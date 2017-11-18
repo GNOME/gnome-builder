@@ -32,6 +32,39 @@ struct _GbpRecentSection
   guint       selection_mode : 1;
 };
 
+enum {
+  PROP_0,
+  PROP_HAS_SELECTION,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+
+static void
+gbp_recent_section_get_has_selection_cb (GtkWidget *widget,
+                                         gpointer   user_data)
+{
+  gboolean *has_selection = user_data;
+  gboolean selected = FALSE;
+
+  g_object_get (widget, "selected", &selected, NULL);
+  *has_selection |= selected;
+}
+
+static gboolean
+gbp_recent_section_get_has_selection (GbpRecentSection *self)
+{
+  gboolean has_selection = FALSE;
+
+  g_assert (GBP_IS_RECENT_SECTION (self));
+
+  gtk_container_foreach (GTK_CONTAINER (self->listbox),
+                         gbp_recent_section_get_has_selection_cb,
+                         &has_selection);
+
+  return has_selection;
+}
+
 static gint
 gbp_recent_section_get_priority (IdeGreeterSection *section)
 {
@@ -158,6 +191,8 @@ gbp_recent_section_set_selection_mode (IdeGreeterSection *section,
                          &selection_mode);
 
   self->selection_mode = selection_mode;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SELECTION]);
 }
 
 static void
@@ -188,6 +223,8 @@ gbp_recent_section_row_activated (GbpRecentSection    *self,
 
       g_object_get (row, "selected", &selected, NULL);
       g_object_set (row, "selected", !selected, NULL);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SELECTION]);
     }
   else
     {
@@ -231,12 +268,39 @@ gbp_recent_section_constructed (GObject *object)
 }
 
 static void
+gbp_recent_section_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  GbpRecentSection *self = GBP_RECENT_SECTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_HAS_SELECTION:
+      g_value_set_boolean (value, gbp_recent_section_get_has_selection (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_recent_section_class_init (GbpRecentSectionClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gbp_recent_section_constructed;
+  object_class->get_property = gbp_recent_section_get_property;
+
+  properties [PROP_HAS_SELECTION] =
+    g_param_spec_boolean ("has-selection", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "recent");
   gtk_widget_class_set_template_from_resource (widget_class,

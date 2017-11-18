@@ -901,6 +901,45 @@ ide_greeter_perspective_project_activated (IdeGreeterPerspective *self,
 }
 
 static void
+ide_greeter_perspective_notify_has_selection_cb (PeasExtensionSet *set,
+                                                 PeasPluginInfo   *plugin_info,
+                                                 PeasExtension    *exten,
+                                                 gpointer          user_data)
+{
+  IdeGreeterSection *section = (IdeGreeterSection *)exten;
+  gboolean *has_selection = user_data;
+
+  g_return_if_fail (PEAS_IS_EXTENSION_SET (set));
+  g_return_if_fail (plugin_info != NULL);
+  g_return_if_fail (has_selection != NULL);
+  g_return_if_fail (IDE_IS_GREETER_SECTION (section));
+
+  if (*has_selection)
+    return;
+
+  g_object_get (section, "has-selection", has_selection, NULL);
+}
+
+static void
+ide_greeter_perspective_notify_has_selection (IdeGreeterPerspective *self,
+                                              GParamSpec            *pspec,
+                                              IdeGreeterSection     *section)
+{
+  gboolean has_selection = FALSE;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (IDE_IS_GREETER_SECTION (section));
+
+  peas_extension_set_foreach (self->sections,
+                              ide_greeter_perspective_notify_has_selection_cb,
+                              &has_selection);
+
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "delete-selected-rows",
+                             "enabled", has_selection,
+                             NULL);
+}
+
+static void
 ide_greeter_perspective_section_added (PeasExtensionSet *set,
                                        PeasPluginInfo   *plugin_info,
                                        PeasExtension    *exten,
@@ -920,6 +959,12 @@ ide_greeter_perspective_section_added (PeasExtensionSet *set,
   /* Take the floating GtkWidget reference */
   if (g_object_is_floating (section))
     g_object_ref_sink (section);
+
+  g_signal_connect_object (section,
+                           "notify::has-selection",
+                           G_CALLBACK (ide_greeter_perspective_notify_has_selection),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (section,
                            "project-activated",

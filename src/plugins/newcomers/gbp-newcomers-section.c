@@ -29,6 +29,12 @@ struct _GbpNewcomersSection
   GtkFlowBox *flowbox;
 };
 
+enum {
+  PROP_0,
+  PROP_HAS_SELECTION,
+  N_PROPS
+};
+
 static void gbp_newcomers_section_child_activated (GbpNewcomersSection *self,
                                                    GbpNewcomersProject *project,
                                                    GtkFlowBox          *flowbox);
@@ -175,9 +181,35 @@ gbp_newcomers_section_child_activated (GbpNewcomersSection *self,
 }
 
 static void
+gbp_newcomers_section_get_property (GObject    *object,
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
+{
+  switch (prop_id)
+    {
+    case PROP_HAS_SELECTION:
+      g_value_set_boolean (value, FALSE);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_newcomers_section_class_init (GbpNewcomersSectionClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gbp_newcomers_section_get_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_HAS_SELECTION,
+                                   g_param_spec_boolean ("has-selection", NULL, NULL,
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gtk_widget_class_set_css_name (widget_class, "newcomers");
   gtk_widget_class_set_template_from_resource (widget_class,

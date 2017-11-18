@@ -32,6 +32,13 @@ static guint signals [N_SIGNALS];
 static void
 ide_greeter_section_default_init (IdeGreeterSectionInterface *iface)
 {
+  g_object_interface_install_property (iface,
+                                       g_param_spec_boolean ("has-selection",
+                                                             "Has Selection",
+                                                             "If the greeter has a selection",
+                                                             FALSE,
+                                                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   /**
    * IdeGreeterSection::project-activated:
    *
