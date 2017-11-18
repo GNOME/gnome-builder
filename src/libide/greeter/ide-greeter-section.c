@@ -81,16 +81,20 @@ ide_greeter_section_get_priority (IdeGreeterSection *self)
  *
  * Refilter the visibile items based on the current search.
  *
+ * Returns: %TRUE if at least one element matched.
+ *
  * Since: 3.28
  */
-void
+gboolean
 ide_greeter_section_filter (IdeGreeterSection *self,
                             DzlPatternSpec    *spec)
 {
-  g_return_if_fail (IDE_IS_GREETER_SECTION (self));
+  g_return_val_if_fail (IDE_IS_GREETER_SECTION (self), FALSE);
 
   if (IDE_GREETER_SECTION_GET_IFACE (self)->filter)
-    IDE_GREETER_SECTION_GET_IFACE (self)->filter (self, spec);
+    return IDE_GREETER_SECTION_GET_IFACE (self)->filter (self, spec);
+
+  return FALSE;
 }
 
 void
@@ -101,4 +105,31 @@ ide_greeter_section_emit_project_activated (IdeGreeterSection *self,
   g_return_if_fail (IDE_IS_PROJECT_INFO (project_info));
 
   g_signal_emit (self, signals [PROJECT_ACTIVATED], 0, project_info);
+}
+
+/**
+ * ide_greeter_section_activate_first:
+ * @self: a #IdeGreeterSection
+ *
+ * Active the first item in the section. This happens when the user
+ * hits Enter within the search box to select the first visible item
+ * in the search result set.
+ *
+ * Ensure the given item is visible before activating it.
+ *
+ * If no item matched, then return %FALSE.
+ *
+ * Returns: %TRUE if an item was activated
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_greeter_section_activate_first (IdeGreeterSection *self)
+{
+  g_return_val_if_fail (IDE_IS_GREETER_SECTION (self), FALSE);
+
+  if (IDE_GREETER_SECTION_GET_IFACE (self)->activate_first)
+    return IDE_GREETER_SECTION_GET_IFACE (self)->activate_first (self);
+
+  return FALSE;
 }
