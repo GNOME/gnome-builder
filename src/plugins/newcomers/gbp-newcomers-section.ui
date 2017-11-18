@@ -9,7 +9,7 @@
         <child>
           <object class="GtkLabel">
             <property name="visible">true</property>
-            <property name="label" translatable="yes">Newcomer Projects</property>
+            <property name="label" translatable="yes">Contribute to an existing project</property>
             <style>
               <class name="dim-label"/>
             </style>
