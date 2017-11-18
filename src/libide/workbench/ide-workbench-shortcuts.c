@@ -25,6 +25,28 @@
 
 #include "workbench/ide-workbench-private.h"
 
+#define I_(s) (g_intern_static_string(s))
+
+static DzlShortcutEntry workbench_shortcuts[] = {
+  { "org.gnome.builder.workbench.fullscreen",
+    0, NULL,
+    NC_("shortcut window", "Workbench shortcuts"),
+    NC_("shortcut window", "General"),
+    NC_("shortcut window", "Toggle window to fullscreen") },
+
+  { "org.gnome.builder.workbench.global-search",
+    0, NULL,
+    NC_("shortcut window", "Workbench shortcuts"),
+    NC_("shortcut window", "Search"),
+    NC_("shortcut window", "Focus to the global search entry") },
+
+  { "org.gnome.builder.workbench.build",
+    0, NULL,
+    NC_("shortcut window", "Workbench shortcuts"),
+    NC_("shortcut window", "Build and Run"),
+    NC_("shortcut window", "Trigger a build") },
+};
+
 void
 _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
                                          IdePerspective *perspective)
@@ -35,6 +57,7 @@ _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
   g_assert (IDE_IS_PERSPECTIVE (perspective));
 
   accel = ide_perspective_get_accelerator (perspective);
+
   if (accel != NULL)
     {
       DzlShortcutController *controller;
@@ -52,6 +75,7 @@ _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
       };
 
       controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+
       dzl_shortcut_controller_add_command_action (controller,
                                                   command_id,
                                                   accel,
@@ -63,4 +87,35 @@ _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
                                                  G_N_ELEMENTS (workbench_shortcut_entry),
                                                  GETTEXT_PACKAGE);
     }
+}
+
+void
+_ide_workbench_init_shortcuts (IdeWorkbench *self)
+{
+  DzlShortcutController *controller;
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.workbench.fullscreen"),
+                                              "F11",
+                                              DZL_SHORTCUT_PHASE_DISPATCH | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("win.fullscreen"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.workbench.global-search"),
+                                              "<Control>period",
+                                              DZL_SHORTCUT_PHASE_DISPATCH | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("win.global-search"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.workbench.build"),
+                                              "<Control>F7",
+                                              DZL_SHORTCUT_PHASE_DISPATCH | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("build-manager.build"));
+
+  dzl_shortcut_manager_add_shortcut_entries (NULL,
+                                             workbench_shortcuts,
+                                             G_N_ELEMENTS (workbench_shortcuts),
+                                             GETTEXT_PACKAGE);
 }
