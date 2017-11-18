@@ -1082,7 +1082,7 @@ sort_symbols_by_name (gconstpointer a,
 /**
  * ide_clang_translation_unit_get_symbols:
  *
- * Returns: (transfer container) (element-type IdeSymbol*): An array of #IdeSymbol.
+ * Returns: (transfer container) (element-type Ide.Symbol): An array of #IdeSymbol.
  */
 GPtrArray *
 ide_clang_translation_unit_get_symbols (IdeClangTranslationUnit *self,
