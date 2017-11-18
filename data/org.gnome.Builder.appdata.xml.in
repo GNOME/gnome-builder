@@ -81,6 +81,43 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.27.2" date="2017-11-18">
+      <description>
+        <p>
+          A number of performance improvements and bug fixes have landed in this release.
+          Newcomers will find a simplified experience to quickly clone, build, and run their first project.
+          A preview of unit testing integration has also landed for Meson-based projects.
+        </p>
+        <ul>
+          <li>Documentation improvements.</li>
+          <li>Bug fixes for the meson build system backend.</li>
+          <li>Bug fixes in our compile_commands.json support.</li>
+          <li>Bug fixes in our GJS integration.</li>
+          <li>Meson project templates gained a Workaround for a glade bug.</li>
+          <li>CMake plugin was ported to C, following the design of the meson plugin.</li>
+          <li>The greeter was abstracted to allow plugins to extend what is visible.</li>
+          <li>A newcomers plugin has been added which displays GNOME newcomer projects on the greeter.</li>
+          <li>Support was added for Yaml when using GNOME Code Assistance.</li>
+          <li>Appdata now installs to the preferred location of the spec.</li>
+          <li>Startup time has been improved by avoiding some costly operations in gtk and glib. Patches upstream improve things further.</li>
+          <li>A new setting allows following GNOME's Night Light behavior for night mode.</li>
+          <li>We now use explicit export macros to simplify ABI management. We still aren't ABI-stable, but we're progressing towards that.</li>
+          <li>Our clang plugin now supports the KeepGoing option, to try harder after encountering failures in includes.</li>
+          <li>Support for code-indexing the Vala programming language.</li>
+          <li>The ctags plugin will try to avoid activating certain language keywords.</li>
+          <li>Find-other-file plugin now shows the results in global search results.</li>
+          <li>Global search can now be navigated with ctrl+n/p in Vim mode.</li>
+          <li>You can now disable the "Open Pages" section of the sidebar in preferences.</li>
+          <li>The flatpak plugin no longer automatically updates project dependencies when the build system activates for the first time. You can manually update the dependencies from the workbench menu.</li>
+          <li>Cursor placement improvements for some text editor movements.</li>
+          <li>Basic support for unit testing in Meson-based projects.</li>
+          <li>Subprocess PATH will now prefer /bin over /usr/bin.</li>
+          <li>Various workbench keyboard shortcuts have been restored.</li>
+          <li>Support for project miners has been dropped.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.27.1" date="2017-10-18">
       <description>
         <p>

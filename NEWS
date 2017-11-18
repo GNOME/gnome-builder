@@ -1,4 +1,46 @@
 ==============
+Version 3.27.2
+==============
+
+Changes since last release:
+
+ • Documentation improvements.
+ • Bug fixes for the meson build system backend.
+ • Bug fixes in our compile_commands.json support.
+ • Bug fixes in our GJS integration.
+ • Meson project templates gained a Workaround for a glade bug.
+ • CMake plugin was ported to C, following the design of the meson plugin.
+ • The greeter was abstracted to allow plugins to extend what is visible.
+ • A newcomers plugin has been added which displays GNOME newcomer projects
+   on the greeter.
+ • Support was added for Yaml when using GNOME Code Assistance.
+ • Appdata now installs to the preferred location of the spec.
+ • Startup time has been improved by avoiding some costly operations in
+   gtk and glib. Patches upstream improve things further.
+ • A new setting allows following GNOME's Night Light behavior for night mode.
+ • We now use explicit export macros to simplify ABI management. We still
+   aren't ABI-stable, but we're progressing towards that.
+ • Our clang plugin now supports the KeepGoing option, to try harder after
+   encountering failures in includes.
+ • Support for code-indexing the Vala programming language.
+ • The ctags plugin will try to avoid activating certain language keywords.
+ • Find-other-file plugin now shows the results in global search results.
+ • Global search can now be navigated with ctrl+n/p in Vim mode.
+ • You can now disable the "Open Pages" section of the sidebar in preferences.
+ • The flatpak plugin no longer automatically updates project dependencies when
+   the build system activates for the first time. You can manually update the
+   dependencies from the workbench menu.
+ • Cursor placement improvements for some text editor movements.
+ • Basic support for unit testing in Meson-based projects.
+ • Subprocess PATH will now prefer /bin over /usr/bin.
+ • Various workbench keyboard shortcuts have been restored.
+ • Support for project miners has been dropped.
+
+Updated Translations:
+
+ Serbian, German, Slovenian, Czech, Spanish
+
+==============
 Version 3.27.1
 ==============
 
