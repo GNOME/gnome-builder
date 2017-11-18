@@ -129,11 +129,19 @@ gbp_newcomers_section_activate_first (IdeGreeterSection *section)
 }
 
 static void
+gbp_newcomers_section_set_selection_mode (IdeGreeterSection *section,
+                                          gboolean           selection_mode)
+{
+  gtk_widget_set_visible (GTK_WIDGET (section), !selection_mode);
+}
+
+static void
 greeter_section_iface_init (IdeGreeterSectionInterface *iface)
 {
   iface->get_priority = gbp_newcomers_section_get_priority;
   iface->filter = gbp_newcomers_section_filter;
   iface->activate_first = gbp_newcomers_section_activate_first;
+  iface->set_selection_mode = gbp_newcomers_section_set_selection_mode;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpNewcomersSection, gbp_newcomers_section, GTK_TYPE_BIN,

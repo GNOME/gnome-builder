@@ -26,7 +26,10 @@
 struct _GbpRecentSection
 {
   GtkBin      parent_instance;
+
   GtkListBox *listbox;
+
+  guint       selection_mode : 1;
 };
 
 static gint
@@ -129,11 +132,41 @@ gbp_recent_section_activate_first (IdeGreeterSection *section)
 }
 
 static void
+gbp_recent_section_set_selection_mode_cb (GtkWidget *widget,
+                                          gpointer   user_data)
+{
+  GbpRecentProjectRow *row = (GbpRecentProjectRow *)widget;
+  gboolean *selection_mode = user_data;
+
+  g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
+  g_assert (selection_mode != NULL);
+
+  gbp_recent_project_row_set_selection_mode (row, *selection_mode);
+  g_object_set (row, "selected", FALSE, NULL);
+}
+
+static void
+gbp_recent_section_set_selection_mode (IdeGreeterSection *section,
+                                       gboolean           selection_mode)
+{
+  GbpRecentSection *self = (GbpRecentSection *)section;
+
+  g_assert (GBP_IS_RECENT_SECTION (self));
+
+  gtk_container_foreach (GTK_CONTAINER (self->listbox),
+                         gbp_recent_section_set_selection_mode_cb,
+                         &selection_mode);
+
+  self->selection_mode = selection_mode;
+}
+
+static void
 greeter_section_iface_init (IdeGreeterSectionInterface *iface)
 {
   iface->get_priority = gbp_recent_section_get_priority;
   iface->filter = gbp_recent_section_filter;
   iface->activate_first = gbp_recent_section_activate_first;
+  iface->set_selection_mode = gbp_recent_section_set_selection_mode;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_BIN,
@@ -145,15 +178,24 @@ gbp_recent_section_row_activated (GbpRecentSection    *self,
                                   GbpRecentProjectRow *row,
                                   GtkListBox          *list_box)
 {
-  IdeProjectInfo *project_info;
-
   g_assert (GBP_IS_RECENT_SECTION (self));
   g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
-  project_info = gbp_recent_project_row_get_project_info (row);
+  if (self->selection_mode)
+    {
+      gboolean selected = FALSE;
 
-  ide_greeter_section_emit_project_activated (IDE_GREETER_SECTION (self), project_info);
+      g_object_get (row, "selected", &selected, NULL);
+      g_object_set (row, "selected", !selected, NULL);
+    }
+  else
+    {
+      IdeProjectInfo *project_info;
+
+      project_info = gbp_recent_project_row_get_project_info (row);
+      ide_greeter_section_emit_project_activated (IDE_GREETER_SECTION (self), project_info);
+    }
 }
 
 static GtkWidget *
