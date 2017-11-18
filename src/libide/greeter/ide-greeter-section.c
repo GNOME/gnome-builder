@@ -133,3 +133,13 @@ ide_greeter_section_activate_first (IdeGreeterSection *self)
 
   return FALSE;
 }
+
+void
+ide_greeter_section_set_selection_mode (IdeGreeterSection *self,
+                                        gboolean           selection_mode)
+{
+  g_return_if_fail (IDE_IS_GREETER_SECTION (self));
+
+  if (IDE_GREETER_SECTION_GET_IFACE (self)->set_selection_mode)
+    IDE_GREETER_SECTION_GET_IFACE (self)->set_selection_mode (self, selection_mode);
+}

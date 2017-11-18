@@ -56,6 +56,7 @@ struct _IdeGreeterPerspective
   GtkInfoBar           *info_bar;
   GtkLabel             *info_bar_label;
   GtkRevealer          *info_bar_revealer;
+  GtkToggleButton      *selection_button;
   GtkViewport          *viewport;
   GtkWidget            *titlebar;
   GtkButton            *open_button;
@@ -1010,6 +1011,37 @@ delete_selected_rows (GSimpleAction *simple,
 }
 
 static void
+ide_greeter_perspective_notify_selection (PeasExtensionSet *set,
+                                          PeasPluginInfo   *plugin_info,
+                                          PeasExtension    *exten,
+                                          gpointer          user_data)
+{
+  IdeGreeterSection *section = (IdeGreeterSection *)exten;
+  gboolean *selection = user_data;
+
+  g_assert (IDE_IS_GREETER_SECTION (section));
+  g_assert (selection != NULL);
+
+  ide_greeter_section_set_selection_mode (section, *selection);
+}
+
+static void
+ide_greeter_perspective_selection_toggled (IdeGreeterPerspective *self,
+                                           GtkToggleButton       *button)
+{
+  gboolean selection;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_TOGGLE_BUTTON (button));
+
+  selection = gtk_toggle_button_get_active (button);
+
+  peas_extension_set_foreach (self->sections,
+                              ide_greeter_perspective_notify_selection,
+                              &selection);
+}
+
+static void
 ide_greeter_perspective_destroy (GtkWidget *widget)
 {
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)widget;
@@ -1061,6 +1093,7 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, sections_container);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, selection_button);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, stack);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, state_machine);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterPerspective, titlebar);
@@ -1084,6 +1117,12 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->titlebar);
+
+  g_signal_connect_object (self->selection_button,
+                           "toggled",
+                           G_CALLBACK (ide_greeter_perspective_selection_toggled),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->search_entry,
                            "activate",

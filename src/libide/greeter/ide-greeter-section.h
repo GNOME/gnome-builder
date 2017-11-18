@@ -34,12 +34,14 @@ struct _IdeGreeterSectionInterface
 {
   GTypeInterface parent_iface;
 
-  void     (*project_activated) (IdeGreeterSection *self,
-                                 IdeProjectInfo    *project_info);
-  gint     (*get_priority)      (IdeGreeterSection *self);
-  gboolean (*filter)            (IdeGreeterSection *self,
-                                 DzlPatternSpec    *pattern);
-  gboolean (*activate_first)    (IdeGreeterSection *self);
+  void     (*project_activated)  (IdeGreeterSection *self,
+                                  IdeProjectInfo    *project_info);
+  gint     (*get_priority)       (IdeGreeterSection *self);
+  gboolean (*filter)             (IdeGreeterSection *self,
+                                  DzlPatternSpec    *pattern);
+  gboolean (*activate_first)     (IdeGreeterSection *self);
+  void     (*set_selection_mode) (IdeGreeterSection *self,
+                                  gboolean           selection_mode);
 };
 
 IDE_AVAILABLE_IN_3_28
@@ -52,5 +54,8 @@ void     ide_greeter_section_emit_project_activated (IdeGreeterSection *self,
                                                      IdeProjectInfo    *project_info);
 IDE_AVAILABLE_IN_3_28
 gboolean ide_greeter_section_activate_first         (IdeGreeterSection *self);
+IDE_AVAILABLE_IN_3_28
+void     ide_greeter_section_set_selection_mode     (IdeGreeterSection *self,
+                                                     gboolean           selection_mode);
 
 G_END_DECLS
