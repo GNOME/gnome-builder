@@ -111,7 +111,7 @@ _ide_workbench_init_shortcuts (IdeWorkbench *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.workbench.build"),
                                               "<Control>F7",
-                                              DZL_SHORTCUT_PHASE_DISPATCH | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("build-manager.build"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
