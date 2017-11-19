@@ -4,6 +4,7 @@ search_headers = [
   'ide-search-provider.h',
   'ide-search-result.h',
   'ide-search-reducer.h',
+  'ide-tagged-entry.h',
 ]
 
 search_sources = [
@@ -12,6 +13,7 @@ search_sources = [
   'ide-search-provider.c',
   'ide-search-result.c',
   'ide-search-reducer.c',
+  'ide-tagged-entry.c',
 ]
 
 libide_public_headers += files(search_headers)

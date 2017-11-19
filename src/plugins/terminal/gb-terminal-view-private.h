@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <libgd/gd.h>
 #include <ide.h>
 #include <vte/vte.h>
 

@@ -52,7 +52,7 @@ search_button_clicked_cb (GtkButton        *button,
 }
 
 static void
-search_text_changed_cb (GdTaggedEntry    *search_entry,
+search_text_changed_cb (IdeTaggedEntry   *search_entry,
                         GbpDevhelpSearch *self)
 {
   const char *search_text;
@@ -100,8 +100,6 @@ gbp_devhelp_search_class_init (GbpDevhelpSearchClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpSearch, close_button);
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpSearch, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpSearch, search_revealer);
-
-  g_type_ensure (GD_TYPE_TAGGED_ENTRY);
 }
 
 static void

@@ -20,11 +20,11 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
-#include <libgd/gd-tagged-entry.h>
 
 #include "editor/ide-editor-private.h"
 #include "editor/ide-editor-search.h"
 #include "editor/ide-editor-search-bar.h"
+#include "search/ide-tagged-entry.h"
 
 struct _IdeEditorSearchBar
 {
@@ -34,13 +34,13 @@ struct _IdeEditorSearchBar
   DzlBindingGroup         *search_bindings;
   IdeEditorSearch         *search;
 
-  GdTaggedEntryTag        *search_entry_tag;
+  IdeTaggedEntryTag       *search_entry_tag;
 
   GtkCheckButton          *case_sensitive;
   GtkButton               *replace_all_button;
   GtkButton               *replace_button;
   GtkSearchEntry          *replace_entry;
-  GdTaggedEntry           *search_entry;
+  IdeTaggedEntry          *search_entry;
   GtkGrid                 *search_options;
   GtkCheckButton          *use_regex;
   GtkCheckButton          *whole_word;
@@ -162,7 +162,7 @@ ide_editor_search_bar_grab_focus (GtkWidget *widget)
 static void
 search_entry_populate_popup (IdeEditorSearchBar *self,
                              GtkWidget          *widget,
-                             GdTaggedEntry      *entry)
+                             IdeTaggedEntry     *entry)
 {
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
   g_assert (GTK_IS_MENU (widget));
@@ -225,10 +225,10 @@ search_entry_next_match (IdeEditorSearchBar *self,
 
 static void
 search_entry_activate (IdeEditorSearchBar *self,
-                       GdTaggedEntry      *entry)
+                       IdeTaggedEntry     *entry)
 {
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GD_IS_TAGGED_ENTRY (entry));
+  g_assert (IDE_IS_TAGGED_ENTRY (entry));
 
   if (self->search != NULL)
     {
@@ -242,10 +242,10 @@ search_entry_activate (IdeEditorSearchBar *self,
 
 static void
 search_entry_changed (IdeEditorSearchBar *self,
-                      GdTaggedEntry      *entry)
+                      IdeTaggedEntry     *entry)
 {
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
-  g_assert (GD_IS_TAGGED_ENTRY (entry));
+  g_assert (IDE_IS_TAGGED_ENTRY (entry));
 
   /*
    * After the text has been changed, ask the IdeEditorSearch to see if
@@ -309,8 +309,7 @@ update_match_positions (gpointer user_data)
     {
       if (self->search_entry_tag != NULL)
         {
-          gd_tagged_entry_remove_tag (self->search_entry,
-                                      self->search_entry_tag);
+          ide_tagged_entry_remove_tag (self->search_entry, self->search_entry_tag);
           g_clear_object (&self->search_entry_tag);
         }
     }
@@ -318,13 +317,12 @@ update_match_positions (gpointer user_data)
     {
       if (self->search_entry_tag == NULL)
         {
-          self->search_entry_tag = gd_tagged_entry_tag_new ("");
-          gd_tagged_entry_add_tag (self->search_entry, self->search_entry_tag);
-          gd_tagged_entry_tag_set_style (self->search_entry_tag,
-                                         "search-occurrences-tag");
+          self->search_entry_tag = ide_tagged_entry_tag_new ("");
+          ide_tagged_entry_add_tag (self->search_entry, self->search_entry_tag);
+          ide_tagged_entry_tag_set_style (self->search_entry_tag, "search-occurrences-tag");
         }
 
-      gd_tagged_entry_tag_set_label (self->search_entry_tag, str);
+      ide_tagged_entry_tag_set_label (self->search_entry_tag, str);
     }
 
   return G_SOURCE_REMOVE;
@@ -453,8 +451,6 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, whole_word);
 
   gtk_widget_class_set_css_name (widget_class, "ideeditorsearchbar");
-
-  g_type_ensure (GD_TYPE_TAGGED_ENTRY);
 }
 
 static void

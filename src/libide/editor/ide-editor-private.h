@@ -20,7 +20,6 @@
 
 #include <dazzle.h>
 #include <libpeas/peas.h>
-#include <libgd/gd-tagged-entry.h>
 
 #include "editor/ide-editor-perspective.h"
 #include "editor/ide-editor-properties.h"

@@ -149,7 +149,7 @@ update_regex (GbTerminalSearch *self)
 }
 
 static void
-search_text_changed_cb (GdTaggedEntry  *search_entry,
+search_text_changed_cb (IdeTaggedEntry  *search_entry,
                         GbTerminalSearch *self)
 {
   update_regex (self);
@@ -311,8 +311,6 @@ gb_terminal_search_class_init (GbTerminalSearchClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, reveal_button);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_options);
-
-  g_type_ensure (GD_TYPE_TAGGED_ENTRY);
 
   signals[SEARCH] =
     g_signal_new ("search",

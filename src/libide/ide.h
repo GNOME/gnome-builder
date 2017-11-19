@@ -144,6 +144,7 @@ G_BEGIN_DECLS
 #include "search/ide-search-provider.h"
 #include "search/ide-search-reducer.h"
 #include "search/ide-search-result.h"
+#include "search/ide-tagged-entry.h"
 #include "snippets/ide-source-snippet-chunk.h"
 #include "snippets/ide-source-snippet-context.h"
 #include "snippets/ide-source-snippet.h"

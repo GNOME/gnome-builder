@@ -194,7 +194,6 @@ endif
 install_data('Ide.py', install_dir: pygobject_override_dir)
 
 libide_deps = [
-  libgd_dep,
   libdazzle_dep,
   libgio_dep,
   libgiounix_dep,
@@ -228,8 +227,7 @@ libide = shared_library('ide-' + libide_api_version,
 
 libide_dep = declare_dependency(
               sources: libide_generated_headers,
-         dependencies: [ libgd_dep,
-                         libdazzle_dep,
+         dependencies: [ libdazzle_dep,
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
@@ -245,8 +243,7 @@ libide_dep = declare_dependency(
 libide_plugin_dep = declare_dependency(
               sources: libide_generated_headers,
   include_directories: include_directories('.'),
-         dependencies: [ libgd_dep,
-                         libdazzle_dep,
+         dependencies: [ libdazzle_dep,
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
@@ -272,7 +269,6 @@ libide_gir = gnome.generate_gir(libide,
 	      sources: libide_generated_headers + libide_public_headers + libide_public_sources,
             nsversion: libide_api_version,
             namespace: 'Ide',
-         dependencies: [ libgd_dep ],
         symbol_prefix: 'ide',
     identifier_prefix: 'Ide',
              includes: [ 'Gio-2.0', 'GtkSource-3.0', 'Peas-1.0', 'Dazzle-1.0', 'Json-1.0', 'Template-1.0'],
@@ -302,8 +298,7 @@ libide_vapi = gnome.generate_vapi('libide-' + libide_api_version,
                  'json-glib-1.0',
                  'libdazzle-1.0',
                  'libpeas-1.0',
-                 'template-glib-1.0',
-               ],
+                 'template-glib-1.0' ],
 )
 
 endif

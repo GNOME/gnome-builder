@@ -18,7 +18,7 @@
             <property name="row_spacing">8</property>
             <property name="column_spacing">8</property>
             <child>
-              <object class="GdTaggedEntry" id="search_entry">
+              <object class="IdeTaggedEntry" id="search_entry">
                 <property name="visible">true</property>
                 <property name="can_focus">true</property>
                 <property name="width-chars">20</property>

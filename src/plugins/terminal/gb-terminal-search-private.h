@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <libgd/gd.h>
 #include <ide.h>
 #include <vte/vte.h>
 
@@ -32,7 +31,7 @@ struct _GbTerminalSearch
 
   GtkRevealer         *search_revealer;
   
-  GdTaggedEntry       *search_entry;
+  IdeTaggedEntry      *search_entry;
 
   GtkButton           *search_prev_button;
   GtkButton           *search_next_button;

@@ -183,15 +183,6 @@ libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.27.2')
 libxml2_dep = dependency('libxml-2.0', version: '>=2.9.0')
 
-libgd = subproject('libgd',
-  default_options: [
-    'static=false',
-    'pkglibdir=' + pkglibdir,
-    'with-tagged-entry=true'
-  ]
-)
-libgd_dep = libgd.get_variable('libgd_dep')
-
 if get_option('with_flatpak') or get_option('with_git')
   libgit_dep = dependency('libgit2-glib-1.0', version: '>= 0.25.0')
 
