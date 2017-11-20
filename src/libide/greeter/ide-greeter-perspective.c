@@ -934,7 +934,7 @@ ide_greeter_perspective_notify_has_selection (IdeGreeterPerspective *self,
                               ide_greeter_perspective_notify_has_selection_cb,
                               &has_selection);
 
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "delete-selected-rows",
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "remove-selected-rows",
                              "enabled", has_selection,
                              NULL);
 }
@@ -1042,7 +1042,7 @@ ide_greeter_perspective_constructed (GObject *object)
 }
 
 static void
-delete_selected_rows_cb (PeasExtensionSet *set,
+remove_selected_rows_cb (PeasExtensionSet *set,
                          PeasPluginInfo   *plugin_info,
                          PeasExtension    *exten,
                          gpointer          user_data)
@@ -1057,7 +1057,7 @@ delete_selected_rows_cb (PeasExtensionSet *set,
 }
 
 static void
-delete_selected_rows (GSimpleAction *simple,
+remove_selected_rows (GSimpleAction *simple,
                       GVariant      *param,
                       gpointer       user_data)
 {
@@ -1067,7 +1067,7 @@ delete_selected_rows (GSimpleAction *simple,
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
-  peas_extension_set_foreach (self->sections, delete_selected_rows_cb, NULL);
+  peas_extension_set_foreach (self->sections, remove_selected_rows_cb, NULL);
   ide_greeter_perspective_apply_filter_all (self);
   dzl_state_machine_set_state (self->state_machine, "browse");
 
@@ -1166,7 +1166,7 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
 }
 
 static const GActionEntry actions[] = {
-  { "delete-selected-rows", delete_selected_rows },
+  { "remove-selected-rows", remove_selected_rows },
 };
 
 static void
@@ -1242,7 +1242,7 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
   g_action_map_add_action_entries (G_ACTION_MAP (group), actions, G_N_ELEMENTS (actions), self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "greeter", G_ACTION_GROUP (group));
 
-  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "delete-selected-rows",
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "remove-selected-rows",
                              "enabled", FALSE,
                              NULL);
 }
