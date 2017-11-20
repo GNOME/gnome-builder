@@ -47,32 +47,6 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static IdeSubprocessLauncher *
-gbp_meson_build_system_create_launcher (GbpMesonBuildSystem  *self,
-                                        GError              **error)
-{
-  IdeBuildPipeline *pipeline;
-  IdeBuildManager *build_manager;
-  IdeContext *context;
-
-  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  build_manager = ide_context_get_build_manager (context);
-  pipeline = ide_build_manager_get_pipeline (build_manager);
-
-  if (pipeline == NULL)
-    {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_FAILED,
-                   "Pipeline is not ready, cannot create launcher");
-      return NULL;
-    }
-
-  return ide_build_pipeline_create_launcher (pipeline, error);
-}
-
 static void
 gbp_meson_build_system_ensure_config_cb (GObject      *object,
                                          GAsyncResult *result,
