@@ -19,6 +19,8 @@
 #define G_LOG_DOMAIN "ide-run-manager"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
+#include <libpeas/peas-autocleanups.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -26,6 +28,7 @@
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-build-target.h"
+#include "buildsystem/ide-build-target-provider.h"
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-environment.h"
@@ -46,6 +49,13 @@ struct _IdeRunManager
 
   guint                    busy : 1;
 };
+
+typedef struct
+{
+  GList     *providers;
+  GPtrArray *results;
+  guint      active;
+} DiscoverState;
 
 static void initable_iface_init                      (GInitableIface *iface);
 static void ide_run_manager_actions_run              (IdeRunManager  *self,
@@ -82,6 +92,18 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+discover_state_free (gpointer data)
+{
+  DiscoverState *state = data;
+
+  g_assert (state->active == 0);
+
+  g_list_free_full (state->providers, g_object_unref);
+  g_clear_pointer (&state->results, g_ptr_array_unref);
+  g_slice_free (DiscoverState, state);
+}
 
 static void
 ide_run_manager_real_run (IdeRunManager *self,
@@ -814,74 +836,78 @@ ide_run_manager_set_build_target (IdeRunManager  *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_TARGET]);
 }
 
-static IdeBuildTarget *
-find_best_target (GPtrArray *targets)
+static void
+collect_extensions (PeasExtensionSet *set,
+                    PeasPluginInfo   *plugin_info,
+                    PeasExtension    *exten,
+                    gpointer          user_data)
 {
-  IdeBuildTarget *ret = NULL;
-  guint i;
+  DiscoverState *state = user_data;
 
-  g_assert (targets != NULL);
+  g_assert (state != NULL);
+  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (exten));
 
-  /* TODO:
-   *
-   * This is just a barebones way to try to discover a target that matters. We
-   * could probably defer this off to the build system. Either way, it's shit
-   * and should be thought through by someone.
-   */
-
-  for (i = 0; i < targets->len; i++)
-    {
-      IdeBuildTarget *target = g_ptr_array_index (targets, i);
-      g_autoptr(GFile) installdir = NULL;
-
-      installdir = ide_build_target_get_install_directory (target);
-
-      if (installdir == NULL)
-        continue;
-
-      if (ret == NULL)
-        ret = target;
-    }
-
-  return ret;
+  state->providers = g_list_append (state->providers, g_object_ref (exten));
+  state->active++;
 }
 
 static void
-ide_run_manager_discover_default_target_cb (GObject      *object,
-                                            GAsyncResult *result,
-                                            gpointer      user_data)
+ide_run_manager_provider_get_targets_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
 {
-  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)object;
   g_autoptr(GTask) task = user_data;
-  g_autoptr(GPtrArray) targets = NULL;
+  g_autoptr(GPtrArray) ret = NULL;
   g_autoptr(GError) error = NULL;
-  IdeBuildTarget *best_match;
+  DiscoverState *state;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
 
-  targets = ide_build_system_get_build_targets_finish (build_system, result, &error);
+  state = g_task_get_task_data (task);
 
-  if (targets == NULL)
+  g_assert (state != NULL);
+  g_assert (state->active > 0);
+  g_assert (g_list_find (state->providers, provider) != NULL);
+
+  ret = ide_build_target_provider_get_targets_finish (provider, result, &error);
+
+  if (ret != NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      for (guint i = 0; i < ret->len; i++)
+        {
+          IdeBuildTarget *target = g_ptr_array_index (ret, i);
+
+          g_ptr_array_add (state->results, g_object_ref (target));
+        }
+    }
+
+  state->active--;
+
+  if (state->active > 0)
+    return;
+
+  if (state->results->len == 0)
+    {
+      if (error != NULL)
+        g_task_return_error (task, g_steal_pointer (&error));
+      else
+        g_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "Failed to locate a build target");
       IDE_EXIT;
     }
 
-  best_match = find_best_target (targets);
+  g_ptr_array_sort (state->results, (GCompareFunc)ide_build_target_compare);
 
-  if (best_match == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to locate build target");
-      IDE_EXIT;
-    }
-
-  g_task_return_pointer (task, g_object_ref (best_match), g_object_unref);
+  g_task_return_pointer (task,
+                         g_object_ref (g_ptr_array_index (state->results, 0)),
+                         g_object_unref);
 
   IDE_EXIT;
 }
@@ -892,8 +918,9 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
                                                GAsyncReadyCallback  callback,
                                                gpointer             user_data)
 {
+  g_autoptr(PeasExtensionSet) set = NULL;
   g_autoptr(GTask) task = NULL;
-  IdeBuildSystem *build_system;
+  DiscoverState *state;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -903,14 +930,39 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_run_manager_discover_default_target_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
 
-  ide_build_system_get_build_targets_async (build_system,
-                                            cancellable,
-                                            ide_run_manager_discover_default_target_cb,
-                                            g_object_ref (task));
+  set = peas_extension_set_new (peas_engine_get_default (),
+                                IDE_TYPE_BUILD_TARGET_PROVIDER,
+                                "context", context,
+                                NULL);
+
+  state = g_slice_new (DiscoverState);
+  state->results = g_ptr_array_new_with_free_func (g_object_unref);
+  state->providers = NULL;
+  state->active = 0;
+
+  peas_extension_set_foreach (set, collect_extensions, state);
+
+  g_task_set_task_data (task, state, discover_state_free);
+
+  for (const GList *iter = state->providers; iter != NULL; iter = iter->next)
+    {
+      IdeBuildTargetProvider *provider = iter->data;
+
+      ide_build_target_provider_get_targets_async (provider,
+                                                   cancellable,
+                                                   ide_run_manager_provider_get_targets_cb,
+                                                   g_object_ref (task));
+    }
+
+  if (state->active == 0)
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Failed to locate a build target");
 
   IDE_EXIT;
 }

@@ -58,3 +58,33 @@ ide_build_target_get_name (IdeBuildTarget *self)
 
   return NULL;
 }
+
+/**
+ * ide_build_target_get_priority:
+ * @self: an #IdeBuildTarget
+ *
+ * Gets the priority of the build target. This is used to sort build targets by
+ * their importance. The lowest value (negative values are allowed) will be run
+ * as the default run target by Builder.
+ *
+ * Returns: the priority of the build target
+ *
+ * Since: 3.28
+ */
+gint
+ide_build_target_get_priority (IdeBuildTarget *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), 0);
+
+  if (IDE_BUILD_TARGET_GET_IFACE (self)->get_priority)
+    return IDE_BUILD_TARGET_GET_IFACE (self)->get_priority (self);
+  return 0;
+}
+
+gint
+ide_build_target_compare (const IdeBuildTarget *left,
+                          const IdeBuildTarget *right)
+{
+  return ide_build_target_get_priority ((IdeBuildTarget *)left) -
+         ide_build_target_get_priority ((IdeBuildTarget *)right);
+}

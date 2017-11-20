@@ -36,20 +36,17 @@ struct _IdeBuildTargetInterface
 
   GFile  *(*get_install_directory) (IdeBuildTarget *self);
   gchar  *(*get_name)              (IdeBuildTarget *self);
-
-  /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
+  gint    (*get_priority)          (IdeBuildTarget *self);
 };
 
 IDE_AVAILABLE_IN_ALL
-GFile  *ide_build_target_get_install_directory (IdeBuildTarget *self);
+GFile    *ide_build_target_get_install_directory (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_ALL
-gchar  *ide_build_target_get_name              (IdeBuildTarget *self);
+gchar    *ide_build_target_get_name              (IdeBuildTarget       *self);
+IDE_AVAILABLE_IN_3_28
+gint      ide_build_target_get_priority          (IdeBuildTarget       *self);
+IDE_AVAILABLE_IN_3_28
+gboolean  ide_build_target_compare               (const IdeBuildTarget *left,
+                                                  const IdeBuildTarget *right);
 
 G_END_DECLS
