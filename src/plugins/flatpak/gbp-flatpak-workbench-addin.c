@@ -176,6 +176,10 @@ gbp_flatpak_workbench_addin_install_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
 
+  /* Make sure we've not been destroyed */
+  if (self->workbench == NULL)
+    IDE_EXIT;
+
   action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "install-flatpak-builder");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), TRUE);
 
@@ -186,7 +190,7 @@ gbp_flatpak_workbench_addin_install_cb (GObject      *object,
     }
   else
     {
-      IdeContext *context = ide_object_get_context (IDE_OBJECT (manager));
+      IdeContext *context = ide_workbench_get_context (self->workbench);
       IdeConfigurationManager *config_manager = ide_context_get_configuration_manager (context);
 
       /* TODO: It would be nice to have a cleaner way to re-setup the pipeline
