@@ -82,7 +82,9 @@ create_palette_close_dialog (GbColorPickerPrefs *self,
 
   toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self->panel)));
   palette_name = gstyle_palette_get_name (palette);
-  text = g_strdup_printf ("Save changes to palette “%s” before closing ?", palette_name);
+  /* translators: %s is replaced with the name of the color palette. */
+  text = g_strdup_printf (_("Save changes to palette “%s” before closing?"),
+                          palette_name);
   dialog = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
                          "text", text,
                          "message-type", GTK_MESSAGE_QUESTION,
