@@ -18,12 +18,55 @@
 
 #define G_LOG_DOMAIN "ide-autotools-build-target-provider"
 
+#include "ide-autotools-build-system.h"
 #include "ide-autotools-build-target-provider.h"
+#include "ide-autotools-makecache-stage.h"
+#include "ide-makecache.h"
 
 struct _IdeAutotoolsBuildTargetProvider
 {
   IdeObject parent_instance;
 };
+
+static void
+find_makecache_from_stage (gpointer data,
+                           gpointer user_data)
+{
+  IdeMakecache **makecache = user_data;
+  IdeBuildStage *stage = data;
+
+  if (*makecache != NULL)
+    return;
+
+  if (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (stage))
+    *makecache = ide_autotools_makecache_stage_get_makecache (IDE_AUTOTOOLS_MAKECACHE_STAGE (stage));
+}
+
+static void
+ide_autotools_build_target_provider_get_targets_cb (GObject      *object,
+                                                    GAsyncResult *result,
+                                                    gpointer      user_data)
+{
+  IdeMakecache *makecache = (IdeMakecache *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GPtrArray) ret = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAKECACHE (makecache));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  ret = ide_makecache_get_build_targets_finish (makecache, result, &error);
+
+  if (ret == NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+
+  IDE_EXIT;
+}
 
 static void
 ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *provider,
@@ -33,8 +76,13 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
 {
   IdeAutotoolsBuildTargetProvider *self = (IdeAutotoolsBuildTargetProvider *)provider;
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GFile) builddir_file = NULL;
+  IdeBuildPipeline *pipeline;
+  IdeBuildManager *build_manager;
   IdeBuildSystem *build_system;
+  IdeMakecache *makecache = NULL;
   IdeContext *context;
+  const gchar *builddir;
 
   IDE_ENTRY;
 
@@ -57,6 +105,35 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
       IDE_EXIT;
     }
 
+  build_manager = ide_context_get_build_manager (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+  builddir = ide_build_pipeline_get_builddir (pipeline);
+  builddir_file = g_file_new_for_path (builddir);
+
+  /*
+   * Locate our makecache by finding the makecache stage (which should have
+   * successfully executed by now) and get makecache object. Then we can
+   * locate the build flags for the file (which makecache will translate
+   * into the appropriate build target).
+   */
+
+  ide_build_pipeline_foreach_stage (pipeline, find_makecache_from_stage, &makecache);
+
+  if (makecache == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Failed to locate makecache");
+      IDE_EXIT;
+    }
+
+  ide_makecache_get_build_targets_async (makecache,
+                                         builddir_file,
+                                         cancellable,
+                                         ide_autotools_build_target_provider_get_targets_cb,
+                                         g_steal_pointer (&task));
+
   IDE_EXIT;
 }
 
@@ -65,11 +142,17 @@ ide_autotools_build_target_provider_get_targets_finish (IdeBuildTargetProvider  
                                                         GAsyncResult            *result,
                                                         GError                 **error)
 {
+  GPtrArray *ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_AUTOTOOLS_BUILD_TARGET_PROVIDER (provider));
   g_assert (G_IS_TASK (result));
   g_assert (g_task_is_valid (G_TASK (result), provider));
 
-  return g_task_propagate_pointer (G_TASK (provider), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void

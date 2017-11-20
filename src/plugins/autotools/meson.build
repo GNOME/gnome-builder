@@ -16,6 +16,8 @@ autotools_sources = [
   'ide-autotools-build-system.h',
   'ide-autotools-build-target.c',
   'ide-autotools-build-target.h',
+  'ide-autotools-build-target-provider.c',
+  'ide-autotools-build-target-provider.h',
   'ide-autotools-make-stage.c',
   'ide-autotools-make-stage.h',
   'ide-autotools-makecache-stage.c',
