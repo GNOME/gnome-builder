@@ -372,11 +372,36 @@ gbp_meson_build_target_provider_get_targets_finish (IdeBuildTargetProvider  *pro
                                                     GAsyncResult            *result,
                                                     GError                 **error)
 {
+  GPtrArray *ret;
+
+  IDE_ENTRY;
+
   g_assert (GBP_IS_MESON_BUILD_TARGET_PROVIDER (provider));
   g_assert (G_IS_TASK (result));
   g_assert (g_task_is_valid (G_TASK (result), provider));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+#ifdef IDE_ENABLE_TRACE
+  if (ret != NULL)
+    {
+      IDE_TRACE_MSG ("Discovered %u targets", ret->len);
+
+      for (guint i = 0; i < ret->len; i++)
+        {
+          IdeBuildTarget *target = g_ptr_array_index (ret, i);
+          g_autofree gchar *name = NULL;
+
+          g_assert (GBP_IS_MESON_BUILD_TARGET (target));
+          g_assert (IDE_IS_BUILD_TARGET (target));
+
+          name = ide_build_target_get_name (target);
+          IDE_TRACE_MSG ("[%u]: %s", i, name);
+        }
+    }
+#endif
+
+  IDE_RETURN (ret);
 }
 
 static void
