@@ -108,7 +108,9 @@ guess_primary_module (JsonNode    *modules_node,
   g_return_val_if_fail (JSON_NODE_HOLDS_ARRAY (modules_node), NULL);
 
   /* TODO: Support module strings that refer to other files? */
+
   modules = json_node_get_array (modules_node);
+
   if (json_array_get_length (modules) == 1)
     {
       module = json_array_get_element (modules, 0);
@@ -117,34 +119,46 @@ guess_primary_module (JsonNode    *modules_node,
     }
   else
     {
-      for (guint i = 0; i < json_array_get_length (modules); i++)
+      guint modules_len = json_array_get_length (modules);
+
+      for (guint i = 0; i < modules_len; i++)
         {
           module = json_array_get_element (modules, i);
+
           if (JSON_NODE_HOLDS_OBJECT (module))
             {
+              JsonObject *obj = json_node_get_object (module);
               const gchar *module_name;
-              module_name = json_object_get_string_member (json_node_get_object (module), "name");
-              if (g_strcmp0 (module_name, project_dir_name) == 0)
+
+              module_name = json_object_get_string_member (obj, "name");
+
+              if (ide_str_equal0 (module_name, project_dir_name))
                 return module;
-              if (json_object_has_member (json_node_get_object (module), "modules"))
+
+              /* Only look at submodules if this is the last item */
+              if (i + 1 == modules_len && json_object_has_member (obj, "modules"))
                 {
                   JsonNode *nested_modules_node;
                   JsonNode *nested_primary_module;
-                  nested_modules_node = json_object_get_member (json_node_get_object (module), "modules");
+
+                  nested_modules_node = json_object_get_member (obj, "modules");
                   nested_primary_module = guess_primary_module (nested_modules_node, project_dir_name);
+
                   if (nested_primary_module != NULL)
                     return nested_primary_module;
                 }
             }
         }
+
         /* If none match, assume the last module in the list is the primary one */
         parent = json_node_get_parent (modules_node);
         if (JSON_NODE_HOLDS_OBJECT (parent) &&
             json_node_get_parent (parent) == NULL &&
-            json_array_get_length (modules) > 0)
+            modules_len > 0)
           {
             JsonNode *last_node;
-            last_node = json_array_get_element (modules, json_array_get_length (modules) - 1);
+
+            last_node = json_array_get_element (modules, modules_len - 1);
             if (JSON_NODE_HOLDS_OBJECT (last_node))
               return last_node;
           }
