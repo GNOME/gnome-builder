@@ -71,7 +71,9 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
       launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                               G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      /* Use our bundled flatpak-builder when possible */
+      ide_subprocess_launcher_set_run_on_host (launcher, !ide_is_flatpak ());
+
       ide_subprocess_launcher_set_clear_env (launcher, FALSE);
       ide_subprocess_launcher_set_cwd (launcher, src_dir);
 

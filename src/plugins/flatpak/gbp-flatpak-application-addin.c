@@ -1301,7 +1301,15 @@ gbp_flatpak_application_addin_check_sysdeps_async (GbpFlatpakApplicationAddin *s
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, gbp_flatpak_application_addin_check_sysdeps_async);
+
+  if (ide_is_flatpak ())
+    {
+      /* We can use bundled flatpak-builder in flatpak */
+      g_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);

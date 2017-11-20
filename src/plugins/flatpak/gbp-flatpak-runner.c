@@ -69,6 +69,10 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
     {
       const gchar *manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (configuration));
 
+      /* Use our bundled flatpak-builder when possible */
+      if (ide_is_flatpak ())
+        ide_subprocess_launcher_set_run_on_host (launcher, FALSE);
+
       ide_subprocess_launcher_insert_argv (launcher, i++, "flatpak-builder");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--run");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--allow=devel");
