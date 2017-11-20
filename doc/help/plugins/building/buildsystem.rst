@@ -37,16 +37,6 @@ Builder has support for many build systems such as autotools, meson, cmake, etc.
            if result.propagate_boolean():
                return result.build_flags
 
-       def do_get_build_targets_async(self, cancellable, callback, data=None):
-           task = Gio.Task.new(self, cancellable, callback)
-           task.build_targets = []
-           # get the build targets
-           task.return_boolean(True)
-
-       def do_get_build_targets_finish(self, result):
-           if result.propagate_boolean():
-               return result.build_targets
-
 
 How does Builder know which build system to use for a project? Each has an associated "project file" (configure.ac for autotools) that has to exist in the source directory for the build system to be used. If a project has multiple project files, the priorities of each are used to decide which to use. You can see where the priority is defined in the code above. The project file is defined in the ``.plugin`` file with these lines (in the case of the make plugin):
 
