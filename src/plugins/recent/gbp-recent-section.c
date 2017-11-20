@@ -196,8 +196,8 @@ gbp_recent_section_set_selection_mode (IdeGreeterSection *section,
 }
 
 static void
-gbp_recent_section_delete_selected_cb (GtkWidget *widget,
-                                       gpointer   user_data)
+gbp_recent_section_collect_selected_cb (GtkWidget *widget,
+                                        gpointer   user_data)
 {
   GbpRecentProjectRow *row = (GbpRecentProjectRow *)widget;
   GList **list = user_data;
@@ -228,12 +228,90 @@ gbp_recent_section_delete_selected (IdeGreeterSection *section)
   g_assert (GBP_IS_RECENT_SECTION (self));
 
   gtk_container_foreach (GTK_CONTAINER (self->listbox),
-                         gbp_recent_section_delete_selected_cb,
+                         gbp_recent_section_collect_selected_cb,
                          &infos);
 
   projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
   ide_recent_projects_remove (projects, infos);
   g_list_free_full (infos, g_object_unref);
+}
+
+static void
+gbp_recent_section_reap_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
+{
+  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  g_autoptr(GPtrArray) directories = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (directories != NULL);
+
+  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+    {
+      g_warning ("Failed to purge directories: %s", error->message);
+      return;
+    }
+
+  for (guint i = 0; i < directories->len; i++)
+    {
+      GFile *directory = g_ptr_array_index (directories, i);
+
+      g_file_delete_async (directory, G_PRIORITY_LOW, NULL, NULL, NULL);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+gbp_recent_section_purge_selected (IdeGreeterSection *section)
+{
+  GbpRecentSection *self = (GbpRecentSection *)section;
+  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr(GPtrArray) directories = NULL;
+  IdeRecentProjects *projects;
+  GList *infos = NULL;
+
+  g_assert (GBP_IS_RECENT_SECTION (self));
+
+  gtk_container_foreach (GTK_CONTAINER (self->listbox),
+                         gbp_recent_section_collect_selected_cb,
+                         &infos);
+
+  /* Remove the projects from the list of recent projects */
+  projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
+  ide_recent_projects_remove (projects, infos);
+
+  /* Now asynchronously remove all the project files */
+  reaper = dzl_directory_reaper_new ();
+  directories = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (const GList *iter = infos; iter != NULL; iter = iter->next)
+    {
+      g_autoptr(IdeProjectInfo) info = iter->data;
+      GFile *directory = ide_project_info_get_directory (info);
+      GFile *file = ide_project_info_get_file (info);
+      g_autoptr(GFile) parent = NULL;
+
+      g_assert (G_IS_FILE (directory) || G_IS_FILE (file));
+
+      if (directory == NULL)
+        directory = parent = g_file_get_parent (file);
+
+      dzl_directory_reaper_add_directory (reaper, directory, 0);
+      g_ptr_array_add (directories, g_object_ref (directory));
+    }
+
+  dzl_directory_reaper_execute_async (reaper,
+                                      NULL,
+                                      gbp_recent_section_reap_cb,
+                                      g_steal_pointer (&directories));
+
+  g_list_free (infos);
 }
 
 static void
@@ -244,6 +322,7 @@ greeter_section_iface_init (IdeGreeterSectionInterface *iface)
   iface->activate_first = gbp_recent_section_activate_first;
   iface->set_selection_mode = gbp_recent_section_set_selection_mode;
   iface->delete_selected = gbp_recent_section_delete_selected;
+  iface->purge_selected = gbp_recent_section_purge_selected;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_BIN,
