@@ -195,37 +195,12 @@ ide_build_system_real_get_build_flags_for_files_finish (IdeBuildSystem       *se
 }
 
 static void
-ide_build_system_real_get_build_targets_async (IdeBuildSystem      *self,
-                                               GCancellable        *cancellable,
-                                               GAsyncReadyCallback  callback,
-                                               gpointer             user_data)
-{
-  g_task_report_new_error (self,
-                           callback,
-                           user_data,
-                           ide_build_system_real_get_build_targets_async,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "Fetching build targets is not supported");
-}
-
-static GPtrArray *
-ide_build_system_real_get_build_targets_finish (IdeBuildSystem  *self,
-                                                GAsyncResult    *result,
-                                                GError         **error)
-{
-  return g_task_propagate_pointer (G_TASK (result), error);
-}
-
-static void
 ide_build_system_default_init (IdeBuildSystemInterface *iface)
 {
   iface->get_build_flags_async = ide_build_system_real_get_build_flags_async;
   iface->get_build_flags_finish = ide_build_system_real_get_build_flags_finish;
   iface->get_build_flags_for_files_async = ide_build_system_real_get_build_flags_for_files_async;
   iface->get_build_flags_for_files_finish = ide_build_system_real_get_build_flags_for_files_finish;
-  iface->get_build_targets_async = ide_build_system_real_get_build_targets_async;
-  iface->get_build_targets_finish = ide_build_system_real_get_build_targets_finish;
 
   properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
@@ -519,45 +494,6 @@ ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem       *self,
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
   ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_for_files_finish (self, result, error);
-
-  IDE_RETURN (ret);
-}
-
-void
-ide_build_system_get_build_targets_async (IdeBuildSystem      *self,
-                                          GCancellable        *cancellable,
-                                          GAsyncReadyCallback  callback,
-                                          gpointer             user_data)
-{
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_targets_async (self, cancellable, callback, user_data);
-
-  IDE_EXIT;
-}
-
-/**
- * ide_build_system_get_build_targets_finish:
- *
- * Returns: (transfer container) (element-type Ide.BuildTarget): An array
- *   of #IdeBuildTarget or %NULL and @error is set.
- */
-GPtrArray *
-ide_build_system_get_build_targets_finish (IdeBuildSystem  *self,
-                                           GAsyncResult    *result,
-                                           GError         **error)
-{
-  GPtrArray *ret;
-
-  IDE_ENTRY;
-
-  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
-
-  ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_targets_finish (self, result, error);
 
   IDE_RETURN (ret);
 }

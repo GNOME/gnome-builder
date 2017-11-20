@@ -51,13 +51,6 @@ struct _IdeBuildSystemInterface
   GHashTable *(*get_build_flags_for_files_finish)  (IdeBuildSystem       *self,
                                                     GAsyncResult         *result,
                                                     GError              **error);
-  void        (*get_build_targets_async)           (IdeBuildSystem       *self,
-                                                    GCancellable         *cancellable,
-                                                    GAsyncReadyCallback   callback,
-                                                    gpointer              user_data);
-  GPtrArray  *(*get_build_targets_finish)          (IdeBuildSystem       *self,
-                                                    GAsyncResult         *result,
-                                                    GError              **error);
   gchar      *(*get_builddir)                      (IdeBuildSystem       *self,
                                                     IdeConfiguration     *configuration);
   gchar      *(*get_id)                            (IdeBuildSystem       *self);
@@ -101,15 +94,6 @@ void            ide_build_system_get_build_flags_for_files_async   (IdeBuildSyst
                                                                     gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
 GHashTable     *ide_build_system_get_build_flags_for_files_finish  (IdeBuildSystem       *self,
-                                                                    GAsyncResult         *result,
-                                                                    GError              **error);
-IDE_AVAILABLE_IN_ALL
-void            ide_build_system_get_build_targets_async           (IdeBuildSystem       *self,
-                                                                    GCancellable         *cancellable,
-                                                                    GAsyncReadyCallback   callback,
-                                                                    gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-GPtrArray      *ide_build_system_get_build_targets_finish          (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
 void            _ide_build_system_set_project_file                 (IdeBuildSystem       *self,
