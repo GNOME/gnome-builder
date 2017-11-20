@@ -20,6 +20,7 @@
 
 #include <json-glib/json-glib.h>
 
+#include "gbp-meson-build-system.h"
 #include "gbp-meson-build-target.h"
 #include "gbp-meson-build-target-provider.h"
 
@@ -314,6 +315,7 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
   g_autoptr(GTask) task = NULL;
   IdeBuildPipeline *pipeline;
   IdeBuildManager *build_manager;
+  IdeBuildSystem *build_system;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -326,6 +328,17 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
   g_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_context_get_build_system (context);
+
+  if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Not a meson build system, ignoring");
+      IDE_EXIT;
+    }
+
   build_manager = ide_context_get_build_manager (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
