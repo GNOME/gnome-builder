@@ -937,6 +937,9 @@ ide_greeter_perspective_notify_has_selection (IdeGreeterPerspective *self,
   dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "remove-selected-rows",
                              "enabled", has_selection,
                              NULL);
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "purge-selected-rows",
+                             "enabled", has_selection,
+                             NULL);
 }
 
 static void
@@ -1075,6 +1078,81 @@ remove_selected_rows (GSimpleAction *simple,
 }
 
 static void
+purge_selected_rows_cb (PeasExtensionSet *set,
+                        PeasPluginInfo   *plugin_info,
+                        PeasExtension    *exten,
+                        gpointer          user_data)
+{
+  IdeGreeterSection *section = (IdeGreeterSection *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_GREETER_SECTION (section));
+
+  ide_greeter_section_purge_selected (section);
+}
+
+static void
+purge_selected_rows_response (IdeGreeterPerspective *self,
+                              gint                   response,
+                              GtkDialog             *dialog)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+  g_assert (GTK_IS_MESSAGE_DIALOG (dialog));
+
+  if (response == GTK_RESPONSE_OK)
+    {
+      peas_extension_set_foreach (self->sections, purge_selected_rows_cb, NULL);
+      ide_greeter_perspective_apply_filter_all (self);
+      dzl_state_machine_set_state (self->state_machine, "browse");
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  IDE_EXIT;
+}
+
+static void
+purge_selected_rows (GSimpleAction *simple,
+                     GVariant      *param,
+                     gpointer       user_data)
+{
+  IdeGreeterPerspective *self = user_data;
+  GtkDialog *dialog;
+  GtkWidget *parent;
+  GtkWidget *button;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
+
+  parent = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
+  dialog = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
+                         "modal", TRUE,
+                         "transient-for", parent,
+                         "attached-to", parent,
+                         "text", _("Removing project files will delete them from your computer and cannot be undone."),
+                         NULL);
+  gtk_dialog_add_buttons (dialog,
+                          _("Cancel"), GTK_RESPONSE_CANCEL,
+                          _("Delete Project Files"), GTK_RESPONSE_OK,
+                          NULL);
+  button = gtk_dialog_get_widget_for_response (dialog, GTK_RESPONSE_OK);
+  dzl_gtk_widget_add_style_class (button, "destructive-action");
+  g_signal_connect_data (dialog,
+                         "response",
+                         G_CALLBACK (purge_selected_rows_response),
+                         g_object_ref (self),
+                         (GClosureNotify)g_object_unref,
+                         G_CONNECT_SWAPPED);
+  gtk_window_present (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
+}
+
+static void
 ide_greeter_perspective_notify_selection (PeasExtensionSet *set,
                                           PeasPluginInfo   *plugin_info,
                                           PeasExtension    *exten,
@@ -1166,6 +1244,7 @@ ide_greeter_perspective_class_init (IdeGreeterPerspectiveClass *klass)
 }
 
 static const GActionEntry actions[] = {
+  { "purge-selected-rows", purge_selected_rows },
   { "remove-selected-rows", remove_selected_rows },
 };
 
@@ -1243,6 +1322,9 @@ ide_greeter_perspective_init (IdeGreeterPerspective *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self), "greeter", G_ACTION_GROUP (group));
 
   dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "remove-selected-rows",
+                             "enabled", FALSE,
+                             NULL);
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "greeter", "purge-selected-rows",
                              "enabled", FALSE,
                              NULL);
 }
