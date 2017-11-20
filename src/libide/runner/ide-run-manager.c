@@ -836,6 +836,16 @@ ide_run_manager_set_build_target (IdeRunManager  *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_TARGET]);
 }
 
+static gint
+compare_targets (gconstpointer a,
+                 gconstpointer b)
+{
+  const IdeBuildTarget * const *a_target = a;
+  const IdeBuildTarget * const *b_target = b;
+
+  return ide_build_target_compare (*a_target, *b_target);
+}
+
 static void
 collect_extensions (PeasExtensionSet *set,
                     PeasPluginInfo   *plugin_info,
@@ -903,7 +913,7 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  g_ptr_array_sort (state->results, (GCompareFunc)ide_build_target_compare);
+  g_ptr_array_sort (state->results, compare_targets);
 
   g_task_return_pointer (task,
                          g_object_ref (g_ptr_array_index (state->results, 0)),
