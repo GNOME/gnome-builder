@@ -517,70 +517,6 @@ gbp_cmake_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
 }
 
 static void
-gbp_cmake_build_system_get_build_targets_async (IdeBuildSystem      *build_system,
-                                                GCancellable        *cancellable,
-                                                GAsyncReadyCallback  callback,
-                                                gpointer             user_data)
-{
-  GbpCMakeBuildSystem *self = (GbpCMakeBuildSystem *)build_system;
-  g_autoptr(GTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_CMAKE_BUILD_SYSTEM (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, gbp_cmake_build_system_get_build_targets_async);
-
-  /* Not implemented yet, still looking for the best option... */
-  g_task_return_error (task,
-                       g_error_new (G_IO_ERROR,
-                                    G_IO_ERROR_NOT_SUPPORTED,
-                                    "Extracting targets from CMake projects isn't supported yet…"));
-
-  IDE_EXIT;
-}
-
-static GPtrArray *
-gbp_cmake_build_system_get_build_targets_finish (IdeBuildSystem  *build_system,
-                                                 GAsyncResult    *result,
-                                                 GError         **error)
-{
-  GbpCMakeBuildSystem *self = (GbpCMakeBuildSystem *)build_system;
-  GPtrArray *build_targets;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_CMAKE_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (result));
-
-  build_targets = g_task_propagate_pointer (G_TASK (result), error);
-
-#ifdef IDE_ENABLE_TRACE
-  if (build_targets != NULL)
-    {
-      IDE_TRACE_MSG ("Discovered %u targets", build_targets->len);
-
-      for (guint i = 0; i < build_targets->len; i++)
-        {
-          IdeBuildTarget *target = g_ptr_array_index (build_targets, i);
-          g_autofree gchar *name = NULL;
-
-          g_assert (GBP_IS_CMAKE_BUILD_TARGET (target));
-          g_assert (IDE_IS_BUILD_TARGET (target));
-
-          name = ide_build_target_get_name (target);
-          IDE_TRACE_MSG ("[%u]: %s", i, name);
-        }
-    }
-#endif
-
-  IDE_RETURN (build_targets);
-}
-
-static void
 build_system_iface_init (IdeBuildSystemInterface *iface)
 {
   iface->get_id = gbp_cmake_build_system_get_id;
@@ -588,8 +524,6 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_priority = gbp_cmake_build_system_get_priority;
   iface->get_build_flags_async = gbp_cmake_build_system_get_build_flags_async;
   iface->get_build_flags_finish = gbp_cmake_build_system_get_build_flags_finish;
-  iface->get_build_targets_async = gbp_cmake_build_system_get_build_targets_async;
-  iface->get_build_targets_finish = gbp_cmake_build_system_get_build_targets_finish;
 }
 
 static void
