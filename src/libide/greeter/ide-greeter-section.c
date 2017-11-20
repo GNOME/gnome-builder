@@ -159,3 +159,12 @@ ide_greeter_section_delete_selected (IdeGreeterSection *self)
   if (IDE_GREETER_SECTION_GET_IFACE (self)->delete_selected)
     IDE_GREETER_SECTION_GET_IFACE (self)->delete_selected (self);
 }
+
+void
+ide_greeter_section_purge_selected (IdeGreeterSection *self)
+{
+  g_assert (IDE_IS_GREETER_SECTION (self));
+
+  if (IDE_GREETER_SECTION_GET_IFACE (self)->purge_selected)
+    IDE_GREETER_SECTION_GET_IFACE (self)->purge_selected (self);
+}
