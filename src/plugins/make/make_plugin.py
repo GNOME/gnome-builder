@@ -74,15 +74,6 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         if result.propagate_boolean():
             return result.build_flags
 
-    def do_get_build_targets_async(self, cancellable, callback, data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.build_targets = []
-        task.return_boolean(True)
-
-    def do_get_build_targets_finish(self, result):
-        if result.propagate_boolean():
-            return result.build_targets
-
     def get_make_dir(self):
         return self.props.make_dir
 
