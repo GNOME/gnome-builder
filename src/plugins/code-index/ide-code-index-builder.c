@@ -502,11 +502,9 @@ ide_code_index_builder_get_changes_worker (GTask        *task,
 {
   IdeCodeIndexBuilder *self = source_object;
   IdeContext *context;
-  const gchar *project_id;
   GFile *workdir;
   g_autoptr(GFile) destination = NULL;
   g_autofree gchar *relative_path = NULL;
-  g_autofree gchar *destination_path = NULL;
   GetChangesTaskData *data = task_data_ptr;
 
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
@@ -514,16 +512,9 @@ ide_code_index_builder_get_changes_worker (GTask        *task,
   g_assert (data != NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  project_id = ide_project_get_id (ide_context_get_project (context));
   workdir = ide_vcs_get_working_directory (ide_context_get_vcs (context));
   relative_path = g_file_get_relative_path (workdir, data->directory);
-  destination_path = g_build_filename (g_get_user_cache_dir (),
-                                       ide_get_program_name (),
-                                       "code-index",
-                                       project_id,
-                                       relative_path,
-                                       NULL);
-  destination = g_file_new_for_path (destination_path);
+  destination = ide_context_cache_file (context, "code-index", relative_path, NULL);
 
   data->changes = g_ptr_array_new_with_free_func ((GDestroyNotify)indexing_data_free);
 
