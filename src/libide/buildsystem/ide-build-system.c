@@ -386,17 +386,15 @@ ide_build_system_post_process_build_flags (IdeBuildSystem  *self,
             }
           break;
 
-        case 'f': /* -fPIC */
-        case 'W': /* -Werror... */
-        case 'm': /* -m64 -mtune=native */
-          break;
-
         case 'D':
         case 'x':
           if (strlen (flag) == 2)
             i++;
           break;
 
+        case 'f': /* -fPIC */
+        case 'W': /* -Werror... */
+        case 'm': /* -m64 -mtune=native */
         default:
           break;
         }
