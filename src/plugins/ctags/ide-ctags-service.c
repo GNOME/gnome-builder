@@ -384,7 +384,6 @@ ide_ctags_service_do_mine (gpointer data)
   g_autoptr(GArray) mine_info = NULL;
   g_autofree gchar *path = NULL;
   IdeContext *context;
-  IdeProject *project;
   MineInfo info;
   GFile *workdir;
 
@@ -396,18 +395,13 @@ ide_ctags_service_do_mine (gpointer data)
   self->miner_active = TRUE;
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  project = ide_context_get_project (context);
   workdir = ide_vcs_get_working_directory (ide_context_get_vcs (context));
 
   mine_info = g_array_new (FALSE, FALSE, sizeof (MineInfo));
   g_array_set_clear_func (mine_info, clear_mine_info);
 
-  /* mine: ~/.cache/gnome-builder/tags/$project_id */
-  info.path = g_build_filename (g_get_user_cache_dir (),
-                                ide_get_program_name (),
-                                "tags",
-                                ide_project_get_id (project),
-                                NULL);
+  /* mine: ~/.cache/gnome-builder/projects/$project_id/ctags/ */
+  info.path = ide_context_cache_filename (context, "ctags", NULL);
   info.recursive = TRUE;
   g_array_append_val (mine_info, info);
 

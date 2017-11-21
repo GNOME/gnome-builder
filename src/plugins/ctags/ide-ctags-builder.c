@@ -289,7 +289,6 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
   g_autofree gchar *relative_path = NULL;
   BuildTaskData *task_data;
   IdeContext *context;
-  const gchar *project_id;
   GFile *workdir;
 
   IDE_ENTRY;
@@ -305,26 +304,21 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
   task_data->recursive = recursive;
 
   /*
-   * The destination directory for the tags should match the hierarchy
-   * of the projects source tree, but be based in something like
-   * ~/.cache/gnome-builder/tags/$project_id/ so that they can be reused
-   * even between configuration changes. Primarily, we want to avoid
+   * The destination directory for the tags should match the hierarchy of the
+   * projects source tree, but be based in something like
+   * ~/.cache/gnome-builder/projects/$project_id/ctags/ so that they can be
+   * reused even between configuration changes. Primarily, we want to avoid
    * putting things in the source tree.
    */
   context = ide_object_get_context (IDE_OBJECT (self));
-  project_id = ide_project_get_id (ide_context_get_project (context));
   workdir = ide_vcs_get_working_directory (ide_context_get_vcs (context));
   relative_path = g_file_get_relative_path (workdir, directory_or_file);
-  destination_path = g_build_filename (g_get_user_cache_dir (),
-                                       ide_get_program_name (),
-                                       "tags",
-                                       project_id,
-                                       relative_path,
-                                       NULL);
+  destination_path = ide_context_cache_filename (context, "ctags", relative_path, NULL);
   task_data->destination = g_file_new_for_path (destination_path);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_ctags_builder_build_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, task_data, build_task_data_free);
   ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_builder_build_worker);
 
