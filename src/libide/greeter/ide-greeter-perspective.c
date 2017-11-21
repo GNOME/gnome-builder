@@ -114,20 +114,19 @@ ide_perspective_iface_init (IdePerspectiveInterface *iface)
 }
 
 static void
-ide_greeter_perspective_activate_cb (PeasExtensionSet *set,
-                                     PeasPluginInfo   *plugin_info,
-                                     PeasExtension    *exten,
-                                     gpointer          user_data)
+ide_greeter_perspective_activate_cb (GtkWidget *widget,
+                                     gpointer   user_data)
 {
-  IdeGreeterSection *section = (IdeGreeterSection *)exten;
   gboolean *handled = user_data;
 
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_GREETER_SECTION (section));
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (handled != NULL);
+
+  if (!IDE_IS_GREETER_SECTION (widget))
+    return;
 
   if (!*handled)
-    *handled = ide_greeter_section_activate_first (section);
+    *handled = ide_greeter_section_activate_first (IDE_GREETER_SECTION (widget));
 }
 
 static void
@@ -139,9 +138,9 @@ ide_greeter_perspective__search_entry_activate (IdeGreeterPerspective *self,
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
 
-  peas_extension_set_foreach (self->sections,
-                              ide_greeter_perspective_activate_cb,
-                              &handled);
+  gtk_container_foreach (GTK_CONTAINER (self->sections_container),
+                         ide_greeter_perspective_activate_cb,
+                         &handled);
 
   if (!handled)
     gdk_window_beep (gtk_widget_get_window (GTK_WIDGET (search_entry)));
