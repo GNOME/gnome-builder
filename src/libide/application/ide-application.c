@@ -389,6 +389,23 @@ ide_application_register_settings (IdeApplication *self)
 }
 
 static void
+_ide_application_init_reapers (IdeApplication *self)
+{
+  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr(GFile) buffers = NULL;
+
+  g_assert (IDE_IS_APPLICATION (self));
+
+  reaper = dzl_directory_reaper_new ();
+  buffers = g_file_new_build_filename (g_get_user_cache_dir (),
+                                       ide_get_program_name (),
+                                       "buffers",
+                                       NULL);
+  dzl_directory_reaper_add_directory (reaper, buffers, G_TIME_SPAN_HOUR);
+  ide_application_add_reaper (self, reaper);
+}
+
+static void
 ide_application_startup (GApplication *application)
 {
   IdeApplication *self = (IdeApplication *)application;
@@ -418,6 +435,7 @@ ide_application_startup (GApplication *application)
       ide_application_actions_init (self);
       _ide_application_init_shortcuts (self);
       _ide_application_init_color (self);
+      _ide_application_init_reapers (self);
 
       modeline_parser_init ();
     }
@@ -467,10 +485,12 @@ ide_application_shutdown (GApplication *application)
   for (guint i = 0; i < self->reapers->len; i++)
     {
       DzlDirectoryReaper *reaper = g_ptr_array_index (self->reapers, i);
+      g_autoptr(GError) error = NULL;
 
       g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
 
-      dzl_directory_reaper_execute (reaper, NULL, NULL);
+      if (!dzl_directory_reaper_execute (reaper, NULL, &error))
+        g_warning ("Failed to reap files: %s", error->message);
     }
 
   _ide_battery_monitor_shutdown ();
