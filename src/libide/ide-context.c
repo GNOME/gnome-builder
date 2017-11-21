@@ -2458,3 +2458,98 @@ _ide_context_get_pausables (IdeContext *self)
 
   return G_LIST_MODEL (self->pausables);
 }
+
+/**
+ * ide_context_cache_file:
+ * @self: a #IdeContext
+ * @first_part: The first part of the path
+ *
+ * Like ide_context_cache_filename() but returns a #GFile.
+ *
+ * Returns: (transfer full): a #GFile for the cache file
+ *
+ * Since: 3.28
+ */
+GFile *
+ide_context_cache_file (IdeContext  *self,
+                        const gchar *first_part,
+                        ...)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autofree gchar *path = NULL;
+  const gchar *part = first_part;
+  va_list args;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+  g_return_val_if_fail (first_part != NULL, NULL);
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_add (ar, (gchar *)g_get_user_cache_dir ());
+  g_ptr_array_add (ar, (gchar *)ide_get_program_name ());
+  g_ptr_array_add (ar, (gchar *)"projects");
+  g_ptr_array_add (ar, (gchar *)ide_project_get_id (self->project));
+
+  va_start (args, first_part);
+  do
+    {
+      g_ptr_array_add (ar, (gchar *)part);
+      part = va_arg (args, const gchar *);
+    }
+  while (part != NULL);
+  va_end (args);
+
+  g_ptr_array_add (ar, NULL);
+
+  path = g_build_filenamev ((gchar **)ar->pdata);
+
+  return g_file_new_for_path (path);
+}
+
+/**
+ * ide_context_cache_filename:
+ * @self: a #IdeContext
+ * @first_part: the first part of the filename
+ *
+ * Creates a new filename that will be located in the projects cache directory.
+ * This makes it convenient to remove files when a project is deleted as all
+ * cache files will share a unified parent directory.
+ *
+ * The file will be located in a directory similar to
+ * ~/.cache/gnome-builder/project_name. This may change based on the value
+ * of g_get_user_cache_dir().
+ *
+ * Returns: (transfer full): A new string containing the cache filename
+ *
+ * Since: 3.28
+ */
+gchar *
+ide_context_cache_filename (IdeContext  *self,
+                            const gchar *first_part,
+                            ...)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  const gchar *part = first_part;
+  va_list args;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+  g_return_val_if_fail (first_part != NULL, NULL);
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_add (ar, (gchar *)g_get_user_cache_dir ());
+  g_ptr_array_add (ar, (gchar *)ide_get_program_name ());
+  g_ptr_array_add (ar, (gchar *)"projects");
+  g_ptr_array_add (ar, (gchar *)ide_project_get_id (self->project));
+
+  va_start (args, first_part);
+  do
+    {
+      g_ptr_array_add (ar, (gchar *)part);
+      part = va_arg (args, const gchar *);
+    }
+  while (part != NULL);
+  va_end (args);
+
+  g_ptr_array_add (ar, NULL);
+
+  return g_build_filenamev ((gchar **)ar->pdata);
+}

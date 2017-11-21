@@ -122,6 +122,14 @@ IDE_AVAILABLE_IN_ALL
 void                      ide_context_warning                   (IdeContext           *self,
                                                                  const gchar          *format,
                                                                  ...) G_GNUC_PRINTF (2, 3);
+IDE_AVAILABLE_IN_3_28
+GFile                    *ide_context_cache_file                (IdeContext           *self,
+                                                                 const gchar          *first_part,
+                                                                 ...) G_GNUC_NULL_TERMINATED;
+IDE_AVAILABLE_IN_3_28
+gchar                    *ide_context_cache_filename            (IdeContext           *self,
+                                                                 const gchar          *first_part,
+                                                                 ...) G_GNUC_NULL_TERMINATED;
 GListModel               *_ide_context_get_pausables            (IdeContext           *self) G_GNUC_INTERNAL;
 gboolean                  _ide_context_is_restoring             (IdeContext           *self) G_GNUC_INTERNAL;
 
