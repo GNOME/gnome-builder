@@ -485,6 +485,8 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
         case 'f': /* -fPIC */
         case 'W': /* -Werror... */
         case 'm': /* -m64 -mtune=native */
+        case 'M': /* -MMD -MQ */
+        case 'O': /* -O2 */
           g_ptr_array_add (ar, g_strdup (param));
           break;
 
@@ -497,6 +499,7 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
 
         default:
           if (g_str_has_prefix (param, "-std=") ||
+              ide_str_equal0 (param, "-pthread") ||
               g_str_has_prefix (param, "-isystem"))
             {
               g_ptr_array_add (ar, g_strdup (param));
