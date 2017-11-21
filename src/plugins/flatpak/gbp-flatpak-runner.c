@@ -54,7 +54,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
 {
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
   IdeConfigurationManager *config_manager;
-  IdeConfiguration *configuration;
+  IdeConfiguration *config;
   IdeContext *context;
   guint i = 0;
 
@@ -63,29 +63,53 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   config_manager = ide_context_get_configuration_manager (context);
-  configuration = ide_configuration_manager_get_current (config_manager);
+  config = ide_configuration_manager_get_current (config_manager);
 
-  if (GBP_IS_FLATPAK_CONFIGURATION (configuration))
+  ide_subprocess_launcher_insert_argv (launcher, i++, "flatpak");
+  ide_subprocess_launcher_insert_argv (launcher, i++, "build");
+  ide_subprocess_launcher_insert_argv (launcher, i++, "--with-appdir");
+  ide_subprocess_launcher_insert_argv (launcher, i++, "--allow=devel");
+
+  if (GBP_IS_FLATPAK_CONFIGURATION (config))
     {
-      const gchar *manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (configuration));
+      const gchar * const *finish_args;
 
-      ide_subprocess_launcher_insert_argv (launcher, i++, "flatpak-builder");
-      ide_subprocess_launcher_insert_argv (launcher, i++, "--run");
-      ide_subprocess_launcher_insert_argv (launcher, i++, "--allow=devel");
-      ide_subprocess_launcher_insert_argv (launcher, i++, self->build_path);
-      ide_subprocess_launcher_insert_argv (launcher, i++, manifest_path);
+      /*
+       * We cannot rely on flatpak-builder --run because it filters out
+       * some finish-args that we really care about. (Primarily so that
+       * it can preserve the integrity of the build results). So instead,
+       * we just mimic what it would do for us and ensure we pass along
+       * all the finish-args we know about.
+       */
+
+      finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (config));
+
+      if (finish_args != NULL)
+        {
+          for (guint j = 0; finish_args[j] != NULL; j++)
+            {
+              const gchar *arg = finish_args[j];
+
+              if (g_str_has_prefix (arg, "--allow") ||
+                  g_str_has_prefix (arg, "--share") ||
+                  g_str_has_prefix (arg, "--socket") ||
+                  g_str_has_prefix (arg, "--filesystem") ||
+                  g_str_has_prefix (arg, "--env") ||
+                  g_str_has_prefix (arg, "--system-talk") ||
+                  g_str_has_prefix (arg, "--talk-name"))
+                ide_subprocess_launcher_insert_argv (launcher, i++, arg);
+            }
+        }
     }
   else
     {
-      ide_subprocess_launcher_insert_argv (launcher, i++, "flatpak");
-      ide_subprocess_launcher_insert_argv (launcher, i++, "build");
-      ide_subprocess_launcher_insert_argv (launcher, i++, "--allow=devel");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--share=ipc");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--share=network");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=x11");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=wayland");
-      ide_subprocess_launcher_insert_argv (launcher, i++, self->build_path);
     }
+
+  ide_subprocess_launcher_insert_argv (launcher, i++, self->build_path);
 }
 
 GbpFlatpakRunner *
