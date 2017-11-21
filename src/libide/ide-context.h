@@ -72,8 +72,6 @@ IdeUnsavedFiles          *ide_context_get_unsaved_files         (IdeContext     
 IDE_AVAILABLE_IN_ALL
 IdeVcs                   *ide_context_get_vcs                   (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL
-const gchar              *ide_context_get_root_build_dir        (IdeContext           *self);
-IDE_AVAILABLE_IN_ALL
 gpointer                  ide_context_get_service_typed         (IdeContext           *self,
                                                                  GType                 service_type);
 IDE_AVAILABLE_IN_ALL
@@ -93,9 +91,6 @@ void                      ide_context_new_async                 (GFile          
 IDE_AVAILABLE_IN_ALL
 IdeContext               *ide_context_new_finish                (GAsyncResult         *result,
                                                                  GError              **error);
-IDE_AVAILABLE_IN_ALL
-void                      ide_context_set_root_build_dir        (IdeContext           *self,
-                                                                 const gchar          *root_build_dir);
 IDE_AVAILABLE_IN_ALL
 void                      ide_context_restore_async             (IdeContext           *self,
                                                                  GCancellable         *cancellable,

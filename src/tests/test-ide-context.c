@@ -27,7 +27,6 @@ test_new_async_cb1 (GObject      *object,
                     GAsyncResult *result,
                     gpointer      user_data)
 {
-  const gchar *root_build_dir;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeContext) context = NULL;
   IdeVcs *vcs;
@@ -43,9 +42,6 @@ test_new_async_cb1 (GObject      *object,
 
   vcs = ide_context_get_vcs (context);
   g_assert_cmpstr (G_OBJECT_TYPE_NAME (vcs), ==, "IdeDirectoryVcs");
-
-  root_build_dir = ide_context_get_root_build_dir (context);
-  g_assert (g_str_has_suffix (root_build_dir, "/gnome-builder/builds"));
 
   g_task_return_boolean (task, TRUE);
 }

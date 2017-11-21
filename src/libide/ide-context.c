@@ -117,7 +117,6 @@ struct _IdeContext
   IdeTestManager           *test_manager;
   IdeProject               *project;
   GFile                    *project_file;
-  gchar                    *root_build_dir;
   gchar                    *recent_projects_path;
   PeasExtensionSet         *services;
   GHashTable               *services_by_gtype;
@@ -148,7 +147,6 @@ enum {
   PROP_DOCUMENTATION,
   PROP_PROJECT_FILE,
   PROP_PROJECT,
-  PROP_ROOT_BUILD_DIR,
   PROP_RUNTIME_MANAGER,
   PROP_SEARCH_ENGINE,
   PROP_SNIPPETS_MANAGER,
@@ -257,47 +255,6 @@ ide_context_get_documentation (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->documentation;
-}
-
-
-/**
- * ide_context_get_root_build_dir:
- *
- * Retrieves the "root-build-dir" for the context. This is the root directory
- * that will contain builds made for various devices.
- *
- * Returns: A string containing the "root-build-dir" property.
- */
-const gchar *
-ide_context_get_root_build_dir (IdeContext *self)
-{
-  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
-
-  return self->root_build_dir;
-}
-
-/**
- * ide_context_set_root_build_dir:
- * @root_build_dir: the path to the root build directory.
- *
- * Sets the "root-build-dir" property. This is the root directory that will
- * be used when building projects for projects that support building out of
- * tree.
- */
-void
-ide_context_set_root_build_dir (IdeContext  *self,
-                                const gchar *root_build_dir)
-{
-  g_return_if_fail (IDE_IS_CONTEXT (self));
-  g_return_if_fail (root_build_dir);
-
-  if (self->root_build_dir != root_build_dir)
-    {
-      g_free (self->root_build_dir);
-      self->root_build_dir = g_strdup (root_build_dir);
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                properties [PROP_ROOT_BUILD_DIR]);
-    }
 }
 
 /**
@@ -559,7 +516,6 @@ ide_context_finalize (GObject *object)
 
   g_clear_pointer (&self->build_system_hint, g_free);
   g_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
-  g_clear_pointer (&self->root_build_dir, g_free);
   g_clear_pointer (&self->recent_projects_path, g_free);
 
   g_clear_object (&self->build_system);
@@ -622,10 +578,6 @@ ide_context_get_property (GObject    *object,
       g_value_set_object (value, ide_context_get_project_file (self));
       break;
 
-    case PROP_ROOT_BUILD_DIR:
-      g_value_set_string (value, ide_context_get_root_build_dir (self));
-      break;
-
     case PROP_RUNTIME_MANAGER:
       g_value_set_object (value, ide_context_get_runtime_manager (self));
       break;
@@ -663,10 +615,6 @@ ide_context_set_property (GObject      *object,
     {
     case PROP_PROJECT_FILE:
       ide_context_set_project_file (self, g_value_get_object (value));
-      break;
-
-    case PROP_ROOT_BUILD_DIR:
-      ide_context_set_root_build_dir (self, g_value_get_string (value));
       break;
 
     default:
@@ -735,13 +683,6 @@ ide_context_class_init (IdeContextClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_ROOT_BUILD_DIR] =
-    g_param_spec_string ("root-build-dir",
-                         "Root Build Directory",
-                         "The root directory to perform builds within.",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_RUNTIME_MANAGER] =
     g_param_spec_object ("runtime-manager",
                          "Runtime Manager",
@@ -808,11 +749,6 @@ ide_context_init (IdeContext *self)
   self->pausables = g_list_store_new (IDE_TYPE_PAUSABLE);
 
   self->recent_manager = g_object_ref (gtk_recent_manager_get_default ());
-
-  self->root_build_dir = g_build_filename (g_get_user_cache_dir (),
-                                           ide_get_program_name (),
-                                           "builds",
-                                           NULL);
 
   self->recent_projects_path = g_build_filename (g_get_user_data_dir (),
                                                  ide_get_program_name (),
