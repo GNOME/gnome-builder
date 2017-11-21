@@ -278,13 +278,6 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 
   ide_subprocess_launcher_set_cwd (launcher, src_dir);
 
-  /* If we're running inside of flatpak, we can use our bundled
-   * flatpak-builder instead of relying on the host. It knows how
-   * to run processes via the same HostCommand service.
-   */
-  if (ide_is_flatpak ())
-    ide_subprocess_launcher_set_run_on_host (launcher, FALSE);
-
   ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
   ide_subprocess_launcher_push_argv (launcher, "--ccache");
   ide_subprocess_launcher_push_argv (launcher, "--force-clean");

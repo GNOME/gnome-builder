@@ -610,6 +610,7 @@
                              "--with-system-install-dir=/var/lib/flatpak" ],
             "cleanup": [ "/etc/profile.d",
                          "/bin/flatpak",
+                         "/bin/flatpak-builder",
                          "/libexec",
                          "/lib/systemd",
                          "/share/dbus-1/interfaces/org.freedesktop.*",
@@ -621,16 +622,6 @@
                 {
                     "type": "git",
                     "url": "https://github.com/flatpak/flatpak.git"
-                }
-            ]
-        },
-        {
-            "name": "flatpak-builder",
-            "config-opts": [ "--disable-documentation", "--disable-docbook-docs" ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://github.com/flatpak/flatpak-builder.git"
                 }
             ]
         },
