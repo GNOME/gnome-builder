@@ -513,29 +513,19 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
   if (ret == NULL)
     {
       g_autofree gchar *name = NULL;
-      const gchar *project_id;
       const gchar *config_id;
       const gchar *device_id;
       const gchar *runtime_id;
       IdeContext *context;
-      IdeProject *project;
 
       context = ide_object_get_context (IDE_OBJECT (self));
-      project = ide_context_get_project (context);
-      project_id = ide_project_get_id (project);
       config_id = ide_configuration_get_id (configuration);
       device_id = ide_configuration_get_device_id (configuration);
       runtime_id = ide_configuration_get_runtime_id (configuration);
 
       name = g_strdelimit (g_strdup_printf ("%s-%s-%s", config_id, device_id, runtime_id),
                            "@:/", '-');
-
-      ret = g_build_filename (g_get_user_cache_dir (),
-                              "gnome-builder",
-                              "builds",
-                              project_id,
-                              name,
-                              NULL);
+      ret = ide_context_cache_filename (context, "builds", name, NULL);
     }
 
   IDE_RETURN (ret);
