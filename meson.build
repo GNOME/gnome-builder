@@ -171,9 +171,9 @@ message('Linker supports --version-script: @0@'.format(ld_supports_version_scrip
 
 # Commonly used deps
 libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.27.2')
-libgio_dep = dependency('gio-2.0', version: '>= 2.53.2')
+libgio_dep = dependency('gio-2.0', version: '>= 2.55.0')
 libgiounix_dep = dependency('gio-unix-2.0')
-libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.1')
+libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.26')
 libgtksource_dep = dependency('gtksourceview-3.0', version: '>= 3.24.0')
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.27.1')
