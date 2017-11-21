@@ -170,12 +170,11 @@ hash_uri (const gchar *uri)
 }
 
 static gchar *
-get_buffers_dir (void)
+get_buffers_dir (IdeContext *context)
 {
-  return g_build_filename (g_get_user_cache_dir (),
-                           "gnome-builder",
-                           "buffers",
-                           NULL);
+  g_assert (IDE_IS_CONTEXT (context));
+
+  return ide_context_cache_filename (context, "buffers", NULL);
 }
 
 static void
@@ -530,9 +529,10 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
 }
 
 static void
-setup_tempfile (GFile  *file,
-                gint   *temp_fd,
-                gchar **temp_path_out)
+setup_tempfile (IdeContext  *context,
+                GFile       *file,
+                gint        *temp_fd,
+                gchar      **temp_path_out)
 {
   g_autofree gchar *tmpdir = NULL;
   g_autofree gchar *name = NULL;
@@ -562,7 +562,7 @@ setup_tempfile (GFile  *file,
    * control the directory so that we can ensure we have one that is available
    * to both the flatpak runtime and the host system.
    */
-  tmpdir = get_buffers_dir ();
+  tmpdir = get_buffers_dir (context);
   shortname = g_strdup_printf ("buffer-XXXXXX%s", suffix);
   tmpl_path = g_build_filename (tmpdir, shortname, NULL);
 
@@ -583,6 +583,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
 {
   IdeUnsavedFilesPrivate *priv = ide_unsaved_files_get_instance_private (self);
   UnsavedFile *unsaved;
+  IdeContext *context;
   guint i;
 
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
@@ -595,6 +596,8 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
       ide_unsaved_files_remove (self, file);
       return;
     }
+
+  context = ide_object_get_context (IDE_OBJECT (self));
 
   for (i = 0; i < priv->unsaved_files->len; i++)
     {
@@ -626,7 +629,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
   unsaved->file = g_object_ref (file);
   unsaved->content = g_bytes_ref (content);
   unsaved->sequence = priv->sequence;
-  setup_tempfile (file, &unsaved->temp_fd, &unsaved->temp_path);
+  setup_tempfile (context, file, &unsaved->temp_fd, &unsaved->temp_path);
 
   g_ptr_array_insert (priv->unsaved_files, 0, unsaved);
 }
@@ -777,12 +780,15 @@ ide_unsaved_files_set_context (IdeObject  *object,
    * Setup a reaper to cleanup old files in case that we left some around
    * after a previous crash.
    */
-  path = get_buffers_dir ();
-  buffersdir = g_file_new_for_path (path);
-  dzl_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_DAY);
+  if (context != NULL)
+    {
+      path = get_buffers_dir (context);
+      buffersdir = g_file_new_for_path (path);
+      dzl_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_HOUR);
 
-  /* Now cleanup the old files */
-  dzl_directory_reaper_execute_async (reaper, NULL, NULL, NULL);
+      /* Now cleanup the old files */
+      dzl_directory_reaper_execute_async (reaper, NULL, NULL, NULL);
+    }
 }
 
 static void
