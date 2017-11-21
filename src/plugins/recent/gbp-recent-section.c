@@ -293,6 +293,7 @@ gbp_recent_section_purge_selected (IdeGreeterSection *section)
   for (const GList *iter = infos; iter != NULL; iter = iter->next)
     {
       g_autoptr(IdeProjectInfo) info = iter->data;
+      const gchar *name = ide_project_info_get_name (info);
       GFile *directory = ide_project_info_get_directory (info);
       GFile *file = ide_project_info_get_file (info);
       g_autoptr(GFile) parent = NULL;
@@ -304,6 +305,27 @@ gbp_recent_section_purge_selected (IdeGreeterSection *section)
 
       dzl_directory_reaper_add_directory (reaper, directory, 0);
       g_ptr_array_add (directories, g_object_ref (directory));
+
+      /*
+       * Also add various cache directories we know are used by
+       * Builder so that we can cleanup extra state that the user
+       * might expect to be reomved.
+       */
+
+      if (name != NULL)
+        {
+          g_autoptr(GFile) cache = NULL;
+          g_autofree gchar *id = NULL;
+
+          id = ide_project_create_id (name);
+          cache = g_file_new_build_filename (g_get_user_cache_dir (),
+                                             ide_get_program_name (),
+                                             "projects",
+                                             id,
+                                             NULL);
+          dzl_directory_reaper_add_directory (reaper, cache, 0);
+          g_ptr_array_add (directories, g_steal_pointer (&cache));
+        }
     }
 
   dzl_directory_reaper_execute_async (reaper,
