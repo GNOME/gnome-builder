@@ -99,12 +99,24 @@ ide_project_writer_unlock (IdeProject *self)
   g_rw_lock_writer_unlock (&self->rw_lock);
 }
 
-static gchar *
-ide_project_create_id (IdeProject *self)
+/**
+ * ide_project_create_id:
+ * @name: the name of the project
+ *
+ * Escapes the project name into something suitable using as an id.
+ * This can be uesd to determine the directory name when the project
+ * name should be used.
+ *
+ * Returns: (transfer full): a new string
+ *
+ * Since: 3.28
+ */
+gchar *
+ide_project_create_id (const gchar *name)
 {
-  g_assert (IDE_IS_PROJECT (self));
+  g_return_val_if_fail (name != NULL, NULL);
 
-  return g_strdelimit (g_strdup (self->name), " /|<>\n\t", '-');
+  return g_strdelimit (g_strdup (name), " /|<>\n\t", '-');
 }
 
 const gchar *
@@ -133,7 +145,7 @@ _ide_project_set_name (IdeProject  *self,
     {
       g_free (self->name);
       self->name = g_strdup (name);
-      self->id = ide_project_create_id (self);
+      self->id = ide_project_create_id (name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_NAME]);
     }
 }

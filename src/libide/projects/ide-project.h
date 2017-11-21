@@ -29,6 +29,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeProject, ide_project, IDE, PROJECT, IdeObject)
 
+IDE_AVAILABLE_IN_3_28
+gchar           *ide_project_create_id          (const gchar          *name);
 IDE_AVAILABLE_IN_ALL
 IdeProjectItem  *ide_project_get_root           (IdeProject           *self);
 IDE_AVAILABLE_IN_ALL
