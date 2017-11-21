@@ -705,12 +705,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
   ar = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (i = 0; i < results->NumResults; i++)
-    {
-      GtkSourceCompletionProposal *proposal;
-
-      proposal = GTK_SOURCE_COMPLETION_PROPOSAL (ide_clang_completion_item_new (refptr, i));
-      g_ptr_array_add (ar, proposal);
-    }
+    g_ptr_array_add (ar, ide_clang_completion_item_new (refptr, i));
 
   g_task_return_pointer (task, ar, (GDestroyNotify)g_ptr_array_unref);
 
