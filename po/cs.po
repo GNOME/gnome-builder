@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-11-18 15:24+0000\n"
-"PO-Revision-Date: 2017-11-19 20:56+0100\n"
+"POT-Creation-Date: 2017-11-20 23:06+0000\n"
+"PO-Revision-Date: 2017-11-22 11:12+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -423,7 +423,7 @@ msgstr "Výška spodního panelu v pixelech."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/application/ide-application.c:566
-#: src/libide/greeter/ide-greeter-perspective.ui:183
+#: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:141
 #: src/libide/workbench/ide-workbench.c:646
 msgid "Builder"
@@ -854,7 +854,7 @@ msgstr "Takový sestavovací proces neexistuje"
 #: src/libide/application/ide-application-shortcuts.c:43
 #: src/libide/application/ide-application-shortcuts.c:51
 #: src/libide/application/ide-application-shortcuts.c:59
-#: src/libide/runner/ide-run-manager.c:750
+#: src/libide/runner/ide-run-manager.c:772
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
 #: src/libide/workbench/ide-workbench-shortcuts.c:45
@@ -1045,8 +1045,8 @@ msgstr "_Uložit"
 
 #: src/libide/buildui/ide-build-log-panel.c:741
 #: src/libide/editor/ide-editor-view.ui:51
-#: src/libide/greeter/ide-greeter-perspective.ui:193
-#: src/libide/greeter/ide-greeter-perspective.ui:241
+#: src/libide/greeter/ide-greeter-perspective.ui:205
+#: src/libide/greeter/ide-greeter-perspective.ui:253
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -1505,7 +1505,7 @@ msgstr "Otevření souboru"
 #: src/libide/editor/ide-editor-perspective-actions.c:73
 #: src/libide/greeter/ide-greeter-perspective.c:322
 #: src/libide/workbench/ide-workbench-actions.c:78
-#: src/plugins/color-picker/gb-color-picker-prefs.c:205
+#: src/plugins/color-picker/gb-color-picker-prefs.c:207
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:365
 msgid "Open"
 msgstr "Otevřít"
@@ -1514,10 +1514,11 @@ msgstr "Otevřít"
 #: src/libide/editor/ide-editor-view-actions.c:244
 #: src/libide/editor/ide-editor-view-actions.c:351
 #: src/libide/greeter/ide-greeter-perspective.c:321
+#: src/libide/greeter/ide-greeter-perspective.c:1139
 #: src/libide/workbench/ide-workbench-actions.c:79
-#: src/plugins/color-picker/gb-color-picker-prefs.c:93
-#: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/color-picker/gb-color-picker-prefs.c:236
+#: src/plugins/color-picker/gb-color-picker-prefs.c:95
+#: src/plugins/color-picker/gb-color-picker-prefs.c:211
+#: src/plugins/color-picker/gb-color-picker-prefs.c:238
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:366
 #: src/plugins/terminal/gb-terminal-view-actions.c:271
 msgid "Cancel"
@@ -1717,7 +1718,7 @@ msgid "Failed to save file: %s"
 msgstr "Selhalo uložení souboru: %s"
 
 #: src/libide/editor/ide-editor-view-actions.c:244
-#: src/plugins/color-picker/gb-color-picker-prefs.c:232
+#: src/plugins/color-picker/gb-color-picker-prefs.c:234
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: src/plugins/terminal/gb-terminal-view-actions.c:272
 msgid "Save"
@@ -1824,6 +1825,18 @@ msgstr "Otevření projektu"
 msgid "All Project Types"
 msgstr "Všechny typy projektů"
 
+#: src/libide/greeter/ide-greeter-perspective.c:1136
+msgid ""
+"Removing project files will delete them from your computer and cannot be "
+"undone."
+msgstr ""
+"Odstraněním projektových souborů dojde k jejich smazání z počítače a nebude "
+"je možné vrátit zpět."
+
+#: src/libide/greeter/ide-greeter-perspective.c:1140
+msgid "Delete Project Files"
+msgstr "Smazat projektové soubory"
+
 #. the action:// link is used to jump to the new-project view
 #: src/libide/greeter/ide-greeter-perspective.ui:52
 msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
@@ -1837,23 +1850,27 @@ msgstr "Nebyl nalezen žádný projekt"
 msgid "_Remove"
 msgstr "Odst_ranit"
 
-#: src/libide/greeter/ide-greeter-perspective.ui:157
+#: src/libide/greeter/ide-greeter-perspective.ui:124
+msgid "Remove Project Files…"
+msgstr "Odstranit projektové soubory…"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:169
 msgid "Select a Project"
 msgstr "Výběr projektu"
 
-#: src/libide/greeter/ide-greeter-perspective.ui:166
+#: src/libide/greeter/ide-greeter-perspective.ui:178
 msgid "Click an item to select"
 msgstr "Kliknutím vyberte položku"
 
-#: src/libide/greeter/ide-greeter-perspective.ui:205
+#: src/libide/greeter/ide-greeter-perspective.ui:217
 msgid "Open…"
 msgstr "Otevřít…"
 
-#: src/libide/greeter/ide-greeter-perspective.ui:220
+#: src/libide/greeter/ide-greeter-perspective.ui:232
 msgid "Select projects for removal"
 msgstr "Výběr projektů k odstranění"
 
-#: src/libide/greeter/ide-greeter-perspective.ui:240
+#: src/libide/greeter/ide-greeter-perspective.ui:252
 msgid "Return to project selection"
 msgstr "Vrátit se do výběru projektu"
 
@@ -1985,7 +2002,7 @@ msgstr "Výchozí"
 msgid "Open File…"
 msgstr "Otevřít soubor…"
 
-#: src/libide/gtk/menus.ui:203 src/libide/runner/ide-run-manager.c:1045
+#: src/libide/gtk/menus.ui:203 src/libide/runner/ide-run-manager.c:1107
 msgid "Run"
 msgstr "Spustit"
 
@@ -2296,7 +2313,7 @@ msgid "Unselect all"
 msgstr "Zrušit všechen výběr"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:405
-#: src/libide/runner/ide-run-manager.c:751
+#: src/libide/runner/ide-run-manager.c:773
 #: src/libide/workbench/ide-workbench-shortcuts.c:46
 msgctxt "shortcut window"
 msgid "Build and Run"
@@ -2885,11 +2902,11 @@ msgstr "Zastavit běh"
 msgid "Change run options"
 msgstr "Změnit volby běhu"
 
-#: src/libide/runner/ide-run-manager.c:345
+#: src/libide/runner/ide-run-manager.c:367
 msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
-#: src/libide/runner/ide-run-manager.c:415
+#: src/libide/runner/ide-run-manager.c:437
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
@@ -3263,35 +3280,41 @@ msgstr "Název palety"
 msgid "Enter a new name for the palette"
 msgstr "Zadejte nový název pro paletu"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:92
+#. translators: %s is replaced with the name of the color palette.
+#: src/plugins/color-picker/gb-color-picker-prefs.c:86
+#, c-format
+msgid "Save changes to palette “%s” before closing?"
+msgstr "Uložit před zavřením změny do palety „%s“?"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:94
 msgid "Close without Saving"
 msgstr "Zavřít bez uložení"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:94
+#: src/plugins/color-picker/gb-color-picker-prefs.c:96
 msgid "Save As…"
 msgstr "Uložit jako…"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:202
+#: src/plugins/color-picker/gb-color-picker-prefs.c:204
 msgid "Load palette"
 msgstr "Načtení palety"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:229
+#: src/plugins/color-picker/gb-color-picker-prefs.c:231
 msgid "Save palette"
 msgstr "Uložení palety"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:702
+#: src/plugins/color-picker/gb-color-picker-prefs.c:704
 msgid "All files"
 msgstr "Všechny soubory"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:706
+#: src/plugins/color-picker/gb-color-picker-prefs.c:708
 msgid "All supported palettes formats"
 msgstr "Všechny podporované formáty palet"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:711
+#: src/plugins/color-picker/gb-color-picker-prefs.c:713
 msgid "GIMP palette"
 msgstr "Paleta GIMP"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:715
+#: src/plugins/color-picker/gb-color-picker-prefs.c:717
 msgid "GNOME Builder palette"
 msgstr "Paleta Builder GNOME"
 
@@ -3981,7 +4004,7 @@ msgstr "Navrhovat dokončování pro Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
-#: src/plugins/meson/gbp-meson-build-system.c:444
+#: src/plugins/meson/gbp-meson-build-system.c:418
 msgid "Meson"
 msgstr "Meson"
 
