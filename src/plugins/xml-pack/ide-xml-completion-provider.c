@@ -103,6 +103,7 @@ populate_state_free (PopulateState *state)
   g_object_unref (state->ifile);
   g_object_unref (state->buffer);
   g_object_unref (state->cancellable);
+  g_slice_free (PopulateState, state);
 }
 
 static GPtrArray *
