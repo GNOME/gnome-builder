@@ -36,6 +36,12 @@ struct _IdeSearchEntry
   guint max_results;
 };
 
+typedef struct
+{
+  IdeEditorPerspective *editor;
+  IdeSourceLocation    *location;
+} DelayedActivate;
+
 G_DEFINE_TYPE (IdeSearchEntry, ide_search_entry, DZL_TYPE_SUGGESTION_ENTRY)
 
 enum {
@@ -112,6 +118,30 @@ ide_search_entry_changed (IdeSearchEntry *self)
 }
 
 static void
+delayed_activate_free (gpointer data)
+{
+  DelayedActivate *da = data;
+
+  g_clear_object (&da->editor);
+  g_clear_pointer (&da->location, ide_source_location_unref);
+  g_slice_free (DelayedActivate, da);
+}
+
+static gboolean
+delayed_activate_handle (gpointer data)
+{
+  DelayedActivate *da = data;
+
+  g_assert (da != NULL);
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (da->editor));
+  g_assert (da->location != NULL);
+
+  ide_editor_perspective_focus_location (da->editor, da->location);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
 suggestion_activated (DzlSuggestionEntry *entry,
                       DzlSuggestion      *suggestion)
 {
@@ -124,10 +154,29 @@ suggestion_activated (DzlSuggestionEntry *entry,
 
   if (location != NULL)
     {
-      IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (entry));
-      IdePerspective *perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
+      IdeWorkbench *workbench;
+      IdePerspective *perspective;
+      DelayedActivate *da;
 
-      ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (perspective), location);
+      workbench = ide_widget_get_workbench (GTK_WIDGET (entry));
+      perspective = ide_workbench_get_perspective_by_name (workbench, "editor");
+
+      /*
+       * The goal here is to wait a short bit of time before activating the
+       * item so that our window has a chance to animate out. Otherwise, we
+       * get a jittery animation because the UI is likely doing too much work
+       * (such as creating and sink'ing the new widgetry).
+       */
+
+      da = g_slice_new0 (DelayedActivate);
+      da->editor = g_object_ref (perspective);
+      da->location = g_steal_pointer (&location);
+
+      gdk_threads_add_timeout_full (G_PRIORITY_LOW,
+                                    250,
+                                    delayed_activate_handle,
+                                    g_steal_pointer (&da),
+                                    delayed_activate_free);
     }
 }
 
