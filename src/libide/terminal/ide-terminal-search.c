@@ -1,4 +1,4 @@
-/* gb-terminal-search.c
+/* ide-terminal-search.c
  *
  * Copyright © 2015 Christian Hergert <christian@hergert.me>
  *
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "gb-terminal-search"
+#define G_LOG_DOMAIN "ide-terminal-search"
 #define PCRE2_CODE_UNIT_WIDTH 0
 
 #include "config.h"
@@ -29,10 +29,10 @@
 #include <vte/vte.h>
 #include <unistd.h>
 
-#include "gb-terminal-search.h"
-#include "gb-terminal-search-private.h"
+#include "terminal/ide-terminal-search.h"
+#include "terminal/ide-terminal-search-private.h"
 
-G_DEFINE_TYPE (GbTerminalSearch, gb_terminal_search, GTK_TYPE_BIN)
+G_DEFINE_TYPE (IdeTerminalSearch, ide_terminal_search, GTK_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -50,7 +50,7 @@ static guint signals[LAST_SIGNAL];
 static GParamSpec *properties[LAST_PROP];
 
 static void
-update_sensitivity (GbTerminalSearch *self)
+update_sensitivity (IdeTerminalSearch *self)
 {
   gboolean can_search;
 
@@ -61,10 +61,10 @@ update_sensitivity (GbTerminalSearch *self)
 }
 
 static void
-perform_search (GbTerminalSearch *self,
+perform_search (IdeTerminalSearch *self,
                 gboolean       backward)
 {
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   if (self->regex == NULL)
     return;
@@ -74,31 +74,31 @@ perform_search (GbTerminalSearch *self,
 
 static void
 close_clicked_cb (GtkButton        *button,
-                  GbTerminalSearch *self)
+                  IdeTerminalSearch *self)
 {
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   gtk_revealer_set_reveal_child(self->search_revealer, FALSE);
 }
 
 static void
 search_button_clicked_cb (GtkButton        *button,
-                          GbTerminalSearch *self)
+                          IdeTerminalSearch *self)
 {
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   perform_search (self, button == self->search_prev_button);
 }
 
 static void
-update_regex (GbTerminalSearch *self)
+update_regex (IdeTerminalSearch *self)
 {
   const char *search_text;
   gboolean caseless;
   g_autofree gchar *pattern = NULL;
   g_autoptr(GError) error = NULL;
 
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
   caseless = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->match_case_checkbutton));
@@ -150,30 +150,30 @@ update_regex (GbTerminalSearch *self)
 
 static void
 search_text_changed_cb (IdeTaggedEntry  *search_entry,
-                        GbTerminalSearch *self)
+                        IdeTerminalSearch *self)
 {
   update_regex (self);
 }
 
 static void
 search_parameters_changed_cb (GtkToggleButton *button,
-                              GbTerminalSearch  *self)
+                              IdeTerminalSearch  *self)
 {
   update_regex (self);
 }
 
 static void
 wrap_around_toggled_cb (GtkToggleButton *button,
-                        GbTerminalSearch  *self)
+                        IdeTerminalSearch  *self)
 {
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WRAP_AROUND]);
 }
 
 static void
 reveal_options_changed_cb (GtkToggleButton *button,
-                           GbTerminalSearch  *self)
+                           IdeTerminalSearch  *self)
 {
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->reveal_button)))
     gtk_widget_set_visible (GTK_WIDGET (self->search_options), TRUE);
@@ -184,35 +184,35 @@ reveal_options_changed_cb (GtkToggleButton *button,
 static void
 search_overlay_notify_regex_cb (VteTerminal    *terminal,
                                 GParamSpec     *pspec G_GNUC_UNUSED,
-                                GbTerminalSearch *self)
+                                IdeTerminalSearch *self)
 {
   VteRegex *regex;
 
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
   g_assert (VTE_IS_TERMINAL (terminal));
 
-  regex = gb_terminal_search_get_regex (self);
+  regex = ide_terminal_search_get_regex (self);
   vte_terminal_search_set_regex (VTE_TERMINAL (terminal), regex, 0);
 }
 
 static void
 search_overlay_notify_wrap_around_cb (VteTerminal    *terminal,
                                       GParamSpec     *pspec G_GNUC_UNUSED,
-                                      GbTerminalSearch *self)
+                                      IdeTerminalSearch *self)
 {
   gboolean wrap;
 
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
   g_assert (VTE_IS_TERMINAL (terminal));
 
-  wrap = gb_terminal_search_get_wrap_around (self);
+  wrap = ide_terminal_search_get_wrap_around (self);
   vte_terminal_search_set_wrap_around (terminal, wrap);
 }
 
 static void
 search_overlay_search_cb (VteTerminal    *terminal,
                           gboolean        backward,
-                          GbTerminalSearch *self)
+                          IdeTerminalSearch *self)
 {
   g_assert (VTE_IS_TERMINAL (terminal));
 
@@ -225,9 +225,9 @@ search_overlay_search_cb (VteTerminal    *terminal,
 static void
 search_revealer_cb (GtkRevealer      *search_revealer,
                     GParamSpec       *pspec G_GNUC_UNUSED,
-                    GbTerminalSearch *self)
+                    IdeTerminalSearch *self)
 {
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   if (gtk_revealer_get_child_revealed (search_revealer))
     {
@@ -246,7 +246,7 @@ search_revealer_cb (GtkRevealer      *search_revealer,
 }
 
 static void
-gb_terminal_search_connect_terminal (GbTerminalSearch *self)
+ide_terminal_search_connect_terminal (IdeTerminalSearch *self)
 {
   g_signal_connect_object (self,
                            "notify::regex",
@@ -268,21 +268,21 @@ gb_terminal_search_connect_terminal (GbTerminalSearch *self)
 }
 
 static void
-gb_terminal_search_get_property (GObject    *object,
+ide_terminal_search_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
                                GParamSpec *pspec)
 {
-  GbTerminalSearch *self = GB_TERMINAL_SEARCH (object);
+  IdeTerminalSearch *self = IDE_TERMINAL_SEARCH (object);
 
   switch (prop_id)
     {
     case PROP_REGEX:
-      g_value_set_boxed (value, gb_terminal_search_get_regex (self));
+      g_value_set_boxed (value, ide_terminal_search_get_regex (self));
       break;
 
     case PROP_WRAP_AROUND:
-      g_value_set_boolean (value, gb_terminal_search_get_wrap_around (self));
+      g_value_set_boolean (value, ide_terminal_search_get_wrap_around (self));
       break;
 
     default:
@@ -291,26 +291,25 @@ gb_terminal_search_get_property (GObject    *object,
 }
 
 static void
-gb_terminal_search_class_init (GbTerminalSearchClass *klass)
+ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->get_property = gb_terminal_search_get_property;
+  object_class->get_property = ide_terminal_search_get_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/terminal/gb-terminal-search.ui");
-
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_prev_button);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_next_button);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, close_button);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, match_case_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, entire_word_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, regex_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, wrap_around_checkbutton);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, reveal_button);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_revealer);
-  gtk_widget_class_bind_template_child (widget_class, GbTerminalSearch, search_options);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-terminal-search.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_prev_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_next_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, close_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, match_case_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, entire_word_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, regex_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, wrap_around_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, reveal_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_options);
 
   signals[SEARCH] =
     g_signal_new ("search",
@@ -336,7 +335,7 @@ gb_terminal_search_class_init (GbTerminalSearchClass *klass)
 }
 
 static void
-gb_terminal_search_init (GbTerminalSearch *self)
+ide_terminal_search_init (IdeTerminalSearch *self)
 {
   self->regex_caseless = FALSE;
   self->regex_pattern = 0;
@@ -357,37 +356,67 @@ gb_terminal_search_init (GbTerminalSearch *self)
   g_signal_connect (self->search_revealer, "notify::child-revealed", G_CALLBACK (search_revealer_cb), self);
 }
 
-
+/**
+ * ide_terminal_search_set_terminal:
+ * @self: a #IdeTerminalSearch
+ *
+ * Since: 3.28
+ */
 void
-gb_terminal_search_set_terminal (GbTerminalSearch *self,
+ide_terminal_search_set_terminal (IdeTerminalSearch *self,
                                  VteTerminal      *terminal)
 {
-  g_assert (GB_IS_TERMINAL_SEARCH (self));
+  g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
   self->terminal = terminal;
-  gb_terminal_search_connect_terminal (self);
+  ide_terminal_search_connect_terminal (self);
 }
 
+/**
+ * ide_terminal_search_get_regex:
+ * @self: a #IdeTerminalSearch
+ *
+ * Returns: (transfer none) (nullable): a #VteRegex or %NULL.
+ *
+ * Since: 3.28
+ */
 VteRegex *
-gb_terminal_search_get_regex (GbTerminalSearch *self)
+ide_terminal_search_get_regex (IdeTerminalSearch *self)
 {
-  g_return_val_if_fail (GB_IS_TERMINAL_SEARCH (self), NULL);
+  g_return_val_if_fail (IDE_IS_TERMINAL_SEARCH (self), NULL);
 
   return self->regex;
 }
 
+/**
+ * ide_terminal_search_get_wrap_around:
+ * @self: a #IdeTerminalSearch
+ * 
+ *
+ * Since: 3.28
+ */
 gboolean
-gb_terminal_search_get_wrap_around (GbTerminalSearch *self)
+ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
 {
-  g_return_val_if_fail (GB_IS_TERMINAL_SEARCH (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TERMINAL_SEARCH (self), FALSE);
 
   return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->wrap_around_checkbutton));
 }
 
+/**
+ * ide_terminal_search_get_revealer:
+ * @self: a #IdeTerminalSearch
+ *
+ * Gets the revealer widget used for the terminal search.
+ *
+ * Returns: (transfer none): a #GtkRevealer
+ *
+ * Since: 3.28
+ */
 GtkRevealer *
-gb_terminal_search_get_revealer (GbTerminalSearch *self)
+ide_terminal_search_get_revealer (IdeTerminalSearch *self)
 {
-  g_return_val_if_fail (GB_IS_TERMINAL_SEARCH (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TERMINAL_SEARCH (self), FALSE);
 
   return self->search_revealer;
 }

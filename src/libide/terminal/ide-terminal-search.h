@@ -18,19 +18,24 @@
 
 #pragma once
 
-#include <ide.h>
 #include <vte/vte.h>
+
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_TERMINAL_SEARCH (gb_terminal_search_get_type())
+#define IDE_TYPE_TERMINAL_SEARCH (ide_terminal_search_get_type())
 
-G_DECLARE_FINAL_TYPE (GbTerminalSearch, gb_terminal_search, GB, TERMINAL_SEARCH, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, IDE, TERMINAL_SEARCH, GtkBin)
 
-VteRegex    *gb_terminal_search_get_regex       (GbTerminalSearch *self);
-gboolean     gb_terminal_search_get_wrap_around (GbTerminalSearch *self);
-void         gb_terminal_search_set_terminal    (GbTerminalSearch *self,
-                                                 VteTerminal      *terminal);
-GtkRevealer *gb_terminal_search_get_revealer    (GbTerminalSearch *self);
+IDE_AVAILABLE_IN_3_28
+VteRegex    *ide_terminal_search_get_regex       (IdeTerminalSearch *self);
+IDE_AVAILABLE_IN_3_28
+gboolean     ide_terminal_search_get_wrap_around (IdeTerminalSearch *self);
+IDE_AVAILABLE_IN_3_28
+void         ide_terminal_search_set_terminal    (IdeTerminalSearch *self,
+                                                  VteTerminal       *terminal);
+IDE_AVAILABLE_IN_3_28
+GtkRevealer *ide_terminal_search_get_revealer    (IdeTerminalSearch *self);
 
 G_END_DECLS

@@ -21,9 +21,6 @@
 #include <ide.h>
 #include <vte/vte.h>
 
-#include "gb-terminal-search.h"
-#include "gb-terminal-search-private.h"
-
 G_BEGIN_DECLS
 
 struct _GbTerminalView
@@ -44,8 +41,7 @@ struct _GbTerminalView
 
   GtkScrollbar        *top_scrollbar;
 
-  GbTerminalSearch    *tsearch;
-  GbTerminalSearch    *bsearch;
+  IdeTerminalSearch   *tsearch;
 
   GFile               *save_as_file_top;
 

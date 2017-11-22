@@ -18,12 +18,13 @@
 
 #pragma once
 
-#include <ide.h>
-#include <vte/vte.h>
+#include <gtk/gtk.h>
+
+#include "search/ide-tagged-entry.h"
 
 G_BEGIN_DECLS
 
-struct _GbTerminalSearch
+struct _IdeTerminalSearch
 {
   GtkBin               parent_instance;
 

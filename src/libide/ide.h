@@ -173,6 +173,7 @@ G_BEGIN_DECLS
 #include "testing/ide-test-provider.h"
 #include "threading/ide-thread-pool.h"
 #include "terminal/ide-terminal.h"
+#include "terminal/ide-terminal-search.h"
 #include "transfers/ide-pkcon-transfer.h"
 #include "transfers/ide-transfer.h"
 #include "transfers/ide-transfer-button.h"

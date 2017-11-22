@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- <template class="GbTerminalSearch" parent="GtkBin">
-    <child> -->
+  <!--template class="IdeTerminalSearch" parent="GtkBin">
+    <child-->
       <object class="GtkRevealer" id="search_revealer">
         <property name="halign">end</property>
         <property name="valign">start</property>
@@ -215,6 +215,6 @@
           </object>
         </child>
       </object>
-    <!-- </child>
-  </template> -->
+    <!--/child>
+  </template-->
 </interface>

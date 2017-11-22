@@ -1,9 +1,11 @@
 terminal_headers = [
   'ide-terminal.h',
+  'ide-terminal-search.h',
 ]
 
 terminal_sources = [
   'ide-terminal.c',
+  'ide-terminal-search.c',
 ]
 
 libide_public_headers += files(terminal_headers)

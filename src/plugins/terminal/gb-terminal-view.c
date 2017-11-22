@@ -736,8 +736,8 @@ gb_terminal_view_init (GbTerminalView *self)
   self->run_on_host = TRUE;
   self->manage_spawn = TRUE;
 
-  self->tsearch = g_object_new (GB_TYPE_TERMINAL_SEARCH, NULL);
-  self->search_revealer_top = gb_terminal_search_get_revealer (self->tsearch);
+  self->tsearch = g_object_new (IDE_TYPE_TERMINAL_SEARCH, NULL);
+  self->search_revealer_top = ide_terminal_search_get_revealer (self->tsearch);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -750,7 +750,7 @@ gb_terminal_view_init (GbTerminalView *self)
 
   gb_terminal_view_connect_terminal (self, self->terminal_top);
 
-  gb_terminal_search_set_terminal (self->tsearch, self->terminal_top);
+  ide_terminal_search_set_terminal (self->tsearch, self->terminal_top);
 
   gb_terminal_view_actions_init (self);
 

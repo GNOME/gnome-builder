@@ -14,9 +14,6 @@ terminal_sources = [
   'gb-terminal-view-private.h',
   'gb-terminal-view-actions.c',
   'gb-terminal-view-actions.h',
-  'gb-terminal-search.c',
-  'gb-terminal-search.h',
-  'gb-terminal-search-private.h',
   'gb-terminal-workbench-addin.c',
   'gb-terminal-workbench-addin.h',
 ]
