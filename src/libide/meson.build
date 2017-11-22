@@ -87,6 +87,7 @@ subdir('sourceview')
 subdir('subprocess')
 subdir('symbols')
 subdir('template')
+subdir('terminal')
 subdir('testing')
 subdir('threading')
 subdir('transfers')
@@ -204,6 +205,7 @@ libide_deps = [
   libpangoft2_dep,
   libpeas_dep,
   libtemplate_glib_dep,
+  libvte_dep,
   libxml2_dep,
 ]
 
@@ -249,7 +251,8 @@ libide_plugin_dep = declare_dependency(
                          libgtksource_dep,
                          libtemplate_glib_dep,
                          libjson_glib_dep,
-                         libjsonrpc_glib_dep ],
+                         libjsonrpc_glib_dep,
+                         libvte_dep ],
 )
 
 pkgg = import('pkgconfig')
@@ -261,7 +264,7 @@ pkgg.generate(
          name: 'Libide',
      filebase: 'libide-1.0',
   description: 'Libide contains the components used to build the GNOME Builder IDE.',
-     requires: [ 'gtk+-3.0', 'gtksourceview-3.0', 'libdazzle-1.0', 'template-glib-1.0', 'jsonrpc-glib-1.0', 'libpeas-1.0' ],
+     requires: [ 'gtk+-3.0', 'gtksourceview-3.0', 'libdazzle-1.0', 'template-glib-1.0', 'jsonrpc-glib-1.0', 'libpeas-1.0', 'vte-2.91' ],
   install_dir: join_paths(pkglibdir, 'pkgconfig'),
 )
 
@@ -271,7 +274,7 @@ libide_gir = gnome.generate_gir(libide,
             namespace: 'Ide',
         symbol_prefix: 'ide',
     identifier_prefix: 'Ide',
-             includes: [ 'Gio-2.0', 'GtkSource-3.0', 'Peas-1.0', 'Dazzle-1.0', 'Json-1.0', 'Template-1.0'],
+             includes: [ 'Gio-2.0', 'GtkSource-3.0', 'Peas-1.0', 'Dazzle-1.0', 'Json-1.0', 'Template-1.0', 'Vte-2.91' ],
 	      install: true,
       install_dir_gir: pkggirdir,
   install_dir_typelib: pkgtypelibdir,
