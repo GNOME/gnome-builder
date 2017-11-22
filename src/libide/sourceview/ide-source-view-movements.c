@@ -45,6 +45,7 @@ typedef struct
    */
   guint                 *target_column;
   IdeSourceViewMovement  type;                        /* Type of movement */
+  IdeSourceScrollAlign   scroll_align;                /* How to align the post-movement scroll */
   GtkTextIter            insert;                      /* Current insert cursor location */
   GtkTextIter            selection;                   /* Current selection cursor location */
   gint                   count;                       /* Repeat count for movement */
@@ -1994,6 +1995,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
   mv.self = self;
   mv.target_column = target_column;
   mv.type = movement;
+  mv.scroll_align = IDE_SOURCE_SCROLL_BOTH;
   mv.extend_selection = extend_selection;
   mv.exclusive = exclusive;
   mv.count = count;
@@ -2334,7 +2336,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
     ide_source_view_get_visual_position (mv.self, &line, target_column);
 
   if (!mv.ignore_scroll_to_insert)
-    ide_source_view_scroll_mark_onscreen (self, insert, TRUE, xalign, 0.5);
+    ide_source_view_scroll_mark_onscreen (self, insert, mv.scroll_align, xalign, 0.5);
 
   /* Emit a jump if we moved more than JUMP_THRESHOLD lines */
   gtk_text_buffer_get_iter_at_mark (buffer, &after_insert, insert);

@@ -88,6 +88,11 @@
   IDE_TRACE_MSG ("%s = Rectangle(x=%d, y=%d, width=%d, height=%d)", \
                  name, (rect)->x, (rect)->y, (rect)->width, (rect)->height)
 
+#define SCROLL_X(align) \
+  (((align) == IDE_SOURCE_SCROLL_BOTH) || ((align) == IDE_SOURCE_SCROLL_X))
+#define SCROLL_Y(align) \
+  (((align) == IDE_SOURCE_SCROLL_BOTH) || ((align) == IDE_SOURCE_SCROLL_Y))
+
 typedef struct
 {
   IdeBuffer                   *buffer;
@@ -7381,11 +7386,11 @@ ide_source_view_get_visible_rect (IdeSourceView *self,
 }
 
 void
-ide_source_view_scroll_mark_onscreen (IdeSourceView *self,
-                                      GtkTextMark   *mark,
-                                      gboolean       use_align,
-                                      gdouble        alignx,
-                                      gdouble        aligny)
+ide_source_view_scroll_mark_onscreen (IdeSourceView        *self,
+                                      GtkTextMark          *mark,
+                                      IdeSourceScrollAlign  use_align,
+                                      gdouble               alignx,
+                                      gdouble               aligny)
 {
   GtkTextView *text_view = (GtkTextView *)self;
   GtkTextBuffer *buffer;
@@ -7497,13 +7502,13 @@ ide_source_view__vadj_animation_completed (IdeSourceView *self)
  * https://developer.gnome.org/gtk3/stable/GtkTextView.html#gtk-text-view-scroll-to-iter
  */
 void
-ide_source_view_scroll_to_iter (IdeSourceView     *self,
-                                const GtkTextIter *iter,
-                                gdouble            within_margin,
-                                gboolean           use_align,
-                                gdouble            xalign,
-                                gdouble            yalign,
-                                gboolean           animate_scroll)
+ide_source_view_scroll_to_iter (IdeSourceView        *self,
+                                const GtkTextIter    *iter,
+                                gdouble               within_margin,
+                                IdeSourceScrollAlign  use_align,
+                                gdouble               xalign,
+                                gdouble               yalign,
+                                gboolean              animate_scroll)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextView *text_view = (GtkTextView *)self;
@@ -7580,7 +7585,7 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
 
   /* Vertical alignment */
   scroll_dest = current_y_scroll;
-  if (use_align)
+  if (SCROLL_Y (use_align))
     {
       scroll_dest = rect.y + (rect.height * yalign) - (screen.height * yalign);
 
@@ -7629,7 +7634,7 @@ ide_source_view_scroll_to_iter (IdeSourceView     *self,
 
   /* Horizontal alignment */
   scroll_dest = current_x_scroll;
-  if (use_align)
+  if (SCROLL_X (use_align))
     {
       scroll_dest = rect.x + (rect.width * xalign) - (screen.width * xalign);
 
@@ -7724,13 +7729,13 @@ ignore_animation:
 }
 
 void
-ide_source_view_scroll_to_mark (IdeSourceView *self,
-                                GtkTextMark   *mark,
-                                gdouble        within_margin,
-                                gboolean       use_align,
-                                gdouble        xalign,
-                                gdouble        yalign,
-                                gboolean       animate_scroll)
+ide_source_view_scroll_to_mark (IdeSourceView        *self,
+                                GtkTextMark          *mark,
+                                gdouble               within_margin,
+                                IdeSourceScrollAlign  use_align,
+                                gdouble               xalign,
+                                gdouble               yalign,
+                                gboolean              animate_scroll)
 {
   GtkTextBuffer *buffer;
   GtkTextIter iter;

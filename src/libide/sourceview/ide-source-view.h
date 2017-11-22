@@ -226,6 +226,14 @@ typedef enum
   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR,
 } IdeSourceViewMovement;
 
+typedef enum
+{
+  IDE_SOURCE_SCROLL_NONE = 0,
+  IDE_SOURCE_SCROLL_BOTH = 1,
+  IDE_SOURCE_SCROLL_X    = 1 << 1,
+  IDE_SOURCE_SCROLL_Y    = 1 << 2,
+} IdeSourceScrollAlign;
+
 struct _IdeSourceViewClass
 {
   GtkSourceViewClass parent_class;
@@ -466,14 +474,14 @@ void                        ide_source_view_clear_search              (IdeSource
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_scroll_mark_onscreen      (IdeSourceView              *self,
                                                                        GtkTextMark                *mark,
-                                                                       gboolean                    use_align,
+                                                                       IdeSourceScrollAlign        use_align,
                                                                        gdouble                     alignx,
                                                                        gdouble                     aligny);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_scroll_to_mark            (IdeSourceView              *self,
                                                                        GtkTextMark                *mark,
                                                                        gdouble                     within_margin,
-                                                                       gboolean                    use_align,
+                                                                       IdeSourceScrollAlign        use_align,
                                                                        gdouble                     xalign,
                                                                        gdouble                     yalign,
                                                                        gboolean                    animate_scroll);
@@ -481,7 +489,7 @@ IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_scroll_to_iter            (IdeSourceView              *self,
                                                                        const GtkTextIter          *iter,
                                                                        gdouble                     within_margin,
-                                                                       gboolean                    use_align,
+                                                                       IdeSourceScrollAlign        use_align,
                                                                        gdouble                     xalign,
                                                                        gdouble                     yalign,
                                                                        gboolean                    animate_scroll);
