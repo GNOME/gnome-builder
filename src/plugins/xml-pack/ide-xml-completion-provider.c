@@ -99,10 +99,10 @@ populate_state_free (PopulateState *state)
 {
   g_assert (state != NULL);
 
-  g_object_unref (state->self);
-  g_object_unref (state->ifile);
-  g_object_unref (state->buffer);
-  g_object_unref (state->cancellable);
+  g_clear_object (&state->self);
+  g_clear_object (&state->ifile);
+  g_clear_object (&state->buffer);
+  g_clear_object (&state->cancellable);
   g_slice_free (PopulateState, state);
 }
 
