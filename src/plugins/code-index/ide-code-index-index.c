@@ -524,7 +524,9 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
     }
   else
     {
-      g_task_return_pointer (task, g_ptr_array_new (), (GDestroyNotify)g_ptr_array_unref);
+      g_task_return_pointer (task,
+                             g_ptr_array_new_with_free_func (g_object_unref),
+                             (GDestroyNotify) g_ptr_array_unref);
     }
 }
 
