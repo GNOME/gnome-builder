@@ -174,6 +174,7 @@ G_BEGIN_DECLS
 #include "threading/ide-thread-pool.h"
 #include "terminal/ide-terminal.h"
 #include "terminal/ide-terminal-search.h"
+#include "terminal/ide-terminal-util.h"
 #include "transfers/ide-pkcon-transfer.h"
 #include "transfers/ide-transfer.h"
 #include "transfers/ide-transfer-button.h"

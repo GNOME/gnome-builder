@@ -29,7 +29,6 @@
 #include <vte/vte.h>
 #include <unistd.h>
 
-#include "gb-terminal-util.h"
 #include "gb-terminal-view.h"
 #include "gb-terminal-view-private.h"
 #include "gb-terminal-view-actions.h"
@@ -256,7 +255,7 @@ gb_terminal_respawn (GbTerminalView *self,
 
   vte_terminal_set_pty (terminal, pty);
 
-  if (-1 == (tty_fd = gb_vte_pty_create_slave (pty)))
+  if (-1 == (tty_fd = ide_vte_pty_create_slave (pty)))
     IDE_GOTO (failure);
 
   /* dup() is safe as it will inherit O_CLOEXEC */

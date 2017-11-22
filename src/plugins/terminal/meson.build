@@ -7,8 +7,6 @@ terminal_resources = gnome.compile_resources(
 terminal_sources = [
   'gb-terminal-plugin.c',
   'gb-terminal-private.h',
-  'gb-terminal-util.c',
-  'gb-terminal-util.h',
   'gb-terminal-view.c',
   'gb-terminal-view.h',
   'gb-terminal-view-private.h',

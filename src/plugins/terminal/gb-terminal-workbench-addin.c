@@ -24,7 +24,6 @@
 #include <ide.h>
 #include <vte/vte.h>
 
-#include "gb-terminal-util.h"
 #include "gb-terminal-view.h"
 #include "gb-terminal-workbench-addin.h"
 
@@ -165,7 +164,7 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
       gb_terminal_view_set_pty (self->run_terminal, pty);
     }
 
-  if (-1 != (tty_fd = gb_vte_pty_create_slave (pty)))
+  if (-1 != (tty_fd = ide_vte_pty_create_slave (pty)))
     {
       ide_runner_set_tty (runner, tty_fd);
       close (tty_fd);

@@ -1,4 +1,4 @@
-/* gb-terminal-util.c
+/* ide-terminal-util.c
  *
  * Copyright © 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "gb-terminal-util"
+#define G_LOG_DOMAIN "ide-terminal-util"
 
 #include "config.h"
 
@@ -24,10 +24,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "gb-terminal-util.h"
+#include "terminal/ide-terminal-util.h"
 
 gint
-gb_vte_pty_create_slave (VtePty *pty)
+ide_vte_pty_create_slave (VtePty *pty)
 {
   gint master_fd;
 #ifdef HAVE_PTSNAME_R

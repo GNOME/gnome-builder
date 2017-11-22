@@ -20,8 +20,10 @@
 
 #include <vte/vte.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
-int gb_vte_pty_create_slave (VtePty *pty);
+int ide_vte_pty_create_slave (VtePty *pty);
 
 G_END_DECLS
