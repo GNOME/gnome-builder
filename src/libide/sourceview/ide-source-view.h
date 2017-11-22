@@ -129,6 +129,8 @@ typedef enum
  * @IDE_SOURCE_VIEW_MOVEMENT_SCROLL_SCREEN_RIGHT: scroll until insert cursor or [count]th char is at screen right.
  * @IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR: move to the next matching char according to f and t in vim.
  * @IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR: move to the previous matching char according to F and T in vim.
+ * @IDE_SOURCE_VIEW_MOVEMENT_SMART_HOME: Moves to the first non-whitespace character unless
+ *   already positioned there. Otherwise, it moves to the first character.
  *
  * The type of movement.
  *
@@ -224,6 +226,8 @@ typedef enum
 
   IDE_SOURCE_VIEW_MOVEMENT_NEXT_MATCH_SEARCH_CHAR,
   IDE_SOURCE_VIEW_MOVEMENT_PREVIOUS_MATCH_SEARCH_CHAR,
+
+  IDE_SOURCE_VIEW_MOVEMENT_SMART_HOME,
 } IdeSourceViewMovement;
 
 typedef enum

@@ -1931,6 +1931,41 @@ ide_source_view_movement_match_search_char (Movement *mv,
     }
 }
 
+static void
+ide_source_view_movements_smart_home (Movement                  *mv,
+                                      GtkSourceSmartHomeEndType  mode)
+{
+  GtkTextIter iter;
+
+  g_assert (mv != NULL);
+
+  iter = mv->insert;
+
+  switch (mode)
+    {
+    case GTK_SOURCE_SMART_HOME_END_BEFORE:
+      ide_source_view_movements_first_nonspace_char (mv);
+      if (gtk_text_iter_equal (&iter, &mv->insert))
+        gtk_text_iter_set_line_offset (&mv->insert, 0);
+      return;
+
+    case GTK_SOURCE_SMART_HOME_END_AFTER:
+      ide_source_view_movements_first_char (mv);
+      if (gtk_text_iter_equal (&iter, &mv->insert))
+        ide_source_view_movements_first_nonspace_char (mv);
+      return;
+
+    case GTK_SOURCE_SMART_HOME_END_ALWAYS:
+      ide_source_view_movements_first_nonspace_char (mv);
+      return;
+
+    case GTK_SOURCE_SMART_HOME_END_DISABLED:
+    default:
+      ide_source_view_movements_first_char (mv);
+      return;
+    }
+}
+
 void
 _ide_source_view_apply_movement (IdeSourceView         *self,
                                  IdeSourceViewMovement  movement,
@@ -2323,6 +2358,18 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
       mv.modifier = search_char;
       for (i = MAX (1, mv.count); i > 0; i--)
         ide_source_view_movement_match_search_char (&mv, TRUE);
+      break;
+
+    case IDE_SOURCE_VIEW_MOVEMENT_SMART_HOME:
+      {
+        GtkSourceSmartHomeEndType smart_home;
+
+        mv.count = 1;
+        mv.scroll_align = IDE_SOURCE_SCROLL_X;
+
+        smart_home = gtk_source_view_get_smart_home_end (GTK_SOURCE_VIEW (self));
+        ide_source_view_movements_smart_home (&mv, smart_home);
+      }
       break;
 
     default:

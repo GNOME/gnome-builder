@@ -6647,6 +6647,26 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                 "find-references", 0);
 
+  /* Override "Home" and "<Shift>Home" to use our movements
+   * instead of the smart home feature of GtkSourceView.
+   */
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Home,
+                                0,
+                                "movement", 4,
+                                IDE_TYPE_SOURCE_VIEW_MOVEMENT, IDE_SOURCE_VIEW_MOVEMENT_SMART_HOME,
+                                G_TYPE_BOOLEAN, FALSE,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, FALSE);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Home,
+                                GDK_MOD1_MASK | GDK_SHIFT_MASK,
+                                "movement", 4,
+                                IDE_TYPE_SOURCE_VIEW_MOVEMENT, IDE_SOURCE_VIEW_MOVEMENT_SMART_HOME,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, FALSE);
+
   /*
    * Escape is wired up by the GtkSourceCompletion by default. However, some
    * keybindings may want to control that manually (such as Vim). Vim needs to
