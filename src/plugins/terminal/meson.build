@@ -5,8 +5,6 @@ terminal_resources = gnome.compile_resources(
 )
 
 terminal_sources = [
-  'gb-terminal.c',
-  'gb-terminal.h',
   'gb-terminal-plugin.c',
   'gb-terminal-private.h',
   'gb-terminal-util.c',
@@ -23,9 +21,7 @@ terminal_sources = [
   'gb-terminal-workbench-addin.h',
 ]
 
-gnome_builder_plugins_deps += [
-  dependency('vte-2.91', version: '>=0.40.2'),
-]
+gnome_builder_plugins_deps += [libvte_dep]
 
 gnome_builder_plugins_sources += files(terminal_sources)
 gnome_builder_plugins_sources += terminal_resources[0]

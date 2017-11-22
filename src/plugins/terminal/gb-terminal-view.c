@@ -29,7 +29,6 @@
 #include <vte/vte.h>
 #include <unistd.h>
 
-#include "gb-terminal.h"
 #include "gb-terminal-util.h"
 #include "gb-terminal-view.h"
 #include "gb-terminal-view-private.h"
@@ -726,8 +725,6 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
-
-  g_type_ensure (GB_TYPE_TERMINAL);
 }
 
 static void

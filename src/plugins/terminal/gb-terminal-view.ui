@@ -18,7 +18,7 @@
                 <property name="expand">true</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="GbTerminal" id="terminal_top">
+                  <object class="IdeTerminal" id="terminal_top">
                     <property name="audible-bell">false</property>
                     <property name="expand">true</property>
                     <property name="visible">true</property>
