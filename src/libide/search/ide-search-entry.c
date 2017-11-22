@@ -169,7 +169,7 @@ suggestion_activated (DzlSuggestionEntry *entry,
        */
 
       da = g_slice_new0 (DelayedActivate);
-      da->editor = g_object_ref (perspective);
+      da->editor = g_object_ref (IDE_EDITOR_PERSPECTIVE (perspective));
       da->location = g_steal_pointer (&location);
 
       gdk_threads_add_timeout_full (G_PRIORITY_LOW,

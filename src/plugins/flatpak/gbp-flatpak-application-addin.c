@@ -1232,7 +1232,7 @@ gbp_flatpak_application_addin_find_ref (GbpFlatpakApplicationAddin *self,
               if (g_strcmp0 (id, flatpak_ref_get_name (ref)) == 0 &&
                   g_strcmp0 (arch, flatpak_ref_get_arch (ref)) == 0 &&
                   g_strcmp0 (branch, flatpak_ref_get_branch (ref)) == 0)
-                return g_object_ref (ref);
+                return g_object_ref (FLATPAK_INSTALLED_REF (ref));
             }
         }
     }

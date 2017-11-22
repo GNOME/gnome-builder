@@ -1041,7 +1041,7 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
 
   buffer = IDE_BUFFER (gtk_text_iter_get_buffer (&iter));
 
-  state->self = g_object_ref (self);
+  state->self = g_object_ref (IDE_XML_COMPLETION_PROVIDER (self));
   state->completion_context = completion_context;
   state->cancellable = g_cancellable_new ();
   state->buffer = g_object_ref (buffer);

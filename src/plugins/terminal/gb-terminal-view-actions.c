@@ -128,7 +128,7 @@ gb_terminal_view_actions_save_async (GbTerminalView       *view,
     {
       savetask = g_slice_new0 (SaveTask);
       savetask->file = g_object_ref (file);
-      savetask->stream = g_object_ref (output_stream);
+      savetask->stream = g_object_ref (G_OUTPUT_STREAM (output_stream));
       savetask->terminal = g_object_ref (terminal);
 
       g_task_set_task_data (task, savetask, savetask_free);

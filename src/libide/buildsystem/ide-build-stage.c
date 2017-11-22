@@ -730,7 +730,7 @@ ide_build_stage_observe_stream (IdeBuildStage     *self,
   g_assert (G_IS_INPUT_STREAM (stream));
 
   if (G_IS_DATA_INPUT_STREAM (stream))
-    data_stream = g_object_ref (stream);
+    data_stream = g_object_ref (G_DATA_INPUT_STREAM (stream));
   else
     data_stream = g_data_input_stream_new (stream);
 
