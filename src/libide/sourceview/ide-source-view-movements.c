@@ -2069,23 +2069,27 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_CHAR:
       mv.count = MAX (1, mv.count);
+      mv.scroll_align = IDE_SOURCE_SCROLL_X;
       ide_source_view_movements_first_char (&mv);
       xalign = 1.0;
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_FIRST_NONSPACE_CHAR:
       mv.count = MAX (1, mv.count);
+      mv.scroll_align = IDE_SOURCE_SCROLL_X;
       ide_source_view_movements_first_nonspace_char (&mv);
       xalign = 1.0;
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_MIDDLE_CHAR:
       mv.count = MAX (1, mv.count);
+      mv.scroll_align = IDE_SOURCE_SCROLL_X;
       ide_source_view_movements_middle_char (&mv);
       break;
 
     case IDE_SOURCE_VIEW_MOVEMENT_LAST_CHAR:
       mv.count = MAX (1, mv.count);
+      mv.scroll_align = IDE_SOURCE_SCROLL_X;
       ide_source_view_movements_last_char (&mv);
       break;
 
@@ -2265,6 +2269,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 
     case IDE_SOURCE_VIEW_MOVEMENT_LINE_END:
       mv.count = MAX (1, mv.count);
+      mv.scroll_align = IDE_SOURCE_SCROLL_X;
       ide_source_view_movements_line_end (&mv);
       break;
 
