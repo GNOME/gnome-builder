@@ -1857,7 +1857,8 @@ ide_source_view_movements_previous_match_modifier (Movement *mv)
 }
 
 static void
-ide_source_view_movement_match_search_char (Movement *mv, gboolean is_next_direction)
+ide_source_view_movement_match_search_char (Movement *mv,
+                                            gboolean  is_next_direction)
 {
   GtkTextIter insert;
   GtkTextIter limit;
