@@ -105,7 +105,7 @@ _ide_workbench_init_shortcuts (IdeWorkbench *self)
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.workbench.global-search"),
                                               "<Control>period",
-                                              DZL_SHORTCUT_PHASE_DISPATCH | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("win.global-search"));
 
   dzl_shortcut_controller_add_command_action (controller,
