@@ -889,7 +889,6 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
                                           IdeSourceLocation        *location,
                                           GError                  **error)
 {
-  g_autofree gchar *filename = NULL;
   g_autofree gchar *workpath = NULL;
   g_auto(CXString) cxstr = { 0 };
   g_autoptr(IdeSourceLocation) declaration = NULL;
