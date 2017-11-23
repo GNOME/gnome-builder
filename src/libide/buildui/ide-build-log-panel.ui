@@ -6,7 +6,14 @@
         <property name="visible">true</property>
         <child>
           <object class="IdeTerminal" id="terminal">
+            <property name="audible-bell">false</property>
             <property name="expand">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrollbar" id="scrollbar">
+            <property name="orientation">vertical</property>
             <property name="visible">true</property>
           </object>
         </child>

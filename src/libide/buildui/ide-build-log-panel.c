@@ -33,6 +33,7 @@ struct _IdeBuildLogPanel
   IdeBuildPipeline  *pipeline;
   GSettings         *settings;
 
+  GtkScrollbar      *scrollbar;
   IdeTerminal       *terminal;
 
   guint              log_observer;
@@ -202,6 +203,7 @@ ide_build_log_panel_class_init (IdeBuildLogPanelClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "buildlogpanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-log-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildLogPanel, scrollbar);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildLogPanel, terminal);
 
   properties [PROP_PIPELINE] =
@@ -298,13 +300,8 @@ ide_build_log_panel_init (IdeBuildLogPanel *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-#if 0
-  {
-    VtePty *pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
-    vte_terminal_set_pty (VTE_TERMINAL (self->terminal), pty);
-    g_object_unref (pty);
-  }
-#endif
+  gtk_range_set_adjustment (GTK_RANGE (self->scrollbar),
+                            gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal)));
 
   vte_terminal_set_scrollback_lines (VTE_TERMINAL (self->terminal), 1000);
   vte_terminal_set_scroll_on_output (VTE_TERMINAL (self->terminal), FALSE);
