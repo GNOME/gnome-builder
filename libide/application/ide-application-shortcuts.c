@@ -68,7 +68,8 @@ _ide_application_init_shortcuts (IdeApplication *self)
                                    NC_("shortcut window", "Search"),
                                    NC_("shortcut window", "Focus to the global search entry"),
                                    NULL);
-  dzl_shortcut_theme_set_accel_for_action (theme, "win.global-search", "<Primary>period", DZL_SHORTCUT_PHASE_DISPATCH);
+  dzl_shortcut_theme_set_accel_for_action (theme, "win.global-search", "<Primary>period",
+                                           DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL);
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("build-manager.build"),
