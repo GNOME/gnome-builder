@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "buildsystem/ide-build-private.h"
 #include "buildui/ide-build-log-panel.h"
 #include "terminal/ide-terminal.h"
 
@@ -86,6 +87,7 @@ ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
           ide_build_pipeline_remove_log_observer (self->pipeline, self->log_observer);
           self->log_observer = 0;
           g_clear_object (&self->pipeline);
+          vte_terminal_set_pty (VTE_TERMINAL (self->terminal), NULL);
         }
 
       if (pipeline != NULL)
@@ -96,6 +98,8 @@ ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
                                                  ide_build_log_panel_log_observer,
                                                  self,
                                                  NULL);
+          vte_terminal_set_pty (VTE_TERMINAL (self->terminal),
+                                _ide_build_pipeline_get_pty (pipeline));
         }
     }
 }
