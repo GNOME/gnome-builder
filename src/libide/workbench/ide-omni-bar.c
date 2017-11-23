@@ -456,8 +456,7 @@ ide_omni_bar__build_manager__build_failed (IdeOmniBar       *self,
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   gtk_label_set_label (self->popover_build_message, NULL);
-  g_signal_handler_disconnect (build_pipeline, self->message_handler);
-  self->message_handler = 0;
+  ide_clear_signal_handler (build_pipeline, &self->message_handler);
 
   gtk_label_set_label (self->popover_build_result_label, _("Failed"));
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
@@ -475,8 +474,7 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   gtk_label_set_label (self->popover_build_message, NULL);
-  g_signal_handler_disconnect (build_pipeline, self->message_handler);
-  self->message_handler = 0;
+  ide_clear_signal_handler (build_pipeline, &self->message_handler);
 
   gtk_label_set_label (self->popover_build_result_label, _("Success"));
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
