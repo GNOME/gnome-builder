@@ -149,3 +149,51 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_stage.set_clean_launcher(clean_launcher)
         self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
 
+class CargoBuildTarget(Ide.Object, Ide.BuildTarget):
+
+    def do_get_install_directory(self):
+        return None
+
+    def do_get_name(self):
+        return 'cargo-run'
+
+    def do_get_argv(self):
+        context = self.get_context()
+        config_manager = context.get_configuration_manager()
+        config = config_manager.get_current()
+        cargo = locate_cargo_from_config(config)
+
+        # Pass the Cargo.toml path so that we don't
+        # need to run from the project directory.
+        project_file = context.get_project_file()
+        if project_file.get_basename() == 'Cargo.toml':
+            cargo_toml = project_file.get_path()
+        else:
+            cargo_toml = project_file.get_child('Cargo.toml')
+
+        return [cargo, 'run', '--manifest-path', cargo_toml]
+
+    def do_get_priority(self):
+        return 0
+
+class CargoBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
+
+    def do_get_targets_async(self, cancellable, callback, data):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.set_priority(GLib.PRIORITY_LOW)
+
+        context = self.get_context()
+        build_system = context.get_build_system()
+
+        if type(build_system) != CargoBuildSystem:
+            task.return_error(GLib.Error('Not cargo build system',
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.NOT_SUPPORTED))
+            return
+
+        task.targets = [CargoBuildTarget(context=self.get_context())]
+        task.return_boolean(True)
+
+    def do_get_targets_finish(self, result):
+        if result.propagate_boolean():
+            return result.targets
