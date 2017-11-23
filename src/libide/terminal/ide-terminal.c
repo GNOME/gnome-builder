@@ -27,6 +27,7 @@
 typedef struct
 {
   GtkWidget *popup_menu;
+  GSettings *settings;
   gchar     *url;
 } IdeTerminalPrivate;
 
@@ -53,6 +54,53 @@ enum {
 
 static guint signals[N_SIGNALS];
 static const gchar *url_regexes[] = { DINGUS1, DINGUS2 };
+static const GdkRGBA solarized_palette[] = {
+  /*
+   * Solarized palette (1.0.0beta2):
+   * http://ethanschoonover.com/solarized
+   */
+  { 0.02745,  0.211764, 0.258823, 1 },
+  { 0.862745, 0.196078, 0.184313, 1 },
+  { 0.521568, 0.6,      0,        1 },
+  { 0.709803, 0.537254, 0,        1 },
+  { 0.149019, 0.545098, 0.823529, 1 },
+  { 0.82745,  0.211764, 0.509803, 1 },
+  { 0.164705, 0.631372, 0.596078, 1 },
+  { 0.933333, 0.909803, 0.835294, 1 },
+  { 0,        0.168627, 0.211764, 1 },
+  { 0.796078, 0.294117, 0.086274, 1 },
+  { 0.345098, 0.431372, 0.458823, 1 },
+  { 0.396078, 0.482352, 0.513725, 1 },
+  { 0.513725, 0.580392, 0.588235, 1 },
+  { 0.423529, 0.443137, 0.768627, 1 },
+  { 0.57647,  0.631372, 0.631372, 1 },
+  { 0.992156, 0.964705, 0.890196, 1 },
+};
+
+static void
+style_context_changed (IdeTerminal *self,
+                       GtkStyleContext *style_context)
+{
+  GtkStateFlags state;
+  GdkRGBA fg;
+  GdkRGBA bg;
+
+  g_assert (GTK_IS_STYLE_CONTEXT (style_context));
+  g_assert (IDE_IS_TERMINAL (self));
+
+  state = gtk_style_context_get_state (style_context);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gtk_style_context_get_color (style_context, state, &fg);
+  gtk_style_context_get_background_color (style_context, state, &bg);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (bg.alpha == 0.0)
+    gdk_rgba_parse (&bg, "#f6f7f8");
+
+  vte_terminal_set_colors (VTE_TERMINAL (self), &fg, &bg,
+                           solarized_palette, G_N_ELEMENTS (solarized_palette));
+}
 
 static void
 popup_menu_detach (GtkWidget *attach_widget,
@@ -271,11 +319,46 @@ ide_terminal_real_search_reveal (IdeTerminal *self)
 }
 
 static void
+ide_terminal_font_changed (IdeTerminal *self,
+                           const gchar *key,
+                           GSettings   *settings)
+{
+  PangoFontDescription *font_desc = NULL;
+  g_autofree gchar *font_name = NULL;
+
+  g_assert (IDE_IS_TERMINAL (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  font_name = g_settings_get_string (settings, "font-name");
+
+  if (font_name != NULL)
+    font_desc = pango_font_description_from_string (font_name);
+
+  vte_terminal_set_font (VTE_TERMINAL (self), font_desc);
+  g_clear_pointer (&font_desc, pango_font_description_free);
+}
+
+static void
+ide_terminal_destroy (GtkWidget *widget)
+{
+  IdeTerminal *self = (IdeTerminal *)widget;
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+
+  g_assert (IDE_IS_TERMINAL (self));
+
+  g_clear_object (&priv->settings);
+  g_clear_pointer (&priv->url, g_free);
+
+  GTK_WIDGET_CLASS (ide_terminal_parent_class)->destroy (widget);
+}
+
+static void
 ide_terminal_class_init (IdeTerminalClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkBindingSet *binding_set;
 
+  widget_class->destroy = ide_terminal_destroy;
   widget_class->button_press_event = ide_terminal_button_press_event;
   widget_class->popup_menu = ide_terminal_popup_menu;
 
@@ -355,6 +438,9 @@ ide_terminal_class_init (IdeTerminalClass *klass)
 static void
 ide_terminal_init (IdeTerminal *self)
 {
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+  GtkStyleContext *style_context;
+
   dzl_widget_action_group_attach (self, "terminal");
 
   for (guint i = 0; i < G_N_ELEMENTS (url_regexes); i++)
@@ -369,6 +455,25 @@ ide_terminal_init (IdeTerminal *self)
       tag = vte_terminal_match_add_regex (VTE_TERMINAL (self), regex, 0);
       vte_terminal_match_set_cursor_type (VTE_TERMINAL (self), tag, GDK_HAND2);
     }
+
+  priv->settings = g_settings_new ("org.gnome.builder.terminal");
+  g_signal_connect_object (priv->settings,
+                           "changed::font-name",
+                           G_CALLBACK (ide_terminal_font_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  ide_terminal_font_changed (self, NULL, priv->settings);
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_add_class (style_context, "terminal");
+  g_signal_connect_object (style_context,
+                           "changed",
+                           G_CALLBACK (style_context_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  style_context_changed (self, style_context);
+
+  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 }
 
 GtkWidget *

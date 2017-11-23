@@ -37,7 +37,6 @@ G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, IDE_TYPE_LAYOUT_VIEW)
 
 enum {
   PROP_0,
-  PROP_FONT_NAME,
   PROP_MANAGE_SPAWN,
   PROP_PTY,
   PROP_RUNTIME,
@@ -47,31 +46,6 @@ enum {
 
 static GParamSpec *properties[LAST_PROP];
 static gchar *cached_shell;
-
-/* TODO: allow palette to come from gnome-terminal. */
-static const GdkRGBA solarized_palette[] =
-{
-  /*
-   * Solarized palette (1.0.0beta2):
-   * http://ethanschoonover.com/solarized
-   */
-  { 0.02745,  0.211764, 0.258823, 1 },
-  { 0.862745, 0.196078, 0.184313, 1 },
-  { 0.521568, 0.6,      0,        1 },
-  { 0.709803, 0.537254, 0,        1 },
-  { 0.149019, 0.545098, 0.823529, 1 },
-  { 0.82745,  0.211764, 0.509803, 1 },
-  { 0.164705, 0.631372, 0.596078, 1 },
-  { 0.933333, 0.909803, 0.835294, 1 },
-  { 0,        0.168627, 0.211764, 1 },
-  { 0.796078, 0.294117, 0.086274, 1 },
-  { 0.345098, 0.431372, 0.458823, 1 },
-  { 0.396078, 0.482352, 0.513725, 1 },
-  { 0.513725, 0.580392, 0.588235, 1 },
-  { 0.423529, 0.443137, 0.768627, 1 },
-  { 0.57647,  0.631372, 0.631372, 1 },
-  { 0.992156, 0.964705, 0.890196, 1 },
-};
 
 static void gb_terminal_view_connect_terminal (GbTerminalView *self,
                                                VteTerminal    *terminal);
@@ -494,10 +468,6 @@ style_context_changed (GtkStyleContext *style_context,
   if (bg.alpha == 0.0)
     gdk_rgba_parse (&bg, "#f6f7f8");
 
-  vte_terminal_set_colors (self->terminal_top, &fg, &bg,
-                           solarized_palette,
-                           G_N_ELEMENTS (solarized_palette));
-
   ide_layout_view_set_primary_color_fg (IDE_LAYOUT_VIEW (self), &fg);
   ide_layout_view_set_primary_color_bg (IDE_LAYOUT_VIEW (self), &bg);
 }
@@ -505,35 +475,11 @@ style_context_changed (GtkStyleContext *style_context,
 static IdeLayoutView *
 gb_terminal_create_split_view (IdeLayoutView *view)
 {
-  IdeLayoutView *new_view;
-
   g_assert (GB_IS_TERMINAL_VIEW (view));
 
-  new_view = g_object_new (GB_TYPE_TERMINAL_VIEW,
-                          "visible", TRUE,
-                          NULL);
-
-  return new_view;
-}
-
-static void
-gb_terminal_view_set_font_name (GbTerminalView *self,
-                                const gchar    *font_name)
-{
-  g_assert (GB_IS_TERMINAL_VIEW (self));
-
-  if (font_name != NULL)
-    {
-      PangoFontDescription *font_desc = NULL;
-
-      font_desc = pango_font_description_from_string (font_name);
-
-      if (font_desc != NULL)
-        {
-          vte_terminal_set_font (self->terminal_top, font_desc);
-          pango_font_description_free (font_desc);
-        }
-    }
+  return g_object_new (GB_TYPE_TERMINAL_VIEW,
+                       "visible", TRUE,
+                       NULL);
 }
 
 static void
@@ -638,10 +584,6 @@ gb_terminal_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_FONT_NAME:
-      gb_terminal_view_set_font_name (self, g_value_get_string (value));
-      break;
-
     case PROP_MANAGE_SPAWN:
       self->manage_spawn = g_value_get_boolean (value);
       break;
@@ -686,15 +628,6 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, top_scrollbar);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_overlay_top);
 
-  g_type_ensure (VTE_TYPE_TERMINAL);
-
-  properties [PROP_FONT_NAME] =
-    g_param_spec_string ("font-name",
-                         "Font Name",
-                         "Font Name",
-                         NULL,
-                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_MANAGE_SPAWN] =
     g_param_spec_boolean ("manage-spawn",
                           "Manage Spawn",
@@ -730,7 +663,6 @@ static void
 gb_terminal_view_init (GbTerminalView *self)
 {
   GtkStyleContext *style_context;
-  g_autoptr(GSettings) settings = NULL;
 
   self->run_on_host = TRUE;
   self->manage_spawn = TRUE;
@@ -752,9 +684,6 @@ gb_terminal_view_init (GbTerminalView *self)
   ide_terminal_search_set_terminal (self->tsearch, self->terminal_top);
 
   gb_terminal_view_actions_init (self);
-
-  settings = g_settings_new ("org.gnome.builder.terminal");
-  g_settings_bind (settings, "font-name", self, "font-name", G_SETTINGS_BIND_GET);
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_class (style_context, "terminal");
