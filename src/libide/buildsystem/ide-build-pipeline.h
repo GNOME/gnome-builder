@@ -166,5 +166,8 @@ IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_rebuild_finish      (IdeBuildPipeline       *self,
                                                                GAsyncResult           *result,
                                                                GError                **error);
+IDE_AVAILABLE_IN_3_28
+void                   ide_build_pipeline_attach_pty          (IdeBuildPipeline       *self,
+                                                               IdeSubprocessLauncher  *launcher);
 
 G_END_DECLS

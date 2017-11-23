@@ -22,6 +22,7 @@
 #include <dazzle.h>
 #include <libpeas/peas.h>
 #include <string.h>
+#include <vte/vte.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -33,6 +34,7 @@
 #include "buildsystem/ide-build-log-private.h"
 #include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-build-pipeline-addin.h"
+#include "buildsystem/ide-build-private.h"
 #include "buildsystem/ide-build-stage.h"
 #include "buildsystem/ide-build-stage-launcher.h"
 #include "buildsystem/ide-build-stage-private.h"
@@ -44,6 +46,7 @@
 #include "plugins/ide-extension-util.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
+#include "terminal/ide-terminal-util.h"
 #include "vcs/ide-vcs.h"
 
 DZL_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
@@ -157,6 +160,14 @@ struct _IdeBuildPipeline
   gchar  *errfmt_current_dir;
   gchar  *errfmt_top_dir;
   guint   errfmt_seqnum;
+
+  /*
+   * Our PTY master for use by launchers in the build pipeline.
+   * We create a slave FD for the launchers (and dup() them when
+   * passing it to the child) that are created by pipeline addins.
+   */
+  VtePty *pty;
+  int pty_slave;
 
   /*
    * No reference to the current stage. It is only available during
@@ -972,6 +983,14 @@ ide_build_pipeline_dispose (GObject *object)
 
   ide_build_pipeline_unload (self);
 
+  g_clear_object (&self->pty);
+
+  if (self->pty_slave != -1)
+    {
+      close (self->pty_slave);
+      self->pty_slave = -1;
+    }
+
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->dispose (object);
 
   IDE_EXIT;
@@ -988,6 +1007,11 @@ ide_build_pipeline_initable_init (GInitable     *initable,
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_CONFIGURATION (self->configuration));
+
+  /* Create a PTY for subprocess launchers */
+  self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, cancellable, error);
+  if (self->pty == NULL)
+    return FALSE;
 
   g_signal_connect_object (self->configuration,
                            "notify::ready",
@@ -1194,6 +1218,7 @@ ide_build_pipeline_init (IdeBuildPipeline *self)
   DZL_COUNTER_INC (Instances);
 
   self->position = -1;
+  self->pty_slave = -1;
 
   self->pipeline = g_array_new (FALSE, FALSE, sizeof (PipelineEntry));
   g_array_set_clear_func (self->pipeline, clear_pipeline_entry);
@@ -2259,6 +2284,56 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
     }
 
   return g_steal_pointer (&ret);
+}
+
+/**
+ * ide_build_pipeline_attach_pty:
+ * @self: an #IdeBuildPipeline
+ * @launcher: an #IdeSubprocessLauncher
+ *
+ * Attaches a PTY to stdin/stdout/stderr of the #IdeSubprocessLauncher.
+ * This is useful if the application can take advantage of a PTY for
+ * features like colors and other escape sequences.
+ *
+ * Since: 3.28
+ */
+void
+ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
+                               IdeSubprocessLauncher *launcher)
+{
+  GSubprocessFlags flags;
+
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+
+  if (self->pty_slave == -1)
+    self->pty_slave = ide_vte_pty_create_slave (self->pty);
+
+  if (self->pty_slave == -1)
+    {
+      g_warning ("Failed to create PTY slave");
+      return;
+    }
+
+  /* Turn off built in pipes if set */
+  flags = ide_subprocess_launcher_get_flags (launcher);
+  flags &= ~(G_SUBPROCESS_FLAGS_STDERR_PIPE |
+             G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+             G_SUBPROCESS_FLAGS_STDIN_PIPE);
+  ide_subprocess_launcher_set_flags (launcher, flags);
+
+  /* Assign slave device */
+  ide_subprocess_launcher_take_stdin_fd (launcher, dup (self->pty_slave));
+  ide_subprocess_launcher_take_stdout_fd (launcher, dup (self->pty_slave));
+  ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->pty_slave));
+}
+
+VtePty *
+_ide_build_pipeline_get_pty (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->pty;
 }
 
 guint
