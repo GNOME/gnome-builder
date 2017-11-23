@@ -2509,6 +2509,12 @@ ide_build_pipeline_get_message (IdeBuildPipeline *self)
   if (self->in_clean)
     return g_strdup (_("Cleaning…"));
 
+  /* Not active, use simple messaging */
+  if (self->failed)
+    return g_strdup (_("Failed"));
+  else if (!self->busy)
+    return g_strdup (_("Ready…"));
+
   if (self->current_stage != NULL)
     {
       const gchar *name = ide_build_stage_get_name (self->current_stage);
