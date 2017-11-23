@@ -216,7 +216,7 @@ struct _IdeBuildPipeline
   guint failed : 1;
 
   /*
-   * If we are within a built, this should be set.
+   * If we are within a build, this should be set.
    */
   guint busy : 1;
 
@@ -1735,6 +1735,9 @@ ide_build_pipeline_do_flush (gpointer data)
   self->position = -1;
   self->in_clean = (task_data->type == TASK_CLEAN);
 
+  /* Clear any lingering message */
+  g_clear_pointer (&self->message, g_free);
+
   /*
    * The following logs some helpful information about the build to our
    * debug log. This is useful to allow users to debug some problems
@@ -1798,6 +1801,7 @@ ide_build_pipeline_do_flush (gpointer data)
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -2497,6 +2501,10 @@ ide_build_pipeline_get_message (IdeBuildPipeline *self)
   const gchar *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  /* Use any message the Pty has given us while building. */
+  if (self->busy && self->message != NULL)
+    return g_strdup (self->message);
 
   if (self->in_clean)
     return g_strdup (_("Cleaning…"));
