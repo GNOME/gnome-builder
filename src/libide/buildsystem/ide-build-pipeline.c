@@ -1463,6 +1463,9 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
   self->requested_mask = 0;
   self->in_clean = FALSE;
 
+  g_clear_pointer (&self->message, g_free);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
+
   /*
    * XXX: How do we ensure transients are executed with the part of the
    *      pipeline we care about? We might just need to ensure that :busy is
@@ -1474,7 +1477,6 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PHASE]);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
 
   /*
    * We might have a delayed addin unloading that needs to occur after the
