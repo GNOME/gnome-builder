@@ -538,6 +538,14 @@ ide_application_open (GApplication  *application,
                               NULL);
 }
 
+static gboolean
+ide_application_force_exit_timeout (gpointer data)
+{
+  g_warning ("Plugin caught spinning, forcing exit immediately");
+  exit (EXIT_FAILURE);
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_application_shutdown (GApplication *application)
 {
@@ -565,6 +573,13 @@ ide_application_shutdown (GApplication *application)
     }
 
   _ide_battery_monitor_shutdown ();
+
+  /* In case a plugin causes us to spin at shutdown, make sure that we
+   * force exit to avoid spinning in the background.
+   */
+  gdk_threads_add_timeout (3000, /* 3 seconds */
+                           ide_application_force_exit_timeout,
+                           NULL);
 }
 
 static void
