@@ -88,3 +88,37 @@ ide_build_target_compare (const IdeBuildTarget *left,
   return ide_build_target_get_priority ((IdeBuildTarget *)left) -
          ide_build_target_get_priority ((IdeBuildTarget *)right);
 }
+
+/**
+ * ide_build_target_get_argv:
+ * @self: a #IdeBuildTarget
+ *
+ * Gets the arguments used to run the target.
+ *
+ * Returns: (transfer full): A #GStrv containing the arguments to
+ *   run the target.
+ *
+ * Since: 3.28
+ */
+gchar **
+ide_build_target_get_argv (IdeBuildTarget *self)
+{
+  g_autofree gchar *name = NULL;
+  g_auto(GStrv) argv = NULL;
+
+  g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), NULL);
+
+  if (IDE_BUILD_TARGET_GET_IFACE (self)->get_argv)
+    argv = IDE_BUILD_TARGET_GET_IFACE (self)->get_argv (self);
+
+  if (argv == NULL || *argv == NULL)
+    {
+      g_clear_pointer (&argv, g_strfreev);
+
+      argv = g_new (gchar *, 2);
+      argv[0] = ide_build_target_get_name (self);
+      argv[1] = NULL;
+    }
+
+  return g_steal_pointer (&argv);
+}

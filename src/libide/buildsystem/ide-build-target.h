@@ -37,16 +37,19 @@ struct _IdeBuildTargetInterface
   GFile  *(*get_install_directory) (IdeBuildTarget *self);
   gchar  *(*get_name)              (IdeBuildTarget *self);
   gint    (*get_priority)          (IdeBuildTarget *self);
+  gchar **(*get_argv)              (IdeBuildTarget *self);
 };
 
 IDE_AVAILABLE_IN_ALL
-GFile    *ide_build_target_get_install_directory (IdeBuildTarget       *self);
+GFile     *ide_build_target_get_install_directory (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_ALL
-gchar    *ide_build_target_get_name              (IdeBuildTarget       *self);
+gchar     *ide_build_target_get_name              (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_3_28
-gint      ide_build_target_get_priority          (IdeBuildTarget       *self);
+gint       ide_build_target_get_priority          (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_3_28
-gboolean  ide_build_target_compare               (const IdeBuildTarget *left,
-                                                  const IdeBuildTarget *right);
+gchar    **ide_build_target_get_argv              (IdeBuildTarget       *self);
+IDE_AVAILABLE_IN_3_28
+gboolean   ide_build_target_compare               (const IdeBuildTarget *left,
+                                                   const IdeBuildTarget *right);
 
 G_END_DECLS
