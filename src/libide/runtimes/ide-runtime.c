@@ -164,8 +164,8 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
                                 IdeBuildTarget *build_target)
 {
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
-  g_autofree gchar *name = NULL;
   g_autoptr(GFile) installdir = NULL;
+  g_auto(GStrv) argv = NULL;
   const gchar *slash;
   IdeContext *context;
   IdeRunner *runner;
@@ -183,48 +183,49 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
     ide_runner_set_run_on_host (runner, TRUE);
 
   if (build_target != NULL)
-    g_object_get (build_target,
-                  "install-directory", &installdir,
-                  "name", &name,
-                  NULL);
-
-  /* Targets might be relative in autotools */
-  if (name != NULL && NULL != (slash = strrchr (name, '/')))
     {
-      gchar *tmp = g_strdup (slash + 1);
-      g_free (name);
-      name = tmp;
+      installdir = ide_build_target_get_install_directory (build_target);
+      argv = ide_build_target_get_argv (build_target);
+    }
+
+  /* Possibly translate relative paths for the binary */
+  if (argv != NULL &&
+      argv[0] != NULL &&
+      !g_path_is_absolute (argv[0]) &&
+      NULL != (slash = strchr (argv[0], '/')))
+    {
+      g_autofree gchar *copy = g_strdup (slash + 1);
+
+      g_free (argv[0]);
+
+      if (installdir != NULL)
+        {
+          g_autoptr(GFile) dest = g_file_get_child (installdir, copy);
+          argv[0] = g_file_get_path (dest);
+        }
+      else
+        argv[0] = g_steal_pointer (&copy);
     }
 
   if (installdir != NULL)
     {
       g_autoptr(GFile) parentdir = NULL;
-      g_autoptr(GFile) bin = NULL;
       g_autofree gchar *schemadir = NULL;
       g_autofree gchar *parentpath = NULL;
-      g_autofree gchar *binpath = NULL;
 
       /* GSettings requires an env var for non-standard dirs */
       if (NULL != (parentdir = g_file_get_parent (installdir)))
         {
-          IdeEnvironment *env;
+          IdeEnvironment *env = ide_runner_get_environment (runner);
 
           parentpath = g_file_get_path (parentdir);
           schemadir = g_build_filename (parentpath, "share", "glib-2.0", "schemas", NULL);
-
-          env = ide_runner_get_environment (runner);
           ide_environment_setenv (env, "GSETTINGS_SCHEMA_DIR", schemadir);
         }
-
-      bin = g_file_get_child (installdir, name);
-      binpath = g_file_get_path (bin);
-
-      ide_runner_append_argv (runner, binpath);
     }
-  else if (name != NULL)
-    {
-      ide_runner_append_argv (runner, name);
-    }
+
+  if (argv != NULL)
+    ide_runner_push_args (runner, (const gchar * const *)argv);
 
   return runner;
 }
