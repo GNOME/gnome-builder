@@ -36,6 +36,7 @@ FLAGS:
 OPTIONS:
         --default-host <default-host>              Choose a default host triple
         --default-toolchain <default-toolchain>    Choose a default toolchain to install
+        --default-toolchain none                   Do not install any toolchains
 EOF
 }
 
@@ -322,10 +323,6 @@ get_architecture() {
 
 say() {
     echo "rustup: $1"
-}
-
-say_err() {
-    say "$1" >&2
 }
 
 err() {
