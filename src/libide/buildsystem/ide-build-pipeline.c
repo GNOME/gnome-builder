@@ -799,9 +799,9 @@ register_build_commands_stage (IdeBuildPipeline *self,
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (IDE_IS_CONFIGURATION (self->configuration));
 
-  build_commands = ide_configuration_get_build_commands (self->configuration);
-  if (build_commands == NULL)
+  if (NULL == (build_commands = ide_configuration_get_build_commands (self->configuration)))
     return;
+
   for (guint i = 0; build_commands[i]; i++)
     {
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
