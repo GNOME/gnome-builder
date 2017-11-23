@@ -192,6 +192,7 @@ static void
 ide_autotools_makecache_stage_init (IdeAutotoolsMakecacheStage *self)
 {
   ide_build_stage_set_name (IDE_BUILD_STAGE (self), _("Building cache…"));
+  ide_build_stage_launcher_set_use_pty (IDE_BUILD_STAGE_LAUNCHER (self), FALSE);
 }
 
 IdeBuildStage *
