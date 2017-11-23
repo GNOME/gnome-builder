@@ -339,6 +339,36 @@ ide_terminal_font_changed (IdeTerminal *self,
 }
 
 static void
+ide_terminal_size_allocate (GtkWidget     *widget,
+                            GtkAllocation *alloc)
+{
+  IdeTerminal *self = (IdeTerminal *)widget;
+  glong width;
+  glong height;
+  glong columns;
+  glong rows;
+
+  GTK_WIDGET_CLASS (ide_terminal_parent_class)->size_allocate (widget, alloc);
+
+  if ((alloc->width == 0) || (alloc->height == 0))
+    return;
+
+  width = vte_terminal_get_char_width (VTE_TERMINAL (self));
+  height = vte_terminal_get_char_height (VTE_TERMINAL (self));
+
+  if ((width == 0) || (height == 0))
+    return;
+
+  columns = alloc->width / width;
+  rows = alloc->height / height;
+
+  if ((columns < 2) || (rows < 2))
+    return;
+
+  vte_terminal_set_size (VTE_TERMINAL (self), columns, rows);
+}
+
+static void
 ide_terminal_destroy (GtkWidget *widget)
 {
   IdeTerminal *self = (IdeTerminal *)widget;
@@ -361,6 +391,7 @@ ide_terminal_class_init (IdeTerminalClass *klass)
   widget_class->destroy = ide_terminal_destroy;
   widget_class->button_press_event = ide_terminal_button_press_event;
   widget_class->popup_menu = ide_terminal_popup_menu;
+  widget_class->size_allocate = ide_terminal_size_allocate;
 
   klass->copy_link_address = ide_terminal_copy_link_address;
   klass->open_link = ide_terminal_open_link;

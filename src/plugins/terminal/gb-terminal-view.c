@@ -318,38 +318,6 @@ gb_terminal_realize (GtkWidget *widget)
 }
 
 static void
-size_allocate_cb (VteTerminal    *terminal,
-                  GtkAllocation  *alloc,
-                  GbTerminalView *self)
-{
-  glong width;
-  glong height;
-  glong columns;
-  glong rows;
-
-  g_assert (VTE_IS_TERMINAL (terminal));
-  g_assert (alloc != NULL);
-  g_assert (GB_IS_TERMINAL_VIEW (self));
-
-  if ((alloc->width == 0) || (alloc->height == 0))
-    return;
-
-  width = vte_terminal_get_char_width (terminal);
-  height = vte_terminal_get_char_height (terminal);
-
-  if ((width == 0) || (height == 0))
-    return;
-
-  columns = alloc->width / width;
-  rows = alloc->height / height;
-
-  if ((columns < 2) || (rows < 2))
-    return;
-
-  vte_terminal_set_size (terminal, columns, rows);
-}
-
-static void
 gb_terminal_get_preferred_width (GtkWidget *widget,
                                  gint      *min_width,
                                  gint      *nat_width)
@@ -501,12 +469,6 @@ gb_terminal_view_connect_terminal (GbTerminalView *self,
   vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (terminal));
 
   gtk_range_set_adjustment (GTK_RANGE (self->top_scrollbar), vadj);
-
-  g_signal_connect_object (terminal,
-                           "size-allocate",
-                           G_CALLBACK (size_allocate_cb),
-                           self,
-                           0);
 
   g_signal_connect_object (terminal,
                            "focus-in-event",
