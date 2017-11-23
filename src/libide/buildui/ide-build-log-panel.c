@@ -98,6 +98,7 @@ ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
                                                  ide_build_log_panel_log_observer,
                                                  self,
                                                  NULL);
+          vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
           vte_terminal_set_pty (VTE_TERMINAL (self->terminal),
                                 _ide_build_pipeline_get_pty (pipeline));
         }
