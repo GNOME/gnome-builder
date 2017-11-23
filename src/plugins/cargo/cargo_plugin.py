@@ -71,6 +71,20 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_priority(self):
         return 300
 
+def locate_cargo_from_config(config):
+    cargo = _CARGO
+
+    if config:
+        runtime = config.get_runtime()
+        if config.getenv('CARGO'):
+            cargo = config.getenv('CARGO')
+        elif not runtime or not runtime.contains_program_in_path(_CARGO):
+            cargo_in_home = os.path.expanduser('~/.cargo/bin/cargo')
+            if os.path.exists(cargo_in_home):
+                cargo = cargo_in_home
+
+    return cargo
+
 class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
     The CargoPipelineAddin is responsible for creating the necessary build
@@ -92,13 +106,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         runtime = config.get_runtime()
 
         # We might need to use cargo from ~/.cargo/bin
-        cargo = _CARGO
-        if config.getenv('CARGO'):
-            cargo = config.getenv('CARGO')
-        elif not runtime.contains_program_in_path(_CARGO):
-            cargo_in_home = os.path.expanduser('~/.cargo/bin/cargo')
-            if os.path.exists(cargo_in_home):
-                cargo = cargo_in_home
+        cargo = locate_cargo_from_config(config)
 
         # Fetch dependencies so that we no longer need network access
         fetch_launcher = pipeline.create_launcher()
