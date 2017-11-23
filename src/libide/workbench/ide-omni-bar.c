@@ -95,6 +95,12 @@ struct _IdeOmniBar
   DzlBindingGroup *vcs_bindings;
 
   /*
+   * Used to bind the pipeline message to the omnibar popover label,
+   * while the build is active.
+   */
+  gulong message_handler;
+
+  /*
    * This tracks the number of times we have shown the current build
    * message while looping between the various messages. After our
    * SETTLE_MESSAGE_COUNT has been reached, we stop flapping between
@@ -116,6 +122,7 @@ struct _IdeOmniBar
   GtkLabel             *project_label;
   GtkBox               *branch_box;
   GtkImage             *build_result_diagnostics_image;
+  GtkLabel             *build_result_mode_label;
   GtkButton            *build_button;
   GtkShortcutsShortcut *build_button_shortcut;
   GtkButton            *cancel_button;
@@ -126,6 +133,7 @@ struct _IdeOmniBar
   GtkLabel             *popover_branch_label;
   GtkLabel             *popover_config_label;
   GtkLabel             *popover_build_result_label;
+  GtkLabel             *popover_build_message;
   GtkRevealer          *popover_details_revealer;
   GtkLabel             *popover_errors_label;
   GtkLabel             *popover_last_build_time_label;
@@ -394,6 +402,22 @@ ide_omni_bar_popover_closed (IdeOmniBar *self,
 }
 
 static void
+ide_omni_bar_notify_message (IdeOmniBar       *self,
+                             GParamSpec       *pspec,
+                             IdeBuildPipeline *pipeline)
+{
+  g_autofree gchar *message = NULL;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  message = ide_build_pipeline_get_message (pipeline);
+
+  gtk_label_set_label (self->popover_build_message, message);
+  gtk_label_set_label (self->build_result_mode_label, message);
+}
+
+static void
 ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
                                             IdeBuildPipeline *build_pipeline,
                                             IdeBuildManager  *build_manager)
@@ -404,6 +428,13 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
 
   self->did_build = TRUE;
   self->seen_count = 0;
+
+  self->message_handler =
+    g_signal_connect_object (build_pipeline,
+                             "notify::message",
+                             G_CALLBACK (ide_omni_bar_notify_message),
+                             self,
+                             G_CONNECT_SWAPPED);
 
   gtk_revealer_set_reveal_child (self->popover_details_revealer, TRUE);
 
@@ -424,6 +455,10 @@ ide_omni_bar__build_manager__build_failed (IdeOmniBar       *self,
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
+  gtk_label_set_label (self->popover_build_message, NULL);
+  g_signal_handler_disconnect (build_pipeline, self->message_handler);
+  self->message_handler = 0;
+
   gtk_label_set_label (self->popover_build_result_label, _("Failed"));
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
 
@@ -438,6 +473,10 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  gtk_label_set_label (self->popover_build_message, NULL);
+  g_signal_handler_disconnect (build_pipeline, self->message_handler);
+  self->message_handler = 0;
 
   gtk_label_set_label (self->popover_build_result_label, _("Success"));
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
@@ -497,6 +536,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button_shortcut);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_diagnostics_image);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, event_box);
@@ -504,6 +544,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, pausables);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_branch_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_message);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_build_result_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_config_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_details_revealer);
