@@ -813,6 +813,9 @@ register_build_commands_stage (IdeBuildPipeline *self,
           return;
         }
 
+      /* Request deprecation warnings from the GLib stack by default */
+      ide_subprocess_launcher_setenv (launcher, "G_ENABLE_DIAGNOSTIC", "1", FALSE);
+
       ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
       ide_subprocess_launcher_push_argv (launcher, "-c");
       ide_subprocess_launcher_push_argv (launcher, build_commands[i]);
