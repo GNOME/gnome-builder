@@ -30,11 +30,13 @@ typedef struct
   IdeSubprocessLauncher *launcher;
   IdeSubprocessLauncher *clean_launcher;
   guint                  ignore_exit_status : 1;
+  guint                  use_pty : 1;
 } IdeBuildStageLauncherPrivate;
 
 enum {
   PROP_0,
   PROP_CLEAN_LAUNCHER,
+  PROP_USE_PTY,
   PROP_IGNORE_EXIT_STATUS,
   PROP_LAUNCHER,
   N_PROPS
@@ -135,25 +137,32 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
       IDE_EXIT;
     }
 
-  flags = ide_subprocess_launcher_get_flags (launcher);
+  if (priv->use_pty)
+    {
+      ide_build_pipeline_attach_pty (pipeline, launcher);
+    }
+  else
+    {
+      flags = ide_subprocess_launcher_get_flags (launcher);
 
-  /* Disable flags we do not want set for build pipeline stuff */
+      /* Disable flags we do not want set for build pipeline stuff */
 
-  if (flags & G_SUBPROCESS_FLAGS_STDERR_SILENCE)
-    flags &= ~G_SUBPROCESS_FLAGS_STDERR_SILENCE;
+      if (flags & G_SUBPROCESS_FLAGS_STDERR_SILENCE)
+        flags &= ~G_SUBPROCESS_FLAGS_STDERR_SILENCE;
 
-  if (flags & G_SUBPROCESS_FLAGS_STDERR_MERGE)
-    flags &= ~G_SUBPROCESS_FLAGS_STDERR_MERGE;
+      if (flags & G_SUBPROCESS_FLAGS_STDERR_MERGE)
+        flags &= ~G_SUBPROCESS_FLAGS_STDERR_MERGE;
 
-  if (flags & G_SUBPROCESS_FLAGS_STDIN_INHERIT)
-    flags &= ~G_SUBPROCESS_FLAGS_STDIN_INHERIT;
+      if (flags & G_SUBPROCESS_FLAGS_STDIN_INHERIT)
+        flags &= ~G_SUBPROCESS_FLAGS_STDIN_INHERIT;
 
-  /* Ensure we have access to stdin/stdout streams */
+      /* Ensure we have access to stdin/stdout streams */
 
-  flags |= G_SUBPROCESS_FLAGS_STDOUT_PIPE;
-  flags |= G_SUBPROCESS_FLAGS_STDERR_PIPE;
+      flags |= G_SUBPROCESS_FLAGS_STDOUT_PIPE;
+      flags |= G_SUBPROCESS_FLAGS_STDERR_PIPE;
 
-  ide_subprocess_launcher_set_flags (launcher, flags);
+      ide_subprocess_launcher_set_flags (launcher, flags);
+    }
 
   /* Now launch the process */
 
@@ -165,7 +174,8 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
       IDE_EXIT;
     }
 
-  ide_build_stage_log_subprocess (IDE_BUILD_STAGE (self), subprocess);
+  if (!priv->use_pty)
+    ide_build_stage_log_subprocess (IDE_BUILD_STAGE (self), subprocess);
 
   IDE_TRACE_MSG ("Waiting for process %s to complete, %s exit status",
                  ide_subprocess_get_identifier (subprocess),
@@ -269,6 +279,10 @@ ide_build_stage_launcher_get_property (GObject    *object,
       g_value_set_object (value, ide_build_stage_launcher_get_clean_launcher (self));
       break;
 
+    case PROP_USE_PTY:
+      g_value_set_boolean (value, ide_build_stage_launcher_get_use_pty (self));
+      break;
+
     case PROP_IGNORE_EXIT_STATUS:
       g_value_set_boolean (value, ide_build_stage_launcher_get_ignore_exit_status (self));
       break;
@@ -294,6 +308,10 @@ ide_build_stage_launcher_set_property (GObject      *object,
     {
     case PROP_CLEAN_LAUNCHER:
       ide_build_stage_launcher_set_clean_launcher (self, g_value_get_object (value));
+      break;
+
+    case PROP_USE_PTY:
+      ide_build_stage_launcher_set_use_pty (self, g_value_get_boolean (value));
       break;
 
     case PROP_IGNORE_EXIT_STATUS:
@@ -331,6 +349,13 @@ ide_build_stage_launcher_class_init (IdeBuildStageLauncherClass *klass)
                          IDE_TYPE_SUBPROCESS_LAUNCHER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_USE_PTY] =
+    g_param_spec_boolean ("use-pty",
+                          "Use Pty",
+                          "If the subprocess should have a Pty attached",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_IGNORE_EXIT_STATUS] =
     g_param_spec_boolean ("ignore-exit-status",
                           "Ignore Exit Status",
@@ -351,6 +376,9 @@ ide_build_stage_launcher_class_init (IdeBuildStageLauncherClass *klass)
 static void
 ide_build_stage_launcher_init (IdeBuildStageLauncher *self)
 {
+  IdeBuildStageLauncherPrivate *priv = ide_build_stage_launcher_get_instance_private (self);
+
+  priv->use_pty = TRUE;
 }
 
 /**
@@ -475,4 +503,40 @@ ide_build_stage_launcher_get_clean_launcher (IdeBuildStageLauncher *self)
   g_return_val_if_fail (IDE_IS_BUILD_STAGE_LAUNCHER (self), NULL);
 
   return priv->clean_launcher;
+}
+
+gboolean
+ide_build_stage_launcher_get_use_pty (IdeBuildStageLauncher *self)
+{
+  IdeBuildStageLauncherPrivate *priv = ide_build_stage_launcher_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUILD_STAGE_LAUNCHER (self), FALSE);
+
+  return priv->use_pty;
+}
+
+/**
+ * ide_build_stage_launcher_set_use_pty:
+ * @self: a #IdeBuildStageLauncher
+ * @use_pty: If a Pty should be used
+ *
+ * If @use_pty is set to %TRUE, a Pty will be attached to the process.
+ *
+ * Since: 3.28
+ */
+void
+ide_build_stage_launcher_set_use_pty (IdeBuildStageLauncher *self,
+                                      gboolean               use_pty)
+{
+  IdeBuildStageLauncherPrivate *priv = ide_build_stage_launcher_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUILD_STAGE_LAUNCHER (self));
+
+  use_pty = !!use_pty;
+
+  if (use_pty != priv->use_pty)
+    {
+      priv->use_pty = use_pty;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_PTY]);
+    }
 }

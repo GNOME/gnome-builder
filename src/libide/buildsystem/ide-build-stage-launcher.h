@@ -62,5 +62,10 @@ gboolean               ide_build_stage_launcher_get_ignore_exit_status (IdeBuild
 IDE_AVAILABLE_IN_ALL
 void                   ide_build_stage_launcher_set_ignore_exit_status (IdeBuildStageLauncher *self,
                                                                         gboolean               ignore_exit_status);
+IDE_AVAILABLE_IN_3_28
+gboolean               ide_build_stage_launcher_get_use_pty            (IdeBuildStageLauncher *self);
+IDE_AVAILABLE_IN_3_28
+void                   ide_build_stage_launcher_set_use_pty            (IdeBuildStageLauncher *self,
+                                                                        gboolean               use_pty);
 
 G_END_DECLS
