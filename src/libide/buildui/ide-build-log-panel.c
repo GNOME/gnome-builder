@@ -31,7 +31,6 @@ struct _IdeBuildLogPanel
   DzlDockWidget      parent_instance;
 
   IdeBuildPipeline  *pipeline;
-  GSettings         *settings;
 
   GtkScrollbar      *scrollbar;
   IdeTerminal       *terminal;
@@ -107,31 +106,6 @@ ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
 }
 
 static void
-ide_build_log_panel_changed_font_name (IdeBuildLogPanel *self,
-                                       const gchar      *key,
-                                       GSettings        *settings)
-{
-  g_autofree gchar *font_name= NULL;
-  PangoFontDescription *font_desc;
-
-  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
-  g_assert (g_strcmp0 (key, "font-name") == 0);
-  g_assert (G_IS_SETTINGS (settings));
-
-  /* TODO: This probably can all go in IdeTerminal directly */
-
-  font_name = g_settings_get_string (settings, key);
-  font_desc = pango_font_description_from_string (font_name);
-
-  if (font_desc != NULL)
-    {
-
-    }
-
-  g_clear_pointer (&font_desc, pango_font_description_free);
-}
-
-static void
 ide_build_log_panel_window_title_changed (IdeBuildLogPanel *self,
                                           IdeTerminal      *terminal)
 {
@@ -153,7 +127,6 @@ ide_build_log_panel_finalize (GObject *object)
   IdeBuildLogPanel *self = (IdeBuildLogPanel *)object;
 
   g_clear_object (&self->pipeline);
-  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_build_log_panel_parent_class)->finalize (object);
 }
@@ -332,14 +305,6 @@ ide_build_log_panel_init (IdeBuildLogPanel *self)
   dzl_dock_widget_set_title (DZL_DOCK_WIDGET (self), _("Build Output"));
 
   ide_build_log_panel_reset_view (self);
-
-  self->settings = g_settings_new ("org.gnome.builder.terminal");
-  g_signal_connect_object (self->settings,
-                           "changed::font-name",
-                           G_CALLBACK (ide_build_log_panel_changed_font_name),
-                           self,
-                           G_CONNECT_SWAPPED);
-  ide_build_log_panel_changed_font_name (self, "font-name", self->settings);
 
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);
