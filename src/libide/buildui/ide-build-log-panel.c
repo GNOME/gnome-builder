@@ -132,6 +132,22 @@ ide_build_log_panel_changed_font_name (IdeBuildLogPanel *self,
 }
 
 static void
+ide_build_log_panel_window_title_changed (IdeBuildLogPanel *self,
+                                          IdeTerminal      *terminal)
+{
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
+  g_assert (VTE_IS_TERMINAL (terminal));
+
+  if (self->pipeline != NULL)
+    {
+      const gchar *title;
+
+      title = vte_terminal_get_window_title (VTE_TERMINAL (terminal));
+      _ide_build_pipeline_set_message (self->pipeline, title);
+    }
+}
+
+static void
 ide_build_log_panel_finalize (GObject *object)
 {
   IdeBuildLogPanel *self = (IdeBuildLogPanel *)object;
@@ -299,6 +315,12 @@ ide_build_log_panel_init (IdeBuildLogPanel *self)
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->terminal,
+                           "window-title-changed",
+                           G_CALLBACK (ide_build_log_panel_window_title_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   gtk_range_set_adjustment (GTK_RANGE (self->scrollbar),
                             gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal)));

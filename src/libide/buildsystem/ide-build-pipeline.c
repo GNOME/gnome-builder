@@ -170,6 +170,13 @@ struct _IdeBuildPipeline
   int pty_slave;
 
   /*
+   * If the terminal interpreting our Pty has received a terminal
+   * title update, it might set this message which we can use for
+   * better build messages.
+   */
+  gchar *message;
+
+  /*
    * No reference to the current stage. It is only available during
    * the asynchronous execution of the stage.
    */
@@ -983,6 +990,7 @@ ide_build_pipeline_dispose (GObject *object)
 
   ide_build_pipeline_unload (self);
 
+  g_clear_pointer (&self->message, g_free);
   g_clear_object (&self->pty);
 
   if (self->pty_slave != -1)
@@ -2988,4 +2996,18 @@ ide_build_pipeline_get_can_export (IdeBuildPipeline *self)
     }
 
   return FALSE;
+}
+
+void
+_ide_build_pipeline_set_message (IdeBuildPipeline *self,
+                                 const gchar      *message)
+{
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+
+  if (!ide_str_equal0 (message, self->message))
+    {
+      g_free (self->message);
+      self->message = g_strdup (message);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
+    }
 }
