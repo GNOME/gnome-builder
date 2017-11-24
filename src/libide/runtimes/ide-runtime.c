@@ -247,12 +247,12 @@ ide_runtime_real_translate_file (IdeRuntime *self,
   if (!g_file_is_native (file) || NULL == (path = g_file_get_path (file)))
     return NULL;
 
-  /* If this is /usr, then translate to /run/host/usr */
-  if (g_str_has_prefix (path, "/usr/"))
-    {
-      const gchar *suffix = path + strlen ("/usr/");
-      return g_file_new_build_filename ("/run/host/usr", suffix, NULL);
-    }
+  /* If this is /usr or /etc, then translate to /run/host/$dir,
+   * as that is where flatpak 0.10.1 and greater will mount them
+   * when --filesystem=host.
+   */
+  if (g_str_has_prefix (path, "/usr/") || g_str_has_prefix (path, "/etc/"))
+    return g_file_new_build_filename ("/run/host/", path, NULL);
 
   return NULL;
 }
