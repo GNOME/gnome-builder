@@ -230,6 +230,33 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
   return runner;
 }
 
+static GFile *
+ide_runtime_real_translate_file (IdeRuntime *self,
+                                 GFile      *file)
+{
+  g_autofree gchar *path = NULL;
+
+  g_assert (IDE_IS_RUNTIME (self));
+  g_assert (G_IS_FILE (file));
+
+  /* We only need to translate when running as flatpak */
+  if (!ide_is_flatpak ())
+    return NULL;
+
+  /* Only deal with native files */
+  if (!g_file_is_native (file) || NULL == (path = g_file_get_path (file)))
+    return NULL;
+
+  /* If this is /usr, then translate to /run/host/usr */
+  if (g_str_has_prefix (path, "/usr/"))
+    {
+      const gchar *suffix = path + strlen ("/usr/");
+      return g_file_new_build_filename ("/run/host/usr", suffix, NULL);
+    }
+
+  return NULL;
+}
+
 static void
 ide_runtime_finalize (GObject *object)
 {
@@ -301,6 +328,7 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
   klass->create_runner = ide_runtime_real_create_runner;
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
   klass->prepare_configuration = ide_runtime_real_prepare_configuration;
+  klass->translate_file = ide_runtime_real_translate_file;
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
