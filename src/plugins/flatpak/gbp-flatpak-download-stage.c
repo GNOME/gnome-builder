@@ -28,11 +28,21 @@ struct _GbpFlatpakDownloadStage
 {
   IdeBuildStageLauncher parent_instance;
 
+  gchar *state_dir;
+
   guint invalid : 1;
   guint force_update : 1;
 };
 
 G_DEFINE_TYPE (GbpFlatpakDownloadStage, gbp_flatpak_download_stage, IDE_TYPE_BUILD_STAGE_LAUNCHER)
+
+enum {
+  PROP_0,
+  PROP_STATE_DIR,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 
 static void
 gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
@@ -78,6 +88,11 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
       ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
       ide_subprocess_launcher_push_argv (launcher, "--ccache");
       ide_subprocess_launcher_push_argv (launcher, "--force-clean");
+      if (!ide_str_empty0 (self->state_dir))
+        {
+          ide_subprocess_launcher_push_argv (launcher, "--state-dir");
+          ide_subprocess_launcher_push_argv (launcher, self->state_dir);
+        }
       ide_subprocess_launcher_push_argv (launcher, "--download-only");
       if (!self->force_update)
         ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
@@ -106,11 +121,52 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
 }
 
 static void
+gbp_flatpak_download_stage_finalize (GObject *object)
+{
+  GbpFlatpakDownloadStage *self = (GbpFlatpakDownloadStage *)object;
+
+  g_assert (GBP_IS_FLATPAK_DOWNLOAD_STAGE (self));
+
+  g_clear_pointer (&self->state_dir, g_free);
+
+  G_OBJECT_CLASS (gbp_flatpak_download_stage_parent_class)->finalize (object);
+}
+
+static void
+gbp_flatpak_download_stage_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec)
+{
+  GbpFlatpakDownloadStage *self = GBP_FLATPAK_DOWNLOAD_STAGE (object);
+
+  switch (prop_id)
+    {
+    case PROP_STATE_DIR:
+      self->state_dir = g_value_dup_string (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_flatpak_download_stage_class_init (GbpFlatpakDownloadStageClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeBuildStageClass *stage_class = IDE_BUILD_STAGE_CLASS (klass);
 
+  object_class->finalize = gbp_flatpak_download_stage_finalize;
+  object_class->set_property = gbp_flatpak_download_stage_set_property;
+
   stage_class->query = gbp_flatpak_download_stage_query;
+
+  properties [PROP_STATE_DIR] =
+    g_param_spec_string ("state-dir", NULL, NULL, NULL,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void

@@ -27,6 +27,24 @@
 #include "gbp-flatpak-transfer.h"
 #include "gbp-flatpak-util.h"
 
+#define VERSION_CHECK(v,a,b,c)                                         \
+  (((v)->major > (a)) ||                                               \
+   (((v)->major == (a)) && ((v)->minor > (b))) ||                      \
+   (((v)->major == (a)) && ((v)->minor == (b)) && ((v)->micro >= (c))))
+
+struct _GbpFlatpakPipelineAddin
+{
+  IdeObject parent_instance;
+
+  gchar *state_dir;
+
+  struct {
+    int major;
+    int minor;
+    int micro;
+  } version;
+};
+
 G_DEFINE_QUARK (gb-flatpak-pipeline-error-quark, gb_flatpak_pipeline_error)
 
 enum {
@@ -39,6 +57,40 @@ enum {
   EXPORT_BUILD_EXPORT,
   EXPORT_BUILD_BUNDLE,
 };
+
+static void
+sniff_flatpak_builder_version (GbpFlatpakPipelineAddin *self)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+  int major = 0;
+  int minor = 0;
+  int micro = 0;
+
+  g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
+  ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
+  ide_subprocess_launcher_push_argv (launcher, "--version");
+
+  subprocess = ide_subprocess_launcher_spawn (launcher, NULL, NULL);
+  if (subprocess == NULL)
+    return;
+
+  if (!ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdout_buf, NULL, NULL))
+    return;
+
+  if (sscanf (stdout_buf, "flatpak-builder %d.%d.%d", &major, &minor, &micro) != 3)
+    return;
+
+  self->version.major = major;
+  self->version.minor = minor;
+  self->version.micro = micro;
+}
 
 static void
 always_run_query_handler (IdeBuildStage    *stage,
@@ -233,6 +285,7 @@ register_downloads_stage (GbpFlatpakPipelineAddin  *self,
 
   stage = g_object_new (GBP_TYPE_FLATPAK_DOWNLOAD_STAGE,
                         "context", context,
+                        "state-dir", self->state_dir,
                         NULL);
   stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_DOWNLOADS, 0, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
@@ -282,6 +335,11 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, "--ccache");
   ide_subprocess_launcher_push_argv (launcher, "--force-clean");
   ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
+  if (self->state_dir != NULL)
+    {
+      ide_subprocess_launcher_push_argv (launcher, "--state-dir");
+      ide_subprocess_launcher_push_argv (launcher, self->state_dir);
+    }
   stop_at_option = g_strdup_printf ("--stop-at=%s", primary_module);
   ide_subprocess_launcher_push_argv (launcher, stop_at_option);
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
@@ -489,6 +547,26 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
+  sniff_flatpak_builder_version (self);
+
+  if (VERSION_CHECK (&self->version, 0, 10, 5))
+    {
+      /* Use a single flatpak-builder state directory that is
+       * kept within .cache (or appropriate mapping directory)
+       * instead of littering it within the project checkout.
+       * It also allows us to share checkouts and clones between
+       * projects instead lots of duplicates.
+       *
+       * It does have the side effect that it is harder to
+       * prune existing data and we may want to address that
+       * in the future (either upstream or in here).
+       */
+      self->state_dir = g_build_filename (g_get_user_cache_dir (),
+                                          ide_get_program_name (),
+                                          "flatpak-builder",
+                                          NULL);
+    }
+
   config = ide_build_pipeline_get_configuration (pipeline);
 
   /* TODO: Once we have GbpFlatpakConfiguration, we can check for
@@ -521,15 +599,26 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
     g_warning ("%s", error->message);
 }
 
+static void
+gbp_flatpak_pipeline_addin_unload (IdeBuildPipelineAddin *addin,
+                                   IdeBuildPipeline      *pipeline)
+{
+  GbpFlatpakPipelineAddin *self = (GbpFlatpakPipelineAddin *)addin;
+
+  g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  g_clear_pointer (&self->state_dir, g_free);
+}
+
 /* GObject boilerplate */
 
 static void
 build_pipeline_addin_iface_init (IdeBuildPipelineAddinInterface *iface)
 {
   iface->load = gbp_flatpak_pipeline_addin_load;
+  iface->unload = gbp_flatpak_pipeline_addin_unload;
 }
-
-struct _GbpFlatpakPipelineAddin { IdeObject parent_instance; };
 
 G_DEFINE_TYPE_WITH_CODE (GbpFlatpakPipelineAddin, gbp_flatpak_pipeline_addin, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_PIPELINE_ADDIN,
