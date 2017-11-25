@@ -154,10 +154,6 @@ add_project_link_arguments(
   language: 'c'
 )
 
-if cc.has_function('sched_getcpu')
-  conf.set('HAVE_SCHED_GETCPU', true)
-endif
-
 configure_file(
          output: 'config.h',
   configuration: conf
