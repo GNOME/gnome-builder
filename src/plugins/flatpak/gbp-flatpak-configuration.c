@@ -363,9 +363,15 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
   sdk = json_node_get_string (sdk_node);
   gbp_flatpak_configuration_set_sdk (self, sdk);
 
+  /* Get the command to run for this manifest. If this is missing, then
+   * we likely have a situation where this is a supplemental manifest
+   * and not the primary manifest.
+   */
   command_node = json_object_get_member (root_object, "command");
-  if (JSON_NODE_HOLDS_VALUE (command_node))
-    gbp_flatpak_configuration_set_command (self, json_node_get_string (command_node));
+  if (command_node == NULL || !JSON_NODE_HOLDS_VALUE (command_node))
+    return FALSE;
+
+  gbp_flatpak_configuration_set_command (self, json_node_get_string (command_node));
 
   if (json_object_has_member (root_object, "finish-args"))
     {
