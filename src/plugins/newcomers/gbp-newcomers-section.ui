@@ -39,7 +39,7 @@
               <object class="GbpNewcomersProject">
                 <property name="name" translatable="yes">Games</property>
                 <property name="icon-name">org.gnome.Games</property>
-                <property name="uri">https://git.gnome.org/browse/gnome-games</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-games.git</property>
                 <property name="visible">true</property>
               </object>
             </child>
@@ -87,7 +87,7 @@
               <object class="GbpNewcomersProject">
                 <property name="name" translatable="yes">Calendar</property>
                 <property name="icon-name">org.gnome.Calendar</property>
-                <property name="uri">https://git.gnome.org/browse/gnome-calendar.git</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-calendar.git</property>
                 <property name="visible">true</property>
               </object>
             </child>
