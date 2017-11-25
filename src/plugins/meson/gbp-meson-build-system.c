@@ -434,7 +434,12 @@ gbp_meson_build_system_get_build_flags_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) directory = NULL;
+  g_auto(GStrv) system_includes = NULL;
   g_auto(GStrv) ret = NULL;
+  IdeConfigurationManager *config_manager;
+  IdeContext *context;
+  IdeConfiguration *config;
+  IdeRuntime *runtime;
   GFile *file;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
@@ -450,18 +455,25 @@ gbp_meson_build_system_get_build_flags_cb (GObject      *object,
     }
 
   file = g_task_get_task_data (task);
-
   g_assert (G_IS_FILE (file));
 
-  ret = ide_compile_commands_lookup (compile_commands, file, &directory, &error);
+  /* Get non-standard system includes */
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+  if (NULL != (runtime = ide_configuration_get_runtime (config)))
+    system_includes = ide_runtime_get_system_include_dirs (runtime);
+
+  ret = ide_compile_commands_lookup (compile_commands,
+                                     file,
+                                     (const gchar * const *)system_includes,
+                                     &directory,
+                                     &error);
 
   if (ret == NULL)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_strfreev);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_strfreev);
 }
 
 static void

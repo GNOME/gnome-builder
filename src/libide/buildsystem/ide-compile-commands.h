@@ -48,6 +48,7 @@ gboolean             ide_compile_commands_load_finish (IdeCompileCommands   *sel
 IDE_AVAILABLE_IN_3_28
 gchar              **ide_compile_commands_lookup      (IdeCompileCommands   *self,
                                                        GFile                *file,
+                                                       const gchar * const  *system_includes,
                                                        GFile               **directory,
                                                        GError              **error);
 

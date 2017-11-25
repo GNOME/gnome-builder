@@ -450,9 +450,10 @@ ide_compile_commands_resolve (IdeCompileCommands *self,
 static void
 ide_compile_commands_filter_c (IdeCompileCommands   *self,
                                const CompileInfo    *info,
+                               const gchar * const  *system_includes,
                                gchar              ***argv)
 {
-  GPtrArray *ar;
+  g_autoptr(GPtrArray) ar = NULL;
 
   g_assert (IDE_IS_COMPILE_COMMANDS (self));
   g_assert (info != NULL);
@@ -461,7 +462,13 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
   if (*argv == NULL)
     return;
 
-  ar = g_ptr_array_new ();
+  ar = g_ptr_array_new_with_free_func (g_free);
+
+  if (system_includes != NULL)
+    {
+      for (guint i = 0; system_includes[i]; i++)
+        g_ptr_array_add (ar, g_strdup_printf ("-I%s", system_includes[i]));
+    }
 
   for (guint i = 0; (*argv)[i] != NULL; i++)
     {
@@ -513,10 +520,10 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
         }
     }
 
-  g_free (*argv);
-
   g_ptr_array_add (ar, NULL);
-  *argv = (gchar **)g_ptr_array_free (ar, FALSE);
+
+  g_strfreev (*argv);
+  *argv = (gchar **)g_ptr_array_free (g_steal_pointer (&ar), FALSE);
 }
 
 static void
@@ -588,6 +595,7 @@ ide_compile_commands_filter_vala (IdeCompileCommands   *self,
  * ide_compile_commands_lookup:
  * @self: An #IdeCompileCommands
  * @file: a #GFile representing the file to lookup
+ * @system_includes: system include dirs if any
  * @directory: (out) (optional) (transfer full): A location for a #GFile, or %NULL
  * @error: A location for a #GError, or %NULL
  *
@@ -602,10 +610,11 @@ ide_compile_commands_filter_vala (IdeCompileCommands   *self,
  * Since: 3.28
  */
 gchar **
-ide_compile_commands_lookup (IdeCompileCommands  *self,
-                             GFile               *file,
-                             GFile              **directory,
-                             GError             **error)
+ide_compile_commands_lookup (IdeCompileCommands   *self,
+                             GFile                *file,
+                             const gchar * const  *system_includes,
+                             GFile               **directory,
+                             GError              **error)
 {
   g_autofree gchar *base = NULL;
   const CompileInfo *info;
@@ -627,7 +636,7 @@ ide_compile_commands_lookup (IdeCompileCommands  *self,
         return NULL;
 
       if (suffix_is_c_like (dot))
-        ide_compile_commands_filter_c (self, info, &argv);
+        ide_compile_commands_filter_c (self, info, system_includes, &argv);
       else if (suffix_is_vala (dot))
         ide_compile_commands_filter_vala (self, info, &argv);
 

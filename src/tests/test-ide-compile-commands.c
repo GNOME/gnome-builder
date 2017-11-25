@@ -37,7 +37,7 @@ test_compile_commands_basic (void)
   commands = ide_compile_commands_new ();
 
   /* Test missing info before we've loaded */
-  g_assert (NULL == ide_compile_commands_lookup (commands, missing, NULL, NULL));
+  g_assert (NULL == ide_compile_commands_lookup (commands, missing, NULL, NULL, NULL));
 
   /* Now load our test file */
   data_path = g_build_filename (TEST_DATA_DIR, "test-ide-compile-commands.json", NULL);
@@ -48,7 +48,7 @@ test_compile_commands_basic (void)
 
   /* Now lookup a file that should exist in the database */
   expected_file = g_file_new_for_path ("/build/gnome-builder/subprojects/libgd/libgd/gd-types-catalog.c");
-  cmdstrv = ide_compile_commands_lookup (commands, expected_file, &dir, &error);
+  cmdstrv = ide_compile_commands_lookup (commands, expected_file, NULL, &dir, &error);
   g_assert_no_error (error);
   g_assert (cmdstrv != NULL);
   /* ccache cc should have been removed. */
@@ -59,7 +59,7 @@ test_compile_commands_basic (void)
 
   /* Vala files don't need to match on exact filename, just something dot vala */
   vala = g_file_new_for_path ("whatever.vala");
-  valastrv = ide_compile_commands_lookup (commands, vala, NULL, &error);
+  valastrv = ide_compile_commands_lookup (commands, vala, NULL, NULL, &error);
   g_assert_no_error (error);
   g_assert (valastrv != NULL);
   g_assert_cmpstr (valastrv[0], ==, "--pkg");
