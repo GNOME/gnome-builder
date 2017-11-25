@@ -33,6 +33,6 @@ typedef enum
   GB_FLATPAK_PIPELINE_ERROR_WRONG_RUNTIME
 } GbFlatpakPipelineError;
 
-GQuark     gb_flatpak_pipeline_error_quark (void);
+GQuark gb_flatpak_pipeline_error_quark (void);
 
 G_END_DECLS
