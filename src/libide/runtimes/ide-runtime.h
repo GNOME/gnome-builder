@@ -44,17 +44,18 @@ struct _IdeRuntimeClass
 {
   IdeObjectClass parent;
 
-  gboolean               (*contains_program_in_path) (IdeRuntime           *self,
-                                                      const gchar          *program,
-                                                      GCancellable         *cancellable);
-  IdeSubprocessLauncher *(*create_launcher)          (IdeRuntime           *self,
-                                                      GError              **error);
-  void                   (*prepare_configuration)    (IdeRuntime           *self,
-                                                      IdeConfiguration     *configuration);
-  IdeRunner             *(*create_runner)            (IdeRuntime           *self,
-                                                      IdeBuildTarget       *build_target);
-  GFile                 *(*translate_file)           (IdeRuntime           *self,
-                                                      GFile                *file);
+  gboolean                (*contains_program_in_path) (IdeRuntime           *self,
+                                                       const gchar          *program,
+                                                       GCancellable         *cancellable);
+  IdeSubprocessLauncher  *(*create_launcher)          (IdeRuntime           *self,
+                                                       GError              **error);
+  void                    (*prepare_configuration)    (IdeRuntime           *self,
+                                                       IdeConfiguration     *configuration);
+  IdeRunner              *(*create_runner)            (IdeRuntime           *self,
+                                                       IdeBuildTarget       *build_target);
+  GFile                  *(*translate_file)           (IdeRuntime           *self,
+                                                       GFile                *file);
+  gchar                 **(*get_system_include_dirs)  (IdeRuntime           *self);
 
   gpointer _reserved4;
   gpointer _reserved5;
@@ -103,5 +104,7 @@ void                   ide_runtime_set_display_name         (IdeRuntime         
 IDE_AVAILABLE_IN_ALL
 GFile                 *ide_runtime_translate_file           (IdeRuntime           *self,
                                                              GFile                *file);
+IDE_AVAILABLE_IN_3_28
+gchar                **ide_runtime_get_system_include_dirs  (IdeRuntime           *self);
 
 G_END_DECLS

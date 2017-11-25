@@ -546,6 +546,13 @@ gbp_flatpak_runtime_set_sdk (GbpFlatpakRuntime *self,
     }
 }
 
+static gchar **
+gbp_flatpak_runtime_get_system_include_dirs (IdeRuntime *runtime)
+{
+  static const gchar *include_dirs[] = { "/app/include", "/usr/include", NULL };
+  return g_strdupv ((gchar **)include_dirs);
+}
+
 static void
 gbp_flatpak_runtime_get_property (GObject    *object,
                                   guint       prop_id,
@@ -647,6 +654,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
+  runtime_class->get_system_include_dirs = gbp_flatpak_runtime_get_system_include_dirs;
 
   properties [PROP_ARCH] =
     g_param_spec_string ("arch",

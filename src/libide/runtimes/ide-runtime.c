@@ -516,3 +516,28 @@ ide_runtime_translate_file (IdeRuntime *self,
 
   return ret;
 }
+
+/**
+ * ide_runtime_get_system_include_dirs:
+ * @self: a #IdeRuntime
+ *
+ * Gets the system include dirs for the runtime. Usually, this is just
+ * "/usr/include", but more complex runtimes may include additional.
+ *
+ * Returns: (transfer full) (array zero-terminated=1): A newly allocated
+ *   string containing the include dirs.
+ *
+ * Since: 3.28
+ */
+gchar **
+ide_runtime_get_system_include_dirs (IdeRuntime *self)
+{
+  static const gchar *basic[] = { "/usr/include", NULL };
+
+  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
+
+  if (IDE_RUNTIME_GET_CLASS (self)->get_system_include_dirs)
+    return IDE_RUNTIME_GET_CLASS (self)->get_system_include_dirs (self);
+
+  return g_strdupv ((gchar **)basic);
+}
