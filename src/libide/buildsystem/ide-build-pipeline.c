@@ -3023,6 +3023,20 @@ _ide_build_pipeline_set_message (IdeBuildPipeline *self,
 {
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
 
+  if (message != NULL)
+    {
+      /*
+       * Special case to deal with messages coming from systems we
+       * know prefix the build tooling information to the message.
+       * It's easier to just do this here rather than provide some
+       * sort of API for plugins to do this for us.
+       */
+      if (g_str_has_prefix (message, "flatpak-builder: "))
+        message += strlen ("flatpak-builder: ");
+      else if (g_str_has_prefix (message, "jhbuild:"))
+        message += strlen ("jhbuild:");
+    }
+
   if (!ide_str_equal0 (message, self->message))
     {
       g_free (self->message);
