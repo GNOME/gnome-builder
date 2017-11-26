@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-gca-service"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-gca-service.h"
@@ -48,7 +49,7 @@ on_bus_closed (GDBusConnection *bus,
   g_assert (IDE_IS_GCA_SERVICE (self));
 
   if (self->bus_closed_handler != 0)
-    ide_clear_signal_handler (bus, &self->bus_closed_handler);
+    dzl_clear_signal_handler (bus, &self->bus_closed_handler);
 
   g_clear_object (&self->bus);
   g_hash_table_remove_all (self->proxy_cache);
@@ -237,7 +238,7 @@ ide_gca_service_finalize (GObject *object)
 
   if (self->bus != NULL)
     {
-      ide_clear_signal_handler (self->bus, &self->bus_closed_handler);
+      dzl_clear_signal_handler (self->bus, &self->bus_closed_handler);
       g_clear_object (&self->bus);
     }
 

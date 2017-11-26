@@ -634,7 +634,7 @@ ide_buffer_reload_change_monitor (IdeBuffer *self)
 
   if (priv->change_monitor)
     {
-      ide_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
+      dzl_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
       g_clear_object (&priv->change_monitor);
     }
 
@@ -1421,7 +1421,7 @@ ide_buffer_dispose (GObject *object)
 
   if (priv->change_monitor != NULL)
     {
-      ide_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
+      dzl_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
       g_clear_object (&priv->change_monitor);
     }
 

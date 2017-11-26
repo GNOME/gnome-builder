@@ -23,14 +23,6 @@
 
 G_BEGIN_DECLS
 
-#define ide_clear_signal_handler(obj,ptr) \
-  G_STMT_START { \
-    if (*(ptr) != 0) { \
-      g_signal_handler_disconnect((obj), *(ptr)); \
-      *(ptr) = 0; \
-    } \
-  } G_STMT_END
-
 /* strlen() generally gets hoisted out automatically */
 #define IDE_LITERAL_LENGTH(s) (strlen(s))
 

@@ -296,7 +296,7 @@ gbp_documentation_card_view_addin_unload (IdeEditorViewAddin *addin,
   source_view = ide_editor_view_get_view (view);
 
   dzl_clear_source (&self->timeout_id);
-  ide_clear_signal_handler (self->editor_view, &self->motion_handler_id);
+  dzl_clear_signal_handler (self->editor_view, &self->motion_handler_id);
 
   g_free (self->previous_text);
   gtk_widget_destroy (GTK_WIDGET (self->popover));

@@ -424,7 +424,7 @@ gbp_flatpak_preferences_addin_unload (IdePreferencesAddin *addin,
   self->preferences = NULL;
 
   app_addin = gbp_flatpak_application_addin_get_default ();
-  ide_clear_signal_handler (app_addin, &self->reload_handler);
+  dzl_clear_signal_handler (app_addin, &self->reload_handler);
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);

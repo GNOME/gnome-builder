@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-word-completion-provider"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -314,7 +315,7 @@ completion_cleanup (IdeWordCompletionProvider *self)
 
   if (priv->context != NULL)
     {
-      ide_clear_signal_handler (priv->context, &priv->cancel_id);
+      dzl_clear_signal_handler (priv->context, &priv->cancel_id);
 
       g_clear_object (&priv->context);
     }
