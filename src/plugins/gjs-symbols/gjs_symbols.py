@@ -151,8 +151,32 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
                                 kind=Ide.SymbolKind.METHOD,
                                 name=name,
                                 file=file_)
+        elif type_ == 'ExpressionStatement' and JsSymbolTree._is_module_exports(dict_):
+            if dict_['expression']['right']['type'] != 'ClassExpression':
+                return None
+            class_ = dict_['expression']['right']
+            children = JsSymbolTree._nodes_from_list(class_['body'], file_)
+            line = max(class_['loc']['start']['line'] - 1, 0)
+            col = class_['loc']['start']['column']
+            return JsSymbolNode(children, line=line, col=col,
+                                kind=Ide.SymbolKind.CLASS,
+                                name=class_['id']['name'],
+                                file=file_)
         else:
             return None
+
+    @staticmethod
+    def _is_module_exports(dict_):
+        if dict_['expression']['type'] != 'AssignmentExpression':
+            return False
+        left = dict_['expression']['left']
+        if left['type'] != 'MemberExpression':
+            return False
+        if left['object']['type'] != 'Identifier' or left['object']['name'] != 'module':
+            return False
+        if left['property']['type'] != 'Identifier' or left['property']['name'] != 'exports':
+            return False
+        return True
 
     @staticmethod
     def _is_module_import(dict_):
@@ -162,7 +186,10 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
             try:
                 return dict_['init']['object']['object']['name'] == 'imports'
             except (KeyError, TypeError):
-                return False
+                try:
+                    return dict_['init']['callee']['name'] == 'require'
+                except (KeyError, TypeError):
+                    return False
 
     @staticmethod
     def _is_gobject_class(dict_):
