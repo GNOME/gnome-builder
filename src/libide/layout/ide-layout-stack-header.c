@@ -479,7 +479,7 @@ ide_layout_stack_header_destroy (GtkWidget *widget)
 
   g_assert (IDE_IS_LAYOUT_STACK_HEADER (self));
 
-  ide_clear_source (&self->update_css_handler);
+  dzl_clear_source (&self->update_css_handler);
   g_clear_object (&self->css_provider);
 
   if (self->title_list_box != NULL)

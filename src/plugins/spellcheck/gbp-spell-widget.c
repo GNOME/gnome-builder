@@ -306,7 +306,7 @@ gbp_spell_widget__word_entry_changed_cb (GbpSpellWidget *self,
       return;
     }
 
-  ide_clear_source (&self->check_word_timeout_id);
+  dzl_clear_source (&self->check_word_timeout_id);
 
   if (self->editor_view_addin != NULL)
     {
@@ -961,8 +961,8 @@ gbp_spell_widget_destroy (GtkWidget *widget)
 
   g_assert (GBP_IS_SPELL_WIDGET (self));
 
-  ide_clear_source (&self->check_word_timeout_id);
-  ide_clear_source (&self->dict_check_word_timeout_id);
+  dzl_clear_source (&self->check_word_timeout_id);
+  dzl_clear_source (&self->dict_check_word_timeout_id);
 
   if (self->editor != NULL)
     gbp_spell_widget_set_editor (self, NULL);

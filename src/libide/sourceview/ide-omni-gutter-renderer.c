@@ -1380,7 +1380,7 @@ ide_omni_gutter_renderer_dispose (GObject *object)
 {
   IdeOmniGutterRenderer *self = (IdeOmniGutterRenderer *)object;
 
-  ide_clear_source (&self->resize_source);
+  dzl_clear_source (&self->resize_source);
 
   g_clear_object (&self->breakpoints);
   g_clear_pointer (&self->lines, g_array_unref);

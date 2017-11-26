@@ -314,7 +314,7 @@ gbp_meson_test_provider_notify_pipeline (GbpMesonTestProvider *self,
   g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  ide_clear_source (&self->reload_source);
+  dzl_clear_source (&self->reload_source);
   self->reload_source = gdk_threads_add_timeout_full (G_PRIORITY_LOW,
                                                       2000,
                                                       gbp_meson_test_provider_reload,
@@ -513,7 +513,7 @@ gbp_meson_test_provider_dispose (GObject *object)
 {
   GbpMesonTestProvider *self = (GbpMesonTestProvider *)object;
 
-  ide_clear_source (&self->reload_source);
+  dzl_clear_source (&self->reload_source);
   g_cancellable_cancel (self->build_cancellable);
   g_clear_object (&self->build_cancellable);
 

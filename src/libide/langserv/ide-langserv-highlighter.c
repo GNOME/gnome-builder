@@ -269,7 +269,7 @@ ide_langserv_highlighter_finalize (GObject *object)
 
   priv->engine = NULL;
 
-  ide_clear_source (&priv->queued_update);
+  dzl_clear_source (&priv->queued_update);
 
   g_clear_pointer (&priv->index, ide_highlight_index_unref);
   g_clear_object (&priv->buffer_signals);

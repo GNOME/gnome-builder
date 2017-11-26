@@ -537,7 +537,7 @@ ide_diagnostics_manager_finalize (GObject *object)
 {
   IdeDiagnosticsManager *self = (IdeDiagnosticsManager *)object;
 
-  ide_clear_source (&self->queued_diagnose_source);
+  dzl_clear_source (&self->queued_diagnose_source);
   g_clear_pointer (&self->groups_by_file, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_diagnostics_manager_parent_class)->finalize (object);

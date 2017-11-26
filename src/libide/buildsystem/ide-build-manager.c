@@ -174,7 +174,7 @@ ide_build_manager_stop_timer (IdeBuildManager *self)
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
   g_timer_stop (self->running_time);
-  ide_clear_source (&self->timer_source);
+  dzl_clear_source (&self->timer_source);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
 
@@ -390,7 +390,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
       g_assert (self->pipeline != NULL);
 
       self->building = FALSE;
-      ide_clear_source (&self->timer_source);
+      dzl_clear_source (&self->timer_source);
       g_signal_emit (self, signals [BUILD_FAILED], 0, self->pipeline);
     }
 
@@ -539,7 +539,7 @@ ide_build_manager_finalize (GObject *object)
   g_clear_pointer (&self->last_build_time, g_date_time_unref);
   g_clear_pointer (&self->running_time, g_timer_destroy);
 
-  ide_clear_source (&self->timer_source);
+  dzl_clear_source (&self->timer_source);
 
   G_OBJECT_CLASS (ide_build_manager_parent_class)->finalize (object);
 }

@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-buildconfig-configuration-provider"
 
+#include <dazzle.h>
 #include <gio/gio.h>
 
 #include "ide-context.h"
@@ -43,7 +44,7 @@ struct _IdeBuildconfigConfigurationProvider
   GPtrArray               *configurations;
   GKeyFile                *key_file;
 
-  gulong                   writeback_handler;
+  guint                    writeback_handler;
   guint                    change_count;
 };
 
@@ -607,7 +608,7 @@ ide_buildconfig_configuration_provider_unload (IdeConfigurationProvider *provide
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
 
-  ide_clear_source (&self->writeback_handler);
+  dzl_clear_source (&self->writeback_handler);
 
   if (self->configurations != NULL)
     {

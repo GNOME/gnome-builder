@@ -37,15 +37,6 @@ G_BEGIN_DECLS
     } \
   } G_STMT_END
 
-#define ide_clear_source(src) \
-  G_STMT_START {\
-    if (*(src) != 0) { \
-      guint __src_handler_id = *(src); \
-      *(src) = 0; \
-      g_source_remove (__src_handler_id); \
-    } \
-  } G_STMT_END
-
 /* strlen() generally gets hoisted out automatically */
 #define IDE_LITERAL_LENGTH(s) (strlen(s))
 

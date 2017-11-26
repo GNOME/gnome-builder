@@ -40,7 +40,7 @@ struct _GbpFlatpakConfigurationProvider
   GPtrArray               *configurations;
   GPtrArray               *manifest_monitors;
 
-  gulong                   writeback_handler;
+  guint                    writeback_handler;
   guint                    change_count;
 };
 
@@ -1103,7 +1103,7 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider,
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
 
-  ide_clear_source (&self->writeback_handler);
+  dzl_clear_source (&self->writeback_handler);
 
   if (self->configurations != NULL)
     {

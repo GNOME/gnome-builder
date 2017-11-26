@@ -141,7 +141,7 @@ buffer_cursor_moved (GbpQuickHighlightEditorViewAddin *self,
     }
   else
     {
-      ide_clear_source (&self->queued_match_source);
+      dzl_clear_source (&self->queued_match_source);
       g_clear_object (&self->search_context);
     }
 }
@@ -239,7 +239,7 @@ gbp_quick_highlight_editor_view_addin_unload (IdeEditorViewAddin *addin,
   g_assert (IDE_IS_EDITOR_VIEW (view));
 
   g_clear_object (&self->search_context);
-  ide_clear_source (&self->queued_match_source);
+  dzl_clear_source (&self->queued_match_source);
 
   dzl_signal_group_set_target (self->buffer_signals, NULL);
   g_clear_object (&self->buffer_signals);

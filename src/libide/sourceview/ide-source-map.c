@@ -124,7 +124,7 @@ ide_source_map_show_map_and_queue_fade (IdeSourceMap *self)
 {
   g_assert (IDE_IS_SOURCE_MAP (self));
 
-  ide_clear_source (&self->delayed_conceal_timeout);
+  dzl_clear_source (&self->delayed_conceal_timeout);
 
   if (self->in_map == FALSE)
     self->delayed_conceal_timeout = g_timeout_add (CONCEAL_TIMEOUT,

@@ -196,7 +196,7 @@ ide_buffer_delay_settling (IdeBuffer *self)
 
   g_assert (IDE_IS_BUFFER (self));
 
-  ide_clear_source (&priv->settling_handler);
+  dzl_clear_source (&priv->settling_handler);
   priv->settling_handler = gdk_threads_add_timeout (SETTLING_DELAY_MSEC,
                                                     ide_buffer_settled_cb,
                                                     self);
@@ -1397,9 +1397,9 @@ ide_buffer_dispose (GObject *object)
 
   IDE_ENTRY;
 
-  ide_clear_source (&priv->settling_handler);
-  ide_clear_source (&priv->reclamation_handler);
-  ide_clear_source (&priv->check_modified_timeout);
+  dzl_clear_source (&priv->settling_handler);
+  dzl_clear_source (&priv->reclamation_handler);
+  dzl_clear_source (&priv->check_modified_timeout);
 
   if (priv->context != NULL)
     {

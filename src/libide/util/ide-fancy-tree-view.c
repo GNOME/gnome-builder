@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-fancy-tree-view"
 
+#include <dazzle.h>
+
 #include "ide-macros.h"
 
 #include "util/ide-cell-renderer-fancy.h"
@@ -53,7 +55,7 @@ ide_fancy_tree_view_destroy (GtkWidget *widget)
   IdeFancyTreeView *self = (IdeFancyTreeView *)widget;
   IdeFancyTreeViewPrivate *priv = ide_fancy_tree_view_get_instance_private (self);
 
-  ide_clear_source (&priv->relayout_source);
+  dzl_clear_source (&priv->relayout_source);
 
   GTK_WIDGET_CLASS (ide_fancy_tree_view_parent_class)->destroy (widget);
 }

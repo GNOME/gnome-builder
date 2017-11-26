@@ -1071,8 +1071,8 @@ ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
   g_clear_pointer (&self->identifier, g_free);
 
   /* Remove our sources used for signal propagation */
-  ide_clear_source (&self->sigint_id);
-  ide_clear_source (&self->sigterm_id);
+  dzl_clear_source (&self->sigint_id);
+  dzl_clear_source (&self->sigterm_id);
 
   /* Complete async workers */
   waiting = self->waiting;
@@ -1587,8 +1587,8 @@ ide_breakout_subprocess_dispose (GObject *object)
   if (self->waiting != NULL)
     g_warning ("improper disposal while async operations are active!");
 
-  ide_clear_source (&self->sigint_id);
-  ide_clear_source (&self->sigterm_id);
+  dzl_clear_source (&self->sigint_id);
+  dzl_clear_source (&self->sigterm_id);
 
   G_OBJECT_CLASS (ide_breakout_subprocess_parent_class)->dispose (object);
 }

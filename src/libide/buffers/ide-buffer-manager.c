@@ -1719,7 +1719,7 @@ unregister_auto_save (IdeBufferManager *self,
   if (state != NULL)
     {
       g_hash_table_remove (self->timeouts, buffer);
-      ide_clear_source (&state->source_id);
+      dzl_clear_source (&state->source_id);
       ide_clear_weak_pointer (&state->buffer);
       ide_clear_weak_pointer (&state->self);
       g_slice_free (AutoSave, state);

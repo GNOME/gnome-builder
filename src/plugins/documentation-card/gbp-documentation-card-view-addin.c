@@ -232,7 +232,7 @@ motion_notify_event_cb (gpointer data)
 {
   GbpDocumentationCardViewAddin *self = GBP_DOCUMENTATION_CARD_VIEW_ADDIN (data);
 
-  ide_clear_source (&self->timeout_id);
+  dzl_clear_source (&self->timeout_id);
 
   if (!self->poped_up)
     self->timeout_id =
@@ -295,7 +295,7 @@ gbp_documentation_card_view_addin_unload (IdeEditorViewAddin *addin,
   self = GBP_DOCUMENTATION_CARD_VIEW_ADDIN (addin);
   source_view = ide_editor_view_get_view (view);
 
-  ide_clear_source (&self->timeout_id);
+  dzl_clear_source (&self->timeout_id);
   ide_clear_signal_handler (self->editor_view, &self->motion_handler_id);
 
   g_free (self->previous_text);

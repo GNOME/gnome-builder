@@ -367,7 +367,7 @@ gbp_symbol_layout_stack_addin_unbind (GbpSymbolLayoutStackAddin *self,
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (DZL_IS_SIGNAL_GROUP (buffer_signals));
 
-  ide_clear_source (&self->cursor_moved_handler);
+  dzl_clear_source (&self->cursor_moved_handler);
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);

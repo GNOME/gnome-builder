@@ -246,7 +246,7 @@ gbp_history_editor_view_addin_unload (IdeEditorViewAddin *addin,
   g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
   g_assert (IDE_IS_EDITOR_VIEW (view));
 
-  ide_clear_source (&self->queued_edit_source);
+  dzl_clear_source (&self->queued_edit_source);
 
   source_view = ide_editor_view_get_view (view);
   buffer = ide_editor_view_get_buffer (view);

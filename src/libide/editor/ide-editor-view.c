@@ -778,7 +778,7 @@ ide_editor_view_destroy (GtkWidget *widget)
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
-  ide_clear_source (&self->toggle_map_source);
+  dzl_clear_source (&self->toggle_map_source);
 
   g_clear_object (&self->addins);
 
@@ -1160,7 +1160,7 @@ ide_editor_view_update_reveal_timer (IdeEditorView *self)
 {
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
-  ide_clear_source (&self->toggle_map_source);
+  dzl_clear_source (&self->toggle_map_source);
 
   if (self->auto_hide_map && gtk_revealer_get_reveal_child (self->map_revealer))
     {
