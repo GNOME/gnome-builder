@@ -85,7 +85,7 @@ gb_command_bar_load (IdeWorkbenchAddin *addin,
 
   g_assert (GB_IS_COMMAND_BAR (self));
 
-  ide_set_weak_pointer (&self->workbench, workbench);
+  dzl_set_weak_pointer (&self->workbench, workbench);
 
   provider = g_object_new (GB_TYPE_COMMAND_GACTION_PROVIDER,
                            "workbench", self->workbench,
@@ -123,7 +123,7 @@ gb_command_bar_unload (IdeWorkbenchAddin *addin,
    */
 
   g_action_map_remove_action (G_ACTION_MAP (workbench), "show-command-bar");
-  ide_clear_weak_pointer (&self->workbench);
+  dzl_clear_weak_pointer (&self->workbench);
 }
 
 GtkWidget *
@@ -198,7 +198,7 @@ gb_command_bar_set_last_focus (GbCommandBar *self,
   g_return_if_fail (GB_IS_COMMAND_BAR (self));
   g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
 
-  ide_set_weak_pointer (&self->last_focus, widget);
+  dzl_set_weak_pointer (&self->last_focus, widget);
 }
 
 /**
@@ -629,12 +629,12 @@ gb_command_bar_finalize (GObject *object)
 {
   GbCommandBar *self = (GbCommandBar *)object;
 
-  ide_clear_weak_pointer (&self->workbench);
+  dzl_clear_weak_pointer (&self->workbench);
 
   g_clear_pointer (&self->last_completion, g_free);
   g_clear_pointer (&self->saved_text, g_free);
   g_queue_free_full (self->history, g_free);
-  ide_clear_weak_pointer (&self->last_focus);
+  dzl_clear_weak_pointer (&self->last_focus);
 
   G_OBJECT_CLASS (gb_command_bar_parent_class)->finalize (object);
 }

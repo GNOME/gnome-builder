@@ -248,7 +248,7 @@ install_info_free (InstallInfo *info)
                                             info);
     }
 
-  ide_clear_weak_pointer (&info->self);
+  dzl_clear_weak_pointer (&info->self);
   g_clear_object (&info->monitor);
   g_clear_object (&info->installation);
 
@@ -267,7 +267,7 @@ install_info_new (GbpFlatpakApplicationAddin *self,
   info = g_slice_new0 (InstallInfo);
   info->installation = g_object_ref (installation);
   info->monitor = flatpak_installation_create_monitor (installation, NULL, NULL);
-  ide_set_weak_pointer (&info->self, self);
+  dzl_set_weak_pointer (&info->self, self);
 
   if (info->monitor != NULL)
     {

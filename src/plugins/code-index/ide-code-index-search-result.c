@@ -83,7 +83,7 @@ ide_code_index_search_result_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_CONTEXT:
-      ide_set_weak_pointer (&self->context, g_value_get_object (value));
+      dzl_set_weak_pointer (&self->context, g_value_get_object (value));
       break;
 
     case PROP_LOCATION:
@@ -100,7 +100,7 @@ ide_code_index_search_result_finalize (GObject *object)
 {
   IdeCodeIndexSearchResult *self = (IdeCodeIndexSearchResult *)object;
 
-  ide_clear_weak_pointer (&self->context);
+  dzl_clear_weak_pointer (&self->context);
   g_clear_pointer (&self->location, ide_source_location_unref);
 
   G_OBJECT_CLASS (ide_code_index_search_result_parent_class)->finalize (object);

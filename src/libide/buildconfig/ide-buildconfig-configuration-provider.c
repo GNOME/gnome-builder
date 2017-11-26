@@ -570,7 +570,7 @@ ide_buildconfig_configuration_provider_load_async (IdeConfigurationProvider *pro
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_set_weak_pointer (&self->manager, manager);
+  dzl_set_weak_pointer (&self->manager, manager);
 
   /* This task is needed so the caller knows when the load finishes */
   parent_task = g_task_new (self, cancellable, callback, user_data);
@@ -622,7 +622,7 @@ ide_buildconfig_configuration_provider_unload (IdeConfigurationProvider *provide
 
   g_clear_pointer (&self->configurations, g_ptr_array_unref);
 
-  ide_clear_weak_pointer (&self->manager);
+  dzl_clear_weak_pointer (&self->manager);
 
   IDE_EXIT;
 }

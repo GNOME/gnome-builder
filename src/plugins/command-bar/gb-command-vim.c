@@ -58,7 +58,7 @@ gb_command_vim_set_active_widget (GbCommandVim *vim,
   g_return_if_fail (GB_IS_COMMAND_VIM (vim));
   g_return_if_fail (GTK_IS_WIDGET (active_widget));
 
-  if (ide_set_weak_pointer (&vim->active_widget, active_widget))
+  if (dzl_set_weak_pointer (&vim->active_widget, active_widget))
     g_object_notify_by_pspec (G_OBJECT (vim), properties [PROP_ACTIVE_WIDGET]);
 }
 
@@ -113,7 +113,7 @@ gb_command_vim_finalize (GObject *object)
 {
   GbCommandVim *self = GB_COMMAND_VIM (object);
 
-  ide_clear_weak_pointer (&self->active_widget);
+  dzl_clear_weak_pointer (&self->active_widget);
   g_clear_pointer (&self->command_text, g_free);
 
   G_OBJECT_CLASS (gb_command_vim_parent_class)->finalize (object);

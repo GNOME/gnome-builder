@@ -150,7 +150,7 @@ gbp_flatpak_runtime_provider_load (IdeRuntimeProvider *provider,
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
-  ide_set_weak_pointer (&self->manager, manager);
+  dzl_set_weak_pointer (&self->manager, manager);
   self->runtimes = g_ptr_array_new_with_free_func (g_object_unref);
   refs = gbp_flatpak_application_addin_get_runtimes (app_addin);
 
@@ -197,7 +197,7 @@ gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
 
   g_clear_pointer (&self->runtimes, g_ptr_array_unref);
 
-  ide_clear_weak_pointer (&self->manager);
+  dzl_clear_weak_pointer (&self->manager);
 
   IDE_EXIT;
 }

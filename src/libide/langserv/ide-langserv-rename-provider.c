@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-langserv-rename-provider"
 
+#include <dazzle.h>
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"
@@ -56,7 +57,7 @@ ide_langserv_rename_provider_set_buffer (IdeLangservRenameProvider *self,
 {
   IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
 
-  ide_set_weak_pointer (&priv->buffer, buffer);
+  dzl_set_weak_pointer (&priv->buffer, buffer);
 }
 
 static void
@@ -66,7 +67,7 @@ ide_langserv_rename_provider_finalize (GObject *object)
   IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
 
   g_clear_object (&priv->client);
-  ide_clear_weak_pointer (&priv->buffer);
+  dzl_clear_weak_pointer (&priv->buffer);
 
   G_OBJECT_CLASS (ide_langserv_rename_provider_parent_class)->finalize (object);
 }

@@ -360,7 +360,7 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
 
-  ide_set_weak_pointer (&self->editor, editor);
+  dzl_set_weak_pointer (&self->editor, editor);
   workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
   self->context = ide_workbench_get_context (workbench);
   self->entries = gb_beautifier_config_get_entries (self, &self->has_default);
@@ -389,7 +389,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
       self->entries = NULL;
     }
 
-  ide_clear_weak_pointer (&self->editor);
+  dzl_clear_weak_pointer (&self->editor);
   self->context = NULL;
 }
 

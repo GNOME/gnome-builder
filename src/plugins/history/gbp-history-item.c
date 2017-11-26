@@ -40,7 +40,7 @@ gbp_history_item_dispose (GObject *object)
 {
   GbpHistoryItem *self = (GbpHistoryItem *)object;
 
-  ide_clear_weak_pointer (&self->context);
+  dzl_clear_weak_pointer (&self->context);
 
   if (self->mark != NULL)
     {
@@ -87,7 +87,7 @@ gbp_history_item_new (GtkTextMark *mark)
   item->mark = g_object_ref (mark);
 
   context = ide_buffer_get_context (IDE_BUFFER (buffer));
-  ide_set_weak_pointer (&item->context, context);
+  dzl_set_weak_pointer (&item->context, context);
 
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
   item->line = gtk_text_iter_get_line (&iter);

@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-project-item"
+
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "projects/ide-project-item.h"
@@ -133,7 +136,7 @@ ide_project_item_set_parent (IdeProjectItem *item,
   g_return_if_fail (IDE_IS_PROJECT_ITEM (item));
   g_return_if_fail (!parent || IDE_IS_PROJECT_ITEM (parent));
 
-  if (ide_set_weak_pointer (&priv->parent, parent))
+  if (dzl_set_weak_pointer (&priv->parent, parent))
     g_object_notify_by_pspec (G_OBJECT (item), properties [PROP_PARENT]);
 }
 
@@ -143,7 +146,7 @@ ide_project_item_finalize (GObject *object)
   IdeProjectItem *self = (IdeProjectItem *)object;
   IdeProjectItemPrivate *priv = ide_project_item_get_instance_private (self);
 
-  ide_clear_weak_pointer (&priv->parent);
+  dzl_clear_weak_pointer (&priv->parent);
   g_clear_pointer (&priv->children, g_sequence_free);
 
   G_OBJECT_CLASS (ide_project_item_parent_class)->finalize (object);

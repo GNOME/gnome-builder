@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-line-change-gutter-renderer"
 
+#include <dazzle.h>
+
 #include "ide-context.h"
 
 #include "buffers/ide-buffer.h"
@@ -87,7 +89,7 @@ disconnect_buffer (IdeLineChangeGutterRenderer *self)
     {
       g_signal_handler_disconnect (self->buffer, self->buffer_notify_style_scheme);
       self->buffer_notify_style_scheme = 0;
-      ide_clear_weak_pointer (&self->buffer);
+      dzl_clear_weak_pointer (&self->buffer);
     }
 }
 
@@ -100,7 +102,7 @@ disconnect_view (IdeLineChangeGutterRenderer *self)
     {
       g_signal_handler_disconnect (self->text_view, self->text_view_notify_buffer);
       self->text_view_notify_buffer = 0;
-      ide_clear_weak_pointer (&self->text_view);
+      dzl_clear_weak_pointer (&self->text_view);
     }
 }
 
@@ -191,7 +193,7 @@ connect_buffer (IdeLineChangeGutterRenderer *self)
 
   if (buffer)
     {
-      ide_set_weak_pointer (&self->buffer, buffer);
+      dzl_set_weak_pointer (&self->buffer, buffer);
       self->buffer_notify_style_scheme = g_signal_connect (buffer,
                                                            "notify::style-scheme",
                                                            G_CALLBACK (notify_style_scheme_cb),
@@ -218,7 +220,7 @@ connect_view (IdeLineChangeGutterRenderer *self)
 
   if (view)
     {
-      ide_set_weak_pointer (&self->text_view, view);
+      dzl_set_weak_pointer (&self->text_view, view);
       self->text_view_notify_buffer = g_signal_connect (self->text_view,
                                                         "notify::buffer",
                                                         G_CALLBACK (notify_buffer_cb),

@@ -23,12 +23,6 @@
 
 G_BEGIN_DECLS
 
-#define ide_clear_weak_pointer(ptr) \
-  (*(ptr) ? (g_object_remove_weak_pointer((GObject*)*(ptr), (gpointer*)ptr),*(ptr)=NULL,1) : 0)
-
-#define ide_set_weak_pointer(ptr,obj) \
-  ((obj!=*(ptr))?(ide_clear_weak_pointer(ptr),*(ptr)=obj,((obj)?g_object_add_weak_pointer((GObject*)obj,(gpointer*)ptr),NULL:NULL),1):0)
-
 #define ide_clear_signal_handler(obj,ptr) \
   G_STMT_START { \
     if (*(ptr) != 0) { \

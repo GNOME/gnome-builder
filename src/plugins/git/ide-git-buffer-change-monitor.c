@@ -458,7 +458,7 @@ ide_git_buffer_change_monitor_set_buffer (IdeBufferChangeMonitor *monitor,
   g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!self->buffer);
 
-  ide_set_weak_pointer (&self->buffer, buffer);
+  dzl_set_weak_pointer (&self->buffer, buffer);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
@@ -700,7 +700,7 @@ ide_git_buffer_change_monitor_dispose (GObject *object)
       self->changed_timeout = 0;
     }
 
-  ide_clear_weak_pointer (&self->buffer);
+  dzl_clear_weak_pointer (&self->buffer);
 
   g_clear_object (&self->signal_group);
   g_clear_object (&self->vcs_signal_group);

@@ -142,7 +142,7 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
                            "pty", pty,
                            "visible", TRUE,
                            NULL);
-      ide_set_weak_pointer (&self->run_terminal, view);
+      dzl_set_weak_pointer (&self->run_terminal, view);
 
       panel = g_object_new (DZL_TYPE_DOCK_WIDGET,
                             "child", self->run_terminal,
@@ -151,7 +151,7 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
                             "title", _("Application Output"),
                             "visible", TRUE,
                             NULL);
-      ide_set_weak_pointer (&self->run_panel, panel);
+      dzl_set_weak_pointer (&self->run_panel, panel);
 
       perspective = ide_workbench_get_perspective_by_name (self->workbench, "editor");
       g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
@@ -244,7 +244,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
 
   context = ide_workbench_get_context (workbench);
 
-  ide_set_weak_pointer (&self->workbench, workbench);
+  dzl_set_weak_pointer (&self->workbench, workbench);
 
   g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions, G_N_ELEMENTS (actions), self);
   gb_terminal_workbench_setup_shortcuts (self, workbench);
@@ -297,13 +297,13 @@ gb_terminal_workbench_addin_unload (IdeWorkbenchAddin *addin,
   if (self->panel_dock_widget != NULL)
     {
       gtk_widget_destroy (self->panel_dock_widget);
-      ide_clear_weak_pointer (&self->panel_dock_widget);
+      dzl_clear_weak_pointer (&self->panel_dock_widget);
     }
 
   if (self->run_panel != NULL)
     {
       gtk_widget_destroy (self->run_panel);
-      ide_clear_weak_pointer (&self->run_panel);
+      dzl_clear_weak_pointer (&self->run_panel);
     }
 }
 

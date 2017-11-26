@@ -84,7 +84,7 @@ ide_cursor_dispose (GObject *object)
       if (self->highlight_tag != NULL)
         gtk_text_tag_table_remove (gtk_text_buffer_get_tag_table (buffer),
                                    self->highlight_tag);
-      ide_clear_weak_pointer (&self->source_view);
+      dzl_clear_weak_pointer (&self->source_view);
     }
 
   if (self->operations_signals != NULL)
@@ -770,7 +770,7 @@ ide_cursor_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_IDE_SOURCE_VIEW:
-      ide_set_weak_pointer (&self->source_view, g_value_get_object (value));
+      dzl_set_weak_pointer (&self->source_view, g_value_get_object (value));
       break;
 
     default:

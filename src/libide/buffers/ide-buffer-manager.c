@@ -317,7 +317,7 @@ ide_buffer_manager_set_focus_buffer (IdeBufferManager *self,
 
   previous = self->focus_buffer;
 
-  if (ide_set_weak_pointer (&self->focus_buffer, buffer))
+  if (dzl_set_weak_pointer (&self->focus_buffer, buffer))
     {
       /* notify that we left the previous buffer */
       if (previous)
@@ -1367,7 +1367,7 @@ ide_buffer_manager_dispose (GObject *object)
 {
   IdeBufferManager *self = (IdeBufferManager *)object;
 
-  ide_clear_weak_pointer (&self->focus_buffer);
+  dzl_clear_weak_pointer (&self->focus_buffer);
 
   while (self->buffers->len)
     {
@@ -1696,8 +1696,8 @@ register_auto_save (IdeBufferManager *self,
       AutoSave *state;
 
       state = g_slice_new0 (AutoSave);
-      ide_set_weak_pointer (&state->buffer, buffer);
-      ide_set_weak_pointer (&state->self, self);
+      dzl_set_weak_pointer (&state->buffer, buffer);
+      dzl_set_weak_pointer (&state->self, self);
       state->source_id = g_timeout_add_seconds (self->auto_save_timeout,
                                                 ide_buffer_manager_auto_save_cb,
                                                 state);
@@ -1720,8 +1720,8 @@ unregister_auto_save (IdeBufferManager *self,
     {
       g_hash_table_remove (self->timeouts, buffer);
       dzl_clear_source (&state->source_id);
-      ide_clear_weak_pointer (&state->buffer);
-      ide_clear_weak_pointer (&state->self);
+      dzl_clear_weak_pointer (&state->buffer);
+      dzl_clear_weak_pointer (&state->self);
       g_slice_free (AutoSave, state);
     }
 }

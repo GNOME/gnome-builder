@@ -139,7 +139,7 @@ ide_xml_highlighter_bind_buffer_cb (IdeXmlHighlighter  *self,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (DZL_IS_SIGNAL_GROUP (group));
 
-  ide_set_weak_pointer (&self->buffer, GTK_TEXT_BUFFER (buffer));
+  dzl_set_weak_pointer (&self->buffer, GTK_TEXT_BUFFER (buffer));
 
   gtk_text_buffer_get_start_iter (self->buffer, &begin);
   self->iter_mark = gtk_text_buffer_create_mark (self->buffer, NULL, &begin, TRUE);
@@ -162,7 +162,7 @@ ide_xml_highlighter_unbind_buffer_cb (IdeXmlHighlighter  *self,
   gtk_text_buffer_delete_mark (self->buffer, self->iter_mark);
   self->iter_mark = NULL;
 
-  ide_clear_weak_pointer (&self->buffer);
+  dzl_clear_weak_pointer (&self->buffer);
 }
 
 
@@ -219,7 +219,7 @@ ide_xml_highlighter_real_set_engine (IdeHighlighter     *highlighter,
   g_return_if_fail (IDE_IS_XML_HIGHLIGHTER (self));
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (engine));
 
-  if (ide_set_weak_pointer (&self->engine, engine))
+  if (dzl_set_weak_pointer (&self->engine, engine))
     {
       buffer = ide_highlight_engine_get_buffer (engine);
       /*
@@ -248,7 +248,7 @@ ide_xml_highlighter_dispose (GObject *object)
       self->highlight_timeout = 0;
     }
 
-  ide_clear_weak_pointer (&self->engine);
+  dzl_clear_weak_pointer (&self->engine);
   g_clear_object (&self->signal_group);
 
   G_OBJECT_CLASS (ide_xml_highlighter_parent_class)->dispose (object);

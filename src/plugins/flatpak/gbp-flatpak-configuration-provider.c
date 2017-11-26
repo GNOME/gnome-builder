@@ -1068,7 +1068,7 @@ gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provide
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  ide_set_weak_pointer (&self->manager, manager);
+  dzl_set_weak_pointer (&self->manager, manager);
 
   self->manifest_monitors = g_ptr_array_new_with_free_func (g_object_unref);
 
@@ -1119,7 +1119,7 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider,
 
   g_clear_pointer (&self->manifest_monitors, g_ptr_array_unref);
 
-  ide_clear_weak_pointer (&self->manager);
+  dzl_clear_weak_pointer (&self->manager);
 
   IDE_EXIT;
 }

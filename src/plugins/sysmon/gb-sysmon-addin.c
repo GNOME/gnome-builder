@@ -58,7 +58,7 @@ gb_sysmon_addin_load (IdeWorkbenchAddin *addin,
                         "expand", TRUE,
                         "visible", TRUE,
                         NULL);
-  ide_set_weak_pointer (&self->panel, panel);
+  dzl_set_weak_pointer (&self->panel, panel);
   gtk_container_add (GTK_CONTAINER (pane), GTK_WIDGET (panel));
 }
 
@@ -74,7 +74,7 @@ gb_sysmon_addin_unload (IdeWorkbenchAddin *addin,
   if (self->panel != NULL)
     {
       gtk_widget_destroy (self->panel);
-      ide_clear_weak_pointer (&self->panel);
+      dzl_clear_weak_pointer (&self->panel);
     }
 }
 
