@@ -23,6 +23,7 @@
 import gi
 import threading
 import os
+import json
 
 gi.require_version('Ide', '1.0')
 
@@ -70,6 +71,7 @@ class NPMBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_priority(self):
         return 300
 
+
 class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
     The NPMPipelineAddin is responsible for creating the necessary build
@@ -106,3 +108,106 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         fetch_launcher.push_argv('install')
         self.track(pipeline.connect_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
 
+
+# The scripts used by the npm build system during build
+# we don't want to include these as build target
+NPM_SPECIAL_SCRIPTS = set(['prepare', 'publish', 'prepublishOnly', 'install', 'uninstall',
+                           'version', 'shrinkwrap'])
+# Standard name of user defined scripts
+# We do want to include these as build targets, but we don't want
+# to include the corresponding "pre" and "post" variants
+NPM_STANDARD_SCRIPTS = set(['test', 'start', 'stop', 'restart'])
+
+class NPMBuildTarget(Ide.Object, Ide.BuildTarget):
+    def __init__(self, script, **kw):
+        super().__init__(**kw)
+        self._script = script
+
+    def do_get_install_directory(self):
+        return None
+
+    def do_get_name(self):
+        return 'npm-run-' + self._script
+
+    def do_get_argv(self):
+        return ['npm', 'run', '--silent', self._script]
+
+    def do_get_cwd(self):
+        context = self.get_context()
+        project_file = context.get_project_file()
+        return project_file.get_parent().get_path()
+
+    def do_get_priority(self):
+        if self._script == 'start':
+            return -10
+        elif self._script in ('stop', 'restart'):
+            return 5
+        elif self._script == 'test':
+            return 10
+        else:
+            return 0
+
+def is_ignored_script(script, all_scripts):
+    if script in NPM_SPECIAL_SCRIPTS:
+        return True
+    if script.startswith('pre'):
+        without_pre = script[3:]
+        if without_pre in NPM_SPECIAL_SCRIPTS or \
+            without_pre in NPM_STANDARD_SCRIPTS or \
+            without_pre in all_scripts:
+            return True
+    if script.startswith('post'):
+        without_post = script[4:]
+        if without_post in NPM_SPECIAL_SCRIPTS or \
+            without_post in NPM_STANDARD_SCRIPTS or \
+            without_post in all_scripts:
+            return True
+    return False
+
+class NPMBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
+
+    def _on_package_json_loaded(self, project_file, result, task):
+        try:
+            ok, contents, _etag = project_file.load_contents_finish(result)
+        except GLib.Error as e:
+            task.return_error(e)
+
+        package_json = json.loads(contents.decode('utf-8'))
+        if 'scripts' not in package_json:
+            task.targets = []
+            task.return_boolean(True)
+            return
+
+        task.targets = []
+        for name in package_json['scripts']:
+            if is_ignored_script(name, package_json['scripts']):
+                continue
+            task.targets.append(NPMBuildTarget(name, context=self.get_context()))
+
+        # if no start script is specified, but server.js exists,
+        # we can still run "npm start"
+        if 'start' not in package_json['scripts'] and \
+            project_file.get_parent().get_child('server.js').query_exists(None):
+                task.targets.append(NPMBuildTarget('start', context=self.get_context()))
+
+        task.return_boolean(True)
+
+    def do_get_targets_async(self, cancellable, callback, data):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.set_priority(GLib.PRIORITY_LOW)
+
+        context = self.get_context()
+        build_system = context.get_build_system()
+
+        if type(build_system) != NPMBuildSystem:
+            task.return_error(GLib.Error('Not NPM build system',
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.NOT_SUPPORTED))
+            return
+
+        project_file = context.get_project_file()
+        project_file.load_contents_async(cancellable, self._on_package_json_loaded, task)
+
+    def do_get_targets_finish(self, result):
+        if result.propagate_boolean():
+            return result.targets
