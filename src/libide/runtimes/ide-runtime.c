@@ -169,6 +169,7 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
   g_autoptr(GFile) installdir = NULL;
   g_auto(GStrv) argv = NULL;
+  g_autofree gchar *cwd = NULL;
   IdeContext *context;
   IdeRunner *runner;
 
@@ -188,6 +189,7 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
     {
       installdir = ide_build_target_get_install_directory (build_target);
       argv = ide_build_target_get_argv (build_target);
+      cwd = ide_build_target_get_cwd (build_target);
     }
 
   /* Possibly translate relative paths for the binary */
@@ -226,6 +228,9 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
 
   if (argv != NULL)
     ide_runner_push_args (runner, (const gchar * const *)argv);
+
+  if (cwd != NULL)
+    ide_runner_set_cwd (runner, cwd);
 
   return runner;
 }

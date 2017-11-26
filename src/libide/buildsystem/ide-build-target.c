@@ -22,9 +22,16 @@
 
 G_DEFINE_INTERFACE (IdeBuildTarget, ide_build_target, IDE_TYPE_OBJECT)
 
+static gchar*
+ide_build_target_real_get_cwd (IdeBuildTarget *self)
+{
+  return NULL;
+}
+
 static void
 ide_build_target_default_init (IdeBuildTargetInterface *iface)
 {
+  iface->get_cwd = ide_build_target_real_get_cwd;
 }
 
 /**
@@ -121,4 +128,27 @@ ide_build_target_get_argv (IdeBuildTarget *self)
     }
 
   return g_steal_pointer (&argv);
+}
+
+/**
+ * ide_build_target_get_cwd:
+ * @self: a #IdeBuildTarget
+ *
+ * For build systems and build target providers that insist to be run in
+ * a specific place, this method gets the correct working directory.
+ *
+ * If this method returns %NULL, the runtime will pick a default working
+ * directory for the spawned process (usually, the user home directory
+ * in the host system, or the flatpak sandbox home under flatpak).
+ *
+ * Returns: (nullable) (transfer full): the working directory to use for this target
+ *
+ * Since: 3.28
+ */
+gchar *
+ide_build_target_get_cwd (IdeBuildTarget *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), NULL);
+
+  return IDE_BUILD_TARGET_GET_IFACE (self)->get_cwd (self);
 }

@@ -38,6 +38,7 @@ struct _IdeBuildTargetInterface
   gchar  *(*get_name)              (IdeBuildTarget *self);
   gint    (*get_priority)          (IdeBuildTarget *self);
   gchar **(*get_argv)              (IdeBuildTarget *self);
+  gchar  *(*get_cwd)               (IdeBuildTarget *self);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -48,6 +49,8 @@ IDE_AVAILABLE_IN_3_28
 gint       ide_build_target_get_priority          (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_3_28
 gchar    **ide_build_target_get_argv              (IdeBuildTarget       *self);
+IDE_AVAILABLE_IN_3_28
+gchar     *ide_build_target_get_cwd               (IdeBuildTarget       *self);
 IDE_AVAILABLE_IN_3_28
 gboolean   ide_build_target_compare               (const IdeBuildTarget *left,
                                                    const IdeBuildTarget *right);
