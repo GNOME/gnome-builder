@@ -76,7 +76,9 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
 
     def execute(self, task, launcher, srcdir, file, file_content):
         try:
-            launcher.push_args((self._get_eslint(srcdir), '-f', 'json'))
+            launcher.push_args((self._get_eslint(srcdir), '-f', 'json',
+                                '--ignore-pattern', '!node_modules/*',
+                                '--ignore-pattern', '!bower_components/*'))
 
             if file_content:
                 launcher.push_argv('--stdin')
