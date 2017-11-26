@@ -94,6 +94,8 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
             results = json.loads(stdout)
             for result in results:
                 for message in result.get('messages', []):
+                    if 'line' not in message or 'column' not in message:
+                        continue
                     start_line = max(message['line'] - 1, 0)
                     start_col = max(message['column'] - 1, 0)
                     start = Ide.SourceLocation.new(file, start_line, start_col, 0)
