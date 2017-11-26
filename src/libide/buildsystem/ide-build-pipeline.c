@@ -2518,7 +2518,7 @@ ide_build_pipeline_get_message (IdeBuildPipeline *self)
   if (self->failed)
     return g_strdup (_("Failed"));
   else if (!self->busy)
-    return g_strdup (_("Ready…"));
+    return g_strdup (_("Ready"));
 
   if (self->current_stage != NULL)
     {
