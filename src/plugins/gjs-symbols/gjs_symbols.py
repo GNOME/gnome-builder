@@ -356,9 +356,6 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
         return nodes
 
     def do_index_file(self, file_, build_flags, cancellable):
-        if 'node_modules' in file_.get_path().split(os.sep):
-            return None  # Avoid indexing these
-
         launcher = GjsSymbolProvider._get_launcher(self.get_context(), file_)
         proc = launcher.spawn()
         success, stdout, stderr = proc.communicate_utf8(None, None)
