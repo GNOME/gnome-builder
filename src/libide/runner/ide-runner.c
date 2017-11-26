@@ -292,12 +292,6 @@ ide_runner_real_run_async (IdeRunner           *self,
   for (const GList *iter = priv->argv.head; iter != NULL; iter = iter->next)
     ide_subprocess_launcher_push_argv (launcher, iter->data);
 
-  /*
-   * Set the working directory for the process.
-   * FIXME: Allow this to be configurable! Add IdeRunner::cwd.
-   */
-  ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
-
   /* Give the runner a final chance to mutate the launcher */
   if (IDE_RUNNER_GET_CLASS (self)->fixup_launcher)
     IDE_RUNNER_GET_CLASS (self)->fixup_launcher (self, launcher);
