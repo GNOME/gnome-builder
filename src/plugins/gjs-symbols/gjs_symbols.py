@@ -99,6 +99,9 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
             for dec in dict_['declarations']:
                 line = max(dec['id']['loc']['start']['line'] - 1, 0)
                 col = dec['id']['loc']['start']['column']
+                if dec['id']['type'] != 'Identifier':
+                    # destructured assignment, ignore
+                    return
                 name = dec['id']['name']
                 kind = Ide.SymbolKind.VARIABLE
                 children = []
