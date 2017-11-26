@@ -157,6 +157,9 @@ class CargoBuildTarget(Ide.Object, Ide.BuildTarget):
     def do_get_name(self):
         return 'cargo-run'
 
+    def do_get_language(self):
+        return 'rust'
+
     def do_get_argv(self):
         context = self.get_context()
         config_manager = context.get_configuration_manager()

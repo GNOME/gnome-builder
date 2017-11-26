@@ -137,6 +137,9 @@ class NPMBuildTarget(Ide.Object, Ide.BuildTarget):
         project_file = context.get_project_file()
         return project_file.get_parent().get_path()
 
+    def do_get_language(self):
+        return 'js'
+
     def do_get_priority(self):
         if self._script == 'start':
             return -10

@@ -28,10 +28,18 @@ ide_build_target_real_get_cwd (IdeBuildTarget *self)
   return NULL;
 }
 
+static gchar*
+ide_build_target_real_get_language (IdeBuildTarget *self)
+{
+  return g_strdup ("asm");
+}
+
+
 static void
 ide_build_target_default_init (IdeBuildTargetInterface *iface)
 {
   iface->get_cwd = ide_build_target_real_get_cwd;
+  iface->get_language = ide_build_target_real_get_language;
 }
 
 /**
@@ -151,4 +159,33 @@ ide_build_target_get_cwd (IdeBuildTarget *self)
   g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), NULL);
 
   return IDE_BUILD_TARGET_GET_IFACE (self)->get_cwd (self);
+}
+
+/**
+ * ide_build_target_get_language:
+ * @self: a #IdeBuildTarget
+ *
+ * Return the main programming language that was used to
+ * write this build target.
+ *
+ * This method is primarily used to choose an appropriate
+ * debugger. Therefore, if a build target is composed of
+ * components in multiple language (eg. a GJS app with
+ * GObject Introspection libraries, or a Java app with JNI
+ * libraries), this should return the language that is
+ * most likely to be appropriate for debugging.
+ *
+ * The default implementation returns "asm", which indicates
+ * an unspecified language that compiles to native code.
+ *
+ * Returns: (transfer full): the programming language of this target
+ *
+ * Since: 3.28
+ */
+gchar *
+ide_build_target_get_language (IdeBuildTarget *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), NULL);
+
+  return IDE_BUILD_TARGET_GET_IFACE (self)->get_language (self);
 }
