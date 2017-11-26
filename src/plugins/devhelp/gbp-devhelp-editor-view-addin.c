@@ -35,7 +35,7 @@ documentation_requested_cb (GbpDevhelpEditorViewAddin *self,
   g_assert (GBP_IS_DEVHELP_EDITOR_VIEW_ADDIN (self));
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
-  if (!ide_str_empty0 (word))
+  if (!dzl_str_empty0 (word))
     dzl_gtk_widget_action (GTK_WIDGET (source_view), "devhelp", "search",
                            g_variant_new_string (word));
 }

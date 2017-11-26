@@ -151,8 +151,8 @@ gbp_comment_code_view_addin_comment_line (GtkTextBuffer *buffer,
   gboolean res;
 
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
-  g_assert (!ide_str_empty0 (start_tag));
-  g_assert ((is_block_tag && !ide_str_empty0 (end_tag)) || !is_block_tag);
+  g_assert (!dzl_str_empty0 (start_tag));
+  g_assert ((is_block_tag && !dzl_str_empty0 (end_tag)) || !is_block_tag);
   g_assert (line >= 0 && line < gtk_text_buffer_get_line_count(buffer));
 
   if (!is_line_commentable (buffer, line, start_tag))
@@ -207,8 +207,8 @@ gbp_comment_code_view_addin_uncomment_line (GtkTextBuffer *buffer,
   gboolean res;
 
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
-  g_assert (!ide_str_empty0 (start_tag));
-  g_assert ((is_block_tag && !ide_str_empty0 (end_tag)) || !is_block_tag);
+  g_assert (!dzl_str_empty0 (start_tag));
+  g_assert ((is_block_tag && !dzl_str_empty0 (end_tag)) || !is_block_tag);
   g_assert (line >= 0 && line < gtk_text_buffer_get_line_count(buffer));
 
   if (!is_line_uncommentable (buffer, line, start_tag, &tag_begin, &tag_end))
@@ -296,7 +296,7 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
   if (!editable || lang == NULL)
     return;
 
-  if (ide_str_equal0 (gtk_source_language_get_id(lang), "c"))
+  if (dzl_str_equal0 (gtk_source_language_get_id(lang), "c"))
     {
       start_tag = gtk_source_language_get_metadata (lang, "block-comment-start");
       end_tag = gtk_source_language_get_metadata (lang, "block-comment-end");

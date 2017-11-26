@@ -880,7 +880,7 @@ ide_workbench_set_visible_perspective (IdeWorkbench   *self,
   current_id = gtk_stack_get_visible_child_name (self->perspectives_stack);
   id = ide_perspective_get_id (perspective);
 
-  if (!ide_str_equal0 (current_id, id))
+  if (!dzl_str_equal0 (current_id, id))
     gtk_stack_set_visible_child_name (self->perspectives_stack, id);
 
   titlebar = gtk_stack_get_child_by_name (self->header_stack, id);

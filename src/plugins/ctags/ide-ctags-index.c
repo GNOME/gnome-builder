@@ -289,7 +289,7 @@ ide_ctags_index_set_path_root (IdeCtagsIndex *self,
 {
   g_return_if_fail (IDE_IS_CTAGS_INDEX (self));
 
-  if (!ide_str_equal0 (self->path_root, path_root))
+  if (!dzl_str_equal0 (self->path_root, path_root))
     {
       g_free (self->path_root);
       self->path_root = g_strdup (path_root);

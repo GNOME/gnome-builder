@@ -28,14 +28,14 @@ list_get_attribute (const guchar **attributes,
 {
   const guchar **l = attributes;
 
-  g_return_val_if_fail (!ide_str_empty0 (name), NULL);
+  g_return_val_if_fail (!dzl_str_empty0 (name), NULL);
 
   if (attributes == NULL)
     return NULL;
 
   while (l [0] != NULL)
     {
-      if (ide_str_equal0 (name, l [0]))
+      if (dzl_str_equal0 (name, l [0]))
         return (const gchar *)l [1];
 
       l += 2;

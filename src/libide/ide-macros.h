@@ -23,26 +23,10 @@
 
 G_BEGIN_DECLS
 
-/* strlen() generally gets hoisted out automatically */
-#define IDE_LITERAL_LENGTH(s) (strlen(s))
-
 #if __GNUC__ >= 7
 # define IDE_FALLTHROUGH __attribute__((fallthrough))
 #else
 # define IDE_FALLTHROUGH
 #endif
-
-static inline gboolean
-ide_str_empty0 (const gchar *str)
-{
-  return (str == NULL) || (str[0] == '\0');
-}
-
-static inline gboolean
-ide_str_equal0 (gconstpointer a,
-                gconstpointer b)
-{
-  return (g_strcmp0 ((const gchar *)a, (const gchar *)b) == 0);
-}
 
 G_END_DECLS

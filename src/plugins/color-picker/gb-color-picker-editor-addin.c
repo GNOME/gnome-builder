@@ -93,7 +93,7 @@ gb_color_picker_editor_addin_add_palette (GbColorPickerEditorAddin *self,
 
   g_assert (GB_IS_COLOR_PICKER_EDITOR_ADDIN (self));
   g_assert (GSTYLE_PALETTE_WIDGET (palette_widget));
-  g_assert (!ide_str_empty0 (uri));
+  g_assert (!dzl_str_empty0 (uri));
 
   file = g_file_new_for_uri (uri);
   palette = gstyle_palette_new_from_file (file, NULL, &error);

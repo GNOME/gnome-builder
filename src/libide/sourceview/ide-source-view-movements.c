@@ -2607,7 +2607,7 @@ find_html_tag (GtkTextIter      *iter,
     }
 
   name = get_html_tag_name (&cursor);
-  if (ide_str_empty0 (name))
+  if (dzl_str_empty0 (name))
     {
       g_free (name);
       tag->kind = HTML_TAG_KIND_ERROR;
@@ -2687,7 +2687,7 @@ find_non_matching_html_tag_at_left (GtkTextIter *cursor,
           last_closing_tag = g_queue_peek_head (stack);
           if (last_closing_tag != NULL)
             {
-              if (ide_str_equal0 (tag->name, last_closing_tag->name))
+              if (dzl_str_equal0 (tag->name, last_closing_tag->name))
                 {
                   g_queue_pop_head (stack);
                   free_html_tag (last_closing_tag);
@@ -2745,7 +2745,7 @@ find_non_matching_html_tag_at_right (GtkTextIter *cursor,
         {
           while ((last_closing_tag = g_queue_pop_head (stack)))
             {
-              gboolean is_names_equal = ide_str_equal0 (tag->name, last_closing_tag->name);
+              gboolean is_names_equal = dzl_str_equal0 (tag->name, last_closing_tag->name);
 
               free_html_tag (last_closing_tag);
               if (is_names_equal)
@@ -2796,7 +2796,7 @@ get_html_element (GtkTextIter cursor_left,
     {
       while ((left_tag = find_non_matching_html_tag_at_left (&cursor_left, block_cursor)))
         {
-          if (!ide_str_equal0 (left_tag->name, right_tag->name))
+          if (!dzl_str_equal0 (left_tag->name, right_tag->name))
             {
               cursor_left = left_tag->begin;
               free_html_tag (left_tag);

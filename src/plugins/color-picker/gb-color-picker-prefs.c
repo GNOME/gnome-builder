@@ -127,7 +127,7 @@ string_to_variant (const gchar *str)
   GVariant *variant;
   g_autoptr(GError) error = NULL;
 
-  g_assert (!ide_str_empty0 (str));
+  g_assert (!dzl_str_empty0 (str));
 
   variant = g_variant_parse (NULL, str, NULL, NULL, &error);
   if (variant == NULL)

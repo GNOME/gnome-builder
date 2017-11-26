@@ -94,7 +94,7 @@ goto_line_activate (IdeEditorLayoutStackControls *self,
   if (self->view == NULL)
     return;
 
-  if (!ide_str_empty0 (text))
+  if (!dzl_str_empty0 (text))
     {
       value = g_ascii_strtoll (text, NULL, 10);
 
@@ -153,7 +153,7 @@ goto_line_changed (IdeEditorLayoutStackControls *self,
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->view->buffer), &begin, &end);
 
-  if (!ide_str_empty0 (text))
+  if (!dzl_str_empty0 (text))
     {
       gint64 value;
 

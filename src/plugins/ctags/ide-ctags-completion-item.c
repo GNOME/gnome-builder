@@ -74,7 +74,7 @@ ide_ctags_completion_item_match (IdeCompletionItem *item,
 
   if (ide_completion_item_fuzzy_match (self->entry->name, casefold, &item->priority))
     {
-      if (!ide_str_equal0 (self->entry->name, query))
+      if (!dzl_str_equal0 (self->entry->name, query))
         return TRUE;
     }
 

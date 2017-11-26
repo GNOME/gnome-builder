@@ -621,7 +621,7 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
   settings = g_settings_new ("org.gnome.builder");
   path = g_settings_get_string (settings, "projects-directory");
 
-  if (ide_str_empty0 (path))
+  if (dzl_str_empty0 (path))
     path = g_build_filename (g_get_home_dir (), "Projects", NULL);
 
   if (!g_path_is_absolute (path))

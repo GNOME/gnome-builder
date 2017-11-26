@@ -3822,7 +3822,7 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
 
               ide_vcs_config_get_config (vcs_config, IDE_VCS_CONFIG_FULL_NAME, &value);
 
-              if (!ide_str_empty0 (g_value_get_string (&value)))
+              if (!dzl_str_empty0 (g_value_get_string (&value)))
                 {
                   ide_source_snippet_context_add_shared_variable (context, "author", g_value_get_string (&value));
                   ide_source_snippet_context_add_shared_variable (context, "fullname", g_value_get_string (&value));
@@ -3833,7 +3833,7 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
 
               ide_vcs_config_get_config (vcs_config, IDE_VCS_CONFIG_EMAIL, &value);
 
-              if (!ide_str_empty0 (g_value_get_string (&value)))
+              if (!dzl_str_empty0 (g_value_get_string (&value)))
                 ide_source_snippet_context_add_shared_variable (context, "email", g_value_get_string (&value));
 
               g_value_unset (&value);

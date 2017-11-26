@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-extension-set-adapter"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
@@ -499,7 +500,7 @@ ide_extension_set_adapter_set_key (IdeExtensionSetAdapter *self,
 {
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
-  if (!ide_str_equal0 (self->key, key))
+  if (!dzl_str_equal0 (self->key, key))
     {
       g_free (self->key);
       self->key = g_strdup (key);
@@ -522,7 +523,7 @@ ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
 {
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
-  if (!ide_str_equal0 (self->value, value))
+  if (!dzl_str_equal0 (self->value, value))
     {
       g_free (self->value);
       self->value = g_strdup (value);

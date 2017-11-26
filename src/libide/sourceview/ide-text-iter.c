@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-text-iter"
 
+#include <dazzle.h>
 #include <string.h>
 
 #include <gtk/gtk.h>
@@ -711,7 +712,7 @@ _ide_text_iter_in_string (GtkTextIter *iter,
   GtkTextIter end_iter;
   gboolean ret = FALSE;
 
-  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+  g_return_val_if_fail (!dzl_str_empty0 (str), FALSE);
 
   len = g_utf8_strlen (str, -1);
   cursor_offset = gtk_text_iter_get_offset (iter);
@@ -797,7 +798,7 @@ _ide_text_iter_find_chars_backward (GtkTextIter *iter,
   const gchar *str_limit;
   GtkTextIter base_cursor;
 
-  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+  g_return_val_if_fail (!dzl_str_empty0 (str), FALSE);
 
   if (!gtk_text_iter_backward_char (iter))
     return FALSE;
@@ -870,7 +871,7 @@ _ide_text_iter_find_chars_forward (GtkTextIter *iter,
   gint str_char_len;
   gint real_limit_offset;
 
-  g_return_val_if_fail (!ide_str_empty0 (str), FALSE);
+  g_return_val_if_fail (!dzl_str_empty0 (str), FALSE);
 
   if (limit == NULL)
     {

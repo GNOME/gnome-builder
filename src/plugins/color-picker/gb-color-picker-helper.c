@@ -170,7 +170,7 @@ gb_color_picker_helper_get_tag_at_iter (GtkTextIter  *cursor,
         {
           tag = tags->data;
           g_object_get (G_OBJECT (tag), "name", &name, NULL);
-          if (!ide_str_empty0 (name) && g_str_has_prefix (name, COLOR_TAG_PREFIX))
+          if (!dzl_str_empty0 (name) && g_str_has_prefix (name, COLOR_TAG_PREFIX))
             {
               *begin = *cursor;
               *end = *cursor;

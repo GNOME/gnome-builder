@@ -279,7 +279,7 @@ gb_color_picker_prefs_palette_row_set_palette_name (GbColorPickerPrefsPaletteRow
 
   g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_ROW (self));
 
-  if (ide_str_empty0 (new_text))
+  if (dzl_str_empty0 (new_text))
     {
       gtk_label_set_text (self->palette_name, "No name");
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PALETTE_NAME]);

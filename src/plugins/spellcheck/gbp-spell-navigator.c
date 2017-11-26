@@ -254,7 +254,7 @@ gbp_spell_navigator_get_count (GbpSpellNavigator *self,
 {
   g_assert (GBP_IS_SPELL_NAVIGATOR (self));
 
-  if (self->words_count == NULL || ide_str_empty0 (word))
+  if (self->words_count == NULL || dzl_str_empty0 (word))
     return 0;
   else
     return GPOINTER_TO_UINT (g_hash_table_lookup (self->words_count, word));

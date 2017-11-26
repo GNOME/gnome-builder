@@ -57,7 +57,7 @@ find_color_code (const gchar  *txt,
 {
   const gchar *cursor = txt;
 
-  g_assert (!ide_str_empty0 (txt));
+  g_assert (!dzl_str_empty0 (txt));
   g_assert (start_offset != NULL);
   g_assert (end_offset != NULL);
 

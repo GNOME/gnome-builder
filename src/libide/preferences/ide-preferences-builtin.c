@@ -226,7 +226,7 @@ language_search_changed (GtkSearchEntry      *search,
 
   text = gtk_entry_get_text (GTK_ENTRY (search));
 
-  if (!ide_str_empty0 (text))
+  if (!dzl_str_empty0 (text))
     {
       g_autofree gchar *folded = g_utf8_casefold (text, -1);
 
@@ -282,7 +282,7 @@ ide_preferences_builtin_register_languages (DzlPreferences *preferences)
       const gchar *name;
       const gchar *section;
 
-      if (ide_str_equal0 (language_ids [i], "def"))
+      if (dzl_str_equal0 (language_ids [i], "def"))
         continue;
 
       language = gtk_source_language_manager_get_language (manager, language_ids [i]);
@@ -484,7 +484,7 @@ vcs_configs_foreach_cb (PeasExtensionSet *set,
   g_value_unset (&value);
 
   fullname = g_object_new (DZL_TYPE_PREFERENCES_ENTRY,
-                           "text", ide_str_empty0 (author_name) ? "" : author_name,
+                           "text", dzl_str_empty0 (author_name) ? "" : author_name,
                            "title", "Author",
                            "visible", TRUE,
                            NULL);
@@ -496,7 +496,7 @@ vcs_configs_foreach_cb (PeasExtensionSet *set,
                            0);
 
   email = g_object_new (DZL_TYPE_PREFERENCES_ENTRY,
-                        "text", ide_str_empty0 (author_email) ? "" : author_email,
+                        "text", dzl_str_empty0 (author_email) ? "" : author_email,
                         "title", "Email",
                         "visible", TRUE,
                         NULL);

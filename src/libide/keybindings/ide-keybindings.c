@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-keybindings"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
@@ -202,7 +203,7 @@ ide_keybindings_set_mode (IdeKeybindings *self,
 {
   g_return_if_fail (IDE_IS_KEYBINDINGS (self));
 
-  if (!ide_str_equal0 (self->mode, mode))
+  if (!dzl_str_equal0 (self->mode, mode))
     {
       g_free (self->mode);
       self->mode = g_strdup (mode);

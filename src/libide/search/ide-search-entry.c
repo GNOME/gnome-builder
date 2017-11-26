@@ -101,7 +101,7 @@ ide_search_entry_changed (IdeSearchEntry *self)
 
   typed_text = dzl_suggestion_entry_get_typed_text (DZL_SUGGESTION_ENTRY (self));
 
-  if (ide_str_empty0 (typed_text))
+  if (dzl_str_empty0 (typed_text))
     {
       dzl_suggestion_entry_set_model (DZL_SUGGESTION_ENTRY (self), NULL);
       return;

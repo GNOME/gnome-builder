@@ -165,12 +165,12 @@ ide_xml_symbol_node_new (const gchar            *name,
                        "flags", flags,
                        NULL);
 
-  if (ide_str_empty0 (element_name))
+  if (dzl_str_empty0 (element_name))
     self->element_name = g_strdup ("unknow");
   else
     self->element_name = g_strdup (element_name);
 
-  if (!ide_str_empty0 (value))
+  if (!dzl_str_empty0 (value))
     self->value = g_strdup (value);
 
   return self;
@@ -550,7 +550,7 @@ ide_xml_symbol_node_set_element_name (IdeXmlSymbolNode *self,
                                       const gchar      *element_name)
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
-  g_return_if_fail (!ide_str_empty0 (element_name));
+  g_return_if_fail (!dzl_str_empty0 (element_name));
 
   g_clear_pointer (&self->element_name, g_free);
 
@@ -723,7 +723,7 @@ ide_xml_symbol_node_get_attribute_value (IdeXmlSymbolNode *self,
   for (gint i = 0; i < self->attributes->len; ++i)
     {
       attr = &g_array_index (self->attributes, Attribute, i);
-      if (ide_str_equal0 (name, attr->name))
+      if (dzl_str_equal0 (name, attr->name))
         return attr->value;
     }
 

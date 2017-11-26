@@ -88,7 +88,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
       ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
       ide_subprocess_launcher_push_argv (launcher, "--ccache");
       ide_subprocess_launcher_push_argv (launcher, "--force-clean");
-      if (!ide_str_empty0 (self->state_dir))
+      if (!dzl_str_empty0 (self->state_dir))
         {
           ide_subprocess_launcher_push_argv (launcher, "--state-dir");
           ide_subprocess_launcher_push_argv (launcher, self->state_dir);

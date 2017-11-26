@@ -88,8 +88,8 @@ match_and_replace (const gchar *str,
   gchar *needle;
   gsize head_len;
 
-  g_assert (!ide_str_empty0 (str));
-  g_assert (!ide_str_empty0 (pattern));
+  g_assert (!dzl_str_empty0 (str));
+  g_assert (!dzl_str_empty0 (pattern));
 
   if (NULL != (needle = g_strstr_len (str, -1, pattern)))
     {
@@ -158,8 +158,8 @@ gb_beautifier_process_create_generic (GbBeautifierEditorAddin  *self,
 
   src_path = g_file_get_path (state->src_file);
 
-  g_assert (!ide_str_empty0 (src_path));
-  g_assert (!ide_str_empty0 (state->lang_id));
+  g_assert (!dzl_str_empty0 (src_path));
+  g_assert (!dzl_str_empty0 (state->lang_id));
 
   command_args_expand (self, state->command_args, state);
   subprocess = g_subprocess_newv ((const gchar * const *)state->command_args->pdata,
@@ -190,9 +190,9 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
   config_path = g_file_get_path (state->config_file);
   src_path = g_file_get_path (state->src_file);
 
-  g_assert (!ide_str_empty0 (config_path));
-  g_assert (!ide_str_empty0 (src_path));
-  g_assert (!ide_str_empty0 (state->lang_id));
+  g_assert (!dzl_str_empty0 (config_path));
+  g_assert (!dzl_str_empty0 (src_path));
+  g_assert (!dzl_str_empty0 (state->lang_id));
 
   if (NULL == (tmp_workdir = g_dir_make_tmp ("gnome-builder-beautify-XXXXXX", error)))
     return NULL;
@@ -270,7 +270,7 @@ process_communicate_utf8_cb (GObject      *object,
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (state->source_view));
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (state->source_view));
 
-  if (!ide_str_empty0 (stdout_str))
+  if (!dzl_str_empty0 (stdout_str))
     {
       gtk_source_completion_block_interactive (completion);
       gtk_text_buffer_begin_user_action (buffer);
@@ -299,7 +299,7 @@ process_communicate_utf8_cb (GObject      *object,
       status = g_subprocess_get_exit_status (process);
       if (status != 0 &&
           stderr_str != NULL &&
-          !ide_str_empty0 (stderr_str))
+          !dzl_str_empty0 (stderr_str))
         {
           g_warning ("beautify plugin stderr:\n%s", stderr_str);
         }

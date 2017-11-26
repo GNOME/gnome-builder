@@ -38,13 +38,13 @@ ide_xml_position_new (IdeXmlSymbolNode     *node,
 
   self->node = (IDE_IS_XML_SYMBOL_NODE (node)) ? g_object_ref (node) : NULL;
 
-  if (!ide_str_empty0 (prefix))
+  if (!dzl_str_empty0 (prefix))
     self->prefix = g_strdup (prefix);
 
-  if (!ide_str_empty0 (detail_name))
+  if (!dzl_str_empty0 (detail_name))
     self->detail_name = g_strdup (detail_name);
 
-  if (!ide_str_empty0 (detail_value))
+  if (!dzl_str_empty0 (detail_value))
     self->detail_value = g_strdup (detail_value);
 
   self->kind = kind;

@@ -545,7 +545,7 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
         {
           gssize len;
 
-          enterdir += IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
+          enterdir += DZL_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
 
           /* Translate to relative paths for out-of-tree builds */
           if (g_str_has_prefix (enterdir, self->builddir))
@@ -555,7 +555,7 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
                 enterdir++;
             }
 
-          len = strlen (enterdir) - IDE_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
+          len = strlen (enterdir) - DZL_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
 
           if (len > 0)
             {
@@ -2524,7 +2524,7 @@ ide_build_pipeline_get_message (IdeBuildPipeline *self)
     {
       const gchar *name = ide_build_stage_get_name (self->current_stage);
 
-      if (!ide_str_empty0 (name))
+      if (!dzl_str_empty0 (name))
         return g_strdup (name);
     }
 
@@ -3037,7 +3037,7 @@ _ide_build_pipeline_set_message (IdeBuildPipeline *self,
         message += strlen ("jhbuild:");
     }
 
-  if (!ide_str_equal0 (message, self->message))
+  if (!dzl_str_equal0 (message, self->message))
     {
       g_free (self->message);
       self->message = g_strdup (message);

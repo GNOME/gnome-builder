@@ -48,7 +48,7 @@ should_supress_message (IdeNotificationAddin *self,
   g_assert (message != NULL);
 
   if (self->last_msg_body == NULL ||
-      !ide_str_equal0 (self->last_msg_body, message) ||
+      !dzl_str_equal0 (self->last_msg_body, message) ||
       self->last_time + GRACE_PERIOD_USEC < g_get_monotonic_time ())
     {
       g_free (self->last_msg_body);

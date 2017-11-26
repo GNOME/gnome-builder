@@ -82,7 +82,7 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
   g_autoptr(GError) error = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!ide_str_empty0 (text));
+  g_assert (!dzl_str_empty0 (text));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (callback != NULL);
 

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-runtime"
 
+#include <dazzle.h>
+
 #include "ide-context.h"
 #include "ide-debug.h"
 
@@ -179,7 +181,7 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
   runner = ide_runner_new (context);
   g_assert (IDE_IS_RUNNER (runner));
 
-  if (ide_str_equal0 (priv->id, "host"))
+  if (dzl_str_equal0 (priv->id, "host"))
     ide_runner_set_run_on_host (runner, TRUE);
 
   if (build_target != NULL)

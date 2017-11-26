@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-subprocess-launcher"
 
+#include <dazzle.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <signal.h>
@@ -705,10 +706,10 @@ ide_subprocess_launcher_set_cwd (IdeSubprocessLauncher *self,
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (ide_str_empty0 (cwd))
+  if (dzl_str_empty0 (cwd))
     cwd = ".";
 
-  if (!ide_str_equal0 (priv->cwd, cwd))
+  if (!dzl_str_equal0 (priv->cwd, cwd))
     {
       g_free (priv->cwd);
       priv->cwd = g_strdup (cwd);
@@ -747,7 +748,7 @@ ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
           key = ide_environment_variable_get_key (var);
           value = ide_environment_variable_get_value (var);
 
-          if (!ide_str_empty0 (key))
+          if (!dzl_str_empty0 (key))
             ide_subprocess_launcher_setenv (self, key, value ?: "", TRUE);
         }
     }

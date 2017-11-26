@@ -80,7 +80,7 @@ gbp_create_project_template_icon_set_property (GObject      *object,
                     "icon-name", icon_name,
                     NULL);
       gtk_label_set_text (self->template_name, name);
-      if (!ide_str_empty0 (description))
+      if (!dzl_str_empty0 (description))
         gtk_widget_set_tooltip_text (GTK_WIDGET (self), description);
       break;
 

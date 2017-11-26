@@ -69,7 +69,7 @@ ide_autotools_application_addin_load (IdeApplicationAddin *addin,
         {
           gint64 time_at;
 
-          suffix += IDE_LITERAL_LENGTH (".tmp-");
+          suffix += DZL_LITERAL_LENGTH (".tmp-");
           time_at = g_ascii_strtoll (suffix, NULL, 10);
 
           if (time_at == G_MININT64 || time_at == G_MAXINT64)

@@ -52,7 +52,7 @@ ide_xml_stack_push (IdeXmlStack       *self,
   StackItem item;
 
   g_return_if_fail (IDE_IS_XML_STACK (self));
-  g_return_if_fail (!ide_str_empty0 (name));
+  g_return_if_fail (!dzl_str_empty0 (name));
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (node) || node == NULL);
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (parent) || parent == NULL);
 

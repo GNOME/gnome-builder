@@ -86,7 +86,7 @@ documentation_requested_cb (GbpDocumentationCardViewAddin *self,
   if (lang == NULL)
     return;
 
-  if (ide_str_equal0 (gtk_source_language_get_id (lang), "c"))
+  if (dzl_str_equal0 (gtk_source_language_get_id (lang), "c"))
     doc_context = IDE_DOCUMENTATION_CONTEXT_CARD_C;
 
   if (g_strcmp0 (word, self->previous_text) != 0)
@@ -188,7 +188,7 @@ search_document_cb (gpointer data)
   if (lang == NULL)
     return G_SOURCE_REMOVE;
 
-  if (ide_str_equal0 (gtk_source_language_get_id (lang), "c"))
+  if (dzl_str_equal0 (gtk_source_language_get_id (lang), "c"))
     doc_context = IDE_DOCUMENTATION_CONTEXT_CARD_C;
   else
     return G_SOURCE_REMOVE;

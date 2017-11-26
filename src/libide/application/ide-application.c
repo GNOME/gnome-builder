@@ -845,7 +845,7 @@ ide_application_show_projects_window (IdeApplication *self)
 
           name = ide_workbench_get_visible_perspective_name (IDE_WORKBENCH (window));
 
-          if (ide_str_equal0 ("greeter", name))
+          if (dzl_str_equal0 ("greeter", name))
             {
               gtk_window_present (windows->data);
               return;

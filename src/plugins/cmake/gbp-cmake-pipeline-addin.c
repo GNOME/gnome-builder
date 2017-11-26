@@ -140,7 +140,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (configure_launcher, "-DCMAKE_BUILD_TYPE=RelWithDebInfo");
   ide_subprocess_launcher_push_argv (configure_launcher, prefix_option);
 
-  if (!ide_str_empty0 (config_opts))
+  if (!dzl_str_empty0 (config_opts))
     {
       g_auto(GStrv) argv = NULL;
       gint argc;

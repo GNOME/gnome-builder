@@ -66,7 +66,7 @@ gb_new_file_popover__button_clicked (GbNewFilePopover *self,
     return;
 
   path = gtk_entry_get_text (self->entry);
-  if (ide_str_empty0 (path))
+  if (dzl_str_empty0 (path))
     return;
 
   file = g_file_get_child (self->directory, path);
@@ -151,7 +151,7 @@ gb_new_file_popover_check_exists (GbNewFilePopover *self,
   if (directory == NULL)
     return;
 
-  if (ide_str_empty0 (path))
+  if (dzl_str_empty0 (path))
     return;
 
   child = g_file_get_child (directory, path);
@@ -179,7 +179,7 @@ gb_new_file_popover__entry_changed (GbNewFilePopover *self,
 
   text = gtk_entry_get_text (entry);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->button), !ide_str_empty0 (text));
+  gtk_widget_set_sensitive (GTK_WIDGET (self->button), !dzl_str_empty0 (text));
 
   gb_new_file_popover_check_exists (self, self->directory, text);
 }

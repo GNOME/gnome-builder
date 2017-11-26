@@ -218,7 +218,7 @@ ide_workbench_header_bar_add_child (GtkBuildable *buildable,
   g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (GTK_IS_WIDGET (object));
 
-  if (ide_str_equal0 (type, "primary"))
+  if (dzl_str_equal0 (type, "primary"))
     {
       ide_workbench_header_bar_add_primary (self, GTK_WIDGET (object));
       return;

@@ -173,7 +173,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_Informative:
-          if (ide_str_equal0 (text, "const "))
+          if (dzl_str_equal0 (text, "const "))
             g_string_append (markup, text);
           break;
 

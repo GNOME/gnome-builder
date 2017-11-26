@@ -835,7 +835,7 @@ ide_source_snippet_rewrite_updated_chunks (IdeSourceSnippet *self)
       text = ide_source_snippet_chunk_get_text (chunk);
       real_text = ide_source_snippet_get_nth_text (self, i);
 
-      if (!ide_str_equal0 (text, real_text))
+      if (!dzl_str_equal0 (text, real_text))
         ide_source_snippet_replace_chunk_text (self, i, text);
     }
 }

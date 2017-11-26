@@ -118,7 +118,7 @@ get_tag (IdeCtagsHighlighter *self,
         continue;
 
       for (j = 0; j < n_entries; j++)
-        if (ide_str_equal0 (entries[j].path, file_path))
+        if (dzl_str_equal0 (entries[j].path, file_path))
           return get_tag_from_kind (entries[j].kind);
 
       return get_tag_from_kind (entries[0].kind);

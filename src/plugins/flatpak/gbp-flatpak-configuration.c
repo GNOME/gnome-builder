@@ -63,7 +63,7 @@ gbp_flatpak_configuration_new (IdeContext  *context,
                                const gchar *display_name)
 {
   g_assert (IDE_IS_CONTEXT (context));
-  g_assert (!ide_str_empty0 (id));
+  g_assert (!dzl_str_empty0 (id));
 
   return g_object_new (GBP_TYPE_FLATPAK_CONFIGURATION,
                        "context", context,
@@ -104,7 +104,7 @@ guess_primary_module (JsonNode    *modules_node,
   JsonNode *module;
   JsonNode *parent;
 
-  g_return_val_if_fail (!ide_str_empty0 (project_dir_name), NULL);
+  g_return_val_if_fail (!dzl_str_empty0 (project_dir_name), NULL);
   g_return_val_if_fail (JSON_NODE_HOLDS_ARRAY (modules_node), NULL);
 
   /* TODO: Support module strings that refer to other files? */
@@ -132,7 +132,7 @@ guess_primary_module (JsonNode    *modules_node,
 
               module_name = json_object_get_string_member (obj, "name");
 
-              if (ide_str_equal0 (module_name, project_dir_name))
+              if (dzl_str_equal0 (module_name, project_dir_name))
                 return module;
 
               /* Only look at submodules if this is the last item */
@@ -186,7 +186,7 @@ get_strv_from_member (JsonObject  *obj,
     {
       const gchar *arg = json_array_get_string_element (ar, i);
 
-      if (!ide_str_empty0 (arg))
+      if (!dzl_str_empty0 (arg))
         g_ptr_array_add (finish_args, g_strdup (arg));
     }
 
@@ -335,7 +335,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
                 {
                   const gchar *env_name = (gchar *)l->data;
                   const gchar *env_value = json_object_get_string_member (env_vars, env_name);
-                  if (!ide_str_empty0 (env_name) && !ide_str_empty0 (env_value))
+                  if (!dzl_str_empty0 (env_name) && !dzl_str_empty0 (env_value))
                     ide_environment_setenv (environment, env_name, env_value);
                 }
             }
@@ -343,7 +343,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
       ide_configuration_set_environment (IDE_CONFIGURATION (self), environment);
     }
 
-  if (ide_str_empty0 (prefix))
+  if (dzl_str_empty0 (prefix))
     prefix = "/app";
   ide_configuration_set_prefix (IDE_CONFIGURATION (self), prefix);
 
@@ -352,7 +352,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
 
   if (JSON_NODE_HOLDS_VALUE (runtime_version_node))
     branch = json_node_get_string (runtime_version_node);
-  if (ide_str_empty0 (branch))
+  if (dzl_str_empty0 (branch))
     branch = "master";
   gbp_flatpak_configuration_set_branch (self, branch);
 
@@ -418,7 +418,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
           for (guint i = 0; i < json_array_get_length (build_commands_array); i++)
             {
               const gchar *arg = json_array_get_string_element (build_commands_array, i);
-              if (!ide_str_empty0 (arg))
+              if (!dzl_str_empty0 (arg))
                 g_ptr_array_add (build_commands, g_strdup (arg));
             }
           g_ptr_array_add (build_commands, NULL);
@@ -436,7 +436,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
           for (guint i = 0; i < json_array_get_length (post_install_commands_array); i++)
             {
               const gchar *arg = json_array_get_string_element (post_install_commands_array, i);
-              if (!ide_str_empty0 (arg))
+              if (!dzl_str_empty0 (arg))
                 g_ptr_array_add (post_install_commands, g_strdup (arg));
             }
           g_ptr_array_add (post_install_commands, NULL);

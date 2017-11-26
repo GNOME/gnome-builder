@@ -365,8 +365,8 @@ ide_makecache_parse_c_cxx_include (IdeMakecache *self,
       part1 = dummy;
     }
 
-  g_assert (!ide_str_empty0 (part1));
-  g_assert (!ide_str_empty0 (part2));
+  g_assert (!dzl_str_empty0 (part1));
+  g_assert (!dzl_str_empty0 (part2));
 
   /*
    * If the path is relative, then we need to adjust it to be relative to the
@@ -1431,7 +1431,7 @@ find_install_dir (const gchar *key,
   const gchar *path = NULL;
 
   if (g_str_has_prefix (key, "nodist_"))
-    key += IDE_LITERAL_LENGTH ("nodist_");
+    key += DZL_LITERAL_LENGTH ("nodist_");
 
   parts = g_strsplit (key, "_", 2);
   dirkey = parts[0];
@@ -1657,7 +1657,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
           if (parts[1])
             g_strstrip (parts [1]);
 
-          if (ide_str_empty0 (parts[0]) || ide_str_empty0 (parts[1]))
+          if (dzl_str_empty0 (parts[0]) || dzl_str_empty0 (parts[1]))
             continue;
 
           key = parts [0];

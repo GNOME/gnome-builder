@@ -842,7 +842,7 @@ ide_context_load_doap_worker (GTask        *task,
 
           filename = g_file_info_get_name (file_info);
 
-          if (!ide_str_empty0 (filename) && g_str_has_suffix (filename, ".doap"))
+          if (!dzl_str_empty0 (filename) && g_str_has_suffix (filename, ".doap"))
             {
               g_autoptr(GFile) file = NULL;
               g_autoptr(IdeDoap) doap = NULL;

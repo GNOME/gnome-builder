@@ -200,7 +200,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
           key = ide_environment_variable_get_key (var);
           value = ide_environment_variable_get_value (var);
 
-          if (!ide_str_empty0 (key))
+          if (!dzl_str_empty0 (key))
             g_key_file_set_string (self->key_file, group_environ, key, value ?: "");
         }
     }

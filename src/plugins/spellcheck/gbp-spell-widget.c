@@ -77,7 +77,7 @@ create_suggestion_row (GbpSpellWidget *self,
                        const gchar    *word)
 {
   g_assert (GBP_IS_SPELL_WIDGET (self));
-  g_assert (!ide_str_empty0 (word));
+  g_assert (!dzl_str_empty0 (word));
 
   return g_object_new (GTK_TYPE_LABEL,
                        "label", word,
@@ -102,7 +102,7 @@ fill_suggestions_box (GbpSpellWidget  *self,
 
   clear_suggestions_box (self);
 
-  if (ide_str_empty0 (word))
+  if (dzl_str_empty0 (word))
     {
       gtk_widget_set_sensitive (GTK_WIDGET (self->suggestions_box), FALSE);
       return;
@@ -196,7 +196,7 @@ _gbp_spell_widget_move_next_word (GbpSpellWidget *self)
 
       fill_suggestions_box (self, word, &first_result);
 
-      if (!ide_str_empty0 (first_result))
+      if (!dzl_str_empty0 (first_result))
         {
           row = gtk_list_box_get_row_at_index (self->suggestions_box, 0);
           gtk_list_box_select_row (self->suggestions_box, row);
@@ -236,7 +236,7 @@ check_word_timeout_cb (GbpSpellWidget *self)
 
   word = gtk_entry_get_text (self->word_entry);
 
-  if (!ide_str_empty0 (word))
+  if (!dzl_str_empty0 (word))
     {
       /* FIXME: suggestions can give a multiple-words suggestion
        * that failed to the checkword test, ex: auto tools
@@ -292,7 +292,7 @@ gbp_spell_widget__word_entry_changed_cb (GbpSpellWidget *self,
   _gbp_spell_widget_update_actions (self);
 
   word = gtk_entry_get_text (self->word_entry);
-  if (ide_str_empty0 (word) && self->spellchecking_status == TRUE)
+  if (dzl_str_empty0 (word) && self->spellchecking_status == TRUE)
     {
       word = gtk_label_get_text (self->word_label);
       gtk_entry_set_text (GTK_ENTRY (self->dict_word_entry), word);
@@ -420,7 +420,7 @@ dict_check_word_timeout_cb (GbpSpellWidget *self)
   self->dict_check_word_state = CHECK_WORD_CHECKING;
 
   word = gtk_entry_get_text (GTK_ENTRY (self->dict_word_entry));
-  if (!ide_str_empty0 (word))
+  if (!dzl_str_empty0 (word))
     {
       if (gbp_spell_dict_personal_contains (self->dict, word))
         gtk_widget_set_tooltip_text (self->dict_word_entry, _("This word is already in the personal dictionary"));
@@ -566,7 +566,7 @@ dict_create_word_row (GbpSpellWidget *self,
   GtkStyleContext *style_context;
 
   g_assert (GBP_IS_SPELL_WIDGET (self));
-  g_assert (!ide_str_empty0 (word));
+  g_assert (!dzl_str_empty0 (word));
 
   label = g_object_new (GTK_TYPE_LABEL,
                        "label", word,
@@ -618,7 +618,7 @@ gbp_spell_widget__add_button_clicked_cb (GbpSpellWidget *self,
   word = gtk_entry_get_text (GTK_ENTRY (self->dict_word_entry));
 
   /* TODO: check if word already in dict */
-  if (check_dict_available (self) && !ide_str_empty0 (word))
+  if (check_dict_available (self) && !dzl_str_empty0 (word))
     {
       if (!gbp_spell_dict_add_word_to_personal (self->dict, word))
         return;
@@ -701,7 +701,7 @@ gbp_spell_widget__language_notify_cb (GbpSpellWidget *self,
     {
       gspell_checker_set_language (checker, spell_language);
       fill_suggestions_box (self, word, &first_result);
-      if (!ide_str_empty0 (first_result))
+      if (!dzl_str_empty0 (first_result))
         {
           row = gtk_list_box_get_row_at_index (self->suggestions_box, 0);
           gtk_list_box_select_row (self->suggestions_box, row);
@@ -768,7 +768,7 @@ gbp_spell_widget__populate_popup_cb (GbpSpellWidget *self,
   checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
   text = gtk_entry_get_text (entry);
 
-  if (!self->is_word_entry_valid && !ide_str_empty0 (text))
+  if (!self->is_word_entry_valid && !dzl_str_empty0 (text))
     suggestions = gspell_checker_get_suggestions (checker, text, -1);
 
   if (suggestions == NULL)
@@ -1152,10 +1152,10 @@ _gbp_spell_widget_change (GbpSpellWidget *self,
   g_assert (GSPELL_IS_CHECKER (checker));
 
   word = gtk_label_get_text (self->word_label);
-  g_assert (!ide_str_empty0 (word));
+  g_assert (!dzl_str_empty0 (word));
 
   change_to = g_strdup (gtk_entry_get_text (self->word_entry));
-  g_assert (!ide_str_empty0 (change_to));
+  g_assert (!dzl_str_empty0 (change_to));
 
   navigator = gbp_spell_editor_view_addin_get_navigator (self->editor_view_addin);
   g_assert (navigator != NULL);

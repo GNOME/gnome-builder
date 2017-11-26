@@ -16,13 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-xml-parser.h"
+#define G_LOG_DOMAIN "ide-xml-parser-ui"
+
+#include <dazzle.h>
+
 #include "ide-xml-parser-ui.h"
+#include "ide-xml-parser.h"
 #include "ide-xml-sax.h"
 #include "ide-xml-stack.h"
 #include "ide-xml-tree-builder-utils-private.h"
-
-#include "ide-xml-parser-ui.h"
 
 static const gchar *
 get_attribute (const guchar **list,
@@ -32,7 +34,7 @@ get_attribute (const guchar **list,
   const gchar *value = NULL;
 
   value = list_get_attribute (list, name);
-  return ide_str_empty0 (value) ? ((replacement != NULL) ? replacement : NULL) : value;
+  return dzl_str_empty0 (value) ? ((replacement != NULL) ? replacement : NULL) : value;
 }
 
 static void
@@ -59,10 +61,10 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   string = g_string_new (NULL);
   parent_name = ide_xml_symbol_node_get_element_name (state->parent_node);
 
-  if (ide_str_equal0 (name, "property"))
+  if (dzl_str_equal0 (name, "property"))
     {
-      if (ide_str_equal0 (parent_name, "object") ||
-          ide_str_equal0 (parent_name, "template"))
+      if (dzl_str_equal0 (parent_name, "object") ||
+          dzl_str_equal0 (parent_name, "template"))
         {
           value = get_attribute (attributes, "name", NULL);
           node = ide_xml_symbol_node_new (value, NULL, "property", IDE_SYMBOL_UI_PROPERTY);
@@ -70,11 +72,11 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           state->build_state = BUILD_STATE_GET_CONTENT;
         }
     }
-  else if (ide_str_equal0 (name, "attribute"))
+  else if (dzl_str_equal0 (name, "attribute"))
     {
-      if (ide_str_equal0 (parent_name, "section") ||
-          ide_str_equal0 (parent_name, "submenu") ||
-          ide_str_equal0 (parent_name, "item"))
+      if (dzl_str_equal0 (parent_name, "section") ||
+          dzl_str_equal0 (parent_name, "submenu") ||
+          dzl_str_equal0 (parent_name, "item"))
         {
           value = get_attribute (attributes, "name", NULL);
           node = ide_xml_symbol_node_new (value, NULL, "attribute", IDE_SYMBOL_UI_MENU_ATTRIBUTE);
@@ -82,13 +84,13 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           state->build_state = BUILD_STATE_GET_CONTENT;
         }
     }
-  else if (ide_str_equal0 (name, "class") && ide_str_equal0 (parent_name, "style"))
+  else if (dzl_str_equal0 (name, "class") && dzl_str_equal0 (parent_name, "style"))
     {
       value = get_attribute (attributes, "name", NULL);
       node = ide_xml_symbol_node_new (value, NULL, "class", IDE_SYMBOL_UI_STYLE_CLASS);
       is_internal = TRUE;
     }
-  else if (ide_str_equal0 (name, "child"))
+  else if (dzl_str_equal0 (name, "child"))
     {
       g_string_append (string, "child");
 
@@ -109,7 +111,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       node = ide_xml_symbol_node_new (string->str, NULL, "child", IDE_SYMBOL_UI_CHILD);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
-  else if (ide_str_equal0 (name, "object"))
+  else if (dzl_str_equal0 (name, "object"))
     {
       value = get_attribute (attributes, "class", "?");
       label = ide_xml_parser_get_color_tag (self, "class", COLOR_TAG_CLASS, TRUE, TRUE, TRUE);
@@ -127,7 +129,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       node = ide_xml_symbol_node_new (string->str, NULL, "object", IDE_SYMBOL_UI_OBJECT);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
-  else if (ide_str_equal0 (name, "template"))
+  else if (dzl_str_equal0 (name, "template"))
     {
       value = get_attribute (attributes, "class", "?");
       label = ide_xml_parser_get_color_tag (self, "class", COLOR_TAG_CLASS, TRUE, TRUE, TRUE);
@@ -143,15 +145,15 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       node = ide_xml_symbol_node_new (string->str, NULL, (const gchar *)name, IDE_SYMBOL_UI_TEMPLATE);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
-  else if (ide_str_equal0 (name, "packing"))
+  else if (dzl_str_equal0 (name, "packing"))
     {
       node = ide_xml_symbol_node_new ("packing", NULL, "packing", IDE_SYMBOL_UI_PACKING);
     }
-  else if (ide_str_equal0 (name, "style"))
+  else if (dzl_str_equal0 (name, "style"))
     {
       node = ide_xml_symbol_node_new ("style", NULL, "style", IDE_SYMBOL_UI_STYLE);
     }
-  else if (ide_str_equal0 (name, "menu"))
+  else if (dzl_str_equal0 (name, "menu"))
     {
       value = get_attribute (attributes, "id", "?");
       label = ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
@@ -161,7 +163,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       node = ide_xml_symbol_node_new (string->str, NULL, "menu", IDE_SYMBOL_UI_MENU);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
-  else if (ide_str_equal0 (name, "submenu"))
+  else if (dzl_str_equal0 (name, "submenu"))
     {
       value = get_attribute (attributes, "id", "?");
       label = ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
@@ -171,7 +173,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       node = ide_xml_symbol_node_new (string->str, NULL, "submenu", IDE_SYMBOL_UI_SUBMENU);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
-  else if (ide_str_equal0 (name, "section"))
+  else if (dzl_str_equal0 (name, "section"))
     {
       value = get_attribute (attributes, "id", "?");
       label = ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
@@ -181,7 +183,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       node = ide_xml_symbol_node_new (string->str, NULL, "section", IDE_SYMBOL_UI_SECTION);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
-  else if (ide_str_equal0 (name, "item"))
+  else if (dzl_str_equal0 (name, "item"))
     {
       node = ide_xml_symbol_node_new ("item", NULL, "item", IDE_SYMBOL_UI_ITEM);
     }
@@ -204,7 +206,7 @@ get_menu_attribute_value (IdeXmlSymbolNode *node,
     {
       child = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_internal_child (node, i));
       if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_UI_MENU_ATTRIBUTE &&
-          ide_str_equal0 (ide_symbol_node_get_name (IDE_SYMBOL_NODE (child)), name))
+          dzl_str_equal0 (ide_symbol_node_get_name (IDE_SYMBOL_NODE (child)), name))
         {
           return ide_xml_symbol_node_get_value (child);
         }
@@ -235,7 +237,7 @@ node_post_processing_collect_style_classes (IdeXmlParser      *self,
       if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_UI_STYLE_CLASS)
         {
           name = ide_symbol_node_get_name (IDE_SYMBOL_NODE (child));
-          if (ide_str_empty0 (name))
+          if (dzl_str_empty0 (name))
             continue;
 
           class_tag = ide_xml_parser_get_color_tag (self, name, COLOR_TAG_STYLE_CLASS, TRUE, TRUE, TRUE);
@@ -303,11 +305,11 @@ ide_xml_parser_ui_post_processing (IdeXmlParser      *self,
 
       element_name = ide_xml_symbol_node_get_element_name (node);
 
-      if (ide_str_equal0 (element_name, "style"))
+      if (dzl_str_equal0 (element_name, "style"))
         node_post_processing_collect_style_classes (self, node);
-      else if (ide_str_equal0 (element_name, "item") ||
-               ide_str_equal0 (element_name, "submenu") ||
-               ide_str_equal0 (element_name, "section"))
+      else if (dzl_str_equal0 (element_name, "item") ||
+               dzl_str_equal0 (element_name, "submenu") ||
+               dzl_str_equal0 (element_name, "section"))
         node_post_processing_add_label (self, node);
     }
 

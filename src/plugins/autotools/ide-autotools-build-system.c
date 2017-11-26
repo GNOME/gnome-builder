@@ -214,7 +214,7 @@ looks_like_makefile (IdeBuffer *buffer)
 
       lang_id = gtk_source_language_get_id (language);
 
-      if (ide_str_equal0 (lang_id, "automake") || ide_str_equal0 (lang_id, "makefile"))
+      if (dzl_str_equal0 (lang_id, "automake") || dzl_str_equal0 (lang_id, "makefile"))
         return TRUE;
     }
 

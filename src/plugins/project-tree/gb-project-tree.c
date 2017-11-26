@@ -389,7 +389,7 @@ find_child_node (DzlTree     *tree,
 
       item_name = gb_project_file_get_display_name (GB_PROJECT_FILE (item));
 
-      return ide_str_equal0 (item_name, name);
+      return dzl_str_equal0 (item_name, name);
     }
 
   return FALSE;

@@ -114,7 +114,7 @@ cursor_is_recognized (TraversalState *state,
       cxloc = clang_getCursorLocation (cursor);
       clang_getFileLocation (cxloc, &file, NULL, NULL, NULL);
       filename = clang_getFileName (file);
-      ret = ide_str_equal0 (clang_getCString (filename), state->path);
+      ret = dzl_str_equal0 (clang_getCString (filename), state->path);
       clang_disposeString (filename);
       break;
 

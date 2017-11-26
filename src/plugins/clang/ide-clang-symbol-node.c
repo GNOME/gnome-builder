@@ -146,7 +146,7 @@ _ide_clang_symbol_node_new (IdeContext *context,
                        "context", context,
                        "kind", kind,
                        "flags", flags,
-                       "name", ide_str_empty0 (name) ? _("anonymous") : name,
+                       "name", dzl_str_empty0 (name) ? _("anonymous") : name,
                        NULL);
 
   self->cursor = cursor;

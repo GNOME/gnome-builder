@@ -375,7 +375,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
       line[line_len] = '\0';
 
-      if (ide_str_empty0 (line))
+      if (dzl_str_empty0 (line))
         continue;
 
       file = g_file_new_for_uri (line);

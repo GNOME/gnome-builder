@@ -153,7 +153,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
         }
 
       new_config_opts_string = g_strdup (ide_configuration_get_config_opts (IDE_CONFIGURATION (configuration)));
-      if (!ide_str_empty0 (new_config_opts_string))
+      if (!dzl_str_empty0 (new_config_opts_string))
         new_config_opts = g_strsplit (g_strstrip (new_config_opts_string), " ", 0);
 
       new_environ = ide_configuration_get_environ (IDE_CONFIGURATION (configuration));
@@ -211,7 +211,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
             }
 
           /* Replace the runtime with the user-chosen one */
-          if (!ide_str_empty0 (new_runtime_name))
+          if (!dzl_str_empty0 (new_runtime_name))
             {
               g_autoptr(GMatchInfo) match_info = NULL;
 
@@ -232,7 +232,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
             }
 
           /* Replace the runtime version with the user-chosen one */
-          if (!ide_str_empty0 (new_runtime_version))
+          if (!dzl_str_empty0 (new_runtime_version))
             {
               g_autoptr(GMatchInfo) match_info = NULL;
 
@@ -296,7 +296,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                       /* We're at the closing curly brace for build-options */
                       guint num_env;
                       num_env = g_strv_length (new_environ);
-                      if (num_env > 0 || !ide_str_empty0 (new_prefix))
+                      if (num_env > 0 || !dzl_str_empty0 (new_prefix))
                         {
                           g_autofree gchar *cflags_line = NULL;
                           g_autofree gchar *cxxflags_line = NULL;
@@ -342,7 +342,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                             {
                               gchar *line_ending;
 
-                              line_ending = (!ide_str_empty0 (new_prefix) || cxxflags_line != NULL || env_lines != NULL) ? "," : "";
+                              line_ending = (!dzl_str_empty0 (new_prefix) || cxxflags_line != NULL || env_lines != NULL) ? "," : "";
                               g_ptr_array_add (new_lines, g_strdup_printf ("%s%s", cflags_line, line_ending));
                             }
 
@@ -350,11 +350,11 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                             {
                               gchar *line_ending;
 
-                              line_ending = (!ide_str_empty0 (new_prefix) || env_lines != NULL) ? "," : "";
+                              line_ending = (!dzl_str_empty0 (new_prefix) || env_lines != NULL) ? "," : "";
                               g_ptr_array_add (new_lines, g_strdup_printf ("%s%s", cxxflags_line, line_ending));
                             }
 
-                          if (!ide_str_empty0 (new_prefix))
+                          if (!dzl_str_empty0 (new_prefix))
                             {
                               gchar *line_ending;
 
@@ -659,7 +659,7 @@ contains_id (GPtrArray   *ar,
 
       g_assert (IDE_IS_CONFIGURATION (configuration));
 
-      if (ide_str_equal0 (id, ide_configuration_get_id (configuration)))
+      if (dzl_str_equal0 (id, ide_configuration_get_id (configuration)))
         return TRUE;
     }
 
@@ -674,7 +674,7 @@ get_manifest_id (const gchar *path,
   g_autofree gchar *hash = NULL;
   gsize manifest_data_len = 0;
 
-  g_assert (!ide_str_empty0 (path));
+  g_assert (!dzl_str_empty0 (path));
 
   if (g_file_get_contents (path, &manifest_data, &manifest_data_len, NULL))
     {

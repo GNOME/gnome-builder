@@ -33,17 +33,17 @@ ide_ctags_get_allowed_suffixes (const gchar *lang_id)
   if (lang_id == NULL)
     return NULL;
 
-  if (ide_str_equal0 (lang_id, "c") || ide_str_equal0 (lang_id, "chdr") || ide_str_equal0 (lang_id, "cpp"))
+  if (dzl_str_equal0 (lang_id, "c") || dzl_str_equal0 (lang_id, "chdr") || dzl_str_equal0 (lang_id, "cpp"))
     return c_languages;
-  else if (ide_str_equal0 (lang_id, "vala"))
+  else if (dzl_str_equal0 (lang_id, "vala"))
     return vala_languages;
-  else if (ide_str_equal0 (lang_id, "python"))
+  else if (dzl_str_equal0 (lang_id, "python"))
     return python_languages;
-  else if (ide_str_equal0 (lang_id, "js"))
+  else if (dzl_str_equal0 (lang_id, "js"))
     return js_languages;
-  else if (ide_str_equal0 (lang_id, "html"))
+  else if (dzl_str_equal0 (lang_id, "html"))
     return html_languages;
-  else if (ide_str_equal0 (lang_id, "ruby"))
+  else if (dzl_str_equal0 (lang_id, "ruby"))
     return ruby_languages;
   else
     return NULL;
@@ -59,7 +59,7 @@ ide_ctags_is_allowed (const IdeCtagsIndexEntry *entry,
       gsize i;
 
       for (i = 0; allowed [i]; i++)
-        if (ide_str_equal0 (dotptr, allowed [i]))
+        if (dzl_str_equal0 (dotptr, allowed [i]))
           return TRUE;
     }
 

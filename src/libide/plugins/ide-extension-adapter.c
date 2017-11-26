@@ -294,7 +294,7 @@ ide_extension_adapter__changed_disabled (IdeExtensionAdapter *self,
   g_assert (IDE_IS_EXTENSION_ADAPTER (self));
   g_assert (G_IS_SETTINGS (settings));
 
-  if (ide_str_equal0 (changed_key, "disabled"))
+  if (dzl_str_equal0 (changed_key, "disabled"))
     ide_extension_adapter_queue_reload (self);
 }
 
@@ -463,7 +463,7 @@ ide_extension_adapter_set_key (IdeExtensionAdapter *self,
 {
   g_return_if_fail (IDE_IS_EXTENSION_ADAPTER (self));
 
-  if (!ide_str_equal0 (self->key, key))
+  if (!dzl_str_equal0 (self->key, key))
     {
       g_free (self->key);
       self->key = g_strdup (key);
@@ -486,7 +486,7 @@ ide_extension_adapter_set_value (IdeExtensionAdapter *self,
 {
   g_return_if_fail (IDE_IS_EXTENSION_ADAPTER (self));
 
-  if (!ide_str_equal0 (self->value, value))
+  if (!dzl_str_equal0 (self->value, value))
     {
       g_free (self->value);
       self->value = g_strdup (value);

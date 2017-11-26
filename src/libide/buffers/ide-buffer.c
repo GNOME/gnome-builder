@@ -694,7 +694,7 @@ ide_buffer_do_modeline (IdeBuffer *self)
   if (old_lang != NULL)
     old_id = gtk_source_language_get_id (old_lang);
 
-  if (old_id == NULL || !ide_str_equal0 (old_id, new_id))
+  if (old_id == NULL || !dzl_str_equal0 (old_id, new_id))
     _ide_file_set_content_type (ifile, content_type);
 }
 

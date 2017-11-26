@@ -175,7 +175,7 @@ gbp_spell_dict_personal_contains (GbpSpellDict *self,
 {
   g_assert (GBP_IS_SPELL_DICT (self));
 
-  if (self->words != NULL && !ide_str_empty0 (word))
+  if (self->words != NULL && !dzl_str_empty0 (word))
     return g_hash_table_contains (self->words, word);
 
   return FALSE;
@@ -186,7 +186,7 @@ gbp_spell_dict_add_word_to_personal (GbpSpellDict *self,
                                      const gchar  *word)
 {
   g_assert (GBP_IS_SPELL_DICT (self));
-  g_assert (!ide_str_empty0 (word));
+  g_assert (!dzl_str_empty0 (word));
 
  if (self->dict != NULL)
     {
@@ -209,7 +209,7 @@ gbp_spell_dict_remove_word_from_personal (GbpSpellDict *self,
                                           const gchar  *word)
 {
   g_assert (GBP_IS_SPELL_DICT (self));
-  g_assert (!ide_str_empty0 (word));
+  g_assert (!dzl_str_empty0 (word));
 
   if (self->dict != NULL)
     {

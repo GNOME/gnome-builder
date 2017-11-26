@@ -184,7 +184,7 @@ ide_application_plugins_enabled_changed (IdeApplication *self,
   gboolean enabled;
 
   g_assert (IDE_IS_APPLICATION (self));
-  g_assert (ide_str_equal0 (key, "enabled"));
+  g_assert (dzl_str_equal0 (key, "enabled"));
   g_assert (G_IS_SETTINGS (settings));
 
   enabled = g_settings_get_boolean (settings, key);

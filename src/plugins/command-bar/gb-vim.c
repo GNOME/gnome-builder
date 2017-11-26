@@ -447,7 +447,7 @@ gb_vim_command_edit (GtkWidget      *active_widget,
 
   g_assert (GTK_IS_WIDGET (active_widget));
 
-  if (ide_str_empty0 (options))
+  if (dzl_str_empty0 (options))
     {
       dzl_gtk_widget_action (GTK_WIDGET (active_widget), "win", "open-with-dialog", NULL);
       return TRUE;
@@ -485,7 +485,7 @@ gb_vim_command_tabe (GtkWidget      *active_widget,
 {
   g_assert (GTK_IS_WIDGET (active_widget));
 
-  if (!ide_str_empty0 (options))
+  if (!dzl_str_empty0 (options))
     return gb_vim_command_edit (active_widget, command, options, error);
 
   dzl_gtk_widget_action (GTK_WIDGET (active_widget), "editor", "new-file", NULL);
@@ -639,7 +639,7 @@ gb_vim_command_split (GtkWidget    *active_widget,
   if (!IDE_IS_LAYOUT_VIEW (active_widget))
     return gb_vim_set_no_view_error (error);
 
-  if (ide_str_empty0 (options))
+  if (dzl_str_empty0 (options))
     {
       variant = g_variant_new_string ("");
       dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "split-view", variant);
@@ -663,7 +663,7 @@ gb_vim_command_vsplit (GtkWidget    *active_widget,
   if (!IDE_IS_LAYOUT_VIEW (active_widget))
     return gb_vim_set_no_view_error (error);
 
-  if (ide_str_empty0 (options))
+  if (dzl_str_empty0 (options))
     {
       variant = g_variant_new_string ("");
       dzl_gtk_widget_action (GTK_WIDGET (active_widget), "layoutstack", "open-in-new-frame", variant);

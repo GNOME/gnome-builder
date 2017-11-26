@@ -22,6 +22,7 @@
 
 #define G_LOG_DOMAIN "ide-project-info"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -208,7 +209,7 @@ ide_project_info_set_build_system_name (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (self->build_system_name, build_system_name))
+  if (!dzl_str_equal0 (self->build_system_name, build_system_name))
     {
       g_free (self->build_system_name);
       self->build_system_name = g_strdup (build_system_name);
@@ -230,7 +231,7 @@ ide_project_info_set_description (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (self->description, description))
+  if (!dzl_str_equal0 (self->description, description))
     {
       g_free (self->description);
       self->description = g_strdup (description);
@@ -252,7 +253,7 @@ ide_project_info_set_name (IdeProjectInfo *self,
 {
   g_return_if_fail (IDE_IS_PROJECT_INFO (self));
 
-  if (!ide_str_equal0 (self->name, name))
+  if (!dzl_str_equal0 (self->name, name))
     {
       g_free (self->name);
       self->name = g_strdup (name);

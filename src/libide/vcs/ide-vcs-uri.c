@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -150,7 +151,7 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
           g_free (tmp);
         }
 
-      if (!ide_str_empty0 (portstr) && g_ascii_isdigit (portstr [1]))
+      if (!dzl_str_empty0 (portstr) && g_ascii_isdigit (portstr [1]))
         port = CLAMP (atoi (&portstr [1]), 1, G_MAXINT16);
 
       ide_vcs_uri_set_scheme (self, scheme);
@@ -306,7 +307,7 @@ ide_vcs_uri_set_scheme (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
-  if (ide_str_empty0 (scheme))
+  if (dzl_str_empty0 (scheme))
     scheme = NULL;
 
   if (scheme != self->scheme)
@@ -330,7 +331,7 @@ ide_vcs_uri_set_user (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
-  if (ide_str_empty0 (user))
+  if (dzl_str_empty0 (user))
     user = NULL;
 
   if (user != self->user)
@@ -354,7 +355,7 @@ ide_vcs_uri_set_host (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
-  if (ide_str_empty0 (host))
+  if (dzl_str_empty0 (host))
     host = NULL;
 
   if (host != self->host)
@@ -384,7 +385,7 @@ ide_vcs_uri_set_path (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
-  if (ide_str_empty0 (path))
+  if (dzl_str_empty0 (path))
     path = NULL;
 
   if (path != self->path)

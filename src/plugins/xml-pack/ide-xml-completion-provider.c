@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "xml-completion"
 
+#include <dazzle.h>
 #include <libpeas/peas.h>
 
 #include "ide-xml-completion-provider.h"
@@ -375,7 +376,7 @@ completion_item_new (const gchar     *label,
 {
   CompletionItem *item;
 
-  g_assert (!ide_str_empty0 (label));
+  g_assert (!dzl_str_empty0 (label));
   g_assert (define != NULL);
 
   item = g_slice_new0 (CompletionItem);
@@ -504,7 +505,7 @@ is_define_equal_node (IdeXmlRngDefine  *define,
   g_assert (define != NULL);
   g_assert (IDE_IS_XML_SYMBOL_NODE (node));
 
-  return ide_str_equal0 (ide_xml_symbol_node_get_element_name (node), define->name);
+  return dzl_str_equal0 (ide_xml_symbol_node_get_element_name (node), define->name);
 }
 
 static gboolean
@@ -517,7 +518,7 @@ is_element_matching (MatchingState *state)
   g_assert (state->define->type == IDE_XML_RNG_DEFINE_ELEMENT);
 
   /* XXX: we skip element without a name for now */
-  if (ide_str_empty0 ((gchar *)state->define->name))
+  if (dzl_str_empty0 ((gchar *)state->define->name))
     return FALSE;
 
   if (state->children->len == 0)
@@ -529,7 +530,7 @@ is_element_matching (MatchingState *state)
   if (state->candidate_node == node)
     {
       name = (gchar *)state->define->name;
-      if (ide_str_empty0 (state->prefix) || g_str_has_prefix ((gchar *)state->define->name, state->prefix))
+      if (dzl_str_empty0 (state->prefix) || g_str_has_prefix ((gchar *)state->define->name, state->prefix))
         {
           state->candidate_node = NULL;
           state->retry = TRUE;
@@ -848,7 +849,7 @@ get_values_proposals (IdeXmlPosition  *position,
   GList *results = NULL;
 
   node = ide_xml_position_get_child_node (position);
-  g_assert (!ide_str_empty0 (position->detail_name));
+  g_assert (!dzl_str_empty0 (position->detail_name));
 
   if (NULL != (attributes = ide_xml_completion_attributes_get_matches (define, node, FALSE)))
     {
@@ -863,7 +864,7 @@ get_values_proposals (IdeXmlPosition  *position,
       for (gint j = 0; j < attributes->len; ++j)
         {
           match_item = g_ptr_array_index (attributes, j);
-          if (ide_str_equal0 (detail_name, match_item->name))
+          if (dzl_str_equal0 (detail_name, match_item->name))
             {
               attr_define = match_item->define;
               break;

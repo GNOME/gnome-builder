@@ -143,7 +143,7 @@ ide_layout_stack_actions_open_in_new_frame (GSimpleAction *action,
   g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
   filepath = g_variant_get_string (variant, NULL);
-  if (!ide_str_empty0 (filepath))
+  if (!dzl_str_empty0 (filepath))
     {
       IdeContext *context;
       IdeBufferManager *buffer_manager;
@@ -235,7 +235,7 @@ ide_layout_stack_actions_split_view (GSimpleAction *action,
     }
 
   filepath = g_variant_get_string (variant, NULL);
-  if (!ide_str_empty0 (filepath))
+  if (!dzl_str_empty0 (filepath))
     {
       IdeContext *context;
       IdeBufferManager *buffer_manager;

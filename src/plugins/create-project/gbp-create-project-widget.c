@@ -166,7 +166,7 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
   text = gtk_entry_get_text (entry);
   project_name = g_strstrip (g_strdup (text));
 
-  if (ide_str_empty0 (project_name) || !validate_name (project_name))
+  if (dzl_str_empty0 (project_name) || !validate_name (project_name))
     {
       g_object_set (self->project_name_entry,
                     "secondary-icon-name", "dialog-warning-symbolic",
@@ -208,7 +208,7 @@ update_language_sensitivity (GtkWidget *widget,
 
   language = dzl_radio_box_get_active_id (self->project_language_chooser);
 
-  if (ide_str_empty0 (language))
+  if (dzl_str_empty0 (language))
     goto apply;
 
   template_icon = GBP_CREATE_PROJECT_TEMPLATE_ICON (gtk_bin_get_child (GTK_BIN (widget)));
@@ -378,12 +378,12 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   text = gtk_entry_get_text (self->project_name_entry);
   project_name = g_strstrip (g_strdup (text));
 
-  if (ide_str_empty0 (project_name) || !validate_name (project_name))
+  if (dzl_str_empty0 (project_name) || !validate_name (project_name))
     return FALSE;
 
   language = dzl_radio_box_get_active_id (self->project_language_chooser);
 
-  if (ide_str_empty0 (language))
+  if (dzl_str_empty0 (language))
     return FALSE;
 
   selected_template = gtk_flow_box_get_selected_children (self->project_template_chooser);
@@ -688,7 +688,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
         }
     }
 
-  if (G_VALUE_HOLDS_STRING (&str) && !ide_str_empty0 (g_value_get_string (&str)))
+  if (G_VALUE_HOLDS_STRING (&str) && !dzl_str_empty0 (g_value_get_string (&str)))
     author_name = g_value_get_string (&str);
   else
     author_name = g_get_real_name ();

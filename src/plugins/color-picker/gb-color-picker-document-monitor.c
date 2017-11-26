@@ -127,7 +127,7 @@ collect_tag_names (GtkTextTag *tag,
   g_assert (taglist != NULL);
 
   g_object_get (G_OBJECT (tag), "name", &name, NULL);
-  if (!ide_str_empty0 (name) && g_str_has_prefix (name, COLOR_TAG_PREFIX))
+  if (!dzl_str_empty0 (name) && g_str_has_prefix (name, COLOR_TAG_PREFIX))
     g_ptr_array_add (taglist, g_steal_pointer (&name));
 }
 
@@ -332,7 +332,7 @@ remove_tag_cb (GbColorPickerDocumentMonitor *self,
   tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self->buffer));
   g_object_get (G_OBJECT (tag), "name", &name, NULL);
 
-  if (!ide_str_empty0 (name) &&
+  if (!dzl_str_empty0 (name) &&
       g_str_has_prefix (name, COLOR_TAG_PREFIX) &&
       gtk_text_tag_table_lookup (tag_table, name))
     gtk_text_tag_table_remove (tag_table, tag);

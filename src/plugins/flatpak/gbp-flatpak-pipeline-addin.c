@@ -216,7 +216,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
    * If we got here by using a non-flatpak configuration, then there is a
    * chance we don't have a valid app-id.
    */
-  if (ide_str_empty0 (app_id))
+  if (dzl_str_empty0 (app_id))
     app_id = "com.example.App";
 
   if (platform == NULL && sdk == NULL)

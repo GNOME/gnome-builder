@@ -161,8 +161,8 @@ is_valid_rng_node (xmlNode     *node,
   return (node != NULL &&
           node->ns != NULL &&
           node->type == XML_ELEMENT_NODE &&
-          ide_str_equal0 (node->name, name) &&
-          ide_str_equal0 (node->ns->href, xmlRelaxNGNs));
+          dzl_str_equal0 (node->name, name) &&
+          dzl_str_equal0 (node->ns->href, xmlRelaxNGNs));
 }
 
 static inline gboolean
@@ -220,7 +220,7 @@ static gint
 compare_href_func (XmlDocument *xml_doc,
                    gchar       *href)
 {
-  return !ide_str_equal0 (href, xml_doc->href);
+  return !dzl_str_equal0 (href, xml_doc->href);
 }
 
 static XmlDocument *
@@ -283,7 +283,7 @@ ide_xml_remove_redefine (IdeXmlRngParser *self,
 
           if (name_tmp != NULL)
             {
-              if (ide_str_equal0 (name, name_tmp))
+              if (dzl_str_equal0 (name, name_tmp))
                 remove_node (node);
             }
         }
@@ -293,7 +293,7 @@ ide_xml_remove_redefine (IdeXmlRngParser *self,
           if (inc_doc != NULL &&
               inc_doc->doc != NULL &&
               inc_doc->doc->children != NULL &&
-              ide_str_equal0 (inc_doc->doc->children->name, "grammar"))
+              dzl_str_equal0 (inc_doc->doc->children->name, "grammar"))
             {
               inc_root = xmlDocGetRootElement (inc_doc->doc);
               ide_xml_remove_redefine (self, inc_root->children, name);
@@ -316,7 +316,7 @@ load_include (IdeXmlRngParser *self,
 
   g_assert (IDE_IS_XML_RNG_PARSER (self));
   g_assert (node != NULL);
-  g_assert (!ide_str_empty0 (url));
+  g_assert (!dzl_str_empty0 (url));
 
   if (NULL != (xml_include_docs_stack_lookup (self, url)) ||
       NULL == (ns = get_node_closest_ns (node)) ||
@@ -375,7 +375,7 @@ load_externalref (IdeXmlRngParser *self,
 
   g_assert (IDE_IS_XML_RNG_PARSER (self));
   g_assert (node != NULL);
-  g_assert (!ide_str_empty0 (url));
+  g_assert (!dzl_str_empty0 (url));
 
   if (NULL != (xml_externalref_docs_stack_lookup (self, url)) ||
       NULL == (ns = get_node_closest_ns (node)) ||
@@ -424,14 +424,14 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
 
       if (current->type == XML_ELEMENT_NODE)
         {
-          if (current->ns == NULL || !ide_str_equal0 (current->ns->href, xmlRelaxNGNs))
+          if (current->ns == NULL || !dzl_str_equal0 (current->ns->href, xmlRelaxNGNs))
             {
               delete = current;
               goto next_node;
             }
           else
             {
-              if (ide_str_equal0 (current->name, "externalRef"))
+              if (dzl_str_equal0 (current->name, "externalRef"))
                 {
                   if (NULL == (href_url = build_url (root->doc, current)) ||
                       NULL == (ext_doc = load_externalref (self, current, (const gchar *)href_url)))
@@ -442,7 +442,7 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
 
                   current->psvi = ext_doc;
                 }
-              else if (ide_str_equal0 (current->name, "include"))
+              else if (dzl_str_equal0 (current->name, "include"))
                 {
                   if (NULL == (href_url = build_url (root->doc, current)) ||
                       NULL == (ext_doc = load_include (self, current, (const gchar *)href_url)))
@@ -453,8 +453,8 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
 
                   current->psvi = ext_doc;
                 }
-              else if (ide_str_equal0 (current->name, "element") ||
-                       ide_str_equal0 (current->name, "attribute"))
+              else if (dzl_str_equal0 (current->name, "element") ||
+                       dzl_str_equal0 (current->name, "attribute"))
                 {
                   xmlNode *text_node;
                   xmlNode *doc_node;
@@ -477,13 +477,13 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
                       xmlUnsetProp (current, (const guchar *)"name");
                       if (NULL != (ns = xmlGetProp (current, NS_PROP)))
                         xmlSetProp (text_node, NS_PROP, ns);
-                      else if (ide_str_equal0 (current->name, "attribute"))
+                      else if (dzl_str_equal0 (current->name, "attribute"))
                         xmlSetProp (text_node, NS_PROP, (const guchar *)"");
                     }
                 }
-              else if (ide_str_equal0 (current->name, "name") ||
-                       ide_str_equal0 (current->name, "nsname") ||
-                       ide_str_equal0 (current->name, "value"))
+              else if (dzl_str_equal0 (current->name, "name") ||
+                       dzl_str_equal0 (current->name, "nsname") ||
+                       dzl_str_equal0 (current->name, "value"))
                 {
                   if (xmlHasProp (current, NS_PROP) == NULL)
                     {
@@ -505,7 +505,7 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
                         xmlSetProp (current, NS_PROP, ns);
                     }
 
-                  if (ide_str_equal0 (current->name, "name"))
+                  if (dzl_str_equal0 (current->name, "name"))
                     {
                       g_autoxmlfree guchar *name = NULL;
                       g_autoxmlfree guchar *local = NULL;
@@ -524,18 +524,18 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
                         }
                     }
                 }
-              else if (ide_str_equal0 (current->name, "except") && current != root)
+              else if (dzl_str_equal0 (current->name, "except") && current != root)
                 {
                     if (current->parent != NULL &&
-                        (ide_str_equal0 (current->parent->name, "anyName") ||
-                         ide_str_equal0 (current->parent->name, "nsName")))
+                        (dzl_str_equal0 (current->parent->name, "anyName") ||
+                         dzl_str_equal0 (current->parent->name, "nsName")))
                       {
                         ide_xml_rng_parser_cleanup (self, current);
                         goto next_node;
                       }
                 }
 
-              if (ide_str_equal0 (current->name, "div"))
+              if (dzl_str_equal0 (current->name, "div"))
                 {
                   g_autoxmlfree guchar *ns = NULL;
                   xmlNode *child;
@@ -578,8 +578,8 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
             {
               if (current->parent != NULL && current->parent->type == XML_ELEMENT_NODE)
                 {
-                  if (!ide_str_equal0 (current->parent->name, "value") &&
-                      !ide_str_equal0 (current->parent->name, "param"))
+                  if (!dzl_str_equal0 (current->parent->name, "value") &&
+                      !dzl_str_equal0 (current->parent->name, "param"))
                     delete = current;
                 }
               else
@@ -1097,7 +1097,7 @@ parse_pattern (IdeXmlRngParser *self,
   else if (is_valid_rng_node (node, "ref"))
     {
       name = _strip (xmlGetProp (node, (const guchar *)"name"));
-      if (!ide_str_empty0 ((gchar *)name))
+      if (!dzl_str_empty0 ((gchar *)name))
         {
           def = ide_xml_rng_define_new (node, parent, name, IDE_XML_RNG_DEFINE_REF);
           ide_xml_hash_table_add (self->grammars->refs, (gchar *)def->name, ide_xml_rng_define_ref (def));
@@ -1412,7 +1412,7 @@ parse_include (IdeXmlRngParser *self,
 
   if (NULL != (include = node->psvi) &&
       NULL != (root = xmlDocGetRootElement(include->doc)) &&
-      ide_str_equal0 (root->name, "grammar") &&
+      dzl_str_equal0 (root->name, "grammar") &&
       root->children != NULL)
     {
       parse_grammar_content (self, root->children);
@@ -1442,16 +1442,16 @@ merge_starts (IdeXmlRngParser  *self,
       combine = NULL;
       if (current->node != NULL &&
           current->node->parent != NULL &&
-          ide_str_equal0 (current->node->parent->name, "start"))
+          dzl_str_equal0 (current->node->parent->name, "start"))
         {
           if (NULL != (combine = xmlGetProp(current->node->parent, (const guchar *)"combine")))
             {
-              if (ide_str_equal0 (combine, "choice"))
+              if (dzl_str_equal0 (combine, "choice"))
                 {
                   if (combine_type == XML_RNG_COMBINE_UNDEF)
                     combine_type = XML_RNG_COMBINE_CHOICE;
                 }
-              else if (ide_str_equal0 (combine, "interleave"))
+              else if (dzl_str_equal0 (combine, "interleave"))
                 {
                   if (combine_type == XML_RNG_COMBINE_UNDEF)
                     combine_type = XML_RNG_COMBINE_INTERLEAVE;
@@ -1503,12 +1503,12 @@ merge_defines_func (const gchar *name,
       current = g_ptr_array_index (array, i);
       if (NULL != (combine = xmlGetProp(current->node, (const guchar *)"combine")))
         {
-          if (ide_str_equal0 (combine, "choice"))
+          if (dzl_str_equal0 (combine, "choice"))
             {
               if (combine_type == XML_RNG_COMBINE_UNDEF)
                 combine_type = XML_RNG_COMBINE_CHOICE;
             }
-          else if (ide_str_equal0 (combine, "interleave"))
+          else if (dzl_str_equal0 (combine, "interleave"))
             {
               if (combine_type == XML_RNG_COMBINE_UNDEF)
                 combine_type = XML_RNG_COMBINE_INTERLEAVE;

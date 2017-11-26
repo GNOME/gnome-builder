@@ -77,8 +77,8 @@ gb_beautifier_config_check_duplicates (GbBeautifierEditorAddin *self,
 {
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (entries != NULL);
-  g_assert (!ide_str_empty0 (lang_id));
-  g_assert (!ide_str_empty0 (display_name));
+  g_assert (!dzl_str_empty0 (lang_id));
+  g_assert (!dzl_str_empty0 (display_name));
 
   for (guint i = 0; i < entries->len; ++i)
     {
@@ -103,7 +103,7 @@ gb_beautifier_map_check_duplicates (GbBeautifierEditorAddin *self,
 {
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (map != NULL);
-  g_assert (!ide_str_empty0 (lang_id));
+  g_assert (!dzl_str_empty0 (lang_id));
 
   for (guint i = 0; i < map->len; ++i)
     {
@@ -139,9 +139,9 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
   GError *error = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!ide_str_empty0 (base_path));
-  g_assert (!ide_str_empty0 (lang_id));
-  g_assert (!ide_str_empty0 (real_lang_id));
+  g_assert (!dzl_str_empty0 (base_path));
+  g_assert (!dzl_str_empty0 (lang_id));
+  g_assert (!dzl_str_empty0 (real_lang_id));
   g_assert (entries != NULL);
 
   *has_default = FALSE;
@@ -311,7 +311,7 @@ add_entries_from_base_path (GbBeautifierEditorAddin *self,
   gboolean ret_has_default = FALSE;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!ide_str_empty0 (base_path));
+  g_assert (!dzl_str_empty0 (base_path));
   g_assert (entries != NULL);
   g_assert (map != NULL);
 
@@ -389,7 +389,7 @@ gb_beautifier_config_get_map (GbBeautifierEditorAddin *self,
   GError *error = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!ide_str_empty0 (path));
+  g_assert (!dzl_str_empty0 (path));
 
   map = g_array_new (TRUE, TRUE, sizeof (GbBeautifierMapEntry));
   g_array_set_clear_func (map, map_entry_clear_func);

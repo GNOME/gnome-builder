@@ -268,7 +268,7 @@ ide_terminal_copy_link_address (IdeTerminal *self)
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (priv->url != NULL);
 
-  if (ide_str_empty0 (priv->url))
+  if (dzl_str_empty0 (priv->url))
     return FALSE;
 
   gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD),
@@ -287,7 +287,7 @@ ide_terminal_open_link (IdeTerminal *self)
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (priv->url != NULL);
 
-  if (ide_str_empty0 (priv->url))
+  if (dzl_str_empty0 (priv->url))
     return FALSE;
 
   if (NULL != (app = GTK_APPLICATION (g_application_get_default ())) &&
@@ -480,7 +480,7 @@ ide_terminal_init (IdeTerminal *self)
       const gchar *pattern = url_regexes[i];
       gint tag;
 
-      regex = vte_regex_new_for_match (pattern, IDE_LITERAL_LENGTH (pattern),
+      regex = vte_regex_new_for_match (pattern, DZL_LITERAL_LENGTH (pattern),
                                        VTE_REGEX_FLAGS_DEFAULT | BUILDER_PCRE2_MULTILINE,
                                        NULL);
       tag = vte_terminal_match_add_regex (VTE_TERMINAL (self), regex, 0);

@@ -417,7 +417,7 @@ gbp_todo_model_mine_worker (GTask        *task,
           continue;
         }
 
-      if (ide_str_empty0 (line))
+      if (dzl_str_empty0 (line))
         continue;
 
       /* Try to match the first line */

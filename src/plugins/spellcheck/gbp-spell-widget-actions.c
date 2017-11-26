@@ -80,7 +80,7 @@ gbp_spell_widget_actions_ignore_all (GSimpleAction *action,
       checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
       word = gtk_label_get_text (self->word_label);
 
-      if (!ide_str_empty0 (word))
+      if (!dzl_str_empty0 (word))
         {
           gspell_checker_add_word_to_session (checker, word, -1);
           _gbp_spell_widget_move_next_word (self);

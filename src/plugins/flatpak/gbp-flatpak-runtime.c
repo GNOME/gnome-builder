@@ -192,7 +192,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ccache_dir = g_build_filename (project_path, ".flatpak-builder", "ccache", NULL);
       ide_subprocess_launcher_setenv (ret, "CCACHE_DIR", ccache_dir, FALSE);
 
-      if (!ide_str_empty0 (project_path))
+      if (!dzl_str_empty0 (project_path))
         {
           g_autofree gchar *filesystem_option_src = NULL;
           g_autofree gchar *filesystem_option_build = NULL;
@@ -245,7 +245,7 @@ get_binary_name (GbpFlatpakRuntime *self,
       const gchar *command;
 
       command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
-      if (!ide_str_empty0 (command))
+      if (!dzl_str_empty0 (command))
         return g_strdup (command);
     }
 
@@ -254,7 +254,7 @@ get_binary_name (GbpFlatpakRuntime *self,
     g_autofree gchar *build_target_name = NULL;
 
     build_target_name = ide_build_target_get_name (build_target);
-    if (!ide_str_empty0 (build_target_name))
+    if (!dzl_str_empty0 (build_target_name))
       return g_steal_pointer (&build_target_name);
   }
 
@@ -396,7 +396,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
 
           translated = g_build_filename (runtime_dir,
                                          "source",
-                                         path + IDE_LITERAL_LENGTH ("/run/build-runtime/"),
+                                         path + DZL_LITERAL_LENGTH ("/run/build-runtime/"),
                                          NULL);
           return g_file_new_for_path (translated);
         }
@@ -412,7 +412,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
           g_autofree gchar *translated = NULL;
 
           translated = g_build_filename (debug_dir,
-                                         path + IDE_LITERAL_LENGTH ("/usr/lib/debug/"),
+                                         path + DZL_LITERAL_LENGTH ("/usr/lib/debug/"),
                                          NULL);
           return g_file_new_for_path (translated);
         }
@@ -422,7 +422,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
     return g_object_ref (self->deploy_dir_files);
 
   if (g_str_has_prefix (path, "/usr/"))
-    return g_file_get_child (self->deploy_dir_files, path + IDE_LITERAL_LENGTH ("/usr/"));
+    return g_file_get_child (self->deploy_dir_files, path + DZL_LITERAL_LENGTH ("/usr/"));
 
   build_dir = get_staging_directory (self);
   app_files_path = g_build_filename (build_dir, "files", NULL);
@@ -435,7 +435,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
       g_autofree gchar *translated = NULL;
 
       translated = g_build_filename (app_files_path,
-                                     path + IDE_LITERAL_LENGTH ("/app/"),
+                                     path + DZL_LITERAL_LENGTH ("/app/"),
                                      NULL);
       return g_file_new_for_path (translated);
     }

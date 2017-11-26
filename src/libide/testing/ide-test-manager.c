@@ -181,7 +181,7 @@ ide_test_manager_locate_group (IdeTestManager *self,
                               IDE_TEST_COLUMN_GROUP, &row_group,
                               -1);
 
-          if (ide_str_equal0 (row_group, group))
+          if (dzl_str_equal0 (row_group, group))
             return;
         }
       while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->tests_store), iter));

@@ -576,7 +576,7 @@ gbp_cmake_build_system_init_worker (GTask        *task,
 
   name = g_file_get_basename (project_file);
 
-  if (ide_str_equal0 (name, "CMakeLists.txt"))
+  if (dzl_str_equal0 (name, "CMakeLists.txt"))
     {
       g_task_return_pointer (task, g_object_ref (project_file), g_object_unref);
       IDE_EXIT;

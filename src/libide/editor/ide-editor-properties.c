@@ -267,7 +267,7 @@ ide_editor_properties_entry_changed (IdeEditorProperties *self,
   text = gtk_entry_get_text (GTK_ENTRY (entry));
 
   /* Clear any previous filter */
-  if (ide_str_empty0 (text))
+  if (dzl_str_empty0 (text))
     {
       gtk_tree_view_set_model (self->tree_view, GTK_TREE_MODEL (self->languages));
       return;

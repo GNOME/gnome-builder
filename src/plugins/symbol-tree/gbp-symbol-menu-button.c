@@ -71,7 +71,7 @@ gbp_symbol_menu_button_search_changed (GbpSymbolMenuButton *self,
 
   text = gtk_entry_get_text (GTK_ENTRY (search_entry));
 
-  if (ide_str_empty0 (text))
+  if (dzl_str_empty0 (text))
     dzl_tree_set_filter (self->tree, NULL, NULL, NULL);
   else
     dzl_tree_set_filter (self->tree,
@@ -274,7 +274,7 @@ gbp_symbol_menu_button_set_symbol (GbpSymbolMenuButton *self,
       title = ide_symbol_get_name (symbol);
     }
 
-  if (ide_str_empty0 (title))
+  if (dzl_str_empty0 (title))
     {
       title = _("Select Symbol…");
       icon_name = NULL;

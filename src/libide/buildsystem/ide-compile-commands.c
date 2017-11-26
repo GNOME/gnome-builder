@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-compile-commands"
 
+#include <dazzle.h>
 #include <json-glib/json-glib.h>
 #include <string.h>
 
@@ -506,12 +507,12 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
 
         default:
           if (g_str_has_prefix (param, "-std=") ||
-              ide_str_equal0 (param, "-pthread") ||
+              dzl_str_equal0 (param, "-pthread") ||
               g_str_has_prefix (param, "-isystem"))
             {
               g_ptr_array_add (ar, g_strdup (param));
             }
-          else if (next != NULL && ide_str_equal0 (param, "-include"))
+          else if (next != NULL && dzl_str_equal0 (param, "-include"))
             {
               g_ptr_array_add (ar, g_strdup (param));
               g_ptr_array_add (ar, ide_compile_commands_resolve (self, info, next));
@@ -652,7 +653,7 @@ ide_compile_commands_lookup (IdeCompileCommands   *self,
    * document we stored information about each of the Vala files in a special
    * list for exactly this purpose.
    */
-  if (ide_str_equal0 (dot, ".vala") && self->vala_info != NULL)
+  if (dzl_str_equal0 (dot, ".vala") && self->vala_info != NULL)
     {
       for (guint i = 0; i < self->vala_info->len; i++)
         {

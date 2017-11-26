@@ -245,13 +245,13 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
 
           target = gbp_meson_build_target_new (context, dir, base);
 
-          found_bindir |= ide_str_equal0 (name_of_dir, "bin");
+          found_bindir |= dzl_str_equal0 (name_of_dir, "bin");
 
           /*
            * Until Builder supports selecting a target to run, we need to prefer
            * bindir targets over other targets.
            */
-          if (ide_str_equal0 (name_of_dir, "bin") && ide_str_equal0 (type, "executable"))
+          if (dzl_str_equal0 (name_of_dir, "bin") && dzl_str_equal0 (type, "executable"))
             g_ptr_array_insert (ret, 0, g_steal_pointer (&target));
           else
             g_ptr_array_add (ret, g_steal_pointer (&target));

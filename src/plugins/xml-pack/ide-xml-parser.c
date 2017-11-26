@@ -182,7 +182,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
     {
       erroneous_element_name = ide_xml_symbol_node_get_element_name (state->parent_node);
       /* TODO: we need better node comparaison (ns) here */
-      if (!ide_str_equal0 (erroneous_element_name, element_name))
+      if (!dzl_str_equal0 (erroneous_element_name, element_name))
         {
           if (ide_xml_stack_is_empty (self->stack))
             goto error;
@@ -225,7 +225,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
                 goto error;
 
               popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
-              if (ide_str_equal0 (popped_element_name, element_name))
+              if (dzl_str_equal0 (popped_element_name, element_name))
                 {
                   ide_xml_symbol_node_set_end_tag_location (popped_node,
                                                             start_line, start_line_offset,
@@ -483,9 +483,9 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
       if (NULL != (extension = strrchr (schema_url, '.')))
         {
           ++extension;
-          if (ide_str_equal0 (extension, "rng"))
+          if (dzl_str_equal0 (extension, "rng"))
             kind = SCHEMA_KIND_RNG;
-          else if (ide_str_equal0 (extension, "xsd"))
+          else if (dzl_str_equal0 (extension, "xsd"))
             kind = SCHEMA_KIND_XML_SCHEMA;
           else
             goto fail;
@@ -663,7 +663,7 @@ ide_xml_parser_get_color_tag (IdeXmlParser *self,
 
   g_assert (IDE_IS_XML_PARSER (self));
   g_assert (self->color_tags != NULL);
-  g_assert (!ide_str_empty0 (str));
+  g_assert (!dzl_str_empty0 (str));
 
   tag = &g_array_index (self->color_tags, ColorTag, id);
   return g_strdup_printf ("%s<span foreground=\"%s\" background=\"%s\">%s%s%s</span>%s",
@@ -751,7 +751,7 @@ editor_settings_changed_cb (IdeXmlParser *self,
 {
   g_assert (IDE_IS_XML_PARSER (self));
 
-  if (ide_str_equal0 (key, "style-scheme-name"))
+  if (dzl_str_equal0 (key, "style-scheme-name"))
     init_color_tags (self);
 }
 

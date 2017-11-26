@@ -166,7 +166,7 @@ ide_greeter_project_row_add_tags (IdeGreeterProjectRow *self,
     }
 
   build_system_name = ide_project_info_get_build_system_name (project_info);
-  if (!ide_str_empty0 (build_system_name))
+  if (!dzl_str_empty0 (build_system_name))
     {
       GtkWidget *pill;
 
