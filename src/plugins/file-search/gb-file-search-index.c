@@ -164,18 +164,28 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
       g_autoptr(GFileInfo) file_info = file_info_ptr;
       g_autofree gchar *path = NULL;
       g_autoptr(GFile) file = NULL;
+      GFileType file_type;
       const gchar *name;
 
       name = g_file_info_get_display_name (file_info);
       file = g_file_get_child (directory, name);
 
-      if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
+      file_type = g_file_info_get_file_type (file_info);
+
+      if (file_type == G_FILE_TYPE_DIRECTORY)
         {
           if (children == NULL)
             children = g_ptr_array_new_with_free_func (g_object_unref);
           g_ptr_array_add (children, g_object_ref (file));
           continue;
         }
+
+      /* We only want to index regular files, and ignore symlinks.  If the
+       * symlink points to something else in-tree, we'll index it in the
+       * rightful place.
+       */
+      if (file_type != G_FILE_TYPE_REGULAR)
+        continue;
 
       if (ide_vcs_is_ignored (vcs, file, NULL))
         continue;
