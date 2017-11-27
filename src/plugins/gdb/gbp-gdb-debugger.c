@@ -2447,7 +2447,7 @@ gbp_gdb_debugger_dispose (GObject *object)
   g_queue_foreach (&self->writequeue, (GFunc)g_bytes_unref, NULL);
   g_queue_clear (&self->writequeue);
 
-  G_OBJECT_CLASS (gbp_gdb_debugger_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_gdb_debugger_parent_class)->dispose (object);
 }
 
 static void
