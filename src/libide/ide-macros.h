@@ -18,15 +18,8 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <string.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
-
-#if __GNUC__ >= 7
-# define IDE_FALLTHROUGH __attribute__((fallthrough))
-#else
-# define IDE_FALLTHROUGH
-#endif
 
 G_END_DECLS

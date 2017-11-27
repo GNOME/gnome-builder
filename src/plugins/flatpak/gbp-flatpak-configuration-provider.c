@@ -751,7 +751,9 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
       else
         g_clear_pointer (&filename, g_free);
       new_config_file = other_file;
-      IDE_FALLTHROUGH;
+#if G_GNUC_CHECK_VERSION(7,0)
+      __attribute__((fallthrough));
+#endif
     case G_FILE_MONITOR_EVENT_CREATED:
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     case G_FILE_MONITOR_EVENT_MOVED_IN:
