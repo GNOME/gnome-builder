@@ -187,6 +187,8 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
 
   if (build_target != NULL)
     {
+      ide_runner_set_build_target (runner, build_target);
+
       installdir = ide_build_target_get_install_directory (build_target);
       argv = ide_build_target_get_argv (build_target);
       cwd = ide_build_target_get_cwd (build_target);

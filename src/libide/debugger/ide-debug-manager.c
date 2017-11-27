@@ -27,6 +27,7 @@
 
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
+#include "buildsystem/ide-build-target.h"
 #include "debugger/ide-debug-manager.h"
 #include "debugger/ide-debugger.h"
 #include "debugger/ide-debugger-private.h"
@@ -699,6 +700,27 @@ ide_debug_manager_init (IdeDebugManager *self)
                                     self);
 }
 
+static gboolean
+debugger_supports_language (PeasPluginInfo *plugin_info,
+                            const gchar    *language)
+{
+  const gchar *supported;
+
+  supported = peas_plugin_info_get_external_data (plugin_info, "Debugger-Languages");
+
+  if (supported != NULL)
+    {
+      g_auto(GStrv) languages = g_strsplit (supported, ",", 0);
+      for (guint i = 0; languages[i]; i++)
+        {
+          if (g_strcmp0 (languages[i], language) == 0)
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 debugger_lookup (PeasExtensionSet *set,
                  PeasPluginInfo   *plugin_info,
@@ -716,6 +738,16 @@ debugger_lookup (PeasExtensionSet *set,
 
   if (ide_debugger_supports_runner (debugger, lookup->runner, &priority))
     {
+      IdeBuildTarget *build_target = ide_runner_get_build_target (lookup->runner);
+
+      if (build_target != NULL)
+        {
+          g_autofree gchar *language = ide_build_target_get_language (build_target);
+
+          if (!debugger_supports_language (plugin_info, language))
+            return;
+        }
+
       if (lookup->debugger == NULL || priority < lookup->priority)
         {
           g_set_object (&lookup->debugger, debugger);

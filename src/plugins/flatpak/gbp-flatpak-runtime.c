@@ -275,6 +275,7 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   g_autofree gchar *build_path = NULL;
   g_autofree gchar *binary_name = NULL;
   IdeContext *context;
+  IdeRunner *runner;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (!build_target || IDE_IS_BUILD_TARGET (build_target));
@@ -285,7 +286,11 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   if (build_target != NULL)
     binary_name = get_binary_name (self, build_target);
 
-  return IDE_RUNNER (gbp_flatpak_runner_new (context, build_path, binary_name));
+  runner = IDE_RUNNER (gbp_flatpak_runner_new (context, build_path, binary_name));
+  if (build_target != NULL)
+    ide_runner_set_build_target (runner, build_target);
+
+  return runner;
 }
 
 static void

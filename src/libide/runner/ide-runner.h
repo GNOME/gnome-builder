@@ -135,4 +135,10 @@ void               ide_runner_set_tty         (IdeRunner            *self,
 IDE_AVAILABLE_IN_ALL
 gint               ide_runner_steal_tty       (IdeRunner            *self);
 
+IDE_AVAILABLE_IN_3_28
+IdeBuildTarget    *ide_runner_get_build_target(IdeRunner            *self);
+IDE_AVAILABLE_IN_3_28
+void               ide_runner_set_build_target(IdeRunner            *self,
+                                               IdeBuildTarget       *build_target);
+
 G_END_DECLS

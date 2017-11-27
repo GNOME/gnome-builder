@@ -7,4 +7,4 @@ Copyright=Copyright © 2017 Christian Hergert
 Depends=debugger;editor;terminal;
 Builtin=true
 Embedded=gbp_gdb_register_types
-X-Debugger-Languages=c,chdr,cpp,cpphdr,fortran,rust,vala
+X-Debugger-Languages=c,chdr,cpp,cpphdr,fortran,rust,vala,asm

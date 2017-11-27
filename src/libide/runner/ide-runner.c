@@ -40,6 +40,7 @@ typedef struct
 {
   PeasExtensionSet *addins;
   IdeEnvironment *env;
+  IdeBuildTarget *build_target;
 
   GArray *fd_mapping;
 
@@ -78,6 +79,7 @@ enum {
   PROP_ENV,
   PROP_FAILED,
   PROP_RUN_ON_HOST,
+  PROP_BUILD_TARGET,
   N_PROPS
 };
 
@@ -489,6 +491,7 @@ ide_runner_finalize (GObject *object)
   g_queue_clear (&priv->argv);
   g_clear_object (&priv->env);
   g_clear_object (&priv->subprocess);
+  g_clear_object (&priv->build_target);
 
   if (priv->fd_mapping != NULL)
     {
@@ -549,6 +552,10 @@ ide_runner_get_property (GObject    *object,
       g_value_set_boolean (value, ide_runner_get_run_on_host (self));
       break;
 
+    case PROP_BUILD_TARGET:
+      g_value_set_object (value, ide_runner_get_build_target (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -582,6 +589,10 @@ ide_runner_set_property (GObject      *object,
 
     case PROP_RUN_ON_HOST:
       ide_runner_set_run_on_host (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_BUILD_TARGET:
+      ide_runner_set_build_target (self, g_value_get_object (value));
       break;
 
     default:
@@ -663,6 +674,25 @@ ide_runner_class_init (IdeRunnerClass *klass)
                           "Run on Host",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeRunner:build-target:
+   *
+   * The %IdeBuildTarget from which this %IdeRunner was constructed.
+   *
+   * This is useful to retrieve various properties related to the program
+   * that will be launched, such as what programming language it uses,
+   * or whether it's a graphical application, a command line tool or a test
+   * program.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_BUILD_TARGET] =
+    g_param_spec_object ("build-target",
+                         "Build Target",
+                         "Build Target",
+                         IDE_TYPE_BUILD_TARGET,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -1387,4 +1417,44 @@ ide_runner_push_args (IdeRunner           *self,
 
   for (guint i = 0; args[i] != NULL; i++)
     ide_runner_append_argv (self, args[i]);
+}
+
+/**
+ * ide_runner_get_build_target:
+ * @self: a #IdeRunner
+ *
+ * Returns: (nullable) (transfer none): The %IdeBuildTarget associated with this %IdeRunner, or %NULL.
+ *   See #IdeRunner:build-target for details.
+ *
+ * Since: 3.28
+ */
+IdeBuildTarget *
+ide_runner_get_build_target (IdeRunner *self)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUNNER (self), NULL);
+
+  return priv->build_target;
+}
+
+/**
+ * ide_runner_set_build_target:
+ * @self: a #IdeRunner
+ * @build_target: (nullable): The build target, or %NULL
+ *
+ * Sets the build target associated with this runner.
+ *
+ * Since: 3.28
+ */
+void
+ide_runner_set_build_target (IdeRunner      *self,
+                             IdeBuildTarget *build_target)
+{
+  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUNNER (self));
+
+  if (g_set_object (&priv->build_target, build_target))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_TARGET]);
 }
