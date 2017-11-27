@@ -9,4 +9,5 @@ Hidden=true
 X-Build-System-Priority=10000000
 X-Project-File-Filter-Name=Directory
 X-Project-File-Filter-Content-Type=inode/directory
+X-Project-File-Filter-Priority=-100
 Embedded=ide_directory_register_types

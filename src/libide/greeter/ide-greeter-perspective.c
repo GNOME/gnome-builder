@@ -297,6 +297,7 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
   PeasEngine *engine;
   const GList *list;
   GtkFileFilter *all_filter;
+  gint64 last_priority = G_MAXINT64;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (GTK_IS_BUTTON (open_button));
@@ -338,6 +339,7 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
       const gchar *pattern;
       const gchar *content_type;
       const gchar *name;
+      const gchar *priority;
       gchar **patterns;
       gchar **content_types;
       gint i;
@@ -351,6 +353,7 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
 
       pattern = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Pattern");
       content_type = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Content-Type");
+      priority = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Priority");
 
       if (pattern == NULL && content_type == NULL)
         continue;
@@ -389,6 +392,18 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
 
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
+      /* Look at the priority to set the default file filter. */
+      if (priority != NULL)
+        {
+          gint64 pval = g_ascii_strtoll (priority, NULL, 10);
+
+          if (pval < last_priority)
+            {
+              gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+              last_priority = pval;
+            }
+        }
+
       g_strfreev (patterns);
       g_strfreev (content_types);
     }
@@ -399,7 +414,9 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
                            self,
                            G_CONNECT_SWAPPED);
 
-  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
+  /* If unset, set the default filter */
+  if (last_priority == G_MAXINT64)
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
 
   settings = g_settings_new ("org.gnome.builder");
   projects_dir = g_settings_get_string (settings, "projects-directory");
