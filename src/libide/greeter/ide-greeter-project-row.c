@@ -22,7 +22,6 @@
 #include <glib/gi18n.h>
 
 #include "greeter/ide-greeter-project-row.h"
-#include "ide-macros.h"
 
 struct _IdeGreeterProjectRow
 {

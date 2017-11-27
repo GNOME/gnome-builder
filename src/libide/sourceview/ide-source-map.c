@@ -21,8 +21,6 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 
-#include "ide-macros.h"
-
 #include "buffers/ide-buffer.h"
 #include "sourceview/ide-line-change-gutter-renderer.h"
 #include "sourceview/ide-source-map.h"

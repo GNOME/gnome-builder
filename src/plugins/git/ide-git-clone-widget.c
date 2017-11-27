@@ -21,7 +21,6 @@
 #include <libgit2-glib/ggit.h>
 #include <ide.h>
 
-#include "ide-macros.h"
 #include "ide-git-clone-widget.h"
 #include "ide-git-remote-callbacks.h"
 

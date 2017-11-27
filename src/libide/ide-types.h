@@ -20,8 +20,6 @@
 
 #include <glib-object.h>
 
-#include "ide-macros.h"
-
 G_BEGIN_DECLS
 
 typedef struct _IdeBackForwardItem             IdeBackForwardItem;

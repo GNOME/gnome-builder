@@ -24,8 +24,6 @@
 #include <libpeas/peas.h>
 #include <pango/pangofc-fontmap.h>
 
-#include "ide-macros.h"
-
 #include "buffers/ide-buffer-private.h"
 #include "editor/ide-editor-private.h"
 #include "sourceview/ide-line-change-gutter-renderer.h"

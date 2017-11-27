@@ -23,8 +23,6 @@
 #include <libpeas/peas.h>
 #include <girepository.h>
 
-#include "ide-macros.h"
-
 #include "application/ide-application.h"
 #include "application/ide-application-addin.h"
 #include "application/ide-application-private.h"

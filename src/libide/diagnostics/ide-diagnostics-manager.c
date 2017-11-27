@@ -22,7 +22,6 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"

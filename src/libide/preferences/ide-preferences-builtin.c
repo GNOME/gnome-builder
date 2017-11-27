@@ -23,8 +23,6 @@
 #include <gtksourceview/gtksource.h>
 #include <libpeas/peas.h>
 
-#include "ide-macros.h"
-
 #include "application/ide-application-private.h"
 #include "preferences/ide-preferences-builtin.h"
 #include "preferences/ide-preferences-language-row.h"

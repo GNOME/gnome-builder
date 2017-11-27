@@ -20,8 +20,6 @@
 
 #include <dazzle.h>
 
-#include "ide-macros.h"
-
 #include "sourceview/ide-source-view.h"
 #include "sourceview/ide-cursor.h"
 #include "sourceview/ide-text-util.h"

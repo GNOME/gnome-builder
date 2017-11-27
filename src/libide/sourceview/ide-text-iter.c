@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "sourceview/ide-text-iter.h"
 

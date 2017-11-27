@@ -20,8 +20,6 @@
 
 #include <dazzle.h>
 
-#include "ide-macros.h"
-
 #include "application/ide-application.h"
 #include "search/ide-search-entry.h"
 #include "util/ide-gtk.h"

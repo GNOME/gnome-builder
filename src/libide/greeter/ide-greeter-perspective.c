@@ -23,7 +23,6 @@
 #include <libpeas/peas.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "application/ide-application.h"
 #include "genesis/ide-genesis-addin.h"

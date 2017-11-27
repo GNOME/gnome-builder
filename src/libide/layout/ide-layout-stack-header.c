@@ -20,8 +20,6 @@
 
 #include <glib/gi18n.h>
 
-#include "ide-macros.h"
-
 #include "layout/ide-layout-private.h"
 #include "layout/ide-layout-stack-header.h"
 

@@ -29,7 +29,6 @@
 
 #include "ide-debug.h"
 #include "ide-global.h"
-#include "ide-macros.h"
 #include "ide-resources.h"
 
 #include "application/ide-application.h"

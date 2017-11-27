@@ -23,7 +23,6 @@
 #include <string.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "sourceview/ide-word-completion-provider.h"
 #include "sourceview/ide-word-completion-item.h"

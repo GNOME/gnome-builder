@@ -20,8 +20,6 @@
 
 #include <dazzle.h>
 
-#include "ide-macros.h"
-
 #include "util/ide-cell-renderer-fancy.h"
 #include "util/ide-fancy-tree-view.h"
 

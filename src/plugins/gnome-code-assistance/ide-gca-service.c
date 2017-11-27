@@ -22,7 +22,6 @@
 #include <glib/gi18n.h>
 
 #include "ide-gca-service.h"
-#include "ide-macros.h"
 
 struct _IdeGcaService
 {

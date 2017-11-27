@@ -26,7 +26,6 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
-#include "ide-macros.h"
 #include "projects/ide-project-info.h"
 
 /**

@@ -23,7 +23,6 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"

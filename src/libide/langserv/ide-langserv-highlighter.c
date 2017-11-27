@@ -22,7 +22,6 @@
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "highlighting/ide-highlight-engine.h"
 #include "highlighting/ide-highlight-index.h"

@@ -23,7 +23,6 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "buildconfig/ide-buildconfig-configuration.h"
 #include "buildconfig/ide-buildconfig-configuration-provider.h"

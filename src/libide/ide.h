@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 #include "ide-debug.h"
 #include "ide-enums.h"
 #include "ide-global.h"
-#include "ide-macros.h"
 #include "ide-object.h"
 #include "ide-pausable.h"
 #include "ide-service.h"

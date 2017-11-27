@@ -27,7 +27,6 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-enums.h"
-#include "ide-macros.h"
 
 #include "application/ide-application.h"
 #include "buildsystem/ide-build-log.h"

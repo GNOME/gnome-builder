@@ -22,7 +22,6 @@
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "snippets/ide-source-snippet.h"
 #include "snippets/ide-source-snippet-private.h"

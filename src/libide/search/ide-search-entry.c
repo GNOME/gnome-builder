@@ -19,7 +19,6 @@
 #define G_LOG_DOMAIN "ide-search-entry"
 
 #include "ide-context.h"
-#include "ide-macros.h"
 
 #include "editor/ide-editor-perspective.h"
 #include "search/ide-search-engine.h"

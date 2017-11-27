@@ -30,7 +30,6 @@
 #include <unistd.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "buildsystem/ide-environment-variable.h"
 #include "buildsystem/ide-environment.h"

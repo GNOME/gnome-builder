@@ -434,7 +434,6 @@
       <xi:include href="xml/ide-glib.xml"/>
       <xi:include href="xml/ide-gtk.xml"/>
       <xi:include href="xml/ide-line-reader.xml"/>
-      <xi:include href="xml/ide-macros.xml"/>
       <xi:include href="xml/ide-posix.xml"/>
       <xi:include href="xml/ide-enums.xml"/>
       <xi:include href="xml/ide-progress.xml"/>

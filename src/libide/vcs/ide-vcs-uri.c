@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ide-macros.h"
 #include "vcs/ide-vcs-uri.h"
 
 G_DEFINE_BOXED_TYPE (IdeVcsUri, ide_vcs_uri, ide_vcs_uri_ref, ide_vcs_uri_unref)

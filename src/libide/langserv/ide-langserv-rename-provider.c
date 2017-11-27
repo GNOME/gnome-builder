@@ -22,7 +22,6 @@
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "buffers/ide-buffer.h"
 #include "files/ide-file.h"

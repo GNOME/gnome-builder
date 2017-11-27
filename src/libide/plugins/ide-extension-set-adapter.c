@@ -22,9 +22,9 @@
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
+
 #include "plugins/ide-extension-set-adapter.h"
 #include "plugins/ide-extension-util.h"
-#include "ide-macros.h"
 
 struct _IdeExtensionSetAdapter
 {

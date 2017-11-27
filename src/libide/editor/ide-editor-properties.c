@@ -20,8 +20,6 @@
 
 #include <dazzle.h>
 
-#include "ide-macros.h"
-
 #include "buffers/ide-buffer.h"
 #include "editor/ide-editor-properties.h"
 

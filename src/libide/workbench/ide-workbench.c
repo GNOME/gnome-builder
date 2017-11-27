@@ -22,7 +22,6 @@
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "application/ide-application.h"
 #include "application/ide-application-actions.h"

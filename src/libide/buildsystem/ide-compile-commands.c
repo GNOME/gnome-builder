@@ -23,7 +23,6 @@
 #include <string.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "buildsystem/ide-compile-commands.h"
 

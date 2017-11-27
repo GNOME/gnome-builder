@@ -32,7 +32,6 @@
 #include <unistd.h>
 
 #include "ide-debug.h"
-#include "ide-macros.h"
 
 #include "application/ide-application.h"
 #include "subprocess/ide-breakout-subprocess.h"

@@ -21,7 +21,6 @@
 #include "dazzle.h"
 
 #include "layout/ide-layout-pane.h"
-#include "ide-macros.h"
 
 typedef struct
 {
