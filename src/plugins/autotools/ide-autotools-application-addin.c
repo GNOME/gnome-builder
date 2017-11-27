@@ -18,6 +18,9 @@
 
 #define G_LOG_DOMAIN "ide-autotools-application-addin"
 
+#include <dazzle.h>
+#include <string.h>
+
 #include "ide-autotools-application-addin.h"
 
 struct _IdeAutotoolsApplicationAddin

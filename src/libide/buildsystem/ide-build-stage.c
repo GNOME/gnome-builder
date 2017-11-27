@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-stage"
 
+#include <string.h>
+
 #include "ide-debug.h"
 
 #include "buildsystem/ide-build-pipeline.h"

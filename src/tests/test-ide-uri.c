@@ -17,6 +17,7 @@
  */
 
 #include <ide.h>
+#include <string.h>
 
 static void
 test_uri_file (void)

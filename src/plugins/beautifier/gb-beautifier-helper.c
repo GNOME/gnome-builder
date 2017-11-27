@@ -18,7 +18,8 @@
 
 #include <glib.h>
 #include <gtksourceview/gtksource.h>
-#include "ide.h"
+#include <ide.h>
+#include <string.h>
 
 #include "gb-beautifier-helper.h"
 

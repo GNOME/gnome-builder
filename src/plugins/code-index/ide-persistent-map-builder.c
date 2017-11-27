@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-persistent-map-builder"
 
 #include <ide.h>
+#include <string.h>
 
 #include "ide-persistent-map-builder.h"
 

@@ -69,12 +69,12 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
        */
       for (argpos = 0; argv[argpos] != NULL; argpos++)
         {
-          if (strcmp (argv[argpos], "flatpak") == 0)
+          if (g_strcmp0 (argv[argpos], "flatpak") == 0)
             break;
         }
       for (; argv[argpos] != NULL; argpos++)
         {
-          if (strcmp (argv[argpos], "build") == 0)
+          if (g_strcmp0 (argv[argpos], "build") == 0)
             {
               argpos++;
               break;

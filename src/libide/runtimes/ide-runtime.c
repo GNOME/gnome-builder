@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-runtime"
 
 #include <dazzle.h>
+#include <string.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
