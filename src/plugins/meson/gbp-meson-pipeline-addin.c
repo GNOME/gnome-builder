@@ -63,6 +63,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   const gchar *ninja = NULL;
   const gchar *prefix;
   const gchar *srcdir;
+  const gchar *meson;
   guint id;
   gint parallel;
 
@@ -111,9 +112,12 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   config_opts = ide_configuration_get_config_opts (config);
   parallel = ide_configuration_get_parallelism (config);
 
+  if (NULL == (meson = ide_configuration_getenv (config, "MESON")))
+    meson = "meson";
+
   /* Setup our meson configure stage. */
 
-  ide_subprocess_launcher_push_argv (config_launcher, "meson");
+  ide_subprocess_launcher_push_argv (config_launcher, meson);
   ide_subprocess_launcher_push_argv (config_launcher, srcdir);
   ide_subprocess_launcher_push_argv (config_launcher, ".");
   ide_subprocess_launcher_push_argv (config_launcher, "--prefix");
