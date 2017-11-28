@@ -544,7 +544,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/template-glib"
+                    "url": "https://gitlab.gnome.org/GNOME/template-glib.git"
                 }
             ]
         },
@@ -557,7 +557,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/jsonrpc-glib"
+                    "url": "https://gitlab.gnome.org/GNOME/jsonrpc-glib.git"
                 }
             ]
         },
