@@ -78,6 +78,7 @@ build_context (GbProjectTreeBuilder *self,
                         "item", item,
                         "icon-name", "folder-symbolic",
                         "expanded-icon-name", "folder-open-symbolic",
+                        "reset-on-collapse", TRUE,
                         NULL);
   g_object_bind_property (project, "name", child, "text", G_BINDING_SYNC_CREATE);
   dzl_tree_node_append (node, child);
@@ -195,7 +196,10 @@ build_file (GbProjectTreeBuilder *self,
       dzl_tree_node_insert_sorted (node, child, compare_nodes_func, self);
 
       if (g_file_info_get_file_type (item_file_info) == G_FILE_TYPE_DIRECTORY)
-        dzl_tree_node_set_children_possible (child, TRUE);
+        {
+          dzl_tree_node_set_children_possible (child, TRUE);
+          dzl_tree_node_set_reset_on_collapse (child, TRUE);
+        }
 
       count++;
     }
