@@ -30,6 +30,7 @@
 
 G_BEGIN_DECLS
 
+DZL_ALIGNED_BEGIN(8)
 struct _IdeApplication
 {
   DzlApplication       parent_instance;
@@ -65,7 +66,7 @@ struct _IdeApplication
   GSettings           *settings;
 
   GDBusProxy          *color_proxy;
-};
+} DZL_ALIGNED_END(8);
 
 void     ide_application_discover_plugins           (IdeApplication        *self) G_GNUC_INTERNAL;
 void     ide_application_load_plugins               (IdeApplication        *self) G_GNUC_INTERNAL;
