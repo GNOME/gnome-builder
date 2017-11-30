@@ -206,4 +206,44 @@
       </item>
     </section>
   </menu>
+  <menu id="ide-terminal-view-popup-menu">
+    <section id="ide-terminal-view-popup-menu-link-section">
+      <item>
+        <attribute name="label" translatable="yes">_Open Link</attribute>
+        <attribute name="action">terminal.open-link</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Copy Link Address</attribute>
+        <attribute name="action">terminal.copy-link-address</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
+    <section id="ide-terminal-view-popup-menu-clipboard-section">
+      <item>
+        <attribute name="id">copy</attribute>
+        <attribute name="label" translatable="yes">_Copy</attribute>
+        <attribute name="action">terminal.copy-clipboard</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Paste</attribute>
+        <attribute name="action">terminal.paste-clipboard</attribute>
+      </item>
+    </section>
+    <section id="ide-terminal-view-popup-menu-selection-section">
+      <submenu id="ide-terminal-view-popup-menu-selection-submenu">
+        <attribute name="label" translatable="yes">Selection</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Select _All</attribute>
+          <attribute name="action">terminal.select-all</attribute>
+          <attribute name="target" type="(b)">(true,)</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Select _None</attribute>
+          <attribute name="action">terminal.select-all</attribute>
+          <attribute name="target" type="(b)">(false,)</attribute>
+        </item>
+      </submenu>
+    </section>
+  </menu>
 </interface>
