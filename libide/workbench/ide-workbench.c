@@ -262,6 +262,7 @@ ide_workbench_constructed (GObject *object)
     }
 
   ide_workbench_actions_init (self);
+  _ide_workbench_init_shortcuts (self);
 }
 
 static void

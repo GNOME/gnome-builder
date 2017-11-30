@@ -62,6 +62,7 @@ void     _ide_workbench_header_bar_set_fullscreen (IdeWorkbenchHeaderBar *self,
                                                    gboolean               fullscreen);
 void     _ide_workbench_add_perspective_shortcut  (IdeWorkbench          *self,
                                                    IdePerspective        *perspective);
+void     _ide_workbench_init_shortcuts            (IdeWorkbench          *self);
 
 G_END_DECLS
 

@@ -25,6 +25,8 @@
 
 #include "ide-workbench-private.h"
 
+#define I_(s) (g_intern_string(s))
+
 void
 _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
                                          IdePerspective *perspective)
@@ -63,4 +65,30 @@ _ide_workbench_add_perspective_shortcut (IdeWorkbench   *self,
                                                  G_N_ELEMENTS (workbench_shortcut_entry),
                                                  GETTEXT_PACKAGE);
     }
+}
+
+void
+_ide_workbench_init_shortcuts (IdeWorkbench *self)
+{
+  DzlShortcutController *controller;
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.workbench.fullscreen"),
+                                              "F11",
+                                              DZL_SHORTCUT_PHASE_DISPATCH | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("win.fullscreen"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.workbench.global-search"),
+                                              "<Control>period",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("win.global-search"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.workbench.build"),
+                                              "<Control>F7",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("build-manager.build"));
 }
