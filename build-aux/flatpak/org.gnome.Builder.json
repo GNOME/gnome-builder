@@ -505,6 +505,17 @@
             ]
         },
         {
+            "name": "enchant",
+            "cleanup": [ "/include", "/lib/pkgconfig", "*.la", "/share" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/AbiWord/enchant/releases/download/v2.1.3/enchant-2.1.3.tar.gz",
+                    "sha256": "086f37cdecd42eacd0e1dc291f5410d9ca2c5ed2cd9cd9367729e3d2d18a8550"
+                }
+            ]
+        },
+        {
             "name": "gspell",
             "config-opts": [ "--disable-gtk-doc", "--disable-gtk-doc-html" ],
             "cleanup": [ "/include", "/lib/pkgconfig", "*.la", "/share" ],
