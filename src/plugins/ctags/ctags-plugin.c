@@ -49,4 +49,6 @@ ide_ctags_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module, IDE_TYPE_HIGHLIGHTER, IDE_TYPE_CTAGS_HIGHLIGHTER);
   peas_object_module_register_extension_type (module, IDE_TYPE_SERVICE, IDE_TYPE_CTAGS_SERVICE);
   peas_object_module_register_extension_type (module, IDE_TYPE_SYMBOL_RESOLVER, IDE_TYPE_CTAGS_SYMBOL_RESOLVER);
+
+  ide_vcs_register_ignored ("tags.??????");
 }
