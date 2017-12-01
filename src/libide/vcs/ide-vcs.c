@@ -85,6 +85,9 @@ ide_vcs_default_init (IdeVcsInterface *iface)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeVcsInterface, changed),
                   NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  /* Ignore Gio temporary files */
+  ide_vcs_register_ignored (".goutputstream-*");
 }
 
 /**
