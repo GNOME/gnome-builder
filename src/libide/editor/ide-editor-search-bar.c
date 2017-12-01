@@ -152,11 +152,7 @@ ide_editor_search_bar_grab_focus (GtkWidget *widget)
 
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
 
-  /* Be careful to not reselect or it can reselect the whole
-   * entry text (causing next character to overwrite).
-   */
-  if (!gtk_widget_has_focus (GTK_WIDGET (self->search_entry)))
-    gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+  gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
 }
 
 static void

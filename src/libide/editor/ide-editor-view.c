@@ -111,7 +111,16 @@ ide_editor_view_notify_child_revealed (IdeEditorView *self,
   g_assert (GTK_IS_REVEALER (revealer));
 
   if (gtk_revealer_get_child_revealed (revealer))
-    gtk_widget_grab_focus (GTK_WIDGET (self->search_bar));
+    {
+      GtkWidget *toplevel = gtk_widget_get_ancestor (GTK_WIDGET (revealer), GTK_TYPE_WINDOW);
+      GtkWidget *focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+
+      /* Only focus the search bar if it doesn't already have focus,
+       * as it can reselect the search text.
+       */
+      if (focus == NULL || !gtk_widget_is_ancestor (focus, GTK_WIDGET (revealer)))
+        gtk_widget_grab_focus (GTK_WIDGET (self->search_bar));
+    }
 }
 
 static void
