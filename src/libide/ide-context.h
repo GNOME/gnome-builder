@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <dazzle.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
@@ -125,6 +126,9 @@ IDE_AVAILABLE_IN_3_28
 gchar                    *ide_context_cache_filename            (IdeContext           *self,
                                                                  const gchar          *first_part,
                                                                  ...) G_GNUC_NULL_TERMINATED;
+IDE_AVAILABLE_IN_3_28
+DzlRecursiveFileMonitor  *ide_context_get_monitor               (IdeContext           *self);
+
 GListModel               *_ide_context_get_pausables            (IdeContext           *self) G_GNUC_INTERNAL;
 gboolean                  _ide_context_is_restoring             (IdeContext           *self) G_GNUC_INTERNAL;
 

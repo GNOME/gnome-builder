@@ -109,6 +109,7 @@ struct _IdeContext
   IdeDoap                  *doap;
   IdeDocumentation         *documentation;
   GListStore               *pausables;
+  DzlRecursiveFileMonitor  *monitor;
   GtkRecentManager         *recent_manager;
   IdeRunManager            *run_manager;
   IdeRuntimeManager        *runtime_manager;
@@ -498,6 +499,7 @@ ide_context_dispose (GObject *object)
   IDE_ENTRY;
 
   g_list_store_remove_all (self->pausables);
+  dzl_recursive_file_monitor_cancel (self->monitor);
 
   G_OBJECT_CLASS (ide_context_parent_class)->dispose (object);
 
@@ -513,6 +515,7 @@ ide_context_finalize (GObject *object)
 
   g_clear_object (&self->services);
   g_clear_object (&self->pausables);
+  g_clear_object (&self->monitor);
 
   g_clear_pointer (&self->build_system_hint, g_free);
   g_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
@@ -2488,4 +2491,54 @@ ide_context_cache_filename (IdeContext  *self,
   g_ptr_array_add (ar, NULL);
 
   return g_build_filenamev ((gchar **)ar->pdata);
+}
+
+static gboolean
+ide_context_ignore_func (GFile    *file,
+                         gpointer  data)
+{
+  IdeContext *self = data;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (IDE_IS_CONTEXT (self));
+
+  return ide_vcs_is_ignored (self->vcs, file, NULL);
+}
+
+/**
+ * ide_context_get_monitor:
+ * @self: a #IdeContext
+ *
+ * Gets a #DzlRecursiveFileMonitor that monitors the project directory
+ * recursively. You can use this to track changes across the project
+ * tree without creating your own #GFileMonitor.
+ *
+ * Returns: (transfer none): a #DzlRecursiveFileMonitor to monitor the
+ *   project tree.
+ *
+ * Since: 3.28
+ */
+DzlRecursiveFileMonitor *
+ide_context_get_monitor (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  if (self->monitor == NULL)
+    {
+      g_autoptr(GFile) root = NULL;
+
+      if (g_file_query_file_type (self->project_file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+        root = g_object_ref (self->project_file);
+      else
+        root = g_file_get_parent (self->project_file);
+
+      self->monitor = dzl_recursive_file_monitor_new (root);
+      dzl_recursive_file_monitor_set_ignore_func (self->monitor,
+                                                  ide_context_ignore_func,
+                                                  g_object_ref (self),
+                                                  g_object_unref);
+      dzl_recursive_file_monitor_start_async (self->monitor, NULL, NULL, NULL);
+    }
+
+  return self->monitor;
 }
