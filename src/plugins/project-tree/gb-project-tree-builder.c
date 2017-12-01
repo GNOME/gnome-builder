@@ -106,25 +106,24 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
     }
 }
 
-static void
-gb_project_tree_builder_remove (GbProjectTreeBuilder *self,
-                                DzlTreeNode          *parent,
-                                GFile                *file)
+static DzlTreeNode *
+gb_project_tree_builder_find_child (GbProjectTreeBuilder *self,
+                                    DzlTreeNode          *parent,
+                                    GFile                *file)
 {
-  DzlTree *tree;
-  GtkTreeModel *model;
   GtkTreeIter piter;
   GtkTreeIter iter;
+  GtkTreeModel *model;
+  DzlTree *tree;
 
   g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
   g_assert (DZL_IS_TREE_NODE (parent));
   g_assert (G_IS_FILE (file));
 
   if (!dzl_tree_node_get_iter (parent, &piter))
-    return;
+    return NULL;
 
   tree = dzl_tree_builder_get_tree (DZL_TREE_BUILDER (self));
-
   /* TODO: deal with filter? We don't currently use one. */
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree));
 
@@ -147,13 +146,28 @@ gb_project_tree_builder_remove (GbProjectTreeBuilder *self,
             continue;
 
           if (g_file_equal (cur_file, file))
-            {
-              dzl_tree_node_remove (parent, cur);
-              return;
-            }
+            return g_steal_pointer (&cur);
         }
       while (gtk_tree_model_iter_next (model, &iter));
     }
+
+  return NULL;
+}
+
+static void
+gb_project_tree_builder_remove (GbProjectTreeBuilder *self,
+                                DzlTreeNode          *parent,
+                                GFile                *file)
+{
+  g_autoptr(DzlTreeNode) child = NULL;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (DZL_IS_TREE_NODE (parent));
+  g_assert (G_IS_FILE (file));
+
+  child = gb_project_tree_builder_find_child (self, parent, file);
+  if (child != NULL)
+    dzl_tree_node_remove (parent, child);
 }
 
 static void
@@ -175,7 +189,13 @@ gb_project_tree_builder_changed (GbProjectTreeBuilder    *self,
       DzlTreeNode *node = g_hash_table_lookup (self->expanded, parent);
 
       if (node != NULL)
-        gb_project_tree_builder_add (self, node, file);
+        {
+          g_autoptr(DzlTreeNode) child = NULL;
+
+          child = gb_project_tree_builder_find_child (self, node, file);
+          if (child == NULL)
+            gb_project_tree_builder_add (self, node, file);
+        }
     }
   else if (event == G_FILE_MONITOR_EVENT_DELETED)
     {
