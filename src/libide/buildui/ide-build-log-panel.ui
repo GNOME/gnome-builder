@@ -7,7 +7,6 @@
         <child>
           <object class="IdeTerminal" id="terminal">
             <property name="audible-bell">false</property>
-            <property name="input-enabled">false</property>
             <property name="expand">true</property>
             <property name="visible">true</property>
           </object>
