@@ -169,7 +169,6 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
   g_autoptr(GFile) installdir = NULL;
   g_auto(GStrv) argv = NULL;
-  const gchar *slash;
   IdeContext *context;
   IdeRunner *runner;
 
@@ -192,12 +191,10 @@ ide_runtime_real_create_runner (IdeRuntime     *self,
     }
 
   /* Possibly translate relative paths for the binary */
-  if (argv != NULL &&
-      argv[0] != NULL &&
-      !g_path_is_absolute (argv[0]) &&
-      NULL != (slash = strchr (argv[0], '/')))
+  if (argv && argv[0] && !g_path_is_absolute (argv[0]))
     {
-      g_autofree gchar *copy = g_strdup (slash + 1);
+      const gchar *slash = strchr (argv[0], '/');
+      g_autofree gchar *copy = g_strdup (slash ? (slash + 1) : argv[0]);
 
       g_free (argv[0]);
 
