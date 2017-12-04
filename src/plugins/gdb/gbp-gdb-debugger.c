@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include "gbp-gdb-debugger.h"
+#include "util/ide-glib.h"
 
 #define READ_BUFFER_LEN 4096
 
@@ -1195,8 +1196,10 @@ gbp_gdb_debugger_insert_breakpoint_async (IdeDebugger           *debugger,
                                           gpointer               user_data)
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
+  g_autofree gchar *translated_file = NULL;
   g_autoptr(GString) command = NULL;
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GFile) gfile = NULL;
   IdeDebuggerAddress addr;
   const gchar *func;
   const gchar *file;
@@ -1223,6 +1226,16 @@ gbp_gdb_debugger_insert_breakpoint_async (IdeDebugger           *debugger,
   func = ide_debugger_breakpoint_get_function (breakpoint);
   line = ide_debugger_breakpoint_get_line (breakpoint);
   addr = ide_debugger_breakpoint_get_address (breakpoint);
+
+  /* Possibly translate the file to be relative to builddir, as that is
+   * what gdb seems to want from us. That is possibly going to be specific
+   * to the build system, and we may need some more massaging here in the
+   * future to get the right thing.
+   */
+  gfile = g_file_new_for_path (file);
+  translated_file = ide_g_file_get_uncanonical_relative_path (self->builddir, gfile);
+  if (translated_file != NULL)
+    file = translated_file;
 
   if (file != NULL && line > 0)
     {
