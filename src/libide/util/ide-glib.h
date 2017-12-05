@@ -20,18 +20,26 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_gettext                              (const gchar    *message);
+IDE_AVAILABLE_IN_ALL
 void         ide_g_task_return_boolean_from_main      (GTask          *task,
                                                        gboolean        value);
+IDE_AVAILABLE_IN_ALL
 void         ide_g_task_return_int_from_main          (GTask          *task,
                                                        gint            value);
+IDE_AVAILABLE_IN_ALL
 void         ide_g_task_return_pointer_from_main      (GTask          *task,
                                                        gpointer        value,
                                                        GDestroyNotify  notify);
+IDE_AVAILABLE_IN_ALL
 void         ide_g_task_return_error_from_main        (GTask          *task,
                                                        GError         *error);
+IDE_AVAILABLE_IN_3_28
 gchar       *ide_g_file_get_uncanonical_relative_path (GFile          *file,
                                                        GFile          *other);
 

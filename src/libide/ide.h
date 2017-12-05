@@ -181,6 +181,7 @@ G_BEGIN_DECLS
 #include "util/ide-cell-renderer-fancy.h"
 #include "util/ide-fancy-tree-view.h"
 #include "util/ide-flatpak.h"
+#include "util/ide-glib.h"
 #include "util/ide-gtk.h"
 #include "util/ide-line-reader.h"
 #include "util/ide-list-inline.h"
