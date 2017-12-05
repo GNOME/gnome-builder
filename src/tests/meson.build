@@ -159,3 +159,9 @@ test_snippet_parser = executable('test-snippet-parser',
 #  env: ide_test_env,
 #)
 
+
+test_ide_glib = executable('test-ide-glib', 'test-ide-glib.c',
+  c_args: ide_test_cflags,
+  dependencies: [ ide_test_deps ],
+)
+test('test-ide-glib', test_ide_glib, env: ide_test_env)

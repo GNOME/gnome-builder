@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-glib"
 
+#include <string.h>
+
 #include "config.h"
 
 #include "util/ide-glib.h"
@@ -180,4 +182,84 @@ ide_gettext (const gchar *message)
   if (message != NULL)
     return g_dgettext (GETTEXT_PACKAGE, message);
   return NULL;
+}
+
+/**
+ * ide_g_file_get_uncanonical_relative_path:
+ * @file: a #GFile
+ * @other: a #GFile with a common ancestor to @file
+ *
+ * This function is similar to g_file_get_relative_path() except that
+ * @file and @other only need to have a shared common ancestor.
+ *
+ * This is useful if you must use a relative path instead of the absolute,
+ * canonical path.
+ *
+ * This is being implemented for use when communicating to GDB. When that
+ * becomes unnecessary, this should no longer be used.
+ *
+ * Returns: (nullable): A relative path, or %NULL if no common ancestor was
+ *   found for the relative path.
+ *
+ * Since: 3.28
+ */
+gchar *
+ide_g_file_get_uncanonical_relative_path (GFile *file,
+                                          GFile *other)
+{
+  g_autoptr(GFile) ancestor = NULL;
+  g_autoptr(GString) relatives = NULL;
+  g_autofree gchar *scheme = NULL;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *suffix = NULL;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (G_IS_FILE (other), NULL);
+
+  /* Nothing for matching files */
+  if (file == other || g_file_equal (file, other))
+    return NULL;
+
+  /* Make sure we're working with files of the same type */
+  if (G_OBJECT_TYPE (file) != G_OBJECT_TYPE (other))
+    return NULL;
+
+  /* Already descendant, just give the actual path */
+  if (g_file_has_prefix (other, file))
+    return g_file_get_path (other);
+
+  relatives = g_string_new ("/");
+
+  /* Find the common ancestor */
+  ancestor = g_object_ref (file);
+  while (ancestor != NULL &&
+         !g_file_has_prefix (other, ancestor) &&
+         !g_file_equal (other, ancestor))
+    {
+      g_autoptr(GFile) parent = g_file_get_parent (ancestor);
+
+      /* We reached the root, nothing more to do */
+      if (g_file_equal (parent, ancestor))
+        return NULL;
+
+      g_string_append_len (relatives, "../", strlen ("../"));
+
+      g_clear_object (&ancestor);
+      ancestor = g_steal_pointer (&parent);
+    }
+
+  g_assert (G_IS_FILE (ancestor));
+  g_assert (g_file_has_prefix (other, ancestor));
+  g_assert (g_file_has_prefix (file, ancestor));
+
+  path = g_file_get_path (file);
+  suffix = g_file_get_relative_path (ancestor, other);
+
+  if (path == NULL)
+    path = g_strdup ("/");
+
+  if (suffix == NULL)
+    suffix = g_strdup ("/");
+
+  return g_build_filename (path, relatives->str, suffix, NULL);
 }

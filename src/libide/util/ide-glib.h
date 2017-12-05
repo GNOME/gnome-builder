@@ -22,15 +22,17 @@
 
 G_BEGIN_DECLS
 
-const gchar *ide_gettext                         (const gchar    *message);
-void         ide_g_task_return_boolean_from_main (GTask          *task,
-                                                  gboolean        value);
-void         ide_g_task_return_int_from_main     (GTask          *task,
-                                                  gint            value);
-void         ide_g_task_return_pointer_from_main (GTask          *task,
-                                                  gpointer        value,
-                                                  GDestroyNotify  notify);
-void         ide_g_task_return_error_from_main   (GTask          *task,
-                                                  GError         *error);
+const gchar *ide_gettext                              (const gchar    *message);
+void         ide_g_task_return_boolean_from_main      (GTask          *task,
+                                                       gboolean        value);
+void         ide_g_task_return_int_from_main          (GTask          *task,
+                                                       gint            value);
+void         ide_g_task_return_pointer_from_main      (GTask          *task,
+                                                       gpointer        value,
+                                                       GDestroyNotify  notify);
+void         ide_g_task_return_error_from_main        (GTask          *task,
+                                                       GError         *error);
+gchar       *ide_g_file_get_uncanonical_relative_path (GFile          *file,
+                                                       GFile          *other);
 
 G_END_DECLS
