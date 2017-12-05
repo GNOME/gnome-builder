@@ -314,6 +314,10 @@ gb_project_tree_class_init (GbProjectTreeClass *klass)
 static void
 gb_project_tree_init (GbProjectTree *self)
 {
+  static const GtkTargetEntry drag_targets[] = {
+    { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 },
+    { "text/uri-list", 0, 0 },
+  };
   DzlTreeBuilder *builder;
   GMenu *menu;
 
@@ -341,6 +345,14 @@ gb_project_tree_init (GbProjectTree *self)
   menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT,
                                          "gb-project-tree-popup-menu");
   dzl_tree_set_context_menu (DZL_TREE (self), G_MENU_MODEL (menu));
+
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (self),
+                                          GDK_BUTTON1_MASK,
+                                          drag_targets, G_N_ELEMENTS (drag_targets),
+                                          GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (self),
+                                        drag_targets, G_N_ELEMENTS (drag_targets),
+                                        GDK_ACTION_COPY | GDK_ACTION_MOVE);
 }
 
 gboolean

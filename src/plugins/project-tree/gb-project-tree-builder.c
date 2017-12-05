@@ -23,6 +23,8 @@
 #include "gb-project-tree.h"
 #include "gb-project-tree-builder.h"
 
+#define _ATOM gdk_atom_intern_static_string
+
 struct _GbProjectTreeBuilder
 {
   DzlTreeBuilder  parent_instance;
@@ -629,6 +631,190 @@ gb_project_tree_builder_node_collapsed (DzlTreeBuilder *builder,
   IDE_EXIT;
 }
 
+static gboolean
+gb_project_tree_builder_node_draggable (DzlTreeBuilder *builder,
+                                        DzlTreeNode    *node)
+{
+  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+  GObject *item;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (DZL_IS_TREE_NODE (node));
+
+  item = dzl_tree_node_get_item (node);
+
+  return GB_IS_PROJECT_FILE (item);
+}
+
+static gboolean
+gb_project_tree_builder_node_droppable (DzlTreeBuilder   *builder,
+                                        DzlTreeNode      *node,
+                                        GtkSelectionData *data)
+{
+  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+  GObject *item;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (DZL_IS_TREE_NODE (node));
+
+  item = dzl_tree_node_get_item (node);
+
+  return GB_IS_PROJECT_FILE (item);
+}
+
+static gboolean
+gb_project_tree_builder_drag_data_get (DzlTreeBuilder   *builder,
+                                       DzlTreeNode      *node,
+                                       GtkSelectionData *data)
+{
+  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+  GObject *item;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (DZL_IS_TREE_NODE (node));
+
+  if (gtk_selection_data_get_target (data) != _ATOM ("text/uri-list"))
+    return FALSE;
+
+  item = dzl_tree_node_get_item (node);
+
+  if (GB_IS_PROJECT_FILE (item))
+    {
+      GFile *file = gb_project_file_get_file (GB_PROJECT_FILE (item));
+      g_autofree gchar *uri = g_file_get_uri (file);
+      gchar *uris[] = { uri, NULL };
+
+      return gtk_selection_data_set_uris (data, uris);
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gb_project_tree_builder_drag_data_received (DzlTreeBuilder      *builder,
+                                            DzlTreeNode         *drop_node,
+                                            DzlTreeDropPosition  position,
+                                            GtkSelectionData    *data)
+{
+  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (DZL_IS_TREE_NODE (drop_node));
+  g_assert (data != NULL);
+
+  /* We don't care about positioning before/after for the file tree.
+   * So if we get one of those, we will just ignore it and look at
+   * the parent instead.
+   */
+  if (position != DZL_TREE_DROP_INTO)
+    {
+      if (NULL == (drop_node = dzl_tree_node_get_parent (drop_node)) ||
+          dzl_tree_node_is_root (drop_node))
+        return FALSE;
+    }
+
+  /* For inter-process DnD, we only support dropping a URI list.
+   * We need to copy all those files into the directory represented
+   * by our drop node.
+   */
+  if (gtk_selection_data_get_target (data) == _ATOM ("text/uri-list"))
+    {
+      GObject *item = dzl_tree_node_get_item (drop_node);
+
+      if (GB_IS_PROJECT_FILE (item))
+        {
+          GFile *file = gb_project_file_get_file (GB_PROJECT_FILE (item));
+          g_auto(GStrv) uris = gtk_selection_data_get_uris (data);
+
+          if (uris != NULL && uris[0] != NULL)
+            {
+              g_autofree gchar *joined = g_strjoinv (" ", uris);
+              g_autofree gchar *dst_uri = g_file_get_uri (file);
+
+              g_debug ("Drop %s onto %s with position %d",
+                       joined, dst_uri, position);
+
+              return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gb_project_tree_builder_drag_node_received (DzlTreeBuilder      *builder,
+                                            DzlTreeNode         *drag_node,
+                                            DzlTreeNode         *drop_node,
+                                            DzlTreeDropPosition  position,
+                                            GtkSelectionData    *data)
+{
+  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+  GObject *drag_item;
+  GObject *drop_item;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (DZL_IS_TREE_NODE (drag_node));
+  g_assert (DZL_IS_TREE_NODE (drop_node));
+  g_assert (data != NULL);
+
+  /* We don't care about positioning before/after for the file tree.
+   * So if we get one of those, we will just ignore it and look at
+   * the parent instead.
+   */
+  if (position != DZL_TREE_DROP_INTO)
+    {
+      if (NULL == (drop_node = dzl_tree_node_get_parent (drop_node)) ||
+          dzl_tree_node_is_root (drop_node))
+        return FALSE;
+    }
+
+  /*
+   * Get our files and determine what we are copying to the new location.
+   * We always do a copy because the drag_delete signal will be used to
+   * remove the old files. Not exactly the most efficient, but it is fine
+   * for our purposes.
+   */
+  drag_item = dzl_tree_node_get_item (drag_node);
+  drop_item = dzl_tree_node_get_item (drop_node);
+
+  if (GB_IS_PROJECT_FILE (drag_item) && GB_IS_PROJECT_FILE (drop_item))
+    {
+      GFile *drag_file = gb_project_file_get_file (GB_PROJECT_FILE (drag_item));
+      GFile *drop_file = gb_project_file_get_file (GB_PROJECT_FILE (drop_item));
+
+      if (G_IS_FILE (drag_file) && G_IS_FILE (drop_file))
+        {
+          g_autofree gchar *src_uri = g_file_get_uri (drag_file);
+          g_autofree gchar *dst_uri = g_file_get_uri (drop_file);
+
+          g_debug ("Need to copy %s into %s", src_uri, dst_uri);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gb_project_tree_builder_drag_node_delete (DzlTreeBuilder *builder,
+                                          DzlTreeNode    *node)
+{
+  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (DZL_IS_TREE_NODE (node));
+
+  /*
+   * We must have done a GTK_ACTION_MOVE, which means that we need to
+   * cleanup whatever it is that we moved. In our case, that means
+   * removing the files.
+   */
+
+  return FALSE;
+}
+
 static void
 gb_project_tree_builder_dispose (GObject *object)
 {
@@ -649,10 +835,16 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
   object_class->dispose = gb_project_tree_builder_dispose;
 
   tree_builder_class->build_node = gb_project_tree_builder_build_node;
+  tree_builder_class->drag_data_get = gb_project_tree_builder_drag_data_get;
+  tree_builder_class->drag_data_received = gb_project_tree_builder_drag_data_received;
+  tree_builder_class->drag_node_received = gb_project_tree_builder_drag_node_received;
+  tree_builder_class->drag_node_delete = gb_project_tree_builder_drag_node_delete;
   tree_builder_class->node_activated = gb_project_tree_builder_node_activated;
   tree_builder_class->node_collapsed = gb_project_tree_builder_node_collapsed;
   tree_builder_class->node_expanded = gb_project_tree_builder_node_expanded;
   tree_builder_class->node_popup = gb_project_tree_builder_node_popup;
+  tree_builder_class->node_draggable = gb_project_tree_builder_node_draggable;
+  tree_builder_class->node_droppable = gb_project_tree_builder_node_droppable;
 }
 
 static void
