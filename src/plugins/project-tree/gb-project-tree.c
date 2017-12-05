@@ -305,8 +305,8 @@ gb_project_tree_class_init (GbProjectTreeClass *klass)
     g_param_spec_boolean ("show-ignored-files",
                           "Show Ignored Files",
                           "If files ignored by the VCS should be displayed.",
-                         FALSE,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -322,11 +322,9 @@ gb_project_tree_init (GbProjectTree *self)
 
   self->settings = g_settings_new ("org.gnome.builder.project-tree");
 
-  g_settings_bind (self->settings, "show-icons",
-                   self, "show-icons",
+  g_settings_bind (self->settings, "show-icons", self, "show-icons",
                    G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (self->settings, "show-ignored-files",
-                   self, "show-ignored-files",
+  g_settings_bind (self->settings, "show-ignored-files", self, "show-ignored-files",
                    G_SETTINGS_BIND_DEFAULT);
 
   builder = gb_project_tree_builder_new ();
@@ -340,7 +338,8 @@ gb_project_tree_init (GbProjectTree *self)
   gb_project_tree_actions_init (self);
   _gb_project_tree_init_shortcuts (self);
 
-  menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-project-tree-popup-menu");
+  menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT,
+                                         "gb-project-tree-popup-menu");
   dzl_tree_set_context_menu (DZL_TREE (self), G_MENU_MODEL (menu));
 }
 
