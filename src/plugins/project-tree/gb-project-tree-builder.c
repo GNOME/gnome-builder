@@ -630,14 +630,14 @@ gb_project_tree_builder_node_collapsed (DzlTreeBuilder *builder,
 }
 
 static void
-gb_project_tree_builder_finalize (GObject *object)
+gb_project_tree_builder_dispose (GObject *object)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)object;
 
   g_clear_pointer (&self->expanded, g_hash_table_unref);
   g_clear_object (&self->settings);
 
-  G_OBJECT_CLASS (gb_project_tree_builder_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gb_project_tree_builder_parent_class)->dispose (object);
 }
 
 static void
@@ -646,7 +646,7 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   DzlTreeBuilderClass *tree_builder_class = DZL_TREE_BUILDER_CLASS (klass);
 
-  object_class->finalize = gb_project_tree_builder_finalize;
+  object_class->dispose = gb_project_tree_builder_dispose;
 
   tree_builder_class->build_node = gb_project_tree_builder_build_node;
   tree_builder_class->node_activated = gb_project_tree_builder_node_activated;
