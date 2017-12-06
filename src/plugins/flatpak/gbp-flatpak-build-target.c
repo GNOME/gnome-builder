@@ -44,6 +44,13 @@ gbp_flatpak_build_target_get_name (IdeBuildTarget *build_target)
 static GFile *
 gbp_flatpak_build_target_get_install_directory (IdeBuildTarget *build_target)
 {
+  GbpFlatpakBuildTarget *self = (GbpFlatpakBuildTarget *)build_target;
+
+  g_assert (GBP_IS_FLATPAK_BUILD_TARGET (self));
+
+  if (!g_path_is_absolute (self->command))
+    return g_file_new_for_path ("/app/bin");
+
   return NULL;
 }
 
