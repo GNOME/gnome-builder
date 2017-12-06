@@ -708,6 +708,7 @@ static gboolean
 gb_project_tree_builder_drag_data_received (DzlTreeBuilder      *builder,
                                             DzlTreeNode         *drop_node,
                                             DzlTreeDropPosition  position,
+                                            GdkDragAction        action,
                                             GtkSelectionData    *data)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
@@ -715,6 +716,7 @@ gb_project_tree_builder_drag_data_received (DzlTreeBuilder      *builder,
   g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
   g_assert (DZL_IS_TREE_NODE (drop_node));
   g_assert (data != NULL);
+  g_assert (action == GDK_ACTION_COPY || action == GDK_ACTION_MOVE);
 
   /* We don't care about positioning before/after for the file tree.
    * So if we get one of those, we will just ignore it and look at
@@ -761,6 +763,7 @@ gb_project_tree_builder_drag_node_received (DzlTreeBuilder      *builder,
                                             DzlTreeNode         *drag_node,
                                             DzlTreeNode         *drop_node,
                                             DzlTreeDropPosition  position,
+                                            GdkDragAction        action,
                                             GtkSelectionData    *data)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
@@ -771,6 +774,7 @@ gb_project_tree_builder_drag_node_received (DzlTreeBuilder      *builder,
   g_assert (DZL_IS_TREE_NODE (drag_node));
   g_assert (DZL_IS_TREE_NODE (drop_node));
   g_assert (data != NULL);
+  g_assert (action == GDK_ACTION_COPY || action == GDK_ACTION_MOVE);
 
   /* We don't care about positioning before/after for the file tree.
    * So if we get one of those, we will just ignore it and look at
