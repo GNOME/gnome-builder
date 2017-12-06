@@ -110,16 +110,21 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
                         "item", item,
                         NULL);
 
+  /*
+   * Insertion sort our child, which should now only have valid siblings or
+   * be the first child of the parent.
+   */
+  dzl_tree_node_insert_sorted (parent, child, compare_nodes_func, self);
+
+  /*
+   * Set directory settings for the node if it is a directory. We need to do
+   * this after inserting the node so the settings take effect propertly.
+   */
   if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
     {
       dzl_tree_node_set_children_possible (child, TRUE);
       dzl_tree_node_set_reset_on_collapse (child, TRUE);
     }
-
-  /* Insertion sort our child, which should now only have valid siblings
-   * or be the first child of the parent.
-   */
-  dzl_tree_node_insert_sorted (parent, child, compare_nodes_func, self);
 }
 
 static DzlTreeNode *
