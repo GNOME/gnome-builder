@@ -744,11 +744,35 @@ gb_project_tree_builder_drag_data_received (DzlTreeBuilder      *builder,
 
           if (uris != NULL && uris[0] != NULL)
             {
+              g_autoptr(DzlFileTransfer) transfer = dzl_file_transfer_new ();
               g_autofree gchar *joined = g_strjoinv (" ", uris);
               g_autofree gchar *dst_uri = g_file_get_uri (file);
 
-              g_debug ("Drop %s onto %s with position %d",
+              if (action == GDK_ACTION_MOVE)
+                dzl_file_transfer_set_flags (transfer, DZL_FILE_TRANSFER_FLAGS_MOVE);
+
+              g_debug ("%s uris %s onto %s with position %d",
+                       action == GDK_ACTION_MOVE ? "Move" : "Copy",
                        joined, dst_uri, position);
+
+              for (guint i = 0; uris[i] != NULL; i++)
+                {
+                  g_autoptr(GFile) drag_file = g_file_new_for_uri (uris[i]);
+                  g_autoptr(GFile) dst_file = NULL;
+                  g_autofree gchar *name = NULL;
+
+                  if (drag_file == NULL)
+                    continue;
+
+                  if (NULL == (name = g_file_get_basename (drag_file)))
+                    continue;
+
+                  dst_file = g_file_get_child (file, name);
+
+                  dzl_file_transfer_add (transfer, drag_file, dst_file);
+                }
+
+              dzl_file_transfer_execute_async (transfer, G_PRIORITY_DEFAULT, NULL, NULL, NULL);
 
               return TRUE;
             }
@@ -805,30 +829,23 @@ gb_project_tree_builder_drag_node_received (DzlTreeBuilder      *builder,
         {
           g_autofree gchar *src_uri = g_file_get_uri (drag_file);
           g_autofree gchar *dst_uri = g_file_get_uri (drop_file);
+          g_autofree gchar *name = g_file_get_basename (drag_file);
+          g_autoptr(GFile) dst_file = g_file_get_child (drop_file, name);
+          g_autoptr(DzlFileTransfer) transfer = dzl_file_transfer_new ();
 
-          g_debug ("Need to copy %s into %s", src_uri, dst_uri);
+          g_debug ("Need to %s %s into %s",
+                   (action & GDK_ACTION_MOVE) ? "move" : "copy",
+                   src_uri, dst_uri);
+
+          dzl_file_transfer_add (transfer, drag_file, dst_file);
+          if (action == GDK_ACTION_MOVE)
+            dzl_file_transfer_set_flags (transfer, DZL_FILE_TRANSFER_FLAGS_MOVE);
+
+          dzl_file_transfer_execute_async (transfer, G_PRIORITY_DEFAULT, NULL, NULL, NULL);
 
           return TRUE;
         }
     }
-
-  return FALSE;
-}
-
-static gboolean
-gb_project_tree_builder_drag_node_delete (DzlTreeBuilder *builder,
-                                          DzlTreeNode    *node)
-{
-  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
-
-  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
-  g_assert (DZL_IS_TREE_NODE (node));
-
-  /*
-   * We must have done a GTK_ACTION_MOVE, which means that we need to
-   * cleanup whatever it is that we moved. In our case, that means
-   * removing the files.
-   */
 
   return FALSE;
 }
@@ -856,7 +873,6 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
   tree_builder_class->drag_data_get = gb_project_tree_builder_drag_data_get;
   tree_builder_class->drag_data_received = gb_project_tree_builder_drag_data_received;
   tree_builder_class->drag_node_received = gb_project_tree_builder_drag_node_received;
-  tree_builder_class->drag_node_delete = gb_project_tree_builder_drag_node_delete;
   tree_builder_class->node_activated = gb_project_tree_builder_node_activated;
   tree_builder_class->node_collapsed = gb_project_tree_builder_node_collapsed;
   tree_builder_class->node_expanded = gb_project_tree_builder_node_expanded;
