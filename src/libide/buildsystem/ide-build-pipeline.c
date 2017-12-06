@@ -1387,6 +1387,9 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
   g_assert (td->phase != IDE_BUILD_PHASE_NONE);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  /* Clear any message from the previous stage */
+  _ide_build_pipeline_set_message (self, NULL);
+
   /* Short circuit now if the task was cancelled */
   if (g_task_return_error_if_cancelled (task))
     IDE_EXIT;
