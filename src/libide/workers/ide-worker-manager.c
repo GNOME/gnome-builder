@@ -226,8 +226,8 @@ ide_worker_manager_get_worker_cb (GObject      *object,
 {
   IdeWorkerProcess *worker_process = (IdeWorkerProcess *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   GDBusProxy *proxy;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -237,7 +237,7 @@ ide_worker_manager_get_worker_cb (GObject      *object,
   proxy = ide_worker_process_get_proxy_finish (worker_process, result, &error);
 
   if (proxy == NULL)
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, proxy, g_object_unref);
 

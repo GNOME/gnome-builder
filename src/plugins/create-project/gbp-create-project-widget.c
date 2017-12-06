@@ -489,14 +489,14 @@ init_vcs_cb (GObject      *object,
   GbpCreateProjectWidget *self;
   IdeWorkbench *workbench;
   GFile *project_file;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   if (!ide_vcs_initializer_initialize_finish (vcs, result, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -525,7 +525,7 @@ extract_cb (GObject      *object,
   PeasEngine *engine;
   PeasPluginInfo *plugin_info;
   GFile *project_file;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   /* To keep the UI simple, we only support git from
    * the creation today. However, at the time of writing
@@ -541,7 +541,7 @@ extract_cb (GObject      *object,
 
   if (!ide_project_template_expand_finish (template, result, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

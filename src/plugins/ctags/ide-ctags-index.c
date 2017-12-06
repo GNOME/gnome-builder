@@ -190,8 +190,8 @@ ide_ctags_index_build_index (GTask        *task,
                              GCancellable *cancellable)
 {
   IdeCtagsIndex *self = source_object;
+  g_autoptr(GError) error = NULL;
   IdeLineReader reader;
-  GError *error = NULL;
   GArray *index = NULL;
   gchar *contents = NULL;
   gchar *line;
@@ -254,7 +254,7 @@ failure:
   g_clear_pointer (&index, g_array_unref);
 
   if (error != NULL)
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_new_error (task,
                              G_IO_ERROR,

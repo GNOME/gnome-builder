@@ -295,9 +295,9 @@ gbp_sysprof_workbench_addin_open_worker (GTask        *task,
 {
   GbpSysprofWorkbenchAddin *self = source_object;
   g_autofree gchar *path = NULL;
+  g_autoptr(GError) error = NULL;
   SpCaptureReader *reader;
   GFile *file = task_data;
-  GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
@@ -307,13 +307,9 @@ gbp_sysprof_workbench_addin_open_worker (GTask        *task,
   path = g_file_get_path (file);
 
   if (NULL == (reader = sp_capture_reader_new (path, &error)))
-    {
-      g_assert (error != NULL);
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_pointer (task, reader, (GDestroyNotify)sp_capture_reader_unref);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task, reader, (GDestroyNotify)sp_capture_reader_unref);
 }
 
 static void

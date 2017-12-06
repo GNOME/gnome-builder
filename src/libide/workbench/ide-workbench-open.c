@@ -443,9 +443,9 @@ ide_workbench_open_project_cb (GObject      *object,
 {
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GError) error = NULL;
   IdeWorkbench *workbench;
   guint32 present_time;
-  GError *error = NULL;
 
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
@@ -454,7 +454,7 @@ ide_workbench_open_project_cb (GObject      *object,
 
   if (context == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

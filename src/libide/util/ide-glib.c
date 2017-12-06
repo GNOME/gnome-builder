@@ -63,8 +63,7 @@ do_return (gpointer user_data)
     default:
       if (state->type == G_TYPE_ERROR)
         {
-          g_task_return_error (state->task, state->u.v_error);
-          state->u.v_error = NULL;
+          g_task_return_error (state->task, g_steal_pointer (&state->u.v_error));
           break;
         }
 

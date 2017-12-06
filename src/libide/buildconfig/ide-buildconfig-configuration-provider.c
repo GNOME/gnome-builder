@@ -61,14 +61,14 @@ ide_buildconfig_configuration_provider_save_cb (GObject      *object,
                                                 gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   GFile *file = (GFile *)object;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }
@@ -85,13 +85,12 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
   g_auto(GStrv) groups = NULL;
   g_autoptr(GFile) file = NULL;
   g_autoptr(GBytes) bytes = NULL;
+  g_autoptr(GError) error = NULL;
   gchar *data;
-  gsize length;
+  gsize length = 0;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
-  GError *error = NULL;
-  guint i;
 
   IDE_ENTRY;
 
@@ -130,7 +129,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
   group_names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-  for (i = 0; i < self->configurations->len; i++)
+  for (guint i = 0; i < self->configurations->len; i++)
     {
       IdeConfiguration *configuration = g_ptr_array_index (self->configurations, i);
       IdeEnvironment *environment;
@@ -209,7 +208,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
    */
   if (NULL != (groups = g_key_file_get_groups (self->key_file, NULL)))
     {
-      for (i = 0; groups [i]; i++)
+      for (guint i = 0; groups [i]; i++)
         {
           if (!g_hash_table_contains (group_names, groups [i]))
             g_key_file_remove_group (self->key_file, groups [i], NULL);
@@ -218,7 +217,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
   if (NULL == (data = g_key_file_to_data (self->key_file, &length, &error)))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -231,7 +230,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
                                        G_FILE_CREATE_NONE,
                                        cancellable,
                                        ide_buildconfig_configuration_provider_save_cb,
-                                       g_object_ref (task));
+                                       g_steal_pointer (&task));
 
   IDE_EXIT;
 }

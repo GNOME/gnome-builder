@@ -671,14 +671,14 @@ ide_git_buffer_change_monitor_worker (gpointer data)
   while ((task = g_async_queue_pop (queue)))
     {
       IdeGitBufferChangeMonitor *self;
+      g_autoptr(GError) error = NULL;
       DiffTask *diff;
-      GError *error = NULL;
 
       self = g_task_get_source_object (task);
       diff = g_task_get_task_data (task);
 
       if (!ide_git_buffer_change_monitor_calculate_threaded (self, diff, &error))
-        g_task_return_error (task, error);
+        g_task_return_error (task, g_steal_pointer (&error));
       else
         g_task_return_pointer (task, g_hash_table_ref (diff->state),
                                (GDestroyNotify)g_hash_table_unref);

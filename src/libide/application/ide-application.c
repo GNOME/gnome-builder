@@ -715,7 +715,7 @@ ide_application_get_worker_cb (GObject      *object,
 {
   IdeWorkerManager *worker_manager = (IdeWorkerManager *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   GDBusProxy *proxy;
 
   g_assert (IDE_IS_WORKER_MANAGER (worker_manager));
@@ -723,7 +723,7 @@ ide_application_get_worker_cb (GObject      *object,
   proxy = ide_worker_manager_get_worker_finish (worker_manager, result, &error);
 
   if (proxy == NULL)
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, proxy, g_object_unref);
 }

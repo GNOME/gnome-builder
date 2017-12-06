@@ -216,10 +216,10 @@ ide_language_defaults_init_worker (GTask        *task,
   g_autofree gchar *version_dir = NULL;
   g_autoptr(GBytes) defaults = NULL;
   g_autoptr(GKeyFile) key_file = NULL;
+  g_autoptr(GError) error = NULL;
   gint global_version;
-  gboolean ret;
-  GError *error = NULL;
   gint current_version;
+  gboolean ret;
 
   IDE_ENTRY;
 
@@ -237,7 +237,7 @@ ide_language_defaults_init_worker (GTask        *task,
 
   if (current_version < 0)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       goto failure;
     }
 
@@ -245,7 +245,7 @@ ide_language_defaults_init_worker (GTask        *task,
 
   if (!defaults)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       goto failure;
     }
 
@@ -258,7 +258,7 @@ ide_language_defaults_init_worker (GTask        *task,
 
   if (!ret)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       goto failure;
     }
 
@@ -274,17 +274,19 @@ ide_language_defaults_init_worker (GTask        *task,
 
   global_version = g_key_file_get_integer (key_file, "global", "version", &error);
 
-  if ((global_version == 0) && error)
+  if (global_version == 0 && error != NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       goto failure;
     }
+
+  g_clear_error (&error);
 
   if (global_version > current_version)
     {
       if (!ide_language_defaults_migrate (key_file, current_version, global_version, &error))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           goto failure;
         }
 
@@ -308,7 +310,7 @@ ide_language_defaults_init_worker (GTask        *task,
 
       if (!g_file_set_contents (version_path, version_contents, -1, &error))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           goto failure;
         }
     }

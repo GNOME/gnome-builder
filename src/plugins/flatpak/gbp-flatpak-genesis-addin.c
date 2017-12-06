@@ -131,13 +131,13 @@ gbp_flatpak_genesis_addin_run_cb (GObject      *object,
 {
   GbpFlatpakCloneWidget *widget = (GbpFlatpakCloneWidget *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (widget));
 
   if (!gbp_flatpak_clone_widget_clone_finish (widget, result, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }

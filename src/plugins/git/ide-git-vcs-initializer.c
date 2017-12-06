@@ -52,9 +52,9 @@ ide_git_vcs_initializer_initialize_worker (GTask        *task,
                                            gpointer      task_data,
                                            GCancellable *cancellable)
 {
-  GFile *file = task_data;
   g_autoptr(GgitRepository) repository = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+  GFile *file = task_data;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_GIT_VCS_INITIALIZER (source_object));
@@ -63,7 +63,7 @@ ide_git_vcs_initializer_initialize_worker (GTask        *task,
   repository = ggit_repository_init_repository (file, FALSE, &error);
 
   if (repository == NULL)
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }

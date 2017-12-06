@@ -125,9 +125,9 @@ proxy_new_cb (GObject      *object,
 {
   IdeGcaService *self;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   const gchar *language_id;
   GcaService *proxy;
-  GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -138,7 +138,7 @@ proxy_new_cb (GObject      *object,
 
   if (!proxy)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -159,11 +159,11 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
                                  gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GError) error = NULL;
   g_autofree gchar *name = NULL;
   g_autofree gchar *object_path = NULL;
   GcaService *proxy;
   GDBusConnection *bus;
-  GError *error = NULL;
 
   g_return_if_fail (IDE_IS_GCA_SERVICE (self));
   g_return_if_fail (language_id);
@@ -186,7 +186,7 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
 
   if (bus == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

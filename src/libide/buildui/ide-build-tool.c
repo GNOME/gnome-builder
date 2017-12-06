@@ -176,7 +176,7 @@ ide_build_tool_new_context_cb (GObject      *object,
   IdeBuildManager *build_manager;
   IdeBuildPipeline *pipeline;
   GCancellable *cancellable;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_TASK (task));
 
@@ -186,7 +186,7 @@ ide_build_tool_new_context_cb (GObject      *object,
 
   if (context == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -260,8 +260,8 @@ ide_build_tool_run_async (IdeApplicationTool  *tool,
   g_autoptr(GFile) project_file = NULL;
   g_autoptr(GOptionContext) opt_context = NULL;
   g_auto(GStrv) strv = NULL;
+  g_autoptr(GError) error = NULL;
   gboolean clean = FALSE;
-  GError *error = NULL;
   const GOptionEntry entries[] = {
     { "clean", 'c', 0, G_OPTION_ARG_NONE, &clean,
       N_("Clean the project") },
@@ -295,7 +295,7 @@ ide_build_tool_run_async (IdeApplicationTool  *tool,
 
   if (!g_option_context_parse_strv (opt_context, &strv, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

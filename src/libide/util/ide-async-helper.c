@@ -24,8 +24,8 @@ ide_async_helper_cb (GObject      *object,
                      gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   GPtrArray *funcs;
-  GError *error = NULL;
 
   g_return_if_fail (G_IS_TASK (task));
   g_return_if_fail (G_IS_TASK (result));
@@ -34,7 +34,7 @@ ide_async_helper_cb (GObject      *object,
 
   if (!g_task_propagate_boolean (G_TASK (result), &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

@@ -242,14 +242,14 @@ vcs_init_cb (GObject      *object,
 {
   IdeVcsInitializer *vcs = (IdeVcsInitializer *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_VCS_INITIALIZER (vcs));
   g_assert (G_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!ide_vcs_initializer_initialize_finish (vcs, result, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_int (task, 0);
 }
@@ -263,7 +263,7 @@ extract_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   GbpCreateProjectTool *self;
   g_autoptr(IdeVcsInitializer) vcs = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_PROJECT_TEMPLATE (template));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -274,7 +274,7 @@ extract_cb (GObject      *object,
 
   if (!ide_project_template_expand_finish (template, result, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -345,7 +345,7 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
   g_autoptr(GTask) task = NULL;
   g_autoptr(GHashTable) params = NULL;
   const gchar *name;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (GBP_IS_CREATE_PROJECT_TOOL (self));
 
@@ -356,7 +356,7 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
 
   if (!gbp_create_project_tool_parse (self, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -379,7 +379,7 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
   if (!validate_name (self, name, &error))
     {
       g_printerr ("%s\n", error->message);
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -399,7 +399,7 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
   if (!extract_params (self, params, &error))
     {
       g_printerr ("%s\n", error->message);
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

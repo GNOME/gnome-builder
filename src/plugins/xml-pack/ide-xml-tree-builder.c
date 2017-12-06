@@ -390,8 +390,8 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
                                      gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeXmlTreeBuilder *self;
-  GError *error = NULL;
 
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
@@ -401,7 +401,7 @@ ide_xml_tree_builder_build_tree_cb2 (GObject      *object,
 
   if (!fetch_schemas_finish (self, result, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -415,9 +415,9 @@ ide_xml_tree_builder_build_tree_cb (GObject      *object,
 {
   IdeXmlTreeBuilder *self;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   TreeBuilderState *state;
   IdeXmlAnalysis *analysis;
-  GError *error = NULL;
 
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
@@ -427,7 +427,7 @@ ide_xml_tree_builder_build_tree_cb (GObject      *object,
 
   if (NULL == (analysis = ide_xml_parser_get_analysis_finish (self->parser, result, &error)))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

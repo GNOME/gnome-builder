@@ -635,7 +635,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       const gchar *subdir;
       const gchar *targetstr;
       const gchar *relpath;
-      GError *error = NULL;
+      g_autoptr(GError) error = NULL;
       gchar **lines;
       gchar **ret = NULL;
       gchar *tmp;
@@ -689,7 +689,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       if (launcher == NULL)
         {
           g_assert (error != NULL);
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
 
@@ -703,7 +703,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       if (subprocess == NULL)
         {
           g_assert (error != NULL);
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
 
@@ -711,7 +711,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       if (!ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdoutstr, NULL, &error))
         {
           g_assert (error != NULL);
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
 
@@ -922,7 +922,7 @@ ide_makecache_get_file_flags__get_targets_cb (GObject      *object,
   g_autoptr(GPtrArray) targets = NULL;
   g_autoptr(GTask) task = user_data;
   FileFlagsLookup *lookup;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -931,7 +931,7 @@ ide_makecache_get_file_flags__get_targets_cb (GObject      *object,
   if (!(targets = ide_makecache_get_file_targets_finish (self, result, &error)))
     {
       g_assert (error != NULL);
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -1198,13 +1198,13 @@ ide_makecache_get_file_targets__task_cache_get_cb (GObject      *object,
 {
   DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   GPtrArray *ret;
 
   if (!(ret = dzl_task_cache_get_finish (cache, result, &error)))
     {
       g_assert (error != NULL);
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
     }
   else
     g_task_return_pointer (task, ret, (GDestroyNotify)g_ptr_array_unref);
@@ -1269,13 +1269,13 @@ ide_makecache_get_file_flags__task_cache_get_cb (GObject      *object,
 {
   DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   gchar **ret;
 
   if (!(ret = dzl_task_cache_get_finish (cache, result, &error)))
     {
       g_assert (error != NULL);
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
     }
   else
     g_task_return_pointer (task, ret, (GDestroyNotify)g_strfreev);
@@ -1460,7 +1460,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
   IdeContext *context;
   IdeRuntime *runtime;
   GFile *build_dir = task_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   gchar *line;
   gsize line_len;
   IdeLineReader reader;
@@ -1539,7 +1539,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
 
   if (makedirs == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (failure);
     }
 
@@ -1584,7 +1584,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        */
       if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_GOTO (failure);
         }
 
@@ -1594,7 +1594,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
        */
       if (!ide_subprocess_communicate_utf8 (subprocess, PRINT_VARS, NULL, &stdout_buf, NULL, &error))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_GOTO (failure);
         }
 

@@ -179,7 +179,7 @@ get_diagnostics_cb (GObject      *source_object,
   DzlTaskCache *cache = DZL_TASK_CACHE (source_object);
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeGettextDiagnostics) diags = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (G_IS_TASK (task));
@@ -187,7 +187,7 @@ get_diagnostics_cb (GObject      *source_object,
   diags = dzl_task_cache_get_finish (cache, res, &error);
 
   if (diags == NULL)
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, g_steal_pointer (&diags), g_object_unref);
 }
@@ -285,8 +285,8 @@ subprocess_wait_cb (GObject      *object,
   g_autoptr(GDataInputStream) stderr_data_input = NULL;
   GInputStream *stderr_input = NULL;
   g_autoptr(IdeGettextDiagnostics) diags = NULL;
+  g_autoptr(GError) error = NULL;
   TranslationUnit *unit;
-  GError *error = NULL;
 
   g_assert (G_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_TASK (task));
@@ -297,7 +297,7 @@ subprocess_wait_cb (GObject      *object,
 
   if (!g_subprocess_wait_finish (subprocess, res, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -401,7 +401,7 @@ populate_cache (DzlTaskCache  *cache,
   TranslationUnit *unit;
   IdeFile *file = (IdeFile *)key;
   GCancellable *cancellable;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   GPtrArray *args;
 
   g_assert (DZL_IS_TASK_CACHE (cache));
@@ -432,7 +432,7 @@ populate_cache (DzlTaskCache  *cache,
 
   if (!ide_unsaved_file_persist (unsaved_file, cancellable, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -472,7 +472,7 @@ populate_cache (DzlTaskCache  *cache,
 
   if (subprocess == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

@@ -51,16 +51,16 @@ get_translation_unit_cb (GObject      *object,
   IdeClangService *service = (IdeClangService *)object;
   g_autoptr(IdeClangTranslationUnit) tu = NULL;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeDiagnostics *diagnostics;
   IdeFile *target;
   GFile *gfile;
-  GError *error = NULL;
 
   tu = ide_clang_service_get_translation_unit_finish (service, result, &error);
 
   if (!tu)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

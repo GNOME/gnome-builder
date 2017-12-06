@@ -81,7 +81,7 @@ ide_xml_symbol_resolver_get_symbol_tree_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeXmlSymbolNode) root_node = NULL;
   IdeXmlSymbolTree *symbol_tree;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -95,7 +95,7 @@ ide_xml_symbol_resolver_get_symbol_tree_cb (GObject      *object,
       g_task_return_pointer (task, symbol_tree, g_object_unref);
     }
   else
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
 
   IDE_EXIT;
 }

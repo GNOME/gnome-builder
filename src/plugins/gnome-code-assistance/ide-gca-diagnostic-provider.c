@@ -181,7 +181,7 @@ diagnostics_cb (GObject      *object,
   GcaDiagnostics *proxy = (GcaDiagnostics *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GVariant) var = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   IdeDiagnostics *diagnostics;
   DiagnoseState *state;
 
@@ -193,7 +193,7 @@ diagnostics_cb (GObject      *object,
   if (!gca_diagnostics_call_diagnostics_finish (proxy, &var, result, &error))
     {
       IDE_TRACE_MSG ("%s", error->message);
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -214,9 +214,9 @@ get_diag_proxy_cb (GObject      *object,
                    gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeGcaDiagnosticProvider *self;
   GcaDiagnostics *proxy;
-  GError *error = NULL;
   const gchar *path;
 
   IDE_ENTRY;
@@ -230,7 +230,7 @@ get_diag_proxy_cb (GObject      *object,
 
   if (!proxy)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -252,12 +252,12 @@ parse_cb (GObject      *object,
 {
   GcaService *proxy = (GcaService *)object;
   IdeGcaDiagnosticProvider *self;
-  DiagnoseState *state;
   g_autoptr(GTask) task = user_data;
-  GcaDiagnostics *doc_proxy;
-  gboolean ret;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   g_autofree gchar *document_path = NULL;
+  GcaDiagnostics *doc_proxy;
+  DiagnoseState *state;
+  gboolean ret;
 
   IDE_ENTRY;
 
@@ -279,7 +279,7 @@ parse_cb (GObject      *object,
       else
         {
           IDE_TRACE_MSG ("%s", error->message);
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
         }
 
       IDE_EXIT;
@@ -340,13 +340,13 @@ get_proxy_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(GVariant) options = NULL;
   IdeGcaService *service = (IdeGcaService *)object;
-  DiagnoseState *state;
-  GcaService *proxy;
-  const gchar *temp_path;
-  GError *error = NULL;
-  GFile *gfile;
   g_autofree gchar *path = NULL;
+  g_autoptr(GError) error = NULL;
+  DiagnoseState *state;
+  const gchar *temp_path;
+  GcaService *proxy;
   GVariant *cursor = NULL;
+  GFile *gfile;
 
   IDE_ENTRY;
 
@@ -360,7 +360,7 @@ get_proxy_cb (GObject      *object,
 
   if (!proxy)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (cleanup);
     }
 
@@ -382,7 +382,7 @@ get_proxy_cb (GObject      *object,
                                      g_task_get_cancellable (task),
                                      &error))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_GOTO (cleanup);
         }
 

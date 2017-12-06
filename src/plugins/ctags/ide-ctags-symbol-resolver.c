@@ -170,9 +170,9 @@ regex_worker (GTask        *task,
   IdeCtagsSymbolResolver *self = source_object;
   LookupSymbol *lookup = task_data;
   g_autoptr(GRegex) regex = NULL;
+  g_autoptr(GError) error = NULL;
   g_autofree gchar *pattern = NULL;
-  GMatchInfo *match_info = NULL;
-  GError *error = NULL;
+  g_autoptr(GMatchInfo) match_info = NULL;
   const gchar *data;
   gsize length;
 
@@ -185,7 +185,7 @@ regex_worker (GTask        *task,
 
       if (lookup->mapped == NULL)
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           return;
         }
 
@@ -202,7 +202,7 @@ regex_worker (GTask        *task,
 
   if (!(regex = g_regex_new (pattern, G_REGEX_MULTILINE, 0, &error)))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -215,34 +215,29 @@ regex_worker (GTask        *task,
 
       if (g_match_info_fetch_pos (match_info, 0, &begin, &end))
         {
-          IdeSymbol *symbol;
+          g_autoptr(IdeSymbol) symbol = NULL;
           gint line = 0;
           gint line_offset = 0;
 
           calculate_offset (data, length, begin, &line, &line_offset);
 
           symbol = create_symbol (self, lookup->entry, line, line_offset, begin);
-          g_task_return_pointer (task, symbol, (GDestroyNotify)ide_symbol_unref);
-
-          g_match_info_free (match_info);
+          g_task_return_pointer (task,
+                                 g_steal_pointer (&symbol),
+                                 (GDestroyNotify)ide_symbol_unref);
 
           return;
         }
     }
 
-  g_match_info_free (match_info);
-
   if (error != NULL)
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_FOUND,
-                           "Failed to locate symbol \"%s\"",
-                           lookup->entry->name);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Failed to locate symbol \"%s\"",
+                             lookup->entry->name);
 }
 
 static gboolean

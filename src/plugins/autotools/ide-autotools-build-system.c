@@ -653,18 +653,15 @@ parse_cb (GObject      *object,
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
   g_return_if_fail (G_IS_TASK (task));
 
   if (!ide_autotools_build_system_parse_finish (self, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  g_task_return_boolean (task, TRUE);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 }
 
 static void

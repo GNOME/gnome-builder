@@ -332,13 +332,13 @@ ide_git_clone_widget_worker (GTask        *task,
 {
   g_autofree gchar *uristr = NULL;
   IdeGitCloneWidget *self = source_object;
+  g_autoptr(GError) error = NULL;
   GgitRepository *repository;
-  CloneRequest *req = task_data;
   GgitCloneOptions *clone_options;
   GgitFetchOptions *fetch_options;
   GgitRemoteCallbacks *callbacks;
+  CloneRequest *req = task_data;
   IdeProgress *progress;
-  GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
@@ -372,7 +372,7 @@ ide_git_clone_widget_worker (GTask        *task,
 
   if (repository == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

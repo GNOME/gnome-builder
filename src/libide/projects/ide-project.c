@@ -466,8 +466,8 @@ rename_file_free (gpointer data)
 
   if (op != NULL)
     {
-      g_object_unref (op->new_file);
-      g_object_unref (op->orig_file);
+      g_clear_object (&op->new_file);
+      g_clear_object (&op->orig_file);
       g_slice_free (RenameFile, op);
     }
 }
@@ -475,7 +475,7 @@ rename_file_free (gpointer data)
 static gboolean
 emit_file_renamed (gpointer data)
 {
-  g_autoptr(GTask) task = data;
+  GTask *task = data;
   IdeProject *project;
   RenameFile *rf;
 
@@ -510,7 +510,7 @@ ide_project_rename_file_worker (GTask        *task,
   IdeContext *context;
   IdeVcs *vcs;
   RenameFile *op = task_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   GFile *workdir;
 
   g_assert (IDE_IS_PROJECT (self));
@@ -526,11 +526,9 @@ ide_project_rename_file_worker (GTask        *task,
 
 #ifdef IDE_ENABLE_TRACE
   {
-    gchar *old_path = g_file_get_uri (op->orig_file);
-    gchar *new_path = g_file_get_uri (op->new_file);
+    g_autofree gchar *old_path = g_file_get_uri (op->orig_file);
+    g_autofree gchar *new_path = g_file_get_uri (op->new_file);
     IDE_TRACE_MSG ("Renaming %s to %s", old_path, new_path);
-    g_free (old_path);
-    g_free (new_path);
   }
 #endif
 
@@ -548,7 +546,7 @@ ide_project_rename_file_worker (GTask        *task,
   if (!g_file_query_exists (parent, cancellable) &&
       !g_file_make_directory_with_parents (parent, cancellable, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -560,11 +558,14 @@ ide_project_rename_file_worker (GTask        *task,
                     NULL,
                     &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  g_timeout_add (0, emit_file_renamed, g_object_ref (task));
+  g_idle_add_full (G_PRIORITY_LOW,
+                   emit_file_renamed,
+                   g_object_ref (task),
+                   g_object_unref);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -738,15 +739,12 @@ ide_project_trash_file_async (IdeProject          *self,
       subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
       if (subprocess == NULL)
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          IDE_EXIT;
-        }
-
-      ide_subprocess_wait_check_async (subprocess,
-                                       cancellable,
-                                       ide_project_trash_file__wait_check_cb,
-                                       g_steal_pointer (&task));
+        g_task_return_error (task, g_steal_pointer (&error));
+      else
+        ide_subprocess_wait_check_async (subprocess,
+                                         cancellable,
+                                         ide_project_trash_file__wait_check_cb,
+                                         g_steal_pointer (&task));
 
       IDE_EXIT;
     }

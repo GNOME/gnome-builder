@@ -71,7 +71,7 @@ save_async (GTask        *task,
 {
   GbTerminalView *view = source_object;
   SaveTask *savetask = (SaveTask *)task_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   gboolean ret;
 
   g_assert (G_IS_TASK (task));
@@ -103,7 +103,7 @@ save_async (GTask        *task,
   if (ret)
     g_task_return_boolean (task, TRUE);
   else
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
 }
 
 static void
@@ -116,8 +116,8 @@ gb_terminal_view_actions_save_async (GbTerminalView       *view,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFileOutputStream) output_stream = NULL;
+  g_autoptr(GError) error = NULL;
   SaveTask *savetask;
-  GError *error = NULL;
 
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -135,7 +135,7 @@ gb_terminal_view_actions_save_async (GbTerminalView       *view,
       g_task_run_in_thread (task, save_async);
     }
   else
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
 }
 
 static void

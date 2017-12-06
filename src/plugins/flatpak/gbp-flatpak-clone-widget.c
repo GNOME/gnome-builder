@@ -312,8 +312,8 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   g_autofree gchar *manifest_hash = NULL;
   g_autofree gchar *runtime_id = NULL;
   g_autofree gchar *manifest_file_name = NULL;
+  g_autoptr(GError) error = NULL;
   gsize manifest_contents_len;
-  GError *error = NULL;
   GType git_callbacks_type;
   guint i;
 
@@ -330,7 +330,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
       if (repository == NULL &&
           !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           return;
         }
 
@@ -361,7 +361,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
           repository = ggit_repository_clone (uristr, req->destination, clone_options, &error);
           if (repository == NULL)
             {
-              g_task_return_error (task, error);
+              g_task_return_error (task, g_steal_pointer (&error));
               return;
             }
 
@@ -371,7 +371,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
               parsed_rev = ggit_repository_revparse (repository, req->src->branch, &error);
               if (parsed_rev == NULL)
                 {
-                  g_task_return_error (task, error);
+                  g_task_return_error (task, g_steal_pointer (&error));
                   return;
                 }
 
@@ -381,7 +381,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
 
               if (error != NULL)
                 {
-                  g_task_return_error (task, error);
+                  g_task_return_error (task, g_steal_pointer (&error));
                   return;
                 }
             }
@@ -398,10 +398,10 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
                                          self->strip_components,
                                          &error);
       if (error != NULL)
-	{
-	  g_task_return_error (task, error);
-	  return;
-	}
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
     }
 
   for (i = 0; req->src->patches[i]; i++)
@@ -411,7 +411,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
                         self->strip_components,
                         &error))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           return;
         }
     }
@@ -421,10 +421,9 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   manifest_file_name = g_strjoin (".", self->id, "json", NULL);
   dst = g_file_get_child (req->project_file,
                           manifest_file_name);
-  if (!g_file_copy (src, dst, G_FILE_COPY_OVERWRITE, NULL,
-                    NULL, NULL, &error))
+  if (!g_file_copy (src, dst, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -577,11 +576,11 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
   g_autoptr(GTask) task = NULL;
   g_autoptr(GSettings) settings = NULL;
   g_autoptr(GFile) destination = NULL;
+  g_autoptr(GError) error = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *projects_dir = NULL;
   DownloadRequest *req;
   ModuleSource *src;
-  GError *error = NULL;
 
   g_return_if_fail (GBP_IS_FLATPAK_CLONE_WIDGET (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -591,7 +590,7 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
   src = get_source (self, &error);
   if (src == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

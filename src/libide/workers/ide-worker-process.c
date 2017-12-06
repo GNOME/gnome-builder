@@ -366,7 +366,7 @@ ide_worker_process_create_proxy_for_task (IdeWorkerProcess *self,
                                           GTask            *task)
 {
   GDBusProxy *proxy;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -390,7 +390,7 @@ ide_worker_process_create_proxy_for_task (IdeWorkerProcess *self,
         error = g_error_new_literal (G_IO_ERROR,
                                      G_IO_ERROR_PROXY_FAILED,
                                      "IdeWorker returned NULL and did not set an error.");
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 

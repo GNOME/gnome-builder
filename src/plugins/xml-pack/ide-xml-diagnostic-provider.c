@@ -39,13 +39,13 @@ ide_xml_diagnostic_provider_diagnose_cb (GObject      *object,
 {
   IdeXmlService *service = (IdeXmlService *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeDiagnostics *diagnostics;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
   if (NULL == (diagnostics = ide_xml_service_get_diagnostics_finish (service, result, &error)))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task,
                            ide_diagnostics_ref (diagnostics),

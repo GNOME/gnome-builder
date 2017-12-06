@@ -433,15 +433,15 @@ ide_clang_service_unit_completed_cb (GObject      *object,
                                      gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   gpointer ret;
-  GError *error = NULL;
 
   g_assert (IDE_IS_CLANG_SERVICE (object));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
   if (!(ret = g_task_propagate_pointer (G_TASK (result), &error)))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, ret, g_object_unref);
 }
@@ -530,12 +530,12 @@ ide_clang_service_get_translation_unit_cb (GObject      *object,
   DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(IdeClangTranslationUnit) ret = NULL;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (DZL_IS_TASK_CACHE (cache));
 
   if (!(ret = dzl_task_cache_get_finish (cache, result, &error)))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, g_steal_pointer (&ret), g_object_unref);
 }

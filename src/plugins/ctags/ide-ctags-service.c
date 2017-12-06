@@ -61,13 +61,13 @@ ide_ctags_service_build_index_init_cb (GObject      *object,
 {
   IdeCtagsIndex *index = (IdeCtagsIndex *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CTAGS_INDEX (index));
   g_assert (G_IS_TASK (task));
 
   if (!g_async_initable_init_finish (G_ASYNC_INITABLE (index), result, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else if (ide_ctags_index_get_is_empty (index))
     g_task_return_new_error (task,
                              G_IO_ERROR,

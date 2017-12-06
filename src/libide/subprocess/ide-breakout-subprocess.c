@@ -671,15 +671,14 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
 {
   CommunicateState *state;
   IdeBreakoutSubprocess *subprocess;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
   gpointer source;
-  GTask *task;
 
   IDE_ENTRY;
 
   g_assert (source_object != NULL);
 
-  task = user_data;
   subprocess = g_task_get_source_object (task);
   state = g_task_get_task_data (task);
   source = source_object;
@@ -690,18 +689,17 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
       source == state->stdout_buf ||
       source == state->stderr_buf)
     {
-      if (g_output_stream_splice_finish ((GOutputStream*) source, result, &error) == -1)
+      if (g_output_stream_splice_finish (source, result, &error) == -1)
         goto out;
 
-      if (source == state->stdout_buf ||
-          source == state->stderr_buf)
+      if (source == state->stdout_buf || source == state->stderr_buf)
         {
           /* This is a memory stream, so it can't be cancelled or return
            * an error really.
            */
           if (state->add_nul)
             {
-              gsize bytes_written;
+              gsize bytes_written = 0;
               if (!g_output_stream_write_all (source, "\0", 1, &bytes_written, NULL, &error))
                 goto out;
             }
@@ -717,7 +715,7 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
     g_assert_not_reached ();
 
  out:
-  if (error)
+  if (error != NULL)
     {
       /* Only report the first error we see.
        *
@@ -728,18 +726,13 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
         {
           state->reported_error = TRUE;
           g_cancellable_cancel (state->cancellable);
-          ide_g_task_return_error_from_main (task, error);
+          ide_g_task_return_error_from_main (task, g_steal_pointer (&error));
         }
-      else
-        g_error_free (error);
     }
   else if (state->outstanding_ops == 0)
     {
       ide_g_task_return_boolean_from_main (task, TRUE);
     }
-
-  /* And drop the original ref */
-  g_object_unref (task);
 
   IDE_EXIT;
 }

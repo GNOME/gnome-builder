@@ -69,29 +69,25 @@ ide_template_base_mkdirs_worker (GTask        *task,
 {
   IdeTemplateBase *self = source_object;
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
-  GError *error = NULL;
-  guint i;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_TEMPLATE_BASE (self));
 
-  for (i = 0; i < priv->files->len; i++)
+  for (guint i = 0; i < priv->files->len; i++)
     {
+      FileExpansion *fexp = &g_array_index (priv->files, FileExpansion, i);
       g_autoptr(GFile) directory = NULL;
-      FileExpansion *fexp;
+      g_autoptr(GError) error = NULL;
 
-      fexp = &g_array_index (priv->files, FileExpansion, i);
       directory = g_file_get_parent (fexp->destination);
 
       if (!g_file_make_directory_with_parents (directory, cancellable, &error))
         {
           if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
             {
-              g_task_return_error (task, error);
+              g_task_return_error (task, g_steal_pointer (&error));
               return;
             }
-
-          g_clear_error (&error);
         }
     }
 
@@ -269,17 +265,16 @@ ide_template_base_parse_worker (GTask        *task,
 {
   IdeTemplateBase *self = source_object;
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
-  guint i;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_TEMPLATE_BASE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  for (i = 0; i < priv->files->len; i++)
+  for (guint i = 0; i < priv->files->len; i++)
     {
       FileExpansion *fexp = &g_array_index (priv->files, FileExpansion, i);
       g_autoptr(TmplTemplate) template = NULL;
-      GError *error = NULL;
+      g_autoptr(GError) error = NULL;
 
       if (fexp->template != NULL)
         continue;
@@ -288,7 +283,7 @@ ide_template_base_parse_worker (GTask        *task,
 
       if (!tmpl_template_parse_file (template, fexp->file, cancellable, &error))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           return;
         }
 
@@ -331,7 +326,7 @@ ide_template_base_replace_cb (GObject      *object,
 {
   GFile *file = (GFile *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   ExpansionTask *expansion;
   FileExpansion *fexp = NULL;
   guint i;
@@ -353,9 +348,7 @@ ide_template_base_replace_cb (GObject      *object,
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
     {
       if (!g_task_get_completed (task))
-        g_task_return_error (task, error);
-      else
-        g_error_free (error);
+        g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -421,7 +414,7 @@ ide_template_base_expand (GTask *task)
        now = g_get_monotonic_time ())
     {
       FileExpansion *fexp;
-      GError *error = NULL;
+      g_autoptr(GError) error = NULL;
 
       g_assert (expansion->index <= expansion->files->len);
 
@@ -439,7 +432,7 @@ ide_template_base_expand (GTask *task)
 
       if (fexp->result == NULL)
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           return G_SOURCE_REMOVE;
         }
 
@@ -497,13 +490,13 @@ ide_template_base_expand_parse_cb (GObject      *object,
 {
   IdeTemplateBase *self = (IdeTemplateBase *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_TEMPLATE_BASE (self));
 
   if (!ide_template_base_parse_finish (self, result, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -521,21 +514,21 @@ ide_template_base_expand_mkdirs_cb (GObject      *object,
 {
   IdeTemplateBase *self = (IdeTemplateBase *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+  GCancellable *cancellable;
 
   g_assert (IDE_IS_TEMPLATE_BASE (self));
   g_assert (G_IS_TASK (task));
 
-  if (!ide_template_base_mkdirs_finish (self, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
+  cancellable = g_task_get_cancellable (task);
 
-  ide_template_base_parse_async (self,
-                                 g_task_get_cancellable (task),
-                                 ide_template_base_expand_parse_cb,
-                                 g_object_ref (task));
+  if (!ide_template_base_mkdirs_finish (self, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_template_base_parse_async (self,
+                                   cancellable,
+                                   ide_template_base_expand_parse_cb,
+                                   g_steal_pointer (&task));
 }
 
 void

@@ -61,7 +61,6 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                                                 GCancellable *cancellable)
 {
   GbpFlatpakConfigurationProvider *self = source_object;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -88,6 +87,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       g_auto(GStrv) new_config_opts = NULL;
       g_auto(GStrv) new_runtime_parts = NULL;
       g_auto(GStrv) new_environ = NULL;
+      g_autoptr(GError) error = NULL;
       g_autofree gchar *primary_module_regex_str = NULL;
       g_autofree gchar *primary_module_right_curly_brace = NULL;
       g_autofree gchar *right_curly_brace_line = NULL;
@@ -128,7 +128,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       file_stream = g_file_read (manifest, NULL, &error);
       if (file_stream == NULL)
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
 
@@ -182,7 +182,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
           line = g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &error);
           if (error != NULL)
             {
-              g_task_return_error (task, error);
+              g_task_return_error (task, g_steal_pointer (&error));
               IDE_EXIT;
             }
 
@@ -459,7 +459,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                   next_line = g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &error);
                   if (error != NULL)
                     {
-                      g_task_return_error (task, error);
+                      g_task_return_error (task, g_steal_pointer (&error));
                       IDE_EXIT;
                     }
                   if (g_str_has_prefix (next_line, primary_module_right_curly_brace))
@@ -558,7 +558,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                                     cancellable,
                                     &error))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
     }
@@ -1020,8 +1020,8 @@ gbp_flatpak_configuration_provider_load_cb (GObject      *object,
                                             gpointer      user_data)
 {
   GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)object;
+  g_autoptr(GError) error = NULL;
   GPtrArray *ret;
-  GError *error = NULL;
   guint i;
   g_autoptr(GTask) task = user_data;
 

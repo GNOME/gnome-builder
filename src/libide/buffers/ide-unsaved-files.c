@@ -233,12 +233,9 @@ ide_unsaved_files_save_worker (GTask        *task,
     }
 
   if (!g_file_set_contents (manifest_path, manifest->str, manifest->len, &write_error))
-    {
-      g_task_return_error (task, write_error);
-      IDE_EXIT;
-    }
-
-  g_task_return_boolean (task, TRUE);
+    g_task_return_error (task, g_steal_pointer (&write_error));
+  else
+    g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }

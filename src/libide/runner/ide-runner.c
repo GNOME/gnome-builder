@@ -135,7 +135,7 @@ ide_runner_run_wait_cb (GObject      *object,
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
   IdeRunnerPrivate *priv;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   IdeRunner *self;
 
   IDE_ENTRY;
@@ -155,7 +155,7 @@ ide_runner_run_wait_cb (GObject      *object,
 
   if (!ide_subprocess_wait_finish (subprocess, result, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -221,7 +221,7 @@ ide_runner_real_run_async (IdeRunner           *self,
   const gchar *identifier;
   IdeContext *context;
   IdeRuntime *runtime;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -304,7 +304,7 @@ ide_runner_real_run_async (IdeRunner           *self,
 
   if (subprocess == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (failure);
     }
 
@@ -880,18 +880,15 @@ ide_runner_posthook_cb (GObject      *object,
 {
   IdeRunnerAddin *addin = (IdeRunnerAddin *)object;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_RUNNER_ADDIN (addin));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!ide_runner_addin_posthook_finish (addin, result, &error))
-    {
-      g_task_return_error (task, error);
-      return;
-    }
-
-  ide_runner_tick_posthook (task);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_runner_tick_posthook (task);
 }
 
 static void
@@ -934,12 +931,9 @@ ide_runner_run_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   if (!IDE_RUNNER_GET_CLASS (self)->run_finish (self, result, &error))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  ide_runner_tick_posthook (task);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_runner_tick_posthook (task);
 
   IDE_EXIT;
 }
@@ -979,12 +973,9 @@ ide_runner_prehook_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   if (!ide_runner_addin_prehook_finish (addin, result, &error))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  ide_runner_tick_prehook (task);
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_runner_tick_prehook (task);
 
   IDE_EXIT;
 }

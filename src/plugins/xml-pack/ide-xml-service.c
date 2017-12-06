@@ -58,14 +58,14 @@ ide_xml_service_build_tree_cb2 (GObject      *object,
   IdeXmlTreeBuilder *tree_builder = (IdeXmlTreeBuilder *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_XML_TREE_BUILDER (tree_builder));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
   if (NULL == (analysis = ide_xml_tree_builder_build_tree_finish (tree_builder, result, &error)))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, g_steal_pointer (&analysis), (GDestroyNotify)ide_xml_analysis_unref);
 }
@@ -257,14 +257,14 @@ ide_xml_service_get_analysis_cb (GObject      *object,
   DzlTaskCache *cache = (DzlTaskCache *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
   if (NULL == (analysis = dzl_task_cache_get_finish (cache, result, &error)))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, g_steal_pointer (&analysis), (GDestroyNotify)ide_xml_analysis_unref);
 }
@@ -384,14 +384,14 @@ ide_xml_service_get_root_node_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
   IdeXmlSymbolNode *root_node;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_XML_SERVICE (self));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
   if (NULL == (analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     {
       root_node = g_object_ref (ide_xml_analysis_get_root_node (analysis));
@@ -498,14 +498,14 @@ ide_xml_service_get_diagnostics_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
   IdeDiagnostics *diagnostics;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_XML_SERVICE (self));
   g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
   if (NULL == (analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     {
       diagnostics = ide_diagnostics_ref (ide_xml_analysis_get_diagnostics (analysis));
@@ -967,7 +967,7 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
   g_autoptr(GTask) task = state->task;
   IdeXmlPosition *position;
   IdeXmlAnalysis *analysis = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -981,7 +981,7 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
       g_task_return_pointer (task, position, g_object_unref);
     }
   else
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
 
   position_state_free (state);
 

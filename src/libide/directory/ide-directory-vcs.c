@@ -162,8 +162,8 @@ ide_directory_vcs_init_worker (GTask        *task,
 {
   IdeDirectoryVcs *self = source_object;
   g_autoptr(GFileInfo) file_info = NULL;
+  g_autoptr(GError) error = NULL;
   GFile *file = task_data;
-  GError *error = NULL;
   GFileType file_type;
 
   g_assert (IDE_IS_DIRECTORY_VCS (self));
@@ -177,7 +177,7 @@ ide_directory_vcs_init_worker (GTask        *task,
 
   if (file_info == NULL)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

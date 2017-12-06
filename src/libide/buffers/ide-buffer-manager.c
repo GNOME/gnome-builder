@@ -586,6 +586,8 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
           g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
+
+      g_clear_error (&error);
     }
 
   gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (state->buffer), FALSE);
@@ -641,8 +643,8 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
   GFile *file = (GFile *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GFileInfo) file_info = NULL;
+  g_autoptr(GError) error = NULL;
   LoadState *state;
-  GError *error = NULL;
   gsize size = 0;
   gboolean create_new_view = FALSE;
 
@@ -660,13 +662,14 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
 
   file_info = g_file_query_info_finish (file, result, &error);
 
-  if (!file_info)
+  if (file_info == NULL)
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
-          g_task_return_error (task, error);
+          g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
+      g_clear_error (&error);
     }
   else
     {
@@ -988,6 +991,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
                                        gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   GtkSourceFileSaver *saver = (GtkSourceFileSaver *)object;
   IdeBufferManager *self;
   IdeUnsavedFiles *unsaved_files;
@@ -997,7 +1001,6 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   GFile *gfile;
   GFile *old_gfile;
   SaveState *state;
-  GError *error = NULL;
 
   g_assert (GTK_SOURCE_IS_FILE_SAVER (saver));
   g_assert (G_IS_TASK (task));
@@ -1014,7 +1017,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   /* Complete the save request */
   if (!gtk_source_file_saver_save_finish (saver, result, &error))
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -1065,7 +1068,7 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
   GtkSourceNewlineType newline_type;
   const GtkSourceEncoding *encoding;
   const gchar *charset;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
@@ -1076,7 +1079,7 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
 
   if (!file_settings)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -2180,6 +2183,7 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
           g_task_return_error (task, g_steal_pointer (&error));
           return;
         }
+      g_clear_error (&error);
     }
 
   /* Nothing to do if we already failed */

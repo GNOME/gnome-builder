@@ -130,14 +130,14 @@ ide_git_genesis_addin_run_cb (GObject      *object,
                               gpointer      user_data)
 {
   IdeGitCloneWidget *widget = (IdeGitCloneWidget *)object;
+  g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_GIT_CLONE_WIDGET (widget));
 
   if (!ide_git_clone_widget_clone_finish (widget, result, &error))
-    g_task_return_error (task, error);
+    g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
 }

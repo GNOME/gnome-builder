@@ -57,10 +57,10 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
                                             GCancellable *cancellable)
 {
   GFile *file = task_data;
+  g_autoptr(GError) error = NULL;
   GHashTableIter iter;
   GHashTable *ht;
   gpointer k, v;
-  GError *error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_EDITORCONFIG_FILE_SETTINGS (source_object));
@@ -71,7 +71,7 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
 
   if (!ht)
     {
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 

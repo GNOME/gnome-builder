@@ -323,7 +323,7 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
   IdeEditorWorkbenchAddin *self;
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GTask) task = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   const gchar *fragment;
   OpenFileTaskData *open_file_task_data;
   IdeUri *uri;
@@ -341,7 +341,7 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
   if (buffer == NULL)
     {
       IDE_TRACE_MSG ("%s", error->message);
-      g_task_return_error (task, error);
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
