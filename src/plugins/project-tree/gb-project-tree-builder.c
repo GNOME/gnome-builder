@@ -67,6 +67,7 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   g_autofree gchar *name = NULL;
   g_autoptr(GFileInfo) file_info = NULL;
   g_autoptr(GbProjectFile) item = NULL;
+  g_autoptr(DzlTreeNode) first = NULL;
   DzlTreeNode *child;
   const gchar *display_name;
   const gchar *icon_name;
@@ -85,6 +86,16 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   if (file_info == NULL)
     return;
 
+  /*
+   * If the parent has a single child and that is a dummy "Empty"
+   * item, then we should remove it before we add our child. We know
+   * it is an "Empty" item if it has no DzlTreeNode:item value.
+   */
+  first = dzl_tree_node_nth_child (parent, 0);
+  if (first != NULL && NULL == dzl_tree_node_get_item (first))
+    dzl_tree_node_remove (parent, first);
+
+  /* Now create our new node for the child. */
   item = gb_project_file_new (file, file_info);
   display_name = gb_project_file_get_display_name (item);
   icon_name = gb_project_file_get_icon_name (item);
@@ -99,13 +110,16 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
                         "item", item,
                         NULL);
 
-  dzl_tree_node_insert_sorted (parent, child, compare_nodes_func, self);
-
   if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
     {
       dzl_tree_node_set_children_possible (child, TRUE);
       dzl_tree_node_set_reset_on_collapse (child, TRUE);
     }
+
+  /* Insertion sort our child, which should now only have valid siblings
+   * or be the first child of the parent.
+   */
+  dzl_tree_node_insert_sorted (parent, child, compare_nodes_func, self);
 }
 
 static DzlTreeNode *
