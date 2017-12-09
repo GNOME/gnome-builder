@@ -35,16 +35,16 @@ struct _IdeVcsInterface
 {
   GTypeInterface            parent_interface;
 
-  GFile                  *(*get_working_directory)     (IdeVcs     *self);
-  IdeBufferChangeMonitor *(*get_buffer_change_monitor) (IdeVcs     *self,
-                                                        IdeBuffer  *buffer);
-  gboolean                (*is_ignored)                (IdeVcs     *self,
-                                                        GFile      *file,
-                                                        GError    **error);
-  gint                    (*get_priority)              (IdeVcs     *self);
-  void                    (*changed)                   (IdeVcs     *self);
-  IdeVcsConfig           *(*get_config)                (IdeVcs     *self);
-  gchar                  *(*get_branch_name)           (IdeVcs     *self);
+  GFile                  *(*get_working_directory)     (IdeVcs               *self);
+  IdeBufferChangeMonitor *(*get_buffer_change_monitor) (IdeVcs               *self,
+                                                        IdeBuffer            *buffer);
+  gboolean                (*is_ignored)                (IdeVcs               *self,
+                                                        GFile                *file,
+                                                        GError              **error);
+  gint                    (*get_priority)              (IdeVcs               *self);
+  void                    (*changed)                   (IdeVcs               *self);
+  IdeVcsConfig           *(*get_config)                (IdeVcs               *self);
+  gchar                  *(*get_branch_name)           (IdeVcs               *self);
 };
 
 IDE_AVAILABLE_IN_ALL
