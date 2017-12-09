@@ -408,8 +408,8 @@ build_file (GbProjectTreeBuilder *self,
 }
 
 static void
-gb_project_tree_builder_build_node (DzlTreeBuilder *builder,
-                                    DzlTreeNode    *node)
+gb_project_tree_builder_build_children (DzlTreeBuilder *builder,
+                                        DzlTreeNode    *node)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
   GObject *item;
@@ -874,7 +874,7 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
 
   object_class->dispose = gb_project_tree_builder_dispose;
 
-  tree_builder_class->build_node = gb_project_tree_builder_build_node;
+  tree_builder_class->build_children = gb_project_tree_builder_build_children;
   tree_builder_class->drag_data_get = gb_project_tree_builder_drag_data_get;
   tree_builder_class->drag_data_received = gb_project_tree_builder_drag_data_received;
   tree_builder_class->drag_node_received = gb_project_tree_builder_drag_node_received;
