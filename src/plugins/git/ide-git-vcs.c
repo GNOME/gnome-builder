@@ -57,6 +57,15 @@ struct _IdeGitVcs
   guint           loaded_files : 1;
 };
 
+typedef struct
+{
+  GFile      *repository_location;
+  GFile      *directory_or_file;
+  GFile      *workdir;
+  GListStore *store;
+  guint       recursive : 1;
+} ListStatus;
+
 static void     g_async_initable_init_interface (GAsyncInitableIface  *iface);
 static void     ide_git_vcs_init_iface          (IdeVcsInterface      *iface);
 static void     ide_git_vcs_reload_async        (IdeGitVcs            *self,
@@ -87,6 +96,18 @@ enum {
 };
 
 static guint signals [LAST_SIGNAL];
+
+static void
+list_status_free (gpointer data)
+{
+  ListStatus *ls = data;
+
+  g_clear_object (&ls->repository_location);
+  g_clear_object (&ls->directory_or_file);
+  g_clear_object (&ls->workdir);
+  g_clear_object (&ls->store);
+  g_slice_free (ListStatus, ls);
+}
 
 static GFile *
 ide_git_vcs_get_working_directory (IdeVcs *vcs)
@@ -504,6 +525,178 @@ ide_git_vcs_real_reloaded (IdeGitVcs      *self,
   g_object_notify (G_OBJECT (self), "branch-name");
 }
 
+static gint
+ide_git_vcs_list_status_cb (const gchar     *path,
+                            GgitStatusFlags  flags,
+                            gpointer         user_data)
+{
+  ListStatus *state = user_data;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(IdeVcsFileInfo) info = NULL;
+  IdeVcsFileStatus status = 0;
+
+  g_assert (path != NULL);
+  g_assert (state != NULL);
+  g_assert (G_IS_LIST_STORE (state->store));
+  g_assert (G_IS_FILE (state->workdir));
+
+  file = g_file_get_child (state->workdir, path);
+
+  switch (flags)
+    {
+    case GGIT_STATUS_INDEX_DELETED:
+    case GGIT_STATUS_WORKING_TREE_DELETED:
+      status = IDE_VCS_FILE_STATUS_DELETED;
+      break;
+
+    case GGIT_STATUS_INDEX_RENAMED:
+      status = IDE_VCS_FILE_STATUS_RENAMED;
+      break;
+
+    case GGIT_STATUS_INDEX_NEW:
+    case GGIT_STATUS_WORKING_TREE_NEW:
+      status = IDE_VCS_FILE_STATUS_ADDED;
+      break;
+
+    case GGIT_STATUS_INDEX_MODIFIED:
+    case GGIT_STATUS_INDEX_TYPECHANGE:
+    case GGIT_STATUS_WORKING_TREE_MODIFIED:
+    case GGIT_STATUS_WORKING_TREE_TYPECHANGE:
+      status = IDE_VCS_FILE_STATUS_CHANGED;
+      break;
+
+    case GGIT_STATUS_IGNORED:
+      status = IDE_VCS_FILE_STATUS_IGNORED;
+      break;
+
+    case GGIT_STATUS_CURRENT:
+    default:
+      status = IDE_VCS_FILE_STATUS_UNCHANGED;
+      break;
+    }
+
+  info = g_object_new (IDE_TYPE_VCS_FILE_INFO,
+                       "file", file,
+                       "status", status,
+                       NULL);
+
+  g_list_store_append (state->store, info);
+
+  return 0;
+}
+
+static void
+ide_git_vcs_list_status_worker (GTask        *task,
+                                gpointer      source_object,
+                                gpointer      task_data,
+                                GCancellable *cancellable)
+{
+  ListStatus *state = task_data;
+  g_autoptr(GListStore) store = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GgitRepository) repository = NULL;
+  g_autoptr(GgitStatusOptions) options = NULL;
+  g_autoptr(GString) pathspec = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *relative = NULL;
+  gchar *strv[] = { NULL, NULL };
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_GIT_VCS (source_object));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->repository_location));
+
+  if (!(repository = ggit_repository_open (state->repository_location, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  if (!(workdir = ggit_repository_get_workdir (repository)))
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to locate working directory");
+      return;
+    }
+
+  g_set_object (&state->workdir, workdir);
+
+  if (state->directory_or_file != NULL)
+    relative = g_file_get_relative_path (workdir, state->directory_or_file);
+
+  strv[0] = relative;
+  options = ggit_status_options_new (0, 0, (const gchar **)strv);
+
+  store = g_list_store_new (IDE_TYPE_VCS_FILE_INFO);
+  g_set_object (&state->store, store);
+
+  if (!ggit_repository_file_status_foreach (repository,
+                                            options,
+                                            ide_git_vcs_list_status_cb,
+                                            state,
+                                            &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
+}
+
+static void
+ide_git_vcs_list_status_async (IdeVcs              *vcs,
+                               GFile               *directory_or_file,
+                               gboolean             include_descendants,
+                               gint                 io_priority,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  IdeGitVcs *self = (IdeGitVcs *)vcs;
+  g_autoptr(GTask) task = NULL;
+  ListStatus *state;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_GIT_VCS (self));
+  g_return_if_fail (!directory_or_file || G_IS_FILE (directory_or_file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  g_mutex_lock (&self->repository_mutex);
+  state = g_slice_new0 (ListStatus);
+  state->directory_or_file = g_object_ref (directory_or_file);
+  state->repository_location = ggit_repository_get_location (self->repository);
+  state->recursive = !!include_descendants;
+  g_mutex_unlock (&self->repository_mutex);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_git_vcs_list_status_async);
+  g_task_set_priority (task, io_priority);
+  g_task_set_return_on_cancel (task, TRUE);
+  g_task_set_task_data (task, state, list_status_free);
+
+  if (state->repository_location == NULL)
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_FAILED,
+                             "No repository loaded");
+  else
+    g_task_run_in_thread (task, ide_git_vcs_list_status_worker);
+
+  IDE_EXIT;
+}
+
+static GListModel *
+ide_git_vcs_list_status_finish (IdeVcs        *vcs,
+                                GAsyncResult  *result,
+                                GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_GIT_VCS (vcs), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
 static void
 ide_git_vcs_dispose (GObject *object)
 {
@@ -578,6 +771,8 @@ ide_git_vcs_init_iface (IdeVcsInterface *iface)
   iface->is_ignored = ide_git_vcs_is_ignored;
   iface->get_config = ide_git_vcs_get_config;
   iface->get_branch_name = ide_git_vcs_get_branch_name;
+  iface->list_status_async = ide_git_vcs_list_status_async;
+  iface->list_status_finish = ide_git_vcs_list_status_finish;
 }
 
 static void
