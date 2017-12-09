@@ -101,7 +101,7 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   display_name = gb_project_file_get_display_name (item);
   icon_name = gb_project_file_get_icon_name (item);
 
-  if (g_strcmp0 (icon_name, "folder-symbolic") == 0)
+  if (is_dir)
     expanded = "folder-open-symbolic";
 
   is_dir = g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY;
@@ -350,6 +350,7 @@ build_file (GbProjectTreeBuilder *self,
       const gchar *icon_name;
       const gchar *expanded = NULL;
       gboolean ignored;
+      gboolean is_dir;
 
       name = g_file_info_get_name (item_file_info);
       item_file = g_file_get_child (file, name);
@@ -362,12 +363,15 @@ build_file (GbProjectTreeBuilder *self,
 
       display_name = gb_project_file_get_display_name (item);
       icon_name = gb_project_file_get_icon_name (item);
+      is_dir = g_file_info_get_file_type (item_file_info) == G_FILE_TYPE_DIRECTORY;
 
-      if (g_strcmp0 (icon_name, "folder-symbolic") == 0)
+      if (is_dir)
         expanded = "folder-open-symbolic";
 
       child = g_object_new (DZL_TYPE_TREE_NODE,
                             "icon-name", icon_name,
+                            "children-possible", is_dir,
+                            "reset-on-collapse", is_dir,
                             "expanded-icon-name", expanded,
                             "text", display_name,
                             "item", item,
@@ -375,12 +379,6 @@ build_file (GbProjectTreeBuilder *self,
                             NULL);
 
       dzl_tree_node_insert_sorted (node, child, compare_nodes_func, self);
-
-      if (g_file_info_get_file_type (item_file_info) == G_FILE_TYPE_DIRECTORY)
-        {
-          dzl_tree_node_set_children_possible (child, TRUE);
-          dzl_tree_node_set_reset_on_collapse (child, TRUE);
-        }
 
       count++;
     }
