@@ -1,5 +1,6 @@
 vcs_headers = [
   'ide-vcs-config.h',
+  'ide-vcs-file-info.h',
   'ide-vcs-initializer.h',
   'ide-vcs-uri.h',
   'ide-vcs.h',
@@ -7,6 +8,7 @@ vcs_headers = [
 
 vcs_sources = [
   'ide-vcs-config.c',
+  'ide-vcs-file-info.c',
   'ide-vcs-initializer.c',
   'ide-vcs-uri.c',
   'ide-vcs.c',
@@ -14,6 +16,7 @@ vcs_sources = [
 
 vcs_enums = [
   'ide-vcs-config.h',
+  'ide-vcs-file-info.h',
 ]
 
 libide_public_headers += files(vcs_headers)

@@ -49,8 +49,38 @@ ide_vcs_register_ignored (const gchar *pattern)
 }
 
 static void
+ide_vcs_real_list_status_async (IdeVcs              *self,
+                                GFile               *directory_or_file,
+                                gboolean             include_descendants,
+                                gint                 io_priority,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_task_report_new_error (self,
+                           callback,
+                           user_data,
+                           ide_vcs_real_list_status_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Not supported by %s",
+                           G_OBJECT_TYPE_NAME (self));
+}
+
+static GListModel *
+ide_vcs_real_list_status_finish (IdeVcs        *self,
+                                 GAsyncResult  *result,
+                                 GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
 ide_vcs_default_init (IdeVcsInterface *iface)
 {
+  iface->list_status_async = ide_vcs_real_list_status_async;
+  iface->list_status_finish = ide_vcs_real_list_status_finish;
+
   g_object_interface_install_property (iface,
                                        g_param_spec_object ("context",
                                                             "Context",
@@ -384,4 +414,79 @@ ide_vcs_get_branch_name (IdeVcs *self)
     return IDE_VCS_GET_IFACE (self)->get_branch_name (self);
 
   return g_strdup ("primary");
+}
+
+/**
+ * ide_vcs_list_status_async:
+ * @self: a #IdeVcs
+ * @directory_or_file: a #GFile containing a file or directory within the
+ *   working tree to retrieve the status of.
+ * @include_descendants: if descendants of @directory_or_file should be
+ *   included when retrieving status information.
+ * @io_priority: a priority for the IO, such as %G_PRIORITY_DEFAULT.
+ * @cancellable: (nullable): A #GCancellable or %NULL
+ * @callback: a callback for the operation
+ * @user_data: closure data for @callback
+ *
+ * Retrieves the status of the files matching the request. If
+ * @directory_or_file is a directory, then all files within that directory
+ * will be scanned for changes. If @include_descendants is %TRUE, the
+ * #IdeVcs will scan sub-directories for changes as well.
+ *
+ * The function specified by @callback should call ide_vcs_list_status_finish()
+ * to retrieve the result of this asynchronous operation.
+ *
+ * Since: 3.28
+ */
+void
+ide_vcs_list_status_async (IdeVcs              *self,
+                           GFile               *directory_or_file,
+                           gboolean             include_descendants,
+                           gint                 io_priority,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_VCS (self));
+  g_return_if_fail (!directory_or_file || G_IS_FILE (directory_or_file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (directory_or_file == NULL)
+    directory_or_file = ide_vcs_get_working_directory (self);
+
+  IDE_VCS_GET_IFACE (self)->list_status_async (self,
+                                               directory_or_file,
+                                               include_descendants,
+                                               io_priority,
+                                               cancellable,
+                                               callback,
+                                               user_data);
+}
+
+/**
+ * ide_vcs_list_status_finish:
+ * @self: a #IdeVcs
+ * @result: a #GAsyncResult provided to the callback
+ * @error: a location for a #GError
+ *
+ * Completes an asynchronous request to ide_vcs_list_status_async().
+ *
+ * The result of this function is a #GListModel containing objects that are
+ * #IdeVcsFileInfo.
+ *
+ * Returns: (transfer full) (nullable):
+ *   A #GListModel containing an #IdeVcsFileInfo for each of the files scanned
+ *   by the #IdeVcs. Upon failure, %NULL is returned and @error is set.
+ *
+ * Since: 3.28
+ */
+GListModel *
+ide_vcs_list_status_finish (IdeVcs        *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_VCS (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  return IDE_VCS_GET_IFACE (self)->list_status_finish (self, result, error);
 }

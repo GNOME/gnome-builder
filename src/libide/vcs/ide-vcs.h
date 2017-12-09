@@ -45,6 +45,16 @@ struct _IdeVcsInterface
   void                    (*changed)                   (IdeVcs               *self);
   IdeVcsConfig           *(*get_config)                (IdeVcs               *self);
   gchar                  *(*get_branch_name)           (IdeVcs               *self);
+  void                    (*list_status_async)         (IdeVcs               *self,
+                                                        GFile                *directory_or_file,
+                                                        gboolean              include_descendants,
+                                                        gint                  io_priority,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
+  GListModel             *(*list_status_finish)        (IdeVcs               *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -79,5 +89,17 @@ IDE_AVAILABLE_IN_ALL
 IdeVcsConfig           *ide_vcs_get_config                (IdeVcs               *self);
 IDE_AVAILABLE_IN_ALL
 gchar                  *ide_vcs_get_branch_name           (IdeVcs               *self);
+IDE_AVAILABLE_IN_3_28
+void                    ide_vcs_list_status_async         (IdeVcs               *self,
+                                                           GFile                *directory_or_file,
+                                                           gboolean              include_descendants,
+                                                           gint                  io_priority,
+                                                           GCancellable         *cancellable,
+                                                           GAsyncReadyCallback   callback,
+                                                           gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+GListModel             *ide_vcs_list_status_finish        (IdeVcs               *self,
+                                                           GAsyncResult         *result,
+                                                           GError              **error);
 
 G_END_DECLS

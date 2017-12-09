@@ -190,6 +190,7 @@ G_BEGIN_DECLS
 #include "util/ide-ref-ptr.h"
 #include "util/ide-uri.h"
 #include "vcs/ide-vcs-config.h"
+#include "vcs/ide-vcs-file-info.h"
 #include "vcs/ide-vcs-initializer.h"
 #include "vcs/ide-vcs-uri.h"
 #include "vcs/ide-vcs.h"
