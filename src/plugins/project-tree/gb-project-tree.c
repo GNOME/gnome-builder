@@ -26,6 +26,7 @@
 #include "gb-project-tree-actions.h"
 #include "gb-project-tree-builder.h"
 #include "gb-project-tree-private.h"
+#include "gb-vcs-tree-builder.h"
 
 G_DEFINE_TYPE (GbProjectTree, gb_project_tree, DZL_TYPE_TREE)
 
@@ -332,6 +333,9 @@ gb_project_tree_init (GbProjectTree *self)
                    G_SETTINGS_BIND_DEFAULT);
 
   builder = gb_project_tree_builder_new ();
+  dzl_tree_add_builder (DZL_TREE (self), builder);
+
+  builder = gb_vcs_tree_builder_new ();
   dzl_tree_add_builder (DZL_TREE (self), builder);
 
   g_signal_connect (self,

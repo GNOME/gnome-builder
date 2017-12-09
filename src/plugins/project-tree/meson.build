@@ -25,6 +25,8 @@ project_tree_sources = [
   'gb-rename-file-popover.h',
   'gb-project-tree-addin.c',
   'gb-project-tree-addin.h',
+  'gb-vcs-tree-builder.c',
+  'gb-vcs-tree-builder.h',
   'project-tree-plugin.c',
 ]
 
