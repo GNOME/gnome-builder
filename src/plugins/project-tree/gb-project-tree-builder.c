@@ -72,6 +72,7 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   const gchar *display_name;
   const gchar *icon_name;
   const gchar *expanded = NULL;
+  gboolean is_dir;
 
   g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
   g_assert (DZL_IS_TREE_NODE (parent));
@@ -103,7 +104,11 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   if (g_strcmp0 (icon_name, "folder-symbolic") == 0)
     expanded = "folder-open-symbolic";
 
+  is_dir = g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY;
+
   child = g_object_new (DZL_TYPE_TREE_NODE,
+                        "children-possible", is_dir,
+                        "reset-on-collapse", is_dir,
                         "icon-name", icon_name,
                         "expanded-icon-name", expanded,
                         "text", display_name,
@@ -115,16 +120,6 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
    * be the first child of the parent.
    */
   dzl_tree_node_insert_sorted (parent, child, compare_nodes_func, self);
-
-  /*
-   * Set directory settings for the node if it is a directory. We need to do
-   * this after inserting the node so the settings take effect propertly.
-   */
-  if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
-    {
-      dzl_tree_node_set_children_possible (child, TRUE);
-      dzl_tree_node_set_reset_on_collapse (child, TRUE);
-    }
 }
 
 static DzlTreeNode *
