@@ -88,6 +88,7 @@ gb_vcs_tree_builder_list_status_cb (GObject      *object,
 
           switch (status)
             {
+            case IDE_VCS_FILE_STATUS_UNTRACKED:
             case IDE_VCS_FILE_STATUS_ADDED:
               /* TODO: add emblems */
               break;
@@ -96,8 +97,10 @@ gb_vcs_tree_builder_list_status_cb (GObject      *object,
               /* TODO: add emblems */
               break;
 
-            case IDE_VCS_FILE_STATUS_DELETED:
             case IDE_VCS_FILE_STATUS_RENAMED:
+              break;
+
+            case IDE_VCS_FILE_STATUS_DELETED:
             case IDE_VCS_FILE_STATUS_IGNORED:
             case IDE_VCS_FILE_STATUS_UNCHANGED:
             default:

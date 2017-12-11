@@ -570,8 +570,11 @@ ide_git_vcs_list_status_cb (const gchar     *path,
       break;
 
     case GGIT_STATUS_CURRENT:
-    default:
       status = IDE_VCS_FILE_STATUS_UNCHANGED;
+      break;
+
+    default:
+      status = IDE_VCS_FILE_STATUS_UNTRACKED;
       break;
     }
 
