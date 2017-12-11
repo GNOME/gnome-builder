@@ -632,7 +632,7 @@ ide_git_vcs_list_status_worker (GTask        *task,
 
   strv[0] = relative;
   options = ggit_status_options_new (GGIT_STATUS_OPTION_DEFAULT,
-                                     GGIT_STATUS_SHOW_WORKDIR_ONLY,
+                                     GGIT_STATUS_SHOW_INDEX_AND_WORKDIR,
                                      (const gchar **)strv);
 
   store = g_list_store_new (IDE_TYPE_VCS_FILE_INFO);
