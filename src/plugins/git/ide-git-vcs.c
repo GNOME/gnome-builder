@@ -631,7 +631,9 @@ ide_git_vcs_list_status_worker (GTask        *task,
     relative = g_file_get_relative_path (workdir, state->directory_or_file);
 
   strv[0] = relative;
-  options = ggit_status_options_new (0, 0, (const gchar **)strv);
+  options = ggit_status_options_new (GGIT_STATUS_OPTION_DEFAULT,
+                                     GGIT_STATUS_SHOW_WORKDIR_ONLY,
+                                     (const gchar **)strv);
 
   store = g_list_store_new (IDE_TYPE_VCS_FILE_INFO);
   g_set_object (&state->store, store);
