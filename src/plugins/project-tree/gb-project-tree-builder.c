@@ -257,9 +257,9 @@ gb_project_tree_builder_reloaded (GbProjectTreeBuilder *self,
   g_assert (IDE_IS_VCS_MONITOR (monitor));
 
   /*
-   * TODO: VCS reloaded, so queue a draw so we can update the colors on
-   *       previously pixel-cached rows. We'll set the foreground when
-   *       hooking into the pango attributes.
+   * VCS reloaded, so queue a draw so we can update the colors on
+   * previously pixel-cached rows. We'll set the foreground when
+   * hooking into the pango attributes.
    */
 
   tree = dzl_tree_builder_get_tree (DZL_TREE_BUILDER (self));
