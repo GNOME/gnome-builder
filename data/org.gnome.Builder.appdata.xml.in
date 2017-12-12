@@ -81,6 +81,34 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.27.3" date="2017-12-11">
+      <description>
+        <p>
+          A number of performance improvements and bug fixes have landed in this release.
+          Notably, the project tree will now automatically update when changes are discovered and includes status from version control.
+          Also, you can now Drag'n'Drop items in the project tree.
+        </p>
+        <ul>
+          <li>Debugging with gdb has been improved to translate paths when running inside of a mount namespace such as flatpak.</li>
+          <li>Improvements to eslint and GJS code indexers to be more flexible with other JS runtimes such as NodeJS.</li>
+          <li>A number of correctness fixes in plumbing and for memory leaks.</li>
+          <li>A new build target provider interface has been added so the project runner can support executing commands extracted from systems such as flatpak.</li>
+          <li>GNOME Night Light integration.</li>
+          <li>Improved greeter sections with support removing data files.</li>
+          <li>Builder will try to remove stale cache data at startup and shutdown to help free some disk usage.</li>
+          <li>Project cache data has been moved into a directory by project, making it easier to remove cache data when a project is removed.</li>
+          <li>Improved alignments for home/end shortcuts.</li>
+          <li>The build pipeline now uses a PTY and VteTerminal to gain color support and extraction of PTY sequences. This allows for proper message titles in the omnibar when building. One regression currently is that we no longer extract Regex-based error messages.</li>
+          <li>You can now run Cargo-based projects using cargo run.</li>
+          <li>Access to /usr and /etc from the host system when running under Flatpak (via /run/host) allows Builder to develop against a host system. Users of Builder on CentOS/RHEL/LTS distros are the most likely to benefit from this feature.</li>
+          <li>The build pipeline tries to be more verbose for known error messages in GLib by setting G_ENABLE_DIAGNOSTIC.</li>
+          <li>Builder now uses --state-dir with flatpak-builder when 0.10.5 or greater of flatpak-builder is detected.</li>
+          <li>The project-tree now supports Drag'n'Drop, both internally and using text/uri-list selections from external applications.</li>
+          <li>An early preview of VCS status integration into the project tree has been included in this release.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.27.2" date="2017-11-18">
       <description>
         <p>

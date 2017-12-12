@@ -1,6 +1,6 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
-          version: '3.27.2',
+          version: '3.27.3',
     meson_version: '>= 0.42.0',
   default_options: [
                      'c_std=gnu11',
@@ -166,7 +166,7 @@ ld_supports_version_script = cc.links('''
 message('Linker supports --version-script: @0@'.format(ld_supports_version_script))
 
 # Commonly used deps
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.27.2')
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.27.3')
 libgio_dep = dependency('gio-2.0', version: '>= 2.55.0')
 libgiounix_dep = dependency('gio-unix-2.0')
 libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.26')

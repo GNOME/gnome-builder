@@ -1,4 +1,47 @@
 ==============
+Version 3.27.3
+==============
+
+Changes since last release:
+
+ • Debugging with gdb has been improved to translate paths when running
+   inside of a mount namespace such as flatpak.
+ • Improvements to eslint and GJS code indexers to be more flexible with
+   other JS runtimes such as NodeJS.
+ • A number of correctness fixes in plumbing and for memory leaks.
+ • A new build target provider interface has been added so the project
+   runner can support executing commands extracted from systems such as
+   flatpak.
+ • GNOME Night Light integration.
+ • Improved greeter sections with support removing data files.
+ • Builder will try to remove stale cache data at startup and
+   shutdown to help free some disk usage.
+ • Project cache data has been moved into a directory by project,
+   making it easier to remove cache data when a project is removed.
+ • Improved alignments for home/end shortcuts.
+ • The build pipeline now uses a PTY and VteTerminal to gain color
+   support and extraction of PTY sequences. This allows for proper
+   message titles in the omnibar when building. One regression currently is
+   that we no longer extract Regex-based error messages.
+ • You can now run Cargo-based projects using cargo run.
+ • Access to /usr and /etc from the host system when running under Flatpak
+   (via /run/host) allows Builder to develop against a host system. Users of
+   Builder on CentOS/RHEL/LTS distros are the most likely to benefit from this
+   feature.
+ • The build pipeline tries to be more verbose for known error messages in
+   GLib by setting G_ENABLE_DIAGNOSTIC.
+ • Builder now uses --state-dir with flatpak-builder when 0.10.5 or greater
+   of flatpak-builder is detected.
+ • The project-tree now supports Drag'n'Drop, both internally and using
+   text/uri-list selections from external applications.
+ • An early preview of VCS status integration into the project tree has been
+   included in this release.
+
+Updated Translations:
+
+ Indonesian, Czech, Slovak
+
+==============
 Version 3.27.2
 ==============
 
