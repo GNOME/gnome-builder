@@ -2,6 +2,7 @@ vcs_headers = [
   'ide-vcs-config.h',
   'ide-vcs-file-info.h',
   'ide-vcs-initializer.h',
+  'ide-vcs-monitor.h',
   'ide-vcs-uri.h',
   'ide-vcs.h',
 ]
@@ -10,6 +11,7 @@ vcs_sources = [
   'ide-vcs-config.c',
   'ide-vcs-file-info.c',
   'ide-vcs-initializer.c',
+  'ide-vcs-monitor.c',
   'ide-vcs-uri.c',
   'ide-vcs.c',
 ]

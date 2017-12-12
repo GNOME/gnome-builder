@@ -187,16 +187,16 @@ gb_project_tree_builder_remove (GbProjectTreeBuilder *self,
 }
 
 static void
-gb_project_tree_builder_changed (GbProjectTreeBuilder    *self,
-                                 GFile                   *file,
-                                 GFile                   *other_file,
-                                 GFileMonitorEvent        event,
-                                 DzlRecursiveFileMonitor *monitor)
+gb_project_tree_builder_changed (GbProjectTreeBuilder *self,
+                                 GFile                *file,
+                                 GFile                *other_file,
+                                 GFileMonitorEvent     event,
+                                 IdeVcsMonitor        *monitor)
 {
   g_assert (GB_PROJECT_TREE_BUILDER (self));
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
-  g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
+  g_assert (IDE_IS_VCS_MONITOR (monitor));
 
   /*
    * We only handle CREATED in the normal signal connection, so that
@@ -221,16 +221,16 @@ gb_project_tree_builder_changed (GbProjectTreeBuilder    *self,
 }
 
 static void
-gb_project_tree_builder_changed_after (GbProjectTreeBuilder    *self,
-                                       GFile                   *file,
-                                       GFile                   *other_file,
-                                       GFileMonitorEvent        event,
-                                       DzlRecursiveFileMonitor *monitor)
+gb_project_tree_builder_changed_after (GbProjectTreeBuilder *self,
+                                       GFile                *file,
+                                       GFile                *other_file,
+                                       GFileMonitorEvent     event,
+                                       IdeVcsMonitor        *monitor)
 {
   g_assert (GB_PROJECT_TREE_BUILDER (self));
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
-  g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
+  g_assert (IDE_IS_VCS_MONITOR (monitor));
 
   /*
    * We only handle DELETED in the after request so that we can ensure
@@ -245,6 +245,26 @@ gb_project_tree_builder_changed_after (GbProjectTreeBuilder    *self,
       if (node != NULL)
         gb_project_tree_builder_remove (self, node, file);
     }
+}
+
+static void
+gb_project_tree_builder_reloaded (GbProjectTreeBuilder *self,
+                                  IdeVcsMonitor        *monitor)
+{
+  DzlTree *tree;
+
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (IDE_IS_VCS_MONITOR (monitor));
+
+  /*
+   * TODO: VCS reloaded, so queue a draw so we can update the colors on
+   *       previously pixel-cached rows. We'll set the foreground when
+   *       hooking into the pango attributes.
+   */
+
+  tree = dzl_tree_builder_get_tree (DZL_TREE_BUILDER (self));
+  if (tree != NULL)
+    gtk_widget_queue_draw (GTK_WIDGET (tree));
 }
 
 static void
@@ -270,9 +290,15 @@ build_context (GbProjectTreeBuilder *self,
 
   if (!self->has_monitor)
     {
-      DzlRecursiveFileMonitor *monitor = ide_context_get_monitor (context);
+      IdeVcsMonitor *monitor = ide_context_get_monitor (context);
 
       self->has_monitor = TRUE;
+
+      g_signal_connect_object (monitor,
+                               "reloaded",
+                               G_CALLBACK (gb_project_tree_builder_reloaded),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       g_signal_connect_object (monitor,
                                "changed",

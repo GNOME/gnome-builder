@@ -63,11 +63,11 @@ static void gb_vcs_tree_builder_build_node (DzlTreeBuilder *builder,
                                             DzlTreeNode    *node);
 
 static void
-gb_vcs_tree_builder_monitor_changed_cb (GbVcsTreeBuilder        *self,
-                                        GFile                   *file,
-                                        GFile                   *other_file,
-                                        GFileMonitorEvent        event,
-                                        DzlRecursiveFileMonitor *monitor)
+gb_vcs_tree_builder_monitor_changed_cb (GbVcsTreeBuilder  *self,
+                                        GFile             *file,
+                                        GFile             *other_file,
+                                        GFileMonitorEvent  event,
+                                        IdeVcsMonitor     *monitor)
 {
   g_autoptr(DzlTreeNode) node = NULL;
   DzlTree *tree;
@@ -75,7 +75,7 @@ gb_vcs_tree_builder_monitor_changed_cb (GbVcsTreeBuilder        *self,
   g_assert (GB_IS_VCS_TREE_BUILDER (self));
   g_assert (G_IS_FILE (file));
   g_assert (!other_file || G_IS_FILE (other_file));
-  g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
+  g_assert (IDE_IS_VCS_MONITOR (monitor));
 
   /* Rebuild the node if we found it */
   tree = dzl_tree_builder_get_tree (DZL_TREE_BUILDER (self));
@@ -90,7 +90,7 @@ static void
 gb_vcs_tree_builder_set_context (GbVcsTreeBuilder *self,
                                  IdeContext       *context)
 {
-  DzlRecursiveFileMonitor *monitor;
+  IdeVcsMonitor *monitor;
 
   g_assert (GB_IS_VCS_TREE_BUILDER (self));
   g_assert (IDE_IS_CONTEXT (context));
