@@ -113,6 +113,8 @@ ide_vcs_monitor_list_status_cb (GObject      *object,
   g_assert (IDE_IS_VCS (vcs));
   g_assert (IDE_IS_VCS_MONITOR (self));
 
+  self->busy = FALSE;
+
   model = ide_vcs_list_status_finish (vcs, result, NULL);
   if (model == NULL)
     return;
@@ -177,6 +179,18 @@ ide_vcs_monitor_cache_cb (gpointer data)
 }
 
 static void
+ide_vcs_monitor_queue_reload (IdeVcsMonitor *self)
+{
+  g_assert (IDE_IS_VCS_MONITOR (self));
+
+  if (self->cache_source == 0 && !self->busy)
+    self->cache_source = g_idle_add_full (G_PRIORITY_LOW,
+                                          ide_vcs_monitor_cache_cb,
+                                          g_object_ref (self),
+                                          g_object_unref);
+}
+
+static void
 ide_vcs_monitor_changed_cb (IdeVcsMonitor           *self,
                             GFile                   *file,
                             GFile                   *other_file,
@@ -192,11 +206,7 @@ ide_vcs_monitor_changed_cb (IdeVcsMonitor           *self,
 
   g_signal_emit (self, signals[CHANGED], 0, file, other_file, event);
 
-  if (self->cache_source == 0 && !self->busy)
-    self->cache_source = g_idle_add_full (G_PRIORITY_LOW,
-                                          ide_vcs_monitor_cache_cb,
-                                          g_object_ref (self),
-                                          g_object_unref);
+  ide_vcs_monitor_queue_reload (self);
 
   IDE_EXIT;
 }
@@ -218,6 +228,25 @@ ide_vcs_monitor_ignore_func (GFile    *file,
 }
 
 static void
+ide_vcs_monitor_start_cb (GObject      *object,
+                          GAsyncResult *result,
+                          gpointer      user_data)
+{
+  DzlRecursiveFileMonitor *monitor = (DzlRecursiveFileMonitor *)object;
+  g_autoptr(IdeVcsMonitor) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_VCS_MONITOR (self));
+
+  if (!dzl_recursive_file_monitor_start_finish (monitor, result, &error))
+    g_warning ("%s", error->message);
+
+  ide_vcs_monitor_queue_reload (self);
+}
+
+static void
 ide_vcs_monitor_constructed (GObject *object)
 {
   IdeVcsMonitor *self = (IdeVcsMonitor *)object;
@@ -236,7 +265,10 @@ ide_vcs_monitor_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  dzl_recursive_file_monitor_start_async (self->monitor, NULL, NULL, NULL);
+  dzl_recursive_file_monitor_start_async (self->monitor,
+                                          NULL,
+                                          ide_vcs_monitor_start_cb,
+                                          g_object_ref (self));
 }
 
 static void
@@ -361,7 +393,12 @@ ide_vcs_monitor_get_info (IdeVcsMonitor *self,
 
   g_return_val_if_fail (IDE_IS_VCS_MONITOR (self), NULL);
 
-  info = g_hash_table_lookup (self->status_by_file, file);
+  if (self->status_by_file == NULL)
+    return NULL;
 
-  return info ? g_object_ref (info) : NULL;
+  info = g_hash_table_lookup (self->status_by_file, file);
+  if (info == NULL)
+    return NULL;
+
+  return g_object_ref (info);
 }
