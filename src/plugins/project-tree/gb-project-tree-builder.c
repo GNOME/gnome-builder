@@ -198,8 +198,13 @@ gb_project_tree_builder_changed (GbProjectTreeBuilder    *self,
   g_assert (!other_file || G_IS_FILE (other_file));
   g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
 
-  if (FALSE) {}
-  else if (event == G_FILE_MONITOR_EVENT_CREATED)
+  /*
+   * We only handle CREATED in the normal signal connection, so that
+   * we can allow others to deal with the signal and hopefully find
+   * their target node.
+   */
+
+  if (event == G_FILE_MONITOR_EVENT_CREATED)
     {
       g_autoptr(GFile) parent = g_file_get_parent (file);
       DzlTreeNode *node = g_hash_table_lookup (self->expanded, parent);
@@ -213,7 +218,26 @@ gb_project_tree_builder_changed (GbProjectTreeBuilder    *self,
             gb_project_tree_builder_add (self, node, file);
         }
     }
-  else if (event == G_FILE_MONITOR_EVENT_DELETED)
+}
+
+static void
+gb_project_tree_builder_changed_after (GbProjectTreeBuilder    *self,
+                                       GFile                   *file,
+                                       GFile                   *other_file,
+                                       GFileMonitorEvent        event,
+                                       DzlRecursiveFileMonitor *monitor)
+{
+  g_assert (GB_PROJECT_TREE_BUILDER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!other_file || G_IS_FILE (other_file));
+  g_assert (DZL_IS_RECURSIVE_FILE_MONITOR (monitor));
+
+  /*
+   * We only handle DELETED in the after request so that we can ensure
+   * that other consumers can locate nodes before we purge them.
+   */
+
+  if (event == G_FILE_MONITOR_EVENT_DELETED)
     {
       g_autoptr(GFile) parent = g_file_get_parent (file);
       DzlTreeNode *node = g_hash_table_lookup (self->expanded, parent);
@@ -255,6 +279,12 @@ build_context (GbProjectTreeBuilder *self,
                                G_CALLBACK (gb_project_tree_builder_changed),
                                self,
                                G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (monitor,
+                               "changed",
+                               G_CALLBACK (gb_project_tree_builder_changed_after),
+                               self,
+                               G_CONNECT_SWAPPED | G_CONNECT_AFTER);
     }
 
   file_info = g_file_info_new ();
