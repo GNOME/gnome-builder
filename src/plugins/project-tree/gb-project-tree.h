@@ -37,5 +37,8 @@ void        gb_project_tree_reveal                 (GbProjectTree *self,
                                                     GFile         *file,
                                                     gboolean       focus_tree_view,
                                                     gboolean       expand_folder);
+DzlTreeNode *
+            gb_project_tree_find_file_node         (GbProjectTree *self,
+                                                    GFile         *file);
 
 G_END_DECLS

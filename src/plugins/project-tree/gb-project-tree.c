@@ -428,6 +428,83 @@ find_files_node (DzlTree     *tree,
 }
 
 /**
+ * gb_project_tree_find_file_node:
+ * @self: a #GbProjectTree
+ * @file: a #GFile
+ *
+ * Tries to locate the #DzlTreeNode that contains #GFile.
+ *
+ * If the node does not exist, %NULL is returned.
+ *
+ * Returns: (transfer full) (nullable): A #DzlTreeNode or %NULL.
+ *
+ * Since: 3.28
+ */
+DzlTreeNode *
+gb_project_tree_find_file_node (GbProjectTree *self,
+                                GFile         *file)
+{
+  g_autofree gchar *relpath = NULL;
+  g_auto(GStrv) parts = NULL;
+  DzlTreeNode *node;
+  DzlTreeNode *last_node;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *workdir;
+
+  g_return_val_if_fail (GB_IS_PROJECT_TREE (self), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  context = gb_project_tree_get_context (self);
+  if (context == NULL)
+    return NULL;
+
+  g_assert (IDE_IS_CONTEXT (context));
+
+  node = dzl_tree_find_child_node (DZL_TREE (self), NULL, find_files_node, NULL);
+  if (node == NULL)
+    return NULL;
+
+  g_assert (DZL_IS_TREE_NODE (node));
+
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  if (!g_file_has_prefix (file, workdir))
+    return NULL;
+
+  relpath = g_file_get_relative_path (workdir, file);
+  if (relpath == NULL)
+    return NULL;
+
+  parts = g_strsplit (relpath, G_DIR_SEPARATOR_S, 0);
+
+  last_node = node;
+  for (guint i = 0; parts[i] != NULL; i++)
+    {
+      /*
+       * Only scan children if we know they exist, otherwise we risk
+       * creating the children nodes as part of the scan. (Which we are
+       * explicitely trying to avoid.
+       */
+      if (dzl_tree_node_n_children (node) == 0)
+        return NULL;
+
+      /*
+       * Scan the children for this particular path part. If we don't
+       * locate it, we can short cirtcuit immediately.
+       */
+      node = dzl_tree_find_child_node (DZL_TREE (self), node, find_child_node, parts[i]);
+      if (node == NULL)
+        return NULL;
+
+      last_node = node;
+    }
+
+  return g_object_ref (last_node);
+}
+
+/**
  * gb_project_tree_reveal:
  * @self: a #GbProjectTree
  * @file: the #GFile to reveal
@@ -450,17 +527,15 @@ gb_project_tree_reveal (GbProjectTree *self,
   DzlTreeNode *last_node = NULL;
   IdeVcs *vcs;
   GFile *workdir;
-  guint i;
   gboolean reveal_parent = FALSE;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
   g_return_if_fail (G_IS_FILE (file));
 
-  context = gb_project_tree_get_context (self);
-  g_assert (IDE_IS_CONTEXT (context));
-
-  if (context == NULL)
+  if (NULL == (context = gb_project_tree_get_context (self)))
     return;
+
+  g_assert (IDE_IS_CONTEXT (context));
 
   node = dzl_tree_find_child_node (DZL_TREE (self), NULL, find_files_node, NULL);
   if (node == NULL)
@@ -469,29 +544,28 @@ gb_project_tree_reveal (GbProjectTree *self,
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
 
-  if (!g_file_equal (workdir, file))
+  if (!g_file_has_prefix (file, workdir))
+    return;
+
+  relpath = g_file_get_relative_path (workdir, file);
+  if (relpath == NULL)
+    return;
+
+  parts = g_strsplit (relpath, G_DIR_SEPARATOR_S, 0);
+
+  last_node = node;
+  for (guint i = 0; parts [i]; i++)
     {
-      relpath = g_file_get_relative_path (workdir, file);
-
-      if (relpath == NULL)
-        return;
-
-      parts = g_strsplit (relpath, G_DIR_SEPARATOR_S, 0);
-
-      last_node = node;
-      for (i = 0; parts [i]; i++)
+      node = dzl_tree_find_child_node (DZL_TREE (self), node, find_child_node, parts [i]);
+      if (node == NULL)
         {
-          node = dzl_tree_find_child_node (DZL_TREE (self), node, find_child_node, parts [i]);
-          if (node == NULL)
-            {
-              node = last_node;
-              reveal_parent = TRUE;
-              break;
-            }
-          else
-            {
-              last_node = node;
-            }
+          node = last_node;
+          reveal_parent = TRUE;
+          break;
+        }
+      else
+        {
+          last_node = node;
         }
     }
 
