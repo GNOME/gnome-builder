@@ -280,10 +280,6 @@ enum {
 };
 
 enum {
-  TARGET_URI_LIST = 100
-};
-
-enum {
   FONT_SCALE_XX_SMALL,
   FONT_SCALE_X_SMALL,
   FONT_SCALE_SMALL,
@@ -6691,7 +6687,6 @@ ide_source_view_init (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkSourceCompletion *completion;
-  GtkTargetList *target_list;
 
   priv->include_regex = g_regex_new (INCLUDE_STATEMENTS,
                                      G_REGEX_OPTIMIZE,
@@ -6830,13 +6825,6 @@ ide_source_view_init (IdeSourceView *self)
    */
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
   gtk_source_completion_block_interactive (completion);
-
-  /*
-   * Drag and drop support
-   */
-  target_list = gtk_drag_dest_get_target_list (GTK_WIDGET (self));
-  if (target_list)
-    gtk_target_list_add_uri_targets (target_list, TARGET_URI_LIST);
 
   dzl_widget_action_group_attach (self, "sourceview");
 }

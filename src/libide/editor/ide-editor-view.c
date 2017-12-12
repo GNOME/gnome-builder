@@ -41,10 +41,6 @@ enum {
   N_PROPS
 };
 
-enum {
-  DND_TARGET_URI_LIST = 100,
-};
-
 static void ide_editor_view_update_reveal_timer (IdeEditorView *self);
 
 G_DEFINE_TYPE (IdeEditorView, ide_editor_view, IDE_TYPE_LAYOUT_VIEW)
@@ -120,54 +116,6 @@ ide_editor_view_notify_child_revealed (IdeEditorView *self,
        */
       if (focus == NULL || !gtk_widget_is_ancestor (focus, GTK_WIDGET (revealer)))
         gtk_widget_grab_focus (GTK_WIDGET (self->search_bar));
-    }
-}
-
-static void
-ide_editor_view_drag_data_received (IdeEditorView    *self,
-                                    GdkDragContext   *context,
-                                    gint              x,
-                                    gint              y,
-                                    GtkSelectionData *selection_data,
-                                    guint             info,
-                                    guint             timestamp,
-                                    IdeSourceView    *source_view)
-{
-  g_auto(GStrv) uri_list = NULL;
-
-  g_assert (IDE_IS_EDITOR_VIEW (self));
-  g_assert (IDE_IS_SOURCE_VIEW (source_view));
-
-  switch (info)
-    {
-    case DND_TARGET_URI_LIST:
-      uri_list = dzl_dnd_get_uri_list (selection_data);
-
-      if (uri_list != NULL)
-        {
-          GVariantBuilder *builder;
-          GVariant *variant;
-          guint i;
-
-          builder = g_variant_builder_new (G_VARIANT_TYPE_STRING_ARRAY);
-          for (i = 0; uri_list [i]; i++)
-            g_variant_builder_add (builder, "s", uri_list [i]);
-          variant = g_variant_builder_end (builder);
-          g_variant_builder_unref (builder);
-
-          /*
-           * request that we get focus first so the workbench will deliver the
-           * document to us in the case it is not already open
-           */
-          gtk_widget_grab_focus (GTK_WIDGET (self));
-          dzl_gtk_widget_action (GTK_WIDGET (self), "workbench", "open-uri-list", variant);
-        }
-
-      gtk_drag_finish (context, TRUE, FALSE, timestamp);
-      break;
-
-    default:
-      break;
     }
 }
 
@@ -713,11 +661,6 @@ ide_editor_view_constructed (GObject *object)
   _ide_editor_view_init_settings (self);
 
   g_signal_connect_swapped (self->source_view,
-                            "drag-data-received",
-                            G_CALLBACK (ide_editor_view_drag_data_received),
-                            self);
-
-  g_signal_connect_swapped (self->source_view,
                             "focus-in-event",
                             G_CALLBACK (ide_editor_view_focus_in_event),
                             self);
@@ -962,8 +905,6 @@ ide_editor_view_class_init (IdeEditorViewClass *klass)
 static void
 ide_editor_view_init (IdeEditorView *self)
 {
-  GtkTargetList *target_list;
-
   DZL_COUNTER_INC (instances);
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -1014,11 +955,6 @@ ide_editor_view_init (IdeEditorView *self)
   /* Setup bindings for the buffer. */
   self->buffer_bindings = dzl_binding_group_new ();
   dzl_binding_group_bind (self->buffer_bindings, "title", self, "title", 0);
-
-  /* Setup Drag and Drop support. */
-  target_list = gtk_drag_dest_get_target_list (GTK_WIDGET (self->source_view));
-  if (target_list != NULL)
-    gtk_target_list_add_uri_targets (target_list, DND_TARGET_URI_LIST);
 
   /* Load our custom font for the overview map. */
   gtk_source_map_set_view (self->map, GTK_SOURCE_VIEW (self->source_view));
