@@ -192,6 +192,7 @@ G_BEGIN_DECLS
 #include "vcs/ide-vcs-config.h"
 #include "vcs/ide-vcs-file-info.h"
 #include "vcs/ide-vcs-initializer.h"
+#include "vcs/ide-vcs-monitor.h"
 #include "vcs/ide-vcs-uri.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-perspective.h"

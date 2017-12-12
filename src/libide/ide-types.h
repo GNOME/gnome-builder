@@ -138,5 +138,6 @@ typedef struct _IdeUnsavedFile                 IdeUnsavedFile;
 typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
 
 typedef struct _IdeVcs                         IdeVcs;
+typedef struct _IdeVcsMonitor                  IdeVcsMonitor;
 
 G_END_DECLS
