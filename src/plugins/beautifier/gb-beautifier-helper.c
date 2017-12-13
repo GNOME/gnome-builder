@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gb-beautifier-helper"
+
 #include <glib.h>
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
