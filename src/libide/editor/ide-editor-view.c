@@ -315,6 +315,7 @@ ide_editor_view_set_buffer (IdeEditorView *self,
       dzl_binding_group_set_source (self->buffer_bindings, buffer);
       gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->source_view),
                                 GTK_TEXT_BUFFER (buffer));
+      gtk_drag_dest_unset (GTK_WIDGET (self->source_view));
     }
 }
 
@@ -908,8 +909,6 @@ ide_editor_view_init (IdeEditorView *self)
   DZL_COUNTER_INC (instances);
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  gtk_drag_dest_unset (GTK_WIDGET (self->source_view));
 
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "ide-editor-view-document-menu");
