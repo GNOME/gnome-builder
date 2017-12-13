@@ -910,7 +910,9 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
 
   g_task_set_task_data (task, state, load_state_free);
 
-  g_hash_table_insert (self->loading, g_object_ref (file), NULL);
+  g_hash_table_insert (self->loading,
+                       g_object_ref (file),
+                       g_object_ref (state->buffer));
 
   g_signal_connect_object (task,
                            "notify::completed",
@@ -1680,7 +1682,8 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->settings = g_settings_new ("org.gnome.builder.editor");
   self->loading = g_hash_table_new_full ((GHashFunc)ide_file_hash,
                                          (GEqualFunc)ide_file_equal,
-                                         g_object_unref, NULL);
+                                         g_object_unref,
+                                         g_object_unref);
 
   g_settings_bind (self->settings, "minimum-word-size", self->word_completion, "minimum-word-size", G_SETTINGS_BIND_GET);
   g_settings_bind (self->settings, "auto-save", self, "auto-save", G_SETTINGS_BIND_GET);
@@ -1793,18 +1796,30 @@ IdeBuffer *
 ide_buffer_manager_find_buffer (IdeBufferManager *self,
                                 GFile            *file)
 {
-  gsize i;
+  GHashTableIter iter;
+  gpointer key, value;
 
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
-  for (i = 0; i < self->buffers->len; i++)
+  for (guint i = 0; i < self->buffers->len; i++)
     {
       IdeBuffer *buffer;
       IdeFile *buffer_file;
 
       buffer = g_ptr_array_index (self->buffers, i);
       buffer_file = ide_buffer_get_file (buffer);
+
+      if (g_file_equal (file, ide_file_get_file (buffer_file)))
+        return buffer;
+    }
+
+  g_hash_table_iter_init (&iter, self->loading);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      IdeFile *buffer_file = key;
+      IdeBuffer *buffer = value;
 
       if (g_file_equal (file, ide_file_get_file (buffer_file)))
         return buffer;
