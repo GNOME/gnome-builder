@@ -583,6 +583,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
        */
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
+          _ide_buffer_set_failure (state->buffer, error);
           g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
@@ -666,6 +667,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
+          _ide_buffer_set_failure (state->buffer, error);
           g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
@@ -1075,17 +1077,17 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
   g_assert (IDE_IS_FILE (file));
   g_assert (G_IS_TASK (task));
 
+  source_file = _ide_file_get_source_file (file);
+  state = g_task_get_task_data (task);
+
   file_settings = ide_file_load_settings_finish (file, result, &error);
 
-  if (!file_settings)
+  if (file_settings == NULL)
     {
+      _ide_buffer_set_failure (state->buffer, error);
       g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
-
-  source_file = _ide_file_get_source_file (file);
-
-  state = g_task_get_task_data (task);
 
   g_assert (GTK_SOURCE_IS_FILE (source_file));
   g_assert (IDE_IS_BUFFER (state->buffer));

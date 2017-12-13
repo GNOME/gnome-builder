@@ -38,6 +38,8 @@ void              _ide_buffer_set_mtime             (IdeBuffer        *self,
                                                      const GTimeVal   *mtime);
 void              _ide_buffer_set_read_only         (IdeBuffer        *buffer,
                                                      gboolean          read_only);
+void              _ide_buffer_set_failure           (IdeBuffer        *self,
+                                                     const GError     *error);
 
 void              _ide_buffer_manager_reclaim       (IdeBufferManager *self,
                                                      IdeBuffer        *buffer);
