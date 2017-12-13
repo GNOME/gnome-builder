@@ -460,7 +460,7 @@ ide_layout_grid_drag_motion (GtkWidget      *widget,
   IdeLayoutGridColumn *column = NULL;
   IdeLayoutStack *stack = NULL;
   DzlAnimation *drag_anim;
-  GdkRectangle area = { 0 };
+  GdkRectangle area = {0};
   GtkAllocation alloc;
   gint drop = DROP_ONTO;
 
@@ -506,6 +506,100 @@ ide_layout_grid_drag_motion (GtkWidget      *widget,
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
   return GDK_EVENT_STOP;
+}
+
+static void
+ide_layout_grid_drag_data_received (GtkWidget        *widget,
+                                    GdkDragContext   *context,
+                                    gint              x,
+                                    gint              y,
+                                    GtkSelectionData *data,
+                                    guint             info,
+                                    guint             time_)
+{
+  IdeLayoutGrid *self = (IdeLayoutGrid *)widget;
+  IdeLayoutGridColumn *column = NULL;
+  IdeLayoutStack *stack = NULL;
+  g_auto(GStrv) uris = NULL;
+  GdkRectangle area = {0};
+  gint drop = DROP_ONTO;
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+  g_assert (GDK_IS_DRAG_CONTEXT (context));
+
+  if (!ide_layout_grid_get_drop_area (self, x, y, &area, &column, &stack, &drop))
+    return;
+
+  g_assert (IDE_IS_LAYOUT_GRID_COLUMN (column));
+  g_assert (IDE_IS_LAYOUT_STACK (stack));
+
+  if (!(uris = gtk_selection_data_get_uris (data)))
+    return;
+
+  for (guint i = 0; uris[i] != NULL; i++)
+    {
+      const gchar *uri = uris[i];
+      IdeLayoutView *view = NULL;
+      gint column_index = 0;
+      gint stack_index = 0;
+
+      g_signal_emit (self, signals [CREATE_VIEW], 0, uri, &view);
+
+      if (view == NULL)
+        {
+          g_debug ("Failed to load IdeLayoutView for \"%s\"", uri);
+          continue;
+        }
+
+      gtk_container_child_get (GTK_CONTAINER (self), GTK_WIDGET (column),
+                               "index", &column_index,
+                               NULL);
+      gtk_container_child_get (GTK_CONTAINER (column), GTK_WIDGET (stack),
+                               "index", &stack_index,
+                               NULL);
+
+      switch (drop)
+        {
+        case DROP_ONTO:
+          gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
+          break;
+
+        case DROP_ABOVE:
+          stack = IDE_LAYOUT_STACK (ide_layout_grid_create_stack (self));
+          gtk_container_add_with_properties (GTK_CONTAINER (column), GTK_WIDGET (stack),
+                                             "index", stack_index,
+                                             NULL);
+          gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
+          break;
+
+        case DROP_BELOW:
+          stack = IDE_LAYOUT_STACK (ide_layout_grid_create_stack (self));
+          gtk_container_add_with_properties (GTK_CONTAINER (column), GTK_WIDGET (stack),
+                                             "index", stack_index + 1,
+                                             NULL);
+          gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
+          break;
+
+        case DROP_LEFT_OF:
+          column = IDE_LAYOUT_GRID_COLUMN (ide_layout_grid_create_column (self));
+          gtk_container_add_with_properties (GTK_CONTAINER (self), GTK_WIDGET (column),
+                                             "index", column_index,
+                                             NULL);
+          gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (view));
+          break;
+
+        case DROP_RIGHT_OF:
+          column = IDE_LAYOUT_GRID_COLUMN (ide_layout_grid_create_column (self));
+          gtk_container_add_with_properties (GTK_CONTAINER (self), GTK_WIDGET (column),
+                                             "index", column_index + 1,
+                                             NULL);
+          gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (view));
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+    }
 }
 
 static void
@@ -638,6 +732,7 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
   object_class->get_property = ide_layout_grid_get_property;
   object_class->set_property = ide_layout_grid_set_property;
 
+  widget_class->drag_data_received = ide_layout_grid_drag_data_received;
   widget_class->drag_motion = ide_layout_grid_drag_motion;
   widget_class->drag_leave = ide_layout_grid_drag_leave;
   widget_class->drag_failed = ide_layout_grid_drag_failed;
@@ -689,6 +784,27 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
                   G_STRUCT_OFFSET (IdeLayoutGridClass, create_stack),
                   g_signal_accumulator_first_wins, NULL, NULL,
                   IDE_TYPE_LAYOUT_STACK, 0);
+
+  /**
+   * IdeLayoutGrid::create-view:
+   * @self: an #IdeLayoutGrid
+   * @uri: the URI to open
+   *
+   * Creates a new view for @uri to be added to the grid.
+   *
+   * Returns: (transfer full): A newly created #IdeLayoutView
+   *
+   * Since: 3.28
+   */
+  signals [CREATE_VIEW] =
+    g_signal_new (g_intern_static_string ("create-view"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeLayoutGridClass, create_view),
+                  g_signal_accumulator_first_wins, NULL, NULL,
+                  IDE_TYPE_LAYOUT_VIEW,
+                  1,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
