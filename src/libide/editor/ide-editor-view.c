@@ -909,6 +909,8 @@ ide_editor_view_init (IdeEditorView *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  gtk_drag_dest_unset (GTK_WIDGET (self->source_view));
+
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "ide-editor-view-document-menu");
 

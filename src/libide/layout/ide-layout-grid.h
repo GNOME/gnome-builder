@@ -37,9 +37,10 @@ struct _IdeLayoutGridClass
   DzlMultiPanedClass parent_class;
 
   IdeLayoutStack *(*create_stack) (IdeLayoutGrid *self);
+  IdeLayoutView  *(*create_view)  (IdeLayoutGrid *self,
+                                   const gchar   *uri);
 
   /*< private >*/
-  gpointer _reserved1;
   gpointer _reserved2;
   gpointer _reserved3;
   gpointer _reserved4;

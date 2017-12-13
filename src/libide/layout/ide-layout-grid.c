@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid"
 
+#include <string.h>
+
 #include "ide-object.h"
 
 #include "layout/ide-layout-grid.h"
@@ -53,12 +55,29 @@ typedef struct
   GArray         *stack_info;
 
   /*
+   * This owned reference is our box highlight theatric that we
+   * animate while doing a DnD drop interaction.
+   */
+  DzlBoxTheatric *drag_theatric;
+  DzlAnimation   *drag_anim;
+
+  /*
    * This unowned reference is simply used to compare to a new focus
    * view to see if we have changed our current view. It is not to
    * be used directly, only for pointer comparison.
    */
   IdeLayoutView  *_last_focused_view;
 } IdeLayoutGridPrivate;
+
+typedef struct
+{
+  IdeLayoutGridColumn *column;
+  IdeLayoutStack      *stack;
+  GdkRectangle         area;
+  gint                 drop;
+  gint                 x;
+  gint                 y;
+} DropLocate;
 
 typedef struct
 {
@@ -76,7 +95,16 @@ enum {
 
 enum {
   CREATE_STACK,
+  CREATE_VIEW,
   N_SIGNALS
+};
+
+enum {
+  DROP_ONTO,
+  DROP_ABOVE,
+  DROP_BELOW,
+  DROP_LEFT_OF,
+  DROP_RIGHT_OF,
 };
 
 static void list_model_iface_init (GListModelInterface *iface);
@@ -332,6 +360,198 @@ ide_layout_grid_remove (GtkContainer *container,
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_COLUMN]);
 }
 
+static inline gboolean
+rect_contains_point (cairo_rectangle_int_t *rect,
+                     gint                   x,
+                     gint                   y)
+{
+  return x >= rect->x &&
+         y >= rect->y &&
+         x <= (rect->x + rect->width) &&
+         y <= (rect->y + rect->height);
+}
+
+static gboolean
+ide_layout_grid_get_drop_area (IdeLayoutGrid        *self,
+                               gint                  x,
+                               gint                  y,
+                               GdkRectangle         *out_area,
+                               IdeLayoutGridColumn **out_column,
+                               IdeLayoutStack      **out_stack,
+                               gint                 *out_drop)
+{
+  GtkAllocation alloc;
+  GtkWidget *column;
+  GtkWidget *stack = NULL;
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+  g_assert (out_area != NULL);
+  g_assert (out_column != NULL);
+  g_assert (out_stack != NULL);
+  g_assert (out_drop != NULL);
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+
+  column = dzl_multi_paned_get_at_point (DZL_MULTI_PANED (self), x + alloc.x, 0);
+  if (column != NULL)
+    stack = dzl_multi_paned_get_at_point (DZL_MULTI_PANED (column), 0, y + alloc.y);
+
+  if (column != NULL && stack != NULL)
+    {
+      GtkAllocation stack_alloc;
+
+      gtk_widget_get_allocation (stack, &stack_alloc);
+
+      gtk_widget_translate_coordinates (stack,
+                                        GTK_WIDGET (self),
+                                        0, 0,
+                                        &stack_alloc.x, &stack_alloc.y);
+
+      *out_area = stack_alloc;
+      *out_column = IDE_LAYOUT_GRID_COLUMN (column);
+      *out_stack = IDE_LAYOUT_STACK (stack);
+      *out_drop = DROP_ONTO;
+
+      gtk_widget_translate_coordinates (GTK_WIDGET (self), stack, x, y, &x, &y);
+
+      if (FALSE) {}
+      else if (x < (stack_alloc.width / 4))
+        {
+          out_area->y = 0;
+          out_area->height = alloc.height;
+          out_area->width = stack_alloc.width / 4;
+          *out_drop = DROP_LEFT_OF;
+        }
+      else if (x > (stack_alloc.width / 4 * 3))
+        {
+          out_area->y = 0;
+          out_area->height = alloc.height;
+          out_area->x = dzl_cairo_rectangle_x2 (&stack_alloc) - (stack_alloc.width / 4);
+          out_area->width = stack_alloc.width / 4;
+          *out_drop = DROP_RIGHT_OF;
+        }
+      else if (y < (stack_alloc.height / 4))
+        {
+          out_area->height = stack_alloc.height / 4;
+          *out_drop = DROP_ABOVE;
+        }
+      else if (y > (stack_alloc.height / 4 * 3))
+        {
+          out_area->y = dzl_cairo_rectangle_y2 (&stack_alloc) - (stack_alloc.height / 4);
+          out_area->height = stack_alloc.height / 4;
+          *out_drop = DROP_BELOW;
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+ide_layout_grid_drag_motion (GtkWidget      *widget,
+                             GdkDragContext *context,
+                             gint            x,
+                             gint            y,
+                             guint           time_)
+{
+  IdeLayoutGrid *self = (IdeLayoutGrid *)widget;
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+  IdeLayoutGridColumn *column = NULL;
+  IdeLayoutStack *stack = NULL;
+  DzlAnimation *drag_anim;
+  GdkRectangle area = { 0 };
+  GtkAllocation alloc;
+  gint drop = DROP_ONTO;
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+  g_assert (GDK_IS_DRAG_CONTEXT (context));
+
+  if (priv->drag_anim != NULL)
+    {
+      dzl_animation_stop (priv->drag_anim);
+      dzl_clear_weak_pointer (&priv->drag_anim);
+    }
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+
+  if (!ide_layout_grid_get_drop_area (self, x, y, &area, &column, &stack, &drop))
+    return GDK_EVENT_PROPAGATE;
+
+  if (priv->drag_theatric == NULL)
+    {
+      priv->drag_theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
+                                          "x", area.x,
+                                          "y", area.y,
+                                          "width", area.width,
+                                          "height", area.height,
+                                          "alpha", 0.3,
+                                          "background", "#729fcf",
+                                          "target", self,
+                                          NULL);
+      return GDK_EVENT_STOP;
+    }
+
+  drag_anim = dzl_object_animate (priv->drag_theatric,
+                                  DZL_ANIMATION_EASE_OUT_CUBIC,
+                                  100,
+                                  gtk_widget_get_frame_clock (GTK_WIDGET (self)),
+                                  "x", area.x,
+                                  "width", area.width,
+                                  "y", area.y,
+                                  "height", area.height,
+                                  NULL);
+  dzl_set_weak_pointer (&priv->drag_anim, drag_anim);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  return GDK_EVENT_STOP;
+}
+
+static void
+ide_layout_grid_drag_leave (GtkWidget      *widget,
+                            GdkDragContext *context,
+                            guint           time_)
+{
+  IdeLayoutGrid *self = (IdeLayoutGrid *)widget;
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+  g_assert (GDK_IS_DRAG_CONTEXT (context));
+
+  if (priv->drag_anim != NULL)
+    {
+      dzl_animation_stop (priv->drag_anim);
+      dzl_clear_weak_pointer (&priv->drag_anim);
+    }
+
+  g_clear_object (&priv->drag_theatric);
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static gboolean
+ide_layout_grid_drag_failed (GtkWidget      *widget,
+                             GdkDragContext *context,
+                             GtkDragResult   result)
+{
+  IdeLayoutGrid *self = (IdeLayoutGrid *)widget;
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+  g_assert (GDK_IS_DRAG_CONTEXT (context));
+
+  if (priv->drag_anim != NULL)
+    {
+      dzl_animation_stop (priv->drag_anim);
+      dzl_clear_weak_pointer (&priv->drag_anim);
+    }
+
+  g_clear_object (&priv->drag_theatric);
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 ide_layout_grid_grab_focus (GtkWidget *widget)
 {
@@ -418,6 +638,9 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
   object_class->get_property = ide_layout_grid_get_property;
   object_class->set_property = ide_layout_grid_set_property;
 
+  widget_class->drag_motion = ide_layout_grid_drag_motion;
+  widget_class->drag_leave = ide_layout_grid_drag_leave;
+  widget_class->drag_failed = ide_layout_grid_drag_failed;
   widget_class->grab_focus = ide_layout_grid_grab_focus;
   widget_class->hierarchy_changed = ide_layout_grid_hierarchy_changed;
 
@@ -472,6 +695,15 @@ static void
 ide_layout_grid_init (IdeLayoutGrid *self)
 {
   IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+  static const GtkTargetEntry target_entries[] = {
+    { "text/uri-list", 0, 0 },
+  };
+
+  gtk_drag_dest_set (GTK_WIDGET (self),
+                     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+                     target_entries,
+                     G_N_ELEMENTS (target_entries),
+                     GDK_ACTION_COPY);
 
   priv->stack_info = g_array_new (FALSE, FALSE, sizeof (StackInfo));
 
