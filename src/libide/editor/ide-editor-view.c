@@ -88,6 +88,21 @@ ide_editor_view_load_fonts (IdeEditorView *self)
 }
 
 static void
+ide_editor_view_buffer_notify_failed (IdeEditorView *self,
+                                      GParamSpec    *pspec,
+                                      IdeBuffer     *buffer)
+{
+  gboolean failed;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  failed = ide_buffer_get_failed (buffer);
+
+  ide_layout_view_set_failed (IDE_LAYOUT_VIEW (self), failed);
+}
+
+static void
 ide_editor_view_stop_search (IdeEditorView      *self,
                              IdeEditorSearchBar *search_bar)
 {
@@ -300,6 +315,7 @@ ide_editor_view_bind_signals (IdeEditorView  *self,
   ide_editor_view_buffer_modified_changed (self, buffer);
   ide_editor_view_buffer_notify_language (self, NULL, buffer);
   ide_editor_view_buffer_notify_style_scheme (self, NULL, buffer);
+  ide_editor_view_buffer_notify_failed (self, NULL, buffer);
 }
 
 static void
@@ -926,6 +942,11 @@ ide_editor_view_init (IdeEditorView *self)
   dzl_signal_group_connect_swapped (self->buffer_signals,
                                     "modified-changed",
                                     G_CALLBACK (ide_editor_view_buffer_modified_changed),
+                                    self);
+
+  dzl_signal_group_connect_swapped (self->buffer_signals,
+                                    "notify::failed",
+                                    G_CALLBACK (ide_editor_view_buffer_notify_failed),
                                     self);
 
   dzl_signal_group_connect_swapped (self->buffer_signals,
