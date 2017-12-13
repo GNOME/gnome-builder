@@ -223,6 +223,84 @@ ide_editor_perspective_create_edge (DzlDockBin      *dock_bin,
 }
 
 static void
+ide_editor_perspective_load_file_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeBuffer) buffer = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  buffer = ide_buffer_manager_load_file_finish (bufmgr, result, &error);
+
+  if (error != NULL)
+    g_warning ("%s", error->message);
+
+  /* TODO: Ensure that the view is marked as failed */
+
+  IDE_EXIT;
+}
+
+static IdeLayoutView *
+ide_editor_perspective_create_view (IdeEditorPerspective *self,
+                                    const gchar          *uri,
+                                    IdeLayoutGrid        *grid)
+{
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  IdeBufferManager *bufmgr;
+  IdeContext *context;
+  IdeBuffer *buffer;
+
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+  g_assert (uri != NULL);
+  g_assert (IDE_IS_LAYOUT_GRID (grid));
+
+  g_debug ("Creating view for %s", uri);
+
+  context = ide_widget_get_context (GTK_WIDGET (self));
+
+  file = g_file_new_for_uri (uri);
+  ifile = ide_file_new (context, file);
+  bufmgr = ide_context_get_buffer_manager (context);
+  buffer = ide_buffer_manager_find_buffer (bufmgr, file);
+
+  /*
+   * If we failed to locate an already loaded buffer, we need to start
+   * loading the buffer. But that could take some time. Either way, after
+   * we start the loading process, we can access the buffer and we'll
+   * display it while it loads.
+   */
+
+  if (buffer == NULL)
+    {
+      /* TODO: We probably need a generic "Open" API that allows
+       *       us to handle any sort of API and redirect it to a
+       *       given view provider.
+       */
+      ide_buffer_manager_load_file_async (bufmgr,
+                                          ifile,
+                                          FALSE,
+                                          IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW,
+                                          NULL,
+                                          NULL,
+                                          ide_editor_perspective_load_file_cb,
+                                          g_object_ref (self));
+      buffer = ide_buffer_manager_find_buffer (bufmgr, file);
+    }
+
+  return g_object_new (IDE_TYPE_EDITOR_VIEW,
+                       "buffer", buffer,
+                       "visible", TRUE,
+                       NULL);
+}
+
+static void
 ide_editor_perspective_grab_focus (GtkWidget *widget)
 {
   IdeEditorPerspective *self = (IdeEditorPerspective *)widget;
@@ -282,6 +360,11 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
   g_signal_connect_swapped (self->grid,
                             "notify::current-view",
                             G_CALLBACK (ide_editor_perspective_notify_current_view),
+                            self);
+
+  g_signal_connect_swapped (self->grid,
+                            "create-view",
+                            G_CALLBACK (ide_editor_perspective_create_view),
                             self);
 
   sidebar = ide_editor_perspective_get_sidebar (self);
