@@ -86,6 +86,7 @@ typedef struct
   IdeExtensionSetAdapter *symbol_resolvers_adapter;
   PeasExtensionSet       *addins;
   gchar                  *title;
+  GError                 *failure;
 
   DzlSignalGroup         *file_signals;
 
@@ -112,6 +113,7 @@ typedef struct
   guint                   loading : 1;
   guint                   mtime_set : 1;
   guint                   read_only : 1;
+  guint                   failed : 1;
 } IdeBufferPrivate;
 
 typedef struct
@@ -132,6 +134,7 @@ enum {
   PROP_BUSY,
   PROP_CHANGED_ON_VOLUME,
   PROP_CONTEXT,
+  PROP_FAILED,
   PROP_FILE,
   PROP_HAS_DIAGNOSTICS,
   PROP_HIGHLIGHT_DIAGNOSTICS,
@@ -1401,6 +1404,8 @@ ide_buffer_dispose (GObject *object)
   dzl_clear_source (&priv->reclamation_handler);
   dzl_clear_source (&priv->check_modified_timeout);
 
+  g_clear_pointer (&priv->failure, g_error_free);
+
   if (priv->context != NULL)
     {
       IdeBufferManager *buffer_manager = ide_context_get_buffer_manager (priv->context);
@@ -1487,6 +1492,10 @@ ide_buffer_get_property (GObject    *object,
 
     case PROP_CONTEXT:
       g_value_set_object (value, ide_buffer_get_context (self));
+      break;
+
+    case PROP_FAILED:
+      g_value_set_boolean (value, ide_buffer_get_failed (self));
       break;
 
     case PROP_FILE:
@@ -1588,6 +1597,20 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeBuffer:failed:
+   *
+   * The "failed" property is set to %TRUE if the buffer failed to load.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_FAILED] =
+    g_param_spec_boolean ("failed",
+                          "Failed",
+                          "If the buffer has failed in loading.",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FILE] =
     g_param_spec_object ("file",
@@ -3144,4 +3167,38 @@ _ide_buffer_get_addins (IdeBuffer *self)
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   return priv->addins;
+}
+
+gboolean
+ide_buffer_get_failed (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
+  return priv->failed;
+}
+
+void
+_ide_buffer_set_failure (IdeBuffer    *self,
+                         const GError *error)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  priv->failed = !!error;
+  g_clear_pointer (&priv->failure, g_error_free);
+  priv->failure = g_error_copy (error);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FAILED]);
+}
+
+const GError *
+ide_buffer_get_failure (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return priv->failure;
 }

@@ -156,8 +156,12 @@ IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_release                       (IdeBuffer            *self);
 IDE_AVAILABLE_IN_ALL
 gchar                    *ide_buffer_get_word_at_iter              (IdeBuffer            *self,
-                                                              const GtkTextIter    *iter);
+                                                                    const GtkTextIter    *iter);
 IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_sync_to_unsaved_files         (IdeBuffer            *self);
+IDE_AVAILABLE_IN_3_28
+gboolean                  ide_buffer_get_failed                    (IdeBuffer            *self);
+IDE_AVAILABLE_IN_3_28
+const GError             *ide_buffer_get_failure                   (IdeBuffer            *self);
 
 G_END_DECLS
