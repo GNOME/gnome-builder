@@ -155,6 +155,7 @@
                         <property name="halign">fill</property>
                         <property name="action-name">source-view.use-spaces</property>
                         <property name="action-target">true</property>
+                        <property name="active" bind-source="tabs_button" bind-property="active" bind-flags="invert-boolean|bidirectional"/>
                       </object>
                     </child>
                     <child>
