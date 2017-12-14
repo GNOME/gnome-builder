@@ -65,12 +65,6 @@
     </section>
   </menu>
   <menu id="gear-menu">
-    <section id="gear-menu-fullscreen-section">
-      <item>
-        <attribute name="label" translatable="yes">_Fullscreen</attribute>
-        <attribute name="action">win.fullscreen</attribute>
-      </item>
-    </section>
   </menu>
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-jump-section">

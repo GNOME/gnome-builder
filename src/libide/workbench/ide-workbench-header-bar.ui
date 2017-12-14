@@ -71,12 +71,13 @@
               <object class="GtkToggleButton" id="fullscreen_button">
                 <property name="action-name">win.fullscreen</property>
                 <property name="focus-on-click">false</property>
+                <property name="visible">true</property>
                 <style>
                   <class name="image-button"/>
                 </style>
                 <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">view-restore-symbolic</property>
+                  <object class="GtkImage" id="fullscreen_image">
+                    <property name="icon-name">view-fullscreen-symbolic</property>
                     <property name="visible">true</property>
                   </object>
                 </child>
