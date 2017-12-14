@@ -262,7 +262,7 @@ _ide_workbench_header_bar_set_fullscreen (IdeWorkbenchHeaderBar *self,
 
   g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
 
-  g_object_set (priv->fullscreen_button,
+  g_object_set (priv->fullscreen_image,
                 "icon-name", icon_names[!!fullscreen],
                 NULL);
   gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (self), fullscreen == FALSE);
