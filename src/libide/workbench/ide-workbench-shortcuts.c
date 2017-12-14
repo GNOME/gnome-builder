@@ -45,6 +45,12 @@ static DzlShortcutEntry workbench_shortcuts[] = {
     NC_("shortcut window", "Workbench shortcuts"),
     NC_("shortcut window", "Build and Run"),
     NC_("shortcut window", "Trigger a build") },
+
+  { "org.gnome.builder.workbench.save-all",
+    0, NULL,
+    NC_("shortcut window", "Workbench shortcuts"),
+    NC_("shortcut window", "General"),
+    NC_("shortcut window", "Save all files") },
 };
 
 void
@@ -113,6 +119,12 @@ _ide_workbench_init_shortcuts (IdeWorkbench *self)
                                               "<Control>F7",
                                               DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("build-manager.build"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.workbench.save-all"),
+                                              "<Primary><Alt>s",
+                                              DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("win.save-all"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              workbench_shortcuts,

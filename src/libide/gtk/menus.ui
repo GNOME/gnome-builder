@@ -60,7 +60,7 @@
       <item>
         <attribute name="label" translatable="yes">Save _All</attribute>
         <attribute name="action">win.save-all</attribute>
-        <attribute name="accel">&lt;primary&gt;&lt;shift&gt;s</attribute>
+        <attribute name="accel">&lt;primary&gt;&lt;alt&gt;s</attribute>
       </item>
     </section>
   </menu>
