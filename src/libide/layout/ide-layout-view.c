@@ -115,6 +115,17 @@ ide_layout_view_grab_focus (GtkWidget *widget)
 }
 
 static void
+ide_layout_view_finalize (GObject *object)
+{
+  IdeLayoutView *self = (IdeLayoutView *)object;
+  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
+
+  g_clear_pointer (&priv->title, g_free);
+
+  G_OBJECT_CLASS (ide_layout_view_parent_class)->finalize (object);
+}
+
+static void
 ide_layout_view_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
@@ -214,6 +225,7 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->finalize = ide_layout_view_finalize;
   object_class->get_property = ide_layout_view_get_property;
   object_class->set_property = ide_layout_view_set_property;
 
