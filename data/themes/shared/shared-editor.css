@@ -39,7 +39,7 @@ ideeditorsidebar list.open-pages row box > button:last-child {
   border: none;
   outline: none;
   padding: 0;
-  margin: 0 6px;
+  margin: 0 9px 0 6px;
   color: @theme_fg_color;
   opacity: 0.55;
 }
@@ -89,4 +89,17 @@ ideeditorproperties button.control.flat {
   margin: 0 8px 0 0;
   min-width: 16px;
   min-height: 16px;
+}
+ideeditorsidebar .flat-menu-button {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0.5;
+  padding: 0;
+  margin: 0;
+  outline-offset: -3px;
+}
+ideeditorsidebar .flat-menu-button:checked,
+ideeditorsidebar .flat-menu-button:hover {
+  opacity: 1;
 }

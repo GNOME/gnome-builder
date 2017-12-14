@@ -55,13 +55,16 @@
       </item>
     </section>
   </menu>
-  <menu id="gear-menu">
-    <section id="gear-menu-save-section">
+  <menu id="pages-menu">
+    <section id="pages-menu-save-section">
       <item>
         <attribute name="label" translatable="yes">Save _All</attribute>
         <attribute name="action">win.save-all</attribute>
+        <attribute name="accel">&lt;primary&gt;&lt;shift&gt;s</attribute>
       </item>
     </section>
+  </menu>
+  <menu id="gear-menu">
     <section id="gear-menu-fullscreen-section">
       <item>
         <attribute name="label" translatable="yes">_Fullscreen</attribute>

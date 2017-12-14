@@ -22,14 +22,34 @@
               <object class="GtkBox" id="open_pages_section">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes" comments="List of pages that are open">Open Pages</property>
-                    <property name="xalign">0.0</property>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">12</property>
                     <property name="visible">true</property>
-                    <style>
-                      <class name="dim-label"/>
-                      <class name="title"/>
-                    </style>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes" comments="List of pages that are open">Open Pages</property>
+                        <property name="hexpand">true</property>
+                        <property name="xalign">0.0</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="dim-label"/>
+                          <class name="title"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="DzlMenuButton">
+                        <property name="margin-right">6</property>
+                        <property name="show-accels">true</property>
+                        <property name="icon-name">pan-down-symbolic</property>
+                        <property name="menu-id">pages-menu</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="flat-menu-button"/>
+                        </style>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
@@ -81,8 +101,7 @@
                       <object class="DzlMenuButton" id="section_menu_button">
                         <property name="margin-right">6</property>
                         <style>
-                          <class name="image-button"/>
-                          <class name="flat"/>
+                          <class name="flat-menu-button"/>
                         </style>
                       </object>
                     </child>
