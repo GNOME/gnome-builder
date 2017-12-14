@@ -195,8 +195,8 @@ ide_debug_manager_plugin_unloaded (IdeDebugManager *self,
 static void
 ide_debug_manager_load_supported_languages (IdeDebugManager *self)
 {
+  g_auto(GStrv) loaded_plugins = NULL;
   PeasEngine *engine;
-  gchar **loaded_plugins;
 
   g_assert (IDE_IS_DEBUG_MANAGER (self));
   g_assert (self->supported_languages != NULL);
