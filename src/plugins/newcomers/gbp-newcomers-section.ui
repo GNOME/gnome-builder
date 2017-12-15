@@ -63,7 +63,7 @@
               <object class="GbpNewcomersProject">
                 <property name="name" translatable="yes">Music</property>
                 <property name="icon-name">org.gnome.Music</property>
-                <property name="uri">https://git.gnome.org/browse/gnome-music</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-music.git</property>
                 <property name="visible">true</property>
               </object>
             </child>
@@ -79,7 +79,7 @@
               <object class="GbpNewcomersProject">
                 <property name="name" translatable="yes">Photos</property>
                 <property name="icon-name">org.gnome.Photos</property>
-                <property name="uri">https://git.gnome.org/browse/gnome-photos</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-photos.git</property>
                 <property name="visible">true</property>
               </object>
             </child>
