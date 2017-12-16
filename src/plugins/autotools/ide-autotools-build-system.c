@@ -84,7 +84,6 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
                                                  gpointer      task_data,
                                                  GCancellable *cancellable)
 {
-  g_autoptr(GFile) parent = NULL;
   g_autoptr(GFile) configure_ac = NULL;
   g_autoptr(GFile) configure_in = NULL;
   GFile *file = task_data;
@@ -108,19 +107,27 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
       IDE_EXIT;
     }
 
-  if (g_file_query_file_type (file, 0, cancellable) == G_FILE_TYPE_DIRECTORY)
-    parent = g_object_ref (file);
-  else
-    parent = g_file_get_parent (file);
+  /*
+   * So this file is not the configure file, if it's not a directory,
+   * we'll ignore this request and assume this isn't an autotools project.
+   */
+  if (g_file_query_file_type (file, 0, cancellable) != G_FILE_TYPE_DIRECTORY)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "Failed to locate configure.ac");
+      IDE_EXIT;
+    }
 
-  configure_ac = g_file_get_child (parent, "configure.ac");
+  configure_ac = g_file_get_child (file, "configure.ac");
   if (g_file_query_exists (configure_ac, cancellable))
     {
       g_task_return_pointer (task, g_steal_pointer (&configure_ac), g_object_unref);
       IDE_EXIT;
     }
 
-  configure_in = g_file_get_child (parent, "configure.in");
+  configure_in = g_file_get_child (file, "configure.in");
   if (g_file_query_exists (configure_in, cancellable))
     {
       g_task_return_pointer (task, g_steal_pointer (&configure_in), g_object_unref);
