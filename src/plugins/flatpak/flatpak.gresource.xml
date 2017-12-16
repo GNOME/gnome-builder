@@ -4,7 +4,6 @@
     <file>flatpak.plugin</file>
   </gresource>
   <gresource prefix="/org/gnome/builder/plugins/flatpak-plugin">
-    <file>gtk/menus.ui</file>
     <file>gbp-flatpak-clone-widget.ui</file>
   </gresource>
 </gresources>

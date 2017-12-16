@@ -177,6 +177,7 @@
                   <object class="GtkBox">
                     <property name="hexpand">true</property>
                     <property name="orientation">horizontal</property>
+                    <property name="spacing">12</property>
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkLabel" id="popover_project_label">
@@ -192,7 +193,24 @@
                     <child>
                       <object class="GtkButton">
                         <property name="focus-on-click">false</property>
-                        <property name="halign">end</property>
+                        <property name="valign">baseline</property>
+                        <property name="action-name">flatpak.update-dependencies</property>
+                        <property name="tooltip-text" translatable="yes">Update project dependencies</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">software-update-available-symbolic</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="focus-on-click">false</property>
                         <property name="valign">baseline</property>
                         <property name="action-name">win.perspective</property>
                         <property name="action-target">'buildperspective'</property>
