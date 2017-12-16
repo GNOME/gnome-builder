@@ -82,6 +82,8 @@ struct _IdeContext
   IdeTransferManager       *transfer_manager;
   IdeProject               *project;
   GFile                    *project_file;
+  GFile                    *downloads_dir;
+  GFile                    *home_dir;
   gchar                    *root_build_dir;
   gchar                    *recent_projects_path;
   PeasExtensionSet         *services;
@@ -521,6 +523,8 @@ ide_context_finalize (GObject *object)
 
   g_clear_object (&self->services);
   g_clear_object (&self->pausables);
+  g_clear_object (&self->home_dir);
+  g_clear_object (&self->downloads_dir);
 
   g_clear_pointer (&self->build_system_hint, g_free);
   g_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
@@ -766,11 +770,19 @@ ide_context_class_init (IdeContextClass *klass)
 static void
 ide_context_init (IdeContext *self)
 {
+  const gchar *downloads_dir;
+
   IDE_ENTRY;
 
   DZL_COUNTER_INC (instances);
 
   g_mutex_init (&self->unload_mutex);
+
+  /* Cache some paths for future lookups */
+  downloads_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
+  if (downloads_dir != NULL)
+    self->downloads_dir = g_file_new_for_path (downloads_dir);
+  self->home_dir = g_file_new_for_path (g_get_home_dir ());
 
   self->pausables = g_list_store_new (IDE_TYPE_PAUSABLE);
 
@@ -1201,19 +1213,26 @@ ide_context_init_services (gpointer             source_object,
 }
 
 static gboolean
-directory_is_ignored (GFile *file)
+directory_is_ignored (IdeContext *self,
+                      GFile      *file)
 {
-  const gchar *home_dir = g_get_home_dir ();
-  const gchar *downloads_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
-  g_autoptr(GFile) home_prefix = g_file_new_for_path (home_dir);
-  g_autoptr(GFile) downloads_prefix = g_file_new_for_path (downloads_dir);
-  g_autofree gchar *relative_path = g_file_get_relative_path (home_prefix, file);
-  GFileType type = g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL);
+  g_autofree gchar *relative_path = NULL;
+  GFileType file_type;
 
-  if (!g_file_has_prefix (file, home_prefix))
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (G_IS_FILE (file));
+
+  relative_path = g_file_get_relative_path (self->home_dir, file);
+  file_type = g_file_query_file_type (file,
+                                      G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                      NULL);
+
+  if (!g_file_has_prefix (file, self->home_dir))
     return TRUE;
 
-  if (g_file_equal (file, downloads_prefix) || g_file_has_prefix (file, downloads_prefix))
+  if (self->downloads_dir != NULL &&
+      (g_file_equal (file, self->downloads_dir) ||
+       g_file_has_prefix (file, self->downloads_dir)))
     return TRUE;
 
   /* realtive_path should be valid here because we are within the home_prefix. */
@@ -1224,15 +1243,15 @@ directory_is_ignored (GFile *file)
    * We've had too many bug reports with people creating things
    * like gnome-shell extensions in their .local directory.
    */
-  if (*relative_path == '.' &&
+  if (relative_path[0] == '.' &&
       !g_str_has_prefix (relative_path, ".local"G_DIR_SEPARATOR_S))
     return TRUE;
 
-  if (type != G_FILE_TYPE_DIRECTORY)
+  if (file_type != G_FILE_TYPE_DIRECTORY)
     {
       g_autoptr(GFile) parent = g_file_get_parent (file);
 
-      if (g_file_equal (home_prefix, parent))
+      if (g_file_equal (self->home_dir, parent))
         return TRUE;
     }
 
@@ -1261,22 +1280,25 @@ ide_context_init_add_recent (gpointer             source_object,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  if (directory_is_ignored (self->project_file))
+  if (directory_is_ignored (self, self->project_file))
     {
       g_task_return_boolean (task, TRUE);
       return;
     }
 
   projects_file = g_bookmark_file_new ();
-  g_bookmark_file_load_from_file (projects_file, self->recent_projects_path, &error);
+  g_bookmark_file_load_from_file (projects_file,
+                                  self->recent_projects_path,
+                                  &error);
 
   /*
-   * If there was an error loading the file and the error is not "File does not exist"
-   * then stop saving operation
+   * If there was an error loading the file and the error is not "File does not
+   * exist" then stop saving operation
    */
-  if ((error != NULL) && !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+  if (error != NULL &&
+      !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
     {
-      g_warning ("Unable to open recent projects %s file: %s",
+      g_warning ("Unable to open recent projects \"%s\" file: %s",
                  self->recent_projects_path, error->message);
       g_task_return_boolean (task, TRUE);
       g_clear_error (&error);
