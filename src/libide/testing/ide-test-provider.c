@@ -81,7 +81,7 @@ ide_test_provider_dispose (GObject *object)
 
   g_clear_pointer (&priv->items, g_ptr_array_unref);
 
-  G_OBJECT_CLASS (ide_test_provider_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_test_provider_parent_class)->dispose (object);
 }
 
 static void
