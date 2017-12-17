@@ -23,6 +23,7 @@
 #include "gbp-flatpak-build-system-discovery.h"
 #include "gbp-flatpak-build-target-provider.h"
 #include "gbp-flatpak-configuration-provider.h"
+#include "gbp-flatpak-dependency-updater.h"
 #include "gbp-flatpak-genesis-addin.h"
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-preferences-addin.h"
@@ -43,6 +44,9 @@ gbp_flatpak_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIGURATION_PROVIDER,
                                               GBP_TYPE_FLATPAK_CONFIGURATION_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_DEPENDENCY_UPDATER,
+                                              GBP_TYPE_FLATPAK_DEPENDENCY_UPDATER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUNTIME_PROVIDER,
                                               GBP_TYPE_FLATPAK_RUNTIME_PROVIDER);

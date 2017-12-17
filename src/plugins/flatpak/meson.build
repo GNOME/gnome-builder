@@ -21,6 +21,8 @@ flatpak_sources = [
   'gbp-flatpak-configuration.h',
   'gbp-flatpak-configuration-provider.c',
   'gbp-flatpak-configuration-provider.h',
+  'gbp-flatpak-dependency-updater.c',
+  'gbp-flatpak-dependency-updater.h',
   'gbp-flatpak-download-stage.c',
   'gbp-flatpak-download-stage.h',
   'gbp-flatpak-genesis-addin.c',
