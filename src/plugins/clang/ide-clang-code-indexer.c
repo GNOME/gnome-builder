@@ -220,14 +220,14 @@ ide_clang_code_indexer_generate_key_finish (IdeCodeIndexer  *self,
 }
 
 static void
-ide_clang_code_indexer_finalize (GObject *object)
+ide_clang_code_indexer_dispose (GObject *object)
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)object;
 
   g_clear_pointer (&self->index, clang_disposeIndex);
   g_clear_pointer (&self->build_flags, g_strfreev);
 
-  G_OBJECT_CLASS (ide_clang_code_indexer_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_clang_code_indexer_parent_class)->dispose (object);
 }
 
 static void
@@ -235,7 +235,7 @@ ide_clang_code_indexer_class_init (IdeClangCodeIndexerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_clang_code_indexer_finalize;
+  object_class->dispose = ide_clang_code_indexer_dispose;
 }
 
 static void
