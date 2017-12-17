@@ -337,12 +337,12 @@ ide_xml_sax_get_location (IdeXmlSax    *self,
                           const gchar **content,
                           gsize        *size)
 {
-  gint tmp_line;
-  gint tmp_line_offset;
-  gint tmp_end_line;
-  gint tmp_end_line_offset;
-  const gchar *tmp_content;
-  gsize tmp_size;
+  gint tmp_line = 0;
+  gint tmp_line_offset = 0;
+  gint tmp_end_line = 0;
+  gint tmp_end_line_offset = 0;
+  const gchar *tmp_content = NULL;
+  gsize tmp_size = 0;
 
   g_return_val_if_fail (IDE_IS_XML_SAX (self), FALSE);
   g_return_val_if_fail (self->context != NULL, FALSE);

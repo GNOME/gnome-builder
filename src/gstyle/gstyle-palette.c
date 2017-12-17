@@ -133,8 +133,8 @@ static GstyleColor *
 gstyle_palette_xml_get_color (xmlTextReaderPtr reader)
 {
   GstyleColor *color = NULL;
-  g_autofree gchar *name;
-  g_autofree gchar *value;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *value = NULL;
 
   g_assert (reader != NULL);
 

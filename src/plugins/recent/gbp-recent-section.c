@@ -79,7 +79,7 @@ gbp_recent_section_filter_cb (GtkListBoxRow *row,
     DzlPatternSpec *spec;
     gboolean found;
   } *filter = user_data;
-  gboolean match;
+  gboolean match = FALSE;
 
   g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
   g_assert (filter != NULL);
