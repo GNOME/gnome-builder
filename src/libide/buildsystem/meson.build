@@ -16,6 +16,7 @@ buildsystem_headers = [
   'ide-configuration-manager.h',
   'ide-configuration-provider.h',
   'ide-configuration.h',
+  'ide-dependency-updater.h',
   'ide-environment-variable.h',
   'ide-environment.h',
 ]
@@ -37,6 +38,7 @@ buildsystem_sources = [
   'ide-configuration-manager.c',
   'ide-configuration-provider.c',
   'ide-configuration.c',
+  'ide-dependency-updater.c',
   'ide-environment-variable.c',
   'ide-environment.c',
 ]

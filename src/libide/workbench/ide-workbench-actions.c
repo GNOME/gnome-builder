@@ -20,12 +20,15 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
+#include <libpeas/peas-autocleanups.h>
 #include <unistd.h>
 
 #include "ide-debug.h"
 
 #include "application/ide-application.h"
 #include "buffers/ide-buffer-manager.h"
+#include "buildsystem/ide-dependency-updater.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-header-bar.h"
@@ -232,6 +235,71 @@ ide_workbench_actions_inspector (GSimpleAction *action,
   gtk_window_set_interactive_debugging (TRUE);
 }
 
+static void
+ide_workbench_actions_update_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  IdeDependencyUpdater *updater = (IdeDependencyUpdater *)object;
+  g_autoptr(IdeWorkbench) self = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeContext *context;
+
+  g_assert (IDE_IS_DEPENDENCY_UPDATER (updater));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  context = ide_workbench_get_context (self);
+
+  if (!ide_dependency_updater_update_finish (updater, result, &error))
+    ide_context_warning (context, "%s", error->message);
+}
+
+static void
+ide_workbench_actions_update_dependencies_cb (PeasExtensionSet *set,
+                                              PeasPluginInfo   *plugin_info,
+                                              PeasExtension    *exten,
+                                              gpointer          user_data)
+{
+  IdeDependencyUpdater *updater = (IdeDependencyUpdater *)exten;
+  IdeWorkbench *self = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_DEPENDENCY_UPDATER (updater));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  ide_dependency_updater_update_async (updater,
+                                       NULL,
+                                       ide_workbench_actions_update_cb,
+                                       g_object_ref (self));
+}
+
+static void
+ide_workbench_actions_update_dependencies (GSimpleAction *action,
+                                           GVariant      *variant,
+                                           gpointer       user_data)
+{
+  g_autoptr(PeasExtensionSet) set = NULL;
+  IdeWorkbench *self = user_data;
+  IdeContext *context;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  context = ide_workbench_get_context (self);
+  if (context == NULL)
+    return;
+
+  set = peas_extension_set_new (peas_engine_get_default (),
+                                IDE_TYPE_DEPENDENCY_UPDATER,
+                                "context", context,
+                                NULL);
+  peas_extension_set_foreach (set,
+                              ide_workbench_actions_update_dependencies_cb,
+                              self);
+}
+
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
@@ -244,6 +312,7 @@ ide_workbench_actions_init (IdeWorkbench *self)
     { "save-all-quit", ide_workbench_actions_save_all_quit },
     { "counters", ide_workbench_actions_counters },
     { "inspector", ide_workbench_actions_inspector },
+    { "update-dependencies", ide_workbench_actions_update_dependencies },
   };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);

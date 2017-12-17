@@ -194,7 +194,7 @@
                       <object class="GtkButton">
                         <property name="focus-on-click">false</property>
                         <property name="valign">baseline</property>
-                        <property name="action-name">flatpak.update-dependencies</property>
+                        <property name="action-name">win.update-dependencies</property>
                         <property name="tooltip-text" translatable="yes">Update project dependencies</property>
                         <property name="visible">true</property>
                         <style>
