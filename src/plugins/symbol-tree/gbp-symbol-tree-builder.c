@@ -31,8 +31,8 @@ struct _GbpSymbolTreeBuilder
 G_DEFINE_TYPE (GbpSymbolTreeBuilder, gbp_symbol_tree_builder, DZL_TYPE_TREE_BUILDER)
 
 static void
-gbp_symbol_tree_builder_build_node (DzlTreeBuilder *builder,
-                                    DzlTreeNode    *node)
+gbp_symbol_tree_builder_build_children (DzlTreeBuilder *builder,
+                                        DzlTreeNode    *node)
 {
   IdeSymbolNode *parent = NULL;
   IdeSymbolTree *symbol_tree;
@@ -154,7 +154,7 @@ gbp_symbol_tree_builder_class_init (GbpSymbolTreeBuilderClass *klass)
 {
   DzlTreeBuilderClass *builder_class = DZL_TREE_BUILDER_CLASS (klass);
 
-  builder_class->build_node = gbp_symbol_tree_builder_build_node;
+  builder_class->build_children = gbp_symbol_tree_builder_build_children;
   builder_class->node_activated = gbp_symbol_tree_builder_node_activated;
 }
 
