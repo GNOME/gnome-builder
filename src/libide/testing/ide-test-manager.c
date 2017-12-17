@@ -295,6 +295,8 @@ ide_test_manager_remove_test (IdeTestManager        *self,
   g_assert (info != NULL);
   g_assert (IDE_IS_TEST (test));
 
+  group = ide_test_get_group (test);
+
   ide_test_manager_locate_group (self, &parent, group);
 
   if (gtk_tree_model_iter_children (GTK_TREE_MODEL (self->tests_store), &iter, &parent))
