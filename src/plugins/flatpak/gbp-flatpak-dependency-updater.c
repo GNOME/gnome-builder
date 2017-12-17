@@ -98,8 +98,15 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
 
   /* Find the downloads stage and tell it to download updates one time */
   ide_build_pipeline_foreach_stage (pipeline, find_download_stage_cb, &stage);
-  if (stage != NULL)
-    gbp_flatpak_download_stage_force_update (stage);
+
+  if (stage == NULL)
+    {
+      /* Synthesize success if they weren't using flatpak. */
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  gbp_flatpak_download_stage_force_update (stage);
 
   /* Ensure downloads and everything past it is invalidated */
   ide_build_pipeline_invalidate_phase (pipeline, IDE_BUILD_PHASE_DOWNLOADS);
