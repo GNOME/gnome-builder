@@ -737,7 +737,7 @@ ide_xml_symbol_node_print (IdeXmlSymbolNode  *self,
                            gboolean           show_value,
                            gboolean           show_attributes)
 {
-  g_autofree gchar *spacer;
+  g_autofree gchar *spacer = NULL;
   guint n_children;
   IdeXmlSymbolNode *child;
   Attribute *attr;

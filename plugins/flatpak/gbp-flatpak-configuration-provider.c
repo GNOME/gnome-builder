@@ -109,7 +109,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       gboolean in_build_options;
       gboolean config_opts_replaced;
       gboolean build_options_replaced;
-      guint opts_per_line;
+      guint opts_per_line = 0;
       guint nested_curly_braces;
 
       GbpFlatpakConfiguration *configuration = (GbpFlatpakConfiguration *)g_ptr_array_index (self->configurations, i);

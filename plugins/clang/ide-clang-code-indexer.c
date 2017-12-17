@@ -145,7 +145,7 @@ ide_clang_code_indexer_generate_key_cb (GObject       *object,
   g_autoptr(IdeClangTranslationUnit) unit = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *key;
+  g_autofree gchar *key = NULL;
   IdeSourceLocation *location;
 
   g_assert (IDE_IS_CLANG_SERVICE (service));

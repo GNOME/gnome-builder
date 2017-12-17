@@ -2980,7 +2980,7 @@ gstyle_colorlexer_parse (const gchar *data)
 {
   GPtrArray *ar;
   GstyleColorItem *item;
-  GstyleColorScanner s;
+  GstyleColorScanner s = { 0 };
   gint token;
 
   if (gstyle_str_empty0 (data))

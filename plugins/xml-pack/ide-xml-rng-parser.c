@@ -1977,7 +1977,7 @@ ide_xml_rng_parser_parse (IdeXmlRngParser *self,
                           GFile           *file)
 {
   IdeXmlSchema *schema = NULL;
-  g_autofree gchar *url;
+  g_autofree gchar *url = NULL;
   xmlDoc *doc;
   xmlNode *root;
   gint options;
