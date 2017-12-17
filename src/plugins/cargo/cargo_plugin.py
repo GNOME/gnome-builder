@@ -200,3 +200,54 @@ class CargoBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
     def do_get_targets_finish(self, result):
         if result.propagate_boolean():
             return result.targets
+
+class CargoDependencyUpdater(Ide.Object, Ide.DependencyUpdater):
+
+    def do_update_async(self, cancellable, callback, data):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.set_priority(GLib.PRIORITY_LOW)
+
+        context = self.get_context()
+        build_system = context.get_build_system()
+
+        # Short circuit if not using cargo
+        if type(build_system) != CargoBuildSystem:
+            task.return_boolean(True)
+            return
+
+        build_manager = context.get_build_manager()
+        pipeline = build_manager.get_pipeline()
+        if not pipeline:
+            task.return_error(GLib.Error('Cannot update dependencies without build pipeline',
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.FAILED))
+            return
+
+        config_manager = context.get_configuration_manager()
+        config = config_manager.get_current()
+        cargo = locate_cargo_from_config(config)
+
+        cargo_toml = build_system.props.project_file.get_path()
+
+        launcher = pipeline.create_launcher()
+        launcher.setenv('CARGO_TARGET_DIR', pipeline.get_builddir(), True)
+        launcher.push_argv(cargo)
+        launcher.push_argv('update')
+        launcher.push_argv('--manifest-path')
+        launcher.push_argv(cargo_toml)
+
+        try:
+            subprocess = launcher.spawn()
+            subprocess.wait_check_async(None, self.wait_check_cb, task)
+        except Exception as ex:
+            task.return_error(ex)
+
+    def do_update_finish(self, result):
+        return result.propagate_boolean()
+
+    def wait_check_cb(self, subprocess, result, task):
+        try:
+            subprocess.wait_check_finish(result)
+            task.return_boolean(True)
+        except Exception as ex:
+            task.return_error(ex)
