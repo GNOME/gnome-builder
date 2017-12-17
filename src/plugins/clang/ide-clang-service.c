@@ -686,22 +686,11 @@ ide_clang_service_dispose (GObject *object)
 }
 
 static void
-ide_clang_service_finalize (GObject *object)
-{
-  IDE_ENTRY;
-
-  G_OBJECT_CLASS (ide_clang_service_parent_class)->finalize (object);
-
-  IDE_EXIT;
-}
-
-static void
 ide_clang_service_class_init (IdeClangServiceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_clang_service_dispose;
-  object_class->finalize = ide_clang_service_finalize;
 }
 
 static void
