@@ -33,6 +33,8 @@
                 <property name="icon-name">org.gnome.Polari</property>
                 <property name="uri">https://gitlab.gnome.org/GNOME/polari.git</property>
                 <property name="visible">true</property>
+                <property name="languages">C
+JavaScript</property>
               </object>
             </child>
             <child>
@@ -41,6 +43,8 @@
                 <property name="icon-name">org.gnome.Games</property>
                 <property name="uri">https://gitlab.gnome.org/GNOME/gnome-games.git</property>
                 <property name="visible">true</property>
+                <property name="languages">C
+Vala</property>
               </object>
             </child>
             <child>
@@ -49,6 +53,8 @@
                 <property name="icon-name">org.gnome.Maps</property>
                 <property name="uri">https://git.gnome.org/browse/gnome-maps</property>
                 <property name="visible">true</property>
+                <property name="languages">C
+JavaScript</property>
               </object>
             </child>
             <child>
@@ -57,6 +63,7 @@
                 <property name="icon-name">org.gnome.Todo</property>
                 <property name="uri">https://gitlab.gnome.org/GNOME/gnome-todo.git</property>
                 <property name="visible">true</property>
+                <property name="languages">C</property>
               </object>
             </child>
             <child>
@@ -65,6 +72,7 @@
                 <property name="icon-name">org.gnome.Music</property>
                 <property name="uri">https://gitlab.gnome.org/GNOME/gnome-music.git</property>
                 <property name="visible">true</property>
+                <property name="languages">Python</property>
               </object>
             </child>
             <child>
@@ -73,6 +81,7 @@
                 <property name="icon-name">org.gnome.Nautilus</property>
                 <property name="uri">https://gitlab.gnome.org/GNOME/nautilus.git</property>
                 <property name="visible">true</property>
+                <property name="languages">C</property>
               </object>
             </child>
             <child>
@@ -81,6 +90,7 @@
                 <property name="icon-name">org.gnome.Photos</property>
                 <property name="uri">https://gitlab.gnome.org/GNOME/gnome-photos.git</property>
                 <property name="visible">true</property>
+                <property name="languages">C</property>
               </object>
             </child>
             <child>
@@ -89,6 +99,7 @@
                 <property name="icon-name">org.gnome.Calendar</property>
                 <property name="uri">https://gitlab.gnome.org/GNOME/gnome-calendar.git</property>
                 <property name="visible">true</property>
+                <property name="languages">C</property>
               </object>
             </child>
           </object>

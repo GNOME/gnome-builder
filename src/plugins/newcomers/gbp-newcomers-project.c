@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "gbp-newcomers-project"
 
+#include <dazzle.h>
+
 #include "gbp-newcomers-project.h"
 
 struct _GbpNewcomersProject
@@ -28,11 +30,13 @@ struct _GbpNewcomersProject
 
   GtkLabel        *label;
   GtkImage        *icon;
+  GtkBox          *tags_box;
 };
 
 enum {
   PROP_0,
   PROP_ICON_NAME,
+  PROP_LANGUAGES,
   PROP_NAME,
   PROP_URI,
   N_PROPS
@@ -41,6 +45,27 @@ enum {
 G_DEFINE_TYPE (GbpNewcomersProject, gbp_newcomers_project, GTK_TYPE_FLOW_BOX_CHILD)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+gbp_newcomers_project_set_languages (GbpNewcomersProject *self,
+                                     const gchar * const *languages)
+{
+  g_assert (GBP_IS_NEWCOMERS_PROJECT (self));
+
+  if (languages == NULL)
+    return;
+
+  for (guint i = 0; languages[i] != NULL; i++)
+    {
+      GtkWidget *tag;
+
+      tag = dzl_pill_box_new (languages[i]);
+      gtk_container_add_with_properties (GTK_CONTAINER (self->tags_box), tag,
+                                         "pack-type", GTK_PACK_END,
+                                         NULL);
+      gtk_widget_show (tag);
+    }
+}
 
 static void
 gbp_newcomers_project_destroy (GtkWidget *widget)
@@ -89,6 +114,10 @@ gbp_newcomers_project_set_property (GObject      *object,
       self->uri = g_value_dup_string (value);
       break;
 
+    case PROP_LANGUAGES:
+      gbp_newcomers_project_set_languages (self, g_value_get_boxed (value));
+      break;
+
     case PROP_NAME:
       gtk_label_set_label (self->label, g_value_get_string (value));
       break;
@@ -127,6 +156,13 @@ gbp_newcomers_project_class_init (GbpNewcomersProjectClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_LANGUAGES] =
+    g_param_spec_boxed ("languages",
+                        "Languages",
+                        "The programming languages of the newcomer project",
+                        G_TYPE_STRV,
+                        (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_URI] =
     g_param_spec_string ("uri",
                          "Uri",
@@ -140,6 +176,7 @@ gbp_newcomers_project_class_init (GbpNewcomersProjectClass *klass)
                                                "/org/gnome/builder/plugins/newcomers-plugin/gbp-newcomers-project.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, label);
   gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, icon);
+  gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, tags_box);
 }
 
 static void

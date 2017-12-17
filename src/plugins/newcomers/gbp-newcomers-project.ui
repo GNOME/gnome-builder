@@ -9,10 +9,26 @@
         <property name="spacing">6</property>
         <property name="visible">true</property>
         <child>
-          <object class="GtkImage" id="icon">
-            <property name="expand">true</property>
-            <property name="pixel-size">96</property>
+          <object class="GtkOverlay">
             <property name="visible">true</property>
+            <child>
+              <object class="GtkImage" id="icon">
+                <property name="expand">true</property>
+                <property name="pixel-size">96</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child type="overlay">
+              <object class="GtkBox" id="tags_box">
+                <property name="orientation">horizontal</property>
+                <property name="spacing">3</property>
+                <property name="margin-right">6</property>
+                <property name="margin-bottom">9</property>
+                <property name="valign">end</property>
+                <property name="vexpand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
