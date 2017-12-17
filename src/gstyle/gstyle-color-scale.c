@@ -603,8 +603,6 @@ gstyle_color_scale_finalize (GObject *object)
 {
   GstyleColorScale *self = (GstyleColorScale *)object;
 
-  G_OBJECT_CLASS (gstyle_color_scale_parent_class)->finalize (object);
-
   g_clear_object (&self->long_press_gesture);
   g_clear_object (&self->default_provider);
 
@@ -616,6 +614,7 @@ gstyle_color_scale_finalize (GObject *object)
   g_clear_pointer (&self->data_raw, g_free);
   g_clear_pointer (&self->data_raw_filtered, g_free);
 
+  G_OBJECT_CLASS (gstyle_color_scale_parent_class)->finalize (object);
 }
 
 static void
