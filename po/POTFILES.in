@@ -158,7 +158,6 @@ src/plugins/flatpak/gbp-flatpak-preferences-addin.c
 src/plugins/flatpak/gbp-flatpak-runtime.c
 src/plugins/flatpak/gbp-flatpak-transfer.c
 src/plugins/flatpak/gbp-flatpak-workbench-addin.c
-src/plugins/flatpak/gtk/menus.ui
 src/plugins/git/ide-git-buffer-change-monitor.c
 src/plugins/git/ide-git-clone-widget.c
 src/plugins/git/ide-git-clone-widget.ui
