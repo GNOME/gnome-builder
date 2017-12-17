@@ -165,6 +165,8 @@ ide_object_dispose (GObject *object)
   IdeObject *self = (IdeObject *)object;
   IdeObjectPrivate *priv = ide_object_get_instance_private (self);
 
+  g_object_ref (self);
+
   G_OBJECT_CLASS (ide_object_parent_class)->dispose (object);
 
   IDE_TRACE_MSG ("%s (%p)",
@@ -176,6 +178,8 @@ ide_object_dispose (GObject *object)
 
   if (!priv->is_destroyed)
     ide_object_destroy (self);
+
+  g_object_unref (self);
 }
 
 static void
