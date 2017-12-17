@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBuildPerspective, ide_build_perspective, IDE, BUILD_PERSPECTIVE, GtkBin)
 
+GtkWidget        *ide_build_perspective_new               (void);
 IdeConfiguration *ide_build_perspective_get_configuration (IdeBuildPerspective *self);
 void              ide_build_perspective_set_configuration (IdeBuildPerspective *self,
                                                            IdeConfiguration    *configuration);

@@ -27,4 +27,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeBuildPanel, ide_build_panel, IDE, BUILD_PANEL, DzlDockWidget)
 
+void ide_build_panel_set_pipeline (IdeBuildPanel    *self,
+                                   IdeBuildPipeline *pipeline);
+
 G_END_DECLS

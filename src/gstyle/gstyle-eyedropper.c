@@ -611,7 +611,7 @@ gstyle_eyedropper_zoom_area_draw_cb (GstyleEyedropper *self,
   return TRUE;
 }
 
-void
+static void
 gstyle_eyedropper_set_source_event (GstyleEyedropper *self,
                                     GdkEvent         *event)
 {

@@ -220,7 +220,6 @@ gstyle_slidein_get_slide_fraction (GstyleSlidein *self)
  * @slide_margin: margin.
  *
  * Set the margin left when the slide is opened, in pixels.
- *
  */
 void
 gstyle_slidein_set_slide_margin (GstyleSlidein *self,

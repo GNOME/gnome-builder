@@ -41,6 +41,15 @@ G_DECLARE_FINAL_TYPE (GstyleSlidein, gstyle_slidein, GSTYLE, SLIDEIN, GtkEventBo
 GType                        gstyle_slidein_type_get_type                    (void);
 
 GtkWidget                   *gstyle_slidein_new                              (void);
+void                         gstyle_slidein_set_slide_margin                 (GstyleSlidein               *self,
+                                                                              guint                        slide_margin);
+guint                        gstyle_slidein_get_slide_margin                 (GstyleSlidein               *self);
+void                         gstyle_slidein_set_duration                     (GstyleSlidein               *self,
+                                                                              gdouble                      duration);
+gdouble                      gstyle_slidein_get_duration                     (GstyleSlidein               *self);
+void                         gstyle_slidein_reset_duration                   (GstyleSlidein               *self);
+gboolean                     gstyle_slidein_get_animation_state              (GstyleSlidein               *self,
+                                                                              gboolean                    *direction);
 void                         gstyle_slidein_add_slide                        (GstyleSlidein               *self,
                                                                               GtkWidget                   *slide);
 void                         gstyle_slidein_remove_slide                     (GstyleSlidein               *self);
@@ -58,4 +67,5 @@ void                         gstyle_slidein_set_interpolate_size             (Gs
                                                                               gboolean                     interpolate_size);
 void                         gstyle_slidein_set_slide_fraction               (GstyleSlidein               *self,
                                                                               gdouble                      slide_fraction);
+
 G_END_DECLS

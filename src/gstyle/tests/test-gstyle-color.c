@@ -98,7 +98,7 @@ test_deltae (void)
 #define LAB_SAMPLES (100.0 * 256.0 * 256.0)
 
 static void
-delta_rgb ()
+delta_rgb (void)
 {
   GdkRGBA src_rgba = {0.0, 0.0, 0.0, 0.0};
   GdkRGBA dst_rgba = {0.0, 0.0, 0.0, 0.0};
@@ -208,7 +208,7 @@ delta_rgb ()
 }
 
 static void
-delta_hsv ()
+delta_hsv (void)
 {
   gdouble src_h, src_s, src_v;
   gdouble dst_h, dst_s, dst_v;
@@ -314,7 +314,7 @@ delta_hsv ()
 }
 
 static void
-delta_lab ()
+delta_lab (void)
 {
   GstyleXYZ xyz;
   GstyleCielab src_lab;

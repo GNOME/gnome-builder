@@ -38,4 +38,6 @@ typedef enum {
   GSTYLE_COLOR_COMPONENT_NONE
 } GstyleColorComponent;
 
+GType gstyle_color_component_get_type (void);
+
 G_END_DECLS

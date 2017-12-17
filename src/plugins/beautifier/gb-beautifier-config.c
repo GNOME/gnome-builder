@@ -26,7 +26,7 @@
 #include "gb-beautifier-config.h"
 
 static const gchar *
-get_datadir ()
+get_datadir (void)
 {
   PeasEngine *engine;
   PeasPluginInfo *info;
