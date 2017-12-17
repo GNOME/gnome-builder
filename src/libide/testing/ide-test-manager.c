@@ -634,8 +634,6 @@ ide_test_manager_run_all_finish (IdeTestManager  *self,
   g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  g_print ("run finish\n");
-
   ret = g_task_propagate_boolean (G_TASK (result), error);
 
   IDE_RETURN (ret);
