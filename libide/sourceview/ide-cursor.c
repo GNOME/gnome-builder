@@ -116,6 +116,8 @@ ide_cursor_dispose (GObject *object)
     }
 
   g_clear_pointer (&self->cursors, g_list_free);
+
+  G_OBJECT_CLASS (ide_cursor_parent_class)->dispose (object);
 }
 
 
