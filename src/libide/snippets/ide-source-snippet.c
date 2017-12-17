@@ -1108,6 +1108,8 @@ ide_source_snippet_dispose (GObject *object)
 
   g_clear_object (&self->buffer);
   g_clear_object (&self->snippet_context);
+
+  G_OBJECT_CLASS (ide_source_snippet_parent_class)->dispose (object);
 }
 
 static void
