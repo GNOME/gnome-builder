@@ -101,10 +101,10 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   display_name = gb_project_file_get_display_name (item);
   icon_name = gb_project_file_get_icon_name (item);
 
+  is_dir = g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY;
+
   if (is_dir)
     expanded = "folder-open-symbolic";
-
-  is_dir = g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY;
 
   child = g_object_new (DZL_TYPE_TREE_NODE,
                         "children-possible", is_dir,
