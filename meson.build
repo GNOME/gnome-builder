@@ -97,14 +97,13 @@ test_c_args = [
   '-Wnested-externs',
   '-Wno-missing-field-initializers',
   '-Wno-sign-compare',
-  '-Wno-strict-aliasing',
-  '-Wno-uninitialized',
   '-Wno-unused-parameter',
   '-Wpointer-arith',
   '-Wredundant-decls',
   '-Wshadow',
   '-Wswitch-default',
   '-Wswitch-enum',
+  '-Wuninitialized',
   '-Wundef',
 ]
 if get_option('buildtype') != 'plain'
