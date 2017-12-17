@@ -745,6 +745,15 @@ ide_editor_view_destroy (GtkWidget *widget)
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
 
+  /*
+   * WORKAROUND: We need to reset the drag dest to avoid warnings by Gtk
+   * reseting the target list for the source view.
+   */
+  if (self->source_view != NULL)
+    gtk_drag_dest_set (GTK_WIDGET (self->source_view),
+                       GTK_DEST_DEFAULT_ALL,
+                       NULL, 0, GDK_ACTION_COPY);
+
   dzl_clear_source (&self->toggle_map_source);
 
   g_clear_object (&self->addins);
