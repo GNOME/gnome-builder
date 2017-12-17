@@ -82,7 +82,7 @@ ide_langserv_formatter_set_client (IdeLangservFormatter *self,
 static void
 ide_langserv_formatter_finalize (GObject *object)
 {
-  IdeLangservFormatter *self = (IdeLangservFormatter *)self;
+  IdeLangservFormatter *self = (IdeLangservFormatter *)object;
   IdeLangservFormatterPrivate *priv = ide_langserv_formatter_get_instance_private (self);
 
   g_clear_object (&priv->client);
