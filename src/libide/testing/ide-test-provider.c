@@ -316,3 +316,20 @@ ide_test_provider_set_loading (IdeTestProvider *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LOADING]);
     }
 }
+
+/**
+ * ide_test_provider_reload:
+ * @self: a #IdeTestProvider
+ *
+ * Requests the test provider reloads the tests.
+ *
+ * Since: 3.28
+ */
+void
+ide_test_provider_reload (IdeTestProvider *self)
+{
+  g_return_if_fail (IDE_IS_TEST_PROVIDER (self));
+
+  if (IDE_TEST_PROVIDER_GET_CLASS (self)->reload)
+    IDE_TEST_PROVIDER_GET_CLASS (self)->reload (self);
+}

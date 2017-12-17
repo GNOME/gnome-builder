@@ -194,6 +194,8 @@ gbp_meson_test_provider_do_reload (GbpMesonTestProvider *self,
   g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
+  ide_test_provider_clear (IDE_TEST_PROVIDER (self));
+
   if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, &error)))
     IDE_GOTO (failure);
 
@@ -307,12 +309,11 @@ gbp_meson_test_provider_reload (gpointer user_data)
 }
 
 static void
-gbp_meson_test_provider_notify_pipeline (GbpMesonTestProvider *self,
-                                         GParamSpec           *pspec,
-                                         IdeBuildManager      *build_manager)
+gbp_meson_test_provider_queue_reload (IdeTestProvider *provider)
 {
+  GbpMesonTestProvider *self = (GbpMesonTestProvider *)provider;
+
   g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
-  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   dzl_clear_source (&self->reload_source);
   self->reload_source = gdk_threads_add_timeout_full (G_PRIORITY_LOW,
@@ -320,6 +321,17 @@ gbp_meson_test_provider_notify_pipeline (GbpMesonTestProvider *self,
                                                       gbp_meson_test_provider_reload,
                                                       self,
                                                       NULL);
+}
+
+static void
+gbp_meson_test_provider_notify_pipeline (GbpMesonTestProvider *self,
+                                         GParamSpec           *pspec,
+                                         IdeBuildManager      *build_manager)
+{
+  g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  gbp_meson_test_provider_queue_reload (IDE_TEST_PROVIDER (self));
 }
 
 static void
@@ -531,6 +543,7 @@ gbp_meson_test_provider_class_init (GbpMesonTestProviderClass *klass)
 
   provider_class->run_async = gbp_meson_test_provider_run_async;
   provider_class->run_finish = gbp_meson_test_provider_run_finish;
+  provider_class->reload = gbp_meson_test_provider_queue_reload;
 }
 
 static void

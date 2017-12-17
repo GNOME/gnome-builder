@@ -348,6 +348,8 @@ ide_test_manager_provider_items_changed (IdeTestManager  *self,
           for (guint j = 0; j < removed; j++)
             {
               IdeTest *test = g_ptr_array_index (info->tests, position);
+
+              g_assert (IDE_IS_TEST (test));
               ide_test_manager_remove_test (self, info, test);
             }
 
@@ -357,6 +359,7 @@ ide_test_manager_provider_items_changed (IdeTestManager  *self,
               g_autoptr(IdeTest) test = NULL;
 
               test = g_list_model_get_item (G_LIST_MODEL (provider), position + j);
+              g_assert (IDE_IS_TEST (test));
               ide_test_manager_add_test (self, info, position + j, test);
             }
         }
@@ -783,6 +786,15 @@ ide_test_manager_actions_reload (IdeTestManager *self,
                                  GVariant       *param)
 {
   g_assert (IDE_IS_TEST_MANAGER (self));
+
+  gtk_tree_store_clear (self->tests_store);
+
+  for (guint i = 0; i < self->tests_by_provider->len; i++)
+    {
+      const TestsByProvider *info = g_ptr_array_index (self->tests_by_provider, i);
+
+      ide_test_provider_reload (info->provider);
+    }
 }
 
 GtkTreeModel *

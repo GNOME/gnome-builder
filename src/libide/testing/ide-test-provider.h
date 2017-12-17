@@ -44,6 +44,7 @@ struct _IdeTestProviderClass
   gboolean (*run_finish) (IdeTestProvider      *self,
                           GAsyncResult         *result,
                           GError              **error);
+  void     (*reload)     (IdeTestProvider      *self);
 
   /*< private >*/
   gpointer _reserved1;
@@ -80,5 +81,7 @@ IDE_AVAILABLE_IN_3_28
 gboolean ide_test_provider_run_finish  (IdeTestProvider      *self,
                                         GAsyncResult         *result,
                                         GError              **error);
+IDE_AVAILABLE_IN_3_28
+void     ide_test_provider_reload      (IdeTestProvider      *self);
 
 G_END_DECLS
