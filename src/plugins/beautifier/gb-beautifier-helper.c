@@ -150,7 +150,7 @@ gb_beautifier_helper_get_lang_id (GbBeautifierEditorAddin *self,
   buffer = GTK_TEXT_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));
   if (NULL == (lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
     {
-      g_warning ("Beautifier plugin: Can't find a GtkSourceLanguage for the buffer");
+      g_debug ("Beautifier plugin: Can't find a GtkSourceLanguage for the buffer");
       return NULL;
     }
 
