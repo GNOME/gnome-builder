@@ -107,8 +107,13 @@ ide_test_manager_dispose (GObject *object)
 {
   IdeTestManager *self = (IdeTestManager *)object;
 
+  if (self->tests_store != NULL)
+    {
+      gtk_tree_store_clear (self->tests_store);
+      g_clear_object (&self->tests_store);
+    }
+
   g_clear_object (&self->providers);
-  g_clear_object (&self->tests_store);
   g_clear_pointer (&self->tests_by_provider, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_test_manager_parent_class)->dispose (object);
