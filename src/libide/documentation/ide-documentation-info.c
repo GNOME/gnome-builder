@@ -23,11 +23,12 @@
 
 struct _IdeDocumentationInfo
 {
-  GObject parent_instance;
+  GObject                  parent_instance;
 
   gchar                   *input;
-  IdeDocumentationContext  context;
   GPtrArray               *proposals;
+
+  IdeDocumentationContext  context;
 };
 
 G_DEFINE_TYPE (IdeDocumentationInfo, ide_documentation_info, G_TYPE_OBJECT)

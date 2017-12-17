@@ -222,12 +222,6 @@ gstyle_revealer_new (void)
 }
 
 static void
-gstyle_revealer_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gstyle_revealer_parent_class)->finalize (object);
-}
-
-static void
 gstyle_revealer_get_preferred_width (GtkWidget *widget,
                                      gint      *min_width,
                                      gint      *nat_width)
@@ -316,11 +310,8 @@ gstyle_revealer_add (GtkContainer *container,
 static void
 gstyle_revealer_class_init (GstyleRevealerClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  object_class->finalize = gstyle_revealer_finalize;
 
   container_class->add = gstyle_revealer_add;
 

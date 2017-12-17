@@ -1340,7 +1340,7 @@ gstyle_color_widget_finalize (GObject *object)
 {
   GstyleColorWidget *self = GSTYLE_COLOR_WIDGET (object);
 
-  if (self->color)
+  if (self->color != NULL)
     gstyle_color_widget_disconnect_color (self);
 
   g_clear_object (&self->multipress_gesture);
@@ -1350,8 +1350,9 @@ gstyle_color_widget_finalize (GObject *object)
   g_clear_object (&self->color);
   g_clear_object (&self->filtered_color);
   g_clear_object (&self->default_provider);
-  cairo_pattern_destroy (self->checkered_pattern);
-  gtk_target_list_unref (self->target_list);
+
+  g_clear_pointer (&self->checkered_pattern, cairo_pattern_destroy);
+  g_clear_pointer (&self->target_list, gtk_target_list_unref);
 
   G_OBJECT_CLASS (gstyle_color_widget_parent_class)->finalize (object);
 }

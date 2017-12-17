@@ -103,14 +103,6 @@ gstyle_css_provider_new (void)
 }
 
 static void
-gstyle_css_provider_finalize (GObject *object)
-{
-  /* GstyleCssProvider *self = (GstyleCssProvider *)object; */
-
-  G_OBJECT_CLASS (gstyle_css_provider_parent_class)->finalize (object);
-}
-
-static void
 gstyle_css_provider_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
@@ -145,7 +137,6 @@ gstyle_css_provider_class_init (GstyleCssProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gstyle_css_provider_finalize;
   object_class->get_property = gstyle_css_provider_get_property;
   object_class->set_property = gstyle_css_provider_set_property;
 }

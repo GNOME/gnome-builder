@@ -25,8 +25,8 @@
 
 struct _IdeDocumentation
 {
-  GObject                  parent_instance;
-  PeasExtensionSet        *extensions;
+  GObject           parent_instance;
+  PeasExtensionSet *extensions;
 };
 
 G_DEFINE_TYPE (IdeDocumentation, ide_documentation, IDE_TYPE_OBJECT)

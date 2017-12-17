@@ -48,7 +48,7 @@ ide_highlight_index_new (void)
 {
   IdeHighlightIndex *ret;
 
-  ret = g_new0 (IdeHighlightIndex, 1);
+  ret = g_slice_new0 (IdeHighlightIndex);
   ret->ref_count = 1;
   ret->strings = g_string_chunk_new (ide_get_system_page_size ());
   ret->index = g_hash_table_new (g_str_hash, g_str_equal);
@@ -117,9 +117,9 @@ ide_highlight_index_finalize (IdeHighlightIndex *self)
 {
   IDE_ENTRY;
 
-  g_string_chunk_free (self->strings);
-  g_hash_table_unref (self->index);
-  g_free (self);
+  g_clear_pointer (&self->strings, g_string_chunk_free);
+  g_clear_pointer (&self->index, g_hash_table_unref);
+  g_slice_free (IdeHighlightIndex, self);
 
   DZL_COUNTER_DEC (instances);
 

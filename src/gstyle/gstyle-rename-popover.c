@@ -207,12 +207,6 @@ gstyle_rename_popover_new (void)
 }
 
 static void
-gstyle_rename_popover_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gstyle_rename_popover_parent_class)->finalize (object);
-}
-
-static void
 gstyle_rename_popover_get_property (GObject    *object,
                                     guint       prop_id,
                                     GValue     *value,
@@ -272,7 +266,6 @@ gstyle_rename_popover_class_init (GstyleRenamePopoverClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = gstyle_rename_popover_finalize;
   object_class->get_property = gstyle_rename_popover_get_property;
   object_class->set_property = gstyle_rename_popover_set_property;
 

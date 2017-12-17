@@ -116,11 +116,13 @@ ide_layout_grid_column_remove (GtkContainer *container,
 static void
 ide_layout_grid_column_finalize (GObject *object)
 {
+#ifndef G_DISABLE_ASSERT
   IdeLayoutGridColumn *self = (IdeLayoutGridColumn *)object;
 
   g_assert (self->focus_stack.head == NULL);
   g_assert (self->focus_stack.tail == NULL);
   g_assert (self->focus_stack.length == 0);
+#endif
 
   G_OBJECT_CLASS (ide_layout_grid_column_parent_class)->finalize (object);
 }

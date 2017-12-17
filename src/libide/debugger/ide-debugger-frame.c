@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-debugger-frame"
+
 #include "debugger/ide-debugger-frame.h"
 
 typedef struct

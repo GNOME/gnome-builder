@@ -1105,12 +1105,11 @@ gstyle_palette_finalize (GObject *object)
 {
   GstylePalette *self = GSTYLE_PALETTE (object);
 
-  g_ptr_array_unref (self->colors);
-  g_hash_table_unref (self->color_names);
-
-  g_free (self->name);
-  g_free (self->id);
-  g_free (self->gettext_domain);
+  g_clear_pointer (&self->colors, g_ptr_array_unref);
+  g_clear_pointer (&self->color_names, g_hash_table_unref);
+  g_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->id, g_free);
+  g_clear_pointer (&self->gettext_domain, g_free);
   g_clear_object (&self->file);
 
   G_OBJECT_CLASS (gstyle_palette_parent_class)->finalize (object);
