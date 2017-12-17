@@ -77,9 +77,12 @@ enum {
 static void initable_iface_init              (GInitableIface *iface);
 static void ide_test_manager_actions_run_all (IdeTestManager *self,
                                               GVariant       *param);
+static void ide_test_manager_actions_reload  (IdeTestManager *self,
+                                              GVariant       *param);
 
 DZL_DEFINE_ACTION_GROUP (IdeTestManager, ide_test_manager, {
   { "run-all", ide_test_manager_actions_run_all },
+  { "reload-tests", ide_test_manager_actions_reload },
 })
 
 G_DEFINE_TYPE_WITH_CODE (IdeTestManager, ide_test_manager, IDE_TYPE_OBJECT,
@@ -766,6 +769,13 @@ ide_test_manager_actions_run_all (IdeTestManager *self,
   g_assert (IDE_IS_TEST_MANAGER (self));
 
   ide_test_manager_run_all_async (self, NULL, NULL, NULL);
+}
+
+static void
+ide_test_manager_actions_reload (IdeTestManager *self,
+                                 GVariant       *param)
+{
+  g_assert (IDE_IS_TEST_MANAGER (self));
 }
 
 GtkTreeModel *

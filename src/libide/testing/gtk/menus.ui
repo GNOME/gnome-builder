@@ -7,5 +7,11 @@
         <attribute name="action">test-manager.run-all</attribute>
       </item>
     </section>
+    <section id="testing-menu-reload-section">
+      <item>
+        <attribute name="label" translatable="yes">Reload tests</attribute>
+        <attribute name="action">test-manager.reload-tests</attribute>
+      </item>
+    </section>
   </menu>
 </interface>
