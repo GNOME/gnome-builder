@@ -67,6 +67,12 @@ typedef struct
    * be used directly, only for pointer comparison.
    */
   IdeLayoutView  *_last_focused_view;
+
+  /*
+   * A GSource that is used to remove empty stacks that are unnecessary
+   * (after a last stack item is removed).
+   */
+  guint cull_source;
 } IdeLayoutGridPrivate;
 
 typedef struct
@@ -115,6 +121,74 @@ G_DEFINE_TYPE_WITH_CODE (IdeLayoutGrid, ide_layout_grid, DZL_TYPE_MULTI_PANED,
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+ide_layout_grid_cull (IdeLayoutGrid *self)
+{
+  guint n_columns;
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+
+  n_columns = dzl_multi_paned_get_n_children (DZL_MULTI_PANED (self));
+
+  for (guint i = n_columns; i > 0; i--)
+    {
+      IdeLayoutGridColumn *column;
+      guint n_stacks;
+
+      column = IDE_LAYOUT_GRID_COLUMN (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (self), i - 1));
+      n_stacks = dzl_multi_paned_get_n_children (DZL_MULTI_PANED (column));
+
+      if (n_columns == 1 && n_stacks == 1)
+        return;
+
+      for (guint j = n_stacks; j > 0; j--)
+        {
+          IdeLayoutStack *stack;
+          guint n_items;
+
+          stack = IDE_LAYOUT_STACK (dzl_multi_paned_get_nth_child (DZL_MULTI_PANED (column), j - 1));
+          n_items = g_list_model_get_n_items (G_LIST_MODEL (stack));
+
+          if (n_items == 0)
+            gtk_widget_destroy (GTK_WIDGET (stack));
+        }
+
+      if (dzl_multi_paned_get_n_children (DZL_MULTI_PANED (column)) == 0)
+        gtk_widget_destroy (GTK_WIDGET (column));
+    }
+}
+
+static gboolean
+ide_layout_grid_do_cull (gpointer data)
+{
+  IdeLayoutGrid *self = data;
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+
+  priv->cull_source = 0;
+
+  ide_layout_grid_cull (self);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_layout_grid_queue_cull (IdeLayoutGrid *self)
+{
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+
+  g_assert (IDE_IS_LAYOUT_GRID (self));
+
+  if (priv->cull_source != 0)
+    return;
+
+  priv->cull_source = gdk_threads_add_idle_full (G_PRIORITY_HIGH,
+                                                 ide_layout_grid_do_cull,
+                                                 g_object_ref (self),
+                                                 g_object_unref);
+}
 
 static void
 ide_layout_grid_update_actions (IdeLayoutGrid *self)
@@ -663,6 +737,17 @@ ide_layout_grid_grab_focus (GtkWidget *widget)
 }
 
 static void
+ide_layout_grid_destroy (GtkWidget *widget)
+{
+  IdeLayoutGrid *self = (IdeLayoutGrid *)widget;
+  IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
+
+  dzl_clear_source (&priv->cull_source);
+
+  GTK_WIDGET_CLASS (ide_layout_grid_parent_class)->destroy (widget);
+}
+
+static void
 ide_layout_grid_finalize (GObject *object)
 {
   IdeLayoutGrid *self = (IdeLayoutGrid *)object;
@@ -732,6 +817,7 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
   object_class->get_property = ide_layout_grid_get_property;
   object_class->set_property = ide_layout_grid_set_property;
 
+  widget_class->destroy = ide_layout_grid_destroy;
   widget_class->drag_data_received = ide_layout_grid_drag_data_received;
   widget_class->drag_motion = ide_layout_grid_drag_motion;
   widget_class->drag_leave = ide_layout_grid_drag_leave;
@@ -1242,6 +1328,8 @@ ide_layout_grid_stack_items_changed (IdeLayoutGrid  *self,
                                       added);
 
           ide_object_notify_in_main (G_OBJECT (self), properties [PROP_CURRENT_VIEW]);
+
+          ide_layout_grid_queue_cull (self);
 
           return;
         }
