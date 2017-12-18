@@ -371,6 +371,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 {
   IdeConfigurationManager *config_manager;
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GCancellable) cancellable = NULL;
   IdeRuntimeManager *runtime_manager;
   IdeConfiguration *config;
   IdeContext *context;
@@ -399,12 +400,9 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
    * Cancel and clear our previous pipeline and associated components
    * as they are not invalide.
    */
-
-  if (self->cancellable != NULL)
-    {
-      ide_build_manager_cancel (self);
-      g_clear_object (&self->cancellable);
-    }
+  ide_build_manager_cancel (self);
+  cancellable = g_cancellable_new ();
+  dzl_cancellable_chain (cancellable, self->cancellable);
 
   g_clear_object (&self->pipeline);
 
@@ -446,14 +444,13 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
    * case a further configuration change comes through and we need to
    * tear down the pipeline immediately.
    */
-  self->cancellable = g_cancellable_new ();
-  task = g_task_new (self, self->cancellable, NULL, NULL);
+  task = g_task_new (self, cancellable, NULL, NULL);
   g_task_set_task_data (task, g_object_ref (self->pipeline), g_object_unref);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_return_on_cancel (task, TRUE);
   ide_runtime_manager_ensure_async (runtime_manager,
                                     runtime_id,
-                                    self->cancellable,
+                                    cancellable,
                                     ide_build_manager_ensure_runtime_cb,
                                     g_steal_pointer (&task));
 
@@ -1048,6 +1045,7 @@ ide_build_manager_cancel (IdeBuildManager *self)
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
 
   cancellable = g_steal_pointer (&self->cancellable);
+  self->cancellable = g_cancellable_new ();
 
   g_debug ("Cancelling [%p] build due to user request", cancellable);
 
@@ -1181,6 +1179,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
 
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
@@ -1207,11 +1206,6 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  g_set_object (&self->cancellable, cancellable);
-
-  if (self->cancellable == NULL)
-    self->cancellable = g_cancellable_new ();
-
   /*
    * Only update our "build time" if we are advancing to IDE_BUILD_PHASE_BUILD,
    * we don't really care about "builds" for configure stages and less.
@@ -1236,7 +1230,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
       context = ide_object_get_context (IDE_OBJECT (self));
       buffer_manager = ide_context_get_buffer_manager (context);
       ide_buffer_manager_save_all_async (buffer_manager,
-                                         self->cancellable,
+                                         cancellable,
                                          ide_build_manager_save_all_cb,
                                          g_steal_pointer (&task));
       IDE_EXIT;
@@ -1339,6 +1333,7 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
 
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
@@ -1359,15 +1354,13 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  g_set_object (&self->cancellable, cancellable);
-
   self->diagnostic_count = 0;
   self->error_count = 0;
   self->warning_count = 0;
 
   ide_build_pipeline_clean_async (self->pipeline,
                                   phase,
-                                  self->cancellable,
+                                  cancellable,
                                   ide_build_manager_clean_cb,
                                   g_steal_pointer (&task));
 
@@ -1460,6 +1453,7 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
 
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
@@ -1480,11 +1474,9 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  g_set_object (&self->cancellable, cancellable);
-
   ide_build_pipeline_rebuild_async (self->pipeline,
                                     phase,
-                                    self->cancellable,
+                                    cancellable,
                                     ide_build_manager_rebuild_cb,
                                     g_steal_pointer (&task));
 
