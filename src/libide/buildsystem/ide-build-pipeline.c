@@ -1540,9 +1540,13 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
                                 gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GCancellable) local_cancellable = NULL;
   TaskData *task_data;
 
   IDE_ENTRY;
+
+  if (cancellable == NULL)
+    cancellable = local_cancellable = g_cancellable_new ();
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_pipeline_build_async);
@@ -2729,6 +2733,7 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
                                 gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GPtrArray) stages = NULL;
   IdeBuildPhase min_phase = IDE_BUILD_PHASE_FINAL;
   IdeBuildPhase phase_mask;
@@ -2739,6 +2744,9 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (cancellable == NULL)
+    cancellable = local_cancellable = g_cancellable_new ();
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, G_PRIORITY_LOW);
@@ -2967,6 +2975,7 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
                                   gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GCancellable) local_cancellable = NULL;
   TaskData *td;
 
   IDE_ENTRY;
@@ -2974,6 +2983,9 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail ((phase & ~IDE_BUILD_PHASE_MASK) == 0);
+
+  if (cancellable == NULL)
+    cancellable = local_cancellable = g_cancellable_new ();
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, G_PRIORITY_LOW);
