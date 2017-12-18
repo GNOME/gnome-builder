@@ -236,6 +236,8 @@ gbp_history_layout_stack_addin_load (IdeLayoutStackAddin *addin,
 
   self->controls = g_object_new (GTK_TYPE_BOX,
                                  "orientation", GTK_ORIENTATION_HORIZONTAL,
+                                 "sensitive", FALSE,
+                                 "visible", TRUE,
                                  NULL);
   g_signal_connect (self->controls,
                     "destroy",
@@ -310,7 +312,7 @@ gbp_history_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
   g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
   g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
 
-  gtk_widget_set_visible (GTK_WIDGET (self->controls), IDE_IS_EDITOR_VIEW (view));
+  gtk_widget_set_sensitive (GTK_WIDGET (self->controls), IDE_IS_EDITOR_VIEW (view));
 }
 
 static void
