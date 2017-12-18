@@ -434,13 +434,15 @@ get_soup_session (void)
 }
 
 static GBytes *
-download_uri (SoupURI *uri,
-              GError **error)
+download_uri (SoupURI  *uri,
+              GError  **error)
 {
-  g_autoptr(SoupSession) session;
+  g_autoptr(SoupSession) session = NULL;
   g_autoptr(SoupRequest) req = NULL;
   g_autoptr(GInputStream) input = NULL;
   g_autoptr(GOutputStream) out = NULL;
+
+  g_assert (uri != NULL);
 
   session = get_soup_session ();
 

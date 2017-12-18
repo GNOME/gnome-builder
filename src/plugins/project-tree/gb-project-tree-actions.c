@@ -310,7 +310,7 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
 
   if (!gb_project_file_get_is_directory (GB_PROJECT_FILE (item)))
     {
-      g_autoptr(GFile) parent;
+      g_autoptr(GFile) parent = NULL;
 
       parent = g_file_get_parent (file);
       workdir = g_file_get_path (parent);
