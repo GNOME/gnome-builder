@@ -106,7 +106,14 @@ typedef struct
 
 struct _IdeBuildPipeline
 {
-  IdeObject         parent_instance;
+  IdeObject parent_instance;
+
+  /*
+   * A cancellable we can use to chain to all incoming requests so that
+   * all tasks may be cancelled at once when _ide_build_pipeline_cancel()
+   * is called.
+   */
+  GCancellable *cancellable;
 
   /*
    * These are our extensions to the BuildPipeline. Plugins insert
@@ -966,6 +973,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_assert (self->task_queue.length == 0);
   g_queue_clear (&self->task_queue);
 
+  g_clear_object (&self->cancellable);
   g_clear_object (&self->log);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
@@ -1226,6 +1234,8 @@ static void
 ide_build_pipeline_init (IdeBuildPipeline *self)
 {
   DZL_COUNTER_INC (Instances);
+
+  self->cancellable = g_cancellable_new ();
 
   self->position = -1;
   self->pty_slave = -1;
@@ -1537,6 +1547,8 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_pipeline_build_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
+
+  dzl_cancellable_chain (cancellable, self->cancellable);
 
   /*
    * If the requested phase has already been met (by a previous build
@@ -2729,7 +2741,10 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_build_pipeline_clean_async);
+
+  dzl_cancellable_chain (cancellable, self->cancellable);
 
   td = task_data_new (task, TASK_CLEAN);
   td->phase = phase;
@@ -2964,6 +2979,8 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_build_pipeline_rebuild_async);
 
+  dzl_cancellable_chain (cancellable, self->cancellable);
+
   td = task_data_new (task, TASK_REBUILD);
   td->phase = phase;
   g_task_set_task_data (task, td, task_data_free);
@@ -3045,4 +3062,16 @@ _ide_build_pipeline_set_message (IdeBuildPipeline *self,
       self->message = g_strdup (message);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
     }
+}
+
+void
+_ide_build_pipeline_cancel (IdeBuildPipeline *self)
+{
+  g_autoptr(GCancellable) cancellable = NULL;
+
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+
+  cancellable = g_steal_pointer (&self->cancellable);
+  self->cancellable = g_cancellable_new ();
+  g_cancellable_cancel (cancellable);
 }

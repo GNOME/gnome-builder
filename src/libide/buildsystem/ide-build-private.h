@@ -24,6 +24,7 @@
 
 G_BEGIN_DECLS
 
+void    _ide_build_pipeline_cancel      (IdeBuildPipeline *self);
 VtePty *_ide_build_pipeline_get_pty     (IdeBuildPipeline *self);
 void    _ide_build_pipeline_set_message (IdeBuildPipeline *self,
                                          const gchar      *message);

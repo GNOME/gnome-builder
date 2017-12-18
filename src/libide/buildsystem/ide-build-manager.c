@@ -26,6 +26,7 @@
 #include "buffers/ide-buffer-manager.h"
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-pipeline.h"
+#include "buildsystem/ide-build-private.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"
 #include "diagnostics/ide-diagnostic.h"
@@ -1052,6 +1053,9 @@ ide_build_manager_cancel (IdeBuildManager *self)
 
   if (!g_cancellable_is_cancelled (cancellable))
     g_cancellable_cancel (cancellable);
+
+  if (self->pipeline != NULL)
+    _ide_build_pipeline_cancel (self->pipeline);
 
   IDE_EXIT;
 }
