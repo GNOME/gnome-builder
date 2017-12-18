@@ -9,3 +9,7 @@ greeter flowboxchild {
 greeter flowboxchild:selected label {
   color: white;
 }
+
+greeter flowboxchild dzlpillbox {
+ background: alpha(shade(@theme_bg_color, 0.9), 0.8);
+}
