@@ -20,6 +20,7 @@
 
 #include <json-glib/json-glib.h>
 
+#include "gbp-meson-build-system.h"
 #include "gbp-meson-test.h"
 #include "gbp-meson-test-provider.h"
 
@@ -261,6 +262,7 @@ gbp_meson_test_provider_reload (gpointer user_data)
   GbpMesonTestProvider *self = user_data;
   IdeBuildPipeline *pipeline;
   IdeBuildManager *build_manager;
+  IdeBuildSystem *build_system;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -274,10 +276,17 @@ gbp_meson_test_provider_reload (gpointer user_data)
   g_clear_object (&self->build_cancellable);
 
   /*
+   * Check that we're working with a meson build system.
+   */
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_context_get_build_system (context);
+  if (build_system == NULL)
+    IDE_RETURN (G_SOURCE_REMOVE);
+
+  /*
    * Get access to the pipeline so we can create a launcher to
    * introspect meson from within the build environment.
    */
-  context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_context_get_build_manager (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
   if (pipeline == NULL)
