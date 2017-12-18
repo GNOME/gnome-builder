@@ -107,11 +107,16 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
   g_autofree gchar *tags_path = NULL;
   g_autoptr(GString) filenames = NULL;
   GOutputStream *stdin_stream;
+  IdeContext *context;
+  IdeVcs *vcs;
   gpointer infoptr;
 
   g_assert (IDE_IS_CTAGS_BUILDER (self));
   g_assert (G_IS_FILE (directory));
   g_assert (G_IS_FILE (destination));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
 
   dest_dir = g_file_get_path (destination);
   if (0 != g_mkdir_with_parents (dest_dir, 0750))
@@ -232,6 +237,9 @@ finish_subprocess:
 
       g_assert (G_IS_FILE (child));
       g_assert (G_IS_FILE (dest_child));
+
+      if (ide_vcs_is_ignored (vcs, child, NULL))
+        continue;
 
       if (!ide_ctags_builder_build (self, ctags, child, dest_child, recursive, cancellable))
         return FALSE;

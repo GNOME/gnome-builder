@@ -278,6 +278,7 @@ ide_ctags_service_load_tags (IdeCtagsService *self,
 
 static void
 ide_ctags_service_mine_directory (IdeCtagsService *self,
+                                  IdeVcs          *vcs,
                                   GFile           *directory,
                                   gboolean         recurse,
                                   GCancellable    *cancellable)
@@ -291,6 +292,9 @@ ide_ctags_service_mine_directory (IdeCtagsService *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (g_cancellable_is_cancelled (cancellable))
+    return;
+
+  if (ide_vcs_is_ignored (vcs, directory, NULL))
     return;
 
   child = g_file_get_child (directory, "tags");
@@ -330,7 +334,7 @@ ide_ctags_service_mine_directory (IdeCtagsService *self,
           const gchar *name = g_file_info_get_name (file_info);
 
           child = g_file_get_child (directory, name);
-          ide_ctags_service_mine_directory (self, child, recurse, cancellable);
+          ide_ctags_service_mine_directory (self, vcs, child, recurse, cancellable);
           g_clear_object (&child);
         }
     }
@@ -347,6 +351,8 @@ ide_ctags_service_miner (GTask        *task,
                          GCancellable *cancellable)
 {
   IdeCtagsService *self = source_object;
+  IdeContext *context;
+  IdeVcs *vcs;
   GArray *mine_info = task_data;
 
   IDE_ENTRY;
@@ -355,12 +361,15 @@ ide_ctags_service_miner (GTask        *task,
   g_assert (IDE_IS_CTAGS_SERVICE (self));
   g_assert (mine_info != NULL);
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+
   for (guint i = 0; i < mine_info->len; i++)
     {
       const MineInfo *info = &g_array_index (mine_info, MineInfo, i);
       g_autoptr(GFile) file = g_file_new_for_path (info->path);
 
-      ide_ctags_service_mine_directory (self, file, info->recursive, cancellable);
+      ide_ctags_service_mine_directory (self, vcs, file, info->recursive, cancellable);
     }
 
   self->miner_active = FALSE;
