@@ -640,14 +640,16 @@ ide_run_manager_run_async (IdeRunManager       *self,
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
   g_return_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
 
+  dzl_cancellable_chain (cancellable, self->cancellable);
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_run_manager_run_async);
-
-  g_set_object (&self->cancellable, cancellable);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (ide_run_manager_check_busy (self, &error))
     {
@@ -703,7 +705,8 @@ ide_run_manager_cancel (IdeRunManager *self)
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
 
   if (self->cancellable != NULL)
-    g_timeout_add (0, do_cancel_in_timeout, g_object_ref (self->cancellable));
+    g_timeout_add (0, do_cancel_in_timeout, g_steal_pointer (&self->cancellable));
+  self->cancellable = g_cancellable_new ();
 
   IDE_EXIT;
 }
@@ -1102,6 +1105,8 @@ ide_run_manager_actions_stop (IdeRunManager *self,
 static void
 ide_run_manager_init (IdeRunManager *self)
 {
+  self->cancellable = g_cancellable_new ();
+
   ide_run_manager_add_handler (self,
                                "run",
                                _("Run"),
