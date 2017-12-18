@@ -56,9 +56,10 @@ struct _IdeBuildManager
 {
   IdeObject         parent_instance;
 
+  GCancellable     *cancellable;
+
   IdeBuildPipeline *pipeline;
   GDateTime        *last_build_time;
-  GCancellable     *cancellable;
   DzlSignalGroup   *pipeline_signals;
 
   GTimer           *running_time;
@@ -368,7 +369,6 @@ static void
 ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 {
   IdeConfigurationManager *config_manager;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = NULL;
   IdeRuntimeManager *runtime_manager;
   IdeConfiguration *config;
@@ -448,6 +448,8 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   self->cancellable = g_cancellable_new ();
   task = g_task_new (self, self->cancellable, NULL, NULL);
   g_task_set_task_data (task, g_object_ref (self->pipeline), g_object_unref);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_return_on_cancel (task, TRUE);
   ide_runtime_manager_ensure_async (runtime_manager,
                                     runtime_id,
                                     self->cancellable,
@@ -900,6 +902,8 @@ ide_build_manager_init (IdeBuildManager *self)
 
   ide_build_manager_update_action_enabled (self);
 
+  self->cancellable = g_cancellable_new ();
+
   self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
 
   dzl_signal_group_connect_object (self->pipeline_signals,
@@ -1042,9 +1046,9 @@ ide_build_manager_cancel (IdeBuildManager *self)
 
   g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
 
-  g_debug ("Cancelling build due to user request");
-
   cancellable = g_steal_pointer (&self->cancellable);
+
+  g_debug ("Cancelling [%p] build due to user request", cancellable);
 
   if (!g_cancellable_is_cancelled (cancellable))
     g_cancellable_cancel (cancellable);
@@ -1177,8 +1181,12 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
 
+  dzl_cancellable_chain (cancellable, self->cancellable);
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_execute_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_return_on_cancel (task, TRUE);
 
   if (self->pipeline == NULL || self->can_build == FALSE)
     {
@@ -1331,8 +1339,12 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
 
+  dzl_cancellable_chain (cancellable, self->cancellable);
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_clean_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_return_on_cancel (task, TRUE);
 
   if (self->pipeline == NULL)
     {
@@ -1448,8 +1460,12 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
 
+  dzl_cancellable_chain (cancellable, self->cancellable);
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_rebuild_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_return_on_cancel (task, TRUE);
 
   if (self->pipeline == NULL)
     {
