@@ -1908,6 +1908,8 @@ ide_build_pipeline_connect (IdeBuildPipeline *self,
         {
           PipelineEntry entry = { 0 };
 
+          _ide_build_stage_set_phase (stage, phase);
+
           IDE_TRACE_MSG ("Adding stage to pipeline with phase %s and priority %d",
                          value->value_nick, priority);
 

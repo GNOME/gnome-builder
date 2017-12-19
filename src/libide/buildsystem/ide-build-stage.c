@@ -36,6 +36,7 @@ typedef struct
   gchar               *stdout_path;
   GOutputStream       *stdout_stream;
   gint                 n_pause;
+  IdeBuildPhase        phase;
   guint                completed : 1;
   guint                disabled : 1;
   guint                transient : 1;
@@ -1117,4 +1118,25 @@ ide_build_stage_set_active (IdeBuildStage *self,
       priv->active = active;
       ide_object_notify_in_main (IDE_OBJECT (self), properties [PROP_ACTIVE]);
     }
+}
+
+IdeBuildPhase
+_ide_build_stage_get_phase (IdeBuildStage *self)
+{
+  IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), 0);
+
+  return priv->phase;
+}
+
+void
+_ide_build_stage_set_phase (IdeBuildStage *self,
+                            IdeBuildPhase  phase)
+{
+  IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUILD_STAGE (self));
+
+  priv->phase = phase;
 }

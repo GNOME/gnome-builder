@@ -23,14 +23,17 @@
 
 G_BEGIN_DECLS
 
-gboolean _ide_build_stage_has_query                 (IdeBuildStage        *self);
-void     _ide_build_stage_execute_with_query_async  (IdeBuildStage        *self,
-                                                     IdeBuildPipeline     *pipeline,
-                                                     GCancellable         *cancellable,
-                                                     GAsyncReadyCallback   callback,
-                                                     gpointer              user_data);
-gboolean _ide_build_stage_execute_with_query_finish (IdeBuildStage        *self,
-                                                     GAsyncResult         *result,
-                                                     GError              **error);
+gboolean      _ide_build_stage_has_query                 (IdeBuildStage        *self);
+IdeBuildPhase _ide_build_stage_get_phase                 (IdeBuildStage        *self);
+void          _ide_build_stage_set_phase                 (IdeBuildStage        *self,
+                                                          IdeBuildPhase         phase);
+void          _ide_build_stage_execute_with_query_async  (IdeBuildStage        *self,
+                                                          IdeBuildPipeline     *pipeline,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+gboolean      _ide_build_stage_execute_with_query_finish (IdeBuildStage        *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
 
 G_END_DECLS
