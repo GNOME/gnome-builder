@@ -1,9 +1,8 @@
 <interface>
   <template class="IdeBuildPanel" parent="DzlDockWidget">
     <child>
-      <object class="GtkBox">
+      <object class="DzlMultiPaned">
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkGrid">
@@ -74,6 +73,29 @@
               <packing>
                 <property name="top-attach">1</property>
                 <property name="left-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkExpander">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Build Details</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="propagate-natural-height">true</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkListBox" id="stages_list_box">
+                        <property name="selection-mode">none</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="top-attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="width">2</property>
               </packing>
             </child>
           </object>

@@ -21,7 +21,9 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
+#include "buildsystem/ide-build-stage-private.h"
 #include "buildui/ide-build-panel.h"
+#include "buildui/ide-build-stage-row.h"
 #include "util/ide-fancy-tree-view.h"
 #include "util/ide-cell-renderer-fancy.h"
 
@@ -42,6 +44,7 @@ struct _IdeBuildPanel
   GtkScrolledWindow   *warnings_page;
   IdeFancyTreeView    *warnings_tree_view;
   GtkListStore        *diagnostics_store;
+  GtkListBox          *stages_list_box;
 
   guint                error_count;
   guint                warning_count;
@@ -189,6 +192,20 @@ ide_build_panel_started (IdeBuildPanel    *self,
 }
 
 static void
+ide_build_panel_connect_stage_cb (gpointer data,
+                                  gpointer user_data)
+{
+  IdeBuildStage *stage = data;
+  IdeBuildPanel *self = user_data;
+
+  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_BUILD_PANEL (self));
+
+  gtk_container_add (GTK_CONTAINER (self->stages_list_box),
+                     ide_build_stage_row_new (stage));
+}
+
+static void
 ide_build_panel_connect (IdeBuildPanel    *self,
                          IdeBuildPipeline *pipeline)
 {
@@ -217,6 +234,10 @@ ide_build_panel_connect (IdeBuildPanel    *self,
                            G_CALLBACK (ide_build_panel_started),
                            self,
                            G_CONNECT_SWAPPED);
+
+  ide_build_pipeline_foreach_stage (pipeline,
+                                    ide_build_panel_connect_stage_cb,
+                                    self);
 }
 
 static void
@@ -232,6 +253,9 @@ ide_build_panel_disconnect (IdeBuildPanel *self)
 
   g_hash_table_remove_all (self->diags_hash);
   gtk_list_store_clear (self->diagnostics_store);
+  gtk_container_foreach (GTK_CONTAINER (self->stages_list_box),
+                         (GtkCallback) gtk_widget_destroy,
+                         NULL);
 }
 
 void
@@ -506,6 +530,31 @@ diagnostic_is_error (GtkTreeModel *model,
 }
 
 static void
+ide_build_panel_stage_row_activated (IdeBuildPanel    *self,
+                                     IdeBuildStageRow *row,
+                                     GtkListBox       *list_box)
+{
+  IdeBuildStage *stage;
+  IdeBuildPhase phase;
+
+  g_assert (IDE_IS_BUILD_PANEL (self));
+  g_assert (IDE_IS_BUILD_STAGE_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  if (self->pipeline == NULL)
+    return;
+
+  stage = ide_build_stage_row_get_stage (row);
+  g_assert (IDE_IS_BUILD_STAGE (stage));
+
+  phase = _ide_build_stage_get_phase (stage);
+
+  ide_build_pipeline_build_async (self->pipeline,
+                                  phase & IDE_BUILD_PHASE_MASK,
+                                  NULL, NULL, NULL);
+}
+
+static void
 ide_build_panel_destroy (GtkWidget *widget)
 {
   IdeBuildPanel *self = (IdeBuildPanel *)widget;
@@ -576,7 +625,8 @@ ide_build_panel_class_init (IdeBuildPanelClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-panel.ui");
+  gtk_widget_class_set_template_from_resource (widget_class,
+                                               "/org/gnome/builder/plugins/buildui/ide-build-panel.ui");
   gtk_widget_class_set_css_name (widget_class, "buildpanel");
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, build_status_label);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, time_completed_label);
@@ -586,6 +636,7 @@ ide_build_panel_class_init (IdeBuildPanelClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, warnings_page);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, warnings_tree_view);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, diagnostics_store);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildPanel, stages_list_box);
 
   g_type_ensure (IDE_TYPE_CELL_RENDERER_FANCY);
   g_type_ensure (IDE_TYPE_DIAGNOSTIC);
@@ -642,4 +693,9 @@ ide_build_panel_init (IdeBuildPanel *self)
 
   ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->errors_tree_view),
                                      ide_build_panel_text_func, self, NULL);
+
+  g_signal_connect_swapped (self->stages_list_box,
+                            "row-activated",
+                            G_CALLBACK (ide_build_panel_stage_row_activated),
+                            self);
 }
