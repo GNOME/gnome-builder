@@ -492,9 +492,12 @@ ide_compile_commands_filter_c (IdeCompileCommands   *self,
         case 'f': /* -fPIC */
         case 'W': /* -Werror... */
         case 'm': /* -m64 -mtune=native */
-        case 'M': /* -MMD -MQ */
         case 'O': /* -O2 */
           g_ptr_array_add (ar, g_strdup (param));
+          break;
+
+        case 'M': /* -MMD -MQ -MT -MF <file> */
+          /* ignore the -M class of commands */
           break;
 
         case 'D': /* -DFOO, -D FOO */
