@@ -172,6 +172,11 @@ struct _IdeBuildStageClass
   gpointer _reserved12;
 };
 
+IDE_AVAILABLE_IN_3_28
+gboolean       ide_build_stage_get_active       (IdeBuildStage        *self);
+IDE_AVAILABLE_IN_3_28
+void           ide_build_stage_set_active       (IdeBuildStage        *self,
+                                                 gboolean              active);
 IDE_AVAILABLE_IN_ALL
 const gchar   *ide_build_stage_get_name         (IdeBuildStage        *self);
 IDE_AVAILABLE_IN_ALL

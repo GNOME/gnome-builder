@@ -40,12 +40,14 @@ typedef struct
   guint                disabled : 1;
   guint                transient : 1;
   guint                check_stdout : 1;
+  guint                active : 1;
 } IdeBuildStagePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildStage, ide_build_stage, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_ACTIVE,
   PROP_CHECK_STDOUT,
   PROP_COMPLETED,
   PROP_DISABLED,
@@ -269,6 +271,10 @@ ide_build_stage_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, ide_build_stage_get_active (self));
+      break;
+
     case PROP_CHECK_STDOUT:
       g_value_set_boolean (value, ide_build_stage_get_check_stdout (self));
       break;
@@ -304,6 +310,10 @@ ide_build_stage_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE:
+      ide_build_stage_set_active (self, g_value_get_boolean (value));
+      break;
+
     case PROP_CHECK_STDOUT:
       ide_build_stage_set_check_stdout (self, g_value_get_boolean (value));
       break;
@@ -344,6 +354,21 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
   klass->clean_async = ide_build_stage_real_clean_async;
   klass->clean_finish = ide_build_stage_real_clean_finish;
   klass->chain = ide_build_stage_real_chain;
+
+  /**
+   * IdeBuildStage:active:
+   *
+   * This property is set to %TRUE when the build stage is actively
+   * running or cleaning.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_ACTIVE] =
+    g_param_spec_boolean ("active",
+                          "Active",
+                          "If the stage is actively running",
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * IdeBuildStage:check-stdout:
@@ -1053,5 +1078,43 @@ ide_build_stage_set_check_stdout (IdeBuildStage *self,
     {
       priv->check_stdout = check_stdout;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CHECK_STDOUT]);
+    }
+}
+
+/**
+ * ide_build_stage_get_active:
+ * @self: a #IdeBuildStage
+ *
+ * Gets the "active" property, which is set to %TRUE when the
+ * build stage is actively executing or cleaning.
+ *
+ * Returns: %TRUE if the stage is actively executing or cleaning.
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_build_stage_get_active (IdeBuildStage *self)
+{
+  IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), FALSE);
+
+  return priv->active;
+}
+
+void
+ide_build_stage_set_active (IdeBuildStage *self,
+                            gboolean       active)
+{
+  IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUILD_STAGE (self));
+
+  active = !!active;
+
+  if (priv->active != active)
+    {
+      priv->active = active;
+      ide_object_notify_in_main (IDE_OBJECT (self), properties [PROP_ACTIVE]);
     }
 }
