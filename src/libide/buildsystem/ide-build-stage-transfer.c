@@ -67,6 +67,17 @@ ide_build_stage_transfer_execute_cb (GObject      *object,
 }
 
 static void
+ide_build_stage_transfer_notify_completed_cb (GTask                 *task,
+                                              GParamSpec            *pspec,
+                                              IdeBuildStageTransfer *transfer)
+{
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_BUILD_STAGE_TRANSFER (transfer));
+
+  ide_build_stage_set_active (IDE_BUILD_STAGE (transfer), FALSE);
+}
+
+static void
 ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
                                         IdeBuildPipeline    *pipeline,
                                         GCancellable        *cancellable,
@@ -85,6 +96,14 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_stage_transfer_execute_async);
+  g_task_set_priority (task, TRUE);
+
+  g_signal_connect (task,
+                    "notify::completed",
+                    G_CALLBACK (ide_build_stage_transfer_notify_completed_cb),
+                    self);
+
+  ide_build_stage_set_active (stage, TRUE);
 
   if (ide_transfer_get_completed (self->transfer))
     {

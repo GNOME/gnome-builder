@@ -107,6 +107,17 @@ ignore_exit_failures:
 }
 
 static void
+ide_build_stage_launcher_notify_completed_cb (GTask                 *task,
+                                              GParamSpec            *pspec,
+                                              IdeBuildStageLauncher *launcher)
+{
+  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_BUILD_STAGE_LAUNCHER (launcher));
+
+  ide_build_stage_set_active (IDE_BUILD_STAGE (launcher), FALSE);
+}
+
+static void
 ide_build_stage_launcher_run (IdeBuildStage         *stage,
                               IdeSubprocessLauncher *launcher,
                               IdeBuildPipeline      *pipeline,
@@ -130,6 +141,14 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_stage_launcher_run);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  g_signal_connect (task,
+                    "notify::completed",
+                    G_CALLBACK (ide_build_stage_launcher_notify_completed_cb),
+                    self);
+
+  ide_build_stage_set_active (IDE_BUILD_STAGE (self), TRUE);
 
   if (launcher == NULL)
     {

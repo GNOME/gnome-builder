@@ -97,6 +97,8 @@ ide_build_stage_mkdirs_execute (IdeBuildStage     *stage,
   g_assert (IDE_IS_BUILD_STAGE_MKDIRS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  ide_build_stage_set_active (stage, TRUE);
+
   for (guint i = 0; i < priv->paths->len; i++)
     {
       const Path *path = &g_array_index (priv->paths, Path, i);
@@ -124,6 +126,8 @@ ide_build_stage_mkdirs_execute (IdeBuildStage     *stage,
         }
     }
 
+  ide_build_stage_set_active (stage, FALSE);
+
   IDE_RETURN (TRUE);
 }
 
@@ -137,6 +141,8 @@ ide_build_stage_mkdirs_reap (IdeBuildStage      *stage,
   g_assert (IDE_IS_BUILD_STAGE_MKDIRS (self));
   g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
 
+  ide_build_stage_set_active (stage, TRUE);
+
   for (guint i = 0; i < priv->paths->len; i++)
     {
       const Path *path = &g_array_index (priv->paths, Path, i);
@@ -147,6 +153,8 @@ ide_build_stage_mkdirs_reap (IdeBuildStage      *stage,
           dzl_directory_reaper_add_directory (reaper, file, 0);
         }
     }
+
+  ide_build_stage_set_active (stage, FALSE);
 }
 
 static void
