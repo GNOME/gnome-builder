@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-autotools-pipeline-addin"
 
+#include <glib/gi18n.h>
+
 #include "ide-autotools-autogen-stage.h"
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-make-stage.h"
@@ -45,6 +47,7 @@ register_autoreconf_stage (IdeAutotoolsPipelineAddin  *self,
   srcdir = ide_build_pipeline_get_srcdir (pipeline);
 
   stage = g_object_new (IDE_TYPE_AUTOTOOLS_AUTOGEN_STAGE,
+                        "name", _("Bootstrapping build system"),
                         "completed", completed,
                         "context", context,
                         "srcdir", srcdir,
@@ -219,6 +222,7 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
     }
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "name", _("Configuring project"),
                         "context", ide_object_get_context (IDE_OBJECT (self)),
                         "launcher", launcher,
                         NULL);
@@ -271,6 +275,7 @@ register_make_stage (IdeAutotoolsPipelineAddin  *self,
   parallel = ide_configuration_get_parallelism (config);
 
   stage = g_object_new (IDE_TYPE_AUTOTOOLS_MAKE_STAGE,
+                        "name", _("Building project"),
                         "clean-target", clean_target,
                         "context", context,
                         "parallel", parallel,
@@ -296,6 +301,8 @@ register_makecache_stage (IdeAutotoolsPipelineAddin  *self,
 
   if (NULL == (stage = ide_autotools_makecache_stage_new_for_pipeline (pipeline, error)))
     return FALSE;
+
+  ide_build_stage_set_name (stage, _("Caching build commands"));
 
   stage_id = ide_build_pipeline_connect (pipeline,
                                          IDE_BUILD_PHASE_CONFIGURE | IDE_BUILD_PHASE_AFTER,

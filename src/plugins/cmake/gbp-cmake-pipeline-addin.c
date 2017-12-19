@@ -19,6 +19,8 @@
 
 #define G_LOG_DOMAIN "gbp-cmake-pipeline-addin"
 
+#include <glib/gi18n.h>
+
 #include "gbp-cmake-build-system.h"
 #include "gbp-cmake-pipeline-addin.h"
 
@@ -152,6 +154,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
     }
 
   configure_stage = ide_build_stage_launcher_new (context, configure_launcher);
+  ide_build_stage_set_name (configure_stage, _("Configure project"));
 
   build_ninja = ide_build_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
   if (g_file_test (build_ninja, G_FILE_TEST_IS_REGULAR))
@@ -176,6 +179,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (clean_launcher, "clean");
 
   build_stage = ide_build_stage_launcher_new (context, build_launcher);
+  ide_build_stage_set_name (build_stage, _("Building project"));
 
   ide_build_stage_launcher_set_clean_launcher (IDE_BUILD_STAGE_LAUNCHER (build_stage), clean_launcher);
   ide_build_stage_set_check_stdout (build_stage, TRUE);
@@ -194,6 +198,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (install_launcher, "install");
 
   install_stage = ide_build_stage_launcher_new (context, install_launcher);
+  ide_build_stage_set_name (install_stage, _("Installing project"));
 
   g_signal_connect (install_stage,
                     "query",

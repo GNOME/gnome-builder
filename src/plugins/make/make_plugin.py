@@ -115,6 +115,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         clean_launcher.push_argv('clean')
 
         build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage.set_name(_("Build project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
         self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
@@ -128,6 +129,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         install_launcher.push_argv('install')
 
         install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+        install_stage.set_name(_("Install project"))
         self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
 
     def _query(self, stage, pipeline, cancellable):

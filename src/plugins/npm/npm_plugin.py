@@ -100,6 +100,7 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         # Fetch dependencies so that we no longer need network access
         fetch_launcher = pipeline.create_launcher()
+        fetch_launcher.set_name(_("Downloading npm dependencies"))
         fetch_launcher.set_cwd(package_json.get_parent().get_path())
         fetch_launcher.push_argv(npm)
         if Ide.get_system_type() != system_type:

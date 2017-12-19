@@ -27,6 +27,8 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gio
 
+_ = Ide.gettext
+
 _TYPE_NONE = 0
 _TYPE_C = 1
 _TYPE_CPLUSPLUS = 2
@@ -205,6 +207,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         bootstrap_launcher.push_argv('phpize')
         bootstrap_launcher.set_cwd(srcdir)
         bootstrap_stage = Ide.BuildStageLauncher.new(context, bootstrap_launcher)
+        bootstrap_stage.set_name(_("Bootstrapping project"))
         bootstrap_stage.set_completed(os.path.exists(os.path.join(srcdir, 'configure')))
         self.track(pipeline.connect(Ide.BuildPhase.AUTOGEN, 0, bootstrap_stage))
 
@@ -220,6 +223,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
             _, config_opts = GLib.shell_parse_argv(config_opts)
             config_launcher.push_args(config_opts)
         config_stage = Ide.BuildStageLauncher.new(context, config_launcher)
+        config_stage.set_name(_("Configuring project"))
         self.track(pipeline.connect(Ide.BuildPhase.CONFIGURE, 0, config_stage))
 
         # Build the project using make.
@@ -231,6 +235,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         clean_launcher.push_argv('make')
         clean_launcher.push_argv('clean')
         build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
         self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
@@ -240,6 +245,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         install_launcher.push_argv('make')
         install_launcher.push_argv('install')
         install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+        install_stage.set_name(_("Installing project"))
         self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
 
     def _query(self, stage, pipeline, cancellable):

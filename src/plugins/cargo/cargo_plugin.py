@@ -30,6 +30,8 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Ide
 
+_ = Ide.gettext
+
 _CARGO = 'cargo'
 
 class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
@@ -146,6 +148,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         clean_launcher.push_argv(cargo_toml)
 
         build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+        build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
 
