@@ -134,6 +134,7 @@ register_mkdirs_stage (GbpFlatpakPipelineAddin  *self,
   config = ide_build_pipeline_get_configuration (pipeline);
 
   mkdirs = ide_build_stage_mkdirs_new (context);
+  ide_build_stage_set_name (mkdirs, _("Creating flatpak workspace"));
 
   repo_dir = gbp_flatpak_get_repo_dir (config);
   staging_dir = gbp_flatpak_get_staging_dir (config);
@@ -245,6 +246,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, branch);
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "name", _("Preparing build directory"),
                         "context", context,
                         "launcher", launcher,
                         NULL);
@@ -284,6 +286,7 @@ register_downloads_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_CONTEXT (context));
 
   stage = g_object_new (GBP_TYPE_FLATPAK_DOWNLOAD_STAGE,
+                        "name", _("Downloading dependencies"),
                         "context", context,
                         "state-dir", self->state_dir,
                         NULL);
@@ -346,6 +349,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, manifest_path);
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "name", _("Building dependencies"),
                         "context", context,
                         "launcher", launcher,
                         NULL);
@@ -388,6 +392,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "name", _("Finalizing flatpak build"),
                         "context", context,
                         "launcher", launcher,
                         NULL);
@@ -430,6 +435,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "name", _("Exporting staging directory"),
                         "context", context,
                         "launcher", launcher,
                         NULL);
@@ -512,6 +518,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, "master");
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
+                        "name", _("Creating flatpak bundle"),
                         "context", context,
                         "launcher", launcher,
                         NULL);
