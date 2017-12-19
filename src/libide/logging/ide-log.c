@@ -95,7 +95,7 @@ G_LOCK_DEFINE (channels_lock);
  * ide_log_get_thread:
  *
  * Retrieves task id for the current thread. This is only supported on Linux.
- * On other platforms, the current current thread pointer is retrieved.
+ * On other platforms, the current thread pointer is retrieved.
  *
  * Returns: The task id.
  */
