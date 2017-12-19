@@ -361,6 +361,83 @@ cleanup:
   g_array_unref (ar);
 }
 
+static gchar *
+ide_clang_service_translate (IdeClangService *self,
+                             const gchar     *path)
+{
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GFile) ret = NULL;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+  IdeContext *context;
+  IdeRuntime *runtime;
+
+  g_assert (IDE_IS_CLANG_SERVICE (self));
+  g_assert (path != NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+  runtime = ide_configuration_get_runtime (config);
+
+  if (runtime == NULL)
+    return g_strdup (path);
+
+  file = g_file_new_for_path (path);
+  ret = ide_runtime_translate_file (runtime, file);
+
+  if (ret == NULL)
+    return NULL;
+
+  return g_file_get_path (ret);
+}
+
+static gchar **
+fixup_cflags (IdeClangService  *self,
+              gchar           **cflags)
+{
+  GPtrArray *ar;
+
+  g_assert (cflags != NULL);
+
+  if (!ide_is_flatpak ())
+    return cflags;
+
+  ar = g_ptr_array_new ();
+
+  /*
+   * If we're running via flatpak, we might need to translate paths
+   * so that we can get /usr/include from the host system.
+   */
+
+  for (guint i = 0; cflags[i] != NULL; i++)
+    {
+      gchar *cflag = cflags[i];
+
+      if (FALSE) {}
+      else if (g_str_equal (cflag, "-I"))
+        {
+          g_ptr_array_add (ar, g_strdup (cflag));
+          g_ptr_array_add (ar, ide_clang_service_translate (self, cflags[++i]));
+        }
+      else if (g_str_has_prefix (cflag, "-I/usr/"))
+        {
+          const gchar *path = &cflag[2];
+          g_autofree gchar *translated = ide_clang_service_translate (self, path);
+
+          g_ptr_array_add (ar, g_strdup_printf ("-I%s", translated));
+        }
+      else
+        {
+          g_ptr_array_add (ar, g_strdup (cflag));
+        }
+    }
+
+  g_ptr_array_add (ar, NULL);
+  g_strfreev (cflags);
+  return (gchar **)g_ptr_array_free (ar, FALSE);
+}
+
 static void
 ide_clang_service__get_build_flags_cb (GObject      *object,
                                        GAsyncResult *result,
@@ -368,6 +445,7 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(GTask) task = user_data;
+  IdeClangService *self;
   ParseRequest *request;
   gchar **argv;
   GError *error = NULL;
@@ -375,7 +453,11 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (G_IS_TASK (task));
 
+  self = g_task_get_source_object (task);
   request = g_task_get_task_data (task);
+
+  g_assert (IDE_IS_CLANG_SERVICE (self));
+  g_assert (request != NULL);
 
   argv = ide_build_system_get_build_flags_finish (build_system, result, &error);
 
@@ -408,6 +490,8 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 
       if (argv == NULL)
         argv = g_new0 (gchar*, 1);
+      else
+        argv = fixup_cflags (self, argv);
     }
 
   request->command_line_args = argv;
