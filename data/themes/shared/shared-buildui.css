@@ -1,0 +1,9 @@
+buildpanel expander title label {
+  font-size: 0.833em;
+  opacity: 0.55;
+}
+
+buildpanel expander list row label {
+  font-size: 0.833em;
+  padding: 3px 14px;
+}
