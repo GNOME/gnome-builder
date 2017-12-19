@@ -126,6 +126,7 @@
     <file preprocess="xml-stripblanks" alias="ide-build-log-panel.ui">buildui/ide-build-log-panel.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-build-panel.ui">buildui/ide-build-panel.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-build-perspective.ui">buildui/ide-build-perspective.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-build-stage-row.ui">buildui/ide-build-stage-row.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-environment-editor-row.ui">buildui/ide-environment-editor-row.ui</file>
   </gresource>
 </gresources>
