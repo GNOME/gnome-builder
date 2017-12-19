@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "gbp-meson-pipeline-addin"
 
+#include <glib/gi18n.h>
+
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-pipeline-addin.h"
 
@@ -135,6 +137,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
     }
 
   config_stage = ide_build_stage_launcher_new (context, config_launcher);
+  ide_build_stage_set_name (config_stage, _("Configuring project"));
   build_ninja = ide_build_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
   if (g_file_test (build_ninja, G_FILE_TEST_IS_REGULAR))
     ide_build_stage_set_completed (config_stage, TRUE);
@@ -163,6 +166,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   build_stage = ide_build_stage_launcher_new (context, build_launcher);
   ide_build_stage_launcher_set_clean_launcher (IDE_BUILD_STAGE_LAUNCHER (build_stage), clean_launcher);
   ide_build_stage_set_check_stdout (build_stage, TRUE);
+  ide_build_stage_set_name (build_stage, _("Building project"));
   g_signal_connect (build_stage, "query", G_CALLBACK (on_stage_query), NULL);
 
   id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_BUILD, 0, build_stage);
@@ -172,6 +176,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (install_launcher, ninja);
   ide_subprocess_launcher_push_argv (install_launcher, "install");
   install_stage = ide_build_stage_launcher_new (context, install_launcher);
+  ide_build_stage_set_name (install_stage, _("Installing project"));
   g_signal_connect (install_stage, "query", G_CALLBACK (on_stage_query), NULL);
   id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_INSTALL, 0, install_stage);
   ide_build_pipeline_addin_track (addin, id);
