@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdePreferencesWindow" parent="GtkWindow">
+    <style>
+      <class name="org-gnome-Builder"/>
+    </style>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <property name="title" translatable="yes">Preferences</property>

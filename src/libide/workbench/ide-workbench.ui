@@ -3,6 +3,7 @@
   <!-- interface-requires gtk+ 3.22 -->
   <template class="IdeWorkbench" parent="DzlApplicationWindow">
     <style>
+      <class name="org-gnome-Builder"/>
       <class name="workbench"/>
     </style>
     <child type="titlebar">
