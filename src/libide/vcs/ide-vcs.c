@@ -114,7 +114,13 @@ ide_vcs_default_init (IdeVcsInterface *iface)
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (IdeVcsInterface, changed),
-                  NULL, NULL, NULL, G_TYPE_NONE, 0);
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals [CHANGED],
+                              G_TYPE_FROM_INTERFACE (iface),
+                              g_cclosure_marshal_VOID__VOIDv);
+
 
   /* Ignore Gio temporary files */
   ide_vcs_register_ignored (".goutputstream-*");
