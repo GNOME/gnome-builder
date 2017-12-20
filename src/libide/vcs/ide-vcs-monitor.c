@@ -211,6 +211,22 @@ ide_vcs_monitor_changed_cb (IdeVcsMonitor           *self,
   IDE_EXIT;
 }
 
+static void
+ide_vcs_monitor_vcs_changed_cb (IdeVcsMonitor *self,
+                                IdeVcs        *vcs)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_VCS_MONITOR (self));
+  g_assert (IDE_IS_VCS (vcs));
+
+  /* Everything is invalidated by new VCS index, reload now */
+  g_clear_pointer (&self->status_by_file, g_hash_table_unref);
+  ide_vcs_monitor_queue_reload (self);
+
+  IDE_EXIT;
+}
+
 static gboolean
 ide_vcs_monitor_ignore_func (GFile    *file,
                              gpointer  data)
@@ -250,8 +266,19 @@ static void
 ide_vcs_monitor_constructed (GObject *object)
 {
   IdeVcsMonitor *self = (IdeVcsMonitor *)object;
+  IdeContext *context;
+  IdeVcs *vcs;
 
   G_OBJECT_CLASS (ide_vcs_monitor_parent_class)->constructed (object);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+
+  g_signal_connect_object (vcs,
+                           "changed",
+                           G_CALLBACK (ide_vcs_monitor_vcs_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   self->monitor = dzl_recursive_file_monitor_new (self->root);
 
