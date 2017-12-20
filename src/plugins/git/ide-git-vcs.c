@@ -311,16 +311,28 @@ ide_git_vcs__monitor_changed_cb (IdeGitVcs         *self,
                                  GFileMonitorEvent  event_type,
                                  gpointer           user_data)
 {
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *other_name = NULL;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_GIT_VCS (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!other_file || G_IS_FILE (other_file));
 
-  if (self->changed_timeout != 0)
-    g_source_remove (self->changed_timeout);
+  name = g_file_get_basename (file);
 
-  self->changed_timeout = g_timeout_add_seconds (DEFAULT_CHANGED_TIMEOUT_SECS,
-                                                 ide_git_vcs__changed_timeout_cb,
-                                                 self);
+  if (other_file != NULL)
+    other_name = g_file_get_basename (other_file);
+
+  if (dzl_str_equal0 (name, "index") ||
+      dzl_str_equal0 (other_name, "index"))
+    {
+      dzl_clear_source (&self->changed_timeout);
+      self->changed_timeout = g_timeout_add_seconds (DEFAULT_CHANGED_TIMEOUT_SECS,
+                                                     ide_git_vcs__changed_timeout_cb,
+                                                     self);
+    }
 
   IDE_EXIT;
 }
@@ -337,16 +349,18 @@ ide_git_vcs_load_monitor_locked (IdeGitVcs  *self,
     {
       g_autoptr(GFile) location = NULL;
       g_autoptr(GFileMonitor) monitor = NULL;
-      g_autoptr(GFile) index_file = NULL;
       GError *local_error = NULL;
 
       location = ggit_repository_get_location (self->repository);
-      index_file = g_file_get_child (location, "index");
-      monitor = g_file_monitor (index_file, 0, NULL, &local_error);
+
+      monitor = g_file_monitor_directory (location,
+                                          G_FILE_MONITOR_NONE,
+                                          NULL,
+                                          &local_error);
 
       if (monitor == NULL)
         {
-          g_warning ("%s", local_error->message);
+          g_warning ("Failed to establish git monitor: %s", local_error->message);
           g_propagate_error (error, local_error);
           ret = FALSE;
         }
@@ -358,7 +372,7 @@ ide_git_vcs_load_monitor_locked (IdeGitVcs  *self,
                                    G_CALLBACK (ide_git_vcs__monitor_changed_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
-          self->monitor = g_object_ref (monitor);
+          self->monitor = g_steal_pointer (&monitor);
         }
     }
 
@@ -709,11 +723,7 @@ ide_git_vcs_dispose (GObject *object)
 
   IDE_ENTRY;
 
-  if (self->changed_timeout)
-    {
-      g_source_remove (self->changed_timeout);
-      self->changed_timeout = 0;
-    }
+  dzl_clear_source (&self->changed_timeout);
 
   if (self->monitor)
     {
