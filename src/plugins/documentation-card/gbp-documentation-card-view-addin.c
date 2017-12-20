@@ -23,8 +23,7 @@
 #include "gbp-documentation-card-view-addin.h"
 #include "gbp-documentation-card.h"
 
-#define POPUP_TIMEOUT          1
-#define POPDOWN_TIMEOUT        500
+#define POPUP_TIMEOUT          600
 #define SPACE_TOLERANCE        15
 
 struct _GbpDocumentationCardViewAddin
@@ -236,11 +235,11 @@ motion_notify_event_cb (gpointer data)
 
   if (!self->poped_up)
     self->timeout_id =
-            gdk_threads_add_timeout_seconds_full (G_PRIORITY_LOW,
-                                                  POPUP_TIMEOUT,
-                                                  search_document_cb,
-                                                  g_object_ref (self),
-                                                  g_object_unref);
+            gdk_threads_add_timeout_full (G_PRIORITY_LOW,
+                                          POPUP_TIMEOUT,
+                                          search_document_cb,
+                                          g_object_ref (self),
+                                          g_object_unref);
   else
     search_document_cb (self);
 
