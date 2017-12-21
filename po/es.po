@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-12-14 08:56+0000\n"
-"PO-Revision-Date: 2017-12-14 12:33+0100\n"
+"POT-Creation-Date: 2017-12-20 00:37+0000\n"
+"PO-Revision-Date: 2017-12-20 09:40+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -577,11 +577,6 @@ msgstr "Nombre del color"
 msgid "Enter a new name for the color"
 msgstr "Introduzca un nombre nuevo para el color"
 
-#: src/gstyle/gstyle-palette-widget.c:983
-#, c-format
-msgid "Unsaved palette %u"
-msgstr "Paleta %u sin guardar"
-
 #: src/gstyle/gstyle-palette.c:492 src/gstyle/gstyle-palette.c:558
 #, c-format
 msgid "failed to parse line %i\n"
@@ -620,6 +615,11 @@ msgstr "Generado"
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "No se puede guardar %s\n"
+
+#: src/gstyle/gstyle-palette-widget.c:983
+#, c-format
+msgid "Unsaved palette %u"
+msgstr "Paleta %u sin guardar"
 
 #: src/gstyle/tests/data/gstyle-color-editor.ui:64
 msgid "Hue"
@@ -861,7 +861,7 @@ msgstr "No existe el trabajador"
 #: src/libide/application/ide-application-shortcuts.c:44
 #: src/libide/application/ide-application-shortcuts.c:55
 #: src/libide/application/ide-application-shortcuts.c:66
-#: src/libide/runner/ide-run-manager.c:772
+#: src/libide/runner/ide-run-manager.c:775
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
 #: src/libide/workbench/ide-workbench-shortcuts.c:45
@@ -902,6 +902,10 @@ msgctxt "shortcut window"
 msgid "Show the shortcuts window"
 msgstr "Mostrar la ventana de atajos"
 
+#: src/libide/buffers/ide-buffer.c:2725
+msgid "The current language lacks a symbol resolver."
+msgstr "Al idioma actual le falta un resolutor de símbolos."
+
 #: src/libide/buffers/ide-buffer-manager.c:686
 msgid "File too large to be opened."
 msgstr "El archivo es demasiado grande para poder abrirlo."
@@ -915,64 +919,60 @@ msgstr "Documento %u sin guardar"
 msgid "Failed to save buffer, ignoring reclamation."
 msgstr "Falló al guardar el búfer, ignorando reclamación."
 
-#: src/libide/buffers/ide-buffer.c:2725
-msgid "The current language lacks a symbol resolver."
-msgstr "Al idioma actual le falta un resolutor de símbolos."
-
-#: src/libide/buildsystem/ide-build-pipeline.c:2517
+#: src/libide/buildsystem/ide-build-pipeline.c:2535
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2521
-#: src/libide/buildsystem/ide-build-pipeline.c:2574
+#: src/libide/buildsystem/ide-build-pipeline.c:2539
+#: src/libide/buildsystem/ide-build-pipeline.c:2592
 #: src/libide/workbench/ide-omni-bar.c:461
 msgid "Failed"
 msgstr "Falló"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2523
-#: src/libide/buildsystem/ide-build-pipeline.c:2582
+#: src/libide/buildsystem/ide-build-pipeline.c:2541
+#: src/libide/buildsystem/ide-build-pipeline.c:2600
 msgid "Ready"
 msgstr "Preparado"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2538
+#: src/libide/buildsystem/ide-build-pipeline.c:2556
 msgid "Downloading…"
 msgstr "Descargando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2542
+#: src/libide/buildsystem/ide-build-pipeline.c:2560
 msgid "Building dependencies…"
 msgstr "Construyendo dependencias…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2546
+#: src/libide/buildsystem/ide-build-pipeline.c:2564
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2550
+#: src/libide/buildsystem/ide-build-pipeline.c:2568
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2554
+#: src/libide/buildsystem/ide-build-pipeline.c:2572
 msgid "Building…"
 msgstr "Construyendo…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2558
+#: src/libide/buildsystem/ide-build-pipeline.c:2576
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2562
+#: src/libide/buildsystem/ide-build-pipeline.c:2580
 msgid "Exporting…"
 msgstr "Exportando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2566
-#: src/libide/buildsystem/ide-build-pipeline.c:2570
+#: src/libide/buildsystem/ide-build-pipeline.c:2584
+#: src/libide/buildsystem/ide-build-pipeline.c:2588
 #: src/libide/workbench/ide-omni-bar.c:479
 msgid "Success"
 msgstr "Correcto"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2578
+#: src/libide/buildsystem/ide-build-pipeline.c:2596
 msgid "Preparing…"
 msgstr "Preparando…"
 
-#: src/libide/buildsystem/ide-build-stage-transfer.c:108
+#: src/libide/buildsystem/ide-build-stage-transfer.c:127
 msgid "Cannot execute transfer while on metered connection"
 msgstr "No se puede ejecutar la transferencia en una conexión medida"
 
@@ -1035,7 +1035,7 @@ msgid "Device"
 msgstr "Dispositivo"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/libide/workbench/ide-omni-bar.ui:271
+#: src/libide/workbench/ide-omni-bar.ui:289
 msgid "Runtime"
 msgstr "Tiempo de ejecución"
 
@@ -1077,39 +1077,44 @@ msgstr "Cancelar instalación"
 msgid "Save build log"
 msgstr "Guardar el registro de construcción"
 
-#: src/libide/buildui/ide-build-panel.c:105
-#: src/libide/buildui/ide-build-panel.c:181
-#: src/libide/buildui/ide-build-panel.c:203
-#: src/libide/buildui/ide-build-panel.ui:106
-#: src/libide/workbench/ide-omni-bar.ui:446
+#: src/libide/buildui/ide-build-panel.c:108
+#: src/libide/buildui/ide-build-panel.c:184
+#: src/libide/buildui/ide-build-panel.c:220
+#: src/libide/buildui/ide-build-panel.ui:128
+#: src/libide/workbench/ide-omni-bar.ui:464
 msgid "Warnings"
 msgstr "Advertencias"
 
-#: src/libide/buildui/ide-build-panel.c:114
-#: src/libide/buildui/ide-build-panel.c:182
-#: src/libide/buildui/ide-build-panel.c:204
-#: src/libide/buildui/ide-build-panel.ui:127
-#: src/libide/workbench/ide-omni-bar.ui:418
+#: src/libide/buildui/ide-build-panel.c:117
+#: src/libide/buildui/ide-build-panel.c:185
+#: src/libide/buildui/ide-build-panel.c:221
+#: src/libide/buildui/ide-build-panel.ui:149
+#: src/libide/workbench/ide-omni-bar.ui:436
 msgid "Errors"
 msgstr "Errores"
 
-#: src/libide/buildui/ide-build-panel.c:604
+#: src/libide/buildui/ide-build-panel.c:655
 #: src/libide/buildui/ide-build-workbench-addin.c:170
 msgid "Build Issues"
 msgstr "Errores de construcción"
 
-#: src/libide/buildui/ide-build-panel.ui:17
+#: src/libide/buildui/ide-build-panel.ui:16
 msgid "Build status:"
 msgstr "Estado de la construcción:"
 
-#: src/libide/buildui/ide-build-panel.ui:34
+#: src/libide/buildui/ide-build-panel.ui:33
 msgid "Time completed:"
 msgstr "Tiempo completado:"
 
-#: src/libide/buildui/ide-build-panel.ui:51
-#: src/libide/buildui/ide-build-panel.ui:66
+#: src/libide/buildui/ide-build-panel.ui:50
+#: src/libide/buildui/ide-build-panel.ui:65
 msgid "—"
 msgstr "—"
+
+#: src/libide/buildui/ide-build-panel.ui:81
+#| msgid "Build status"
+msgid "Build Details"
+msgstr "Construir detalles"
 
 #: src/libide/buildui/ide-build-perspective.c:450 src/libide/gtk/menus.ui:51
 msgid "Build Preferences"
@@ -1244,10 +1249,6 @@ msgstr "Quitar variable de entorno"
 #: src/libide/debugger/ide-debugger-editor-addin.c:409
 msgid "Run with Debugger"
 msgstr "Ejecutar con el depurador"
-
-#: src/libide/debugger/ide-debug-manager.c:968
-msgid "A suitable debugger could not be found."
-msgstr "No se pudo encontrar un depurador adecuado."
 
 #: src/libide/debugger/ide-debugger-breakpoints-view.ui:22
 #: src/libide/debugger/ide-debugger-registers-view.ui:13
@@ -1385,6 +1386,10 @@ msgstr "Ubicación"
 msgid "Binary"
 msgstr "Binario"
 
+#: src/libide/debugger/ide-debug-manager.c:968
+msgid "A suitable debugger could not be found."
+msgstr "No se pudo encontrar un depurador adecuado."
+
 #: src/libide/devices/ide-device-manager.c:148
 #, c-format
 msgid "The device “%s” could not be found."
@@ -1397,6 +1402,10 @@ msgstr "sin versionar"
 #: src/libide/doap/xml-reader.c:327
 msgid "Could not parse XML from stream"
 msgstr "No se pudo analizar el XML del flujo"
+
+#: src/libide/editorconfig/ide-editorconfig-file-settings.c:159
+msgid "No file was provided."
+msgstr "No se ha proporcionado ningún archivo."
 
 #: src/libide/editor/gtk/menus.ui:9
 #: src/libide/editor/ide-editor-perspective.c:831
@@ -1508,13 +1517,13 @@ msgid "Go"
 msgstr "Ir"
 
 #: src/libide/editor/ide-editor-perspective-actions.c:70
-#: src/libide/workbench/ide-workbench-actions.c:75
+#: src/libide/workbench/ide-workbench-actions.c:78
 msgid "Open File"
 msgstr "Abrir archivo"
 
 #: src/libide/editor/ide-editor-perspective-actions.c:73
 #: src/libide/greeter/ide-greeter-perspective.c:321
-#: src/libide/workbench/ide-workbench-actions.c:78
+#: src/libide/workbench/ide-workbench-actions.c:81
 #: src/plugins/color-picker/gb-color-picker-prefs.c:207
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
 msgid "Open"
@@ -1525,7 +1534,7 @@ msgstr "Abrir"
 #: src/libide/editor/ide-editor-view-actions.c:351
 #: src/libide/greeter/ide-greeter-perspective.c:320
 #: src/libide/greeter/ide-greeter-perspective.c:1154
-#: src/libide/workbench/ide-workbench-actions.c:79
+#: src/libide/workbench/ide-workbench-actions.c:82
 #: src/plugins/color-picker/gb-color-picker-prefs.c:95
 #: src/plugins/color-picker/gb-color-picker-prefs.c:211
 #: src/plugins/color-picker/gb-color-picker-prefs.c:238
@@ -1821,10 +1830,6 @@ msgstr "Conmutar panel de navegación"
 msgid "Toggle utilities panel"
 msgstr "Conmutar panel de utilidades"
 
-#: src/libide/editorconfig/ide-editorconfig-file-settings.c:159
-msgid "No file was provided."
-msgstr "No se ha proporcionado ningún archivo."
-
 #: src/libide/greeter/ide-greeter-perspective.c:216
 msgid "Failed to load the project"
 msgstr "Falló al cargar el proyecto"
@@ -1846,7 +1851,6 @@ msgstr ""
 "esta acción."
 
 #: src/libide/greeter/ide-greeter-perspective.c:1155
-#| msgid "Select Project"
 msgid "Delete Project Files"
 msgstr "Eliminar archivos del proyecto"
 
@@ -1865,7 +1869,6 @@ msgid "_Remove"
 msgstr "_Eliminar"
 
 #: src/libide/greeter/ide-greeter-perspective.ui:124
-#| msgid "Recent Projects"
 msgid "Remove Project Files…"
 msgstr "Quitar archivos del proyecto…"
 
@@ -2015,7 +2018,7 @@ msgstr "Reiniciar"
 msgid "Open File…"
 msgstr "Abrir archivo…"
 
-#: src/libide/gtk/menus.ui:200 src/libide/runner/ide-run-manager.c:1107
+#: src/libide/gtk/menus.ui:200 src/libide/runner/ide-run-manager.c:1112
 msgid "Run"
 msgstr "Ejecutar"
 
@@ -2027,36 +2030,36 @@ msgstr "_Abrir enlace"
 msgid "_Copy Link Address"
 msgstr "C_opiar la dirección del enlace"
 
-#: src/libide/ide-context.c:1954
-msgid "An unload request is already pending"
-msgstr "Ya hay una solicitud de descarga pendiente"
-
-#: src/libide/ide-context.c:2073
-msgid "Context has already been restored."
-msgstr "Ya se ha restaurado el contexto."
-
-#: src/libide/ide-object.c:339
-#, c-format
-msgid "No implementations of extension point “%s”."
-msgstr "No hay implementaciones para el punto de extensión «%s»."
-
-#: src/libide/ide-object.c:448
-#, c-format
-msgid "Failed to locate %s plugin."
-msgstr "Falló al buscar el complemento %s."
-
-#: src/libide/ide-object.c:583
-msgid "No such extension point."
-msgstr "No existe el punto de extensión."
-
-#: src/libide/ide-object.c:593
-msgid "No implementations of extension point."
-msgstr "No hay implementaciones para el punto de extensión."
-
 #: src/libide/ide.c:58
 #, c-format
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
+
+#: src/libide/ide-context.c:1976
+msgid "An unload request is already pending"
+msgstr "Ya hay una solicitud de descarga pendiente"
+
+#: src/libide/ide-context.c:2095
+msgid "Context has already been restored."
+msgstr "Ya se ha restaurado el contexto."
+
+#: src/libide/ide-object.c:343
+#, c-format
+msgid "No implementations of extension point “%s”."
+msgstr "No hay implementaciones para el punto de extensión «%s»."
+
+#: src/libide/ide-object.c:452
+#, c-format
+msgid "Failed to locate %s plugin."
+msgstr "Falló al buscar el complemento %s."
+
+#: src/libide/ide-object.c:587
+msgid "No such extension point."
+msgstr "No existe el punto de extensión."
+
+#: src/libide/ide-object.c:597
+msgid "No implementations of extension point."
+msgstr "No hay implementaciones para el punto de extensión."
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:10
 msgctxt "shortcut window"
@@ -2335,7 +2338,7 @@ msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:405
-#: src/libide/runner/ide-run-manager.c:773
+#: src/libide/runner/ide-run-manager.c:776
 #: src/libide/workbench/ide-workbench-shortcuts.c:46
 msgctxt "shortcut window"
 msgid "Build and Run"
@@ -2377,6 +2380,11 @@ msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Buscar texto en la terminal"
 
+#: src/libide/layout/ide-layout-stack.c:171
+#: src/libide/layout/ide-layout-stack.ui:8
+msgid "No Open Pages"
+msgstr "No hay páginas abiertas"
+
 #: src/libide/layout/ide-layout-stack-header.ui:48
 msgid "Open file"
 msgstr "Abrir archivo"
@@ -2403,11 +2411,6 @@ msgstr "Mover documento a la derecha"
 msgctxt "shortcut window"
 msgid "Move document to the left"
 msgstr "Mover documento a la izquierda"
-
-#: src/libide/layout/ide-layout-stack.c:171
-#: src/libide/layout/ide-layout-stack.ui:8
-msgid "No Open Pages"
-msgstr "No hay páginas abiertas"
 
 #: src/libide/layout/ide-layout-stack.ui:33
 msgid "Open a File or Terminal"
@@ -2905,7 +2908,7 @@ msgid "Open previously opened files when loading a project"
 msgstr "Abrir archivos abiertos anteriormente al cargar un proyecto"
 
 #: src/libide/preferences/ide-preferences-builtin.c:524
-#: src/plugins/create-project/gbp-create-project-widget.ui:154
+#: src/plugins/create-project/gbp-create-project-widget.ui:155
 msgid "Version Control"
 msgstr "Control de versiones"
 
@@ -3009,6 +3012,11 @@ msgstr "Volver al principio"
 msgid "Run _all tests"
 msgstr "Ejecutar _todas las pruebas"
 
+#: src/libide/testing/gtk/menus.ui:12
+#| msgid "_Reload"
+msgid "Reload tests"
+msgstr "Recargar pruebas"
+
 #: src/libide/testing/ide-test-editor-addin.c:73
 msgid "Unit Tests"
 msgstr "Pruebas unitarias"
@@ -3093,63 +3101,73 @@ msgstr "El URI «%s» no tiene componente de equipo"
 msgid "Building"
 msgstr "Construyendo"
 
-#: src/libide/workbench/ide-omni-bar.ui:199
+#: src/libide/workbench/ide-omni-bar.ui:198
+msgid "Update project dependencies"
+msgstr "Actualizar las dependencias del proyecto"
+
+#: src/libide/workbench/ide-omni-bar.ui:217
 msgid "Configure build preferences"
 msgstr "Configurar preferencias de construcción"
 
-#: src/libide/workbench/ide-omni-bar.ui:221
+#: src/libide/workbench/ide-omni-bar.ui:239
 msgid "Branch"
 msgstr "Rama"
 
-#: src/libide/workbench/ide-omni-bar.ui:246
+#: src/libide/workbench/ide-omni-bar.ui:264
 msgid "Build Profile"
 msgstr "Construir perfil"
 
-#: src/libide/workbench/ide-omni-bar.ui:321
+#: src/libide/workbench/ide-omni-bar.ui:339
 msgid "Build status"
 msgstr "Estado de la construcción"
 
-#: src/libide/workbench/ide-omni-bar.ui:342
+#: src/libide/workbench/ide-omni-bar.ui:360
 msgid "View build console contents"
 msgstr "Ver contenido de la consola de construcción"
 
-#: src/libide/workbench/ide-omni-bar.ui:364
+#: src/libide/workbench/ide-omni-bar.ui:382
 msgid "Last build"
 msgstr "Última construcción"
 
-#: src/libide/workbench/ide-omni-bar.ui:391
+#: src/libide/workbench/ide-omni-bar.ui:409
 msgid "Build result"
 msgstr "Resultado de la construcción"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:484
+#: src/libide/workbench/ide-omni-bar.ui:502
 msgid "true"
 msgstr "cierto"
 
-#: src/libide/workbench/ide-omni-bar.ui:489
+#: src/libide/workbench/ide-omni-bar.ui:507
 msgctxt "button"
 msgid "Build"
 msgstr "Construir"
 
-#: src/libide/workbench/ide-omni-bar.ui:496
+#: src/libide/workbench/ide-omni-bar.ui:514
 msgid "Rebuild"
 msgstr "Volver a construir"
 
-#: src/libide/workbench/ide-omni-bar.ui:503
+#: src/libide/workbench/ide-omni-bar.ui:521
 msgid "Clean"
 msgstr "Limpiar"
 
-#: src/libide/workbench/ide-omni-bar.ui:510
+#: src/libide/workbench/ide-omni-bar.ui:528
 msgid "Export Bundle"
 msgstr "Exportar como paquete"
 
-#: src/libide/workbench/ide-omni-bar.ui:535
+#: src/libide/workbench/ide-omni-bar.ui:553
+#: src/plugins/make/make_plugin.py:118
 msgid "Build project"
 msgstr "Construir proyecto"
 
-#: src/libide/workbench/ide-workbench-actions.c:215
+#: src/libide/workbench/ide-workbench-actions.c:218
 msgid "Builder Statistics"
 msgstr "Estadísticas del constructor"
+
+#: src/libide/workbench/ide-workbench.c:643
+#, c-format
+msgid "%s — Builder"
+msgstr "%s - Constructor"
 
 #: src/libide/workbench/ide-workbench-header-bar.ui:50
 msgid "Transfers"
@@ -3179,7 +3197,6 @@ msgid "Trigger a build"
 msgstr "Lanzar una construcción"
 
 #: src/libide/workbench/ide-workbench-shortcuts.c:53
-#| msgid "All files"
 msgctxt "shortcut window"
 msgid "Save all files"
 msgstr "Guardar todos los archivos"
@@ -3189,10 +3206,34 @@ msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Perspectivas"
 
-#: src/libide/workbench/ide-workbench.c:643
-#, c-format
-msgid "%s — Builder"
-msgstr "%s - Constructor"
+#: src/plugins/autotools/ide-autotools-makecache-stage.c:194
+msgid "Building cache…"
+msgstr "Construyendo caché…"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
+#| msgid "Host operating system"
+msgid "Bootstrapping build system"
+msgstr "Inicializando sistema de construcción"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:225
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:140
+#: src/plugins/phpize/phpize_plugin.py:226
+#| msgid "Configuring…"
+msgid "Configuring project"
+msgstr "Configurando proyecto"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:278
+#: src/plugins/cargo/cargo_plugin.py:151
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:182
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:169
+#: src/plugins/phpize/phpize_plugin.py:238
+#| msgid "Build project"
+msgid "Building project"
+msgstr "Construyendo proyecto"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:305
+msgid "Caching build commands"
+msgstr "Guardando en caché comandos de construcción"
 
 #: src/plugins/autotools-templates/autotools_templates/__init__.py:265
 msgid "Shared Library (Autotools)"
@@ -3218,10 +3259,6 @@ msgstr "Aplicación de GNOME (Autotools)"
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Crear una nueva aplicación de GNOME preparada para «flatpak»"
 
-#: src/plugins/autotools/ide-autotools-makecache-stage.c:194
-msgid "Building cache…"
-msgstr "Construyendo caché…"
-
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:239
 #, c-format
 msgid "No beautifier available for “%s”"
@@ -3244,11 +3281,6 @@ msgstr "Lanzar la entrada predeterminada"
 #: src/plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
 msgstr "Embellecer"
-
-#: src/plugins/c-pack/ide-c-format-provider.c:283
-#: src/plugins/python-pack/ide-python-format-provider.c:240
-msgid "Format Strings"
-msgstr "Cadenas de formato"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:62
 msgid "Clang"
@@ -3284,7 +3316,7 @@ msgstr "Error de lectura AST"
 msgid "Failed to create translation unit: %s"
 msgstr "Falló al crear la unidad de traducción: %s"
 
-#: src/plugins/clang/ide-clang-service.c:480
+#: src/plugins/clang/ide-clang-service.c:564
 #: src/plugins/xml-pack/ide-xml-service.c:97
 msgid "File must be saved locally to parse."
 msgstr ""
@@ -3301,6 +3333,18 @@ msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
 #: src/plugins/cmake/gbp-cmake-build-system.c:421
 msgid "CMake"
 msgstr "CMake"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:157
+#| msgid "Clone Project"
+msgid "Configure project"
+msgstr "Configurar proyecto"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:201
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:179
+#: src/plugins/phpize/phpize_plugin.py:248
+#| msgid "Installing rust "
+msgid "Installing project"
+msgstr "Instalando proyecto"
 
 #. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
 #: src/plugins/code-index/ide-code-index-index.c:351
@@ -3321,18 +3365,9 @@ msgstr ""
 msgid "Colors"
 msgstr "Colores"
 
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
-msgid "Palette name"
-msgstr "Nombre de la paleta"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
-msgid "Enter a new name for the palette"
-msgstr "Introduzca un nombre nuevo para la paleta"
-
 #. translators: %s is replaced with the name of the color palette.
 #: src/plugins/color-picker/gb-color-picker-prefs.c:86
 #, c-format
-#| msgid "Save changes to document “%s” before closing?"
 msgid "Save changes to palette “%s” before closing?"
 msgstr "¿Guardar los cambios de la paleta «%s» antes de cerrar?"
 
@@ -3367,6 +3402,14 @@ msgstr "Paleta de Gimp"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:717
 msgid "GNOME Builder palette"
 msgstr "Paleta de GNOME Builder"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
+msgid "Palette name"
+msgstr "Nombre de la paleta"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+msgid "Enter a new name for the palette"
+msgstr "Introduzca un nombre nuevo para la paleta"
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
 msgid "HSV visibility"
@@ -3656,6 +3699,11 @@ msgstr "Comentar código"
 msgid "Uncomment code"
 msgstr "Descomentar código"
 
+#: src/plugins/c-pack/ide-c-format-provider.c:283
+#: src/plugins/python-pack/ide-python-format-provider.c:240
+msgid "Format Strings"
+msgstr "Cadenas de formato"
+
 #: src/plugins/create-project/gbp-create-project-genesis-addin.c:158
 msgid "New Project"
 msgstr "Nuevo proyecto"
@@ -3745,43 +3793,43 @@ msgstr "Seleccionar la carpeta de proyectos"
 msgid "Language"
 msgstr "Idioma"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:121
+#: src/plugins/create-project/gbp-create-project-widget.ui:122
 msgid "License"
 msgstr "Licencia"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:136
+#: src/plugins/create-project/gbp-create-project-widget.ui:137
 msgid "GPLv3+"
 msgstr "GPLv3+"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:137
+#: src/plugins/create-project/gbp-create-project-widget.ui:138
 msgid "LGPLv3+"
 msgstr "LGPLv3+"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:138
+#: src/plugins/create-project/gbp-create-project-widget.ui:139
 msgid "AGPLv3+"
 msgstr "AGPLv3+"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:139
+#: src/plugins/create-project/gbp-create-project-widget.ui:140
 msgid "MIT/X11"
 msgstr "MIT/X11"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:140
+#: src/plugins/create-project/gbp-create-project-widget.ui:141
 msgid "GPLv2+"
 msgstr "GPLv2+"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:141
+#: src/plugins/create-project/gbp-create-project-widget.ui:142
 msgid "LGPLv2.1+"
 msgstr "LGPLv2.1+"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:142
+#: src/plugins/create-project/gbp-create-project-widget.ui:143
 msgid "No license"
 msgstr "Sin licencia"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:175
+#: src/plugins/create-project/gbp-create-project-widget.ui:176
 msgid "Uses the Git version control system"
 msgstr "Usa Git como sistema de control de versiones"
 
-#: src/plugins/create-project/gbp-create-project-widget.ui:264
+#: src/plugins/create-project/gbp-create-project-widget.ui:265
 msgid "Select a Template"
 msgstr "Seleccionar una plantilla"
 
@@ -3843,6 +3891,37 @@ msgstr "Clonar aplicación"
 #: src/plugins/git/ide-git-genesis-addin.c:190
 msgid "Clone"
 msgstr "Clonar"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:137
+msgid "Creating flatpak workspace"
+msgstr "Creando área de trabajo flatpak"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:249
+#| msgid "Root Build Directory"
+msgid "Preparing build directory"
+msgstr "Preparando carpeta de construcción"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
+#| msgid "_Download Dependencies"
+msgid "Downloading dependencies"
+msgstr "Descargando dependencias"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:352
+#| msgid "Building dependencies…"
+msgid "Building dependencies"
+msgstr "Construyendo dependencias"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:395
+msgid "Finalizing flatpak build"
+msgstr "Terminando construcción de flatpak"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:438
+msgid "Exporting staging directory"
+msgstr "Exportando carpeta de trabajo"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:521
+msgid "Creating flatpak bundle"
+msgstr "Creando paquete flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
@@ -3935,14 +4014,6 @@ msgid ""
 msgstr ""
 "Este programa es necesario para construir aplicaciones Flatpak. ¿Quiere "
 "instalarlo?"
-
-#: src/plugins/flatpak/gtk/menus.ui:6
-msgid "Flatpak"
-msgstr "Flatpak"
-
-#: src/plugins/flatpak/gtk/menus.ui:8
-msgid "_Download Dependencies"
-msgstr "_Descargar dependencias"
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:161
 msgid "Cannot provide diff, no backing file provided."
@@ -4059,6 +4130,11 @@ msgstr "Sugerir completado en Python"
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para completado en el lenguaje Python"
 
+#: src/plugins/make/make_plugin.py:132
+#| msgid "Run project"
+msgid "Install project"
+msgstr "Instalar proyecto"
+
 #: src/plugins/meson/gbp-meson-build-system.c:418
 msgid "Meson"
 msgstr "Meson"
@@ -4096,7 +4172,6 @@ msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:12
-#| msgid "Create from existing project"
 msgid "Contribute to an existing project"
 msgstr "Colaborar con un proyecto existente"
 
@@ -4104,31 +4179,31 @@ msgstr "Colaborar con un proyecto existente"
 msgid "Polari"
 msgstr "Polari"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:40
+#: src/plugins/newcomers/gbp-newcomers-section.ui:42
 msgid "Games"
 msgstr "Juegos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:48
+#: src/plugins/newcomers/gbp-newcomers-section.ui:52
 msgid "Maps"
 msgstr "Mapas"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:56
+#: src/plugins/newcomers/gbp-newcomers-section.ui:62
 msgid "Todo"
 msgstr "Por hacer"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:64
+#: src/plugins/newcomers/gbp-newcomers-section.ui:71
 msgid "Music"
 msgstr "Música"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:72
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
 msgid "Nautilus"
 msgstr "Nautilus"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
 msgid "Photos"
 msgstr "Fotos"
 
-#: src/plugins/newcomers/gbp-newcomers-section.ui:88
+#: src/plugins/newcomers/gbp-newcomers-section.ui:98
 msgid "Calendar"
 msgstr "Calendario"
 
@@ -4149,6 +4224,16 @@ msgstr "Fallo al construir"
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "El proyecto «%s» ha fallado al construirse"
+
+#: src/plugins/npm/npm_plugin.py:103
+#| msgid "_Download Dependencies"
+msgid "Downloading npm dependencies"
+msgstr "Descargando dependencias npm"
+
+#: src/plugins/phpize/phpize_plugin.py:210
+#| msgid "Bootstrapping…"
+msgid "Bootstrapping project"
+msgstr "Inicializando proyecto"
 
 #: src/plugins/project-tree/gb-new-file-popover.c:123
 #: src/plugins/project-tree/gb-rename-file-popover.c:139
@@ -4632,6 +4717,9 @@ msgstr "Falló al crear el árbol XML."
 #: src/plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero no en el gestor de búferes."
+
+#~ msgid "Flatpak"
+#~ msgstr "Flatpak"
 
 #~ msgid "Newcomer Projects"
 #~ msgstr "Proyectos para principiantes"
@@ -5152,9 +5240,6 @@ msgstr "Búfer cargado pero no en el gestor de búferes."
 
 #~ msgid "Failed to locate build target"
 #~ msgstr "Falló al buscar el objetivo de construcción"
-
-#~ msgid "Run project"
-#~ msgstr "Ejecutar proyecto"
 
 #~ msgid "_Close All"
 #~ msgstr "_Cerrar todo"
@@ -5777,9 +5862,6 @@ msgstr "Búfer cargado pero no en el gestor de búferes."
 
 #~ msgid "The project file for the context."
 #~ msgstr "El archivo de proyecto para el contexto."
-
-#~ msgid "Root Build Directory"
-#~ msgstr "Carpeta raíz de construcción"
 
 #~ msgid "Script Manager"
 #~ msgstr "Gestor de scripts"
