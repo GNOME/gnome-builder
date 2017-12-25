@@ -77,6 +77,7 @@ shared_module('vala-pack-plugin', vala_pack_sources,
                   '-DLOG_DOMAIN="vala-pack-plugin"',
                   '-DGETTEXT_PACKAGE="gnome-builder"',
                   '-DPACKAGE_DATADIR="@0@"'.format(join_paths(get_option('prefix'), get_option('datadir'), 'gnome-builder')),
+		  '-Wno-incompatible-pointer-types',
                 ],
 )
 
