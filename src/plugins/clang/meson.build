@@ -38,13 +38,14 @@ clang_sources = [
 
 llvm_config = find_program(
   'llvm-config',
+  'llvm-config-5.0', 'llvm-config50',
   'llvm-config-4.0', 'llvm-config40',
   'llvm-config-3.9', 'llvm-config39',
   'llvm-config-3.8', 'llvm-config38',
   'llvm-config-3.7', 'llvm-config37',
   'llvm-config-3.6', 'llvm-config36',
   'llvm-config-3.5', 'llvm-config35',
-  'llvm-config-5.0', 'llvm-config-devel',
+  'llvm-config-6.0', 'llvm-config-devel',
 )
 
 ret = run_command(llvm_config, '--includedir')
