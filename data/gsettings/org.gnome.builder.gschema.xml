@@ -26,7 +26,7 @@
       <description>Use GNOME night light setting to activate night-mode.</description>
     </key>
     <key name="projects-directory" type="s">
-      <default>"Projects"</default>
+      <default l10n="messages">"Projects"</default>
       <summary>Projects directory</summary>
       <description>Directory for all Builder projects.</description>
     </key>
