@@ -325,8 +325,8 @@ ide_git_vcs__monitor_changed_cb (IdeGitVcs         *self,
   if (other_file != NULL)
     other_name = g_file_get_basename (other_file);
 
-  if (dzl_str_equal0 (name, "index") ||
-      dzl_str_equal0 (other_name, "index"))
+  if (dzl_str_equal0 (name, "index") || dzl_str_equal0 (other_name, "index") ||
+      dzl_str_equal0 (name, "HEAD") || dzl_str_equal0 (other_name, "HEAD"))
     {
       dzl_clear_source (&self->changed_timeout);
       self->changed_timeout = g_timeout_add_seconds (DEFAULT_CHANGED_TIMEOUT_SECS,
