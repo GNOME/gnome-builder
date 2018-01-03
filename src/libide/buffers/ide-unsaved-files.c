@@ -639,7 +639,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
  * If you would like to hold onto an unsaved file instance, call
  * ide_unsaved_file_ref() to increment its reference count.
  *
- * Returns: (transfer container) (element-type IdeUnsavedFile*): a #GPtrArray
+ * Returns: (transfer container) (element-type Ide.UnsavedFile): a #GPtrArray
  *   containing #IdeUnsavedFile elements.
  */
 GPtrArray *
