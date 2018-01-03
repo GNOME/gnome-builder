@@ -119,9 +119,7 @@ typedef struct
 typedef struct
 {
   GPtrArray         *resolvers;
-
   IdeSourceLocation *location;
-
   IdeSymbol         *symbol;
 } LookUpSymbolData;
 
@@ -271,8 +269,8 @@ ide_buffer_get_iter_at_location (IdeBuffer         *self,
   guint line_offset;
 
   g_assert (IDE_IS_BUFFER (self));
-  g_assert (iter);
-  g_assert (location);
+  g_assert (iter != NULL);
+  g_assert (location != NULL);
 
   line = ide_source_location_get_line (location);
   line_offset = ide_source_location_get_line_offset (location);
@@ -385,10 +383,10 @@ ide_buffer_cache_diagnostic_line (IdeBuffer             *self,
   gsize i;
 
   g_assert (IDE_IS_BUFFER (self));
-  g_assert (begin);
-  g_assert (end);
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
 
-  if (!priv->diagnostics_line_cache)
+  if (priv->diagnostics_line_cache == NULL)
     return;
 
   line_begin = MIN (ide_source_location_get_line (begin),
@@ -518,7 +516,7 @@ ide_buffer_update_diagnostics (IdeBuffer      *self,
   gsize i;
 
   g_assert (IDE_IS_BUFFER (self));
-  g_assert (diagnostics);
+  g_assert (diagnostics != NULL);
 
   size = ide_diagnostics_get_size (diagnostics);
 
@@ -2079,7 +2077,7 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
 
           diag = ide_diagnostics_index (priv->diagnostics, i);
           location = ide_diagnostic_get_location (diag);
-          if (!location)
+          if (location == NULL)
             continue;
 
           /* TODO: This should look at the range for the diagnostic */
@@ -2630,11 +2628,14 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
   LookUpSymbolData *data;
 
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   symbol = ide_symbol_resolver_lookup_symbol_finish (symbol_resolver, result, &error);
 
   data = g_task_get_task_data (task);
+  g_assert (data->resolvers != NULL);
+  g_assert (data->resolvers->len > 0);
 
   if (symbol != NULL)
     {
@@ -2648,14 +2649,13 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
            ide_symbol_get_declaration_location (symbol)))
         {
           g_clear_pointer (&data->symbol, ide_symbol_unref);
-
           data->symbol = g_steal_pointer (&symbol);
         }
     }
 
   g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
 
-  if (data->resolvers->len)
+  if (data->resolvers->len > 0)
     {
       IdeSymbolResolver *resolver;
       GCancellable *cancellable;
@@ -2671,7 +2671,10 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
     }
   else if (data->symbol == NULL)
     {
-      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND, "Symbol not found");
+      g_task_return_new_error (task,
+		      G_IO_ERROR,
+		      G_IO_ERROR_NOT_FOUND,
+		      "Symbol not found");
     }
   else
     {
@@ -2737,7 +2740,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
 
   data = g_slice_new0 (LookUpSymbolData);
   data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
-  data->location = ide_source_location_ref (srcloc);
+  data->location = g_steal_pointer (&srcloc);
 
   ide_extension_set_adapter_foreach (adapter, lookup_symbol_get_extension, data);
   g_assert (data->resolvers->len > 0);
