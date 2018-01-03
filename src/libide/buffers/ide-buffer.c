@@ -2696,7 +2696,6 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   g_autoptr(IdeSourceLocation) srcloc = NULL;
-  g_autoptr(GPtrArray) extensions = NULL;
   g_autoptr(GTask) task = NULL;
   IdeExtensionSetAdapter *adapter;
   IdeSymbolResolver *resolver;
