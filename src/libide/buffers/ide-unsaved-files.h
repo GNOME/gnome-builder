@@ -28,11 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeUnsavedFiles, ide_unsaved_files, IDE, UNSAVED_FILES, IdeObject)
 
-struct _IdeUnsavedFiles
-{
-  IdeObject parent_instance;
-};
-
 IDE_AVAILABLE_IN_ALL
 void            ide_unsaved_files_update            (IdeUnsavedFiles      *self,
                                                      GFile                *file,
