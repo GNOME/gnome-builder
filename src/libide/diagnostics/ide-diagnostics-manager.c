@@ -41,7 +41,7 @@ typedef struct
    * only. This is used so that providers can have access to the group even
    * after the group has been removed from the IdeDiagnosticsManager.
    */
-  gint ref_count;
+  volatile gint ref_count;
 
   /*
    * This is our identifier for the diagnostics. We use this as the key in
