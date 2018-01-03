@@ -432,12 +432,13 @@ ide_unsaved_files_restore_finish (IdeUnsavedFiles  *files,
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   state = g_task_get_task_data (G_TASK (result));
+  g_assert (state != NULL);
+  g_assert (state->unsaved_files != NULL);
 
   for (guint i = 0; i < state->unsaved_files->len; i++)
     {
-      UnsavedFile *uf;
+      const UnsavedFile *uf = g_ptr_array_index (state->unsaved_files, i);
 
-      uf = g_ptr_array_index (state->unsaved_files, i);
       ide_unsaved_files_update (files, uf->file, uf->content);
     }
 
@@ -457,9 +458,9 @@ ide_unsaved_files_move_to_front (IdeUnsavedFiles *self,
   old_front = g_ptr_array_index (self->unsaved_files, 0);
 
   /*
-   * TODO: We could shift all these items down, but it probably isnt' worth
-   *       the effort. We will just move-to-front after a miss and ping
-   *       pong the old item back to the front.
+   * We could shift all these items down, but it probably isn't worth
+   * the effort. We will just move-to-front after a miss and ping
+   * pong the old item back to the front.
    */
   self->unsaved_files->pdata[0] = new_front;
   self->unsaved_files->pdata[index] = old_front;
@@ -504,9 +505,7 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
 
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
-      UnsavedFile *unsaved;
-
-      unsaved = g_ptr_array_index (self->unsaved_files, i);
+      const UnsavedFile *unsaved = g_ptr_array_index (self->unsaved_files, i);
 
       if (g_file_equal (file, unsaved->file))
         {
@@ -532,8 +531,8 @@ setup_tempfile (IdeContext  *context,
   const gchar *suffix;
 
   g_assert (G_IS_FILE (file));
-  g_assert (temp_fd);
-  g_assert (temp_path_out);
+  g_assert (temp_fd != NULL);
+  g_assert (temp_path_out != NULL);
 
   *temp_fd = -1;
   *temp_path_out = NULL;
@@ -544,7 +543,6 @@ setup_tempfile (IdeContext  *context,
    */
   name = g_file_get_basename (file);
   suffix = strrchr (name, '.') ?: "";
-
 
   /*
    * We want to create our tempfile within a custom directory. It turns out
@@ -580,7 +578,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
 
   self->sequence++;
 
-  if (!content)
+  if (content == NULL)
     {
       ide_unsaved_files_remove (self, file);
       return;
@@ -620,7 +618,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
   unsaved->sequence = self->sequence;
   setup_tempfile (context, file, &unsaved->temp_fd, &unsaved->temp_path);
 
-  g_ptr_array_insert (self->unsaved_files, 0, unsaved);
+  g_ptr_array_add (self->unsaved_files, unsaved);
 }
 
 /**
@@ -641,7 +639,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
 GPtrArray *
 ide_unsaved_files_to_array (IdeUnsavedFiles *self)
 {
-  GPtrArray *ar;
+  g_autoptr(GPtrArray) ar = NULL;
 
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
 
@@ -649,16 +647,16 @@ ide_unsaved_files_to_array (IdeUnsavedFiles *self)
 
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
+      const UnsavedFile *uf;
       IdeUnsavedFile *item;
-      UnsavedFile *uf;
 
       uf = g_ptr_array_index (self->unsaved_files, i);
       item = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path, uf->sequence);
 
-      g_ptr_array_add (ar, item);
+      g_ptr_array_add (ar, g_steal_pointer (&item));
     }
 
-  return ar;
+  return g_steal_pointer (&ar);
 }
 
 gboolean
@@ -699,31 +697,22 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
 
 #ifdef IDE_ENABLE_TRACE
   {
-    gchar *path;
-
-    path = g_file_get_path (file);
+    g_autofree gchar *path = g_file_get_path (file);
     IDE_TRACE_MSG ("%s", path);
-    g_free (path);
   }
 #endif
 
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
-      UnsavedFile *uf;
-
-      uf = g_ptr_array_index (self->unsaved_files, i);
+      const UnsavedFile *uf = g_ptr_array_index (self->unsaved_files, i);
 
       if (g_file_equal (uf->file, file))
         {
-          IDE_TRACE_MSG ("Hit");
           ret = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path, uf->sequence);
-          goto complete;
+          break;
         }
     }
 
-  IDE_TRACE_MSG ("Miss");
-
-complete:
   IDE_RETURN (ret);
 }
 
@@ -740,16 +729,11 @@ ide_unsaved_files_set_context (IdeObject  *object,
                                IdeContext *context)
 {
   IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
-  g_autoptr(DzlDirectoryReaper) reaper = NULL;
-  g_autoptr(GFile) buffersdir = NULL;
-  g_autofree gchar *path = NULL;
 
   g_assert (IDE_IS_UNSAVED_FILES (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
   IDE_OBJECT_CLASS (ide_unsaved_files_parent_class)->set_context (object, context);
-
-  reaper = dzl_directory_reaper_new ();
 
   /*
    * Setup a reaper to cleanup old files in case that we left some around
@@ -757,6 +741,11 @@ ide_unsaved_files_set_context (IdeObject  *object,
    */
   if (context != NULL)
     {
+      g_autoptr(DzlDirectoryReaper) reaper = NULL;
+      g_autoptr(GFile) buffersdir = NULL;
+      g_autofree gchar *path = NULL;
+
+      reaper = dzl_directory_reaper_new ();
       path = get_buffers_dir (context);
       buffersdir = g_file_new_for_path (path);
       dzl_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_HOUR);
@@ -804,11 +793,9 @@ ide_unsaved_files_clear (IdeUnsavedFiles *self)
 
   for (guint i = 0; i < ar->len; i++)
     {
-      IdeUnsavedFile *uf;
-      GFile *file;
+      IdeUnsavedFile *uf = g_ptr_array_index (ar, i);
+      GFile *file = ide_unsaved_file_get_file (uf);
 
-      uf = g_ptr_array_index (ar, i);
-      file = ide_unsaved_file_get_file (uf);
       ide_unsaved_files_remove (self, file);
     }
 }
