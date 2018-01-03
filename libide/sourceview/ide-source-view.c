@@ -351,7 +351,7 @@ find_references_task_get_extension (IdeExtensionSetAdapter *set,
 {
   FindReferencesTaskData *data = user_data;
 
-  g_ptr_array_add (data->resolvers, IDE_SYMBOL_RESOLVER (extension));
+  g_ptr_array_add (data->resolvers, g_object_ref (extension));
 }
 
 static SearchMovement *
@@ -6175,7 +6175,7 @@ ide_source_view_real_find_references (IdeSourceView *self)
 
   data = g_slice_new (FindReferencesTaskData);
 
-  data->resolvers = g_ptr_array_new_full (n_extensions, NULL);
+  data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
   data->location = ide_buffer_get_insert_location (priv->buffer);
 
   g_task_set_task_data (task, data, (GDestroyNotify)find_references_task_data_free);
