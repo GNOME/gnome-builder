@@ -321,7 +321,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
   IdeDiagnostic *diag;
-  IdeSourceLocation *loc;
+  g_autoptr(IdeSourceLocation) loc = NULL;
   g_autofree gchar *spelling = NULL;
   CXString cxstr;
   CXSourceLocation cxloc;
