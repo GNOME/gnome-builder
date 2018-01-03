@@ -188,6 +188,8 @@ ide_clang_code_indexer_generate_key_async (IdeCodeIndexer       *indexer,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_clang_code_indexer_generate_key_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   g_task_set_task_data (task,
                         ide_source_location_ref (location),
