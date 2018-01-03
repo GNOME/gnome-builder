@@ -166,8 +166,7 @@ free_diagnostics (gpointer data)
 {
   IdeDiagnostics *diagnostics = data;
 
-  if (diagnostics != NULL)
-    ide_diagnostics_unref (diagnostics);
+  g_clear_pointer (&diagnostics, ide_diagnostics_unref);
 }
 
 static void
@@ -823,6 +822,9 @@ ide_diagnostics_manager_extension_removed (IdeExtensionSetAdapter *adapter,
    * clean those up.
    */
   ide_diagnostics_manager_clear_by_provider (self, provider);
+
+  /* Clear the diagnostics group */
+  g_object_set_data (G_OBJECT (provider), "IDE_DIAGNOSTICS_GROUP", NULL);
 
   IDE_EXIT;
 }
