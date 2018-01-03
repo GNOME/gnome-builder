@@ -438,7 +438,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
               for (j = 0; j < num_fixits; j++)
                 {
                   IdeFixit *fixit = NULL;
-                  IdeSourceRange *range;
+                  g_autoptr(IdeSourceRange) range = NULL;
                   CXSourceRange cxrange;
                   CXString cxstr;
 
