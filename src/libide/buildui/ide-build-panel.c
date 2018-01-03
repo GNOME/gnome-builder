@@ -281,9 +281,9 @@ ide_build_panel_diagnostic_activated (IdeBuildPanel     *self,
                                       GtkTreeViewColumn *colun,
                                       GtkTreeView       *tree_view)
 {
+  g_autoptr(IdeDiagnostic) diagnostic = NULL;
   g_autoptr(IdeUri) uri = NULL;
   IdeSourceLocation *loc;
-  IdeDiagnostic *diagnostic = NULL;
   IdeWorkbench *workbench;
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -303,15 +303,9 @@ ide_build_panel_diagnostic_activated (IdeBuildPanel     *self,
                       COLUMN_DIAGNOSTIC, &diagnostic,
                       -1);
 
-  if (diagnostic == NULL)
-    IDE_EXIT;
-
-  loc = ide_diagnostic_get_location (diagnostic);
-  if (loc == NULL)
-    IDE_EXIT;
-
-  uri = ide_source_location_get_uri (loc);
-  if (uri == NULL)
+  if (diagnostic == NULL ||
+      NULL == (loc = ide_diagnostic_get_location (diagnostic)) ||
+      NULL == (uri = ide_source_location_get_uri (loc)))
     IDE_EXIT;
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
@@ -320,9 +314,7 @@ ide_build_panel_diagnostic_activated (IdeBuildPanel     *self,
                                 uri,
                                 "editor",
                                 IDE_WORKBENCH_OPEN_FLAGS_NONE,
-                                NULL,
-                                NULL,
-                                NULL);
+                                NULL, NULL, NULL);
 
   IDE_EXIT;
 }
