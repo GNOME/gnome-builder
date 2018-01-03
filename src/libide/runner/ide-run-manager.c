@@ -753,7 +753,7 @@ ide_run_manager_add_handler (IdeRunManager  *self,
   g_return_if_fail (id != NULL);
   g_return_if_fail (title != NULL);
 
-  info = g_slice_new (IdeRunHandlerInfo);
+  info = g_slice_new0 (IdeRunHandlerInfo);
   info->id = g_strdup (id);
   info->title = g_strdup (title);
   info->icon_name = g_strdup (icon_name);
@@ -952,7 +952,7 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
                                 "context", context,
                                 NULL);
 
-  state = g_slice_new (DiscoverState);
+  state = g_slice_new0 (DiscoverState);
   state->results = g_ptr_array_new_with_free_func (g_object_unref);
   state->providers = NULL;
   state->active = 0;
