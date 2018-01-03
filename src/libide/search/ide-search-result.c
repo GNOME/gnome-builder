@@ -205,7 +205,7 @@ ide_search_result_set_priority (IdeSearchResult *self,
  * Many search providers ultimately just open a file, so this may
  * be used in lieu of handling the activate signal.
  *
- * Returns: (transfer full): An #IdeUri
+ * Returns: (transfer full) (nullable): An #IdeUri
  */
 IdeSourceLocation *
 ide_search_result_get_source_location (IdeSearchResult *self)
@@ -214,8 +214,6 @@ ide_search_result_get_source_location (IdeSearchResult *self)
 
   if (IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location != NULL)
     return IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location (self);
-
-  g_print ("nope\n");
 
   return NULL;
 }
