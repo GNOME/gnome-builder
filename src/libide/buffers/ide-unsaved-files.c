@@ -431,14 +431,13 @@ ide_unsaved_files_restore_finish (IdeUnsavedFiles  *files,
                                   GError          **error)
 {
   AsyncState *state;
-  gsize i;
 
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (files), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   state = g_task_get_task_data (G_TASK (result));
 
-  for (i = 0; i < state->unsaved_files->len; i++)
+  for (guint i = 0; i < state->unsaved_files->len; i++)
     {
       UnsavedFile *uf;
 
@@ -647,14 +646,13 @@ GPtrArray *
 ide_unsaved_files_to_array (IdeUnsavedFiles *self)
 {
   GPtrArray *ar;
-  gsize i;
 
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
 
   ar = g_ptr_array_new ();
   g_ptr_array_set_free_func (ar, (GDestroyNotify)ide_unsaved_file_unref);
 
-  for (i = 0; i < self->unsaved_files->len; i++)
+  for (guint i = 0; i < self->unsaved_files->len; i++)
     {
       IdeUnsavedFile *item;
       UnsavedFile *uf;
@@ -699,7 +697,6 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
                                     GFile           *file)
 {
   IdeUnsavedFile *ret = NULL;
-  gsize i;
 
   IDE_ENTRY;
 
@@ -715,7 +712,7 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
   }
 #endif
 
-  for (i = 0; i < self->unsaved_files->len; i++)
+  for (guint i = 0; i < self->unsaved_files->len; i++)
     {
       UnsavedFile *uf;
 
@@ -805,13 +802,12 @@ void
 ide_unsaved_files_clear (IdeUnsavedFiles *self)
 {
   g_autoptr(GPtrArray) ar = NULL;
-  gsize i;
 
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
 
   ar = ide_unsaved_files_to_array (self);
 
-  for (i = 0; i < ar->len; i++)
+  for (guint i = 0; i < ar->len; i++)
     {
       IdeUnsavedFile *uf;
       GFile *file;
