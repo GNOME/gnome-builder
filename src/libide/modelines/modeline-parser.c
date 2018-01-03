@@ -799,9 +799,8 @@ modeline_parser_apply_modeline (GtkTextBuffer   *buffer,
 	}
 	else
 	{
-		previous = g_slice_new (ModelineOptions);
-		*previous = options;
-		previous->language_id = g_strdup (options.language_id);
+		previous = g_slice_dup (ModelineOptions, &options);
+		previous->language_id = g_steal_pointer (&options.language_id);
 
 		g_object_set_data_full (G_OBJECT (buffer),
 		                        MODELINE_OPTIONS_DATA_KEY,
