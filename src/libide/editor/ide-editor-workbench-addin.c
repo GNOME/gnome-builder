@@ -405,7 +405,7 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin    *addin,
 
   if (gfile == NULL)
     {
-      gchar *uristr;
+      g_autofree gchar *uristr = NULL;
 
       uristr = ide_uri_to_string (uri, IDE_URI_HIDE_AUTH_PARAMS);
       g_task_return_new_error (task,
@@ -413,7 +413,6 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin    *addin,
                                G_IO_ERROR_INVALID_FILENAME,
                                "Failed to create resource for \"%s\"",
                                uristr);
-      g_free (uristr);
       return;
     }
 
