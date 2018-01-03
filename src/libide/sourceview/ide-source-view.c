@@ -182,7 +182,6 @@ typedef struct
 typedef struct
 {
   GPtrArray         *resolvers;
-
   IdeSourceLocation *location;
 } FindReferencesTaskData;
 
@@ -325,8 +324,12 @@ find_references_task_get_extension (IdeExtensionSetAdapter *set,
                                     gpointer                user_data)
 {
   FindReferencesTaskData *data = user_data;
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
 
-  g_ptr_array_add (data->resolvers, IDE_SYMBOL_RESOLVER (extension));
+  g_assert (data != NULL);
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+
+  g_ptr_array_add (data->resolvers, g_object_ref (resolver));
 }
 
 static void
@@ -5431,14 +5434,13 @@ ide_source_view_real_find_references (IdeSourceView *self)
       IDE_EXIT;
     }
 
-  data = g_slice_new (FindReferencesTaskData);
-
-  data->resolvers = g_ptr_array_new_full (n_extensions, NULL);
+  data = g_slice_new0 (FindReferencesTaskData);
+  data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
   data->location = ide_buffer_get_insert_location (priv->buffer);
-
   g_task_set_task_data (task, data, (GDestroyNotify)find_references_task_data_free);
 
   ide_extension_set_adapter_foreach (adapter, find_references_task_get_extension, data);
+  g_assert (data->resolvers->len > 0);
 
   resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
 
