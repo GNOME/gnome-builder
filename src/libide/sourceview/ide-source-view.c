@@ -1939,7 +1939,7 @@ is_key_vim_binded (GtkWidget       *widget,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (IDE_SOURCE_VIEW (widget));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (priv->mode));
-  keymap = gdk_keymap_get_default ();
+  keymap = gdk_keymap_get_for_display (gtk_widget_get_display (widget));
   state = gtk_widget_get_state_flags (GTK_WIDGET (priv->mode));
 
   gtk_style_context_get (context, state, "gtk-key-bindings", &binding_set_array, NULL);
@@ -2147,7 +2147,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
         {
           guint new_keyval;
           GdkModifierType state_consumed;
-          GdkKeymap *keymap = gdk_keymap_get_default ();
+          GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (widget));
 
           _ide_source_view_set_modifier (self, gdk_keyval_to_unicode (event->keyval));
           gdk_keymap_translate_keyboard_state (keymap,
