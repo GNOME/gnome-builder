@@ -49,6 +49,9 @@ typedef struct
 static void
 symbol_resolver_task_data_free (SymbolResolverTaskData *data)
 {
+  g_assert (data != NULL);
+  g_assert (data->resolvers != NULL);
+
   g_clear_pointer (&data->resolvers, g_ptr_array_unref);
   g_clear_object (&data->buffer);
   g_clear_pointer (&data->location, ide_source_location_unref);
@@ -62,8 +65,13 @@ get_extension (IdeExtensionSetAdapter *set,
                gpointer                user_data)
 {
   SymbolResolverTaskData *data = user_data;
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
 
-  g_ptr_array_add (data->resolvers, IDE_SYMBOL_RESOLVER (extension));
+  g_assert (data != NULL);
+  g_assert (data->resolvers != NULL);
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+
+  g_ptr_array_add (data->resolvers, g_object_ref (resolver));
 }
 
 static void
@@ -142,14 +150,17 @@ gbp_symbol_layout_stack_addin_cursor_moved_cb (gpointer user_data)
           self->scope_cancellable = g_cancellable_new ();
 
           task = g_task_new (self, self->scope_cancellable, NULL, NULL);
+          g_task_set_source_tag (task, gbp_symbol_layout_stack_addin_cursor_moved_cb);
+          g_task_set_priority (task, G_PRIORITY_LOW);
 
           data = g_slice_new0 (SymbolResolverTaskData);
-          data->resolvers = g_ptr_array_new ();
+          data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
           data->location = ide_buffer_get_insert_location (buffer);
+          data->buffer = g_object_ref (buffer);
+          g_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
 
           ide_extension_set_adapter_foreach (adapter, get_extension, data);
-
-          g_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
+          g_assert (data->resolvers->len > 0);
 
           resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
           /* Go through symbol resolvers one by one to find nearest scope */
@@ -285,12 +296,12 @@ gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
   task = g_task_new (self, self->cancellable, NULL, NULL);
 
   data = g_slice_new0 (SymbolResolverTaskData);
-  data->resolvers = g_ptr_array_new ();
+  data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
   data->buffer = g_object_ref (buffer);
+  g_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
 
   ide_extension_set_adapter_foreach (adapter, get_extension, data);
-
-  g_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
+  g_assert (data->resolvers->len > 0);
 
   resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
   ide_symbol_resolver_get_symbol_tree_async (resolver,
