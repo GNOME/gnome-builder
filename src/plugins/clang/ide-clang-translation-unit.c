@@ -399,7 +399,6 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
       GFile *workdir;
       GPtrArray *diags;
       guint count;
-      guint i;
 
       diags = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
 
@@ -419,7 +418,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
       ide_project_reader_lock (project);
 
       count = clang_getNumDiagnostics (tu);
-      for (i = 0; i < count; i++)
+      for (guint i = 0; i < count; i++)
         {
           CXDiagnostic cxdiag;
           IdeDiagnostic *diag;
@@ -430,11 +429,10 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
           if (diag != NULL)
             {
               guint num_fixits;
-              gsize j;
 
               num_fixits = clang_getDiagnosticNumFixIts (cxdiag);
 
-              for (j = 0; j < num_fixits; j++)
+              for (guint j = 0; j < num_fixits; j++)
                 {
                   IdeFixit *fixit = NULL;
                   IdeSourceRange *range;
