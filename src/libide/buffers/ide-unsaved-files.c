@@ -649,8 +649,7 @@ ide_unsaved_files_to_array (IdeUnsavedFiles *self)
 
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
 
-  ar = g_ptr_array_new ();
-  g_ptr_array_set_free_func (ar, (GDestroyNotify)ide_unsaved_file_unref);
+  ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_unsaved_file_unref);
 
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
