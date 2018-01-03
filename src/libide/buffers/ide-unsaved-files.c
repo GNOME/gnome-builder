@@ -193,7 +193,9 @@ ide_unsaved_files_save_worker (GTask        *task,
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_UNSAVED_FILES (source_object));
-  g_assert (state);
+  g_assert (state != NULL);
+  g_assert (state->drafts_directory != NULL);
+  g_assert (state->unsaved_files != NULL);
 
   /* ensure that the directory exists */
   if (g_mkdir_with_parents (state->drafts_directory, 0700) != 0)
@@ -206,19 +208,15 @@ ide_unsaved_files_save_worker (GTask        *task,
     }
 
   manifest = g_string_new (NULL);
-  manifest_path = g_build_filename (state->drafts_directory,
-                                    "manifest",
-                                    NULL);
+  manifest_path = g_build_filename (state->drafts_directory, "manifest", NULL);
 
   for (guint i = 0; i < state->unsaved_files->len; i++)
     {
+      UnsavedFile *uf = g_ptr_array_index (state->unsaved_files, i);
       g_autoptr(GError) error = NULL;
       g_autofree gchar *path = NULL;
       g_autofree gchar *uri = NULL;
       g_autofree gchar *hash = NULL;
-      UnsavedFile *uf;
-
-      uf = g_ptr_array_index (state->unsaved_files, i);
 
       uri = g_file_get_uri (uf->file);
 
@@ -230,7 +228,7 @@ ide_unsaved_files_save_worker (GTask        *task,
       path = g_build_filename (state->drafts_directory, hash, NULL);
 
       if (!unsaved_file_save (uf, path, &error))
-        g_warning ("%s", error->message);
+        g_warning ("Failed to save draft: %s", error->message);
     }
 
   if (!g_file_set_contents (manifest_path, manifest->str, manifest->len, &write_error))
@@ -323,7 +321,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
   AsyncState *state = task_data;
   g_autofree gchar *manifest_contents = NULL;
   g_autofree gchar *manifest_path = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr(GError) read_error = NULL;
   IdeLineReader reader;
   gchar *line;
   gsize line_len;
@@ -333,11 +331,9 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_UNSAVED_FILES (source_object));
-  g_assert (state);
+  g_assert (state != NULL);
 
-  manifest_path = g_build_filename (state->drafts_directory,
-                                    "manifest",
-                                    NULL);
+  manifest_path = g_build_filename (state->drafts_directory, "manifest", NULL);
 
   g_debug ("Loading drafts manifest %s", manifest_path);
 
@@ -347,9 +343,9 @@ ide_unsaved_files_restore_worker (GTask        *task,
       return;
     }
 
-  if (!g_file_get_contents (manifest_path, &manifest_contents, &len, &error))
+  if (!g_file_get_contents (manifest_path, &manifest_contents, &len, &read_error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      g_task_return_error (task, g_steal_pointer (&read_error));
       return;
     }
 
@@ -367,7 +363,8 @@ ide_unsaved_files_restore_worker (GTask        *task,
   while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
     {
       g_autoptr(GFile) file = NULL;
-      gchar *contents = NULL;
+      g_autoptr(GError) error = NULL;
+      g_autofree gchar *contents = NULL;
       g_autofree gchar *hash = NULL;
       g_autofree gchar *path = NULL;
       UnsavedFile *unsaved;
@@ -379,7 +376,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
         continue;
 
       file = g_file_new_for_uri (line);
-      if (!file || !g_file_query_exists (file, NULL))
+      if (file == NULL || !g_file_query_exists (file, NULL))
         continue;
 
       hash = hash_uri (line);
@@ -389,16 +386,15 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
       if (!g_file_get_contents (path, &contents, &data_len, &error))
         {
-          g_warning ("%s", error->message);
-          g_clear_error (&error);
+          g_warning ("Failed to load \"%s\": %s", path, error->message);
           continue;
         }
 
       unsaved = g_slice_new0 (UnsavedFile);
       unsaved->file = g_object_ref (file);
-      unsaved->content = g_bytes_new_take (contents, data_len);
+      unsaved->content = g_bytes_new_take (g_steal_pointer (&contents), data_len);
 
-      g_ptr_array_add (state->unsaved_files, unsaved);
+      g_ptr_array_add (state->unsaved_files, g_steal_pointer (&unsaved));
     }
 
   g_task_return_boolean (task, TRUE);
