@@ -2568,8 +2568,7 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
       GtkTextIter word_start;
       GtkTextIter word_end;
 
-      if (priv->definition_src_location &&
-          (priv->definition_src_location != srcloc))
+      if (priv->definition_src_location != NULL && priv->definition_src_location != srcloc)
         g_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
 
       if (priv->definition_src_location == NULL)
@@ -5254,23 +5253,24 @@ ide_source_view_find_references_cb (GObject      *object,
                                     gpointer      user_data)
 {
   IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
+  g_autoptr(GPtrArray) references = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
   FindReferencesTaskData *data;
   IdeSourceView *self;
   IdeSourceViewPrivate *priv;
-  g_autoptr(GPtrArray) references = NULL;
-  g_autoptr(GError) error = NULL;
   GtkScrolledWindow *scroller;
   GtkPopover *popover;
   GtkListBox *list_box;
   GtkTextMark *insert;
   GtkTextIter iter;
   GdkRectangle loc;
-  g_autoptr(GTask) task = user_data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
 
   references = ide_symbol_resolver_find_references_finish (symbol_resolver, result, &error);
 
@@ -5286,7 +5286,7 @@ ide_source_view_find_references_cb (GObject      *object,
   g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
 
   /* If references are not found and symbol resolvers are left try those */
-  if (references == NULL && data->resolvers->len)
+  if (references == NULL && data->resolvers->len > 0)
     {
       GCancellable *cancellable;
       IdeSymbolResolver *resolver;
