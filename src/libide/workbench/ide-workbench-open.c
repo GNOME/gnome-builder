@@ -46,13 +46,25 @@ typedef struct
 
 typedef struct
 {
-  gint          ref_count;
-  IdeWorkbench *self;
-  GTask        *task;
-  GString      *error_msg;
-} IdeWorkbenchOpenFilesState;
+  GString *errors;
+  guint   active;
+} OpenFilesState;
 
 static void ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state);
+
+static void
+open_files_state_free (gpointer data)
+{
+  OpenFilesState *state = data;
+
+  if (state->errors != NULL)
+    {
+      g_string_free (state->errors, TRUE);
+      state->errors = NULL;
+    }
+
+  g_slice_free (OpenFilesState, state);
+}
 
 static void
 ide_workbench_collect_loaders (PeasExtensionSet *set,
@@ -322,37 +334,33 @@ ide_workbench_open_files_cb (GObject      *object,
                              gpointer      user_data)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
-  IdeWorkbenchOpenFilesState *open_files_state = user_data;
-  GError *error = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  OpenFilesState *task_data;
 
   g_assert (IDE_IS_WORKBENCH (self));
-  g_assert (open_files_state->self == self);
-  g_assert (open_files_state->ref_count > 0);
-  g_assert (open_files_state->error_msg != NULL);
-  g_assert (G_IS_TASK (open_files_state->task));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  task_data = g_task_get_task_data (task);
+  g_assert (task_data != NULL);
+  g_assert (task_data->errors != NULL);
+  g_assert (task_data->active > 0);
+
+  task_data->active--;
 
   if (!ide_workbench_open_uri_finish (self, result, &error))
-    {
-      g_string_append (open_files_state->error_msg, error->message);
-      g_clear_error (&error);
-    }
+    g_string_append_printf (task_data->errors, "%s ", error->message);
 
-  open_files_state->ref_count--;
-
-  if (open_files_state->ref_count == 0)
+  if (task_data->active == 0)
     {
-      if (open_files_state->error_msg->len > 0)
-        g_task_return_new_error (open_files_state->task,
+      if (task_data->errors->len > 0)
+        g_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_FAILED,
-                                 "%s",
-                                 open_files_state->error_msg->str);
+                                 "%s", task_data->errors->str);
       else
-        g_task_return_boolean (open_files_state->task, TRUE);
-
-      g_string_free (open_files_state->error_msg, TRUE);
-      g_clear_object (&open_files_state->task);
-      g_free (open_files_state);
+        g_task_return_boolean (task, TRUE);
     }
 }
 
@@ -381,45 +389,37 @@ ide_workbench_open_files_async (IdeWorkbench         *self,
                                 GAsyncReadyCallback   callback,
                                 gpointer              user_data)
 {
-  IdeWorkbenchOpenFilesState *open_files_state;
-  gint i;
+  g_autoptr(GTask) task = NULL;
+  OpenFilesState *task_data;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail ((n_files > 0 && files != NULL) || (n_files == 0));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_workbench_open_files_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
   if (n_files == 0)
     {
-      GTask *task;
-
-      task = g_task_new (self, cancellable, callback, user_data);
       g_task_return_boolean (task, TRUE);
-      g_object_unref (task);
-
       return;
     }
 
-  open_files_state = g_new0 (IdeWorkbenchOpenFilesState, 1);
-  open_files_state->ref_count = n_files;
-  open_files_state->self = self;
-  open_files_state->task = g_task_new (self, cancellable, callback, user_data);
-  open_files_state->error_msg = g_string_new (NULL);
+  task_data = g_slice_new0 (OpenFilesState);
+  task_data->errors = g_string_new (NULL);
+  task_data->active = n_files;
 
-  g_assert (n_files > 0);
+  g_task_set_task_data (task, task_data, open_files_state_free);
 
-  for (i = 0; i < n_files; i++)
+  for (guint i = 0; i < n_files; i++)
     {
-      IdeUri *uri;
+      g_autoptr(IdeUri) uri = ide_uri_new_from_file (files [i]);
 
-      uri = ide_uri_new_from_file (files [i]);
-      ide_workbench_open_uri_async (self,
-                                    uri,
-                                    hint,
-                                    flags,
+      ide_workbench_open_uri_async (self, uri, hint, flags,
                                     cancellable,
                                     ide_workbench_open_files_cb,
-                                    open_files_state);
-      ide_uri_unref (uri);
+                                    g_object_ref (task));
     }
 }
 
