@@ -172,8 +172,13 @@ lookup_symbol_get_extension (IdeExtensionSetAdapter *set,
                              gpointer                user_data)
 {
   LookUpSymbolData *data = user_data;
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
 
-  g_ptr_array_add (data->resolvers, IDE_SYMBOL_RESOLVER (extension));
+  g_assert (data != NULL);
+  g_assert (data->resolvers != NULL);
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+
+  g_ptr_array_add (data->resolvers, g_object_ref (resolver));
 }
 
 static gboolean
@@ -2700,10 +2705,11 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
   srcloc = ide_source_location_new (priv->file, line, line_offset, offset);
 
   data = g_slice_new0 (LookUpSymbolData);
-  data->resolvers = g_ptr_array_new_full (n_extensions, NULL);
+  data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
   data->location = ide_source_location_ref (srcloc);
 
   ide_extension_set_adapter_foreach (adapter, lookup_symbol_get_extension, data);
+  g_assert (data->resolvers->len > 0);
 
   g_task_set_task_data (task, data, (GDestroyNotify)lookup_symbol_task_data_free);
 
