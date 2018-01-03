@@ -392,12 +392,12 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
   if (!g_hash_table_contains (self->diagnostics, file))
     {
       CXTranslationUnit tu = ide_ref_ptr_get (self->native);
+      g_autofree gchar *workpath = NULL;
+      g_autoptr(GPtrArray) diags = NULL;
       IdeContext *context;
       IdeProject *project;
-      IdeVcs *vcs;
-      g_autofree gchar *workpath = NULL;
       GFile *workdir;
-      GPtrArray *diags;
+      IdeVcs *vcs;
       guint count;
 
       diags = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
@@ -434,8 +434,8 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
 
               for (guint j = 0; j < num_fixits; j++)
                 {
-                  IdeFixit *fixit = NULL;
                   IdeSourceRange *range;
+                  g_autoptr(IdeFixit) fixit = NULL;
                   CXSourceRange cxrange;
                   CXString cxstr;
 
@@ -445,7 +445,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
                   clang_disposeString (cxstr);
 
                   if (fixit != NULL)
-                    ide_diagnostic_take_fixit (diag, fixit);
+                    ide_diagnostic_take_fixit (diag, g_steal_pointer (&fixit));
                 }
 
               g_ptr_array_add (diags, diag);
@@ -456,7 +456,9 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
 
       ide_project_reader_unlock (project);
 
-      g_hash_table_insert (self->diagnostics, g_object_ref (file), ide_diagnostics_new (diags));
+      g_hash_table_insert (self->diagnostics,
+                           g_object_ref (file),
+                           ide_diagnostics_new (g_steal_pointer (&diags)));
     }
 
   return g_hash_table_lookup (self->diagnostics, file);

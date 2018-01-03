@@ -33,4 +33,6 @@ void            ide_fixit_apply     (IdeFixit       *self);
 const gchar    *ide_fixit_get_text  (IdeFixit       *self);
 IdeSourceRange *ide_fixit_get_range (IdeFixit       *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeFixit, ide_fixit_unref)
+
 G_END_DECLS
