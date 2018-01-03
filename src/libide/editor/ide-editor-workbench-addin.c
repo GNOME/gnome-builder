@@ -393,7 +393,7 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin    *addin,
   g_assert (IDE_IS_WORKBENCH (self->workbench));
 
   task = g_task_new (self, cancellable, callback, user_data);
-  open_file_task_data = g_slice_new (OpenFileTaskData);
+  open_file_task_data = g_slice_new0 (OpenFileTaskData);
   open_file_task_data->flags = flags;
   open_file_task_data->uri = ide_uri_ref(uri);
   g_task_set_task_data (task, open_file_task_data, open_file_task_data_free);

@@ -246,7 +246,7 @@ ide_compile_commands_load_worker (GTask        *task,
           g_hash_table_insert (directories_by_path, (gchar *)directory, dir);
         }
 
-      info = g_slice_new (CompileInfo);
+      info = g_slice_new0 (CompileInfo);
       info->file = g_file_resolve_relative_path (dir, file);
       info->directory = g_object_ref (dir);
       info->command = g_strdup (command);
@@ -260,7 +260,7 @@ ide_compile_commands_load_worker (GTask        *task,
        */
       if (g_str_has_suffix (file, ".vala"))
         {
-          info = g_slice_new (CompileInfo);
+          info = g_slice_new0 (CompileInfo);
           info->file = g_file_resolve_relative_path (dir, file);
           info->directory = g_object_ref (dir);
           info->command = g_strdup (command);

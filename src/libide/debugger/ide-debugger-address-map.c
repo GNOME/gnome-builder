@@ -97,7 +97,7 @@ ide_debugger_address_map_new (void)
 {
   IdeDebuggerAddressMap *ret;
 
-  ret = g_slice_new (IdeDebuggerAddressMap);
+  ret = g_slice_new0 (IdeDebuggerAddressMap);
   ret->seq = g_sequence_new (ide_debugger_address_map_entry_free);
   ret->chunk = g_string_chunk_new (4096);
 
