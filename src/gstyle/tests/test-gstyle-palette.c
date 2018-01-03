@@ -28,7 +28,7 @@ load_palette (gchar *name)
   GstylePalette *palette;
   g_autoptr (GFile) file = NULL;
   g_autofree gchar *uri = NULL;
-  g_autofree gchar *path;
+  g_autofree gchar *path = NULL;
   GError *error = NULL;
   GCancellable *cancellable = NULL;
 

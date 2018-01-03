@@ -96,7 +96,7 @@ static void
 setup_sample (FilterData *filter_data,
               gint        sample_num)
 {
-  g_autofree gchar *name;
+  g_autofree gchar *name = NULL;
   gint width;
   gint height;
   GError *error = NULL;

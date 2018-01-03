@@ -74,7 +74,7 @@ create_palette_close_dialog (GbColorPickerPrefs *self,
 {
   GtkWindow *toplevel;
   GtkDialog *dialog;
-  g_autofree gchar *text;
+  g_autofree gchar *text = NULL;
   const gchar *palette_name;
 
   g_assert (GB_IS_COLOR_PICKER_PREFS (self));
@@ -451,7 +451,7 @@ create_palette_list_item (gpointer item,
   GstylePalette *palette = (GstylePalette *)item;
   GtkWidget *row;
   const gchar *name;
-  g_autofree gchar *target;
+  g_autofree gchar *target = NULL;
 
   g_assert (GB_IS_COLOR_PICKER_PREFS (self));
   g_assert (GSTYLE_IS_PALETTE (palette));
