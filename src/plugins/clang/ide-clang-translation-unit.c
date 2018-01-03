@@ -317,10 +317,10 @@ create_diagnostic (IdeClangTranslationUnit *self,
                    GFile                   *target,
                    CXDiagnostic            *cxdiag)
 {
+  g_autoptr(IdeSourceLocation) loc = NULL;
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
   IdeDiagnostic *diag;
-  IdeSourceLocation *loc;
   g_autofree gchar *spelling = NULL;
   CXString cxstr;
   CXSourceLocation cxloc;
