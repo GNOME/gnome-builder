@@ -1433,7 +1433,8 @@ ide_buffer_dispose (GObject *object)
       g_clear_object (&priv->change_monitor);
     }
 
-  dzl_signal_group_set_target (priv->diagnostics_manager_signals, NULL);
+  if (priv->diagnostics_manager_signals != NULL)
+    dzl_signal_group_set_target (priv->diagnostics_manager_signals, NULL);
 
   g_clear_pointer (&priv->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
