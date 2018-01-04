@@ -19,6 +19,7 @@
 #ifndef IDE_DEBUG_H
 #define IDE_DEBUG_H
 
+#include <execinfo.h>
 #include <glib.h>
 
 G_BEGIN_DECLS
@@ -116,7 +117,7 @@ G_BEGIN_DECLS
 
 #ifdef IDE_ENABLE_TRACE
 # define IDE_TRACE_MSG(fmt, ...)                                         \
-   g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "  MSG: %s():%d: " fmt,       \
+   g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "  MSG: %s():%d: " fmt,      \
          G_STRFUNC, __LINE__, ##__VA_ARGS__)
 # define IDE_PROBE                                                       \
    g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "PROBE: %s():%d",            \
@@ -145,14 +146,26 @@ G_BEGIN_DECLS
             G_STRFUNC, __LINE__);                                        \
       return _r;                                                         \
    } G_STMT_END
+# define IDE_BACKTRACE                                                   \
+  G_STMT_START {                                                         \
+    gpointer btbuf[64];                                                  \
+    int btbuflen = backtrace (btbuf, G_N_ELEMENTS (btbuf));              \
+    char **symnames = backtrace_symbols (btbuf, btbuflen);               \
+    for (guint _i = 0; _i < btbuflen; _i++) {                            \
+      g_log(G_LOG_DOMAIN, IDE_LOG_LEVEL_TRACE, "TRACE: [%-2d]: %s",      \
+            _i, symnames[_i]);                                           \
+    }                                                                    \
+    free (symnames);                                                     \
+  } G_STMT_END
 #else
-# define IDE_TODO(_msg)
-# define IDE_PROBE
-# define IDE_TRACE_MSG(fmt, ...)
-# define IDE_ENTRY
-# define IDE_GOTO(_l)   goto _l
-# define IDE_EXIT       return
-# define IDE_RETURN(_r) return _r
+# define IDE_TODO(_msg)          G_STMT_START {            } G_STMT_END
+# define IDE_PROBE               G_STMT_START {            } G_STMT_END
+# define IDE_TRACE_MSG(fmt, ...) G_STMT_START {            } G_STMT_END
+# define IDE_ENTRY               G_STMT_START {            } G_STMT_END
+# define IDE_GOTO(_l)            G_STMT_START { goto _l;   } G_STMT_END
+# define IDE_EXIT                G_STMT_START { return;    } G_STMT_END
+# define IDE_RETURN(_r)          G_STMT_START { return _r; } G_STMT_END
+# define IDE_BACKTRACE           G_STMT_START {            } G_STMT_END
 #endif
 
 #define _IDE_BUG(Component, Description, File, Line, Func, ...)                         \
