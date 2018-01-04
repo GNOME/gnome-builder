@@ -44,7 +44,7 @@ typedef struct
 {
   GPtrArray   *files;
   GHashTable  *flags;
-  gsize        index;
+  guint        index;
 } GetBuildFlagsData;
 
 static GParamSpec *properties [N_PROPS];
@@ -102,46 +102,58 @@ ide_build_system_get_build_flags_cb (GObject      *object,
                                      gpointer      user_data)
 {
   IdeBuildSystem *self = (IdeBuildSystem *)object;
-  g_auto(GStrv) flags = NULL;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) flags = NULL;
   GetBuildFlagsData *data;
+  IdeFile *file;
 
   g_assert (IDE_IS_BUILD_SYSTEM (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
-  flags = ide_build_system_get_build_flags_finish (self, result, &error);
-
   data = g_task_get_task_data (task);
+  g_assert (data != NULL);
+  g_assert (data->files != NULL);
+  g_assert (data->files->len > 0);
+  g_assert (data->index < data->files->len);
+  g_assert (data->flags != NULL);
 
-  if (flags != NULL)
-    g_hash_table_insert (data->flags,
-                         g_object_ref (g_ptr_array_index (data->files, data->index)),
-                         g_steal_pointer (&flags));
+  file = g_ptr_array_index (data->files, data->index);
+  g_assert (IDE_IS_FILE (file));
 
   data->index++;
 
+  flags = ide_build_system_get_build_flags_finish (self, result, &error);
+
+  if (error != NULL)
+    g_debug ("Failed to load build flags for \"%s\": %s",
+             ide_file_get_path (file),
+             error->message);
+  else
+    g_hash_table_insert (data->flags, g_object_ref (file), g_steal_pointer (&flags));
+
+  if (g_task_return_error_if_cancelled (task))
+    return;
+
   if (data->index < data->files->len)
     {
-      GCancellable *cancellable;
+      GCancellable *cancellable = g_task_get_cancellable (task);
 
-      cancellable = g_task_get_cancellable (task);
-
-      if (g_task_return_error_if_cancelled (task))
-        return;
+      file = g_ptr_array_index (data->files, data->index);
+      g_assert (IDE_IS_FILE (file));
 
       ide_build_system_get_build_flags_async (self,
-                                              g_ptr_array_index (data->files, data->index),
+                                              file,
                                               cancellable,
                                               ide_build_system_get_build_flags_cb,
                                               g_steal_pointer (&task));
+      return;
     }
-  else
-    {
-      g_task_return_pointer (task,
-                             g_steal_pointer (&data->flags),
-                             (GDestroyNotify)g_hash_table_unref);
-    }
+
+  g_task_return_pointer (task,
+                         g_steal_pointer (&data->flags),
+                         (GDestroyNotify)g_hash_table_unref);
 }
 
 static void
@@ -159,6 +171,23 @@ ide_build_system_real_get_build_flags_for_files_async (IdeBuildSystem       *sel
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_build_system_real_get_build_flags_for_files_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  if (files->len == 0)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVAL,
+                               "No files were provided");
+      return;
+    }
+
+  g_assert (files->len > 0);
+  g_assert (IDE_IS_FILE (g_ptr_array_index (files, 0)));
+
+  if (g_task_return_error_if_cancelled (task))
+    return;
 
   data = g_slice_new0 (GetBuildFlagsData);
   data->files = g_ptr_array_ref (files);
@@ -168,18 +197,6 @@ ide_build_system_real_get_build_flags_for_files_async (IdeBuildSystem       *sel
                                        (GDestroyNotify)g_strfreev);
 
   g_task_set_task_data (task, data, (GDestroyNotify)get_build_flags_data_free);
-
-  if (g_task_return_error_if_cancelled (task))
-    {
-      return;
-    }
-  else if (!files->len)
-    {
-      g_task_return_pointer (task,
-                             g_steal_pointer (&data->flags),
-                             (GDestroyNotify)g_hash_table_unref);
-      return;
-    }
 
   ide_build_system_get_build_flags_async (self,
                                           g_ptr_array_index (files, 0),
