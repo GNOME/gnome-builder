@@ -598,16 +598,17 @@ ide_buffer__file_load_settings_cb (GObject      *object,
                                    GAsyncResult *result,
                                    gpointer      user_data)
 {
-  g_autoptr(IdeBuffer) self = user_data;
   IdeFile *file = (IdeFile *)object;
+  g_autoptr(IdeBuffer) self = user_data;
   g_autoptr(IdeFileSettings) file_settings = NULL;
 
   g_assert (IDE_IS_BUFFER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_FILE (file));
 
   file_settings = ide_file_load_settings_finish (file, result, NULL);
 
-  if (file_settings)
+  if (file_settings != NULL)
     {
       gboolean insert_trailing_newline;
 
@@ -2476,6 +2477,7 @@ ide_buffer__check_for_volume_cb (GObject      *object,
   GFile *file = (GFile *)object;
 
   g_assert (IDE_IS_BUFFER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_FILE (file));
 
   file_info = g_file_query_info_finish (file, result, NULL);

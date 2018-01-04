@@ -152,6 +152,8 @@ static void
 gbp_history_editor_view_addin_queue (GbpHistoryEditorViewAddin *self,
                                      guint                      line)
 {
+  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
+
   /*
    * If the buffer is modified, we want to keep track of this position in the
    * history (the layout stack will automatically merge it with the previous

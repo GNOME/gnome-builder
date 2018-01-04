@@ -726,7 +726,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
                                      g_object_ref (state->progress),
                                      g_object_unref,
                                      ide_buffer_manager_load_file__load_cb,
-                                     g_object_ref (task));
+                                     g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -1743,14 +1743,13 @@ unregister_auto_save (IdeBufferManager *self,
 GPtrArray *
 ide_buffer_manager_get_buffers (IdeBufferManager *self)
 {
-  GPtrArray *ret;
-  gsize i;
+  g_autoptr(GPtrArray) ret = NULL;
 
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
-  for (i = 0; i < self->buffers->len; i++)
+  for (guint i = 0; i < self->buffers->len; i++)
     {
       IdeBuffer *buffer;
 
@@ -1758,7 +1757,7 @@ ide_buffer_manager_get_buffers (IdeBufferManager *self)
       g_ptr_array_add (ret, g_object_ref (buffer));
     }
 
-  return ret;
+  return g_steal_pointer (&ret);
 }
 
 /**

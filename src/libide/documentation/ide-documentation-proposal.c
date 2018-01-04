@@ -22,9 +22,9 @@
 
 typedef struct
 {
-  gchar       *header;
-  gchar       *text;
-  gchar       *uri;
+  gchar *header;
+  gchar *text;
+  gchar *uri;
 } IdeDocumentationProposalPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeDocumentationProposal, ide_documentation_proposal, G_TYPE_OBJECT)
@@ -77,7 +77,6 @@ ide_documentation_proposal_get_uri (IdeDocumentationProposal *self)
   return priv->uri;
 }
 
-
 void
 ide_documentation_proposal_set_header (IdeDocumentationProposal *self,
                                        const gchar              *header)
@@ -110,22 +109,11 @@ ide_documentation_proposal_set_text (IdeDocumentationProposal *self,
       }
 }
 
-void
-ide_documentation_proposal_set_uri (IdeDocumentationProposal *self,
-                                    const gchar              *uri)
-{
-  IdeDocumentationProposalPrivate *priv = ide_documentation_proposal_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_DOCUMENTATION_PROPOSAL (self));
-
-  priv->uri = g_strdup (uri);
-}
-
 static void
 ide_documentation_proposal_get_property (GObject    *object,
-                                     guint       prop_id,
-                                     GValue     *value,
-                                     GParamSpec *pspec)
+                                         guint       prop_id,
+                                         GValue     *value,
+                                         GParamSpec *pspec)
 {
   IdeDocumentationProposal *self = IDE_DOCUMENTATION_PROPOSAL (object);
 
@@ -155,6 +143,7 @@ ide_documentation_proposal_set_property (GObject      *object,
                                          GParamSpec   *pspec)
 {
   IdeDocumentationProposal *self = IDE_DOCUMENTATION_PROPOSAL (object);
+  IdeDocumentationProposalPrivate *priv = ide_documentation_proposal_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -167,7 +156,7 @@ ide_documentation_proposal_set_property (GObject      *object,
       break;
 
     case PROP_URI:
-      ide_documentation_proposal_set_uri (self, g_value_get_string (value));
+      priv->uri = g_value_dup_string (value);
       break;
 
     default:
@@ -224,10 +213,4 @@ ide_documentation_proposal_class_init (IdeDocumentationProposalClass *klass)
 void
 ide_documentation_proposal_init (IdeDocumentationProposal *self)
 {
-  IdeDocumentationProposalPrivate *priv = ide_documentation_proposal_get_instance_private (self);
-
-  priv->header = NULL;
-  priv->text = NULL;
-  priv->uri = NULL;
 }
-

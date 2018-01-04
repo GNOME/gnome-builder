@@ -149,11 +149,16 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
   self->state_dirty = FALSE;
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_git_buffer_change_monitor_calculate_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   file = ide_buffer_get_file (self->buffer);
-  gfile = ide_file_get_file (file);
+  g_assert (IDE_IS_FILE (file));
 
-  if (!gfile)
+  gfile = ide_file_get_file (file);
+  g_assert (!gfile || G_IS_FILE (gfile));
+
+  if (gfile == NULL)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -173,7 +178,7 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
 
   self->in_calculation = TRUE;
 
-  g_async_queue_push (work_queue, g_object_ref (task));
+  g_async_queue_push (work_queue, g_steal_pointer (&task));
 }
 
 static IdeBufferLineChange
@@ -656,7 +661,7 @@ static gpointer
 ide_git_buffer_change_monitor_worker (gpointer data)
 {
   GAsyncQueue *queue = data;
-  GTask *task;
+  gpointer taskptr;
 
   g_assert (queue != NULL);
 
@@ -668,22 +673,25 @@ ide_git_buffer_change_monitor_worker (gpointer data)
    * share the same GgitRepository amongst themselves).
    */
 
-  while ((task = g_async_queue_pop (queue)))
+  while (NULL != (taskptr = g_async_queue_pop (queue)))
     {
       IdeGitBufferChangeMonitor *self;
       g_autoptr(GError) error = NULL;
+      g_autoptr(GTask) task = taskptr;
       DiffTask *diff;
 
       self = g_task_get_source_object (task);
+      g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
+
       diff = g_task_get_task_data (task);
+      g_assert (diff != NULL);
 
       if (!ide_git_buffer_change_monitor_calculate_threaded (self, diff, &error))
         g_task_return_error (task, g_steal_pointer (&error));
       else
-        g_task_return_pointer (task, g_hash_table_ref (diff->state),
+        g_task_return_pointer (task,
+                               g_hash_table_ref (diff->state),
                                (GDestroyNotify)g_hash_table_unref);
-
-      g_object_unref (task);
     }
 
   return NULL;
@@ -694,11 +702,7 @@ ide_git_buffer_change_monitor_dispose (GObject *object)
 {
   IdeGitBufferChangeMonitor *self = (IdeGitBufferChangeMonitor *)object;
 
-  if (self->changed_timeout)
-    {
-      g_source_remove (self->changed_timeout);
-      self->changed_timeout = 0;
-    }
+  dzl_clear_source (&self->changed_timeout);
 
   dzl_clear_weak_pointer (&self->buffer);
 

@@ -354,8 +354,9 @@ _ide_file_settings_append (IdeFileSettings *self,
 {
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
-  g_return_if_fail (IDE_IS_FILE_SETTINGS (child));
+  g_assert (IDE_IS_FILE_SETTINGS (self));
+  g_assert (IDE_IS_FILE_SETTINGS (child));
+  g_assert (self != child);
 
   g_signal_connect_object (child,
                            "notify",
