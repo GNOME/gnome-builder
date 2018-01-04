@@ -446,18 +446,19 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeClangService *self;
   ParseRequest *request;
   gchar **argv;
-  GError *error = NULL;
 
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
-  request = g_task_get_task_data (task);
-
   g_assert (IDE_IS_CLANG_SERVICE (self));
+
+  request = g_task_get_task_data (task);
   g_assert (request != NULL);
 
   argv = ide_build_system_get_build_flags_finish (build_system, result, &error);
@@ -474,7 +475,6 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 
       if (error && !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         g_message ("%s", error->message);
-      g_clear_error (&error);
 
       /* Try to find CFLAGS or CXXFLAGS */
       context = ide_object_get_context (IDE_OBJECT (build_system));
@@ -544,18 +544,16 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
   IdeBuildSystem *build_system;
   ParseRequest *request;
   IdeContext *context;
-  IdeFile *file = (IdeFile *)key;
-  GFile *gfile;
+  GFile *gfile = (GFile *)key;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CLANG_SERVICE (self));
-  g_assert (IDE_IS_FILE ((IdeFile *)key));
-  g_assert (IDE_IS_FILE (file));
+  g_assert (G_IS_FILE (gfile));
   g_assert (G_IS_TASK (task));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
   build_system = ide_context_get_build_system (context);
-  gfile = ide_file_get_file (file);
 
   if (!gfile || !(path = g_file_get_path (gfile)))
     {
@@ -594,6 +592,8 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
                           g_task_get_cancellable (task),
                           ide_clang_service_unit_completed_cb,
                           g_object_ref (task));
+  g_task_set_source_tag (real_task, ide_clang_service_get_translation_unit_worker);
+  g_task_set_priority (real_task, G_PRIORITY_LOW);
   g_task_set_task_data (real_task, request, parse_request_free);
 
   /*
@@ -604,7 +604,7 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
                                           request->file,
                                           g_task_get_cancellable (task),
                                           ide_clang_service__get_build_flags_cb,
-                                          g_object_ref (real_task));
+                                          g_steal_pointer (&real_task));
 }
 
 static void
@@ -647,12 +647,18 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
 {
   IdeClangTranslationUnit *cached;
   g_autoptr(GTask) task = NULL;
+  GFile *gfile;
 
   g_return_if_fail (IDE_IS_CLANG_SERVICE (self));
   g_return_if_fail (IDE_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  gfile = ide_file_get_file (file);
+  g_assert (G_IS_FILE (gfile));
+
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_clang_service_get_translation_unit_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   /*
    * Clang likes to crash on our temporary files.
@@ -679,7 +685,7 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
   /*
    * If we have a cached unit, and it is new enough, then re-use it.
    */
-  if ((cached = dzl_task_cache_peek (self->units_cache, file)) &&
+  if ((cached = dzl_task_cache_peek (self->units_cache, gfile)) &&
       (ide_clang_translation_unit_get_serial (cached) >= min_serial))
     {
       g_task_return_pointer (task, g_object_ref (cached), g_object_unref);
@@ -687,7 +693,7 @@ ide_clang_service_get_translation_unit_async (IdeClangService     *self,
     }
 
   dzl_task_cache_get_async (self->units_cache,
-                            file,
+                            gfile,
                             TRUE,
                             cancellable,
                             ide_clang_service_get_translation_unit_cb,
@@ -724,8 +730,8 @@ ide_clang_service_start (IdeService *service)
 
   self->cancellable = g_cancellable_new ();
 
-  self->units_cache = dzl_task_cache_new ((GHashFunc)ide_file_hash,
-                                          (GEqualFunc)ide_file_equal,
+  self->units_cache = dzl_task_cache_new ((GHashFunc)g_file_hash,
+                                          (GEqualFunc)g_file_equal,
                                           g_object_ref,
                                           g_object_unref,
                                           g_object_ref,
@@ -803,11 +809,13 @@ ide_clang_service_get_cached_translation_unit (IdeClangService *self,
                                                IdeFile         *file)
 {
   IdeClangTranslationUnit *cached;
+  GFile *gfile;
 
   g_return_val_if_fail (IDE_IS_CLANG_SERVICE (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (file), NULL);
 
-  cached = dzl_task_cache_peek (self->units_cache, file);
+  gfile = ide_file_get_file (file);
+  cached = dzl_task_cache_peek (self->units_cache, gfile);
 
   return cached ? g_object_ref (cached) : NULL;
 }
