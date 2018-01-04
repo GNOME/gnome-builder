@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexBuilder, ide_code_index_builder, IDE, CODE_INDEX_BUILDER, IdeObject)
 
+void                    ide_code_index_builder_drop_caches     (IdeCodeIndexBuilder     *self);
 void                    ide_code_index_builder_build_async     (IdeCodeIndexBuilder     *self,
                                                                 GFile                   *directory,
                                                                 gboolean                 recursive,

@@ -861,3 +861,17 @@ ide_code_index_builder_new (IdeContext          *context,
                        "service", service,
                        NULL);
 }
+
+void
+ide_code_index_builder_drop_caches (IdeCodeIndexBuilder *self)
+{
+  g_return_if_fail (IDE_IS_CODE_INDEX_BUILDER (self));
+
+  /*
+   * Drop our caches so that we force the data to be regenereted
+   * upon the next request. Also helps keep IdeFile from lingering
+   * around forever.
+   */
+
+  g_hash_table_remove_all (self->build_flags);
+}

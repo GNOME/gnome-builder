@@ -124,6 +124,7 @@ ide_code_index_service_build_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_CODE_INDEX_BUILDER (builder));
 
   bdata = g_queue_pop_head (&self->build_queue);
@@ -175,7 +176,10 @@ ide_code_index_service_build_cb (GObject      *object,
                                           g_steal_pointer (&self));
     }
   else
-    unregister_pausable (self);
+    {
+      unregister_pausable (self);
+      ide_code_index_builder_drop_caches (builder);
+    }
 }
 
 static gboolean
