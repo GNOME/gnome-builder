@@ -511,17 +511,13 @@ static IdeBuffer *
 ide_buffer_manager_get_buffer (IdeBufferManager *self,
                                IdeFile          *file)
 {
-  gsize i;
-
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
+  g_return_val_if_fail (IDE_IS_FILE (file), NULL);
 
-  for (i = 0; i < self->buffers->len; i++)
+  for (guint i = 0; i < self->buffers->len; i++)
     {
-      IdeBuffer *buffer;
-      IdeFile *cur_file;
-
-      buffer = g_ptr_array_index (self->buffers, i);
-      cur_file = ide_buffer_get_file (buffer);
+      IdeBuffer *buffer = g_ptr_array_index (self->buffers, i);
+      IdeFile *cur_file = ide_buffer_get_file (buffer);
 
       if (ide_file_equal (cur_file, file))
         return buffer;
