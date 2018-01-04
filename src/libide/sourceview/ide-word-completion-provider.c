@@ -643,11 +643,15 @@ ide_word_completion_provider_dispose (GObject *object)
 
   completion_cleanup (self);
 
+  g_clear_pointer (&priv->current_word, g_free);
   g_clear_pointer (&priv->name, g_free);
+  g_clear_pointer (&priv->all_proposals, g_hash_table_unref);
 
+  g_clear_object (&priv->context);
   g_clear_object (&priv->icon);
-  g_clear_object (&priv->search_context);
   g_clear_object (&priv->results);
+  g_clear_object (&priv->search_context);
+  g_clear_object (&priv->search_settings);
 
   G_OBJECT_CLASS (ide_word_completion_provider_parent_class)->dispose (object);
 }
