@@ -687,11 +687,7 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
 
   text_buffer = GTK_TEXT_BUFFER (self->buffer);
 
-  if (self->work_timeout)
-    {
-      g_source_remove (self->work_timeout);
-      self->work_timeout = 0;
-    }
+  dzl_clear_source (&self->work_timeout);
 
   g_object_set_qdata (G_OBJECT (text_buffer), engineQuark, NULL);
 
