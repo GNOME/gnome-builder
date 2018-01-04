@@ -891,7 +891,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
       if ((state->buffer != NULL) && !IDE_IS_BUFFER (state->buffer))
         {
           g_warning ("Invalid buffer type retrieved from create-buffer signal.");
-          state->buffer = NULL;
+          g_clear_object (&state->buffer);
         }
 
       if (state->buffer == NULL)
