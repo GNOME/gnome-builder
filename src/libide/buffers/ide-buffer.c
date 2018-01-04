@@ -2830,11 +2830,7 @@ ide_buffer_hold (IdeBuffer *self)
   if (priv->context == NULL)
     return;
 
-  if (priv->reclamation_handler != 0)
-    {
-      g_source_remove (priv->reclamation_handler);
-      priv->reclamation_handler = 0;
-    }
+  dzl_clear_source (&priv->reclamation_handler);
 }
 
 void
