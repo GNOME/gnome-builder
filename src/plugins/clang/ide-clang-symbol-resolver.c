@@ -187,9 +187,9 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
 {
   IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)resolver;
   g_autoptr(GTask) task = NULL;
-  IdeContext *context;
-  IdeClangService *service;
   g_autoptr(IdeFile) ifile = NULL;
+  IdeClangService *service;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -204,10 +204,7 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
-  ifile = g_object_new (IDE_TYPE_FILE,
-                        "file", file,
-                        "context", context,
-                        NULL);
+  ifile = ide_file_new (context, file);
 
   ide_clang_service_get_translation_unit_async (service,
                                                 ifile,
