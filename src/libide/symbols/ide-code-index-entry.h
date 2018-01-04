@@ -32,12 +32,15 @@ G_DECLARE_DERIVABLE_TYPE (IdeCodeIndexEntry, ide_code_index_entry, IDE, CODE_IND
 struct _IdeCodeIndexEntryClass
 {
   GObjectClass parent;
+
+  /*< private */
+  gpointer _padding[16];
 };
 
 IDE_AVAILABLE_IN_ALL
-gchar           *ide_code_index_entry_get_key   (IdeCodeIndexEntry *self);
+const gchar     *ide_code_index_entry_get_key   (IdeCodeIndexEntry *self);
 IDE_AVAILABLE_IN_ALL
-gchar           *ide_code_index_entry_get_name  (IdeCodeIndexEntry *self);
+const gchar     *ide_code_index_entry_get_name  (IdeCodeIndexEntry *self);
 IDE_AVAILABLE_IN_ALL
 IdeSymbolKind    ide_code_index_entry_get_kind  (IdeCodeIndexEntry *self);
 IDE_AVAILABLE_IN_ALL

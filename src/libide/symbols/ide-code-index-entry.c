@@ -77,29 +77,39 @@ ide_code_index_entry_set_property (GObject       *object,
   switch (prop_id)
     {
     case PROP_KEY:
-      priv->key = g_strdup (g_value_get_string (value));
+      g_free (priv->key);
+      priv->key = g_value_dup_string (value);
       break;
+
     case PROP_NAME:
-      priv->name = g_strdup (g_value_get_string (value));
+      g_free (priv->name);
+      priv->name = g_value_dup_string (value);
       break;
+
     case PROP_KIND:
       priv->kind = g_value_get_int (value);
       break;
+
     case PROP_FLAGS:
       priv->flags = g_value_get_int (value);
       break;
+
     case PROP_BEGIN_LINE:
       priv->begin_line = g_value_get_uint (value);
       break;
+
     case PROP_BEGIN_LINE_OFFSET:
       priv->begin_line_offset = g_value_get_uint (value);
       break;
+
     case PROP_END_LINE:
       priv->end_line = g_value_get_uint (value);
       break;
+
     case PROP_END_LINE_OFFSET:
       priv->end_line_offset = g_value_get_uint (value);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -119,27 +129,35 @@ ide_code_index_entry_get_property (GObject    *object,
     case PROP_KEY:
       g_value_set_string (value, priv->key);
       break;
+
     case PROP_NAME:
       g_value_set_string (value, priv->name);
       break;
+
     case PROP_KIND:
       g_value_set_int (value, priv->kind);
       break;
+
     case PROP_FLAGS:
       g_value_set_int (value, priv->flags);
       break;
+
     case PROP_BEGIN_LINE:
       g_value_set_uint (value, priv->begin_line);
       break;
+
     case PROP_BEGIN_LINE_OFFSET:
       g_value_set_uint (value, priv->begin_line_offset);
       break;
+
     case PROP_END_LINE:
       g_value_set_uint (value, priv->end_line);
       break;
+
     case PROP_END_LINE_OFFSET:
       g_value_set_uint (value, priv->end_line_offset);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -218,25 +236,23 @@ ide_code_index_entry_init (IdeCodeIndexEntry *self)
 {
 }
 
-gchar *
+const gchar *
 ide_code_index_entry_get_key (IdeCodeIndexEntry *self)
 {
-  IdeCodeIndexEntryPrivate *priv;
+  IdeCodeIndexEntryPrivate *priv = ide_code_index_entry_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRY (self), NULL);
 
-  priv = ide_code_index_entry_get_instance_private (self);
   return priv->key;
 }
 
-gchar *
+const gchar *
 ide_code_index_entry_get_name (IdeCodeIndexEntry *self)
 {
-  IdeCodeIndexEntryPrivate *priv;
+  IdeCodeIndexEntryPrivate *priv = ide_code_index_entry_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRY (self), NULL);
 
-  priv = ide_code_index_entry_get_instance_private (self);
   return priv->name;
 }
 
