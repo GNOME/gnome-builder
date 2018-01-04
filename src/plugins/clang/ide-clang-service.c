@@ -565,9 +565,6 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
     }
 
   request = g_slice_new0 (ParseRequest);
-  /* Use a copy of the file so that our cache key does not
-   * include any file settings held by the IdeFile instance.
-   */
   request->file = ide_file_new (context, gfile);
   request->index = self->index;
   request->source_filename = g_steal_pointer (&path);
