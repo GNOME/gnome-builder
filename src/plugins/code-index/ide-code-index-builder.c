@@ -603,40 +603,45 @@ ide_code_index_builder_build_cb2 (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
 {
-  IdeCodeIndexBuilder *self;
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(GHashTable) build_flags = NULL;
-  g_autoptr(GError) error = NULL;
   g_autoptr(GTask) main_task = user_data;
-  GPtrArray *changes = NULL;
-  GHashTableIter iter;
-  gpointer key = NULL;
-  gpointer value = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeCodeIndexBuilder *self;
   GCancellable *cancellable;
+  GPtrArray *changes;
+  IdeFile *key;
+  gchar **value;
+  GHashTableIter iter;
 
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (main_task));
 
-  if (NULL == (build_flags = ide_build_system_get_build_flags_for_files_finish (build_system,
-                                                                                result,
-                                                                                &error)))
+  build_flags = ide_build_system_get_build_flags_for_files_finish (build_system, result, &error);
+
+  if (build_flags == NULL)
     {
       g_message ("Failed to fetch build flags %s", error->message);
       g_task_return_error (main_task, g_steal_pointer (&error));
       return;
     }
-  else if (g_task_return_error_if_cancelled (main_task))
-    {
-      return;
-    }
+
+  if (g_task_return_error_if_cancelled (main_task))
+    return;
 
   self = g_task_get_source_object (main_task);
+  g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
+
   cancellable = g_task_get_cancellable (main_task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
   changes = g_task_get_task_data (main_task);
+  g_assert (changes != NULL);
 
   /* Update self->build_flags hash table with new flags */
   g_hash_table_iter_init (&iter, build_flags);
-  while (g_hash_table_iter_next (&iter, &key, &value))
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
     {
       g_hash_table_iter_steal (&iter);
       g_hash_table_insert (self->build_flags, key, value);
@@ -748,24 +753,16 @@ ide_code_index_builder_build_finish (IdeCodeIndexBuilder  *self,
 }
 
 static void
-ide_code_index_builder_set_property (GObject       *object,
-                                    guint          prop_id,
-                                    const GValue  *value,
-                                    GParamSpec    *pspec)
+ide_code_index_builder_finalize (GObject *object)
 {
   IdeCodeIndexBuilder *self = (IdeCodeIndexBuilder *)object;
 
-  switch (prop_id)
-    {
-    case PROP_INDEX:
-      self->index = g_value_dup_object (value);
-      break;
-    case PROP_SERVICE:
-      self->service = g_value_dup_object (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  g_clear_object (&self->index);
+  g_clear_object (&self->service);
+  g_clear_pointer (&self->build_flags, g_hash_table_unref);
+  g_mutex_clear (&self->indexed);
+
+  G_OBJECT_CLASS(ide_code_index_builder_parent_class)->finalize (object);
 }
 
 static void
@@ -781,9 +778,34 @@ ide_code_index_builder_get_property (GObject    *object,
     case PROP_INDEX:
       g_value_set_object (value, self->index);
       break;
+
     case PROP_SERVICE:
       g_value_set_object (value, self->service);
       break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_code_index_builder_set_property (GObject       *object,
+                                    guint          prop_id,
+                                    const GValue  *value,
+                                    GParamSpec    *pspec)
+{
+  IdeCodeIndexBuilder *self = (IdeCodeIndexBuilder *)object;
+
+  switch (prop_id)
+    {
+    case PROP_INDEX:
+      self->index = g_value_dup_object (value);
+      break;
+
+    case PROP_SERVICE:
+      self->service = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -800,40 +822,27 @@ ide_code_index_builder_init (IdeCodeIndexBuilder *self)
 }
 
 static void
-ide_code_index_builder_finalize (GObject *object)
-{
-  IdeCodeIndexBuilder *self = (IdeCodeIndexBuilder *)object;
-
-  g_clear_object (&self->index);
-  g_clear_object (&self->service);
-  g_clear_pointer (&self->build_flags, g_hash_table_unref);
-  g_mutex_clear (&self->indexed);
-
-  G_OBJECT_CLASS(ide_code_index_builder_parent_class)->finalize (object);
-}
-
-static void
 ide_code_index_builder_class_init (IdeCodeIndexBuilderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->set_property = ide_code_index_builder_set_property;
-  object_class->get_property = ide_code_index_builder_get_property;
   object_class->finalize = ide_code_index_builder_finalize;
+  object_class->get_property = ide_code_index_builder_get_property;
+  object_class->set_property = ide_code_index_builder_set_property;
 
   properties [PROP_INDEX] =
     g_param_spec_object ("index",
                          "Index",
                          "Index in which all symbols are stored.",
                          IDE_TYPE_CODE_INDEX_INDEX,
-                         G_PARAM_READWRITE);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   properties [PROP_SERVICE] =
     g_param_spec_object ("service",
                          "Service",
                          "IdeCodeIndexService.",
                          IDE_TYPE_CODE_INDEX_SERVICE,
-                         G_PARAM_READWRITE);
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
