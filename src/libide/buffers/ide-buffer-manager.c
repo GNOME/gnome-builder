@@ -1742,7 +1742,7 @@ unregister_auto_save (IdeBufferManager *self,
  *
  * Buffers are generally not added to the buffer list until they have been loaded.
  *
- * Returns: (transfer container) (element-type IdeBuffer*): a #GPtrArray of buffers.
+ * Returns: (transfer container) (element-type Ide.Buffer): a #GPtrArray of buffers.
  */
 GPtrArray *
 ide_buffer_manager_get_buffers (IdeBufferManager *self)

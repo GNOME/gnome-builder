@@ -1242,7 +1242,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
  *
  * Completes an asynchronous request to ide_makecache_get_file_flags_async().
  *
- * Returns: (transfer container) (element-type IdeMakecacheTarget): An array of targets.
+ * Returns: (transfer container) (element-type Ide.MakecacheTarget): An array of targets.
  */
 GPtrArray *
 ide_makecache_get_file_targets_finish (IdeMakecache  *self,

@@ -2782,7 +2782,7 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
  * ide_buffer_get_symbols_finish:
  * @self: an #IdeBuffer.
  *
- * Returns: (transfer container) (element-type IdeSymbol*): a #GPtrArray if successful;
+ * Returns: (transfer container) (element-type Ide.Symbol): a #GPtrArray if successful;
  *   otherwise %NULL.
  */
 GPtrArray *

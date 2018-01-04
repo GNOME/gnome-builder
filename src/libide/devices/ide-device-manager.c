@@ -275,7 +275,7 @@ ide_device_manager_add_providers (IdeDeviceManager *self)
  *
  * Retrieves all of the devices that are registered with the #IdeDeviceManager.
  *
- * Returns: (transfer container) (element-type IdeDevice*): An array of devices
+ * Returns: (transfer container) (element-type Ide.Device): An array of devices
  *   registered with the #IdeManager.
  */
 GPtrArray *

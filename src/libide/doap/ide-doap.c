@@ -243,7 +243,7 @@ ide_doap_set_shortdesc (IdeDoap     *self,
  *
  *
  *
- * Returns: (transfer none) (element-type IdeDoapPerson*): a #GList of #IdeDoapPerson.
+ * Returns: (transfer none) (element-type Ide.DoapPerson): a #GList of #IdeDoapPerson.
  */
 GList *
 ide_doap_get_maintainers (IdeDoap *self)
