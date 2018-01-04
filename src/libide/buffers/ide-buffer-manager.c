@@ -929,7 +929,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
                      G_PRIORITY_DEFAULT,
                      cancellable,
                      ide_buffer_manager__load_file_read_cb,
-                     g_object_ref (task));
+                     g_steal_pointer (&task));
 
   IDE_EXIT;
 }
