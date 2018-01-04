@@ -805,6 +805,8 @@ ide_highlight_engine_dispose (GObject *object)
   g_clear_object (&self->highlighter);
   g_clear_object (&self->settings);
 
+  g_assert (self->buffer == NULL);
+
   G_OBJECT_CLASS (ide_highlight_engine_parent_class)->dispose (object);
 }
 
