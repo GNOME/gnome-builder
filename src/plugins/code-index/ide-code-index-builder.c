@@ -89,14 +89,16 @@ static const gchar * const *
 ide_code_index_builder_get_build_flags (IdeCodeIndexBuilder *self,
                                         GFile               *file)
 {
-  g_autoptr(IdeFile) ide_file = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  IdeContext *context;
 
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
   g_assert (G_IS_FILE (file));
 
-  ide_file = ide_file_new (ide_object_get_context (IDE_OBJECT (self)), file);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  ifile = ide_file_new (context, file);
 
-  return g_hash_table_lookup (self->build_flags, ide_file);
+  return g_hash_table_lookup (self->build_flags, ifile);
 }
 
 static GPtrArray *
@@ -104,24 +106,23 @@ ide_code_index_builder_get_all_files (IdeCodeIndexBuilder *self,
                                       GPtrArray           *changes)
 {
   g_autoptr(GPtrArray) all_files = NULL;
+  IdeContext *context;
 
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
   g_assert (changes != NULL);
 
+  context = ide_object_get_context (IDE_OBJECT (self));
   all_files = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (guint i = 0; i < changes->len ; i++)
     {
-      GPtrArray *dir_files;
-
-      dir_files = ((IndexingData *)g_ptr_array_index (changes, i))->files;
+      IndexingData *change = g_ptr_array_index (changes, i);
+      GPtrArray *dir_files = change->files;
 
       for (guint j = 0; j < dir_files->len; j++)
         {
-          g_autoptr(IdeFile) file = NULL;
-
-          file = ide_file_new (ide_object_get_context (IDE_OBJECT(self)),
-                               g_ptr_array_index (dir_files, j));
+          GFile *gfile = g_ptr_array_index (dir_files, j);
+          g_autoptr(IdeFile) file = ide_file_new (context, gfile);
 
           if (g_hash_table_lookup (self->build_flags, file) == NULL)
             g_ptr_array_add (all_files, g_steal_pointer (&file));
@@ -146,6 +147,8 @@ ide_code_index_builder_index_file (IdeCodeIndexBuilder      *self,
   g_autoptr(GError) error = NULL;
   IdeCodeIndexer *indexer;
   GCancellable *cancellable;
+  gpointer indexentryptr;
+  gchar num[16];
 
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
   g_assert (G_IS_FILE (file));
@@ -155,72 +158,71 @@ ide_code_index_builder_index_file (IdeCodeIndexBuilder      *self,
 
   file_name = g_file_get_path (file);
 
-  if (NULL == (indexer = ide_code_index_service_get_code_indexer (self->service, file_name)))
+  indexer = ide_code_index_service_get_code_indexer (self->service, file_name);
+  if (indexer == NULL)
     return;
 
   cancellable = g_task_get_cancellable (task);
 
-  if (NULL != (entries = ide_code_indexer_index_file (indexer,
-                                                      file,
-                                                      ide_code_index_builder_get_build_flags (self, file),
-                                                      cancellable,
-                                                      &error)))
+  entries = ide_code_indexer_index_file (indexer,
+                                         file,
+                                         ide_code_index_builder_get_build_flags (self, file),
+                                         cancellable,
+                                         &error);
+
+  if (entries == NULL)
     {
-      gchar num[100];
-      IdeCodeIndexEntry *index_entry;
-
-      g_snprintf (num, sizeof (num), "%u", file_id);
-
-      /*
-       * Storing file_name:id and id:file_name into index, file_name:id will be
-       * used to check whether a file is there in index or not.
-       */
-      dzl_fuzzy_index_builder_set_metadata_uint32 (fuzzy_builder, file_name, file_id);
-      dzl_fuzzy_index_builder_set_metadata_string (fuzzy_builder, num, file_name);
-
-      while (NULL != (index_entry = ide_code_index_entries_get_next_entry (entries)))
-        {
-          g_autoptr(IdeCodeIndexEntry) entry = index_entry;
-          gchar *key;
-          gchar *name;
-          IdeSymbolKind kind;
-          IdeSymbolFlags flags;
-          guint begin_line;
-          guint begin_line_offset;
-
-          key = ide_code_index_entry_get_key (entry);
-          name  = ide_code_index_entry_get_name (entry);
-          kind  = ide_code_index_entry_get_kind (entry);
-          flags  = ide_code_index_entry_get_flags (entry);
-
-          ide_code_index_entry_get_range (entry,
-                                          &begin_line,
-                                          &begin_line_offset,
-                                          NULL,
-                                          NULL);
-
-          /* In our index lines and offsets are 1-based */
-          if (key != NULL)
-            ide_persistent_map_builder_insert (map_builder,
-                                               key,
-                                               g_variant_new ("(uuuu)",
-                                                 file_id,
-                                                 begin_line, begin_line_offset,
-                                                 flags),
-                                               flags & IDE_SYMBOL_FLAGS_IS_DEFINITION);
-          if (name != NULL)
-            dzl_fuzzy_index_builder_insert (fuzzy_builder,
-                                            name,
-                                            g_variant_new ("(uuuuu)",
-                                              file_id,
-                                              begin_line, begin_line_offset,
-                                              flags, kind),
-                                            0);
-        }
+      g_warning ("Failed to index file: %s", error->message);
+      return;
     }
-    else if (error != NULL)
+
+  g_snprintf (num, sizeof (num), "%u", file_id);
+
+  /*
+   * Storing file_name:id and id:file_name into index, file_name:id will be
+   * used to check whether a file is there in index or not.
+   */
+  dzl_fuzzy_index_builder_set_metadata_uint32 (fuzzy_builder, file_name, file_id);
+  dzl_fuzzy_index_builder_set_metadata_string (fuzzy_builder, num, file_name);
+
+  while (NULL != (indexentryptr = ide_code_index_entries_get_next_entry (entries)))
     {
-      g_message ("Failed to index file, %s", error->message);
+      g_autoptr(IdeCodeIndexEntry) entry = indexentryptr;
+      const gchar *key;
+      const gchar *name;
+      IdeSymbolKind kind;
+      IdeSymbolFlags flags;
+      guint begin_line;
+      guint begin_line_offset;
+
+      key = ide_code_index_entry_get_key (entry);
+      name  = ide_code_index_entry_get_name (entry);
+      kind  = ide_code_index_entry_get_kind (entry);
+      flags  = ide_code_index_entry_get_flags (entry);
+
+      ide_code_index_entry_get_range (entry,
+                                      &begin_line,
+                                      &begin_line_offset,
+                                      NULL,
+                                      NULL);
+
+      /* In our index lines and offsets are 1-based */
+      if (key != NULL)
+        ide_persistent_map_builder_insert (map_builder,
+                                           key,
+                                           g_variant_new ("(uuuu)",
+                                             file_id,
+                                             begin_line, begin_line_offset,
+                                             flags),
+                                           flags & IDE_SYMBOL_FLAGS_IS_DEFINITION);
+      if (name != NULL)
+        dzl_fuzzy_index_builder_insert (fuzzy_builder,
+                                        name,
+                                        g_variant_new ("(uuuuu)",
+                                          file_id,
+                                          begin_line, begin_line_offset,
+                                          flags, kind),
+                                        0);
     }
 }
 
