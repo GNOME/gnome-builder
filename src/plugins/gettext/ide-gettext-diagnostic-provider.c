@@ -256,13 +256,13 @@ diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface)
 }
 
 static void
-ide_gettext_diagnostic_provider_finalize (GObject *object)
+ide_gettext_diagnostic_provider_dispose (GObject *object)
 {
   IdeGettextDiagnosticProvider *self = IDE_GETTEXT_DIAGNOSTIC_PROVIDER (object);
 
   g_clear_object (&self->diagnostics_cache);
 
-  G_OBJECT_CLASS (ide_gettext_diagnostic_provider_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_gettext_diagnostic_provider_parent_class)->dispose (object);
 }
 
 static void
@@ -270,7 +270,7 @@ ide_gettext_diagnostic_provider_class_init (IdeGettextDiagnosticProviderClass *k
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_gettext_diagnostic_provider_finalize;
+  object_class->dispose = ide_gettext_diagnostic_provider_dispose;
 }
 
 static void
