@@ -189,6 +189,7 @@ ide_search_entry_unfocus (IdeSearchEntry *self)
   g_signal_emit_by_name (self, "hide-suggestions");
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
   gtk_widget_grab_focus (toplevel);
+  gtk_entry_set_text (GTK_ENTRY (self), "");
 }
 
 static void
