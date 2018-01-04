@@ -815,12 +815,7 @@ ide_buffer_queue_modify_check (IdeBuffer *self)
 
   g_assert (IDE_IS_BUFFER (self));
 
-  if (priv->check_modified_timeout != 0)
-    {
-      g_source_remove (priv->check_modified_timeout);
-      priv->check_modified_timeout = 0;
-    }
-
+  dzl_clear_source (&self->check_modified_timeout);
   priv->check_modified_timeout = g_timeout_add_seconds (MODIFICATION_TIMEOUT_SECS,
                                                         do_check_modified,
                                                         self);
