@@ -146,7 +146,6 @@ get_unsaved_file (IdeGettextDiagnosticProvider *self,
   g_autoptr(GPtrArray) array = NULL;
   IdeUnsavedFiles *unsaved_files;
   IdeContext *context;
-  guint i;
 
   g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
   g_assert (IDE_IS_FILE (file));
@@ -155,7 +154,7 @@ get_unsaved_file (IdeGettextDiagnosticProvider *self,
   unsaved_files = ide_context_get_unsaved_files (context);
   array = ide_unsaved_files_to_array (unsaved_files);
 
-  for (i = 0; i < array->len; i++)
+  for (guint i = 0; i < array->len; i++)
     {
       IdeUnsavedFile *unsaved_file = g_ptr_array_index (array, i);
       GFile *ufile = ide_unsaved_file_get_file (unsaved_file);
@@ -205,8 +204,10 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   IdeGettextDiagnostics *cached;
   g_autoptr(GTask) task = NULL;
 
-  g_return_if_fail (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
+  g_assert (IDE_IS_FILE (file));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_gettext_diagnostic_provider_diagnose_async);
@@ -402,13 +403,14 @@ populate_cache (DzlTaskCache  *cache,
   IdeFile *file = (IdeFile *)key;
   GCancellable *cancellable;
   g_autoptr(GError) error = NULL;
-  GPtrArray *args;
+  g_autoptr(GPtrArray) args = NULL;
 
   g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_FILE (file));
   g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
 
   cancellable = g_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (NULL == (unsaved_file = get_unsaved_file (self, file)))
     {
@@ -467,8 +469,6 @@ populate_cache (DzlTaskCache  *cache,
                                   | G_SUBPROCESS_FLAGS_STDOUT_PIPE
                                   | G_SUBPROCESS_FLAGS_STDERR_PIPE,
                                   &error);
-
-  g_ptr_array_free (args, TRUE);
 
   if (subprocess == NULL)
     {
