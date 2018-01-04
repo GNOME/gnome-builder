@@ -1437,8 +1437,10 @@ ide_buffer_dispose (GObject *object)
 
   g_clear_pointer (&priv->diagnostics_line_cache, g_hash_table_unref);
   g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
+  g_clear_object (&priv->diagnostics_manager_signals);
   g_clear_object (&priv->addins);
   g_clear_object (&priv->highlight_engine);
+  g_clear_object (&priv->formatter_adapter);
   g_clear_object (&priv->rename_provider_adapter);
   g_clear_object (&priv->symbol_resolvers_adapter);
 
@@ -2809,6 +2811,7 @@ ide_buffer_reclaim_timeout (gpointer data)
 
   g_clear_object (&priv->rename_provider_adapter);
   g_clear_object (&priv->symbol_resolvers_adapter);
+  g_clear_object (&priv->formatter_adapter);
 
   buffer_manager = ide_context_get_buffer_manager (priv->context);
 
