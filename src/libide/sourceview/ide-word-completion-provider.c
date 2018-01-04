@@ -35,7 +35,6 @@ typedef struct
   GtkSourceSearchSettings       *search_settings;
   GtkSourceCompletionContext    *context;
   IdeWordCompletionResults      *results;
-  GtkSourceCompletionActivation  activation;
   GHashTable                    *all_proposals;
 
   GIcon                         *icon;
@@ -49,6 +48,7 @@ typedef struct
   gint                           direction;
   gint                           word_line;
   guint                          minimum_word_size;
+  GtkSourceCompletionActivation  activation;
 
   guint                          wrap_around_flag : 1;
 
@@ -615,7 +615,7 @@ ide_word_completion_provider_get_property (GObject    *object,
 
       case PROP_PRIORITY:
         g_value_set_int (value, priv->priority);
-	break;
+        break;
 
       case PROP_ACTIVATION:
         g_value_set_flags (value, priv->activation);

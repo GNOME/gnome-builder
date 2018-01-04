@@ -26,12 +26,11 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_WORD_COMPLETION_ITEM (ide_word_completion_item_get_type ())
 
-G_DECLARE_FINAL_TYPE (IdeWordCompletionItem, ide_word_completion_item,
-                      IDE, WORD_COMPLETION_ITEM, IdeCompletionItem)
+G_DECLARE_FINAL_TYPE (IdeWordCompletionItem, ide_word_completion_item, IDE, WORD_COMPLETION_ITEM, IdeCompletionItem)
 
-IdeWordCompletionItem *ide_word_completion_item_new        (const gchar *word,
-                                                            gint         offset,
-                                                            GIcon       *icon);
+IdeWordCompletionItem *ide_word_completion_item_new        (const gchar           *word,
+                                                            gint                   offset,
+                                                            GIcon                 *icon);
 const gchar           *ide_word_completion_item_get_word   (IdeWordCompletionItem *proposal);
 gint                   ide_word_completion_item_get_offset (IdeWordCompletionItem *proposal);
 
