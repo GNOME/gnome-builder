@@ -719,6 +719,7 @@ ide_source_snippet_finish (IdeSourceSnippet *self)
 
   g_clear_object (&self->mark_begin);
   g_clear_object (&self->mark_end);
+  g_clear_object (&self->buffer);
 }
 
 void
@@ -1119,6 +1120,7 @@ ide_source_snippet_finalize (GObject *object)
 
   g_clear_pointer (&self->description, g_free);
   g_clear_pointer (&self->trigger, g_free);
+  g_clear_object (&self->buffer);
 
   G_OBJECT_CLASS (ide_source_snippet_parent_class)->finalize (object);
 
