@@ -71,9 +71,9 @@ parse_request_free (gpointer data)
 {
   ParseRequest *request = data;
 
-  g_free (request->source_filename);
-  g_strfreev (request->command_line_args);
-  g_ptr_array_unref (request->unsaved_files);
+  g_clear_pointer (&request->source_filename, g_free);
+  g_clear_pointer (&request->command_line_args, g_strfreev);
+  g_clear_pointer (&request->unsaved_files, g_ptr_array_unref);
   g_clear_object (&request->file);
   g_slice_free (ParseRequest, request);
 }
@@ -186,7 +186,8 @@ static void
 clear_unsaved_file (gpointer data)
 {
   struct CXUnsavedFile *uf = data;
-  g_free ((gchar *)uf->Filename);
+
+  g_clear_pointer (&uf->Filename, g_free);
 }
 
 static const gchar *
