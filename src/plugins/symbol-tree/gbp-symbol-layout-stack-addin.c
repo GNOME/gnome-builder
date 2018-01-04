@@ -41,7 +41,6 @@ struct _GbpSymbolLayoutStackAddin {
 typedef struct
 {
   GPtrArray         *resolvers;
-
   IdeBuffer         *buffer;
   IdeSourceLocation *location;
 } SymbolResolverTaskData;
@@ -51,6 +50,8 @@ symbol_resolver_task_data_free (SymbolResolverTaskData *data)
 {
   g_assert (data != NULL);
   g_assert (data->resolvers != NULL);
+  g_assert (data->buffer != NULL);
+  g_assert (IDE_IS_BUFFER (data->buffer));
 
   g_clear_pointer (&data->resolvers, g_ptr_array_unref);
   g_clear_object (&data->buffer);
@@ -91,14 +92,21 @@ gbp_symbol_layout_stack_addin_find_scope_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   symbol = ide_symbol_resolver_find_nearest_scope_finish (symbol_resolver, result, &error);
+  g_assert (symbol != NULL || error != NULL);
 
   self = g_task_get_source_object (task);
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+
   data = g_task_get_task_data (task);
+  g_assert (data != NULL);
+  g_assert (IDE_IS_BUFFER (data->buffer));
+  g_assert (data->resolvers != NULL);
+  g_assert (data->resolvers->len > 0);
 
   g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
 
   /* If symbol is not found and symbol resolvers are left try those */
-  if (symbol == NULL && data->resolvers->len)
+  if (symbol == NULL && data->resolvers->len > 0)
     {
       IdeSymbolResolver *resolver;
 
