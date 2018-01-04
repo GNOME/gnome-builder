@@ -366,15 +366,19 @@ ide_code_index_index_query_cb (GObject       *object,
   IdeCodeIndexIndex *self;
   DzlFuzzyIndex *index = (DzlFuzzyIndex *)object;
   g_autoptr(GTask) task = (GTask *)user_data;
-  PopulateTaskData *data;
   g_autoptr(GListModel) list = NULL;
   g_autoptr(GError) error = NULL;
+  PopulateTaskData *data;
 
   g_assert (DZL_IS_FUZZY_INDEX (index));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  g_assert (IDE_IS_CODE_INDEX_INDEX (self));
+
   data = g_task_get_task_data (task);
+  g_assert (data != NULL);
 
   if (NULL != (list = dzl_fuzzy_index_query_finish (index, result, &error)))
     {
@@ -422,15 +426,17 @@ ide_code_index_index_query_cb (GObject       *object,
        * Extract match from heap with max score, get next item from the list from which
        * the max score match came from and insert that into heap.
        */
-      while (data->max_results && data->fuzzy_matches->len)
+      while (data->max_results > 0 && data->fuzzy_matches->len > 0)
         {
           IdeCodeIndexSearchResult *item;
           FuzzyMatch fuzzy_match;
 
           dzl_heap_extract (data->fuzzy_matches, &fuzzy_match);
+
           item = ide_code_index_index_new_search_result (self, &fuzzy_match);
           if (item != NULL)
             g_ptr_array_add (results, item);
+
           data->max_results--;
 
           g_clear_object (&fuzzy_match.match);
@@ -535,30 +541,29 @@ ide_code_index_index_populate_finish (IdeCodeIndexIndex *self,
                                       GAsyncResult      *result,
                                       GError           **error)
 {
-  GTask *task = (GTask *)result;
+  g_return_val_if_fail (IDE_IS_CODE_INDEX_INDEX (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
-
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 IdeSymbol *
 ide_code_index_index_lookup_symbol (IdeCodeIndexIndex     *self,
                                     const gchar           *key)
 {
+  g_autoptr(IdeSourceLocation) declaration = NULL;
+  g_autoptr(IdeSourceLocation) definition = NULL;
+  g_autoptr(IdeFile) file = NULL;
   g_autofree gchar *name = NULL;
   IdeSymbolKind kind = IDE_SYMBOL_NONE;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
   DirectoryIndex *dir_index;
   DzlFuzzyIndex *symbol_names = NULL;
-  guint32 file_id =0;
+  const gchar *path;
+  guint32 file_id = 0;
   guint32 line = 0;
   guint32 line_offset = 0;
   gchar num[20];
-  const gchar *path;
-  g_autoptr(IdeSourceLocation) declaration = NULL;
-  g_autoptr(IdeSourceLocation) definition = NULL;
-  g_autoptr(IdeFile) file = NULL;
 
   g_return_val_if_fail (IDE_IS_CODE_INDEX_INDEX (self), NULL);
 
@@ -586,7 +591,7 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex     *self,
         break;
     }
 
-  if (!file_id)
+  if (file_id == 0)
     {
       g_debug ("symbol location not found");
       return NULL;

@@ -42,14 +42,16 @@ populate_cb (GObject           *object,
 {
   IdeCodeIndexIndex *index = (IdeCodeIndexIndex *)object;
   g_autoptr(GTask) task = user_data;
-  GPtrArray *results;
+  g_autoptr(GPtrArray) results = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CODE_INDEX_INDEX (index));
   g_assert (G_IS_TASK (task));
 
-  if (NULL != (results = ide_code_index_index_populate_finish (index, result, &error)))
-    g_task_return_pointer (task, results, (GDestroyNotify)g_ptr_array_unref);
+  results = ide_code_index_index_populate_finish (index, result, &error);
+
+  if (results != NULL)
+    g_task_return_pointer (task, g_steal_pointer (&results), (GDestroyNotify)g_ptr_array_unref);
   else
     g_task_return_error (task, g_steal_pointer (&error));
 }
