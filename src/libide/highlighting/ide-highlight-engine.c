@@ -26,6 +26,7 @@
 #include "ide-debug.h"
 #include "ide-types.h"
 
+#include "buffers/ide-buffer-private.h"
 #include "highlighting/ide-highlight-engine.h"
 #include "plugins/ide-extension-adapter.h"
 
@@ -66,7 +67,6 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
-static GQuark      engineQuark;
 
 static gboolean
 get_invalidation_area (GtkTextIter *begin,
@@ -284,7 +284,7 @@ ide_highlight_engine_apply_style (const GtkTextIter *begin,
   GtkTextTag *tag;
 
   buffer = gtk_text_iter_get_buffer (begin);
-  self = g_object_get_qdata (G_OBJECT (buffer), engineQuark);
+  self = _ide_buffer_get_highlight_engine (IDE_BUFFER (buffer));
   tag = get_tag_from_style (self, style_name, TRUE);
 
   gtk_text_buffer_apply_tag (buffer, tag, begin, end);
@@ -655,8 +655,6 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
 
   self->buffer = buffer;
 
-  g_object_set_qdata (G_OBJECT (buffer), engineQuark, self);
-
   gtk_text_buffer_get_bounds (text_buffer, &begin, &end);
 
   self->invalid_begin = gtk_text_buffer_create_mark (text_buffer, NULL, &begin, TRUE);
@@ -684,12 +682,11 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (DZL_IS_SIGNAL_GROUP (group));
+  g_assert (GTK_IS_TEXT_BUFFER (self->buffer));
 
   text_buffer = GTK_TEXT_BUFFER (self->buffer);
 
   dzl_clear_source (&self->work_timeout);
-
-  g_object_set_qdata (G_OBJECT (text_buffer), engineQuark, NULL);
 
   tag_table = gtk_text_buffer_get_tag_table (text_buffer);
 
@@ -877,8 +874,6 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
-
-  engineQuark = g_quark_from_string ("IDE_HIGHLIGHT_ENGINE");
 }
 
 static void
