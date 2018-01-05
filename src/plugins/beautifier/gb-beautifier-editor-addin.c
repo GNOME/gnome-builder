@@ -414,13 +414,16 @@ gb_beautifier_editor_addin_view_set (IdeEditorAddin *addin,
       if (view == self->current_view)
         return;
 
-      if (view != NULL)
-        cleanup_view_cb (GTK_WIDGET (view), self);
+      cleanup_view_cb (GTK_WIDGET (self->current_view), self);
     }
 
-  self->current_view = view;
   if (view != NULL)
-    setup_view_cb (GTK_WIDGET (view), self);
+    {
+      dzl_set_weak_pointer (&self->current_view, view);
+      setup_view_cb (GTK_WIDGET (view), self);
+    }
+  else
+    self->current_view = NULL;
 }
 
 static void
