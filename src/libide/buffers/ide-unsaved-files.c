@@ -174,7 +174,6 @@ hash_uri (const gchar *uri)
   GChecksum *checksum;
   gchar *ret;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (uri != NULL);
 
   checksum = g_checksum_new (G_CHECKSUM_SHA1);
