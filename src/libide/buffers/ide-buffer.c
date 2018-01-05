@@ -3305,3 +3305,13 @@ ide_buffer_get_failure (IdeBuffer *self)
 
   return priv->failure;
 }
+
+IdeHighlightEngine *
+_ide_buffer_get_highlight_engine (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  return priv->highlight_engine;
+}
