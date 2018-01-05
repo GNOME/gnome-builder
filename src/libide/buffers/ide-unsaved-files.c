@@ -47,6 +47,7 @@ typedef struct
 struct _IdeUnsavedFiles
 {
   IdeObject  parent_instance;
+  GMutex     mutex;
   GPtrArray *unsaved_files;
   gint64     sequence;
 };
@@ -58,6 +59,10 @@ typedef struct
 } AsyncState;
 
 G_DEFINE_TYPE (IdeUnsavedFiles, ide_unsaved_files, IDE_TYPE_OBJECT)
+
+static void ide_unsaved_files_update_locked (IdeUnsavedFiles *self,
+                                             GFile           *file,
+                                             GBytes          *content);
 
 gchar *
 get_drafts_directory (IdeContext *context)
@@ -85,7 +90,7 @@ async_state_free (gpointer data)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
-  if (state)
+  if (state != NULL)
     {
       g_clear_pointer (&state->drafts_directory, g_free);
       g_clear_pointer (&state->unsaved_files, g_ptr_array_unref);
@@ -186,7 +191,6 @@ hash_uri (const gchar *uri)
 static gchar *
 get_buffers_dir (IdeContext *context)
 {
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONTEXT (context));
 
   return ide_context_cache_filename (context, "buffers", NULL);
@@ -292,15 +296,17 @@ ide_unsaved_files_save_async (IdeUnsavedFiles     *self,
   g_assert (state->unsaved_files != NULL);
   g_assert (state->drafts_directory != NULL);
 
+  g_mutex_lock (&self->mutex);
+
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
-      UnsavedFile *uf;
-      UnsavedFile *uf_copy;
+      UnsavedFile *uf = g_ptr_array_index (self->unsaved_files, i);
+      UnsavedFile *uf_copy = unsaved_file_copy (uf);
 
-      uf = g_ptr_array_index (self->unsaved_files, i);
-      uf_copy = unsaved_file_copy (uf);
       g_ptr_array_add (state->unsaved_files, uf_copy);
     }
+
+  g_mutex_unlock (&self->mutex);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_unsaved_files_save_async);
@@ -440,33 +446,36 @@ ide_unsaved_files_restore_async (IdeUnsavedFiles     *files,
 }
 
 gboolean
-ide_unsaved_files_restore_finish (IdeUnsavedFiles  *files,
+ide_unsaved_files_restore_finish (IdeUnsavedFiles  *self,
                                   GAsyncResult     *result,
                                   GError          **error)
 {
   AsyncState *state;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
-  g_return_val_if_fail (IDE_IS_UNSAVED_FILES (files), FALSE);
+  g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   state = g_task_get_task_data (G_TASK (result));
   g_assert (state != NULL);
   g_assert (state->unsaved_files != NULL);
 
+  g_mutex_lock (&self->mutex);
+
   for (guint i = 0; i < state->unsaved_files->len; i++)
     {
       const UnsavedFile *uf = g_ptr_array_index (state->unsaved_files, i);
-
-      ide_unsaved_files_update (files, uf->file, uf->content);
+      ide_unsaved_files_update_locked (self, uf->file, uf->content);
     }
+
+  g_mutex_unlock (&self->mutex);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
-ide_unsaved_files_move_to_front (IdeUnsavedFiles *self,
-                                 guint            index)
+ide_unsaved_files_move_to_front_locked (IdeUnsavedFiles *self,
+                                        guint            index)
 {
   UnsavedFile *new_front;
   UnsavedFile *old_front;
@@ -490,8 +499,8 @@ ide_unsaved_files_move_to_front (IdeUnsavedFiles *self,
 }
 
 static void
-ide_unsaved_files_remove_draft (IdeUnsavedFiles *self,
-                                GFile           *file)
+ide_unsaved_files_remove_draft_locked (IdeUnsavedFiles *self,
+                                       GFile           *file)
 {
   IdeContext *context;
   g_autofree gchar *drafts_directory = NULL;
@@ -528,17 +537,21 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
   g_return_if_fail (G_IS_FILE (file));
 
+  g_mutex_lock (&self->mutex);
+
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
       const UnsavedFile *unsaved = g_ptr_array_index (self->unsaved_files, i);
 
       if (g_file_equal (file, unsaved->file))
         {
-          ide_unsaved_files_remove_draft (self, file);
+          ide_unsaved_files_remove_draft_locked (self, file);
           g_ptr_array_remove_index_fast (self->unsaved_files, i);
-          IDE_EXIT;
+          break;
         }
     }
+
+  g_mutex_unlock (&self->mutex);
 
   IDE_EXIT;
 }
@@ -592,10 +605,10 @@ setup_tempfile (IdeContext  *context,
     *temp_path_out = g_steal_pointer (&tmpl_path);
 }
 
-void
-ide_unsaved_files_update (IdeUnsavedFiles *self,
-                          GFile           *file,
-                          GBytes          *content)
+static void
+ide_unsaved_files_update_locked (IdeUnsavedFiles *self,
+                                 GFile           *file,
+                                 GBytes          *content)
 {
   UnsavedFile *unsaved;
   IdeContext *context;
@@ -604,13 +617,13 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
   g_return_if_fail (G_IS_FILE (file));
 
-  self->sequence++;
-
   if (content == NULL)
     {
       ide_unsaved_files_remove (self, file);
       return;
     }
+
+  self->sequence++;
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
@@ -633,8 +646,8 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
            * the beginning of the array to increase its chances of being the
            * first entry we check.
            */
-          if (i != 0)
-            ide_unsaved_files_move_to_front (self, i);
+          if (i > 0)
+            ide_unsaved_files_move_to_front_locked (self, i);
 
           return;
         }
@@ -647,6 +660,19 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
   setup_tempfile (context, file, &unsaved->temp_fd, &unsaved->temp_path);
 
   g_ptr_array_add (self->unsaved_files, unsaved);
+}
+
+void
+ide_unsaved_files_update (IdeUnsavedFiles *self,
+                          GFile           *file,
+                          GBytes          *content)
+{
+  g_assert (IDE_IS_UNSAVED_FILES (self));
+  g_assert (G_IS_FILE (file));
+
+  g_mutex_lock (&self->mutex);
+  ide_unsaved_files_update_locked (self, file, content);
+  g_mutex_unlock (&self->mutex);
 }
 
 /**
@@ -674,16 +700,21 @@ ide_unsaved_files_to_array (IdeUnsavedFiles *self)
 
   ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_unsaved_file_unref);
 
+  g_mutex_lock (&self->mutex);
+
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
-      const UnsavedFile *uf;
-      IdeUnsavedFile *item;
+      const UnsavedFile *uf = g_ptr_array_index (self->unsaved_files, i);
+      g_autoptr(IdeUnsavedFile) item = NULL;
 
-      uf = g_ptr_array_index (self->unsaved_files, i);
-      item = _ide_unsaved_file_new (uf->file, uf->content, uf->temp_path, uf->sequence);
-
+      item = _ide_unsaved_file_new (uf->file,
+                                    uf->content,
+                                    uf->temp_path,
+                                    uf->sequence);
       g_ptr_array_add (ar, g_steal_pointer (&item));
     }
+
+  g_mutex_unlock (&self->mutex);
 
   return g_steal_pointer (&ar);
 }
@@ -692,19 +723,28 @@ gboolean
 ide_unsaved_files_contains (IdeUnsavedFiles *self,
                             GFile           *file)
 {
+  gboolean ret = FALSE;
+
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
+
+  g_mutex_lock (&self->mutex);
 
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
       UnsavedFile *uf = g_ptr_array_index (self->unsaved_files, i);
 
       if (g_file_equal (uf->file, file))
-        return TRUE;
+        {
+          ret = TRUE;
+          break;
+        }
     }
 
-  return FALSE;
+  g_mutex_unlock (&self->mutex);
+
+  return ret;
 }
 
 /**
@@ -714,6 +754,9 @@ ide_unsaved_files_contains (IdeUnsavedFiles *self,
  * file content is registered, %NULL is returned.
  *
  * Returns: (nullable) (transfer full): An #IdeUnsavedFile or %NULL.
+ *
+ * Thread safety: you may call this from any thread, as long as you
+ *   hold a reference to @self.
  */
 IdeUnsavedFile *
 ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
@@ -723,7 +766,6 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
 
 #ifdef IDE_ENABLE_TRACE
@@ -732,6 +774,8 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
     IDE_TRACE_MSG ("%s", path);
   }
 #endif
+
+  g_mutex_lock (&self->mutex);
 
   for (guint i = 0; i < self->unsaved_files->len; i++)
     {
@@ -744,16 +788,23 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
         }
     }
 
+  g_mutex_unlock (&self->mutex);
+
   IDE_RETURN (ret);
 }
 
 gint64
 ide_unsaved_files_get_sequence (IdeUnsavedFiles *self)
 {
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), -1);
+  gint64 ret;
+
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), -1);
 
-  return self->sequence;
+  g_mutex_lock (&self->mutex);
+  ret = self->sequence;
+  g_mutex_unlock (&self->mutex);
+
+  return ret;
 }
 
 static void
@@ -795,6 +846,7 @@ ide_unsaved_files_finalize (GObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
+  g_mutex_clear (&self->mutex);
   g_clear_pointer (&self->unsaved_files, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_unsaved_files_parent_class)->finalize (object);
@@ -814,6 +866,7 @@ ide_unsaved_files_class_init (IdeUnsavedFilesClass *klass)
 static void
 ide_unsaved_files_init (IdeUnsavedFiles *self)
 {
+  g_mutex_init (&self->mutex);
   self->unsaved_files = g_ptr_array_new_with_free_func (unsaved_file_free);
 }
 
@@ -827,6 +880,8 @@ ide_unsaved_files_clear (IdeUnsavedFiles *self)
 
   ar = ide_unsaved_files_to_array (self);
 
+  g_mutex_lock (&self->mutex);
+
   for (guint i = 0; i < ar->len; i++)
     {
       IdeUnsavedFile *uf = g_ptr_array_index (ar, i);
@@ -834,4 +889,6 @@ ide_unsaved_files_clear (IdeUnsavedFiles *self)
 
       ide_unsaved_files_remove (self, file);
     }
+
+  g_mutex_unlock (&self->mutex);
 }
