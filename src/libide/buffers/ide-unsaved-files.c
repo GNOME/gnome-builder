@@ -28,6 +28,7 @@
 #include "ide-debug.h"
 #include "ide-global.h"
 
+#include "application/ide-application.h"
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
 #include "projects/ide-project.h"
@@ -64,6 +65,9 @@ get_drafts_directory (IdeContext *context)
   IdeProject *project;
   const gchar *project_name;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CONTEXT (context));
+
   project = ide_context_get_project (context);
   project_name = ide_project_get_id (project);
 
@@ -79,6 +83,8 @@ async_state_free (gpointer data)
 {
   AsyncState *state = data;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+
   if (state)
     {
       g_clear_pointer (&state->drafts_directory, g_free);
@@ -92,7 +98,9 @@ unsaved_file_free (gpointer data)
 {
   UnsavedFile *uf = data;
 
-  if (uf)
+  g_assert (IDE_IS_MAIN_THREAD ());
+
+  if (uf != NULL)
     {
       g_clear_object (&uf->file);
       g_clear_pointer (&uf->content, g_bytes_unref);
@@ -118,6 +126,9 @@ unsaved_file_copy (const UnsavedFile *uf)
 {
   UnsavedFile *copy;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (uf != NULL);
+
   copy = g_slice_new0 (UnsavedFile);
   copy->file = g_object_ref (uf->file);
   copy->content = g_bytes_ref (uf->content);
@@ -132,6 +143,7 @@ unsaved_file_save (UnsavedFile  *uf,
 {
   g_autoptr(GFile) file = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (uf != NULL);
   g_assert (uf->content != NULL);
   g_assert (path != NULL);
@@ -162,6 +174,9 @@ hash_uri (const gchar *uri)
   GChecksum *checksum;
   gchar *ret;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (uri != NULL);
+
   checksum = g_checksum_new (G_CHECKSUM_SHA1);
   g_checksum_update (checksum, (guchar *)uri, strlen (uri));
   ret = g_strdup (g_checksum_get_string (checksum));
@@ -173,6 +188,7 @@ hash_uri (const gchar *uri)
 static gchar *
 get_buffers_dir (IdeContext *context)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONTEXT (context));
 
   return ide_context_cache_filename (context, "buffers", NULL);
@@ -245,6 +261,7 @@ async_state_new (IdeUnsavedFiles *files)
   IdeContext *context;
   AsyncState *state;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_UNSAVED_FILES (files));
 
   context = ide_object_get_context (IDE_OBJECT (files));
@@ -267,6 +284,7 @@ ide_unsaved_files_save_async (IdeUnsavedFiles     *self,
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -304,6 +322,7 @@ ide_unsaved_files_save_finish (IdeUnsavedFiles  *files,
 
   IDE_ENTRY;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (files), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
@@ -368,7 +387,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
       g_autofree gchar *hash = NULL;
       g_autofree gchar *path = NULL;
       UnsavedFile *unsaved;
-      gsize data_len;
+      gsize data_len = 0;
 
       line[line_len] = '\0';
 
@@ -409,9 +428,10 @@ ide_unsaved_files_restore_async (IdeUnsavedFiles     *files,
   g_autoptr(GTask) task = NULL;
   AsyncState *state;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_UNSAVED_FILES (files));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_return_if_fail (callback);
+  g_return_if_fail (callback != NULL);
 
   state = async_state_new (files);
 
@@ -428,6 +448,7 @@ ide_unsaved_files_restore_finish (IdeUnsavedFiles  *files,
 {
   AsyncState *state;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (files), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
@@ -452,7 +473,11 @@ ide_unsaved_files_move_to_front (IdeUnsavedFiles *self,
   UnsavedFile *new_front;
   UnsavedFile *old_front;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
+
+  if (index == 0)
+    return;
 
   new_front = g_ptr_array_index (self->unsaved_files, index);
   old_front = g_ptr_array_index (self->unsaved_files, 0);
@@ -478,6 +503,7 @@ ide_unsaved_files_remove_draft (IdeUnsavedFiles *self,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_UNSAVED_FILES (self));
   g_assert (G_IS_FILE (file));
 
@@ -500,6 +526,7 @@ ide_unsaved_files_remove (IdeUnsavedFiles *self,
 {
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
   g_return_if_fail (G_IS_FILE (file));
 
@@ -530,6 +557,8 @@ setup_tempfile (IdeContext  *context,
   g_autofree gchar *tmpl_path = NULL;
   const gchar *suffix;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CONTEXT (context));
   g_assert (G_IS_FILE (file));
   g_assert (temp_fd != NULL);
   g_assert (temp_path_out != NULL);
@@ -573,6 +602,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
   UnsavedFile *unsaved;
   IdeContext *context;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
   g_return_if_fail (G_IS_FILE (file));
 
@@ -641,6 +671,7 @@ ide_unsaved_files_to_array (IdeUnsavedFiles *self)
 {
   g_autoptr(GPtrArray) ar = NULL;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
 
   ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_unsaved_file_unref);
@@ -663,6 +694,7 @@ gboolean
 ide_unsaved_files_contains (IdeUnsavedFiles *self,
                             GFile           *file)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
@@ -693,6 +725,7 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
 
   IDE_ENTRY;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), NULL);
 
 #ifdef IDE_ENABLE_TRACE
@@ -719,6 +752,7 @@ ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,
 gint64
 ide_unsaved_files_get_sequence (IdeUnsavedFiles *self)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), -1);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), -1);
 
   return self->sequence;
@@ -730,6 +764,7 @@ ide_unsaved_files_set_context (IdeObject  *object,
 {
   IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_UNSAVED_FILES (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
@@ -760,6 +795,8 @@ ide_unsaved_files_finalize (GObject *object)
 {
   IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+
   g_clear_pointer (&self->unsaved_files, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_unsaved_files_parent_class)->finalize (object);
@@ -787,6 +824,7 @@ ide_unsaved_files_clear (IdeUnsavedFiles *self)
 {
   g_autoptr(GPtrArray) ar = NULL;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
 
   ar = ide_unsaved_files_to_array (self);
