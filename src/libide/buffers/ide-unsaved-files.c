@@ -143,7 +143,6 @@ unsaved_file_save (UnsavedFile  *uf,
 {
   g_autoptr(GFile) file = NULL;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (uf != NULL);
   g_assert (uf->content != NULL);
   g_assert (path != NULL);
