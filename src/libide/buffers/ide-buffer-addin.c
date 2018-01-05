@@ -20,6 +20,7 @@
 
 #include <libpeas/peas.h>
 
+#include "application/ide-application.h"
 #include "buffers/ide-buffer-addin.h"
 #include "buffers/ide-buffer-private.h"
 
@@ -59,6 +60,7 @@ void
 ide_buffer_addin_load (IdeBufferAddin *self,
                        IdeBuffer      *buffer)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER_ADDIN (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
@@ -83,6 +85,7 @@ void
 ide_buffer_addin_unload (IdeBufferAddin *self,
                          IdeBuffer      *buffer)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER_ADDIN (self));
   g_return_if_fail (IDE_IS_BUFFER (buffer));
 
@@ -110,6 +113,7 @@ ide_buffer_addin_find_by_module_name (IdeBuffer   *buffer,
   PeasExtensionSet *set;
   PeasExtension *ret = NULL;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (buffer), NULL);
   g_return_val_if_fail (module_name != NULL, NULL);
 
