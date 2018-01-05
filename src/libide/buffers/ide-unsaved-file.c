@@ -20,7 +20,14 @@
 
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "buffers/ide-unsaved-file.h"
+
+/*
+ * This type is meant to be created and then immutable after that.
+ * So you can create it from the main thread, and then pass it to
+ * any other thread to do the work.
+ */
 
 G_DEFINE_BOXED_TYPE (IdeUnsavedFile, ide_unsaved_file,
                      ide_unsaved_file_ref, ide_unsaved_file_unref)
@@ -42,6 +49,7 @@ _ide_unsaved_file_new (GFile       *file,
 {
   IdeUnsavedFile *ret;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (G_IS_FILE (file), NULL);
   g_return_val_if_fail (content, NULL);
 
@@ -58,7 +66,8 @@ _ide_unsaved_file_new (GFile       *file,
 const gchar *
 ide_unsaved_file_get_temp_path (IdeUnsavedFile *self)
 {
-  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   return self->temp_path;
 }
@@ -73,7 +82,8 @@ ide_unsaved_file_persist (IdeUnsavedFile  *self,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (self, FALSE);
+  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (self->ref_count > 0, FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
 
   IDE_TRACE_MSG ("Saving draft to \"%s\"", self->temp_path);
@@ -95,7 +105,8 @@ ide_unsaved_file_persist (IdeUnsavedFile  *self,
 gint64
 ide_unsaved_file_get_sequence (IdeUnsavedFile *self)
 {
-  g_return_val_if_fail (self, -1);
+  g_return_val_if_fail (self != NULL, -1);
+  g_return_val_if_fail (self->ref_count > 0, -1);
 
   return self->sequence;
 }
@@ -103,7 +114,7 @@ ide_unsaved_file_get_sequence (IdeUnsavedFile *self)
 IdeUnsavedFile *
 ide_unsaved_file_ref (IdeUnsavedFile *self)
 {
-  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (self->ref_count > 0, NULL);
 
   g_atomic_int_inc (&self->ref_count);
@@ -114,7 +125,7 @@ ide_unsaved_file_ref (IdeUnsavedFile *self)
 void
 ide_unsaved_file_unref (IdeUnsavedFile *self)
 {
-  g_return_if_fail (self);
+  g_return_if_fail (self != NULL);
   g_return_if_fail (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
@@ -137,7 +148,8 @@ ide_unsaved_file_unref (IdeUnsavedFile *self)
 GBytes *
 ide_unsaved_file_get_content (IdeUnsavedFile *self)
 {
-  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   return self->content;
 }
@@ -152,7 +164,8 @@ ide_unsaved_file_get_content (IdeUnsavedFile *self)
 GFile *
 ide_unsaved_file_get_file (IdeUnsavedFile *self)
 {
-  g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   return self->file;
 }
