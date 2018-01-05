@@ -19,25 +19,14 @@
 #define G_LOG_DOMAIN "beautifier-config"
 
 #include <string.h>
+
+#include <glib/gstdio.h>
 #include <ide.h>
 #include <libpeas/peas.h>
 
+#include "gb-beautifier-helper.h"
 #include "gb-beautifier-private.h"
 #include "gb-beautifier-config.h"
-
-static const gchar *
-get_datadir (void)
-{
-  PeasEngine *engine;
-  PeasPluginInfo *info;
-  const gchar *datadir = NULL;
-
-  engine = peas_engine_get_default ();
-  if (NULL != (info = peas_engine_get_plugin_info (engine, "beautifier_plugin")))
-    datadir = peas_plugin_info_get_data_dir (info);
-
-  return datadir;
-}
 
 static void
 config_entry_clear_func (gpointer data)
@@ -46,15 +35,13 @@ config_entry_clear_func (gpointer data)
 
   g_assert (entry != NULL);
 
-  /* Some entries don't have a config file */
-  if (entry->config_file != NULL)
-    g_object_unref (entry->config_file);
+  g_clear_object (&entry->config_file);
 
   g_free (entry->name);
   g_free (entry->lang_id);
 
   if (entry->command_args != NULL)
-    g_ptr_array_unref (entry->command_args);
+    g_array_unref (entry->command_args);
 }
 
 static void
@@ -67,6 +54,16 @@ map_entry_clear_func (gpointer data)
   g_free (entry->lang_id);
   g_free (entry->mapped_lang_id);
   g_free (entry->default_profile);
+}
+
+static void
+command_arg_clear_func (gpointer data)
+{
+  GbBeautifierCommandArg *arg = (GbBeautifierCommandArg *)data;
+
+  g_assert (arg != NULL);
+
+  g_clear_pointer (&arg->str, g_free);
 }
 
 static gboolean
@@ -120,6 +117,34 @@ gb_beautifier_map_check_duplicates (GbBeautifierEditorAddin *self,
   return FALSE;
 }
 
+gchar *
+copy_to_tmp_file (const gchar *source_path,
+                  gboolean     is_executable)
+{
+  g_autoptr (GFile) file = NULL;
+  g_autoptr (GFile) tmp_file = NULL;
+  g_autoptr (GError) error = NULL;
+  GFileIOStream *stream;
+  gchar *tmp_path;
+
+  file = g_file_new_for_uri (source_path);
+  if (NULL == (tmp_file = g_file_new_tmp ("gnome-builder-beautifier-XXXXXX.txt", &stream, &error)) ||
+      !g_io_stream_close (G_IO_STREAM (stream), NULL, &error) ||
+      !g_file_copy (file, tmp_file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error))
+    {
+      g_warning ("beautifier plugin: error copying the gresource config file:%s",
+                 error->message);
+
+      return NULL;
+    }
+
+  tmp_path = g_file_get_path (tmp_file);
+  if (is_executable)
+    g_chmod (tmp_path, 0777);
+
+  return tmp_path;
+}
+
 static gboolean
 add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
                                   const gchar             *base_path,
@@ -132,11 +157,13 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
 {
   g_autoptr(GKeyFile) key_file = NULL;
   g_autofree gchar *ini_path = NULL;
+  g_autoptr(GFile) file = NULL;
   g_auto(GStrv) profiles = NULL;
   g_autofree gchar *default_profile = NULL;
-  GbBeautifierConfigEntry entry;
+  g_autofree gchar *data = NULL;
+  g_autoptr (GError) error = NULL;
+  gsize data_len;
   gsize nb_profiles;
-  GError *error = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!dzl_str_empty0 (base_path));
@@ -147,15 +174,19 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
   *has_default = FALSE;
   key_file = g_key_file_new ();
   ini_path = g_build_filename (base_path, real_lang_id, "config.ini", NULL);
+  if (g_str_has_prefix (ini_path, "resource://"))
+    file = g_file_new_for_uri (ini_path);
+  else
+    file = g_file_new_for_path (ini_path);
 
-  if (!g_file_test (ini_path, G_FILE_TEST_EXISTS))
+  if (!g_file_load_contents (file, NULL, &data, &data_len, NULL, &error))
     {
-      g_debug ("%s doesn't exist", ini_path);
+      g_debug ("Can't read .ini file:%s", error->message);
       return FALSE;
     }
 
-  if (!g_key_file_load_from_file (key_file, ini_path, G_KEY_FILE_NONE, &error))
-    return FALSE;
+  if (!g_key_file_load_from_data (key_file, data, data_len, G_KEY_FILE_NONE, &error))
+    goto fail;
 
   if (map_default != NULL)
     default_profile = g_strdup (map_default);
@@ -171,11 +202,11 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
           g_autofree gchar *config_path = NULL;
           g_autoptr(GFile) config_file = NULL;
           g_auto(GStrv) strv = NULL;
-          const gchar *datadir;
+          GbBeautifierConfigEntry entry = {0};
           gint argc;
           gchar *profile;
-          gboolean has_command;
-          gboolean has_command_pattern;
+          gboolean has_command = FALSE;
+          gboolean has_command_pattern = FALSE;
 
           profile = profiles [i];
           if (0 == g_strcmp0 (profile, "global"))
@@ -201,19 +232,37 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
               continue;
             }
 
+          if (has_command && has_command_pattern)
+            {
+              g_warning ("beautifier plugin: both command and command-pattern keys found");
+              g_warning ("entry \"%s\" disabled", display_name);
+              continue;
+            }
+
           if (NULL != (config_name = g_key_file_get_string (key_file, profile, "config", NULL)))
             {
               config_path = g_build_filename (base_path, real_lang_id, config_name, NULL);
-              config_file = g_file_new_for_path (config_path);
-              if (!g_file_query_exists (config_file, NULL))
+              if (g_str_has_prefix (config_path, "resource://"))
                 {
-                  g_warning ("beautifier plugin: \"%s\" does not exist", config_path);
-                  g_warning ("entry \"%s\" disabled", display_name);
-                  continue;
+                  gchar *tmp_config_path = copy_to_tmp_file (config_path, FALSE);
+
+                  g_free (config_path);
+                  config_path = tmp_config_path;
+                  config_file = g_file_new_for_path (config_path);
+                  entry.is_config_file_temp = TRUE;
+                }
+              else
+                {
+                  config_file = g_file_new_for_path (config_path);
+                  if (!g_file_query_exists (config_file, NULL))
+                    {
+                      g_warning ("beautifier plugin: \"%s\" does not exist", config_path);
+                      g_warning ("entry \"%s\" disabled", display_name);
+                      continue;
+                    }
                 }
             }
 
-          memset (&entry, 0, sizeof(GbBeautifierConfigEntry));
           if (has_command)
             {
               command = g_key_file_get_string (key_file, profile, "command", NULL);
@@ -223,6 +272,10 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
                 {
                   g_warning ("beautifier plugin: command key out of possible values");
                   g_warning ("entry \"%s\" disabled", display_name);
+
+                  if (entry.is_config_file_temp)
+                    gb_beautifier_helper_remove_temp_for_file (config_file);
+
                   continue;
                 }
             }
@@ -231,13 +284,14 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
               command = g_key_file_get_string (key_file, profile, "command-pattern", NULL);
               if (g_str_has_prefix (command, "[internal]"))
                 {
-                  datadir = get_datadir ();
-                  command_pattern = g_build_filename (datadir, "internal", command + 10, NULL);
+                  command_pattern = g_build_filename ("resource:///org/gnome/builder/plugins/beautifier_plugin/internal/",
+                                                      command + 10,
+                                                      NULL);
                 }
               else
                 command_pattern = g_strdup (command);
 
-              if (g_strstr_len (command_pattern, -1, "@c@") == NULL && config_file != NULL)
+              if (g_strstr_len (command_pattern, -1, "@c@") != NULL && config_file == NULL)
                 {
                   g_warning ("beautifier plugin: @c@ in \"%s\" command-pattern key but no config file set",
                              profile);
@@ -247,38 +301,69 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
 
               if (!g_shell_parse_argv (command_pattern, &argc, &strv, &error))
                 {
-                  g_warning ("beautifier plugin: \"%s\"", error->message);
-                  return FALSE;
+                  if (entry.is_config_file_temp)
+                    gb_beautifier_helper_remove_temp_for_file (config_file);
+
+                  goto fail;
                 }
 
               entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_NONE;
-              entry.command_args = g_ptr_array_new_with_free_func (g_free);
-              for (gint j = 0; strv [j] != NULL; ++j)
-                g_ptr_array_add (entry.command_args, g_strdup (strv [j]));
+              entry.command_args = g_array_new (FALSE, TRUE, sizeof (GbBeautifierCommandArg));
+              g_array_set_clear_func (entry.command_args, command_arg_clear_func);
 
-              g_ptr_array_add (entry.command_args, NULL);
+              for (gint j = 0; strv [j] != NULL; ++j)
+                {
+                  GbBeautifierCommandArg arg = {0};
+                  gboolean is_executable = FALSE;
+
+                  if (g_str_has_prefix (strv[j], "resource://"))
+                    {
+                      if (g_strstr_len (strv[j], -1, "internal"))
+                        is_executable = TRUE;
+
+                      if (NULL == (arg.str = copy_to_tmp_file (strv[j], is_executable)))
+                        {
+                          g_warning ("beautifier plugin: can't create tmp file for:%s", strv[j]);
+                          g_warning ("entry \"%s\" disabled", display_name);
+
+                          if (entry.is_config_file_temp)
+                            gb_beautifier_helper_remove_temp_for_file (config_file);
+
+                          gb_beautifier_helper_config_entry_remove_temp_files (&entry);
+                          config_entry_clear_func (&entry);
+
+                          continue;
+                        }
+
+                      arg.is_temp = TRUE;
+                    }
+                  else
+                    arg.str = g_strdup (strv [j]);
+
+                  g_array_append_val (entry.command_args, arg);
+                }
             }
 
-            entry.name = g_steal_pointer (&display_name);
-            entry.config_file = g_steal_pointer (&config_file);
-            entry.lang_id = g_strdup (lang_id);
+          entry.name = g_steal_pointer (&display_name);
+          entry.config_file = g_steal_pointer (&config_file);
+          entry.lang_id = g_strdup (lang_id);
 
-            if (0 == g_strcmp0 (default_profile, profile))
-              {
-                *has_default = entry.is_default = TRUE;
-                g_clear_pointer (&default_profile, g_free);
-              }
-            else
-              entry.is_default = FALSE;
+          if (0 == g_strcmp0 (default_profile, profile))
+            {
+              *has_default = entry.is_default = TRUE;
+              g_clear_pointer (&default_profile, g_free);
+            }
+          else
+            entry.is_default = FALSE;
 
-            g_array_append_val (entries, entry);
+          g_array_append_val (entries, entry);
         }
     }
 
   return TRUE;
 
 fail:
-  g_warning ("\"%s\"", error->message);
+  g_warning ("Beautifier plugin:\"%s\"", error->message);
 
   return FALSE;
 }
@@ -305,8 +390,8 @@ add_entries_from_base_path (GbBeautifierEditorAddin *self,
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   g_autoptr(GFile) parent_file = NULL;
+  g_autoptr (GError) error = NULL;
   GFileInfo *child_info;
-  GError *error = NULL;
   gboolean ret = FALSE;
   gboolean ret_has_default = FALSE;
 
@@ -316,7 +401,12 @@ add_entries_from_base_path (GbBeautifierEditorAddin *self,
   g_assert (map != NULL);
 
   *has_default = FALSE;
-  parent_file = g_file_new_for_path (base_path);
+
+  if (g_str_has_prefix (base_path, "resource://"))
+    parent_file = g_file_new_for_uri (base_path);
+  else
+    parent_file = g_file_new_for_path (base_path);
+
   if (NULL == (enumerator = g_file_enumerate_children (parent_file,
                                                        G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
                                                        G_FILE_ATTRIBUTE_STANDARD_TYPE,
@@ -384,27 +474,39 @@ gb_beautifier_config_get_map (GbBeautifierEditorAddin *self,
   GArray *map;
   g_autofree gchar *file_name = NULL;
   g_autoptr(GKeyFile) key_file = NULL;
+  g_autoptr (GFile) file = NULL;
   g_auto(GStrv) lang_ids = NULL;
+  g_autofree gchar *data = NULL;
+  g_autoptr (GError) error = NULL;
   gsize nb_lang_ids;
-  GError *error = NULL;
+  gsize data_len;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!dzl_str_empty0 (path));
 
   map = g_array_new (TRUE, TRUE, sizeof (GbBeautifierMapEntry));
   g_array_set_clear_func (map, map_entry_clear_func);
-  file_name = g_build_filename (path,
-                                "global.ini",
-                                NULL);
+
+  file_name = g_build_filename (path,  "global.ini", NULL);
+  if (g_str_has_prefix (file_name, "resource://"))
+    file = g_file_new_for_uri (file_name);
+  else
+    file = g_file_new_for_path (file_name);
 
   key_file = g_key_file_new ();
-  if (!g_file_test (file_name, G_FILE_TEST_EXISTS))
+  if (!g_file_query_exists (file, NULL))
     {
       g_debug ("%s doesn't exist", file_name);
       return map;
     }
 
-  if (g_key_file_load_from_file (key_file, file_name, G_KEY_FILE_NONE, &error) &&
+  if (!g_file_load_contents (file, NULL, &data, &data_len, NULL, NULL))
+    {
+      g_debug ("Can't read the resource file:%s", file_name);
+      return map;
+    }
+
+  if (g_key_file_load_from_data (key_file, data, data_len, G_KEY_FILE_NONE, &error) &&
       NULL != (lang_ids = g_key_file_get_groups (key_file, &nb_lang_ids)))
     {
       for (guint i = 0; i < nb_lang_ids; ++i)
@@ -433,21 +535,41 @@ gb_beautifier_config_get_map (GbBeautifierEditorAddin *self,
   return map;
 }
 
-GArray *
-gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self,
-                                  gboolean                *has_default)
+void
+gb_beautifier_entries_result_free (gpointer data)
 {
+  GbBeautifierEntriesResult *result = (GbBeautifierEntriesResult *)data;
+
+  g_return_if_fail (result != NULL);
+
+  if (result->entries != NULL)
+    g_array_unref (result->entries);
+
+  g_slice_free (GbBeautifierEntriesResult, result);
+}
+
+static void
+get_entries_worker (GTask        *task,
+                    gpointer      source_object,
+                    gpointer      task_data,
+                    GCancellable *cancellable)
+{
+  GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)source_object;
   IdeContext *context;
   IdeVcs *vcs;
   GArray *entries;
   GArray *map = NULL;
   g_autofree gchar *project_config_path = NULL;
   g_autofree gchar *user_config_path = NULL;
-  const gchar *datadir;
   g_autofree gchar *configdir = NULL;
-  gboolean ret_has_default;
+  GbBeautifierEntriesResult *result;
+  gboolean has_default = FALSE;
+  gboolean ret_has_default = FALSE;
+  //g_autoptr (GError) error = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+  g_assert (G_IS_TASK (task));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   entries = g_array_new (TRUE, TRUE, sizeof (GbBeautifierConfigEntry));
   g_array_set_clear_func (entries, config_entry_clear_func);
@@ -459,7 +581,7 @@ gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self,
                                        NULL);
   map = gb_beautifier_config_get_map (self, user_config_path);
   add_entries_from_base_path (self, user_config_path, entries, map, &ret_has_default);
-  *has_default |= ret_has_default;
+  has_default |= ret_has_default;
 
   if (map != NULL)
     g_array_free (map, TRUE);
@@ -478,24 +600,56 @@ gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self,
                                               NULL);
       map = gb_beautifier_config_get_map (self, project_config_path);
       add_entries_from_base_path (self, project_config_path, entries, map, &ret_has_default);
-      *has_default |= ret_has_default;
+      has_default |= ret_has_default;
 
       if (map != NULL)
         g_array_free (map, TRUE);
     }
 
   /* System wide config */
-  if (NULL != (datadir = get_datadir ()))
-    {
-      configdir = g_build_filename (datadir, "data", NULL);
+  configdir = g_strdup ("resource:///org/gnome/builder/plugins/beautifier_plugin/config/");
 
-      map = gb_beautifier_config_get_map (self, configdir);
-      add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
-      *has_default |= ret_has_default;
+  map = gb_beautifier_config_get_map (self, configdir);
+  add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
+  has_default |= ret_has_default;
 
-      if (map != NULL)
-        g_array_free (map, TRUE);
-    }
+  if (map != NULL)
+    g_array_free (map, TRUE);
 
-  return entries;
+  result = g_slice_new0 (GbBeautifierEntriesResult);
+  result->entries = entries;
+  result->has_default = has_default;
+
+  g_task_return_pointer (task, result, NULL);
+  // g_task_return_error (task, error);
+}
+
+void
+gb_beautifier_config_get_entries_async (GbBeautifierEditorAddin *self,
+                                        gboolean                *has_default,
+                                        GAsyncReadyCallback      callback,
+                                        GCancellable            *cancellable,
+                                        gpointer                 user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (callback != NULL);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gb_beautifier_config_get_entries_async);
+
+  g_task_run_in_thread (task, get_entries_worker);
+}
+
+GbBeautifierEntriesResult *
+gb_beautifier_config_get_entries_finish (GbBeautifierEditorAddin  *self,
+                                         GAsyncResult             *result,
+                                         GError                  **error)
+{
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+  g_assert (g_task_is_valid (result, self));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }

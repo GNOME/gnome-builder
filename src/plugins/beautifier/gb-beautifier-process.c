@@ -33,7 +33,7 @@ typedef struct
   GtkTextMark               *begin_mark;
   GtkTextMark               *end_mark;
   GbBeautifierConfigCommand  command;
-  GPtrArray                 *command_args;
+  GPtrArray                 *command_args_strs;
   GFile                     *src_file;
   GFile                     *config_file;
   GFile                     *tmp_workdir_file;
@@ -55,16 +55,17 @@ process_state_free (gpointer data)
   gtk_text_buffer_delete_mark (buffer, state->begin_mark);
   gtk_text_buffer_delete_mark (buffer, state->end_mark);
 
-  gb_beautifier_helper_remove_tmp_file (state->self, state->src_file);
+  gb_beautifier_helper_remove_temp_for_file (state->src_file);
+
   g_clear_object (&state->src_file);
   g_clear_object (&state->config_file);
 
   if (state->tmp_config_file != NULL)
-    g_file_delete (state->tmp_config_file, NULL, NULL);
+    gb_beautifier_helper_remove_temp_for_file (state->tmp_config_file);
   if (state->tmp_src_file != NULL)
-    g_file_delete (state->tmp_src_file, NULL, NULL);
+    gb_beautifier_helper_remove_temp_for_file (state->tmp_src_file);
   if (state->tmp_workdir_file != NULL)
-    g_file_delete (state->tmp_workdir_file, NULL, NULL);
+    gb_beautifier_helper_remove_temp_for_file (state->tmp_workdir_file);
 
   g_clear_object (&state->tmp_workdir_file);
   g_clear_object (&state->tmp_config_file);
@@ -73,45 +74,13 @@ process_state_free (gpointer data)
   g_free (state->lang_id);
   g_free (state->text);
 
-  if (state->command_args != NULL)
-    g_ptr_array_unref (state->command_args);
+  if (state->command_args_strs != NULL)
+    g_ptr_array_unref (state->command_args_strs);
 
   g_slice_free (ProcessState, state);
 }
 
-static gchar *
-match_and_replace (const gchar *str,
-                   const gchar *pattern,
-                   const gchar *replacement)
-{
-  g_autofree gchar *head = NULL;
-  g_autofree gchar *tail = NULL;
-  gchar *needle;
-  gsize head_len;
-
-  g_assert (!dzl_str_empty0 (str));
-  g_assert (!dzl_str_empty0 (pattern));
-
-  if (NULL != (needle = g_strstr_len (str, -1, pattern)))
-    {
-      head_len = needle - str;
-      if (head_len > 0)
-        head = g_strndup (str, head_len);
-      else
-        head = g_strdup ("");
-
-      tail = needle + strlen (pattern);
-      if (*tail != '\0')
-        tail = g_strdup (tail);
-      else
-        tail = g_strdup ("");
-
-      return g_strconcat (head, replacement, tail, NULL);
-    }
-  else
-    return NULL;
-}
-
+/* Substitute each @c@ annd @s@ pattern by the corresponding file */
 static void
 command_args_expand (GbBeautifierEditorAddin *self,
                      GPtrArray               *args,
@@ -132,13 +101,13 @@ command_args_expand (GbBeautifierEditorAddin *self,
   for (gint i = 0; g_ptr_array_index (args, i) != NULL; ++i)
     {
       arg_adr = (gchar **)&g_ptr_array_index (args, i);
-      if (NULL != (new_arg = match_and_replace (*arg_adr, "@s@", src_path)))
+      if (NULL != (new_arg = gb_beautifier_helper_match_and_replace (*arg_adr, "@s@", src_path)))
         {
           g_free (*arg_adr);
           *arg_adr = new_arg;
         }
       else if (has_config &&
-               NULL != (new_arg = match_and_replace (*arg_adr, "@c@", config_path)))
+               NULL != (new_arg = gb_beautifier_helper_match_and_replace (*arg_adr, "@c@", config_path)))
         {
           g_free (*arg_adr);
           *arg_adr = new_arg;
@@ -162,8 +131,9 @@ gb_beautifier_process_create_generic (GbBeautifierEditorAddin  *self,
   g_assert (!dzl_str_empty0 (src_path));
   g_assert (!dzl_str_empty0 (state->lang_id));
 
-  command_args_expand (self, state->command_args, state);
-  subprocess = g_subprocess_newv ((const gchar * const *)state->command_args->pdata,
+  command_args_expand (self, state->command_args_strs, state);
+
+  subprocess = g_subprocess_newv ((const gchar * const *)state->command_args_strs->pdata,
                                   G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                   G_SUBPROCESS_FLAGS_STDERR_PIPE,
                                   error);
@@ -308,9 +278,9 @@ process_communicate_utf8_cb (GObject      *object,
 }
 
 static void
-create_tmp_file_cb (GObject      *object,
-                    GAsyncResult *result,
-                    gpointer      user_data)
+create_text_tmp_file_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
 {
   GbBeautifierEditorAddin  *self = (GbBeautifierEditorAddin  *)object;
   g_autoptr (GTask) task = (GTask *)user_data;
@@ -354,16 +324,21 @@ fail:
   return;
 }
 
+/* We just need to keep the string part */
 static GPtrArray *
-command_args_copy (GPtrArray *args)
+command_args_copy (GArray *args)
 {
   GPtrArray *args_copy;
 
   g_assert (args != NULL);
 
   args_copy = g_ptr_array_new_with_free_func (g_free);
-  for (gint i = 0; g_ptr_array_index (args, i) != NULL; ++i)
-    g_ptr_array_add (args_copy, g_strdup (g_ptr_array_index (args, i)));
+  for (gint i = 0; i < args->len; ++i)
+    {
+      GbBeautifierCommandArg *arg = &g_array_index (args, GbBeautifierCommandArg, i);
+
+      g_ptr_array_add (args_copy, g_strdup (arg->str));
+    }
 
   g_ptr_array_add (args_copy, NULL);
 
@@ -415,17 +390,19 @@ gb_beautifier_process_launch_async (GbBeautifierEditorAddin  *self,
   state->lang_id = g_strdup (lang_id);
 
   if (G_IS_FILE (entry->config_file))
-    state->config_file = g_file_dup (entry->config_file);
+    state->config_file = g_object_ref (entry->config_file);
 
   if (entry->command_args != NULL)
-    state->command_args = command_args_copy (entry->command_args);
+    state->command_args_strs = command_args_copy (entry->command_args);
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gb_beautifier_process_launch_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, state, process_state_free);
 
   gb_beautifier_helper_create_tmp_file_async (self,
                                               state->text,
-                                              create_tmp_file_cb,
+                                              create_text_tmp_file_cb,
                                               cancellable,
                                               g_steal_pointer (&task));
 }

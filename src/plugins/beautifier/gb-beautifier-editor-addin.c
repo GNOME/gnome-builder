@@ -351,6 +351,39 @@ add_shortcut_window_entry (GbBeautifierEditorAddin *self)
 }
 
 static void
+get_entries_async_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  g_autoptr(GbBeautifierEditorAddin) self = (GbBeautifierEditorAddin *)object;
+  GbBeautifierEntriesResult *ret;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (NULL == (ret = gb_beautifier_config_get_entries_finish (self, result, &error)))
+    {
+      g_warning ("\"%s\"", error->message);
+      g_warning ("Beautifier plugin disabled");
+
+      /* TODO: properly disable the plugin */
+      return;
+    }
+
+  self->entries = g_steal_pointer (&ret->entries);
+  self->has_default = ret->has_default;
+  gb_beautifier_entries_result_free (ret);
+
+  if (!self->has_default)
+    set_default_keybinding (self, "view.beautify-default::none");
+
+  ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)setup_view_cb, self);
+
+  add_shortcut_window_entry (self);
+}
+
+static void
 gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
                                  IdeEditorPerspective *editor)
 {
@@ -363,14 +396,12 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
   dzl_set_weak_pointer (&self->editor, editor);
   workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
   self->context = ide_workbench_get_context (workbench);
-  self->entries = gb_beautifier_config_get_entries (self, &self->has_default);
 
-  if (!self->has_default)
-    set_default_keybinding (self, "view.beautify-default::none");
-
-  ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)setup_view_cb, self);
-
-  add_shortcut_window_entry (self);
+  gb_beautifier_config_get_entries_async (self,
+                                          &self->has_default,
+                                          get_entries_async_cb,
+                                          NULL,
+                                          g_object_ref (self));
 }
 
 static void
@@ -378,6 +409,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
                                    IdeEditorPerspective *editor)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)addin;
+  GbBeautifierConfigEntry *entry;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
@@ -385,8 +417,13 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)cleanup_view_cb, self);
   if (self->entries != NULL)
     {
-      g_array_free (self->entries, TRUE);
-      self->entries = NULL;
+      for (gint i =0; i < self->entries->len; i++)
+        {
+          entry = &g_array_index (self->entries, GbBeautifierConfigEntry, i);
+          gb_beautifier_helper_config_entry_remove_temp_files (entry);
+        }
+
+      g_clear_pointer (&self->entries, g_array_unref);
     }
 
   dzl_clear_weak_pointer (&self->editor);

@@ -36,9 +36,17 @@ typedef struct
   GFile                     *config_file;
   gchar                     *name;
   GbBeautifierConfigCommand  command;
-  GPtrArray                 *command_args;
+  GArray                    *command_args;
   guint                      is_default : 1;
+  guint                      is_config_file_temp : 1;
 } GbBeautifierConfigEntry;
+
+typedef struct
+{
+  gchar *str;
+  guint  is_path : 1;
+  guint  is_temp : 1;
+} GbBeautifierCommandArg;
 
 typedef struct
 {
@@ -47,7 +55,21 @@ typedef struct
   gchar *default_profile;
 } GbBeautifierMapEntry;
 
-GArray *gb_beautifier_config_get_entries (GbBeautifierEditorAddin *self,
-                                          gboolean                *has_default);
+typedef struct
+{
+  GArray   *entries;
+  gboolean  has_default;
+} GbBeautifierEntriesResult;
+
+void                            gb_beautifier_config_get_entries_async       (GbBeautifierEditorAddin  *self,
+                                                                              gboolean                 *has_default,
+                                                                              GAsyncReadyCallback       callback,
+                                                                              GCancellable             *cancellable,
+                                                                              gpointer                  user_data);
+GbBeautifierEntriesResult      *gb_beautifier_config_get_entries_finish      (GbBeautifierEditorAddin  *self,
+                                                                              GAsyncResult             *result,
+                                                                              GError                  **error);
+
+void                            gb_beautifier_entries_result_free            (gpointer                  data);
 
 G_END_DECLS
