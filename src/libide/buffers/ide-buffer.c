@@ -24,6 +24,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "buffers/ide-buffer-addin.h"
 #include "buffers/ide-buffer-change-monitor.h"
 #include "buffers/ide-buffer-manager.h"
@@ -159,6 +160,8 @@ static guint signals [LAST_SIGNAL];
 static void
 lookup_symbol_task_data_free (LookUpSymbolData *data)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
+
   g_clear_pointer (&data->resolvers, g_ptr_array_unref);
   g_clear_pointer (&data->location, ide_source_location_unref);
   g_clear_pointer (&data->symbol, ide_symbol_unref);
@@ -174,6 +177,7 @@ lookup_symbol_get_extension (IdeExtensionSetAdapter *set,
   LookUpSymbolData *data = user_data;
   IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (data != NULL);
   g_assert (data->resolvers != NULL);
   g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
@@ -187,6 +191,7 @@ ide_buffer_settled_cb (gpointer user_data)
   IdeBuffer *self = user_data;
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   priv->settling_handler = 0;
@@ -200,6 +205,7 @@ ide_buffer_delay_settling (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   dzl_clear_source (&priv->settling_handler);
@@ -222,6 +228,7 @@ ide_buffer_get_has_diagnostics (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   return (priv->diagnostics != NULL) &&
@@ -240,6 +247,7 @@ ide_buffer_get_has_diagnostics (IdeBuffer *self)
 gboolean
 ide_buffer_get_busy (IdeBuffer *self)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   /* TODO: This should be deprecated */
@@ -253,6 +261,7 @@ ide_buffer_emit_cursor_moved (IdeBuffer *self)
   GtkTextMark *mark;
   GtkTextIter iter;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self));
@@ -268,6 +277,7 @@ ide_buffer_get_iter_at_location (IdeBuffer         *self,
   guint line;
   guint line_offset;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (iter != NULL);
   g_assert (location != NULL);
@@ -287,7 +297,9 @@ ide_buffer_release_context (gpointer  data,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
+  g_assert (where_the_object_was != NULL);
 
   priv->context = NULL;
 
@@ -296,11 +308,7 @@ ide_buffer_release_context (gpointer  data,
    * manager while shutting down. We can safely drop our reclamation_handler
    * since it can no longer be run anyway.
    */
-  if (priv->reclamation_handler != 0)
-    {
-      g_source_remove (priv->reclamation_handler);
-      priv->reclamation_handler = 0;
-    }
+  dzl_clear_source (&priv->reclamation_handler);
 
   IDE_EXIT;
 }
@@ -312,6 +320,7 @@ ide_buffer_set_context (IdeBuffer  *self,
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   IdeDiagnosticsManager *diagnostics_manager;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (priv->context == NULL);
@@ -332,6 +341,7 @@ ide_buffer_sync_to_unsaved_files (IdeBuffer *self)
 {
   GBytes *content;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   if ((content = ide_buffer_get_content (self)))
@@ -348,6 +358,7 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
   GtkTextIter begin;
   GtkTextIter end;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   if (priv->diagnostics_line_cache != NULL)
@@ -382,6 +393,7 @@ ide_buffer_cache_diagnostic_line (IdeBuffer             *self,
   gsize line_end;
   gsize i;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (begin != NULL);
   g_assert (end != NULL);
@@ -417,8 +429,9 @@ ide_buffer_update_diagnostic (IdeBuffer     *self,
   gsize num_ranges;
   gsize i;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
-  g_assert (diagnostic);
+  g_assert (diagnostic != NULL);
 
   severity = ide_diagnostic_get_severity (diagnostic);
 
@@ -515,6 +528,7 @@ ide_buffer_update_diagnostics (IdeBuffer      *self,
   gsize size;
   gsize i;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (diagnostics != NULL);
 
@@ -538,6 +552,7 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (diagnostics != NULL);
 
@@ -571,6 +586,7 @@ ide_buffer__diagnostics_manager__changed (IdeBuffer             *self,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_DIAGNOSTICS_MANAGER (diagnostics_manager));
 
@@ -602,6 +618,7 @@ ide_buffer__file_load_settings_cb (GObject      *object,
   g_autoptr(IdeBuffer) self = user_data;
   g_autoptr(IdeFileSettings) file_settings = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_FILE (file));
@@ -624,6 +641,7 @@ ide_buffer__change_monitor_changed_cb (IdeBuffer              *self,
 {
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_BUFFER_CHANGE_MONITOR (monitor));
 
@@ -637,6 +655,7 @@ ide_buffer_reload_change_monitor (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   if (priv->change_monitor)
@@ -678,6 +697,7 @@ ide_buffer_do_modeline (IdeBuffer *self)
   const gchar *file_path;
   gboolean uncertain;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (self), &begin);
@@ -758,15 +778,16 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
 {
   gboolean check_modeline = FALSE;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (location);
-  g_assert (text);
+  g_assert (location != NULL);
+  g_assert (text != NULL);
 
   /*
-   * If we are inserting a \n at the end of the first line, then we might want to adjust the
-   * GtkSourceBuffer:language property to reflect the format. This is similar to emacs "modelines",
-   * which is apparently a bit of an overloaded term as is not to be confused with editor setting
-   * modelines.
+   * If we are inserting a \n at the end of the first line, then we might want
+   * to adjust the GtkSourceBuffer:language property to reflect the format.
+   * This is similar to emacs "modelines", which is apparently a bit of an
+   * overloaded term as is not to be confused with editor setting modelines.
    */
   if ((gtk_text_iter_get_line (location) == 0) && gtk_text_iter_ends_line (location) &&
       ((text [0] == '\n') || ((len > 1) && (strchr (text, '\n') != NULL))))
@@ -799,6 +820,7 @@ do_check_modified (gpointer user_data)
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   priv->check_modified_timeout = 0;
@@ -813,6 +835,7 @@ ide_buffer_queue_modify_check (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   dzl_clear_source (&priv->check_modified_timeout);
@@ -830,6 +853,7 @@ ide_buffer__file_monitor_changed (IdeBuffer         *self,
 {
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_FILE_MONITOR (file_monitor));
@@ -866,6 +890,7 @@ ide_buffer__file_notify_file (IdeBuffer  *self,
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   GFile *gfile;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_FILE (file));
 
@@ -906,6 +931,7 @@ ide_buffer__file_notify_language (IdeBuffer  *self,
 {
   GtkSourceLanguage *language;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_FILE (file));
 
@@ -929,6 +955,7 @@ ide_buffer_notify_language (IdeBuffer  *self,
   GtkSourceLanguage *language;
   const gchar *lang_id = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (pspec != NULL);
 
@@ -952,6 +979,7 @@ apply_style (GtkTextTag  *tag,
 {
   va_list args;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (!tag || GTK_IS_TEXT_TAG (tag));
   g_assert (first_property != NULL);
 
@@ -975,6 +1003,7 @@ ide_buffer_notify_style_scheme (IdeBuffer  *self,
   GdkRGBA note_rgba;
   GdkRGBA warning_rgba;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (pspec != NULL);
 
@@ -1058,6 +1087,7 @@ ide_buffer_on_tag_added (IdeBuffer       *self,
 {
   GtkTextTag *chunk_tag;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (GTK_IS_TEXT_TAG (tag));
   g_assert (GTK_IS_TEXT_TAG_TABLE (table));
@@ -1081,6 +1111,7 @@ ide_buffer_loaded (IdeBuffer *self)
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   /*
@@ -1121,6 +1152,7 @@ ide_buffer_load_formatter (IdeBuffer           *self,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
 
@@ -1141,6 +1173,7 @@ ide_buffer_load_rename_provider (IdeBuffer           *self,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
 
@@ -1170,6 +1203,7 @@ ide_buffer_load_symbol_resolvers (IdeBuffer              *self,
 {
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
 
@@ -1194,6 +1228,7 @@ ide_buffer_addin_added (PeasExtensionSet *set,
   IdeBufferAddin *addin = (IdeBufferAddin *)exten;
   IdeBuffer *self = user_data;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_BUFFER_ADDIN (addin));
@@ -1214,6 +1249,7 @@ ide_buffer_addin_removed (PeasExtensionSet *set,
   IdeBufferAddin *addin = (IdeBufferAddin *)exten;
   IdeBuffer *self = user_data;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_BUFFER_ADDIN (addin));
@@ -1239,6 +1275,7 @@ ide_buffer_init_tags (IdeBuffer *self)
   GdkRGBA note_rgba;
   GdkRGBA warning_rgba;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self));
@@ -1316,6 +1353,7 @@ ide_buffer_constructed (GObject *object)
   IdeBuffer *self = (IdeBuffer *)object;
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (IDE_IS_CONTEXT (priv->context));
 
@@ -1399,6 +1437,8 @@ ide_buffer_dispose (GObject *object)
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+
   dzl_clear_source (&priv->settling_handler);
   dzl_clear_source (&priv->reclamation_handler);
   dzl_clear_source (&priv->check_modified_timeout);
@@ -1454,6 +1494,8 @@ ide_buffer_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+
   g_clear_object (&priv->file_signals);
   g_clear_object (&priv->file);
   g_clear_pointer (&priv->title, g_free);
@@ -1481,6 +1523,8 @@ ide_buffer_get_property (GObject    *object,
                          GParamSpec *pspec)
 {
   IdeBuffer *self = IDE_BUFFER (object);
+
+  g_assert (IDE_IS_MAIN_THREAD ());
 
   switch (prop_id)
     {
@@ -1536,6 +1580,8 @@ ide_buffer_set_property (GObject      *object,
                          GParamSpec   *pspec)
 {
   IdeBuffer *self = IDE_BUFFER (object);
+
+  g_assert (IDE_IS_MAIN_THREAD ());
 
   switch (prop_id)
     {
@@ -1783,8 +1829,9 @@ ide_buffer_init (IdeBuffer *self)
 
   IDE_ENTRY;
 
-  priv->loading = TRUE;
+  g_assert (IDE_IS_MAIN_THREAD ());
 
+  priv->loading = TRUE;
   priv->highlight_diagnostics = TRUE;
 
   priv->file_signals = dzl_signal_group_new (IDE_TYPE_FILE);
@@ -1821,6 +1868,7 @@ ide_buffer_update_title (IdeBuffer *self)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   g_autofree gchar *title = NULL;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   if (priv->file)
@@ -1856,6 +1904,7 @@ ide_buffer_get_file (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   return priv->file;
@@ -1874,6 +1923,7 @@ ide_buffer_set_file (IdeBuffer *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (IDE_IS_FILE (file));
 
@@ -1910,6 +1960,7 @@ ide_buffer_get_context (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   return priv->context;
@@ -2002,6 +2053,7 @@ ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   return priv->highlight_diagnostics;
@@ -2022,6 +2074,7 @@ ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   highlight_diagnostics = !!highlight_diagnostics;
@@ -2048,6 +2101,7 @@ ide_buffer_get_diagnostic_at_iter (IdeBuffer         *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
   g_return_val_if_fail (iter, NULL);
 
@@ -2109,6 +2163,7 @@ ide_buffer_can_do_newline_hack (IdeBuffer *self,
 {
   guint next_pow2;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   /*
@@ -2153,6 +2208,7 @@ ide_buffer_get_content (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   if (!priv->content)
@@ -2225,6 +2281,7 @@ ide_buffer_trim_trailing_whitespace (IdeBuffer *self)
   GtkTextIter iter;
   gint line;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   buffer = GTK_TEXT_BUFFER (self);
@@ -2300,6 +2357,7 @@ ide_buffer_get_title (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   return priv->title;
@@ -2319,6 +2377,7 @@ ide_buffer_get_style_scheme_name (IdeBuffer *self)
 {
   GtkSourceStyleScheme *scheme;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self));
@@ -2343,6 +2402,7 @@ ide_buffer_set_style_scheme_name (IdeBuffer   *self,
   GtkSourceStyleSchemeManager *mgr;
   GtkSourceStyleScheme *scheme;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   mgr = gtk_source_style_scheme_manager_get_default ();
@@ -2357,6 +2417,7 @@ _ide_buffer_get_loading (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   return priv->loading;
@@ -2370,6 +2431,7 @@ _ide_buffer_set_loading (IdeBuffer *self,
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   loading = !!loading;
@@ -2398,6 +2460,7 @@ ide_buffer_get_read_only (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   return priv->read_only;
@@ -2409,6 +2472,7 @@ _ide_buffer_set_read_only (IdeBuffer *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   read_only = !!read_only;
@@ -2435,6 +2499,7 @@ ide_buffer_get_changed_on_volume (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   return priv->changed_on_volume;
@@ -2448,6 +2513,7 @@ _ide_buffer_set_changed_on_volume (IdeBuffer *self,
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   changed_on_volume = !!changed_on_volume;
@@ -2471,6 +2537,7 @@ ide_buffer__check_for_volume_cb (GObject      *object,
   g_autoptr(GFileInfo) file_info = NULL;
   GFile *file = (GFile *)object;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_FILE (file));
@@ -2514,6 +2581,7 @@ ide_buffer_check_for_volume_change (IdeBuffer *self)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   GFile *location;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   if (priv->changed_on_volume)
@@ -2541,6 +2609,7 @@ _ide_buffer_set_mtime (IdeBuffer      *self,
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   if (mtime == NULL)
@@ -2575,6 +2644,7 @@ ide_buffer_get_iter_at_source_location (IdeBuffer         *self,
   guint line;
   guint line_offset;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (iter != NULL);
   g_return_if_fail (location != NULL);
@@ -2599,6 +2669,7 @@ ide_buffer_rehighlight (IdeBuffer *self)
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   /* In case we are disposing */
@@ -2627,6 +2698,7 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   LookUpSymbolData *data;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
@@ -2713,6 +2785,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
   guint offset;
   guint n_extensions;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (location != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -2772,6 +2845,7 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
                                           GAsyncResult  *result,
                                           GError       **error)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
@@ -2790,6 +2864,7 @@ ide_buffer_get_symbols_finish (IdeBuffer     *self,
                                GAsyncResult  *result,
                                GError       **error)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
@@ -2803,6 +2878,7 @@ ide_buffer_reclaim_timeout (gpointer data)
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
   IdeBufferManager *buffer_manager;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
 
   priv->reclamation_handler = 0;
@@ -2823,6 +2899,7 @@ ide_buffer_hold (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (priv->hold_count >= 0);
 
@@ -2841,6 +2918,7 @@ ide_buffer_release (IdeBuffer *self)
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (priv->hold_count >= 0);
 
@@ -2887,6 +2965,7 @@ ide_buffer_get_selection_bounds (IdeBuffer   *self,
 {
   GtkTextMark *mark;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   if (insert != NULL)
@@ -2915,6 +2994,7 @@ ide_buffer_get_rename_provider (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   if (priv->rename_provider_adapter != NULL)
@@ -2936,6 +3016,7 @@ ide_buffer_get_symbol_resolvers (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   return priv->symbol_resolvers_adapter;
@@ -2957,6 +3038,7 @@ ide_buffer_get_word_at_iter (IdeBuffer         *self,
   GtkTextIter begin;
   GtkTextIter end;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
 
@@ -2976,6 +3058,7 @@ ide_buffer_get_change_count (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), 0);
   g_return_val_if_fail (IDE_IS_BUFFER (self), 0);
 
   return priv->change_count;
@@ -2987,6 +3070,7 @@ ide_buffer_get_uri (IdeBuffer *self)
   IdeFile *file;
   GFile *gfile;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   file = ide_buffer_get_file (self);
@@ -3008,6 +3092,7 @@ ide_buffer_get_iter_location (IdeBuffer         *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
   g_return_val_if_fail (gtk_text_iter_get_buffer (iter) == GTK_TEXT_BUFFER (self), NULL);
@@ -3031,6 +3116,7 @@ ide_buffer_get_insert_location (IdeBuffer *self)
   GtkTextMark *mark;
   GtkTextIter iter;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self));
@@ -3080,6 +3166,7 @@ ide_buffer_format_selection_async (IdeBuffer           *self,
 
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
   g_return_if_fail (IDE_IS_FORMATTER_OPTIONS (options));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -3140,6 +3227,7 @@ ide_buffer_format_selection_finish (IdeBuffer     *self,
 
   IDE_ENTRY;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
@@ -3152,7 +3240,10 @@ void
 _ide_buffer_cancel_cursor_restore (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
+
   priv->cancel_cursor_restore = TRUE;
 }
 
@@ -3160,7 +3251,10 @@ gboolean
 _ide_buffer_can_restore_cursor (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
+
   return !priv->cancel_cursor_restore;
 }
 
@@ -3169,6 +3263,7 @@ _ide_buffer_get_addins (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   return priv->addins;
@@ -3179,6 +3274,7 @@ ide_buffer_get_failed (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER (self), FALSE);
 
   return priv->failed;
@@ -3190,6 +3286,7 @@ _ide_buffer_set_failure (IdeBuffer    *self,
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
   priv->failed = !!error;
@@ -3203,6 +3300,7 @@ ide_buffer_get_failure (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
 
   return priv->failure;
