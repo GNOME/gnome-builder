@@ -237,8 +237,12 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
 
   g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
 
+  /* Ignore empty trees, in favor of next symbol resovler */
+  if (tree != NULL && ide_symbol_tree_get_n_children (tree, NULL) == 0)
+    g_clear_object (&tree);
+
   /* If tree is not fetched and symbol resolvers are left then try those */
-  if (tree == NULL && data->resolvers->len)
+  if (tree == NULL && data->resolvers->len > 0)
     {
       GFile *file;
       IdeSymbolResolver *resolver;
