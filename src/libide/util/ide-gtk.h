@@ -38,5 +38,13 @@ IDE_AVAILABLE_IN_ALL
 IdeContext   *ide_widget_get_context         (GtkWidget               *widget);
 IDE_AVAILABLE_IN_ALL
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
+IDE_AVAILABLE_IN_3_28
+void          ide_widget_message             (gpointer                 instance,
+                                              const gchar             *format,
+                                              ...) G_GNUC_PRINTF (2, 3);
+IDE_AVAILABLE_IN_3_28
+void          ide_widget_warning             (gpointer                 instance,
+                                              const gchar             *format,
+                                              ...) G_GNUC_PRINTF (2, 3);
 
 G_END_DECLS
