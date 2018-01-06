@@ -273,7 +273,7 @@ gbp_gdb_debugger_handle_result (GbpGdbDebugger           *self,
     }
 
   if (!g_str_has_prefix (output->line, "9999^"))
-    g_warning ("No reply found for: %s\n", output->line);
+    ide_object_warning (self, "gdb: No reply found for: %s", output->line);
 
   gdbwire_mi_output_free (output);
 }
@@ -907,7 +907,7 @@ gbp_gdb_debugger_output_callback (void                     *context,
   switch (output->kind)
     {
     case GDBWIRE_MI_OUTPUT_PARSE_ERROR:
-      g_warning ("Failed to parse gdb communication: %s", output->line);
+      ide_object_warning (self, "Failed to parse gdb communication: %s", output->line);
       gdbwire_mi_output_free (output);
       gbp_gdb_debugger_panic (self);
       break;
@@ -1052,7 +1052,7 @@ gbp_gdb_debugger_reload_breakpoints_cb (GObject      *object,
 
   if (output == NULL || gbp_gdb_debugger_unwrap (output, &error))
     {
-      g_warning ("%s", error->message);
+      ide_object_warning (self, "%s", error->message);
       goto cleanup;
     }
 
@@ -1389,7 +1389,7 @@ gbp_gdb_debugger_list_register_names_cb (GObject      *object,
 
   if (output == NULL || gbp_gdb_debugger_unwrap (output, &error))
     {
-      g_warning ("%s", error->message);
+      ide_object_warning (self, "%s", error->message);
       goto cleanup;
     }
 
@@ -2572,7 +2572,7 @@ gbp_gdb_debugger_read_cb (GObject      *object,
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
           !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CLOSED))
-        g_warning ("gdb client read failed: %s", error->message);
+        ide_object_warning (self, "gdb client read failed: %s", error->message);
       return;
     }
 
@@ -2591,7 +2591,7 @@ gbp_gdb_debugger_read_cb (GObject      *object,
 
   if (res != GDBWIRE_OK)
     {
-      g_warning ("Failed to push data into gdbwire parser: %d", res);
+      ide_object_warning (self, "Failed to push data into gdbwire parser: %d", res);
       return;
     }
 
@@ -2688,7 +2688,7 @@ gbp_gdb_debugger_write_cb (GObject      *object,
 
   if (error != NULL)
     {
-      g_warning ("%s", error->message);
+      ide_object_warning (self, "%s", error->message);
       gbp_gdb_debugger_panic (self);
       return;
     }
