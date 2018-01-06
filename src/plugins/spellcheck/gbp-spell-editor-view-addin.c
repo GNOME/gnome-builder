@@ -136,7 +136,7 @@ gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
        * addins are already in destruction. Therefore, silently
        * fail any further setup.
        */
-      g_warning ("Failed to locate buffer addin, spellcheck disabled");
+      ide_widget_warning (source_view, _("Failed to initialize spellchecking, disabling"));
       return;
     }
 
@@ -243,7 +243,7 @@ gbp_spell_editor_view_addin_begin_checking (GbpSpellEditorViewAddin *self)
 
   if (buffer_addin == NULL)
     {
-      g_warning ("Attempt to start spellchecking without a buffer addin");
+      ide_widget_warning (self->view, _("Failed to initialize spellchecking, disabling"));
       return;
     }
 
