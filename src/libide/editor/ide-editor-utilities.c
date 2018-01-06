@@ -115,4 +115,6 @@ ide_editor_utilities_init (IdeEditorUtilities *self)
   self->loading = TRUE;
   gtk_widget_init_template (GTK_WIDGET (self));
   self->loading = FALSE;
+
+  gtk_stack_switcher_set_stack (self->stack_switcher, self->stack);
 }

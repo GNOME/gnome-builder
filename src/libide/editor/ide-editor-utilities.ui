@@ -8,7 +8,6 @@
         <child>
           <object class="GtkStackSwitcher" id="stack_switcher">
             <property name="orientation">vertical</property>
-            <property name="stack">stack</property>
             <property name="vexpand">true</property>
             <property name="visible">true</property>
           </object>
