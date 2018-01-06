@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-build-manager"
 
 #include <dazzle.h>
+#include <glib/gi18n.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -346,7 +347,10 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   /* This will cause plugins to load on the pipeline. */
   if (!g_initable_init (G_INITABLE (pipeline), NULL, &error))
     {
-      g_warning ("Failure to initialize pipeline: %s", error->message);
+      /* translators: %s is replaced with the error message */
+      ide_object_warning (self,
+                          _("Failed to initialize build pipeline: %s"),
+                          error->message);
       IDE_GOTO (failure);
     }
 

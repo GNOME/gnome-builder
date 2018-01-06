@@ -859,7 +859,7 @@ register_post_install_commands_stage (IdeBuildPipeline *self,
 
       if (NULL == (launcher = ide_build_pipeline_create_launcher (self, &error)))
         {
-          g_warning ("%s", error->message);
+          ide_object_warning (self, "%s", error->message);
           return;
         }
 
@@ -2348,7 +2348,7 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
 
   if (self->pty_slave == -1)
     {
-      g_warning ("Failed to create PTY slave");
+      ide_object_warning (self, _("Psuedo terminal creation failed. Terminal features will be limited."));
       return;
     }
 
