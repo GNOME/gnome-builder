@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpMessagesPanel" parent="DzlDockWidget">
+    <property name="icon-name">dialog-information-symbolic</property>
+    <property name="title" translatable="yes">Messages</property>
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="hexpand">true</property>
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="IdeTerminal" id="terminal">
+            <property name="hexpand">true</property>
+            <property name="scrollback-lines">1000</property>
+            <property name="scroll-on-output">false</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrollbar" id="scrollbar">
+            <property name="hexpand">false</property>
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

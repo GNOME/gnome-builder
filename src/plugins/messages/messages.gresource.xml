@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>messages.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/messages-plugin">
+    <file preprocess="xml-stripblanks">gbp-messages-panel.ui</file>
+  </gresource>
+</gresources>
