@@ -453,7 +453,7 @@ ide_buffer_manager_save_cursor_position (IdeBufferManager *self,
                               gtk_text_iter_get_line_offset (&iter));
 
   if (!g_file_set_attribute_string (gfile, IDE_FILE_ATTRIBUTE_POSITION, position, 0, NULL, &error))
-    g_warning ("Failed to persist cursor position: %s", error->message);
+    ide_object_warning (self, "Failed to persist cursor position: %s", error->message);
 }
 
 static void
@@ -916,7 +916,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
 
       if ((state->buffer != NULL) && !IDE_IS_BUFFER (state->buffer))
         {
-          g_warning ("Invalid buffer type retrieved from create-buffer signal.");
+          ide_object_warning (self, "Invalid buffer type retrieved from create-buffer signal");
           g_clear_object (&state->buffer);
         }
 
@@ -2003,8 +2003,8 @@ ide_buffer_manager_reclaim__save_cb (GObject      *object,
 
   if (!ide_buffer_manager_save_file_finish (self, result, &error))
     {
-      g_warning (_("Failed to save buffer, ignoring reclamation."));
-      g_warning ("%s", error->message);
+      /* translators: %s is replaced with the error message */
+      ide_object_warning (self, _("Failed to save file: %s"), error->message);
       IDE_EXIT;
     }
 
@@ -2066,7 +2066,8 @@ ide_buffer_manager_save_all__save_file_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   if (!ide_buffer_manager_save_file_finish (self, result, &error))
-    g_warning ("%s", error->message);
+    /* translators: %s is replaced with error message */
+    ide_object_warning (self, _("Failed to save file: %s"), error->message);
 
   count = g_task_get_task_data (task);
   (*count)--;
