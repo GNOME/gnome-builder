@@ -2346,6 +2346,41 @@ ide_context_get_configuration_manager (IdeContext *self)
 }
 
 /**
+ * ide_context_emit_log:
+ * @self: a #IdeContext
+ * @log_level: a #GLogLevelFlags
+ * @message: (utf8): the log message
+ * @message_len: the length of @message, not including a %NULL byte, or -1
+ *   to indicate the message is %NULL terminated.
+ *
+ * Emits the #IdeContext::log signal, possibly after sending the message to
+ * the main loop.
+ *
+ * Thread-safety: you may call this from any thread that holds a reference to
+ *   the #IdeContext object.
+ */
+void
+ide_context_emit_log (IdeContext     *self,
+                      GLogLevelFlags  log_level,
+                      const gchar    *message,
+                      gssize          message_len)
+{
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+
+  /*
+   * This may be called from a thread, so we proxy the message
+   * to the main thread using IdeBuildLog.
+   */
+
+  if (self->log != NULL)
+    ide_build_log_observer (log_level & (G_LOG_LEVEL_WARNING | G_LOG_LEVEL_ERROR) ?
+                            IDE_BUILD_LOG_STDERR : IDE_BUILD_LOG_STDOUT,
+                            message,
+                            message_len,
+                            self->log);
+}
+
+/**
  * ide_context_message:
  * @self: a #IdeContext
  * @format: a printf style format
@@ -2381,7 +2416,7 @@ ide_context_message (IdeContext  *self,
       str = g_strdup_vprintf (format, args);
       va_end (args);
 
-      ide_build_log_observer (IDE_BUILD_LOG_STDOUT, str, -1, self->log);
+      ide_context_emit_log (self, G_LOG_LEVEL_MESSAGE, str, -1);
     }
 }
 
@@ -2419,7 +2454,7 @@ ide_context_warning (IdeContext  *self,
       str = g_strdup_vprintf (format, args);
       va_end (args);
 
-      ide_build_log_observer (IDE_BUILD_LOG_STDERR, str, -1, self->log);
+      ide_context_emit_log (self, G_LOG_LEVEL_WARNING, str, -1);
     }
 }
 

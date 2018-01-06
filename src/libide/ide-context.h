@@ -123,6 +123,11 @@ void                      ide_context_warning                   (IdeContext     
                                                                  const gchar          *format,
                                                                  ...) G_GNUC_PRINTF (2, 3);
 IDE_AVAILABLE_IN_3_28
+void                      ide_context_emit_log                  (IdeContext           *self,
+                                                                 GLogLevelFlags        log_level,
+                                                                 const gchar          *message,
+                                                                 gssize                message_len);
+IDE_AVAILABLE_IN_3_28
 GFile                    *ide_context_cache_file                (IdeContext           *self,
                                                                  const gchar          *first_part,
                                                                  ...) G_GNUC_NULL_TERMINATED;
