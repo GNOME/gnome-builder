@@ -2346,6 +2346,46 @@ ide_context_get_configuration_manager (IdeContext *self)
 }
 
 /**
+ * ide_context_message:
+ * @self: a #IdeContext
+ * @format: a printf style format
+ * @...: parameters for @format
+ *
+ * Emits a log message for the context, which is useful so that
+ * messages may be displayed to the user in the workbench window.
+ *
+ * Thread-safety: you may call this from any thread, so long as the thread
+ *   owns a reference to the context.
+ *
+ * Since: 3.28
+ */
+void
+ide_context_message (IdeContext  *self,
+                     const gchar *format,
+                     ...)
+{
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (format != NULL);
+
+  /*
+   * This may be called from a thread, so we proxy the message
+   * to the main thread using IdeBuildLog.
+   */
+
+  if (self->log != NULL)
+    {
+      g_autofree gchar *str = NULL;
+      va_list args;
+
+      va_start (args, format);
+      str = g_strdup_vprintf (format, args);
+      va_end (args);
+
+      ide_build_log_observer (IDE_BUILD_LOG_STDOUT, str, -1, self->log);
+    }
+}
+
+/**
  * ide_context_warning:
  * @self: a #IdeContext
  * @format: a printf style format

@@ -114,6 +114,10 @@ void                      ide_context_hold_for_object           (IdeContext     
                                                                  gpointer              instance);
 IDE_AVAILABLE_IN_ALL
 void                      ide_context_release                   (IdeContext           *self);
+IDE_AVAILABLE_IN_3_28
+void                      ide_context_message                   (IdeContext           *self,
+                                                                 const gchar          *format,
+                                                                 ...) G_GNUC_PRINTF (2, 3);
 IDE_AVAILABLE_IN_ALL
 void                      ide_context_warning                   (IdeContext           *self,
                                                                  const gchar          *format,
