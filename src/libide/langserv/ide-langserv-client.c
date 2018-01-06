@@ -20,6 +20,7 @@
 
 #include <dazzle.h>
 #include <dazzle.h>
+#include <glib/gi18n.h>
 #include <jsonrpc-glib.h>
 #include <unistd.h>
 
@@ -868,7 +869,10 @@ ide_langserv_client_initialize_cb (GObject      *object,
 
   if (!jsonrpc_client_call_finish (rpc_client, result, &reply, &error))
     {
-      g_warning ("Failed to initialize language server: %s", error->message);
+      ide_object_warning (self,
+                          /* translators: %s is replaced with the error message */
+                          _("Failed to initialize language server: %s"),
+                          error->message);
       ide_langserv_client_stop (self);
       IDE_EXIT;
     }
@@ -922,8 +926,9 @@ ide_langserv_client_start (IdeLangservClient *self)
 
   if (!G_IS_IO_STREAM (priv->io_stream) || !IDE_IS_CONTEXT (context))
     {
-      g_warning ("Cannot start %s due to misconfiguration.",
-                 G_OBJECT_TYPE_NAME (self));
+      ide_object_message (self,
+                          "Cannot start %s due to misconfiguration.",
+                          G_OBJECT_TYPE_NAME (self));
       return;
     }
 
