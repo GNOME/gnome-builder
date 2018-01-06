@@ -326,7 +326,16 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
    * finalized), we should be guaranteed we have a valid group.
    */
   group = g_object_get_data (G_OBJECT (provider), "IDE_DIAGNOSTICS_GROUP");
-  g_assert (group != NULL);
+
+  if (group == NULL)
+    {
+      /* Warning and bail if we failed to get the diagnostic group.
+       * This shouldn't be happening, but I have definitely seen it
+       * so it is probably related to disposal.
+       */
+      g_warning ("Failed to locate group, possibly disposed.");
+      return;
+    }
 
   /*
    * Clear all of our old diagnostics no matter where they ended up.
