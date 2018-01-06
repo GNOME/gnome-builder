@@ -282,7 +282,7 @@ handle_reload_from_changed_timeout (GObject      *object,
 
   /* Call finish() so that "changed" is emitted */
   if (!ide_git_vcs_reload_finish (self, result, &error))
-    g_warning ("%s", error->message);
+    ide_object_warning (self, "git: %s", error->message);
 }
 
 static gboolean
@@ -360,7 +360,10 @@ ide_git_vcs_load_monitor_locked (IdeGitVcs  *self,
 
       if (monitor == NULL)
         {
-          g_warning ("Failed to establish git monitor: %s", local_error->message);
+          ide_object_warning (self,
+                              /* translators: %s is replaced with the error message */
+                              _("Failed to establish git file monitor: %s"),
+                              local_error->message);
           g_propagate_error (error, local_error);
           ret = FALSE;
         }
