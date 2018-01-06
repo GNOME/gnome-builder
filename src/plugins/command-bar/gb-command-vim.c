@@ -90,19 +90,19 @@ gb_command_vim_execute (GbCommand *command)
 {
   GbCommandVim *self = (GbCommandVim *)command;
 
-  g_return_val_if_fail (GB_IS_COMMAND_VIM (self), NULL);
+  g_assert (GB_IS_COMMAND_VIM (self));
 
   if (self->active_widget)
     {
-      GError *error = NULL;
+      g_autoptr(GError) error = NULL;
 
       IDE_TRACE_MSG ("Executing Vim command: %s", self->command_text);
 
       if (!gb_vim_execute (self->active_widget, self->command_text, &error))
-        {
-          g_warning ("%s", error->message);
-          g_clear_error (&error);
-        }
+        ide_widget_warning (self->active_widget,
+                            /* translators: %s is replaced with the error message */
+                            _("Command failed: %s"),
+                            error->message);
     }
 
   return NULL;
