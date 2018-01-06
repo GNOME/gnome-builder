@@ -782,17 +782,18 @@ ide_object_message (gpointer     instance,
                     ...)
 {
   g_autofree gchar *str = NULL;
-  IdeContext *context;
+  IdeContext *context = NULL;
   va_list args;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (GTK_IS_WIDGET (instance));
+  g_return_if_fail (!instance || IDE_IS_OBJECT (instance));
 
   va_start (args, format);
   str = g_strdup_vprintf (format, args);
   va_end (args);
 
-  context = ide_object_get_context (instance);
+  if (instance != NULL)
+    context = ide_object_get_context (instance);
 
   if (context != NULL)
     ide_context_emit_log (context, G_LOG_LEVEL_MESSAGE, str, -1);
@@ -806,17 +807,18 @@ ide_object_warning (gpointer     instance,
                     ...)
 {
   g_autofree gchar *str = NULL;
-  IdeContext *context;
+  IdeContext *context = NULL;
   va_list args;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (GTK_IS_WIDGET (instance));
+  g_return_if_fail (!instance || IDE_IS_OBJECT (instance));
 
   va_start (args, format);
   str = g_strdup_vprintf (format, args);
   va_end (args);
 
-  context = ide_object_get_context (instance);
+  if (instance != NULL)
+    context = ide_object_get_context (instance);
 
   if (context != NULL)
     ide_context_emit_log (context, G_LOG_LEVEL_WARNING, str, -1);
