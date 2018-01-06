@@ -220,13 +220,13 @@ discover_llvm_flags (void)
 
   if (!subprocess)
     {
-      g_warning ("%s\n", error->message);
+      g_warning ("%s", error->message);
       IDE_RETURN (NULL);
     }
 
   if (!g_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdoutstr, NULL, &error))
     {
-      g_warning ("%s\n", error->message);
+      g_warning ("%s", error->message);
       IDE_RETURN (NULL);
     }
 
