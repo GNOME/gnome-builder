@@ -1174,10 +1174,9 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GTask) task = NULL;
-  IdeContext *context;
   IdeBufferManager *buffer_manager;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -1185,10 +1184,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  if (cancellable == NULL)
-    cancellable = local_cancellable = g_cancellable_new ();
-
-  dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_execute_async);
@@ -1330,7 +1326,6 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
 {
-  g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
@@ -1339,10 +1334,7 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  if (cancellable == NULL)
-    cancellable = local_cancellable = g_cancellable_new ();
-
-  dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_clean_async);
@@ -1450,7 +1442,6 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
@@ -1459,10 +1450,7 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  if (cancellable == NULL)
-    cancellable = local_cancellable = g_cancellable_new ();
-
-  dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_manager_rebuild_async);
