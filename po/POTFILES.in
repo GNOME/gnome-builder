@@ -31,6 +31,8 @@ src/libide/application/ide-application-command-line.c
 src/libide/application/ide-application-shortcuts.c
 src/libide/buffers/ide-buffer.c
 src/libide/buffers/ide-buffer-manager.c
+src/libide/buffers/ide-unsaved-files.c
+src/libide/buildsystem/ide-build-manager.c
 src/libide/buildsystem/ide-build-pipeline.c
 src/libide/buildsystem/ide-build-stage-transfer.c
 src/libide/buildsystem/ide-configuration-manager.c
@@ -83,6 +85,7 @@ src/libide/ide.c
 src/libide/ide-context.c
 src/libide/ide-object.c
 src/libide/keybindings/ide-shortcuts-window.ui
+src/libide/langserv/ide-langserv-client.c
 src/libide/layout/ide-layout-stack.c
 src/libide/layout/ide-layout-stack-header.ui
 src/libide/layout/ide-layout-stack-shortcuts.c
@@ -138,6 +141,7 @@ src/plugins/color-picker/gtk/color-picker-preview.ui
 src/plugins/color-picker/gtk/color-picker.ui
 src/plugins/color-picker/gtk/menus.ui
 src/plugins/command-bar/gb-command-bar.c
+src/plugins/command-bar/gb-command-vim.c
 src/plugins/command-bar/gb-vim.c
 src/plugins/comment-code/gbp-comment-code-view-addin.c
 src/plugins/comment-code/gtk/menus.ui
@@ -166,6 +170,7 @@ src/plugins/git/ide-git-clone-widget.c
 src/plugins/git/ide-git-clone-widget.ui
 src/plugins/git/ide-git-genesis-addin.c
 src/plugins/git/ide-git-remote-callbacks.c
+src/plugins/git/ide-git-vcs.c
 src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 src/plugins/gnome-code-assistance/ide-gca-service.c
@@ -177,6 +182,7 @@ src/plugins/make/make_plugin.py
 src/plugins/meson/gbp-meson-build-system.c
 src/plugins/meson/gbp-meson-pipeline-addin.c
 src/plugins/meson-templates/meson_templates.py
+src/plugins/messages/gbp-messages-panel.ui
 src/plugins/mingw/ide-mingw-device-provider.c
 src/plugins/newcomers/gbp-newcomers-section.ui
 src/plugins/notification/ide-notification-addin.c
@@ -184,6 +190,7 @@ src/plugins/npm/npm_plugin.py
 src/plugins/phpize/phpize_plugin.py
 src/plugins/project-tree/gb-new-file-popover.c
 src/plugins/project-tree/gb-new-file-popover.ui
+src/plugins/project-tree/gb-project-tree-actions.c
 src/plugins/project-tree/gb-project-tree-addin.c
 src/plugins/project-tree/gb-project-tree-builder.c
 src/plugins/project-tree/gb-project-tree-shortcuts.c
