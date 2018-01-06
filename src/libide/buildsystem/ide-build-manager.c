@@ -1102,6 +1102,7 @@ ide_build_manager_execute_cb (GObject      *object,
 
   if (!ide_build_pipeline_execute_finish (pipeline, result, &error))
     {
+      ide_object_warning (pipeline, "%s", error->message);
       g_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (failure);
     }
