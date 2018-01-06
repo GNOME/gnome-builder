@@ -297,7 +297,7 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
   g_autofree gchar *terminal_executable = NULL;
   const gchar *argv[] = { NULL, NULL };
   g_auto(GStrv) env = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (GB_IS_PROJECT_TREE (self));
 
@@ -322,7 +322,7 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
 
   if (workdir == NULL)
     {
-      g_warning ("Cannot load non-native file in terminal.");
+      ide_widget_warning (self, _("Cannot load a non-native file in terminal"));
       return;
     }
 
@@ -349,11 +349,10 @@ gb_project_tree_actions_open_in_terminal (GSimpleAction *action,
   if (!g_spawn_async (workdir, (gchar **)argv, env,
                       G_SPAWN_STDERR_TO_DEV_NULL,
                       NULL, NULL, NULL, &error))
-    {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-      return;
-    }
+    ide_widget_warning (self,
+                        /* translators: %s is replaced with the error message */
+                        _("Failed to spawn terminal: %s"),
+                        error->message);
 }
 
 static void
@@ -604,14 +603,14 @@ gb_project_tree_actions__project_rename_file_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_PROJECT (project));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GB_IS_RENAME_FILE_POPOVER (popover));
 
   if (!ide_project_rename_file_finish (project, result, &error))
-    {
-      /* todo: display error */
-      g_warning ("%s", error->message);
-      return;
-    }
+    ide_object_warning (project,
+                        /* translators: %s is replaced with the error message */
+                        _("Failed to rename file: %s"),
+                        error->message);
 
   gtk_widget_hide (GTK_WIDGET (popover));
   gtk_widget_destroy (GTK_WIDGET (popover));
@@ -695,14 +694,14 @@ gb_project_tree_actions__trash_file_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_PROJECT (project));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (DZL_IS_TREE_NODE (node));
 
   if (!ide_project_trash_file_finish (project, result, &error))
-    {
-      /* TODO: warning dialog */
-      g_warning ("%s", error->message);
-      return;
-    }
+    ide_object_warning (project,
+                        /* translators: %s is replaced with the error message */
+                        _("Failed to trash file: %s"),
+                        error->message);
 }
 
 typedef struct
