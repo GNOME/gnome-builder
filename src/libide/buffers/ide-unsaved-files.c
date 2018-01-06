@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-unsaved-files"
 
 #include <dazzle.h>
+#include <glib/gi18n.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <glib/gstdio.h>
@@ -246,7 +247,10 @@ ide_unsaved_files_save_worker (GTask        *task,
       path = g_build_filename (state->drafts_directory, hash, NULL);
 
       if (!unsaved_file_save (uf, path, &error))
-        g_warning ("Failed to save draft: %s", error->message);
+        ide_object_warning (source_object,
+                            /* translators: %s is replaced with the error message */
+                            _("Failed to save draft: %s"),
+                            error->message);
     }
 
   if (!g_file_set_contents (manifest_path, manifest->str, manifest->len, &write_error))
@@ -409,7 +413,10 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
       if (!g_file_get_contents (path, &contents, &data_len, &error))
         {
-          g_warning ("Failed to load \"%s\": %s", path, error->message);
+          ide_object_warning (source_object,
+                              /* translators: the first %s is the path, th second is the error message */
+                              "Failed to load draft for %s: %s",
+                              line, error->message);
           continue;
         }
 

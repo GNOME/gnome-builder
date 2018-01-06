@@ -904,7 +904,7 @@ ide_buffer__file_notify_file (IdeBuffer  *self,
 
   if (gfile != NULL)
     {
-      GError *error = NULL;
+      g_autoptr(GError) error = NULL;
 
       priv->file_monitor = g_file_monitor_file (gfile, G_FILE_MONITOR_NONE, NULL, &error);
 
@@ -916,11 +916,12 @@ ide_buffer__file_notify_file (IdeBuffer  *self,
                                    self,
                                    G_CONNECT_SWAPPED);
         }
-      else if (error != NULL)
-        {
-          g_debug ("Failed to create GFileMonitor: %s", error->message);
-          g_clear_error (&error);
-        }
+
+      if (error != NULL)
+        ide_object_message (self,
+                            /* translators: %s is replaced with the error message */
+                            _("Failed to establish a monitor for background changes: %s"),
+                            error->message);
     }
 }
 
