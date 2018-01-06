@@ -79,11 +79,11 @@ ide_editor_utilities_add (GtkContainer *container,
                                "title", title,
                                "icon-name", icon_name,
                                NULL);
-
-      gtk_container_foreach (GTK_CONTAINER (self->stack_switcher),
-                             tweak_radio_button,
-                             NULL);
     }
+
+  gtk_container_foreach (GTK_CONTAINER (self->stack_switcher),
+                         tweak_radio_button,
+                         NULL);
 }
 
 static void
