@@ -45,7 +45,7 @@ gbp_todo_workbench_addin_mine_cb (GObject      *object,
   g_assert (GBP_IS_TODO_MODEL (model));
 
   if (!gbp_todo_model_mine_finish (model, result, &error))
-    g_warning ("%s", error->message);
+    ide_widget_warning (self->panel, "todo: %s", error->message);
 }
 
 static void
