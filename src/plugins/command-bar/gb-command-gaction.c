@@ -89,17 +89,12 @@ gb_command_gaction_execute (GbCommand *command)
 {
   GbCommandGaction *self = (GbCommandGaction *)command;
 
-  g_return_val_if_fail (GB_IS_COMMAND_GACTION (self), NULL);
+  g_assert (GB_IS_COMMAND_GACTION (self));
 
-  if (self->action_group &&
-      self->action_name &&
-      g_action_group_has_action (self->action_group,
-                                 self->action_name))
-    {
-      g_action_group_activate_action (self->action_group,
-                                      self->action_name,
-                                      self->parameters);
-    }
+  if (self->action_group != NULL &&
+      self->action_name != NULL &&
+      g_action_group_has_action (self->action_group, self->action_name))
+    g_action_group_activate_action (self->action_group, self->action_name, self->parameters);
 
   return NULL;
 }
