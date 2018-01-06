@@ -27,6 +27,7 @@
 #include "ide-pausable.h"
 #include "ide-service.h"
 
+#include "application/ide-application.h"
 #include "buffers/ide-buffer-manager.h"
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-unsaved-file.h"
@@ -161,6 +162,7 @@ enum {
 
 enum {
   LOADED,
+  LOG,
   LAST_SIGNAL
 };
 
@@ -495,6 +497,14 @@ ide_context_loaded (IdeContext *self)
 }
 
 static void
+ide_context_real_log (IdeContext     *self,
+                      GLogLevelFlags  log_level,
+                      const gchar    *str)
+{
+  g_log ("Ide", log_level, "%s", str);
+}
+
+static void
 ide_context_dispose (GObject *object)
 {
   IdeContext *self = (IdeContext *)object;
@@ -743,6 +753,28 @@ ide_context_class_init (IdeContextClass *klass)
                                 G_CALLBACK (ide_context_loaded),
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE, 0);
+
+  /**
+   * IdeContext::log:
+   * @self: an #IdeContext
+   * @log_level: the #GLogLevelFlags
+   * @message: the log message
+   *
+   * The "log" signal is emitted when ide_context_warning()
+   * or other log messages are sent.
+   *
+   * Since: 3.28
+   */
+  signals [LOG] =
+    g_signal_new_class_handler ("log",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_context_real_log),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                2,
+                                G_TYPE_UINT,
+                                G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
@@ -1290,8 +1322,9 @@ ide_context_init_add_recent (gpointer             source_object,
   if (error != NULL &&
       !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
     {
-      g_warning ("Unable to open recent projects \"%s\" file: %s",
-                 self->recent_projects_path, error->message);
+      ide_context_warning (self,
+                           "Unable to open recent projects \"%s\" file: %s",
+                           self->recent_projects_path, error->message);
       g_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
@@ -2277,18 +2310,18 @@ ide_context_warning (IdeContext  *self,
                      const gchar *format,
                      ...)
 {
+  g_autofree gchar *str = NULL;
   va_list args;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONTEXT (self));
   g_return_if_fail (format != NULL);
 
   va_start (args, format);
-  /*
-   * TODO: Track logging information so that we can display warnings
-   *       to the user in the workbench.
-   */
-  g_logv ("Ide", G_LOG_LEVEL_WARNING, format, args);
+  str = g_strdup_vprintf (format, args);
   va_end (args);
+
+  g_signal_emit (self, signals [LOG], 0, G_LOG_LEVEL_WARNING, str);
 }
 
 /**
