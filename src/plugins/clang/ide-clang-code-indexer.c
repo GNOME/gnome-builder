@@ -83,7 +83,6 @@ ide_clang_code_indexer_index_file (IdeCodeIndexer       *indexer,
                                    GError              **error)
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)indexer;
-  g_autoptr(GTask) task = NULL;
   g_autofree gchar *filename = NULL;
   CXTranslationUnit tu;
   guint n_args = 0;
@@ -91,8 +90,6 @@ ide_clang_code_indexer_index_file (IdeCodeIndexer       *indexer,
   g_return_val_if_fail (IDE_IS_CLANG_CODE_INDEXER (self), NULL);
   g_return_val_if_fail (G_IS_FILE (file), NULL);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
-
-  task = g_task_new (self, cancellable, NULL, NULL);
 
   filename = g_file_get_path (file);
 
@@ -122,17 +119,18 @@ ide_clang_code_indexer_index_file (IdeCodeIndexer       *indexer,
       /* entries has to dispose TU when done with it */
       entries = ide_clang_code_index_entries_new (tu, filename);
 
-      g_task_return_pointer (task, g_steal_pointer (&entries), g_object_unref);
-    }
-  else
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Unable to create translation unit");
+      if (entries != NULL)
+        return g_steal_pointer (&entries);
+
+      clang_disposeTranslationUnit (tu);
     }
 
-  return g_task_propagate_pointer (task, error);
+  g_set_error (error,
+               G_IO_ERROR,
+               G_IO_ERROR_FAILED,
+               "Unable to create translation unit");
+
+  return NULL;
 }
 
 static void

@@ -299,11 +299,12 @@ static IdeCodeIndexEntry *
 ide_clang_code_index_entries_get_next_entry (IdeCodeIndexEntries *entries)
 {
   IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)entries;
-  gboolean finish = FALSE;
   g_autoptr(IdeCodeIndexEntry) entry = NULL;
+  gboolean finish = FALSE;
+
+  g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (self));
 
   entry = ide_clang_code_index_entries_real_get_next_entry (self, &finish);
-
   while (entry == NULL && !finish)
     entry = ide_clang_code_index_entries_real_get_next_entry (self, &finish);
 

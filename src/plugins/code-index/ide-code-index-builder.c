@@ -172,7 +172,8 @@ ide_code_index_builder_index_file (IdeCodeIndexBuilder      *self,
 
   if (entries == NULL)
     {
-      g_warning ("Failed to index file: %s", error->message);
+      if (error != NULL)
+        g_warning ("Failed to index file: %s", error->message);
       return;
     }
 
