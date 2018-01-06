@@ -32,6 +32,8 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
+#include "buildsystem/ide-build-log.h"
+#include "buildsystem/ide-build-log-private.h"
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-build-system-discovery.h"
@@ -128,12 +130,16 @@ struct _IdeContext
   IdeUnsavedFiles          *unsaved_files;
   IdeVcs                   *vcs;
 
-  guint                     restored : 1;
-  guint                     restoring : 1;
+  IdeBuildLog              *log;
+  guint                     log_id;
 
   GMutex                    unload_mutex;
   gint                      hold_count;
+
   GTask                    *delayed_unload_task;
+
+  guint                     restored : 1;
+  guint                     restoring : 1;
 };
 
 static void async_initable_init (GAsyncInitableIface *);
@@ -168,6 +174,26 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
+
+static void
+ide_context_log_observer (IdeBuildLogStream  log_stream,
+                          const gchar       *message,
+                          gssize             message_len,
+                          gpointer           user_data)
+{
+  IdeContext *self = user_data;
+  GLogLevelFlags flags;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (message_len >= 0);
+  g_assert (message[message_len] == 0);
+
+  flags = log_stream == IDE_BUILD_LOG_STDOUT ? G_LOG_LEVEL_MESSAGE
+                                             : G_LOG_LEVEL_WARNING;
+
+  g_signal_emit (self, signals [LOG], 0, flags, message);
+}
 
 /**
  * ide_context_get_recent_manager:
@@ -511,6 +537,13 @@ ide_context_dispose (GObject *object)
 
   IDE_ENTRY;
 
+  if (self->log_id != 0)
+    {
+      guint log_id = self->log_id;
+      self->log_id = 0;
+      ide_build_log_remove_observer (self->log, log_id);
+    }
+
   g_list_store_remove_all (self->pausables);
   g_object_run_dispose (G_OBJECT (self->monitor));
 
@@ -526,6 +559,7 @@ ide_context_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  g_clear_object (&self->log);
   g_clear_object (&self->services);
   g_clear_object (&self->pausables);
   g_clear_object (&self->monitor);
@@ -787,6 +821,12 @@ ide_context_init (IdeContext *self)
   DZL_COUNTER_INC (instances);
 
   g_mutex_init (&self->unload_mutex);
+
+  /* Create log for internal context-based logging */
+  self->log = ide_build_log_new ();
+  self->log_id = ide_build_log_add_observer (self->log,
+                                             ide_context_log_observer,
+                                             self, NULL);
 
   /* Cache some paths for future lookups */
   downloads_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD);
@@ -2305,23 +2345,42 @@ ide_context_get_configuration_manager (IdeContext *self)
   return self->configuration_manager;
 }
 
+/**
+ * ide_context_warning:
+ * @self: a #IdeContext
+ * @format: a printf style format
+ * @...: parameters for @format
+ *
+ * Emits a log message for the context, which is useful so that error
+ * messages may be displayed to the user in the workbench window.
+ *
+ * Thread-safety: you may call this from any thread, so long as the thread
+ *   owns a reference to the context.
+ */
 void
 ide_context_warning (IdeContext  *self,
                      const gchar *format,
                      ...)
 {
-  g_autofree gchar *str = NULL;
-  va_list args;
-
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONTEXT (self));
   g_return_if_fail (format != NULL);
 
-  va_start (args, format);
-  str = g_strdup_vprintf (format, args);
-  va_end (args);
+  /*
+   * This may be called from a thread, so we proxy the message
+   * to the main thread using IdeBuildLog.
+   */
 
-  g_signal_emit (self, signals [LOG], 0, G_LOG_LEVEL_WARNING, str);
+  if (self->log != NULL)
+    {
+      g_autofree gchar *str = NULL;
+      va_list args;
+
+      va_start (args, format);
+      str = g_strdup_vprintf (format, args);
+      va_end (args);
+
+      ide_build_log_observer (IDE_BUILD_LOG_STDERR, str, -1, self->log);
+    }
 }
 
 /**
