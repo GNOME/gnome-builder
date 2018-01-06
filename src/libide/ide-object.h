@@ -73,5 +73,13 @@ void        ide_object_release                 (IdeObject            *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_object_notify_in_main          (gpointer              instance,
                                                 GParamSpec           *pspec);
+IDE_AVAILABLE_IN_3_28
+void        ide_object_message                 (gpointer              instance,
+                                                const gchar          *format,
+                                                ...) G_GNUC_PRINTF (2, 3);
+IDE_AVAILABLE_IN_3_28
+void        ide_object_warning                 (gpointer              instance,
+                                                const gchar          *format,
+                                                ...) G_GNUC_PRINTF (2, 3);
 
 G_END_DECLS

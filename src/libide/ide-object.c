@@ -25,6 +25,8 @@
 #include "ide-debug.h"
 #include "ide-object.h"
 
+#include "application/ide-application.h"
+
 /**
  * SECTION:ide-object
  * @title: IdeObject
@@ -772,4 +774,52 @@ ide_object_notify_in_main (gpointer    instance,
   notify->pspec = g_param_spec_ref (pspec);
 
   g_timeout_add (0, ide_object_notify_in_main_cb, notify);
+}
+
+void
+ide_object_message (gpointer     instance,
+                    const gchar *format,
+                    ...)
+{
+  g_autofree gchar *str = NULL;
+  IdeContext *context;
+  va_list args;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GTK_IS_WIDGET (instance));
+
+  va_start (args, format);
+  str = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  context = ide_object_get_context (instance);
+
+  if (context != NULL)
+    ide_context_emit_log (context, G_LOG_LEVEL_MESSAGE, str, -1);
+  else
+    g_message ("%s", str);
+}
+
+void
+ide_object_warning (gpointer     instance,
+                    const gchar *format,
+                    ...)
+{
+  g_autofree gchar *str = NULL;
+  IdeContext *context;
+  va_list args;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GTK_IS_WIDGET (instance));
+
+  va_start (args, format);
+  str = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  context = ide_object_get_context (instance);
+
+  if (context != NULL)
+    ide_context_emit_log (context, G_LOG_LEVEL_WARNING, str, -1);
+  else
+    g_warning ("%s", str);
 }
