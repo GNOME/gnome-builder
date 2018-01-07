@@ -1,0 +1,8 @@
+[Plugin]
+Module=go_langserver_plugin
+Loader=python3
+Name=Go Language Server Plugin
+Description=Provides LSP integration for Go
+Copyright=Copyright © 2018 Henry Finucane
+Builtin=true
+X-Symbol-Resolver-Languages=go
