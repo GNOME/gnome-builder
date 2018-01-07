@@ -24,8 +24,8 @@
 
 #include "threading/ide-thread-pool.h"
 
-#define COMPILER_MAX_THREADS 4
-#define INDEXER_MAX_THREADS  1
+#define COMPILER_MAX_THREADS (g_get_num_processors())
+#define INDEXER_MAX_THREADS  (MAX (1, g_get_num_processors() / 2))
 
 typedef struct
 {
