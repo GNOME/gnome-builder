@@ -26,6 +26,12 @@
     <file>config/xml/config.ini</file>
   </gresource>
   <gresource prefix="/org/gnome/builder/plugins/beautifier_plugin">
+    <file>self/global.ini</file>
+    <file>self/c/config.ini</file>
+    <file>self/c/gb-clang-format.cfg</file>
+    <file>self/c/gb-uncrustify.cfg</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/beautifier_plugin">
     <file>internal/align_makefile.py</file>
   </gresource>
 </gresources>

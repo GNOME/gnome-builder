@@ -556,12 +556,14 @@ get_entries_worker (GTask        *task,
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)source_object;
   IdeContext *context;
+  IdeProject *project;
   IdeVcs *vcs;
   GArray *entries;
   GArray *map = NULL;
+  const gchar *project_name;
   g_autofree gchar *project_config_path = NULL;
   g_autofree gchar *user_config_path = NULL;
-  g_autofree gchar *configdir = NULL;
+  gchar *configdir;
   GbBeautifierEntriesResult *result;
   gboolean has_default = FALSE;
   gboolean ret_has_default = FALSE;
@@ -587,23 +589,37 @@ get_entries_worker (GTask        *task,
     g_array_free (map, TRUE);
 
   /* Project wide config */
-  if (NULL != (context = self->context) &&
-      NULL != (vcs = ide_context_get_vcs (context)))
+  if (NULL != (context = self->context))
     {
-      GFile *workdir;
-      g_autofree gchar *workdir_path = NULL;
+      if (NULL != (project = ide_context_get_project (context)))
+        {
+          project_name = ide_project_get_name (project);
+          if (dzl_str_equal0 (project_name, "Builder"))
+            {
+              configdir = g_strdup ("resource:///org/gnome/builder/plugins/beautifier_plugin/self/");
+              map = gb_beautifier_config_get_map (self, configdir);
+              add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
+              has_default |= ret_has_default;
+              g_clear_pointer (&configdir, g_free);
+            }
+          else if (NULL != (vcs = ide_context_get_vcs (context)))
+            {
+              GFile *workdir;
+              g_autofree gchar *workdir_path = NULL;
 
-      workdir = ide_vcs_get_working_directory (vcs);
-      workdir_path = g_file_get_path (workdir);
-      project_config_path = g_build_filename (workdir_path,
-                                              ".beautifier",
-                                              NULL);
-      map = gb_beautifier_config_get_map (self, project_config_path);
-      add_entries_from_base_path (self, project_config_path, entries, map, &ret_has_default);
-      has_default |= ret_has_default;
+              workdir = ide_vcs_get_working_directory (vcs);
+              workdir_path = g_file_get_path (workdir);
+              project_config_path = g_build_filename (workdir_path,
+                                                      ".beautifier",
+                                                      NULL);
+              map = gb_beautifier_config_get_map (self, project_config_path);
+              add_entries_from_base_path (self, project_config_path, entries, map, &ret_has_default);
+              has_default |= ret_has_default;
 
-      if (map != NULL)
-        g_array_free (map, TRUE);
+              if (map != NULL)
+                g_array_free (map, TRUE);
+            }
+        }
     }
 
   /* System wide config */
@@ -611,6 +627,7 @@ get_entries_worker (GTask        *task,
 
   map = gb_beautifier_config_get_map (self, configdir);
   add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
+  g_clear_pointer (&configdir, g_free);
   has_default |= ret_has_default;
 
   if (map != NULL)
