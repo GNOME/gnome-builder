@@ -81,6 +81,34 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+
+    <!-- release version="3.27.4" date="2018-01-08">
+      <description>
+        <p>
+          A number of performance improvements and bug fixes have landed in this release.
+          Notably, the projcet tree now supports displaying status from the Version Control System.
+        </p>
+        <ul>
+          <li>A new IdeVcsMonitor interface provides status tracking for project files. This can be used to show the status in the project tree.</li>
+          <li>The editor supports Drag'n'Drop to open files, also allowing placement of the editor frame to the left/right/top/bottom of an existing editor frame.</li>
+          <li>A new message pane allows plugins to deliver information to users, particular about failures which would otherwise be silently dropped to the console. It is hidden until the first message is displayed.</li>
+          <li>A number of improvements to subsystems for better error tracking, memory leaks, and correctness fixes.</li>
+          <li>Save-All shortcut has been fixed.</li>
+          <li>The “hamburger” menu has been hidden by default, but will automatically display if any plugins end up using it. Currently, all plugins have removed their use of it.</li>
+          <li>Fullscreen now has a top-level button.</li>
+          <li>Newcomers greeter section now displays the included programming languages to help guide developers to projects they may want to contribute to.</li>
+          <li>The omnibar now includes a button to download dependencies.</li>
+          <li>Unit tests are reloaded whenever the build pipeline is updated.</li>
+          <li>Symbol Tree will now more reliably show document contents.</li>
+          <li>Builder can now chain GCancellables together, meaning more reliable cancellation of complex operations such as project building.</li>
+          <li>The build status panel can now display the build pipeline stages and update them as the build progresses.</li>
+          <li>The Clang plugin will more reliably work when used to build against a host system from Builder shipped via Flatpak.</li>
+          <li>Support for LLVM 5.0.</li>
+          <li>Various compilation fixes for FreeBSD.</li>
+        </ul>
+      </description>
+    </release -->
+
     <release version="3.27.3" date="2017-12-11">
       <description>
         <p>
