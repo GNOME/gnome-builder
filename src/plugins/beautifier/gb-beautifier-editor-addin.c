@@ -418,7 +418,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
   ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)cleanup_view_cb, self);
   if (self->entries != NULL)
     {
-      for (gint i =0; i < self->entries->len; i++)
+      for (guint i = 0; i < self->entries->len; i++)
         {
           entry = &g_array_index (self->entries, GbBeautifierConfigEntry, i);
           gb_beautifier_helper_config_entry_remove_temp_files (entry);

@@ -116,7 +116,7 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierConfigEntry *co
 
   if (config_entry->command_args != NULL)
     {
-      for (gint i = 0; i < config_entry->command_args->len; i++)
+      for (guint i = 0; i < config_entry->command_args->len; i++)
         {
           arg = &g_array_index (config_entry->command_args, GbBeautifierCommandArg, i);
           if (arg->is_temp && !dzl_str_empty0 (arg->str))

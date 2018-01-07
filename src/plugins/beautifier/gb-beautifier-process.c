@@ -98,7 +98,7 @@ command_args_expand (GbBeautifierEditorAddin *self,
   else
     has_config = FALSE;
 
-  for (gint i = 0; g_ptr_array_index (args, i) != NULL; ++i)
+  for (guint i = 0; g_ptr_array_index (args, i) != NULL; ++i)
     {
       arg_adr = (gchar **)&g_ptr_array_index (args, i);
       if (NULL != (new_arg = gb_beautifier_helper_match_and_replace (*arg_adr, "@s@", src_path)))
@@ -333,7 +333,7 @@ command_args_copy (GArray *args)
   g_assert (args != NULL);
 
   args_copy = g_ptr_array_new_with_free_func (g_free);
-  for (gint i = 0; i < args->len; ++i)
+  for (guint i = 0; i < args->len; ++i)
     {
       GbBeautifierCommandArg *arg = &g_array_index (args, GbBeautifierCommandArg, i);
 
