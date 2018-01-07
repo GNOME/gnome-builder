@@ -86,7 +86,7 @@
       <description>
         <p>
           A number of performance improvements and bug fixes have landed in this release.
-          Notably, the projcet tree now supports displaying status from the Version Control System.
+          Notably, the project tree now supports displaying status from the Version Control System.
         </p>
         <ul>
           <li>A new IdeVcsMonitor interface provides status tracking for project files. This can be used to show the status in the project tree.</li>
