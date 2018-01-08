@@ -212,23 +212,24 @@ process_communicate_utf8_cb (GObject      *object,
                              GAsyncResult *result,
                              gpointer      user_data)
 {
-  g_autoptr (GSubprocess) process = (GSubprocess *)object;
-  g_autoptr (GTask) task = (GTask *)user_data;
-  g_autofree gchar *stdout_str = NULL;
-  g_autofree gchar *stderr_str = NULL;
+  g_autoptr(GSubprocess) process = (GSubprocess *)object;
+  g_autoptr(GTask) task = (GTask *)user_data;
+  g_autoptr(GBytes) stdout_gb = NULL;
+  g_autoptr(GBytes) stderr_gb = NULL;
+  const gchar *stdout_str = NULL;
+  const gchar *stderr_str = NULL;
   g_autoptr(GError) error = NULL;
   GtkSourceCompletion *completion;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
   ProcessState *state;
-  gboolean status;
 
   g_assert (G_IS_SUBPROCESS (process));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
-  if (!g_subprocess_communicate_utf8_finish (process, result, &stdout_str, &stderr_str, &error))
+  if (!g_subprocess_communicate_finish (process, result, &stdout_gb, &stderr_gb, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -237,12 +238,28 @@ process_communicate_utf8_cb (GObject      *object,
   if (g_task_return_error_if_cancelled (task))
     return;
 
-  state = (ProcessState *)g_task_get_task_data (task);
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (state->source_view));
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (state->source_view));
-
-  if (!dzl_str_empty0 (stdout_str))
+  if (stderr_gb != NULL &&
+      NULL != (stderr_str = g_bytes_get_data (stderr_gb, NULL)) &&
+      !dzl_str_empty0 (stderr_str) &&
+      g_utf8_validate (stderr_str, -1, NULL))
     {
+      if (g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) != 0)
+        g_warning ("beautify plugin:\n%s", stderr_str);
+    }
+
+  if (stdout_gb != NULL)
+    stdout_str = g_bytes_get_data (stdout_gb, NULL);
+
+  if (stdout_gb != NULL && dzl_str_empty0 (stdout_str))
+    {
+      g_warning ("beautify plugin: output empty");
+    }
+  else if (g_utf8_validate (stdout_str, -1, NULL))
+    {
+      state = (ProcessState *)g_task_get_task_data (task);
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (state->source_view));
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (state->source_view));
+
       gtk_source_completion_block_interactive (completion);
       gtk_text_buffer_begin_user_action (buffer);
 
@@ -263,18 +280,7 @@ process_communicate_utf8_cb (GObject      *object,
       g_task_return_boolean (task, TRUE);
     }
   else
-    g_warning ("beautify plugin: output empty");
-
-  if (g_subprocess_get_if_exited (process))
-    {
-      status = g_subprocess_get_exit_status (process);
-      if (status != 0 &&
-          stderr_str != NULL &&
-          !dzl_str_empty0 (stderr_str))
-        {
-          g_warning ("beautify plugin stderr:\n%s", stderr_str);
-        }
-    }
+    g_warning ("beautify plugin: output is not a valid uft8 text");
 }
 
 static void
@@ -309,11 +315,11 @@ create_text_tmp_file_cb (GObject      *object,
       else
         {
           cancellable = g_task_get_cancellable (task);
-          g_subprocess_communicate_utf8_async (process,
-                                               NULL,
-                                               cancellable,
-                                               process_communicate_utf8_cb,
-                                               g_steal_pointer (&task));
+          g_subprocess_communicate_async (process,
+                                          NULL,
+                                          cancellable,
+                                          process_communicate_utf8_cb,
+                                          g_steal_pointer (&task));
         }
 
       return;
