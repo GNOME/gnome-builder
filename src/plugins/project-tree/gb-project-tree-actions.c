@@ -427,7 +427,7 @@ gb_project_tree_actions__popover_create_file_cb (GbProjectTree    *self,
             (file_type == G_FILE_TYPE_REGULAR));
   g_assert (GB_IS_NEW_FILE_POPOVER (popover));
 
-  selected = dzl_tree_get_selected (DZL_TREE (self));
+  selected = g_object_get_data (G_OBJECT (popover), "DZL_TREE_NODE");
 
   g_assert (selected != NULL);
   g_assert (DZL_IS_TREE_NODE (selected));
@@ -469,10 +469,13 @@ gb_project_tree_actions__popover_closed_cb (GbProjectTree *self,
   g_assert (GB_IS_PROJECT_TREE (self));
   g_assert (GTK_IS_POPOVER (popover));
 
-  if (!(selected = dzl_tree_get_selected (DZL_TREE (self))) || !self->expanded_in_new)
-    return;
+  selected = g_object_get_data (G_OBJECT (popover), "DZL_TREE_NODE");
 
-  dzl_tree_node_collapse (selected);
+  g_assert (selected != NULL);
+  g_assert (DZL_IS_TREE_NODE (selected));
+
+  if (self->expanded_in_new)
+    dzl_tree_node_collapse (selected);
 }
 
 static void
@@ -555,6 +558,10 @@ again:
                           "file-type", file_type,
                           "position", GTK_POS_RIGHT,
                           NULL);
+  g_object_set_data_full (G_OBJECT (popover),
+                          "DZL_TREE_NODE",
+                          g_object_ref (selected),
+                          g_object_unref);
   g_signal_connect_object (popover,
                            "create-file",
                            G_CALLBACK (gb_project_tree_actions__popover_create_file_cb),
