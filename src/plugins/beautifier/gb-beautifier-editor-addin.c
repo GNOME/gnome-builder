@@ -410,6 +410,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)addin;
   GbBeautifierConfigEntry *entry;
+  g_autoptr (GFile) tmp_file = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
@@ -427,6 +428,13 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
     }
 
   dzl_clear_weak_pointer (&self->editor);
+  if (self->tmp_dir != NULL)
+    {
+      tmp_file = g_file_new_for_path (self->tmp_dir);
+      gb_beautifier_helper_remove_temp_for_file (tmp_file);
+      g_clear_pointer (&self->tmp_dir, g_free);
+    }
+
   self->context = NULL;
 }
 

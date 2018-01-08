@@ -33,6 +33,8 @@ struct _GbBeautifierEditorAddin
   IdeLayoutView         *current_view;
   GArray                *entries;
 
+  gchar                 *tmp_dir;
+
   gboolean               has_default;
 };
 

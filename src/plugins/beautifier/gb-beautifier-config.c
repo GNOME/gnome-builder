@@ -117,32 +117,43 @@ gb_beautifier_map_check_duplicates (GbBeautifierEditorAddin *self,
   return FALSE;
 }
 
-gchar *
-copy_to_tmp_file (const gchar *source_path,
+static gchar *
+copy_to_tmp_file (const gchar *tmp_dir,
+                  const gchar *source_path,
                   gboolean     is_executable)
 {
-  g_autoptr (GFile) file = NULL;
-  g_autoptr (GFile) tmp_file = NULL;
+  g_autoptr (GFile) src_file = NULL;
+  g_autoptr (GFile) dst_file = NULL;
   g_autoptr (GError) error = NULL;
-  GFileIOStream *stream;
-  gchar *tmp_path;
+  g_autofree gchar *tmp_path = NULL;
+  gint fd;
 
-  file = g_file_new_for_uri (source_path);
-  if (NULL == (tmp_file = g_file_new_tmp ("gnome-builder-beautifier-XXXXXX.txt", &stream, &error)) ||
-      !g_io_stream_close (G_IO_STREAM (stream), NULL, &error) ||
-      !g_file_copy (file, tmp_file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error))
+  g_assert (!dzl_str_empty0 (tmp_dir));
+  g_assert (!dzl_str_empty0 (source_path));
+
+  tmp_path = g_build_filename (tmp_dir, "gnome-builder-beautifier-XXXXXX.txt", NULL);
+  if (-1 != (fd = g_mkstemp (tmp_path)))
     {
-      g_warning ("beautifier plugin: error copying the gresource config file:%s",
-                 error->message);
+      close (fd);
+      src_file = g_file_new_for_uri (source_path);
+      dst_file = g_file_new_for_path (tmp_path);
+      if (g_file_copy (src_file, dst_file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error))
+        {
+          if (is_executable)
+            g_chmod (tmp_path, 0777);
 
-      return NULL;
+          return g_steal_pointer (&tmp_path);
+        }
     }
 
-  tmp_path = g_file_get_path (tmp_file);
-  if (is_executable)
-    g_chmod (tmp_path, 0777);
+  if (error != NULL)
+    g_warning ("beautifier plugin: error copying the gresource config file for '%s':%s",
+               source_path,
+               error->message);
+  else
+    g_warning ("beautifier plugin: error creating config temp file for '%s'", source_path);
 
-  return tmp_path;
+  return NULL;
 }
 
 static gboolean
@@ -244,7 +255,7 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
               config_path = g_build_filename (base_path, real_lang_id, config_name, NULL);
               if (g_str_has_prefix (config_path, "resource://"))
                 {
-                  gchar *tmp_config_path = copy_to_tmp_file (config_path, FALSE);
+                  gchar *tmp_config_path = copy_to_tmp_file (self->tmp_dir, config_path, FALSE);
 
                   g_free (config_path);
                   config_path = tmp_config_path;
@@ -321,7 +332,7 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
                       if (g_strstr_len (strv[j], -1, "internal"))
                         is_executable = TRUE;
 
-                      if (NULL == (arg.str = copy_to_tmp_file (strv[j], is_executable)))
+                      if (NULL == (arg.str = copy_to_tmp_file (self->tmp_dir, strv[j], is_executable)))
                         {
                           g_warning ("beautifier plugin: can't create tmp file for:%s", strv[j]);
                           g_warning ("entry \"%s\" disabled", display_name);
@@ -555,6 +566,7 @@ get_entries_worker (GTask        *task,
                     GCancellable *cancellable)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)source_object;
+  g_autoptr (GError) error = NULL;
   IdeContext *context;
   IdeProject *project;
   IdeVcs *vcs;
@@ -567,11 +579,20 @@ get_entries_worker (GTask        *task,
   GbBeautifierEntriesResult *result;
   gboolean has_default = FALSE;
   gboolean ret_has_default = FALSE;
-  //g_autoptr (GError) error = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (G_IS_TASK (task));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (self->tmp_dir == NULL)
+    {
+      if (NULL == (self->tmp_dir = g_dir_make_tmp ("gnome-builder-beautifier-XXXXXX", &error)))
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+
+    }
 
   entries = g_array_new (TRUE, TRUE, sizeof (GbBeautifierConfigEntry));
   g_array_set_clear_func (entries, config_entry_clear_func);
@@ -638,7 +659,6 @@ get_entries_worker (GTask        *task,
   result->has_default = has_default;
 
   g_task_return_pointer (task, result, NULL);
-  // g_task_return_error (task, error);
 }
 
 void
