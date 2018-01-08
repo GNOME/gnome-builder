@@ -361,7 +361,6 @@ get_entries_async_cb (GObject      *object,
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (user_data == NULL);
 
   if (NULL == (ret = gb_beautifier_config_get_entries_finish (self, result, &error)))
     {
@@ -402,7 +401,7 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
                                           &self->has_default,
                                           get_entries_async_cb,
                                           NULL,
-                                          NULL);
+                                          g_object_ref (self));
 }
 
 static void
