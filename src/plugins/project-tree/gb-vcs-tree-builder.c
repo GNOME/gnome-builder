@@ -62,7 +62,11 @@ gb_vcs_tree_builder_cell_data_func (DzlTreeBuilder  *builder,
   if (!GTK_IS_CELL_RENDERER_TEXT (cell))
     goto unset;
 
+  /* try to not touch anything if we're NULL (the empty node) */
   item = dzl_tree_node_get_item (node);
+  if (item == NULL)
+    return;
+
   if (!GB_IS_PROJECT_FILE (item))
     goto unset;
 
