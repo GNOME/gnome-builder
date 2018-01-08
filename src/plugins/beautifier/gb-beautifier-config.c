@@ -622,6 +622,9 @@ get_entries_worker (GTask        *task,
               add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
               has_default |= ret_has_default;
               g_clear_pointer (&configdir, g_free);
+
+              if (map != NULL)
+                g_array_free (map, TRUE);
             }
           else if (NULL != (vcs = ide_context_get_vcs (context)))
             {
