@@ -3,15 +3,15 @@
 # Copyright (C) 2015 THE GNOME Builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the GNOME Builder package.
 # Ian Hernandez <ihernandezs@openmailbox.org>, 2015.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016, 2017.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2017-12-20 00:37+0000\n"
-"PO-Revision-Date: 2017-12-20 09:40+0100\n"
+"POT-Creation-Date: 2018-01-06 12:32+0000\n"
+"PO-Revision-Date: 2018-01-08 13:10+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -755,7 +755,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5131
+#: src/libide/sourceview/ide-source-view.c:5133
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renombrar"
@@ -902,22 +902,55 @@ msgctxt "shortcut window"
 msgid "Show the shortcuts window"
 msgstr "Mostrar la ventana de atajos"
 
-#: src/libide/buffers/ide-buffer.c:2725
+#. translators: %s is replaced with the error message
+#: src/libide/buffers/ide-buffer.c:923
+#, c-format
+msgid "Failed to establish a monitor for background changes: %s"
+msgstr "Falló al establecer un monitor para cambios en segundo plano: %s"
+
+#: src/libide/buffers/ide-buffer.c:2806
 msgid "The current language lacks a symbol resolver."
 msgstr "Al idioma actual le falta un resolutor de símbolos."
 
-#: src/libide/buffers/ide-buffer-manager.c:686
+#: src/libide/buffers/ide-buffer-manager.c:703
 msgid "File too large to be opened."
 msgstr "El archivo es demasiado grande para poder abrirlo."
 
-#: src/libide/buffers/ide-buffer-manager.c:1912
+#: src/libide/buffers/ide-buffer-manager.c:1968
 #, c-format
 msgid "unsaved document %u"
 msgstr "Documento %u sin guardar"
 
-#: src/libide/buffers/ide-buffer-manager.c:1950
-msgid "Failed to save buffer, ignoring reclamation."
-msgstr "Falló al guardar el búfer, ignorando reclamación."
+#. translators: %s is replaced with the error message
+#. translators: %s is replaced with error message
+#. translators: %s is the error message
+#. translators: %s is the underlying error message
+#: src/libide/buffers/ide-buffer-manager.c:2007
+#: src/libide/buffers/ide-buffer-manager.c:2070
+#: src/libide/editor/ide-editor-view-actions.c:189
+#: src/libide/editor/ide-editor-view-actions.c:310
+#, c-format
+msgid "Failed to save file: %s"
+msgstr "Falló al cargar el archivo: %s:"
+
+#. translators: %s is replaced with the error message
+#: src/libide/buffers/ide-unsaved-files.c:252
+#, c-format
+#| msgid "Failed to save file: %s"
+msgid "Failed to save draft: %s"
+msgstr "Falló al guardar el borrador: %s"
+
+#: src/libide/buildsystem/ide-build-manager.c:352
+#, c-format
+#| msgid "Failed to initialize defaults."
+msgid "Failed to initialize build pipeline: %s"
+msgstr "Falló al inicializar la tubería de construcción: %s"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2351
+msgid "Psuedo terminal creation failed. Terminal features will be limited."
+msgstr ""
+"Falló la creación de la pseudo-terminal. Sus características estarán "
+"limitadas."
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2535
 msgid "Cleaning…"
@@ -1093,7 +1126,7 @@ msgstr "Advertencias"
 msgid "Errors"
 msgstr "Errores"
 
-#: src/libide/buildui/ide-build-panel.c:655
+#: src/libide/buildui/ide-build-panel.c:647
 #: src/libide/buildui/ide-build-workbench-addin.c:170
 msgid "Build Issues"
 msgstr "Errores de construcción"
@@ -1112,7 +1145,6 @@ msgid "—"
 msgstr "—"
 
 #: src/libide/buildui/ide-build-panel.ui:81
-#| msgid "Build status"
 msgid "Build Details"
 msgstr "Construir detalles"
 
@@ -1729,14 +1761,6 @@ msgstr "Falló al cargar el archivo: %s:"
 msgid "Print failed: %s"
 msgstr "Fallo al imprimir: %s"
 
-#. translators: %s is the error message
-#. translators: %s is the underlying error message
-#: src/libide/editor/ide-editor-view-actions.c:189
-#: src/libide/editor/ide-editor-view-actions.c:310
-#, c-format
-msgid "Failed to save file: %s"
-msgstr "Falló al cargar el archivo: %s:"
-
 #: src/libide/editor/ide-editor-view-actions.c:244
 #: src/plugins/color-picker/gb-color-picker-prefs.c:234
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
@@ -2035,29 +2059,29 @@ msgstr "C_opiar la dirección del enlace"
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
 
-#: src/libide/ide-context.c:1976
+#: src/libide/ide-context.c:2049
 msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
-#: src/libide/ide-context.c:2095
+#: src/libide/ide-context.c:2168
 msgid "Context has already been restored."
 msgstr "Ya se ha restaurado el contexto."
 
-#: src/libide/ide-object.c:343
+#: src/libide/ide-object.c:345
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "No hay implementaciones para el punto de extensión «%s»."
 
-#: src/libide/ide-object.c:452
+#: src/libide/ide-object.c:454
 #, c-format
 msgid "Failed to locate %s plugin."
 msgstr "Falló al buscar el complemento %s."
 
-#: src/libide/ide-object.c:587
+#: src/libide/ide-object.c:589
 msgid "No such extension point."
 msgstr "No existe el punto de extensión."
 
-#: src/libide/ide-object.c:597
+#: src/libide/ide-object.c:599
 msgid "No implementations of extension point."
 msgstr "No hay implementaciones para el punto de extensión."
 
@@ -2379,6 +2403,13 @@ msgstr "Buscar"
 msgctxt "shortcut window"
 msgid "Find text within terminal"
 msgstr "Buscar texto en la terminal"
+
+#. translators: %s is replaced with the error message
+#: src/libide/langserv/ide-langserv-client.c:874
+#, c-format
+#| msgid "Failed to initialize the debugger"
+msgid "Failed to initialize language server: %s"
+msgstr "Falló al inicializar el idioma del servidor: %s"
 
 #: src/libide/layout/ide-layout-stack.c:171
 #: src/libide/layout/ide-layout-stack.ui:8
@@ -2918,7 +2949,7 @@ msgid "SDKs"
 msgstr "SDK"
 
 #: src/libide/preferences/ide-preferences-perspective.c:137
-#: src/libide/preferences/ide-preferences-window.ui:6
+#: src/libide/preferences/ide-preferences-window.ui:9
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -2964,31 +2995,31 @@ msgstr "Falló al abrir la carpeta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falló al cargar el archivo: %s: %s"
 
-#: src/libide/sourceview/ide-source-view.c:4587
+#: src/libide/sourceview/ide-source-view.c:4589
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4589
+#: src/libide/sourceview/ide-source-view.c:4591
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4703
+#: src/libide/sourceview/ide-source-view.c:4705
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:5130
+#: src/libide/sourceview/ide-source-view.c:5132
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5363
+#: src/libide/sourceview/ide-source-view.c:5366
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5389
+#: src/libide/sourceview/ide-source-view.c:5392
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
@@ -3013,7 +3044,6 @@ msgid "Run _all tests"
 msgstr "Ejecutar _todas las pruebas"
 
 #: src/libide/testing/gtk/menus.ui:12
-#| msgid "_Reload"
 msgid "Reload tests"
 msgstr "Recargar pruebas"
 
@@ -3211,14 +3241,12 @@ msgid "Building cache…"
 msgstr "Construyendo caché…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
-#| msgid "Host operating system"
 msgid "Bootstrapping build system"
 msgstr "Inicializando sistema de construcción"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:225
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:140
 #: src/plugins/phpize/phpize_plugin.py:226
-#| msgid "Configuring…"
 msgid "Configuring project"
 msgstr "Configurando proyecto"
 
@@ -3227,7 +3255,6 @@ msgstr "Configurando proyecto"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:182
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:169
 #: src/plugins/phpize/phpize_plugin.py:238
-#| msgid "Build project"
 msgid "Building project"
 msgstr "Construyendo proyecto"
 
@@ -3295,28 +3322,28 @@ msgstr "Mostrar errores y advertencias proporcionadas por Clang"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos advertencias errors"
 
-#: src/plugins/clang/ide-clang-service.c:325
+#: src/plugins/clang/ide-clang-service.c:326
 msgid "Unknown failure"
 msgstr "Fallo desconocido"
 
-#: src/plugins/clang/ide-clang-service.c:329
+#: src/plugins/clang/ide-clang-service.c:330
 msgid "Clang crashed"
 msgstr "Clang ha fallado"
 
-#: src/plugins/clang/ide-clang-service.c:333
+#: src/plugins/clang/ide-clang-service.c:334
 msgid "Invalid arguments"
 msgstr "Argumentos no válidos"
 
-#: src/plugins/clang/ide-clang-service.c:337
+#: src/plugins/clang/ide-clang-service.c:338
 msgid "AST read error"
 msgstr "Error de lectura AST"
 
-#: src/plugins/clang/ide-clang-service.c:349
+#: src/plugins/clang/ide-clang-service.c:350
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Falló al crear la unidad de traducción: %s"
 
-#: src/plugins/clang/ide-clang-service.c:564
+#: src/plugins/clang/ide-clang-service.c:563
 #: src/plugins/xml-pack/ide-xml-service.c:97
 msgid "File must be saved locally to parse."
 msgstr ""
@@ -3335,14 +3362,12 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:157
-#| msgid "Clone Project"
 msgid "Configure project"
 msgstr "Configurar proyecto"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:201
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:179
 #: src/plugins/phpize/phpize_plugin.py:248
-#| msgid "Installing rust "
 msgid "Installing project"
 msgstr "Instalando proyecto"
 
@@ -3351,11 +3376,11 @@ msgstr "Instalando proyecto"
 msgid "Declaration"
 msgstr "Declaración"
 
-#: src/plugins/code-index/ide-code-index-service.c:543
+#: src/plugins/code-index/ide-code-index-service.c:547
 msgid "Indexing Source Code"
 msgstr "Indexando el código fuente"
 
-#: src/plugins/code-index/ide-code-index-service.c:544
+#: src/plugins/code-index/ide-code-index-service.c:548
 msgid "Search, diagnostics and autocompletion may be limited until complete."
 msgstr ""
 "La búsqueda, los diagnósticos y completado automático pueden estar limitados "
@@ -3631,6 +3656,13 @@ msgstr "Comando no encontrado: %s"
 msgid "Use the entry below to execute a command"
 msgstr "Use la siguiente entrada para ejecutar un comando"
 
+#. translators: %s is replaced with the error message
+#: src/plugins/command-bar/gb-command-vim.c:104
+#, c-format
+#| msgid "Command not found: %s"
+msgid "Command failed: %s"
+msgstr "Falló el comando: %s"
+
 #: src/plugins/command-bar/gb-vim.c:87
 msgid "Number required"
 msgstr "Número requerido"
@@ -3897,17 +3929,14 @@ msgid "Creating flatpak workspace"
 msgstr "Creando área de trabajo flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:249
-#| msgid "Root Build Directory"
 msgid "Preparing build directory"
 msgstr "Preparando carpeta de construcción"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
-#| msgid "_Download Dependencies"
 msgid "Downloading dependencies"
 msgstr "Descargando dependencias"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:352
-#| msgid "Building dependencies…"
 msgid "Building dependencies"
 msgstr "Construyendo dependencias"
 
@@ -4015,21 +4044,21 @@ msgstr ""
 "Este programa es necesario para construir aplicaciones Flatpak. ¿Quiere "
 "instalarlo?"
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:161
+#: src/plugins/git/ide-git-buffer-change-monitor.c:166
 msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 "Imposible proporcionar diferencias, no se ha proporcionado ningún archivo de "
 "respaldo."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:566
+#: src/plugins/git/ide-git-buffer-change-monitor.c:571
 msgid "Repository does not have a working directory."
 msgstr "El repositorio no tiene una carpeta de trabajo."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:577
+#: src/plugins/git/ide-git-buffer-change-monitor.c:582
 msgid "File is not under control of git working directory."
 msgstr "El archivo no está bajo el control de la carpeta de trabajo de git."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:643
+#: src/plugins/git/ide-git-buffer-change-monitor.c:648
 msgid "The requested file does not exist within the git index."
 msgstr "El archivo solicitado no existe dentro del índice de git."
 
@@ -4072,6 +4101,13 @@ msgid ""
 msgstr ""
 "Builder ha fallado al proporcionar las credenciales apropiadas al clonar el "
 "repositorio."
+
+#. translators: %s is replaced with the error message
+#: src/plugins/git/ide-git-vcs.c:365
+#, c-format
+#| msgid "Failed to save file: %s"
+msgid "Failed to establish git file monitor: %s"
+msgstr "Falló al establecer el archivo de monitorización de git: %s"
 
 #: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
 msgid "Code assistance requires a local file."
@@ -4131,7 +4167,6 @@ msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para completado en el lenguaje Python"
 
 #: src/plugins/make/make_plugin.py:132
-#| msgid "Run project"
 msgid "Install project"
 msgstr "Instalar proyecto"
 
@@ -4162,6 +4197,11 @@ msgstr "Proyecto vacío"
 #: src/plugins/meson-templates/meson_templates.py:298
 msgid "Create a new empty project"
 msgstr "Crear un nuevo proyecto vacío"
+
+#: src/plugins/messages/gbp-messages-panel.ui:5
+#| msgid "Message"
+msgid "Messages"
+msgstr "Mensajes"
 
 #: src/plugins/mingw/ide-mingw-device-provider.c:94
 msgid "MinGW 64-bit"
@@ -4226,12 +4266,10 @@ msgid "Project “%s” failed to build"
 msgstr "El proyecto «%s» ha fallado al construirse"
 
 #: src/plugins/npm/npm_plugin.py:103
-#| msgid "_Download Dependencies"
 msgid "Downloading npm dependencies"
 msgstr "Descargando dependencias npm"
 
 #: src/plugins/phpize/phpize_plugin.py:210
-#| msgid "Bootstrapping…"
 msgid "Bootstrapping project"
 msgstr "Inicializando proyecto"
 
@@ -4258,6 +4296,31 @@ msgstr "Nombre de la carpeta"
 #: src/plugins/project-tree/gb-new-file-popover.ui:35
 msgid "_Create"
 msgstr "_Crear"
+
+#: src/plugins/project-tree/gb-project-tree-actions.c:325
+msgid "Cannot load a non-native file in terminal"
+msgstr "No se puede cargar un archivo no nativo en la terminal"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/project-tree/gb-project-tree-actions.c:354
+#, c-format
+#| msgid "Failed to save file: %s"
+msgid "Failed to spawn terminal: %s"
+msgstr "Falló al lanzar la terminal: %s"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/project-tree/gb-project-tree-actions.c:612
+#, c-format
+#| msgid "Failed to save file: %s"
+msgid "Failed to rename file: %s"
+msgstr "Falló al renombrar el archivo: %s"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/project-tree/gb-project-tree-actions.c:703
+#, c-format
+#| msgid "Failed to load file: %s"
+msgid "Failed to trash file: %s"
+msgstr "Falló al eliminar el archivo: %s"
 
 #: src/plugins/project-tree/gb-project-tree-addin.c:88
 msgid "Project Tree"
@@ -4509,6 +4572,16 @@ msgctxt "shortcut window"
 msgid "Show the spellchecker panel"
 msgstr "Mostrar el panel de revisión ortográfica"
 
+#. We might find ourselves in a race here and the buffer
+#. * addins are already in destruction. Therefore, silently
+#. * fail any further setup.
+#.
+#: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:139
+#: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:246
+#| msgid "Failed to initialize the debugger"
+msgid "Failed to initialize spellchecking, disabling"
+msgstr "Falló al inicializar la revisión ortográfica, desactivando."
+
 #: src/plugins/spellcheck/gbp-spell-language-popover.c:232
 msgid "No language selected"
 msgstr "No se ha seleccionado ningún idioma"
@@ -4717,6 +4790,9 @@ msgstr "Falló al crear el árbol XML."
 #: src/plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero no en el gestor de búferes."
+
+#~ msgid "Failed to save buffer, ignoring reclamation."
+#~ msgstr "Falló al guardar el búfer, ignorando reclamación."
 
 #~ msgid "Flatpak"
 #~ msgstr "Flatpak"
@@ -5962,9 +6038,6 @@ msgstr "Búfer cargado pero no en el gestor de búferes."
 
 #~ msgid "The fraction of the progress."
 #~ msgstr "La fracción del progreso."
-
-#~ msgid "Message"
-#~ msgstr "Mensaje"
 
 #~ msgid "A short message for the progress."
 #~ msgstr "Un mensaje corto del progreso."
