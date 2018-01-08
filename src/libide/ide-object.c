@@ -785,7 +785,6 @@ ide_object_message (gpointer     instance,
   IdeContext *context = NULL;
   va_list args;
 
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (!instance || IDE_IS_OBJECT (instance));
 
   va_start (args, format);
@@ -810,7 +809,6 @@ ide_object_warning (gpointer     instance,
   IdeContext *context = NULL;
   va_list args;
 
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (!instance || IDE_IS_OBJECT (instance));
 
   va_start (args, format);
