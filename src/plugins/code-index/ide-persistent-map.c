@@ -70,7 +70,6 @@ ide_persistent_map_load_file_worker (GTask        *task,
   g_autoptr(GVariant) values = NULL;
   g_autoptr(GVariant) metadata = NULL;
   g_autoptr(GVariant) kvpairs = NULL;
-  g_autoptr(GVariant) value_size = NULL;
   GVariantDict dict;
   gint32 version;
   gsize n_elements;
