@@ -19,12 +19,14 @@
 #define G_LOG_DOMAIN "gb-beautifier-helper"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
 #include <string.h>
 
 #include "gb-beautifier-helper.h"
+#include "gb-beautifier-private.h"
 
 typedef struct
 {
@@ -45,7 +47,8 @@ check_path_is_in_tmp_dir (const gchar *path,
 }
 
 void
-gb_beautifier_helper_remove_temp_for_path (const gchar *path)
+gb_beautifier_helper_remove_temp_for_path (GbBeautifierEditorAddin *self,
+                                           const gchar             *path)
 {
   const gchar *tmp_dir;
 
@@ -57,15 +60,18 @@ gb_beautifier_helper_remove_temp_for_path (const gchar *path)
     g_unlink (path);
   else
     {
-      g_warning ("Beautifier plugin: blocked attempt to remove a config file outside of the tmp dir '%s': '%s'",
-                 tmp_dir,
-                 path);
+      /* translators: %s and %s are replaced with the temporary dir and the file path */
+      ide_object_warning (self,
+                          _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary dir: “%s”"),
+                          tmp_dir,
+                          path);
       return;
     }
 }
 
 void
-gb_beautifier_helper_remove_temp_for_file (GFile *file)
+gb_beautifier_helper_remove_temp_for_file (GbBeautifierEditorAddin *self,
+                                           GFile                   *file)
 {
   const gchar *tmp_dir;
   g_autofree gchar *path = NULL;
@@ -79,15 +85,18 @@ gb_beautifier_helper_remove_temp_for_file (GFile *file)
     g_file_delete (file, NULL, NULL);
   else
     {
-      g_warning ("Beautifier plugin: blocked attempt to remove a config file outside of the tmp dir '%s': '%s'",
-                 tmp_dir,
-                 path);
+      /* translators: %s and %s are replaced with the temporary dir and the file path */
+      ide_object_warning (self,
+                          _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary dir: “%s”"),
+                          tmp_dir,
+                          path);
       return;
     }
 }
 
 void
-gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierConfigEntry *config_entry)
+gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *self,
+                                                     GbBeautifierConfigEntry *config_entry)
 {
   GbBeautifierCommandArg *arg;
   g_autofree gchar *config_path = NULL;
@@ -106,9 +115,11 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierConfigEntry *co
             g_file_delete (config_entry->config_file, NULL, NULL);
           else
             {
-              g_warning ("Beautifier plugin: blocked attempt to remove a config file outside of the tmp dir '%s': '%s'",
-                         tmp_dir,
-                         config_path);
+              /* translators: %s and %s are replaced with the temporary dir and the file path */
+              ide_object_warning (self,
+                                  _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary dir: “%s”"),
+                                  tmp_dir,
+                                  config_path);
               return;
             }
         }
@@ -125,9 +136,10 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierConfigEntry *co
                 g_unlink (arg->str);
               else
                 {
-                  g_warning ("Beautifier plugin: blocked attempt to remove a config file outside of the tmp dir '%s': '%s'",
-                             tmp_dir,
-                             arg->str);
+                  ide_object_warning (self,
+                                      _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary dir: “%s”"),
+                                      tmp_dir,
+                                      arg->str);
                   return;
                 }
             }

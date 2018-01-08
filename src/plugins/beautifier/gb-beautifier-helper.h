@@ -41,8 +41,11 @@ const gchar  *gb_beautifier_helper_get_lang_id                    (GbBeautifierE
 gchar        *gb_beautifier_helper_match_and_replace              (const gchar              *str,
                                                                    const gchar              *pattern,
                                                                    const gchar              *replacement);
-void          gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierConfigEntry  *config_entry);
-void          gb_beautifier_helper_remove_temp_for_path           (const gchar              *path);
-void          gb_beautifier_helper_remove_temp_for_file           (GFile                    *file);
+void          gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin  *self,
+                                                                   GbBeautifierConfigEntry  *config_entry);
+void          gb_beautifier_helper_remove_temp_for_path           (GbBeautifierEditorAddin  *self,
+                                                                   const gchar              *path);
+void          gb_beautifier_helper_remove_temp_for_file           (GbBeautifierEditorAddin  *self,
+                                                                   GFile                    *file);
 
 G_END_DECLS

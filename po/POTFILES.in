@@ -119,7 +119,10 @@ src/libide/workbench/ide-workbench-shortcuts.c
 src/plugins/autotools/ide-autotools-makecache-stage.c
 src/plugins/autotools/ide-autotools-pipeline-addin.c
 src/plugins/autotools-templates/autotools_templates/__init__.py
+src/plugins/beautifier/gb-beautifier-config.c
 src/plugins/beautifier/gb-beautifier-editor-addin.c
+src/plugins/beautifier/gb-beautifier-helper.c
+src/plugins/beautifier/gb-beautifier-process.c
 src/plugins/beautifier/gtk/menus.ui
 src/plugins/cargo/cargo_plugin.py
 src/plugins/clang/ide-clang-preferences-addin.c

@@ -24,6 +24,6 @@ G_BEGIN_DECLS
 
 #define GB_TYPE_BEAUTIFIER_EDITOR_ADDIN (gb_beautifier_editor_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbBeautifierEditorAddin, gb_beautifier_editor_addin, GB, BEAUTIFIER_EDITOR_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbBeautifierEditorAddin, gb_beautifier_editor_addin, GB, BEAUTIFIER_EDITOR_ADDIN, IdeObject)
 
 G_END_DECLS

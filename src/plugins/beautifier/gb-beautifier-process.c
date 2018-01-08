@@ -17,6 +17,7 @@
  */
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
 #include <string.h>
@@ -55,17 +56,17 @@ process_state_free (gpointer data)
   gtk_text_buffer_delete_mark (buffer, state->begin_mark);
   gtk_text_buffer_delete_mark (buffer, state->end_mark);
 
-  gb_beautifier_helper_remove_temp_for_file (state->src_file);
+  gb_beautifier_helper_remove_temp_for_file (state->self, state->src_file);
 
   g_clear_object (&state->src_file);
   g_clear_object (&state->config_file);
 
   if (state->tmp_config_file != NULL)
-    gb_beautifier_helper_remove_temp_for_file (state->tmp_config_file);
+    gb_beautifier_helper_remove_temp_for_file (state->self, state->tmp_config_file);
   if (state->tmp_src_file != NULL)
-    gb_beautifier_helper_remove_temp_for_file (state->tmp_src_file);
+    gb_beautifier_helper_remove_temp_for_file (state->self, state->tmp_src_file);
   if (state->tmp_workdir_file != NULL)
-    gb_beautifier_helper_remove_temp_for_file (state->tmp_workdir_file);
+    gb_beautifier_helper_remove_temp_for_file (state->self, state->tmp_workdir_file);
 
   g_clear_object (&state->tmp_workdir_file);
   g_clear_object (&state->tmp_config_file);
@@ -238,13 +239,19 @@ process_communicate_utf8_cb (GObject      *object,
   if (g_task_return_error_if_cancelled (task))
     return;
 
+  state = (ProcessState *)g_task_get_task_data (task);
   if (stderr_gb != NULL &&
       NULL != (stderr_str = g_bytes_get_data (stderr_gb, NULL)) &&
       !dzl_str_empty0 (stderr_str) &&
       g_utf8_validate (stderr_str, -1, NULL))
     {
       if (g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) != 0)
-        g_warning ("beautify plugin:\n%s", stderr_str);
+        {
+          /* translators: %s is replaced with the command error message */
+          ide_object_warning (state->self,
+                              _("Beautifier plugin: command error output: %s"),
+                              stderr_str);
+        }
     }
 
   if (stdout_gb != NULL)
@@ -252,11 +259,10 @@ process_communicate_utf8_cb (GObject      *object,
 
   if (stdout_gb != NULL && dzl_str_empty0 (stdout_str))
     {
-      g_warning ("beautify plugin: output empty");
+      ide_object_warning (state->self, _("Beautifier plugin: the command output is empty"));
     }
   else if (g_utf8_validate (stdout_str, -1, NULL))
     {
-      state = (ProcessState *)g_task_get_task_data (task);
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (state->source_view));
       completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (state->source_view));
 
@@ -280,7 +286,7 @@ process_communicate_utf8_cb (GObject      *object,
       g_task_return_boolean (task, TRUE);
     }
   else
-    g_warning ("beautify plugin: output is not a valid uft8 text");
+    ide_object_warning (state->self,_("Beautify plugin: the output is not a valid utf8 text"));
 }
 
 static void

@@ -35,7 +35,7 @@
 
 static void editor_addin_iface_init (IdeEditorAddinInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbBeautifierEditorAddin, gb_beautifier_editor_addin, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GbBeautifierEditorAddin, gb_beautifier_editor_addin, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_ADDIN, editor_addin_iface_init))
 
 static void
@@ -50,7 +50,10 @@ process_launch_async_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!gb_beautifier_process_launch_finish (self, result, &error))
-    g_warning ("\"%s\"", error->message);
+    {
+      /* translators: %s is replaced with the error message */
+      ide_object_warning (self, _("Beautifier plugin: %s"), error->message);
+    }
 }
 
 static void
@@ -80,20 +83,20 @@ view_activate_beautify_action_cb (GSimpleAction *action,
   source_view = ide_editor_view_get_view (view);
   if (!GTK_SOURCE_IS_VIEW (source_view))
     {
-      g_warning ("Beautifier Plugin: the view is not a GtkSourceView");
+      ide_object_warning (self, _("Beautifier Plugin: the view is not a GtkSourceView"));
       return;
     }
 
   param = g_variant_get_string (variant, NULL);
   if (g_strcmp0 (param, "none") == 0)
     {
-      g_warning ("Beautifier Plugin: no default beautifier found");
+      ide_object_warning (self, _("Beautifier Plugin: no default beautifier found"));
       return;
     }
 
   if (!gtk_text_view_get_editable (GTK_TEXT_VIEW (source_view)))
     {
-      g_warning ("Beautifier Plugin: the buffer is not writable");
+      ide_object_warning (self, _("Beautifier Plugin: the buffer is not writable"));
       return;
     }
 
@@ -101,7 +104,7 @@ view_activate_beautify_action_cb (GSimpleAction *action,
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
   if (gtk_text_iter_equal (&begin, &end))
     {
-      g_warning ("Beautifier Plugin: Nothing selected");
+      ide_object_warning (self, _("Beautifier Plugin: Nothing selected"));
       return;
     }
 
@@ -364,8 +367,8 @@ get_entries_async_cb (GObject      *object,
 
   if (NULL == (ret = gb_beautifier_config_get_entries_finish (self, result, &error)))
     {
-      g_warning ("\"%s\"", error->message);
-      g_warning ("Beautifier plugin disabled");
+      /* translators: %s is replaced with the error message */
+      ide_object_warning (self, _("Beautifier plugin: no valid entries, disabling: %s"), error->message);
 
       /* TODO: properly disable the plugin */
       return;
@@ -421,7 +424,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
       for (guint i = 0; i < self->entries->len; i++)
         {
           entry = &g_array_index (self->entries, GbBeautifierConfigEntry, i);
-          gb_beautifier_helper_config_entry_remove_temp_files (entry);
+          gb_beautifier_helper_config_entry_remove_temp_files (self, entry);
         }
 
       g_clear_pointer (&self->entries, g_array_unref);
@@ -431,7 +434,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
   if (self->tmp_dir != NULL)
     {
       tmp_file = g_file_new_for_path (self->tmp_dir);
-      gb_beautifier_helper_remove_temp_for_file (tmp_file);
+      gb_beautifier_helper_remove_temp_for_file (self, tmp_file);
       g_clear_pointer (&self->tmp_dir, g_free);
     }
 

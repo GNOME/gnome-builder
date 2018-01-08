@@ -20,6 +20,7 @@
 
 #include <string.h>
 
+#include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <ide.h>
 #include <libpeas/peas.h>
@@ -118,9 +119,10 @@ gb_beautifier_map_check_duplicates (GbBeautifierEditorAddin *self,
 }
 
 static gchar *
-copy_to_tmp_file (const gchar *tmp_dir,
-                  const gchar *source_path,
-                  gboolean     is_executable)
+copy_to_tmp_file (GbBeautifierEditorAddin *self,
+                  const gchar             *tmp_dir,
+                  const gchar             *source_path,
+                  gboolean                 is_executable)
 {
   g_autoptr (GFile) src_file = NULL;
   g_autoptr (GFile) dst_file = NULL;
@@ -147,11 +149,20 @@ copy_to_tmp_file (const gchar *tmp_dir,
     }
 
   if (error != NULL)
-    g_warning ("beautifier plugin: error copying the gresource config file for '%s':%s",
-               source_path,
-               error->message);
+    {
+      /* translators: %s and %s are replaced with source file path and the error message */
+      ide_object_warning (self,
+                          _("Beautifier plugin: error copying the gresource config file for “%s”: %s"),
+                          source_path,
+                          error->message);
+    }
   else
-    g_warning ("beautifier plugin: error creating config temp file for '%s'", source_path);
+    {
+      /* translators: %s is replaced with the source file path */
+      ide_object_warning (self,
+                          _("Beautifier plugin: error creating temporary config file for “%s”"),
+                          source_path);
+    }
 
   return NULL;
 }
@@ -192,7 +203,8 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
 
   if (!g_file_load_contents (file, NULL, &data, &data_len, NULL, &error))
     {
-      g_debug ("Can't read .ini file:%s", error->message);
+      /* translators: %s is replaced with the .ini source file path */
+      ide_object_warning (self, _("Beautifier plugin: Can't read .ini file: %s"), error->message);
       return FALSE;
     }
 
@@ -238,15 +250,20 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
           has_command_pattern = g_key_file_has_key (key_file, profile, "command-pattern", NULL);
           if (!has_command && !has_command_pattern)
             {
-              g_warning ("beautifier plugin: neither command nor command-pattern keys found");
-              g_warning ("entry \"%s\" disabled", display_name);
+              /* translators: %s is replaced with the config entry name */
+              ide_object_warning (self,
+                                  _("Beautifier plugin: neither command nor command-pattern keys found: entry “%s” disabling"),
+                                  display_name);
+
               continue;
             }
 
           if (has_command && has_command_pattern)
             {
-              g_warning ("beautifier plugin: both command and command-pattern keys found");
-              g_warning ("entry \"%s\" disabled", display_name);
+              /* translators: %s is replaced with the config entry name */
+              ide_object_warning (self,
+                                  _("Beautifier plugin: both command and command-pattern keys found: entry “%s” disabling"),
+                                  display_name);
               continue;
             }
 
@@ -255,7 +272,7 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
               config_path = g_build_filename (base_path, real_lang_id, config_name, NULL);
               if (g_str_has_prefix (config_path, "resource://"))
                 {
-                  gchar *tmp_config_path = copy_to_tmp_file (self->tmp_dir, config_path, FALSE);
+                  gchar *tmp_config_path = copy_to_tmp_file (self, self->tmp_dir, config_path, FALSE);
 
                   g_free (config_path);
                   config_path = tmp_config_path;
@@ -267,8 +284,11 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
                   config_file = g_file_new_for_path (config_path);
                   if (!g_file_query_exists (config_file, NULL))
                     {
-                      g_warning ("beautifier plugin: \"%s\" does not exist", config_path);
-                      g_warning ("entry \"%s\" disabled", display_name);
+                      /* translators: %s and %s are replaced with the config path and the entry name */
+                      ide_object_warning (self,
+                                          _("Beautifier plugin: config path “%s” does not exist, entry “%s” disabling"),
+                                          config_path,
+                                          display_name);
                       continue;
                     }
                 }
@@ -281,11 +301,13 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
                 entry.command = GB_BEAUTIFIER_CONFIG_COMMAND_CLANG_FORMAT;
               else
                 {
-                  g_warning ("beautifier plugin: command key out of possible values");
-                  g_warning ("entry \"%s\" disabled", display_name);
+                  /* translators: %s is replaced with the entry name */
+                  ide_object_warning (self,
+                                      _("Beautifier plugin: command key out of possible values: entry “%s” disabling"),
+                                      display_name);
 
                   if (entry.is_config_file_temp)
-                    gb_beautifier_helper_remove_temp_for_file (config_file);
+                    gb_beautifier_helper_remove_temp_for_file (self, config_file);
 
                   continue;
                 }
@@ -304,16 +326,18 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
 
               if (g_strstr_len (command_pattern, -1, "@c@") != NULL && config_file == NULL)
                 {
-                  g_warning ("beautifier plugin: @c@ in \"%s\" command-pattern key but no config file set",
-                             profile);
-                  g_warning ("entry \"%s\" disabled", display_name);
+                  /* translators: %s and %s are replaced with the profile name and the entry name */
+                  ide_object_warning (self,
+                                      _("Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: entry “%s” disabling"),
+                                      profile,
+                                      display_name);
                   continue;
                 }
 
               if (!g_shell_parse_argv (command_pattern, &argc, &strv, &error))
                 {
                   if (entry.is_config_file_temp)
-                    gb_beautifier_helper_remove_temp_for_file (config_file);
+                    gb_beautifier_helper_remove_temp_for_file (self, config_file);
 
                   goto fail;
                 }
@@ -332,15 +356,18 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
                       if (g_strstr_len (strv[j], -1, "internal"))
                         is_executable = TRUE;
 
-                      if (NULL == (arg.str = copy_to_tmp_file (self->tmp_dir, strv[j], is_executable)))
+                      if (NULL == (arg.str = copy_to_tmp_file (self, self->tmp_dir, strv[j], is_executable)))
                         {
-                          g_warning ("beautifier plugin: can't create tmp file for:%s", strv[j]);
-                          g_warning ("entry \"%s\" disabled", display_name);
+                          /* translators: %s and %s are replaced with the profile name and the entry name */
+                          ide_object_warning (self,
+                                              _("Beautifier plugin: can't create temporary file for “%s”: entry “%s” disabling"),
+                                              strv[j],
+                                              display_name);
 
                           if (entry.is_config_file_temp)
-                            gb_beautifier_helper_remove_temp_for_file (config_file);
+                            gb_beautifier_helper_remove_temp_for_file (self, config_file);
 
-                          gb_beautifier_helper_config_entry_remove_temp_files (&entry);
+                          gb_beautifier_helper_config_entry_remove_temp_files (self, &entry);
                           config_entry_clear_func (&entry);
 
                           continue;
@@ -374,7 +401,8 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
   return TRUE;
 
 fail:
-  g_warning ("Beautifier plugin:\"%s\"", error->message);
+  /* translators: %s is replaced with the error message */
+  ide_object_warning (self, _("Beautifier plugin: “%s”"), error->message);
 
   return FALSE;
 }
@@ -473,7 +501,10 @@ add_entries_from_base_path (GbBeautifierEditorAddin *self,
     }
 
   if (error != NULL)
-    g_warning ("\"%s\"", error->message);
+    {
+      /* translators: %s is replaced with the error message */
+      ide_object_warning (self,_("Beautifier plugin: %s"), error->message);
+    }
 
   return ret;
 }
@@ -507,13 +538,15 @@ gb_beautifier_config_get_map (GbBeautifierEditorAddin *self,
   key_file = g_key_file_new ();
   if (!g_file_query_exists (file, NULL))
     {
-      g_debug ("%s doesn't exist", file_name);
+      /* translators: %s is replaced with a path name */
+      ide_object_warning (self, _("Beautifier plugin: the path “%s” doesn't exist"), file_name);
       return map;
     }
 
   if (!g_file_load_contents (file, NULL, &data, &data_len, NULL, NULL))
     {
-      g_debug ("Can't read the resource file:%s", file_name);
+      /* translators: %s is replaced with a path name */
+      ide_object_warning (self, _("Beautifier plugin: can't read the following resource file: “%s”"), file_name);
       return map;
     }
 

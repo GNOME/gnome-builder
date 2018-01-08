@@ -21,6 +21,7 @@
 #include <glib-object.h>
 
 #include "ide.h"
+#include "gb-beautifier-editor-addin.h"
 
 G_BEGIN_DECLS
 
@@ -37,5 +38,7 @@ struct _GbBeautifierEditorAddin
 
   gboolean               has_default;
 };
+
+GbBeautifierEditorAddin    *gb_beautifier_editor_addin_get_editor_perspective    (GbBeautifierEditorAddin *self);
 
 G_END_DECLS
