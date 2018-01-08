@@ -36,29 +36,10 @@ clang_sources = [
   'clang-plugin.c',
 ]
 
-llvm_config = find_program(
-  'llvm-config',
-  'llvm-config-5.0', 'llvm-config50',
-  'llvm-config-4.0', 'llvm-config40',
-  'llvm-config-3.9', 'llvm-config39',
-  'llvm-config-3.8', 'llvm-config38',
-  'llvm-config-3.7', 'llvm-config37',
-  'llvm-config-3.6', 'llvm-config36',
-  'llvm-config-3.5', 'llvm-config35',
-  'llvm-config-6.0', 'llvm-config-devel',
-)
-
-ret = run_command(llvm_config, '--includedir')
-if ret.returncode() != 0
-  error('clang: Failed to run ' + llvm_config.path())
-endif
-clang_include = ret.stdout().strip()
-
-ret = run_command(llvm_config, '--libdir')
-if ret.returncode() != 0
-  error('clang: Failed to run ' + llvm_config.path())
-endif
-clang_libdir = ret.stdout().strip().split(' ')
+add_languages('cpp') # Needed for llvm dep
+llvm_dep = dependency('llvm', version: '>= 3.5')
+clang_include = llvm_dep.get_configtool_variable('includedir')
+clang_libdir = llvm_dep.get_configtool_variable('libdir').split(' ')
 
 if not cc.has_header('clang-c/Index.h', args: '-I' + clang_include)
   error('clang: Failed to find headers')
