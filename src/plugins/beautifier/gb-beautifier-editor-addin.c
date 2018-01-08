@@ -399,6 +399,7 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
   dzl_set_weak_pointer (&self->editor, editor);
   workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
   self->context = ide_workbench_get_context (workbench);
+  ide_object_set_context (IDE_OBJECT (self), self->context);
 
   gb_beautifier_config_get_entries_async (self,
                                           &self->has_default,
