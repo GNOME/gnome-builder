@@ -433,8 +433,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/uncrustify/uncrustify/archive/uncrustify-0.65.tar.gz",
-                    "sha256": "45e954cd207ee4f6531d72ece27554ef4e0e9f64c912b523bc80ad6a36404110"
+                    "url": "https://github.com/uncrustify/uncrustify/archive/uncrustify-0.66.1.tar.gz",
+                    "sha256": "0862778fb692ce9859f4ece5e801db72841d8d76d9304e2da52bdd098b05331f"
                 }
             ]
         },
