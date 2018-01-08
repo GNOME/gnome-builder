@@ -60,9 +60,9 @@ gb_beautifier_helper_remove_temp_for_path (GbBeautifierEditorAddin *self,
     g_unlink (path);
   else
     {
-      /* translators: %s and %s are replaced with the temporary dir and the file path */
       ide_object_warning (self,
-                          _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary dir: “%s”"),
+                          /* translators: %s and %s are replaced with the temporary dir and the file path */
+                          _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
                           tmp_dir,
                           path);
       return;
@@ -85,9 +85,9 @@ gb_beautifier_helper_remove_temp_for_file (GbBeautifierEditorAddin *self,
     g_file_delete (file, NULL, NULL);
   else
     {
-      /* translators: %s and %s are replaced with the temporary dir and the file path */
       ide_object_warning (self,
-                          _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary dir: “%s”"),
+                          /* translators: %s and %s are replaced with the temporary dir and the file path */
+                          _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
                           tmp_dir,
                           path);
       return;
@@ -115,9 +115,9 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *se
             g_file_delete (config_entry->config_file, NULL, NULL);
           else
             {
-              /* translators: %s and %s are replaced with the temporary dir and the file path */
               ide_object_warning (self,
-                                  _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary dir: “%s”"),
+                                  /* translators: %s and %s are replaced with the temporary dir and the file path */
+                                  _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
                                   tmp_dir,
                                   config_path);
               return;
@@ -137,7 +137,7 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *se
               else
                 {
                   ide_object_warning (self,
-                                      _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary dir: “%s”"),
+                                      _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
                                       tmp_dir,
                                       arg->str);
                   return;

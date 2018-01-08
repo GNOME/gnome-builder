@@ -247,8 +247,8 @@ process_communicate_utf8_cb (GObject      *object,
     {
       if (g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) != 0)
         {
-          /* translators: %s is replaced with the command error message */
           ide_object_warning (state->self,
+                              /* translators: %s is replaced with the command error message */
                               _("Beautifier plugin: command error output: %s"),
                               stderr_str);
         }
@@ -286,7 +286,7 @@ process_communicate_utf8_cb (GObject      *object,
       g_task_return_boolean (task, TRUE);
     }
   else
-    ide_object_warning (state->self,_("Beautify plugin: the output is not a valid utf8 text"));
+    ide_object_warning (state->self,_("Beautify plugin: the output is not a valid UTF-8 text"));
 }
 
 static void
