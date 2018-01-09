@@ -177,56 +177,56 @@ ide_code_index_entry_class_init (IdeCodeIndexEntryClass *klass)
                          "Key",
                          "A key unique to declaration.",
                          NULL,
-                         (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                         (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_NAME] =
     g_param_spec_string ("name",
                          "Name",
                          "Name of declaration.",
                          NULL,
-                         (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                         (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_KIND] =
     g_param_spec_int ("kind",
                       "Kind",
                       "Kind of declaration.",
                        G_MININT, G_MAXINT, IDE_SYMBOL_NONE,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FLAGS] =
     g_param_spec_int ("flags",
                       "Flags",
                       "Flags of declaration.",
                        G_MININT, G_MAXINT, IDE_SYMBOL_FLAGS_NONE,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_BEGIN_LINE] =
     g_param_spec_uint ("begin-line",
                        "Begin Line",
                        "Begin Line of declaration.",
                        0, G_MAXUINT, 0,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_BEGIN_LINE_OFFSET] =
     g_param_spec_uint ("begin-line-offset",
                        "Begin Line Offset",
                        "Begin Line Offset of declaration.",
                        0, G_MAXUINT, 0,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_END_LINE] =
     g_param_spec_uint ("end-line",
                        "End Line",
                        "End Line of declaration.",
                        0, G_MAXUINT, 0,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_END_LINE_OFFSET] =
     g_param_spec_uint ("end-line-offset",
                        "End Line Offset",
                        "End Line Offset of declaration.",
                        0, G_MAXUINT, 0,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
