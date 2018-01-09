@@ -116,6 +116,7 @@ src/libide/workbench/ide-workbench-actions.c
 src/libide/workbench/ide-workbench.c
 src/libide/workbench/ide-workbench-header-bar.ui
 src/libide/workbench/ide-workbench-shortcuts.c
+src/main.c
 src/plugins/autotools/ide-autotools-makecache-stage.c
 src/plugins/autotools/ide-autotools-pipeline-addin.c
 src/plugins/autotools-templates/autotools_templates/__init__.py
