@@ -26,6 +26,8 @@ struct _GbpMessagesPanel
 {
   DzlDockWidget parent_instance;
 
+  DzlSignalGroup *signals;
+
   GtkScrollbar *scrollbar;
   IdeTerminal  *terminal;
 };
@@ -65,22 +67,30 @@ gbp_messages_panel_set_context (GtkWidget  *widget,
   g_assert (GBP_IS_MESSAGES_PANEL (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
-#if 0
-  g_timeout_add (1000, do_log, context);
-#endif
+  dzl_signal_group_set_target (self->signals, context);
 
+#if 0
   if (context != NULL)
-    g_signal_connect_object (context,
-                             "log",
-                             G_CALLBACK (gbp_messages_panel_log_cb),
-                             self,
-                             G_CONNECT_SWAPPED);
+    g_timeout_add (1000, do_log, context);
+#endif
+}
+
+static void
+gbp_messages_panel_destroy (GtkWidget *widget)
+{
+  GbpMessagesPanel *self = (GbpMessagesPanel *)widget;
+
+  g_clear_object (&self->signals);
+
+  GTK_WIDGET_CLASS (gbp_messages_panel_parent_class)->destroy (widget);
 }
 
 static void
 gbp_messages_panel_class_init (GbpMessagesPanelClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->destroy = gbp_messages_panel_destroy;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/builder/plugins/messages-plugin/gbp-messages-panel.ui");
@@ -99,4 +109,12 @@ gbp_messages_panel_init (GbpMessagesPanel *self)
 
   vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->terminal));
   gtk_range_set_adjustment (GTK_RANGE (self->scrollbar), vadj);
+
+  self->signals = dzl_signal_group_new (IDE_TYPE_CONTEXT);
+
+  dzl_signal_group_connect_object (self->signals,
+                                   "log",
+                                   G_CALLBACK (gbp_messages_panel_log_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 }
