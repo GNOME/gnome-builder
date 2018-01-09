@@ -82,7 +82,7 @@
 
   <releases>
 
-    <!-- release version="3.27.4" date="2018-01-08">
+    <release version="3.27.4" date="2018-01-08">
       <description>
         <p>
           A number of performance improvements and bug fixes have landed in this release.
@@ -107,7 +107,7 @@
           <li>Various compilation fixes for FreeBSD.</li>
         </ul>
       </description>
-    </release -->
+    </release>
 
     <release version="3.27.3" date="2017-12-11">
       <description>
