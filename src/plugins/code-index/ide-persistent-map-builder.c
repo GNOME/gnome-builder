@@ -287,7 +287,7 @@ ide_persistent_map_builder_init (IdePersistentMapBuilder *self)
 {
   self->keys = g_byte_array_new ();
   self->keys_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  self->values = g_ptr_array_new ();
+  self->values = g_ptr_array_new_with_free_func ((GDestroyNotify)g_variant_unref);
   self->kvpairs = g_array_new (FALSE, FALSE, sizeof (KVPair));
   self->metadata = g_variant_dict_new (NULL);
 }
