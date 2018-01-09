@@ -56,6 +56,7 @@
 #include "testing/ide-test-manager.h"
 #include "transfers/ide-transfer-manager.h"
 #include "util/ide-async-helper.h"
+#include "util/ide-line-reader.h"
 #include "util/ide-settings.h"
 #include "vcs/ide-vcs.h"
 #include "vcs/ide-vcs-monitor.h"
@@ -183,6 +184,9 @@ ide_context_log_observer (IdeBuildLogStream  log_stream,
 {
   IdeContext *self = user_data;
   GLogLevelFlags flags;
+  IdeLineReader reader;
+  const gchar *str;
+  gsize len;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONTEXT (self));
@@ -192,7 +196,22 @@ ide_context_log_observer (IdeBuildLogStream  log_stream,
   flags = log_stream == IDE_BUILD_LOG_STDOUT ? G_LOG_LEVEL_MESSAGE
                                              : G_LOG_LEVEL_WARNING;
 
-  g_signal_emit (self, signals [LOG], 0, flags, message);
+  ide_line_reader_init (&reader, (gchar *)message, message_len);
+
+  while (NULL != (str = ide_line_reader_next (&reader, &len)))
+    {
+      g_autofree gchar *copy = NULL;
+
+      /* Most of the time, we'll only have a single line, so we
+       * don't need to copy the string to get a single line emitted
+       * to the ::log signal.
+       */
+
+      if G_UNLIKELY (str[len] != '\0')
+        str = copy = g_strndup (str, len);
+
+      g_signal_emit (self, signals [LOG], 0, flags, str);
+    }
 }
 
 /**
