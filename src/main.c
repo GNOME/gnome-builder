@@ -115,7 +115,7 @@ main (int   argc,
    */
   if (g_getenv ("DBUS_SESSION_BUS_ADDRESS") == NULL)
     {
-      g_printerr (_("GNOME Builder requires a desktop session with DBus. Please set DBUS_SESSION_BUS_ADDRESS."));
+      g_printerr (_("GNOME Builder requires a desktop session with D-Bus. Please set DBUS_SESSION_BUS_ADDRESS."));
       return EXIT_FAILURE;
     }
 
@@ -140,7 +140,7 @@ main (int   argc,
   if (desktop == NULL)
     desktop = "unknown";
 
-  g_message ("Initializing with %s desktop and Gtk+ %d.%d.%d.",
+  g_message ("Initializing with %s desktop and GTK+ %d.%d.%d.",
              desktop,
              gtk_get_major_version (),
              gtk_get_minor_version (),
