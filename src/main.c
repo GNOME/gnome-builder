@@ -103,6 +103,7 @@ main (int   argc,
       char *argv[])
 {
   IdeApplication *app;
+  const gchar *desktop;
   int ret;
 
   /* Setup our gdb fork()/exec() helper */
@@ -132,7 +133,15 @@ main (int   argc,
    */
   early_ssl_check ();
 
-  g_message ("Initializing with Gtk+ version %d.%d.%d.",
+  /* Log what desktop is being used to simplify tracking down
+   * quirks in the future.
+   */
+  desktop = g_getenv ("XDG_CURRENT_DESKTOP");
+  if (desktop == NULL)
+    desktop = "unknown";
+
+  g_message ("Initializing with %s desktop and Gtk+ %d.%d.%d.",
+             desktop,
              gtk_get_major_version (),
              gtk_get_minor_version (),
              gtk_get_micro_version ());
