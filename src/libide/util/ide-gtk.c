@@ -21,23 +21,46 @@
 #include "application/ide-application.h"
 #include "util/ide-gtk.h"
 
+static GQuark quark_handler;
+static GQuark quark_where_context_was;
+
 static void
 ide_widget_notify_context (GtkWidget  *toplevel,
                            GParamSpec *pspec,
                            GtkWidget  *widget)
 {
   IdeWidgetContextHandler handler;
-  g_autoptr(IdeContext) context = NULL;
+  IdeContext *old_context;
+  IdeContext *context;
 
-  handler = g_object_get_data (G_OBJECT (widget), "IDE_CONTEXT_HANDLER");
+  g_assert (GTK_IS_WIDGET (toplevel));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  handler = g_object_get_qdata (G_OBJECT (widget), quark_handler);
+  old_context = g_object_get_qdata (G_OBJECT (widget), quark_where_context_was);
+
   if (handler == NULL)
     return;
 
-  g_object_get (toplevel,
-                "context", &context,
-                NULL);
+  context = ide_widget_get_context (toplevel);
+
+  if (context == old_context)
+    return;
+
+  g_object_set_qdata (G_OBJECT (widget), quark_where_context_was, context);
 
   handler (widget, context);
+}
+
+static gboolean
+has_context_property (GtkWidget *widget)
+{
+  GParamSpec *pspec;
+
+  g_assert (GTK_IS_WIDGET (widget));
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (widget), "context");
+  return pspec != NULL && g_type_is_a (pspec->value_type, IDE_TYPE_CONTEXT);
 }
 
 static void
@@ -56,7 +79,7 @@ ide_widget_hierarchy_changed (GtkWidget *widget,
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (GTK_IS_WINDOW (toplevel))
+  if (GTK_IS_WINDOW (toplevel) && has_context_property (toplevel))
     {
       g_signal_connect_object (toplevel,
                                "notify::context",
@@ -82,14 +105,22 @@ ide_widget_set_context_handler (gpointer                widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_object_set_data (G_OBJECT (widget), "IDE_CONTEXT_HANDLER", handler);
+  /* Ensure we have our quarks for quick key lookup */
+  if G_UNLIKELY (quark_handler == 0)
+    quark_handler = g_quark_from_static_string ("IDE_CONTEXT_HANDLER");
+  if G_UNLIKELY (quark_where_context_was == 0)
+    quark_where_context_was = g_quark_from_static_string ("IDE_CONTEXT");
+
+  g_object_set_qdata (G_OBJECT (widget), quark_handler, handler);
 
   g_signal_connect (widget,
                     "hierarchy-changed",
                     G_CALLBACK (ide_widget_hierarchy_changed),
                     NULL);
 
-  if ((toplevel = gtk_widget_get_toplevel (widget)))
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel))
     ide_widget_hierarchy_changed (widget, NULL, NULL);
 }
 
