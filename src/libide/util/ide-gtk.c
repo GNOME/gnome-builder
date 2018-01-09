@@ -140,6 +140,9 @@ ide_widget_get_workbench (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
+  if (IDE_IS_WORKBENCH (widget))
+    return IDE_WORKBENCH (widget);
+
   ancestor = gtk_widget_get_ancestor (widget, IDE_TYPE_WORKBENCH);
   if (IDE_IS_WORKBENCH (ancestor))
     return IDE_WORKBENCH (ancestor);
