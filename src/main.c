@@ -19,7 +19,9 @@
 #define G_LOG_DOMAIN "builder"
 
 #include <ide.h>
+#include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+#include <stdlib.h>
 
 #include "application/ide-application-private.h"
 #include "plugins/gnome-builder-plugins.h"
@@ -105,6 +107,16 @@ main (int   argc,
 
   /* Setup our gdb fork()/exec() helper */
   bug_buddy_init ();
+
+  /*
+   * We require a desktop session that provides a properly working
+   * DBus environment. Bail if for some reason that is not the case.
+   */
+  if (g_getenv ("DBUS_SESSION_BUS_ADDRESS") == NULL)
+    {
+      g_printerr (_("GNOME Builder requires a desktop session with DBus. Please set DBUS_SESSION_BUS_ADDRESS."));
+      return EXIT_FAILURE;
+    }
 
   /* Early init of logging so that we get messages in a consistent
    * format. If we deferred this to GApplication, we'd get them in
