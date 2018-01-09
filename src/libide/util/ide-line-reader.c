@@ -80,6 +80,9 @@ ide_line_reader_next (IdeLineReader *reader,
       if (reader->contents [reader->pos] == '\n')
         {
           *length = &reader->contents [reader->pos] - ret;
+          /* Ingore the \r in \r\n if provided */
+          if (*length > 0 && reader->pos > 0 && reader->contents [reader->pos - 1] == '\r')
+            (*length)--;
           reader->pos++;
           return ret;
         }
