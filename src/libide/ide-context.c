@@ -2368,7 +2368,7 @@ ide_context_get_configuration_manager (IdeContext *self)
  * ide_context_emit_log:
  * @self: a #IdeContext
  * @log_level: a #GLogLevelFlags
- * @message: (utf8): the log message
+ * @message: the log message
  * @message_len: the length of @message, not including a %NULL byte, or -1
  *   to indicate the message is %NULL terminated.
  *
