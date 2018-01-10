@@ -346,12 +346,11 @@ static void
 ide_code_index_service_context_loaded (IdeService *service)
 {
   IdeCodeIndexService *self = (IdeCodeIndexService *)service;
+  IdeBufferManager *bufmgr;
   IdeContext *context;
   IdeProject *project;
-  IdeBufferManager *bufmgr;
   IdeVcs *vcs;
   GFile *workdir;
-  const GList *plugins;
 
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
 
@@ -361,47 +360,7 @@ ide_code_index_service_context_loaded (IdeService *service)
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
 
-  self->code_indexers = g_hash_table_new_full (g_str_hash,
-                                               g_str_equal,
-                                               g_free,
-                                               g_object_unref);
-
-  plugins = peas_engine_get_plugin_list (peas_engine_get_default ());
-
-  while (plugins != NULL)
-    {
-      PeasPluginInfo *plugin_info;
-      const gchar *value;
-
-      plugin_info = plugins->data;
-
-      value = peas_plugin_info_get_external_data (plugin_info, "Code-Indexer-Languages");
-
-      if (value != NULL)
-        {
-          g_auto(GStrv) languages = NULL;
-
-          languages = g_strsplit (value, ",", 0);
-
-          for (guint i = 0; languages[i] != NULL; i++)
-            {
-              g_autoptr(IdeExtensionAdapter) adapter = NULL;
-
-              adapter = ide_extension_adapter_new (context,
-                                                   NULL,
-                                                   IDE_TYPE_CODE_INDEXER,
-                                                   "Code-Indexer-Languages",
-                                                   languages[i]);
-
-              g_hash_table_insert (self->code_indexers,
-                                   g_strdup (languages[i]),
-                                   g_steal_pointer (&adapter));
-            }
-        }
-
-      plugins = plugins->next;
-    }
-
+  self->code_indexers = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
   self->index = ide_code_index_index_new (context);
   self->builder = ide_code_index_builder_new (context, self->index, self);
   self->build_dirs = g_hash_table_new_full (g_file_hash,
@@ -569,33 +528,53 @@ ide_code_index_service_get_index (IdeCodeIndexService *self)
   return self->index;
 }
 
+/**
+ * ide_code_index_service_get_code_indexer:
+ * @self: a #IdeCodeIndexService
+ * @file_name: the name of the file to index
+ *
+ * Gets an #IdeCodeIndexer suitable for @file_name.
+ *
+ * Returns: (transfer none) (nullable): an #IdeCodeIndexer or %NULL
+ *
+ * Since: 3.26
+ */
 IdeCodeIndexer *
 ide_code_index_service_get_code_indexer (IdeCodeIndexService *self,
                                          const gchar         *file_name)
 {
-  IdeExtensionAdapter *code_indexer;
   GtkSourceLanguageManager *manager;
+  IdeExtensionAdapter *adapter;
   GtkSourceLanguage *language;
-  const gchar *lang;
+  const gchar *lang_id;
 
   g_return_val_if_fail (IDE_IS_CODE_INDEX_SERVICE (self), NULL);
   g_return_val_if_fail (file_name != NULL, NULL);
 
-  if (self->code_indexers == NULL)
+  if (self->code_indexers == NULL ||
+      !(manager = gtk_source_language_manager_get_default ()) ||
+      !(language = gtk_source_language_manager_guess_language (manager, file_name, NULL)) ||
+      !(lang_id = gtk_source_language_get_id (language)))
     return NULL;
 
-  manager = gtk_source_language_manager_get_default ();
-  language = gtk_source_language_manager_guess_language (manager, file_name, NULL);
+  lang_id = g_intern_string (lang_id);
+  adapter = g_hash_table_lookup (self->code_indexers, lang_id);
 
-  if (language == NULL)
-    return NULL;
+  g_assert (!adapter || IDE_IS_EXTENSION_ADAPTER (adapter));
 
-  lang = gtk_source_language_get_id (language);
+  if (adapter == NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
 
-  code_indexer = g_hash_table_lookup (self->code_indexers, lang);
+      adapter = ide_extension_adapter_new (context,
+                                           peas_engine_get_default (),
+                                           IDE_TYPE_CODE_INDEXER,
+                                           "Code-Indexer-Languages",
+                                           lang_id);
+      g_hash_table_insert (self->code_indexers, (gchar *)lang_id, adapter);
+    }
 
-  if (code_indexer == NULL)
-    return NULL;
-  else
-    return ide_extension_adapter_get_extension (code_indexer);
+  g_assert (IDE_IS_EXTENSION_ADAPTER (adapter));
+
+  return ide_extension_adapter_get_extension (adapter);
 }
