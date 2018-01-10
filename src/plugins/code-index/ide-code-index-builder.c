@@ -114,9 +114,9 @@ ide_code_index_builder_get_all_files (IdeCodeIndexBuilder *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   all_files = g_ptr_array_new_with_free_func (g_object_unref);
 
-  for (guint i = 0; i < changes->len ; i++)
+  for (guint i = 0; i < changes->len; i++)
     {
-      IndexingData *change = g_ptr_array_index (changes, i);
+      const IndexingData *change = g_ptr_array_index (changes, i);
       GPtrArray *dir_files = change->files;
 
       for (guint j = 0; j < dir_files->len; j++)
@@ -124,7 +124,7 @@ ide_code_index_builder_get_all_files (IdeCodeIndexBuilder *self,
           GFile *gfile = g_ptr_array_index (dir_files, j);
           g_autoptr(IdeFile) file = ide_file_new (context, gfile);
 
-          if (g_hash_table_lookup (self->build_flags, file) == NULL)
+          if (!g_hash_table_contains (self->build_flags, file))
             g_ptr_array_add (all_files, g_steal_pointer (&file));
         }
     }
