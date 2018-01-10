@@ -338,11 +338,14 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   ide_subprocess_launcher_push_argv (launcher, "--ccache");
   ide_subprocess_launcher_push_argv (launcher, "--force-clean");
   ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
+  ide_subprocess_launcher_push_argv (launcher, "--disable-download");
+
   if (self->state_dir != NULL)
     {
       ide_subprocess_launcher_push_argv (launcher, "--state-dir");
       ide_subprocess_launcher_push_argv (launcher, self->state_dir);
     }
+
   stop_at_option = g_strdup_printf ("--stop-at=%s", primary_module);
   ide_subprocess_launcher_push_argv (launcher, stop_at_option);
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
