@@ -344,6 +344,14 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
     {
       ide_subprocess_launcher_push_argv (launcher, "--state-dir");
       ide_subprocess_launcher_push_argv (launcher, self->state_dir);
+
+      /*
+       * We need to specify to flatpak-builder the location for the sources
+       * so that it doesn't try to ping the remote host. This should
+       * _probably_ be fixed in upstream flatpak-builder.
+       */
+      ide_subprocess_launcher_push_argv (launcher, "--extra-sources");
+      ide_subprocess_launcher_push_argv (launcher, self->state_dir);
     }
 
   stop_at_option = g_strdup_printf ("--stop-at=%s", primary_module);
