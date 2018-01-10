@@ -504,6 +504,9 @@ gbp_symbol_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
 
+  /* First clear any old symbol tree */
+  gbp_symbol_menu_button_set_symbol_tree (self->button, NULL);
+
   if (IDE_IS_EDITOR_VIEW (view))
     buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (view));
 
