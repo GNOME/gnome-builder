@@ -306,6 +306,8 @@ gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
   self->cancellable = g_cancellable_new ();
 
   task = g_task_new (self, self->cancellable, NULL, NULL);
+  g_task_set_source_tag (task, gbp_symbol_layout_stack_addin_update_tree);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   data = g_slice_new0 (SymbolResolverTaskData);
   data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
