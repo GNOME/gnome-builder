@@ -1112,7 +1112,7 @@ ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
                                                   gpointer                 user_data)
 {
   g_autoptr(GTask) task = NULL;
-  IdeSymbolTree *symbol_tree;
+  g_autoptr(IdeSymbolTree) symbol_tree = NULL;
   IdeContext *context;
 
   g_return_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self));
@@ -1120,6 +1120,8 @@ ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_clang_translation_unit_get_symbol_tree_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   symbol_tree = g_object_new (IDE_TYPE_CLANG_SYMBOL_TREE,
@@ -1127,7 +1129,7 @@ ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
                               "native", self->native,
                               "file", file,
                               NULL);
-  g_task_return_pointer (task, symbol_tree, g_object_unref);
+  g_task_return_pointer (task, g_steal_pointer (&symbol_tree), g_object_unref);
 }
 
 IdeSymbolTree *
@@ -1135,12 +1137,10 @@ ide_clang_translation_unit_get_symbol_tree_finish (IdeClangTranslationUnit  *sel
                                                    GAsyncResult             *result,
                                                    GError                  **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static gboolean

@@ -171,22 +171,22 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
                                           gpointer             user_data)
 {
   IdeClangSymbolNode *self = (IdeClangSymbolNode *)symbol_node;
-  IdeSourceLocation *ret;
+  g_autoptr(IdeFile) ifile = NULL;
+  g_autoptr(GFile) gfile = NULL;
+  g_autoptr(GTask) task = NULL;
   IdeContext *context;
   const gchar *filename;
   CXString cxfilename;
   CXSourceLocation cxloc;
   CXFile file;
-  GFile *gfile;
-  IdeFile *ifile;
   guint line = 0;
   guint line_offset = 0;
-  g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_clang_symbol_node_get_location_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   cxloc = clang_getCursorLocation (self->cursor);
   clang_getFileLocation (cxloc, &file, &line, &line_offset, NULL);
@@ -204,13 +204,11 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
                         "context", context,
                         NULL);
 
-  ret = ide_source_location_new (ifile, line-1, line_offset-1, 0);
+  g_task_return_pointer (task,
+                         ide_source_location_new (ifile, line-1, line_offset-1, 0),
+                         (GDestroyNotify)ide_source_location_unref);
 
-  g_clear_object (&ifile);
-  g_clear_object (&gfile);
   clang_disposeString (cxfilename);
-
-  g_task_return_pointer (task, ret, (GDestroyNotify)ide_source_location_unref);
 }
 
 static IdeSourceLocation *
