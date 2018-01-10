@@ -225,9 +225,22 @@ ide_clang_symbol_node_get_location_finish (IdeSymbolNode  *symbol_node,
 }
 
 static void
+ide_clang_symbol_node_finalize (GObject *object)
+{
+  IdeClangSymbolNode *self = (IdeClangSymbolNode *)object;
+
+  g_clear_pointer (&self->children, g_array_unref);
+
+  G_OBJECT_CLASS (ide_clang_symbol_node_parent_class)->finalize (object);
+}
+
+static void
 ide_clang_symbol_node_class_init (IdeClangSymbolNodeClass *klass)
 {
   IdeSymbolNodeClass *node_class = IDE_SYMBOL_NODE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ide_clang_symbol_node_finalize;
 
   node_class->get_location_async = ide_clang_symbol_node_get_location_async;
   node_class->get_location_finish = ide_clang_symbol_node_get_location_finish;
