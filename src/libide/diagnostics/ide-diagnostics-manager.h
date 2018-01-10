@@ -42,5 +42,8 @@ IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_manager_update_group_by_file     (IdeDiagnosticsManager *self,
                                                                   IdeBuffer             *buffer,
                                                                   GFile                 *new_file);
+IDE_AVAILABLE_IN_3_28
+void            ide_diagnostics_manager_rediagnose               (IdeDiagnosticsManager *self,
+                                                                  IdeBuffer             *buffer);
 
 G_END_DECLS

@@ -1278,3 +1278,30 @@ ide_diagnostics_manager_get_sequence_for_file (IdeDiagnosticsManager *self,
 
   return 0;
 }
+
+/**
+ * ide_diagnostics_manager_rediagnose:
+ * @self: an #IdeDiagnosticsManager
+ * @buffer: an #IdeBuffer
+ *
+ * Requests that the diagnostics be reloaded for @buffer.
+ *
+ * You may want to call this if you changed something that a buffer depends on,
+ * and want to seamlessly update its diagnostics with that updated information.
+ *
+ * Internally, this is the same as @buffer emitting the #IdeBuffer::changed
+ * signal.
+ *
+ * Since: 3.28
+ */
+void
+ide_diagnostics_manager_rediagnose (IdeDiagnosticsManager *self,
+                                    IdeBuffer             *buffer)
+{
+  g_return_if_fail (IDE_IS_DIAGNOSTICS_MANAGER (self));
+  g_return_if_fail (IDE_IS_BUFFER (buffer));
+  g_return_if_fail (ide_buffer_get_context (buffer) ==
+                    ide_object_get_context (IDE_OBJECT (self)));
+
+  ide_diagnostics_manager_buffer_changed (self, buffer);
+}

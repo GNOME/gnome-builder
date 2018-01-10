@@ -24,6 +24,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-pipeline.h"
@@ -31,6 +32,7 @@
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration.h"
 #include "diagnostics/ide-diagnostic.h"
+#include "diagnostics/ide-diagnostics-manager.h"
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 
@@ -520,10 +522,33 @@ static void
 ide_build_manager_real_build_finished (IdeBuildManager  *self,
                                        IdeBuildPipeline *pipeline)
 {
+  IdeDiagnosticsManager *diagnostics;
+  IdeBufferManager *bufmgr;
+  IdeContext *context;
+  guint n_items;
+
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   ide_build_manager_stop_timer (self);
+
+  /*
+   * We had a successful build, so lets notify the build manager to reload
+   * dianostics on loaded buffers so the user doesn't have to make a change
+   * to force the update.
+   */
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  diagnostics = ide_context_get_diagnostics_manager (context);
+  bufmgr = ide_context_get_buffer_manager (context);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (bufmgr));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeBuffer) buffer = g_list_model_get_item (G_LIST_MODEL (bufmgr), i);
+
+      ide_diagnostics_manager_rediagnose (diagnostics, buffer);
+    }
 }
 
 static void
