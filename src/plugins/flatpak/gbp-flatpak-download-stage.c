@@ -161,8 +161,19 @@ gbp_flatpak_download_stage_class_init (GbpFlatpakDownloadStageClass *klass)
 
   stage_class->query = gbp_flatpak_download_stage_query;
 
+  /**
+   * GbpFlatpakDownloadStage:state-dir:
+   *
+   * The "state-dir" is the flatpak-builder state directory, to be used
+   * as a parameter to "flatpak-builder --state-dir".
+   *
+   * Since: 3.28
+   */
   properties [PROP_STATE_DIR] =
-    g_param_spec_string ("state-dir", NULL, NULL, NULL,
+    g_param_spec_string ("state-dir",
+                         "State Dir",
+                         "The flatpak-builder state directory",
+                         NULL,
                          G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
