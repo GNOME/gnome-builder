@@ -73,6 +73,8 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
     }
 
   config = ide_build_pipeline_get_configuration (pipeline);
+  g_assert (!config || IDE_IS_CONFIGURATION (config));
+
   if (!GBP_IS_FLATPAK_CONFIGURATION (config))
     {
       ide_build_stage_set_completed (stage, TRUE);
@@ -98,16 +100,24 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
       ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
       ide_subprocess_launcher_push_argv (launcher, "--ccache");
       ide_subprocess_launcher_push_argv (launcher, "--force-clean");
+
       if (!dzl_str_empty0 (self->state_dir))
         {
           ide_subprocess_launcher_push_argv (launcher, "--state-dir");
           ide_subprocess_launcher_push_argv (launcher, self->state_dir);
         }
+
       ide_subprocess_launcher_push_argv (launcher, "--download-only");
+
       if (!self->force_update)
-        ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
+        {
+          ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
+          ide_subprocess_launcher_push_argv (launcher, "--disable-download");
+        }
+
       stop_at_option = g_strdup_printf ("--stop-at=%s", primary_module);
       ide_subprocess_launcher_push_argv (launcher, stop_at_option);
+
       ide_subprocess_launcher_push_argv (launcher, staging_dir);
       ide_subprocess_launcher_push_argv (launcher, manifest_path);
 
