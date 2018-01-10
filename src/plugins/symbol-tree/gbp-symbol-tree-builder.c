@@ -40,7 +40,6 @@ gbp_symbol_tree_builder_build_children (DzlTreeBuilder *builder,
   DzlTreeNode *root;
   GObject *item;
   guint n_children;
-  guint i;
 
   g_assert (DZL_IS_TREE_BUILDER (builder));
   g_assert (DZL_IS_TREE_NODE (node));
@@ -57,7 +56,7 @@ gbp_symbol_tree_builder_build_children (DzlTreeBuilder *builder,
 
   n_children = ide_symbol_tree_get_n_children (symbol_tree, parent);
 
-  for (i = 0; i < n_children; i++)
+  for (guint i = 0; i < n_children; i++)
     {
       g_autoptr(IdeSymbolNode) symbol = NULL;
       const gchar *name;
