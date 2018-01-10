@@ -26,30 +26,27 @@ struct _IdeCodeIndexSymbolResolver
   IdeObject parent_instance;
 };
 
-static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
-
-G_DEFINE_TYPE_EXTENDED (IdeCodeIndexSymbolResolver, ide_code_index_symbol_resolver, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
-
 static void
 ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
                                           GAsyncResult *result,
                                           gpointer      user_data)
 {
-  IdeCodeIndexSymbolResolver *self;
   IdeCodeIndexer *code_indexer = (IdeCodeIndexer *)object;
-  g_autofree gchar *key = NULL;
-  IdeContext *context;
-  IdeCodeIndexService *service;
-  IdeCodeIndexIndex *index;
+  g_autoptr(GTask) task = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autofree gchar *key = NULL;
+  IdeCodeIndexSymbolResolver *self;
+  IdeCodeIndexService *service;
+  IdeCodeIndexIndex *index;
+  IdeContext *context;
 
   g_assert (IDE_IS_CODE_INDEXER (code_indexer));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  g_assert (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (self));
 
   key = ide_code_indexer_generate_key_finish (code_indexer, result, &error);
 
@@ -63,19 +60,18 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
   context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
   index = ide_code_index_service_get_index (service);
+  symbol = ide_code_index_index_lookup_symbol (index, key);
 
-  if (NULL != (symbol = ide_code_index_index_lookup_symbol (index, key)))
-    {
-      g_task_return_pointer (task, g_steal_pointer (&symbol), (GDestroyNotify)ide_symbol_unref);
-    }
+  if (symbol != NULL)
+    g_task_return_pointer (task,
+                           g_steal_pointer (&symbol),
+                           (GDestroyNotify)ide_symbol_unref);
   else
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               "Symbol with key:%s not found",
-                               key);
-    }
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Symbol with key \"%s\" not found",
+                             key);
 }
 
 static void
@@ -86,11 +82,11 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
                                                     gpointer             user_data)
 {
   IdeCodeIndexSymbolResolver *self = (IdeCodeIndexSymbolResolver *)resolver;
-  IdeContext *context;
+  g_autoptr(GTask) task = NULL;
   IdeCodeIndexService *service;
   IdeCodeIndexer *code_indexer;
-  const gchar *file_name = NULL;
-  g_autoptr(GTask) task = NULL;
+  const gchar *file_name;
+  IdeContext *context;
 
   g_return_if_fail (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (self));
   g_return_if_fail (location != NULL);
@@ -144,6 +140,10 @@ symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
   iface->lookup_symbol_async = ide_code_index_symbol_resolver_lookup_symbol_async;
   iface->lookup_symbol_finish = ide_code_index_symbol_resolver_lookup_symbol_finish;
 }
+
+G_DEFINE_TYPE_WITH_CODE (IdeCodeIndexSymbolResolver, ide_code_index_symbol_resolver, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER,
+                                                symbol_resolver_iface_init))
 
 static void
 ide_code_index_symbol_resolver_init (IdeCodeIndexSymbolResolver *self)
