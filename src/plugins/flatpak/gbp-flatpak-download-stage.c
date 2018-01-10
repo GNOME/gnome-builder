@@ -51,7 +51,6 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
 {
   GbpFlatpakDownloadStage *self = (GbpFlatpakDownloadStage *)stage;
   IdeConfiguration *config;
-  GNetworkMonitor *monitor;
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *manifest_path = NULL;
   g_autofree gchar *stop_at_option = NULL;
@@ -61,6 +60,17 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
   g_assert (GBP_IS_FLATPAK_DOWNLOAD_STAGE (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* Ignore downloads if there is no connection */
+  if (!g_network_monitor_get_network_available (g_network_monitor_get_default ()))
+    {
+      ide_build_stage_log (stage,
+                           IDE_BUILD_LOG_STDOUT,
+                           _("Network is not available, skipping downloads"),
+                           -1);
+      ide_build_stage_set_completed (stage, TRUE);
+      return;
+    }
 
   config = ide_build_pipeline_get_configuration (pipeline);
   if (!GBP_IS_FLATPAK_CONFIGURATION (config))
@@ -106,17 +116,6 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
 
       self->invalid = FALSE;
       self->force_update = FALSE;
-    }
-
-  /* Ignore downloads if there is no connection */
-  monitor = g_network_monitor_get_default ();
-  if (!g_network_monitor_get_network_available (monitor))
-    {
-      ide_build_stage_log (stage,
-                           IDE_BUILD_LOG_STDOUT,
-                           _("Network is not available, skipping downloads"),
-                           -1);
-      ide_build_stage_set_completed (stage, TRUE);
     }
 }
 
