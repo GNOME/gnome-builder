@@ -593,7 +593,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/libdazzle"
+                    "url": "https://gitlab.gnome.org/GNOME/libdazzle.git"
                 }
             ]
         },
