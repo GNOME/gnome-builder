@@ -3090,3 +3090,71 @@ _ide_build_pipeline_cancel (IdeBuildPipeline *self)
   self->cancellable = g_cancellable_new ();
   g_cancellable_cancel (cancellable);
 }
+
+/**
+ * ide_build_pipeline_has_configured:
+ * @self: a #IdeBuildPipeline
+ *
+ * Checks to see if the pipeline has advanced far enough to ensure that
+ * the configure stage has been reached.
+ *
+ * Returns: %TRUE if %IDE_BUILD_PHASE_CONFIGURE has been reached.
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_build_pipeline_has_configured (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+
+  /*
+   * We need to walk from beginning towards end (instead of
+   * taking a cleaner approach that would be to walk from the
+   * end forward) because it's possible for some items to be
+   * marked completed before they've ever been run.
+   *
+   * So just walk forward and we have configured if we hit
+   * any phase that is CONFIGURE and has completed, or no
+   * configure phases were found.
+   */
+
+  for (guint i = 0; i < self->pipeline->len; i++)
+    {
+      const PipelineEntry *entry = &g_array_index (self->pipeline, PipelineEntry, i);
+
+      if ((entry->phase & IDE_BUILD_PHASE_MASK) < IDE_BUILD_PHASE_CONFIGURE)
+        continue;
+
+      if (entry->phase & IDE_BUILD_PHASE_CONFIGURE)
+        {
+          /*
+           * This is a configure phase, ensure that it has been
+           * completed, or we have not really configured.
+           */
+          if (!ide_build_stage_get_completed (entry->stage))
+            return FALSE;
+
+          /*
+           * Check the next pipeline entry to ensure that it too
+           * has been configured.
+           */
+          continue;
+        }
+
+      /*
+       * We've advanced past CONFIGURE, so anything at this point
+       * can be considered configured.
+       */
+
+      return TRUE;
+    }
+
+  /*
+   * Technically we could have a build system that only supports
+   * up to configure. But I don't really care about that case. If
+   * that ever happens, we need an additional check here that the
+   * last pipeline entry completed.
+   */
+
+  return FALSE;
+}

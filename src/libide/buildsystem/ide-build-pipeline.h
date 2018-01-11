@@ -169,5 +169,7 @@ gboolean               ide_build_pipeline_rebuild_finish      (IdeBuildPipeline 
 IDE_AVAILABLE_IN_3_28
 void                   ide_build_pipeline_attach_pty          (IdeBuildPipeline       *self,
                                                                IdeSubprocessLauncher  *launcher);
+IDE_AVAILABLE_IN_3_28
+gboolean               ide_build_pipeline_has_configured      (IdeBuildPipeline       *self);
 
 G_END_DECLS
