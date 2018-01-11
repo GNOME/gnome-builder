@@ -26,31 +26,53 @@
 gchar *
 gbp_flatpak_get_repo_dir (IdeConfiguration *configuration)
 {
-  g_autofree gchar *runtime_id = NULL;
+  g_autofree gchar *branch = NULL;
+  g_autofree gchar *name = NULL;
+  const gchar *runtime_id;
   IdeContext *context;
+  IdeVcs *vcs;
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   context = ide_object_get_context (IDE_OBJECT (configuration));
-  runtime_id = g_strdup (ide_configuration_get_runtime_id (configuration));
-  g_strdelimit (runtime_id, G_DIR_SEPARATOR_S, '-');
+  vcs = ide_context_get_vcs (context);
+  branch = ide_vcs_get_branch_name (vcs);
+  runtime_id = ide_configuration_get_runtime_id (configuration);
 
-  return ide_context_cache_filename (context, "flatpak", "repos", runtime_id, NULL);
+  if (branch != NULL)
+    name = g_strdup_printf ("%s:%s", runtime_id, branch);
+  else
+    name = g_strdup (runtime_id);
+
+  g_strdelimit (name, G_DIR_SEPARATOR_S, '-');
+
+  return ide_context_cache_filename (context, "flatpak", "repos", name, NULL);
 }
 
 gchar *
 gbp_flatpak_get_staging_dir (IdeConfiguration *configuration)
 {
-  g_autofree gchar *runtime_id = NULL;
+  g_autofree gchar *branch = NULL;
+  g_autofree gchar *name = NULL;
+  const gchar *runtime_id;
   IdeContext *context;
+  IdeVcs *vcs;
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   context = ide_object_get_context (IDE_OBJECT (configuration));
-  runtime_id = g_strdup (ide_configuration_get_runtime_id (configuration));
-  g_strdelimit (runtime_id, G_DIR_SEPARATOR_S, '-');
+  vcs = ide_context_get_vcs (context);
+  branch = ide_vcs_get_branch_name (vcs);
+  runtime_id = ide_configuration_get_runtime_id (configuration);
 
-  return ide_context_cache_filename (context, "flatpak", "staging", runtime_id, NULL);
+  if (branch != NULL)
+    name = g_strdup_printf ("%s:%s", runtime_id, branch);
+  else
+    name = g_strdup (runtime_id);
+
+  g_strdelimit (name, G_DIR_SEPARATOR_S, '-');
+
+  return ide_context_cache_filename (context, "flatpak", "staging", name, NULL);
 }
 
 gboolean
