@@ -667,7 +667,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://git.gnome.org/browse/gnome-builder"
+                    "url": "https://gitlab.gnome.org/GNOME/gnome-builder.git"
                 }
             ]
         }
