@@ -635,8 +635,7 @@ get_entries_worker (GTask        *task,
   add_entries_from_base_path (self, user_config_path, entries, map, &ret_has_default);
   has_default |= ret_has_default;
 
-  if (map != NULL)
-    g_array_free (map, TRUE);
+  g_clear_pointer (&map, g_array_unref);
 
   /* Project wide config */
   if (NULL != (context = self->context))
@@ -652,8 +651,7 @@ get_entries_worker (GTask        *task,
               has_default |= ret_has_default;
               g_clear_pointer (&configdir, g_free);
 
-              if (map != NULL)
-                g_array_free (map, TRUE);
+              g_clear_pointer (&map, g_array_unref);
             }
           else if (NULL != (vcs = ide_context_get_vcs (context)))
             {
@@ -669,8 +667,7 @@ get_entries_worker (GTask        *task,
               add_entries_from_base_path (self, project_config_path, entries, map, &ret_has_default);
               has_default |= ret_has_default;
 
-              if (map != NULL)
-                g_array_free (map, TRUE);
+              g_clear_pointer (&map, g_array_unref);
             }
         }
     }
@@ -683,8 +680,7 @@ get_entries_worker (GTask        *task,
   g_clear_pointer (&configdir, g_free);
   has_default |= ret_has_default;
 
-  if (map != NULL)
-    g_array_free (map, TRUE);
+  g_clear_pointer (&map, g_array_unref);
 
   result = g_slice_new0 (GbBeautifierEntriesResult);
   result->entries = entries;
