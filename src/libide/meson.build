@@ -282,11 +282,11 @@ libide_gir = gnome.generate_gir(libide,
 if get_option('with_vapi')
 
 configure_file(
-      input: 'libide-' + libide_api_version + '.deps',
-     output: 'libide-' + libide_api_version + '.deps',
-configuration: configuration_data(),
-    install: true,
-install_dir: pkgvapidir,
+          input: 'libide-' + libide_api_version + '.deps',
+         output: 'libide-' + libide_api_version + '.deps',
+  configuration: configuration_data(),
+        install: true,
+    install_dir: pkgvapidir,
 )
 
 libide_vapi = gnome.generate_vapi('libide-' + libide_api_version,
