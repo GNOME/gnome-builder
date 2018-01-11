@@ -1540,13 +1540,14 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
                                 gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  g_autoptr(GCancellable) local_cancellable = NULL;
   TaskData *task_data;
 
   IDE_ENTRY;
 
-  if (cancellable == NULL)
-    cancellable = local_cancellable = g_cancellable_new ();
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_pipeline_build_async);
