@@ -537,11 +537,7 @@ gb_beautifier_config_get_map (GbBeautifierEditorAddin *self,
 
   key_file = g_key_file_new ();
   if (!g_file_query_exists (file, NULL))
-    {
-      /* translators: %s is replaced with a path name */
-      ide_object_warning (self, _("Beautifier plugin: the path “%s” doesn’t exist"), file_name);
-      return map;
-    }
+    return map;
 
   if (!g_file_load_contents (file, NULL, &data, &data_len, NULL, NULL))
     {
