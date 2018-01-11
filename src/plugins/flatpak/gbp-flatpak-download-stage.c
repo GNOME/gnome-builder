@@ -109,17 +109,6 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
 
       ide_subprocess_launcher_push_argv (launcher, "--download-only");
 
-      if (self->state_dir != NULL)
-        {
-          /*
-           * We need to specify to flatpak-builder the location for the sources
-           * so that it doesn't try to ping the remote host. This should
-           * _probably_ be fixed in upstream flatpak-builder.
-           */
-          ide_subprocess_launcher_push_argv (launcher, "--extra-sources");
-          ide_subprocess_launcher_push_argv (launcher, self->state_dir);
-        }
-
       if (!self->force_update)
         ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
 
