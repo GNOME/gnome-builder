@@ -683,7 +683,7 @@ get_entries_worker (GTask        *task,
   g_clear_pointer (&map, g_array_unref);
 
   result = g_slice_new0 (GbBeautifierEntriesResult);
-  result->entries = entries;
+  result->entries = g_steal_pointer (&entries);
   result->has_default = has_default;
 
   g_task_return_pointer (task, result, NULL);
