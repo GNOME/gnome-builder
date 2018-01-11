@@ -156,24 +156,20 @@ ide_code_index_service_build_cb (GObject      *object,
                                     bdata->n_trial + 1);
     }
 
-  g_clear_object (&self->cancellable);
-
   /* Index next directory */
   if (!g_queue_is_empty (&self->build_queue))
     {
-      GCancellable *cancellable;
-      BuildData *peek;
+      BuildData *peek = g_queue_peek_head (&self->build_queue);
 
-      peek = g_queue_peek_head (&self->build_queue);
-
-      self->cancellable = cancellable = g_cancellable_new ();
+      g_clear_object (&self->cancellable);
+      self->cancellable = g_cancellable_new ();
 
       ide_code_index_builder_build_async (builder,
                                           peek->directory,
                                           peek->recursive,
-                                          cancellable,
+                                          self->cancellable,
                                           ide_code_index_service_build_cb,
-                                          g_steal_pointer (&self));
+                                          g_object_ref (self));
     }
   else
     {
@@ -188,6 +184,8 @@ ide_code_index_serivce_push (BuildData *bdata)
   IdeCodeIndexService *self;
 
   g_assert (bdata != NULL);
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (bdata->self));
+  g_assert (G_IS_FILE (bdata->directory));
 
   self = bdata->self;
 
@@ -198,7 +196,6 @@ ide_code_index_serivce_push (BuildData *bdata)
       g_queue_push_tail (&self->build_queue, bdata);
 
       g_clear_object (&self->cancellable);
-
       self->cancellable = g_cancellable_new ();
 
       register_pausable (self);
