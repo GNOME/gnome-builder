@@ -5,9 +5,9 @@ Develop software for GNOME
 ## Helpful Links
 
  * [Read the documentation](http://builder.readthedocs.io/en/latest/)
- * [File a Bug on Bugzilla](https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder)
+ * [File a Bug in GitLab](https://gitlab.gnome.org/GNOME/gnome-builder/issues)
  * [Download a Release Tarball](https://download.gnome.org/sources/gnome-builder/)
- * [Browse source code in Git version control](https://git.gnome.org/browse/gnome-builder)
+ * [Browse source code in Git version control](https://gitlab.gnome.org/GNOME/gnome-builder)
  * [Learn more about Builder](https://wiki.gnome.org/Apps/Builder)
  * [Chat with the developers](irc://irc.gnome.org/#gnome-builder) in #gnome-builder on irc.gnome.org
 
