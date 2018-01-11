@@ -23,6 +23,7 @@
 #include <gio/gio.h>
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
+#include <string.h>
 
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-makecache-stage.h"
@@ -65,17 +66,29 @@ ide_autotools_build_system_get_tarball_name (IdeAutotoolsBuildSystem *self)
 static gboolean
 is_configure (GFile *file)
 {
-  gchar *name;
-  gboolean ret;
+  g_autofree gchar *name = NULL;
 
   g_assert (G_IS_FILE (file));
 
   name = g_file_get_basename (file);
-  ret = ((0 == g_strcmp0 (name, "configure.ac")) ||
-         (0 == g_strcmp0 (name, "configure.in")));
-  g_free (name);
+  return dzl_str_equal0 (name, "configure.ac") ||
+         dzl_str_equal0 (name, "configure.in");
+}
 
-  return ret;
+static gboolean
+check_for_ac_init (GFile        *file,
+                   GCancellable *cancellable)
+{
+  g_autofree gchar *contents = NULL;
+  gsize len = 0;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (g_file_load_contents (file, cancellable, &contents, &len, NULL, NULL))
+    return strstr (contents, "AC_INIT") != NULL;
+
+  return FALSE;
 }
 
 static void
@@ -121,14 +134,14 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
     }
 
   configure_ac = g_file_get_child (file, "configure.ac");
-  if (g_file_query_exists (configure_ac, cancellable))
+  if (check_for_ac_init (configure_ac, cancellable))
     {
       g_task_return_pointer (task, g_steal_pointer (&configure_ac), g_object_unref);
       IDE_EXIT;
     }
 
   configure_in = g_file_get_child (file, "configure.in");
-  if (g_file_query_exists (configure_in, cancellable))
+  if (check_for_ac_init (configure_in, cancellable))
     {
       g_task_return_pointer (task, g_steal_pointer (&configure_in), g_object_unref);
       IDE_EXIT;
