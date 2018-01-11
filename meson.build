@@ -1,6 +1,6 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
-          version: '3.26.2',
+          version: '3.26.3',
     meson_version: '>= 0.40.1',
   default_options: [
                      'c_std=gnu11',
@@ -171,7 +171,7 @@ libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.1')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
 libm_dep = cc.find_library('m', required: false)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.26.1', required: false)
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.26.2', required: false)
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.26.1', required: false)
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.26.1',
   fallback: ['jsonrpc-glib', 'libjsonrpc_glib_dep'],

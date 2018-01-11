@@ -1,4 +1,24 @@
 ==============
+Version 3.26.3
+==============
+
+Changes since last release:
+
+ • Various improvements to for developing against the host system
+   when running Builder from a flatpak.
+ • Builder will set more fallback environment variable when running
+   under flatpak to ensure subprocesses have a predictable environment.
+ • Various fixes to the shortcut engine and how key-press are captured.
+ • Fixes for invalid cast in LSP format provider.
+ • Various correctness and memory leak fixes.
+ • Symbol tree will try additional symbol resolvers if the first one
+   returned with an empty set.
+
+Updated Translations:
+
+ Slovak, Serbian
+
+==============
 Version 3.26.2
 ==============
 
