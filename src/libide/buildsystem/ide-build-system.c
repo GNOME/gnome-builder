@@ -30,6 +30,7 @@
 #include "buildsystem/ide-configuration.h"
 #include "files/ide-file.h"
 #include "projects/ide-project.h"
+#include "vcs/ide-vcs.h"
 
 G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)
 
@@ -532,18 +533,28 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
   if (ret == NULL)
     {
       g_autofree gchar *name = NULL;
+      g_autofree gchar *branch = NULL;
       const gchar *config_id;
       const gchar *device_id;
       const gchar *runtime_id;
       IdeContext *context;
+      IdeVcs *vcs;
 
       context = ide_object_get_context (IDE_OBJECT (self));
+      vcs = ide_context_get_vcs (context);
+
       config_id = ide_configuration_get_id (configuration);
       device_id = ide_configuration_get_device_id (configuration);
       runtime_id = ide_configuration_get_runtime_id (configuration);
+      branch = ide_vcs_get_branch_name (vcs);
 
-      name = g_strdelimit (g_strdup_printf ("%s-%s-%s", config_id, device_id, runtime_id),
-                           "@:/", '-');
+      if (branch != NULL)
+        name = g_strdup_printf ("%s-%s-%s-%s", config_id, device_id, runtime_id, branch);
+      else
+        name = g_strdup_printf ("%s-%s-%s", config_id, device_id, runtime_id);
+
+      g_strdelimit (name, "@:/", '-');
+
       ret = ide_context_cache_filename (context, "builds", name, NULL);
     }
 
