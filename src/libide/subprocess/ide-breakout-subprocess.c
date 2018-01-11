@@ -1520,13 +1520,15 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
 
   IDE_TRACE_MSG ("HostCommand() spawned client_pid %u", (guint)client_pid);
 
-  if (cancellable != NULL)
+  if (cancellable != NULL && !g_cancellable_is_cancelled (cancellable))
     {
       g_signal_connect_object (cancellable,
                                "cancelled",
                                G_CALLBACK (ide_breakout_subprocess_cancelled),
                                self,
                                G_CONNECT_SWAPPED);
+      if (g_cancellable_is_cancelled (cancellable) && !self->client_has_exited)
+        ide_breakout_subprocess_force_exit (IDE_SUBPROCESS (self));
     }
 
   ret = TRUE;
