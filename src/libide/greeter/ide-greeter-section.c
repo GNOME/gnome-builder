@@ -41,6 +41,8 @@ ide_greeter_section_default_init (IdeGreeterSectionInterface *iface)
 
   /**
    * IdeGreeterSection::project-activated:
+   * @self: an #IdeGreeterSection
+   * @project_info: an #IdeProjectInfo
    *
    * The "project-activated" signal is emitted when a project has been
    * selected by the user in the section.

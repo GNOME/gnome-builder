@@ -38,7 +38,7 @@ struct _IdeGreeterSectionInterface
                                   IdeProjectInfo    *project_info);
   gint     (*get_priority)       (IdeGreeterSection *self);
   gboolean (*filter)             (IdeGreeterSection *self,
-                                  DzlPatternSpec    *pattern);
+                                  DzlPatternSpec    *spec);
   gboolean (*activate_first)     (IdeGreeterSection *self);
   void     (*set_selection_mode) (IdeGreeterSection *self,
                                   gboolean           selection_mode);
