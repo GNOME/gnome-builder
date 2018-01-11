@@ -71,7 +71,6 @@ sniff_flatpak_builder_version (GbpFlatpakPipelineAddin *self)
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
   ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
@@ -304,10 +303,10 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 {
   g_autoptr(IdeBuildStage) stage = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autofree gchar *manifest_path = NULL;
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *stop_at_option = NULL;
   IdeConfiguration *config;
-  g_autofree gchar *manifest_path = NULL;
   const gchar *primary_module;
   const gchar *src_dir;
   guint stage_id;
@@ -333,6 +332,17 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   launcher = create_subprocess_launcher ();
 
   ide_subprocess_launcher_set_cwd (launcher, src_dir);
+  ide_subprocess_launcher_set_run_on_host (launcher, FALSE);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+
+  if (ide_is_flatpak ())
+    {
+      g_autofree gchar *user_dir = NULL;
+
+      user_dir = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
+      ide_subprocess_launcher_setenv (launcher, "FLATPAK_USER_DIR", user_dir, TRUE);
+      ide_subprocess_launcher_setenv (launcher, "XDG_RUNTIME_DIR", g_get_user_runtime_dir (), TRUE);
+    }
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
   ide_subprocess_launcher_push_argv (launcher, "--ccache");

@@ -656,6 +656,15 @@
             ]
         },
         {
+            "name": "flatpak-builder",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/flatpak/flatpak-builder"
+                }
+            ]
+        },
+        {
             "name": "gnome-builder",
             "buildsystem": "meson",
             "builddir": true,

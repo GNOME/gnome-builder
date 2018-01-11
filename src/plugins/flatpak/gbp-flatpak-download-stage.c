@@ -93,9 +93,17 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
       launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                               G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
       ide_subprocess_launcher_set_cwd (launcher, src_dir);
+      ide_subprocess_launcher_set_run_on_host (launcher, FALSE);
+
+      if (ide_is_flatpak ())
+        {
+          g_autofree gchar *user_dir = NULL;
+
+          user_dir = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
+          ide_subprocess_launcher_setenv (launcher, "FLATPAK_USER_DIR", user_dir, TRUE);
+          ide_subprocess_launcher_setenv (launcher, "XDG_RUNTIME_DIR", g_get_user_runtime_dir (), TRUE);
+        }
 
       ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
       ide_subprocess_launcher_push_argv (launcher, "--ccache");
