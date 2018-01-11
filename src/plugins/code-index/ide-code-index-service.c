@@ -52,6 +52,7 @@ struct _IdeCodeIndexService
   GCancellable           *cancellable;
 
   guint                   stopped : 1;
+  guint                   delayed_build_reqeusted : 1;
 };
 
 typedef struct
@@ -76,7 +77,8 @@ G_DEFINE_TYPE_EXTENDED (IdeCodeIndexService, ide_code_index_service, IDE_TYPE_OB
 static void
 remove_source (gpointer source_id)
 {
-  g_source_remove (GPOINTER_TO_UINT (source_id));
+  if (source_id != NULL)
+    g_source_remove (GPOINTER_TO_UINT (source_id));
 }
 
 static void
@@ -111,6 +113,31 @@ unregister_pausable (IdeCodeIndexService *self)
   context = ide_object_get_context (IDE_OBJECT (self));
   if (context != NULL && self->pausable != NULL)
     ide_context_remove_pausable (context, self->pausable);
+}
+
+static gboolean
+delay_until_build_completes (IdeCodeIndexService *self)
+{
+  IdeBuildPipeline *pipeline;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
+
+  if (self->delayed_build_reqeusted)
+    return TRUE;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  if (pipeline == NULL || !ide_build_pipeline_has_configured (pipeline))
+    {
+      self->delayed_build_reqeusted = TRUE;
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -227,6 +254,15 @@ ide_code_index_service_build (IdeCodeIndexService *self,
   if (n_trial > MAX_TRIALS)
     return;
 
+  /*
+   * If the build system is currently failed, then don't try to
+   * do any indexing now. We'll wait for a successful build that
+   * at least reaches IDE_BUILD_PHASE_CONFIGURE and then trigger
+   * after that.
+   */
+  if (delay_until_build_completes (self))
+    return;
+
   if (!g_hash_table_lookup (self->build_dirs, directory))
     {
       BuildData *bdata;
@@ -252,10 +288,13 @@ static void
 ide_code_index_service_vcs_changed (IdeCodeIndexService *self,
                                     IdeVcs              *vcs)
 {
+  GFile *workdir;
+
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (IDE_IS_VCS (vcs));
 
-  ide_code_index_service_build (self, ide_vcs_get_working_directory (vcs), TRUE, 1);
+  workdir = ide_vcs_get_working_directory (vcs);
+  ide_code_index_service_build (self, workdir, TRUE, 1);
 }
 
 static void
@@ -340,10 +379,37 @@ ide_code_index_service_file_renamed (IdeCodeIndexService *self,
 }
 
 static void
+ide_code_index_service_build_finished (IdeCodeIndexService *self,
+                                       IdeBuildPipeline    *pipeline,
+                                       IdeBuildManager     *build_manager)
+{
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  if (self->delayed_build_reqeusted &&
+      ide_build_pipeline_has_configured (pipeline))
+    {
+      IdeContext *context;
+      IdeVcs *vcs;
+      GFile *workdir;
+
+      self->delayed_build_reqeusted = FALSE;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      vcs = ide_context_get_vcs (context);
+      workdir = ide_vcs_get_working_directory (vcs);
+
+      ide_code_index_service_build (self, workdir, TRUE, 1);
+    }
+}
+
+static void
 ide_code_index_service_context_loaded (IdeService *service)
 {
   IdeCodeIndexService *self = (IdeCodeIndexService *)service;
   IdeBufferManager *bufmgr;
+  IdeBuildManager *buildmgr;
   IdeContext *context;
   IdeProject *project;
   IdeVcs *vcs;
@@ -354,6 +420,7 @@ ide_code_index_service_context_loaded (IdeService *service)
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
   bufmgr = ide_context_get_buffer_manager (context);
+  buildmgr = ide_context_get_build_manager (context);
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
 
@@ -374,6 +441,12 @@ ide_code_index_service_context_loaded (IdeService *service)
   g_signal_connect_object (bufmgr,
                            "buffer-saved",
                            G_CALLBACK (ide_code_index_service_buffer_saved),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (buildmgr,
+                           "build-finished",
+                           G_CALLBACK (ide_code_index_service_build_finished),
                            self,
                            G_CONNECT_SWAPPED);
 
