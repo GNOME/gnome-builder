@@ -1,6 +1,6 @@
 /* ide-highlight-engine.c
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright © 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,12 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "ide-context.h"
 #include "ide-debug.h"
 #include "ide-internal.h"
 #include "ide-types.h"
 
+#include "buffers/ide-buffer-private.h"
 #include "highlighting/ide-highlight-engine.h"
 #include "plugins/ide-extension-adapter.h"
 
@@ -36,8 +38,9 @@ struct _IdeHighlightEngine
 {
   IdeObject            parent_instance;
 
+  GWeakRef             buffer_wref;
+
   DzlSignalGroup      *signal_group;
-  IdeBuffer           *buffer;
   IdeHighlighter      *highlighter;
   GSettings           *settings;
 
@@ -66,7 +69,6 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
-static GQuark      engineQuark;
 
 static gboolean
 get_invalidation_area (GtkTextIter *begin,
@@ -220,32 +222,42 @@ static GtkTextTag *
 create_tag_from_style (IdeHighlightEngine *self,
                        const gchar        *style_name)
 {
+  g_autoptr(IdeBuffer) buffer = NULL;
   GtkSourceStyleScheme *style_scheme;
-  GtkTextTag *tag;
+  GtkTextTag *tag = NULL;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (IDE_IS_BUFFER (self->buffer));
   g_assert (style_name != NULL);
 
-  tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->buffer), style_name, NULL);
-  gtk_text_tag_set_priority (tag, 0);
-  style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (self->buffer));
-  sync_tag_style (style_scheme, tag);
+  buffer = g_weak_ref_get (&self->buffer_wref);
+
+  if (buffer != NULL)
+    {
+      tag = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (buffer), style_name, NULL);
+      gtk_text_tag_set_priority (tag, 0);
+      style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+      sync_tag_style (style_scheme, tag);
+    }
 
   return tag;
 }
 
-GtkTextTag *
+static GtkTextTag *
 get_tag_from_style (IdeHighlightEngine *self,
                     const gchar        *style_name,
                     gboolean            private_tag)
 {
+  g_autoptr(IdeBuffer) buffer = NULL;
+  g_autofree gchar *tmp_style_name = NULL;
   GtkTextTagTable *tag_table;
   GtkTextTag *tag;
-  g_autofree gchar *tmp_style_name = NULL;
 
   g_return_val_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self), NULL);
   g_return_val_if_fail (style_name != NULL, NULL);
+
+  buffer = g_weak_ref_get (&self->buffer_wref);
+  if (buffer == NULL)
+    return NULL;
 
   /*
    * If is private tag prepend the PRIVATE_TAG_PREFIX (gb-private-tag)
@@ -258,7 +270,7 @@ get_tag_from_style (IdeHighlightEngine *self,
   else
     tmp_style_name = g_strdup (style_name);
 
-  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self->buffer));
+  tag_table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (buffer));
   tag = gtk_text_tag_table_lookup (tag_table, tmp_style_name);
 
   if (tag == NULL)
@@ -284,7 +296,7 @@ ide_highlight_engine_apply_style (const GtkTextIter *begin,
   GtkTextTag *tag;
 
   buffer = gtk_text_iter_get_buffer (begin);
-  self = g_object_get_qdata (G_OBJECT (buffer), engineQuark);
+  self = _ide_buffer_get_highlight_engine (IDE_BUFFER (buffer));
   tag = get_tag_from_style (self, style_name, TRUE);
 
   gtk_text_buffer_apply_tag (buffer, tag, begin, end);
@@ -307,14 +319,15 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   IDE_PROBE;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
-  g_assert (self->buffer != NULL);
   g_assert (self->highlighter != NULL);
   g_assert (self->invalid_begin != NULL);
   g_assert (self->invalid_end != NULL);
 
-  self->quanta_expiration = g_get_monotonic_time () + HIGHLIGHT_QUANTA_USEC;
+  buffer = g_weak_ref_get (&self->buffer_wref);
+  if (buffer == NULL)
+    return G_SOURCE_REMOVE;
 
-  buffer = GTK_TEXT_BUFFER (self->buffer);
+  self->quanta_expiration = g_get_monotonic_time () + HIGHLIGHT_QUANTA_USEC;
 
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_begin, self->invalid_begin);
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_end, self->invalid_end);
@@ -346,18 +359,18 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
 
   /* Stop processing until further instruction if no movement was made */
   if (gtk_text_iter_equal (&iter, &invalid_begin))
-    return FALSE;
+    return G_SOURCE_REMOVE;
 
   gtk_text_buffer_move_mark (buffer, self->invalid_begin, &iter);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 
 up_to_date:
   gtk_text_buffer_get_start_iter (buffer, &iter);
   gtk_text_buffer_move_mark (buffer, self->invalid_begin, &iter);
   gtk_text_buffer_move_mark (buffer, self->invalid_end, &iter);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -381,9 +394,12 @@ ide_highlight_engine_work_timeout_handler (gpointer data)
 static void
 ide_highlight_engine_queue_work (IdeHighlightEngine *self)
 {
+  g_autoptr(GtkTextBuffer) buffer = NULL;
+
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if ((self->highlighter == NULL) || (self->buffer == NULL) || (self->work_timeout != 0))
+  buffer = g_weak_ref_get (&self->buffer_wref);
+  if (self->highlighter == NULL || buffer == NULL || self->work_timeout != 0)
     return;
 
   /*
@@ -406,6 +422,7 @@ invalidate_and_highlight (IdeHighlightEngine *self,
                           GtkTextIter        *begin,
                           GtkTextIter        *end)
 {
+  GtkTextBuffer *text_buffer;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (begin != NULL);
@@ -414,11 +431,12 @@ invalidate_and_highlight (IdeHighlightEngine *self,
   if (!self->enabled)
     return FALSE;
 
+  text_buffer = gtk_text_iter_get_buffer (begin);
+
   if (get_invalidation_area (begin, end))
     {
       GtkTextIter begin_tmp;
       GtkTextIter end_tmp;
-      GtkTextBuffer *text_buffer = GTK_TEXT_BUFFER (self->buffer);
 
       gtk_text_buffer_get_iter_at_mark (text_buffer, &begin_tmp, self->invalid_begin);
       gtk_text_buffer_get_iter_at_mark (text_buffer, &end_tmp, self->invalid_end);
@@ -447,7 +465,7 @@ invalidate_and_highlight (IdeHighlightEngine *self,
 static void
 ide_highlight_engine_reload (IdeHighlightEngine *self)
 {
-  GtkTextBuffer *buffer;
+  g_autoptr(GtkTextBuffer) buffer = NULL;
   GtkTextIter begin;
   GtkTextIter end;
   GSList *iter;
@@ -456,16 +474,11 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->work_timeout != 0)
-    {
-      g_source_remove (self->work_timeout);
-      self->work_timeout = 0;
-    }
+  dzl_clear_source (&self->work_timeout);
 
-  if (self->buffer == NULL)
+  buffer = g_weak_ref_get (&self->buffer_wref);
+  if (buffer == NULL)
     IDE_EXIT;
-
-  buffer = GTK_TEXT_BUFFER (self->buffer);
 
   gtk_text_buffer_get_bounds (buffer, &begin, &end);
 
@@ -621,20 +634,23 @@ ide_highlight_engine__notify_style_scheme_cb (IdeHighlightEngine *self,
 void
 ide_highlight_engine_clear (IdeHighlightEngine *self)
 {
+  g_autoptr(GtkTextBuffer) buffer = NULL;
   GtkTextIter begin;
   GtkTextIter end;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->buffer != NULL)
+  buffer = g_weak_ref_get (&self->buffer_wref);
+
+  if (buffer != NULL)
     {
-      GtkTextBuffer *buffer = GTK_TEXT_BUFFER (self->buffer);
-      GSList *iter;
+      gtk_text_buffer_get_bounds (buffer, &begin, &end);
 
-      gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
-
-      for (iter = self->public_tags; iter; iter = iter->next)
-        gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
+      for (const GSList *iter = self->public_tags; iter; iter = iter->next)
+        {
+          GtkTextTag *tag = iter->data;
+          gtk_text_buffer_remove_tag (buffer, tag, &begin, &end);
+        }
     }
 }
 
@@ -652,15 +668,22 @@ ide_highlight_engine__bind_buffer_cb (IdeHighlightEngine *self,
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (DZL_IS_SIGNAL_GROUP (group));
+  g_assert (self->invalid_begin == NULL);
+  g_assert (self->invalid_end == NULL);
 
-  self->buffer = buffer;
-
-  g_object_set_qdata (G_OBJECT (buffer), engineQuark, self);
+  g_weak_ref_set (&self->buffer_wref, buffer);
 
   gtk_text_buffer_get_bounds (text_buffer, &begin, &end);
 
   self->invalid_begin = gtk_text_buffer_create_mark (text_buffer, NULL, &begin, TRUE);
   self->invalid_end = gtk_text_buffer_create_mark (text_buffer, NULL, &end, FALSE);
+
+  /* We can hold a full reference to the text marks, without
+   * taking a reference to the buffer. We want to avoid a reference
+   * to the buffer for cyclic reasons.
+   */
+  g_object_ref (self->invalid_begin);
+  g_object_ref (self->invalid_end);
 
   ide_highlight_engine__notify_style_scheme_cb (self, NULL, buffer);
   ide_highlight_engine__notify_language_cb (self, NULL, buffer);
@@ -674,52 +697,53 @@ static void
 ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
                                         DzlSignalGroup      *group)
 {
-  GtkTextBuffer *text_buffer;
-  GtkTextTagTable *tag_table;
-  GtkTextIter begin;
-  GtkTextIter end;
-  GSList *iter;
+  g_autoptr(GtkTextBuffer) text_buffer = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_assert (DZL_IS_SIGNAL_GROUP (group));
 
-  text_buffer = GTK_TEXT_BUFFER (self->buffer);
+  text_buffer = g_weak_ref_get (&self->buffer_wref);
 
-  if (self->work_timeout)
+  dzl_clear_source (&self->work_timeout);
+
+  if (text_buffer != NULL)
     {
-      g_source_remove (self->work_timeout);
-      self->work_timeout = 0;
+      g_autoptr(GSList) private_tags = NULL;
+      g_autoptr(GSList) public_tags = NULL;
+      GtkTextTagTable *tag_table;
+      GtkTextIter begin;
+      GtkTextIter end;
+
+      tag_table = gtk_text_buffer_get_tag_table (text_buffer);
+
+      gtk_text_buffer_delete_mark (text_buffer, self->invalid_begin);
+      gtk_text_buffer_delete_mark (text_buffer, self->invalid_end);
+
+      gtk_text_buffer_get_bounds (text_buffer, &begin, &end);
+
+      private_tags = g_steal_pointer (&self->private_tags);
+      public_tags = g_steal_pointer (&self->public_tags);
+
+      for (const GSList *iter = private_tags; iter; iter = iter->next)
+        {
+          gtk_text_buffer_remove_tag (text_buffer, iter->data, &begin, &end);
+          gtk_text_tag_table_remove (tag_table, iter->data);
+        }
+
+      for (const GSList *iter = public_tags; iter; iter = iter->next)
+        {
+          gtk_text_buffer_remove_tag (text_buffer, iter->data, &begin, &end);
+          gtk_text_tag_table_remove (tag_table, iter->data);
+        }
     }
 
-  g_object_set_qdata (G_OBJECT (text_buffer), engineQuark, NULL);
-
-  tag_table = gtk_text_buffer_get_tag_table (text_buffer);
-
-  gtk_text_buffer_delete_mark (text_buffer, self->invalid_begin);
-  gtk_text_buffer_delete_mark (text_buffer, self->invalid_end);
-
-  self->invalid_begin = NULL;
-  self->invalid_end = NULL;
-
-  gtk_text_buffer_get_bounds (text_buffer, &begin, &end);
-
-  for (iter = self->private_tags; iter; iter = iter->next)
-    {
-      gtk_text_buffer_remove_tag (text_buffer, iter->data, &begin, &end);
-      gtk_text_tag_table_remove (tag_table, iter->data);
-    }
+  g_clear_pointer (&self->public_tags, g_slist_free);
   g_clear_pointer (&self->private_tags, g_slist_free);
 
-  for (iter = self->public_tags; iter; iter = iter->next)
-    {
-      gtk_text_buffer_remove_tag (text_buffer, iter->data, &begin, &end);
-      gtk_text_tag_table_remove (tag_table, iter->data);
-    }
-  g_clear_pointer (&self->public_tags, g_slist_free);
-
-  self->buffer = NULL;
+  g_clear_object (&self->invalid_begin);
+  g_clear_object (&self->invalid_end);
 
   IDE_EXIT;
 }
@@ -804,12 +828,23 @@ ide_highlight_engine_dispose (GObject *object)
 {
   IdeHighlightEngine *self = (IdeHighlightEngine *)object;
 
+  g_weak_ref_set (&self->buffer_wref, NULL);
   g_clear_object (&self->signal_group);
   g_clear_object (&self->extension);
   g_clear_object (&self->highlighter);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_highlight_engine_parent_class)->dispose (object);
+}
+
+static void
+ide_highlight_engine_finalize (GObject *object)
+{
+  IdeHighlightEngine *self = (IdeHighlightEngine *)object;
+
+  g_weak_ref_clear (&self->buffer_wref);
+
+  G_OBJECT_CLASS (ide_highlight_engine_parent_class)->finalize (object);
 }
 
 static void
@@ -861,6 +896,7 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
 
   object_class->constructed = ide_highlight_engine_constructed;
   object_class->dispose = ide_highlight_engine_dispose;
+  object_class->finalize = ide_highlight_engine_finalize;
   object_class->get_property = ide_highlight_engine_get_property;
   object_class->set_property = ide_highlight_engine_set_property;
 
@@ -879,13 +915,13 @@ ide_highlight_engine_class_init (IdeHighlightEngineClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
-
-  engineQuark = g_quark_from_string ("IDE_HIGHLIGHT_ENGINE");
 }
 
 static void
 ide_highlight_engine_init (IdeHighlightEngine *self)
 {
+  g_weak_ref_init (&self->buffer_wref, NULL);
+
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
   self->enabled = g_settings_get_boolean (self->settings, "semantic-highlighting");
   self->signal_group = dzl_signal_group_new (IDE_TYPE_BUFFER);
@@ -952,7 +988,7 @@ ide_highlight_engine_new (IdeBuffer *buffer)
 
 /**
  * ide_highlight_engine_get_highlighter:
- * @self: A #IdeHighlightEngine.
+ * @self: an #IdeHighlightEngine.
  *
  * Gets the IdeHighlightEngine:highlighter property.
  *
@@ -968,7 +1004,7 @@ ide_highlight_engine_get_highlighter (IdeHighlightEngine *self)
 
 /**
  * ide_highlight_engine_get_buffer:
- * @self: A #IdeHighlightEngine.
+ * @self: an #IdeHighlightEngine.
  *
  * Gets the IdeHighlightEngine:buffer property.
  *
@@ -977,27 +1013,38 @@ ide_highlight_engine_get_highlighter (IdeHighlightEngine *self)
 IdeBuffer *
 ide_highlight_engine_get_buffer (IdeHighlightEngine *self)
 {
+  g_autoptr(IdeBuffer) buffer = NULL;
+
   g_return_val_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self), NULL);
 
-  return self->buffer;
+  /* We don't need the "thread-safety" provided by GWeakRef here,
+   * (where it gives us a new object reference). It is safe to
+   * return a borrowed reference instead.
+   */
+  buffer = g_weak_ref_get (&self->buffer_wref);
+  return buffer;
 }
 
 void
 ide_highlight_engine_rebuild (IdeHighlightEngine *self)
 {
+  g_autoptr(GtkTextBuffer) buffer = NULL;
+
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  if (self->buffer != NULL)
+  buffer = g_weak_ref_get (&self->buffer_wref);
+
+  if (buffer != NULL)
     {
-      GtkTextBuffer *buffer = GTK_TEXT_BUFFER (self->buffer);
       GtkTextIter begin;
       GtkTextIter end;
 
       gtk_text_buffer_get_bounds (buffer, &begin, &end);
       gtk_text_buffer_move_mark (buffer, self->invalid_begin, &begin);
       gtk_text_buffer_move_mark (buffer, self->invalid_end, &end);
+
       ide_highlight_engine_queue_work (self);
     }
 
@@ -1034,10 +1081,8 @@ ide_highlight_engine_invalidate (IdeHighlightEngine *self,
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_return_if_fail (begin != NULL);
   g_return_if_fail (end != NULL);
-  g_return_if_fail (gtk_text_iter_get_buffer (begin) == GTK_TEXT_BUFFER (self->buffer));
-  g_return_if_fail (gtk_text_iter_get_buffer (end) == GTK_TEXT_BUFFER (self->buffer));
 
-  buffer = GTK_TEXT_BUFFER (self->buffer);
+  buffer = gtk_text_iter_get_buffer (begin);
 
   gtk_text_buffer_get_iter_at_mark (buffer, &mark_begin, self->invalid_begin);
   gtk_text_buffer_get_iter_at_mark (buffer, &mark_end, self->invalid_end);
@@ -1067,7 +1112,7 @@ ide_highlight_engine_invalidate (IdeHighlightEngine *self,
  *
  * A #GtkTextTag for @style_name.
  *
- * Returns: (transfer none): A #GtkTextTag.
+ * Returns: (transfer none): a #GtkTextTag.
  */
 GtkTextTag *
 ide_highlight_engine_get_style (IdeHighlightEngine *self,
@@ -1087,16 +1132,20 @@ ide_highlight_engine_pause (IdeHighlightEngine *self)
 void
 ide_highlight_engine_unpause (IdeHighlightEngine *self)
 {
+  g_autoptr(IdeBuffer) buffer = NULL;
+
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
   g_return_if_fail (self->signal_group != NULL);
 
   dzl_signal_group_unblock (self->signal_group);
 
-  if (self->buffer != NULL)
+  buffer = g_weak_ref_get (&self->buffer_wref);
+
+  if (buffer != NULL)
     {
       /* Notify of some blocked signals */
-      ide_highlight_engine__notify_style_scheme_cb (self, NULL, self->buffer);
-      ide_highlight_engine__notify_language_cb (self, NULL, self->buffer);
+      ide_highlight_engine__notify_style_scheme_cb (self, NULL, buffer);
+      ide_highlight_engine__notify_language_cb (self, NULL, buffer);
 
       ide_highlight_engine_reload (self);
     }
