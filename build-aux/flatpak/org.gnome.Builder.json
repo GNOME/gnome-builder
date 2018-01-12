@@ -620,8 +620,6 @@
                              "--disable-system-helper",
                              "--with-system-install-dir=/var/lib/flatpak" ],
             "cleanup": [ "/etc/profile.d",
-                         "/bin/flatpak",
-                         "/bin/flatpak-builder",
                          "/libexec",
                          "/lib/systemd",
                          "/share/dbus-1/interfaces/org.freedesktop.*",
