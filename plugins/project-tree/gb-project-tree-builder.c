@@ -403,7 +403,11 @@ gb_project_tree_builder_class_init (GbProjectTreeBuilderClass *klass)
 
   object_class->finalize = gb_project_tree_builder_finalize;
 
+#if DZL_CHECK_VERSION(3, 27, 1)
+  tree_builder_class->build_children = gb_project_tree_builder_build_node;
+#else
   tree_builder_class->build_node = gb_project_tree_builder_build_node;
+#endif
   tree_builder_class->node_activated = gb_project_tree_builder_node_activated;
   tree_builder_class->node_popup = gb_project_tree_builder_node_popup;
 }
