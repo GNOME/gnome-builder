@@ -3142,3 +3142,13 @@ _ide_buffer_get_addins (IdeBuffer *self)
 
   return priv->addins;
 }
+
+IdeHighlightEngine *
+_ide_buffer_get_highlight_engine (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  return priv->highlight_engine;
+}

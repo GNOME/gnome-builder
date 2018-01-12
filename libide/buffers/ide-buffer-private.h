@@ -23,6 +23,7 @@
 
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
+#include "highlighting/ide-highlight-engine.h"
 
 G_BEGIN_DECLS
 
@@ -38,6 +39,8 @@ void              _ide_buffer_set_mtime             (IdeBuffer        *self,
                                                      const GTimeVal   *mtime);
 void              _ide_buffer_set_read_only         (IdeBuffer        *buffer,
                                                      gboolean          read_only);
+IdeHighlightEngine *
+                  _ide_buffer_get_highlight_engine  (IdeBuffer        *self);
 
 void              _ide_buffer_manager_reclaim       (IdeBufferManager *self,
                                                      IdeBuffer        *buffer);
