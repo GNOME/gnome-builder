@@ -690,7 +690,7 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
       source == state->stderr_buf)
     {
       if (g_output_stream_splice_finish (source, result, &error) == -1)
-        goto out;
+        IDE_GOTO (out);
 
       if (source == state->stdout_buf || source == state->stderr_buf)
         {
@@ -701,10 +701,10 @@ ide_subprocess_communicate_made_progress (GObject      *source_object,
             {
               gsize bytes_written = 0;
               if (!g_output_stream_write_all (source, "\0", 1, &bytes_written, NULL, &error))
-                goto out;
+                IDE_GOTO (out);
             }
           if (!g_output_stream_close (source, NULL, &error))
-            goto out;
+            IDE_GOTO (out);
         }
     }
   else if (source == subprocess)
@@ -1067,10 +1067,9 @@ ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
   dzl_clear_source (&self->sigterm_id);
 
   /* Complete async workers */
-  waiting = self->waiting;
-  self->waiting = NULL;
+  waiting = g_steal_pointer (&self->waiting);
 
-  for (GList *iter = waiting; iter != NULL; iter = iter->next)
+  for (const GList *iter = waiting; iter != NULL; iter = iter->next)
     {
       g_autoptr(GTask) task = iter->data;
 
