@@ -166,7 +166,7 @@ ide_xml_symbol_node_new (const gchar   *name,
                        NULL);
 
   if (dzl_str_empty0 (element_name))
-    self->element_name = g_strdup ("unknow");
+    self->element_name = g_strdup ("unknown");
   else
     self->element_name = g_strdup (element_name);
 
