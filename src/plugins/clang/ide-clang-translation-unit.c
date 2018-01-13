@@ -209,7 +209,6 @@ get_path (const gchar *workpath,
 
 static IdeSourceLocation *
 create_location (IdeClangTranslationUnit *self,
-                 IdeProject              *project,
                  const gchar             *workpath,
                  CXSourceLocation         cxloc)
 {
@@ -243,7 +242,6 @@ create_location (IdeClangTranslationUnit *self,
 
 static IdeSourceRange *
 create_range (IdeClangTranslationUnit *self,
-              IdeProject              *project,
               const gchar             *workpath,
               CXSourceRange            cxrange)
 {
@@ -258,8 +256,8 @@ create_range (IdeClangTranslationUnit *self,
   cxbegin = clang_getRangeStart (cxrange);
   cxend = clang_getRangeEnd (cxrange);
 
-  begin = create_location (self, project, workpath, cxbegin);
-  end = create_location (self, project, workpath, cxend);
+  begin = create_location (self, workpath, cxbegin);
+  end = create_location (self, workpath, cxend);
 
   if ((begin != NULL) && (end != NULL))
     range = ide_source_range_new (begin, end);
@@ -288,7 +286,6 @@ cxfile_equal (CXFile  cxfile,
 
 static IdeDiagnostic *
 create_diagnostic (IdeClangTranslationUnit *self,
-                   IdeProject              *project,
                    const gchar             *workpath,
                    GFile                   *target,
                    CXDiagnostic            *cxdiag)
@@ -332,7 +329,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
       (strstr (spelling, "deprecated") != NULL))
     severity = IDE_DIAGNOSTIC_DEPRECATED;
 
-  loc = create_location (self, project, workpath, cxloc);
+  loc = create_location (self, workpath, cxloc);
 
   diag = ide_diagnostic_new (severity, spelling, loc);
 
@@ -344,7 +341,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
       IdeSourceRange *range;
 
       cxrange = clang_getDiagnosticRange (cxdiag, i);
-      range = create_range (self, project, workpath, cxrange);
+      range = create_range (self, workpath, cxrange);
       if (range != NULL)
         ide_diagnostic_take_range (diag, range);
     }
@@ -371,27 +368,16 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
       g_autofree gchar *workpath = NULL;
       g_autoptr(GPtrArray) diags = NULL;
       IdeContext *context;
-      IdeProject *project;
       GFile *workdir;
       IdeVcs *vcs;
       guint count;
 
       diags = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
 
-      /*
-       * Acquire the reader lock for the project since we will need to do
-       * a bunch of project tree lookups when creating diagnostics. By doing
-       * this outside of the loops, we avoid creating lots of contention on
-       * the reader lock, but potentially hold on to the entire lock for a bit
-       * longer at a time.
-       */
       context = ide_object_get_context (IDE_OBJECT (self));
-      project = ide_context_get_project (context);
       vcs = ide_context_get_vcs (context);
       workdir = ide_vcs_get_working_directory (vcs);
       workpath = g_file_get_path (workdir);
-
-      ide_project_reader_lock (project);
 
       count = clang_getNumDiagnostics (tu);
       for (guint i = 0; i < count; i++)
@@ -400,7 +386,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
           IdeDiagnostic *diag;
 
           cxdiag = clang_getDiagnostic (tu, i);
-          diag = create_diagnostic (self, project, workpath, file, cxdiag);
+          diag = create_diagnostic (self, workpath, file, cxdiag);
 
           if (diag != NULL)
             {
@@ -416,7 +402,7 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
                   CXString cxstr;
 
                   cxstr = clang_getDiagnosticFixIt (cxdiag, j, &cxrange);
-                  range = create_range (self, project, workpath, cxrange);
+                  range = create_range (self, workpath, cxrange);
                   fixit = ide_fixit_new (range, clang_getCString (cxstr));
                   clang_disposeString (cxstr);
 
@@ -429,8 +415,6 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
 
           clang_disposeDiagnostic (cxdiag);
         }
-
-      ide_project_reader_unlock (project);
 
       g_hash_table_insert (self->diagnostics,
                            g_object_ref (file),
@@ -873,7 +857,6 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   CXTranslationUnit tu;
   IdeSymbolKind symkind = 0;
   IdeSymbolFlags symflags = 0;
-  IdeProject *project;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
@@ -893,7 +876,6 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   tu = ide_ref_ptr_get (self->native);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  project = ide_context_get_project (context);
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
   workpath = g_file_get_path (workdir);
@@ -923,9 +905,9 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
       tmploc = clang_getRangeStart (cxrange);
 
       if (clang_isCursorDefinition (tmpcursor))
-        definition = create_location (self, project, workpath, tmploc);
+        definition = create_location (self, workpath, tmploc);
       else
-        declaration = create_location (self, project, workpath, tmploc);
+        declaration = create_location (self, workpath, tmploc);
     }
 
   symkind = get_symbol_kind (cursor, &symflags);
