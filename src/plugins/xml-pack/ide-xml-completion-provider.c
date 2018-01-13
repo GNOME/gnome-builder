@@ -903,28 +903,46 @@ populate_cb (GObject      *object,
              gpointer      user_data)
 {
   IdeXmlService *service = (IdeXmlService *)object;
-  PopulateState *state = (PopulateState *)user_data;
-  IdeXmlCompletionProvider *self = state->self;
-  g_autoptr (IdeXmlPosition) position = NULL;
-  IdeXmlSymbolNode *root_node, *node, *candidate_node;
-  IdeXmlAnalysis *analysis;
-  IdeXmlPositionKind kind;
-  IdeXmlPositionDetail detail;
-  g_autoptr (IdeXmlPath) path = NULL;
-  GPtrArray *schemas;
-  g_autoptr (GPtrArray) candidates = NULL;
+  PopulateState *state = user_data;
+  g_autoptr(IdeXmlPosition) position = NULL;
+  g_autoptr(IdeXmlPath) path = NULL;
+  g_autoptr(GPtrArray) candidates = NULL;
+  g_autoptr(GPtrArray) items = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeXmlCompletionProvider *self;
+  IdeXmlSymbolNode *root_node;
+  IdeXmlSymbolNode *node;
+  IdeXmlSymbolNode *candidate_node;
   IdeXmlRngDefine *def;
+  IdeXmlAnalysis *analysis;
   MatchingState *initial_state;
-  g_autoptr (GPtrArray) items = NULL;
-  GError *error = NULL;
-  gint child_pos;
+  GPtrArray *schemas;
+  IdeXmlPositionDetail detail;
+  IdeXmlPositionKind kind;
   gboolean complete_attributes = FALSE;
   gboolean complete_values = FALSE;
+  gboolean did_final_add = FALSE;
+  gint child_pos;
 
-  g_assert (IDE_IS_XML_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_XML_SERVICE (service));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_XML_COMPLETION_PROVIDER (state->self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (state->completion_context));
+
+  self = state->self;
+
+  /* Check cancellation state first, as that tells us we should
+   * not notify the context of any proposals.
+   */
+  if (g_cancellable_is_cancelled (state->cancellable))
+    goto free_state;
 
   position = ide_xml_service_get_position_from_cursor_finish (service, result, &error);
+
+  if (error != NULL)
+    goto cleanup;
+
   analysis = ide_xml_position_get_analysis (position);
   schemas = ide_xml_analysis_get_schemas (analysis);
   root_node = ide_xml_analysis_get_root_node (analysis);
@@ -932,9 +950,6 @@ populate_cb (GObject      *object,
   kind = ide_xml_position_get_kind (position);
   detail = ide_xml_position_get_detail (position);
   child_pos = ide_xml_position_get_child_pos (position);
-
-  if (g_cancellable_is_cancelled (state->cancellable))
-    goto cleanup;
 
   if (kind == IDE_XML_POSITION_KIND_IN_START_TAG || kind == IDE_XML_POSITION_KIND_IN_END_TAG)
     {
@@ -963,9 +978,9 @@ populate_cb (GObject      *object,
     {
       if (complete_attributes)
         {
-          for (gint i = 0; i < candidates->len; ++i)
+          for (guint i = 0; i < candidates->len; ++i)
             {
-              g_autoptr (GList) results = NULL;
+              g_autoptr(GList) results = NULL;
 
               def = g_ptr_array_index (candidates, i);
               results = get_attributes_proposals (position, def);
@@ -973,13 +988,14 @@ populate_cb (GObject      *object,
                                                            GTK_SOURCE_COMPLETION_PROVIDER (self),
                                                            results,
                                                            TRUE);
+              did_final_add = TRUE;
             }
         }
       else if (complete_values)
         {
           for (guint i = 0; i < candidates->len; ++i)
             {
-              g_autoptr (GList) results = NULL;
+              g_autoptr(GList) results = NULL;
 
               def = g_ptr_array_index (candidates, i);
               results = get_values_proposals (position, def);
@@ -987,11 +1003,12 @@ populate_cb (GObject      *object,
                                                            GTK_SOURCE_COMPLETION_PROVIDER (self),
                                                            results,
                                                            TRUE);
+              did_final_add = TRUE;
             }
         }
       else
         {
-          g_autoptr (GList) results = NULL;
+          g_autoptr(GList) results = NULL;
 
           items = g_ptr_array_new_with_free_func ((GDestroyNotify)completion_item_free);
           if (child_pos != -1)
@@ -1014,10 +1031,17 @@ populate_cb (GObject      *object,
                                                        GTK_SOURCE_COMPLETION_PROVIDER (self),
                                                        results,
                                                        TRUE);
+          did_final_add = TRUE;
         }
     }
 
 cleanup:
+  if (!did_final_add)
+    gtk_source_completion_context_add_proposals (state->completion_context,
+                                                 GTK_SOURCE_COMPLETION_PROVIDER (self),
+                                                 NULL, TRUE);
+
+free_state:
   populate_state_free (state);
 }
 
