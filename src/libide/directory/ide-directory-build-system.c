@@ -23,7 +23,6 @@
 #include "ide-context.h"
 
 #include "directory/ide-directory-build-system.h"
-#include "projects/ide-project-file.h"
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
 

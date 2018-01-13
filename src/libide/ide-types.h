@@ -91,10 +91,6 @@ typedef struct _IdeProjectItem                 IdeProjectItem;
 
 typedef struct _IdeProjectEdit                 IdeProjectEdit;
 
-typedef struct _IdeProjectFile                 IdeProjectFile;
-
-typedef struct _IdeProjectFiles                IdeProjectFiles;
-
 typedef struct _IdeRenameProvider              IdeRenameProvider;
 
 typedef struct _IdeRunner                      IdeRunner;

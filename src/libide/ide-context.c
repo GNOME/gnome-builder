@@ -44,7 +44,6 @@
 #include "doap/ide-doap.h"
 #include "documentation/ide-documentation.h"
 #include "plugins/ide-extension-util.h"
-#include "projects/ide-project-files.h"
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
 #include "projects/ide-recent-projects.h"
@@ -2129,11 +2128,12 @@ restore_in_idle (gpointer user_data)
   IdeContext *self;
   GPtrArray *ar;
   GFile *file;
-  IdeWorkbenchOpenFlags flags;
 
   g_assert (G_IS_TASK (task));
 
   self = g_task_get_source_object (task);
+  g_assert (IDE_IS_CONTEXT (self));
+
   ar = g_task_get_task_data (task);
 
   if (ar == NULL || ar->len == 0)
@@ -2148,15 +2148,13 @@ restore_in_idle (gpointer user_data)
 
   uf = g_ptr_array_index (ar, ar->len - 1);
   file = ide_unsaved_file_get_file (uf);
-  ifile = ide_project_get_project_file (self->project, file);
+  ifile = ide_file_new (self, file);
   g_ptr_array_remove_index (ar, ar->len - 1);
-
-  flags = IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND;
 
   ide_buffer_manager_load_file_async (self->buffer_manager,
                                       ifile,
                                       FALSE,
-                                      flags,
+                                      IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND,
                                       NULL,
                                       g_task_get_cancellable (task),
                                       ide_context_restore__load_file_cb,

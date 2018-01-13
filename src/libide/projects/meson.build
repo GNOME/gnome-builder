@@ -1,7 +1,5 @@
 projects_headers = [
   'ide-project-edit.h',
-  'ide-project-file.h',
-  'ide-project-files.h',
   'ide-project-info.h',
   'ide-project-item.h',
   'ide-project.h',
@@ -10,8 +8,6 @@ projects_headers = [
 
 projects_sources = [
   'ide-project-edit.c',
-  'ide-project-file.c',
-  'ide-project-files.c',
   'ide-project-info.c',
   'ide-project-item.c',
   'ide-project.c',

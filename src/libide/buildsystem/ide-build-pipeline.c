@@ -42,6 +42,7 @@
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
+#include "files/ide-file.h"
 #include "plugins/ide-extension-util.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"

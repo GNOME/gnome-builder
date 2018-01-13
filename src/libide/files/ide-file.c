@@ -733,7 +733,15 @@ ide_file_new_for_path (IdeContext  *context,
   g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 
-  file = g_file_new_for_path (path);
+  if (context != NULL && !g_path_is_absolute (path))
+    {
+      IdeVcs *vcs = ide_context_get_vcs (context);
+      GFile *workdir = ide_vcs_get_working_directory (vcs);
+
+      file = g_file_get_child (workdir, path);
+    }
+  else
+    file = g_file_new_for_path (path);
 
   return ide_file_new (context, file);
 }

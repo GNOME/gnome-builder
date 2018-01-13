@@ -55,9 +55,8 @@ test_buffer_basic_cb1 (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeFile) file = NULL;
   g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GError) error = NULL;
   IdeBufferManager *manager;
-  IdeProject *project;
-  GError *error = NULL;
 
   IDE_ENTRY;
 
@@ -67,8 +66,7 @@ test_buffer_basic_cb1 (GObject      *object,
   g_assert (IDE_IS_CONTEXT (context));
 
   manager = ide_context_get_buffer_manager (context);
-  project = ide_context_get_project (context);
-  file = ide_project_get_file_for_path (project, "test-ide-buffer.tmp");
+  file = ide_file_new_for_path (context, "test-ide-buffer.tmp");
 
   ide_buffer_manager_load_file_async (manager,
                                       file,

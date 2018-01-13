@@ -43,25 +43,21 @@ new_context_cb (GObject      *object,
                 gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   GtkWidget *window;
   GtkWidget *widget;
   IdeBuffer *buffer;
   GtkSourceCompletion *completion;
   IdeContext *context;
-  IdeProject *project;
-  IdeFile *file;
-  GError *error = NULL;
 
   context = ide_context_new_finish (result, &error);
   g_assert_no_error (error);
   g_assert (context != NULL);
   g_assert (IDE_IS_CONTEXT (context));
 
-  project = ide_context_get_project (context);
-
   for (gint i = 0; vim_tests [i].path; i++)
     {
-      file = ide_project_get_file_for_path (project, vim_tests [i].path);
+      g_autoptr(IdeFile) file = ide_file_new_for_path (context, vim_tests [i].path);
 
       buffer = g_object_new (IDE_TYPE_BUFFER,
                              "context", context,

@@ -44,24 +44,20 @@ new_context_cb (GObject      *object,
 {
   g_autoptr(GTask) task = user_data;
   g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GError) error = NULL;
+  GtkSourceCompletion *completion;
   GtkWidget *window;
   GtkWidget *widget;
-  IdeBuffer *buffer;
-  GtkSourceCompletion *completion;
-  IdeProject *project;
-  IdeFile *file;
-  GError *error = NULL;
 
   context = ide_context_new_finish (result, &error);
   g_assert_no_error (error);
   g_assert (context != NULL);
   g_assert (IDE_IS_CONTEXT (context));
 
-  project = ide_context_get_project (context);
-
-  for (gint i = 0; indent_tests [i].path; i++)
+  for (guint i = 0; indent_tests [i].path; i++)
     {
-      file = ide_project_get_file_for_path (project, indent_tests [i].path);
+      g_autoptr(IdeFile) file = ide_file_new_for_path (context, indent_tests [i].path);
+      g_autoptr(IdeBuffer) buffer = NULL;
 
       buffer = g_object_new (IDE_TYPE_BUFFER,
                              "context", context,
@@ -85,9 +81,6 @@ new_context_cb (GObject      *object,
         gtk_main_iteration ();
 
       indent_tests [i].func (context, widget);
-
-      g_object_unref (buffer);
-      g_object_unref (file);
     }
 
   g_task_return_boolean (task, TRUE);

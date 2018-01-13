@@ -73,10 +73,10 @@ test_buffer_manager_basic_cb2 (GObject      *object,
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
   g_autoptr(IdeProgress) progress = NULL;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(GFile) gfile = NULL;
+  g_autoptr(IdeFile) file = NULL;
   IdeContext *context;
-  IdeProject *project;
   GtkTextIter begin, end;
-  IdeFile *file;
   g_autofree gchar *text = NULL;
   GError *error = NULL;
   int tmpfd;
@@ -96,8 +96,8 @@ test_buffer_manager_basic_cb2 (GObject      *object,
   g_assert_cmpint (-1, !=, tmpfd);
   close (tmpfd); /* not secure, but okay for tests */
 
-  project = ide_context_get_project (context);
-  file = ide_project_get_file_for_path (project, tmpfilename);
+  gfile = g_file_new_for_path (tmpfilename);
+  file = ide_file_new (context, gfile);
 
   ide_buffer_manager_save_file_async (buffer_manager,
                                       buffer,
@@ -120,7 +120,6 @@ test_buffer_manager_basic_cb1 (GObject      *object,
   g_autoptr(IdeProgress) progress = NULL;
   g_autoptr(IdeContext) context = NULL;
   IdeBufferManager *buffer_manager;
-  IdeProject *project;
   g_autofree gchar *path = NULL;
   GError *error = NULL;
 
@@ -132,10 +131,8 @@ test_buffer_manager_basic_cb1 (GObject      *object,
   g_signal_connect (buffer_manager, "save-buffer", G_CALLBACK (save_buffer_cb), task);
   g_signal_connect (buffer_manager, "buffer-loaded", G_CALLBACK (buffer_loaded_cb), task);
 
-  project = ide_context_get_project (context);
-
   path = g_build_filename (TEST_DATA_DIR, "project1", "configure.ac", NULL);
-  file = ide_project_get_file_for_path (project, path);
+  file = ide_file_new_for_path (context, path);
 
   ide_buffer_manager_load_file_async (buffer_manager,
                                       file,
