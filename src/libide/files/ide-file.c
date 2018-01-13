@@ -220,9 +220,23 @@ ide_file_get_path (IdeFile *self)
 
   if (g_once_init_enter (&self->path))
     {
-      gchar *path;
+      IdeContext *context;
+      gchar *path = NULL;
 
-      path = g_file_get_path (self->file);
+      context = ide_object_get_context (IDE_OBJECT (self));
+
+      if (context != NULL)
+        {
+          IdeVcs *vcs = ide_context_get_vcs (context);
+          GFile *workdir = ide_vcs_get_working_directory (vcs);
+
+          if (g_file_has_prefix (self->file, workdir))
+            path = g_file_get_relative_path (workdir, self->file);
+        }
+
+      if (path == NULL)
+        path = g_file_get_path (self->file);
+
       g_once_init_leave (&self->path, path);
     }
 
@@ -567,8 +581,8 @@ ide_file_find_other_worker (GTask        *task,
   const gchar **target = NULL;
   g_autofree gchar *prefix = NULL;
   g_autofree gchar *uri = NULL;
-  gsize i;
 
+  g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_FILE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -593,7 +607,7 @@ ide_file_find_other_worker (GTask        *task,
 
   prefix = g_strndup (uri, strrchr (uri, '.') - uri);
 
-  for (i = 0; target [i]; i++)
+  for (guint i = 0; target [i]; i++)
     {
       g_autofree gchar *new_uri = NULL;
       g_autoptr(GFile) gfile = NULL;
@@ -603,23 +617,12 @@ ide_file_find_other_worker (GTask        *task,
 
       if (g_file_query_exists (gfile, cancellable))
         {
-          g_autofree gchar *path = NULL;
-          IdeContext *context;
-          IdeVcs *vcs;
-          IdeFile *ret;
-          GFile *workdir;
+          IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
 
-          context = ide_object_get_context (IDE_OBJECT (self));
-          vcs = ide_context_get_vcs (context);
-          workdir = ide_vcs_get_working_directory (vcs);
-          path = g_file_get_relative_path (workdir, gfile);
+          g_task_return_pointer (task,
+                                 ide_file_new (context, gfile),
+                                 g_object_unref);
 
-          ret = g_object_new (IDE_TYPE_FILE,
-                              "context", context,
-                              "path", path,
-                              "file", gfile,
-                              NULL);
-          g_task_return_pointer (task, ret, g_object_unref);
           return;
         }
     }
