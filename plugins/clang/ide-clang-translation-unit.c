@@ -200,16 +200,12 @@ static gchar *
 get_path (const gchar *workpath,
           const gchar *path)
 {
-  if (g_str_has_prefix (path, workpath))
-    {
-      path = path + strlen (workpath);
-      while (*path == G_DIR_SEPARATOR)
-        path++;
-
-      return g_strdup (path);
-    }
-
-  return g_strdup (path);
+  if (path == NULL)
+    return g_strdup (workpath);
+  else if (g_str_has_prefix (path, workpath))
+    return g_strdup (path);
+  else
+    return g_build_filename (workpath, path, NULL);
 }
 
 static IdeSourceLocation *
@@ -218,18 +214,18 @@ create_location (IdeClangTranslationUnit *self,
                  const gchar             *workpath,
                  CXSourceLocation         cxloc)
 {
-  IdeSourceLocation *ret = NULL;
-  IdeFile *file = NULL;
-  CXFile cxfile = NULL;
   g_autofree gchar *path = NULL;
-  const gchar *cstr;
-  CXString str;
+  g_autoptr(IdeFile) file = NULL;
+  g_autoptr(GFile) gfile = NULL;
+  g_auto(CXString) str = {0};
+  IdeContext *context;
+  CXFile cxfile = NULL;
   unsigned line;
   unsigned column;
   unsigned offset;
 
-  g_return_val_if_fail (self, NULL);
-  g_return_val_if_fail (workpath, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (workpath != NULL, NULL);
 
   clang_getFileLocation (cxloc, &cxfile, &line, &column, &offset);
 
@@ -237,33 +233,13 @@ create_location (IdeClangTranslationUnit *self,
   if (column > 0) column--;
 
   str = clang_getFileName (cxfile);
-  cstr = clang_getCString (str);
-  if (cstr != NULL)
-    path = get_path (workpath, cstr);
-  clang_disposeString (str);
-  if (cstr == NULL)
-    return NULL;
+  path = get_path (workpath, clang_getCString (str));
 
-  file = ide_project_get_file_for_path (project, path);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  gfile = g_file_new_for_path (path);
+  file = ide_file_new (context, gfile);
 
-  if (!file)
-    {
-      IdeContext *context;
-      GFile *gfile;
-
-      context = ide_object_get_context (IDE_OBJECT (self));
-      gfile = g_file_new_for_path (path);
-
-      file = g_object_new (IDE_TYPE_FILE,
-                           "context", context,
-                           "file", gfile,
-                           "path", path,
-                           NULL);
-    }
-
-  ret = ide_source_location_new (file, line, column, offset);
-
-  return ret;
+  return ide_source_location_new (file, line, column, offset);
 }
 
 static IdeSourceRange *
