@@ -934,8 +934,8 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
 
   if (symkind == IDE_SYMBOL_HEADER)
     {
+      g_auto(CXString) included_file_name = {0};
       CXFile included_file;
-      CXString included_file_name;
       const gchar *path;
 
       included_file = clang_getIncludedFile (cursor);
