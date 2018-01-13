@@ -116,7 +116,7 @@ copy_children (GPtrArray *children)
   g_assert (children != NULL);
 
   copy = g_ptr_array_new ();
-  for (gint i = 0; i < children->len; ++i)
+  for (guint i = 0; i < children->len; ++i)
     g_ptr_array_add (copy, g_ptr_array_index (children, i));
 
   return copy;
@@ -247,7 +247,7 @@ move_candidates (GPtrArray *array,
   if (sub_array->len == 0)
     return;
 
-  for (gint i = 0; i < sub_array->len; ++i)
+  for (guint i = 0; i < sub_array->len; ++i)
     g_ptr_array_add (array, g_ptr_array_index (sub_array, i));
 
   g_ptr_array_remove_range (sub_array, 0, sub_array->len);
@@ -353,7 +353,7 @@ get_matching_candidates (IdeXmlCompletionProvider *self,
   candidates_tmp = g_ptr_array_sized_new (16);
   defines = g_ptr_array_new ();
 
-  for (gint i = 0; i < schemas->len; ++i)
+  for (guint i = 0; i < schemas->len; ++i)
     {
       schema_entry = g_ptr_array_index (schemas, i);
       /* TODO: only RNG for now */
@@ -445,7 +445,7 @@ matching_state_copy (MatchingState *state)
   if (state->children != NULL)
     {
       new_state->children = g_ptr_array_new ();
-      for (gint i = 0; i < state->children->len; ++i)
+      for (guint i = 0; i < state->children->len; ++i)
         g_ptr_array_add (new_state->children, g_ptr_array_index (state->children, i));
     }
 
@@ -484,7 +484,7 @@ create_initial_matching_state (IdeXmlPosition  *position,
   g_assert (IDE_IS_XML_SYMBOL_NODE (pos_node));
 
   nb_nodes = ide_xml_symbol_node_get_n_direct_children (pos_node);
-  for (gint i = 0; i < nb_nodes; ++i)
+  for (guint i = 0; i < nb_nodes; ++i)
     {
       /* Inject a fake node at child_pos */
       if (child_pos == i)
@@ -781,7 +781,7 @@ get__element_proposals (IdeXmlPosition *position,
   if (ide_xml_position_get_kind (position) == IDE_XML_POSITION_KIND_IN_CONTENT)
     start = "<";
 
-  for (gint i = 0; i < items->len; ++i)
+  for (guint i = 0; i < items->len; ++i)
     {
       g_autofree gchar *label = NULL;
       g_autofree gchar *text = NULL;
@@ -812,7 +812,7 @@ get_attributes_proposals (IdeXmlPosition  *position,
   node = ide_xml_position_get_child_node (position);
   if (NULL != (attributes = ide_xml_completion_attributes_get_matches (define, node, TRUE)))
     {
-      for (gint i = 0; i < attributes->len; ++i)
+      for (guint i = 0; i < attributes->len; ++i)
         {
           g_autofree gchar *name = NULL;
           g_autofree gchar *text = NULL;
@@ -879,7 +879,7 @@ get_values_proposals (IdeXmlPosition  *position,
 
           if (NULL != (values = ide_xml_completion_values_get_matches (attr_define, content, detail_value)))
             {
-              for (gint i = 0; i < values->len; ++i)
+              for (guint i = 0; i < values->len; ++i)
                 {
                   ValueMatchItem *value_match_item = g_ptr_array_index (values, i);
 
@@ -977,7 +977,7 @@ populate_cb (GObject      *object,
         }
       else if (complete_values)
         {
-          for (gint i = 0; i < candidates->len; ++i)
+          for (guint i = 0; i < candidates->len; ++i)
             {
               g_autoptr (GList) results = NULL;
 
@@ -1000,7 +1000,7 @@ populate_cb (GObject      *object,
               ide_xml_position_set_child_node (position, candidate_node);
             }
 
-          for (gint i = 0; i < candidates->len; ++i)
+          for (guint i = 0; i < candidates->len; ++i)
             {
               def = g_ptr_array_index (candidates, i);
 
