@@ -227,10 +227,16 @@ ide_configuration_manager_get_configuration (IdeConfigurationManager *self,
 
   for (guint i = 0; i < self->configurations->len; i++)
     {
-      IdeConfiguration *configuration = g_ptr_array_index (self->configurations, i);
+      IdeConfiguration *config = g_ptr_array_index (self->configurations, i);
+      const gchar *config_id;
 
-      if (g_strcmp0 (id, ide_configuration_get_id (configuration)) == 0)
-        return configuration;
+      g_assert (config != NULL);
+      g_assert (IDE_IS_CONFIGURATION (config));
+
+      config_id = ide_configuration_get_id (config);
+
+      if (dzl_str_equal0 (config_id, id))
+        return config;
     }
 
   return NULL;
@@ -432,6 +438,7 @@ ide_configuration_manager_load_cb (GObject      *object,
     g_warning ("%s: %s", G_OBJECT_TYPE_NAME (provider), error->message);
 
   self->providers_loading--;
+
   if (self->providers_loading == 0)
     {
       IdeConfiguration *default_config;
@@ -439,10 +446,14 @@ ide_configuration_manager_load_cb (GObject      *object,
 
       for (guint i = 0; i < self->configurations->len; i++)
         {
-          IdeConfiguration *configuration = g_ptr_array_index (self->configurations, i);
+          IdeConfiguration *config = g_ptr_array_index (self->configurations, i);
+          const gchar *config_id;
 
-          if (IDE_IS_BUILDCONFIG_CONFIGURATION (configuration) &&
-              g_strcmp0 ("default", ide_configuration_get_id (configuration)) != 0)
+          g_assert (IDE_IS_CONFIGURATION (config));
+
+          config_id = ide_configuration_get_id (config);
+
+          if (IDE_IS_BUILDCONFIG_CONFIGURATION (config) && dzl_str_equal0 (config_id, "default"))
             restored_buildconfig = TRUE;
         }
 
