@@ -41,7 +41,8 @@ struct _IdeXmlTreeBuilder
   IdeXmlValidator *validator;
 };
 
-typedef struct{
+typedef struct
+{
   GBytes         *content;
   GFile          *file;
   IdeXmlAnalysis *analysis;
@@ -54,6 +55,7 @@ tree_builder_state_free (TreeBuilderState *state)
   g_clear_pointer (&state->content, g_bytes_unref);
   g_clear_pointer (&state->analysis, ide_xml_analysis_unref);
   g_clear_object (&state->file);
+  g_slice_free (TreeBuilderState, state);
 }
 
 G_DEFINE_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE_TYPE_OBJECT)
