@@ -23,6 +23,7 @@
 
 #include "ide-clang-completion-item.h"
 #include "ide-clang-completion-item-private.h"
+#include "ide-clang-private.h"
 
 static void completion_proposal_iface_init (GtkSourceCompletionProposalIface *);
 
@@ -135,7 +136,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
       enum CXCompletionChunkKind kind;
       const gchar *text;
       g_autofree gchar *escaped = NULL;
-      CXString cxstr;
+      g_auto(CXString) cxstr = {0};
 
       kind = clang_getCompletionChunkKind (result->CompletionString, i);
       cxstr = clang_getCompletionChunkText (result->CompletionString, i);
