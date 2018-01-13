@@ -151,10 +151,10 @@ ide_xml_symbol_node_init (IdeXmlSymbolNode *self)
 }
 
 IdeXmlSymbolNode *
-ide_xml_symbol_node_new (const gchar            *name,
-                         const gchar            *value,
-                         const gchar            *element_name,
-                         IdeSymbolKind           kind)
+ide_xml_symbol_node_new (const gchar   *name,
+                         const gchar   *value,
+                         const gchar   *element_name,
+                         IdeSymbolKind  kind)
 {
   IdeXmlSymbolNode *self;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
