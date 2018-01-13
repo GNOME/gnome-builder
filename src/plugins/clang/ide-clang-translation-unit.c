@@ -882,8 +882,6 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
   CXCursor cursor;
   CXFile cxfile;
   IdeSymbol *ret = NULL;
-  IdeFile *file;
-  GFile *gfile;
   guint line;
   guint line_offset;
 
@@ -944,18 +942,14 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
 
       if (path != NULL)
         {
+          g_autoptr(IdeFile) file = NULL;
+          g_autoptr(GFile) gfile = NULL;
+
           gfile = g_file_new_for_path (path);
-          file = g_object_new (IDE_TYPE_FILE,
-                               "context", context,
-                               "file", gfile,
-                               "path", path,
-                               NULL);
+          file = ide_file_new (context, gfile);
 
           g_clear_pointer (&definition, ide_symbol_unref);
           declaration = ide_source_location_new (file, 0, 0, 0);
-
-          g_clear_object (&file);
-          g_clear_object (&gfile);
         }
     }
 
