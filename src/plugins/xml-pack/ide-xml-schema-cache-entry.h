@@ -49,7 +49,7 @@ typedef enum
 
 struct _IdeXmlSchemaCacheEntry
 {
-  guint ref_count;
+  volatile gint      ref_count;
 
   GFile             *file;
   GBytes            *content;
