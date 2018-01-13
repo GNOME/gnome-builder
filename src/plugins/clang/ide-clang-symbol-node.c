@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 
+#include "ide-clang-private.h"
 #include "ide-clang-symbol-node.h"
 
 struct _IdeClangSymbolNode
@@ -128,15 +129,17 @@ get_symbol_kind (CXCursor        cursor,
   return kind;
 }
 
-IdeClangSymbolNode *
+IdeSymbolNode *
 _ide_clang_symbol_node_new (IdeContext *context,
                             CXCursor    cursor)
 {
   IdeClangSymbolNode *self;
   IdeSymbolFlags flags = 0;
   IdeSymbolKind kind;
-  CXString cxname;
+  g_auto(CXString) cxname = {0};
   const gchar *name;
+
+  g_assert (IDE_IS_CONTEXT (context));
 
   kind = get_symbol_kind (cursor, &flags);
   cxname = clang_getCursorSpelling (cursor);
@@ -151,9 +154,7 @@ _ide_clang_symbol_node_new (IdeContext *context,
 
   self->cursor = cursor;
 
-  clang_disposeString (cxname);
-
-  return self;
+  return IDE_SYMBOL_NODE (self);
 }
 
 CXCursor
@@ -174,9 +175,9 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(GFile) gfile = NULL;
   g_autoptr(GTask) task = NULL;
+  g_auto(CXString) cxfilename = {0};
   IdeContext *context;
   const gchar *filename;
-  CXString cxfilename;
   CXSourceLocation cxloc;
   CXFile file;
   guint line = 0;
@@ -207,8 +208,6 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
   g_task_return_pointer (task,
                          ide_source_location_new (ifile, line-1, line_offset-1, 0),
                          (GDestroyNotify)ide_source_location_unref);
-
-  clang_disposeString (cxfilename);
 }
 
 static IdeSourceLocation *
