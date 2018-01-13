@@ -71,7 +71,7 @@ visitor (CXCursor     cursor,
   enum CXCursorKind cursor_kind;
   CXSourceLocation location;
   CXFile file;
-  CXString cx_file_name;
+  g_auto(CXString) cx_file_name = {0};
   const char *file_name;
   CXCursor *child_cursor;
 
