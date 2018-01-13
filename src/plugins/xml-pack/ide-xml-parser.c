@@ -643,12 +643,10 @@ ide_xml_parser_get_analysis_finish (IdeXmlParser  *self,
                                     GAsyncResult  *result,
                                     GError       **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_XML_PARSER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 gchar *

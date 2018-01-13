@@ -16,9 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-xml-schema-cache-entry"
+
 #include "ide-xml-schema-cache-entry.h"
 
-G_DEFINE_BOXED_TYPE (IdeXmlSchemaCacheEntry, ide_xml_schema_cache_entry, ide_xml_schema_cache_entry_ref, ide_xml_schema_cache_entry_unref)
+G_DEFINE_BOXED_TYPE (IdeXmlSchemaCacheEntry,
+                     ide_xml_schema_cache_entry,
+                     ide_xml_schema_cache_entry_ref,
+                     ide_xml_schema_cache_entry_unref)
 
 IdeXmlSchemaCacheEntry *
 ide_xml_schema_cache_entry_new (void)
@@ -60,6 +65,7 @@ ide_xml_schema_cache_entry_copy (IdeXmlSchemaCacheEntry *self)
   g_return_val_if_fail (self->ref_count, NULL);
 
   copy = ide_xml_schema_cache_entry_new ();
+
   if (self->content != NULL)
     copy->content = g_bytes_ref (self->content);
 
@@ -81,8 +87,8 @@ ide_xml_schema_cache_entry_copy (IdeXmlSchemaCacheEntry *self)
 static void
 ide_xml_schema_cache_entry_free (IdeXmlSchemaCacheEntry *self)
 {
-  g_assert (self);
-  g_assert_cmpint (self->ref_count, ==, 0);
+  g_assert (self != NULL);
+  g_assert (self->ref_count == 0);
 
   g_clear_pointer (&self->content, g_bytes_unref);
   g_clear_object (&self->file);
@@ -95,7 +101,7 @@ IdeXmlSchemaCacheEntry *
 ide_xml_schema_cache_entry_ref (IdeXmlSchemaCacheEntry *self)
 {
   g_return_val_if_fail (self, NULL);
-  g_return_val_if_fail (self->ref_count, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   g_atomic_int_inc (&self->ref_count);
 
@@ -105,8 +111,8 @@ ide_xml_schema_cache_entry_ref (IdeXmlSchemaCacheEntry *self)
 void
 ide_xml_schema_cache_entry_unref (IdeXmlSchemaCacheEntry *self)
 {
-  g_return_if_fail (self);
-  g_return_if_fail (self->ref_count);
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     ide_xml_schema_cache_entry_free (self);
