@@ -269,19 +269,15 @@ static gboolean
 cxfile_equal (CXFile  cxfile,
               GFile  *file)
 {
-  CXString cxstr;
-  gchar *path;
-  gboolean ret;
+  g_auto(CXString) cxstr = {0};
+  g_autofree gchar *path = NULL;
+  const gchar *cstr;
 
   cxstr = clang_getFileName (cxfile);
+  cstr = clang_getCString (cxstr);
   path = g_file_get_path (file);
 
-  ret = (0 == g_strcmp0 (clang_getCString (cxstr), path));
-
-  clang_disposeString (cxstr);
-  g_free (path);
-
-  return ret;
+  return dzl_str_equal0 (cstr, path);
 }
 
 static IdeDiagnostic *
@@ -294,8 +290,8 @@ create_diagnostic (IdeClangTranslationUnit *self,
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
   IdeDiagnostic *diag;
-  g_autofree gchar *spelling = NULL;
-  CXString cxstr;
+  const gchar *spelling;
+  g_auto(CXString) cxstr = {0};
   CXSourceLocation cxloc;
   CXFile cxfile = NULL;
   guint num_ranges;
@@ -314,8 +310,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
   severity = translate_severity (cxseverity);
 
   cxstr = clang_getDiagnosticSpelling (cxdiag);
-  spelling = g_strdup (clang_getCString (cxstr));
-  clang_disposeString (cxstr);
+  spelling = clang_getCString (cxstr);
 
   /*
    * I thought we could use an approach like the following to get deprecation
@@ -398,13 +393,12 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
                 {
                   g_autoptr(IdeSourceRange) range = NULL;
                   g_autoptr(IdeFixit) fixit = NULL;
+                  g_auto(CXString) cxstr = {0};
                   CXSourceRange cxrange;
-                  CXString cxstr;
 
                   cxstr = clang_getDiagnosticFixIt (cxdiag, j, &cxrange);
                   range = create_range (self, workpath, cxrange);
                   fixit = ide_fixit_new (range, clang_getCString (cxstr));
-                  clang_disposeString (cxstr);
 
                   if (fixit != NULL)
                     ide_diagnostic_take_fixit (diag, g_steal_pointer (&fixit));
@@ -951,13 +945,12 @@ static IdeSymbol *
 create_symbol (CXCursor         cursor,
                GetSymbolsState *state)
 {
-  g_auto(CXString) cxname = { 0 };
+  g_auto(CXString) cxname = {0};
   g_autoptr(IdeSourceLocation) srcloc = NULL;
   CXSourceLocation cxloc;
   IdeSymbolKind symkind;
   IdeSymbolFlags symflags;
   const gchar *name;
-  IdeSymbol *symbol;
   guint line;
   guint line_offset;
 
@@ -966,12 +959,9 @@ create_symbol (CXCursor         cursor,
   cxloc = clang_getCursorLocation (cursor);
   clang_getFileLocation (cxloc, NULL, &line, &line_offset, NULL);
   srcloc = ide_source_location_new (state->file, line-1, line_offset-1, 0);
-
   symkind = get_symbol_kind (cursor, &symflags);
 
-  symbol = ide_symbol_new (name, symkind, symflags, NULL, NULL, srcloc);
-
-  return symbol;
+  return ide_symbol_new (name, symkind, symflags, NULL, NULL, srcloc);
 }
 
 static enum CXChildVisitResult
@@ -981,7 +971,7 @@ ide_clang_translation_unit_get_symbols__visitor_cb (CXCursor     cursor,
 {
   GetSymbolsState *state = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
-  g_auto(CXString) filename = { 0 };
+  g_auto(CXString) filename = {0};
   CXSourceLocation cxloc;
   CXFile file;
   enum CXCursorKind kind;
@@ -1159,7 +1149,7 @@ ide_clang_translation_unit_find_nearest_scope (IdeClangTranslationUnit  *self,
                                                GError                  **error)
 {
   g_autoptr(IdeSourceLocation) symbol_location = NULL;
-  g_auto(CXString) cxname = { 0 };
+  g_auto(CXString) cxname = {0};
   CXTranslationUnit unit;
   CXSourceLocation loc;
   CXCursor cursor;
@@ -1252,14 +1242,13 @@ gchar *
 ide_clang_translation_unit_generate_key (IdeClangTranslationUnit  *self,
                                          IdeSourceLocation        *location)
 {
+  g_auto(CXString) cx_usr = {0};
   CXTranslationUnit unit;
   CXFile file;
   CXSourceLocation cx_location;
   CXCursor reference;
   CXCursor declaration;
-  CXString cx_usr;
   const gchar *usr;
-  g_autofree gchar *ret = NULL;
   guint line = 0;
   guint column = 0;
   enum CXLinkageKind linkage;
@@ -1277,20 +1266,11 @@ ide_clang_translation_unit_generate_key (IdeClangTranslationUnit  *self,
   reference = clang_getCursor (unit, cx_location);
   declaration = clang_getCursorReferenced (reference);
   cx_usr = clang_getCursorUSR (declaration);
-
+  usr = clang_getCString (cx_usr);
   linkage = clang_getCursorLinkage (declaration);
 
-  if (linkage == CXLinkage_Internal || linkage == CXLinkage_NoLinkage)
+  if (linkage == CXLinkage_Internal || linkage == CXLinkage_NoLinkage || usr == NULL)
     return NULL;
 
-  usr = clang_getCString (cx_usr);
-
-  if (usr == NULL)
-    return NULL;
-
-  ret = g_strdup (usr);
-
-  clang_disposeString (cx_usr);
-
-  return g_steal_pointer (&ret);
+  return g_strdup (usr);
 }

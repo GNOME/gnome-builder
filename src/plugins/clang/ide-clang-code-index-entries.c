@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-clang-code-index-entries"
 
 #include "ide-clang-code-index-entries.h"
+#include "ide-clang-private.h"
 
  /*
   * This is an implementation of IdeCodeIndexEntries. This will have a TU and
@@ -121,7 +122,7 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
   guint column = 0;
   guint offset = 0;
   enum CXLinkageKind linkage;
-  CXString cx_name;
+  g_auto(CXString) cx_name = {0};
   const gchar *cname = NULL;
   gchar *prefix = NULL;
   g_autofree gchar *name = NULL;
@@ -259,7 +260,7 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
   else
     prefix = "x\x1F";
 
-  name = g_strconcat (prefix, clang_getCString (cx_name), NULL);
+  name = g_strconcat (prefix, cname, NULL);
 
   if (clang_isCursorDefinition (*cursor))
     flags |= IDE_SYMBOL_FLAGS_IS_DEFINITION;
@@ -276,13 +277,11 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
     }
   else
     {
-      CXString usr;
+      g_auto(CXString) usr = {0};
+
       usr = clang_getCursorUSR (*cursor);
       key = g_strdup (clang_getCString (usr));
-      clang_disposeString (usr);
     }
-
-  clang_disposeString (cx_name);
 
   return g_object_new (IDE_TYPE_CODE_INDEX_ENTRY,
                        "name", name,

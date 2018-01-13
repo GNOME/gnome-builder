@@ -125,13 +125,12 @@ ide_clang_service_build_index_visitor (CXCursor     cursor,
 
   if (style_name != NULL)
     {
-      CXString cxstr;
+      g_auto(CXString) cxstr = {0};
       const gchar *word;
 
       cxstr = clang_getCursorSpelling (cursor);
       word = clang_getCString (cxstr);
       ide_highlight_index_insert (request->index, word, (gpointer)style_name);
-      clang_disposeString (cxstr);
     }
 
   return CXChildVisit_Continue;

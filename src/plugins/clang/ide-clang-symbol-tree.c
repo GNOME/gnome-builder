@@ -86,7 +86,7 @@ static gboolean
 cursor_is_recognized (TraversalState *state,
                       CXCursor        cursor)
 {
-  CXString filename;
+  g_auto(CXString) filename = {0};
   CXSourceLocation cxloc;
   CXFile file;
   enum CXCursorKind kind;
@@ -115,7 +115,6 @@ cursor_is_recognized (TraversalState *state,
       clang_getFileLocation (cxloc, &file, NULL, NULL, NULL);
       filename = clang_getFileName (file);
       ret = dzl_str_equal0 (clang_getCString (filename), state->path);
-      clang_disposeString (filename);
       break;
 
     default:

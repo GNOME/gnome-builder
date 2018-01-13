@@ -201,7 +201,6 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self)
   CXCompletionResult *result;
   IdeSourceSnippet *snippet;
   unsigned num_chunks;
-  unsigned i;
   guint tab_stop = 0;
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
@@ -210,12 +209,12 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self)
   snippet = ide_source_snippet_new (NULL, NULL);
   num_chunks = clang_getNumCompletionChunks (result->CompletionString);
 
-  for (i = 0; i < num_chunks; i++)
+  for (unsigned i = 0; i < num_chunks; i++)
     {
+      g_auto(CXString) cxstr = {0};
       enum CXCompletionChunkKind kind;
       IdeSourceSnippetChunk *chunk;
       const gchar *text;
-      CXString cxstr;
 
       kind = clang_getCompletionChunkKind (result->CompletionString, i);
       cxstr = clang_getCompletionChunkText (result->CompletionString, i);
@@ -298,8 +297,6 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self)
         default:
           break;
         }
-
-      clang_disposeString (cxstr);
     }
 
   return snippet;
@@ -464,7 +461,7 @@ const gchar *
 ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
 {
   CXCompletionResult *result;
-  CXString cxstr;
+  g_auto(CXString) cxstr = {0};
 
   g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self), NULL);
 
@@ -479,12 +476,9 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
    */
   if (G_UNLIKELY (self->typed_text_index == -1))
     {
-      guint num_chunks;
-      guint i;
+      guint num_chunks = clang_getNumCompletionChunks (result->CompletionString);
 
-      num_chunks = clang_getNumCompletionChunks (result->CompletionString);
-
-      for (i = 0; i < num_chunks; i++)
+      for (guint i = 0; i < num_chunks; i++)
         {
           enum CXCompletionChunkKind kind;
 
@@ -525,7 +519,6 @@ ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
 
   cxstr = clang_getCompletionChunkText (result->CompletionString, self->typed_text_index);
   self->typed_text = g_strdup (clang_getCString (cxstr));
-  clang_disposeString (cxstr);
 
   return self->typed_text;
 }
@@ -548,12 +541,11 @@ ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self)
 
   if (self->brief_comment == NULL)
     {
-      CXString cxstr;
+      g_auto(CXString) cxstr = {0};
 
       result = ide_clang_completion_item_get_result (self);
       cxstr = clang_getCompletionBriefComment (result->CompletionString);
       self->brief_comment = g_strdup (clang_getCString (cxstr));
-      clang_disposeString (cxstr);
     }
 
   return self->brief_comment;
