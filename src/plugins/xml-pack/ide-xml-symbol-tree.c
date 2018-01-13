@@ -53,22 +53,21 @@ ide_xml_symbol_tree_get_nth_child (IdeSymbolTree *tree,
                                    guint          nth)
 {
   IdeXmlSymbolTree *self = (IdeXmlSymbolTree *)tree;
-  gint n_children;
+  guint n_children;
 
   g_assert (IDE_IS_XML_SYMBOL_TREE (tree));
   g_assert (node == NULL || IDE_IS_XML_SYMBOL_NODE (node));
 
   if (node == NULL)
-    node = (IdeSymbolNode *)self->root_node;
+    node = IDE_SYMBOL_NODE (self->root_node);
 
   n_children = ide_xml_symbol_node_get_n_children (IDE_XML_SYMBOL_NODE (node));
   if (nth < n_children)
     return ide_xml_symbol_node_get_nth_child (IDE_XML_SYMBOL_NODE (node), nth);
-  else
-    {
-      g_warning ("nth child %u is out of bounds", nth);
-      return NULL;
-    }
+
+  g_warning ("nth child %u is out of bounds", nth);
+
+  return NULL;
 }
 
 static void

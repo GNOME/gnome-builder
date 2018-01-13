@@ -182,16 +182,16 @@ ide_xml_symbol_node_new (const gchar            *name,
 guint
 ide_xml_symbol_node_get_n_children (IdeXmlSymbolNode *self)
 {
-  NodeEntry *entry;
   guint nb_children = 0;
 
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), 0);
 
   if (self->children != NULL)
     {
-      for (gint n = 0; n < self->children->len; ++n)
+      for (guint n = 0; n < self->children->len; ++n)
         {
-          entry = &g_array_index (self->children, NodeEntry, n);
+          const NodeEntry *entry = &g_array_index (self->children, NodeEntry, n);
+
           if (entry->is_internal)
             {
               nb_children += ide_xml_symbol_node_get_n_children (entry->node);
@@ -214,17 +214,16 @@ ide_xml_symbol_node_get_nth_child_deep (IdeXmlSymbolNode *self,
                                         guint             nth_child,
                                         guint            *current_pos)
 {
-  IdeSymbolNode *node;
-  NodeEntry *entry;
-
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
   if (self->children == NULL)
     return NULL;
 
-  for (gint n = 0; n < self->children->len; ++n)
+  for (guint n = 0; n < self->children->len; ++n)
     {
-      entry = &g_array_index (self->children, NodeEntry, n);
+      const NodeEntry *entry = &g_array_index (self->children, NodeEntry, n);
+      IdeSymbolNode *node;
+
       if (entry->is_internal)
         {
           node = ide_xml_symbol_node_get_nth_child_deep (entry->node, nth_child, current_pos);
@@ -258,7 +257,7 @@ get_nth_child (IdeXmlSymbolNode *self,
       switch (node_walker)
         {
         case NODE_WALKER_INTERNAL:
-          for (gint n = 0; n < self->children->len; ++n)
+          for (guint n = 0; n < self->children->len; ++n)
             {
               entry = &g_array_index (self->children, NodeEntry, n);
               if (entry->is_internal)
@@ -623,17 +622,17 @@ is_in_range (NodeRange range,
 static void
 print_node_ranges (IdeXmlSymbolNode *node)
 {
-  printf ("(%i,%i)->(%i,%i) s:%"G_GSIZE_FORMAT" end: (%i,%i)->(%i,%i) s:%"G_GSIZE_FORMAT"\n",
-          node->start_tag.start_line,
-          node->start_tag.start_line_offset,
-          node->start_tag.end_line,
-          node->start_tag.end_line_offset,
-          node->start_tag.size,
-          node->end_tag.start_line,
-          node->end_tag.start_line_offset,
-          node->end_tag.end_line,
-          node->end_tag.end_line_offset,
-          node->end_tag.size);
+  g_print ("(%i,%i)->(%i,%i) s:%"G_GSIZE_FORMAT" end: (%i,%i)->(%i,%i) s:%"G_GSIZE_FORMAT"\n",
+           node->start_tag.start_line,
+           node->start_tag.start_line_offset,
+           node->start_tag.end_line,
+           node->start_tag.end_line_offset,
+           node->start_tag.size,
+           node->end_tag.start_line,
+           node->end_tag.start_line_offset,
+           node->end_tag.end_line,
+           node->end_tag.end_line_offset,
+           node->end_tag.size);
 }
 
 /* Find the relative position of the (line, line_offset) cursor
@@ -698,7 +697,7 @@ ide_xml_symbol_node_get_attributes_names (IdeXmlSymbolNode  *self)
     return NULL;
 
   ar_names = g_ptr_array_new ();
-  for (gint i = 0; i < self->attributes->len; ++i)
+  for (guint i = 0; i < self->attributes->len; ++i)
     {
       attr = &g_array_index (self->attributes, Attribute, i);
       g_ptr_array_add (ar_names, g_strdup (attr->name));
@@ -720,7 +719,7 @@ ide_xml_symbol_node_get_attribute_value (IdeXmlSymbolNode *self,
   if (self->attributes == NULL || name == NULL)
     return NULL;
 
-  for (gint i = 0; i < self->attributes->len; ++i)
+  for (guint i = 0; i < self->attributes->len; ++i)
     {
       attr = &g_array_index (self->attributes, Attribute, i);
       if (dzl_str_equal0 (name, attr->name))
@@ -751,25 +750,25 @@ ide_xml_symbol_node_print (IdeXmlSymbolNode  *self,
     }
 
   spacer = g_strnfill (depth, '\t');
-  printf ("%s%s state:%d ", spacer, self->element_name, self->state);
+  g_print ("%s%s state:%d ", spacer, self->element_name, self->state);
   print_node_ranges (self);
 
   if (show_attributes && self->attributes != NULL)
     {
-      for (gint i = 0; i < self->attributes->len; ++i)
+      for (guint i = 0; i < self->attributes->len; ++i)
         {
           attr = &g_array_index (self->attributes, Attribute, i);
-          printf ("attr '%s':'%s'\n", attr->name, attr->value);
+          g_print ("attr '%s':'%s'\n", attr->name, attr->value);
         }
     }
 
   if (show_value && self->value != NULL)
-    printf ("%svalue:%s\n", spacer, self->value);
+    g_print ("%svalue:%s\n", spacer, self->value);
 
   if (recurse)
     {
       n_children = ide_xml_symbol_node_get_n_direct_children (self);
-      for (gint i = 0; i < n_children; ++i)
+      for (guint i = 0; i < n_children; ++i)
         {
           child = (IdeXmlSymbolNode *)ide_xml_symbol_node_get_nth_direct_child (self, i);
           ide_xml_symbol_node_print (child, depth + 1, recurse, show_value, show_attributes);
