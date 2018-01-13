@@ -524,22 +524,32 @@ ide_xml_tree_builder_finalize (GObject *object)
 }
 
 static void
+ide_xml_tree_builder_constructed (GObject *object)
+{
+  IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)object;
+  IdeContext *context;
+
+  G_OBJECT_CLASS (ide_xml_tree_builder_parent_class)->constructed (object);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  self->parser = g_object_new (IDE_TYPE_XML_PARSER,
+                               "context", context,
+                               NULL);
+  self->validator = ide_xml_validator_new (context);
+}
+
+static void
 ide_xml_tree_builder_class_init (IdeXmlTreeBuilderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_xml_tree_builder_constructed;
   object_class->finalize = ide_xml_tree_builder_finalize;
 }
 
 static void
 ide_xml_tree_builder_init (IdeXmlTreeBuilder *self)
 {
-  IdeContext *context;
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  self->parser = g_object_new (IDE_TYPE_XML_PARSER,
-                               "context", context,
-                               NULL);
-
-  self->validator = ide_xml_validator_new (context);
 }
