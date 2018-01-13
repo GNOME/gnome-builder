@@ -32,6 +32,7 @@ IdeClangTranslationUnit *_ide_clang_translation_unit_new     (IdeContext        
                                                               GFile              *file,
                                                               IdeHighlightIndex  *index,
                                                               gint64              serial);
+void                     _ide_clang_dispose_diagnostic       (CXDiagnostic       *diag);
 void                     _ide_clang_dispose_string           (CXString           *str);
 IdeSymbolNode           *_ide_clang_symbol_node_new          (IdeContext         *context,
                                                               CXCursor            cursor);
@@ -41,5 +42,6 @@ void                     _ide_clang_symbol_node_set_children (IdeClangSymbolNode
                                                               GArray             *children);
 
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXString, _ide_clang_dispose_string)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (CXDiagnostic, _ide_clang_dispose_diagnostic)
 
 G_END_DECLS

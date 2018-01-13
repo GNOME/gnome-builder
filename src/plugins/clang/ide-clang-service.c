@@ -822,3 +822,10 @@ _ide_clang_dispose_string (CXString *str)
   if (str != NULL && str->data != NULL)
     clang_disposeString (*str);
 }
+
+void
+_ide_clang_dispose_diagnostic (CXDiagnostic *diag)
+{
+  if (diag != NULL)
+    clang_disposeDiagnostic (diag);
+}

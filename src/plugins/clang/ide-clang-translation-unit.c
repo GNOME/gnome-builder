@@ -387,17 +387,15 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
       count = clang_getNumDiagnostics (tu);
       for (guint i = 0; i < count; i++)
         {
-          CXDiagnostic cxdiag;
-          IdeDiagnostic *diag;
+          g_autoptr(CXDiagnostic) cxdiag = NULL;
+          g_autoptr(IdeDiagnostic) diag = NULL;
 
           cxdiag = clang_getDiagnostic (tu, i);
           diag = create_diagnostic (self, workpath, file, cxdiag);
 
           if (diag != NULL)
             {
-              guint num_fixits;
-
-              num_fixits = clang_getDiagnosticNumFixIts (cxdiag);
+              guint num_fixits = clang_getDiagnosticNumFixIts (cxdiag);
 
               for (guint j = 0; j < num_fixits; j++)
                 {
@@ -414,10 +412,8 @@ ide_clang_translation_unit_get_diagnostics_for_file (IdeClangTranslationUnit *se
                     ide_diagnostic_take_fixit (diag, g_steal_pointer (&fixit));
                 }
 
-              g_ptr_array_add (diags, diag);
+              g_ptr_array_add (diags, g_steal_pointer (&diag));
             }
-
-          clang_disposeDiagnostic (cxdiag);
         }
 
       g_hash_table_insert (self->diagnostics,
