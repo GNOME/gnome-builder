@@ -406,10 +406,11 @@ ide_configuration_manager_track_buildconfig (PeasExtensionSet *set,
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
+  g_assert (!config || IDE_IS_BUILDCONFIG_CONFIGURATION (config));
 
   if (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (provider) && config != NULL)
-    ide_buildconfig_configuration_provider_track_config ((IdeBuildconfigConfigurationProvider *)provider,
-                                                         (IdeBuildconfigConfiguration *)g_object_ref (config));
+    ide_buildconfig_configuration_provider_track_config (IDE_BUILDCONFIG_CONFIGURATION_PROVIDER (provider),
+                                                         IDE_BUILDCONFIG_CONFIGURATION (config));
 }
 
 static void

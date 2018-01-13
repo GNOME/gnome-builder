@@ -630,7 +630,7 @@ ide_buildconfig_configuration_provider_track_config (IdeBuildconfigConfiguration
                                                      IdeBuildconfigConfiguration         *config)
 {
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
-  g_return_if_fail (IDE_IS_BUILDCONFIG_CONFIGURATION (config));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION (config));
 
   g_signal_connect_object (config,
                            "changed",
@@ -638,7 +638,7 @@ ide_buildconfig_configuration_provider_track_config (IdeBuildconfigConfiguration
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_ptr_array_add (self->configurations, config);
+  g_ptr_array_add (self->configurations, g_object_ref (config));
 }
 
 static void
