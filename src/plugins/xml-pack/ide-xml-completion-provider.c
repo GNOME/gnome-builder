@@ -101,6 +101,7 @@ populate_state_free (PopulateState *state)
   g_assert (state != NULL);
 
   g_clear_object (&state->self);
+  g_clear_object (&state->completion_context);
   g_clear_object (&state->ifile);
   g_clear_object (&state->buffer);
   g_clear_object (&state->cancellable);
@@ -1038,12 +1039,11 @@ ide_xml_completion_provider_populate (GtkSourceCompletionProvider *self,
 
   gtk_source_completion_context_get_iter (completion_context, &iter);
 
-  state = g_slice_new0 (PopulateState);
-
   buffer = IDE_BUFFER (gtk_text_iter_get_buffer (&iter));
 
+  state = g_slice_new0 (PopulateState);
   state->self = g_object_ref (IDE_XML_COMPLETION_PROVIDER (self));
-  state->completion_context = completion_context;
+  state->completion_context = g_object_ref (completion_context);
   state->cancellable = g_cancellable_new ();
   state->buffer = g_object_ref (buffer);
   state->ifile = g_object_ref (ide_buffer_get_file (buffer));
