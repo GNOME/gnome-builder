@@ -128,8 +128,9 @@ typedef struct _FetchSchemasState
 static void
 fetch_schema_state_free (FetchSchemasState *state)
 {
-  g_object_unref (state->self);
-  g_ptr_array_unref (state->schemas);
+  g_clear_object (&state->self);
+  g_clear_pointer (&state->schemas, g_ptr_array_unref);
+  self->task = NULL;
 
   g_slice_free (FetchSchemasState, state);
 }
