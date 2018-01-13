@@ -374,6 +374,8 @@ IDE_AVAILABLE_IN_ALL
 IdeFileSettings            *ide_source_view_get_file_settings         (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
+IDE_AVAILABLE_IN_3_28
+PangoFontDescription       *ide_source_view_get_scaled_font_desc      (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 gboolean                    ide_source_view_get_highlight_current_line(IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL

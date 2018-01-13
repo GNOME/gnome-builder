@@ -50,6 +50,7 @@
 #include "sourceview/ide-cursor.h"
 #include "sourceview/ide-indenter.h"
 #include "sourceview/ide-omni-gutter-renderer.h"
+#include "sourceview/ide-omni-gutter-renderer-private.h"
 #include "sourceview/ide-source-iter.h"
 #include "sourceview/ide-source-view-capture.h"
 #include "sourceview/ide-source-view-mode.h"
@@ -977,22 +978,14 @@ ide_source_view_rebuild_css (IdeSourceView *self)
       PangoFontDescription *copy = NULL;
 
       if (priv->font_scale != FONT_SCALE_NORMAL)
-        {
-          gdouble font_scale;
-          guint font_size;
-
-          font_scale = fontScale [priv->font_scale];
-
-          copy = pango_font_description_copy (priv->font_desc);
-          font_size = pango_font_description_get_size (priv->font_desc);
-          pango_font_description_set_size (copy, font_size * font_scale);
-
-          font_desc = copy;
-        }
+        font_desc = copy = ide_source_view_get_scaled_font_desc (self);
 
       str = dzl_pango_font_description_to_css (font_desc);
       css = g_strdup_printf ("textview { %s }", str ?: "");
       gtk_css_provider_load_from_data (priv->css_provider, css, -1, NULL);
+
+      if (priv->omni_renderer != NULL)
+        _ide_omni_gutter_renderer_reset_font (priv->omni_renderer);
 
       g_clear_pointer (&copy, pango_font_description_free);
     }
@@ -6839,6 +6832,33 @@ ide_source_view_get_font_desc (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
 
   return priv->font_desc;
+}
+
+/**
+ * ide_source_view_get_scaled_font_desc:
+ * @self: a #IdeSourceView
+ *
+ * Like ide_source_view_get_font_desc() but takes the editor zoom into
+ * account. You must free the result with pango_font_description_free().
+ *
+ * Returns: (transfer full): a #PangoFontDescription
+ */
+PangoFontDescription *
+ide_source_view_get_scaled_font_desc (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  PangoFontDescription *copy;
+  gdouble font_scale;
+  guint font_size;
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), NULL);
+
+  copy = pango_font_description_copy (priv->font_desc);
+  font_size = pango_font_description_get_size (priv->font_desc);
+  font_scale = fontScale [priv->font_scale];
+  pango_font_description_set_size (copy, font_size * font_scale);
+
+  return g_steal_pointer (&copy);
 }
 
 void
