@@ -210,7 +210,8 @@ get_path (const gchar *workpath,
 static IdeSourceLocation *
 create_location (IdeClangTranslationUnit *self,
                  const gchar             *workpath,
-                 CXSourceLocation         cxloc)
+                 CXSourceLocation         cxloc,
+                 IdeFile                 *override_file)
 {
   g_autofree gchar *path = NULL;
   g_autoptr(IdeFile) file = NULL;
@@ -222,22 +223,28 @@ create_location (IdeClangTranslationUnit *self,
   unsigned column;
   unsigned offset;
 
-  g_return_val_if_fail (self != NULL, NULL);
-  g_return_val_if_fail (workpath != NULL, NULL);
+  g_assert (self != NULL);
+  g_assert (workpath != NULL);
+  g_assert (!override_file || IDE_IS_FILE (override_file));
 
   clang_getFileLocation (cxloc, &cxfile, &line, &column, &offset);
 
   if (line > 0) line--;
   if (column > 0) column--;
 
-  str = clang_getFileName (cxfile);
-  path = get_path (workpath, clang_getCString (str));
+  if (override_file == NULL)
+    {
+      str = clang_getFileName (cxfile);
+      path = get_path (workpath, clang_getCString (str));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  gfile = g_file_new_for_path (path);
-  file = ide_file_new (context, gfile);
+      context = ide_object_get_context (IDE_OBJECT (self));
+      gfile = g_file_new_for_path (path);
+      file = ide_file_new (context, gfile);
 
-  return ide_source_location_new (file, line, column, offset);
+      override_file = file;
+    }
+
+  return ide_source_location_new (override_file, line, column, offset);
 }
 
 static IdeSourceRange *
@@ -256,8 +263,11 @@ create_range (IdeClangTranslationUnit *self,
   cxbegin = clang_getRangeStart (cxrange);
   cxend = clang_getRangeEnd (cxrange);
 
-  begin = create_location (self, workpath, cxbegin);
-  end = create_location (self, workpath, cxend);
+  /* Sometimes the end location does not have a file associated with it,
+   * so we force it to have the IdeFile of the first location.
+   */
+  begin = create_location (self, workpath, cxbegin, NULL);
+  end = create_location (self, workpath, cxend, ide_source_location_get_file (begin));
 
   if ((begin != NULL) && (end != NULL))
     range = ide_source_range_new (begin, end);
@@ -324,7 +334,7 @@ create_diagnostic (IdeClangTranslationUnit *self,
       (strstr (spelling, "deprecated") != NULL))
     severity = IDE_DIAGNOSTIC_DEPRECATED;
 
-  loc = create_location (self, workpath, cxloc);
+  loc = create_location (self, workpath, cxloc, NULL);
 
   diag = ide_diagnostic_new (severity, spelling, loc);
 
@@ -899,9 +909,9 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
       tmploc = clang_getRangeStart (cxrange);
 
       if (clang_isCursorDefinition (tmpcursor))
-        definition = create_location (self, workpath, tmploc);
+        definition = create_location (self, workpath, tmploc, NULL);
       else
-        declaration = create_location (self, workpath, tmploc);
+        declaration = create_location (self, workpath, tmploc, NULL);
     }
 
   symkind = get_symbol_kind (cursor, &symflags);
