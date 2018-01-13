@@ -398,13 +398,13 @@ ide_clang_code_index_entries_class_init (IdeClangCodeIndexEntriesClass *klass)
     g_param_spec_pointer ("main-file",
                           "Main File",
                           "Name of file from which TU is parsed.",
-                          (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   properties [PROP_UNIT] =
     g_param_spec_pointer ("unit",
                           "Unit",
                           "Translation Unit from which index entries are to be generated",
-                          (G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
