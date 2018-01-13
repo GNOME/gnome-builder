@@ -416,10 +416,7 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin    *addin,
       return;
     }
 
-  ifile = g_object_new (IDE_TYPE_FILE,
-                        "context", context,
-                        "file", gfile,
-                        NULL);
+  ifile = ide_file_new (context, gfile);
 
   ide_buffer_manager_load_file_async (buffer_manager,
                                       ifile,

@@ -587,12 +587,12 @@ ide_langserv_client_text_document_publish_diagnostics (IdeLangservClient *self,
       g_autoptr(IdeFile) ifile = NULL;
       g_autoptr(GFile) file = NULL;
       g_autoptr(IdeDiagnostics) diagnostics = NULL;
+      IdeContext *context;
 
+      context = ide_object_get_context (IDE_OBJECT (self));
       file = g_file_new_for_uri (uri);
-      ifile = g_object_new (IDE_TYPE_FILE,
-                            "file", file,
-                            "context", ide_object_get_context (IDE_OBJECT (self)),
-                            NULL);
+      ifile = ide_file_new (context, file);
+
       diagnostics = ide_langserv_client_translate_diagnostics (self, ifile, json_diagnostics);
 
       IDE_TRACE_MSG ("%"G_GSIZE_FORMAT" diagnostics received for %s",

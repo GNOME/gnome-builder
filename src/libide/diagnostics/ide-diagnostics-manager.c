@@ -437,10 +437,7 @@ ide_diagnostics_group_diagnose_foreach (IdeExtensionSetAdapter *adapter,
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  file = g_object_new (IDE_TYPE_FILE,
-                       "context", context,
-                       "file", group->file,
-                       NULL);
+  file = ide_file_new (context, group->file);
 
 #ifdef IDE_ENABLE_TRACE
   {
