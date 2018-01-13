@@ -73,6 +73,13 @@ struct _IdeOmniGutterRenderer
   DzlSignalGroup *view_signals;
   DzlSignalGroup *buffer_signals;
 
+  /*
+   * A scaled font description that matches the size of the text
+   * within the source view. Cached to avoid recreating it on ever
+   * frame render.
+   */
+  PangoFontDescription *scaled_font_desc;
+
   /* TODO: It would be nice to use some basic caching here
    *       so we don't waste 6Kb-12Kb of data on these surfaces.
    *       But that can be done later after this patch set merges.
@@ -494,7 +501,6 @@ count_num_digits (gint num_lines)
 static void
 ide_omni_gutter_renderer_recalculate_size (IdeOmniGutterRenderer *self)
 {
-  const PangoFontDescription *font_desc;
   g_autofree gchar *numbers = NULL;
   GtkTextBuffer *buffer;
   GtkTextView *view;
@@ -526,12 +532,17 @@ ide_omni_gutter_renderer_recalculate_size (IdeOmniGutterRenderer *self)
   numbers = g_strnfill (self->n_chars, '9');
 
   /*
+   * Stash the font description for future use.
+   */
+  g_clear_pointer (&self->scaled_font_desc, pango_font_description_free);
+  self->scaled_font_desc = ide_source_view_get_scaled_font_desc (IDE_SOURCE_VIEW (view));
+
+  /*
    * Get the font description used by the IdeSourceView so we can
    * match the font styling as much as possible.
    */
-  font_desc = ide_source_view_get_font_desc (IDE_SOURCE_VIEW (view));
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (view), numbers);
-  pango_layout_set_font_description (layout, font_desc);
+  pango_layout_set_font_description (layout, self->scaled_font_desc);
 
   /*
    * Now cache the width of the text layout so we can simplify our
@@ -556,7 +567,7 @@ ide_omni_gutter_renderer_recalculate_size (IdeOmniGutterRenderer *self)
     size += CHANGE_WIDTH + 2;
 
   /* Update the size and ensure we are re-drawn */
-  gtk_source_gutter_renderer_set_size (GTK_SOURCE_GUTTER_RENDERER (self), size );
+  gtk_source_gutter_renderer_set_size (GTK_SOURCE_GUTTER_RENDERER (self), size);
   gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (self));
 
   g_clear_object (&layout);
@@ -651,7 +662,7 @@ ide_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   /* Create a new layout for rendering lines to */
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (view), "");
   pango_layout_set_alignment (self->layout, PANGO_ALIGN_RIGHT);
-  pango_layout_set_font_description (self->layout, ide_source_view_get_font_desc (view));
+  pango_layout_set_font_description (self->layout, self->scaled_font_desc);
   pango_layout_set_width (self->layout, (cell_area->width - ARROW_WIDTH - 4) * PANGO_SCALE);
 }
 
@@ -1312,7 +1323,9 @@ ide_omni_gutter_renderer_do_recalc (gpointer data)
   g_assert (IDE_IS_OMNI_GUTTER_RENDERER (self));
 
   self->resize_source = 0;
+
   ide_omni_gutter_renderer_recalculate_size (self);
+
   return G_SOURCE_REMOVE;
 }
 
@@ -1384,6 +1397,8 @@ ide_omni_gutter_renderer_dispose (GObject *object)
 
   g_clear_object (&self->breakpoints);
   g_clear_pointer (&self->lines, g_array_unref);
+
+  g_clear_pointer (&self->scaled_font_desc, pango_font_description_free);
 
   g_clear_object (&self->view_signals);
   g_clear_object (&self->buffer_signals);
@@ -1554,6 +1569,7 @@ gboolean
 ide_omni_gutter_renderer_get_show_line_changes (IdeOmniGutterRenderer *self)
 {
   g_return_val_if_fail (IDE_IS_OMNI_GUTTER_RENDERER (self), FALSE);
+
   return self->show_line_changes;
 }
 
@@ -1561,6 +1577,7 @@ gboolean
 ide_omni_gutter_renderer_get_show_line_diagnostics (IdeOmniGutterRenderer *self)
 {
   g_return_val_if_fail (IDE_IS_OMNI_GUTTER_RENDERER (self), FALSE);
+
   return self->show_line_diagnostics;
 }
 
@@ -1568,6 +1585,7 @@ gboolean
 ide_omni_gutter_renderer_get_show_line_numbers (IdeOmniGutterRenderer *self)
 {
   g_return_val_if_fail (IDE_IS_OMNI_GUTTER_RENDERER (self), FALSE);
+
   return self->show_line_numbers;
 }
 
@@ -1617,4 +1635,13 @@ ide_omni_gutter_renderer_set_show_line_numbers (IdeOmniGutterRenderer *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_NUMBERS]);
       ide_omni_gutter_renderer_recalculate_size (self);
     }
+}
+
+void
+_ide_omni_gutter_renderer_reset_font (IdeOmniGutterRenderer *self)
+{
+  g_return_if_fail (IDE_IS_OMNI_GUTTER_RENDERER (self));
+
+  ide_omni_gutter_renderer_recalculate_size (self);
+  ide_omni_gutter_renderer_reload_icons (self);
 }
