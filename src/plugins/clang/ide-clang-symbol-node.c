@@ -200,10 +200,7 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   gfile = g_file_new_for_path (filename);
-  ifile = g_object_new (IDE_TYPE_FILE,
-                        "file", gfile,
-                        "context", context,
-                        NULL);
+  ifile = ide_file_new (context, gfile);
 
   g_task_return_pointer (task,
                          ide_source_location_new (ifile, line-1, line_offset-1, 0),
