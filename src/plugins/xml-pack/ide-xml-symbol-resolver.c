@@ -127,10 +127,7 @@ ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
   g_task_set_source_tag (task, ide_xml_symbol_resolver_get_symbol_tree_async);
 
-  ifile = g_object_new (IDE_TYPE_FILE,
-                        "file", file,
-                        "context", context,
-                        NULL);
+  ifile = ide_file_new (context, file);
 
   ide_xml_service_get_root_node_async (service,
                                        ifile,

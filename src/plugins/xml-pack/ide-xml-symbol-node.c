@@ -91,10 +91,7 @@ ide_xml_symbol_node_get_location_async (IdeSymbolNode       *node,
   g_task_set_source_tag (task, ide_xml_symbol_node_get_location_async);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  ifile = g_object_new (IDE_TYPE_FILE,
-                        "file", self->file,
-                        "context", context,
-                        NULL);
+  ifile = ide_file_new (context, self->file);
 
   ret = ide_source_location_new (ifile,
                                  self->start_tag.start_line - 1,
