@@ -58,6 +58,9 @@ G_DEFINE_TYPE (IdeFile, ide_file, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [LAST_PROP];
 
+G_LOCK_DEFINE (files_cache);
+static GHashTable *files_cache;
+
 const gchar *
 _ide_file_get_content_type (IdeFile *self)
 {
@@ -375,6 +378,22 @@ ide_file_get_is_temporary (IdeFile *self)
 }
 
 static void
+ide_file_dispose (GObject *object)
+{
+  IdeFile *self = (IdeFile *)object;
+
+  if (self->file != NULL)
+    {
+      G_LOCK (files_cache);
+      if (files_cache != NULL)
+        g_hash_table_remove (files_cache, self->file);
+      G_UNLOCK (files_cache);
+    }
+
+  G_OBJECT_CLASS (ide_file_parent_class)->dispose (object);
+}
+
+static void
 ide_file_finalize (GObject *object)
 {
   IdeFile *self = (IdeFile *)object;
@@ -462,6 +481,7 @@ ide_file_class_init (IdeFileClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = ide_file_dispose;
   object_class->finalize = ide_file_finalize;
   object_class->get_property = ide_file_get_property;
   object_class->set_property = ide_file_set_property;
@@ -519,7 +539,6 @@ has_suffix (const gchar          *path,
             const gchar * const *allowed_suffixes)
 {
   const gchar *dot;
-  gsize i;
 
   dot = strrchr (path, '.');
   if (!dot)
@@ -527,7 +546,7 @@ has_suffix (const gchar          *path,
 
   dot++;
 
-  for (i = 0; allowed_suffixes [i]; i++)
+  for (guint i = 0; allowed_suffixes [i]; i++)
     {
       if (g_str_equal (dot, allowed_suffixes [i]))
         return TRUE;
@@ -649,6 +668,23 @@ ide_file_find_other_finish (IdeFile       *self,
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
+static IdeFile *
+lookup_by_gfile_locked (GFile *file)
+{
+  IdeFile *ret;
+
+  g_assert (G_IS_FILE (file));
+
+  if (files_cache == NULL)
+    files_cache = g_hash_table_new_full (g_file_hash, (GEqualFunc)g_file_equal, NULL, NULL);
+
+  ret = g_hash_table_lookup (files_cache, file);
+  if (ret != NULL)
+    g_object_ref (ret);
+
+  return ret;
+}
+
 /**
  * ide_file_new:
  * @context: (allow-none): An #IdeContext or %NULL.
@@ -662,13 +698,27 @@ IdeFile *
 ide_file_new (IdeContext *context,
               GFile      *file)
 {
+  g_autoptr(IdeFile) ret = NULL;
+
   g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
-  return g_object_new (IDE_TYPE_FILE,
-                       "context", context,
-                       "file", file,
-                       NULL);
+  G_LOCK (files_cache);
+
+  ret = lookup_by_gfile_locked (file);
+
+  if (ret == NULL)
+    {
+      ret = g_object_new (IDE_TYPE_FILE,
+                          "context", context,
+                          "file", file,
+                          NULL);
+      g_hash_table_insert (files_cache, file, ret);
+    }
+
+  G_UNLOCK (files_cache);
+
+  return g_steal_pointer (&ret);
 }
 
 IdeFile *
@@ -676,18 +726,13 @@ ide_file_new_for_path (IdeContext  *context,
                        const gchar *path)
 {
   g_autoptr(GFile) file = NULL;
-  IdeFile *ret;
 
   g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 
   file = g_file_new_for_path (path);
-  ret = g_object_new (IDE_TYPE_FILE,
-                      "context", context,
-                      "file", file,
-                      NULL);
 
-  return ret;
+  return ide_file_new (context, file);
 }
 
 gint
