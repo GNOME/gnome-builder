@@ -907,12 +907,49 @@ ide_greeter_perspective_project_activated (IdeGreeterPerspective *self,
                                            IdeProjectInfo        *project_info,
                                            IdeGreeterSection     *section)
 {
+  const GList *windows;
+  GFile *info_file;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (IDE_IS_PROJECT_INFO (project_info));
   g_assert (IDE_IS_GREETER_SECTION (section));
 
+  if (!(info_file = ide_project_info_get_file (project_info)))
+    goto load_project;
+
+  /* Look to see if we can find an already open project matching info */
+  windows = gtk_application_get_windows (GTK_APPLICATION (IDE_APPLICATION_DEFAULT));
+
+  for (const GList *iter = windows; iter != NULL; iter = iter->next)
+    {
+      GtkWindow *window = iter->data;
+      IdeContext *context;
+      GFile *project_file;
+
+      if (!IDE_IS_WORKBENCH (window))
+        continue;
+
+      if (!(context = ide_workbench_get_context (IDE_WORKBENCH (window))))
+        continue;
+
+      project_file = ide_context_get_project_file (context);
+
+      if (g_file_equal (project_file, info_file) ||
+          g_file_has_prefix (project_file, info_file) ||
+          g_file_has_prefix (info_file, project_file))
+        {
+          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+
+          gtk_window_present (window);
+          gtk_window_close (GTK_WINDOW (toplevel));
+
+          IDE_EXIT;
+        }
+    }
+
+load_project:
   ide_greeter_perspective_load_project (self, project_info);
 
   IDE_EXIT;
