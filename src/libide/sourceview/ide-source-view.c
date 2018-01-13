@@ -2859,11 +2859,14 @@ static void
 ide_source_view_real_change_case (IdeSourceView           *self,
                                   GtkSourceChangeCaseType  type)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ide_cursor_remove_cursors (priv->cursor);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
