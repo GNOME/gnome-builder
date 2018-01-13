@@ -80,10 +80,7 @@ create_symbol (IdeCtagsSymbolResolver   *self,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   gfile = g_file_new_for_path (entry->path);
-  file = g_object_new (IDE_TYPE_FILE,
-                       "file", gfile,
-                       "context", context,
-                       NULL);
+  file = ide_file_new (context, gfile);
   loc = ide_source_location_new (file, line, line_offset, offset);
 
   return ide_symbol_new (entry->name, ide_ctags_index_entry_kind_to_symbol_kind (entry->kind), 0, loc, loc, loc);
