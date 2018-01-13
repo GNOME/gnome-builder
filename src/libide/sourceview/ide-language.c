@@ -70,9 +70,7 @@ ide_language_format_header (GtkSourceLanguage *self,
         }
       else if (line_prefix == NULL)
         {
-          guint i;
-
-          for (i = 0; i < prefix_len; i++)
+          for (guint i = 0; i < prefix_len; i++)
             g_string_append_c (outstr, ' ');
         }
       else
@@ -85,6 +83,12 @@ ide_language_format_header (GtkSourceLanguage *self,
           g_string_append_c (outstr, ' ');
           g_string_append_len (outstr, line, len);
         }
+
+      /* Lines ending in expansion need an extra \n */
+      if (outstr->len > 2 &&
+          outstr->str[outstr->len - 2] == '}' &&
+          outstr->str[outstr->len - 1] == '}')
+        g_string_append_c (outstr, '\n');
 
       g_string_append_c (outstr, '\n');
     }
