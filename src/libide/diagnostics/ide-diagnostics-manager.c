@@ -317,7 +317,9 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
 
   diagnostics = ide_diagnostic_provider_diagnose_finish (provider, result, &error);
 
-  if (error != NULL)
+  if (error != NULL &&
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
     g_warning ("%s", error->message);
 
   /*
