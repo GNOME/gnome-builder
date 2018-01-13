@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <glib-object.h>
 #include <ide.h>
 
 #include "ide-xml-analysis.h"
@@ -30,7 +29,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE, XML_TREE_BUILDER, IdeObject)
 
-IdeXmlTreeBuilder   *ide_xml_tree_builder_new                    (DzlTaskCache          *schemas);
 void                 ide_xml_tree_builder_build_tree_async       (IdeXmlTreeBuilder     *self,
                                                                   GFile                 *file,
                                                                   GCancellable          *cancellable,
