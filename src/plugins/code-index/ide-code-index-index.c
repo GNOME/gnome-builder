@@ -220,17 +220,14 @@ ide_code_index_index_load_if_nmod (IdeCodeIndexIndex     *self,
   g_autoptr(GFile) names_file = NULL;
   g_autoptr(GFileInfo) file_info = NULL;
   g_autofree gchar *dir_name = NULL;
+
   g_return_val_if_fail (IDE_IS_CODE_INDEX_INDEX (self), FALSE);
   g_return_val_if_fail (G_IS_FILE (directory), FALSE);
   g_return_val_if_fail (files != NULL, FALSE);
 
-  if (NULL == (dir_index = ide_code_index_index_real_load_index (self,
-                                                                 directory,
-                                                                 cancellable,
-                                                                 error)))
-    {
-      return FALSE;
-    }
+  dir_index = ide_code_index_index_real_load_index (self, directory, cancellable, error);
+  if (dir_index == NULL)
+    return FALSE;
 
   symbol_names = dir_index->symbol_names;
 
@@ -275,10 +272,7 @@ ide_code_index_index_load_if_nmod (IdeCodeIndexIndex     *self,
 
   g_mutex_lock (&self->update_entries);
 
-  if (g_hash_table_lookup_extended (self->directories,
-                                    dir_name,
-                                    NULL,
-                                    &value))
+  if (g_hash_table_lookup_extended (self->directories, dir_name, NULL, &value))
     {
       guint i = GPOINTER_TO_UINT (value);
 
@@ -517,9 +511,7 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
 
   if (data->curr_index < self->indexes->len)
     {
-      DirectoryIndex *dir_index;
-
-      dir_index = g_ptr_array_index (self->indexes, data->curr_index);
+      DirectoryIndex *dir_index = g_ptr_array_index (self->indexes, data->curr_index);
 
       dzl_fuzzy_index_query_async (dir_index->symbol_names,
                                    data->query,
@@ -527,13 +519,13 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
                                    cancellable,
                                    ide_code_index_index_query_cb,
                                    g_steal_pointer (&task));
+
+      return;
     }
-  else
-    {
-      g_task_return_pointer (task,
-                             g_ptr_array_new_with_free_func (g_object_unref),
-                             (GDestroyNotify) g_ptr_array_unref);
-    }
+
+  g_task_return_pointer (task,
+                         g_ptr_array_new_with_free_func (g_object_unref),
+                         (GDestroyNotify) g_ptr_array_unref);
 }
 
 GPtrArray *
@@ -567,7 +559,7 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex     *self,
 
   g_return_val_if_fail (IDE_IS_CODE_INDEX_INDEX (self), NULL);
 
-  if (key == NULL || !key[0])
+  if (dzl_str_empty0 (key))
     return NULL;
 
   g_message ("Searching declaration with key:%s\n", key);
