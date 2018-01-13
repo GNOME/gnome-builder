@@ -630,6 +630,7 @@ run_genesis_addin (PeasExtensionSet *set,
   g_assert (IDE_IS_GREETER_PERSPECTIVE (state->self));
   g_assert (state->name != NULL);
   g_assert (IDE_IS_GENESIS_ADDIN (addin));
+  g_assert (G_IS_CANCELLABLE (state->self->cancellable));
 
   if (g_strcmp0 (state->name, G_OBJECT_TYPE_NAME (addin)) == 0)
     {
@@ -664,7 +665,9 @@ static void
 ide_greeter_perspective_genesis_continue_clicked (IdeGreeterPerspective *self,
                                                   GtkButton             *button)
 {
+  g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
   g_assert (GTK_IS_BUTTON (button));
+
   ide_greeter_perspective_genesis_continue (self);
 }
 
