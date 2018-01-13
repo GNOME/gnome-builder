@@ -315,7 +315,9 @@ ide_clang_code_index_entries_finalize (GObject *object)
 {
   IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)object;
 
+  g_queue_foreach (&self->decl_cursors, (GFunc)cx_cursor_free, NULL);
   g_queue_clear (&self->decl_cursors);
+
   g_queue_foreach (&self->cursors, (GFunc)cx_cursor_free, NULL);
   g_queue_clear (&self->cursors);
 
