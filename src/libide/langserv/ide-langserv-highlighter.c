@@ -112,7 +112,8 @@ ide_langserv_highlighter_document_symbol_cb (GObject      *object,
 
   if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
     {
-      g_message ("%s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_debug ("%s", error->message);
       IDE_EXIT;
     }
 
