@@ -371,8 +371,8 @@ ide_langserv_completion_provider_populate (GtkSourceCompletionProvider *provider
 
   ide_langserv_client_call_async (priv->client,
                                   "textDocument/completion",
-                                  g_steal_pointer (&params),
-                                  g_steal_pointer (&cancellable),
+                                  params,
+                                  cancellable,
                                   ide_langserv_completion_provider_complete_cb,
                                   g_steal_pointer (&state));
 
