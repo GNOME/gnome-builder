@@ -144,8 +144,7 @@ ide_langserv_client_buffer_saved (IdeLangservClient *self,
   );
 
   ide_langserv_client_send_notification_async (self, "textDocument/didSave",
-                                               g_steal_pointer (&params),
-                                               NULL, NULL, NULL);
+                                               params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -206,8 +205,7 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
     "]");
 
   ide_langserv_client_send_notification_async (self, "textDocument/didChange",
-                                               g_steal_pointer (&params),
-                                               NULL, NULL, NULL);
+                                               params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -269,8 +267,7 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
     "]");
 
   ide_langserv_client_send_notification_async (self, "textDocument/didChange",
-                                               g_steal_pointer (&params),
-                                               NULL, NULL, NULL);
+                                               params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -328,10 +325,8 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
     "}"
   );
 
-  ide_langserv_client_send_notification_async (self,
-                                               "textDocument/didOpen",
-                                               g_steal_pointer (&params),
-                                               NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self, "textDocument/didOpen",
+                                               params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -361,10 +356,8 @@ ide_langserv_client_buffer_unloaded (IdeLangservClient *self,
     "}"
   );
 
-  ide_langserv_client_send_notification_async (self,
-                                               "textDocument/didClose",
-                                               g_steal_pointer (&params),
-                                               NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self, "textDocument/didClose",
+                                               params, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -428,10 +421,8 @@ ide_langserv_client_project_file_trashed (IdeLangservClient *self,
     "]"
   );
 
-  ide_langserv_client_send_notification_async (self,
-                                               "workspace/didChangeWatchedFiles",
-                                               g_steal_pointer (&params),
-                                               NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self, "workspace/didChangeWatchedFiles",
+                                               params, NULL, NULL, NULL);
 
   ide_langserv_client_clear_diagnostics (self, uri);
 
@@ -471,10 +462,8 @@ ide_langserv_client_project_file_renamed (IdeLangservClient *self,
     "]"
   );
 
-  ide_langserv_client_send_notification_async (self,
-                                               "workspace/didChangeWatchedFiles",
-                                               g_steal_pointer (&params),
-                                               NULL, NULL, NULL);
+  ide_langserv_client_send_notification_async (self, "workspace/didChangeWatchedFiles",
+                                               params, NULL, NULL, NULL);
 
   ide_langserv_client_clear_diagnostics (self, src_uri);
 
@@ -1058,12 +1047,16 @@ ide_langserv_client_call_cb (GObject      *object,
  * ide_langserv_client_call_async:
  * @self: An #IdeLangservClient
  * @method: the method to call
- * @params: (nullable) (transfer full): An #GVariant or %NULL
+ * @params: (nullable) (transfer none): An #GVariant or %NULL
  * @cancellable: (nullable): A cancellable or %NULL
  * @callback: the callback to receive the result, or %NULL
  * @user_data: user data for @callback
  *
  * Asynchronously queries the Language Server using the JSON-RPC protocol.
+ *
+ * If @params is floating, it's floating reference is consumed.
+ *
+ * Since: 3.26
  */
 void
 ide_langserv_client_call_async (IdeLangservClient   *self,
@@ -1151,12 +1144,16 @@ ide_langserv_client_send_notification_cb (GObject      *object,
  * ide_langserv_client_send_notification_async:
  * @self: An #IdeLangservClient
  * @method: the method to notification
- * @params: (nullable) (transfer full): An #GVariant or %NULL
+ * @params: (nullable) (transfer none): An #GVariant or %NULL
  * @cancellable: (nullable): A cancellable or %NULL
  * @notificationback: the notificationback to receive the result, or %NULL
  * @user_data: user data for @notificationback
  *
  * Asynchronously sends a notification to the Language Server.
+ *
+ * If @params is floating, it's reference is consumed.
+ *
+ * Since: 3.26
  */
 void
 ide_langserv_client_send_notification_async (IdeLangservClient   *self,
@@ -1170,6 +1167,10 @@ ide_langserv_client_send_notification_async (IdeLangservClient   *self,
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_LANGSERV_CLIENT (self));
+  g_return_if_fail (method != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, notificationback, user_data);
   g_task_set_source_tag (task, ide_langserv_client_send_notification_async);
