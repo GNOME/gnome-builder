@@ -244,8 +244,12 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
 
   if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
     {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_message ("%s", error->message);
+      /* If we were cancelled, we shouldn't report anything to the context,
+       * as it is no longer the active contenxt for completion.
+       */
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        IDE_EXIT;
+      g_debug ("%s", error->message);
       IDE_GOTO (failure);
     }
 
