@@ -66,8 +66,6 @@ struct _IdeGreeterPerspective
   GtkScrolledWindow    *scrolled_window;
   DzlPriorityBox       *genesis_buttons;
   DzlPriorityBox       *sections_container;
-
-  gint                  selected_count;
 };
 
 typedef struct
