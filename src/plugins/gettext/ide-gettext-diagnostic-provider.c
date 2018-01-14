@@ -155,7 +155,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   g_autoptr(GTask) task = NULL;
   g_autoptr(GError) error = NULL;
   GtkSourceLanguage *language;
-  const gchar *lang_id;
+  const gchar *lang_id = NULL;
   const gchar *xgettext_id;
 
   g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
@@ -177,7 +177,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
                                "Language %s is not supported",
-                               lang_id);
+                               lang_id ?: "plain-text");
       return;
     }
 
