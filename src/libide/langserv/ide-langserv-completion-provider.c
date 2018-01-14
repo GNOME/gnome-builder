@@ -230,8 +230,8 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
   g_autoptr(CompletionState) state = user_data;
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
+  GQueue queue = G_QUEUE_INIT;
   GVariant *node;
-  GList *list = NULL;
   GVariantIter iter;
 
   IDE_ENTRY;
@@ -292,23 +292,23 @@ ide_langserv_completion_provider_complete_cb (GObject      *object,
       else
         full_label = g_strdup (label);
 
-      //item = gtk_source_completion_item_new (full_label, label, NULL, NULL);
       item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
                            "icon-name", icon_name,
                            "label", full_label,
                            "text", label,
                            NULL);
 
-      list = g_list_prepend (list, g_steal_pointer (&item));
+      g_queue_push_tail (&queue, g_steal_pointer (&item));
     }
 
 failure:
   gtk_source_completion_context_add_proposals (state->context,
                                                GTK_SOURCE_COMPLETION_PROVIDER (state->self),
-                                               list,
+                                               queue.head,
                                                TRUE);
 
-  g_list_free_full (list, g_object_unref);
+  g_queue_foreach (&queue, (GFunc)g_object_unref, NULL);
+  g_queue_clear (&queue);
 
   IDE_EXIT;
 }
