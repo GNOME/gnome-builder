@@ -318,7 +318,7 @@ ide_langserv_formatter_format_async (IdeFormatter        *formatter,
 
   ide_langserv_client_call_async (priv->client,
                                   "textDocument/formatting",
-                                  g_steal_pointer (&params),
+                                  params,
                                   cancellable,
                                   ide_langserv_formatter_format_call_cb,
                                   g_steal_pointer (&task));
@@ -410,7 +410,7 @@ ide_langserv_formatter_format_range_async (IdeFormatter        *formatter,
 
   ide_langserv_client_call_async (priv->client,
                                   "textDocument/rangeFormatting",
-                                  g_steal_pointer (&params),
+                                  params,
                                   cancellable,
                                   ide_langserv_formatter_format_call_cb,
                                   g_steal_pointer (&task));

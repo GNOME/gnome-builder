@@ -947,7 +947,7 @@ ide_langserv_client_start (IdeLangservClient *self)
 
   jsonrpc_client_call_async (priv->rpc_client,
                              "initialize",
-                             g_steal_pointer (&params),
+                             params,
                              NULL,
                              ide_langserv_client_initialize_cb,
                              g_object_ref (self));

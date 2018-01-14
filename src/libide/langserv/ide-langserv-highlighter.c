@@ -216,7 +216,7 @@ ide_langserv_highlighter_update_symbols (gpointer data)
 
       ide_langserv_client_call_async (priv->client,
                                       "textDocument/documentSymbol",
-                                      g_steal_pointer (&params),
+                                      params,
                                       NULL,
                                       ide_langserv_highlighter_document_symbol_cb,
                                       g_object_ref (self));

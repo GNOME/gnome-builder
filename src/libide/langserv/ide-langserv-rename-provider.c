@@ -312,7 +312,7 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
 
   ide_langserv_client_call_async (priv->client,
                                   "textDocument/rename",
-                                  g_steal_pointer (&params),
+                                  params,
                                   cancellable,
                                   ide_langserv_rename_provider_rename_cb,
                                   g_steal_pointer (&task));

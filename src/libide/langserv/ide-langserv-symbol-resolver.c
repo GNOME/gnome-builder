@@ -300,7 +300,7 @@ ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
 
   ide_langserv_client_call_async (priv->client,
                                   "textDocument/definition",
-                                  g_steal_pointer (&params),
+                                  params,
                                   cancellable,
                                   ide_langserv_symbol_resolver_definition_cb,
                                   g_steal_pointer (&task));
@@ -463,7 +463,7 @@ ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolve
 
   ide_langserv_client_call_async (priv->client,
                                   "textDocument/documentSymbol",
-                                  g_steal_pointer (&params),
+                                  params,
                                   cancellable,
                                   ide_langserv_symbol_resolver_document_symbol_cb,
                                   g_steal_pointer (&task));
@@ -636,7 +636,7 @@ ide_langserv_symbol_resolver_find_references_async (IdeSymbolResolver   *resolve
 
   ide_langserv_client_call_async (priv->client,
                                   "textDocument/references",
-                                  g_steal_pointer (&params),
+                                  params,
                                   cancellable,
                                   ide_langserv_symbol_resolver_find_references_cb,
                                   g_steal_pointer (&task));
