@@ -352,6 +352,17 @@ G_DEFINE_TYPE_WITH_CODE (GbpRecentSection, gbp_recent_section, GTK_TYPE_BIN,
                                                 greeter_section_iface_init))
 
 static void
+gbp_recent_section_notify_row_selected (GbpRecentSection    *self,
+                                        GParamSpec          *pspec,
+                                        GbpRecentProjectRow *row)
+{
+  g_assert (GBP_IS_RECENT_SECTION (self));
+  g_assert (GBP_IS_RECENT_PROJECT_ROW (row));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SELECTION]);
+}
+
+static void
 gbp_recent_section_row_activated (GbpRecentSection    *self,
                                   GbpRecentProjectRow *row,
                                   GtkListBox          *list_box)
@@ -366,8 +377,6 @@ gbp_recent_section_row_activated (GbpRecentSection    *self,
 
       g_object_get (row, "selected", &selected, NULL);
       g_object_set (row, "selected", !selected, NULL);
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_SELECTION]);
     }
   else
     {
@@ -384,13 +393,21 @@ create_widget_func (gpointer item,
 {
   IdeProjectInfo *project_info = item;
   GbpRecentProjectRow *row;
+  GbpRecentSection *self = user_data;
 
   g_assert (IDE_IS_PROJECT_INFO (project_info));
+  g_assert (GBP_IS_RECENT_SECTION (self));
 
   row = g_object_new (GBP_TYPE_RECENT_PROJECT_ROW,
                       "project-info", project_info,
                       "visible", TRUE,
                       NULL);
+
+  g_signal_connect_object (row,
+                           "notify::selected",
+                           G_CALLBACK (gbp_recent_section_notify_row_selected),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   return GTK_WIDGET (row);
 }
