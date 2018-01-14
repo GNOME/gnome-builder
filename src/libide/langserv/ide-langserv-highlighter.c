@@ -261,7 +261,7 @@ ide_langserv_highlighter_buffer_line_flags_changed (IdeLangservHighlighter *self
 }
 
 static void
-ide_langserv_highlighter_finalize (GObject *object)
+ide_langserv_highlighter_dispose (GObject *object)
 {
   IdeLangservHighlighter *self = (IdeLangservHighlighter *)object;
   IdeLangservHighlighterPrivate *priv = ide_langserv_highlighter_get_instance_private (self);
@@ -274,7 +274,7 @@ ide_langserv_highlighter_finalize (GObject *object)
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->client);
 
-  G_OBJECT_CLASS (ide_langserv_highlighter_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_langserv_highlighter_parent_class)->dispose (object);
 }
 
 static void
@@ -320,7 +320,7 @@ ide_langserv_highlighter_class_init (IdeLangservHighlighterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_langserv_highlighter_finalize;
+  object_class->dispose = ide_langserv_highlighter_dispose;
   object_class->get_property = ide_langserv_highlighter_get_property;
   object_class->set_property = ide_langserv_highlighter_set_property;
 
