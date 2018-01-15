@@ -678,3 +678,13 @@ gb_terminal_view_set_pty (GbTerminalView *self,
       vte_terminal_set_pty (self->terminal_top, pty);
     }
 }
+
+void
+gb_terminal_view_feed (GbTerminalView *self,
+                       const gchar    *message)
+{
+  g_return_if_fail (GB_IS_TERMINAL_VIEW (self));
+
+  if (self->terminal_top != NULL)
+    vte_terminal_feed (self->terminal_top, message, -1);
+}

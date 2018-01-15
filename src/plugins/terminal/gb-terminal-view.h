@@ -29,5 +29,7 @@ G_DECLARE_FINAL_TYPE (GbTerminalView, gb_terminal_view, GB, TERMINAL_VIEW, IdeLa
 
 void      gb_terminal_view_set_pty        (GbTerminalView *self,
                                            VtePty         *pty);
+void      gb_terminal_view_feed           (GbTerminalView *self,
+                                           const gchar    *message);
 
 G_END_DECLS
