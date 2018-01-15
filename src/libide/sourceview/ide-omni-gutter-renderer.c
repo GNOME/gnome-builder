@@ -510,15 +510,13 @@ calculate_diagnostics_size (gint height)
 {
   static guint sizes[] = { 64, 48, 32, 24, 16, 8 };
 
-  height -= 2; /* Subtract padding */
-
   for (guint i = 0; i < G_N_ELEMENTS (sizes); i++)
     {
       if (height >= sizes[i])
         return sizes[i];
     }
 
-  return 16;
+  return sizes [G_N_ELEMENTS (sizes) - 1];
 }
 
 static void
@@ -978,7 +976,7 @@ draw_diagnostic (IdeOmniGutterRenderer        *self,
                  cairo_t                      *cr,
                  GdkRectangle                 *area,
                  LineInfo                     *info,
-                 guint                         diag_size,
+                 gint                          diag_size,
                  GtkSourceGutterRendererState  state)
 {
   cairo_surface_t *surface = NULL;
