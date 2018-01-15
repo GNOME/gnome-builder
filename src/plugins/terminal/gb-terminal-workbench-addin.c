@@ -181,6 +181,16 @@ failure:
   IDE_EXIT;
 }
 
+static void
+on_run_manager_stopped (GbTerminalWorkbenchAddin *self,
+                        IdeRunManager            *run_manager)
+{
+  g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+
+  gb_terminal_view_feed (self->run_terminal, _("Application exited\r\n"));
+}
+
 static const DzlShortcutEntry gb_terminal_shortcut_entries[] = {
   { "org.gnome.builder.workbench.new-terminal",
     0, NULL,
@@ -281,6 +291,11 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
                            G_CALLBACK (on_run_manager_run),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (run_manager,
+                           "stopped",
+                           G_CALLBACK (on_run_manager_stopped),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -288,11 +303,23 @@ gb_terminal_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                     IdeWorkbench      *workbench)
 {
   GbTerminalWorkbenchAddin *self = (GbTerminalWorkbenchAddin *)addin;
+  IdeRunManager *run_manager;
+  IdeContext *context;
 
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal");
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal-in-runtime");
+
+  context = ide_workbench_get_context (workbench);
+
+  run_manager = ide_context_get_run_manager (context);
+  g_signal_handlers_disconnect_by_func (run_manager,
+                                        G_CALLBACK (on_run_manager_run),
+                                        self);
+  g_signal_handlers_disconnect_by_func (run_manager,
+                                        G_CALLBACK (on_run_manager_stopped),
+                                        self);
 
   if (self->panel_dock_widget != NULL)
     {
