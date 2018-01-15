@@ -441,6 +441,8 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
        PreferencesAddin to display the installed rustup version and to change the rustup installation
     """
     def do_load(self, preferences):
+        self.unloaded = False
+
         preferences.add_list_group('sdk', 'rustup', _('Rustup'), Gtk.SelectionMode.NONE, 100)
         preferences.add_group('sdk', 'rustup_toolchains_edit', _('Rustup Toolchains'), 100)
 
@@ -465,6 +467,7 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
         ]
 
     def do_unload(self, preferences):
+        self.unloaded = True
         if self.ids:
             for id in self.ids:
                 preferences.remove_id(id)
@@ -536,13 +539,14 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
 
         # reload toolchains
         def has_rustup_callback(applicationAddin, preferenceAddin):
-            toolchains = RustupApplicationAddin.instance.get_toolchains()
-            self.toolchain_listbox.set_visible(len(toolchains) != 0)
-            tcs = []
-            for toolchain in toolchains:
-                tcs.append(ModelItem(toolchain[0], toolchain[1]))
-            old_len = self.store.get_n_items()
-            self.store.splice(0, old_len, tcs)
+            if not self.unloaded:
+                toolchains = RustupApplicationAddin.instance.get_toolchains()
+                self.toolchain_listbox.set_visible(len(toolchains) != 0)
+                tcs = []
+                for toolchain in toolchains:
+                    tcs.append(ModelItem(toolchain[0], toolchain[1]))
+                old_len = self.store.get_n_items()
+                self.store.splice(0, old_len, tcs)
         RustupApplicationAddin.instance.connect('rustup_changed', has_rustup_callback, self)
         has_rustup_callback(RustupApplicationAddin.instance, self)
         return self.toolchain_listbox
@@ -581,9 +585,10 @@ class RustupPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
 
         # reload toolchains
         def has_rustup_callback(applicationAddin):
-            add_toolchain.set_sensitive(applicationAddin.has_rustup)
-            toolchains = applicationAddin.get_toolchains()
-            list_control.set_visible(applicationAddin.has_rustup and len(toolchains) != 0)
+            if not self.unloaded:
+                add_toolchain.set_sensitive(applicationAddin.has_rustup)
+                toolchains = applicationAddin.get_toolchains()
+                list_control.set_visible(applicationAddin.has_rustup and len(toolchains) != 0)
         RustupApplicationAddin.instance.connect('rustup_changed', has_rustup_callback)
         has_rustup_callback(RustupApplicationAddin.instance)
 
