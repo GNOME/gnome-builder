@@ -150,7 +150,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('author').assign_string(author_name)
 
         # Just avoiding dealing with template bugs
-        if self.language == 'c':
+        if self.language in ('c', 'c++'):
             ui_file = prefix + '-window.ui'
         else:
             ui_file = 'window.ui'
@@ -226,7 +226,7 @@ class GnomeProjectTemplate(MesonTemplate):
             _('GNOME Application'),
             'pattern-gnome',
             _('Create a new GNOME application'),
-            ['C', 'Python', 'JavaScript', 'Vala']
+            ['C', 'C++', 'Python', 'JavaScript', 'Vala']
          )
 
     def prepare_files(self, files):
@@ -248,6 +248,11 @@ class GnomeProjectTemplate(MesonTemplate):
             files['resources/src/main.c'] = 'src/main.c'
             files['resources/src/window.c'] = 'src/%(prefix)s-window.c'
             files['resources/src/window.h'] = 'src/%(prefix)s-window.h'
+            window_ui_name = 'src/%(prefix)s-window.ui'
+        elif self.language == 'c++':
+            files['resources/src/main.cpp'] = 'src/main.cpp'
+            files['resources/src/window.cpp'] = 'src/%(prefix)s-window.cpp'
+            files['resources/src/window.hpp'] = 'src/%(prefix)s-window.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
         elif self.language == 'vala':
             files['resources/src/main.vala'] = 'src/main.vala'

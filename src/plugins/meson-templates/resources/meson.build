@@ -2,8 +2,14 @@ project('{{name}}',{{if language == "c"}} 'c',{{else if language == "c++"}} 'cpp
         version: '{{project_version}}',
   meson_version: '>= 0.40.0',
 )
+
 {{if enable_i18n}}
-i18n = import('i18n'){{end}}
+i18n = import('i18n')
+{{end}}
+
+{{if language == "c++"}}
+add_languages('c')
+{{end}}
 
 {{if language == "c"}}
 config_h = configuration_data()

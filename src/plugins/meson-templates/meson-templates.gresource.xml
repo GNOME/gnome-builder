@@ -17,9 +17,12 @@
     <file compressed="true">resources/src/gi_composites.py</file>
     <file compressed="true">resources/src/main.js</file>
     <file compressed="true">resources/src/main.c</file>
-    <file compressed="true">resources/src/window.py</file>
-    <file compressed="true">resources/src/window.c</file>
+    <file compressed="true">resources/src/main.cpp</file>
     <file compressed="true">resources/src/hello.src.gresource.xml</file>
+    <file compressed="true">resources/src/window.c</file>
+    <file compressed="true">resources/src/window.cpp</file>
+    <file compressed="true">resources/src/window.hpp</file>
+    <file compressed="true">resources/src/window.py</file>
     <file compressed="true">resources/src/window.vala</file>
     <file compressed="true">resources/src/main.vala</file>
     <file compressed="true">resources/src/hello.py.in</file>

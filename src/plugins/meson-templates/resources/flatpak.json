@@ -1,52 +1,134 @@
 {
-  "app-id": "{{appid}}",
-  "runtime": "org.gnome.Platform",
-  "runtime-version": "master",
-  "sdk": "org.gnome.Sdk",
-  "command": "{{exec_name}}",
-  "finish-args": [
-    "--share=network",
-    "--share=ipc",
-    "--socket=x11",
-    "--socket=wayland",
-    "--filesystem=xdg-run/dconf",
-    "--filesystem=~/.config/dconf:ro",
-    "--talk-name=ca.desrt.dconf",
-    "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
-  ],
-  "build-options": {
-    "cflags": "-O2 -g",
-    "cxxflags": "-O2 -g",
-    "env": {
-      "V": "1"
-    }
-  },
-  "cleanup": [
-    "/include",
-    "/lib/pkgconfig",
-    "/man",
-    "/share/doc",
-    "/share/gtk-doc",
-    "/share/man",
-    "/share/pkgconfig",
-{{if language == "vala"}}    "/share/vala",{{end}}
-    "*.la",
-    "*.a"
-  ],
-  "modules": [
-    {
-      "name": "{{name}}",
-      "buildsystem": "meson",
-      "config-opts": [
-        "--libdir=lib"
-      ],
-      "builddir": true,
-      "sources": [
-        {
-          "type": "git",
-          "url": "file://{{project_path}}"
+    "app-id": "{{appid}}",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "master",
+    "sdk": "org.gnome.Sdk",
+    "command": "{{exec_name}}",
+    "finish-args": [
+        "--share=network",
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "build-options": {
+        "cflags": "-O2 -g",
+        "cxxflags": "-O2 -g",
+        "env": {
+            "V": "1"
         }
-      ]
-    }
-  ]
+    },
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+{{if language == "vala"}}
+        "/share/vala",
+{{end}}
+        "*.la",
+        "*.a"
+    ],
+    "modules": [
+{{if template == "gnome-app"}}
+{{if language == "c++"}}
+        {
+           "name": "mm-common",
+           "cleanup": [ "/" ],
+           "sources": [
+               {
+                   "type": "archive",
+                   "url": "http://ftp.gnome.org/pub/GNOME/sources/mm-common/0.9/mm-common-0.9.9.tar.xz",
+                   "sha256": "9d00bc77e77794e0bd2ae68132c4b4136aa115d255e34b310f7449b29db50b7a"
+               }
+           ]
+        },
+        {
+            "name": "sigc++",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.9/libsigc++-2.9.3.tar.xz",
+                    "sha256": "0bf9b301ad6198c550986c51150a646df198e8d1d235270c16486b0dda30097f"
+                }
+            ]
+        },
+        {
+            "name": "glibmm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.acc.umu.se/pub/GNOME/sources/glibmm/2.50/glibmm-2.50.1.tar.xz",
+                    "sha256": "1fd85051da9cb402cc8348cec72dfe4d79f9345df4a1dbf68703a4ded45846a4"
+                }
+            ]
+        },
+        {
+            "name": "cairomm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://cairographics.org/releases/cairomm-1.12.0.tar.gz",
+                    "sha256": "50435aec6fdd976934b791e808993160113ad19ca53a5634a9b64ccbe55874cc"
+                }
+            ]
+        },
+        {
+            "name": "pangomm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.acc.umu.se/pub/GNOME/sources/pangomm/2.40/pangomm-2.40.1.tar.xz",
+                    "sha256": "9762ee2a2d5781be6797448d4dd2383ce14907159b30bc12bf6b08e7227be3af"
+                }
+            ]
+        },
+        {
+            "name": "atkmm",
+            "config-opts": [ "--disable-documentation" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/atkmm/2.24/atkmm-2.24.2.tar.xz",
+                    "sha256": "ff95385759e2af23828d4056356f25376cfabc41e690ac1df055371537e458bd"
+                }
+            ]
+        },
+        {
+            "name": "gtkmm",
+            "config-opts": [ "--disable-documentation" ],
+            "build-options": { "cxxflags": "-O2 -g -std=c++11" },
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.22/gtkmm-3.22.2.tar.xz",
+                    "sha256": "91afd98a31519536f5f397c2d79696e3d53143b80b75778521ca7b48cb280090"
+                }
+            ]
+        }, 
+{{end}}
+{{end}}
+        {
+            "name": "{{name}}",
+            "buildsystem": "meson",
+            "config-opts": [ "--libdir=lib" ],
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "file://{{project_path}}"
+                }
+            ]
+        }
+    ]
 }
