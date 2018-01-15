@@ -80,6 +80,9 @@ namespace Ide
 			var index = service.index;
 			var unsaved_files = this._context.get_unsaved_files ();
 
+			/* make a copy for threaded access */
+			var unsaved_files_copy = unsaved_files.to_array ();
+
 			var cancellable = new GLib.Cancellable ();
 			context.cancelled.connect(() => {
 				cancellable.cancel ();
@@ -92,7 +95,7 @@ namespace Ide
 				                                    iter.get_line () + 1,
 				                                    iter.get_line_offset () + 1,
 				                                    line,
-				                                    unsaved_files,
+				                                    unsaved_files_copy,
 				                                    this,
 				                                    cancellable,
 				                                    out res_line,
