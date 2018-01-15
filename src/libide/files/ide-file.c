@@ -716,7 +716,13 @@ ide_file_new (IdeContext *context,
                           "context", context,
                           "file", file,
                           NULL);
-      g_hash_table_insert (files_cache, file, ret);
+
+      /* Only cache this item if has an IdeContext. We might want
+       * to make a file cache per-context, but we can hold off on
+       * that until we know we need it.
+       */
+      if (context != NULL)
+        g_hash_table_insert (files_cache, file, ret);
     }
 
   G_UNLOCK (files_cache);
