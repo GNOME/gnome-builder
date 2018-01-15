@@ -51,7 +51,6 @@
  * Since: 3.28
  */
 
-#define DIAGNOSTICS_SIZE 16
 #define ARROW_WIDTH      5
 #define CHANGE_WIDTH     2
 #define DELETE_WIDTH     5.0
@@ -158,6 +157,12 @@ struct _IdeOmniGutterRenderer
   gint number_width;
 
   /*
+   * Calculated size for diagnostics, to be a nearest icon-size based
+   * on the height of the line text.
+   */
+  gint diag_size;
+
+  /*
    * Some users might want to toggle off individual features of the
    * omni gutter, and these boolean properties provide that. Other
    * components map them to GSettings values to be toggled.
@@ -215,6 +220,8 @@ typedef struct
   /* The line contains a diagnostic note */
   guint is_note : 1;
 } LineInfo;
+
+static void ide_omni_gutter_renderer_reload_icons (IdeOmniGutterRenderer *self);
 
 G_DEFINE_TYPE (IdeOmniGutterRenderer, ide_omni_gutter_renderer, GTK_SOURCE_TYPE_GUTTER_RENDERER)
 
@@ -498,6 +505,22 @@ count_num_digits (gint num_lines)
     return 10;
 }
 
+static gint
+calculate_diagnostics_size (gint height)
+{
+  static guint sizes[] = { 64, 48, 32, 24, 16, 8 };
+
+  height -= 2; /* Subtract padding */
+
+  for (guint i = 0; i < G_N_ELEMENTS (sizes); i++)
+    {
+      if (height >= sizes[i])
+        return sizes[i];
+    }
+
+  return 16;
+}
+
 static void
 ide_omni_gutter_renderer_recalculate_size (IdeOmniGutterRenderer *self)
 {
@@ -551,10 +574,17 @@ ide_omni_gutter_renderer_recalculate_size (IdeOmniGutterRenderer *self)
    */
   pango_layout_get_pixel_size (layout, &self->number_width, &height);
 
+  /*
+   * Calculate the nearest size for diagnostics so they scale somewhat
+   * reasonable with the character size.
+   */
+  self->diag_size = calculate_diagnostics_size (MAX (16, height));
+  g_assert (self->diag_size > 0);
+
   /* Now calculate the size based on enabled features */
   size = 2;
   if (self->show_line_diagnostics)
-    size += DIAGNOSTICS_SIZE + 2;
+    size += self->diag_size + 2;
   if (self->show_line_numbers)
     size += self->number_width + 2;
 
@@ -582,6 +612,7 @@ ide_omni_gutter_renderer_notify_font_desc (IdeOmniGutterRenderer *self,
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
   ide_omni_gutter_renderer_recalculate_size (self);
+  ide_omni_gutter_renderer_reload_icons (self);
 }
 
 static void
@@ -947,6 +978,7 @@ draw_diagnostic (IdeOmniGutterRenderer        *self,
                  cairo_t                      *cr,
                  GdkRectangle                 *area,
                  LineInfo                     *info,
+                 guint                         diag_size,
                  GtkSourceGutterRendererState  state)
 {
   cairo_surface_t *surface = NULL;
@@ -954,6 +986,7 @@ draw_diagnostic (IdeOmniGutterRenderer        *self,
   g_assert (IDE_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (cr != NULL);
   g_assert (area != NULL);
+  g_assert (diag_size > 0);
 
   if (IS_BREAKPOINT (info) || (state & GTK_SOURCE_GUTTER_RENDERER_STATE_PRELIT))
     {
@@ -978,12 +1011,12 @@ draw_diagnostic (IdeOmniGutterRenderer        *self,
     {
       cairo_rectangle (cr,
                        area->x + 2,
-                       area->y + ((area->height - DIAGNOSTICS_SIZE) / 2),
-                       DIAGNOSTICS_SIZE, DIAGNOSTICS_SIZE);
+                       area->y + ((area->height - diag_size) / 2),
+                       diag_size, diag_size);
       cairo_set_source_surface (cr,
                                 surface,
                                 area->x + 2,
-                                area->y + ((area->height - DIAGNOSTICS_SIZE) / 2));
+                                area->y + ((area->height - diag_size) / 2));
       cairo_paint (cr);
     }
 }
@@ -1072,7 +1105,7 @@ ide_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
        * color for symbolic icon).
        */
       if (self->show_line_diagnostics && IS_DIAGNOSTIC (info))
-        draw_diagnostic (self, cr, cell_area, info, state);
+        draw_diagnostic (self, cr, cell_area, info, self->diag_size, state);
 
       /*
        * Now draw the line numbers if we are showing them. Ensure
@@ -1132,6 +1165,7 @@ get_icon_surface (IdeOmniGutterRenderer *self,
   g_assert (IDE_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (icon_name != NULL);
+  g_assert (size > 0);
 
   /*
    * This deals with loading a given icon by icon name and trying to
@@ -1203,13 +1237,13 @@ ide_omni_gutter_renderer_reload_icons (IdeOmniGutterRenderer *self)
   if (view == NULL)
     return;
 
-  self->note_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-information-symbolic", DIAGNOSTICS_SIZE, FALSE);
-  self->warning_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-warning-symbolic", DIAGNOSTICS_SIZE, FALSE);
-  self->error_surface = get_icon_surface (self, GTK_WIDGET (view), "process-stop-symbolic", DIAGNOSTICS_SIZE, FALSE);
+  self->note_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, FALSE);
+  self->warning_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, FALSE);
+  self->error_surface = get_icon_surface (self, GTK_WIDGET (view), "process-stop-symbolic", self->diag_size, FALSE);
 
-  self->note_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-information-symbolic", DIAGNOSTICS_SIZE, TRUE);
-  self->warning_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-warning-symbolic", DIAGNOSTICS_SIZE, TRUE);
-  self->error_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "process-stop-symbolic", DIAGNOSTICS_SIZE, TRUE);
+  self->note_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, TRUE);
+  self->warning_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, TRUE);
+  self->error_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "process-stop-symbolic", self->diag_size, TRUE);
 }
 
 static void
@@ -1253,8 +1287,8 @@ ide_omni_gutter_renderer_reload (IdeOmniGutterRenderer *self)
   g_set_object (&self->breakpoints, breakpoints);
 
   /* Reload icons and then recalcuate our physical size */
-  ide_omni_gutter_renderer_reload_icons (self);
   ide_omni_gutter_renderer_recalculate_size (self);
+  ide_omni_gutter_renderer_reload_icons (self);
 }
 
 static void
