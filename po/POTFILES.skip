@@ -1,6 +1,7 @@
 # List of source files that should *not* be translated.
 # Please keep this file sorted alphabetically.
 data/org.gnome.Builder.desktop.in
+src/gstyle/tests/data/gstyle-color-editor.ui
+src/gstyle/tests/data/palette.gstyle.xml
 src/plugins/gdb/gdbwire.c
 src/plugins/vala-pack/ide-vala-preferences-addin.c
-subprojects

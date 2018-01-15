@@ -20,8 +20,6 @@ src/gstyle/gstyle-color-plane.c
 src/gstyle/gstyle-color-widget-actions.c
 src/gstyle/gstyle-palette.c
 src/gstyle/gstyle-palette-widget.c
-src/gstyle/tests/data/gstyle-color-editor.ui
-src/gstyle/tests/data/palette.gstyle.xml
 src/gstyle/ui/gstyle-color-panel.ui
 src/gstyle/ui/gstyle-color-widget.ui
 src/gstyle/ui/gstyle-rename-popover.ui
