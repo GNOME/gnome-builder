@@ -205,7 +205,7 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
 
         def build_targets_thread():
             try:
-                ret = execInRuntime(runtime, 'mesonintrospect', '--targets', builddir)
+                ret = execInRuntime(runtime, 'meson', 'introspect', '--targets', builddir)
             except Exception as e:
                 task.return_error(GLib.Error('Failed to run mesonintrospect: {}'.format(e)))
                 return
@@ -241,7 +241,7 @@ class MesonBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
             if not targets or targets[0].install_directory.get_path() != bindir:
                 try:
                     # This is a new feature in Meson 0.37.0
-                    ret = execInRuntime(runtime, 'mesonintrospect', '--installed', builddir)
+                    ret = execInRuntime(runtime, 'meson', 'introspect', '--installed', builddir)
                     installed = json.loads(ret)
                     for f in installed.values():
                         install_dir = path.dirname(f)
