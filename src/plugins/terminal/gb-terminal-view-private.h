@@ -47,6 +47,8 @@ struct _GbTerminalView
 
   gchar               *selection_buffer;
 
+  gchar               *cwd;
+
   VtePty              *pty;
 
   gint64               last_respawn;

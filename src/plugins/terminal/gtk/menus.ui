@@ -47,4 +47,13 @@
       </item>
     </section>
   </menu>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-terminal-section">
+      <attribute name="after">ide-source-view-popup-menu-zoom-section</attribute>
+      <item>
+        <attribute name="label" translatable="yes">New terminal in directory</attribute>
+        <attribute name="action">win.new-terminal-in-dir</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

@@ -37,6 +37,7 @@ G_DEFINE_TYPE (GbTerminalView, gb_terminal_view, IDE_TYPE_LAYOUT_VIEW)
 
 enum {
   PROP_0,
+  PROP_CWD,
   PROP_MANAGE_SPAWN,
   PROP_PTY,
   PROP_RUNTIME,
@@ -253,7 +254,6 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_set_flags (launcher, 0);
   ide_subprocess_launcher_set_run_on_host (launcher, self->run_on_host);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-  ide_subprocess_launcher_set_cwd (launcher, workpath);
   ide_subprocess_launcher_push_argv (launcher, shell);
   ide_subprocess_launcher_take_stdin_fd (launcher, tty_fd);
   ide_subprocess_launcher_take_stdout_fd (launcher, stdout_fd);
@@ -261,6 +261,11 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", TRUE);
   ide_subprocess_launcher_setenv (launcher, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION, TRUE);
   ide_subprocess_launcher_setenv (launcher, "SHELL", shell, TRUE);
+
+  if (self->cwd != NULL)
+    ide_subprocess_launcher_set_cwd (launcher, self->cwd);
+  else
+    ide_subprocess_launcher_set_cwd (launcher, workpath);
 
   if (pipeline != NULL)
     {
@@ -498,6 +503,7 @@ gb_terminal_view_finalize (GObject *object)
   GbTerminalView *self = GB_TERMINAL_VIEW (object);
 
   g_clear_object (&self->save_as_file_top);
+  g_clear_pointer (&self->cwd, g_free);
   g_clear_pointer (&self->selection_buffer, g_free);
   g_clear_object (&self->pty);
   g_clear_object (&self->runtime);
@@ -546,6 +552,10 @@ gb_terminal_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CWD:
+      self->cwd = g_value_dup_string (value);
+      break;
+
     case PROP_MANAGE_SPAWN:
       self->manage_spawn = g_value_get_boolean (value);
       break;
@@ -589,6 +599,13 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_top);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, top_scrollbar);
   gtk_widget_class_bind_template_child (widget_class, GbTerminalView, terminal_overlay_top);
+
+  properties [PROP_CWD] =
+    g_param_spec_string ("cwd",
+                         "CWD",
+                         "The directory to spawn the terminal in",
+                         NULL,
+                         G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   properties [PROP_MANAGE_SPAWN] =
     g_param_spec_boolean ("manage-spawn",

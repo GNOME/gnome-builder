@@ -72,6 +72,7 @@ new_terminal_activate (GSimpleAction *action,
                        gpointer       user_data)
 {
   GbTerminalWorkbenchAddin *self = user_data;
+  g_autofree gchar *cwd = NULL;
   GbTerminalView *view;
   IdePerspective *perspective;
   IdeRuntime *runtime = NULL;
@@ -91,7 +92,31 @@ new_terminal_activate (GSimpleAction *action,
   perspective = ide_workbench_get_perspective_by_name (self->workbench, "editor");
   ide_workbench_set_visible_perspective (self->workbench, perspective);
 
+  if (g_strcmp0 (name, "new-terminal-in-dir") == 0)
+    {
+      IdeLayoutView *editor;
+
+      editor = ide_editor_perspective_get_active_view (IDE_EDITOR_PERSPECTIVE (perspective));
+
+      if (IDE_IS_EDITOR_VIEW (editor))
+        {
+          IdeBuffer *buffer;
+
+          buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (editor));
+
+          if (buffer != NULL)
+            {
+              IdeFile *file = ide_buffer_get_file (buffer);
+              GFile *gfile = ide_file_get_file (file);
+              g_autoptr(GFile) parent = g_file_get_parent (gfile);
+
+              cwd = g_file_get_path (parent);
+            }
+        }
+    }
+
   view = g_object_new (GB_TYPE_TERMINAL_VIEW,
+                       "cwd", cwd,
                        "run-on-host", run_on_host,
                        "runtime", runtime,
                        "visible", TRUE,
@@ -246,6 +271,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
   static const GActionEntry actions[] = {
     { "new-terminal", new_terminal_activate },
     { "new-terminal-in-runtime", new_terminal_activate },
+    { "new-terminal-in-dir", new_terminal_activate },
     { "debug-terminal", new_terminal_activate },
   };
 
@@ -310,6 +336,7 @@ gb_terminal_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal");
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal-in-runtime");
+  g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal-in-dir");
 
   context = ide_workbench_get_context (workbench);
 
