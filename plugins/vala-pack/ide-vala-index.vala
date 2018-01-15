@@ -304,7 +304,9 @@ namespace Ide
 						var source_file = this.source_files[file];
 						source_file.get_mapped_contents ();
 
-						this.apply_unsaved_files (unsaved_files_copy);
+						if (unsaved_files_copy != null)
+							this.apply_unsaved_files (unsaved_files_copy);
+
 						this.report.clear ();
 						this.reparse ();
 						if (this.report.get_errors () == 0 &&
@@ -328,20 +330,21 @@ namespace Ide
 		                                            int line,
 		                                            int column,
 		                                            string? line_text,
-		                                            Ide.UnsavedFiles? unsaved_files,
+		                                            GLib.GenericArray<Ide.UnsavedFile>? unsaved_files,
 		                                            Ide.ValaCompletionProvider provider,
 		                                            GLib.Cancellable? cancellable,
 		                                            out int result_line,
 		                                            out int result_column)
 		{
-			var unsaved_files_copy = unsaved_files.to_array ();
 			var result = new Ide.CompletionResults (provider.query);
 
 			if ((cancellable == null) || !cancellable.is_cancelled ()) {
 				lock (this.code_context) {
 					Vala.CodeContext.push (this.code_context);
 
-					this.apply_unsaved_files (unsaved_files_copy);
+					if (unsaved_files != null)
+						this.apply_unsaved_files (unsaved_files);
+
 					this.report.clear ();
 					this.reparse ();
 					if (this.report.get_errors () == 0 &&
