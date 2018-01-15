@@ -5,3 +5,8 @@ src/gstyle/tests/data/gstyle-color-editor.ui
 src/gstyle/tests/data/palette.gstyle.xml
 src/plugins/gdb/gdbwire.c
 src/plugins/vala-pack/ide-vala-preferences-addin.c
+# Damned Lies only reads master POTFILES.skip, and that can
+# have an affect on branches (which do have submodules), even
+# though master does not.
+# https://bugzilla.gnome.org/show_bug.cgi?id=695008#c7
+submodules
