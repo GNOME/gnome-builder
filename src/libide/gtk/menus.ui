@@ -167,7 +167,7 @@
         <item>
           <attribute name="label" translatable="yes">Zoom _In</attribute>
           <attribute name="action">sourceview.increase-font-size</attribute>
-            <attribute name="accel">&lt;control&gt;plus</attribute>
+          <attribute name="accel">&lt;control&gt;plus</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Zoom _Out</attribute>
