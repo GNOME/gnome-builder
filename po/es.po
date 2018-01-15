@@ -8,10 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"builder&keywords=I18N+L10N&component=translations (i18n)\n"
-"POT-Creation-Date: 2018-01-06 12:32+0000\n"
-"PO-Revision-Date: 2018-01-08 13:10+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
+"POT-Creation-Date: 2018-01-15 07:05+0000\n"
+"PO-Revision-Date: 2018-01-15 09:52+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -755,7 +754,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5133
+#: src/libide/sourceview/ide-source-view.c:5129
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renombrar"
@@ -868,8 +867,8 @@ msgstr "No existe el trabajador"
 #: src/libide/workbench/ide-workbench-shortcuts.c:51
 #: src/libide/workbench/ide-workbench-shortcuts.c:78
 #: src/plugins/command-bar/gb-command-bar.c:694
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:187
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:193
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:197
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:203
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Atajos del banco de trabajo"
@@ -936,72 +935,70 @@ msgstr "Falló al cargar el archivo: %s:"
 #. translators: %s is replaced with the error message
 #: src/libide/buffers/ide-unsaved-files.c:252
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to save draft: %s"
 msgstr "Falló al guardar el borrador: %s"
 
-#: src/libide/buildsystem/ide-build-manager.c:352
+#: src/libide/buildsystem/ide-build-manager.c:354
 #, c-format
-#| msgid "Failed to initialize defaults."
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Falló al inicializar la tubería de construcción: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2351
+#: src/libide/buildsystem/ide-build-pipeline.c:2353
 msgid "Psuedo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Falló la creación de la pseudo-terminal. Sus características estarán "
 "limitadas."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2535
+#: src/libide/buildsystem/ide-build-pipeline.c:2537
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2539
-#: src/libide/buildsystem/ide-build-pipeline.c:2592
+#: src/libide/buildsystem/ide-build-pipeline.c:2541
+#: src/libide/buildsystem/ide-build-pipeline.c:2594
 #: src/libide/workbench/ide-omni-bar.c:461
 msgid "Failed"
 msgstr "Falló"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2541
-#: src/libide/buildsystem/ide-build-pipeline.c:2600
+#: src/libide/buildsystem/ide-build-pipeline.c:2543
+#: src/libide/buildsystem/ide-build-pipeline.c:2602
 msgid "Ready"
 msgstr "Preparado"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2556
+#: src/libide/buildsystem/ide-build-pipeline.c:2558
 msgid "Downloading…"
 msgstr "Descargando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2560
+#: src/libide/buildsystem/ide-build-pipeline.c:2562
 msgid "Building dependencies…"
 msgstr "Construyendo dependencias…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2564
+#: src/libide/buildsystem/ide-build-pipeline.c:2566
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2568
+#: src/libide/buildsystem/ide-build-pipeline.c:2570
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2572
+#: src/libide/buildsystem/ide-build-pipeline.c:2574
 msgid "Building…"
 msgstr "Construyendo…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2576
+#: src/libide/buildsystem/ide-build-pipeline.c:2578
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2580
+#: src/libide/buildsystem/ide-build-pipeline.c:2582
 msgid "Exporting…"
 msgstr "Exportando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2584
-#: src/libide/buildsystem/ide-build-pipeline.c:2588
+#: src/libide/buildsystem/ide-build-pipeline.c:2586
+#: src/libide/buildsystem/ide-build-pipeline.c:2590
 #: src/libide/workbench/ide-omni-bar.c:479
 msgid "Success"
 msgstr "Correcto"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2596
+#: src/libide/buildsystem/ide-build-pipeline.c:2598
 msgid "Preparing…"
 msgstr "Preparando…"
 
@@ -1554,7 +1551,7 @@ msgid "Open File"
 msgstr "Abrir archivo"
 
 #: src/libide/editor/ide-editor-perspective-actions.c:73
-#: src/libide/greeter/ide-greeter-perspective.c:321
+#: src/libide/greeter/ide-greeter-perspective.c:319
 #: src/libide/workbench/ide-workbench-actions.c:81
 #: src/plugins/color-picker/gb-color-picker-prefs.c:207
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
@@ -1564,8 +1561,8 @@ msgstr "Abrir"
 #: src/libide/editor/ide-editor-perspective-actions.c:74
 #: src/libide/editor/ide-editor-view-actions.c:244
 #: src/libide/editor/ide-editor-view-actions.c:351
-#: src/libide/greeter/ide-greeter-perspective.c:320
-#: src/libide/greeter/ide-greeter-perspective.c:1154
+#: src/libide/greeter/ide-greeter-perspective.c:318
+#: src/libide/greeter/ide-greeter-perspective.c:1192
 #: src/libide/workbench/ide-workbench-actions.c:82
 #: src/plugins/color-picker/gb-color-picker-prefs.c:95
 #: src/plugins/color-picker/gb-color-picker-prefs.c:211
@@ -1593,7 +1590,7 @@ msgstr "Cancelar"
 #: src/libide/layout/ide-layout-stack-shortcuts.c:46
 #: src/libide/layout/ide-layout-stack-shortcuts.c:53
 #: src/libide/layout/ide-layout-stack-shortcuts.c:60
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:336
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:339
 #: src/plugins/comment-code/gbp-comment-code-view-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-view-addin.c:376
 #: src/plugins/project-tree/gb-project-tree-shortcuts.c:33
@@ -1854,19 +1851,19 @@ msgstr "Conmutar panel de navegación"
 msgid "Toggle utilities panel"
 msgstr "Conmutar panel de utilidades"
 
-#: src/libide/greeter/ide-greeter-perspective.c:216
+#: src/libide/greeter/ide-greeter-perspective.c:214
 msgid "Failed to load the project"
 msgstr "Falló al cargar el proyecto"
 
-#: src/libide/greeter/ide-greeter-perspective.c:316
+#: src/libide/greeter/ide-greeter-perspective.c:314
 msgid "Open Project"
 msgstr "Abrir proyecto"
 
-#: src/libide/greeter/ide-greeter-perspective.c:332
+#: src/libide/greeter/ide-greeter-perspective.c:330
 msgid "All Project Types"
 msgstr "Todos los tipos de proyectos"
 
-#: src/libide/greeter/ide-greeter-perspective.c:1151
+#: src/libide/greeter/ide-greeter-perspective.c:1189
 msgid ""
 "Removing project files will delete them from your computer and cannot be "
 "undone."
@@ -1874,7 +1871,7 @@ msgstr ""
 "Quitar archivos del proyecto los eliminará del equipo y no podrá deshacer "
 "esta acción."
 
-#: src/libide/greeter/ide-greeter-perspective.c:1155
+#: src/libide/greeter/ide-greeter-perspective.c:1193
 msgid "Delete Project Files"
 msgstr "Eliminar archivos del proyecto"
 
@@ -2059,11 +2056,11 @@ msgstr "C_opiar la dirección del enlace"
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
 
-#: src/libide/ide-context.c:2049
+#: src/libide/ide-context.c:2067
 msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
-#: src/libide/ide-context.c:2168
+#: src/libide/ide-context.c:2185
 msgid "Context has already been restored."
 msgstr "Ya se ha restaurado el contexto."
 
@@ -2095,8 +2092,8 @@ msgstr "Editor de atajos"
 #: src/libide/workbench/ide-workbench-shortcuts.c:34
 #: src/libide/workbench/ide-workbench-shortcuts.c:52
 #: src/plugins/command-bar/gb-command-bar.c:695
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:188
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:194
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:198
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:204
 msgctxt "shortcut window"
 msgid "General"
 msgstr "General"
@@ -2116,14 +2113,14 @@ msgstr "Barra de comandos"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:39
 #: src/libide/keybindings/ide-shortcuts-window.ui:484
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:189
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:199
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:46
 #: src/libide/keybindings/ide-shortcuts-window.ui:491
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:195
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:205
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminal en tiempo de ejecución de construcción"
@@ -2238,7 +2235,7 @@ msgid "Redo previous command"
 msgstr "Rehacer el comando anterior"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:246
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:337
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:340
 #: src/plugins/comment-code/gbp-comment-code-view-addin.c:371
 #: src/plugins/comment-code/gbp-comment-code-view-addin.c:377
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:101
@@ -2405,9 +2402,8 @@ msgid "Find text within terminal"
 msgstr "Buscar texto en la terminal"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:874
+#: src/libide/langserv/ide-langserv-client.c:863
 #, c-format
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize language server: %s"
 msgstr "Falló al inicializar el idioma del servidor: %s"
 
@@ -2531,7 +2527,7 @@ msgstr "tipografía monoespaciada del editor"
 
 #. XXX: This belongs in terminal addin
 #: src/libide/preferences/ide-preferences-builtin.c:106
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:257
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:267
 #: src/plugins/terminal/gtk/menus.ui:5
 msgid "Terminal"
 msgstr "Terminal"
@@ -2953,11 +2949,11 @@ msgstr "SDK"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/libide/projects/ide-project.c:540
+#: src/libide/projects/ide-project.c:391
 msgid "Destination file must be within the project tree."
 msgstr "El archivo de destino debe estar en el árbol del proyecto."
 
-#: src/libide/projects/ide-project.c:711
+#: src/libide/projects/ide-project.c:562
 msgid "File must be within the project tree."
 msgstr "El archivo debe estar en el árbol del proyecto."
 
@@ -2995,31 +2991,31 @@ msgstr "Falló al abrir la carpeta: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Falló al cargar el archivo: %s: %s"
 
-#: src/libide/sourceview/ide-source-view.c:4589
+#: src/libide/sourceview/ide-source-view.c:4585
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4591
+#: src/libide/sourceview/ide-source-view.c:4587
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4705
+#: src/libide/sourceview/ide-source-view.c:4701
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:5132
+#: src/libide/sourceview/ide-source-view.c:5128
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5366
+#: src/libide/sourceview/ide-source-view.c:5362
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5392
+#: src/libide/sourceview/ide-source-view.c:5388
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
@@ -3236,6 +3232,14 @@ msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Perspectivas"
 
+#: src/main.c:118
+msgid ""
+"GNOME Builder requires a desktop session with D-Bus. Please set "
+"DBUS_SESSION_BUS_ADDRESS."
+msgstr ""
+"GNOME Builder necesita una sesión de escritorio don D-Bus. Configure la "
+"DBUS_SESSION_BUS_ADDRESS."
+
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:194
 msgid "Building cache…"
 msgstr "Construyendo caché…"
@@ -3286,24 +3290,174 @@ msgstr "Aplicación de GNOME (Autotools)"
 msgid "Create a new flatpak-ready GNOME application"
 msgstr "Crear una nueva aplicación de GNOME preparada para «flatpak»"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:239
+#. translators: %s and %s are replaced with source file path and the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:155
+#, c-format
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgstr ""
+"Complemento embellecedor: error al copiar el archivo de configuración de "
+"gresource para «%s»: %s"
+
+#. translators: %s is replaced with the source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:163
+#, c-format
+msgid "Beautifier plugin: error creating temporary config file for “%s”"
+msgstr ""
+"Complemento embellecedor: error al crear el archivo de configuración "
+"temporal para «%s»"
+
+#. translators: %s is replaced with the .ini source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:207
+#, c-format
+msgid "Beautifier plugin: Can’t read .ini file: %s"
+msgstr "Complemento embellecedor: no se puede leer el archivo .ini: %s"
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:255
+#, c-format
+msgid ""
+"Beautifier plugin: neither command nor command-pattern keys found: entry "
+"“%s” disabled"
+msgstr ""
+"Complemento embellecedor: no se ha encontrado ni el comando ni las claves "
+"del patrón del comando: entrada «%s» desactivada"
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:265
+#, c-format
+msgid ""
+"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
+"disabled"
+msgstr ""
+"Complemento embellecedor: encontrados tanto el comando como las claves del "
+"patrón del comando: entrada «%s» desactivada"
+
+#. translators: %s and %s are replaced with the config path and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:289
+#, c-format
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgstr ""
+"Complemento embellecedor: la ruta de configuración «%s» no existe, entrada "
+"«%s» desactivada"
+
+#. translators: %s is replaced with the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:306
+#, c-format
+msgid ""
+"Beautifier plugin: command key out of possible values: entry “%s” disabled"
+msgstr ""
+"Complemento embellecedor: valores posibles de la salida de la clave del "
+"comando: entrada «%s» desactivada"
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:331
+#, c-format
+msgid ""
+"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
+"entry “%s” disabled"
+msgstr ""
+"Complemento embellecedor:@c@ en la clave del patrón de comando «%s» "
+"establecida pero no hay archivo de configuración: entrada «%s» desactivada"
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:363
+#, c-format
+msgid ""
+"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
+msgstr ""
+"Complemento embellecedor: no se puede crear el archivo temporal para «%s»: "
+"entrada «%s» desactivada"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:405
+#, c-format
+#| msgid "No beautifier available for “%s”"
+msgid "Beautifier plugin: “%s”"
+msgstr "Complemento embellecedor: «%s»"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:506
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:55
+#, c-format
+msgid "Beautifier plugin: %s"
+msgstr "Complemento embellecedor: %s"
+
+#. translators: %s is replaced with a path name
+#: src/plugins/beautifier/gb-beautifier-config.c:545
+#, c-format
+msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+msgstr ""
+"Complemento embellecedor: no se puede leer el siguiente archivo de recursos: "
+"«%s»"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:86
+msgid "Beautifier Plugin: the view is not a GtkSourceView"
+msgstr "Complemento embellecedor: la vista no es un GtkSourceView"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:93
+msgid "Beautifier Plugin: no default beautifier found"
+msgstr ""
+"Complemento embellecedor: no se ha encontrado el embellecedor predeterminado"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:99
+msgid "Beautifier Plugin: the buffer is not writable"
+msgstr "Complemento embellecedor: no se puede escribir en el búfer"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:107
+msgid "Beautifier Plugin: Nothing selected"
+msgstr "Complemento embellecedor: no hay nada seleccionado"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:242
 #, c-format
 msgid "No beautifier available for “%s”"
 msgstr "No hay embellecedor disponible para «%s»"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:241
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
 msgid "No beautifier available"
 msgstr "No hay embellecedor disponible"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:338
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:341
 msgctxt "shortcut window"
 msgid "Beautify the code"
 msgstr "Embellecer el código"
 
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:339
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:342
 msgctxt "shortcut window"
 msgid "Trigger the default entry"
 msgstr "Lanzar la entrada predeterminada"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:371
+#, c-format
+msgid "Beautifier plugin: no valid entries, disabling: %s"
+msgstr "Complemento embellecedor: no hay entradas válidas, desactivando: %s"
+
+#. translators: %s and %s are replaced with the temporary dir and the file path
+#: src/plugins/beautifier/gb-beautifier-helper.c:65
+#: src/plugins/beautifier/gb-beautifier-helper.c:90
+#: src/plugins/beautifier/gb-beautifier-helper.c:120
+#: src/plugins/beautifier/gb-beautifier-helper.c:140
+#, c-format
+msgid ""
+"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+"temporary directory: “%s”"
+msgstr ""
+"Complemento embellecedor: bloqueado el intento de eliminar un archivo fuera "
+"de la carpeta temporal «%s»: «%s»"
+
+#. translators: %s is replaced with the command error message
+#: src/plugins/beautifier/gb-beautifier-process.c:252
+#, c-format
+msgid "Beautifier plugin: command error output: %s"
+msgstr "Complemento embellecedor: salida de error del comando: %s"
+
+#: src/plugins/beautifier/gb-beautifier-process.c:262
+msgid "Beautifier plugin: the command output is empty"
+msgstr "Complemento embellecedor: la salida del comando está vacía"
+
+#: src/plugins/beautifier/gb-beautifier-process.c:289
+msgid "Beautify plugin: the output is not a valid UTF-8 text"
+msgstr "Complemento embellecedor: la salida no es un texto UTF-8 válido"
 
 #: src/plugins/beautifier/gtk/menus.ui:9
 msgid "Beautify"
@@ -3322,38 +3476,38 @@ msgstr "Mostrar errores y advertencias proporcionadas por Clang"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos advertencias errors"
 
-#: src/plugins/clang/ide-clang-service.c:326
+#: src/plugins/clang/ide-clang-service.c:325
 msgid "Unknown failure"
 msgstr "Fallo desconocido"
 
-#: src/plugins/clang/ide-clang-service.c:330
+#: src/plugins/clang/ide-clang-service.c:329
 msgid "Clang crashed"
 msgstr "Clang ha fallado"
 
-#: src/plugins/clang/ide-clang-service.c:334
+#: src/plugins/clang/ide-clang-service.c:333
 msgid "Invalid arguments"
 msgstr "Argumentos no válidos"
 
-#: src/plugins/clang/ide-clang-service.c:338
+#: src/plugins/clang/ide-clang-service.c:337
 msgid "AST read error"
 msgstr "Error de lectura AST"
 
-#: src/plugins/clang/ide-clang-service.c:350
+#: src/plugins/clang/ide-clang-service.c:349
 #, c-format
 msgid "Failed to create translation unit: %s"
 msgstr "Falló al crear la unidad de traducción: %s"
 
-#: src/plugins/clang/ide-clang-service.c:563
+#: src/plugins/clang/ide-clang-service.c:562
 #: src/plugins/xml-pack/ide-xml-service.c:97
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
 
-#: src/plugins/clang/ide-clang-symbol-node.c:149
+#: src/plugins/clang/ide-clang-symbol-node.c:152
 msgid "anonymous"
 msgstr "anónimo"
 
-#: src/plugins/clang/ide-clang-translation-unit.c:660
+#: src/plugins/clang/ide-clang-translation-unit.c:620
 msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
 
@@ -3372,15 +3526,15 @@ msgid "Installing project"
 msgstr "Instalando proyecto"
 
 #. translators: "Declaration" is the forward-declaration (usually a header file), not the implementation
-#: src/plugins/code-index/ide-code-index-index.c:351
+#: src/plugins/code-index/ide-code-index-index.c:345
 msgid "Declaration"
 msgstr "Declaración"
 
-#: src/plugins/code-index/ide-code-index-service.c:547
+#: src/plugins/code-index/ide-code-index-service.c:576
 msgid "Indexing Source Code"
 msgstr "Indexando el código fuente"
 
-#: src/plugins/code-index/ide-code-index-service.c:548
+#: src/plugins/code-index/ide-code-index-service.c:577
 msgid "Search, diagnostics and autocompletion may be limited until complete."
 msgstr ""
 "La búsqueda, los diagnósticos y completado automático pueden estar limitados "
@@ -3659,7 +3813,6 @@ msgstr "Use la siguiente entrada para ejecutar un comando"
 #. translators: %s is replaced with the error message
 #: src/plugins/command-bar/gb-command-vim.c:104
 #, c-format
-#| msgid "Command not found: %s"
 msgid "Command failed: %s"
 msgstr "Falló el comando: %s"
 
@@ -3911,7 +4064,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Descargando fuentes de aplicaciones…"
 
-#: src/plugins/flatpak/gbp-flatpak-download-stage.c:117
+#: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "La red no está disponible, omitiendo las descargas"
 
@@ -3924,31 +4077,31 @@ msgstr "Clonar aplicación"
 msgid "Clone"
 msgstr "Clonar"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:137
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:136
 msgid "Creating flatpak workspace"
 msgstr "Creando área de trabajo flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:249
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:248
 msgid "Preparing build directory"
 msgstr "Preparando carpeta de construcción"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:289
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:288
 msgid "Downloading dependencies"
 msgstr "Descargando dependencias"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:352
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:365
 msgid "Building dependencies"
 msgstr "Construyendo dependencias"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:395
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:408
 msgid "Finalizing flatpak build"
 msgstr "Terminando construcción de flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:438
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:451
 msgid "Exporting staging directory"
 msgstr "Exportando carpeta de trabajo"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:521
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:534
 msgid "Creating flatpak bundle"
 msgstr "Creando paquete flatpak"
 
@@ -3956,15 +4109,15 @@ msgstr "Creando paquete flatpak"
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
 #: src/plugins/html-preview/html_preview.py:325
 #: src/plugins/html-preview/html_preview.py:335
-#: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/rustup/rustup_plugin.py:492
-#: src/plugins/rustup/rustup_plugin.py:607
+#: src/plugins/rustup/rustup_plugin.py:491
+#: src/plugins/rustup/rustup_plugin.py:495
+#: src/plugins/rustup/rustup_plugin.py:612
 msgid "Install"
 msgstr "Instalar"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:97
-#: src/plugins/rustup/rustup_plugin.py:488
-#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:491
+#: src/plugins/rustup/rustup_plugin.py:495
 msgid "Update"
 msgstr "Actualizar"
 
@@ -4105,7 +4258,6 @@ msgstr ""
 #. translators: %s is replaced with the error message
 #: src/plugins/git/ide-git-vcs.c:365
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to establish git file monitor: %s"
 msgstr "Falló al establecer el archivo de monitorización de git: %s"
 
@@ -4199,7 +4351,6 @@ msgid "Create a new empty project"
 msgstr "Crear un nuevo proyecto vacío"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
-#| msgid "Message"
 msgid "Messages"
 msgstr "Mensajes"
 
@@ -4304,21 +4455,18 @@ msgstr "No se puede cargar un archivo no nativo en la terminal"
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:354
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to spawn terminal: %s"
 msgstr "Falló al lanzar la terminal: %s"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/project-tree/gb-project-tree-actions.c:612
+#: src/plugins/project-tree/gb-project-tree-actions.c:619
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to rename file: %s"
 msgstr "Falló al renombrar el archivo: %s"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/project-tree/gb-project-tree-actions.c:703
+#: src/plugins/project-tree/gb-project-tree-actions.c:710
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to trash file: %s"
 msgstr "Falló al eliminar el archivo: %s"
 
@@ -4498,43 +4646,43 @@ msgstr "Cancelado"
 msgid "Finished"
 msgstr "Terminado"
 
-#: src/plugins/rustup/rustup_plugin.py:444
+#: src/plugins/rustup/rustup_plugin.py:446
 msgid "Rustup"
 msgstr "Rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:445
+#: src/plugins/rustup/rustup_plugin.py:447
 msgid "Rustup Toolchains"
 msgstr "«Toolchains» de Rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:500
+#: src/plugins/rustup/rustup_plugin.py:503
 msgid "Updating"
 msgstr "Actualizando"
 
-#: src/plugins/rustup/rustup_plugin.py:500
+#: src/plugins/rustup/rustup_plugin.py:503
 msgid "Installing"
 msgstr "Instalando"
 
 #. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:591
+#: src/plugins/rustup/rustup_plugin.py:596
 msgid "Make default"
 msgstr "Convertir en predeterminada"
 
-#: src/plugins/rustup/rustup_plugin.py:591
+#: src/plugins/rustup/rustup_plugin.py:596
 msgid "Makes the selected toolchain the default rust installation"
 msgstr ""
 "Hace que la «toolchain» seleccionada sea la instalación de Rust "
 "predeterminada"
 
-#: src/plugins/rustup/rustup_plugin.py:606
+#: src/plugins/rustup/rustup_plugin.py:611
 msgid "Install Rust Channel"
 msgstr "Instalar canal Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:611
+#: src/plugins/rustup/rustup_plugin.py:616
 msgid "Enter name of rust channel"
 msgstr "Introduzca el nombre del canal rust"
 
-#: src/plugins/rustup/rustup_plugin.py:612
+#: src/plugins/rustup/rustup_plugin.py:617
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -4551,15 +4699,15 @@ msgstr ""
 "                        <date>          = YYYY-MM-DD\n"
 "                        <host>          = <target-triple>"
 
-#: src/plugins/rustup/rustup_plugin.py:637
+#: src/plugins/rustup/rustup_plugin.py:642
 msgid "Install Rustup to manage toolchains here!"
 msgstr "Instale Rustup para gestionar las «toolchains»."
 
-#: src/plugins/rustup/rustup_plugin.py:644
+#: src/plugins/rustup/rustup_plugin.py:649
 msgid "No toolchain installed. Click"
 msgstr "No hay «toolchains» instaladas. Pulse"
 
-#: src/plugins/rustup/rustup_plugin.py:645
+#: src/plugins/rustup/rustup_plugin.py:650
 msgid "to add a new toolchain!"
 msgstr "para añadir una «toolchain» nueva."
 
@@ -4578,7 +4726,6 @@ msgstr "Mostrar el panel de revisión ortográfica"
 #.
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:139
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:246
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize spellchecking, disabling"
 msgstr "Falló al inicializar la revisión ortográfica, desactivando."
 
@@ -4748,6 +4895,11 @@ msgstr "Terminal sin título"
 msgid "Application Output"
 msgstr "Salida de la aplicación"
 
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:191
+#| msgid "Application Output"
+msgid "Application exited\r\n"
+msgstr "Aplicación terminada\n"
+
 #: src/plugins/terminal/gtk/menus.ui:17
 msgid "Reset and Clear"
 msgstr "Reiniciar y limpiar"
@@ -4783,7 +4935,7 @@ msgid "Run with Valgrind"
 msgstr "Ejecutar con Valgrind"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:579
-#: src/plugins/xml-pack/ide-xml-tree-builder.c:473
+#: src/plugins/xml-pack/ide-xml-tree-builder.c:524
 msgid "Failed to create the XML tree."
 msgstr "Falló al crear el árbol XML."
 
