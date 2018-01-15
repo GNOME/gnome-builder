@@ -13,6 +13,9 @@
     <key name="insert-matching-brace" type="b">
       <default>false</default>
     </key>
+    <key name="insert-trailing-newline" type="b">
+      <default>false</default>
+    </key>
     <key name="overwrite-braces" type="b">
       <default>true</default>
     </key>

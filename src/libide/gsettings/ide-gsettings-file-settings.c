@@ -66,6 +66,7 @@ static SettingsMapping language_mappings [] = {
   { "tab-width",                     "tab-width",                NULL             },
   { "trim-trailing-whitespace",      "trim-trailing-whitespace", NULL             },
   { "insert-matching-brace",         "insert-matching-brace",    NULL             },
+  { "insert-trailing-newline",       "insert-trailing-newline",  NULL             },
   { "overwrite-braces",              "overwrite-braces",         NULL             },
 };
 
