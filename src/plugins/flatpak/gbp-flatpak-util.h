@@ -22,9 +22,9 @@
 
 G_BEGIN_DECLS
 
-gboolean  gbp_flatpak_is_ignored      (const gchar      *name);
-gchar    *gbp_flatpak_get_repo_dir    (IdeConfiguration *configuration);
-gchar    *gbp_flatpak_get_staging_dir (IdeConfiguration *configuration);
+gboolean  gbp_flatpak_is_ignored      (const gchar       *name);
+gchar    *gbp_flatpak_get_repo_dir    (IdeConfiguration  *configuration);
+gchar    *gbp_flatpak_get_staging_dir (IdeConfiguration  *configuration);
 gboolean  gbp_flatpak_split_id        (const gchar       *str,
                                        gchar            **id,
                                        gchar            **arch,
