@@ -31,6 +31,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_DERIVABLE_TYPE (IdeConfiguration, ide_configuration, IDE, CONFIGURATION, IdeObject)
 
+typedef enum
+{
+  IDE_BUILD_LOCALITY_IN_TREE     = 1 << 0,
+  IDE_BUILD_LOCALITY_OUT_OF_TREE = 1 << 1,
+  IDE_BUILD_LOCALITY_DEFAULT     = IDE_BUILD_LOCALITY_IN_TREE | IDE_BUILD_LOCALITY_OUT_OF_TREE,
+} IdeBuildLocality;
+
 struct _IdeConfigurationClass
 {
   IdeObjectClass parent;
@@ -104,6 +111,11 @@ const gchar          *ide_configuration_get_display_name          (IdeConfigurat
 IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_display_name          (IdeConfiguration      *self,
                                                                    const gchar           *display_name);
+IDE_AVAILABLE_IN_3_28
+IdeBuildLocality      ide_configuration_get_locality              (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_3_28
+void                  ide_configuration_set_locality              (IdeConfiguration      *self,
+                                                                   IdeBuildLocality       locality);
 IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_get_ready                 (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL

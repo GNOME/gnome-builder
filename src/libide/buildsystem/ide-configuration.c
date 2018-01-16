@@ -22,6 +22,7 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
+#include "ide-enums.h"
 
 #include "buildsystem/ide-configuration.h"
 #include "buildsystem/ide-configuration-manager.h"
@@ -63,6 +64,8 @@ typedef struct
    */
   guint           device_ready : 1;
   guint           runtime_ready : 1;
+
+  IdeBuildLocality locality : 3;
 } IdeConfigurationPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeConfiguration, ide_configuration, IDE_TYPE_OBJECT)
@@ -79,6 +82,7 @@ enum {
   PROP_DISPLAY_NAME,
   PROP_ENVIRON,
   PROP_ID,
+  PROP_LOCALITY,
   PROP_PARALLELISM,
   PROP_POST_INSTALL_COMMANDS,
   PROP_PREFIX,
@@ -432,6 +436,10 @@ ide_configuration_get_property (GObject    *object,
       g_value_set_string (value, ide_configuration_get_append_path (self));
       break;
 
+    case PROP_LOCALITY:
+      g_value_set_flags (value, ide_configuration_get_locality (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -509,6 +517,10 @@ ide_configuration_set_property (GObject      *object,
 
     case PROP_APPEND_PATH:
       ide_configuration_set_append_path (self, g_value_get_string (value));
+      break;
+
+    case PROP_LOCALITY:
+      ide_configuration_set_locality (self, g_value_get_flags (value));
       break;
 
     default:
@@ -659,6 +671,14 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_LOCALITY] =
+    g_param_spec_flags ("locality",
+                        "Locality",
+                        "Where the build may occur",
+                        IDE_TYPE_BUILD_LOCALITY,
+                        IDE_BUILD_LOCALITY_DEFAULT,
+                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   signals [CHANGED] =
@@ -678,6 +698,7 @@ ide_configuration_init (IdeConfiguration *self)
   priv->debug = TRUE;
   priv->environment = ide_environment_new ();
   priv->parallelism = -1;
+  priv->locality = IDE_BUILD_LOCALITY_DEFAULT;
 
   priv->internal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _value_free);
 
@@ -1712,5 +1733,32 @@ ide_configuration_set_append_path (IdeConfiguration *self,
       g_free (priv->append_path);
       priv->append_path = g_strdup (append_path);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_APPEND_PATH]);
+    }
+}
+
+IdeBuildLocality
+ide_configuration_get_locality (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), 0);
+
+  return priv->locality;
+}
+
+void
+ide_configuration_set_locality (IdeConfiguration *self,
+                                IdeBuildLocality  locality)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (locality > 0);
+  g_return_if_fail (locality <= IDE_BUILD_LOCALITY_DEFAULT);
+
+  if (priv->locality != locality)
+    {
+      priv->locality = locality;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LOCALITY]);
     }
 }

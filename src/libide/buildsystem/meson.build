@@ -52,6 +52,7 @@ buildsystem_private_sources = [
 buildsystem_enums = [
   'ide-build-log.h',
   'ide-build-pipeline.h',
+  'ide-configuration.h',
 ]
 
 libide_enum_headers += files(buildsystem_enums)
