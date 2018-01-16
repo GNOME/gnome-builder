@@ -996,3 +996,27 @@ ide_subprocess_launcher_set_stdout_file_path (IdeSubprocessLauncher *self,
       priv->stdout_file_path = g_strdup (stdout_file_path);
     }
 }
+
+void
+ide_subprocess_launcher_append_path (IdeSubprocessLauncher *self,
+                                     const gchar           *path)
+{
+  const gchar *old_path;
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  if (path == NULL)
+    return;
+
+  old_path = ide_subprocess_launcher_getenv (self, "PATH");
+
+  if (old_path != NULL)
+    {
+      g_autofree gchar *new_path = g_strdup_printf ("%s:%s", old_path, path);
+      ide_subprocess_launcher_setenv (self, "PATH", new_path, TRUE);
+    }
+  else
+    {
+      ide_subprocess_launcher_setenv (self, "PATH", path, TRUE);
+    }
+}
