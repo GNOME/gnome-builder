@@ -381,7 +381,6 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   IdeRuntimeManager *runtime_manager;
   IdeConfiguration *config;
   IdeContext *context;
-  const gchar *runtime_id;
 
   IDE_ENTRY;
 
@@ -424,7 +423,6 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   config = ide_configuration_manager_get_current (config_manager);
 
   runtime_manager = ide_context_get_runtime_manager (context);
-  runtime_id = ide_configuration_get_runtime_id (config);
 
   /*
    * We want to set the pipeline before connecting things using the GInitable
@@ -454,11 +452,11 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   g_task_set_task_data (task, g_object_ref (self->pipeline), g_object_unref);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_return_on_cancel (task, TRUE);
-  ide_runtime_manager_ensure_async (runtime_manager,
-                                    runtime_id,
-                                    cancellable,
-                                    ide_build_manager_ensure_runtime_cb,
-                                    g_steal_pointer (&task));
+  ide_runtime_manager_ensure_config_async (runtime_manager,
+                                           config,
+                                           cancellable,
+                                           ide_build_manager_ensure_runtime_cb,
+                                           g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
