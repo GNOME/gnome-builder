@@ -2846,6 +2846,7 @@ ide_build_pipeline_clean_finish (IdeBuildPipeline  *self,
 static gboolean
 can_remove_builddir (IdeBuildPipeline *self)
 {
+  g_autofree gchar *name = NULL;
   g_autoptr(GFile) builddir = NULL;
   g_autoptr(GFile) cache = NULL;
 
@@ -2855,12 +2856,23 @@ can_remove_builddir (IdeBuildPipeline *self)
    * Only remove builddir if it is in ~/.cache/ or our XDG data dirs
    * equivalent. We don't want to accidentally remove data that might
    * be important to the user.
+   *
+   * However, if the build dir is our special case "_build" inside the
+   * project directory, we'll allow that too.
    */
 
   cache = g_file_new_for_path (g_get_user_cache_dir ());
   builddir = g_file_new_for_path (self->builddir);
+  if (g_file_has_prefix (builddir, cache))
+    return TRUE;
 
-  return g_file_has_prefix (builddir, cache);
+  name = g_path_get_basename (self->builddir);
+  if (dzl_str_equal0 (name, "_build"))
+    return TRUE;
+
+  g_debug ("%s is not in a cache directory, will not delete it", self->builddir);
+
+  return FALSE;
 }
 
 static void
