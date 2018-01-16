@@ -297,6 +297,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
     {
       JsonObject *build_options = NULL;
       IdeEnvironment *environment;
+      JsonNode *node;
 
       build_options = json_object_get_object_member (root_object, "build-options");
 
@@ -343,6 +344,14 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
             }
         }
       ide_configuration_set_environment (IDE_CONFIGURATION (self), environment);
+
+      if (json_object_has_member (build_options, "append-path") &&
+          NULL != (node = json_object_get_member (build_options, "append-path")) &&
+          JSON_NODE_HOLDS_VALUE (node))
+        {
+          const gchar *str = json_node_get_string (node);
+          ide_configuration_set_append_path (IDE_CONFIGURATION (self), str);
+        }
     }
 
   if (dzl_str_empty0 (prefix))
