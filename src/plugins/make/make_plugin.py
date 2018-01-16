@@ -19,17 +19,17 @@ import gi
 
 gi.require_version('Ide', '1.0')
 
-from gi.repository import (
-    GObject,
-    Gio,
-    Ide
-)
+from gi.repository import GObject
+from gi.repository import Gio
+from gi.repository import GLib
+from gi.repository import Ide
 
 _ = Ide.gettext
 
 class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
     make_dir = GObject.Property(type=Gio.File)
+    run_args = None
 
     def do_get_id(self):
         return 'make'
@@ -132,6 +132,60 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         install_stage.set_name(_("Install project"))
         self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
 
+        # Determine what it will take to "make run" for this pipeline
+        # and stash it on the build_system for use by the build target.
+        # This allows us to run Make projects as long as the makefile
+        # has a "run" target.
+        build_system.run_args = [make, '-C', build_system.get_make_dir().get_path(), 'run']
+
     def _query(self, stage, pipeline, cancellable):
         stage.set_completed(False)
 
+class MakeBuildTarget(Ide.Object, Ide.BuildTarget):
+
+    def do_get_install_directory(self):
+        return None
+
+    def do_get_name(self):
+        return 'make-run'
+
+    def do_get_language(self):
+        # Not meaningful, since we have an indirect process.
+        return 'make'
+
+    def do_get_argv(self):
+        context = self.get_context()
+        build_system = context.get_build_system()
+        assert type(build_system) == MakeBuildSystem
+        return build_system.run_args
+
+    def do_get_priority(self):
+        return 0
+
+class MakeBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
+    """
+    The MakeBuildTargetProvider just wraps a "make run" command. If the
+    Makefile doesn't have a run target, we'll just fail to execute and the user
+    should get the warning in their application output (and can update their
+    Makefile appropriately).
+    """
+
+    def do_get_targets_async(self, cancellable, callback, data):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.set_priority(GLib.PRIORITY_LOW)
+
+        context = self.get_context()
+        build_system = context.get_build_system()
+
+        if type(build_system) != MakeBuildSystem:
+            task.return_error(GLib.Error('Not a make build system',
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.NOT_SUPPORTED))
+            return
+
+        task.targets = [MakeBuildTarget(context=self.get_context())]
+        task.return_boolean(True)
+
+    def do_get_targets_finish(self, result):
+        if result.propagate_boolean():
+            return result.targets
