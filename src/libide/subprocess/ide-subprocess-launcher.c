@@ -663,7 +663,10 @@ ide_subprocess_launcher_setenv (IdeSubprocessLauncher *self,
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_return_if_fail (key != NULL);
 
-  priv->environ = g_environ_setenv (priv->environ, key, value, replace);
+  if (value != NULL)
+    priv->environ = g_environ_setenv (priv->environ, key, value, replace);
+  else
+    priv->environ = g_environ_unsetenv (priv->environ, key);
 }
 
 void
