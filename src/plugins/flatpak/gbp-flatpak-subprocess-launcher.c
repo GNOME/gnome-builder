@@ -41,15 +41,6 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /*
-   * Don't allow PATH to be set when traversing "flatpak build" from the
-   * default IdeSubprocessLauncher. We need to ensure that /app/bin is before
-   * /usr/bin so that we are similar to "flatpak run org.gnome.Sdk" and that
-   * the developers tooling can override /usr/.
-   */
-  if (ide_subprocess_launcher_get_clear_env (launcher))
-    ide_subprocess_launcher_setenv (launcher, "PATH", "/app/bin:/usr/bin", TRUE);
-
-  /*
    * The "flatpak build" command will filter out all of our environment variables
    * from the subprocess. So we need to look at our configured environment and
    * convert the KEY=VALUE pairs into --env=key=value command line arguments.
@@ -92,6 +83,8 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
           if (!g_strv_contains (argv, arg))
             ide_subprocess_launcher_insert_argv (launcher, argpos, arg);
         }
+
+      ide_subprocess_launcher_setenv (launcher, "PATH", NULL, TRUE);
     }
 
   ret = IDE_SUBPROCESS_LAUNCHER_CLASS (gbp_flatpak_subprocess_launcher_parent_class)->spawn (launcher, cancellable, error);
@@ -110,6 +103,7 @@ gbp_flatpak_subprocess_launcher_class_init (GbpFlatpakSubprocessLauncherClass *k
 static void
 gbp_flatpak_subprocess_launcher_init (GbpFlatpakSubprocessLauncher *self)
 {
+  ide_subprocess_launcher_setenv (IDE_SUBPROCESS_LAUNCHER (self), "PATH", "/app/bin:/usr/bin", TRUE);
 }
 
 IdeSubprocessLauncher *
