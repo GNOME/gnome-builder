@@ -183,6 +183,9 @@ const gchar          *ide_configuration_get_app_id                (IdeConfigurat
 IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_app_id                (IdeConfiguration      *self,
                                                                    const gchar           *app_id);
+IDE_AVAILABLE_IN_3_28
+void                  ide_configuration_apply_path                (IdeConfiguration      *self,
+                                                                   IdeSubprocessLauncher *launcher);
 IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_supports_device           (IdeConfiguration      *self,
                                                                    IdeDevice             *device);

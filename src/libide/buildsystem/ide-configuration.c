@@ -31,6 +31,7 @@
 #include "devices/ide-device.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime.h"
+#include "subprocess/ide-subprocess-launcher.h"
 
 typedef struct
 {
@@ -1734,6 +1735,19 @@ ide_configuration_set_append_path (IdeConfiguration *self,
       priv->append_path = g_strdup (append_path);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_APPEND_PATH]);
     }
+}
+
+void
+ide_configuration_apply_path (IdeConfiguration      *self,
+                              IdeSubprocessLauncher *launcher)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+
+  if (priv->append_path != NULL)
+    ide_subprocess_launcher_append_path (launcher, priv->append_path);
 }
 
 IdeBuildLocality
