@@ -37,7 +37,9 @@ _ = Ide.gettext
 
 class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
     def do_get_project_templates(self):
-        return [GnomeProjectTemplate(), LibraryProjectTemplate(), EmptyProjectTemplate()]
+        return [GnomeProjectTemplate(),
+                LibraryProjectTemplate(),
+                EmptyProjectTemplate()]
 
 
 class MesonTemplateLocator(Template.TemplateLocator):
@@ -101,8 +103,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             self.language = 'c'
 
         if self.language not in ('c', 'c++', 'javascript', 'python', 'vala'):
-            task.return_error(GLib.Error('Language %s not supported' %
-                                         self.language))
+            task.return_error(GLib.Error('Language %s not supported' % self.language))
             return
 
         if 'versioning' in params:
@@ -170,6 +171,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             'appid': appid,
             'name_': name_,
             'name': name,
+            'exec_name': exec_name,
         }
 
         files = {
