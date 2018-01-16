@@ -2320,6 +2320,7 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
       ide_subprocess_launcher_set_flags (ret,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE));
+      ide_configuration_apply_path (self->configuration, ret);
     }
 
   return g_steal_pointer (&ret);
