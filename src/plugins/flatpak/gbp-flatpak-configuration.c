@@ -35,6 +35,7 @@ struct _GbpFlatpakConfiguration
   gchar  *platform;
   gchar  *primary_module;
   gchar  *sdk;
+  gchar **sdk_extensions;
 };
 
 G_DEFINE_TYPE (GbpFlatpakConfiguration, gbp_flatpak_configuration, IDE_TYPE_CONFIGURATION)
@@ -49,6 +50,7 @@ enum {
   PROP_PLATFORM,
   PROP_PRIMARY_MODULE,
   PROP_SDK,
+  PROP_SDK_EXTENSIONS,
   N_PROPS
 };
 
@@ -380,6 +382,14 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
       gbp_flatpak_configuration_set_finish_args (self, (const gchar * const *)finish_args);
     }
 
+  /* Look for "sdk-extensions" so we can install those runtimes too */
+  if (json_object_has_member (root_object, "sdk-extensions"))
+    {
+      g_auto(GStrv) sdk_exts = get_strv_from_member (root_object, "sdk-extensions");
+
+      gbp_flatpak_configuration_set_sdk_extensions (self, (const gchar * const *)sdk_exts);
+    }
+
   /* Our custom extension to store run options in the .json */
   if (json_object_has_member (root_object, "x-run-args"))
     {
@@ -671,6 +681,10 @@ gbp_flatpak_configuration_get_property (GObject    *object,
       g_value_set_string (value, gbp_flatpak_configuration_get_sdk (self));
       break;
 
+    case PROP_SDK_EXTENSIONS:
+      g_value_set_boxed (value, gbp_flatpak_configuration_get_sdk_extensions (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
@@ -718,6 +732,10 @@ gbp_flatpak_configuration_set_property (GObject      *object,
       gbp_flatpak_configuration_set_sdk (self, g_value_get_string (value));
       break;
 
+    case PROP_SDK_EXTENSIONS:
+      gbp_flatpak_configuration_set_sdk_extensions (self, g_value_get_boxed (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
@@ -735,6 +753,7 @@ gbp_flatpak_configuration_finalize (GObject *object)
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->primary_module, g_free);
   g_clear_pointer (&self->sdk, g_free);
+  g_clear_pointer (&self->sdk_extensions, g_strfreev);
 
   G_OBJECT_CLASS (gbp_flatpak_configuration_parent_class)->finalize (object);
 }
@@ -823,6 +842,13 @@ gbp_flatpak_configuration_class_init (GbpFlatpakConfigurationClass *klass)
                           G_PARAM_CONSTRUCT |
                           G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_SDK_EXTENSIONS] =
+    g_param_spec_boxed ("sdk-extensions",
+                         "Sdk Extensions",
+                         "Flatpak Sdk extentions to the Sdk runtime",
+                         G_TYPE_STRV,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -830,4 +856,26 @@ static void
 gbp_flatpak_configuration_init (GbpFlatpakConfiguration *self)
 {
   ide_configuration_set_prefix (IDE_CONFIGURATION (self), "/app");
+}
+
+const gchar * const *
+gbp_flatpak_configuration_get_sdk_extensions (GbpFlatpakConfiguration *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self), NULL);
+
+  return (const gchar * const *)self->sdk_extensions;
+}
+
+void
+gbp_flatpak_configuration_set_sdk_extensions (GbpFlatpakConfiguration *self,
+                                              const gchar * const     *sdk_extensions)
+{
+  g_return_if_fail (GBP_IS_FLATPAK_CONFIGURATION (self));
+
+  if (self->sdk_extensions != (gchar **)sdk_extensions)
+    {
+      g_strfreev (self->sdk_extensions);
+      self->sdk_extensions = g_strdupv ((gchar **)sdk_extensions);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SDK_EXTENSIONS]);
+    }
 }

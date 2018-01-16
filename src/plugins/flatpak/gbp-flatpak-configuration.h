@@ -54,4 +54,8 @@ void                     gbp_flatpak_configuration_set_primary_module (GbpFlatpa
 const gchar             *gbp_flatpak_configuration_get_sdk            (GbpFlatpakConfiguration *self);
 void                     gbp_flatpak_configuration_set_sdk            (GbpFlatpakConfiguration *self,
                                                                        const gchar             *sdk);
+const gchar * const     *gbp_flatpak_configuration_get_sdk_extensions (GbpFlatpakConfiguration *self);
+void                     gbp_flatpak_configuration_set_sdk_extensions (GbpFlatpakConfiguration *self,
+                                                                       const gchar * const     *sdk_extensions);
+
 G_END_DECLS
