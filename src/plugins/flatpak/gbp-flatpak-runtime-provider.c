@@ -25,6 +25,7 @@
 #include "util/ide-posix.h"
 
 #include "gbp-flatpak-application-addin.h"
+#include "gbp-flatpak-configuration.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-runtime-provider.h"
 #include "gbp-flatpak-transfer.h"
@@ -327,8 +328,11 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
                                                         &install->sdk_branch,
                                                         &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
     }
 
   install->op_count = 3;
@@ -358,7 +362,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   sdk_matches_runtime = (g_strcmp0 (install->sdk_id, install->id) == 0 &&
                          g_strcmp0 (install->sdk_arch, install->arch) == 0 &&
                          g_strcmp0 (install->sdk_branch, install->branch) == 0);
-  if (sdk_matches_runtime ||
+  if (sdk_matches_runtime || install->sdk_id == NULL ||
       gbp_flatpak_application_addin_has_runtime (app_addin,
                                                  install->sdk_id,
                                                  install->sdk_arch,
@@ -380,8 +384,9 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
     }
 
   /* If there is a .Docs runtime for the SDK, install that too */
-  docs_id = g_strdup_printf ("%s.Docs", install->sdk_id);
-  if (gbp_flatpak_application_addin_has_runtime (app_addin,
+  if (install->sdk_id == NULL ||
+      !(docs_id = g_strdup_printf ("%s.Docs", install->sdk_id)) ||
+      gbp_flatpak_application_addin_has_runtime (app_addin,
                                                  docs_id,
                                                  install->arch,
                                                  install->branch))
@@ -417,8 +422,9 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
 {
   GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
   g_autoptr(GTask) task = NULL;
-  g_autofree gchar *delimited = NULL;
-  g_auto(GStrv) parts = NULL;
+  g_autofree gchar *id = NULL;
+  g_autofree gchar *arch = NULL;
+  g_autofree gchar *branch = NULL;
   InstallRuntime *install;
 
   IDE_ENTRY;
@@ -441,15 +447,14 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
 
   if (!g_str_has_prefix (runtime_id, "flatpak:"))
     IDE_GOTO (unknown_runtime_id);
-  delimited = g_strdelimit (g_strdup (runtime_id), ":/", ':');
-  parts = g_strsplit (delimited, ":", 0);
-  if (g_strv_length (parts) != 4)
+
+  if (!gbp_flatpak_split_id (runtime_id + strlen ("flatpak:"), &id, &arch, &branch))
     IDE_GOTO (unknown_runtime_id);
 
   install = g_slice_new0 (InstallRuntime);
-  install->id = g_strdup (parts[1]);
-  install->arch = g_strdup (parts[2]);
-  install->branch = g_strdup (parts[3]);
+  install->id = g_steal_pointer (&id);
+  install->arch = g_steal_pointer (&arch);
+  install->branch = g_steal_pointer (&branch);
 
   g_task_set_task_data (task, install, (GDestroyNotify)install_runtime_free);
 
@@ -477,6 +482,154 @@ static gboolean
 gbp_flatpak_runtime_provider_install_finish (IdeRuntimeProvider  *provider,
                                              GAsyncResult        *result,
                                              GError             **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (provider));
+  g_assert (G_IS_TASK (result));
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  guint *count;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (object) ||
+            IDE_IS_TRANSFER_MANAGER (object));
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  count = g_task_get_task_data (task);
+  g_assert (count != NULL);
+  g_assert (*count > 0);
+
+  (*count)--;
+
+  if (GBP_IS_FLATPAK_RUNTIME_PROVIDER (object))
+    {
+      if (!gbp_flatpak_runtime_provider_install_finish (IDE_RUNTIME_PROVIDER (object), result, &error))
+        {
+          g_warning ("Failed to install runtime: %s", error->message);
+          if (!g_task_get_completed (task))
+            g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+  else if (IDE_IS_TRANSFER_MANAGER (object))
+    {
+      if (!ide_transfer_manager_execute_finish (IDE_TRANSFER_MANAGER (object), result, &error))
+        {
+          g_warning ("Failed to install runtime: %s", error->message);
+          if (!g_task_get_completed (task))
+            g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+
+  if (*count == 0 && !g_task_get_completed (task))
+    g_task_return_boolean (task, TRUE);
+}
+
+static void
+gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
+                                              IdeConfiguration    *configuration,
+                                              GCancellable        *cancellable,
+                                              GAsyncReadyCallback  callback,
+                                              gpointer             user_data)
+{
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
+  g_autoptr(GTask) task = NULL;
+  const gchar *runtime_id;
+  guint *count;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_flatpak_runtime_provider_bootstrap_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  count = g_new0 (guint, 1);
+  g_task_set_task_data (task, count, g_free);
+
+  if (GBP_IS_FLATPAK_CONFIGURATION (configuration))
+    {
+      GbpFlatpakApplicationAddin *addin = gbp_flatpak_application_addin_get_default ();
+      const gchar * const *sdk_exts;
+      g_autofree gchar *platform_id = NULL;
+
+      /*
+       * TODO: When we add cross-device/cross-compile support,
+       *       we'll have to be more careful about arch support here.
+       */
+
+      sdk_exts = gbp_flatpak_configuration_get_sdk_extensions (GBP_FLATPAK_CONFIGURATION (configuration));
+
+      if (sdk_exts != NULL)
+        {
+          IdeTransferManager *transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
+
+          for (guint i = 0; sdk_exts[i] != NULL; i++)
+            {
+              g_autofree gchar *ext_id = NULL;
+              g_autofree gchar *ext_arch = NULL;
+              g_autofree gchar *ext_branch = NULL;
+
+              if (gbp_flatpak_split_id (sdk_exts[i], &ext_id, &ext_arch, &ext_branch))
+                {
+                  if (!gbp_flatpak_application_addin_has_runtime (addin, ext_id, ext_arch, ext_branch))
+                    {
+                      g_autoptr(GbpFlatpakTransfer) transfer = NULL;
+
+                      (*count)++;
+
+                      transfer = gbp_flatpak_transfer_new (ext_id, ext_arch, ext_branch, FALSE);
+                      ide_transfer_manager_execute_async (transfer_manager,
+                                                          IDE_TRANSFER (transfer),
+                                                          cancellable,
+                                                          gbp_flatpak_runtime_provider_bootstrap_cb,
+                                                          g_object_ref (task));
+                    }
+                }
+            }
+        }
+    }
+
+  runtime_id = ide_configuration_get_runtime_id (configuration);
+
+  if (runtime_id != NULL)
+    {
+      (*count)++;
+      gbp_flatpak_runtime_provider_install_async (IDE_RUNTIME_PROVIDER (self),
+                                                  runtime_id,
+                                                  cancellable,
+                                                  gbp_flatpak_runtime_provider_bootstrap_cb,
+                                                  g_object_ref (task));
+    }
+
+  if (*count == 0)
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_flatpak_runtime_provider_bootstrap_finish (IdeRuntimeProvider  *provider,
+                                               GAsyncResult        *result,
+                                               GError             **error)
 {
   gboolean ret;
 
@@ -524,4 +677,6 @@ runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
   iface->can_install = gbp_flatpak_runtime_provider_can_install;
   iface->install_async = gbp_flatpak_runtime_provider_install_async;
   iface->install_finish = gbp_flatpak_runtime_provider_install_finish;
+  iface->bootstrap_async = gbp_flatpak_runtime_provider_bootstrap_async;
+  iface->bootstrap_finish = gbp_flatpak_runtime_provider_bootstrap_finish;
 }
