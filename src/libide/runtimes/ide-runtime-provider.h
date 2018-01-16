@@ -48,6 +48,14 @@ struct _IdeRuntimeProviderInterface
   gboolean (*install_finish)   (IdeRuntimeProvider   *self,
                                 GAsyncResult         *result,
                                 GError              **error);
+  void     (*bootstrap_async)  (IdeRuntimeProvider   *self,
+                                IdeConfiguration     *configuration,
+                                GCancellable         *cancellable,
+                                GAsyncReadyCallback   callback,
+                                gpointer              user_data);
+  gboolean (*bootstrap_finish) (IdeRuntimeProvider   *self,
+                                GAsyncResult         *result,
+                                GError              **error);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -67,6 +75,16 @@ void     ide_runtime_provider_install_async    (IdeRuntimeProvider   *self,
                                                 gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
 gboolean ide_runtime_provider_install_finish   (IdeRuntimeProvider   *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
+IDE_AVAILABLE_IN_3_28
+void     ide_runtime_provider_bootstrap_async  (IdeRuntimeProvider   *self,
+                                                IdeConfiguration     *configuration,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+gboolean ide_runtime_provider_bootstrap_finish (IdeRuntimeProvider   *self,
                                                 GAsyncResult         *result,
                                                 GError              **error);
 

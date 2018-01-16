@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-runtime-provider"
+
+#include "buildsystem/ide-configuration.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-provider.h"
 
@@ -64,6 +67,63 @@ ide_runtime_provider_real_install_finish (IdeRuntimeProvider  *self,
 }
 
 static void
+ide_runtime_provider_real_bootstrap_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  IdeRuntimeProvider *self = (IdeRuntimeProvider *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+
+  g_assert (IDE_IS_RUNTIME_PROVIDER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_runtime_provider_install_finish (self, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+void
+ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
+                                           IdeConfiguration    *configuration,
+                                           GCancellable        *cancellable,
+                                           GAsyncReadyCallback  callback,
+                                           gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  const gchar *runtime_id;
+
+  g_assert (IDE_IS_RUNTIME_PROVIDER (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (!cancellable || IDE_IS_CONFIGURATION (configuration));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_runtime_provider_real_bootstrap_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  runtime_id = ide_configuration_get_runtime_id (configuration);
+
+  if (runtime_id == NULL)
+    g_task_return_boolean (task, TRUE);
+  else
+    ide_runtime_provider_install_async (self,
+                                        runtime_id,
+                                        cancellable,
+                                        ide_runtime_provider_real_bootstrap_cb,
+                                        g_steal_pointer (&task));
+}
+
+gboolean
+ide_runtime_provider_real_bootstrap_finish (IdeRuntimeProvider  *self,
+                                          GAsyncResult        *result,
+                                          GError             **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
 ide_runtime_provider_default_init (IdeRuntimeProviderInterface *iface)
 {
   iface->load = ide_runtime_provider_real_load;
@@ -71,6 +131,8 @@ ide_runtime_provider_default_init (IdeRuntimeProviderInterface *iface)
   iface->can_install = ide_runtime_provider_real_can_install;
   iface->install_async = ide_runtime_provider_real_install_async;
   iface->install_finish = ide_runtime_provider_real_install_finish;
+  iface->bootstrap_async = ide_runtime_provider_real_bootstrap_async;
+  iface->bootstrap_finish = ide_runtime_provider_real_bootstrap_finish;
 }
 
 void
@@ -126,4 +188,60 @@ ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   return IDE_RUNTIME_PROVIDER_GET_IFACE (self)->install_finish (self, result, error);
+}
+
+/**
+ * ide_runtime_provider_bootstrap_async:
+ * @self: a #IdeRuntimeProvider
+ * @configuration: an #IdeConfiguration
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: a #GAsyncReadyCallback or %NULL
+ * @user_data: closure data for @callback
+ *
+ * This function allows to the runtime provider to install dependent runtimes
+ * similar to ide_runtime_provider_install_async(), but with the added benefit
+ * that it can access the configuration for additional information.
+ *
+ * Some runtime providers like Flatpak might use this to locate SDK extensions
+ * and install those too.
+ *
+ * This function should be used instead of ide_runtime_provider_install_async().
+ *
+ * Since: 3.28
+ */
+void
+ide_runtime_provider_bootstrap_async (IdeRuntimeProvider  *self,
+                                      IdeConfiguration    *configuration,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_RUNTIME_PROVIDER (self));
+  g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_async (self, configuration, cancellable, callback, user_data);
+}
+
+/**
+ * ide_runtime_provider_bootstrap_finish:
+ * @self: a #IdeRuntimeProvider
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes the asynchronous request to bootstrap.
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_runtime_provider_bootstrap_finish (IdeRuntimeProvider  *self,
+                                       GAsyncResult        *result,
+                                       GError             **error)
+{
+  g_return_val_if_fail (IDE_IS_RUNTIME_PROVIDER (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_finish (self, result, error);
 }

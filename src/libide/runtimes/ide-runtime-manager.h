@@ -48,5 +48,15 @@ IDE_AVAILABLE_IN_ALL
 IdeRuntime *ide_runtime_manager_ensure_finish        (IdeRuntimeManager    *self,
                                                       GAsyncResult         *result,
                                                       GError              **error);
+IDE_AVAILABLE_IN_3_28
+void        ide_runtime_manager_ensure_config_async  (IdeRuntimeManager    *self,
+                                                      IdeConfiguration     *configuration,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+IdeRuntime *ide_runtime_manager_ensure_config_finish (IdeRuntimeManager    *self,
+                                                      GAsyncResult         *result,
+                                                      GError              **error);
 
 G_END_DECLS
