@@ -516,7 +516,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
 
   content = ide_xml_tree_builder_get_file_content (self, file, &sequence);
 
-  if (content == NULL)
+  if (content == NULL || g_bytes_get_size (content) == 0)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
