@@ -526,6 +526,35 @@ gbp_meson_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
   IDE_RETURN (ret);
 }
 
+static gchar *
+gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
+                                     IdeConfiguration *configuration)
+{
+  GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
+  IdeBuildLocality locality;
+
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  /*
+   * If the build configuration requires that we do an in tree build (yuck),
+   * then use "_build" as our build directory to build in-tree.
+   */
+
+  locality = ide_configuration_get_locality (configuration);
+
+  if ((locality & IDE_BUILD_LOCALITY_OUT_OF_TREE) == 0)
+    {
+      g_autoptr(GFile) parent = g_file_get_parent (self->project_file);
+      g_autofree gchar *path = g_file_get_path (parent);
+      g_autofree gchar *builddir = g_build_filename (path, "_build", NULL);
+
+      return g_steal_pointer (&builddir);
+    }
+
+  return NULL;
+}
+
 static void
 build_system_iface_init (IdeBuildSystemInterface *iface)
 {
@@ -534,6 +563,7 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_priority = gbp_meson_build_system_get_priority;
   iface->get_build_flags_async = gbp_meson_build_system_get_build_flags_async;
   iface->get_build_flags_finish = gbp_meson_build_system_get_build_flags_finish;
+  iface->get_builddir = gbp_meson_build_system_get_builddir;
 }
 
 static void
