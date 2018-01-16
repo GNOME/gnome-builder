@@ -419,6 +419,7 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
       const gchar *primary_module_name;
       JsonObject *primary_module_object;
       g_autofree gchar *config_opts = NULL;
+      IdeBuildLocality locality = IDE_BUILD_LOCALITY_IN_TREE;
 
       primary_module_object = json_node_get_object (primary_module_node);
       primary_module_name = json_object_get_string_member (primary_module_object, "name");
@@ -426,6 +427,15 @@ gbp_flatpak_configuration_load_from_file (GbpFlatpakConfiguration *self,
 
       config_opts = get_argv_from_member (primary_module_object, "config-opts");
       ide_configuration_set_config_opts (IDE_CONFIGURATION (self), config_opts);
+
+      if (json_object_has_member (primary_module_object, "builddir"))
+        {
+          gboolean builddir = json_object_get_boolean_member (primary_module_object, "builddir");
+          locality = builddir ? IDE_BUILD_LOCALITY_OUT_OF_TREE : IDE_BUILD_LOCALITY_IN_TREE;
+        }
+
+      /* Flatpak does in-tree builds by default unless "builddir": true */
+      ide_configuration_set_locality (IDE_CONFIGURATION (self), locality);
 
       if (json_object_has_member (primary_module_object, "build-commands"))
         {
