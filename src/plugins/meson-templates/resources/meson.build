@@ -1,14 +1,10 @@
-project('{{name}}',{{if language == "c"}} 'c',{{else if language == "c++"}} 'cpp',{{else if language == "vala"}} 'c', 'vala',{{end}}
+project('{{name}}', {{if language == "c"}}'c',{{else if language == "c++"}}['cpp', 'c'],{{else if language == "vala"}}['c', 'vala'],{{else if language == "c♯"}}'cs',{{end}}
         version: '{{project_version}}',
   meson_version: '>= 0.40.0',
 )
 
 {{if enable_i18n}}
 i18n = import('i18n')
-{{end}}
-
-{{if language == "c++"}}
-add_languages('c')
 {{end}}
 
 {{if language == "c"}}

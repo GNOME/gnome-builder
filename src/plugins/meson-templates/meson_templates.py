@@ -102,7 +102,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         else:
             self.language = 'c'
 
-        if self.language not in ('c', 'c++', 'javascript', 'python', 'vala'):
+        if self.language not in ('c', 'c♯', 'c++', 'javascript', 'python', 'vala'):
             task.return_error(GLib.Error('Language %s not supported' % self.language))
             return
 
@@ -153,6 +153,8 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         # Just avoiding dealing with template bugs
         if self.language in ('c', 'c++'):
             ui_file = prefix + '-window.ui'
+        elif self.language in ('c♯',):
+            ui_file = ""
         else:
             ui_file = 'window.ui'
         scope.get('ui_file').assign_string(ui_file)
@@ -163,6 +165,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         modes = {
             'resources/src/hello.js.in': 0o750,
             'resources/src/hello.py.in': 0o750,
+            'resources/src/application.in': 0o750,
             'resources/build-aux/meson/postinstall.py': 0o750,
         }
 
@@ -228,7 +231,7 @@ class GnomeProjectTemplate(MesonTemplate):
             _('GNOME Application'),
             'pattern-gnome',
             _('Create a new GNOME application'),
-            ['C', 'C++', 'Python', 'JavaScript', 'Vala']
+            ['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala']
          )
 
     def prepare_files(self, files):
@@ -256,6 +259,13 @@ class GnomeProjectTemplate(MesonTemplate):
             files['resources/src/window.cpp'] = 'src/%(prefix)s-window.cpp'
             files['resources/src/window.hpp'] = 'src/%(prefix)s-window.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
+        elif self.language == 'c♯':
+            files['resources/src/main.cs'] = 'src/main.cs'
+            files['resources/src/application.in'] = 'src/%(exec_name)s.in'
+            files['resources/flatpak-gtksharp.json'] = '%(appid)s.json'
+            meson_file = 'resources/src/meson-cs.build'
+            resource_name = None
+            window_ui_name = None
         elif self.language == 'vala':
             files['resources/src/main.vala'] = 'src/main.vala'
             files['resources/src/window.vala'] = 'src/window.vala'
@@ -274,8 +284,11 @@ class GnomeProjectTemplate(MesonTemplate):
             files['resources/src/main.py'] = 'src/main.py'
             meson_file = 'resources/src/meson-py.build'
 
-        files['resources/src/hello.gresource.xml'] = resource_name
-        files['resources/src/window.ui'] = window_ui_name
+        if resource_name:
+            files['resources/src/hello.gresource.xml'] = resource_name
+        if window_ui_name:
+            files['resources/src/window.ui'] = window_ui_name
+
         files[meson_file] = 'src/meson.build'
 
 
@@ -308,3 +321,4 @@ class EmptyProjectTemplate(MesonTemplate):
 
     def prepare_files(self, files):
         files['resources/src/meson-empty.build'] = 'src/meson.build'
+

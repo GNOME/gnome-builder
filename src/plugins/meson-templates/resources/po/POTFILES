@@ -1,7 +1,9 @@
 data/{{appid}}.desktop.in
 data/{{appid}}.appdata.xml.in
 data/{{appid}}.gschema.xml
+{{if ui_file}}
 src/{{ui_file}}
+{{end}}
 {{if language == "c"}}src/main.c
 src/{{prefix}}-window.c{{end}}
 {{if language == "vala"}}src/main.vala

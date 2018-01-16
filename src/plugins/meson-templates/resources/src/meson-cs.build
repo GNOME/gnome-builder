@@ -1,0 +1,21 @@
+gtk_sharp_dep = dependency('gtk-sharp-3.0')
+
+{{name_}}_sources = [
+  'main.cs',
+]
+
+executable('{{exec_name}}', {{name_}}_sources,
+  dependencies: gtk_sharp_dep,
+       install: true,
+   install_dir: join_paths(get_option('prefix'), 'libexec'),
+)
+
+cdata = configuration_data()
+cdata.set('libexecdir', join_paths(get_option('prefix'), 'libexec'))
+configure_file(
+          input: '{{exec_name}}.in',
+         output: '{{exec_name}}',
+  configuration: cdata,
+        install: true,
+    install_dir: get_option('bindir'),
+)

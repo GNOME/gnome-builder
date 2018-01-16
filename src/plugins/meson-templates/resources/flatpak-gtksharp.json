@@ -1,0 +1,59 @@
+{
+    "app-id": "{{appid}}",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "master",
+    "sdk": "org.gnome.Sdk",
+    "command": "{{exec_name}}",
+    "sdk-extensions": ["org.freedesktop.Sdk.Extension.mono5"],
+    "finish-args": [
+        "--share=network",
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "build-options" : {
+        "append-path": "/usr/lib/sdk/mono5/bin",
+        "append-ld-library-path": "/usr/lib/sdk/mono5/lib",
+        "env": {
+            "PKG_CONFIG_PATH": "/app/lib/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig:/usr/lib/sdk/mono5/lib/pkgconfig"
+        }
+    },
+    "cleanup": [ "/lib/monodoc", "/lib/pkgconfig" ],
+    "modules": [
+        {
+            "name": "mono-runtime",
+            "buildsystem": "simple",
+            "build-commands": ["/usr/lib/sdk/mono5/install.sh "],
+            "build-options" : {
+                "no-debuginfo": true,
+                "strip": true
+            }
+        },
+        {
+            "name": "gtk-sharp3",
+            "buildsystem": "meson",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/gtk-sharp/gtk-sharp.git"
+                }
+            ]
+        },
+        {
+            "name": "{{name}}",
+            "buildsystem": "meson",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "file://{{project_path}}"
+                }
+            ]
+        }
+    ]
+}
