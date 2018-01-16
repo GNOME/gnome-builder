@@ -34,40 +34,40 @@ struct _IdeRuntimeProviderInterface
 {
   GTypeInterface parent;
 
-  void     (*load)           (IdeRuntimeProvider   *self,
-                              IdeRuntimeManager    *manager);
-  void     (*unload)         (IdeRuntimeProvider   *self,
-                              IdeRuntimeManager    *manager);
-  gboolean (*can_install)    (IdeRuntimeProvider   *self,
-                              const gchar          *runtime_id);
-  void     (*install_async)  (IdeRuntimeProvider   *self,
-                              const gchar          *runtime_id,
-                              GCancellable         *cancellable,
-                              GAsyncReadyCallback   callback,
-                              gpointer              user_data);
-  gboolean (*install_finish) (IdeRuntimeProvider   *self,
-                              GAsyncResult         *result,
-                              GError              **error);
+  void     (*load)             (IdeRuntimeProvider   *self,
+                                IdeRuntimeManager    *manager);
+  void     (*unload)           (IdeRuntimeProvider   *self,
+                                IdeRuntimeManager    *manager);
+  gboolean (*can_install)      (IdeRuntimeProvider   *self,
+                                const gchar          *runtime_id);
+  void     (*install_async)    (IdeRuntimeProvider   *self,
+                                const gchar          *runtime_id,
+                                GCancellable         *cancellable,
+                                GAsyncReadyCallback   callback,
+                                gpointer              user_data);
+  gboolean (*install_finish)   (IdeRuntimeProvider   *self,
+                                GAsyncResult         *result,
+                                GError              **error);
 };
 
 IDE_AVAILABLE_IN_ALL
-void     ide_runtime_provider_load           (IdeRuntimeProvider   *self,
-                                              IdeRuntimeManager    *manager);
+void     ide_runtime_provider_load             (IdeRuntimeProvider   *self,
+                                                IdeRuntimeManager    *manager);
 IDE_AVAILABLE_IN_ALL
-void     ide_runtime_provider_unload         (IdeRuntimeProvider   *self,
-                                              IdeRuntimeManager    *manager);
+void     ide_runtime_provider_unload           (IdeRuntimeProvider   *self,
+                                                IdeRuntimeManager    *manager);
 IDE_AVAILABLE_IN_ALL
-gboolean ide_runtime_provider_can_install    (IdeRuntimeProvider   *self,
-                                              const gchar          *runtime_id);
+gboolean ide_runtime_provider_can_install      (IdeRuntimeProvider   *self,
+                                                const gchar          *runtime_id);
 IDE_AVAILABLE_IN_ALL
-void     ide_runtime_provider_install_async  (IdeRuntimeProvider   *self,
-                                              const gchar          *runtime_id,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data);
+void     ide_runtime_provider_install_async    (IdeRuntimeProvider   *self,
+                                                const gchar          *runtime_id,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean ide_runtime_provider_install_finish (IdeRuntimeProvider   *self,
-                                              GAsyncResult         *result,
-                                              GError              **error);
+gboolean ide_runtime_provider_install_finish   (IdeRuntimeProvider   *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
 
 G_END_DECLS
