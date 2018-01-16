@@ -2992,7 +2992,6 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
                                   gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
-  g_autoptr(GCancellable) local_cancellable = NULL;
   TaskData *td;
 
   IDE_ENTRY;
@@ -3001,14 +3000,11 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail ((phase & ~IDE_BUILD_PHASE_MASK) == 0);
 
-  if (cancellable == NULL)
-    cancellable = local_cancellable = g_cancellable_new ();
+  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_build_pipeline_rebuild_async);
-
-  dzl_cancellable_chain (cancellable, self->cancellable);
 
   td = task_data_new (task, TASK_REBUILD);
   td->phase = phase;
