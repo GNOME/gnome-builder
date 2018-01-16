@@ -602,7 +602,7 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
   g_assert (request != NULL);
   g_assert (request->id != NULL);
   g_assert (request->arch != NULL);
-  g_assert (request->branch != NULL);
+  g_assert (request->branch == NULL || *request->branch != 0);
   g_assert (request->installations != NULL);
 
   if (!ensure_remotes_exist_sync (cancellable, &error))
@@ -637,15 +637,15 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
           g_assert (FLATPAK_IS_INSTALLED_REF (ref));
 
           if (g_strcmp0 (request->id, id) == 0 &&
-              g_strcmp0 (request->branch, branch) == 0 &&
+              (!request->branch || g_strcmp0 (request->branch, branch) == 0) &&
               g_strcmp0 (request->arch, arch) == 0)
             {
               request->ref = flatpak_installation_update (installation,
                                                           FLATPAK_UPDATE_FLAGS_NONE,
                                                           FLATPAK_REF_KIND_RUNTIME,
-                                                          request->id,
-                                                          request->arch,
-                                                          request->branch,
+                                                          id,
+                                                          arch,
+                                                          branch,
                                                           ide_progress_flatpak_progress_callback,
                                                           request->progress,
                                                           cancellable,
@@ -702,15 +702,15 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
               g_assert (FLATPAK_IS_REMOTE_REF (ref));
 
               if (g_strcmp0 (request->id, id) == 0 &&
-                  g_strcmp0 (request->arch, arch) == 0 &&
-                  g_strcmp0 (request->branch, branch) == 0)
+                  (!request->branch || g_strcmp0 (request->branch, branch) == 0) &&
+                  g_strcmp0 (request->arch, arch) == 0)
                 {
                   request->ref = flatpak_installation_install (installation,
                                                                name,
                                                                FLATPAK_REF_KIND_RUNTIME,
-                                                               request->id,
-                                                               request->arch,
-                                                               request->branch,
+                                                               id,
+                                                               arch,
+                                                               branch,
                                                                ide_progress_flatpak_progress_callback,
                                                                request->progress,
                                                                cancellable,
@@ -730,7 +730,8 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
   g_task_return_new_error (task,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_FOUND,
-                           "Failed to locate runtime within installed flatpak remotes");
+                           "Failed to locate runtime \"%s/%s/%s\" within configured flatpak remotes",
+                           request->id, request->arch ?: "", request->branch ?: "");
 
   IDE_EXIT;
 }
@@ -755,11 +756,12 @@ gbp_flatpak_application_addin_install_runtime_async (GbpFlatpakApplicationAddin 
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (self->installations != NULL);
 
-  if (arch == NULL)
+  if (arch == NULL || *arch == 0)
     arch = flatpak_get_default_arch ();
 
-  if (branch == NULL)
-    branch = "master";
+  /* NULL branch indicates to accept any match */
+  if (branch != NULL && *branch == 0)
+    branch = NULL;
 
   request = g_slice_new0 (InstallRequest);
   request->id = g_strdup (runtime_id);
@@ -843,10 +845,7 @@ gbp_flatpak_application_addin_has_runtime (GbpFlatpakApplicationAddin *self,
   if (arch == NULL)
     arch = flatpak_get_default_arch ();
 
-  if (branch == NULL)
-    branch = "master";
-
-  IDE_TRACE_MSG ("Looking for runtime %s/%s/%s", id, arch, branch);
+  IDE_TRACE_MSG ("Looking for runtime %s/%s/%s", id, arch, branch ?: "");
 
   ar = gbp_flatpak_application_addin_get_runtimes (self);
 
@@ -860,8 +859,8 @@ gbp_flatpak_application_addin_has_runtime (GbpFlatpakApplicationAddin *self,
           const gchar *ref_branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
 
           if (g_strcmp0 (id, ref_id) == 0 &&
-              g_strcmp0 (arch, ref_arch) == 0 &&
-              g_strcmp0 (branch, ref_branch) == 0)
+              (branch == NULL || (g_strcmp0 (branch, ref_branch) == 0)) &&
+              g_strcmp0 (arch, ref_arch) == 0)
             IDE_RETURN (TRUE);
         }
     }
