@@ -153,9 +153,8 @@
                         <property name="label" translatable="yes">Spaces</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">source-view.use-spaces</property>
-                        <property name="action-target">true</property>
-                        <property name="active" bind-source="tabs_button" bind-property="active" bind-flags="invert-boolean|bidirectional"/>
+                        <property name="action-name">file-settings.indent-style</property>
+                        <property name="action-target">'spaces'</property>
                       </object>
                     </child>
                     <child>
@@ -165,8 +164,8 @@
                         <property name="label" translatable="yes">Tabs</property>
                         <property name="focus-on-click">false</property>
                         <property name="halign">fill</property>
-                        <property name="action-name">source-view.use-spaces</property>
-                        <property name="action-target">false</property>
+                        <property name="action-name">file-settings.indent-style</property>
+                        <property name="action-target">'tabs'</property>
                       </object>
                     </child>
                   </object>
