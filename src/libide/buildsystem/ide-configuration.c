@@ -43,6 +43,7 @@ typedef struct
   gchar          *prefix;
   gchar          *run_opts;
   gchar          *runtime_id;
+  gchar          *append_path;
 
   IdeEnvironment *environment;
 
@@ -68,6 +69,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeConfiguration, ide_configuration, IDE_TYPE_OBJECT
 
 enum {
   PROP_0,
+  PROP_APPEND_PATH,
   PROP_BUILD_COMMANDS,
   PROP_CONFIG_OPTS,
   PROP_DEBUG,
@@ -426,6 +428,10 @@ ide_configuration_get_property (GObject    *object,
       g_value_set_string (value, ide_configuration_get_app_id (self));
       break;
 
+    case PROP_APPEND_PATH:
+      g_value_set_string (value, ide_configuration_get_append_path (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -501,6 +507,10 @@ ide_configuration_set_property (GObject      *object,
       ide_configuration_set_app_id (self, g_value_get_string (value));
       break;
 
+    case PROP_APPEND_PATH:
+      ide_configuration_set_append_path (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -520,6 +530,13 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
   klass->set_device = ide_configuration_real_set_device;
   klass->get_runtime = ide_configuration_real_get_runtime;
   klass->set_runtime = ide_configuration_real_set_runtime;
+
+  properties [PROP_APPEND_PATH] =
+    g_param_spec_string ("append-path",
+                         "Append Path",
+                         "Append to PATH environment variable",
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   properties [PROP_BUILD_COMMANDS] =
     g_param_spec_boxed ("build-commands",
@@ -1669,5 +1686,31 @@ ide_configuration_set_run_opts (IdeConfiguration *self,
       g_free (priv->run_opts);
       priv->run_opts = g_strdup (run_opts);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUN_OPTS]);
+    }
+}
+
+const gchar *
+ide_configuration_get_append_path (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return priv->append_path;
+}
+
+void
+ide_configuration_set_append_path (IdeConfiguration *self,
+                                   const gchar      *append_path)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+
+  if (priv->append_path != append_path)
+    {
+      g_free (priv->append_path);
+      priv->append_path = g_strdup (append_path);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_APPEND_PATH]);
     }
 }

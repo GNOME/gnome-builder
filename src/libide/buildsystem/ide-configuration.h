@@ -72,6 +72,11 @@ IdeConfiguration     *ide_configuration_new                       (IdeContext   
                                                                    const gchar           *id,
                                                                    const gchar           *device_id,
                                                                    const gchar           *runtime_id);
+IDE_AVAILABLE_IN_3_28
+const gchar          *ide_configuration_get_append_path           (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_3_28
+void                  ide_configuration_set_append_path           (IdeConfiguration      *self,
+                                                                   const gchar           *append_path);
 IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_id                    (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL
