@@ -64,19 +64,19 @@ gbp_flatpak_transfer_update_title (GbpFlatpakTransfer *self)
         {
           if (self->finished)
             /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc) */
-            title = g_strdup_printf (_("Updated %s %s"), self->id, self->branch);
+            title = g_strdup_printf (_("Updated %s %s"), self->id, self->branch ?: "");
           else
             /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc) */
-            title = g_strdup_printf (_("Updating %s %s"), self->id, self->branch);
+            title = g_strdup_printf (_("Updating %s %s"), self->id, self->branch ?: "");
         }
       else
         {
           if (self->finished)
             /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc) */
-            title = g_strdup_printf (_("Installed %s %s"), self->id, self->branch);
+            title = g_strdup_printf (_("Installed %s %s"), self->id, self->branch ?: "");
           else
             /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc) */
-            title = g_strdup_printf (_("Installing %s %s"), self->id, self->branch);
+            title = g_strdup_printf (_("Installing %s %s"), self->id, self->branch ?: "");
         }
     }
 
@@ -172,6 +172,14 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
                            G_CONNECT_SWAPPED);
 
   addin = gbp_flatpak_application_addin_get_default ();
+
+  if (self->branch == NULL &&
+      gbp_flatpak_application_addin_has_runtime (addin, self->id, self->arch, "stable"))
+    self->branch = g_strdup ("stable");
+
+  if (self->branch == NULL &&
+      gbp_flatpak_application_addin_has_runtime (addin, self->id, self->arch, "master"))
+    self->branch = g_strdup ("master");
 
   self->failed = FALSE;
   self->finished = FALSE;
@@ -369,9 +377,6 @@ gbp_flatpak_transfer_new (const gchar *id,
 
   if (arch == NULL)
     arch = flatpak_get_default_arch ();
-
-  if (branch == NULL)
-    branch = "stable";
 
   return g_object_new (GBP_TYPE_FLATPAK_TRANSFER,
                        "id", id,
