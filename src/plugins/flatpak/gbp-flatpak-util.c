@@ -97,3 +97,52 @@ gbp_flatpak_is_ignored (const gchar *name)
          strstr (name, ".PlatformTheme") != NULL;
 }
 
+gboolean
+gbp_flatpak_split_id (const gchar  *str,
+                      gchar       **id,
+                      gchar       **arch,
+                      gchar       **branch)
+{
+  g_auto(GStrv) parts = g_strsplit (str, "/", 0);
+  guint i = 0;
+
+  if (id)
+    *id = NULL;
+
+  if (arch)
+    *arch = NULL;
+
+  if (branch)
+    *branch = NULL;
+
+  if (parts[i] != NULL)
+    {
+      if (id != NULL)
+        *id = g_strdup (parts[i]);
+    }
+  else
+    {
+      /* we require at least a runtime/app ID */
+      return FALSE;
+    }
+
+  i++;
+
+  if (parts[i] != NULL)
+    {
+      if (arch != NULL)
+        *arch = g_strdup (parts[i]);
+    }
+  else
+    return TRUE;
+
+  i++;
+
+  if (parts[i] != NULL)
+    {
+      if (branch != NULL)
+        *branch = g_strdup (parts[i]);
+    }
+
+  return TRUE;
+}
