@@ -40,7 +40,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/gtk-sharp/gtk-sharp.git"
+                    "url": "https://github.com/GLibSharp/GtkSharp"
                 }
             ]
         },
