@@ -320,7 +320,7 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
   if (error != NULL &&
       !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
       !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
-    g_warning ("%s", error->message);
+    g_debug ("%s", error->message);
 
   /*
    * This fetches the group our provider belongs to. Since the group is
