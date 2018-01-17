@@ -9,4 +9,4 @@
 	url = https://gitlab.gnome.org/GNOME/template-glib.git
 [submodule "subprojects/libdazzle"]
 	path = subprojects/libdazzle
-	url = https://git.gnome.org/browse/libdazzle
+	url = https://gitlab.gnome.org/GNOME/libdazzle.git
