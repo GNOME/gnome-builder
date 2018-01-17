@@ -903,6 +903,7 @@ ide_langserv_client_start (IdeLangservClient *self)
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *root_path = NULL;
+  g_autofree gchar *root_uri = NULL;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
@@ -932,6 +933,7 @@ ide_langserv_client_start (IdeLangservClient *self)
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
   root_path = g_file_get_path (workdir);
+  root_uri = g_file_get_uri (workdir);
 
   /*
    * The first thing we need to do is initialize the client with information
@@ -941,6 +943,7 @@ ide_langserv_client_start (IdeLangservClient *self)
 
   params = JSONRPC_MESSAGE_NEW (
     "processId", JSONRPC_MESSAGE_PUT_INT64 (getpid ()),
+    "rootUri", JSONRPC_MESSAGE_PUT_STRING (root_uri),
     "rootPath", JSONRPC_MESSAGE_PUT_STRING (root_path),
     "capabilities", "{", "}"
   );
