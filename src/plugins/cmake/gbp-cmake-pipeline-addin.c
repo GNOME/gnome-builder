@@ -82,6 +82,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   const gchar *config_opts;
   const gchar *prefix;
   const gchar *srcdir;
+  const gchar *cmake;
   guint id;
   gint parallelism;
 
@@ -103,6 +104,9 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_assert (IDE_IS_CONFIGURATION (configuration));
   g_assert (IDE_IS_RUNTIME (runtime));
   g_assert (srcdir != NULL);
+
+  if (!(cmake = ide_configuration_getenv (configuration, "CMAKE")))
+    cmake = "cmake";
 
   for (guint i = 0; i < G_N_ELEMENTS (ninja_names); i++)
     {
@@ -133,7 +137,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   prefix_option = g_strdup_printf ("-DCMAKE_INSTALL_PREFIX=%s", prefix);
 
-  ide_subprocess_launcher_push_argv (configure_launcher, "cmake");
+  ide_subprocess_launcher_push_argv (configure_launcher, cmake);
   ide_subprocess_launcher_push_argv (configure_launcher, "-G");
   ide_subprocess_launcher_push_argv (configure_launcher, "Ninja");
   ide_subprocess_launcher_push_argv (configure_launcher, ".");
