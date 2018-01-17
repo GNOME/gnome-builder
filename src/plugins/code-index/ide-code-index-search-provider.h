@@ -22,7 +22,7 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CODE_INDEX_SEARCH_PROVIDER (ide_code_index_search_provider_get_type ())
+#define IDE_TYPE_CODE_INDEX_SEARCH_PROVIDER (ide_code_index_search_provider_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexSearchProvider, ide_code_index_search_provider, IDE, CODE_INDEX_SEARCH_PROVIDER, IdeObject)
 

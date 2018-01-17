@@ -68,8 +68,13 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
   service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (service));
+
   index = ide_code_index_service_get_index (service);
+  g_assert (IDE_IS_CODE_INDEX_INDEX (index));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_code_index_search_provider_search_async);

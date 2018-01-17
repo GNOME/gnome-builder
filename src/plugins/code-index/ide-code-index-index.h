@@ -26,27 +26,27 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexIndex, ide_code_index_index, IDE, CODE_INDEX_INDEX, IdeObject)
 
-IdeCodeIndexIndex *ide_code_index_index_new               (IdeContext            *context);
-gboolean           ide_code_index_index_load_if_nmod      (IdeCodeIndexIndex     *self,
-                                                           GFile                 *directory,
-                                                           GPtrArray             *files,
-                                                           GTimeVal               mod_time,
-                                                           GCancellable          *cancellable,
-                                                           GError               **error);
-gboolean           ide_code_index_index_load              (IdeCodeIndexIndex     *self,
-                                                           GFile                 *directory,
-                                                           GCancellable          *cancellable,
-                                                           GError               **error);
-void               ide_code_index_index_populate_async    (IdeCodeIndexIndex     *self,
-                                                           const gchar           *query,
-                                                           gsize                  max_results,
-                                                           GCancellable          *cancellable,
-                                                           GAsyncReadyCallback    callback,
-                                                           gpointer               user_data);
-GPtrArray         *ide_code_index_index_populate_finish   (IdeCodeIndexIndex     *self,
-                                                           GAsyncResult          *result,
-                                                           GError               **error);
-IdeSymbol         *ide_code_index_index_lookup_symbol     (IdeCodeIndexIndex     *self,
-                                                           const gchar           *key);
+IdeCodeIndexIndex *ide_code_index_index_new             (IdeContext           *context);
+gboolean           ide_code_index_index_load_if_nmod    (IdeCodeIndexIndex    *self,
+                                                         GFile                *directory,
+                                                         GPtrArray            *files,
+                                                         GTimeVal              mod_time,
+                                                         GCancellable         *cancellable,
+                                                         GError              **error);
+gboolean           ide_code_index_index_load            (IdeCodeIndexIndex    *self,
+                                                         GFile                *directory,
+                                                         GCancellable         *cancellable,
+                                                         GError              **error);
+IdeSymbol         *ide_code_index_index_lookup_symbol   (IdeCodeIndexIndex    *self,
+                                                         const gchar          *key);
+void               ide_code_index_index_populate_async  (IdeCodeIndexIndex    *self,
+                                                         const gchar          *query,
+                                                         gsize                 max_results,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+GPtrArray         *ide_code_index_index_populate_finish (IdeCodeIndexIndex    *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
 
 G_END_DECLS
