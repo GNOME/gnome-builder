@@ -27,27 +27,27 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdePersistentMapBuilder, ide_persistent_map_builder, IDE, PERSISTENT_MAP_BUILDER, GObject)
 
-IdePersistentMapBuilder  *ide_persistent_map_builder_new                  (void);
-void                      ide_persistent_map_builder_insert               (IdePersistentMapBuilder  *self,
-                                                                           const gchar              *key,
-                                                                           GVariant                 *value,
-                                                                           gboolean                  replace);
-gboolean                  ide_persistent_map_builder_write                (IdePersistentMapBuilder  *self,
-                                                                           GFile                    *destination,
-                                                                           gint                      io_priority,
-                                                                           GCancellable             *cancellable,
-                                                                           GError                  **error);
-void                      ide_persistent_map_builder_write_async          (IdePersistentMapBuilder  *self,
-                                                                           GFile                    *destination,
-                                                                           gint                      io_priority,
-                                                                           GCancellable             *cancellable,
-                                                                           GAsyncReadyCallback       callback,
-                                                                           gpointer                  user_data);
-gboolean                  ide_persistent_map_builder_write_finish         (IdePersistentMapBuilder  *self,
-                                                                           GAsyncResult             *result,
-                                                                           GError                  **error);
-void                      ide_persistent_map_builder_set_metadata_int64   (IdePersistentMapBuilder  *self,
-                                                                           const gchar              *key,
-                                                                           gint64                    value);
+IdePersistentMapBuilder *ide_persistent_map_builder_new                (void);
+void                     ide_persistent_map_builder_insert             (IdePersistentMapBuilder  *self,
+                                                                        const gchar              *key,
+                                                                        GVariant                 *value,
+                                                                        gboolean                  replace);
+void                     ide_persistent_map_builder_set_metadata_int64 (IdePersistentMapBuilder  *self,
+                                                                        const gchar              *key,
+                                                                        gint64                    value);
+gboolean                 ide_persistent_map_builder_write              (IdePersistentMapBuilder  *self,
+                                                                        GFile                    *destination,
+                                                                        gint                      io_priority,
+                                                                        GCancellable             *cancellable,
+                                                                        GError                  **error);
+void                     ide_persistent_map_builder_write_async        (IdePersistentMapBuilder  *self,
+                                                                        GFile                    *destination,
+                                                                        gint                      io_priority,
+                                                                        GCancellable             *cancellable,
+                                                                        GAsyncReadyCallback       callback,
+                                                                        gpointer                  user_data);
+gboolean                 ide_persistent_map_builder_write_finish       (IdePersistentMapBuilder  *self,
+                                                                        GAsyncResult             *result,
+                                                                        GError                  **error);
 
 G_END_DECLS
