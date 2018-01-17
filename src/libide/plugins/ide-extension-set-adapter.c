@@ -86,16 +86,19 @@ remove_extension (IdeExtensionSetAdapter *self,
                   PeasPluginInfo         *plugin_info,
                   PeasExtension          *exten)
 {
+  g_autoptr(GObject) hold = NULL;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (plugin_info != NULL);
   g_assert (exten != NULL);
-  g_assert (g_type_is_a (G_OBJECT_TYPE (exten), self->interface_type));
+  g_assert (self->interface_type == G_TYPE_INVALID ||
+            g_type_is_a (G_OBJECT_TYPE (exten), self->interface_type));
 
-  g_object_ref (exten);
+  hold = g_object_ref (exten);
+
   g_hash_table_remove (self->extensions, plugin_info);
-  g_signal_emit (self, signals [EXTENSION_REMOVED], 0, plugin_info, exten);
-  g_object_unref (exten);
+  g_signal_emit (self, signals [EXTENSION_REMOVED], 0, plugin_info, hold);
 }
 
 static void
@@ -230,7 +233,9 @@ ide_extension_set_adapter_do_reload (gpointer data)
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
   self->reload_handler = 0;
-  ide_extension_set_adapter_reload (self);
+
+  if (self->interface_type != G_TYPE_INVALID)
+    ide_extension_set_adapter_reload (self);
 
   return G_SOURCE_REMOVE;
 }
@@ -241,7 +246,9 @@ ide_extension_set_adapter_queue_reload (IdeExtensionSetAdapter *self)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
-  if (self->reload_handler != 0)
+  dzl_clear_source (&self->reload_handler);
+
+  if (self->interface_type == G_TYPE_INVALID)
     return;
 
   self->reload_handler = g_timeout_add (0, ide_extension_set_adapter_do_reload, self);
@@ -289,6 +296,9 @@ ide_extension_set_adapter_dispose (GObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+
+  self->interface_type = G_TYPE_INVALID;
+  dzl_clear_source (&self->reload_handler);
 
   /*
    * Steal the extensions so we can be re-entrant safe and not break
@@ -539,6 +549,9 @@ ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
+  IDE_TRACE_MSG ("Setting extension adapter %s value to \"%s\"",
+                 g_type_name (self->interface_type),
+                 value ?: "");
 
   if (!dzl_str_equal0 (self->value, value))
     {
