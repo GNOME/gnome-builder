@@ -28,10 +28,9 @@ struct _IdeCodeIndexBuilder
 {
   IdeObject            parent;
 
+  GMutex               mutex;
   IdeCodeIndexIndex   *index;
   IdeCodeIndexService *service;
-
-  GMutex               indexed;
 
   GHashTable          *build_flags;
 };
@@ -320,7 +319,7 @@ ide_code_index_builder_index_directory_cb (GObject      *object,
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
   g_assert (G_IS_TASK (task));
 
-  g_mutex_lock (&self->indexed);
+  g_mutex_lock (&self->mutex);
 
   n_threads = GPOINTER_TO_UINT (g_task_get_task_data (task)) - 1;
 
@@ -329,7 +328,7 @@ ide_code_index_builder_index_directory_cb (GObject      *object,
   else
     g_task_return_boolean (task, TRUE);
 
-  g_mutex_unlock (&self->indexed);
+  g_mutex_unlock (&self->mutex);
 }
 
 static void
@@ -761,7 +760,7 @@ ide_code_index_builder_finalize (GObject *object)
   g_clear_object (&self->index);
   g_clear_object (&self->service);
   g_clear_pointer (&self->build_flags, g_hash_table_unref);
-  g_mutex_clear (&self->indexed);
+  g_mutex_clear (&self->mutex);
 
   G_OBJECT_CLASS(ide_code_index_builder_parent_class)->finalize (object);
 }
@@ -819,7 +818,7 @@ ide_code_index_builder_init (IdeCodeIndexBuilder *self)
                                              (GEqualFunc)ide_file_equal,
                                              g_object_unref,
                                              (GDestroyNotify)g_strfreev);
-  g_mutex_init (&self->indexed);
+  g_mutex_init (&self->mutex);
 }
 
 static void
