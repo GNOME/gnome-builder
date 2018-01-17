@@ -21,11 +21,6 @@
 #include "ide-code-index-service.h"
 #include "ide-code-index-symbol-resolver.h"
 
-struct _IdeCodeIndexSymbolResolver
-{
-  IdeObject parent_instance;
-};
-
 static void
 ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
                                           GAsyncResult *result,
@@ -41,6 +36,7 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
   IdeCodeIndexIndex *index;
   IdeContext *context;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEXER (code_indexer));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
@@ -48,18 +44,21 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
   self = g_task_get_source_object (task);
   g_assert (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (self));
 
-  key = ide_code_indexer_generate_key_finish (code_indexer, result, &error);
-
-  if (key == NULL)
+  if (!(key = ide_code_indexer_generate_key_finish (code_indexer, result, &error)))
     {
-      g_message ("Key not found, %s", error->message);
       g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
   service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (service));
+
   index = ide_code_index_service_get_index (service);
+  g_assert (IDE_IS_CODE_INDEX_INDEX (index));
+
   symbol = ide_code_index_index_lookup_symbol (index, key);
 
   if (symbol != NULL)
@@ -70,8 +69,7 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
     g_task_return_new_error (task,
                              G_IO_ERROR,
                              G_IO_ERROR_NOT_FOUND,
-                             "Symbol with key \"%s\" not found",
-                             key);
+                             "Failed to locate symbol \"%s\"", key);
 }
 
 static void
@@ -85,53 +83,51 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   g_autoptr(GTask) task = NULL;
   IdeCodeIndexService *service;
   IdeCodeIndexer *code_indexer;
-  const gchar *file_name;
+  const gchar *path;
   IdeContext *context;
 
-  g_return_if_fail (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (self));
-  g_return_if_fail (location != NULL);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
-
-  file_name = ide_file_get_path (ide_source_location_get_file (location));
-  code_indexer = ide_code_index_service_get_code_indexer (service, file_name);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (self));
+  g_assert (location != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_code_index_symbol_resolver_lookup_symbol_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (service));
+
+  path = ide_file_get_path (ide_source_location_get_file (location));
+  g_assert (path != NULL);
+
+  code_indexer = ide_code_index_service_get_code_indexer (service, path);
+  g_assert (!code_indexer || IDE_IS_CODE_INDEXER (code_indexer));
+
   if (code_indexer == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Failed to lcoate code indexer");
-      return;
-    }
-
-  if (g_task_return_error_if_cancelled (task))
-    return;
-
-  g_debug ("Getting key");
-
-  ide_code_indexer_generate_key_async (code_indexer,
-                                       location,
-                                       cancellable,
-                                       ide_code_index_symbol_resolver_lookup_cb,
-                                       g_steal_pointer (&task));
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Failed to lcoate code indexer");
+  else
+    ide_code_indexer_generate_key_async (code_indexer,
+                                         location,
+                                         cancellable,
+                                         ide_code_index_symbol_resolver_lookup_cb,
+                                         g_steal_pointer (&task));
 }
 static IdeSymbol *
 ide_code_index_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
                                                      GAsyncResult       *result,
                                                      GError            **error)
 {
-  GTask *task = (GTask *)result;
+  g_assert (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (resolver));
+  g_assert (G_IS_TASK (result));
 
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
-
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
@@ -141,9 +137,10 @@ symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
   iface->lookup_symbol_finish = ide_code_index_symbol_resolver_lookup_symbol_finish;
 }
 
+struct _IdeCodeIndexSymbolResolver { IdeObject parent_instance; };
+
 G_DEFINE_TYPE_WITH_CODE (IdeCodeIndexSymbolResolver, ide_code_index_symbol_resolver, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER,
-                                                symbol_resolver_iface_init))
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
 static void
 ide_code_index_symbol_resolver_init (IdeCodeIndexSymbolResolver *self)
