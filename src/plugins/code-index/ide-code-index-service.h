@@ -28,8 +28,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexService, ide_code_index_service, IDE, CODE_INDEX_SERVICE, IdeObject)
 
-IdeCodeIndexIndex *ide_code_index_service_get_index                 (IdeCodeIndexService *self);
-IdeCodeIndexer    *ide_code_index_service_get_code_indexer          (IdeCodeIndexService *self,
-                                                                     const gchar         *file_name);
+IdeCodeIndexIndex *ide_code_index_service_get_index        (IdeCodeIndexService *self);
+IdeCodeIndexer    *ide_code_index_service_get_code_indexer (IdeCodeIndexService *self,
+                                                            const gchar         *file_name);
 
 G_END_DECLS

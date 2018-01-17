@@ -29,18 +29,18 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexBuilder, ide_code_index_builder, IDE, CODE_INDEX_BUILDER, IdeObject)
 
-void                    ide_code_index_builder_drop_caches     (IdeCodeIndexBuilder     *self);
-void                    ide_code_index_builder_build_async     (IdeCodeIndexBuilder     *self,
-                                                                GFile                   *directory,
-                                                                gboolean                 recursive,
-                                                                GCancellable            *cancellable,
-                                                                GAsyncReadyCallback      callback,
-                                                                gpointer                 user_data);
-gboolean                ide_code_index_builder_build_finish    (IdeCodeIndexBuilder     *self,
-                                                                GAsyncResult            *result,
-                                                                GError                 **error);
-IdeCodeIndexBuilder    *ide_code_index_builder_new             (IdeContext              *context,
-                                                                IdeCodeIndexIndex       *index,
-                                                                IdeCodeIndexService     *service);
+void                 ide_code_index_builder_drop_caches  (IdeCodeIndexBuilder  *self);
+void                 ide_code_index_builder_build_async  (IdeCodeIndexBuilder  *self,
+                                                          GFile                *directory,
+                                                          gboolean              recursive,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+gboolean             ide_code_index_builder_build_finish (IdeCodeIndexBuilder  *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
+IdeCodeIndexBuilder *ide_code_index_builder_new          (IdeContext           *context,
+                                                          IdeCodeIndexIndex    *index,
+                                                          IdeCodeIndexService  *service);
 
 G_END_DECLS
