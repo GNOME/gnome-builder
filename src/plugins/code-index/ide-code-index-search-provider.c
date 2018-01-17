@@ -22,23 +22,10 @@
 #include "ide-code-index-service.h"
 #include "ide-code-index-index.h"
 
-struct _IdeCodeIndexSearchProvider
-{
-  IdeObject parent;
-};
-
-static void search_provider_iface_init (IdeSearchProviderInterface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (IdeCodeIndexSearchProvider,
-                         ide_code_index_search_provider,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER,
-                                                search_provider_iface_init))
-
 static void
-populate_cb (GObject           *object,
-             GAsyncResult      *result,
-             gpointer           user_data)
+populate_cb (GObject      *object,
+             GAsyncResult *result,
+             gpointer      user_data)
 {
   IdeCodeIndexIndex *index = (IdeCodeIndexIndex *)object;
   g_autoptr(GTask) task = user_data;
@@ -46,12 +33,15 @@ populate_cb (GObject           *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CODE_INDEX_INDEX (index));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   results = ide_code_index_index_populate_finish (index, result, &error);
 
   if (results != NULL)
-    g_task_return_pointer (task, g_steal_pointer (&results), (GDestroyNotify)g_ptr_array_unref);
+    g_task_return_pointer (task,
+                           g_steal_pointer (&results),
+                           (GDestroyNotify)g_ptr_array_unref);
   else
     g_task_return_error (task, g_steal_pointer (&error));
 }
@@ -65,32 +55,52 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
                                              gpointer             user_data)
 {
   IdeCodeIndexSearchProvider *self = (IdeCodeIndexSearchProvider *)provider;
+  g_autoptr(GTask) task = NULL;
   IdeCodeIndexService *service;
   IdeCodeIndexIndex *index;
-  g_autoptr(GTask) task = NULL;
+  IdeContext *context;
 
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CODE_INDEX_SEARCH_PROVIDER (self));
+  g_return_if_fail (search_terms != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  service = ide_context_get_service_typed (ide_object_get_context (IDE_OBJECT (self)),
-                                           IDE_TYPE_CODE_INDEX_SERVICE);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
   index = ide_code_index_service_get_index (service);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_code_index_search_provider_search_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
-  ide_code_index_index_populate_async (index, search_terms, max_results, cancellable,
-                                       populate_cb, g_steal_pointer (&task));
+  ide_code_index_index_populate_async (index,
+                                       search_terms,
+                                       max_results,
+                                       cancellable,
+                                       populate_cb,
+                                       g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
-static GPtrArray*
+static GPtrArray *
 ide_code_index_search_provider_search_finish (IdeSearchProvider *provider,
                                               GAsyncResult      *result,
                                               GError           **error)
 {
-  GTask *task = (GTask *)result;
+  GPtrArray *ar;
 
-  g_return_val_if_fail (G_IS_TASK(task), NULL);
+  IDE_ENTRY;
 
-  return g_task_propagate_pointer (task, error);
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_CODE_INDEX_SEARCH_PROVIDER (provider), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  ar = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ar);
 }
 
 static void
@@ -99,6 +109,13 @@ search_provider_iface_init (IdeSearchProviderInterface *iface)
   iface->search_async = ide_code_index_search_provider_search_async;
   iface->search_finish = ide_code_index_search_provider_search_finish;
 }
+
+struct _IdeCodeIndexSearchProvider { IdeObject parent; };
+
+G_DEFINE_TYPE_WITH_CODE (IdeCodeIndexSearchProvider,
+                         ide_code_index_search_provider,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))
 
 static void
 ide_code_index_search_provider_init (IdeCodeIndexSearchProvider *self)
