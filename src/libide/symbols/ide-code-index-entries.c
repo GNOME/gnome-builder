@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-code-index-entries"
 
+#include "application/ide-application.h"
 #include "symbols/ide-code-index-entries.h"
 
 G_DEFINE_INTERFACE (IdeCodeIndexEntries, ide_code_index_entries, G_TYPE_OBJECT)
@@ -49,6 +50,7 @@ ide_code_index_entries_default_init (IdeCodeIndexEntriesInterface *iface)
 IdeCodeIndexEntry *
 ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRIES (self), NULL);
 
   return IDE_CODE_INDEX_ENTRIES_GET_IFACE (self)->get_next_entry (self);

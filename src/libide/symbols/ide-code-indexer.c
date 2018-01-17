@@ -1,6 +1,7 @@
 /* ide-code-indexer.c
  *
  * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright © 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,56 +19,91 @@
 
 #define G_LOG_DOMAIN "ide-code-indexer"
 
+#include "application/ide-application.h"
 #include "symbols/ide-code-indexer.h"
+
+/**
+ * SECTION:ide-code-indexer
+ * @title: IdeCodeIndexer
+ * @short_description: Interface for background indexing source code
+ *
+ * The #IdeCodeIndexer interface is used to index source code in the project.
+ * Plugins that want to provide global search features for source code should
+ * implement this interface and specify which languages they support in their
+ * .plugin definition, using "X-Code-Indexer-Languages". For example. to index
+ * Python source code, you might use:
+ *
+ *   X-Code-Indexer-Languages=python,python3
+ *
+ * Since: 3.26
+ */
 
 G_DEFINE_INTERFACE (IdeCodeIndexer, ide_code_indexer, IDE_TYPE_OBJECT)
 
-static IdeCodeIndexEntries *
-ide_code_indexer_real_index_file (IdeCodeIndexer       *self,
-                                  GFile                *file,
-                                  const gchar * const  *build_flags,
-                                  GCancellable         *cancellable,
-                                  GError              **error)
+static void
+ide_code_indexer_real_index_file_async (IdeCodeIndexer      *self,
+                                        GFile               *file,
+                                        const gchar * const *build_flags,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
 {
-  g_set_error (error,
-               G_IO_ERROR,
-               G_IO_ERROR_NOT_SUPPORTED,
-               "Indexing is not supported");
-  return NULL;
+  g_assert (IDE_IS_CODE_INDEXER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  g_task_report_new_error (self, callback, user_data,
+                           ide_code_indexer_real_index_file_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Get key is not supported");
 }
 
-void
-ide_code_indexer_real_generate_key_async (IdeCodeIndexer       *self,
-                                          IdeSourceLocation    *location,
-                                          GCancellable         *cancellable,
-                                          GAsyncReadyCallback   callback,
-                                          gpointer              user_data)
+static IdeCodeIndexEntries *
+ide_code_indexer_real_index_file_finish (IdeCodeIndexer  *self,
+                                         GAsyncResult    *result,
+                                         GError         **error)
 {
-  g_task_report_new_error (self,
-                           callback,
-                           user_data,
+  g_assert (IDE_IS_CODE_INDEXER (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+ide_code_indexer_real_generate_key_async (IdeCodeIndexer      *self,
+                                          IdeSourceLocation   *location,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
+{
+  g_assert (IDE_IS_CODE_INDEXER (self));
+  g_assert (location != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  g_task_report_new_error (self, callback, user_data,
                            ide_code_indexer_real_generate_key_async,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_SUPPORTED,
                            "Get key is not supported");
 }
 
-gchar *
+static gchar *
 ide_code_indexer_real_generate_key_finish (IdeCodeIndexer  *self,
                                            GAsyncResult    *result,
                                            GError         **error)
 {
-  GTask *task = (GTask *)result;
-
+  g_assert (IDE_IS_CODE_INDEXER (self));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
 ide_code_indexer_default_init (IdeCodeIndexerInterface *iface)
 {
-  iface->index_file = ide_code_indexer_real_index_file;
+  iface->index_file_async = ide_code_indexer_real_index_file_async;
+  iface->index_file_finish = ide_code_indexer_real_index_file_finish;
   iface->generate_key_async = ide_code_indexer_real_generate_key_async;
   iface->generate_key_finish = ide_code_indexer_real_generate_key_finish;
 }
@@ -78,32 +114,54 @@ ide_code_indexer_default_init (IdeCodeIndexerInterface *iface)
  * @file: Source file to index.
  * @build_flags: (nullable) (array zero-terminated=1): array of build flags to parse @file.
  * @cancellable: (nullable): a #GCancellable.
- * @error: a #GError.
+ * @callback: a #GAsyncReadyCallback
+ * @user_data: closure data for @callback
  *
- * This function will take index source file and create an array
- * of symbols in @file.
+ * This function will take index source file and create an array of symbols in
+ * @file. @callback is called upon completion and must call
+ * ide_code_indexer_index_file_finish() to complete the operation.
  *
- * Returns: (transfer full): an #IdeCodeIndexEntries contains list
- *    of #IdeCodeIndexEntry.
+ * Since: 3.28
+ */
+void
+ide_code_indexer_index_file_async (IdeCodeIndexer      *self,
+                                   GFile               *file,
+                                   const gchar * const *build_flags,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_CODE_INDEXER (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  return IDE_CODE_INDEXER_GET_IFACE (self)->index_file_async (self, file, build_flags, cancellable, callback, user_data);
+}
+
+/**
+ * ide_code_indexer_index_file_finish:
+ * @self: a #IdeCodeIndexer
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
  *
- * Since: 3.26
+ * Completes an asynchronous request to ide_code_indexer_index_file_async().
+ *
+ * Returns: (transfer full): an #IdeCodeIndexEntries if successful; otherwise %NULL
+ *   and @error is set.
+ *
+ * Since: 3.28
  */
 IdeCodeIndexEntries *
-ide_code_indexer_index_file (IdeCodeIndexer       *self,
-                             GFile                *file,
-                             const gchar * const  *build_flags,
-                             GCancellable         *cancellable,
-                             GError              **error)
+ide_code_indexer_index_file_finish (IdeCodeIndexer  *self,
+                                    GAsyncResult    *result,
+                                    GError         **error)
 {
-  IdeCodeIndexerInterface *iface;
-
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEXER (self), NULL);
-  g_return_val_if_fail (G_IS_FILE (file), NULL);
-  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  iface = IDE_CODE_INDEXER_GET_IFACE (self);
-
-  return iface->index_file (self, file, build_flags, cancellable, error);
+  return IDE_CODE_INDEXER_GET_IFACE (self)->index_file_finish (self, result, error);
 }
 
 /**
@@ -119,21 +177,18 @@ ide_code_indexer_index_file (IdeCodeIndexer       *self,
  * Since: 3.26
  */
 void
-ide_code_indexer_generate_key_async (IdeCodeIndexer       *self,
-                                     IdeSourceLocation    *location,
-                                     GCancellable         *cancellable,
-                                     GAsyncReadyCallback   callback,
-                                     gpointer              user_data)
+ide_code_indexer_generate_key_async (IdeCodeIndexer      *self,
+                                     IdeSourceLocation   *location,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
 {
-  IdeCodeIndexerInterface *iface;
-
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CODE_INDEXER (self));
   g_return_if_fail (location != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  iface = IDE_CODE_INDEXER_GET_IFACE (self);
-
-  iface->generate_key_async (self, location, cancellable, callback, user_data);
+  IDE_CODE_INDEXER_GET_IFACE (self)->generate_key_async (self, location, cancellable, callback, user_data);
 }
 
 /**
@@ -149,15 +204,13 @@ ide_code_indexer_generate_key_async (IdeCodeIndexer       *self,
  * Since: 3.26
  */
 gchar *
-ide_code_indexer_generate_key_finish (IdeCodeIndexer       *self,
-                                      GAsyncResult         *result,
-                                      GError              **error)
+ide_code_indexer_generate_key_finish (IdeCodeIndexer  *self,
+                                      GAsyncResult    *result,
+                                      GError         **error)
 {
-  IdeCodeIndexerInterface *iface;
-
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEXER (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  iface  = IDE_CODE_INDEXER_GET_IFACE (self);
-
-  return iface->generate_key_finish (self, result, error);
+  return IDE_CODE_INDEXER_GET_IFACE (self)->generate_key_finish (self, result, error);
 }

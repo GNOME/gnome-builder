@@ -19,22 +19,23 @@
 #pragma once
 
 #include "ide-object.h"
-#include "symbols/ide-symbol.h"
+
 #include "symbols/ide-code-index-entry.h"
+#include "symbols/ide-symbol.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CODE_INDEX_ENTRIES (ide_code_index_entries_get_type ())
+#define IDE_TYPE_CODE_INDEX_ENTRIES (ide_code_index_entries_get_type())
 
 G_DECLARE_INTERFACE (IdeCodeIndexEntries, ide_code_index_entries, IDE, CODE_INDEX_ENTRIES, GObject)
 
 struct _IdeCodeIndexEntriesInterface
 {
-  GTypeInterface parent_iface;
+  GTypeInterface       parent_iface;
 
-  IdeCodeIndexEntry   *(*get_next_entry)   (IdeCodeIndexEntries *self);
+  IdeCodeIndexEntry *(*get_next_entry) (IdeCodeIndexEntries *self);
 };
 
-IdeCodeIndexEntry  *ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self);
+IdeCodeIndexEntry *ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self);
 
 G_END_DECLS

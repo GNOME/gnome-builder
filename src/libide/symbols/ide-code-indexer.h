@@ -18,9 +18,9 @@
 
 #pragma once
 
+#include "ide-object.h"
 #include "ide-version-macros.h"
 
-#include "ide-object.h"
 #include "symbols/ide-code-index-entries.h"
 
 G_BEGIN_DECLS
@@ -31,13 +31,8 @@ G_DECLARE_INTERFACE (IdeCodeIndexer, ide_code_indexer, IDE, CODE_INDEXER, IdeObj
 
 struct _IdeCodeIndexerInterface
 {
-  GTypeInterface parent_iface;
+  GTypeInterface         parent_iface;
 
-  IdeCodeIndexEntries *(*index_file)             (IdeCodeIndexer       *self,
-                                                  GFile                *file,
-                                                  const gchar * const  *build_flags,
-                                                  GCancellable         *cancellable,
-                                                  GError              **error);
   void                 (*generate_key_async)     (IdeCodeIndexer       *self,
                                                   IdeSourceLocation    *location,
                                                   GCancellable         *cancellable,
@@ -46,23 +41,37 @@ struct _IdeCodeIndexerInterface
   gchar               *(*generate_key_finish)    (IdeCodeIndexer       *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+  void                 (*index_file_async)       (IdeCodeIndexer       *self,
+                                                  GFile                *file,
+                                                  const gchar * const  *build_flags,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+  IdeCodeIndexEntries *(*index_file_finish)      (IdeCodeIndexer       *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
 };
 
+IDE_AVAILABLE_IN_3_28
+void                  ide_code_indexer_index_file_async    (IdeCodeIndexer       *self,
+                                                            GFile                *file,
+                                                            const gchar * const  *build_flags,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+IdeCodeIndexEntries  *ide_code_indexer_index_file_finish   (IdeCodeIndexer       *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
 IDE_AVAILABLE_IN_ALL
-IdeCodeIndexEntries  *ide_code_indexer_index_file           (IdeCodeIndexer       *self,
-                                                             GFile                *file,
-                                                             const gchar * const  *build_flags,
-                                                             GCancellable         *cancellable,
-                                                             GError              **error);
+void                  ide_code_indexer_generate_key_async  (IdeCodeIndexer       *self,
+                                                            IdeSourceLocation    *location,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-void                  ide_code_indexer_generate_key_async   (IdeCodeIndexer       *self,
-                                                             IdeSourceLocation    *location,
-                                                             GCancellable         *cancellable,
-                                                             GAsyncReadyCallback   callback,
-                                                             gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-gchar                *ide_code_indexer_generate_key_finish  (IdeCodeIndexer       *self,
-                                                             GAsyncResult         *result,
-                                                             GError              **error);
+gchar                *ide_code_indexer_generate_key_finish (IdeCodeIndexer       *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
 
 G_END_DECLS
