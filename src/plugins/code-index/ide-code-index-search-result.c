@@ -23,8 +23,6 @@
 struct _IdeCodeIndexSearchResult
 {
   IdeSearchResult    parent;
-
-  IdeContext        *context;
   IdeSourceLocation *location;
 };
 
@@ -32,7 +30,6 @@ G_DEFINE_TYPE (IdeCodeIndexSearchResult, ide_code_index_search_result, IDE_TYPE_
 
 enum {
   PROP_0,
-  PROP_CONTEXT,
   PROP_LOCATION,
   N_PROPS
 };
@@ -59,10 +56,6 @@ ide_code_index_search_result_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_CONTEXT:
-      g_value_set_object (value, self->context);
-      break;
-
     case PROP_LOCATION:
       g_value_set_boxed (value, self->location);
       break;
@@ -82,10 +75,6 @@ ide_code_index_search_result_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CONTEXT:
-      dzl_set_weak_pointer (&self->context, g_value_get_object (value));
-      break;
-
     case PROP_LOCATION:
       self->location = g_value_dup_boxed (value);
       break;
@@ -100,7 +89,6 @@ ide_code_index_search_result_finalize (GObject *object)
 {
   IdeCodeIndexSearchResult *self = (IdeCodeIndexSearchResult *)object;
 
-  dzl_clear_weak_pointer (&self->context);
   g_clear_pointer (&self->location, ide_source_location_unref);
 
   G_OBJECT_CLASS (ide_code_index_search_result_parent_class)->finalize (object);
@@ -118,13 +106,6 @@ ide_code_index_search_result_class_init (IdeCodeIndexSearchResultClass *klass)
 
   result_class->get_source_location = ide_code_index_search_result_get_source_location;
 
-  properties [PROP_CONTEXT] =
-    g_param_spec_object ("context",
-                         "Context",
-                         "The context for the result",
-                         IDE_TYPE_CONTEXT,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_LOCATION] =
     g_param_spec_boxed ("location",
                         "location",
@@ -140,16 +121,14 @@ ide_code_index_search_result_init (IdeCodeIndexSearchResult *self)
 {
 }
 
-IdeCodeIndexSearchResult*
-ide_code_index_search_result_new (IdeContext        *context,
-                                  const gchar       *title,
+IdeCodeIndexSearchResult *
+ide_code_index_search_result_new (const gchar       *title,
                                   const gchar       *subtitle,
                                   const gchar       *icon_name,
                                   IdeSourceLocation *location,
                                   gfloat             score)
 {
   return g_object_new (IDE_TYPE_CODE_INDEX_SEARCH_RESULT,
-                       "context", context,
                        "title", title,
                        "subtitle", subtitle,
                        "icon-name", icon_name,

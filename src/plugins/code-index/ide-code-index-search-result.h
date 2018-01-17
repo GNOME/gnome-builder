@@ -24,11 +24,9 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_INDEX_SEARCH_RESULT (ide_code_index_search_result_get_type ())
 
-G_DECLARE_FINAL_TYPE (IdeCodeIndexSearchResult, ide_code_index_search_result,
-                      IDE, CODE_INDEX_SEARCH_RESULT, IdeSearchResult)
+G_DECLARE_FINAL_TYPE (IdeCodeIndexSearchResult, ide_code_index_search_result, IDE, CODE_INDEX_SEARCH_RESULT, IdeSearchResult)
 
-IdeCodeIndexSearchResult* ide_code_index_search_result_new (IdeContext        *context,
-                                                            const gchar       *title,
+IdeCodeIndexSearchResult *ide_code_index_search_result_new (const gchar       *title,
                                                             const gchar       *subtitle,
                                                             const gchar       *icon_name,
                                                             IdeSourceLocation *location,

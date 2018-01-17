@@ -344,8 +344,7 @@ ide_code_index_index_new_search_result (IdeCodeIndexIndex *self,
     /* translators: "Declaration" is the forward-declaration (usually a header file), not the implementation */
     g_string_append_printf (subtitle, " (%s)", _("Declaration"));
 
-  return ide_code_index_search_result_new (context,
-                                           key + 2,
+  return ide_code_index_search_result_new (key + 2,
                                            subtitle->str,
                                            icon_name,
                                            location,
