@@ -512,7 +512,7 @@ ide_context_get_service_typed (IdeContext *self,
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      if (g_type_is_a (service_type, GPOINTER_TO_SIZE (key)))
+      if (G_TYPE_CHECK_INSTANCE_TYPE (value, service_type))
         return value;
     }
 
