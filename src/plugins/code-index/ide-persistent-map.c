@@ -50,8 +50,11 @@ struct _IdePersistentMap
 
   gint32             byte_order;
 
+  guint              load_called : 1;
   guint              loaded : 1;
 };
+
+G_STATIC_ASSERT (sizeof (KVPair) == 8);
 
 G_DEFINE_TYPE (IdePersistentMap, ide_persistent_map, G_TYPE_OBJECT)
 
@@ -70,24 +73,16 @@ ide_persistent_map_load_file_worker (GTask        *task,
   g_autoptr(GVariant) values = NULL;
   g_autoptr(GVariant) metadata = NULL;
   g_autoptr(GVariant) kvpairs = NULL;
-  GVariantDict dict;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariantDict) dict = NULL;
   gint32 version;
   gsize n_elements;
-  g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_PERSISTENT_MAP (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (self->loaded)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVAL,
-                               "Index already loaded");
-      return;
-    }
+  g_assert (self->loaded == FALSE);
 
   self->loaded = TRUE;
 
@@ -100,7 +95,9 @@ ide_persistent_map_load_file_worker (GTask        *task,
       return;
     }
 
-  if (NULL == (mapped_file = g_mapped_file_new (path, FALSE, &error)))
+  mapped_file = g_mapped_file_new (path, FALSE, &error);
+
+  if (mapped_file == NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -120,13 +117,12 @@ ide_persistent_map_load_file_worker (GTask        *task,
       return;
     }
 
-  g_variant_ref_sink (data);
+  g_variant_take_ref (data);
 
-  g_variant_dict_init (&dict, data);
+  dict = g_variant_dict_new (data);
 
-  if (!g_variant_dict_lookup (&dict, "version", "i", &version) || version != 2)
+  if (!g_variant_dict_lookup (dict, "version", "i", &version) || version != 2)
     {
-      g_variant_dict_clear (&dict);
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_INVAL,
@@ -135,15 +131,13 @@ ide_persistent_map_load_file_worker (GTask        *task,
       return;
     }
 
-  keys = g_variant_dict_lookup_value (&dict, "keys", G_VARIANT_TYPE_ARRAY);
-  values = g_variant_dict_lookup_value (&dict, "values", G_VARIANT_TYPE_ARRAY);
-  kvpairs = g_variant_dict_lookup_value (&dict, "kvpairs", G_VARIANT_TYPE_ARRAY);
-  metadata = g_variant_dict_lookup_value (&dict, "metadata", G_VARIANT_TYPE_VARDICT);
+  keys = g_variant_dict_lookup_value (dict, "keys", G_VARIANT_TYPE_ARRAY);
+  values = g_variant_dict_lookup_value (dict, "values", G_VARIANT_TYPE_ARRAY);
+  kvpairs = g_variant_dict_lookup_value (dict, "kvpairs", G_VARIANT_TYPE_ARRAY);
+  metadata = g_variant_dict_lookup_value (dict, "metadata", G_VARIANT_TYPE_VARDICT);
 
-  if (!g_variant_dict_lookup (&dict, "byte-order", "i", &self->byte_order))
-    self->byte_order = 0;
-
-  g_variant_dict_clear (&dict);
+  if (!g_variant_dict_lookup (dict, "byte-order", "i", &self->byte_order))
+    self->byte_order = G_BYTE_ORDER;
 
   if (keys == NULL || values == NULL || kvpairs == NULL || metadata == NULL || !self->byte_order)
     {
@@ -154,13 +148,8 @@ ide_persistent_map_load_file_worker (GTask        *task,
       return;
     }
 
-  self->keys = g_variant_get_fixed_array (keys,
-                                          &n_elements,
-                                          sizeof (guint8));
-
-  self->kvpairs = g_variant_get_fixed_array (kvpairs,
-                                             &self->n_kvpairs,
-                                             sizeof (KVPair));
+  self->keys = g_variant_get_fixed_array (keys, &n_elements, sizeof (guint8));
+  self->kvpairs = g_variant_get_fixed_array (kvpairs, &self->n_kvpairs, sizeof (KVPair));
 
   self->mapped_file = g_steal_pointer (&mapped_file);
   self->data = g_steal_pointer (&data);
@@ -168,6 +157,14 @@ ide_persistent_map_load_file_worker (GTask        *task,
   self->values = g_steal_pointer (&values);
   self->kvpairs_var = g_steal_pointer (&kvpairs);
   self->metadata = g_variant_dict_new (metadata);
+
+  g_assert (!g_variant_is_floating (self->data));
+  g_assert (!g_variant_is_floating (self->keys_var));
+  g_assert (!g_variant_is_floating (self->values));
+  g_assert (!g_variant_is_floating (self->kvpairs_var));
+  g_assert (self->keys != NULL);
+  g_assert (self->kvpairs != NULL);
+  g_assert (self->metadata != NULL);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -181,60 +178,61 @@ ide_persistent_map_load_file (IdePersistentMap *self,
   g_autoptr(GTask) task = NULL;
 
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP (self), FALSE);
+  g_return_val_if_fail (self->load_called == FALSE, FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
 
+  self->load_called = TRUE;
+
   task = g_task_new (self, cancellable, NULL, NULL);
-
-  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_persistent_map_load_file);
+  g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-
-  ide_persistent_map_load_file_worker (task, self, file, cancellable);
+  g_task_run_in_thread_sync (task, ide_persistent_map_load_file_worker);
 
   return g_task_propagate_boolean (task, error);
 }
 
 void
-ide_persistent_map_load_file_async  (IdePersistentMap      *self,
-                                     GFile                 *file,
-                                     GCancellable          *cancellable,
-                                     GAsyncReadyCallback    callback,
-                                     gpointer               user_data)
+ide_persistent_map_load_file_async (IdePersistentMap    *self,
+                                    GFile               *file,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_PERSISTENT_MAP (self));
+  g_return_if_fail (self->load_called == FALSE);
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  self->load_called = TRUE;
 
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_persistent_map_load_file_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_set_source_tag (task, ide_persistent_map_load_file_async);
-
   g_task_run_in_thread (task, ide_persistent_map_load_file_worker);
 }
 
 /**
  * ide_persistent_map_load_file_finish:
- * @self: An #IdePersistentMap instance.
- * @result: result of loading process
- * @error: error in loading process
+ * @self: an #IdePersistentMap
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
  *
  * Returns: Whether file is loaded or not.
  */
 gboolean
-ide_persistent_map_load_file_finish (IdePersistentMap   *self,
+ide_persistent_map_load_file_finish (IdePersistentMap  *self,
                                      GAsyncResult      *result,
                                      GError           **error)
 {
-  GTask *task = (GTask *)result;
+  g_return_val_if_fail (IDE_IS_PERSISTENT_MAP (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
-
-  return g_task_propagate_boolean (task, error);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 /**
@@ -253,22 +251,23 @@ ide_persistent_map_lookup_value (IdePersistentMap *self,
   gint64 r;
 
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP (self), NULL);
-  g_return_val_if_fail (key != NULL, NULL);
+  g_return_val_if_fail (self->loaded, NULL);
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (self->kvpairs != NULL, NULL);
+  g_return_val_if_fail (self->keys != NULL, NULL);
+  g_return_val_if_fail (self->values != NULL, NULL);
+  g_return_val_if_fail (self->n_kvpairs < G_MAXINT64, NULL);
 
+  /* unsigned long to signed long */
+  r = (gint64)self->n_kvpairs - 1;
   l = 0;
-  r = (gint64)self->n_kvpairs - 1; /* unsigned long to signed long */
 
   while (l <= r)
     {
-      gint64 m;
-      gint cmp;
-
-      m = (l + r)/2;
-
-      cmp = g_strcmp0 (key, &self->keys [self->kvpairs [m].key]);
+      gint64 m = (l + r) / 2;
+      gint cmp = g_strcmp0 (key, &self->keys [self->kvpairs [m].key]);
 
       if (cmp < 0)
-
         r = m - 1;
       else if (cmp > 0)
         l = m + 1;
@@ -277,19 +276,14 @@ ide_persistent_map_lookup_value (IdePersistentMap *self,
           value = g_variant_get_child_value (self->values, self->kvpairs [m].value);
           break;
         }
+
+      g_assert (l >= 0);
+      g_assert (r >= 0);
+      g_assert (r >= l);
     }
 
   if (value != NULL && self->byte_order != G_BYTE_ORDER)
-    {
-      g_autoptr(GVariant) new_value = NULL;
-      GVariant *t;
-
-      new_value = g_variant_byteswap (value);
-      /* swap new_value with value */
-      t = value;
-      value = new_value;
-      new_value = t;
-    }
+    return g_variant_byteswap (value);
 
   return g_steal_pointer (&value);
 }
@@ -298,15 +292,16 @@ gint64
 ide_persistent_map_builder_get_metadata_int64 (IdePersistentMap *self,
                                                const gchar      *key)
 {
-  guint64 value;
+  guint64 value = 0;
 
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP (self), 0);
   g_return_val_if_fail (key != NULL, 0);
+  g_return_val_if_fail (self->metadata != NULL, 0);
 
-  if (g_variant_dict_lookup (self->metadata, key, "x", &value))
-    return value;
+  if (!g_variant_dict_lookup (self->metadata, key, "x", &value))
+    return 0;
 
-  return 0;
+  return value;
 }
 
 static void
@@ -314,11 +309,15 @@ ide_persistent_map_finalize (GObject *object)
 {
   IdePersistentMap *self = (IdePersistentMap *)object;
 
-  g_clear_pointer (&self->mapped_file, g_mapped_file_unref);
+  self->keys = NULL;
+  self->kvpairs = NULL;
+
+  g_clear_pointer (&self->data, g_variant_unref);
   g_clear_pointer (&self->keys_var, g_variant_unref);
   g_clear_pointer (&self->values, g_variant_unref);
   g_clear_pointer (&self->kvpairs_var, g_variant_unref);
   g_clear_pointer (&self->metadata, g_variant_dict_unref);
+  g_clear_pointer (&self->mapped_file, g_mapped_file_unref);
 
   G_OBJECT_CLASS (ide_persistent_map_parent_class)->finalize (object);
 }
@@ -336,7 +335,7 @@ ide_persistent_map_class_init (IdePersistentMapClass *self)
   object_class->finalize = ide_persistent_map_finalize;
 }
 
-IdePersistentMap*
+IdePersistentMap *
 ide_persistent_map_new (void)
 {
   return g_object_new (IDE_TYPE_PERSISTENT_MAP, NULL);

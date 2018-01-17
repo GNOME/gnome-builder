@@ -18,26 +18,26 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <gio/gio.h>
 
 #define IDE_TYPE_PERSISTENT_MAP (ide_persistent_map_get_type ())
 
 G_DECLARE_FINAL_TYPE (IdePersistentMap, ide_persistent_map, IDE, PERSISTENT_MAP, GObject)
 
-IdePersistentMap     *ide_persistent_map_new                           (void);
-gboolean              ide_persistent_map_load_file                     (IdePersistentMap    *self,
-                                                                        GFile               *file,
-                                                                        GCancellable        *cancellable,
-                                                                        GError             **error);
-void                  ide_persistent_map_load_file_async               (IdePersistentMap    *self,
-                                                                        GFile               *file,
-                                                                        GCancellable        *cancellable,
-                                                                        GAsyncReadyCallback  callback,
-                                                                        gpointer             user_data);
-gboolean              ide_persistent_map_load_file_finish              (IdePersistentMap    *self,
-                                                                        GAsyncResult        *result,
-                                                                        GError             **error);
-GVariant             *ide_persistent_map_lookup_value                  (IdePersistentMap    *self,
-                                                                        const gchar         *key);
-gint64                ide_persistent_map_builder_get_metadata_int64    (IdePersistentMap    *self,
-                                                                        const gchar         *key);
+IdePersistentMap *ide_persistent_map_new                        (void);
+gboolean          ide_persistent_map_load_file                  (IdePersistentMap     *self,
+                                                                 GFile                *file,
+                                                                 GCancellable         *cancellable,
+                                                                 GError              **error);
+void              ide_persistent_map_load_file_async            (IdePersistentMap     *self,
+                                                                 GFile                *file,
+                                                                 GCancellable         *cancellable,
+                                                                 GAsyncReadyCallback   callback,
+                                                                 gpointer              user_data);
+gboolean          ide_persistent_map_load_file_finish           (IdePersistentMap     *self,
+                                                                 GAsyncResult         *result,
+                                                                 GError              **error);
+GVariant         *ide_persistent_map_lookup_value               (IdePersistentMap     *self,
+                                                                 const gchar          *key);
+gint64            ide_persistent_map_builder_get_metadata_int64 (IdePersistentMap     *self,
+                                                                 const gchar          *key);
