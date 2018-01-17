@@ -22,7 +22,9 @@
 #include <glib/gi18n.h>
 
 #include "ide-context.h"
+#include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "plugins/ide-extension-set-adapter.h"
 #include "plugins/ide-extension-util.h"
 
@@ -69,6 +71,7 @@ add_extension (IdeExtensionSetAdapter *self,
                PeasPluginInfo         *plugin_info,
                PeasExtension          *exten)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (plugin_info != NULL);
   g_assert (exten != NULL);
@@ -83,6 +86,7 @@ remove_extension (IdeExtensionSetAdapter *self,
                   PeasPluginInfo         *plugin_info,
                   PeasExtension          *exten)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (plugin_info != NULL);
   g_assert (exten != NULL);
@@ -99,6 +103,7 @@ ide_extension_set_adapter_enabled_changed (IdeExtensionSetAdapter *self,
                                            const gchar            *key,
                                            GSettings              *settings)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (key != NULL);
   g_assert (G_IS_SETTINGS (settings));
@@ -114,6 +119,7 @@ watch_extension (IdeExtensionSetAdapter *self,
   GSettings *settings;
   gchar *path;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (plugin_info != NULL);
   g_assert (G_TYPE_IS_INTERFACE (interface_type));
@@ -141,7 +147,9 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
   IdeContext *context;
   const GList *plugins;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+  g_assert (self->interface_type != G_TYPE_INVALID);
 
   while (self->settings->len > 0)
     {
@@ -218,6 +226,7 @@ ide_extension_set_adapter_do_reload (gpointer data)
 {
   IdeExtensionSetAdapter *self = data;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
   self->reload_handler = 0;
@@ -229,6 +238,7 @@ ide_extension_set_adapter_do_reload (gpointer data)
 static void
 ide_extension_set_adapter_queue_reload (IdeExtensionSetAdapter *self)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
   if (self->reload_handler != 0)
@@ -241,6 +251,7 @@ static void
 ide_extension_set_adapter_set_engine (IdeExtensionSetAdapter *self,
                                       PeasEngine             *engine)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (PEAS_IS_ENGINE (engine));
 
@@ -255,6 +266,7 @@ static void
 ide_extension_set_adapter_set_interface_type (IdeExtensionSetAdapter *self,
                                               GType                   interface_type)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (G_TYPE_IS_INTERFACE (interface_type));
 
@@ -275,6 +287,7 @@ ide_extension_set_adapter_dispose (GObject *object)
   gpointer key;
   gpointer value;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
   /*
@@ -498,6 +511,7 @@ void
 ide_extension_set_adapter_set_key (IdeExtensionSetAdapter *self,
                                    const gchar            *key)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
   if (!dzl_str_equal0 (self->key, key))
@@ -512,6 +526,7 @@ ide_extension_set_adapter_set_key (IdeExtensionSetAdapter *self,
 const gchar *
 ide_extension_set_adapter_get_value (IdeExtensionSetAdapter *self)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self), NULL);
 
   return self->value;
@@ -521,7 +536,9 @@ void
 ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
                                      const gchar            *value)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
+
 
   if (!dzl_str_equal0 (self->value, value))
     {
@@ -549,6 +566,7 @@ ide_extension_set_adapter_foreach (IdeExtensionSetAdapter            *self,
   gpointer key;
   gpointer value;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_return_if_fail (foreach_func != NULL);
 
@@ -581,6 +599,7 @@ ide_extension_set_adapter_new (IdeContext  *context,
                                const gchar *key,
                                const gchar *value)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (!engine || PEAS_IS_ENGINE (engine), NULL);
   g_return_val_if_fail (G_TYPE_IS_INTERFACE (interface_type), NULL);
@@ -608,6 +627,7 @@ PeasExtension *
 ide_extension_set_adapter_get_extension (IdeExtensionSetAdapter *self,
                                          PeasPluginInfo         *plugin_info)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self), NULL);
   g_return_val_if_fail (plugin_info != NULL, NULL);
 
