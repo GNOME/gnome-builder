@@ -20,8 +20,8 @@
 
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
-#include <stdlib.h>
 #include <plugins/ide-extension-adapter.h>
+#include <stdlib.h>
 
 #include "ide-code-index-service.h"
 #include "ide-code-index-builder.h"
@@ -39,6 +39,7 @@ struct _IdeCodeIndexService
 
   /* The builder to build & update index */
   IdeCodeIndexBuilder    *builder;
+
   /* The Index which will store all declarations */
   IdeCodeIndexIndex      *index;
 
@@ -57,22 +58,37 @@ struct _IdeCodeIndexService
 
 typedef struct
 {
+  volatile gint        ref_count;
   IdeCodeIndexService *self;
   GFile               *directory;
   guint                n_trial;
   guint                recursive : 1;
 } BuildData;
 
-static void build_data_free              (BuildData            *data);
 static void service_iface_init           (IdeServiceInterface  *iface);
 static void ide_code_index_service_build (IdeCodeIndexService  *self,
                                           GFile                *directory,
                                           gboolean              recursive,
                                           guint                 n_trial);
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (BuildData, build_data_free)
 G_DEFINE_TYPE_EXTENDED (IdeCodeIndexService, ide_code_index_service, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
+
+static void
+build_data_unref (BuildData *data)
+{
+  g_assert (data != NULL);
+  g_assert (data->ref_count > 0);
+
+  if (g_atomic_int_dec_and_test (&data->ref_count))
+    {
+      g_clear_object (&data->self);
+      g_clear_object (&data->directory);
+      g_slice_free (BuildData, data);
+    }
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (BuildData, build_data_unref)
 
 static void
 remove_source (gpointer source_id)
@@ -82,23 +98,16 @@ remove_source (gpointer source_id)
 }
 
 static void
-build_data_free (BuildData *data)
-{
-  if (data != NULL)
-    {
-      g_clear_object (&data->directory);
-      g_slice_free (BuildData, data);
-    }
-}
-
-static void
 register_pausable (IdeCodeIndexService *self)
 {
   IdeContext *context;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
   if (context != NULL && self->pausable != NULL)
     ide_context_add_pausable (context, self->pausable);
 }
@@ -108,9 +117,12 @@ unregister_pausable (IdeCodeIndexService *self)
 {
   IdeContext *context;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
   if (context != NULL && self->pausable != NULL)
     ide_context_remove_pausable (context, self->pausable);
 }
@@ -122,14 +134,20 @@ delay_until_build_completes (IdeCodeIndexService *self)
   IdeBuildManager *build_manager;
   IdeContext *context;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
 
   if (self->delayed_build_reqeusted)
     return TRUE;
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
   build_manager = ide_context_get_build_manager (context);
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
   pipeline = ide_build_manager_get_pipeline (build_manager);
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   if (pipeline == NULL || !ide_build_pipeline_has_configured (pipeline))
     {
@@ -150,19 +168,20 @@ ide_code_index_service_build_cb (GObject      *object,
   g_autoptr(BuildData) bdata = NULL;
   g_autoptr(GError) error = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_CODE_INDEX_BUILDER (builder));
-
-  bdata = g_queue_pop_head (&self->build_queue);
-
-  if (self->stopped)
-    return;
 
   if (ide_code_index_builder_build_finish (builder, result, &error))
     g_debug ("Finished building code index");
   else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     g_warning ("Failed to build code index: %s", error->message);
+
+  if (self->stopped)
+    return;
+
+  bdata = g_queue_pop_head (&self->build_queue);
 
   /*
    * If we're paused, push this item back on the queue to
@@ -208,36 +227,34 @@ ide_code_index_service_build_cb (GObject      *object,
 static gboolean
 ide_code_index_serivce_push (BuildData *bdata)
 {
-  IdeCodeIndexService *self;
-
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (bdata != NULL);
   g_assert (IDE_IS_CODE_INDEX_SERVICE (bdata->self));
   g_assert (G_IS_FILE (bdata->directory));
 
-  self = bdata->self;
-
-  g_hash_table_remove (self->build_dirs, bdata->directory);
-
-  if (g_queue_is_empty (&self->build_queue))
+  if (g_queue_is_empty (&bdata->self->build_queue))
     {
-      g_queue_push_tail (&self->build_queue, bdata);
+      g_queue_push_tail (&bdata->self->build_queue, bdata);
 
-      g_clear_object (&self->cancellable);
-      self->cancellable = g_cancellable_new ();
+      g_clear_object (&bdata->self->cancellable);
+      bdata->self->cancellable = g_cancellable_new ();
 
-      register_pausable (self);
+      register_pausable (bdata->self);
 
-      ide_code_index_builder_build_async (self->builder,
+      ide_code_index_builder_build_async (bdata->self->builder,
                                           bdata->directory,
                                           bdata->recursive,
-                                          self->cancellable,
+                                          bdata->self->cancellable,
                                           ide_code_index_service_build_cb,
-                                          g_object_ref (self));
+                                          g_object_ref (bdata->self));
     }
   else
     {
-      g_queue_push_tail (&self->build_queue, bdata);
+      g_queue_push_tail (&bdata->self->build_queue, bdata);
     }
+
+  if (bdata->self->build_dirs != NULL)
+    g_hash_table_remove (bdata->self->build_dirs, bdata->directory);
 
   return G_SOURCE_REMOVE;
 }
@@ -248,6 +265,7 @@ ide_code_index_service_build (IdeCodeIndexService *self,
                               gboolean             recursive,
                               guint                n_trial)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (G_IS_FILE (directory));
 
@@ -265,18 +283,21 @@ ide_code_index_service_build (IdeCodeIndexService *self,
 
   if (!g_hash_table_lookup (self->build_dirs, directory))
     {
-      BuildData *bdata;
+      g_autoptr(BuildData) bdata = NULL;
       guint source_id;
 
       bdata = g_slice_new0 (BuildData);
-      bdata->self = self;
+      bdata->ref_count = 1;
+      bdata->self = g_object_ref (self);
       bdata->directory = g_object_ref (directory);
       bdata->recursive = recursive;
       bdata->n_trial = n_trial;
 
-      source_id = g_timeout_add_seconds (DEFAULT_INDEX_TIMEOUT_SECS,
-                                         (GSourceFunc)ide_code_index_serivce_push,
-                                         bdata);
+      source_id = g_timeout_add_seconds_full (G_PRIORITY_LOW,
+                                              DEFAULT_INDEX_TIMEOUT_SECS,
+                                              (GSourceFunc) ide_code_index_serivce_push,
+                                              g_steal_pointer (&bdata),
+                                              (GDestroyNotify) build_data_unref);
 
       g_hash_table_insert (self->build_dirs,
                            g_object_ref (directory),
@@ -290,6 +311,7 @@ ide_code_index_service_vcs_changed (IdeCodeIndexService *self,
 {
   GFile *workdir;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (IDE_IS_VCS (vcs));
 
@@ -305,6 +327,7 @@ ide_code_index_service_buffer_saved (IdeCodeIndexService *self,
   GFile *file;
   g_autofree gchar *file_name = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
@@ -327,6 +350,7 @@ ide_code_index_service_file_trashed (IdeCodeIndexService *self,
 {
   g_autofree gchar *file_name = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (G_IS_FILE (file));
 
@@ -352,6 +376,7 @@ ide_code_index_service_file_renamed (IdeCodeIndexService *self,
   g_autoptr(GFile) src_parent = NULL;
   g_autoptr(GFile) dst_parent = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (G_IS_FILE (src_file));
   g_assert (G_IS_FILE (dst_file));
@@ -383,6 +408,7 @@ ide_code_index_service_build_finished (IdeCodeIndexService *self,
                                        IdeBuildPipeline    *pipeline,
                                        IdeBuildManager     *build_manager)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
@@ -415,6 +441,7 @@ ide_code_index_service_context_loaded (IdeService *service)
   IdeVcs *vcs;
   GFile *workdir;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -534,7 +561,7 @@ ide_code_index_service_stop (IdeService *service)
 
   g_clear_object (&self->index);
   g_clear_object (&self->builder);
-  g_queue_foreach (&self->build_queue, (GFunc)build_data_free, NULL);
+  g_queue_foreach (&self->build_queue, (GFunc)build_data_unref, NULL);
   g_queue_clear (&self->build_queue);
   g_clear_pointer (&self->build_dirs, g_hash_table_unref);
   g_clear_pointer (&self->code_indexers, g_hash_table_unref);
@@ -546,6 +573,13 @@ static void
 ide_code_index_service_finalize (GObject *object)
 {
   IdeCodeIndexService *self = (IdeCodeIndexService *)object;
+
+  g_assert (self->stopped == TRUE);
+  g_assert (self->index == NULL);
+  g_assert (self->builder == NULL);
+  g_assert (self->build_queue.length == 0);
+  g_assert (self->build_dirs == NULL);
+  g_assert (self->code_indexers== NULL);
 
   g_clear_object (&self->pausable);
 
@@ -593,6 +627,7 @@ ide_code_index_service_init (IdeCodeIndexService *self)
 IdeCodeIndexIndex *
 ide_code_index_service_get_index (IdeCodeIndexService *self)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_SERVICE (self), NULL);
 
   return self->index;
@@ -618,6 +653,7 @@ ide_code_index_service_get_code_indexer (IdeCodeIndexService *self,
   GtkSourceLanguage *language;
   const gchar *lang_id;
 
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_SERVICE (self), NULL);
   g_return_val_if_fail (file_name != NULL, NULL);
 
