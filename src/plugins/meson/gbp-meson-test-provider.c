@@ -280,7 +280,7 @@ gbp_meson_test_provider_reload (gpointer user_data)
    */
   context = ide_object_get_context (IDE_OBJECT (self));
   build_system = ide_context_get_build_system (context);
-  if (build_system == NULL)
+  if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
     IDE_RETURN (G_SOURCE_REMOVE);
 
   /*
