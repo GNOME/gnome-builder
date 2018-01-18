@@ -279,7 +279,7 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
 
     def do_lookup_symbol_async(self, location, cancellable, callback, user_data=None):
         task = Gio.Task.new(self, cancellable, callback)
-        task.return_boolean(False)  # Not implemented
+        task.return_error(GLib.Error('Not implemented'))
 
     def do_lookup_symbol_finish(self, result):
         result.propagate_boolean()
@@ -298,7 +298,7 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
             success, stdout, stderr = proc.communicate_utf8(None, None)
 
             if not success:
-                task.return_boolean(False)
+                task.return_error(GLib.Error('Failed to run gjs'))
                 return
 
             ide_file = Ide.File(file=file_, context=self.get_context())
@@ -321,7 +321,7 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
 
     def do_find_references_async(self, location, cancellable, callback, user_data=None):
         task = Gio.Task.new(self, cancellable, callback)
-        task.return_boolean(False)  # Not implemented
+        task.return_error(GLib.Error('Not implemented'))
 
     def do_find_references_finish(self, result):
         result.propagate_boolean()
@@ -329,7 +329,7 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
 
     def do_find_nearest_scope_async(self, location, cancellable, callback, user_data=None):
         task = Gio.Task.new(self, cancellable, callback)
-        task.return_boolean(False)  # Not implemented
+        task.return_error(GLib.Error('Not implemented'))
 
     def do_find_nearest_scope_finish(self, result):
         result.propagate_boolean()
@@ -426,7 +426,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
     def do_generate_key_async(self, location, cancellable, callback, user_data=None):
         # print('generate key')
         task = Gio.Task.new(self, cancellable, callback)
-        task.return_boolean(False)
+        task.return_error(GLib.Error('Not implemented'))
 
     def do_generate_key_finish(self, result):
         if result.propagate_boolean():
