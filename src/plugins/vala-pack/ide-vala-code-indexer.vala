@@ -28,10 +28,9 @@ namespace Ide
 
 	public class ValaCodeIndexer : Ide.Object, Ide.CodeIndexer
 	{
-		/* Note: This runs in a thread */
-		public Ide.CodeIndexEntries index_file (GLib.File file,
-		                                        string[]? build_flags,
-		                                        GLib.Cancellable? cancellable)
+		public async Ide.CodeIndexEntries index_file_async (GLib.File file,
+		                                                    string[]? build_flags,
+		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
 			var context = this.get_context ();
@@ -39,12 +38,7 @@ namespace Ide
 			var index = service.index;
 			var tree = index.get_symbol_tree_sync (file, cancellable);
 
-			Ide.ValaCodeIndexEntries? ret = null;
-
-			index.do_locked (_ => {
-				ret = new Ide.ValaCodeIndexEntries (tree as Ide.ValaSymbolTree);
-			});
-
+			var ret = new Ide.ValaCodeIndexEntries (tree as Ide.ValaSymbolTree);
 			if (ret == null)
 				throw new GLib.IOError.FAILED ("failed to build entries");
 
