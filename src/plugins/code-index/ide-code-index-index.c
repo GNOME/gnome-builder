@@ -495,7 +495,7 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
   IdeSymbolKind kind = IDE_SYMBOL_NONE;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
   DzlFuzzyIndex *symbol_names = NULL;
-  const DirectoryIndex *dir_index;
+  const DirectoryIndex *dir_index = NULL;
   IdeContext *context;
   const gchar *filename;
   guint32 file_id = 0;
