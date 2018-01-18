@@ -30,6 +30,7 @@
 #include "buildsystem/ide-configuration.h"
 #include "files/ide-file.h"
 #include "projects/ide-project.h"
+#include "util/ide-glib.h"
 #include "vcs/ide-vcs.h"
 
 G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)
@@ -494,15 +495,17 @@ ide_build_system_get_build_flags_for_files_async (IdeBuildSystem       *self,
 }
 
 /**
- * ide_build_system_get_build_flags_for_files_finish:
+ * ide_build_system_get_build_flags_for_files_finish: (skip)
+ * @self: an #IdeBuildSystem
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError or %NULL
  *
- * Returns: (transfer full): Returns #GHashTable which has a map
- *   of files and its build flags.
+ * Returns: Returns a #GHashTable or #IdeFile to #GStrv
  */
 GHashTable *
-ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem       *self,
-                                                   GAsyncResult         *result,
-                                                   GError              **error)
+ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
+                                                   GAsyncResult    *result,
+                                                   GError         **error)
 {
   GHashTable *ret;
 
@@ -581,4 +584,132 @@ ide_build_system_get_display_name (IdeBuildSystem *self)
     return IDE_BUILD_SYSTEM_GET_IFACE (self)->get_display_name (self);
 
   return ide_build_system_get_id (self);
+}
+
+static void
+ide_build_system_get_build_flags_for_dir_cb2 (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GHashTable) ret = NULL;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  ret = ide_build_system_get_build_flags_for_files_finish (build_system, result, &error);
+
+  if (ret == NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_pointer (task,
+                           g_steal_pointer (&ret),
+                           (GDestroyNotify)g_hash_table_unref);
+}
+
+static void
+ide_build_system_get_build_flags_for_dir_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
+{
+  GFile *dir = (GFile *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GPtrArray) infos = NULL;
+  g_autoptr(GPtrArray) files = NULL;
+  IdeBuildSystem *self;
+  GCancellable *cancellable;
+  IdeContext *context;
+  IdeVcs *vcs;
+
+  g_assert (G_IS_FILE (dir));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  infos = ide_g_file_get_children_finish (dir, result, &error);
+
+  if (infos == NULL)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  self = g_task_get_source_object (task);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  cancellable = g_task_get_cancellable (task);
+  files = g_ptr_array_new_with_free_func (g_object_unref);
+
+  for (guint i = 0; i < infos->len; i++)
+    {
+      GFileInfo *file_info = g_ptr_array_index (infos, i);
+      GFileType file_type = g_file_info_get_file_type (file_info);
+
+      if (file_type == G_FILE_TYPE_REGULAR)
+        {
+          const gchar *name = g_file_info_get_name (file_info);
+          g_autoptr(GFile) child = g_file_get_child (dir, name);
+
+          if (!ide_vcs_is_ignored (vcs, child, NULL))
+            g_ptr_array_add (files, ide_file_new (context, child));
+        }
+    }
+
+  ide_build_system_get_build_flags_for_files_async (self,
+                                                    files,
+                                                    cancellable,
+                                                    ide_build_system_get_build_flags_for_dir_cb2,
+                                                    g_steal_pointer (&task));
+}
+
+void
+ide_build_system_get_build_flags_for_dir_async (IdeBuildSystem      *self,
+                                                GFile               *directory,
+                                                GCancellable        *cancellable,
+                                                GAsyncReadyCallback  callback,
+                                                gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
+  g_return_if_fail (G_IS_FILE (directory));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_build_system_get_build_flags_for_dir_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_task_data (task,
+                        g_ptr_array_new_with_free_func (g_object_unref),
+                        (GDestroyNotify)g_ptr_array_unref);
+
+  ide_g_file_get_children_async (directory,
+                                 G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                 G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                 G_FILE_QUERY_INFO_NONE,
+                                 G_PRIORITY_LOW,
+                                 cancellable,
+                                 ide_build_system_get_build_flags_for_dir_cb,
+                                 g_steal_pointer (&task));
+}
+
+/**
+ * ide_build_system_get_build_flags_for_dir_finish: (skip)
+ * @self: an #IdeBuildSystem
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError or %NULL
+ *
+ * Returns: a #GHashTable of #IdeFile to #GStrv
+ */
+GHashTable *
+ide_build_system_get_build_flags_for_dir_finish (IdeBuildSystem  *self,
+                                                 GAsyncResult    *result,
+                                                 GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
 }

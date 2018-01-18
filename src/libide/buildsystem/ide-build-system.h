@@ -96,6 +96,16 @@ IDE_AVAILABLE_IN_ALL
 GHashTable     *ide_build_system_get_build_flags_for_files_finish  (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
+IDE_AVAILABLE_IN_3_28
+void            ide_build_system_get_build_flags_for_dir_async     (IdeBuildSystem       *self,
+                                                                    GFile                *directory,
+                                                                    GCancellable         *cancellable,
+                                                                    GAsyncReadyCallback   callback,
+                                                                    gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+GHashTable     *ide_build_system_get_build_flags_for_dir_finish    (IdeBuildSystem       *self,
+                                                                    GAsyncResult         *result,
+                                                                    GError              **error);
 void            _ide_build_system_set_project_file                 (IdeBuildSystem       *self,
                                                                     GFile                *project_file) G_GNUC_INTERNAL;
 
