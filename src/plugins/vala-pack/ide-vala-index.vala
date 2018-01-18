@@ -578,7 +578,9 @@ namespace Ide
 		public void do_locked (GLib.Func func)
 		{
 			lock (this.code_context) {
+				Vala.CodeContext.push (this.code_context);
 				func (this);
+				Vala.CodeContext.pop ();
 			}
 		}
 	}
