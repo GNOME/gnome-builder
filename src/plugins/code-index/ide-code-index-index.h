@@ -29,6 +29,7 @@ G_DECLARE_FINAL_TYPE (IdeCodeIndexIndex, ide_code_index_index, IDE, CODE_INDEX_I
 IdeCodeIndexIndex *ide_code_index_index_new             (IdeContext           *context);
 gboolean           ide_code_index_index_load            (IdeCodeIndexIndex    *self,
                                                          GFile                *directory,
+                                                         GFile                *source_directory,
                                                          GCancellable         *cancellable,
                                                          GError              **error);
 IdeSymbol         *ide_code_index_index_lookup_symbol   (IdeCodeIndexIndex    *self,

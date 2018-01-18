@@ -41,6 +41,8 @@ struct _IdeCodeIndexIndex
 
 typedef struct
 {
+  GFile            *directory;
+  GFile            *source_directory;
   DzlFuzzyIndex    *symbol_names;
   IdePersistentMap *symbol_keys;
 } DirectoryIndex;
@@ -76,6 +78,7 @@ directory_index_free (DirectoryIndex *data)
 {
   g_clear_object (&data->symbol_names);
   g_clear_object (&data->symbol_keys);
+  g_clear_object (&data->directory);
   g_slice_free (DirectoryIndex, data);
 }
 
@@ -115,6 +118,7 @@ fuzzy_match_compare (const FuzzyMatch *a,
 /* This function will load indexes and returns them */
 static DirectoryIndex *
 directory_index_new (GFile         *directory,
+                     GFile         *source_directory,
                      GCancellable  *cancellable,
                      GError       **error)
 {
@@ -142,6 +146,9 @@ directory_index_new (GFile         *directory,
   dir_index = g_slice_new0 (DirectoryIndex);
   dir_index->symbol_keys = g_steal_pointer (&symbol_keys);
   dir_index->symbol_names = g_steal_pointer (&symbol_names);
+  dir_index->directory = g_object_ref (directory);
+  dir_index->source_directory = g_object_ref (source_directory);
+
 
   return g_steal_pointer (&dir_index);
 }
@@ -150,6 +157,7 @@ directory_index_new (GFile         *directory,
  * ide_code_index_index_load:
  * @self: a #IdeCodeIndexIndex
  * @directory: a #GFile of the directory to load
+ * @source_directory: a #GFile of the directory containing the sources
  * @cancellable: a #GCancellable or %NULL
  * @error: a #GError or %NULL
  *
@@ -164,6 +172,7 @@ directory_index_new (GFile         *directory,
 gboolean
 ide_code_index_index_load (IdeCodeIndexIndex   *self,
                            GFile               *directory,
+                           GFile               *source_directory,
                            GCancellable        *cancellable,
                            GError             **error)
 {
@@ -176,10 +185,11 @@ ide_code_index_index_load (IdeCodeIndexIndex   *self,
   g_return_val_if_fail (G_IS_FILE (directory), FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
 
-  if (!(dir_index = directory_index_new (directory, cancellable, error)))
-    return FALSE;
-
   dir_name = g_file_get_path (directory);
+  g_debug ("Loading code index from %s", dir_name);
+
+  if (!(dir_index = directory_index_new (directory, source_directory, cancellable, error)))
+    return FALSE;
 
   locker = g_mutex_locker_new (&self->mutex);
 
@@ -241,7 +251,9 @@ ide_code_index_index_create_search_result (IdeContext       *context,
   key = dzl_fuzzy_index_match_get_key (fuzzy_match->match);
 
   g_snprintf (num, sizeof num, "%u", file_id);
+
   path = dzl_fuzzy_index_get_metadata_string (fuzzy_match->index, num);
+
   file = ide_file_new_for_path (context, path);
   location = ide_source_location_new (file, line - 1, line_offset - 1, 0);
 
@@ -479,7 +491,9 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
   IdeSymbolKind kind = IDE_SYMBOL_NONE;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
   DzlFuzzyIndex *symbol_names = NULL;
-  const gchar *path;
+  const DirectoryIndex *dir_index;
+  IdeContext *context;
+  const gchar *filename;
   guint32 file_id = 0;
   guint32 line = 0;
   guint32 line_offset = 0;
@@ -495,8 +509,9 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
 
   for (guint i = 0; i < self->indexes->len; i++)
     {
-      const DirectoryIndex *dir_index = g_ptr_array_index (self->indexes, i);
       g_autoptr(GVariant) variant = NULL;
+
+      dir_index = g_ptr_array_index (self->indexes, i);
 
       if (!(variant = ide_persistent_map_lookup_value (dir_index->symbol_keys, key)))
         continue;
@@ -515,11 +530,14 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
       return NULL;
     }
 
+  g_assert (dir_index != NULL);
+  g_assert (dir_index->symbol_names == symbol_names);
+
   g_snprintf (num, sizeof(num), "%u", file_id);
 
-  path = dzl_fuzzy_index_get_metadata_string (symbol_names, num);
-  file = ide_file_new_for_path (ide_object_get_context (IDE_OBJECT (self)), path);
-  g_debug ("Symbol location found at %s %d:%d\n", path, line, line_offset);
+  filename = dzl_fuzzy_index_get_metadata_string (symbol_names, num);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  file = ide_file_new_for_path (context, filename);
 
   if (flags & IDE_SYMBOL_FLAGS_IS_DEFINITION)
     definition = ide_source_location_new (file, line - 1, line_offset - 1, 0);
