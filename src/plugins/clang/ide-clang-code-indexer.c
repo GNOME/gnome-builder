@@ -68,8 +68,10 @@ ide_clang_code_indexer_index_file_worker (GTask        *task,
                                       NULL,
                                       0,
                                       (CXTranslationUnit_DetailedPreprocessingRecord |
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 43)
                                        CXTranslationUnit_SingleFileParse |
+#endif
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
                                        CXTranslationUnit_KeepGoing |
 #endif
                                        CXTranslationUnit_SkipFunctionBodies),
