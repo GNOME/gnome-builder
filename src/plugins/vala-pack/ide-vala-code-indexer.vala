@@ -38,7 +38,7 @@ namespace Ide
 			var index = service.index;
 			var tree = index.get_symbol_tree_sync (file, cancellable);
 
-			var ret = new Ide.ValaCodeIndexEntries (tree as Ide.ValaSymbolTree);
+			var ret = new Ide.ValaCodeIndexEntries (file, tree as Ide.ValaSymbolTree);
 			if (ret == null)
 				throw new GLib.IOError.FAILED ("failed to build entries");
 
@@ -67,11 +67,18 @@ namespace Ide
 	public class ValaCodeIndexEntries : GLib.Object, Ide.CodeIndexEntries
 	{
 		GLib.GenericArray<Ide.CodeIndexEntry> entries;
+		GLib.File file;
 		uint pos;
 
-		public ValaCodeIndexEntries (Ide.ValaSymbolTree tree)
+		public GLib.File get_file ()
+		{
+			return this.file;
+		}
+
+		public ValaCodeIndexEntries (GLib.File file, Ide.ValaSymbolTree tree)
 		{
 			this.entries = new GLib.GenericArray<Ide.CodeIndexEntry> ();
+			this.file = file;
 			this.add_children (tree, null, "");
 		}
 

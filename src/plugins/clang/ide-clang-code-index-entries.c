@@ -328,10 +328,21 @@ ide_clang_code_index_entries_get_next_entry (IdeCodeIndexEntries *entries)
   return g_steal_pointer (&entry);
 }
 
+static GFile *
+ide_clang_code_index_entries_get_file (IdeCodeIndexEntries *entries)
+{
+  IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)entries;
+
+  g_return_val_if_fail (IDE_IS_CLANG_CODE_INDEX_ENTRIES (self), NULL);
+
+  return g_file_new_for_path (self->path);
+}
+
 static void
 index_entries_iface_init (IdeCodeIndexEntriesInterface *iface)
 {
   iface->get_next_entry = ide_clang_code_index_entries_get_next_entry;
+  iface->get_file = ide_clang_code_index_entries_get_file;
 }
 
 G_DEFINE_TYPE_WITH_CODE (IdeClangCodeIndexEntries, ide_clang_code_index_entries, G_TYPE_OBJECT,

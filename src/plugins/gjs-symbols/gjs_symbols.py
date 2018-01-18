@@ -337,10 +337,11 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
 
 
 class JsCodeIndexEntries(GObject.Object, Ide.CodeIndexEntries):
-    def __init__(self, entries):
+    def __init__(self, file, entries):
         super().__init__()
         self.entries = entries
         self.entry_iter = None
+        self.file = file
 
     def do_get_next_entry(self):
         if self.entry_iter is None:
@@ -350,6 +351,9 @@ class JsCodeIndexEntries(GObject.Object, Ide.CodeIndexEntries):
         except StopIteration:
             self.entry_iter = None
             return None
+
+    def do_get_file(self):
+        return self.file
 
 
 class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
@@ -378,7 +382,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
         try:
             _, stdout, stderr = subprocess.communicate_utf8_finish(result)
 
-            ide_file = Ide.File(file=file_, context=self.get_context())
+            ide_file = Ide.File(file=task.file_, context=self.get_context())
             try:
                 root_node = JsSymbolTree._node_from_dict(json.loads(stdout), ide_file)
             except (json.JSONDecodeError, UnicodeDecodeError) as e:
@@ -399,7 +403,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
                 )
                 entries.append(entry)
 
-            task.entries = JsCodeIndexEntries(entries)
+            task.entries = JsCodeIndexEntries(task.file_, entries)
             task.return_boolean(True)
 
         except Exception as ex:
@@ -409,6 +413,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
     def do_index_file_async(self, file_, build_flags, cancellable, callback, data):
         task = Gio.Task.new(self, cancellable, callback)
         task.entries = None
+        task.file = file_
 
         launcher = GjsSymbolProvider._get_launcher(self.get_context(), file_)
         proc = launcher.spawn()

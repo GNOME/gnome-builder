@@ -23,16 +23,9 @@
 
 G_DEFINE_INTERFACE (IdeCodeIndexEntries, ide_code_index_entries, G_TYPE_OBJECT)
 
-IdeCodeIndexEntry *
-ide_code_index_entries_real_get_next_entry (IdeCodeIndexEntries *self)
-{
-  return NULL;
-}
-
 static void
 ide_code_index_entries_default_init (IdeCodeIndexEntriesInterface *iface)
 {
-  iface->get_next_entry = ide_code_index_entries_real_get_next_entry;
 }
 
 /**
@@ -54,4 +47,21 @@ ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self)
   g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRIES (self), NULL);
 
   return IDE_CODE_INDEX_ENTRIES_GET_IFACE (self)->get_next_entry (self);
+}
+
+/**
+ * ide_code_index_entries_get_file:
+ * @self: a #IdeCodeIndexEntries
+ *
+ * The file that was indexed.
+ *
+ * Returns: (transfer full): a #GFile
+ */
+GFile *
+ide_code_index_entries_get_file (IdeCodeIndexEntries *self)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRIES (self), NULL);
+
+  return IDE_CODE_INDEX_ENTRIES_GET_IFACE (self)->get_file (self);
 }

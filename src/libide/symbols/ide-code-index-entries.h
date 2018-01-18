@@ -33,9 +33,11 @@ struct _IdeCodeIndexEntriesInterface
 {
   GTypeInterface       parent_iface;
 
+  GFile             *(*get_file)       (IdeCodeIndexEntries *self);
   IdeCodeIndexEntry *(*get_next_entry) (IdeCodeIndexEntries *self);
 };
 
 IdeCodeIndexEntry *ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self);
+GFile             *ide_code_index_entries_get_file       (IdeCodeIndexEntries *self);
 
 G_END_DECLS
