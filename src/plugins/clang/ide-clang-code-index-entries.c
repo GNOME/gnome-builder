@@ -156,7 +156,6 @@ visitor (CXCursor     cursor,
          CXClientData client_data)
 {
   IdeClangCodeIndexEntries *self = client_data;
-  g_autoptr(CXCursor) child_cursor = NULL;
   g_auto(CXString) cxpath = {0};
   CXSourceLocation location;
   const char *path;
@@ -171,8 +170,7 @@ visitor (CXCursor     cursor,
    * file.
    */
 
-  child_cursor = g_slice_dup (CXCursor, &cursor);
-  g_queue_push_tail (&self->cursors, child_cursor);
+  g_queue_push_tail (&self->cursors, g_slice_dup (CXCursor, &cursor));
 
   location = clang_getCursorLocation (cursor);
   clang_getSpellingLocation (location, &file, NULL, NULL, NULL);
@@ -188,7 +186,7 @@ visitor (CXCursor     cursor,
           (cursor_kind >= CXCursor_Constructor && cursor_kind <= CXCursor_NamespaceAlias) ||
           cursor_kind == CXCursor_TypeAliasDecl ||
           cursor_kind == CXCursor_MacroDefinition)
-        g_queue_push_tail (&self->decl_cursors, child_cursor);
+        g_queue_push_tail (&self->decl_cursors, g_slice_dup (CXCursor, &cursor));
     }
 
   /* TODO: Record MACRO EXPANSION FOR G_DEFINE_TYPE, G_DECLARE_TYPE */
@@ -223,6 +221,7 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
   guint column = 0;
   guint offset = 0;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (self));
   g_assert (finish != NULL);
 
@@ -242,6 +241,8 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
         }
 
       decl_cursor = g_queue_pop_head (&self->cursors);
+      g_assert (decl_cursor != NULL);
+
       clang_visitChildren (*decl_cursor, visitor, self);
     }
 
