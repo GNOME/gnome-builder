@@ -185,10 +185,13 @@ ide_persistent_map_builder_write_worker (GTask        *task,
 
   if (state->keys->len == 0)
     {
+      g_autofree gchar *path = g_file_get_path (state->destination);
+
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_INVALID_DATA,
-                               "No entries to write");
+                               "No entries to write for \"%s\"",
+                               path);
       return;
     }
 
