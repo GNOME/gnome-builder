@@ -1,3 +1,25 @@
+# -*- coding: utf-8 -*-
+#
+# gjs_symbols.py
+#
+# Copyright © 2017 Patrick Griffi <tingping@tingping.se>
+# Copyright © 2017 Giovanni Campagna <gcampagn@cs.stanford.edu>
+# Copyright © 2018 Christian Hergert <chergert@redhat.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 import gi
 import os
 import json
@@ -7,13 +29,10 @@ gi.require_versions({
     'Ide': '1.0',
 })
 
-from gi.repository import (
-    GLib,
-    GObject,
-    Gio,
-    Ide,
-)
-
+from gi.repository import GLib
+from gi.repository import GObject
+from gi.repository import Gio
+from gi.repository import Ide
 
 SYMBOL_PARAM_FLAGS=flags = GObject.ParamFlags.CONSTRUCT_ONLY | GObject.ParamFlags.READWRITE
 
@@ -355,35 +374,49 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
             nodes += GjsCodeIndexer._flatten_node_list(node)
         return nodes
 
-    def do_index_file(self, file_, build_flags, cancellable):
+    def _index_file_cb(self, subprocess, result, task):
+        try:
+            _, stdout, stderr = subprocess.communicate_utf8_finish(result)
+
+            ide_file = Ide.File(file=file_, context=self.get_context())
+            try:
+                root_node = JsSymbolTree._node_from_dict(json.loads(stdout), ide_file)
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                raise GLib.Error('Failed to decode gjs json: {}'.format(e))
+            except (IndexError, KeyError) as e:
+                raise GLib.Error('Failed to extract information from ast: {}'.format(e))
+
+            entries = []
+            # TODO: Avoid recreating the same data
+            for node in self._flatten_node_list(root_node):
+                entry = Ide.CodeIndexEntry(
+                    key=node.props.file.get_path() + '|' + node.props.name, # Some unique value..
+                    name=self._get_node_name(node),
+                    kind=node.props.kind,
+                    flags=node.props.flags,
+                    begin_line=node.props.line + 1,  # Not sure why offset here doesn't match tree
+                    begin_line_offset=node.props.col + 1,
+                )
+                entries.append(entry)
+
+            task.entries = JsCodeIndexEntries(entries)
+            task.return_boolean(True)
+
+        except Exception as ex:
+            print(repr(ex))
+            task.return_error(GLib.Error(message=repr(ex)))
+
+    def do_index_file_async(self, file_, build_flags, cancellable, callback, data):
+        task = Gio.Task.new(self, cancellable, callback)
+        task.entries = None
+
         launcher = GjsSymbolProvider._get_launcher(self.get_context(), file_)
         proc = launcher.spawn()
-        success, stdout, stderr = proc.communicate_utf8(None, None)
+        proc.communicate_utf8_async(None, task.get_cancellable(), self._index_file_cb, task)
 
-        if not success:
-            return None
-
-        ide_file = Ide.File(file=file_, context=self.get_context())
-        try:
-            root_node = JsSymbolTree._node_from_dict(json.loads(stdout), ide_file)
-        except (json.JSONDecodeError, UnicodeDecodeError) as e:
-            raise GLib.Error('Failed to decode gjs json: {}'.format(e))
-        except (IndexError, KeyError) as e:
-            raise GLib.Error('Failed to extract information from ast: {}'.format(e))
-
-        entries = []
-        # TODO: Avoid recreating the same data
-        for node in self._flatten_node_list(root_node):
-            entry = Ide.CodeIndexEntry(
-                key=node.props.file.get_path() + '|' + node.props.name, # Some unique value..
-                name=self._get_node_name(node),
-                kind=node.props.kind,
-                flags=node.props.flags,
-                begin_line=node.props.line + 1,  # Not sure why offset here doesn't match tree
-                begin_line_offset=node.props.col + 1,
-            )
-            entries.append(entry)
-        return JsCodeIndexEntries(entries)
+    def do_index_file_finish(self, result):
+        if result.propagate_boolean():
+            return result.entries
 
     def do_generate_key_async(self, location, cancellable, callback, user_data=None):
         # print('generate key')
