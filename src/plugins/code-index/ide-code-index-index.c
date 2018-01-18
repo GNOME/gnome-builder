@@ -71,6 +71,7 @@ G_DEFINE_TYPE (IdeCodeIndexIndex, ide_code_index_index, IDE_TYPE_OBJECT)
 
 static void directory_index_free (DirectoryIndex *data);
 
+DZL_DEFINE_COUNTER (code_indexes, "Code Indexes", "Instances", "Number of loaded code indexes")
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (DirectoryIndex, directory_index_free)
 
 static void
@@ -80,6 +81,8 @@ directory_index_free (DirectoryIndex *data)
   g_clear_object (&data->symbol_keys);
   g_clear_object (&data->directory);
   g_slice_free (DirectoryIndex, data);
+
+  DZL_COUNTER_DEC (code_indexes);
 }
 
 static void
@@ -149,6 +152,7 @@ directory_index_new (GFile         *directory,
   dir_index->directory = g_object_ref (directory);
   dir_index->source_directory = g_object_ref (source_directory);
 
+  DZL_COUNTER_INC (code_indexes);
 
   return g_steal_pointer (&dir_index);
 }
