@@ -56,9 +56,6 @@ struct _IdePersistentMapBuilder
 {
   GObject parent;
 
-  /* Owning thread for assertions */
-  GThread *thread;
-
   /*
    * The build state lets us keep all the contents together, and then
    * pass it to the worker thread so the main thread can no longer access
@@ -253,11 +250,10 @@ ide_persistent_map_builder_write (IdePersistentMapBuilder  *self,
   g_autoptr(GTask) task = NULL;
 
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP_BUILDER (self), FALSE);
-  g_return_val_if_fail (self->thread == g_thread_self (), FALSE);
   g_return_val_if_fail (G_IS_FILE (destination), FALSE);
   g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
   g_return_val_if_fail (self->state != NULL, FALSE);
-  g_return_val_if_fail (self->state->destination != NULL, FALSE);
+  g_return_val_if_fail (self->state->destination == NULL, FALSE);
 
   self->state->destination = g_object_ref (destination);
 
@@ -281,10 +277,8 @@ ide_persistent_map_builder_write_async (IdePersistentMapBuilder *self,
   g_autoptr(GTask) task = NULL;
 
   g_return_if_fail (IDE_IS_PERSISTENT_MAP_BUILDER (self));
-  g_return_if_fail (self->thread == g_thread_self ());
   g_return_if_fail (G_IS_FILE (destination));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_return_if_fail (self->thread == g_thread_self ());
   g_return_if_fail (self->state != NULL);
   g_return_if_fail (self->state->destination != NULL);
 
@@ -313,7 +307,6 @@ ide_persistent_map_builder_write_finish (IdePersistentMapBuilder  *self,
 {
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP_BUILDER (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
-  g_return_val_if_fail (self->thread == g_thread_self (), FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
@@ -324,7 +317,6 @@ ide_persistent_map_builder_finalize (GObject *object)
   IdePersistentMapBuilder *self = (IdePersistentMapBuilder *)object;
 
   g_clear_pointer (&self->state, build_state_free);
-  self->thread =  NULL;
 
   G_OBJECT_CLASS (ide_persistent_map_builder_parent_class)->finalize (object);
 }
@@ -332,8 +324,6 @@ ide_persistent_map_builder_finalize (GObject *object)
 static void
 ide_persistent_map_builder_init (IdePersistentMapBuilder *self)
 {
-  self->thread = g_thread_self ();
-
   self->state = g_slice_new0 (BuildState);
   self->state->keys = g_byte_array_new ();
   self->state->keys_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);

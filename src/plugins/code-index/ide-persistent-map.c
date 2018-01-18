@@ -258,6 +258,9 @@ ide_persistent_map_lookup_value (IdePersistentMap *self,
   g_return_val_if_fail (self->values != NULL, NULL);
   g_return_val_if_fail (self->n_kvpairs < G_MAXINT64, NULL);
 
+  if (self->n_kvpairs == 0)
+    return NULL;
+
   /* unsigned long to signed long */
   r = (gint64)self->n_kvpairs - 1;
   l = 0;
@@ -279,7 +282,6 @@ ide_persistent_map_lookup_value (IdePersistentMap *self,
 
       g_assert (l >= 0);
       g_assert (r >= 0);
-      g_assert (r >= l);
     }
 
   if (value != NULL && self->byte_order != G_BYTE_ORDER)
