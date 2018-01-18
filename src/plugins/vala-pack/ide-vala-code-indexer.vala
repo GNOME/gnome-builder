@@ -29,7 +29,7 @@ namespace Ide
 	public class ValaCodeIndexer : Ide.Object, Ide.CodeIndexer
 	{
 		public async Ide.CodeIndexEntries index_file_async (GLib.File file,
-		                                                    string[]? build_flags,
+		                                                    [CCode (array_length = false, array_null_terminated = true)] string[]? build_flags,
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
