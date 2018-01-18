@@ -72,13 +72,10 @@ visitor (CXCursor     cursor,
   CXFile file;
   CXString cx_file_name;
   const char *file_name;
-  CXCursor *child_cursor;
 
   g_assert (!clang_Cursor_isNull (cursor));
 
-  child_cursor = g_slice_new (CXCursor);
-  *child_cursor = cursor;
-  g_queue_push_tail (&self->cursors, child_cursor);
+  g_queue_push_tail (&self->cursors, g_slice_dup (CXCursor, &cursor));
 
   location = clang_getCursorLocation (cursor);
 
@@ -96,7 +93,7 @@ visitor (CXCursor     cursor,
           cursor_kind == CXCursor_TypeAliasDecl ||
           cursor_kind == CXCursor_MacroDefinition)
         {
-          g_queue_push_tail (&self->decl_cursors, child_cursor);
+          g_queue_push_tail (&self->decl_cursors, g_slice_dup (CXCursor, &cursor));
         }
     }
 
@@ -147,11 +144,10 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
           return NULL;
         }
 
-      cursor = g_queue_pop_head (&self->cursors);
-
       /* Resume visiting children.*/
+      cursor = g_queue_pop_head (&self->cursors);
       clang_visitChildren (*cursor, visitor, self);
-      g_slice_free (CXCursor, cursor);
+      g_clear_pointer (&cursor, cx_cursor_free);
     }
 
   cursor = g_queue_pop_head (&self->decl_cursors);
@@ -284,6 +280,8 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
 
   clang_disposeString (cx_name);
 
+  g_clear_pointer (&cursor, cx_cursor_free);
+
   return g_object_new (IDE_TYPE_CODE_INDEX_ENTRY,
                        "name", name,
                        "key", key,
@@ -315,15 +313,13 @@ ide_clang_code_index_entries_finalize (GObject *object)
 {
   IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)object;
 
+  g_queue_foreach (&self->decl_cursors, (GFunc)cx_cursor_free, NULL);
   g_queue_clear (&self->decl_cursors);
+
   g_queue_foreach (&self->cursors, (GFunc)cx_cursor_free, NULL);
   g_queue_clear (&self->cursors);
 
-  if (self->tu != NULL)
-    {
-      clang_disposeTranslationUnit (self->tu);
-      self->tu = NULL;
-    }
+  g_clear_pointer (&self->tu, clang_disposeTranslationUnit);
 
   G_OBJECT_CLASS(ide_clang_code_index_entries_parent_class)->finalize (object);
 }
