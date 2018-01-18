@@ -22,7 +22,7 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CLANG_CODE_INDEXER (ide_clang_code_indexer_get_type ())
+#define IDE_TYPE_CLANG_CODE_INDEXER (ide_clang_code_indexer_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeClangCodeIndexer, ide_clang_code_indexer, IDE, CLANG_CODE_INDEXER, IdeObject)
 

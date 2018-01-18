@@ -23,11 +23,12 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CLANG_CODE_INDEX_ENTRIES (ide_clang_code_index_entries_get_type ())
+#define IDE_TYPE_CLANG_CODE_INDEX_ENTRIES (ide_clang_code_index_entries_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeClangCodeIndexEntries, ide_clang_code_index_entries, IDE, CLANG_CODE_INDEX_ENTRIES, GObject)
 
-IdeClangCodeIndexEntries *ide_clang_code_index_entries_new (CXTranslationUnit  tu,
+IdeClangCodeIndexEntries *ide_clang_code_index_entries_new (CXIndex            index,
+                                                            CXTranslationUnit  unit,
                                                             const gchar       *source_filename);
 
 G_END_DECLS
