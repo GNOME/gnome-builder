@@ -157,9 +157,6 @@ ide_thread_pool_worker (gpointer data,
                         gpointer user_data)
 {
   WorkItem *work_item = data;
-  gpointer source_object;
-  gpointer task_data;
-  GCancellable *cancellable;
 
   g_assert (work_item != NULL);
 
@@ -167,17 +164,18 @@ ide_thread_pool_worker (gpointer data,
 
   if (work_item->type == TYPE_TASK)
     {
-      source_object = g_task_get_source_object (work_item->task.task);
-      task_data = g_task_get_task_data (work_item->task.task);
-      cancellable = g_task_get_cancellable (work_item->task.task);
+      gpointer source_object = g_task_get_source_object (work_item->task.task);
+      gpointer task_data = g_task_get_task_data (work_item->task.task);
+      GCancellable *cancellable = g_task_get_cancellable (work_item->task.task);
 
       work_item->task.func (work_item->task.task, source_object, task_data, cancellable);
-
-      g_object_unref (work_item->task.task);
+      g_clear_object (&work_item->task.task);
+      work_item->task.func = NULL;
     }
   else if (work_item->type == TYPE_FUNC)
     {
       work_item->func.callback (work_item->func.data);
+      work_item->func.data = NULL;
     }
 
   g_slice_free (WorkItem, work_item);
