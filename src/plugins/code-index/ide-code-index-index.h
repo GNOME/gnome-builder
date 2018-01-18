@@ -27,12 +27,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeCodeIndexIndex, ide_code_index_index, IDE, CODE_INDEX_INDEX, IdeObject)
 
 IdeCodeIndexIndex *ide_code_index_index_new             (IdeContext           *context);
-gboolean           ide_code_index_index_load_if_nmod    (IdeCodeIndexIndex    *self,
-                                                         GFile                *directory,
-                                                         GPtrArray            *files,
-                                                         GTimeVal              mod_time,
-                                                         GCancellable         *cancellable,
-                                                         GError              **error);
 gboolean           ide_code_index_index_load            (IdeCodeIndexIndex    *self,
                                                          GFile                *directory,
                                                          GCancellable         *cancellable,
