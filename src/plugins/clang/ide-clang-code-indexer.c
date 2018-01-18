@@ -49,7 +49,6 @@ ide_clang_code_indexer_index_file_worker (GTask        *task,
                                           GCancellable *cancellable)
 {
   BuildRequest *br = task_data;
-  g_autoptr(IdeClangCodeIndexEntries) entries = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
   g_auto(CXIndex) index = NULL;
   g_autofree gchar *path = NULL;
@@ -75,20 +74,17 @@ ide_clang_code_indexer_index_file_worker (GTask        *task,
                                       &unit);
 
   if (code != CXError_Success)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to index \"%s\"",
-                               path);
-      return;
-    }
-
-  entries = ide_clang_code_index_entries_new (g_steal_pointer (&index),
-                                              g_steal_pointer (&unit),
-                                              path);
-
-  g_task_return_pointer (task, g_steal_pointer (&entries), g_object_unref);
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_FAILED,
+                             "Failed to index \"%s\"",
+                             path);
+  else
+    g_task_return_pointer (task,
+                           ide_clang_code_index_entries_new (g_steal_pointer (&index),
+                                                             g_steal_pointer (&unit),
+                                                             path),
+                           g_object_unref);
 }
 
 static void
