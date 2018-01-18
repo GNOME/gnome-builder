@@ -330,7 +330,11 @@ enum gdbwire_logger_level {
  * Any additional format arguments.
  */
 void gdbwire_logger_log(const char *file, int line,
-        enum gdbwire_logger_level level, const char *fmt, ...);
+        enum gdbwire_logger_level level, const char *fmt, ...)
+#ifdef __GNUC__
+        __attribute__((__format__(__printf__, 4, 5)))
+#endif
+        ;
 
 /* The macros intended to be used for logging */
 #define gdbwire_debug(fmt, ...)(gdbwire_logger_log(__FILE__, __LINE__, \
