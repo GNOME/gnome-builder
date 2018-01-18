@@ -262,3 +262,142 @@ ide_g_file_get_uncanonical_relative_path (GFile *file,
 
   return g_build_filename (path, relatives->str, suffix, NULL);
 }
+
+typedef struct
+{
+  gchar *attributes;
+  GFileQueryInfoFlags flags;
+} GetChildren;
+
+static void
+ide_g_file_get_children_worker (GTask        *task,
+                                gpointer      source_object,
+                                gpointer      task_data,
+                                GCancellable *cancellable)
+{
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GPtrArray) children = NULL;
+  g_autoptr(GError) error = NULL;
+  GetChildren *gc = task_data;
+  GFile *dir = source_object;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_FILE (dir));
+  g_assert (gc != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  children = g_ptr_array_new_with_free_func (g_object_unref);
+
+  enumerator = g_file_enumerate_children (dir,
+                                          gc->attributes,
+                                          gc->flags,
+                                          cancellable,
+                                          &error);
+
+  if (enumerator == NULL)
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  for (;;)
+    {
+      g_autoptr(GFileInfo) file_info = NULL;
+
+      file_info = g_file_enumerator_next_file (enumerator, cancellable, &error);
+
+      if (error != NULL)
+        {
+          g_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+
+      if (file_info == NULL)
+        break;
+
+      g_ptr_array_add (children, g_steal_pointer (&file_info));
+    }
+
+  g_task_return_pointer (task,
+                         g_steal_pointer (&children),
+                         (GDestroyNotify) g_ptr_array_unref);
+}
+
+static void
+get_children_free (gpointer data)
+{
+  GetChildren *gc = data;
+
+  g_free (gc->attributes);
+  g_slice_free (GetChildren, gc);
+}
+
+/**
+ * ide_g_file_get_children_async:
+ * @file: a #IdeGlib
+ * @attributes: attributes to retrieve
+ * @flags: flags for the query
+ * @io_priority: the io priority
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: a callback to execute upon completion
+ * @user_data: closure data for @callback
+ *
+ * This function is like g_file_enumerate_children_async() except that
+ * it returns a #GPtrArray of #GFileInfo instead of an enumerator.
+ *
+ * This can be convenient when you know you need all of the #GFileInfo
+ * accessable at once, or the size will be small.
+ *
+ * Since: 3.28
+ */
+void
+ide_g_file_get_children_async (GFile               *file,
+                               const gchar         *attributes,
+                               GFileQueryInfoFlags  flags,
+                               gint                 io_priority,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  GetChildren *gc;
+
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (attributes != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  gc = g_slice_new0 (GetChildren);
+  gc->attributes = g_strdup (attributes);
+  gc->flags = flags;
+
+  task = g_task_new (file, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_g_file_get_children_async);
+  g_task_set_priority (task, io_priority);
+  g_task_set_task_data (task, gc, get_children_free);
+  g_task_run_in_thread (task, ide_g_file_get_children_worker);
+}
+
+/**
+ * ide_g_file_get_children_finish:
+ * @file: a #GFile
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to ide_g_file_get_children_async().
+ *
+ * Returns: (transfer container) (element-type Gio.File): A #GPtrArray
+ *   of #GFileInfo if successful, otherwise %NULL.
+ *
+ * Since: 3.28
+ */
+GPtrArray *
+ide_g_file_get_children_finish (GFile         *file,
+                                GAsyncResult  *result,
+                                GError       **error)
+{
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (g_task_is_valid (G_TASK (result), file), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}

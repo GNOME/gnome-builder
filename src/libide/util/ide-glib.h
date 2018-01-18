@@ -25,22 +25,34 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_gettext                              (const gchar    *message);
+const gchar *ide_gettext                              (const gchar          *message);
 IDE_AVAILABLE_IN_ALL
-void         ide_g_task_return_boolean_from_main      (GTask          *task,
-                                                       gboolean        value);
+void         ide_g_task_return_boolean_from_main      (GTask                *task,
+                                                       gboolean              value);
 IDE_AVAILABLE_IN_ALL
-void         ide_g_task_return_int_from_main          (GTask          *task,
-                                                       gint            value);
+void         ide_g_task_return_int_from_main          (GTask                *task,
+                                                       gint                  value);
 IDE_AVAILABLE_IN_ALL
-void         ide_g_task_return_pointer_from_main      (GTask          *task,
-                                                       gpointer        value,
-                                                       GDestroyNotify  notify);
+void         ide_g_task_return_pointer_from_main      (GTask                *task,
+                                                       gpointer              value,
+                                                       GDestroyNotify        notify);
 IDE_AVAILABLE_IN_ALL
-void         ide_g_task_return_error_from_main        (GTask          *task,
-                                                       GError         *error);
+void         ide_g_task_return_error_from_main        (GTask                *task,
+                                                       GError               *error);
 IDE_AVAILABLE_IN_3_28
-gchar       *ide_g_file_get_uncanonical_relative_path (GFile          *file,
-                                                       GFile          *other);
+gchar       *ide_g_file_get_uncanonical_relative_path (GFile                *file,
+                                                       GFile                *other);
+IDE_AVAILABLE_IN_3_28
+void         ide_g_file_get_children_async            (GFile                *file,
+                                                       const gchar          *attributes,
+                                                       GFileQueryInfoFlags   flags,
+                                                       gint                  io_priority,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+GPtrArray   *ide_g_file_get_children_finish           (GFile                *file,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
 
 G_END_DECLS
