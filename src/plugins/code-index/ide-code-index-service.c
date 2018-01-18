@@ -88,6 +88,15 @@ build_data_unref (BuildData *data)
     }
 }
 
+static BuildData *
+build_data_ref (BuildData *data)
+{
+  g_assert (data != NULL);
+  g_assert (data->ref_count > 0);
+  g_atomic_int_inc (&data->ref_count);
+  return data;
+}
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (BuildData, build_data_unref)
 
 static void
@@ -220,7 +229,6 @@ ide_code_index_service_build_cb (GObject      *object,
   else
     {
       unregister_pausable (self);
-      ide_code_index_builder_drop_caches (builder);
     }
 }
 
@@ -234,7 +242,7 @@ ide_code_index_serivce_push (BuildData *bdata)
 
   if (g_queue_is_empty (&bdata->self->build_queue))
     {
-      g_queue_push_tail (&bdata->self->build_queue, bdata);
+      g_queue_push_tail (&bdata->self->build_queue, build_data_ref (bdata));
 
       g_clear_object (&bdata->self->cancellable);
       bdata->self->cancellable = g_cancellable_new ();
@@ -250,7 +258,7 @@ ide_code_index_serivce_push (BuildData *bdata)
     }
   else
     {
-      g_queue_push_tail (&bdata->self->build_queue, bdata);
+      g_queue_push_tail (&bdata->self->build_queue, build_data_ref (bdata));
     }
 
   if (bdata->self->build_dirs != NULL)
