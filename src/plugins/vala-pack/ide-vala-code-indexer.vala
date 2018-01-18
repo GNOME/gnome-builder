@@ -38,7 +38,17 @@ namespace Ide
 			var index = service.index;
 			var tree = index.get_symbol_tree_sync (file, cancellable);
 
-			var ret = new Ide.ValaCodeIndexEntries (file, tree as Ide.ValaSymbolTree);
+			Ide.CodeIndexEntries? ret = null;
+
+			Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
+				index.do_locked (_ => {
+					ret = new Ide.ValaCodeIndexEntries (file, tree as Ide.ValaSymbolTree);
+				});
+				GLib.Idle.add(index_file_async.callback);
+			});
+
+			yield;
+
 			if (ret == null)
 				throw new GLib.IOError.FAILED ("failed to build entries");
 
