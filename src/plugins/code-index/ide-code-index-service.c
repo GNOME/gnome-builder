@@ -453,7 +453,7 @@ ide_code_index_service_context_loaded (IdeService *service)
 
   self->code_indexers = g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
   self->index = ide_code_index_index_new (context);
-  self->builder = ide_code_index_builder_new (context, self->index, self);
+  self->builder = ide_code_index_builder_new (context, self, self->index);
   self->build_dirs = g_hash_table_new_full (g_file_hash,
                                             (GEqualFunc)g_file_equal,
                                             g_object_unref,

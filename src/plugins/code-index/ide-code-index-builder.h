@@ -1,6 +1,7 @@
 /* ide-code-index-builder.h
  *
  * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright © 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +30,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexBuilder, ide_code_index_builder, IDE, CODE_INDEX_BUILDER, IdeObject)
 
+IdeCodeIndexBuilder *ide_code_index_builder_new          (IdeContext           *context,
+                                                          IdeCodeIndexService  *service,
+                                                          IdeCodeIndexIndex    *index);
 void                 ide_code_index_builder_drop_caches  (IdeCodeIndexBuilder  *self);
 void                 ide_code_index_builder_build_async  (IdeCodeIndexBuilder  *self,
                                                           GFile                *directory,
@@ -39,8 +43,5 @@ void                 ide_code_index_builder_build_async  (IdeCodeIndexBuilder  *
 gboolean             ide_code_index_builder_build_finish (IdeCodeIndexBuilder  *self,
                                                           GAsyncResult         *result,
                                                           GError              **error);
-IdeCodeIndexBuilder *ide_code_index_builder_new          (IdeContext           *context,
-                                                          IdeCodeIndexIndex    *index,
-                                                          IdeCodeIndexService  *service);
 
 G_END_DECLS
