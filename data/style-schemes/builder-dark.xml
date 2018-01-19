@@ -68,7 +68,7 @@
   <style name="selection"                   foreground="aluminium1" background="aluminium4"/>
   <style name="cursor"                      foreground="aluminium2"/>
   <style name="current-line"                background="dark2"/>
-  <style name="current-line-number"         background="dark1"/>
+  <style name="current-line-number"         background="dark2"/>
   <style name="line-numbers"                foreground="dark3" background="dark1"/>
   <style name="draw-spaces"                 foreground="dark3"/>
   <style name="background-pattern"          background="dark2"/>
