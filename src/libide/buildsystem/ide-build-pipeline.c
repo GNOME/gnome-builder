@@ -281,17 +281,19 @@ typedef struct
   };
 } TaskData;
 
-static void ide_build_pipeline_queue_flush  (IdeBuildPipeline *self);
-static void ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
-                                             GTask            *task);
-static void ide_build_pipeline_tick_clean   (IdeBuildPipeline *self,
-                                             GTask            *task);
-static void ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
-                                             GTask            *task);
-static void initable_iface_init             (GInitableIface   *iface);
+static void ide_build_pipeline_queue_flush  (IdeBuildPipeline    *self);
+static void ide_build_pipeline_tick_execute (IdeBuildPipeline    *self,
+                                             GTask               *task);
+static void ide_build_pipeline_tick_clean   (IdeBuildPipeline    *self,
+                                             GTask               *task);
+static void ide_build_pipeline_tick_rebuild (IdeBuildPipeline    *self,
+                                             GTask               *task);
+static void initable_iface_init             (GInitableIface      *iface);
+static void list_model_iface_init           (GListModelInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeBuildPipeline, ide_build_pipeline, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeBuildPipeline, ide_build_pipeline, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
+                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
 
 enum {
   PROP_0,
@@ -1410,7 +1412,7 @@ complete_queued_before_phase (IdeBuildPipeline *self,
       GTask *task;
       TaskData *task_data;
 
-again:
+    again:
       task = iter->data;
       task_data = g_task_get_task_data (task);
 
@@ -1994,6 +1996,23 @@ ide_build_pipeline_connect (IdeBuildPipeline *self,
                                             self,
                                             NULL);
 
+          /*
+           * We need to emit items-changed for the newly added entry, but we relied
+           * on insertion sort above to get our final position. So now we need to
+           * scan the pipeline for where we ended up, and then emit items-changed for
+           * the new stage.
+           */
+          for (guint j = 0; j < self->pipeline->len; j++)
+            {
+              const PipelineEntry *ele = &g_array_index (self->pipeline, PipelineEntry, j);
+
+              if (ele->id == entry.id)
+                {
+                  g_list_model_items_changed (G_LIST_MODEL (self), j, 0, 1);
+                  break;
+                }
+            }
+
           IDE_GOTO (cleanup);
         }
     }
@@ -2259,6 +2278,7 @@ ide_build_pipeline_disconnect (IdeBuildPipeline *self,
       if (entry->id == stage_id)
         {
           g_array_remove_index (self->pipeline, i);
+          g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
           break;
         }
     }
@@ -3264,4 +3284,44 @@ _ide_build_pipeline_mark_broken (IdeBuildPipeline *self)
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
 
   self->broken = TRUE;
+}
+
+static GType
+ide_build_pipeline_get_item_type (GListModel *model)
+{
+  return IDE_TYPE_BUILD_STAGE;
+}
+
+static guint
+ide_build_pipeline_get_n_items (GListModel *model)
+{
+  IdeBuildPipeline *self = (IdeBuildPipeline *)model;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+
+  return self->pipeline != NULL ? self->pipeline->len : 0;
+}
+
+static gpointer
+ide_build_pipeline_get_item (GListModel *model,
+                             guint       position)
+{
+  IdeBuildPipeline *self = (IdeBuildPipeline *)model;
+  const PipelineEntry *entry;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (self->pipeline != NULL);
+  g_assert (position < self->pipeline->len);
+
+  entry = &g_array_index (self->pipeline, PipelineEntry, position);
+
+  return g_object_ref (entry->stage);
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item = ide_build_pipeline_get_item;
+  iface->get_item_type = ide_build_pipeline_get_item_type;
+  iface->get_n_items = ide_build_pipeline_get_n_items;
 }
