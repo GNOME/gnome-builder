@@ -192,9 +192,9 @@ ide_build_panel_started (IdeBuildPanel    *self,
   IDE_EXIT;
 }
 
-static void
-ide_build_panel_connect_stage_cb (gpointer data,
-                                  gpointer user_data)
+static GtkWidget *
+ide_build_panel_create_stage_row_cb (gpointer data,
+                                     gpointer user_data)
 {
   IdeBuildStage *stage = data;
   IdeBuildPanel *self = user_data;
@@ -202,8 +202,7 @@ ide_build_panel_connect_stage_cb (gpointer data,
   g_assert (IDE_IS_BUILD_STAGE (stage));
   g_assert (IDE_IS_BUILD_PANEL (self));
 
-  gtk_container_add (GTK_CONTAINER (self->stages_list_box),
-                     ide_build_stage_row_new (stage));
+  return ide_build_stage_row_new (stage);
 }
 
 static void
@@ -227,10 +226,11 @@ ide_build_panel_bind_pipeline (IdeBuildPanel    *self,
   gtk_label_set_label (self->time_completed_label, "—");
   gtk_label_set_label (self->build_status_label, "—");
 
+  gtk_list_box_bind_model (self->stages_list_box,
+                           G_LIST_MODEL (pipeline),
+                           ide_build_panel_create_stage_row_cb,
+                           self, NULL);
 
-  ide_build_pipeline_foreach_stage (pipeline,
-                                    ide_build_panel_connect_stage_cb,
-                                    self);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 }
 
