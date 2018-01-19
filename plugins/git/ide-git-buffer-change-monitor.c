@@ -622,7 +622,7 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
       if (!blob)
         goto cleanup;
 
-      diff->blob = g_object_ref (blob);
+      diff->blob = g_object_ref (GGIT_BLOB (blob));
 
     cleanup:
       g_clear_object (&blob);

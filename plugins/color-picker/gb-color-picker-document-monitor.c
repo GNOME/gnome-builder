@@ -703,7 +703,7 @@ gb_color_picker_document_monitor_queue_oper (GbColorPickerDocumentMonitor *self,
     real_end = *end;
 
   queued.self = g_object_ref (self);
-  queued.buffer = g_object_ref (self->buffer);
+  queued.buffer = g_object_ref (buffer);
   queued.begin = g_object_ref (gtk_text_buffer_create_mark (buffer, NULL, &real_begin, TRUE));
   queued.end = g_object_ref (gtk_text_buffer_create_mark (buffer, NULL, &real_end, FALSE));
   queued.uncolorize = !!uncolorize;
