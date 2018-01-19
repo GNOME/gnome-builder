@@ -319,6 +319,7 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeBuildManager *self;
   IdeBuildPipeline *pipeline;
+  GCancellable *cancellable;
 
   IDE_ENTRY;
 
@@ -346,8 +347,13 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
       IDE_GOTO (failure);
     }
 
+  if (g_task_return_error_if_cancelled (task))
+    IDE_GOTO (failure);
+
+  cancellable = g_task_get_cancellable (task);
+
   /* This will cause plugins to load on the pipeline. */
-  if (!g_initable_init (G_INITABLE (pipeline), NULL, &error))
+  if (!g_initable_init (G_INITABLE (pipeline), cancellable, &error))
     {
       /* translators: %s is replaced with the error message */
       ide_object_warning (self,
@@ -360,14 +366,19 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 
+  g_task_return_boolean (task, TRUE);
+
   IDE_EXIT;
 
 failure:
-  if (pipeline == self->pipeline)
-    {
-      g_clear_object (&self->pipeline);
-      dzl_signal_group_set_target (self->pipeline_signals, NULL);
-    }
+
+  if (error != NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_FAILED,
+                             "Failed to setup build pipeline");
 
   IDE_EXIT;
 }
@@ -377,7 +388,6 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 {
   IdeConfigurationManager *config_manager;
   g_autoptr(GTask) task = NULL;
-  g_autoptr(GCancellable) cancellable = NULL;
   IdeRuntimeManager *runtime_manager;
   IdeConfiguration *config;
   IdeContext *context;
@@ -406,8 +416,6 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
    * as they are not invalide.
    */
   ide_build_manager_cancel (self);
-  cancellable = g_cancellable_new ();
-  dzl_cancellable_chain (cancellable, self->cancellable);
 
   g_clear_object (&self->pipeline);
 
@@ -448,13 +456,12 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
    * case a further configuration change comes through and we need to
    * tear down the pipeline immediately.
    */
-  task = g_task_new (self, cancellable, NULL, NULL);
+  task = g_task_new (self, self->cancellable, NULL, NULL);
   g_task_set_task_data (task, g_object_ref (self->pipeline), g_object_unref);
   g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_return_on_cancel (task, TRUE);
   ide_runtime_manager_ensure_config_async (runtime_manager,
                                            config,
-                                           cancellable,
+                                           self->cancellable,
                                            ide_build_manager_ensure_runtime_cb,
                                            g_steal_pointer (&task));
 
