@@ -4523,7 +4523,8 @@ ide_source_view_constructed (GObject *object)
   priv->omni_renderer = g_object_new (IDE_TYPE_OMNI_GUTTER_RENDERER,
                                       "visible", TRUE,
                                       NULL);
-  gtk_source_gutter_insert (gutter, g_object_ref_sink (priv->omni_renderer), 0);
+  g_object_ref_sink (priv->omni_renderer);
+  gtk_source_gutter_insert (gutter, GTK_SOURCE_GUTTER_RENDERER (priv->omni_renderer), 0);
 }
 
 static void
