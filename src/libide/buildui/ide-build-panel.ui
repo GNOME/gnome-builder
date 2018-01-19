@@ -87,6 +87,17 @@
                       <object class="GtkListBox" id="stages_list_box">
                         <property name="selection-mode">none</property>
                         <property name="visible">true</property>
+                        <child type="placeholder">
+                          <object class="GtkLabel">
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                            <property name="label" translatable="yes">Build pipeline is empty</property>
+                            <property name="xalign">0.5</property>
+                            <property name="ypad">12</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
