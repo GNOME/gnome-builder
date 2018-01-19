@@ -267,8 +267,17 @@ ide_persistent_map_lookup_value (IdePersistentMap *self,
 
   while (l <= r)
     {
-      gint64 m = (l + r) / 2;
-      gint cmp = g_strcmp0 (key, &self->keys [self->kvpairs [m].key]);
+      gint64 m;
+      gint32 k;
+      gint cmp;
+
+      m = (l + r) / 2;
+      g_assert (m >= 0);
+
+      k = self->kvpairs [m].key;
+      g_assert (k >= 0);
+
+      cmp = g_strcmp0 (key, &self->keys [k]);
 
       if (cmp < 0)
         r = m - 1;
@@ -279,9 +288,6 @@ ide_persistent_map_lookup_value (IdePersistentMap *self,
           value = g_variant_get_child_value (self->values, self->kvpairs [m].value);
           break;
         }
-
-      g_assert (l >= 0);
-      g_assert (r >= 0);
     }
 
   if (value != NULL && self->byte_order != G_BYTE_ORDER)
