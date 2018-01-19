@@ -953,13 +953,14 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
   IDE_EXIT;
 }
 
-/*
+/**
  * ide_build_pipeline_unload:
+ * @self: an #IdeBuildPipeline
  *
- * This clears things up that were initialized in ide_build_pipeline_load. This
- * function is safe to run even if load has not been called. We will not clean
- * things up if the pipeline is currently executing (we can wait until its
- * finished or dispose/finalize to cleanup up further.
+ * This clears things up that were initialized in ide_build_pipeline_load().
+ * This function is safe to run even if load has not been called. We will not
+ * clean things up if the pipeline is currently executing (we can wait until
+ * its finished or dispose/finalize to cleanup up further.
  */
 static void
 ide_build_pipeline_unload (IdeBuildPipeline *self)
