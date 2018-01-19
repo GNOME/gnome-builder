@@ -299,6 +299,7 @@ enum {
   PROP_CONFIGURATION,
   PROP_MESSAGE,
   PROP_PHASE,
+  PROP_PTY,
   N_PROPS
 };
 
@@ -1066,6 +1067,8 @@ ide_build_pipeline_initable_init (GInitable     *initable,
 
   ide_build_pipeline_notify_ready (self, NULL, self->configuration);
 
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PTY]);
+
   IDE_RETURN (TRUE);
 }
 
@@ -1125,6 +1128,10 @@ ide_build_pipeline_get_property (GObject    *object,
 
     case PROP_PHASE:
       g_value_set_flags (value, ide_build_pipeline_get_phase (self));
+      break;
+
+    case PROP_PTY:
+      g_value_set_object (value, ide_build_pipeline_get_pty (self));
       break;
 
     default:
@@ -1205,6 +1212,21 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                         IDE_TYPE_BUILD_PHASE,
                         IDE_BUILD_PHASE_NONE,
                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeBuildPipeline:pty:
+   *
+   * The "pty" property is the #VtePty that is used by build stages that
+   * execute subprocesses with a pseudo terminal.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_PTY] =
+    g_param_spec_object ("pty",
+                         "PTY",
+                         "The PTY used by the pipeline",
+                         VTE_TYPE_PTY,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -2395,8 +2417,21 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
   ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->pty_slave));
 }
 
+/**
+ * ide_build_pipeline_get_pty:
+ * @self: a #IdeBuildPipeline
+ *
+ * Gets the #VtePty for the pipeline, if set.
+ *
+ * This will not be set until the pipeline has been initialized. That is not
+ * guaranteed to happen at object creation time.
+ *
+ * Returns: (transfer none) (nullable): a #VtePty or %NULL
+ *
+ * Since: 3.28
+ */
 VtePty *
-_ide_build_pipeline_get_pty (IdeBuildPipeline *self)
+ide_build_pipeline_get_pty (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 

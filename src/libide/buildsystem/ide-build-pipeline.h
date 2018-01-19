@@ -19,6 +19,7 @@
 #pragma once
 
 #include <gio/gio.h>
+#include <vte/vte.h>
 
 #include "ide-version-macros.h"
 
@@ -72,6 +73,8 @@ IDE_AVAILABLE_IN_ALL
 IdeBuildPhase          ide_build_pipeline_get_phase           (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_get_can_export      (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_28
+VtePty                *ide_build_pipeline_get_pty             (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_build_pipeline_create_launcher     (IdeBuildPipeline       *self,
                                                                GError                **error);
