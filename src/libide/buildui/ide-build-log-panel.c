@@ -73,6 +73,18 @@ ide_build_log_panel_log_observer (IdeBuildLogStream  stream,
   vte_terminal_feed (VTE_TERMINAL (self->terminal), "\r\n", -1);
 }
 
+static void
+ide_build_log_panel_notify_pty (IdeBuildLogPanel *self,
+                                GParamSpec       *pspec,
+                                IdeBuildPipeline *pipeline)
+{
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  vte_terminal_set_pty (VTE_TERMINAL (self->terminal),
+                        ide_build_pipeline_get_pty (pipeline));
+}
+
 void
 ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
                                   IdeBuildPipeline *pipeline)
@@ -84,6 +96,9 @@ ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
     {
       if (self->pipeline != NULL)
         {
+          g_signal_handlers_disconnect_by_func (self->pipeline,
+                                                G_CALLBACK (ide_build_log_panel_notify_pty),
+                                                self);
           ide_build_pipeline_remove_log_observer (self->pipeline, self->log_observer);
           self->log_observer = 0;
           g_clear_object (&self->pipeline);
@@ -100,7 +115,12 @@ ide_build_log_panel_set_pipeline (IdeBuildLogPanel *self,
                                                  NULL);
           vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
           vte_terminal_set_pty (VTE_TERMINAL (self->terminal),
-                                _ide_build_pipeline_get_pty (pipeline));
+                                ide_build_pipeline_get_pty (pipeline));
+          g_signal_connect_object (pipeline,
+                                   "notify::pty",
+                                   G_CALLBACK (ide_build_log_panel_notify_pty),
+                                   self,
+                                   G_CONNECT_SWAPPED);
         }
     }
 }
