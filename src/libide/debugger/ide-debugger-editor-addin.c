@@ -35,8 +35,10 @@
 #include "editor/ide-editor-addin.h"
 #include "files/ide-file.h"
 #include "runner/ide-run-manager.h"
+#include "terminal/ide-terminal.h"
 #include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-message.h"
+#include "util/ide-line-reader.h"
 #include "util/ide-gtk.h"
 
 /**
@@ -70,7 +72,8 @@ struct _IdeDebuggerEditorAddin
   DzlDockWidget              *panel;
   IdeDebuggerRegistersView   *registers_view;
   IdeDebuggerThreadsView     *threads_view;
-  GtkTextView                *log_view;
+  IdeTerminal                *log_view;
+  GtkScrollbar               *log_view_scroller;
 };
 
 static void
@@ -86,18 +89,25 @@ debugger_log (IdeDebuggerEditorAddin *self,
 
   if (stream == IDE_DEBUGGER_CONSOLE)
     {
-      GtkTextBuffer *buffer;
+      IdeLineReader reader;
       const gchar *str;
-      GtkTextIter iter;
+      gchar *line;
       gsize len;
+      gsize line_len;
 
-      str = (gchar *)g_bytes_get_data (content, &len);
+      str = g_bytes_get_data (content, &len);
 
-      buffer = gtk_text_view_get_buffer (self->log_view);
-      gtk_text_buffer_get_end_iter (buffer, &iter);
-      gtk_text_buffer_insert (buffer, &iter, str, len);
-      gtk_text_buffer_select_range (buffer, &iter, &iter);
-      gtk_text_view_scroll_to_iter (self->log_view, &iter, 0.0, FALSE, 1.0, 1.0);
+      /*
+       * Ingnore \n so we can add \r\n. Otherwise we get problematic
+       * output in the terminal.
+       */
+      ide_line_reader_init (&reader, (gchar *)str, len);
+      while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
+        {
+          vte_terminal_feed (VTE_TERMINAL (self->log_view), line, line_len);
+          if (line[line_len] == '\r' || line[line_len] == '\n')
+            vte_terminal_feed (VTE_TERMINAL (self->log_view), "\r\n", 2);
+        }
     }
 }
 
@@ -265,7 +275,7 @@ static void
 ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
 {
   IdeWorkbench *workbench;
-  GtkWidget *scroller;
+  GtkWidget *scroll_box;
   GtkWidget *box;
   GtkWidget *hpaned;
   GtkWidget *utilities;
@@ -353,19 +363,27 @@ ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
                                      "tab-label", _("Registers"),
                                      NULL);
 
-  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                           "visible", TRUE,
-                           NULL);
-  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (scroller),
+  scroll_box = g_object_new (GTK_TYPE_BOX,
+                             "orientation", GTK_ORIENTATION_HORIZONTAL,
+                             "visible", TRUE,
+                             NULL);
+  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (scroll_box),
                                      "tab-label", _("Log"),
                                      NULL);
 
-  self->log_view = g_object_new (GTK_TYPE_TEXT_VIEW,
-                                 "monospace", TRUE,
+  self->log_view = g_object_new (IDE_TYPE_TERMINAL,
+                                 "hexpand", TRUE,
                                  "visible", TRUE,
                                  NULL);
   OBSERVE_DESTROY (self->log_view);
-  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (self->log_view));
+  gtk_container_add (GTK_CONTAINER (scroll_box), GTK_WIDGET (self->log_view));
+
+  self->log_view_scroller = g_object_new (GTK_TYPE_SCROLLBAR,
+                                          "adjustment", gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->log_view)),
+                                          "orientation", GTK_ORIENTATION_VERTICAL,
+                                          "visible", TRUE,
+                                          NULL);
+  gtk_container_add (GTK_CONTAINER (scroll_box), GTK_WIDGET (self->log_view_scroller));
 
   utilities = ide_editor_perspective_get_utilities (self->editor);
   gtk_container_add (GTK_CONTAINER (utilities), GTK_WIDGET (self->panel));
