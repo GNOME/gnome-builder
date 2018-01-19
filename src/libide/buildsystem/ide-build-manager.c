@@ -333,7 +333,7 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  runtime = ide_runtime_manager_ensure_finish (runtime_manager, result, &error);
+  runtime = ide_runtime_manager_ensure_config_finish (runtime_manager, result, &error);
 
   if (runtime == NULL)
     {
