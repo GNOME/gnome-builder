@@ -238,6 +238,13 @@ struct _IdeBuildPipeline
    * asynchronously and after the processes/stage has completed.
    */
   guint errors_on_stdout : 1;
+
+  /*
+   * This is set to TRUE if the pipeline has failed initialization. That means
+   * that all future operations will fail (but we can keep the object alive to
+   * ensure that the manager has a valid object instance for the pipeline).
+   */
+  guint broken : 1;
 };
 
 typedef enum
@@ -629,6 +636,25 @@ ide_build_pipeline_release_transients (IdeBuildPipeline *self)
     }
 
   IDE_EXIT;
+}
+
+static gboolean
+ide_build_pipeline_check_ready (IdeBuildPipeline *self,
+                                GTask            *task)
+{
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (G_IS_TASK (task));
+
+  if (self->broken)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               _("The build pipeline is in a failed state"));
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 /**
@@ -1554,7 +1580,8 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
   g_task_set_source_tag (task, ide_build_pipeline_build_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
 
-  dzl_cancellable_chain (cancellable, self->cancellable);
+  if (!ide_build_pipeline_check_ready (self, task))
+    return;
 
   /*
    * If the requested phase has already been met (by a previous build
@@ -2757,6 +2784,9 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_build_pipeline_clean_async);
 
+  if (!ide_build_pipeline_check_ready (self, task))
+    return;
+
   dzl_cancellable_chain (cancellable, self->cancellable);
 
   td = task_data_new (task, TASK_CLEAN);
@@ -3006,6 +3036,9 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_build_pipeline_rebuild_async);
 
+  if (!ide_build_pipeline_check_ready (self, task))
+    return;
+
   td = task_data_new (task, TASK_REBUILD);
   td->phase = phase;
   g_task_set_task_data (task, td, task_data_free);
@@ -3049,6 +3082,9 @@ gboolean
 ide_build_pipeline_get_can_export (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+
+  if (self->broken)
+    return FALSE;
 
   for (guint i = 0; i < self->pipeline->len; i++)
     {
@@ -3117,6 +3153,9 @@ ide_build_pipeline_has_configured (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
 
+  if (self->broken)
+    return FALSE;
+
   /*
    * We need to walk from beginning towards end (instead of
    * taking a cleaner approach that would be to walk from the
@@ -3167,4 +3206,12 @@ ide_build_pipeline_has_configured (IdeBuildPipeline *self)
    */
 
   return FALSE;
+}
+
+void
+_ide_build_pipeline_mark_broken (IdeBuildPipeline *self)
+{
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+
+  self->broken = TRUE;
 }
