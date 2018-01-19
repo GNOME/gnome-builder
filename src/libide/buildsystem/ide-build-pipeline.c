@@ -984,10 +984,20 @@ ide_build_pipeline_notify_ready (IdeBuildPipeline *self,
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
+  /*
+   * If we're being realistic, we can only really setup the build pipeline one
+   * time, once the configuration is ready. So cancel all tracking after that
+   * so that and just rely on the build manager to create a new pipeline when
+   * the active configuration changes.
+   */
+
   if (ide_configuration_get_ready (configuration))
-    ide_build_pipeline_load (self);
-  else
-    ide_build_pipeline_unload (self);
+    {
+      ide_build_pipeline_load (self);
+      g_signal_handlers_disconnect_by_func (configuration,
+                                            G_CALLBACK (ide_build_pipeline_notify_ready),
+                                            self);
+    }
 
   IDE_EXIT;
 }
