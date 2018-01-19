@@ -34,6 +34,7 @@ struct _IdeBuildPanel
   /* Owned references */
   GHashTable          *diags_hash;
   IdeBuildPipeline    *pipeline;
+  DzlSignalGroup      *pipeline_signals;
 
   /* Template widgets */
   GtkLabel            *build_status_label;
@@ -206,12 +207,15 @@ ide_build_panel_connect_stage_cb (gpointer data,
 }
 
 static void
-ide_build_panel_connect (IdeBuildPanel    *self,
-                         IdeBuildPipeline *pipeline)
+ide_build_panel_bind_pipeline (IdeBuildPanel    *self,
+                               IdeBuildPipeline *pipeline,
+                               DzlSignalGroup   *signals)
 {
-  g_return_if_fail (IDE_IS_BUILD_PANEL (self));
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
-  g_return_if_fail (self->pipeline == NULL);
+  g_assert (IDE_IS_BUILD_PANEL (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (G_IS_LIST_MODEL (pipeline));
+  g_assert (self->pipeline == NULL);
+  g_assert (DZL_IS_SIGNAL_GROUP (signals));
 
   self->pipeline = g_object_ref (pipeline);
   self->error_count = 0;
@@ -223,39 +227,31 @@ ide_build_panel_connect (IdeBuildPanel    *self,
   gtk_label_set_label (self->time_completed_label, "—");
   gtk_label_set_label (self->build_status_label, "—");
 
-  g_signal_connect_object (pipeline,
-                           "diagnostic",
-                           G_CALLBACK (ide_build_panel_diagnostic),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (pipeline,
-                           "started",
-                           G_CALLBACK (ide_build_panel_started),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   ide_build_pipeline_foreach_stage (pipeline,
                                     ide_build_panel_connect_stage_cb,
                                     self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 }
 
 static void
-ide_build_panel_disconnect (IdeBuildPanel *self)
+ide_build_panel_unbind_pipeline (IdeBuildPanel  *self,
+                                 DzlSignalGroup *signals)
 {
   g_return_if_fail (IDE_IS_BUILD_PANEL (self));
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self->pipeline));
+  g_return_if_fail (!self->pipeline || IDE_IS_BUILD_PIPELINE (self->pipeline));
 
-  g_signal_handlers_disconnect_by_func (self->pipeline,
-                                        G_CALLBACK (ide_build_panel_diagnostic),
-                                        self);
   g_clear_object (&self->pipeline);
 
-  g_hash_table_remove_all (self->diags_hash);
-  gtk_list_store_clear (self->diagnostics_store);
-  gtk_container_foreach (GTK_CONTAINER (self->stages_list_box),
-                         (GtkCallback) gtk_widget_destroy,
-                         NULL);
+  if (!gtk_widget_in_destruction (GTK_WIDGET (self)))
+    {
+      g_hash_table_remove_all (self->diags_hash);
+      gtk_list_store_clear (self->diagnostics_store);
+      gtk_container_foreach (GTK_CONTAINER (self->stages_list_box),
+                             (GtkCallback) gtk_widget_destroy,
+                             NULL);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
+    }
 }
 
 void
@@ -265,14 +261,8 @@ ide_build_panel_set_pipeline (IdeBuildPanel    *self,
   g_return_if_fail (IDE_IS_BUILD_PANEL (self));
   g_return_if_fail (!pipeline || IDE_IS_BUILD_PIPELINE (pipeline));
 
-  if (pipeline != self->pipeline)
-    {
-      if (self->pipeline)
-        ide_build_panel_disconnect (self);
-
-      if (pipeline)
-        ide_build_panel_connect (self, pipeline);
-    }
+  if (self->pipeline_signals != NULL)
+    dzl_signal_group_set_target (self->pipeline_signals, pipeline);
 }
 
 static void
@@ -551,10 +541,13 @@ ide_build_panel_destroy (GtkWidget *widget)
 {
   IdeBuildPanel *self = (IdeBuildPanel *)widget;
 
-  if (self->pipeline != NULL)
-    ide_build_panel_disconnect (self);
+  if (self->pipeline_signals != NULL)
+    dzl_signal_group_set_target (self->pipeline_signals, NULL);
 
   g_clear_pointer (&self->diags_hash, g_hash_table_unref);
+
+  g_clear_object (&self->pipeline_signals);
+  g_clear_object (&self->pipeline);
 
   GTK_WIDGET_CLASS (ide_build_panel_parent_class)->destroy (widget);
 }
@@ -641,6 +634,32 @@ ide_build_panel_init (IdeBuildPanel *self)
   GtkTreeModel *filter;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
+
+  g_signal_connect_object (self->pipeline_signals,
+                           "bind",
+                           G_CALLBACK (ide_build_panel_bind_pipeline),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->pipeline_signals,
+                           "unbind",
+                           G_CALLBACK (ide_build_panel_unbind_pipeline),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  dzl_signal_group_connect_object (self->pipeline_signals,
+                                   "diagnostic",
+                                   G_CALLBACK (ide_build_panel_diagnostic),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  dzl_signal_group_connect_object (self->pipeline_signals,
+                                   "started",
+                                   G_CALLBACK (ide_build_panel_started),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
   self->diags_hash = g_hash_table_new (NULL, NULL);
 
