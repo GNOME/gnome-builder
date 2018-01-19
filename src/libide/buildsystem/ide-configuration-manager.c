@@ -666,18 +666,35 @@ void
 ide_configuration_manager_add (IdeConfigurationManager *self,
                                IdeConfiguration        *configuration)
 {
+  const gchar *config_id;
   guint position;
 
   g_return_if_fail (IDE_IS_CONFIGURATION_MANAGER (self));
   g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
 
-  /* Allow the default config to be overridden by one from a provider */
-  if (g_strcmp0 ("default", ide_configuration_get_id (configuration)) == 0)
+  for (guint i = 0; i < self->configurations->len; i++)
     {
-      IdeConfiguration *default_config;
-      default_config = ide_configuration_manager_get_configuration (self, "default");
-      if (default_config != NULL)
-        g_ptr_array_remove_fast (self->configurations, default_config);
+      IdeConfiguration *ele = g_ptr_array_index (self->configurations, i);
+
+      /* Do nothing if we already have this. Unlikely to happen but might
+       * be if we got into a weird race with registering default configurations
+       * and receiving a default from a provider.
+       */
+      if (configuration == ele)
+        return;
+    }
+
+  config_id = ide_configuration_get_id (configuration);
+
+  /* Allow the default config to be overridden by one from a provider */
+  if (dzl_str_equal0 ("default", config_id))
+    {
+      IdeConfiguration *def = ide_configuration_manager_get_configuration (self, "default");
+
+      g_assert (def != configuration);
+
+      if (def != NULL)
+        g_ptr_array_remove_fast (self->configurations, def);
     }
 
   position = self->configurations->len;
