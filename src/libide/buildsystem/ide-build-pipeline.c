@@ -1053,11 +1053,15 @@ ide_build_pipeline_initable_init (GInitable     *initable,
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_CONFIGURATION (self->configuration));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* Create a PTY for subprocess launchers */
-  self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, cancellable, error);
+  /*
+   * Create a PTY for subprocess launchers. PTY initialization does not
+   * support cancellation, so do not pass @cancellable along to it.
+   */
+  self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, error);
   if (self->pty == NULL)
-    return FALSE;
+    IDE_RETURN (FALSE);
 
   g_signal_connect_object (self->configuration,
                            "notify::ready",
