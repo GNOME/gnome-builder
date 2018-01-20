@@ -382,7 +382,8 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
   g_autofree gchar *staging_dir = NULL;
-  const gchar *const *finish_args;
+  const gchar * const *finish_args;
+  const gchar *command;
   IdeConfiguration *config;
   guint stage_id;
 
@@ -394,6 +395,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   if (!GBP_IS_FLATPAK_CONFIGURATION (config))
     return TRUE;
 
+  command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
   finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (config));
   staging_dir = gbp_flatpak_get_staging_dir (config);
 
@@ -401,6 +403,13 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak");
   ide_subprocess_launcher_push_argv (launcher, "build-finish");
+
+  if (command != NULL)
+    {
+      ide_subprocess_launcher_push_argv (launcher, "--command");
+      ide_subprocess_launcher_push_argv (launcher, command);
+    }
+
   ide_subprocess_launcher_push_args (launcher, finish_args);
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
 
