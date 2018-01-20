@@ -1190,12 +1190,51 @@ ide_buffer_load_rename_provider (IdeBuffer           *self,
 }
 
 static void
-ide_buffer_load_symbol_resolver (IdeExtensionSetAdapter *adapter,
-                                 PeasPluginInfo         *plugin_info,
-                                 PeasExtension          *extension,
-                                 gpointer                user_data)
+ide_buffer_symbol_resolver_added (IdeExtensionSetAdapter *adapter,
+                                  PeasPluginInfo         *plugin_info,
+                                  PeasExtension          *extension,
+                                  gpointer                user_data)
 {
-  ide_symbol_resolver_load (IDE_SYMBOL_RESOLVER (extension));
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
+  IdeBuffer *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (IDE_IS_BUFFER (self));
+
+  IDE_TRACE_MSG ("Loading symbol resolver %s", G_OBJECT_TYPE_NAME (resolver));
+
+  ide_symbol_resolver_load (resolver);
+
+  IDE_EXIT;
+}
+
+static void
+ide_buffer_symbol_resolver_removed (IdeExtensionSetAdapter *adapter,
+                                    PeasPluginInfo         *plugin_info,
+                                    PeasExtension          *extension,
+                                    gpointer                user_data)
+{
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
+  IdeBuffer *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (IDE_IS_BUFFER (self));
+
+  IDE_TRACE_MSG ("Unloading symbol resolver %s", G_OBJECT_TYPE_NAME (resolver));
+
+  ide_symbol_resolver_unload (resolver);
+
+  IDE_EXIT;
 }
 
 static void
@@ -1210,10 +1249,6 @@ ide_buffer_load_symbol_resolvers (IdeBuffer              *self,
 
   if (!ide_extension_set_adapter_get_n_extensions (adapter))
     return;
-
-  ide_extension_set_adapter_foreach (adapter,
-                                     ide_buffer_load_symbol_resolver,
-                                     NULL);
 
   g_signal_emit (self, signals [SYMBOL_RESOLVERS_LOADED], 0);
 
@@ -1416,6 +1451,18 @@ ide_buffer_constructed (GObject *object)
                            G_CALLBACK (ide_buffer_load_symbol_resolvers),
                            self,
                            G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (priv->symbol_resolvers_adapter,
+                           "extension-added",
+                           G_CALLBACK (ide_buffer_symbol_resolver_added),
+                           self,
+                           0);
+
+  g_signal_connect_object (priv->symbol_resolvers_adapter,
+                           "extension-removed",
+                           G_CALLBACK (ide_buffer_symbol_resolver_removed),
+                           self,
+                           0);
 
   g_signal_connect (self,
                     "notify::language",
