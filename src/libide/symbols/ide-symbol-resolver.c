@@ -234,6 +234,15 @@ ide_symbol_resolver_load (IdeSymbolResolver *self)
 }
 
 void
+ide_symbol_resolver_unload (IdeSymbolResolver *self)
+{
+  g_return_if_fail (IDE_IS_SYMBOL_RESOLVER (self));
+
+  if (IDE_SYMBOL_RESOLVER_GET_IFACE (self)->unload)
+    IDE_SYMBOL_RESOLVER_GET_IFACE (self)->unload (self);
+}
+
+void
 ide_symbol_resolver_find_references_async (IdeSymbolResolver   *self,
                                            IdeSourceLocation   *location,
                                            GCancellable        *cancellable,

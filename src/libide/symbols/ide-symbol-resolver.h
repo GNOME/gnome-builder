@@ -67,10 +67,13 @@ struct _IdeSymbolResolverInterface
   IdeSymbol     *(*find_nearest_scope_finish) (IdeSymbolResolver    *self,
                                               GAsyncResult         *result,
                                               GError              **error);
+  void           (*unload)                   (IdeSymbolResolver    *self);
 };
 
 IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_load                      (IdeSymbolResolver    *self);
+IDE_AVAILABLE_IN_3_28
+void           ide_symbol_resolver_unload                    (IdeSymbolResolver    *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_lookup_symbol_async       (IdeSymbolResolver    *self,
                                                               IdeSourceLocation    *location,
