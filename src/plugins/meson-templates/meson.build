@@ -1,6 +1,6 @@
 if get_option('with_meson_templates')
 
-devhelp_resources = gnome.compile_resources(
+meson_templates_resources = gnome.compile_resources(
   'meson_templates',
   'meson-templates.gresource.xml',
   gresource_bundle: true,

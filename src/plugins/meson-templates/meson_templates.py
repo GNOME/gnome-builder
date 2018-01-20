@@ -29,7 +29,6 @@ from gi.repository import (
     GLib,
     GObject,
     GtkSource,
-    Peas,
     Template,
 )
 
