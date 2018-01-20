@@ -16,13 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import gi
+import os
+from os import path
 
 gi.require_version('Ide', '1.0')
+gi.require_version('Template', '1.0')
 
 from gi.repository import GObject
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GtkSource
 from gi.repository import Ide
+from gi.repository import Template
 
 _ = Ide.gettext
 
@@ -189,3 +194,173 @@ class MakeBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
     def do_get_targets_finish(self, result):
         if result.propagate_boolean():
             return result.targets
+
+class MakeProjectTemplateProvider(GObject.Object, Ide.TemplateProvider):
+    def do_get_project_templates(self):
+        return [SimpleMakefileTemplate()]
+
+class MakeTemplateLocator(Template.TemplateLocator):
+    license = None
+
+    def empty(self):
+        return Gio.MemoryInputStream()
+
+    def do_locate(self, path):
+        if path.startswith('license.'):
+            filename = GLib.basename(path)
+            manager = GtkSource.LanguageManager.get_default()
+            language = manager.guess_language(filename, None)
+
+            if self.license is None or language is None:
+                return self.empty()
+
+            header = Ide.language_format_header(language, self.license)
+            gbytes = GLib.Bytes(header.encode())
+
+            return Gio.MemoryInputStream.new_from_bytes(gbytes)
+
+        return super().do_locate(self, path)
+
+class MakeTemplateBase(Ide.TemplateBase, Ide.ProjectTemplate):
+    def __init__(self, id, name, icon_name, description, languages):
+        super().__init__()
+        self.id = id
+        self.name = name
+        self.icon_name = icon_name
+        self.description = description
+        self.languages = languages
+
+        # Work around https://bugzilla.gnome.org/show_bug.cgi?id=687522
+        self.locator = MakeTemplateLocator()
+        self.props.locator = self.locator
+
+    def do_get_id(self):
+        return self.id
+
+    def do_get_name(self):
+        return self.name
+
+    def do_get_icon_name(self):
+        return self.icon_name
+
+    def do_get_description(self):
+        return self.description
+
+    def do_get_languages(self):
+        return self.languages
+
+    def do_expand_async(self, params, cancellable, callback, data):
+        self.reset()
+
+        task = Gio.Task.new(self, cancellable, callback)
+
+        if 'language' in params:
+            self.language = params['language'].get_string().lower()
+        else:
+            self.language = 'c'
+
+        if self.language not in ('c', 'c++'):
+            task.return_error(GLib.Error('Language %s not supported' % self.language))
+            return
+
+        if 'versioning' in params:
+            self.versioning = params['versioning'].get_string()
+        else:
+            self.versioning = ''
+
+        if 'author' in params:
+            author_name = params['author'].get_string()
+        else:
+            author_name = GLib.get_real_name()
+
+        scope = Template.Scope.new()
+        scope.get('template').assign_string(self.id)
+
+        name = params['name'].get_string().lower()
+        name_ = name.lower().replace('-', '_')
+        scope.get('name').assign_string(name)
+        scope.get('name_').assign_string(name_)
+        scope.get('NAME').assign_string(name.upper().replace('-','_'))
+
+        prefix = name if not name.endswith('-glib') else name[:-5]
+        PREFIX = prefix.upper().replace('-','_')
+        prefix_ = prefix.lower().replace('-','_')
+        PreFix = ''.join([word.capitalize() for word in prefix.lower().split('-')])
+
+        scope.get('prefix').assign_string(prefix)
+        scope.get('Prefix').assign_string(prefix.capitalize())
+        scope.get('PreFix').assign_string(PreFix)
+        scope.get('prefix_').assign_string(prefix_)
+        scope.get('PREFIX').assign_string(PREFIX)
+
+        scope.get('language').assign_string(self.language)
+        scope.get('author').assign_string(author_name)
+        scope.get('exec_name').assign_string(name)
+
+        expands = {
+            'prefix': prefix,
+            'name_': name_,
+            'name': name,
+            'exec_name': name,
+        }
+
+        files = {
+            'resources/.gitignore': '.gitignore',
+            'resources/Makefile': 'Makefile',
+            'resources/main.c': '%(exec_name)s.c',
+        }
+        self.prepare_files(files)
+
+        modes = {}
+
+        if 'license_full' in params:
+            license_full_path = params['license_full'].get_string()
+            files[license_full_path] = 'COPYING'
+
+        if 'license_short' in params:
+            license_short_path = params['license_short'].get_string()
+            license_base = Gio.resources_lookup_data(license_short_path[11:], 0).get_data().decode()
+            self.locator.license = license_base
+
+        if 'path' in params:
+            dir_path = params['path'].get_string()
+        else:
+            dir_path = name
+        directory = Gio.File.new_for_path(dir_path)
+        scope.get('project_path').assign_string(directory.get_path())
+
+        for src, dst in files.items():
+            destination = directory.get_child(dst % expands)
+            if src.startswith('resource://'):
+                self.add_resource(src[11:], destination, scope, modes.get(src, 0))
+            else:
+                path = os.path.join('/org/gnome/builder/plugins/make_plugin', src)
+                self.add_resource(path, destination, scope, modes.get(src, 0))
+
+        self.expand_all_async(cancellable, self.expand_all_cb, task)
+
+    def do_expand_finish(self, result):
+        return result.propagate_boolean()
+
+    def expand_all_cb(self, obj, result, task):
+        try:
+            self.expand_all_finish(result)
+            task.return_boolean(True)
+        except Exception as exc:
+            if isinstance(exc, GLib.Error):
+                task.return_error(exc)
+            else:
+                task.return_error(GLib.Error(repr(exc)))
+
+class SimpleMakefileTemplate(MakeTemplateBase):
+    def __init__(self):
+        super().__init__(
+            'empty-makefile',
+            _('Empty Makefile Project'),
+            'pattern-cli',
+            _('Create a new empty project using a simple Makefile'),
+            ['C', 'C++'],
+         )
+
+    def prepare_files(self, files):
+        pass
