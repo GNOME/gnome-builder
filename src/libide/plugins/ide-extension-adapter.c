@@ -120,8 +120,9 @@ ide_extension_adapter_reload (IdeExtensionAdapter *self)
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_ADAPTER (self));
+  g_assert (self->interface_type != G_TYPE_INVALID);
 
-  if (!self->engine || !self->key || !self->value || self->interface_type == G_TYPE_INVALID)
+  if (!self->engine || !self->key || !self->value)
     {
       ide_extension_adapter_set_extension (self, NULL, NULL);
       return;
@@ -515,7 +516,8 @@ ide_extension_adapter_set_value (IdeExtensionAdapter *self,
     {
       g_free (self->value);
       self->value = g_strdup (value);
-      ide_extension_adapter_reload (self);
+      if (self->interface_type != G_TYPE_INVALID)
+        ide_extension_adapter_reload (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
     }
 }

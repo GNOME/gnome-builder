@@ -175,6 +175,9 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
       PeasPluginInfo *plugin_info = plugins->data;
       gint priority;
 
+      if (!peas_plugin_info_is_loaded (plugin_info))
+        continue;
+
       if (peas_engine_provides_extension (self->engine, plugin_info, self->interface_type))
         watch_extension (self, plugin_info, self->interface_type);
 
@@ -185,7 +188,7 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
                                              self->value,
                                              &priority))
         {
-          if (!g_hash_table_lookup (self->extensions, plugin_info))
+          if (!g_hash_table_contains (self->extensions, plugin_info))
             {
               PeasExtension *exten;
 
@@ -221,6 +224,7 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
             remove_extension (self, plugin_info, exten);
         }
     }
+
   g_signal_emit (self, signals [EXTENSIONS_LOADED], 0);
 }
 
@@ -248,10 +252,10 @@ ide_extension_set_adapter_queue_reload (IdeExtensionSetAdapter *self)
 
   dzl_clear_source (&self->reload_handler);
 
-  if (self->interface_type == G_TYPE_INVALID)
-    return;
-
-  self->reload_handler = g_timeout_add (0, ide_extension_set_adapter_do_reload, self);
+  self->reload_handler = g_idle_add_full (G_PRIORITY_HIGH,
+                                          ide_extension_set_adapter_do_reload,
+                                          self,
+                                          NULL);
 }
 
 static void
