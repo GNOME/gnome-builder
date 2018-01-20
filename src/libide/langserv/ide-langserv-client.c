@@ -219,6 +219,8 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
 
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
+  GtkTextIter copy_begin;
+  GtkTextIter copy_end;
   struct {
     gint line;
     gint column;
@@ -236,13 +238,17 @@ ide_langserv_client_buffer_delete_range (IdeLangservClient *self,
   uri = ide_buffer_get_uri (buffer);
   version = (gint)ide_buffer_get_change_count (buffer);
 
-  begin.line = gtk_text_iter_get_line (begin_iter);
-  begin.column = gtk_text_iter_get_line_offset (begin_iter);
+  copy_begin = *begin_iter;
+  copy_end = *end_iter;
+  gtk_text_iter_order (&copy_begin, &copy_end);
 
-  end.line = gtk_text_iter_get_line (end_iter);
-  end.column = gtk_text_iter_get_line_offset (end_iter);
+  begin.line = gtk_text_iter_get_line (&copy_begin);
+  begin.column = gtk_text_iter_get_line_offset (&copy_begin);
 
-  length = gtk_text_iter_get_offset (end_iter) - gtk_text_iter_get_offset (begin_iter);
+  end.line = gtk_text_iter_get_line (&copy_end);
+  end.column = gtk_text_iter_get_line_offset (&copy_end);
+
+  length = gtk_text_iter_get_offset (&copy_end) - gtk_text_iter_get_offset (&copy_begin);
 
   params = JSONRPC_MESSAGE_NEW (
     "textDocument", "{",
