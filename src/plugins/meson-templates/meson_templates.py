@@ -65,13 +65,14 @@ class MesonTemplateLocator(Template.TemplateLocator):
 
 
 class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
-    def __init__(self, id, name, icon_name, description, languages):
+    def __init__(self, id, name, icon_name, description, languages, priority):
         super().__init__()
         self.id = id
         self.name = name
         self.icon_name = icon_name
         self.description = description
         self.languages = languages
+        self.priority = priority
         self.locator = MesonTemplateLocator()
 
         self.props.locator = self.locator
@@ -90,6 +91,9 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
 
     def do_get_languages(self):
         return self.languages
+
+    def do_get_priority(self):
+        return self.priority
 
     def do_expand_async(self, params, cancellable, callback, data):
         self.reset()
@@ -230,7 +234,8 @@ class GnomeProjectTemplate(MesonTemplate):
             _('GNOME Application'),
             'pattern-gnome',
             _('Create a new GNOME application'),
-            ['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala']
+            ['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala'],
+            0
          )
 
     def prepare_files(self, files):
@@ -298,7 +303,8 @@ class LibraryProjectTemplate(MesonTemplate):
             _("Shared Library"),
             'pattern-library',
             _("Create a new project with a shared library"),
-            ['C']
+            ['C'],
+            100
          )
 
     def prepare_files(self, files):
@@ -316,6 +322,7 @@ class EmptyProjectTemplate(MesonTemplate):
             'pattern-library',
             _('Create a new empty project'),
             ['C', 'C++', 'JavaScript', 'Python', 'Vala'],
+            200
          )
 
     def prepare_files(self, files):
