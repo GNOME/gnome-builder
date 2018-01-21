@@ -362,5 +362,8 @@ class SimpleMakefileTemplate(MakeTemplateBase):
             ['C', 'C++'],
          )
 
+    def do_get_priority(self):
+        return 10000
+
     def prepare_files(self, files):
         pass
