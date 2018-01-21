@@ -120,12 +120,11 @@ ideeditorutilities dzltab:hover {
   background-color: mix(@theme_bg_color, @borders, 0.1);
 }
 ideeditorutilities dzltab:first-child {
-  border-radius: 6px 6px 0 0;
+  border-radius: 3px 3px 0 0;
   border-width: 1px 1px 0 1px;
 }
 ideeditorutilities dzltab:last-child {
-  border-radius: 6px;
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 0 3px 3px;
   border-bottom-width: 1px;
 }
 ideeditorutilities dzltabstrip {
