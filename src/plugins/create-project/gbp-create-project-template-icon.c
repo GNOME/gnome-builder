@@ -130,3 +130,19 @@ gbp_create_project_template_icon_init (GbpCreateProjectTemplateIcon *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }
+
+/**
+ * gbp_create_project_template_icon_get_template:
+ * @self: a #GbpCreateProjectTemplateIcon
+ *
+ * Gets the template for the item.
+ *
+ * Returns: (transfer none): an #IdeProjectTemplate
+ */
+IdeProjectTemplate *
+gbp_create_project_template_icon_get_template (GbpCreateProjectTemplateIcon *self)
+{
+  g_return_val_if_fail (GBP_IS_CREATE_PROJECT_TEMPLATE_ICON (self), NULL);
+
+  return self->template;
+}

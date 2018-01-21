@@ -27,4 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpCreateProjectTemplateIcon, gbp_create_project_template_icon, GBP, CREATE_PROJECT_TEMPLATE_ICON, GtkBin)
 
+IdeProjectTemplate *gbp_create_project_template_icon_get_template (GbpCreateProjectTemplateIcon *self);
+
 G_END_DECLS
