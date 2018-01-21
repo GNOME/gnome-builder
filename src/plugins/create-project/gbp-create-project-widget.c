@@ -260,6 +260,25 @@ gbp_create_project_widget_template_selected (GbpCreateProjectWidget *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
 
+static gint
+project_template_sort_func (GtkFlowBoxChild *child1,
+                            GtkFlowBoxChild *child2,
+                            gpointer         user_data)
+{
+  GbpCreateProjectTemplateIcon *icon1;
+  GbpCreateProjectTemplateIcon *icon2;
+  IdeProjectTemplate *tmpl1;
+  IdeProjectTemplate *tmpl2;
+
+  icon1 = GBP_CREATE_PROJECT_TEMPLATE_ICON (gtk_bin_get_child (GTK_BIN (child1)));
+  icon2 = GBP_CREATE_PROJECT_TEMPLATE_ICON (gtk_bin_get_child (GTK_BIN (child2)));
+
+  tmpl1 = gbp_create_project_template_icon_get_template (icon1);
+  tmpl2 = gbp_create_project_template_icon_get_template (icon2);
+
+  return ide_project_template_compare (tmpl1, tmpl2);
+}
+
 static void
 gbp_create_project_widget_add_template_buttons (GbpCreateProjectWidget *self,
                                                 GList                  *project_templates)
@@ -287,6 +306,8 @@ gbp_create_project_widget_add_template_buttons (GbpCreateProjectWidget *self,
       gtk_container_add (GTK_CONTAINER (template_container), GTK_WIDGET (template_icon));
       gtk_flow_box_insert (self->project_template_chooser, GTK_WIDGET (template_container), -1);
     }
+
+  gtk_flow_box_invalidate_sort (self->project_template_chooser);
 
   gbp_create_project_widget_refilter (self);
 }
@@ -477,6 +498,10 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
                            G_CALLBACK (gbp_create_project_widget_template_selected),
                            self,
                            G_CONNECT_SWAPPED);
+
+  gtk_flow_box_set_sort_func (self->project_template_chooser,
+                              project_template_sort_func,
+                              NULL, NULL);
 }
 
 static void
