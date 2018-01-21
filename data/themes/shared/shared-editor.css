@@ -103,3 +103,31 @@ ideeditorsidebar .flat-menu-button:checked,
 ideeditorsidebar .flat-menu-button:hover {
   opacity: 1;
 }
+
+/* utilities panel buttons */
+ideeditorutilities dzltab {
+  background: @theme_bg_color;
+  padding: 6px 8px;
+  border-style: solid;
+  border-color: @borders;
+  border-width: 1px 1px 0 1px;
+}
+ideeditorutilities dzltab:checked {
+  background-color: mix(@theme_bg_color, @borders, 0.3);
+}
+ideeditorutilities dzltab:hover {
+  background-color: mix(@theme_bg_color, @borders, 0.1);
+}
+ideeditorutilities dzltab:first-child {
+  border-radius: 6px 6px 0 0;
+  border-width: 1px 1px 0 1px;
+}
+ideeditorutilities dzltab:last-child {
+  border-radius: 6px;
+  border-radius: 0 0 6px 6px;
+  border-bottom-width: 1px;
+}
+ideeditorutilities dzltabstrip {
+  margin: 3px 0px 5px 0;
+  border-style: none;
+}

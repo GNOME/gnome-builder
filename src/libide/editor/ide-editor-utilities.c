@@ -37,22 +37,11 @@
 
 struct _IdeEditorUtilities
 {
-  IdeLayoutPane     parent_instance;
-
-  GtkStackSwitcher *stack_switcher;
-  GtkStack         *stack;
-
-  guint             loading : 1;
+  IdeLayoutPane  parent_instance;
+  DzlDockStack  *stack;
 };
 
 G_DEFINE_TYPE (IdeEditorUtilities, ide_editor_utilities, IDE_TYPE_LAYOUT_PANE)
-
-static void
-tweak_radio_button (GtkWidget *widget,
-                    gpointer   user_data)
-{
-  gtk_widget_set_vexpand (widget, TRUE);
-}
 
 static void
 ide_editor_utilities_add (GtkContainer *container,
@@ -60,37 +49,10 @@ ide_editor_utilities_add (GtkContainer *container,
 {
   IdeEditorUtilities *self = (IdeEditorUtilities *)container;
 
-  if (self->loading)
-    GTK_CONTAINER_CLASS (ide_editor_utilities_parent_class)->add (container, widget);
-  else
-    gtk_container_add (GTK_CONTAINER (self->stack), widget);
+  g_assert (IDE_IS_EDITOR_UTILITIES (self));
+  g_assert (GTK_IS_WIDGET (widget));
 
-  if (DZL_IS_DOCK_WIDGET (widget))
-    {
-      g_autofree gchar *icon_name = NULL;
-      g_autofree gchar *title = NULL;
-
-      g_object_get (widget,
-                    "icon-name", &icon_name,
-                    "title", &title,
-                    NULL);
-
-      gtk_container_child_set (GTK_CONTAINER (self->stack), widget,
-                               "title", title,
-                               "icon-name", icon_name,
-                               NULL);
-    }
-
-  if (self->stack_switcher != NULL)
-    gtk_container_foreach (GTK_CONTAINER (self->stack_switcher),
-                           tweak_radio_button,
-                           NULL);
-}
-
-static void
-ide_editor_utilities_destroy (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (ide_editor_utilities_parent_class)->destroy (widget);
+  gtk_container_add (GTK_CONTAINER (self->stack), widget);
 }
 
 static void
@@ -99,22 +61,21 @@ ide_editor_utilities_class_init (IdeEditorUtilitiesClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  widget_class->destroy = ide_editor_utilities_destroy;
-
   container_class->add = ide_editor_utilities_add;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-utilities.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorUtilities, stack_switcher);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorUtilities, stack);
   gtk_widget_class_set_css_name (widget_class, "ideeditorutilities");
 }
 
 static void
 ide_editor_utilities_init (IdeEditorUtilities *self)
 {
-  self->loading = TRUE;
-  gtk_widget_init_template (GTK_WIDGET (self));
-  self->loading = FALSE;
-
-  gtk_stack_switcher_set_stack (self->stack_switcher, self->stack);
+  self->stack = g_object_new (DZL_TYPE_DOCK_STACK,
+                              "visible", TRUE,
+                              NULL);
+  GTK_CONTAINER_CLASS (ide_editor_utilities_parent_class)->add (GTK_CONTAINER (self),
+                                                                GTK_WIDGET (self->stack));
+  g_object_set (self->stack,
+                "style", DZL_TAB_ICONS,
+                "edge", GTK_POS_LEFT,
+                NULL);
 }

@@ -68,7 +68,6 @@
     <file preprocess="xml-stripblanks" alias="ide-layout-pane.ui">layout/ide-layout-pane.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-layout-stack-header.ui">layout/ide-layout-stack-header.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-layout-stack.ui">layout/ide-layout-stack.ui</file>
-    <file preprocess="xml-stripblanks" alias="ide-editor-utilities.ui">editor/ide-editor-utilities.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-editor-perspective.ui">editor/ide-editor-perspective.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-editor-properties.ui">editor/ide-editor-properties.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-editor-layout-stack-controls.ui">editor/ide-editor-layout-stack-controls.ui</file>
