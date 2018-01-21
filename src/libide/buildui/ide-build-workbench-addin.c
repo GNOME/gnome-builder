@@ -68,14 +68,15 @@ ide_build_workbench_addin_set_pipeline (IdeBuildWorkbenchAddin *self,
   if (g_set_object (&self->pipeline, pipeline))
     {
       ide_build_log_panel_set_pipeline (self->build_log_panel, pipeline);
-
-      if (!gtk_widget_get_visible (GTK_WIDGET (self->build_log_panel)))
-        {
-          gtk_widget_show (GTK_WIDGET (self->build_log_panel));
-          dzl_dock_item_present (DZL_DOCK_ITEM (self->build_log_panel));
-        }
-
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
+    }
+
+  if (pipeline != NULL)
+    {
+      gtk_widget_show (GTK_WIDGET (self->build_log_panel));
+
+      if (ide_build_pipeline_get_requested_phase (pipeline) >= IDE_BUILD_PHASE_BUILD)
+        dzl_dock_item_present (DZL_DOCK_ITEM (self->build_log_panel));
     }
 }
 
