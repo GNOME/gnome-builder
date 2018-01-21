@@ -354,9 +354,9 @@ add_shortcut_window_entry (GbBeautifierEditorAddin *self)
 }
 
 static void
-get_entries_async_cb (GObject      *object,
-                      GAsyncResult *result,
-                      gpointer      user_data)
+gb_beautifier_editor_addin_async_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
 {
   g_autoptr(GbBeautifierEditorAddin) self = (GbBeautifierEditorAddin *)object;
   GbBeautifierEntriesResult *ret;
@@ -387,11 +387,42 @@ get_entries_async_cb (GObject      *object,
 }
 
 static void
+gb_beautifier_editor_addin_reap_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  g_autoptr(GbBeautifierEditorAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+
+  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+    g_warning ("Failed to reap old beautifier data: %s", error->message);
+
+  if (g_mkdir_with_parents (self->tmp_dir, 0750) != 0)
+    {
+      g_warning ("Failed to initialized the Beautifier plugin, can't write the temporary directory");
+      return;
+    }
+
+  gb_beautifier_config_get_entries_async (self,
+                                          &self->has_default,
+                                          gb_beautifier_editor_addin_async_cb,
+                                          NULL,
+                                          g_object_ref (self));
+}
+
+static void
 gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
                                  IdeEditorPerspective *editor)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)addin;
   IdeWorkbench *workbench;
+  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr (GFile) tmp_file = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
@@ -401,11 +432,18 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
   self->context = ide_workbench_get_context (workbench);
   ide_object_set_context (IDE_OBJECT (self), self->context);
 
-  gb_beautifier_config_get_entries_async (self,
-                                          &self->has_default,
-                                          get_entries_async_cb,
-                                          NULL,
-                                          g_object_ref (self));
+  if (self->tmp_dir == NULL)
+    self->tmp_dir = ide_context_cache_filename (self->context, "beautifier", NULL);
+
+  /* Cleanup old beautifier cache directory */
+  reaper = dzl_directory_reaper_new ();
+  tmp_file = g_file_new_for_path (self->tmp_dir);
+  dzl_directory_reaper_add_directory (reaper, tmp_file, 0);
+
+  dzl_directory_reaper_execute_async (reaper,
+                                      NULL,
+                                      gb_beautifier_editor_addin_reap_cb,
+                                      g_object_ref (self));
 }
 
 static void
