@@ -133,7 +133,7 @@ copy_to_tmp_file (GbBeautifierEditorAddin *self,
   g_assert (!dzl_str_empty0 (tmp_dir));
   g_assert (!dzl_str_empty0 (source_path));
 
-  tmp_path = g_build_filename (tmp_dir, "gnome-builder-beautifier-XXXXXX.txt", NULL);
+  tmp_path = g_build_filename (tmp_dir, "XXXXXX.txt", NULL);
   if (-1 != (fd = g_mkstemp (tmp_path)))
     {
       close (fd);
@@ -595,8 +595,6 @@ get_entries_worker (GTask        *task,
                     GCancellable *cancellable)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)source_object;
-  g_autoptr (GError) error = NULL;
-  IdeContext *context;
   IdeProject *project;
   IdeVcs *vcs;
   GArray *entries;
@@ -613,14 +611,13 @@ get_entries_worker (GTask        *task,
   g_assert (G_IS_TASK (task));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (self->tmp_dir == NULL)
+  if (self->context == NULL)
     {
-      if (NULL == (self->tmp_dir = g_dir_make_tmp ("gnome-builder-beautifier-XXXXXX", &error)))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          return;
-        }
-
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to initialized the Beautifier plugin, no IdeContext ready");
+      return;
     }
 
   entries = g_array_new (TRUE, TRUE, sizeof (GbBeautifierConfigEntry));
@@ -638,37 +635,34 @@ get_entries_worker (GTask        *task,
   g_clear_pointer (&map, g_array_unref);
 
   /* Project wide config */
-  if (NULL != (context = self->context))
+  if (NULL != (project = ide_context_get_project (self->context)))
     {
-      if (NULL != (project = ide_context_get_project (context)))
+      project_name = ide_project_get_name (project);
+      if (dzl_str_equal0 (project_name, "Builder"))
         {
-          project_name = ide_project_get_name (project);
-          if (dzl_str_equal0 (project_name, "Builder"))
-            {
-              configdir = g_strdup ("resource:///org/gnome/builder/plugins/beautifier_plugin/self/");
-              map = gb_beautifier_config_get_map (self, configdir);
-              add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
-              has_default |= ret_has_default;
-              g_clear_pointer (&configdir, g_free);
+          configdir = g_strdup ("resource:///org/gnome/builder/plugins/beautifier_plugin/self/");
+          map = gb_beautifier_config_get_map (self, configdir);
+          add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
+          has_default |= ret_has_default;
+          g_clear_pointer (&configdir, g_free);
 
-              g_clear_pointer (&map, g_array_unref);
-            }
-          else if (NULL != (vcs = ide_context_get_vcs (context)))
-            {
-              GFile *workdir;
-              g_autofree gchar *workdir_path = NULL;
+          g_clear_pointer (&map, g_array_unref);
+        }
+      else if (NULL != (vcs = ide_context_get_vcs (self->context)))
+        {
+          GFile *workdir;
+          g_autofree gchar *workdir_path = NULL;
 
-              workdir = ide_vcs_get_working_directory (vcs);
-              workdir_path = g_file_get_path (workdir);
-              project_config_path = g_build_filename (workdir_path,
-                                                      ".beautifier",
-                                                      NULL);
-              map = gb_beautifier_config_get_map (self, project_config_path);
-              add_entries_from_base_path (self, project_config_path, entries, map, &ret_has_default);
-              has_default |= ret_has_default;
+          workdir = ide_vcs_get_working_directory (vcs);
+          workdir_path = g_file_get_path (workdir);
+          project_config_path = g_build_filename (workdir_path,
+                                                  ".beautifier",
+                                                  NULL);
+          map = gb_beautifier_config_get_map (self, project_config_path);
+          add_entries_from_base_path (self, project_config_path, entries, map, &ret_has_default);
+          has_default |= ret_has_default;
 
-              g_clear_pointer (&map, g_array_unref);
-            }
+          g_clear_pointer (&map, g_array_unref);
         }
     }
 
