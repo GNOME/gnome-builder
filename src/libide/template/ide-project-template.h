@@ -46,10 +46,13 @@ struct _IdeProjectTemplateInterface
   gboolean    (*expand_finish)   (IdeProjectTemplate   *self,
                                   GAsyncResult         *result,
                                   GError              **error);
+  gint        (*get_priority)    (IdeProjectTemplate   *self);
 };
 
 IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_id          (IdeProjectTemplate  *self);
+IDE_AVAILABLE_IN_3_28
+gint        ide_project_template_get_priority    (IdeProjectTemplate  *self);
 IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_name        (IdeProjectTemplate  *self);
 IDE_AVAILABLE_IN_ALL
@@ -70,5 +73,8 @@ IDE_AVAILABLE_IN_ALL
 gboolean    ide_project_template_expand_finish   (IdeProjectTemplate   *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+IDE_AVAILABLE_IN_3_28
+gint        ide_project_template_compare         (IdeProjectTemplate   *a,
+                                                  IdeProjectTemplate   *b);
 
 G_END_DECLS

@@ -133,3 +133,46 @@ ide_project_template_expand_finish (IdeProjectTemplate  *self,
 
   return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->expand_finish (self, result, error);
 }
+
+/**
+ * ide_project_template_get_priority:
+ * @self: a #IdeProjectTemplate
+ *
+ * Gets the priority of the template. This can be used to sort the templates
+ * in the "new project" view.
+ *
+ * Returns: the priority of the template
+ *
+ * Since: 3.28
+ */
+gint
+ide_project_template_get_priority (IdeProjectTemplate *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), 0);
+
+  if (IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_priority)
+    return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_priority (self);
+
+  return 0;
+}
+
+gint
+ide_project_template_compare (IdeProjectTemplate *a,
+                              IdeProjectTemplate *b)
+{
+  gint ret;
+
+  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (a), 0);
+  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (b), 0);
+
+  ret = ide_project_template_get_priority (a) - ide_project_template_get_priority (b);
+
+  if (ret == 0)
+    {
+      g_autofree gchar *a_name = ide_project_template_get_name (a);
+      g_autofree gchar *b_name = ide_project_template_get_name (b);
+      ret = g_utf8_collate (a_name, b_name);
+    }
+
+  return ret;
+}
