@@ -1,0 +1,10 @@
+@define-color borders @border_color;
+@define-color theme_selected_fg_color @selected_fg_color;
+@define-color theme_selected_bg_color @selected_bg_color;
+@define-color theme_fg_color @textColorPrimary;
+@define-color theme_bg_color @bg_color;
+@define-color theme_unfocused_fg_color @textColorPrimary;
+@define-color content_view_bg @base_color;
+@define-color wm_shadow alpha(#000, 0.23);
+
+@import url("resource:///org/gnome/builder/themes/shared.css");
