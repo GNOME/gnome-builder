@@ -319,7 +319,7 @@ class EmptyProjectTemplate(MesonTemplate):
         super().__init__(
             'empty',
             _('Empty Project'),
-            'pattern-library',
+            'pattern-cli',
             _('Create a new empty project'),
             ['C', 'C++', 'JavaScript', 'Python', 'Vala'],
             200
