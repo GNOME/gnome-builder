@@ -174,5 +174,7 @@ void                   ide_build_pipeline_attach_pty          (IdeBuildPipeline 
                                                                IdeSubprocessLauncher  *launcher);
 IDE_AVAILABLE_IN_3_28
 gboolean               ide_build_pipeline_has_configured      (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_28
+IdeBuildPhase          ide_build_pipeline_get_requested_phase (IdeBuildPipeline       *self);
 
 G_END_DECLS

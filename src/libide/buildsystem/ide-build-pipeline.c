@@ -3325,3 +3325,22 @@ list_model_iface_init (GListModelInterface *iface)
   iface->get_item_type = ide_build_pipeline_get_item_type;
   iface->get_n_items = ide_build_pipeline_get_n_items;
 }
+
+/**
+ * ide_build_pipeline_get_requested_phase:
+ * @self: a #IdeBuildPipeline
+ *
+ * Gets the phase that has been requested. This can be useful when you want to
+ * get an idea of where the build pipeline will attempt to advance.
+ *
+ * Returns: an #IdeBuildPhase
+ *
+ * Since: 3.28
+ */
+IdeBuildPhase
+ide_build_pipeline_get_requested_phase (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), 0);
+
+  return self->requested_mask & IDE_BUILD_PHASE_MASK;
+}
