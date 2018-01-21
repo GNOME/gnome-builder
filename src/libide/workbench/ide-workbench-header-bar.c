@@ -52,6 +52,22 @@ ide_workbench_header_bar_new (void)
 }
 
 static void
+apply_quirks (IdeWorkbenchHeaderBar *self)
+{
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
+  const gchar *session;
+
+  g_assert (IDE_IS_WORKBENCH_HEADER_BAR (self));
+
+  /* Hide fullscreen on Pantheon, which adds it's own fullscreen button
+   * without any app negotiation.
+   */
+  session = g_getenv ("DESKTOP_SESSION");
+  if (dzl_str_equal0 (session, "pantheon"))
+    gtk_widget_hide (GTK_WIDGET (priv->fullscreen_button));
+}
+
+static void
 ide_workbench_header_bar_menu_items_changed (IdeWorkbenchHeaderBar *self,
                                              guint                  position,
                                              guint                  removed,
@@ -144,6 +160,8 @@ ide_workbench_header_bar_init (IdeWorkbenchHeaderBar *self)
                            self,
                            G_CONNECT_SWAPPED);
   ide_workbench_header_bar_menu_items_changed (self, 0, 0, 0, model);
+
+  apply_quirks (self);
 }
 
 void
