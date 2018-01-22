@@ -111,6 +111,9 @@
   bind "<alt>7" { "append-to-count" (7) };
   bind "<alt>8" { "append-to-count" (8) };
   bind "<alt>9" { "append-to-count" (9) };
+
+  /* Add back emoji */
+  bind "<ctrl>semicolon" { "insert-emoji" () };
 }
 
 @binding-set builder-emacs-source-view-has-indenter

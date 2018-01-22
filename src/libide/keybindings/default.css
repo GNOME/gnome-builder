@@ -42,6 +42,9 @@
   bind "F4" { "action" ("win", "find-other-file", "") };
 
   bind "<ctrl><alt>i" { "reindent" () };
+
+  /* Add back emoji */
+  bind "<ctrl>semicolon" { "insert-emoji" () };
 }
 
 idesourceviewmode.default {
