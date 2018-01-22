@@ -240,9 +240,9 @@ ide_terminal_button_press_event (GtkWidget      *widget,
                                     pattern,
                                     gtk_get_current_event_time (),
                                     NULL);
-        }
 
-      return GDK_EVENT_STOP;
+          return GDK_EVENT_STOP;
+        }
     }
 
   return GTK_WIDGET_CLASS (ide_terminal_parent_class)->button_press_event (widget, button);
