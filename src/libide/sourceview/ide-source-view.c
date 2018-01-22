@@ -6662,6 +6662,11 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 G_TYPE_BOOLEAN, TRUE,
                                 G_TYPE_BOOLEAN, FALSE);
 
+  /* Remove Emoji from GtkTextView, we'll add back in various keybinding modes */
+  binding_set = gtk_binding_set_by_class (g_type_class_peek (GTK_TYPE_TEXT_VIEW));
+  gtk_binding_entry_remove (binding_set, GDK_KEY_period, GDK_CONTROL_MASK);
+  gtk_binding_entry_remove (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK);
+
   /*
    * Escape is wired up by the GtkSourceCompletion by default. However, some
    * keybindings may want to control that manually (such as Vim). Vim needs to
