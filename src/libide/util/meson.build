@@ -29,13 +29,9 @@ util_sources = [
 
 util_private_sources = [
   'ide-async-helper.c',
-  'ide-async-helper.h',
   'ide-battery-monitor.c',
-  'ide-battery-monitor.h',
   'ide-doc-seq.c',
-  'ide-doc-seq.h',
   'ide-window-settings.c',
-  'ide-window-settings.h',
 ]
 
 libide_public_headers += files(util_headers)
