@@ -189,7 +189,11 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
        *
        * See https://bugzilla.gnome.org/show_bug.cgi?id=780153
        */
-      ccache_dir = g_build_filename (project_path, ".flatpak-builder", "ccache", NULL);
+      ccache_dir = g_build_filename (g_get_user_cache_dir (),
+                                     ide_get_program_name (),
+                                     "flatpak-builder",
+                                     "ccache",
+                                     NULL);
       ide_subprocess_launcher_setenv (ret, "CCACHE_DIR", ccache_dir, FALSE);
 
       if (!dzl_str_empty0 (project_path))
