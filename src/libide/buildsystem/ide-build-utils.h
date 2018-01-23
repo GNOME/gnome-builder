@@ -22,6 +22,8 @@
 
 G_BEGIN_DECLS
 
-gchar *ide_build_utils_color_codes_filtering (const gchar *txt);
+guint8 *ide_build_utils_filter_color_codes (const guint8 *data,
+                                            gsize         len,
+                                            gsize        *out_len);
 
 G_END_DECLS

@@ -16,126 +16,66 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ide.h>
-
 #include "buildsystem/ide-build-utils.h"
 
-static void
-skip_color_codes_values (const gchar **cursor)
+guint8 *
+ide_build_utils_filter_color_codes (const guint8 *data,
+                                    gsize         len,
+                                    gsize        *out_len)
 {
-  g_assert (cursor != NULL && *cursor != NULL);
+  g_autoptr(GByteArray) dst = NULL;
 
-  if (**cursor == 'm')
+  g_return_val_if_fail (out_len != NULL, NULL);
+
+  *out_len = 0;
+
+  if (data == NULL)
+    return NULL;
+  else if (len == 0)
+    return (guint8 *)g_strdup ("");
+
+  dst = g_byte_array_sized_new (len);
+
+  for (gsize i = 0; i < len; i++)
     {
-      ++(*cursor);
-      return;
-    }
+      guint8 ch = data[i];
+      guint8 next = (i+1) < len ? data[i+1] : 0;
 
-  while (**cursor != '\0')
-    {
-      while (**cursor >= '0' && **cursor <= '9')
-        ++(*cursor);
-
-      if (**cursor == ';')
+      if (ch == '\\' && next == 'e')
         {
-          ++(*cursor);
+          i += 2;
+        }
+      else if (ch == '\033')
+        {
+          i++;
+        }
+      else
+        {
+          g_byte_array_append (dst, &ch, 1);
           continue;
         }
 
-      if (**cursor == 'm')
+      if (i >= len)
+        break;
+
+      if (data[i] == '[')
+        i++;
+
+      if (i >= len)
+        break;
+
+      for (; i < len; i++)
         {
-          ++(*cursor);
+          ch = data[i];
+
+          if (g_ascii_isdigit (ch) || ch == ' ' || ch == ';')
+            continue;
+
           break;
         }
     }
-}
 
-static gboolean
-find_color_code (const gchar  *txt,
-                 const gchar **start_offset,
-                 const gchar **end_offset)
-{
-  const gchar *cursor = txt;
+  *out_len = dst->len;
 
-  g_assert (!dzl_str_empty0 (txt));
-  g_assert (start_offset != NULL);
-  g_assert (end_offset != NULL);
-
-  while (*cursor != '\0')
-    {
-      if (*cursor == '\\' && *(cursor + 1) == 'e')
-        {
-          *start_offset = cursor;
-          cursor += 2;
-        }
-      else if (*cursor == '\033')
-        {
-          *start_offset = cursor;
-          ++cursor;
-        }
-      else
-        goto next;
-
-      if (*cursor == '[')
-        {
-          ++cursor;
-          if (*cursor == '\0')
-            goto end;
-
-          if (*cursor == 'K')
-            {
-              *end_offset = cursor + 1;
-              return TRUE;
-            }
-
-          skip_color_codes_values (&cursor);
-          *end_offset = cursor;
-
-          return TRUE;
-        }
-
-      if (*cursor == '\0')
-        goto end;
-
-next:
-      /* TODO: skip a possible escaped char */
-      cursor = g_utf8_next_char (cursor);
-    }
-
-end:
-  *start_offset = *end_offset = cursor;
-  return FALSE;
-}
-
-gchar *
-ide_build_utils_color_codes_filtering (const gchar *txt)
-{
-  const gchar *cursor = txt;
-  const gchar *start_offset;
-  const gchar *end_offset;
-  GString *string;
-  gsize len;
-  gboolean ret;
-
-  g_assert (txt != NULL);
-
-  if (*txt == '\0')
-    return g_strdup ("\0");
-
-  string = g_string_new (NULL);
-
-  while (*cursor != '\0')
-    {
-      ret = find_color_code (cursor, &start_offset, &end_offset);
-      len = start_offset - cursor;
-      if (len > 0)
-        g_string_append_len (string, cursor, len);
-
-      if (!ret)
-        break;
-
-      cursor = end_offset;
-    }
-
-  return g_string_free (string, FALSE);
+  return g_byte_array_free (g_steal_pointer (&dst), FALSE);
 }
