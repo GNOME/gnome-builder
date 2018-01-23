@@ -570,6 +570,9 @@ extract_directory_change (IdeBuildPipeline *self,
       else
         self->errfmt_current_dir = g_strndup (dir, len);
 
+      if (self->errfmt_top_dir == NULL)
+        self->errfmt_top_dir = g_strdup (self->errfmt_current_dir);
+
       return TRUE;
     }
 
