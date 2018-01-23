@@ -45,9 +45,7 @@ struct _GbpFlatpakConfigurationProvider
   guint                    change_count;
 };
 
-static void configuration_provider_iface_init         (IdeConfigurationProviderInterface  *iface);
-static void gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider           *provider,
-                                                       IdeConfigurationManager            *manager);
+static void configuration_provider_iface_init (IdeConfigurationProviderInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GbpFlatpakConfigurationProvider,
                          gbp_flatpak_configuration_provider,

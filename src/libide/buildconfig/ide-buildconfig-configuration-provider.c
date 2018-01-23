@@ -55,8 +55,6 @@ G_DEFINE_TYPE_WITH_CODE (IdeBuildconfigConfigurationProvider,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIGURATION_PROVIDER,
                                                 configuration_provider_iface_init))
 
-static void ide_buildconfig_configuration_provider_unload (IdeConfigurationProvider *provider, IdeConfigurationManager *manager);
-
 static void
 ide_buildconfig_configuration_provider_save_cb (GObject      *object,
                                                 GAsyncResult *result,
