@@ -32,14 +32,15 @@ struct _IdeCodeIndexBuilder
   IdeCodeIndexIndex   *index;
 };
 
-#define BUILD_DATA_MAGIC      0x778124
-#define IS_BUILD_DATA(d)      ((d)->magic == BUILD_DATA_MAGIC)
-#define GET_CHANGES_MAGIC     0x912828
-#define IS_GET_CHANGES(d)     ((d)->magic == GET_CHANGES_MAGIC)
-#define FILE_INFO_MAGIC       0x112840
-#define IS_FILE_INFO(d)       ((d)->magic == FILE_INFO_MAGIC)
-#define INDEX_DIRECTORY_MAGIC 0x133801
-#define IS_INDEX_DIRECTORY(d) ((d)->magic == INDEX_DIRECTORY_MAGIC)
+#define ADD_ENTRIES_CHUNK_SIZE  10
+#define BUILD_DATA_MAGIC        0x778124
+#define IS_BUILD_DATA(d)        ((d)->magic == BUILD_DATA_MAGIC)
+#define GET_CHANGES_MAGIC       0x912828
+#define IS_GET_CHANGES(d)       ((d)->magic == GET_CHANGES_MAGIC)
+#define FILE_INFO_MAGIC         0x112840
+#define IS_FILE_INFO(d)         ((d)->magic == FILE_INFO_MAGIC)
+#define INDEX_DIRECTORY_MAGIC   0x133801
+#define IS_INDEX_DIRECTORY(d)   ((d)->magic == INDEX_DIRECTORY_MAGIC)
 
 typedef struct
 {
@@ -81,6 +82,14 @@ typedef struct
   guint                    n_files;
 } IndexDirectoryData;
 
+typedef struct
+{
+  IdeCodeIndexEntries     *entries;
+  IdePersistentMapBuilder *map_builder;
+  DzlFuzzyIndexBuilder    *fuzzy_builder;
+  guint32                  file_id;
+} AddEntriesData;
+
 enum {
   PROP_0,
   PROP_INDEX,
@@ -116,6 +125,15 @@ get_changes_data_free (GetChangesData *self)
   g_queue_foreach (&self->directories, (GFunc)g_object_unref, NULL);
   g_queue_clear (&self->directories);
   g_slice_free (GetChangesData, self);
+}
+
+static void
+add_entries_data_free (AddEntriesData *self)
+{
+  g_clear_object (&self->entries);
+  g_clear_object (&self->map_builder);
+  g_clear_object (&self->fuzzy_builder);
+  g_slice_free (AddEntriesData, self);
 }
 
 static void
@@ -159,7 +177,8 @@ maybe_log_error (const GError *error)
       g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
     return;
 
-  g_warning ("%s", error->message);
+  if (error != NULL)
+    g_warning ("%s", error->message);
 }
 
 static void
@@ -646,14 +665,30 @@ get_changes_finish (IdeCodeIndexBuilder  *self,
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
-static void
+/**
+ * add_entries_to_index
+ * @self: a #IdeCodeIndexBuilder
+ * @file_id: the id within the index
+ * @map_builder: the persistent map builder to append
+ * @fuzzy_builder: the fuzzy index builder to append
+ * @deadline: the deadline to stop processing on this thread. This should
+ *   be a time using the monotonic clock, g_get_monotonic_time().
+ *
+ * This will incrementally add entries to the builder. However,
+ * it will stop processing once @deadline has expired.
+ *
+ * Returns: %TRUE if there are more items to process; otherwise %FALSE
+ */
+static gboolean
 add_entries_to_index (IdeCodeIndexEntries     *entries,
                       guint32                  file_id,
                       IdePersistentMapBuilder *map_builder,
-                      DzlFuzzyIndexBuilder    *fuzzy_builder)
+                      DzlFuzzyIndexBuilder    *fuzzy_builder,
+                      gint64                   deadline)
 {
   g_autofree gchar *filename = NULL;
   g_autoptr(GFile) file = NULL;
+  guint count = 0;
   gchar num[16];
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -668,6 +703,9 @@ add_entries_to_index (IdeCodeIndexEntries     *entries,
   /*
    * Storing file_name:id and id:file_name into index, file_name:id will be
    * used to check whether a file is there in index or not.
+   *
+   * This can get called multiple times, but it's fine because we're just
+   * updating a GVariantDict until the file has been processed.
    */
   g_snprintf (num, sizeof (num), "%u", file_id);
   filename = g_file_get_path (file);
@@ -720,7 +758,17 @@ add_entries_to_index (IdeCodeIndexEntries     *entries,
                                                        flags,
                                                        kind),
                                         0);
+
+      if (++count > ADD_ENTRIES_CHUNK_SIZE)
+        {
+          count = 0;
+
+          if (g_get_monotonic_time () >= deadline)
+            return TRUE;
+        }
     }
+
+  return FALSE;
 }
 
 static void
@@ -755,6 +803,136 @@ index_directory_worker (GTask        *task,
     g_task_return_boolean (task, TRUE);
 }
 
+static gboolean
+add_entries_to_index_cb (gpointer data)
+{
+  AddEntriesData *task_data;
+  GTask *task = data;
+  gint64 deadline;
+  gboolean has_more;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_TASK (task));
+
+  task_data = g_task_get_task_data (task);
+  g_assert (task_data != NULL);
+  g_assert (IDE_IS_CODE_INDEX_ENTRIES (task_data->entries));
+  g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (task_data->map_builder));
+  g_assert (DZL_IS_FUZZY_INDEX_BUILDER (task_data->fuzzy_builder));
+  g_assert (task_data->file_id > 0);
+
+  /* 1 msec of indexing allowed this cycle */
+  deadline = g_get_monotonic_time () + (G_USEC_PER_SEC / 1000);
+  has_more = add_entries_to_index (task_data->entries,
+                                   task_data->file_id,
+                                   task_data->map_builder,
+                                   task_data->fuzzy_builder,
+                                   deadline);
+
+  /* Complete task if there's nothing more */
+  if (!has_more)
+    g_task_return_boolean (task, TRUE);
+
+  return has_more;
+}
+
+static void
+add_entries_to_index_async (IdeCodeIndexBuilder     *self,
+                            IdeCodeIndexEntries     *entries,
+                            guint32                  file_id,
+                            IdePersistentMapBuilder *map_builder,
+                            DzlFuzzyIndexBuilder    *fuzzy_builder,
+                            GCancellable            *cancellable,
+                            GAsyncReadyCallback      callback,
+                            gpointer                 user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  AddEntriesData *task_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
+  g_assert (IDE_IS_CODE_INDEX_ENTRIES (entries));
+  g_assert (file_id > 0);
+  g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (map_builder));
+  g_assert (DZL_IS_FUZZY_INDEX_BUILDER (fuzzy_builder));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, add_entries_to_index_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  if (g_task_return_error_if_cancelled (task))
+    return;
+
+  task_data = g_slice_new0 (AddEntriesData);
+  task_data->entries = g_object_ref (entries);
+  task_data->map_builder = g_object_ref (map_builder);
+  task_data->fuzzy_builder = g_object_ref (fuzzy_builder);
+  task_data->file_id = file_id;
+  g_task_set_task_data (task, task_data, (GDestroyNotify)add_entries_data_free);
+
+  /* Super low priority to avoid UI stalls */
+  g_idle_add_full (G_PRIORITY_LOW + 1000,
+                   add_entries_to_index_cb,
+                   g_steal_pointer (&task),
+                   g_object_unref);
+}
+
+static gboolean
+add_entries_to_index_finish (IdeCodeIndexBuilder  *self,
+                             GAsyncResult         *result,
+                             GError              **error)
+{
+  g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+dec_active_and_maybe_complete (GTask *task)
+{
+  IndexDirectoryData *idd;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_TASK (task));
+
+  idd = g_task_get_task_data (task);
+  g_assert (idd != NULL);
+  g_assert (IS_INDEX_DIRECTORY (idd));
+  g_assert (G_IS_FILE (idd->index_dir));
+  g_assert (DZL_IS_FUZZY_INDEX_BUILDER (idd->fuzzy));
+  g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (idd->map));
+
+  idd->n_active--;
+
+  if (idd->n_active == 0)
+    {
+      dzl_fuzzy_index_builder_set_metadata_uint32 (idd->fuzzy, "n_files", idd->n_files);
+      g_task_run_in_thread (task, index_directory_worker);
+    }
+}
+
+static void
+index_directory_add_entries_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  IdeCodeIndexBuilder *self = (IdeCodeIndexBuilder *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!add_entries_to_index_finish (self, result, &error))
+    maybe_log_error (error);
+
+  dec_active_and_maybe_complete (task);
+}
+
 static void
 index_directory_index_file_cb (GObject      *object,
                                GAsyncResult *result,
@@ -764,7 +942,9 @@ index_directory_index_file_cb (GObject      *object,
   g_autoptr(IdeCodeIndexEntries) entries = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
+  IdeCodeIndexBuilder *self;
   IndexDirectoryData *idd;
+  GCancellable *cancellable;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEXER (indexer));
@@ -781,19 +961,27 @@ index_directory_index_file_cb (GObject      *object,
   entries = ide_code_indexer_index_file_finish (indexer, result, &error);
 
   if (entries == NULL)
-    maybe_log_error (error);
-  else
-    add_entries_to_index (entries, ++idd->n_files, idd->map, idd->fuzzy);
-
-  idd->n_active--;
-
-  if (idd->n_active == 0)
     {
-      dzl_fuzzy_index_builder_set_metadata_uint32 (idd->fuzzy, "n_files", idd->n_files);
-      g_task_run_in_thread (task, index_directory_worker);
+      maybe_log_error (error);
+      dec_active_and_maybe_complete (task);
+      return;
     }
-}
 
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
+
+  cancellable = g_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  add_entries_to_index_async (self,
+                              entries,
+                              ++idd->n_files,
+                              idd->map,
+                              idd->fuzzy,
+                              cancellable,
+                              index_directory_add_entries_cb,
+                              g_steal_pointer (&task));
+}
 
 static void
 index_directory_async (IdeCodeIndexBuilder *self,
@@ -819,6 +1007,9 @@ index_directory_async (IdeCodeIndexBuilder *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, index_directory_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
+
+  if (g_task_return_error_if_cancelled (task))
+    return;
 
   idd = g_slice_new0 (IndexDirectoryData);
   idd->magic = INDEX_DIRECTORY_MAGIC;
