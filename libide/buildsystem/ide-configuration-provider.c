@@ -115,7 +115,7 @@ ide_configuration_provider_load_finish (IdeConfigurationProvider  *self,
   g_return_val_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  return IDE_CONFIGURATION_PROVIDER_GET_IFACE (self)->save_finish (self, result, error);
+  return IDE_CONFIGURATION_PROVIDER_GET_IFACE (self)->load_finish (self, result, error);
 }
 
 void
