@@ -32,6 +32,7 @@ util_private_sources = [
   'ide-battery-monitor.c',
   'ide-doc-seq.c',
   'ide-window-settings.c',
+  'ptyintercept.c',
 ]
 
 libide_public_headers += files(util_headers)
