@@ -3420,3 +3420,14 @@ ide_build_pipeline_get_requested_phase (IdeBuildPipeline *self)
 
   return self->requested_mask & IDE_BUILD_PHASE_MASK;
 }
+
+void
+_ide_build_pipeline_set_pty_size (IdeBuildPipeline *self,
+                                  guint             rows,
+                                  guint             columns)
+{
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+
+  if (self->pty_slave != PTY_FD_INVALID)
+    pty_intercept_set_size (&self->intercept, rows, columns);
+}
