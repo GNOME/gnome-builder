@@ -22,7 +22,7 @@
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration-provider.h"
 
-G_DEFINE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, IDE_TYPE_OBJECT)
 
 static void
 ide_configuration_provider_real_load_async (IdeConfigurationProvider *self,

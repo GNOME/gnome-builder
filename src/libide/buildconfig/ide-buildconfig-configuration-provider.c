@@ -37,7 +37,7 @@
 
 struct _IdeBuildconfigConfigurationProvider
 {
-  GObject                  parent_instance;
+  IdeObject                parent_instance;
 
   IdeConfigurationManager *manager;
   GPtrArray               *configurations;
@@ -49,9 +49,11 @@ struct _IdeBuildconfigConfigurationProvider
 
 static void configuration_provider_iface_init (IdeConfigurationProviderInterface *);
 
-G_DEFINE_TYPE_EXTENDED (IdeBuildconfigConfigurationProvider, ide_buildconfig_configuration_provider, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIGURATION_PROVIDER,
-                                               configuration_provider_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeBuildconfigConfigurationProvider,
+                         ide_buildconfig_configuration_provider,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIGURATION_PROVIDER,
+                                                configuration_provider_iface_init))
 
 static void ide_buildconfig_configuration_provider_unload (IdeConfigurationProvider *provider, IdeConfigurationManager *manager);
 

@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIGURATION_PROVIDER (ide_configuration_provider_get_type ())
 
-G_DECLARE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, IDE, CONFIGURATION_PROVIDER, GObject)
+G_DECLARE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, IDE, CONFIGURATION_PROVIDER, IdeObject)
 
 struct _IdeConfigurationProviderInterface
 {

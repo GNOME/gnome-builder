@@ -24,6 +24,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_CONFIGURATION_PROVIDER (gbp_flatpak_configuration_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakConfigurationProvider, gbp_flatpak_configuration_provider, GBP, FLATPAK_CONFIGURATION_PROVIDER, GObject)
+G_DECLARE_FINAL_TYPE (GbpFlatpakConfigurationProvider, gbp_flatpak_configuration_provider, GBP, FLATPAK_CONFIGURATION_PROVIDER, IdeObject)
 
 G_END_DECLS

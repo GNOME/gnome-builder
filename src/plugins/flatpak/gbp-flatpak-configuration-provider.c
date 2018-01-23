@@ -35,7 +35,8 @@
 
 struct _GbpFlatpakConfigurationProvider
 {
-  GObject                  parent_instance;
+  IdeObject                parent_instance;
+
   IdeConfigurationManager *manager;
   GPtrArray               *configurations;
   GPtrArray               *manifest_monitors;
@@ -48,9 +49,11 @@ static void configuration_provider_iface_init         (IdeConfigurationProviderI
 static void gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider           *provider,
                                                        IdeConfigurationManager            *manager);
 
-G_DEFINE_TYPE_EXTENDED (GbpFlatpakConfigurationProvider, gbp_flatpak_configuration_provider, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIGURATION_PROVIDER,
-                                               configuration_provider_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbpFlatpakConfigurationProvider,
+                         gbp_flatpak_configuration_provider,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIGURATION_PROVIDER,
+                                                configuration_provider_iface_init))
 
 static GRegex *filename_regex;
 
