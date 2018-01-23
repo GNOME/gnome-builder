@@ -24,10 +24,10 @@
 
 G_BEGIN_DECLS
 
-void _ide_build_pipeline_cancel      (IdeBuildPipeline *self);
-void _ide_build_pipeline_set_message (IdeBuildPipeline *self,
-                                      const gchar      *message);
-void _ide_build_pipeline_mark_broken (IdeBuildPipeline *self);
+void _ide_build_pipeline_cancel       (IdeBuildPipeline *self);
+void _ide_build_pipeline_set_message  (IdeBuildPipeline *self,
+                                       const gchar      *message);
+void _ide_build_pipeline_mark_broken  (IdeBuildPipeline *self);
 void _ide_build_pipeline_set_pty_size (IdeBuildPipeline *self,
                                        guint             rows,
                                        guint             columns);
