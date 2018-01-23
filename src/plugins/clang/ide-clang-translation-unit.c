@@ -211,7 +211,7 @@ static IdeSourceLocation *
 create_location (IdeClangTranslationUnit *self,
                  const gchar             *workpath,
                  CXSourceLocation         cxloc,
-                 IdeFile                 *override_file)
+                 IdeSourceLocation       *alternate)
 {
   g_autofree gchar *path = NULL;
   g_autoptr(IdeFile) file = NULL;
@@ -223,28 +223,28 @@ create_location (IdeClangTranslationUnit *self,
   unsigned column;
   unsigned offset;
 
-  g_assert (self != NULL);
+  g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (self));
   g_assert (workpath != NULL);
-  g_assert (!override_file || IDE_IS_FILE (override_file));
 
   clang_getFileLocation (cxloc, &cxfile, &line, &column, &offset);
 
-  if (line > 0) line--;
-  if (column > 0) column--;
+  str = clang_getFileName (cxfile);
 
-  if (override_file == NULL)
-    {
-      str = clang_getFileName (cxfile);
-      path = get_path (workpath, clang_getCString (str));
+  if (line == 0 || clang_getCString (str) == NULL)
+    return alternate ? ide_source_location_ref (alternate) : NULL;
 
-      context = ide_object_get_context (IDE_OBJECT (self));
-      gfile = g_file_new_for_path (path);
-      file = ide_file_new (context, gfile);
+  if (line > 0)
+    line--;
 
-      override_file = file;
-    }
+  if (column > 0)
+    column--;
 
-  return ide_source_location_new (override_file, line, column, offset);
+  path = get_path (workpath, clang_getCString (str));
+  context = ide_object_get_context (IDE_OBJECT (self));
+  gfile = g_file_new_for_path (path);
+  file = ide_file_new (context, gfile);
+
+  return ide_source_location_new (file, line, column, offset);
 }
 
 static IdeSourceRange *
@@ -267,7 +267,7 @@ create_range (IdeClangTranslationUnit *self,
    * so we force it to have the IdeFile of the first location.
    */
   begin = create_location (self, workpath, cxbegin, NULL);
-  end = create_location (self, workpath, cxend, ide_source_location_get_file (begin));
+  end = create_location (self, workpath, cxend, begin);
 
   if ((begin != NULL) && (end != NULL))
     range = ide_source_range_new (begin, end);
