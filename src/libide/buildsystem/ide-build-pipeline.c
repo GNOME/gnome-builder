@@ -1542,6 +1542,10 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
   /* Clear any message from the previous stage */
   _ide_build_pipeline_set_message (self, NULL);
 
+  /* Clear cached directory enter/leave tracking */
+  g_clear_pointer (&self->errfmt_current_dir, g_free);
+  g_clear_pointer (&self->errfmt_top_dir, g_free);
+
   /* Short circuit now if the task was cancelled */
   if (g_task_return_error_if_cancelled (task))
     IDE_EXIT;
