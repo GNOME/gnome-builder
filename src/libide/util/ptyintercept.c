@@ -116,7 +116,7 @@ pty_intercept_create_slave (pty_fd_t master_fd)
         return PTY_FD_INVALID;
 
       flags = fcntl (ret, F_GETFD, 0);
-      flags |= O_NONBLOCK | O_CLOEXEC;
+      flags |= O_NONBLOCK | FD_CLOEXEC;
 
       if (fcntl (ret, F_SETFD, flags) < 0)
         return PTY_FD_INVALID;
@@ -156,7 +156,7 @@ pty_intercept_create_master (void)
       if (master_fd == PTY_FD_INVALID && errno == EINVAL)
         {
           master_fd = posix_openpt (O_RDWR | O_NOCTTY);
-          new_flags |= O_CLOEXEC;
+          new_flags |= FD_CLOEXEC;
           if (master_fd == -1)
             return PTY_FD_INVALID;
         }
