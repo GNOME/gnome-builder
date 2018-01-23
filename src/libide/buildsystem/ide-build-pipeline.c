@@ -2529,6 +2529,9 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
   ide_subprocess_launcher_take_stdin_fd (launcher, dup (self->pty_slave));
   ide_subprocess_launcher_take_stdout_fd (launcher, dup (self->pty_slave));
   ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->pty_slave));
+
+  /* Ensure a terminal type is set */
+  ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", FALSE);
 }
 
 /**
