@@ -47,6 +47,8 @@
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
 #include "terminal/ide-terminal-util.h"
+#include "util/ide-line-reader.h"
+#include "util/ptyintercept.h"
 #include "vcs/ide-vcs.h"
 
 DZL_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
@@ -169,12 +171,18 @@ struct _IdeBuildPipeline
   guint   errfmt_seqnum;
 
   /*
-   * Our PTY master for use by launchers in the build pipeline.
-   * We create a slave FD for the launchers (and dup() them when
-   * passing it to the child) that are created by pipeline addins.
+   * The VtePty is used to connect to a VteTerminal. It's basically
+   * just a wrapper around a PTY master. We then add a pty_intercept_t
+   * to proxy PTY data while allowing us to tap into the content being
+   * transmitted. We can use that to run regexes against and perform
+   * additional error extraction. Finally, pty_slave is the PTY device
+   * we created that will get attached to stdin/stdout/stderr in our
+   * spawned subprocesses. It is a slave to the PTY master owned by
+   * the pty_intercept_t.
    */
-  VtePty *pty;
-  int pty_slave;
+  VtePty          *pty;
+  pty_intercept_t  intercept;
+  pty_fd_t         pty_slave;
 
   /*
    * If the terminal interpreting our Pty has received a terminal
@@ -525,6 +533,107 @@ create_diagnostic (IdeBuildPipeline *self,
   return ide_diagnostic_new (parsed.severity, message, location);
 }
 
+static gboolean
+extract_directory_change (IdeBuildPipeline *self,
+                          const guint8     *data,
+                          gsize             len)
+{
+  g_autofree gchar *dir = NULL;
+  const guint8 *begin;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+
+  if (len == 0)
+    return FALSE;
+
+#define ENTERING_DIRECTORY_BEGIN "Entering directory '"
+#define ENTERING_DIRECTORY_END   "'"
+
+  begin = memmem (data, len, ENTERING_DIRECTORY_BEGIN, strlen (ENTERING_DIRECTORY_BEGIN));
+  if (begin == NULL)
+    return FALSE;
+
+  begin += strlen (ENTERING_DIRECTORY_BEGIN);
+
+  if (data[len - 1] != '\'')
+    return FALSE;
+
+  len = &data[len - 1] - begin;
+  dir = g_memdup (begin, len);
+
+  if (g_utf8_validate (dir, len, NULL))
+    {
+      g_free (self->errfmt_current_dir);
+
+      if (len == 0)
+        self->errfmt_current_dir = g_strdup (self->errfmt_top_dir);
+      else
+        self->errfmt_current_dir = g_strndup (dir, len);
+
+      return TRUE;
+    }
+
+#undef ENTERING_DIRECTORY_BEGIN
+#undef ENTERING_DIRECTORY_END
+
+  return FALSE;
+}
+
+static void
+extract_diagnostics (IdeBuildPipeline *self,
+                     const guint8     *data,
+                     gsize             len)
+{
+  g_autofree guint8 *unescaped = NULL;
+  IdeLineReader reader;
+  gchar *line;
+  gsize line_len;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (data != NULL);
+
+  if (len == 0 || self->errfmts->len == 0)
+    return;
+
+  /* If we have any color escape sequences, remove them */
+  if G_UNLIKELY (memchr (data, '\033', len) || memmem (data, len, "\\e", 2))
+    {
+      gsize out_len = 0;
+
+      unescaped = ide_build_utils_filter_color_codes (data, len, &out_len);
+      if (out_len == 0)
+        return;
+
+      data = unescaped;
+      len = out_len;
+    }
+
+  ide_line_reader_init (&reader, (gchar *)data, len);
+
+  while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
+    {
+      if (extract_directory_change (self, (const guint8 *)line, line_len))
+        continue;
+
+      for (guint i = 0; i < self->errfmts->len; i++)
+        {
+          const ErrorFormat *errfmt = &g_array_index (self->errfmts, ErrorFormat, i);
+          g_autoptr(GMatchInfo) match_info = NULL;
+
+          if (g_regex_match_full (errfmt->regex, line, line_len, 0, 0, &match_info, NULL))
+            {
+              g_autoptr(IdeDiagnostic) diagnostic = create_diagnostic (self, match_info);
+
+              if (diagnostic != NULL)
+                {
+                  ide_build_pipeline_emit_diagnostic (self, diagnostic);
+                  break;
+                }
+            }
+        }
+    }
+}
+
 static void
 ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
                                  const gchar       *message,
@@ -532,15 +641,10 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
                                  gpointer           user_data)
 {
   IdeBuildPipeline *self = user_data;
-  g_autofree gchar *filtered_message = NULL;
-  const gchar *enterdir;
 
   g_assert (stream == IDE_BUILD_LOG_STDOUT || stream == IDE_BUILD_LOG_STDERR);
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (message != NULL);
-
-#define ENTERING_DIRECTORY_BEGIN "Entering directory '"
-#define ENTERING_DIRECTORY_END   "'"
 
   if (message_len < 0)
     message_len = strlen (message);
@@ -548,71 +652,25 @@ ide_build_pipeline_log_observer (IdeBuildLogStream  stream,
   if (self->log != NULL)
     ide_build_log_observer (stream, message, message_len, self->log);
 
-  filtered_message = ide_build_utils_color_codes_filtering (message);
+  extract_diagnostics (self, (const guint8 *)message, message_len);
+}
 
-  if (stream == IDE_BUILD_LOG_STDOUT)
-    {
-      /*
-       * This expects LANG=C, which is defined in the autotools Builder.
-       * Not the most ideal decoupling of logic, but we don't have a whole
-       * lot to work with here.
-       */
-      if (NULL != (enterdir = strstr (filtered_message, ENTERING_DIRECTORY_BEGIN)) &&
-          g_str_has_suffix (enterdir, ENTERING_DIRECTORY_END))
-        {
-          gssize len;
+static void
+ide_build_pipeline_intercept_pty_master_cb (const pty_intercept_t      *intercept,
+                                            const pty_intercept_side_t *side,
+                                            const guint8               *data,
+                                            gsize                       len,
+                                            gpointer                    user_data)
+{
+  IdeBuildPipeline *self = user_data;
 
-          enterdir += DZL_LITERAL_LENGTH (ENTERING_DIRECTORY_BEGIN);
+  g_assert (intercept != NULL);
+  g_assert (side != NULL);
+  g_assert (data != NULL);
+  g_assert (len > 0);
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
 
-          /* Translate to relative paths for out-of-tree builds */
-          if (g_str_has_prefix (enterdir, self->builddir))
-            {
-              enterdir += strlen (self->builddir);
-              if (*enterdir == G_DIR_SEPARATOR)
-                enterdir++;
-            }
-
-          len = strlen (enterdir) - DZL_LITERAL_LENGTH (ENTERING_DIRECTORY_END);
-
-          if (len > 0)
-            {
-              g_free (self->errfmt_current_dir);
-              self->errfmt_current_dir = g_strndup (enterdir, len);
-              if (self->errfmt_top_dir == NULL)
-                self->errfmt_top_dir = g_strndup (enterdir, len);
-            }
-
-          return;
-        }
-    }
-
-  /*
-   * Unfortunately, some build engines such as Ninja refuse to pass errors on
-   * stderr like the tooling they abstract. So we must parse stdout in addition
-   * to stderr to extract errors.
-   */
-  if (stream == IDE_BUILD_LOG_STDERR || self->errors_on_stdout)
-    {
-      for (guint i = 0; i < self->errfmts->len; i++)
-        {
-          const ErrorFormat *errfmt = &g_array_index (self->errfmts, ErrorFormat, i);
-          g_autoptr(GMatchInfo) match_info = NULL;
-
-          if (g_regex_match (errfmt->regex, filtered_message, 0, &match_info))
-            {
-              g_autoptr(IdeDiagnostic) diagnostic = create_diagnostic (self, match_info);
-
-              if (diagnostic != NULL)
-                {
-                  ide_build_pipeline_emit_diagnostic (self, diagnostic);
-                  return;
-                }
-            }
-        }
-    }
-
-#undef ENTERING_DIRECTORY_BEGIN
-#undef ENTERING_DIRECTORY_END
+  extract_diagnostics (self, data, len);
 }
 
 static void
@@ -1036,19 +1094,17 @@ static void
 ide_build_pipeline_dispose (GObject *object)
 {
   IdeBuildPipeline *self = IDE_BUILD_PIPELINE (object);
+  g_auto(pty_fd_t) fd = PTY_FD_INVALID;
 
   IDE_ENTRY;
 
   ide_build_pipeline_unload (self);
 
   g_clear_pointer (&self->message, g_free);
-  g_clear_object (&self->pty);
 
-  if (self->pty_slave != -1)
-    {
-      close (self->pty_slave);
-      self->pty_slave = -1;
-    }
+  g_clear_object (&self->pty);
+  pty_intercept_clear (&self->intercept);
+  fd = pty_fd_steal (&self->pty_slave);
 
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->dispose (object);
 
@@ -1061,6 +1117,7 @@ ide_build_pipeline_initable_init (GInitable     *initable,
                                   GError       **error)
 {
   IdeBuildPipeline *self = (IdeBuildPipeline *)initable;
+  pty_fd_t master_fd;
 
   IDE_ENTRY;
 
@@ -1075,6 +1132,22 @@ ide_build_pipeline_initable_init (GInitable     *initable,
   self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, error);
   if (self->pty == NULL)
     IDE_RETURN (FALSE);
+
+  master_fd = vte_pty_get_fd (self->pty);
+
+  if (!pty_intercept_init (&self->intercept, master_fd, NULL))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "Failed to initialize PTY intercept");
+      IDE_RETURN (FALSE);
+    }
+
+  pty_intercept_set_callback (&self->intercept,
+                              &self->intercept.master,
+                              ide_build_pipeline_intercept_pty_master_cb,
+                              self);
 
   g_signal_connect_object (self->configuration,
                            "notify::ready",
@@ -2431,7 +2504,10 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
   if (self->pty_slave == -1)
-    self->pty_slave = ide_vte_pty_create_slave (self->pty);
+    {
+      pty_fd_t master_fd = pty_intercept_get_fd (&self->intercept);
+      self->pty_slave = pty_intercept_create_slave (master_fd);
+    }
 
   if (self->pty_slave == -1)
     {
