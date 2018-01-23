@@ -299,6 +299,28 @@ ide_build_log_panel_save_in_file (GSimpleAction *action,
 }
 
 static void
+terminal_size_allocate (IdeBuildLogPanel *self,
+                        GtkAllocation    *allocation,
+                        IdeTerminal      *terminal)
+{
+  VtePty *pty;
+  guint rows = 0;
+  guint columns = 0;
+
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
+  g_assert (allocation != NULL);
+  g_assert (IDE_IS_TERMINAL (terminal));
+
+  pty = vte_terminal_get_pty (VTE_TERMINAL (self->terminal));
+
+  if (self->pipeline != NULL && pty != NULL)
+    {
+      if (vte_pty_get_size (pty, &rows, &columns, NULL))
+        _ide_build_pipeline_set_pty_size (self->pipeline, rows, columns);
+    }
+}
+
+static void
 ide_build_log_panel_init (IdeBuildLogPanel *self)
 {
   g_autoptr(GSimpleActionGroup) actions = NULL;
@@ -308,6 +330,12 @@ ide_build_log_panel_init (IdeBuildLogPanel *self)
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->terminal,
+                           "size-allocate",
+                           G_CALLBACK (terminal_size_allocate),
+                           self,
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (self->terminal,
                            "window-title-changed",
