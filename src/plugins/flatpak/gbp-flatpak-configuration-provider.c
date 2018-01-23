@@ -18,17 +18,12 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-configuration-provider"
 
-#include <string.h>
 #include <flatpak.h>
 #include <json-glib/json-glib.h>
+#include <string.h>
 
-#include "util/ide-posix.h"
-
-#include "buildsystem/ide-environment.h"
-#include "buildsystem/ide-configuration.h"
-#include "buildsystem/ide-configuration-provider.h"
-#include "gbp-flatpak-configuration-provider.h"
 #include "gbp-flatpak-configuration.h"
+#include "gbp-flatpak-configuration-provider.h"
 
 #define WRITEBACK_TIMEOUT_SECS 2
 #define DISCOVERY_MAX_DEPTH 3

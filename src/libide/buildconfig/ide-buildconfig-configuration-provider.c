@@ -26,9 +26,9 @@
 
 #include "buildconfig/ide-buildconfig-configuration.h"
 #include "buildconfig/ide-buildconfig-configuration-provider.h"
-#include "buildsystem/ide-configuration-manager.h"
-#include "buildsystem/ide-configuration-provider.h"
-#include "buildsystem/ide-configuration.h"
+#include "config/ide-configuration-manager.h"
+#include "config/ide-configuration-provider.h"
+#include "config/ide-configuration.h"
 #include "buildsystem/ide-environment.h"
 #include "vcs/ide-vcs.h"
 

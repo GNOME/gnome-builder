@@ -28,8 +28,8 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
-#include "buildsystem/ide-configuration.h"
-#include "buildsystem/ide-configuration-manager.h"
+#include "config/ide-configuration.h"
+#include "config/ide-configuration-manager.h"
 #include "runner/ide-runner.h"
 #include "runner/ide-runner-addin.h"
 #include "runtimes/ide-runtime.h"

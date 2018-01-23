@@ -23,7 +23,7 @@
 #include "buildconfig/ide-buildconfig-configuration-provider.h"
 #include "buildconfig/ide-buildconfig-pipeline-addin.h"
 #include "buildsystem/ide-build-pipeline-addin.h"
-#include "buildsystem/ide-configuration-provider.h"
+#include "config/ide-configuration-provider.h"
 
 void
 ide_buildconfig_register_types (PeasObjectModule *module)

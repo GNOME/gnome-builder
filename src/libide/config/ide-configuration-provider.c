@@ -19,8 +19,8 @@
 #define G_LOG_DOMAIN "ide-configuration-provider"
 
 #include "application/ide-application.h"
-#include "buildsystem/ide-configuration-manager.h"
-#include "buildsystem/ide-configuration-provider.h"
+#include "config/ide-configuration-manager.h"
+#include "config/ide-configuration-provider.h"
 
 G_DEFINE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, IDE_TYPE_OBJECT)
 

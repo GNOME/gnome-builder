@@ -13,9 +13,6 @@ buildsystem_headers = [
   'ide-build-target-provider.h',
   'ide-build-utils.h',
   'ide-compile-commands.h',
-  'ide-configuration-manager.h',
-  'ide-configuration-provider.h',
-  'ide-configuration.h',
   'ide-dependency-updater.h',
   'ide-environment-variable.h',
   'ide-environment.h',
@@ -35,9 +32,6 @@ buildsystem_sources = [
   'ide-build-target-provider.c',
   'ide-build-utils.c',
   'ide-compile-commands.c',
-  'ide-configuration-manager.c',
-  'ide-configuration-provider.c',
-  'ide-configuration.c',
   'ide-dependency-updater.c',
   'ide-environment-variable.c',
   'ide-environment.c',
@@ -52,7 +46,6 @@ buildsystem_private_sources = [
 buildsystem_enums = [
   'ide-build-log.h',
   'ide-build-pipeline.h',
-  'ide-configuration.h',
 ]
 
 libide_enum_headers += files(buildsystem_enums)

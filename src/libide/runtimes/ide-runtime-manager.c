@@ -24,7 +24,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
-#include "buildsystem/ide-configuration.h"
+#include "config/ide-configuration.h"
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-provider.h"

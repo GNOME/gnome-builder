@@ -27,7 +27,7 @@
 
 #include "buildsystem/ide-build-log.h"
 #include "buildsystem/ide-build-stage.h"
-#include "buildsystem/ide-configuration.h"
+#include "config/ide-configuration.h"
 #include "runtimes/ide-runtime.h"
 #include "subprocess/ide-subprocess-launcher.h"
 

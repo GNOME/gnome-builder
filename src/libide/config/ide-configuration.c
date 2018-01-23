@@ -24,8 +24,8 @@
 #include "ide-debug.h"
 #include "ide-enums.h"
 
-#include "buildsystem/ide-configuration.h"
-#include "buildsystem/ide-configuration-manager.h"
+#include "config/ide-configuration.h"
+#include "config/ide-configuration-manager.h"
 #include "buildsystem/ide-environment.h"
 #include "devices/ide-device-manager.h"
 #include "devices/ide-device.h"

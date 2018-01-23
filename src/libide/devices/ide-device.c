@@ -20,7 +20,7 @@
 
 #include <glib/gi18n.h>
 
-#include "buildsystem/ide-configuration.h"
+#include "config/ide-configuration.h"
 #include "devices/ide-device.h"
 
 typedef struct

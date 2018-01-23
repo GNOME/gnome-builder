@@ -18,7 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-runtime-provider"
 
-#include "buildsystem/ide-configuration.h"
+#include "config/ide-configuration.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-provider.h"
 

@@ -27,7 +27,7 @@
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-build-system.h"
-#include "buildsystem/ide-configuration.h"
+#include "config/ide-configuration.h"
 #include "files/ide-file.h"
 #include "projects/ide-project.h"
 #include "util/ide-glib.h"

@@ -37,7 +37,7 @@
 #include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-build-system-discovery.h"
-#include "buildsystem/ide-configuration-manager.h"
+#include "config/ide-configuration-manager.h"
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "debugger/ide-debug-manager.h"
 #include "devices/ide-device-manager.h"

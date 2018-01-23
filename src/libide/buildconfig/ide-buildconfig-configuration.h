@@ -20,7 +20,7 @@
 
 #include "ide-version-macros.h"
 
-#include "buildsystem/ide-configuration.h"
+#include "config/ide-configuration.h"
 
 G_BEGIN_DECLS
 
