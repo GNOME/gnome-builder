@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-configuration-provider"
+
+#include "application/ide-application.h"
 #include "buildsystem/ide-configuration-manager.h"
 #include "buildsystem/ide-configuration-provider.h"
 
@@ -28,15 +31,17 @@ ide_configuration_provider_real_load_async (IdeConfigurationProvider *self,
                                             GAsyncReadyCallback       callback,
                                             gpointer                  user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  g_return_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self));
-  g_return_if_fail (IDE_IS_CONFIGURATION_MANAGER (manager));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_return_if_fail (G_IS_TASK (task));
-
-  g_warning ("The current IdeConfigurationProvider doesn't implement load_async");
-  g_task_return_boolean (task, TRUE);
+  g_task_report_new_error (self, callback, user_data,
+                           ide_configuration_provider_real_load_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "%s does not implement load_async",
+                           G_OBJECT_TYPE_NAME (self));
 }
 
 gboolean
@@ -44,16 +49,21 @@ ide_configuration_provider_real_load_finish (IdeConfigurationProvider  *self,
                                              GAsyncResult              *result,
                                              GError                   **error)
 {
-  g_return_val_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self), FALSE);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_TASK (result));
+  g_assert (g_task_is_valid (G_TASK (result), self));
 
-  return TRUE;
+  return g_task_propagate_boolean (G_TASK (self), error);
 }
 
 static void
 ide_configuration_provider_real_unload (IdeConfigurationProvider *self,
                                         IdeConfigurationManager  *manager)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
 }
 
 void
@@ -62,14 +72,16 @@ ide_configuration_provider_real_save_async (IdeConfigurationProvider *self,
                                             GAsyncReadyCallback       callback,
                                             gpointer                  user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  g_return_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_return_if_fail (G_IS_TASK (task));
-
-  g_warning ("The current IdeConfigurationProvider doesn't implement save_async");
-  g_task_return_boolean (task, TRUE);
+  g_task_report_new_error (self, callback, user_data,
+                           ide_configuration_provider_real_save_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "%s does not implement save_async",
+                           G_OBJECT_TYPE_NAME (self));
 }
 
 gboolean
@@ -77,10 +89,12 @@ ide_configuration_provider_real_save_finish (IdeConfigurationProvider  *self,
                                              GAsyncResult              *result,
                                              GError                   **error)
 {
-  g_return_val_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self), FALSE);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_TASK (result));
+  g_assert (g_task_is_valid (G_TASK (result), self));
 
-  return TRUE;
+  return g_task_propagate_boolean (G_TASK (self), error);
 }
 
 static void
@@ -100,6 +114,7 @@ ide_configuration_provider_load_async (IdeConfigurationProvider *self,
                                        GAsyncReadyCallback       callback,
                                        gpointer                  user_data)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self));
   g_return_if_fail (IDE_IS_CONFIGURATION_MANAGER (manager));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -112,6 +127,7 @@ ide_configuration_provider_load_finish (IdeConfigurationProvider  *self,
                                         GAsyncResult              *result,
                                         GError                   **error)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
@@ -122,6 +138,7 @@ void
 ide_configuration_provider_unload (IdeConfigurationProvider *self,
                                    IdeConfigurationManager  *manager)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self));
   g_return_if_fail (IDE_IS_CONFIGURATION_MANAGER (manager));
 
@@ -134,6 +151,7 @@ ide_configuration_provider_save_async (IdeConfigurationProvider *self,
                                        GAsyncReadyCallback       callback,
                                        gpointer                  user_data)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -145,6 +163,7 @@ ide_configuration_provider_save_finish (IdeConfigurationProvider  *self,
                                         GAsyncResult              *result,
                                         GError                   **error)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
