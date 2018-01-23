@@ -304,8 +304,8 @@ terminal_size_allocate (IdeBuildLogPanel *self,
                         IdeTerminal      *terminal)
 {
   VtePty *pty;
-  guint rows = 0;
-  guint columns = 0;
+  gint rows = 0;
+  gint columns = 0;
 
   g_assert (IDE_IS_BUILD_LOG_PANEL (self));
   g_assert (allocation != NULL);
