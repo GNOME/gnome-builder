@@ -39,8 +39,6 @@
  */
 #define CHANNEL_BUFFER_SIZE (4096 * 4)
 
-#define PTY_INTERCEPT_MAGIC (0x81723647)
-#define PTY_IS_INTERCEPT(s) ((s) != NULL && (s)->magic == PTY_INTERCEPT_MAGIC)
 
 static void     _pty_intercept_side_close (pty_intercept_side_t *side);
 static gboolean _pty_intercept_in_cb      (GIOChannel           *channel,

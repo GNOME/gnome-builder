@@ -24,6 +24,8 @@
 G_BEGIN_DECLS
 
 #define PTY_FD_INVALID (-1)
+#define PTY_INTERCEPT_MAGIC (0x81723647)
+#define PTY_IS_INTERCEPT(s) ((s) != NULL && (s)->magic == PTY_INTERCEPT_MAGIC)
 
 typedef int                               pty_fd_t;
 typedef struct _pty_intercept_t           pty_intercept_t;

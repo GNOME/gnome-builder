@@ -1106,8 +1106,10 @@ ide_build_pipeline_dispose (GObject *object)
   g_clear_pointer (&self->message, g_free);
 
   g_clear_object (&self->pty);
-  pty_intercept_clear (&self->intercept);
   fd = pty_fd_steal (&self->pty_slave);
+
+  if (PTY_IS_INTERCEPT (&self->intercept))
+    pty_intercept_clear (&self->intercept);
 
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->dispose (object);
 
