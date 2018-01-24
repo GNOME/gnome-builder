@@ -128,6 +128,10 @@ void                      ide_context_emit_log                  (IdeContext     
                                                                  const gchar          *message,
                                                                  gssize                message_len);
 IDE_AVAILABLE_IN_3_28
+gchar                    *ide_context_build_filename            (IdeContext           *self,
+                                                                 const gchar          *first_part,
+                                                                 ...) G_GNUC_NULL_TERMINATED;
+IDE_AVAILABLE_IN_3_28
 GFile                    *ide_context_cache_file                (IdeContext           *self,
                                                                  const gchar          *first_part,
                                                                  ...) G_GNUC_NULL_TERMINATED;

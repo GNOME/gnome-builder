@@ -2737,3 +2737,49 @@ ide_context_get_monitor (IdeContext *self)
 
   return self->monitor;
 }
+
+/**
+ * ide_context_build_filename:
+ * @self: a #IdeContext
+ * @first_part: first path part
+ *
+ * Creates a new path that starts from the working directory of the
+ * loaded project.
+ *
+ * Returns: (transfer full): a string containing the new path
+ *
+ * Since: 3.28
+ */
+gchar *
+ide_context_build_filename (IdeContext  *self,
+                            const gchar *first_part,
+                            ...)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autofree gchar *base = NULL;
+  const gchar *part = first_part;
+  GFile *workdir;
+  va_list args;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+  g_return_val_if_fail (first_part != NULL, NULL);
+
+  workdir = ide_vcs_get_working_directory (self->vcs);
+  base = g_file_get_path (workdir);
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_add (ar, base);
+
+  va_start (args, first_part);
+  do
+    {
+      g_ptr_array_add (ar, (gchar *)part);
+      part = va_arg (args, const gchar *);
+    }
+  while (part != NULL);
+  va_end (args);
+
+  g_ptr_array_add (ar, NULL);
+
+  return g_build_filenamev ((gchar **)ar->pdata);
+}
