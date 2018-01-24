@@ -25,36 +25,18 @@
 #include <unistd.h>
 
 #include "terminal/ide-terminal-util.h"
+#include "util/ptyintercept.h"
 
 gint
 ide_vte_pty_create_slave (VtePty *pty)
 {
   gint master_fd;
-#ifdef HAVE_PTSNAME_R
-  char name[PATH_MAX + 1];
-#else
-  const char *name;
-#endif
 
-  g_assert (VTE_IS_PTY (pty));
+  g_return_val_if_fail (VTE_IS_PTY (pty), PTY_FD_INVALID);
 
-  if (-1 == (master_fd = vte_pty_get_fd (pty)))
-    return -1;
+  master_fd = vte_pty_get_fd (pty);
+  if (master_fd == PTY_FD_INVALID)
+    return PTY_FD_INVALID;
 
-  if (grantpt (master_fd) != 0)
-    return -1;
-
-  if (unlockpt (master_fd) != 0)
-    return -1;
-
-#ifdef HAVE_PTSNAME_R
-  if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
-    return -1;
-  name[sizeof name - 1] = '\0';
-#else
-  if (NULL == (name = ptsname (master_fd)))
-    return -1;
-#endif
-
-  return open (name, O_RDWR | O_CLOEXEC);
+  return pty_intercept_create_slave (master_fd);
 }

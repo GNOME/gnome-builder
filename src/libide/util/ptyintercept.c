@@ -20,6 +20,10 @@
 # define _GNU_SOURCE
 #endif
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <errno.h>
 #include <fcntl.h>
 #include <glib-unix.h>
@@ -85,7 +89,11 @@ pty_fd_t
 pty_intercept_create_slave (pty_fd_t master_fd)
 {
   g_auto(pty_fd_t) ret = PTY_FD_INVALID;
-  gchar name[256];
+#ifdef HAVE_PTSNAME_R
+  char name[256];
+#else
+  const char *name;
+#endif
 
   g_assert (master_fd != -1);
 
@@ -95,8 +103,14 @@ pty_intercept_create_slave (pty_fd_t master_fd)
   if (unlockpt (master_fd) != 0)
     return PTY_FD_INVALID;
 
+#ifdef HAVE_PTSNAME_R
   if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
     return PTY_FD_INVALID;
+  name[sizeof name - 1] = '\0';
+#else
+  if (NULL == (name = ptsname (master_fd)))
+    return PTY_FD_INVALID;
+#endif
 
   name[sizeof name - 1] = '\0';
 

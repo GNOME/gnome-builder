@@ -220,6 +220,18 @@ if get_option('with_flatpak') or get_option('with_git')
   endif
 endif
 
+check_functions = [
+  # pty
+  ['HAVE_GRANTPT', 'grantpt'],
+  ['HAVE_POSIX_OPENPT', 'posix_openpt'],
+  ['HAVE_PTSNAME', 'ptsname'],
+  ['HAVE_PTSNAME_R', 'ptsname_r'],
+  ['HAVE_UNLOCKPT', 'unlockpt'],
+]
+foreach func: check_functions
+  config_h.set(func[0], cc.has_function(func[1]))
+endforeach
+
 configure_file(output: 'config.h', configuration: config_h)
 
 gnome = import('gnome')
