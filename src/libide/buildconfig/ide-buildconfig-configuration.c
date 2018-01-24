@@ -136,7 +136,7 @@ ide_buildconfig_configuration_get_postbuild (IdeBuildconfigConfiguration *self)
 {
   g_return_val_if_fail (IDE_IS_BUILDCONFIG_CONFIGURATION (self), NULL);
 
-  return (const gchar * const *)self->prebuild;
+  return (const gchar * const *)self->postbuild;
 }
 
 void
