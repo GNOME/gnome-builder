@@ -33,7 +33,6 @@ src/libide/buffers/ide-unsaved-files.c
 src/libide/buildsystem/ide-build-manager.c
 src/libide/buildsystem/ide-build-pipeline.c
 src/libide/buildsystem/ide-build-stage-transfer.c
-src/libide/buildsystem/ide-configuration-manager.c
 src/libide/buildui/ide-build-configuration-row.ui
 src/libide/buildui/ide-build-configuration-view.ui
 src/libide/buildui/ide-build-log-panel.c
@@ -45,6 +44,7 @@ src/libide/buildui/ide-build-tool.c
 src/libide/buildui/ide-build-workbench-addin.c
 src/libide/buildui/ide-environment-editor.c
 src/libide/buildui/ide-environment-editor-row.ui
+src/libide/config/ide-configuration-manager.c
 src/libide/debugger/gtk/menus.ui
 src/libide/debugger/ide-debugger-breakpoints-view.ui
 src/libide/debugger/ide-debugger-controls.ui
