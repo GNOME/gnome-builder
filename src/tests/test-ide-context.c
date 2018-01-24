@@ -77,6 +77,18 @@ test_with_callback (TestCallback         test_func,
   ide_context_new_async (project_file, cancellable, test_new_async_cb1, task);
 }
 
+static gboolean
+real_test_build_filename (IdeContext  *context,
+                          GError     **error)
+{
+  g_autofree gchar *real = g_build_filename (TEST_DATA_DIR, "project1", "foo", "bar", NULL);
+  g_autofree gchar *path = ide_context_build_filename (context, "foo", "bar", NULL, "baz", NULL);
+
+  g_assert_cmpstr (real, ==, path);
+
+  return TRUE;
+}
+
 #define ADD_TEST_FUNC(name, func)                              \
 static void                                                    \
 test_##name (GCancellable        *cancellable,                 \
@@ -86,6 +98,7 @@ test_##name (GCancellable        *cancellable,                 \
   test_with_callback (func, cancellable, callback, user_data); \
 }
 ADD_TEST_FUNC (new_async, NULL)
+ADD_TEST_FUNC (build_filename, real_test_build_filename)
 #undef ADD_TEST_FUNC
 
 gint
@@ -105,6 +118,7 @@ main (gint   argc,
 #define ADD_TEST_FUNC(name) \
   ide_application_add_test (app, "/Ide/Context/"#name, test_##name, NULL, required_plugins);
 ADD_TEST_FUNC(new_async)
+ADD_TEST_FUNC(build_filename)
 #undef ADD_TEST_FUNC
 
   gnome_builder_plugins_init ();
