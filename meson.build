@@ -59,24 +59,24 @@ status += [
   '', ''
 ]
 
-conf = configuration_data()
-conf.set_quoted('PACKAGE_NAME', 'gnome-builder')
-conf.set_quoted('PACKAGE_VERSION', meson.project_version())
-conf.set_quoted('PACKAGE_STRING', 'gnome-builder-' + meson.project_version())
-conf.set_quoted('PACKAGE_DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
-conf.set_quoted('PACKAGE_DOCDIR', join_paths(get_option('prefix'), get_option('datadir'), 'doc/gnome-builder'))
-conf.set_quoted('PACKAGE_LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
-conf.set_quoted('PACKAGE_LOCALE_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'locale'))
-conf.set_quoted('PACKAGE_LIBEXECDIR', join_paths(get_option('prefix'), get_option('libexecdir')))
+config_h = configuration_data()
+config_h.set_quoted('PACKAGE_NAME', 'gnome-builder')
+config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
+config_h.set_quoted('PACKAGE_STRING', 'gnome-builder-' + meson.project_version())
+config_h.set_quoted('PACKAGE_DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
+config_h.set_quoted('PACKAGE_DOCDIR', join_paths(get_option('prefix'), get_option('datadir'), 'doc/gnome-builder'))
+config_h.set_quoted('PACKAGE_LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
+config_h.set_quoted('PACKAGE_LOCALE_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'locale'))
+config_h.set_quoted('PACKAGE_LIBEXECDIR', join_paths(get_option('prefix'), get_option('libexecdir')))
 
-conf.set('GETTEXT_PACKAGE', 'PACKAGE_NAME')
-conf.set('LOCALEDIR', 'PACKAGE_LOCALE_DIR')
+config_h.set('GETTEXT_PACKAGE', 'PACKAGE_NAME')
+config_h.set('LOCALEDIR', 'PACKAGE_LOCALE_DIR')
 
-conf.set10('ENABLE_NLS', true) # Always enabled
+config_h.set10('ENABLE_NLS', true) # Always enabled
 
 # We should probably avoid using these
-conf.set_quoted('SRCDIR', meson.source_root())
-conf.set_quoted('BUILDDIR', meson.build_root())
+config_h.set_quoted('SRCDIR', meson.source_root())
+config_h.set_quoted('BUILDDIR', meson.build_root())
 
 add_global_arguments([
   '-DHAVE_CONFIG_H',
@@ -165,11 +165,6 @@ add_project_link_arguments(
   language: 'c'
 )
 
-configure_file(
-         output: 'config.h',
-  configuration: conf
-)
-
 # Check if we can use version scripts for ABI exports
 ld_supports_version_script = cc.links('''
   int main (void) { return 0; }
@@ -224,6 +219,8 @@ if get_option('with_flatpak') or get_option('with_git')
     error('libgit2 was not compiled with SSH support')
   endif
 endif
+
+configure_file(output: 'config.h', configuration: config_h)
 
 gnome = import('gnome')
 i18n = import('i18n')
