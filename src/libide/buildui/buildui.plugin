@@ -8,5 +8,3 @@ Depends=editor
 Hidden=true
 Builtin=true
 Embedded=ide_build_tool_register_types
-X-Tool-Name=build
-X-Tool-Description=Build a project

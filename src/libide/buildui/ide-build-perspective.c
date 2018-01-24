@@ -211,10 +211,12 @@ duplicate_configuration (GSimpleAction *action,
 
   if (self->configuration != NULL)
     {
-      g_autoptr(IdeConfiguration) copy = NULL;
+      IdeContext *context;
+      IdeConfigurationManager *config_manager;
 
-      copy = ide_configuration_duplicate (self->configuration);
-      ide_configuration_manager_add (self->configuration_manager, copy);
+      context = ide_widget_get_context (GTK_WIDGET (self));
+      config_manager = ide_context_get_configuration_manager (context);
+      ide_configuration_manager_duplicate (config_manager, self->configuration);
     }
 }
 
@@ -236,7 +238,7 @@ delete_configuration (GSimpleAction *action,
        * self->configuration will change during this call.
        */
       config = g_object_ref (self->configuration);
-      ide_configuration_manager_remove (self->configuration_manager, config);
+      ide_configuration_manager_delete (self->configuration_manager, config);
 
       /*
        * Switch to the first configuration in the list. The configuration

@@ -23,6 +23,7 @@
 struct _IdeBuildconfigConfiguration
 {
   IdeConfiguration   parent_instance;
+
   gchar            **prebuild;
   gchar            **postbuild;
 };
@@ -113,7 +114,7 @@ ide_buildconfig_configuration_class_init (IdeBuildconfigConfigurationClass *klas
     g_param_spec_boxed ("postbuild", NULL, NULL,
                         G_TYPE_STRV,
                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 

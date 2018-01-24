@@ -56,7 +56,6 @@ typedef struct
 
   guint           dirty : 1;
   guint           debug : 1;
-  guint           is_snapshot : 1;
 
   /*
    * These are used to determine if we can make progress building
@@ -69,7 +68,7 @@ typedef struct
   IdeBuildLocality locality : 3;
 } IdeConfigurationPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeConfiguration, ide_configuration, IDE_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeConfiguration, ide_configuration, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -124,20 +123,6 @@ _value_new (GType type)
   g_value_init (value, type);
 
   return value;
-}
-
-static GValue *
-_value_copy (const GValue *value)
-{
-  GValue *dst;
-
-  g_assert (value != NULL);
-
-  dst = g_slice_new0 (GValue);
-  g_value_init (dst, G_VALUE_TYPE (value));
-  g_value_copy (value, dst);
-
-  return dst;
 }
 
 static void
@@ -383,6 +368,10 @@ ide_configuration_get_property (GObject    *object,
 
     case PROP_DEVICE:
       g_value_set_object (value, ide_configuration_get_device (self));
+      break;
+
+    case PROP_DEVICE_ID:
+      g_value_set_string (value, ide_configuration_get_device_id (self));
       break;
 
     case PROP_DIRTY:
@@ -710,25 +699,6 @@ ide_configuration_init (IdeConfiguration *self)
                            G_CONNECT_SWAPPED);
 }
 
-IdeConfiguration *
-ide_configuration_new (IdeContext  *context,
-                       const gchar *id,
-                       const gchar *device_id,
-                       const gchar *runtime_id)
-{
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-  g_return_val_if_fail (id != NULL, NULL);
-  g_return_val_if_fail (device_id != NULL, NULL);
-  g_return_val_if_fail (runtime_id != NULL, NULL);
-
-  return g_object_new (IDE_TYPE_CONFIGURATION,
-                       "context", context,
-                       "device-id", device_id,
-                       "id", id,
-                       "runtime-id", runtime_id,
-                       NULL);
-}
-
 const gchar *
 ide_configuration_get_device_id (IdeConfiguration *self)
 {
@@ -747,6 +717,9 @@ ide_configuration_set_device_id (IdeConfiguration *self,
 
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
   g_return_if_fail (device_id != NULL);
+
+  if (device_id == NULL)
+    device_id = "local";
 
   if (g_strcmp0 (device_id, priv->device_id) != 0)
     {
@@ -819,11 +792,13 @@ ide_configuration_set_app_id (IdeConfiguration *self,
   IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
-  g_return_if_fail (app_id != NULL);
 
-  g_free (priv->app_id);
-
-  priv->app_id = g_strdup (app_id);
+  if (priv->app_id != app_id)
+    {
+      g_free (priv->app_id);
+      priv->app_id = g_strdup (app_id);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_APP_ID]);
+    }
 }
 
 const gchar *
@@ -843,7 +818,9 @@ ide_configuration_set_runtime_id (IdeConfiguration *self,
   IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
-  g_return_if_fail (runtime_id != NULL);
+
+  if (runtime_id == NULL)
+    runtime_id = "host";
 
   if (g_strcmp0 (runtime_id, priv->runtime_id) != 0)
     {
@@ -1074,37 +1051,6 @@ ide_configuration_get_dirty (IdeConfiguration *self)
   return priv->dirty;
 }
 
-static gboolean
-propagate_dirty_bit (gpointer user_data)
-{
-  g_autofree gpointer *data = user_data;
-  g_autoptr(IdeContext) context = NULL;
-  g_autofree gchar *id = NULL;
-  IdeConfigurationManager *config_manager;
-  IdeConfiguration *config;
-  IdeConfigurationPrivate *config_priv;
-  guint sequence;
-
-  g_assert (data != NULL);
-  g_assert (IDE_IS_CONTEXT (data[0]));
-
-  context = data[0];
-  id = data[1];
-  sequence = GPOINTER_TO_UINT (data[2]);
-
-  config_manager = ide_context_get_configuration_manager (context);
-  config = ide_configuration_manager_get_configuration (config_manager, id);
-  config_priv = ide_configuration_get_instance_private (config);
-
-  if (config != NULL)
-    {
-      if (sequence == config_priv->sequence)
-        ide_configuration_set_dirty (config, FALSE);
-    }
-
-  return G_SOURCE_REMOVE;
-}
-
 void
 ide_configuration_set_dirty (IdeConfiguration *self,
                              gboolean          dirty)
@@ -1133,21 +1079,6 @@ ide_configuration_set_dirty (IdeConfiguration *self,
       priv->sequence++;
       IDE_TRACE_MSG ("configuration set dirty with sequence %u", priv->sequence);
       ide_configuration_emit_changed (self);
-    }
-  else if (priv->is_snapshot)
-    {
-      gpointer *data;
-
-      /*
-       * If we are marking this not-dirty, and it is a snapshot (which means it
-       * was copied for a build process), then we want to propagate the dirty
-       * bit back to the primary configuration.
-       */
-      data = g_new0 (gpointer, 3);
-      data[0] = g_object_ref (ide_object_get_context (IDE_OBJECT (self)));
-      data[1] = g_strdup (priv->id);
-      data[2] = GUINT_TO_POINTER (priv->sequence);
-      g_timeout_add (0, propagate_dirty_bit, data);
     }
 
   IDE_EXIT;
@@ -1262,83 +1193,6 @@ ide_configuration_set_post_install_commands (IdeConfiguration    *self,
       priv->post_install_commands = g_strdupv ((gchar **)post_install_commands);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_POST_INSTALL_COMMANDS]);
     }
-}
-
-/**
- * ide_configuration_snapshot:
- *
- * Makes a snapshot of the configuration that can be used by build processes
- * to build the project without synchronizing with other threads.
- *
- * Returns: (transfer full): A newly allocated #IdeConfiguration.
- */
-IdeConfiguration *
-ide_configuration_snapshot (IdeConfiguration *self)
-{
-  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
-  IdeConfigurationPrivate *copy_priv;
-  IdeConfiguration *copy;
-  IdeContext *context;
-  const gchar *key;
-  const GValue *value;
-  GHashTableIter iter;
-
-  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  copy = g_object_new (IDE_TYPE_CONFIGURATION,
-                       "config-opts", priv->config_opts,
-                       "context", context,
-                       "device-id", priv->device_id,
-                       "display-name", priv->display_name,
-                       "id", priv->id,
-                       "parallelism", priv->parallelism,
-                       "prefix", priv->prefix,
-                       "runtime-id", priv->runtime_id,
-                       NULL);
-
-  copy_priv = ide_configuration_get_instance_private (copy);
-  copy_priv->environment = ide_environment_copy (priv->environment);
-
-  g_hash_table_iter_init (&iter, priv->internal);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
-    g_hash_table_insert (copy_priv->internal, g_strdup (key), _value_copy (value));
-
-  copy_priv->dirty = priv->dirty;
-  copy_priv->is_snapshot = TRUE;
-  copy_priv->sequence = priv->sequence;
-
-  return copy;
-}
-
-/**
- * ide_configuration_duplicate:
- * @self: An #IdeConfiguration
- *
- * Copies the configuration into a new configuration.
- *
- * Returns: (transfer full): An #IdeConfiguration.
- */
-IdeConfiguration *
-ide_configuration_duplicate (IdeConfiguration *self)
-{
-  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
-  IdeConfigurationPrivate *copy_priv;
-  static gint next_counter = 2;
-  IdeConfiguration *copy;
-
-  copy = ide_configuration_snapshot (self);
-  copy_priv = ide_configuration_get_instance_private (copy);
-
-  g_free (copy_priv->id);
-  g_free (copy_priv->display_name);
-
-  copy_priv->id = g_strdup_printf ("%s %d", priv->id, next_counter++);
-  copy_priv->display_name = g_strdup_printf ("%s Copy", priv->display_name);
-  copy_priv->is_snapshot = FALSE;
-
-  return copy;
 }
 
 /**

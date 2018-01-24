@@ -12,8 +12,6 @@ buildui_private_sources = [
   'ide-build-plugin.c',
   'ide-build-stage-row.c',
   'ide-build-stage-row.h',
-  'ide-build-tool.c',
-  'ide-build-tool.h',
   'ide-build-workbench-addin.c',
   'ide-build-workbench-addin.h',
   'ide-environment-editor-row.c',

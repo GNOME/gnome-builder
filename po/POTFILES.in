@@ -30,6 +30,7 @@ src/libide/application/ide-application-shortcuts.c
 src/libide/buffers/ide-buffer.c
 src/libide/buffers/ide-buffer-manager.c
 src/libide/buffers/ide-unsaved-files.c
+src/libide/buildconfig/ide-buildconfig-configuration-provider.c
 src/libide/buildsystem/ide-build-manager.c
 src/libide/buildsystem/ide-build-pipeline.c
 src/libide/buildsystem/ide-build-stage-transfer.c

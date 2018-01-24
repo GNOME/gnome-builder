@@ -25,19 +25,14 @@
 #include "gbp-flatpak-configuration.h"
 #include "gbp-flatpak-configuration-provider.h"
 
-#define WRITEBACK_TIMEOUT_SECS 2
 #define DISCOVERY_MAX_DEPTH 3
 
 struct _GbpFlatpakConfigurationProvider
 {
-  IdeObject                parent_instance;
-
-  IdeConfigurationManager *manager;
-  GPtrArray               *configurations;
-  GPtrArray               *manifest_monitors;
-
-  guint                    writeback_handler;
-  guint                    change_count;
+  IdeObject  parent_instance;
+  GMutex     mutex;
+  GPtrArray *configs;
+  GPtrArray *manifest_monitors;
 };
 
 static void configuration_provider_iface_init (IdeConfigurationProviderInterface *iface);
@@ -64,13 +59,11 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  self->change_count = 0;
+  g_mutex_lock (&self->mutex);
 
-  if (self->configurations == NULL)
-    IDE_EXIT;
-
-  for (guint i = 0; i < self->configurations->len; i++)
+  for (guint i = 0; i < self->configs->len; i++)
     {
+      GbpFlatpakConfiguration *configuration = g_ptr_array_index (self->configs, i);
       g_autoptr(GFileInputStream) file_stream = NULL;
       g_autoptr(GDataInputStream) data_stream = NULL;
       g_autoptr(GRegex) runtime_regex = NULL;
@@ -108,24 +101,19 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       guint opts_per_line = 0;
       guint nested_curly_braces;
 
-      GbpFlatpakConfiguration *configuration = (GbpFlatpakConfiguration *)g_ptr_array_index (self->configurations, i);
-
-      manifest = gbp_flatpak_configuration_get_manifest (configuration);
-      if (manifest == NULL)
+      if (!(manifest = gbp_flatpak_configuration_get_manifest (configuration)))
         continue;
 
-      primary_module = gbp_flatpak_configuration_get_primary_module (configuration);
-      if (primary_module == NULL)
+      if (!(primary_module = gbp_flatpak_configuration_get_primary_module (configuration)))
         {
           g_warning ("Flatpak manifest configuration has no primary module set");
           continue;
         }
 
-      file_stream = g_file_read (manifest, NULL, &error);
-      if (file_stream == NULL)
+      if (!(file_stream = g_file_read (manifest, NULL, &error)))
         {
           g_task_return_error (task, g_steal_pointer (&error));
-          IDE_EXIT;
+          IDE_GOTO (unlock);
         }
 
       data_stream = g_data_input_stream_new (G_INPUT_STREAM (file_stream));
@@ -138,6 +126,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       primary_module_regex = g_regex_new (primary_module_regex_str, 0, 0, NULL);
 
       new_runtime_id = ide_configuration_get_runtime_id (IDE_CONFIGURATION (configuration));
+
       if (g_str_has_prefix (new_runtime_id, "flatpak:"))
         {
           new_runtime_parts = g_strsplit (new_runtime_id + 8, "/", 3);
@@ -173,13 +162,14 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
       nested_curly_braces = 0;
       for (;;)
         {
-          gchar *line;
+          g_autofree gchar *line = NULL;
 
           line = g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &error);
+
           if (error != NULL)
             {
               g_task_return_error (task, g_steal_pointer (&error));
-              IDE_EXIT;
+              IDE_GOTO (unlock);
             }
 
           if (line == NULL)
@@ -276,7 +266,6 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                     }
 
                   /* Discard the line because it will be replaced with new info */
-                  g_free (line);
                   continue;
                 }
               else
@@ -284,7 +273,6 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                   if (nested_curly_braces > 0)
                     {
                       nested_curly_braces--;
-                      g_free (line);
                       continue;
                     }
                   else
@@ -439,7 +427,6 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                               opts_per_line = (opts_per_line > 0) ? opts_per_line : 1;
                             }
 
-                          g_free (line);
                           continue;
                         }
                     }
@@ -447,7 +434,6 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                     {
                       in_config_opts_array = TRUE;
                       config_opt_indent = g_strsplit (line, "\"", 0)[0];
-                      g_free (line);
                       continue;
                     }
 
@@ -456,7 +442,7 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                   if (error != NULL)
                     {
                       g_task_return_error (task, g_steal_pointer (&error));
-                      IDE_EXIT;
+                      IDE_GOTO (unlock);
                     }
                   if (g_str_has_prefix (next_line, primary_module_right_curly_brace))
                     right_curly_brace_line = next_line;
@@ -511,7 +497,6 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                     }
 
                   /* Discard the line that was just replaced with the new config-opts array */
-                  g_free (line);
 
                   /* If we're on the last line of the module, add the curly brace now */
                   if (right_curly_brace_line != NULL)
@@ -555,9 +540,14 @@ gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                                     &error))
         {
           g_task_return_error (task, g_steal_pointer (&error));
-          IDE_EXIT;
+          IDE_GOTO (unlock);
         }
     }
+
+  g_task_return_boolean (task, TRUE);
+
+unlock:
+  g_mutex_unlock (&self->mutex);
 
   IDE_EXIT;
 }
@@ -577,11 +567,9 @@ gbp_flatpak_configuration_provider_save_async (IdeConfigurationProvider *provide
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
-
-  if (self->change_count == 0)
-    g_task_return_boolean (task, TRUE);
-  else
-    g_task_run_in_thread (task, gbp_flatpak_configuration_provider_save_worker);
+  g_task_set_source_tag (task, gbp_flatpak_configuration_provider_save_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_run_in_thread (task, gbp_flatpak_configuration_provider_save_worker);
 
   IDE_EXIT;
 }
@@ -597,49 +585,6 @@ gbp_flatpak_configuration_provider_save_finish (IdeConfigurationProvider  *provi
   g_return_val_if_fail (G_IS_TASK (result), FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
-}
-
-static gboolean
-gbp_flatpak_configuration_provider_do_writeback (gpointer data)
-{
-  GbpFlatpakConfigurationProvider *self = data;
-
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
-
-  self->writeback_handler = 0;
-
-  gbp_flatpak_configuration_provider_save_async (IDE_CONFIGURATION_PROVIDER (self), NULL, NULL, NULL);
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-gbp_flatpak_configuration_provider_queue_writeback (GbpFlatpakConfigurationProvider *self)
-{
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
-
-  IDE_ENTRY;
-
-  if (self->writeback_handler != 0)
-    g_source_remove (self->writeback_handler);
-
-  self->writeback_handler = g_timeout_add_seconds (WRITEBACK_TIMEOUT_SECS,
-                                                   gbp_flatpak_configuration_provider_do_writeback,
-                                                   self);
-
-  IDE_EXIT;
-}
-
-static void
-gbp_flatpak_configuration_provider_config_changed (GbpFlatpakConfigurationProvider *self,
-                                                   IdeConfiguration                *configuration)
-{
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-
-  self->change_count++;
-
-  gbp_flatpak_configuration_provider_queue_writeback (self);
 }
 
 static gboolean
@@ -694,12 +639,12 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
                                                      GFileMonitorEvent                event,
                                                      GFileMonitor                    *file_monitor)
 {
-  GbpFlatpakConfiguration *relevant_config = NULL;
+  g_autoptr(GbpFlatpakConfiguration) relevant_config = NULL;
   IdeContext *context;
-  GFile *new_config_file;
   g_autofree gchar *filename = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *id = NULL;
+  GFile *new_config_file;
 
   IDE_ENTRY;
 
@@ -707,19 +652,21 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_FILE_MONITOR (file_monitor));
 
-  context = ide_object_get_context (IDE_OBJECT (self->manager));
+  context = ide_object_get_context (IDE_OBJECT (self));
 
-  if (self->configurations != NULL)
+  g_mutex_lock (&self->mutex);
+
+  if (self->configs != NULL)
     {
-      for (guint i = 0; i < self->configurations->len; i++)
+      for (guint i = 0; i < self->configs->len; i++)
         {
-          GbpFlatpakConfiguration *configuration = g_ptr_array_index (self->configurations, i);
+          GbpFlatpakConfiguration *configuration = g_ptr_array_index (self->configs, i);
           GFile *config_manifest;
           config_manifest = gbp_flatpak_configuration_get_manifest (configuration);
           if (g_file_equal (file, config_manifest) ||
               (event == G_FILE_MONITOR_EVENT_RENAMED && g_file_equal (other_file, config_manifest)))
             {
-              relevant_config = configuration;
+              relevant_config = g_object_ref (configuration);
               break;
             }
         }
@@ -728,22 +675,23 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
   if (relevant_config == NULL &&
       event != G_FILE_MONITOR_EVENT_CREATED &&
       event != G_FILE_MONITOR_EVENT_MOVED_IN)
-    IDE_EXIT;
+    IDE_GOTO (unlock);
 
   new_config_file = file;
   switch (event)
     {
     case G_FILE_MONITOR_EVENT_DELETED:
     case G_FILE_MONITOR_EVENT_MOVED_OUT:
-      ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
-      g_ptr_array_remove_fast (self->configurations, relevant_config);
+      ide_configuration_provider_emit_removed (IDE_CONFIGURATION_PROVIDER (self),
+                                               IDE_CONFIGURATION (relevant_config));
+      g_ptr_array_remove_fast (self->configs, relevant_config);
       break;
 
     case G_FILE_MONITOR_EVENT_RENAMED:
       filename = g_file_get_basename (other_file);
       /* The "rename" is just a temporary file created by an editor */
       if (g_str_has_suffix (filename, "~"))
-        IDE_EXIT;
+        IDE_GOTO (unlock);
       else
         g_clear_pointer (&filename, g_free);
       new_config_file = other_file;
@@ -757,7 +705,7 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
       filename = g_file_get_basename (new_config_file);
       id = get_manifest_id (path, filename);
 
-      if (!contains_id (self->configurations, id))
+      if (!contains_id (self->configs, id))
         {
           g_autoptr(GbpFlatpakConfiguration) new_config = NULL;
 
@@ -766,12 +714,6 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
             {
               g_autoptr(GFileMonitor) manifest_monitor = NULL;
               g_autoptr(GError) local_error = NULL;
-
-              g_signal_connect_object (new_config,
-                                       "changed",
-                                       G_CALLBACK (gbp_flatpak_configuration_provider_config_changed),
-                                       self,
-                                       G_CONNECT_SWAPPED);
 
               manifest_monitor = g_file_monitor_file (new_config_file, G_FILE_MONITOR_WATCH_MOVES, NULL, &local_error);
               if (manifest_monitor == NULL)
@@ -788,13 +730,14 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
 
               if (relevant_config != NULL)
                 {
-                  ide_configuration_manager_remove (self->manager, IDE_CONFIGURATION (relevant_config));
-                  g_ptr_array_remove_fast (self->configurations, relevant_config);
+                  ide_configuration_provider_emit_removed (IDE_CONFIGURATION_PROVIDER (self),
+                                                           IDE_CONFIGURATION (relevant_config));
+                  g_ptr_array_remove_fast (self->configs, relevant_config);
                 }
               g_ptr_array_remove_fast (self->manifest_monitors, file_monitor);
-              ide_configuration_manager_add (self->manager, IDE_CONFIGURATION (new_config));
-              ide_configuration_manager_set_current (self->manager, IDE_CONFIGURATION (new_config));
-              g_ptr_array_add (self->configurations, g_steal_pointer (&new_config));
+              g_ptr_array_add (self->configs, g_object_ref (new_config));
+              ide_configuration_provider_emit_added (IDE_CONFIGURATION_PROVIDER (self),
+                                                     IDE_CONFIGURATION (new_config));
             }
         }
       break;
@@ -807,6 +750,9 @@ gbp_flatpak_configuration_provider_manifest_changed (GbpFlatpakConfigurationProv
     default:
       break;
     }
+
+unlock:
+  g_mutex_unlock (&self->mutex);
 
   IDE_EXIT;
 }
@@ -821,8 +767,8 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   g_autoptr(GPtrArray) child_dirs = NULL;
-  GFileInfo *file_info = NULL;
   IdeContext *context;
+  gpointer infoptr;
 
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
   g_assert (G_IS_FILE (directory));
@@ -830,19 +776,21 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (depth < DISCOVERY_MAX_DEPTH);
 
-  context = ide_object_get_context (IDE_OBJECT (self->manager));
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
 
   enumerator = g_file_enumerate_children (directory,
                                           G_FILE_ATTRIBUTE_STANDARD_NAME,
                                           G_FILE_QUERY_INFO_NONE,
                                           cancellable,
                                           error);
-  if (!enumerator)
+
+  if (enumerator == NULL)
     return;
 
-  while ((file_info = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
+  while ((infoptr = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
-      GFileType file_type;
+      g_autoptr(GFileInfo) file_info = infoptr;
       g_autofree gchar *filename = NULL;
       g_autofree gchar *path = NULL;
       g_autofree gchar *id = NULL;
@@ -851,6 +799,7 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
       g_autoptr(GbpFlatpakConfiguration) possible_config = NULL;
       g_autoptr(GFileMonitor) manifest_monitor = NULL;
       g_autoptr(GError) local_error = NULL;
+      GFileType file_type;
 
       file_type = g_file_info_get_file_type (file_info);
       filename = g_strdup (g_file_info_get_name (file_info));
@@ -892,12 +841,6 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
       if (!gbp_flatpak_configuration_load_from_file (possible_config, file))
         continue;
 
-      g_signal_connect_object (possible_config,
-                               "changed",
-                               G_CALLBACK (gbp_flatpak_configuration_provider_config_changed),
-                               self,
-                               G_CONNECT_SWAPPED);
-
       manifest_monitor = g_file_monitor_file (file, G_FILE_MONITOR_WATCH_MOVES, NULL, &local_error);
       if (manifest_monitor == NULL)
         g_warning ("Error encountered trying to monitor flatpak manifest %s: %s", path, local_error->message);
@@ -926,27 +869,28 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
           gbp_flatpak_configuration_provider_find_manifests (self, file, configs, depth + 1, cancellable, error);
         }
     }
-
-  return;
 }
 
 static void
 gbp_flatpak_configuration_provider_load_manifests (GbpFlatpakConfigurationProvider  *self,
-                                                   GPtrArray                        *configurations,
+                                                   GPtrArray                        *configs,
                                                    GCancellable                     *cancellable,
                                                    GError                          **error)
 {
   g_autoptr(GPtrArray) ar = NULL;
   g_autoptr(GFileInfo) file_info = NULL;
+  g_autoptr(GFile) project_dir = NULL;
   IdeContext *context;
   GFile *project_file;
-  g_autoptr(GFile) project_dir = NULL;
 
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (configs != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  context = ide_object_get_context (IDE_OBJECT (self->manager));
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
   project_file = ide_context_get_project_file (context);
-
   g_assert (G_IS_FILE (project_file));
 
   file_info = g_file_query_info (project_file,
@@ -954,7 +898,6 @@ gbp_flatpak_configuration_provider_load_manifests (GbpFlatpakConfigurationProvid
                                  G_FILE_QUERY_INFO_NONE,
                                  cancellable,
                                  error);
-
   if (file_info == NULL)
     return;
 
@@ -963,18 +906,11 @@ gbp_flatpak_configuration_provider_load_manifests (GbpFlatpakConfigurationProvid
   else
     project_dir = g_file_get_parent (project_file);
 
-  gbp_flatpak_configuration_provider_find_manifests (self,
-                                                     project_dir,
-                                                     configurations,
-                                                     0,
-                                                     cancellable,
-                                                     error);
-  if (error != NULL)
-    return;
+  g_mutex_lock (&self->mutex);
+  gbp_flatpak_configuration_provider_find_manifests (self, project_dir, configs, 0, cancellable, error);
+  g_mutex_unlock (&self->mutex);
 
-  IDE_TRACE_MSG ("Found %u flatpak manifests", configurations->len);
-
-  return;
+  g_debug ("Found %u flatpak manifests", configs->len);
 }
 
 static void
@@ -984,147 +920,145 @@ gbp_flatpak_configuration_provider_load_worker (GTask        *task,
                                                 GCancellable *cancellable)
 {
   GbpFlatpakConfigurationProvider *self = source_object;
-  g_autoptr(GPtrArray) ret = NULL;
-  g_autoptr(GFile) file = NULL;
-  g_autofree gchar *path = NULL;
-  GError *error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_TASK (task));
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (self->manager));
-
-  ret = g_ptr_array_new_with_free_func (g_object_unref);
-
-  /* Load flatpak manifests in the repo */
-  gbp_flatpak_configuration_provider_load_manifests (self, ret, cancellable, &error);
-  if (error != NULL)
-    {
-      g_warning ("%s", error->message);
-      g_clear_error (&error);
-    }
-
-  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
-
-  IDE_EXIT;
-}
-
-static void
-gbp_flatpak_configuration_provider_load_cb (GObject      *object,
-                                            GAsyncResult *result,
-                                            gpointer      user_data)
-{
-  GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)object;
   g_autoptr(GError) error = NULL;
-  GPtrArray *ret;
-  guint i;
-  g_autoptr(GTask) task = user_data;
+  GPtrArray *configs = task_data;
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
-  g_assert (G_IS_TASK (result));
   g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (configs != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (!(ret = g_task_propagate_pointer (G_TASK (result), &error)))
-    {
-      g_warning ("%s", error->message);
-      g_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
+  gbp_flatpak_configuration_provider_load_manifests (self, configs, cancellable, &error);
 
-  for (i = 0; i < ret->len; i++)
-    {
-      IdeConfiguration *configuration = g_ptr_array_index (ret, i);
-
-      ide_configuration_manager_add (self->manager, configuration);
-      ide_configuration_manager_set_current (self->manager, configuration);
-    }
-
-  self->configurations = ret;
-
-  g_task_return_boolean (task, TRUE);
+  if (error != NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
 
 static void
 gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provider,
-                                               IdeConfigurationManager  *manager,
                                                GCancellable             *cancellable,
                                                GAsyncReadyCallback       callback,
                                                gpointer                  user_data)
 {
-  GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
-  g_autoptr(GTask) parent_task = NULL;
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (provider));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  dzl_set_weak_pointer (&self->manager, manager);
-
-  self->manifest_monitors = g_ptr_array_new_with_free_func (g_object_unref);
-
-  parent_task = g_task_new (self, cancellable, callback, user_data);
-  task = g_task_new (self, cancellable, gbp_flatpak_configuration_provider_load_cb, g_steal_pointer (&parent_task));
+  task = g_task_new (provider, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_flatpak_configuration_provider_load_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_task_data (task,
+                        g_ptr_array_new_with_free_func (g_object_unref),
+                        (GDestroyNotify)g_ptr_array_unref);
   g_task_run_in_thread (task, gbp_flatpak_configuration_provider_load_worker);
 
   IDE_EXIT;
 }
 
-gboolean
+static gboolean
 gbp_flatpak_configuration_provider_load_finish (IdeConfigurationProvider  *provider,
                                                 GAsyncResult              *result,
                                                 GError                   **error)
 {
   GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
 
-  g_return_val_if_fail (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_TASK (result));
+  g_assert (g_task_is_valid (G_TASK (result), provider));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  if (g_task_propagate_boolean (G_TASK (result), error))
+    {
+      GPtrArray *configs = g_task_get_task_data (G_TASK (result));
+
+      g_assert (configs != NULL);
+
+      for (guint i = 0; i < configs->len; i++)
+        {
+          IdeConfiguration *config = g_ptr_array_index (configs, i);
+          g_assert (IDE_IS_CONFIGURATION (config));
+          ide_configuration_provider_emit_added (provider, config);
+        }
+
+      if (configs->len > 0)
+        {
+          IdeConfiguration *config = g_ptr_array_index (configs, 0);
+          IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+          IdeConfigurationManager *manager = ide_context_get_configuration_manager (context);
+
+          g_assert (IDE_IS_CONFIGURATION (config));
+
+          /* TODO: We should have a GSetting for this, in config-manager */
+          ide_configuration_manager_set_current (manager, config);
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
-gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider,
-                                           IdeConfigurationManager  *manager)
+gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider)
 {
   GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
 
-  dzl_clear_source (&self->writeback_handler);
+  g_mutex_lock (&self->mutex);
 
-  if (self->configurations != NULL)
+  if (self->configs != NULL)
     {
-      for (guint i = 0; i < self->configurations->len; i++)
+      for (guint i = self->configs->len; i > 0; i--)
         {
-          IdeConfiguration *configuration = g_ptr_array_index (self->configurations, i);
+          g_autoptr(IdeConfiguration) config = NULL;
 
-          ide_configuration_manager_remove (manager, configuration);
+          config = g_object_ref (g_ptr_array_index (self->configs, i - 1));
+          g_ptr_array_remove_index (self->configs, i);
+
+          g_mutex_unlock (&self->mutex);
+          ide_configuration_provider_emit_removed (provider, config);
+          g_mutex_lock (&self->mutex);
         }
     }
 
-  g_clear_pointer (&self->configurations, g_ptr_array_unref);
-
+  g_clear_pointer (&self->configs, g_ptr_array_unref);
   g_clear_pointer (&self->manifest_monitors, g_ptr_array_unref);
 
-  dzl_clear_weak_pointer (&self->manager);
+  g_mutex_unlock (&self->mutex);
 
   IDE_EXIT;
 }
 
 static void
+gbp_flatpak_configuration_provider_finalize (GObject *object)
+{
+  GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)object;
+
+  g_mutex_clear (&self->mutex);
+
+  G_OBJECT_CLASS (gbp_flatpak_configuration_provider_parent_class)->finalize (object);
+}
+
+static void
 gbp_flatpak_configuration_provider_class_init (GbpFlatpakConfigurationProviderClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gbp_flatpak_configuration_provider_finalize;
+
   /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
   filename_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*\\.json$",
                                 G_REGEX_OPTIMIZE, 0, NULL);
@@ -1133,6 +1067,10 @@ gbp_flatpak_configuration_provider_class_init (GbpFlatpakConfigurationProviderCl
 static void
 gbp_flatpak_configuration_provider_init (GbpFlatpakConfigurationProvider *self)
 {
+  g_mutex_init (&self->mutex);
+
+  self->manifest_monitors = g_ptr_array_new_with_free_func (g_object_unref);
+  self->configs = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
 static void

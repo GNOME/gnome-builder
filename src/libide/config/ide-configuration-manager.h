@@ -39,12 +39,12 @@ void              ide_configuration_manager_set_current       (IdeConfigurationM
 IDE_AVAILABLE_IN_ALL
 IdeConfiguration *ide_configuration_manager_get_configuration (IdeConfigurationManager  *self,
                                                                const gchar              *id);
-IDE_AVAILABLE_IN_ALL
-void              ide_configuration_manager_add               (IdeConfigurationManager  *self,
-                                                               IdeConfiguration         *configuration);
-IDE_AVAILABLE_IN_ALL
-void              ide_configuration_manager_remove            (IdeConfigurationManager  *self,
-                                                               IdeConfiguration         *configuration);
+IDE_AVAILABLE_IN_3_28
+void              ide_configuration_manager_duplicate         (IdeConfigurationManager  *self,
+                                                               IdeConfiguration         *config);
+IDE_AVAILABLE_IN_3_28
+void              ide_configuration_manager_delete            (IdeConfigurationManager  *self,
+                                                               IdeConfiguration         *config);
 IDE_AVAILABLE_IN_ALL
 void              ide_configuration_manager_save_async        (IdeConfigurationManager  *self,
                                                                GCancellable             *cancellable,

@@ -74,11 +74,6 @@ struct _IdeConfigurationClass
   gpointer _reserved16;
 };
 
-IDE_AVAILABLE_IN_ALL
-IdeConfiguration     *ide_configuration_new                       (IdeContext            *context,
-                                                                   const gchar           *id,
-                                                                   const gchar           *device_id,
-                                                                   const gchar           *runtime_id);
 IDE_AVAILABLE_IN_3_28
 const gchar          *ide_configuration_get_append_path           (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_3_28
@@ -172,8 +167,6 @@ IdeEnvironment       *ide_configuration_get_environment           (IdeConfigurat
 IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_environment           (IdeConfiguration      *self,
                                                                    IdeEnvironment        *environment);
-IDE_AVAILABLE_IN_ALL
-IdeConfiguration     *ide_configuration_duplicate                 (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL
 IdeConfiguration     *ide_configuration_snapshot                  (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL

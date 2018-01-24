@@ -28,9 +28,6 @@ void
 ide_build_tool_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_TOOL,
-                                              IDE_TYPE_BUILD_TOOL);
-  peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               IDE_TYPE_BUILD_WORKBENCH_ADDIN);
 }
