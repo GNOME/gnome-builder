@@ -64,7 +64,7 @@ ide_clang_code_indexer_index_file_worker (GTask        *task,
   code = clang_parseTranslationUnit2 (index,
                                       path,
                                       (const char * const *)br->build_flags,
-                                      g_strv_length (br->build_flags),
+                                      br->build_flags ? g_strv_length (br->build_flags) : 0,
                                       NULL,
                                       0,
                                       (CXTranslationUnit_DetailedPreprocessingRecord |
