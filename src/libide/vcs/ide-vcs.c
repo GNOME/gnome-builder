@@ -137,6 +137,9 @@ ide_vcs_default_init (IdeVcsInterface *iface)
  *
  * For convenience, this function will return %TRUE if @file is %NULL.
  *
+ * If @self is %NULL, only static checks against known ignored files
+ * will be performed (such as .git, .flatpak-builder, etc).
+ *
  * Returns: %TRUE if the path should be ignored.
  *
  * Thread safety: This function is safe to call from a thread as
@@ -152,7 +155,7 @@ ide_vcs_is_ignored (IdeVcs  *self,
 {
   gboolean ret = FALSE;
 
-  g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
+  g_return_val_if_fail (!self || IDE_IS_VCS (self), FALSE);
   g_return_val_if_fail (!file || G_IS_FILE (file), FALSE);
 
   if (file == NULL)
@@ -180,8 +183,11 @@ ide_vcs_is_ignored (IdeVcs  *self,
 
   G_UNLOCK (ignored);
 
-  if (!ret && IDE_VCS_GET_IFACE (self)->is_ignored)
-    ret = IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+  if (self != NULL)
+    {
+      if (!ret && IDE_VCS_GET_IFACE (self)->is_ignored)
+        ret = IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+    }
 
   return ret;
 }
@@ -200,6 +206,8 @@ ide_vcs_is_ignored (IdeVcs  *self,
  *
  * For convenience, this function will return %TRUE if @path is %NULL.
  *
+ * If @self is %NULL, only registered ignore patterns will be checked.
+ *
  * Returns: %TRUE if the path should be ignored.
  *
  * Thread safety: This function is safe to call from a thread as
@@ -215,7 +223,7 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
 {
   gboolean ret = FALSE;
 
-  g_return_val_if_fail (IDE_IS_VCS (self), FALSE);
+  g_return_val_if_fail (!self || IDE_IS_VCS (self), FALSE);
 
   if (path == NULL)
     return TRUE;
@@ -242,16 +250,19 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
 
   G_UNLOCK (ignored);
 
-  if (!ret && IDE_VCS_GET_IFACE (self)->is_ignored)
+  if (self != NULL)
     {
-      g_autoptr(GFile) file = NULL;
+      if (!ret && IDE_VCS_GET_IFACE (self)->is_ignored)
+        {
+          g_autoptr(GFile) file = NULL;
 
-      if (g_path_is_absolute (path))
-        file = g_file_new_for_path (path);
-      else
-        file = g_file_get_child (ide_vcs_get_working_directory (self), path);
+          if (g_path_is_absolute (path))
+            file = g_file_new_for_path (path);
+          else
+            file = g_file_get_child (ide_vcs_get_working_directory (self), path);
 
-      ret = IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+          ret = IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+        }
     }
 
   return ret;
