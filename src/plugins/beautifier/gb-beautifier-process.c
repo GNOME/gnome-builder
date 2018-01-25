@@ -166,16 +166,8 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
   g_assert (!dzl_str_empty0 (src_path));
   g_assert (!dzl_str_empty0 (state->lang_id));
 
-  tmp_workdir = g_build_filename (self->tmp_dir, "clang-XXXXXX.txt", NULL);
-  if (g_mkdtemp (tmp_workdir) == NULL)
-    {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_FAILED,
-                   "Failed to create temporary directory for the Beautifier plugin");
-
-      return NULL;
-    }
+  if (NULL == (tmp_workdir = g_dir_make_tmp ("gnome-builder-beautify-XXXXXX", error)))
+    return NULL;
 
   state->tmp_workdir_file = g_file_new_for_path (tmp_workdir);
   tmp_config_path = g_build_filename (tmp_workdir,

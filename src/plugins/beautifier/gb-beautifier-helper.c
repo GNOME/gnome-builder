@@ -28,6 +28,14 @@
 #include "gb-beautifier-helper.h"
 #include "gb-beautifier-private.h"
 
+typedef struct
+{
+  GbBeautifierEditorAddin *self;
+  GFile                   *file;
+  GFileIOStream           *stream;
+  gsize                    len;
+} SaveTmpState;
+
 static gboolean
 check_path_is_in_tmp_dir (const gchar *path,
                           const gchar *tmp_dir)
@@ -42,16 +50,20 @@ void
 gb_beautifier_helper_remove_temp_for_path (GbBeautifierEditorAddin *self,
                                            const gchar             *path)
 {
+  const gchar *tmp_dir;
+
   g_assert (path != NULL);
 
-  if (check_path_is_in_tmp_dir (path, self->tmp_dir))
+  tmp_dir = g_get_tmp_dir ();
+
+  if (check_path_is_in_tmp_dir (path, tmp_dir))
     g_unlink (path);
   else
     {
       ide_object_warning (self,
                           /* translators: %s and %s are replaced with the temporary dir and the file path */
                           _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
-                          self->tmp_dir,
+                          tmp_dir,
                           path);
       return;
     }
@@ -61,20 +73,22 @@ void
 gb_beautifier_helper_remove_temp_for_file (GbBeautifierEditorAddin *self,
                                            GFile                   *file)
 {
+  const gchar *tmp_dir;
   g_autofree gchar *path = NULL;
 
   g_assert (G_IS_FILE (file));
 
+  tmp_dir = g_get_tmp_dir ();
   path = g_file_get_path (file);
 
-  if (check_path_is_in_tmp_dir (path, self->tmp_dir))
+  if (check_path_is_in_tmp_dir (path, tmp_dir))
     g_file_delete (file, NULL, NULL);
   else
     {
       ide_object_warning (self,
                           /* translators: %s and %s are replaced with the temporary dir and the file path */
                           _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
-                          self->tmp_dir,
+                          tmp_dir,
                           path);
       return;
     }
@@ -86,23 +100,25 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *se
 {
   GbBeautifierCommandArg *arg;
   g_autofree gchar *config_path = NULL;
+  const gchar *tmp_dir;
 
   g_assert (config_entry != NULL);
 
+  tmp_dir = g_get_tmp_dir ();
   if (config_entry->is_config_file_temp)
     {
 
       if (G_IS_FILE (config_entry->config_file))
         {
           config_path = g_file_get_path (config_entry->config_file);
-          if (check_path_is_in_tmp_dir (config_path, self->tmp_dir))
+          if (check_path_is_in_tmp_dir (config_path, tmp_dir))
             g_file_delete (config_entry->config_file, NULL, NULL);
           else
             {
               ide_object_warning (self,
                                   /* translators: %s and %s are replaced with the temporary dir and the file path */
                                   _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
-                                  self->tmp_dir,
+                                  tmp_dir,
                                   config_path);
               return;
             }
@@ -116,13 +132,13 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *se
           arg = &g_array_index (config_entry->command_args, GbBeautifierCommandArg, i);
           if (arg->is_temp && !dzl_str_empty0 (arg->str))
             {
-              if (check_path_is_in_tmp_dir (arg->str, self->tmp_dir))
+              if (check_path_is_in_tmp_dir (arg->str, tmp_dir))
                 g_unlink (arg->str);
               else
                 {
                   ide_object_warning (self,
                                       _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
-                                      self->tmp_dir,
+                                      tmp_dir,
                                       arg->str);
                   return;
                 }
@@ -132,25 +148,42 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *se
 }
 
 static void
+save_tmp_state_free (gpointer data)
+{
+  SaveTmpState *state = (SaveTmpState *)data;
+
+  g_assert (data != NULL);
+
+  if (!g_io_stream_is_closed ((GIOStream *)state->stream))
+    g_io_stream_close ((GIOStream *)state->stream, NULL, NULL);
+
+  g_clear_object (&state->file);
+
+  g_slice_free (SaveTmpState, state);
+}
+
+static void
 gb_beautifier_helper_create_tmp_file_cb (GObject      *object,
                                          GAsyncResult *result,
                                          gpointer      user_data)
 {
-  g_autoptr (GFile) file = (GFile *)object;
+  GOutputStream *output_stream = (GOutputStream *)object;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = (GTask *)user_data;
+  SaveTmpState *state;
+  gsize count;
 
-  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_OUTPUT_STREAM (output_stream));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
-  if (!g_file_replace_contents_finish (file, result, NULL, &error))
+  state = (SaveTmpState *)g_task_get_task_data (task);
+  if (!g_output_stream_write_all_finish (output_stream, result, &count, &error))
     g_task_return_error (task, g_steal_pointer (&error));
-
-  if (g_task_return_error_if_cancelled (task))
-    g_file_delete (file, NULL, NULL);
+  else if (g_task_return_error_if_cancelled (task))
+    g_file_delete (state->file, NULL, NULL);
   else
-    g_task_return_pointer (task, g_steal_pointer (&file), g_object_unref);
+    g_task_return_pointer (task, g_steal_pointer (&state->file), g_object_unref);
 }
 
 void
@@ -160,10 +193,12 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
                                             GCancellable            *cancellable,
                                             gpointer                 user_data)
 {
+  SaveTmpState *state;
+  GFile *file = NULL;
+  GFileIOStream *stream;
+  GOutputStream *output_stream;
   g_autoptr(GTask) task = NULL;
-  g_autofree gchar *tmp_path = NULL;
-  GFile *file;
-  gint fd;
+  g_autoptr(GError) error = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!dzl_str_empty0 (text));
@@ -172,29 +207,28 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gb_beautifier_helper_create_tmp_file_async);
+  state = g_slice_new0 (SaveTmpState);
+  state->self = self;
+  g_task_set_task_data (task, state, save_tmp_state_free);
 
-  tmp_path = g_build_filename (self->tmp_dir, "XXXXXX.txt", NULL);
-  if (-1 == (fd = g_mkstemp (tmp_path)))
+  if (NULL == (file = g_file_new_tmp ("gnome-builder-beautifier-XXXXXX.txt", &stream, &error)))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to create temporary file for the Beautifier plugin");
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  g_close (fd, NULL);
-  file = g_file_new_for_path (tmp_path);
+  state->file = file;
+  state->stream = stream;
+  state->len = strlen (text);
 
-  g_file_replace_contents_async (file,
-                                 text,
-                                 strlen (text),
-                                 NULL,
-                                 FALSE,
-                                 G_FILE_CREATE_REPLACE_DESTINATION,
-                                 NULL,
-                                 gb_beautifier_helper_create_tmp_file_cb,
-                                 g_steal_pointer (&task));
+  output_stream = g_io_stream_get_output_stream ((GIOStream *)stream);
+  g_output_stream_write_all_async (output_stream,
+                                   text,
+                                   state->len,
+                                   G_PRIORITY_DEFAULT,
+                                   cancellable,
+                                   gb_beautifier_helper_create_tmp_file_cb,
+                                   g_steal_pointer (&task));
 }
 
 GFile *
