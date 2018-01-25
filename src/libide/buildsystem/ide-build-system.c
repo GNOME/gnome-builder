@@ -681,9 +681,6 @@ ide_build_system_get_build_flags_for_dir_async (IdeBuildSystem      *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_system_get_build_flags_for_dir_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task,
-                        g_ptr_array_new_with_free_func (g_object_unref),
-                        (GDestroyNotify)g_ptr_array_unref);
 
   ide_g_file_get_children_async (directory,
                                  G_FILE_ATTRIBUTE_STANDARD_NAME","
