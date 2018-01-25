@@ -41,7 +41,6 @@ src/libide/buildui/ide-build-log-panel.ui
 src/libide/buildui/ide-build-panel.c
 src/libide/buildui/ide-build-panel.ui
 src/libide/buildui/ide-build-perspective.c
-src/libide/buildui/ide-build-tool.c
 src/libide/buildui/ide-build-workbench-addin.c
 src/libide/buildui/ide-environment-editor.c
 src/libide/buildui/ide-environment-editor-row.ui
