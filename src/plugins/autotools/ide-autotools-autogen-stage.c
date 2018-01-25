@@ -98,6 +98,11 @@ ide_autotools_autogen_stage_execute_async (IdeBuildStage       *stage,
       ide_subprocess_launcher_push_argv (launcher, "-fiv");
     }
 
+#ifdef __FreeBSD__
+  /* FreeBSD has autoreconf in /usr/local/bin */
+  ide_subprocess_launcher_append_path (launcher, "/usr/local/bin");
+#endif
+
   subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
   if (subprocess == NULL)
