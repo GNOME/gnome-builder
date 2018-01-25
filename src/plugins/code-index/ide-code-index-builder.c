@@ -594,6 +594,13 @@ get_changes_worker (GTask        *task,
       g_queue_foreach (&files, (GFunc)file_info_free, NULL);
     }
 
+  /* In case we were cancelled */
+  if (gcd->directories.length > 0)
+    {
+      g_queue_foreach (&gcd->directories, (GFunc)g_object_unref, NULL);
+      g_queue_clear (&gcd->directories);
+    }
+
   g_assert (gcd->directories.length == 0);
   g_assert (IDE_IS_VCS (gcd->vcs));
   g_assert (G_IS_FILE (gcd->data_dir));
