@@ -31,7 +31,7 @@
 
 struct _IdeBuildStageTransfer
 {
-  IdeBuildStage  parent_instnace;
+  IdeBuildStage  parent_instance;
   IdeTransfer   *transfer;
   guint          disable_when_metered : 1;
 };
