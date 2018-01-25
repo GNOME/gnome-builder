@@ -26,29 +26,34 @@ namespace Ide
 	{
 		Ide.ValaIndex _index;
 
-		public ValaIndex index {
-			get { return this._index; }
-		}
-
 		public unowned string get_name () {
 			return typeof (Ide.ValaService).name ();
 		}
 
-		public void start () {
-			this._index = new Ide.ValaIndex (this.get_context ());
+		public ValaIndex index {
+			get {
+				if (this._index == null) {
+					this._index = new Ide.ValaIndex (this.get_context ());
 
-			Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
-				Ide.Vcs vcs = this.get_context ().get_vcs ();
-				var files = new ArrayList<GLib.File> ();
+					Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
+						Ide.Vcs vcs = this.get_context ().get_vcs ();
+						var files = new ArrayList<GLib.File> ();
 
-				load_directory (vcs.get_working_directory (), null, files);
+						load_directory (vcs.get_working_directory (), null, files);
 
-				if (files.size > 0) {
-					this._index.add_files.begin (files, null, () => {
-						debug ("Vala files registered");
+						if (files.size > 0) {
+							this._index.add_files.begin (files, null, () => {
+								debug ("Vala files registered");
+							});
+						}
 					});
 				}
-			});
+
+				return this._index;
+			}
+		}
+
+		public void start () {
 		}
 
 		public void stop () {
