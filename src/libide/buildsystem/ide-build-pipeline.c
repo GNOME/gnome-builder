@@ -3036,8 +3036,10 @@ static gboolean
 can_remove_builddir (IdeBuildPipeline *self)
 {
   g_autofree gchar *name = NULL;
+  g_autofree gchar *_build = NULL;
   g_autoptr(GFile) builddir = NULL;
   g_autoptr(GFile) cache = NULL;
+  IdeContext *context;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
 
@@ -3055,8 +3057,12 @@ can_remove_builddir (IdeBuildPipeline *self)
   if (g_file_has_prefix (builddir, cache))
     return TRUE;
 
-  name = g_path_get_basename (self->builddir);
-  if (dzl_str_equal0 (name, "_build"))
+  /* If this is _build in the project tree, we will allow that too
+   * since we create those sometimes.
+   */
+  context = ide_object_get_context (IDE_OBJECT (self));
+  _build = ide_context_build_filename (context, "_build", NULL);
+  if (g_str_equal (_build, self->builddir))
     return TRUE;
 
   g_debug ("%s is not in a cache directory, will not delete it", self->builddir);
