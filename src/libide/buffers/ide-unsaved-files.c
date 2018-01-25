@@ -815,38 +815,6 @@ ide_unsaved_files_get_sequence (IdeUnsavedFiles *self)
 }
 
 static void
-ide_unsaved_files_set_context (IdeObject  *object,
-                               IdeContext *context)
-{
-  IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_UNSAVED_FILES (self));
-  g_assert (!context || IDE_IS_CONTEXT (context));
-
-  IDE_OBJECT_CLASS (ide_unsaved_files_parent_class)->set_context (object, context);
-
-  /*
-   * Setup a reaper to cleanup old files in case that we left some around
-   * after a previous crash.
-   */
-  if (context != NULL)
-    {
-      g_autoptr(DzlDirectoryReaper) reaper = NULL;
-      g_autoptr(GFile) buffersdir = NULL;
-      g_autofree gchar *path = NULL;
-
-      reaper = dzl_directory_reaper_new ();
-      path = get_buffers_dir (context);
-      buffersdir = g_file_new_for_path (path);
-      dzl_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_HOUR);
-
-      /* Now cleanup the old files */
-      dzl_directory_reaper_execute_async (reaper, NULL, NULL, NULL);
-    }
-}
-
-static void
 ide_unsaved_files_finalize (GObject *object)
 {
   IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
@@ -863,11 +831,8 @@ static void
 ide_unsaved_files_class_init (IdeUnsavedFilesClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeObjectClass *ide_object_class = IDE_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_unsaved_files_finalize;
-
-  ide_object_class->set_context = ide_unsaved_files_set_context;
 }
 
 static void
@@ -898,4 +863,69 @@ ide_unsaved_files_clear (IdeUnsavedFiles *self)
     }
 
   g_mutex_unlock (&self->mutex);
+}
+
+static void
+ide_unsaved_files_reap_cb (GObject      *object,
+                           GAsyncResult *result,
+                           gpointer      user_data)
+{
+  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+void
+ide_unsaved_files_reap_async (IdeUnsavedFiles     *self,
+                              GCancellable        *cancellable,
+                              GAsyncReadyCallback  callback,
+                              gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr(GFile) buffersdir = NULL;
+  g_autofree gchar *path = NULL;
+  IdeContext *context;
+
+  g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_unsaved_files_reap_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_return_if_fail (context != NULL);
+
+  reaper = dzl_directory_reaper_new ();
+  path = get_buffers_dir (context);
+  buffersdir = g_file_new_for_path (path);
+
+  dzl_directory_reaper_add_directory (reaper, buffersdir, G_TIME_SPAN_DAY);
+
+  /* Now cleanup the old files */
+  dzl_directory_reaper_execute_async (reaper,
+                                      cancellable,
+                                      ide_unsaved_files_reap_cb,
+                                      g_steal_pointer (&task));
+}
+
+gboolean
+ide_unsaved_files_reap_finish (IdeUnsavedFiles  *self,
+                               GAsyncResult     *result,
+                               GError          **error)
+{
+  g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }

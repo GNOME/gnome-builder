@@ -65,5 +65,14 @@ void            ide_unsaved_files_clear             (IdeUnsavedFiles      *self)
 IDE_AVAILABLE_IN_ALL
 gboolean        ide_unsaved_files_contains          (IdeUnsavedFiles      *self,
                                                      GFile                *file);
+IDE_AVAILABLE_IN_3_28
+void            ide_unsaved_files_reap_async        (IdeUnsavedFiles      *self,
+                                                     GCancellable         *cancellable,
+                                                     GAsyncReadyCallback   callback,
+                                                     gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+gboolean        ide_unsaved_files_reap_finish       (IdeUnsavedFiles      *self,
+                                                     GAsyncResult         *result,
+                                                     GError              **error);
 
 G_END_DECLS
