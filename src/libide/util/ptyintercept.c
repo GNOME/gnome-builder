@@ -112,8 +112,6 @@ pty_intercept_create_slave (pty_fd_t master_fd)
     return PTY_FD_INVALID;
 #endif
 
-  name[sizeof name - 1] = '\0';
-
   ret =  open (name, O_RDWR | O_CLOEXEC | O_NONBLOCK);
 
   if (ret == PTY_FD_INVALID && errno == EINVAL)
