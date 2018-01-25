@@ -96,7 +96,7 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_build_stage_transfer_execute_async);
-  g_task_set_priority (task, TRUE);
+  g_task_set_priority (task, G_PRIORITY_LOW);
 
   g_signal_connect (task,
                     "notify::completed",
