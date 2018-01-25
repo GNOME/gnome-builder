@@ -150,6 +150,7 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
     return;
 
   enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                           G_FILE_QUERY_INFO_NONE,
@@ -166,6 +167,9 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
       g_autoptr(GFile) file = NULL;
       GFileType file_type;
       const gchar *name;
+
+      if (g_file_info_get_is_symlink (file_info))
+        continue;
 
       name = g_file_info_get_display_name (file_info);
       file = g_file_get_child (directory, name);
