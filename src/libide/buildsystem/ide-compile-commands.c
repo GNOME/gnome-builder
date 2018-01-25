@@ -594,6 +594,45 @@ ide_compile_commands_filter_vala (IdeCompileCommands   *self,
   *argv = (gchar **)g_ptr_array_free (ar, FALSE);
 }
 
+static const CompileInfo *
+find_with_alternates (IdeCompileCommands *self,
+                      GFile              *file)
+{
+  const CompileInfo *info;
+
+  g_assert (IDE_IS_COMPILE_COMMANDS (self));
+  g_assert (G_IS_FILE (file));
+
+  if (self->info_by_file == NULL)
+    return NULL;
+
+  if (NULL != (info = g_hash_table_lookup (self->info_by_file, file)))
+    return info;
+
+  {
+    g_autofree gchar *path = g_file_get_path (file);
+    gsize len = strlen (path);
+
+    /* Try .c/etc instead of .h */
+    if (g_str_has_suffix (path, ".h"))
+      {
+        static const gchar *tries[] = { "c", "cc", "cpp" };
+        path[--len] = 0;
+
+        for (guint i = 0; i < G_N_ELEMENTS (tries); i++)
+          {
+            g_autofree gchar *other_path = g_strconcat (path, tries[i], NULL);
+            g_autoptr(GFile) other = g_file_new_for_path (other_path);
+
+            if (NULL != (info = g_hash_table_lookup (self->info_by_file, other)))
+              return info;
+          }
+      }
+  }
+
+  return NULL;
+}
+
 /**
  * ide_compile_commands_lookup:
  * @self: An #IdeCompileCommands
@@ -629,8 +668,7 @@ ide_compile_commands_lookup (IdeCompileCommands   *self,
   base = g_file_get_basename (file);
   dot = strrchr (base, '.');
 
-  if (self->info_by_file != NULL &&
-      NULL != (info = g_hash_table_lookup (self->info_by_file, file)))
+  if (NULL != (info = find_with_alternates (self, file)))
     {
       g_auto(GStrv) argv = NULL;
       gint argc = 0;
