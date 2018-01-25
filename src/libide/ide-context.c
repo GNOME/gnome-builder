@@ -2623,17 +2623,22 @@ ide_context_cache_file (IdeContext  *self,
 {
   g_autoptr(GPtrArray) ar = NULL;
   g_autofree gchar *path = NULL;
+  const gchar *project_id;
   const gchar *part = first_part;
   va_list args;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+  g_return_val_if_fail (IDE_IS_PROJECT (self->project), NULL);
   g_return_val_if_fail (first_part != NULL, NULL);
+
+  project_id = ide_project_get_id (self->project);
+  g_return_val_if_fail (project_id != NULL, NULL);
 
   ar = g_ptr_array_new ();
   g_ptr_array_add (ar, (gchar *)g_get_user_cache_dir ());
   g_ptr_array_add (ar, (gchar *)ide_get_program_name ());
   g_ptr_array_add (ar, (gchar *)"projects");
-  g_ptr_array_add (ar, (gchar *)ide_project_get_id (self->project));
+  g_ptr_array_add (ar, (gchar *)project_id);
 
   va_start (args, first_part);
   do
@@ -2675,16 +2680,21 @@ ide_context_cache_filename (IdeContext  *self,
 {
   g_autoptr(GPtrArray) ar = NULL;
   const gchar *part = first_part;
+  const gchar *project_id;
   va_list args;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+  g_return_val_if_fail (IDE_IS_PROJECT (self->project), NULL);
   g_return_val_if_fail (first_part != NULL, NULL);
+
+  project_id = ide_project_get_id (self->project);
+  g_return_val_if_fail (project_id != NULL, NULL);
 
   ar = g_ptr_array_new ();
   g_ptr_array_add (ar, (gchar *)g_get_user_cache_dir ());
   g_ptr_array_add (ar, (gchar *)ide_get_program_name ());
   g_ptr_array_add (ar, (gchar *)"projects");
-  g_ptr_array_add (ar, (gchar *)ide_project_get_id (self->project));
+  g_ptr_array_add (ar, (gchar *)project_id);
 
   va_start (args, first_part);
   do
