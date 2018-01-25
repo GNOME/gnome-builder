@@ -352,43 +352,51 @@ strip_components_into (GFile   *dest,
                        int      level,
                        GError **error)
 {
-  g_autoptr(GFileEnumerator) dir_enum = NULL;
-  g_autoptr(GFileInfo) child_info = NULL;
-  GError *temp_error = NULL;
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GError) local_error = NULL;
+  gpointer infoptr;
 
-  dir_enum = g_file_enumerate_children (src, "standard::name,standard::type",
-                                        G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
-                                        NULL, error);
-  if (!dir_enum)
+  g_assert (G_IS_FILE (src));
+  g_assert (G_IS_FILE (dest));
+
+  enumerator = g_file_enumerate_children (src,
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                          NULL,
+                                          error);
+  if (enumerator == NULL)
     return FALSE;
 
-  while ((child_info = g_file_enumerator_next_file (dir_enum, NULL, &temp_error)))
+  while ((infoptr = g_file_enumerator_next_file (enumerator, NULL, &local_error)))
     {
+      g_autoptr(GFileInfo) info = infoptr;
       g_autoptr(GFile) child = NULL;
       g_autoptr(GFile) dest_child = NULL;
+      GFileType file_type;
 
-      child = g_file_enumerator_get_child (dir_enum, child_info);
+      if (g_file_info_get_is_symlink (info))
+        continue;
 
-      if (g_file_info_get_file_type (child_info) == G_FILE_TYPE_DIRECTORY &&
-          level > 0)
+      child = g_file_enumerator_get_child (enumerator, info);
+      file_type = g_file_info_get_file_type (info);
+
+      if (file_type == G_FILE_TYPE_DIRECTORY && level > 0)
         {
           if (!strip_components_into (dest, child, level - 1, error))
             return FALSE;
-
-          g_clear_object (&child_info);
           continue;
         }
 
-      dest_child = g_file_get_child (dest, g_file_info_get_name (child_info));
+      dest_child = g_file_get_child (dest, g_file_info_get_name (info));
       if (!g_file_move (child, dest_child, G_FILE_COPY_NONE, NULL, NULL, NULL, error))
         return FALSE;
-
-      g_clear_object (&child_info);
     }
 
-  if (temp_error != NULL)
+  if (local_error != NULL)
     {
-      g_propagate_error (error, temp_error);
+      g_propagate_error (error, g_steal_pointer (&local_error));
       return FALSE;
     }
 
