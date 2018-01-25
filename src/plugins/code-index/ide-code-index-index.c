@@ -534,9 +534,6 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
       return NULL;
     }
 
-  g_assert (dir_index != NULL);
-  g_assert (dir_index->symbol_names == symbol_names);
-
   g_snprintf (num, sizeof(num), "%u", file_id);
 
   filename = dzl_fuzzy_index_get_metadata_string (symbol_names, num);
