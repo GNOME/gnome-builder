@@ -613,8 +613,20 @@ find_with_alternates (IdeCompileCommands *self,
     g_autofree gchar *path = g_file_get_path (file);
     gsize len = strlen (path);
 
-    /* Try .c/etc instead of .h */
-    if (g_str_has_suffix (path, ".h"))
+    if (g_str_has_suffix (path, "-private.h"))
+      {
+        g_autofree gchar *other_path = NULL;
+        g_autoptr(GFile) other = NULL;
+
+        path[len - strlen ("-private.h")] = 0;
+
+        other_path = g_strconcat (path, ".c", NULL);
+        other = g_file_new_for_path (other_path);
+
+        if (NULL != (info = g_hash_table_lookup (self->info_by_file, other)))
+          return info;
+      }
+    else if (g_str_has_suffix (path, ".h"))
       {
         static const gchar *tries[] = { "c", "cc", "cpp" };
         path[--len] = 0;
