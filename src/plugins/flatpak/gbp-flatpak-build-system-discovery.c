@@ -50,6 +50,7 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
   g_assert (depth < DISCOVERY_MAX_DEPTH);
 
   enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                           G_FILE_QUERY_INFO_NONE,
@@ -64,6 +65,9 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
       g_autofree gchar *path = NULL;
       GFileType file_type;
       const gchar *name;
+
+      if (g_file_info_get_is_symlink (info))
+        continue;
 
       if (NULL == (name = g_file_info_get_name (info)))
         continue;

@@ -780,6 +780,8 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
   g_assert (IDE_IS_CONTEXT (context));
 
   enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE","
                                           G_FILE_ATTRIBUTE_STANDARD_NAME,
                                           G_FILE_QUERY_INFO_NONE,
                                           cancellable,
@@ -800,6 +802,9 @@ gbp_flatpak_configuration_provider_find_manifests (GbpFlatpakConfigurationProvid
       g_autoptr(GFileMonitor) manifest_monitor = NULL;
       g_autoptr(GError) local_error = NULL;
       GFileType file_type;
+
+      if (g_file_info_get_is_symlink (file_info))
+        continue;
 
       file_type = g_file_info_get_file_type (file_info);
       filename = g_strdup (g_file_info_get_name (file_info));
