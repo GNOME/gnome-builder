@@ -425,6 +425,64 @@ gbp_meson_build_system_get_priority (IdeBuildSystem *build_system)
 }
 
 static void
+gbp_meson_build_system_get_build_flags_for_files_cb (GObject      *object,
+                                                     GAsyncResult *result,
+                                                     gpointer      user_data)
+{
+  GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)object;
+  g_autoptr(IdeCompileCommands) compile_commands = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) directory = NULL;
+  g_autoptr(GHashTable) ret = NULL;
+  g_auto(GStrv) system_includes = NULL;
+  IdeConfigurationManager *config_manager;
+  IdeConfiguration *config;
+  IdeContext *context;
+  IdeRuntime *runtime;
+  GPtrArray *files;
+
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!(compile_commands = gbp_meson_build_system_load_commands_finish (self, result, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  files = g_task_get_task_data (task);
+  g_assert (files != NULL);
+
+  /* Get non-standard system includes */
+  context = ide_object_get_context (IDE_OBJECT (self));
+  config_manager = ide_context_get_configuration_manager (context);
+  config = ide_configuration_manager_get_current (config_manager);
+  if (NULL != (runtime = ide_configuration_get_runtime (config)))
+    system_includes = ide_runtime_get_system_include_dirs (runtime);
+
+  ret = g_hash_table_new_full ((GHashFunc)ide_file_hash,
+                               (GEqualFunc)ide_file_equal,
+                               g_object_unref,
+                               (GDestroyNotify)g_strfreev);
+
+  for (guint i = 0; i < files->len; i++)
+    {
+      IdeFile *file = g_ptr_array_index (files, i);
+      GFile *gfile = ide_file_get_file (file);
+      g_auto(GStrv) flags = NULL;
+
+      flags = ide_compile_commands_lookup (compile_commands, gfile,
+                                           (const gchar * const *)system_includes,
+                                           NULL, NULL);
+      g_hash_table_insert (ret, g_object_ref (file), g_steal_pointer (&flags));
+    }
+
+  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_hash_table_unref);
+}
+
+static void
 gbp_meson_build_system_get_build_flags_cb (GObject      *object,
                                            GAsyncResult *result,
                                            gpointer      user_data)
@@ -513,17 +571,56 @@ gbp_meson_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
                                                GAsyncResult    *result,
                                                GError         **error)
 {
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+gbp_meson_build_system_get_build_flags_for_files_async (IdeBuildSystem      *build_system,
+                                                        GPtrArray           *files,
+                                                        GCancellable        *cancellable,
+                                                        GAsyncReadyCallback  callback,
+                                                        gpointer             user_data)
+{
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
-  gchar **ret;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GPtrArray) copy = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (files != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_meson_build_system_get_build_flags_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  /* Make our own copy of the array */
+  copy = g_ptr_array_new_with_free_func (g_object_unref);
+  for (guint i = 0; i < files->len; i++)
+    g_ptr_array_add (copy, g_object_ref (g_ptr_array_index (files, i)));
+  g_task_set_task_data (task, g_steal_pointer (&copy), (GDestroyNotify)g_ptr_array_unref);
+
+  gbp_meson_build_system_load_commands_async (self,
+                                              cancellable,
+                                              gbp_meson_build_system_get_build_flags_for_files_cb,
+                                              g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static GHashTable *
+gbp_meson_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *build_system,
+                                                         GAsyncResult    *result,
+                                                         GError         **error)
+{
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (build_system));
   g_assert (G_IS_TASK (result));
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
-
-  IDE_RETURN (ret);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static gchar *
@@ -563,6 +660,8 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_priority = gbp_meson_build_system_get_priority;
   iface->get_build_flags_async = gbp_meson_build_system_get_build_flags_async;
   iface->get_build_flags_finish = gbp_meson_build_system_get_build_flags_finish;
+  iface->get_build_flags_for_files_async = gbp_meson_build_system_get_build_flags_for_files_async;
+  iface->get_build_flags_for_files_finish = gbp_meson_build_system_get_build_flags_for_files_finish;
   iface->get_builddir = gbp_meson_build_system_get_builddir;
 }
 
