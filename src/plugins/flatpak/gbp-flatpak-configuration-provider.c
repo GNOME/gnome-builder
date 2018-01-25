@@ -965,6 +965,39 @@ gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provide
   IDE_EXIT;
 }
 
+static IdeConfiguration *
+guess_best_config (GPtrArray *ar)
+{
+  g_assert (ar != NULL);
+  g_assert (ar->len > 0);
+
+  for (guint i = 0; i < ar->len; i++)
+    {
+      GbpFlatpakConfiguration *config = g_ptr_array_index (ar, i);
+      g_autofree gchar *path = gbp_flatpak_configuration_get_manifest_path (config);
+
+      if (strstr (path, "-unstable.json") != NULL)
+        return IDE_CONFIGURATION (config);
+    }
+
+  for (guint i = 0; i < ar->len; i++)
+    {
+      GbpFlatpakConfiguration *config = g_ptr_array_index (ar, i);
+      g_autofree gchar *path = gbp_flatpak_configuration_get_manifest_path (config);
+      g_autofree gchar *base = g_path_get_basename (path);
+      const gchar *app_id = ide_configuration_get_app_id (IDE_CONFIGURATION (config));
+      g_autofree gchar *app_id_json = g_strdup_printf ("%s.json", app_id);
+
+      /* If appid.json is the same as the filename, that is the
+       * best match (after unstable) we can have. Use it.
+       */
+      if (dzl_str_equal0 (app_id_json, base))
+        return IDE_CONFIGURATION (config);
+    }
+
+  return g_ptr_array_index (ar, 0);
+}
+
 static gboolean
 gbp_flatpak_configuration_provider_load_finish (IdeConfigurationProvider  *provider,
                                                 GAsyncResult              *result,
@@ -992,7 +1025,7 @@ gbp_flatpak_configuration_provider_load_finish (IdeConfigurationProvider  *provi
 
       if (configs->len > 0)
         {
-          IdeConfiguration *config = g_ptr_array_index (configs, 0);
+          IdeConfiguration *config = guess_best_config (configs);
           IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
           IdeConfigurationManager *manager = ide_context_get_configuration_manager (context);
 

@@ -37,8 +37,8 @@ void                     gbp_flatpak_configuration_set_branch         (GbpFlatpa
 const gchar             *gbp_flatpak_configuration_get_command        (GbpFlatpakConfiguration *self);
 void                     gbp_flatpak_configuration_set_command        (GbpFlatpakConfiguration *self,
                                                                        const gchar             *command);
-const gchar * const      *gbp_flatpak_configuration_get_build_args    (GbpFlatpakConfiguration *self);
-void                      gbp_flatpak_configuration_set_build_args    (GbpFlatpakConfiguration *self,
+const gchar * const     *gbp_flatpak_configuration_get_build_args    (GbpFlatpakConfiguration *self);
+void                     gbp_flatpak_configuration_set_build_args    (GbpFlatpakConfiguration *self,
                                                                        const gchar *const      *build_args);
 const gchar * const     *gbp_flatpak_configuration_get_finish_args    (GbpFlatpakConfiguration *self);
 void                     gbp_flatpak_configuration_set_finish_args    (GbpFlatpakConfiguration *self,
