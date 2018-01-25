@@ -447,6 +447,7 @@ find_all_files_typed (GFile        *root,
   for (;;)
     {
       g_autoptr(GFileInfo) info = NULL;
+      const gchar *name;
       GFileType file_type;
 
       if (g_cancellable_is_cancelled (cancellable))
@@ -454,6 +455,10 @@ find_all_files_typed (GFile        *root,
 
       if (!(info = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
         break;
+
+      name = g_file_info_get_name (info);
+      if (ide_vcs_path_is_ignored (NULL, name, NULL))
+        continue;
 
       file_type = g_file_info_get_file_type (info);
 
