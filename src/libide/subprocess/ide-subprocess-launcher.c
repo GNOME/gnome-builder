@@ -394,7 +394,12 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
        * that it can get /app/bin too. Since it chains up to us, we wont
        * overwrite PATH in that case (which is what we want).
        */
+#ifdef __FreeBSD__
+      /* FreeBSD puts third-party components in /usr/local/bin */
+      ide_subprocess_launcher_setenv (self, "PATH", "/usr/local/bin:/usr/bin:/bin", FALSE);
+#else
       ide_subprocess_launcher_setenv (self, "PATH", "/usr/bin:/bin", FALSE);
+#endif
       ide_subprocess_launcher_setenv (self, "HOME", g_get_home_dir (), FALSE);
       ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
       ide_subprocess_launcher_setenv (self, "LANG", g_getenv ("LANG"), FALSE);
