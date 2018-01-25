@@ -59,12 +59,14 @@ static GParamSpec *properties [N_PROPS];
 static GRegex *line1;
 static GRegex *line2;
 
+#ifndef __FreeBSD__
 static const gchar *exclude_dirs[] = {
   ".bzr",
   ".flatpak-builder",
   ".git",
   ".svn",
 };
+#endif
 
 static const gchar *exclude_files[] = {
   "*.m4",
@@ -330,6 +332,12 @@ gbp_todo_model_mine_worker (GTask        *task,
       ide_subprocess_launcher_push_argv (launcher, arg);
     }
 
+#ifndef __FreeBSD__
+  /* Exclude directories to reduce how much data can get into our
+   * GBytes of stdout data. FreeBSD does not currently support
+   * this option in their GNU grep version, so we'll just skip it
+   * and their stdout GBytes will be slightly larger (but work).
+   */
   for (guint i = 0; i < G_N_ELEMENTS (exclude_dirs); i++)
     {
       const gchar *exclude_dir = exclude_dirs[i];
@@ -338,6 +346,7 @@ gbp_todo_model_mine_worker (GTask        *task,
       arg = g_strdup_printf ("--exclude-dir=%s", exclude_dir);
       ide_subprocess_launcher_push_argv (launcher, arg);
     }
+#endif
 
   for (guint i = 0; i < G_N_ELEMENTS (keywords); i++)
     {
