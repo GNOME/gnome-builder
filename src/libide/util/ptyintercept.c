@@ -122,15 +122,20 @@ pty_intercept_create_slave (pty_fd_t master_fd)
 
       ret = open (name, O_RDWR | O_CLOEXEC);
       if (ret == PTY_FD_INVALID && errno == EINVAL)
-        ret = open (name, O_RDWR | O_CLOEXEC);
+        ret = open (name, O_RDWR);
 
       if (ret == PTY_FD_INVALID)
         return PTY_FD_INVALID;
 
+      /* Add FD_CLOEXEC if O_CLOEXEC failed */
       flags = fcntl (ret, F_GETFD, 0);
-      flags |= O_NONBLOCK | FD_CLOEXEC;
+      if ((flags & FD_CLOEXEC) == 0)
+        {
+          if (fcntl (ret, F_SETFD, flags | FD_CLOEXEC) < 0)
+            return PTY_FD_INVALID;
+        }
 
-      if (fcntl (ret, F_SETFD, flags) < 0)
+      if (!g_unix_set_fd_nonblocking (ret, TRUE, NULL))
         return PTY_FD_INVALID;
     }
 
