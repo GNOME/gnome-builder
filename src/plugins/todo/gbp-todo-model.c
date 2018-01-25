@@ -314,7 +314,11 @@ gbp_todo_model_mine_worker (GTask        *task,
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
 
+#ifdef __FreeBSD__
+  ide_subprocess_launcher_push_argv (launcher, "bsdgrep");
+#else
   ide_subprocess_launcher_push_argv (launcher, "grep");
+#endif
   ide_subprocess_launcher_push_argv (launcher, "-A");
   ide_subprocess_launcher_push_argv (launcher, "5");
   ide_subprocess_launcher_push_argv (launcher, "-I");
