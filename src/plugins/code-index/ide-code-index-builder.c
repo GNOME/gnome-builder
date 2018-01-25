@@ -413,6 +413,7 @@ filter_ignored (IdeVcs *vcs,
           if (tmp == NULL)
             break;
           iter = tmp;
+          file_info_free (info);
           goto again;
         }
     }
