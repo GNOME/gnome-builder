@@ -433,6 +433,7 @@ find_all_files_typed (GFile        *root,
   g_assert (func != NULL);
 
   enumerator = g_file_enumerate_children (root,
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE","
                                           G_FILE_ATTRIBUTE_TIME_MODIFIED,
@@ -469,7 +470,9 @@ find_all_files_typed (GFile        *root,
           func (g_steal_pointer (&fi), user_data);
         }
 
-      if (recursive && file_type == G_FILE_TYPE_DIRECTORY)
+      if (recursive &&
+          !g_file_info_get_is_symlink (info) &&
+          file_type == G_FILE_TYPE_DIRECTORY)
         {
           g_autoptr(GFile) child = g_file_enumerator_get_child (enumerator, info);
 
