@@ -8,7 +8,7 @@
     "desktop-file-name-prefix": "(Nightly) ",
     "finish-args": [
         /* Require recent flatpak at runtime */
-        "--require-version=0.8.0",
+        "--require-version=0.10.0",
         /* Allow access to developer tools */
         "--allow=devel",
         "--talk-name=org.freedesktop.Flatpak",
