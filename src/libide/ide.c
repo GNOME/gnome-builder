@@ -59,7 +59,8 @@ ide_set_program_name (const gchar *program_name)
       return;
     }
 
-  programName = g_intern_string (program_name);
+  if (program_name != NULL)
+    programName = g_intern_string (program_name);
 }
 
 static void
