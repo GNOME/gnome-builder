@@ -365,10 +365,10 @@ ide_project_rename_file_worker (GTask        *task,
   IdeProject *self = source_object;
   g_autofree gchar *path = NULL;
   g_autoptr(GFile) parent = NULL;
+  g_autoptr(GError) error = NULL;
+  RenameFile *op = task_data;
   IdeContext *context;
   IdeVcs *vcs;
-  RenameFile *op = task_data;
-  g_autoptr(GError) error = NULL;
   GFile *workdir;
 
   g_assert (IDE_IS_PROJECT (self));
@@ -435,16 +435,37 @@ ide_project_rename_buffer_save_cb (GObject      *object,
 {
   IdeBufferManager *bufmgr = (IdeBufferManager *)object;
   g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeFile) file = NULL;
   g_autoptr(GError) error = NULL;
+  IdeContext *context;
+  RenameFile *rf;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   if (!ide_buffer_manager_save_file_finish (bufmgr, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
-  else
-    g_task_run_in_thread (task, ide_project_rename_file_worker);
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  rf = g_task_get_task_data (task);
+  g_assert (rf != NULL);
+  g_assert (G_IS_FILE (rf->orig_file));
+  g_assert (G_IS_FILE (rf->new_file));
+  g_assert (IDE_IS_BUFFER (rf->buffer));
+
+  /*
+   * Change the filename in the buffer so that the user doesn't continue
+   * to edit the file under the old name.
+   */
+  context = ide_object_get_context (IDE_OBJECT (bufmgr));
+  file = ide_file_new (context, rf->new_file);
+  ide_buffer_set_file (rf->buffer, file);
+
+  g_task_run_in_thread (task, ide_project_rename_file_worker);
 }
 
 void
@@ -484,18 +505,24 @@ ide_project_rename_file_async (IdeProject          *self,
    * If the file is open and has any changes, we need to save those
    * changes before we can proceed.
    */
-  if (buffer != NULL && gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+  if (buffer != NULL)
     {
-      g_autoptr(IdeFile) file = ide_file_new (context, orig_file);
+      g_autoptr(IdeFile) from = ide_file_new (context, orig_file);
+      g_autoptr(IdeFile) to = ide_file_new (context, new_file);
 
-      ide_buffer_manager_save_file_async (bufmgr,
-                                          buffer,
-                                          file,
-                                          NULL,
-                                          NULL,
-                                          ide_project_rename_buffer_save_cb,
-                                          g_steal_pointer (&task));
-      return;
+      if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+        {
+          ide_buffer_manager_save_file_async (bufmgr,
+                                              buffer,
+                                              from,
+                                              NULL,
+                                              NULL,
+                                              ide_project_rename_buffer_save_cb,
+                                              g_steal_pointer (&task));
+          return;
+        }
+
+      ide_buffer_set_file (buffer, to);
     }
 
   g_task_run_in_thread (task, ide_project_rename_file_worker);
