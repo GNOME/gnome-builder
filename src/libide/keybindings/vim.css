@@ -1161,6 +1161,14 @@
                  "delete-selection" ()
                  "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
+  bind "Return" { "begin-macro" ()
+                  "movement" (first-char, 0, 1, 0)
+                  "movement" (next-line, 1, 0, 0)
+                  "movement" (next-line, 1, 0, 1)
+                  "copy-clipboard" ()
+                  "delete-selection" ()
+                  "movement" (first-nonspace-char, 0, 1, 0)
+                  "end-macro" () };
 
   bind "<shift>g" { "begin-macro" ()
                     "movement" (nth-line, 1, 0, 1)
