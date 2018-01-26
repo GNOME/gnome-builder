@@ -1138,6 +1138,8 @@ ide_build_pipeline_initable_init (GInitable     *initable,
   if (self->pty == NULL)
     IDE_RETURN (FALSE);
 
+  vte_pty_set_utf8 (self->pty, TRUE, NULL);
+
   master_fd = vte_pty_get_fd (self->pty);
 
   if (!pty_intercept_init (&self->intercept, master_fd, NULL))
