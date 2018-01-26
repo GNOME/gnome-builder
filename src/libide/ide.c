@@ -32,7 +32,7 @@
 #endif
 
 static gboolean     programNameRead;
-static const gchar *programName = "libide";
+static const gchar *programName = "gnome-builder";
 
 #if defined (G_HAS_CONSTRUCTORS)
 # ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
