@@ -163,24 +163,25 @@ pty_intercept_create_master (void)
    */
   if (master_fd == PTY_FD_INVALID && errno == EINVAL)
     {
-      gint new_flags = O_NONBLOCK;
-      gint flags;
-
       master_fd = posix_openpt (O_RDWR | O_NOCTTY | O_CLOEXEC);
 
       if (master_fd == PTY_FD_INVALID && errno == EINVAL)
         {
+          gint flags;
+
           master_fd = posix_openpt (O_RDWR | O_NOCTTY);
-          new_flags |= FD_CLOEXEC;
           if (master_fd == -1)
+            return PTY_FD_INVALID;
+
+          flags = fcntl (master_fd, F_GETFD, 0);
+          if (flags < 0)
+            return PTY_FD_INVALID;
+
+          if (fcntl (master_fd, F_SETFD, flags | FD_CLOEXEC) < 0)
             return PTY_FD_INVALID;
         }
 
-      flags = fcntl (master_fd, F_GETFD, 0);
-      if (flags < 0)
-        return PTY_FD_INVALID;
-
-      if (fcntl (master_fd, F_SETFD, flags | new_flags) < 0)
+      if (!g_unix_set_fd_nonblocking (master_fd, TRUE, NULL))
         return PTY_FD_INVALID;
     }
 #endif
