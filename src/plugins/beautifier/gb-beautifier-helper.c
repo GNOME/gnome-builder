@@ -32,10 +32,18 @@ static gboolean
 check_path_is_in_tmp_dir (const gchar *path,
                           const gchar *tmp_dir)
 {
+  g_autofree gchar *with_slash = NULL;
+
   g_assert (!dzl_str_empty0 (path));
   g_assert (!dzl_str_empty0 (tmp_dir));
 
-  return  g_str_has_prefix (path, tmp_dir);
+  if (dzl_str_equal0 (path, tmp_dir))
+    return TRUE;
+
+  if (!g_str_has_suffix (tmp_dir, G_DIR_SEPARATOR_S))
+    tmp_dir = with_slash = g_strconcat (tmp_dir, G_DIR_SEPARATOR_S, NULL);
+
+  return g_str_has_prefix (path, tmp_dir);
 }
 
 void
@@ -84,17 +92,15 @@ void
 gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *self,
                                                      GbBeautifierConfigEntry *config_entry)
 {
-  GbBeautifierCommandArg *arg;
-  g_autofree gchar *config_path = NULL;
-
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (config_entry != NULL);
 
   if (config_entry->is_config_file_temp)
     {
-
       if (G_IS_FILE (config_entry->config_file))
         {
-          config_path = g_file_get_path (config_entry->config_file);
+          g_autofree gchar *config_path = g_file_get_path (config_entry->config_file);
+
           if (check_path_is_in_tmp_dir (config_path, self->tmp_dir))
             g_file_delete (config_entry->config_file, NULL, NULL);
           else
@@ -113,7 +119,8 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *se
     {
       for (guint i = 0; i < config_entry->command_args->len; i++)
         {
-          arg = &g_array_index (config_entry->command_args, GbBeautifierCommandArg, i);
+          const GbBeautifierCommandArg *arg = &g_array_index (config_entry->command_args, GbBeautifierCommandArg, i);
+
           if (arg->is_temp && !dzl_str_empty0 (arg->str))
             {
               if (check_path_is_in_tmp_dir (arg->str, self->tmp_dir))
@@ -124,7 +131,7 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *se
                                       _("Beautifier plugin: blocked attempt to remove a file outside of the “%s” temporary directory: “%s”"),
                                       self->tmp_dir,
                                       arg->str);
-                  return;
+                  continue;
                 }
             }
         }
@@ -136,7 +143,7 @@ gb_beautifier_helper_create_tmp_file_cb (GObject      *object,
                                          GAsyncResult *result,
                                          gpointer      user_data)
 {
-  g_autoptr (GFile) file = (GFile *)object;
+  GFile *file = (GFile *)object;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = (GTask *)user_data;
 
@@ -145,7 +152,10 @@ gb_beautifier_helper_create_tmp_file_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
   if (g_task_return_error_if_cancelled (task))
     g_file_delete (file, NULL, NULL);
@@ -161,8 +171,8 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
                                             gpointer                 user_data)
 {
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GFile) file = NULL;
   g_autofree gchar *tmp_path = NULL;
-  GFile *file;
   gint fd;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
@@ -202,12 +212,11 @@ gb_beautifier_helper_create_tmp_file_finish (GbBeautifierEditorAddin  *self,
                                              GAsyncResult             *result,
                                              GError                  **error)
 {
-  GTask *task = (GTask *)result;
-
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (g_task_is_valid (result, self));
+  g_assert (G_IS_TASK (result));
+  g_assert (g_task_is_valid (G_TASK (result), self));
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 gchar *
