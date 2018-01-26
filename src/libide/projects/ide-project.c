@@ -23,6 +23,9 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
+#include "buffers/ide-buffer.h"
+#include "buffers/ide-buffer-manager.h"
 #include "files/ide-file.h"
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
@@ -43,8 +46,9 @@ struct _IdeProject
 
 typedef struct
 {
-  GFile *orig_file;
-  GFile *new_file;
+  GFile     *orig_file;
+  GFile     *new_file;
+  IdeBuffer *buffer;
 } RenameFile;
 
 G_DEFINE_TYPE (IdeProject, ide_project, IDE_TYPE_OBJECT)
@@ -315,10 +319,13 @@ rename_file_free (gpointer data)
 {
   RenameFile *op = data;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
+
   if (op != NULL)
     {
       g_clear_object (&op->new_file);
       g_clear_object (&op->orig_file);
+      g_clear_object (&op->buffer);
       g_slice_free (RenameFile, op);
     }
 }
@@ -421,6 +428,25 @@ ide_project_rename_file_worker (GTask        *task,
   g_task_return_boolean (task, TRUE);
 }
 
+static void
+ide_project_rename_buffer_save_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!ide_buffer_manager_save_file_finish (bufmgr, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_run_in_thread (task, ide_project_rename_file_worker);
+}
+
 void
 ide_project_rename_file_async (IdeProject          *self,
                                GFile               *orig_file,
@@ -430,6 +456,9 @@ ide_project_rename_file_async (IdeProject          *self,
                                gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  IdeBufferManager *bufmgr;
+  IdeContext *context;
+  IdeBuffer *buffer;
   RenameFile *op;
 
   g_return_if_fail (IDE_IS_PROJECT (self));
@@ -437,12 +466,38 @@ ide_project_rename_file_async (IdeProject          *self,
   g_return_if_fail (G_IS_FILE (new_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_project_rename_file_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  bufmgr = ide_context_get_buffer_manager (context);
+  buffer = ide_buffer_manager_find_buffer (bufmgr, orig_file);
+
   op = g_slice_new0 (RenameFile);
   op->orig_file = g_object_ref (orig_file);
   op->new_file = g_object_ref (new_file);
-
-  task = g_task_new (self, cancellable, callback, user_data);
+  op->buffer = buffer ? g_object_ref (buffer) : NULL;
   g_task_set_task_data (task, op, rename_file_free);
+
+  /*
+   * If the file is open and has any changes, we need to save those
+   * changes before we can proceed.
+   */
+  if (buffer != NULL && gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
+    {
+      g_autoptr(IdeFile) file = ide_file_new (context, orig_file);
+
+      ide_buffer_manager_save_file_async (bufmgr,
+                                          buffer,
+                                          file,
+                                          NULL,
+                                          NULL,
+                                          ide_project_rename_buffer_save_cb,
+                                          g_steal_pointer (&task));
+      return;
+    }
+
   g_task_run_in_thread (task, ide_project_rename_file_worker);
 }
 
