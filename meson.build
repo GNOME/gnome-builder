@@ -155,9 +155,9 @@ if not get_option('buildtype').startswith('debug')
 
 endif
 
-foreach arg: test_link_args
-  if cc.has_argument(arg)
-    global_link_args += arg
+foreach link_arg: test_link_args
+  if cc.links('int main () { return 0; }', name: link_arg, args: link_arg)
+    global_link_args += link_arg
   endif
 endforeach
 add_project_link_arguments(
