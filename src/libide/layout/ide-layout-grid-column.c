@@ -114,6 +114,22 @@ ide_layout_grid_column_remove (GtkContainer *container,
 }
 
 static void
+ide_layout_grid_column_grab_focus (GtkWidget *widget)
+{
+  IdeLayoutGridColumn *self = (IdeLayoutGridColumn *)widget;
+  IdeLayoutStack *stack;
+
+  g_assert (IDE_IS_LAYOUT_GRID_COLUMN (self));
+
+  stack = ide_layout_grid_column_get_current_stack (self);
+
+  if (stack != NULL)
+    gtk_widget_grab_focus (GTK_WIDGET (stack));
+  else
+    GTK_WIDGET_CLASS (ide_layout_grid_column_parent_class)->grab_focus (widget);
+}
+
+static void
 ide_layout_grid_column_finalize (GObject *object)
 {
 #ifndef G_DISABLE_ASSERT
@@ -175,6 +191,8 @@ ide_layout_grid_column_class_init (IdeLayoutGridColumnClass *klass)
   object_class->finalize = ide_layout_grid_column_finalize;
   object_class->get_property = ide_layout_grid_column_get_property;
   object_class->set_property = ide_layout_grid_column_set_property;
+
+  widget_class->grab_focus = ide_layout_grid_column_grab_focus;
 
   container_class->add = ide_layout_grid_column_add;
   container_class->remove = ide_layout_grid_column_remove;
