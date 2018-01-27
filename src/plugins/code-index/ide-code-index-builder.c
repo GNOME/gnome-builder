@@ -55,21 +55,29 @@ typedef struct
 
 typedef struct
 {
-  guint   magic;
-  GFile  *data_dir;
-  GFile  *index_dir;
-  IdeVcs *vcs;
-  GQueue  directories;
-  guint   recursive : 1;
+  GPtrArray *specs;
+  GPtrArray *mime_types;
+} IndexerInfo;
+
+typedef struct
+{
+  guint        magic;
+  GFile       *data_dir;
+  GFile       *index_dir;
+  IdeVcs      *vcs;
+  IndexerInfo *indexers;
+  GQueue       directories;
+  guint        recursive : 1;
 } GetChangesData;
 
 typedef struct
 {
-  guint      magic;
-  GFile     *directory;
-  gchar     *name;
-  GTimeVal   mtime;
-  GFileType  file_type;
+  guint        magic;
+  GFile       *directory;
+  gchar       *name;
+  const gchar *content_type;
+  GTimeVal     mtime;
+  GFileType    file_type;
 } FileInfo;
 
 typedef struct
@@ -116,9 +124,17 @@ build_data_free (BuildData *self)
 }
 
 static void
+indexer_info_free (IndexerInfo *info)
+{
+  g_clear_pointer (&info->specs, g_ptr_array_unref);
+  g_clear_pointer (&info->mime_types, g_ptr_array_unref);
+  g_slice_free (IndexerInfo, info);
+}
+
+static void
 get_changes_data_free (GetChangesData *self)
 {
-
+  g_clear_pointer (&self->indexers, indexer_info_free);
   g_clear_object (&self->data_dir);
   g_clear_object (&self->index_dir);
   g_clear_object (&self->vcs);
@@ -156,6 +172,102 @@ index_directory_data_free (IndexDirectoryData *self)
   g_clear_object (&self->fuzzy);
   g_clear_object (&self->index_dir);
   g_slice_free (IndexDirectoryData, self);
+}
+
+static IndexerInfo *
+collect_indexer_info (void)
+{
+  GtkSourceLanguageManager *manager;
+  const GList *plugins;
+  PeasEngine *engine;
+  IndexerInfo *info;
+
+  manager = gtk_source_language_manager_get_default ();
+  engine = peas_engine_get_default ();
+  plugins = peas_engine_get_plugin_list (engine);
+
+  info = g_slice_new0 (IndexerInfo);
+  info->specs = g_ptr_array_new_with_free_func ((GDestroyNotify)g_pattern_spec_free);
+  info->mime_types = g_ptr_array_new ();
+
+  for (; plugins != NULL; plugins = plugins->next)
+    {
+      const PeasPluginInfo *plugin_info = plugins->data;
+      g_auto(GStrv) split = NULL;
+      const gchar *str;
+
+      if (!peas_plugin_info_is_loaded (plugin_info))
+        continue;
+
+      if (!(str = peas_plugin_info_get_external_data (plugin_info, "Code-Indexer-Languages")))
+        continue;
+
+      split = g_strsplit (str, ",", 0);
+
+      for (guint i = 0; split[i] != NULL; i++)
+        {
+          const gchar *name = split[i];
+          GtkSourceLanguage *lang;
+          g_auto(GStrv) globs = NULL;
+          g_auto(GStrv) mime_types = NULL;
+
+          if (!(lang = gtk_source_language_manager_get_language (manager, name)))
+            continue;
+
+          globs = gtk_source_language_get_globs (lang);
+          mime_types = gtk_source_language_get_mime_types (lang);
+
+          for (guint j = 0; globs[j] != NULL; j++)
+            {
+              g_autoptr(GPatternSpec) spec = g_pattern_spec_new (globs[j]);
+              g_ptr_array_add (info->specs, g_steal_pointer (&spec));
+            }
+
+          for (guint j = 0; mime_types[j]; j++)
+            g_ptr_array_add (info->mime_types, (gchar *)g_intern_string (mime_types[j]));
+        }
+    }
+
+  return info;
+}
+
+static gboolean
+has_supported_indexer (const IndexerInfo *info,
+                       const gchar       *filename,
+                       const gchar       *mime_type)
+{
+  g_autofree gchar *reversed = NULL;
+  guint len;
+
+  g_assert (info != NULL);
+  g_assert (info->specs != NULL);
+  g_assert (info->mime_types != NULL);
+  g_assert (filename != NULL);
+
+  if (mime_type != NULL)
+    {
+      for (guint i = 0; i < info->mime_types->len; i++)
+        {
+          const gchar *mt = g_ptr_array_index (info->mime_types, i);
+
+          /* interned strings use pointer comparison */
+          if (mt == mime_type)
+            return TRUE;
+        }
+    }
+
+  len = strlen (filename);
+  reversed = g_utf8_strreverse (filename, len);
+
+  for (guint i = 0; i < info->specs->len; i++)
+    {
+      GPatternSpec *spec = g_ptr_array_index (info->specs, i);
+
+      if (g_pattern_match (spec, len, filename, reversed))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gint
@@ -385,8 +497,9 @@ directory_needs_update (GFile        *index_dir,
 }
 
 static void
-filter_ignored (IdeVcs *vcs,
-                GQueue *file_infos)
+filter_ignored (IdeVcs            *vcs,
+                GQueue            *file_infos,
+                const IndexerInfo *indexers)
 {
   g_assert (IDE_IS_VCS (vcs));
   g_assert (file_infos != NULL);
@@ -405,6 +518,9 @@ filter_ignored (IdeVcs *vcs,
       file = g_file_get_child (info->directory, info->name);
       ignore = ide_vcs_is_ignored (vcs, file, NULL);
       g_clear_object (&file);
+
+      if (!ignore)
+        ignore = !has_supported_indexer (indexers, info->name, info->content_type);
 
       if (ignore)
         {
@@ -436,6 +552,7 @@ find_all_files_typed (GFile        *root,
   enumerator = g_file_enumerate_children (root,
                                           G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE","
                                           G_FILE_ATTRIBUTE_TIME_MODIFIED,
                                           G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
@@ -471,6 +588,7 @@ find_all_files_typed (GFile        *root,
           fi->directory = g_object_ref (root);
           fi->name = g_strdup (g_file_info_get_name (info));
           fi->file_type = g_file_info_get_file_type (info);
+          fi->content_type = g_intern_string (g_file_info_get_content_type (info));
           g_file_info_get_modification_time (info, &fi->mtime);
 
           func (g_steal_pointer (&fi), user_data);
@@ -584,7 +702,7 @@ get_changes_worker (GTask        *task,
                             get_changes_collect_files_cb,
                             &files);
 
-      filter_ignored (gcd->vcs, &files);
+      filter_ignored (gcd->vcs, &files, gcd->indexers);
 
       if (!(relative = g_file_get_relative_path (gcd->index_dir, dir)))
         index_dir = g_object_ref (gcd->index_dir);
@@ -658,6 +776,7 @@ get_changes_async (IdeCodeIndexBuilder *self,
 
   gcd = g_slice_new0 (GetChangesData);
   gcd->magic = GET_CHANGES_MAGIC;
+  gcd->indexers = collect_indexer_info ();
   gcd->data_dir = g_object_ref (data_dir);
   gcd->index_dir = g_object_ref (index_dir);
   gcd->recursive = !!recursive;
