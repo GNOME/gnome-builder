@@ -431,7 +431,14 @@ ide_layout_grid_remove (GtkContainer *container,
   ide_layout_grid_update_actions (self);
 
   if (notify)
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_COLUMN]);
+    {
+      GtkWidget *head = g_queue_peek_head (&priv->focus_column);
+
+      if (head != NULL)
+        gtk_widget_grab_focus (head);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_COLUMN]);
+    }
 }
 
 static inline gboolean
