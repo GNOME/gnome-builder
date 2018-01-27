@@ -26,6 +26,9 @@
       <description>Use GNOME night light setting to activate night-mode.</description>
     </key>
     <key name="projects-directory" type="s">
+      <!-- Translators: This is the default directory name for user’s
+           projects. Do NOT change the ASCII double quotes ("") to your
+           language’s convention, e.g. do not use “” or »«.-->
       <default l10n="messages">"Projects"</default>
       <summary>Projects directory</summary>
       <description>Directory for all Builder projects.</description>
