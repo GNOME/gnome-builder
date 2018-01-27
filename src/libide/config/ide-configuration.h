@@ -168,8 +168,6 @@ IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_environment           (IdeConfiguration      *self,
                                                                    IdeEnvironment        *environment);
 IDE_AVAILABLE_IN_ALL
-IdeConfiguration     *ide_configuration_snapshot                  (IdeConfiguration      *self);
-IDE_AVAILABLE_IN_ALL
 guint                 ide_configuration_get_sequence              (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL
 const gchar          *ide_configuration_get_app_id                (IdeConfiguration      *self);
