@@ -43,36 +43,36 @@ typedef enum
 } IdeApplicationMode;
 
 IDE_AVAILABLE_IN_ALL
-GThread            *ide_application_get_main_thread      (void);
+GThread            *ide_application_get_main_thread        (void);
 IDE_AVAILABLE_IN_ALL
-IdeApplicationMode  ide_application_get_mode             (IdeApplication       *self);
+IdeApplicationMode  ide_application_get_mode               (IdeApplication       *self);
 IDE_AVAILABLE_IN_ALL
-IdeApplication     *ide_application_new                  (void);
+IdeApplication     *ide_application_new                    (void);
 IDE_AVAILABLE_IN_ALL
-GDateTime          *ide_application_get_started_at       (IdeApplication       *self);
+GDateTime          *ide_application_get_started_at         (IdeApplication       *self);
 IDE_AVAILABLE_IN_3_28
-IdeTransferManager *ide_application_get_transfer_manager (IdeApplication       *self);
+IdeTransferManager *ide_application_get_transfer_manager   (IdeApplication       *self);
 IDE_AVAILABLE_IN_ALL
-IdeRecentProjects  *ide_application_get_recent_projects  (IdeApplication       *self);
+IdeRecentProjects  *ide_application_get_recent_projects    (IdeApplication       *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_application_show_projects_window (IdeApplication       *self);
+void                ide_application_show_projects_window   (IdeApplication       *self);
 IDE_AVAILABLE_IN_ALL
-const gchar        *ide_application_get_keybindings_mode (IdeApplication       *self);
+const gchar        *ide_application_get_keybindings_mode   (IdeApplication       *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_application_get_worker_async     (IdeApplication       *self,
-                                                          const gchar          *plugin_name,
-                                                          GCancellable         *cancellable,
-                                                          GAsyncReadyCallback   callback,
-                                                          gpointer              user_data);
+void                ide_application_get_worker_async       (IdeApplication       *self,
+                                                            const gchar          *plugin_name,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-GDBusProxy         *ide_application_get_worker_finish    (IdeApplication       *self,
-                                                          GAsyncResult         *result,
-                                                          GError              **error);
+ GDBusProxy         *ide_application_get_worker_finish     (IdeApplication       *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
 IDE_AVAILABLE_IN_ALL
-gboolean            ide_application_open_project         (IdeApplication       *self,
-                                                          GFile                *file);
+ gboolean            ide_application_open_project          (IdeApplication       *self,
+                                                            GFile                *file);
 IDE_AVAILABLE_IN_ALL
-void                ide_application_add_reaper           (IdeApplication       *self,
-                                                          DzlDirectoryReaper   *reaper);
+ void                ide_application_add_reaper            (IdeApplication       *self,
+                                                            DzlDirectoryReaper   *reaper);
 
 G_END_DECLS
