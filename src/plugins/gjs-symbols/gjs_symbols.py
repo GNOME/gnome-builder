@@ -382,7 +382,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
         try:
             _, stdout, stderr = subprocess.communicate_utf8_finish(result)
 
-            ide_file = Ide.File(file=task.file_, context=self.get_context())
+            ide_file = Ide.File(file=task.file, context=self.get_context())
             try:
                 root_node = JsSymbolTree._node_from_dict(json.loads(stdout), ide_file)
             except (json.JSONDecodeError, UnicodeDecodeError) as e:
@@ -403,7 +403,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
                 )
                 entries.append(entry)
 
-            task.entries = JsCodeIndexEntries(task.file_, entries)
+            task.entries = JsCodeIndexEntries(task.file, entries)
             task.return_boolean(True)
 
         except Exception as ex:
