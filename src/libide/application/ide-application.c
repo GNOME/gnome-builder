@@ -471,6 +471,18 @@ _ide_application_reap_legacy (IdeApplication *self)
 }
 
 static void
+projects_directory_changed_cb (IdeApplication *self,
+                               const gchar    *key,
+                               GSettings      *settings)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  g_clear_object (&self->projects_directory);
+}
+
+static void
 ide_application_startup (GApplication *application)
 {
   IdeApplication *self = (IdeApplication *)application;
@@ -479,6 +491,12 @@ ide_application_startup (GApplication *application)
   g_assert (IDE_IS_APPLICATION (self));
 
   self->settings = g_settings_new ("org.gnome.builder");
+
+  g_signal_connect_object (self->settings,
+                           "changed::projects-directory",
+                           G_CALLBACK (projects_directory_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_resources_register (ide_get_resource ());
   g_resources_register (ide_icons_get_resource ());
