@@ -74,5 +74,7 @@ IDE_AVAILABLE_IN_ALL
 IDE_AVAILABLE_IN_ALL
  void                ide_application_add_reaper            (IdeApplication       *self,
                                                             DzlDirectoryReaper   *reaper);
+IDE_AVAILABLE_IN_3_28
+GFile              *ide_application_get_projects_directory (IdeApplication       *self);
 
 G_END_DECLS

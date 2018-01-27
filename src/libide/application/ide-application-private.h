@@ -40,6 +40,8 @@ struct _IdeApplication
   PeasExtensionSet    *addins;
   gchar               *dbus_address;
 
+  GFile               *projects_directory;
+
   PeasPluginInfo      *tool;
   gchar              **tool_arguments;
 

@@ -40,6 +40,7 @@
 #include "threading/ide-thread-pool.h"
 #include "util/ide-battery-monitor.h"
 #include "util/ide-flatpak.h"
+#include "util/ide-posix.h"
 #include "workbench/ide-workbench.h"
 #include "workers/ide-worker.h"
 
@@ -87,7 +88,7 @@ _ide_application_set_mode (IdeApplication     *self,
 static void
 ide_application_make_skeleton_dirs (IdeApplication *self)
 {
-  g_autofree gchar *projects_dir = NULL;
+  g_autoptr(GFile) projects_dir = NULL;
   gchar *path;
 
   IDE_ENTRY;
@@ -96,27 +97,21 @@ ide_application_make_skeleton_dirs (IdeApplication *self)
 
   path = g_build_filename (g_get_user_data_dir (), "gnome-builder", NULL);
   g_mkdir_with_parents (path, 0750);
-  g_free (path);
+  g_clear_pointer (&path, g_free);
 
   path = g_build_filename (g_get_user_config_dir (), "gnome-builder", NULL);
   g_mkdir_with_parents (path, 0750);
-  g_free (path);
+  g_clear_pointer (&path, g_free);
 
   path = g_build_filename (g_get_user_config_dir (), "gnome-builder", "snippets", NULL);
   g_mkdir_with_parents (path, 0750);
-  g_free (path);
+  g_clear_pointer (&path, g_free);
 
-  projects_dir = g_settings_get_string (self->settings, "projects-directory");
+  projects_dir = ide_application_get_projects_directory (self);
+  g_assert (G_IS_FILE (projects_dir));
 
-  if (!g_path_is_absolute (projects_dir))
-    {
-      g_autofree gchar *tmp = projects_dir;
-
-      projects_dir = g_build_filename (g_get_home_dir (), tmp, NULL);
-    }
-
-  if (!g_file_test (projects_dir, G_FILE_TEST_IS_DIR))
-    g_mkdir_with_parents (projects_dir, 0750);
+  if (!g_file_query_exists (projects_dir, NULL))
+    g_file_make_directory_with_parents (projects_dir, NULL, NULL);
 
   IDE_EXIT;
 }
@@ -1001,4 +996,72 @@ ide_application_get_transfer_manager (IdeApplication *self)
   g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
 
   return self->transfer_manager;
+}
+
+/**
+ * ide_application_get_projects_directory:
+ * @self: an #IdeApplication
+ *
+ * Gets the directory to store projects within.
+ *
+ * First, this checks GSettings for a directory. If that directory exists,
+ * it is returned.
+ *
+ * If not, it then checks for the non-translated name "Projects" in the
+ * users home directory. If it exists, that is returned.
+ *
+ * If that does not exist, and a GSetting path existed, but was non-existant
+ * that is returned.
+ *
+ * If the GSetting was empty, the translated name "Projects" is returned.
+ *
+ * Returns: (not nullable) (transfer full): a #GFile
+ *
+ * Since: 3.28
+ */
+GFile *
+ide_application_get_projects_directory (IdeApplication *self)
+{
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+  g_return_val_if_fail (G_IS_SETTINGS (self->settings), NULL);
+
+  if (self->projects_directory == NULL)
+    {
+      g_autofree gchar *dir = g_settings_get_string (self->settings, "projects-directory");
+      g_autofree gchar *expanded = ide_path_expand (dir);
+      g_autofree gchar *projects = NULL;
+      g_autofree gchar *translated = NULL;
+      g_autoptr(GFile) ret = NULL;
+
+      if (g_file_test (expanded, G_FILE_TEST_IS_DIR))
+        {
+          ret = g_file_new_for_path (expanded);
+          goto completed;
+        }
+
+      projects = g_build_filename (g_get_home_dir (), "Projects", NULL);
+
+      if (g_file_test (projects, G_FILE_TEST_IS_DIR))
+        {
+          ret = g_file_new_for_path (projects);
+          goto completed;
+        }
+
+      if (!dzl_str_empty0 (dir) && !dzl_str_empty0 (expanded))
+        {
+          ret = g_file_new_for_path (expanded);
+          goto completed;
+        }
+
+      translated = g_build_filename (g_get_home_dir (), _("Projects"), NULL);
+      ret = g_file_new_for_path (translated);
+
+    completed:
+      g_assert (G_IS_FILE (ret));
+
+      self->projects_directory = g_steal_pointer (&ret);
+    }
+
+  return g_object_ref (self->projects_directory);
 }
