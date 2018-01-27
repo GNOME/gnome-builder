@@ -4192,7 +4192,7 @@ msgstr "Annullato"
 
 #: plugins/rustup/rustup_plugin/__init__.py:438
 msgid "Finished"
-msgstr "Compleatto"
+msgstr "Completato"
 
 #: plugins/rustup/rustup_plugin/__init__.py:452
 msgid "Rustup"
