@@ -574,11 +574,9 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
                                       gpointer                 user_data)
 {
   g_autoptr(GTask) task = NULL;
-  g_autoptr(GSettings) settings = NULL;
   g_autoptr(GFile) destination = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *path = NULL;
-  g_autofree gchar *projects_dir = NULL;
   DownloadRequest *req;
   ModuleSource *src;
 
@@ -617,18 +615,8 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
         }
     }
 
-  settings = g_settings_new ("org.gnome.builder");
-  path = g_settings_get_string (settings, "projects-directory");
-
-  if (dzl_str_empty0 (path))
-    path = g_build_filename (g_get_home_dir (), "Projects", NULL);
-
-  if (!g_path_is_absolute (path))
-    projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
-  else
-    projects_dir = g_steal_pointer (&path);
-
-  destination = g_file_new_for_path (projects_dir);
+  destination = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
+  g_assert (G_IS_FILE (destination));
 
   if (self->child_name)
     {

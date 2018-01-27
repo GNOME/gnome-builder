@@ -344,17 +344,12 @@ gbp_create_project_widget_get_directory (GbpCreateProjectWidget *self)
 
 static void
 gbp_create_project_widget_set_directory (GbpCreateProjectWidget *self,
-                                         const gchar            *path)
+                                         GFile                  *directory)
 {
-  g_autofree gchar *resolved = NULL;
-  g_autoptr(GFile) file = NULL;
-
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (G_IS_FILE (directory));
 
-  resolved = ide_path_expand (path);
-  file = g_file_new_for_path (resolved);
-
-  dzl_file_chooser_entry_set_file (self->project_location_entry, file);
+  dzl_file_chooser_entry_set_file (self->project_location_entry, directory);
 }
 
 static void
@@ -471,15 +466,12 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
 static void
 gbp_create_project_widget_init (GbpCreateProjectWidget *self)
 {
-  g_autoptr(GSettings) settings = NULL;
-  g_autofree gchar *path = NULL;
+  g_autoptr(GFile) projects_dir = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  settings = g_settings_new ("org.gnome.builder");
-
-  path = g_settings_get_string (settings, "projects-directory");
-  gbp_create_project_widget_set_directory (self, path);
+  projects_dir = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
+  gbp_create_project_widget_set_directory (self, projects_dir);
 
   g_signal_connect_object (self->project_name_entry,
                            "changed",

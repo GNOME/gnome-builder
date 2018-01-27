@@ -288,8 +288,7 @@ static void
 ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
                                       GtkButton             *open_button)
 {
-  g_autoptr(GSettings) settings = NULL;
-  g_autofree gchar *projects_dir = NULL;
+  g_autoptr(GFile) projects_dir = NULL;
   GtkFileChooserDialog *dialog;
   GtkWidget *toplevel;
   PeasEngine *engine;
@@ -416,9 +415,8 @@ ide_greeter_perspective_open_clicked (IdeGreeterPerspective *self,
   if (last_priority == G_MAXINT64)
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
 
-  settings = g_settings_new ("org.gnome.builder");
-  projects_dir = g_settings_get_string (settings, "projects-directory");
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), projects_dir);
+  projects_dir = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
+  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog), projects_dir, NULL);
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
@@ -747,16 +745,15 @@ ide_greeter_perspective_info_bar_response (IdeGreeterPerspective *self,
 static gchar *
 get_project_directory (const gchar *name)
 {
-  g_autoptr(GSettings) settings = NULL;
-  g_autofree gchar *projects = NULL;
+  g_autoptr(GFile) projects = NULL;
+  g_autoptr(GFile) child = NULL;
 
-  settings = g_settings_new ("org.gnome.builder");
-  projects = g_settings_get_string (settings, "projects-directory");
+  g_assert (IDE_IS_MAIN_THREAD ());
 
-  if (!g_path_is_absolute (projects))
-    return g_build_filename (g_get_home_dir (), projects, name, NULL);
-  else
-    return g_build_filename (projects, name, NULL);
+  projects = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
+  child = g_file_get_child (projects, name);
+
+  return g_file_get_path (child);
 }
 
 static void

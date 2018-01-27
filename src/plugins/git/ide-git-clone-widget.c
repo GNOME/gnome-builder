@@ -227,26 +227,14 @@ ide_git_clone_widget_class_init (IdeGitCloneWidgetClass *klass)
 static void
 ide_git_clone_widget_init (IdeGitCloneWidget *self)
 {
-  g_autoptr(GSettings) settings = NULL;
-  g_autoptr(GFile) file = NULL;
-  g_autofree gchar *path = NULL;
-  g_autofree gchar *projects_dir = NULL;
+  g_autoptr(GFile) projects_dir = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  settings = g_settings_new ("org.gnome.builder");
-  path = g_settings_get_string (settings, "projects-directory");
+  projects_dir = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
+  g_assert (G_IS_FILE (projects_dir));
 
-  if (dzl_str_empty0 (path))
-    path = g_build_filename (g_get_home_dir (), "Projects", NULL);
-
-  if (!g_path_is_absolute (path))
-    projects_dir = g_build_filename (g_get_home_dir (), path, NULL);
-  else
-    projects_dir = g_steal_pointer (&path);
-
-  file = g_file_new_for_path (projects_dir);
-  dzl_file_chooser_entry_set_file (self->clone_location_entry, file);
+  dzl_file_chooser_entry_set_file (self->clone_location_entry, projects_dir);
 
   g_signal_connect_object (self->clone_uri_entry,
                            "changed",
