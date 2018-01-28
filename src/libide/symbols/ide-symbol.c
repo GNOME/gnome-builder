@@ -211,6 +211,10 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
       icon_name = "lang-function-symbolic";
       break;
 
+    case IDE_SYMBOL_PACKAGE:
+      icon_name = "lang-include-symbolic";
+      break;
+
     case IDE_SYMBOL_MACRO:
       icon_name = "lang-define-symbolic";
       break;
@@ -247,7 +251,6 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
     case IDE_SYMBOL_MODULE:
     case IDE_SYMBOL_NUMBER:
     case IDE_SYMBOL_NONE:
-    case IDE_SYMBOL_PACKAGE:
     case IDE_SYMBOL_PROPERTY:
     case IDE_SYMBOL_STRING:
     case IDE_SYMBOL_TEMPLATE:
