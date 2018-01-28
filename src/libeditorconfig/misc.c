@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2012 EditorConfig Team
+ * Copyright © 2011-2012 EditorConfig Team
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,7 @@
 /*
  * strcasecmp function from FreeBSD
  *
- * Copyright (c) 1987, 1993
+ * Copyright © 1987, 1993
  * The Regents of the University of California. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -86,7 +86,7 @@ int ec_strcasecmp(const char *s1, const char *s2)
 /*
  * strdup function from FreeBSD
  *
- * Copyright (c) 1988, 1993
+ * Copyright © 1988, 1993
  * The Regents of the University of California. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -140,7 +140,7 @@ char* ec_strdup(const char *str)
  *
  * $NetBSD: strndup.c,v 1.3 2007/01/14 23:41:24 cbiere Exp $ 
  *
- * Copyright (c) 1988, 1993
+ * Copyright © 1988, 1993
  *  The Regents of the University of California.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

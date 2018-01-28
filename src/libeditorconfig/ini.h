@@ -2,7 +2,7 @@
 
 The "inih" library is distributed under the New BSD license:
 
-Copyright (c) 2009, Brush Technology
+Copyright © 2009, Brush Technology
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
