@@ -97,6 +97,7 @@ static gchar *
 extract_regex (const gchar *pattern)
 {
   const gchar *input = pattern;
+  GString *str;
   const gchar *endptr;
 
   if (!pattern || *pattern != '/')
@@ -116,10 +117,30 @@ extract_regex (const gchar *pattern)
   if (endptr < pattern)
     goto failure;
 
-  return g_strdelimit (g_strndup (pattern, endptr - pattern), "()", '.');
+  str = g_string_new (NULL);
+
+  for (const gchar *iter = pattern; iter < endptr; iter = g_utf8_next_char (iter))
+    {
+      gunichar ch = g_utf8_get_char (iter);
+
+      switch (ch)
+        {
+        case '(':
+        case ')':
+        case '*':
+          g_string_append_printf (str, "\\%c", ch);
+          break;
+
+        default:
+          g_string_append_unichar (str, ch);
+          break;
+        }
+    }
+
+  return g_string_free (str, FALSE);
 
 failure:
-  return g_strdup (input);
+  return g_regex_escape_string (input, -1);
 }
 
 static void
@@ -196,6 +217,8 @@ regex_worker (GTask        *task,
     }
 
   pattern = extract_regex (lookup->entry->pattern);
+
+  IDE_TRACE_MSG ("Looking for regex pattern: %s", pattern);
 
   if (!(regex = g_regex_new (pattern, G_REGEX_MULTILINE, 0, &error)))
     {
