@@ -190,7 +190,6 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
   g_autoptr(IdeCtagsService) self = user_data;
   g_autoptr(IdeCtagsIndex) index = NULL;
   GError *error = NULL;
-  gsize i;
 
   IDE_ENTRY;
 
@@ -210,13 +209,13 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
 
   g_assert (IDE_IS_CTAGS_INDEX (index));
 
-  for (i = 0; i < self->highlighters->len; i++)
+  for (guint i = 0; i < self->highlighters->len; i++)
     {
       IdeCtagsHighlighter *highlighter = g_ptr_array_index (self->highlighters, i);
       ide_ctags_highlighter_add_index (highlighter, index);
     }
 
-  for (i = 0; i < self->completions->len; i++)
+  for (guint i = 0; i < self->completions->len; i++)
     {
       IdeCtagsCompletionProvider *provider = g_ptr_array_index (self->completions, i);
       ide_ctags_completion_provider_add_index (provider, index);
