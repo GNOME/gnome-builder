@@ -483,6 +483,9 @@ make_parent_key (const IdeCtagsIndexEntry *entry)
     case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
       return g_strdup_printf ("struct:%s", entry->name);
 
+    case IDE_CTAGS_INDEX_ENTRY_IMPORT:
+      return g_strdup_printf ("package:%s", entry->name);
+
     case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
     case IDE_CTAGS_INDEX_ENTRY_MEMBER:
       {
@@ -592,6 +595,7 @@ ide_ctags_symbol_resolver_get_symbol_tree_worker (GTask        *task,
             case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
             case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
             case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+	    case IDE_CTAGS_INDEX_ENTRY_IMPORT:
             case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
               node = ide_ctags_symbol_node_new (self, index, entry);
               break;
