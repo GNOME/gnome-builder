@@ -503,6 +503,8 @@ ide_ctags_symbol_resolver_get_symbol_tree_worker (GTask        *task,
   g_autoptr(GFile) parent = NULL;
   g_autofree gchar *parent_path = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CTAGS_SYMBOL_RESOLVER (self));
   g_assert (G_IS_TASK (task));
   g_assert (state != NULL);
@@ -602,6 +604,8 @@ ide_ctags_symbol_resolver_get_symbol_tree_worker (GTask        *task,
     }
 
   g_task_return_pointer (task, ide_ctags_symbol_tree_new (g_steal_pointer (&ar)), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -638,7 +642,7 @@ ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
                                "No ctags indexes are loaded");
-      return;
+      IDE_EXIT;
     }
 
   state = g_slice_new0 (TreeResolverState);
@@ -668,10 +672,16 @@ ide_ctags_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
                                                   GAsyncResult       *result,
                                                   GError            **error)
 {
+  IdeSymbolTree *ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CTAGS_SYMBOL_RESOLVER (resolver));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
