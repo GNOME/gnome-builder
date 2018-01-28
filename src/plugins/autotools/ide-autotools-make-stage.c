@@ -131,6 +131,18 @@ create_launcher (IdeAutotoolsMakeStage  *self,
 
   ide_subprocess_launcher_push_argv (launcher, make_target);
 
+  /*
+   * When doing the "make all" target, we need to force LANG=C so that
+   * we can parse the directory changes (Entering directory foo). Otherwise,
+   * we can't really give users diagnostics that are in the proper directory.
+   */
+  if (dzl_str_equal0 ("all", make_target))
+    {
+      ide_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
+      ide_subprocess_launcher_setenv (launcher, "LC_ALL", "C", TRUE);
+      ide_subprocess_launcher_setenv (launcher, "LC_MESSAGES", "C", TRUE);
+    }
+
   return g_steal_pointer (&launcher);
 }
 
