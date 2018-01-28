@@ -285,7 +285,7 @@ ide_ctags_service_load_tags (IdeCtagsService *self,
   pair = g_slice_alloc0 (sizeof *pair);
   pair->self = g_object_ref (self);
   pair->file = g_object_ref (file);
-  g_timeout_add (0, do_load, pair);
+  g_idle_add_full (G_PRIORITY_LOW + 100, do_load, pair, NULL);
 }
 
 static void
