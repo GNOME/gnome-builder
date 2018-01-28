@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 #define IDE_CTAGS_HIGHLIGHTER_TYPE          "def:type"
 #define IDE_CTAGS_HIGHLIGHTER_FUNCTION_NAME "def:function"
 #define IDE_CTAGS_HIGHLIGHTER_ENUM_NAME     "def:constant"
+#define IDE_CTAGS_HIGHLIGHTER_IMPORT        "def:preprocessor"
 
 G_DECLARE_FINAL_TYPE (IdeCtagsHighlighter, ide_ctags_highlighter, IDE, CTAGS_HIGHLIGHTER, IdeObject)
 
