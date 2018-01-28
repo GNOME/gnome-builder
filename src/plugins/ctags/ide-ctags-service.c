@@ -97,36 +97,49 @@ static gchar *
 resolve_path_root (IdeCtagsService *self,
                    GFile           *file)
 {
-  IdeContext *context;
-  IdeVcs *vcs;
   g_autoptr(GFile) parent = NULL;
   g_autoptr(GFile) cache_file = NULL;
-  g_autofree gchar *cache_path = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
   GFile *workdir;
-  gchar *tmp;
 
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
+  parent = g_file_get_parent (file);
 
   /*
    * If we are inside the local cache dir, we are relative to the project
    * working directory.
    */
-  cache_path = g_build_filename (g_get_user_cache_dir (),
-                                 ide_get_program_name (),
-                                 NULL);
-  cache_file = g_file_new_for_path (cache_path);
-  if ((tmp = g_file_get_relative_path (cache_file, file)))
+  cache_file = ide_context_cache_file (context, "ctags", NULL);
+  if (g_file_has_prefix (file, cache_file) || g_file_equal (file, cache_file))
     {
-      g_free (tmp);
+      g_autofree gchar *relative = g_file_get_relative_path (cache_file, parent);
+
+      if (relative != NULL)
+        {
+          g_autoptr(GFile) child = g_file_get_child (workdir, relative);
+          return g_file_get_path (child);
+        }
+
       return g_file_get_path (workdir);
     }
 
-  /*
-   * Else, we are relative to the parent of the tags file.
-   */
-  parent = g_file_get_parent (file);
+  if (g_file_has_prefix (file, workdir) || g_file_equal (file, workdir))
+    {
+      g_autofree gchar *relative = g_file_get_relative_path (workdir, parent);
+
+      if (relative != NULL)
+        {
+          g_autoptr(GFile) child = g_file_get_child (workdir, relative);
+          return g_file_get_path (child);
+        }
+
+      return g_file_get_path (workdir);
+    }
+
+  /* Else, we are relative to the parent of the tags file. */
 
   return g_file_get_path (parent);
 }
