@@ -334,7 +334,7 @@ ide_autotools_build_system_constructed (GObject *object)
 static gint
 ide_autotools_build_system_get_priority (IdeBuildSystem *system)
 {
-  return -100;
+  return -500;
 }
 
 static void

@@ -424,7 +424,7 @@ gbp_cmake_build_system_get_display_name (IdeBuildSystem *build_system)
 static gint
 gbp_cmake_build_system_get_priority (IdeBuildSystem *build_system)
 {
-  return 100;
+  return -300;
 }
 
 static void

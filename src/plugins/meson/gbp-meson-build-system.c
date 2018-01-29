@@ -421,7 +421,7 @@ gbp_meson_build_system_get_display_name (IdeBuildSystem *build_system)
 static gint
 gbp_meson_build_system_get_priority (IdeBuildSystem *build_system)
 {
-  return 100;
+  return -400;
 }
 
 static void

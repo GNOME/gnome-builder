@@ -63,7 +63,7 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return result.propagate_boolean()
 
     def do_get_priority(self):
-        return -400 # Lower priority than Autotools and Meson
+        return 0
 
     def do_get_builddir(self, config):
         context = self.get_context()

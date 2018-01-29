@@ -69,7 +69,7 @@ class NPMBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return task.propagate_boolean()
 
     def do_get_priority(self):
-        return 300
+        return -100
 
 
 class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):

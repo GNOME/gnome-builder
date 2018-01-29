@@ -71,7 +71,7 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return task.propagate_boolean()
 
     def do_get_priority(self):
-        return 300
+        return -200
 
 def locate_cargo_from_config(config):
     cargo = _CARGO
