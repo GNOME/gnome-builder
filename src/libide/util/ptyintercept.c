@@ -96,7 +96,7 @@ pty_intercept_create_slave (pty_fd_t master_fd,
 {
   g_auto(pty_fd_t) ret = PTY_FD_INVALID;
   gint extra = blocking ? 0 : O_NONBLOCK;
-#ifdef HAVE_PTSNAME_R
+#if defined(HAVE_PTSNAME_R) || defined(__FreeBSD__)
   char name[256];
 #else
   const char *name;
@@ -113,6 +113,11 @@ pty_intercept_create_slave (pty_fd_t master_fd,
 #ifdef HAVE_PTSNAME_R
   if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
     return PTY_FD_INVALID;
+  name[sizeof name - 1] = '\0';
+#elif defined(__FreeBSD__)
+  if (fdevname_r (master_fd, name + 5, sizeof name - 6) == NULL)
+    return PTY_FD_INVALID;
+  memcpy (name, "/dev/", 5);
   name[sizeof name - 1] = '\0';
 #else
   if (NULL == (name = ptsname (master_fd)))
