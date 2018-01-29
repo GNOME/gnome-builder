@@ -638,7 +638,6 @@ ide_langserv_client_send_notification (IdeLangservClient *self,
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (method != NULL);
-  g_assert (params != NULL);
   g_assert (JSONRPC_IS_CLIENT (rpc_client));
 
   IDE_TRACE_MSG ("Notification: %s", method);
