@@ -266,7 +266,7 @@ class GnomeProjectTemplate(MesonTemplate):
         elif self.language == 'c♯':
             files['resources/src/main.cs'] = 'src/main.cs'
             files['resources/src/application.in'] = 'src/%(exec_name)s.in'
-            files['resources/flatpak-gtksharp.json'] = '%(appid)s.json'
+            files['resources/flatpak-gtksharp.json.tmpl'] = '%(appid)s.json'
             meson_file = 'resources/src/meson-cs.build'
             resource_name = None
             window_ui_name = None

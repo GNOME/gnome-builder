@@ -33,7 +33,7 @@
     <file compressed="true">resources/build-aux/meson/postinstall.py</file>
     <file compressed="true">resources/meson.build</file>
     <file compressed="true">resources/flatpak.json</file>
-    <file compressed="true">resources/flatpak-gtksharp.json</file>
+    <file compressed="true">resources/flatpak-gtksharp.json.tmpl</file>
     <file compressed="true">resources/data/meson.build</file>
     <file compressed="true">resources/data/hello.gschema.xml</file>
     <file compressed="true">resources/data/hello.desktop.in</file>
