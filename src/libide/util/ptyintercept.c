@@ -42,6 +42,10 @@
  * us to break some deadlock scenarios.
  */
 #define CHANNEL_BUFFER_SIZE (4096 * 4)
+#define SLAVE_READ_PRIORITY   G_PRIORITY_HIGH
+#define SLAVE_WRITE_PRIORITY  G_PRIORITY_DEFAULT_IDLE
+#define MASTER_READ_PRIORITY  G_PRIORITY_DEFAULT_IDLE
+#define MASTER_WRITE_PRIORITY G_PRIORITY_HIGH
 
 
 static void     _pty_intercept_side_close (pty_intercept_side_t *side);
@@ -269,7 +273,7 @@ _pty_intercept_out_cb (GIOChannel   *channel,
   us->out_watch = 0;
   them->in_watch =
     g_io_add_watch_full (them->channel,
-                         G_PRIORITY_DEFAULT,
+                         them->read_prio,
                          G_IO_IN | G_IO_ERR | G_IO_HUP,
                          _pty_intercept_in_cb,
                          self, NULL);
@@ -363,7 +367,7 @@ _pty_intercept_in_cb (GIOChannel   *channel,
            */
           them->out_bytes = g_bytes_new (wrbuf, n_read);
           them->out_watch = g_io_add_watch_full (them->channel,
-                                                 G_PRIORITY_DEFAULT,
+                                                 them->write_prio,
                                                  G_IO_OUT | G_IO_ERR | G_IO_HUP,
                                                  _pty_intercept_out_cb,
                                                  self, NULL);
@@ -473,6 +477,11 @@ pty_intercept_init (pty_intercept_t *self,
   if (main_context == NULL)
     main_context = g_main_context_get_thread_default ();
 
+  self->master.read_prio = MASTER_READ_PRIORITY;
+  self->master.write_prio = MASTER_WRITE_PRIORITY;
+  self->slave.read_prio = SLAVE_READ_PRIORITY;
+  self->slave.write_prio = SLAVE_WRITE_PRIORITY;
+
   self->master.channel = g_io_channel_unix_new (pty_fd_steal (&master_fd));
   self->slave.channel = g_io_channel_unix_new (pty_fd_steal (&slave_fd));
 
@@ -487,14 +496,14 @@ pty_intercept_init (pty_intercept_t *self,
 
   self->master.in_watch =
     g_io_add_watch_full (self->master.channel,
-                         G_PRIORITY_DEFAULT,
+                         self->master.read_prio,
                          G_IO_IN | G_IO_ERR | G_IO_HUP,
                          _pty_intercept_in_cb,
                          self, NULL);
 
   self->slave.in_watch =
     g_io_add_watch_full (self->slave.channel,
-                         G_PRIORITY_DEFAULT,
+                         self->slave.read_prio,
                          G_IO_IN | G_IO_ERR | G_IO_HUP,
                          _pty_intercept_in_cb,
                          self, NULL);

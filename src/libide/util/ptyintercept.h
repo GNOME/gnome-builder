@@ -41,6 +41,8 @@ struct _pty_intercept_side_t
   GIOChannel               *channel;
   guint                     in_watch;
   guint                     out_watch;
+  gint                      read_prio;
+  gint                      write_prio;
   GBytes                   *out_bytes;
   pty_intercept_callback_t  callback;
   gpointer                  callback_data;
