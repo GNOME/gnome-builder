@@ -23,7 +23,7 @@
 #include <json-glib/json-glib.h>
 
 #include "gbp-flatpak-application-addin.h"
-#include "gbp-flatpak-configuration.h"
+#include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runner.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-subprocess-launcher.h"
@@ -175,8 +175,8 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_push_argv (ret, "flatpak");
       ide_subprocess_launcher_push_argv (ret, "build");
 
-      if (GBP_IS_FLATPAK_CONFIGURATION (configuration))
-        build_args = gbp_flatpak_configuration_get_build_args (GBP_FLATPAK_CONFIGURATION (configuration));
+      if (GBP_IS_FLATPAK_MANIFEST (configuration))
+        build_args = gbp_flatpak_manifest_get_build_args (GBP_FLATPAK_MANIFEST (configuration));
 
       if (build_args != NULL)
         ide_subprocess_launcher_push_args (ret, build_args);
@@ -244,11 +244,11 @@ get_binary_name (GbpFlatpakRuntime *self,
   IdeConfigurationManager *config_manager = ide_context_get_configuration_manager (context);
   IdeConfiguration *config = ide_configuration_manager_get_current (config_manager);
 
-  if (GBP_IS_FLATPAK_CONFIGURATION (config))
+  if (GBP_IS_FLATPAK_MANIFEST (config))
     {
       const gchar *command;
 
-      command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
+      command = gbp_flatpak_manifest_get_command (GBP_FLATPAK_MANIFEST (config));
       if (!dzl_str_empty0 (command))
         return g_strdup (command);
     }

@@ -20,7 +20,7 @@
 
 #include "gbp-flatpak-build-target.h"
 #include "gbp-flatpak-build-target-provider.h"
-#include "gbp-flatpak-configuration.h"
+#include "gbp-flatpak-manifest.h"
 
 struct _GbpFlatpakBuildTargetProvider
 {
@@ -53,12 +53,12 @@ gbp_flatpak_build_target_provider_get_targets_async (IdeBuildTargetProvider *pro
 
   targets = g_ptr_array_new_with_free_func (g_object_unref);
 
-  if (GBP_IS_FLATPAK_CONFIGURATION (config))
+  if (GBP_IS_FLATPAK_MANIFEST (config))
     {
       g_autoptr(IdeBuildTarget) target = NULL;
       const gchar *command;
 
-      command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
+      command = gbp_flatpak_manifest_get_command (GBP_FLATPAK_MANIFEST (config));
 
       target = g_object_new (GBP_TYPE_FLATPAK_BUILD_TARGET,
                              "context", context,

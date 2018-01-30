@@ -25,7 +25,7 @@
 #include "util/ide-posix.h"
 
 #include "gbp-flatpak-application-addin.h"
-#include "gbp-flatpak-configuration.h"
+#include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-runtime-provider.h"
 #include "gbp-flatpak-transfer.h"
@@ -565,7 +565,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   count = g_new0 (guint, 1);
   g_task_set_task_data (task, count, g_free);
 
-  if (GBP_IS_FLATPAK_CONFIGURATION (configuration))
+  if (GBP_IS_FLATPAK_MANIFEST (configuration))
     {
       GbpFlatpakApplicationAddin *addin = gbp_flatpak_application_addin_get_default ();
       const gchar * const *sdk_exts;
@@ -576,7 +576,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
        *       we'll have to be more careful about arch support here.
        */
 
-      sdk_exts = gbp_flatpak_configuration_get_sdk_extensions (GBP_FLATPAK_CONFIGURATION (configuration));
+      sdk_exts = gbp_flatpak_manifest_get_sdk_extensions (GBP_FLATPAK_MANIFEST (configuration));
 
       if (sdk_exts != NULL)
         {

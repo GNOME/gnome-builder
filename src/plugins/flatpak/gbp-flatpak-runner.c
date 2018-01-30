@@ -23,8 +23,8 @@
 #include <glib/gi18n.h>
 #include <unistd.h>
 
+#include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runner.h"
-#include "gbp-flatpak-configuration.h"
 #include "gbp-flatpak-util.h"
 
 struct _GbpFlatpakRunner
@@ -70,7 +70,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   ide_subprocess_launcher_insert_argv (launcher, i++, "--with-appdir");
   ide_subprocess_launcher_insert_argv (launcher, i++, "--allow=devel");
 
-  if (GBP_IS_FLATPAK_CONFIGURATION (config))
+  if (GBP_IS_FLATPAK_MANIFEST (config))
     {
       const gchar * const *finish_args;
 
@@ -82,7 +82,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
        * all the finish-args we know about.
        */
 
-      finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (config));
+      finish_args = gbp_flatpak_manifest_get_finish_args (GBP_FLATPAK_MANIFEST (config));
 
       if (finish_args != NULL)
         {

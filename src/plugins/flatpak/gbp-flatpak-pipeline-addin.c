@@ -20,7 +20,7 @@
 
 #include <glib/gi18n.h>
 
-#include "gbp-flatpak-configuration.h"
+#include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-download-stage.h"
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-runtime.h"
@@ -320,11 +320,11 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   /* If there is no manifest, then there are no dependencies
    * to build for this configuration.
    */
-  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
+  if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
-  primary_module = gbp_flatpak_configuration_get_primary_module (GBP_FLATPAK_CONFIGURATION (config));
-  manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
+  primary_module = gbp_flatpak_manifest_get_primary_module (GBP_FLATPAK_MANIFEST (config));
+  manifest_path = gbp_flatpak_manifest_get_path (GBP_FLATPAK_MANIFEST (config));
 
   staging_dir = gbp_flatpak_get_staging_dir (config);
   src_dir = ide_build_pipeline_get_srcdir (pipeline);
@@ -392,11 +392,11 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_CONTEXT (context));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
+  if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
-  command = gbp_flatpak_configuration_get_command (GBP_FLATPAK_CONFIGURATION (config));
-  finish_args = gbp_flatpak_configuration_get_finish_args (GBP_FLATPAK_CONFIGURATION (config));
+  command = gbp_flatpak_manifest_get_command (GBP_FLATPAK_MANIFEST (config));
+  finish_args = gbp_flatpak_manifest_get_finish_args (GBP_FLATPAK_MANIFEST (config));
   staging_dir = gbp_flatpak_get_staging_dir (config);
 
   launcher = create_subprocess_launcher ();
@@ -443,7 +443,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_CONTEXT (context));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
+  if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
   staging_dir = gbp_flatpak_get_staging_dir (config);
@@ -515,7 +515,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_CONTEXT (context));
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
+  if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
   staging_dir = gbp_flatpak_get_staging_dir (config);

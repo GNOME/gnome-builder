@@ -20,8 +20,8 @@
 
 #include <glib/gi18n.h>
 
-#include "gbp-flatpak-configuration.h"
 #include "gbp-flatpak-download-stage.h"
+#include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-util.h"
 
 struct _GbpFlatpakDownloadStage
@@ -75,7 +75,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
   config = ide_build_pipeline_get_configuration (pipeline);
   g_assert (!config || IDE_IS_CONFIGURATION (config));
 
-  if (!GBP_IS_FLATPAK_CONFIGURATION (config))
+  if (!GBP_IS_FLATPAK_MANIFEST (config))
     {
       ide_build_stage_set_completed (stage, TRUE);
       return;
@@ -85,8 +85,8 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
     {
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
 
-      primary_module = gbp_flatpak_configuration_get_primary_module (GBP_FLATPAK_CONFIGURATION (config));
-      manifest_path = gbp_flatpak_configuration_get_manifest_path (GBP_FLATPAK_CONFIGURATION (config));
+      primary_module = gbp_flatpak_manifest_get_primary_module (GBP_FLATPAK_MANIFEST (config));
+      manifest_path = gbp_flatpak_manifest_get_path (GBP_FLATPAK_MANIFEST (config));
       staging_dir = gbp_flatpak_get_staging_dir (config);
       src_dir = ide_build_pipeline_get_srcdir (pipeline);
 
