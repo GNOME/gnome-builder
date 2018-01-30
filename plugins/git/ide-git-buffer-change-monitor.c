@@ -104,6 +104,7 @@ diff_task_free (gpointer data)
       g_clear_object (&diff->repository);
       g_clear_pointer (&diff->state, g_hash_table_unref);
       g_clear_pointer (&diff->content, g_bytes_unref);
+      g_slice_free (DiffTask, diff);
     }
 }
 
