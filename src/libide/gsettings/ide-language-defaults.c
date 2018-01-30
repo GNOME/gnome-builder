@@ -36,6 +36,29 @@ static GList    *tasks;
 G_LOCK_DEFINE (lock);
 
 static gboolean
+strv_equal (gchar **a,
+            gchar **b)
+{
+  if (a == b)
+    return TRUE;
+  else if (!a && b)
+    return FALSE;
+  else if (a && !b)
+    return FALSE;
+
+  for (;;)
+    {
+      if (*a == NULL && *b == NULL)
+        return TRUE;
+
+      if (g_strcmp0 (*a, *b) == 0)
+        continue;
+
+      return FALSE;
+    }
+}
+
+static gboolean
 ide_language_defaults_migrate (GKeyFile  *key_file,
                                gint       current_version,
                                gint       new_version,
@@ -134,6 +157,19 @@ ide_language_defaults_migrate (GKeyFile  *key_file,
 
               if (default_int32 == current_int32)
                 g_settings_set_int (settings, key, override_int32);
+            }
+          else if (g_variant_is_of_type (default_value, G_VARIANT_TYPE_STRING_ARRAY))
+            {
+              g_auto(GStrv) current_strv = NULL;
+              g_auto(GStrv) override_strv = NULL;
+              g_autofree const gchar **default_strv = NULL;
+
+              default_strv = g_variant_get_strv (default_value, NULL);
+              current_strv = g_settings_get_strv (settings, key);
+              override_strv = g_key_file_get_string_list (key_file, group, key, NULL, NULL);
+
+              if (strv_equal ((gchar **)default_strv, current_strv))
+                g_settings_set_strv (settings, key, (const gchar * const *)override_strv);
             }
           else
             {
