@@ -332,6 +332,15 @@ ide_preferences_builtin_register_languages (DzlPreferences *preferences)
   dzl_preferences_add_spin_button (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "tab-width", "/org/gnome/builder/editor/language/{id}/", _("Tab width"), _("Width of a tab character in spaces"), NULL, 10);
   dzl_preferences_add_radio (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "insert-spaces-instead-of-tabs", "/org/gnome/builder/editor/language/{id}/", NULL, _("Insert spaces instead of tabs"), _("Prefer spaces over use of tabs"), NULL, 20);
   dzl_preferences_add_radio (preferences, "languages.id", "indentation", "org.gnome.builder.editor.language", "auto-indent", "/org/gnome/builder/editor/language/{id}/", NULL, _("Automatically indent"), _("Indent source code as you type"), NULL, 30);
+
+  dzl_preferences_add_list_group (preferences, "languages.id", "spaces-style", _("Spacing"), GTK_SELECTION_NONE, 600);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-paren\"", _("Space before opening parentheses"), NULL, NULL, 0);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-bracket\"", _("Space before opening brackets"), NULL, NULL, 1);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-brace\"", _("Space before opening braces"), NULL, NULL, 2);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"before-left-angle\"", _("Space before opening angles"), NULL, NULL, 3);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"colon\"", _("Prefer a space before colons"), NULL, NULL, 4);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"comma\"", _("Prefer a space before commas"), NULL, NULL, 5);
+  dzl_preferences_add_radio (preferences, "languages.id", "spaces-style", "org.gnome.builder.editor.language", "spaces-style", "/org/gnome/builder/editor/language/{id}/", "\"semicolon\"", _("Prefer a space before semicolons"), NULL, NULL, 6);
 }
 
 static gboolean
