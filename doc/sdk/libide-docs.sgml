@@ -343,8 +343,6 @@
     <title>Project Management and Templates</title>
     <chapter>
       <title>API Reference</title>
-      <xi:include href="xml/ide-project-files.xml"/>
-      <xi:include href="xml/ide-project-file.xml"/>
       <xi:include href="xml/ide-project-info.xml"/>
       <xi:include href="xml/ide-project-item.xml"/>
       <xi:include href="xml/ide-project.xml"/>
