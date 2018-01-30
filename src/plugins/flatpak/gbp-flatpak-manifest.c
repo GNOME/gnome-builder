@@ -66,6 +66,13 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+static GRegex *app_id_regex;
+
+static gboolean
+is_valid_app_id (const gchar *str)
+{
+  return g_regex_match (app_id_regex, str, 0, NULL);
+}
 
 static gboolean
 validate_properties (GbpFlatpakManifest  *self,
@@ -369,8 +376,16 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   if (!(primary = discover_primary_module (self, root_obj, dir_name, TRUE, error)))
     return FALSE;
 
-  if (discover_string_field (root_obj, "app-id", &app_id))
-    ide_configuration_set_app_id (IDE_CONFIGURATION (self), app_id);
+  if (!discover_string_field (root_obj, "app-id", &app_id) || !is_valid_app_id (app_id))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_INVALID_DATA,
+                   "File does not appear to have a valid app-id");
+      return FALSE;
+    }
+
+  ide_configuration_set_app_id (IDE_CONFIGURATION (self), app_id);
 
   discover_string_field (root_obj, "runtime", &self->runtime);
   discover_string_field (root_obj, "runtime-version", &self->runtime_version);
@@ -530,6 +545,10 @@ gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
+  app_id_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*$",
+                              G_REGEX_OPTIMIZE, 0, NULL);
 }
 
 static void

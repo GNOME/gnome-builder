@@ -33,10 +33,6 @@ struct _GbpFlatpakConfigurationProvider
   GPtrArray *configs;
 };
 
-
-
-static GRegex *filename_regex;
-
 static void
 gbp_flatpak_configuration_provider_save_worker (GTask        *task,
                                                 gpointer      source_object,
@@ -334,10 +330,6 @@ gbp_flatpak_configuration_provider_class_init (GbpFlatpakConfigurationProviderCl
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_flatpak_configuration_provider_finalize;
-
-  /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
-  filename_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*\\.json$",
-                                G_REGEX_OPTIMIZE, 0, NULL);
 }
 
 static void
