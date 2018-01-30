@@ -25,6 +25,22 @@ pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
 pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
 pkgvapidir = join_paths(get_option('datadir'), 'gnome-builder/vapi')
 
+safe_path = get_option('with_safe_path')
+
+# These default values are obtained by running /bin/sh without setting PATH
+if safe_path == ''
+  if host_machine.system() == 'freebsd'
+    safe_path = '/bin:/usr/bin:/usr/local/bin'
+  elif host_machine.system() == 'dragonfly'
+    safe_path = '/bin:/usr/bin:/usr/local/bin:/usr/pkg/bin'
+  elif host_machine.system() == 'netbsd'
+    safe_path = '/usr/bin:/bin:/usr/pkg/bin:/usr/local/bin'
+  elif host_machine.system() == 'openbsd'
+    safe_path = '/usr/bin:/bin:/usr/X11R6/bin:/usr/local/bin'
+  else
+    safe_path = '/usr/bin:/bin'
+  endif
+endif
 
 status = [
   '', '',
@@ -49,6 +65,7 @@ status += [
   '',
   'Prefix ................ : @0@'.format(get_option('prefix')),
   'Libdir ................ : @0@'.format(join_paths(get_option('prefix'), get_option('libdir'))),
+  'Safe PATH ............. : @0@'.format(safe_path),
   '',
   'Tracing ............... : @0@'.format(get_option('enable_tracing')),
   'Profiling ............. : @0@'.format(get_option('enable_profiling')),
@@ -68,6 +85,7 @@ config_h.set_quoted('PACKAGE_DOCDIR', join_paths(get_option('prefix'), get_optio
 config_h.set_quoted('PACKAGE_LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
 config_h.set_quoted('PACKAGE_LOCALE_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'locale'))
 config_h.set_quoted('PACKAGE_LIBEXECDIR', join_paths(get_option('prefix'), get_option('libexecdir')))
+config_h.set_quoted('SAFE_PATH', safe_path)
 
 config_h.set('GETTEXT_PACKAGE', 'PACKAGE_NAME')
 config_h.set('LOCALEDIR', 'PACKAGE_LOCALE_DIR')
