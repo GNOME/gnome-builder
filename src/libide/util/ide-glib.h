@@ -43,6 +43,16 @@ IDE_AVAILABLE_IN_3_28
 gchar       *ide_g_file_get_uncanonical_relative_path (GFile                *file,
                                                        GFile                *other);
 IDE_AVAILABLE_IN_3_28
+void         ide_g_file_find_async                    (GFile                *file,
+                                                       const gchar          *pattern,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+GPtrArray   *ide_g_file_find_finish                   (GFile                *file,
+                                                       GAsyncResult         *result,
+                                                       GError              **error);
+IDE_AVAILABLE_IN_3_28
 void         ide_g_file_get_children_async            (GFile                *file,
                                                        const gchar          *attributes,
                                                        GFileQueryInfoFlags   flags,

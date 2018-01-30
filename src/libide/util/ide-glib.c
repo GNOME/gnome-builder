@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "util/ide-glib.h"
+#include "vcs/ide-vcs.h"
 
 typedef struct
 {
@@ -398,6 +399,156 @@ ide_g_file_get_children_finish (GFile         *file,
   g_return_val_if_fail (G_IS_FILE (file), NULL);
   g_return_val_if_fail (G_IS_TASK (result), NULL);
   g_return_val_if_fail (g_task_is_valid (G_TASK (result), file), NULL);
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+populate_descendants_matching (GFile        *file,
+                               GCancellable *cancellable,
+                               GPtrArray    *results,
+                               GPatternSpec *spec)
+{
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GPtrArray) children = NULL;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (results != NULL);
+  g_assert (spec != NULL);
+
+  enumerator = g_file_enumerate_children (file,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          cancellable,
+                                          NULL);
+
+  if (enumerator == NULL)
+    return;
+
+  for (;;)
+    {
+      g_autoptr(GFileInfo) info = g_file_enumerator_next_file (enumerator, cancellable, NULL);
+      const gchar *name;
+      GFileType file_type;
+
+      if (info == NULL)
+        break;
+
+      name = g_file_info_get_name (info);
+      file_type = g_file_info_get_file_type (info);
+
+      if (g_pattern_match_string (spec, name))
+        g_ptr_array_add (results, g_file_enumerator_get_child (enumerator, info));
+
+      if (file_type == G_FILE_TYPE_DIRECTORY)
+        {
+          if (children == NULL)
+            children = g_ptr_array_new_with_free_func (g_object_unref);
+          g_ptr_array_add (children, g_file_enumerator_get_child (enumerator, info));
+        }
+    }
+
+  g_file_enumerator_close (enumerator, cancellable, NULL);
+
+  if (children != NULL)
+    {
+      for (guint i = 0; i < children->len; i++)
+        {
+          GFile *child = g_ptr_array_index (children, i);
+
+          /* Don't recurse into known bad directories */
+          if (!ide_vcs_is_ignored (NULL, child, NULL))
+            populate_descendants_matching (child, cancellable, results, spec);
+        }
+    }
+}
+
+static void
+ide_g_file_find_worker (GTask        *task,
+                        gpointer      source_object,
+                        gpointer      task_data,
+                        GCancellable *cancellable)
+{
+  GFile *file = source_object;
+  GPatternSpec *spec = task_data;
+  g_autoptr(GPtrArray) ret = NULL;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_FILE (file));
+  g_assert (spec != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ret = g_ptr_array_new_with_free_func (g_object_unref);
+  populate_descendants_matching (file, cancellable, ret, spec);
+  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+}
+
+/**
+ * ide_g_file_find_async:
+ * @file: a #IdeGlib
+ * @pattern: the glob pattern to search for using GPatternSpec
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: a callback to execute upon completion
+ * @user_data: closure data for @callback
+ *
+ * Searches descendants of @file for files matching @pattern.
+ *
+ * You may only match on the filename, not the directory.
+ *
+ * Since: 3.28
+ */
+void
+ide_g_file_find_async (GFile               *file,
+                       const gchar         *pattern,
+                       GCancellable        *cancellable,
+                       GAsyncReadyCallback  callback,
+                       gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GPatternSpec) spec = NULL;
+
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (pattern != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (file, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_g_file_find_async);
+  g_task_set_priority (task, G_PRIORITY_LOW + 100);
+
+  spec = g_pattern_spec_new (pattern);
+
+  if (spec == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVAL,
+                               "Invalid pattern spec: %s",
+                               pattern);
+      return;
+    }
+
+  g_task_set_task_data (task, g_steal_pointer (&spec), (GDestroyNotify)g_pattern_spec_free);
+  g_task_run_in_thread (task, ide_g_file_find_worker);
+}
+
+/**
+ * ide_g_file_find_finish:
+ * @file: a #GFile
+ * @result: a result provided to callback
+ * @error: a location for a #GError or %NULL
+ *
+ * Gets the files that were found which matched the pattern.
+ *
+ * Returns: (transfer container) (element-type Gio.File): A #GPtrArray of #GFile
+ */
+GPtrArray *
+ide_g_file_find_finish (GFile         *file,
+                        GAsyncResult  *result,
+                        GError       **error)
+{
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
