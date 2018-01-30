@@ -42,22 +42,22 @@ ide_language_defaults_migrate (GKeyFile  *key_file,
                                GError   **error)
 {
   gchar **groups;
-  gsize i;
+  gsize n_groups = 0;
 
   g_assert (key_file);
   g_assert (current_version >= 0);
   g_assert (current_version >= 0);
   g_assert (new_version > current_version);
 
-  groups = g_key_file_get_groups (key_file, NULL);
+  groups = g_key_file_get_groups (key_file, &n_groups);
 
-  for (i = 0; groups [i]; i++)
+  for (gsize i = 0; i < n_groups; i++)
     {
       const gchar *group = groups [i];
       g_autoptr(GSettings) settings = NULL;
       g_autofree gchar *lang_path = NULL;
       gchar **keys;
-      gsize j;
+      gsize n_keys = 0;
 
       g_assert (group != NULL);
 
@@ -65,15 +65,15 @@ ide_language_defaults_migrate (GKeyFile  *key_file,
         continue;
 
       lang_path = g_strdup_printf (PATH_BASE"%s/", group);
-      g_assert(lang_path);
+      g_assert (lang_path);
 
       settings = g_settings_new_with_path (SCHEMA_ID, lang_path);
       g_assert (G_IS_SETTINGS (settings));
 
-      keys = g_key_file_get_keys (key_file, group, NULL, NULL);
+      keys = g_key_file_get_keys (key_file, group, &n_keys, NULL);
       g_assert (keys);
 
-      for (j = 0; keys [j]; j++)
+      for (gsize j = 0; j < n_keys; j++)
         {
           const gchar *key = keys [j];
           g_autoptr(GVariant) default_value = NULL;
@@ -238,16 +238,13 @@ ide_language_defaults_init_worker (GTask        *task,
   if (current_version < 0)
     {
       g_task_return_error (task, g_steal_pointer (&error));
-      goto failure;
+      IDE_GOTO (failure);
     }
+
+  IDE_TRACE_MSG ("Current language defaults at version %d", current_version);
 
   defaults = ide_language_defaults_get_defaults (&error);
-
-  if (!defaults)
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      goto failure;
-    }
+  g_assert (defaults != NULL);
 
   key_file = g_key_file_new ();
   ret = g_key_file_load_from_data (key_file,
@@ -259,7 +256,7 @@ ide_language_defaults_init_worker (GTask        *task,
   if (!ret)
     {
       g_task_return_error (task, g_steal_pointer (&error));
-      goto failure;
+      IDE_GOTO (failure);
     }
 
   if (!g_key_file_has_group (key_file, "global") ||
@@ -269,7 +266,7 @@ ide_language_defaults_init_worker (GTask        *task,
                                G_IO_ERROR,
                                G_IO_ERROR_INVALID_DATA,
                                _("language defaults missing version in [global] group."));
-      goto failure;
+      IDE_GOTO (failure);
     }
 
   global_version = g_key_file_get_integer (key_file, "global", "version", &error);
@@ -277,7 +274,7 @@ ide_language_defaults_init_worker (GTask        *task,
   if (global_version == 0 && error != NULL)
     {
       g_task_return_error (task, g_steal_pointer (&error));
-      goto failure;
+      IDE_GOTO (failure);
     }
 
   g_clear_error (&error);
@@ -287,7 +284,7 @@ ide_language_defaults_init_worker (GTask        *task,
       if (!ide_language_defaults_migrate (key_file, current_version, global_version, &error))
         {
           g_task_return_error (task, g_steal_pointer (&error));
-          goto failure;
+          IDE_GOTO (failure);
         }
 
       version_contents = g_strdup_printf ("%d", global_version);
@@ -302,7 +299,7 @@ ide_language_defaults_init_worker (GTask        *task,
                                        G_IO_ERROR,
                                        g_io_error_from_errno (errno),
                                        "%s", g_strerror (errno));
-              goto failure;
+              IDE_GOTO (failure);
             }
         }
 
@@ -311,7 +308,7 @@ ide_language_defaults_init_worker (GTask        *task,
       if (!g_file_set_contents (version_path, version_contents, -1, &error))
         {
           g_task_return_error (task, g_steal_pointer (&error));
-          goto failure;
+          IDE_GOTO (failure);
         }
     }
 
