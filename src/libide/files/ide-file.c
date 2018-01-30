@@ -353,6 +353,24 @@ ide_file_load_settings_finish (IdeFile              *self,
 }
 
 /**
+ * ide_file_peek_settings:
+ * @self: a #IdeFile
+ *
+ * Returns the #IdeFileSettings if they've been loaded.
+ *
+ * Returns: (nullable) (transfer none): an #IdeFileSettings or %NULL
+ *
+ * Since: 3.28
+ */
+IdeFileSettings *
+ide_file_peek_settings (IdeFile *self)
+{
+  g_return_val_if_fail (IDE_IS_FILE (self), NULL);
+
+  return self->file_settings;
+}
+
+/**
  * ide_file_get_temporary_id:
  * @self: (in): an #IdeFile.
  *

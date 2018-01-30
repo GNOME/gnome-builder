@@ -64,6 +64,8 @@ IDE_AVAILABLE_IN_ALL
 IdeFileSettings   *ide_file_load_settings_finish (IdeFile              *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+IDE_AVAILABLE_IN_3_28
+IdeFileSettings   *ide_file_peek_settings        (IdeFile              *self);
 IDE_AVAILABLE_IN_ALL
 void               ide_file_find_other_async     (IdeFile              *self,
                                                   GCancellable         *cancellable,
