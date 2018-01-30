@@ -3,6 +3,7 @@ files_headers = [
   'ide-file-settings.h',
   'ide-file-settings.defs',
   'ide-indent-style.h',
+  'ide-spaces-style.h',
 ]
 
 files_sources = [
@@ -12,6 +13,7 @@ files_sources = [
 
 files_enums = [
   'ide-indent-style.h',
+  'ide-spaces-style.h',
 ]
 
 libide_public_headers += files(files_headers)

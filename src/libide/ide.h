@@ -101,6 +101,8 @@ G_BEGIN_DECLS
 #include "editor/ide-editor-view.h"
 #include "files/ide-file-settings.h"
 #include "files/ide-file.h"
+#include "files/ide-indent-style.h"
+#include "files/ide-spaces-style.h"
 #include "genesis/ide-genesis-addin.h"
 #include "greeter/ide-greeter-section.h"
 #include "highlighting/ide-highlight-engine.h"
