@@ -701,8 +701,10 @@ ide_clang_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
-  IdeSourceSnippet *snippet;
+  g_autoptr(IdeSourceSnippet) snippet = NULL;
+  IdeFileSettings *file_settings;
   GtkTextBuffer *buffer;
+  IdeFile *file;
   GtkTextIter end;
 
   IDE_ENTRY;
@@ -714,9 +716,17 @@ ide_clang_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
     IDE_RETURN (FALSE);
 
   buffer = gtk_text_iter_get_buffer (iter);
+  g_assert (IDE_IS_BUFFER (buffer));
+
   gtk_text_buffer_delete (buffer, iter, &end);
 
-  snippet = ide_clang_completion_item_get_snippet (item);
+  file = ide_buffer_get_file (IDE_BUFFER (buffer));
+  g_assert (IDE_IS_FILE (file));
+
+  file_settings = ide_file_peek_settings (file);
+  g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
+
+  snippet = ide_clang_completion_item_get_snippet (item, file_settings);
 
   g_assert (snippet != NULL);
   g_assert (IDE_IS_SOURCE_SNIPPET (snippet));

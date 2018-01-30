@@ -27,7 +27,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClangCompletionItem, ide_clang_completion_item, IDE, CLANG_COMPLETION_ITEM, GObject)
 
-IdeSourceSnippet *ide_clang_completion_item_get_snippet       (IdeClangCompletionItem *self);
+IdeSourceSnippet *ide_clang_completion_item_get_snippet       (IdeClangCompletionItem *self,
+                                                               IdeFileSettings        *file_settings);
 const gchar      *ide_clang_completion_item_get_typed_text    (IdeClangCompletionItem *self);
 const gchar      *ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self);
 

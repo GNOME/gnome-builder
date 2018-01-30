@@ -42,7 +42,6 @@ struct _IdeClangCompletionItem
   gchar            *brief_comment;
   gchar            *markup;
   IdeRefPtr        *results;
-  IdeSourceSnippet *snippet;
   gchar            *typed_text;
 };
 
