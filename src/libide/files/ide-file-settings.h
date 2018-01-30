@@ -20,11 +20,12 @@
 
 #include <gtksourceview/gtksource.h>
 
+#include "ide-object.h"
 #include "ide-version-macros.h"
 
 #include "files/ide-file.h"
 #include "files/ide-indent-style.h"
-#include "ide-object.h"
+#include "files/ide-spaces-style.h"
 
 G_BEGIN_DECLS
 

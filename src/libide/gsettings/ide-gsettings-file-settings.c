@@ -23,6 +23,7 @@
 
 #include "ide-context.h"
 #include "ide-debug.h"
+#include "ide-enums.h"
 
 #include "files/ide-file.h"
 #include "gsettings/ide-gsettings-file-settings.h"
@@ -58,6 +59,35 @@ indent_style_get (GValue   *value,
   return TRUE;
 }
 
+static gboolean
+spaces_style_get (GValue   *value,
+                  GVariant *variant,
+                  gpointer  user_data)
+{
+  g_autofree const gchar **strv = g_variant_get_strv (variant, NULL);
+  GFlagsClass *klass = g_type_class_ref (IDE_TYPE_SPACES_STYLE);
+  guint flags = 0;
+
+  for (guint i = 0; strv[i] != NULL; i++)
+    {
+      GFlagsValue *val = g_flags_get_value_by_nick (klass, strv[i]);
+
+      if (val == NULL)
+        {
+          g_warning ("No such nick %s", strv[i]);
+          continue;
+        }
+
+      flags |= val->value;
+    }
+
+  g_type_class_unref (klass);
+
+  g_value_set_flags (value, flags);
+
+  return TRUE;
+}
+
 static SettingsMapping language_mappings [] = {
   { "indent-width",                  "indent-width",             NULL             },
   { "insert-spaces-instead-of-tabs", "indent-style",             indent_style_get },
@@ -68,6 +98,7 @@ static SettingsMapping language_mappings [] = {
   { "insert-matching-brace",         "insert-matching-brace",    NULL             },
   { "insert-trailing-newline",       "insert-trailing-newline",  NULL             },
   { "overwrite-braces",              "overwrite-braces",         NULL             },
+  { "spaces-style",                  "spaces-style",             spaces_style_get },
 };
 
 static void

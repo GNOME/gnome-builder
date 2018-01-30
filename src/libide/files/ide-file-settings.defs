@@ -103,6 +103,18 @@ IDE_FILE_SETTINGS_PROPERTY (SHOW_RIGHT_MARGIN, show_right_margin,
                             priv->show_right_margin = !!show_right_margin;,
                             boolean)
 
+IDE_FILE_SETTINGS_PROPERTY (SPACES_STYLE, spaces_style,
+                            IdeSpacesStyle, IdeSpacesStyle,
+                            "spaces-style",
+                            g_param_spec_flags ("spaces-style",
+                                                "Spaces Style",
+                                                "How to add spaces when reformatting certain text. Mostly used by completions.",
+                                                IDE_TYPE_SPACES_STYLE,
+                                                IDE_SPACES_STYLE_IGNORE,
+                                                (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)),
+                            priv->spaces_style = spaces_style;,
+                            flags)
+
 IDE_FILE_SETTINGS_PROPERTY (TAB_WIDTH, tab_width,
                             guint, guint,
                             "tab-width",
