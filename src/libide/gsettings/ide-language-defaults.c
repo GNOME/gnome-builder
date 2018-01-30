@@ -106,7 +106,7 @@ ide_language_defaults_migrate (GKeyFile  *key_file,
               current_str = g_settings_get_string (settings, key);
               override_str = g_key_file_get_string (key_file, group, key, NULL);
 
-              if (0 != g_strcmp0 (default_str, current_str))
+              if (g_strcmp0 (default_str, current_str) == 0)
                 g_settings_set_string (settings, key, override_str);
             }
           else if (g_variant_is_of_type (default_value, G_VARIANT_TYPE_BOOLEAN))
@@ -119,7 +119,7 @@ ide_language_defaults_migrate (GKeyFile  *key_file,
               current_bool = g_settings_get_boolean (settings, key);
               override_bool = g_key_file_get_boolean (key_file, group, key, NULL);
 
-              if (default_bool != current_bool)
+              if (default_bool == current_bool)
                 g_settings_set_boolean (settings, key, override_bool);
             }
           else if (g_variant_is_of_type (default_value, G_VARIANT_TYPE_INT32))
@@ -132,7 +132,7 @@ ide_language_defaults_migrate (GKeyFile  *key_file,
               current_int32 = g_settings_get_int (settings, key);
               override_int32 = g_key_file_get_integer (key_file, group, key, NULL);
 
-              if (default_int32 != current_int32)
+              if (default_int32 == current_int32)
                 g_settings_set_int (settings, key, override_int32);
             }
           else
