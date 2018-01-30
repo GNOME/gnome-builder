@@ -274,9 +274,9 @@ class GnomeProjectTemplate(MesonTemplate):
             files['resources/src/main.vala'] = 'src/main.vala'
             files['resources/src/window.vala'] = 'src/window.vala'
         elif self.language == 'javascript':
-            files['resources/src/main.js'] = 'src/main.js'
+            files['resources/src/main.js.tmpl'] = 'src/main.js'
             files['resources/src/hello.js.in'] = 'src/%(appid)s.in'
-            files['resources/src/window.js'] = 'src/window.js'
+            files['resources/src/window.js.tmpl'] = 'src/window.js'
             files['resources/src/hello.src.gresource.xml'] = 'src/%(appid)s.src.gresource.xml'
             resource_name = 'src/%(appid)s.data.gresource.xml'
             meson_file = 'resources/src/meson-js.build'

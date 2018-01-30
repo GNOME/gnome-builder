@@ -2,7 +2,7 @@
 <gresources>
   <gresource prefix="/org/gnome/builder/plugins/meson_templates">
     <file compressed="true">resources/src/window.ui</file>
-    <file compressed="true">resources/src/window.js</file>
+    <file compressed="true">resources/src/window.js.tmpl</file>
     <file compressed="true">resources/src/meson-py.build</file>
     <file compressed="true">resources/src/window.h</file>
     <file compressed="true">resources/src/hello.js.in</file>
@@ -15,7 +15,7 @@
     <file compressed="true">resources/src/meson-c-vala.build</file>
     <file compressed="true">resources/src/meson-empty.build</file>
     <file compressed="true">resources/src/gi_composites.py</file>
-    <file compressed="true">resources/src/main.js</file>
+    <file compressed="true">resources/src/main.js.tmpl</file>
     <file compressed="true">resources/src/main.c</file>
     <file compressed="true">resources/src/main.cpp</file>
     <file compressed="true">resources/src/hello.src.gresource.xml</file>
