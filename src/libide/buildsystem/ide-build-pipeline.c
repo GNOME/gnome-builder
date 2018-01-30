@@ -2517,7 +2517,7 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
   if (self->pty_slave == -1)
     {
       pty_fd_t master_fd = pty_intercept_get_fd (&self->intercept);
-      self->pty_slave = pty_intercept_create_slave (master_fd);
+      self->pty_slave = pty_intercept_create_slave (master_fd, TRUE);
     }
 
   if (self->pty_slave == -1)

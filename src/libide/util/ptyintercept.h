@@ -77,7 +77,8 @@ pty_fd_clear (pty_fd_t *fd)
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (pty_fd_t, pty_fd_clear)
 
 pty_fd_t pty_intercept_create_master (void);
-pty_fd_t pty_intercept_create_slave  (pty_fd_t                  master_fd);
+pty_fd_t pty_intercept_create_slave  (pty_fd_t                  master_fd,
+                                      gboolean                  blocking);
 gboolean pty_intercept_init          (pty_intercept_t          *self,
                                       pty_fd_t                  fd,
                                       GMainContext             *main_context);

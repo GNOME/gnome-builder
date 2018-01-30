@@ -38,5 +38,5 @@ ide_vte_pty_create_slave (VtePty *pty)
   if (master_fd == PTY_FD_INVALID)
     return PTY_FD_INVALID;
 
-  return pty_intercept_create_slave (master_fd);
+  return pty_intercept_create_slave (master_fd, TRUE);
 }

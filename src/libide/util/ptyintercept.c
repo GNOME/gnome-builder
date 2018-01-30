@@ -80,6 +80,7 @@ _pty_intercept_set_raw (pty_fd_t fd)
 /**
  * pty_intercept_create_slave:
  * @master_fd: a pty master
+ * @blocking: use %FALSE to set O_NONBLOCK
  *
  * This creates a new slave to the PTY master @master_fd.
  *
@@ -90,9 +91,11 @@ _pty_intercept_set_raw (pty_fd_t fd)
  *   Upon error, %PTY_FD_INVALID (-1) is returned.
  */
 pty_fd_t
-pty_intercept_create_slave (pty_fd_t master_fd)
+pty_intercept_create_slave (pty_fd_t master_fd,
+                            gboolean blocking)
 {
   g_auto(pty_fd_t) ret = PTY_FD_INVALID;
+  gint extra = blocking ? 0 : O_NONBLOCK;
 #ifdef HAVE_PTSNAME_R
   char name[256];
 #else
@@ -116,7 +119,7 @@ pty_intercept_create_slave (pty_fd_t master_fd)
     return PTY_FD_INVALID;
 #endif
 
-  ret =  open (name, O_RDWR | O_CLOEXEC | O_NONBLOCK);
+  ret = open (name, O_RDWR | O_CLOEXEC | extra);
 
   if (ret == PTY_FD_INVALID && errno == EINVAL)
     {
@@ -137,8 +140,11 @@ pty_intercept_create_slave (pty_fd_t master_fd)
             return PTY_FD_INVALID;
         }
 
-      if (!g_unix_set_fd_nonblocking (ret, TRUE, NULL))
-        return PTY_FD_INVALID;
+      if (!blocking)
+        {
+          if (!g_unix_set_fd_nonblocking (ret, TRUE, NULL))
+            return PTY_FD_INVALID;
+        }
     }
 
   return pty_fd_steal (&ret);
@@ -455,7 +461,7 @@ pty_intercept_init (pty_intercept_t *self,
   memset (self, 0, sizeof *self);
   self->magic = PTY_INTERCEPT_MAGIC;
 
-  slave_fd = pty_intercept_create_slave (fd);
+  slave_fd = pty_intercept_create_slave (fd, FALSE);
   if (slave_fd == PTY_FD_INVALID)
     return FALSE;
 
