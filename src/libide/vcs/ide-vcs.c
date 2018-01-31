@@ -170,6 +170,10 @@ ide_vcs_is_ignored (IdeVcs  *self,
 
   len = strlen (name);
 
+  /* Ignore builtin backup files by GIO */
+  if (name[len - 1] == '~')
+    return TRUE;
+
   reversed = g_utf8_strreverse (name, len);
 
   G_LOCK (ignored);
@@ -243,6 +247,10 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
     return TRUE;
 
   len = strlen (name);
+
+  /* Ignore builtin backup files by GIO */
+  if (name[len - 1] == '~')
+    return TRUE;
 
   reversed = g_utf8_strreverse (name, len);
 
