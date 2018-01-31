@@ -6,6 +6,7 @@
         <property name="visible">true</property>
         <property name="propagate-natural-height">true</property>
         <property name="propagate-natural-width">true</property>
+        <property name="hscrollbar-policy">never</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
