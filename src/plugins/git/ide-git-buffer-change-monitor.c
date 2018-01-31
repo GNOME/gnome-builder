@@ -21,9 +21,12 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libgit2-glib/ggit.h>
+#include <stdlib.h>
 
 #include "ide-git-buffer-change-monitor.h"
 #include "ide-git-vcs.h"
+
+#define DELAY_CHANGED_SEC 1
 
 /**
  * SECTION:idegitbufferchangemonitor
@@ -53,7 +56,7 @@ struct _IdeGitBufferChangeMonitor
   IdeBuffer              *buffer;
 
   GgitRepository         *repository;
-  GHashTable             *state;
+  GArray                 *lines;
 
   GgitBlob               *cached_blob;
 
@@ -68,12 +71,35 @@ struct _IdeGitBufferChangeMonitor
 typedef struct
 {
   GgitRepository *repository;
-  GHashTable     *state;
+  GArray         *lines;
   GFile          *file;
   GBytes         *content;
   GgitBlob       *blob;
   guint           is_child_of_workdir : 1;
 } DiffTask;
+
+typedef struct
+{
+  gint                line;
+  IdeBufferLineChange change;
+} DiffLine;
+
+typedef struct
+{
+  /*
+   * An array of DiffLine that contains information about the lines that
+   * have changed. This is sorted and used to bsearch() when the buffer
+   * requests the line flags.
+   */
+  GArray *lines;
+
+  /*
+   * We need to keep track of additions/removals as we process our way
+   * through the diff so that we can adjust lines for the deleted case.
+   */
+  gint hunk_add_count;
+  gint hunk_del_count;
+} DiffCallbackData;
 
 G_DEFINE_TYPE (IdeGitBufferChangeMonitor,
                ide_git_buffer_change_monitor,
@@ -102,13 +128,20 @@ diff_task_free (gpointer data)
       g_clear_object (&diff->file);
       g_clear_object (&diff->blob);
       g_clear_object (&diff->repository);
-      g_clear_pointer (&diff->state, g_hash_table_unref);
+      g_clear_pointer (&diff->lines, g_array_unref);
       g_clear_pointer (&diff->content, g_bytes_unref);
       g_slice_free (DiffTask, diff);
     }
 }
 
-static GHashTable *
+static gint
+diff_line_compare (const DiffLine *left,
+                   const DiffLine *right)
+{
+  return left->line - right->line;
+}
+
+static GArray *
 ide_git_buffer_change_monitor_calculate_finish (IdeGitBufferChangeMonitor  *self,
                                                 GAsyncResult               *result,
                                                 GError                    **error)
@@ -171,7 +204,7 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
   diff = g_slice_new0 (DiffTask);
   diff->file = g_object_ref (gfile);
   diff->repository = g_object_ref (self->repository);
-  diff->state = g_hash_table_new (g_direct_hash, g_direct_equal);
+  diff->lines = g_array_new (FALSE, FALSE, sizeof (DiffLine));
   diff->content = ide_buffer_get_content (self->buffer);
   diff->blob = self->cached_blob ? g_object_ref (self->cached_blob) : NULL;
 
@@ -187,23 +220,22 @@ ide_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
                                           guint                   line)
 {
   IdeGitBufferChangeMonitor *self = (IdeGitBufferChangeMonitor *)monitor;
-  gpointer key;
-  gpointer value;
+  DiffLine key = { line + 1, 0 }; /* Git is 1-based */
+  DiffLine *ret;
 
-  if (self->state == NULL)
+  if (self->lines == NULL)
     {
-      /*
-       * If the file is within the working directory, synthesize line addition.
-       */
+      /* If within working directory, synthesize line addition. */
       if (self->is_child_of_workdir)
         return IDE_BUFFER_LINE_CHANGE_ADDED;
       return IDE_BUFFER_LINE_CHANGE_NONE;
     }
 
-  key = GINT_TO_POINTER (line + 1);
-  value = g_hash_table_lookup (self->state, key);
+  ret = bsearch (&key, (gconstpointer)self->lines->data,
+                 self->lines->len, sizeof (DiffLine),
+                 (GCompareFunc)diff_line_compare);
 
-  return GPOINTER_TO_INT (value);
+  return ret != NULL ? ret->change : 0;
 }
 
 static void
@@ -222,31 +254,30 @@ ide_git_buffer_change_monitor__calculate_cb (GObject      *object,
                                              gpointer      user_data_unused)
 {
   IdeGitBufferChangeMonitor *self = (IdeGitBufferChangeMonitor *)object;
-  g_autoptr(GHashTable) ret = NULL;
+  g_autoptr(GArray) lines = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
+  g_assert (user_data_unused == NULL);
 
   self->in_calculation = FALSE;
 
-  ret = ide_git_buffer_change_monitor_calculate_finish (self, result, &error);
+  lines = ide_git_buffer_change_monitor_calculate_finish (self, result, &error);
 
-  if (!ret)
+  if (lines == NULL)
     {
       if (!g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
         g_message ("%s", error->message);
     }
   else
     {
-      g_clear_pointer (&self->state, g_hash_table_unref);
-      self->state = g_hash_table_ref (ret);
+      g_clear_pointer (&self->lines, g_array_unref);
+      self->lines = g_steal_pointer (&lines);
     }
 
   ide_buffer_change_monitor_emit_changed (IDE_BUFFER_CHANGE_MONITOR (self));
 
-  /*
-   * Recalculate the state if the buffer has changed since we submitted our request.
-   */
+  /* Recalculate if the buffer has changed since last request. */
   if (self->state_dirty)
     ide_git_buffer_change_monitor_calculate_async (self,
                                                    NULL,
@@ -261,13 +292,11 @@ ide_git_buffer_change_monitor_recalculate (IdeGitBufferChangeMonitor *self)
 
   self->state_dirty = TRUE;
 
-  if (self->in_calculation)
-    return;
-
-  ide_git_buffer_change_monitor_calculate_async (self,
-                                                 NULL,
-                                                 ide_git_buffer_change_monitor__calculate_cb,
-                                                 NULL);
+  if (!self->in_calculation)
+    ide_git_buffer_change_monitor_calculate_async (self,
+                                                   NULL,
+                                                   ide_git_buffer_change_monitor__calculate_cb,
+                                                   NULL);
 }
 
 static void
@@ -386,36 +415,30 @@ ide_git_buffer_change_monitor__changed_timeout_cb (gpointer user_data)
 {
   IdeGitBufferChangeMonitor *self = user_data;
 
-  IDE_ENTRY;
+  g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
 
-  ide_git_buffer_change_monitor_recalculate (self);
   self->changed_timeout = 0;
+  ide_git_buffer_change_monitor_recalculate (self);
 
-  IDE_RETURN (G_SOURCE_REMOVE);
+  return G_SOURCE_REMOVE;
 }
 
 static void
 ide_git_buffer_change_monitor__buffer_changed_after_cb (IdeGitBufferChangeMonitor *self,
                                                         IdeBuffer                 *buffer)
 {
-  IDE_ENTRY;
-
   g_assert (IDE_IS_BUFFER_CHANGE_MONITOR (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   self->state_dirty = TRUE;
 
   if (self->in_calculation)
-    IDE_EXIT;
+    return;
 
-  if (self->changed_timeout)
-    g_source_remove (self->changed_timeout);
-
-  self->changed_timeout = g_timeout_add_seconds (1,
+  dzl_clear_source (&self->changed_timeout);
+  self->changed_timeout = g_timeout_add_seconds (DELAY_CHANGED_SEC,
                                                  ide_git_buffer_change_monitor__changed_timeout_cb,
                                                  self);
-
-  IDE_EXIT;
 }
 
 static void
@@ -475,69 +498,116 @@ ide_git_buffer_change_monitor_set_buffer (IdeBufferChangeMonitor *monitor,
   IDE_EXIT;
 }
 
+static DiffLine *
+find_or_add_line (GArray *array,
+                  gint    line)
+{
+  DiffLine key = { line, 0 };
+  DiffLine *ret;
+
+  g_assert (array != NULL);
+  g_assert (line >= 0);
+
+  ret = bsearch (&key, (gconstpointer)array->data,
+                 array->len, sizeof (DiffLine),
+                 (GCompareFunc)diff_line_compare);
+
+  if (ret == NULL)
+    {
+      DiffLine *prev;
+
+      g_array_append_val (array, key);
+
+      if (array->len == 1)
+        return &g_array_index (array, DiffLine, 0);
+
+      g_assert (array->len > 1);
+
+      prev = &g_array_index (array, DiffLine, array->len - 2);
+      if (prev->line < line)
+        return &g_array_index (array, DiffLine, array->len - 1);
+
+      g_array_sort (array, (GCompareFunc)diff_line_compare);
+
+      ret = bsearch (&key, (gconstpointer)array->data,
+                     array->len, sizeof (DiffLine),
+                     (GCompareFunc)diff_line_compare);
+    }
+
+  g_assert (ret != NULL);
+
+  return ret;
+}
+
 static gint
 diff_line_cb (GgitDiffDelta *delta,
               GgitDiffHunk  *hunk,
               GgitDiffLine  *line,
               gpointer       user_data)
 {
+  DiffCallbackData *info = user_data;
   GgitDiffLineType type;
-  GHashTable *hash = user_data;
+  DiffLine *diff_line;
+  gint new_hunk_start;
+  gint old_hunk_start;
   gint new_lineno;
   gint old_lineno;
-  gint adjust;
 
-  g_return_val_if_fail (delta, GGIT_ERROR_GIT_ERROR);
-  g_return_val_if_fail (hunk, GGIT_ERROR_GIT_ERROR);
-  g_return_val_if_fail (line, GGIT_ERROR_GIT_ERROR);
-  g_return_val_if_fail (hash, GGIT_ERROR_GIT_ERROR);
+  g_assert (delta != NULL);
+  g_assert (hunk != NULL);
+  g_assert (line != NULL);
+  g_assert (info != NULL);
+  g_assert (info->lines != NULL);
 
   type = ggit_diff_line_get_origin (line);
 
-  if ((type != GGIT_DIFF_LINE_ADDITION) && (type != GGIT_DIFF_LINE_DELETION))
-    return 0;
-
   new_lineno = ggit_diff_line_get_new_lineno (line);
-  old_lineno = ggit_diff_line_get_old_lineno (line);
+	old_lineno = ggit_diff_line_get_old_lineno (line);
 
   switch (type)
     {
     case GGIT_DIFF_LINE_ADDITION:
-      if (g_hash_table_lookup (hash, GINT_TO_POINTER (new_lineno)))
-        g_hash_table_replace (hash,
-                              GINT_TO_POINTER (new_lineno),
-                              GINT_TO_POINTER (IDE_BUFFER_LINE_CHANGE_CHANGED));
+      diff_line = find_or_add_line (info->lines, new_lineno);
+      if (diff_line->change != 0)
+        diff_line->change = IDE_BUFFER_LINE_CHANGE_CHANGED;
       else
-        g_hash_table_insert (hash,
-                             GINT_TO_POINTER (new_lineno),
-                             GINT_TO_POINTER (IDE_BUFFER_LINE_CHANGE_ADDED));
+        diff_line->change = IDE_BUFFER_LINE_CHANGE_ADDED;
+
+      info->hunk_add_count++;
+
       break;
 
     case GGIT_DIFF_LINE_DELETION:
-      adjust = (ggit_diff_hunk_get_new_start (hunk) - ggit_diff_hunk_get_old_start (hunk));
-      old_lineno += adjust;
-      if (g_hash_table_lookup (hash, GINT_TO_POINTER (old_lineno)))
-        g_hash_table_replace (hash,
-                              GINT_TO_POINTER (old_lineno),
-                              GINT_TO_POINTER (IDE_BUFFER_LINE_CHANGE_CHANGED));
+      new_hunk_start = ggit_diff_hunk_get_new_start (hunk);
+      old_hunk_start = ggit_diff_hunk_get_old_start (hunk);
+
+      old_lineno += new_hunk_start - old_hunk_start;
+      old_lineno += info->hunk_add_count - info->hunk_del_count;
+
+      diff_line = find_or_add_line (info->lines, old_lineno);
+      if (diff_line->change != 0)
+        diff_line->change = IDE_BUFFER_LINE_CHANGE_CHANGED;
       else
-        g_hash_table_insert (hash,
-                             GINT_TO_POINTER (old_lineno),
-                             GINT_TO_POINTER (IDE_BUFFER_LINE_CHANGE_DELETED));
+        diff_line->change = IDE_BUFFER_LINE_CHANGE_DELETED;
+
+      info->hunk_del_count++;
+
+      break;
+
+    case GGIT_DIFF_LINE_DEL_EOFNL:
+      /* TODO: Handle trailing newline differences */
       break;
 
     case GGIT_DIFF_LINE_CONTEXT:
     case GGIT_DIFF_LINE_CONTEXT_EOFNL:
     case GGIT_DIFF_LINE_ADD_EOFNL:
-    case GGIT_DIFF_LINE_DEL_EOFNL:
     case GGIT_DIFF_LINE_FILE_HDR:
+    case GGIT_DIFF_LINE_HUNK_HDR:
     case GGIT_DIFF_LINE_BINARY:
     default:
-      break;
-
-    case GGIT_DIFF_LINE_HUNK_HDR:
-      g_assert_not_reached ();
+      return 0;
     }
+
 
   return 0;
 }
@@ -549,18 +619,19 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
 {
   g_autofree gchar *relative_path = NULL;
   g_autoptr(GFile) workdir = NULL;
+  DiffCallbackData cb_data = {0};
   const guint8 *data;
   gsize data_len = 0;
 
   g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
-  g_assert (diff);
+  g_assert (diff != NULL);
   g_assert (G_IS_FILE (diff->file));
-  g_assert (diff->state);
+  g_assert (diff->lines != NULL);
   g_assert (GGIT_IS_REPOSITORY (diff->repository));
-  g_assert (diff->content);
+  g_assert (diff->content != NULL);
   g_assert (!diff->blob || GGIT_IS_BLOB (diff->blob));
-  g_assert (error);
-  g_assert (!*error);
+  g_assert (error != NULL);
+  g_assert (*error == NULL);
 
   workdir = ggit_repository_get_workdir (diff->repository);
 
@@ -587,10 +658,10 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
   diff->is_child_of_workdir = TRUE;
 
   /*
-   * Find the blob if necessary. This will be cached by the main thread for us on the way out
-   * of the async operation.
+   * Find the blob if necessary. This will be cached by the main thread for
+   * us on the way out of the async operation.
    */
-  if (!diff->blob)
+  if (diff->blob == NULL)
     {
       GgitOId *entry_oid = NULL;
       GgitOId *oid = NULL;
@@ -640,9 +711,9 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
       g_clear_object (&head);
     }
 
-  if (!diff->blob)
+  if (diff->blob == NULL)
     {
-      if ((*error) == NULL)
+      if (*error == NULL)
         g_set_error (error,
                      G_IO_ERROR,
                      G_IO_ERROR_NOT_FOUND,
@@ -652,10 +723,15 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
 
   data = g_bytes_get_data (diff->content, &data_len);
 
-  ggit_diff_blob_to_buffer (diff->blob, relative_path, data, data_len, relative_path,
-                            NULL, NULL, NULL, NULL, diff_line_cb, (gpointer)diff->state, error);
+  cb_data.lines = diff->lines;
+  cb_data.hunk_add_count = 0;
+  cb_data.hunk_del_count = 0;
 
-  return ((*error) == NULL);
+  ggit_diff_blob_to_buffer (diff->blob, relative_path, data, data_len, relative_path,
+                            NULL, NULL, NULL, NULL,
+                            diff_line_cb, &cb_data, error);
+
+  return *error == NULL;
 }
 
 static gpointer
@@ -691,8 +767,8 @@ ide_git_buffer_change_monitor_worker (gpointer data)
         g_task_return_error (task, g_steal_pointer (&error));
       else
         g_task_return_pointer (task,
-                               g_hash_table_ref (diff->state),
-                               (GDestroyNotify)g_hash_table_unref);
+                               g_steal_pointer (&diff->lines),
+                               (GDestroyNotify)g_array_unref);
     }
 
   return NULL;
