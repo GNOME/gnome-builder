@@ -711,7 +711,7 @@
             "buildsystem" : "meson",
             "builddir" : true,
             "config-opts" : [
-                "--libdir=/app/lib",
+                "--libdir=lib",
                 "--buildtype=debugoptimized",
                 "-Denable_tracing=true",
                 "-Dwith_help=true",
