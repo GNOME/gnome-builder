@@ -183,15 +183,20 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
   const gchar * const *allowed;
   g_autofree gchar *casefold = NULL;
-  gint word_len;
-  guint i;
-  guint j;
   g_autoptr(GHashTable) completions = NULL;
+  g_autoptr(GtkSourceCompletion) completion = NULL;
+  gint word_len;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+
+  g_object_get (context,
+                "completion", &completion,
+                NULL);
+
+  self->view = IDE_SOURCE_VIEW (gtk_source_completion_get_view (completion));
 
   g_clear_pointer (&self->current_word, g_free);
   self->current_word = ide_completion_provider_context_current_word (context);
@@ -218,7 +223,7 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
 
   completions = g_hash_table_new (g_str_hash, g_str_equal);
 
-  for (i = 0; i < self->indexes->len; i++)
+  for (guint i = 0; i < self->indexes->len; i++)
     {
       g_autofree gchar *copy = g_strdup (self->current_word);
       IdeCtagsIndex *index = g_ptr_array_index (self->indexes, i);
@@ -226,6 +231,11 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
       guint tmp_len = word_len;
       gsize n_entries = 0;
       gchar gdata_key[64];
+
+      /* NOTE: "ctags-%d" is turned into a GQuark and therefore lives the
+       *       length of the process. But it's generally under 1000 so not a
+       *       really big deal for now.
+       */
 
       /*
        * Make sure we hold a reference to the index for the lifetime of the results.
@@ -244,7 +254,7 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
       if ((entries == NULL) || (n_entries == 0))
         continue;
 
-      for (j = 0; j < n_entries; j++)
+      for (guint j = 0; j < n_entries; j++)
         {
           const IdeCtagsIndexEntry *entry = &entries [j];
           IdeCtagsCompletionItem *item;
@@ -326,8 +336,7 @@ ide_ctags_completion_provider_match (GtkSourceCompletionProvider *provider,
 }
 
 static gboolean
-is_reserved_word (GtkTextBuffer *buffer,
-                  const gchar   *word)
+is_reserved_word (const gchar *word)
 {
   /* TODO: Check by language */
   return g_hash_table_contains (reserved, word);
@@ -341,47 +350,44 @@ ide_ctags_completion_provider_activate_proposal (GtkSourceCompletionProvider *pr
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
   IdeCtagsCompletionItem *item = (IdeCtagsCompletionItem *)proposal;
   g_auto(GStrv) contexts = NULL;
+  IdeFileSettings *file_settings = NULL;
   GtkTextBuffer *buffer;
+  IdeFile *file;
   GtkTextIter begin;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (self->view != NULL);
+  g_assert (IDE_IS_SOURCE_VIEW (self->view));
   g_assert (IDE_IS_CTAGS_COMPLETION_ITEM (item));
   g_assert (iter != NULL);
 
   begin = *iter;
 
   buffer = gtk_text_iter_get_buffer (iter);
+  g_assert (IDE_IS_BUFFER (buffer));
 
-  /*
-   * NOTE:
-   *
-   * Try to reduce our insertion to just the new text. This avoids a delete
-   * which can be troublesome when we are working on a snippet. Ideally we
-   * would improve snippets, but due to various limitations in GtkTextBuffer
-   * and GtkTextView, we don't have an answer for that yet.
-   */
+  file = ide_buffer_get_file (IDE_BUFFER (buffer));
+  g_assert (IDE_IS_FILE (file));
+
+  file_settings = ide_file_peek_settings (file);
+
   if (_ide_source_iter_backward_visible_word_start (&begin))
     {
-      g_autofree gchar *current_text = gtk_text_iter_get_slice (&begin, iter);
-      g_autofree gchar *proposal_text = gtk_source_completion_proposal_get_text (proposal);
+      g_autofree gchar *slice = gtk_text_iter_get_slice (&begin, iter);
+      g_autoptr(IdeSourceSnippet) snippet = NULL;
 
-      /*
-       * If this is a keyword for the language, we probably didn't mean
-       * to activate this completion proposal.
-       */
-      if (is_reserved_word (buffer, current_text))
+      /* Ignore reserved words */
+      if (is_reserved_word (slice))
         return TRUE;
 
-      if (g_str_has_prefix (proposal_text, current_text))
-        {
-          gtk_text_buffer_begin_user_action (buffer);
-          gtk_text_buffer_insert (buffer,
-                                  iter,
-                                  proposal_text + strlen (current_text),
-                                  -1);
-          gtk_text_buffer_end_user_action (buffer);
-          return TRUE;
-        }
+      snippet = ide_ctags_completion_item_get_snippet (item, file_settings);
+
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_buffer_delete (buffer, &begin, iter);
+      ide_source_view_push_snippet (self->view, snippet, iter);
+      gtk_text_buffer_end_user_action (buffer);
+
+      return TRUE;
     }
 
   /* Fallback and let the default handler take care of things */

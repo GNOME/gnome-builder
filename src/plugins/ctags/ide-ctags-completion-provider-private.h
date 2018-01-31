@@ -30,6 +30,7 @@ struct _IdeCtagsCompletionProvider
   GPtrArray            *indexes;
   IdeCompletionResults *results;
   gchar                *current_word;
+  IdeSourceView        *view;
 };
 
 G_END_DECLS
