@@ -12,11 +12,11 @@ that do this for fun. Be respectful and assume the best of each other.
 ## Filing a bug
 
 Please file bugs for issues, enhancements and features on
-[our Bugzilla](https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder)
-bug tracker.
+[our bug tracker](https://gitlab.gnome.org/GNOME/gnome-builder/issues).
 
-To submit a patch, file a bug and attach your patch to the bug.
-Someone will review your patch shortly after doing so.
+Create a
+[Merge Request](https://gitlab.gnome.org/GNOME/gnome-builder/merge_requests)
+and we'd be happy to review your patch and help you get it merged.
 
 ## Asking for Help
 
@@ -70,6 +70,8 @@ example_object_get_widget (ExampleObject  *object,
 }
 ```
 
+You may omit curly-braces for single-line conditionals.
+
 Please use new-style Object declarations such as `G_DECLARE_FINAL_TYPE()` or `G_DECLARE_DERIVABLE_TYPE()`.
 Unless you intend to subclass the object, make the object final.
 
@@ -91,6 +93,8 @@ These include:
  * `g_autoptr()`, `g_auto()`, and `g_autofree`.
  * `g_steal_pointer()`
  * `g_clear_object()` and `g_clear_pointer()`
+
+We prefer that you zero fields in structures when freeing the contents.
 
 ## Documentation
 
