@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.builder.project" gettext-domain="gnome-builder">
+
+    <key name="config-id" type="s">
+      <default>"default"</default>
+      <summary>Selected configuration for building</summary>
+      <description>The configuration that has been selected and will be restored the next time the project loads.</description>
+    </key>
+
+  </schema>
+</schemalist>
