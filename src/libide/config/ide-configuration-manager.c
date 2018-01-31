@@ -256,6 +256,11 @@ ide_configuration_manager_dispose (GObject *object)
 {
   IdeConfigurationManager *self = (IdeConfigurationManager *)object;
 
+  if (self->current != NULL)
+    g_signal_handlers_disconnect_by_func (self->current,
+                                          G_CALLBACK (ide_configuration_manager_notify_display_name),
+                                          self);
+
   g_cancellable_cancel (self->cancellable);
 
   G_OBJECT_CLASS (ide_configuration_manager_parent_class)->dispose (object);
@@ -266,16 +271,9 @@ ide_configuration_manager_finalize (GObject *object)
 {
   IdeConfigurationManager *self = (IdeConfigurationManager *)object;
 
+  g_clear_object (&self->current);
   g_clear_object (&self->cancellable);
   g_clear_pointer (&self->configs, g_array_unref);
-
-  if (self->current != NULL)
-    {
-      g_signal_handlers_disconnect_by_func (self->current,
-                                            G_CALLBACK (ide_configuration_manager_notify_display_name),
-                                            self);
-      g_clear_object (&self->current);
-    }
 
   G_OBJECT_CLASS (ide_configuration_manager_parent_class)->finalize (object);
 }
