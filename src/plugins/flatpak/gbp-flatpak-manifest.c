@@ -668,6 +668,7 @@ apply_changes_to_tree (GbpFlatpakManifest *self)
 {
   IdeEnvironment *env;
   const gchar *app_id;
+  const gchar *config_opts;
   const gchar *runtime_id;
   JsonObject *obj;
   JsonObject *build_options;
@@ -732,6 +733,29 @@ apply_changes_to_tree (GbpFlatpakManifest *self)
     json_object_set_boolean_member (self->primary, "builddir", TRUE);
   else if (json_object_has_member (self->primary, "builddir"))
     json_object_remove_member (self->primary, "builddir");
+
+  if (!(config_opts = ide_configuration_get_config_opts (IDE_CONFIGURATION (self))))
+    {
+      if (json_object_has_member (self->primary, "config-opts"))
+        json_object_remove_member (self->primary, "config-opts");
+    }
+  else
+    {
+      g_auto(GStrv) argv = NULL;
+      gint argc;
+
+      if (g_shell_parse_argv (config_opts, &argc, &argv, NULL))
+        {
+          g_autoptr(JsonArray) ar = json_array_new ();
+
+          for (guint i = 0; argv[i] != NULL; i++)
+            json_array_add_string_element (ar, argv[i]);
+
+          json_object_set_array_member (self->primary, "config-opts", g_steal_pointer (&ar));
+        }
+
+    }
+
 }
 
 static void
