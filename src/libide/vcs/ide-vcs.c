@@ -153,7 +153,10 @@ ide_vcs_is_ignored (IdeVcs  *self,
                     GFile   *file,
                     GError **error)
 {
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *reversed = NULL;
   gboolean ret = FALSE;
+  gsize len;
 
   g_return_val_if_fail (!self || IDE_IS_VCS (self), FALSE);
   g_return_val_if_fail (!file || G_IS_FILE (file), FALSE);
@@ -161,14 +164,18 @@ ide_vcs_is_ignored (IdeVcs  *self,
   if (file == NULL)
     return TRUE;
 
+  name = g_file_get_basename (file);
+  if (name == NULL || *name == 0)
+    return TRUE;
+
+  len = strlen (name);
+
+  reversed = g_utf8_strreverse (name, len);
+
   G_LOCK (ignored);
 
   if G_LIKELY (ignored != NULL)
     {
-      g_autofree gchar *name = g_file_get_basename (file);
-      guint len = strlen (name);
-      g_autofree gchar *reversed = g_utf8_strreverse (name, len);
-
       for (guint i = 0; i < ignored->len; i++)
         {
           GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
@@ -221,6 +228,9 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
                          const gchar  *path,
                          GError      **error)
 {
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *reversed = NULL;
+  gsize len;
   gboolean ret = FALSE;
 
   g_return_val_if_fail (!self || IDE_IS_VCS (self), FALSE);
@@ -228,14 +238,18 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
   if (path == NULL)
     return TRUE;
 
+  name = g_path_get_basename (path);
+  if (name == NULL || *name == 0)
+    return TRUE;
+
+  len = strlen (name);
+
+  reversed = g_utf8_strreverse (name, len);
+
   G_LOCK (ignored);
 
   if G_LIKELY (ignored != NULL)
     {
-      g_autofree gchar *name = g_path_get_basename (path);
-      guint len = strlen (name);
-      g_autofree gchar *reversed = g_utf8_strreverse (name, len);
-
       for (guint i = 0; i < ignored->len; i++)
         {
           GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
