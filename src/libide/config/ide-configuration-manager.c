@@ -44,6 +44,8 @@ struct _IdeConfigurationManager
   GSettings        *project_settings;
 
   guint             queued_save_source;
+
+  guint             propagate_to_settings : 1;
 };
 
 typedef struct
@@ -626,6 +628,53 @@ ide_configuration_manager_provider_removed (PeasExtensionSet *set,
 }
 
 static void
+notify_providers_loaded (IdeConfigurationManager *self,
+                         GParamSpec              *pspec,
+                         GTask                   *task)
+{
+  g_autoptr(GVariant) user_value = NULL;
+
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
+  g_assert (G_IS_TASK (task));
+
+  if (self->project_settings == NULL)
+    return;
+
+  /*
+   * At this point, all of our configuratin providers have returned from
+   * their asynchronous loading. So we should have all of the configs we
+   * can know about at this point.
+   *
+   * We need to read our config-id from project_settings, and if we find
+   * a match, make that our active configuration.
+   *
+   * We want to avoid applying the value if the value is unchanged
+   * according to g_settings_get_user_value() so that we don't override
+   * any provider that set_current() during it's load, unless the user
+   * has manually set this config in the past.
+   *
+   * Once we have updated the current config, we can start propagating
+   * new values to the settings when set_current() is called.
+   */
+
+  user_value = g_settings_get_user_value (self->project_settings, "config-id");
+
+  if (user_value != NULL)
+    {
+      const gchar *str = g_variant_get_string (user_value, NULL);
+      IdeConfiguration *config;
+
+      if ((config = ide_configuration_manager_get_configuration (self, str)))
+        {
+          if (config != self->current)
+            ide_configuration_manager_set_current (self, config);
+        }
+    }
+
+  self->propagate_to_settings = TRUE;
+}
+
+static void
 ide_configuration_manager_init_load_cb (GObject      *object,
                                         GAsyncResult *result,
                                         gpointer      user_data)
@@ -690,6 +739,11 @@ ide_configuration_manager_init_async (GAsyncInitable      *initable,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_configuration_manager_init_async);
   g_task_set_priority (task, priority);
+
+  g_signal_connect_swapped (task,
+                            "notify::completed",
+                            G_CALLBACK (notify_providers_loaded),
+                            self);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -780,6 +834,12 @@ ide_configuration_manager_set_current (IdeConfigurationManager *self,
                                    G_CALLBACK (ide_configuration_manager_notify_display_name),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+          if (self->propagate_to_settings && self->project_settings != NULL)
+            {
+              g_autofree gchar *new_id = g_strdup (ide_configuration_get_id (current));
+              g_settings_set_string (self->project_settings, "config-id", new_id);
+            }
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT]);
