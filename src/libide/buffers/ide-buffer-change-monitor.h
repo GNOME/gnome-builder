@@ -33,9 +33,9 @@ G_DECLARE_DERIVABLE_TYPE (IdeBufferChangeMonitor, ide_buffer_change_monitor, IDE
 typedef enum
 {
   IDE_BUFFER_LINE_CHANGE_NONE    = 0,
-  IDE_BUFFER_LINE_CHANGE_ADDED   = 1,
-  IDE_BUFFER_LINE_CHANGE_CHANGED = 2,
-  IDE_BUFFER_LINE_CHANGE_DELETED = 3,
+  IDE_BUFFER_LINE_CHANGE_ADDED   = 1 << 0,
+  IDE_BUFFER_LINE_CHANGE_CHANGED = 1 << 1,
+  IDE_BUFFER_LINE_CHANGE_DELETED = 1 << 2,
 } IdeBufferLineChange;
 
 struct _IdeBufferChangeMonitorClass

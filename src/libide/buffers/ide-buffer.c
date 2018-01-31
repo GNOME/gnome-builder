@@ -2064,24 +2064,14 @@ ide_buffer_get_line_flags (IdeBuffer *self,
     {
       change = ide_buffer_change_monitor_get_change (priv->change_monitor, line);
 
-      switch (change)
-        {
-        case IDE_BUFFER_LINE_CHANGE_ADDED:
-          flags |= IDE_BUFFER_LINE_FLAGS_ADDED;
-          break;
+      {
+        G_STATIC_ASSERT ((int)IDE_BUFFER_LINE_CHANGE_ADDED == (int)IDE_BUFFER_LINE_FLAGS_ADDED);
+        G_STATIC_ASSERT ((int)IDE_BUFFER_LINE_CHANGE_DELETED == (int)IDE_BUFFER_LINE_FLAGS_DELETED);
+        G_STATIC_ASSERT ((int)IDE_BUFFER_LINE_CHANGE_CHANGED == (int)IDE_BUFFER_LINE_FLAGS_CHANGED);
+      }
 
-        case IDE_BUFFER_LINE_CHANGE_CHANGED:
-          flags |= IDE_BUFFER_LINE_FLAGS_CHANGED;
-          break;
-
-        case IDE_BUFFER_LINE_CHANGE_DELETED:
-          flags |= IDE_BUFFER_LINE_FLAGS_DELETED;
-          break;
-
-        case IDE_BUFFER_LINE_CHANGE_NONE:
-        default:
-          break;
-        }
+      /* Change maps to the same bits in our flags */
+      flags |= (change & 0x7);
     }
 
   return flags;

@@ -569,7 +569,7 @@ diff_line_cb (GgitDiffDelta *delta,
     case GGIT_DIFF_LINE_ADDITION:
       diff_line = find_or_add_line (info->lines, new_lineno);
       if (diff_line->change != 0)
-        diff_line->change = IDE_BUFFER_LINE_CHANGE_CHANGED;
+        diff_line->change |= IDE_BUFFER_LINE_CHANGE_CHANGED;
       else
         diff_line->change = IDE_BUFFER_LINE_CHANGE_ADDED;
 
@@ -586,9 +586,8 @@ diff_line_cb (GgitDiffDelta *delta,
 
       diff_line = find_or_add_line (info->lines, old_lineno);
       if (diff_line->change != 0)
-        diff_line->change = IDE_BUFFER_LINE_CHANGE_CHANGED;
-      else
-        diff_line->change = IDE_BUFFER_LINE_CHANGE_DELETED;
+        diff_line->change |= IDE_BUFFER_LINE_CHANGE_CHANGED;
+      diff_line->change |= IDE_BUFFER_LINE_CHANGE_DELETED;
 
       info->hunk_del_count++;
 
