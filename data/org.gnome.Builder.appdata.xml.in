@@ -80,6 +80,20 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.26.4" date="2018-1-31">
+      <description>
+        <p>
+          This new release of Builder contains a number of bug fixes found
+          during the 3.26 cycle. It is recommended that you update.
+        </p>
+        <ul>
+          <li>Various memory leak improvements.</li>
+          <li>Meson plugin no longer uses the legacy "mesonintrospect" utility.</li>
+          <li>Block selection in the terminal has been restored.</li>
+          <li>The flatpak exporter now properly determines the target application binary from the manifest.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.26.3" date="2018-1-10">
       <description>
         <p>

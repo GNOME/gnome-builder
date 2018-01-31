@@ -1,4 +1,31 @@
 ==============
+Version 3.26.4
+==============
+
+Changes since last release:
+
+ • A number of correctness and memory leaks were fixed in the
+   semantic highlighter, project tree, clang, rustup, vala-pack,
+   code-index, config manager and configs, and git.
+ • The meson plugin now uses "meson" "introspect" instead of the
+   legacy "mesonintrospect" utility.
+ • Fixes for deprecated API usage in Gtk+.
+ • Block selection has been fixed in the terminal plugin.
+ • Postbuild support in configurations was fixed to no longer
+   run prebuild commands a second time.
+ • The flatpak plugin now passes --command to build-finish. This
+   fixes an issue where the wrong binary would get activated when
+   exporting a project.
+ • Fixes for -Wincompatible-pointer-type changes from recently
+   upstreamed type propagation in g_object_ref().
+
+Updated Translations:
+
+ Occitan
+
+It is recommended that all distributions update to this release.
+
+==============
 Version 3.26.3
 ==============
 
