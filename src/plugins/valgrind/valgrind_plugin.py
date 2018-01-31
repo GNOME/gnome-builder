@@ -31,12 +31,13 @@ _ = Ide.gettext
 class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
     workbench = None
     has_handler = False
+    notify_handler = None
 
     def do_load(self, workbench):
         self.workbench = workbench
 
-        build_manager = self.workbench.get_context().get_build_manager()
-        build_manager.connect('notify::pipeline', self.notify_pipeline)
+        build_manager = workbench.get_context().get_build_manager()
+        self.notify_handler = build_manager.connect('notify::pipeline', self.notify_pipeline)
         self.notify_pipeline(build_manager, None)
 
     def notify_pipeline(self, build_manager, pspec):
@@ -57,9 +58,14 @@ class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
             run_manager.remove_handler('valgrind')
 
     def do_unload(self, workbench):
+        build_manager = workbench.get_context().get_build_manager()
+        build_manager.disconnect(self.notify_handler)
+        self.notify_handler = None
+
         if self.has_handler:
-            run_manager = self.workbench.get_context().get_run_manager()
+            run_manager = workbench.get_context().get_run_manager()
             run_manager.remove_handler('valgrind')
+
         self.workbench = None
 
     def valgrind_handler(self, run_manager, runner):
