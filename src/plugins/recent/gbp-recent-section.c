@@ -41,6 +41,25 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
+clear_settings_with_path (const gchar *schema_id,
+                          const gchar *path)
+{
+  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GSettingsSchema) schema = NULL;
+  g_auto(GStrv) keys = NULL;
+
+  g_assert (schema_id != NULL);
+  g_assert (path != NULL);
+
+  settings = g_settings_new_with_path (schema_id, path);
+  g_object_get (settings, "settings-schema", &schema, NULL);
+  keys = g_settings_schema_list_keys (schema);
+
+  for (guint i = 0; keys[i] != NULL; i++)
+    g_settings_reset (settings, keys[i]);
+}
+
+static void
 gbp_recent_section_get_has_selection_cb (GtkWidget *widget,
                                          gpointer   user_data)
 {
@@ -297,6 +316,8 @@ gbp_recent_section_purge_selected (IdeGreeterSection *section)
       GFile *directory = ide_project_info_get_directory (info);
       GFile *file = ide_project_info_get_file (info);
       g_autoptr(GFile) parent = NULL;
+      g_autofree gchar *id = NULL;
+      g_autofree gchar *path = NULL;
 
       g_assert (G_IS_FILE (directory) || G_IS_FILE (file));
 
@@ -312,12 +333,12 @@ gbp_recent_section_purge_selected (IdeGreeterSection *section)
        * might expect to be reomved.
        */
 
+      id = ide_project_create_id (name);
+
       if (name != NULL)
         {
           g_autoptr(GFile) cache = NULL;
-          g_autofree gchar *id = NULL;
 
-          id = ide_project_create_id (name);
           cache = g_file_new_build_filename (g_get_user_cache_dir (),
                                              ide_get_program_name (),
                                              "projects",
@@ -326,6 +347,13 @@ gbp_recent_section_purge_selected (IdeGreeterSection *section)
           dzl_directory_reaper_add_directory (reaper, cache, 0);
           g_ptr_array_add (directories, g_steal_pointer (&cache));
         }
+
+      /*
+       * Unset any project settings so if the project is openned again there
+       * is a better chance it get's fresh state.
+       */
+      path = g_strdup_printf ("/org/gnome/builder/projects/%s/", id);
+      clear_settings_with_path ("org.gnome.builder.project", path);
     }
 
   dzl_directory_reaper_execute_async (reaper,
