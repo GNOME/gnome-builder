@@ -2831,3 +2831,29 @@ ide_context_build_filename (IdeContext  *self,
 
   return g_build_filenamev ((gchar **)ar->pdata);
 }
+
+/**
+ * ide_context_get_project_settings:
+ * @self: a #IdeContext
+ *
+ * Gets an org.gnome.builder.project #GSettings.
+ *
+ * This creates a new #GSettings instance for the project.
+ *
+ * Returns: (transfer full): a #GSettings
+ */
+GSettings *
+ide_context_get_project_settings (IdeContext *self)
+{
+  g_autofree gchar *path = NULL;
+  const gchar *project_id;
+  IdeProject *project;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  project = ide_context_get_project (self);
+  project_id = ide_project_get_id (project);
+  path = g_strdup_printf ("/org/gnome/builder/projects/%s/", project_id);
+
+  return g_settings_new_with_path ("org.gnome.builder.project", path);
+}

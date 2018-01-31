@@ -52,6 +52,8 @@ IDE_AVAILABLE_IN_ALL
 IdeDocumentation         *ide_context_get_documentation         (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL
 IdeProject               *ide_context_get_project               (IdeContext           *self);
+IDE_AVAILABLE_IN_3_28
+GSettings                *ide_context_get_project_settings      (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL
 GtkRecentManager         *ide_context_get_recent_manager        (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL
