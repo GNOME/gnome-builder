@@ -41,6 +41,7 @@ struct _IdeConfigurationManager
   GArray           *configs;
   IdeConfiguration *current;
   PeasExtensionSet *providers;
+  GSettings        *project_settings;
 
   guint             queued_save_source;
 };
@@ -262,6 +263,7 @@ ide_configuration_manager_dispose (GObject *object)
                                           self);
 
   g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->project_settings);
 
   G_OBJECT_CLASS (ide_configuration_manager_parent_class)->dispose (object);
 }
@@ -691,6 +693,8 @@ ide_configuration_manager_init_async (GAsyncInitable      *initable,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
+
+  self->project_settings = ide_context_get_project_settings (context);
 
   self->providers = peas_extension_set_new (peas_engine_get_default (),
                                             IDE_TYPE_CONFIGURATION_PROVIDER,
