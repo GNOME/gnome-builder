@@ -31,7 +31,7 @@
 #include "buildconfig/ide-buildconfig-configuration.h"
 #include "buildconfig/ide-buildconfig-configuration-provider.h"
 
-#define WRITEBACK_DELAY_SEC 2
+#define WRITEBACK_DELAY_SEC 3
 
 struct _IdeConfigurationManager
 {
