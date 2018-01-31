@@ -427,8 +427,8 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
                                           (const gchar * const *)build_commands);
 
   if (discover_strv_field (primary, "post-install", &post_install))
-    ide_configuration_set_build_commands (IDE_CONFIGURATION (self),
-                                          (const gchar * const *)post_install);
+    ide_configuration_set_post_install_commands (IDE_CONFIGURATION (self),
+                                                 (const gchar * const *)post_install);
 
   if (json_object_has_member (primary, "builddir") &&
       json_object_get_boolean_member (primary, "builddir"))
@@ -661,4 +661,199 @@ gbp_flatpak_manifest_get_path (GbpFlatpakManifest *self)
   g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
 
   return g_file_get_path (self->file);
+}
+
+static void
+apply_changes_to_tree (GbpFlatpakManifest *self)
+{
+  IdeEnvironment *env;
+  const gchar *app_id;
+  const gchar *runtime_id;
+  JsonObject *obj;
+  JsonObject *build_options;
+  JsonObject *env_obj;
+  guint n_items;
+
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (self->root != NULL);
+  g_assert (JSON_NODE_HOLDS_OBJECT (self->root));
+
+  obj = json_node_get_object (self->root);
+
+  if ((runtime_id = ide_configuration_get_runtime_id (IDE_CONFIGURATION (self))))
+    {
+      g_autofree gchar *id = NULL;
+      g_autofree gchar *arch = NULL;
+      g_autofree gchar *branch = NULL;
+
+      if (g_str_has_prefix (runtime_id, "flatpak:"))
+        runtime_id += strlen ("flatpak:");
+
+      if (gbp_flatpak_split_id (runtime_id, &id, &arch, &branch))
+        {
+          json_object_set_string_member (obj, "runtime", id);
+          json_object_set_string_member (obj, "runtime-version", branch);
+        }
+    }
+
+  if ((app_id = ide_configuration_get_app_id (IDE_CONFIGURATION (self))))
+    json_object_set_string_member (obj, "app-id", app_id);
+
+  if (!json_object_has_member (obj, "build-options"))
+    json_object_set_object_member (obj, "build-options", json_object_new ());
+  build_options = json_object_get_object_member (obj, "build-options");
+
+  env_obj = json_object_new ();
+  json_object_set_object_member (build_options, "env", env_obj);
+
+  env = ide_configuration_get_environment (IDE_CONFIGURATION (self));
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (env));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeEnvironmentVariable) var = g_list_model_get_item (G_LIST_MODEL (env), i);
+      const gchar *key;
+      const gchar *value;
+
+      g_assert (IDE_IS_ENVIRONMENT_VARIABLE (var));
+
+      key = ide_environment_variable_get_key (var);
+      value = ide_environment_variable_get_value (var);
+
+      if (dzl_str_equal0 (key, "CFLAGS"))
+        json_object_set_string_member (build_options, "cflags", value);
+      else if (dzl_str_equal0 (key, "CXXFLAGS"))
+        json_object_set_string_member (build_options, "cxxflags", value);
+      else
+        json_object_set_string_member (env_obj, key, value);
+    }
+
+  if (ide_configuration_get_locality (IDE_CONFIGURATION (self)) == IDE_BUILD_LOCALITY_OUT_OF_TREE)
+    json_object_set_boolean_member (self->primary, "builddir", TRUE);
+  else if (json_object_has_member (self->primary, "builddir"))
+    json_object_remove_member (self->primary, "builddir");
+}
+
+static void
+gbp_flatpak_manifest_save_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  GbpFlatpakManifest *self;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!g_file_replace_contents_finish (file, result, NULL, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  self = g_task_get_source_object (task);
+  ide_configuration_set_dirty (IDE_CONFIGURATION (self), FALSE);
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+void
+gbp_flatpak_manifest_save_async (GbpFlatpakManifest  *self,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+  g_autoptr(JsonGenerator) generator = NULL;
+  g_autofree gchar *data = NULL;
+  gsize len;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GBP_IS_FLATPAK_MANIFEST (self));
+  g_return_if_fail (G_IS_FILE (self->file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_flatpak_manifest_save_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  if (self->root == NULL || self->primary == NULL)
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to save, missing JSON node");
+      return;
+    }
+
+  /*
+   * First apply our changes to the saved JsonNode while we are in the
+   * main loop to avoid proxying structures to another thread (and the
+   * mutability issues that would arrise from that).
+   */
+  apply_changes_to_tree (self);
+
+  /*
+   * Now that we have an updated JsonNode tree, convert that to a
+   * pretty-printed JSON document stream. We are destructive here (in that
+   * we lose extended-JSON comments. But that is outside the scope of our
+   * support and needs to be dealt with at a lower layer.
+   */
+  generator = json_generator_new ();
+  json_generator_set_pretty (generator, TRUE);
+  json_generator_set_indent (generator, 4);
+  json_generator_set_indent_char (generator, ' ');
+  json_generator_set_root (generator, self->root);
+  data = json_generator_to_data (generator, &len);
+
+  /*
+   * Since we're writing this as a series of bytes, and not a utf8 string
+   * (even though it is), we can steal the final \0 byte to add a trailing
+   * newline for the file.
+   */
+  data[len] = '\n';
+  bytes = g_bytes_new_take (g_steal_pointer (&data), len + 1);
+
+  /*
+   * Now that we have a buffer containing the UTF-8 encoded formatted
+   * JSON, we can asynchronously write that content to disk without hvaing
+   * to access any of our Json nodes (which are main-thread only).
+   */
+
+  g_file_replace_contents_bytes_async (self->file,
+                                       bytes,
+                                       NULL,
+                                       TRUE,
+                                       G_FILE_CREATE_REPLACE_DESTINATION,
+                                       cancellable,
+                                       gbp_flatpak_manifest_save_cb,
+                                       g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+gbp_flatpak_manifest_save_finish (GbpFlatpakManifest  *self,
+                                  GAsyncResult        *result,
+                                  GError             **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
