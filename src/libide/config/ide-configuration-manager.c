@@ -425,6 +425,8 @@ ide_configuration_manager_do_save (gpointer data)
 
   self->queued_save_source = 0;
 
+  g_signal_emit (self, signals [INVALIDATE], 0);
+
   ide_configuration_manager_save_async (self, NULL, NULL, NULL);
 
   IDE_RETURN (G_SOURCE_REMOVE);
@@ -436,8 +438,6 @@ ide_configuration_manager_changed (IdeConfigurationManager *self,
 {
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
   g_assert (IDE_IS_CONFIGURATION (config));
-
-  g_signal_emit (self, signals [INVALIDATE], 0);
 
   dzl_clear_source (&self->queued_save_source);
   self->queued_save_source =
