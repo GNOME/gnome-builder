@@ -46,6 +46,60 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildStageLauncher, ide_build_stage_launcher, IDE
 
 static GParamSpec *properties [N_PROPS];
 
+static inline gboolean
+needs_quoting (const gchar *str)
+{
+  for (; *str; str = g_utf8_next_char (str))
+    {
+      gunichar ch = g_utf8_get_char (str);
+
+      switch (ch)
+        {
+        case '\'':
+        case '"':
+        case '\\':
+          return TRUE;
+
+        default:
+          if (g_unichar_isspace (ch))
+            return TRUE;
+          break;
+        }
+    }
+
+  return FALSE;
+}
+
+static gchar *
+pretty_print_args (IdeSubprocessLauncher *launcher)
+{
+  const gchar * const *argv;
+  g_autoptr(GString) command = NULL;
+
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+
+  if (!(argv = ide_subprocess_launcher_get_argv (launcher)))
+    return NULL;
+
+  command = g_string_new (NULL);
+
+  for (guint i = 0; argv[i] != NULL; i++)
+    {
+      if (command->len > 0)
+        g_string_append_c (command, ' ');
+
+      if (needs_quoting (argv[i]))
+        {
+          g_autofree gchar *quoted = g_shell_quote (argv[i]);
+          g_string_append (command, quoted);
+        }
+      else
+        g_string_append (command, argv[i]);
+    }
+
+  return g_string_free (g_steal_pointer (&command), FALSE);
+}
+
 static void
 ide_build_stage_launcher_wait_cb (GObject      *object,
                                   GAsyncResult *result,
@@ -181,6 +235,14 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
       flags |= G_SUBPROCESS_FLAGS_STDERR_PIPE;
 
       ide_subprocess_launcher_set_flags (launcher, flags);
+    }
+
+  if (priv->use_pty)
+    {
+      g_autofree gchar *command = pretty_print_args (launcher);
+
+      if (command != NULL)
+        ide_build_stage_log (IDE_BUILD_STAGE (self), IDE_BUILD_LOG_STDOUT, command, -1);
     }
 
   /* Now launch the process */
