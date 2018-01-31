@@ -38,6 +38,7 @@ struct _GbpCreateProjectWidget
   GtkFlowBox           *project_template_chooser;
   GtkSwitch            *versioning_switch;
   DzlRadioBox          *license_chooser;
+  GtkLabel             *destination_label;
 
   guint                 invalid_directory : 1;
 };
@@ -157,8 +158,8 @@ static void
 gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                                         GtkEntry               *entry)
 {
-  const gchar *text;
   g_autofree gchar *project_name = NULL;
+  const gchar *text;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
@@ -172,6 +173,8 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                     "secondary-icon-name", "dialog-warning-symbolic",
                     "tooltip-text", _("Characters were used which might cause technical issues as a project name"),
                     NULL);
+      gtk_label_set_label (self->destination_label,
+                           _("Your project will be created within a new child directory."));
     }
   else if (directory_exists (self, project_name))
     {
@@ -179,13 +182,24 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
                     "secondary-icon-name", "dialog-warning-symbolic",
                     "tooltip-text", _("Directory already exists with that name"),
                     NULL);
+      gtk_label_set_label (self->destination_label, NULL);
     }
   else
     {
+      g_autofree gchar *formatted = NULL;
+      g_autoptr(GFile) file = dzl_file_chooser_entry_get_file (self->project_location_entry);
+      g_autoptr(GFile) child = g_file_get_child (file, project_name);
+      g_autofree gchar *path = g_file_get_path (child);
+      g_autofree gchar *collapsed = ide_path_collapse (path);
+
       g_object_set (self->project_name_entry,
                     "secondary-icon-name", NULL,
                     "tooltip-text", NULL,
                     NULL);
+
+      /* translators: %s is replaced with a short-form file-system path to the project */
+      formatted = g_strdup_printf (_("Your project will be created within %s."), collapsed);
+      gtk_label_set_label (self->destination_label, formatted);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
@@ -461,6 +475,7 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_template_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_switch);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, license_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, destination_label);
 }
 
 static void

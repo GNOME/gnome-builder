@@ -71,9 +71,10 @@
                 </child>
 
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="project_location_label">
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">Project Location</property>
+                    <property name="valign">start</property>
                     <property name="visible">true</property>
                   </object>
                   <packing>
@@ -82,11 +83,33 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="DzlFileChooserEntry" id="project_location_entry">
-                    <property name="action">select-folder</property>
-                    <property name="title" translatable="yes">Select Project Directory</property>
-                    <property name="hexpand">true</property>
+                  <object class="GtkBox">
+                    <property name="spacing">6</property>
+                    <property name="orientation">vertical</property>
                     <property name="visible">true</property>
+                    <child>
+                      <object class="DzlFileChooserEntry" id="project_location_entry">
+                        <property name="action">select-folder</property>
+                        <property name="title" translatable="yes">Select Project Directory</property>
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="destination_label">
+                        <property name="xalign">0.0</property>
+                        <property name="wrap">true</property>
+                        <property name="visible">true</property>
+                        <property name="max-width-chars">60</property>
+                        <property name="label" translatable="yes">Your project will be created within a new child directory.</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                        <attributes>
+                          <attribute name="scale" value="0.833333"/>
+                        </attributes>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="column">center</property>
@@ -296,6 +319,7 @@
     <widgets>
       <widget name="project_name_label"/>
       <widget name="project_name_entry"/>
+      <widget name="project_location_label"/>
       <widget name="license_label"/>
       <widget name="language_label"/>
     </widgets>
