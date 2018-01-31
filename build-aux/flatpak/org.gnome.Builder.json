@@ -1,661 +1,726 @@
 {
-    "app-id": "org.gnome.Builder",
-    "runtime": "org.gnome.Sdk",
-    "runtime-version": "master",
-    "sdk": "org.gnome.Sdk",
-    "command": "gnome-builder",
-    "tags": ["nightly"],
-    "desktop-file-name-prefix": "(Nightly) ",
-    "finish-args": [
-        /* Require recent flatpak at runtime */
+    "app-id" : "org.gnome.Builder",
+    "runtime" : "org.gnome.Sdk",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "gnome-builder",
+    "tags" : [
+        "nightly"
+    ],
+    "desktop-file-name-prefix" : "(Nightly) ",
+    "finish-args" : [
         "--require-version=0.10.0",
-        /* Allow access to developer tools */
         "--allow=devel",
         "--talk-name=org.freedesktop.Flatpak",
-        /* X11 + XShm access */
-        "--share=ipc", "--socket=x11",
-        /* Wayland access */
+        "--share=ipc",
+        "--socket=x11",
         "--socket=wayland",
-        /* We want full fs access */
         "--filesystem=home",
         "--filesystem=host",
-        /* Needs to talk to the network: */
         "--share=network",
         "--talk-name=org.gtk.vfs.*",
-        /* Needs access to policykit for flatpak and sysprof */
         "--system-talk-name=org.freedesktop.PolicyKit1",
-        /* Needs access to host sysprofd for profiling */
         "--system-talk-name=org.gnome.Sysprof2",
-        /* Needs access to host gnome-code-assistance for extra languages */
         "--talk-name=org.gnome.CodeAssist.v1.*",
-        /* Needed for dconf to work (+ host or homedir read access from above) */
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
-        /* Need access to talk to the file manager */
         "--talk-name=org.freedesktop.FileManager1",
-        /* Need access to gnome-settings-daemon for Night Light */
         "--talk-name=org.gnome.SettingsDaemon.Color",
-        /* Need access to packagekit for installs */
         "--talk-name=org.freedesktop.PackageKit",
-        /* We need access to auth agents */
         "--talk-name=org.freedesktop.secrets",
         "--filesystem=xdg-run/keyring",
-        /* Needed for various SSL certificates to work */
         "--env=SSL_CERT_DIR=/etc/ssl/certs",
         "--filesystem=/etc/ssl:ro",
         "--filesystem=/etc/pki:ro",
         "--filesystem=/etc/ca-certificates:ro",
-        /* Need access to user and system flatpak repos */
         "--filesystem=~/.local/share/flatpak",
         "--filesystem=/var/lib/flatpak"
     ],
-    "x-run-args" : [ "--standalone", "-vvvv" ],
+    "x-run-args" : [
+        "--standalone",
+        "-vvvv"
+    ],
     "build-options" : {
-        "cflags": "-O2 -g",
-        "cxxflags": "-O2 -g",
-        "env": {
-            "BASH_COMPLETIONSDIR": "/app/share/bash-completion/completions",
-            "MOUNT_FUSE_PATH": "../tmp/",
-            "V": "1"
+        "cflags" : "-O2 -g",
+        "cxxflags" : "-O2 -g",
+        "env" : {
+            "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
+            "MOUNT_FUSE_PATH" : "../tmp/",
+            "V" : "1"
         }
     },
-    "cleanup": ["/include", "/lib/pkgconfig", "/lib/cmake",
-                "/share/pkgconfig", "/share/aclocal",
-                "/man", "/share/man", "/share/gtk-doc",
-                "/share/doc", "/share/vala",
-                "/share/bash-completions",
-                "*.la", "*.a"],
-    "modules": [
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/lib/cmake",
+        "/share/pkgconfig",
+        "/share/aclocal",
+        "/man",
+        "/share/man",
+        "/share/gtk-doc",
+        "/share/doc",
+        "/share/vala",
+        "/share/bash-completions",
+        "*.la",
+        "*.a"
+    ],
+    "modules" : [
         {
-            "name": "libfuse",
-            "cleanup": [ "/bin" ],
-            "config-opts": [
+            "name" : "libfuse",
+            "cleanup" : [
+                "/bin"
+            ],
+            "config-opts" : [
                 "UDEV_RULES_PATH=/app/etc/udev/rules.d",
                 "INIT_D_PATH=/app/etc/init.d"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "https://github.com/libfuse/libfuse/releases/download/fuse-2.9.7/fuse-2.9.7.tar.gz",
-                    "sha256": "832432d1ad4f833c20e13b57cf40ce5277a9d33e483205fc63c78111b3358874"
+                    "type" : "archive",
+                    "url" : "https://github.com/libfuse/libfuse/releases/download/fuse-2.9.7/fuse-2.9.7.tar.gz",
+                    "sha256" : "832432d1ad4f833c20e13b57cf40ce5277a9d33e483205fc63c78111b3358874"
                 },
                 {
-                    "type": "patch",
-                    "path": "fuse-2.9.2-namespace-conflict-fix.patch"
+                    "type" : "patch",
+                    "path" : "fuse-2.9.2-namespace-conflict-fix.patch"
                 }
             ]
         },
         {
-            "name": "polkit",
-            "config-opts": [ "--disable-polkitd", "--disable-man-pages", "--disable-introspection" ],
-            "rm-configure": true,
-            "cleanup": [ "/bin/*",
-                         "/etc/pam.d",
-                         "/etc/dbus-1",
-                         "/share/dbus-1/system-services/*",
-                         "/share/polkit-1/actions/*",
-                         "/lib/polkit-1" ],
-            "sources": [
+            "name" : "polkit",
+            "config-opts" : [
+                "--disable-polkitd",
+                "--disable-man-pages",
+                "--disable-introspection"
+            ],
+            "rm-configure" : true,
+            "cleanup" : [
+                "/bin/*",
+                "/etc/pam.d",
+                "/etc/dbus-1",
+                "/share/dbus-1/system-services/*",
+                "/share/polkit-1/actions/*",
+                "/lib/polkit-1"
+            ],
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "http://www.freedesktop.org/software/polkit/releases/polkit-0.113.tar.gz",
-                    "sha256": "e1c095093c654951f78f8618d427faf91cf62abdefed98de40ff65eca6413c81"
+                    "type" : "archive",
+                    "url" : "http://www.freedesktop.org/software/polkit/releases/polkit-0.113.tar.gz",
+                    "sha256" : "e1c095093c654951f78f8618d427faf91cf62abdefed98de40ff65eca6413c81"
                 },
                 {
-                    "type": "patch",
-                    "path": "polkit-build-Add-option-to-build-without-polkitd.patch"
+                    "type" : "patch",
+                    "path" : "polkit-build-Add-option-to-build-without-polkitd.patch"
                 },
                 {
-                    "type": "file",
-                    "path": "polkit-autogen",
-                    "dest-filename": "autogen.sh"
+                    "type" : "file",
+                    "path" : "polkit-autogen",
+                    "dest-filename" : "autogen.sh"
                 }
             ]
         },
         {
-            "name": "ctags",
-            "sources": [
+            "name" : "ctags",
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz",
-                    "sha256": "0e44b45dcabe969e0bbbb11e30c246f81abe5d32012db37395eb57d66e9e99c7"
+                    "type" : "archive",
+                    "url" : "http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz",
+                    "sha256" : "0e44b45dcabe969e0bbbb11e30c246f81abe5d32012db37395eb57d66e9e99c7"
                 }
             ]
         },
         {
-            "name": "python3-jedi",
-            "no-autogen": true,
-            "sources": [
+            "name" : "python3-jedi",
+            "no-autogen" : true,
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "https://pypi.python.org/packages/80/b9/4e9b0b999deeec8a91cb84e567380853a842e6c387c9d39b8fc9a49953fa/jedi-0.10.2.tar.gz",
-                    "sha256": "7abb618cac6470ebbd142e59c23daec5e6e063bfcecc8a43a037d2ab57276f4e"
+                    "type" : "archive",
+                    "url" : "https://pypi.python.org/packages/80/b9/4e9b0b999deeec8a91cb84e567380853a842e6c387c9d39b8fc9a49953fa/jedi-0.10.2.tar.gz",
+                    "sha256" : "7abb618cac6470ebbd142e59c23daec5e6e063bfcecc8a43a037d2ab57276f4e"
                 },
                 {
-                    "type": "file",
-                    "path": "setuptools-makefile",
-                    "dest-filename": "Makefile"
+                    "type" : "file",
+                    "path" : "setuptools-makefile",
+                    "dest-filename" : "Makefile"
                 }
             ]
         },
         {
-            "name": "python3-lxml",
-            "no-autogen": true,
-            "ensure-writable": ["/lib/python*/site-packages/easy-install.pth"],
-            "build-options": {
-                "cflags": "-I/usr/include",
-                "env": {
-                    "XSLT_CONFIG": "pkg-config libxslt",
-                    "XML2_CONFIG": "pkg-config libxml-2.0"
+            "name" : "python3-lxml",
+            "no-autogen" : true,
+            "ensure-writable" : [
+                "/lib/python*/site-packages/easy-install.pth"
+            ],
+            "build-options" : {
+                "cflags" : "-I/usr/include",
+                "env" : {
+                    "XSLT_CONFIG" : "pkg-config libxslt",
+                    "XML2_CONFIG" : "pkg-config libxml-2.0"
                 }
             },
-            "sources": [
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "https://pypi.python.org/packages/20/b3/9f245de14b7696e2d2a386c0b09032a2ff6625270761d6543827e667d8de/lxml-3.8.0.tar.gz",
-                    "sha256": "736f72be15caad8116891eb6aa4a078b590d231fdc63818c40c21624ac71db96"
+                    "type" : "archive",
+                    "url" : "https://pypi.python.org/packages/20/b3/9f245de14b7696e2d2a386c0b09032a2ff6625270761d6543827e667d8de/lxml-3.8.0.tar.gz",
+                    "sha256" : "736f72be15caad8116891eb6aa4a078b590d231fdc63818c40c21624ac71db96"
                 },
                 {
-                    "type": "file",
-                    "path": "setuptools-makefile",
-                    "dest-filename": "Makefile"
+                    "type" : "file",
+                    "path" : "setuptools-makefile",
+                    "dest-filename" : "Makefile"
                 },
                 {
-                    "type": "patch",
-                    "path": "lxml-Fix-getting-lib-version-when-using-pkg-config.patch"
+                    "type" : "patch",
+                    "path" : "lxml-Fix-getting-lib-version-when-using-pkg-config.patch"
                 }
             ]
         },
         {
-            "name": "python3-docutils",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-docutils",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app docutils-0.13.1-py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/7c/30/8fb30d820c012a6f701a66618ce065b6d61d08ac0a77e47fc7808dbaee47/docutils-0.13.1-py3-none-any.whl",
-                    "sha256": "cb3ebcb09242804f84bdbf0b26504077a054da6772c6f4d625f335cc53ebf94d"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/7c/30/8fb30d820c012a6f701a66618ce065b6d61d08ac0a77e47fc7808dbaee47/docutils-0.13.1-py3-none-any.whl",
+                    "sha256" : "cb3ebcb09242804f84bdbf0b26504077a054da6772c6f4d625f335cc53ebf94d"
                 }
             ]
         },
         {
-            "name": "python3-six",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-six",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app six-1.10.0-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/c8/0a/b6723e1bc4c516cb687841499455a8505b44607ab535be01091c0f24f079/six-1.10.0-py2.py3-none-any.whl",
-                    "sha256": "0ff78c403d9bccf5a425a6d31a12aa6b47f1c21ca4dc2573a7e2f32a97335eb1"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/c8/0a/b6723e1bc4c516cb687841499455a8505b44607ab535be01091c0f24f079/six-1.10.0-py2.py3-none-any.whl",
+                    "sha256" : "0ff78c403d9bccf5a425a6d31a12aa6b47f1c21ca4dc2573a7e2f32a97335eb1"
                 }
             ]
         },
         {
-            "name": "python3-chardet",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-chardet",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app chardet-2.3.0-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/7e/5c/605ca2daa5cf21c87690d8fe6ab05a6f2278c451f4ede6456dd26453f4bd/chardet-2.3.0-py2.py3-none-any.whl",
-                    "sha256": "aaf514bde38020b4f1e42c6a6e141f2827a8a58ccfc3b22b6ff5a1a4b50be56e"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/7e/5c/605ca2daa5cf21c87690d8fe6ab05a6f2278c451f4ede6456dd26453f4bd/chardet-2.3.0-py2.py3-none-any.whl",
+                    "sha256" : "aaf514bde38020b4f1e42c6a6e141f2827a8a58ccfc3b22b6ff5a1a4b50be56e"
                 }
             ]
         },
         {
-            "name": "python3-urllib3",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-urllib3",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app urllib3-1.20-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/67/87/67be08389f8df83c9ba4c12e618a4ad93546e234a1e9530618735cd9b73d/urllib3-1.20-py2.py3-none-any.whl",
-                    "sha256": "b64c0faa183e9e9e76193146c4147e82a734982c6b6719dca851d6cc4ec90c01"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/67/87/67be08389f8df83c9ba4c12e618a4ad93546e234a1e9530618735cd9b73d/urllib3-1.20-py2.py3-none-any.whl",
+                    "sha256" : "b64c0faa183e9e9e76193146c4147e82a734982c6b6719dca851d6cc4ec90c01"
                 }
             ]
         },
         {
-            "name": "python3-sphinx_rtd_theme",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-sphinx_rtd_theme",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app sphinx_rtd_theme-0.2.4-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/d7/50/849cd05961e7bafda2e0846ba80fa03f5a16a55fc5acc1d9f6bc79eb6fd9/sphinx_rtd_theme-0.2.4-py2.py3-none-any.whl",
-                    "sha256": "62ee4752716e698bad7de8a18906f42d33664128eea06c46b718fc7fbd1a9f5c"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/d7/50/849cd05961e7bafda2e0846ba80fa03f5a16a55fc5acc1d9f6bc79eb6fd9/sphinx_rtd_theme-0.2.4-py2.py3-none-any.whl",
+                    "sha256" : "62ee4752716e698bad7de8a18906f42d33664128eea06c46b718fc7fbd1a9f5c"
                 }
             ]
         },
         {
-            "name": "python3-pbr",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-pbr",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app pbr-2.0.0-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/e9/c0/8f7f54d7b9b8ceb73ac30d769fdd722431e95ad0d2cd689def382e8b9eec/pbr-2.0.0-py2.py3-none-any.whl",
-                    "sha256": "d9b69a26a5cb4e3898eb3c5cea54d2ab3332382167f04e30db5e1f54e1945e45"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/e9/c0/8f7f54d7b9b8ceb73ac30d769fdd722431e95ad0d2cd689def382e8b9eec/pbr-2.0.0-py2.py3-none-any.whl",
+                    "sha256" : "d9b69a26a5cb4e3898eb3c5cea54d2ab3332382167f04e30db5e1f54e1945e45"
                 }
             ]
         },
         {
-            "name": "python3-funcsigs",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-funcsigs",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app funcsigs-1.0.2-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/69/cb/f5be453359271714c01b9bd06126eaf2e368f1fddfff30818754b5ac2328/funcsigs-1.0.2-py2.py3-none-any.whl",
-                    "sha256": "330cc27ccbf7f1e992e69fef78261dc7c6569012cf397db8d3de0234e6c937ca"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/69/cb/f5be453359271714c01b9bd06126eaf2e368f1fddfff30818754b5ac2328/funcsigs-1.0.2-py2.py3-none-any.whl",
+                    "sha256" : "330cc27ccbf7f1e992e69fef78261dc7c6569012cf397db8d3de0234e6c937ca"
                 }
             ]
         },
         {
-            "name": "python3-mock",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-mock",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app mock-2.0.0-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/e6/35/f187bdf23be87092bd0f1200d43d23076cee4d0dec109f195173fd3ebc79/mock-2.0.0-py2.py3-none-any.whl",
-                    "sha256": "5ce3c71c5545b472da17b72268978914d0252980348636840bd34a00b5cc96c1"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/e6/35/f187bdf23be87092bd0f1200d43d23076cee4d0dec109f195173fd3ebc79/mock-2.0.0-py2.py3-none-any.whl",
+                    "sha256" : "5ce3c71c5545b472da17b72268978914d0252980348636840bd34a00b5cc96c1"
                 }
             ]
         },
         {
-            "name": "python3-imagesize",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-imagesize",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app imagesize-0.7.1-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/29/e9/342106962eac603ff7865a29de05e965af6a259e30fbccc6fc5aeac74d70/imagesize-0.7.1-py2.py3-none-any.whl",
-                    "sha256": "6ebdc9e0ad188f9d1b2cdd9bc59cbe42bf931875e829e7a595e6b3abdc05cdfb"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/29/e9/342106962eac603ff7865a29de05e965af6a259e30fbccc6fc5aeac74d70/imagesize-0.7.1-py2.py3-none-any.whl",
+                    "sha256" : "6ebdc9e0ad188f9d1b2cdd9bc59cbe42bf931875e829e7a595e6b3abdc05cdfb"
                 }
             ]
         },
         {
-            "name": "python3-markupsafe",
-            "no-autogen": true,
-            "ensure-writable": ["/lib/python*/site-packages/easy-install.pth"],
-            "build-options": {
-                "cflags": "-I/usr/include"
+            "name" : "python3-markupsafe",
+            "no-autogen" : true,
+            "ensure-writable" : [
+                "/lib/python*/site-packages/easy-install.pth"
+            ],
+            "build-options" : {
+                "cflags" : "-I/usr/include"
             },
-            "sources": [
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz",
-                    "sha256": "a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"
+                    "type" : "archive",
+                    "url" : "https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz",
+                    "sha256" : "a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"
                 },
                 {
-                    "type": "file",
-                    "path": "setuptools-makefile",
-                    "dest-filename": "Makefile"
+                    "type" : "file",
+                    "path" : "setuptools-makefile",
+                    "dest-filename" : "Makefile"
                 }
             ]
         },
         {
-            "name": "python3-jinja2",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-jinja2",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app Jinja2-2.9.5-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/3c/d1/49d69bc23d0e0c7612248dd8f5391bd043648865132309616c280ca1c837/Jinja2-2.9.5-py2.py3-none-any.whl",
-                    "sha256": "a7b7438120dbe76a8e735ef7eba6048eaf4e0b7dbc530e100812f8ec462a4d50"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/3c/d1/49d69bc23d0e0c7612248dd8f5391bd043648865132309616c280ca1c837/Jinja2-2.9.5-py2.py3-none-any.whl",
+                    "sha256" : "a7b7438120dbe76a8e735ef7eba6048eaf4e0b7dbc530e100812f8ec462a4d50"
                 }
             ]
         },
         {
-            "name": "python3-pygments",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-pygments",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app Pygments-2.2.0-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/02/ee/b6e02dc6529e82b75bb06823ff7d005b141037cb1416b10c6f00fc419dca/Pygments-2.2.0-py2.py3-none-any.whl",
-                    "sha256": "78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/02/ee/b6e02dc6529e82b75bb06823ff7d005b141037cb1416b10c6f00fc419dca/Pygments-2.2.0-py2.py3-none-any.whl",
+                    "sha256" : "78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d"
                 }
             ]
         },
         {
-            "name": "python3-snowballstemmer",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-snowballstemmer",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app snowballstemmer-1.2.1-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/d4/6c/8a935e2c7b54a37714656d753e4187ee0631988184ed50c0cf6476858566/snowballstemmer-1.2.1-py2.py3-none-any.whl",
-                    "sha256": "9f3bcd3c401c3e862ec0ebe6d2c069ebc012ce142cce209c098ccb5b09136e89"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/d4/6c/8a935e2c7b54a37714656d753e4187ee0631988184ed50c0cf6476858566/snowballstemmer-1.2.1-py2.py3-none-any.whl",
+                    "sha256" : "9f3bcd3c401c3e862ec0ebe6d2c069ebc012ce142cce209c098ccb5b09136e89"
                 }
             ]
         },
         {
-            "name": "python3-requests",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-requests",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app requests-2.13.0-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/7e/ac/a80ed043485a3764053f59ca92f809cc8a18344692817152b0e8bd3ca891/requests-2.13.0-py2.py3-none-any.whl",
-                    "sha256": "1a720e8862a41aa22e339373b526f508ef0c8988baf48b84d3fc891a8e237efb"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/7e/ac/a80ed043485a3764053f59ca92f809cc8a18344692817152b0e8bd3ca891/requests-2.13.0-py2.py3-none-any.whl",
+                    "sha256" : "1a720e8862a41aa22e339373b526f508ef0c8988baf48b84d3fc891a8e237efb"
                 }
             ]
         },
         {
-            "name": "alabaster",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "alabaster",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app alabaster-0.7.10-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/2e/c3/9b7dcd8548cf2c00531763ba154e524af575e8f36701bacfe5bcadc67440/alabaster-0.7.10-py2.py3-none-any.whl",
-                    "sha256": "2eef172f44e8d301d25aff8068fddd65f767a3f04b5f15b0f4922f113aa1c732"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/2e/c3/9b7dcd8548cf2c00531763ba154e524af575e8f36701bacfe5bcadc67440/alabaster-0.7.10-py2.py3-none-any.whl",
+                    "sha256" : "2eef172f44e8d301d25aff8068fddd65f767a3f04b5f15b0f4922f113aa1c732"
                 }
             ]
         },
         {
-            "name": "python3-pytz",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-pytz",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app pytz-2016.10-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/f5/fa/4a9aefc206aa49a4b5e0a72f013df1f471b4714cdbe6d78f0134feeeecdb/pytz-2016.10-py2.py3-none-any.whl",
-                    "sha256": "a1ea35e87a63c7825846d5b5c81d23d668e8a102d3b1b465ce95afe1b3a2e065"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/f5/fa/4a9aefc206aa49a4b5e0a72f013df1f471b4714cdbe6d78f0134feeeecdb/pytz-2016.10-py2.py3-none-any.whl",
+                    "sha256" : "a1ea35e87a63c7825846d5b5c81d23d668e8a102d3b1b465ce95afe1b3a2e065"
                 }
             ]
         },
         {
-            "name": "python3-babel",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-babel",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app Babel-2.4.0-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/5f/cf/17935db603f7044d188ce3e3a6545c4b4500dbaa8835d50da2934b738111/Babel-2.4.0-py2.py3-none-any.whl",
-                    "sha256": "e86ca5a3a6bb64b9bbb62b9dac37225ec0ab5dfaae3c2492ebd648266468042f"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/5f/cf/17935db603f7044d188ce3e3a6545c4b4500dbaa8835d50da2934b738111/Babel-2.4.0-py2.py3-none-any.whl",
+                    "sha256" : "e86ca5a3a6bb64b9bbb62b9dac37225ec0ab5dfaae3c2492ebd648266468042f"
                 }
             ]
         },
         {
-            "name": "python3-sphinx",
-            "buildsystem": "simple",
-            "build-commands": [
+            "name" : "python3-sphinx",
+            "buildsystem" : "simple",
+            "build-commands" : [
                 "pip3.5 install --prefix=/app Sphinx-1.5.3-py2.py3-none-any.whl"
             ],
-            "sources": [
+            "sources" : [
                 {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/50/2e/7a7fc35a841cf65c4600288a331345c0c3f2d23ead9b0819940e59588ae0/Sphinx-1.5.3-py2.py3-none-any.whl",
-                    "sha256": "2809b2ab81906483b47c9d7e28740e3b69c160617f33d7aa11dc4ae376fd04d9"
+                    "type" : "file",
+                    "url" : "https://pypi.python.org/packages/50/2e/7a7fc35a841cf65c4600288a331345c0c3f2d23ead9b0819940e59588ae0/Sphinx-1.5.3-py2.py3-none-any.whl",
+                    "sha256" : "2809b2ab81906483b47c9d7e28740e3b69c160617f33d7aa11dc4ae376fd04d9"
                 }
             ]
         },
         {
-            "name": "uncrustify",
-            "buildsystem": "cmake",
-            "builddir": true,
-            "sources": [
+            "name" : "uncrustify",
+            "buildsystem" : "cmake",
+            "builddir" : true,
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "https://github.com/uncrustify/uncrustify/archive/uncrustify-0.66.1.tar.gz",
-                    "sha256": "0862778fb692ce9859f4ece5e801db72841d8d76d9304e2da52bdd098b05331f"
+                    "type" : "archive",
+                    "url" : "https://github.com/uncrustify/uncrustify/archive/uncrustify-0.66.1.tar.gz",
+                    "sha256" : "0862778fb692ce9859f4ece5e801db72841d8d76d9304e2da52bdd098b05331f"
                 }
             ]
         },
         {
-            "name": "libssh2",
-            "cmake": true,
-            "config-opts": [ "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
-                             "-DBUILD_SHARED_LIBS:BOOL=ON" ],
-            "sources": [
+            "name" : "libssh2",
+            "cmake" : true,
+            "config-opts" : [
+                "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
+                "-DBUILD_SHARED_LIBS:BOOL=ON"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://github.com/libssh2/libssh2.git",
-                    "branch": "libssh2-1.8.0"
+                    "type" : "git",
+                    "url" : "https://github.com/libssh2/libssh2.git",
+                    "branch" : "libssh2-1.8.0"
                 }
             ]
         },
         {
-            "name": "libgit2",
-            "cmake": true,
-            "config-opts": [ "-DBUILD_SHARED_LIBS:BOOL=ON", "-DTHREADSAFE=ON" ],
-            "sources": [
+            "name" : "libgit2",
+            "cmake" : true,
+            "config-opts" : [
+                "-DBUILD_SHARED_LIBS:BOOL=ON",
+                "-DTHREADSAFE=ON"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://github.com/libgit2/libgit2.git",
-                    "branch": "maint/v0.26"
+                    "type" : "git",
+                    "url" : "https://github.com/libgit2/libgit2.git",
+                    "branch" : "maint/v0.26"
                 }
             ]
         },
         {
-            "name": "libgit2-glib",
-            "sources": [
+            "name" : "libgit2-glib",
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://git.gnome.org/browse/libgit2-glib"
+                    "type" : "git",
+                    "url" : "https://git.gnome.org/browse/libgit2-glib"
                 }
             ]
         },
         {
-            "name": "libpeas",
-            "cleanup": [ "/bin/*", "/lib/peas-demo" ],
-            "sources": [
+            "name" : "libpeas",
+            "cleanup" : [
+                "/bin/*",
+                "/lib/peas-demo"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://git.gnome.org/browse/libpeas"
+                    "type" : "git",
+                    "url" : "https://git.gnome.org/browse/libpeas"
                 }
             ]
         },
         {
-            "name": "gtksourceview",
-            "sources": [
+            "name" : "gtksourceview",
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://git.gnome.org/browse/gtksourceview",
-                    "branch": "gnome-3-24"
+                    "type" : "git",
+                    "url" : "https://git.gnome.org/browse/gtksourceview",
+                    "branch" : "gnome-3-24"
                 }
             ]
         },
         {
-            "name": "devhelp",
-            "config-opts": [ "--disable-compile-warnings" ],
-            "cleanup": [ "/bin/*", "/lib/gedit/plugins", "/share/appdata/*", "/share/applications/*", "/share/dbus-1/services", "/share/GConf" ],
-            "sources": [
+            "name" : "devhelp",
+            "config-opts" : [
+                "--disable-compile-warnings"
+            ],
+            "cleanup" : [
+                "/bin/*",
+                "/lib/gedit/plugins",
+                "/share/appdata/*",
+                "/share/applications/*",
+                "/share/dbus-1/services",
+                "/share/GConf"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://git.gnome.org/browse/devhelp"
+                    "type" : "git",
+                    "url" : "https://git.gnome.org/browse/devhelp"
                 }
             ]
         },
         {
-            "name": "json-glib",
-            "buildsystem": "meson",
-            "builddir": true,
-            "config-opts": [ "--libdir=/app/lib",
-                             "--buildtype=debugoptimized" ],
-            "sources": [
+            "name" : "json-glib",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/json-glib.git"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/json-glib.git"
                 }
             ]
         },
         {
-            "name": "enchant",
-            "cleanup": [ "/include", "/lib/pkgconfig", "*.la", "/share" ],
-            "sources": [
+            "name" : "enchant",
+            "cleanup" : [
+                "/include",
+                "/lib/pkgconfig",
+                "*.la",
+                "/share"
+            ],
+            "sources" : [
                 {
-                    "type": "archive",
-                    "url": "https://github.com/AbiWord/enchant/releases/download/v2.1.3/enchant-2.1.3.tar.gz",
-                    "sha256": "086f37cdecd42eacd0e1dc291f5410d9ca2c5ed2cd9cd9367729e3d2d18a8550"
+                    "type" : "archive",
+                    "url" : "https://github.com/AbiWord/enchant/releases/download/v2.1.3/enchant-2.1.3.tar.gz",
+                    "sha256" : "086f37cdecd42eacd0e1dc291f5410d9ca2c5ed2cd9cd9367729e3d2d18a8550"
                 }
             ]
         },
         {
-            "name": "gspell",
-            "config-opts": [ "--disable-gtk-doc", "--disable-gtk-doc-html" ],
-            "cleanup": [ "/include", "/lib/pkgconfig", "*.la", "/share" ],
-            "sources": [
+            "name" : "gspell",
+            "config-opts" : [
+                "--disable-gtk-doc",
+                "--disable-gtk-doc-html"
+            ],
+            "cleanup" : [
+                "/include",
+                "/lib/pkgconfig",
+                "*.la",
+                "/share"
+            ],
+            "sources" : [
                 {
-                     "type": "git",
-                     "url": "https://git.gnome.org/browse/gspell"
+                    "type" : "git",
+                    "url" : "https://git.gnome.org/browse/gspell"
                 }
             ]
         },
         {
-            "name": "sysprof",
-            "config-opts": [ "--libdir=/app/lib",
-                             "--buildtype=debugoptimized",
-                             "-Denable_gtk=true",
-                             "-Dwith_sysprofd=host" ],
-            "buildsystem": "meson",
-            "builddir": true,
-            "cleanup": [ "/bin/*",
-                         "/libexec/sysprof",
-                         "/share/appdata/",
-                         "/share/applications/",
-                         "/share/mime/packages" ],
-            "sources": [
+            "name" : "sysprof",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized",
+                "-Denable_gtk=true",
+                "-Dwith_sysprofd=host"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "cleanup" : [
+                "/bin/*",
+                "/libexec/sysprof",
+                "/share/appdata/",
+                "/share/applications/",
+                "/share/mime/packages"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://git.gnome.org/browse/sysprof"
+                    "type" : "git",
+                    "url" : "https://git.gnome.org/browse/sysprof"
                 }
             ]
         },
         {
-            "name": "template-glib",
-            "config-opts": [ "--libdir=/app/lib",
-                             "--buildtype=debugoptimized" ],
-            "buildsystem": "meson",
-            "builddir": true,
-            "sources": [
+            "name" : "template-glib",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/template-glib.git"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/template-glib.git"
                 }
             ]
         },
         {
-            "name": "jsonrpc-glib",
-            "config-opts": [ "--libdir=/app/lib",
-                             "--buildtype=debugoptimized" ],
-            "buildsystem": "meson",
-            "builddir": true,
-            "sources": [
+            "name" : "jsonrpc-glib",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/jsonrpc-glib.git"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/jsonrpc-glib.git"
                 }
             ]
         },
         {
-            "name": "libdazzle",
-            "config-opts": [ "--libdir=/app/lib",
-                             "--buildtype=debugoptimized" ],
-            "buildsystem": "meson",
-            "builddir": true,
-            "sources": [
+            "name" : "libdazzle",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/libdazzle.git"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
                 }
             ]
         },
         {
-            "name": "ostree",
-            "config-opts": [ "--disable-man" ],
-            "cleanup": [ "/bin",
-                         "/etc/grub.d",
-                         "/etc/ostree",
-                         "/share/ostree",
-                         "/libexec" ],
-            "sources": [
+            "name" : "ostree",
+            "config-opts" : [
+                "--disable-man"
+            ],
+            "cleanup" : [
+                "/bin",
+                "/etc/grub.d",
+                "/etc/ostree",
+                "/share/ostree",
+                "/libexec"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://github.com/ostreedev/ostree.git"
+                    "type" : "git",
+                    "url" : "https://github.com/ostreedev/ostree.git"
                 }
             ]
         },
         {
-            "name": "flatpak",
-            "config-opts": [ "--disable-documentation",
-                             "--disable-seccomp",
-                             "--disable-sandboxed-triggers",
-                             "--disable-system-helper",
-                             "--with-system-install-dir=/var/lib/flatpak" ],
-            "cleanup": [ "/etc/profile.d",
-                         "/libexec",
-                         "/lib/systemd",
-                         "/share/dbus-1/interfaces/org.freedesktop.*",
-                         "/share/dbus-1/services/org.freedesktop.*",
-                         "/share/gdm" ],
-            "post-install": [ "cp /usr/bin/update-mime-database /app/bin",
-                              "cp /usr/bin/update-desktop-database /app/bin" ],
-            "sources": [
+            "name" : "flatpak",
+            "config-opts" : [
+                "--disable-documentation",
+                "--disable-seccomp",
+                "--disable-sandboxed-triggers",
+                "--disable-system-helper",
+                "--with-system-install-dir=/var/lib/flatpak"
+            ],
+            "cleanup" : [
+                "/etc/profile.d",
+                "/libexec",
+                "/lib/systemd",
+                "/share/dbus-1/interfaces/org.freedesktop.*",
+                "/share/dbus-1/services/org.freedesktop.*",
+                "/share/gdm"
+            ],
+            "post-install" : [
+                "cp /usr/bin/update-mime-database /app/bin",
+                "cp /usr/bin/update-desktop-database /app/bin"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://github.com/flatpak/flatpak.git"
+                    "type" : "git",
+                    "url" : "https://github.com/flatpak/flatpak.git"
                 }
             ]
         },
         {
-            "name": "flatpak-builder",
-            "sources": [
+            "name" : "flatpak-builder",
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://github.com/flatpak/flatpak-builder"
+                    "type" : "git",
+                    "url" : "https://github.com/flatpak/flatpak-builder"
                 }
             ]
         },
         {
-            "name": "gnome-builder",
-            "buildsystem": "meson",
-            "builddir": true,
-            "config-opts": [ "--libdir=/app/lib",
-                             "--buildtype=debugoptimized",
-                             "-Denable_tracing=true",
-                             "-Dwith_help=true",
-                             "-Dwith_channel=flatpak-nightly" ],
-            "sources": [
+            "name" : "gnome-builder",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized",
+                "-Denable_tracing=true",
+                "-Dwith_help=true",
+                "-Dwith_channel=flatpak-nightly"
+            ],
+            "sources" : [
                 {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/gnome-builder.git"
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git"
                 }
             ]
         }
