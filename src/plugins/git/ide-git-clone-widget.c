@@ -36,7 +36,7 @@ struct _IdeGitCloneWidget
   GtkEntry             *clone_uri_entry;
   GtkLabel             *clone_error_label;
   GtkProgressBar       *clone_progress;
-  GtkSpinner           *clone_spinner;
+  GtkLabel             *destination_label;
 
   guint                 is_ready : 1;
 };
@@ -100,6 +100,8 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
 
+  g_clear_pointer (&self->child_name, g_free);
+
   text = gtk_entry_get_text (entry);
   str = g_string_new (NULL);
 
@@ -127,7 +129,6 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
   if (uri != NULL)
     {
       const gchar *path;
-      gchar *name = NULL;
 
       g_object_set (self->clone_uri_entry,
                     "secondary-icon-tooltip-text", "",
@@ -136,31 +137,42 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
 
       path = ide_vcs_uri_get_path (uri);
 
-      if (path != NULL)
+      if (!dzl_str_empty0 (path))
         {
-          name = g_path_get_basename (path);
+          g_autofree gchar *name = g_path_get_basename (path);
 
           if (g_str_has_suffix (name, ".git"))
             *(strrchr (name, '.')) = '\0';
 
-          if (!g_str_equal (name, "/"))
-            {
-              g_free (self->child_name);
-              self->child_name = g_steal_pointer (&name);
-            }
+          if (!g_str_equal (name, "/") && !g_str_equal (name, "~"))
+            self->child_name = g_steal_pointer (&name);
 
-          g_free (name);
+          is_ready = TRUE;
         }
-
-      is_ready = TRUE;
     }
-  else
+
+  if (!is_ready)
     {
       g_object_set (self->clone_uri_entry,
                     "secondary-icon-name", "dialog-warning-symbolic",
                     "secondary-icon-tooltip-text", _("A valid Git URL is required"),
                     NULL);
     }
+
+  if (self->child_name != NULL)
+    {
+      g_autofree gchar *formatted = NULL;
+      g_autoptr(GFile) file = dzl_file_chooser_entry_get_file (self->clone_location_entry);
+      g_autoptr(GFile) child = g_file_get_child (file, self->child_name);
+      g_autofree gchar *path = g_file_get_path (child);
+      g_autofree gchar *collapsed = ide_path_collapse (path);
+
+      /* translators: %s is replaced with the path to the project */
+      formatted = g_strdup_printf (_("Your project will be created at %s"), collapsed);
+      gtk_label_set_label (self->destination_label, formatted);
+    }
+  else
+    gtk_label_set_label (self->destination_label, NULL);
 
   if (is_ready != self->is_ready)
     {
@@ -220,8 +232,8 @@ ide_git_clone_widget_class_init (IdeGitCloneWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_error_label);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_location_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_progress);
-  gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_spinner);
   gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, clone_uri_entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeGitCloneWidget, destination_label);
 }
 
 static void
@@ -437,8 +449,6 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
       req = clone_request_new (uri, location);
     }
 
-  gtk_spinner_start (self->clone_spinner);
-
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), FALSE);
 
@@ -465,8 +475,6 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
   /* Only hide progress if we were cancelled */
   if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     gtk_widget_hide (GTK_WIDGET (self->clone_progress));
-
-  gtk_spinner_stop (self->clone_spinner);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_location_entry), TRUE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->clone_uri_entry), TRUE);
