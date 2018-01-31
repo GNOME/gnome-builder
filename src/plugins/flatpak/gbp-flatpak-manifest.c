@@ -30,6 +30,7 @@ struct _GbpFlatpakManifest
   IdeConfiguration  parent_instance;
 
   GFile            *file;
+  GFileMonitor     *file_monitor;
 
   JsonNode         *root;
 
@@ -65,7 +66,13 @@ enum {
   N_PROPS
 };
 
+enum {
+  NEEDS_RELOAD,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 static GRegex *app_id_regex;
 
 static gboolean
@@ -463,11 +470,80 @@ gbp_flatpak_manifest_supports_runtime (IdeConfiguration *config,
 }
 
 static void
+gbp_flatpak_manifest_file_changed (GbpFlatpakManifest *self,
+                                   GFile              *file,
+                                   GFile              *other_file,
+                                   GFileMonitorEvent   event,
+                                   GFileMonitor       *file_monitor)
+{
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (G_IS_FILE_MONITOR (file_monitor));
+
+  if (event == G_FILE_MONITOR_EVENT_CHANGED || event == G_FILE_MONITOR_EVENT_CREATED)
+    g_signal_emit (self, signals [NEEDS_RELOAD], 0);
+}
+
+static void
+gbp_flatpak_manifest_block_monitor (GbpFlatpakManifest *self)
+{
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+
+  g_signal_handlers_block_matched (self->file_monitor,
+                                   G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                                   g_signal_lookup ("changed", G_TYPE_FILE_MONITOR),
+                                   0,
+                                   NULL,
+                                   gbp_flatpak_manifest_file_changed,
+                                   self);
+}
+
+static void
+gbp_flatpak_manifest_unblock_monitor (GbpFlatpakManifest *self)
+{
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+
+  g_signal_handlers_unblock_matched (self->file_monitor,
+                                     G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                                     g_signal_lookup ("changed", G_TYPE_FILE_MONITOR),
+                                     0,
+                                     NULL,
+                                     gbp_flatpak_manifest_file_changed,
+                                     self);
+}
+
+static void
+gbp_flatpak_manifest_set_file (GbpFlatpakManifest *self,
+                               GFile              *file)
+{
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (self->file == NULL);
+  g_assert (self->file_monitor == NULL);
+  g_assert (!file || G_IS_FILE (file));
+
+  if (file == NULL)
+    {
+      g_critical ("GbpFlatpakManifest:file is required upon construction");
+      return;
+    }
+
+  g_set_object (&self->file, file);
+
+  self->file_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, NULL);
+
+  g_signal_connect_object (self->file_monitor,
+                           "changed",
+                           G_CALLBACK (gbp_flatpak_manifest_file_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 gbp_flatpak_manifest_finalize (GObject *object)
 {
   GbpFlatpakManifest *self = (GbpFlatpakManifest *)object;
 
   g_clear_object (&self->file);
+  g_clear_object (&self->file_monitor);
 
   g_clear_pointer (&self->root, json_node_unref);
 
@@ -517,7 +593,7 @@ gbp_flatpak_manifest_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_FILE:
-      self->file = g_value_dup_object (value);
+      gbp_flatpak_manifest_set_file (self, g_value_get_object (value));
       break;
 
     default:
@@ -545,6 +621,14 @@ gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [NEEDS_RELOAD] =
+    g_signal_new ("needs-reload",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
   app_id_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*$",
@@ -784,6 +868,8 @@ gbp_flatpak_manifest_save_cb (GObject      *object,
   ide_configuration_set_dirty (IDE_CONFIGURATION (self), FALSE);
   g_task_return_boolean (task, TRUE);
 
+  gbp_flatpak_manifest_unblock_monitor (self);
+
   IDE_EXIT;
 }
 
@@ -846,6 +932,8 @@ gbp_flatpak_manifest_save_async (GbpFlatpakManifest  *self,
    */
   data[len] = '\n';
   bytes = g_bytes_new_take (g_steal_pointer (&data), len + 1);
+
+  gbp_flatpak_manifest_block_monitor (self);
 
   /*
    * Now that we have a buffer containing the UTF-8 encoded formatted

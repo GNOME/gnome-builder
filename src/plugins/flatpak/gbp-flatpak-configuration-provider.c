@@ -33,7 +33,9 @@ struct _GbpFlatpakConfigurationProvider
   GPtrArray *configs;
 };
 
-static void gbp_flatpak_configuration_provider_save_tick (GTask *task);
+static void manifest_save_tick    (GTask                           *task);
+static void manifest_needs_reload (GbpFlatpakConfigurationProvider *self,
+                                   GbpFlatpakManifest              *manifest);
 
 static void
 gbp_flatpak_configuration_provider_save_cb (GObject      *object,
@@ -51,11 +53,11 @@ gbp_flatpak_configuration_provider_save_cb (GObject      *object,
   if (!gbp_flatpak_manifest_save_finish (manifest, result, &error))
     g_warning ("Failed to save manifest: %s", error->message);
 
-  gbp_flatpak_configuration_provider_save_tick (task);
+  manifest_save_tick (task);
 }
 
 static void
-gbp_flatpak_configuration_provider_save_tick (GTask *task)
+manifest_save_tick (GTask *task)
 {
   g_autoptr(GbpFlatpakManifest) manifest = NULL;
   GbpFlatpakConfigurationProvider *self;
@@ -125,7 +127,7 @@ gbp_flatpak_configuration_provider_save_async (IdeConfigurationProvider *provide
 
   g_task_set_task_data (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
 
-  gbp_flatpak_configuration_provider_save_tick (task);
+  manifest_save_tick (task);
 
   IDE_EXIT;
 }
@@ -139,6 +141,155 @@ gbp_flatpak_configuration_provider_save_finish (IdeConfigurationProvider  *provi
   g_assert (G_IS_TASK (result));
 
   return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+load_manifest_worker (GTask        *task,
+                      gpointer      source_object,
+                      gpointer      task_data,
+                      GCancellable *cancellable)
+{
+  GbpFlatpakConfigurationProvider *self = source_object;
+  g_autoptr(GbpFlatpakManifest) manifest = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *name = NULL;
+  IdeContext *context;
+  GFile *file = task_data;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  name = g_file_get_basename (file);
+  manifest = gbp_flatpak_manifest_new (context, file, name);
+
+  if (!g_initable_init (G_INITABLE (manifest), cancellable, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  g_signal_connect_object (manifest,
+                           "needs-reload",
+                           G_CALLBACK (manifest_needs_reload),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_task_return_pointer (task, g_steal_pointer (&manifest), g_object_unref);
+}
+
+static void
+load_manifest_async (GbpFlatpakConfigurationProvider *self,
+                     GFile                           *file,
+                     GCancellable                    *cancellable,
+                     GAsyncReadyCallback              callback,
+                     gpointer                         user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, load_manifest_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  g_task_run_in_thread (task, load_manifest_worker);
+}
+
+static GbpFlatpakManifest *
+load_manifest_finish (GbpFlatpakConfigurationProvider  *self,
+                      GAsyncResult                     *result,
+                      GError                          **error)
+{
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_TASK (result));
+  g_assert (g_task_is_valid (G_TASK (result), self));
+
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
+reload_manifest_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)object;
+  g_autoptr(GbpFlatpakManifest) old_manifest = user_data;
+  g_autoptr(GbpFlatpakManifest) new_manifest = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeConfigurationManager *manager;
+  IdeConfiguration *current;
+  IdeContext *context;
+  gboolean is_active;
+
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_FLATPAK_MANIFEST (old_manifest));
+
+  new_manifest = load_manifest_finish (self, result, &error);
+
+  if (new_manifest == NULL)
+    {
+      g_warning ("Failed to reload manifest: %s", error->message);
+
+      /* Watch for future changes */
+      g_signal_connect_object (old_manifest,
+                               "needs-reload",
+                               G_CALLBACK (manifest_needs_reload),
+                               self,
+                               G_CONNECT_SWAPPED);
+      return;
+    }
+
+  g_ptr_array_remove (self->configs, old_manifest);
+  g_ptr_array_add (self->configs, g_object_ref (new_manifest));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  manager = ide_context_get_configuration_manager (context);
+  current = ide_configuration_manager_get_current (manager);
+
+  is_active = current == IDE_CONFIGURATION (old_manifest);
+
+  ide_configuration_provider_emit_added (IDE_CONFIGURATION_PROVIDER (self),
+                                         IDE_CONFIGURATION (new_manifest));
+
+  if (is_active)
+    ide_configuration_manager_set_current (manager,
+                                           IDE_CONFIGURATION (new_manifest));
+
+  ide_configuration_provider_emit_removed (IDE_CONFIGURATION_PROVIDER (self),
+                                           IDE_CONFIGURATION (old_manifest));
+}
+
+static void
+manifest_needs_reload (GbpFlatpakConfigurationProvider *self,
+                       GbpFlatpakManifest              *manifest)
+{
+  g_autoptr(GTask) task = NULL;
+  GFile *file;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
+
+  g_signal_handlers_disconnect_by_func (manifest,
+                                        G_CALLBACK (manifest_needs_reload),
+                                        self);
+
+  file = gbp_flatpak_manifest_get_file (manifest);
+
+  load_manifest_async (self,
+                       file,
+                       NULL,
+                       reload_manifest_cb,
+                       g_object_ref (manifest));
+
+  IDE_EXIT;
 }
 
 static void
@@ -178,6 +329,12 @@ gbp_flatpak_configuration_provider_load_worker (GTask        *task,
                      name, error->message);
           continue;
         }
+
+      g_signal_connect_object (manifest,
+                               "needs-reload",
+                               G_CALLBACK (manifest_needs_reload),
+                               self,
+                               G_CONNECT_SWAPPED);
 
       g_ptr_array_add (manifests, g_steal_pointer (&manifest));
     }
@@ -342,13 +499,16 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider)
           g_autoptr(IdeConfiguration) config = NULL;
 
           config = g_object_ref (g_ptr_array_index (self->configs, i - 1));
-          g_ptr_array_remove_index (self->configs, i);
+          g_signal_handlers_disconnect_by_func (config,
+                                                G_CALLBACK (manifest_needs_reload),
+                                                self);
+          g_ptr_array_remove_index (self->configs, i - 1);
 
           ide_configuration_provider_emit_removed (provider, config);
         }
-    }
 
-  g_clear_pointer (&self->configs, g_ptr_array_unref);
+      g_clear_pointer (&self->configs, g_ptr_array_unref);
+    }
 
   IDE_EXIT;
 }
