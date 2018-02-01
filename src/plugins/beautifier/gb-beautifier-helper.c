@@ -71,6 +71,8 @@ gb_beautifier_helper_remove_temp_for_file (GbBeautifierEditorAddin *self,
 {
   g_autofree gchar *path = NULL;
 
+  g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
+  g_assert (file != NULL);
   g_assert (G_IS_FILE (file));
 
   path = g_file_get_path (file);
@@ -172,6 +174,7 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
 {
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) file = NULL;
+  g_autoptr(GBytes) bytes = NULL;
   g_autofree gchar *tmp_path = NULL;
   gint fd;
 
@@ -196,15 +199,16 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
   g_close (fd, NULL);
   file = g_file_new_for_path (tmp_path);
 
-  g_file_replace_contents_async (file,
-                                 text,
-                                 strlen (text),
-                                 NULL,
-                                 FALSE,
-                                 G_FILE_CREATE_REPLACE_DESTINATION,
-                                 NULL,
-                                 gb_beautifier_helper_create_tmp_file_cb,
-                                 g_steal_pointer (&task));
+  bytes = g_bytes_new (text, strlen (text));
+
+  g_file_replace_contents_bytes_async (file,
+                                       bytes,
+                                       NULL,
+                                       FALSE,
+                                       G_FILE_CREATE_REPLACE_DESTINATION,
+                                       NULL,
+                                       gb_beautifier_helper_create_tmp_file_cb,
+                                       g_steal_pointer (&task));
 }
 
 GFile *
