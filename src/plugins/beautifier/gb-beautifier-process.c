@@ -51,32 +51,41 @@ process_state_free (gpointer data)
   GtkTextBuffer *buffer;
 
   g_assert (state != NULL);
+  g_assert (!state->self || GB_IS_BEAUTIFIER_EDITOR_ADDIN (state->self));
+  g_assert (!state->begin_mark || GTK_IS_TEXT_MARK (state->begin_mark));
+  g_assert (!state->end_mark || GTK_IS_TEXT_MARK (state->end_mark));
+  g_assert (!state->src_file || G_IS_FILE (state->src_file));
+  g_assert (!state->config_file || G_IS_FILE (state->config_file));
+  g_assert (!state->tmp_workdir_file || G_IS_FILE (state->tmp_workdir_file));
+  g_assert (!state->tmp_src_file || G_IS_FILE (state->tmp_src_file));
+  g_assert (!state->tmp_config_file || G_IS_FILE (state->tmp_config_file));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (state->source_view));
-  gtk_text_buffer_delete_mark (buffer, state->begin_mark);
-  gtk_text_buffer_delete_mark (buffer, state->end_mark);
+  gtk_text_buffer_delete_mark (buffer, g_steal_pointer (&state->begin_mark));
+  gtk_text_buffer_delete_mark (buffer, g_steal_pointer (&state->end_mark));
 
-  gb_beautifier_helper_remove_temp_for_file (state->self, state->src_file);
-
-  g_clear_object (&state->src_file);
-  g_clear_object (&state->config_file);
+  if (state->src_file != NULL)
+    gb_beautifier_helper_remove_temp_for_file (state->self, state->src_file);
 
   if (state->tmp_config_file != NULL)
     gb_beautifier_helper_remove_temp_for_file (state->self, state->tmp_config_file);
+
   if (state->tmp_src_file != NULL)
     gb_beautifier_helper_remove_temp_for_file (state->self, state->tmp_src_file);
+
   if (state->tmp_workdir_file != NULL)
     gb_beautifier_helper_remove_temp_for_file (state->self, state->tmp_workdir_file);
 
-  g_clear_object (&state->tmp_workdir_file);
+  g_clear_object (&state->config_file);
+  g_clear_object (&state->src_file);
   g_clear_object (&state->tmp_config_file);
   g_clear_object (&state->tmp_src_file);
+  g_clear_object (&state->tmp_workdir_file);
 
-  g_free (state->lang_id);
-  g_free (state->text);
+  g_clear_pointer (&state->lang_id, g_free);
+  g_clear_pointer (&state->text, g_free);
 
-  if (state->command_args_strs != NULL)
-    g_ptr_array_unref (state->command_args_strs);
+  g_clear_pointer (&state->command_args_strs, g_ptr_array_unref);
 
   g_slice_free (ProcessState, state);
 }
