@@ -81,5 +81,7 @@ IDE_AVAILABLE_IN_3_28
 void        ide_object_warning                 (gpointer              instance,
                                                 const gchar          *format,
                                                 ...) G_GNUC_PRINTF (2, 3);
+IDE_AVAILABLE_IN_3_28
+gboolean    ide_object_is_unloading            (IdeObject            *self);
 
 G_END_DECLS

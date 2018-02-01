@@ -140,6 +140,7 @@ struct _IdeContext
 
   guint                     restored : 1;
   guint                     restoring : 1;
+  guint                     unloading : 1;
 };
 
 static void async_initable_init (GAsyncInitableIface *);
@@ -2092,6 +2093,8 @@ ide_context_unload_async (IdeContext          *self,
   g_return_if_fail (IDE_IS_CONTEXT (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  self->unloading = TRUE;
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_context_unload_async);
 
@@ -2856,4 +2859,25 @@ ide_context_get_project_settings (IdeContext *self)
   path = g_strdup_printf ("/org/gnome/builder/projects/%s/", project_id);
 
   return g_settings_new_with_path ("org.gnome.builder.project", path);
+}
+
+/**
+ * ide_context_is_unloading:
+ * @self: a #IdeContext
+ *
+ * Checks if ide_context_unload_async() has been called.
+ *
+ * You might use this to avoid starting any new work once the context has
+ * started the shutdown sequence.
+ *
+ * Returns: %TRUE if ide_context_unload_async() has been called.
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_context_is_unloading (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), FALSE);
+
+  return self->unloading;
 }

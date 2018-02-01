@@ -144,6 +144,9 @@ gchar                    *ide_context_cache_filename            (IdeContext     
 IDE_AVAILABLE_IN_3_28
 IdeVcsMonitor            *ide_context_get_monitor               (IdeContext           *self);
 
+IDE_AVAILABLE_IN_3_28
+gboolean                  ide_context_is_unloading              (IdeContext           *self);
+
 GListModel               *_ide_context_get_pausables            (IdeContext           *self) G_GNUC_INTERNAL;
 gboolean                  _ide_context_is_restoring             (IdeContext           *self) G_GNUC_INTERNAL;
 

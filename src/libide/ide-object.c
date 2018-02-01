@@ -816,3 +816,16 @@ ide_object_warning (gpointer     instance,
   else
     g_warning ("%s", str);
 }
+
+gboolean
+ide_object_is_unloading (IdeObject *object)
+{
+  IdeContext *context;
+
+  g_return_val_if_fail (IDE_IS_OBJECT (object), TRUE);
+
+  if (!(context = ide_object_get_context (object)))
+    return TRUE;
+
+  return ide_context_is_unloading (context);
+}
