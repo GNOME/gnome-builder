@@ -160,7 +160,7 @@ gb_beautifier_helper_create_tmp_file_cb (GObject      *object,
   if (g_task_return_error_if_cancelled (task))
     g_file_delete (file, NULL, NULL);
   else
-    g_task_return_pointer (task, g_steal_pointer (&file), g_object_unref);
+    g_task_return_pointer (task, g_object_ref (file), g_object_unref);
 }
 
 void
