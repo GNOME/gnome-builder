@@ -112,6 +112,7 @@ test_c_args = [
   '-Wformat-security',
   '-Wmissing-include-dirs',
   '-Wnested-externs',
+  '-Wno-cast-function-type',
   '-Wno-missing-field-initializers',
   '-Wno-sign-compare',
   '-Wno-unused-parameter',
