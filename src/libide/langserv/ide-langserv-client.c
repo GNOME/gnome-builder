@@ -618,10 +618,12 @@ ide_langserv_client_real_notification (IdeLangservClient *self,
 
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
   g_assert (method != NULL);
-  g_assert (params != NULL);
 
-  if (g_str_equal (method, "textDocument/publishDiagnostics"))
-    ide_langserv_client_text_document_publish_diagnostics (self, params);
+  if (params != NULL)
+    {
+      if (g_str_equal (method, "textDocument/publishDiagnostics"))
+        ide_langserv_client_text_document_publish_diagnostics (self, params);
+    }
 
   IDE_EXIT;
 }
