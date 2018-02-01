@@ -82,6 +82,9 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
   if (!(window = gtk_application_get_active_window (app)))
     return;
 
+  if (gtk_window_is_active (window))
+    return;
+
   context = ide_object_get_context (IDE_OBJECT (self));
   project = ide_context_get_project (context);
   project_name = ide_project_get_name (project);
