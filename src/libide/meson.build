@@ -108,7 +108,7 @@ libide_generated_headers += [libide_enums[1]]
 
 libide_conf = configuration_data()
 libide_conf.set10('ENABLE_TRACING', get_option('enable_tracing'))
-libide_conf.set('BUGREPORT_URL', 'https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder')
+libide_conf.set('BUGREPORT_URL', 'https://gitlab.gnome.org/GNOME/gnome-builder/issues')
 libide_debug_h = configure_file(
          input: 'ide-debug.h.in',
          output: 'ide-debug.h',
