@@ -204,6 +204,9 @@ ide_configuration_device_manager_items_changed (IdeConfiguration *self,
   g_assert (IDE_IS_CONFIGURATION (self));
   g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
 
+  if (ide_object_is_unloading (IDE_OBJECT (self)))
+    return;
+
   device = ide_device_manager_get_device (device_manager, priv->device_id);
   device_ready = !!device;
 
@@ -231,6 +234,9 @@ ide_configuration_runtime_manager_items_changed (IdeConfiguration  *self,
   g_assert (IDE_IS_CONFIGURATION (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
 
+  if (ide_object_is_unloading (IDE_OBJECT (self)))
+    return;
+
   runtime = ide_runtime_manager_get_runtime (runtime_manager, priv->runtime_id);
   runtime_ready = !!runtime;
 
@@ -252,6 +258,9 @@ ide_configuration_environment_changed (IdeConfiguration *self,
 
   g_assert (IDE_IS_CONFIGURATION (self));
   g_assert (IDE_IS_ENVIRONMENT (environment));
+
+  if (ide_object_is_unloading (IDE_OBJECT (self)))
+    return;
 
   ide_configuration_set_dirty (self, TRUE);
   ide_configuration_emit_changed (self);
