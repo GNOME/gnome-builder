@@ -396,6 +396,8 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+
   IDE_TRACE_MSG ("Reloading pipeline due to configuration change");
 
   /*
@@ -425,7 +427,9 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   self->error_count = 0;
   self->warning_count = 0;
 
-  context = ide_object_get_context (IDE_OBJECT (self));
+  /* Don't setup anything new if we're in shutdown */
+  if (ide_context_is_unloading (context))
+    IDE_EXIT;
 
   config_manager = ide_context_get_configuration_manager (context);
   config = ide_configuration_manager_get_current (config_manager);
