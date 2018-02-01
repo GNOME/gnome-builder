@@ -78,8 +78,8 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
 
   app = GTK_APPLICATION (g_application_get_default ());
-  window = gtk_application_get_active_window (app);
-  if(gtk_window_is_active (window))
+
+  if (!(window = gtk_application_get_active_window (app)))
     return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
