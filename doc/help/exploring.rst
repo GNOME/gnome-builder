@@ -61,7 +61,7 @@ In the center is the "OmniBar" which can be used to `Build your Project`_.
 
 To the right of the OmniBar is the *Run* button.
 Clicking the arrow next to *Run* allows you to change how Builder will run your application.
-You can run normally, with a debugger, profiler, or event with Valgrind.
+You can run normally, with a debugger, profiler, or even with Valgrind.
 
 On the right is the search box.
 Type a few characters from the file you would like to open and it will fuzzy search your project tree.
@@ -126,7 +126,7 @@ This is where you develop your project.
    :width: 1415 px
    :align: center
 
-Along the left is the project sidebar. It contains the project tre, list of
+Along the left is the project sidebar. It contains the project tree, list of
 open documents, todo items, and build errors. Generally, it contains the
 "source" or things to work on in your project.
 
