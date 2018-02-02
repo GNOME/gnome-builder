@@ -1088,6 +1088,9 @@ ide_editor_view_scroll_to_line (IdeEditorView *self,
  * This will move the insert cursor.
  *
  * Lines and offsets start from 0.
+ *
+ * If @line_offset is zero, the first non-space character of @line will be
+ * used instead.
  */
 void
 ide_editor_view_scroll_to_line_offset (IdeEditorView *self,
@@ -1104,6 +1107,17 @@ ide_editor_view_scroll_to_line_offset (IdeEditorView *self,
 
   gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (self->buffer), &iter,
                                            line, line_offset);
+
+  if (line_offset == 0)
+    {
+      while (!gtk_text_iter_ends_line (&iter) &&
+             g_unichar_isspace (gtk_text_iter_get_char (&iter)))
+        {
+          if (!gtk_text_iter_forward_char (&iter))
+            break;
+        }
+    }
+
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
   ide_source_view_scroll_to_insert (self->source_view);
 }
