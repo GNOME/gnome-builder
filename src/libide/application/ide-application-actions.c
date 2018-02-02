@@ -129,7 +129,7 @@ ide_application_actions_about (GSimpleAction *action,
 
   version = g_string_new (NULL);
 
-  if (g_str_has_prefix (IDE_BUILD_TYPE, "debug"))
+  if (!g_str_equal (IDE_BUILD_TYPE, "release"))
     g_string_append (version, IDE_BUILD_IDENTIFIER);
   else
     g_string_append (version, PACKAGE_VERSION);
