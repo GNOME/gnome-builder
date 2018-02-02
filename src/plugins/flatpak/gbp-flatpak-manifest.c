@@ -43,7 +43,6 @@ struct _GbpFlatpakManifest
   gchar            *runtime;
   gchar            *runtime_version;
   gchar            *sdk;
-  gchar            *sdk_version;
   gchar           **sdk_extensions;
 
   /*
@@ -405,7 +404,6 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   discover_string_field (root_obj, "runtime", &self->runtime);
   discover_string_field (root_obj, "runtime-version", &self->runtime_version);
   discover_string_field (root_obj, "sdk", &self->sdk);
-  discover_string_field (root_obj, "sdk-version", &self->sdk_version);
   discover_string_field (root_obj, "command", &self->command);
   discover_strv_field (root_obj, "build-args", &self->build_args);
   discover_strv_field (root_obj, "finish-args", &self->finish_args);
@@ -561,7 +559,6 @@ gbp_flatpak_manifest_finalize (GObject *object)
   g_clear_pointer (&self->runtime, g_free);
   g_clear_pointer (&self->runtime_version, g_free);
   g_clear_pointer (&self->sdk, g_free);
-  g_clear_pointer (&self->sdk_version, g_free);
   g_clear_pointer (&self->sdk_extensions, g_strfreev);
 
   g_clear_pointer (&self->primary, json_object_unref);
