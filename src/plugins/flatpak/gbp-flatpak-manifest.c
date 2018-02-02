@@ -340,6 +340,7 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   g_autoptr(JsonParser) parser = NULL;
   g_auto(GStrv) build_commands = NULL;
   g_auto(GStrv) post_install = NULL;
+  const gchar *app_id_field = "app-id";
   IdeContext *context;
   JsonObject *root_obj;
   JsonObject *primary;
@@ -383,7 +384,14 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   if (!(primary = discover_primary_module (self, root_obj, dir_name, TRUE, error)))
     return FALSE;
 
-  if (!discover_string_field (root_obj, "app-id", &app_id) || !is_valid_app_id (app_id))
+  /* Some flatpak manifests have "id" instead of "app-id", such
+   * as some KDE applications we've seen in the wild.
+   */
+  if (!json_object_has_member (root_obj, "app-id") &&
+      json_object_has_member (root_obj, "id"))
+    app_id_field = "id";
+
+  if (!discover_string_field (root_obj, app_id_field, &app_id) || !is_valid_app_id (app_id))
     {
       g_set_error (error,
                    G_IO_ERROR,
@@ -782,7 +790,13 @@ apply_changes_to_tree (GbpFlatpakManifest *self)
     }
 
   if ((app_id = ide_configuration_get_app_id (IDE_CONFIGURATION (self))))
-    json_object_set_string_member (obj, "app-id", app_id);
+  {
+    /* Be friendly to old? style "id" fields */
+    if (json_object_has_member (obj, "id"))
+      json_object_set_string_member (obj, "id", app_id);
+    else
+      json_object_set_string_member (obj, "app-id", app_id);
+  }
 
   if (!json_object_has_member (obj, "build-options"))
     json_object_set_object_member (obj, "build-options", json_object_new ());
