@@ -1,5 +1,5 @@
 #################################
-Subprocesses and Psuedo Terminals
+Subprocesses and Pseudo Terminals
 #################################
 
 
@@ -92,10 +92,10 @@ If you need access to the subprocess, you can access it either via the ``Ide.Sub
    supervisor.start()
 
 
-Psuedo Terminals
+Pseudo Terminals
 ================
 
-Psuedo terminals are tricky business.
+Pseudo terminals are tricky business.
 In general, if you need access to a PTY, use the VTE library like Builder's terminal plugin.
 For an example of how to setup the PTY, we use a flow like this.
 

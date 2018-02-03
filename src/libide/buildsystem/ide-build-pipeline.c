@@ -2522,7 +2522,7 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
 
   if (self->pty_slave == -1)
     {
-      ide_object_warning (self, _("Psuedo terminal creation failed. Terminal features will be limited."));
+      ide_object_warning (self, _("Pseudo terminal creation failed. Terminal features will be limited."));
       return;
     }
 

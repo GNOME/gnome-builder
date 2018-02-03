@@ -617,7 +617,7 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
   properties [PROP_PTY] =
     g_param_spec_object ("pty",
                          "Pty",
-                         "The psuedo terminal to use",
+                         "The pseudo terminal to use",
                          VTE_TYPE_PTY,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
