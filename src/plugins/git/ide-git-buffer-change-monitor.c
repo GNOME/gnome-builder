@@ -81,7 +81,8 @@ typedef struct
 typedef struct
 {
   gint                line;
-  IdeBufferLineChange change;
+  IdeBufferLineChange change : 3;
+  guint               really_delete : 1;
 } DiffLine;
 
 typedef struct
@@ -564,14 +565,47 @@ diff_line_cb (GgitDiffDelta *delta,
   new_lineno = ggit_diff_line_get_new_lineno (line);
 	old_lineno = ggit_diff_line_get_old_lineno (line);
 
+  /*
+   * The callbacks here are are somewhat cryptic and have been little
+   * tweak, one after another.
+   *
+   * What I glean, thus far, is that things happen like this (after
+   * we've accouned for the line number drift). If something looks off,
+   * it probably is!
+   *
+   * Scenario 1
+   * - Delete N
+   * - Delete N
+   * - Added  N
+   *   This means that N is both a change and the previous line(s)
+   *   where deleted.
+   *
+   * Scenario 2
+   * - Delete N
+   *   This means the line(s) previous to N were deleted.
+   *
+   * Scenario 3
+   * - Delete N
+   * - Added  N
+   *   This means N was changed.
+   *
+   * Scenario 4
+   *
+   * - Added N
+   *   This means N was added.
+   */
+
   switch (type)
     {
     case GGIT_DIFF_LINE_ADDITION:
       diff_line = find_or_add_line (info->lines, new_lineno);
-      if (diff_line->change != 0)
-        diff_line->change |= IDE_BUFFER_LINE_CHANGE_CHANGED;
+      if (diff_line->change == IDE_BUFFER_LINE_CHANGE_DELETED)
+        diff_line->change = IDE_BUFFER_LINE_CHANGE_CHANGED;
       else
         diff_line->change = IDE_BUFFER_LINE_CHANGE_ADDED;
+
+      if (diff_line->really_delete)
+        diff_line->change |= IDE_BUFFER_LINE_CHANGE_DELETED;
 
       info->hunk_add_count++;
 
@@ -585,9 +619,9 @@ diff_line_cb (GgitDiffDelta *delta,
       old_lineno += info->hunk_add_count - info->hunk_del_count;
 
       diff_line = find_or_add_line (info->lines, old_lineno);
-      if (diff_line->change != 0)
-        diff_line->change |= IDE_BUFFER_LINE_CHANGE_CHANGED;
-      diff_line->change |= IDE_BUFFER_LINE_CHANGE_DELETED;
+      if (diff_line->change & IDE_BUFFER_LINE_CHANGE_DELETED)
+        diff_line->really_delete = TRUE;
+      diff_line->change = IDE_BUFFER_LINE_CHANGE_DELETED;
 
       info->hunk_del_count++;
 
