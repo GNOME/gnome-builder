@@ -1016,7 +1016,8 @@ ide_context_init_vcs_cb (GObject      *object,
       return;
     }
 
-  self->vcs = g_object_ref (vcs);
+  if (g_set_object (&self->vcs, vcs))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VCS]);
 
   g_task_return_boolean (task, TRUE);
 }
@@ -1067,7 +1068,8 @@ ide_context_init_build_system_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  self->build_system = g_object_ref (build_system);
+  if (g_set_object (&self->build_system, build_system))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_SYSTEM]);
 
   /* allow the build system to override the project file */
   g_object_get (self->build_system,
