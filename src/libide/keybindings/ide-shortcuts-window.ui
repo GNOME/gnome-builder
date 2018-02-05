@@ -77,13 +77,6 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
-                <property name="title" translatable="yes" context="shortcut window">Toggle right panel</property>
-                <property name="accelerator">&lt;shift&gt;F9</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">true</property>
                 <property name="title" translatable="yes" context="shortcut window">Toggle bottom panel</property>
                 <property name="accelerator">&lt;ctrl&gt;F9</property>
               </object>
