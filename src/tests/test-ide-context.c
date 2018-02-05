@@ -105,7 +105,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  static const gchar *required_plugins[] = { "autotools-plugin", "directory-plugin", NULL };
+  static const gchar *required_plugins[] = { "autotools-plugin", "buildconfig", "directory-plugin", NULL };
   g_autoptr(IdeApplication) app = NULL;
 
   g_test_init (&argc, &argv, NULL);

@@ -171,7 +171,7 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  static const gchar *required_plugins[] = { "autotools-plugin", "directory-plugin", NULL };
+  static const gchar *required_plugins[] = { "autotools-plugin", "buildconfig", "directory-plugin", NULL };
   IdeApplication *app;
   gint ret;
 
