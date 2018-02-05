@@ -1,3 +1,49 @@
+===============
+Version 3.27.90
+===============
+
+Changes since last release:
+
+ • Various fixes for FreeBSD and similar
+ • The "Projects" directory is now translated and created using the translated
+   name when applicable. If "Projects" already exists, it is used.
+ • Fixes and correctness improvements in the beautifier plugin.
+ • Fixes and correctness improvements in the xml plugin.
+ • A new "Clone Repository" app-menu item has been added.
+ • The code-indexer has been restructured to avoid threading in the plugin
+   API. Plugins are still free to use threads in their implementation.
+ • A new golang language server client has been added with limited support.
+ • Many leaks across a variety of plugins have been plugged.
+ • The flatpak plugin tries even harder to avoid building projects immediate
+   upon project load.
+ • The autotools plugin now checks for AC_INIT() inside configure.ac to avoid
+   being fooled by invalid tooling.
+ • The configuration manager and providers have been restructured to avoid
+   threading in plugin APIs.
+ • Writeback of configuration changes has been improved.
+ • The editor gutter handles text and icon size changes for zoom.
+ • The language server protocol client has gotten a number of fixes.
+ • Preferences improvments.
+ • The terminal now supports grid selection again.
+ • Fixes for tab v spaces selection in the document properties pane.
+ • We now support SDK extensions in flatpak and they will be downloaded.
+ • A new template for Mono/C♯/Gtk♯ has been added.
+ • We try even harder to supress unwanted build notifications.
+ • The make plugin now supports a "run" target.
+ • A new PTY interceptor has been added so that we can extract build warnings
+   while also using a real PTY for the terminal widget.
+ • Ctags now inserts snippets for completion, allowing for parameters expansion.
+ • Clang plugin now uses language spacing settings when expanding snippets.
+   This allows for supression of spaces before opening parens.
+ • Language defaults have been restored, and now properly set the fallback
+   settings we intended.
+ • We now log subprocess arguments when building.
+
+
+Updated Translations:
+
+  Lithuanian, Hungarian, Occitan, Spanish, Italian, Finnish, Portuguese
+
 ==============
 Version 3.27.4
 ==============

@@ -64,7 +64,7 @@
   </screenshots>
 
   <url type="homepage">https://wiki.gnome.org/Apps/Builder</url>
-  <url type="bugtracker">https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder</url>
+  <url type="bugtracker">https://gitlab.gnome.org/GNOME/gnome-builder/issues</url>
   <url type="donation">http://www.gnome.org/friends/</url>
   <url type="help">https://builder.readthedocs.io</url>
   <project_group>GNOME</project_group>
@@ -81,6 +81,16 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+
+    <release version="3.27.90" date="2018-02-04">
+      <description>
+        <p>
+          This release is our first Alpha for the upcoming GNOME 3.28 release.
+          We have primarily been focused on stablizing features added during the cycle.
+          We would love for you to file bugs for any issues you come across to help us get Builder as stable as possible.
+        </p>
+      </description>
+    </release>
 
     <release version="3.27.4" date="2018-01-08">
       <description>
