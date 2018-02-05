@@ -28,9 +28,9 @@
 struct _IdeNotificationAddin
 {
   IdeObject  parent_instance;
-
   gchar     *last_msg_body;
   gint64     last_time;
+  guint      supress : 1;
 };
 
 static void addin_iface_init (IdeBuildPipelineAddinInterface *iface);
@@ -77,6 +77,9 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
 
+  if (self->supress)
+    return;
+
   app = GTK_APPLICATION (g_application_get_default ());
 
   if (!(window = gtk_application_get_active_window (app)))
@@ -113,6 +116,28 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 }
 
 static void
+ide_notification_addin_build_started (IdeNotificationAddin *self,
+                                      IdeBuildPipeline     *build_pipeline,
+                                      IdeBuildManager      *build_manager)
+{
+  IdeBuildPhase phase;
+
+  g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  /* We don't care about any build that is advancing to a phase
+   * before the BUILD phase. We advanced to CONFIGURE a lot when
+   * extracting build flags.
+   */
+
+  phase = ide_build_pipeline_get_requested_phase (build_pipeline);
+  g_assert ((phase & IDE_BUILD_PHASE_MASK) == phase);
+
+  self->supress = phase < IDE_BUILD_PHASE_BUILD;
+}
+
+static void
 ide_notification_addin_build_failed (IdeNotificationAddin *self,
                                      IdeBuildPipeline     *build_pipeline,
                                      IdeBuildManager      *build_manager)
@@ -129,16 +154,11 @@ ide_notification_addin_build_finished (IdeNotificationAddin *self,
                                        IdeBuildPipeline     *build_pipeline,
                                        IdeBuildManager      *build_manager)
 {
-  IdeBuildPhase phase;
-
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  /* Only notify if we were advancing to a build phase */
-  phase = ide_build_pipeline_get_phase (build_pipeline);
-  if (phase >= IDE_BUILD_PHASE_BUILD)
-    ide_notification_addin_notify (self, TRUE);
+  ide_notification_addin_notify (self, TRUE);
 }
 
 static void
@@ -157,6 +177,12 @@ ide_notification_addin_load (IdeBuildPipelineAddin *addin,
 
   build_manager = ide_context_get_build_manager (context);
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  g_signal_connect_object (build_manager,
+                           "build-started",
+                           G_CALLBACK (ide_notification_addin_build_started),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (build_manager,
                            "build-finished",
