@@ -37,7 +37,6 @@ G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
-  PROP_CONTEXT,
   PROP_PROJECT_FILE,
   N_PROPS
 };
@@ -230,14 +229,6 @@ ide_build_system_default_init (IdeBuildSystemInterface *iface)
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
   g_object_interface_install_property (iface, properties [PROP_PROJECT_FILE]);
-
-  properties [PROP_CONTEXT] =
-    g_param_spec_object ("context",
-                         "Context",
-                         "Context",
-                         IDE_TYPE_CONTEXT,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-  g_object_interface_install_property (iface, properties [PROP_CONTEXT]);
 }
 
 static gint

@@ -49,13 +49,6 @@ ide_device_provider_default_init (IdeDeviceProviderInterface *iface)
                                                              FALSE,
                                                              (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
 
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "Context",
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
-
   signals [DEVICE_ADDED] =
     g_signal_new ("device-added",
                   IDE_TYPE_DEVICE_PROVIDER,
