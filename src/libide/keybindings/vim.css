@@ -1117,6 +1117,18 @@
                  "delete-selection" ()
                  "end-macro" () };
 
+  bind "braceleft"  { "begin-macro" ()
+                      "movement" (paragraph-start, 1, 0, 1)
+                      "copy-clipboard" ()
+                      "delete-selection" ()
+                      "end-macro" () };
+
+  bind "braceright" { "begin-macro" ()
+                      "movement" (paragraph-end, 1, 0, 1)
+                      "copy-clipboard" ()
+                      "delete-selection" ()
+                      "end-macro" () };
+
   bind "Right" { "begin-macro" ()
                  "movement" (next-char, 1, 1, 1)
                  "copy-clipboard" ()
