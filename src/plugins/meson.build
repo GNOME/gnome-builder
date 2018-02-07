@@ -22,6 +22,7 @@ subdir('color-picker')
 subdir('command-bar')
 subdir('comment-code')
 subdir('create-project')
+subdir('cross-compilation')
 subdir('ctags')
 subdir('documentation-card')
 subdir('devhelp')
@@ -101,6 +102,7 @@ status += [
   'Color Picker .......... : @0@'.format(get_option('with_color_picker')),
   'Command Bar ........... : @0@'.format(get_option('with_command_bar')),
   'Comment Code .......... : @0@'.format(get_option('with_comment_code')),
+  'Cross-Compilation ..... : @0@'.format(get_option('with_cross_compilation')),
   'Project Wizard ........ : @0@'.format(get_option('with_create_project')),
   'CTags ................. : @0@'.format(get_option('with_ctags')),
   'Devhelp ............... : @0@'.format(get_option('with_devhelp')),
