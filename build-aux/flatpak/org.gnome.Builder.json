@@ -481,6 +481,12 @@
         },
         {
             "name" : "libgit2-glib",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
             "sources" : [
                 {
                     "type" : "git",
