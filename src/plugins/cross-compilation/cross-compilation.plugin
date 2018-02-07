@@ -1,0 +1,8 @@
+[Plugin]
+Module=cross-compilation-plugin
+Name=Cross-Compilation
+Description=Provides support for cross-compilation
+Authors=Corentin Noël <corentin.noel@collabora.co.uk>
+Copyright=Copyright © 2018 Collabora Ltd.
+Builtin=true
+Embedded=ide_cross_compilation_register_types
