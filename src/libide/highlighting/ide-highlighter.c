@@ -43,13 +43,6 @@ ide_highlighter_default_init (IdeHighlighterInterface *iface)
 {
   iface->update = ide_highlighter_real_update;
   iface->set_engine = ide_highlighter_real_set_engine;
-
-  g_object_interface_install_property (iface,
-                                       g_param_spec_object ("context",
-                                                            "Context",
-                                                            "Context",
-                                                            IDE_TYPE_CONTEXT,
-                                                            (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS)));
 }
 
 /**
