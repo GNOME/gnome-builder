@@ -228,7 +228,7 @@ gstyle_color_widget_on_drag_motion (GtkWidget      *widget,
       gtk_drag_highlight (widget);
 
       drag_action = gdk_drag_context_get_actions (context);
-      if ((drag_action | GDK_ACTION_COPY) != 0)
+      if (drag_action & GDK_ACTION_COPY)
         {
           gdk_drag_status (context, GDK_ACTION_COPY, time);
           return TRUE;
