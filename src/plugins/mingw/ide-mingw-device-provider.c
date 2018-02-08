@@ -68,6 +68,7 @@ ide_mingw_device_provider_discover_worker (GTask        *task,
   IdeMingwDeviceProvider *self = source_object;
   GPtrArray *devices;
   IdeContext *context;
+  gchar *mingw_path;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_MINGW_DEVICE_PROVIDER (self));
@@ -85,10 +86,12 @@ ide_mingw_device_provider_discover_worker (GTask        *task,
    * Someone that knows how this works, please fix this up!
    */
 
-  if (g_file_test ("/usr/bin/x86_64-w64-mingw32-gcc", G_FILE_TEST_EXISTS))
+  mingw_path = g_find_program_in_path ("x86_64-w64-mingw32-gcc");
+  if (mingw_path != NULL)
     {
       IdeDevice *device;
 
+      g_free (mingw_path);
       /* add 64-bit mingw device */
       device = ide_mingw_device_new (context,
                                      _("MinGW 64-bit"),
@@ -97,10 +100,12 @@ ide_mingw_device_provider_discover_worker (GTask        *task,
       g_ptr_array_add (devices, device);
     }
 
-  if (g_file_test ("/usr/bin/i686-w64-mingw32-gcc", G_FILE_TEST_EXISTS))
+  mingw_path = g_find_program_in_path ("i686-w64-mingw32-gcc");
+  if (mingw_path != NULL)
     {
       IdeDevice *device;
 
+      g_free (mingw_path);
       /* add 32-bit mingw device */
       device = ide_mingw_device_new (context,
                                      _("MinGW 32-bit"),
