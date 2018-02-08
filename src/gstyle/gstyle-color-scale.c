@@ -265,10 +265,7 @@ gstyle_color_scale_add_rgba_color_stop (GstyleColorScale *self,
                                 self);
       id_count += 1;
 
-      if (self->pattern != NULL)
-        cairo_pattern_destroy (self->pattern);
-
-      self->pattern = NULL;
+      g_clear_pointer (&self->pattern, cairo_pattern_destroy);
 
       if (gtk_widget_get_realized (GTK_WIDGET (self)))
         gtk_widget_queue_draw (GTK_WIDGET (self));
@@ -403,12 +400,7 @@ gstyle_color_scale_set_kind (GstyleColorScale     *self,
                                                                     self->data_stride);
         }
 
-      if (self->pattern != NULL)
-        {
-          cairo_pattern_destroy (self->pattern);
-          self->pattern = NULL;
-        }
-
+      g_clear_pointer (&self->pattern, cairo_pattern_destroy);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KIND]);
 
       if (gtk_widget_get_realized (GTK_WIDGET (self)))
@@ -515,7 +507,7 @@ update_pattern (GstyleColorScale *self)
         }
     }
 
-  cairo_pattern_destroy (self->pattern);
+  g_clear_pointer (&self->pattern, cairo_pattern_destroy);
   self->pattern = pattern;
 }
 
