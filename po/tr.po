@@ -7,18 +7,18 @@
 # Taner Orak <tnrork@gmail.com>, 2015.
 # ztugcesirin <ztugcesirin@gmail.com>, 2016.
 # Çağatay Yiğit Şahin <cyigitsahin@outlook.com>, 2017.
-# Muhammet Kara <muhammetk@gmail.com>, 2015, 2016, 2017.
 # Furkan Tokaç <developmentft@gmail.com>, 2017.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017, 2018.
+# Muhammet Kara <muhammetk@gmail.com>, 2015, 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-05 21:08+0000\n"
-"PO-Revision-Date: 2018-02-07 13:00+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2018-02-10 08:20+0000\n"
+"PO-Revision-Date: 2018-02-10 11:33+0300\n"
+"Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -263,9 +263,8 @@ msgid "The number of seconds after modification before auto saving."
 msgstr "Kendiliğinden kaydetme için değiştirmeden sonra saniye sayısı"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
-#| msgid "Spaces"
 msgid "Spaces Style"
-msgstr "Boşluk Stili"
+msgstr "Boşluk Biçemi"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
 msgid "How to apply spaces when reformating text."
@@ -323,7 +322,6 @@ msgstr "Gece kipini devreye sokmak için GNOME gece ışığı ayarını kullan.
 #. projects. Do NOT change the ASCII double quotes ("") to your
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:32
-#| msgid "Projects"
 msgid "\"Projects\""
 msgstr "\"Projeler\""
 
@@ -361,7 +359,6 @@ msgid "If the plugin should be enabled"
 msgstr "Eklentinin etkinleştirilmesi"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
-#| msgid "The configuration to use from .buildconfig"
 msgid "Selected configuration for building"
 msgstr "İnşa için seçilen yapılandırma"
 
@@ -919,7 +916,6 @@ msgstr "Dosya kaydetme başarısız oldu: %s"
 #. translators: %s is replaced with the error message
 #: src/libide/buffers/ide-unsaved-files.c:252
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to save draft: %s"
 msgstr "Taslak kaydetme başarısız oldu: %s"
 
@@ -931,7 +927,6 @@ msgstr "%s (Kopya)"
 
 #: src/libide/buildsystem/ide-build-manager.c:360
 #, c-format
-#| msgid "Failed to initialize defaults."
 msgid "Failed to initialize build pipeline: %s"
 msgstr "İnşa boru hattı ilklendirme başarısız oldu: %s"
 
@@ -1821,7 +1816,6 @@ msgid "_Open Project"
 msgstr "Pr_oje Aç"
 
 #: src/libide/gtk/menus.ui:15
-#| msgid "Repository URL"
 msgid "_Clone Repository"
 msgstr "Depoyu _Klonla"
 
@@ -2283,7 +2277,6 @@ msgstr "Metni uçbirimde bul"
 #. translators: %s is replaced with the error message
 #: src/libide/langserv/ide-langserv-client.c:870
 #, c-format
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize language server: %s"
 msgstr "Dil sunucusu ilklendirme başarısız: %s"
 
@@ -2708,7 +2701,6 @@ msgid "Insert matching character for { [ ( or \""
 msgstr "{ [ ( veya \" için eşleşen karakter ekle"
 
 #: src/libide/preferences/ide-preferences-builtin.c:325
-#| msgid "Insert trailing newline"
 msgid "Insert Trailing Newline"
 msgstr "İzleyen Yeni Satır Ekle"
 
@@ -2757,7 +2749,6 @@ msgid "Indent source code as you type"
 msgstr "Kaynak kodunu yazarken girintile"
 
 #: src/libide/preferences/ide-preferences-builtin.c:336
-#| msgid "Spaces"
 msgid "Spacing"
 msgstr "Boşluklama"
 
@@ -2766,7 +2757,6 @@ msgid "Space before opening parentheses"
 msgstr "Parantez açmadan önce boşluk"
 
 #: src/libide/preferences/ide-preferences-builtin.c:338
-#| msgid "Matching brackets"
 msgid "Space before opening brackets"
 msgstr "Köşeli parantez açmadan önce boşluk"
 
@@ -2779,17 +2769,14 @@ msgid "Space before opening angles"
 msgstr "Eşitsizlik imi açmadan önce boşluk"
 
 #: src/libide/preferences/ide-preferences-builtin.c:341
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before colons"
 msgstr "İki noktadan önce bir boşluk yeğle"
 
 #: src/libide/preferences/ide-preferences-builtin.c:342
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before commas"
 msgstr "Virgül öncesinde bir boşluk yeğle"
 
 #: src/libide/preferences/ide-preferences-builtin.c:343
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before semicolons"
 msgstr "Noktalı virgül öncesinde bir boşluk yeğle"
 
@@ -3281,7 +3268,6 @@ msgstr ""
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:405
 #, c-format
-#| msgid "No beautifier available for “%s”"
 msgid "Beautifier plugin: “%s”"
 msgstr "Güzelleştirici eklentisi: “%s”"
 
@@ -3724,7 +3710,6 @@ msgstr "Bir komut çalıştırmak için alttaki girdiyi kullanın"
 #. translators: %s is replaced with the error message
 #: src/plugins/command-bar/gb-command-vim.c:104
 #, c-format
-#| msgid "Command not found: %s"
 msgid "Command failed: %s"
 msgstr "Komut başarısız: %s"
 
@@ -4185,7 +4170,6 @@ msgstr ""
 #. translators: %s is replaced with the error message
 #: src/plugins/git/ide-git-vcs.c:365
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to establish git file monitor: %s"
 msgstr "Git dosya izleyicisi saptanamadı: %s"
 
@@ -4253,12 +4237,10 @@ msgid "Install project"
 msgstr "Proje kur"
 
 #: src/plugins/make/make_plugin.py:359
-#| msgid "Empty Meson Project"
 msgid "Empty Makefile Project"
 msgstr "Boş Makefile Projesi"
 
 #: src/plugins/make/make_plugin.py:361
-#| msgid "Create a new empty project"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Basit bir Makefile kullanarak yeni boş proje oluştur"
 
@@ -4294,11 +4276,11 @@ msgstr "Yeni boş bir proje oluştur"
 msgid "Messages"
 msgstr "İletiler"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:94
+#: src/plugins/mingw/ide-mingw-device-provider.c:97
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bit"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:106
+#: src/plugins/mingw/ide-mingw-device-provider.c:111
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
@@ -4395,21 +4377,18 @@ msgstr "Uçbirime yerli olmayan dosya yüklenemez"
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:354
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to spawn terminal: %s"
 msgstr "Uçbirim yaratılamadı: %s"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:619
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to rename file: %s"
 msgstr "Dosya yeniden adlandırılamadı: %s"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:710
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to trash file: %s"
 msgstr "Dosya çöpe atılamadı: %s"
 
@@ -4664,7 +4643,6 @@ msgstr "İmla denetleyici panelini göster"
 #.
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:139
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:246
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize spellchecking, disabling"
 msgstr "Hata ayıklayıcı ilklendirme başarısız, devre dışı bırakılıyor"
 
@@ -4835,7 +4813,6 @@ msgid "Application Output"
 msgstr "Uygulama Çıktısı"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:216
-#| msgid "Application Output"
 msgid "Application exited\r\n"
 msgstr "Uygulama çıktı\n"
 
@@ -4852,7 +4829,6 @@ msgid "New _Build Terminal"
 msgstr "Yeni _İnşa Uçbirimi"
 
 #: src/plugins/terminal/gtk/menus.ui:54
-#| msgid "New terminal"
 msgid "New terminal in directory"
 msgstr "Dizinde yeni uçbirim"
 
