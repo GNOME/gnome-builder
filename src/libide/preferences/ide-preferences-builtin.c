@@ -151,7 +151,7 @@ ide_preferences_builtin_register_editor (DzlPreferences *preferences)
   dzl_preferences_add_page (preferences, "editor", _("Editor"), 100);
 
   dzl_preferences_add_list_group (preferences, "editor", "general", _("General"), GTK_SELECTION_NONE, -5);
-  dzl_preferences_add_switch (preferences, "editor", "general", "org.gnome.builder", "show-open-files", NULL, NULL, _("Display list of open files"), _("Display the list of all open files in the within the project sidebar"), NULL, 0);
+  dzl_preferences_add_switch (preferences, "editor", "general", "org.gnome.builder", "show-open-files", NULL, NULL, _("Display list of open files"), _("Display the list of all open files in the project sidebar"), NULL, 0);
 
   dzl_preferences_add_list_group (preferences, "editor", "position", _("Cursor"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore cursor position when a file is reopened"), NULL, 0);
