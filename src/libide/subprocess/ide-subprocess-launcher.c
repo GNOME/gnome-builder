@@ -627,6 +627,14 @@ ide_subprocess_launcher_get_environ (IdeSubprocessLauncher *self)
   return (const gchar * const *)priv->environ;
 }
 
+/**
+ * ide_subprocess_launcher_set_environ:
+ * @self: an #IdeSubprocessLauncher
+ * @environ_: (array zero-terminated=1) (element-type utf8) (nullable): the list
+ * of environment variables to set
+ *
+ * Replace the environment variables by a new list of variables.
+ */
 void
 ide_subprocess_launcher_set_environ (IdeSubprocessLauncher *self,
                                      const gchar * const   *environ_)
