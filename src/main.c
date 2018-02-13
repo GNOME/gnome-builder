@@ -104,6 +104,7 @@ main (int   argc,
 {
   IdeApplication *app;
   const gchar *desktop;
+  const gchar *jhbuild_prefix;
   int ret;
 
   /* Setup our gdb fork()/exec() helper */
@@ -117,6 +118,33 @@ main (int   argc,
     {
       g_printerr (_("GNOME Builder requires a desktop session with D-Bus. Please set DBUS_SESSION_BUS_ADDRESS."));
       return EXIT_FAILURE;
+    }
+
+
+  /*
+   * JHBuild adds its own path to the main PATH environment variable
+   * and thus prevents the use of the host sytem environment.
+   */
+  jhbuild_prefix = g_getenv ("JHBUILD_PREFIX");
+  if (jhbuild_prefix != NULL)
+    {
+      const gchar *path = g_getenv ("PATH");
+      gchar **path_parts = g_strsplit (path, ":", -1);
+      gchar **wanted_parts = g_new0 (gchar*, g_strv_length (path_parts) + 1);
+      guint index = 0;
+      for(guint i = 0; path_parts[i] != NULL; i++)
+        {
+          if (!g_str_has_prefix (path_parts[i], jhbuild_prefix))
+            {
+              wanted_parts[index] = g_strdup(path_parts[i]);
+              index++;
+            }
+        }
+
+      path = g_strjoinv (":", wanted_parts);
+      g_strfreev (wanted_parts);
+      g_strfreev (path_parts);
+      g_setenv ("PATH", path, TRUE);
     }
 
   /* Early init of logging so that we get messages in a consistent

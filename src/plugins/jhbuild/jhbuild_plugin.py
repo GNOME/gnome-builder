@@ -53,14 +53,18 @@ class JhbuildRuntime(Ide.Runtime):
 
         return launcher
 
-    def do_prepare_configuration(self, configuration):
+    def _get_jhbuild_prefix_cmd(self):
+        # If we are inside a JHBuild environment, just get the variable
+        prefix = os.environ["JHBUILD_PREFIX"]
+        if prefix is not None:
+            return prefix
+
         launcher = self.create_launcher()
         launcher.push_argv('sh')
         launcher.push_argv('-c')
         launcher.push_argv('echo $JHBUILD_PREFIX')
         launcher.set_flags(Gio.SubprocessFlags.STDOUT_PIPE)
 
-        prefix = None
         try:
             # FIXME: Async
             subprocess = launcher.spawn(None)
@@ -73,7 +77,17 @@ class JhbuildRuntime(Ide.Runtime):
         if not prefix:
             prefix = os.path.join(GLib.get_home_dir(), 'jhbuild', 'install')
 
+        return prefix
+
+    def do_prepare_configuration(self, configuration):
+        prefix = self._get_jhbuild_prefix_cmd()
         configuration.set_prefix(prefix)
+        bin_path = os.path.join(prefix, 'bin')
+        path_var = os.environ['PATH']
+        if path_var:
+            os.environ['PATH'] = ':'.join((bin_path, path_var))
+        else:
+            os.environ['PATH'] = bin_path
 
     def do_contains_program_in_path(self, program, cancellable):
         launcher = self.create_launcher()
