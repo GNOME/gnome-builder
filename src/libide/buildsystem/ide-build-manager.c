@@ -178,10 +178,13 @@ ide_build_manager_stop_timer (IdeBuildManager *self)
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  g_timer_stop (self->running_time);
   dzl_clear_source (&self->timer_source);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+  if (self->running_time != NULL)
+    {
+      g_timer_stop (self->running_time);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+    }
 
   IDE_EXIT;
 }
