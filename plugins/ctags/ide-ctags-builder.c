@@ -179,6 +179,7 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
    */
 
   enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                           G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
@@ -198,6 +199,9 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
       type = g_file_info_get_file_type (info);
 
       if (g_hash_table_contains (ignored, name))
+        continue;
+
+      if (g_file_info_get_is_symlink (info))
         continue;
 
       if (type == G_FILE_TYPE_DIRECTORY)
