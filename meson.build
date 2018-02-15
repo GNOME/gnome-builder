@@ -308,8 +308,6 @@ foreach func: check_functions
   config_h.set(func[0], cc.has_function(func[1]))
 endforeach
 
-configure_file(output: 'config.h', configuration: config_h)
-
 gnome = import('gnome')
 i18n = import('i18n')
 
@@ -317,6 +315,8 @@ subdir('data')
 subdir('src')
 subdir('po')
 subdir('doc')
+
+configure_file(output: 'config.h', configuration: config_h)
 
 meson.add_install_script('build-aux/meson/post_install.py')
 
