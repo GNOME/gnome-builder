@@ -418,6 +418,7 @@ populate_descendants_matching (GFile        *file,
 
   enumerator = g_file_enumerate_children (file,
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                           G_FILE_QUERY_INFO_NONE,
                                           cancellable,
@@ -441,7 +442,7 @@ populate_descendants_matching (GFile        *file,
       if (g_pattern_match_string (spec, name))
         g_ptr_array_add (results, g_file_enumerator_get_child (enumerator, info));
 
-      if (file_type == G_FILE_TYPE_DIRECTORY)
+      if (!g_file_info_get_is_symlink (info) && file_type == G_FILE_TYPE_DIRECTORY)
         {
           if (children == NULL)
             children = g_ptr_array_new_with_free_func (g_object_unref);
