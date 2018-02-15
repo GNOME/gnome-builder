@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="IdeSysrootPreferencesRow" parent="DzlPreferencesBin">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <property name="orientation">horizontal</property>
+        <property name="column-spacing">12</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel" id="display_name">
+            <property name="hexpand">true</property>
+            <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage" id="image">
+            <property name="icon-name">edit-symbolic</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkPopover" id="popover">
+    <property name="relative-to">image</property>
+    <property name="position">bottom</property>
+    <property name="can-focus">true</property>
+    <child>
+      <object class="GtkGrid">
+        <property name="orientation">horizontal</property>
+        <property name="column-spacing">12</property>
+        <property name="row-spacing">6</property>
+        <property name="margin">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="xalign">1.0</property>
+            <property name="label" translatable="yes">Name</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="name_entry">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="can-focus">true</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="xalign">1.0</property>
+            <property name="label" translatable="yes">Sysroot path</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="sysroot_entry">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="can-focus">true</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="xalign">1.0</property>
+            <property name="label" translatable="yes">Additional Pkg-config path</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="pkg_config_entry">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="can-focus">true</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="delete_button">
+            <style>
+              <class name="destructive-action"/>
+            </style>
+            <property name="label" translatable="yes">Delete</property>
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="can-focus">true</property>
+            <property name="halign">end</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
