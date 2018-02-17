@@ -83,7 +83,7 @@ G_DECLARE_FINAL_TYPE (ExampleObject, example_object, EXAMPLE, OBJECT, GObject)
 
 Builder's default C mode matches our style guide.
 
-### Be explit about ownership transfers
+### Be explicit about ownership transfers
 
 Since `GLib 2.44`, we've had helpful macros and functions to be explit about ownership transfers.
 Please use them as it drastically saves time when tracking down memory leaks.
