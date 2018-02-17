@@ -6,29 +6,9 @@ endif
 
 add_languages('vala')
 
-libvala_options = [
-  ['libvala-0.40', ''],
-  ['libvala-0.38', ''],
-  ['libvala-0.36', ''],
-  ['libvala-0.34', ''],
-]
-
-libvala_found = false
-foreach v: libvala_options
-  if not libvala_found or not libvala.found()
-    if v[1] != ''
-      libvala = dependency(v[0], version: v[1], required: false)
-    else
-      libvala = dependency(v[0], required: false)
-    endif
-    libvala_found = libvala.found()
-    libvala_version = v[0].split('-')[1]
-  endif
-endforeach
-
-if not libvala_found
-  error('Failed to find suitable libvala')
-endif
+valac = find_program ('valac')
+libvala_version = run_command(valac, '--api-version').stdout()
+libvala = dependency('libvala-@0@'.format(libvala_version))
 
 vala_pack_sources = [
   'config.vapi',
