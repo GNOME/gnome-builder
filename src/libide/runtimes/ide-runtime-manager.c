@@ -214,9 +214,6 @@ ide_runtime_manager_remove (IdeRuntimeManager *self,
   g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
   g_return_if_fail (IDE_IS_RUNTIME (runtime));
 
-  if (self->unloading)
-    return;
-
   for (guint i = 0; i < self->runtimes->len; i++)
     {
       IdeRuntime *item = g_ptr_array_index (self->runtimes, i);
@@ -224,7 +221,8 @@ ide_runtime_manager_remove (IdeRuntimeManager *self,
       if (runtime == item)
         {
           g_ptr_array_remove_index (self->runtimes, i);
-          g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
+          if (!ide_object_is_unloading (IDE_OBJECT (self)))
+            g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
           break;
         }
     }
