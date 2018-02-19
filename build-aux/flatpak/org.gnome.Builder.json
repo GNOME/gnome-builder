@@ -723,9 +723,9 @@
                 "-Dwith_help=true",
                 "-Dwith_channel=flatpak-nightly"
             ],
-            "disable-shallow-clone": true,
             "sources" : [
                 {
+                    "disable-shallow-clone": true,
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git"
                 }
