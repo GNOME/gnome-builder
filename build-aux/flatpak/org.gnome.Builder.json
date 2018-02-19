@@ -723,6 +723,7 @@
                 "-Dwith_help=true",
                 "-Dwith_channel=flatpak-nightly"
             ],
+            "disable-shallow-clone": true,
             "sources" : [
                 {
                     "type" : "git",
