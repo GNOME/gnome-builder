@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-05 21:08+0000\n"
-"PO-Revision-Date: 2018-02-05 19:21+0100\n"
+"POT-Creation-Date: 2018-02-20 09:15+0000\n"
+"PO-Revision-Date: 2018-02-20 21:37+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -892,7 +892,7 @@ msgstr "Wyświetlenie okna skrótów"
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Założenie monitora zmian w tle się nie powiodło: %s"
 
-#: src/libide/buffers/ide-buffer.c:2843
+#: src/libide/buffers/ide-buffer.c:2844
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie ma mechanizmu rozwiązywania symboli."
 
@@ -929,7 +929,7 @@ msgstr "Zapisanie szkicu się nie powiodło: %s"
 msgid "%s (Copy)"
 msgstr "%s (kopia)"
 
-#: src/libide/buildsystem/ide-build-manager.c:360
+#: src/libide/buildsystem/ide-build-manager.c:363
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Zainicjowanie potoku budowania się nie powiodło: %s"
@@ -2279,7 +2279,7 @@ msgid "Find text within terminal"
 msgstr "Wyszukiwanie tekstu w terminalu"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:870
+#: src/libide/langserv/ide-langserv-client.c:891
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Zainicjowanie serwera języka się nie powiodło: %s"
@@ -2895,6 +2895,10 @@ msgstr "Otwarcie katalogu się nie powiodło: %s"
 #, c-format
 msgid "Failed to load file: %s: %s"
 msgstr "Wczytanie pliku się nie powiodło: %s: %s"
+
+#: src/libide/sourceview/ide-omni-gutter-renderer.c:749
+msgid "Click to toggle breakpoint"
+msgstr "Kliknięcie doda punkt przerwania"
 
 #: src/libide/sourceview/ide-source-view.c:4584
 #, c-format
@@ -4058,12 +4062,12 @@ msgstr[2] "Wyświetla %u środowisk wykonawczych więcej"
 msgid "Flatpak Runtimes"
 msgstr "Środowisko wykonawcze Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:762
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:765
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:764
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:767
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -4283,11 +4287,11 @@ msgstr "Utworzenie nowego pustego projektu"
 msgid "Messages"
 msgstr "Komunikaty"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:94
+#: src/plugins/mingw/ide-mingw-device-provider.c:97
 msgid "MinGW 64-bit"
 msgstr "64-bitowe MinGW"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:106
+#: src/plugins/mingw/ide-mingw-device-provider.c:111
 msgid "MinGW 32-bit"
 msgstr "32-bitowe MinGW"
 
