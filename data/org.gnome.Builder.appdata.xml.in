@@ -82,6 +82,21 @@
 
   <releases>
 
+    <release version="3.27.91" date="2018-02-20">
+      <description>
+        <p>
+          This is a bugfix release for bugs found in 3.27.90.
+          We would love for you to file bugs for any issues you come across to help us get Builder as stable as possible.
+        </p>
+        <ul>
+          <li>A spinloop was fixed for projects containing symlinks.</li>
+          <li>Various bugfixes for Flatpak-based projects including support for --own-name.</li>
+          <li>The editor gutter now supports tooltips when hovering over line numbers.</li>
+          <li>Various Vim emulation improvements.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.27.90" date="2018-02-04">
       <description>
         <p>

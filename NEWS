@@ -1,4 +1,25 @@
 ===============
+Version 3.27.91
+===============
+
+This release was pretty quiet which means our stablization efforts last
+cycle are paying off.
+
+Changes since last release:
+
+ • Various build fixes for some flatpak configurations.
+ • Don't follow through symlinks when building directory lists. This fixes
+   a spinloop some users saw when opening projects with symlinks.
+ • Avoid adding trailing \n when the document already includes a traliing \n.
+ • Builder now respects --own-name when spawning user projects.
+ • The editor gutter now provides tooltips with diagnostic information.
+ • Some vim emulation improvements.
+
+Updated Translations:
+
+  German, Polish, Turkish, Indonesian, Galician, Friulian, Spanish, Catalan
+
+===============
 Version 3.27.90
 ===============
 
