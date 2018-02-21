@@ -168,9 +168,9 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *copy = NULL;
+  gint64 version;
   gint line;
   gint column;
-  gint version;
 
   IDE_ENTRY;
 
@@ -182,7 +182,7 @@ ide_langserv_client_buffer_insert_text (IdeLangservClient *self,
   copy = g_strndup (new_text, len);
 
   uri = ide_buffer_get_uri (buffer);
-  version = (gint)ide_buffer_get_change_count (buffer);
+  version = (gint64)ide_buffer_get_change_count (buffer);
 
   line = gtk_text_iter_get_line (location);
   column = gtk_text_iter_get_line_offset (location);
@@ -296,6 +296,7 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
   const gchar *language_id;
   GtkTextIter begin;
   GtkTextIter end;
+  gint64 version;
 
   IDE_ENTRY;
 
@@ -320,6 +321,7 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
                            G_CONNECT_SWAPPED);
 
   uri = ide_buffer_get_uri (buffer);
+  version = (gint64)ide_buffer_get_change_count (buffer);
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
   text = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (buffer), &begin, &end, TRUE);
@@ -335,6 +337,7 @@ ide_langserv_client_buffer_loaded (IdeLangservClient *self,
       "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
       "languageId", JSONRPC_MESSAGE_PUT_STRING (language_id),
       "text", JSONRPC_MESSAGE_PUT_STRING (text),
+      "version", JSONRPC_MESSAGE_PUT_INT64 (version),
     "}"
   );
 
