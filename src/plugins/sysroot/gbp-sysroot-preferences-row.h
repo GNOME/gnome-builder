@@ -1,11 +1,11 @@
-/* ide-sysroot-preferences.h
+/* gbp-sysroot-preferences-row.h
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, eitIher version 3 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -23,8 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SYSROOT_PREFERENCES_ADDIN (ide_sysroot_preferences_addin_get_type())
+#define GBP_TYPE_SYSROOT_PREFERENCES_ROW (gbp_sysroot_preferences_row_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSysrootPreferencesAddin, ide_sysroot_preferences_addin, IDE, SYSROOT_PREFERENCES_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpSysrootPreferencesRow, gbp_sysroot_preferences_row, GBP, SYSROOT_PREFERENCES_ROW, DzlPreferencesBin)
+
+void gbp_sysroot_preferences_row_show_popup (GbpSysrootPreferencesRow *self);
 
 G_END_DECLS

@@ -1,4 +1,4 @@
-/* ide-sysroot-manager.c
+/* gbp-sysroot-manager.c
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
@@ -17,15 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ide-sysroot-manager.h"
+#include "gbp-sysroot-manager.h"
 
-struct _IdeSysrootManager
+struct _GbpSysrootManager
 {
   GObject parent_instance;
   GKeyFile *key_file;
 };
 
-G_DEFINE_TYPE (IdeSysrootManager, ide_sysroot_manager, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GbpSysrootManager, gbp_sysroot_manager, G_TYPE_OBJECT)
 
 enum {
   TARGET_MODIFIED,
@@ -52,12 +52,12 @@ sysroot_manager_get_path (void)
 }
 
 static void
-sysroot_manager_save (IdeSysrootManager *self)
+sysroot_manager_save (GbpSysrootManager *self)
 {
   g_autofree gchar *conf_file = NULL;
   g_autoptr(GError) error = NULL;
 
-  g_assert (IDE_IS_SYSROOT_MANAGER (self));
+  g_assert (GBP_IS_SYSROOT_MANAGER (self));
   g_assert (self->key_file != NULL);
 
   conf_file = sysroot_manager_get_path ();
@@ -66,22 +66,22 @@ sysroot_manager_save (IdeSysrootManager *self)
     g_critical ("Error loading the sysroot configuration: %s", error->message);
 }
 
-IdeSysrootManager *
-ide_sysroot_manager_get_default (void)
+GbpSysrootManager *
+gbp_sysroot_manager_get_default (void)
 {
-  static IdeSysrootManager *instance;
+  static GbpSysrootManager *instance;
   if (instance == NULL)
     {
-      instance = g_object_new (IDE_TYPE_SYSROOT_MANAGER, NULL);
+      instance = g_object_new (GBP_TYPE_SYSROOT_MANAGER, NULL);
     }
 
   return instance;
 }
 
 gchar *
-ide_sysroot_manager_create_target (IdeSysrootManager *self)
+gbp_sysroot_manager_create_target (GbpSysrootManager *self)
 {
-  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (GBP_IS_SYSROOT_MANAGER (self), NULL);
   g_return_val_if_fail (self->key_file != NULL, NULL);
 
   for (guint i = 0; i < UINT_MAX; i++)
@@ -96,7 +96,7 @@ ide_sysroot_manager_create_target (IdeSysrootManager *self)
           g_key_file_set_string (self->key_file, result, "Name", result);
           g_key_file_set_string (self->key_file, result, "Path", "/");
           sysroot_manager_save (self);
-          g_signal_emit (self, signals[TARGET_MODIFIED], 0, result, IDE_SYSROOT_MANAGER_TARGET_CREATED);
+          g_signal_emit (self, signals[TARGET_MODIFIED], 0, result, GBP_SYSROOT_MANAGER_TARGET_CREATED);
           return g_string_free (g_steal_pointer (&sysroot_name), FALSE);
         }
     }
@@ -105,12 +105,12 @@ ide_sysroot_manager_create_target (IdeSysrootManager *self)
 }
 
 void
-ide_sysroot_manager_remove_target (IdeSysrootManager *self,
+gbp_sysroot_manager_remove_target (GbpSysrootManager *self,
                                    const gchar       *target)
 {
   g_autoptr(GError) error = NULL;
 
-  g_return_if_fail (IDE_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (GBP_IS_SYSROOT_MANAGER (self));
   g_return_if_fail (self->key_file != NULL);
   g_return_if_fail (target != NULL);
 
@@ -118,30 +118,30 @@ ide_sysroot_manager_remove_target (IdeSysrootManager *self,
   if (error)
     g_critical ("Error removing target \"%s\": %s", target, error->message);
 
-  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, IDE_SYSROOT_MANAGER_TARGET_REMOVED);
+  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, GBP_SYSROOT_MANAGER_TARGET_REMOVED);
   sysroot_manager_save (self);
 }
 
 void
-ide_sysroot_manager_set_target_name (IdeSysrootManager *self,
+gbp_sysroot_manager_set_target_name (GbpSysrootManager *self,
                                      const gchar       *target,
                                      const gchar       *name)
 {
-  g_return_if_fail (IDE_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (GBP_IS_SYSROOT_MANAGER (self));
   g_return_if_fail (self->key_file != NULL);
   g_return_if_fail (target != NULL);
 
   g_key_file_set_string (self->key_file, target, "Name", name);
-  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, IDE_SYSROOT_MANAGER_TARGET_CHANGED);
+  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, GBP_SYSROOT_MANAGER_TARGET_CHANGED);
   g_signal_emit (self, signals[TARGET_NAME_CHANGED], 0, target, name);
   sysroot_manager_save (self);
 }
 
 gchar *
-ide_sysroot_manager_get_target_name (IdeSysrootManager *self,
+gbp_sysroot_manager_get_target_name (GbpSysrootManager *self,
                                      const gchar       *target)
 {
-  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (GBP_IS_SYSROOT_MANAGER (self), NULL);
   g_return_val_if_fail (self->key_file != NULL, NULL);
   g_return_val_if_fail (target != NULL, NULL);
 
@@ -149,24 +149,24 @@ ide_sysroot_manager_get_target_name (IdeSysrootManager *self,
 }
 
 void
-ide_sysroot_manager_set_target_path (IdeSysrootManager *self,
+gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
                                      const gchar       *target,
                                      const gchar       *path)
 {
-  g_return_if_fail (IDE_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (GBP_IS_SYSROOT_MANAGER (self));
   g_return_if_fail (self->key_file != NULL);
   g_return_if_fail (target != NULL);
 
   g_key_file_set_string (self->key_file, target, "Path", path);
-  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, IDE_SYSROOT_MANAGER_TARGET_CHANGED);
+  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, GBP_SYSROOT_MANAGER_TARGET_CHANGED);
   sysroot_manager_save (self);
 }
 
 gchar *
-ide_sysroot_manager_get_target_path (IdeSysrootManager *self,
+gbp_sysroot_manager_get_target_path (GbpSysrootManager *self,
                                      const gchar       *target)
 {
-  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (GBP_IS_SYSROOT_MANAGER (self), NULL);
   g_return_val_if_fail (self->key_file != NULL, NULL);
   g_return_val_if_fail (target != NULL, NULL);
 
@@ -174,24 +174,24 @@ ide_sysroot_manager_get_target_path (IdeSysrootManager *self,
 }
 
 void
-ide_sysroot_manager_set_target_pkg_config_path (IdeSysrootManager *self,
+gbp_sysroot_manager_set_target_pkg_config_path (GbpSysrootManager *self,
                                                 const gchar       *target,
                                                 const gchar       *path)
 {
-  g_return_if_fail (IDE_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (GBP_IS_SYSROOT_MANAGER (self));
   g_return_if_fail (self->key_file != NULL);
   g_return_if_fail (target != NULL);
 
   g_key_file_set_string (self->key_file, target, "PkgConfigPath", path);
-  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, IDE_SYSROOT_MANAGER_TARGET_CHANGED);
+  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, GBP_SYSROOT_MANAGER_TARGET_CHANGED);
   sysroot_manager_save (self);
 }
 
 gchar *
-ide_sysroot_manager_get_target_pkg_config_path (IdeSysrootManager *self,
+gbp_sysroot_manager_get_target_pkg_config_path (GbpSysrootManager *self,
                                                 const gchar       *target)
 {
-  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (GBP_IS_SYSROOT_MANAGER (self), NULL);
   g_return_val_if_fail (self->key_file != NULL, NULL);
   g_return_val_if_fail (target != NULL, NULL);
 
@@ -199,28 +199,28 @@ ide_sysroot_manager_get_target_pkg_config_path (IdeSysrootManager *self,
 }
 
 gchar **
-ide_sysroot_manager_list (IdeSysrootManager *self)
+gbp_sysroot_manager_list (GbpSysrootManager *self)
 {
-  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (GBP_IS_SYSROOT_MANAGER (self), NULL);
   g_return_val_if_fail (self->key_file != NULL, NULL);
 
   return g_key_file_get_groups (self->key_file, NULL);
 }
 
 void
-ide_sysroot_manager_finalize (GObject *object)
+gbp_sysroot_manager_finalize (GObject *object)
 {
-  IdeSysrootManager *self = IDE_SYSROOT_MANAGER(object);
+  GbpSysrootManager *self = GBP_SYSROOT_MANAGER(object);
 
   g_clear_pointer (&self->key_file, g_key_file_free);
 
-  G_OBJECT_CLASS (ide_sysroot_manager_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_sysroot_manager_parent_class)->finalize (object);
 }
 
 void
-ide_sysroot_manager_class_init (IdeSysrootManagerClass *klass)
+gbp_sysroot_manager_class_init (GbpSysrootManagerClass *klass)
 {
-  G_OBJECT_CLASS (klass)->finalize = ide_sysroot_manager_finalize;
+  G_OBJECT_CLASS (klass)->finalize = gbp_sysroot_manager_finalize;
 
   signals [TARGET_MODIFIED] =
     g_signal_new_class_handler ("target-changed",
@@ -244,7 +244,7 @@ ide_sysroot_manager_class_init (IdeSysrootManagerClass *klass)
 }
 
 static void
-ide_sysroot_manager_init (IdeSysrootManager *self)
+gbp_sysroot_manager_init (GbpSysrootManager *self)
 {
   gchar *conf_file = NULL;
   g_autoptr(GError) error = NULL;

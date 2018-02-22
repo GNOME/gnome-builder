@@ -1,4 +1,4 @@
-/* ide-sysroot-runtime-provider.c
+/* gbp-sysroot-runtime-provider.c
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
@@ -17,15 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-sysroot-runtime-provider"
+#define G_LOG_DOMAIN "gbp-sysroot-runtime-provider"
 
 #include <glib/gi18n.h>
 
-#include "ide-sysroot-runtime.h"
-#include "ide-sysroot-runtime-provider.h"
-#include "ide-sysroot-manager.h"
+#include "gbp-sysroot-runtime.h"
+#include "gbp-sysroot-runtime-provider.h"
+#include "gbp-sysroot-manager.h"
 
-struct _IdeSysrootRuntimeProvider
+struct _GbpSysrootRuntimeProvider
 {
   IdeObject  parent_instance;
 
@@ -35,23 +35,23 @@ struct _IdeSysrootRuntimeProvider
 
 static void runtime_provider_iface_init (IdeRuntimeProviderInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeSysrootRuntimeProvider,
-                        ide_sysroot_runtime_provider,
+G_DEFINE_TYPE_EXTENDED (GbpSysrootRuntimeProvider,
+                        gbp_sysroot_runtime_provider,
                         IDE_TYPE_OBJECT,
                         0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER,
                                                runtime_provider_iface_init))
 
 static void
-sysroot_runtime_provider_remove_target (IdeSysrootRuntimeProvider *self,
+sysroot_runtime_provider_remove_target (GbpSysrootRuntimeProvider *self,
                                         const gchar               *target)
 {
   if (self->runtimes != NULL)
     {
       for (guint i= 0; i < self->runtimes->len; i++)
         {
-          IdeSysrootRuntime *runtime = g_ptr_array_index (self->runtimes, i);
-          const gchar *sysroot_id = ide_sysroot_runtime_get_sysroot_id (runtime);
+          GbpSysrootRuntime *runtime = g_ptr_array_index (self->runtimes, i);
+          const gchar *sysroot_id = gbp_sysroot_runtime_get_sysroot_id (runtime);
 
           if (g_strcmp0 (target, sysroot_id) == 0)
             {
@@ -63,62 +63,62 @@ sysroot_runtime_provider_remove_target (IdeSysrootRuntimeProvider *self,
 }
 
 static void
-sysroot_runtime_provider_add_target (IdeSysrootRuntimeProvider *self,
+sysroot_runtime_provider_add_target (GbpSysrootRuntimeProvider *self,
                                      const gchar               *target)
 {
-  g_autoptr(IdeSysrootRuntime) runtime = NULL;
+  g_autoptr(GbpSysrootRuntime) runtime = NULL;
   IdeContext *context = NULL;
 
   context = ide_object_get_context (IDE_OBJECT (self->runtime_manager));
-  runtime = ide_sysroot_runtime_new (context, target);
+  runtime = gbp_sysroot_runtime_new (context, target);
 
   ide_runtime_manager_add (self->runtime_manager, IDE_RUNTIME (runtime));
   g_ptr_array_add (self->runtimes, g_steal_pointer (&runtime));
 }
 
 static void
-sysroot_runtime_provider_target_changed (IdeSysrootRuntimeProvider               *self,
+sysroot_runtime_provider_target_changed (GbpSysrootRuntimeProvider               *self,
                                          const gchar                             *target,
-                                         IdeSysrootManagerTargetModificationType  mod_type,
+                                         GbpSysrootManagerTargetModificationType  mod_type,
                                          gpointer                                 user_data)
 {
-  if (mod_type == IDE_SYSROOT_MANAGER_TARGET_CREATED)
+  if (mod_type == GBP_SYSROOT_MANAGER_TARGET_CREATED)
     sysroot_runtime_provider_add_target (self, target);
-  else if (mod_type == IDE_SYSROOT_MANAGER_TARGET_REMOVED)
+  else if (mod_type == GBP_SYSROOT_MANAGER_TARGET_REMOVED)
     sysroot_runtime_provider_remove_target (self, target);
 }
 
 static void
-ide_sysroot_runtime_provider_class_init (IdeSysrootRuntimeProviderClass *klass)
+gbp_sysroot_runtime_provider_class_init (GbpSysrootRuntimeProviderClass *klass)
 {
   
 }
 
 static void
-ide_sysroot_runtime_provider_init (IdeSysrootRuntimeProvider *self)
+gbp_sysroot_runtime_provider_init (GbpSysrootRuntimeProvider *self)
 {
   
 }
 
 static void
-ide_sysroot_runtime_provider_load (IdeRuntimeProvider *provider,
+gbp_sysroot_runtime_provider_load (IdeRuntimeProvider *provider,
                                    IdeRuntimeManager  *manager)
 {
-  IdeSysrootRuntimeProvider *self = IDE_SYSROOT_RUNTIME_PROVIDER (provider);
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootRuntimeProvider *self = (GbpSysrootRuntimeProvider *)provider;
+  GbpSysrootManager *sysroot_manager = NULL;
   g_auto(GStrv) sysroots = NULL;
   guint sysroots_length = 0;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_SYSROOT_RUNTIME_PROVIDER (self));
+  g_assert (GBP_IS_SYSROOT_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
   self->runtime_manager = manager;
   self->runtimes = g_ptr_array_new_with_free_func (g_object_unref);
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
-  sysroots = ide_sysroot_manager_list (sysroot_manager);
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  sysroots = gbp_sysroot_manager_list (sysroot_manager);
   sysroots_length = g_strv_length (sysroots);
   for (guint i = 0; i < sysroots_length; i++)
     {
@@ -134,18 +134,18 @@ ide_sysroot_runtime_provider_load (IdeRuntimeProvider *provider,
 }
 
 static void
-ide_sysroot_runtime_provider_unload (IdeRuntimeProvider *provider,
+gbp_sysroot_runtime_provider_unload (IdeRuntimeProvider *provider,
                                      IdeRuntimeManager  *manager)
 {
-  IdeSysrootRuntimeProvider *self = IDE_SYSROOT_RUNTIME_PROVIDER (provider);
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootRuntimeProvider *self = (GbpSysrootRuntimeProvider *)provider;
+  GbpSysrootManager *sysroot_manager = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_SYSROOT_RUNTIME_PROVIDER (self));
+  g_assert (GBP_IS_SYSROOT_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
+  sysroot_manager = gbp_sysroot_manager_get_default ();
   g_object_unref (sysroot_manager);
 
   if (self->runtimes != NULL)
@@ -166,6 +166,6 @@ ide_sysroot_runtime_provider_unload (IdeRuntimeProvider *provider,
 static void
 runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
 {
-  iface->load = ide_sysroot_runtime_provider_load;
-  iface->unload = ide_sysroot_runtime_provider_unload;
+  iface->load = gbp_sysroot_runtime_provider_load;
+  iface->unload = gbp_sysroot_runtime_provider_unload;
 }
