@@ -30,17 +30,15 @@ G_DEFINE_TYPE (IdeSysrootManager, ide_sysroot_manager, G_TYPE_OBJECT)
 enum {
   TARGET_MODIFIED,
   TARGET_NAME_CHANGED,
-  LAST_SIGNAL
+  N_SIGNALS
 };
 
-static guint signals [LAST_SIGNAL];
+static guint signals [N_SIGNALS];
 
-static IdeSysrootManager *instance;
-
-gchar *
+static gchar *
 sysroot_manager_get_path (void)
 {
-  gchar *directory_path = NULL;
+  g_autofree gchar *directory_path = NULL;
   gchar *conf_file = NULL;
 
   directory_path = g_build_filename (g_get_user_config_dir (),
@@ -50,29 +48,28 @@ sysroot_manager_get_path (void)
 
   g_mkdir_with_parents (directory_path, 0750);
   conf_file = g_build_filename (directory_path, "general.conf", NULL);
-  g_free (directory_path);
-  return conf_file;
+  return g_steal_pointer (&conf_file);
 }
 
 static void
 sysroot_manager_save (IdeSysrootManager *self)
 {
-  gchar *conf_file = NULL;
-  GError *error = NULL;
+  g_autofree gchar *conf_file = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_SYSROOT_MANAGER (self));
+  g_assert (self->key_file != NULL);
+
   conf_file = sysroot_manager_get_path ();
 
   if (!g_key_file_save_to_file (self->key_file, conf_file, &error))
-    {
-      g_critical ("Error loading the sysroot configuration: %s", error->message);
-      g_error_free (error);
-    }
-
-  g_free (conf_file);
+    g_critical ("Error loading the sysroot configuration: %s", error->message);
 }
 
 IdeSysrootManager *
 ide_sysroot_manager_get_default (void)
 {
+  static IdeSysrootManager *instance;
   if (instance == NULL)
     {
       instance = g_object_new (IDE_TYPE_SYSROOT_MANAGER, NULL);
@@ -84,19 +81,23 @@ ide_sysroot_manager_get_default (void)
 gchar *
 ide_sysroot_manager_create_target (IdeSysrootManager *self)
 {
+  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (self->key_file != NULL, NULL);
+
   for (guint i = 0; i < UINT_MAX; i++)
     {
       gchar * result;
-      GString *sysroot_name = g_string_new (NULL);
+      g_autoptr(GString) sysroot_name = g_string_new (NULL);
+
       g_string_printf (sysroot_name, "Sysroot %u", i);
-      result = g_string_free (sysroot_name, FALSE);
+      result = sysroot_name->str;
       if (!g_key_file_has_group (self->key_file, result))
         {
           g_key_file_set_string (self->key_file, result, "Name", result);
           g_key_file_set_string (self->key_file, result, "Path", "/");
           sysroot_manager_save (self);
           g_signal_emit (self, signals[TARGET_MODIFIED], 0, result, IDE_SYSROOT_MANAGER_TARGET_CREATED);
-          return result;
+          return g_string_free (g_steal_pointer (&sysroot_name), FALSE);
         }
     }
 
@@ -104,23 +105,32 @@ ide_sysroot_manager_create_target (IdeSysrootManager *self)
 }
 
 void
-ide_sysroot_manager_remove_target (IdeSysrootManager *self, const char *target)
+ide_sysroot_manager_remove_target (IdeSysrootManager *self,
+                                   const gchar       *target)
 {
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_return_if_fail (IDE_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (self->key_file != NULL);
+  g_return_if_fail (target != NULL);
+
   g_key_file_remove_group (self->key_file, target, &error);
   if (error)
-    {
-      g_critical ("Error removing target \"%s\": %s", target, error->message);
-      g_error_free (error);
-    }
+    g_critical ("Error removing target \"%s\": %s", target, error->message);
 
   g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, IDE_SYSROOT_MANAGER_TARGET_REMOVED);
   sysroot_manager_save (self);
 }
 
 void
-ide_sysroot_manager_set_target_name (IdeSysrootManager *self, const char *target, const char *name)
+ide_sysroot_manager_set_target_name (IdeSysrootManager *self,
+                                     const gchar       *target,
+                                     const gchar       *name)
 {
+  g_return_if_fail (IDE_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (self->key_file != NULL);
+  g_return_if_fail (target != NULL);
+
   g_key_file_set_string (self->key_file, target, "Name", name);
   g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, IDE_SYSROOT_MANAGER_TARGET_CHANGED);
   g_signal_emit (self, signals[TARGET_NAME_CHANGED], 0, target, name);
@@ -128,51 +138,73 @@ ide_sysroot_manager_set_target_name (IdeSysrootManager *self, const char *target
 }
 
 gchar *
-ide_sysroot_manager_get_target_name (IdeSysrootManager *self, const char *target)
+ide_sysroot_manager_get_target_name (IdeSysrootManager *self,
+                                     const gchar       *target)
 {
+  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (self->key_file != NULL, NULL);
+  g_return_val_if_fail (target != NULL, NULL);
+
   return g_key_file_get_string (self->key_file, target, "Name", NULL);
 }
 
 void
-ide_sysroot_manager_set_target_path (IdeSysrootManager *self, const char *target, const char *path)
+ide_sysroot_manager_set_target_path (IdeSysrootManager *self,
+                                     const gchar       *target,
+                                     const gchar       *path)
 {
+  g_return_if_fail (IDE_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (self->key_file != NULL);
+  g_return_if_fail (target != NULL);
+
   g_key_file_set_string (self->key_file, target, "Path", path);
   g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, IDE_SYSROOT_MANAGER_TARGET_CHANGED);
   sysroot_manager_save (self);
 }
 
 gchar *
-ide_sysroot_manager_get_target_path (IdeSysrootManager *self, const char *target)
+ide_sysroot_manager_get_target_path (IdeSysrootManager *self,
+                                     const gchar       *target)
 {
+  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (self->key_file != NULL, NULL);
+  g_return_val_if_fail (target != NULL, NULL);
+
   return g_key_file_get_string (self->key_file, target, "Path", NULL);
 }
 
 void
-ide_sysroot_manager_set_target_pkg_config_path (IdeSysrootManager *self, const char *target, const char *path)
+ide_sysroot_manager_set_target_pkg_config_path (IdeSysrootManager *self,
+                                                const gchar       *target,
+                                                const gchar       *path)
 {
+  g_return_if_fail (IDE_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (self->key_file != NULL);
+  g_return_if_fail (target != NULL);
+
   g_key_file_set_string (self->key_file, target, "PkgConfigPath", path);
   g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, IDE_SYSROOT_MANAGER_TARGET_CHANGED);
   sysroot_manager_save (self);
 }
 
 gchar *
-ide_sysroot_manager_get_target_pkg_config_path (IdeSysrootManager *self, const char *target)
+ide_sysroot_manager_get_target_pkg_config_path (IdeSysrootManager *self,
+                                                const gchar       *target)
 {
+  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (self->key_file != NULL, NULL);
+  g_return_val_if_fail (target != NULL, NULL);
+
   return g_key_file_get_string (self->key_file, target, "PkgConfigPath", NULL);
 }
 
-GArray *
+gchar **
 ide_sysroot_manager_list (IdeSysrootManager *self)
 {
-  GArray *list = NULL;
-  gchar **groups = NULL;
-  gsize groups_length = 0;
+  g_return_val_if_fail (IDE_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (self->key_file != NULL, NULL);
 
-  list = g_array_new (FALSE, FALSE, sizeof (char*));
-  groups = g_key_file_get_groups (self->key_file, &groups_length);
-  g_array_append_vals (list, groups, groups_length);
-
-  return list;
+  return g_key_file_get_groups (self->key_file, NULL);
 }
 
 void
@@ -215,18 +247,11 @@ static void
 ide_sysroot_manager_init (IdeSysrootManager *self)
 {
   gchar *conf_file = NULL;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
 
   conf_file = sysroot_manager_get_path ();
   self->key_file = g_key_file_new ();
   g_key_file_load_from_file (self->key_file, conf_file, G_KEY_FILE_KEEP_COMMENTS, &error);
-  if (error)
-    {
-      if (error->code != G_FILE_ERROR_NOENT)
-        {
-          g_critical ("Error loading the sysroot configuration: %s", error->message);
-        }
-
-      g_error_free (error);
-    }
+  if (g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+    g_critical ("Error loading the sysroot configuration: %s", error->message);
 }

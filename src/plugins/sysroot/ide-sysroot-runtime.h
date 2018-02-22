@@ -27,7 +27,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeSysrootRuntime, ide_sysroot_runtime, IDE, SYSROOT_RUNTIME, IdeRuntime)
 
-GObject *ide_sysroot_runtime_new (IdeContext *context, gchar* sysroot_id);
-const gchar *ide_sysroot_runtime_get_sysroot_id (IdeSysrootRuntime *self);
+IdeSysrootRuntime  *ide_sysroot_runtime_new            (IdeContext        *context, 
+                                                        const gchar* sysroot_id);
+const gchar        *ide_sysroot_runtime_get_sysroot_id (IdeSysrootRuntime *self);
 
 G_END_DECLS
