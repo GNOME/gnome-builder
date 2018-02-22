@@ -1,11 +1,11 @@
-/* ide-host-subprocess-launcher.h
+/* gbp-sysroot-preferences.h
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * the Free Software Foundation, eitIher version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -23,10 +23,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_HOST_SUBPROCESS_LAUNCHER (ide_host_subprocess_launcher_get_type())
+#define GBP_TYPE_SYSROOT_PREFERENCES_ADDIN (gbp_sysroot_preferences_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeHostSubprocessLauncher, ide_host_subprocess_launcher, IDE, HOST_SUBPROCESS_LAUNCHER, IdeSubprocessLauncher)
-
-IdeHostSubprocessLauncher *ide_host_subprocess_launcher_new (GSubprocessFlags flags);
+G_DECLARE_FINAL_TYPE (GbpSysrootPreferencesAddin, gbp_sysroot_preferences_addin, GBP, SYSROOT_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS

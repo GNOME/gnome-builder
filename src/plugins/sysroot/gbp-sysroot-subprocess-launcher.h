@@ -1,4 +1,4 @@
-/* ide-sysroot-preferences-row.h
+/* gbp-sysroot-subprocess-launcher.h
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
@@ -23,10 +23,10 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SYSROOT_PREFERENCES_ROW (ide_sysroot_preferences_row_get_type())
+#define GBP_TYPE_SYSROOT_SUBPROCESS_LAUNCHER (gbp_sysroot_subprocess_launcher_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSysrootPreferencesRow, ide_sysroot_preferences_row, IDE, SYSROOT_PREFERENCES_ROW, DzlPreferencesBin)
+G_DECLARE_FINAL_TYPE (GbpSysrootSubprocessLauncher, gbp_sysroot_subprocess_launcher, GBP, SYSROOT_SUBPROCESS_LAUNCHER, IdeSubprocessLauncher)
 
-void ide_sysroot_preferences_row_show_popup (IdeSysrootPreferencesRow *self);
+GbpSysrootSubprocessLauncher *gbp_sysroot_subprocess_launcher_new (GSubprocessFlags flags);
 
 G_END_DECLS
