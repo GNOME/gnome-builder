@@ -36,29 +36,34 @@ struct _IdeSysrootRuntime
 
 G_DEFINE_TYPE (IdeSysrootRuntime, ide_sysroot_runtime, IDE_TYPE_RUNTIME)
 
-GObject *
-ide_sysroot_runtime_new (IdeContext *context, gchar* sysroot_id)
+IdeSysrootRuntime *
+ide_sysroot_runtime_new (IdeContext  *context,
+                         const gchar *sysroot_id)
 {
-  GObject *runtime = NULL;
+  g_autoptr(IdeRuntime) runtime = NULL;
+  g_autofree gchar *built_id = NULL;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (sysroot_id != NULL, NULL);
 
+  built_id = g_strconcat (RUNTIME_PREFIX, sysroot_id, NULL);
   runtime = g_object_new (IDE_TYPE_SYSROOT_RUNTIME,
-                          "id", g_strconcat (RUNTIME_PREFIX, sysroot_id, NULL),
+                          "id", g_steal_pointer (&built_id),
                           "context", context,
                           "display-name", "",
                           NULL);
-  return runtime;
+  return g_steal_pointer (&runtime);
 }
 
 const gchar *
 ide_sysroot_runtime_get_sysroot_id (IdeSysrootRuntime *self)
 {
   const gchar *runtime_id = ide_runtime_get_id (IDE_RUNTIME (self));
+
   if (!g_str_has_prefix (runtime_id, RUNTIME_PREFIX))
     return runtime_id;
 
-  return g_utf8_offset_to_pointer (runtime_id, g_utf8_strlen (RUNTIME_PREFIX, -1));
+  return runtime_id + strlen(RUNTIME_PREFIX);
 }
 
 static IdeSubprocessLauncher *
@@ -79,11 +84,11 @@ ide_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
       IdeSysrootManager *sysroot_manager = NULL;
       const gchar *env_var = NULL;
       const gchar *sysroot_id = NULL;
-      gchar *sysroot_cflags = NULL;
-      gchar *sysroot_libdirs = NULL;
-      gchar **path_parts = NULL;
-      gchar *sysroot_path = NULL;
-      gchar *pkgconfig_dirs = NULL;
+      g_autofree gchar *sysroot_cflags = NULL;
+      g_autofree gchar *sysroot_libdirs = NULL;
+      g_auto(GStrv) path_parts = NULL;
+      g_autofree gchar *sysroot_path = NULL;
+      g_autofree gchar *pkgconfig_dirs = NULL;
 
       sysroot_id = ide_sysroot_runtime_get_sysroot_id (self);
 
@@ -97,7 +102,6 @@ ide_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
       env_var = ide_subprocess_launcher_getenv (ret, "CFLAGS");
       sysroot_cflags = g_strconcat ("--sysroot=", sysroot_path, NULL);
       ide_subprocess_launcher_setenv (ret, "CFLAGS", g_strjoin (" ", sysroot_cflags, env_var, NULL), TRUE);
-      g_free (sysroot_cflags);
 
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_DIR", "", TRUE);
 
@@ -107,24 +111,24 @@ ide_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
       path_parts = g_strsplit (BASIC_LIBDIRS, ":", 0);
       for (gint i = g_strv_length (path_parts) - 1; i >= 0; i--)
         {
-          gchar *path_i = g_build_path (G_DIR_SEPARATOR_S, sysroot_path, path_parts[i], NULL);
-          gchar *libdir_tmp = g_strjoin (":", path_i, sysroot_libdirs, NULL);
-          g_free (sysroot_libdirs);
-          sysroot_libdirs = libdir_tmp;
-          g_free (path_i);
+          g_autofree gchar *path_i = NULL;
+          g_autofree gchar *libdir_tmp = NULL;
+
+          path_i = g_build_path (G_DIR_SEPARATOR_S, sysroot_path, path_parts[i], NULL);
+          libdir_tmp = g_strjoin (":", path_i, sysroot_libdirs, NULL);
+          sysroot_libdirs = g_steal_pointer (&libdir_tmp);
         }
 
       pkgconfig_dirs = ide_sysroot_manager_get_target_pkg_config_path (sysroot_manager, sysroot_id);
       if (pkgconfig_dirs != NULL && g_strcmp0 (pkgconfig_dirs, "") != 0)
         {
-          gchar *libdir_tmp = g_strjoin (":", pkgconfig_dirs, sysroot_libdirs, NULL);
-          g_free (sysroot_libdirs);
-          sysroot_libdirs = libdir_tmp;
+          g_autofree gchar *libdir_tmp = NULL;
+
+          libdir_tmp = g_strjoin (":", pkgconfig_dirs, sysroot_libdirs, NULL);
+          sysroot_libdirs = g_steal_pointer (&libdir_tmp);
         }
 
-      g_strfreev (path_parts);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_LIBDIR", sysroot_libdirs, TRUE);
-      g_free (sysroot_libdirs);
     }
   else
     {
@@ -140,23 +144,21 @@ ide_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
 
 static void
 sysroot_runtime_target_name_changed (IdeSysrootRuntime *self,
-                                     gchar *target,
-                                     gchar *new_name,
-                                     gpointer user_data)
+                                     gchar             *target,
+                                     gchar             *new_name,
+                                     gpointer           user_data)
 {
   const gchar* sysroot_id = ide_sysroot_runtime_get_sysroot_id (self);
+
   if (g_strcmp0 (target, sysroot_id) == 0)
     ide_runtime_set_display_name (IDE_RUNTIME (self), new_name);
 }
 
-static GObject *
-ide_sysroot_runtime_constructor (GType type,
-                                 guint n_construct_properties,
-                                 GObjectConstructParam *construct_properties)
+static void
+ide_sysroot_runtime_constructed (GObject *object)
 {
-  GObject *object = G_OBJECT_CLASS (ide_sysroot_runtime_parent_class)->constructor (type, n_construct_properties, construct_properties);
   IdeSysrootManager *sysroot_manager = NULL;
-  gchar *display_name = NULL;
+  g_autofree gchar *display_name = NULL;
   const gchar* sysroot_id = NULL;
 
   sysroot_id = ide_sysroot_runtime_get_sysroot_id (IDE_SYSROOT_RUNTIME (object));
@@ -165,7 +167,6 @@ ide_sysroot_runtime_constructor (GType type,
   ide_runtime_set_display_name (IDE_RUNTIME (object), display_name);
 
   g_signal_connect_swapped (sysroot_manager, "target-name-changed", G_CALLBACK (sysroot_runtime_target_name_changed), object);
-  return object;
 }
 
 static void
@@ -174,7 +175,7 @@ ide_sysroot_runtime_class_init (IdeSysrootRuntimeClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeRuntimeClass *runtime_class = IDE_RUNTIME_CLASS (klass);
 
-  object_class->constructor = ide_sysroot_runtime_constructor;
+  object_class->constructed = ide_sysroot_runtime_constructed;
 
   runtime_class->create_launcher = ide_sysroot_runtime_create_launcher;
 }
