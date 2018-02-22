@@ -43,17 +43,19 @@ G_DEFINE_TYPE_EXTENDED (IdeSysrootRuntimeProvider,
                                                runtime_provider_iface_init))
 
 static void
-sysroot_runtime_provider_remove_target (IdeSysrootRuntimeProvider *self, gchar *target)
+sysroot_runtime_provider_remove_target (IdeSysrootRuntimeProvider *self,
+                                        const gchar               *target)
 {
   if (self->runtimes != NULL)
     {
       for (guint i= 0; i < self->runtimes->len; i++)
         {
-          IdeRuntime *runtime = g_ptr_array_index (self->runtimes, i);
-          const gchar *sysroot_id = ide_sysroot_runtime_get_sysroot_id (IDE_SYSROOT_RUNTIME (runtime));
+          IdeSysrootRuntime *runtime = g_ptr_array_index (self->runtimes, i);
+          const gchar *sysroot_id = ide_sysroot_runtime_get_sysroot_id (runtime);
+
           if (g_strcmp0 (target, sysroot_id) == 0)
             {
-              ide_runtime_manager_remove (self->runtime_manager, runtime);
+              ide_runtime_manager_remove (self->runtime_manager, IDE_RUNTIME (runtime));
               return;
             }
         }
@@ -61,9 +63,10 @@ sysroot_runtime_provider_remove_target (IdeSysrootRuntimeProvider *self, gchar *
 }
 
 static void
-sysroot_runtime_provider_add_target (IdeSysrootRuntimeProvider *self, gchar *target)
+sysroot_runtime_provider_add_target (IdeSysrootRuntimeProvider *self,
+                                     const gchar               *target)
 {
-  GObject *runtime = NULL;
+  g_autoptr(IdeSysrootRuntime) runtime = NULL;
   IdeContext *context = NULL;
 
   context = ide_object_get_context (IDE_OBJECT (self->runtime_manager));
@@ -74,19 +77,15 @@ sysroot_runtime_provider_add_target (IdeSysrootRuntimeProvider *self, gchar *tar
 }
 
 static void
-sysroot_runtime_provider_target_changed (IdeSysrootRuntimeProvider *self,
-                                         gchar *target,
-                                         IdeSysrootManagerTargetModificationType mod_type,
-                                         gpointer user_data)
+sysroot_runtime_provider_target_changed (IdeSysrootRuntimeProvider               *self,
+                                         const gchar                             *target,
+                                         IdeSysrootManagerTargetModificationType  mod_type,
+                                         gpointer                                 user_data)
 {
   if (mod_type == IDE_SYSROOT_MANAGER_TARGET_CREATED)
-    {
-      sysroot_runtime_provider_add_target (self, target);
-    }
+    sysroot_runtime_provider_add_target (self, target);
   else if (mod_type == IDE_SYSROOT_MANAGER_TARGET_REMOVED)
-    {
-      sysroot_runtime_provider_remove_target (self, target);
-    }
+    sysroot_runtime_provider_remove_target (self, target);
 }
 
 static void
@@ -107,7 +106,8 @@ ide_sysroot_runtime_provider_load (IdeRuntimeProvider *provider,
 {
   IdeSysrootRuntimeProvider *self = IDE_SYSROOT_RUNTIME_PROVIDER (provider);
   IdeSysrootManager *sysroot_manager = NULL;
-  GArray *sysroots = NULL;
+  g_auto(GStrv) sysroots = NULL;
+  guint sysroots_length = 0;
 
   IDE_ENTRY;
 
@@ -119,23 +119,23 @@ ide_sysroot_runtime_provider_load (IdeRuntimeProvider *provider,
 
   sysroot_manager = ide_sysroot_manager_get_default ();
   sysroots = ide_sysroot_manager_list (sysroot_manager);
-  for (guint i = 0; i < sysroots->len; i++)
+  sysroots_length = g_strv_length (sysroots);
+  for (guint i = 0; i < sysroots_length; i++)
     {
-      gchar *sysroot_id = g_array_index (sysroots, gchar*, i);
-      sysroot_runtime_provider_add_target (self, sysroot_id);
+      sysroot_runtime_provider_add_target (self, sysroots[i]);
     }
 
-  g_signal_connect_swapped (sysroot_manager, "target-changed", G_CALLBACK (sysroot_runtime_provider_target_changed), self);
-
-  g_array_free (sysroots, TRUE);
-
+  g_signal_connect_swapped (sysroot_manager,
+                            "target-changed",
+                            G_CALLBACK (sysroot_runtime_provider_target_changed),
+                            self);
 
   IDE_EXIT;
 }
 
 static void
 ide_sysroot_runtime_provider_unload (IdeRuntimeProvider *provider,
-                                   IdeRuntimeManager  *manager)
+                                     IdeRuntimeManager  *manager)
 {
   IdeSysrootRuntimeProvider *self = IDE_SYSROOT_RUNTIME_PROVIDER (provider);
   IdeSysrootManager *sysroot_manager = NULL;

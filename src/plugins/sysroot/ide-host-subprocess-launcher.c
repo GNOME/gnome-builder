@@ -41,42 +41,35 @@ ide_host_subprocess_launcher_new (GSubprocessFlags flags)
 }
 
 static IdeSubprocess *
-ide_hostsubprocess_launcher_spawn (IdeSubprocessLauncher  *self,
-                                   GCancellable           *cancellable,
-                                   GError                **error)
+ide_host_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
+                                    GCancellable           *cancellable,
+                                    GError                 **error)
 {
-  gchar *argv = NULL;
+  g_autofree gchar *argv = NULL;
   const gchar * const *args = NULL;
-  const gchar * const *environ = NULL;
-  GString *cmd = NULL;
+  g_autoptr(GString) cmd = NULL;
 
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (self));
+  g_assert (IDE_IS_HOST_SUBPROCESS_LAUNCHER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  // don't prepend `sh -c` twice
+  /* don't prepend `sh -c` twice */
   args = ide_subprocess_launcher_get_argv (self);
-  if (g_strv_length ((gchar **)args) >= 2)
-    {
-      if (g_strcmp0 (args[0], "sh") == 0 && g_strcmp0 (args[1], "-c") == 0)
-        {
-          return IDE_SUBPROCESS_LAUNCHER_CLASS (ide_host_subprocess_launcher_parent_class)->spawn (self, cancellable, error);
-        }
-    }
+  if (args[0] != NULL && g_strcmp0 (args[0], "sh") == 0 && g_strcmp0 (args[1], "-c") == 0)
+    return IDE_SUBPROCESS_LAUNCHER_CLASS (ide_host_subprocess_launcher_parent_class)->spawn (self, cancellable, error);
 
   argv = ide_subprocess_launcher_pop_argv (self);
   cmd = g_string_new (argv);
-  g_free (argv);
 
   while ((argv = ide_subprocess_launcher_pop_argv (self)) != NULL)
     {
+      g_autofree gchar *arg = g_shell_quote(argv);
       g_string_prepend (cmd, " ");
-      g_string_prepend (cmd, argv);
-      g_free (argv);
+      g_string_prepend (cmd, arg);
     }
 
   ide_subprocess_launcher_push_argv (self, "sh");
   ide_subprocess_launcher_push_argv (self, "-c");
-  ide_subprocess_launcher_push_argv (self, g_string_free (cmd, FALSE));
+  ide_subprocess_launcher_push_argv (self, cmd->str);
 
   return IDE_SUBPROCESS_LAUNCHER_CLASS (ide_host_subprocess_launcher_parent_class)->spawn (self, cancellable, error);
 }
@@ -86,7 +79,7 @@ ide_host_subprocess_launcher_class_init (IdeHostSubprocessLauncherClass *klass)
 {
   IdeSubprocessLauncherClass *subprocess_launcher_class = IDE_SUBPROCESS_LAUNCHER_CLASS (klass);
 
-  subprocess_launcher_class->spawn = ide_hostsubprocess_launcher_spawn;
+  subprocess_launcher_class->spawn = ide_host_subprocess_launcher_spawn;
 }
 
 static void
