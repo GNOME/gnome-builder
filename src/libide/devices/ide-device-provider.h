@@ -18,34 +18,50 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#include "ide-object.h"
 
 #include "devices/ide-device.h"
-#include "ide-object.h"
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_DEVICE_PROVIDER (ide_device_provider_get_type())
 
-G_DECLARE_INTERFACE (IdeDeviceProvider, ide_device_provider, IDE, DEVICE_PROVIDER, IdeObject)
+G_DECLARE_DERIVABLE_TYPE (IdeDeviceProvider, ide_device_provider, IDE, DEVICE_PROVIDER, IdeObject)
 
-struct _IdeDeviceProviderInterface
+struct _IdeDeviceProviderClass
 {
-  GTypeInterface parent_interface;
+  IdeObjectClass parent_class;
 
-  gboolean   (*get_settled) (IdeDeviceProvider *provider);
-  GPtrArray *(*get_devices) (IdeDeviceProvider *provider);
+  void     (*device_added)   (IdeDeviceProvider    *self,
+                              IdeDevice            *device);
+  void     (*device_removed) (IdeDeviceProvider    *self,
+                              IdeDevice            *device);
+  void     (*load_async)     (IdeDeviceProvider    *self,
+                              GCancellable         *cancellable,
+                              GAsyncReadyCallback   callback,
+                              gpointer              user_data);
+  gboolean (*load_finish)    (IdeDeviceProvider    *self,
+                              GAsyncResult         *result,
+                              GError              **error);
 };
 
 IDE_AVAILABLE_IN_ALL
-void       ide_device_provider_emit_device_added   (IdeDeviceProvider *provider,
-                                                    IdeDevice         *device);
+void       ide_device_provider_emit_device_added   (IdeDeviceProvider    *self,
+                                                    IdeDevice            *device);
 IDE_AVAILABLE_IN_ALL
-void       ide_device_provider_emit_device_removed (IdeDeviceProvider *provider,
-                                                    IdeDevice         *device);
+void       ide_device_provider_emit_device_removed (IdeDeviceProvider    *self,
+                                                    IdeDevice            *device);
 IDE_AVAILABLE_IN_ALL
-GPtrArray *ide_device_provider_get_devices         (IdeDeviceProvider *provider);
+void       ide_device_provider_load_async          (IdeDeviceProvider    *self,
+                                                    GCancellable         *cancellable,
+                                                    GAsyncReadyCallback   callback,
+                                                    gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean   ide_device_provider_get_settled         (IdeDeviceProvider *provider);
+gboolean   ide_device_provider_load_finish         (IdeDeviceProvider    *self,
+                                                    GAsyncResult         *result,
+                                                    GError              **error);
+IDE_AVAILABLE_IN_ALL
+GPtrArray *ide_device_provider_get_devices         (IdeDeviceProvider    *self);
 
 G_END_DECLS
