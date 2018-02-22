@@ -66,6 +66,13 @@ sysroot_manager_save (GbpSysrootManager *self)
     g_critical ("Error loading the sysroot configuration: %s", error->message);
 }
 
+/**
+ * gbp_sysroot_manager_get_default:
+ *
+ * Returns the default #GbpSysrootManager instance.
+ *
+ * Returns: (transfer none): the common sysroot manager
+ */
 GbpSysrootManager *
 gbp_sysroot_manager_get_default (void)
 {
@@ -78,6 +85,14 @@ gbp_sysroot_manager_get_default (void)
   return instance;
 }
 
+/**
+ * gbp_sysroot_manager_create_target:
+ * @self: a #GbpSysrootManager
+ *
+ * This creates a new target and initializes its fields to the default parameters.
+ *
+ * Returns: (transfer full): the unique identifier of the new target
+ */
 gchar *
 gbp_sysroot_manager_create_target (GbpSysrootManager *self)
 {
@@ -122,6 +137,14 @@ gbp_sysroot_manager_remove_target (GbpSysrootManager *self,
   sysroot_manager_save (self);
 }
 
+/**
+ * gbp_sysroot_manager_set_target_name:
+ * @self: a #GbpSysrootManager
+ * @target: the unique identifier of the target
+ * @name: the displayable name of the target
+ *
+ * Sets the displayable name of the target.
+ */
 void
 gbp_sysroot_manager_set_target_name (GbpSysrootManager *self,
                                      const gchar       *target,
@@ -137,6 +160,15 @@ gbp_sysroot_manager_set_target_name (GbpSysrootManager *self,
   sysroot_manager_save (self);
 }
 
+/**
+ * gbp_sysroot_manager_get_target_name:
+ * @self: a #GbpSysrootManager
+ * @target: the unique identifier of the target
+ *
+ * Gets the displayable name of the target.
+ *
+ * Returns: (transfer full): the name of the target to display.
+ */
 gchar *
 gbp_sysroot_manager_get_target_name (GbpSysrootManager *self,
                                      const gchar       *target)
@@ -148,6 +180,14 @@ gbp_sysroot_manager_get_target_name (GbpSysrootManager *self,
   return g_key_file_get_string (self->key_file, target, "Name", NULL);
 }
 
+/**
+ * gbp_sysroot_manager_set_target_path:
+ * @self: a #GbpSysrootManager
+ * @target: the unique identifier of the target
+ * @path: the sysroot path of the target
+ *
+ * Sets the sysroot path of the target.
+ */
 void
 gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
                                      const gchar       *target,
@@ -156,12 +196,22 @@ gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
   g_return_if_fail (GBP_IS_SYSROOT_MANAGER (self));
   g_return_if_fail (self->key_file != NULL);
   g_return_if_fail (target != NULL);
+  g_return_if_fail (path != NULL);
 
   g_key_file_set_string (self->key_file, target, "Path", path);
   g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, GBP_SYSROOT_MANAGER_TARGET_CHANGED);
   sysroot_manager_save (self);
 }
 
+/**
+ * gbp_sysroot_manager_get_target_path:
+ * @self: a #GbpSysrootManager
+ * @target: the unique identifier of the target
+ *
+ * Gets the sysroot path of the target.
+ *
+ * Returns: (transfer full): the sysroot path of the target.
+ */
 gchar *
 gbp_sysroot_manager_get_target_path (GbpSysrootManager *self,
                                      const gchar       *target)
@@ -173,6 +223,16 @@ gbp_sysroot_manager_get_target_path (GbpSysrootManager *self,
   return g_key_file_get_string (self->key_file, target, "Path", NULL);
 }
 
+
+/**
+ * gbp_sysroot_manager_set_target_pkg_config_path:
+ * @self: a #GbpSysrootManager
+ * @target: the unique identifier of the target
+ * @path: (nullable): the additional Pkg-Config paths of the target or %NULL
+ *
+ * Sets the additional Pkg-Config paths of the target.
+ * It is possible to use several paths by separating them with a colon character.
+ */
 void
 gbp_sysroot_manager_set_target_pkg_config_path (GbpSysrootManager *self,
                                                 const gchar       *target,
@@ -187,6 +247,17 @@ gbp_sysroot_manager_set_target_pkg_config_path (GbpSysrootManager *self,
   sysroot_manager_save (self);
 }
 
+/**
+ * gbp_sysroot_manager_get_target_pkg_config_path:
+ * @self: a #GbpSysrootManager
+ * @target: the unique identifier of the target
+ *
+ * Gets the additional Pkg-Config paths of the target.
+ *
+ * This is often used when the target has its libraries in an architecture-specific folder.
+ *
+ * Returns: (transfer full) (nullable): the additional paths to pkg-config, using a colon separator.
+ */
 gchar *
 gbp_sysroot_manager_get_target_pkg_config_path (GbpSysrootManager *self,
                                                 const gchar       *target)
@@ -198,6 +269,15 @@ gbp_sysroot_manager_get_target_pkg_config_path (GbpSysrootManager *self,
   return g_key_file_get_string (self->key_file, target, "PkgConfigPath", NULL);
 }
 
+/**
+ * gbp_sysroot_manager_list:
+ * @self: a #GbpSysrootManager
+ *
+ * Retrieves the list of all the available sysroot unique identifiers.
+ *
+ * Returns: (transfer full) (nullable): the %NULL-terminated list of all the available sysroot
+ * unique identifiers.
+ */
 gchar **
 gbp_sysroot_manager_list (GbpSysrootManager *self)
 {
