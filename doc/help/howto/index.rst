@@ -17,3 +17,4 @@ Contents
    jump_to_definition
    search_for_symbol
    rust_integration
+   sysroot
