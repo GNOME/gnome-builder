@@ -1,4 +1,4 @@
-/* ide-sysroot-preferences.c
+/* gbp-sysroot-preferences.c
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
@@ -17,15 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-sysroot-preferences-addin"
+#define G_LOG_DOMAIN "gbp-sysroot-preferences-addin"
 
 #include <glib/gi18n.h>
 
-#include "ide-sysroot-preferences-addin.h"
-#include "ide-sysroot-preferences-row.h"
-#include "ide-sysroot-manager.h"
+#include "gbp-sysroot-preferences-addin.h"
+#include "gbp-sysroot-preferences-row.h"
+#include "gbp-sysroot-manager.h"
 
-struct _IdeSysrootPreferencesAddin
+struct _GbpSysrootPreferencesAddin
 {
   GObject         parent_instance;
 
@@ -34,20 +34,20 @@ struct _IdeSysrootPreferencesAddin
 };
 
 static void
-sysroot_preferences_add_new (IdeSysrootPreferencesAddin *self,
+sysroot_preferences_add_new (GbpSysrootPreferencesAddin *self,
                              GtkWidget                  *emitter)
 {
   GtkWidget *pref_row = NULL;
   guint id = 0;
   g_autofree gchar *new_target;
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootManager *sysroot_manager = NULL;
 
-  g_assert (IDE_IS_SYSROOT_PREFERENCES_ADDIN (self));
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ADDIN (self));
   g_assert (DZL_IS_PREFERENCES_BIN (emitter));
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
-  new_target = ide_sysroot_manager_create_target (sysroot_manager);
-  pref_row = g_object_new (IDE_TYPE_SYSROOT_PREFERENCES_ROW,
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  new_target = gbp_sysroot_manager_create_target (sysroot_manager);
+  pref_row = g_object_new (GBP_TYPE_SYSROOT_PREFERENCES_ROW,
                            "visible", TRUE,
                            "sysroot-id", new_target,
                            NULL);
@@ -55,11 +55,11 @@ sysroot_preferences_add_new (IdeSysrootPreferencesAddin *self,
   id = dzl_preferences_add_custom (self->preferences, "sdk", "sysroot", pref_row, "", 1);
   g_array_append_val (self->ids, id);
 
-  ide_sysroot_preferences_row_show_popup (IDE_SYSROOT_PREFERENCES_ROW (pref_row));
+  gbp_sysroot_preferences_row_show_popup (GBP_SYSROOT_PREFERENCES_ROW (pref_row));
 }
 
 static GtkWidget *
-sysroot_preferences_get_add_widget (IdeSysrootPreferencesAddin *self)
+sysroot_preferences_get_add_widget (GbpSysrootPreferencesAddin *self)
 {
   GtkWidget *bin = NULL;
   GtkWidget *grid = NULL;
@@ -114,19 +114,19 @@ sysroot_preferences_get_add_widget (IdeSysrootPreferencesAddin *self)
 }
 
 static void
-ide_sysroot_preferences_addin_load (IdePreferencesAddin *addin,
+gbp_sysroot_preferences_addin_load (IdePreferencesAddin *addin,
                                     DzlPreferences      *preferences)
 {
-  IdeSysrootPreferencesAddin *self = (IdeSysrootPreferencesAddin *)addin;
+  GbpSysrootPreferencesAddin *self = (GbpSysrootPreferencesAddin *)addin;
   GtkWidget *widget = NULL;
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootManager *sysroot_manager = NULL;
   g_auto(GStrv) sysroots = NULL;
   guint sysroots_length = 0;
   guint id = 0;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_SYSROOT_PREFERENCES_ADDIN (self));
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ADDIN (self));
   g_assert (DZL_IS_PREFERENCES (preferences));
 
   self->ids = g_array_new (FALSE, FALSE, sizeof (guint));
@@ -139,12 +139,12 @@ ide_sysroot_preferences_addin_load (IdePreferencesAddin *addin,
 
   g_array_append_val (self->ids, id);
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
-  sysroots = ide_sysroot_manager_list (sysroot_manager);
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  sysroots = gbp_sysroot_manager_list (sysroot_manager);
   sysroots_length = g_strv_length (sysroots);
   for (guint i = 0; i < sysroots_length; i++)
     {
-      GtkWidget *pref_row = g_object_new (IDE_TYPE_SYSROOT_PREFERENCES_ROW,
+      GtkWidget *pref_row = g_object_new (GBP_TYPE_SYSROOT_PREFERENCES_ROW,
                                           "visible", TRUE,
                                           "sysroot-id", sysroots[i],
                                           NULL);
@@ -157,14 +157,14 @@ ide_sysroot_preferences_addin_load (IdePreferencesAddin *addin,
 }
 
 static void
-ide_sysroot_preferences_addin_unload (IdePreferencesAddin *addin,
+gbp_sysroot_preferences_addin_unload (IdePreferencesAddin *addin,
                                       DzlPreferences      *preferences)
 {
-  IdeSysrootPreferencesAddin *self = IDE_SYSROOT_PREFERENCES_ADDIN (addin);
+  GbpSysrootPreferencesAddin *self = (GbpSysrootPreferencesAddin *)addin;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_SYSROOT_PREFERENCES_ADDIN (self));
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ADDIN (self));
   g_assert (DZL_IS_PREFERENCES (preferences));
 
   /* Clear preferences so reload code doesn't try to
@@ -187,19 +187,19 @@ ide_sysroot_preferences_addin_unload (IdePreferencesAddin *addin,
 static void
 preferences_addin_iface_init (IdePreferencesAddinInterface *iface)
 {
-  iface->load = ide_sysroot_preferences_addin_load;
-  iface->unload = ide_sysroot_preferences_addin_unload;
+  iface->load = gbp_sysroot_preferences_addin_load;
+  iface->unload = gbp_sysroot_preferences_addin_unload;
 }
 
-G_DEFINE_TYPE_EXTENDED (IdeSysrootPreferencesAddin, ide_sysroot_preferences_addin, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GbpSysrootPreferencesAddin, gbp_sysroot_preferences_addin, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, preferences_addin_iface_init))
 
 static void
-ide_sysroot_preferences_addin_class_init (IdeSysrootPreferencesAddinClass *klass)
+gbp_sysroot_preferences_addin_class_init (GbpSysrootPreferencesAddinClass *klass)
 {
 }
 
 static void
-ide_sysroot_preferences_addin_init (IdeSysrootPreferencesAddin *self)
+gbp_sysroot_preferences_addin_init (GbpSysrootPreferencesAddin *self)
 {
 }

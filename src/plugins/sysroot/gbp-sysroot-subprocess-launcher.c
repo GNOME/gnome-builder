@@ -1,4 +1,4 @@
-/* ide-host-subprocess-launcher.c
+/* gbp-sysroot-subprocess-launcher.c
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
@@ -17,45 +17,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-host-subprocess-launcher"
+#define G_LOG_DOMAIN "gbp-sysroot-subprocess-launcher"
 
 #include <glib/gi18n.h>
 
-#include "ide-host-subprocess-launcher.h"
+#include "gbp-sysroot-subprocess-launcher.h"
 
-struct _IdeHostSubprocessLauncher
+struct _GbpSysrootSubprocessLauncher
 {
   IdeSubprocessLauncher parent_instance;
 };
 
-G_DEFINE_TYPE (IdeHostSubprocessLauncher,
-               ide_host_subprocess_launcher,
+G_DEFINE_TYPE (GbpSysrootSubprocessLauncher,
+               gbp_sysroot_subprocess_launcher,
                IDE_TYPE_SUBPROCESS_LAUNCHER)
 
-IdeHostSubprocessLauncher *
-ide_host_subprocess_launcher_new (GSubprocessFlags flags)
+GbpSysrootSubprocessLauncher *
+gbp_sysroot_subprocess_launcher_new (GSubprocessFlags flags)
 {
-  return g_object_new (IDE_TYPE_HOST_SUBPROCESS_LAUNCHER,
+  return g_object_new (GBP_TYPE_SYSROOT_SUBPROCESS_LAUNCHER,
                        "flags", flags,
                        NULL);
 }
 
 static IdeSubprocess *
-ide_host_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
-                                    GCancellable           *cancellable,
-                                    GError                 **error)
+gbp_sysroot_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
+                                       GCancellable           *cancellable,
+                                       GError                 **error)
 {
   g_autofree gchar *argv = NULL;
   const gchar * const *args = NULL;
   g_autoptr(GString) cmd = NULL;
 
-  g_assert (IDE_IS_HOST_SUBPROCESS_LAUNCHER (self));
+  g_assert (GBP_IS_SYSROOT_SUBPROCESS_LAUNCHER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* don't prepend `sh -c` twice */
   args = ide_subprocess_launcher_get_argv (self);
   if (args[0] != NULL && g_strcmp0 (args[0], "sh") == 0 && g_strcmp0 (args[1], "-c") == 0)
-    return IDE_SUBPROCESS_LAUNCHER_CLASS (ide_host_subprocess_launcher_parent_class)->spawn (self, cancellable, error);
+    return IDE_SUBPROCESS_LAUNCHER_CLASS (gbp_sysroot_subprocess_launcher_parent_class)->spawn (self, cancellable, error);
 
   argv = ide_subprocess_launcher_pop_argv (self);
   cmd = g_string_new (argv);
@@ -71,19 +71,19 @@ ide_host_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
   ide_subprocess_launcher_push_argv (self, "-c");
   ide_subprocess_launcher_push_argv (self, cmd->str);
 
-  return IDE_SUBPROCESS_LAUNCHER_CLASS (ide_host_subprocess_launcher_parent_class)->spawn (self, cancellable, error);
+  return IDE_SUBPROCESS_LAUNCHER_CLASS (gbp_sysroot_subprocess_launcher_parent_class)->spawn (self, cancellable, error);
 }
 
 static void
-ide_host_subprocess_launcher_class_init (IdeHostSubprocessLauncherClass *klass)
+gbp_sysroot_subprocess_launcher_class_init (GbpSysrootSubprocessLauncherClass *klass)
 {
   IdeSubprocessLauncherClass *subprocess_launcher_class = IDE_SUBPROCESS_LAUNCHER_CLASS (klass);
 
-  subprocess_launcher_class->spawn = ide_host_subprocess_launcher_spawn;
+  subprocess_launcher_class->spawn = gbp_sysroot_subprocess_launcher_spawn;
 }
 
 static void
-ide_host_subprocess_launcher_init (IdeHostSubprocessLauncher *self)
+gbp_sysroot_subprocess_launcher_init (GbpSysrootSubprocessLauncher *self)
 {
   
 }
