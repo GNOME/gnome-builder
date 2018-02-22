@@ -4,6 +4,6 @@
     <file>sysroot.plugin</file>
   </gresource>
   <gresource prefix="/org/gnome/builder/plugins/sysroot-plugin">
-    <file>ide-sysroot-preferences-row.ui</file>
+    <file>gbp-sysroot-preferences-row.ui</file>
   </gresource>
 </gresources>

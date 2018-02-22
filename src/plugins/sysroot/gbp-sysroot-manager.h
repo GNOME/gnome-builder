@@ -1,4 +1,4 @@
-/* ide-sysroot-manager.h
+/* gbp-sysroot-manager.h
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
@@ -23,35 +23,35 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SYSROOT_MANAGER (ide_sysroot_manager_get_type())
+#define GBP_TYPE_SYSROOT_MANAGER (gbp_sysroot_manager_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSysrootManager, ide_sysroot_manager, IDE, SYSROOT_MANAGER, GObject)
+G_DECLARE_FINAL_TYPE (GbpSysrootManager, gbp_sysroot_manager, GBP, SYSROOT_MANAGER, GObject)
 
 typedef enum {
-  IDE_SYSROOT_MANAGER_TARGET_CHANGED,
-  IDE_SYSROOT_MANAGER_TARGET_CREATED,
-  IDE_SYSROOT_MANAGER_TARGET_REMOVED
-} IdeSysrootManagerTargetModificationType;
+  GBP_SYSROOT_MANAGER_TARGET_CHANGED,
+  GBP_SYSROOT_MANAGER_TARGET_CREATED,
+  GBP_SYSROOT_MANAGER_TARGET_REMOVED
+} GbpSysrootManagerTargetModificationType;
 
-IdeSysrootManager        *ide_sysroot_manager_get_default                 (void);
-gchar                    *ide_sysroot_manager_create_target               (IdeSysrootManager *self);
-void                      ide_sysroot_manager_remove_target               (IdeSysrootManager *self,
+GbpSysrootManager        *gbp_sysroot_manager_get_default                 (void);
+gchar                    *gbp_sysroot_manager_create_target               (GbpSysrootManager *self);
+void                      gbp_sysroot_manager_remove_target               (GbpSysrootManager *self,
                                                                            const gchar       *target);
-void                      ide_sysroot_manager_set_target_name             (IdeSysrootManager *self,
+void                      gbp_sysroot_manager_set_target_name             (GbpSysrootManager *self,
                                                                            const gchar       *target,
                                                                            const gchar       *path);
-gchar                    *ide_sysroot_manager_get_target_name             (IdeSysrootManager *self,
+gchar                    *gbp_sysroot_manager_get_target_name             (GbpSysrootManager *self,
                                                                            const gchar       *target);
-void                      ide_sysroot_manager_set_target_path             (IdeSysrootManager *self,
+void                      gbp_sysroot_manager_set_target_path             (GbpSysrootManager *self,
                                                                            const gchar       *target,
                                                                            const gchar       *path);
-gchar                    *ide_sysroot_manager_get_target_path             (IdeSysrootManager *self,
+gchar                    *gbp_sysroot_manager_get_target_path             (GbpSysrootManager *self,
                                                                            const gchar       *target);
-void                      ide_sysroot_manager_set_target_pkg_config_path  (IdeSysrootManager *self,
+void                      gbp_sysroot_manager_set_target_pkg_config_path  (GbpSysrootManager *self,
                                                                            const gchar       *target,
                                                                            const gchar       *path);
-gchar                    *ide_sysroot_manager_get_target_pkg_config_path  (IdeSysrootManager *self,
+gchar                    *gbp_sysroot_manager_get_target_pkg_config_path  (GbpSysrootManager *self,
                                                                            const gchar       *target);
-gchar                    **ide_sysroot_manager_list                       (IdeSysrootManager *self);
+gchar                    **gbp_sysroot_manager_list                       (GbpSysrootManager *self);
 
 G_END_DECLS
