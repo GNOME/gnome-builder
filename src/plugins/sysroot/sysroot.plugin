@@ -5,4 +5,4 @@ Description=Provides sysroot support
 Authors=Corentin Noël <corentin.noel@collabora.com>
 Copyright=Copyright © 2018 Collabora Ltd.
 Builtin=true
-Embedded=ide_sysroot_register_types
+Embedded=gbp_sysroot_register_types

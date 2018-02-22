@@ -1,4 +1,4 @@
-/* ide-sysroot-preferences-row.c
+/* gbp-sysroot-preferences-row.c
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-sysroot-preferences-row"
+#define G_LOG_DOMAIN "gbp-sysroot-preferences-row"
 
-#include "ide-sysroot-preferences-row.h"
-#include "ide-sysroot-manager.h"
+#include "gbp-sysroot-preferences-row.h"
+#include "gbp-sysroot-manager.h"
 
-struct _IdeSysrootPreferencesRow
+struct _GbpSysrootPreferencesRow
 {
   DzlPreferencesBin parent_instance;
   gchar *sysroot_id;
@@ -34,7 +34,7 @@ struct _IdeSysrootPreferencesRow
   GtkWidget *popover;
 };
 
-G_DEFINE_TYPE (IdeSysrootPreferencesRow, ide_sysroot_preferences_row, DZL_TYPE_PREFERENCES_BIN)
+G_DEFINE_TYPE (GbpSysrootPreferencesRow, gbp_sysroot_preferences_row, DZL_TYPE_PREFERENCES_BIN)
 
 enum {
   PROP_0,
@@ -45,81 +45,81 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-sysroot_preferences_row_name_changed (IdeSysrootPreferencesRow *self,
+sysroot_preferences_row_name_changed (GbpSysrootPreferencesRow *self,
                                       gpointer                  user_data)
 {
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootManager *sysroot_manager = NULL;
 
-  g_assert (IDE_IS_SYSROOT_PREFERENCES_ROW (self));
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
   g_assert (GTK_IS_ENTRY (user_data));
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
-  ide_sysroot_manager_set_target_name (sysroot_manager,
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  gbp_sysroot_manager_set_target_name (sysroot_manager,
                                        self->sysroot_id,
                                        gtk_entry_get_text (GTK_ENTRY (user_data)));
 }
 
 static void
-sysroot_preferences_row_sysroot_changed (IdeSysrootPreferencesRow *self,
+sysroot_preferences_row_sysroot_changed (GbpSysrootPreferencesRow *self,
                                          gpointer                  user_data)
 {
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootManager *sysroot_manager = NULL;
 
-  g_assert (IDE_IS_SYSROOT_PREFERENCES_ROW (self));
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
   g_assert (GTK_IS_ENTRY (user_data));
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
-  ide_sysroot_manager_set_target_path (sysroot_manager,
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  gbp_sysroot_manager_set_target_path (sysroot_manager,
                                        self->sysroot_id,
                                        gtk_entry_get_text (GTK_ENTRY (user_data)));
 }
 
 static void
-sysroot_preferences_row_pkg_config_changed (IdeSysrootPreferencesRow *self,
+sysroot_preferences_row_pkg_config_changed (GbpSysrootPreferencesRow *self,
                                             gpointer                  user_data)
 {
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootManager *sysroot_manager = NULL;
 
-  g_assert (IDE_IS_SYSROOT_PREFERENCES_ROW (self));
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
   g_assert (GTK_IS_ENTRY (user_data));
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
-  ide_sysroot_manager_set_target_pkg_config_path (sysroot_manager,
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  gbp_sysroot_manager_set_target_pkg_config_path (sysroot_manager,
                                                   self->sysroot_id,
                                                   gtk_entry_get_text (GTK_ENTRY (user_data)));
 }
 
 static void
-sysroot_preferences_row_clicked (IdeSysrootPreferencesRow *self,
+sysroot_preferences_row_clicked (GbpSysrootPreferencesRow *self,
                                  gpointer                  user_data)
 {
-  g_assert (IDE_IS_SYSROOT_PREFERENCES_ROW (self));
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
 
-  ide_sysroot_preferences_row_show_popup (self);
+  gbp_sysroot_preferences_row_show_popup (self);
 }
 
 static void
-sysroot_preferences_delete (IdeSysrootPreferencesRow *self,
+sysroot_preferences_delete (GbpSysrootPreferencesRow *self,
                             gpointer                  user_data)
 {
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootManager *sysroot_manager = NULL;
 
-  g_assert (IDE_IS_SYSROOT_PREFERENCES_ROW (self));
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
-  ide_sysroot_manager_remove_target (sysroot_manager, self->sysroot_id);
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  gbp_sysroot_manager_remove_target (sysroot_manager, self->sysroot_id);
 
   /* The row is wrapped into a GtkListBoxRow that won't be removed when child is destroyed */
   gtk_widget_destroy (gtk_widget_get_parent (GTK_WIDGET (self)));
 }
 
 static void
-ide_sysroot_preferences_row_get_property (GObject    *object,
+gbp_sysroot_preferences_row_get_property (GObject    *object,
                                           guint       prop_id,
                                           GValue     *value,
                                           GParamSpec *pspec)
 {
-  IdeSysrootPreferencesRow *self = IDE_SYSROOT_PREFERENCES_ROW (object);
+  GbpSysrootPreferencesRow *self = GBP_SYSROOT_PREFERENCES_ROW (object);
 
   switch (prop_id)
     {
@@ -133,12 +133,12 @@ ide_sysroot_preferences_row_get_property (GObject    *object,
 }
 
 static void
-ide_sysroot_preferences_row_set_property (GObject      *object,
+gbp_sysroot_preferences_row_set_property (GObject      *object,
                                           guint         prop_id,
                                           const GValue *value,
                                           GParamSpec   *pspec)
 {
-  IdeSysrootPreferencesRow *self = IDE_SYSROOT_PREFERENCES_ROW (object);
+  GbpSysrootPreferencesRow *self = GBP_SYSROOT_PREFERENCES_ROW (object);
 
   switch (prop_id)
     {
@@ -152,19 +152,19 @@ ide_sysroot_preferences_row_set_property (GObject      *object,
 }
 
 static void
-ide_sysroot_preferences_row_finalize (GObject *object)
+gbp_sysroot_preferences_row_finalize (GObject *object)
 {
-  IdeSysrootPreferencesRow *self = (IdeSysrootPreferencesRow *) object;
+  GbpSysrootPreferencesRow *self = (GbpSysrootPreferencesRow *) object;
 
   g_clear_pointer (&self->sysroot_id, g_free);
 
-  G_OBJECT_CLASS (ide_sysroot_preferences_row_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_sysroot_preferences_row_parent_class)->finalize (object);
 }
 
 void
-ide_sysroot_preferences_row_show_popup (IdeSysrootPreferencesRow *self)
+gbp_sysroot_preferences_row_show_popup (GbpSysrootPreferencesRow *self)
 {
-  g_return_if_fail (IDE_IS_SYSROOT_PREFERENCES_ROW (self));
+  g_return_if_fail (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
   g_return_if_fail (GTK_IS_POPOVER (self->popover));
 
   gtk_popover_popup (GTK_POPOVER (self->popover));
@@ -172,18 +172,18 @@ ide_sysroot_preferences_row_show_popup (IdeSysrootPreferencesRow *self)
 }
 
 static void
-ide_sysroot_preferences_row_constructed (GObject *object)
+gbp_sysroot_preferences_row_constructed (GObject *object)
 {
-  IdeSysrootManager *sysroot_manager = NULL;
+  GbpSysrootManager *sysroot_manager = NULL;
   gchar *value;
-  IdeSysrootPreferencesRow *self = (IdeSysrootPreferencesRow *) object;
+  GbpSysrootPreferencesRow *self = (GbpSysrootPreferencesRow *) object;
 
-  sysroot_manager = ide_sysroot_manager_get_default ();
+  sysroot_manager = gbp_sysroot_manager_get_default ();
   gtk_entry_set_text (self->name_entry,
-                      ide_sysroot_manager_get_target_name (sysroot_manager, self->sysroot_id));
+                      gbp_sysroot_manager_get_target_name (sysroot_manager, self->sysroot_id));
   gtk_entry_set_text (self->sysroot_entry,
-                      ide_sysroot_manager_get_target_path (sysroot_manager, self->sysroot_id));
-  value = ide_sysroot_manager_get_target_pkg_config_path (sysroot_manager, self->sysroot_id);
+                      gbp_sysroot_manager_get_target_path (sysroot_manager, self->sysroot_id));
+  value = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, self->sysroot_id);
   if (value != NULL)
     gtk_entry_set_text (self->pkg_config_entry, value);
 
@@ -207,15 +207,15 @@ ide_sysroot_preferences_row_constructed (GObject *object)
 }
 
 static void
-ide_sysroot_preferences_row_class_init (IdeSysrootPreferencesRowClass *klass)
+gbp_sysroot_preferences_row_class_init (GbpSysrootPreferencesRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = ide_sysroot_preferences_row_finalize;
-  object_class->get_property = ide_sysroot_preferences_row_get_property;
-  object_class->set_property = ide_sysroot_preferences_row_set_property;
-  object_class->constructed = ide_sysroot_preferences_row_constructed;
+  object_class->finalize = gbp_sysroot_preferences_row_finalize;
+  object_class->get_property = gbp_sysroot_preferences_row_get_property;
+  object_class->set_property = gbp_sysroot_preferences_row_set_property;
+  object_class->constructed = gbp_sysroot_preferences_row_constructed;
 
   properties [PROP_SYSROOT_ID] =
     g_param_spec_string ("sysroot-id",
@@ -226,17 +226,17 @@ ide_sysroot_preferences_row_class_init (IdeSysrootPreferencesRowClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysroot-plugin/ide-sysroot-preferences-row.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeSysrootPreferencesRow, display_name);
-  gtk_widget_class_bind_template_child (widget_class, IdeSysrootPreferencesRow, popover);
-  gtk_widget_class_bind_template_child (widget_class, IdeSysrootPreferencesRow, name_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeSysrootPreferencesRow, sysroot_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeSysrootPreferencesRow, pkg_config_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeSysrootPreferencesRow, delete_button);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysroot-plugin/gbp-sysroot-preferences-row.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, display_name);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, popover);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, name_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, sysroot_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, pkg_config_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, delete_button);
 }
 
 static void
-ide_sysroot_preferences_row_init (IdeSysrootPreferencesRow *self)
+gbp_sysroot_preferences_row_init (GbpSysrootPreferencesRow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 

@@ -1,4 +1,4 @@
-/* ide-sysroot-runtime.h
+/* gbp-sysroot-runtime-provider.h
  *
  * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright (C) 2018 Collabora Ltd.
@@ -23,12 +23,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SYSROOT_RUNTIME (ide_sysroot_runtime_get_type())
+#define GBP_TYPE_SYSROOT_RUNTIME_PROVIDER (gbp_sysroot_runtime_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSysrootRuntime, ide_sysroot_runtime, IDE, SYSROOT_RUNTIME, IdeRuntime)
-
-IdeSysrootRuntime  *ide_sysroot_runtime_new            (IdeContext        *context, 
-                                                        const gchar* sysroot_id);
-const gchar        *ide_sysroot_runtime_get_sysroot_id (IdeSysrootRuntime *self);
+G_DECLARE_FINAL_TYPE (GbpSysrootRuntimeProvider, gbp_sysroot_runtime_provider, GBP, SYSROOT_RUNTIME_PROVIDER, IdeObject)
 
 G_END_DECLS

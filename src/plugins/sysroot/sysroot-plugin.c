@@ -19,12 +19,12 @@
 
 #include <libpeas/peas.h>
 
-#include "ide-sysroot-runtime-provider.h"
-#include "ide-sysroot-preferences-addin.h"
+#include "gbp-sysroot-runtime-provider.h"
+#include "gbp-sysroot-preferences-addin.h"
 
 void
-ide_sysroot_register_types (PeasObjectModule *module)
+gbp_sysroot_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_RUNTIME_PROVIDER, IDE_TYPE_SYSROOT_RUNTIME_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_PREFERENCES_ADDIN, IDE_TYPE_SYSROOT_PREFERENCES_ADDIN);
+  peas_object_module_register_extension_type (module, IDE_TYPE_RUNTIME_PROVIDER, GBP_TYPE_SYSROOT_RUNTIME_PROVIDER);
+  peas_object_module_register_extension_type (module, IDE_TYPE_PREFERENCES_ADDIN, GBP_TYPE_SYSROOT_PREFERENCES_ADDIN);
 }
