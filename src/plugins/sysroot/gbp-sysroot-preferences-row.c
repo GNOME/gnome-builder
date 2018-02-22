@@ -161,6 +161,12 @@ gbp_sysroot_preferences_row_finalize (GObject *object)
   G_OBJECT_CLASS (gbp_sysroot_preferences_row_parent_class)->finalize (object);
 }
 
+/**
+ * gbp_sysroot_preferences_row_show_popup:
+ * @self: a #GbpSysrootPreferencesRow
+ *
+ * Requests the configuration popover the be shown over the widget.
+ */
 void
 gbp_sysroot_preferences_row_show_popup (GbpSysrootPreferencesRow *self)
 {
