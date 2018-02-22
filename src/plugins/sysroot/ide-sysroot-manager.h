@@ -33,24 +33,25 @@ typedef enum {
   IDE_SYSROOT_MANAGER_TARGET_REMOVED
 } IdeSysrootManagerTargetModificationType;
 
-IdeSysrootManager *ide_sysroot_manager_get_default (void);
-
-gchar *ide_sysroot_manager_create_target (IdeSysrootManager *self);
-
-void ide_sysroot_manager_remove_target (IdeSysrootManager *self, const char *target);
-
-void ide_sysroot_manager_set_target_name (IdeSysrootManager *self, const char *target, const char *path);
-
-gchar *ide_sysroot_manager_get_target_name (IdeSysrootManager *self, const char *target);
-
-void ide_sysroot_manager_set_target_path (IdeSysrootManager *self, const char *target, const char *path);
-
-gchar *ide_sysroot_manager_get_target_path (IdeSysrootManager *self, const char *target);
-
-void ide_sysroot_manager_set_target_pkg_config_path (IdeSysrootManager *self, const char *target, const char *path);
-
-gchar *ide_sysroot_manager_get_target_pkg_config_path (IdeSysrootManager *self, const char *target);
-
-GArray *ide_sysroot_manager_list (IdeSysrootManager *self);
+IdeSysrootManager        *ide_sysroot_manager_get_default                 (void);
+gchar                    *ide_sysroot_manager_create_target               (IdeSysrootManager *self);
+void                      ide_sysroot_manager_remove_target               (IdeSysrootManager *self,
+                                                                           const gchar       *target);
+void                      ide_sysroot_manager_set_target_name             (IdeSysrootManager *self,
+                                                                           const gchar       *target,
+                                                                           const gchar       *path);
+gchar                    *ide_sysroot_manager_get_target_name             (IdeSysrootManager *self,
+                                                                           const gchar       *target);
+void                      ide_sysroot_manager_set_target_path             (IdeSysrootManager *self,
+                                                                           const gchar       *target,
+                                                                           const gchar       *path);
+gchar                    *ide_sysroot_manager_get_target_path             (IdeSysrootManager *self,
+                                                                           const gchar       *target);
+void                      ide_sysroot_manager_set_target_pkg_config_path  (IdeSysrootManager *self,
+                                                                           const gchar       *target,
+                                                                           const gchar       *path);
+gchar                    *ide_sysroot_manager_get_target_pkg_config_path  (IdeSysrootManager *self,
+                                                                           const gchar       *target);
+gchar                    **ide_sysroot_manager_list                       (IdeSysrootManager *self);
 
 G_END_DECLS

@@ -33,12 +33,13 @@ struct _IdeSysrootPreferencesAddin
   DzlPreferences *preferences;
 };
 
-static void sysroot_preferences_add_new (IdeSysrootPreferencesAddin *self,
-                                         GtkWidget *emitter)
+static void
+sysroot_preferences_add_new (IdeSysrootPreferencesAddin *self,
+                             GtkWidget                  *emitter)
 {
   GtkWidget *pref_row = NULL;
   guint id = 0;
-  gchar *new_target;
+  g_autofree gchar *new_target;
   IdeSysrootManager *sysroot_manager = NULL;
 
   g_assert (IDE_IS_SYSROOT_PREFERENCES_ADDIN (self));
@@ -57,7 +58,7 @@ static void sysroot_preferences_add_new (IdeSysrootPreferencesAddin *self,
   ide_sysroot_preferences_row_show_popup (IDE_SYSROOT_PREFERENCES_ROW (pref_row));
 }
 
-GtkWidget *
+static GtkWidget *
 sysroot_preferences_get_add_widget (IdeSysrootPreferencesAddin *self)
 {
   GtkWidget *bin = NULL;
@@ -103,7 +104,11 @@ sysroot_preferences_get_add_widget (IdeSysrootPreferencesAddin *self)
 
   gtk_container_add (GTK_CONTAINER (bin), grid);
 
-  g_signal_connect_swapped (bin, "preference-activated", G_CALLBACK(sysroot_preferences_add_new), self);
+  g_signal_connect_object (bin,
+                           "preference-activated",
+                           G_CALLBACK (sysroot_preferences_add_new),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   return bin;
 }
@@ -112,10 +117,11 @@ static void
 ide_sysroot_preferences_addin_load (IdePreferencesAddin *addin,
                                     DzlPreferences      *preferences)
 {
-  IdeSysrootPreferencesAddin *self = IDE_SYSROOT_PREFERENCES_ADDIN (addin);
+  IdeSysrootPreferencesAddin *self = (IdeSysrootPreferencesAddin *)addin;
   GtkWidget *widget = NULL;
   IdeSysrootManager *sysroot_manager = NULL;
-  GArray *sysroots = NULL;
+  g_auto(GStrv) sysroots = NULL;
+  guint sysroots_length = 0;
   guint id = 0;
 
   IDE_ENTRY;
@@ -135,19 +141,17 @@ ide_sysroot_preferences_addin_load (IdePreferencesAddin *addin,
 
   sysroot_manager = ide_sysroot_manager_get_default ();
   sysroots = ide_sysroot_manager_list (sysroot_manager);
-  for (guint i = 0; i < sysroots->len; i++)
+  sysroots_length = g_strv_length (sysroots);
+  for (guint i = 0; i < sysroots_length; i++)
     {
-      gchar *sysroot_id = g_array_index (sysroots, gchar*, i);
       GtkWidget *pref_row = g_object_new (IDE_TYPE_SYSROOT_PREFERENCES_ROW,
                                           "visible", TRUE,
-                                          "sysroot-id", sysroot_id,
+                                          "sysroot-id", sysroots[i],
                                           NULL);
 
-      id = dzl_preferences_add_custom (self->preferences, "sdk", "sysroot", pref_row, NULL, 1);
+      id = dzl_preferences_add_custom (self->preferences, "sdk", "sysroot", pref_row, NULL, i);
       g_array_append_val (self->ids, id);
     }
-
-  g_array_free (sysroots, TRUE);
 
   IDE_EXIT;
 }
