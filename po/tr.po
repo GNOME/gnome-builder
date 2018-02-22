@@ -11,14 +11,15 @@
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017, 2018.
 # Muhammet Kara <muhammetk@gmail.com>, 2015, 2016, 2017, 2018.
+# Çağrı Dolaz <dolazcagri@gmail.com>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-10 08:20+0000\n"
-"PO-Revision-Date: 2018-02-10 11:33+0300\n"
-"Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
+"POT-Creation-Date: 2018-02-16 17:12+0000\n"
+"PO-Revision-Date: 2018-02-17 20:59+0200\n"
+"Last-Translator: Çağrı Dolaz <dolazcagri@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -925,7 +926,7 @@ msgstr "Taslak kaydetme başarısız oldu: %s"
 msgid "%s (Copy)"
 msgstr "%s (Kopya)"
 
-#: src/libide/buildsystem/ide-build-manager.c:360
+#: src/libide/buildsystem/ide-build-manager.c:363
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "İnşa boru hattı ilklendirme başarısız oldu: %s"
@@ -2460,8 +2461,9 @@ msgid "Display list of open files"
 msgstr "Açık dosyaların listesini göster"
 
 #: src/libide/preferences/ide-preferences-builtin.c:154
-msgid "Display the list of all open files in the within the project sidebar"
-msgstr "Tüm açık dosyaları proje kenar çubuğu içerisinde göster"
+#| msgid "Display the list of all open files in the within the project sidebar"
+msgid "Display the list of all open files in the project sidebar"
+msgstr "Tüm açık dosyaların listesini proje kenar çubuğunda göster"
 
 #: src/libide/preferences/ide-preferences-builtin.c:156
 msgid "Cursor"
@@ -4046,12 +4048,12 @@ msgstr[0] "%u çalışma ortamı daha göster"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Çalışma Ortamları"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:762
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:765
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:764
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:767
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
