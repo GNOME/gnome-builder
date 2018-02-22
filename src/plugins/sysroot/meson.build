@@ -3,23 +3,23 @@ if get_option('with_sysroot')
 sysroot_resources = gnome.compile_resources(
   'sysroot-resources',
   'sysroot.gresource.xml',
-  c_name: 'ide_sysroot',
+  c_name: 'gbp_sysroot',
 )
 
 sysroot_sources = [
   'sysroot-plugin.c',
-  'ide-sysroot-runtime.c',
-  'ide-sysroot-runtime.h',
-  'ide-sysroot-runtime-provider.c',
-  'ide-sysroot-runtime-provider.h',
-  'ide-host-subprocess-launcher.c',
-  'ide-host-subprocess-launcher.h',
-  'ide-sysroot-preferences-addin.c',
-  'ide-sysroot-preferences-addin.h',
-  'ide-sysroot-preferences-row.c',
-  'ide-sysroot-preferences-row.h',
-  'ide-sysroot-manager.c',
-  'ide-sysroot-manager.h'
+  'gbp-sysroot-manager.c',
+  'gbp-sysroot-manager.h',
+  'gbp-sysroot-preferences-addin.c',
+  'gbp-sysroot-preferences-addin.h',
+  'gbp-sysroot-preferences-row.c',
+  'gbp-sysroot-preferences-row.h',
+  'gbp-sysroot-runtime.c',
+  'gbp-sysroot-runtime.h',
+  'gbp-sysroot-runtime-provider.c',
+  'gbp-sysroot-runtime-provider.h',
+  'gbp-sysroot-subprocess-launcher.c',
+  'gbp-sysroot-subprocess-launcher.h'
 ]
 
 gnome_builder_plugins_sources += files(sysroot_sources)

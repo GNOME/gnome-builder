@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.18 -->
-  <template class="IdeSysrootPreferencesRow" parent="DzlPreferencesBin">
+  <template class="GbpSysrootPreferencesRow" parent="DzlPreferencesBin">
     <child>
       <object class="GtkGrid" id="grid">
         <property name="orientation">horizontal</property>
