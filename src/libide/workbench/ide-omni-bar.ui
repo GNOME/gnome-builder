@@ -4,6 +4,20 @@
     <style>
       <class name="linked"/>
     </style>
+    <child>
+      <object class="DzlMenuButton" id="device_button">
+        <property name="menu-id">ide-device-manager-menu</property>
+        <property name="icon-name">computer-symbolic</property>
+        <property name="focus-on-click">false</property>
+        <property name="show-arrow">false</property>
+        <property name="show-icons">true</property>
+        <property name="visible">true</property>
+      </object>
+      <packing>
+        <property name="pack-type">start</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
     <child type="center">
       <object class="DzlEntryBox" id="frame">
         <property name="max-width-chars">50</property>
