@@ -23,6 +23,7 @@
 
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "devices/ide-device.h"
 #include "devices/ide-device-manager.h"
 #include "devices/ide-device-provider.h"
@@ -46,14 +47,40 @@ ide_device_manager_provider_device_added_cb (IdeDeviceManager  *self,
                                              IdeDevice         *device,
                                              IdeDeviceProvider *provider)
 {
+  g_autoptr(GMenuItem) menu_item = NULL;
+  const gchar *display_name;
+  const gchar *icon_name;
+  const gchar *device_id;
+  GMenu *menu;
+  guint position;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEVICE_MANAGER (self));
   g_assert (IDE_IS_DEVICE (device));
-  g_assert (IDE_IS_DEVICE_PROVIDER (provider));
+  g_assert (!provider || IDE_IS_DEVICE_PROVIDER (provider));
 
+  device_id = ide_device_get_id (device);
+  icon_name = ide_device_get_icon_name (device);
+  display_name = ide_device_get_display_name (device);
+
+  IDE_TRACE_MSG ("Discovered device %s", device_id);
+
+  /* First add the device to the array, we'll notify observers later */
+  position = self->devices->len;
   g_ptr_array_add (self->devices, g_object_ref (device));
-  g_list_model_items_changed (G_LIST_MODEL (self), self->devices->len - 1, 0, 1);
+
+  /* Now add a new menu item to our selection model */
+  menu = dzl_application_get_menu_by_id (DZL_APPLICATION (IDE_APPLICATION_DEFAULT),
+                                         "ide-device-manager-menu-section");
+  menu_item = g_menu_item_new (display_name, NULL);
+  g_menu_item_set_attribute (menu_item, "id", "s", device_id);
+  g_menu_item_set_attribute (menu_item, "verb-icon-name", "s", icon_name ?: "computer-symbolic");
+  g_menu_item_set_action_and_target (menu_item, "build-manager.device", "s", device_id);
+  g_menu_append_item (menu, menu_item);
+
+  /* Now notify about the new device */
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 
   IDE_EXIT;
 }
@@ -63,11 +90,33 @@ ide_device_manager_provider_device_removed_cb (IdeDeviceManager  *self,
                                                IdeDevice         *device,
                                                IdeDeviceProvider *provider)
 {
+  const gchar *device_id;
+  GMenu *menu;
+  guint n_items;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEVICE_MANAGER (self));
   g_assert (IDE_IS_DEVICE (device));
   g_assert (IDE_IS_DEVICE_PROVIDER (provider));
+
+  device_id = ide_device_get_id (device);
+
+  menu = dzl_application_get_menu_by_id (DZL_APPLICATION (IDE_APPLICATION_DEFAULT),
+                                         "ide-device-manager-menu-section");
+  n_items = g_menu_model_get_n_items (G_MENU_MODEL (menu));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autofree gchar *id = NULL;
+
+      if (g_menu_model_get_item_attribute (G_MENU_MODEL (menu), i, "id", "s", &id) &&
+          g_strcmp0 (id, device_id) == 0)
+        {
+          g_menu_remove (menu, i);
+          break;
+        }
+    }
 
   for (guint i = 0; i < self->devices->len; i++)
     {
@@ -116,7 +165,6 @@ ide_device_manager_provider_added_cb (PeasExtensionSet *set,
   IdeDeviceManager *self = user_data;
   IdeDeviceProvider *provider = (IdeDeviceProvider *)exten;
   g_autoptr(GPtrArray) devices = NULL;
-  guint position;
 
   IDE_ENTRY;
 
@@ -138,7 +186,6 @@ ide_device_manager_provider_added_cb (PeasExtensionSet *set,
                            G_CONNECT_SWAPPED);
 
   devices = ide_device_provider_get_devices (provider);
-  position = self->devices->len;
 
   for (guint i = 0; i < devices->len; i++)
     {
@@ -146,11 +193,8 @@ ide_device_manager_provider_added_cb (PeasExtensionSet *set,
 
       g_assert (IDE_IS_DEVICE (device));
 
-      g_ptr_array_add (self->devices, g_object_ref (device));
+      ide_device_manager_provider_device_added_cb (self, device, provider);
     }
-
-  if (devices->len > 0)
-    g_list_model_items_changed (G_LIST_MODEL (self), position, 0, devices->len);
 
   ide_device_provider_load_async (provider,
                                   NULL,
@@ -246,8 +290,7 @@ ide_device_manager_add_local (IdeDeviceManager *self)
 
   context = ide_object_get_context (IDE_OBJECT (self));
   device = g_object_new (IDE_TYPE_LOCAL_DEVICE, "context", context, NULL);
-  g_ptr_array_add (self->devices, g_steal_pointer (&device));
-  g_list_model_items_changed (G_LIST_MODEL (self), self->devices->len - 1, 0, 1);
+  ide_device_manager_provider_device_added_cb (self, device, NULL);
 }
 
 static GType
