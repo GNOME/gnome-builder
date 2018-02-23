@@ -26,6 +26,7 @@
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        "--system-talk-name=org.freedesktop.Avahi",
         "--talk-name=org.freedesktop.FileManager1",
         "--talk-name=org.gnome.SettingsDaemon.Color",
         "--talk-name=org.freedesktop.PackageKit",
@@ -709,6 +710,52 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/flatpak/flatpak-builder"
+                }
+            ]
+        },
+        {
+            "name" : "avahi",
+            "config-opts" : [
+                "--with-distro=none",
+                "--disable-qt3",
+                "--disable-qt4",
+                "--disable-gtk",
+                "--disable-gtk3",
+                "--disable-python",
+                "--disable-pygobject",
+                "--disable-python-dbus",
+                "--disable-mono",
+                "--disable-monodoc",
+                "--disable-autoipd",
+                "--disable-core-docs",
+                "--disable-manpages",
+                "--disable-xmltoman",
+                "--disable-tests",
+                "--disable-libdaemon",
+                "--disable-compat-libdns_sd",
+                "--disable-compat-howl"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/lathiat/avahi.git"
+                }
+            ]
+        },
+        {
+            "name" : "deviced",
+            "config-opts" : [
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized",
+                "-Ddaemon=false",
+                "-Dtools=false"
+            ],
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/chergert/deviced.git"
                 }
             ]
         },
