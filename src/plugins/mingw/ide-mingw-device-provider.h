@@ -24,6 +24,6 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_MINGW_DEVICE_PROVIDER (ide_mingw_device_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeMingwDeviceProvider,ide_mingw_device_provider, IDE, MINGW_DEVICE_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeMingwDeviceProvider,ide_mingw_device_provider, IDE, MINGW_DEVICE_PROVIDER, IdeDeviceProvider)
 
 G_END_DECLS

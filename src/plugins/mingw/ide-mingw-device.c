@@ -26,7 +26,7 @@ struct _IdeMingwDevice
   gchar     *system_type;
 };
 
-G_DEFINE_DYNAMIC_TYPE (IdeMingwDevice, ide_mingw_device, IDE_TYPE_DEVICE)
+G_DEFINE_TYPE (IdeMingwDevice, ide_mingw_device, IDE_TYPE_DEVICE)
 
 IdeDevice *
 ide_mingw_device_new (IdeContext  *context,
@@ -78,11 +78,7 @@ ide_mingw_device_class_init (IdeMingwDeviceClass *klass)
   device_class->get_system_type = ide_mingw_device_get_system_type;
 }
 
-static void ide_mingw_device_class_finalize (IdeMingwDeviceClass *klass) { }
-static void ide_mingw_device_init (IdeMingwDevice *self) { }
-
-void
-_ide_mingw_device_register_type (GTypeModule *module)
+static void
+ide_mingw_device_init (IdeMingwDevice *self)
 {
-  ide_mingw_device_register_type (module);
 }

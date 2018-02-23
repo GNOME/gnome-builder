@@ -25,212 +25,112 @@
 
 struct _IdeMingwDeviceProvider
 {
-  IdeObject  parent_instance;
-
-  GPtrArray *devices;
-
-  guint      settled : 1;
+  IdeDeviceProvider parent_instance;
 };
 
-static void device_provider_iface_init (IdeDeviceProviderInterface *iface);
-
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeMingwDeviceProvider,
-                                ide_mingw_device_provider,
-                                IDE_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_DEVICE_PROVIDER,
-                                                       device_provider_iface_init))
-
-enum {
-  PROP_0,
-  PROP_SETTLED,
-  LAST_PROP
-};
-
-static GParamSpec *properties [LAST_PROP];
-
-static GPtrArray *
-ide_mingw_device_provider_get_devices (IdeDeviceProvider *provider)
-{
-  IdeMingwDeviceProvider *self = (IdeMingwDeviceProvider *)provider;
-
-  g_return_val_if_fail (IDE_IS_MINGW_DEVICE_PROVIDER (self), NULL);
-
-  return g_ptr_array_ref (self->devices);
-}
+G_DEFINE_TYPE (IdeMingwDeviceProvider, ide_mingw_device_provider, IDE_TYPE_DEVICE_PROVIDER)
 
 static void
-ide_mingw_device_provider_discover_worker (GTask        *task,
-                                           gpointer      source_object,
-                                           gpointer      task_data,
-                                           GCancellable *cancellable)
+ide_mingw_device_provider_load_worker (GTask        *task,
+                                       gpointer      source_object,
+                                       gpointer      task_data,
+                                       GCancellable *cancellable)
 {
   IdeMingwDeviceProvider *self = source_object;
-  GPtrArray *devices;
+  g_autoptr(GPtrArray) devices = NULL;
+  g_autofree gchar *x32 = NULL;
+  g_autofree gchar *x64 = NULL;
   IdeContext *context;
-  gchar *mingw_path;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
   g_assert (IDE_IS_MINGW_DEVICE_PROVIDER (self));
-
-  devices = g_ptr_array_new_with_free_func (g_object_unref);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  devices = g_ptr_array_new_with_free_func (g_object_unref);
 
-  g_assert (IDE_IS_CONTEXT (context));
+  if (NULL != (x64 = g_find_program_in_path ("x86_64-w64-mingw32-gcc")))
+    g_ptr_array_add (devices,
+                     ide_mingw_device_new (context,
+                                           _("MinGW 64-bit"),
+                                           "local-x86_64-w64-mingw32",
+                                           "x86_64-w64-mingw32"));
 
-  /*
-   * FIXME:
-   *
-   * I'm almost certain this is not the proper way to check for mingw support.
-   * Someone that knows how this works, please fix this up!
-   */
+  if (NULL != (x32 = g_find_program_in_path ("i686-w64-mingw32-gcc")))
+    g_ptr_array_add (devices,
+                     ide_mingw_device_new (context,
+                                           _("MinGW 32-bit"),
+                                           "local-i686-w64-mingw32",
+                                           "i686-w64-mingw32"));
 
-  mingw_path = g_find_program_in_path ("x86_64-w64-mingw32-gcc");
-  if (mingw_path != NULL)
-    {
-      IdeDevice *device;
+  g_task_return_pointer (task,
+                         g_steal_pointer (&devices),
+                         (GDestroyNotify)g_ptr_array_unref);
 
-      g_free (mingw_path);
-      /* add 64-bit mingw device */
-      device = ide_mingw_device_new (context,
-                                     _("MinGW 64-bit"),
-                                     "local-x86_64-w64-mingw32",
-                                     "x86_64-w64-mingw32");
-      g_ptr_array_add (devices, device);
-    }
-
-  mingw_path = g_find_program_in_path ("i686-w64-mingw32-gcc");
-  if (mingw_path != NULL)
-    {
-      IdeDevice *device;
-
-      g_free (mingw_path);
-      /* add 32-bit mingw device */
-      device = ide_mingw_device_new (context,
-                                     _("MinGW 32-bit"),
-                                     "local-i686-w64-mingw32",
-                                     "i686-w64-mingw32");
-      g_ptr_array_add (devices, device);
-    }
-
-  g_task_return_pointer (task, devices, (GDestroyNotify)g_ptr_array_unref);
-
-  ide_object_release (IDE_OBJECT (self));
+  IDE_EXIT;
 }
 
 static void
-load_cb (GObject      *object,
-         GAsyncResult *result,
-         gpointer      user_data)
+ide_mingw_device_provider_load_async (IdeDeviceProvider   *provider,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
 {
-  IdeMingwDeviceProvider *self = (IdeMingwDeviceProvider *)object;
-  GTask *task = (GTask *)result;
-  GPtrArray *devices;
-  gsize i;
+  IdeMingwDeviceProvider *self = (IdeMingwDeviceProvider *)provider;
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MINGW_DEVICE_PROVIDER (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_DEVICE_PROVIDER (provider));
 
-  devices = g_task_propagate_pointer (task, NULL);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_mingw_device_provider_load_async);
+  ide_context_hold_for_object (ide_object_get_context (IDE_OBJECT (self)), task);
+  g_task_run_in_thread (task, ide_mingw_device_provider_load_worker);
 
-  if (devices)
+  IDE_EXIT;
+}
+
+static gboolean
+ide_mingw_device_provider_load_finish (IdeDeviceProvider  *provider,
+                                       GAsyncResult       *result,
+                                       GError            **error)
+{
+  g_autoptr(GPtrArray) devices = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MINGW_DEVICE_PROVIDER (provider));
+  g_assert (G_IS_TASK (result));
+
+  if (NULL != (devices = g_task_propagate_pointer (G_TASK (result), error)))
     {
-      g_clear_pointer (&self->devices, g_ptr_array_unref);
-      self->devices = devices;
-
-      for (i = 0; i < devices->len; i++)
+      for (guint i = 0; i < devices->len; i++)
         {
-          IdeDevice *device;
+          IdeDevice *device = g_ptr_array_index (devices, i);
 
-          device = g_ptr_array_index (devices, i);
-          ide_device_provider_emit_device_added (IDE_DEVICE_PROVIDER (self), device);
+          g_assert (IDE_IS_DEVICE (device));
+
+          ide_device_provider_emit_device_added (provider, device);
         }
     }
 
-  self->settled = TRUE;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTLED]);
-}
-
-static void
-ide_mingw_device_provider_constructed (GObject *object)
-{
-  IdeMingwDeviceProvider *self = (IdeMingwDeviceProvider *)object;
-  g_autoptr(GTask) task = NULL;
-
-  g_assert (IDE_IS_MINGW_DEVICE_PROVIDER (self));
-
-  ide_object_hold (IDE_OBJECT (self));
-  task = g_task_new (self, NULL, load_cb, NULL);
-  g_task_run_in_thread (task, ide_mingw_device_provider_discover_worker);
-}
-static void
-ide_mingw_device_provider_finalize (GObject *object)
-{
-  IdeMingwDeviceProvider *self = (IdeMingwDeviceProvider *)object;
-
-  g_clear_pointer (&self->devices, g_ptr_array_unref);
-
-  G_OBJECT_CLASS (ide_mingw_device_provider_parent_class)->finalize (object);
-}
-
-static void
-ide_mingw_device_provider_get_property (GObject    *object,
-                                        guint       prop_id,
-                                        GValue     *value,
-                                        GParamSpec *pspec)
-{
-  IdeMingwDeviceProvider *self = IDE_MINGW_DEVICE_PROVIDER(object);
-
-  switch (prop_id)
-    {
-    case PROP_SETTLED:
-      g_value_set_boolean (value, self->settled);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-    }
+  IDE_RETURN (TRUE);
 }
 
 static void
 ide_mingw_device_provider_class_init (IdeMingwDeviceProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeDeviceProviderClass *provider_class = IDE_DEVICE_PROVIDER_CLASS (klass);
 
-  object_class->constructed = ide_mingw_device_provider_constructed;
-  object_class->finalize = ide_mingw_device_provider_finalize;
-  object_class->get_property = ide_mingw_device_provider_get_property;
-
-  properties [PROP_SETTLED] =
-    g_param_spec_boolean ("settled",
-                          "Settled",
-                          "Settled",
-                          FALSE,
-                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
-}
-
-static void
-ide_mingw_device_provider_class_finalize (IdeMingwDeviceProviderClass *klass)
-{
+  provider_class->load_async = ide_mingw_device_provider_load_async;
+  provider_class->load_finish = ide_mingw_device_provider_load_finish;
 }
 
 static void
 ide_mingw_device_provider_init (IdeMingwDeviceProvider *self)
 {
-  self->devices = g_ptr_array_new_with_free_func (g_object_unref);
-}
-
-static void
-device_provider_iface_init (IdeDeviceProviderInterface *iface)
-{
-  iface->get_devices = ide_mingw_device_provider_get_devices;
-}
-
-void
-_ide_mingw_device_provider_register_type (GTypeModule *module)
-{
-  ide_mingw_device_provider_register_type (module);
 }

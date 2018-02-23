@@ -19,16 +19,9 @@
 #include <libpeas/peas.h>
 
 #include "ide-mingw-device-provider.h"
-#include "ide-mingw-device.h"
-
-void _ide_mingw_device_provider_register_type (GTypeModule *module);
-void _ide_mingw_device_register_type (GTypeModule *module);
 
 void
 ide_mingw_register_types (PeasObjectModule *module)
 {
-  _ide_mingw_device_provider_register_type (G_TYPE_MODULE (module));
-  _ide_mingw_device_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module, IDE_TYPE_DEVICE_PROVIDER, IDE_TYPE_MINGW_DEVICE_PROVIDER);
 }

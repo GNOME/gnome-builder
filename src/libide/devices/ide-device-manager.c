@@ -19,17 +19,17 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include "ide-debug.h"
+
 #include "devices/ide-device.h"
 #include "devices/ide-device-manager.h"
 #include "devices/ide-device-provider.h"
-
 #include "local/ide-local-device.h"
 #include "plugins/ide-extension-util.h"
 
 struct _IdeDeviceManager
 {
-  IdeObject  parent_instance;
-
+  IdeObject         parent_instance;
   GPtrArray        *devices;
   PeasExtensionSet *providers;
 };
@@ -39,182 +39,136 @@ static void list_model_init_interface (GListModelInterface *iface);
 G_DEFINE_TYPE_WITH_CODE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_init_interface))
 
-enum {
-  PROP_0,
-  PROP_SETTLED,
-  LAST_PROP
-};
-
-enum {
-  DEVICE_ADDED,
-  DEVICE_REMOVED,
-  LAST_SIGNAL
-};
-
-static guint signals [LAST_SIGNAL];
-static GParamSpec *properties [LAST_PROP];
-
 static void
-get_settled (PeasExtensionSet *set,
-             PeasPluginInfo   *plugin_info,
-             PeasExtension    *exten,
-             gpointer          user_data)
-{
-  gboolean *settled = user_data;
-
-  if (!ide_device_provider_get_settled (IDE_DEVICE_PROVIDER (exten)))
-    *settled = FALSE;
-}
-
-gboolean
-ide_device_manager_get_settled (IdeDeviceManager *self)
-{
-  gboolean settled = TRUE;
-
-  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), FALSE);
-
-  peas_extension_set_foreach (self->providers,
-                              (PeasExtensionSetForeachFunc)get_settled,
-                              &settled);
-
-  return settled;
-}
-
-static void
-ide_device_manager__provider_notify_settled (IdeDeviceManager  *self,
-                                             GParamSpec        *pspec,
-                                             IdeDeviceProvider *provider)
-{
-  g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
-  g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTLED]);
-}
-
-static void
-ide_device_manager_do_add_device (IdeDeviceManager *self,
-                                  IdeDevice        *device)
-{
-  guint position;
-
-  g_assert (IDE_IS_DEVICE_MANAGER (self));
-  g_assert (IDE_IS_DEVICE (device));
-
-  position = self->devices->len;
-  g_ptr_array_add (self->devices, g_object_ref (device));
-  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
-}
-
-static void
-ide_device_manager__provider_device_added (IdeDeviceManager  *self,
-                                           IdeDevice         *device,
-                                           IdeDeviceProvider *provider)
-{
-  g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
-  g_return_if_fail (IDE_IS_DEVICE (device));
-  g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
-
-  ide_device_manager_do_add_device (self, device);
-  g_signal_emit (self, signals [DEVICE_ADDED], 0, provider, device);
-}
-
-static void
-ide_device_manager__provider_device_removed (IdeDeviceManager  *self,
+ide_device_manager_provider_device_added_cb (IdeDeviceManager  *self,
                                              IdeDevice         *device,
                                              IdeDeviceProvider *provider)
 {
-  guint i;
+  IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
-  g_return_if_fail (IDE_IS_DEVICE (device));
-  g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+  g_assert (IDE_IS_DEVICE (device));
+  g_assert (IDE_IS_DEVICE_PROVIDER (provider));
 
-  if (self->devices == NULL)
-    return;
+  g_ptr_array_add (self->devices, g_object_ref (device));
+  g_list_model_items_changed (G_LIST_MODEL (self), self->devices->len - 1, 0, 1);
 
-  for (i = 0; i < self->devices->len; i++)
+  IDE_EXIT;
+}
+
+static void
+ide_device_manager_provider_device_removed_cb (IdeDeviceManager  *self,
+                                               IdeDevice         *device,
+                                               IdeDeviceProvider *provider)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+  g_assert (IDE_IS_DEVICE (device));
+  g_assert (IDE_IS_DEVICE_PROVIDER (provider));
+
+  for (guint i = 0; i < self->devices->len; i++)
     {
-      IdeDevice *current = g_ptr_array_index (self->devices, i);
+      IdeDevice *element = g_ptr_array_index (self->devices, i);
 
-      if (current == device)
+      if (element == device)
         {
           g_ptr_array_remove_index (self->devices, i);
           g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
-          g_signal_emit (self, signals [DEVICE_REMOVED], 0, provider, device);
-          return;
+          break;
         }
     }
 
-  g_warning (_("The device “%s” could not be found."),
-             ide_device_get_id (device));
+  IDE_EXIT;
 }
 
-void
-ide_device_manager_add_provider (IdeDeviceManager  *self,
-                                 IdeDeviceProvider *provider)
+static void
+ide_device_manager_provider_load_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
 {
+  IdeDeviceProvider *provider = (IdeDeviceProvider *)object;
+  g_autoptr(IdeDeviceManager) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEVICE_PROVIDER (provider));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+
+  if (!ide_device_provider_load_finish (provider, result, &error))
+    g_warning ("%s failed to load: %s",
+               G_OBJECT_TYPE_NAME (provider),
+               error->message);
+
+  IDE_EXIT;
+}
+
+static void
+ide_device_manager_provider_added_cb (PeasExtensionSet *set,
+                                      PeasPluginInfo   *plugin_info,
+                                      PeasExtension    *exten,
+                                      gpointer          user_data)
+{
+  IdeDeviceManager *self = user_data;
+  IdeDeviceProvider *provider = (IdeDeviceProvider *)exten;
   g_autoptr(GPtrArray) devices = NULL;
-  guint i;
+  guint position;
 
-  g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
-  g_return_if_fail (IDE_IS_DEVICE_PROVIDER (provider));
+  IDE_ENTRY;
 
-  g_signal_connect_object (provider,
-                           "notify::settled",
-                           G_CALLBACK (ide_device_manager__provider_notify_settled),
-                           self,
-                           G_CONNECT_SWAPPED);
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_DEVICE_PROVIDER (provider));
 
   g_signal_connect_object (provider,
                            "device-added",
-                           G_CALLBACK (ide_device_manager__provider_device_added),
+                           G_CALLBACK (ide_device_manager_provider_device_added_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (provider,
                            "device-removed",
-                           G_CALLBACK (ide_device_manager__provider_device_removed),
+                           G_CALLBACK (ide_device_manager_provider_device_removed_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
   devices = ide_device_provider_get_devices (provider);
+  position = self->devices->len;
 
-  for (i = 0; i < devices->len; i++)
+  for (guint i = 0; i < devices->len; i++)
     {
-      IdeDevice *device;
+      IdeDevice *device = g_ptr_array_index (devices, i);
 
-      device = g_ptr_array_index (devices, i);
-      ide_device_manager__provider_device_added (self, device, provider);
+      g_assert (IDE_IS_DEVICE (device));
+
+      g_ptr_array_add (self->devices, g_object_ref (device));
     }
+
+  if (devices->len > 0)
+    g_list_model_items_changed (G_LIST_MODEL (self), position, 0, devices->len);
+
+  ide_device_provider_load_async (provider,
+                                  NULL,
+                                  ide_device_manager_provider_load_cb,
+                                  g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void
-ide_device_manager_provider_added (PeasExtensionSet *set,
-                                   PeasPluginInfo   *plugin_info,
-                                   PeasExtension    *exten,
-                                   gpointer          user_data)
-{
-  IdeDeviceManager *self = user_data;
-  IdeDeviceProvider *provider = (IdeDeviceProvider *)exten;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (IDE_IS_DEVICE_MANAGER (self));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_DEVICE_PROVIDER (provider));
-
-  ide_device_manager_add_provider (self, provider);
-}
-
-static void
-ide_device_manager_provider_removed (PeasExtensionSet *set,
-                                     PeasPluginInfo   *plugin_info,
-                                     PeasExtension    *exten,
-                                     gpointer          user_data)
+ide_device_manager_provider_removed_cb (PeasExtensionSet *set,
+                                        PeasPluginInfo   *plugin_info,
+                                        PeasExtension    *exten,
+                                        gpointer          user_data)
 {
   IdeDeviceManager *self = user_data;
   IdeDeviceProvider *provider = (IdeDeviceProvider *)exten;
   g_autoptr(GPtrArray) devices = NULL;
-  gsize i;
+
+  IDE_ENTRY;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (IDE_IS_DEVICE_MANAGER (self));
@@ -223,22 +177,32 @@ ide_device_manager_provider_removed (PeasExtensionSet *set,
 
   devices = ide_device_provider_get_devices (provider);
 
-  for (i = 0; i < devices->len; i++)
+  for (guint i = 0; i < devices->len; i++)
     {
-      IdeDevice *device = g_ptr_array_index (devices, i);
+      IdeDevice *removed_device = g_ptr_array_index (devices, i);
 
-      ide_device_manager__provider_device_removed (self, device, provider);
+      for (guint j = 0; j < self->devices->len; j++)
+        {
+          IdeDevice *device = g_ptr_array_index (self->devices, j);
+
+          if (device == removed_device)
+            {
+              g_ptr_array_remove_index (self->devices, j);
+              g_list_model_items_changed (G_LIST_MODEL (self), j, 1, 0);
+              break;
+            }
+        }
     }
 
   g_signal_handlers_disconnect_by_func (provider,
-                                        G_CALLBACK (ide_device_manager__provider_notify_settled),
+                                        G_CALLBACK (ide_device_manager_provider_device_added_cb),
                                         self);
+
   g_signal_handlers_disconnect_by_func (provider,
-                                        G_CALLBACK (ide_device_manager__provider_device_added),
+                                        G_CALLBACK (ide_device_manager_provider_device_removed_cb),
                                         self);
-  g_signal_handlers_disconnect_by_func (provider,
-                                        G_CALLBACK (ide_device_manager__provider_device_removed),
-                                        self);
+
+  IDE_EXIT;
 }
 
 static void
@@ -250,53 +214,24 @@ ide_device_manager_add_providers (IdeDeviceManager *self)
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  self->providers = ide_extension_set_new (peas_engine_get_default (),
-                                           IDE_TYPE_DEVICE_PROVIDER,
-                                           "context", context,
-                                           NULL);
+  self->providers = peas_extension_set_new (peas_engine_get_default (),
+                                            IDE_TYPE_DEVICE_PROVIDER,
+                                            "context", context,
+                                            NULL);
 
   g_signal_connect (self->providers,
                     "extension-added",
-                    G_CALLBACK (ide_device_manager_provider_added),
+                    G_CALLBACK (ide_device_manager_provider_added_cb),
                     self);
 
   g_signal_connect (self->providers,
                     "extension-removed",
-                    G_CALLBACK (ide_device_manager_provider_removed),
+                    G_CALLBACK (ide_device_manager_provider_removed_cb),
                     self);
 
   peas_extension_set_foreach (self->providers,
-                              (PeasExtensionSetForeachFunc)ide_device_manager_provider_added,
+                              (PeasExtensionSetForeachFunc)ide_device_manager_provider_added_cb,
                               self);
-}
-
-/**
- * ide_device_manager_get_devices:
- *
- * Retrieves all of the devices that are registered with the #IdeDeviceManager.
- *
- * Returns: (transfer container) (element-type Ide.Device): An array of devices
- *   registered with the #IdeManager.
- */
-GPtrArray *
-ide_device_manager_get_devices (IdeDeviceManager *self)
-{
-  GPtrArray *ret;
-  guint i;
-
-  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
-
-  ret = g_ptr_array_new_with_free_func (g_object_unref);
-
-  for (i = 0; i < self->devices->len; i++)
-    {
-      IdeDevice *device;
-
-      device = g_ptr_array_index (self->devices, i);
-      g_ptr_array_add (ret, g_object_ref (device));
-    }
-
-  return ret;
 }
 
 static void
@@ -308,10 +243,9 @@ ide_device_manager_add_local (IdeDeviceManager *self)
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
-                         "context", context,
-                         NULL);
-  ide_device_manager_do_add_device (self, device);
+  device = g_object_new (IDE_TYPE_LOCAL_DEVICE, "context", context, NULL);
+  g_ptr_array_add (self->devices, g_steal_pointer (&device));
+  g_list_model_items_changed (G_LIST_MODEL (self), self->devices->len - 1, 0, 1);
 }
 
 static GType
@@ -356,33 +290,25 @@ ide_device_manager_constructed (GObject *object)
 }
 
 static void
+ide_device_manager_dispose (GObject *object)
+{
+  IdeDeviceManager *self = (IdeDeviceManager *)object;
+
+  if (self->devices->len > 0)
+    g_ptr_array_remove_range (self->devices, 0, self->devices->len);
+  g_clear_object (&self->providers);
+
+  G_OBJECT_CLASS (ide_device_manager_parent_class)->dispose (object);
+}
+
+static void
 ide_device_manager_finalize (GObject *object)
 {
   IdeDeviceManager *self = (IdeDeviceManager *)object;
 
   g_clear_pointer (&self->devices, g_ptr_array_unref);
-  g_clear_object (&self->providers);
 
   G_OBJECT_CLASS (ide_device_manager_parent_class)->finalize (object);
-}
-
-static void
-ide_device_manager_get_property (GObject    *object,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
-{
-  IdeDeviceManager *self = IDE_DEVICE_MANAGER(object);
-
-  switch (prop_id)
-    {
-    case PROP_SETTLED:
-      g_value_set_boolean (value, ide_device_manager_get_settled (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-    }
 }
 
 static void
@@ -391,39 +317,8 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = ide_device_manager_constructed;
+  object_class->dispose = ide_device_manager_dispose;
   object_class->finalize = ide_device_manager_finalize;
-  object_class->get_property = ide_device_manager_get_property;
-
-  properties [PROP_SETTLED] =
-    g_param_spec_boolean ("settled",
-                          "Settled",
-                          "If the device providers have settled.",
-                          FALSE,
-                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
-
-  signals [DEVICE_ADDED] =
-    g_signal_new ("device-added",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  2,
-                  IDE_TYPE_DEVICE_PROVIDER,
-                  IDE_TYPE_DEVICE);
-
-  signals [DEVICE_REMOVED] =
-    g_signal_new ("device-removed",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  2,
-                  IDE_TYPE_DEVICE_PROVIDER,
-                  IDE_TYPE_DEVICE);
 }
 
 static void
@@ -442,6 +337,7 @@ ide_device_manager_init (IdeDeviceManager *self)
 
 /**
  * ide_device_manager_get_device:
+ * @self: an #IdeDeviceManager
  * @device_id: The device identifier string.
  *
  * Fetches the first device that matches the device identifier @device_id.
@@ -452,11 +348,9 @@ IdeDevice *
 ide_device_manager_get_device (IdeDeviceManager *self,
                                const gchar      *device_id)
 {
-  gsize i;
-
   g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
 
-  for (i = 0; i < self->devices->len; i++)
+  for (guint i = 0; i < self->devices->len; i++)
     {
       IdeDevice *device;
       const gchar *id;

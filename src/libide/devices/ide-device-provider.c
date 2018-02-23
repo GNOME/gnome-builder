@@ -227,8 +227,6 @@ ide_device_provider_emit_device_removed (IdeDeviceProvider *provider,
  * operation so that the device manager does not need to wait for additional
  * devices to enter the "settled" state.
  *
- * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
  * Since: 3.28
  */
 void
