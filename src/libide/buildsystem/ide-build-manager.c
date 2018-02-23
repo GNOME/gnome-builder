@@ -194,6 +194,8 @@ ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
                                      IdeDiagnostic    *diagnostic,
                                      IdeBuildPipeline *pipeline)
 {
+  IdeDiagnosticSeverity severity;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
@@ -202,17 +204,19 @@ ide_build_manager_handle_diagnostic (IdeBuildManager  *self,
 
   self->diagnostic_count++;
   if (self->diagnostic_count == 1)
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HAS_DIAGNOSTICS]);
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
 
-  if (ide_diagnostic_get_severity (diagnostic) > IDE_DIAGNOSTIC_WARNING)
-    {
-      self->error_count++;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
-    }
-  else
+  severity = ide_diagnostic_get_severity (diagnostic);
+
+  if (severity == IDE_DIAGNOSTIC_WARNING)
     {
       self->warning_count++;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WARNING_COUNT]);
+    }
+  else if (severity == IDE_DIAGNOSTIC_ERROR || severity == IDE_DIAGNOSTIC_FATAL)
+    {
+      self->error_count++;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
     }
 
   IDE_EXIT;
