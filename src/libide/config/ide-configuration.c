@@ -308,6 +308,9 @@ ide_configuration_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_configuration_parent_class)->constructed (object);
 
+  if (ide_object_is_unloading (IDE_OBJECT (self)))
+    return;
+
   /* Allow ourselves to be run from unit tests without a valid context */
   if (NULL != (context = ide_object_get_context (IDE_OBJECT (self))))
     {
