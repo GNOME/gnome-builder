@@ -89,6 +89,7 @@ src/libide/layout/ide-layout-stack.c
 src/libide/layout/ide-layout-stack-header.ui
 src/libide/layout/ide-layout-stack-shortcuts.c
 src/libide/layout/ide-layout-stack.ui
+src/libide/local/ide-local-device.c
 src/libide/preferences/ide-preferences-builtin.c
 src/libide/preferences/ide-preferences-perspective.c
 src/libide/preferences/ide-preferences-window.ui
