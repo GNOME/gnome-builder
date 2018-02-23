@@ -42,6 +42,8 @@ struct _IdeDeviceClass
   const gchar *(*get_system_type)       (IdeDevice        *self);
   void         (*prepare_configuration) (IdeDevice        *self,
                                          IdeConfiguration *configuration);
+
+  gpointer _reserved[32];
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -51,6 +53,11 @@ const gchar *ide_device_get_display_name      (IdeDevice        *self);
 IDE_AVAILABLE_IN_ALL
 void         ide_device_set_display_name      (IdeDevice        *self,
                                                const gchar      *display_name);
+IDE_AVAILABLE_IN_ALL
+const gchar *ide_device_get_icon_name         (IdeDevice        *self);
+IDE_AVAILABLE_IN_ALL
+void         ide_device_set_icon_name         (IdeDevice        *self,
+                                               const gchar      *icon_name);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_device_get_id                (IdeDevice        *self);
 IDE_AVAILABLE_IN_ALL

@@ -26,6 +26,7 @@
 typedef struct
 {
   gchar *display_name;
+  gchar *icon_name;
   gchar *id;
 } IdeDevicePrivate;
 
@@ -34,12 +35,13 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeDevice, ide_device, IDE_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_DISPLAY_NAME,
+  PROP_ICON_NAME,
   PROP_ID,
   PROP_SYSTEM_TYPE,
-  LAST_PROP
+  N_PROPS
 };
 
-static GParamSpec *properties [LAST_PROP];
+static GParamSpec *properties [N_PROPS];
 
 /**
  * ide_device_get_display_name:
@@ -76,6 +78,52 @@ ide_device_set_display_name (IdeDevice   *device,
       priv->display_name = g_strdup (display_name);
       g_object_notify_by_pspec (G_OBJECT (device),
                                 properties [PROP_DISPLAY_NAME]);
+    }
+}
+
+/**
+ * ide_device_get_icon_name:
+ * @self: a #IdeDevice
+ *
+ * Gets the icon to use when displaying the device in UI elements.
+ *
+ * Returns: (nullable): an icon-name or %NULL
+ *
+ * Since: 3.28
+ */
+const gchar *
+ide_device_get_icon_name (IdeDevice *self)
+{
+  IdeDevicePrivate *priv = ide_device_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_DEVICE (self), NULL);
+
+  return priv->icon_name;
+}
+
+/**
+ * ide_device_set_icon_name:
+ * @self: a #IdeDevice
+ *
+ * Sets the icon-name property.
+ *
+ * This is the icon that is displayed with the device name in UI elements.
+ *
+ * Since: 3.28
+ */
+void
+ide_device_set_icon_name (IdeDevice   *self,
+                          const gchar *icon_name)
+{
+  IdeDevicePrivate *priv = ide_device_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_DEVICE (self));
+
+  if (g_strcmp0 (icon_name, priv->icon_name) != 0)
+    {
+      g_free (priv->icon_name);
+      priv->icon_name = g_strdup (icon_name);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
     }
 }
 
@@ -166,6 +214,10 @@ ide_device_get_property (GObject    *object,
       g_value_set_string (value, ide_device_get_display_name (self));
       break;
 
+    case PROP_ICON_NAME:
+      g_value_set_string (value, ide_device_get_icon_name (self));
+      break;
+
     case PROP_ID:
       g_value_set_string (value, ide_device_get_id (self));
       break;
@@ -193,6 +245,10 @@ ide_device_set_property (GObject      *object,
       ide_device_set_display_name (self, g_value_get_string (value));
       break;
 
+    case PROP_ICON_NAME:
+      ide_device_set_icon_name (self, g_value_get_string (value));
+      break;
+
     case PROP_ID:
       ide_device_set_id (self, g_value_get_string (value));
       break;
@@ -218,6 +274,21 @@ ide_device_class_init (IdeDeviceClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * IdeDevice:icon-name:
+   *
+   * The "icon-name" property is the icon to display with the device in
+   * various UI elements of Builder.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name",
+                         "Icon Name",
+                         "Icon Name",
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
   properties [PROP_ID] =
     g_param_spec_string ("id",
                          "ID",
@@ -232,7 +303,7 @@ ide_device_class_init (IdeDeviceClass *klass)
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
