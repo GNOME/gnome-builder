@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-05 21:08+0000\n"
-"PO-Revision-Date: 2018-02-10 20:49+0200\n"
+"POT-Creation-Date: 2018-02-20 22:23+0000\n"
+"PO-Revision-Date: 2018-02-23 01:12+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -120,12 +120,10 @@ msgstr ""
 "código fonte."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
-#| msgid "Show if a line was added or modified next to line number"
 msgid "Show diagnostics next to line number"
 msgstr "Mostrar diagnósticos ao lado do número de liña"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
-#| msgid "If enabled, the editor will show line numbers."
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
@@ -264,7 +262,6 @@ msgstr ""
 "dunha modificación."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
-#| msgid "Spaces"
 msgid "Spaces Style"
 msgstr "Estilo dos espazos"
 
@@ -324,7 +321,6 @@ msgstr "Usar a preferencia de luz nocturna de GNOME para activar o modo noite."
 #. projects. Do NOT change the ASCII double quotes ("") to your
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:32
-#| msgid "Projects"
 msgid "\"Projects\""
 msgstr "«Proxectos»"
 
@@ -346,12 +342,10 @@ msgid "Restore previously opened files when loading a project."
 msgstr "Restaurar os ficheiros abertos anteriormente ao cargar un proxecto."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:43
-#| msgid "Open File"
 msgid "Show Open Files"
 msgstr "Mostrar ficheiros abertos"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:44
-#| msgid "The path for the file within the project tree."
 msgid "Display the open files list in the project sidebar."
 msgstr "Mostrar a lista de ficheiros abertos na barra lateral do proxecto."
 
@@ -364,7 +358,6 @@ msgid "If the plugin should be enabled"
 msgstr "Se o engadido debería estar activado"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
-#| msgid "The configuration to use from .buildconfig"
 msgid "Selected configuration for building"
 msgstr "Configuración seleccionada para construír"
 
@@ -634,6 +627,7 @@ msgid "%s: This file format is not supported\n"
 msgstr "%s: Este formato de ficheiro non é compatíbel\n"
 
 #: src/gstyle/gstyle-palette.c:822
+#, c-format
 msgid "failed to parse\n"
 msgstr "produciuse un fallo ao analizar\n"
 
@@ -836,7 +830,6 @@ msgid "No such tool"
 msgstr "A ferramenta non está presente"
 
 #: src/libide/application/ide-application-command-line.c:405
-#| msgid "Please provide a worker type"
 msgid "Please provide a worker plugin"
 msgstr "Forneza un engadido de traballador"
 
@@ -883,8 +876,6 @@ msgid "Preferences"
 msgstr "Preferencias"
 
 #: src/libide/application/ide-application-shortcuts.c:57
-#| msgctxt "shortcut window"
-#| msgid "Show the shortcuts window"
 msgctxt "shortcut window"
 msgid "Show the preferences window"
 msgstr "Mostrar a xanela de preferencias"
@@ -902,7 +893,7 @@ msgstr ""
 "Produciuse un fallo ao estabelecer un monitor para os cambios en segundo "
 "plano: %s"
 
-#: src/libide/buffers/ide-buffer.c:2843
+#: src/libide/buffers/ide-buffer.c:2844
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolutor de símbolos."
 
@@ -930,20 +921,17 @@ msgstr "Produciuse un fallo ao gardar o ficheiro: %s"
 #. translators: %s is replaced with the error message
 #: src/libide/buffers/ide-unsaved-files.c:252
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to save draft: %s"
 msgstr "Produciuse un fallo ao gardar o borrador: %s"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:624
 #, c-format
-#| msgid "%s (read-only)"
 msgid "%s (Copy)"
 msgstr "%s (Copia)"
 
-#: src/libide/buildsystem/ide-build-manager.c:360
+#: src/libide/buildsystem/ide-build-manager.c:363
 #, c-format
-#| msgid "Failed to initialize defaults."
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Produciuse un fallo ao iniciar a tubería de construción: %s"
 
@@ -1144,7 +1132,6 @@ msgid "—"
 msgstr "—"
 
 #: src/libide/buildui/ide-build-panel.ui:81
-#| msgid "Build status"
 msgid "Build Details"
 msgstr "Detalles da construción"
 
@@ -1313,6 +1300,7 @@ msgid "Binary"
 msgstr "Binario"
 
 #: src/libide/debugger/ide-debug-manager.c:968
+#, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Non é posíbel atopar un depurador axeitado."
 
@@ -1326,6 +1314,7 @@ msgid "unversioned"
 msgstr "sen versión"
 
 #: src/libide/doap/xml-reader.c:327
+#, c-format
 msgid "Could not parse XML from stream"
 msgstr "Non foi posíbel analizar o XML desde o fluxo"
 
@@ -1768,7 +1757,6 @@ msgstr ""
 "recuperalos."
 
 #: src/libide/greeter/ide-greeter-perspective.c:1190
-#| msgid "Select Project"
 msgid "Delete Project Files"
 msgstr "Eliminar ficheiros do proxecto"
 
@@ -1787,7 +1775,6 @@ msgid "_Remove"
 msgstr "_Renomear"
 
 #: src/libide/greeter/ide-greeter-perspective.ui:124
-#| msgid "Recent Projects"
 msgid "Remove Project Files…"
 msgstr "Eliminar ficheiros do proxecto…"
 
@@ -1839,7 +1826,6 @@ msgid "_Open Project"
 msgstr "_Abrir proxecto"
 
 #: src/libide/gtk/menus.ui:15
-#| msgid "Clone Repository"
 msgid "_Clone Repository"
 msgstr "_Clonar repositorio"
 
@@ -2299,9 +2285,8 @@ msgid "Find text within terminal"
 msgstr "Bucar texto na terminal"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:870
+#: src/libide/langserv/ide-langserv-client.c:891
 #, c-format
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize language server: %s"
 msgstr "Produciuse un fallo ao iniciar o servidor de linguaxe: %s"
 
@@ -2383,7 +2368,6 @@ msgid "Themes"
 msgstr "Temas"
 
 #: src/libide/preferences/ide-preferences-builtin.c:99
-#| msgid "Dark Theme"
 msgid "Dark Mode"
 msgstr "Modo escuro"
 
@@ -2396,18 +2380,14 @@ msgid "dark theme"
 msgstr "tema escuro"
 
 #: src/libide/preferences/ide-preferences-builtin.c:100
-#| msgid "Highlight"
 msgid "Night Light"
 msgstr "Luz nocturna"
 
 #: src/libide/preferences/ide-preferences-builtin.c:100
-#| msgid "Automatically indent"
 msgid "Automatically enable dark mode at night"
 msgstr "Activar o modo escuro automaticamente pola noite"
 
 #: src/libide/preferences/ide-preferences-builtin.c:100
-#| msgctxt "shortcut window"
-#| msgid "Clear highlight"
 msgid "follow night light"
 msgstr "seguir a luz nocturna"
 
@@ -2490,13 +2470,12 @@ msgstr ""
 "sangrado"
 
 #: src/libide/preferences/ide-preferences-builtin.c:154
-#| msgid "Display line numbers"
 msgid "Display list of open files"
 msgstr "Mostra unha lista dos ficheiros abertos"
 
 #: src/libide/preferences/ide-preferences-builtin.c:154
-#| msgid "Destination file must be within the project tree."
-msgid "Display the list of all open files in the within the project sidebar"
+#| msgid "Display the list of all open files in the within the project sidebar"
+msgid "Display the list of all open files in the project sidebar"
 msgstr ""
 "Mostra unha lista con todos os ficheiros abertos na barra lateral do proxecto"
 
@@ -2554,7 +2533,6 @@ msgstr ""
 "Mostra se unha liña foi engadida ou moficiada ao lado do número de liña"
 
 #: src/libide/preferences/ide-preferences-builtin.c:165
-#| msgid "Show Line Diagnostics"
 msgid "Line diagnostics"
 msgstr "Diagnósticos en liña"
 
@@ -2745,7 +2723,6 @@ msgid "Insert matching character for { [ ( or \""
 msgstr "Inserir os caracteres coincidentes para { [ ( ou \""
 
 #: src/libide/preferences/ide-preferences-builtin.c:325
-#| msgid "Insert trailing newline"
 msgid "Insert Trailing Newline"
 msgstr "Inserir a nova liña final"
 
@@ -2794,7 +2771,6 @@ msgid "Indent source code as you type"
 msgstr "Indentar o código fonte mentres se escribir"
 
 #: src/libide/preferences/ide-preferences-builtin.c:336
-#| msgid "Spaces"
 msgid "Spacing"
 msgstr "Espaciado"
 
@@ -2803,7 +2779,6 @@ msgid "Space before opening parentheses"
 msgstr "Espaczo antes de abrir parenteses"
 
 #: src/libide/preferences/ide-preferences-builtin.c:338
-#| msgid "Matching brackets"
 msgid "Space before opening brackets"
 msgstr "Espazo antes de abrir chaves"
 
@@ -2816,17 +2791,14 @@ msgid "Space before opening angles"
 msgstr "Espazo antes de abrir angulos"
 
 #: src/libide/preferences/ide-preferences-builtin.c:341
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before colons"
 msgstr "Preferir o uso de espazos antes dos dous puntos"
 
 #: src/libide/preferences/ide-preferences-builtin.c:342
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before commas"
 msgstr "Preferir o uso de espazos antes das comas"
 
 #: src/libide/preferences/ide-preferences-builtin.c:343
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before semicolons"
 msgstr "Preferir o uso de espazos antes do punto e coma"
 
@@ -2941,6 +2913,10 @@ msgstr "Produciuse un fallo ao abrir o cartafol: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Produciuse un fallo ao cargar o ficheiro: %s: %s"
 
+#: src/libide/sourceview/ide-omni-gutter-renderer.c:749
+msgid "Click to toggle breakpoint"
+msgstr "Prema para trocar o punto de corte"
+
 #: src/libide/sourceview/ide-source-view.c:4584
 #, c-format
 msgid "Insert “%s”"
@@ -2990,17 +2966,14 @@ msgid "Run _all tests"
 msgstr "Executar _todas as probas"
 
 #: src/libide/testing/gtk/menus.ui:12
-#| msgid "_Reload"
 msgid "Reload tests"
 msgstr "_Recargar probas"
 
 #: src/libide/testing/ide-test-editor-addin.c:73
-#| msgid "Snippet Text"
 msgid "Unit Tests"
 msgstr "Probas unitarias"
 
 #: src/libide/testing/ide-test-panel.ui:12
-#| msgid "No beautifier available"
 msgid "No tests available"
 msgstr "Non hai probas dispoñíbeis"
 
@@ -3118,7 +3091,6 @@ msgid "true"
 msgstr "true"
 
 #: src/libide/workbench/ide-omni-bar.ui:507
-#| msgid "Build"
 msgctxt "button"
 msgid "Build"
 msgstr "Construír"
@@ -3176,7 +3148,6 @@ msgid "Trigger a build"
 msgstr "Dispara unha construción"
 
 #: src/libide/workbench/ide-workbench-shortcuts.c:53
-#| msgid "All files"
 msgctxt "shortcut window"
 msgid "Save all files"
 msgstr "Gardar todos os ficheiros"
@@ -3199,14 +3170,12 @@ msgid "Building cache…"
 msgstr "Construíndo caché…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
-#| msgid "Host operating system"
 msgid "Bootstrapping build system"
 msgstr "Iniciando o sistema de construción"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:225
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:140
 #: src/plugins/phpize/phpize_plugin.py:226
-#| msgid "Configuring…"
 msgid "Configuring project"
 msgstr "Configurando o proxecto"
 
@@ -3215,7 +3184,6 @@ msgstr "Configurando o proxecto"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:169
 #: src/plugins/phpize/phpize_plugin.py:238
-#| msgid "Build project"
 msgid "Building project"
 msgstr "Construíndo o proxecto"
 
@@ -3303,6 +3271,8 @@ msgstr ""
 msgid ""
 "Beautifier plugin: command key out of possible values: entry “%s” disabled"
 msgstr ""
+"Engadido Beautifier: tecla de comando dos posíbeis valores: entrada «%s» "
+"desactivada"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:331
@@ -3326,7 +3296,6 @@ msgstr ""
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:405
 #, c-format
-#| msgid "No beautifier available for “%s”"
 msgid "Beautifier plugin: “%s”"
 msgstr "Engadido Beautifier: «%s»"
 
@@ -3366,6 +3335,7 @@ msgid "No beautifier available for “%s”"
 msgstr "Non hai un «beautifier» dispoñíbel para «%s»"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#, c-format
 msgid "No beautifier available"
 msgstr "Non hai «beautifiers» dispoñíbeis"
 
@@ -3464,19 +3434,16 @@ msgid "clang_codeCompleteAt() only works on local files"
 msgstr "clang_codeCompleteAt() só funciona en ficheiros locais"
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:421
-#| msgid "Makefile"
 msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:161
-#| msgid "Clone Project"
 msgid "Configure project"
 msgstr "Configurar proxecto"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:179
 #: src/plugins/phpize/phpize_plugin.py:248
-#| msgid "Installing rust "
 msgid "Installing project"
 msgstr "Instalando o proxecto "
 
@@ -3771,11 +3738,11 @@ msgstr "Usar a entrada embaixo para executar unha ore"
 #. translators: %s is replaced with the error message
 #: src/plugins/command-bar/gb-command-vim.c:104
 #, c-format
-#| msgid "Command not found: %s"
 msgid "Command failed: %s"
 msgstr "Orde fallida: %s"
 
 #: src/plugins/command-bar/gb-vim.c:87
+#, c-format
 msgid "Number required"
 msgstr "Requírese un número"
 
@@ -3790,10 +3757,12 @@ msgid "Cannot find language “%s”"
 msgstr "Non se pode atopar o linguaxe «%s»"
 
 #: src/plugins/command-bar/gb-vim.c:312
+#, c-format
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Esta orde require un GtkSourceView para enfocarlo"
 
 #: src/plugins/command-bar/gb-vim.c:323
+#, c-format
 msgid "This command requires a view to be focused"
 msgstr "Esta orde require unha vista para enfocala"
 
@@ -3808,6 +3777,7 @@ msgid "Cannot find colorscheme “%s”"
 msgstr "Non é posíbel atopar o esquema de cor «%s»"
 
 #: src/plugins/command-bar/gb-vim.c:464 src/plugins/command-bar/gb-vim.c:596
+#, c-format
 msgid "Failed to locate working directory"
 msgstr "Produciuse un fallo ao buscar o cartafol de traballo"
 
@@ -3817,6 +3787,7 @@ msgid "Invalid :syntax subcommand: %s"
 msgstr "Subcomando :syntax non válido: %s"
 
 #: src/plugins/command-bar/gb-vim.c:1206
+#, c-format
 msgid "Invalid search and replace request"
 msgstr "Solicitude de buscar e reemprazar non válida"
 
@@ -3885,6 +3856,7 @@ msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPCIÓNS...] NOME_DE_PROXECTO"
 
 #: src/plugins/create-project/gbp-create-project-tool.c:198
+#, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "O nome de ficheiro debe ser ASCII e non debe onter : ou ="
 
@@ -4053,17 +4025,14 @@ msgid "Creating flatpak workspace"
 msgstr "Creando o espazo de traballo de flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:248
-#| msgid "Root Build Directory"
 msgid "Preparing build directory"
 msgstr "Preparando o cartafol de construción"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:288
-#| msgid "_Download Dependencies"
 msgid "Downloading dependencies"
 msgstr "Descargando as dependencias"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:365
-#| msgid "Building dependencies…"
 msgid "Building dependencies"
 msgstr "Construindo as dependencias"
 
@@ -4113,12 +4082,12 @@ msgstr[1] "Mostrar %u runtimes máis"
 msgid "Flatpak Runtimes"
 msgstr "Runtimes de Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:762
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:765
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:764
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:767
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -4176,14 +4145,17 @@ msgstr ""
 "Imposíbel fornecer diferenzas, non se forneceu ningún ficheiro de respaldo."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:676
+#, c-format
 msgid "Repository does not have a working directory."
 msgstr "O repositorio non ten un cartafol de traballo."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:687
+#, c-format
 msgid "File is not under control of git working directory."
 msgstr "O ficheiro non está baixo o control do cartafol de traballo de git."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:753
+#, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "O ficheiro solicitado non existe dentro do índice de git."
 
@@ -4228,6 +4200,7 @@ msgid "Clone…"
 msgstr "Clonar…"
 
 #: src/plugins/git/ide-git-remote-callbacks.c:193
+#, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
@@ -4237,7 +4210,6 @@ msgstr ""
 #. translators: %s is replaced with the error message
 #: src/plugins/git/ide-git-vcs.c:365
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to establish git file monitor: %s"
 msgstr ""
 "Produciuse un fallo ao estabelecer a monitorización dun ficheiro git: %s"
@@ -4300,17 +4272,14 @@ msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para fornecer o completado do linguaxe Python"
 
 #: src/plugins/make/make_plugin.py:137
-#| msgid "Installing rust "
 msgid "Install project"
 msgstr "Instalando o proxecto"
 
 #: src/plugins/make/make_plugin.py:359
-#| msgid "Empty Meson Project"
 msgid "Empty Makefile Project"
 msgstr "Proxecto Makefile baleiro"
 
 #: src/plugins/make/make_plugin.py:361
-#| msgid "Create a new empty project"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Crear un novo proxecto baleiro usando un Makefile simple"
 
@@ -4343,20 +4312,18 @@ msgid "Create a new empty project"
 msgstr "Crear un novo proxecto baleiro"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
-#| msgid "Message"
 msgid "Messages"
 msgstr "Mensaxes"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:94
+#: src/plugins/mingw/ide-mingw-device-provider.c:97
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bit"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:106
+#: src/plugins/mingw/ide-mingw-device-provider.c:111
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:12
-#| msgid "Create from existing project"
 msgid "Contribute to an existing project"
 msgstr "Contribuir a un proxecto existente"
 
@@ -4411,12 +4378,10 @@ msgid "Project “%s” failed to build"
 msgstr "Fallou a construción do proxecto «%s»"
 
 #: src/plugins/npm/npm_plugin.py:103
-#| msgid "_Download Dependencies"
 msgid "Downloading npm dependencies"
 msgstr "Descargando as dependencias de npm"
 
 #: src/plugins/phpize/phpize_plugin.py:210
-#| msgid "Bootstrapping…"
 msgid "Bootstrapping project"
 msgstr "Inicializando o proxecto"
 
@@ -4451,21 +4416,18 @@ msgstr "Non foi posíbel ler o ficheiro non nativo na terminal"
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:354
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to spawn terminal: %s"
 msgstr "Produciuse un fallo ao xerar o terminal: %s"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:619
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to rename file: %s"
 msgstr "Produciuse un fallo ao renomear o ficheiro: %s"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:710
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to trash file: %s"
 msgstr "Produciuse un fallo ao enviar ao lixo o ficheiro: %s"
 
@@ -4722,9 +4684,9 @@ msgstr "Mostrar o panel de verificación ortográfica"
 #.
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:139
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:246
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize spellchecking, disabling"
-msgstr "Produciuse un fallo ao iniciar a verificación ortográfica, desactivando"
+msgstr ""
+"Produciuse un fallo ao iniciar a verificación ortográfica, desactivando"
 
 #: src/plugins/spellcheck/gbp-spell-language-popover.c:232
 msgid "No language selected"
@@ -4893,7 +4855,6 @@ msgid "Application Output"
 msgstr "Saída do aplicativo"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:216
-#| msgid "Application Output"
 msgid "Application exited\r\n"
 msgstr "O aplicativo saíu\n"
 
@@ -4910,7 +4871,6 @@ msgid "New _Build Terminal"
 msgstr "_Novo Terminal de construción"
 
 #: src/plugins/terminal/gtk/menus.ui:54
-#| msgid "New terminal"
 msgid "New terminal in directory"
 msgstr "Novo temrinal no cartafol"
 
