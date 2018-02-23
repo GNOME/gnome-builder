@@ -725,7 +725,7 @@
             ],
             "sources" : [
                 {
-                    "disable-shallow-clone": true,
+                    "disable-shallow-clone" : true,
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git"
                 }
