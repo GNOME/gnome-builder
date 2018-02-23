@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-loca-device"
 
+#include <glib/gi18n.h>
 #include <string.h>
 #include <sys/utsname.h>
 
@@ -69,9 +70,13 @@ static void
 ide_local_device_init (IdeLocalDevice *self)
 {
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
+  g_autofree gchar *name = NULL;
 
   priv->system_type = g_strdup (ide_get_system_type ());
 
-  ide_device_set_display_name (IDE_DEVICE (self), g_get_host_name ());
+  /* translators: %s is replaced with the local systems host name */
+  name = g_strdup_printf (_("My Computer (%s)"), g_get_host_name ());
+
+  ide_device_set_display_name (IDE_DEVICE (self), name);
   ide_device_set_id (IDE_DEVICE (self), "local");
 }
