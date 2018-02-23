@@ -247,4 +247,8 @@
       </submenu>
     </section>
   </menu>
+  <menu id="ide-device-manager-menu">
+    <section id="ide-device-manager-menu-section">
+    </section>
+  </menu>
 </interface>
