@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-20 09:15+0000\n"
-"PO-Revision-Date: 2018-02-20 21:37+0100\n"
+"POT-Creation-Date: 2018-02-23 23:40+0000\n"
+"PO-Revision-Date: 2018-02-24 20:12+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -627,6 +627,7 @@ msgid "%s: This file format is not supported\n"
 msgstr "%s: nieobsługiwany format plików\n"
 
 #: src/gstyle/gstyle-palette.c:822
+#, c-format
 msgid "failed to parse\n"
 msgstr "przetworzenie się nie powiodło\n"
 
@@ -929,7 +930,7 @@ msgstr "Zapisanie szkicu się nie powiodło: %s"
 msgid "%s (Copy)"
 msgstr "%s (kopia)"
 
-#: src/libide/buildsystem/ide-build-manager.c:363
+#: src/libide/buildsystem/ide-build-manager.c:367
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Zainicjowanie potoku budowania się nie powiodło: %s"
@@ -1298,19 +1299,16 @@ msgid "Binary"
 msgstr "Plik binarny"
 
 #: src/libide/debugger/ide-debug-manager.c:968
+#, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Nie można odnaleźć odpowiedniego debugera."
-
-#: src/libide/devices/ide-device-manager.c:148
-#, c-format
-msgid "The device “%s” could not be found."
-msgstr "Nie można odnaleźć urządzenia „%s”."
 
 #: src/libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
 msgstr "bez systemu kontroli wersji"
 
 #: src/libide/doap/xml-reader.c:327
+#, c-format
 msgid "Could not parse XML from stream"
 msgstr "Nie można przetworzyć kodu XML z potoku"
 
@@ -2279,7 +2277,7 @@ msgid "Find text within terminal"
 msgstr "Wyszukiwanie tekstu w terminalu"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:891
+#: src/libide/langserv/ide-langserv-client.c:894
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Zainicjowanie serwera języka się nie powiodło: %s"
@@ -2347,6 +2345,12 @@ msgstr "Coś się nie powiodło"
 #: src/libide/layout/ide-layout-stack.ui:125
 msgid "There was a failure while trying to perform the operation."
 msgstr "Wystąpił błąd podczas wykonywania działania."
+
+#. translators: %s is replaced with the local systems host name
+#: src/libide/local/ide-local-device.c:78
+#, c-format
+msgid "My Computer (%s)"
+msgstr "Mój komputer (%s)"
 
 #: src/libide/preferences/ide-preferences-builtin.c:59
 #: src/libide/preferences/ide-preferences-builtin.c:60
@@ -3321,6 +3325,7 @@ msgid "No beautifier available for “%s”"
 msgstr "Brak dostępnego mechanizmu upiększania dla języka „%s”"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#, c-format
 msgid "No beautifier available"
 msgstr "Brak dostępnego mechanizmu upiększania"
 
@@ -3728,6 +3733,7 @@ msgid "Command failed: %s"
 msgstr "Polecenie się nie powiodło: %s"
 
 #: src/plugins/command-bar/gb-vim.c:87
+#, c-format
 msgid "Number required"
 msgstr "Wymagany jest numer"
 
@@ -3742,10 +3748,12 @@ msgid "Cannot find language “%s”"
 msgstr "Nie można odnaleźć języka „%s”"
 
 #: src/plugins/command-bar/gb-vim.c:312
+#, c-format
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "To polecenie wymaga aktywności widżetu GtkSourceView"
 
 #: src/plugins/command-bar/gb-vim.c:323
+#, c-format
 msgid "This command requires a view to be focused"
 msgstr "To polecenie wymaga aktywności widoku"
 
@@ -3760,6 +3768,7 @@ msgid "Cannot find colorscheme “%s”"
 msgstr "Nie można odnaleźć schematu kolorów „%s”"
 
 #: src/plugins/command-bar/gb-vim.c:464 src/plugins/command-bar/gb-vim.c:596
+#, c-format
 msgid "Failed to locate working directory"
 msgstr "Ustalenie położenia katalogu roboczego się nie powiodło"
 
@@ -3769,6 +3778,7 @@ msgid "Invalid :syntax subcommand: %s"
 msgstr "Nieprawidłowe podpolecenie „:syntax”: %s"
 
 #: src/plugins/command-bar/gb-vim.c:1206
+#, c-format
 msgid "Invalid search and replace request"
 msgstr "Nieprawidłowe żądanie wyszukania i zastąpienia"
 
@@ -3837,6 +3847,7 @@ msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPCJA…] NAZWA_PROJEKTU"
 
 #: src/plugins/create-project/gbp-create-project-tool.c:198
+#, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Nazwa pliku musi być ASCII i nie może zawierać znaków „:” i „=”"
 
@@ -4123,14 +4134,17 @@ msgid "Cannot provide diff, no backing file provided."
 msgstr "Nie można dostarczyć różnicy, nie podano pliku na dysku."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:676
+#, c-format
 msgid "Repository does not have a working directory."
 msgstr "Repozytorium nie ma katalogu roboczego."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:687
+#, c-format
 msgid "File is not under control of git working directory."
 msgstr "Plik nie jest pod kontrolą katalogu roboczego systemu git."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:753
+#, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "Żądany plik nie istnieje w indeksie systemu git."
 
@@ -4174,6 +4188,7 @@ msgid "Clone…"
 msgstr "Sklonuj…"
 
 #: src/plugins/git/ide-git-remote-callbacks.c:193
+#, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
@@ -4287,11 +4302,11 @@ msgstr "Utworzenie nowego pustego projektu"
 msgid "Messages"
 msgstr "Komunikaty"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:97
+#: src/plugins/mingw/ide-mingw-device-provider.c:57
 msgid "MinGW 64-bit"
 msgstr "64-bitowe MinGW"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:111
+#: src/plugins/mingw/ide-mingw-device-provider.c:64
 msgid "MinGW 32-bit"
 msgstr "32-bitowe MinGW"
 
