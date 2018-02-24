@@ -187,7 +187,9 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         }
         self.prepare_files(files)
 
-        spdx_license = ''
+        # No explicit license == proprietary
+        spdx_license = 'LicenseRef-proprietary'
+
         # https://spdx.org/licenses/
         LICENSE_TO_SPDX = {
             'agpl_3': 'AGPL-3.0-or-later',
