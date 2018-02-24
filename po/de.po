@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-23 02:48+0000\n"
-"PO-Revision-Date: 2018-02-23 22:56+0100\n"
+"POT-Creation-Date: 2018-02-23 23:40+0000\n"
+"PO-Revision-Date: 2018-02-24 12:13+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -951,7 +951,7 @@ msgstr "Entwurf konnte nicht gespeichert werden: %s"
 msgid "%s (Copy)"
 msgstr "%s (Kopie)"
 
-#: src/libide/buildsystem/ide-build-manager.c:363
+#: src/libide/buildsystem/ide-build-manager.c:367
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Erstellungskette konnte nicht initialisiert werden: %s"
@@ -2375,6 +2375,12 @@ msgstr "Hoppla! Etwas ist schief gegangen."
 #: src/libide/layout/ide-layout-stack.ui:125
 msgid "There was a failure while trying to perform the operation."
 msgstr "Beim Versuch, den Vorgang auszuführen, ist ein Fehler aufgetreten."
+
+#. translators: %s is replaced with the local systems host name
+#: src/libide/local/ide-local-device.c:78
+#, c-format
+msgid "My Computer (%s)"
+msgstr "Mein Rechner (%s)"
 
 #: src/libide/preferences/ide-preferences-builtin.c:59
 #: src/libide/preferences/ide-preferences-builtin.c:60
