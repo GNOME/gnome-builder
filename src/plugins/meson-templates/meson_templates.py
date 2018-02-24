@@ -187,6 +187,16 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         }
         self.prepare_files(files)
 
+        spdx_license = ''
+        # https://spdx.org/licenses/
+        LICENSE_TO_SPDX = {
+            'agpl_3': 'AGPL-3.0-or-later',
+            'gpl_3': 'GPL-3.0-or-later',
+            'lgpl_2_1': 'LGPL-2.1-or-later',
+            'lgpl_3': 'LGPL-3.0-or-later',
+            'mit_x11': 'MIT',
+        }
+
         if 'license_full' in params:
             license_full_path = params['license_full'].get_string()
             files[license_full_path] = 'COPYING'
@@ -195,6 +205,10 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             license_short_path = params['license_short'].get_string()
             license_base = Gio.resources_lookup_data(license_short_path[11:], 0).get_data().decode()
             self.locator.license = license_base
+            license_name = license_short_path.rsplit('/', 1)[1]
+            spdx_license = LICENSE_TO_SPDX.get(license_name, '')
+
+        scope.get('project_license').assign_string(spdx_license)
 
         if 'path' in params:
             dir_path = params['path'].get_string()
