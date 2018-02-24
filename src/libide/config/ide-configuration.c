@@ -144,7 +144,7 @@ ide_configuration_real_get_device (IdeConfiguration *self)
     {
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
       IdeDeviceManager *device_manager = ide_context_get_device_manager (context);
-      IdeDevice *device = ide_device_manager_get_device (device_manager, priv->device_id);
+      IdeDevice *device = ide_device_manager_get_device_by_id (device_manager, priv->device_id);
 
       if (device != NULL)
         return g_object_ref (device);
@@ -207,7 +207,7 @@ ide_configuration_device_manager_items_changed (IdeConfiguration *self,
   if (ide_object_is_unloading (IDE_OBJECT (self)))
     return;
 
-  device = ide_device_manager_get_device (device_manager, priv->device_id);
+  device = ide_device_manager_get_device_by_id (device_manager, priv->device_id);
   device_ready = !!device;
 
   if (!priv->device_ready && device_ready)

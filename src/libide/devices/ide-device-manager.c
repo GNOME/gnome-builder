@@ -32,8 +32,25 @@
 
 struct _IdeDeviceManager
 {
-  IdeObject         parent_instance;
-  GPtrArray        *devices;
+  IdeObject parent_instance;
+
+  /*
+   * The currently selected device. Various subsystems will track this
+   * to update necessary changes for the device type. For example, the
+   * build pipeline will need to adjust things based on the current
+   * device to ensure we are building for the right architecture.
+   */
+  IdeDevice *device;
+
+  /*
+   * The devices that have been registered by IdeDeviceProvier plugins.
+   * It always has at least one device, the "local" device (IdeLocalDevice).
+   */
+  GPtrArray *devices;
+
+  /*
+   * The providers that are registered in plugins supporting IdeDeviceProvider.
+   */
   PeasExtensionSet *providers;
 };
 
@@ -41,6 +58,14 @@ static void list_model_init_interface (GListModelInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_init_interface))
+
+enum {
+  PROP_0,
+  PROP_DEVICE,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 
 static void
 ide_device_manager_provider_device_added_cb (IdeDeviceManager  *self,
@@ -341,6 +366,8 @@ ide_device_manager_dispose (GObject *object)
 
   if (self->devices->len > 0)
     g_ptr_array_remove_range (self->devices, 0, self->devices->len);
+
+  g_clear_object (&self->device);
   g_clear_object (&self->providers);
 
   G_OBJECT_CLASS (ide_device_manager_parent_class)->dispose (object);
@@ -357,6 +384,44 @@ ide_device_manager_finalize (GObject *object)
 }
 
 static void
+ide_device_manager_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  IdeDeviceManager *self = IDE_DEVICE_MANAGER (object);
+
+  switch (prop_id)
+    {
+    case PROP_DEVICE:
+      g_value_set_object (value, ide_device_manager_get_device (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_device_manager_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
+{
+  IdeDeviceManager *self = IDE_DEVICE_MANAGER (object);
+
+  switch (prop_id)
+    {
+    case PROP_DEVICE:
+      ide_device_manager_set_device (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_device_manager_class_init (IdeDeviceManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -364,6 +429,26 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
   object_class->constructed = ide_device_manager_constructed;
   object_class->dispose = ide_device_manager_dispose;
   object_class->finalize = ide_device_manager_finalize;
+  object_class->get_property = ide_device_manager_get_property;
+  object_class->set_property = ide_device_manager_set_property;
+
+  /**
+   * IdeDeviceManager:device:
+   *
+   * The "device" property indicates the currently selected device by the
+   * user. This is the device we will try to deploy to when running, and
+   * execute the application on.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_DEVICE] =
+    g_param_spec_object ("device",
+                         "Device",
+                         "The currently selected device to build for",
+                         IDE_TYPE_DEVICE,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -381,7 +466,7 @@ ide_device_manager_init (IdeDeviceManager *self)
 }
 
 /**
- * ide_device_manager_get_device:
+ * ide_device_manager_get_device_by_id:
  * @self: an #IdeDeviceManager
  * @device_id: The device identifier string.
  *
@@ -390,8 +475,8 @@ ide_device_manager_init (IdeDeviceManager *self)
  * Returns: (transfer none): An #IdeDevice or %NULL.
  */
 IdeDevice *
-ide_device_manager_get_device (IdeDeviceManager *self,
-                               const gchar      *device_id)
+ide_device_manager_get_device_by_id (IdeDeviceManager *self,
+                                     const gchar      *device_id)
 {
   g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
 
@@ -408,4 +493,61 @@ ide_device_manager_get_device (IdeDeviceManager *self,
     }
 
   return NULL;
+}
+
+/**
+ * ide_device_manager_get_device:
+ * @self: a #IdeDeviceManager
+ *
+ * Gets the currently selected device.
+ * Usually, this is an #IdeLocalDevice.
+ *
+ * Returns: (transfer none) (not nullable): an #IdeDevice
+ *
+ * Since: 3.28
+ */
+IdeDevice *
+ide_device_manager_get_device (IdeDeviceManager *self)
+{
+  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
+  g_return_val_if_fail (self->devices->len > 0, NULL);
+
+  if (self->device == NULL)
+    {
+      for (guint i = 0; i < self->devices->len; i++)
+        {
+          IdeDevice *device = g_ptr_array_index (self->devices, i);
+
+          if (IDE_IS_LOCAL_DEVICE (device))
+            return device;
+        }
+
+      g_assert_not_reached ();
+    }
+
+  return self->device;
+}
+
+/**
+ * ide_device_manager_set_device:
+ * @self: an #IdeDeviceManager
+ * @device: (nullable): an #IdeDevice or %NULL
+ *
+ * Sets the #IdeDeviceManager:device property, which is the currently selected
+ * device. Builder uses this to determine how to build the current project for
+ * the devices architecture and operating system.
+ *
+ * If @device is %NULL, the local device will be used.
+ *
+ * Since: 3.28
+ */
+void
+ide_device_manager_set_device (IdeDeviceManager *self,
+                               IdeDevice        *device)
+{
+  g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
+  g_return_if_fail (!device || IDE_IS_DEVICE (device));
+
+  if (g_set_object (&self->device, device))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
 }
