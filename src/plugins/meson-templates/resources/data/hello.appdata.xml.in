@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
 	<id>{{appid}}.desktop</id>
-	<licence>CC0</licence>
+	<metadata_license>CC0-1.0</metadata_license>
 	<description>
 	</description>
 </component>
