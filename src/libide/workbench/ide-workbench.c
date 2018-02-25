@@ -26,6 +26,7 @@
 #include "application/ide-application.h"
 #include "application/ide-application-actions.h"
 #include "editor/ide-editor-perspective.h"
+#include "devices/ide-device-manager.h"
 #include "layout/ide-layout-pane.h"
 #include "layout/ide-layout-view.h"
 #include "layout/ide-layout.h"
@@ -651,6 +652,7 @@ void
 ide_workbench_set_context (IdeWorkbench *self,
                            IdeContext   *context)
 {
+  IdeDeviceManager *device_manager;
   IdeBuildManager *build_manager;
   IdeRunManager *run_manager;
   IdeProject *project;
@@ -675,6 +677,11 @@ ide_workbench_set_context (IdeWorkbench *self,
   gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "build-manager",
                                   G_ACTION_GROUP (build_manager));
+
+  device_manager = ide_context_get_device_manager (context);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "device-manager",
+                                  G_ACTION_GROUP (device_manager));
 
   run_manager = ide_context_get_run_manager (context);
   gtk_widget_insert_action_group (GTK_WIDGET (self),
