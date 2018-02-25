@@ -54,9 +54,17 @@ struct _IdeDeviceManager
   PeasExtensionSet *providers;
 };
 
-static void list_model_init_interface (GListModelInterface *iface);
+static void list_model_init_interface        (GListModelInterface *iface);
+static void ide_device_manager_action_device (IdeDeviceManager    *self,
+                                              GVariant            *param);
+
+DZL_DEFINE_ACTION_GROUP (IdeDeviceManager, ide_device_manager, {
+  { "device", ide_device_manager_action_device, "s", "'local'" },
+})
 
 G_DEFINE_TYPE_WITH_CODE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
+                                                ide_device_manager_init_action_group)
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_init_interface))
 
 enum {
@@ -101,7 +109,9 @@ ide_device_manager_provider_device_added_cb (IdeDeviceManager  *self,
   menu_item = g_menu_item_new (display_name, NULL);
   g_menu_item_set_attribute (menu_item, "id", "s", device_id);
   g_menu_item_set_attribute (menu_item, "verb-icon-name", "s", icon_name ?: "computer-symbolic");
-  g_menu_item_set_action_and_target (menu_item, "build-manager.device", "s", device_id);
+  g_menu_item_set_action_and_target_value (menu_item,
+                                           "device-manager.device",
+                                           g_variant_new_string (device_id));
   g_menu_append_item (menu, menu_item);
 
   /* Now notify about the new device */
@@ -549,5 +559,34 @@ ide_device_manager_set_device (IdeDeviceManager *self,
   g_return_if_fail (!device || IDE_IS_DEVICE (device));
 
   if (g_set_object (&self->device, device))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
+    {
+      const gchar *device_id = NULL;
+
+      if (device != NULL)
+        device_id = ide_device_get_id (device);
+
+      if (device_id == NULL)
+        device_id = "local";
+
+      ide_device_manager_set_action_state (self, "device", g_variant_new_string (device_id));
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
+    }
+}
+
+static void
+ide_device_manager_action_device (IdeDeviceManager *self,
+                                  GVariant         *param)
+{
+  const gchar *device_id;
+  IdeDevice *device;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  if (!(device_id = g_variant_get_string (param, NULL)))
+    device_id = "local";
+
+  if ((device = ide_device_manager_get_device_by_id (self, device_id)))
+    ide_device_manager_set_device (self, device);
 }
