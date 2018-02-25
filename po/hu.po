@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-23 02:48+0000\n"
-"PO-Revision-Date: 2018-02-24 00:03+0100\n"
+"POT-Creation-Date: 2018-02-23 23:40+0000\n"
+"PO-Revision-Date: 2018-02-25 20:47+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -937,7 +937,7 @@ msgstr "Nem sikerült a piszkozatot menteni: %s"
 msgid "%s (Copy)"
 msgstr "%s (másolat)"
 
-#: src/libide/buildsystem/ide-build-manager.c:363
+#: src/libide/buildsystem/ide-build-manager.c:367
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Az összeállítási folyamat előkészítése meghiúsult: %s"
@@ -2356,6 +2356,12 @@ msgstr "Jaj, valami elromlott"
 #: src/libide/layout/ide-layout-stack.ui:125
 msgid "There was a failure while trying to perform the operation."
 msgstr "Hiba történt a művelet elvégzése közben."
+
+#. translators: %s is replaced with the local systems host name
+#: src/libide/local/ide-local-device.c:78
+#, c-format
+msgid "My Computer (%s)"
+msgstr "Sajátgép (%s)"
 
 #: src/libide/preferences/ide-preferences-builtin.c:59
 #: src/libide/preferences/ide-preferences-builtin.c:60
