@@ -565,6 +565,12 @@ gbp_flatpak_runtime_get_system_include_dirs (IdeRuntime *runtime)
   return g_strdupv ((gchar **)include_dirs);
 }
 
+static gchar *
+gbp_flatpak_runtime_real_get_arch (IdeRuntime *runtime)
+{
+  return g_strdup (GBP_FLATPAK_RUNTIME (runtime)->arch);
+}
+
 static void
 gbp_flatpak_runtime_get_property (GObject    *object,
                                   guint       prop_id,
@@ -667,6 +673,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
   runtime_class->get_system_include_dirs = gbp_flatpak_runtime_get_system_include_dirs;
+  runtime_class->get_arch = gbp_flatpak_runtime_real_get_arch;
 
   properties [PROP_ARCH] =
     g_param_spec_string ("arch",
