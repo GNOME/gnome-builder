@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-23 23:40+0000\n"
-"PO-Revision-Date: 2018-02-24 12:13+0100\n"
+"POT-Creation-Date: 2018-02-26 07:50+0000\n"
+"PO-Revision-Date: 2018-02-26 18:49+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -956,66 +956,70 @@ msgstr "%s (Kopie)"
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Erstellungskette konnte nicht initialisiert werden: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:717
+#: src/libide/buildsystem/ide-build-pipeline.c:723
 msgid "The build pipeline is in a failed state"
 msgstr "Die Erstellungskette ist in einem fehlerhaften Zustand"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2525
+#: src/libide/buildsystem/ide-build-pipeline.c:733
+msgid "The build configuration has errors"
+msgstr "Die Erstellungskonfiguration ist fehlerhaft"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2543
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Die Erstellung eines Pseudo-Terminals ist fehlgeschlagen. Terminal-"
 "Funktionsmerkmale werden nur eingeschränkt verfügbar sein."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2725
+#: src/libide/buildsystem/ide-build-pipeline.c:2743
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2729
-#: src/libide/buildsystem/ide-build-pipeline.c:2782
-#: src/libide/workbench/ide-omni-bar.c:461
+#: src/libide/buildsystem/ide-build-pipeline.c:2747
+#: src/libide/buildsystem/ide-build-pipeline.c:2800
+#: src/libide/workbench/ide-omni-bar.c:467
 msgid "Failed"
 msgstr "Gescheitert"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2731
-#: src/libide/buildsystem/ide-build-pipeline.c:2790
+#: src/libide/buildsystem/ide-build-pipeline.c:2749
+#: src/libide/buildsystem/ide-build-pipeline.c:2808
 msgid "Ready"
 msgstr "Bereit"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2746
+#: src/libide/buildsystem/ide-build-pipeline.c:2764
 msgid "Downloading…"
 msgstr "Wird heruntergeladen …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2750
+#: src/libide/buildsystem/ide-build-pipeline.c:2768
 msgid "Building dependencies…"
 msgstr "Abhängigkeiten werden erstellt …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2754
+#: src/libide/buildsystem/ide-build-pipeline.c:2772
 msgid "Bootstrapping…"
 msgstr "Bootstrapping …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2758
+#: src/libide/buildsystem/ide-build-pipeline.c:2776
 msgid "Configuring…"
 msgstr "Konfiguration läuft …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2762
+#: src/libide/buildsystem/ide-build-pipeline.c:2780
 msgid "Building…"
 msgstr "Erstellung …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2766
+#: src/libide/buildsystem/ide-build-pipeline.c:2784
 msgid "Installing…"
 msgstr "Installieren …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2770
+#: src/libide/buildsystem/ide-build-pipeline.c:2788
 msgid "Exporting…"
 msgstr "Wird exportiert …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2774
-#: src/libide/buildsystem/ide-build-pipeline.c:2778
-#: src/libide/workbench/ide-omni-bar.c:479
+#: src/libide/buildsystem/ide-build-pipeline.c:2792
+#: src/libide/buildsystem/ide-build-pipeline.c:2796
+#: src/libide/workbench/ide-omni-bar.c:485
 msgid "Success"
 msgstr "Erfolg"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2786
+#: src/libide/buildsystem/ide-build-pipeline.c:2804
 msgid "Preparing…"
 msgstr "Wird vorbereitet …"
 
@@ -1123,7 +1127,7 @@ msgstr "Erstellungsprotokoll speichern"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:464
+#: src/libide/workbench/ide-omni-bar.ui:477
 msgid "Warnings"
 msgstr "Warnungen"
 
@@ -1131,7 +1135,7 @@ msgstr "Warnungen"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:436
+#: src/libide/workbench/ide-omni-bar.ui:449
 msgid "Errors"
 msgstr "Fehler"
 
@@ -3084,7 +3088,7 @@ msgstr "»%s« konnte nicht als absolute Adresse ausgewertet werden"
 msgid "URI “%s” has no host component"
 msgstr "Adresse »%s« hat keine Rechner-Komponente"
 
-#: src/libide/workbench/ide-omni-bar.c:441
+#: src/libide/workbench/ide-omni-bar.c:447
 msgid "Building"
 msgstr "Erstellung läuft"
 
@@ -3104,45 +3108,49 @@ msgstr "Zweig"
 msgid "Build Profile"
 msgstr "Erstellungsprofil"
 
-#: src/libide/workbench/ide-omni-bar.ui:339
+#: src/libide/workbench/ide-omni-bar.ui:319
+msgid "There is a problem with the current build configuration."
+msgstr "Es gibt ein Problem mit der derzeitigen Erstellungskonfiguration."
+
+#: src/libide/workbench/ide-omni-bar.ui:352
 msgid "Build status"
 msgstr "Erstellungsstatus"
 
-#: src/libide/workbench/ide-omni-bar.ui:360
+#: src/libide/workbench/ide-omni-bar.ui:373
 msgid "View build console contents"
 msgstr "Inhalt der Erstellungskonsole anzeigen"
 
-#: src/libide/workbench/ide-omni-bar.ui:382
+#: src/libide/workbench/ide-omni-bar.ui:395
 msgid "Last build"
 msgstr "Letzte Erstellung"
 
-#: src/libide/workbench/ide-omni-bar.ui:409
+#: src/libide/workbench/ide-omni-bar.ui:422
 msgid "Build result"
 msgstr "Erstellungsergebnis"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:502
+#: src/libide/workbench/ide-omni-bar.ui:515
 msgid "true"
 msgstr "true"
 
-#: src/libide/workbench/ide-omni-bar.ui:507
+#: src/libide/workbench/ide-omni-bar.ui:520
 msgctxt "button"
 msgid "Build"
 msgstr "Erstellen"
 
-#: src/libide/workbench/ide-omni-bar.ui:514
+#: src/libide/workbench/ide-omni-bar.ui:527
 msgid "Rebuild"
 msgstr "Neu erstellen"
 
-#: src/libide/workbench/ide-omni-bar.ui:521
+#: src/libide/workbench/ide-omni-bar.ui:534
 msgid "Clean"
 msgstr "Aufräumen"
 
-#: src/libide/workbench/ide-omni-bar.ui:528
+#: src/libide/workbench/ide-omni-bar.ui:541
 msgid "Export Bundle"
 msgstr "Bundle exportieren"
 
-#: src/libide/workbench/ide-omni-bar.ui:553 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:566 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Projekt erstellen"
 
@@ -4140,12 +4148,12 @@ msgstr[1] "%u weitere Laufzeiten zeigen"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak-Laufzeitumgebungen"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:765
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:772
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:767
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:774
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -4349,27 +4357,27 @@ msgstr ""
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson-templates/meson_templates.py:234
+#: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
 msgstr "GNOME-Anwendung"
 
-#: src/plugins/meson-templates/meson_templates.py:236
+#: src/plugins/meson-templates/meson_templates.py:252
 msgid "Create a new GNOME application"
 msgstr "Eine neue GNOME-Anwendung erstellen"
 
-#: src/plugins/meson-templates/meson_templates.py:303
+#: src/plugins/meson-templates/meson_templates.py:319
 msgid "Shared Library"
 msgstr "Gemeinsam verwendete Bibliothek"
 
-#: src/plugins/meson-templates/meson_templates.py:305
+#: src/plugins/meson-templates/meson_templates.py:321
 msgid "Create a new project with a shared library"
 msgstr "Ein neues Projekt mit einer gemeinsam verwendeten Bibliothek erstellen"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:337
 msgid "Empty Project"
 msgstr "Leeres Projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:323
+#: src/plugins/meson-templates/meson_templates.py:339
 msgid "Create a new empty project"
 msgstr "Ein neues, leeres Projekt anlegen"
 
