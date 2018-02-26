@@ -1074,10 +1074,10 @@ ide_build_pipeline_notify_ready (IdeBuildPipeline *self,
 
   if (ide_configuration_get_ready (configuration))
     {
-      ide_build_pipeline_load (self);
       g_signal_handlers_disconnect_by_func (configuration,
                                             G_CALLBACK (ide_build_pipeline_notify_ready),
                                             self);
+      ide_build_pipeline_load (self);
     }
   else
     g_debug ("Configuration not yet ready, delaying pipeline setup");
