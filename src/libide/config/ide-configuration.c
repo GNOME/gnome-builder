@@ -232,10 +232,11 @@ ide_configuration_runtime_manager_items_changed (IdeConfiguration  *self,
   gboolean runtime_ready;
 
   g_assert (IDE_IS_CONFIGURATION (self));
-  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
 
   if (ide_object_is_unloading (IDE_OBJECT (self)))
     return;
+
+  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
 
   runtime = ide_runtime_manager_get_runtime (runtime_manager, priv->runtime_id);
   runtime_ready = !!runtime;
