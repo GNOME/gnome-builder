@@ -54,5 +54,7 @@ IDE_AVAILABLE_IN_ALL
 gboolean          ide_configuration_manager_save_finish       (IdeConfigurationManager  *self,
                                                                GAsyncResult             *result,
                                                                GError                  **error);
+IDE_AVAILABLE_IN_3_28
+gboolean          ide_configuration_manager_get_ready         (IdeConfigurationManager  *self);
 
 G_END_DECLS

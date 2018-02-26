@@ -66,6 +66,7 @@ enum {
   PROP_0,
   PROP_CURRENT,
   PROP_CURRENT_DISPLAY_NAME,
+  PROP_READY,
   LAST_PROP
 };
 
@@ -255,14 +256,30 @@ ide_configuration_manager_notify_display_name (IdeConfigurationManager *self,
 }
 
 static void
+ide_configuration_manager_notify_ready (IdeConfigurationManager *self,
+                                        GParamSpec              *pspec,
+                                        IdeConfiguration        *configuration)
+{
+  g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_READY]);
+}
+
+static void
 ide_configuration_manager_dispose (GObject *object)
 {
   IdeConfigurationManager *self = (IdeConfigurationManager *)object;
 
   if (self->current != NULL)
-    g_signal_handlers_disconnect_by_func (self->current,
-                                          G_CALLBACK (ide_configuration_manager_notify_display_name),
-                                          self);
+    {
+      g_signal_handlers_disconnect_by_func (self->current,
+                                            G_CALLBACK (ide_configuration_manager_notify_display_name),
+                                            self);
+      g_signal_handlers_disconnect_by_func (self->current,
+                                            G_CALLBACK (ide_configuration_manager_notify_ready),
+                                            self);
+    }
 
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->project_settings);
@@ -297,10 +314,12 @@ ide_configuration_manager_get_property (GObject    *object,
       break;
 
     case PROP_CURRENT_DISPLAY_NAME:
-      {
-        g_value_set_string (value, ide_configuration_manager_get_display_name (self));
-        break;
-      }
+      g_value_set_string (value, ide_configuration_manager_get_display_name (self));
+      break;
+
+    case PROP_READY:
+      g_value_set_boolean (value, ide_configuration_manager_get_ready (self));
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -349,6 +368,13 @@ ide_configuration_manager_class_init (IdeConfigurationManagerClass *klass)
                          "The display name of the current configuration",
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_READY] =
+    g_param_spec_boolean ("ready",
+                          "Ready",
+                          "If the current configuration is ready",
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
@@ -823,15 +849,24 @@ ide_configuration_manager_set_current (IdeConfigurationManager *self,
           g_signal_handlers_disconnect_by_func (self->current,
                                                 G_CALLBACK (ide_configuration_manager_notify_display_name),
                                                 self);
+          g_signal_handlers_disconnect_by_func (self->current,
+                                                G_CALLBACK (ide_configuration_manager_notify_ready),
+                                                self);
           g_clear_object (&self->current);
         }
 
       if (current != NULL)
         {
           self->current = g_object_ref (current);
+
           g_signal_connect_object (current,
                                    "notify::display-name",
                                    G_CALLBACK (ide_configuration_manager_notify_display_name),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+          g_signal_connect_object (current,
+                                   "notify::ready",
+                                   G_CALLBACK (ide_configuration_manager_notify_ready),
                                    self,
                                    G_CONNECT_SWAPPED);
 
@@ -844,6 +879,7 @@ ide_configuration_manager_set_current (IdeConfigurationManager *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_DISPLAY_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_READY]);
 
       g_signal_emit (self, signals [INVALIDATE], 0);
     }
@@ -941,4 +977,32 @@ ide_configuration_manager_delete (IdeConfigurationManager *self,
           break;
         }
     }
+}
+
+/**
+ * ide_configuration_manager_get_ready:
+ * @self: an #IdeConfigurationManager
+ *
+ * This returns %TRUE if the current configuration is ready for usage.
+ *
+ * This is equivalent to checking the ready property of the current
+ * configuration. It allows consumers to not need to track changes to
+ * the current configuration.
+ *
+ * Returns: %TRUE if the current configuration is ready for usage;
+ *   otherwise %FALSE.
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_configuration_manager_get_ready (IdeConfigurationManager *self)
+{
+  IdeConfiguration *config;
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION_MANAGER (self), FALSE);
+
+  if ((config = ide_configuration_manager_get_current (self)))
+    return ide_configuration_get_ready (config);
+
+  return FALSE;
 }
