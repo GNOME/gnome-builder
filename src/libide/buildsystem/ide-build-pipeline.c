@@ -253,6 +253,12 @@ struct _IdeBuildPipeline
    * ensure that the manager has a valid object instance for the pipeline).
    */
   guint broken : 1;
+
+  /*
+   * This is set to TRUE when we attempt to load plugins (after the config
+   * has been marked as ready).
+   */
+  guint loaded : 1;
 };
 
 typedef enum
@@ -718,6 +724,16 @@ ide_build_pipeline_check_ready (IdeBuildPipeline *self,
       return FALSE;
     }
 
+  if (self->loaded == FALSE)
+    {
+      /* configuration:ready is FALSE */
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_INITIALIZED,
+                               _("The build configuration has errors"));
+      return FALSE;
+    }
+
   return TRUE;
 }
 
@@ -988,6 +1004,8 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (self->addins == NULL);
+
+  self->loaded = TRUE;
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
