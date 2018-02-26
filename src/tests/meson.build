@@ -24,6 +24,7 @@ ide_test_env = [
 ]
 ide_test_cflags = [
   '-DTEST_DATA_DIR="@0@/data/"'.format(meson.current_source_dir()),
+  '-I' + join_paths(meson.source_root(), 'src'),
 ]
 
 ide_test_deps = [
@@ -40,16 +41,18 @@ ide_compile_commands = executable('test-ide-compile-commands', 'test-ide-compile
 test('test-ide-compile-commands', ide_compile_commands, env: ide_test_env)
 
 
-ide_context = executable('test-ide-context',
-  'test-ide-context.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
+ide_context = executable('test-ide-context', 'test-ide-context.c',
+        c_args: ide_test_cflags,
+  dependencies: [ide_test_deps]
 )
-test('test-ide-context', ide_context,
-  env: ide_test_env,
+test('test-ide-context', ide_context, env: ide_test_env)
+
+
+ide_runtime = executable('test-ide-runtime', 'test-ide-runtime.c',
+        c_args: ide_test_cflags,
+  dependencies: [ide_test_deps]
 )
+test('test-ide-runtime', ide_runtime, env: ide_test_env)
 
 
 ide_buffer_manager = executable('test-ide-buffer-manager',
