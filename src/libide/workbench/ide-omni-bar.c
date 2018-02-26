@@ -127,6 +127,7 @@ struct _IdeOmniBar
   GtkShortcutsShortcut *build_button_shortcut;
   GtkButton            *cancel_button;
   GtkLabel             *config_name_label;
+  GtkLabel             *config_ready_label;
   GtkStack             *message_stack;
   DzlListBox           *pausables;
   GtkPopover           *popover;
@@ -251,7 +252,12 @@ ide_omni_bar_context_set (GtkWidget  *widget,
   dzl_list_box_set_model (self->pausables, pausables);
 
   if (config_manager != NULL)
-    ide_omni_bar__config_manager__notify_current (self, NULL, config_manager);
+    {
+      ide_omni_bar__config_manager__notify_current (self, NULL, config_manager);
+      g_object_bind_property (config_manager, "ready",
+                              self->config_ready_label, "visible",
+                              G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+    }
 
   IDE_EXIT;
 }
@@ -537,6 +543,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_ready_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, event_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, pausables);
