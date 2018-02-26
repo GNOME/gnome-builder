@@ -52,6 +52,6 @@ void                      gbp_sysroot_manager_set_target_pkg_config_path  (GbpSy
                                                                            const gchar       *path);
 gchar                    *gbp_sysroot_manager_get_target_pkg_config_path  (GbpSysrootManager *self,
                                                                            const gchar       *target);
-gchar                    **gbp_sysroot_manager_list                       (GbpSysrootManager *self);
+gchar                   **gbp_sysroot_manager_list                        (GbpSysrootManager *self);
 
 G_END_DECLS
