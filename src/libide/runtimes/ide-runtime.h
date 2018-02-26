@@ -56,20 +56,9 @@ struct _IdeRuntimeClass
   GFile                  *(*translate_file)           (IdeRuntime           *self,
                                                        GFile                *file);
   gchar                 **(*get_system_include_dirs)  (IdeRuntime           *self);
+  gchar                  *(*get_arch)                 (IdeRuntime           *self);
 
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
-  gpointer _reserved9;
-  gpointer _reserved10;
-  gpointer _reserved11;
-  gpointer _reserved12;
-  gpointer _reserved13;
-  gpointer _reserved14;
-  gpointer _reserved15;
-  gpointer _reserved16;
+  gpointer _reserved[12];
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -106,5 +95,7 @@ GFile                 *ide_runtime_translate_file           (IdeRuntime         
                                                              GFile                *file);
 IDE_AVAILABLE_IN_3_28
 gchar                **ide_runtime_get_system_include_dirs  (IdeRuntime           *self);
+IDE_AVAILABLE_IN_3_28
+gchar                 *ide_runtime_get_arch                 (IdeRuntime           *self);
 
 G_END_DECLS

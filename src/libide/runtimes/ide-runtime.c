@@ -30,6 +30,7 @@
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
 #include "util/ide-flatpak.h"
+#include "util/ide-posix.h"
 
 typedef struct
 {
@@ -547,4 +548,34 @@ ide_runtime_get_system_include_dirs (IdeRuntime *self)
     return IDE_RUNTIME_GET_CLASS (self)->get_system_include_dirs (self);
 
   return g_strdupv ((gchar **)basic);
+}
+
+/**
+ * ide_runtime_get_arch:
+ * @self: a #IdeRuntime
+ *
+ * Get's the architecture of the runtime.
+ *
+ * This can be used to ensure we're compiling for the right architecture
+ * given the current device.
+ *
+ * Returns: (transfer full) (not nullable): the name of the architecture
+ *   the runtime will build for.
+ *
+ * Since: 3.28
+ */
+gchar *
+ide_runtime_get_arch (IdeRuntime *self)
+{
+  gchar *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
+
+  if (IDE_RUNTIME_GET_CLASS (self)->get_arch)
+    ret = IDE_RUNTIME_GET_CLASS (self)->get_arch (self);
+
+  if (ret == NULL)
+    ret = ide_get_system_arch ();
+
+  return ret;
 }
