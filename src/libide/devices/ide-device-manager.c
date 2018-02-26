@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-device-manager"
+
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
