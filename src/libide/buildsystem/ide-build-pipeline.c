@@ -1079,6 +1079,8 @@ ide_build_pipeline_notify_ready (IdeBuildPipeline *self,
                                             G_CALLBACK (ide_build_pipeline_notify_ready),
                                             self);
     }
+  else
+    g_debug ("Configuration not yet ready, delaying pipeline setup");
 
   IDE_EXIT;
 }
