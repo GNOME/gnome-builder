@@ -77,6 +77,7 @@ G_BEGIN_DECLS
 #include "debugger/ide-debugger-types.h"
 #include "debugger/ide-debugger-variable.h"
 #include "debugger/ide-debugger.h"
+#include "devices/ide-device-info.h"
 #include "devices/ide-device-manager.h"
 #include "devices/ide-device-provider.h"
 #include "devices/ide-device.h"

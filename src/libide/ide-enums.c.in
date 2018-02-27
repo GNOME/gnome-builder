@@ -9,6 +9,7 @@
 #include "buildsystem/ide-build-pipeline.h"
 #include "config/ide-configuration.h"
 #include "devices/ide-device.h"
+#include "devices/ide-device-info.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "doap/ide-doap.h"
 #include "files/ide-indent-style.h"
@@ -56,3 +57,4 @@ GType
 /*** BEGIN file-tail ***/
 
 /*** END file-tail ***/
+

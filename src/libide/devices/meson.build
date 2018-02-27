@@ -1,10 +1,12 @@
 devices_headers = [
+  'ide-device-info.h',
   'ide-device-manager.h',
   'ide-device-provider.h',
   'ide-device.h',
 ]
 
 devices_sources = [
+  'ide-device-info.c',
   'ide-device-manager.c',
   'ide-device-provider.c',
   'ide-device.c',
@@ -12,6 +14,7 @@ devices_sources = [
 
 devices_enums = [
   'ide-device.h',
+  'ide-device-info.h',
 ]
 
 libide_enum_headers += files(devices_enums)
