@@ -31,6 +31,8 @@
 #include "buildsystem/ide-build-private.h"
 #include "config/ide-configuration-manager.h"
 #include "config/ide-configuration.h"
+#include "devices/ide-device.h"
+#include "devices/ide-device-manager.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "runtimes/ide-runtime.h"
@@ -396,8 +398,10 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   IdeConfigurationManager *config_manager;
   g_autoptr(GTask) task = NULL;
   IdeRuntimeManager *runtime_manager;
+  IdeDeviceManager *device_manager;
   IdeConfiguration *config;
   IdeContext *context;
+  IdeDevice *device;
 
   IDE_ENTRY;
 
@@ -439,9 +443,11 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
     IDE_EXIT;
 
   config_manager = ide_context_get_configuration_manager (context);
-  config = ide_configuration_manager_get_current (config_manager);
-
+  device_manager = ide_context_get_device_manager (context);
   runtime_manager = ide_context_get_runtime_manager (context);
+
+  config = ide_configuration_manager_get_current (config_manager);
+  device = ide_device_manager_get_device (device_manager);
 
   /*
    * We want to set the pipeline before connecting things using the GInitable
@@ -455,6 +461,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   self->pipeline = g_object_new (IDE_TYPE_BUILD_PIPELINE,
                                  "context", context,
                                  "configuration", config,
+                                 "device", device,
                                  NULL);
   dzl_signal_group_set_target (self->pipeline_signals, self->pipeline);
 

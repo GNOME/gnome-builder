@@ -39,6 +39,7 @@
 #include "buildsystem/ide-build-stage-private.h"
 #include "buildsystem/ide-build-system.h"
 #include "buildsystem/ide-build-utils.h"
+#include "devices/ide-device.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
@@ -131,6 +132,14 @@ struct _IdeBuildPipeline
    * with the UI process for accesses.
    */
   IdeConfiguration *configuration;
+
+  /*
+   * The device we are building for. This allows components to setup
+   * cross-compiling if necessary based on the architecture and system of
+   * the device in question. It also allows for determining a deployment
+   * strategy to get the compiled bits onto the device.
+   */
+  IdeDevice *device;
 
   /*
    * The IdeBuildLog is a private implementation that we use to
@@ -313,6 +322,7 @@ enum {
   PROP_0,
   PROP_BUSY,
   PROP_CONFIGURATION,
+  PROP_DEVICE,
   PROP_MESSAGE,
   PROP_PHASE,
   PROP_PTY,
@@ -1097,6 +1107,7 @@ ide_build_pipeline_finalize (GObject *object)
 
   g_clear_object (&self->cancellable);
   g_clear_object (&self->log);
+  g_clear_object (&self->device);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
   g_clear_pointer (&self->srcdir, g_free);
@@ -1270,6 +1281,10 @@ ide_build_pipeline_set_property (GObject      *object,
       self->configuration = g_value_dup_object (value);
       break;
 
+    case PROP_DEVICE:
+      self->device = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1310,6 +1325,28 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                          IDE_TYPE_CONFIGURATION,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * IdeBuildPipeline:device:
+   *
+   * The "device" property is the device we are compiling for.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_DEVICE] =
+    g_param_spec_object ("device",
+                         "Device",
+                         "The device we are building for",
+                         IDE_TYPE_DEVICE,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * IdeBuildPipeline:message:
+   *
+   * The "message" property is descriptive text about what the the
+   * pipeline is doing or it's readiness status.
+   *
+   * Since: 3.28
+   */
   properties [PROP_MESSAGE] =
     g_param_spec_string ("message",
                          "Message",
