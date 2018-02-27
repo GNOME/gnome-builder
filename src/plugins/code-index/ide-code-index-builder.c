@@ -32,7 +32,7 @@ struct _IdeCodeIndexBuilder
   IdeCodeIndexIndex   *index;
 };
 
-#define ADD_ENTRIES_CHUNK_SIZE  10
+#define ADD_ENTRIES_CHUNK_SIZE  5
 #define BUILD_DATA_MAGIC        0x778124
 #define IS_BUILD_DATA(d)        ((d)->magic == BUILD_DATA_MAGIC)
 #define GET_CHANGES_MAGIC       0x912828
