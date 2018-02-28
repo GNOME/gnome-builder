@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-20 22:23+0000\n"
-"PO-Revision-Date: 2018-02-20 21:15-0300\n"
-"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
+"POT-Creation-Date: 2018-02-26 07:50+0000\n"
+"PO-Revision-Date: 2018-02-28 09:52-0200\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Virtaal 1.0.0-beta1\n"
 "X-Project-Style: gnome\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
@@ -943,71 +943,76 @@ msgstr "Falha ao salvar rascunho: %s"
 msgid "%s (Copy)"
 msgstr "%s (cópia)"
 
-#: src/libide/buildsystem/ide-build-manager.c:363
+#: src/libide/buildsystem/ide-build-manager.c:367
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Falha ao inicializar pipeline de compilação: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:717
+#: src/libide/buildsystem/ide-build-pipeline.c:723
 msgid "The build pipeline is in a failed state"
 msgstr "O pipeline de compilação está em um estado de falha"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2525
+#: src/libide/buildsystem/ide-build-pipeline.c:733
+#| msgid "Edit build configuration"
+msgid "The build configuration has errors"
+msgstr "A configuração de compilação possui erros"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2543
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Criação de pseudoterminal falhou. Os recursos de terminal serão limitados."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2725
+#: src/libide/buildsystem/ide-build-pipeline.c:2743
 msgid "Cleaning…"
 msgstr "Limpando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2729
-#: src/libide/buildsystem/ide-build-pipeline.c:2782
-#: src/libide/workbench/ide-omni-bar.c:461
+#: src/libide/buildsystem/ide-build-pipeline.c:2747
+#: src/libide/buildsystem/ide-build-pipeline.c:2800
+#: src/libide/workbench/ide-omni-bar.c:467
 msgid "Failed"
 msgstr "Falhou"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2731
-#: src/libide/buildsystem/ide-build-pipeline.c:2790
+#: src/libide/buildsystem/ide-build-pipeline.c:2749
+#: src/libide/buildsystem/ide-build-pipeline.c:2808
 msgid "Ready"
 msgstr "Pronto"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2746
+#: src/libide/buildsystem/ide-build-pipeline.c:2764
 msgid "Downloading…"
 msgstr "Baixando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2750
+#: src/libide/buildsystem/ide-build-pipeline.c:2768
 msgid "Building dependencies…"
 msgstr "Preferências de compilação…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2754
+#: src/libide/buildsystem/ide-build-pipeline.c:2772
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2758
+#: src/libide/buildsystem/ide-build-pipeline.c:2776
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2762
+#: src/libide/buildsystem/ide-build-pipeline.c:2780
 msgid "Building…"
 msgstr "Compilando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2766
+#: src/libide/buildsystem/ide-build-pipeline.c:2784
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2770
+#: src/libide/buildsystem/ide-build-pipeline.c:2788
 msgid "Exporting…"
 msgstr "Exportando…"
 
 # A resposta por ser Failed ou Successful -- Rafael
-#: src/libide/buildsystem/ide-build-pipeline.c:2774
-#: src/libide/buildsystem/ide-build-pipeline.c:2778
-#: src/libide/workbench/ide-omni-bar.c:479
+#: src/libide/buildsystem/ide-build-pipeline.c:2792
+#: src/libide/buildsystem/ide-build-pipeline.c:2796
+#: src/libide/workbench/ide-omni-bar.c:485
 msgid "Success"
 msgstr "Sucesso"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2786
+#: src/libide/buildsystem/ide-build-pipeline.c:2804
 msgid "Preparing…"
 msgstr "Preparando…"
 
@@ -1114,7 +1119,7 @@ msgstr "Salvar log de compilação"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:464
+#: src/libide/workbench/ide-omni-bar.ui:477
 msgid "Warnings"
 msgstr "Avisos"
 
@@ -1122,7 +1127,7 @@ msgstr "Avisos"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:436
+#: src/libide/workbench/ide-omni-bar.ui:449
 msgid "Errors"
 msgstr "Erros"
 
@@ -1316,11 +1321,6 @@ msgstr "Binário"
 #, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Um depurador adequado não pôde ser encontrado."
-
-#: src/libide/devices/ide-device-manager.c:148
-#, c-format
-msgid "The device “%s” could not be found."
-msgstr "O dispositivo “%s” não pôde ser encontrado."
 
 #: src/libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
@@ -2298,7 +2298,7 @@ msgid "Find text within terminal"
 msgstr "Terminal sem título"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:891
+#: src/libide/langserv/ide-langserv-client.c:894
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falha ao inicializar o servidor de linguagem: %s"
@@ -2366,6 +2366,12 @@ msgstr "Oh, não. Alguma coisa deu errado"
 #: src/libide/layout/ide-layout-stack.ui:125
 msgid "There was a failure while trying to perform the operation."
 msgstr "Houve uma falha ao tentar realizar a operação."
+
+#. translators: %s is replaced with the local systems host name
+#: src/libide/local/ide-local-device.c:78
+#, c-format
+msgid "My Computer (%s)"
+msgstr "Meu computador (%s)"
 
 #: src/libide/preferences/ide-preferences-builtin.c:59
 #: src/libide/preferences/ide-preferences-builtin.c:60
@@ -3057,7 +3063,7 @@ msgstr "Não foi possível analisar “%s” como URI absoluta"
 msgid "URI “%s” has no host component"
 msgstr "URI “%s” não possui um componente máquina"
 
-#: src/libide/workbench/ide-omni-bar.c:441
+#: src/libide/workbench/ide-omni-bar.c:447
 msgid "Building"
 msgstr "Compilando"
 
@@ -3077,46 +3083,51 @@ msgstr "Ramo"
 msgid "Build Profile"
 msgstr "Perfil de compilação"
 
-#: src/libide/workbench/ide-omni-bar.ui:339
+#: src/libide/workbench/ide-omni-bar.ui:319
+#| msgid "The name of the build configuration"
+msgid "There is a problem with the current build configuration."
+msgstr "Há um problema com a configuração de compilação atual."
+
+#: src/libide/workbench/ide-omni-bar.ui:352
 msgid "Build status"
 msgstr "Saída da compilação"
 
-#: src/libide/workbench/ide-omni-bar.ui:360
+#: src/libide/workbench/ide-omni-bar.ui:373
 msgid "View build console contents"
 msgstr "Ver o conteúdo do console de compilação"
 
-#: src/libide/workbench/ide-omni-bar.ui:382
+#: src/libide/workbench/ide-omni-bar.ui:395
 msgid "Last build"
 msgstr "Última compilação"
 
 # Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#: src/libide/workbench/ide-omni-bar.ui:409
+#: src/libide/workbench/ide-omni-bar.ui:422
 msgid "Build result"
 msgstr "Resultado da compilação"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:502
+#: src/libide/workbench/ide-omni-bar.ui:515
 msgid "true"
 msgstr "true"
 
-#: src/libide/workbench/ide-omni-bar.ui:507
+#: src/libide/workbench/ide-omni-bar.ui:520
 msgctxt "button"
 msgid "Build"
 msgstr "Compilar"
 
-#: src/libide/workbench/ide-omni-bar.ui:514
+#: src/libide/workbench/ide-omni-bar.ui:527
 msgid "Rebuild"
 msgstr "Recompilar"
 
-#: src/libide/workbench/ide-omni-bar.ui:521
+#: src/libide/workbench/ide-omni-bar.ui:534
 msgid "Clean"
 msgstr "Limpar"
 
-#: src/libide/workbench/ide-omni-bar.ui:528
+#: src/libide/workbench/ide-omni-bar.ui:541
 msgid "Export Bundle"
 msgstr "Exportar pacote"
 
-#: src/libide/workbench/ide-omni-bar.ui:553 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:566 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Compila o projeto"
 
@@ -4093,12 +4104,12 @@ msgstr[1] "Mostrar mais %u runtimes"
 msgid "Flatpak Runtimes"
 msgstr "Runtimes do Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:765
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:772
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:767
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:774
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -4296,27 +4307,27 @@ msgstr "Criar um novo projeto vazio usando um Makefile simples"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson-templates/meson_templates.py:234
+#: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
 msgstr "Aplicativo do GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:236
+#: src/plugins/meson-templates/meson_templates.py:252
 msgid "Create a new GNOME application"
 msgstr "Criar um novo aplicativo do GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:303
+#: src/plugins/meson-templates/meson_templates.py:319
 msgid "Shared Library"
 msgstr "Biblioteca compartilhada"
 
-#: src/plugins/meson-templates/meson_templates.py:305
+#: src/plugins/meson-templates/meson_templates.py:321
 msgid "Create a new project with a shared library"
 msgstr "Criar um novo projeto com uma biblioteca compartilhada"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:337
 msgid "Empty Project"
 msgstr "Projeto vazio"
 
-#: src/plugins/meson-templates/meson_templates.py:323
+#: src/plugins/meson-templates/meson_templates.py:339
 msgid "Create a new empty project"
 msgstr "Criar um novo projeto vazio"
 
@@ -4324,11 +4335,11 @@ msgstr "Criar um novo projeto vazio"
 msgid "Messages"
 msgstr "Mensagens"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:97
+#: src/plugins/mingw/ide-mingw-device-provider.c:57
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bit"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:111
+#: src/plugins/mingw/ide-mingw-device-provider.c:64
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
@@ -4913,6 +4924,9 @@ msgstr "Falha ao criar a árvore XML."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer carregado, mas não no gerenciador de buffer."
 
+#~ msgid "The device “%s” could not be found."
+#~ msgstr "O dispositivo “%s” não pôde ser encontrado."
+
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle right panel"
 #~ msgstr "Ativa o painel direito"
@@ -5071,9 +5085,6 @@ msgstr "Buffer carregado, mas não no gerenciador de buffer."
 
 #~ msgid "missing"
 #~ msgstr "faltando"
-
-#~ msgid "Edit build configuration"
-#~ msgstr "Editar configuração de compilação"
 
 #~| msgid "Restore cursor position"
 #~ msgid "Execute from the current cursor position"
