@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-11 18:23+0000\n"
-"PO-Revision-Date: 2018-02-12 11:12+0700\n"
+"POT-Creation-Date: 2018-02-27 06:41+0000\n"
+"PO-Revision-Date: 2018-02-28 17:00+0700\n"
 "Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -452,7 +452,7 @@ msgstr "Tinggi panel bawah dalam piksel."
 #: src/libide/application/ide-application.c:684
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
-#: src/libide/workbench/ide-workbench.c:645
+#: src/libide/workbench/ide-workbench.c:646
 msgid "Builder"
 msgstr "Builder"
 
@@ -623,6 +623,7 @@ msgid "%s: This file format is not supported\n"
 msgstr "%s: Format berkas ini tidak didukung\n"
 
 #: src/gstyle/gstyle-palette.c:822
+#, c-format
 msgid "failed to parse\n"
 msgstr "gagal mengurai\n"
 
@@ -888,7 +889,7 @@ msgstr "Tampilkan jendela pintasan"
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Gagal menyiapkan pemantau untuk perubahan di belakang: %s"
 
-#: src/libide/buffers/ide-buffer.c:2843
+#: src/libide/buffers/ide-buffer.c:2844
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
@@ -925,69 +926,73 @@ msgstr "Gagal menyimpan draf: %s"
 msgid "%s (Copy)"
 msgstr "%s (Salinan)"
 
-#: src/libide/buildsystem/ide-build-manager.c:360
+#: src/libide/buildsystem/ide-build-manager.c:369
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Gagal menginisialisasi pipa bangun: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:717
+#: src/libide/buildsystem/ide-build-pipeline.c:733
 msgid "The build pipeline is in a failed state"
 msgstr "Pipa bangun berada dalam keadaan gagal"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2525
+#: src/libide/buildsystem/ide-build-pipeline.c:743
+msgid "The build configuration has errors"
+msgstr "Konfigurasi bangun memiliki galat"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2582
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Pembuatan terminal pseudo gagal. Fitur terminal akan terbatas."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2725
+#: src/libide/buildsystem/ide-build-pipeline.c:2782
 msgid "Cleaning…"
 msgstr "Membersihkan…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2729
-#: src/libide/buildsystem/ide-build-pipeline.c:2782
-#: src/libide/workbench/ide-omni-bar.c:461
+#: src/libide/buildsystem/ide-build-pipeline.c:2786
+#: src/libide/buildsystem/ide-build-pipeline.c:2839
+#: src/libide/workbench/ide-omni-bar.c:467
 msgid "Failed"
 msgstr "Gagal"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2731
-#: src/libide/buildsystem/ide-build-pipeline.c:2790
+#: src/libide/buildsystem/ide-build-pipeline.c:2788
+#: src/libide/buildsystem/ide-build-pipeline.c:2847
 msgid "Ready"
 msgstr "Siap"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2746
+#: src/libide/buildsystem/ide-build-pipeline.c:2803
 msgid "Downloading…"
 msgstr "Mengunduh…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2750
+#: src/libide/buildsystem/ide-build-pipeline.c:2807
 msgid "Building dependencies…"
 msgstr "Membangun dependensi…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2754
+#: src/libide/buildsystem/ide-build-pipeline.c:2811
 msgid "Bootstrapping…"
 msgstr "Bootstrapping…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2758
+#: src/libide/buildsystem/ide-build-pipeline.c:2815
 msgid "Configuring…"
 msgstr "Mengkonfigurasi…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2762
+#: src/libide/buildsystem/ide-build-pipeline.c:2819
 msgid "Building…"
 msgstr "Sedang membangun…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2766
+#: src/libide/buildsystem/ide-build-pipeline.c:2823
 msgid "Installing…"
 msgstr "Memasang…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2770
+#: src/libide/buildsystem/ide-build-pipeline.c:2827
 msgid "Exporting…"
 msgstr "Mengekspor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2774
-#: src/libide/buildsystem/ide-build-pipeline.c:2778
-#: src/libide/workbench/ide-omni-bar.c:479
+#: src/libide/buildsystem/ide-build-pipeline.c:2831
+#: src/libide/buildsystem/ide-build-pipeline.c:2835
+#: src/libide/workbench/ide-omni-bar.c:485
 msgid "Success"
 msgstr "Berhasil"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2786
+#: src/libide/buildsystem/ide-build-pipeline.c:2843
 msgid "Preparing…"
 msgstr "Mempersiapkan…"
 
@@ -1094,7 +1099,7 @@ msgstr "Simpan log bangun"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:464
+#: src/libide/workbench/ide-omni-bar.ui:477
 msgid "Warnings"
 msgstr "Peringatan"
 
@@ -1102,7 +1107,7 @@ msgstr "Peringatan"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:436
+#: src/libide/workbench/ide-omni-bar.ui:449
 msgid "Errors"
 msgstr "Kesalahan"
 
@@ -1293,19 +1298,16 @@ msgid "Binary"
 msgstr "Biner"
 
 #: src/libide/debugger/ide-debug-manager.c:968
+#, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Pengawakutu yang cocok tidak bisa ditemukan."
-
-#: src/libide/devices/ide-device-manager.c:148
-#, c-format
-msgid "The device “%s” could not be found."
-msgstr "Perangkat \"%s\" tidak bisa ditemukan."
 
 #: src/libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
 msgstr "tanpa versi"
 
 #: src/libide/doap/xml-reader.c:327
+#, c-format
 msgid "Could not parse XML from stream"
 msgstr "Tak bisa mengurai XML dari stream"
 
@@ -2277,7 +2279,7 @@ msgid "Find text within terminal"
 msgstr "Cari teks dalam terminal"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:870
+#: src/libide/langserv/ide-langserv-client.c:894
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Gagal menginisialisasi server bahasa: %s"
@@ -2346,6 +2348,12 @@ msgstr "Oh, ada yang tidak beres"
 #: src/libide/layout/ide-layout-stack.ui:125
 msgid "There was a failure while trying to perform the operation."
 msgstr "Terjadi kegagalan saat mencoba melakukan operasi."
+
+#. translators: %s is replaced with the local systems host name
+#: src/libide/local/ide-local-device.c:78
+#, c-format
+msgid "My Computer (%s)"
+msgstr "Komputer Saya (%s)"
 
 #: src/libide/preferences/ide-preferences-builtin.c:59
 #: src/libide/preferences/ide-preferences-builtin.c:60
@@ -2898,6 +2906,10 @@ msgstr "Gagal membuka direktori: %s"
 msgid "Failed to load file: %s: %s"
 msgstr "Gagal memuat berkas: %s: %s"
 
+#: src/libide/sourceview/ide-omni-gutter-renderer.c:749
+msgid "Click to toggle breakpoint"
+msgstr "Klik untuk menjungkitkan breakpoint"
+
 #: src/libide/sourceview/ide-source-view.c:4584
 #, c-format
 msgid "Insert “%s”"
@@ -3029,7 +3041,7 @@ msgstr "Tidak dapat menguraikan \"%s\" sebagai URI absolut"
 msgid "URI “%s” has no host component"
 msgstr "URI \"%s\" tidak memiliki komponen host"
 
-#: src/libide/workbench/ide-omni-bar.c:441
+#: src/libide/workbench/ide-omni-bar.c:447
 msgid "Building"
 msgstr "Membangun"
 
@@ -3049,46 +3061,50 @@ msgstr "Branch"
 msgid "Build Profile"
 msgstr "Profil Bangun"
 
-#: src/libide/workbench/ide-omni-bar.ui:339
+#: src/libide/workbench/ide-omni-bar.ui:319
+msgid "There is a problem with the current build configuration."
+msgstr "Ada masalah dengan konfigurasi bangun saat ini."
+
+#: src/libide/workbench/ide-omni-bar.ui:352
 msgid "Build status"
 msgstr "Status bangun"
 
-#: src/libide/workbench/ide-omni-bar.ui:360
+#: src/libide/workbench/ide-omni-bar.ui:373
 msgid "View build console contents"
 msgstr "Tilik isi konsole bangun"
 
-#: src/libide/workbench/ide-omni-bar.ui:382
+#: src/libide/workbench/ide-omni-bar.ui:395
 msgid "Last build"
 msgstr "Bangun terakhir"
 
-#: src/libide/workbench/ide-omni-bar.ui:409
+#: src/libide/workbench/ide-omni-bar.ui:422
 msgid "Build result"
 msgstr "Hasil bangun"
 
 # mesti dites
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:502
+#: src/libide/workbench/ide-omni-bar.ui:515
 msgid "true"
 msgstr "true"
 
-#: src/libide/workbench/ide-omni-bar.ui:507
+#: src/libide/workbench/ide-omni-bar.ui:520
 msgctxt "button"
 msgid "Build"
 msgstr "Bangun"
 
-#: src/libide/workbench/ide-omni-bar.ui:514
+#: src/libide/workbench/ide-omni-bar.ui:527
 msgid "Rebuild"
 msgstr "Bangun Ulang"
 
-#: src/libide/workbench/ide-omni-bar.ui:521
+#: src/libide/workbench/ide-omni-bar.ui:534
 msgid "Clean"
 msgstr "Bersihkan"
 
-#: src/libide/workbench/ide-omni-bar.ui:528
+#: src/libide/workbench/ide-omni-bar.ui:541
 msgid "Export Bundle"
 msgstr "Ekspor Bundel"
 
-#: src/libide/workbench/ide-omni-bar.ui:553 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:566 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Bangun proyek"
 
@@ -3096,7 +3112,7 @@ msgstr "Bangun proyek"
 msgid "Builder Statistics"
 msgstr "Stastistik Builder"
 
-#: src/libide/workbench/ide-workbench.c:643
+#: src/libide/workbench/ide-workbench.c:644
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
@@ -3315,6 +3331,7 @@ msgid "No beautifier available for “%s”"
 msgstr "Tidak ada beautifier yang tersedia untuk \"%s\""
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#, c-format
 msgid "No beautifier available"
 msgstr "Tidak ada beautifier yang tersedia"
 
@@ -3722,6 +3739,7 @@ msgid "Command failed: %s"
 msgstr "Perintah gagal: %s"
 
 #: src/plugins/command-bar/gb-vim.c:87
+#, c-format
 msgid "Number required"
 msgstr "Perlu angka"
 
@@ -3736,10 +3754,12 @@ msgid "Cannot find language “%s”"
 msgstr "Tidak dapat menemukan bahasa “%s”"
 
 #: src/plugins/command-bar/gb-vim.c:312
+#, c-format
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Perintah ini memerlukan GtkSourceView yang difokuskan"
 
 #: src/plugins/command-bar/gb-vim.c:323
+#, c-format
 msgid "This command requires a view to be focused"
 msgstr "Perintah ini memerlukan pandangan yang difokuskan"
 
@@ -3754,6 +3774,7 @@ msgid "Cannot find colorscheme “%s”"
 msgstr "Tak bisa temukan skema warna \"%s\""
 
 #: src/plugins/command-bar/gb-vim.c:464 src/plugins/command-bar/gb-vim.c:596
+#, c-format
 msgid "Failed to locate working directory"
 msgstr "Gagal menemukan direktori kerja"
 
@@ -3763,6 +3784,7 @@ msgid "Invalid :syntax subcommand: %s"
 msgstr "Sub perintah :syntax tidak valid: %s"
 
 #: src/plugins/command-bar/gb-vim.c:1206
+#, c-format
 msgid "Invalid search and replace request"
 msgstr "Permintaan cari dan ganti yang tak valid"
 
@@ -3831,6 +3853,7 @@ msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [OPTION...] PROJECT_NAME"
 
 #: src/plugins/create-project/gbp-create-project-tool.c:198
+#, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Nama berkas mesti ASCII dan tak boleh mengandung : atau ="
 
@@ -4057,12 +4080,12 @@ msgstr[0] "Tampilkan %u lebih banyak runtime"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Runtimes"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:762
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:772
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:764
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:774
 #, c-format
 msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
@@ -4121,14 +4144,17 @@ msgstr ""
 "Tidak bisa menyediakan diff, tidak ada berkas pendukung yang disediakan."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:676
+#, c-format
 msgid "Repository does not have a working directory."
 msgstr "Repositori tak punya suatu direktori kerja."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:687
+#, c-format
 msgid "File is not under control of git working directory."
 msgstr "Berkas tidak di bawah kendali dari direktori kerja git."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:753
+#, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "Berkas yang diminta tak ada di dalam indeks git."
 
@@ -4172,6 +4198,7 @@ msgid "Clone…"
 msgstr "Klon…"
 
 #: src/plugins/git/ide-git-remote-callbacks.c:193
+#, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
@@ -4259,27 +4286,27 @@ msgstr "Buat proyek kosong baru dengan menggunakan Makefile sederhana"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson-templates/meson_templates.py:234
+#: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
 msgstr "Aplikasi GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:236
+#: src/plugins/meson-templates/meson_templates.py:252
 msgid "Create a new GNOME application"
 msgstr "Buat suatu aplikasi GNOME baru"
 
-#: src/plugins/meson-templates/meson_templates.py:303
+#: src/plugins/meson-templates/meson_templates.py:319
 msgid "Shared Library"
 msgstr "Pustaka Bersama"
 
-#: src/plugins/meson-templates/meson_templates.py:305
+#: src/plugins/meson-templates/meson_templates.py:321
 msgid "Create a new project with a shared library"
 msgstr "Buat suatu proyek baru dengan pustaka bersama"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:337
 msgid "Empty Project"
 msgstr "Proyek Kosong"
 
-#: src/plugins/meson-templates/meson_templates.py:323
+#: src/plugins/meson-templates/meson_templates.py:339
 msgid "Create a new empty project"
 msgstr "Buat proyek kosong baru"
 
@@ -4287,11 +4314,11 @@ msgstr "Buat proyek kosong baru"
 msgid "Messages"
 msgstr "Pesan"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:97
+#: src/plugins/mingw/ide-mingw-device-provider.c:57
 msgid "MinGW 64-bit"
 msgstr "MinGW 64-bit"
 
-#: src/plugins/mingw/ide-mingw-device-provider.c:111
+#: src/plugins/mingw/ide-mingw-device-provider.c:64
 msgid "MinGW 32-bit"
 msgstr "MinGW 32-bit"
 
@@ -4873,6 +4900,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer dimuat tapi tidak di pengelola buffer."
+
+#~ msgid "The device “%s” could not be found."
+#~ msgstr "Perangkat \"%s\" tidak bisa ditemukan."
 
 #~ msgctxt "shortcut window"
 #~ msgid "Toggle right panel"
