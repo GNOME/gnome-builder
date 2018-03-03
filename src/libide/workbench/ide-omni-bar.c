@@ -428,6 +428,9 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
                                             IdeBuildPipeline *build_pipeline,
                                             IdeBuildManager  *build_manager)
 {
+  const gchar *display_name;
+  IdeRuntime *runtime;
+
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
@@ -441,6 +444,10 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
                              G_CALLBACK (ide_omni_bar_notify_message),
                              self,
                              G_CONNECT_SWAPPED);
+
+  runtime = ide_build_pipeline_get_runtime (build_pipeline);
+  display_name = ide_runtime_get_display_name (runtime);
+  gtk_label_set_label (self->popover_runtime_label, display_name);
 
   gtk_revealer_set_reveal_child (self->popover_details_revealer, TRUE);
 
