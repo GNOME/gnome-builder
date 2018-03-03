@@ -142,6 +142,13 @@ struct _IdeBuildPipeline
   IdeDevice *device;
 
   /*
+   * The runtime we're using to build. This may be different than what
+   * is specified in the IdeConfiguration, as the @device could alter
+   * what architecture we're building for (and/or cross-compiling).
+   */
+  IdeRuntime *runtime;
+
+  /*
    * The IdeBuildLog is a private implementation that we use to
    * log things from addins via observer callbacks.
    */
@@ -1108,6 +1115,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->cancellable);
   g_clear_object (&self->log);
   g_clear_object (&self->device);
+  g_clear_object (&self->runtime);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
   g_clear_pointer (&self->srcdir, g_free);
@@ -1160,6 +1168,15 @@ ide_build_pipeline_initable_init (GInitable     *initable,
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_CONFIGURATION (self->configuration));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (self->runtime == NULL)
+    {
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           "No runtime assigned to build pipeline");
+      IDE_RETURN (FALSE);
+    }
 
   /*
    * Create a PTY for subprocess launchers. PTY initialization does not
@@ -2498,7 +2515,7 @@ ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
-  return ide_configuration_get_runtime (self->configuration);
+  return self->runtime;
 }
 
 /**
@@ -3507,4 +3524,14 @@ _ide_build_pipeline_set_pty_size (IdeBuildPipeline *self,
 
   if (self->pty_slave != PTY_FD_INVALID)
     pty_intercept_set_size (&self->intercept, rows, columns);
+}
+
+void
+_ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
+                                 IdeRuntime       *runtime)
+{
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
+
+  g_set_object (&self->runtime, runtime);
 }
