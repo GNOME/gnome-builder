@@ -28,6 +28,7 @@
 #include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-build-system.h"
 #include "config/ide-configuration.h"
+#include "devices/ide-device.h"
 #include "files/ide-file.h"
 #include "projects/ide-project.h"
 #include "util/ide-glib.h"
@@ -512,7 +513,8 @@ ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
 
 gchar *
 ide_build_system_get_builddir (IdeBuildSystem   *self,
-                               IdeConfiguration *configuration)
+                               IdeConfiguration *configuration,
+                               IdeDevice        *device)
 {
   gchar *ret = NULL;
 
@@ -520,9 +522,10 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
 
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
   g_return_val_if_fail (IDE_IS_CONFIGURATION (configuration), NULL);
+  g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
 
   if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir)
-    ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir (self, configuration);
+    ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir (self, configuration, device);
 
   if (ret == NULL)
     {
@@ -538,7 +541,7 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
       vcs = ide_context_get_vcs (context);
 
       config_id = ide_configuration_get_id (configuration);
-      device_id = ide_configuration_get_device_id (configuration);
+      device_id = ide_device_get_id (device);
       runtime_id = ide_configuration_get_runtime_id (configuration);
       branch = ide_vcs_get_branch_name (vcs);
 

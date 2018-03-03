@@ -65,7 +65,7 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_priority(self):
         return 0
 
-    def do_get_builddir(self, config):
+    def do_get_builddir(self, config, device):
         context = self.get_context()
         return context.get_vcs().get_working_directory().get_path()
 

@@ -481,6 +481,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   g_task_set_priority (task, G_PRIORITY_LOW);
   ide_runtime_manager_ensure_config_async (runtime_manager,
                                            config,
+                                           device,
                                            self->cancellable,
                                            ide_build_manager_ensure_runtime_cb,
                                            g_steal_pointer (&task));

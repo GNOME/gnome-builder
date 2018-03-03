@@ -52,7 +52,8 @@ struct _IdeBuildSystemInterface
                                                     GAsyncResult         *result,
                                                     GError              **error);
   gchar      *(*get_builddir)                      (IdeBuildSystem       *self,
-                                                    IdeConfiguration     *configuration);
+                                                    IdeConfiguration     *configuration,
+                                                    IdeDevice            *device);
   gchar      *(*get_id)                            (IdeBuildSystem       *self);
   gchar      *(*get_display_name)                  (IdeBuildSystem       *self);
 };
@@ -73,9 +74,10 @@ IdeBuildSystem *ide_build_system_new_finish                        (GAsyncResult
                                                                     GError              **error);
 IDE_AVAILABLE_IN_ALL
 gint            ide_build_system_get_priority                      (IdeBuildSystem       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_28
 gchar          *ide_build_system_get_builddir                      (IdeBuildSystem       *self,
-                                                                    IdeConfiguration     *configuration);
+                                                                    IdeConfiguration     *configuration,
+                                                                    IdeDevice            *device);
 IDE_AVAILABLE_IN_ALL
 void            ide_build_system_get_build_flags_async             (IdeBuildSystem       *self,
                                                                     IdeFile              *file,

@@ -190,7 +190,7 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
 
   /* --host=triplet */
   configuration = ide_build_pipeline_get_configuration (pipeline);
-  device = ide_configuration_get_device (configuration);
+  device = ide_build_pipeline_get_device (pipeline);
   system_type = ide_device_get_system_type (device);
   host_arg = g_strdup_printf ("--host=%s", system_type);
   ide_subprocess_launcher_push_argv (launcher, host_arg);

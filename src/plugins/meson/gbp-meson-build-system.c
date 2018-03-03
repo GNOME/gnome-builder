@@ -625,13 +625,15 @@ gbp_meson_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *build_
 
 static gchar *
 gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
-                                     IdeConfiguration *configuration)
+                                     IdeConfiguration *configuration,
+                                     IdeDevice        *device)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
   IdeBuildLocality locality;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_DEVICE (device));
 
   /*
    * If the build configuration requires that we do an in tree build (yuck),

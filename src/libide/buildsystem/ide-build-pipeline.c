@@ -1244,7 +1244,7 @@ ide_build_pipeline_constructed (GObject *object)
   workdir = ide_vcs_get_working_directory (vcs);
 
   self->srcdir = g_file_get_path (workdir);
-  self->builddir = ide_build_system_get_builddir (build_system, self->configuration);
+  self->builddir = ide_build_system_get_builddir (build_system, self->configuration, self->device);
 
   IDE_EXIT;
 }
