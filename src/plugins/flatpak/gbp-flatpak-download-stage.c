@@ -84,6 +84,9 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
   if (self->invalid)
     {
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autofree gchar *arch = NULL;
+      g_autofree gchar *arch_param = NULL;
+      IdeRuntime *runtime;
 
       primary_module = gbp_flatpak_manifest_get_primary_module (GBP_FLATPAK_MANIFEST (config));
       manifest_path = gbp_flatpak_manifest_get_path (GBP_FLATPAK_MANIFEST (config));
@@ -105,7 +108,12 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
           ide_subprocess_launcher_setenv (launcher, "XDG_RUNTIME_DIR", g_get_user_runtime_dir (), TRUE);
         }
 
+      runtime = ide_build_pipeline_get_runtime (pipeline);
+      arch = ide_runtime_get_arch (runtime);
+      arch_param = g_strdup_printf ("--arch=%s", arch);
+
       ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
+      ide_subprocess_launcher_push_argv (launcher, arch_param);
       ide_subprocess_launcher_push_argv (launcher, "--ccache");
       ide_subprocess_launcher_push_argv (launcher, "--force-clean");
 

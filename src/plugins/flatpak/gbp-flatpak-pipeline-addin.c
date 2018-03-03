@@ -58,6 +58,20 @@ enum {
   EXPORT_BUILD_BUNDLE,
 };
 
+static gchar *
+get_arch_option (IdeBuildPipeline *pipeline)
+{
+  g_autofree gchar *arch = NULL;
+  IdeRuntime *runtime;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  runtime = ide_build_pipeline_get_runtime (pipeline);
+  arch = ide_runtime_get_arch (runtime);
+
+  return g_strdup_printf ("--arch=%s", arch);
+}
+
 static void
 sniff_flatpak_builder_version (GbpFlatpakPipelineAddin *self)
 {
@@ -181,6 +195,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *sdk = NULL;
   g_autofree gchar *metadata_path = NULL;
+  g_autofree gchar *arch = NULL;
   IdeConfiguration *config;
   IdeRuntime *runtime;
   const gchar *app_id;
@@ -195,7 +210,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   launcher = create_subprocess_launcher ();
 
   config = ide_build_pipeline_get_configuration (pipeline);
-  runtime = ide_configuration_get_runtime (config);
+  runtime = ide_build_pipeline_get_runtime (pipeline);
 
   if (!GBP_IS_FLATPAK_RUNTIME (runtime))
     {
@@ -206,6 +221,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
       return FALSE;
     }
 
+  arch = get_arch_option (pipeline);
   staging_dir = gbp_flatpak_get_staging_dir (config);
   app_id = ide_configuration_get_app_id (config);
   platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
@@ -238,6 +254,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak");
   ide_subprocess_launcher_push_argv (launcher, "build-init");
+  ide_subprocess_launcher_push_argv (launcher, arch);
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
   ide_subprocess_launcher_push_argv (launcher, app_id);
   ide_subprocess_launcher_push_argv (launcher, sdk);
@@ -303,6 +320,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 {
   g_autoptr(IdeBuildStage) stage = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autofree gchar *arch = NULL;
   g_autofree gchar *manifest_path = NULL;
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *stop_at_option = NULL;
@@ -323,6 +341,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
+  arch = get_arch_option (pipeline);
   primary_module = gbp_flatpak_manifest_get_primary_module (GBP_FLATPAK_MANIFEST (config));
   manifest_path = gbp_flatpak_manifest_get_path (GBP_FLATPAK_MANIFEST (config));
 
@@ -345,6 +364,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
     }
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
+  ide_subprocess_launcher_push_argv (launcher, arch);
   ide_subprocess_launcher_push_argv (launcher, "--ccache");
   ide_subprocess_launcher_push_argv (launcher, "--force-clean");
   ide_subprocess_launcher_push_argv (launcher, "--disable-updates");
@@ -433,6 +453,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
+  g_autofree gchar *arch = NULL;
   g_autofree gchar *repo_dir = NULL;
   g_autofree gchar *staging_dir = NULL;
   IdeConfiguration *config;
@@ -448,11 +469,13 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
 
   staging_dir = gbp_flatpak_get_staging_dir (config);
   repo_dir = gbp_flatpak_get_repo_dir (config);
+  arch = get_arch_option (pipeline);
 
   launcher = create_subprocess_launcher ();
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak");
   ide_subprocess_launcher_push_argv (launcher, "build-export");
+  ide_subprocess_launcher_push_argv (launcher, arch);
   ide_subprocess_launcher_push_argv (launcher, repo_dir);
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
 
@@ -505,6 +528,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   g_autofree gchar *repo_dir = NULL;
   g_autofree gchar *export_path = NULL;
   g_autofree gchar *dest_path = NULL;
+  g_autofree gchar *arch = NULL;
   g_autofree gchar *name = NULL;
   IdeConfiguration *config;
   const gchar *app_id;
@@ -525,10 +549,13 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   name = g_strdup_printf ("%s.flatpak", app_id);
   dest_path = g_build_filename (staging_dir, name, NULL);
 
+  arch = get_arch_option (pipeline);
+
   launcher = create_subprocess_launcher ();
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak");
   ide_subprocess_launcher_push_argv (launcher, "build-bundle");
+  ide_subprocess_launcher_push_argv (launcher, arch);
   ide_subprocess_launcher_push_argv (launcher, repo_dir);
   ide_subprocess_launcher_push_argv (launcher, dest_path);
   ide_subprocess_launcher_push_argv (launcher, app_id);

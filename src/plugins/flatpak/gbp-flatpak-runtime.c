@@ -86,10 +86,13 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autofree gchar *arch = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  arch = g_strdup_printf ("--arch=%s", self->arch);
 
   /*
    * To check if a program is available, we don't want to use the normal
@@ -105,6 +108,7 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
 
   ide_subprocess_launcher_push_argv (launcher, "flatpak");
   ide_subprocess_launcher_push_argv (launcher, "run");
+  ide_subprocess_launcher_push_argv (launcher, arch);
   ide_subprocess_launcher_push_argv (launcher, "--command=which");
   ide_subprocess_launcher_push_argv (launcher, self->sdk);
   ide_subprocess_launcher_push_argv (launcher, program);
