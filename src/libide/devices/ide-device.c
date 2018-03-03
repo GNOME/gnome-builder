@@ -20,6 +20,8 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-debug.h"
+
 #include "config/ide-configuration.h"
 #include "devices/ide-device.h"
 
@@ -189,6 +191,28 @@ ide_device_get_system_type (IdeDevice *device)
 }
 
 static void
+ide_device_real_get_info_async (IdeDevice           *self,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_task_report_new_error (self, callback, user_data,
+                           ide_device_real_get_info_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "%s has not implemented get_info_async()",
+                           G_OBJECT_TYPE_NAME (self));
+}
+
+static IdeDeviceInfo *
+ide_device_real_get_info_finish (IdeDevice     *self,
+                                 GAsyncResult  *result,
+                                 GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+static void
 ide_device_finalize (GObject *object)
 {
   IdeDevice *self = (IdeDevice *)object;
@@ -267,6 +291,9 @@ ide_device_class_init (IdeDeviceClass *klass)
   object_class->get_property = ide_device_get_property;
   object_class->set_property = ide_device_set_property;
 
+  klass->get_info_async = ide_device_real_get_info_async;
+  klass->get_info_finish = ide_device_real_get_info_finish;
+
   properties [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
                          "Display Name",
@@ -331,4 +358,66 @@ ide_device_error_quark (void)
     quark = g_quark_from_static_string ("ide_device_error_quark");
 
   return quark;
+}
+
+/**
+ * ide_device_get_info_async:
+ * @self: an #IdeDevice
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: a callback to execute upon completion
+ * @user_data: closure data for @callback
+ *
+ * Asynchronously requests information about the device.
+ *
+ * Some information may not be available until after a connection
+ * has been established. This allows the device to connect before
+ * fetching that information.
+ *
+ * Since: 3.28
+ */
+void
+ide_device_get_info_async (IdeDevice           *self,
+                           GCancellable        *cancellable,
+                           GAsyncReadyCallback  callback,
+                           gpointer             user_data)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_DEVICE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_DEVICE_GET_CLASS (self)->get_info_async (self, cancellable, callback, user_data);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_device_get_info_finish:
+ * @self: an #IdeDevice
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to load the information about a device.
+ *
+ * Returns: (transfer full): an #IdeDeviceInfo or %NULL and @error is set
+ *
+ * Since: 3.28
+ */
+IdeDeviceInfo *
+ide_device_get_info_finish (IdeDevice     *self,
+                            GAsyncResult  *result,
+                            GError       **error)
+{
+  IdeDeviceInfo *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_DEVICE (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  ret = IDE_DEVICE_GET_CLASS (self)->get_info_finish (self, result, error);
+
+  g_return_val_if_fail (!ret || IDE_IS_DEVICE_INFO (ret), NULL);
+
+  IDE_RETURN (ret);
 }

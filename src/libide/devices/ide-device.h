@@ -18,10 +18,11 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
-
 #include "ide-object.h"
 #include "ide-types.h"
+#include "ide-version-macros.h"
+
+#include "devices/ide-device-info.h"
 
 G_BEGIN_DECLS
 
@@ -39,34 +40,50 @@ struct _IdeDeviceClass
 {
   IdeObjectClass parent;
 
-  const gchar *(*get_system_type)       (IdeDevice        *self);
-  void         (*prepare_configuration) (IdeDevice        *self,
-                                         IdeConfiguration *configuration);
+  const gchar   *(*get_system_type)       (IdeDevice            *self);
+  void           (*prepare_configuration) (IdeDevice            *self,
+                                           IdeConfiguration     *configuration);
+  void           (*get_info_async)        (IdeDevice            *self,
+                                           GCancellable         *cancellable,
+                                           GAsyncReadyCallback   callback,
+                                           gpointer              user_data);
+  IdeDeviceInfo *(*get_info_finish)       (IdeDevice            *self,
+                                           GAsyncResult         *result,
+                                           GError              **error);
 
   gpointer _reserved[32];
 };
 
 IDE_AVAILABLE_IN_ALL
-GQuark       ide_device_error_quark           (void) G_GNUC_CONST;
+GQuark         ide_device_error_quark           (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_device_get_display_name      (IdeDevice        *self);
+const gchar   *ide_device_get_display_name      (IdeDevice             *self);
 IDE_AVAILABLE_IN_ALL
-void         ide_device_set_display_name      (IdeDevice        *self,
-                                               const gchar      *display_name);
+void           ide_device_set_display_name      (IdeDevice             *self,
+                                                 const gchar           *display_name);
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_device_get_icon_name         (IdeDevice        *self);
+const gchar   *ide_device_get_icon_name         (IdeDevice             *self);
 IDE_AVAILABLE_IN_ALL
-void         ide_device_set_icon_name         (IdeDevice        *self,
-                                               const gchar      *icon_name);
+void           ide_device_set_icon_name         (IdeDevice             *self,
+                                                 const gchar           *icon_name);
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_device_get_id                (IdeDevice        *self);
+const gchar   *ide_device_get_id                (IdeDevice             *self);
 IDE_AVAILABLE_IN_ALL
-void         ide_device_set_id                (IdeDevice        *self,
-                                               const gchar      *id);
+void           ide_device_set_id                (IdeDevice             *self,
+                                                 const gchar           *id);
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_device_get_system_type       (IdeDevice        *self);
+const gchar   *ide_device_get_system_type       (IdeDevice             *self);
 IDE_AVAILABLE_IN_ALL
-void         ide_device_prepare_configuration (IdeDevice        *self,
-                                               IdeConfiguration *configuration);
+void           ide_device_prepare_configuration (IdeDevice             *self,
+                                                 IdeConfiguration      *configuration);
+IDE_AVAILABLE_IN_3_28
+void           ide_device_get_info_async        (IdeDevice             *self,
+                                                 GCancellable          *cancellable,
+                                                 GAsyncReadyCallback    callback,
+                                                 gpointer               user_data);
+IDE_AVAILABLE_IN_3_28
+IdeDeviceInfo *ide_device_get_info_finish       (IdeDevice             *self,
+                                                 GAsyncResult          *result,
+                                                 GError               **error);
 
 G_END_DECLS
