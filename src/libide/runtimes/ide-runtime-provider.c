@@ -18,7 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-runtime-provider"
 
+#include "ide-context.h"
+
 #include "config/ide-configuration.h"
+#include "devices/ide-device.h"
+#include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-provider.h"
 
@@ -74,20 +78,40 @@ ide_runtime_provider_real_bootstrap_cb (GObject      *object,
   IdeRuntimeProvider *self = (IdeRuntimeProvider *)object;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
+  IdeRuntimeManager *runtime_manager;
+  const gchar *runtime_id;
+  IdeContext *context;
+  IdeRuntime *runtime;
 
   g_assert (IDE_IS_RUNTIME_PROVIDER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   if (!ide_runtime_provider_install_finish (self, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  runtime_id = g_task_get_task_data (task);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  runtime_manager = ide_context_get_runtime_manager (context);
+  runtime = ide_runtime_manager_get_runtime (runtime_manager, runtime_id);
+
+  if (runtime == NULL)
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "No such runtime \"%s\"",
+                             runtime_id);
   else
-    g_task_return_boolean (task, TRUE);
+    g_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
 }
 
 void
 ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
                                            IdeConfiguration    *configuration,
+                                           IdeDevice           *device,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
@@ -97,6 +121,7 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
 
   g_assert (IDE_IS_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_DEVICE (device));
   g_assert (!cancellable || IDE_IS_CONFIGURATION (configuration));
 
   task = g_task_new (self, cancellable, callback, user_data);
@@ -104,23 +129,32 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
   g_task_set_priority (task, G_PRIORITY_LOW);
 
   runtime_id = ide_configuration_get_runtime_id (configuration);
+  g_task_set_task_data (task, g_strdup (runtime_id), g_free);
 
   if (runtime_id == NULL)
-    g_task_return_boolean (task, TRUE);
-  else
-    ide_runtime_provider_install_async (self,
-                                        runtime_id,
-                                        cancellable,
-                                        ide_runtime_provider_real_bootstrap_cb,
-                                        g_steal_pointer (&task));
+    {
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "No runtime provided to install");
+      return;
+    }
+
+  ide_runtime_provider_install_async (self,
+                                      runtime_id,
+                                      cancellable,
+                                      ide_runtime_provider_real_bootstrap_cb,
+                                      g_steal_pointer (&task));
 }
 
-gboolean
+IdeRuntime *
 ide_runtime_provider_real_bootstrap_finish (IdeRuntimeProvider  *self,
-                                          GAsyncResult        *result,
-                                          GError             **error)
+                                            GAsyncResult        *result,
+                                            GError             **error)
 {
-  return g_task_propagate_boolean (G_TASK (result), error);
+  IdeRuntime *ret = g_task_propagate_pointer (G_TASK (result), error);
+  g_return_val_if_fail (!ret || IDE_IS_RUNTIME (ret), NULL);
+  return ret;
 }
 
 static void
@@ -194,6 +228,7 @@ ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
  * ide_runtime_provider_bootstrap_async:
  * @self: a #IdeRuntimeProvider
  * @configuration: an #IdeConfiguration
+ * @device: an #IdeDevice
  * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a #GAsyncReadyCallback or %NULL
  * @user_data: closure data for @callback
@@ -212,15 +247,17 @@ ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
 void
 ide_runtime_provider_bootstrap_async (IdeRuntimeProvider  *self,
                                       IdeConfiguration    *configuration,
+                                      IdeDevice           *device,
                                       GCancellable        *cancellable,
                                       GAsyncReadyCallback  callback,
                                       gpointer             user_data)
 {
   g_return_if_fail (IDE_IS_RUNTIME_PROVIDER (self));
   g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
+  g_return_if_fail (IDE_IS_DEVICE (device));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_async (self, configuration, cancellable, callback, user_data);
+  IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_async (self, configuration, device, cancellable, callback, user_data);
 }
 
 /**
@@ -231,17 +268,24 @@ ide_runtime_provider_bootstrap_async (IdeRuntimeProvider  *self,
  *
  * Completes the asynchronous request to bootstrap.
  *
- * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ * Returns: (transfer full): an #IdeRuntime if successful; otherwise %NULL
+ *   and @error is set.
  *
  * Since: 3.28
  */
-gboolean
+IdeRuntime *
 ide_runtime_provider_bootstrap_finish (IdeRuntimeProvider  *self,
                                        GAsyncResult        *result,
                                        GError             **error)
 {
+  IdeRuntime *ret;
+
   g_return_val_if_fail (IDE_IS_RUNTIME_PROVIDER (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  return IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_finish (self, result, error);
+  ret = IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_finish (self, result, error);
+
+  g_return_val_if_fail (!ret || IDE_IS_RUNTIME (ret), NULL);
+
+  return ret;
 }

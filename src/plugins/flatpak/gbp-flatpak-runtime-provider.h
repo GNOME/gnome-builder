@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 

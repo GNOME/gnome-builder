@@ -51,6 +51,7 @@ IdeRuntime *ide_runtime_manager_ensure_finish        (IdeRuntimeManager    *self
 IDE_AVAILABLE_IN_3_28
 void        ide_runtime_manager_ensure_config_async  (IdeRuntimeManager    *self,
                                                       IdeConfiguration     *configuration,
+                                                      IdeDevice            *device,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
