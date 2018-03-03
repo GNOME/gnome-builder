@@ -771,7 +771,7 @@ gbp_flatpak_runtime_new (IdeContext           *context,
   if (g_str_equal (arch, flatpak_get_default_arch ()))
     display_name = g_strdup_printf (_("%s <b>%s</b>"), name, branch);
   else
-    display_name = g_strdup_printf (_("%s <b>%s</b> <span variant='smallcaps'>%s</span>"), name, branch, arch);
+    display_name = g_strdup_printf (_("%s <b>%s</b> <span fgalpha='36044'>%s</span>"), name, branch, arch);
 
   /*
    * If we have an SDK that is different from this runtime, we need to locate
