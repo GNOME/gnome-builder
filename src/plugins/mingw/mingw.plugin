@@ -1,8 +1,0 @@
-[Plugin]
-Module=mingw-plugin
-Name=MinGW Support
-Description=Provides cross-compilation support using MinGW
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
-Builtin=true
-Embedded=ide_mingw_register_types

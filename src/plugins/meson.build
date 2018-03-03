@@ -46,7 +46,6 @@ subdir('make')
 subdir('meson')
 subdir('meson-templates')
 subdir('messages')
-subdir('mingw')
 subdir('mono')
 subdir('newcomers')
 subdir('notification')
@@ -123,7 +122,6 @@ status += [
   'JHBuild ............... : @0@'.format(get_option('with_jhbuild')),
   'Make .................. : @0@'.format(get_option('with_make')),
   'Meson ................. : @0@'.format(get_option('with_meson')),
-  'MinGW ................. : @0@'.format(get_option('with_mingw')),
   'Mono .................. : @0@'.format(get_option('with_mono')),
   'Notifications ......... : @0@'.format(get_option('with_notification')),
   'Node Package Manager .. : @0@'.format(get_option('with_npm')),
