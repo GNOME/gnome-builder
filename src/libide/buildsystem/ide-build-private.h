@@ -21,10 +21,13 @@
 #include <vte/vte.h>
 
 #include "buildsystem/ide-build-pipeline.h"
+#include "runtimes/ide-runtime.h"
 
 G_BEGIN_DECLS
 
 void _ide_build_pipeline_cancel       (IdeBuildPipeline *self);
+void _ide_build_pipeline_set_runtime  (IdeBuildPipeline *self,
+                                       IdeRuntime       *runtime);
 void _ide_build_pipeline_set_message  (IdeBuildPipeline *self,
                                        const gchar      *message);
 void _ide_build_pipeline_mark_broken  (IdeBuildPipeline *self);
