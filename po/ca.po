@@ -34,7 +34,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Allow network when metered"
-msgstr "Permet la xarxa quan es limitada"
+msgstr "Permet la xarxa quan és limitada"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid ""
@@ -42,7 +42,7 @@ msgid ""
 "dependencies when connection is metered."
 msgstr ""
 "Habilita les transferències automàtiques en construccions com descàrregues "
-"SDK i dependències quan la connexió es limitada."
+"SDK i dependències quan la connexió és limitada."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 #| msgid "Snippet Completion"
@@ -51,7 +51,7 @@ msgstr "Suggereix compleció de fragments"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
 msgid "Allow snippets to be inserted into the document."
-msgstr "Habilita el fragments per a inserir-los dins dels document."
+msgstr "Habilita els fragments per a inserir-los dins dels documents."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
 #| msgid "Suggest Completions using Clang (Experimental)"
@@ -75,7 +75,7 @@ msgstr "Usa Ctags per a autocompleció."
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
 #| msgid "Suggest completion of words found within all open documents."
 msgid "Enable auto-completion of words in document"
-msgstr "Habilita la autocompleció de paraules trobades dins de documents"
+msgstr "Habilita l'autocompleció de paraules trobades dins de documents"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
 msgid ""
@@ -125,7 +125,7 @@ msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
-"Si està habilitat, el editor mostrarà línies afegides i canvis al costat del "
+"Si està habilitat, l'editor mostrarà línies afegides i canvis al costat del "
 "codi font."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
@@ -239,7 +239,7 @@ msgstr "Dibuixa espais"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:94
 msgid "The various types of space to draw in the editor."
-msgstr "El variats tipus d'espais que pot dibuixar l'editor."
+msgstr "Els diferents tipus d'espais que pot dibuixar l'editor."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:99
 #: src/libide/preferences/ide-preferences-builtin.c:160
@@ -264,7 +264,7 @@ msgid ""
 "visible."
 msgstr ""
 "Si està habilitat, el constructor ajustarà el text automàticament de forma "
-"que tot la línia de text sigui visible."
+"que tota la línia de text sigui visible."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:109
 #: src/libide/preferences/ide-preferences-builtin.c:185
@@ -357,7 +357,7 @@ msgstr "«Projectes»"
 #: src/libide/preferences/ide-preferences-builtin.c:412
 #| msgid "The project directory."
 msgid "Projects directory"
-msgstr "El directori del projectes."
+msgstr "El directori dels projectes."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 #| msgid "The git repository for the project."
@@ -424,7 +424,7 @@ msgstr "Mostra els fitxers ignorats"
 msgid ""
 "If enabled, the project tree will display files that are ignored by the VCS."
 msgstr ""
-"Si està habilitat, l'arbre del projecte mostrarà fitxers que son ignorats per "
+"Si està habilitat, l'arbre del projecte mostrarà fitxers que són ignorats per "
 "VCS."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
@@ -518,7 +518,7 @@ msgid ""
 msgstr ""
 "Constructor és un entorn de desenvolupament integrat actiu desenvolupat per "
 "GNOME. Combina el suport integrat per a tecnologies GNOME essencials, com ara "
-"GTK +, GLib i la API de GNOME APIs amb característiques que qualsevol "
+"GTK +, GLib i l'API de GNOME APIs amb característiques que qualsevol "
 "desenvolupador apreciarà, com el ressaltat de sintaxi i els fragments."
 
 #: data/org.gnome.Builder.appdata.xml.in:17
@@ -535,7 +535,7 @@ msgstr "Característiques:"
 
 #: data/org.gnome.Builder.appdata.xml.in:23
 msgid "Built in syntax highlighting for many languages"
-msgstr "Construït amb ressaltat de sintaxi per molt llenguatges"
+msgstr "Construït amb ressaltat de sintaxi per molts llenguatges"
 
 #: data/org.gnome.Builder.appdata.xml.in:24
 msgid "Side-by-side code editors"
@@ -563,7 +563,7 @@ msgstr "Autocompleció usant Vala i diagnòstics"
 
 #: data/org.gnome.Builder.appdata.xml.in:30
 msgid "Auto indentation support for C, Python, Vala, and XML"
-msgstr "Suport a la auto-sagnat per a C, Python, Vala, i XML "
+msgstr "Suport a l'auto-sagnat per a C, Python, Vala, i XML "
 
 #: data/org.gnome.Builder.appdata.xml.in:31
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
@@ -661,7 +661,7 @@ msgstr "%s: la paleta és buida\n"
 #, c-format
 #| msgid "Failed to diagnose: %s\n"
 msgid "%s: failed to parse\n"
-msgstr "%s: ha hagut un error en analitzar\n"
+msgstr "%s: hi hagut un error en analitzar\n"
 
 #: src/gstyle/gstyle-palette.c:727
 #, c-format
@@ -982,7 +982,7 @@ msgstr "Ha fallat desar el fitxer: %s"
 #, c-format
 #| msgid "Failed to load file: %s: %s"
 msgid "Failed to save draft: %s"
-msgstr "Ha fallat desar el esborrany: %s"
+msgstr "Ha fallat en desar l'esborrany: %s"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:624
@@ -1295,7 +1295,7 @@ msgstr ""
 #: src/libide/debugger/ide-debugger-controls.ui:97
 #| msgid "The name of the action"
 msgid "Run until the end of the function"
-msgstr "Executeu fins el final de la funció"
+msgstr "Executeu fins al final de la funció"
 
 #: src/libide/debugger/ide-debugger-disassembly-view.ui:5
 msgid "Disassembly"
@@ -1628,7 +1628,7 @@ msgstr "Commuta el quadre de navegació"
 #: src/libide/editor/ide-editor-perspective-shortcuts.c:53
 msgctxt "shortcut window"
 msgid "Toggle utilities panel"
-msgstr "Commuta el quadre de utilitats"
+msgstr "Commuta el quadre d'utilitats"
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -1810,22 +1810,22 @@ msgstr "Cerca"
 #: src/libide/editor/ide-editor-view-shortcuts.c:57
 msgctxt "shortcut window"
 msgid "Move to the next match"
-msgstr "Ves a la coincidència següent"
+msgstr "Vés a la coincidència següent"
 
 #: src/libide/editor/ide-editor-view-shortcuts.c:63
 msgctxt "shortcut window"
 msgid "Move to the previous match"
-msgstr "Ves a la coincidència prèvia"
+msgstr "Vés a la coincidència prèvia"
 
 #: src/libide/editor/ide-editor-view-shortcuts.c:69
 msgctxt "shortcut window"
 msgid "Move to the next error"
-msgstr "Ves a l'error següent"
+msgstr "Vés a l'error següent"
 
 #: src/libide/editor/ide-editor-view-shortcuts.c:75
 msgctxt "shortcut window"
 msgid "Move to the previous error"
-msgstr "Ves a l'error previ"
+msgstr "Vés a l'error previ"
 
 #: src/libide/editor/ide-editor-view-shortcuts.c:81
 #: src/libide/keybindings/ide-shortcuts-window.ui:163
@@ -1851,7 +1851,7 @@ msgstr "Commuta el quadre de navegació"
 
 #: src/libide/editor/ide-editor-workbench-addin.c:191
 msgid "Toggle utilities panel"
-msgstr "Commuta el quadre de utilitats"
+msgstr "Commuta el quadre d'utilitats"
 
 #: src/libide/greeter/ide-greeter-perspective.c:214
 #| msgid "Failed to locate configure.ac"
@@ -1991,11 +1991,11 @@ msgstr "_Desfés"
 
 #: src/libide/gtk/menus.ui:86
 msgid "_Redo"
-msgstr "_Refès"
+msgstr "_Refés"
 
 #: src/libide/gtk/menus.ui:92
 msgid "C_ut"
-msgstr "_Talla"
+msgstr "_Retalla"
 
 #: src/libide/gtk/menus.ui:113
 #: src/libide/preferences/ide-preferences-builtin.c:194
@@ -2089,7 +2089,7 @@ msgstr "El context ja s'ha restaurat."
 #: src/libide/ide-object.c:345
 #, c-format
 msgid "No implementations of extension point “%s”."
-msgstr "No hi han implementacions del punt d'extensió «%s»."
+msgstr "No hi ha implementacions del punt d'extensió «%s»."
 
 #: src/libide/ide-object.c:454
 #, c-format
@@ -2328,22 +2328,22 @@ msgstr "Navegació"
 #: src/libide/keybindings/ide-shortcuts-window.ui:307
 msgctxt "shortcut window"
 msgid "Move to next error in file"
-msgstr "Ves al següent error del fitxer"
+msgstr "Vés al següent error del fitxer"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:314
 msgctxt "shortcut window"
 msgid "Move to previous error in file"
-msgstr "Ves al error previ del fitxer"
+msgstr "Vés a l'error previ del fitxer"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:321
 msgctxt "shortcut window"
 msgid "Move to previous edit location"
-msgstr "Ves a la ubicació d'edició anterior"
+msgstr "Vés a la ubicació d'edició anterior"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:328
 msgctxt "shortcut window"
 msgid "Move to next edit location"
-msgstr "Ves a la ubicació d'edició següent"
+msgstr "Vés a la ubicació d'edició següent"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:335
 msgctxt "shortcut window"
@@ -2868,7 +2868,7 @@ msgid ""
 "Create and manages a Ctags database for completing class names, functions, "
 "and more"
 msgstr ""
-"Crea i gestiona una base dades Ctags pe la compleció de noms de classe, "
+"Crea i gestiona una base dades Ctags per la compleció de noms de classe, "
 "funcions, i més"
 
 #: src/libide/preferences/ide-preferences-builtin.c:201
@@ -2898,7 +2898,7 @@ msgstr "Fragments de codi"
 
 #: src/libide/preferences/ide-preferences-builtin.c:212
 msgid "Use code fragments to increase typing efficiency"
-msgstr "Usa fragments de codi per incrementar la eficàcia d'escriptura"
+msgstr "Usa fragments de codi per incrementar l'eficàcia d'escriptura"
 
 #: src/libide/preferences/ide-preferences-builtin.c:256
 msgid "Programming Languages"
@@ -2916,11 +2916,11 @@ msgstr ""
 
 #: src/libide/preferences/ide-preferences-builtin.c:323
 msgid "Overwrite Braces"
-msgstr "Sobreescriu el claudàtors"
+msgstr "Sobreescriu els claudàtors"
 
 #: src/libide/preferences/ide-preferences-builtin.c:323
 msgid "Overwrite closing braces"
-msgstr "Sobreescriu el claudàtors tancats"
+msgstr "Sobreescriu els claudàtors tancats"
 
 #: src/libide/preferences/ide-preferences-builtin.c:324
 msgid "Insert Matching Brace"
@@ -3065,7 +3065,7 @@ msgstr "Espai de treball"
 
 #: src/libide/preferences/ide-preferences-builtin.c:412
 msgid "A place for all your projects"
-msgstr "Un lloc per tots els vostre projectes"
+msgstr "Un lloc per tots els vostres projectes"
 
 #: src/libide/preferences/ide-preferences-builtin.c:413
 msgid "Restore previously opened files"
@@ -3201,7 +3201,7 @@ msgstr "No hi ha proves disponibles"
 
 #: src/libide/testing/ide-test-panel.ui:13
 msgid "Tests will be loaded after building."
-msgstr "Les proves es carregaran desprès de la construcció."
+msgstr "Les proves es carregaran després de la construcció."
 
 #: src/libide/transfers/ide-pkcon-transfer.c:55
 #, c-format
@@ -3367,7 +3367,7 @@ msgstr "Prem Ctrl+. per cercar"
 #: src/libide/workbench/ide-workbench-shortcuts.c:35
 msgctxt "shortcut window"
 msgid "Toggle window to fullscreen"
-msgstr "Commuta la finestra a pantalla sencera"
+msgstr "Commuta la finestra a pantalla completa"
 
 #: src/libide/workbench/ide-workbench-shortcuts.c:41
 msgctxt "shortcut window"
@@ -3556,11 +3556,11 @@ msgstr "Connector embellidor:  la vista no és GtkSourceView"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:93
 msgid "Beautifier Plugin: no default beautifier found"
-msgstr "Connector embellidor:  no s'ha trobar embellidor per defecte"
+msgstr "Connector embellidor: no s'ha trobat embellidor per defecte"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:99
 msgid "Beautifier Plugin: the buffer is not writable"
-msgstr "Connector embellidor: la memòria intermèdia no és pot escriure"
+msgstr "Connector embellidor: la memòria intermèdia no es pot escriure"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:107
 msgid "Beautifier Plugin: Nothing selected"
@@ -3590,7 +3590,7 @@ msgstr "Activa l'entrada per defecte"
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
 msgstr ""
-"Connector embellidor: no hi ha entrades valides, s'està deshabilitant: %s"
+"Connector embellidor: no hi ha entrades vàlides, s'està deshabilitant: %s"
 
 #. translators: %s and %s are replaced with the temporary dir and the file path
 #: src/plugins/beautifier/gb-beautifier-helper.c:61
@@ -3703,7 +3703,7 @@ msgstr "S'està indexant el codi font"
 msgid "Search, diagnostics and autocompletion may be limited until complete."
 msgstr ""
 "La cerca, diagnòstic i la compleció automàtica poden ser limitades fins que "
-"estiguin complerts."
+"estiguin complets."
 
 #: src/plugins/color-picker/data/basic.gstyle.xml:20
 msgid "Basic"
@@ -3738,7 +3738,7 @@ msgstr "Desa la paleta"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:704
 msgid "All files"
-msgstr "Tots els fitxer"
+msgstr "Tots els fitxers"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:708
 msgid "All supported palettes formats"
@@ -4250,7 +4250,7 @@ msgstr "ESlint"
 
 #: src/plugins/eslint/eslint_plugin.py:144
 msgid "Enable the use of ESLint, which may execute code in your project"
-msgstr "Habilita el ús de ESLint, el qual pot executar codi al vostre projecte"
+msgstr "Habilita l'ús de ESLint, el qual pot executar codi al vostre projecte"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/eslint/eslint_plugin.py:146
@@ -4275,7 +4275,7 @@ msgstr "Descarregant fonts d'aplicacions..."
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
-msgstr "La xarxa no és disponible, s'estan ometent les descarregues"
+msgstr "La xarxa no és disponible, s'estan ometent les descàrregues"
 
 #: src/plugins/flatpak/gbp-flatpak-genesis-addin.c:93
 msgid "Clone App"
@@ -4315,7 +4315,7 @@ msgstr "S'està exportant el directori"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:543
 msgid "Creating flatpak bundle"
-msgstr "S'està creant el embolcall flatpak"
+msgstr "S'està creant l'embolcall flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
@@ -4441,7 +4441,7 @@ msgstr "El vostre projecte es crearà a %s"
 
 #: src/plugins/git/ide-git-clone-widget.ui:37
 msgid "Use Git to create a local copy of a remotely hosted project."
-msgstr "Useu Git per crear una copia local d'un projecte d'un amfitrió remot."
+msgstr "Useu Git per crear una còpia local d'un projecte d'un amfitrió remot."
 
 #: src/plugins/git/ide-git-clone-widget.ui:66
 msgid "user@host:repository.git"
@@ -4516,7 +4516,7 @@ msgid ""
 "This may result in the execution of code in your project."
 msgstr ""
 "Habilita l'ús de pylint per trobar diagnòstics addicionals en programes "
-"Python.Això pot permetre l'execució de codi al vostre projecte."
+"Python. Això pot permetre l'execució de codi al vostre projecte."
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #| msgid "Preview"
@@ -5072,7 +5072,7 @@ msgstr "Comprova l'_ortografia"
 
 #: src/plugins/spellcheck/gtk/menus.ui:14
 msgid "Underline misspelled words"
-msgstr "Subratlla el mots mal escrits"
+msgstr "Subratlla els mots mal escrits"
 
 #: src/plugins/support/gtk/menus.ui:7
 msgid "Generate Support Log"
@@ -5207,7 +5207,7 @@ msgstr "Mostra els errors i avisos proporcionats per Vala"
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:36
 #| msgid "If diagnostic warnings and errors should be highlighted."
 msgid "vala diagnostics warnings errors"
-msgstr "Errors avisos diagnostics Vala"
+msgstr "Errors avisos diagnòstics Vala"
 
 #: src/plugins/valgrind/gtk/menus.ui:10
 #: src/plugins/valgrind/valgrind_plugin.py:53
