@@ -29,6 +29,7 @@
 #include "devices/ide-device-provider.h"
 #include "local/ide-local-device.h"
 #include "plugins/ide-extension-util.h"
+#include "util/ide-posix.h"
 
 struct _IdeDeviceManager
 {
@@ -319,13 +320,36 @@ static void
 ide_device_manager_add_local (IdeDeviceManager *self)
 {
   g_autoptr(IdeDevice) device = NULL;
+  g_autofree gchar *arch = NULL;
   IdeContext *context;
 
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  device = g_object_new (IDE_TYPE_LOCAL_DEVICE, "context", context, NULL);
+
+  device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
+                         "context", context,
+                         NULL);
   ide_device_manager_provider_device_added_cb (self, device, NULL);
+
+  arch = ide_get_system_arch ();
+
+  /*
+   * If we're running on 64-bit intel, also include a 32-bit device
+   * that allows the user to build/configure the pipeline for i386.
+   */
+  if (g_str_equal (arch, "x86_64"))
+    {
+#if 0
+      g_autoptr(IdeDevice) legacy_device = NULL;
+
+      legacy_device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
+                                    "arch", "i386",
+                                    "context", context,
+                                    NULL);
+      ide_device_manager_provider_device_added_cb (self, legacy_device, NULL);
+#endif
+    }
 }
 
 static GType
