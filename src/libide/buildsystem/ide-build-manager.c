@@ -375,7 +375,7 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 
-  g_task_return_boolean (task, TRUE);
+  g_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
 
   IDE_EXIT;
 
