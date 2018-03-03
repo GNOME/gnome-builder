@@ -359,6 +359,8 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   if (g_task_return_error_if_cancelled (task))
     IDE_GOTO (failure);
 
+  _ide_build_pipeline_set_runtime (pipeline, runtime);
+
   cancellable = g_task_get_cancellable (task);
 
   /* This will cause plugins to load on the pipeline. */
