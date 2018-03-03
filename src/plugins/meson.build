@@ -104,6 +104,7 @@ status += [
   'Project Wizard ........ : @0@'.format(get_option('with_create_project')),
   'CTags ................. : @0@'.format(get_option('with_ctags')),
   'Devhelp ............... : @0@'.format(get_option('with_devhelp')),
+  'Deviced ............... : @0@'.format(get_option('with_deviced')),
   'ESLint ................ : @0@'.format(get_option('with_eslint')),
   'File Search ........... : @0@'.format(get_option('with_file_search')),
   'Find other file ....... : @0@'.format(get_option('with_find_other_file')),
