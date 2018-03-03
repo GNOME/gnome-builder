@@ -1192,10 +1192,10 @@ ide_build_pipeline_initable_init (GInitable     *initable,
 
   if (!pty_intercept_init (&self->intercept, master_fd, NULL))
     {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_FAILED,
-                   "Failed to initialize PTY intercept");
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           "Failed to initialize PTY intercept");
       IDE_RETURN (FALSE);
     }
 
