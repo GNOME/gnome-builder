@@ -21,9 +21,8 @@
 #include <gio/gio.h>
 #include <vte/vte.h>
 
-#include "ide-version-macros.h"
-
 #include "ide-types.h"
+#include "ide-version-macros.h"
 
 #include "buildsystem/ide-build-log.h"
 #include "buildsystem/ide-build-stage.h"
@@ -61,6 +60,8 @@ IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_get_busy            (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 IdeConfiguration      *ide_build_pipeline_get_configuration   (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_28
+IdeDevice             *ide_build_pipeline_get_device          (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_28
 IdeRuntime            *ide_build_pipeline_get_runtime         (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL

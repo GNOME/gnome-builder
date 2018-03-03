@@ -3535,3 +3535,21 @@ _ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
 
   g_set_object (&self->runtime, runtime);
 }
+
+/**
+ * ide_build_pipeline_get_device:
+ * @self: a #IdeBuildPipeline
+ *
+ * Gets the device that the pipeline is building for.
+ *
+ * Returns: (transfer none): an #IdeDevice.
+ *
+ * Since: 3.28
+ */
+IdeDevice *
+ide_build_pipeline_get_device (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->device;
+}
