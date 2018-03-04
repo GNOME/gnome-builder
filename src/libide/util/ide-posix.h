@@ -28,6 +28,10 @@ IDE_AVAILABLE_IN_ALL
 gchar       *ide_get_system_arch      (void);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_get_system_type      (void);
+IDE_AVAILABLE_IN_3_28
+gchar       *ide_create_host_triplet  (const gchar *arch,
+                                       const gchar *kernel,
+                                       const gchar *system);
 IDE_AVAILABLE_IN_ALL
 gsize        ide_get_system_page_size (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_ALL

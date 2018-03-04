@@ -25,6 +25,19 @@
 
 #include "util/ide-posix.h"
 
+gchar *
+ide_create_host_triplet (const gchar *arch,
+                         const gchar *kernel,
+                         const gchar *system)
+{
+  if (arch == NULL || kernel == NULL)
+    return g_strdup (ide_get_system_type ());
+  else if (system == NULL)
+    return g_strdup_printf ("%s-%s", arch, kernel);
+  else
+    return g_strdup_printf ("%s-%s-%s", arch, kernel, system);
+}
+
 const gchar *
 ide_get_system_type (void)
 {
