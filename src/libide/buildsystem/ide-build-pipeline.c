@@ -1062,6 +1062,31 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
   IDE_EXIT;
 }
 
+void
+_ide_build_pipeline_set_device_info (IdeBuildPipeline *self,
+                                     IdeDeviceInfo    *info)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_DEVICE_INFO (info));
+
+  g_clear_pointer (&self->arch, g_free);
+  g_clear_pointer (&self->kernel, g_free);
+  g_clear_pointer (&self->system, g_free);
+  g_clear_pointer (&self->system_type, g_free);
+
+  g_object_get (info,
+                "arch", &self->arch,
+                "kernel", &self->kernel,
+                "system", &self->system,
+                NULL);
+
+  self->system_type = ide_create_host_triplet (self->arch, self->kernel, self->system);
+
+  IDE_EXIT;
+}
+
 static void
 ide_build_pipeline_load_get_info_cb (GObject      *object,
                                      GAsyncResult *result,
@@ -1087,20 +1112,7 @@ ide_build_pipeline_load_get_info_cb (GObject      *object,
   if (g_cancellable_is_cancelled (self->cancellable))
     IDE_EXIT;
 
-  g_assert (self->arch == NULL);
-  g_assert (self->kernel == NULL);
-  g_assert (self->system == NULL);
-  g_assert (self->system_type == NULL);
-
-  g_object_get (info,
-                "arch", &self->arch,
-                "kernel", &self->kernel,
-                "system", &self->system,
-                NULL);
-
-  self->system_type = ide_create_host_triplet (self->arch,
-                                               self->kernel,
-                                               self->system);
+  _ide_build_pipeline_set_device_info (self, info);
 
   ide_build_pipeline_load (self);
 }

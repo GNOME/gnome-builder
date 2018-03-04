@@ -24,6 +24,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "buildsystem/ide-build-private.h"
 #include "config/ide-configuration.h"
 #include "devices/ide-device.h"
 #include "runtimes/ide-runtime.h"
@@ -44,12 +45,26 @@ typedef struct
   IdeRuntimeProvider *provider;
 } InstallLookup;
 
+typedef struct
+{
+  IdeBuildPipeline *pipeline;
+  gchar            *runtime_id;
+} PrepareState;
+
 static void list_model_iface_init (GListModelInterface *iface);
 static void initable_iface_init   (GInitableIface      *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeRuntimeManager, ide_runtime_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
+
+static void
+prepare_state_free (PrepareState *state)
+{
+  g_clear_object (&state->pipeline);
+  g_clear_pointer (&state->runtime_id, g_free);
+  g_slice_free (PrepareState, state);
+}
 
 static void
 ide_runtime_manager_extension_added (PeasExtensionSet *set,
@@ -280,165 +295,9 @@ install_lookup_cb (PeasExtensionSet   *set,
 }
 
 static void
-ide_runtime_manager_install_cb (GObject      *object,
+ide_runtime_manager_prepare_cb (GObject      *object,
                                 GAsyncResult *result,
                                 gpointer      user_data)
-{
-  IdeRuntimeProvider *provider = (IdeRuntimeProvider *)object;
-  IdeRuntimeManager *self;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  IdeRuntime *runtime;
-  const gchar *runtime_id;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
-
-  if (!ide_runtime_provider_install_finish (provider, result, &error))
-    {
-      g_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  self = g_task_get_source_object (task);
-  runtime_id = g_task_get_task_data (task);
-
-  g_assert (IDE_IS_RUNTIME_MANAGER (self));
-  g_assert (runtime_id != NULL);
-
-  runtime = ide_runtime_manager_get_runtime (self, runtime_id);
-
-  if (runtime == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Runtime provider returned success but did not register runtime %s",
-                               runtime_id);
-      IDE_EXIT;
-    }
-
-  g_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
-
-  IDE_EXIT;
-}
-
-/**
- * ide_runtime_manager_ensure_async:
- * @self: An #IdeRuntimeManager
- * @runtime_id: the id for an expected runtime
- * @cancellable: (nullable): a #GCancellable or %NULL
- * @callback: a callback to call after execution
- * @user_data: user data for @callback
- *
- * This function will asynchronously check if a runtime is installed.
- *
- * If it is not installed, it will check to see if any runtime provider
- * can provide the runtime by installing it. If so, the runtime will be
- * installed.
- *
- * Call ide_runtime_manager_ensure_finish() to get the resulting runtime
- * or a #GError in case of failure.
- */
-void
-ide_runtime_manager_ensure_async (IdeRuntimeManager   *self,
-                                  const gchar         *runtime_id,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
-{
-  g_autoptr(GTask) task = NULL;
-  InstallLookup lookup = {
-    .runtime_id = runtime_id,
-    .provider = NULL
-  };
-
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
-  g_return_if_fail (runtime_id != NULL);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_runtime_manager_ensure_async);
-  g_task_set_task_data (task, g_strdup (runtime_id), g_free);
-
-  /*
-   * It would be tempting to just return early here if we could locate
-   * the runtime as already registered. But that isn't enough since we
-   * might need to also install an SDK.
-   */
-
-  peas_extension_set_foreach (self->extensions,
-                              (PeasExtensionSetForeachFunc) install_lookup_cb,
-                              &lookup);
-
-  if (lookup.provider == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Failed to locate provider for runtime: %s",
-                               runtime_id);
-      IDE_EXIT;
-    }
-
-  ide_runtime_provider_install_async (lookup.provider,
-                                      runtime_id,
-                                      cancellable,
-                                      ide_runtime_manager_install_cb,
-                                      g_steal_pointer (&task));
-
-  IDE_EXIT;
-}
-
-/**
- * ide_runtime_manager_ensure_finish:
- * @self: an #IdeRuntimeManager
- * @result: a #GAsyncResult
- * @error: a location for a #GError or %NULL
- *
- * Completes an asynchronous request to ide_runtime_manager_ensure_async()
- *
- * Returns: (transfer full): An #IdeRuntime or %NULL.
- */
-IdeRuntime *
-ide_runtime_manager_ensure_finish (IdeRuntimeManager  *self,
-                                   GAsyncResult       *result,
-                                   GError            **error)
-{
-  g_autoptr(GError) local_error = NULL;
-  IdeRuntime *ret;
-
-  g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
-
-  ret = g_task_propagate_pointer (G_TASK (result), &local_error);
-
-  /*
-   * If we got NOT_SUPPORTED error, and the runtime already exists,
-   * then we can synthesize a successful result to the caller.
-   */
-  if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
-    {
-      const gchar *runtime_id = g_task_get_task_data (G_TASK (result));
-      ret = ide_runtime_manager_get_runtime (self, runtime_id);
-      if (ret != NULL)
-        return ret;
-    }
-
-  if (error != NULL)
-    *error = g_steal_pointer (&local_error);
-
-  return ret;
-}
-
-static void
-ide_runtime_manager_ensure_config_cb (GObject      *object,
-                                      GAsyncResult *result,
-                                      gpointer      user_data)
 {
   IdeRuntimeProvider *provider = (IdeRuntimeProvider *)object;
   g_autoptr(IdeRuntime) runtime = NULL;
@@ -463,52 +322,44 @@ ide_runtime_manager_ensure_config_cb (GObject      *object,
   IDE_EXIT;
 }
 
-/**
- * ide_runtime_manager_ensure_config_async:
- * @self: a #IdeRuntimeManager
- * @configuration: an #IdeConfiguration
- * @cancellable: (nullable): a #GCancellable or %NULL
- * @callback: a #GAsyncReadyCallback to execute upon completion
- * @user_data: closure data for @callback
- *
- * Ensures that the runtime or multiple runtimes that may be necessary to
- * build the configuration are installed.
- *
- * Since: 3.28
- */
 void
-ide_runtime_manager_ensure_config_async (IdeRuntimeManager   *self,
-                                         IdeConfiguration    *configuration,
-                                         IdeDevice           *device,
-                                         GCancellable        *cancellable,
-                                         GAsyncReadyCallback  callback,
-                                         gpointer             user_data)
+_ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
+                                    IdeBuildPipeline    *pipeline,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  IdeConfiguration *config;
+  PrepareState *state;
   const gchar *runtime_id;
   InstallLookup lookup = { 0 };
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_RUNTIME_MANAGER (self));
-  g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
-  g_return_if_fail (IDE_IS_DEVICE (device));
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  runtime_id = ide_configuration_get_runtime_id (configuration);
+  config = ide_build_pipeline_get_configuration (pipeline);
+  runtime_id = ide_configuration_get_runtime_id (config);
 
   task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_runtime_manager_ensure_config_async);
+  g_task_set_source_tag (task, _ide_runtime_manager_prepare_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task, g_strdup (runtime_id), g_free);
+
+  state = g_slice_new0 (PrepareState);
+  state->runtime_id = g_strdup (runtime_id);
+  state->pipeline = g_object_ref (pipeline);
+  g_task_set_task_data (task, state, (GDestroyNotify)prepare_state_free);
 
   if (runtime_id == NULL)
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_FAILED,
-                               "Configuration does not have specified runtime");
-      return;
+                               "Configuration lacks runtime specification");
+      IDE_EXIT;
     }
 
   /*
@@ -523,48 +374,36 @@ ide_runtime_manager_ensure_config_async (IdeRuntimeManager   *self,
                               &lookup);
 
   if (lookup.provider == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Failed to locate provider for runtime: %s",
-                               runtime_id);
-      IDE_EXIT;
-    }
-
-  ide_runtime_provider_bootstrap_async (lookup.provider,
-                                        configuration,
-                                        device,
-                                        cancellable,
-                                        ide_runtime_manager_ensure_config_cb,
-                                        g_steal_pointer (&task));
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Failed to locate provider for runtime: %s",
+                             runtime_id);
+  else
+    ide_runtime_provider_bootstrap_async (lookup.provider,
+                                          pipeline,
+                                          cancellable,
+                                          ide_runtime_manager_prepare_cb,
+                                          g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
-/**
- * ide_runtime_manager_ensure_config_finish:
- * @self: a #IdeRuntimeManager
- * @result: a #GAsyncResult provided to callback
- * @error: a location for a #GError or %NULL
- *
- * Completes an asynchronous request to ide_runtime_manager_ensure_config_async().
- *
- * Returns: (transfer full): an #IdeRuntime
- *
- * Since: 3.28
- */
-IdeRuntime *
-ide_runtime_manager_ensure_config_finish (IdeRuntimeManager  *self,
-                                          GAsyncResult       *result,
-                                          GError            **error)
+gboolean
+_ide_runtime_manager_prepare_finish (IdeRuntimeManager  *self,
+                                     GAsyncResult       *result,
+                                     GError            **error)
 {
+  g_autoptr(IdeRuntime) ret = NULL;
   g_autoptr(GError) local_error = NULL;
-  IdeRuntime *ret;
+  PrepareState *state;
 
-  g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  IDE_ENTRY;
 
+  g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  state = g_task_get_task_data (G_TASK (result));
   ret = g_task_propagate_pointer (G_TASK (result), &local_error);
 
   /*
@@ -573,16 +412,17 @@ ide_runtime_manager_ensure_config_finish (IdeRuntimeManager  *self,
    */
   if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
     {
-      const gchar *runtime_id = g_task_get_task_data (G_TASK (result));
-      ret = ide_runtime_manager_get_runtime (self, runtime_id);
-      if (ret != NULL)
-        return ret;
+      if ((ret = ide_runtime_manager_get_runtime (self, state->runtime_id)))
+        g_clear_error (&local_error);
     }
 
   if (error != NULL)
     *error = g_steal_pointer (&local_error);
 
-  g_return_val_if_fail (!ret || IDE_IS_RUNTIME (ret), NULL);
+  g_return_val_if_fail (!ret || IDE_IS_RUNTIME (ret), FALSE);
 
-  return ret;
+  if (IDE_IS_RUNTIME (ret))
+    _ide_build_pipeline_set_runtime (state->pipeline, ret);
+
+  IDE_RETURN (ret != NULL);
 }

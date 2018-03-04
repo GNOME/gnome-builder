@@ -46,8 +46,6 @@ typedef struct
 typedef struct
 {
   IdeConfiguration *config;
-  IdeDevice        *device;
-  IdeDeviceInfo    *info;
   gchar            *runtime_id;
   gchar            *name;
   gchar            *arch;
@@ -79,8 +77,6 @@ bootstrap_state_free (gpointer data)
   g_assert (state != NULL);
 
   g_clear_object (&state->config);
-  g_clear_object (&state->device);
-  g_clear_object (&state->info);
   g_clear_pointer (&state->runtime_id, g_free);
   g_clear_pointer (&state->name, g_free);
   g_clear_pointer (&state->arch, g_free);
@@ -577,12 +573,8 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
     {
       g_autofree gchar *runtime_id = NULL;
       IdeRuntimeManager *runtime_manager;
-      const gchar *arch;
       IdeContext *context;
       IdeRuntime *runtime;
-
-      if (!(arch = ide_device_info_get_arch (state->info)))
-        arch = state->arch;
 
       runtime_id = g_strdup_printf ("flatpak:%s/%s/%s",
                                     state->name,
@@ -604,57 +596,54 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
 }
 
 static void
-bootstrap_get_info_cb (GObject      *object,
-                       GAsyncResult *result,
-                       gpointer      user_data)
+gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
+                                              IdeBuildPipeline    *pipeline,
+                                              GCancellable        *cancellable,
+                                              GAsyncReadyCallback  callback,
+                                              gpointer             user_data)
 {
-  IdeDevice *device = (IdeDevice *)object;
-  g_autoptr(IdeDeviceInfo) info = NULL;
-  g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
-  GbpFlatpakRuntimeProvider *self;
+  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *arch = NULL;
+  g_autofree gchar *branch = NULL;
+  g_autoptr(GTask) task = NULL;
+  IdeConfiguration *config;
   BootstrapState *state;
-  GCancellable *cancellable;
-  const gchar *arch;
+  const gchar *runtime_id;
+  const gchar *build_arch;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_DEVICE (device));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
-
-  cancellable = g_task_get_cancellable (task);
-  state = g_task_get_task_data (task);
-  self = g_task_get_source_object (task);
-
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (state != NULL);
-  g_assert (IDE_IS_DEVICE (state->device));
-  g_assert (IDE_IS_CONFIGURATION (state->config));
 
-  if (!(info = ide_device_get_info_finish (device, result, &error)))
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_flatpak_runtime_provider_bootstrap_async);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  build_arch = ide_build_pipeline_get_arch (pipeline);
+  config = ide_build_pipeline_get_configuration (pipeline);
+  runtime_id = ide_configuration_get_runtime_id (config);
+
+  if (runtime_id == NULL ||
+      !g_str_has_prefix (runtime_id, "flatpak:") ||
+      !gbp_flatpak_split_id (runtime_id + strlen ("flatpak:"), &name, &arch, &branch))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "No runtime available");
       IDE_EXIT;
     }
 
-  g_set_object (&state->info, info);
-
-  arch = ide_device_info_get_arch (info);
-
-  if (arch != NULL)
-    {
-      g_free (state->arch);
-      g_free (state->runtime_id);
-
-      state->arch = g_strdup (arch);
-      state->runtime_id = g_strdup_printf ("flatpak:%s/%s/%s",
-                                           state->name,
-                                           state->arch,
-                                           state->branch);
-    }
+  state = g_slice_new0 (BootstrapState);
+  state->config = g_object_ref (config);
+  state->runtime_id = g_strdup_printf ("flatpak:%s/%s/%s", name, build_arch, branch);
+  state->name = g_steal_pointer (&name);
+  state->branch = g_steal_pointer (&branch);
+  state->arch = g_strdup (build_arch);
+  g_task_set_task_data (task, state, bootstrap_state_free);
 
   if (GBP_IS_FLATPAK_MANIFEST (state->config))
     {
@@ -703,69 +692,6 @@ bootstrap_get_info_cb (GObject      *object,
                                               cancellable,
                                               gbp_flatpak_runtime_provider_bootstrap_cb,
                                               g_object_ref (task));
-
-  IDE_EXIT;
-}
-
-static void
-gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
-                                              IdeConfiguration    *configuration,
-                                              IdeDevice           *device,
-                                              GCancellable        *cancellable,
-                                              GAsyncReadyCallback  callback,
-                                              gpointer             user_data)
-{
-  GbpFlatpakRuntimeProvider *self = (GbpFlatpakRuntimeProvider *)provider;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *arch = NULL;
-  g_autofree gchar *branch = NULL;
-  g_autoptr(GTask) task = NULL;
-  BootstrapState *state;
-  const gchar *runtime_id;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (IDE_IS_DEVICE (device));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  runtime_id = ide_configuration_get_runtime_id (configuration);
-
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_flatpak_runtime_provider_bootstrap_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-
-  if (runtime_id == NULL ||
-      !g_str_has_prefix (runtime_id, "flatpak:") ||
-      !gbp_flatpak_split_id (runtime_id + strlen ("flatpak:"), &name, &arch, &branch))
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               "No runtime available");
-      IDE_EXIT;
-    }
-
-  state = g_slice_new0 (BootstrapState);
-  state->config = g_object_ref (configuration);
-  state->device = g_object_ref (device);
-  state->runtime_id = g_strdup (runtime_id);
-  state->name = g_steal_pointer (&name);
-  state->branch = g_steal_pointer (&branch);
-  state->arch = g_steal_pointer (&arch);
-  g_task_set_task_data (task, state, bootstrap_state_free);
-
-  /*
-   * First thing we need to do is connect to the device and get information
-   * about what sort of system it is. We might need to alter architecture
-   * we're building for.
-   */
-
-  ide_device_get_info_async (device,
-                             cancellable,
-                             bootstrap_get_info_cb,
-                             g_steal_pointer (&task));
 
   IDE_EXIT;
 }

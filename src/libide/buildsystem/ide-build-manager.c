@@ -37,6 +37,7 @@
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
+#include "runtimes/ide-runtime-private.h"
 
 /**
  * SECTION:ide-build-manager
@@ -323,11 +324,10 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
                                      gpointer      user_data)
 {
   IdeRuntimeManager *runtime_manager = (IdeRuntimeManager *)object;
-  g_autoptr(IdeRuntime) runtime = NULL;
-  g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeBuildManager *self;
+  g_autoptr(GTask) task = user_data;
   IdeBuildPipeline *pipeline;
+  IdeBuildManager *self;
   GCancellable *cancellable;
 
   IDE_ENTRY;
@@ -342,11 +342,9 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  runtime = ide_runtime_manager_ensure_config_finish (runtime_manager, result, &error);
-
-  if (runtime == NULL)
+  if (!_ide_runtime_manager_prepare_finish (runtime_manager, result, &error))
     {
-      g_message ("Failed to locate runtime: %s", error->message);
+      g_message ("Failed to prepare runtime: %s", error->message);
       IDE_GOTO (failure);
     }
 
@@ -358,8 +356,6 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
 
   if (g_task_return_error_if_cancelled (task))
     IDE_GOTO (failure);
-
-  _ide_build_pipeline_set_runtime (pipeline, runtime);
 
   cancellable = g_task_get_cancellable (task);
 
@@ -377,7 +373,7 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 
-  g_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
+  g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 
@@ -395,11 +391,58 @@ failure:
 }
 
 static void
+ide_build_manager_device_get_info_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  IdeDevice *device = (IdeDevice *)object;
+  g_autoptr(IdeDeviceInfo) info = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  IdeRuntimeManager *runtime_manager;
+  IdeBuildPipeline *pipeline;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEVICE (device));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  pipeline = g_task_get_task_data (task);
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  runtime_manager = ide_context_get_runtime_manager (context);
+  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
+
+  if (!(info = ide_device_get_info_finish (device, result, &error)))
+    {
+      ide_context_warning (context,
+                           _("Failed to get device information: %s"),
+                           error->message);
+      g_task_return_error (task, g_steal_pointer (&task));
+      IDE_EXIT;
+    }
+
+  _ide_build_pipeline_set_device_info (pipeline, info);
+
+  _ide_runtime_manager_prepare_async (runtime_manager,
+                                      pipeline,
+                                      g_task_get_cancellable (task),
+                                      ide_build_manager_ensure_runtime_cb,
+                                      g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
 ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 {
-  IdeConfigurationManager *config_manager;
   g_autoptr(GTask) task = NULL;
-  IdeRuntimeManager *runtime_manager;
+  IdeConfigurationManager *config_manager;
   IdeDeviceManager *device_manager;
   IdeConfiguration *config;
   IdeContext *context;
@@ -446,7 +489,6 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 
   config_manager = ide_context_get_configuration_manager (context);
   device_manager = ide_context_get_device_manager (context);
-  runtime_manager = ide_context_get_runtime_manager (context);
 
   config = ide_configuration_manager_get_current (config_manager);
   device = ide_device_manager_get_device (device_manager);
@@ -468,23 +510,22 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   dzl_signal_group_set_target (self->pipeline_signals, self->pipeline);
 
   /*
-   * This next part of the pipeline setup is asynchronous, as we need to
-   * make sure that the pipeline's runtime is available before we setup
-   * the pipeline. That could mean that we have to install it.
-   *
-   * We setup a cancellable so that we can cancel the setup operation in
-   * case a further configuration change comes through and we need to
-   * tear down the pipeline immediately.
+   * Create a task to manage our async pipeline initialization state.
    */
   task = g_task_new (self, self->cancellable, NULL, NULL);
   g_task_set_task_data (task, g_object_ref (self->pipeline), g_object_unref);
   g_task_set_priority (task, G_PRIORITY_LOW);
-  ide_runtime_manager_ensure_config_async (runtime_manager,
-                                           config,
-                                           device,
-                                           self->cancellable,
-                                           ide_build_manager_ensure_runtime_cb,
-                                           g_steal_pointer (&task));
+
+  /*
+   * Next, we need to get information on the build device, which may require
+   * connecting to it. So we will query that information (so we can get
+   * arch/kernel/system too). We might need that when bootstrapping the
+   * runtime (if it's missing) among other things.
+   */
+  ide_device_get_info_async (device,
+                             self->cancellable,
+                             ide_build_manager_device_get_info_cb,
+                             g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ERROR_COUNT]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);

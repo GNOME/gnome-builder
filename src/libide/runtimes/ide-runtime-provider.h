@@ -49,8 +49,7 @@ struct _IdeRuntimeProviderInterface
                                    GAsyncResult         *result,
                                    GError              **error);
   void        (*bootstrap_async)  (IdeRuntimeProvider   *self,
-                                   IdeConfiguration     *configuration,
-                                   IdeDevice            *device,
+                                   IdeBuildPipeline     *pipeline,
                                    GCancellable         *cancellable,
                                    GAsyncReadyCallback   callback,
                                    gpointer              user_data);
@@ -80,8 +79,7 @@ gboolean    ide_runtime_provider_install_finish   (IdeRuntimeProvider   *self,
                                                    GError              **error);
 IDE_AVAILABLE_IN_3_28
 void        ide_runtime_provider_bootstrap_async  (IdeRuntimeProvider   *self,
-                                                   IdeConfiguration     *configuration,
-                                                   IdeDevice            *device,
+                                                   IdeBuildPipeline     *pipeline,
                                                    GCancellable         *cancellable,
                                                    GAsyncReadyCallback   callback,
                                                    gpointer              user_data);

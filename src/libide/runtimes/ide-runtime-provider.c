@@ -19,9 +19,10 @@
 #define G_LOG_DOMAIN "ide-runtime-provider"
 
 #include "ide-context.h"
+#include "ide-debug.h"
 
+#include "buildsystem/ide-build-pipeline.h"
 #include "config/ide-configuration.h"
-#include "devices/ide-device.h"
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-provider.h"
@@ -110,41 +111,42 @@ ide_runtime_provider_real_bootstrap_cb (GObject      *object,
 
 void
 ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
-                                           IdeConfiguration    *configuration,
-                                           IdeDevice           *device,
+                                           IdeBuildPipeline    *pipeline,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  IdeConfiguration *config;
   const gchar *runtime_id;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_RUNTIME_PROVIDER (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (IDE_IS_DEVICE (device));
-  g_assert (!cancellable || IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_runtime_provider_real_bootstrap_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
 
-  runtime_id = ide_configuration_get_runtime_id (configuration);
+  config = ide_build_pipeline_get_configuration (pipeline);
+  runtime_id = ide_configuration_get_runtime_id (config);
   g_task_set_task_data (task, g_strdup (runtime_id), g_free);
 
   if (runtime_id == NULL)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "No runtime provided to install");
-      return;
-    }
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_FAILED,
+                             "No runtime provided to install");
+  else
+    ide_runtime_provider_install_async (self,
+                                        runtime_id,
+                                        cancellable,
+                                        ide_runtime_provider_real_bootstrap_cb,
+                                        g_steal_pointer (&task));
 
-  ide_runtime_provider_install_async (self,
-                                      runtime_id,
-                                      cancellable,
-                                      ide_runtime_provider_real_bootstrap_cb,
-                                      g_steal_pointer (&task));
+  IDE_EXIT;
 }
 
 IdeRuntime *
@@ -227,15 +229,16 @@ ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
 /**
  * ide_runtime_provider_bootstrap_async:
  * @self: a #IdeRuntimeProvider
- * @configuration: an #IdeConfiguration
- * @device: an #IdeDevice
+ * @pipeline: an #IdeBuildPipeline
  * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a #GAsyncReadyCallback or %NULL
  * @user_data: closure data for @callback
  *
  * This function allows to the runtime provider to install dependent runtimes
  * similar to ide_runtime_provider_install_async(), but with the added benefit
- * that it can access the configuration for additional information.
+ * that it can access the pipeline for more information. For example, it may
+ * want to check the architecture of the pipeline, or the connected device for
+ * tweaks as to what runtime to use.
  *
  * Some runtime providers like Flatpak might use this to locate SDK extensions
  * and install those too.
@@ -246,18 +249,16 @@ ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
  */
 void
 ide_runtime_provider_bootstrap_async (IdeRuntimeProvider  *self,
-                                      IdeConfiguration    *configuration,
-                                      IdeDevice           *device,
+                                      IdeBuildPipeline    *pipeline,
                                       GCancellable        *cancellable,
                                       GAsyncReadyCallback  callback,
                                       gpointer             user_data)
 {
   g_return_if_fail (IDE_IS_RUNTIME_PROVIDER (self));
-  g_return_if_fail (IDE_IS_CONFIGURATION (configuration));
-  g_return_if_fail (IDE_IS_DEVICE (device));
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_async (self, configuration, device, cancellable, callback, user_data);
+  IDE_RUNTIME_PROVIDER_GET_IFACE (self)->bootstrap_async (self, pipeline, cancellable, callback, user_data);
 }
 
 /**
@@ -267,6 +268,9 @@ ide_runtime_provider_bootstrap_async (IdeRuntimeProvider  *self,
  * @error: a location for a #GError, or %NULL
  *
  * Completes the asynchronous request to bootstrap.
+ *
+ * The resulting runtime will be set as the runtime to use for the build
+ * pipeline.
  *
  * Returns: (transfer full): an #IdeRuntime if successful; otherwise %NULL
  *   and @error is set.
