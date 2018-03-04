@@ -49,6 +49,7 @@
 #include "runtimes/ide-runtime.h"
 #include "terminal/ide-terminal-util.h"
 #include "util/ide-line-reader.h"
+#include "util/ide-posix.h"
 #include "util/ptyintercept.h"
 #include "vcs/ide-vcs.h"
 
@@ -3718,4 +3719,22 @@ ide_build_pipeline_get_system_type (IdeBuildPipeline *self)
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
   return self->system_type;
+}
+
+/**
+ * ide_build_pipeline_is_native:
+ * @self: a #IdeBuildPipeline
+ *
+ * Checks to see if the pipeline is building for the native architecture,
+ * kernel, and system of the host.
+ *
+ * This is equivalent to checking if ide_get_system_type() matches the host
+ * triplet (arch, kernel, system) properties of the pipeline.
+ *
+ * Returns: %TRUE if this is a native build, otherwise %FALSE.
+ */
+gboolean
+ide_build_pipeline_is_native (IdeBuildPipeline *self)
+{
+  return g_strcmp0 (self->system_type, ide_get_system_type ()) == 0;
 }
