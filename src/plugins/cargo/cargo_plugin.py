@@ -103,7 +103,6 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         cargo_toml = build_system.props.project_file.get_path()
         config = pipeline.get_configuration()
-        system_type = config.get_device().get_system_type()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
 
@@ -130,9 +129,9 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_launcher.push_argv('--message-format')
         build_launcher.push_argv('human')
 
-        if Ide.get_system_type() != system_type:
+        if not pipeline.is_native():
             build_launcher.push_argv('--target')
-            build_launcher.push_argv(system_type)
+            build_launcher.push_argv(pipeline.get_system_type())
 
         if config.props.parallelism > 0:
             build_launcher.push_argv('-j{}'.format(config.props.parallelism))
