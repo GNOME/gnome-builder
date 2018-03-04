@@ -163,6 +163,16 @@ struct _IdeBuildPipeline
   gchar *srcdir;
 
   /*
+   * This is some general information about our build device that
+   * the pipeline addins may want to use to tweak how the execute
+   * the build.
+   */
+  gchar *arch;
+  gchar *kernel;
+  gchar *system;
+  gchar *system_type;
+
+  /*
    * This is an array of PipelineEntry, which contain information we
    * need about the stage and an identifier that addins can use to
    * remove their inserted stages.
@@ -1051,6 +1061,75 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
   IDE_EXIT;
 }
 
+static void
+ide_build_pipeline_load_get_info_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeDevice *device = (IdeDevice *)object;
+  g_autoptr(IdeBuildPipeline) self = user_data;
+  g_autoptr(IdeDeviceInfo) info = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEVICE (device));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+
+  if (!(info = ide_device_get_info_finish (device, result, &error)))
+    {
+      g_warning ("Failed to get device information: %s", error->message);
+      IDE_EXIT;
+    }
+
+  if (g_cancellable_is_cancelled (self->cancellable))
+    IDE_EXIT;
+
+  g_assert (self->arch == NULL);
+  g_assert (self->kernel == NULL);
+  g_assert (self->system == NULL);
+  g_assert (self->system_type == NULL);
+
+  g_object_get (info,
+                "arch", &self->arch,
+                "kernel", &self->kernel,
+                "system", &self->system,
+                NULL);
+
+  self->system_type = ide_create_host_triplet (self->arch,
+                                               self->kernel,
+                                               self->system);
+
+  ide_build_pipeline_load (self);
+}
+
+static void
+ide_build_pipeline_begin_load (IdeBuildPipeline *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+  g_assert (IDE_IS_DEVICE (self->device));
+
+  /*
+   * The first thing we need to do is get some information from the
+   * configured device. We want to know the arch/kernel/system triplet
+   * for the device as some pipeline addins may need that. We can also
+   * use that to ensure that we load the proper runtime for the device.
+   *
+   * We have to load this information asynchronously, as the device might
+   * be remote (and we need to connect to it to get the information).
+   */
+
+  ide_device_get_info_async (self->device,
+                             self->cancellable,
+                             ide_build_pipeline_load_get_info_cb,
+                             g_object_ref (self));
+
+  IDE_EXIT;
+}
+
 /**
  * ide_build_pipeline_unload:
  * @self: an #IdeBuildPipeline
@@ -1094,7 +1173,7 @@ ide_build_pipeline_notify_ready (IdeBuildPipeline *self,
       g_signal_handlers_disconnect_by_func (configuration,
                                             G_CALLBACK (ide_build_pipeline_notify_ready),
                                             self);
-      ide_build_pipeline_load (self);
+      ide_build_pipeline_begin_load (self);
     }
   else
     g_debug ("Configuration not yet ready, delaying pipeline setup");
@@ -1118,6 +1197,10 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->runtime);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
+  g_clear_pointer (&self->arch, g_free);
+  g_clear_pointer (&self->kernel, g_free);
+  g_clear_pointer (&self->system, g_free);
+  g_clear_pointer (&self->system_type, g_free);
   g_clear_pointer (&self->srcdir, g_free);
   g_clear_pointer (&self->builddir, g_free);
   g_clear_pointer (&self->errfmts, g_array_unref);
@@ -1139,6 +1222,8 @@ ide_build_pipeline_dispose (GObject *object)
   g_auto(pty_fd_t) fd = PTY_FD_INVALID;
 
   IDE_ENTRY;
+
+  _ide_build_pipeline_cancel (self);
 
   ide_build_pipeline_unload (self);
 
@@ -3552,4 +3637,85 @@ ide_build_pipeline_get_device (IdeBuildPipeline *self)
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
   return self->device;
+}
+
+/**
+ * ide_build_pipeline_get_arch:
+ * @self: a #IdeBuildPipeline
+ *
+ * Gets the architecture that the pipeline is building for, once that has
+ * been discovered from the device.
+ *
+ * Returns: (nullable): a string describing the architecture, or %NULL
+ *
+ * Since: 3.28
+ */
+const gchar *
+ide_build_pipeline_get_arch (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->arch;
+}
+
+/**
+ * ide_build_pipeline_get_kernel:
+ * @self: a #IdeBuildPipeline
+ *
+ * Gets the kernel that the pipeline is building for, once that has
+ * been discovered from the device.
+ *
+ * Returns: (nullable): a string describing the kernel, or %NULL
+ *
+ * Since: 3.28
+ */
+const gchar *
+ide_build_pipeline_get_kernel (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->kernel;
+}
+
+/**
+ * ide_build_pipeline_get_system:
+ * @self: a #IdeBuildPipeline
+ *
+ * Gets the system portion of the host tripet that the pipeline is
+ * building for, once that has been discovered from the device.
+ *
+ * For Linux based devices, this will generally be "gnu".
+ *
+ * Returns: (nullable): a string describing the device system, or %NULL
+ *
+ * Since: 3.28
+ */
+const gchar *
+ide_build_pipeline_get_system (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->system;
+}
+
+/**
+ * ide_build_pipeline_get_system_type:
+ * @self: a #IdeBuildPipeline
+ *
+ * Gets the combination of arch-kernel-system, sometimes referred to as
+ * the "host triplet".
+ *
+ * For Linux based devices, this will generally be something like
+ * "x86_64-linux-gnu".
+ *
+ * Returns: a string describing the device
+ *
+ * Since: 3.28
+ */
+const gchar *
+ide_build_pipeline_get_system_type (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->system_type;
 }

@@ -68,6 +68,14 @@ IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_builddir        (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_srcdir          (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_28
+const gchar           *ide_build_pipeline_get_arch            (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_28
+const gchar           *ide_build_pipeline_get_kernel          (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_28
+const gchar           *ide_build_pipeline_get_system          (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_28
+const gchar           *ide_build_pipeline_get_system_type     (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 gchar                 *ide_build_pipeline_get_message         (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
