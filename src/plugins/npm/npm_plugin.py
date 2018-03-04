@@ -88,7 +88,6 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         package_json = build_system.props.project_file
         config = pipeline.get_configuration()
-        system_type = config.get_device().get_system_type()
         builddir = pipeline.get_builddir()
         runtime = config.get_runtime()
 
@@ -103,9 +102,9 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         fetch_launcher.set_name(_("Downloading npm dependencies"))
         fetch_launcher.set_cwd(package_json.get_parent().get_path())
         fetch_launcher.push_argv(npm)
-        if Ide.get_system_type() != system_type:
+        if not pipeline.is_native():
             fetch_launcher.push_argv('--arch')
-            fetch_launcher.push_argv(system_type)
+            fetch_launcher.push_argv(pipeline.get_arch())
         fetch_launcher.push_argv('install')
         self.track(pipeline.connect_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
 
