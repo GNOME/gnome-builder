@@ -494,8 +494,7 @@ ide_autotools_build_system_get_build_flags_finish (IdeBuildSystem  *build_system
 
 static gchar *
 ide_autotools_build_system_get_builddir (IdeBuildSystem   *build_system,
-                                         IdeConfiguration *configuration,
-                                         IdeDevice        *device)
+                                         IdeBuildPipeline *pipeline)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
   g_autoptr(GFile) makefile = NULL;
@@ -504,8 +503,7 @@ ide_autotools_build_system_get_builddir (IdeBuildSystem   *build_system,
   GFile *workdir;
 
   g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (IDE_IS_DEVICE (device));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   /*
    * If there is a Makefile in the build directory, then the project has been

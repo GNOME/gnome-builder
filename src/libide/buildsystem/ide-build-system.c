@@ -513,42 +513,41 @@ ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
 
 gchar *
 ide_build_system_get_builddir (IdeBuildSystem   *self,
-                               IdeConfiguration *configuration,
-                               IdeDevice        *device)
+                               IdeBuildPipeline *pipeline)
 {
   gchar *ret = NULL;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
-  g_return_val_if_fail (IDE_IS_CONFIGURATION (configuration), NULL);
-  g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (pipeline), NULL);
 
   if (IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir)
-    ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir (self, configuration, device);
+    ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_builddir (self, pipeline);
 
   if (ret == NULL)
     {
       g_autofree gchar *name = NULL;
       g_autofree gchar *branch = NULL;
+      IdeConfiguration *config;
       const gchar *config_id;
-      const gchar *device_id;
       const gchar *runtime_id;
+      IdeRuntime *runtime;
       IdeContext *context;
       IdeVcs *vcs;
 
       context = ide_object_get_context (IDE_OBJECT (self));
       vcs = ide_context_get_vcs (context);
-
-      config_id = ide_configuration_get_id (configuration);
-      device_id = ide_device_get_id (device);
-      runtime_id = ide_configuration_get_runtime_id (configuration);
+      config = ide_build_pipeline_get_configuration (pipeline);
+      config_id = ide_configuration_get_id (config);
+      runtime = ide_build_pipeline_get_runtime (pipeline);
+      runtime_id = ide_runtime_get_id (runtime);
       branch = ide_vcs_get_branch_name (vcs);
 
       if (branch != NULL)
-        name = g_strdup_printf ("%s-%s-%s-%s", config_id, device_id, runtime_id, branch);
+        name = g_strdup_printf ("%s-%s-%s", config_id, runtime_id, branch);
       else
-        name = g_strdup_printf ("%s-%s-%s", config_id, device_id, runtime_id);
+        name = g_strdup_printf ("%s-%s", config_id, runtime_id);
 
       g_strdelimit (name, "@:/", '-');
 

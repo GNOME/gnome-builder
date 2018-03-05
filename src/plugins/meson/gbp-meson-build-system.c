@@ -625,22 +625,22 @@ gbp_meson_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *build_
 
 static gchar *
 gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
-                                     IdeConfiguration *configuration,
-                                     IdeDevice        *device)
+                                     IdeBuildPipeline *pipeline)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
+  IdeConfiguration *config;
   IdeBuildLocality locality;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-  g_assert (IDE_IS_DEVICE (device));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   /*
    * If the build configuration requires that we do an in tree build (yuck),
    * then use "_build" as our build directory to build in-tree.
    */
 
-  locality = ide_configuration_get_locality (configuration);
+  config = ide_build_pipeline_get_configuration (pipeline);
+  locality = ide_configuration_get_locality (config);
 
   if ((locality & IDE_BUILD_LOCALITY_OUT_OF_TREE) == 0)
     {

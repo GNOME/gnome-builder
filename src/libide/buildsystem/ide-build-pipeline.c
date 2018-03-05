@@ -1325,7 +1325,6 @@ static void
 ide_build_pipeline_constructed (GObject *object)
 {
   IdeBuildPipeline *self = IDE_BUILD_PIPELINE (object);
-  IdeBuildSystem *build_system;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
@@ -1337,12 +1336,10 @@ ide_build_pipeline_constructed (GObject *object)
   g_assert (IDE_IS_CONFIGURATION (self->configuration));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
 
   self->srcdir = g_file_get_path (workdir);
-  self->builddir = ide_build_system_get_builddir (build_system, self->configuration, self->device);
 
   IDE_EXIT;
 }
@@ -3631,7 +3628,17 @@ _ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
   g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
 
-  g_set_object (&self->runtime, runtime);
+  if (g_set_object (&self->runtime, runtime))
+    {
+      IdeBuildSystem *build_system;
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      build_system = ide_context_get_build_system (context);
+
+      g_clear_pointer (&self->builddir, g_free);
+      self->builddir = ide_build_system_get_builddir (build_system, self);
+    }
 }
 
 /**

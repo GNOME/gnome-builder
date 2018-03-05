@@ -65,7 +65,7 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_priority(self):
         return 0
 
-    def do_get_builddir(self, config, device):
+    def do_get_builddir(self, pipeline):
         context = self.get_context()
         return context.get_vcs().get_working_directory().get_path()
 
@@ -103,7 +103,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         make = config.getenv('MAKE') or "make"
 
         srcdir = context.get_vcs().get_working_directory().get_path()
-        builddir = build_system.get_builddir(config)
+        builddir = pipeline.get_builddir()
 
         # Register the build launcher which will perform the incremental
         # build of the project when the Ide.BuildPhase.BUILD phase is
