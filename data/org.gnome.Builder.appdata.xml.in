@@ -82,6 +82,18 @@
 
   <releases>
 
+    <release version="3.27.92" date="2018-03-04">
+      <description>
+        <p>
+          This is our last beta release before 3.28.
+          Please file bugs for any issues you come across.
+        </p>
+        <ul>
+          <li>A number of non-visible changes have occurred in our build pipeline.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.27.91" date="2018-02-20">
       <description>
         <p>

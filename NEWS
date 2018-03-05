@@ -1,4 +1,38 @@
 ===============
+Version 3.27.92
+===============
+
+Changes since last release:
+
+ • Licensing improvements to meson-templates
+ • Improvements for Language Server Protocol compliance
+ • The device manager has been improved to support selecting a device
+   externally to the build configuration. UI is not currently exposed
+   and may be in a future release.
+ • The build configuration no longer contains a device.
+ • A number of build pipeline changes were made to support building for
+   an architecture other than the host.
+ • The "local device" is now named "My Computer"
+ • System architecture has been hoisted into the device info which
+   allows to more easily support remove devices.
+ • The code index builder tries harder to avoid blocking the main loop.
+ • A number of components were moved into the build pipeline to more
+   cleanly abstract device support.
+ • The mingw plugin was dropped as it no longer fits into our design
+   abstractions.
+
+Updated Translations:
+
+  Serbian, Serbian Latin, Turkish, Polish, German, Czech, Indonesian,
+  Catalan, Dutch, Galician, Brazilian Portuguese, Spanish, Korean,
+  Kazakh, Hungarian, Lithuanian
+
+Distributors:
+
+  A new deviced plugin was added, but we do not expect distributions to
+  ship it by default in 3.28. It is disabled by default.
+
+===============
 Version 3.27.91
 ===============
 
