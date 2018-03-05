@@ -94,6 +94,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
                   g_str_has_prefix (arg, "--share") ||
                   g_str_has_prefix (arg, "--socket") ||
                   g_str_has_prefix (arg, "--filesystem") ||
+                  g_str_has_prefix (arg, "--device") ||
                   g_str_has_prefix (arg, "--env") ||
                   g_str_has_prefix (arg, "--system-talk") ||
                   g_str_has_prefix (arg, "--own-name") ||
