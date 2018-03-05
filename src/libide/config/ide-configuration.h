@@ -190,9 +190,5 @@ IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_internal_object       (IdeConfiguration      *self,
                                                                    const gchar           *key,
                                                                    gpointer               instance);
-void                  _ide_configuration_set_prebuild             (IdeConfiguration      *self,
-                                                                   IdeBuildCommandQueue  *prebuild) G_GNUC_INTERNAL;
-void                  _ide_configuration_set_postbuild            (IdeConfiguration      *self,
-                                                                   IdeBuildCommandQueue  *postbuild) G_GNUC_INTERNAL;
 
 G_END_DECLS

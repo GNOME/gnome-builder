@@ -22,19 +22,12 @@
 
 G_BEGIN_DECLS
 
-typedef struct _IdeBackForwardItem             IdeBackForwardItem;
-typedef struct _IdeBackForwardList             IdeBackForwardList;
-
 typedef struct _IdeBuffer                      IdeBuffer;
 typedef struct _IdeBufferChangeMonitor         IdeBufferChangeMonitor;
 typedef struct _IdeBufferManager               IdeBufferManager;
 
-typedef struct _IdeBuildCommand                IdeBuildCommand;
-typedef struct _IdeBuildCommandQueue           IdeBuildCommandQueue;
-typedef struct _IdeBuilder                     IdeBuilder;
 typedef struct _IdeBuildManager                IdeBuildManager;
 typedef struct _IdeBuildPipeline               IdeBuildPipeline;
-typedef struct _IdeBuildResult                 IdeBuildResult;
 typedef struct _IdeBuildStage                  IdeBuildStage;
 typedef struct _IdeBuildSystem                 IdeBuildSystem;
 typedef struct _IdeBuildTarget                 IdeBuildTarget;
@@ -53,6 +46,7 @@ typedef struct _IdeDebuggerRegister            IdeDebuggerRegister;
 typedef struct _IdeDebuggerVariable            IdeDebuggerVariable;
 
 typedef struct _IdeDevice                      IdeDevice;
+typedef struct _IdeDeviceInfo                  IdeDeviceInfo;
 typedef struct _IdeDeviceManager               IdeDeviceManager;
 typedef struct _IdeDeviceProvider              IdeDeviceProvider;
 
@@ -69,7 +63,6 @@ typedef struct _IdeEnvironment                 IdeEnvironment;
 typedef struct _IdeEnvironmentVariable         IdeEnvironmentVariable;
 
 typedef struct _IdeFile                        IdeFile;
-
 typedef struct _IdeFileSettings                IdeFileSettings;
 
 typedef struct _IdeFixit                       IdeFixit;
