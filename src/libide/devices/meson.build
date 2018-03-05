@@ -1,4 +1,5 @@
 devices_headers = [
+  'ide-deploy-strategy.h',
   'ide-device-info.h',
   'ide-device-manager.h',
   'ide-device-provider.h',
@@ -6,6 +7,7 @@ devices_headers = [
 ]
 
 devices_sources = [
+  'ide-deploy-strategy.c',
   'ide-device-info.c',
   'ide-device-manager.c',
   'ide-device-provider.c',

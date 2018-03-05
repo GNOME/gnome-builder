@@ -45,6 +45,8 @@ typedef struct _IdeDebuggerInstruction         IdeDebuggerInstruction;
 typedef struct _IdeDebuggerRegister            IdeDebuggerRegister;
 typedef struct _IdeDebuggerVariable            IdeDebuggerVariable;
 
+typedef struct _IdeDeployStrategy              IdeDeployStrategy;
+
 typedef struct _IdeDevice                      IdeDevice;
 typedef struct _IdeDeviceInfo                  IdeDeviceInfo;
 typedef struct _IdeDeviceManager               IdeDeviceManager;
