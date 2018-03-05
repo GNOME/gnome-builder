@@ -40,7 +40,6 @@ struct _IdeDeviceClass
 {
   IdeObjectClass parent;
 
-  const gchar   *(*get_system_type)       (IdeDevice            *self);
   void           (*prepare_configuration) (IdeDevice            *self,
                                            IdeConfiguration     *configuration);
   void           (*get_info_async)        (IdeDevice            *self,
@@ -71,8 +70,6 @@ const gchar   *ide_device_get_id                (IdeDevice             *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_device_set_id                (IdeDevice             *self,
                                                  const gchar           *id);
-IDE_AVAILABLE_IN_ALL
-const gchar   *ide_device_get_system_type       (IdeDevice             *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_device_prepare_configuration (IdeDevice             *self,
                                                  IdeConfiguration      *configuration);

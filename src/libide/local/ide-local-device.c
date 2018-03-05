@@ -45,18 +45,6 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static const gchar *
-ide_local_device_get_system_type (IdeDevice *device)
-{
-  IdeLocalDevice *self = (IdeLocalDevice *)device;
-  IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_LOCAL_DEVICE (device), NULL);
-  g_return_val_if_fail (IDE_IS_LOCAL_DEVICE (self), NULL);
-
-  return priv->system_type;
-}
-
 static void
 ide_local_device_get_info_async (IdeDevice           *device,
                                  GCancellable        *cancellable,
@@ -245,7 +233,6 @@ ide_local_device_class_init (IdeLocalDeviceClass *klass)
   object_class->get_property = ide_local_device_get_property;
   object_class->set_property = ide_local_device_set_property;
 
-  device_class->get_system_type = ide_local_device_get_system_type;
   device_class->get_info_async = ide_local_device_get_info_async;
   device_class->get_info_finish = ide_local_device_get_info_finish;
 

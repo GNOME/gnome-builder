@@ -39,7 +39,6 @@ enum {
   PROP_DISPLAY_NAME,
   PROP_ICON_NAME,
   PROP_ID,
-  PROP_SYSTEM_TYPE,
   N_PROPS
 };
 
@@ -163,33 +162,6 @@ ide_device_set_id (IdeDevice   *device,
     }
 }
 
-/**
- * ide_device_get_system_type:
- *
- * This is the description of the system we are building for. Commonly, this
- * is referred to as a "system_type". A combination of the machine architecture
- * such as x86_64, the operating system, and the libc.
- *
- * "x86_64-linux-gnu" might be one such system.
- *
- * Returns: A string containing the system type.
- */
-const gchar *
-ide_device_get_system_type (IdeDevice *device)
-{
-  IdeDeviceClass *klass;
-  const gchar *ret = NULL;
-
-  g_return_val_if_fail (IDE_IS_DEVICE (device), NULL);
-
-  klass = IDE_DEVICE_GET_CLASS (device);
-
-  if (klass->get_system_type)
-    ret = klass->get_system_type (device);
-
-  return ret;
-}
-
 static void
 ide_device_real_get_info_async (IdeDevice           *self,
                                 GCancellable        *cancellable,
@@ -244,10 +216,6 @@ ide_device_get_property (GObject    *object,
 
     case PROP_ID:
       g_value_set_string (value, ide_device_get_id (self));
-      break;
-
-    case PROP_SYSTEM_TYPE:
-      g_value_set_string (value, ide_device_get_system_type (self));
       break;
 
     default:
@@ -322,13 +290,6 @@ ide_device_class_init (IdeDeviceClass *klass)
                          "The device identifier.",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_SYSTEM_TYPE] =
-    g_param_spec_string ("system-type",
-                         "System Type",
-                         "The system type for which to compile.",
-                         NULL,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
