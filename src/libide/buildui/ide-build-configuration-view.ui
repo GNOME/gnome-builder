@@ -186,34 +186,6 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="yes">Device</property>
-            <property name="xalign">0.0</property>
-            <property name="visible">true</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-        <child>
-          <object class="GtkFrame">
-            <property name="visible">true</property>
-            <child>
-              <object class="GtkListBox" id="device_list_box">
-                <property name="selection-mode">none</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <property name="visible">true</property>
-        <child>
-          <object class="GtkLabel">
             <property name="label" translatable="yes">Runtime</property>
             <property name="xalign">0.0</property>
             <property name="visible">true</property>

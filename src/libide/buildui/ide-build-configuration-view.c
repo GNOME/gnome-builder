@@ -36,7 +36,6 @@ struct _IdeBuildConfigurationView
 
   GtkEntry             *build_system_entry;
   GtkEntry             *configure_entry;
-  GtkListBox           *device_list_box;
   GtkEntry             *display_name_entry;
   IdeEnvironmentEditor *environment_editor;
   GtkEntry             *prefix_entry;
@@ -124,83 +123,6 @@ create_runtime_row (gpointer item,
   return row;
 }
 
-static GtkWidget *
-create_device_row (gpointer item,
-                   gpointer user_data)
-{
-  IdeDevice *device = item;
-  IdeConfiguration *configuration = user_data;
-  GtkWidget *box;
-  GtkWidget *image;
-  GtkWidget *label;
-  GtkWidget *row;
-  gboolean sensitive;
-
-  g_assert (IDE_IS_DEVICE (device));
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-
-  sensitive = ide_configuration_supports_device (configuration, device);
-
-  box = g_object_new (GTK_TYPE_BOX,
-                      "spacing", 12,
-                      "visible", TRUE,
-                      NULL);
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "use-markup", TRUE,
-                        "visible", TRUE,
-                        "xalign", 0.0f,
-                        NULL);
-  g_object_bind_property (device, "display-name", label, "label", G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-  image = g_object_new (GTK_TYPE_IMAGE,
-                        "icon-name", "object-select-symbolic",
-                        "visible", TRUE,
-                        NULL);
-  g_object_bind_property_full (configuration, "device",
-                               image, "visible",
-                               G_BINDING_SYNC_CREATE,
-                               map_pointer_to,
-                               NULL,
-                               g_object_ref (device),
-                               g_object_unref);
-  gtk_container_add (GTK_CONTAINER (box), image);
-
-  label = g_object_new (GTK_TYPE_LABEL,
-                        "hexpand", TRUE,
-                        "visible", TRUE,
-                        NULL);
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
-                      "child", box,
-                      "sensitive", sensitive,
-                      "visible", TRUE,
-                      NULL);
-
-  g_object_set_data (G_OBJECT (row), "IDE_DEVICE", device);
-
-  return row;
-}
-
-static void
-device_row_activated (IdeBuildConfigurationView *self,
-                      GtkListBoxRow             *row,
-                      GtkListBox                *list_box)
-{
-  IdeDevice *device;
-
-  g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
-
-  device = g_object_get_data (G_OBJECT (row), "IDE_DEVICE");
-
-  if (self->configuration != NULL)
-    ide_configuration_set_device (self->configuration, device);
-}
-
 static void
 runtime_row_activated (IdeBuildConfigurationView *self,
                        GtkListBoxRow             *row,
@@ -234,7 +156,6 @@ ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
                                       IdeConfiguration          *configuration)
 {
   IdeRuntimeManager *runtime_manager;
-  IdeDeviceManager *device_manager;
   IdeContext *context;
   IdeEnvironment *environment;
 
@@ -243,7 +164,6 @@ ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
 
   context = ide_object_get_context (IDE_OBJECT (configuration));
   runtime_manager = ide_context_get_runtime_manager (context);
-  device_manager = ide_context_get_device_manager (context);
 
   self->display_name_binding =
     g_object_bind_property_full (configuration, "display-name",
@@ -269,12 +189,6 @@ ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
                            g_object_ref (configuration),
                            g_object_unref);
 
-  gtk_list_box_bind_model (self->device_list_box,
-                           G_LIST_MODEL (device_manager),
-                           create_device_row,
-                           g_object_ref (configuration),
-                           g_object_unref);
-
   environment = ide_configuration_get_environment (configuration);
   ide_environment_editor_set_environment (self->environment_editor, environment);
 }
@@ -286,7 +200,6 @@ ide_build_configuration_view_disconnect (IdeBuildConfigurationView *self,
   g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  gtk_list_box_bind_model (self->device_list_box, NULL, NULL, NULL, NULL);
   gtk_list_box_bind_model (self->runtime_list_box, NULL, NULL, NULL, NULL);
 
   g_clear_pointer (&self->configure_binding, g_binding_unbind);
@@ -370,7 +283,6 @@ ide_build_configuration_view_class_init (IdeBuildConfigurationViewClass *klass)
   gtk_widget_class_set_css_name (widget_class, "configurationview");
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, build_system_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, configure_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, device_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, display_name_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, environment_editor);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, prefix_entry);
@@ -384,12 +296,6 @@ static void
 ide_build_configuration_view_init (IdeBuildConfigurationView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  g_signal_connect_object (self->device_list_box,
-                           "row-activated",
-                           G_CALLBACK (device_row_activated),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->runtime_list_box,
                            "row-activated",

@@ -42,16 +42,9 @@ struct _IdeConfigurationClass
 {
   IdeObjectClass parent;
 
-  IdeDevice  *(*get_device)       (IdeConfiguration *self);
-  void        (*set_device)       (IdeConfiguration *self,
-                                   IdeDevice        *device);
-
   IdeRuntime *(*get_runtime)      (IdeConfiguration *self);
   void        (*set_runtime)      (IdeConfiguration *self,
                                    IdeRuntime       *runtime);
-
-  gboolean    (*supports_device)  (IdeConfiguration *self,
-                                   IdeDevice        *device);
   gboolean    (*supports_runtime) (IdeConfiguration *self,
                                    IdeRuntime       *runtime);
 
@@ -71,16 +64,6 @@ const gchar          *ide_configuration_get_runtime_id            (IdeConfigurat
 IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_runtime_id            (IdeConfiguration      *self,
                                                                    const gchar           *runtime_id);
-IDE_AVAILABLE_IN_ALL
-const gchar          *ide_configuration_get_device_id             (IdeConfiguration      *self);
-IDE_AVAILABLE_IN_ALL
-void                  ide_configuration_set_device_id             (IdeConfiguration      *self,
-                                                                   const gchar           *device_id);
-IDE_AVAILABLE_IN_ALL
-IdeDevice            *ide_configuration_get_device                (IdeConfiguration      *self);
-IDE_AVAILABLE_IN_ALL
-void                  ide_configuration_set_device                (IdeConfiguration      *self,
-                                                                   IdeDevice             *device);
 IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_get_dirty                 (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL
@@ -162,9 +145,6 @@ void                  ide_configuration_set_app_id                (IdeConfigurat
 IDE_AVAILABLE_IN_3_28
 void                  ide_configuration_apply_path                (IdeConfiguration      *self,
                                                                    IdeSubprocessLauncher *launcher);
-IDE_AVAILABLE_IN_ALL
-gboolean              ide_configuration_supports_device           (IdeConfiguration      *self,
-                                                                   IdeDevice             *device);
 IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_supports_runtime          (IdeConfiguration      *self,
                                                                    IdeRuntime            *runtime);

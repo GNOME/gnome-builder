@@ -202,7 +202,6 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
                          NULL);
 
   load_string (config, self->key_file, config_id, "config-opts", "config-opts");
-  load_string (config, self->key_file, config_id, "device", "device-id");
   load_string (config, self->key_file, config_id, "name", "display-name");
   load_string (config, self->key_file, config_id, "run-opts", "run-opts");
   load_string (config, self->key_file, config_id, "runtime", "runtime-id");
@@ -282,7 +281,6 @@ add_default:
   /* "Default" is not translated because .buildconfig can be checked in */
   fallback = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
                            "context", context,
-                           "device-id", "local",
                            "display-name", "Default",
                            "id", "default",
                            "runtime-id", "host",
@@ -415,7 +413,6 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 } G_STMT_END
 
       PERSIST_STRING_KEY ("name", get_display_name);
-      PERSIST_STRING_KEY ("device", get_device_id);
       PERSIST_STRING_KEY ("runtime", get_runtime_id);
       PERSIST_STRING_KEY ("config-opts", get_config_opts);
       PERSIST_STRING_KEY ("run-opts", get_run_opts);
@@ -571,7 +568,6 @@ ide_buildconfig_configuration_provider_delete (IdeConfigurationProvider *provide
       /* "Default" is not translated because .buildconfig can be checked in */
       new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
                                  "context", context,
-                                 "device-id", "local",
                                  "display-name", "Default",
                                  "id", "default",
                                  "runtime-id", "host",

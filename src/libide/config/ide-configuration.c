@@ -27,8 +27,6 @@
 #include "config/ide-configuration.h"
 #include "config/ide-configuration-manager.h"
 #include "buildsystem/ide-environment.h"
-#include "devices/ide-device-manager.h"
-#include "devices/ide-device.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime.h"
 #include "subprocess/ide-subprocess-launcher.h"
@@ -38,7 +36,6 @@ typedef struct
   gchar          *app_id;
   gchar         **build_commands;
   gchar          *config_opts;
-  gchar          *device_id;
   gchar          *display_name;
   gchar          *id;
   gchar         **post_install_commands;
@@ -58,11 +55,10 @@ typedef struct
   guint           debug : 1;
 
   /*
-   * These are used to determine if we can make progress building
-   * with this configuration. When devices are added/removed, the
+   * This is used to determine if we can make progress building
+   * with this configuration. When runtimes are added/removed, the
    * IdeConfiguration:ready property will be notified.
    */
-  guint           device_ready : 1;
   guint           runtime_ready : 1;
 
   IdeBuildLocality locality : 3;
@@ -77,8 +73,6 @@ enum {
   PROP_BUILD_COMMANDS,
   PROP_CONFIG_OPTS,
   PROP_DEBUG,
-  PROP_DEVICE,
-  PROP_DEVICE_ID,
   PROP_DIRTY,
   PROP_DISPLAY_NAME,
   PROP_ENVIRON,
@@ -133,26 +127,6 @@ ide_configuration_emit_changed (IdeConfiguration *self)
   g_signal_emit (self, signals [CHANGED], 0);
 }
 
-static IdeDevice *
-ide_configuration_real_get_device (IdeConfiguration *self)
-{
-  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
-
-  if (priv->device_id != NULL)
-    {
-      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-      IdeDeviceManager *device_manager = ide_context_get_device_manager (context);
-      IdeDevice *device = ide_device_manager_get_device_by_id (device_manager, priv->device_id);
-
-      if (device != NULL)
-        return g_object_ref (device);
-    }
-
-  return NULL;
-}
-
 static IdeRuntime *
 ide_configuration_real_get_runtime (IdeConfiguration *self)
 {
@@ -187,36 +161,6 @@ ide_configuration_set_id (IdeConfiguration *self,
       g_free (priv->id);
       priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
-    }
-}
-
-static void
-ide_configuration_device_manager_items_changed (IdeConfiguration *self,
-                                                guint             position,
-                                                guint             added,
-                                                guint             removed,
-                                                IdeDeviceManager *device_manager)
-{
-  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
-  IdeDevice *device;
-  gboolean device_ready;
-
-  g_assert (IDE_IS_CONFIGURATION (self));
-  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
-
-  if (ide_object_is_unloading (IDE_OBJECT (self)))
-    return;
-
-  device = ide_device_manager_get_device_by_id (device_manager, priv->device_id);
-  device_ready = !!device;
-
-  if (!priv->device_ready && device_ready)
-    ide_device_prepare_configuration (device, self);
-
-  if (device_ready != priv->device_ready)
-    {
-      priv->device_ready = device_ready;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_READY]);
     }
 }
 
@@ -270,21 +214,6 @@ ide_configuration_environment_changed (IdeConfiguration *self,
 }
 
 static void
-ide_configuration_real_set_device (IdeConfiguration *self,
-                                    IdeDevice       *device)
-{
-  const gchar *device_id = "local";
-
-  g_assert (IDE_IS_CONFIGURATION (self));
-  g_assert (!device || IDE_IS_DEVICE (device));
-
-  if (device != NULL)
-    device_id = ide_device_get_id (device);
-
-  ide_configuration_set_device_id (self, device_id);
-}
-
-static void
 ide_configuration_real_set_runtime (IdeConfiguration *self,
                                     IdeRuntime       *runtime)
 {
@@ -304,7 +233,6 @@ ide_configuration_constructed (GObject *object)
 {
   IdeConfiguration *self = (IdeConfiguration *)object;
   IdeContext *context;
-  IdeDeviceManager *device_manager;
   IdeRuntimeManager *runtime_manager;
 
   G_OBJECT_CLASS (ide_configuration_parent_class)->constructed (object);
@@ -315,14 +243,7 @@ ide_configuration_constructed (GObject *object)
   /* Allow ourselves to be run from unit tests without a valid context */
   if (NULL != (context = ide_object_get_context (IDE_OBJECT (self))))
     {
-      device_manager = ide_context_get_device_manager (context);
       runtime_manager = ide_context_get_runtime_manager (context);
-
-      g_signal_connect_object (device_manager,
-                               "items-changed",
-                               G_CALLBACK (ide_configuration_device_manager_items_changed),
-                               self,
-                               G_CONNECT_SWAPPED);
 
       g_signal_connect_object (runtime_manager,
                                "items-changed",
@@ -330,7 +251,6 @@ ide_configuration_constructed (GObject *object)
                                self,
                                G_CONNECT_SWAPPED);
 
-      ide_configuration_device_manager_items_changed (self, 0, 0, 0, device_manager);
       ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
     }
 }
@@ -346,7 +266,6 @@ ide_configuration_finalize (GObject *object)
   g_clear_pointer (&priv->build_commands, g_strfreev);
   g_clear_pointer (&priv->internal, g_hash_table_unref);
   g_clear_pointer (&priv->config_opts, g_free);
-  g_clear_pointer (&priv->device_id, g_free);
   g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->post_install_commands, g_strfreev);
@@ -377,14 +296,6 @@ ide_configuration_get_property (GObject    *object,
 
     case PROP_DEBUG:
       g_value_set_boolean (value, ide_configuration_get_debug (self));
-      break;
-
-    case PROP_DEVICE:
-      g_value_set_object (value, ide_configuration_get_device (self));
-      break;
-
-    case PROP_DEVICE_ID:
-      g_value_set_string (value, ide_configuration_get_device_id (self));
       break;
 
     case PROP_DIRTY:
@@ -470,14 +381,6 @@ ide_configuration_set_property (GObject      *object,
       ide_configuration_set_debug (self, g_value_get_boolean (value));
       break;
 
-    case PROP_DEVICE:
-      ide_configuration_set_device (self, g_value_get_object (value));
-      break;
-
-    case PROP_DEVICE_ID:
-      ide_configuration_set_device_id (self, g_value_get_string (value));
-      break;
-
     case PROP_DIRTY:
       ide_configuration_set_dirty (self, g_value_get_boolean (value));
       break;
@@ -541,8 +444,6 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
   object_class->get_property = ide_configuration_get_property;
   object_class->set_property = ide_configuration_set_property;
 
-  klass->get_device = ide_configuration_real_get_device;
-  klass->set_device = ide_configuration_real_set_device;
   klass->get_runtime = ide_configuration_real_get_runtime;
   klass->set_runtime = ide_configuration_real_set_runtime;
 
@@ -573,20 +474,6 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                           "Debug",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_DEVICE] =
-    g_param_spec_object ("device",
-                         "Device",
-                         "Device",
-                         IDE_TYPE_DEVICE,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_DEVICE_ID] =
-    g_param_spec_string ("device-id",
-                         "Device Id",
-                         "The identifier of the device",
-                         "local",
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DIRTY] =
     g_param_spec_boolean ("dirty",
@@ -696,7 +583,6 @@ ide_configuration_init (IdeConfiguration *self)
 {
   IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
 
-  priv->device_id = g_strdup ("local");
   priv->runtime_id = g_strdup ("host");
   priv->debug = TRUE;
   priv->environment = ide_environment_new ();
@@ -710,74 +596,6 @@ ide_configuration_init (IdeConfiguration *self)
                            G_CALLBACK (ide_configuration_environment_changed),
                            self,
                            G_CONNECT_SWAPPED);
-}
-
-const gchar *
-ide_configuration_get_device_id (IdeConfiguration *self)
-{
-  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
-
-  return priv->device_id;
-}
-
-void
-ide_configuration_set_device_id (IdeConfiguration *self,
-                                 const gchar      *device_id)
-{
-  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_CONFIGURATION (self));
-  g_return_if_fail (device_id != NULL);
-
-  if (device_id == NULL)
-    device_id = "local";
-
-  if (g_strcmp0 (device_id, priv->device_id) != 0)
-    {
-      IdeContext *context;
-      IdeDeviceManager *device_manager;
-
-      g_free (priv->device_id);
-      priv->device_id = g_strdup (device_id);
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE_ID]);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEVICE]);
-
-      context = ide_object_get_context (IDE_OBJECT (self));
-      device_manager = ide_context_get_device_manager (context);
-      ide_configuration_device_manager_items_changed (self, 0, 0, 0, device_manager);
-
-      ide_configuration_set_dirty (self, TRUE);
-      ide_configuration_emit_changed (self);
-    }
-}
-
-/**
- * ide_configuration_get_device:
- * @self: An #IdeConfiguration
- *
- * Gets the device for the configuration.
- *
- * Returns: (transfer none) (nullable): An #IdeDevice.
- */
-IdeDevice *
-ide_configuration_get_device (IdeConfiguration *self)
-{
-  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
-
-  return IDE_CONFIGURATION_GET_CLASS (self)->get_device (self);
-}
-
-void
-ide_configuration_set_device (IdeConfiguration *self,
-                              IdeDevice        *device)
-{
-  g_return_if_fail (IDE_IS_CONFIGURATION (self));
-  g_return_if_fail (!device || IDE_IS_DEVICE (device));
-
-  IDE_CONFIGURATION_GET_CLASS (self)->set_device (self, device);
 }
 
 /**
@@ -1479,9 +1297,7 @@ ide_configuration_set_internal_object (IdeConfiguration *self,
  * ide_configuration_get_ready:
  * @self: An #IdeConfiguration
  *
- * Determines if the configuration is ready for use. That means that the
- * build device can be accessed and the runtime is loaded. This may change
- * at runtime as devices and runtimes are added or removed.
+ * Determines if the configuration is ready for use.
  *
  * Returns: %TRUE if the configuration is ready for use.
  */
@@ -1492,24 +1308,7 @@ ide_configuration_get_ready (IdeConfiguration *self)
 
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self), FALSE);
 
-  return priv->device_ready && priv->runtime_ready;
-}
-
-gboolean
-ide_configuration_supports_device (IdeConfiguration *self,
-                                   IdeDevice        *device)
-{
-  gboolean ret = TRUE;
-
-  IDE_ENTRY;
-
-  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), FALSE);
-  g_return_val_if_fail (IDE_IS_DEVICE (device), FALSE);
-
-  if (IDE_CONFIGURATION_GET_CLASS (self)->supports_device)
-    ret = IDE_CONFIGURATION_GET_CLASS (self)->supports_device (self, device);
-
-  IDE_RETURN (ret);
+  return priv->runtime_ready;
 }
 
 gboolean
