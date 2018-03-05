@@ -74,6 +74,7 @@ ide_local_device_get_info_async (IdeDevice           *device,
 
   task = g_task_new (device, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_local_device_get_info_async);
+  g_task_set_check_cancellable (task, FALSE);
 
   system_type = ide_get_system_type ();
   arch = ide_get_system_arch ();
