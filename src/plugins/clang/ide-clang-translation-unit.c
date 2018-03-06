@@ -201,7 +201,7 @@ get_path (const gchar *workpath,
 {
   if (path == NULL)
     return g_strdup (workpath);
-  else if (g_str_has_prefix (path, workpath))
+  else if (g_path_is_absolute (path) || g_str_has_prefix (path, workpath))
     return g_strdup (path);
   else
     return g_build_filename (workpath, path, NULL);
