@@ -101,7 +101,7 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
       g_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_SUPPORTED,
-                               "Not a meson build system, ignoring");
+                               "Not a autotools build system, ignoring");
       IDE_EXIT;
     }
 
