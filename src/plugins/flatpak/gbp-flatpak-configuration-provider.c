@@ -370,6 +370,77 @@ load_find_files_cb (GObject      *object,
   g_task_run_in_thread (task, gbp_flatpak_configuration_provider_load_worker);
 }
 
+static gboolean
+contains_file (GbpFlatpakConfigurationProvider *self,
+               GFile                           *file)
+{
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_FILE (file));
+
+  for (guint i = 0; i < self->configs->len; i++)
+    {
+      GbpFlatpakManifest *manifest = g_ptr_array_index (self->configs, i);
+      GFile *loc;
+
+      g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
+
+      loc = gbp_flatpak_manifest_get_file (manifest);
+
+      if (g_file_equal (loc, file))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gbp_flatpak_configuration_provider_monitor_changed (GbpFlatpakConfigurationProvider *self,
+                                                    GFile                           *file,
+                                                    GFile                           *other_file,
+                                                    GFileMonitorEvent                event,
+                                                    IdeVcsMonitor                   *monitor)
+{
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (G_IS_FILE (file));
+  g_assert (!other_file || G_IS_FILE (other_file));
+  g_assert (IDE_IS_VCS_MONITOR (monitor));
+
+  if (event == G_FILE_MONITOR_EVENT_CREATED)
+    {
+      g_autofree gchar *name = g_file_get_basename (file);
+
+      if (name != NULL &&
+          g_str_has_suffix (name, ".json") &&
+          !contains_file (self, file))
+        {
+          g_autoptr(GbpFlatpakManifest) manifest = NULL;
+          g_autoptr(GError) error = NULL;
+          IdeContext *context;
+
+          context = ide_object_get_context (IDE_OBJECT (self));
+          manifest = gbp_flatpak_manifest_new (context, file, name);
+
+          if (!g_initable_init (G_INITABLE (manifest), NULL, &error))
+            {
+              g_message ("%s is not a flatpak manifest, skipping: %s",
+                         name, error->message);
+              return;
+            }
+
+          g_signal_connect_object (manifest,
+                                   "needs-reload",
+                                   G_CALLBACK (manifest_needs_reload),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+          g_ptr_array_add (self->configs, g_object_ref (manifest));
+
+          ide_configuration_provider_emit_added (IDE_CONFIGURATION_PROVIDER (self),
+                                                 IDE_CONFIGURATION (manifest));
+        }
+    }
+}
+
 static void
 gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provider,
                                                GCancellable             *cancellable,
@@ -378,6 +449,7 @@ gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provide
 {
   GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
   g_autoptr(GTask) task = NULL;
+  IdeVcsMonitor *monitor;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
@@ -391,10 +463,17 @@ gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provide
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
+  monitor = ide_context_get_monitor (context);
 
   task = g_task_new (provider, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_flatpak_configuration_provider_load_async);
   g_task_set_priority (task, G_PRIORITY_LOW);
+
+  g_signal_connect_object (monitor,
+                           "changed",
+                           G_CALLBACK (gbp_flatpak_configuration_provider_monitor_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   ide_g_file_find_async (workdir,
                          "*.json",
