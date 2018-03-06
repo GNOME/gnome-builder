@@ -35,5 +35,15 @@ void       ide_device_manager_set_device       (IdeDeviceManager     *self,
 IDE_AVAILABLE_IN_3_28
 IdeDevice *ide_device_manager_get_device_by_id (IdeDeviceManager     *self,
                                                 const gchar          *device_id);
+IDE_AVAILABLE_IN_3_28
+void       ide_device_manager_deploy_async     (IdeDeviceManager     *self,
+                                                IdeBuildPipeline     *pipeline,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+gboolean   ide_device_manager_deploy_finish    (IdeDeviceManager     *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
 
 G_END_DECLS
