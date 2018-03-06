@@ -25,7 +25,7 @@
 #include "buildsystem/ide-build-pipeline.h"
 #include "devices/ide-deploy-strategy.h"
 
-G_DEFINE_ABSTRACT_TYPE (IdeDeployStrategy, ide_deploy_strategy, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (IdeDeployStrategy, ide_deploy_strategy, IDE_TYPE_OBJECT)
 
 static void
 ide_deploy_strategy_real_load_async (IdeDeployStrategy   *self,
