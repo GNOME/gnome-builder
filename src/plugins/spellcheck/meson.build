@@ -29,7 +29,7 @@ spellcheck_sources = [
 
 gnome_builder_plugins_deps += [
   dependency('gspell-1', version: '>= 1.2.0'),
-  dependency('enchant'),
+  dependency('enchant-2'),
 ]
 
 gnome_builder_plugins_sources += files(spellcheck_sources)
