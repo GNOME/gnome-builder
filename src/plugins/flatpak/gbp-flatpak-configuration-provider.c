@@ -513,6 +513,43 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider)
   IDE_EXIT;
 }
 
+static void
+gbp_flatpak_configuration_provider_duplicate (IdeConfigurationProvider *provider,
+                                              IdeConfiguration         *configuration)
+{
+  GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
+  GbpFlatpakManifest *manifest = (GbpFlatpakManifest *)configuration;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *base = NULL;
+  g_autoptr(GFile) parent = NULL;
+  gchar *dot;
+  GFile *file;
+
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
+
+  file = gbp_flatpak_manifest_get_file (manifest);
+  path = g_file_get_path (file);
+  base = g_file_get_basename (file);
+  parent = g_file_get_parent (file);
+
+  if ((dot = strrchr (base, '.')))
+    *dot = '\0';
+
+  for (guint i = 2; i <= 10; i++)
+    {
+      g_autofree gchar *name = g_strdup_printf ("%s-%u.json", base, i);
+      g_autoptr(GFile) dest = g_file_get_child (parent, name);
+
+      if (!g_file_query_exists (dest, NULL))
+        {
+          g_file_copy (file, dest,
+                       G_FILE_COPY_ALL_METADATA,
+                       NULL, NULL, NULL, NULL);
+          break;
+        }
+    }
+}
 
 static void
 configuration_provider_iface_init (IdeConfigurationProviderInterface *iface)
@@ -522,6 +559,7 @@ configuration_provider_iface_init (IdeConfigurationProviderInterface *iface)
   iface->unload = gbp_flatpak_configuration_provider_unload;
   iface->save_async = gbp_flatpak_configuration_provider_save_async;
   iface->save_finish = gbp_flatpak_configuration_provider_save_finish;
+  iface->duplicate = gbp_flatpak_configuration_provider_duplicate;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpFlatpakConfigurationProvider,
