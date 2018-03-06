@@ -21,9 +21,11 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include "ide-context.h"
 #include "ide-debug.h"
 
 #include "application/ide-application.h"
+#include "buildsystem/ide-build-manager.h"
 #include "buildsystem/ide-build-pipeline.h"
 #include "devices/ide-deploy-strategy.h"
 #include "devices/ide-device.h"
@@ -66,10 +68,13 @@ typedef struct
 static void list_model_init_interface        (GListModelInterface *iface);
 static void ide_device_manager_action_device (IdeDeviceManager    *self,
                                               GVariant            *param);
+static void ide_device_manager_action_deploy (IdeDeviceManager    *self,
+                                              GVariant            *param);
 static void ide_device_manager_deploy_tick   (GTask               *task);
 
 DZL_DEFINE_ACTION_GROUP (IdeDeviceManager, ide_device_manager, {
   { "device", ide_device_manager_action_device, "s", "'local'" },
+  { "deploy", ide_device_manager_action_deploy },
 })
 
 G_DEFINE_TYPE_WITH_CODE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT,
@@ -630,6 +635,26 @@ ide_device_manager_action_device (IdeDeviceManager *self,
 
   if ((device = ide_device_manager_get_device_by_id (self, device_id)))
     ide_device_manager_set_device (self, device);
+}
+
+static void
+ide_device_manager_action_deploy (IdeDeviceManager *self,
+                                  GVariant         *param)
+{
+  IdeBuildPipeline *pipeline;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  if (!ide_build_pipeline_is_ready (pipeline))
+    ide_context_warning (context, _("Cannot deploy to device, build pipeline is not initialized"));
+  else
+    ide_device_manager_deploy_async (self, pipeline, NULL, NULL, NULL);
 }
 
 static void
