@@ -638,6 +638,20 @@ ide_device_manager_action_device (IdeDeviceManager *self,
 }
 
 static void
+log_deploy_error (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_DEVICE_MANAGER (object));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_device_manager_deploy_finish (IDE_DEVICE_MANAGER (object), result, &error))
+    ide_object_warning (object, "%s", error->message);
+}
+
+static void
 ide_device_manager_action_deploy (IdeDeviceManager *self,
                                   GVariant         *param)
 {
@@ -654,7 +668,7 @@ ide_device_manager_action_deploy (IdeDeviceManager *self,
   if (!ide_build_pipeline_is_ready (pipeline))
     ide_context_warning (context, _("Cannot deploy to device, build pipeline is not initialized"));
   else
-    ide_device_manager_deploy_async (self, pipeline, NULL, NULL, NULL);
+    ide_device_manager_deploy_async (self, pipeline, NULL, log_deploy_error, NULL);
 }
 
 static void
