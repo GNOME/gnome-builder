@@ -3757,3 +3757,22 @@ ide_build_pipeline_is_native (IdeBuildPipeline *self)
 {
   return g_strcmp0 (self->system_type, ide_get_system_type ()) == 0;
 }
+
+/**
+ * ide_build_pipeline_is_ready:
+ * @self: a #IdeBuildPipeline
+ *
+ * Checks to see if the pipeline has been loaded. Loading may be delayed
+ * due to various initialization routines that need to complete.
+ *
+ * Returns: %TRUE if the pipeline has loaded, otherwise %FALSE
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_build_pipeline_is_ready (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+
+  return self->loaded;
+}

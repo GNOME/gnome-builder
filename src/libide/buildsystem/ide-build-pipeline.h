@@ -56,6 +56,8 @@ typedef enum
 
 G_DECLARE_FINAL_TYPE (IdeBuildPipeline, ide_build_pipeline, IDE, BUILD_PIPELINE, IdeObject)
 
+IDE_AVAILABLE_IN_3_28
+gboolean               ide_build_pipeline_is_ready            (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_get_busy            (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
