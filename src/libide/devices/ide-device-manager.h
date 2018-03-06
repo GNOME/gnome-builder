@@ -27,13 +27,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeDeviceManager, ide_device_manager, IDE, DEVICE_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_ALL
-IdeDevice *ide_device_manager_get_device       (IdeDeviceManager *self);
-IDE_AVAILABLE_IN_ALL
-void       ide_device_manager_set_device       (IdeDeviceManager *self,
-                                                IdeDevice        *device);
-IDE_AVAILABLE_IN_ALL
-IdeDevice *ide_device_manager_get_device_by_id (IdeDeviceManager *self,
-                                                const gchar      *device_id);
+IDE_AVAILABLE_IN_3_28
+IdeDevice *ide_device_manager_get_device       (IdeDeviceManager     *self);
+IDE_AVAILABLE_IN_3_28
+void       ide_device_manager_set_device       (IdeDeviceManager     *self,
+                                                IdeDevice            *device);
+IDE_AVAILABLE_IN_3_28
+IdeDevice *ide_device_manager_get_device_by_id (IdeDeviceManager     *self,
+                                                const gchar          *device_id);
 
 G_END_DECLS
