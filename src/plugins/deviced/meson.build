@@ -8,6 +8,7 @@ deviced_resources = gnome.compile_resources(
 
 deviced_sources = [
   'gbp-deviced-plugin.c',
+  'gbp-deviced-deploy-strategy.c',
   'gbp-deviced-device.c',
   'gbp-deviced-device-provider.c',
 ]

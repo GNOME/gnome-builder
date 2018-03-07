@@ -1,4 +1,4 @@
-/* gbp-deviced-plugin.c
+/* gbp-deviced-deploy-strategy.h
  *
  * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
@@ -18,15 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#pragma once
+
 #include <ide.h>
-#include <libpeas/peas.h>
 
-#include "gbp-deviced-device-provider.h"
-#include "gbp-deviced-deploy-strategy.h"
+G_BEGIN_DECLS
 
-void
-gbp_deviced_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module, IDE_TYPE_DEVICE_PROVIDER, GBP_TYPE_DEVICED_DEVICE_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_DEPLOY_STRATEGY, GBP_TYPE_DEVICED_DEPLOY_STRATEGY);
-}
+#define GBP_TYPE_DEVICED_DEPLOY_STRATEGY (gbp_deviced_deploy_strategy_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpDevicedDeployStrategy, gbp_deviced_deploy_strategy, GBP, DEVICED_DEPLOY_STRATEGY, IdeDeployStrategy)
+
+G_END_DECLS
