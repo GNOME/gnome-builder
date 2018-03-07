@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-05 04:05+0000\n"
-"PO-Revision-Date: 2018-03-06 13:08+0200\n"
+"POT-Creation-Date: 2018-03-07 22:10+0000\n"
+"PO-Revision-Date: 2018-03-07 23:45+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -937,7 +937,6 @@ msgstr "Produciuse un fallo ao iniciar a tubería de construción: %s"
 
 #: src/libide/buildsystem/ide-build-manager.c:424
 #, c-format
-#| msgid "Failed to save draft: %s"
 msgid "Failed to get device information: %s"
 msgstr "Produciuse un fallo ao obter a información do dispositivo: %s"
 
@@ -2356,15 +2355,14 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Houbo un fallo ao tentar levar a cabo a operación."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:207
+#: src/libide/local/ide-local-device.c:196
 #, c-format
 msgid "My Computer (%s)"
 msgstr "O meu computador (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:216
+#: src/libide/local/ide-local-device.c:205
 #, c-format
-#| msgid "My Computer (%s)"
 msgid "My Computer (%s) — %s"
 msgstr "O meu computador (%s) — %s"
 
@@ -4106,43 +4104,46 @@ msgstr "%s <b>%s</b>"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime.c:778
 #, c-format
-#| msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:67
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:78
 #, c-format
-msgid "Updated %s %s"
-msgstr "Actualizado %s %s"
+#| msgid "Updated %s %s"
+msgid "Updated %s"
+msgstr "%s actualizado"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:70
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:81
 #, c-format
-msgid "Updating %s %s"
-msgstr "Actualizando %s %s"
+#| msgid "Updating %s %s"
+msgid "Updating %s"
+msgstr "Actualizando %s"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:76
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:87
 #, c-format
-msgid "Installed %s %s"
-msgstr "Instalado %s %s"
+#| msgid "Installed %s %s"
+msgid "Installed %s"
+msgstr "%s instalado"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:79
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:90
 #, c-format
-msgid "Installing %s %s"
-msgstr "Instalando %s %s"
+#| msgid "Installing "
+msgid "Installing %s"
+msgstr "Instalando %s"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:101
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:116
 msgid "Failed to install runtime"
 msgstr "Produciuse un fallo ao instalar o runtime"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:103
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
 msgid "Runtime has been updated"
 msgstr "Runtime actualizado"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:105
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been installed"
 msgstr "Runtime instalado"
 
@@ -4445,7 +4446,7 @@ msgstr "Produciuse un fallo ao enviar ao lixo o ficheiro: %s"
 msgid "Project Tree"
 msgstr "Árbore do proxecto"
 
-#: src/plugins/project-tree/gb-project-tree-builder.c:452
+#: src/plugins/project-tree/gb-project-tree-builder.c:451
 msgid "Empty"
 msgstr "Baleiro"
 
@@ -4914,6 +4915,9 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero non no xestor de búfer."
+
+#~ msgid "Installing %s %s"
+#~ msgstr "Instalando %s %s"
 
 #~ msgid "Device"
 #~ msgstr "Dispositivo"
