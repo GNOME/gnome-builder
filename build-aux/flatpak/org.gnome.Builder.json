@@ -768,7 +768,8 @@
                 "--buildtype=debugoptimized",
                 "-Denable_tracing=true",
                 "-Dwith_help=true",
-                "-Dwith_channel=flatpak-nightly"
+                "-Dwith_channel=flatpak-nightly",
+                "-Dwith_deviced=true"
             ],
             "sources" : [
                 {
