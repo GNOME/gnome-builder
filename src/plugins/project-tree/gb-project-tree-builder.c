@@ -64,7 +64,6 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
                              DzlTreeNode          *parent,
                              GFile                *file)
 {
-  g_autofree gchar *name = NULL;
   g_autoptr(GFileInfo) file_info = NULL;
   g_autoptr(GbProjectFile) item = NULL;
   g_autoptr(DzlTreeNode) first = NULL;
