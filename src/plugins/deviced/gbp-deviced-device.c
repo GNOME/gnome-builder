@@ -29,6 +29,12 @@ struct _GbpDevicedDevice
   GQueue         connecting;
 };
 
+typedef struct
+{
+  gchar *local_path;
+  gchar *remote_path;
+} InstallBundleState;
+
 G_DEFINE_TYPE (GbpDevicedDevice, gbp_deviced_device, IDE_TYPE_DEVICE)
 
 enum {
@@ -38,6 +44,14 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+install_bundle_state_free (InstallBundleState *state)
+{
+  g_clear_pointer (&state->local_path, g_free);
+  g_clear_pointer (&state->remote_path, g_free);
+  g_slice_free (InstallBundleState, state);
+}
 
 static void
 gbp_deviced_device_connect_cb (GObject      *object,
@@ -420,6 +434,193 @@ gbp_deviced_device_get_commit_finish (GbpDevicedDevice  *self,
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
   ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+install_bundle_progress (goffset  current_num_bytes,
+                         goffset  total_num_bytes,
+                         gpointer user_data)
+{
+  InstallBundleState *state = user_data;
+
+  g_assert (state != NULL);
+
+  g_print ("%u bytes\n", (guint)current_num_bytes);
+
+  /* TODO: proxy progress */
+}
+
+static void
+install_bundle_install_cb (GObject      *object,
+                           GAsyncResult *result,
+                           gpointer      user_data)
+{
+  DevdFlatpakService *service = (DevdFlatpakService *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (DEVD_IS_FLATPAK_SERVICE (service));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!devd_flatpak_service_install_bundle_finish (service, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  /* TODO: Remove bundle */
+
+  IDE_EXIT;
+
+}
+
+static void
+install_bundle_put_file_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
+{
+  DevdTransferService *service = (DevdTransferService *)object;
+  g_autoptr(DevdFlatpakService) flatpak = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  InstallBundleState *state;
+  DevdClient *client;
+
+  IDE_ENTRY;
+
+  g_assert (DEVD_IS_TRANSFER_SERVICE (service));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!devd_transfer_service_put_file_finish (service, result, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  client = devd_service_get_client (DEVD_SERVICE (service));
+
+  if (!(flatpak = devd_flatpak_service_new (client, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  state = g_task_get_task_data (task);
+  g_assert (state != NULL);
+  g_assert (state->remote_path != NULL);
+
+  devd_flatpak_service_install_bundle_async (flatpak,
+                                             state->remote_path,
+                                             g_task_get_cancellable (task),
+                                             install_bundle_install_cb,
+                                             g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+install_bundle_get_client_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  GbpDevicedDevice *self = (GbpDevicedDevice *)object;
+  g_autoptr(DevdTransferService) service = NULL;
+  g_autoptr(DevdClient) client = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GFile) file = NULL;
+  InstallBundleState *state;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_DEVICED_DEVICE (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+  g_assert (state != NULL);
+  g_assert (state->local_path != NULL);
+
+  if (!(client = gbp_deviced_device_get_client_finish (self, result, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (!(service = devd_transfer_service_new (client, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  file = g_file_new_for_path (state->local_path);
+
+  devd_transfer_service_put_file_async (service,
+                                        file,
+                                        state->remote_path,
+                                        install_bundle_progress, state, NULL,
+                                        g_task_get_cancellable (task),
+                                        install_bundle_put_file_cb,
+                                        g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+void
+gbp_deviced_device_install_bundle_async (GbpDevicedDevice    *self,
+                                         const gchar         *bundle_path,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+  g_autofree gchar *name = NULL;
+  InstallBundleState *state;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (GBP_IS_DEVICED_DEVICE (self));
+  g_return_if_fail (bundle_path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* TODO: Add file progress callbacks */
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_deviced_device_install_bundle_async);
+
+  name = g_path_get_basename (bundle_path);
+
+  state = g_slice_new0 (InstallBundleState);
+  state->local_path = g_strdup (bundle_path);
+  state->remote_path = g_build_filename (".cache", "deviced", name, NULL);
+  g_task_set_task_data (task, state, (GDestroyNotify)install_bundle_state_free);
+
+  gbp_deviced_device_get_client_async (self,
+                                       cancellable,
+                                       install_bundle_get_client_cb,
+                                       g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+gbp_deviced_device_install_bundle_finish (GbpDevicedDevice  *self,
+                                          GAsyncResult      *result,
+                                          GError           **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (GBP_IS_DEVICED_DEVICE (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  ret = g_task_propagate_boolean (G_TASK (result), error);
 
   IDE_RETURN (ret);
 }

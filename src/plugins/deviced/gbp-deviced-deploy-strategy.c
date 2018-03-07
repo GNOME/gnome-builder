@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "gbp-deviced-deploy-strategy"
 
 #include "../flatpak/gbp-flatpak-manifest.h"
+#include "../flatpak/gbp-flatpak-util.h"
 
 #include "gbp-deviced-deploy-strategy.h"
 #include "gbp-deviced-device.h"
@@ -33,7 +34,9 @@ struct _GbpDevicedDeployStrategy
 typedef struct
 {
   IdeBuildPipeline *pipeline;
+  GbpDevicedDevice *device;
   gchar            *app_id;
+  gchar            *flatpak_path;
 } DeployState;
 
 G_DEFINE_TYPE (GbpDevicedDeployStrategy, gbp_deviced_deploy_strategy, IDE_TYPE_DEPLOY_STRATEGY)
@@ -42,7 +45,9 @@ static void
 deploy_state_free (DeployState *state)
 {
   g_clear_object (&state->pipeline);
+  g_clear_object (&state->device);
   g_clear_pointer (&state->app_id, g_free);
+  g_clear_pointer (&state->flatpak_path, g_free);
   g_slice_free (DeployState, state);
 }
 
@@ -88,13 +93,13 @@ gbp_deviced_deploy_strategy_load_async (IdeDeployStrategy   *strategy,
 }
 
 static void
-deploy_get_commit_cb (GObject      *object,
-                      GAsyncResult *result,
-                      gpointer      user_data)
+deploy_install_bundle_cb (GObject      *object,
+                          GAsyncResult *result,
+                          gpointer      user_data)
 {
   GbpDevicedDevice *device = (GbpDevicedDevice *)object;
+  g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
-  g_autofree gchar *commit_id = NULL;
 
   IDE_ENTRY;
 
@@ -102,19 +107,159 @@ deploy_get_commit_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
+  if (!gbp_deviced_device_install_bundle_finish (device, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+deploy_wait_check_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  DeployState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    gbp_deviced_device_install_bundle_async (state->device,
+                                             state->flatpak_path,
+                                             g_task_get_cancellable (task),
+                                             deploy_install_bundle_cb,
+                                             g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+deploy_get_commit_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  GbpDevicedDevice *device = (GbpDevicedDevice *)object;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autofree gchar *commit_id = NULL;
+  g_autofree gchar *dest_path = NULL;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *repo_dir = NULL;
+  g_autofree gchar *staging_dir = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeConfiguration *config;
+  const gchar *arch;
+  const gchar *app_id;
+  DeployState *state;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_DEVICED_DEVICE (device));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  state = g_task_get_task_data (task);
+  g_assert (state != NULL);
+  g_assert (IDE_IS_BUILD_PIPELINE (state->pipeline));
+
   commit_id = gbp_deviced_device_get_commit_finish (device, result, NULL);
 
+  context = ide_object_get_context (IDE_OBJECT (state->pipeline));
+  config = ide_build_pipeline_get_configuration (state->pipeline);
+  arch = ide_build_pipeline_get_arch (state->pipeline);
+  staging_dir = gbp_flatpak_get_staging_dir (state->pipeline);
+  repo_dir = gbp_flatpak_get_repo_dir (context);
+  app_id = ide_configuration_get_app_id (config);
+  name = g_strdup_printf ("%s-%s.flatpak", app_id, commit_id);
+  dest_path = g_build_filename (staging_dir, name, NULL);
+
+  state->flatpak_path = g_strdup (dest_path);
+
+  launcher = ide_subprocess_launcher_new (0);
+  ide_subprocess_launcher_push_argv (launcher, "flatpak");
+  ide_subprocess_launcher_push_argv (launcher, "build-bundle");
+  ide_subprocess_launcher_push_argv (launcher, "--arch");
+  ide_subprocess_launcher_push_argv (launcher, arch ?: ide_get_system_arch ());
+  ide_subprocess_launcher_push_argv (launcher, repo_dir);
+  ide_subprocess_launcher_push_argv (launcher, dest_path);
+  ide_subprocess_launcher_push_argv (launcher, app_id);
+  /* TODO: pretend to be master until config has way to set branch */
+  ide_subprocess_launcher_push_argv (launcher, "master");
+
+#if 0
+  if (commit_id != NULL)
+    {
+      /*
+       * If we got a commit_id, we can build a static delta between the
+       * two versions (if we have it). Otherwise, we'll just deploy a full
+       * image of the entire app contents.
+       */
+      IDE_TRACE_MSG ("Building static delta from commit %s", commit_id);
+      ide_subprocess_launcher_push_argv (launcher, "--from-commit");
+      ide_subprocess_launcher_push_argv (launcher, commit_id);
+    }
+#endif
+
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_subprocess_wait_check_async (subprocess,
+                                     g_task_get_cancellable (task),
+                                     deploy_wait_check_cb,
+                                     g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+deploy_commit_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  GCancellable *cancellable;
+  DeployState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
   /*
-   * If we got a commit_id, we can build a static delta between the
-   * two versions (if we have it). Otherwise, we'll just deploy a full
-   * image of the entire app contents.
+   * If we successfully exported the build to a repo, we can now check
+   * what version we have on the other side. We might be able to save
+   * some data transfer by building a static-delta.
    */
 
-  /* TODO */
+  cancellable = g_task_get_cancellable (task);
+  state = g_task_get_task_data (task);
 
-  g_print ("Commit id is %s\n", commit_id);
-
-  g_task_return_boolean (task, TRUE);
+  if (!ide_build_pipeline_build_finish (pipeline, result, &error))
+    g_task_return_error (task, g_steal_pointer (&task));
+  else
+    gbp_deviced_device_get_commit_async (state->device,
+                                         state->app_id,
+                                         cancellable,
+                                         deploy_get_commit_cb,
+                                         g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -157,19 +302,19 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   state = g_slice_new (DeployState);
   state->pipeline = g_object_ref (pipeline);
   state->app_id = g_strdup_printf ("%s/%s/master", app_id, arch);
+  state->device = g_object_ref (GBP_DEVICED_DEVICE (device));
   g_task_set_task_data (task, state, (GDestroyNotify)deploy_state_free);
 
   /*
-   * First, we want to check to see what version of the application the
-   * device already has. If it is already installed, we can generate a
-   * static-delta instead of copying the entire app to the device.
+   * First make sure we've built up to the point where we have a
+   * build-finish/build-export in the flatpak plugin.
    */
 
-  gbp_deviced_device_get_commit_async (GBP_DEVICED_DEVICE (device),
-                                       state->app_id,
-                                       cancellable,
-                                       deploy_get_commit_cb,
-                                       g_steal_pointer (&task));
+  ide_build_pipeline_build_async (pipeline,
+                                  IDE_BUILD_PHASE_COMMIT,
+                                  cancellable,
+                                  deploy_commit_cb,
+                                  g_steal_pointer (&task));
 
   IDE_EXIT;
 }

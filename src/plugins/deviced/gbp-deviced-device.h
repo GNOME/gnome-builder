@@ -27,15 +27,23 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpDevicedDevice, gbp_deviced_device, GBP, DEVICED_DEVICE, IdeDevice)
 
-GbpDevicedDevice *gbp_deviced_device_new               (IdeContext           *context,
-                                                        DevdDevice           *device);
-void              gbp_deviced_device_get_commit_async  (GbpDevicedDevice     *self,
-                                                        const gchar          *commit_id,
-                                                        GCancellable         *cancellable,
-                                                        GAsyncReadyCallback   callback,
-                                                        gpointer              user_data);
-gchar            *gbp_deviced_device_get_commit_finish (GbpDevicedDevice     *self,
-                                                        GAsyncResult         *result,
-                                                        GError              **error);
+GbpDevicedDevice *gbp_deviced_device_new                   (IdeContext           *context,
+                                                            DevdDevice           *device);
+void              gbp_deviced_device_get_commit_async      (GbpDevicedDevice     *self,
+                                                            const gchar          *commit_id,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+gchar            *gbp_deviced_device_get_commit_finish     (GbpDevicedDevice     *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
+void              gbp_deviced_device_install_bundle_async  (GbpDevicedDevice     *self,
+                                                            const gchar          *bundle_path,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+gboolean          gbp_deviced_device_install_bundle_finish (GbpDevicedDevice     *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
 
 G_END_DECLS
