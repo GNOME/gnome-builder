@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-05 04:05+0000\n"
-"PO-Revision-Date: 2018-03-05 17:55+0100\n"
+"POT-Creation-Date: 2018-03-07 22:10+0000\n"
+"PO-Revision-Date: 2018-03-07 23:55+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2352,13 +2352,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Wystąpił błąd podczas wykonywania działania."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:207
+#: src/libide/local/ide-local-device.c:196
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Mój komputer (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:216
+#: src/libide/local/ide-local-device.c:205
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Mój komputer (%s) — %s"
@@ -4098,39 +4098,39 @@ msgstr "%s <b>%s</b>"
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:67
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:78
 #, c-format
-msgid "Updated %s %s"
-msgstr "Zaktualizowano %s (%s)"
+msgid "Updated %s"
+msgstr "Zaktualizowano %s"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:70
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:81
 #, c-format
-msgid "Updating %s %s"
-msgstr "Aktualizowanie %s (%s)"
+msgid "Updating %s"
+msgstr "Aktualizowanie %s"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:76
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:87
 #, c-format
-msgid "Installed %s %s"
-msgstr "Zainstalowano %s (%s)"
+msgid "Installed %s"
+msgstr "Zainstalowano %s"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:79
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:90
 #, c-format
-msgid "Installing %s %s"
-msgstr "Instalowanie %s (%s)"
+msgid "Installing %s"
+msgstr "Instalowanie %s"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:101
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:116
 msgid "Failed to install runtime"
 msgstr "Zainstalowanie środowiska wykonawczego się nie powiodło"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:103
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
 msgid "Runtime has been updated"
 msgstr "Zaktualizowano środowisko wykonawcze"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:105
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been installed"
 msgstr "Zainstalowano środowisko wykonawcze"
 
@@ -4429,7 +4429,7 @@ msgstr "Przeniesienie pliku do kosza się nie powiodło: %s"
 msgid "Project Tree"
 msgstr "Drzewo projektu"
 
-#: src/plugins/project-tree/gb-project-tree-builder.c:452
+#: src/plugins/project-tree/gb-project-tree-builder.c:451
 msgid "Empty"
 msgstr "Puste"
 
