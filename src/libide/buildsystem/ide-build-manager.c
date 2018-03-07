@@ -423,7 +423,7 @@ ide_build_manager_device_get_info_cb (GObject      *object,
       ide_context_warning (context,
                            _("Failed to get device information: %s"),
                            error->message);
-      g_task_return_error (task, g_steal_pointer (&task));
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
