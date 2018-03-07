@@ -72,10 +72,10 @@ static gchar *
 get_staging_directory (GbpFlatpakRuntime *self)
 {
   IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-  IdeConfigurationManager *config_manager = ide_context_get_configuration_manager (context);
-  IdeConfiguration *config = ide_configuration_manager_get_current (config_manager);
+  IdeBuildManager *build_manager = ide_context_get_build_manager (context);
+  IdeBuildPipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
 
-  return gbp_flatpak_get_staging_dir (config);
+  return gbp_flatpak_get_staging_dir (pipeline);
 }
 
 static gboolean

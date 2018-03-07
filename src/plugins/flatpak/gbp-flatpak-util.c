@@ -24,51 +24,27 @@
 #include "gbp-flatpak-util.h"
 
 gchar *
-gbp_flatpak_get_repo_dir (IdeConfiguration *configuration)
+gbp_flatpak_get_repo_dir (IdeContext *context)
 {
-  g_autofree gchar *branch = NULL;
-  g_autofree gchar *name = NULL;
-  const gchar *runtime_id;
-  IdeContext *context;
-  IdeVcs *vcs;
-
-  g_assert (IDE_IS_CONFIGURATION (configuration));
-
-  context = ide_object_get_context (IDE_OBJECT (configuration));
-  vcs = ide_context_get_vcs (context);
-  branch = ide_vcs_get_branch_name (vcs);
-  runtime_id = ide_configuration_get_runtime_id (configuration);
-
-  if (branch != NULL)
-    name = g_strdup_printf ("%s:%s", runtime_id, branch);
-  else
-    name = g_strdup (runtime_id);
-
-  g_strdelimit (name, G_DIR_SEPARATOR_S, '-');
-
-  return ide_context_cache_filename (context, "flatpak", "repos", name, NULL);
+  return ide_context_cache_filename (context, "flatpak", "repo", NULL);
 }
 
 gchar *
-gbp_flatpak_get_staging_dir (IdeConfiguration *configuration)
+gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
 {
   g_autofree gchar *branch = NULL;
   g_autofree gchar *name = NULL;
-  const gchar *runtime_id;
+  const gchar *arch;
   IdeContext *context;
   IdeVcs *vcs;
 
-  g_assert (IDE_IS_CONFIGURATION (configuration));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  context = ide_object_get_context (IDE_OBJECT (configuration));
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
   vcs = ide_context_get_vcs (context);
   branch = ide_vcs_get_branch_name (vcs);
-  runtime_id = ide_configuration_get_runtime_id (configuration);
-
-  if (branch != NULL)
-    name = g_strdup_printf ("%s:%s", runtime_id, branch);
-  else
-    name = g_strdup (runtime_id);
+  arch = ide_build_pipeline_get_arch (pipeline);
+  name = g_strdup_printf ("%s-%s", arch, branch);
 
   g_strdelimit (name, G_DIR_SEPARATOR_S, '-');
 

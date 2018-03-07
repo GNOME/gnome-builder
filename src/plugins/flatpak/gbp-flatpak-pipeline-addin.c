@@ -138,7 +138,6 @@ register_mkdirs_stage (GbpFlatpakPipelineAddin  *self,
                        GError                  **error)
 {
   g_autoptr(IdeBuildStage) mkdirs = NULL;
-  IdeConfiguration *config;
   g_autofree gchar *repo_dir = NULL;
   g_autofree gchar *staging_dir = NULL;
   guint stage_id;
@@ -147,13 +146,11 @@ register_mkdirs_stage (GbpFlatpakPipelineAddin  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  config = ide_build_pipeline_get_configuration (pipeline);
-
   mkdirs = ide_build_stage_mkdirs_new (context);
   ide_build_stage_set_name (mkdirs, _("Creating flatpak workspace"));
 
-  repo_dir = gbp_flatpak_get_repo_dir (config);
-  staging_dir = gbp_flatpak_get_staging_dir (config);
+  repo_dir = gbp_flatpak_get_repo_dir (context);
+  staging_dir = gbp_flatpak_get_staging_dir (pipeline);
 
   ide_build_stage_mkdirs_add_path (IDE_BUILD_STAGE_MKDIRS (mkdirs), repo_dir, TRUE, 0750, FALSE);
   ide_build_stage_mkdirs_add_path (IDE_BUILD_STAGE_MKDIRS (mkdirs), staging_dir, TRUE, 0750, TRUE);
@@ -225,7 +222,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
     }
 
   arch = get_arch_option (pipeline);
-  staging_dir = gbp_flatpak_get_staging_dir (config);
+  staging_dir = gbp_flatpak_get_staging_dir (pipeline);
   app_id = ide_configuration_get_app_id (config);
   platform = gbp_flatpak_runtime_get_platform (GBP_FLATPAK_RUNTIME (runtime));
   sdk = gbp_flatpak_runtime_get_sdk_name (GBP_FLATPAK_RUNTIME (runtime));
@@ -348,7 +345,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   primary_module = gbp_flatpak_manifest_get_primary_module (GBP_FLATPAK_MANIFEST (config));
   manifest_path = gbp_flatpak_manifest_get_path (GBP_FLATPAK_MANIFEST (config));
 
-  staging_dir = gbp_flatpak_get_staging_dir (config);
+  staging_dir = gbp_flatpak_get_staging_dir (pipeline);
   src_dir = ide_build_pipeline_get_srcdir (pipeline);
 
   launcher = create_subprocess_launcher ();
@@ -420,7 +417,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
 
   command = gbp_flatpak_manifest_get_command (GBP_FLATPAK_MANIFEST (config));
   finish_args = gbp_flatpak_manifest_get_finish_args (GBP_FLATPAK_MANIFEST (config));
-  staging_dir = gbp_flatpak_get_staging_dir (config);
+  staging_dir = gbp_flatpak_get_staging_dir (pipeline);
 
   launcher = create_subprocess_launcher ();
 
@@ -470,8 +467,8 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
-  staging_dir = gbp_flatpak_get_staging_dir (config);
-  repo_dir = gbp_flatpak_get_repo_dir (config);
+  staging_dir = gbp_flatpak_get_staging_dir (pipeline);
+  repo_dir = gbp_flatpak_get_repo_dir (context);
   arch = get_arch_option (pipeline);
 
   launcher = create_subprocess_launcher ();
@@ -545,8 +542,8 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
-  staging_dir = gbp_flatpak_get_staging_dir (config);
-  repo_dir = gbp_flatpak_get_repo_dir (config);
+  staging_dir = gbp_flatpak_get_staging_dir (pipeline);
+  repo_dir = gbp_flatpak_get_repo_dir (context);
 
   app_id = ide_configuration_get_app_id (config);
   name = g_strdup_printf ("%s.flatpak", app_id);

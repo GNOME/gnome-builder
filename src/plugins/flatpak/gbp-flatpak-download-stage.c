@@ -90,7 +90,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
 
       primary_module = gbp_flatpak_manifest_get_primary_module (GBP_FLATPAK_MANIFEST (config));
       manifest_path = gbp_flatpak_manifest_get_path (GBP_FLATPAK_MANIFEST (config));
-      staging_dir = gbp_flatpak_get_staging_dir (config);
+      staging_dir = gbp_flatpak_get_staging_dir (pipeline);
       src_dir = ide_build_pipeline_get_srcdir (pipeline);
 
       launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
