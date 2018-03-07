@@ -296,3 +296,130 @@ gbp_deviced_device_new (IdeContext *context,
                        "icon-name", icon_name,
                        NULL);
 }
+
+static void
+gbp_deviced_device_get_commit_list_apps_cb (GObject      *object,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
+{
+  DevdClient *client = (DevdClient *)object;
+  g_autoptr(GPtrArray) apps = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  const gchar *app_id;
+
+  IDE_ENTRY;
+
+  g_assert (DEVD_IS_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!(apps = devd_client_list_apps_finish (client, result, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  app_id = g_task_get_task_data (task);
+
+  for (guint i = 0; i < apps->len; i++)
+    {
+      DevdAppInfo *app_info = g_ptr_array_index (apps, i);
+
+      if (g_strcmp0 (app_id, devd_app_info_get_id (app_info)) == 0)
+        {
+          const gchar *commit_id = devd_app_info_get_commit_id (app_info);
+
+          if (commit_id != NULL)
+            {
+              g_task_return_pointer (task, g_strdup (commit_id), g_free);
+              IDE_EXIT;
+            }
+        }
+    }
+
+  g_task_return_new_error (task,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_FOUND,
+                           "No such application \"%s\"",
+                           app_id);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_deviced_device_get_commit_client_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  GbpDevicedDevice *self = (GbpDevicedDevice *)object;
+  g_autoptr(DevdClient) client = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  GCancellable *cancellable;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_DEVICED_DEVICE (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  if (!(client = gbp_deviced_device_get_client_finish (self, result, &error)))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  cancellable = g_task_get_cancellable (task);
+
+  devd_client_list_apps_async (client,
+                               cancellable,
+                               gbp_deviced_device_get_commit_list_apps_cb,
+                               g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+void
+gbp_deviced_device_get_commit_async (GbpDevicedDevice    *self,
+                                     const gchar         *app_id,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  g_autoptr(GTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (GBP_IS_DEVICED_DEVICE (self));
+  g_return_if_fail (app_id != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gbp_deviced_device_get_commit_async);
+  g_task_set_task_data (task, g_strdup (app_id), g_free);
+
+  gbp_deviced_device_get_client_async (self,
+                                       cancellable,
+                                       gbp_deviced_device_get_commit_client_cb,
+                                       g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gchar *
+gbp_deviced_device_get_commit_finish (GbpDevicedDevice  *self,
+                                      GAsyncResult      *result,
+                                      GError           **error)
+{
+  gchar *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (GBP_IS_DEVICED_DEVICE (self), NULL);
+  g_return_val_if_fail (G_IS_TASK (result), NULL);
+
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
