@@ -12,7 +12,7 @@
         <property name="visible">true</property>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="min-content-width">275</property>
+            <property name="min-content-width">350</property>
             <property name="min-content-height">300</property>
             <property name="max-content-height">300</property>
             <property name="propagate-natural-height">true</property>
