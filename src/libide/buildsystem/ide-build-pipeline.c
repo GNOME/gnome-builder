@@ -2935,6 +2935,10 @@ ide_build_pipeline_get_message (IdeBuildPipeline *self)
       ret = _("Installing…");
       break;
 
+    case IDE_BUILD_PHASE_COMMIT:
+      ret = _("Committing…");
+      break;
+
     case IDE_BUILD_PHASE_EXPORT:
       ret = _("Exporting…");
       break;
