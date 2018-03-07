@@ -53,8 +53,11 @@ enum {
 };
 
 enum {
-  EXPORT_BUILD_FINISH,
-  EXPORT_BUILD_EXPORT,
+  COMMIT_BUILD_FINISH,
+  COMMIT_BUILD_EXPORT,
+};
+
+enum {
   EXPORT_BUILD_BUNDLE,
 };
 
@@ -439,7 +442,7 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
                         "launcher", launcher,
                         NULL);
 
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_FINISH, stage);
+  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_FINISH, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -490,7 +493,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
                     G_CALLBACK (always_run_query_handler),
                     NULL);
 
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_EXPORT, stage);
+  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_EXPORT, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
