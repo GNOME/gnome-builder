@@ -54,37 +54,48 @@ static GParamSpec *properties [N_PROPS];
 static void
 gbp_flatpak_transfer_update_title (GbpFlatpakTransfer *self)
 {
-  g_autofree gchar *title = NULL;
-  const gchar *arch = "";
+  g_autofree gchar *triplet = NULL;
 
   g_return_if_fail (GBP_IS_FLATPAK_TRANSFER (self));
 
-  if (self->arch != NULL && g_strcmp0 (self->arch, flatpak_get_default_arch ()) != 0)
-    arch = self->arch;
+  if (self->id && self->arch && self->branch)
+    triplet = g_strdup_printf ("%s/%s/%s", self->id, self->arch, self->branch);
+  else if (self->id && self->arch)
+    triplet = g_strdup_printf ("%s/%s/", self->id, self->arch);
+  else if (self->id && self->branch)
+    triplet = g_strdup_printf ("%s//%s", self->id, self->branch);
+  else
+    triplet = g_strdup_printf ("%s//", self->id);
 
   if (!self->failed)
     {
+      g_autofree gchar *title = NULL;
+
       if (self->has_runtime)
         {
           if (self->finished)
-            /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the arch and the branch (3.24, master, etc) */
-            title = g_strdup_printf (_("Updated %s %s %s"), self->id, arch, self->branch ?: "");
+            /* Translators: %s is replaced with the runtime identifier */
+            title = g_strdup_printf (_("Updated %s"), triplet);
           else
-            /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the arch and the branch (3.24, master, etc) */
-            title = g_strdup_printf (_("Updating %s %s %s"), self->id, arch, self->branch ?: "");
+            /* Translators: %s is replaced with the runtime identifier */
+            title = g_strdup_printf (_("Updating %s"), triplet);
         }
       else
         {
           if (self->finished)
-            /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the arch and the branch (3.24, master, etc) */
-            title = g_strdup_printf (_("Installed %s %s %s"), self->id, arch, self->branch ?: "");
+            /* Translators: %s is replaced with the runtime identifier */
+            title = g_strdup_printf (_("Installed %s"), triplet);
           else
-            /* Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the arch and the branch (3.24, master, etc) */
-            title = g_strdup_printf (_("Installing %s %s %s"), self->id, arch, self->branch ?: "");
+            /* Translators: %s is replaced with the runtime identifier */
+            title = g_strdup_printf (_("Installing %s"), triplet);
         }
-    }
 
-  ide_transfer_set_title (IDE_TRANSFER (self), title);
+      ide_transfer_set_title (IDE_TRANSFER (self), title);
+    }
+  else
+    {
+      ide_transfer_set_title (IDE_TRANSFER (self), triplet);
+    }
 }
 
 static void
