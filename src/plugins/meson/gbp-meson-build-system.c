@@ -248,6 +248,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
                                             gpointer             user_data)
 {
   g_autoptr(GTask) task = NULL;
+  g_autofree gchar *path = NULL;
   IdeBuildManager *build_manager;
   IdeBuildPipeline *pipeline;
   IdeContext *context;
@@ -283,30 +284,39 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
   build_manager = ide_context_get_build_manager (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
-  if (pipeline != NULL)
+  /*
+   * Because we're accessing the pipeline directly, we need to be careful
+   * here about whether or not it is setup fully. It may be delayed due
+   * to device initialization.
+   */
+  if (pipeline == NULL || !ide_build_pipeline_is_ready (pipeline))
     {
-      g_autofree gchar *path = NULL;
+      g_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_INITIALIZED,
+                               "The pipeline is not yet ready to handle requests");
+      return;
+    }
 
-      path = ide_build_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
+  path = ide_build_pipeline_build_builddir_path (pipeline, "compile_commands.json", NULL);
 
-      if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
-        {
-          g_autoptr(IdeCompileCommands) compile_commands = NULL;
-          g_autoptr(GFile) file = NULL;
+  if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
+    {
+      g_autoptr(IdeCompileCommands) compile_commands = NULL;
+      g_autoptr(GFile) file = NULL;
 
-          compile_commands = ide_compile_commands_new ();
-          file = g_file_new_for_path (path);
+      compile_commands = ide_compile_commands_new ();
+      file = g_file_new_for_path (path);
 
-          ide_compile_commands_load_async (compile_commands,
-                                           file,
-                                           cancellable,
-                                           gbp_meson_build_system_load_commands_load_cb,
-                                           g_steal_pointer (&task));
+      ide_compile_commands_load_async (compile_commands,
+                                       file,
+                                       cancellable,
+                                       gbp_meson_build_system_load_commands_load_cb,
+                                       g_steal_pointer (&task));
 
-          gbp_meson_build_system_monitor (self, file);
+      gbp_meson_build_system_monitor (self, file);
 
-          return;
-        }
+      return;
     }
 
   /*

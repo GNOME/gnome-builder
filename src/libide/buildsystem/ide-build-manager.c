@@ -1292,7 +1292,9 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_return_on_cancel (task, TRUE);
 
-  if (self->pipeline == NULL || self->can_build == FALSE)
+  if (self->pipeline == NULL ||
+      self->can_build == FALSE ||
+      !ide_build_pipeline_is_ready (self->pipeline))
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,

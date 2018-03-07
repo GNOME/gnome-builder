@@ -2466,6 +2466,7 @@ ide_build_pipeline_build_srcdir_path (IdeBuildPipeline *self,
   va_list args;
 
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (self->srcdir != NULL, NULL);
   g_return_val_if_fail (first_part != NULL, NULL);
 
   va_start (args, first_part);
@@ -2495,6 +2496,7 @@ ide_build_pipeline_build_builddir_path (IdeBuildPipeline *self,
   va_list args;
 
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+  g_return_val_if_fail (self->builddir != NULL, NULL);
   g_return_val_if_fail (first_part != NULL, NULL);
 
   va_start (args, first_part);
