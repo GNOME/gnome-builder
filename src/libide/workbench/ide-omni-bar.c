@@ -141,6 +141,7 @@ struct _IdeOmniBar
   GtkLabel             *popover_runtime_label;
   GtkLabel             *popover_project_label;
   GtkLabel             *popover_warnings_label;
+  GtkProgressBar       *progress;
 };
 
 G_DEFINE_TYPE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BOX)
@@ -566,6 +567,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_runtime_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_warnings_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, progress);
 
   g_type_ensure (IDE_TYPE_OMNI_PAUSABLE_ROW);
   g_type_ensure (DZL_TYPE_LIST_BOX);

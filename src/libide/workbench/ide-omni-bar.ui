@@ -28,94 +28,106 @@
             <property name="above-child">true</property>
             <property name="visible">true</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkOverlay">
                 <property name="visible">true</property>
-                <property name="margin-end">3</property>
-                <property name="margin-start">3</property>
-                <property name="spacing">6</property>
+                <child type="overlay">
+                  <object class="GtkProgressBar" id="progress">
+                    <style>
+                      <class name="osd"/>
+                    </style>
+                    <property name="halign">fill</property>
+                    <property name="valign">end</property>
+                  </object>
+                </child>
                 <child>
-                  <object class="GtkBox" id="branch_box">
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">6</property>
+                  <object class="GtkBox">
+                    <property name="hexpand">true</property>
                     <property name="visible">true</property>
+                    <property name="margin-end">3</property>
+                    <property name="margin-start">3</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="project_label">
-                        <property name="ellipsize">end</property>
+                      <object class="GtkBox" id="branch_box">
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
                         <property name="visible">true</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <child>
+                          <object class="GtkLabel" id="project_label">
+                            <property name="ellipsize">end</property>
+                            <property name="visible">true</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">/</property>
+                            <property name="visible">true</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="branch_label">
+                            <property name="ellipsize">end</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel">
-                        <property name="label">/</property>
-                        <property name="visible">true</property>
+                      <object class="GtkImage" id="build_result_diagnostics_image">
+                        <property name="icon-name">dialog-warning-symbolic</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="warning"/>
                         </style>
                       </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="branch_label">
-                        <property name="ellipsize">end</property>
-                        <property name="visible">true</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="build_result_diagnostics_image">
-                    <property name="icon-name">dialog-warning-symbolic</property>
-                    <style>
-                      <class name="warning"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkStack" id="message_stack">
-                    <property name="vhomogeneous">false</property>
-                    <property name="hhomogeneous">false</property>
-                    <property name="interpolate-size">true</property>
-                    <property name="transition-type">slide-left</property>
-                    <property name="transition-duration">500</property>
-                    <property name="visible">true</property>
-                    <child>
-                      <object class="GtkLabel" id="config_name_label">
-                        <property name="visible">true</property>
-                        <property name="ellipsize">end</property>
-                        <property name="halign">end</property>
-                      </object>
                       <packing>
-                        <property name="name">config</property>
+                        <property name="pack-type">end</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="build_result_mode_label">
-                        <property name="halign">end</property>
+                      <object class="GtkStack" id="message_stack">
+                        <property name="vhomogeneous">false</property>
+                        <property name="hhomogeneous">false</property>
+                        <property name="interpolate-size">true</property>
+                        <property name="transition-type">slide-left</property>
+                        <property name="transition-duration">500</property>
                         <property name="visible">true</property>
-                        <property name="ellipsize">end</property>
+                        <child>
+                          <object class="GtkLabel" id="config_name_label">
+                            <property name="visible">true</property>
+                            <property name="ellipsize">end</property>
+                            <property name="halign">end</property>
+                          </object>
+                          <packing>
+                            <property name="name">config</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="build_result_mode_label">
+                            <property name="halign">end</property>
+                            <property name="visible">true</property>
+                            <property name="ellipsize">end</property>
+                          </object>
+                          <packing>
+                            <property name="name">build</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="name">build</property>
+                        <property name="pack-type">end</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">true</property>
-          </packing>
         </child>
       </object>
     </child>
