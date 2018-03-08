@@ -89,8 +89,6 @@ async_state_free (gpointer data)
 {
   AsyncState *state = data;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
-
   if (state != NULL)
     {
       g_clear_pointer (&state->drafts_directory, g_free);
