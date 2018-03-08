@@ -31,8 +31,11 @@ struct _GbpDevicedDevice
 
 typedef struct
 {
-  gchar *local_path;
-  gchar *remote_path;
+  gchar                 *local_path;
+  gchar                 *remote_path;
+  GFileProgressCallback  progress;
+  gpointer               progress_data;
+  GDestroyNotify         progress_data_destroy;
 } InstallBundleState;
 
 G_DEFINE_TYPE (GbpDevicedDevice, gbp_deviced_device, IDE_TYPE_DEVICE)
@@ -50,6 +53,8 @@ install_bundle_state_free (InstallBundleState *state)
 {
   g_clear_pointer (&state->local_path, g_free);
   g_clear_pointer (&state->remote_path, g_free);
+  if (state->progress_data_destroy)
+    state->progress_data_destroy (state->progress_data);
   g_slice_free (InstallBundleState, state);
 }
 
@@ -447,9 +452,8 @@ install_bundle_progress (goffset  current_num_bytes,
 
   g_assert (state != NULL);
 
-  g_print ("%u bytes\n", (guint)current_num_bytes);
-
-  /* TODO: proxy progress */
+  if (state->progress && total_num_bytes)
+    state->progress (current_num_bytes, total_num_bytes, state->progress_data);
 }
 
 static void
@@ -572,11 +576,14 @@ install_bundle_get_client_cb (GObject      *object,
 }
 
 void
-gbp_deviced_device_install_bundle_async (GbpDevicedDevice    *self,
-                                         const gchar         *bundle_path,
-                                         GCancellable        *cancellable,
-                                         GAsyncReadyCallback  callback,
-                                         gpointer             user_data)
+gbp_deviced_device_install_bundle_async (GbpDevicedDevice      *self,
+                                         const gchar           *bundle_path,
+                                         GFileProgressCallback  progress,
+                                         gpointer               progress_data,
+                                         GDestroyNotify         progress_data_destroy,
+                                         GCancellable          *cancellable,
+                                         GAsyncReadyCallback    callback,
+                                         gpointer               user_data)
 {
   g_autoptr(GTask) task = NULL;
   g_autofree gchar *name = NULL;
@@ -588,8 +595,6 @@ gbp_deviced_device_install_bundle_async (GbpDevicedDevice    *self,
   g_return_if_fail (bundle_path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* TODO: Add file progress callbacks */
-
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, gbp_deviced_device_install_bundle_async);
 
@@ -598,6 +603,9 @@ gbp_deviced_device_install_bundle_async (GbpDevicedDevice    *self,
   state = g_slice_new0 (InstallBundleState);
   state->local_path = g_strdup (bundle_path);
   state->remote_path = g_build_filename (".cache", "deviced", name, NULL);
+  state->progress = progress;
+  state->progress_data = progress_data;
+  state->progress_data_destroy = progress_data_destroy;
   g_task_set_task_data (task, state, (GDestroyNotify)install_bundle_state_free);
 
   gbp_deviced_device_get_client_async (self,

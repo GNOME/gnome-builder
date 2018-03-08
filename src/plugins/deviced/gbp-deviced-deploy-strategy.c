@@ -33,10 +33,13 @@ struct _GbpDevicedDeployStrategy
 
 typedef struct
 {
-  IdeBuildPipeline *pipeline;
-  GbpDevicedDevice *device;
-  gchar            *app_id;
-  gchar            *flatpak_path;
+  IdeBuildPipeline      *pipeline;
+  GbpDevicedDevice      *device;
+  gchar                 *app_id;
+  gchar                 *flatpak_path;
+  GFileProgressCallback  progress;
+  gpointer               progress_data;
+  GDestroyNotify         progress_data_destroy;
 } DeployState;
 
 G_DEFINE_TYPE (GbpDevicedDeployStrategy, gbp_deviced_deploy_strategy, IDE_TYPE_DEPLOY_STRATEGY)
@@ -48,6 +51,8 @@ deploy_state_free (DeployState *state)
   g_clear_object (&state->device);
   g_clear_pointer (&state->app_id, g_free);
   g_clear_pointer (&state->flatpak_path, g_free);
+  if (state->progress_data_destroy)
+    state->progress_data_destroy (state->progress_data);
   g_slice_free (DeployState, state);
 }
 
@@ -116,6 +121,19 @@ deploy_install_bundle_cb (GObject      *object,
 }
 
 static void
+deploy_progress_cb (goffset  current_num_bytes,
+                    goffset  total_num_bytes,
+                    gpointer user_data)
+{
+  DeployState *state = user_data;
+
+  g_assert (state != NULL);
+
+  if (state->progress && total_num_bytes)
+    state->progress (current_num_bytes, total_num_bytes, state->progress_data);
+}
+
+static void
 deploy_wait_check_cb (GObject      *object,
                       GAsyncResult *result,
                       gpointer      user_data)
@@ -138,6 +156,7 @@ deploy_wait_check_cb (GObject      *object,
   else
     gbp_deviced_device_install_bundle_async (state->device,
                                              state->flatpak_path,
+                                             deploy_progress_cb, state, NULL,
                                              g_task_get_cancellable (task),
                                              deploy_install_bundle_cb,
                                              g_object_ref (task));
@@ -185,7 +204,12 @@ deploy_get_commit_cb (GObject      *object,
   staging_dir = gbp_flatpak_get_staging_dir (state->pipeline);
   repo_dir = gbp_flatpak_get_repo_dir (context);
   app_id = ide_configuration_get_app_id (config);
-  name = g_strdup_printf ("%s-%s.flatpak", app_id, commit_id);
+#if 0
+  if (commit_id != NULL)
+    name = g_strdup_printf ("%s-%s.flatpak", app_id, commit_id);
+  else
+#endif
+  name = g_strdup_printf ("%s.flatpak", app_id);
   dest_path = g_build_filename (staging_dir, name, NULL);
 
   state->flatpak_path = g_strdup (dest_path);
@@ -193,6 +217,7 @@ deploy_get_commit_cb (GObject      *object,
   launcher = ide_subprocess_launcher_new (0);
   ide_subprocess_launcher_push_argv (launcher, "flatpak");
   ide_subprocess_launcher_push_argv (launcher, "build-bundle");
+  ide_subprocess_launcher_push_argv (launcher, "-vv");
   ide_subprocess_launcher_push_argv (launcher, "--arch");
   ide_subprocess_launcher_push_argv (launcher, arch ?: ide_get_system_arch ());
   ide_subprocess_launcher_push_argv (launcher, repo_dir);
@@ -214,6 +239,8 @@ deploy_get_commit_cb (GObject      *object,
       ide_subprocess_launcher_push_argv (launcher, commit_id);
     }
 #endif
+
+  ide_build_pipeline_attach_pty (state->pipeline, launcher);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     g_task_return_error (task, g_steal_pointer (&error));
@@ -268,7 +295,7 @@ static void
 gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
                                           IdeBuildPipeline      *pipeline,
                                           GFileProgressCallback  progress,
-                                          gpointer               process_data,
+                                          gpointer               progress_data,
                                           GDestroyNotify         progress_data_destroy,
                                           GCancellable          *cancellable,
                                           GAsyncReadyCallback    callback,
@@ -303,6 +330,9 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   state->pipeline = g_object_ref (pipeline);
   state->app_id = g_strdup_printf ("%s/%s/master", app_id, arch);
   state->device = g_object_ref (GBP_DEVICED_DEVICE (device));
+  state->progress = progress;
+  state->progress_data = progress_data;
+  state->progress_data_destroy = progress_data_destroy;
   g_task_set_task_data (task, state, (GDestroyNotify)deploy_state_free);
 
   /*
