@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-05 04:05+0000\n"
-"PO-Revision-Date: 2018-03-08 12:31+0100\n"
+"POT-Creation-Date: 2018-03-08 11:35+0000\n"
+"PO-Revision-Date: 2018-03-08 13:54+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -375,7 +375,9 @@ msgstr "Valgte konfiguration til kompilering"
 msgid ""
 "The configuration that has been selected and will be restored the next time "
 "the project loads."
-msgstr "Konfigurationen, som er valgt og vil blive gendannet, næste gang projektet indlæses."
+msgstr ""
+"Konfigurationen, som er valgt og vil blive gendannet, næste gang projektet "
+"indlæses."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/gtk/menus.ui:84
@@ -933,7 +935,7 @@ msgid "Failed to save file: %s"
 msgstr "Kunne ikke gemme fil: %s"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:252
+#: src/libide/buffers/ide-unsaved-files.c:250
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr "Kunne ikke gemme kladde: %s"
@@ -962,60 +964,66 @@ msgstr "Kompileringsrørledningen er i en fejltilstand"
 msgid "The build configuration has errors"
 msgstr "Kompileringskonfigurationen har fejl"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2694
+#: src/libide/buildsystem/ide-build-pipeline.c:2696
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
-msgstr "Kunne ikke oprette pseudoterminal. Terminalfunktioner vil være begrænsede."
+msgstr ""
+"Kunne ikke oprette pseudoterminal. Terminalfunktioner vil være begrænsede."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2894
+#: src/libide/buildsystem/ide-build-pipeline.c:2896
 msgid "Cleaning…"
 msgstr "Rydder op …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2898
-#: src/libide/buildsystem/ide-build-pipeline.c:2951
-#: src/libide/workbench/ide-omni-bar.c:474
+#: src/libide/buildsystem/ide-build-pipeline.c:2900
+#: src/libide/buildsystem/ide-build-pipeline.c:2957
+#: src/libide/workbench/ide-omni-bar.c:531
 msgid "Failed"
 msgstr "Fejlet"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2900
-#: src/libide/buildsystem/ide-build-pipeline.c:2959
+#: src/libide/buildsystem/ide-build-pipeline.c:2902
+#: src/libide/buildsystem/ide-build-pipeline.c:2965
 msgid "Ready"
 msgstr "Klar"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2915
+#: src/libide/buildsystem/ide-build-pipeline.c:2917
 msgid "Downloading…"
 msgstr "Henter …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2919
+#: src/libide/buildsystem/ide-build-pipeline.c:2921
 msgid "Building dependencies…"
 msgstr "Kompilerer afhængigheder …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2923
+#: src/libide/buildsystem/ide-build-pipeline.c:2925
 msgid "Bootstrapping…"
 msgstr "Klargør …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2927
+#: src/libide/buildsystem/ide-build-pipeline.c:2929
 msgid "Configuring…"
 msgstr "Konfigurerer …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2931
+#: src/libide/buildsystem/ide-build-pipeline.c:2933
 msgid "Building…"
 msgstr "Kompilerer …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2935
+#: src/libide/buildsystem/ide-build-pipeline.c:2937
 msgid "Installing…"
 msgstr "Installerer …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2939
+# Kan også værer Integrerer, men commit ses ret ofte.  Dog er det svært at gætte om det nødvendigvis drejer sig om git
+#: src/libide/buildsystem/ide-build-pipeline.c:2941
+msgid "Committing…"
+msgstr "Committer …"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2945
 msgid "Exporting…"
 msgstr "Eksporterer …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2943
-#: src/libide/buildsystem/ide-build-pipeline.c:2947
-#: src/libide/workbench/ide-omni-bar.c:492
+#: src/libide/buildsystem/ide-build-pipeline.c:2949
+#: src/libide/buildsystem/ide-build-pipeline.c:2953
+#: src/libide/workbench/ide-omni-bar.c:549
 msgid "Success"
 msgstr "Succes"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2955
+#: src/libide/buildsystem/ide-build-pipeline.c:2961
 msgid "Preparing…"
 msgstr "Forbereder …"
 
@@ -1072,7 +1080,7 @@ msgid "Configure Options"
 msgstr "Konfigurationsindstillinger"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:189
-#: src/libide/workbench/ide-omni-bar.ui:304
+#: src/libide/workbench/ide-omni-bar.ui:316
 msgid "Runtime"
 msgstr "Runtime"
 
@@ -1106,7 +1114,7 @@ msgid "Clear build log"
 msgstr "Ryd kompileringslog"
 
 #: src/libide/buildui/ide-build-log-panel.ui:49
-#: src/libide/workbench/ide-omni-bar.ui:148
+#: src/libide/workbench/ide-omni-bar.ui:160
 msgid "Cancel build"
 msgstr "Kompilering annulleret"
 
@@ -1118,7 +1126,7 @@ msgstr "Gem kompileringslog"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:492
+#: src/libide/workbench/ide-omni-bar.ui:504
 msgid "Warnings"
 msgstr "Advarsler"
 
@@ -1126,7 +1134,7 @@ msgstr "Advarsler"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:464
+#: src/libide/workbench/ide-omni-bar.ui:476
 msgid "Errors"
 msgstr "Fejl"
 
@@ -1324,6 +1332,11 @@ msgstr "Binær"
 #, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Der blev ikke fundet en egnet fejlsøger."
+
+# deploy -> distribuere bør passe nogenlunde.  Nogen bedre?
+#: src/libide/devices/ide-device-manager.c:714
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr "Kan ikke distribuere på enheden, da kompileringsrørledningen ikke er klargjort"
 
 #: src/libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
@@ -1768,7 +1781,9 @@ msgstr "Alle projekttyper"
 msgid ""
 "Removing project files will delete them from your computer and cannot be "
 "undone."
-msgstr "Fjernelse af projektfiler vil slette dem fra din computer og kan ikke fortrydes."
+msgstr ""
+"Fjernelse af projektfiler vil slette dem fra din computer og kan ikke "
+"fortrydes."
 
 #: src/libide/greeter/ide-greeter-perspective.c:1190
 msgid "Delete Project Files"
@@ -2369,13 +2384,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Der opstod en fejl ved forsøg på at udføre handlingen."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:207
+#: src/libide/local/ide-local-device.c:196
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Min computer (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:216
+#: src/libide/local/ide-local-device.c:205
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Min computer (%s) — %s"
@@ -3065,71 +3080,71 @@ msgstr "Kunne ikke fortolke “%s” som absolut URI"
 msgid "URI “%s” has no host component"
 msgstr "URI'en “%s” har ingen værtskomponent"
 
-#: src/libide/workbench/ide-omni-bar.c:454
+#: src/libide/workbench/ide-omni-bar.c:511
 msgid "Building"
 msgstr "Kompilerer"
 
-#: src/libide/workbench/ide-omni-bar.ui:213
+#: src/libide/workbench/ide-omni-bar.ui:225
 msgid "Update project dependencies"
 msgstr "Opdatér projektets afhængigheder"
 
-#: src/libide/workbench/ide-omni-bar.ui:232
+#: src/libide/workbench/ide-omni-bar.ui:244
 msgid "Configure build preferences"
 msgstr "Redigér kompileringsindstillinger"
 
-#: src/libide/workbench/ide-omni-bar.ui:254
+#: src/libide/workbench/ide-omni-bar.ui:266
 msgid "Branch"
 msgstr "Gren"
 
 # ?
-#: src/libide/workbench/ide-omni-bar.ui:279
+#: src/libide/workbench/ide-omni-bar.ui:291
 msgid "Build Profile"
 msgstr "Kompileringsprofil"
 
-#: src/libide/workbench/ide-omni-bar.ui:334
+#: src/libide/workbench/ide-omni-bar.ui:346
 msgid "There is a problem with the current build configuration."
 msgstr "Der er et problem med den nuværende kompileringskonfiguration."
 
-#: src/libide/workbench/ide-omni-bar.ui:367
+#: src/libide/workbench/ide-omni-bar.ui:379
 msgid "Build status"
 msgstr "Kompileringsstatus"
 
-#: src/libide/workbench/ide-omni-bar.ui:388
+#: src/libide/workbench/ide-omni-bar.ui:400
 msgid "View build console contents"
 msgstr "Vis indhold af kompileringskonsol"
 
-#: src/libide/workbench/ide-omni-bar.ui:410
+#: src/libide/workbench/ide-omni-bar.ui:422
 msgid "Last build"
 msgstr "Sidste kompilering"
 
-#: src/libide/workbench/ide-omni-bar.ui:437
+#: src/libide/workbench/ide-omni-bar.ui:449
 msgid "Build result"
 msgstr "Kompileringsresultat"
 
 # Ikke sikker på størrelsen af knapperne
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:530
+#: src/libide/workbench/ide-omni-bar.ui:542
 msgid "true"
 msgstr "false"
 
-#: src/libide/workbench/ide-omni-bar.ui:535
+#: src/libide/workbench/ide-omni-bar.ui:547
 msgctxt "button"
 msgid "Build"
 msgstr "Kompilér"
 
-#: src/libide/workbench/ide-omni-bar.ui:542
+#: src/libide/workbench/ide-omni-bar.ui:554
 msgid "Rebuild"
 msgstr "Genkompilér"
 
-#: src/libide/workbench/ide-omni-bar.ui:549
+#: src/libide/workbench/ide-omni-bar.ui:561
 msgid "Clean"
 msgstr "Ryd"
 
-#: src/libide/workbench/ide-omni-bar.ui:556
+#: src/libide/workbench/ide-omni-bar.ui:568
 msgid "Export Bundle"
 msgstr "Eksportér bundle"
 
-#: src/libide/workbench/ide-omni-bar.ui:581 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:593 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Kompilér projektet"
 
@@ -3142,15 +3157,15 @@ msgstr "Builder-statistik"
 msgid "%s — Builder"
 msgstr "%s — Builder"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:50
+#: src/libide/workbench/ide-workbench-header-bar.ui:51
 msgid "Transfers"
 msgstr "Overførsler"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:56
+#: src/libide/workbench/ide-workbench-header-bar.ui:57
 msgid "Show workbench menu"
 msgstr "Vis arbejdsbordsmenu"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:95
+#: src/libide/workbench/ide-workbench-header-bar.ui:96
 msgid "Press Ctrl+. to search"
 msgstr "Tryk Ctrl+. for at søge"
 
@@ -3183,7 +3198,9 @@ msgstr "Perspektiver"
 msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
-msgstr "GNOME Builder kræver en skrivebordssession med D-Bus. Angiv venligst DBUS_SESSION_BUS_ADDRESS."
+msgstr ""
+"GNOME Builder kræver en skrivebordssession med D-Bus. Angiv venligst "
+"DBUS_SESSION_BUS_ADDRESS."
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:194
 msgid "Building cache…"
@@ -3239,13 +3256,17 @@ msgstr "Opret et nyt flatpak-klart GNOME-program"
 #: src/plugins/beautifier/gb-beautifier-config.c:155
 #, c-format
 msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
-msgstr "Udvidelsesmodulet Beautifier: fejl ved kopiering af gresource-konfigurationsfil for “%s”: %s"
+msgstr ""
+"Udvidelsesmodulet Beautifier: fejl ved kopiering af gresource-"
+"konfigurationsfil for “%s”: %s"
 
 #. translators: %s is replaced with the source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:163
 #, c-format
 msgid "Beautifier plugin: error creating temporary config file for “%s”"
-msgstr "Udvidelsesmodulet Beautifier: fejl ved oprettelse af midlertidig konfigurationsfil for “%s”"
+msgstr ""
+"Udvidelsesmodulet Beautifier: fejl ved oprettelse af midlertidig "
+"konfigurationsfil for “%s”"
 
 #. translators: %s is replaced with the .ini source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:207
@@ -3259,7 +3280,9 @@ msgstr "Udvidelsesmodulet Beautifier: kan ikke læse .ini-fil: %s"
 msgid ""
 "Beautifier plugin: neither command nor command-pattern keys found: entry "
 "“%s” disabled"
-msgstr "Udvidelsesmodulet Beautifier: hverken kommando eller nøgler til kommandomønster fundet: posten “%s” deaktiveret"
+msgstr ""
+"Udvidelsesmodulet Beautifier: hverken kommando eller nøgler til "
+"kommandomønster fundet: posten “%s” deaktiveret"
 
 #. translators: %s is replaced with the config entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:265
@@ -3267,20 +3290,26 @@ msgstr "Udvidelsesmodulet Beautifier: hverken kommando eller nøgler til kommand
 msgid ""
 "Beautifier plugin: both command and command-pattern keys found: entry “%s” "
 "disabled"
-msgstr "Udvidelsesmodulet Beautifier: både kommando og nøgler til kommandomønster fundet: posten “%s” deaktiveret"
+msgstr ""
+"Udvidelsesmodulet Beautifier: både kommando og nøgler til kommandomønster "
+"fundet: posten “%s” deaktiveret"
 
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:289
 #, c-format
 msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
-msgstr "Udvidelsesmodulet Beautifier: konfigurationsstien “%s” findes ikke; posten “%s” deaktiveret"
+msgstr ""
+"Udvidelsesmodulet Beautifier: konfigurationsstien “%s” findes ikke; posten "
+"“%s” deaktiveret"
 
 #. translators: %s is replaced with the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:306
 #, c-format
 msgid ""
 "Beautifier plugin: command key out of possible values: entry “%s” disabled"
-msgstr "Udvidelsesmodulet Beautifier: kommandonøgle er ikke blandt de mulige værdier: posten “%s” deaktiveret"
+msgstr ""
+"Udvidelsesmodulet Beautifier: kommandonøgle er ikke blandt de mulige "
+"værdier: posten “%s” deaktiveret"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:331
@@ -3288,14 +3317,18 @@ msgstr "Udvidelsesmodulet Beautifier: kommandonøgle er ikke blandt de mulige v�
 msgid ""
 "Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
 "entry “%s” disabled"
-msgstr "Udvidelsesmodulet Beautifier: @c@ i nøgle til kommandomønster “%s”, men ingen konfigurationsfil angivet: posten “%s” deaktiveret"
+msgstr ""
+"Udvidelsesmodulet Beautifier: @c@ i nøgle til kommandomønster “%s”, men "
+"ingen konfigurationsfil angivet: posten “%s” deaktiveret"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:363
 #, c-format
 msgid ""
 "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
-msgstr "Udvidelsesmodulet Beautifier: kan ikke oprette midlertidig fil for “%s”: posten “%s” deaktiveret"
+msgstr ""
+"Udvidelsesmodulet Beautifier: kan ikke oprette midlertidig fil for “%s”: "
+"posten “%s” deaktiveret"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:405
@@ -3314,7 +3347,8 @@ msgstr "Udvidelsesmodulet Beautifier: %s"
 #: src/plugins/beautifier/gb-beautifier-config.c:545
 #, c-format
 msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-msgstr "Udvidelsesmodulet Beautifier: kan ikke læse følgende ressourcefil: “%s”"
+msgstr ""
+"Udvidelsesmodulet Beautifier: kan ikke læse følgende ressourcefil: “%s”"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:86
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
@@ -3368,7 +3402,9 @@ msgstr "Udvidelsesmodulet Beautifier: ingen gyldige poster; deaktiverer: %s"
 msgid ""
 "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
 "temporary directory: “%s”"
-msgstr "Udvidelsesmodulet Beautifier: blokerede et forsøg på at fjerne en fil uden for den midlertidige mappe “%s”: “%s”"
+msgstr ""
+"Udvidelsesmodulet Beautifier: blokerede et forsøg på at fjerne en fil uden "
+"for den midlertidige mappe “%s”: “%s”"
 
 #. translators: %s is replaced with the command error message
 #: src/plugins/beautifier/gb-beautifier-process.c:269
@@ -4094,39 +4130,40 @@ msgstr "%s <b>%s</b>"
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:67
+# Tvetydig men sml. næste
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:78
 #, c-format
-msgid "Updated %s %s"
-msgstr "Opdaterede %s %s"
+msgid "Updated %s"
+msgstr "%s opdateret"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:70
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:81
 #, c-format
-msgid "Updating %s %s"
-msgstr "Opdaterer %s %s"
+msgid "Updating %s"
+msgstr "Opdaterer %s"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:76
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:87
 #, c-format
-msgid "Installed %s %s"
-msgstr "Installerede %s %s"
+msgid "Installed %s"
+msgstr "%s installeret"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:79
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:90
 #, c-format
-msgid "Installing %s %s"
-msgstr "Installerer %s %s"
+msgid "Installing %s"
+msgstr "Installerer %s"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:101
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:116
 msgid "Failed to install runtime"
 msgstr "Kan ikke installere runtime"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:103
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
 msgid "Runtime has been updated"
 msgstr "Runtime er blevet opdateret"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:105
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been installed"
 msgstr "Runtime er blevet installeret"
 
@@ -4283,7 +4320,7 @@ msgstr "Tomt projekt med Makefil"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Opret et nyt tomt projekt ved hjælp af en simpel Makefil"
 
-#: src/plugins/meson/gbp-meson-build-system.c:418
+#: src/plugins/meson/gbp-meson-build-system.c:428
 msgid "Meson"
 msgstr "Meson"
 
@@ -4433,7 +4470,7 @@ msgstr "Projekttræ"
 #    * notify the user that nothing was found.
 #    */
 # Dette tyder på at det er "tom" og ikke "tøm"
-#: src/plugins/project-tree/gb-project-tree-builder.c:452
+#: src/plugins/project-tree/gb-project-tree-builder.c:451
 msgid "Empty"
 msgstr "Tom"
 
@@ -4910,6 +4947,9 @@ msgstr "Kunne ikke oprette XML-træet."
 #: src/plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
+
+#~ msgid "Installing %s %s"
+#~ msgstr "Installerer %s %s"
 
 #~ msgid "Hue"
 #~ msgstr "Farvetone"
