@@ -28,6 +28,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeDeviceManager, ide_device_manager, IDE, DEVICE_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_28
+gdouble    ide_device_manager_get_progress     (IdeDeviceManager     *self);
+IDE_AVAILABLE_IN_3_28
 IdeDevice *ide_device_manager_get_device       (IdeDeviceManager     *self);
 IDE_AVAILABLE_IN_3_28
 void       ide_device_manager_set_device       (IdeDeviceManager     *self,

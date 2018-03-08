@@ -57,6 +57,12 @@ struct _IdeDeviceManager
    * The providers that are registered in plugins supporting IdeDeviceProvider.
    */
   PeasExtensionSet *providers;
+
+  /*
+   * Our progress in a deployment. Simplifies binding to the progress bar
+   * in the omnibar.
+   */
+  gdouble progress;
 };
 
 typedef struct
@@ -85,10 +91,18 @@ G_DEFINE_TYPE_WITH_CODE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT,
 enum {
   PROP_0,
   PROP_DEVICE,
+  PROP_PROGRESS,
   N_PROPS
 };
 
+enum {
+  DEPLOY_STARTED,
+  DEPLOY_FINISHED,
+  N_SIGNALS
+};
+
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static void
 deploy_state_free (DeployState *state)
@@ -453,6 +467,10 @@ ide_device_manager_get_property (GObject    *object,
       g_value_set_object (value, ide_device_manager_get_device (self));
       break;
 
+    case PROP_PROGRESS:
+      g_value_set_double (value, ide_device_manager_get_progress (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -504,7 +522,34 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
                          IDE_TYPE_DEVICE,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * IdeDeviceManager:progress:
+   *
+   * The "progress" property is updated with a value between 0.0 and 1.0 while
+   * the deployment is in progress.
+   *
+   * Since: 3.28
+   */
+  properties [PROP_PROGRESS] =
+    g_param_spec_double ("progress",
+                         "Progress",
+                         "Deployment progress",
+                         0.0, 1.0, 0.0,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [DEPLOY_STARTED] =
+    g_signal_new ("deploy-started",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  signals [DEPLOY_FINISHED] =
+    g_signal_new ("deploy-finished",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
 }
 
 static void
@@ -677,10 +722,15 @@ deploy_progress_cb (goffset  current_num_bytes,
                     gpointer user_data)
 {
   IdeDeviceManager *self = user_data;
+  gdouble progress = 0.0;
 
   g_assert (IDE_IS_DEVICE_MANAGER (self));
 
-  /* TODO: Update progress */
+  if (total_num_bytes > 0)
+    progress = current_num_bytes / total_num_bytes;
+
+  self->progress = CLAMP (progress, 0.0, 1.0);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRESS]);
 }
 
 static void
@@ -805,6 +855,23 @@ ide_device_manager_deploy_tick (GTask *task)
   IDE_EXIT;
 }
 
+static void
+ide_device_manager_deploy_completed (IdeDeviceManager *self,
+                                     GParamSpec       *pspec,
+                                     GTask            *task)
+{
+  g_assert (IDE_IS_DEVICE_MANAGER (self));
+  g_assert (G_IS_TASK (task));
+
+  if (self->progress < 1.0)
+    {
+      self->progress = 1.0;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRESS]);
+    }
+
+  g_signal_emit (self, signals [DEPLOY_FINISHED], 0);
+}
+
 /**
  * ide_device_manager_deploy_async:
  * @self: a #IdeDeviceManager
@@ -838,8 +905,19 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  self->progress = 0.0;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROGRESS]);
+
+  g_signal_emit (self, signals [DEPLOY_STARTED], 0);
+
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_device_manager_deploy_async);
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_device_manager_deploy_completed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   if (!(device = ide_build_pipeline_get_device (pipeline)))
     {
@@ -901,4 +979,12 @@ ide_device_manager_deploy_finish (IdeDeviceManager  *self,
   ret = g_task_propagate_boolean (G_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+gdouble
+ide_device_manager_get_progress (IdeDeviceManager *self)
+{
+  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), 0.0);
+
+  return self->progress;
 }
