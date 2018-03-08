@@ -29,6 +29,7 @@
 #include "buildsystem/ide-build-system.h"
 #include "config/ide-configuration.h"
 #include "config/ide-configuration-manager.h"
+#include "devices/ide-device-manager.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
 #include "util/ide-gtk.h"
@@ -218,11 +219,46 @@ ide_omni_bar__config_manager__notify_current (IdeOmniBar              *self,
 }
 
 static void
+ide_omni_bar_device_manager_deploy_started (IdeOmniBar       *self,
+                                            IdeDeviceManager *device_manager)
+{
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+
+  gtk_progress_bar_set_fraction (self->progress, 0.0);
+  gtk_widget_show (GTK_WIDGET (self->progress));
+}
+
+static void
+ide_omni_bar_device_manager_deploy_finished (IdeOmniBar       *self,
+                                             IdeDeviceManager *device_manager)
+{
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+
+  dzl_gtk_widget_hide_with_fade (GTK_WIDGET (self->progress));
+}
+
+static void
+ide_omni_bar_device_manager_notify_progress (IdeOmniBar       *self,
+                                             GParamSpec       *pspec,
+                                             IdeDeviceManager *device_manager)
+{
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+  g_assert (GTK_IS_PROGRESS_BAR (self->progress));
+
+  gtk_progress_bar_set_fraction (self->progress,
+                                 ide_device_manager_get_progress (device_manager));
+}
+
+static void
 ide_omni_bar_context_set (GtkWidget  *widget,
                           IdeContext *context)
 {
   IdeOmniBar *self = (IdeOmniBar *)widget;
   IdeConfigurationManager *config_manager = NULL;
+  IdeDeviceManager *device_manager = NULL;
   IdeBuildManager *build_manager = NULL;
   GListModel *pausables = NULL;
   IdeProject *project = NULL;
@@ -242,6 +278,7 @@ ide_omni_bar_context_set (GtkWidget  *widget,
       config_manager = ide_context_get_configuration_manager (context);
       project = ide_context_get_project (context);
       pausables = _ide_context_get_pausables (context);
+      device_manager = ide_context_get_device_manager (context);
     }
 
   dzl_binding_group_set_source (self->build_manager_bindings, build_manager);
@@ -258,6 +295,25 @@ ide_omni_bar_context_set (GtkWidget  *widget,
       g_object_bind_property (config_manager, "ready",
                               self->config_ready_label, "visible",
                               G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+    }
+
+  if (device_manager != NULL)
+    {
+      g_signal_connect_object (device_manager,
+                               "deploy-started",
+                               G_CALLBACK (ide_omni_bar_device_manager_deploy_started),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (device_manager,
+                               "deploy-finished",
+                               G_CALLBACK (ide_omni_bar_device_manager_deploy_finished),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (device_manager,
+                               "notify::progress",
+                               G_CALLBACK (ide_omni_bar_device_manager_notify_progress),
+                               self,
+                               G_CONNECT_SWAPPED);
     }
 
   IDE_EXIT;
