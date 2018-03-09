@@ -202,6 +202,7 @@ src/plugins/project-tree/gb-rename-file-popover.c
 src/plugins/project-tree/gb-rename-file-popover.ui
 src/plugins/project-tree/gtk/menus.ui
 src/plugins/python-pack/ide-python-format-provider.c
+src/plugins/qemu/gbp-qemu-device-provider.c
 src/plugins/quick-highlight/gbp-quick-highlight-preferences.c
 src/plugins/recent/gbp-recent-section.ui
 src/plugins/retab/gtk/menus.ui
