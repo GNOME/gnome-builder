@@ -102,7 +102,7 @@ gbp_qemu_device_provider_load_worker (GTask        *task,
   context = ide_object_get_context (source_object);
 
   /* Now locate which of the machines are registered. Qemu has a huge
-   * list of these, so we only check for ones we thing are likely to
+   * list of these, so we only check for ones we think are likely to
    * be used. If you want support for more, let us know.
    */
   for (guint i = 0; i < G_N_ELEMENTS (machines); i++)
