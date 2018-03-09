@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "gbp-qemu-device-provider"
 
 #include <glib/gi18n.h>
+#include <string.h>
 
 #include "gbp-qemu-device-provider.h"
 
@@ -66,7 +67,7 @@ gbp_qemu_device_provider_load_worker (GTask        *task,
    * in /proc/mounts so that the system knows about binfmt hooks.
    */
 
-  if (!g_file_get_contents ("/proc/mounts", &mounts, NULL, &error))
+  if (!ide_g_host_file_get_contents ("/proc/mounts", &mounts, NULL, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -82,15 +83,14 @@ gbp_qemu_device_provider_load_worker (GTask        *task,
       IDE_EXIT;
     }
 
-  if (!g_file_get_contents ("/proc/sys/fs/binfmt_misc/status", &status, NULL, &error))
+  if (!ide_g_host_file_get_contents  ("/proc/sys/fs/binfmt_misc/status", &status, NULL, &error))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   /* @status is guaranteed to have a \0 suffix */
-  g_strstrip (status);
-  if (!g_str_equal (status, "enabled"))
+  if (!g_str_equal (g_strstrip (status), "enabled"))
     {
       g_task_return_new_error (task,
                                G_IO_ERROR,
@@ -108,10 +108,14 @@ gbp_qemu_device_provider_load_worker (GTask        *task,
   for (guint i = 0; i < G_N_ELEMENTS (machines); i++)
     {
       g_autofree gchar *path = NULL;
+      g_autofree gchar *contents = NULL;
+      gsize len;
 
       path = g_build_filename ("/proc/sys/fs/binfmt_misc", machines[i].filename, NULL);
 
-      if (g_file_test (path, G_FILE_TEST_EXISTS))
+      /* First line of file should be "enabled\n" */
+      if (ide_g_host_file_get_contents (path, &contents, &len, NULL) &&
+          strncmp (contents, "enabled\n", 8) == 0)
         {
           g_autoptr(IdeLocalDevice) device = NULL;
           g_autofree gchar *display_name = NULL;
