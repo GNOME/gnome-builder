@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 00:38+0000\n"
-"PO-Revision-Date: 2018-03-09 14:59+0200\n"
+"POT-Creation-Date: 2018-03-09 20:51+0000\n"
+"PO-Revision-Date: 2018-03-09 23:42+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -266,7 +266,8 @@ msgid "Spaces Style"
 msgstr "Estilo dos espazos"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+#| msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr "Como aplicar os espazos ao reformatar texto."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -4032,6 +4033,12 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Desgargando as fontes do aplicativo…"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#, c-format
+#| msgid "Failed to rename file: %s"
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Produciuse un fallo ao eliminar o manifesto de flatpak: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "A rede non está dispoñíbel, omitindo as descargas"
@@ -4538,20 +4545,17 @@ msgid "_Refresh"
 msgstr "_Recargar"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:40
-#| msgid "Emacs Emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
 msgid "Aarch64 Emulation"
 msgstr "Emulación de Aarch64"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
-#| msgid "Emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Arm Emulation"
 msgstr "Emulación de Arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:122
+#: src/plugins/qemu/gbp-qemu-device-provider.c:126
 #, c-format
-#| msgid "My Computer (%s)"
 msgid "My Computer (%s) %s"
 msgstr "O meu computador (%s) %s"
 
