@@ -31,6 +31,8 @@ G_DECLARE_DERIVABLE_TYPE (IdeLocalDevice, ide_local_device, IDE, LOCAL_DEVICE, I
 struct _IdeLocalDeviceClass
 {
   IdeDeviceClass parent;
+
+  gpointer _reserved[8];
 };
 
 G_END_DECLS
