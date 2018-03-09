@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 19:56+0000\n"
-"PO-Revision-Date: 2018-03-09 21:00+0100\n"
+"POT-Creation-Date: 2018-03-09 20:51+0000\n"
+"PO-Revision-Date: 2018-03-09 23:25+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -263,7 +263,7 @@ msgid "Spaces Style"
 msgstr "Styl spacji"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr "Jak stosować spacje podczas formatowania tekstu."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -4020,7 +4020,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Pobieranie źródeł programu…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:653
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Usunięcie manifestu Flatpak się nie powiodło: %s"
