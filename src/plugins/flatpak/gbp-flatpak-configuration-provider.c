@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "gbp-flatpak-configuration-provider"
 
 #include <flatpak.h>
+#include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 #include <string.h>
 
@@ -631,6 +632,28 @@ gbp_flatpak_configuration_provider_duplicate (IdeConfigurationProvider *provider
 }
 
 static void
+gbp_flatpak_configuration_provider_delete (IdeConfigurationProvider *provider,
+                                           IdeConfiguration         *configuration)
+{
+  GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
+  GbpFlatpakManifest *manifest = (GbpFlatpakManifest *)configuration;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *name = NULL;
+
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
+
+  file = g_object_ref (gbp_flatpak_manifest_get_file (manifest));
+  name = g_file_get_basename (file);
+
+  ide_configuration_provider_emit_removed (provider, configuration);
+
+  if (!g_file_delete (file, NULL, &error))
+    ide_object_warning (provider, _("Failed to remove flatpak manifest: %s"), name);
+}
+
+static void
 configuration_provider_iface_init (IdeConfigurationProviderInterface *iface)
 {
   iface->load_async = gbp_flatpak_configuration_provider_load_async;
@@ -639,6 +662,7 @@ configuration_provider_iface_init (IdeConfigurationProviderInterface *iface)
   iface->save_async = gbp_flatpak_configuration_provider_save_async;
   iface->save_finish = gbp_flatpak_configuration_provider_save_finish;
   iface->duplicate = gbp_flatpak_configuration_provider_duplicate;
+  iface->delete = gbp_flatpak_configuration_provider_delete;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpFlatpakConfigurationProvider,

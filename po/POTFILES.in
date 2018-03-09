@@ -163,6 +163,7 @@ src/plugins/eslint/eslint_plugin.py
 src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml
 src/plugins/find-other-file/find_other_file.py
 src/plugins/flatpak/gbp-flatpak-clone-widget.ui
+src/plugins/flatpak/gbp-flatpak-configuration-provider.c
 src/plugins/flatpak/gbp-flatpak-download-stage.c
 src/plugins/flatpak/gbp-flatpak-genesis-addin.c
 src/plugins/flatpak/gbp-flatpak-pipeline-addin.c
