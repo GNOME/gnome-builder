@@ -375,17 +375,26 @@ static gboolean
 contains_file (GbpFlatpakConfigurationProvider *self,
                GFile                           *file)
 {
+  g_autofree gchar *path = NULL;
+
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
   g_assert (G_IS_FILE (file));
+
+  path = g_file_get_path (file);
+  g_debug ("Checking for existing configuration: %s", path);
 
   for (guint i = 0; i < self->configs->len; i++)
     {
       GbpFlatpakManifest *manifest = g_ptr_array_index (self->configs, i);
+      g_autofree gchar *loc_path = NULL;
       GFile *loc;
 
       g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
 
       loc = gbp_flatpak_manifest_get_file (manifest);
+
+      loc_path = g_file_get_path (loc);
+      g_debug ("  [%u] = %s", i, loc_path);
 
       if (g_file_equal (loc, file))
         return TRUE;
