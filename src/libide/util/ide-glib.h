@@ -64,5 +64,10 @@ IDE_AVAILABLE_IN_3_28
 GPtrArray   *ide_g_file_get_children_finish           (GFile                *file,
                                                        GAsyncResult         *result,
                                                        GError              **error);
+IDE_AVAILABLE_IN_3_28
+gboolean     ide_g_host_file_get_contents             (const gchar          *path,
+                                                       gchar               **contents,
+                                                       gsize                *len,
+                                                       GError              **error);
 
 G_END_DECLS

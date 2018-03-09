@@ -22,7 +22,10 @@
 
 #include "config.h"
 
+#include "util/ide-flatpak.h"
 #include "util/ide-glib.h"
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
 #include "vcs/ide-vcs.h"
 
 typedef struct
@@ -552,4 +555,70 @@ ide_g_file_find_finish (GFile         *file,
   g_return_val_if_fail (G_IS_TASK (result), NULL);
 
   return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+/**
+ * ide_g_host_file_get_contents:
+ * @path: the path on the host
+ * @contents: (out): a location for the contents
+ * @len: (out): a location for the size, not including trailing \0
+ * @error: location for a #GError, or %NULL
+ *
+ * This is similar to g_get_file_contents() but ensures that we get
+ * the file from the host, rather than our mount namespace.
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.28
+ */
+gboolean
+ide_g_host_file_get_contents (const gchar  *path,
+                              gchar       **contents,
+                              gsize        *len,
+                              GError      **error)
+{
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (contents != NULL)
+    *contents = NULL;
+
+  if (len != NULL)
+    *len = 0;
+
+  if (!ide_is_flatpak ())
+    return g_file_get_contents (path, contents, len, error);
+
+  {
+    g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+    g_autoptr(IdeSubprocess) subprocess = NULL;
+    g_autoptr(GBytes) stdout_buf = NULL;
+
+    launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+    ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+    ide_subprocess_launcher_push_argv (launcher, "cat");
+    ide_subprocess_launcher_push_argv (launcher, path);
+
+    if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, error)))
+      return FALSE;
+
+    if (!ide_subprocess_communicate (subprocess, NULL, NULL, &stdout_buf, NULL, error))
+      return FALSE;
+
+    if (len != NULL)
+      *len = g_bytes_get_size (stdout_buf);
+
+    if (contents != NULL)
+      {
+        const guint8 *data;
+        gsize n;
+
+        /* g_file_get_contents() gurantees a trailing null byte */
+        data = g_bytes_get_data (stdout_buf, &n);
+        *contents = g_malloc (n + 1);
+        memcpy (*contents, data, n);
+        (*contents)[n] = '\0';
+      }
+  }
+
+  return TRUE;
 }
