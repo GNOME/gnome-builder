@@ -51,13 +51,15 @@ ide_local_device_get_info_async (IdeDevice           *device,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
+  IdeLocalDevice *self = (IdeLocalDevice *)device;
+  IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
   g_autoptr(GTask) task = NULL;
   g_autoptr(IdeDeviceInfo) info = NULL;
   const gchar *system_type = NULL;
   g_auto(GStrv) parts = NULL;
   g_autofree gchar *arch = NULL;
 
-  g_assert (IDE_IS_LOCAL_DEVICE (device));
+  g_assert (IDE_IS_LOCAL_DEVICE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (device, cancellable, callback, user_data);
@@ -77,6 +79,15 @@ ide_local_device_get_info_async (IdeDevice           *device,
       if (parts[2] != NULL)
         ide_device_info_set_system (info, parts[2]);
     }
+
+  /* Now override anything that was specified in the device */
+
+  if (priv->arch != NULL)
+    ide_device_info_set_arch (info, priv->arch);
+  if (priv->kernel != NULL)
+    ide_device_info_set_kernel (info, priv->kernel);
+  if (priv->system != NULL)
+    ide_device_info_set_system (info, priv->system);
 
   g_task_return_pointer (task, g_steal_pointer (&info), g_object_unref);
 }
