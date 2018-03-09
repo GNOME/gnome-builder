@@ -54,6 +54,7 @@ subdir('phpize')
 subdir('project-tree')
 subdir('python-gi-imports-completion')
 subdir('python-pack')
+subdir('qemu')
 subdir('quick-highlight')
 subdir('recent')
 subdir('retab')
@@ -130,6 +131,7 @@ status += [
   'Project Tree .......... : @0@'.format(get_option('with_project_tree')),
   'Python GI Completion .. : @0@'.format(get_option('with_python_gi_imports_completion')),
   'Python Language Pack .. : @0@'.format(get_option('with_python_pack')),
+  'Qemu .................. : @0@'.format(get_option('with_qemu')),
   'Quick Highlight ....... : @0@'.format(get_option('with_quick_highlight')),
   'Retab ................. : @0@'.format(get_option('with_retab')),
   'Rust Language Server .. : @0@'.format(get_option('with_rust_langserv')),

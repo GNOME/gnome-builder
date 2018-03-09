@@ -1,0 +1,8 @@
+[Plugin]
+Module=qemu-plugin
+Name=Qemu
+Description=Integration with Qemu cross-architecture emulation
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2018 Christian Hergert
+Builtin=true
+Embedded=gbp_qemu_register_types
