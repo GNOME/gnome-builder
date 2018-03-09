@@ -646,6 +646,7 @@ gbp_flatpak_configuration_provider_delete (IdeConfigurationProvider *provider,
 {
   GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
   GbpFlatpakManifest *manifest = (GbpFlatpakManifest *)configuration;
+  g_autoptr(IdeConfiguration) hold = NULL;
   g_autoptr(GFile) file = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *name = NULL;
@@ -653,13 +654,16 @@ gbp_flatpak_configuration_provider_delete (IdeConfigurationProvider *provider,
   g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
   g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
 
+  hold = g_object_ref (configuration);
   file = g_object_ref (gbp_flatpak_manifest_get_file (manifest));
   name = g_file_get_basename (file);
 
-  ide_configuration_provider_emit_removed (provider, configuration);
-
-  if (!g_file_delete (file, NULL, &error))
-    ide_object_warning (provider, _("Failed to remove flatpak manifest: %s"), name);
+  if (g_ptr_array_remove (self->configs, hold))
+    {
+      ide_configuration_provider_emit_removed (provider, hold);
+      if (!g_file_delete (file, NULL, &error))
+        ide_object_warning (provider, _("Failed to remove flatpak manifest: %s"), name);
+    }
 }
 
 static void
