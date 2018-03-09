@@ -11,8 +11,7 @@
         <property name="focus-on-click">false</property>
         <property name="show-arrow">false</property>
         <property name="show-icons">true</property>
-        <!-- disabled by default for now -->
-        <property name="visible">false</property>
+        <property name="visible">true</property>
       </object>
       <packing>
         <property name="pack-type">start</property>
