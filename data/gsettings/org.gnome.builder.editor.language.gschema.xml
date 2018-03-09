@@ -40,7 +40,7 @@
     <key name="spaces-style" flags="org.gnome.builder.SpacesStyle">
       <default>[]</default>
       <summary>Spaces Style</summary>
-      <description>How to apply spaces when reformating text.</description>
+      <description>How to apply spaces when reformatting text.</description>
     </key>
     <key name="tab-width" type="i">
       <range min="1" max="120"/>
