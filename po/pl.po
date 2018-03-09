@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 00:38+0000\n"
-"PO-Revision-Date: 2018-03-09 01:41+0100\n"
+"POT-Creation-Date: 2018-03-09 19:56+0000\n"
+"PO-Revision-Date: 2018-03-09 21:00+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -4020,6 +4020,11 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Pobieranie źródeł programu…"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:653
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Usunięcie manifestu Flatpak się nie powiodło: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "Sieć jest niedostępna, pomijanie pobierania"
@@ -4523,16 +4528,16 @@ msgid "_Refresh"
 msgstr "_Odśwież"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:40
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
 msgid "Aarch64 Emulation"
 msgstr "Emulacja AArch64"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Arm Emulation"
 msgstr "Emulacja ARM"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:122
+#: src/plugins/qemu/gbp-qemu-device-provider.c:126
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Mój komputer (%s) — %s"
