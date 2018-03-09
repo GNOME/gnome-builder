@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-08 06:13+0000\n"
-"PO-Revision-Date: 2018-03-08 10:51-0200\n"
+"POT-Creation-Date: 2018-03-09 00:38+0000\n"
+"PO-Revision-Date: 2018-03-09 01:27-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -1006,7 +1006,6 @@ msgid "Installing…"
 msgstr "Instalando…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2941
-#| msgid "Configuring…"
 msgid "Committing…"
 msgstr "Fazendo commit…"
 
@@ -1078,7 +1077,7 @@ msgid "Configure Options"
 msgstr "Opções de configuração"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:189
-#: src/libide/workbench/ide-omni-bar.ui:316
+#: src/libide/workbench/ide-omni-bar.ui:315
 msgid "Runtime"
 msgstr "Runtime"
 
@@ -1112,7 +1111,7 @@ msgid "Clear build log"
 msgstr "Limpar log de compilação"
 
 #: src/libide/buildui/ide-build-log-panel.ui:49
-#: src/libide/workbench/ide-omni-bar.ui:160
+#: src/libide/workbench/ide-omni-bar.ui:159
 msgid "Cancel build"
 msgstr "Cancelar compilação"
 
@@ -1124,7 +1123,7 @@ msgstr "Salvar log de compilação"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:504
+#: src/libide/workbench/ide-omni-bar.ui:503
 msgid "Warnings"
 msgstr "Avisos"
 
@@ -1132,7 +1131,7 @@ msgstr "Avisos"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:476
+#: src/libide/workbench/ide-omni-bar.ui:475
 msgid "Errors"
 msgstr "Erros"
 
@@ -2379,13 +2378,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Houve uma falha ao tentar realizar a operação."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:196
+#: src/libide/local/ide-local-device.c:207
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Meu computador (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:205
+#: src/libide/local/ide-local-device.c:216
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Meu computador (%s) — %s"
@@ -3084,66 +3083,66 @@ msgstr "URI “%s” não possui um componente máquina"
 msgid "Building"
 msgstr "Compilando"
 
-#: src/libide/workbench/ide-omni-bar.ui:225
+#: src/libide/workbench/ide-omni-bar.ui:224
 msgid "Update project dependencies"
 msgstr "Atualizar dependências do projeto"
 
-#: src/libide/workbench/ide-omni-bar.ui:244
+#: src/libide/workbench/ide-omni-bar.ui:243
 msgid "Configure build preferences"
 msgstr "Configurar preferências de compilação"
 
-#: src/libide/workbench/ide-omni-bar.ui:266
+#: src/libide/workbench/ide-omni-bar.ui:265
 msgid "Branch"
 msgstr "Ramo"
 
-#: src/libide/workbench/ide-omni-bar.ui:291
+#: src/libide/workbench/ide-omni-bar.ui:290
 msgid "Build Profile"
 msgstr "Perfil de compilação"
 
-#: src/libide/workbench/ide-omni-bar.ui:346
+#: src/libide/workbench/ide-omni-bar.ui:345
 msgid "There is a problem with the current build configuration."
 msgstr "Há um problema com a configuração de compilação atual."
 
-#: src/libide/workbench/ide-omni-bar.ui:379
+#: src/libide/workbench/ide-omni-bar.ui:378
 msgid "Build status"
 msgstr "Saída da compilação"
 
-#: src/libide/workbench/ide-omni-bar.ui:400
+#: src/libide/workbench/ide-omni-bar.ui:399
 msgid "View build console contents"
 msgstr "Ver o conteúdo do console de compilação"
 
-#: src/libide/workbench/ide-omni-bar.ui:422
+#: src/libide/workbench/ide-omni-bar.ui:421
 msgid "Last build"
 msgstr "Última compilação"
 
 # Não é trabalhador "pessoa". Adotei tradução semelhante à da Microsoft.
-#: src/libide/workbench/ide-omni-bar.ui:449
+#: src/libide/workbench/ide-omni-bar.ui:448
 msgid "Build result"
 msgstr "Resultado da compilação"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:542
+#: src/libide/workbench/ide-omni-bar.ui:541
 msgid "true"
 msgstr "true"
 
-#: src/libide/workbench/ide-omni-bar.ui:547
+#: src/libide/workbench/ide-omni-bar.ui:546
 msgctxt "button"
 msgid "Build"
 msgstr "Compilar"
 
-#: src/libide/workbench/ide-omni-bar.ui:554
+#: src/libide/workbench/ide-omni-bar.ui:553
 msgid "Rebuild"
 msgstr "Recompilar"
 
-#: src/libide/workbench/ide-omni-bar.ui:561
+#: src/libide/workbench/ide-omni-bar.ui:560
 msgid "Clean"
 msgstr "Limpar"
 
-#: src/libide/workbench/ide-omni-bar.ui:568
+#: src/libide/workbench/ide-omni-bar.ui:567
 msgid "Export Bundle"
 msgstr "Exportar pacote"
 
-#: src/libide/workbench/ide-omni-bar.ui:593 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:592 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Compila o projeto"
 
@@ -4549,6 +4548,24 @@ msgstr "_Fechar todos os nós"
 msgid "_Refresh"
 msgstr "_Recarregar"
 
+#. translators: format is "CPU emulation". Only translate "emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:40
+#| msgid "Emacs Emulation"
+msgid "Aarch64 Emulation"
+msgstr "Emulação de Aarch64"
+
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#| msgid "Emulation"
+msgid "Arm Emulation"
+msgstr "Emulação de Arm"
+
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#: src/plugins/qemu/gbp-qemu-device-provider.c:122
+#, c-format
+#| msgid "My Computer (%s)"
+msgid "My Computer (%s) %s"
+msgstr "Meu computador (%s) %s"
+
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
 msgid "Words matching selection"
 msgstr "Palavras correspondendo à seleção"
@@ -5702,9 +5719,6 @@ msgstr "Buffer carregado, mas não no gerenciador de buffer."
 
 #~ msgid "The default keybindings for Builder."
 #~ msgstr "As associações de teclas padrões do Builder."
-
-#~ msgid "Emacs Emulation"
-#~ msgstr "Emulação Emacs"
 
 #~ msgid "Keyboard Movement"
 #~ msgstr "Movimento de teclado"
