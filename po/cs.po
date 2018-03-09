@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-05 04:05+0000\n"
-"PO-Revision-Date: 2018-03-06 21:43+0100\n"
+"POT-Creation-Date: 2018-03-08 06:13+0000\n"
+"PO-Revision-Date: 2018-03-09 01:05+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -916,7 +916,7 @@ msgid "Failed to save file: %s"
 msgstr "Selhalo uložení souboru: %s"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:252
+#: src/libide/buffers/ide-unsaved-files.c:250
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr "Selhalo uložení konceptu: %s"
@@ -945,60 +945,64 @@ msgstr "Roura sestavení je v chybovém stavu"
 msgid "The build configuration has errors"
 msgstr "Konfigurace sestavení má chybu"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2694
+#: src/libide/buildsystem/ide-build-pipeline.c:2696
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Selhalo vytvoření pseudoterminálu. Schopnosti terminálu budou omezené."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2894
+#: src/libide/buildsystem/ide-build-pipeline.c:2896
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2898
-#: src/libide/buildsystem/ide-build-pipeline.c:2951
-#: src/libide/workbench/ide-omni-bar.c:474
+#: src/libide/buildsystem/ide-build-pipeline.c:2900
+#: src/libide/buildsystem/ide-build-pipeline.c:2957
+#: src/libide/workbench/ide-omni-bar.c:531
 msgid "Failed"
 msgstr "Selhalo"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2900
-#: src/libide/buildsystem/ide-build-pipeline.c:2959
+#: src/libide/buildsystem/ide-build-pipeline.c:2902
+#: src/libide/buildsystem/ide-build-pipeline.c:2965
 msgid "Ready"
 msgstr "Připraveno"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2915
+#: src/libide/buildsystem/ide-build-pipeline.c:2917
 msgid "Downloading…"
 msgstr "Stahuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2919
+#: src/libide/buildsystem/ide-build-pipeline.c:2921
 msgid "Building dependencies…"
 msgstr "Sestavují se závislosti…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2923
+#: src/libide/buildsystem/ide-build-pipeline.c:2925
 msgid "Bootstrapping…"
 msgstr "Připravuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2927
+#: src/libide/buildsystem/ide-build-pipeline.c:2929
 msgid "Configuring…"
 msgstr "Konfiguruje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2931
+#: src/libide/buildsystem/ide-build-pipeline.c:2933
 msgid "Building…"
 msgstr "Sestavuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2935
+#: src/libide/buildsystem/ide-build-pipeline.c:2937
 msgid "Installing…"
 msgstr "Instaluje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2939
+#: src/libide/buildsystem/ide-build-pipeline.c:2941
+msgid "Committing…"
+msgstr "Zařazuje se…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2945
 msgid "Exporting…"
 msgstr "Exportuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2943
-#: src/libide/buildsystem/ide-build-pipeline.c:2947
-#: src/libide/workbench/ide-omni-bar.c:492
+#: src/libide/buildsystem/ide-build-pipeline.c:2949
+#: src/libide/buildsystem/ide-build-pipeline.c:2953
+#: src/libide/workbench/ide-omni-bar.c:549
 msgid "Success"
 msgstr "Úspěšné"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2955
+#: src/libide/buildsystem/ide-build-pipeline.c:2961
 msgid "Preparing…"
 msgstr "Připravuje se…"
 
@@ -1055,7 +1059,7 @@ msgid "Configure Options"
 msgstr "Volby konfigurace"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:189
-#: src/libide/workbench/ide-omni-bar.ui:304
+#: src/libide/workbench/ide-omni-bar.ui:316
 msgid "Runtime"
 msgstr "Běhové prostředí"
 
@@ -1089,7 +1093,7 @@ msgid "Clear build log"
 msgstr "Smazat záznam o sestavení"
 
 #: src/libide/buildui/ide-build-log-panel.ui:49
-#: src/libide/workbench/ide-omni-bar.ui:148
+#: src/libide/workbench/ide-omni-bar.ui:160
 msgid "Cancel build"
 msgstr "Zrušit sestavení"
 
@@ -1101,7 +1105,7 @@ msgstr "Uložit záznam o sestavení"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:492
+#: src/libide/workbench/ide-omni-bar.ui:504
 msgid "Warnings"
 msgstr "Varovnání"
 
@@ -1109,7 +1113,7 @@ msgstr "Varovnání"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:464
+#: src/libide/workbench/ide-omni-bar.ui:476
 msgid "Errors"
 msgstr "Chyby"
 
@@ -1302,6 +1306,11 @@ msgstr "Spustitelný program"
 #, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Nezdařilo se najít použitelný ladicí program."
+
+#: src/libide/devices/ide-device-manager.c:714
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr ""
+"Nezdařilo se nasadit do zařízení, sestavovací roura není inicializovaná"
 
 #: src/libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
@@ -2346,13 +2355,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Při provádění operace něco někde selhalo."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:207
+#: src/libide/local/ide-local-device.c:196
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Můj počítač (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:216
+#: src/libide/local/ide-local-device.c:205
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Můj počítač (%s) — %s"
@@ -3046,69 +3055,69 @@ msgstr "Nelze zpracovat „%s“ jako absolutní URI"
 msgid "URI “%s” has no host component"
 msgstr "Adresa URI „%s“ nemá část určující hostitele"
 
-#: src/libide/workbench/ide-omni-bar.c:454
+#: src/libide/workbench/ide-omni-bar.c:511
 msgid "Building"
 msgstr "Sestavuje se"
 
-#: src/libide/workbench/ide-omni-bar.ui:213
+#: src/libide/workbench/ide-omni-bar.ui:225
 msgid "Update project dependencies"
 msgstr "Aktualizovat závislosti projektu"
 
-#: src/libide/workbench/ide-omni-bar.ui:232
+#: src/libide/workbench/ide-omni-bar.ui:244
 msgid "Configure build preferences"
 msgstr "Nastavit předvolby sestavení"
 
-#: src/libide/workbench/ide-omni-bar.ui:254
+#: src/libide/workbench/ide-omni-bar.ui:266
 msgid "Branch"
 msgstr "Větev"
 
-#: src/libide/workbench/ide-omni-bar.ui:279
+#: src/libide/workbench/ide-omni-bar.ui:291
 msgid "Build Profile"
 msgstr "Profil sestavení"
 
-#: src/libide/workbench/ide-omni-bar.ui:334
+#: src/libide/workbench/ide-omni-bar.ui:346
 msgid "There is a problem with the current build configuration."
 msgstr "Je nějaký problém s aktuální konfigurací sestavení."
 
-#: src/libide/workbench/ide-omni-bar.ui:367
+#: src/libide/workbench/ide-omni-bar.ui:379
 msgid "Build status"
 msgstr "Stav sestavování"
 
-#: src/libide/workbench/ide-omni-bar.ui:388
+#: src/libide/workbench/ide-omni-bar.ui:400
 msgid "View build console contents"
 msgstr "Zobrazit obsah konzole použité pro sestavování"
 
-#: src/libide/workbench/ide-omni-bar.ui:410
+#: src/libide/workbench/ide-omni-bar.ui:422
 msgid "Last build"
 msgstr "Poslední sestavení"
 
-#: src/libide/workbench/ide-omni-bar.ui:437
+#: src/libide/workbench/ide-omni-bar.ui:449
 msgid "Build result"
 msgstr "Výsledek sestavování"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:530
+#: src/libide/workbench/ide-omni-bar.ui:542
 msgid "true"
 msgstr "true"
 
-#: src/libide/workbench/ide-omni-bar.ui:535
+#: src/libide/workbench/ide-omni-bar.ui:547
 msgctxt "button"
 msgid "Build"
 msgstr "Sestavit"
 
-#: src/libide/workbench/ide-omni-bar.ui:542
+#: src/libide/workbench/ide-omni-bar.ui:554
 msgid "Rebuild"
 msgstr "Znovu sestavit"
 
-#: src/libide/workbench/ide-omni-bar.ui:549
+#: src/libide/workbench/ide-omni-bar.ui:561
 msgid "Clean"
 msgstr "Vyčistit"
 
-#: src/libide/workbench/ide-omni-bar.ui:556
+#: src/libide/workbench/ide-omni-bar.ui:568
 msgid "Export Bundle"
 msgstr "Exportovat balík"
 
-#: src/libide/workbench/ide-omni-bar.ui:581 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:593 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Sestavit projekt"
 
@@ -3121,15 +3130,15 @@ msgstr "Statistiky aplikace Builder"
 msgid "%s — Builder"
 msgstr "%s – Builder"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:50
+#: src/libide/workbench/ide-workbench-header-bar.ui:51
 msgid "Transfers"
 msgstr "Přenosy"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:56
+#: src/libide/workbench/ide-workbench-header-bar.ui:57
 msgid "Show workbench menu"
 msgstr "Zobrazovat nabídku pracovních nástrojů"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:95
+#: src/libide/workbench/ide-workbench-header-bar.ui:96
 msgid "Press Ctrl+. to search"
 msgstr "Zmáčknutím Ctrl+. můžete hledat"
 
@@ -4100,39 +4109,39 @@ msgstr "%s <b>%s</b>"
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:67
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:78
 #, c-format
-msgid "Updated %s %s"
-msgstr "Aktualizováno %s %s"
+msgid "Updated %s"
+msgstr "Bylo aktualizováno běhové prostředí %s"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:70
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:81
 #, c-format
-msgid "Updating %s %s"
-msgstr "Aktualizuje se %s %s"
+msgid "Updating %s"
+msgstr "Aktualizuje se běhové prostředí %s"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:76
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:87
 #, c-format
-msgid "Installed %s %s"
-msgstr "Nainstalováno %s %s"
+msgid "Installed %s"
+msgstr "Bylo nainstalováno běhové prostředí %s"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:79
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:90
 #, c-format
-msgid "Installing %s %s"
-msgstr "Instaluje se %s %s"
+msgid "Installing %s"
+msgstr "Instaluje se běhové prostředí %s"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:101
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:116
 msgid "Failed to install runtime"
 msgstr "Selhala instalace běhového prostředí"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:103
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
 msgid "Runtime has been updated"
 msgstr "Běhové prostředí bylo uktualizováno"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:105
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been installed"
 msgstr "Běhové prostředí bylo nainstalováno"
 
@@ -4287,7 +4296,7 @@ msgstr "Prázdný projekt používající Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Vytvořit nový prázdný projekt používající jednoduchý Makefile"
 
-#: src/plugins/meson/gbp-meson-build-system.c:418
+#: src/plugins/meson/gbp-meson-build-system.c:428
 msgid "Meson"
 msgstr "Meson"
 
@@ -4431,7 +4440,7 @@ msgstr "Selhalo vyhození souboru do koše: %s"
 msgid "Project Tree"
 msgstr "Strom projektu"
 
-#: src/plugins/project-tree/gb-project-tree-builder.c:452
+#: src/plugins/project-tree/gb-project-tree-builder.c:451
 msgid "Empty"
 msgstr "Prázdný"
 
