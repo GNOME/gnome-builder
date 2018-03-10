@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 00:38+0000\n"
-"PO-Revision-Date: 2018-03-09 08:27+0100\n"
+"POT-Creation-Date: 2018-03-09 20:51+0000\n"
+"PO-Revision-Date: 2018-03-10 01:05+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -265,7 +265,7 @@ msgid "Spaces Style"
 msgstr "Styl mezer"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr "Jak používat mezery při přeformátovávání textu."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -4023,6 +4023,11 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Stahují se zdroje aplikace…"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Selhalo odstranění manifestu flatpaku: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "Síť není dostupná, přeskakuje se stahování"
@@ -4097,7 +4102,7 @@ msgstr[2] "Zobrazit %u dalších běhových prostředí"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:393
 msgid "Flatpak Runtimes"
-msgstr "Běhová prostředí Flatpak"
+msgstr "Běhová prostředí flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime.c:776
 #, c-format
@@ -4526,16 +4531,16 @@ msgid "_Refresh"
 msgstr "_Aktualizovat"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:40
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
 msgid "Aarch64 Emulation"
 msgstr "Emulace Aarch64"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Arm Emulation"
 msgstr "Emulace Arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:122
+#: src/plugins/qemu/gbp-qemu-device-provider.c:126
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Můj počítač (%s) %s"
