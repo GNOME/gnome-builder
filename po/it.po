@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 07:30+0000\n"
-"PO-Revision-Date: 2018-03-09 10:20+0100\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-10 18:23+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -262,8 +262,8 @@ msgid "Spaces Style"
 msgstr "Stile degli spazi"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
-msgstr "Come applicare gli spazi quando si riformata il testo."
+msgid "How to apply spaces when reformatting text."
+msgstr "Come applicare gli spazi quando si modifica il testo."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 msgid "Enabled"
@@ -958,7 +958,7 @@ msgstr "Pulizia…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2900
 #: src/libide/buildsystem/ide-build-pipeline.c:2957
-#: src/libide/workbench/ide-omni-bar.c:531
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "Non riuscito"
 
@@ -1001,7 +1001,7 @@ msgstr "Esportazione…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2949
 #: src/libide/buildsystem/ide-build-pipeline.c:2953
-#: src/libide/workbench/ide-omni-bar.c:549
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "Completato"
 
@@ -1944,6 +1944,10 @@ msgstr "_Apri collegamento"
 #: src/libide/gtk/menus.ui:218
 msgid "_Copy Link Address"
 msgstr "_Copia indirizzo collegamento"
+
+#: src/libide/gtk/menus.ui:252
+msgid "Devices"
+msgstr "Dispositivi"
 
 #: src/libide/ide.c:58
 #, c-format
@@ -3068,7 +3072,7 @@ msgstr "Impossibile leggere «%s» come URI assoluto"
 msgid "URI “%s” has no host component"
 msgstr "L'URI «%s» non ha il componente host"
 
-#: src/libide/workbench/ide-omni-bar.c:511
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "Compilazione"
 
@@ -4036,6 +4040,11 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Scaricamento sorgenti applicazione…"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Rinomina del manifest flatpack non riuscita: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "La rete non è disponibile, non verrà scaricato nulla"
@@ -4943,9 +4952,6 @@ msgstr "Buffer caricato, ma non nel gestore del buffer."
 
 #~ msgid "Installing %s %s"
 #~ msgstr "Installazione di %s %s"
-
-#~ msgid "Device"
-#~ msgstr "Dispositivo"
 
 #~ msgid "The device “%s” could not be found."
 #~ msgstr "Il dispositivo «%s» non può essere usato."
