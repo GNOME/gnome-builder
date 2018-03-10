@@ -1,7 +1,5 @@
 @import url("resource:///org/gnome/builder/themes/shared.css");
 
-@define-color build_success_color @theme_selected_bg_color;
-
 idelayoutstackheader > button:last-child {
   margin-right: 3px;
 }
