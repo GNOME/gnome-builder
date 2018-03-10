@@ -96,6 +96,12 @@ struct _IdeOmniBar
   DzlBindingGroup *vcs_bindings;
 
   /*
+   * The phase we're advancing to in the pipeline. We can use this to
+   * ignore being visually spammy for irrelevant things.
+   */
+  IdeBuildPhase advancing_to;
+
+  /*
    * Used to bind the pipeline message to the omnibar popover label,
    * while the build is active.
    */
@@ -485,6 +491,7 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
                                             IdeBuildPipeline *build_pipeline,
                                             IdeBuildManager  *build_manager)
 {
+  GtkStyleContext *style_context;
   const gchar *display_name;
   IdeRuntime *runtime;
 
@@ -494,6 +501,11 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
 
   self->did_build = TRUE;
   self->seen_count = 0;
+  self->advancing_to = ide_build_pipeline_get_requested_phase (build_pipeline);
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_remove_class (style_context, "build-success");
+  gtk_style_context_remove_class (style_context, "build-failure");
 
   self->message_handler =
     g_signal_connect_object (build_pipeline,
@@ -521,9 +533,18 @@ ide_omni_bar__build_manager__build_failed (IdeOmniBar       *self,
                                            IdeBuildPipeline *build_pipeline,
                                            IdeBuildManager  *build_manager)
 {
+  GtkStyleContext *style_context;
+
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  /* try not to spam too hard visually for pre-build failures */
+  if (self->advancing_to > IDE_BUILD_PHASE_CONFIGURE)
+    {
+      style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+      gtk_style_context_add_class (style_context, "build-failure");
+    }
 
   gtk_label_set_label (self->popover_build_message, NULL);
   dzl_clear_signal_handler (build_pipeline, &self->message_handler);
@@ -539,9 +560,18 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
                                              IdeBuildPipeline *build_pipeline,
                                              IdeBuildManager  *build_manager)
 {
+  GtkStyleContext *style_context;
+
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  /* try not to spam too hard visually for pre-build failures */
+  if (self->advancing_to > IDE_BUILD_PHASE_CONFIGURE)
+    {
+      style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+      gtk_style_context_add_class (style_context, "build-success");
+    }
 
   gtk_label_set_label (self->popover_build_message, NULL);
   dzl_clear_signal_handler (build_pipeline, &self->message_handler);

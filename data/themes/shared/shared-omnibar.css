@@ -24,3 +24,27 @@ omnibar:active entry {
   background-color: mix(@theme_bg_color, @content_view_bg, 0.9);
   color: @theme_fg_color;
 }
+
+@define-color build_success_color @success_color;
+@define-color build_error_color @error_color;
+
+@keyframes build-success-animation {
+  0% { background: transparent; }
+  50% { background: alpha(@build_success_color, 0.15); }
+}
+
+@keyframes build-failure-animation {
+  0% { background: transparent; }
+  50% { background: alpha(@build_error_color, 0.15); }
+}
+
+omnibar.build-success entry {
+  animation: build-success-animation 1s 1 ease-in-out;
+  background: alpha(@build_success_color, 0.1);
+}
+
+
+omnibar.build-failure entry {
+  animation: build-failure-animation 1s 1 ease-in-out;
+  background: alpha(@build_error_color, 0.1);
+}
