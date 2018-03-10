@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-26 07:50+0000\n"
-"PO-Revision-Date: 2018-03-03 20:50+0900\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-10 16:00+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -252,7 +252,7 @@ msgid "Spaces Style"
 msgstr "공백 방식"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr "포맷을 다시 맞출 때 공백을 적용하는 방식."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -440,7 +440,7 @@ msgstr "아래 패널의 높이, 픽셀 단위."
 #: src/libide/application/ide-application.c:684
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
-#: src/libide/workbench/ide-workbench.c:645
+#: src/libide/workbench/ide-workbench.c:646
 msgid "Builder"
 msgstr "빌더"
 
@@ -897,13 +897,13 @@ msgid "Failed to save file: %s"
 msgstr "파일을 저장하는데 실패했습니다: %s"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:252
+#: src/libide/buffers/ide-unsaved-files.c:250
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr "임시 저장에 실패했습니다: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:624
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:620
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (사본)"
@@ -913,68 +913,77 @@ msgstr "%s (사본)"
 msgid "Failed to initialize build pipeline: %s"
 msgstr "빌드 파이프라인 초기화에 실패했습니다: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:723
+#: src/libide/buildsystem/ide-build-manager.c:424
+#, c-format
+msgid "Failed to get device information: %s"
+msgstr "장치 정보를 가져오는데 실패했습니다: %s"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:751
 msgid "The build pipeline is in a failed state"
 msgstr "빌드 파이프라인이 실패 상태에 있습니다"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:733
+#: src/libide/buildsystem/ide-build-pipeline.c:761
 msgid "The build configuration has errors"
 msgstr "빌드 설정에 오류가 있습니다"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2543
+#: src/libide/buildsystem/ide-build-pipeline.c:2696
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "가상 터미널 생성에 실패했습니다. 터미널 기능이 제한적입니다."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2743
+#: src/libide/buildsystem/ide-build-pipeline.c:2896
 msgid "Cleaning…"
 msgstr "빌드 결과 지우는 중…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2747
-#: src/libide/buildsystem/ide-build-pipeline.c:2800
-#: src/libide/workbench/ide-omni-bar.c:467
+#: src/libide/buildsystem/ide-build-pipeline.c:2900
+#: src/libide/buildsystem/ide-build-pipeline.c:2957
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "실패"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2749
-#: src/libide/buildsystem/ide-build-pipeline.c:2808
+#: src/libide/buildsystem/ide-build-pipeline.c:2902
+#: src/libide/buildsystem/ide-build-pipeline.c:2965
 msgid "Ready"
 msgstr "준비됨"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2764
+#: src/libide/buildsystem/ide-build-pipeline.c:2917
 msgid "Downloading…"
 msgstr "다운로드 중…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2768
+#: src/libide/buildsystem/ide-build-pipeline.c:2921
 msgid "Building dependencies…"
 msgstr "의존성 빌드 중…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2772
+#: src/libide/buildsystem/ide-build-pipeline.c:2925
 msgid "Bootstrapping…"
 msgstr "부트스트랩 중…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2776
+#: src/libide/buildsystem/ide-build-pipeline.c:2929
 msgid "Configuring…"
 msgstr "설정 중…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2780
+#: src/libide/buildsystem/ide-build-pipeline.c:2933
 msgid "Building…"
 msgstr "빌드 중…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2784
+#: src/libide/buildsystem/ide-build-pipeline.c:2937
 msgid "Installing…"
 msgstr "설치 중…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2788
+#: src/libide/buildsystem/ide-build-pipeline.c:2941
+msgid "Committing…"
+msgstr "커밋 중…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2945
 msgid "Exporting…"
 msgstr "내보내기 중…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2792
-#: src/libide/buildsystem/ide-build-pipeline.c:2796
-#: src/libide/workbench/ide-omni-bar.c:485
+#: src/libide/buildsystem/ide-build-pipeline.c:2949
+#: src/libide/buildsystem/ide-build-pipeline.c:2953
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "성공"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2804
+#: src/libide/buildsystem/ide-build-pipeline.c:2961
 msgid "Preparing…"
 msgstr "준비 중…"
 
@@ -1031,15 +1040,11 @@ msgid "Configure Options"
 msgstr "설정 옵션"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:189
-msgid "Device"
-msgstr "장치"
-
-#: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/libide/workbench/ide-omni-bar.ui:289
+#: src/libide/workbench/ide-omni-bar.ui:315
 msgid "Runtime"
 msgstr "런타임"
 
-#: src/libide/buildui/ide-build-configuration-view.ui:245
+#: src/libide/buildui/ide-build-configuration-view.ui:217
 msgid "Environment"
 msgstr "환경"
 
@@ -1069,7 +1074,7 @@ msgid "Clear build log"
 msgstr "빌드 기록 지우기"
 
 #: src/libide/buildui/ide-build-log-panel.ui:49
-#: src/libide/workbench/ide-omni-bar.ui:133
+#: src/libide/workbench/ide-omni-bar.ui:159
 msgid "Cancel build"
 msgstr "빌드 취소"
 
@@ -1081,7 +1086,7 @@ msgstr "빌드 기록 저장"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:477
+#: src/libide/workbench/ide-omni-bar.ui:503
 msgid "Warnings"
 msgstr "경고"
 
@@ -1089,7 +1094,7 @@ msgstr "경고"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:449
+#: src/libide/workbench/ide-omni-bar.ui:475
 msgid "Errors"
 msgstr "오류"
 
@@ -1283,6 +1288,10 @@ msgstr "바이너리"
 #, c-format
 msgid "A suitable debugger could not be found."
 msgstr "적당한 디버거를 찾을 수 없습니다."
+
+#: src/libide/devices/ide-device-manager.c:714
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr "장치에 적용할 수 없습니다. 빌드 파이프라인을 초기화하지 않았습니다"
 
 #: src/libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
@@ -1910,6 +1919,10 @@ msgstr "링크 열기(_O)"
 msgid "_Copy Link Address"
 msgstr "링크 주소 복사(_C)"
 
+#: src/libide/gtk/menus.ui:252
+msgid "Devices"
+msgstr "장치"
+
 #: src/libide/ide.c:58
 #, c-format
 msgid "You must call %s() before using libide."
@@ -2325,11 +2338,17 @@ msgstr "어라라, 뭔가 잘못됐습니다"
 msgid "There was a failure while trying to perform the operation."
 msgstr "작업을 수행하려는 중 실패가 있었습니다."
 
-#. translators: %s is replaced with the local systems host name
-#: src/libide/local/ide-local-device.c:78
+#. translators: %s is replaced with the host name
+#: src/libide/local/ide-local-device.c:207
 #, c-format
 msgid "My Computer (%s)"
 msgstr "내 컴퓨터 (%s)"
+
+#. translators: first %s is replaced with the host name, second with CPU architecture
+#: src/libide/local/ide-local-device.c:216
+#, c-format
+msgid "My Computer (%s) — %s"
+msgstr "내 컴퓨터 (%s) — %s"
 
 #: src/libide/preferences/ide-preferences-builtin.c:59
 #: src/libide/preferences/ide-preferences-builtin.c:60
@@ -2859,7 +2878,7 @@ msgstr "런타임을 찾는데 실패했습니다"
 msgid "Process quit unexpectedly"
 msgstr "예상치 못하게 끝내기 처리했습니다"
 
-#: src/libide/runtimes/ide-runtime-manager.c:115
+#: src/libide/runtimes/ide-runtime-manager.c:131
 msgid "Host operating system"
 msgstr "호스트 운영 체제"
 
@@ -3008,70 +3027,70 @@ msgstr "“%s”을(를) 절대 경로 URI로 파싱할 수 없습니다"
 msgid "URI “%s” has no host component"
 msgstr "“%s” URI에 호스트 부분이 없습니다"
 
-#: src/libide/workbench/ide-omni-bar.c:447
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "빌드 중"
 
-#: src/libide/workbench/ide-omni-bar.ui:198
+#: src/libide/workbench/ide-omni-bar.ui:224
 msgid "Update project dependencies"
 msgstr "프로젝트 의존성 업데이트"
 
-#: src/libide/workbench/ide-omni-bar.ui:217
+#: src/libide/workbench/ide-omni-bar.ui:243
 msgid "Configure build preferences"
 msgstr "빌드 기본 설정"
 
-#: src/libide/workbench/ide-omni-bar.ui:239
+#: src/libide/workbench/ide-omni-bar.ui:265
 msgid "Branch"
 msgstr "브랜치"
 
-#: src/libide/workbench/ide-omni-bar.ui:264
+#: src/libide/workbench/ide-omni-bar.ui:290
 msgid "Build Profile"
 msgstr "빌드 프로파일"
 
-#: src/libide/workbench/ide-omni-bar.ui:319
+#: src/libide/workbench/ide-omni-bar.ui:345
 msgid "There is a problem with the current build configuration."
 msgstr "현재 빌드 설정에 문제가 있습니다."
 
-#: src/libide/workbench/ide-omni-bar.ui:352
+#: src/libide/workbench/ide-omni-bar.ui:378
 msgid "Build status"
 msgstr "빌드 상태"
 
-#: src/libide/workbench/ide-omni-bar.ui:373
+#: src/libide/workbench/ide-omni-bar.ui:399
 msgid "View build console contents"
 msgstr "빌드 콘솔 내용을 봅니다"
 
-#: src/libide/workbench/ide-omni-bar.ui:395
+#: src/libide/workbench/ide-omni-bar.ui:421
 msgid "Last build"
 msgstr "최근 빌드"
 
-#: src/libide/workbench/ide-omni-bar.ui:422
+#: src/libide/workbench/ide-omni-bar.ui:448
 msgid "Build result"
 msgstr "빌드 결과"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:515
+#: src/libide/workbench/ide-omni-bar.ui:541
 msgid "true"
 msgstr "true"
 
-#: src/libide/workbench/ide-omni-bar.ui:520
+#: src/libide/workbench/ide-omni-bar.ui:546
 msgctxt "button"
 msgid "Build"
 msgstr "빌드"
 
-#: src/libide/workbench/ide-omni-bar.ui:527
+#: src/libide/workbench/ide-omni-bar.ui:553
 msgid "Rebuild"
 msgstr "다시 빌드"
 
 # 주의: 일반적인 clean과 구분하기 위해 빌드 결과임을 명시한다
-#: src/libide/workbench/ide-omni-bar.ui:534
+#: src/libide/workbench/ide-omni-bar.ui:560
 msgid "Clean"
 msgstr "지우기"
 
-#: src/libide/workbench/ide-omni-bar.ui:541
+#: src/libide/workbench/ide-omni-bar.ui:567
 msgid "Export Bundle"
 msgstr "번들로 내보내기"
 
-#: src/libide/workbench/ide-omni-bar.ui:566 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:592 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "프로젝트 빌드"
 
@@ -3079,20 +3098,20 @@ msgstr "프로젝트 빌드"
 msgid "Builder Statistics"
 msgstr "빌드 통계"
 
-#: src/libide/workbench/ide-workbench.c:643
+#: src/libide/workbench/ide-workbench.c:644
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — 빌더"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:50
+#: src/libide/workbench/ide-workbench-header-bar.ui:51
 msgid "Transfers"
 msgstr "전송"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:56
+#: src/libide/workbench/ide-workbench-header-bar.ui:57
 msgid "Show workbench menu"
 msgstr "워크벤치 메뉴 표시"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:95
+#: src/libide/workbench/ide-workbench-header-bar.ui:96
 msgid "Press Ctrl+. to search"
 msgstr "검색하려면 Ctrl+. 누르기"
 
@@ -3137,21 +3156,21 @@ msgstr "캐시 빌드 중…"
 msgid "Bootstrapping build system"
 msgstr "빌드 시스템 부트스트랩 중"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:225
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:140
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "프로젝트 설정 중"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:278
-#: src/plugins/cargo/cargo_plugin.py:151
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:276
+#: src/plugins/cargo/cargo_plugin.py:150
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:169
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "프로젝트 빌드 중"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:305
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:303
 msgid "Caching build commands"
 msgstr "빌드 명령 캐시 중"
 
@@ -3961,6 +3980,11 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "앱 소스 다운로드 중…"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "플랫팩 매니페스트를 제거하는데 실패했습니다: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "네트워크를 사용할 수 없어 다운로드를 건너뜁니다"
@@ -3974,31 +3998,31 @@ msgstr "앱 복제"
 msgid "Clone"
 msgstr "복제"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:136
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:150
 msgid "Creating flatpak workspace"
 msgstr "플랫팩 작업 공간을 만드는 중"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:248
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:265
 msgid "Preparing build directory"
 msgstr "빌드 디렉터리 준비 중"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:288
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:305
 msgid "Downloading dependencies"
 msgstr "의존성 다운로드 중"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:365
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:385
 msgid "Building dependencies"
 msgstr "의존성 빌드 중"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:417
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:437
 msgid "Finalizing flatpak build"
 msgstr "플랫팩 빌드 마치는 중"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:460
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:483
 msgid "Exporting staging directory"
 msgstr "스테이징 디렉터리 내보내는 중"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:543
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:570
 msgid "Creating flatpak bundle"
 msgstr "플랫팩 번들 만드는 중"
 
@@ -4035,49 +4059,49 @@ msgstr[0] "런타임 %u개 더 표시"
 msgid "Flatpak Runtimes"
 msgstr "플랫팩 런타임"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:772
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:776
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:774
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:778
 #, c-format
-msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
-msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:67
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:78
 #, c-format
-msgid "Updated %s %s"
-msgstr "%s %s 업데이트함"
+msgid "Updated %s"
+msgstr "%s 업데이트함"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:70
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:81
 #, c-format
-msgid "Updating %s %s"
-msgstr "%s %s 업데이트 중"
+msgid "Updating %s"
+msgstr "%s 업데이트 중"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:76
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:87
 #, c-format
-msgid "Installed %s %s"
-msgstr "%s %s 설치"
+msgid "Installed %s"
+msgstr "%s 설치"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:79
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:90
 #, c-format
-msgid "Installing %s %s"
-msgstr "%s %s 설치 중"
+msgid "Installing %s"
+msgstr "%s 설치 중"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:101
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:116
 msgid "Failed to install runtime"
 msgstr "런타임 설치하는데 실패했습니다"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:103
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
 msgid "Runtime has been updated"
 msgstr "런타임을 업데이트했습니다"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:105
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been installed"
 msgstr "런타임을 설치했습니다"
 
@@ -4232,7 +4256,7 @@ msgstr "빈 메이크파일 프로젝트"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "간단한 메이크파일을 이용해 빈 프로젝트를 새로 만듭니다"
 
-#: src/plugins/meson/gbp-meson-build-system.c:418
+#: src/plugins/meson/gbp-meson-build-system.c:428
 msgid "Meson"
 msgstr "메존"
 
@@ -4263,14 +4287,6 @@ msgstr "새 빈 프로젝트 만들기"
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "메시지"
-
-#: src/plugins/mingw/ide-mingw-device-provider.c:57
-msgid "MinGW 64-bit"
-msgstr "MinGW 64비트"
-
-#: src/plugins/mingw/ide-mingw-device-provider.c:64
-msgid "MinGW 32-bit"
-msgstr "MinGW 32비트"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:12
 msgid "Contribute to an existing project"
@@ -4326,7 +4342,7 @@ msgstr "빌드 실패"
 msgid "Project “%s” failed to build"
 msgstr "“%s” 프로젝트가 빌드에 실패했습니다"
 
-#: src/plugins/npm/npm_plugin.py:103
+#: src/plugins/npm/npm_plugin.py:102
 msgid "Downloading npm dependencies"
 msgstr "NPM 의존성 다운로드 중"
 
@@ -4384,7 +4400,7 @@ msgstr "파일을 휴지통에 버리는데 실패했습니다: %s"
 msgid "Project Tree"
 msgstr "프로젝트 트리"
 
-#: src/plugins/project-tree/gb-project-tree-builder.c:452
+#: src/plugins/project-tree/gb-project-tree-builder.c:451
 msgid "Empty"
 msgstr "비었음"
 
@@ -4468,6 +4484,21 @@ msgstr "모든 노드 접기(_C)"
 #: src/plugins/project-tree/gtk/menus.ui:102
 msgid "_Refresh"
 msgstr "새로 고침(_R)"
+
+#. translators: format is "CPU emulation". Only translate "emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+msgid "Aarch64 Emulation"
+msgstr "Aarch64 흉내내기"
+
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+msgid "Arm Emulation"
+msgstr "ARM 흉내내기"
+
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#: src/plugins/qemu/gbp-qemu-device-provider.c:126
+#, c-format
+msgid "My Computer (%s) %s"
+msgstr "내 컴퓨터 (%s) %s"
 
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
 msgid "Words matching selection"
@@ -4851,6 +4882,15 @@ msgstr "XML 트리를 만드는데 실패했습니다."
 #: src/plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "버퍼를 읽어들였지만 버퍼 관리자 안에 없습니다."
+
+#~ msgid "Installing %s %s"
+#~ msgstr "%s %s 설치 중"
+
+#~ msgid "MinGW 64-bit"
+#~ msgstr "MinGW 64비트"
+
+#~ msgid "MinGW 32-bit"
+#~ msgstr "MinGW 32비트"
 
 #~ msgid "Hue"
 #~ msgstr "색상"
