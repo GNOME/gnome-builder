@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 20:51+0000\n"
-"PO-Revision-Date: 2018-03-09 23:42+0200\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-10 12:23+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -266,7 +266,6 @@ msgid "Spaces Style"
 msgstr "Estilo dos espazos"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-#| msgid "How to apply spaces when reformating text."
 msgid "How to apply spaces when reformatting text."
 msgstr "Como aplicar os espazos ao reformatar texto."
 
@@ -961,7 +960,7 @@ msgstr "Limpando…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2900
 #: src/libide/buildsystem/ide-build-pipeline.c:2957
-#: src/libide/workbench/ide-omni-bar.c:531
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "Fallido"
 
@@ -1004,7 +1003,7 @@ msgstr "Exportando…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2949
 #: src/libide/buildsystem/ide-build-pipeline.c:2953
-#: src/libide/workbench/ide-omni-bar.c:549
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "Éxito"
 
@@ -1949,6 +1948,11 @@ msgstr "_Abrir ligazón"
 #: src/libide/gtk/menus.ui:218
 msgid "_Copy Link Address"
 msgstr "_Copiar o enderezo da ligazón"
+
+#: src/libide/gtk/menus.ui:252
+#| msgid "Device"
+msgid "Devices"
+msgstr "Dispositivos"
 
 #: src/libide/ide.c:58
 #, c-format
@@ -3071,7 +3075,7 @@ msgstr "Non foi posíbel analizar o «%s» como URI absoluto"
 msgid "URI “%s” has no host component"
 msgstr "O URI «%s» non ten un compoñente de equipo"
 
-#: src/libide/workbench/ide-omni-bar.c:511
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "Construíndo"
 
@@ -4035,7 +4039,6 @@ msgstr "Desgargando as fontes do aplicativo…"
 
 #: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
 #, c-format
-#| msgid "Failed to rename file: %s"
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Produciuse un fallo ao eliminar o manifesto de flatpak: %s"
 
@@ -4946,9 +4949,6 @@ msgstr "Búfer cargado pero non no xestor de búfer."
 
 #~ msgid "Installing %s %s"
 #~ msgstr "Instalando %s %s"
-
-#~ msgid "Device"
-#~ msgstr "Dispositivo"
 
 #~ msgid "MinGW 64-bit"
 #~ msgstr "MinGW 64-bit"
