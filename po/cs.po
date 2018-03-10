@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 20:51+0000\n"
-"PO-Revision-Date: 2018-03-10 01:05+0100\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-10 08:28+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -955,7 +955,7 @@ msgstr "Čistí se…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2900
 #: src/libide/buildsystem/ide-build-pipeline.c:2957
-#: src/libide/workbench/ide-omni-bar.c:531
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "Selhalo"
 
@@ -998,7 +998,7 @@ msgstr "Exportuje se…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2949
 #: src/libide/buildsystem/ide-build-pipeline.c:2953
-#: src/libide/workbench/ide-omni-bar.c:549
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "Úspěšné"
 
@@ -1938,6 +1938,10 @@ msgstr "_Otevřít odkaz"
 #: src/libide/gtk/menus.ui:218
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
+
+#: src/libide/gtk/menus.ui:252
+msgid "Devices"
+msgstr "Zařízení"
 
 #: src/libide/ide.c:58
 #, c-format
@@ -3055,7 +3059,7 @@ msgstr "Nelze zpracovat „%s“ jako absolutní URI"
 msgid "URI “%s” has no host component"
 msgstr "Adresa URI „%s“ nemá část určující hostitele"
 
-#: src/libide/workbench/ide-omni-bar.c:511
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "Sestavuje se"
 
