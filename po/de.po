@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 00:38+0000\n"
-"PO-Revision-Date: 2018-03-09 13:20+0100\n"
-"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-10 10:41+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -277,7 +277,7 @@ msgid "Spaces Style"
 msgstr "Leerzeichen-Stil"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr "Behandlung von Leerzeichen bei der Neuformatierung von Text."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -982,7 +982,7 @@ msgstr "Wird aufgeräumt …"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2900
 #: src/libide/buildsystem/ide-build-pipeline.c:2957
-#: src/libide/workbench/ide-omni-bar.c:531
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "Gescheitert"
 
@@ -1025,7 +1025,7 @@ msgstr "Wird exportiert …"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2949
 #: src/libide/buildsystem/ide-build-pipeline.c:2953
-#: src/libide/workbench/ide-omni-bar.c:549
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "Erfolg"
 
@@ -1976,6 +1976,10 @@ msgstr "Verweis ö_ffnen"
 #: src/libide/gtk/menus.ui:218
 msgid "_Copy Link Address"
 msgstr "Verweisadresse _kopieren"
+
+#: src/libide/gtk/menus.ui:252
+msgid "Devices"
+msgstr "Geräte"
 
 #: src/libide/ide.c:58
 #, c-format
@@ -3106,7 +3110,7 @@ msgstr "»%s« konnte nicht als absolute Adresse ausgewertet werden"
 msgid "URI “%s” has no host component"
 msgstr "Adresse »%s« hat keine Rechner-Komponente"
 
-#: src/libide/workbench/ide-omni-bar.c:511
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "Erstellung läuft"
 
@@ -4091,6 +4095,11 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Anwendungsquellen werden heruntergeladen …"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Flatpak-Manifest konnte nicht entfernt werden: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "Netzwerk ist nicht verfügbar, Downloads werden übersprungen"
@@ -4601,16 +4610,16 @@ msgid "_Refresh"
 msgstr "_Aktualisieren"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:40
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
 msgid "Aarch64 Emulation"
 msgstr "Emulation"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Arm Emulation"
 msgstr "Emulation"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:122
+#: src/plugins/qemu/gbp-qemu-device-provider.c:126
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Mein Rechner (%s) %s"
@@ -4999,15 +5008,3 @@ msgstr "Der XML-Baum konnte nicht angelegt werden."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
 "Der Puffer wurde geladen, ist aber nicht in der Pufferverwaltung vorhanden."
-
-#~ msgid "Installing %s %s"
-#~ msgstr "%s %s wird installiert"
-
-#~ msgid "Device"
-#~ msgstr "Gerät"
-
-#~ msgid "MinGW 64-bit"
-#~ msgstr "MinGW (64-bit)"
-
-#~ msgid "MinGW 32-bit"
-#~ msgstr "MinGW (32-bit)"
