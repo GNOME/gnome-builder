@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 20:51+0000\n"
-"PO-Revision-Date: 2018-03-09 23:25+0100\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-10 05:07+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -960,7 +960,7 @@ msgstr "Czyszczenie…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2900
 #: src/libide/buildsystem/ide-build-pipeline.c:2957
-#: src/libide/workbench/ide-omni-bar.c:531
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "Niepowodzenie"
 
@@ -1003,7 +1003,7 @@ msgstr "Eksportowanie…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2949
 #: src/libide/buildsystem/ide-build-pipeline.c:2953
-#: src/libide/workbench/ide-omni-bar.c:549
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "Powodzenie"
 
@@ -1943,6 +1943,10 @@ msgstr "_Otwórz odnośnik"
 #: src/libide/gtk/menus.ui:218
 msgid "_Copy Link Address"
 msgstr "Skopiuj _adres odnośnika"
+
+#: src/libide/gtk/menus.ui:252
+msgid "Devices"
+msgstr "Urządzenia"
 
 #: src/libide/ide.c:58
 #, c-format
@@ -3056,7 +3060,7 @@ msgstr "Nie można przetworzyć „%s” jako bezwzględnego adresu URI"
 msgid "URI “%s” has no host component"
 msgstr "Adres URI „%s” nie ma części komputera"
 
-#: src/libide/workbench/ide-omni-bar.c:511
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "Budowanie"
 
