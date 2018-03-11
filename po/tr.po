@@ -9,17 +9,17 @@
 # Çağatay Yiğit Şahin <cyigitsahin@outlook.com>, 2017.
 # Furkan Tokaç <developmentft@gmail.com>, 2017.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2017, 2018.
 # Muhammet Kara <muhammetk@gmail.com>, 2015, 2016, 2017, 2018.
 # Çağrı Dolaz <dolazcagri@gmail.com>, 2018.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-16 17:12+0000\n"
-"PO-Revision-Date: 2018-02-17 20:59+0200\n"
-"Last-Translator: Çağrı Dolaz <dolazcagri@gmail.com>\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-10 17:51+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -268,7 +268,8 @@ msgid "Spaces Style"
 msgstr "Boşluk Biçemi"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+#| msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr "Metin yeniden biçimlendirilirken boşlukların nasıl uygulanacağı."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -457,7 +458,7 @@ msgstr "Dip panelin piksel cinsinden yüksekliği."
 #: src/libide/application/ide-application.c:684
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
-#: src/libide/workbench/ide-workbench.c:645
+#: src/libide/workbench/ide-workbench.c:646
 msgid "Builder"
 msgstr "Builder"
 
@@ -626,6 +627,7 @@ msgid "%s: This file format is not supported\n"
 msgstr "%s: Bu dosya biçimi desteklenmiyor\n"
 
 #: src/gstyle/gstyle-palette.c:822
+#, c-format
 msgid "failed to parse\n"
 msgstr "ayrıştırma başarısız oldu\n"
 
@@ -889,7 +891,7 @@ msgstr "Kısayol penceresini göster"
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Arka plan değişiklikleri için bir izleyici saptanamadı: %s"
 
-#: src/libide/buffers/ide-buffer.c:2843
+#: src/libide/buffers/ide-buffer.c:2844
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
@@ -915,80 +917,96 @@ msgid "Failed to save file: %s"
 msgstr "Dosya kaydetme başarısız oldu: %s"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:252
+#: src/libide/buffers/ide-unsaved-files.c:250
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr "Taslak kaydetme başarısız oldu: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:624
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:620
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Kopya)"
 
-#: src/libide/buildsystem/ide-build-manager.c:363
+#: src/libide/buildsystem/ide-build-manager.c:367
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "İnşa boru hattı ilklendirme başarısız oldu: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:717
+#: src/libide/buildsystem/ide-build-manager.c:424
+#, c-format
+#| msgid "Failed to save draft: %s"
+msgid "Failed to get device information: %s"
+msgstr "Aygıt bilgisi alınamadı: %s"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:751
 msgid "The build pipeline is in a failed state"
 msgstr "İnşa boru hattı başarısız bir durum içinde"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2525
+#: src/libide/buildsystem/ide-build-pipeline.c:761
+#| msgid "Edit build configuration"
+msgid "The build configuration has errors"
+msgstr "İnşa yapılandırmasının hataları var"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2696
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Sahte uçbirim oluşturma başarısız. Uçbirim özellikleri kısıtlanacak."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2725
+#: src/libide/buildsystem/ide-build-pipeline.c:2896
 msgid "Cleaning…"
 msgstr "Temizleniyor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2729
-#: src/libide/buildsystem/ide-build-pipeline.c:2782
-#: src/libide/workbench/ide-omni-bar.c:461
+#: src/libide/buildsystem/ide-build-pipeline.c:2900
+#: src/libide/buildsystem/ide-build-pipeline.c:2957
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "Başarısız Oldu"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2731
-#: src/libide/buildsystem/ide-build-pipeline.c:2790
+#: src/libide/buildsystem/ide-build-pipeline.c:2902
+#: src/libide/buildsystem/ide-build-pipeline.c:2965
 msgid "Ready"
 msgstr "Hazır"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2746
+#: src/libide/buildsystem/ide-build-pipeline.c:2917
 msgid "Downloading…"
 msgstr "İndiriliyor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2750
+#: src/libide/buildsystem/ide-build-pipeline.c:2921
 msgid "Building dependencies…"
 msgstr "Bağımlılıklar inşa ediliyor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2754
+#: src/libide/buildsystem/ide-build-pipeline.c:2925
 msgid "Bootstrapping…"
 msgstr "Özyükleniyor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2758
+#: src/libide/buildsystem/ide-build-pipeline.c:2929
 msgid "Configuring…"
 msgstr "Yapılandırılıyor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2762
+#: src/libide/buildsystem/ide-build-pipeline.c:2933
 msgid "Building…"
 msgstr "İnşa Ediliyor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2766
+#: src/libide/buildsystem/ide-build-pipeline.c:2937
 msgid "Installing…"
 msgstr "Yükleniyor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2770
+#: src/libide/buildsystem/ide-build-pipeline.c:2941
+#| msgid "Configuring…"
+msgid "Committing…"
+msgstr "İşleniyor…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2945
 msgid "Exporting…"
 msgstr "Dışa Aktarılıyor…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2774
-#: src/libide/buildsystem/ide-build-pipeline.c:2778
-#: src/libide/workbench/ide-omni-bar.c:479
+#: src/libide/buildsystem/ide-build-pipeline.c:2949
+#: src/libide/buildsystem/ide-build-pipeline.c:2953
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "Başarılı"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2786
+#: src/libide/buildsystem/ide-build-pipeline.c:2961
 msgid "Preparing…"
 msgstr "Hazırlanıyor…"
 
@@ -1045,15 +1063,11 @@ msgid "Configure Options"
 msgstr "Yapılandırma Seçenekleri"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:189
-msgid "Device"
-msgstr "Aygıt"
-
-#: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/libide/workbench/ide-omni-bar.ui:289
+#: src/libide/workbench/ide-omni-bar.ui:315
 msgid "Runtime"
 msgstr "Çalışma Zamanı"
 
-#: src/libide/buildui/ide-build-configuration-view.ui:245
+#: src/libide/buildui/ide-build-configuration-view.ui:217
 msgid "Environment"
 msgstr "Ortam"
 
@@ -1083,7 +1097,7 @@ msgid "Clear build log"
 msgstr "İnşa günlüğünü temizle"
 
 #: src/libide/buildui/ide-build-log-panel.ui:49
-#: src/libide/workbench/ide-omni-bar.ui:133
+#: src/libide/workbench/ide-omni-bar.ui:159
 msgid "Cancel build"
 msgstr "İnşayı iptal et"
 
@@ -1095,7 +1109,7 @@ msgstr "İnşa günlüğünü kaydet"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:464
+#: src/libide/workbench/ide-omni-bar.ui:503
 msgid "Warnings"
 msgstr "Uyarılar"
 
@@ -1103,7 +1117,7 @@ msgstr "Uyarılar"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:436
+#: src/libide/workbench/ide-omni-bar.ui:475
 msgid "Errors"
 msgstr "Hatalar"
 
@@ -1293,19 +1307,20 @@ msgid "Binary"
 msgstr "İkilik"
 
 #: src/libide/debugger/ide-debug-manager.c:968
+#, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Uygun bir hata ayıklayıcı bulunamadı."
 
-#: src/libide/devices/ide-device-manager.c:148
-#, c-format
-msgid "The device “%s” could not be found."
-msgstr "“%s” aygıtı bulunamadı."
+#: src/libide/devices/ide-device-manager.c:714
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr "Aygıta konuşlanamıyor, inşa boru hattı başlatılmadı"
 
 #: src/libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
 msgstr "sürümlendirilmemiş"
 
 #: src/libide/doap/xml-reader.c:327
+#, c-format
 msgid "Could not parse XML from stream"
 msgstr "Akıştan XML ayrıştırılamadı"
 
@@ -1930,6 +1945,11 @@ msgstr "Bağlantıyı _Aç"
 msgid "_Copy Link Address"
 msgstr "Bağlantı Adresini _Kopyala"
 
+#: src/libide/gtk/menus.ui:252
+#| msgid "Device"
+msgid "Devices"
+msgstr "Aygıtlar"
+
 #: src/libide/ide.c:58
 #, c-format
 msgid "You must call %s() before using libide."
@@ -2013,7 +2033,7 @@ msgstr "Klavye Kısayolları"
 #: src/libide/keybindings/ide-shortcuts-window.ui:60
 msgctxt "shortcut window"
 msgid "Toggle Focus Mode"
-msgstr "Odak Kipini Değiştir"
+msgstr "Odak Kipini aç/kapat"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:73
 msgctxt "shortcut window"
@@ -2276,7 +2296,7 @@ msgid "Find text within terminal"
 msgstr "Metni uçbirimde bul"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:870
+#: src/libide/langserv/ide-langserv-client.c:894
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Dil sunucusu ilklendirme başarısız: %s"
@@ -2344,6 +2364,18 @@ msgstr "Tüh, bir şeyler yanlış gitti"
 #: src/libide/layout/ide-layout-stack.ui:125
 msgid "There was a failure while trying to perform the operation."
 msgstr "İşlemi gerçekleştirmeye çalışırken bir hata oluştu"
+
+#. translators: %s is replaced with the host name
+#: src/libide/local/ide-local-device.c:207
+#, c-format
+msgid "My Computer (%s)"
+msgstr "Bilgisayarım (%s)"
+
+#. translators: first %s is replaced with the host name, second with CPU architecture
+#: src/libide/local/ide-local-device.c:216
+#, c-format
+msgid "My Computer (%s) — %s"
+msgstr "Bilgisayarım (%s) — %s"
 
 #: src/libide/preferences/ide-preferences-builtin.c:59
 #: src/libide/preferences/ide-preferences-builtin.c:60
@@ -2461,7 +2493,6 @@ msgid "Display list of open files"
 msgstr "Açık dosyaların listesini göster"
 
 #: src/libide/preferences/ide-preferences-builtin.c:154
-#| msgid "Display the list of all open files in the within the project sidebar"
 msgid "Display the list of all open files in the project sidebar"
 msgstr "Tüm açık dosyaların listesini proje kenar çubuğunda göster"
 
@@ -2879,7 +2910,7 @@ msgstr "Çalışma ortamını konumlama başarısız oldu"
 msgid "Process quit unexpectedly"
 msgstr "Süreç beklenmeyen bir şekilde kapandı"
 
-#: src/libide/runtimes/ide-runtime-manager.c:115
+#: src/libide/runtimes/ide-runtime-manager.c:131
 msgid "Host operating system"
 msgstr "Ev sahibi işletim sistemi"
 
@@ -2892,6 +2923,10 @@ msgstr "Dizin açma başarısız oldu: %s"
 #, c-format
 msgid "Failed to load file: %s: %s"
 msgstr "Dosya yükleme başarısız oldu: %s: %s"
+
+#: src/libide/sourceview/ide-omni-gutter-renderer.c:749
+msgid "Click to toggle breakpoint"
+msgstr "Kesme noktasını açmak/kapatmak için tıklayın"
 
 #: src/libide/sourceview/ide-source-view.c:4584
 #, c-format
@@ -3024,65 +3059,70 @@ msgstr "“%s” mutlak URI olarak ayrıştırılamadı"
 msgid "URI “%s” has no host component"
 msgstr "“%s” URI’sinin ana makine bileşeni yok"
 
-#: src/libide/workbench/ide-omni-bar.c:441
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "İnşa Ediliyor"
 
-#: src/libide/workbench/ide-omni-bar.ui:198
+#: src/libide/workbench/ide-omni-bar.ui:224
 msgid "Update project dependencies"
 msgstr "Proje bağımlılıklarını güncelle"
 
-#: src/libide/workbench/ide-omni-bar.ui:217
+#: src/libide/workbench/ide-omni-bar.ui:243
 msgid "Configure build preferences"
 msgstr "İnşa tercihlerini yapılandır"
 
-#: src/libide/workbench/ide-omni-bar.ui:239
+#: src/libide/workbench/ide-omni-bar.ui:265
 msgid "Branch"
 msgstr "Dal"
 
-#: src/libide/workbench/ide-omni-bar.ui:264
+#: src/libide/workbench/ide-omni-bar.ui:290
 msgid "Build Profile"
 msgstr "İnşa Profili"
 
-#: src/libide/workbench/ide-omni-bar.ui:339
+#: src/libide/workbench/ide-omni-bar.ui:345
+#| msgid "The name of the build configuration"
+msgid "There is a problem with the current build configuration."
+msgstr "Geçerli inşa yapılandırmasında sorun var."
+
+#: src/libide/workbench/ide-omni-bar.ui:378
 msgid "Build status"
 msgstr "İnşa durumu"
 
-#: src/libide/workbench/ide-omni-bar.ui:360
+#: src/libide/workbench/ide-omni-bar.ui:399
 msgid "View build console contents"
 msgstr "İnşa konsolu içeriklerini göster"
 
-#: src/libide/workbench/ide-omni-bar.ui:382
+#: src/libide/workbench/ide-omni-bar.ui:421
 msgid "Last build"
 msgstr "Son inşa"
 
-#: src/libide/workbench/ide-omni-bar.ui:409
+#: src/libide/workbench/ide-omni-bar.ui:448
 msgid "Build result"
 msgstr "İnşa sonucu"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:502
+#: src/libide/workbench/ide-omni-bar.ui:541
 msgid "true"
 msgstr "true"
 
-#: src/libide/workbench/ide-omni-bar.ui:507
+#: src/libide/workbench/ide-omni-bar.ui:546
 msgctxt "button"
 msgid "Build"
 msgstr "İnşa Et"
 
-#: src/libide/workbench/ide-omni-bar.ui:514
+#: src/libide/workbench/ide-omni-bar.ui:553
 msgid "Rebuild"
 msgstr "Yeniden İnşa Et"
 
-#: src/libide/workbench/ide-omni-bar.ui:521
+#: src/libide/workbench/ide-omni-bar.ui:560
 msgid "Clean"
 msgstr "Temizle"
 
-#: src/libide/workbench/ide-omni-bar.ui:528
+#: src/libide/workbench/ide-omni-bar.ui:567
 msgid "Export Bundle"
 msgstr "Paketi Dışa Aktar"
 
-#: src/libide/workbench/ide-omni-bar.ui:553 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:592 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Projeyi inşa et"
 
@@ -3090,20 +3130,20 @@ msgstr "Projeyi inşa et"
 msgid "Builder Statistics"
 msgstr "Builder İstatistikleri"
 
-#: src/libide/workbench/ide-workbench.c:643
+#: src/libide/workbench/ide-workbench.c:644
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:50
+#: src/libide/workbench/ide-workbench-header-bar.ui:51
 msgid "Transfers"
 msgstr "Aktarımlar"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:56
+#: src/libide/workbench/ide-workbench-header-bar.ui:57
 msgid "Show workbench menu"
 msgstr "Tezgâh menüsünü aç"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:95
+#: src/libide/workbench/ide-workbench-header-bar.ui:96
 msgid "Press Ctrl+. to search"
 msgstr "Aramak için Ctrl+. tuşlarına basın "
 
@@ -3148,21 +3188,21 @@ msgstr "Önbellek inşa ediliyor…"
 msgid "Bootstrapping build system"
 msgstr "İnşa sistemi özyükleniyor"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:225
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:140
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "Proje yapılandırılıyor"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:278
-#: src/plugins/cargo/cargo_plugin.py:151
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:276
+#: src/plugins/cargo/cargo_plugin.py:150
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:169
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Proje inşa ediliyor"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:305
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:303
 msgid "Caching build commands"
 msgstr "İnşa komutları önbellekleniyor"
 
@@ -3308,6 +3348,7 @@ msgid "No beautifier available for “%s”"
 msgstr "“%s” için kullanılabilir güzelleştirici yok"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#, c-format
 msgid "No beautifier available"
 msgstr "Kullanılabilir güzelleştirici yok"
 
@@ -3716,6 +3757,7 @@ msgid "Command failed: %s"
 msgstr "Komut başarısız: %s"
 
 #: src/plugins/command-bar/gb-vim.c:87
+#, c-format
 msgid "Number required"
 msgstr "Gerekli sayı"
 
@@ -3730,10 +3772,12 @@ msgid "Cannot find language “%s”"
 msgstr "“%s” dili bulunamıyor"
 
 #: src/plugins/command-bar/gb-vim.c:312
+#, c-format
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Bu komut odaklanmak için bir GtkSourceView gerektiriyor"
 
 #: src/plugins/command-bar/gb-vim.c:323
+#, c-format
 msgid "This command requires a view to be focused"
 msgstr "Bu komut odaklanmak için bir görünüm gerektiriyor"
 
@@ -3748,6 +3792,7 @@ msgid "Cannot find colorscheme “%s”"
 msgstr "Renk şeması “%s” bulunamıyor"
 
 #: src/plugins/command-bar/gb-vim.c:464 src/plugins/command-bar/gb-vim.c:596
+#, c-format
 msgid "Failed to locate working directory"
 msgstr "Çalışma dizini konumlanamadı"
 
@@ -3757,6 +3802,7 @@ msgid "Invalid :syntax subcommand: %s"
 msgstr "Geçersiz :syntax alt komutu: %s"
 
 #: src/plugins/command-bar/gb-vim.c:1206
+#, c-format
 msgid "Invalid search and replace request"
 msgstr "Geçersiz ara ve değiştir isteği"
 
@@ -3826,6 +3872,7 @@ msgid "create-project [OPTION...] PROJECT_NAME"
 msgstr "create-project [SEÇENEK...] PROJE_ADI"
 
 #: src/plugins/create-project/gbp-create-project-tool.c:198
+#, c-format
 msgid "Filename must be ASCII and may not contain : or ="
 msgstr "Dosya adı ASCII olmalı ve : ya da = içermemelidir."
 
@@ -3974,6 +4021,12 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Uygulama kaynakları indiriliyor…"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#, c-format
+#| msgid "Failed to rename file: %s"
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Flatpak manifest kaldırılamadı: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "Ağ kullanılabilir değil, indirmeler atlanıyor"
@@ -3987,31 +4040,31 @@ msgstr "Uygulama Klonla"
 msgid "Clone"
 msgstr "Klonla"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:136
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:150
 msgid "Creating flatpak workspace"
 msgstr "Flatpak çalışma alanı oluşturuluyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:248
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:265
 msgid "Preparing build directory"
 msgstr "İnşa dizini hazırlanıyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:288
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:305
 msgid "Downloading dependencies"
 msgstr "Bağımlılıklar indiriliyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:365
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:385
 msgid "Building dependencies"
 msgstr "Bağımlılıklar inşa ediliyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:417
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:437
 msgid "Finalizing flatpak build"
 msgstr "Flatpak inşası sonuçlandırılıyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:460
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:483
 msgid "Exporting staging directory"
 msgstr "Evreleme dizini dışa aktarılıyor"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:543
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:570
 msgid "Creating flatpak bundle"
 msgstr "Flatpak paketi oluşturuluyor"
 
@@ -4048,49 +4101,54 @@ msgstr[0] "%u çalışma ortamı daha göster"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Çalışma Ortamları"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:765
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:776
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:767
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:778
 #, c-format
-msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
-msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+#| msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:67
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:78
 #, c-format
-msgid "Updated %s %s"
-msgstr "%s %s güncellendi"
+#| msgid "Updated %s %s"
+msgid "Updated %s"
+msgstr "%s güncellendi"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:70
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:81
 #, c-format
-msgid "Updating %s %s"
-msgstr "%s %s güncelleniyor"
+#| msgid "Updating %s %s"
+msgid "Updating %s"
+msgstr "%s güncelleniyor"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:76
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:87
 #, c-format
-msgid "Installed %s %s"
-msgstr "%s %s kuruldu"
+#| msgid "Installed %s %s"
+msgid "Installed %s"
+msgstr "%s kuruldu"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:79
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:90
 #, c-format
-msgid "Installing %s %s"
-msgstr "%s %s kuruluyor"
+#| msgid "Installing "
+msgid "Installing %s"
+msgstr "%s kuruluyor"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:101
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:116
 msgid "Failed to install runtime"
 msgstr "Çalışma ortamını kurma başarısız oldu"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:103
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
 msgid "Runtime has been updated"
 msgstr "Çalışma ortamı güncellendi"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:105
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been installed"
 msgstr "Çalışma ortamı kuruldu"
 
@@ -4111,14 +4169,17 @@ msgid "Cannot provide diff, no backing file provided."
 msgstr "Fark sağlanamıyor, destek dosyası sağlanmamış."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:676
+#, c-format
 msgid "Repository does not have a working directory."
 msgstr "Depo bir çalışma dizinine sahip değil."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:687
+#, c-format
 msgid "File is not under control of git working directory."
 msgstr "Dosya git çalışma dizininin denetimi altında değil."
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:753
+#, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "İstenen dosya git dizininde bulunmuyor."
 
@@ -4163,6 +4224,7 @@ msgid "Clone…"
 msgstr "Klonla…"
 
 #: src/plugins/git/ide-git-remote-callbacks.c:193
+#, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
@@ -4246,45 +4308,37 @@ msgstr "Boş Makefile Projesi"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Basit bir Makefile kullanarak yeni boş proje oluştur"
 
-#: src/plugins/meson/gbp-meson-build-system.c:418
+#: src/plugins/meson/gbp-meson-build-system.c:428
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson-templates/meson_templates.py:234
+#: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
 msgstr "GNOME Uygulaması"
 
-#: src/plugins/meson-templates/meson_templates.py:236
+#: src/plugins/meson-templates/meson_templates.py:252
 msgid "Create a new GNOME application"
 msgstr "Yeni bir GNOME uygulaması oluştur"
 
-#: src/plugins/meson-templates/meson_templates.py:303
+#: src/plugins/meson-templates/meson_templates.py:319
 msgid "Shared Library"
 msgstr "Paylaşılan Kütüphane"
 
-#: src/plugins/meson-templates/meson_templates.py:305
+#: src/plugins/meson-templates/meson_templates.py:321
 msgid "Create a new project with a shared library"
 msgstr "Paylaşılan kütüphaneyle yeni bir proje oluştur"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:337
 msgid "Empty Project"
 msgstr "Boş Proje"
 
-#: src/plugins/meson-templates/meson_templates.py:323
+#: src/plugins/meson-templates/meson_templates.py:339
 msgid "Create a new empty project"
 msgstr "Yeni boş bir proje oluştur"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "İletiler"
-
-#: src/plugins/mingw/ide-mingw-device-provider.c:97
-msgid "MinGW 64-bit"
-msgstr "MinGW 64-bit"
-
-#: src/plugins/mingw/ide-mingw-device-provider.c:111
-msgid "MinGW 32-bit"
-msgstr "MinGW 32-bit"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:12
 msgid "Contribute to an existing project"
@@ -4340,7 +4394,7 @@ msgstr "İnşa başarısız oldu"
 msgid "Project “%s” failed to build"
 msgstr "“%s” projesi inşa edilemedi"
 
-#: src/plugins/npm/npm_plugin.py:103
+#: src/plugins/npm/npm_plugin.py:102
 msgid "Downloading npm dependencies"
 msgstr "npm bağımlılıkları indiriliyor"
 
@@ -4398,7 +4452,7 @@ msgstr "Dosya çöpe atılamadı: %s"
 msgid "Project Tree"
 msgstr "Proje Ağacı"
 
-#: src/plugins/project-tree/gb-project-tree-builder.c:452
+#: src/plugins/project-tree/gb-project-tree-builder.c:451
 msgid "Empty"
 msgstr "Boş"
 
@@ -4482,6 +4536,23 @@ msgstr "_Tüm Düğümleri Daralt"
 #: src/plugins/project-tree/gtk/menus.ui:102
 msgid "_Refresh"
 msgstr "_Tazele"
+
+#. translators: format is "CPU emulation". Only translate "emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#| msgid "Emulation"
+msgid "Aarch64 Emulation"
+msgstr "Aarch64 Öykünme"
+
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+#| msgid "Emulation"
+msgid "Arm Emulation"
+msgstr "Arm Öykünme"
+
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#: src/plugins/qemu/gbp-qemu-device-provider.c:126
+#, c-format
+msgid "My Computer (%s) %s"
+msgstr "Bilgisayarım (%s) %s"
 
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
 msgid "Words matching selection"
@@ -4865,6 +4936,18 @@ msgstr "XML ağacı oluşturulamadı."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 
+#~ msgid "The device “%s” could not be found."
+#~ msgstr "“%s” aygıtı bulunamadı."
+
+#~ msgid "Installing %s %s"
+#~ msgstr "%s %s kuruluyor"
+
+#~ msgid "MinGW 64-bit"
+#~ msgstr "MinGW 64-bit"
+
+#~ msgid "MinGW 32-bit"
+#~ msgstr "MinGW 32-bit"
+
 #~ msgid "Hue"
 #~ msgstr "Ton"
 
@@ -5018,9 +5101,6 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 
 #~ msgid "missing"
 #~ msgstr "eksik"
-
-#~ msgid "Edit build configuration"
-#~ msgstr "İnşa yapılandırmasını düzenle"
 
 #~ msgid "Open a document"
 #~ msgstr "Belge aç"
