@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 00:38+0000\n"
-"PO-Revision-Date: 2018-03-09 10:51+0100\n"
-"Last-Translator: Meskó Balázs <meskobalazs@fedoraproject.org>\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-11 20:20+0100\n"
+"Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -267,7 +267,7 @@ msgid "Spaces Style"
 msgstr "Szóközök stílusa"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr "Hogyan alkalmazza a szóközöket a szöveg újraformázásakor."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -967,7 +967,7 @@ msgstr "Takarítás…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2900
 #: src/libide/buildsystem/ide-build-pipeline.c:2957
-#: src/libide/workbench/ide-omni-bar.c:531
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "Sikertelen"
 
@@ -1010,7 +1010,7 @@ msgstr "Exportálás…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2949
 #: src/libide/buildsystem/ide-build-pipeline.c:2953
-#: src/libide/workbench/ide-omni-bar.c:549
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "Sikeres"
 
@@ -1956,6 +1956,10 @@ msgstr "Hi_vatkozás megnyitása"
 #: src/libide/gtk/menus.ui:218
 msgid "_Copy Link Address"
 msgstr "Hivatkozás _címének másolása"
+
+#: src/libide/gtk/menus.ui:252
+msgid "Devices"
+msgstr "Eszközök"
 
 #: src/libide/ide.c:58
 #, c-format
@@ -3067,7 +3071,7 @@ msgstr "A(z) „%s” nem dolgozható fel abszolút URI-ként"
 msgid "URI “%s” has no host component"
 msgstr "A(z) „%s” URI-nak nincs gépnév része"
 
-#: src/libide/workbench/ide-omni-bar.c:511
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "Összeállítás"
 
@@ -4035,6 +4039,11 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Alkalmazásforrások letöltése…"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "A flatpak leíró eltávolítása meghiúsult: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "A hálózat nem elérhető, letöltések kihagyása"
@@ -4539,17 +4548,16 @@ msgid "_Refresh"
 msgstr "_Frissítés"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:40
-#| msgid "Emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
 msgid "Aarch64 Emulation"
 msgstr "Aarch64 emuláció"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Arm Emulation"
 msgstr "Arm emuláció"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:122
+#: src/plugins/qemu/gbp-qemu-device-provider.c:126
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Számítógép (%s) %s"
@@ -4938,9 +4946,6 @@ msgstr "Puffer betöltve, de nincs a pufferkezelőben."
 
 #~ msgid "Installing %s %s"
 #~ msgstr "Telepítés alatt: %s %s"
-
-#~ msgid "Device"
-#~ msgstr "Eszköz"
 
 #~ msgid "MinGW 64-bit"
 #~ msgstr "MinGW 64 bites"
