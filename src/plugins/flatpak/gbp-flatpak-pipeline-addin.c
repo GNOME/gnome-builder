@@ -163,25 +163,77 @@ register_mkdirs_stage (GbpFlatpakPipelineAddin  *self,
 }
 
 static void
-check_if_file_exists (IdeBuildStage    *stage,
-                      IdeBuildPipeline *pipeline,
-                      GCancellable     *cancellable,
-                      const gchar      *file_path)
+reap_staging_dir_cb (GObject      *object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
 {
-  gboolean exists;
+  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  g_autoptr(IdeBuildStage) stage = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_BUILD_STAGE (stage));
+
+  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+    ide_object_warning (stage,
+                        "Failed to reap staging directory: %s",
+                        error->message);
+
+  ide_build_stage_unpause (stage);
+
+  IDE_EXIT;
+}
+
+static void
+check_for_build_init_files (IdeBuildStage    *stage,
+                            IdeBuildPipeline *pipeline,
+                            GCancellable     *cancellable,
+                            const gchar      *staging_dir)
+{
+  g_autofree gchar *metadata = NULL;
+  g_autofree gchar *files = NULL;
+  g_autofree gchar *var = NULL;
+  gboolean completed = FALSE;
+  gboolean parent_exists;
 
   g_assert (IDE_IS_BUILD_STAGE (stage));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (file_path != NULL);
+  g_assert (staging_dir != NULL);
 
-  exists = g_file_test (file_path, G_FILE_TEST_IS_REGULAR);
+  metadata = g_build_filename (staging_dir, "metadata", NULL);
+  files = g_build_filename (staging_dir, "files", NULL);
+  var = g_build_filename (staging_dir, "var", NULL);
 
-  IDE_TRACE_MSG ("%s::query checking for %s: %s",
-                 G_OBJECT_TYPE_NAME (stage),
-                 file_path,
-                 exists ? "yes" : "no");
+  parent_exists = g_file_test (staging_dir, G_FILE_TEST_IS_DIR);
 
-  ide_build_stage_set_completed (stage, exists);
+  if (parent_exists &&
+      g_file_test (metadata, G_FILE_TEST_IS_REGULAR) &&
+      g_file_test (files, G_FILE_TEST_IS_DIR) &&
+      g_file_test (var, G_FILE_TEST_IS_DIR))
+    completed = TRUE;
+
+  IDE_TRACE_MSG ("Checking for previous build-init in %s: %s",
+                 staging_dir, completed ? "yes" : "no");
+
+  ide_build_stage_set_completed (stage, completed);
+
+  if (!completed && parent_exists)
+    {
+      g_autoptr(DzlDirectoryReaper) reaper = NULL;
+      g_autoptr(GFile) staging = g_file_new_for_path (staging_dir);
+
+      ide_build_stage_pause (stage);
+
+      reaper = dzl_directory_reaper_new ();
+      dzl_directory_reaper_add_directory (reaper, staging, 0);
+      dzl_directory_reaper_execute_async (reaper,
+                                          cancellable,
+                                          reap_staging_dir_cb,
+                                          g_object_ref (stage));
+    }
 }
 
 static gboolean
@@ -194,7 +246,6 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_autoptr(IdeBuildStage) stage = NULL;
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *sdk = NULL;
-  g_autofree gchar *metadata_path = NULL;
   g_autofree gchar *arch = NULL;
   IdeConfiguration *config;
   IdeRuntime *runtime;
@@ -250,8 +301,6 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   if (sdk == NULL)
     sdk = g_strdup (platform);
 
-  metadata_path = g_build_filename (staging_dir, "metadata", NULL);
-
   ide_subprocess_launcher_push_argv (launcher, "flatpak");
   ide_subprocess_launcher_push_argv (launcher, "build-init");
   ide_subprocess_launcher_push_argv (launcher, arch);
@@ -274,8 +323,8 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
    */
   g_signal_connect_data (stage,
                          "query",
-                         G_CALLBACK (check_if_file_exists),
-                         g_steal_pointer (&metadata_path),
+                         G_CALLBACK (check_for_build_init_files),
+                         g_strdup (staging_dir),
                          (GClosureNotify)g_free,
                          0);
 
