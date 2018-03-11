@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-02-28 12:53+0000\n"
-"PO-Revision-Date: 2018-02-28 19:39+0500\n"
+"POT-Creation-Date: 2018-03-10 03:47+0000\n"
+"PO-Revision-Date: 2018-03-11 14:41+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -247,7 +247,7 @@ msgid "Spaces Style"
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -514,7 +514,6 @@ msgid "An integrated debugger for native applications"
 msgstr ""
 
 #: data/org.gnome.Builder.appdata.xml.in:35
-#| msgid "Support for building with jhbuild"
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr ""
 
@@ -892,85 +891,95 @@ msgid "Failed to save file: %s"
 msgstr "Файлды сақтау сәтсіз аяқталды: %s"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:252
+#: src/libide/buffers/ide-unsaved-files.c:250
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr ""
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:624
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:620
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Көшірме)"
 
-#: src/libide/buildsystem/ide-build-manager.c:369
+#: src/libide/buildsystem/ide-build-manager.c:367
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr ""
 
-#: src/libide/buildsystem/ide-build-pipeline.c:733
+#: src/libide/buildsystem/ide-build-manager.c:424
+#, c-format
+#| msgid "Failed to open directory: %s"
+msgid "Failed to get device information: %s"
+msgstr "Құрылғы ақпаратын алу сәтсіз аяқталды: %s"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:751
 msgid "The build pipeline is in a failed state"
 msgstr ""
 
-#: src/libide/buildsystem/ide-build-pipeline.c:743
-#| msgid "Edit build configuration"
+#: src/libide/buildsystem/ide-build-pipeline.c:761
 msgid "The build configuration has errors"
 msgstr ""
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2582
+#: src/libide/buildsystem/ide-build-pipeline.c:2696
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2782
+#: src/libide/buildsystem/ide-build-pipeline.c:2896
 msgid "Cleaning…"
 msgstr "Тазарту…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2786
-#: src/libide/buildsystem/ide-build-pipeline.c:2839
-#: src/libide/workbench/ide-omni-bar.c:467
+#: src/libide/buildsystem/ide-build-pipeline.c:2900
+#: src/libide/buildsystem/ide-build-pipeline.c:2957
+#: src/libide/workbench/ide-omni-bar.c:552
 msgid "Failed"
 msgstr "Сәтсіз"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2788
-#: src/libide/buildsystem/ide-build-pipeline.c:2847
+#: src/libide/buildsystem/ide-build-pipeline.c:2902
+#: src/libide/buildsystem/ide-build-pipeline.c:2965
 msgid "Ready"
 msgstr "Дайын"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2803
+#: src/libide/buildsystem/ide-build-pipeline.c:2917
 msgid "Downloading…"
 msgstr "Жүктелуде…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2807
+#: src/libide/buildsystem/ide-build-pipeline.c:2921
 msgid "Building dependencies…"
 msgstr "Тәуелділіктерді құрастыру…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2811
+#: src/libide/buildsystem/ide-build-pipeline.c:2925
 msgid "Bootstrapping…"
 msgstr "Ортаны дайындау…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2815
+#: src/libide/buildsystem/ide-build-pipeline.c:2929
 msgid "Configuring…"
 msgstr "Баптау…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2819
+#: src/libide/buildsystem/ide-build-pipeline.c:2933
 msgid "Building…"
 msgstr "Жинау…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2823
+#: src/libide/buildsystem/ide-build-pipeline.c:2937
 msgid "Installing…"
 msgstr "Орнату…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2827
+#: src/libide/buildsystem/ide-build-pipeline.c:2941
+#| msgid "Configuring…"
+msgid "Committing…"
+msgstr ""
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2945
 msgid "Exporting…"
 msgstr "Экспорттау…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2831
-#: src/libide/buildsystem/ide-build-pipeline.c:2835
-#: src/libide/workbench/ide-omni-bar.c:485
+#: src/libide/buildsystem/ide-build-pipeline.c:2949
+#: src/libide/buildsystem/ide-build-pipeline.c:2953
+#: src/libide/workbench/ide-omni-bar.c:579
 msgid "Success"
 msgstr "Сәтті аяқталды"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2843
+#: src/libide/buildsystem/ide-build-pipeline.c:2961
 msgid "Preparing…"
 msgstr "Дайындау…"
 
@@ -1027,15 +1036,11 @@ msgid "Configure Options"
 msgstr "Баптау опциялары"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:189
-msgid "Device"
-msgstr "Құрылғы"
-
-#: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/libide/workbench/ide-omni-bar.ui:289
+#: src/libide/workbench/ide-omni-bar.ui:315
 msgid "Runtime"
 msgstr "Орындалу ортасы"
 
-#: src/libide/buildui/ide-build-configuration-view.ui:245
+#: src/libide/buildui/ide-build-configuration-view.ui:217
 msgid "Environment"
 msgstr "Қоршам"
 
@@ -1065,7 +1070,7 @@ msgid "Clear build log"
 msgstr "Құрастыру журналын тазарту"
 
 #: src/libide/buildui/ide-build-log-panel.ui:49
-#: src/libide/workbench/ide-omni-bar.ui:133
+#: src/libide/workbench/ide-omni-bar.ui:159
 msgid "Cancel build"
 msgstr "Құрастыруды тоқтату"
 
@@ -1077,7 +1082,7 @@ msgstr "Құрастыру журналын сақтау"
 #: src/libide/buildui/ide-build-panel.c:185
 #: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:477
+#: src/libide/workbench/ide-omni-bar.ui:503
 msgid "Warnings"
 msgstr "Ескертулер"
 
@@ -1085,7 +1090,7 @@ msgstr "Ескертулер"
 #: src/libide/buildui/ide-build-panel.c:186
 #: src/libide/buildui/ide-build-panel.c:224
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:449
+#: src/libide/workbench/ide-omni-bar.ui:475
 msgid "Errors"
 msgstr "Қателер"
 
@@ -1278,6 +1283,10 @@ msgstr "Бинарлы"
 #, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Сай келетін жөндеушіні табу мүмкін емес."
+
+#: src/libide/devices/ide-device-manager.c:714
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr ""
 
 #: src/libide/directory/ide-directory-vcs.c:55
 msgid "unversioned"
@@ -1903,6 +1912,11 @@ msgstr "Сі_лтемені ашу"
 msgid "_Copy Link Address"
 msgstr "Сілтеме адр_есін көшіру"
 
+#: src/libide/gtk/menus.ui:252
+#| msgid "Device"
+msgid "Devices"
+msgstr "Құрылғылар"
+
 #: src/libide/ide.c:58
 #, c-format
 msgid "You must call %s() before using libide."
@@ -2318,10 +2332,16 @@ msgstr "Қап, бірнәрсе қате кетті"
 msgid "There was a failure while trying to perform the operation."
 msgstr ""
 
-#. translators: %s is replaced with the local systems host name
-#: src/libide/local/ide-local-device.c:78
+#. translators: %s is replaced with the host name
+#: src/libide/local/ide-local-device.c:207
 #, c-format
 msgid "My Computer (%s)"
+msgstr ""
+
+#. translators: first %s is replaced with the host name, second with CPU architecture
+#: src/libide/local/ide-local-device.c:216
+#, c-format
+msgid "My Computer (%s) — %s"
 msgstr ""
 
 #: src/libide/preferences/ide-preferences-builtin.c:59
@@ -2358,8 +2378,6 @@ msgid "Automatically enable dark mode at night"
 msgstr ""
 
 #: src/libide/preferences/ide-preferences-builtin.c:100
-#| msgctxt "shortcut window"
-#| msgid "Clear highlight"
 msgid "follow night light"
 msgstr ""
 
@@ -2852,7 +2870,7 @@ msgstr ""
 msgid "Process quit unexpectedly"
 msgstr "Процесс күтпегенде үзілді"
 
-#: src/libide/runtimes/ide-runtime-manager.c:115
+#: src/libide/runtimes/ide-runtime-manager.c:131
 msgid "Host operating system"
 msgstr "Хост операциялық жүйесі"
 
@@ -3001,69 +3019,69 @@ msgstr ""
 msgid "URI “%s” has no host component"
 msgstr ""
 
-#: src/libide/workbench/ide-omni-bar.c:447
+#: src/libide/workbench/ide-omni-bar.c:523
 msgid "Building"
 msgstr "Құрастыру"
 
-#: src/libide/workbench/ide-omni-bar.ui:198
+#: src/libide/workbench/ide-omni-bar.ui:224
 msgid "Update project dependencies"
 msgstr ""
 
-#: src/libide/workbench/ide-omni-bar.ui:217
+#: src/libide/workbench/ide-omni-bar.ui:243
 msgid "Configure build preferences"
 msgstr "Құрастыру баптауларын түзету"
 
-#: src/libide/workbench/ide-omni-bar.ui:239
+#: src/libide/workbench/ide-omni-bar.ui:265
 msgid "Branch"
 msgstr "Бұтақ"
 
-#: src/libide/workbench/ide-omni-bar.ui:264
+#: src/libide/workbench/ide-omni-bar.ui:290
 msgid "Build Profile"
 msgstr "Құрастыру профилі"
 
-#: src/libide/workbench/ide-omni-bar.ui:319
+#: src/libide/workbench/ide-omni-bar.ui:345
 msgid "There is a problem with the current build configuration."
 msgstr ""
 
-#: src/libide/workbench/ide-omni-bar.ui:352
+#: src/libide/workbench/ide-omni-bar.ui:378
 msgid "Build status"
 msgstr "Құрастыру қалып-күйі"
 
-#: src/libide/workbench/ide-omni-bar.ui:373
+#: src/libide/workbench/ide-omni-bar.ui:399
 msgid "View build console contents"
 msgstr ""
 
-#: src/libide/workbench/ide-omni-bar.ui:395
+#: src/libide/workbench/ide-omni-bar.ui:421
 msgid "Last build"
 msgstr "Соңғы құрастыру"
 
-#: src/libide/workbench/ide-omni-bar.ui:422
+#: src/libide/workbench/ide-omni-bar.ui:448
 msgid "Build result"
 msgstr "Құрастыру нәтижесі"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:515
+#: src/libide/workbench/ide-omni-bar.ui:541
 msgid "true"
 msgstr ""
 
-#: src/libide/workbench/ide-omni-bar.ui:520
+#: src/libide/workbench/ide-omni-bar.ui:546
 msgctxt "button"
 msgid "Build"
 msgstr ""
 
-#: src/libide/workbench/ide-omni-bar.ui:527
+#: src/libide/workbench/ide-omni-bar.ui:553
 msgid "Rebuild"
 msgstr "Қайта құрастыру"
 
-#: src/libide/workbench/ide-omni-bar.ui:534
+#: src/libide/workbench/ide-omni-bar.ui:560
 msgid "Clean"
 msgstr "Тазарту"
 
-#: src/libide/workbench/ide-omni-bar.ui:541
+#: src/libide/workbench/ide-omni-bar.ui:567
 msgid "Export Bundle"
 msgstr ""
 
-#: src/libide/workbench/ide-omni-bar.ui:566 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:592 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Жобаны құрастыру"
 
@@ -3076,15 +3094,15 @@ msgstr "Құрастырушы статистикасы"
 msgid "%s — Builder"
 msgstr "%s — Құрастырушы"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:50
+#: src/libide/workbench/ide-workbench-header-bar.ui:51
 msgid "Transfers"
 msgstr "Алмасулар"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:56
+#: src/libide/workbench/ide-workbench-header-bar.ui:57
 msgid "Show workbench menu"
 msgstr "Жұмыс ортасының мәзірін көрсету"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:95
+#: src/libide/workbench/ide-workbench-header-bar.ui:96
 msgid "Press Ctrl+. to search"
 msgstr "Іздеу үшін Ctrl+. басыңыз"
 
@@ -3127,22 +3145,21 @@ msgstr "Кэшті құрастыру…"
 msgid "Bootstrapping build system"
 msgstr ""
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:225
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:140
 #: src/plugins/phpize/phpize_plugin.py:226
-#| msgid "Configuring…"
 msgid "Configuring project"
 msgstr ""
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:278
-#: src/plugins/cargo/cargo_plugin.py:151
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:276
+#: src/plugins/cargo/cargo_plugin.py:150
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:169
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Жобаны құрастыру"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:305
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:303
 msgid "Caching build commands"
 msgstr ""
 
@@ -3380,7 +3397,6 @@ msgstr "Жобаны баптау"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:179
 #: src/plugins/phpize/phpize_plugin.py:248
-#| msgid "Installing rust "
 msgid "Installing project"
 msgstr ""
 
@@ -3934,6 +3950,12 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr ""
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#, c-format
+#| msgid "Failed to save file: %s"
+msgid "Failed to remove flatpak manifest: %s"
+msgstr ""
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr ""
@@ -3947,32 +3969,31 @@ msgstr "Қолданбаны клондау"
 msgid "Clone"
 msgstr "Клондау"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:136
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:150
 msgid "Creating flatpak workspace"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:248
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:265
 msgid "Preparing build directory"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:288
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:305
 msgid "Downloading dependencies"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:365
-#| msgid "Building dependencies…"
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:385
 msgid "Building dependencies"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:417
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:437
 msgid "Finalizing flatpak build"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:460
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:483
 msgid "Exporting staging directory"
 msgstr ""
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:543
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:570
 msgid "Creating flatpak bundle"
 msgstr ""
 
@@ -4009,49 +4030,54 @@ msgstr[0] ""
 msgid "Flatpak Runtimes"
 msgstr "Flatpak орындалу орталары"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:772
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:776
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:774
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:778
 #, c-format
-msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
-msgstr "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+#| msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
+msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:67
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:78
 #, c-format
-msgid "Updated %s %s"
-msgstr "%s %s жаңартылған"
+#| msgid "Updated %s %s"
+msgid "Updated %s"
+msgstr "%s жаңартылды"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:70
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:81
 #, c-format
-msgid "Updating %s %s"
-msgstr "%s %s жаңартылуда"
+#| msgid "Updating %s %s"
+msgid "Updating %s"
+msgstr "%s жаңартылуда"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:76
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:87
 #, c-format
-msgid "Installed %s %s"
-msgstr "%s %s орнатылған"
+#| msgid "Installed %s %s"
+msgid "Installed %s"
+msgstr "%s орнатылды"
 
-#. Translators: %s %s is used for replacing the runtime id (org.gnome.Platform) and the branch (3.24, master, etc)
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:79
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:90
 #, c-format
-msgid "Installing %s %s"
-msgstr "%s %s орнатылуда"
+#| msgid "Installing "
+msgid "Installing %s"
+msgstr "%s орнатылуда"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:101
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:116
 msgid "Failed to install runtime"
 msgstr "Орындалу ортасын орнату сәтсіз аяқталды"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:103
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
 msgid "Runtime has been updated"
 msgstr "Орындалу ортасы жаңартылды"
 
-#: src/plugins/flatpak/gbp-flatpak-transfer.c:105
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
 msgid "Runtime has been installed"
 msgstr "Орындалу орнатылды"
 
@@ -4193,7 +4219,6 @@ msgid "Use Jedi to provide completions for the Python language"
 msgstr "Python тілі үшін толықтыруларды ұсыну үшін Jedi қолдану"
 
 #: src/plugins/make/make_plugin.py:137
-#| msgid "Installing rust "
 msgid "Install project"
 msgstr ""
 
@@ -4205,7 +4230,7 @@ msgstr "Бос Makefile жобасы"
 msgid "Create a new empty project using a simple Makefile"
 msgstr ""
 
-#: src/plugins/meson/gbp-meson-build-system.c:418
+#: src/plugins/meson/gbp-meson-build-system.c:428
 msgid "Meson"
 msgstr "Meson"
 
@@ -4236,14 +4261,6 @@ msgstr "Жаңа бос жобаны жасау"
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
 msgstr "Хабарламалар"
-
-#: src/plugins/mingw/ide-mingw-device-provider.c:57
-msgid "MinGW 64-bit"
-msgstr "MinGW 64-бит"
-
-#: src/plugins/mingw/ide-mingw-device-provider.c:64
-msgid "MinGW 32-bit"
-msgstr "MinGW 32-бит"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:12
 msgid "Contribute to an existing project"
@@ -4299,12 +4316,11 @@ msgstr "Құрастыру сәтсіз аяқталды"
 msgid "Project “%s” failed to build"
 msgstr "\"%s\" жобасының құрастырылуы сәтсіз аяқталды"
 
-#: src/plugins/npm/npm_plugin.py:103
+#: src/plugins/npm/npm_plugin.py:102
 msgid "Downloading npm dependencies"
 msgstr ""
 
 #: src/plugins/phpize/phpize_plugin.py:210
-#| msgid "Bootstrapping…"
 msgid "Bootstrapping project"
 msgstr ""
 
@@ -4358,7 +4374,7 @@ msgstr ""
 msgid "Project Tree"
 msgstr "Жоба ағашы"
 
-#: src/plugins/project-tree/gb-project-tree-builder.c:452
+#: src/plugins/project-tree/gb-project-tree-builder.c:451
 msgid "Empty"
 msgstr "Бос"
 
@@ -4443,6 +4459,23 @@ msgstr "Барлық тораптарды ж_инау"
 msgid "_Refresh"
 msgstr "Жаңар_ту"
 
+#. translators: format is "CPU emulation". Only translate "emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+#| msgid "Emulation"
+msgid "Aarch64 Emulation"
+msgstr "Aarch64 эмуляциясы"
+
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+#| msgid "Emulation"
+msgid "Arm Emulation"
+msgstr "Arm эмуляциясы"
+
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#: src/plugins/qemu/gbp-qemu-device-provider.c:126
+#, c-format
+msgid "My Computer (%s) %s"
+msgstr "Менің компьютерім (%s) %s"
+
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
 msgid "Words matching selection"
 msgstr "Таңдалғанға сәйкес сөздер"
@@ -4450,6 +4483,8 @@ msgstr "Таңдалғанға сәйкес сөздер"
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
 msgid "Highlight all occurrences of words matching the current selection"
 msgstr ""
+"Ағымдағы таңдауға сәйкес келетін сөздердің барлық кездесулерін түспен "
+"ерекшелеу"
 
 #. Translators: the following are keywords used for searching to locate this preference
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
@@ -4816,6 +4851,15 @@ msgstr "XML ағашын жасау сәтсіз аяқталды."
 #: src/plugins/xml-pack/ide-xml-service.c:339
 msgid "Buffer loaded but not in the buffer manager."
 msgstr ""
+
+#~ msgid "Installing %s %s"
+#~ msgstr "%s %s орнатылуда"
+
+#~ msgid "MinGW 64-bit"
+#~ msgstr "MinGW 64-бит"
+
+#~ msgid "MinGW 32-bit"
+#~ msgstr "MinGW 32-бит"
 
 #~ msgid "Hue"
 #~ msgstr "Реңі"
