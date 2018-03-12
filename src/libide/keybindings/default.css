@@ -20,6 +20,14 @@
   bind "<ctrl>i" { "action" ("editor-view", "goto-line", "") };
   bind "<ctrl>asciitilde" { "change-case" (toggle) };
   bind "<ctrl><alt>d" { "duplicate-entire-line" ()};
+  bind "<ctrl><shift>z" { "clear-count" ()
+                          "clear-selection" ()
+                          "remove-cursors" ()
+                          "redo" () };
+  bind "<ctrl>z" { "clear-count" ()
+                   "clear-selection" ()
+                   "remove-cursors" ()
+                   "undo" () };
 
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
