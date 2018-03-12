@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2018-03-10 03:47+0000\n"
-"PO-Revision-Date: 2018-03-12 11:56+0100\n"
+"PO-Revision-Date: 2018-03-12 13:09+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -4053,7 +4053,7 @@ msgstr "Henter programkilder …"
 #: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr "Kunne ikke fjerne flatpak-manufest: %s"
+msgstr "Kunne ikke fjerne flatpak-manifest: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
