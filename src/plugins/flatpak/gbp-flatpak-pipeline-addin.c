@@ -236,6 +236,21 @@ check_for_build_init_files (IdeBuildStage    *stage,
     }
 }
 
+static void
+reap_staging_dir (IdeBuildStage      *stage,
+                  DzlDirectoryReaper *reaper,
+                  const gchar        *staging_dir)
+{
+  g_autoptr(GFile) dir = NULL;
+
+  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (staging_dir != NULL);
+
+  dir = g_file_new_for_path (staging_dir);
+  dzl_directory_reaper_add_directory (reaper, dir, 0);
+}
+
 static gboolean
 register_build_init_stage (GbpFlatpakPipelineAddin  *self,
                            IdeBuildPipeline         *pipeline,
@@ -324,6 +339,17 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
   g_signal_connect_data (stage,
                          "query",
                          G_CALLBACK (check_for_build_init_files),
+                         g_strdup (staging_dir),
+                         (GClosureNotify)g_free,
+                         0);
+
+  /*
+   * When reaping the build, during a rebuild, make sure we wipe
+   * out the stagint directory too.
+   */
+  g_signal_connect_data (stage,
+                         "reap",
+                         G_CALLBACK (reap_staging_dir),
                          g_strdup (staging_dir),
                          (GClosureNotify)g_free,
                          0);
