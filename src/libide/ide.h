@@ -174,6 +174,7 @@ G_BEGIN_DECLS
 #include "testing/ide-test.h"
 #include "testing/ide-test-manager.h"
 #include "testing/ide-test-provider.h"
+#include "threading/ide-task.h"
 #include "threading/ide-thread-pool.h"
 #include "terminal/ide-terminal.h"
 #include "terminal/ide-terminal-search.h"

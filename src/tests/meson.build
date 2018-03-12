@@ -169,8 +169,16 @@ test_ide_glib = executable('test-ide-glib', 'test-ide-glib.c',
 )
 test('test-ide-glib', test_ide_glib, env: ide_test_env)
 
+
 test_line_reader = executable('test-line-reader', 'test-line-reader.c',
   c_args: ide_test_cflags,
   dependencies: [ ide_test_deps ],
 )
 test('test-line-reader', test_line_reader, env: ide_test_env)
+
+
+test_ide_task = executable('test-ide-task', 'test-ide-task.c',
+  c_args: ide_test_cflags,
+  dependencies: [ ide_test_deps ],
+)
+test('test-ide-task', test_ide_task, env: ide_test_env)
