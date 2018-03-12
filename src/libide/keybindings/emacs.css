@@ -59,7 +59,10 @@
   bind "<ctrl><shift>d" { "add-cursor" (match) };
   bind "<ctrl>x" { "set-mode" ("emacs-x", transient) };
   bind "<ctrl>c" { "set-mode" ("emacs-c", transient) };
-  bind "<ctrl>underscore" { "undo" () };
+  bind "<ctrl>underscore" { "clear-count" ()
+                            "clear-selection" ()
+                            "remove-cursors" ()
+                            "undo" () };
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };
   bind "<ctrl>r" { "action" ("editor-view", "find", "") };
   bind "<ctrl>s" { "action" ("editor-view", "find", "") };
@@ -131,7 +134,10 @@
   bind "s" { "action" ("win", "save-all", "") };
   bind "<ctrl>b" { "action" ("layoutstack", "show-list", "") };
   bind "<ctrl>w" { "action" ("editor-view", "save-as", "") };
-  bind "u" { "redo" () };
+  bind "u" { "clear-count" ()
+             "clear-selection" ()
+             "remove-cursors" ()
+             "redo" () };
   bind "2" { "action" ("lyaoutstack", "split-view", "''") };
   bind "3" { "action" ("layoutstack", "open-in-new-frame", "''") };
   bind "o" { "action" ("layoutgrid", "focus-neighbor", "0") };
