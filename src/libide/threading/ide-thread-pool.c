@@ -24,9 +24,6 @@
 
 #include "threading/ide-thread-pool.h"
 
-#define COMPILER_MAX_THREADS (g_get_num_processors())
-#define INDEXER_MAX_THREADS  (MAX (1, g_get_num_processors() / 2))
-
 typedef struct
 {
   int type;
@@ -42,10 +39,25 @@ typedef struct
   };
 } WorkItem;
 
+struct _IdeThreadPool
+{
+  GThreadPool       *pool;
+  IdeThreadPoolKind  kind;
+  guint              max_threads;
+  guint              worker_max_threads;
+  gboolean           exclusive;
+};
+
 DZL_DEFINE_COUNTER (TotalTasks, "ThreadPool", "Total Tasks", "Total number of tasks processed.")
 DZL_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number of pending tasks.")
 
-static GThreadPool *thread_pools [IDE_THREAD_POOL_LAST];
+static IdeThreadPool thread_pools[] = {
+  { NULL, IDE_THREAD_POOL_DEFAULT, 10, 1, FALSE },
+  { NULL, IDE_THREAD_POOL_COMPILER, 2, 1, FALSE },
+  { NULL, IDE_THREAD_POOL_INDEXER,  2, 1, FALSE },
+  { NULL, IDE_THREAD_POOL_IO,       8, 1, FALSE },
+  { NULL, IDE_THREAD_POOL_LAST,     0, 0, FALSE }
+};
 
 enum {
   TYPE_TASK,
@@ -55,7 +67,7 @@ enum {
 static inline GThreadPool *
 ide_thread_pool_get_pool (IdeThreadPoolKind kind)
 {
-  return thread_pools [kind];
+  return thread_pools [kind].pool;
 }
 
 /**
@@ -184,35 +196,21 @@ ide_thread_pool_worker (gpointer data,
 void
 _ide_thread_pool_init (gboolean is_worker)
 {
-  gint compiler = COMPILER_MAX_THREADS;
-  gint indexer = INDEXER_MAX_THREADS;
-  gboolean exclusive = FALSE;
-
-  if (is_worker)
+  for (IdeThreadPoolKind kind = IDE_THREAD_POOL_DEFAULT;
+       kind < IDE_THREAD_POOL_LAST;
+       kind++)
     {
-      compiler = 1;
-      indexer = 1;
-      exclusive = TRUE;
+      IdeThreadPool *p = &thread_pools[kind];
+      g_autoptr(GError) error = NULL;
+
+      p->pool = g_thread_pool_new (ide_thread_pool_worker,
+                                   NULL,
+                                   is_worker ? p->worker_max_threads : p->max_threads,
+                                   p->exclusive,
+                                   &error);
+
+      if (error != NULL)
+        g_error ("Failed to initialize thread pool %u: %s",
+                 p->kind, error->message);
     }
-
-  /*
-   * Create our thread pool exclusive to compiler tasks (such as those from Clang).
-   * We don't want to consume threads from other GTask's such as those regarding IO so we manage
-   * these work items exclusively.
-   */
-  thread_pools [IDE_THREAD_POOL_COMPILER] = g_thread_pool_new (ide_thread_pool_worker,
-                                                               NULL,
-                                                               compiler,
-                                                               exclusive,
-                                                               NULL);
-
-  /*
-   * Create our pool exclusive to things like indexing. Such examples including building of
-   * ctags indexes or highlight indexes.
-   */
-  thread_pools [IDE_THREAD_POOL_INDEXER] = g_thread_pool_new (ide_thread_pool_worker,
-                                                              NULL,
-                                                              indexer,
-                                                              exclusive,
-                                                              NULL);
 }

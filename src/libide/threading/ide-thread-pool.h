@@ -28,8 +28,10 @@ typedef struct _IdeThreadPool IdeThreadPool;
 
 typedef enum
 {
+  IDE_THREAD_POOL_DEFAULT,
   IDE_THREAD_POOL_COMPILER,
   IDE_THREAD_POOL_INDEXER,
+  IDE_THREAD_POOL_IO,
   IDE_THREAD_POOL_LAST
 } IdeThreadPoolKind;
 
@@ -40,7 +42,6 @@ typedef enum
  */
 typedef void (*IdeThreadFunc) (gpointer user_data);
 
-void     _ide_thread_pool_init     (gboolean              is_worker) G_GNUC_INTERNAL;
 IDE_AVAILABLE_IN_ALL
 void     ide_thread_pool_push      (IdeThreadPoolKind     kind,
                                     IdeThreadFunc         func,
