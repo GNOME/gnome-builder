@@ -128,6 +128,9 @@ gbp_symbol_layout_stack_addin_find_scope_cb (GObject      *object,
 
   if (self->button != NULL)
     gbp_symbol_menu_button_set_symbol (self->button, symbol);
+
+  /* We don't use this, but we should return a value anyway */
+  g_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -273,6 +276,9 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
       if (tree != NULL)
         gbp_symbol_menu_button_set_symbol_tree (self->button, tree);
     }
+
+  /* We don't use this, but we should return a value anyway */
+  g_task_return_boolean (task, TRUE);
 }
 
 static void
