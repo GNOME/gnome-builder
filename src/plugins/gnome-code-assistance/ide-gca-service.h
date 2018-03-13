@@ -18,8 +18,9 @@
 
 #pragma once
 
+#include <ide.h>
+
 #include "gca-service.h"
-#include "ide-service.h"
 
 G_BEGIN_DECLS
 
