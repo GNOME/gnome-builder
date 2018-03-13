@@ -318,7 +318,7 @@ ide_compile_commands_load (IdeCompileCommands  *self,
   g_task_set_priority (task, G_PRIORITY_LOW);
   g_task_set_source_tag (task, ide_compile_commands_load);
   g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_run_in_thread_sync (task, ide_compile_commands_load_worker);
+  ide_compile_commands_load_worker (task, self, file, cancellable);
 
   ret = g_task_propagate_boolean (task, error);
 
