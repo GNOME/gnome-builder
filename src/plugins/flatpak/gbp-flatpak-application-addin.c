@@ -136,6 +136,8 @@ copy_devhelp_docs_into_user_data_dir_worker (GTask        *task,
         }
     }
 
+  g_task_return_boolean (task, TRUE);
+
   IDE_EXIT;
 }
 
@@ -175,7 +177,7 @@ copy_devhelp_docs_into_user_data_dir (GbpFlatpakApplicationAddin *self)
   /*
    * Collect the paths to all of the .Docs runtimes.
    *
-   * TODO: We should try to sort these by importants, so that master
+   * TODO: We should try to sort these by importance, so that master
    *       docs are preferred and if that is not available, the highest
    *       version number.
    */
