@@ -447,7 +447,7 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_finish (self, result, error);
   if (ret != NULL)
@@ -504,7 +504,7 @@ ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_for_files_finish (self, result, error);
 
