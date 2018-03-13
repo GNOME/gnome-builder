@@ -471,6 +471,25 @@ ide_layout_stack_header_add (GtkContainer *container,
 }
 
 static void
+ide_layout_stack_header_get_preferred_width (GtkWidget *widget,
+                                             gint      *min_width,
+                                             gint      *nat_width)
+{
+  g_assert (IDE_IS_LAYOUT_STACK_HEADER (widget));
+  g_assert (min_width != NULL);
+  g_assert (nat_width != NULL);
+
+  GTK_WIDGET_CLASS (ide_layout_stack_header_parent_class)->get_preferred_width (widget, min_width, nat_width);
+
+  /*
+   * We don't want changes to the natural width to influence our positioning of
+   * the grid separators (unless necessary). So instead, we always return our
+   * minimum position as our natural size and let the grid expand as necessary.
+   */
+  *nat_width = *min_width;
+}
+
+static void
 ide_layout_stack_header_destroy (GtkWidget *widget)
 {
   IdeLayoutStackHeader *self = (IdeLayoutStackHeader *)widget;
@@ -561,6 +580,7 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
   object_class->set_property = ide_layout_stack_header_set_property;
 
   widget_class->destroy = ide_layout_stack_header_destroy;
+  widget_class->get_preferred_width = ide_layout_stack_header_get_preferred_width;
 
   container_class->add = ide_layout_stack_header_add;
 
