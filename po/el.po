@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2018-02-11 18:23+0000\n"
-"PO-Revision-Date: 2018-03-08 14:36+0200\n"
-"Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
+"PO-Revision-Date: 2018-03-09 18:01+0200\n"
+"Last-Translator: Efstathios Iosifidis <iosifidis@opensuse.org>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -255,10 +255,9 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:109
 #: src/libide/preferences/ide-preferences-builtin.c:185
-#, fuzzy
 #| msgid "Enabled"
 msgid "Autosave Enabled"
-msgstr "Ενεργοποιημένο"
+msgstr "Η αυτόματη αποθήκευση ενεργοποιήθηκε"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 msgid "Enable or disable autosave feature."
@@ -336,10 +335,9 @@ msgstr ""
 #. projects. Do NOT change the ASCII double quotes ("") to your
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:32
-#, fuzzy
 #| msgid "Projects"
 msgid "\"Projects\""
-msgstr "Έργα"
+msgstr "\"Έργα\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 #: src/libide/preferences/ide-preferences-builtin.c:412
@@ -359,10 +357,9 @@ msgid "Restore previously opened files when loading a project."
 msgstr "Επαναφορά προηγούμενων ανοιχτών αρχείων κατά την φόρτωση του έργου."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:43
-#, fuzzy
 #| msgid "Open File"
 msgid "Show Open Files"
-msgstr "Άνοιγμα αρχείου"
+msgstr "Εμφάνιση ανοικτών αρχείων"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:44
 #, fuzzy
@@ -582,7 +579,6 @@ msgid "Integration with Git to clone your projects"
 msgstr "Ενσωμάτωση με Autotools"
 
 #: data/org.gnome.Builder.appdata.xml.in:53
-#, fuzzy
 #| msgid "Source Code Editor"
 msgid "The source code editor"
 msgstr "Επεξεργαστής πηγαίου κώδικα"
@@ -955,10 +951,10 @@ msgstr "Μη αποθηκευμένο έγγραφο %u"
 #: src/libide/buffers/ide-buffer-manager.c:2070
 #: src/libide/editor/ide-editor-view-actions.c:189
 #: src/libide/editor/ide-editor-view-actions.c:310
-#, fuzzy, c-format
+#, c-format
 #| msgid "Failed to load file: %s: %s"
 msgid "Failed to save file: %s"
-msgstr "Αδυναμία φόρτωσης αρχείου: %s: %s"
+msgstr "Αποτυχία αποθήκευσης αρχείου: %s"
 
 #. translators: %s is replaced with the error message
 #: src/libide/buffers/ide-unsaved-files.c:252
@@ -969,10 +965,10 @@ msgstr "Αποτυχία ανοίγματος καταλόγου: %s"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:624
-#, fuzzy, c-format
+#, c-format
 #| msgid "%s (read-only)"
 msgid "%s (Copy)"
-msgstr "%s (μόνο για ανάγνωση)"
+msgstr "%s (Αντιγραφή)"
 
 #: src/libide/buildsystem/ide-build-manager.c:360
 #, fuzzy, c-format
@@ -1004,10 +1000,9 @@ msgid "Ready"
 msgstr "Έτοιμο"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2746
-#, fuzzy
 #| msgid "Download Page"
 msgid "Downloading…"
-msgstr "Σελίδα λήψης"
+msgstr "Γίνεται λήψη…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2750
 #, fuzzy
@@ -3302,7 +3297,8 @@ msgstr "Καθαρό"
 msgid "Export Bundle"
 msgstr "Εξαγωγή"
 
-#: src/libide/workbench/ide-omni-bar.ui:553 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:553
+#: src/plugins/make/make_plugin.py:123
 #, fuzzy
 #| msgid "- Build the project."
 msgid "Build project"
@@ -3844,7 +3840,7 @@ msgstr ""
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
-msgstr ""
+msgstr "Κανένα"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
 msgid "Achromatopsia (monochromacy)"
@@ -3918,7 +3914,7 @@ msgstr "Από το τρέχον έγγραφο"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
 msgid "Select the palette you want to see in the panel or close one."
-msgstr ""
+msgstr "Επιλέξτε την παλέτα που θέλετε να δείτε στον πίνακα ή κλείστε την ."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
 msgid "No loaded palettes"
@@ -4236,7 +4232,7 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:38
 msgid "Downloading application sources…"
-msgstr ""
+msgstr "Λήψη πηγών εφαρμογής…"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
@@ -4266,7 +4262,7 @@ msgstr "Αποτυχία δημιουργίας του καταλόγου δόμ
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:288
 msgid "Downloading dependencies"
-msgstr ""
+msgstr "Λήψη εξαρτήσεων"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:365
 #, fuzzy
@@ -4276,7 +4272,7 @@ msgstr "Προτιμήσεις δόμησης"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:417
 msgid "Finalizing flatpak build"
-msgstr ""
+msgstr "Ολοκλήρωση δόμησης flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:460
 msgid "Exporting staging directory"
@@ -4887,7 +4883,7 @@ msgstr "Aκύρωση"
 
 #: src/plugins/rustup/rustup_plugin.py:430
 msgid "Finished"
-msgstr ""
+msgstr "Ολοκληρώθηκε"
 
 #: src/plugins/rustup/rustup_plugin.py:446
 msgid "Rustup"
