@@ -260,7 +260,7 @@ ide_device_provider_load_finish (IdeDeviceProvider  *self,
                                  GError            **error)
 {
   g_return_val_if_fail (IDE_IS_DEVICE_PROVIDER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   return IDE_DEVICE_PROVIDER_GET_CLASS (self)->load_finish (self, result, error);
 }
