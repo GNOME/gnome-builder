@@ -61,7 +61,7 @@ ide_xml_service_build_tree_cb2 (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_XML_TREE_BUILDER (tree_builder));
-  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   if (NULL == (analysis = ide_xml_tree_builder_build_tree_finish (tree_builder, result, &error)))
@@ -132,7 +132,7 @@ ide_xml_service_load_schema_cb3 (GObject      *object,
   gsize len;
 
   g_assert (G_IS_FILE (file));
-  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (state != NULL);
 
   task = state->task;
@@ -189,7 +189,7 @@ ide_xml_service_load_schema_cb2 (GObject      *object,
   GTask *task;
 
   g_assert (G_IS_FILE (file));
-  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (state != NULL);
 
   task = state->task;
@@ -260,7 +260,7 @@ ide_xml_service_get_analysis_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (DZL_IS_TASK_CACHE (cache));
-  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   if (NULL == (analysis = dzl_task_cache_get_finish (cache, result, &error)))
@@ -387,7 +387,7 @@ ide_xml_service_get_root_node_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   if (NULL == (analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
@@ -501,7 +501,7 @@ ide_xml_service_get_diagnostics_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_XML_SERVICE (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
   if (NULL == (analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
