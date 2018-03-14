@@ -353,7 +353,7 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           g_autofree gchar *free_me_sym = NULL;
           const gchar *filename = match->key;
           const gchar *icon_name = "text-x-generic-symbolic";
-          const gchar *content_type;
+          g_autofree gchar *content_type;
 
           escaped = g_markup_escape_text (match->key, -1);
           markup = dzl_fuzzy_highlight (escaped, delimited->str, FALSE);
