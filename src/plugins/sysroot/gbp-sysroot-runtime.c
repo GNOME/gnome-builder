@@ -26,7 +26,6 @@
 #include "gbp-sysroot-subprocess-launcher.h"
 
 // This is a list of common libdirs to use
-#define BASIC_LIBDIRS "/usr/lib/pkgconfig:/usr/share/pkgconfig"
 #define RUNTIME_PREFIX "sysroot:"
 
 struct _GbpSysrootRuntime
@@ -76,7 +75,7 @@ gbp_sysroot_runtime_get_sysroot_id (GbpSysrootRuntime *self)
 
 static IdeSubprocessLauncher *
 gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
-                                     GError      **error)
+                                     GError     **error)
 {
   IdeSubprocessLauncher *ret;
   GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
@@ -115,18 +114,6 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
 
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_SYSROOT_DIR", g_strdup (sysroot_path), TRUE);
 
-      // Prepend the sysroot path to the BASIC_LIBDIRS values
-      path_parts = g_strsplit (BASIC_LIBDIRS, ":", 0);
-      for (gint i = g_strv_length (path_parts) - 1; i >= 0; i--)
-        {
-          g_autofree gchar *path_i = NULL;
-          g_autofree gchar *libdir_tmp = NULL;
-
-          path_i = g_build_path (G_DIR_SEPARATOR_S, sysroot_path, path_parts[i], NULL);
-          libdir_tmp = g_strjoin (":", path_i, sysroot_libdirs, NULL);
-          sysroot_libdirs = g_steal_pointer (&libdir_tmp);
-        }
-
       pkgconfig_dirs = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, sysroot_id);
       if (pkgconfig_dirs != NULL && g_strcmp0 (pkgconfig_dirs, "") != 0)
         {
@@ -149,6 +136,40 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
   IDE_RETURN (ret);
 }
 
+static gchar **
+gbp_sysroot_runtime_get_system_include_dirs (IdeRuntime *runtime)
+{
+  GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
+  GbpSysrootManager *sysroot_manager = NULL;
+  const gchar *sysroot_id = NULL;
+  const gchar *result_paths[2] = { NULL, NULL };
+  g_autofree gchar *sysroot_path = NULL;
+  g_autofree gchar *full_path = NULL;
+
+  g_return_val_if_fail (GBP_IS_SYSROOT_RUNTIME (self), NULL);
+
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
+  sysroot_path = gbp_sysroot_manager_get_target_path (sysroot_manager, sysroot_id);
+  full_path = g_build_path (G_DIR_SEPARATOR_S, sysroot_path, "/usr/include", NULL);
+  result_paths[0] = full_path;
+
+  return g_strdupv ((char**) result_paths);
+}
+
+static gchar *
+gbp_sysroot_runtime_get_arch (IdeRuntime *runtime)
+{
+  GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
+  GbpSysrootManager *sysroot_manager = NULL;
+  const gchar *sysroot_id = NULL;
+
+  g_return_val_if_fail (GBP_IS_SYSROOT_RUNTIME (self), NULL);
+
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
+  return gbp_sysroot_manager_get_target_arch (sysroot_manager, sysroot_id);
+}
 
 static void
 sysroot_runtime_target_name_changed (GbpSysrootRuntime *self,
@@ -186,6 +207,8 @@ gbp_sysroot_runtime_class_init (GbpSysrootRuntimeClass *klass)
   object_class->constructed = gbp_sysroot_runtime_constructed;
 
   runtime_class->create_launcher = gbp_sysroot_runtime_create_launcher;
+  runtime_class->get_system_include_dirs = gbp_sysroot_runtime_get_system_include_dirs;
+  runtime_class->get_arch = gbp_sysroot_runtime_get_arch;
 }
 
 static void
