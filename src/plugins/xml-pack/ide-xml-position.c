@@ -178,7 +178,7 @@ ide_xml_position_set_siblings    (IdeXmlPosition   *self,
 const gchar *
 ide_xml_position_kind_get_str (IdeXmlPositionKind kind)
 {
-  const gchar *kind_str;
+  const gchar *kind_str = NULL;
 
   switch (kind)
     {
@@ -208,7 +208,7 @@ ide_xml_position_kind_get_str (IdeXmlPositionKind kind)
 const gchar *
 ide_xml_position_detail_get_str (IdeXmlPositionDetail detail)
 {
-  const gchar *detail_str;
+  const gchar *detail_str = NULL;
 
   switch (detail)
     {

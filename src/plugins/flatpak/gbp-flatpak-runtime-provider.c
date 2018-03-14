@@ -322,7 +322,6 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *docs_id = NULL;
-  GbpFlatpakRuntimeProvider *self;
   IdeTransferManager *transfer_manager;
   InstallRuntime *install;
   GCancellable *cancellable;
@@ -335,14 +334,11 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
   g_assert (!g_task_get_completed (task));
 
-  self = g_task_get_source_object (task);
   install = g_task_get_task_data (task);
   cancellable = g_task_get_cancellable (task);
 
   g_assert (install != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (self != NULL);
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
 
   transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
 

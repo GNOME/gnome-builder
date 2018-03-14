@@ -1196,7 +1196,6 @@ ide_buffer_symbol_resolver_added (IdeExtensionSetAdapter *adapter,
                                   gpointer                user_data)
 {
   IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
-  IdeBuffer *self = user_data;
 
   IDE_ENTRY;
 
@@ -1204,7 +1203,7 @@ ide_buffer_symbol_resolver_added (IdeExtensionSetAdapter *adapter,
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
-  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_BUFFER (user_data));
 
   IDE_TRACE_MSG ("Loading symbol resolver %s", G_OBJECT_TYPE_NAME (resolver));
 
@@ -1220,7 +1219,6 @@ ide_buffer_symbol_resolver_removed (IdeExtensionSetAdapter *adapter,
                                     gpointer                user_data)
 {
   IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
-  IdeBuffer *self = user_data;
 
   IDE_ENTRY;
 
@@ -1228,7 +1226,7 @@ ide_buffer_symbol_resolver_removed (IdeExtensionSetAdapter *adapter,
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
-  g_assert (IDE_IS_BUFFER (self));
+  g_assert (IDE_IS_BUFFER (user_data));
 
   IDE_TRACE_MSG ("Unloading symbol resolver %s", G_OBJECT_TYPE_NAME (resolver));
 

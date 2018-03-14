@@ -308,9 +308,7 @@ static void
 gbp_flatpak_runtime_prepare_configuration (IdeRuntime       *runtime,
                                            IdeConfiguration *configuration)
 {
-  GbpFlatpakRuntime* self = (GbpFlatpakRuntime *)runtime;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (GBP_IS_FLATPAK_RUNTIME (runtime));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   ide_configuration_set_prefix (configuration, "/app");

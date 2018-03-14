@@ -428,11 +428,10 @@ static gboolean
 ide_word_completion_provider_match (GtkSourceCompletionProvider *provider,
                                     GtkSourceCompletionContext  *context)
 {
-  IdeWordCompletionProvider *self = (IdeWordCompletionProvider *) provider;
   GtkSourceCompletionActivation activation;
   GtkTextIter iter;
 
-  g_assert (IDE_IS_WORD_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_WORD_COMPLETION_PROVIDER (provider));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
   if (!gtk_source_completion_context_get_iter (context, &iter))

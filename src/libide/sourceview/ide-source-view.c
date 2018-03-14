@@ -4989,11 +4989,10 @@ ide_source_view_rename_edits_applied (GObject      *object,
                                       gpointer      user_data)
 {
   g_autoptr(IdeSourceView) self = user_data;
-  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (IDE_IS_BUFFER_MANAGER (object));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_SOURCE_VIEW (self));
 

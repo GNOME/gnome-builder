@@ -330,7 +330,7 @@ ide_xml_tree_builder_parse_worker (GTask        *task,
           const gchar *schema_data;
           gsize schema_size;
           g_autoptr (IdeDiagnostics) diagnostics = NULL;
-          gboolean schema_ret;
+          gboolean schema_ret = FALSE;
 
           if (entry->kind == SCHEMA_KIND_RNG || entry->kind == SCHEMA_KIND_XML_SCHEMA)
             {
@@ -447,7 +447,6 @@ ide_xml_tree_builder_build_tree_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
-  IdeXmlParser *parser = (IdeXmlParser *)object;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
@@ -455,7 +454,7 @@ ide_xml_tree_builder_build_tree_cb (GObject      *object,
   TreeBuilderState *state;
   GCancellable *cancellable;
 
-  g_assert (IDE_IS_XML_PARSER (parser));
+  g_assert (IDE_IS_XML_PARSER (object));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 

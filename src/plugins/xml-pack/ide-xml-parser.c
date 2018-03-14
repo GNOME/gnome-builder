@@ -316,12 +316,12 @@ ide_xml_parser_warning_sax_cb (ParserState    *state,
                                const xmlChar  *name,
                                ...)
 {
-  IdeXmlParser *self = (IdeXmlParser *)state->self;
   IdeDiagnostic *diagnostic;
   g_autofree gchar *msg = NULL;
   va_list var_args;
 
-  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_XML_PARSER (state->self));
 
   va_start (var_args, name);
   msg = g_strdup_vprintf ((const gchar *)name, var_args);
@@ -399,12 +399,12 @@ ide_xml_parser_fatal_error_sax_cb (ParserState    *state,
                                    const xmlChar  *name,
                                    ...)
 {
-  IdeXmlParser *self = (IdeXmlParser *)state->self;
   IdeDiagnostic *diagnostic;
   g_autofree gchar *msg = NULL;
   va_list var_args;
 
-  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_XML_PARSER (state->self));
 
   va_start (var_args, name);
   msg = g_strdup_vprintf ((const gchar *)name, var_args);
@@ -439,9 +439,8 @@ ide_xml_parser_external_subset_sax_cb (ParserState   *state,
                                        const xmlChar *external_id,
                                        const xmlChar *system_id)
 {
-  IdeXmlParser *self = (IdeXmlParser *)state->self;
-
-  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_XML_PARSER (state->self));
 }
 
 static GFile *

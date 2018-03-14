@@ -608,14 +608,13 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
                                                       gpointer      task_data,
                                                       GCancellable *cancellable)
 {
-  GbpFlatpakApplicationAddin *self = source_object;
   InstallRequest *request = task_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_assert (G_IS_TASK (task));
-  g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
+  g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (source_object));
   g_assert (request != NULL);
   g_assert (request->id != NULL);
   g_assert (request->arch != NULL);

@@ -61,13 +61,9 @@ static void
 manifest_save_tick (GTask *task)
 {
   g_autoptr(GbpFlatpakManifest) manifest = NULL;
-  GbpFlatpakConfigurationProvider *self;
   GPtrArray *manifests;
 
   g_assert (G_IS_TASK (task));
-
-  self = g_task_get_source_object (task);
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
 
   manifests = g_task_get_task_data (task);
   g_assert (manifests != NULL);
@@ -606,7 +602,6 @@ static void
 gbp_flatpak_configuration_provider_duplicate (IdeConfigurationProvider *provider,
                                               IdeConfiguration         *configuration)
 {
-  GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)provider;
   GbpFlatpakManifest *manifest = (GbpFlatpakManifest *)configuration;
   g_autofree gchar *path = NULL;
   g_autofree gchar *base = NULL;
@@ -614,7 +609,7 @@ gbp_flatpak_configuration_provider_duplicate (IdeConfigurationProvider *provider
   gchar *dot;
   GFile *file;
 
-  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_CONFIGURATION_PROVIDER (provider));
   g_assert (GBP_IS_FLATPAK_MANIFEST (manifest));
 
   file = gbp_flatpak_manifest_get_file (manifest);

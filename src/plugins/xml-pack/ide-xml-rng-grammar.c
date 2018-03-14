@@ -25,14 +25,9 @@ dump_defines_func (const gchar *name,
                    GPtrArray   *array,
                    gpointer     data)
 {
-  IdeXmlRngGrammar *self = (IdeXmlRngGrammar *)data;
-  IdeXmlRngDefine *def;
-
-  g_assert (self != NULL);
-
-  for (gint i = 0; i <array->len; ++i)
+  for (guint i = 0; i < array->len; ++i)
     {
-      def = g_ptr_array_index (array, i);
+      IdeXmlRngDefine *def = g_ptr_array_index (array, i);
       ide_xml_rng_define_dump_tree (def, TRUE);
     }
 }

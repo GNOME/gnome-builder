@@ -702,10 +702,9 @@ static gboolean
 gb_project_tree_builder_node_draggable (DzlTreeBuilder *builder,
                                         DzlTreeNode    *node)
 {
-  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
   GObject *item;
 
-  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
   g_assert (DZL_IS_TREE_NODE (node));
 
   item = dzl_tree_node_get_item (node);
@@ -718,10 +717,9 @@ gb_project_tree_builder_node_droppable (DzlTreeBuilder   *builder,
                                         DzlTreeNode      *node,
                                         GtkSelectionData *data)
 {
-  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
   GObject *item;
 
-  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
   g_assert (DZL_IS_TREE_NODE (node));
 
   item = dzl_tree_node_get_item (node);
@@ -734,10 +732,9 @@ gb_project_tree_builder_drag_data_get (DzlTreeBuilder   *builder,
                                        DzlTreeNode      *node,
                                        GtkSelectionData *data)
 {
-  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
   GObject *item;
 
-  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
   g_assert (DZL_IS_TREE_NODE (node));
 
   if (gtk_selection_data_get_target (data) != _ATOM ("text/uri-list"))
@@ -764,9 +761,7 @@ gb_project_tree_builder_drag_data_received (DzlTreeBuilder      *builder,
                                             GdkDragAction        action,
                                             GtkSelectionData    *data)
 {
-  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
-
-  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
   g_assert (DZL_IS_TREE_NODE (drop_node));
   g_assert (data != NULL);
   g_assert (action == GDK_ACTION_COPY || action == GDK_ACTION_MOVE);
@@ -843,11 +838,10 @@ gb_project_tree_builder_drag_node_received (DzlTreeBuilder      *builder,
                                             GdkDragAction        action,
                                             GtkSelectionData    *data)
 {
-  GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)builder;
   GObject *drag_item;
   GObject *drop_item;
 
-  g_assert (GB_IS_PROJECT_TREE_BUILDER (self));
+  g_assert (GB_IS_PROJECT_TREE_BUILDER (builder));
   g_assert (DZL_IS_TREE_NODE (drag_node));
   g_assert (DZL_IS_TREE_NODE (drop_node));
   g_assert (data != NULL);

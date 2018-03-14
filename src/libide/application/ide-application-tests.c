@@ -56,12 +56,16 @@ ide_application_run_tests_cb (GObject      *object,
                               gpointer      user_data)
 {
   AsyncTest *test = user_data;
-  GError *error = NULL;
+  g_autoptr(GError) error = NULL;
   gboolean ret;
 
   ret = test->test_completion (result, &error);
-  g_assert_no_error (error);
-  g_assert (ret == TRUE);
+
+  if (error != NULL)
+    g_error ("%s: %s", g_quark_to_string (error->domain), error->message);
+
+  if (ret == FALSE)
+    g_error ("Test failed without an error");
 
   if (test->self->test_funcs)
     ide_application_run_next_test (test->self);

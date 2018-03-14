@@ -293,14 +293,13 @@ gbp_sysprof_workbench_addin_open_worker (GTask        *task,
                                          gpointer      task_data,
                                          GCancellable *cancellable)
 {
-  GbpSysprofWorkbenchAddin *self = source_object;
   g_autofree gchar *path = NULL;
   g_autoptr(GError) error = NULL;
   SpCaptureReader *reader;
   GFile *file = task_data;
 
   g_assert (G_IS_TASK (task));
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (source_object));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 

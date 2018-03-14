@@ -197,10 +197,9 @@ ide_build_panel_create_stage_row_cb (gpointer data,
                                      gpointer user_data)
 {
   IdeBuildStage *stage = data;
-  IdeBuildPanel *self = user_data;
 
   g_assert (IDE_IS_BUILD_STAGE (stage));
-  g_assert (IDE_IS_BUILD_PANEL (self));
+  g_assert (IDE_IS_BUILD_PANEL (user_data));
 
   return ide_build_stage_row_new (stage);
 }

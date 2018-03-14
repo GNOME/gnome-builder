@@ -285,7 +285,7 @@ process_matching_state (MatchingState   *state,
 {
   IdeXmlRngDefine *old_define;
   IdeXmlRngDefineType type;
-  GPtrArray *match_children;
+  GPtrArray *match_children = NULL;
   gboolean old_optional;
 
   g_assert (state != NULL);
