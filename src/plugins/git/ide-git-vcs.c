@@ -616,7 +616,6 @@ ide_git_vcs_list_status_worker (GTask        *task,
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(GgitRepository) repository = NULL;
   g_autoptr(GgitStatusOptions) options = NULL;
-  g_autoptr(GString) pathspec = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *relative = NULL;
   gchar *strv[] = { NULL, NULL };
