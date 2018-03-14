@@ -87,20 +87,22 @@ xml_parse (GbpDevhelpDocumentationProvider *self,
            gchar                           *func_name,
            IdeDocumentationInfo            *info)
 {
-  GFileInputStream *file_stream;
-  GDataInputStream *data_stream;
+  g_autoptr(GFileInputStream) file_stream = NULL;
+  g_autoptr(GDataInputStream) data_stream = NULL;
   g_autoptr(GString) header = g_string_new (NULL);
   g_autoptr(GString) text = g_string_new (NULL);
   g_autoptr(GError) error_file = NULL;
   g_autoptr(GError) error_stream = NULL;
-  GRegex *start_text;
+  g_autoptr(GFile) xml_file = NULL;
+  g_autoptr(GRegex) start_text = NULL;
 
-  const gchar *regex_char;
+  g_autofree gchar *regex_char = NULL;
   gboolean informal_example_bool = FALSE;
   gboolean found_tag = FALSE;
   gboolean text_tag = FALSE;
 
-  file_stream = g_file_read (g_file_new_for_uri (file_name), NULL, &error_file);
+  xml_file = g_file_new_for_uri (file_name);
+  file_stream = g_file_read (xml_file, NULL, &error_file);
   if (file_stream == NULL)
     return FALSE;
 
@@ -182,9 +184,6 @@ xml_parse (GbpDevhelpDocumentationProvider *self,
   ide_documentation_proposal_set_header (self->proposal, header->str);
   ide_documentation_proposal_set_text (self->proposal, text->str);
 
-  g_string_free (g_steal_pointer (&header), TRUE);
-  g_string_free (g_steal_pointer (&text), TRUE);
-
   return TRUE;
 }
 
@@ -201,7 +200,7 @@ get_devhelp_book (GbpDevhelpDocumentationProvider *self,
   if (link == NULL)
     return FALSE;
 
-  g_free (self->uri);
+  g_clear_pointer (&self->uri, g_free);
   self->uri = dh_link_get_uri (link);
 
   return TRUE;
