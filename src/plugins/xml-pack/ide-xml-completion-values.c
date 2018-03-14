@@ -197,7 +197,7 @@ process_matching_state (MatchingState   *state,
 {
   IdeXmlRngDefine *old_define;
   IdeXmlRngDefineType type;
-  GPtrArray *match_values;
+  GPtrArray *match_values = NULL;
 
   g_assert (state != NULL);
   g_assert (define != NULL);

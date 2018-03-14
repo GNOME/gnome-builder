@@ -454,14 +454,10 @@ ide_ctags_index_init_finish (GAsyncInitable  *initable,
                              GAsyncResult    *result,
                              GError         **error)
 {
-  IdeCtagsIndex *self = (IdeCtagsIndex *)initable;
-  GTask *task = (GTask *)result;
-
-  g_assert (IDE_IS_CTAGS_INDEX (self));
+  g_assert (IDE_IS_CTAGS_INDEX (initable));
   g_assert (G_IS_TASK (result));
-  g_assert (G_IS_TASK (task));
 
-  return g_task_propagate_boolean (task, error);
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void

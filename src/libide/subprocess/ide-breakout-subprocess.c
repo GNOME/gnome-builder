@@ -566,9 +566,7 @@ ide_breakout_subprocess_send_signal (IdeSubprocess *subprocess,
 static void
 ide_breakout_subprocess_force_exit (IdeSubprocess *subprocess)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
-
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
 
   ide_breakout_subprocess_send_signal (subprocess, SIGKILL);
 }
@@ -835,14 +833,13 @@ ide_breakout_subprocess_communicate_finish (IdeSubprocess  *subprocess,
                                             GBytes        **stderr_buf,
                                             GError        **error)
 {
-  IdeBreakoutSubprocess *self = (IdeBreakoutSubprocess *)subprocess;
   CommunicateState *state;
   GTask *task = (GTask *)result;
   gboolean success;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (self));
+  g_assert (IDE_IS_BREAKOUT_SUBPROCESS (subprocess));
   g_assert (G_IS_TASK (task));
 
   g_object_ref (task);

@@ -159,7 +159,6 @@ ide_persistent_map_builder_write_worker (GTask        *task,
                                          gpointer      task_data,
                                          GCancellable *cancellable)
 {
-  IdePersistentMapBuilder *self = source_object;
   BuildState *state = task_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) data = NULL;
@@ -170,7 +169,7 @@ ide_persistent_map_builder_write_worker (GTask        *task,
   GVariant *metadata;
 
   g_assert (G_IS_TASK (task));
-  g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (self));
+  g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (source_object));
   g_assert (state != NULL);
   g_assert (state->keys != NULL);
   g_assert (state->keys_hash != NULL);

@@ -3256,7 +3256,6 @@ ide_build_pipeline_reaper_cb (GObject      *object,
   IdeBuildPipeline *self;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  GCancellable *cancellable;
   TaskData *td;
 
   IDE_ENTRY;
@@ -3271,10 +3270,7 @@ ide_build_pipeline_reaper_cb (GObject      *object,
   g_assert (td->task == task);
   g_assert (td->type == TASK_REBUILD);
 
-  cancellable = g_task_get_cancellable (task);
   self = g_task_get_source_object (task);
-
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (IDE_IS_BUILD_PIPELINE (self));
 
   /* Make sure our reaper completed or else we bail */

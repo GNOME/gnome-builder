@@ -159,8 +159,6 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
   g_autoptr(GSubprocessLauncher) launcher = NULL;
   GSubprocess *subprocess = NULL;
   GPtrArray *args;
-  gchar *config_path;
-  gchar *src_path;
   g_autofree gchar *tmp_workdir = NULL;
   g_autofree gchar *tmp_config_path = NULL;
   g_autofree gchar *tmp_src_path = NULL;
@@ -168,11 +166,6 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (state != NULL);
 
-  config_path = g_file_get_path (state->config_file);
-  src_path = g_file_get_path (state->src_file);
-
-  g_assert (!dzl_str_empty0 (config_path));
-  g_assert (!dzl_str_empty0 (src_path));
   g_assert (!dzl_str_empty0 (state->lang_id));
 
   tmp_workdir = g_build_filename (self->tmp_dir, "clang-XXXXXX.txt", NULL);

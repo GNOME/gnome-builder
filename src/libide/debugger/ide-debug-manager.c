@@ -797,11 +797,10 @@ static void
 ide_debug_manager_reset_breakpoints_cb (gpointer item,
                                         gpointer user_data)
 {
-  IdeDebugManager *self = user_data;
   IdeDebuggerBreakpoint *breakpoint = item;
 
   g_assert (IDE_IS_DEBUGGER_BREAKPOINT (breakpoint));
-  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (IDE_IS_DEBUG_MANAGER (user_data));
 
   _ide_debugger_breakpoint_reset (breakpoint);
 }

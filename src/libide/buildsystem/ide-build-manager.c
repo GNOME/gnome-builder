@@ -1187,7 +1187,6 @@ ide_build_manager_execute_cb (GObject      *object,
                               gpointer      user_data)
 {
   IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
-  IdeBuildManager *self;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
@@ -1196,9 +1195,6 @@ ide_build_manager_execute_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
-
-  self = g_task_get_source_object (task);
-  g_assert (IDE_IS_BUILD_MANAGER (self));
 
   if (!ide_build_pipeline_execute_finish (pipeline, result, &error))
     {
@@ -1391,16 +1387,12 @@ ide_build_manager_clean_cb (GObject      *object,
   IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeBuildManager *self;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
-
-  self = g_task_get_source_object (task);
-  g_assert (IDE_IS_BUILD_MANAGER (self));
 
   if (!ide_build_pipeline_clean_finish (pipeline, result, &error))
     g_task_return_error (task, g_steal_pointer (&error));

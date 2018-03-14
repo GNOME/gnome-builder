@@ -516,12 +516,11 @@ gbp_cmake_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
                                                GAsyncResult    *result,
                                                GError         **error)
 {
-  GbpCMakeBuildSystem *self = (GbpCMakeBuildSystem *)build_system;
   gchar **build_flags;
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_CMAKE_BUILD_SYSTEM (self));
+  g_assert (GBP_IS_CMAKE_BUILD_SYSTEM (build_system));
   g_assert (G_IS_TASK (result));
 
   build_flags = g_task_propagate_pointer (G_TASK (result), error);

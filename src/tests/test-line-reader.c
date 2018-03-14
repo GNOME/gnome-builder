@@ -19,6 +19,10 @@
 #include <ide.h>
 #include <string.h>
 
+#ifdef G_DISABLE_ASSERT
+# undef G_DISABLE_ASSERT
+#endif
+
 static void
 test_line_reader_basic (void)
 {

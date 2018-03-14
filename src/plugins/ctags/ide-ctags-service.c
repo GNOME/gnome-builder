@@ -465,10 +465,11 @@ build_system_tags_cb (GObject      *object,
                       GAsyncResult *result,
                       gpointer      user_data)
 {
-  IdeTagsBuilder *builder = (IdeTagsBuilder *)object;
   g_autoptr(IdeCtagsService) self = user_data;
 
-  g_assert (IDE_IS_TAGS_BUILDER (builder));
+  g_assert (IDE_IS_TAGS_BUILDER (object));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_CTAGS_SERVICE (self));
 
   ide_ctags_service_queue_mine (self);
 }

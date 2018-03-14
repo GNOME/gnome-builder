@@ -326,13 +326,12 @@ ide_langserv_rename_provider_rename_finish (IdeRenameProvider  *provider,
                                             GPtrArray         **edits,
                                             GError            **error)
 {
-  IdeLangservRenameProvider *self = (IdeLangservRenameProvider *)provider;
   g_autoptr(GPtrArray) ar = NULL;
   gboolean ret;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_LANGSERV_RENAME_PROVIDER (self));
+  g_assert (IDE_IS_LANGSERV_RENAME_PROVIDER (provider));
   g_assert (G_IS_TASK (result));
 
   ar = g_task_propagate_pointer (G_TASK (result), error);

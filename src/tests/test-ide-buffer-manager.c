@@ -23,6 +23,10 @@
 #include "application/ide-application-tests.h"
 #include "../plugins/gnome-builder-plugins.h"
 
+#ifdef G_DISABLE_ASSERT
+# undef G_DISABLE_ASSERT
+#endif
+
 static gint   save_count;
 static gint   load_count;
 static gchar *tmpfilename;
