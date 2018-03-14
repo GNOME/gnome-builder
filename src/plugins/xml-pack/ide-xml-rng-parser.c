@@ -55,16 +55,16 @@ static IdeXmlSchema     *parse_document             (IdeXmlRngParser    *self,
 
 typedef enum
 {
-  XML_RNG_FLAGS_IN_ATTRIBUTE	   = 1 << 0,
-  XML_RNG_FLAGS_IN_ONEORMORE	   = 1 << 1,
-  XML_RNG_FLAGS_IN_LIST		       = 1 << 2,
-  XML_RNG_FLAGS_IN_DATAEXCEPT	   = 1 << 3,
-  XML_RNG_FLAGS_IN_START		     = 1 << 4,
-  XML_RNG_FLAGS_IN_OOMGROUP		   = 1 << 5,
+  XML_RNG_FLAGS_IN_ATTRIBUTE     = 1 << 0,
+  XML_RNG_FLAGS_IN_ONEORMORE     = 1 << 1,
+  XML_RNG_FLAGS_IN_LIST          = 1 << 2,
+  XML_RNG_FLAGS_IN_DATAEXCEPT    = 1 << 3,
+  XML_RNG_FLAGS_IN_START         = 1 << 4,
+  XML_RNG_FLAGS_IN_OOMGROUP      = 1 << 5,
   XML_RNG_FLAGS_IN_OOMINTERLEAVE = 1 << 6,
-  XML_RNG_FLAGS_IN_EXTERNALREF	 = 1 << 7,
-  XML_RNG_FLAGS_IN_ANYEXCEPT	   = 1 << 8,
-  XML_RNG_FLAGS_IN_NSEXCEPT		   = 1 << 9
+  XML_RNG_FLAGS_IN_EXTERNALREF   = 1 << 7,
+  XML_RNG_FLAGS_IN_ANYEXCEPT     = 1 << 8,
+  XML_RNG_FLAGS_IN_NSEXCEPT      = 1 << 9
 } XmlRngFlags;
 
 typedef enum

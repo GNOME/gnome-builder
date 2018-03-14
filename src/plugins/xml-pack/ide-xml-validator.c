@@ -244,7 +244,7 @@ ide_xml_validator_set_schema (IdeXmlValidator  *self,
     }
   else if (kind == SCHEMA_KIND_RNG)
     {
-      if (NULL != (rng_parser = xmlRelaxNGNewMemParserCtxt	(data, size)) &&
+      if (NULL != (rng_parser = xmlRelaxNGNewMemParserCtxt (data, size)) &&
           NULL != (self->rng = xmlRelaxNGParse (rng_parser)))
         ret = TRUE;
     }
