@@ -2783,9 +2783,9 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
   else if (data->symbol == NULL)
     {
       g_task_return_new_error (task,
-		      G_IO_ERROR,
-		      G_IO_ERROR_NOT_FOUND,
-		      "Symbol not found");
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "Symbol not found");
     }
   else
     {

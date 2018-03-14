@@ -45,7 +45,7 @@ get_buffer_range_indent (GtkTextBuffer *buffer,
   while (!gtk_text_iter_ends_line (&iter) && g_unichar_isspace(gtk_text_iter_get_char (&iter)))
     {
       gtk_text_iter_forward_char (&iter);
-     	++indent;
+      ++indent;
     }
 
   return indent;

@@ -563,7 +563,7 @@ diff_line_cb (GgitDiffDelta *delta,
   type = ggit_diff_line_get_origin (line);
 
   new_lineno = ggit_diff_line_get_new_lineno (line);
-	old_lineno = ggit_diff_line_get_old_lineno (line);
+  old_lineno = ggit_diff_line_get_old_lineno (line);
 
   /*
    * The callbacks here are are somewhat cryptic and have been little
