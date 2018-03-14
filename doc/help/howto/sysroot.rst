@@ -4,9 +4,10 @@ Use a Custom Sysroot
 
 If you need to use a custom sysroot. You can configure a new target in `Preferences->SDKs`.
 
-There are three fields to fill:
+There are four fields to fill:
 
 - Name: The name of your choice describing this sysroot.
+- Arch: The architecture targeted by the sysroot.
 - Sysroot path: The absolute path on your filesystem leading to the sysroot.
 - Additional pkg-config path: (optional) A colon separated list of absolute path leading to pkg-config folders of the sysroot.
 
@@ -18,5 +19,6 @@ The configuration will be stored in ~/.config/gnome-builder/sysroot/general.conf
 
     [Sysroot 0]
     Name=My Sysroot 😎
+    Arch=x86_64
     Path=/path/to/my_sysroot
     PkgConfigPath=/path/to/my_sysroot/usr/lib/x86_64-linux-gnu/pkgconfig

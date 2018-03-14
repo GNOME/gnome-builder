@@ -28,8 +28,9 @@ struct _GbpSysrootPreferencesRow
   gchar *sysroot_id;
   GtkLabel *display_name;
   GtkEntry *name_entry;
-  GtkEntry *sysroot_entry;
+  DzlFileChooserEntry *sysroot_entry;
   GtkEntry *pkg_config_entry;
+  GtkComboBox *arch_combobox;
   GtkButton *delete_button;
   GtkWidget *popover;
 };
@@ -61,17 +62,37 @@ sysroot_preferences_row_name_changed (GbpSysrootPreferencesRow *self,
 
 static void
 sysroot_preferences_row_sysroot_changed (GbpSysrootPreferencesRow *self,
+                                         GParamSpec               *pspec,
                                          gpointer                  user_data)
+{
+  GbpSysrootManager *sysroot_manager = NULL;
+  g_autofree gchar *sysroot_path = NULL;
+  GFile *file;
+
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
+  g_assert (DZL_IS_FILE_CHOOSER_ENTRY (user_data));
+
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  file = dzl_file_chooser_entry_get_file (DZL_FILE_CHOOSER_ENTRY (user_data));
+  sysroot_path = g_file_get_path (file);
+  gbp_sysroot_manager_set_target_path (sysroot_manager,
+                                       self->sysroot_id,
+                                       sysroot_path);
+}
+
+static void
+sysroot_preferences_row_arch_changed (GbpSysrootPreferencesRow *self,
+                                      gpointer                  user_data)
 {
   GbpSysrootManager *sysroot_manager = NULL;
 
   g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
-  g_assert (GTK_IS_ENTRY (user_data));
+  g_assert (GTK_IS_COMBO_BOX (user_data));
 
   sysroot_manager = gbp_sysroot_manager_get_default ();
-  gbp_sysroot_manager_set_target_path (sysroot_manager,
+  gbp_sysroot_manager_set_target_arch (sysroot_manager,
                                        self->sysroot_id,
-                                       gtk_entry_get_text (GTK_ENTRY (user_data)));
+                                       gtk_combo_box_get_active_id (GTK_COMBO_BOX (user_data)));
 }
 
 static void
@@ -87,6 +108,31 @@ sysroot_preferences_row_pkg_config_changed (GbpSysrootPreferencesRow *self,
   gbp_sysroot_manager_set_target_pkg_config_path (sysroot_manager,
                                                   self->sysroot_id,
                                                   gtk_entry_get_text (GTK_ENTRY (user_data)));
+}
+
+static void
+sysroot_preferences_row_target_changed (GbpSysrootPreferencesRow                *self,
+                                        const gchar                             *target,
+                                        GbpSysrootManagerTargetModificationType  mod_type,
+                                        gpointer                                 user_data)
+{
+  GbpSysrootManager *sysroot_manager = NULL;
+  g_autofree gchar *value = NULL;
+
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
+  g_assert (GBP_IS_SYSROOT_MANAGER (user_data));
+
+  if (mod_type != GBP_SYSROOT_MANAGER_TARGET_CHANGED)
+    return;
+
+  if (g_strcmp0 (target, self->sysroot_id) != 0)
+    return;
+
+  sysroot_manager = GBP_SYSROOT_MANAGER (user_data);
+  value = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager,
+                                                          self->sysroot_id);
+  if (value != NULL)
+    gtk_entry_set_text (self->pkg_config_entry, value);
 }
 
 static void
@@ -181,14 +227,15 @@ static void
 gbp_sysroot_preferences_row_constructed (GObject *object)
 {
   GbpSysrootManager *sysroot_manager = NULL;
-  gchar *value;
+  g_autofree gchar *value = NULL;
   GbpSysrootPreferencesRow *self = (GbpSysrootPreferencesRow *) object;
 
   sysroot_manager = gbp_sysroot_manager_get_default ();
   gtk_entry_set_text (self->name_entry,
                       gbp_sysroot_manager_get_target_name (sysroot_manager, self->sysroot_id));
-  gtk_entry_set_text (self->sysroot_entry,
-                      gbp_sysroot_manager_get_target_path (sysroot_manager, self->sysroot_id));
+  gtk_combo_box_set_active_id (self->arch_combobox, gbp_sysroot_manager_get_target_arch (sysroot_manager, self->sysroot_id));
+  dzl_file_chooser_entry_set_file (self->sysroot_entry,
+                      g_file_new_for_path (gbp_sysroot_manager_get_target_path (sysroot_manager, self->sysroot_id)));
   value = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, self->sysroot_id);
   if (value != NULL)
     gtk_entry_set_text (self->pkg_config_entry, value);
@@ -199,8 +246,14 @@ gbp_sysroot_preferences_row_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (self->sysroot_entry,
+  g_signal_connect_object (self->arch_combobox,
                            "changed",
+                           G_CALLBACK (sysroot_preferences_row_arch_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->sysroot_entry,
+                           "notify::file",
                            G_CALLBACK (sysroot_preferences_row_sysroot_changed),
                            self,
                            G_CONNECT_SWAPPED);
@@ -208,6 +261,12 @@ gbp_sysroot_preferences_row_constructed (GObject *object)
   g_signal_connect_object (self->pkg_config_entry,
                            "changed",
                            G_CALLBACK (sysroot_preferences_row_pkg_config_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (sysroot_manager,
+                           "target-changed",
+                           G_CALLBACK (sysroot_preferences_row_target_changed),
                            self,
                            G_CONNECT_SWAPPED);
 }
@@ -236,6 +295,7 @@ gbp_sysroot_preferences_row_class_init (GbpSysrootPreferencesRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, display_name);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, name_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, arch_combobox);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, sysroot_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, pkg_config_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, delete_button);

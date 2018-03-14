@@ -17,6 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gbp-sysroot-manager"
+#define BASIC_LIBDIRS "/usr/lib/pkgconfig:/usr/share/pkgconfig"
+
 #include "gbp-sysroot-manager.h"
 
 struct _GbpSysrootManager
@@ -30,6 +33,7 @@ G_DEFINE_TYPE (GbpSysrootManager, gbp_sysroot_manager, G_TYPE_OBJECT)
 enum {
   TARGET_MODIFIED,
   TARGET_NAME_CHANGED,
+  TARGET_ARCH_CHANGED,
   N_SIGNALS
 };
 
@@ -39,7 +43,7 @@ static gchar *
 sysroot_manager_get_path (void)
 {
   g_autofree gchar *directory_path = NULL;
-  gchar *conf_file = NULL;
+  g_autofree gchar *conf_file = NULL;
 
   directory_path = g_build_filename (g_get_user_config_dir (),
                                      ide_get_program_name (),
@@ -49,6 +53,69 @@ sysroot_manager_get_path (void)
   g_mkdir_with_parents (directory_path, 0750);
   conf_file = g_build_filename (directory_path, "general.conf", NULL);
   return g_steal_pointer (&conf_file);
+}
+
+/**
+ * sysroot_manager_find_additional_pkgconfig_paths:
+ *
+ * Returns a colon-separated list of additional pkgconfig paths
+ *
+ * Returns: (transfer full) (nullable): additional guessed paths
+ */
+static gchar *
+sysroot_manager_find_additional_pkgconfig_paths (GbpSysrootManager *self,
+                                                 const gchar       *target)
+{
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *lib64_path = NULL;
+  g_autofree gchar *libmultiarch_path = NULL;
+  g_autofree gchar *returned_paths = NULL;
+
+  g_assert (GBP_IS_SYSROOT_MANAGER (self));
+  g_assert (self->key_file != NULL);
+  g_assert (target != NULL);
+
+  path = gbp_sysroot_manager_get_target_path (self, target);
+  lib64_path = g_build_path (G_DIR_SEPARATOR_S, path, "usr", "lib64", "pkgconfig", NULL);
+  libmultiarch_path = g_build_path (G_DIR_SEPARATOR_S, path, "usr", "lib", "pkg-config.multiarch", NULL);
+
+  if (g_file_test (lib64_path, G_FILE_TEST_EXISTS))
+    {
+      returned_paths = lib64_path;
+    }
+
+  if (g_file_test (libmultiarch_path, G_FILE_TEST_EXISTS))
+    {
+      g_autoptr(GFileInputStream) file_stream = NULL;
+      g_autoptr(GFile) multiarch_file = g_file_new_for_path (libmultiarch_path);
+      g_autoptr(GError) file_error = NULL;
+
+      file_stream = g_file_read (multiarch_file, NULL, &file_error);
+      if (file_error == NULL)
+        {
+          g_autoptr(GDataInputStream) data_stream = NULL;
+          g_autofree gchar *line = NULL;
+
+          data_stream = g_data_input_stream_new (G_INPUT_STREAM (file_stream));
+          while ((line = (gchar *)g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &file_error)) != NULL)
+            {
+              g_autofree gchar *multiarch_path = NULL;
+
+              if (file_error != NULL)
+                {
+                  g_critical ("Error while reading \"%s\": %s", libmultiarch_path, file_error->message);
+                  break;
+                }
+
+              multiarch_path = g_build_path (G_DIR_SEPARATOR_S, path, "usr", "lib", line, "pkgconfig", NULL);
+              returned_paths = g_strjoin (":", multiarch_path, returned_paths, NULL);
+            }
+        }
+      else
+        g_critical ("Unable to read \"%s\": %s", libmultiarch_path, file_error->message);
+    }
+
+  return g_strdup (returned_paths);
 }
 
 static void
@@ -101,7 +168,7 @@ gbp_sysroot_manager_create_target (GbpSysrootManager *self)
 
   for (guint i = 0; i < UINT_MAX; i++)
     {
-      gchar * result;
+      gchar *result;
       g_autoptr(GString) sysroot_name = g_string_new (NULL);
 
       g_string_printf (sysroot_name, "Sysroot %u", i);
@@ -181,6 +248,49 @@ gbp_sysroot_manager_get_target_name (GbpSysrootManager *self,
 }
 
 /**
+ * gbp_sysroot_manager_set_target_arch:
+ * @self: a #GbpSysrootManager
+ * @target: the unique identifier of the target
+ * @name: the architecture of the target
+ *
+ * Sets the architecture of the target.
+ */
+void
+gbp_sysroot_manager_set_target_arch (GbpSysrootManager *self,
+                                     const gchar       *target,
+                                     const gchar       *arch)
+{
+  g_return_if_fail (GBP_IS_SYSROOT_MANAGER (self));
+  g_return_if_fail (self->key_file != NULL);
+  g_return_if_fail (target != NULL);
+
+  g_key_file_set_string (self->key_file, target, "Arch", arch);
+  g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, GBP_SYSROOT_MANAGER_TARGET_CHANGED);
+  g_signal_emit (self, signals[TARGET_ARCH_CHANGED], 0, target, arch);
+  sysroot_manager_save (self);
+}
+
+/**
+ * gbp_sysroot_manager_get_target_arch:
+ * @self: a #GbpSysrootManager
+ * @target: the unique identifier of the target
+ *
+ * Gets the architecture of the target.
+ *
+ * Returns: (transfer full): the architecture of the target.
+ */
+gchar *
+gbp_sysroot_manager_get_target_arch (GbpSysrootManager *self,
+                                     const gchar       *target)
+{
+  g_return_val_if_fail (GBP_IS_SYSROOT_MANAGER (self), NULL);
+  g_return_val_if_fail (self->key_file != NULL, NULL);
+  g_return_val_if_fail (target != NULL, NULL);
+
+  return g_key_file_get_string (self->key_file, target, "Arch", NULL);
+}
+
+/**
  * gbp_sysroot_manager_set_target_path:
  * @self: a #GbpSysrootManager
  * @target: the unique identifier of the target
@@ -193,14 +303,59 @@ gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
                                      const gchar       *target,
                                      const gchar       *path)
 {
+  g_autofree gchar *current_path = NULL;
+  g_autofree gchar *current_pkgconfigs = NULL;
+
   g_return_if_fail (GBP_IS_SYSROOT_MANAGER (self));
   g_return_if_fail (self->key_file != NULL);
   g_return_if_fail (target != NULL);
   g_return_if_fail (path != NULL);
 
+  current_path = gbp_sysroot_manager_get_target_path (self, target);
   g_key_file_set_string (self->key_file, target, "Path", path);
   g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, GBP_SYSROOT_MANAGER_TARGET_CHANGED);
   sysroot_manager_save (self);
+
+  current_pkgconfigs = gbp_sysroot_manager_get_target_pkg_config_path (self, target);
+  if (current_pkgconfigs == NULL || g_strcmp0 (current_pkgconfigs, "") == 0)
+    {
+      g_auto(GStrv) path_parts = NULL;
+      g_autofree gchar *additional_paths = NULL;
+
+      // Prepend the sysroot path to the BASIC_LIBDIRS values
+      path_parts = g_strsplit (BASIC_LIBDIRS, ":", 0);
+      for (gint i = g_strv_length (path_parts) - 1; i >= 0; i--)
+        {
+          g_autofree gchar *path_i = NULL;
+
+          path_i = g_build_path (G_DIR_SEPARATOR_S, path, path_parts[i], NULL);
+          current_pkgconfigs = g_strjoin (":", path_i, current_pkgconfigs, NULL);
+        }
+
+      additional_paths = sysroot_manager_find_additional_pkgconfig_paths (self, target);
+      current_pkgconfigs = g_strjoin (":", current_pkgconfigs, additional_paths, NULL);
+
+      gbp_sysroot_manager_set_target_pkg_config_path (self, target, current_pkgconfigs);
+    }
+  else
+    {
+      g_autoptr(GError) regex_error = NULL;
+      g_autoptr(GRegex) regex = NULL;
+      g_autofree gchar *current_path_escaped = NULL;
+
+      current_path_escaped = g_regex_escape_string (current_path, -1);
+      regex = g_regex_new (current_path_escaped, 0, 0, &regex_error);
+      if (regex_error == NULL)
+        {
+          current_pkgconfigs = g_regex_replace_literal (regex, current_pkgconfigs, (gssize) -1, 0, path, 0, &regex_error);
+          if (regex_error == NULL)
+            gbp_sysroot_manager_set_target_pkg_config_path (self, target, current_pkgconfigs);
+          else
+            g_critical ("Regex error: %s", regex_error->message);
+        }
+      else
+        g_critical ("Regex error: %s", regex_error->message);
+    }
 }
 
 /**
@@ -314,6 +469,16 @@ gbp_sysroot_manager_class_init (GbpSysrootManagerClass *klass)
 
   signals [TARGET_NAME_CHANGED] =
     g_signal_new_class_handler ("target-name-changed",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_FIRST,
+                                NULL, NULL, NULL, NULL,
+                                G_TYPE_NONE,
+                                2,
+                                G_TYPE_STRING,
+                                G_TYPE_STRING);
+
+  signals [TARGET_ARCH_CHANGED] =
+    g_signal_new_class_handler ("target-arch-changed",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_FIRST,
                                 NULL, NULL, NULL, NULL,

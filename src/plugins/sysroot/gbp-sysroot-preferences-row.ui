@@ -23,6 +23,25 @@
       </object>
     </child>
   </template>
+  <object class="GtkListStore" id="arch_liststore">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">i386</col>
+      </row>
+      <row>
+        <col id="0">x86_64</col>
+      </row>
+      <row>
+        <col id="0">arm</col>
+      </row>
+      <row>
+        <col id="0">aarch64</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkPopover" id="popover">
     <property name="relative-to">image</property>
     <property name="position">bottom</property>
@@ -60,7 +79,7 @@
           <object class="GtkLabel">
             <property name="visible">true</property>
             <property name="xalign">1.0</property>
-            <property name="label" translatable="yes">Sysroot path</property>
+            <property name="label" translatable="yes">Architecture</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -68,10 +87,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="sysroot_entry">
+          <object class="GtkComboBox" id="arch_combobox">
             <property name="visible">true</property>
             <property name="hexpand">true</property>
-            <property name="can-focus">true</property>
+            <property name="has-entry">true</property>
+            <property name="model">arch_liststore</property>
+            <property name="id-column">0</property>
+            <property name="entry-text-column">0</property>
+            <property name="active">0</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -82,11 +105,35 @@
           <object class="GtkLabel">
             <property name="visible">true</property>
             <property name="xalign">1.0</property>
-            <property name="label" translatable="yes">Additional Pkg-config path</property>
+            <property name="label" translatable="yes">Sysroot path</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="DzlFileChooserEntry" id="sysroot_entry">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="can-focus">true</property>
+            <property name="local-only">true</property>
+            <property name="action">GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="xalign">1.0</property>
+            <property name="label" translatable="yes">Pkg-config paths</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
@@ -97,7 +144,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
@@ -113,7 +160,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+            <property name="top_attach">4</property>
             <property name="width">2</property>
           </packing>
         </child>
