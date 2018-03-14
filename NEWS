@@ -1,3 +1,48 @@
+==============
+Version 3.28.0
+==============
+
+Changes since last release:
+
+ • Undo/Redo improvements when using multiple cursors.
+ • Support for --device in flatpak finish-args. This fixes running apps
+   such as gnome-maps that require OpenGL support.
+ • Experimental support for deviced to connect to remote devices.
+ • The flatpak manifest configuration provide now supports duplication,
+   delete, and tracking changes in the source repository.
+ • Builder requires enchant-2 now in coordination with gspell.
+ • The build pipeline now supports building alternate architectures
+   based upon the selected device architecture.
+ • A new deploy action has been added which allows pushing builds to
+   supported external devices.
+ • A new build pipeline phase "commit" has been added. This allows
+   separating the process of commiting a build to a flatpak-repo from
+   the process of exporting a binary such as a .flatpak.
+ • The flatpak build pipeline tries a number of strategies to cleanup
+   broken build directories.
+ • The omnibar provides some visual feedback about build success/failure
+   when a build advancing to certain build phases completes.
+ • A new qemu plugin adds support for building for non-native architectures
+   using binfmt and qemu-user-static.
+ • A new "device" button has been added to the omnibar to select the target
+   device. We expect this to be used more in 3.30 but has limited support
+   in 3.28.
+
+Updated Translations:
+
+  Swedish, Danish, Lithuanian, Hungarian, Kazakh, British English, Korean,
+  Spanish, Greek, Turkish, Galician, French, Dutch, Czech, German, Italian,
+  Polish, Brazilian Portuguese, Serbian.
+
+  We'd like to thank all our translators for keeping up with a number of
+  late stage translation improvements.
+
+Distributors:
+
+  GNOME-based templates use the Flatpak 3.28 SDK and Platform. Those
+  may not be available until after 3.28 is announced. You may want to
+  coordinate your release to users with Flathub.
+
 ===============
 Version 3.27.92
 ===============
