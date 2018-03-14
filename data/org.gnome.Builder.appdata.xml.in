@@ -82,6 +82,37 @@
 
   <releases>
 
+    <release version="3.28.0" date="2018-03-13">
+      <description>
+        <p>
+          Builder 3.28 brings 6 months of features, bug fixes, and performance improvements.
+        </p>
+        <ul>
+          <li>Significant improvements in memory usage.</li>
+          <li>Builder now monitors your project's file-system for changes to update the sidebar in real-time.</li>
+          <li>Builder gained the support for drag-n-drop of files in the project sidebar and editor.</li>
+          <li>Builder now tracks git status in the sidebar for quickly locating new and changed files.</li>
+          <li>An overview of the build pipeline is provided in the build panel which updates as the build progresses.</li>
+          <li>Builder now extracts progress messages from tooling such as flatpak-builder and displays it prominently in the project bar.</li>
+          <li>Builder tries to avoid building projects immediately upon opening, and no longer auto-updates dependencies upon loading.</li>
+          <li>Developers can update project dependencies for certain project backends such as Flatpak and Cargo using the "Update Dependencies" button in the omnibar.</li>
+          <li>Builder now uses a pseudo-terminal for build output, allowing color output from build tooling.</li>
+          <li>A simplified newcomers experience has been added, to click on a newcomer project icon and immediately clone/open the project.</li>
+          <li>Editor search has been improved to be more reliable and predictable in usage.</li>
+          <li>The project open dialog now defaults to directory selection. It will autodetect the project backend based on the directory contents.</li>
+          <li>The code indexers have been improved.</li>
+          <li>Support for compile_commands.json has been added for Meson and CMake build systems.</li>
+          <li>Three-finger-swipe can be used to move pages left or right.</li>
+          <li>A number of improvements to Meson, CMake, and Make project support.</li>
+          <li>New templates including a Mono-based Gtk♯ application and a command-line based Makefile template.</li>
+          <li>A number of features were added in our Flatpak support, including support for Flatpak SDK extensions.</li>
+          <li>Builder no longer requires flatpak-builder on the host when running from Flatpak, it is now bundled with Builder.</li>
+          <li>Technology preview for external devices, adding the ability to compile for alternate architectures.</li>
+          <li>Technology preview of integrated unit testing is included.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.27.92" date="2018-03-04">
       <description>
         <p>
