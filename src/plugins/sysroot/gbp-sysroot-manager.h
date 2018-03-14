@@ -42,6 +42,11 @@ void                      gbp_sysroot_manager_set_target_name             (GbpSy
                                                                            const gchar       *path);
 gchar                    *gbp_sysroot_manager_get_target_name             (GbpSysrootManager *self,
                                                                            const gchar       *target);
+void                      gbp_sysroot_manager_set_target_arch             (GbpSysrootManager *self,
+                                                                           const gchar       *target,
+                                                                           const gchar       *arch);
+gchar                    *gbp_sysroot_manager_get_target_arch             (GbpSysrootManager *self,
+                                                                           const gchar       *target);
 void                      gbp_sysroot_manager_set_target_path             (GbpSysrootManager *self,
                                                                            const gchar       *target,
                                                                            const gchar       *path);
