@@ -62,6 +62,7 @@ G_BEGIN_DECLS
 #include "buildsystem/ide-dependency-updater.h"
 #include "buildsystem/ide-environment-variable.h"
 #include "buildsystem/ide-environment.h"
+#include "buildsystem/ide-simple-build-target.h"
 #include "config/ide-configuration.h"
 #include "config/ide-configuration-manager.h"
 #include "config/ide-configuration-provider.h"

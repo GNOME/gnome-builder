@@ -16,6 +16,7 @@ buildsystem_headers = [
   'ide-dependency-updater.h',
   'ide-environment-variable.h',
   'ide-environment.h',
+  'ide-simple-build-target.h',
 ]
 
 buildsystem_sources = [
@@ -35,6 +36,7 @@ buildsystem_sources = [
   'ide-dependency-updater.c',
   'ide-environment-variable.c',
   'ide-environment.c',
+  'ide-simple-build-target.c',
 ]
 
 buildsystem_private_sources = [
