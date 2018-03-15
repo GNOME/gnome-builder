@@ -243,6 +243,23 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
   return ret;
 }
 
+static gboolean
+is_a_shell (const gchar *str)
+{
+  static const gchar *suffixes[] = { "/bash", "/sh", "/dash", "/zsh" };
+
+  if (str)
+    {
+      for (guint i = 0; i < G_N_ELEMENTS (suffixes); i++)
+        {
+          if (g_str_has_suffix (str, suffixes[i]))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static gchar *
 get_binary_name (GbpFlatpakRuntime *self,
                  IdeBuildTarget    *build_target)
@@ -250,6 +267,16 @@ get_binary_name (GbpFlatpakRuntime *self,
   IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
   IdeConfigurationManager *config_manager = ide_context_get_configuration_manager (context);
   IdeConfiguration *config = ide_configuration_manager_get_current (config_manager);
+  g_autofree gchar *build_target_name = ide_build_target_get_name (build_target);
+  g_auto(GStrv) argv = ide_build_target_get_argv (build_target);
+
+  /* XXX: temporary workaround while we come up with how to
+   *      spawn shells in the mount namespace appropriately.
+   */
+  if (is_a_shell (build_target_name))
+    return g_steal_pointer (&build_target_name);
+  else if (argv && is_a_shell (argv[0]))
+    return g_strdup (argv[0]);
 
   if (GBP_IS_FLATPAK_MANIFEST (config))
     {
@@ -261,13 +288,8 @@ get_binary_name (GbpFlatpakRuntime *self,
     }
 
   /* Use the build target name if there's no command in the manifest */
-  {
-    g_autofree gchar *build_target_name = NULL;
-
-    build_target_name = ide_build_target_get_name (build_target);
-    if (!dzl_str_empty0 (build_target_name))
-      return g_steal_pointer (&build_target_name);
-  }
+  if (!dzl_str_empty0 (build_target_name))
+    return g_steal_pointer (&build_target_name);
 
   /* Use the project name as a last resort */
   {
