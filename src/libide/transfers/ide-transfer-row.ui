@@ -41,10 +41,14 @@
         </child>
         <child>
           <object class="GtkLabel" id="status">
+            <style>
+              <class name="status"/>
+            </style>
             <property name="hexpand">true</property>
             <property name="visible">true</property>
             <property name="wrap">true</property>
             <property name="xalign">0.0</property>
+            <property name="use-markup">true</property>
             <style>
               <class name="dim-label"/>
             </style>
