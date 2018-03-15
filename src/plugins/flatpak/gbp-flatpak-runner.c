@@ -55,6 +55,8 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
   IdeConfigurationManager *config_manager;
   IdeConfiguration *config;
+  IdeEnvironment *env;
+  g_auto(GStrv) environ = NULL;
   IdeContext *context;
   guint i = 0;
 
@@ -109,6 +111,17 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
       ide_subprocess_launcher_insert_argv (launcher, i++, "--share=network");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=x11");
       ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=wayland");
+    }
+
+  /* Proxy environment stuff to the launcher */
+  if ((env = ide_runner_get_environment (runner)) &&
+      (environ = ide_environment_get_environ (env)))
+    {
+      for (guint j = 0; environ[j]; j++)
+        {
+          g_autofree gchar *arg = g_strdup_printf ("--env=%s", environ[j]);
+          ide_subprocess_launcher_insert_argv (launcher, i++, arg);
+        }
     }
 
   ide_subprocess_launcher_insert_argv (launcher, i++, self->build_path);
