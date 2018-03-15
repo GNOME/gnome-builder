@@ -247,9 +247,4 @@
       </submenu>
     </section>
   </menu>
-  <menu id="ide-device-manager-menu">
-    <section id="ide-device-manager-menu-section">
-      <attribute name="label" translatable="yes">Devices</attribute>
-    </section>
-  </menu>
 </interface>
