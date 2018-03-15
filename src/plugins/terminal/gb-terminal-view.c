@@ -42,6 +42,7 @@ enum {
   PROP_PTY,
   PROP_RUNTIME,
   PROP_RUN_ON_HOST,
+  PROP_USE_RUNNER,
   LAST_PROP
 };
 
@@ -148,6 +149,44 @@ failure:
   IDE_EXIT;
 }
 
+static void
+gb_terminal_view_run_cb (GObject      *object,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  IdeRunner *runner = (IdeRunner *)object;
+  VteTerminal *terminal = user_data;
+  GbTerminalView *self;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (VTE_IS_TERMINAL (terminal));
+
+  if (!ide_runner_run_finish (runner, result, &error))
+    {
+      g_warning ("%s", error->message);
+      IDE_GOTO (failure);
+    }
+
+  self = (GbTerminalView *)gtk_widget_get_ancestor (GTK_WIDGET (terminal), GB_TYPE_TERMINAL_VIEW);
+  if (self == NULL)
+    IDE_GOTO (failure);
+
+  if (!dzl_gtk_widget_action (GTK_WIDGET (self), "layoutstack", "close-view", NULL))
+    {
+      if (!gtk_widget_in_destruction (GTK_WIDGET (terminal)))
+        gb_terminal_respawn (self, terminal);
+    }
+
+failure:
+  g_clear_object (&terminal);
+
+  IDE_EXIT;
+}
+
 static gboolean
 terminal_has_notification_signal (void)
 {
@@ -226,27 +265,54 @@ gb_terminal_respawn (GbTerminalView *self,
                                    NULL,
                                    &error);
   if (pty == NULL)
-    IDE_GOTO (failure);
+    IDE_GOTO (cleanup);
 
   vte_terminal_set_pty (terminal, pty);
 
   if (-1 == (tty_fd = ide_vte_pty_create_slave (pty)))
-    IDE_GOTO (failure);
+    IDE_GOTO (cleanup);
+
+  if (self->runtime != NULL &&
+      !ide_runtime_contains_program_in_path (self->runtime, shell, NULL))
+    {
+      g_free (shell);
+      shell = g_strdup ("/bin/bash");
+    }
+
+  /* they want to use the runner API, which means we spawn in the
+   * program mount namespace, etc.
+   */
+  if (self->runtime != NULL && self->use_runner)
+    {
+      g_autoptr(IdeSimpleBuildTarget) target = NULL;
+      g_autoptr(IdeRunner) runner = NULL;
+      const gchar *argv[] = { shell, NULL };
+
+
+      target = ide_simple_build_target_new (context);
+      ide_simple_build_target_set_argv (target, argv);
+      ide_simple_build_target_set_cwd (target, self->cwd ?: workpath);
+
+      runner = ide_runtime_create_runner (self->runtime, IDE_BUILD_TARGET (target));
+
+      if (runner != NULL)
+        {
+          /* set_tty() will dup() the fd */
+          ide_runner_set_tty (runner, tty_fd);
+          ide_runner_run_async (runner,
+                                NULL,
+                                gb_terminal_view_run_cb,
+                                g_object_ref (terminal));
+          IDE_GOTO (cleanup);
+        }
+    }
 
   /* dup() is safe as it will inherit O_CLOEXEC */
   if (-1 == (stdout_fd = dup (tty_fd)) || -1 == (stderr_fd = dup (tty_fd)))
-    IDE_GOTO (failure);
+    IDE_GOTO (cleanup);
 
   if (self->runtime != NULL)
-    {
-      launcher = ide_runtime_create_launcher (self->runtime, NULL);
-
-      if (!ide_runtime_contains_program_in_path (self->runtime, shell, NULL))
-        {
-          g_free (shell);
-          shell = g_strdup ("/bin/bash");
-        }
-    }
+    launcher = ide_runtime_create_launcher (self->runtime, NULL);
 
   if (launcher == NULL)
     launcher = ide_subprocess_launcher_new (0);
@@ -278,14 +344,14 @@ gb_terminal_respawn (GbTerminalView *self,
   stderr_fd = -1;
 
   if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
-    IDE_GOTO (failure);
+    IDE_GOTO (cleanup);
 
   ide_subprocess_wait_async (subprocess,
                              NULL,
                              gb_terminal_view_wait_cb,
                              g_object_ref (terminal));
 
-failure:
+cleanup:
   if (tty_fd != -1)
     close (tty_fd);
 
@@ -537,6 +603,10 @@ gb_terminal_view_get_property (GObject    *object,
       g_value_set_boolean (value, self->run_on_host);
       break;
 
+    case PROP_USE_RUNNER:
+      g_value_set_boolean (value, self->use_runner);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -570,6 +640,10 @@ gb_terminal_view_set_property (GObject      *object,
 
     case PROP_RUN_ON_HOST:
       self->run_on_host = g_value_get_boolean (value);
+      break;
+
+    case PROP_USE_RUNNER:
+      self->use_runner = g_value_get_boolean (value);
       break;
 
     default:
@@ -634,6 +708,13 @@ gb_terminal_view_class_init (GbTerminalViewClass *klass)
                           "If the process should be spawned on the host",
                           TRUE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_USE_RUNNER] =
+    g_param_spec_boolean ("use-runner",
+                          "Use Runner",
+                          "If we should use the runner interface and build target",
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }

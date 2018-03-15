@@ -40,10 +40,16 @@
       <item>
         <attribute name="id">new-build-terminal</attribute>
         <attribute name="after">new-terminal</attribute>
-        <attribute name="before">new-build-terminal</attribute>
         <attribute name="label" translatable="yes">New _Build Terminal</attribute>
         <attribute name="action">win.new-terminal-in-runtime</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;&lt;alt&gt;t</attribute>
+      </item>
+      <item>
+        <attribute name="id">new-run-terminal</attribute>
+        <attribute name="after">new-build-terminal</attribute>
+        <attribute name="label" translatable="yes">New _Runtime Terminal</attribute>
+        <attribute name="action">win.new-terminal-in-runner</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;t</attribute>
       </item>
     </section>
   </menu>

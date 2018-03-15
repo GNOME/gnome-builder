@@ -78,6 +78,7 @@ new_terminal_activate (GSimpleAction *action,
   IdeRuntime *runtime = NULL;
   const gchar *name;
   gboolean run_on_host = TRUE;
+  gboolean use_runner = FALSE;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
@@ -88,6 +89,12 @@ new_terminal_activate (GSimpleAction *action,
     runtime = find_runtime (self->workbench);
   else if (g_strcmp0 (name, "debug-terminal") == 0)
     run_on_host = FALSE;
+
+  if (g_strcmp0 (name, "new-terminal-in-runner") == 0)
+    {
+      runtime = find_runtime (self->workbench);
+      use_runner = TRUE;
+    }
 
   perspective = ide_workbench_get_perspective_by_name (self->workbench, "editor");
   ide_workbench_set_visible_perspective (self->workbench, perspective);
@@ -119,6 +126,7 @@ new_terminal_activate (GSimpleAction *action,
                        "cwd", cwd,
                        "run-on-host", run_on_host,
                        "runtime", runtime,
+                       "use-runner", use_runner,
                        "visible", TRUE,
                        NULL);
   gtk_container_add (GTK_CONTAINER (perspective), GTK_WIDGET (view));
@@ -228,6 +236,12 @@ static const DzlShortcutEntry gb_terminal_shortcut_entries[] = {
     NC_("shortcut window", "Workbench shortcuts"),
     NC_("shortcut window", "General"),
     NC_("shortcut window", "Terminal in Build Runtime") },
+
+  { "org.gnome.builder.workbench.new-terminal-in-runner",
+    0, NULL,
+    NC_("shortcut window", "Workbench shortcuts"),
+    NC_("shortcut window", "General"),
+    NC_("shortcut window", "Terminal in Runtime") },
 };
 
 static void
@@ -253,6 +267,12 @@ gb_terminal_workbench_setup_shortcuts (GbTerminalWorkbenchAddin *self,
                                               DZL_SHORTCUT_PHASE_DISPATCH,
                                               "win.new-terminal-in-runtime");
 
+  dzl_shortcut_controller_add_command_action (controller,
+                                              "org.gnome.builder.workbench.new-terminal-in-runner",
+                                              I_("<primary><alt>t"),
+                                              DZL_SHORTCUT_PHASE_DISPATCH,
+                                              "win.new-terminal-in-runner");
+
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              gb_terminal_shortcut_entries,
                                              G_N_ELEMENTS (gb_terminal_shortcut_entries),
@@ -270,6 +290,7 @@ gb_terminal_workbench_addin_load (IdeWorkbenchAddin *addin,
   IdeRunManager *run_manager;
   static const GActionEntry actions[] = {
     { "new-terminal", new_terminal_activate },
+    { "new-terminal-in-runner", new_terminal_activate },
     { "new-terminal-in-runtime", new_terminal_activate },
     { "new-terminal-in-dir", new_terminal_activate },
     { "debug-terminal", new_terminal_activate },
@@ -335,6 +356,7 @@ gb_terminal_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (GB_IS_TERMINAL_WORKBENCH_ADDIN (self));
 
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal");
+  g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal-in-runner");
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal-in-runtime");
   g_action_map_remove_action (G_ACTION_MAP (self->workbench), "new-terminal-in-dir");
 
