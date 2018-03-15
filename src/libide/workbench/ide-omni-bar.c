@@ -30,6 +30,7 @@
 #include "config/ide-configuration.h"
 #include "config/ide-configuration-manager.h"
 #include "devices/ide-device-manager.h"
+#include "devices/ide-device-private.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
 #include "util/ide-gtk.h"
@@ -135,6 +136,7 @@ struct _IdeOmniBar
   GtkButton            *cancel_button;
   GtkLabel             *config_name_label;
   GtkLabel             *config_ready_label;
+  DzlMenuButton        *device_button;
   GtkStack             *message_stack;
   DzlListBox           *pausables;
   GtkPopover           *popover;
@@ -269,6 +271,7 @@ ide_omni_bar_context_set (GtkWidget  *widget,
   GListModel *pausables = NULL;
   IdeProject *project = NULL;
   IdeVcs *vcs = NULL;
+  GMenu *menu = NULL;
 
   IDE_ENTRY;
 
@@ -285,6 +288,7 @@ ide_omni_bar_context_set (GtkWidget  *widget,
       project = ide_context_get_project (context);
       pausables = _ide_context_get_pausables (context);
       device_manager = ide_context_get_device_manager (context);
+      menu = _ide_device_manager_get_menu (device_manager);
     }
 
   dzl_binding_group_set_source (self->build_manager_bindings, build_manager);
@@ -294,6 +298,7 @@ ide_omni_bar_context_set (GtkWidget  *widget,
   dzl_binding_group_set_source (self->project_bindings, project);
   dzl_binding_group_set_source (self->vcs_bindings, vcs);
   dzl_list_box_set_model (self->pausables, pausables);
+  dzl_menu_button_set_model (self->device_button, G_MENU_MODEL (menu));
 
   if (config_manager != NULL)
     {
@@ -638,6 +643,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, cancel_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_name_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, config_ready_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, device_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, event_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, message_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, pausables);

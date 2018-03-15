@@ -30,6 +30,7 @@
 #include "devices/ide-deploy-strategy.h"
 #include "devices/ide-device.h"
 #include "devices/ide-device-manager.h"
+#include "devices/ide-device-private.h"
 #include "devices/ide-device-provider.h"
 #include "local/ide-local-device.h"
 #include "plugins/ide-extension-util.h"
@@ -57,6 +58,14 @@ struct _IdeDeviceManager
    * The providers that are registered in plugins supporting IdeDeviceProvider.
    */
   PeasExtensionSet *providers;
+
+  /*
+   * Our menu that contains our list of devices for the user to select. This
+   * is "per-IdeContext" so that it is not global to the system (which would
+   * result in duplicates for each workbench opened).
+   */
+  GMenu *menu;
+  GMenu *menu_section;
 
   /*
    * Our progress in a deployment. Simplifies binding to the progress bar
@@ -121,7 +130,6 @@ ide_device_manager_provider_device_added_cb (IdeDeviceManager  *self,
   const gchar *display_name;
   const gchar *icon_name;
   const gchar *device_id;
-  GMenu *menu;
   guint position;
 
   IDE_ENTRY;
@@ -141,15 +149,13 @@ ide_device_manager_provider_device_added_cb (IdeDeviceManager  *self,
   g_ptr_array_add (self->devices, g_object_ref (device));
 
   /* Now add a new menu item to our selection model */
-  menu = dzl_application_get_menu_by_id (DZL_APPLICATION (IDE_APPLICATION_DEFAULT),
-                                         "ide-device-manager-menu-section");
   menu_item = g_menu_item_new (display_name, NULL);
   g_menu_item_set_attribute (menu_item, "id", "s", device_id);
   g_menu_item_set_attribute (menu_item, "verb-icon-name", "s", icon_name ?: "computer-symbolic");
   g_menu_item_set_action_and_target_value (menu_item,
                                            "device-manager.device",
                                            g_variant_new_string (device_id));
-  g_menu_append_item (menu, menu_item);
+  g_menu_append_item (self->menu_section, menu_item);
 
   /* Now notify about the new device */
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
@@ -174,8 +180,7 @@ ide_device_manager_provider_device_removed_cb (IdeDeviceManager  *self,
 
   device_id = ide_device_get_id (device);
 
-  menu = dzl_application_get_menu_by_id (DZL_APPLICATION (IDE_APPLICATION_DEFAULT),
-                                         "ide-device-manager-menu-section");
+  menu = self->menu_section;
   n_items = g_menu_model_get_n_items (G_MENU_MODEL (menu));
 
   for (guint i = 0; i < n_items; i++)
@@ -449,6 +454,8 @@ ide_device_manager_finalize (GObject *object)
   IdeDeviceManager *self = (IdeDeviceManager *)object;
 
   g_clear_pointer (&self->devices, g_ptr_array_unref);
+  g_clear_object (&self->menu);
+  g_clear_object (&self->menu_section);
 
   G_OBJECT_CLASS (ide_device_manager_parent_class)->finalize (object);
 }
@@ -564,6 +571,10 @@ static void
 ide_device_manager_init (IdeDeviceManager *self)
 {
   self->devices = g_ptr_array_new_with_free_func (g_object_unref);
+
+  self->menu = g_menu_new ();
+  self->menu_section = g_menu_new ();
+  g_menu_append_section (self->menu, _("Devices"), G_MENU_MODEL (self->menu_section));
 }
 
 /**
@@ -987,4 +998,12 @@ ide_device_manager_get_progress (IdeDeviceManager *self)
   g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), 0.0);
 
   return self->progress;
+}
+
+GMenu *
+_ide_device_manager_get_menu (IdeDeviceManager *self)
+{
+  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), NULL);
+
+  return self->menu;
 }
