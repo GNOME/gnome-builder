@@ -297,8 +297,21 @@ gb_terminal_respawn (GbTerminalView *self,
 
       if (runner != NULL)
         {
+          IdeEnvironment *env = ide_runner_get_environment (runner);
+
           /* set_tty() will dup() the fd */
           ide_runner_set_tty (runner, tty_fd);
+
+          ide_environment_setenv (env, "TERM", "xterm-256color");
+          ide_environment_setenv (env, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
+          ide_environment_setenv (env, "SHELL", shell);
+
+          if (pipeline != NULL)
+            {
+              ide_environment_setenv (env, "BUILDDIR", ide_build_pipeline_get_builddir (pipeline));
+              ide_environment_setenv (env, "SRCDIR", ide_build_pipeline_get_srcdir (pipeline));
+            }
+
           ide_runner_run_async (runner,
                                 NULL,
                                 gb_terminal_view_run_cb,
