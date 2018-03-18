@@ -4,15 +4,30 @@ stages:
 flatpak:master:
     image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
     stage: test
-    script:
-    # This should be removed once the base image works with git submodules
-    - dnf install -y git
 
-    - flatpak-builder --force-clean --repo=repo app build-aux/flatpak/org.gnome.Builder.json
-    - flatpak build-bundle repo builder-dev.flatpak org.gnome.Builder
+    variables:
+        GIT_SUBMODULE_STRATEGY: normal
+
+    script:
+        # This should be removed once the base image works with git submodules
+        - dnf install -y git
+
+        # Build the flatpak repo
+        - flatpak-builder --stop-at=gnome-builder app build-aux/flatpak/org.gnome.Builder.json
+        - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json meson --prefix=/app --libdir=/app/lib _build
+        - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build install
+        - flatpak-builder --finish-only app build-aux/flatpak/org.gnome.Builder.json
+        - flatpak build-export repo app
+
+        # Make a flatpak for people to test
+        - flatpak build-bundle repo gnome-builder-dev.flatpak org.gnome.Builder
+
+        # Run tests inside the Flatpak env
+        - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build test
+
     artifacts:
         paths:
-          - builder-dev.flatpak
+            - gnome-builder-dev.flatpak
         expire_in: 2 days
 
     cache:
@@ -21,4 +36,5 @@ flatpak:master:
         # ^ Keep diffrerent caches for each branch
         key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
         paths:
-          - .flatpak-builder/cache/
+            # Cache .flatpak-builder
+            - .flatpak-builder/cache/
