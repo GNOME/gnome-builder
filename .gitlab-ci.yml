@@ -1,0 +1,15 @@
+stages:
+    - test
+
+flatpak:master:
+    image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
+    stage: test
+    script:
+    # This should be removed once the base image works with git submodules
+    - dnf install -y git
+    - flatpak-builder --force-clean --repo=repo app build-aux/flatpak/org.gnome.Builder.json
+    - flatpak build-bundle repo builder-dev.flatpak org.gnome.Builder
+    artifacts:
+        paths:
+          - nautilus-dev.flatpak
+        expire_in: 2 days
