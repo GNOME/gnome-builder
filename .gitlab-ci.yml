@@ -23,7 +23,7 @@ flatpak:master:
         - flatpak build-bundle repo gnome-builder-dev.flatpak org.gnome.Builder
 
         # Run tests inside the Flatpak env
-        - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build test
+        # - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build test
 
     artifacts:
         paths:
