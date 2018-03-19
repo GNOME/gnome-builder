@@ -29,16 +29,16 @@
     </columns>
     <data>
       <row>
-        <col id="0">i386</col>
+        <col id="0">i386-linux-gnu</col>
       </row>
       <row>
-        <col id="0">x86_64</col>
+        <col id="0">x86_64-linux-gnu</col>
       </row>
       <row>
-        <col id="0">arm</col>
+        <col id="0">arm-linux-gnu</col>
       </row>
       <row>
-        <col id="0">aarch64</col>
+        <col id="0">aarch64-linux-gnu</col>
       </row>
     </data>
   </object>
