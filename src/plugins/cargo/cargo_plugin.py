@@ -149,7 +149,12 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
+        build_stage.connect('query', self._query)
         self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
+
+    def _query(self, stage, pipeline, cancellable):
+        # Always defer to cargo to check if build is needed
+        stage.set_completed(False)
 
 class CargoBuildTarget(Ide.Object, Ide.BuildTarget):
 
