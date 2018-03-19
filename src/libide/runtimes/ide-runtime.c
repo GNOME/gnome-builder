@@ -581,3 +581,33 @@ ide_runtime_get_arch (IdeRuntime *self)
 
   return ret;
 }
+
+/**
+ * ide_runtime_supports_toolchain:
+ * @self: a #IdeRuntime
+ * @toolchain: the #IdeToolchain to check
+ *
+ * Informs wether a toolchain is supported by this.
+ *
+ * Returns: %TRUE if the toolchain is supported
+ *
+ * Since: 3.30
+ */
+gboolean
+ide_runtime_supports_toolchain (IdeRuntime   *self,
+                                IdeToolchain *toolchain)
+{
+  const gchar *toolchain_id;
+
+  g_return_val_if_fail (IDE_IS_RUNTIME (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN (toolchain), FALSE);
+
+  toolchain_id = ide_toolchain_get_id (toolchain);
+  if (g_strcmp0 (toolchain_id, "default") == 0)
+    return TRUE;
+
+  if (IDE_RUNTIME_GET_CLASS (self)->supports_toolchain)
+    return IDE_RUNTIME_GET_CLASS (self)->supports_toolchain (self, toolchain);
+
+  return FALSE;
+}
