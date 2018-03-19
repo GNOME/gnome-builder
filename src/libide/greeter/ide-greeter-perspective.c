@@ -27,7 +27,6 @@
 #include "application/ide-application.h"
 #include "genesis/ide-genesis-addin.h"
 #include "greeter/ide-greeter-perspective.h"
-#include "greeter/ide-greeter-project-row.h"
 #include "greeter/ide-greeter-section.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
