@@ -14,6 +14,10 @@ cmake_sources = [
   'gbp-cmake-build-target.h',
   'gbp-cmake-pipeline-addin.c',
   'gbp-cmake-pipeline-addin.h',
+  'gbp-cmake-toolchain.c',
+  'gbp-cmake-toolchain.h',
+  'gbp-cmake-toolchain-provider.c',
+  'gbp-cmake-toolchain-provider.h',
 ]
 
 gnome_builder_plugins_sources += files(cmake_sources)
