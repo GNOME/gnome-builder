@@ -56,6 +56,8 @@ struct _IdeBuildSystemInterface
                                                     IdeBuildPipeline     *pipeline);
   gchar      *(*get_id)                            (IdeBuildSystem       *self);
   gchar      *(*get_display_name)                  (IdeBuildSystem       *self);
+  gboolean    (*supports_toolchain)                (IdeBuildSystem       *self,
+                                                    IdeToolchain         *toolchain);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -109,5 +111,8 @@ GHashTable     *ide_build_system_get_build_flags_for_dir_finish    (IdeBuildSyst
                                                                     GError              **error);
 void            _ide_build_system_set_project_file                 (IdeBuildSystem       *self,
                                                                     GFile                *project_file) G_GNUC_INTERNAL;
+IDE_AVAILABLE_IN_3_30
+gboolean        ide_build_system_supports_toolchain                (IdeBuildSystem       *self,
+                                                                    IdeToolchain         *toolchain);
 
 G_END_DECLS

@@ -158,6 +158,40 @@ check_configure_status (IdeAutotoolsPipelineAddin *self,
   IDE_EXIT;
 }
 
+static const gchar *
+compiler_environment_from_language (gchar *language)
+{
+  if (g_strcmp0 (language, "c") == 0)
+    return "CC";
+
+  if (g_strcmp0 (language, "c++") == 0 || g_strcmp0 (language, "cpp") == 0)
+    return "CXX";
+
+  if (g_strcmp0 (language, "fortran") == 0)
+    return "FC";
+
+  if (g_strcmp0 (language, "d") == 0)
+    return "DC";
+
+  if (g_strcmp0 (language, "vala") == 0)
+    return "VALAC";
+
+  return NULL;
+}
+
+static void
+add_compiler_env_variables (gpointer key,
+                            gpointer value,
+                            gpointer user_data)
+{
+  IdeSubprocessLauncher *launcher = (IdeSubprocessLauncher *)user_data;
+  const gchar *env = compiler_environment_from_language (key);
+  if (env == NULL)
+    return;
+
+  ide_subprocess_launcher_setenv (launcher, env, value, TRUE);
+}
+
 static gboolean
 register_configure_stage (IdeAutotoolsPipelineAddin  *self,
                           IdeBuildPipeline           *pipeline,
@@ -166,6 +200,7 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
   IdeConfiguration *configuration;
+  IdeToolchain *toolchain;
   g_autofree gchar *configure_path = NULL;
   g_autofree gchar *host_arg = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
@@ -189,9 +224,30 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
 
   /* --host=triplet */
   configuration = ide_build_pipeline_get_configuration (pipeline);
-  triplet = ide_build_pipeline_get_host_triplet (pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (pipeline);
+  triplet = ide_toolchain_get_host_triplet (toolchain);
   host_arg = g_strdup_printf ("--host=%s", ide_triplet_get_full_name (triplet));
   ide_subprocess_launcher_push_argv (launcher, host_arg);
+
+  if (g_strcmp0 (ide_toolchain_get_id (toolchain), "default") != 0)
+    {
+      GHashTable *compilers = ide_toolchain_get_compilers (toolchain);
+      const gchar *tool_path;
+
+      g_hash_table_foreach (compilers, add_compiler_env_variables, launcher);
+
+      tool_path = ide_toolchain_get_archiver (toolchain);
+      if (tool_path != NULL)
+        ide_subprocess_launcher_setenv (launcher, "AR", tool_path, TRUE);
+
+      tool_path = ide_toolchain_get_strip (toolchain);
+      if (tool_path != NULL)
+        ide_subprocess_launcher_setenv (launcher, "STRIP", tool_path, TRUE);
+
+      tool_path = ide_toolchain_get_pkg_config (toolchain);
+      if (tool_path != NULL)
+        ide_subprocess_launcher_setenv (launcher, "PKG_CONFIG", tool_path, TRUE);
+    }
 
   /*
    * Parse the configure options as defined in the build configuration and append
