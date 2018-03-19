@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 
+#include "gbp-meson-toolchain.h"
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-pipeline-addin.h"
 
@@ -44,6 +45,31 @@ on_stage_query (IdeBuildStage    *stage,
 }
 
 static void
+_g_key_file_set_string_quoted (GKeyFile *keyfile,
+                               const gchar *group,
+                               const gchar *key,
+                               const gchar *unquoted_value)
+{
+  g_autofree gchar *quoted_value = NULL;
+
+  g_return_if_fail (keyfile != NULL);
+  g_return_if_fail (group != NULL);
+  g_return_if_fail (key != NULL);
+  g_return_if_fail (unquoted_value != NULL);
+
+  quoted_value = g_strdup_printf ("'%s'", unquoted_value);
+  g_key_file_set_string (keyfile, group, key, quoted_value);
+}
+
+static void
+add_lang_executable (gchar *lang,
+                     gchar *path,
+                     GKeyFile *keyfile)
+{
+    _g_key_file_set_string_quoted (keyfile, "binaries", lang, path);
+}
+
+static void
 gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
                                IdeBuildPipeline      *pipeline)
 {
@@ -57,10 +83,12 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_autoptr(IdeBuildStage) install_stage = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *build_ninja = NULL;
+  g_autofree gchar *crossbuild_file = NULL;
   IdeBuildSystem *build_system;
   IdeConfiguration *config;
   IdeContext *context;
   IdeRuntime *runtime;
+  IdeToolchain *toolchain;
   const gchar *config_opts;
   const gchar *ninja = NULL;
   const gchar *prefix;
@@ -82,6 +110,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   config = ide_build_pipeline_get_configuration (pipeline);
   runtime = ide_build_pipeline_get_runtime (pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (pipeline);
   srcdir = ide_build_pipeline_get_srcdir (pipeline);
 
   g_assert (IDE_IS_CONFIGURATION (config));
@@ -117,6 +146,46 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (NULL == (meson = ide_configuration_getenv (config, "MESON")))
     meson = "meson";
 
+  /* Create the toolchain file is required */
+  if (GBP_IS_MESON_TOOLCHAIN (toolchain))
+    crossbuild_file = g_strdup (gbp_meson_toolchain_get_file_path (GBP_MESON_TOOLCHAIN (toolchain)));
+  else if (g_strcmp0 (ide_toolchain_get_id (toolchain), "default") != 0)
+    {
+      g_autoptr(GKeyFile) crossbuild_keyfile = NULL;
+      g_autoptr(IdeTriplet) triplet = NULL;
+      g_autofree gchar *crossfile_name = NULL;
+      const gchar *binary_path;
+
+      crossfile_name = g_strdup_printf ("gnome-builder-%s.crossfile", ide_toolchain_get_id (toolchain));
+      crossbuild_file = ide_build_pipeline_build_builddir_path (pipeline, crossfile_name, NULL);
+
+      crossbuild_keyfile = g_key_file_new ();
+      triplet = ide_toolchain_get_host_triplet (toolchain);
+
+      g_hash_table_foreach (ide_toolchain_get_compilers (toolchain), (GHFunc)add_lang_executable, crossbuild_keyfile);
+
+      binary_path = ide_toolchain_get_archiver (toolchain);
+      _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "ar", binary_path);
+
+      binary_path = ide_toolchain_get_strip (toolchain);
+      _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "strip", binary_path);
+
+      binary_path = ide_toolchain_get_pkg_config (toolchain);
+      _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "pkgconfig", binary_path);
+
+      binary_path = ide_toolchain_get_exe_wrapper (toolchain);
+      _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "exe_wrapper", binary_path);
+
+      binary_path = ide_triplet_get_kernel (triplet);
+      _g_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "system", binary_path);
+
+      binary_path = ide_triplet_get_arch (triplet);
+      _g_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "cpu_family", binary_path);
+
+      if (!g_key_file_save_to_file (crossbuild_keyfile, crossbuild_file, &error))
+        IDE_GOTO (failure);
+    }
+
   /* Setup our meson configure stage. */
 
   ide_subprocess_launcher_push_argv (config_launcher, meson);
@@ -124,6 +193,11 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (config_launcher, ".");
   ide_subprocess_launcher_push_argv (config_launcher, "--prefix");
   ide_subprocess_launcher_push_argv (config_launcher, prefix);
+  if (crossbuild_file != NULL)
+    {
+      ide_subprocess_launcher_push_argv (config_launcher, "--cross-file");
+      ide_subprocess_launcher_push_argv (config_launcher, crossbuild_file);
+    }
 
   if (!dzl_str_empty0 (config_opts))
     {
