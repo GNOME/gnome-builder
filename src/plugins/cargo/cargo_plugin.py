@@ -118,7 +118,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         fetch_launcher.push_argv(cargo_toml)
         self.track(pipeline.connect_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
 
-        # Fetch dependencies so that we no longer need network access
+        # Now create our launcher to build the project
         build_launcher = pipeline.create_launcher()
         build_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
         build_launcher.push_argv(cargo)
