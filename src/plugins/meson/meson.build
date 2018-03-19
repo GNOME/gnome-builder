@@ -16,6 +16,8 @@ meson_sources = [
   'gbp-meson-build-target-provider.h',
   'gbp-meson-pipeline-addin.c',
   'gbp-meson-pipeline-addin.h',
+  'gbp-meson-toolchain-provider.c',
+  'gbp-meson-toolchain-provider.h',
   'gbp-meson-test-provider.c',
   'gbp-meson-test-provider.h',
   'gbp-meson-test.c',

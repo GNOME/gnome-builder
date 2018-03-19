@@ -150,6 +150,13 @@ struct _IdeBuildPipeline
   IdeRuntime *runtime;
 
   /*
+   * The toolchain we're using to build. This may be different than what
+   * is specified in the IdeConfiguration, as the @device could alter
+   * what architecture we're building for (and/or cross-compiling).
+   */
+  IdeToolchain *toolchain;
+
+  /*
    * The IdeBuildLog is a private implementation that we use to
    * log things from addins via observer callbacks.
    */
@@ -1208,6 +1215,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->log);
   g_clear_object (&self->device);
   g_clear_object (&self->runtime);
+  g_clear_object (&self->toolchain);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
   g_clear_pointer (&self->arch, g_free);
@@ -2616,6 +2624,24 @@ ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
 }
 
 /**
+ * ide_build_pipeline_get_toolchain:
+ * @self: An #IdeBuildPipeline
+ *
+ * A convenience function to get the toolchain for a build pipeline.
+ *
+ * Returns: (transfer none) (nullable): An #IdeToolchain or %NULL
+ *
+ * Since: 3.30
+ */
+IdeToolchain *
+ide_build_pipeline_get_toolchain (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->toolchain;
+}
+
+/**
  * ide_build_pipeline_create_launcher:
  * @self: An #IdeBuildPipeline
  *
@@ -3631,6 +3657,26 @@ _ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
   g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
 
   if (g_set_object (&self->runtime, runtime))
+    {
+      IdeBuildSystem *build_system;
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      build_system = ide_context_get_build_system (context);
+
+      g_clear_pointer (&self->builddir, g_free);
+      self->builddir = ide_build_system_get_builddir (build_system, self);
+    }
+}
+
+void
+_ide_build_pipeline_set_toolchain (IdeBuildPipeline *self,
+                                   IdeToolchain     *toolchain)
+{
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (!toolchain || IDE_IS_TOOLCHAIN (toolchain));
+
+  if (g_set_object (&self->toolchain, toolchain))
     {
       IdeBuildSystem *build_system;
       IdeContext *context;

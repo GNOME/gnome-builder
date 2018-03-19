@@ -53,6 +53,7 @@
 #include "search/ide-search-provider.h"
 #include "snippets/ide-source-snippets-manager.h"
 #include "testing/ide-test-manager.h"
+#include "toolchain/ide-toolchain-manager.h"
 #include "transfers/ide-transfer-manager.h"
 #include "util/ide-async-helper.h"
 #include "util/ide-line-reader.h"
@@ -117,6 +118,7 @@ struct _IdeContext
   GtkRecentManager         *recent_manager;
   IdeRunManager            *run_manager;
   IdeRuntimeManager        *runtime_manager;
+  IdeToolchainManager      *toolchain_manager;
   IdeSearchEngine          *search_engine;
   IdeSourceSnippetsManager *snippets_manager;
   IdeTestManager           *test_manager;
@@ -160,6 +162,7 @@ enum {
   PROP_PROJECT_FILE,
   PROP_PROJECT,
   PROP_RUNTIME_MANAGER,
+  PROP_TOOLCHAIN_MANAGER,
   PROP_SEARCH_ENGINE,
   PROP_SNIPPETS_MANAGER,
   PROP_VCS,
@@ -598,6 +601,7 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
   g_clear_object (&self->runtime_manager);
+  g_clear_object (&self->toolchain_manager);
   g_clear_object (&self->test_manager);
   g_clear_object (&self->unsaved_files);
   g_clear_object (&self->vcs);
@@ -651,6 +655,10 @@ ide_context_get_property (GObject    *object,
 
     case PROP_RUNTIME_MANAGER:
       g_value_set_object (value, ide_context_get_runtime_manager (self));
+      break;
+
+    case PROP_TOOLCHAIN_MANAGER:
+      g_value_set_object (value, ide_context_get_toolchain_manager (self));
       break;
 
     case PROP_SEARCH_ENGINE:
@@ -759,6 +767,13 @@ ide_context_class_init (IdeContextClass *klass)
                          "Runtime Manager",
                          "Runtime Manager",
                          IDE_TYPE_RUNTIME_MANAGER,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TOOLCHAIN_MANAGER] =
+    g_param_spec_object ("toolchain-manager",
+                         "Toolchain Manager",
+                         "Toolchain Manager",
+                         IDE_TYPE_TOOLCHAIN_MANAGER,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SEARCH_ENGINE] =
@@ -897,6 +912,10 @@ ide_context_init (IdeContext *self)
   self->runtime_manager = g_object_new (IDE_TYPE_RUNTIME_MANAGER,
                                         "context", self,
                                         NULL);
+
+  self->toolchain_manager = g_object_new (IDE_TYPE_TOOLCHAIN_MANAGER,
+                                          "context", self,
+                                          NULL);
 
   self->test_manager = g_object_new (IDE_TYPE_TEST_MANAGER,
                                      "context", self,
@@ -1121,6 +1140,28 @@ ide_context_init_runtimes (gpointer             source_object,
   g_task_set_priority (task, G_PRIORITY_LOW);
 
   if (!g_initable_init (G_INITABLE (self->runtime_manager), cancellable, &error))
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_init_toolchains (gpointer             source_object,
+                             GCancellable        *cancellable,
+                             GAsyncReadyCallback  callback,
+                             gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_context_init_toolchains);
+  g_task_set_priority (task, G_PRIORITY_LOW);
+
+  if (!g_initable_init (G_INITABLE (self->toolchain_manager), cancellable, &error))
     g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_boolean (task, TRUE);
@@ -1794,6 +1835,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_search_engine,
                         ide_context_init_documentation,
                         ide_context_init_runtimes,
+                        ide_context_init_toolchains,
                         ide_context_init_configuration_manager,
                         ide_context_init_build_manager,
                         ide_context_init_run_manager,
@@ -2039,6 +2081,7 @@ ide_context_unload_cb (GObject      *object,
 
   g_clear_object (&self->device_manager);
   g_clear_object (&self->runtime_manager);
+  g_clear_object (&self->toolchain_manager);
 
   if (!g_task_propagate_boolean (unload_task, &error))
     g_task_return_error (task, g_steal_pointer (&error));
@@ -2380,6 +2423,26 @@ ide_context_get_runtime_manager (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   return self->runtime_manager;
+}
+
+/**
+ * ide_context_get_toolchain_manager:
+ * @self: An #IdeContext
+ *
+ * Gets the #IdeToolchainManager for the LibIDE context.
+ *
+ * The toolchain manager provies access to #IdeToolchain instances via the
+ * #GListModel interface. These can provide support for building projects
+ * using different specified toolchains.
+ *
+ * Returns: (transfer none): An #IdeToolchainManager.
+ */
+IdeToolchainManager *
+ide_context_get_toolchain_manager (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->toolchain_manager;
 }
 
 /**

@@ -67,6 +67,8 @@ IDE_AVAILABLE_IN_3_28
 IdeDevice             *ide_build_pipeline_get_device          (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_28
 IdeRuntime            *ide_build_pipeline_get_runtime         (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_30
+IdeToolchain          *ide_build_pipeline_get_toolchain       (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_builddir        (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL

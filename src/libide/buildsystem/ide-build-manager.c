@@ -38,6 +38,8 @@
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-private.h"
+#include "toolchain/ide-toolchain-manager.h"
+#include "toolchain/ide-toolchain-private.h"
 
 /**
  * SECTION:ide-build-manager
@@ -319,11 +321,11 @@ ide_build_manager_pipeline_finished (IdeBuildManager  *self,
 }
 
 static void
-ide_build_manager_ensure_runtime_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
+ide_build_manager_ensure_toolchain_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
 {
-  IdeRuntimeManager *runtime_manager = (IdeRuntimeManager *)object;
+  IdeToolchainManager *toolchain_manager = (IdeToolchainManager *)object;
   g_autoptr(GError) error = NULL;
   g_autoptr(GTask) task = user_data;
   IdeBuildPipeline *pipeline;
@@ -332,7 +334,7 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
+  g_assert (IDE_IS_TOOLCHAIN_MANAGER (toolchain_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
@@ -342,7 +344,7 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  if (!_ide_runtime_manager_prepare_finish (runtime_manager, result, &error))
+  if (!_ide_toolchain_manager_prepare_finish (toolchain_manager, result, &error))
     {
       g_message ("Failed to prepare runtime: %s", error->message);
       IDE_GOTO (failure);
@@ -374,6 +376,73 @@ ide_build_manager_ensure_runtime_cb (GObject      *object,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 
   g_task_return_boolean (task, TRUE);
+  IDE_EXIT;
+
+failure:
+
+  if (error != NULL)
+    g_task_return_error (task, g_steal_pointer (&error));
+  else
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_FAILED,
+                             "Failed to setup build pipeline");
+
+  IDE_EXIT;
+}
+
+static void
+ide_build_manager_ensure_runtime_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeRuntimeManager *runtime_manager = (IdeRuntimeManager *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  IdeBuildPipeline *pipeline;
+  IdeBuildManager *self;
+  IdeToolchainManager *toolchain_manager;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  self = g_task_get_source_object (task);
+  pipeline = g_task_get_task_data (task);
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  if (!_ide_runtime_manager_prepare_finish (runtime_manager, result, &error))
+    {
+      g_message ("Failed to prepare runtime: %s", error->message);
+      IDE_GOTO (failure);
+    }
+
+  if (pipeline != self->pipeline)
+    {
+      IDE_TRACE_MSG ("pipeline is no longer active, ignoring");
+      IDE_GOTO (failure);
+    }
+
+  if (g_task_return_error_if_cancelled (task))
+    IDE_GOTO (failure);
+
+
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  toolchain_manager = ide_context_get_toolchain_manager (context);
+  g_assert (IDE_IS_TOOLCHAIN_MANAGER (toolchain_manager));
+
+  _ide_toolchain_manager_prepare_async (toolchain_manager,
+                                        pipeline,
+                                        g_task_get_cancellable (task),
+                                        ide_build_manager_ensure_toolchain_cb,
+                                        g_object_ref (task));
 
   IDE_EXIT;
 

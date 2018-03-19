@@ -64,6 +64,11 @@ const gchar          *ide_configuration_get_runtime_id            (IdeConfigurat
 IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_runtime_id            (IdeConfiguration      *self,
                                                                    const gchar           *runtime_id);
+IDE_AVAILABLE_IN_3_30
+const gchar          *ide_configuration_get_toolchain_id          (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_3_30
+void                  ide_configuration_set_toolchain_id          (IdeConfiguration      *self,
+                                                                   const gchar           *toolchain_id);
 IDE_AVAILABLE_IN_ALL
 gboolean              ide_configuration_get_dirty                 (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL
@@ -86,6 +91,11 @@ IdeRuntime           *ide_configuration_get_runtime               (IdeConfigurat
 IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_runtime               (IdeConfiguration      *self,
                                                                    IdeRuntime            *runtime);
+IDE_AVAILABLE_IN_3_30
+IdeToolchain         *ide_configuration_get_toolchain             (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_3_30
+void                  ide_configuration_set_toolchain             (IdeConfiguration      *self,
+                                                                   IdeToolchain          *toolchain);
 IDE_AVAILABLE_IN_ALL
 gchar               **ide_configuration_get_environ               (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL

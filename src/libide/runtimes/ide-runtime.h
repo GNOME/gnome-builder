@@ -27,6 +27,7 @@
 #include "buildsystem/ide-build-target.h"
 #include "runner/ide-runner.h"
 #include "subprocess/ide-subprocess-launcher.h"
+#include "toolchain/ide-toolchain.h"
 
 G_BEGIN_DECLS
 
@@ -57,6 +58,8 @@ struct _IdeRuntimeClass
                                                        GFile                *file);
   gchar                 **(*get_system_include_dirs)  (IdeRuntime           *self);
   gchar                  *(*get_arch)                 (IdeRuntime           *self);
+  gboolean                (*supports_toolchain)       (IdeRuntime           *self,
+                                                       IdeToolchain         *toolchain);
 
   gpointer _reserved[12];
 };
@@ -97,5 +100,8 @@ IDE_AVAILABLE_IN_3_28
 gchar                **ide_runtime_get_system_include_dirs  (IdeRuntime           *self);
 IDE_AVAILABLE_IN_3_28
 gchar                 *ide_runtime_get_arch                 (IdeRuntime           *self);
+IDE_AVAILABLE_IN_3_30
+gboolean               ide_runtime_supports_toolchain       (IdeRuntime           *self,
+                                                             IdeToolchain         *toolchain);
 
 G_END_DECLS

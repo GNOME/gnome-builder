@@ -60,6 +60,8 @@ IDE_AVAILABLE_IN_ALL
 IdeRunManager            *ide_context_get_run_manager           (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL
 IdeRuntimeManager        *ide_context_get_runtime_manager       (IdeContext           *self);
+IDE_AVAILABLE_IN_3_30
+IdeToolchainManager      *ide_context_get_toolchain_manager     (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL
 IdeSearchEngine          *ide_context_get_search_engine         (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL
