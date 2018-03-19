@@ -33,6 +33,7 @@
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime.h"
 #include "subprocess/ide-subprocess-launcher.h"
+#include "toolchain/ide-toolchain-manager.h"
 
 typedef struct
 {
@@ -45,6 +46,7 @@ typedef struct
   gchar          *prefix;
   gchar          *run_opts;
   gchar          *runtime_id;
+  gchar          *toolchain_id;
   gchar          *append_path;
 
   GFile          *build_commands_dir;
@@ -91,6 +93,8 @@ enum {
   PROP_READY,
   PROP_RUNTIME,
   PROP_RUNTIME_ID,
+  PROP_TOOLCHAIN_ID,
+  PROP_TOOLCHAIN,
   PROP_RUN_OPTS,
   N_PROPS
 };
@@ -320,6 +324,14 @@ ide_configuration_get_property (GObject    *object,
       g_value_set_string (value, ide_configuration_get_runtime_id (self));
       break;
 
+    case PROP_TOOLCHAIN:
+      g_value_take_object (value, ide_configuration_get_toolchain (self));
+      break;
+
+    case PROP_TOOLCHAIN_ID:
+      g_value_set_string (value, ide_configuration_get_toolchain_id (self));
+      break;
+
     case PROP_RUN_OPTS:
       g_value_set_string (value, ide_configuration_get_run_opts (self));
       break;
@@ -397,6 +409,14 @@ ide_configuration_set_property (GObject      *object,
 
     case PROP_RUNTIME_ID:
       ide_configuration_set_runtime_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_TOOLCHAIN:
+      ide_configuration_set_toolchain (self, g_value_get_object (value));
+      break;
+
+    case PROP_TOOLCHAIN_ID:
+      ide_configuration_set_toolchain_id (self, g_value_get_string (value));
       break;
 
     case PROP_RUN_OPTS:
@@ -546,6 +566,20 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                          "host",
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_TOOLCHAIN] =
+    g_param_spec_object ("toolchain",
+                         "Toolchain",
+                         "Toolchain",
+                         IDE_TYPE_TOOLCHAIN,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TOOLCHAIN_ID] =
+    g_param_spec_string ("toolchain-id",
+                         "Toolchain Id",
+                         "The identifier of the toolchain",
+                         "default",
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_APP_ID] =
     g_param_spec_string ("app-id",
                          "App ID",
@@ -577,6 +611,7 @@ ide_configuration_init (IdeConfiguration *self)
   g_autoptr(IdeEnvironment) env = ide_environment_new ();
 
   priv->runtime_id = g_strdup ("host");
+  priv->toolchain_id = g_strdup ("default");
   priv->debug = TRUE;
   priv->parallelism = -1;
   priv->locality = IDE_BUILD_LOCALITY_DEFAULT;
@@ -668,6 +703,59 @@ ide_configuration_set_runtime_id (IdeConfiguration *self,
 }
 
 /**
+ * ide_configuration_get_toolchain_id:
+ * @self: An #IdeConfiguration
+ *
+ * Gets the toolchain id for the configuration.
+ *
+ * Returns: (transfer none) (nullable): The id of an #IdeToolchain or %NULL
+ *
+ * Since: 3.30
+ */
+const gchar *
+ide_configuration_get_toolchain_id (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return priv->toolchain_id;
+}
+
+/**
+ * ide_configuration_set_toolchain_id:
+ * @self: An #IdeConfiguration
+ * @toolchain_id: The id of an #IdeToolchain
+ *
+ * Sets the toolchain id for the configuration.
+ *
+ * Since: 3.30
+ */
+void
+ide_configuration_set_toolchain_id (IdeConfiguration *self,
+                                    const gchar      *toolchain_id)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+
+  if (toolchain_id == NULL)
+    toolchain_id = "default";
+
+  if (g_strcmp0 (toolchain_id, priv->toolchain_id) != 0)
+    {
+      g_free (priv->toolchain_id);
+      priv->toolchain_id = g_strdup (toolchain_id);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TOOLCHAIN_ID]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TOOLCHAIN]);
+
+      ide_configuration_set_dirty (self, TRUE);
+      ide_configuration_emit_changed (self);
+    }
+}
+
+/**
  * ide_configuration_get_runtime:
  * @self: An #IdeConfiguration
  *
@@ -691,6 +779,60 @@ ide_configuration_set_runtime (IdeConfiguration *self,
   g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
 
   IDE_CONFIGURATION_GET_CLASS (self)->set_runtime (self, runtime);
+}
+
+/**
+ * ide_configuration_get_toolchain:
+ * @self: An #IdeConfiguration
+ *
+ * Gets the toolchain for the configuration.
+ *
+ * Returns: (transfer full) (nullable): An #IdeToolchain
+ *
+ * Since: 3.30
+ */
+IdeToolchain *
+ide_configuration_get_toolchain (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  if (priv->toolchain_id != NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeToolchainManager *toolchain_manager = ide_context_get_toolchain_manager (context);
+      g_autoptr (IdeToolchain) toolchain = ide_toolchain_manager_get_toolchain (toolchain_manager, priv->toolchain_id);
+
+      if (toolchain != NULL)
+        return g_steal_pointer (&toolchain);
+    }
+
+  return NULL;
+}
+
+/**
+ * ide_configuration_set_toolchain:
+ * @self: An #IdeConfiguration
+ * @toolchain: (nullable): An #IdeToolchain or %NULL to use the default one
+ *
+ * Sets the toolchain for the configuration.
+ *
+ * Since: 3.30
+ */
+void
+ide_configuration_set_toolchain (IdeConfiguration *self,
+                                 IdeToolchain     *toolchain)
+{
+  const gchar *toolchain_id = "default";
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (!toolchain || IDE_IS_TOOLCHAIN (toolchain));
+
+  if (toolchain != NULL)
+    toolchain_id = ide_toolchain_get_id (toolchain);
+
+  ide_configuration_set_toolchain_id (self, toolchain_id);
 }
 
 /**

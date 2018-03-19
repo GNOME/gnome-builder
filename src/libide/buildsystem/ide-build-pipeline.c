@@ -50,6 +50,8 @@
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
 #include "terminal/ide-terminal-util.h"
+#include "toolchain/ide-toolchain-manager.h"
+#include "toolchain/ide-toolchain.h"
 #include "util/ide-line-reader.h"
 #include "util/ide-posix.h"
 #include "util/ptyintercept.h"
@@ -159,6 +161,13 @@ struct _IdeBuildPipeline
   IdeRuntime *runtime;
 
   /*
+   * The toolchain we're using to build. This may be different than what
+   * is specified in the IdeConfiguration, as the @device could alter
+   * what architecture we're building for (and/or cross-compiling).
+   */
+  IdeToolchain *toolchain;
+
+  /*
    * The IdeBuildLog is a private implementation that we use to
    * log things from addins via observer callbacks.
    */
@@ -171,13 +180,6 @@ struct _IdeBuildPipeline
    */
   gchar *builddir;
   gchar *srcdir;
-
-  /*
-   * This is some general information about our build device that
-   * the pipeline addins may want to use to tweak how the execute
-   * the build.
-   */
-  IdeTriplet *host_triplet;
 
   /*
    * This is an array of PipelineEntry, which contain information we
@@ -1172,22 +1174,6 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
   IDE_EXIT;
 }
 
-void
-_ide_build_pipeline_set_device_info (IdeBuildPipeline *self,
-                                     IdeDeviceInfo    *info)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (IDE_IS_DEVICE_INFO (info));
-
-  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
-
-  g_object_get (info, "host-triplet", &self->host_triplet, NULL);
-
-  IDE_EXIT;
-}
-
 static void
 ide_build_pipeline_load_get_info_cb (GObject      *object,
                                      GAsyncResult *result,
@@ -1213,7 +1199,7 @@ ide_build_pipeline_load_get_info_cb (GObject      *object,
   if (g_cancellable_is_cancelled (self->cancellable))
     IDE_EXIT;
 
-  _ide_build_pipeline_set_device_info (self, info);
+  _ide_build_pipeline_check_toolchain (self, info);
 
   ide_build_pipeline_load (self);
 }
@@ -1230,7 +1216,8 @@ ide_build_pipeline_begin_load (IdeBuildPipeline *self)
    * The first thing we need to do is get some information from the
    * configured device. We want to know the arch/kernel/system triplet
    * for the device as some pipeline addins may need that. We can also
-   * use that to ensure that we load the proper runtime for the device.
+   * use that to ensure that we load the proper runtime and toolchain
+   * for the device.
    *
    * We have to load this information asynchronously, as the device might
    * be remote (and we need to connect to it to get the information).
@@ -1309,9 +1296,9 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->log);
   g_clear_object (&self->device);
   g_clear_object (&self->runtime);
+  g_clear_object (&self->toolchain);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
-  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
   g_clear_pointer (&self->srcdir, g_free);
   g_clear_pointer (&self->builddir, g_free);
   g_clear_pointer (&self->errfmts, g_array_unref);
@@ -1426,6 +1413,7 @@ ide_build_pipeline_constructed (GObject *object)
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
+  IdeToolchainManager *toolchain_manager;
 
   IDE_ENTRY;
 
@@ -1439,6 +1427,8 @@ ide_build_pipeline_constructed (GObject *object)
 
   self->srcdir = g_file_get_path (workdir);
 
+  toolchain_manager = ide_context_get_toolchain_manager (context);
+  self->toolchain = ide_toolchain_manager_get_toolchain (toolchain_manager, "default");
   IDE_EXIT;
 }
 
@@ -2714,6 +2704,24 @@ ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
 }
 
 /**
+ * ide_build_pipeline_get_toolchain:
+ * @self: An #IdeBuildPipeline
+ *
+ * A convenience function to get the toolchain for a build pipeline.
+ *
+ * Returns: (transfer none): An #IdeToolchain
+ *
+ * Since: 3.30
+ */
+IdeToolchain *
+ide_build_pipeline_get_toolchain (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->toolchain;
+}
+
+/**
  * ide_build_pipeline_create_launcher:
  * @self: An #IdeBuildPipeline
  *
@@ -3741,6 +3749,49 @@ _ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
     }
 }
 
+void
+_ide_build_pipeline_set_toolchain (IdeBuildPipeline *self,
+                                   IdeToolchain     *toolchain)
+{
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (!toolchain || IDE_IS_TOOLCHAIN (toolchain));
+
+  if (g_set_object (&self->toolchain, toolchain))
+    ide_configuration_set_toolchain (self->configuration, toolchain);
+}
+
+void
+_ide_build_pipeline_check_toolchain (IdeBuildPipeline *self, IdeDeviceInfo *info)
+{
+  g_autoptr(IdeToolchain) toolchain = NULL;
+  g_autoptr(IdeTriplet) toolchain_triplet = NULL;
+  IdeRuntime *runtime;
+  IdeTriplet *device_triplet;
+
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (IDE_IS_DEVICE_INFO (info));
+
+  toolchain = ide_configuration_get_toolchain (self->configuration);
+  runtime = ide_configuration_get_runtime (self->configuration);
+  device_triplet = ide_device_info_get_host_triplet (info);
+  toolchain_triplet = ide_toolchain_get_host_triplet (toolchain);
+
+  // TODO fallback to the most compatible toolchain instead of the default one
+  if (toolchain == NULL ||
+      g_strcmp0 (ide_triplet_get_arch (device_triplet), ide_triplet_get_arch (toolchain_triplet)) != 0 ||
+      !ide_runtime_supports_toolchain (runtime, toolchain))
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeToolchainManager *toolchain_manager = ide_context_get_toolchain_manager (context);
+      g_autoptr(IdeToolchain) default_toolchain = ide_toolchain_manager_get_toolchain (toolchain_manager, "default");
+
+      g_return_if_fail (IDE_IS_CONTEXT (context));
+      g_return_if_fail (IDE_IS_TOOLCHAIN_MANAGER (toolchain_manager));
+
+      _ide_build_pipeline_set_toolchain (self, default_toolchain);
+    }
+}
+
 /**
  * ide_build_pipeline_get_device:
  * @self: a #IdeBuildPipeline
@@ -3757,47 +3808,6 @@ ide_build_pipeline_get_device (IdeBuildPipeline *self)
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
   return self->device;
-}
-
-/**
- * ide_build_pipeline_get_host_triplet:
- * @self: a #IdeBuildPipeline
- *
- * Gets the architecture, kernel, and system that the pipeline is building for,
- * once that has been discovered from the device.
- *
- * Returns: (nullable) (transfer full): an #IdeTriplet describing the architecture,
- * or %NULL. Should be unrefered using ide_triplet_unref() when no longer needed
- *
- * Since: 3.30
- */
-
-IdeTriplet *
-ide_build_pipeline_get_host_triplet (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
-
-  return ide_triplet_ref (self->host_triplet);
-}
-
-/**
- * ide_build_pipeline_is_native:
- * @self: a #IdeBuildPipeline
- *
- * Checks to see if the pipeline is building for the native architecture,
- * kernel, and system of the host.
- *
- * This is equivalent to checking if ide_get_system_type() matches the
- * device-triplet property of the pipeline.
- *
- * Returns: %TRUE if this is a native build, otherwise %FALSE
- */
-gboolean
-ide_build_pipeline_is_native (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
-
-  return ide_triplet_is_system (self->host_triplet);
 }
 
 /**
