@@ -95,6 +95,10 @@ typedef struct _IdeRuntime                     IdeRuntime;
 typedef struct _IdeRuntimeManager              IdeRuntimeManager;
 typedef struct _IdeRuntimeProvider             IdeRuntimeProvider;
 
+typedef struct _IdeToolchain                   IdeToolchain;
+typedef struct _IdeToolchainManager            IdeToolchainManager;
+typedef struct _IdeToolchainProvider           IdeToolchainProvider;
+
 typedef struct _IdeSearchEngine                IdeSearchEngine;
 typedef struct _IdeSearchProvider              IdeSearchProvider;
 typedef struct _IdeSearchResult                IdeSearchResult;
