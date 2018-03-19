@@ -180,6 +180,7 @@ deploy_get_commit_cb (GObject      *object,
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
   IdeConfiguration *config;
+  IdeToolchain *toolchain;
   const gchar *arch;
   const gchar *app_id;
   DeployState *state;
@@ -200,7 +201,8 @@ deploy_get_commit_cb (GObject      *object,
 
   context = ide_object_get_context (IDE_OBJECT (state->pipeline));
   config = ide_build_pipeline_get_configuration (state->pipeline);
-  arch = ide_build_pipeline_get_arch (state->pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (state->pipeline);
+  arch = ide_toolchain_get_host_architecture (toolchain);
   staging_dir = gbp_flatpak_get_staging_dir (state->pipeline);
   repo_dir = gbp_flatpak_get_repo_dir (context);
   app_id = ide_configuration_get_app_id (config);
@@ -308,6 +310,7 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   const gchar *app_id;
   const gchar *arch;
   IdeDevice *device;
+  IdeToolchain *toolchain;
 
   IDE_ENTRY;
 
@@ -320,7 +323,8 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
 
   config = ide_build_pipeline_get_configuration (pipeline);
   device = ide_build_pipeline_get_device (pipeline);
-  arch = ide_build_pipeline_get_arch (pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (toolchain);
+  arch = ide_toolchain_get_host_architecture (pipeline);
   app_id = ide_configuration_get_app_id (config);
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (config));

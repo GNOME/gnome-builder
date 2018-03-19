@@ -37,13 +37,15 @@ gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
   const gchar *arch;
   IdeContext *context;
   IdeVcs *vcs;
+  IdeToolchain *toolchain;
 
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (pipeline));
   vcs = ide_context_get_vcs (context);
   branch = ide_vcs_get_branch_name (vcs);
-  arch = ide_build_pipeline_get_arch (pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (pipeline);
+  arch = ide_toolchain_get_host_architecture (toolchain);
   name = g_strdup_printf ("%s-%s", arch, branch);
 
   g_strdelimit (name, G_DIR_SEPARATOR_S, '-');
