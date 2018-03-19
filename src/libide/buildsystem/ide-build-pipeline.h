@@ -188,5 +188,7 @@ IDE_AVAILABLE_IN_3_28
 gboolean               ide_build_pipeline_has_configured      (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_28
 IdeBuildPhase          ide_build_pipeline_get_requested_phase (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_28
+gboolean               ide_build_pipeline_is_native           (IdeBuildPipeline       *self);
 
 G_END_DECLS
