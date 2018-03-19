@@ -499,8 +499,41 @@ gbp_recent_section_class_init (GbpRecentSectionClass *klass)
   g_type_ensure (GBP_TYPE_RECENT_PROJECT_ROW);
 }
 
+static gboolean
+on_button_press_event_cb (GtkListBox       *listbox,
+                          GdkEventButton   *ev,
+                          GbpRecentSection *self)
+{
+  GtkListBoxRow *row;
+
+  g_assert (GTK_IS_LIST_BOX (listbox));
+  g_assert (GBP_IS_RECENT_SECTION (self));
+
+  if (ev->button == GDK_BUTTON_SECONDARY)
+    {
+      dzl_gtk_widget_action (GTK_WIDGET (self),
+                             "greeter",
+                             "state",
+                             g_variant_new_string ("selection"));
+
+      if ((row = gtk_list_box_get_row_at_y (listbox, ev->y)))
+        {
+          g_object_set (row, "selected", TRUE, NULL);
+          return GDK_EVENT_STOP;
+        }
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+
 static void
 gbp_recent_section_init (GbpRecentSection *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect (self->listbox,
+                    "button-press-event",
+                    G_CALLBACK (on_button_press_event_cb),
+                    self);
 }
