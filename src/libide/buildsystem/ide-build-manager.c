@@ -546,6 +546,7 @@ initable_init (GInitable     *initable,
   IdeConfigurationManager *config_manager;
   IdeDeviceManager *device_manager;
   IdeContext *context;
+  IdeVcs *vcs;
 
   IDE_ENTRY;
 
@@ -555,6 +556,7 @@ initable_init (GInitable     *initable,
   context = ide_object_get_context (IDE_OBJECT (self));
   config_manager = ide_context_get_configuration_manager (context);
   device_manager = ide_context_get_device_manager (context);
+  vcs = ide_context_get_vcs (context);
 
   g_signal_connect_object (config_manager,
                            "invalidate",
@@ -564,6 +566,12 @@ initable_init (GInitable     *initable,
 
   g_signal_connect_object (device_manager,
                            "notify::device",
+                           G_CALLBACK (ide_build_manager_invalidate_pipeline),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (vcs,
+                           "changed",
                            G_CALLBACK (ide_build_manager_invalidate_pipeline),
                            self,
                            G_CONNECT_SWAPPED);
