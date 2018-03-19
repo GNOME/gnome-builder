@@ -153,6 +153,13 @@ struct _IdeBuildPipeline
   IdeRuntime *runtime;
 
   /*
+   * The toolchain we're using to build. This may be different than what
+   * is specified in the IdeConfiguration, as the @device could alter
+   * what architecture we're building for (and/or cross-compiling).
+   */
+  IdeToolchain *toolchain;
+
+  /*
    * The IdeBuildLog is a private implementation that we use to
    * log things from addins via observer callbacks.
    */
@@ -165,16 +172,6 @@ struct _IdeBuildPipeline
    */
   gchar *builddir;
   gchar *srcdir;
-
-  /*
-   * This is some general information about our build device that
-   * the pipeline addins may want to use to tweak how the execute
-   * the build.
-   */
-  gchar *arch;
-  gchar *kernel;
-  gchar *system;
-  gchar *system_type;
 
   /*
    * This is an array of PipelineEntry, which contain information we
@@ -1065,31 +1062,6 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
   IDE_EXIT;
 }
 
-void
-_ide_build_pipeline_set_device_info (IdeBuildPipeline *self,
-                                     IdeDeviceInfo    *info)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (IDE_IS_DEVICE_INFO (info));
-
-  g_clear_pointer (&self->arch, g_free);
-  g_clear_pointer (&self->kernel, g_free);
-  g_clear_pointer (&self->system, g_free);
-  g_clear_pointer (&self->system_type, g_free);
-
-  g_object_get (info,
-                "arch", &self->arch,
-                "kernel", &self->kernel,
-                "system", &self->system,
-                NULL);
-
-  self->system_type = ide_create_host_triplet (self->arch, self->kernel, self->system);
-
-  IDE_EXIT;
-}
-
 static void
 ide_build_pipeline_load_get_info_cb (GObject      *object,
                                      GAsyncResult *result,
@@ -1115,7 +1087,7 @@ ide_build_pipeline_load_get_info_cb (GObject      *object,
   if (g_cancellable_is_cancelled (self->cancellable))
     IDE_EXIT;
 
-  _ide_build_pipeline_set_device_info (self, info);
+  // TODO: use the right toolchain
 
   ide_build_pipeline_load (self);
 }
@@ -1211,12 +1183,9 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->log);
   g_clear_object (&self->device);
   g_clear_object (&self->runtime);
+  g_clear_object (&self->toolchain);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
-  g_clear_pointer (&self->arch, g_free);
-  g_clear_pointer (&self->kernel, g_free);
-  g_clear_pointer (&self->system, g_free);
-  g_clear_pointer (&self->system_type, g_free);
   g_clear_pointer (&self->srcdir, g_free);
   g_clear_pointer (&self->builddir, g_free);
   g_clear_pointer (&self->errfmts, g_array_unref);
@@ -2619,6 +2588,24 @@ ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
 }
 
 /**
+ * ide_build_pipeline_get_toolchain:
+ * @self: An #IdeBuildPipeline
+ *
+ * A convenience function to get the toolchain for a build pipeline.
+ *
+ * Returns: (transfer none) (nullable): An #IdeToolchain or %NULL
+ *
+ * Since: 3.30
+ */
+IdeToolchain *
+ide_build_pipeline_get_toolchain (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->toolchain;
+}
+
+/**
  * ide_build_pipeline_create_launcher:
  * @self: An #IdeBuildPipeline
  *
@@ -3646,6 +3633,26 @@ _ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
     }
 }
 
+void
+_ide_build_pipeline_set_toolchain (IdeBuildPipeline *self,
+                                   IdeToolchain     *toolchain)
+{
+  g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
+  g_return_if_fail (!toolchain || IDE_IS_TOOLCHAIN (toolchain));
+
+  if (g_set_object (&self->toolchain, toolchain))
+    {
+      IdeBuildSystem *build_system;
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      build_system = ide_context_get_build_system (context);
+
+      g_clear_pointer (&self->builddir, g_free);
+      self->builddir = ide_build_system_get_builddir (build_system, self);
+    }
+}
+
 /**
  * ide_build_pipeline_get_device:
  * @self: a #IdeBuildPipeline
@@ -3662,105 +3669,6 @@ ide_build_pipeline_get_device (IdeBuildPipeline *self)
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
   return self->device;
-}
-
-/**
- * ide_build_pipeline_get_arch:
- * @self: a #IdeBuildPipeline
- *
- * Gets the architecture that the pipeline is building for, once that has
- * been discovered from the device.
- *
- * Returns: (nullable): a string describing the architecture, or %NULL
- *
- * Since: 3.28
- */
-const gchar *
-ide_build_pipeline_get_arch (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
-
-  return self->arch;
-}
-
-/**
- * ide_build_pipeline_get_kernel:
- * @self: a #IdeBuildPipeline
- *
- * Gets the kernel that the pipeline is building for, once that has
- * been discovered from the device.
- *
- * Returns: (nullable): a string describing the kernel, or %NULL
- *
- * Since: 3.28
- */
-const gchar *
-ide_build_pipeline_get_kernel (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
-
-  return self->kernel;
-}
-
-/**
- * ide_build_pipeline_get_system:
- * @self: a #IdeBuildPipeline
- *
- * Gets the system portion of the host tripet that the pipeline is
- * building for, once that has been discovered from the device.
- *
- * For Linux based devices, this will generally be "gnu".
- *
- * Returns: (nullable): a string describing the device system, or %NULL
- *
- * Since: 3.28
- */
-const gchar *
-ide_build_pipeline_get_system (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
-
-  return self->system;
-}
-
-/**
- * ide_build_pipeline_get_system_type:
- * @self: a #IdeBuildPipeline
- *
- * Gets the combination of arch-kernel-system, sometimes referred to as
- * the "host triplet".
- *
- * For Linux based devices, this will generally be something like
- * "x86_64-linux-gnu".
- *
- * Returns: a string describing the device
- *
- * Since: 3.28
- */
-const gchar *
-ide_build_pipeline_get_system_type (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
-
-  return self->system_type;
-}
-
-/**
- * ide_build_pipeline_is_native:
- * @self: a #IdeBuildPipeline
- *
- * Checks to see if the pipeline is building for the native architecture,
- * kernel, and system of the host.
- *
- * This is equivalent to checking if ide_get_system_type() matches the host
- * triplet (arch, kernel, system) properties of the pipeline.
- *
- * Returns: %TRUE if this is a native build, otherwise %FALSE.
- */
-gboolean
-ide_build_pipeline_is_native (IdeBuildPipeline *self)
-{
-  return g_strcmp0 (self->system_type, ide_get_system_type ()) == 0;
 }
 
 /**

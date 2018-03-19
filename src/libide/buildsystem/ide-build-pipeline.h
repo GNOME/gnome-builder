@@ -68,18 +68,12 @@ IDE_AVAILABLE_IN_3_28
 IdeDevice             *ide_build_pipeline_get_device          (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_28
 IdeRuntime            *ide_build_pipeline_get_runtime         (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_30
+IdeToolchain          *ide_build_pipeline_get_toolchain       (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_builddir        (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_srcdir          (IdeBuildPipeline       *self);
-IDE_AVAILABLE_IN_3_28
-const gchar           *ide_build_pipeline_get_arch            (IdeBuildPipeline       *self);
-IDE_AVAILABLE_IN_3_28
-const gchar           *ide_build_pipeline_get_kernel          (IdeBuildPipeline       *self);
-IDE_AVAILABLE_IN_3_28
-const gchar           *ide_build_pipeline_get_system          (IdeBuildPipeline       *self);
-IDE_AVAILABLE_IN_3_28
-const gchar           *ide_build_pipeline_get_system_type     (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 gchar                 *ide_build_pipeline_get_message         (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
@@ -189,7 +183,5 @@ IDE_AVAILABLE_IN_3_28
 gboolean               ide_build_pipeline_has_configured      (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_28
 IdeBuildPhase          ide_build_pipeline_get_requested_phase (IdeBuildPipeline       *self);
-IDE_AVAILABLE_IN_3_28
-gboolean               ide_build_pipeline_is_native           (IdeBuildPipeline       *self);
 
 G_END_DECLS
