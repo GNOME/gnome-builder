@@ -80,6 +80,8 @@ struct _IdeBuildManager
   guint             can_build : 1;
   guint             can_export : 1;
   guint             building : 1;
+  guint             needs_rediagnose : 1;
+  guint             has_configured : 1;
 };
 
 static void initable_iface_init              (GInitableIface  *iface);
@@ -585,10 +587,28 @@ static void
 ide_build_manager_real_build_started (IdeBuildManager  *self,
                                       IdeBuildPipeline *pipeline)
 {
+  IdeBuildPhase phase;
+
   g_assert (IDE_IS_BUILD_MANAGER (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   ide_build_manager_start_timer (self);
+
+  /*
+   * When the build completes, we may want to update diagnostics for
+   * files that are open. But we only want to do this if we are reaching
+   * configure for the first time, or performing a real build.
+   */
+
+  phase = ide_build_pipeline_get_requested_phase (pipeline);
+  g_assert ((phase & IDE_BUILD_PHASE_MASK) == phase);
+
+  if (phase == IDE_BUILD_PHASE_BUILD ||
+      (phase == IDE_BUILD_PHASE_CONFIGURE && !self->has_configured))
+    {
+      self->needs_rediagnose = TRUE;
+      self->has_configured = TRUE;
+    }
 }
 
 static void
@@ -614,6 +634,13 @@ ide_build_manager_real_build_finished (IdeBuildManager  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   ide_build_manager_stop_timer (self);
+
+  /*
+   * If this was not a full build (such as advancing to just the configure
+   * phase or so), then there is nothing more to do.
+   */
+  if (!self->needs_rediagnose)
+    return;
 
   /*
    * We had a successful build, so lets notify the build manager to reload
