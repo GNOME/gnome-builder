@@ -117,6 +117,10 @@ ide_vcs_default_init (IdeVcsInterface *iface)
 
   /* Ignore Gio temporary files */
   ide_vcs_register_ignored (".goutputstream-*");
+
+  /* Ignore minified JS */
+  ide_vcs_register_ignored ("*.min.js");
+  ide_vcs_register_ignored ("*.min.js.*");
 }
 
 /**
