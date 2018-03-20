@@ -66,9 +66,17 @@ static const gchar *exclude_dirs[] = {
   ".svn",
 };
 
+/* This is an optimization to avoid reading files in from disk that
+ * we know we'll discard, rather than wait until we query the IdeVcs
+ * for that information.
+ */
 static const gchar *exclude_files[] = {
   "*.m4",
   "*.po",
+  "*.min.js.*",
+  "*.min.js",
+  "configure",
+  "Makecache",
 };
 
 static const gchar *keywords[] = {
