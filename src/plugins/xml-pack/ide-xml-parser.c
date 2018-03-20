@@ -69,6 +69,8 @@ parser_state_free (ParserState *state)
   g_clear_pointer (&state->diagnostics_array, g_ptr_array_unref);
   g_clear_object (&state->file);
   g_clear_object (&state->root_node);
+  g_clear_object (&state->sax_parser);
+  g_clear_object (&state->stack);
 
   g_clear_pointer (&state->content, g_bytes_unref);
   g_clear_pointer (&state->schemas, g_array_unref);
@@ -119,7 +121,7 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
   g_assert (IDE_IS_XML_PARSER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  ide_xml_sax_get_location (self->sax_parser,
+  ide_xml_sax_get_location (state->sax_parser,
                             &start_line, &start_line_offset,
                             &end_line, &end_line_offset,
                             NULL,
@@ -184,10 +186,10 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
       /* TODO: we need better node comparaison (ns) here */
       if (!dzl_str_equal0 (erroneous_element_name, element_name))
         {
-          if (ide_xml_stack_is_empty (self->stack))
+          if (ide_xml_stack_is_empty (state->stack))
             goto error;
 
-          popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
+          popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth);
           ide_xml_symbol_node_set_state (popped_node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
           g_clear_pointer (&popped_element_name, g_free);
 
@@ -196,8 +198,8 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
         }
     }
 
-  depth = ide_xml_sax_get_depth (self->sax_parser);
-  ide_xml_sax_get_location (self->sax_parser, &start_line, &start_line_offset, &end_line, &end_line_offset, &content, &size);
+  depth = ide_xml_sax_get_depth (state->sax_parser);
+  ide_xml_sax_get_location (state->sax_parser, &start_line, &start_line_offset, &end_line, &end_line_offset, &content, &size);
 
   /* No node mean not created by one of the specific parser */
   if (node == NULL)
@@ -210,7 +212,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
                                             end_line, end_line_offset,
                                             size);
 
-          ide_xml_stack_push (self->stack, element_name, node, state->parent_node, depth);
+          ide_xml_stack_push (state->stack, element_name, node, state->parent_node, depth);
           ide_xml_symbol_node_take_internal_child (state->parent_node, node);
           state->parent_node = node;
 
@@ -221,10 +223,10 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
         {
           while (TRUE)
             {
-              if (ide_xml_stack_is_empty (self->stack))
+              if (ide_xml_stack_is_empty (state->stack))
                 goto error;
 
-              popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
+              popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth);
               if (dzl_str_equal0 (popped_element_name, element_name))
                 {
                   ide_xml_symbol_node_set_end_tag_location (popped_node,
@@ -263,7 +265,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
 
   if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT)
     {
-      ide_xml_stack_push (self->stack, element_name, node, state->parent_node, depth);
+      ide_xml_stack_push (state->stack, element_name, node, state->parent_node, depth);
       if (is_internal)
         ide_xml_symbol_node_take_internal_child (state->parent_node, node);
       else
@@ -276,10 +278,10 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
   else if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT)
     {
       /* TODO: compare current with popped */
-      if (ide_xml_stack_is_empty (self->stack))
+      if (ide_xml_stack_is_empty (state->stack))
         goto error;
 
-      popped_node = ide_xml_stack_pop (self->stack, &popped_element_name, &parent_node, &depth);
+      popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth);
       state->parent_node = parent_node;
       g_assert (state->parent_node != NULL);
     }
@@ -354,7 +356,7 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
   diagnostic = ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_ERROR);
   g_ptr_array_add (state->diagnostics_array, diagnostic);
 
-  context = ide_xml_sax_get_context (self->sax_parser);
+  context = ide_xml_sax_get_context (state->sax_parser);
   base = (const gchar *)context->input->base;
   current = (const gchar *)context->input->cur;
   error = xmlCtxtGetLastError (context);
@@ -381,7 +383,7 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
               ide_xml_symbol_node_set_state (node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
               ide_xml_symbol_node_take_internal_child (state->parent_node, node);
 
-              ide_xml_sax_get_location (self->sax_parser,
+              ide_xml_sax_get_location (state->sax_parser,
                                         &start_line, &start_line_offset,
                                         &end_line, &end_line_offset,
                                         NULL, &size);
@@ -429,7 +431,7 @@ ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
 
   entry = ide_xml_schema_cache_entry_new ();
   entry->kind = SCHEMA_KIND_DTD;
-  ide_xml_sax_get_location (self->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
+  ide_xml_sax_get_location (state->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
   g_ptr_array_add (state->schemas, entry);
 }
 
@@ -497,7 +499,7 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
           entry->file = get_absolute_schema_file (state->file, schema_url);;
           entry->kind = kind;
 
-          ide_xml_sax_get_location (self->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
+          ide_xml_sax_get_location (state->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
           /* Needed to pass the kind to the service schema fetcher */
           g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
 
@@ -564,7 +566,7 @@ ide_xml_parser_get_analysis_worker (GTask        *task,
     ide_xml_parser_generic_setup (self, state);
 
   uri = g_file_get_uri (state->file);
-  ide_xml_sax_parse (self->sax_parser, doc_data, doc_size, uri, state);
+  ide_xml_sax_parse (state->sax_parser, doc_data, doc_size, uri, state);
 
   if (self->post_processing_callback != NULL)
     (self->post_processing_callback)(self, state->root_node);
@@ -623,6 +625,8 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->sequence = sequence;
   state->diagnostics_array = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
   state->schemas = g_ptr_array_new_with_free_func (g_object_unref);
+  state->sax_parser = ide_xml_sax_new ();
+  state->stack = ide_xml_stack_new ();
 
   state->build_state = BUILD_STATE_NORMAL;
 
@@ -631,7 +635,7 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   ide_xml_analysis_set_root_node (state->analysis, state->root_node);
 
   state->parent_node = state->root_node;
-  ide_xml_stack_push (self->stack, "root", state->root_node, NULL, 0);
+  ide_xml_stack_push (state->stack, "root", state->root_node, NULL, 0);
 
   g_task_set_task_data (task, state, (GDestroyNotify)parser_state_free);
   g_task_run_in_thread (task, ide_xml_parser_get_analysis_worker);
@@ -763,9 +767,6 @@ ide_xml_parser_finalize (GObject *object)
 {
   IdeXmlParser *self = (IdeXmlParser *)object;
 
-  g_clear_object (&self->sax_parser);
-  g_clear_object (&self->stack);
-
   g_clear_pointer (&self->color_tags, g_array_unref);
   g_clear_object (&self->settings);
 
@@ -783,9 +784,6 @@ ide_xml_parser_class_init (IdeXmlParserClass *klass)
 static void
 ide_xml_parser_init (IdeXmlParser *self)
 {
-  self->sax_parser = ide_xml_sax_new ();
-  self->stack = ide_xml_stack_new ();
-
   self->color_tags = g_array_new (TRUE, TRUE, sizeof (ColorTag));
   g_array_set_clear_func (self->color_tags, (GDestroyNotify)color_tag_free);
 

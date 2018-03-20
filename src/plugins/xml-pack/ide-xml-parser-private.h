@@ -53,8 +53,6 @@ typedef enum _ColorTagId
 struct _IdeXmlParser
 {
   GObject                 parent_instance;
-  IdeXmlSax              *sax_parser;
-  IdeXmlStack            *stack;
   GSettings              *settings;
   GArray                 *color_tags;
   PostProcessingCallback  post_processing_callback;
@@ -75,6 +73,9 @@ typedef struct _ParserState
   gint               current_depth;
   GPtrArray         *schemas;
   gint64             sequence;
+
+  IdeXmlSax         *sax_parser;
+  IdeXmlStack       *stack;
 
   guint              error_missing_tag_end : 1;
   guint              file_is_ui : 1;
