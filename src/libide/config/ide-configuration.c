@@ -138,10 +138,7 @@ ide_configuration_real_get_runtime (IdeConfiguration *self)
     {
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
       IdeRuntimeManager *runtime_manager = ide_context_get_runtime_manager (context);
-      IdeRuntime *runtime = ide_runtime_manager_get_runtime (runtime_manager, priv->runtime_id);
-
-      if (runtime != NULL)
-        return g_object_ref (runtime);
+      return ide_runtime_manager_get_runtime (runtime_manager, priv->runtime_id);;
     }
 
   return NULL;
