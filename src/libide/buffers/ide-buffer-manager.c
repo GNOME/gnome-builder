@@ -1218,6 +1218,8 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
   IdeContext *context;
   SaveState *state;
 
+  IDE_ENTRY;
+
   if (progress)
     *progress = NULL;
 
@@ -1228,6 +1230,22 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_buffer_manager_save_file_async);
+
+  /* Short cirtcuit if there is nothing to do. */
+  if (!gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)) &&
+      !ide_buffer_get_changed_on_volume (buffer) &&
+      ide_file_equal (file, ide_buffer_get_file (buffer)))
+    {
+      if (progress != NULL)
+        {
+          *progress = ide_progress_new ();
+          ide_progress_set_fraction (*progress, 1.0);
+        }
+
+      g_task_return_boolean (task, TRUE);
+      IDE_GOTO (unmodified);
+    }
 
   context = ide_object_get_context (IDE_OBJECT (self));
   ide_context_hold_for_object (context, task);
@@ -1254,7 +1272,10 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
                                 ide_buffer_manager_save_file__load_settings_cb,
                                 g_object_ref (task));
 
+unmodified:
   unregister_auto_save (self, state->buffer);
+
+  IDE_EXIT;
 }
 
 /**
