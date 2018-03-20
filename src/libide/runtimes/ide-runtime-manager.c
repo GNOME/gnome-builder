@@ -413,7 +413,10 @@ _ide_runtime_manager_prepare_finish (IdeRuntimeManager  *self,
   if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
     {
       if ((ret = ide_runtime_manager_get_runtime (self, state->runtime_id)))
-        g_clear_error (&local_error);
+        {
+          g_object_ref (ret);
+          g_clear_error (&local_error);
+        }
     }
 
   if (error != NULL)
