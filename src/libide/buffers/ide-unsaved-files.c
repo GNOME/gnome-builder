@@ -34,6 +34,7 @@
 #include "buffers/ide-unsaved-files.h"
 #include "projects/ide-project.h"
 #include "util/ide-line-reader.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -196,7 +197,7 @@ get_buffers_dir (IdeContext *context)
 }
 
 static void
-ide_unsaved_files_save_worker (GTask        *task,
+ide_unsaved_files_save_worker (IdeTask      *task,
                                gpointer      source_object,
                                gpointer      task_data,
                                GCancellable *cancellable)
@@ -208,7 +209,7 @@ ide_unsaved_files_save_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_UNSAVED_FILES (source_object));
   g_assert (state != NULL);
   g_assert (state->drafts_directory != NULL);
@@ -217,10 +218,10 @@ ide_unsaved_files_save_worker (GTask        *task,
   /* ensure that the directory exists */
   if (g_mkdir_with_parents (state->drafts_directory, 0700) != 0)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               g_io_error_from_errno (errno),
-                               "Failed to create drafts directory");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 g_io_error_from_errno (errno),
+                                 "Failed to create drafts directory");
       IDE_EXIT;
     }
 
@@ -252,9 +253,9 @@ ide_unsaved_files_save_worker (GTask        *task,
     }
 
   if (!g_file_set_contents (manifest_path, manifest->str, manifest->len, &write_error))
-    g_task_return_error (task, g_steal_pointer (&write_error));
+    ide_task_return_error (task, g_steal_pointer (&write_error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -283,7 +284,7 @@ ide_unsaved_files_save_async (IdeUnsavedFiles     *self,
                               GAsyncReadyCallback  callback,
                               gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   AsyncState *state;
 
   IDE_ENTRY;
@@ -310,11 +311,11 @@ ide_unsaved_files_save_async (IdeUnsavedFiles     *self,
 
   g_mutex_unlock (&self->mutex);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_unsaved_files_save_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task, state, async_state_free);
-  g_task_run_in_thread (task, ide_unsaved_files_save_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_unsaved_files_save_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_task_data (task, state, async_state_free);
+  ide_task_run_in_thread (task, ide_unsaved_files_save_worker);
 
   IDE_EXIT;
 }
@@ -330,15 +331,15 @@ ide_unsaved_files_save_finish (IdeUnsavedFiles  *files,
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (files), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
 
 static void
-ide_unsaved_files_restore_worker (GTask        *task,
+ide_unsaved_files_restore_worker (IdeTask      *task,
                                   gpointer      source_object,
                                   gpointer      task_data,
                                   GCancellable *cancellable)
@@ -354,7 +355,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_UNSAVED_FILES (source_object));
   g_assert (state != NULL);
 
@@ -364,22 +365,22 @@ ide_unsaved_files_restore_worker (GTask        *task,
 
   if (!g_file_test (manifest_path, G_FILE_TEST_IS_REGULAR))
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
   if (!g_file_get_contents (manifest_path, &manifest_contents, &len, &read_error))
     {
-      g_task_return_error (task, g_steal_pointer (&read_error));
+      ide_task_return_error (task, g_steal_pointer (&read_error));
       return;
     }
 
   if (len > G_MAXSSIZE)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NO_SPACE,
-                               "File is too large to load");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NO_SPACE,
+                                 "File is too large to load");
       return;
     }
 
@@ -425,7 +426,7 @@ ide_unsaved_files_restore_worker (GTask        *task,
       g_ptr_array_add (state->unsaved_files, g_steal_pointer (&unsaved));
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 void
@@ -434,7 +435,7 @@ ide_unsaved_files_restore_async (IdeUnsavedFiles     *files,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   AsyncState *state;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
@@ -444,10 +445,10 @@ ide_unsaved_files_restore_async (IdeUnsavedFiles     *files,
 
   state = async_state_new (files);
 
-  task = g_task_new (files, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task, state, async_state_free);
-  g_task_run_in_thread (task, ide_unsaved_files_restore_worker);
+  task = ide_task_new (files, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_task_data (task, state, async_state_free);
+  ide_task_run_in_thread (task, ide_unsaved_files_restore_worker);
 }
 
 gboolean
@@ -459,9 +460,9 @@ ide_unsaved_files_restore_finish (IdeUnsavedFiles  *self,
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  state = g_task_get_task_data (G_TASK (result));
+  state = ide_task_get_task_data (IDE_TASK (result));
   g_assert (state != NULL);
   g_assert (state->unsaved_files != NULL);
 
@@ -475,7 +476,7 @@ ide_unsaved_files_restore_finish (IdeUnsavedFiles  *self,
 
   g_mutex_unlock (&self->mutex);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -869,17 +870,17 @@ ide_unsaved_files_reap_cb (GObject      *object,
                            gpointer      user_data)
 {
   DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 void
@@ -888,7 +889,7 @@ ide_unsaved_files_reap_async (IdeUnsavedFiles     *self,
                               GAsyncReadyCallback  callback,
                               gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(DzlDirectoryReaper) reaper = NULL;
   g_autoptr(GFile) buffersdir = NULL;
   g_autofree gchar *path = NULL;
@@ -897,9 +898,9 @@ ide_unsaved_files_reap_async (IdeUnsavedFiles     *self,
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_unsaved_files_reap_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_unsaved_files_reap_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_return_if_fail (context != NULL);
@@ -923,7 +924,7 @@ ide_unsaved_files_reap_finish (IdeUnsavedFiles  *self,
                                GError          **error)
 {
   g_return_val_if_fail (IDE_IS_UNSAVED_FILES (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
