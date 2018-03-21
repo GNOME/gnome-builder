@@ -1198,12 +1198,20 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
 
 /**
  * ide_buffer_manager_save_file_async:
+ * @self: an #IdeBufferManager
+ * @buffer: an #IdeBuffer
+ * @file: an #IdeFile
+ * @progress: (out) (transfer full): a location for an #IdeProgress
+ * @cancellable: (nullable): a #GCancellable
+ * @callback: (nullable): a #GAsyncReadyCallback or %NULL
+ * @user_data: closure data for @callback
  *
- * This function asynchronously requests that a buffer be saved to the storage represented by
- * @file. @buffer should be a previously loaded buffer owned by @self, such as one loaded with
- * ide_buffer_manager_load_file_async().
+ * This function asynchronously requests that a buffer be saved to the storage
+ * represented by @file. @buffer should be a previously loaded buffer owned by
+ * @self, such as one loaded with ide_buffer_manager_load_file_async().
  *
- * Call ide_buffer_manager_save_file_finish() to complete this asynchronous request.
+ * Call ide_buffer_manager_save_file_finish() to complete this asynchronous
+ * request.
  */
 void
 ide_buffer_manager_save_file_async (IdeBufferManager     *self,
