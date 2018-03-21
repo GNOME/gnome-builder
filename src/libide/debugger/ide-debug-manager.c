@@ -468,6 +468,7 @@ ide_debug_manager_load_file_cb (GObject      *object,
   if (buffer == NULL)
     {
       g_warning ("%s", error->message);
+      g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -478,6 +479,8 @@ ide_debug_manager_load_file_cb (GObject      *object,
   g_assert (IDE_IS_DEBUGGER_BREAKPOINT (breakpoint));
 
   ide_debug_manager_mark_stopped (self, buffer, breakpoint);
+
+  g_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
