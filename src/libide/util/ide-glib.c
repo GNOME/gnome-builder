@@ -274,7 +274,7 @@ typedef struct
 } GetChildren;
 
 static void
-ide_g_file_get_children_worker (GTask        *task,
+ide_g_file_get_children_worker (IdeTask      *task,
                                 gpointer      source_object,
                                 gpointer      task_data,
                                 GCancellable *cancellable)
@@ -285,7 +285,7 @@ ide_g_file_get_children_worker (GTask        *task,
   GetChildren *gc = task_data;
   GFile *dir = source_object;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (G_IS_FILE (dir));
   g_assert (gc != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -300,7 +300,7 @@ ide_g_file_get_children_worker (GTask        *task,
 
   if (enumerator == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -312,7 +312,7 @@ ide_g_file_get_children_worker (GTask        *task,
 
       if (error != NULL)
         {
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }
 
@@ -322,9 +322,9 @@ ide_g_file_get_children_worker (GTask        *task,
       g_ptr_array_add (children, g_steal_pointer (&file_info));
     }
 
-  g_task_return_pointer (task,
-                         g_steal_pointer (&children),
-                         (GDestroyNotify) g_ptr_array_unref);
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&children),
+                           (GDestroyNotify) g_ptr_array_unref);
 }
 
 static void
@@ -363,7 +363,7 @@ ide_g_file_get_children_async (GFile               *file,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   GetChildren *gc;
 
   g_return_if_fail (G_IS_FILE (file));
@@ -374,11 +374,11 @@ ide_g_file_get_children_async (GFile               *file,
   gc->attributes = g_strdup (attributes);
   gc->flags = flags;
 
-  task = g_task_new (file, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_g_file_get_children_async);
-  g_task_set_priority (task, io_priority);
-  g_task_set_task_data (task, gc, get_children_free);
-  g_task_run_in_thread (task, ide_g_file_get_children_worker);
+  task = ide_task_new (file, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_g_file_get_children_async);
+  ide_task_set_priority (task, io_priority);
+  ide_task_set_task_data (task, gc, get_children_free);
+  ide_task_run_in_thread (task, ide_g_file_get_children_worker);
 }
 
 /**
@@ -400,10 +400,10 @@ ide_g_file_get_children_finish (GFile         *file,
                                 GError       **error)
 {
   g_return_val_if_fail (G_IS_FILE (file), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
-  g_return_val_if_fail (g_task_is_valid (G_TASK (result), file), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+  g_return_val_if_fail (ide_task_is_valid (IDE_TASK (result), file), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -469,7 +469,7 @@ populate_descendants_matching (GFile        *file,
 }
 
 static void
-ide_g_file_find_worker (GTask        *task,
+ide_g_file_find_worker (IdeTask      *task,
                         gpointer      source_object,
                         gpointer      task_data,
                         GCancellable *cancellable)
@@ -478,14 +478,14 @@ ide_g_file_find_worker (GTask        *task,
   GPatternSpec *spec = task_data;
   g_autoptr(GPtrArray) ret = NULL;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (G_IS_FILE (file));
   g_assert (spec != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
   populate_descendants_matching (file, cancellable, ret, spec);
-  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
 }
 
 /**
@@ -509,31 +509,31 @@ ide_g_file_find_async (GFile               *file,
                        GAsyncReadyCallback  callback,
                        gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPatternSpec) spec = NULL;
 
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (pattern != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (file, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_g_file_find_async);
-  g_task_set_priority (task, G_PRIORITY_LOW + 100);
+  task = ide_task_new (file, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_g_file_find_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW + 100);
 
   spec = g_pattern_spec_new (pattern);
 
   if (spec == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVAL,
-                               "Invalid pattern spec: %s",
-                               pattern);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "Invalid pattern spec: %s",
+                                 pattern);
       return;
     }
 
-  g_task_set_task_data (task, g_steal_pointer (&spec), (GDestroyNotify)g_pattern_spec_free);
-  g_task_run_in_thread (task, ide_g_file_find_worker);
+  ide_task_set_task_data (task, g_steal_pointer (&spec), (GDestroyNotify)g_pattern_spec_free);
+  ide_task_run_in_thread (task, ide_g_file_find_worker);
 }
 
 /**
@@ -552,9 +552,9 @@ ide_g_file_find_finish (GFile         *file,
                         GError       **error)
 {
   g_return_val_if_fail (G_IS_FILE (file), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 /**
