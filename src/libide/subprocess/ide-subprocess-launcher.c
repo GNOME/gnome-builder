@@ -403,9 +403,9 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
     }
 
   if (should_use_breakout_process (self))
-    g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_host_worker);
+    ide_subprocess_launcher_spawn_host_worker (task, self, NULL, cancellable);
   else
-    g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_worker);
+    ide_subprocess_launcher_spawn_worker (task, self, NULL, cancellable);
 
   return g_task_propagate_pointer (task, error);
 }
