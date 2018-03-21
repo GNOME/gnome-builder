@@ -226,7 +226,7 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
 }
 
 static void
-gb_file_search_index_builder (GTask        *task,
+gb_file_search_index_builder (IdeTask      *task,
                               gpointer      source_object,
                               gpointer      task_data,
                               GCancellable *cancellable)
@@ -239,7 +239,7 @@ gb_file_search_index_builder (GTask        *task,
   DzlFuzzyMutableIndex *fuzzy;
   gdouble elapsed;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GB_IS_FILE_SEARCH_INDEX (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (G_IS_FILE (directory));
@@ -261,7 +261,7 @@ gb_file_search_index_builder (GTask        *task,
 
   g_message ("File index built in %lf seconds.", elapsed);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 void
@@ -270,26 +270,26 @@ gb_file_search_index_build_async (GbFileSearchIndex   *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (GB_IS_FILE_SEARCH_INDEX (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gb_file_search_index_build_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gb_file_search_index_build_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->root_directory == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               "Root directory has not been set.");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_FILENAME,
+                                 "Root directory has not been set.");
       return;
     }
 
-  g_task_set_task_data (task, g_object_ref (self->root_directory), g_object_unref);
-  g_task_run_in_thread (task, gb_file_search_index_builder);
+  ide_task_set_task_data (task, g_object_ref (self->root_directory), g_object_unref);
+  ide_task_run_in_thread (task, gb_file_search_index_builder);
 }
 
 gboolean
@@ -297,13 +297,13 @@ gb_file_search_index_build_finish (GbFileSearchIndex  *self,
                                    GAsyncResult       *result,
                                    GError            **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (GB_IS_FILE_SEARCH_INDEX (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 GPtrArray *
