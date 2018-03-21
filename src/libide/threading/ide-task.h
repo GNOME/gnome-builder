@@ -125,9 +125,6 @@ IDE_AVAILABLE_IN_3_28
 void          ide_task_run_in_thread             (IdeTask              *self,
                                                   IdeTaskThreadFunc     thread_func);
 IDE_AVAILABLE_IN_3_28
-void          ide_task_run_in_thread_sync        (IdeTask              *self,
-                                                  IdeTaskThreadFunc     thread_func);
-IDE_AVAILABLE_IN_3_28
 void          ide_task_set_check_cancellable     (IdeTask              *self,
                                                   gboolean              check_cancellable);
 IDE_AVAILABLE_IN_3_28

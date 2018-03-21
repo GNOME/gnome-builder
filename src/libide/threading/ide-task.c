@@ -1411,29 +1411,6 @@ unlock:
     ide_task_return_error (self, g_steal_pointer (&error));
 }
 
-/**
- * ide_task_run_in_thread_sync: (skip)
- */
-void
-ide_task_run_in_thread_sync (IdeTask           *self,
-                             IdeTaskThreadFunc  thread_func)
-{
-  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
-  g_autoptr(GMainContext) main_context = NULL;
-
-  g_return_if_fail (IDE_IS_TASK (self));
-  g_return_if_fail (thread_func != NULL);
-
-  g_mutex_lock (&priv->mutex);
-  main_context = g_main_context_ref (priv->main_context);
-  g_mutex_unlock (&priv->mutex);
-
-  ide_task_run_in_thread (self, thread_func);
-
-  while (!ide_task_get_completed (self))
-    g_main_context_iteration (main_context, TRUE);
-}
-
 static IdeTaskResult *
 ide_task_propagate_locked (IdeTask            *self,
                            IdeTaskResultType   expected_type,

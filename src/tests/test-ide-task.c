@@ -672,31 +672,6 @@ test_ide_task_report_new_error (void)
   g_main_loop_run (main_loop);
 }
 
-static void
-test_ide_task_run_in_thread_sync_cb (IdeTask      *task,
-                                     gpointer      source_object,
-                                     gpointer      task_data,
-                                     GCancellable *cancellable)
-{
-  g_assert (IDE_IS_TASK (task));
-  g_assert_null (source_object);
-  g_assert_null (task_data);
-  g_assert_null (cancellable);
-
-  ide_task_return_int (task, 774);
-}
-
-static void
-test_ide_task_run_in_thread_sync (void)
-{
-  g_autoptr(IdeTask) task = ide_task_new (NULL, NULL, NULL, NULL);
-  g_autoptr(GError) error = NULL;
-
-  ide_task_run_in_thread_sync (task, test_ide_task_run_in_thread_sync_cb);
-  g_assert_cmpint (774, ==, ide_task_propagate_int (task, &error));
-  g_assert_no_error (error);
-}
-
 gint
 main (gint   argc,
       gchar *argv[])
@@ -729,7 +704,6 @@ main (gint   argc,
   g_test_add_func ("/Ide/Task/check-cancellable", test_ide_task_check_cancellable);
   g_test_add_func ("/Ide/Task/return-on-cancel", test_ide_task_return_on_cancel);
   g_test_add_func ("/Ide/Task/report-new-error", test_ide_task_report_new_error);
-  g_test_add_func ("/Ide/Task/run-in-thread-sync", test_ide_task_run_in_thread_sync);
 
   return g_test_run ();
 }
