@@ -38,20 +38,20 @@ ide_ctags_symbol_node_get_location_cb (GObject      *object,
 {
   IdeCtagsSymbolResolver *resolver = (IdeCtagsSymbolResolver *)object;
   g_autoptr(IdeSourceLocation) location = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CTAGS_SYMBOL_RESOLVER (resolver));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   location = ide_ctags_symbol_resolver_get_location_finish (resolver, result, &error);
 
   if (location == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task,
-                           g_steal_pointer (&location),
-                           (GDestroyNotify)ide_source_location_unref);
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&location),
+                             (GDestroyNotify)ide_source_location_unref);
 }
 
 static void
@@ -61,12 +61,12 @@ ide_ctags_symbol_node_get_location_async (IdeSymbolNode       *node,
                                           gpointer             user_data)
 {
   IdeCtagsSymbolNode *self = (IdeCtagsSymbolNode *)node;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CTAGS_SYMBOL_NODE (self));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_ctags_symbol_node_get_location_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_ctags_symbol_node_get_location_async);
 
   ide_ctags_symbol_resolver_get_location_async (self->resolver,
                                                 self->index,
@@ -82,9 +82,9 @@ ide_ctags_symbol_node_get_location_finish (IdeSymbolNode  *node,
                                            GError        **error)
 {
   g_return_val_if_fail (IDE_IS_CTAGS_SYMBOL_NODE (node), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

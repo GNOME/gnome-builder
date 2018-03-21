@@ -185,7 +185,7 @@ ide_ctags_index_parse_line (gchar              *line,
 }
 
 static void
-ide_ctags_index_build_index (GTask        *task,
+ide_ctags_index_build_index (IdeTask      *task,
                              gpointer      source_object,
                              gpointer      task_data,
                              GCancellable *cancellable)
@@ -201,7 +201,7 @@ ide_ctags_index_build_index (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_CTAGS_INDEX (self));
   g_assert (G_IS_FILE (self->file));
 
@@ -246,7 +246,7 @@ ide_ctags_index_build_index (GTask        *task,
   DZL_COUNTER_ADD (index_entries, (gint64)index->len);
   DZL_COUNTER_ADD (heap_size, (gint64)length);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 
@@ -255,12 +255,12 @@ failure:
   g_clear_pointer (&index, g_array_unref);
 
   if (error != NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_FAILED,
-                             "Failed to parse ctags file.");
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to parse ctags file.");
 
   IDE_EXIT;
 }
@@ -430,23 +430,23 @@ ide_ctags_index_init_async (GAsyncInitable      *initable,
                             gpointer             user_data)
 {
   IdeCtagsIndex *self = (IdeCtagsIndex *)initable;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_CTAGS_INDEX (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW + 100);
+  ide_task_set_source_tag (task, ide_ctags_index_init_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   if (self->file == NULL)
-    {
-      g_task_return_new_error (task,
+    ide_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_FAILED,
                                "You must set IdeCtagsIndex:file before async initialization");
-      return;
-    }
-
-  ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_index_build_index);
+  else
+    ide_task_run_in_thread (task, ide_ctags_index_build_index);
 }
 
 static gboolean
@@ -455,9 +455,9 @@ ide_ctags_index_init_finish (GAsyncInitable  *initable,
                              GError         **error)
 {
   g_assert (IDE_IS_CTAGS_INDEX (initable));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
