@@ -37,6 +37,7 @@
 #include "application/ide-application-tests.h"
 #include "application/ide-application-tool.h"
 #include "modelines/modeline-parser.h"
+#include "terminal/ide-terminal-private.h"
 #include "threading/ide-thread-pool.h"
 #include "threading/ide-thread-private.h"
 #include "util/ide-battery-monitor.h"
@@ -530,6 +531,8 @@ ide_application_startup (GApplication *application)
 
   if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
     ide_application_register_plugin_accessories (self);
+
+  _ide_guess_shell ();
 
   ide_application_load_addins (self);
 }

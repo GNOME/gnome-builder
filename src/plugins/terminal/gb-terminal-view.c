@@ -47,69 +47,11 @@ enum {
 };
 
 static GParamSpec *properties[LAST_PROP];
-static gchar *cached_shell;
 
 static void gb_terminal_view_connect_terminal (GbTerminalView *self,
                                                VteTerminal    *terminal);
 static void gb_terminal_respawn               (GbTerminalView *self,
                                                VteTerminal    *terminal);
-
-static gchar *
-gb_terminal_view_discover_shell (GbTerminalView  *self,
-                                 GCancellable    *cancellable,
-                                 GError         **error)
-{
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autofree gchar *command = NULL;
-  g_autofree gchar *stdout_buf = NULL;
-  g_auto(GStrv) argv = NULL;
-
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (cached_shell != NULL)
-    return g_strdup (cached_shell);
-
-  command = g_strdup_printf ("sh -c 'getent passwd | grep ^%s: | head -n1 | cut -f 7 -d :'",
-                             g_get_user_name ());
-
-  if (!g_shell_parse_argv (command, NULL, &argv, error))
-    return NULL;
-
-  /*
-   * We don't use the runtime shell here, because we want to know
-   * what the host thinks the user shell should be.
-   */
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-
-  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-  ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
-  ide_subprocess_launcher_push_args (launcher, (const gchar * const *)argv);
-
-  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, error);
-
-  if (subprocess == NULL)
-    return NULL;
-
-  if (!ide_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdout_buf, NULL, error))
-    return NULL;
-
-  if (stdout_buf != NULL)
-    {
-      g_strstrip (stdout_buf);
-      if (stdout_buf[0] == '/')
-        cached_shell = g_steal_pointer (&stdout_buf);
-    }
-
-  if (cached_shell == NULL)
-    g_set_error_literal (error,
-                         G_IO_ERROR,
-                         G_IO_ERROR_FAILED,
-                         "Unknown error when discovering user shell");
-
-  return g_strdup (cached_shell);
-}
 
 static void
 gb_terminal_view_wait_cb (GObject      *object,
@@ -245,20 +187,7 @@ gb_terminal_respawn (GbTerminalView *self,
   build_manager = ide_context_get_build_manager (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
-  shell = gb_terminal_view_discover_shell (self, NULL, &error);
-
-  if (shell == NULL)
-    {
-      g_warning ("Failed to discover user shell: %s", error->message);
-
-      /* We prefer bash in flatpak over sh */
-      if (ide_is_flatpak ())
-        shell = g_strdup ("/bin/bash");
-      else
-        shell = vte_get_user_shell ();
-
-      g_clear_error (&error);
-    }
+  shell = g_strdup (ide_get_user_shell ());
 
   pty = vte_terminal_pty_new_sync (terminal,
                                    VTE_PTY_DEFAULT | VTE_PTY_NO_LASTLOG | VTE_PTY_NO_UTMP | VTE_PTY_NO_WTMP,
