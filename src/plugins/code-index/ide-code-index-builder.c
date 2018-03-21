@@ -1361,6 +1361,7 @@ build_get_changes_cb (GObject      *object,
 
   bd = g_task_get_task_data (task);
   g_assert (bd != NULL);
+  g_assert (bd->magic == BUILD_DATA_MAGIC);
   g_assert (G_IS_FILE (bd->data_dir));
   g_assert (G_IS_FILE (bd->index_dir));
   g_assert (bd->changes == NULL);
