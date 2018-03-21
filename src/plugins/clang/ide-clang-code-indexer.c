@@ -43,7 +43,7 @@ build_request_free (gpointer data)
 }
 
 static void
-ide_clang_code_indexer_index_file_worker (GTask        *task,
+ide_clang_code_indexer_index_file_worker (IdeTask      *task,
                                           gpointer      source_object,
                                           gpointer      task_data,
                                           GCancellable *cancellable)
@@ -54,7 +54,7 @@ ide_clang_code_indexer_index_file_worker (GTask        *task,
   g_autofree gchar *path = NULL;
   enum CXErrorCode code;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_CLANG_CODE_INDEXER (source_object));
   g_assert (br != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -78,17 +78,17 @@ ide_clang_code_indexer_index_file_worker (GTask        *task,
                                       &unit);
 
   if (code != CXError_Success)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_FAILED,
-                             "Failed to index \"%s\"",
-                             path);
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to index \"%s\"",
+                               path);
   else
-    g_task_return_pointer (task,
-                           ide_clang_code_index_entries_new (g_steal_pointer (&index),
-                                                             g_steal_pointer (&unit),
-                                                             path),
-                           g_object_unref);
+    ide_task_return_pointer (task,
+                             ide_clang_code_index_entries_new (g_steal_pointer (&index),
+                                                               g_steal_pointer (&unit),
+                                                               path),
+                             g_object_unref);
 }
 
 static void
@@ -100,34 +100,33 @@ ide_clang_code_indexer_index_file_async (IdeCodeIndexer      *indexer,
                                          gpointer             user_data)
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)indexer;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   BuildRequest *br;
 
   g_assert (IDE_IS_CLANG_CODE_INDEXER (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_clang_code_indexer_index_file_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_code_indexer_index_file_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   if (!g_file_is_native (file))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Only native files are supported");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Only native files are supported");
       return;
     }
 
   br = g_slice_new0 (BuildRequest);
   br->build_flags = g_strdupv ((gchar **)args);
   br->file = g_object_ref (file);
-  g_task_set_task_data (task, br, build_request_free);
+  ide_task_set_task_data (task, br, build_request_free);
 
-  ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER,
-                             task,
-                             ide_clang_code_indexer_index_file_worker);
+  ide_task_run_in_thread (task, ide_clang_code_indexer_index_file_worker);
 }
 
 static IdeCodeIndexEntries *
@@ -136,9 +135,9 @@ ide_clang_code_indexer_index_file_finish (IdeCodeIndexer  *indexer,
                                           GError         **error)
 {
   g_assert (IDE_IS_CLANG_CODE_INDEXER (indexer));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -148,28 +147,28 @@ ide_clang_code_indexer_generate_key_cb (GObject       *object,
 {
   IdeClangService *service = (IdeClangService *)object;
   g_autoptr(IdeClangTranslationUnit) unit = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *key = NULL;
   IdeSourceLocation *location;
 
   g_assert (IDE_IS_CLANG_SERVICE (service));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!(unit = ide_clang_service_get_translation_unit_finish (service, result, &error)))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  location = g_task_get_task_data (task);
+  location = ide_task_get_task_data (task);
   g_assert (location != NULL);
 
   if (!(key = ide_clang_translation_unit_generate_key (unit, location)))
-    g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND, "Key not found");
+    ide_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND, "Key not found");
   else
-    g_task_return_pointer (task, g_steal_pointer (&key), g_free);
+    ide_task_return_pointer (task, g_steal_pointer (&key), g_free);
 }
 
 static void
@@ -180,7 +179,7 @@ ide_clang_code_indexer_generate_key_async (IdeCodeIndexer       *indexer,
                                            gpointer              user_data)
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)indexer;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeClangService *service;
   IdeContext *context;
 
@@ -193,13 +192,13 @@ ide_clang_code_indexer_generate_key_async (IdeCodeIndexer       *indexer,
    * can be referenced across compilation units.
    */
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_clang_code_indexer_generate_key_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_code_indexer_generate_key_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  g_task_set_task_data (task,
-                        ide_source_location_ref (location),
-                        (GDestroyNotify)ide_source_location_unref);
+  ide_task_set_task_data (task,
+                          ide_source_location_ref (location),
+                          (GDestroyNotify)ide_source_location_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -221,9 +220,9 @@ ide_clang_code_indexer_generate_key_finish (IdeCodeIndexer  *self,
                                             GError         **error)
 {
   g_assert (IDE_IS_CODE_INDEXER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

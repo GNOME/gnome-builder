@@ -50,7 +50,7 @@ get_translation_unit_cb (GObject      *object,
 {
   IdeClangService *service = (IdeClangService *)object;
   g_autoptr(IdeClangTranslationUnit) tu = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeDiagnostics *diagnostics;
   IdeFile *target;
@@ -60,11 +60,11 @@ get_translation_unit_cb (GObject      *object,
 
   if (!tu)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  target = g_task_get_task_data (task);
+  target = ide_task_get_task_data (task);
   g_assert (IDE_IS_FILE (target));
 
   gfile = ide_file_get_file (target);
@@ -72,9 +72,9 @@ get_translation_unit_cb (GObject      *object,
 
   diagnostics = ide_clang_translation_unit_get_diagnostics_for_file (tu, gfile);
 
-  g_task_return_pointer (task,
-                         ide_diagnostics_ref (diagnostics),
-                         (GDestroyNotify)ide_diagnostics_unref);
+  ide_task_return_pointer (task,
+                           ide_diagnostics_ref (diagnostics),
+                           (GDestroyNotify)ide_diagnostics_unref);
 }
 
 static gboolean
@@ -99,7 +99,7 @@ ide_clang_diagnostic_provider_diagnose__file_find_other_cb (GObject      *object
 {
   IdeFile *file = (IdeFile *)object;
   g_autoptr(IdeFile) other = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   IdeClangService *service;
   IdeContext *context;
 
@@ -116,7 +116,7 @@ ide_clang_diagnostic_provider_diagnose__file_find_other_cb (GObject      *object
   ide_clang_service_get_translation_unit_async (service,
                                                 file,
                                                 0,
-                                                g_task_get_cancellable (task),
+                                                ide_task_get_cancellable (task),
                                                 get_translation_unit_cb,
                                                 g_object_ref (task));
 }
@@ -130,12 +130,12 @@ ide_clang_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
                                               gpointer               user_data)
 {
   IdeClangDiagnosticProvider *self = (IdeClangDiagnosticProvider *)provider;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   if (is_header (file))
     {
@@ -166,12 +166,12 @@ ide_clang_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provider,
                                                GAsyncResult           *result,
                                                GError                **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (provider), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 static void

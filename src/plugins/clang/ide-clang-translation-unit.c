@@ -585,7 +585,7 @@ ide_clang_translation_unit_init (IdeClangTranslationUnit *self)
 }
 
 static void
-ide_clang_translation_unit_code_complete_worker (GTask        *task,
+ide_clang_translation_unit_code_complete_worker (IdeTask      *task,
                                                  gpointer      source_object,
                                                  gpointer      task_data,
                                                  GCancellable *cancellable)
@@ -614,10 +614,10 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
   if (!state->path)
     {
       /* implausable to reach here, anyway */
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               _("clang_codeCompleteAt() only works on local files"));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_FILENAME,
+                                 _("clang_codeCompleteAt() only works on local files"));
       return;
     }
 
@@ -667,7 +667,7 @@ ide_clang_translation_unit_code_complete_worker (GTask        *task,
   for (i = 0; i < results->NumResults; i++)
     g_ptr_array_add (ar, ide_clang_completion_item_new (refptr, i));
 
-  g_task_return_pointer (task, ar, (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, ar, (GDestroyNotify)g_ptr_array_unref);
 
   /* cleanup malloc'd state */
   for (i = 0; i < j; i++)
@@ -684,7 +684,7 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
                                                 GAsyncReadyCallback      callback,
                                                 gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   CodeCompleteState *state;
   IdeContext *context;
   IdeUnsavedFiles *unsaved_files;
@@ -699,7 +699,7 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   state = g_new0 (CodeCompleteState, 1);
   state->path = g_file_get_path (file);
@@ -712,11 +712,9 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
    *       that only one thread is dealing with this at a time.
    */
 
-  g_task_set_task_data (task, state, code_complete_state_free);
-
-  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
-                             task,
-                             ide_clang_translation_unit_code_complete_worker);
+  ide_task_set_task_data (task, state, code_complete_state_free);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+  ide_task_run_in_thread (task, ide_clang_translation_unit_code_complete_worker);
 
   IDE_EXIT;
 }
@@ -737,15 +735,15 @@ ide_clang_translation_unit_code_complete_finish (IdeClangTranslationUnit  *self,
                                                  GAsyncResult             *result,
                                                  GError                  **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
   GPtrArray *ret;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  ret = g_task_propagate_pointer (task, error);
+  ret = ide_task_propagate_pointer (task, error);
 
   IDE_RETURN (ret);
 }
@@ -1059,7 +1057,7 @@ ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
                                                   GAsyncReadyCallback      callback,
                                                   gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeSymbolTree) symbol_tree = NULL;
   IdeContext *context;
 
@@ -1067,9 +1065,9 @@ ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_clang_translation_unit_get_symbol_tree_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_translation_unit_get_symbol_tree_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   symbol_tree = g_object_new (IDE_TYPE_CLANG_SYMBOL_TREE,
@@ -1077,7 +1075,7 @@ ide_clang_translation_unit_get_symbol_tree_async (IdeClangTranslationUnit *self,
                               "native", self->native,
                               "file", file,
                               NULL);
-  g_task_return_pointer (task, g_steal_pointer (&symbol_tree), g_object_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&symbol_tree), g_object_unref);
 }
 
 IdeSymbolTree *
@@ -1086,9 +1084,9 @@ ide_clang_translation_unit_get_symbol_tree_finish (IdeClangTranslationUnit  *sel
                                                    GError                  **error)
 {
   g_return_val_if_fail (IDE_IS_CLANG_TRANSLATION_UNIT (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static gboolean
