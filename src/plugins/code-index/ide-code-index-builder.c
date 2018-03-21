@@ -1001,6 +1001,7 @@ add_entries_to_index_async (IdeCodeIndexBuilder     *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, add_entries_to_index_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
 
   if (ide_task_return_error_if_cancelled (task))
     return;
@@ -1148,6 +1149,7 @@ index_directory_async (IdeCodeIndexBuilder *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, index_directory_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
 
   if (ide_task_return_error_if_cancelled (task))
     return;
@@ -1413,6 +1415,7 @@ ide_code_index_builder_build_async (IdeCodeIndexBuilder *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_code_index_builder_build_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
 
   bd = g_slice_new0 (BuildData);
   bd->magic = BUILD_DATA_MAGIC;
