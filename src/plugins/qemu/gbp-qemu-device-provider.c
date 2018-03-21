@@ -44,7 +44,7 @@ static const struct {
 
 #ifdef __linux__
 static void
-gbp_qemu_device_provider_load_worker (GTask        *task,
+gbp_qemu_device_provider_load_worker (IdeTask      *task,
                                       gpointer      source_object,
                                       gpointer      task_data,
                                       GCancellable *cancellable)
@@ -57,7 +57,7 @@ gbp_qemu_device_provider_load_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_QEMU_DEVICE_PROVIDER (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -69,33 +69,33 @@ gbp_qemu_device_provider_load_worker (GTask        *task,
 
   if (!ide_g_host_file_get_contents ("/proc/mounts", &mounts, NULL, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   /* @mounts is guaranteed to have a \0 suffix */
   if (strstr (mounts, "binfmt") == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "binfmt is missing from /proc/mounts");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "binfmt is missing from /proc/mounts");
       IDE_EXIT;
     }
 
   if (!ide_g_host_file_get_contents  ("/proc/sys/fs/binfmt_misc/status", &status, NULL, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   /* @status is guaranteed to have a \0 suffix */
   if (!g_str_equal (g_strstrip (status), "enabled"))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "binfmt hooks are not currently enabled");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "binfmt hooks are not currently enabled");
       IDE_EXIT;
     }
 
@@ -137,9 +137,9 @@ gbp_qemu_device_provider_load_worker (GTask        *task,
         }
     }
 
-  g_task_return_pointer (task,
-                         g_steal_pointer (&devices),
-                         (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&devices),
+                           (GDestroyNotify)g_ptr_array_unref);
 
   IDE_EXIT;
 }
@@ -151,23 +151,23 @@ gbp_qemu_device_provider_load_async (IdeDeviceProvider   *provider,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_QEMU_DEVICE_PROVIDER (provider));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (provider, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_qemu_device_provider_load_async);
+  task = ide_task_new (provider, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_qemu_device_provider_load_async);
 
 #ifdef __linux__
-  g_task_run_in_thread (task, gbp_qemu_device_provider_load_worker);
+  ide_task_run_in_thread (task, gbp_qemu_device_provider_load_worker);
 #else
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "Qemu device hooks are only supported on Linux");
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Qemu device hooks are only supported on Linux");
 #endif
 
   IDE_EXIT;
@@ -185,7 +185,7 @@ gbp_qemu_device_provider_load_finish (IdeDeviceProvider  *provider,
   g_assert (IDE_IS_DEVICE_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
 
-  if ((devices = g_task_propagate_pointer (G_TASK (result), error)))
+  if ((devices = ide_task_propagate_pointer (IDE_TASK (result), error)))
     {
       for (guint i = 0; i < devices->len; i++)
         {
