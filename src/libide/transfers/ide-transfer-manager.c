@@ -23,6 +23,7 @@
 
 #include "transfers/ide-transfer.h"
 #include "transfers/ide-transfer-manager.h"
+#include "threading/ide-task.h"
 
 struct _IdeTransferManager
 {
@@ -354,26 +355,26 @@ ide_transfer_manager_execute_cb (GObject      *object,
 {
   IdeTransfer *transfer = (IdeTransfer *)object;
   IdeTransferManager *self;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_TRANSFER (transfer));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
 
   if (!ide_transfer_execute_finish (transfer, result, &error))
     {
       g_signal_emit (self, signals[TRANSFER_FAILED], 0, transfer, error);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (notify_properties);
     }
   else
     {
       g_signal_emit (self, signals[TRANSFER_COMPLETED], 0, transfer);
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
     }
 
   if (!ide_transfer_manager_get_has_active (self))
@@ -405,7 +406,7 @@ ide_transfer_manager_execute_async (IdeTransferManager  *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -413,8 +414,8 @@ ide_transfer_manager_execute_async (IdeTransferManager  *self,
   g_return_if_fail (IDE_IS_TRANSFER (transfer));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_transfer_manager_execute_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_transfer_manager_execute_async);
 
   if (!ide_transfer_manager_append (self, transfer))
     {
@@ -440,7 +441,7 @@ ide_transfer_manager_execute_finish (IdeTransferManager  *self,
                                      GError             **error)
 {
   g_return_val_if_fail (IDE_IS_TRANSFER_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

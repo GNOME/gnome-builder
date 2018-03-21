@@ -25,6 +25,7 @@
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
 #include "transfers/ide-pkcon-transfer.h"
+#include "threading/ide-task.h"
 
 struct _IdePkconTransfer
 {
@@ -62,17 +63,17 @@ ide_pkcon_transfer_wait_check_cb (GObject      *object,
                                   gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -120,7 +121,7 @@ ide_pkcon_transfer_execute_async (IdeTransfer         *transfer,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GDataInputStream) data_stream = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   GInputStream *stdout_stream;
 
@@ -129,12 +130,12 @@ ide_pkcon_transfer_execute_async (IdeTransfer         *transfer,
   g_assert (IDE_IS_TRANSFER (transfer));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_pkcon_transfer_execute_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_pkcon_transfer_execute_async);
 
   if (self->packages == NULL || !self->packages[0])
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -152,7 +153,7 @@ ide_pkcon_transfer_execute_async (IdeTransfer         *transfer,
 
   if (subprocess == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -183,9 +184,9 @@ ide_pkcon_transfer_execute_finish (IdeTransfer   *transfer,
   IDE_ENTRY;
 
   g_assert (IDE_IS_TRANSFER (transfer));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

@@ -21,6 +21,7 @@
 #include "ide-debug.h"
 
 #include "transfers/ide-transfer.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -54,13 +55,13 @@ ide_transfer_real_execute_async (IdeTransfer         *self,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_TRANSFER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -69,9 +70,9 @@ ide_transfer_real_execute_finish (IdeTransfer   *self,
                                   GError       **error)
 {
   g_assert (IDE_IS_TRANSFER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -229,13 +230,13 @@ ide_transfer_execute_cb (GObject      *object,
 {
   IdeTransfer *self = (IdeTransfer *)object;
   IdeTransferPrivate *priv = ide_transfer_get_instance_private (self);
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_TRANSFER (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   priv->active = FALSE;
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTIVE]);
@@ -244,14 +245,14 @@ ide_transfer_execute_cb (GObject      *object,
 
   if (!IDE_TRANSFER_GET_CLASS (self)->execute_finish (self, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   priv->completed = TRUE;
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_COMPLETED]);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -263,7 +264,7 @@ ide_transfer_execute_async (IdeTransfer         *self,
                             gpointer             user_data)
 {
   IdeTransferPrivate *priv = ide_transfer_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -275,8 +276,8 @@ ide_transfer_execute_async (IdeTransfer         *self,
    * cleanly from the subclass implementation. It also allows us to ensure
    * that the subclasses execute_finish() is guaranteed to be called.
    */
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_transfer_execute_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_transfer_execute_async);
 
   /*
    * Wrap our own cancellable so that we can gracefully control
@@ -317,9 +318,9 @@ ide_transfer_execute_finish (IdeTransfer   *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_TRANSFER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
