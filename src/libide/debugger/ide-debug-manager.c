@@ -34,6 +34,7 @@
 #include "files/ide-file.h"
 #include "plugins/ide-extension-util.h"
 #include "runner/ide-runner.h"
+#include "threading/ide-task.h"
 
 #define TAG_CURRENT_BKPT "debugger::current-breakpoint"
 
@@ -451,7 +452,7 @@ ide_debug_manager_load_file_cb (GObject      *object,
                                 gpointer      user_data)
 {
   IdeBufferManager *bufmgr = (IdeBufferManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GError) error = NULL;
   IdeDebuggerBreakpoint *breakpoint;
@@ -461,23 +462,26 @@ ide_debug_manager_load_file_cb (GObject      *object,
 
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   buffer = ide_buffer_manager_load_file_finish (bufmgr, result, &error);
 
   if (buffer == NULL)
     {
       g_warning ("%s", error->message);
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_DEBUG_MANAGER (self));
 
-  breakpoint = g_task_get_task_data (task);
+  breakpoint = ide_task_get_task_data (task);
   g_assert (IDE_IS_DEBUGGER_BREAKPOINT (breakpoint));
 
   ide_debug_manager_mark_stopped (self, buffer, breakpoint);
+
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -498,10 +502,10 @@ ide_debug_manager_real_breakpoint_reached (IdeDebugManager       *self,
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
       IdeBufferManager *bufmgr = ide_context_get_buffer_manager (context);
       g_autoptr(IdeFile) file = ide_file_new_for_path (context, path);
-      g_autoptr(GTask) task = NULL;
+      g_autoptr(IdeTask) task = NULL;
 
-      task = g_task_new (self, NULL, NULL, NULL);
-      g_task_set_task_data (task, g_object_ref (breakpoint), g_object_unref);
+      task = ide_task_new (self, NULL, NULL, NULL);
+      ide_task_set_task_data (task, g_object_ref (breakpoint), g_object_unref);
 
       ide_buffer_manager_load_file_async (bufmgr,
                                           file,
