@@ -290,7 +290,7 @@ gbp_todo_model_new (IdeVcs *vcs)
 }
 
 static void
-gbp_todo_model_mine_worker (GTask        *task,
+gbp_todo_model_mine_worker (IdeTask      *task,
                             gpointer      source_object,
                             gpointer      task_data,
                             GCancellable *cancellable)
@@ -313,7 +313,7 @@ gbp_todo_model_mine_worker (GTask        *task,
   gsize pathlen;
   gsize len;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_TODO_MODEL (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -369,14 +369,14 @@ gbp_todo_model_mine_worker (GTask        *task,
   /* Spawn our grep process */
   if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   /* Read all of the output into a giant string */
   if (!ide_subprocess_communicate_utf8 (subprocess, NULL, NULL, &stdoutstr, NULL, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -514,7 +514,7 @@ gbp_todo_model_mine_worker (GTask        *task,
                              gbp_todo_model_merge_results,
                              info, result_info_free);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 /**
@@ -543,27 +543,28 @@ gbp_todo_model_mine_async (GbpTodoModel        *self,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (GBP_IS_TODO_MODEL (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW + 100);
-  g_task_set_source_tag (task, gbp_todo_model_mine_async);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW + 100);
+  ide_task_set_source_tag (task, gbp_todo_model_mine_async);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   if (!g_file_is_native (file))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Only local files are supported");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Only local files are supported");
       return;
     }
 
-  g_task_run_in_thread (task, gbp_todo_model_mine_worker);
+  ide_task_run_in_thread (task, gbp_todo_model_mine_worker);
 }
 
 /**
@@ -582,7 +583,7 @@ gbp_todo_model_mine_finish (GbpTodoModel  *self,
                             GError       **error)
 {
   g_return_val_if_fail (GBP_IS_TODO_MODEL (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
