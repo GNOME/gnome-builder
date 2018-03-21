@@ -23,9 +23,15 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <vte/vte.h>
 
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
+#include "terminal/ide-terminal-private.h"
 #include "terminal/ide-terminal-util.h"
 #include "util/ptyintercept.h"
+
+static const gchar *user_shell = "/bin/sh";
 
 gint
 ide_vte_pty_create_slave (VtePty *pty)
@@ -39,4 +45,99 @@ ide_vte_pty_create_slave (VtePty *pty)
     return PTY_FD_INVALID;
 
   return pty_intercept_create_slave (master_fd, TRUE);
+}
+
+/**
+ * ide_get_user_shell:
+ *
+ * Gets the user preferred shell on the host.
+ *
+ * If the background shell discovery has not yet finished due to
+ * slow or misconfigured getent on the host, this will provide a
+ * sensible fallback.
+ *
+ * Returns: (not nullable): a shell such as "/bin/sh"
+ */
+const gchar *
+ide_get_user_shell (void)
+{
+  return user_shell;
+}
+
+static void
+ide_guess_shell_communicate_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *stdout_buf = NULL;
+
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (user_data == NULL);
+
+  if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, NULL, &error))
+    {
+      g_warning ("Failed to parse result from getent: %s", error->message);
+      return;
+    }
+
+  if (stdout_buf != NULL)
+    {
+      g_strstrip (stdout_buf);
+
+      if (stdout_buf[0] == '/')
+        user_shell = g_steal_pointer (&stdout_buf);
+    }
+}
+
+void
+_ide_guess_shell (void)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autofree gchar *command = NULL;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) argv = NULL;
+  const gchar *shell;
+
+  /*
+   * First ask VTE to guess, so we can use that while we discover
+   * the real shell asynchronously (and possibly outside the container).
+   */
+  if ((shell = vte_get_user_shell ()))
+    user_shell = g_strdup (shell);
+
+  command = g_strdup_printf ("sh -c 'getent passwd | grep ^%s: | head -n1 | cut -f 7 -d :'",
+                             g_get_user_name ());
+
+  if (!g_shell_parse_argv (command, NULL, &argv, &error))
+    {
+      g_warning ("Failed to parse command into argv: %s", error->message);
+      return;
+    }
+
+  /*
+   * We don't use the runtime shell here, because we want to know
+   * what the host thinks the user shell should be.
+   */
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_set_cwd (launcher, g_get_home_dir ());
+  ide_subprocess_launcher_push_args (launcher, (const gchar * const *)argv);
+
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
+    {
+      g_warning ("Failed to spawn getent: %s", error->message);
+      return;
+    }
+
+  ide_subprocess_communicate_utf8_async (subprocess,
+                                         NULL,
+                                         NULL,
+                                         ide_guess_shell_communicate_cb,
+                                         NULL);
 }

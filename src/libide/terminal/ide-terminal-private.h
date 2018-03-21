@@ -1,6 +1,6 @@
-/* gb-terminal-util.h
+/* ide-terminal-private.h
  *
- * Copyright © 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,10 @@
 
 #pragma once
 
-#include <vte/vte.h>
-
-#include "ide-version-macros.h"
+#include <glib.h>
 
 G_BEGIN_DECLS
 
-int          ide_vte_pty_create_slave (VtePty *pty);
-const gchar *ide_get_user_shell       (void);
+void _ide_guess_shell (void);
 
 G_END_DECLS
