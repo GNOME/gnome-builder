@@ -109,6 +109,8 @@ IDE_AVAILABLE_IN_3_28
 void          ide_task_return_int                (IdeTask              *self,
                                                   gssize                result);
 IDE_AVAILABLE_IN_3_28
+gboolean      ide_task_get_return_on_cancel      (IdeTask              *self);
+IDE_AVAILABLE_IN_3_28
 void          ide_task_return_new_error          (IdeTask              *self,
                                                   GQuark                error_domain,
                                                   gint                  error_code,

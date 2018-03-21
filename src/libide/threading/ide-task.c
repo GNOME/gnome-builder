@@ -1791,6 +1791,28 @@ ide_task_cancellable_cancelled_cb (GCancellable  *cancellable,
 }
 
 /**
+ * ide_task_get_return_on_cancel:
+ * @self: a #IdeTask
+ *
+ * Gets the return_on_cancel value, which means the task will return
+ * immediately when the #GCancellable is cancelled.
+ */
+gboolean
+ide_task_get_return_on_cancel (IdeTask *self)
+{
+  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
+  gboolean ret;
+
+  g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
+
+  g_mutex_lock (&priv->mutex);
+  ret = priv->return_on_cancel;
+  g_mutex_unlock (&priv->mutex);
+
+  return ret;
+}
+
+/**
  * ide_task_set_return_on_cancel:
  * @self: a #IdeTask
  * @return_on_cancel: if the task should return immediately when the
