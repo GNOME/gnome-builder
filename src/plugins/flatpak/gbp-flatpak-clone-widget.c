@@ -240,15 +240,15 @@ gbp_flatpak_clone_widget_init (GbpFlatpakCloneWidget *self)
 static gboolean
 open_after_timeout (gpointer user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   DownloadRequest *req;
   GbpFlatpakCloneWidget *self;
   IdeWorkbench *workbench;
 
   IDE_ENTRY;
 
-  req = g_task_get_task_data (task);
-  self = g_task_get_source_object (task);
+  req = ide_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
   g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (self));
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
@@ -260,13 +260,13 @@ open_after_timeout (gpointer user_data)
 }
 
 static void
-gbp_flatpak_clone_widget_worker_completed (GTask      *task,
+gbp_flatpak_clone_widget_worker_completed (IdeTask    *task,
                                            GParamSpec *pspec,
                                            gpointer    user_data)
 {
   GbpFlatpakCloneWidget *self = user_data;
 
-  if (!g_task_get_completed (task))
+  if (!ide_task_get_completed (task))
     return;
 
   dzl_object_animate_full (self->clone_progress,
@@ -278,7 +278,7 @@ gbp_flatpak_clone_widget_worker_completed (GTask      *task,
                            "fraction", 1.0,
                            NULL);
 
-  if (g_task_had_error (task))
+  if (ide_task_had_error (task))
     return;
 
   /* Wait for a second so animations can complete before opening
@@ -288,7 +288,7 @@ gbp_flatpak_clone_widget_worker_completed (GTask      *task,
 }
 
 static void
-gbp_flatpak_clone_widget_worker (GTask        *task,
+gbp_flatpak_clone_widget_worker (IdeTask      *task,
                                  gpointer      source_object,
                                  gpointer      task_data,
                                  GCancellable *cancellable)
@@ -317,7 +317,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   GType git_callbacks_type;
   guint i;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (self));
   g_assert (req != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -330,7 +330,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
       if (repository == NULL &&
           !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
         {
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }
 
@@ -361,7 +361,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
           repository = ggit_repository_clone (uristr, req->destination, clone_options, &error);
           if (repository == NULL)
             {
-              g_task_return_error (task, g_steal_pointer (&error));
+              ide_task_return_error (task, g_steal_pointer (&error));
               return;
             }
 
@@ -371,7 +371,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
               parsed_rev = ggit_repository_revparse (repository, req->src->branch, &error);
               if (parsed_rev == NULL)
                 {
-                  g_task_return_error (task, g_steal_pointer (&error));
+                  ide_task_return_error (task, g_steal_pointer (&error));
                   return;
                 }
 
@@ -381,7 +381,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
 
               if (error != NULL)
                 {
-                  g_task_return_error (task, g_steal_pointer (&error));
+                  ide_task_return_error (task, g_steal_pointer (&error));
                   return;
                 }
             }
@@ -399,7 +399,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
                                          &error);
       if (error != NULL)
         {
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }
     }
@@ -411,7 +411,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
                         self->strip_components,
                         &error))
         {
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }
     }
@@ -423,7 +423,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
                           manifest_file_name);
   if (!g_file_copy (src, dst, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -431,7 +431,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
   build_config = g_file_get_child (req->project_file, ".buildconfig");
   if (g_file_query_exists (build_config, NULL))
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -442,7 +442,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
       g_warning ("Failed to load JSON manifest at %s: %s",
                  self->manifest, error->message);
       g_error_free (error);
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -476,7 +476,7 @@ gbp_flatpak_clone_widget_worker (GTask        *task,
       g_error_free (error);
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static ModuleSource *
@@ -573,7 +573,7 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
                                       GAsyncReadyCallback      callback,
                                       gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) destination = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *path = NULL;
@@ -583,12 +583,12 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
   g_return_if_fail (GBP_IS_FLATPAK_CLONE_WIDGET (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   src = get_source (self, &error);
   if (src == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -626,8 +626,8 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
 
   req = download_request_new (src, destination);
 
-  g_task_set_task_data (task, req, download_request_free);
-  g_task_run_in_thread (task, gbp_flatpak_clone_widget_worker);
+  ide_task_set_task_data (task, req, download_request_free);
+  ide_task_run_in_thread (task, gbp_flatpak_clone_widget_worker);
 
   g_signal_connect (task, "notify::completed",
                     G_CALLBACK (gbp_flatpak_clone_widget_worker_completed), self);
@@ -639,7 +639,7 @@ gbp_flatpak_clone_widget_clone_finish (GbpFlatpakCloneWidget *self,
                                        GError               **error)
 {
   g_return_val_if_fail (GBP_IS_FLATPAK_CLONE_WIDGET (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

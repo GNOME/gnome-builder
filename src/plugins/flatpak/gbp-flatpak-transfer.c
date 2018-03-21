@@ -101,10 +101,10 @@ gbp_flatpak_transfer_update_title (GbpFlatpakTransfer *self)
 static void
 task_completed (GbpFlatpakTransfer *self,
                 GParamSpec         *pspec,
-                GTask              *task)
+                IdeTask            *task)
 {
   g_assert (GBP_IS_FLATPAK_TRANSFER (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   self->finished = TRUE;
 
@@ -145,7 +145,7 @@ gbp_flatpak_transfer_execute_cb (GObject      *object,
                                  gpointer      user_data)
 {
   GbpFlatpakApplicationAddin *addin = (GbpFlatpakApplicationAddin *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -154,9 +154,9 @@ gbp_flatpak_transfer_execute_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!gbp_flatpak_application_addin_install_runtime_finish (addin, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -169,7 +169,7 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
 {
   GbpFlatpakTransfer *self = (GbpFlatpakTransfer *)transfer;
   GbpFlatpakApplicationAddin *addin;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeProgress) progress = NULL;
 
   IDE_ENTRY;
@@ -177,8 +177,8 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
   g_assert (GBP_IS_FLATPAK_TRANSFER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_flatpak_transfer_execute_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_flatpak_transfer_execute_async);
 
   g_signal_connect_object (task,
                            "notify::completed",
@@ -202,7 +202,7 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
 
   if (self->has_runtime && !self->force_update)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -243,9 +243,9 @@ gbp_flatpak_transfer_execute_finish (IdeTransfer   *transfer,
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_TRANSFER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   if (ret == FALSE)
     {

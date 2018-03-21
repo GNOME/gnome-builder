@@ -860,24 +860,24 @@ gbp_flatpak_manifest_save_cb (GObject      *object,
 {
   GFile *file = (GFile *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   GbpFlatpakManifest *self;
 
   IDE_ENTRY;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   ide_configuration_set_dirty (IDE_CONFIGURATION (self), FALSE);
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   gbp_flatpak_manifest_unblock_monitor (self);
 
@@ -890,7 +890,7 @@ gbp_flatpak_manifest_save_async (GbpFlatpakManifest  *self,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GBytes) bytes = NULL;
   g_autoptr(JsonGenerator) generator = NULL;
   g_autofree gchar *data = NULL;
@@ -903,16 +903,16 @@ gbp_flatpak_manifest_save_async (GbpFlatpakManifest  *self,
   g_return_if_fail (G_IS_FILE (self->file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_flatpak_manifest_save_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_flatpak_manifest_save_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->root == NULL || self->primary == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to save, missing JSON node");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to save, missing JSON node");
       return;
     }
 
@@ -974,9 +974,9 @@ gbp_flatpak_manifest_save_finish (GbpFlatpakManifest  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

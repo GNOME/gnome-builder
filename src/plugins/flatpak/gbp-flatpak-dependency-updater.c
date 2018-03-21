@@ -45,17 +45,17 @@ gbp_flatpak_dependency_updater_update_cb (GObject      *object,
                                           gpointer      user_data)
 {
   IdeBuildManager *manager = (IdeBuildManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_BUILD_MANAGER (manager));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_build_manager_rebuild_finish (manager, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -66,7 +66,7 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
 {
   GbpFlatpakDependencyUpdater *self = (GbpFlatpakDependencyUpdater *)updater;
   GbpFlatpakDownloadStage *stage = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeBuildPipeline *pipeline;
   IdeBuildManager *manager;
   IdeContext *context;
@@ -74,9 +74,9 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
   g_assert (GBP_IS_FLATPAK_DEPENDENCY_UPDATER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_flatpak_dependency_updater_update_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_flatpak_dependency_updater_update_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -89,10 +89,10 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
 
   if (pipeline == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Cannot update flatpak dependencies until build pipeline is initialized");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Cannot update flatpak dependencies until build pipeline is initialized");
       return;
     }
 
@@ -102,7 +102,7 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
   if (stage == NULL)
     {
       /* Synthesize success if they weren't using flatpak. */
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -127,10 +127,10 @@ gbp_flatpak_dependency_updater_update_finish (IdeDependencyUpdater  *updater,
                                               GError               **error)
 {
   g_assert (GBP_IS_FLATPAK_DEPENDENCY_UPDATER (updater));
-  g_assert (G_IS_TASK (result));
-  g_assert (g_task_is_valid (G_TASK (result), updater));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (IDE_TASK (result), updater));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
