@@ -589,7 +589,7 @@ gb_beautifier_entries_result_free (gpointer data)
 }
 
 static void
-get_entries_worker (GTask        *task,
+get_entries_worker (IdeTask      *task,
                     gpointer      source_object,
                     gpointer      task_data,
                     GCancellable *cancellable)
@@ -608,15 +608,15 @@ get_entries_worker (GTask        *task,
   gboolean ret_has_default = FALSE;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (self->context == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to initialized the Beautifier plugin, no IdeContext ready");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to initialized the Beautifier plugin, no IdeContext ready");
       return;
     }
 
@@ -680,7 +680,7 @@ get_entries_worker (GTask        *task,
   result->entries = g_steal_pointer (&entries);
   result->has_default = has_default;
 
-  g_task_return_pointer (task, result, NULL);
+  ide_task_return_pointer (task, result, NULL);
 }
 
 void
@@ -690,16 +690,17 @@ gb_beautifier_config_get_entries_async (GbBeautifierEditorAddin *self,
                                         GCancellable            *cancellable,
                                         gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (callback != NULL);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gb_beautifier_config_get_entries_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gb_beautifier_config_get_entries_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  g_task_run_in_thread (task, get_entries_worker);
+  ide_task_run_in_thread (task, get_entries_worker);
 }
 
 GbBeautifierEntriesResult *
@@ -708,7 +709,7 @@ gb_beautifier_config_get_entries_finish (GbBeautifierEditorAddin  *self,
                                          GError                  **error)
 {
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (g_task_is_valid (result, self));
+  g_assert (ide_task_is_valid (result, self));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
