@@ -76,6 +76,8 @@ gpointer      ide_task_get_source_tag            (IdeTask              *self);
 IDE_AVAILABLE_IN_3_28
 gpointer      ide_task_get_task_data             (IdeTask              *self);
 IDE_AVAILABLE_IN_3_28
+gboolean      ide_task_had_error                 (IdeTask              *self);
+IDE_AVAILABLE_IN_3_28
 gboolean      ide_task_is_valid                  (gpointer              self,
                                                   gpointer              source_object);
 IDE_AVAILABLE_IN_3_28

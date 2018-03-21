@@ -1959,6 +1959,22 @@ ide_task_set_name (IdeTask *self,
   g_mutex_unlock (&priv->mutex);
 }
 
+gboolean
+ide_task_had_error (IdeTask *self)
+{
+  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
+  gboolean ret;
+
+  g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
+
+  g_mutex_lock (&priv->mutex);
+  ret = (priv->result != NULL && priv->result->type == IDE_TASK_RESULT_ERROR) ||
+        (priv->thread_result != NULL && priv->thread_result->type == IDE_TASK_RESULT_ERROR);
+  g_mutex_unlock (&priv->mutex);
+
+  return ret;
+}
+
 static gpointer
 ide_task_get_user_data (GAsyncResult *result)
 {
