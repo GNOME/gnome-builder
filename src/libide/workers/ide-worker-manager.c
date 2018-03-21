@@ -32,6 +32,7 @@
 
 #include "workers/ide-worker-process.h"
 #include "workers/ide-worker-manager.h"
+#include "threading/ide-task.h"
 
 struct _IdeWorkerManager
 {
@@ -225,21 +226,21 @@ ide_worker_manager_get_worker_cb (GObject      *object,
                                   gpointer      user_data)
 {
   IdeWorkerProcess *worker_process = (IdeWorkerProcess *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GDBusProxy *proxy;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_WORKER_PROCESS (worker_process));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   proxy = ide_worker_process_get_proxy_finish (worker_process, result, &error);
 
   if (proxy == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, proxy, g_object_unref);
+    ide_task_return_pointer (task, proxy, g_object_unref);
 
   IDE_EXIT;
 }
@@ -252,13 +253,13 @@ ide_worker_manager_get_worker_async (IdeWorkerManager    *self,
                                      gpointer             user_data)
 {
   IdeWorkerProcess *worker_process;
-  GTask *task;
+  IdeTask *task;
 
   g_return_if_fail (IDE_IS_WORKER_MANAGER (self));
   g_return_if_fail (plugin_name != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
   worker_process = ide_worker_manager_get_worker_process (self, plugin_name);
   ide_worker_process_get_proxy_async (worker_process,
                                       cancellable,
@@ -271,12 +272,12 @@ ide_worker_manager_get_worker_finish (IdeWorkerManager  *self,
                                       GAsyncResult      *result,
                                       GError           **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_WORKER_MANAGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 IdeWorkerManager *

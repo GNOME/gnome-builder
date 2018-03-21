@@ -26,6 +26,7 @@
 #include "logging/ide-log.h"
 #include "workers/ide-worker-process.h"
 #include "workers/ide-worker.h"
+#include "threading/ide-task.h"
 
 struct _IdeWorkerProcess
 {
@@ -363,7 +364,7 @@ ide_worker_process_matches_credentials (IdeWorkerProcess *self,
 
 static void
 ide_worker_process_create_proxy_for_task (IdeWorkerProcess *self,
-                                          GTask            *task)
+                                          IdeTask          *task)
 {
   GDBusProxy *proxy;
   g_autoptr(GError) error = NULL;
@@ -371,14 +372,14 @@ ide_worker_process_create_proxy_for_task (IdeWorkerProcess *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_WORKER_PROCESS (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (self->worker == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_PROXY_FAILED,
-                               "Failed to create IdeWorker instance.");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_PROXY_FAILED,
+                                 "Failed to create IdeWorker instance.");
       IDE_EXIT;
     }
 
@@ -390,11 +391,11 @@ ide_worker_process_create_proxy_for_task (IdeWorkerProcess *self,
         error = g_error_new_literal (G_IO_ERROR,
                                      G_IO_ERROR_PROXY_FAILED,
                                      "IdeWorker returned NULL and did not set an error.");
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  g_task_return_pointer (task, proxy, g_object_unref);
+  ide_task_return_pointer (task, proxy, g_object_unref);
 
   IDE_EXIT;
 }
@@ -418,7 +419,7 @@ ide_worker_process_set_connection (IdeWorkerProcess *self,
 
           for (i = 0; i < ar->len; i++)
             {
-              GTask *task = g_ptr_array_index (ar, i);
+              IdeTask *task = g_ptr_array_index (ar, i);
               ide_worker_process_create_proxy_for_task (self, task);
             }
         }
@@ -431,14 +432,14 @@ ide_worker_process_get_proxy_async (IdeWorkerProcess    *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_WORKER_PROCESS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   if (self->connection != NULL)
     {
@@ -459,15 +460,15 @@ ide_worker_process_get_proxy_finish (IdeWorkerProcess  *self,
                                      GAsyncResult      *result,
                                      GError           **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
   GDBusProxy *ret;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_WORKER_PROCESS (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  ret = g_task_propagate_pointer (task, error);
+  ret = ide_task_propagate_pointer (task, error);
 
   IDE_RETURN (ret);
 }
