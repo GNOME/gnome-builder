@@ -1011,9 +1011,9 @@ ide_task_return (IdeTask       *self,
     {
       if (result->type == IDE_TASK_RESULT_CANCELLED)
         {
-          /* We handled the cancel signal but already raced to get a result
-           * in the mean time. So we can just drop this result immediately
-           * as it has no state ot propagate.
+          /* We already had a result, and now raced to be notified of
+           * cancellation. We can safely free this result even if we're
+           * currently in a worker thread.
            */
           ide_task_result_free (result);
           return;
