@@ -1281,7 +1281,7 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
                                 g_object_ref (task));
 
 unmodified:
-  unregister_auto_save (self, state->buffer);
+  unregister_auto_save (self, buffer);
 
   IDE_EXIT;
 }
