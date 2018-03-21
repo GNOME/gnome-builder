@@ -53,17 +53,17 @@ gbp_meson_build_system_ensure_config_cb (GObject      *object,
                                          gpointer      user_data)
 {
   IdeBuildManager *build_manager = (IdeBuildManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_build_manager_execute_finish (build_manager, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -72,16 +72,16 @@ gbp_meson_build_system_ensure_config_async (GbpMesonBuildSystem *self,
                                             GAsyncReadyCallback  callback,
                                             gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeBuildManager *build_manager;
   IdeContext *context;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_meson_build_system_ensure_config_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_meson_build_system_ensure_config_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_context_get_build_manager (context);
@@ -99,9 +99,9 @@ gbp_meson_build_system_ensure_config_finish (GbpMesonBuildSystem  *self,
                                              GError              **error)
 {
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -154,25 +154,25 @@ gbp_meson_build_system_load_commands_load_cb (GObject      *object,
 {
   IdeCompileCommands *compile_commands = (IdeCompileCommands *)object;
   GbpMesonBuildSystem *self;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_COMPILE_COMMANDS (compile_commands));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
 
   if (!ide_compile_commands_load_finish (compile_commands, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   g_set_object (&self->compile_commands, compile_commands);
-  g_task_return_pointer (task, g_object_ref (compile_commands), g_object_unref);
+  ide_task_return_pointer (task, g_object_ref (compile_commands), g_object_unref);
 }
 
 static void
@@ -182,7 +182,7 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)object;
   g_autoptr(IdeCompileCommands) compile_commands = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GFileMonitor) monitor = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) file = NULL;
@@ -194,11 +194,11 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!gbp_meson_build_system_ensure_config_finish (self, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -209,10 +209,10 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
   if (pipeline == NULL)
     {
       /* Unlikely, but possible */
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "No build pipeline is available");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "No build pipeline is available");
       return;
     }
 
@@ -221,16 +221,16 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
   if (!g_file_test (path, G_FILE_TEST_IS_REGULAR))
     {
       /* Unlikely, but possible */
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               "Failed to locate compile_commands.json");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "Failed to locate compile_commands.json");
       return;
     }
 
   compile_commands = ide_compile_commands_new ();
   file = g_file_new_for_path (path);
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
 
   ide_compile_commands_load_async (compile_commands,
                                    file,
@@ -247,7 +247,7 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
                                             GAsyncReadyCallback  callback,
                                             gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *path = NULL;
   IdeBuildManager *build_manager;
   IdeBuildPipeline *pipeline;
@@ -256,9 +256,9 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_meson_build_system_load_commands_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_meson_build_system_load_commands_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   /*
    * If we've already load the compile commands database, use it and
@@ -268,9 +268,9 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
 
   if (self->compile_commands != NULL)
     {
-      g_task_return_pointer (task,
-                             g_object_ref (self->compile_commands),
-                             g_object_unref);
+      ide_task_return_pointer (task,
+                               g_object_ref (self->compile_commands),
+                               g_object_unref);
       return;
     }
 
@@ -291,10 +291,10 @@ gbp_meson_build_system_load_commands_async (GbpMesonBuildSystem *self,
    */
   if (pipeline == NULL || !ide_build_pipeline_is_ready (pipeline))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_INITIALIZED,
-                               "The pipeline is not yet ready to handle requests");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_INITIALIZED,
+                                 "The pipeline is not yet ready to handle requests");
       return;
     }
 
@@ -337,9 +337,9 @@ gbp_meson_build_system_load_commands_finish (GbpMesonBuildSystem  *self,
                                              GError              **error)
 {
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -441,7 +441,7 @@ gbp_meson_build_system_get_build_flags_for_files_cb (GObject      *object,
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)object;
   g_autoptr(IdeCompileCommands) compile_commands = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) directory = NULL;
   g_autoptr(GHashTable) ret = NULL;
@@ -454,15 +454,15 @@ gbp_meson_build_system_get_build_flags_for_files_cb (GObject      *object,
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!(compile_commands = gbp_meson_build_system_load_commands_finish (self, result, &error)))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  files = g_task_get_task_data (task);
+  files = ide_task_get_task_data (task);
   g_assert (files != NULL);
 
   /* Get non-standard system includes */
@@ -489,7 +489,7 @@ gbp_meson_build_system_get_build_flags_for_files_cb (GObject      *object,
       g_hash_table_insert (ret, g_object_ref (file), g_steal_pointer (&flags));
     }
 
-  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_hash_table_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_hash_table_unref);
 }
 
 static void
@@ -499,7 +499,7 @@ gbp_meson_build_system_get_build_flags_cb (GObject      *object,
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)object;
   g_autoptr(IdeCompileCommands) compile_commands = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) directory = NULL;
   g_auto(GStrv) system_includes = NULL;
@@ -512,17 +512,17 @@ gbp_meson_build_system_get_build_flags_cb (GObject      *object,
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   compile_commands = gbp_meson_build_system_load_commands_finish (self, result, &error);
 
   if (compile_commands == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  file = g_task_get_task_data (task);
+  file = ide_task_get_task_data (task);
   g_assert (G_IS_FILE (file));
 
   /* Get non-standard system includes */
@@ -539,9 +539,9 @@ gbp_meson_build_system_get_build_flags_cb (GObject      *object,
                                      &error);
 
   if (ret == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_strfreev);
+    ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_strfreev);
 }
 
 static void
@@ -552,7 +552,7 @@ gbp_meson_build_system_get_build_flags_async (IdeBuildSystem      *build_system,
                                               gpointer             user_data)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   GFile *gfile;
 
   IDE_ENTRY;
@@ -563,10 +563,10 @@ gbp_meson_build_system_get_build_flags_async (IdeBuildSystem      *build_system,
 
   gfile = ide_file_get_file (file);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, gbp_meson_build_system_get_build_flags_async);
-  g_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_source_tag (task, gbp_meson_build_system_get_build_flags_async);
+  ide_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
 
   gbp_meson_build_system_load_commands_async (self,
                                               cancellable,
@@ -582,9 +582,9 @@ gbp_meson_build_system_get_build_flags_finish (IdeBuildSystem  *build_system,
                                                GError         **error)
 {
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (build_system));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -595,7 +595,7 @@ gbp_meson_build_system_get_build_flags_for_files_async (IdeBuildSystem      *bui
                                                         gpointer             user_data)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)build_system;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) copy = NULL;
 
   IDE_ENTRY;
@@ -604,15 +604,15 @@ gbp_meson_build_system_get_build_flags_for_files_async (IdeBuildSystem      *bui
   g_assert (files != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_meson_build_system_get_build_flags_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_meson_build_system_get_build_flags_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   /* Make our own copy of the array */
   copy = g_ptr_array_new_with_free_func (g_object_unref);
   for (guint i = 0; i < files->len; i++)
     g_ptr_array_add (copy, g_object_ref (g_ptr_array_index (files, i)));
-  g_task_set_task_data (task, g_steal_pointer (&copy), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&copy), (GDestroyNotify)g_ptr_array_unref);
 
   gbp_meson_build_system_load_commands_async (self,
                                               cancellable,
@@ -628,9 +628,9 @@ gbp_meson_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *build_
                                                          GError         **error)
 {
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (build_system));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static gchar *
@@ -698,7 +698,7 @@ gbp_meson_build_system_notify_pipeline (GbpMesonBuildSystem *self,
 }
 
 static void
-gbp_meson_build_system_init_worker (GTask        *task,
+gbp_meson_build_system_init_worker (IdeTask      *task,
                                     gpointer      source_object,
                                     gpointer      task_data,
                                     GCancellable *cancellable)
@@ -716,7 +716,7 @@ gbp_meson_build_system_init_worker (GTask        *task,
 
   if (dzl_str_equal0 (name, "meson.build"))
     {
-      g_task_return_pointer (task, g_object_ref (project_file), g_object_unref);
+      ide_task_return_pointer (task, g_object_ref (project_file), g_object_unref);
       IDE_EXIT;
     }
 
@@ -726,16 +726,16 @@ gbp_meson_build_system_init_worker (GTask        *task,
 
       if (g_file_query_exists (meson_build, cancellable))
         {
-          g_task_return_pointer (task, g_object_ref (meson_build), g_object_unref);
+          ide_task_return_pointer (task, g_object_ref (meson_build), g_object_unref);
           IDE_EXIT;
         }
     }
 
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "%s is not supported by the meson plugin",
-                           name);
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "%s is not supported by the meson plugin",
+                             name);
 
   IDE_EXIT;
 }
@@ -748,7 +748,7 @@ gbp_meson_build_system_init_async (GAsyncInitable      *initable,
                                    gpointer             user_data)
 {
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)initable;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeBuildManager *build_manager;
   IdeContext *context;
 
@@ -764,10 +764,10 @@ gbp_meson_build_system_init_async (GAsyncInitable      *initable,
   build_manager = ide_context_get_build_manager (context);
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_meson_build_system_init_async);
-  g_task_set_priority (task, io_priority);
-  g_task_set_task_data (task, g_object_ref (self->project_file), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_meson_build_system_init_async);
+  ide_task_set_priority (task, io_priority);
+  ide_task_set_task_data (task, g_object_ref (self->project_file), g_object_unref);
 
   /*
    * We want to be notified of any changes to the current build manager.
@@ -779,7 +779,7 @@ gbp_meson_build_system_init_async (GAsyncInitable      *initable,
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_task_run_in_thread (task, gbp_meson_build_system_init_worker);
+  ide_task_run_in_thread (task, gbp_meson_build_system_init_worker);
 
   IDE_EXIT;
 }
@@ -795,9 +795,9 @@ gbp_meson_build_system_init_finish (GAsyncInitable  *initable,
   IDE_ENTRY;
 
   g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  project_file = g_task_propagate_pointer (G_TASK (result), error);
+  project_file = ide_task_propagate_pointer (IDE_TASK (result), error);
   if (g_set_object (&self->project_file, project_file))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_FILE]);
 
