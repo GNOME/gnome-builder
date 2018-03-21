@@ -92,7 +92,7 @@ check_for_ac_init (GFile        *file,
 }
 
 static void
-ide_autotools_build_system_discover_file_worker (GTask        *task,
+ide_autotools_build_system_discover_file_worker (IdeTask      *task,
                                                  gpointer      source_object,
                                                  gpointer      task_data,
                                                  GCancellable *cancellable)
@@ -103,7 +103,7 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -116,7 +116,7 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
 
   if (is_configure (file) && g_file_query_exists (file, cancellable))
     {
-      g_task_return_pointer (task, g_object_ref (file), g_object_unref);
+      ide_task_return_pointer (task, g_object_ref (file), g_object_unref);
       IDE_EXIT;
     }
 
@@ -126,31 +126,31 @@ ide_autotools_build_system_discover_file_worker (GTask        *task,
    */
   if (g_file_query_file_type (file, 0, cancellable) != G_FILE_TYPE_DIRECTORY)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               "Failed to locate configure.ac");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "Failed to locate configure.ac");
       IDE_EXIT;
     }
 
   configure_ac = g_file_get_child (file, "configure.ac");
   if (check_for_ac_init (configure_ac, cancellable))
     {
-      g_task_return_pointer (task, g_steal_pointer (&configure_ac), g_object_unref);
+      ide_task_return_pointer (task, g_steal_pointer (&configure_ac), g_object_unref);
       IDE_EXIT;
     }
 
   configure_in = g_file_get_child (file, "configure.in");
   if (check_for_ac_init (configure_in, cancellable))
     {
-      g_task_return_pointer (task, g_steal_pointer (&configure_in), g_object_unref);
+      ide_task_return_pointer (task, g_steal_pointer (&configure_in), g_object_unref);
       IDE_EXIT;
     }
 
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_FOUND,
-                           "Failed to locate configure.ac");
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Failed to locate configure.ac");
 
   IDE_EXIT;
 }
@@ -162,16 +162,16 @@ ide_autotools_build_system_discover_file_async (IdeAutotoolsBuildSystem *system,
                                                 GAsyncReadyCallback      callback,
                                                 gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (system, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_run_in_thread (task, ide_autotools_build_system_discover_file_worker);
+  task = ide_task_new (system, cancellable, callback, user_data);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_run_in_thread (task, ide_autotools_build_system_discover_file_worker);
 
   IDE_EXIT;
 }
@@ -181,12 +181,12 @@ ide_autotools_build_system_discover_file_finish (IdeAutotoolsBuildSystem  *syste
                                                  GAsyncResult             *result,
                                                  GError                  **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 static void
@@ -357,7 +357,7 @@ ide_autotools_build_system_get_file_flags_cb (GObject      *object,
                                               gpointer      user_data)
 {
   IdeMakecache *makecache = (IdeMakecache *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) flags = NULL;
 
@@ -365,14 +365,14 @@ ide_autotools_build_system_get_file_flags_cb (GObject      *object,
 
   g_assert (IDE_IS_MAKECACHE (makecache));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   flags = ide_makecache_get_file_flags_finish (makecache, result, &error);
 
   if (flags == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&flags), (GDestroyNotify)g_strfreev);
+    ide_task_return_pointer (task, g_steal_pointer (&flags), (GDestroyNotify)g_strfreev);
 
   IDE_EXIT;
 }
@@ -383,7 +383,7 @@ ide_autotools_build_system_get_build_flags_execute_cb (GObject      *object,
                                                        gpointer      user_data)
 {
   IdeBuildManager *build_manager = (IdeBuildManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeMakecache *makecache = NULL;
   IdeBuildPipeline *pipeline;
@@ -394,17 +394,17 @@ ide_autotools_build_system_get_build_flags_execute_cb (GObject      *object,
 
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  file = g_task_get_task_data (task);
-  cancellable = g_task_get_cancellable (task);
+  file = ide_task_get_task_data (task);
+  cancellable = ide_task_get_cancellable (task);
 
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (!ide_build_manager_execute_finish (build_manager, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -434,7 +434,7 @@ ide_autotools_build_system_get_build_flags_execute_cb (GObject      *object,
    * of flags.
    */
 
-  g_task_return_pointer (task, g_new0 (gchar *, 1), g_free);
+  ide_task_return_pointer (task, g_new0 (gchar *, 1), g_free);
 
   IDE_EXIT;
 }
@@ -449,7 +449,7 @@ ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_sys
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)build_system;
   IdeBuildManager *build_manager;
   IdeContext *context;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -457,9 +457,9 @@ ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_sys
   g_assert (IDE_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_build_system_get_build_flags_async);
-  g_task_set_task_data (task, g_object_ref (ide_file_get_file (file)), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_autotools_build_system_get_build_flags_async);
+  ide_task_set_task_data (task, g_object_ref (ide_file_get_file (file)), g_object_unref);
 
   /*
    * To get the build flags for the file, we first need to get the makecache
@@ -487,9 +487,9 @@ ide_autotools_build_system_get_build_flags_finish (IdeBuildSystem  *build_system
                                                    GError         **error)
 {
   g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static gchar *
@@ -643,14 +643,14 @@ ide_autotools_build_system_parse_async (IdeAutotoolsBuildSystem *system,
                                         GAsyncReadyCallback      callback,
                                         gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system));
   g_return_if_fail (G_IS_FILE (project_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (system, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE);
+  task = ide_task_new (system, cancellable, callback, user_data);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -658,12 +658,12 @@ ide_autotools_build_system_parse_finish (IdeAutotoolsBuildSystem  *system,
                                          GAsyncResult             *result,
                                          GError                  **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 static void
@@ -672,16 +672,16 @@ parse_cb (GObject      *object,
           gpointer      user_data)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_return_if_fail (G_IS_TASK (task));
+  g_return_if_fail (IDE_IS_TASK (task));
 
   if (!ide_autotools_build_system_parse_finish (self, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -690,21 +690,21 @@ discover_file_cb (GObject      *object,
                   gpointer      user_data)
 {
   IdeAutotoolsBuildSystem *self;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GFile) file = NULL;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_return_if_fail (G_IS_TASK (task));
+  g_return_if_fail (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   file = ide_autotools_build_system_discover_file_finish (self, result, &error);
 
   if (error != NULL)
     {
       g_debug ("Not an autotools build system: %s", error->message);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -712,7 +712,7 @@ discover_file_cb (GObject      *object,
 
   ide_autotools_build_system_parse_async (self,
                                           file,
-                                          g_task_get_cancellable (task),
+                                          ide_task_get_cancellable (task),
                                           parse_cb,
                                           g_object_ref (task));
 
@@ -727,7 +727,7 @@ ide_autotools_build_system_init_async (GAsyncInitable      *initable,
                                        gpointer             user_data)
 {
   IdeAutotoolsBuildSystem *system = (IdeAutotoolsBuildSystem *)initable;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
   GFile *project_file;
 
@@ -736,9 +736,9 @@ ide_autotools_build_system_init_async (GAsyncInitable      *initable,
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (initable, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_build_system_init_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (initable, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_autotools_build_system_init_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (system));
   project_file = ide_context_get_project_file (context);
@@ -757,12 +757,12 @@ ide_autotools_build_system_init_finish (GAsyncInitable  *initable,
                                         GAsyncResult    *result,
                                         GError         **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (initable), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 static void
