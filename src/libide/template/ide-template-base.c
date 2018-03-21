@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "template/ide-template-base.h"
+#include "threading/ide-task.h"
 
 #define TIMEOUT_INTERVAL_MSEC 17
 #define TIMEOUT_DURATION_MSEC  2
@@ -62,7 +63,7 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
-ide_template_base_mkdirs_worker (GTask        *task,
+ide_template_base_mkdirs_worker (IdeTask      *task,
                                  gpointer      source_object,
                                  gpointer      task_data,
                                  GCancellable *cancellable)
@@ -70,7 +71,7 @@ ide_template_base_mkdirs_worker (GTask        *task,
   IdeTemplateBase *self = source_object;
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_TEMPLATE_BASE (self));
 
   for (guint i = 0; i < priv->files->len; i++)
@@ -85,13 +86,13 @@ ide_template_base_mkdirs_worker (GTask        *task,
         {
           if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
             {
-              g_task_return_error (task, g_steal_pointer (&error));
+              ide_task_return_error (task, g_steal_pointer (&error));
               return;
             }
         }
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -100,13 +101,13 @@ ide_template_base_mkdirs_async (IdeTemplateBase     *self,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_TEMPLATE_BASE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_run_in_thread (task, ide_template_base_mkdirs_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_run_in_thread (task, ide_template_base_mkdirs_worker);
 }
 
 static gboolean
@@ -115,9 +116,9 @@ ide_template_base_mkdirs_finish (IdeTemplateBase  *self,
                                  GError          **error)
 {
   g_assert (IDE_IS_TEMPLATE_BASE (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 /**
@@ -258,7 +259,7 @@ ide_template_base_init (IdeTemplateBase *self)
 }
 
 static void
-ide_template_base_parse_worker (GTask        *task,
+ide_template_base_parse_worker (IdeTask      *task,
                                 gpointer      source_object,
                                 gpointer      task_data,
                                 GCancellable *cancellable)
@@ -266,7 +267,7 @@ ide_template_base_parse_worker (GTask        *task,
   IdeTemplateBase *self = source_object;
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_TEMPLATE_BASE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -283,14 +284,14 @@ ide_template_base_parse_worker (GTask        *task,
 
       if (!tmpl_template_parse_file (template, fexp->file, cancellable, &error))
         {
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }
 
       fexp->template = g_object_ref (template);
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -299,13 +300,13 @@ ide_template_base_parse_async (IdeTemplateBase     *self,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_TEMPLATE_BASE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_run_in_thread (task, ide_template_base_parse_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_run_in_thread (task, ide_template_base_parse_worker);
 }
 
 static gboolean
@@ -314,9 +315,9 @@ ide_template_base_parse_finish (IdeTemplateBase  *self,
                                 GError          **error)
 {
   g_assert (IDE_IS_TEMPLATE_BASE (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -325,7 +326,7 @@ ide_template_base_replace_cb (GObject      *object,
                               gpointer      user_data)
 {
   GFile *file = (GFile *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   ExpansionTask *expansion;
   FileExpansion *fexp = NULL;
@@ -333,9 +334,9 @@ ide_template_base_replace_cb (GObject      *object,
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  expansion = g_task_get_task_data (task);
+  expansion = ide_task_get_task_data (task);
 
   g_assert (expansion != NULL);
   g_assert (expansion->files != NULL);
@@ -347,8 +348,8 @@ ide_template_base_replace_cb (GObject      *object,
    */
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
     {
-      if (!g_task_get_completed (task))
-        g_task_return_error (task, g_steal_pointer (&error));
+      if (!ide_task_get_completed (task))
+        ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -385,21 +386,21 @@ ide_template_base_replace_cb (GObject      *object,
 
   if (expansion->completed == expansion->files->len)
     {
-      if (!g_task_get_completed (task))
-        g_task_return_boolean (task, TRUE);
+      if (!ide_task_get_completed (task))
+        ide_task_return_boolean (task, TRUE);
     }
 }
 
 static gboolean
-ide_template_base_expand (GTask *task)
+ide_template_base_expand (IdeTask *task)
 {
   ExpansionTask *expansion;
   gint64 end;
   gint64 now;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  expansion = g_task_get_task_data (task);
+  expansion = ide_task_get_task_data (task);
 
   g_assert (expansion != NULL);
   g_assert (expansion->files != NULL);
@@ -432,7 +433,7 @@ ide_template_base_expand (GTask *task)
 
       if (fexp->result == NULL)
         {
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           return G_SOURCE_REMOVE;
         }
 
@@ -472,7 +473,7 @@ ide_template_base_expand (GTask *task)
                                          NULL,
                                          FALSE,
                                          G_FILE_CREATE_REPLACE_DESTINATION,
-                                         g_task_get_cancellable (task),
+                                         ide_task_get_cancellable (task),
                                          ide_template_base_replace_cb,
                                          g_object_ref (task));
         }
@@ -489,14 +490,14 @@ ide_template_base_expand_parse_cb (GObject      *object,
                                    gpointer      user_data)
 {
   IdeTemplateBase *self = (IdeTemplateBase *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_TEMPLATE_BASE (self));
 
   if (!ide_template_base_parse_finish (self, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -513,17 +514,17 @@ ide_template_base_expand_mkdirs_cb (GObject      *object,
                                     gpointer      user_data)
 {
   IdeTemplateBase *self = (IdeTemplateBase *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
 
   g_assert (IDE_IS_TEMPLATE_BASE (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
 
   if (!ide_template_base_mkdirs_finish (self, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_template_base_parse_async (self,
                                    cancellable,
@@ -538,7 +539,7 @@ ide_template_base_expand_all_async (IdeTemplateBase     *self,
                                     gpointer             user_data)
 {
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   ExpansionTask *task_data;
 
   g_return_if_fail (IDE_IS_TEMPLATE_BASE (self));
@@ -563,8 +564,8 @@ ide_template_base_expand_all_async (IdeTemplateBase     *self,
    * Once we have all of our templates expanded, we progress to asynchronously
    * write them to the requested underlying storage.
    */
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, task_data, g_free);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_task_data (task, task_data, g_free);
 
   /*
    * You can only call ide_template_base_expand_all_async() once, since we maintain
@@ -572,11 +573,11 @@ ide_template_base_expand_all_async (IdeTemplateBase     *self,
    */
   if (priv->has_expanded)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_PENDING,
-                               "%s() has already been called.",
-                               G_STRFUNC);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_PENDING,
+                                 "%s() has already been called.",
+                                 G_STRFUNC);
       return;
     }
 
@@ -588,7 +589,7 @@ ide_template_base_expand_all_async (IdeTemplateBase     *self,
    */
   if (priv->files->len == 0)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -604,9 +605,9 @@ ide_template_base_expand_all_finish (IdeTemplateBase  *self,
                                      GError          **error)
 {
   g_return_val_if_fail (IDE_IS_TEMPLATE_BASE (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static TmplScope *

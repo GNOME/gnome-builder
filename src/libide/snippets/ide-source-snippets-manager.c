@@ -25,6 +25,7 @@
 #include "snippets/ide-source-snippet-parser.h"
 #include "snippets/ide-source-snippets.h"
 #include "snippets/ide-source-snippet.h"
+#include "threading/ide-task.h"
 
 /**
  * SECTION:ide-source-snippets-manager
@@ -217,14 +218,14 @@ ide_source_snippets_manager_load_directory (IdeSourceSnippetsManager *manager,
 }
 
 static void
-ide_source_snippets_manager_load_worker (GTask        *task,
+ide_source_snippets_manager_load_worker (IdeTask      *task,
                                          gpointer      source_object,
                                          gpointer      task_data,
                                          GCancellable *cancellable)
 {
   g_autofree gchar *path = NULL;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_SOURCE_SNIPPETS_MANAGER (source_object));
 
   /* Load internal snippets */
@@ -232,7 +233,7 @@ ide_source_snippets_manager_load_worker (GTask        *task,
   g_mkdir_with_parents (path, 0700);
   ide_source_snippets_manager_load_directory (source_object, path);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 /**
@@ -255,15 +256,15 @@ ide_source_snippets_manager_load_async (IdeSourceSnippetsManager *self,
                                         GAsyncReadyCallback       callback,
                                         gpointer                  user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_SOURCE_SNIPPETS_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_source_snippets_manager_load_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_run_in_thread (task, ide_source_snippets_manager_load_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_source_snippets_manager_load_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_run_in_thread (task, ide_source_snippets_manager_load_worker);
 }
 
 /**
@@ -283,9 +284,9 @@ ide_source_snippets_manager_load_finish (IdeSourceSnippetsManager  *self,
                                          GAsyncResult              *result,
                                          GError                   **error)
 {
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 /**

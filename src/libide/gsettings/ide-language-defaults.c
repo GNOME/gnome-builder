@@ -25,6 +25,7 @@
 #include "ide-debug.h"
 
 #include "gsettings/ide-language-defaults.h"
+#include "threading/ide-task.h"
 
 #define SCHEMA_ID "org.gnome.builder.editor.language"
 #define PATH_BASE "/org/gnome/builder/editor/language/"
@@ -242,7 +243,7 @@ ide_language_defaults_get_defaults (GError **error)
 }
 
 static void
-ide_language_defaults_init_worker (GTask        *task,
+ide_language_defaults_init_worker (IdeTask      *task,
                                    gpointer      source_object,
                                    gpointer      task_data,
                                    GCancellable *cancellable)
@@ -259,7 +260,7 @@ ide_language_defaults_init_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (source_object == NULL);
   g_assert (task_data == NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -273,7 +274,7 @@ ide_language_defaults_init_worker (GTask        *task,
 
   if (current_version < 0)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (failure);
     }
 
@@ -291,17 +292,17 @@ ide_language_defaults_init_worker (GTask        *task,
 
   if (!ret)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (failure);
     }
 
   if (!g_key_file_has_group (key_file, "global") ||
       !g_key_file_has_key (key_file, "global", "version", NULL))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               _("language defaults missing version in [global] group."));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 _("language defaults missing version in [global] group."));
       IDE_GOTO (failure);
     }
 
@@ -309,7 +310,7 @@ ide_language_defaults_init_worker (GTask        *task,
 
   if (global_version == 0 && error != NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (failure);
     }
 
@@ -319,7 +320,7 @@ ide_language_defaults_init_worker (GTask        *task,
     {
       if (!ide_language_defaults_migrate (key_file, current_version, global_version, &error))
         {
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           IDE_GOTO (failure);
         }
 
@@ -331,10 +332,10 @@ ide_language_defaults_init_worker (GTask        *task,
         {
           if (g_mkdir_with_parents (version_dir, 0750) == -1)
             {
-              g_task_return_new_error (task,
-                                       G_IO_ERROR,
-                                       g_io_error_from_errno (errno),
-                                       "%s", g_strerror (errno));
+              ide_task_return_new_error (task,
+                                         G_IO_ERROR,
+                                         g_io_error_from_errno (errno),
+                                         "%s", g_strerror (errno));
               IDE_GOTO (failure);
             }
         }
@@ -343,12 +344,12 @@ ide_language_defaults_init_worker (GTask        *task,
 
       if (!g_file_set_contents (version_path, version_contents, -1, &error))
         {
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           IDE_GOTO (failure);
         }
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   {
     GList *list;
@@ -366,7 +367,7 @@ ide_language_defaults_init_worker (GTask        *task,
 
     for (iter = list; iter; iter = iter->next)
       {
-        g_task_return_boolean (iter->data, TRUE);
+        ide_task_return_boolean (iter->data, TRUE);
         g_object_unref (iter->data);
       }
 
@@ -392,10 +393,10 @@ failure:
 
     for (iter = list; iter; iter = iter->next)
       {
-        g_task_return_new_error (iter->data,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_FAILED,
-                                 _("Failed to initialize defaults."));
+        ide_task_return_new_error (iter->data,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_FAILED,
+                                   _("Failed to initialize defaults."));
         g_object_unref (iter->data);
       }
 
@@ -410,19 +411,19 @@ ide_language_defaults_init_async (GCancellable        *cancellable,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (NULL, cancellable, callback, user_data);
+  task = ide_task_new (NULL, cancellable, callback, user_data);
 
   G_LOCK (lock);
 
   if (initialized)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
     }
   else if (initializing)
     {
@@ -431,7 +432,7 @@ ide_language_defaults_init_async (GCancellable        *cancellable,
   else
     {
       initializing = TRUE;
-      g_task_run_in_thread (task, ide_language_defaults_init_worker);
+      ide_task_run_in_thread (task, ide_language_defaults_init_worker);
     }
 
   G_UNLOCK (lock);
@@ -443,14 +444,14 @@ gboolean
 ide_language_defaults_init_finish (GAsyncResult  *result,
                                    GError       **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
   gboolean ret;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  ret = g_task_propagate_boolean (task, error);
+  ret = ide_task_propagate_boolean (task, error);
 
   IDE_RETURN (ret);
 }

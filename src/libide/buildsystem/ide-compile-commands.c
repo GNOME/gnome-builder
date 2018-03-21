@@ -25,6 +25,7 @@
 #include "ide-debug.h"
 
 #include "buildsystem/ide-compile-commands.h"
+#include "threading/ide-task.h"
 
 /**
  * SECTION:ide-compile-commands
@@ -140,7 +141,7 @@ ide_compile_commands_new (void)
 }
 
 static void
-ide_compile_commands_load_worker (GTask        *task,
+ide_compile_commands_load_worker (IdeTask      *task,
                                   gpointer      source_object,
                                   gpointer      task_data,
                                   GCancellable *cancellable)
@@ -160,7 +161,7 @@ ide_compile_commands_load_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_COMPILE_COMMANDS (self));
   g_assert (G_IS_FILE (gfile));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -170,7 +171,7 @@ ide_compile_commands_load_worker (GTask        *task,
   if (!g_file_load_contents (gfile, cancellable, &contents, &len, NULL, &error) ||
       !json_parser_load_from_data (parser, contents, len, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -178,10 +179,10 @@ ide_compile_commands_load_worker (GTask        *task,
       !JSON_NODE_HOLDS_ARRAY (root) ||
       NULL == (ar = json_node_get_array (root)))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               "Failed to extract commands, invalid json");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "Failed to extract commands, invalid json");
       IDE_EXIT;
     }
 
@@ -271,7 +272,7 @@ ide_compile_commands_load_worker (GTask        *task,
   self->info_by_file = g_steal_pointer (&info_by_file);
   self->vala_info = g_steal_pointer (&vala_info);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -302,7 +303,7 @@ ide_compile_commands_load (IdeCompileCommands  *self,
                            GCancellable        *cancellable,
                            GError             **error)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   gboolean ret;
 
   IDE_ENTRY;
@@ -314,13 +315,13 @@ ide_compile_commands_load (IdeCompileCommands  *self,
 
   self->has_loaded = TRUE;
 
-  task = g_task_new (self, cancellable, NULL, NULL);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, ide_compile_commands_load);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  task = ide_task_new (self, cancellable, NULL, NULL);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_source_tag (task, ide_compile_commands_load);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
   ide_compile_commands_load_worker (task, self, file, cancellable);
 
-  ret = g_task_propagate_boolean (task, error);
+  ret = ide_task_propagate_boolean (task, error);
 
   IDE_RETURN (ret);
 }
@@ -351,7 +352,7 @@ ide_compile_commands_load_async (IdeCompileCommands  *self,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -362,11 +363,11 @@ ide_compile_commands_load_async (IdeCompileCommands  *self,
 
   self->has_loaded = TRUE;
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, ide_compile_commands_load_async);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_run_in_thread (task, ide_compile_commands_load_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_source_tag (task, ide_compile_commands_load_async);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_run_in_thread (task, ide_compile_commands_load_worker);
 
   IDE_EXIT;
 }
@@ -396,9 +397,9 @@ ide_compile_commands_load_finish (IdeCompileCommands  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_COMPILE_COMMANDS (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

@@ -25,6 +25,7 @@
 #include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-build-stage.h"
 #include "subprocess/ide-subprocess.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -32,7 +33,7 @@ typedef struct
   IdeBuildLogObserver  observer;
   gpointer             observer_data;
   GDestroyNotify       observer_data_destroy;
-  GTask               *queued_execute;
+  IdeTask             *queued_execute;
   gchar               *stdout_path;
   GOutputStream       *stdout_stream;
   gint                 n_pause;
@@ -135,7 +136,7 @@ ide_build_stage_real_execute (IdeBuildStage     *self,
 }
 
 static void
-ide_build_stage_real_execute_worker (GTask        *task,
+ide_build_stage_real_execute_worker (IdeTask      *task,
                                      gpointer      source_object,
                                      gpointer      task_data,
                                      GCancellable *cancellable)
@@ -144,14 +145,14 @@ ide_build_stage_real_execute_worker (GTask        *task,
   IdeBuildPipeline *pipeline = task_data;
   g_autoptr(GError) error = NULL;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_BUILD_STAGE (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   if (IDE_BUILD_STAGE_GET_CLASS (self)->execute (self, pipeline, cancellable, &error))
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
   else
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
 }
 
 static void
@@ -161,16 +162,16 @@ ide_build_stage_real_execute_async (IdeBuildStage       *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_BUILD_STAGE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_stage_real_execute_async);
-  g_task_set_task_data (task, g_object_ref (pipeline), g_object_unref);
-  g_task_run_in_thread (task, ide_build_stage_real_execute_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_stage_real_execute_async);
+  ide_task_set_task_data (task, g_object_ref (pipeline), g_object_unref);
+  ide_task_run_in_thread (task, ide_build_stage_real_execute_worker);
 }
 
 static gboolean
@@ -179,9 +180,9 @@ ide_build_stage_real_execute_finish (IdeBuildStage  *self,
                                      GError        **error)
 {
   g_assert (IDE_IS_BUILD_STAGE (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 const gchar *
@@ -217,18 +218,18 @@ ide_build_stage_real_clean_async (IdeBuildStage       *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_BUILD_STAGE (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_stage_real_clean_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_stage_real_clean_async);
 
   ide_build_stage_set_completed (self, FALSE);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -236,7 +237,7 @@ ide_build_stage_real_clean_finish (IdeBuildStage  *self,
                                    GAsyncResult   *result,
                                    GError        **error)
 {
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static gboolean
@@ -513,7 +514,7 @@ ide_build_stage_execute_async (IdeBuildStage       *self,
                                gpointer             user_data)
 {
   IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_BUILD_STAGE (self));
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
@@ -828,16 +829,16 @@ ide_build_stage_unpause_execute_cb (GObject      *object,
                                     gpointer      user_data)
 {
   IdeBuildStage *self = (IdeBuildStage *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_BUILD_STAGE (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_build_stage_execute_finish (self, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 void
@@ -850,17 +851,17 @@ ide_build_stage_unpause (IdeBuildStage *self)
 
   if (g_atomic_int_dec_and_test (&priv->n_pause) && priv->queued_execute != NULL)
     {
-      g_autoptr(GTask) task = g_steal_pointer (&priv->queued_execute);
-      GCancellable *cancellable = g_task_get_cancellable (task);
-      IdeBuildPipeline *pipeline = g_task_get_task_data (task);
+      g_autoptr(IdeTask) task = g_steal_pointer (&priv->queued_execute);
+      GCancellable *cancellable = ide_task_get_cancellable (task);
+      IdeBuildPipeline *pipeline = ide_task_get_task_data (task);
 
-      g_assert (G_IS_TASK (task));
+      g_assert (IDE_IS_TASK (task));
       g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
       g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
       if (priv->completed)
         {
-          g_task_return_boolean (task, TRUE);
+          ide_task_return_boolean (task, TRUE);
           return;
         }
 
@@ -888,22 +889,22 @@ _ide_build_stage_execute_with_query_async (IdeBuildStage       *self,
                                            gpointer             user_data)
 {
   IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_BUILD_STAGE (self));
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, _ide_build_stage_execute_with_query_async);
-  g_task_set_task_data (task, g_object_ref (pipeline), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, _ide_build_stage_execute_with_query_async);
+  ide_task_set_task_data (task, g_object_ref (pipeline), g_object_unref);
 
   if (priv->queued_execute != NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_PENDING,
-                               "A build is already in progress");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_PENDING,
+                                 "A build is already in progress");
       return;
     }
 
@@ -925,9 +926,9 @@ _ide_build_stage_execute_with_query_finish (IdeBuildStage  *self,
                                             GError        **error)
 {
   g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 void
@@ -992,7 +993,7 @@ ide_build_stage_clean_finish (IdeBuildStage  *self,
                               GError        **error)
 {
   g_return_val_if_fail (IDE_IS_BUILD_STAGE (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   return IDE_BUILD_STAGE_GET_CLASS (self)->clean_finish (self, result, error);
 }

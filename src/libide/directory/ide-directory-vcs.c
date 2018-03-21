@@ -24,6 +24,7 @@
 
 #include "directory/ide-directory-vcs.h"
 #include "projects/ide-project.h"
+#include "threading/ide-task.h"
 
 struct _IdeDirectoryVcs
 {
@@ -155,7 +156,7 @@ ide_directory_vcs_init (IdeDirectoryVcs *self)
 }
 
 static void
-ide_directory_vcs_init_worker (GTask        *task,
+ide_directory_vcs_init_worker (IdeTask      *task,
                                gpointer      source_object,
                                gpointer      task_data,
                                GCancellable *cancellable)
@@ -177,7 +178,7 @@ ide_directory_vcs_init_worker (GTask        *task,
 
   if (file_info == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -193,7 +194,7 @@ ide_directory_vcs_init_worker (GTask        *task,
   else
     self->working_directory = g_file_get_parent (file);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -204,7 +205,7 @@ ide_directory_vcs_init_async (GAsyncInitable      *initable,
                               gpointer             user_data)
 {
   IdeDirectoryVcs *self = (IdeDirectoryVcs *)initable;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
   GFile *project_file;
 
@@ -214,9 +215,9 @@ ide_directory_vcs_init_async (GAsyncInitable      *initable,
   context = ide_object_get_context (IDE_OBJECT (initable));
   project_file = ide_context_get_project_file (context);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (project_file), g_object_unref);
-  g_task_run_in_thread (task, ide_directory_vcs_init_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_task_data (task, g_object_ref (project_file), g_object_unref);
+  ide_task_run_in_thread (task, ide_directory_vcs_init_worker);
 }
 
 static gboolean
@@ -224,13 +225,13 @@ ide_directory_vcs_init_finish (GAsyncInitable  *initable,
                                GAsyncResult    *result,
                                GError         **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_DIRECTORY_VCS (initable), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 static void

@@ -28,6 +28,7 @@
 #include "files/ide-file.h"
 #include "files/ide-file-settings.h"
 #include "vcs/ide-vcs.h"
+#include "threading/ide-task.h"
 
 struct _IdeFile
 {
@@ -259,21 +260,21 @@ ide_file__file_settings_settled_cb (IdeFileSettings *file_settings,
                                     GParamSpec      *pspec,
                                     gpointer         user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   IdeFile *self;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_FILE_SETTINGS (file_settings));
-  g_assert (G_IS_TASK (task));
-  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_TASK (task));
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_FILE (self));
 
   g_signal_handlers_disconnect_by_func (file_settings,
                                         G_CALLBACK (ide_file__file_settings_settled_cb),
                                         task);
   g_set_object (&self->file_settings, file_settings);
-  g_task_return_pointer (task, g_object_ref (file_settings), g_object_unref);
+  ide_task_return_pointer (task, g_object_ref (file_settings), g_object_unref);
 
   IDE_EXIT;
 }
@@ -284,7 +285,7 @@ ide_file_load_settings_async (IdeFile              *self,
                               GAsyncReadyCallback   callback,
                               gpointer              user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeFileSettings) file_settings = NULL;
 
   IDE_ENTRY;
@@ -292,12 +293,12 @@ ide_file_load_settings_async (IdeFile              *self,
   g_return_if_fail (IDE_IS_FILE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   /* Use shared instance if available */
   if (self->file_settings != NULL)
     {
-      g_task_return_pointer (task, g_object_ref (self->file_settings), g_object_unref);
+      ide_task_return_pointer (task, g_object_ref (self->file_settings), g_object_unref);
       IDE_EXIT;
     }
 
@@ -310,7 +311,7 @@ ide_file_load_settings_async (IdeFile              *self,
   if (ide_file_settings_get_settled (file_settings))
     {
       self->file_settings = g_steal_pointer (&file_settings);
-      g_task_return_pointer (task, g_object_ref (self->file_settings), g_object_unref);
+      ide_task_return_pointer (task, g_object_ref (self->file_settings), g_object_unref);
       IDE_EXIT;
     }
 
@@ -323,7 +324,7 @@ ide_file_load_settings_async (IdeFile              *self,
                     "notify::settled",
                     G_CALLBACK (ide_file__file_settings_settled_cb),
                     g_object_ref (task));
-  g_task_set_task_data (task, g_steal_pointer (&file_settings), g_object_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&file_settings), g_object_unref);
 
   IDE_EXIT;
 }
@@ -345,9 +346,9 @@ ide_file_load_settings_finish (IdeFile              *self,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -588,7 +589,7 @@ has_suffix (const gchar          *path,
 }
 
 static void
-ide_file_find_other_worker (GTask        *task,
+ide_file_find_other_worker (IdeTask      *task,
                             gpointer      source_object,
                             gpointer      task_data,
                             GCancellable *cancellable)
@@ -600,7 +601,7 @@ ide_file_find_other_worker (GTask        *task,
   g_autofree gchar *prefix = NULL;
   g_autofree gchar *uri = NULL;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_FILE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -616,10 +617,10 @@ ide_file_find_other_worker (GTask        *task,
     }
   else
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               "File is missing a suffix.");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_FILENAME,
+                                 "File is missing a suffix.");
       return;
     }
 
@@ -637,18 +638,18 @@ ide_file_find_other_worker (GTask        *task,
         {
           IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
 
-          g_task_return_pointer (task,
-                                 ide_file_new (context, gfile),
-                                 g_object_unref);
+          ide_task_return_pointer (task,
+                                   ide_file_new (context, gfile),
+                                   g_object_unref);
 
           return;
         }
     }
 
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_FOUND,
-                           "Failed to locate other file.");
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Failed to locate other file.");
 }
 
 void
@@ -657,13 +658,13 @@ ide_file_find_other_async (IdeFile             *self,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_FILE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_run_in_thread (task, ide_file_find_other_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_run_in_thread (task, ide_file_find_other_worker);
 }
 
 /**
@@ -684,9 +685,9 @@ ide_file_find_other_finish (IdeFile       *self,
                             GError       **error)
 {
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static IdeFile *

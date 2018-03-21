@@ -26,6 +26,7 @@
 #include "util/ide-glib.h"
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
+#include "threading/ide-task.h"
 #include "vcs/ide-vcs.h"
 
 typedef struct

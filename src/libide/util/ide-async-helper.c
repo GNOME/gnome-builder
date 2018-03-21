@@ -17,26 +17,40 @@
  */
 
 #include "util/ide-async-helper.h"
+#include "threading/ide-task.h"
 
 static void
 ide_async_helper_cb (GObject      *object,
                      GAsyncResult *result,
                      gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GPtrArray *funcs;
 
-  g_return_if_fail (G_IS_TASK (task));
-  g_return_if_fail (G_IS_TASK (result));
+  g_return_if_fail (IDE_IS_TASK (task));
+  g_return_if_fail (IDE_IS_TASK (result) || G_IS_TASK (result));
 
-  funcs = g_task_get_task_data (task);
-
-  if (!g_task_propagate_boolean (G_TASK (result), &error))
+  if (IDE_IS_TASK (result))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
+      if (!ide_task_propagate_boolean (IDE_TASK (result), &error))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
     }
+  else
+    {
+      g_assert (G_IS_TASK (result));
+
+      if (!g_task_propagate_boolean (G_TASK (result), &error))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+
+  funcs = ide_task_get_task_data (task);
 
   g_ptr_array_remove_index (funcs, 0);
 
@@ -45,13 +59,13 @@ ide_async_helper_cb (GObject      *object,
       IdeAsyncStep step;
 
       step = g_ptr_array_index (funcs, 0);
-      step (g_task_get_source_object (task),
-            g_task_get_cancellable (task),
+      step (ide_task_get_source_object (task),
+            ide_task_get_cancellable (task),
             ide_async_helper_cb,
             g_object_ref (task));
     }
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 void
@@ -62,7 +76,7 @@ ide_async_helper_run (gpointer             source_object,
                       IdeAsyncStep         step1,
                       ...)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeAsyncStep step;
   GPtrArray *funcs;
   va_list args;
@@ -75,8 +89,8 @@ ide_async_helper_run (gpointer             source_object,
     g_ptr_array_add (funcs, step);
   va_end (args);
 
-  task = g_task_new (source_object, cancellable, callback, user_data);
-  g_task_set_task_data (task, funcs, (GDestroyNotify)g_ptr_array_unref);
+  task = ide_task_new (source_object, cancellable, callback, user_data);
+  ide_task_set_task_data (task, funcs, (GDestroyNotify)g_ptr_array_unref);
 
   step1 (source_object,
          cancellable,

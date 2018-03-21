@@ -33,6 +33,7 @@
 #include "subprocess/ide-subprocess-launcher.h"
 #include "util/ide-flatpak.h"
 #include "vcs/ide-vcs.h"
+#include "threading/ide-task.h"
 
 struct _IdeProject
 {
@@ -333,14 +334,14 @@ rename_file_free (gpointer data)
 static gboolean
 emit_file_renamed (gpointer data)
 {
-  GTask *task = data;
+  IdeTask *task = data;
   IdeProject *project;
   RenameFile *rf;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  project = g_task_get_source_object (task);
-  rf = g_task_get_task_data (task);
+  project = ide_task_get_source_object (task);
+  rf = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_PROJECT (project));
   g_assert (rf != NULL);
@@ -357,7 +358,7 @@ emit_file_renamed (gpointer data)
 }
 
 static void
-ide_project_rename_file_worker (GTask        *task,
+ide_project_rename_file_worker (IdeTask      *task,
                                 gpointer      source_object,
                                 gpointer      task_data,
                                 GCancellable *cancellable)
@@ -392,10 +393,10 @@ ide_project_rename_file_worker (GTask        *task,
 
   if (path == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               _("Destination file must be within the project tree."));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_FILENAME,
+                                 _("Destination file must be within the project tree."));
       return;
     }
 
@@ -404,7 +405,7 @@ ide_project_rename_file_worker (GTask        *task,
   if (!g_file_query_exists (parent, cancellable) &&
       !g_file_make_directory_with_parents (parent, cancellable, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -416,7 +417,7 @@ ide_project_rename_file_worker (GTask        *task,
                     NULL,
                     &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -425,7 +426,7 @@ ide_project_rename_file_worker (GTask        *task,
                    g_object_ref (task),
                    g_object_unref);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -434,7 +435,7 @@ ide_project_rename_buffer_save_cb (GObject      *object,
                                    gpointer      user_data)
 {
   IdeBufferManager *bufmgr = (IdeBufferManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeFile) file = NULL;
   g_autoptr(GError) error = NULL;
   IdeContext *context;
@@ -443,15 +444,15 @@ ide_project_rename_buffer_save_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_buffer_manager_save_file_finish (bufmgr, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  rf = g_task_get_task_data (task);
+  rf = ide_task_get_task_data (task);
   g_assert (rf != NULL);
   g_assert (G_IS_FILE (rf->orig_file));
   g_assert (G_IS_FILE (rf->new_file));
@@ -465,7 +466,7 @@ ide_project_rename_buffer_save_cb (GObject      *object,
   file = ide_file_new (context, rf->new_file);
   ide_buffer_set_file (rf->buffer, file);
 
-  g_task_run_in_thread (task, ide_project_rename_file_worker);
+  ide_task_run_in_thread (task, ide_project_rename_file_worker);
 }
 
 void
@@ -476,7 +477,7 @@ ide_project_rename_file_async (IdeProject          *self,
                                GAsyncReadyCallback  callback,
                                gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeBufferManager *bufmgr;
   IdeContext *context;
   IdeBuffer *buffer;
@@ -487,9 +488,9 @@ ide_project_rename_file_async (IdeProject          *self,
   g_return_if_fail (G_IS_FILE (new_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_project_rename_file_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_project_rename_file_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   bufmgr = ide_context_get_buffer_manager (context);
@@ -499,7 +500,7 @@ ide_project_rename_file_async (IdeProject          *self,
   op->orig_file = g_object_ref (orig_file);
   op->new_file = g_object_ref (new_file);
   op->buffer = buffer ? g_object_ref (buffer) : NULL;
-  g_task_set_task_data (task, op, rename_file_free);
+  ide_task_set_task_data (task, op, rename_file_free);
 
   /*
    * If the file is open and has any changes, we need to save those
@@ -525,7 +526,7 @@ ide_project_rename_file_async (IdeProject          *self,
       ide_buffer_set_file (buffer, to);
     }
 
-  g_task_run_in_thread (task, ide_project_rename_file_worker);
+  ide_task_run_in_thread (task, ide_project_rename_file_worker);
 }
 
 gboolean
@@ -533,12 +534,12 @@ ide_project_rename_file_finish (IdeProject    *self,
                                 GAsyncResult  *result,
                                 GError       **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_PROJECT (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 static void
@@ -547,20 +548,20 @@ ide_project_trash_file__file_trash_cb (GObject      *object,
                                        gpointer      user_data)
 {
   GFile *file = (GFile *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeProject *self;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!g_file_trash_finish (file, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
 
   g_assert (IDE_IS_PROJECT (self));
 
@@ -573,22 +574,22 @@ ide_project_trash_file__wait_check_cb (GObject      *object,
                                        gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeProject *self;
   GFile *file;
 
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
-  self = g_task_get_source_object (task);
-  file = g_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+  file = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_PROJECT (self));
   g_assert (G_IS_FILE (file));
@@ -617,7 +618,7 @@ ide_project_trash_file_async (IdeProject          *self,
                               GAsyncReadyCallback  callback,
                               gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
@@ -631,17 +632,17 @@ ide_project_trash_file_async (IdeProject          *self,
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_project_trash_file_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_project_trash_file_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   if (!file_is_ancestor (workdir, file))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               _("File must be within the project tree."));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_FILENAME,
+                                 _("File must be within the project tree."));
       IDE_EXIT;
     }
 
@@ -672,7 +673,7 @@ ide_project_trash_file_async (IdeProject          *self,
       subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
       if (subprocess == NULL)
-        g_task_return_error (task, g_steal_pointer (&error));
+        ide_task_return_error (task, g_steal_pointer (&error));
       else
         ide_subprocess_wait_check_async (subprocess,
                                          cancellable,
@@ -698,7 +699,7 @@ ide_project_trash_file_finish (IdeProject    *self,
                                GAsyncResult  *result,
                                GError       **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
   gboolean ret;
 
   IDE_ENTRY;
@@ -706,7 +707,7 @@ ide_project_trash_file_finish (IdeProject    *self,
   g_return_val_if_fail (IDE_IS_PROJECT (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  ret = g_task_propagate_boolean (task, error);
+  ret = ide_task_propagate_boolean (task, error);
 
   IDE_RETURN (ret);
 }

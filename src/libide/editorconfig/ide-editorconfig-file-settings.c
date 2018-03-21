@@ -25,6 +25,7 @@
 
 #include "editorconfig/ide-editorconfig-file-settings.h"
 #include "files/ide-file.h"
+#include "threading/ide-task.h"
 
 struct _IdeEditorconfigFileSettings
 {
@@ -51,7 +52,7 @@ ide_editorconfig_file_settings_init (IdeEditorconfigFileSettings *self)
 }
 
 static void
-ide_editorconfig_file_settings_init_worker (GTask        *task,
+ide_editorconfig_file_settings_init_worker (IdeTask      *task,
                                             gpointer      source_object,
                                             gpointer      task_data,
                                             GCancellable *cancellable)
@@ -62,7 +63,7 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
   GHashTable *ht;
   gpointer k, v;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_EDITORCONFIG_FILE_SETTINGS (source_object));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -71,7 +72,7 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
 
   if (!ht)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -123,7 +124,7 @@ ide_editorconfig_file_settings_init_worker (GTask        *task,
         }
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   g_hash_table_unref (ht);
 }
@@ -136,7 +137,7 @@ ide_editorconfig_file_settings_init_async (GAsyncInitable      *initable,
                                            gpointer             user_data)
 {
   IdeEditorconfigFileSettings *self = (IdeEditorconfigFileSettings *)initable;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeFile *file;
   GFile *gfile = NULL;
 
@@ -145,7 +146,7 @@ ide_editorconfig_file_settings_init_async (GAsyncInitable      *initable,
   g_return_if_fail (IDE_IS_EDITORCONFIG_FILE_SETTINGS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   file = ide_file_settings_get_file (IDE_FILE_SETTINGS (self));
   if (file)
@@ -153,15 +154,15 @@ ide_editorconfig_file_settings_init_async (GAsyncInitable      *initable,
 
   if (!gfile)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               _("No file was provided."));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 _("No file was provided."));
       IDE_EXIT;
     }
 
-  g_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
-  g_task_run_in_thread (task, ide_editorconfig_file_settings_init_worker);
+  ide_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
+  ide_task_run_in_thread (task, ide_editorconfig_file_settings_init_worker);
 
   IDE_EXIT;
 }
@@ -175,9 +176,9 @@ ide_editorconfig_file_settings_init_finish (GAsyncInitable  *initable,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
