@@ -167,7 +167,7 @@ void          ide_task_report_new_error          (gpointer              source_o
 # define ide_task_new(self, cancellable, callback, user_data)                      \
   ({                                                                               \
     IdeTask *__ide_task = (ide_task_new) (self, cancellable, callback, user_data); \
-    ide_task_set_name (__ide_task, G_STRLOC);                                      \
+    ide_task_set_name (__ide_task, g_intern_static_string (G_STRLOC));             \
     __ide_task;                                                                    \
   })
 #endif
