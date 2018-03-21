@@ -27,7 +27,7 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
                                           gpointer      user_data)
 {
   IdeCodeIndexer *code_indexer = (IdeCodeIndexer *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *key = NULL;
@@ -39,14 +39,14 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEXER (code_indexer));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (self));
 
   if (!(key = ide_code_indexer_generate_key_finish (code_indexer, result, &error)))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -62,14 +62,14 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
   symbol = ide_code_index_index_lookup_symbol (index, key);
 
   if (symbol != NULL)
-    g_task_return_pointer (task,
-                           g_steal_pointer (&symbol),
-                           (GDestroyNotify)ide_symbol_unref);
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&symbol),
+                             (GDestroyNotify)ide_symbol_unref);
   else
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_FOUND,
-                             "Failed to locate symbol \"%s\"", key);
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "Failed to locate symbol \"%s\"", key);
 }
 
 static void
@@ -80,7 +80,7 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
                                                     gpointer             user_data)
 {
   IdeCodeIndexSymbolResolver *self = (IdeCodeIndexSymbolResolver *)resolver;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeCodeIndexService *service;
   IdeCodeIndexer *code_indexer;
   const gchar *path;
@@ -91,9 +91,9 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   g_assert (location != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_code_index_symbol_resolver_lookup_symbol_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_code_index_symbol_resolver_lookup_symbol_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -108,10 +108,10 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   g_assert (!code_indexer || IDE_IS_CODE_INDEXER (code_indexer));
 
   if (code_indexer == NULL)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "Failed to lcoate code indexer");
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Failed to lcoate code indexer");
   else
     ide_code_indexer_generate_key_async (code_indexer,
                                          location,
@@ -125,9 +125,9 @@ ide_code_index_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolve
                                                      GError            **error)
 {
   g_assert (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (resolver));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

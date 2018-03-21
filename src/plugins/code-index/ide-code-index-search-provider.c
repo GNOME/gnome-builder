@@ -28,22 +28,22 @@ populate_cb (GObject      *object,
              gpointer      user_data)
 {
   IdeCodeIndexIndex *index = (IdeCodeIndexIndex *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GPtrArray) results = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CODE_INDEX_INDEX (index));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   results = ide_code_index_index_populate_finish (index, result, &error);
 
   if (results != NULL)
-    g_task_return_pointer (task,
-                           g_steal_pointer (&results),
-                           (GDestroyNotify)g_ptr_array_unref);
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&results),
+                             (GDestroyNotify)g_ptr_array_unref);
   else
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
 }
 
 static void
@@ -55,7 +55,7 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
                                              gpointer             user_data)
 {
   IdeCodeIndexSearchProvider *self = (IdeCodeIndexSearchProvider *)provider;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeCodeIndexService *service;
   IdeCodeIndexIndex *index;
   IdeContext *context;
@@ -76,9 +76,9 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
   index = ide_code_index_service_get_index (service);
   g_assert (IDE_IS_CODE_INDEX_INDEX (index));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_code_index_search_provider_search_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_code_index_search_provider_search_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   ide_code_index_index_populate_async (index,
                                        search_terms,
@@ -101,9 +101,9 @@ ide_code_index_search_provider_search_finish (IdeSearchProvider *provider,
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_SEARCH_PROVIDER (provider), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ar = g_task_propagate_pointer (G_TASK (result), error);
+  ar = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ar);
 }

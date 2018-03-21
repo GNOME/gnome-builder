@@ -286,7 +286,7 @@ ide_code_index_index_query_cb (GObject      *object,
                                gpointer      user_data)
 {
   DzlFuzzyIndex *index = (DzlFuzzyIndex *)object;
-  g_autoptr(GTask) task = (GTask *)user_data;
+  g_autoptr(IdeTask) task = (IdeTask *)user_data;
   g_autoptr(GListModel) list = NULL;
   g_autoptr(GMutexLocker) locker = NULL;
   g_autoptr(GError) error = NULL;
@@ -296,14 +296,14 @@ ide_code_index_index_query_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (DZL_IS_FUZZY_INDEX (index));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_CODE_INDEX_INDEX (self));
 
   locker = g_mutex_locker_new (&self->mutex);
 
-  data = g_task_get_task_data (task);
+  data = ide_task_get_task_data (task);
   g_assert (data != NULL);
 
   list = dzl_fuzzy_index_query_finish (index, result, &error);
@@ -336,7 +336,7 @@ ide_code_index_index_query_cb (GObject      *object,
       GCancellable *cancellable;
 
       dir_index = g_ptr_array_index (self->indexes, data->curr_index);
-      cancellable = g_task_get_cancellable (task);
+      cancellable = ide_task_get_cancellable (task);
 
       dzl_fuzzy_index_query_async (dir_index->symbol_names,
                                    data->query,
@@ -382,9 +382,9 @@ ide_code_index_index_query_cb (GObject      *object,
             }
         }
 
-      g_task_return_pointer (task,
-                             g_steal_pointer (&results),
-                             (GDestroyNotify)g_ptr_array_unref);
+      ide_task_return_pointer (task,
+                               g_steal_pointer (&results),
+                               (GDestroyNotify)g_ptr_array_unref);
     }
 }
 
@@ -397,7 +397,7 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
                                      gpointer             user_data)
 {
   g_autoptr(GMutexLocker) locker = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_auto(GStrv) str = NULL;
   PopulateTaskData *data;
 
@@ -406,9 +406,9 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
   g_return_if_fail (query != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_code_index_index_populate_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_code_index_index_populate_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   data = g_slice_new0 (PopulateTaskData);
   data->max_results = max_results;
@@ -448,7 +448,7 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
       data->query = g_strconcat (prefix, "\x1F", str[1], NULL);
     }
 
-  g_task_set_task_data (task, data, (GDestroyNotify)populate_task_data_free);
+  ide_task_set_task_data (task, data, (GDestroyNotify)populate_task_data_free);
 
   locker = g_mutex_locker_new (&self->mutex);
 
@@ -465,9 +465,9 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
     }
   else
     {
-      g_task_return_pointer (task,
-                             g_ptr_array_new_with_free_func (g_object_unref),
-                             (GDestroyNotify) g_ptr_array_unref);
+      ide_task_return_pointer (task,
+                               g_ptr_array_new_with_free_func (g_object_unref),
+                               (GDestroyNotify) g_ptr_array_unref);
     }
 }
 
@@ -478,9 +478,9 @@ ide_code_index_index_populate_finish (IdeCodeIndexIndex *self,
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_INDEX (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 IdeSymbol *
