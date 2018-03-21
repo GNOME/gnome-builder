@@ -1155,6 +1155,8 @@ index_directory_async (IdeCodeIndexBuilder *self,
 
   g_hash_table_iter_init (&iter, build_flags);
 
+  idd->n_active++;
+
   while (g_hash_table_iter_next (&iter, &k, &v))
     {
       IdeFile *file = k;
@@ -1179,6 +1181,8 @@ index_directory_async (IdeCodeIndexBuilder *self,
                                              g_object_ref (task));
         }
     }
+
+  idd->n_active--;
 
   if (idd->n_active == 0)
     g_task_return_boolean (task, TRUE);
