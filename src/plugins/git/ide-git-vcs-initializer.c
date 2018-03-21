@@ -47,7 +47,7 @@ ide_git_vcs_initializer_init (IdeGitVcsInitializer *self)
 }
 
 static void
-ide_git_vcs_initializer_initialize_worker (GTask        *task,
+ide_git_vcs_initializer_initialize_worker (IdeTask      *task,
                                            gpointer      source_object,
                                            gpointer      task_data,
                                            GCancellable *cancellable)
@@ -56,16 +56,16 @@ ide_git_vcs_initializer_initialize_worker (GTask        *task,
   g_autoptr(GError) error = NULL;
   GFile *file = task_data;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_GIT_VCS_INITIALIZER (source_object));
   g_assert (G_IS_FILE (file));
 
   repository = ggit_repository_init_repository (file, FALSE, &error);
 
   if (repository == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -76,15 +76,15 @@ ide_git_vcs_initializer_initialize_async (IdeVcsInitializer   *initializer,
                                           gpointer             user_data)
 {
   IdeGitVcsInitializer *self = (IdeGitVcsInitializer *)initializer;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_GIT_VCS_INITIALIZER (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_run_in_thread (task, ide_git_vcs_initializer_initialize_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_run_in_thread (task, ide_git_vcs_initializer_initialize_worker);
 }
 
 static gboolean
@@ -93,9 +93,9 @@ ide_git_vcs_initializer_initialize_finish (IdeVcsInitializer  *initializer,
                                            GError            **error)
 {
   g_return_val_if_fail (IDE_IS_GIT_VCS_INITIALIZER (initializer), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static gchar *

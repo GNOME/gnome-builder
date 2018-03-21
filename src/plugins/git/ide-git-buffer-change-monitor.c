@@ -147,13 +147,13 @@ ide_git_buffer_change_monitor_calculate_finish (IdeGitBufferChangeMonitor  *self
                                                 GAsyncResult               *result,
                                                 GError                    **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
   DiffTask *diff;
 
   g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  diff = g_task_get_task_data (task);
+  diff = ide_task_get_task_data (task);
 
   /* Keep the blob around for future use */
   if (diff->blob != self->cached_blob)
@@ -162,7 +162,7 @@ ide_git_buffer_change_monitor_calculate_finish (IdeGitBufferChangeMonitor  *self
   /* If the file is a child of the working directory, we need to know */
   self->is_child_of_workdir = diff->is_child_of_workdir;
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 static void
@@ -171,7 +171,7 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
                                                GAsyncReadyCallback        callback,
                                                gpointer                   user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   DiffTask *diff;
   IdeFile *file;
   GFile *gfile;
@@ -183,9 +183,9 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
 
   self->state_dirty = FALSE;
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_git_buffer_change_monitor_calculate_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_git_buffer_change_monitor_calculate_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   file = ide_buffer_get_file (self->buffer);
   g_assert (IDE_IS_FILE (file));
@@ -195,10 +195,10 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
 
   if (gfile == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_FOUND,
-                               _("Cannot provide diff, no backing file provided."));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 _("Cannot provide diff, no backing file provided."));
       return;
     }
 
@@ -209,7 +209,7 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
   diff->content = ide_buffer_get_content (self->buffer);
   diff->blob = self->cached_blob ? g_object_ref (self->cached_blob) : NULL;
 
-  g_task_set_task_data (task, diff, diff_task_free);
+  ide_task_set_task_data (task, diff, diff_task_free);
 
   self->in_calculation = TRUE;
 
@@ -787,21 +787,21 @@ ide_git_buffer_change_monitor_worker (gpointer data)
     {
       IdeGitBufferChangeMonitor *self;
       g_autoptr(GError) error = NULL;
-      g_autoptr(GTask) task = taskptr;
+      g_autoptr(IdeTask) task = taskptr;
       DiffTask *diff;
 
-      self = g_task_get_source_object (task);
+      self = ide_task_get_source_object (task);
       g_assert (IDE_IS_GIT_BUFFER_CHANGE_MONITOR (self));
 
-      diff = g_task_get_task_data (task);
+      diff = ide_task_get_task_data (task);
       g_assert (diff != NULL);
 
       if (!ide_git_buffer_change_monitor_calculate_threaded (self, diff, &error))
-        g_task_return_error (task, g_steal_pointer (&error));
+        ide_task_return_error (task, g_steal_pointer (&error));
       else
-        g_task_return_pointer (task,
-                               g_steal_pointer (&diff->lines),
-                               (GDestroyNotify)g_array_unref);
+        ide_task_return_pointer (task,
+                                 g_steal_pointer (&diff->lines),
+                                 (GDestroyNotify)g_array_unref);
     }
 
   return NULL;
