@@ -30,6 +30,7 @@ typedef struct
   VteTerminal    *terminal;
   GFile          *file;
   GOutputStream  *stream;
+  gchar          *buffer;
 } SaveTask;
 
 static void
@@ -39,11 +40,11 @@ savetask_free (gpointer data)
 
   if (savetask != NULL)
     {
-      if (savetask->file)
-        g_object_unref (savetask->file);
-
-      g_object_unref (savetask->stream);
-      g_object_unref (savetask->terminal);
+      g_clear_object (&savetask->file);
+      g_clear_object (&savetask->stream);
+      g_clear_object (&savetask->terminal);
+      g_clear_pointer (&savetask->buffer, g_free);
+      g_slice_free (SaveTask, savetask);
     }
 }
 
@@ -64,32 +65,32 @@ gb_terminal_view_actions_save_finish (GbTerminalView  *view,
 }
 
 static void
-save_async (GTask        *task,
-            gpointer      source_object,
-            gpointer      task_data,
-            GCancellable *cancellable)
+save_worker (GTask        *task,
+             gpointer      source_object,
+             gpointer      task_data,
+             GCancellable *cancellable)
 {
   GbTerminalView *view = source_object;
   SaveTask *savetask = (SaveTask *)task_data;
   g_autoptr(GError) error = NULL;
   gboolean ret;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_TASK (task));
   g_assert (GB_IS_TERMINAL_VIEW (view));
+  g_assert (savetask != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (view->selection_buffer != NULL)
+  if (savetask->buffer != NULL)
     {
       g_autoptr(GInputStream) input_stream = NULL;
 
-      input_stream = g_memory_input_stream_new_from_data (view->selection_buffer, -1, NULL);
+      input_stream = g_memory_input_stream_new_from_data (savetask->buffer, -1, NULL);
       ret = g_output_stream_splice (G_OUTPUT_STREAM (savetask->stream),
                                     G_INPUT_STREAM (input_stream),
                                     G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
                                     cancellable,
                                     &error);
-
-      g_clear_pointer (&view->selection_buffer, g_free);
     }
   else
     {
@@ -124,15 +125,17 @@ gb_terminal_view_actions_save_async (GbTerminalView       *view,
   task = g_task_new (view, cancellable, callback, user_data);
 
   output_stream = g_file_replace (file, NULL, FALSE, G_FILE_CREATE_REPLACE_DESTINATION, cancellable, &error);
-  if (output_stream)
+
+  if (output_stream != NULL)
     {
       savetask = g_slice_new0 (SaveTask);
       savetask->file = g_object_ref (file);
       savetask->stream = g_object_ref (G_OUTPUT_STREAM (output_stream));
       savetask->terminal = g_object_ref (terminal);
+      savetask->buffer = g_steal_pointer (&view->selection_buffer);
 
       g_task_set_task_data (task, savetask, savetask_free);
-      g_task_run_in_thread (task, save_async);
+      save_worker (task, view, savetask, cancellable);
     }
   else
     g_task_return_error (task, g_steal_pointer (&error));
