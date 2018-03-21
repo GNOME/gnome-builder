@@ -269,9 +269,9 @@ gbp_sysprof_workbench_addin_open_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  reader = g_task_propagate_pointer (G_TASK (result), &error);
+  reader = ide_task_propagate_pointer (IDE_TASK (result), &error);
 
   g_assert (reader || error != NULL);
 
@@ -288,7 +288,7 @@ gbp_sysprof_workbench_addin_open_cb (GObject      *object,
 }
 
 static void
-gbp_sysprof_workbench_addin_open_worker (GTask        *task,
+gbp_sysprof_workbench_addin_open_worker (IdeTask      *task,
                                          gpointer      source_object,
                                          gpointer      task_data,
                                          GCancellable *cancellable)
@@ -298,7 +298,7 @@ gbp_sysprof_workbench_addin_open_worker (GTask        *task,
   SpCaptureReader *reader;
   GFile *file = task_data;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (source_object));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -306,16 +306,16 @@ gbp_sysprof_workbench_addin_open_worker (GTask        *task,
   path = g_file_get_path (file);
 
   if (NULL == (reader = sp_capture_reader_new (path, &error)))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, reader, (GDestroyNotify)sp_capture_reader_unref);
+    ide_task_return_pointer (task, reader, (GDestroyNotify)sp_capture_reader_unref);
 }
 
 static void
 gbp_sysprof_workbench_addin_open (GbpSysprofWorkbenchAddin *self,
                                   GFile                    *file)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
   g_assert (G_IS_FILE (file));
@@ -326,9 +326,9 @@ gbp_sysprof_workbench_addin_open (GbpSysprofWorkbenchAddin *self,
       return;
     }
 
-  task = g_task_new (self, NULL, gbp_sysprof_workbench_addin_open_cb, NULL);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_run_in_thread (task, gbp_sysprof_workbench_addin_open_worker);
+  task = ide_task_new (self, NULL, gbp_sysprof_workbench_addin_open_cb, NULL);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_run_in_thread (task, gbp_sysprof_workbench_addin_open_worker);
 }
 
 static void
