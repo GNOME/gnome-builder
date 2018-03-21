@@ -22,6 +22,7 @@
 #include "application/ide-application-private.h"
 #include "workbench/ide-workbench.h"
 #include "vcs/ide-vcs.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -29,7 +30,7 @@ typedef struct
   gchar     *hint;
 } IdeApplicationOpen;
 
-static void ide_application_open_tick (GTask *task);
+static void ide_application_open_tick (IdeTask *task);
 
 static void
 ide_application_open_free (gpointer data)
@@ -104,14 +105,14 @@ ide_application_open_project_cb (GObject      *object,
 {
   IdeWorkbench *workbench = (IdeWorkbench *)object;
   IdeApplicationOpen *state;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) file = NULL;
 
   g_assert (IDE_IS_WORKBENCH (workbench));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
 
   file = g_object_ref (g_ptr_array_index (state->files, state->files->len - 1));
   g_ptr_array_remove_index (state->files, state->files->len - 1);
@@ -127,7 +128,7 @@ ide_application_open_project_cb (GObject      *object,
                                       &file, 1,
                                       state->hint,
                                       0,
-                                      g_task_get_cancellable (task),
+                                      ide_task_get_cancellable (task),
                                       NULL,
                                       NULL);
       gtk_window_present (GTK_WINDOW (workbench));
@@ -137,7 +138,7 @@ ide_application_open_project_cb (GObject      *object,
 }
 
 static void
-ide_application_open_tick (GTask *task)
+ide_application_open_tick (IdeTask *task)
 {
   IdeApplication *self;
   IdeApplicationOpen *state;
@@ -146,11 +147,11 @@ ide_application_open_tick (GTask *task)
   GFile *next;
   guint i;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
-  state = g_task_get_task_data (task);
-  cancellable = g_task_get_cancellable (task);
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
+  cancellable = ide_task_get_cancellable (task);
 
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (state != NULL);
@@ -182,7 +183,7 @@ ide_application_open_tick (GTask *task)
    */
   if (state->files->len == 0)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -215,7 +216,7 @@ ide_application_open_async (IdeApplication       *self,
                             GAsyncReadyCallback   callback,
                             gpointer              user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) ar = NULL;
   IdeApplicationOpen *state;
   guint i;
@@ -224,9 +225,9 @@ ide_application_open_async (IdeApplication       *self,
   g_return_if_fail (!n_files || files != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_application_open_async);
-  g_task_set_check_cancellable (task, FALSE);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_application_open_async);
+  ide_task_set_check_cancellable (task, FALSE);
 
   /*
    * We have to open each file one at a time so that we don't race to
@@ -247,7 +248,7 @@ ide_application_open_async (IdeApplication       *self,
   state->hint = g_strdup (hint);
   state->files = g_steal_pointer (&ar);
 
-  g_task_set_task_data (task, state, ide_application_open_free);
+  ide_task_set_task_data (task, state, ide_application_open_free);
   ide_application_open_tick (task);
 }
 
@@ -258,5 +259,5 @@ ide_application_open_finish (IdeApplication  *self,
 {
   g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

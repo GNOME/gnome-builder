@@ -24,6 +24,7 @@
 #include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-build-stage-launcher.h"
 #include "subprocess/ide-subprocess.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -108,7 +109,7 @@ ide_build_stage_launcher_wait_cb (GObject      *object,
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
   IdeBuildStageLauncher *self = NULL;
   IdeBuildStageLauncherPrivate *priv;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   gint exit_status;
 
@@ -116,9 +117,9 @@ ide_build_stage_launcher_wait_cb (GObject      *object,
 
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_BUILD_STAGE_LAUNCHER (self));
 
   priv = ide_build_stage_launcher_get_instance_private (self);
@@ -129,17 +130,17 @@ ide_build_stage_launcher_wait_cb (GObject      *object,
 
   if (!ide_subprocess_wait_finish (subprocess, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   if (ide_subprocess_get_if_signaled (subprocess))
     {
-      g_task_return_new_error (task,
-                               G_SPAWN_ERROR,
-                               G_SPAWN_ERROR_FAILED,
-                               "The process was terminated by signal %d",
-                               ide_subprocess_get_term_sig (subprocess));
+      ide_task_return_new_error (task,
+                                 G_SPAWN_ERROR,
+                                 G_SPAWN_ERROR_FAILED,
+                                 "The process was terminated by signal %d",
+                                 ide_subprocess_get_term_sig (subprocess));
       IDE_EXIT;
     }
 
@@ -150,22 +151,22 @@ ide_build_stage_launcher_wait_cb (GObject      *object,
 
   if (!g_spawn_check_exit_status (exit_status, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
 ignore_exit_failures:
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
 
 static void
-ide_build_stage_launcher_notify_completed_cb (GTask                 *task,
+ide_build_stage_launcher_notify_completed_cb (IdeTask               *task,
                                               GParamSpec            *pspec,
                                               IdeBuildStageLauncher *launcher)
 {
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_BUILD_STAGE_LAUNCHER (launcher));
 
   ide_build_stage_set_active (IDE_BUILD_STAGE (launcher), FALSE);
@@ -181,7 +182,7 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
 {
   IdeBuildStageLauncher *self = (IdeBuildStageLauncher *)stage;
   G_GNUC_UNUSED IdeBuildStageLauncherPrivate *priv = ide_build_stage_launcher_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   GSubprocessFlags flags;
@@ -193,9 +194,9 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
   g_assert (!launcher || IDE_IS_SUBPROCESS_LAUNCHER (launcher));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_stage_launcher_run);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_stage_launcher_run);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   g_signal_connect (task,
                     "notify::completed",
@@ -206,7 +207,7 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
 
   if (launcher == NULL)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -251,7 +252,7 @@ ide_build_stage_launcher_run (IdeBuildStage         *stage,
 
   if (subprocess == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -295,9 +296,9 @@ ide_build_stage_launcher_execute_finish (IdeBuildStage  *stage,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_STAGE_LAUNCHER (stage));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -327,9 +328,9 @@ ide_build_stage_launcher_clean_finish (IdeBuildStage  *stage,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_STAGE_LAUNCHER (stage));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

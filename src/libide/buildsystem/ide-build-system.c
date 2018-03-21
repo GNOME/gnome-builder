@@ -33,6 +33,7 @@
 #include "projects/ide-project.h"
 #include "util/ide-glib.h"
 #include "vcs/ide-vcs.h"
+#include "threading/ide-task.h"
 
 G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)
 
@@ -81,13 +82,13 @@ ide_build_system_real_get_build_flags_async (IdeBuildSystem      *self,
                                              GAsyncReadyCallback  callback,
                                              gpointer             user_data)
 {
-  g_task_report_new_error (self,
-                           callback,
-                           user_data,
-                           ide_build_system_real_get_build_flags_async,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "Fetching build flags is not supported");
+  ide_task_report_new_error (self,
+                             callback,
+                             user_data,
+                             ide_build_system_real_get_build_flags_async,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Fetching build flags is not supported");
 }
 
 static gchar **
@@ -95,7 +96,7 @@ ide_build_system_real_get_build_flags_finish (IdeBuildSystem  *self,
                                               GAsyncResult    *result,
                                               GError         **error)
 {
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -104,7 +105,7 @@ ide_build_system_get_build_flags_cb (GObject      *object,
                                      gpointer      user_data)
 {
   IdeBuildSystem *self = (IdeBuildSystem *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) flags = NULL;
   GetBuildFlagsData *data;
@@ -112,9 +113,9 @@ ide_build_system_get_build_flags_cb (GObject      *object,
 
   g_assert (IDE_IS_BUILD_SYSTEM (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  data = g_task_get_task_data (task);
+  data = ide_task_get_task_data (task);
   g_assert (data != NULL);
   g_assert (data->files != NULL);
   g_assert (data->files->len > 0);
@@ -135,12 +136,12 @@ ide_build_system_get_build_flags_cb (GObject      *object,
   else
     g_hash_table_insert (data->flags, g_object_ref (file), g_steal_pointer (&flags));
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   if (data->index < data->files->len)
     {
-      GCancellable *cancellable = g_task_get_cancellable (task);
+      GCancellable *cancellable = ide_task_get_cancellable (task);
 
       file = g_ptr_array_index (data->files, data->index);
       g_assert (IDE_IS_FILE (file));
@@ -153,9 +154,9 @@ ide_build_system_get_build_flags_cb (GObject      *object,
       return;
     }
 
-  g_task_return_pointer (task,
-                         g_steal_pointer (&data->flags),
-                         (GDestroyNotify)g_hash_table_unref);
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&data->flags),
+                           (GDestroyNotify)g_hash_table_unref);
 }
 
 static void
@@ -165,30 +166,30 @@ ide_build_system_real_get_build_flags_for_files_async (IdeBuildSystem       *sel
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   GetBuildFlagsData *data;
 
   g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
   g_return_if_fail (files != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_system_real_get_build_flags_for_files_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_system_real_get_build_flags_for_files_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (files->len == 0)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVAL,
-                               "No files were provided");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "No files were provided");
       return;
     }
 
   g_assert (files->len > 0);
   g_assert (IDE_IS_FILE (g_ptr_array_index (files, 0)));
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   data = g_slice_new0 (GetBuildFlagsData);
@@ -198,7 +199,7 @@ ide_build_system_real_get_build_flags_for_files_async (IdeBuildSystem       *sel
                                        g_object_unref,
                                        (GDestroyNotify)g_strfreev);
 
-  g_task_set_task_data (task, data, (GDestroyNotify)get_build_flags_data_free);
+  ide_task_set_task_data (task, data, (GDestroyNotify)get_build_flags_data_free);
 
   ide_build_system_get_build_flags_async (self,
                                           g_ptr_array_index (files, 0),
@@ -212,7 +213,7 @@ ide_build_system_real_get_build_flags_for_files_finish (IdeBuildSystem       *se
                                                         GAsyncResult         *result,
                                                         GError              **error)
 {
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -585,22 +586,22 @@ ide_build_system_get_build_flags_for_dir_cb2 (GObject      *object,
                                               gpointer      user_data)
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GHashTable) ret = NULL;
 
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   ret = ide_build_system_get_build_flags_for_files_finish (build_system, result, &error);
 
   if (ret == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task,
-                           g_steal_pointer (&ret),
-                           (GDestroyNotify)g_hash_table_unref);
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&ret),
+                             (GDestroyNotify)g_hash_table_unref);
 }
 
 static void
@@ -609,7 +610,7 @@ ide_build_system_get_build_flags_for_dir_cb (GObject      *object,
                                              gpointer      user_data)
 {
   GFile *dir = (GFile *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) infos = NULL;
   g_autoptr(GPtrArray) files = NULL;
@@ -620,20 +621,20 @@ ide_build_system_get_build_flags_for_dir_cb (GObject      *object,
 
   g_assert (G_IS_FILE (dir));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   infos = ide_g_file_get_children_finish (dir, result, &error);
 
   if (infos == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
   files = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (guint i = 0; i < infos->len; i++)
@@ -665,15 +666,15 @@ ide_build_system_get_build_flags_for_dir_async (IdeBuildSystem      *self,
                                                 GAsyncReadyCallback  callback,
                                                 gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_BUILD_SYSTEM (self));
   g_return_if_fail (G_IS_FILE (directory));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_system_get_build_flags_for_dir_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_system_get_build_flags_for_dir_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   ide_g_file_get_children_async (directory,
                                  G_FILE_ATTRIBUTE_STANDARD_NAME","
@@ -701,5 +702,5 @@ ide_build_system_get_build_flags_for_dir_finish (IdeBuildSystem  *self,
   g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), NULL);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }

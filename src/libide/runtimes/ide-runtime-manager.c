@@ -30,6 +30,7 @@
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-provider.h"
+#include "threading/ide-task.h"
 
 struct _IdeRuntimeManager
 {
@@ -302,22 +303,22 @@ ide_runtime_manager_prepare_cb (GObject      *object,
   IdeRuntimeProvider *provider = (IdeRuntimeProvider *)object;
   g_autoptr(IdeRuntime) runtime = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUNTIME_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   runtime = ide_runtime_provider_bootstrap_finish (provider, result, &error);
 
   g_assert (!runtime ||IDE_IS_RUNTIME (runtime));
 
   if (runtime == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&runtime), g_object_unref);
 
   IDE_EXIT;
 }
@@ -329,7 +330,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeConfiguration *config;
   PrepareState *state;
   const gchar *runtime_id;
@@ -344,21 +345,21 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
   config = ide_build_pipeline_get_configuration (pipeline);
   runtime_id = ide_configuration_get_runtime_id (config);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, _ide_runtime_manager_prepare_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, _ide_runtime_manager_prepare_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   state = g_slice_new0 (PrepareState);
   state->runtime_id = g_strdup (runtime_id);
   state->pipeline = g_object_ref (pipeline);
-  g_task_set_task_data (task, state, (GDestroyNotify)prepare_state_free);
+  ide_task_set_task_data (task, state, (GDestroyNotify)prepare_state_free);
 
   if (runtime_id == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Configuration lacks runtime specification");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Configuration lacks runtime specification");
       IDE_EXIT;
     }
 
@@ -374,11 +375,11 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
                               &lookup);
 
   if (lookup.provider == NULL)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "Failed to locate provider for runtime: %s",
-                             runtime_id);
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Failed to locate provider for runtime: %s",
+                               runtime_id);
   else
     ide_runtime_provider_bootstrap_async (lookup.provider,
                                           pipeline,
@@ -401,10 +402,10 @@ _ide_runtime_manager_prepare_finish (IdeRuntimeManager  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_RUNTIME_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  state = g_task_get_task_data (G_TASK (result));
-  ret = g_task_propagate_pointer (G_TASK (result), &local_error);
+  state = ide_task_get_task_data (IDE_TASK (result));
+  ret = ide_task_propagate_pointer (IDE_TASK (result), &local_error);
 
   /*
    * If we got NOT_SUPPORTED error, and the runtime already exists,

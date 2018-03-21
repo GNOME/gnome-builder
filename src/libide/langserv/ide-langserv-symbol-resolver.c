@@ -30,6 +30,7 @@
 #include "langserv/ide-langserv-symbol-resolver.h"
 #include "langserv/ide-langserv-symbol-tree.h"
 #include "langserv/ide-langserv-symbol-tree-private.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -160,7 +161,7 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
 {
   IdeLangservClient *client = (IdeLangservClient *)object;
   IdeLangservSymbolResolver *self;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(IdeSymbol) symbol = NULL;
@@ -180,13 +181,13 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
 
   g_assert (IDE_IS_LANGSERV_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
-  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_TASK (task));
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
 
   if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -218,10 +219,10 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
 
   if (!success)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               "Got invalid reply for textDocument/definition");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "Got invalid reply for textDocument/definition");
       IDE_EXIT;
     }
 
@@ -233,7 +234,7 @@ ide_langserv_symbol_resolver_definition_cb (GObject      *object,
   location = ide_source_location_new (ifile, begin.line, begin.column, 0);
   symbol = ide_symbol_new ("", IDE_SYMBOL_NONE, IDE_SYMBOL_FLAGS_NONE, location, location, location);
 
-  g_task_return_pointer (task, g_steal_pointer (&symbol), (GDestroyNotify)ide_symbol_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&symbol), (GDestroyNotify)ide_symbol_unref);
 
   IDE_EXIT;
 }
@@ -247,7 +248,7 @@ ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
 {
   IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
   IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
   IdeFile *ifile;
@@ -261,26 +262,26 @@ ide_langserv_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   g_assert (location != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_symbol_resolver_lookup_symbol_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_symbol_resolver_lookup_symbol_async);
 
   if (priv->client == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_CONNECTED,
-                               "%s requires a client to resolve symbols",
-                               G_OBJECT_TYPE_NAME (self));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_CONNECTED,
+                                 "%s requires a client to resolve symbols",
+                                 G_OBJECT_TYPE_NAME (self));
       IDE_EXIT;
     }
 
   if (NULL == (ifile = ide_source_location_get_file (location)) ||
       NULL == (gfile = ide_file_get_file (ifile)))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Cannot resolve symbol, invalid source location");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Cannot resolve symbol, invalid source location");
       IDE_EXIT;
     }
 
@@ -318,9 +319,9 @@ ide_langserv_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_RESOLVER (resolver), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -331,7 +332,7 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
                                                  gpointer      user_data)
 {
   IdeLangservClient *client = (IdeLangservClient *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeLangservSymbolTree) tree = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) return_value = NULL;
@@ -342,20 +343,20 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
   IDE_ENTRY;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (client));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   if (!g_variant_is_of_type (return_value, G_VARIANT_TYPE ("av")))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               "Invalid result for textDocument/documentSymbol");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "Invalid result for textDocument/documentSymbol");
       IDE_EXIT;
     }
 
@@ -416,7 +417,7 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
 
   tree = ide_langserv_symbol_tree_new (g_steal_pointer (&symbols));
 
-  g_task_return_pointer (task, g_steal_pointer (&tree), g_object_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&tree), g_object_unref);
 
   IDE_EXIT;
 }
@@ -431,7 +432,7 @@ ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolve
 {
   IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
   IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
 
@@ -441,15 +442,15 @@ ide_langserv_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolve
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_symbol_resolver_get_symbol_tree_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_symbol_resolver_get_symbol_tree_async);
 
   if (priv->client == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_CONNECTED,
-                               "Cannot query language server, not connected");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_CONNECTED,
+                                 "Cannot query language server, not connected");
       IDE_EXIT;
     }
 
@@ -481,9 +482,9 @@ ide_langserv_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolve
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_LANGSERV_SYMBOL_RESOLVER (resolver), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -494,7 +495,7 @@ ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
                                                  gpointer      user_data)
 {
   IdeLangservClient *client = (IdeLangservClient *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GPtrArray) references = NULL;
   g_autoptr(GError) error = NULL;
@@ -506,23 +507,23 @@ ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
 
   g_assert (IDE_IS_LANGSERV_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
 
   if (!ide_langserv_client_call_finish (client, result, &reply, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   if (!g_variant_is_of_type (reply, G_VARIANT_TYPE ("av")))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               "Invalid reply type from peer: %s",
-                               g_variant_get_type_string (reply));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "Invalid reply type from peer: %s",
+                                 g_variant_get_type_string (reply));
       IDE_EXIT;
     }
 
@@ -560,10 +561,10 @@ ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
 
       if (!success)
         {
-          g_task_return_new_error (task,
-                                   G_IO_ERROR,
-                                   G_IO_ERROR_INVALID_DATA,
-                                   "Failed to parse location object");
+          ide_task_return_new_error (task,
+                                     G_IO_ERROR,
+                                     G_IO_ERROR_INVALID_DATA,
+                                     "Failed to parse location object");
           IDE_EXIT;
         }
 
@@ -577,7 +578,7 @@ ide_langserv_symbol_resolver_find_references_cb (GObject      *object,
       g_ptr_array_add (references, g_steal_pointer (&range));
     }
 
-  g_task_return_pointer (task, g_steal_pointer (&references), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&references), (GDestroyNotify)g_ptr_array_unref);
 
   IDE_EXIT;
 }
@@ -591,7 +592,7 @@ ide_langserv_symbol_resolver_find_references_async (IdeSymbolResolver   *resolve
 {
   IdeLangservSymbolResolver *self = (IdeLangservSymbolResolver *)resolver;
   IdeLangservSymbolResolverPrivate *priv = ide_langserv_symbol_resolver_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *uri = NULL;
   const gchar *language_id;
@@ -606,8 +607,8 @@ ide_langserv_symbol_resolver_find_references_async (IdeSymbolResolver   *resolve
   g_assert (location != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_symbol_resolver_find_references_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_symbol_resolver_find_references_async);
 
   file = ide_source_location_get_file (location);
   gfile = ide_file_get_file (file);
@@ -654,9 +655,9 @@ ide_langserv_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_LANGSERV_SYMBOL_RESOLVER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

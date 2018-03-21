@@ -25,6 +25,7 @@
 #include "directory/ide-directory-build-system.h"
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
+#include "threading/ide-task.h"
 
 struct _IdeDirectoryBuildSystem
 {
@@ -137,13 +138,13 @@ ide_directory_build_system_init_async (GAsyncInitable      *initable,
                                        gpointer             user_data)
 {
   IdeDirectoryBuildSystem *system = (IdeDirectoryBuildSystem *)initable;
-  GTask *task;
+  IdeTask *task;
 
   g_return_if_fail (IDE_IS_DIRECTORY_BUILD_SYSTEM (system));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (system, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE);
+  task = ide_task_new (system, cancellable, callback, user_data);
+  ide_task_return_boolean (task, TRUE);
   g_object_unref (task);
 }
 
@@ -152,11 +153,11 @@ ide_directory_build_system_init_finish (GAsyncInitable  *initable,
                                         GAsyncResult    *result,
                                         GError         **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 static void

@@ -42,6 +42,7 @@
 #include "util/ide-doc-seq.h"
 #include "util/ide-progress.h"
 #include "vcs/ide-vcs.h"
+#include "threading/ide-task.h"
 
 #define AUTO_SAVE_TIMEOUT_DEFAULT    60
 #define MAX_FILE_SIZE_BYTES_DEFAULT  (1024UL * 1024UL * 10UL)
@@ -549,7 +550,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
                                        GAsyncResult *result,
                                        gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autofree gchar *guess_contents = NULL;
   g_autofree gchar *content_type = NULL;
   GtkSourceFileLoader *loader = (GtkSourceFileLoader *)object;
@@ -565,11 +566,11 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GTK_SOURCE_IS_FILE_LOADER (loader));
 
-  self = g_task_get_source_object (task);
-  state = g_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (IDE_IS_FILE (state->file));
@@ -599,7 +600,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
           _ide_buffer_set_failure (state->buffer, error);
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
 
@@ -645,7 +646,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 
   g_signal_emit (self, signals [BUFFER_LOADED], 0, state->buffer);
 
-  g_task_return_pointer (task, g_object_ref (state->buffer), g_object_unref);
+  ide_task_return_pointer (task, g_object_ref (state->buffer), g_object_unref);
 
   IDE_EXIT;
 }
@@ -657,7 +658,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
 {
   IdeBufferManager *self;
   GFile *file = (GFile *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GFileInfo) file_info = NULL;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
@@ -669,10 +670,10 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_FILE (file));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
-  self = g_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
 
   g_assert (state);
   g_assert (IDE_IS_BUFFER (state->buffer));
@@ -685,7 +686,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
         {
           _ide_buffer_set_failure (state->buffer, error);
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
       g_clear_error (&error);
@@ -697,10 +698,10 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
 
   if ((self->max_file_size > 0) && (size > self->max_file_size))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               _("File too large to be opened."));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 _("File too large to be opened."));
       IDE_EXIT;
     }
 
@@ -740,7 +741,7 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
 
   g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer, create_new_view);
 
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
 
   gtk_source_file_loader_load_async (state->loader,
                                      G_PRIORITY_LOW,
@@ -761,7 +762,7 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
 {
   GFile *file = (GFile *)object;
   g_autoptr(GFileInputStream) stream = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   GtkSourceFile *source_file;
   LoadState *state;
 
@@ -769,9 +770,9 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_FILE (file));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
 
   g_assert (state != NULL);
   g_assert (IDE_IS_BUFFER (state->buffer));
@@ -794,7 +795,7 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
                            IDE_FILE_ATTRIBUTE_POSITION,
                            G_FILE_QUERY_INFO_NONE,
                            G_PRIORITY_DEFAULT,
-                           g_task_get_cancellable (task),
+                           ide_task_get_cancellable (task),
                            ide_buffer_manager__load_file_query_info_cb,
                            g_object_ref (task));
 
@@ -804,7 +805,7 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
 static void
 ide_buffer_manager_load_task_completed (IdeBufferManager *self,
                                         GParamSpec       *pspec,
-                                        GTask            *task)
+                                        IdeTask          *task)
 {
   LoadState *state;
 
@@ -812,9 +813,9 @@ ide_buffer_manager_load_task_completed (IdeBufferManager *self,
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (pspec != NULL);
   g_assert (g_strcmp0 ("completed", pspec->name) == 0);
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
   g_assert (state != NULL);
   g_assert (state->file != NULL);
   g_assert (IDE_IS_FILE (state->file));
@@ -846,7 +847,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
                                     GAsyncReadyCallback     callback,
                                     gpointer                user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
   IdeBuffer *buffer;
   LoadState *state;
@@ -862,16 +863,16 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
   g_return_if_fail (IDE_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, ide_buffer_manager_load_file_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_source_tag (task, ide_buffer_manager_load_file_async);
 
   if (g_hash_table_contains (self->loading, file))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_BUSY,
-                               "The file is already loading");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_BUSY,
+                                 "The file is already loading");
       IDE_EXIT;
     }
 
@@ -889,7 +890,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
         *progress = g_object_new (IDE_TYPE_PROGRESS,
                                   "fraction", 1.0,
                                   NULL);
-      g_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
+      ide_task_return_pointer (task, g_object_ref (buffer), g_object_unref);
       if (!(flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND || flags & IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW))
         ide_buffer_manager_set_focus_buffer (self, buffer);
 
@@ -930,7 +931,7 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
   _ide_buffer_set_mtime (state->buffer, NULL);
   _ide_buffer_set_changed_on_volume (state->buffer, FALSE);
 
-  g_task_set_task_data (task, state, load_state_free);
+  ide_task_set_task_data (task, state, load_state_free);
 
   g_hash_table_insert (self->loading,
                        g_object_ref (file),
@@ -976,9 +977,9 @@ ide_buffer_manager_load_file_finish (IdeBufferManager  *self,
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -990,15 +991,15 @@ ide_buffer_manager__buffer_reload_mtime_cb (GObject      *object,
 {
   GFile *file = (GFile *)object;
   g_autoptr(GFileInfo) file_info = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   SaveState *state;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
   g_assert (state != NULL);
   g_assert (IDE_IS_BUFFER (state->buffer));
 
@@ -1012,7 +1013,7 @@ ide_buffer_manager__buffer_reload_mtime_cb (GObject      *object,
 
   _ide_buffer_set_changed_on_volume (state->buffer, FALSE);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -1020,7 +1021,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
                                        GAsyncResult *result,
                                        gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GtkSourceFileSaver *saver = (GtkSourceFileSaver *)object;
   IdeBufferManager *self;
@@ -1035,10 +1036,10 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GTK_SOURCE_IS_FILE_SAVER (saver));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
-  state = g_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (state != NULL);
@@ -1049,7 +1050,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
   /* Complete the save request */
   if (!gtk_source_file_saver_save_finish (saver, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -1081,7 +1082,7 @@ ide_buffer_manager_save_file__save_cb (GObject      *object,
                            G_FILE_ATTRIBUTE_TIME_MODIFIED,
                            G_FILE_QUERY_INFO_NONE,
                            G_PRIORITY_DEFAULT,
-                           g_task_get_cancellable (task),
+                           ide_task_get_cancellable (task),
                            ide_buffer_manager__buffer_reload_mtime_cb,
                            g_object_ref (task));
 }
@@ -1093,7 +1094,7 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
 {
   IdeFile *file = (IdeFile *)object;
   g_autoptr(IdeFileSettings) file_settings = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   SaveState *state;
   GtkSourceFileSaver *saver;
   GtkSourceFile *source_file;
@@ -1107,17 +1108,17 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   source_file = _ide_file_get_source_file (file);
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
 
   file_settings = ide_file_load_settings_finish (file, result, &error);
 
   if (file_settings == NULL)
     {
       _ide_buffer_set_failure (state->buffer, error);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -1184,7 +1185,7 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
 
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
-                                    g_task_get_cancellable (task),
+                                    ide_task_get_cancellable (task),
                                     ide_progress_file_progress_callback,
                                     g_object_ref (state->progress),
                                     g_object_unref,
@@ -1222,7 +1223,7 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
                                     GAsyncReadyCallback   callback,
                                     gpointer              user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
   SaveState *state;
 
@@ -1237,8 +1238,8 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
   g_return_if_fail (IDE_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_buffer_manager_save_file_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buffer_manager_save_file_async);
 
   /* Short cirtcuit if there is nothing to do. */
   if (!gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)) &&
@@ -1251,7 +1252,7 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
           ide_progress_set_fraction (*progress, 1.0);
         }
 
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_GOTO (unmodified);
     }
 
@@ -1263,7 +1264,7 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
   state->buffer = g_object_ref (buffer);
   state->progress = ide_progress_new ();
 
-  g_task_set_task_data (task, state, save_state_free);
+  ide_task_set_task_data (task, state, save_state_free);
 
   g_signal_emit (self, signals [SAVE_BUFFER], 0, buffer);
 
@@ -1301,9 +1302,9 @@ ide_buffer_manager_save_file_finish (IdeBufferManager  *self,
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -2085,24 +2086,24 @@ ide_buffer_manager_save_all__save_file_cb (GObject      *object,
                                            gpointer      user_data)
 {
   IdeBufferManager *self = (IdeBufferManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   guint *count;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_buffer_manager_save_file_finish (self, result, &error))
     /* translators: %s is replaced with error message */
     ide_object_warning (self, _("Failed to save file: %s"), error->message);
 
-  count = g_task_get_task_data (task);
+  count = ide_task_get_task_data (task);
   (*count)--;
 
   if (*count == 0)
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 void
@@ -2111,18 +2112,18 @@ ide_buffer_manager_save_all_async (IdeBufferManager    *self,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   guint *count;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   count = g_new0 (guint, 1);
   *count = self->buffers->len;
-  g_task_set_task_data (task, count, g_free);
+  ide_task_set_task_data (task, count, g_free);
 
   for (guint i = 0; i < self->buffers->len; i++)
     {
@@ -2147,7 +2148,7 @@ ide_buffer_manager_save_all_async (IdeBufferManager    *self,
     }
 
   if (*count == 0)
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 gboolean
@@ -2157,9 +2158,9 @@ ide_buffer_manager_save_all_finish (IdeBufferManager  *self,
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -2248,7 +2249,7 @@ ide_buffer_manager_apply_edits_save_cb (GObject      *object,
                                         gpointer      user_data)
 {
   IdeBufferManager *self = (IdeBufferManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -2256,12 +2257,12 @@ ide_buffer_manager_apply_edits_save_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_buffer_manager_save_all_finish (self, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -2272,7 +2273,7 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
                                               gpointer      user_data)
 {
   IdeBufferManager *self = (IdeBufferManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeBuffer) buffer = NULL;
   EditState *state;
@@ -2282,9 +2283,9 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER_MANAGER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
   state->count--;
 
   /* Get our buffer, if we failed, we won't proceed with edits */
@@ -2293,7 +2294,7 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
       if (state->failed == FALSE)
         {
           state->failed = TRUE;
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }
       g_clear_error (&error);
@@ -2306,7 +2307,7 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
   /* If this is the last buffer to load, then we can go apply the edits. */
   if (state->count == 0)
     {
-      GCancellable *cancellable = g_task_get_cancellable (task);
+      GCancellable *cancellable = ide_task_get_cancellable (task);
 
       ide_buffer_manager_do_apply_edits (self, state->buffers, state->edits);
 
@@ -2338,7 +2339,7 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
                                       GAsyncReadyCallback  callback,
                                       gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   EditState *state;
 
   IDE_ENTRY;
@@ -2348,8 +2349,8 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
   g_return_if_fail (edits != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_buffer_manager_apply_edits_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buffer_manager_apply_edits_async);
 
   state = g_slice_new0 (EditState);
   state->buffers = g_hash_table_new_full ((GHashFunc)ide_file_hash,
@@ -2359,7 +2360,7 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
   state->edits = g_steal_pointer (&edits);
   state->count = 1;
 
-  g_task_set_task_data (task, state, edit_state_free);
+  ide_task_set_task_data (task, state, edit_state_free);
 
   for (guint i = 0; i < state->edits->len; i++)
     {
@@ -2426,9 +2427,9 @@ ide_buffer_manager_apply_edits_finish (IdeBufferManager  *self,
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

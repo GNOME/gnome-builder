@@ -29,6 +29,7 @@
 #include "diagnostics/ide-diagnostics.h"
 #include "files/ide-file.h"
 #include "langserv/ide-langserv-diagnostic-provider.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -57,16 +58,16 @@ ide_langserv_diagnostic_provider_get_diagnostics_cb (GObject      *object,
 {
   IdeLangservClient *client = (IdeLangservClient *)object;
   g_autoptr(IdeDiagnostics) diagnostics = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_LANGSERV_CLIENT (client));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_langserv_client_get_diagnostics_finish (client, result, &diagnostics, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&diagnostics), (GDestroyNotify)ide_diagnostics_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&diagnostics), (GDestroyNotify)ide_diagnostics_unref);
 }
 
 static void
@@ -79,7 +80,7 @@ ide_langserv_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider
 {
   IdeLangservDiagnosticProvider *self = (IdeLangservDiagnosticProvider *)provider;
   IdeLangservDiagnosticProviderPrivate *priv = ide_langserv_diagnostic_provider_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -87,16 +88,16 @@ ide_langserv_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider
   g_assert (IDE_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_diagnostic_provider_diagnose_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_diagnostic_provider_diagnose_async);
 
   if (priv->client == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Improperly configured %s is missing IdeLangservClient",
-                               G_OBJECT_TYPE_NAME (self));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Improperly configured %s is missing IdeLangservClient",
+                                 G_OBJECT_TYPE_NAME (self));
       IDE_EXIT;
     }
 
@@ -119,9 +120,9 @@ ide_langserv_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provid
   IDE_ENTRY;
 
   g_assert (IDE_IS_LANGSERV_DIAGNOSTIC_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

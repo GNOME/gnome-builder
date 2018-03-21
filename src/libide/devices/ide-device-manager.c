@@ -35,6 +35,7 @@
 #include "local/ide-local-device.h"
 #include "plugins/ide-extension-util.h"
 #include "util/ide-posix.h"
+#include "threading/ide-task.h"
 
 struct _IdeDeviceManager
 {
@@ -85,7 +86,7 @@ static void ide_device_manager_action_device (IdeDeviceManager    *self,
                                               GVariant            *param);
 static void ide_device_manager_action_deploy (IdeDeviceManager    *self,
                                               GVariant            *param);
-static void ide_device_manager_deploy_tick   (GTask               *task);
+static void ide_device_manager_deploy_tick   (IdeTask             *task);
 
 DZL_DEFINE_ACTION_GROUP (IdeDeviceManager, ide_device_manager, {
   { "device", ide_device_manager_action_device, "s", "'local'" },
@@ -767,18 +768,18 @@ ide_device_manager_deploy_cb (GObject      *object,
 {
   IdeDeployStrategy *strategy = (IdeDeployStrategy *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_deploy_strategy_deploy_finish (strategy, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -790,7 +791,7 @@ ide_device_manager_deploy_load_cb (GObject      *object,
 {
   IdeDeployStrategy *strategy = (IdeDeployStrategy *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   IdeDeviceManager *self;
   DeployState *state;
 
@@ -798,7 +799,7 @@ ide_device_manager_deploy_load_cb (GObject      *object,
 
   g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_deploy_strategy_load_finish (strategy, result, &error))
     {
@@ -809,8 +810,8 @@ ide_device_manager_deploy_load_cb (GObject      *object,
 
   /* Okay, we found a match. Now deploy to the device. */
 
-  self = g_task_get_source_object (task);
-  state = g_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_DEVICE_MANAGER (self));
   g_assert (state != NULL);
@@ -822,7 +823,7 @@ ide_device_manager_deploy_load_cb (GObject      *object,
                                     deploy_progress_cb,
                                     g_object_ref (self),
                                     g_object_unref,
-                                    g_task_get_cancellable (task),
+                                    ide_task_get_cancellable (task),
                                     ide_device_manager_deploy_cb,
                                     g_object_ref (task));
 
@@ -830,16 +831,16 @@ ide_device_manager_deploy_load_cb (GObject      *object,
 }
 
 static void
-ide_device_manager_deploy_tick (GTask *task)
+ide_device_manager_deploy_tick (IdeTask *task)
 {
   g_autoptr(IdeDeployStrategy) strategy = NULL;
   DeployState *state;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
 
   g_assert (state != NULL);
   g_assert (state->strategies != NULL);
@@ -847,10 +848,10 @@ ide_device_manager_deploy_tick (GTask *task)
 
   if (state->strategies->len == 0)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Failed to locate deployment strategy for device");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Failed to locate deployment strategy for device");
       IDE_EXIT;
     }
 
@@ -859,7 +860,7 @@ ide_device_manager_deploy_tick (GTask *task)
 
   ide_deploy_strategy_load_async (strategy,
                                   state->pipeline,
-                                  g_task_get_cancellable (task),
+                                  ide_task_get_cancellable (task),
                                   ide_device_manager_deploy_load_cb,
                                   g_object_ref (task));
 
@@ -869,10 +870,10 @@ ide_device_manager_deploy_tick (GTask *task)
 static void
 ide_device_manager_deploy_completed (IdeDeviceManager *self,
                                      GParamSpec       *pspec,
-                                     GTask            *task)
+                                     IdeTask          *task)
 {
   g_assert (IDE_IS_DEVICE_MANAGER (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (self->progress < 1.0)
     {
@@ -905,7 +906,7 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
                                  gpointer             user_data)
 {
   g_autoptr(PeasExtensionSet) set = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   DeployState *state;
   IdeContext *context;
   IdeDevice *device;
@@ -921,8 +922,8 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
 
   g_signal_emit (self, signals [DEPLOY_STARTED], 0);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_device_manager_deploy_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_device_manager_deploy_async);
 
   g_signal_connect_object (task,
                            "notify::completed",
@@ -932,23 +933,23 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
 
   if (!(device = ide_build_pipeline_get_device (pipeline)))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Missing device in pipeline");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Missing device in pipeline");
       IDE_EXIT;
     }
 
   if (IDE_IS_LOCAL_DEVICE (device))
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
   state = g_slice_new0 (DeployState);
   state->pipeline = g_object_ref (pipeline);
   state->strategies = g_ptr_array_new_with_free_func (g_object_unref);
-  g_task_set_task_data (task, state, (GDestroyNotify)deploy_state_free);
+  ide_task_set_task_data (task, state, (GDestroyNotify)deploy_state_free);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   set = peas_extension_set_new (peas_engine_get_default (),
@@ -984,10 +985,10 @@ ide_device_manager_deploy_finish (IdeDeviceManager  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
-  g_return_val_if_fail (g_task_is_valid (G_TASK (result), self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+  g_return_val_if_fail (ide_task_is_valid (IDE_TASK (result), self), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

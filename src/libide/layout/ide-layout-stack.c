@@ -29,6 +29,7 @@
 #include "layout/ide-layout-stack-header.h"
 #include "layout/ide-layout-private.h"
 #include "layout/ide-shortcut-label.h"
+#include "threading/ide-task.h"
 
 #define TRANSITION_DURATION 300
 #define DISTANCE_THRESHOLD(alloc) (MIN(250, (gint)((alloc)->width * .333)))
@@ -371,15 +372,15 @@ ide_layout_stack_real_agree_to_close_async (IdeLayoutStack      *self,
                                             GAsyncReadyCallback  callback,
                                             gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_layout_stack_real_agree_to_close_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_return_boolean (task, TRUE);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_layout_stack_real_agree_to_close_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -388,9 +389,9 @@ ide_layout_stack_real_agree_to_close_finish (IdeLayoutStack *self,
                                              GError        **error)
 {
   g_assert (IDE_IS_LAYOUT_STACK (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void

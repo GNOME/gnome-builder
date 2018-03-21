@@ -45,6 +45,7 @@
 #include "util/ide-posix.h"
 #include "workbench/ide-workbench.h"
 #include "workers/ide-worker.h"
+#include "threading/ide-task.h"
 
 /**
  * SECTION:ide-application
@@ -731,7 +732,7 @@ ide_application_get_worker_cb (GObject      *object,
                                gpointer      user_data)
 {
   IdeWorkerManager *worker_manager = (IdeWorkerManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GDBusProxy *proxy;
 
@@ -740,9 +741,9 @@ ide_application_get_worker_cb (GObject      *object,
   proxy = ide_worker_manager_get_worker_finish (worker_manager, result, &error);
 
   if (proxy == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, proxy, g_object_unref);
+    ide_task_return_pointer (task, proxy, g_object_unref);
 }
 
 /**
@@ -770,7 +771,7 @@ ide_application_get_worker_async (IdeApplication      *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_APPLICATION (self));
   g_return_if_fail (plugin_name != NULL);
@@ -782,7 +783,7 @@ ide_application_get_worker_async (IdeApplication      *self,
   if (self->worker_manager == NULL)
     self->worker_manager = ide_worker_manager_new ();
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   ide_worker_manager_get_worker_async (self->worker_manager,
                                        plugin_name,
@@ -806,13 +807,13 @@ ide_application_get_worker_finish (IdeApplication  *self,
                                    GAsyncResult    *result,
                                    GError         **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 /**

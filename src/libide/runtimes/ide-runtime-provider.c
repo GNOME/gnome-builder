@@ -26,6 +26,7 @@
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-provider.h"
+#include "threading/ide-task.h"
 
 G_DEFINE_INTERFACE (IdeRuntimeProvider, ide_runtime_provider, G_TYPE_OBJECT)
 
@@ -55,12 +56,12 @@ ide_runtime_provider_real_install_async (IdeRuntimeProvider  *self,
                                          GAsyncReadyCallback  callback,
                                          gpointer             user_data)
 {
-  g_task_report_new_error (self, callback, user_data,
-                           ide_runtime_provider_real_install_async,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "%s does not support installing runtimes",
-                           G_OBJECT_TYPE_NAME (self));
+  ide_task_report_new_error (self, callback, user_data,
+                             ide_runtime_provider_real_install_async,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "%s does not support installing runtimes",
+                             G_OBJECT_TYPE_NAME (self));
 }
 
 gboolean
@@ -68,7 +69,7 @@ ide_runtime_provider_real_install_finish (IdeRuntimeProvider  *self,
                                           GAsyncResult        *result,
                                           GError             **error)
 {
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -78,7 +79,7 @@ ide_runtime_provider_real_bootstrap_cb (GObject      *object,
 {
   IdeRuntimeProvider *self = (IdeRuntimeProvider *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   IdeRuntimeManager *runtime_manager;
   const gchar *runtime_id;
   IdeContext *context;
@@ -86,27 +87,27 @@ ide_runtime_provider_real_bootstrap_cb (GObject      *object,
 
   g_assert (IDE_IS_RUNTIME_PROVIDER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_runtime_provider_install_finish (self, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  runtime_id = g_task_get_task_data (task);
+  runtime_id = ide_task_get_task_data (task);
   context = ide_object_get_context (IDE_OBJECT (self));
   runtime_manager = ide_context_get_runtime_manager (context);
   runtime = ide_runtime_manager_get_runtime (runtime_manager, runtime_id);
 
   if (runtime == NULL)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_FOUND,
-                             "No such runtime \"%s\"",
-                             runtime_id);
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "No such runtime \"%s\"",
+                               runtime_id);
   else
-    g_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
+    ide_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
 }
 
 void
@@ -116,7 +117,7 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
                                            GAsyncReadyCallback  callback,
                                            gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeConfiguration *config;
   const gchar *runtime_id;
 
@@ -126,19 +127,19 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_runtime_provider_real_bootstrap_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_runtime_provider_real_bootstrap_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   config = ide_build_pipeline_get_configuration (pipeline);
   runtime_id = ide_configuration_get_runtime_id (config);
-  g_task_set_task_data (task, g_strdup (runtime_id), g_free);
+  ide_task_set_task_data (task, g_strdup (runtime_id), g_free);
 
   if (runtime_id == NULL)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_FAILED,
-                             "No runtime provided to install");
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "No runtime provided to install");
   else
     ide_runtime_provider_install_async (self,
                                         runtime_id,
@@ -154,7 +155,7 @@ ide_runtime_provider_real_bootstrap_finish (IdeRuntimeProvider  *self,
                                             GAsyncResult        *result,
                                             GError             **error)
 {
-  IdeRuntime *ret = g_task_propagate_pointer (G_TASK (result), error);
+  IdeRuntime *ret = ide_task_propagate_pointer (IDE_TASK (result), error);
   g_return_val_if_fail (!ret || IDE_IS_RUNTIME (ret), NULL);
   return ret;
 }

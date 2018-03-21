@@ -23,6 +23,7 @@
 #include "buffers/ide-buffer.h"
 #include "files/ide-file.h"
 #include "symbols/ide-symbol-resolver.h"
+#include "threading/ide-task.h"
 
 G_DEFINE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE_TYPE_OBJECT)
 
@@ -34,19 +35,19 @@ ide_symbol_resolver_real_get_symbol_tree_async (IdeSymbolResolver   *self,
                                                 GAsyncReadyCallback  callback,
                                                 gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_SYMBOL_RESOLVER (self));
   g_assert (G_IS_FILE (file));
   g_assert (buffer == NULL || IDE_IS_BUFFER (buffer));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_symbol_resolver_get_symbol_tree_async);
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "Symbol tree is not supported on this symbol resolver");
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_symbol_resolver_get_symbol_tree_async);
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Symbol tree is not supported on this symbol resolver");
 }
 
 static IdeSymbolTree *
@@ -55,9 +56,9 @@ ide_symbol_resolver_real_get_symbol_tree_finish (IdeSymbolResolver  *self,
                                                  GError            **error)
 {
   g_assert (IDE_IS_SYMBOL_RESOLVER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -71,13 +72,13 @@ ide_symbol_resolver_real_find_references_async (IdeSymbolResolver   *self,
   g_assert (location != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  g_task_report_new_error (self,
-                           callback,
-                           user_data,
-                           ide_symbol_resolver_real_find_references_async,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "Finding references is not supported for this language");
+  ide_task_report_new_error (self,
+                             callback,
+                             user_data,
+                             ide_symbol_resolver_real_find_references_async,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Finding references is not supported for this language");
 }
 
 static GPtrArray *
@@ -86,9 +87,9 @@ ide_symbol_resolver_real_find_references_finish (IdeSymbolResolver  *self,
                                                  GError            **error)
 {
   g_assert (IDE_IS_SYMBOL_RESOLVER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -102,13 +103,13 @@ ide_symbol_resolver_real_find_nearest_scope_async (IdeSymbolResolver   *self,
   g_assert (location != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  g_task_report_new_error (self,
-                           callback,
-                           user_data,
-                           ide_symbol_resolver_real_find_nearest_scope_async,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "Finding nearest scope is not supported for this language");
+  ide_task_report_new_error (self,
+                             callback,
+                             user_data,
+                             ide_symbol_resolver_real_find_nearest_scope_async,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Finding nearest scope is not supported for this language");
 }
 
 static IdeSymbol *
@@ -117,9 +118,9 @@ ide_symbol_resolver_real_find_nearest_scope_finish (IdeSymbolResolver  *self,
                                                     GError            **error)
 {
   g_assert (IDE_IS_SYMBOL_RESOLVER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

@@ -64,6 +64,7 @@
 #include "util/ide-gtk.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-workbench-private.h"
+#include "threading/ide-task.h"
 
 #define INCLUDE_STATEMENTS "^#include[\\s]+[\\\"\\<][^\\s\\\"\\\'\\<\\>[:cntrl:]]+[\\\"\\>]"
 
@@ -5249,7 +5250,7 @@ ide_source_view_find_references_cb (GObject      *object,
   IdeSymbolResolver *symbol_resolver = (IdeSymbolResolver *)object;
   g_autoptr(GPtrArray) references = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   FindReferencesTaskData *data;
   IdeSourceView *self;
   IdeSourceViewPrivate *priv;
@@ -5264,13 +5265,13 @@ ide_source_view_find_references_cb (GObject      *object,
 
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   references = ide_symbol_resolver_find_references_finish (symbol_resolver, result, &error);
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   priv = ide_source_view_get_instance_private (self);
-  data = g_task_get_task_data (task);
+  data = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (data != NULL);
@@ -5285,7 +5286,7 @@ ide_source_view_find_references_cb (GObject      *object,
       GCancellable *cancellable;
       IdeSymbolResolver *resolver;
 
-      cancellable = g_task_get_cancellable (task);
+      cancellable = ide_task_get_cancellable (task);
       resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
 
       ide_symbol_resolver_find_references_async (resolver,
@@ -5406,7 +5407,7 @@ static void
 ide_source_view_real_find_references (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeExtensionSetAdapter *adapter;
   FindReferencesTaskData *data;
   guint n_extensions;
@@ -5416,7 +5417,7 @@ ide_source_view_real_find_references (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  task = g_task_new (self, NULL, NULL, NULL);
+  task = ide_task_new (self, NULL, NULL, NULL);
 
   adapter = ide_buffer_get_symbol_resolvers (priv->buffer);
   n_extensions = ide_extension_set_adapter_get_n_extensions (adapter);
@@ -5431,7 +5432,7 @@ ide_source_view_real_find_references (IdeSourceView *self)
   data = g_slice_new0 (FindReferencesTaskData);
   data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
   data->location = ide_buffer_get_insert_location (priv->buffer);
-  g_task_set_task_data (task, data, (GDestroyNotify)find_references_task_data_free);
+  ide_task_set_task_data (task, data, (GDestroyNotify)find_references_task_data_free);
 
   ide_extension_set_adapter_foreach (adapter, find_references_task_get_extension, data);
   g_assert (data->resolvers->len > 0);

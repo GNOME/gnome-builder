@@ -21,6 +21,7 @@
 #include "layout/ide-layout-grid-column.h"
 #include "layout/ide-layout-private.h"
 #include "layout/ide-layout-view.h"
+#include "threading/ide-task.h"
 
 struct _IdeLayoutGridColumn
 {
@@ -31,12 +32,12 @@ struct _IdeLayoutGridColumn
 typedef struct
 {
   GList *stacks;
-  GTask *backpointer;
+  IdeTask *backpointer;
 } TryCloseState;
 
 G_DEFINE_TYPE (IdeLayoutGridColumn, ide_layout_grid_column, DZL_TYPE_MULTI_PANED)
 
-static void ide_layout_grid_column_try_close_pump (GTask *task);
+static void ide_layout_grid_column_try_close_pump (IdeTask *task);
 
 enum {
   PROP_0,
@@ -227,18 +228,18 @@ ide_layout_grid_column_try_close_cb (GObject      *object,
                                      gpointer      user_data)
 {
   IdeLayoutStack *stack = (IdeLayoutStack *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_LAYOUT_STACK (stack));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_layout_stack_agree_to_close_finish (stack, result, &error))
     {
       g_debug ("Cannot close stack now due to: %s", error->message);
       gtk_widget_grab_focus (GTK_WIDGET (stack));
-      g_task_return_boolean (task, FALSE);
+      ide_task_return_boolean (task, FALSE);
       return;
     }
 
@@ -248,26 +249,26 @@ ide_layout_grid_column_try_close_cb (GObject      *object,
 }
 
 static void
-ide_layout_grid_column_try_close_pump (GTask *_task)
+ide_layout_grid_column_try_close_pump (IdeTask *_task)
 {
-  g_autoptr(GTask) task = _task;
+  g_autoptr(IdeTask) task = _task;
   g_autoptr(IdeLayoutStack) stack = NULL;
   TryCloseState *state;
   GCancellable *cancellable;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
   g_assert (state != NULL);
   g_assert (state->backpointer == task);
 
   if (state->stacks == NULL)
     {
-      IdeLayoutGridColumn *self = g_task_get_source_object (task);
+      IdeLayoutGridColumn *self = ide_task_get_source_object (task);
 
       g_assert (IDE_IS_LAYOUT_GRID_COLUMN (self));
       gtk_widget_destroy (GTK_WIDGET (self));
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -275,7 +276,7 @@ ide_layout_grid_column_try_close_pump (GTask *_task)
   state->stacks = g_list_remove (state->stacks, stack);
   g_assert (IDE_IS_LAYOUT_STACK (stack));
 
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   ide_layout_stack_agree_to_close_async (stack,
@@ -288,7 +289,7 @@ void
 _ide_layout_grid_column_try_close (IdeLayoutGridColumn *self)
 {
   TryCloseState state = { 0 };
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_LAYOUT_GRID_COLUMN (self));
 
@@ -303,13 +304,13 @@ _ide_layout_grid_column_try_close (IdeLayoutGridColumn *self)
       g_return_if_reached ();
     }
 
-  task = g_task_new (self, NULL, NULL, NULL);
-  g_task_set_source_tag (task, _ide_layout_grid_column_try_close);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, _ide_layout_grid_column_try_close);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   g_list_foreach (state.stacks, (GFunc)g_object_ref, NULL);
   state.backpointer = task;
-  g_task_set_task_data (task, g_slice_dup (TryCloseState, &state), try_close_state_free);
+  ide_task_set_task_data (task, g_slice_dup (TryCloseState, &state), try_close_state_free);
 
   ide_layout_grid_column_try_close_pump (g_steal_pointer (&task));
 }

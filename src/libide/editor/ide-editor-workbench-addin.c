@@ -34,6 +34,7 @@
 #include "util/ide-gtk.h"
 #include "workbench/ide-workbench.h"
 #include "workbench/ide-workbench-header-bar.h"
+#include "threading/ide-task.h"
 
 struct _IdeEditorWorkbenchAddin
 {
@@ -322,26 +323,26 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
   IdeEditorWorkbenchAddin *self;
   g_autoptr(IdeBuffer) buffer = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   const gchar *fragment;
   OpenFileTaskData *open_file_task_data;
   IdeUri *uri;
 
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (self));
 
-  open_file_task_data = g_task_get_task_data (task);
+  open_file_task_data = ide_task_get_task_data (task);
 
   buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error);
 
   if (buffer == NULL)
     {
       IDE_TRACE_MSG ("%s", error->message);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -367,7 +368,7 @@ ide_editor_workbench_addin_open_cb (GObject      *object,
       !(open_file_task_data->flags & IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND))
     ide_editor_perspective_focus_buffer_in_current_stack (self->perspective, buffer);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -383,7 +384,7 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin    *addin,
   IdeBufferManager *buffer_manager;
   IdeContext *context;
   OpenFileTaskData *open_file_task_data;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(GFile) gfile = NULL;
 
@@ -392,11 +393,11 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin    *addin,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (IDE_IS_WORKBENCH (self->workbench));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
   open_file_task_data = g_slice_new0 (OpenFileTaskData);
   open_file_task_data->flags = flags;
   open_file_task_data->uri = ide_uri_ref(uri);
-  g_task_set_task_data (task, open_file_task_data, open_file_task_data_free);
+  ide_task_set_task_data (task, open_file_task_data, open_file_task_data_free);
 
   context = ide_workbench_get_context (self->workbench);
   buffer_manager = ide_context_get_buffer_manager (context);
@@ -408,11 +409,11 @@ ide_editor_workbench_addin_open_async (IdeWorkbenchAddin    *addin,
       g_autofree gchar *uristr = NULL;
 
       uristr = ide_uri_to_string (uri, IDE_URI_HIDE_AUTH_PARAMS);
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               "Failed to create resource for \"%s\"",
-                               uristr);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_FILENAME,
+                                 "Failed to create resource for \"%s\"",
+                                 uristr);
       return;
     }
 
@@ -434,9 +435,9 @@ ide_editor_workbench_addin_open_finish (IdeWorkbenchAddin  *addin,
                                         GError            **error)
 {
   g_assert (IDE_IS_EDITOR_WORKBENCH_ADDIN (addin));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static gchar *

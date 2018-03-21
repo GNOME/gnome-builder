@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 
 #include "debugger/ide-debugger-locals-view.h"
+#include "threading/ide-task.h"
 
 struct _IdeDebuggerLocalsView
 {
@@ -285,22 +286,22 @@ ide_debugger_locals_view_load_locals_cb (GObject      *object,
   IdeDebugger *debugger = (IdeDebugger *)object;
   g_autoptr(GPtrArray) locals = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   GtkTreeIter parent;
 
   g_assert (IDE_IS_DEBUGGER (debugger));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   locals = ide_debugger_list_locals_finish (debugger, result, &error);
 
   if (locals == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_DEBUGGER_LOCALS_VIEW (self));
 
   gtk_tree_store_append (self->tree_store, &parent, NULL);
@@ -327,7 +328,7 @@ ide_debugger_locals_view_load_locals_cb (GObject      *object,
 
   gtk_tree_view_expand_all (self->tree_view);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -389,7 +390,7 @@ ide_debugger_locals_view_load_async (IdeDebuggerLocalsView *self,
                                      gpointer               user_data)
 {
   IdeDebugger *debugger;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_DEBUGGER_LOCALS_VIEW (self));
   g_return_if_fail (IDE_IS_DEBUGGER_THREAD (thread));
@@ -398,15 +399,15 @@ ide_debugger_locals_view_load_async (IdeDebuggerLocalsView *self,
 
   gtk_tree_store_clear (self->tree_store);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, ide_debugger_locals_view_load_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_source_tag (task, ide_debugger_locals_view_load_async);
 
   debugger = ide_debugger_locals_view_get_debugger (self);
 
   if (debugger == NULL)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -431,7 +432,7 @@ ide_debugger_locals_view_load_finish (IdeDebuggerLocalsView  *self,
                                       GError                **error)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER_LOCALS_VIEW (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

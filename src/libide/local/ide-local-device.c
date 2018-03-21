@@ -24,6 +24,7 @@
 
 #include "local/ide-local-device.h"
 #include "util/ide-posix.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -53,7 +54,7 @@ ide_local_device_get_info_async (IdeDevice           *device,
 {
   IdeLocalDevice *self = (IdeLocalDevice *)device;
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeDeviceInfo) info = NULL;
   const gchar *system_type = NULL;
   g_auto(GStrv) parts = NULL;
@@ -62,9 +63,9 @@ ide_local_device_get_info_async (IdeDevice           *device,
   g_assert (IDE_IS_LOCAL_DEVICE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (device, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_local_device_get_info_async);
-  g_task_set_check_cancellable (task, FALSE);
+  task = ide_task_new (device, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_local_device_get_info_async);
+  ide_task_set_check_cancellable (task, FALSE);
 
   system_type = ide_get_system_type ();
   arch = ide_get_system_arch ();
@@ -89,7 +90,7 @@ ide_local_device_get_info_async (IdeDevice           *device,
   if (priv->system != NULL)
     ide_device_info_set_system (info, priv->system);
 
-  g_task_return_pointer (task, g_steal_pointer (&info), g_object_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&info), g_object_unref);
 }
 
 static IdeDeviceInfo *
@@ -98,9 +99,9 @@ ide_local_device_get_info_finish (IdeDevice     *device,
                                   GError       **error)
 {
   g_assert (IDE_IS_DEVICE (device));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

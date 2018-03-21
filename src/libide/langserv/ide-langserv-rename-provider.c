@@ -28,6 +28,7 @@
 #include "langserv/ide-langserv-client.h"
 #include "langserv/ide-langserv-rename-provider.h"
 #include "diagnostics/ide-source-location.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -153,7 +154,7 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
   IdeLangservRenameProvider *self;
   g_autoptr(GVariant) return_value = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GPtrArray) ret = NULL;
   g_autoptr(GVariantIter) changes_by_uri = NULL;
   IdeContext *context;
@@ -164,13 +165,13 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
 
   g_assert (IDE_IS_LANGSERV_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
-  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_TASK (task));
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_LANGSERV_RENAME_PROVIDER (self));
 
   if (!ide_langserv_client_call_finish (client, result, &return_value, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -239,7 +240,7 @@ ide_langserv_rename_provider_rename_cb (GObject      *object,
         }
     }
 
-  g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
 
   IDE_EXIT;
 }
@@ -254,7 +255,7 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
 {
   IdeLangservRenameProvider *self = (IdeLangservRenameProvider *)provider;
   IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *text = NULL;
   g_autofree gchar *uri = NULL;
@@ -273,15 +274,15 @@ ide_langserv_rename_provider_rename_async (IdeRenameProvider   *provider,
   g_assert (new_name != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_rename_provider_rename_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_rename_provider_rename_async);
 
   if (priv->client == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_CONNECTED,
-                               "No client set, cannot rename symbol");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_CONNECTED,
+                                 "No client set, cannot rename symbol");
       IDE_EXIT;
     }
 
@@ -332,9 +333,9 @@ ide_langserv_rename_provider_rename_finish (IdeRenameProvider  *provider,
   IDE_ENTRY;
 
   g_assert (IDE_IS_LANGSERV_RENAME_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ar = g_task_propagate_pointer (G_TASK (result), error);
+  ar = ide_task_propagate_pointer (IDE_TASK (result), error);
   ret = (ar != NULL);
 
   if (edits != NULL)

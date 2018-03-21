@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-search-provider"
 
 #include "search/ide-search-provider.h"
+#include "threading/ide-task.h"
 
 G_DEFINE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE_TYPE_OBJECT)
 
@@ -30,16 +31,16 @@ ide_search_provider_real_search_async (IdeSearchProvider   *self,
                                        GAsyncReadyCallback  callback,
                                        gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_SEARCH_PROVIDER (self));
   g_assert (query != NULL);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "search not implemented");
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "search not implemented");
 }
 
 static GPtrArray *
@@ -48,9 +49,9 @@ ide_search_provider_real_search_finish (IdeSearchProvider  *self,
                                         GError            **error)
 {
   g_assert (IDE_IS_SEARCH_PROVIDER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

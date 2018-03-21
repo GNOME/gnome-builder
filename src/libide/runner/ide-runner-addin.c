@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-runner-addin"
 
 #include "runner/ide-runner-addin.h"
+#include "threading/ide-task.h"
 
 G_DEFINE_INTERFACE (IdeRunnerAddin, ide_runner_addin, G_TYPE_OBJECT)
 
@@ -40,7 +41,7 @@ dummy_async (IdeRunnerAddin      *self,
              GAsyncReadyCallback  callback,
              gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_RUNNER_ADDIN (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -48,8 +49,8 @@ dummy_async (IdeRunnerAddin      *self,
   if (callback == NULL)
     return;
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_return_boolean (task, TRUE);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -58,9 +59,9 @@ dummy_finish (IdeRunnerAddin  *self,
               GError         **error)
 {
   g_assert (IDE_IS_RUNNER_ADDIN (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void

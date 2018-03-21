@@ -21,6 +21,7 @@
 #include "ide-enums.h"
 #include "symbols/ide-symbol.h"
 #include "symbols/ide-symbol-node.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -49,14 +50,14 @@ ide_symbol_node_real_get_location_async (IdeSymbolNode       *self,
                                          GAsyncReadyCallback  callback,
                                          gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_symbol_node_get_location_async);
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_SUPPORTED,
-                           "Unsupported operation on symbol node");
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_symbol_node_get_location_async);
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Unsupported operation on symbol node");
 }
 
 static IdeSourceLocation *
@@ -64,7 +65,7 @@ ide_symbol_node_real_get_location_finish (IdeSymbolNode  *self,
                                           GAsyncResult   *result,
                                           GError        **error)
 {
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

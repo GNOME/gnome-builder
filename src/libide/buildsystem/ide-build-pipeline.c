@@ -52,6 +52,7 @@
 #include "util/ide-posix.h"
 #include "util/ptyintercept.h"
 #include "vcs/ide-vcs.h"
+#include "threading/ide-task.h"
 
 DZL_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
 
@@ -240,7 +241,7 @@ struct _IdeBuildPipeline
   /*
    * We queue incoming tasks in case we need for a finish task to
    * complete before our task can continue. The items in the queue
-   * are DelayedTask structs with a GTask and the type id so we
+   * are DelayedTask structs with a IdeTask and the type id so we
    * can progress the task upon completion of the previous task.
    */
   GQueue task_queue;
@@ -308,7 +309,7 @@ typedef struct
    * the task data, we cannot reference as that would create a cycle. Instead,
    * we just rely on this becoming invalid during the task cleanup.
    */
-  GTask *task;
+  IdeTask *task;
 
   /*
    * The phase that should be met for the given pipeline operation.
@@ -324,11 +325,11 @@ typedef struct
 
 static void ide_build_pipeline_queue_flush  (IdeBuildPipeline    *self);
 static void ide_build_pipeline_tick_execute (IdeBuildPipeline    *self,
-                                             GTask               *task);
+                                             IdeTask             *task);
 static void ide_build_pipeline_tick_clean   (IdeBuildPipeline    *self,
-                                             GTask               *task);
+                                             IdeTask             *task);
 static void ide_build_pipeline_tick_rebuild (IdeBuildPipeline    *self,
-                                             GTask               *task);
+                                             IdeTask             *task);
 static void initable_iface_init             (GInitableIface      *iface);
 static void list_model_iface_init           (GListModelInterface *iface);
 
@@ -388,12 +389,12 @@ task_data_free (gpointer data)
 }
 
 static TaskData *
-task_data_new (GTask    *task,
+task_data_new (IdeTask  *task,
                TaskType  type)
 {
   TaskData *td;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (type > 0);
   g_assert (type <= TASK_REBUILD);
 
@@ -738,27 +739,27 @@ ide_build_pipeline_release_transients (IdeBuildPipeline *self)
 
 static gboolean
 ide_build_pipeline_check_ready (IdeBuildPipeline *self,
-                                GTask            *task)
+                                IdeTask          *task)
 {
   g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (self->broken)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               _("The build pipeline is in a failed state"));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 _("The build pipeline is in a failed state"));
       return FALSE;
     }
 
   if (self->loaded == FALSE)
     {
       /* configuration:ready is FALSE */
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_INITIALIZED,
-                               _("The build configuration has errors"));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_INITIALIZED,
+                                 _("The build configuration has errors"));
       return FALSE;
     }
 
@@ -1573,16 +1574,16 @@ ide_build_pipeline_stage_execute_cb (GObject      *object,
 {
   IdeBuildStage *stage = (IdeBuildStage *)object;
   IdeBuildPipeline *self;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_STAGE (stage));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_BUILD_PIPELINE (self));
 
   if (!_ide_build_stage_execute_with_query_finish (stage, result, &error))
@@ -1591,7 +1592,7 @@ ide_build_pipeline_stage_execute_cb (GObject      *object,
                G_OBJECT_TYPE_NAME (stage),
                error->message);
       self->failed = TRUE;
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
     }
 
   ide_build_stage_set_completed (stage, !self->failed);
@@ -1658,14 +1659,14 @@ complete_queued_before_phase (IdeBuildPipeline *self,
 
   for (GList *iter = self->task_queue.head; iter; iter = iter->next)
     {
-      GTask *task;
+      IdeTask *task;
       TaskData *task_data;
 
     again:
       task = iter->data;
-      task_data = g_task_get_task_data (task);
+      task_data = ide_task_get_task_data (task);
 
-      g_assert (G_IS_TASK (task));
+      g_assert (IDE_IS_TASK (task));
       g_assert (task_data->task == task);
 
       /*
@@ -1678,7 +1679,7 @@ complete_queued_before_phase (IdeBuildPipeline *self,
 
           iter = iter->next;
           g_queue_delete_link (&self->task_queue, to_remove);
-          g_task_return_boolean (task, TRUE);
+          ide_task_return_boolean (task, TRUE);
           g_object_unref (task);
 
           if (iter == NULL)
@@ -1691,7 +1692,7 @@ complete_queued_before_phase (IdeBuildPipeline *self,
 
 static void
 ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
-                                 GTask            *task)
+                                 IdeTask          *task)
 {
   GCancellable *cancellable;
   TaskData *td;
@@ -1699,12 +1700,12 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   self->current_stage = NULL;
 
-  td = g_task_get_task_data (task);
-  cancellable = g_task_get_cancellable (task);
+  td = ide_task_get_task_data (task);
+  cancellable = ide_task_get_cancellable (task);
 
   g_assert (td != NULL);
   g_assert (td->type == TASK_BUILD || td->type == TASK_REBUILD);
@@ -1720,13 +1721,13 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
   g_clear_pointer (&self->errfmt_top_dir, g_free);
 
   /* Short circuit now if the task was cancelled */
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     IDE_EXIT;
 
   /* If we can skip walking the pipeline, go ahead and do so now. */
   if (!ide_build_pipeline_request_phase (self, td->phase))
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -1775,7 +1776,7 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
         }
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -1783,12 +1784,12 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
 static void
 ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
                                           GParamSpec       *pspec,
-                                          GTask            *task)
+                                          IdeTask          *task)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   IDE_TRACE_MSG ("Clearing busy bit for pipeline");
 
@@ -1858,7 +1859,7 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   TaskData *task_data;
 
   IDE_ENTRY;
@@ -1868,9 +1869,9 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
 
   cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_pipeline_build_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_pipeline_build_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (!ide_build_pipeline_check_ready (self, task))
     return;
@@ -1904,7 +1905,7 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
 
   task_data = task_data_new (task, TASK_BUILD);
   task_data->phase = 1 << g_bit_nth_msf (phase, -1);
-  g_task_set_task_data (task, task_data, task_data_free);
+  ide_task_set_task_data (task, task_data, task_data_free);
 
   g_queue_push_tail (&self->task_queue, g_steal_pointer (&task));
 
@@ -1913,7 +1914,7 @@ ide_build_pipeline_build_async (IdeBuildPipeline    *self,
   IDE_EXIT;
 
 short_circuit:
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
   IDE_EXIT;
 }
 
@@ -1942,9 +1943,9 @@ ide_build_pipeline_build_finish (IdeBuildPipeline  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -1987,7 +1988,7 @@ static gboolean
 ide_build_pipeline_do_flush (gpointer data)
 {
   IdeBuildPipeline *self = data;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) builddir = NULL;
   g_autoptr(GError) error = NULL;
   TaskData *task_data;
@@ -2010,11 +2011,11 @@ ide_build_pipeline_do_flush (gpointer data)
   if (!g_file_make_directory_with_parents (builddir, NULL, &error) &&
       !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
     {
-      GTask *failed_task;
+      IdeTask *failed_task;
 
       while (NULL != (failed_task = g_queue_pop_head (&self->task_queue)))
         {
-          g_task_return_error (failed_task, g_error_copy (error));
+          ide_task_return_error (failed_task, g_error_copy (error));
           g_object_unref (failed_task);
         }
 
@@ -2033,7 +2034,7 @@ ide_build_pipeline_do_flush (gpointer data)
       IDE_RETURN (G_SOURCE_REMOVE);
     }
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (self->busy == FALSE);
 
   /*
@@ -2047,12 +2048,12 @@ ide_build_pipeline_do_flush (gpointer data)
                            G_CONNECT_SWAPPED);
 
   /* We need access to the task data to determine how to process the task. */
-  task_data = g_task_get_task_data (task);
+  task_data = ide_task_get_task_data (task);
 
   g_assert (task_data != NULL);
   g_assert (task_data->type > 0);
   g_assert (task_data->type <= TASK_REBUILD);
-  g_assert (G_IS_TASK (task_data->task));
+  g_assert (IDE_IS_TASK (task_data->task));
 
   /*
    * If this build request could cause us to spin while we are continually
@@ -2063,10 +2064,10 @@ ide_build_pipeline_do_flush (gpointer data)
       task_data->type == TASK_BUILD &&
       task_data->phase <= IDE_BUILD_PHASE_CONFIGURE)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "The build pipeline is in a failed state and requires a rebuild");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "The build pipeline is in a failed state and requires a rebuild");
       IDE_RETURN (G_SOURCE_REMOVE);
     }
 
@@ -2180,9 +2181,9 @@ ide_build_pipeline_execute_finish (IdeBuildPipeline  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -3005,7 +3006,7 @@ ide_build_pipeline_clean_cb (GObject      *object,
                              gpointer      user_data)
 {
   IdeBuildStage *stage = (IdeBuildStage *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeBuildPipeline *self;
   GPtrArray *stages;
@@ -3014,10 +3015,10 @@ ide_build_pipeline_clean_cb (GObject      *object,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_STAGE (stage));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
-  td = g_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+  td = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (td != NULL);
@@ -3033,7 +3034,7 @@ ide_build_pipeline_clean_cb (GObject      *object,
 
   if (!ide_build_stage_clean_finish (stage, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -3046,7 +3047,7 @@ ide_build_pipeline_clean_cb (GObject      *object,
 
 static void
 ide_build_pipeline_tick_clean (IdeBuildPipeline *self,
-                               GTask            *task)
+                               IdeTask          *task)
 {
   GCancellable *cancellable;
   GPtrArray *stages;
@@ -3055,10 +3056,10 @@ ide_build_pipeline_tick_clean (IdeBuildPipeline *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  td = g_task_get_task_data (task);
-  cancellable = g_task_get_cancellable (task);
+  td = ide_task_get_task_data (task);
+  cancellable = ide_task_get_cancellable (task);
 
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (td != NULL);
@@ -3083,7 +3084,7 @@ ide_build_pipeline_tick_clean (IdeBuildPipeline *self,
       IDE_GOTO (notify);
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
 notify:
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
@@ -3099,7 +3100,7 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GPtrArray) stages = NULL;
   IdeBuildPhase min_phase = IDE_BUILD_PHASE_FINAL;
@@ -3115,9 +3116,9 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, ide_build_pipeline_clean_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_source_tag (task, ide_build_pipeline_clean_async);
 
   if (!ide_build_pipeline_check_ready (self, task))
     return;
@@ -3126,7 +3127,7 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
 
   td = task_data_new (task, TASK_CLEAN);
   td->phase = phase;
-  g_task_set_task_data (task, td, task_data_free);
+  ide_task_set_task_data (task, td, task_data_free);
 
   /*
    * To clean the project, we go through each stage and call it's clean async
@@ -3179,7 +3180,7 @@ ide_build_pipeline_clean_async (IdeBuildPipeline    *self,
    */
   if (stages->len == 0)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -3202,9 +3203,9 @@ ide_build_pipeline_clean_finish (IdeBuildPipeline  *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -3254,7 +3255,7 @@ ide_build_pipeline_reaper_cb (GObject      *object,
 {
   DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
   IdeBuildPipeline *self;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   TaskData *td;
 
@@ -3262,27 +3263,27 @@ ide_build_pipeline_reaper_cb (GObject      *object,
 
   g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  td = g_task_get_task_data (task);
+  td = ide_task_get_task_data (task);
 
   g_assert (td != NULL);
   g_assert (td->task == task);
   g_assert (td->type == TASK_REBUILD);
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_BUILD_PIPELINE (self));
 
   /* Make sure our reaper completed or else we bail */
   if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   if (td->phase == IDE_BUILD_PHASE_NONE)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -3294,7 +3295,7 @@ ide_build_pipeline_reaper_cb (GObject      *object,
 
 static void
 ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
-                                 GTask            *task)
+                                 IdeTask          *task)
 {
   g_autoptr(DzlDirectoryReaper) reaper = NULL;
   GCancellable *cancellable;
@@ -3302,11 +3303,11 @@ ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
 #ifndef G_DISABLE_ASSERT
   {
-    TaskData *td = g_task_get_task_data (task);
+    TaskData *td = ide_task_get_task_data (task);
 
     g_assert (td != NULL);
     g_assert (td->type == TASK_REBUILD);
@@ -3339,7 +3340,7 @@ ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,
       ide_build_stage_set_completed (entry->stage, FALSE);
     }
 
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Now execute the reaper to clean up the build files. */
@@ -3358,7 +3359,7 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   TaskData *td;
 
   IDE_ENTRY;
@@ -3369,16 +3370,16 @@ ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,
 
   cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, ide_build_pipeline_rebuild_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_source_tag (task, ide_build_pipeline_rebuild_async);
 
   if (!ide_build_pipeline_check_ready (self, task))
     return;
 
   td = task_data_new (task, TASK_REBUILD);
   td->phase = phase;
-  g_task_set_task_data (task, td, task_data_free);
+  ide_task_set_task_data (task, td, task_data_free);
 
   g_queue_push_tail (&self->task_queue, g_steal_pointer (&task));
 
@@ -3397,9 +3398,9 @@ ide_build_pipeline_rebuild_finish (IdeBuildPipeline  *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

@@ -25,6 +25,7 @@
 #include "langserv/ide-langserv-symbol-node.h"
 #include "langserv/ide-langserv-symbol-node-private.h"
 #include "langserv/ide-langserv-util.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -64,7 +65,7 @@ ide_langserv_symbol_node_get_location_async (IdeSymbolNode       *node,
 {
   IdeLangservSymbolNode *self = (IdeLangservSymbolNode *)node;
   IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(IdeSourceLocation) location = NULL;
 
@@ -72,13 +73,13 @@ ide_langserv_symbol_node_get_location_async (IdeSymbolNode       *node,
 
   g_assert (IDE_IS_LANGSERV_SYMBOL_NODE (node));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_symbol_node_get_location_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_symbol_node_get_location_async);
 
   ifile = ide_file_new (NULL, priv->file);
   location = ide_source_location_new (ifile, priv->begin.line, priv->begin.column, 0);
 
-  g_task_return_pointer (task, g_steal_pointer (&location), (GDestroyNotify)ide_source_location_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&location), (GDestroyNotify)ide_source_location_unref);
 
   IDE_EXIT;
 }
@@ -93,9 +94,9 @@ ide_langserv_symbol_node_get_location_finish (IdeSymbolNode  *node,
   IDE_ENTRY;
 
   g_assert (IDE_IS_LANGSERV_SYMBOL_NODE (node));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

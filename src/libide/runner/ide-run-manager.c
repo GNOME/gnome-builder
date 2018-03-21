@@ -36,6 +36,7 @@
 #include "runner/ide-run-manager-private.h"
 #include "runner/ide-runner.h"
 #include "runtimes/ide-runtime.h"
+#include "threading/ide-task.h"
 
 struct _IdeRunManager
 {
@@ -377,21 +378,21 @@ ide_run_manager_run_cb (GObject      *object,
                         gpointer      user_data)
 {
   IdeRunner *runner = (IdeRunner *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeRunManager *self;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUNNER (runner));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
 
   if (!ide_runner_run_finish (runner, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   g_signal_emit (self, signals [STOPPED], 0);
 
@@ -400,7 +401,7 @@ ide_run_manager_run_cb (GObject      *object,
 
 static void
 do_run_async (IdeRunManager *self,
-              GTask         *task)
+              IdeTask       *task)
 {
   g_auto(GStrv) run_argv = NULL;
   IdeBuildTarget *build_target;
@@ -416,9 +417,9 @@ do_run_async (IdeRunManager *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  build_target = g_task_get_task_data (task);
+  build_target = ide_task_get_task_data (task);
   context = ide_object_get_context (IDE_OBJECT (self));
 
   g_assert (IDE_IS_BUILD_TARGET (build_target));
@@ -430,17 +431,17 @@ do_run_async (IdeRunManager *self,
 
   if (runtime == NULL)
     {
-      g_task_return_new_error (task,
-                               IDE_RUNTIME_ERROR,
-                               IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME,
-                               "%s “%s”",
-                               _("Failed to locate runtime"),
-                               ide_configuration_get_runtime_id (config));
+      ide_task_return_new_error (task,
+                                 IDE_RUNTIME_ERROR,
+                                 IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME,
+                                 "%s “%s”",
+                                 _("Failed to locate runtime"),
+                                 ide_configuration_get_runtime_id (config));
       IDE_EXIT;
     }
 
   runner = ide_runtime_create_runner (runtime, build_target);
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
 
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -471,10 +472,10 @@ do_run_async (IdeRunManager *self,
 
   if (ide_runner_get_failed (runner))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to execute the application");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to execute the application");
       IDE_EXIT;
     }
 
@@ -493,7 +494,7 @@ ide_run_manager_run_discover_cb (GObject      *object,
 {
   IdeRunManager *self = (IdeRunManager *)object;
   g_autoptr(IdeBuildTarget) build_target = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -505,13 +506,13 @@ ide_run_manager_run_discover_cb (GObject      *object,
 
   if (build_target == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   ide_run_manager_set_build_target (self, build_target);
 
-  g_task_set_task_data (task, g_steal_pointer (&build_target), g_object_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&build_target), g_object_unref);
 
   do_run_async (self, task);
 
@@ -524,7 +525,7 @@ ide_run_manager_install_cb (GObject      *object,
                             gpointer      user_data)
 {
   IdeBuildManager *build_manager = (IdeBuildManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeRunManager *self;
   IdeBuildTarget *build_target;
@@ -533,14 +534,14 @@ ide_run_manager_install_cb (GObject      *object,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_RUN_MANAGER (self));
 
   if (!ide_build_manager_execute_finish (build_manager, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -548,7 +549,7 @@ ide_run_manager_install_cb (GObject      *object,
 
   if (build_target == NULL)
     {
-      cancellable = g_task_get_cancellable (task);
+      cancellable = ide_task_get_cancellable (task);
       g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
       ide_run_manager_discover_default_target_async (self,
@@ -558,7 +559,7 @@ ide_run_manager_install_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  g_task_set_task_data (task, g_object_ref (build_target), g_object_unref);
+  ide_task_set_task_data (task, g_object_ref (build_target), g_object_unref);
 
   do_run_async (self, task);
 
@@ -568,13 +569,13 @@ ide_run_manager_install_cb (GObject      *object,
 static void
 ide_run_manager_task_completed (IdeRunManager *self,
                                 GParamSpec    *pspec,
-                                GTask         *task)
+                                IdeTask       *task)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (pspec != NULL);
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   self->busy = FALSE;
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
@@ -586,7 +587,7 @@ ide_run_manager_task_completed (IdeRunManager *self,
 
 static void
 ide_run_manager_do_install_before_run (IdeRunManager *self,
-                                       GTask         *task)
+                                       IdeTask       *task)
 {
   IdeBuildManager *build_manager;
   IdeContext *context;
@@ -594,7 +595,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_context_get_build_manager (context);
@@ -615,7 +616,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
 
   ide_build_manager_execute_async (build_manager,
                                    IDE_BUILD_PHASE_INSTALL,
-                                   g_task_get_cancellable (task),
+                                   ide_task_get_cancellable (task),
                                    ide_run_manager_install_cb,
                                    g_object_ref (task));
 
@@ -631,7 +632,7 @@ ide_run_manager_run_async (IdeRunManager       *self,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -647,13 +648,13 @@ ide_run_manager_run_async (IdeRunManager       *self,
 
   dzl_cancellable_chain (cancellable, self->cancellable);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_run_manager_run_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_run_manager_run_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (ide_run_manager_check_busy (self, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -675,9 +676,9 @@ ide_run_manager_run_finish (IdeRunManager  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -870,7 +871,7 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
                                          gpointer      user_data)
 {
   IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GPtrArray) ret = NULL;
   g_autoptr(GError) error = NULL;
   DiscoverState *state;
@@ -879,9 +880,9 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
 
   g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
 
   g_assert (state != NULL);
   g_assert (state->active > 0);
@@ -907,20 +908,20 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
   if (state->results->len == 0)
     {
       if (error != NULL)
-        g_task_return_error (task, g_steal_pointer (&error));
+        ide_task_return_error (task, g_steal_pointer (&error));
       else
-        g_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_NOT_FOUND,
-                                 "Failed to locate a build target");
+        ide_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_NOT_FOUND,
+                                   "Failed to locate a build target");
       IDE_EXIT;
     }
 
   g_ptr_array_sort (state->results, compare_targets);
 
-  g_task_return_pointer (task,
-                         g_object_ref (g_ptr_array_index (state->results, 0)),
-                         g_object_unref);
+  ide_task_return_pointer (task,
+                           g_object_ref (g_ptr_array_index (state->results, 0)),
+                           g_object_unref);
 
   IDE_EXIT;
 }
@@ -932,7 +933,7 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
                                                gpointer             user_data)
 {
   g_autoptr(PeasExtensionSet) set = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   DiscoverState *state;
   IdeContext *context;
 
@@ -941,9 +942,9 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_run_manager_discover_default_target_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_run_manager_discover_default_target_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
@@ -959,7 +960,7 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
 
   peas_extension_set_foreach (set, collect_extensions, state);
 
-  g_task_set_task_data (task, state, discover_state_free);
+  ide_task_set_task_data (task, state, discover_state_free);
 
   for (const GList *iter = state->providers; iter != NULL; iter = iter->next)
     {
@@ -972,10 +973,10 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
     }
 
   if (state->active == 0)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_FOUND,
-                             "Failed to locate a build target");
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "Failed to locate a build target");
 
   IDE_EXIT;
 }
@@ -996,9 +997,9 @@ ide_run_manager_discover_default_target_finish (IdeRunManager  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

@@ -37,6 +37,7 @@
 #include "langserv/ide-langserv-client.h"
 #include "projects/ide-project.h"
 #include "vcs/ide-vcs.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -1064,21 +1065,21 @@ ide_langserv_client_call_cb (GObject      *object,
   JsonrpcClient *client = (JsonrpcClient *)object;
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (JSONRPC_IS_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!jsonrpc_client_call_finish (client, result, &reply, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task,
-                           g_steal_pointer (&reply),
-                           (GDestroyNotify)g_variant_unref);
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&reply),
+                             (GDestroyNotify)g_variant_unref);
 
   IDE_EXIT;
 }
@@ -1107,7 +1108,7 @@ ide_langserv_client_call_async (IdeLangservClient   *self,
                                 gpointer             user_data)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -1117,14 +1118,14 @@ ide_langserv_client_call_async (IdeLangservClient   *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!priv->rpc_client || JSONRPC_IS_CLIENT (priv->rpc_client));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_client_call_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_client_call_async);
 
   if (priv->rpc_client == NULL)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_CONNECTED,
-                             "No connection to language server");
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_CONNECTED,
+                               "No connection to language server");
   else
     jsonrpc_client_call_async (priv->rpc_client,
                                method,
@@ -1148,9 +1149,9 @@ ide_langserv_client_call_finish (IdeLangservClient  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  local_return_value = g_task_propagate_pointer (G_TASK (result), error);
+  local_return_value = ide_task_propagate_pointer (IDE_TASK (result), error);
   ret = local_return_value != NULL;
 
   if (return_value != NULL)
@@ -1165,7 +1166,7 @@ ide_langserv_client_send_notification_cb (GObject      *object,
                                           gpointer      user_data)
 {
   JsonrpcClient *client = (JsonrpcClient *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -1173,12 +1174,12 @@ ide_langserv_client_send_notification_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (JSONRPC_IS_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!jsonrpc_client_send_notification_finish (client, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -1207,7 +1208,7 @@ ide_langserv_client_send_notification_async (IdeLangservClient   *self,
                                              gpointer             user_data)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -1216,14 +1217,14 @@ ide_langserv_client_send_notification_async (IdeLangservClient   *self,
   g_return_if_fail (method != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, notificationback, user_data);
-  g_task_set_source_tag (task, ide_langserv_client_send_notification_async);
+  task = ide_task_new (self, cancellable, notificationback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_client_send_notification_async);
 
   if (priv->rpc_client == NULL)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_CONNECTED,
-                             "No connection to language server");
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_CONNECTED,
+                               "No connection to language server");
   else
     jsonrpc_client_send_notification_async (priv->rpc_client,
                                             method,
@@ -1246,9 +1247,9 @@ ide_langserv_client_send_notification_finish (IdeLangservClient  *self,
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -1261,7 +1262,7 @@ ide_langserv_client_get_diagnostics_async (IdeLangservClient   *self,
                                            gpointer             user_data)
 {
   IdeLangservClientPrivate *priv = ide_langserv_client_get_instance_private (self);
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeDiagnostics *diagnostics;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
@@ -1269,19 +1270,19 @@ ide_langserv_client_get_diagnostics_async (IdeLangservClient   *self,
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_client_get_diagnostics_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_client_get_diagnostics_async);
 
   diagnostics = g_hash_table_lookup (priv->diagnostics_by_file, file);
 
   if (diagnostics != NULL)
-    g_task_return_pointer (task,
-                           ide_diagnostics_ref (diagnostics),
-                           (GDestroyNotify)ide_diagnostics_unref);
+    ide_task_return_pointer (task,
+                             ide_diagnostics_ref (diagnostics),
+                             (GDestroyNotify)ide_diagnostics_unref);
   else
-    g_task_return_pointer (task,
-                           ide_diagnostics_new (NULL),
-                           (GDestroyNotify)ide_diagnostics_unref);
+    ide_task_return_pointer (task,
+                             ide_diagnostics_new (NULL),
+                             (GDestroyNotify)ide_diagnostics_unref);
 }
 
 /**
@@ -1308,9 +1309,9 @@ ide_langserv_client_get_diagnostics_finish (IdeLangservClient  *self,
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_LANGSERV_CLIENT (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  local_diagnostics = g_task_propagate_pointer (G_TASK (result), &local_error);
+  local_diagnostics = ide_task_propagate_pointer (IDE_TASK (result), &local_error);
   ret = local_diagnostics != NULL;
 
   if (local_diagnostics != NULL && diagnostics != NULL)

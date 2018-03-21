@@ -29,6 +29,7 @@
 #include "diagnostics/ide-source-range.h"
 #include "langserv/ide-langserv-formatter.h"
 #include "projects/ide-project-edit.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -241,7 +242,7 @@ ide_langserv_formatter_format_call_cb (GObject      *object,
                                        gpointer      user_data)
 {
   IdeLangservClient *client = (IdeLangservClient *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GVariant) reply = NULL;
   IdeLangservFormatter *self;
@@ -252,19 +253,19 @@ ide_langserv_formatter_format_call_cb (GObject      *object,
 
   if (!ide_langserv_client_call_finish (client, result, &reply, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&task));
+      ide_task_return_error (task, g_steal_pointer (&task));
       return;
     }
 
-  self = g_task_get_source_object (task);
-  buffer = g_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+  buffer = ide_task_get_task_data (task);
 
   g_assert (IDE_IS_LANGSERV_FORMATTER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   ide_langserv_formatter_apply_changes (self, buffer, reply);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -278,7 +279,7 @@ ide_langserv_formatter_format_async (IdeFormatter        *formatter,
   IdeLangservFormatter *self = (IdeLangservFormatter *)formatter;
   IdeLangservFormatterPrivate *priv = ide_langserv_formatter_get_instance_private (self);
   g_autoptr(GVariant) params = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *text = NULL;
   GtkTextIter begin;
@@ -290,9 +291,9 @@ ide_langserv_formatter_format_async (IdeFormatter        *formatter,
   g_assert (IDE_IS_LANGSERV_FORMATTER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_formatter_format_async);
-  g_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_formatter_format_async);
+  ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
 
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end);
   gtk_text_iter_order (&begin, &end);
@@ -330,9 +331,9 @@ ide_langserv_formatter_format_finish (IdeFormatter  *self,
                                       GError       **error)
 {
   g_assert (IDE_IS_FORMATTER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -348,7 +349,7 @@ ide_langserv_formatter_format_range_async (IdeFormatter        *formatter,
   IdeLangservFormatter *self = (IdeLangservFormatter *)formatter;
   IdeLangservFormatterPrivate *priv = ide_langserv_formatter_get_instance_private (self);
   g_autoptr(GVariant) params = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *text = NULL;
   gint64 version;
@@ -362,9 +363,9 @@ ide_langserv_formatter_format_range_async (IdeFormatter        *formatter,
   g_assert (IDE_IS_LANGSERV_FORMATTER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_langserv_formatter_format_async);
-  g_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_langserv_formatter_format_async);
+  ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
 
   if (gtk_text_iter_compare (begin, end) > 0)
     {
@@ -422,9 +423,9 @@ ide_langserv_formatter_format_range_finish (IdeFormatter  *self,
                                             GError       **error)
 {
   g_assert (IDE_IS_FORMATTER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void

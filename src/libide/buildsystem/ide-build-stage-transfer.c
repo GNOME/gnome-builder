@@ -28,6 +28,7 @@
 #include "buildsystem/ide-build-pipeline.h"
 #include "transfers/ide-transfer-manager.h"
 #include "transfers/ide-transfer.h"
+#include "threading/ide-task.h"
 
 struct _IdeBuildStageTransfer
 {
@@ -53,25 +54,25 @@ ide_build_stage_transfer_execute_cb (GObject      *object,
                                      gpointer      user_data)
 {
   IdeTransferManager *transfer_manager = (IdeTransferManager *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_TRANSFER_MANAGER (transfer_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_transfer_manager_execute_finish (transfer_manager, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
-ide_build_stage_transfer_notify_completed_cb (GTask                 *task,
+ide_build_stage_transfer_notify_completed_cb (IdeTask               *task,
                                               GParamSpec            *pspec,
                                               IdeBuildStageTransfer *transfer)
 {
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_BUILD_STAGE_TRANSFER (transfer));
 
   ide_build_stage_set_active (IDE_BUILD_STAGE (transfer), FALSE);
@@ -85,7 +86,7 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
                                         gpointer             user_data)
 {
   IdeBuildStageTransfer *self = (IdeBuildStageTransfer *)stage;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeTransferManager *transfer_manager;
 
   IDE_ENTRY;
@@ -94,9 +95,9 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_build_stage_transfer_execute_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_stage_transfer_execute_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   g_signal_connect (task,
                     "notify::completed",
@@ -107,7 +108,7 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
 
   if (ide_transfer_get_completed (self->transfer))
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -121,10 +122,10 @@ ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,
 
           if (!g_settings_get_boolean (settings, "allow-network-when-metered"))
             {
-              g_task_return_new_error (task,
-                                       IDE_TRANSFER_ERROR,
-                                       IDE_TRANSFER_ERROR_CONNECTION_IS_METERED,
-                                       _("Cannot execute transfer while on metered connection"));
+              ide_task_return_new_error (task,
+                                         IDE_TRANSFER_ERROR,
+                                         IDE_TRANSFER_ERROR_CONNECTION_IS_METERED,
+                                         _("Cannot execute transfer while on metered connection"));
               IDE_EXIT;
             }
         }
@@ -147,9 +148,9 @@ ide_build_stage_transfer_execute_finish (IdeBuildStage  *stage,
                                          GError        **error)
 {
   g_assert (IDE_IS_BUILD_STAGE_TRANSFER (stage));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void

@@ -23,6 +23,7 @@
 #include "search/ide-search-engine.h"
 #include "search/ide-search-provider.h"
 #include "search/ide-search-result.h"
+#include "threading/ide-task.h"
 
 #define DEFAULT_MAX_RESULTS 50
 
@@ -35,7 +36,7 @@ struct _IdeSearchEngine
 
 typedef struct
 {
-  GTask         *task;
+  IdeTask       *task;
   gchar         *query;
   GListStore    *store;
   guint          outstanding;
@@ -174,16 +175,16 @@ ide_search_engine_search_cb (GObject      *object,
                              gpointer      user_data)
 {
   IdeSearchProvider *provider = (IdeSearchProvider *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) ar = NULL;
   Request *r;
 
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  r = g_task_get_task_data (task);
+  r = ide_task_get_task_data (task);
   g_assert (r != NULL);
   g_assert (r->task == task);
   g_assert (r->outstanding > 0);
@@ -214,7 +215,7 @@ cleanup:
   r->outstanding--;
 
   if (r->outstanding == 0)
-    g_task_return_pointer (task, g_steal_pointer (&r->store), g_object_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&r->store), g_object_unref);
 }
 
 static void
@@ -230,7 +231,7 @@ ide_search_engine_search_foreach (PeasExtensionSet *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
   g_assert (r != NULL);
-  g_assert (G_IS_TASK (r->task));
+  g_assert (IDE_IS_TASK (r->task));
   g_assert (G_IS_LIST_STORE (r->store));
 
   r->outstanding++;
@@ -238,7 +239,7 @@ ide_search_engine_search_foreach (PeasExtensionSet *set,
   ide_search_provider_search_async (provider,
                                     r->query,
                                     r->max_results,
-                                    g_task_get_cancellable (r->task),
+                                    ide_task_get_cancellable (r->task),
                                     ide_search_engine_search_cb,
                                     g_object_ref (r->task));
 }
@@ -251,7 +252,7 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GListStore) store = NULL;
   Request *r;
 
@@ -261,9 +262,9 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
 
   max_results = max_results ? max_results : DEFAULT_MAX_RESULTS;
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_search_engine_search_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_search_engine_search_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   r = request_new ();
   r->query = g_strdup (query);
@@ -271,7 +272,7 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   r->task = task;
   r->store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
   r->outstanding = 0;
-  g_task_set_task_data (task, r, (GDestroyNotify)request_destroy);
+  ide_task_set_task_data (task, r, (GDestroyNotify)request_destroy);
 
   peas_extension_set_foreach (self->extensions,
                               ide_search_engine_search_foreach,
@@ -280,9 +281,9 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   self->active_count += r->outstanding;
 
   if (r->outstanding == 0)
-    g_task_return_pointer (task,
-                           g_object_ref (r->store),
-                           g_object_unref);
+    ide_task_return_pointer (task,
+                             g_object_ref (r->store),
+                             g_object_unref);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 }
@@ -305,7 +306,7 @@ ide_search_engine_search_finish (IdeSearchEngine  *self,
                                  GError          **error)
 {
   g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
