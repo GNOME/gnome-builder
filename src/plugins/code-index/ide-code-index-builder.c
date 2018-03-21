@@ -681,12 +681,14 @@ get_changes_worker (GTask        *task,
    */
   to_update = g_ptr_array_new_with_free_func (g_object_unref);
 
+  if (g_task_return_error_if_cancelled (task))
+    return;
+
   /*
    * Process directories to check for changes, while ensuring we have not
    * been asynchronously cancelled.
    */
-  while (!g_task_return_error_if_cancelled (task) &&
-         !g_queue_is_empty (&gcd->directories))
+  while (!g_queue_is_empty (&gcd->directories))
     {
       g_autofree gchar *relative = NULL;
       g_autoptr(GFile) dir = g_queue_pop_head (&gcd->directories);
@@ -715,6 +717,9 @@ get_changes_worker (GTask        *task,
         g_ptr_array_add (to_update, g_steal_pointer (&dir));
 
       g_queue_foreach (&files, (GFunc)file_info_free, NULL);
+
+      if (g_task_return_error_if_cancelled (task))
+        return;
     }
 
   /* In case we were cancelled */
