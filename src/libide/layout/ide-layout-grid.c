@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid"
 
+#include "config.h"
+
 #include <string.h>
 
 #include "ide-object.h"

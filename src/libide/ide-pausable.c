@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-pausable"
 
+#include "config.h"
+
 #include "ide-pausable.h"
 
 struct _IdePausable

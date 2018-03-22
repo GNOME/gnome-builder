@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buildsystem-plugin"
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 
 #include "buildconfig/ide-buildconfig-configuration-provider.h"

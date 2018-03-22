@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-formatter-options"
 
+#include "config.h"
+
 #include "formatting/ide-formatter-options.h"
 
 struct _IdeFormatterOptions

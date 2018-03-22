@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-simple-build-target"
 
+#include "config.h"
+
 #include "buildsystem/ide-build-target.h"
 #include "buildsystem/ide-simple-build-target.h"
 

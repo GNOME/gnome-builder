@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-test"
 
+#include "config.h"
+
 #include "ide-enums.h"
 
 #include "testing/ide-test.h"

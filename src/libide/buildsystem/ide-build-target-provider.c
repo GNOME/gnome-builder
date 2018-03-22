@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-target-provider"
 
+#include "config.h"
+
 #include "ide-context.h"
 #include "ide-debug.h"
 

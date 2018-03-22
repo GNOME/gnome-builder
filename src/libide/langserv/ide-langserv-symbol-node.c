@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-langserv-symbol-node"
 
+#include "config.h"
+
 #include "ide-debug.h"
 
 #include "diagnostics/ide-source-location.h"

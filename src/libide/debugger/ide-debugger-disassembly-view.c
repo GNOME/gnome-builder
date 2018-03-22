@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-disassembly-view"
 
+#include "config.h"
+
 #include <gtksourceview/gtksource.h>
 
 #include "debugger/ide-debugger-disassembly-view.h"

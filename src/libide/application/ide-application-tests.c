@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-application-tests"
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 

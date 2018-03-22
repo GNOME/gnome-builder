@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-shortcut-label"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "layout/ide-shortcut-label.h"

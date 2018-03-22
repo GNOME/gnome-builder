@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-device-provider"
 
+#include "config.h"
+
 #include "devices/ide-device-provider.h"
 
 typedef struct

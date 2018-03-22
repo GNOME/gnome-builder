@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-application-open"
 
+#include "config.h"
+
 #include "application/ide-application.h"
 #include "application/ide-application-private.h"
 #include "workbench/ide-workbench.h"

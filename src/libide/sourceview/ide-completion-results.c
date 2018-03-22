@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-completion-results"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <string.h>
 

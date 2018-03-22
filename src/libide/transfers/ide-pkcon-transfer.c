@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-pkcon-transfer"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"

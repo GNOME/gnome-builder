@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-language"
 
+#include "config.h"
+
 #include <string.h>
 #include <tmpl-glib.h>
 

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-stage-transfer"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "ide-context.h"

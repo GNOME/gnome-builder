@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-transfer-row"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "transfers/ide-transfer-row.h"

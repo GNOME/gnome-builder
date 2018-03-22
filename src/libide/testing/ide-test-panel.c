@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-test-panel"
 
+#include "config.h"
+
 #include "ide-context.h"
 #include "ide-debug.h"
 

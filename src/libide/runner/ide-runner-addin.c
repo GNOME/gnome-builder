@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-runner-addin"
 
+#include "config.h"
+
 #include "runner/ide-runner-addin.h"
 #include "threading/ide-task.h"
 

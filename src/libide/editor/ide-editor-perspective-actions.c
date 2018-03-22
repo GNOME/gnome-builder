@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-perspective-actions"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "buffers/ide-buffer-manager.h"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-pipeline-addin"
 
+#include "config.h"
+
 #include "ide-context.h"
 
 #include "buildsystem/ide-build-pipeline-addin.h"

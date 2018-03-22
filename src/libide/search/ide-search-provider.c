@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-search-provider"
 
+#include "config.h"
+
 #include "search/ide-search-provider.h"
 #include "threading/ide-task.h"
 

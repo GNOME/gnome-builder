@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buildconfig-configuration-provider"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <gio/gio.h>
 #include <glib/gi18n.h>

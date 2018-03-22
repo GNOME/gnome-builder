@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-dependency-updater"
 
+#include "config.h"
+
 #include "ide-dependency-updater.h"
 
 G_DEFINE_INTERFACE (IdeDependencyUpdater, ide_dependency_updater, IDE_TYPE_OBJECT)

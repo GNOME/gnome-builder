@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-utilities"
 
+#include "config.h"
+
 #include "editor/ide-editor-utilities.h"
 
 /**

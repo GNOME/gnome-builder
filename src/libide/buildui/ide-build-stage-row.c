@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-stage-row"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "buildui/ide-build-stage-row.h"

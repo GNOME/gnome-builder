@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-omni-bar"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <dazzle.h>
 

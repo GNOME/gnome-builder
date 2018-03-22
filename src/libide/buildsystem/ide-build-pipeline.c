@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-pipeline"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <dazzle.h>
 #include <libpeas/peas.h>

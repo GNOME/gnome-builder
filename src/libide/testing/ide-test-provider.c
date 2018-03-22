@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-test-provider"
 
+#include "config.h"
+
 #include "testing/ide-test-provider.h"
 #include "testing/ide-test-private.h"
 

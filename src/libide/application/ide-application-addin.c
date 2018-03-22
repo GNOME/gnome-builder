@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-application-addin"
 
+#include "config.h"
+
 #include "application/ide-application-addin.h"
 
 /**

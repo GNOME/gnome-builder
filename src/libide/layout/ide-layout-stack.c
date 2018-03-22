@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-stack"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>

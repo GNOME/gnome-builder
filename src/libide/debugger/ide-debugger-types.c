@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-types"
 
+#include "config.h"
+
 #include "debugger/ide-debugger-types.h"
 
 GType

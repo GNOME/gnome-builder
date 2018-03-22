@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-editor-addin"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "ide-context.h"

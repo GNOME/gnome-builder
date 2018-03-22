@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-file-settings"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 

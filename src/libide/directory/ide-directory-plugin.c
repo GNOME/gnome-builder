@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-directory-plugin"
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 
 #include "buildsystem/ide-build-system.h"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buffer-change-monitor"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "buffers/ide-buffer.h"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-langserv-symbol-resolver"
 
+#include "config.h"
+
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"

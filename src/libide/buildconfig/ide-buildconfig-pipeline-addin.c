@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buildconfig-pipeline-addin"
 
+#include "config.h"
+
 #include "ide-debug.h"
 
 #include "buildconfig/ide-buildconfig-configuration.h"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-cell-renderer-fancy"
 
+#include "config.h"
+
 #include "util/ide-cell-renderer-fancy.h"
 
 #define TITLE_SPACING 3

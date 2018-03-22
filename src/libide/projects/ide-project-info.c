@@ -22,6 +22,8 @@
 
 #define G_LOG_DOMAIN "ide-project-info"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>

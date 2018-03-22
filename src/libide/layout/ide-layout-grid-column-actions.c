@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid-column-actions"
 
+#include "config.h"
+
 #include "layout/ide-layout-private.h"
 
 static void

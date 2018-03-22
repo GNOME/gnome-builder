@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-plugin"
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 
 #include "editor/ide-editor-layout-stack-addin.h"

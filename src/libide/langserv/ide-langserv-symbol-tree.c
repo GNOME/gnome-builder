@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-langserv-symbol-tree"
 
+#include "config.h"
+
 #include "langserv/ide-langserv-symbol-node.h"
 #include "langserv/ide-langserv-symbol-node-private.h"
 #include "langserv/ide-langserv-symbol-tree.h"

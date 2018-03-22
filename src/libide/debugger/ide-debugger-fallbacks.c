@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-fallbacks"
 
+#include "config.h"
+
 #include "debugger/ide-debugger.h"
 #include "debugger/ide-debugger-private.h"
 

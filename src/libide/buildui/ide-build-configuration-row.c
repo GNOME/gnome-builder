@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-configuration-row"
 
+#include "config.h"
+
 #include "buildui/ide-build-configuration-row.h"
 
 struct _IdeBuildConfigurationRow

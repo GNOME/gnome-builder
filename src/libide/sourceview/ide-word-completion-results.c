@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-word-completion-results"
 
+#include "config.h"
+
 #include "sourceview/ide-word-completion-results.h"
 #include "sourceview/ide-word-completion-item.h"
 

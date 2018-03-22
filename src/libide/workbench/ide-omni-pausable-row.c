@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-omni-pausable-row"
 
+#include "config.h"
+
 #include "ide-pausable.h"
 
 #include "workbench/ide-omni-pausable-row.h"

@@ -19,6 +19,8 @@
 
 #define G_LOG_DOMAIN "ide-source-view-mode"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <string.h>
 

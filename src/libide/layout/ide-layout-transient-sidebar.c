@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-transient-sidebar"
 
+#include "config.h"
+
 #include "layout/ide-layout-stack.h"
 #include "layout/ide-layout-grid.h"
 #include "layout/ide-layout-transient-sidebar.h"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-line-reader"
 
+#include "config.h"
+
 #include <string.h>
 
 #include "util/ide-line-reader.h"

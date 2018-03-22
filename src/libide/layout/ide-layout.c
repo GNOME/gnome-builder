@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout"
 
+#include "config.h"
+
 #include "layout/ide-layout.h"
 #include "layout/ide-layout-pane.h"
 #include "layout/ide-layout-view.h"

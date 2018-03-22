@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-transfer-manager"
 
+#include "config.h"
+
 #include "ide-context.h"
 #include "ide-debug.h"
 

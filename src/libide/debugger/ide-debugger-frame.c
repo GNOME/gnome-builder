@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-frame"
 
+#include "config.h"
+
 #include "debugger/ide-debugger-frame.h"
 
 typedef struct

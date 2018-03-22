@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-workbench-addin"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <string.h>

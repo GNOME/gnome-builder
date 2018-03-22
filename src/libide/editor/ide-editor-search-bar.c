@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-search-bar"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 

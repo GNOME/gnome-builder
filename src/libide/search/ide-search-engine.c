@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-search-engine"
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 
 #include "search/ide-search-engine.h"

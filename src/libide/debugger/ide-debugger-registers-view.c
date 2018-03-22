@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-registers-view"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "debugger/ide-debugger-registers-view.h"

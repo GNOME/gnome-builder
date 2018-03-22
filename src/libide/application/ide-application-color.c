@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-application-color"
 
+#include "config.h"
+
 #include "application/ide-application.h"
 #include "application/ide-application-private.h"
 

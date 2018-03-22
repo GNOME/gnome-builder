@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-transfers-button"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "ide-debug.h"

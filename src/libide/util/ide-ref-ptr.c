@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-ref-ptr"
 
+#include "config.h"
+
 #include "dazzle.h"
 
 #include "util/ide-ref-ptr.h"

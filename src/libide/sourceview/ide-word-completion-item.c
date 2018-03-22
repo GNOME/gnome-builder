@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-word-completion-item"
 
+#include "config.h"
+
 #include "sourceview/ide-word-completion-item.h"
 
 typedef struct

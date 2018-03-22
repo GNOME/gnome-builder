@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-view-addin"
 
+#include "config.h"
+
 #include "editor/ide-editor-private.h"
 #include "editor/ide-editor-view-addin.h"
 

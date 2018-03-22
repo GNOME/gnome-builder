@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-unsaved-file"
 
+#include "config.h"
+
 #include "ide-debug.h"
 
 #include "application/ide-application.h"

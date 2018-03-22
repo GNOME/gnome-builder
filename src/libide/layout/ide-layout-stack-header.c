@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-stack-header"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "layout/ide-layout-private.h"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-langserv-rename-provider"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <jsonrpc-glib.h>
 

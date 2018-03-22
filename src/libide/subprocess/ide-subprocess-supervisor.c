@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-subproces-supervisor"
 
+#include "config.h"
+
 #include "ide-debug.h"
 
 #include "subprocess/ide-subprocess.h"

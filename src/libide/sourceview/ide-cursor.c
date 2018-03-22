@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-cursor"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "sourceview/ide-source-view.h"

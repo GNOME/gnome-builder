@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-source-range"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "diagnostics/ide-source-location.h"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-search-reducer"
 
+#include "config.h"
+
 #include "search/ide-search-reducer.h"
 #include "search/ide-search-result.h"
 

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-stage-mkdirs"
 
+#include "config.h"
+
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>

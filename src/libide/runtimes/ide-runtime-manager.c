@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-runtime-manager"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 

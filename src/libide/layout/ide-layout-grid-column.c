@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-layout-grid-column"
 
+#include "config.h"
+
 #include "layout/ide-layout-grid-column.h"
 #include "layout/ide-layout-private.h"
 #include "layout/ide-layout-view.h"

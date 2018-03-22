@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-search-result"
 
+#include "config.h"
+
 #include "search/ide-search-result.h"
 
 typedef struct

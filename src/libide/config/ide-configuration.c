@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-configuration"
 
+#include "config.h"
+
 #include <string.h>
 
 #include "ide-context.h"

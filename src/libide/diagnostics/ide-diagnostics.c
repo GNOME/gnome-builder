@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-diagnostics"
 
+#include "config.h"
+
 #include "dazzle.h"
 
 #include "diagnostics/ide-diagnostic.h"

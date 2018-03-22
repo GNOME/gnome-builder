@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-extension-util"
 
+#include "config.h"
+
 #include <glib-object.h>
 #include <gobject/gvaluecollector.h>
 #include <stdlib.h>

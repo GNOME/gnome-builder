@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-language-defaults"
 
+#include "config.h"
+
 #include <errno.h>
 #include <glib/gi18n.h>
 

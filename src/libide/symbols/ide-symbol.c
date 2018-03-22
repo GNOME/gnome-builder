@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-symbol"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "diagnostics/ide-source-location.h"

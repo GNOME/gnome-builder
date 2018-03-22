@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-test-manager"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <libpeas/peas.h>
 

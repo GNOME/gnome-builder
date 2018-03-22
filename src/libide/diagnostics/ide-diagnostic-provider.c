@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-diagnostic-provider"
 
+#include "config.h"
+
 #include "buffers/ide-buffer.h"
 #include "ide-context.h"
 #include "ide-debug.h"

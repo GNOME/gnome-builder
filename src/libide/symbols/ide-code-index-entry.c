@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-code-index-entry"
 
+#include "config.h"
+
 #include "symbols/ide-code-index-entry.h"
 
 typedef struct

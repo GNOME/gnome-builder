@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-vcs-file-info"
 
+#include "config.h"
+
 #include "ide-enums.h"
 
 #include "vcs/ide-vcs-file-info.h"

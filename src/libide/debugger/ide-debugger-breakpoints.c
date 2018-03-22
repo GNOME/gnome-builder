@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-breakpoints"
 
+#include "config.h"
+
 #include <stdlib.h>
 
 #include "ide-debug.h"

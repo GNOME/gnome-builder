@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-log"
 
+#include "config.h"
+
 #ifndef _GNU_SOURCE
 # define _GNU_SOURCE
 #endif

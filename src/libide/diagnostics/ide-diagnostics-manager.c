@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-diagnostics-manager"
 
+#include "config.h"
+
 #include <gtksourceview/gtksource.h>
 
 #include "ide-context.h"

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-search-bar-shortcuts"
 
+#include "config.h"
+
 #include "editor/ide-editor-search-bar.h"
 
 static void

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-log"
 
+#include "config.h"
+
 #include <string.h>
 
 #include "application/ide-application.h"

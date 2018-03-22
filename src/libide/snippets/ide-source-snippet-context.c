@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-source-snippets-context"
 
+#include "config.h"
+
 #include <errno.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>

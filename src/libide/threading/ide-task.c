@@ -19,6 +19,8 @@
 
 #define G_LOG_DOMAIN "ide-task"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "threading/ide-task.h"

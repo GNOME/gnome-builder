@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-transfer"
 
+#include "config.h"
+
 #include "ide-debug.h"
 
 #include "transfers/ide-transfer.h"

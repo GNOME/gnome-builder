@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-runner"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <errno.h>
 #include <glib/gi18n.h>

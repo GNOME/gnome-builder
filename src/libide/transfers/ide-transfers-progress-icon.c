@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-transfers-progress-icon"
 
+#include "config.h"
+
 #include "transfers/ide-transfers-progress-icon.h"
 
 struct _IdeTransfersProgressIcon

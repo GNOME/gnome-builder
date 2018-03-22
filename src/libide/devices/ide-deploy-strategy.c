@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-deploy-strategy"
 
+#include "config.h"
+
 #include "ide-debug.h"
 
 #include "buildsystem/ide-build-pipeline.h"

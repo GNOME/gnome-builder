@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-sidebar"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "editor/ide-editor-sidebar.h"

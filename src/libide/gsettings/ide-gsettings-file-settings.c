@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-gsettings-file-settings"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 

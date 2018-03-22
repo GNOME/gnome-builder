@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-symbol-resolver"
 
+#include "config.h"
+
 #include "ide-context.h"
 
 #include "buffers/ide-buffer.h"

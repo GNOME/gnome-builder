@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-source-view"
 
+#include "config.h"
+
 #include <cairo-gobject.h>
 #include <dazzle.h>
 #include <glib/gi18n.h>

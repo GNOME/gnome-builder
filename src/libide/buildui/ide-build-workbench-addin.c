@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-workbench-addin"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 

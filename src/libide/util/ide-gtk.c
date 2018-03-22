@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-gtk"
 
+#include "config.h"
+
 #include "application/ide-application.h"
 #include "util/ide-gtk.h"
 

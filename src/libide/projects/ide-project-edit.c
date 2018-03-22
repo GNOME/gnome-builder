@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-project-edit"
 
+#include "config.h"
+
 #include "projects/ide-project-edit.h"
 #include "projects/ide-project-edit-private.h"
 

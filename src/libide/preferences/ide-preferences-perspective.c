@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-preferences-perspective"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 

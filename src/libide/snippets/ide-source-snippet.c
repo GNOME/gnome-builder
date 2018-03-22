@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-source-snippet"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 

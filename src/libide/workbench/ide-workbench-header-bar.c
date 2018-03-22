@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-workbench-header-bar"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "application/ide-application.h"

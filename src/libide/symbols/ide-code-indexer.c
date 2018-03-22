@@ -19,6 +19,8 @@
 
 #define G_LOG_DOMAIN "ide-code-indexer"
 
+#include "config.h"
+
 #include "application/ide-application.h"
 #include "symbols/ide-code-indexer.h"
 

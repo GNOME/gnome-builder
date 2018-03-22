@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-langserv-diagnostic-provider"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <json-glib/json-glib.h>
 

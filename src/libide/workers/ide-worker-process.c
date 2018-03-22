@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-worker-process"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <libpeas/peas.h>
 

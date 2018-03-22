@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-preferences-addin"
 
+#include "config.h"
+
 #include "preferences/ide-preferences-addin.h"
 
 G_DEFINE_INTERFACE (IdePreferencesAddin, ide_preferences_addin, G_TYPE_OBJECT)

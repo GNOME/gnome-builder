@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-highlight-index"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <string.h>
 

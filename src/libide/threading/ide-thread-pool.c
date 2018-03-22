@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-thread-pool"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "ide-debug.h"

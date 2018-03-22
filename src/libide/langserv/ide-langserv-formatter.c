@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-langserv-formatter"
 
+#include "config.h"
+
 #include <jsonrpc-glib.h>
 
 #include "ide-context.h"

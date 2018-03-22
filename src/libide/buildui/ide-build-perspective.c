@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-perspective"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "buildui/ide-build-configuration-row.h"

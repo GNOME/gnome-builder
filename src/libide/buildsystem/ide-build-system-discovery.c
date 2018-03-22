@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-build-system-discovery"
 
+#include "config.h"
+
 #include "buildsystem/ide-build-system-discovery.h"
 
 G_DEFINE_INTERFACE (IdeBuildSystemDiscovery, ide_build_system_discovery, G_TYPE_OBJECT)

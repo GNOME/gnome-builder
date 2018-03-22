@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buffer-manager"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <gtksourceview/gtksource.h>
 #include <glib/gi18n.h>

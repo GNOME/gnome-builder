@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-device-info"
 
+#include "config.h"
+
 #include "ide-device-info.h"
 #include "ide-enums.h"
 

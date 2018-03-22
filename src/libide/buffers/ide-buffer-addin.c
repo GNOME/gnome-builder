@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buffer-addin"
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 
 #include "application/ide-application.h"

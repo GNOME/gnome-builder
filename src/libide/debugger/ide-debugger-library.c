@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-library"
 
+#include "config.h"
+
 #include "debugger/ide-debugger-library.h"
 
 typedef struct

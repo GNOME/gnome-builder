@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buildconfig-configuration"
 
+#include "config.h"
+
 #include "buildconfig/ide-buildconfig-configuration.h"
 
 struct _IdeBuildconfigConfiguration

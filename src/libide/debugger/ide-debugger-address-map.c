@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-address-map"
 
+#include "config.h"
+
 #include "debugger/ide-debugger-address-map.h"
 
 struct _IdeDebuggerAddressMap

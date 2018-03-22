@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-completion-item"
 
+#include "config.h"
+
 #include <string.h>
 
 #include "sourceview/ide-completion-item.h"

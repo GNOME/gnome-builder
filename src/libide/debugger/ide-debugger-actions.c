@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-debugger-actions"
 
+#include "config.h"
+
 #include "debugger/ide-debugger-private.h"
 
 typedef struct _IdeDebuggerActionEntry IdeDebuggerActionEntry;

@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-breakout-subprocess"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <errno.h>
 #include <fcntl.h>

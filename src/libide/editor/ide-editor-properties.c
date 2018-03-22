@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-editor-properties"
 
+#include "config.h"
+
 #include <dazzle.h>
 
 #include "buffers/ide-buffer.h"

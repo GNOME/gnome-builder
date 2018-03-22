@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-formatter"
 
+#include "config.h"
+
 #include "buffers/ide-buffer.h"
 #include "formatting/ide-formatter.h"
 

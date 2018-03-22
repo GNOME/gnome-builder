@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-greeter-section"
 
+#include "config.h"
+
 #include "greeter/ide-greeter-section.h"
 
 G_DEFINE_INTERFACE (IdeGreeterSection, ide_greeter_section, GTK_TYPE_WIDGET)
