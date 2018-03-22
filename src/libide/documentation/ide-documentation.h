@@ -29,14 +29,11 @@ G_BEGIN_DECLS
 #define IDE_TYPE_DOCUMENTATION (ide_documentation_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeDocumentation,
-                      ide_documentation,
-                      IDE, DOCUMENTATION,
-                      IdeObject)
+G_DECLARE_FINAL_TYPE (IdeDocumentation, ide_documentation, IDE, DOCUMENTATION, IdeObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeDocumentationInfo    *ide_documentation_get_info    (IdeDocumentation        *self,
-                                                        const gchar             *input,
-                                                        IdeDocumentationContext  context);
+IdeDocumentationInfo *ide_documentation_get_info (IdeDocumentation        *self,
+                                                  const gchar             *input,
+                                                  IdeDocumentationContext  context);
 
 G_END_DECLS

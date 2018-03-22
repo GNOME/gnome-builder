@@ -16,8 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sourceview/ide-completion-provider.h"
+#define G_LOG_DOMAIN "ide-completion-provider"
+
+#include "config.h"
+
 #include "ide-context.h"
+
+#include "sourceview/ide-completion-provider.h"
 
 G_DEFINE_INTERFACE (IdeCompletionProvider, ide_completion_provider, GTK_SOURCE_TYPE_COMPLETION_PROVIDER)
 

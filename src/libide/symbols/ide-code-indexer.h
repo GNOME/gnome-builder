@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_INDEXER (ide_code_indexer_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeCodeIndexer, ide_code_indexer, IDE, CODE_INDEXER, IdeObject)
 
 struct _IdeCodeIndexerInterface

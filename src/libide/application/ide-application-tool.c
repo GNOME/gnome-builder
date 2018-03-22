@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-application-tool"
+
+#include "config.h"
+
 #include "application/ide-application-tool.h"
 
 G_DEFINE_INTERFACE (IdeApplicationTool, ide_application_tool, G_TYPE_OBJECT)

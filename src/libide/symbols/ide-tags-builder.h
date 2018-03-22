@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TAGS_BUILDER (ide_tags_builder_get_type ())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeTagsBuilder, ide_tags_builder, IDE, TAGS_BUILDER, GObject)
 
 struct _IdeTagsBuilderInterface

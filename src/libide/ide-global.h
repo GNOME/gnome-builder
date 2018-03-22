@@ -18,11 +18,13 @@
 
 #pragma once
 
-#include <glib.h>
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_get_program_name (void);
+IDE_AVAILABLE_IN_ALL
 void         ide_set_program_name (const gchar *program_name);
 
 G_END_DECLS

@@ -21,25 +21,35 @@
 #include <libpeas/peas.h>
 
 #include "ide-object.h"
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EXTENSION_ADAPTER (ide_extension_adapter_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeExtensionAdapter, ide_extension_adapter, IDE, EXTENSION_ADAPTER, IdeObject)
 
+IDE_AVAILABLE_IN_ALL
 IdeExtensionAdapter *ide_extension_adapter_new                (IdeContext          *context,
                                                                PeasEngine          *engine,
                                                                GType                interface_type,
                                                                const gchar         *key,
                                                                const gchar         *value);
+IDE_AVAILABLE_IN_ALL
 PeasEngine          *ide_extension_adapter_get_engine         (IdeExtensionAdapter *self);
+IDE_AVAILABLE_IN_ALL
 gpointer             ide_extension_adapter_get_extension      (IdeExtensionAdapter *self);
+IDE_AVAILABLE_IN_ALL
 GType                ide_extension_adapter_get_interface_type (IdeExtensionAdapter *self);
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_extension_adapter_get_key            (IdeExtensionAdapter *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_extension_adapter_set_key            (IdeExtensionAdapter *self,
                                                                const gchar         *key);
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_extension_adapter_get_value          (IdeExtensionAdapter *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_extension_adapter_set_value          (IdeExtensionAdapter *self,
                                                                const gchar         *value);
 

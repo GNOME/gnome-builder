@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-genesis-addin"
+
+#include "config.h"
+
 #include "genesis/ide-genesis-addin.h"
 
 G_DEFINE_INTERFACE (IdeGenesisAddin, ide_genesis_addin, G_TYPE_OBJECT)

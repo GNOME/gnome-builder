@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_MAP (ide_source_map_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSourceMap, ide_source_map, IDE, SOURCE_MAP, GtkSourceMap)
 
 G_END_DECLS

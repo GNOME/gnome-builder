@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-vcs-uri"
+
+#include "config.h"
+
 #include <dazzle.h>
 #include <stdlib.h>
 #include <string.h>

@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-tags-builder"
+
+#include "config.h"
+
 #include "symbols/ide-tags-builder.h"
 
 G_DEFINE_INTERFACE (IdeTagsBuilder, ide_tags_builder, G_TYPE_OBJECT)

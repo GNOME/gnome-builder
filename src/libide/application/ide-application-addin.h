@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_APPLICATION_ADDIN (ide_application_addin_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeApplicationAddin, ide_application_addin, IDE, APPLICATION_ADDIN, GObject)
 
 /**

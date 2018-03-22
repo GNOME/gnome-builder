@@ -24,7 +24,9 @@
 
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_3_28
 int          ide_vte_pty_create_slave (VtePty *pty);
+IDE_AVAILABLE_IN_3_30
 const gchar *ide_get_user_shell       (void);
 
 G_END_DECLS

@@ -16,7 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dazzle.h"
+#define G_LOG_DOMAIN "ide-fixit"
+
+#include "config.h"
+
+#include <dazzle.h>
 
 #include "diagnostics/ide-fixit.h"
 #include "diagnostics/ide-source-range.h"

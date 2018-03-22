@@ -1,18 +1,17 @@
 runner_headers = [
-  'ide-run-button.h',
   'ide-run-manager.h',
   'ide-runner.h',
   'ide-runner-addin.h',
 ]
 
 runner_sources = [
-  'ide-run-button.c',
   'ide-run-manager.c',
   'ide-runner.c',
   'ide-runner-addin.c',
 ]
 
 runner_private_sources = [
+  'ide-run-button.c',
   'ide-run-manager-private.h',
 ]
 

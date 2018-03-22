@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_UTILITIES (ide_editor_utilities_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeEditorUtilities, ide_editor_utilities, IDE, EDITOR_UTILITIES, IdeLayoutPane)
 
 /* Use GtkContainer api to add your DzlDockWidget */

@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_GREETER_SECTION (ide_greeter_section_get_type ())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_INTERFACE (IdeGreeterSection, ide_greeter_section, IDE, GREETER_SECTION, GtkWidget)
 
 struct _IdeGreeterSectionInterface

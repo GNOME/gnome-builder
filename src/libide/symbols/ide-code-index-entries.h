@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_INDEX_ENTRIES (ide_code_index_entries_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeCodeIndexEntries, ide_code_index_entries, IDE, CODE_INDEX_ENTRIES, GObject)
 
 struct _IdeCodeIndexEntriesInterface
@@ -37,7 +38,9 @@ struct _IdeCodeIndexEntriesInterface
   IdeCodeIndexEntry *(*get_next_entry) (IdeCodeIndexEntries *self);
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeCodeIndexEntry *ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self);
+IDE_AVAILABLE_IN_ALL
 GFile             *ide_code_index_entries_get_file       (IdeCodeIndexEntries *self);
 
 G_END_DECLS

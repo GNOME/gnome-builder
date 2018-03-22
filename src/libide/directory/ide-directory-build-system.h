@@ -18,12 +18,15 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "buildsystem/ide-build-system.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_DIRECTORY_BUILD_SYSTEM (ide_directory_build_system_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeDirectoryBuildSystem, ide_directory_build_system, IDE, DIRECTORY_BUILD_SYSTEM, IdeObject)
 
 G_END_DECLS

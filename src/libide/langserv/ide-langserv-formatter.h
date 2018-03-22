@@ -19,6 +19,7 @@
 #pragma once
 
 #include "ide-object.h"
+#include "ide-version-macros.h"
 
 #include "formatting/ide-formatter.h"
 #include "langserv/ide-langserv-client.h"
@@ -27,21 +28,21 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_FORMATTER (ide_langserv_formatter_get_type())
 
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeLangservFormatter, ide_langserv_formatter, IDE, LANGSERV_FORMATTER, IdeObject)
+
 struct _IdeLangservFormatter
 {
   IdeObject parent_class;
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
+  gpointer _reserved[4];
 };
 
-G_DECLARE_FINAL_TYPE (IdeLangservFormatter, ide_langserv_formatter, IDE, LANGSERV_FORMATTER, IdeObject)
-
+IDE_AVAILABLE_IN_ALL
 void                  ide_langserv_formatter_set_client (IdeLangservFormatter *self,
                                                          IdeLangservClient    *client);
+IDE_AVAILABLE_IN_ALL
 IdeLangservClient    *ide_langserv_formatter_get_client (IdeLangservFormatter *self);
 
 G_END_DECLS

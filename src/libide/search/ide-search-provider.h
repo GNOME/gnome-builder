@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_PROVIDER (ide_search_provider_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE, SEARCH_PROVIDER, IdeObject)
 
 struct _IdeSearchProviderInterface

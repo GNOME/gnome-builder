@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-template-base"
+
+#include "config.h"
+
 #include <glib/gstdio.h>
 #include <errno.h>
 #include <string.h>

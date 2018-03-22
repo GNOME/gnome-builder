@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_SYSTEM_DISCOVERY (ide_build_system_discovery_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeBuildSystemDiscovery, ide_build_system_discovery, IDE, BUILD_SYSTEM_DISCOVERY, GObject)
 
 struct _IdeBuildSystemDiscoveryInterface

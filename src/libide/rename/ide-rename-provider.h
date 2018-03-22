@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RENAME_PROVIDER (ide_rename_provider_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeRenameProvider, ide_rename_provider, IDE, RENAME_PROVIDER, IdeObject)
 
 struct _IdeRenameProviderInterface

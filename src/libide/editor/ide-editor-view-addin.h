@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_VIEW_ADDIN (ide_editor_view_addin_get_type ())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeEditorViewAddin, ide_editor_view_addin, IDE, EDITOR_VIEW_ADDIN, GObject)
 
 struct _IdeEditorViewAddinInterface

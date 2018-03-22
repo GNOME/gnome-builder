@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_TARGET_PROVIDER (ide_build_target_provider_get_type())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_INTERFACE (IdeBuildTargetProvider, ide_build_target_provider, IDE, BUILD_TARGET_PROVIDER, IdeObject)
 
 struct _IdeBuildTargetProviderInterface

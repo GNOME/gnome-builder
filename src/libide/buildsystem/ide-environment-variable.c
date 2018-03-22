@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-environment-variable"
+
+#include "config.h"
+
 #include "buildsystem/ide-environment-variable.h"
 
 struct _IdeEnvironmentVariable

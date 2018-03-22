@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_PIPELINE_ADDIN (ide_build_pipeline_addin_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeBuildPipelineAddin, ide_build_pipeline_addin, IDE, BUILD_PIPELINE_ADDIN, IdeObject)
 
 struct _IdeBuildPipelineAddinInterface

@@ -20,9 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
-#include "ide-version-macros.h"
-
 #include "ide-types.h"
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
@@ -30,6 +29,13 @@ G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSourceView, ide_source_view, IDE, SOURCE_VIEW, GtkSourceView)
+
+typedef enum
+{
+  IDE_CURSOR_COLUMN,
+  IDE_CURSOR_SELECT,
+  IDE_CURSOR_MATCH
+} IdeCursorType;
 
 /**
  * IdeSourceViewModeType:

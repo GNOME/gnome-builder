@@ -18,12 +18,15 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "vcs/ide-vcs.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_DIRECTORY_VCS (ide_directory_vcs_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeDirectoryVcs, ide_directory_vcs, IDE, DIRECTORY_VCS, IdeObject)
 
 G_END_DECLS

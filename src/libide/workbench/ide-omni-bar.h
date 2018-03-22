@@ -21,13 +21,16 @@
 #include <gtk/gtk.h>
 
 #include "ide-types.h"
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_OMNI_BAR (ide_omni_bar_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_omni_bar_new (void);
 
 G_END_DECLS

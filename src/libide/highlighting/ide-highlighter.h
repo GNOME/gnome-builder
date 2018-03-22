@@ -20,10 +20,9 @@
 
 #include <gtk/gtk.h>
 
-#include "ide-version-macros.h"
-
 #include "ide-object.h"
 #include "ide-types.h"
+#include "ide-version-macros.h"
 
 #include "buffers/ide-buffer.h"
 #include "sourceview/ide-source-view.h"
@@ -32,6 +31,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_HIGHLIGHTER (ide_highlighter_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeHighlighter, ide_highlighter, IDE, HIGHLIGHTER, IdeObject)
 
 typedef enum

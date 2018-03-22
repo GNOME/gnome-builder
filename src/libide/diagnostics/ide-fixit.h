@@ -19,18 +19,26 @@
 #pragma once
 
 #include "ide-types.h"
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_FIXIT (ide_fixit_get_type())
 
+IDE_AVAILABLE_IN_ALL
 IdeFixit       *ide_fixit_new       (IdeSourceRange *source_range,
                                      const gchar    *replacement_text);
+IDE_AVAILABLE_IN_ALL
 GType           ide_fixit_get_type  (void);
+IDE_AVAILABLE_IN_ALL
 IdeFixit       *ide_fixit_ref       (IdeFixit       *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_fixit_unref     (IdeFixit       *self);
+IDE_AVAILABLE_IN_ALL
 void            ide_fixit_apply     (IdeFixit       *self);
+IDE_AVAILABLE_IN_ALL
 const gchar    *ide_fixit_get_text  (IdeFixit       *self);
+IDE_AVAILABLE_IN_ALL
 IdeSourceRange *ide_fixit_get_range (IdeFixit       *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeFixit, ide_fixit_unref)

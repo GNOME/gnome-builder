@@ -26,12 +26,14 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LOCAL_DEVICE (ide_local_device_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLocalDevice, ide_local_device, IDE, LOCAL_DEVICE, IdeDevice)
 
 struct _IdeLocalDeviceClass
 {
   IdeDeviceClass parent;
 
+  /*< private >*/
   gpointer _reserved[8];
 };
 

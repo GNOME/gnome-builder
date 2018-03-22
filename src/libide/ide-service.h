@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SERVICE (ide_service_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeService, ide_service, IDE, SERVICE, IdeObject)
 
 /**

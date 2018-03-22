@@ -3,16 +3,16 @@
  * Copyright 2013 Ignacio Casal Quinteiro
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by 
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at your
  * option) any later version.
  *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public 
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  * License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License 
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
@@ -20,9 +20,11 @@
  *
  */
 
-#include "ide-tagged-entry.h"
+#include "config.h"
 
 #include <math.h>
+
+#include "ide-tagged-entry.h"
 
 #define BUTTON_INTERNAL_SPACING 6
 
@@ -153,7 +155,7 @@ ide_tagged_entry_tag_panel_get_height (IdeTaggedEntryTag *tag,
 
 static void
 ide_tagged_entry_tag_panel_get_position (IdeTaggedEntry *self,
-                                        gint *x_out, 
+                                        gint *x_out,
                                         gint *y_out)
 {
   GtkWidget *widget = GTK_WIDGET (self);
@@ -416,7 +418,7 @@ ide_tagged_entry_tag_event_is_button (IdeTaggedEntryTag *tag,
   gtk_style_context_restore (context);
 
   /* see if the event falls into the button allocation */
-  if ((event_x >= button_allocation.x && 
+  if ((event_x >= button_allocation.x &&
        event_x <= button_allocation.x + button_allocation.width) &&
       (event_y >= button_allocation.y &&
        event_y <= button_allocation.y + button_allocation.height))
@@ -477,10 +479,10 @@ ide_tagged_entry_tag_draw (IdeTaggedEntryTag *tag,
   gtk_style_context_set_state (context, state);
   gtk_render_background (context, cr,
                          background_allocation.x, background_allocation.y,
-                         background_allocation.width, background_allocation.height); 
+                         background_allocation.width, background_allocation.height);
   gtk_render_frame (context, cr,
                     background_allocation.x, background_allocation.y,
-                    background_allocation.width, background_allocation.height); 
+                    background_allocation.width, background_allocation.height);
 
   gtk_render_layout (context, cr,
                      layout_allocation.x, layout_allocation.y,

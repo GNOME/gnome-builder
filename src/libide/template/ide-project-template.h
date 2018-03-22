@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_TEMPLATE (ide_project_template_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeProjectTemplate, ide_project_template, IDE, PROJECT_TEMPLATE, GObject)
 
 struct _IdeProjectTemplateInterface

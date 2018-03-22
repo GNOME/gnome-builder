@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-doap-person"
+
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "doap/ide-doap-person.h"

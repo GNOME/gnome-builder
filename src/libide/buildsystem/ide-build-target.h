@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_TARGET (ide_build_target_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeBuildTarget, ide_build_target, IDE, BUILD_TARGET, IdeObject)
 
 struct _IdeBuildTargetInterface

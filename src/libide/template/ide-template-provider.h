@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TEMPLATE_PROVIDER (ide_template_provider_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeTemplateProvider, ide_template_provider, IDE, TEMPLATE_PROVIDER, GObject)
 
 struct _IdeTemplateProviderInterface

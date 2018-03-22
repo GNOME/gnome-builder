@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_CONFIG (ide_vcs_config_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeVcsConfig, ide_vcs_config, IDE, VCS_CONFIG, GObject)
 
 typedef enum

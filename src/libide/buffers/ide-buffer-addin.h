@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUFFER_ADDIN (ide_buffer_addin_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeBufferAddin, ide_buffer_addin, IDE, BUFFER_ADDIN, GObject)
 
 struct _IdeBufferAddinInterface

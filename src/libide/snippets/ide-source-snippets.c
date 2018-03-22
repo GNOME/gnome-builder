@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-source-snippets"
+
+#include "config.h"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>

@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RUNTIME_PROVIDER (ide_runtime_provider_get_type ())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeRuntimeProvider, ide_runtime_provider, IDE, RUNTIME_PROVIDER, GObject)
 
 struct _IdeRuntimeProviderInterface

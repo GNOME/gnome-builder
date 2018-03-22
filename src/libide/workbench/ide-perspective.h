@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PERSPECTIVE (ide_perspective_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdePerspective, ide_perspective, IDE, PERSPECTIVE, GtkWidget)
 
 struct _IdePerspectiveInterface

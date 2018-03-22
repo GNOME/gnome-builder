@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_INDENTER (ide_indenter_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeIndenter, ide_indenter, IDE, INDENTER, IdeObject)
 
 struct _IdeIndenterInterface

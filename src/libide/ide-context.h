@@ -22,9 +22,8 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-#include "ide-version-macros.h"
-
 #include "ide-types.h"
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 

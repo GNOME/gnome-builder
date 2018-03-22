@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
 
@@ -25,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SUBPROCESS_SUPERVISOR (ide_subprocess_supervisor_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSubprocessSupervisor, ide_subprocess_supervisor, IDE, SUBPROCESS_SUPERVISOR, GObject)
 
 struct _IdeSubprocessSupervisorClass
@@ -45,13 +48,20 @@ struct _IdeSubprocessSupervisorClass
   gpointer _reserved8;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessSupervisor *ide_subprocess_supervisor_new            (void);
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher   *ide_subprocess_supervisor_get_launcher   (IdeSubprocessSupervisor *self);
+IDE_AVAILABLE_IN_ALL
 void                     ide_subprocess_supervisor_set_launcher   (IdeSubprocessSupervisor *self,
                                                                    IdeSubprocessLauncher   *launcher);
+IDE_AVAILABLE_IN_ALL
 void                     ide_subprocess_supervisor_start          (IdeSubprocessSupervisor *self);
+IDE_AVAILABLE_IN_ALL
 void                     ide_subprocess_supervisor_stop           (IdeSubprocessSupervisor *self);
+IDE_AVAILABLE_IN_ALL
 IdeSubprocess           *ide_subprocess_supervisor_get_subprocess (IdeSubprocessSupervisor *self);
+IDE_AVAILABLE_IN_ALL
 void                     ide_subprocess_supervisor_set_subprocess (IdeSubprocessSupervisor *self,
                                                                    IdeSubprocess           *subprocess);
 

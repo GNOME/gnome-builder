@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_PANE (ide_layout_pane_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutPane, ide_layout_pane, IDE, LAYOUT_PANE, DzlDockBinEdge)
 
 struct _IdeLayoutPaneClass
@@ -33,14 +34,7 @@ struct _IdeLayoutPaneClass
   DzlDockBinEdgeClass parent_class;
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
+  gpointer _reserved[8];
 };
 
 G_END_DECLS

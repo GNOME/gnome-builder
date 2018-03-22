@@ -18,15 +18,20 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "symbols/ide-symbol-node.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_SYMBOL_NODE (ide_langserv_symbol_node_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLangservSymbolNode, ide_langserv_symbol_node, IDE, LANGSERV_SYMBOL_NODE, IdeSymbolNode)
 
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_langserv_symbol_node_get_parent_name (IdeLangservSymbolNode *self);
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_langserv_symbol_node_is_parent_of    (IdeLangservSymbolNode *self,
                                                        IdeLangservSymbolNode *other);
 

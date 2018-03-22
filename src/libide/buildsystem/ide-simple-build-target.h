@@ -18,12 +18,14 @@
 
 #pragma once
 
-#include <ide.h>
+#include "ide-object.h"
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SIMPLE_BUILD_TARGET (ide_simple_build_target_get_type())
 
+IDE_AVAILABLE_IN_3_30
 G_DECLARE_DERIVABLE_TYPE (IdeSimpleBuildTarget, ide_simple_build_target, IDE, SIMPLE_BUILD_TARGET, IdeObject)
 
 struct _IdeSimpleBuildTargetClass
@@ -34,17 +36,24 @@ struct _IdeSimpleBuildTargetClass
   gpointer _reserved[8];
 };
 
+IDE_AVAILABLE_IN_3_30
 IdeSimpleBuildTarget *ide_simple_build_target_new                   (IdeContext           *context);
+IDE_AVAILABLE_IN_3_30
 void                  ide_simple_build_target_set_install_directory (IdeSimpleBuildTarget *self,
                                                                      GFile                *install_directory);
+IDE_AVAILABLE_IN_3_30
 void                  ide_simple_build_target_set_name              (IdeSimpleBuildTarget *self,
                                                                      const gchar          *name);
+IDE_AVAILABLE_IN_3_30
 void                  ide_simple_build_target_set_priority          (IdeSimpleBuildTarget *self,
                                                                      gint                  priority);
+IDE_AVAILABLE_IN_3_30
 void                  ide_simple_build_target_set_argv              (IdeSimpleBuildTarget *self,
                                                                      const gchar * const  *argv);
+IDE_AVAILABLE_IN_3_30
 void                  ide_simple_build_target_set_cwd               (IdeSimpleBuildTarget *self,
                                                                      const gchar          *cwd);
+IDE_AVAILABLE_IN_3_30
 void                  ide_simple_build_target_set_language          (IdeSimpleBuildTarget *self,
                                                                      const gchar          *language);
 

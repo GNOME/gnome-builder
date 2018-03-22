@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_PREFERENCES_PERSPECTIVE     (ide_preferences_perspective_get_type())
 #define IDE_PREFERENCES_PERSPECTIVE_PRIORITY 1000000
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePreferencesPerspective, ide_preferences_perspective, IDE, PREFERENCES_PERSPECTIVE, DzlPreferencesView)
 
 G_END_DECLS

@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_SYSTEM (ide_build_system_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeBuildSystem, ide_build_system, IDE, BUILD_SYSTEM, IdeObject)
 
 struct _IdeBuildSystemInterface

@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_WINDOW (ide_preferences_window_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, IDE, PREFERENCES_WINDOW, GtkWindow)
 
 G_END_DECLS

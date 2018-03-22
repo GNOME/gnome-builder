@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKBENCH_ADDIN (ide_workbench_addin_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeWorkbenchAddin, ide_workbench_addin, IDE, WORKBENCH_ADDIN, GObject)
 
 struct _IdeWorkbenchAddinInterface

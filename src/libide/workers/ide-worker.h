@@ -20,10 +20,13 @@
 
 #include <gio/gio.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKER (ide_worker_get_type ())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeWorker, ide_worker, IDE, WORKER, GObject)
 
 struct _IdeWorkerInterface
@@ -37,9 +40,11 @@ struct _IdeWorkerInterface
                                    GDBusConnection  *connection);
 };
 
+IDE_AVAILABLE_IN_ALL
 GDBusProxy *ide_worker_create_proxy     (IdeWorker        *self,
                                          GDBusConnection  *connection,
                                          GError          **error);
+IDE_AVAILABLE_IN_ALL
 void        ide_worker_register_service (IdeWorker        *self,
                                          GDBusConnection  *connection);
 

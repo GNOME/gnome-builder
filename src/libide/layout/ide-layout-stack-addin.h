@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_STACK_ADDIN (ide_layout_stack_addin_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeLayoutStackAddin, ide_layout_stack_addin, IDE, LAYOUT_STACK_ADDIN, GObject)
 
 struct _IdeLayoutStackAddinInterface

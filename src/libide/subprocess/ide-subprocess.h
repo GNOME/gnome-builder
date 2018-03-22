@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SUBPROCESS (ide_subprocess_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeSubprocess, ide_subprocess, IDE, SUBPROCESS, GObject)
 
 struct _IdeSubprocessInterface

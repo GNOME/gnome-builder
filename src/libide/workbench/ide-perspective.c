@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-perspective"
+
+#include "config.h"
+
 #include "workbench/ide-perspective.h"
 
 G_DEFINE_INTERFACE (IdePerspective, ide_perspective, G_TYPE_OBJECT)

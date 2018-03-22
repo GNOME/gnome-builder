@@ -20,12 +20,15 @@
 
 #include <glib-object.h>
 
+#include "ide-version-macros.h"
+
 #include "symbols/ide-symbol-node.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL_TREE (ide_symbol_tree_get_type ())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeSymbolTree, ide_symbol_tree, IDE, SYMBOL_TREE, GObject)
 
 struct _IdeSymbolTreeInterface
@@ -39,8 +42,10 @@ struct _IdeSymbolTreeInterface
                                     guint          nth);
 };
 
+IDE_AVAILABLE_IN_ALL
 guint          ide_symbol_tree_get_n_children (IdeSymbolTree *self,
                                                IdeSymbolNode *node);
+IDE_AVAILABLE_IN_ALL
 IdeSymbolNode *ide_symbol_tree_get_nth_child  (IdeSymbolTree *self,
                                                IdeSymbolNode *node,
                                                guint          nth);

@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RUNNER_ADDIN (ide_runner_addin_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeRunnerAddin, ide_runner_addin, IDE, RUNNER_ADDIN, GObject)
 
 struct _IdeRunnerAddinInterface

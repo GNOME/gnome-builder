@@ -48,24 +48,24 @@ IDE_AVAILABLE_IN_ALL
 gboolean         ide_file_settings_get_settled (IdeFileSettings *self);
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _3, _4, _5, _6) \
-  ret_type ide_file_settings_get_##name (IdeFileSettings *self);
+  _IDE_EXTERN ret_type ide_file_settings_get_##name (IdeFileSettings *self);
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _3, _4, _5, _6) \
-  void ide_file_settings_set_##name (IdeFileSettings *self, \
-                                     ret_type         name);
+  _IDE_EXTERN void ide_file_settings_set_##name (IdeFileSettings *self, \
+                                                 ret_type         name);
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, _3, _4, _5, _6, _7) \
-  gboolean ide_file_settings_get_##name##_set (IdeFileSettings *self);
+  _IDE_EXTERN gboolean ide_file_settings_get_##name##_set (IdeFileSettings *self);
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, _3, _4, _5, _6, _7) \
-  void ide_file_settings_set_##name##_set (IdeFileSettings *self, \
-                                           gboolean         name##_set);
+  _IDE_EXTERN void ide_file_settings_set_##name##_set (IdeFileSettings *self, \
+                                                       gboolean         name##_set);
 # include "ide-file-settings.defs"
 #undef IDE_FILE_SETTINGS_PROPERTY
 

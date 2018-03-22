@@ -20,14 +20,20 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFERS_PROGRESS_ICON (ide_transfers_progress_icon_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTransfersProgressIcon, ide_transfers_progress_icon, IDE, TRANSFERS_PROGRESS_ICON, GtkDrawingArea)
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_transfers_progress_icon_new          (void);
+IDE_AVAILABLE_IN_ALL
 gdouble    ide_transfers_progress_icon_get_progress (IdeTransfersProgressIcon *self);
+IDE_AVAILABLE_IN_ALL
 void       ide_transfers_progress_icon_set_progress (IdeTransfersProgressIcon *self,
                                                      gdouble                   progress);
 

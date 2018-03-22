@@ -19,6 +19,7 @@
 #pragma once
 
 #include "ide-object.h"
+#include "ide-version-macros.h"
 
 #include "highlighting/ide-highlighter.h"
 #include "langserv/ide-langserv-client.h"
@@ -27,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_HIGHLIGHTER (ide_langserv_highlighter_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLangservHighlighter, ide_langserv_highlighter, IDE, LANGSERV_HIGHLIGHTER, IdeObject)
 
 struct _IdeLangservHighlighterClass
@@ -40,7 +42,9 @@ struct _IdeLangservHighlighterClass
   gpointer _reserved4;
 };
 
+IDE_AVAILABLE_IN_ALL
 IdeLangservClient *ide_langserv_highlighter_get_client (IdeLangservHighlighter *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_langserv_highlighter_set_client (IdeLangservHighlighter *self,
                                                         IdeLangservClient      *client);
 

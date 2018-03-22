@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-symbol-tree"
+
+#include "config.h"
+
 #include "symbols/ide-symbol-tree.h"
 
 G_DEFINE_INTERFACE (IdeSymbolTree, ide_symbol_tree, G_TYPE_OBJECT)

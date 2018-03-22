@@ -20,10 +20,13 @@
 
 #include "symbols/ide-symbol-tree.h"
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_SYMBOL_TREE (ide_langserv_symbol_tree_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLangservSymbolTree, ide_langserv_symbol_tree, IDE, LANGSERV_SYMBOL_TREE, GObject)
 
 G_END_DECLS

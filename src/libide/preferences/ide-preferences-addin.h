@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_ADDIN (ide_preferences_addin_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdePreferencesAddin, ide_preferences_addin, IDE, PREFERENCES_ADDIN, GObject)
 
 struct _IdePreferencesAddinInterface

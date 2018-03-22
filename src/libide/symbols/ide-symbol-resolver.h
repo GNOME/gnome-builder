@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL_RESOLVER (ide_symbol_resolver_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE, SYMBOL_RESOLVER, IdeObject)
 
 struct _IdeSymbolResolverInterface

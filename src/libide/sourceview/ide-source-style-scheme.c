@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-source-style-scheme"
+
+#include "config.h"
+
 #include <string.h>
 
 #include "sourceview/ide-source-style-scheme.h"

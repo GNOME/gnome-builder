@@ -20,9 +20,8 @@
 
 #include <gtksourceview/gtksource.h>
 
-#include "ide-version-macros.h"
-
 #include "ide-types.h"
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 

@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS (ide_vcs_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeVcs, ide_vcs, IDE, VCS, IdeObject)
 
 struct _IdeVcsInterface

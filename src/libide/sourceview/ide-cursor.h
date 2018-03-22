@@ -18,20 +18,13 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include "ide-source-view.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_CURSOR (ide_cursor_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeCursor, ide_cursor, IDE, CURSOR, GObject)
-
-typedef enum
-{
-  IDE_CURSOR_COLUMN,
-  IDE_CURSOR_SELECT,
-  IDE_CURSOR_MATCH
-} IdeCursorType;
 
 void         ide_cursor_add_cursor            (IdeCursor *self,
                                                guint      type);

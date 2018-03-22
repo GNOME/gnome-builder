@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_GENESIS_ADDIN (ide_genesis_addin_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeGenesisAddin, ide_genesis_addin, IDE, GENESIS_ADDIN, GObject)
 
 struct _IdeGenesisAddinInterface

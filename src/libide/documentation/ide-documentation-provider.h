@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DOCUMENTATION_PROVIDER             (ide_documentation_provider_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeDocumentationProvider, ide_documentation_provider, IDE, DOCUMENTATION_PROVIDER, IdeObject)
 
 struct _IdeDocumentationProviderInterface

@@ -20,12 +20,16 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFERS_BUTTON (ide_transfers_button_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTransfersButton, ide_transfers_button, IDE, TRANSFERS_BUTTON, DzlProgressMenuButton)
 
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_transfers_button_new (void);
 
 G_END_DECLS
