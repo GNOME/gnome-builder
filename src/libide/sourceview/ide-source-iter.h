@@ -24,61 +24,62 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
 
 /* Semi-public functions. */
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_forward_visible_word_end		(GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_forward_visible_word_ends		(GtkTextIter *iter,
 									 gint         count);
 
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_backward_visible_word_start		(GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_backward_visible_word_starts		(GtkTextIter *iter,
 									 gint         count);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 void		_ide_source_iter_extend_selection_word			(const GtkTextIter *location,
 									 GtkTextIter       *start,
 									 GtkTextIter       *end);
 
-/* Internal functions, in the header for unit tests. */
-
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 void		_ide_source_iter_forward_full_word_end			(GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 void		_ide_source_iter_backward_full_word_start		(GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_starts_full_word			(const GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_ends_full_word				(const GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 void		_ide_source_iter_forward_extra_natural_word_end		(GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 void		_ide_source_iter_backward_extra_natural_word_start	(GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_starts_extra_natural_word		(const GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_ends_extra_natural_word		(const GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_starts_word				(const GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_ends_word				(const GtkTextIter *iter);
 
-G_GNUC_INTERNAL
+IDE_AVAILABLE_IN_ALL
 gboolean	_ide_source_iter_inside_word				(const GtkTextIter *iter);
 
 G_END_DECLS

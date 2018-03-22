@@ -4,9 +4,11 @@ sourceview_headers = [
   'ide-completion-results.h',
   'ide-indenter.h',
   'ide-language.h',
+  'ide-source-iter.h',
   'ide-source-map.h',
   'ide-source-style-scheme.h',
   'ide-source-view.h',
+  'ide-text-iter.h',
 ]
 
 sourceview_sources = [
@@ -15,9 +17,11 @@ sourceview_sources = [
   'ide-completion-results.c',
   'ide-indenter.c',
   'ide-language.c',
+  'ide-source-iter.c',
   'ide-source-map.c',
   'ide-source-style-scheme.c',
   'ide-source-view.c',
+  'ide-text-iter.c',
 ]
 
 sourceview_private_sources = [
@@ -25,12 +29,10 @@ sourceview_private_sources = [
   'ide-cursor.c',
   'ide-omni-gutter-renderer.c',
   'ide-line-change-gutter-renderer.c',
-  'ide-source-iter.c',
   'ide-source-view-capture.c',
   'ide-source-view-mode.c',
   'ide-source-view-movements.c',
   'ide-source-view-shortcuts.c',
-  'ide-text-iter.c',
   'ide-text-util.c',
   'ide-word-completion-provider.c',
   'ide-word-completion-results.c',

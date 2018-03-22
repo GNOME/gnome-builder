@@ -172,7 +172,7 @@ ide_editor_view_buffer_modified_changed (IdeEditorView *self,
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if (!_ide_buffer_get_loading (buffer))
+  if (!ide_buffer_get_loading (buffer))
     modified = gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer));
 
   ide_layout_view_set_modified (IDE_LAYOUT_VIEW (self), modified);

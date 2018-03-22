@@ -25,6 +25,7 @@
 
 #include "threading/ide-task.h"
 #include "threading/ide-thread-pool.h"
+#include "threading/ide-thread-private.h"
 
 /**
  * SECTION:ide-task
@@ -642,6 +643,12 @@ ide_task_class_init (IdeTaskClass *klass)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /* This can be called multiple times, so we use this to allow
+   * unit tests to work without having to expose the function as
+   * public API.
+   */
+  _ide_thread_pool_init (FALSE);
 }
 
 static void

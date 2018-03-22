@@ -150,6 +150,7 @@ G_BEGIN_DECLS
 #include "search/ide-tagged-entry.h"
 #include "snippets/ide-source-snippet-chunk.h"
 #include "snippets/ide-source-snippet-context.h"
+#include "snippets/ide-source-snippet-parser.h"
 #include "snippets/ide-source-snippet.h"
 #include "snippets/ide-source-snippets-manager.h"
 #include "snippets/ide-source-snippets.h"

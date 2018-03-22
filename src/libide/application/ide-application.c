@@ -699,12 +699,17 @@ ide_application_init (IdeApplication *self)
  * Since: 3.22
  */
 IdeApplication *
-ide_application_new (void)
+ide_application_new (IdeApplicationMode mode)
 {
-  return g_object_new (IDE_TYPE_APPLICATION,
-                       "application-id", "org.gnome.Builder",
-                       "flags", G_APPLICATION_HANDLES_OPEN,
-                       NULL);
+  IdeApplication *app;
+
+  app = g_object_new (IDE_TYPE_APPLICATION,
+                      "application-id", "org.gnome.Builder",
+                      "flags", G_APPLICATION_HANDLES_OPEN,
+                      NULL);
+  _ide_application_set_mode (app, mode);
+
+  return app;
 }
 
 /**

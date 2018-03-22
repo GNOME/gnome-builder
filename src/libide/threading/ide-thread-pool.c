@@ -198,21 +198,28 @@ ide_thread_pool_worker (gpointer data,
 void
 _ide_thread_pool_init (gboolean is_worker)
 {
-  for (IdeThreadPoolKind kind = IDE_THREAD_POOL_DEFAULT;
-       kind < IDE_THREAD_POOL_LAST;
-       kind++)
+  static gsize initialized;
+
+  if (g_once_init_enter (&initialized))
     {
-      IdeThreadPool *p = &thread_pools[kind];
-      g_autoptr(GError) error = NULL;
+      for (IdeThreadPoolKind kind = IDE_THREAD_POOL_DEFAULT;
+           kind < IDE_THREAD_POOL_LAST;
+           kind++)
+        {
+          IdeThreadPool *p = &thread_pools[kind];
+          g_autoptr(GError) error = NULL;
 
-      p->pool = g_thread_pool_new (ide_thread_pool_worker,
-                                   NULL,
-                                   is_worker ? p->worker_max_threads : p->max_threads,
-                                   p->exclusive,
-                                   &error);
+          p->pool = g_thread_pool_new (ide_thread_pool_worker,
+                                       NULL,
+                                       is_worker ? p->worker_max_threads : p->max_threads,
+                                       p->exclusive,
+                                       &error);
 
-      if (error != NULL)
-        g_error ("Failed to initialize thread pool %u: %s",
-                 p->kind, error->message);
+          if (error != NULL)
+            g_error ("Failed to initialize thread pool %u: %s",
+                     p->kind, error->message);
+        }
+
+      g_once_init_leave (&initialized, TRUE);
     }
 }

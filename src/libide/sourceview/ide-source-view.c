@@ -1033,7 +1033,7 @@ ide_source_view__buffer_insert_text_cb (IdeSourceView *self,
   g_assert (text != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if (_ide_buffer_get_loading (IDE_BUFFER (buffer)))
+  if (ide_buffer_get_loading (IDE_BUFFER (buffer)))
     return;
 
   gtk_text_buffer_begin_user_action (buffer);
@@ -1062,7 +1062,7 @@ ide_source_view__buffer_insert_text_after_cb (IdeSourceView *self,
   g_assert (text != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if (_ide_buffer_get_loading (IDE_BUFFER (buffer)))
+  if (ide_buffer_get_loading (IDE_BUFFER (buffer)))
     return;
 
   if (NULL != (snippet = g_queue_peek_head (priv->snippets)))
@@ -1417,7 +1417,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
 
   ide_buffer_hold (buffer);
 
-  if (_ide_buffer_get_loading (buffer))
+  if (ide_buffer_get_loading (buffer))
     {
       GtkSourceCompletion *completion;
 
@@ -7302,7 +7302,7 @@ ide_source_view_jump (IdeSourceView     *self,
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
   if (priv->buffer != NULL &&
-      !_ide_buffer_get_loading (priv->buffer))
+      !ide_buffer_get_loading (priv->buffer))
     {
       GtkTextIter dummy_from;
       GtkTextIter dummy_to;

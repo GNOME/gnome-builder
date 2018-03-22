@@ -48,7 +48,7 @@ GThread            *ide_application_get_main_thread        (void);
 IDE_AVAILABLE_IN_ALL
 IdeApplicationMode  ide_application_get_mode               (IdeApplication       *self);
 IDE_AVAILABLE_IN_ALL
-IdeApplication     *ide_application_new                    (void);
+IdeApplication     *ide_application_new                    (IdeApplicationMode    mode);
 IDE_AVAILABLE_IN_ALL
 GDateTime          *ide_application_get_started_at         (IdeApplication       *self);
 IDE_AVAILABLE_IN_3_28

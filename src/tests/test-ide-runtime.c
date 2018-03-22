@@ -88,7 +88,7 @@ main (gint   argc,
   ide_log_init (TRUE, NULL);
   ide_log_set_verbosity (4);
 
-  app = ide_application_new ();
+  app = ide_application_new (IDE_APPLICATION_MODE_TESTS);
   ide_application_add_test (app, "/Ide/Runtime/basic", test_runtime, NULL, required_plugins);
   gnome_builder_plugins_init ();
 

@@ -93,6 +93,8 @@ IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_get_spell_checking            (IdeBuffer            *self);
 IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_get_highlight_diagnostics     (IdeBuffer            *self);
+IDE_AVAILABLE_IN_3_30
+gboolean                  ide_buffer_get_loading                   (IdeBuffer            *self);
 IDE_AVAILABLE_IN_ALL
 const gchar              *ide_buffer_get_style_scheme_name         (IdeBuffer            *self);
 IDE_AVAILABLE_IN_ALL

@@ -48,7 +48,7 @@ document_cursor_moved (IdeEditorLayoutStackControls *self,
   if (self->view == NULL)
     return;
 
-  if (_ide_buffer_get_loading (IDE_BUFFER (buffer)))
+  if (ide_buffer_get_loading (IDE_BUFFER (buffer)))
     return;
 
   source_view = ide_editor_view_get_view (self->view);

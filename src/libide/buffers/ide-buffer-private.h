@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 PeasExtensionSet *_ide_buffer_get_addins            (IdeBuffer        *self);
 void              _ide_buffer_set_changed_on_volume (IdeBuffer        *self,
                                                      gboolean          changed_on_volume);
-gboolean          _ide_buffer_get_loading           (IdeBuffer        *self);
 void              _ide_buffer_set_loading           (IdeBuffer        *self,
                                                      gboolean          loading);
 void              _ide_buffer_cancel_cursor_restore (IdeBuffer        *self);

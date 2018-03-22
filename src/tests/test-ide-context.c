@@ -113,7 +113,7 @@ main (gint   argc,
   ide_log_init (TRUE, NULL);
   ide_log_set_verbosity (4);
 
-  app = ide_application_new ();
+  app = ide_application_new (IDE_APPLICATION_MODE_TESTS);
 
 #define ADD_TEST_FUNC(name) \
   ide_application_add_test (app, "/Ide/Context/"#name, test_##name, NULL, required_plugins);

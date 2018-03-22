@@ -18,16 +18,15 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "files/ide-file-settings.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITORCONFIG_FILE_SETTINGS \
-  (ide_editorconfig_file_settings_get_type())
+#define IDE_TYPE_EDITORCONFIG_FILE_SETTINGS (ide_editorconfig_file_settings_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeEditorconfigFileSettings,
-                      ide_editorconfig_file_settings,
-                      IDE, EDITORCONFIG_FILE_SETTINGS,
-                      IdeFileSettings)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeEditorconfigFileSettings, ide_editorconfig_file_settings, IDE, EDITORCONFIG_FILE_SETTINGS, IdeFileSettings)
 
 G_END_DECLS

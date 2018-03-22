@@ -32,6 +32,8 @@
  * https://bugzilla.gnome.org/show_bug.cgi?id=111503
  */
 
+#include "config.h"
+
 /*
  * TODO: Once this is made public api, switch to using that instead of a copy.
  */

@@ -175,7 +175,7 @@ main (gint argc,
   ide_log_init (TRUE, NULL);
   ide_log_set_verbosity (4);
 
-  app = ide_application_new ();
+  app = ide_application_new (IDE_APPLICATION_MODE_TESTS);
   ide_application_add_test (app, "/Ide/FileSettings/basic", test_filesettings, NULL, required_plugins);
   ide_application_add_test (app, "/Ide/EditorconfigFileSettings/basic", test_editorconfig, NULL, required_plugins);
   gnome_builder_plugins_init ();

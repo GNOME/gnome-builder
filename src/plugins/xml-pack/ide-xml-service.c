@@ -31,8 +31,6 @@
 #include "ide-xml-service.h"
 #include "ide-xml-tree-builder.h"
 
-gboolean _ide_buffer_get_loading (IdeBuffer *self);
-
 #define DEFAULT_EVICTION_MSEC (60 * 1000)
 
 struct _IdeXmlService
@@ -331,7 +329,7 @@ ide_xml_service_get_analysis_async (IdeXmlService       *self,
     {
       TaskState *state;
 
-      if (!_ide_buffer_get_loading (buffer))
+      if (!ide_buffer_get_loading (buffer))
         {
           g_task_return_new_error (task,
                                    G_IO_ERROR,

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "ide-version-macros.h"
+
 #include "application/ide-application.h"
 
 G_BEGIN_DECLS
@@ -28,6 +30,7 @@ typedef void     (*IdeApplicationTest)           (GCancellable         *cancella
 typedef gboolean (*IdeApplicationTestCompletion) (GAsyncResult         *result,
                                                   GError              **error);
 
+IDE_AVAILABLE_IN_ALL
 void ide_application_add_test (IdeApplication               *self,
                                const gchar                  *test_name,
                                IdeApplicationTest            test_func,

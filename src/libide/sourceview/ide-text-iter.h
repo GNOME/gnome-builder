@@ -20,50 +20,71 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-version-macros.h"
+
 G_BEGIN_DECLS
+
+/* Semi-public API */
 
 typedef gboolean (* IdeTextIterCharPredicate)    (GtkTextIter              *iter,
                                                   gunichar                  ch,
                                                   gpointer                  user_data);
 
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_forward_find_char        (GtkTextIter              *iter,
                                                   IdeTextIterCharPredicate  pred,
                                                   gpointer                  user_data,
                                                   const GtkTextIter        *limit);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_backward_find_char       (GtkTextIter              *iter,
                                                   IdeTextIterCharPredicate  pred,
                                                   gpointer                  user_data,
                                                   const GtkTextIter        *limit);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_forward_word_start       (GtkTextIter              *iter,
                                                   gboolean                  newline_stop);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_forward_WORD_start       (GtkTextIter              *iter,
                                                   gboolean                  newline_stop);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_forward_word_end         (GtkTextIter              *iter,
                                                   gboolean                  newline_stop);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_forward_WORD_end         (GtkTextIter              *iter,
                                                   gboolean                  newline_stop);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_backward_paragraph_start (GtkTextIter              *iter);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_forward_paragraph_end    (GtkTextIter              *iter);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_backward_sentence_start  (GtkTextIter              *iter);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_forward_sentence_end     (GtkTextIter              *iter);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_backward_WORD_start      (GtkTextIter              *iter,
                                                   gboolean                  newline_stop);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_backward_word_start      (GtkTextIter              *iter,
                                                   gboolean                  newline_stop);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_backward_WORD_end        (GtkTextIter              *iter,
                                                   gboolean                  newline_stop);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_backward_word_end        (GtkTextIter              *iter,
                                                   gboolean                  newline_stop);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_in_string                (GtkTextIter              *iter,
                                                   const gchar              *str,
                                                   GtkTextIter              *str_start,
                                                   GtkTextIter              *str_end,
                                                   gboolean                  include_str_bounds);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_find_chars_backward      (GtkTextIter              *iter,
                                                   GtkTextIter              *limit,
                                                   GtkTextIter              *end,
                                                   const gchar              *str,
                                                   gboolean                  only_at_start);
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_text_iter_find_chars_forward       (GtkTextIter              *iter,
                                                   GtkTextIter              *limit,
                                                   GtkTextIter              *end,

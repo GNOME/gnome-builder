@@ -2453,7 +2453,7 @@ ide_buffer_set_style_scheme_name (IdeBuffer   *self,
 }
 
 gboolean
-_ide_buffer_get_loading (IdeBuffer *self)
+ide_buffer_get_loading (IdeBuffer *self)
 {
   IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
 

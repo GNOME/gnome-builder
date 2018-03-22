@@ -23,7 +23,6 @@
 #include <gtksourceview/gtksource.h>
 #include <stdlib.h>
 
-#include "application/ide-application-private.h"
 #include "plugins/gnome-builder-plugins.h"
 
 #include "bug-buddy.h"
@@ -162,8 +161,7 @@ main (int   argc,
   g_type_ensure (G_TYPE_ZLIB_DECOMPRESSOR);
 
   /* Setup the application instance */
-  app = ide_application_new ();
-  _ide_application_set_mode (app, early_mode);
+  app = ide_application_new (early_mode);
 
   /* Ensure that our static plugins init routine is called.
    * This is necessary to ensure that -Wl,--as-needed does not

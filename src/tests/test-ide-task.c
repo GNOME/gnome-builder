@@ -18,8 +18,6 @@
 
 #include <ide.h>
 
-#include "../libide/threading/ide-thread-private.h"
-
 static gboolean
 complete_int (gpointer data)
 {
@@ -676,8 +674,6 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  _ide_thread_pool_init (FALSE);
-
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/Ide/Task/typical", test_ide_task_typical);
