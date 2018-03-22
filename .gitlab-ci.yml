@@ -2,23 +2,17 @@ stages:
     - test
 
 flatpak:master:
-    # image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
+    image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
     stage: test
 
     variables:
         GIT_SUBMODULE_STRATEGY: normal
         FLATPAK_ARTIFACT: gnome-builder-git.flatpak
 
-    before_script:
+    script:
         # Create a neme for the .flatpak bundle that will be extracted
         # - export FLATPAK_ARTIFACT=gnome-builder-${COMMIT_REF_SHA}.flatpak
 
-        # Make sure the flatpak repos are there and up to date.
-        - flatpak remote-add --user gnome-nightly --if-not-exists https://sdk.gnome.org/gnome-nightly.flatpakrepo
-        - flatpak install -y --user gnome-nightly org.gnome.Sdk org.gnome.Platform
-        - flatpak update -y --user
-
-    script:
         # Build the flatpak repo
         - flatpak-builder --user --stop-at=gnome-builder app build-aux/flatpak/org.gnome.Builder.json
         - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json meson --prefix=/app --libdir=/app/lib _build
