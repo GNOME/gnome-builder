@@ -349,27 +349,27 @@ gbp_meson_test_provider_run_cb (GObject      *object,
                                 gpointer      user_data)
 {
   IdeRunner *runner = (IdeRunner *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeTest *test;
 
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  test = g_task_get_task_data (task);
+  test = ide_task_get_task_data (task);
   g_assert (IDE_IS_TEST (test));
 
   if (!ide_runner_run_finish (runner, result, &error))
     {
       ide_test_set_status (test, IDE_TEST_STATUS_FAILED);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   ide_test_set_status (test, IDE_TEST_STATUS_SUCCESS);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -380,7 +380,7 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeRunner) runner = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
   const gchar * const *command;
@@ -394,11 +394,11 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
 
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_build_pipeline_build_finish (pipeline, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -408,15 +408,15 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
 
   if (runner == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to create runner for executing unit test");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to create runner for executing unit test");
       IDE_EXIT;
     }
 
-  test = g_task_get_task_data (task);
-  cancellable = g_task_get_cancellable (task);
+  test = ide_task_get_task_data (task);
+  cancellable = ide_task_get_cancellable (task);
 
   g_assert (IDE_IS_TEST (test));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -467,7 +467,7 @@ gbp_meson_test_provider_run_async (IdeTestProvider     *provider,
                                    gpointer             user_data)
 {
   GbpMesonTestProvider *self = (GbpMesonTestProvider *)provider;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -476,10 +476,10 @@ gbp_meson_test_provider_run_async (IdeTestProvider     *provider,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_meson_test_provider_run_async);
-  g_task_set_task_data (task, g_object_ref (test), g_object_unref);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_meson_test_provider_run_async);
+  ide_task_set_task_data (task, g_object_ref (test), g_object_unref);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   /* Currently, we don't have a way to determine what targets
    * need to be built before the test can run, so we must build
@@ -501,9 +501,9 @@ gbp_meson_test_provider_run_finish (IdeTestProvider  *provider,
                                     GError          **error)
 {
   g_assert (IDE_IS_TEST_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void

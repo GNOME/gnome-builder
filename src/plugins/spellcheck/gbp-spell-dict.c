@@ -86,21 +86,21 @@ task_state_free (gpointer data)
 }
 
 static void
-read_line_async (GTask *task)
+read_line_async (IdeTask *task)
 {
   TaskState *state;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
   g_assert (state != NULL);
   g_assert (state->hash_table != NULL);
   g_assert (GBP_IS_SPELL_DICT (state->self));
   g_assert (G_IS_DATA_INPUT_STREAM (state->data_stream));
 
   g_data_input_stream_read_line_async (state->data_stream,
-                                       g_task_get_priority (task),
-                                       g_task_get_cancellable (task),
+                                       ide_task_get_priority (task),
+                                       ide_task_get_cancellable (task),
                                        read_line_cb,
                                        task);
 }
@@ -110,16 +110,16 @@ read_line_cb (GObject      *object,
               GAsyncResult *result,
               gpointer      user_data)
 {
-  g_autoptr (GTask) task = (GTask *)user_data;
+  g_autoptr (IdeTask) task = (IdeTask *)user_data;
   g_autoptr(GError) error = NULL;
   TaskState *state;
   gchar *word;
   gsize len;
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
   if (NULL == (word = g_data_input_stream_read_line_finish_utf8 (state->data_stream,
                                                                  result,
                                                                  &len,
@@ -128,10 +128,10 @@ read_line_cb (GObject      *object,
       if (error != NULL)
         {
           /* TODO: check invalid utf8 string to skip it */
-          g_task_return_error (task, g_steal_pointer (&error));
+          ide_task_return_error (task, g_steal_pointer (&error));
         }
       else
-        g_task_return_pointer (task, state->hash_table, (GDestroyNotify)g_hash_table_unref);
+        ide_task_return_pointer (task, state->hash_table, (GDestroyNotify)g_hash_table_unref);
     }
   else
     {
@@ -147,21 +147,21 @@ open_file_cb (GObject      *object,
               GAsyncResult *result,
               gpointer      user_data)
 {
-  g_autoptr (GTask) task = (GTask *)user_data;
+  g_autoptr (IdeTask) task = (IdeTask *)user_data;
   g_autoptr(GError) error = NULL;
   GFileInputStream *stream;
   TaskState *state;
 
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
   if (NULL == (stream = g_file_read_finish (state->file, result, &error)))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -263,7 +263,7 @@ gbp_spell_dict_get_words_async (GbpSpellDict        *self,
                                 GCancellable        *cancellable,
                                 gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *dict_filename = NULL;
   TaskState *state;
@@ -275,9 +275,9 @@ gbp_spell_dict_get_words_async (GbpSpellDict        *self,
 
   state = g_slice_new0 (TaskState);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_spell_dict_get_words_async);
-  g_task_set_task_data (task, state, (GDestroyNotify)task_state_free);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_spell_dict_get_words_async);
+  ide_task_set_task_data (task, state, (GDestroyNotify)task_state_free);
 
   dict_filename = g_strconcat (gspell_language_get_code (self->language), ".dic", NULL);
   path = g_build_filename (g_get_user_config_dir (), "enchant", dict_filename, NULL);
@@ -285,7 +285,7 @@ gbp_spell_dict_get_words_async (GbpSpellDict        *self,
   state->hash_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   state->file = g_file_new_for_path (path);
 
-  priority = g_task_get_priority (task);
+  priority = ide_task_get_priority (task);
   g_file_read_async (state->file,
                      priority,
                      cancellable,
@@ -299,9 +299,9 @@ gbp_spell_dict_get_words_finish (GbpSpellDict  *self,
                                  GError       **error)
 {
   g_assert (GBP_IS_SPELL_DICT (self));
-  g_assert (g_task_is_valid (result, self));
+  g_assert (ide_task_is_valid (result, self));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

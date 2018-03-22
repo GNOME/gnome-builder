@@ -43,16 +43,16 @@ ide_autotools_autogen_stage_wait_check_cb (GObject      *object,
                                            gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_SUBPROCESS (subprocess));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -66,14 +66,14 @@ ide_autotools_autogen_stage_execute_async (IdeBuildStage       *stage,
   g_autofree gchar *autogen_path = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_AUTOTOOLS_AUTOGEN_STAGE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_autogen_stage_execute_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_autotools_autogen_stage_execute_async);
 
   autogen_path = g_build_filename (self->srcdir, "autogen.sh", NULL);
 
@@ -81,7 +81,7 @@ ide_autotools_autogen_stage_execute_async (IdeBuildStage       *stage,
 
   if (launcher == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -102,7 +102,7 @@ ide_autotools_autogen_stage_execute_async (IdeBuildStage       *stage,
 
   if (subprocess == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -120,9 +120,9 @@ ide_autotools_autogen_stage_execute_finish (IdeBuildStage  *stage,
                                             GError        **error)
 {
   g_assert (IDE_IS_AUTOTOOLS_AUTOGEN_STAGE (stage));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void

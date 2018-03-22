@@ -48,7 +48,7 @@ ide_autotools_build_target_provider_get_targets_cb (GObject      *object,
                                                     gpointer      user_data)
 {
   IdeMakecache *makecache = (IdeMakecache *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GPtrArray) ret = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -56,14 +56,14 @@ ide_autotools_build_target_provider_get_targets_cb (GObject      *object,
 
   g_assert (IDE_IS_MAKECACHE (makecache));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   ret = ide_makecache_get_build_targets_finish (makecache, result, &error);
 
   if (ret == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
 
   IDE_EXIT;
 }
@@ -75,7 +75,7 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
                                                        gpointer                user_data)
 {
   IdeAutotoolsBuildTargetProvider *self = (IdeAutotoolsBuildTargetProvider *)provider;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) builddir_file = NULL;
   IdeBuildPipeline *pipeline;
   IdeBuildManager *build_manager;
@@ -89,19 +89,19 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
   g_assert (IDE_IS_AUTOTOOLS_BUILD_TARGET_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_build_target_provider_get_targets_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_autotools_build_target_provider_get_targets_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_system = ide_context_get_build_system (context);
 
   if (!IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Not an autotools build system, ignoring");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Not an autotools build system, ignoring");
       IDE_EXIT;
     }
 
@@ -121,10 +121,10 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
 
   if (makecache == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Failed to locate makecache");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Failed to locate makecache");
       IDE_EXIT;
     }
 
@@ -147,10 +147,10 @@ ide_autotools_build_target_provider_get_targets_finish (IdeBuildTargetProvider  
   IDE_ENTRY;
 
   g_assert (IDE_IS_AUTOTOOLS_BUILD_TARGET_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
-  g_assert (g_task_is_valid (G_TASK (result), provider));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (IDE_TASK (result), provider));
 
-  ret = g_task_propagate_pointer (G_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

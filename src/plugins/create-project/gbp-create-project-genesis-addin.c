@@ -164,17 +164,17 @@ gbp_create_project_genesis_addin_run_cb (GObject      *object,
                                          gpointer      user_data)
 {
   GbpCreateProjectWidget *widget = (GbpCreateProjectWidget *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (widget));
 
   if (!gbp_create_project_widget_create_finish (widget, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -184,11 +184,11 @@ gbp_create_project_genesis_addin_run_async (IdeGenesisAddin     *addin,
                                             gpointer             user_data)
 {
   GbpCreateProjectGenesisAddin *self = (GbpCreateProjectGenesisAddin *)addin;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (GBP_IS_CREATE_PROJECT_GENESIS_ADDIN (self));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   /*
    * TODO: Generate the project from information found in the widget.
@@ -207,9 +207,9 @@ gbp_create_project_genesis_addin_run_finish (IdeGenesisAddin  *addin,
                                              GError          **error)
 {
   g_return_val_if_fail (GBP_IS_CREATE_PROJECT_GENESIS_ADDIN (addin), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static gint

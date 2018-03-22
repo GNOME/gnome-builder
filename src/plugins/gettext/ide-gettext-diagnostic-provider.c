@@ -72,7 +72,7 @@ ide_gettext_diagnostic_provider_communicate_cb (GObject      *object,
                                                 gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeDiagnostics) ret = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *stderr_buf = NULL;
@@ -84,15 +84,15 @@ ide_gettext_diagnostic_provider_communicate_cb (GObject      *object,
 
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  file = g_task_get_task_data (task);
+  file = ide_task_get_task_data (task);
   g_assert (file != NULL);
   g_assert (IDE_IS_FILE (file));
 
@@ -135,9 +135,9 @@ ide_gettext_diagnostic_provider_communicate_cb (GObject      *object,
       ide_diagnostics_add (ret, diag);
     }
 
-  g_task_return_pointer (task,
-                         g_steal_pointer (&ret),
-                         (GDestroyNotify)ide_diagnostics_unref);
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&ret),
+                           (GDestroyNotify)ide_diagnostics_unref);
 }
 
 static void
@@ -152,7 +152,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GBytes) contents = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   GtkSourceLanguage *language;
   const gchar *lang_id = NULL;
@@ -163,30 +163,30 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_gettext_diagnostic_provider_diagnose_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_gettext_diagnostic_provider_diagnose_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   /* Figure out what language xgettext should use */
   if (!(language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))) ||
       !(lang_id = gtk_source_language_get_id (language)) ||
       !(xgettext_id = id_to_xgettext_language (lang_id)))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Language %s is not supported",
-                               lang_id ?: "plain-text");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Language %s is not supported",
+                                 lang_id ?: "plain-text");
       return;
     }
 
   /* Return an empty set if we failed to locate any buffer contents */
   if (!(contents = ide_buffer_get_content (buffer)) || g_bytes_get_size (contents) == 0)
     {
-      g_task_return_pointer (task,
-                             ide_diagnostics_new (NULL),
-                             (GDestroyNotify)ide_diagnostics_unref);
+      ide_task_return_pointer (task,
+                               ide_diagnostics_new (NULL),
+                               (GDestroyNotify)ide_diagnostics_unref);
       return;
     }
 
@@ -210,7 +210,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   /* Spawn the process of fail immediately */
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -230,10 +230,10 @@ ide_gettext_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provide
                                                  GError                **error)
 {
   g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
-  g_assert (g_task_is_valid (G_TASK (result), provider));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (IDE_TASK (result), provider));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

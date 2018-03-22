@@ -241,17 +241,17 @@ vcs_init_cb (GObject      *object,
              gpointer      user_data)
 {
   IdeVcsInitializer *vcs = (IdeVcsInitializer *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_VCS_INITIALIZER (vcs));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!ide_vcs_initializer_initialize_finish (vcs, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_int (task, 0);
+    ide_task_return_int (task, 0);
 }
 
 static void
@@ -260,21 +260,21 @@ extract_cb (GObject      *object,
             gpointer      user_data)
 {
   IdeProjectTemplate *template = (IdeProjectTemplate *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   GbpCreateProjectTool *self;
   g_autoptr(IdeVcsInitializer) vcs = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_PROJECT_TEMPLATE (template));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (GBP_IS_CREATE_PROJECT_TOOL (self));
 
   if (!ide_project_template_expand_finish (template, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -286,13 +286,13 @@ extract_cb (GObject      *object,
 
       ide_vcs_initializer_initialize_async (vcs,
                                             project_dir,
-                                            g_task_get_cancellable (task),
+                                            ide_task_get_cancellable (task),
                                             vcs_init_cb,
                                             g_object_ref (task));
       return;
     }
 
-  g_task_return_int (task, 0);
+  ide_task_return_int (task, 0);
 }
 
 static gboolean
@@ -342,35 +342,35 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
 {
   GbpCreateProjectTool *self = (GbpCreateProjectTool *)tool;
   IdeProjectTemplate *template;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GHashTable) params = NULL;
   const gchar *name;
   g_autoptr(GError) error = NULL;
 
   g_assert (GBP_IS_CREATE_PROJECT_TOOL (self));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   /* pretend that "create-project" is argv[0] */
   self->args = g_strdupv ((gchar **)&arguments[1]);
 
   if (!gbp_create_project_tool_parse (self, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   if (self->list_templates)
     {
       gbp_create_project_tool_list_templates (self);
-      g_task_return_int (task, 0);
+      ide_task_return_int (task, 0);
       return;
     }
 
   if (!self->args || g_strv_length (self->args) < 2)
     {
       g_printerr (_("Please specify a project name.\n"));
-      g_task_return_int (task, 1);
+      ide_task_return_int (task, 1);
       return;
     }
 
@@ -379,7 +379,7 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
   if (!validate_name (self, name, &error))
     {
       g_printerr ("%s\n", error->message);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -387,7 +387,7 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
     {
       g_printerr (_("Please specify a project template with --template=\n"));
       gbp_create_project_tool_list_templates (self);
-      g_task_return_int (task, 1);
+      ide_task_return_int (task, 1);
       return;
     }
 
@@ -399,7 +399,7 @@ gbp_create_project_tool_run_async (IdeApplicationTool  *tool,
   if (!extract_params (self, params, &error))
     {
       g_printerr ("%s\n", error->message);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -431,9 +431,9 @@ gbp_create_project_tool_run_finish (IdeApplicationTool  *tool,
                                     GError             **error)
 {
   g_assert (GBP_IS_CREATE_PROJECT_TOOL (tool));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_int (G_TASK (result), error);
+  return ide_task_propagate_int (IDE_TASK (result), error);
 }
 
 static void

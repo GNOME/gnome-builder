@@ -38,7 +38,7 @@ ide_autotools_makecache_stage_makecache_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeMakecache) makecache = NULL;
   g_autoptr(GError) error = NULL;
   IdeAutotoolsMakecacheStage *self;
@@ -46,23 +46,23 @@ ide_autotools_makecache_stage_makecache_cb (GObject      *object,
   IDE_ENTRY;
 
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   makecache = ide_makecache_new_for_cache_file_finish (result, &error);
 
   if (makecache == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (self));
 
   g_clear_object (&self->makecache);
   self->makecache = g_steal_pointer (&makecache);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -74,7 +74,7 @@ ide_autotools_makecache_stage_execute_cb (GObject      *object,
 {
   IdeAutotoolsMakecacheStage *self = (IdeAutotoolsMakecacheStage *)object;
   IdeBuildStage *stage = (IdeBuildStage *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
 
@@ -83,16 +83,16 @@ ide_autotools_makecache_stage_execute_cb (GObject      *object,
   g_assert (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (stage));
   g_assert (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!IDE_BUILD_STAGE_CLASS (ide_autotools_makecache_stage_parent_class)->execute_finish (stage, result, &error))
     {
       g_warning ("%s", error->message);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /*
@@ -117,7 +117,7 @@ ide_autotools_makecache_stage_execute_async (IdeBuildStage       *stage,
                                              gpointer             user_data)
 {
   IdeAutotoolsMakecacheStage *self = (IdeAutotoolsMakecacheStage *)stage;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -125,8 +125,8 @@ ide_autotools_makecache_stage_execute_async (IdeBuildStage       *stage,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_makecache_stage_execute_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_autotools_makecache_stage_execute_async);
 
   /*
    * First we need to execute our launcher (performed by our parent class).
@@ -153,9 +153,9 @@ ide_autotools_makecache_stage_execute_finish (IdeBuildStage  *stage,
   IDE_ENTRY;
 
   g_assert (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (stage));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

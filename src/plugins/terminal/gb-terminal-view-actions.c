@@ -53,19 +53,19 @@ gb_terminal_view_actions_save_finish (GbTerminalView  *view,
                                       GAsyncResult    *result,
                                       GError         **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
-  g_return_val_if_fail (g_task_is_valid (result, view), FALSE);
+  g_return_val_if_fail (ide_task_is_valid (result, view), FALSE);
 
   g_return_val_if_fail (GB_IS_TERMINAL_VIEW (view), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 static void
-save_worker (GTask        *task,
+save_worker (IdeTask      *task,
              gpointer      source_object,
              gpointer      task_data,
              GCancellable *cancellable)
@@ -76,7 +76,7 @@ save_worker (GTask        *task,
   gboolean ret;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GB_IS_TERMINAL_VIEW (view));
   g_assert (savetask != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -102,9 +102,9 @@ save_worker (GTask        *task,
     }
 
   if (ret)
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
   else
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
 }
 
 static void
@@ -115,14 +115,14 @@ gb_terminal_view_actions_save_async (GbTerminalView       *view,
                                      GCancellable         *cancellable,
                                      gpointer              user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFileOutputStream) output_stream = NULL;
   g_autoptr(GError) error = NULL;
   SaveTask *savetask;
 
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (view, cancellable, callback, user_data);
+  task = ide_task_new (view, cancellable, callback, user_data);
 
   output_stream = g_file_replace (file, NULL, FALSE, G_FILE_CREATE_REPLACE_DESTINATION, cancellable, &error);
 
@@ -134,11 +134,11 @@ gb_terminal_view_actions_save_async (GbTerminalView       *view,
       savetask->terminal = g_object_ref (terminal);
       savetask->buffer = g_steal_pointer (&view->selection_buffer);
 
-      g_task_set_task_data (task, savetask, savetask_free);
+      ide_task_set_task_data (task, savetask, savetask_free);
       save_worker (task, view, savetask, cancellable);
     }
   else
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
 }
 
 static void
@@ -146,13 +146,13 @@ save_as_cb (GObject      *object,
             GAsyncResult *result,
             gpointer      user_data)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
   GbTerminalView *view = user_data;
   SaveTask *savetask;
   GFile *file;
   GError *error = NULL;
 
-  savetask = g_task_get_task_data (task);
+  savetask = ide_task_get_task_data (task);
   file = g_object_ref (savetask->file);
 
   if (!gb_terminal_view_actions_save_finish (view, result, &error))

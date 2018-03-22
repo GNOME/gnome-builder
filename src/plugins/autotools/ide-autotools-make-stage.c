@@ -152,7 +152,7 @@ ide_autotools_make_stage_wait_cb (GObject      *object,
                                   gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -161,9 +161,9 @@ ide_autotools_make_stage_wait_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
 
   if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -178,7 +178,7 @@ ide_autotools_make_stage_execute_async (IdeBuildStage       *stage,
   IdeAutotoolsMakeStage *self = (IdeAutotoolsMakeStage *)stage;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *message = NULL;
   const gchar * const *argv;
@@ -190,8 +190,8 @@ ide_autotools_make_stage_execute_async (IdeBuildStage       *stage,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_make_stage_execute_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_autotools_make_stage_execute_async);
 
   /* If we have a chained target, we just execute that instead */
   if (self->chained_target)
@@ -202,7 +202,7 @@ ide_autotools_make_stage_execute_async (IdeBuildStage       *stage,
   if (target == NULL)
     {
       g_warning ("Improperly configured IdeAutotoolsMakeStage, no target set");
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -210,7 +210,7 @@ ide_autotools_make_stage_execute_async (IdeBuildStage       *stage,
 
   if (launcher == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -226,7 +226,7 @@ ide_autotools_make_stage_execute_async (IdeBuildStage       *stage,
 
   if (subprocess == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -250,9 +250,9 @@ ide_autotools_make_stage_execute_finish (IdeBuildStage  *stage,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_STAGE (stage));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
@@ -267,7 +267,7 @@ ide_autotools_make_stage_clean_async (IdeBuildStage       *stage,
   IdeAutotoolsMakeStage *self = (IdeAutotoolsMakeStage *)stage;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *message = NULL;
   const gchar * const *argv;
@@ -278,12 +278,12 @@ ide_autotools_make_stage_clean_async (IdeBuildStage       *stage,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_autotools_make_stage_clean_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_autotools_make_stage_clean_async);
 
   if (self->clean_target == NULL)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -291,7 +291,7 @@ ide_autotools_make_stage_clean_async (IdeBuildStage       *stage,
 
   if (launcher == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -304,7 +304,7 @@ ide_autotools_make_stage_clean_async (IdeBuildStage       *stage,
 
   if (subprocess == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -328,9 +328,9 @@ ide_autotools_make_stage_clean_finish (IdeBuildStage  *stage,
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_STAGE (stage));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

@@ -46,23 +46,23 @@ gb_file_search_provider_search_async (IdeSearchProvider   *provider,
                                       gpointer             user_data)
 {
   GbFileSearchProvider *self = (GbFileSearchProvider *)provider;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) results = NULL;
 
   g_assert (GB_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (search_terms != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gb_file_search_provider_search_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gb_file_search_provider_search_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->index != NULL)
     results = gb_file_search_index_populate (self->index, search_terms, max_results);
   else
     results = g_ptr_array_new_with_free_func (g_object_unref);
 
-  g_task_return_pointer (task, g_steal_pointer (&results), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&results), (GDestroyNotify)g_ptr_array_unref);
 }
 
 static GPtrArray *
@@ -71,9 +71,9 @@ gb_file_search_provider_search_finish (IdeSearchProvider  *provider,
                                        GError            **error)
 {
   g_assert (GB_IS_FILE_SEARCH_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void

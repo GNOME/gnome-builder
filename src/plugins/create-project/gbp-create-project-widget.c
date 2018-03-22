@@ -516,7 +516,7 @@ init_vcs_cb (GObject      *object,
              GAsyncResult *result,
              gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   IdeVcsInitializer *vcs = (IdeVcsInitializer *)object;
   GbpCreateProjectWidget *self;
   IdeWorkbench *workbench;
@@ -524,24 +524,24 @@ init_vcs_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_vcs_initializer_initialize_finish (vcs, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  project_file = g_task_get_task_data (task);
+  project_file = ide_task_get_task_data (task);
   g_assert (G_IS_FILE (project_file));
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
   ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -550,7 +550,7 @@ extract_cb (GObject      *object,
             gpointer      user_data)
 {
   IdeProjectTemplate *template = (IdeProjectTemplate *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeVcsInitializer) vcs = NULL;
   GbpCreateProjectWidget *self;
   IdeWorkbench *workbench;
@@ -569,25 +569,25 @@ extract_cb (GObject      *object,
 
   g_assert (IDE_IS_PROJECT_TEMPLATE (template));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_project_template_expand_finish (template, result, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  project_file = g_task_get_task_data (task);
+  project_file = ide_task_get_task_data (task);
   g_assert (G_IS_FILE (project_file));
 
   if (!gtk_switch_get_active (self->versioning_switch))
     {
       workbench = ide_widget_get_workbench (GTK_WIDGET (self));
       ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -604,17 +604,17 @@ extract_cb (GObject      *object,
 
   ide_vcs_initializer_initialize_async (vcs,
                                         project_file,
-                                        g_task_get_cancellable (task),
+                                        ide_task_get_cancellable (task),
                                         init_vcs_cb,
                                         g_object_ref (task));
 
   return;
 
 failure:
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_FAILED,
-                           _("A failure occurred while initializing version control"));
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_FAILED,
+                             _("A failure occurred while initializing version control"));
 }
 
 void
@@ -623,7 +623,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                                         GAsyncReadyCallback     callback,
                                         gpointer                user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GHashTable) params = NULL;
   g_autoptr(IdeProjectTemplate) template = NULL;
   g_autoptr(IdeVcsConfig) vcs_conf = NULL;
@@ -731,8 +731,8 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
 
   g_value_unset (&str);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_file_new_for_path (path), g_object_unref);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_task_data (task, g_file_new_for_path (path), g_object_unref);
 
   ide_project_template_expand_async (template,
                                      params,
@@ -747,7 +747,7 @@ gbp_create_project_widget_create_finish (GbpCreateProjectWidget *self,
                                          GError                **error)
 {
   g_return_val_if_fail (GBP_IS_CREATE_PROJECT_WIDGET (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

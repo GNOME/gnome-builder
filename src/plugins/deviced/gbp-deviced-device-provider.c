@@ -90,18 +90,18 @@ gbp_deviced_device_provider_load_cb (GObject      *object,
 {
   DevdBrowser *browser = (DevdBrowser *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
 
   IDE_ENTRY;
 
   g_assert (DEVD_IS_BROWSER (browser));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!devd_browser_load_finish (browser, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -113,15 +113,15 @@ gbp_deviced_device_provider_load_async (IdeDeviceProvider   *provider,
                                         gpointer             user_data)
 {
   GbpDevicedDeviceProvider *self = (GbpDevicedDeviceProvider *)provider;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_DEVICED_DEVICE_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_deviced_device_provider_load_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_deviced_device_provider_load_async);
 
   devd_browser_load_async (self->browser,
                            cancellable,
@@ -141,9 +141,9 @@ gbp_deviced_device_provider_load_finish (IdeDeviceProvider  *provider,
   IDE_ENTRY;
 
   g_assert (GBP_IS_DEVICED_DEVICE_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

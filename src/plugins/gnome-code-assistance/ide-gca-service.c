@@ -124,29 +124,29 @@ proxy_new_cb (GObject      *object,
               gpointer      user_data)
 {
   IdeGcaService *self;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   const gchar *language_id;
   GcaService *proxy;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (G_IS_ASYNC_RESULT (result));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
 
   proxy = gca_service_proxy_new_finish (result, &error);
 
   if (!proxy)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  language_id = g_task_get_task_data (task);
+  language_id = ide_task_get_task_data (task);
   g_hash_table_replace (self->proxy_cache, g_strdup (language_id),
                         g_object_ref (proxy));
 
-  g_task_return_pointer (task, g_object_ref (proxy), g_object_unref);
+  ide_task_return_pointer (task, g_object_ref (proxy), g_object_unref);
 
   g_clear_object (&proxy);
 }
@@ -158,7 +158,7 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *name = NULL;
   g_autofree gchar *object_path = NULL;
@@ -169,16 +169,16 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
   g_return_if_fail (language_id);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   language_id = remap_language (language_id);
 
   if (!language_id)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               _("No language specified"));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 _("No language specified"));
       return;
     }
 
@@ -186,17 +186,17 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
 
   if (bus == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   if ((proxy = g_hash_table_lookup (self->proxy_cache, language_id)))
     {
-      g_task_return_pointer (task, g_object_ref (proxy), g_object_unref);
+      ide_task_return_pointer (task, g_object_ref (proxy), g_object_unref);
       return;
     }
 
-  g_task_set_task_data (task, g_strdup (language_id), g_free);
+  ide_task_set_task_data (task, g_strdup (language_id), g_free);
 
   name = g_strdup_printf ("org.gnome.CodeAssist.v1.%s", language_id);
   object_path = g_strdup_printf ("/org/gnome/CodeAssist/v1/%s", language_id);
@@ -222,12 +222,12 @@ ide_gca_service_get_proxy_finish (IdeGcaService  *self,
                                   GAsyncResult   *result,
                                   GError        **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_GCA_SERVICE (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 static void

@@ -147,22 +147,22 @@ gb_beautifier_helper_create_tmp_file_cb (GObject      *object,
 {
   GFile *file = (GFile *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = (GTask *)user_data;
+  g_autoptr(IdeTask) task = (IdeTask *)user_data;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     g_file_delete (file, NULL, NULL);
   else
-    g_task_return_pointer (task, g_object_ref (file), g_object_unref);
+    ide_task_return_pointer (task, g_object_ref (file), g_object_unref);
 }
 
 void
@@ -172,7 +172,7 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
                                             GCancellable            *cancellable,
                                             gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) file = NULL;
   g_autoptr(GBytes) bytes = NULL;
   g_autofree gchar *tmp_path = NULL;
@@ -183,16 +183,16 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (callback != NULL);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gb_beautifier_helper_create_tmp_file_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gb_beautifier_helper_create_tmp_file_async);
 
   tmp_path = g_build_filename (self->tmp_dir, "XXXXXX.txt", NULL);
   if (-1 == (fd = g_mkstemp (tmp_path)))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to create temporary file for the Beautifier plugin");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to create temporary file for the Beautifier plugin");
       return;
     }
 
@@ -217,10 +217,10 @@ gb_beautifier_helper_create_tmp_file_finish (GbBeautifierEditorAddin  *self,
                                              GError                  **error)
 {
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (G_IS_TASK (result));
-  g_assert (g_task_is_valid (G_TASK (result), self));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (IDE_TASK (result), self));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 gchar *

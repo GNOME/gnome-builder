@@ -84,20 +84,20 @@ gbp_symbol_layout_stack_addin_find_scope_cb (GObject      *object,
   GbpSymbolLayoutStackAddin *self;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   SymbolResolverTaskData *data;
 
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   symbol = ide_symbol_resolver_find_nearest_scope_finish (symbol_resolver, result, &error);
   g_assert (symbol != NULL || error != NULL);
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
 
-  data = g_task_get_task_data (task);
+  data = ide_task_get_task_data (task);
   g_assert (data != NULL);
   g_assert (IDE_IS_BUFFER (data->buffer));
   g_assert (data->resolvers != NULL);
@@ -130,7 +130,7 @@ gbp_symbol_layout_stack_addin_find_scope_cb (GObject      *object,
     gbp_symbol_menu_button_set_symbol (self->button, symbol);
 
   /* We don't use this, but we should return a value anyway */
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -154,21 +154,21 @@ gbp_symbol_layout_stack_addin_cursor_moved_cb (gpointer user_data)
 
       if (ide_extension_set_adapter_get_n_extensions (adapter))
         {
-          g_autoptr(GTask) task = NULL;
+          g_autoptr(IdeTask) task = NULL;
           SymbolResolverTaskData *data;
           IdeSymbolResolver *resolver;
 
           self->scope_cancellable = g_cancellable_new ();
 
-          task = g_task_new (self, self->scope_cancellable, NULL, NULL);
-          g_task_set_source_tag (task, gbp_symbol_layout_stack_addin_cursor_moved_cb);
-          g_task_set_priority (task, G_PRIORITY_LOW);
+          task = ide_task_new (self, self->scope_cancellable, NULL, NULL);
+          ide_task_set_source_tag (task, gbp_symbol_layout_stack_addin_cursor_moved_cb);
+          ide_task_set_priority (task, G_PRIORITY_LOW);
 
           data = g_slice_new0 (SymbolResolverTaskData);
           data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
           data->location = ide_buffer_get_insert_location (buffer);
           data->buffer = g_object_ref (buffer);
-          g_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
+          ide_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
 
           ide_extension_set_adapter_foreach (adapter, get_extension, data);
           g_assert (data->resolvers->len > 0);
@@ -226,17 +226,17 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
   GbpSymbolLayoutStackAddin *self;
   g_autoptr(IdeSymbolTree) tree = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   SymbolResolverTaskData *data;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
   g_assert (G_IS_ASYNC_RESULT (result));
 
   tree = ide_symbol_resolver_get_symbol_tree_finish (symbol_resolver, result, &error);
 
-  self = g_task_get_source_object (task);
-  data = g_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+  data = ide_task_get_task_data (task);
 
   g_ptr_array_remove_index (data->resolvers, data->resolvers->len - 1);
 
@@ -278,7 +278,7 @@ gbp_symbol_layout_stack_addin_get_symbol_tree_cb (GObject      *object,
     }
 
   /* We don't use this, but we should return a value anyway */
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -287,7 +287,7 @@ gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
 {
   IdeExtensionSetAdapter *adapter;
   IdeFile *file;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   SymbolResolverTaskData *data;
   IdeSymbolResolver *resolver;
 
@@ -311,14 +311,14 @@ gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
 
   self->cancellable = g_cancellable_new ();
 
-  task = g_task_new (self, self->cancellable, NULL, NULL);
-  g_task_set_source_tag (task, gbp_symbol_layout_stack_addin_update_tree);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, self->cancellable, NULL, NULL);
+  ide_task_set_source_tag (task, gbp_symbol_layout_stack_addin_update_tree);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   data = g_slice_new0 (SymbolResolverTaskData);
   data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
   data->buffer = g_object_ref (buffer);
-  g_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
+  ide_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
 
   ide_extension_set_adapter_foreach (adapter, get_extension, data);
   g_assert (data->resolvers->len > 0);
