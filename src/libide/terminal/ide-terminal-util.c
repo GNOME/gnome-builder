@@ -109,7 +109,7 @@ _ide_guess_shell (void)
   if ((shell = vte_get_user_shell ()))
     user_shell = g_strdup (shell);
 
-  command = g_strdup_printf ("sh -c 'getent passwd | grep ^%s: | head -n1 | cut -f 7 -d :'",
+  command = g_strdup_printf ("sh -c 'getent passwd %s | head -n1 | cut -f 7 -d :'",
                              g_get_user_name ());
 
   if (!g_shell_parse_argv (command, NULL, &argv, &error))
