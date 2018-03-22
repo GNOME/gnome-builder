@@ -16,10 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 #include <webkit2/webkit2.h>
 
-void
+#include "ide-version-macros.h"
+
+_IDE_EXTERN void
 ide_webkit_register_types (PeasObjectModule *module)
 {
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);

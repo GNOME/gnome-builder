@@ -26,7 +26,7 @@
 #include "directory/ide-directory-build-system.h"
 #include "directory/ide-directory-vcs.h"
 
-void
+_IDE_EXTERN void
 ide_directory_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

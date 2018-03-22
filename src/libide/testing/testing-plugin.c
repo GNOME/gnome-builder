@@ -16,12 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
+
+#include "ide-version-macros.h"
 
 #include "editor/ide-editor-addin.h"
 #include "testing/ide-test-editor-addin.h"
 
-void
+_IDE_EXTERN void
 ide_test_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_ADDIN, IDE_TYPE_TEST_EDITOR_ADDIN);

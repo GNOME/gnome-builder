@@ -16,13 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
+
+#include "ide-version-macros.h"
 
 #include "debugger/ide-debugger-editor-addin.h"
 #include "editor/ide-editor-addin.h"
 #include "editor/ide-editor-view-addin.h"
 
-void
+_IDE_EXTERN void
 ide_debugger_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

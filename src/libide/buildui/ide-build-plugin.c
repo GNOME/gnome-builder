@@ -21,12 +21,13 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
-#include <ide.h>
 
-#include "buildui/ide-build-tool.h"
+#include "ide-version-macros.h"
+
+#include "workbench/ide-workbench-addin.h"
 #include "buildui/ide-build-workbench-addin.h"
 
-void
+_IDE_EXTERN void
 ide_build_tool_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

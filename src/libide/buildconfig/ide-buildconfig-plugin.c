@@ -22,12 +22,14 @@
 
 #include <libpeas/peas.h>
 
+#include "ide-version-macros.h"
+
 #include "buildconfig/ide-buildconfig-configuration-provider.h"
 #include "buildconfig/ide-buildconfig-pipeline-addin.h"
 #include "buildsystem/ide-build-pipeline-addin.h"
 #include "config/ide-configuration-provider.h"
 
-void
+_IDE_EXTERN void
 ide_buildconfig_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

@@ -23,6 +23,7 @@
 #include <dazzle.h>
 
 #include "application/ide-application.h"
+#include "runner/ide-run-button.h"
 #include "search/ide-search-entry.h"
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
@@ -130,6 +131,7 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, right_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, search_entry);
 
+  g_type_ensure (IDE_TYPE_RUN_BUTTON);
   g_type_ensure (IDE_TYPE_SEARCH_ENTRY);
 }
 
