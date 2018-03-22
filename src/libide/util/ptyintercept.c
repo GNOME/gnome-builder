@@ -1,6 +1,6 @@
 /* ptyintercept.c
  *
- * Copyright © 2018 Christian Hergert
+ * Copyright 2018 Christian Hergert
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

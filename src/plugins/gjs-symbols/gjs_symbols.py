@@ -2,9 +2,9 @@
 #
 # gjs_symbols.py
 #
-# Copyright © 2017 Patrick Griffi <tingping@tingping.se>
-# Copyright © 2017 Giovanni Campagna <gcampagn@cs.stanford.edu>
-# Copyright © 2018 Christian Hergert <chergert@redhat.com>
+# Copyright 2017 Patrick Griffi <tingping@tingping.se>
+# Copyright 2017 Giovanni Campagna <gcampagn@cs.stanford.edu>
+# Copyright 2018 Christian Hergert <chergert@redhat.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

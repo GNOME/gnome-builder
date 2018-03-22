@@ -1,6 +1,6 @@
 /* ide-gettext-diagnostic-provider.c
  *
- * Copyright © 2016 Daiki Ueno <dueno@src.gnome.org>
+ * Copyright 2016 Daiki Ueno <dueno@src.gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

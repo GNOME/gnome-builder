@@ -1,6 +1,6 @@
 /* ide-editor-print-operation.c
  *
- * Copyright © 2015 Paolo Borelli <pborelli@gnome.org>
+ * Copyright 2015 Paolo Borelli <pborelli@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

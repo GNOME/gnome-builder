@@ -1,7 +1,7 @@
 /* ide-source-view-mode.c
  *
- * Copyright © 2015 Alexander Larsson <alexl@redhat.com>
- * Copyright © 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015 Alexander Larsson <alexl@redhat.com>
+ * Copyright 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

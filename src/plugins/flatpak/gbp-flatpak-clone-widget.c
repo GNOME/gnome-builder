@@ -1,6 +1,6 @@
 /* gbp-flatpak-clone-widget.c
  *
- * Copyright © 2016 Endless Mobile, Inc.
+ * Copyright 2016 Endless Mobile, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

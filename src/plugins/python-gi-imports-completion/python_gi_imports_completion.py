@@ -3,8 +3,8 @@
 #
 # python_gi_imports_completion.py
 #
-# Copyright © 2015 Christian Hergert <chris@dronelabs.com>
-# Copyright © 2015 Elad Alfassa <elad@fedoraproject.org>
+# Copyright 2015 Christian Hergert <chris@dronelabs.com>
+# Copyright 2015 Elad Alfassa <elad@fedoraproject.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

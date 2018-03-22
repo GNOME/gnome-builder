@@ -1,6 +1,6 @@
 /* ide-xml.c
  *
- * Copyright © 2015 Dimitris Zenios <dimitris.zenios@gmail.com>
+ * Copyright 2015 Dimitris Zenios <dimitris.zenios@gmail.com>
  *
  * This file is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

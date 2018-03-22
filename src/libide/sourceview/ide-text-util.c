@@ -2,9 +2,9 @@
  * gedit-view.c
  * This file is part of gedit
  *
- * Copyright © 1998, 1999 Alex Roberts, Evan Lawrence
- * Copyright © 2000, 2002 Chema Celorio, Paolo Maggi
- * Copyright © 2003-2005 Paolo Maggi
+ * Copyright 1998, 1999 Alex Roberts, Evan Lawrence
+ * Copyright 2000, 2002 Chema Celorio, Paolo Maggi
+ * Copyright 2003-2005 Paolo Maggi
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

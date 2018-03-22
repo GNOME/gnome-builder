@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013 Robert Rossi <bob@brasko.net>
+ * Copyright 2013 Robert Rossi <bob@brasko.net>
  *
  * This file is an amalgamation of the source files from GDBWIRE.
  *
@@ -2409,7 +2409,7 @@ void gdbwire_mi_command_free(struct gdbwire_mi_command *mi_command);
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright © 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -2551,7 +2551,7 @@ void gdbwire_mi_pstate_delete (gdbwire_mi_pstate *ps);
 /***** End of gdbwire_mi_grammar.h *******************************************/
 /***** Begin file gdbwire.h **************************************************/
 /**
- * Copyright © 2013 Robert Rossi <bob@brasko.net>
+ * Copyright 2013 Robert Rossi <bob@brasko.net>
  *
  * This file is part of GDBWIRE.
  *

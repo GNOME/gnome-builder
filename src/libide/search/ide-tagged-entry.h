@@ -1,6 +1,6 @@
 /*
- * Copyright © 2011 Red Hat, Inc.
- * Copyright © 2013 Ignacio Casal Quinteiro
+ * Copyright 2011 Red Hat, Inc.
+ * Copyright 2013 Ignacio Casal Quinteiro
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by 

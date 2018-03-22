@@ -2,7 +2,7 @@
  * modelie-parser.h
  * Emacs, Kate and Vim-style modelines support for gedit.
  *
- * Copyright © 2005-2007 - Steve Frécinaux <code@istique.net>
+ * Copyright 2005-2007 - Steve Frécinaux <code@istique.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
