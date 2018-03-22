@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FANCY_TREE_VIEW (ide_fancy_tree_view_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeFancyTreeView, ide_fancy_tree_view, IDE, FANCY_TREE_VIEW, GtkTreeView)
 
 struct _IdeFancyTreeViewClass

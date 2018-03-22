@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_LIBRARY (ide_debugger_library_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerLibrary, ide_debugger_library, IDE, DEBUGGER_LIBRARY, GObject)
 
 struct _IdeDebuggerLibraryClass

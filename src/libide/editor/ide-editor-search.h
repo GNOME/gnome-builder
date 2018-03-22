@@ -54,6 +54,7 @@ typedef enum
 #define IDE_TYPE_EDITOR_SEARCH_DIRECTION (ide_editor_search_direction_get_type())
 #define IDE_TYPE_EDITOR_SEARCH_SELECT    (ide_editor_search_select_get_type())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_FINAL_TYPE (IdeEditorSearch, ide_editor_search, IDE, EDITOR_SEARCH, GObject)
 
 IDE_AVAILABLE_IN_3_28

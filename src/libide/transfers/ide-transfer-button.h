@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER_BUTTON (ide_transfer_button_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeTransferButton, ide_transfer_button, IDE, TRANSFER_BUTTON, DzlProgressButton)
 
 struct _IdeTransferButtonClass

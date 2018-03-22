@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_VIEW  (ide_source_view_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSourceView, ide_source_view, IDE, SOURCE_VIEW, GtkSourceView)
 
 /**

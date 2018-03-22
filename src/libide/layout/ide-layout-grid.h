@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_GRID (ide_layout_grid_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutGrid, ide_layout_grid, IDE, LAYOUT_GRID, DzlMultiPaned)
 
 struct _IdeLayoutGridClass

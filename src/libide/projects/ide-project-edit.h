@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_EDIT (ide_project_edit_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeProjectEdit, ide_project_edit, IDE, PROJECT_EDIT, GObject)
 
 struct _IdeProjectEditClass

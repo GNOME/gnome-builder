@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_THREAD (ide_debugger_thread_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerThread, ide_debugger_thread, IDE, DEBUGGER_THREAD, GObject)
 
 struct _IdeDebuggerThreadClass

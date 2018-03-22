@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_INSTRUCTION (ide_debugger_instruction_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerInstruction, ide_debugger_instruction, IDE, DEBUGGER_INSTRUCTION, GObject)
 
 struct _IdeDebuggerInstructionClass

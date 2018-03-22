@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILDCONFIG_CONFIGURATION (ide_buildconfig_configuration_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeBuildconfigConfiguration, ide_buildconfig_configuration, IDE, BUILDCONFIG_CONFIGURATION, IdeConfiguration)
 
 IDE_AVAILABLE_IN_ALL

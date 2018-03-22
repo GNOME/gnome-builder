@@ -38,6 +38,7 @@ typedef enum
 #define IDE_TYPE_RUNTIME (ide_runtime_get_type())
 #define IDE_RUNTIME_ERROR (ide_runtime_error_quark())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeRuntime, ide_runtime, IDE, RUNTIME, IdeObject)
 
 struct _IdeRuntimeClass

@@ -34,6 +34,7 @@ typedef enum
   IDE_TEST_STATUS_FAILED,
 } IdeTestStatus;
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_DERIVABLE_TYPE (IdeTest, ide_test, IDE, TEST, GObject)
 
 struct _IdeTestClass

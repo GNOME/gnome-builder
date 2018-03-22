@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TEST_MANAGER (ide_test_manager_get_type())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_FINAL_TYPE (IdeTestManager, ide_test_manager, IDE, TEST_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_28

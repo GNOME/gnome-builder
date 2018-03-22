@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TEST_PROVIDER (ide_test_provider_get_type ())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_DERIVABLE_TYPE (IdeTestProvider, ide_test_provider, IDE, TEST_PROVIDER, IdeObject)
 
 struct _IdeTestProviderClass

@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_STACK (ide_layout_stack_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutStack, ide_layout_stack, IDE, LAYOUT_STACK, GtkBox)
 
 struct _IdeLayoutStackClass

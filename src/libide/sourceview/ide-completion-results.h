@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_RESULTS (ide_completion_results_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeCompletionResults, ide_completion_results, IDE, COMPLETION_RESULTS, GObject)
 
 struct _IdeCompletionResultsClass

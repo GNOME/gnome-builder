@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEVICE_MANAGER (ide_device_manager_get_type())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_FINAL_TYPE (IdeDeviceManager, ide_device_manager, IDE, DEVICE_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_3_28

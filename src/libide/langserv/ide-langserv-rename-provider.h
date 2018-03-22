@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_RENAME_PROVIDER (ide_langserv_rename_provider_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLangservRenameProvider, ide_langserv_rename_provider, IDE, LANGSERV_RENAME_PROVIDER, IdeObject)
 
 struct _IdeLangservRenameProviderClass

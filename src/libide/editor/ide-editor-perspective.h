@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_PERSPECTIVE (ide_editor_perspective_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeEditorPerspective, ide_editor_perspective, IDE, EDITOR_PERSPECTIVE, IdeLayout)
 
 IDE_AVAILABLE_IN_ALL

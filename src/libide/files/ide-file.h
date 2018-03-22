@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_FILE_ATTRIBUTE_POSITION "metadata::libide-position"
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeFile, ide_file, IDE, FILE, IdeObject)
 
 IDE_AVAILABLE_IN_ALL

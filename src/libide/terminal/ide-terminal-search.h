@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL_SEARCH (ide_terminal_search_get_type())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, IDE, TERMINAL_SEARCH, GtkBin)
 
 IDE_AVAILABLE_IN_3_28

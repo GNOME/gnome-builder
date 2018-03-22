@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_MANAGER (ide_build_manager_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeBuildManager, ide_build_manager, IDE, BUILD_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_ALL

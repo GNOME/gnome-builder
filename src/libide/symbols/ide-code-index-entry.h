@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_INDEX_ENTRY (ide_code_index_entry_get_type ())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeCodeIndexEntry, ide_code_index_entry, IDE, CODE_INDEX_ENTRY, GObject)
 
 struct _IdeCodeIndexEntryClass

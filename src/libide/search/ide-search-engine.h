@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_ENGINE (ide_search_engine_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE, SEARCH_ENGINE, IdeObject)
 
 IDE_AVAILABLE_IN_ALL

@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_VIEW (ide_editor_view_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeEditorView, ide_editor_view, IDE, EDITOR_VIEW, IdeLayoutView)
 
 IDE_AVAILABLE_IN_ALL

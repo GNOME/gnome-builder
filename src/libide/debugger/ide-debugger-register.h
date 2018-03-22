@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_REGISTER (ide_debugger_register_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerRegister, ide_debugger_register, IDE, DEBUGGER_REGISTER, GObject)
 
 struct _IdeDebuggerRegisterClass

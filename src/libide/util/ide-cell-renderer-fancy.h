@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CELL_RENDERER_FANCY (ide_cell_renderer_fancy_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeCellRendererFancy, ide_cell_renderer_fancy, IDE, CELL_RENDERER_FANCY, GtkCellRenderer)
 
 IDE_AVAILABLE_IN_ALL

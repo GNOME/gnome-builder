@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPILE_COMMANDS (ide_compile_commands_get_type())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_FINAL_TYPE (IdeCompileCommands, ide_compile_commands, IDE, COMPILE_COMMANDS, GObject)
 
 IDE_AVAILABLE_IN_3_28

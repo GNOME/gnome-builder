@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_ITEM (ide_project_item_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeProjectItem, ide_project_item, IDE, PROJECT_ITEM, IdeObject)
 
 struct _IdeProjectItemClass

@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_INFO (ide_project_info_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeProjectInfo, ide_project_info, IDE, PROJECT_INFO, GObject)
 
 IDE_AVAILABLE_IN_ALL

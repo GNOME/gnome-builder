@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROGRESS (ide_progress_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeProgress, ide_progress, IDE, PROGRESS, GObject)
 
 IDE_AVAILABLE_IN_ALL

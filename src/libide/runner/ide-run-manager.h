@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RUN_MANAGER (ide_run_manager_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeRunManager, ide_run_manager, IDE, RUN_MANAGER, IdeObject)
 
 typedef void (*IdeRunHandler) (IdeRunManager *self,

@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_VIEW (ide_layout_view_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutView, ide_layout_view, IDE, LAYOUT_VIEW, GtkBox)
 
 struct _IdeLayoutViewClass

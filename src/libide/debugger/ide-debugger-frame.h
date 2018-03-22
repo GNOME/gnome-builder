@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_FRAME (ide_debugger_frame_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerFrame, ide_debugger_frame, IDE, DEBUGGER_FRAME, GObject)
 
 struct _IdeDebuggerFrameClass

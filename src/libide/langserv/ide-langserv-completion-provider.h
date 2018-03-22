@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 #define IDE_LANGSERV_COMPLETION_PROVIDER_PRIORITY 200
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLangservCompletionProvider, ide_langserv_completion_provider, IDE, LANGSERV_COMPLETION_PROVIDER, IdeObject)
 
 struct _IdeLangservCompletionProviderClass

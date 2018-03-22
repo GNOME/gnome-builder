@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_CLIENT (ide_langserv_client_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLangservClient, ide_langserv_client, IDE, LANGSERV_CLIENT, IdeObject)
 
 struct _IdeLangservClientClass

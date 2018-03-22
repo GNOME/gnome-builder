@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER_MANAGER (ide_transfer_manager_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTransferManager, ide_transfer_manager, IDE, TRANSFER_MANAGER, GObject)
 
 IDE_AVAILABLE_IN_ALL

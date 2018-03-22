@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUFFER_CHANGE_MONITOR (ide_buffer_change_monitor_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeBufferChangeMonitor, ide_buffer_change_monitor, IDE, BUFFER_CHANGE_MONITOR, IdeObject)
 
 typedef enum

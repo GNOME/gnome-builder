@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIGURATION_MANAGER (ide_configuration_manager_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeConfigurationManager, ide_configuration_manager, IDE, CONFIGURATION_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_ALL

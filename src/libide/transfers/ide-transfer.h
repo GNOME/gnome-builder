@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_TRANSFER  (ide_transfer_get_type())
 #define IDE_TRANSFER_ERROR (ide_transfer_error_quark())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeTransfer, ide_transfer, IDE, TRANSFER, GObject)
 
 struct _IdeTransferClass

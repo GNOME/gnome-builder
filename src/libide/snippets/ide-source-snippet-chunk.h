@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_SNIPPET_CHUNK (ide_source_snippet_chunk_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSourceSnippetChunk, ide_source_snippet_chunk,
                       IDE, SOURCE_SNIPPET_CHUNK, GObject)
 

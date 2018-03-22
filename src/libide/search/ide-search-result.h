@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_RESULT (ide_search_result_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSearchResult, ide_search_result, IDE, SEARCH_RESULT, DzlSuggestion)
 
 struct _IdeSearchResultClass

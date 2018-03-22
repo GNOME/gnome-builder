@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_BREAKPOINT (ide_debugger_breakpoint_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerBreakpoint, ide_debugger_breakpoint, IDE, DEBUGGER_BREAKPOINT, GObject)
 
 struct _IdeDebuggerBreakpointClass

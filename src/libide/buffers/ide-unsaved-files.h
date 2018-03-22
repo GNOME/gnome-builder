@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_UNSAVED_FILES (ide_unsaved_files_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeUnsavedFiles, ide_unsaved_files, IDE, UNSAVED_FILES, IdeObject)
 
 IDE_AVAILABLE_IN_ALL

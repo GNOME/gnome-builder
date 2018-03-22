@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_TRANSIENT_SIDEBAR (ide_layout_transient_sidebar_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutTransientSidebar, ide_layout_transient_sidebar, IDE, LAYOUT_TRANSIENT_SIDEBAR, IdeLayoutPane)
 
 struct _IdeLayoutTransientSidebarClass

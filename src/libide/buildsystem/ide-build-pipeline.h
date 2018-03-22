@@ -55,6 +55,7 @@ typedef enum
   IDE_BUILD_PHASE_FAILED       = 1 << 31,
 } IdeBuildPhase;
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeBuildPipeline, ide_build_pipeline, IDE, BUILD_PIPELINE, IdeObject)
 
 IDE_AVAILABLE_IN_3_28

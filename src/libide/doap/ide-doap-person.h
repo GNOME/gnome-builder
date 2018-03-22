@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DOAP_PERSON (ide_doap_person_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeDoapPerson, ide_doap_person, IDE, DOAP_PERSON, GObject)
 
 IDE_AVAILABLE_IN_ALL

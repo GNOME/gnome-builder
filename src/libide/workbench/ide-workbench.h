@@ -55,6 +55,7 @@ typedef enum
 
 #define IDE_TYPE_WORKBENCH (ide_workbench_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, DzlApplicationWindow)
 
 IDE_AVAILABLE_IN_ALL

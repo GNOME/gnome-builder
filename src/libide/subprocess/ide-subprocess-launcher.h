@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SUBPROCESS_LAUNCHER (ide_subprocess_launcher_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSubprocessLauncher, ide_subprocess_launcher, IDE, SUBPROCESS_LAUNCHER, GObject)
 
 struct _IdeSubprocessLauncherClass

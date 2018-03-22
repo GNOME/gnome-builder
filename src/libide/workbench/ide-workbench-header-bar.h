@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKBENCH_HEADER_BAR (ide_workbench_header_bar_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeWorkbenchHeaderBar, ide_workbench_header_bar, IDE, WORKBENCH_HEADER_BAR, GtkHeaderBar)
 
 struct _IdeWorkbenchHeaderBarClass

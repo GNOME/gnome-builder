@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_SNIPPETS (ide_source_snippets_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSourceSnippets, ide_source_snippets, IDE, SOURCE_SNIPPETS, GObject)
 
 IDE_AVAILABLE_IN_ALL

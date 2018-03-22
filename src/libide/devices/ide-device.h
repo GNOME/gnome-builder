@@ -34,6 +34,7 @@ typedef enum
 #define IDE_TYPE_DEVICE  (ide_device_get_type())
 #define IDE_DEVICE_ERROR (ide_device_error_quark())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDevice, ide_device, IDE, DEVICE, IdeObject)
 
 struct _IdeDeviceClass

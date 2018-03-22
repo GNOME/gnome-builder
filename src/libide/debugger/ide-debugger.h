@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER (ide_debugger_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebugger, ide_debugger, IDE, DEBUGGER, IdeObject)
 
 struct _IdeDebuggerClass

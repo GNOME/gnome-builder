@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_HIGHLIGHT_ENGINE (ide_highlight_engine_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeHighlightEngine, ide_highlight_engine, IDE, HIGHLIGHT_ENGINE, IdeObject)
 
 IDE_AVAILABLE_IN_ALL

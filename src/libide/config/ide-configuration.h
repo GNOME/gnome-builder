@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIGURATION (ide_configuration_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeConfiguration, ide_configuration, IDE, CONFIGURATION, IdeObject)
 
 typedef enum

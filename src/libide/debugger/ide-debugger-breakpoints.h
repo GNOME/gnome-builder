@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_BREAKPOINTS (ide_debugger_breakpoints_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeDebuggerBreakpoints, ide_debugger_breakpoints, IDE, DEBUGGER_BREAKPOINTS, GObject)
 
 IDE_AVAILABLE_IN_ALL

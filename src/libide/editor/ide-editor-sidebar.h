@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_SIDEBAR (ide_editor_sidebar_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE, EDITOR_SIDEBAR, IdeLayoutPane)
 
 IDE_AVAILABLE_IN_ALL

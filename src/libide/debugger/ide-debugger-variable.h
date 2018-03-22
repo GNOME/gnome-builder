@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_VARIABLE (ide_debugger_variable_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerVariable, ide_debugger_variable, IDE, DEBUGGER_VARIABLE, GObject)
 
 struct _IdeDebuggerVariableClass

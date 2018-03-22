@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_GRID_COLUMN (ide_layout_grid_column_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLayoutGridColumn, ide_layout_grid_column, IDE, LAYOUT_GRID_COLUMN, DzlMultiPaned)
 
 IDE_AVAILABLE_IN_ALL

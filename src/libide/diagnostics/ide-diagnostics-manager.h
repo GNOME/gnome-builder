@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTICS_MANAGER (ide_diagnostics_manager_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeDiagnosticsManager, ide_diagnostics_manager, IDE, DIAGNOSTICS_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_ALL

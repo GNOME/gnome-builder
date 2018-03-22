@@ -33,6 +33,7 @@ struct _IdeDocumentationProposalClass
 
 typedef struct _IdeDocumentationProposalClass IdeDocumentationProposalClass;
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDocumentationProposal, ide_documentation_proposal, IDE, DOCUMENTATION_PROPOSAL, GObject)
 
 IDE_AVAILABLE_IN_ALL

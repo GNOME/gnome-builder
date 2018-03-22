@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_SNIPPETS_MANAGER (ide_source_snippets_manager_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSourceSnippetsManager, ide_source_snippets_manager, IDE, SOURCE_SNIPPETS_MANAGER, GObject)
 
 IDE_AVAILABLE_IN_ALL

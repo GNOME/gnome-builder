@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DOCUMENTATION_INFO (ide_documentation_info_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeDocumentationInfo, ide_documentation_info, IDE, DOCUMENTATION_INFO, GObject)
 
 typedef enum {

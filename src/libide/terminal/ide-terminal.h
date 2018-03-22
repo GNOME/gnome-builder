@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL (ide_terminal_get_type())
 
+IDE_AVAILABLE_IN_3_28
 G_DECLARE_DERIVABLE_TYPE (IdeTerminal, ide_terminal, IDE, TERMINAL, VteTerminal)
 
 struct _IdeTerminalClass

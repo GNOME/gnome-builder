@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_SYMBOL_RESOLVER (ide_langserv_symbol_resolver_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLangservSymbolResolver, ide_langserv_symbol_resolver, IDE, LANGSERV_SYMBOL_RESOLVER, IdeObject)
 
 struct _IdeLangservSymbolResolverClass

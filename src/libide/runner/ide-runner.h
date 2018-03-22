@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RUNNER (ide_runner_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeRunner, ide_runner, IDE, RUNNER, IdeObject)
 
 struct _IdeRunnerClass

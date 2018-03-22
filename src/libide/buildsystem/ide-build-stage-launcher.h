@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_STAGE_LAUNCHER (ide_build_stage_launcher_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeBuildStageLauncher, ide_build_stage_launcher, IDE, BUILD_STAGE_LAUNCHER, IdeBuildStage)
 
 struct _IdeBuildStageLauncherClass

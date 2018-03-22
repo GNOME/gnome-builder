@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUFFER_MANAGER (ide_buffer_manager_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeBufferManager, ide_buffer_manager, IDE, BUFFER_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_ALL

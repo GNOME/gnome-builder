@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_STAGE (ide_build_stage_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeBuildStage, ide_build_stage, IDE, BUILD_STAGE, IdeObject)
 
 struct _IdeBuildStageClass

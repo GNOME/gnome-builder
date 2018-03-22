@@ -26,6 +26,7 @@
 
 G_BEGIN_DECLS
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeObject, ide_object, IDE, OBJECT, GObject)
 
 #define IDE_TYPE_OBJECT (ide_object_get_type())

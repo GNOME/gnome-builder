@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_FILE_SETTINGS            (ide_file_settings_get_type())
 #define IDE_FILE_SETTINGS_EXTENSION_POINT "org.gnome.libide.extensions.file-settings"
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeFileSettings, ide_file_settings, IDE, FILE_SETTINGS, IdeObject)
 
 struct _IdeFileSettingsClass

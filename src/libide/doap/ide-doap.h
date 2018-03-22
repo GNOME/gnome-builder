@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 #define IDE_DOAP_ERROR (ide_doap_error_quark())
 #define IDE_TYPE_DOAP  (ide_doap_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeDoap, ide_doap, IDE, DOAP, GObject)
 
 typedef enum
