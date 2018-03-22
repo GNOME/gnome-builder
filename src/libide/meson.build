@@ -217,6 +217,9 @@ if get_option('with_editorconfig')
   libide_deps += libeditorconfig_dep
 endif
 
+# Limit visibility to public API
+# libide_args += hidden_visibility_args
+
 libide = shared_library('ide-' + libide_api_version,
   libide_resources + libide_icons_resources + libide_sources,
   dependencies: libide_deps,

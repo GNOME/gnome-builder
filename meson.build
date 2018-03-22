@@ -149,10 +149,25 @@ foreach arg: test_c_args
     global_c_args += arg
   endif
 endforeach
-add_project_arguments(
-  global_c_args,
-  language: 'c'
-)
+
+# Detect and set symbol visibility
+hidden_visibility_args = []
+if get_option('default_library') != 'static'
+  if host_machine.system() == 'windows'
+    config_h.set('DLL_EXPORT', true)
+    if cc.get_id() == 'msvc'
+      config_h.set('_IDE_EXTERN', '__declspec(dllexport) extern')
+    elif cc.has_argument('-fvisibility=hidden')
+      config_h.set('_IDE_EXTERN', '__attribute__((visibility("default"))) __declspec(dllexport) extern')
+      hidden_visibility_args = ['-fvisibility=hidden']
+    endif
+  elif cc.has_argument('-fvisibility=hidden')
+    config_h.set('_IDE_EXTERN', '__attribute__((visibility("default"))) extern')
+    hidden_visibility_args = ['-fvisibility=hidden']
+  endif
+endif
+
+add_project_arguments(global_c_args, language: 'c')
 
 global_link_args = []
 test_link_args = [
