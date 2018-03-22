@@ -44,16 +44,10 @@
  * to avoid doing duplicate work by instead simply chaining the tasks.
  *
  * There are some costs to this design. It uses the main context a bit
- * more than #GTask may use it. Also, an equivalent to
- * g_task_get_source_object() cannot be provided because we do not control
- * the exact lifecycle of that object. g_async_result_get_source_object()
- * may be used which provides a full reference instead of a borrowed
- * reference.
+ * more than #GTask may use it.
  *
- * #IdeTask uses it's own #GThreadPool, however the threads are not exclusive
- * to increase the chances of thread sharing with other pools.
- *
- * The number of threads in the pool is equivalent to N_CPU*2+1.
+ * #IdeTask allows setting a task kind which determines which thread pool
+ * the task will be executed (and throttled) on.
  *
  * Because #IdeTask needs more control over result life-cycles (for chaining
  * results), additional return methods have been provided. Consumers should
