@@ -2,32 +2,43 @@ stages:
     - test
 
 flatpak:master:
-    image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
+    # image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
     stage: test
 
     variables:
         GIT_SUBMODULE_STRATEGY: normal
 
-    script:
-        # This should be removed once the base image works with git submodules
-        - dnf install -y git
+    before_script:
+        # Create a neme for the .flatpak bundle that will be extracted
+        - export FLATPAK_ARTIFACT=gnome-builder-${COMMIT_REF_SHA}.flatpak
+        # append it to gitignore
+        - echo FLATPAK_ARTIFACT >> .gitignore
 
+        # Make sure the flatpak repos are there and up to date.
+        - flatpak remote-add --user gnome-nightly --if-not-exists https://sdk.gnome.org/gnome-nightly.flatpakrepo
+        - flatpak install -y --user gnome-nightly org.gnome.Sdk org.gnome.Platform
+        - flatpak update -y --user
+
+    script:
         # Build the flatpak repo
-        - flatpak-builder --stop-at=gnome-builder app build-aux/flatpak/org.gnome.Builder.json
+        - flatpak-builder --user --stop-at=gnome-builder app build-aux/flatpak/org.gnome.Builder.json
         - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json meson --prefix=/app --libdir=/app/lib _build
         - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build install
         - flatpak-builder --finish-only app build-aux/flatpak/org.gnome.Builder.json
         - flatpak build-export repo app
 
         # Make a flatpak for people to test
-        - flatpak build-bundle repo gnome-builder-dev.flatpak org.gnome.Builder
+        - flatpak build-bundle repo $FLATPAK_ARTIFACT org.gnome.Builder
 
         # Run tests inside the Flatpak env
         # - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build test
 
+    after_script:
+        - git clean -f
+
     artifacts:
         paths:
-            - gnome-builder-dev.flatpak
+            - $FLATPAK_ARTIFACT
         expire_in: 2 days
 
     cache:
