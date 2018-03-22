@@ -42,6 +42,7 @@
 #endif
 
 #define IDE_VERSION_3_28 (G_ENCODE_VERSION (3, 28))
+#define IDE_VERSION_3_30 (G_ENCODE_VERSION (3, 30))
 
 #if (IDE_MINOR_VERSION == 99)
 # define IDE_VERSION_CUR_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION + 1, 0))
@@ -126,6 +127,20 @@
 # define IDE_AVAILABLE_IN_3_28                 IDE_UNAVAILABLE(3, 28)
 #else
 # define IDE_AVAILABLE_IN_3_28                 _IDE_EXTERN
+#endif
+
+#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_30
+# define IDE_DEPRECATED_IN_3_30                IDE_DEPRECATED
+# define IDE_DEPRECATED_IN_3_30_FOR(f)         IDE_DEPRECATED_FOR(f)
+#else
+# define IDE_DEPRECATED_IN_3_30                _IDE_EXTERN
+# define IDE_DEPRECATED_IN_3_30_FOR(f)         _IDE_EXTERN
+#endif
+
+#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_30
+# define IDE_AVAILABLE_IN_3_30                 IDE_UNAVAILABLE(3, 30)
+#else
+# define IDE_AVAILABLE_IN_3_30                 _IDE_EXTERN
 #endif
 
 #endif /* IDE_VERSION_MACROS_H */
