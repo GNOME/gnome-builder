@@ -2,16 +2,17 @@ stages:
     - test
 
 flatpak:master:
-    image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
+    # image: registry.gitlab.com/alatiera/gnome-nightly-oci/gnome-master:latest
     stage: test
 
     variables:
         GIT_SUBMODULE_STRATEGY: normal
 
-    script:
-        # This should be removed once the base image works with git submodules
-        - dnf install -y git
+    before_script:
+        - flatpak remote-add gnome-nightly --if-not-exists https://sdk.gnome.org/gnome-nightly.flatpakrepo
+        - flatpak install -y gnome-nightly org.gnome.Sdk org.gnome.Platform
 
+    script:
         # Build the flatpak repo
         - flatpak-builder --stop-at=gnome-builder app build-aux/flatpak/org.gnome.Builder.json
         - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json meson --prefix=/app --libdir=/app/lib _build
@@ -24,6 +25,9 @@ flatpak:master:
 
         # Run tests inside the Flatpak env
         # - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build test
+
+    after_script:
+        - git clean -f
 
     artifacts:
         paths:
