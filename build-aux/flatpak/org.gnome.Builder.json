@@ -520,8 +520,11 @@
         },
         {
             "name" : "devhelp",
+            "buildsystem" : "meson",
+            "builddir" : true,
             "config-opts" : [
-                "--disable-compile-warnings"
+                "--libdir=/app/lib",
+                "--buildtype=debugoptimized"
             ],
             "cleanup" : [
                 "/bin/*",
