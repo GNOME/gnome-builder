@@ -56,6 +56,12 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
+static inline gboolean
+strv_empty (gchar **strv)
+{
+  return strv == NULL || strv[0] == NULL;
+}
+
 static const gchar *
 get_builddir (GbpFlatpakRuntime *self)
 {
@@ -66,7 +72,6 @@ get_builddir (GbpFlatpakRuntime *self)
 
   return builddir;
 }
-
 
 static gchar *
 get_staging_directory (GbpFlatpakRuntime *self)
@@ -214,8 +219,10 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
           ide_subprocess_launcher_push_argv (ret, filesystem_option_src);
           ide_subprocess_launcher_push_argv (ret, filesystem_option_build);
         }
+
       new_environ = ide_configuration_get_environ (IDE_CONFIGURATION (configuration));
-      if (g_strv_length (new_environ) > 0)
+
+      if (!strv_empty (new_environ))
         {
           for (guint i = 0; new_environ[i]; i++)
             {
