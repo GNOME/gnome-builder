@@ -362,6 +362,7 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
   ide_subprocess_launcher_push_argv (launcher, "meson");
   ide_subprocess_launcher_push_argv (launcher, "introspect");
   ide_subprocess_launcher_push_argv (launcher, "--targets");
+  ide_subprocess_launcher_push_argv (launcher, ide_build_pipeline_get_builddir (pipeline));
 
   subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
