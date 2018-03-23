@@ -43,6 +43,32 @@ static const struct {
 };
 
 #ifdef __linux__
+static gboolean
+has_flag (const gchar *contents,
+          gsize        len,
+          gchar        flag)
+{
+  IdeLineReader reader;
+  const gchar *line;
+  gsize line_len = 0;
+
+  ide_line_reader_init (&reader, (gchar *)contents, len);
+
+  while ((line = ide_line_reader_next (&reader, &line_len)))
+    {
+      if (strncmp (line, "flags: ", 7) == 0)
+        {
+          for (gsize i = 7; i < line_len; i++)
+            {
+              if (line[i] == flag)
+                return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 gbp_qemu_device_provider_load_worker (IdeTask      *task,
                                       gpointer      source_object,
@@ -113,9 +139,13 @@ gbp_qemu_device_provider_load_worker (IdeTask      *task,
 
       path = g_build_filename ("/proc/sys/fs/binfmt_misc", machines[i].filename, NULL);
 
-      /* First line of file should be "enabled\n" */
+      /* First line of file should be "enabled\n". We also require the
+       * 'F' flag so that the kernel opens the interpreter and passes the
+       * fd across to execute within the subprocess.
+       */
       if (ide_g_host_file_get_contents (path, &contents, &len, NULL) &&
-          strncmp (contents, "enabled\n", 8) == 0)
+          strncmp (contents, "enabled\n", 8) == 0 &&
+          has_flag (contents, len, 'F'))
         {
           g_autoptr(IdeLocalDevice) device = NULL;
           g_autofree gchar *display_name = NULL;
