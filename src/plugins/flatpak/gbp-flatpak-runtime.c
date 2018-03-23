@@ -210,7 +210,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
           filesystem_option_src = g_strdup_printf ("--filesystem=%s", project_path);
           filesystem_option_build = g_strdup_printf ("--filesystem=%s", builddir);
           filesystem_option_cache = g_strdup_printf ("--filesystem=%s/gnome-builder", g_get_user_cache_dir ());
-          build_dir_option = g_strdup_printf ("--build-dir=%s", builddir);
           ide_subprocess_launcher_push_argv (ret, "--nofilesystem=host");
           ide_subprocess_launcher_push_argv (ret, filesystem_option_cache);
           ide_subprocess_launcher_push_argv (ret, filesystem_option_src);

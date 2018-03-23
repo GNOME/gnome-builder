@@ -34,44 +34,57 @@ gbp_flatpak_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
 {
   const gchar * const * envp;
   IdeSubprocess *ret;
+  const gchar * const * argv;
+  guint argpos = 0;
+  g_autofree gchar *build_dir_option = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+
   /*
    * The "flatpak build" command will filter out all of our environment variables
-   * from the subprocess. So we need to look at our configured environment and
-   * convert the KEY=VALUE pairs into --env=key=value command line arguments.
+   * from the subprocess, and change the current directory to the build dir.
+   * So we need to look at our configured environment and convert the
+   * KEY=VALUE pairs into --env=key=value command line arguments, and set the appropriate
+   * --build-dir
    */
+
+  argv = ide_subprocess_launcher_get_argv (launcher);
+
+  /*
+   * Locate the position after our ["flatpak", "build"] arguments.
+   */
+  for (argpos = 0; argv[argpos] != NULL; argpos++)
+    {
+      if (g_strcmp0 (argv[argpos], "flatpak") == 0)
+        break;
+    }
+  for (; argv[argpos] != NULL; argpos++)
+    {
+      if (g_strcmp0 (argv[argpos], "build") == 0)
+        {
+          argpos++;
+          break;
+        }
+    }
+
+  build_dir_option = g_strdup_printf ("--build-dir=%s",
+                                      ide_subprocess_launcher_get_cwd (launcher));
+
+  /*
+   * Since this can be called multiple times, we have to avoid re-adding
+   * the --build-dir= parameters a second (or third, or fourth) time.
+   */
+  if (!g_strv_contains (argv, build_dir_option))
+      ide_subprocess_launcher_insert_argv (launcher, argpos, build_dir_option);
 
   envp = ide_subprocess_launcher_get_environ (launcher);
 
   if (envp != NULL)
     {
-      const gchar * const * argv;
-      guint argpos = 0;
-
-      argv = ide_subprocess_launcher_get_argv (launcher);
-
-      /*
-       * Locate the position after our ["flatpak", "build"] arguments.
-       */
-      for (argpos = 0; argv[argpos] != NULL; argpos++)
-        {
-          if (g_strcmp0 (argv[argpos], "flatpak") == 0)
-            break;
-        }
-      for (; argv[argpos] != NULL; argpos++)
-        {
-          if (g_strcmp0 (argv[argpos], "build") == 0)
-            {
-              argpos++;
-              break;
-            }
-        }
-
       /*
        * Since this can be called multiple times, we have to avoid re-adding
        * the --env= parameters a second (or third, or fourth) time.
