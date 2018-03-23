@@ -208,6 +208,7 @@ gbp_meson_test_provider_do_reload (GbpMesonTestProvider *self,
   ide_subprocess_launcher_push_argv (launcher, "meson");
   ide_subprocess_launcher_push_argv (launcher, "introspect");
   ide_subprocess_launcher_push_argv (launcher, "--tests");
+  ide_subprocess_launcher_push_argv (launcher, ide_build_pipeline_get_builddir (pipeline));
 
   if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     IDE_GOTO (failure);
