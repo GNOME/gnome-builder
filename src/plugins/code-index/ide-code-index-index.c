@@ -23,7 +23,6 @@
 
 #include "ide-code-index-search-result.h"
 #include "ide-code-index-index.h"
-#include "ide-persistent-map.h"
 
 /*
  * This class will store index of all directories and will have a map of

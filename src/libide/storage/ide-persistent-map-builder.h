@@ -16,36 +16,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <glib-object.h>
+#pragma once
+
 #include <gio/gio.h>
 
-#pragma once
+#include "ide-version-macros.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PERSISTENT_MAP_BUILDER (ide_persistent_map_builder_get_type ())
 
+IDE_AVAILABLE_IN_3_30
 G_DECLARE_FINAL_TYPE (IdePersistentMapBuilder, ide_persistent_map_builder, IDE, PERSISTENT_MAP_BUILDER, GObject)
 
+IDE_AVAILABLE_IN_3_30
 IdePersistentMapBuilder *ide_persistent_map_builder_new                (void);
+IDE_AVAILABLE_IN_3_30
 void                     ide_persistent_map_builder_insert             (IdePersistentMapBuilder  *self,
                                                                         const gchar              *key,
                                                                         GVariant                 *value,
                                                                         gboolean                  replace);
+IDE_AVAILABLE_IN_3_30
 void                     ide_persistent_map_builder_set_metadata_int64 (IdePersistentMapBuilder  *self,
                                                                         const gchar              *key,
                                                                         gint64                    value);
+IDE_AVAILABLE_IN_3_30
 gboolean                 ide_persistent_map_builder_write              (IdePersistentMapBuilder  *self,
                                                                         GFile                    *destination,
                                                                         gint                      io_priority,
                                                                         GCancellable             *cancellable,
                                                                         GError                  **error);
+IDE_AVAILABLE_IN_3_30
 void                     ide_persistent_map_builder_write_async        (IdePersistentMapBuilder  *self,
                                                                         GFile                    *destination,
                                                                         gint                      io_priority,
                                                                         GCancellable             *cancellable,
                                                                         GAsyncReadyCallback       callback,
                                                                         gpointer                  user_data);
+IDE_AVAILABLE_IN_3_30
 gboolean                 ide_persistent_map_builder_write_finish       (IdePersistentMapBuilder  *self,
                                                                         GAsyncResult             *result,
                                                                         GError                  **error);

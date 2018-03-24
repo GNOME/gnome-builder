@@ -1,6 +1,7 @@
 /* ide-persistent-map.c
  *
  * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017-2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +19,10 @@
 
 #define G_LOG_DOMAIN "ide-persistent-map"
 
-#include <ide.h>
+#include "config.h"
 
-#include "ide-persistent-map.h"
+#include "storage/ide-persistent-map.h"
+#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -187,6 +189,7 @@ ide_persistent_map_load_file (IdePersistentMap *self,
   task = ide_task_new (self, cancellable, NULL, NULL);
   ide_task_set_source_tag (task, ide_persistent_map_load_file);
   ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
   ide_persistent_map_load_file_worker (task, self, file, cancellable);
 
   return ide_task_propagate_boolean (task, error);
@@ -211,6 +214,7 @@ ide_persistent_map_load_file_async (IdePersistentMap    *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_persistent_map_load_file_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
   ide_task_run_in_thread (task, ide_persistent_map_load_file_worker);
 }

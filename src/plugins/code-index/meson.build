@@ -20,10 +20,6 @@ code_index_sources = [
   'ide-code-index-service.h',
   'ide-code-index-symbol-resolver.c',
   'ide-code-index-symbol-resolver.h',
-  'ide-persistent-map-builder.c',
-  'ide-persistent-map-builder.h',
-  'ide-persistent-map.c',
-  'ide-persistent-map.h',
 ]
 
 gnome_builder_plugins_sources += files(code_index_sources)

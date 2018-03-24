@@ -162,6 +162,8 @@ G_BEGIN_DECLS
 #include "sourceview/ide-source-map.h"
 #include "sourceview/ide-source-style-scheme.h"
 #include "sourceview/ide-source-view.h"
+#include "storage/ide-persistent-map.h"
+#include "storage/ide-persistent-map-builder.h"
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
 #include "symbols/ide-code-indexer.h"

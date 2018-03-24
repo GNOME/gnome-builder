@@ -23,7 +23,6 @@
 #include <string.h>
 
 #include "ide-code-index-builder.h"
-#include "ide-persistent-map-builder.h"
 
 struct _IdeCodeIndexBuilder
 {
