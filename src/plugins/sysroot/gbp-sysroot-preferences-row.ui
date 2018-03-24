@@ -16,8 +16,7 @@
         </child>
         <child>
           <object class="GtkImage" id="image">
-            <!-- todo: need icon here -->
-            <property name="icon-name">edit-symbolic</property>
+            <property name="icon-name">pan-down-symbolic</property>
             <property name="visible">true</property>
           </object>
         </child>
