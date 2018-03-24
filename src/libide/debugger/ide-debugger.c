@@ -928,7 +928,7 @@ ide_debugger_move_finish (IdeDebugger   *self,
                           GError       **error)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   return IDE_DEBUGGER_GET_CLASS (self)->move_finish (self, result, error);
 }
@@ -1590,7 +1590,7 @@ ide_debugger_list_frames_finish (IdeDebugger   *self,
                                  GError       **error)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   return IDE_DEBUGGER_GET_CLASS (self)->list_frames_finish (self, result, error);
 }
@@ -1789,7 +1789,7 @@ ide_debugger_list_locals_finish (IdeDebugger   *self,
                                  GError       **error)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   return IDE_DEBUGGER_GET_CLASS (self)->list_locals_finish (self, result, error);
 }
@@ -1848,7 +1848,7 @@ ide_debugger_list_params_finish (IdeDebugger   *self,
                                  GError       **error)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   return IDE_DEBUGGER_GET_CLASS (self)->list_params_finish (self, result, error);
 }
@@ -1895,7 +1895,7 @@ ide_debugger_list_registers_finish (IdeDebugger   *self,
                                     GError       **error)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   return IDE_DEBUGGER_GET_CLASS (self)->list_registers_finish (self, result, error);
 }
@@ -1945,7 +1945,7 @@ ide_debugger_disassemble_finish (IdeDebugger   *self,
                                  GError       **error)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   return IDE_DEBUGGER_GET_CLASS (self)->disassemble_finish (self, result, error);
 }
