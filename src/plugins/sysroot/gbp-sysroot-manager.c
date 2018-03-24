@@ -103,7 +103,7 @@ sysroot_manager_find_additional_pkgconfig_paths (GbpSysrootManager *self,
 
               if (file_error != NULL)
                 {
-                  g_critical ("Error while reading \"%s\": %s", libmultiarch_path, file_error->message);
+                  g_warning ("Error while reading \"%s\": %s", libmultiarch_path, file_error->message);
                   break;
                 }
 
@@ -112,7 +112,7 @@ sysroot_manager_find_additional_pkgconfig_paths (GbpSysrootManager *self,
             }
         }
       else
-        g_critical ("Unable to read \"%s\": %s", libmultiarch_path, file_error->message);
+        g_warning ("Unable to read \"%s\": %s", libmultiarch_path, file_error->message);
     }
 
   return g_strdup (returned_paths);
@@ -130,7 +130,7 @@ sysroot_manager_save (GbpSysrootManager *self)
   conf_file = sysroot_manager_get_path ();
 
   if (!g_key_file_save_to_file (self->key_file, conf_file, &error))
-    g_critical ("Error loading the sysroot configuration: %s", error->message);
+    g_warning ("Error saving the sysroot configuration: %s", error->message);
 }
 
 /**
@@ -196,9 +196,8 @@ gbp_sysroot_manager_remove_target (GbpSysrootManager *self,
   g_return_if_fail (self->key_file != NULL);
   g_return_if_fail (target != NULL);
 
-  g_key_file_remove_group (self->key_file, target, &error);
-  if (error)
-    g_critical ("Error removing target \"%s\": %s", target, error->message);
+  if (!g_key_file_remove_group (self->key_file, target, &error))
+    g_warning ("Error removing target \"%s\": %s", target, error->message);
 
   g_signal_emit (self, signals[TARGET_MODIFIED], 0, target, GBP_SYSROOT_MANAGER_TARGET_REMOVED);
   sysroot_manager_save (self);
@@ -351,10 +350,10 @@ gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
           if (regex_error == NULL)
             gbp_sysroot_manager_set_target_pkg_config_path (self, target, current_pkgconfigs);
           else
-            g_critical ("Regex error: %s", regex_error->message);
+            g_warning ("Regex error: %s", regex_error->message);
         }
       else
-        g_critical ("Regex error: %s", regex_error->message);
+        g_warning ("Regex error: %s", regex_error->message);
     }
 }
 
@@ -496,7 +495,8 @@ gbp_sysroot_manager_init (GbpSysrootManager *self)
 
   conf_file = sysroot_manager_get_path ();
   self->key_file = g_key_file_new ();
-  g_key_file_load_from_file (self->key_file, conf_file, G_KEY_FILE_KEEP_COMMENTS, &error);
-  if (g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-    g_critical ("Error loading the sysroot configuration: %s", error->message);
+
+  if (!g_key_file_load_from_file (self->key_file, conf_file, G_KEY_FILE_KEEP_COMMENTS, &error) &&
+      !g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+    g_warning ("Error loading the sysroot configuration: %s", error->message);
 }
