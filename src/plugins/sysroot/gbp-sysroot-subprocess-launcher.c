@@ -32,7 +32,7 @@ G_DEFINE_TYPE (GbpSysrootSubprocessLauncher,
                gbp_sysroot_subprocess_launcher,
                IDE_TYPE_SUBPROCESS_LAUNCHER)
 
-GbpSysrootSubprocessLauncher *
+IdeSubprocessLauncher *
 gbp_sysroot_subprocess_launcher_new (GSubprocessFlags flags)
 {
   return g_object_new (GBP_TYPE_SYSROOT_SUBPROCESS_LAUNCHER,
@@ -85,5 +85,4 @@ gbp_sysroot_subprocess_launcher_class_init (GbpSysrootSubprocessLauncherClass *k
 static void
 gbp_sysroot_subprocess_launcher_init (GbpSysrootSubprocessLauncher *self)
 {
-  
 }

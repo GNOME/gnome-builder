@@ -82,40 +82,32 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (GBP_IS_SYSROOT_RUNTIME (self), NULL);
+  g_assert (GBP_IS_SYSROOT_RUNTIME (self));
 
-  ret = (IdeSubprocessLauncher *)gbp_sysroot_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
+  ret = gbp_sysroot_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                             G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
   if (ret != NULL)
     {
       GbpSysrootManager *sysroot_manager = NULL;
-      const gchar *env_var = NULL;
-      const gchar *sysroot_id = NULL;
       g_autofree gchar *sysroot_cflags = NULL;
       g_autofree gchar *sysroot_libdirs = NULL;
-      g_auto(GStrv) path_parts = NULL;
       g_autofree gchar *sysroot_path = NULL;
       g_autofree gchar *pkgconfig_dirs = NULL;
+      g_autofree gchar *cflags = NULL;
+      g_auto(GStrv) path_parts = NULL;
+      const gchar *env_var = NULL;
+      const gchar *sysroot_id = NULL;
 
       sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
-
       sysroot_manager = gbp_sysroot_manager_get_default ();
-
-      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
-      ide_subprocess_launcher_set_clear_env (ret, FALSE);
-
       sysroot_path = gbp_sysroot_manager_get_target_path (sysroot_manager, sysroot_id);
-
       env_var = ide_subprocess_launcher_getenv (ret, "CFLAGS");
       sysroot_cflags = g_strconcat ("--sysroot=", sysroot_path, NULL);
-      ide_subprocess_launcher_setenv (ret, "CFLAGS", g_strjoin (" ", sysroot_cflags, env_var, NULL), TRUE);
-
-      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_DIR", "", TRUE);
-
-      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_SYSROOT_DIR", g_strdup (sysroot_path), TRUE);
-
+      cflags = g_strjoin (" ", sysroot_cflags, env_var, NULL);
       pkgconfig_dirs = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, sysroot_id);
-      if (pkgconfig_dirs != NULL && g_strcmp0 (pkgconfig_dirs, "") != 0)
+
+      if (!dzl_str_empty0 (pkgconfig_dirs))
         {
           g_autofree gchar *libdir_tmp = NULL;
 
@@ -123,6 +115,12 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
           sysroot_libdirs = g_steal_pointer (&libdir_tmp);
         }
 
+      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
+      ide_subprocess_launcher_set_clear_env (ret, FALSE);
+
+      ide_subprocess_launcher_setenv (ret, "CFLAGS", cflags, TRUE);
+      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_DIR", "", TRUE);
+      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_SYSROOT_DIR", g_strdup (sysroot_path), TRUE);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_LIBDIR", sysroot_libdirs, TRUE);
     }
   else
@@ -139,19 +137,19 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
 static gchar **
 gbp_sysroot_runtime_get_system_include_dirs (IdeRuntime *runtime)
 {
-  GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
+  GbpSysrootRuntime *self = (GbpSysrootRuntime *)runtime;
   GbpSysrootManager *sysroot_manager = NULL;
-  const gchar *sysroot_id = NULL;
-  const gchar *result_paths[2] = { NULL, NULL };
   g_autofree gchar *sysroot_path = NULL;
   g_autofree gchar *full_path = NULL;
+  const gchar *sysroot_id = NULL;
+  const gchar *result_paths[2] = { NULL, NULL };
 
-  g_return_val_if_fail (GBP_IS_SYSROOT_RUNTIME (self), NULL);
+  g_assert (GBP_IS_SYSROOT_RUNTIME (self));
 
   sysroot_manager = gbp_sysroot_manager_get_default ();
   sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
   sysroot_path = gbp_sysroot_manager_get_target_path (sysroot_manager, sysroot_id);
-  full_path = g_build_path (G_DIR_SEPARATOR_S, sysroot_path, "/usr/include", NULL);
+  full_path = g_build_filename (G_DIR_SEPARATOR_S, sysroot_path, "/usr/include", NULL);
   result_paths[0] = full_path;
 
   return g_strdupv ((char**) result_paths);
@@ -164,20 +162,26 @@ gbp_sysroot_runtime_get_arch (IdeRuntime *runtime)
   GbpSysrootManager *sysroot_manager = NULL;
   const gchar *sysroot_id = NULL;
 
-  g_return_val_if_fail (GBP_IS_SYSROOT_RUNTIME (self), NULL);
+  g_assert (GBP_IS_SYSROOT_RUNTIME (self));
 
   sysroot_manager = gbp_sysroot_manager_get_default ();
   sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
+
   return gbp_sysroot_manager_get_target_arch (sysroot_manager, sysroot_id);
 }
 
 static void
 sysroot_runtime_target_name_changed (GbpSysrootRuntime *self,
-                                     gchar             *target,
-                                     gchar             *new_name,
-                                     gpointer           user_data)
+                                     const gchar       *target,
+                                     const gchar       *new_name,
+                                     GbpSysrootManager *manager)
 {
-  const gchar* sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
+  const gchar* sysroot_id;
+
+  g_assert (GBP_IS_SYSROOT_RUNTIME (self));
+  g_assert (GBP_IS_SYSROOT_MANAGER (manager));
+
+  sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
 
   if (g_strcmp0 (target, sysroot_id) == 0)
     ide_runtime_set_display_name (IDE_RUNTIME (self), new_name);
@@ -190,12 +194,20 @@ gbp_sysroot_runtime_constructed (GObject *object)
   g_autofree gchar *display_name = NULL;
   const gchar* sysroot_id = NULL;
 
+  g_assert (GBP_IS_SYSROOT_RUNTIME (object));
+
   sysroot_id = gbp_sysroot_runtime_get_sysroot_id (GBP_SYSROOT_RUNTIME (object));
   sysroot_manager = gbp_sysroot_manager_get_default ();
   display_name = gbp_sysroot_manager_get_target_name (sysroot_manager, sysroot_id);
   ide_runtime_set_display_name (IDE_RUNTIME (object), display_name);
 
-  g_signal_connect_swapped (sysroot_manager, "target-name-changed", G_CALLBACK (sysroot_runtime_target_name_changed), object);
+  g_signal_connect_object (sysroot_manager,
+                            "target-name-changed",
+                            G_CALLBACK (sysroot_runtime_target_name_changed),
+                            object,
+                            G_CONNECT_SWAPPED);
+
+  G_OBJECT_CLASS (gbp_sysroot_runtime_parent_class)->constructed (object);
 }
 
 static void
@@ -214,6 +226,4 @@ gbp_sysroot_runtime_class_init (GbpSysrootRuntimeClass *klass)
 static void
 gbp_sysroot_runtime_init (GbpSysrootRuntime *self)
 {
-  
 }
-

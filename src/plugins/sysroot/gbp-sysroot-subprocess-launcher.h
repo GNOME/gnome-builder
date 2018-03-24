@@ -27,6 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSysrootSubprocessLauncher, gbp_sysroot_subprocess_launcher, GBP, SYSROOT_SUBPROCESS_LAUNCHER, IdeSubprocessLauncher)
 
-GbpSysrootSubprocessLauncher *gbp_sysroot_subprocess_launcher_new (GSubprocessFlags flags);
+IdeSubprocessLauncher *gbp_sysroot_subprocess_launcher_new (GSubprocessFlags flags);
 
 G_END_DECLS
