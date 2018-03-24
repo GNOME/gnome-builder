@@ -224,6 +224,8 @@ src/plugins/sysprof/gbp-sysprof-perspective.c
 src/plugins/sysprof/gbp-sysprof-perspective.ui
 src/plugins/sysprof/gbp-sysprof-workbench-addin.c
 src/plugins/sysprof/gtk/menus.ui
+src/plugins/sysroot/gbp-sysroot-preferences-addin.c
+src/plugins/sysroot/gbp-sysroot-preferences-row.ui
 src/plugins/terminal/gb-terminal-view-actions.c
 src/plugins/terminal/gb-terminal-view.c
 src/plugins/terminal/gb-terminal-workbench-addin.c
