@@ -16,6 +16,7 @@
         </child>
         <child>
           <object class="GtkImage" id="image">
+            <!-- todo: need icon here -->
             <property name="icon-name">edit-symbolic</property>
             <property name="visible">true</property>
           </object>
@@ -48,16 +49,21 @@
     <property name="can-focus">true</property>
     <child>
       <object class="GtkGrid">
+        <property name="border-width">12</property>
         <property name="orientation">horizontal</property>
         <property name="column-spacing">12</property>
-        <property name="row-spacing">6</property>
+        <property name="row-spacing">12</property>
         <property name="margin">6</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkLabel">
+            <style>
+              <class name="dim-label"/>
+            </style>
             <property name="visible">true</property>
             <property name="xalign">1.0</property>
             <property name="label" translatable="yes">Name</property>
+            <property name="tooltip-text" translatable="yes">A name to identify the sysroot.</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -77,9 +83,13 @@
         </child>
         <child>
           <object class="GtkLabel">
+            <style>
+              <class name="dim-label"/>
+            </style>
             <property name="visible">true</property>
             <property name="xalign">1.0</property>
             <property name="label" translatable="yes">Architecture</property>
+            <property name="tooltip-text" translatable="yes">The system architecture of the sysroot.</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -103,9 +113,13 @@
         </child>
         <child>
           <object class="GtkLabel">
+            <style>
+              <class name="dim-label"/>
+            </style>
             <property name="visible">true</property>
             <property name="xalign">1.0</property>
-            <property name="label" translatable="yes">Sysroot path</property>
+            <property name="label" translatable="yes">Location</property>
+            <property name="tooltip-text" translatable="yes">An absolute file-system path to the sysroot.</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -127,9 +141,13 @@
         </child>
         <child>
           <object class="GtkLabel">
+            <style>
+              <class name="dim-label"/>
+            </style>
             <property name="visible">true</property>
             <property name="xalign">1.0</property>
-            <property name="label" translatable="yes">Pkg-config paths</property>
+            <property name="label" translatable="yes">Package Config Path</property>
+            <property name="tooltip-text" translatable="yes">An optional comma-separated path to specify PKG_CONFIG_PATH.</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -157,6 +175,7 @@
             <property name="hexpand">true</property>
             <property name="can-focus">true</property>
             <property name="halign">end</property>
+            <property name="margin-top">6</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
