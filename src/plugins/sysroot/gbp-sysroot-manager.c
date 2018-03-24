@@ -491,7 +491,7 @@ gbp_sysroot_manager_class_init (GbpSysrootManagerClass *klass)
 static void
 gbp_sysroot_manager_init (GbpSysrootManager *self)
 {
-  gchar *conf_file = NULL;
+  g_autofree gchar *conf_file = NULL;
   g_autoptr(GError) error = NULL;
 
   conf_file = sysroot_manager_get_path ();
