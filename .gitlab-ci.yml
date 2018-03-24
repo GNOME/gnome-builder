@@ -6,7 +6,7 @@ flatpak:
     stage: test
 
     variables:
-        GIT_SUBMODULE_STRATEGY: normal
+        GIT_SUBMODULE_STRATEGY: recursive
         FLATPAK_ARTIFACT: gnome-builder-git.flatpak
 
     script:
