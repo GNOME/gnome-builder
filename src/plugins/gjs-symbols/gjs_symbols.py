@@ -390,18 +390,18 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
             except (IndexError, KeyError) as e:
                 raise GLib.Error('Failed to extract information from ast: {}'.format(e))
 
+            builder = Ide.CodeIndexEntryBuilder()
+
             entries = []
             # TODO: Avoid recreating the same data
             for node in self._flatten_node_list(root_node):
-                entry = Ide.CodeIndexEntry(
-                    key=node.props.file.get_path() + '|' + node.props.name, # Some unique value..
-                    name=self._get_node_name(node),
-                    kind=node.props.kind,
-                    flags=node.props.flags,
-                    begin_line=node.props.line + 1,  # Not sure why offset here doesn't match tree
-                    begin_line_offset=node.props.col + 1,
-                )
-                entries.append(entry)
+                builder.set_key(node.props.file.get_path() + '|' + node.props.name) # Some unique value..
+                builder.set_name(self._get_node_name(node))
+                builder.set_kind(node.props.kind)
+                builder.set_flags(node.props.flags)
+                # Not sure why offset here doesn't match tree
+                builder.set_range(node.props.line + 1, node.props.col + 1, 0, 0)
+                entries.append(builder.build())
 
             task.entries = JsCodeIndexEntries(task.file, entries)
             task.return_boolean(True)

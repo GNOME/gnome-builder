@@ -19,6 +19,7 @@
 #pragma once
 
 #include "ide-object.h"
+#include "ide-version-macros.h"
 
 #include "symbols/ide-code-index-entry.h"
 #include "symbols/ide-symbol.h"
@@ -34,13 +35,29 @@ struct _IdeCodeIndexEntriesInterface
 {
   GTypeInterface       parent_iface;
 
-  GFile             *(*get_file)       (IdeCodeIndexEntries *self);
-  IdeCodeIndexEntry *(*get_next_entry) (IdeCodeIndexEntries *self);
+  GFile             *(*get_file)            (IdeCodeIndexEntries  *self);
+  IdeCodeIndexEntry *(*get_next_entry)      (IdeCodeIndexEntries  *self);
+  void               (*next_entries_async)  (IdeCodeIndexEntries  *self,
+                                             GCancellable         *cancellable,
+                                             GAsyncReadyCallback   callback,
+                                             gpointer              user_data);
+  GPtrArray         *(*next_entries_finish) (IdeCodeIndexEntries  *self,
+                                             GAsyncResult         *result,
+                                             GError              **error);
 };
 
 IDE_AVAILABLE_IN_ALL
-IdeCodeIndexEntry *ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self);
+IdeCodeIndexEntry *ide_code_index_entries_get_next_entry      (IdeCodeIndexEntries  *self);
 IDE_AVAILABLE_IN_ALL
-GFile             *ide_code_index_entries_get_file       (IdeCodeIndexEntries *self);
+GFile             *ide_code_index_entries_get_file            (IdeCodeIndexEntries  *self);
+IDE_AVAILABLE_IN_3_30
+void               ide_code_index_entries_next_entries_async  (IdeCodeIndexEntries  *self,
+                                                               GCancellable         *cancellable,
+                                                               GAsyncReadyCallback   callback,
+                                                               gpointer              user_data);
+IDE_AVAILABLE_IN_3_30
+GPtrArray         *ide_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *self,
+                                                               GAsyncResult         *result,
+                                                               GError              **error);
 
 G_END_DECLS

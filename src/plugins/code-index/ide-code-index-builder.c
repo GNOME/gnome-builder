@@ -807,38 +807,28 @@ get_changes_finish (IdeCodeIndexBuilder  *self,
 
 /**
  * add_entries_to_index
- * @self: a #IdeCodeIndexBuilder
+ * @entries: (element-type Ide.CodeIndexEntry): the entries to add
  * @file_id: the id within the index
  * @map_builder: the persistent map builder to append
  * @fuzzy_builder: the fuzzy index builder to append
- * @deadline: the deadline to stop processing on this thread. This should
- *   be a time using the monotonic clock, g_get_monotonic_time().
  *
- * This will incrementally add entries to the builder. However,
- * it will stop processing once @deadline has expired.
- *
- * Returns: %TRUE if there are more items to process; otherwise %FALSE
+ * This will incrementally add entries to the builder.
  */
-static gboolean
-add_entries_to_index (IdeCodeIndexEntries     *entries,
+static void
+add_entries_to_index (GPtrArray               *entries,
+                      GFile                   *file,
                       guint32                  file_id,
                       IdePersistentMapBuilder *map_builder,
-                      DzlFuzzyIndexBuilder    *fuzzy_builder,
-                      gint64                   deadline)
+                      DzlFuzzyIndexBuilder    *fuzzy_builder)
 {
   g_autofree gchar *filename = NULL;
-  g_autoptr(GFile) file = NULL;
-  guint count = 0;
   gchar num[16];
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CODE_INDEX_ENTRIES (entries));
+  g_assert (G_IS_FILE (file));
   g_assert (file_id > 0);
   g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (map_builder));
   g_assert (DZL_IS_FUZZY_INDEX_BUILDER (fuzzy_builder));
-
-  file = ide_code_index_entries_get_file (entries);
-  g_assert (G_IS_FILE (file));
 
   /*
    * Storing file_name:id and id:file_name into index, file_name:id will be
@@ -852,18 +842,15 @@ add_entries_to_index (IdeCodeIndexEntries     *entries,
   dzl_fuzzy_index_builder_set_metadata_uint32 (fuzzy_builder, filename, file_id);
   dzl_fuzzy_index_builder_set_metadata_string (fuzzy_builder, num, filename);
 
-  for (;;)
+  for (guint i = 0; i < entries->len; i++)
     {
-      g_autoptr(IdeCodeIndexEntry) entry = NULL;
+      IdeCodeIndexEntry *entry = g_ptr_array_index (entries, i);
       const gchar *key;
       const gchar *name;
       IdeSymbolKind kind;
       IdeSymbolFlags flags;
       guint begin_line;
       guint begin_line_offset;
-
-      if (!(entry = ide_code_index_entries_get_next_entry (entries)))
-        break;
 
       key = ide_code_index_entry_get_key (entry);
       name  = ide_code_index_entry_get_name (entry);
@@ -898,17 +885,7 @@ add_entries_to_index (IdeCodeIndexEntries     *entries,
                                                        flags,
                                                        kind),
                                         0);
-
-      if (++count > ADD_ENTRIES_CHUNK_SIZE)
-        {
-          count = 0;
-
-          if (g_get_monotonic_time () >= deadline)
-            return TRUE;
-        }
     }
-
-  return FALSE;
 }
 
 static void
@@ -943,37 +920,58 @@ index_directory_worker (IdeTask      *task,
     ide_task_return_boolean (task, TRUE);
 }
 
-static gboolean
-add_entries_to_index_cb (gpointer data)
+static void
+add_entries_to_index_next_entries_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
 {
+  IdeCodeIndexEntries *entries = (IdeCodeIndexEntries *)object;
+  g_autoptr(GPtrArray) ret = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
   AddEntriesData *task_data;
-  IdeTask *task = data;
-  gint64 deadline;
-  gboolean has_more;
+  GCancellable *cancellable;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_CODE_INDEX_ENTRIES (entries));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  ret = ide_code_index_entries_next_entries_finish (entries, result, &error);
+
+  if (error != NULL)
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  if (ret == NULL || ret->len == 0)
+    {
+      ide_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  cancellable = ide_task_get_cancellable (task);
   task_data = ide_task_get_task_data (task);
+
   g_assert (task_data != NULL);
   g_assert (IDE_IS_CODE_INDEX_ENTRIES (task_data->entries));
   g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (task_data->map_builder));
   g_assert (DZL_IS_FUZZY_INDEX_BUILDER (task_data->fuzzy_builder));
   g_assert (task_data->file_id > 0);
 
-  /* 1 msec of indexing allowed this cycle */
-  deadline = g_get_monotonic_time () + (G_USEC_PER_SEC / 1000);
-  has_more = add_entries_to_index (task_data->entries,
-                                   task_data->file_id,
-                                   task_data->map_builder,
-                                   task_data->fuzzy_builder,
-                                   deadline);
+  file = ide_code_index_entries_get_file (entries);
 
-  /* Complete task if there's nothing more */
-  if (!has_more)
-    ide_task_return_boolean (task, TRUE);
+  add_entries_to_index (ret,
+                        file,
+                        task_data->file_id,
+                        task_data->map_builder,
+                        task_data->fuzzy_builder);
 
-  return has_more;
+  ide_code_index_entries_next_entries_async (entries,
+                                             cancellable,
+                                             add_entries_to_index_next_entries_cb,
+                                             g_steal_pointer (&task));
 }
 
 static void
@@ -1012,11 +1010,10 @@ add_entries_to_index_async (IdeCodeIndexBuilder     *self,
   task_data->file_id = file_id;
   ide_task_set_task_data (task, task_data, (GDestroyNotify)add_entries_data_free);
 
-  /* Super low priority to avoid UI stalls */
-  g_idle_add_full (G_PRIORITY_LOW + 1000,
-                   add_entries_to_index_cb,
-                   g_steal_pointer (&task),
-                   g_object_unref);
+  ide_code_index_entries_next_entries_async (entries,
+                                             cancellable,
+                                             add_entries_to_index_next_entries_cb,
+                                             g_steal_pointer (&task));
 }
 
 static gboolean
