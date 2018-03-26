@@ -34,6 +34,17 @@ IDE_FILE_SETTINGS_PROPERTY (INDENT_WIDTH, indent_width,
                             priv->indent_width = indent_width;,
                             int)
 
+IDE_FILE_SETTINGS_PROPERTY (AUTO_INDENT, auto_indent,
+                            gboolean, gboolean,
+                            "auto-indent",
+                            g_param_spec_boolean ("auto-indent",
+                                                  "Auto Indent",
+                                                  "If the the auto-indenter should be enabled",
+                                                  FALSE,
+                                                  (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)),
+                            priv->auto_indent = !!auto_indent;,
+                            boolean)
+
 IDE_FILE_SETTINGS_PROPERTY (INSERT_TRAILING_NEWLINE, insert_trailing_newline,
                             gboolean, gboolean,
                             "insert-trailing-newline",

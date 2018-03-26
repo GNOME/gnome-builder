@@ -228,7 +228,7 @@
                 <property name="margin-top">6</property>
                 <property name="visible">true</property>
                 <property name="halign">fill</property>
-                <property name="action-name">source-view.auto-indent</property>
+                <property name="action-name">file-settings.auto-indent</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">true</property>

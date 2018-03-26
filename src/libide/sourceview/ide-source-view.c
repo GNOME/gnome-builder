@@ -6721,6 +6721,8 @@ ide_source_view_init (IdeSourceView *self)
                                    0);
 
   priv->file_setting_bindings = dzl_binding_group_new ();
+  dzl_binding_group_bind (priv->file_setting_bindings, "auto-indent",
+                          self, "auto-indent", G_BINDING_SYNC_CREATE);
   dzl_binding_group_bind (priv->file_setting_bindings, "indent-width",
                           self, "indent-width", G_BINDING_SYNC_CREATE);
   dzl_binding_group_bind (priv->file_setting_bindings, "tab-width",
