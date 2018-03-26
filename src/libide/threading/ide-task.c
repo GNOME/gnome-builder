@@ -1403,9 +1403,10 @@ ide_task_run_in_thread (IdeTask           *self,
   priv->thread_called = TRUE;
   priv->thread_func = thread_func;
 
-  ide_thread_pool_push ((IdeThreadPoolKind)priv->kind,
-                        ide_task_thread_func,
-                        g_object_ref (self));
+  ide_thread_pool_push_with_priority ((IdeThreadPoolKind)priv->kind,
+                                      priv->priority,
+                                      ide_task_thread_func,
+                                      g_object_ref (self));
 
 unlock:
   g_mutex_unlock (&priv->mutex);
