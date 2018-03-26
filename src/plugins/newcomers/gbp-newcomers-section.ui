@@ -51,7 +51,7 @@ Vala</property>
               <object class="GbpNewcomersProject">
                 <property name="name" translatable="yes">Maps</property>
                 <property name="icon-name">org.gnome.Maps</property>
-                <property name="uri">https://git.gnome.org/browse/gnome-maps</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-maps.git</property>
                 <property name="visible">true</property>
                 <property name="languages">C
 JavaScript</property>
