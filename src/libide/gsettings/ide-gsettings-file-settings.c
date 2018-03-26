@@ -89,6 +89,7 @@ spaces_style_get (GValue   *value,
 }
 
 static SettingsMapping language_mappings [] = {
+  { "auto-indent",                   "auto-indent",              NULL             },
   { "indent-width",                  "indent-width",             NULL             },
   { "insert-spaces-instead-of-tabs", "indent-style",             indent_style_get },
   { "right-margin-position",         "right-margin-position",    NULL             },
