@@ -2776,13 +2776,10 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
   /* We might need to switch threads before we execute the command. */
   if (thread != NULL)
     {
-      if (selected == NULL || ide_debugger_thread_compare (selected, thread) != 0)
-        {
-          const gchar *tid = ide_debugger_thread_get_id (thread);
+      const gchar *tid = ide_debugger_thread_get_id (thread);
 
-          /* We ignore 9999 commands */
-          g_string_append_printf (str, "9999-thread-select %s\n", tid);
-        }
+      /* We ignore 9999 commands */
+      g_string_append_printf (str, "9999-thread-select %s\n", tid);
     }
 
   if (command[0] == '-' || strstr (command, "@@@@") != NULL)
