@@ -456,6 +456,7 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   gtk_widget_show (GTK_WIDGET (self->clone_progress));
 
   ide_task_set_task_data (task, req, clone_request_free);
+  ide_task_set_release_on_propagate (task, FALSE);
   ide_task_run_in_thread (task, ide_git_clone_widget_worker);
 }
 
