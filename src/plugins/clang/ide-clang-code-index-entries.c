@@ -55,6 +55,9 @@ struct _IdeClangCodeIndexEntries
 
   /* Path to the file that has been parsed. */
   gchar *path;
+
+  /* If we've already run once, (so return empty result). */
+  guint has_run : 1;
 };
 
 static void
@@ -376,7 +379,15 @@ ide_clang_code_index_entries_next_entries_async (IdeCodeIndexEntries *entries,
   ide_task_set_source_tag (task, ide_clang_code_index_entries_next_entries_async);
   ide_task_set_priority (task, G_PRIORITY_LOW + 1000);
   ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
-  ide_task_run_in_thread (task, ide_clang_code_index_entries_worker);
+
+  if (self->has_run)
+    ide_task_return_pointer (task,
+                             g_ptr_array_new_with_free_func ((GDestroyNotify)ide_code_index_entry_free),
+                             (GDestroyNotify)g_ptr_array_unref);
+  else
+    ide_task_run_in_thread (task, ide_clang_code_index_entries_worker);
+
+  self->has_run = TRUE;
 }
 
 static GPtrArray *
