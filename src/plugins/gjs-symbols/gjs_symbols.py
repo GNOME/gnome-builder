@@ -340,17 +340,16 @@ class JsCodeIndexEntries(GObject.Object, Ide.CodeIndexEntries):
     def __init__(self, file, entries):
         super().__init__()
         self.entries = entries
-        self.entry_iter = None
+        self.entry_iter = iter(entries)
         self.file = file
 
     def do_get_next_entry(self):
-        if self.entry_iter is None:
-            self.entry_iter = iter(self.entries)
-        try:
-            return next(self.entry_iter)
-        except StopIteration:
-            self.entry_iter = None
-            return None
+        if self.entry_iter is not None:
+            try:
+                return next(self.entry_iter)
+            except StopIteration:
+                self.entry_iter = None
+        return None
 
     def do_get_file(self):
         return self.file
