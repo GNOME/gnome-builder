@@ -29,6 +29,7 @@
 typedef struct
 {
   int type;
+  int priority;
   union {
     struct {
       GTask           *task;
@@ -105,6 +106,7 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
 
       work_item = g_slice_new0 (WorkItem);
       work_item->type = TYPE_TASK;
+      work_item->priority = g_task_get_priority (task);
       work_item->task.task = g_object_ref (task);
       work_item->task.func = func;
 
@@ -133,6 +135,24 @@ ide_thread_pool_push (IdeThreadPoolKind kind,
                       IdeThreadFunc     func,
                       gpointer          func_data)
 {
+  ide_thread_pool_push_with_priority (kind, G_PRIORITY_DEFAULT, func, func_data);
+}
+
+/**
+ * ide_thread_pool_push_with_priority:
+ * @kind: the threadpool kind to use.
+ * @priority: the priority for func
+ * @func: (scope async) (closure func_data): A function to call in the worker thread.
+ * @func_data: user data for @func.
+ *
+ * Runs the callback on the thread pool thread.
+ */
+void
+ide_thread_pool_push_with_priority (IdeThreadPoolKind kind,
+                                    gint              priority,
+                                    IdeThreadFunc     func,
+                                    gpointer          func_data)
+{
   GThreadPool *pool;
 
   IDE_ENTRY;
@@ -151,6 +171,7 @@ ide_thread_pool_push (IdeThreadPoolKind kind,
 
       work_item = g_slice_new0 (WorkItem);
       work_item->type = TYPE_FUNC;
+      work_item->priority = priority;
       work_item->func.callback = func;
       work_item->func.data = func_data;
 
@@ -195,6 +216,17 @@ ide_thread_pool_worker (gpointer data,
   g_slice_free (WorkItem, work_item);
 }
 
+static gint
+thread_pool_sort_func (gconstpointer a,
+                       gconstpointer b,
+                       gpointer      user_data)
+{
+  const WorkItem *a_item = a;
+  const WorkItem *b_item = b;
+
+  return a_item->priority - b_item->priority;
+}
+
 void
 _ide_thread_pool_init (gboolean is_worker)
 {
@@ -214,6 +246,7 @@ _ide_thread_pool_init (gboolean is_worker)
                                        is_worker ? p->worker_max_threads : p->max_threads,
                                        p->exclusive,
                                        &error);
+          g_thread_pool_set_sort_function (p->pool, thread_pool_sort_func, NULL);
 
           if (error != NULL)
             g_error ("Failed to initialize thread pool %u: %s",
