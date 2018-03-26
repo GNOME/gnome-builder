@@ -12,7 +12,7 @@
 
 @binding-set builder-workbench-bindings
 {
-  bind "<ctrl>comma" { "set-perspective" ("preferences") };
+  bind "<ctrl>comma" { "action" ("app", "preferences", "") };
 }
 
 entry.gb-command-bar-entry {
