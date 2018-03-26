@@ -3547,6 +3547,21 @@ wrapped:
     }
 }
 
+static gboolean
+is_same_range (GtkTextIter *new_start,
+               GtkTextIter *old_start,
+               GtkTextIter *new_sel,
+               GtkTextIter *old_sel)
+{
+  if (gtk_text_iter_equal (new_start, old_start))
+    return gtk_text_iter_equal (old_sel, new_sel);
+
+  if (gtk_text_iter_equal (new_start, old_sel))
+    return gtk_text_iter_equal (old_start, new_sel);
+
+  return FALSE;
+}
+
 static void
 ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
                                                gboolean       move_mark)
@@ -3555,6 +3570,8 @@ ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter selection;
+  GtkTextIter old_iter;
+  GtkTextIter old_selection;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
@@ -3576,7 +3593,10 @@ ide_source_view_real_restore_insert_mark_full (IdeSourceView *self,
                                              priv->saved_selection_line_column,
                                              &selection);
 
-  gtk_text_buffer_select_range (buffer, &iter, &selection);
+  gtk_text_buffer_get_selection_bounds (buffer, &old_iter, &old_selection);
+
+  if (!is_same_range (&iter, &old_iter, &selection, &old_selection))
+    gtk_text_buffer_select_range (buffer, &iter, &selection);
 
   if (move_mark)
     {
