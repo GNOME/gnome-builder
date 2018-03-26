@@ -138,7 +138,7 @@
              "clear-selection" ()
              "remove-cursors" ()
              "redo" () };
-  bind "2" { "action" ("lyaoutstack", "split-view", "''") };
+  bind "2" { "action" ("layoutstack", "split-view", "''") };
   bind "3" { "action" ("layoutstack", "open-in-new-frame", "''") };
   bind "o" { "action" ("layoutgrid", "focus-neighbor", "0") };
   bind "grave" { "move-error" (down) };
