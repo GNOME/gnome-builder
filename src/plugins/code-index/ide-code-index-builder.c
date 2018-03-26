@@ -825,6 +825,7 @@ add_entries_to_index (GPtrArray               *entries,
   gchar num[16];
 
   g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (entries != NULL);
   g_assert (G_IS_FILE (file));
   g_assert (file_id > 0);
   g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (map_builder));
@@ -841,6 +842,8 @@ add_entries_to_index (GPtrArray               *entries,
   filename = g_file_get_path (file);
   dzl_fuzzy_index_builder_set_metadata_uint32 (fuzzy_builder, filename, file_id);
   dzl_fuzzy_index_builder_set_metadata_string (fuzzy_builder, num, filename);
+
+  IDE_TRACE_MSG ("Adding %u entries for %s", entries->len, filename);
 
   for (guint i = 0; i < entries->len; i++)
     {
