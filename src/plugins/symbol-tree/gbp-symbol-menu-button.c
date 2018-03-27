@@ -113,6 +113,30 @@ gbp_symbol_menu_button_get_icon_cell (GbpSymbolMenuButton *self)
 }
 
 static void
+on_entry_activate (GbpSymbolMenuButton *self,
+                   GtkSearchEntry      *entry)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  g_assert (GBP_IS_SYMBOL_MENU_BUTTON (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->tree));
+
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      GtkTreePath *path;
+      GtkTreeViewColumn *column;
+
+      path = gtk_tree_path_new_first ();
+      column = gtk_tree_view_get_column (GTK_TREE_VIEW (self->tree), 0);
+      gtk_tree_view_row_activated (GTK_TREE_VIEW (self->tree), path, column);
+      gtk_tree_path_free (path);
+    }
+}
+
+static void
 gbp_symbol_menu_button_destroy (GtkWidget *widget)
 {
   GbpSymbolMenuButton *self = (GbpSymbolMenuButton *)widget;
@@ -181,6 +205,7 @@ gbp_symbol_menu_button_class_init (GbpSymbolMenuButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, symbol_title);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, tree);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, tree_builder);
+  gtk_widget_class_bind_template_callback (widget_class, on_entry_activate);
 
   properties [PROP_SYMBOL_TREE] =
     g_param_spec_object ("symbol-tree",

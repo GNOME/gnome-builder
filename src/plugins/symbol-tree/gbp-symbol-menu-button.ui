@@ -26,6 +26,7 @@
           <object class="GtkSearchEntry" id="search_entry">
             <property name="margin-bottom">6</property>
             <property name="visible">true</property>
+            <signal name="activate" handler="on_entry_activate" swapped="yes" object="GbpSymbolMenuButton"/>
           </object>
         </child>
         <child>
