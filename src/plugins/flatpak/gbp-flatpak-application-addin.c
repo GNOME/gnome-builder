@@ -1175,6 +1175,7 @@ gbp_flatpak_application_addin_locate_sdk_async (GbpFlatpakApplicationAddin  *sel
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_application_addin_locate_sdk_async);
+  ide_task_set_release_on_propagate (task, FALSE);
 
   locate = g_slice_new0 (LocateSdk);
   locate->id = g_strdup (runtime_id);

@@ -350,6 +350,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, _ide_runtime_manager_prepare_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_release_on_propagate (task, FALSE);
 
   state = g_slice_new0 (PrepareState);
   state->runtime_id = g_strdup (runtime_id);
