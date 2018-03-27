@@ -3760,6 +3760,8 @@ ide_build_pipeline_get_system_type (IdeBuildPipeline *self)
 gboolean
 ide_build_pipeline_is_native (IdeBuildPipeline *self)
 {
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+
   return g_strcmp0 (self->system_type, ide_get_system_type ()) == 0;
 }
 
