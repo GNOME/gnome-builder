@@ -22,10 +22,10 @@
 
 -->
 
-<style-scheme id="builder-dark" _name="Builder Dark" version="1.0">
+<style-scheme id="builder-dark" name="Builder Dark" version="1.0">
 
   <author>Paolo Borelli, Christian Hergert</author>
-  <_description>Dark color scheme for Builder using the Tango color palette</_description>
+  <description>Dark color scheme for Builder using the Tango color palette</description>
 
   <!-- Tango Palette -->
   <color name="butter1"                     value="#fce94f"/>
