@@ -73,12 +73,6 @@ static DzlShortcutEntry editor_view_shortcuts[] = {
     NC_("shortcut window", "Editor shortcuts"),
     NC_("shortcut window", "Find and replace"),
     NC_("shortcut window", "Move to the previous error") },
-
-  { "org.gnome.builder.editor-view.clear-highlight",
-    0, NULL,
-    NC_("shortcut window", "Editor shortcuts"),
-    NC_("shortcut window", "Find and replace"),
-    NC_("shortcut window", "Find the next match") },
 };
 
 void
@@ -125,12 +119,6 @@ _ide_editor_view_init_shortcuts (IdeEditorView *self)
                                               "<alt>p",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("editor-view.move-previous-error"));
-
-  dzl_shortcut_controller_add_command_action (controller,
-                                              I_("org.gnome.builder.editor-view.clear-highlight"),
-                                              "<Primary><Shift>k",
-                                              DZL_SHORTCUT_PHASE_BUBBLE,
-                                              I_("editor-view.clear-highlight"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.editor-view.save"),
