@@ -217,6 +217,7 @@ src/plugins/spellcheck/gbp-spell-widget.ui
 src/plugins/spellcheck/gtk/menus.ui
 src/plugins/support/gtk/menus.ui
 src/plugins/support/ide-support-application-addin.c
+src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c
 src/plugins/symbol-tree/gbp-symbol-menu-button.c
 src/plugins/symbol-tree/gbp-symbol-menu-button.ui
 src/plugins/sysmon/gb-sysmon-panel.ui
