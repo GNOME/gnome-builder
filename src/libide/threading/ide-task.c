@@ -1474,6 +1474,8 @@ ide_task_propagate_locked (IdeTask            *self,
 
       if (priv->release_on_propagate)
         ret = g_steal_pointer (&priv->result);
+      else if (priv->result->type == IDE_TASK_RESULT_POINTER)
+        ret = g_steal_pointer (&priv->result);
       else
         ret = ide_task_result_copy (priv->result);
 
