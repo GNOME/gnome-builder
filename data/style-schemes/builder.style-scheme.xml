@@ -19,9 +19,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<style-scheme id="builder" _name="Builder" version="1.0">
+<style-scheme id="builder" name="Builder" version="1.0">
   <author>Christian Hergert</author>
-  <_description>The default color scheme for Builder</_description>
+  <description>The default color scheme for Builder</description>
 
   <!-- Tango Palette -->
   <color name="bg1"                         value="#f6f7f8"/>

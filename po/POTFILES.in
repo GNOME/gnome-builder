@@ -13,8 +13,8 @@ data/gsettings/org.gnome.builder.terminal.gschema.xml
 data/gsettings/org.gnome.builder.workbench.gschema.xml
 data/org.gnome.Builder.appdata.xml.in
 data/org.gnome.Builder.desktop.in.in
-data/style-schemes/builder-dark.xml
-data/style-schemes/builder.xml
+data/style-schemes/builder-dark.style-scheme.xml
+data/style-schemes/builder.style-scheme.xml
 src/gstyle/data/palettes/basic.gstyle.xml
 src/gstyle/gstyle-color-panel.c
 src/gstyle/gstyle-color-plane.c
