@@ -2738,7 +2738,6 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GBytes) bytes = NULL;
-  IdeDebuggerThread *selected;
   GOutputStream *stream;
   GString *str;
   guint id;
@@ -2770,8 +2769,6 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
   stream = g_io_stream_get_output_stream (self->io_stream);
 
   str = g_string_new (NULL);
-
-  selected = ide_debugger_get_selected_thread (IDE_DEBUGGER (self));
 
   /* We might need to switch threads before we execute the command. */
   if (thread != NULL)
