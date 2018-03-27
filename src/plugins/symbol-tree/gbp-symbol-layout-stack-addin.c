@@ -18,12 +18,15 @@
 
 #define G_LOG_DOMAIN "gbp-symbol-layout-stack-addin"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 
 #include "gbp-symbol-layout-stack-addin.h"
 #include "gbp-symbol-menu-button.h"
 
 #define CURSOR_MOVED_DELAY_MSEC 500
+#define I_(s) (g_intern_static_string(s))
 
 struct _GbpSymbolLayoutStackAddin {
   GObject              parent_instance;
@@ -44,6 +47,14 @@ typedef struct
   IdeBuffer         *buffer;
   IdeSourceLocation *location;
 } SymbolResolverTaskData;
+
+static DzlShortcutEntry symbol_tree_shortcuts[] = {
+  { "org.gnome.builder.symbol-tree.search",
+    0, NULL,
+    NC_("shortcut window", "Editor shortcuts"),
+    NC_("shortcut window", "Symbols"),
+    NC_("shortcut window", "Search symbols within document") },
+};
 
 static void
 symbol_resolver_task_data_free (SymbolResolverTaskData *data)
@@ -433,14 +444,50 @@ gbp_symbol_layout_stack_addin_symbol_resolvers_loaded (GbpSymbolLayoutStackAddin
 }
 
 static void
+search_action_cb (GSimpleAction *action,
+                  GVariant      *param,
+                  gpointer       user_data)
+{
+  GbpSymbolLayoutStackAddin *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
+
+  if (gtk_widget_get_visible (GTK_WIDGET (self->button)))
+    gtk_widget_activate (GTK_WIDGET (self->button));
+}
+
+static void
 gbp_symbol_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                                     IdeLayoutStack      *stack)
 {
   GbpSymbolLayoutStackAddin *self = (GbpSymbolLayoutStackAddin *)addin;
+  g_autoptr(GSimpleActionGroup) actions = NULL;
+  DzlShortcutController *controller;
   GtkWidget *header;
+  static const GActionEntry entries[] = {
+    { "search", search_action_cb },
+  };
 
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_LAYOUT_STACK (stack));
+
+  controller = dzl_shortcut_controller_find (GTK_WIDGET (stack));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.symbol-tree.search"),
+                                              "<Primary><Shift>k",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("symbol-tree.search"));
+
+  actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries,
+                                   G_N_ELEMENTS (entries),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (stack),
+                                  "symbol-tree",
+                                  G_ACTION_GROUP (actions));
 
   /* Add our menu button to the header */
   header = ide_layout_stack_get_titlebar (stack);
@@ -494,6 +541,8 @@ gbp_symbol_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
   g_assert (GBP_IS_SYMBOL_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_LAYOUT_STACK (stack));
 
+  gtk_widget_insert_action_group (GTK_WIDGET (stack), "symbol-tree", NULL);
+
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->buffer_signals);
@@ -543,4 +592,8 @@ gbp_symbol_layout_stack_addin_class_init (GbpSymbolLayoutStackAddinClass *klass)
 static void
 gbp_symbol_layout_stack_addin_init (GbpSymbolLayoutStackAddin *self)
 {
+  dzl_shortcut_manager_add_shortcut_entries (NULL,
+                                             symbol_tree_shortcuts,
+                                             G_N_ELEMENTS (symbol_tree_shortcuts),
+                                             GETTEXT_PACKAGE);
 }
