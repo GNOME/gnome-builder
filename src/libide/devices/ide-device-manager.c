@@ -386,9 +386,10 @@ ide_device_manager_add_local (IdeDeviceManager *self)
     {
 #if 0
       g_autoptr(IdeDevice) legacy_device = NULL;
+      g_autoptr(IdeMachineConfigName) machine_config_name = ide_machine_config_name_new ("i386");
 
       legacy_device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
-                                    "arch", "i386",
+                                    "machine-config-name", machine_config_name,
                                     "context", context,
                                     NULL);
       ide_device_manager_provider_device_added_cb (self, legacy_device, NULL);

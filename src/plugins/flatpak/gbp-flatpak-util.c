@@ -34,7 +34,7 @@ gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
 {
   g_autofree gchar *branch = NULL;
   g_autofree gchar *name = NULL;
-  const gchar *arch;
+  g_autoptr (IdeMachineConfigName) machine_config_name = NULL;
   IdeContext *context;
   IdeVcs *vcs;
 
@@ -43,8 +43,8 @@ gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
   context = ide_object_get_context (IDE_OBJECT (pipeline));
   vcs = ide_context_get_vcs (context);
   branch = ide_vcs_get_branch_name (vcs);
-  arch = ide_build_pipeline_get_arch (pipeline);
-  name = g_strdup_printf ("%s-%s", arch, branch);
+  machine_config_name = ide_build_pipeline_get_device_config_name (pipeline);
+  name = g_strdup_printf ("%s-%s", ide_machine_config_name_get_cpu (machine_config_name), branch);
 
   g_strdelimit (name, G_DIR_SEPARATOR_S, '-');
 
