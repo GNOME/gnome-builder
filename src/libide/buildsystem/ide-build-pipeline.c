@@ -177,10 +177,7 @@ struct _IdeBuildPipeline
    * the pipeline addins may want to use to tweak how the execute
    * the build.
    */
-  gchar *arch;
-  gchar *kernel;
-  gchar *system;
-  gchar *system_type;
+  IdeTriplet *device_triplet;
 
   /*
    * This is an array of PipelineEntry, which contain information we
@@ -1156,18 +1153,9 @@ _ide_build_pipeline_set_device_info (IdeBuildPipeline *self,
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_DEVICE_INFO (info));
 
-  g_clear_pointer (&self->arch, g_free);
-  g_clear_pointer (&self->kernel, g_free);
-  g_clear_pointer (&self->system, g_free);
-  g_clear_pointer (&self->system_type, g_free);
+  g_clear_pointer (&self->device_triplet, ide_triplet_unref);
 
-  g_object_get (info,
-                "arch", &self->arch,
-                "kernel", &self->kernel,
-                "system", &self->system,
-                NULL);
-
-  self->system_type = ide_create_host_triplet (self->arch, self->kernel, self->system);
+  g_object_get (info, "triplet", &self->device_triplet, NULL);
 
   IDE_EXIT;
 }
@@ -1295,10 +1283,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->runtime);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
-  g_clear_pointer (&self->arch, g_free);
-  g_clear_pointer (&self->kernel, g_free);
-  g_clear_pointer (&self->system, g_free);
-  g_clear_pointer (&self->system_type, g_free);
+  g_clear_pointer (&self->device_triplet, ide_triplet_unref);
   g_clear_pointer (&self->srcdir, g_free);
   g_clear_pointer (&self->builddir, g_free);
   g_clear_pointer (&self->errfmts, g_array_unref);
@@ -3747,84 +3732,24 @@ ide_build_pipeline_get_device (IdeBuildPipeline *self)
 }
 
 /**
- * ide_build_pipeline_get_arch:
+ * ide_build_pipeline_get_device_triplet:
  * @self: a #IdeBuildPipeline
  *
- * Gets the architecture that the pipeline is building for, once that has
- * been discovered from the device.
+ * Gets the architecture, kernel, and system that the pipeline is building for,
+ * once that has been discovered from the device.
  *
- * Returns: (nullable): a string describing the architecture, or %NULL
+ * Returns: (nullable) (transfer full): an #IdeTriplet describing the architecture,
+ * or %NULL. Should be unrefered using ide_triplet_unref() when no longer needed
  *
- * Since: 3.28
+ * Since: 3.30
  */
-const gchar *
-ide_build_pipeline_get_arch (IdeBuildPipeline *self)
+
+IdeTriplet *
+ide_build_pipeline_get_device_triplet (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
-  return self->arch;
-}
-
-/**
- * ide_build_pipeline_get_kernel:
- * @self: a #IdeBuildPipeline
- *
- * Gets the kernel that the pipeline is building for, once that has
- * been discovered from the device.
- *
- * Returns: (nullable): a string describing the kernel, or %NULL
- *
- * Since: 3.28
- */
-const gchar *
-ide_build_pipeline_get_kernel (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
-
-  return self->kernel;
-}
-
-/**
- * ide_build_pipeline_get_system:
- * @self: a #IdeBuildPipeline
- *
- * Gets the system portion of the host tripet that the pipeline is
- * building for, once that has been discovered from the device.
- *
- * For Linux based devices, this will generally be "gnu".
- *
- * Returns: (nullable): a string describing the device system, or %NULL
- *
- * Since: 3.28
- */
-const gchar *
-ide_build_pipeline_get_system (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
-
-  return self->system;
-}
-
-/**
- * ide_build_pipeline_get_system_type:
- * @self: a #IdeBuildPipeline
- *
- * Gets the combination of arch-kernel-system, sometimes referred to as
- * the "host triplet".
- *
- * For Linux based devices, this will generally be something like
- * "x86_64-linux-gnu".
- *
- * Returns: a string describing the device
- *
- * Since: 3.28
- */
-const gchar *
-ide_build_pipeline_get_system_type (IdeBuildPipeline *self)
-{
-  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
-
-  return self->system_type;
+  return ide_triplet_ref (self->device_triplet);
 }
 
 /**
@@ -3834,17 +3759,17 @@ ide_build_pipeline_get_system_type (IdeBuildPipeline *self)
  * Checks to see if the pipeline is building for the native architecture,
  * kernel, and system of the host.
  *
- * This is equivalent to checking if ide_get_system_type() matches the host
- * triplet (arch, kernel, system) properties of the pipeline.
+ * This is equivalent to checking if ide_get_system_type() matches the
+ * device-triplet property of the pipeline.
  *
- * Returns: %TRUE if this is a native build, otherwise %FALSE.
+ * Returns: %TRUE if this is a native build, otherwise %FALSE
  */
 gboolean
 ide_build_pipeline_is_native (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
 
-  return g_strcmp0 (self->system_type, ide_get_system_type ()) == 0;
+  return ide_triplet_is_system (self->device_triplet);
 }
 
 /**
