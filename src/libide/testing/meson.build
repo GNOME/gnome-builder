@@ -12,7 +12,9 @@ testing_sources = [
 
 testing_private_sources = [
   'ide-test-panel.c',
+  'ide-test-panel.h',
   'ide-test-editor-addin.c',
+  'ide-test-editor-addin.h',
   'testing-plugin.c',
 ]
 

@@ -8,6 +8,7 @@ buildconfig_sources = [
 
 buildconfig_private_sources = [
   'ide-buildconfig-configuration-provider.c',
+  'ide-buildconfig-configuration-provider.h',
   'ide-buildconfig-plugin.c',
   'ide-buildconfig-pipeline-addin.c',
   'ide-buildconfig-pipeline-addin.h',

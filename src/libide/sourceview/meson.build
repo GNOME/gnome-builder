@@ -26,17 +26,26 @@ sourceview_sources = [
 
 sourceview_private_sources = [
   'ide-completion-words.c',
+  'ide-completion-words.h',
   'ide-cursor.c',
+  'ide-cursor.h',
   'ide-omni-gutter-renderer.c',
+  'ide-omni-gutter-renderer.h',
   'ide-line-change-gutter-renderer.c',
+  'ide-line-change-gutter-renderer.h',
   'ide-source-view-capture.c',
+  'ide-source-view-capture.h',
   'ide-source-view-mode.c',
+  'ide-source-view-mode.h',
   'ide-source-view-movements.c',
   'ide-source-view-shortcuts.c',
   'ide-text-util.c',
-  'ide-word-completion-provider.c',
-  'ide-word-completion-results.c',
   'ide-word-completion-item.c',
+  'ide-word-completion-item.h',
+  'ide-word-completion-provider.c',
+  'ide-word-completion-provider.h',
+  'ide-word-completion-results.c',
+  'ide-word-completion-results.h',
 ]
 
 sourceview_enums = [

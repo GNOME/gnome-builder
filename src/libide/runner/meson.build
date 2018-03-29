@@ -12,6 +12,7 @@ runner_sources = [
 
 runner_private_sources = [
   'ide-run-button.c',
+  'ide-run-button.h',
   'ide-run-manager-private.h',
 ]
 
