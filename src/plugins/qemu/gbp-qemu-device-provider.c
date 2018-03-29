@@ -148,6 +148,7 @@ gbp_qemu_device_provider_load_worker (IdeTask      *task,
           has_flag (contents, len, 'F'))
         {
           g_autoptr(IdeLocalDevice) device = NULL;
+          g_autoptr(IdeMachineConfigName) machine_config_name = NULL;
           g_autofree gchar *display_name = NULL;
 
           IDE_TRACE_MSG ("Discovered QEMU device \"%s\"\n", machines[i].arch);
@@ -157,9 +158,10 @@ gbp_qemu_device_provider_load_worker (IdeTask      *task,
                                           g_get_host_name (),
                                           machines[i].suffix);
 
+          machine_config_name = ide_machine_config_name_new (machines[i].arch);
           device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
                                  "id", machines[i].filename,
-                                 "arch", machines[i].arch,
+                                 "machine-config-name", machine_config_name,
                                  "context", context,
                                  "display-name", display_name,
                                  NULL);
