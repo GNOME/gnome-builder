@@ -34,7 +34,7 @@ gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
 {
   g_autofree gchar *branch = NULL;
   g_autofree gchar *name = NULL;
-  const gchar *arch;
+  g_autoptr (IdeTriplet) triplet = NULL;
   IdeContext *context;
   IdeVcs *vcs;
 
@@ -43,8 +43,8 @@ gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
   context = ide_object_get_context (IDE_OBJECT (pipeline));
   vcs = ide_context_get_vcs (context);
   branch = ide_vcs_get_branch_name (vcs);
-  arch = ide_build_pipeline_get_arch (pipeline);
-  name = g_strdup_printf ("%s-%s", arch, branch);
+  triplet = ide_build_pipeline_get_host_triplet (pipeline);
+  name = g_strdup_printf ("%s-%s", ide_triplet_get_arch (triplet), branch);
 
   g_strdelimit (name, G_DIR_SEPARATOR_S, '-');
 

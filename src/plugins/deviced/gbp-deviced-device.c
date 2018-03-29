@@ -149,11 +149,13 @@ gbp_deviced_device_get_info_connect_cb (GObject      *object,
 {
   GbpDevicedDevice *self = (GbpDevicedDevice *)object;
   g_autoptr(IdeDeviceInfo) info = NULL;
+  g_autoptr(IdeTriplet) triplet = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autofree gchar *arch = NULL;
   g_autofree gchar *kernel = NULL;
   g_autofree gchar *system = NULL;
+  IdeDeviceKind kind = 0;
   DevdClient *client;
 
   g_assert (GBP_IS_DEVICED_DEVICE (self));
@@ -169,12 +171,31 @@ gbp_deviced_device_get_info_connect_cb (GObject      *object,
   arch = devd_client_get_arch (client);
   kernel = devd_client_get_kernel (client);
   system = devd_client_get_system (client);
+  triplet = ide_triplet_new_with_triplet (arch, kernel, system);
 
-  info = g_object_new (IDE_TYPE_DEVICE_INFO,
-                       "arch", arch,
-                       "kernel", kernel,
-                       "system", system,
-                       NULL);
+  switch (devd_device_get_kind (self->device))
+    {
+    case DEVD_DEVICE_KIND_TABLET:
+      kind = IDE_DEVICE_KIND_TABLET;
+      break;
+
+    case DEVD_DEVICE_KIND_PHONE:
+      kind = IDE_DEVICE_KIND_PHONE;
+      break;
+
+    case DEVD_DEVICE_KIND_MICRO_CONTROLLER:
+      kind = IDE_DEVICE_KIND_MICRO_CONTROLLER;
+      break;
+
+    case DEVD_DEVICE_KIND_COMPUTER:
+    default:
+      kind = IDE_DEVICE_KIND_COMPUTER;
+      break;
+    }
+
+  info = ide_device_info_new ();
+  ide_device_info_set_kind (info, kind);
+  ide_device_info_set_host_triplet (info, triplet);
 
   ide_task_return_pointer (task, g_steal_pointer (&info), g_object_unref);
 }

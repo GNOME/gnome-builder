@@ -26,23 +26,19 @@
 
 #include "local/ide-local-device.h"
 #include "util/ide-posix.h"
+#include "util/ide-triplet.h"
 #include "threading/ide-task.h"
 
 typedef struct
 {
-  gchar *system_type;
-  gchar *arch;
-  gchar *kernel;
-  gchar *system;
+  IdeTriplet *triplet;
 } IdeLocalDevicePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeLocalDevice, ide_local_device, IDE_TYPE_DEVICE)
 
 enum {
   PROP_0,
-  PROP_ARCH,
-  PROP_KERNEL,
-  PROP_SYSTEM,
+  PROP_TRIPLET,
   N_PROPS
 };
 
@@ -58,9 +54,6 @@ ide_local_device_get_info_async (IdeDevice           *device,
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeDeviceInfo) info = NULL;
-  const gchar *system_type = NULL;
-  g_auto(GStrv) parts = NULL;
-  g_autofree gchar *arch = NULL;
 
   g_assert (IDE_IS_LOCAL_DEVICE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -69,28 +62,8 @@ ide_local_device_get_info_async (IdeDevice           *device,
   ide_task_set_source_tag (task, ide_local_device_get_info_async);
   ide_task_set_check_cancellable (task, FALSE);
 
-  system_type = ide_get_system_type ();
-  arch = ide_get_system_arch ();
-  parts = g_strsplit (system_type, "-", 3);
-
   info = ide_device_info_new ();
-  ide_device_info_set_arch (info, arch);
-
-  if (parts[1] != NULL)
-    {
-      ide_device_info_set_kernel (info, parts[1]);
-      if (parts[2] != NULL)
-        ide_device_info_set_system (info, parts[2]);
-    }
-
-  /* Now override anything that was specified in the device */
-
-  if (priv->arch != NULL)
-    ide_device_info_set_arch (info, priv->arch);
-  if (priv->kernel != NULL)
-    ide_device_info_set_kernel (info, priv->kernel);
-  if (priv->system != NULL)
-    ide_device_info_set_system (info, priv->system);
+  ide_device_info_set_host_triplet (info, priv->triplet);
 
   ide_task_return_pointer (task, g_steal_pointer (&info), g_object_unref);
 }
@@ -117,16 +90,8 @@ ide_local_device_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ARCH:
-      g_value_set_string (value, priv->arch);
-      break;
-
-    case PROP_KERNEL:
-      g_value_set_string (value, priv->kernel);
-      break;
-
-    case PROP_SYSTEM:
-      g_value_set_string (value, priv->system);
+    case PROP_TRIPLET:
+      g_value_set_boxed (value, priv->triplet);
       break;
 
     default:
@@ -145,16 +110,8 @@ ide_local_device_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ARCH:
-      priv->arch = g_value_dup_string (value);
-      break;
-
-    case PROP_KERNEL:
-      priv->kernel = g_value_dup_string (value);
-      break;
-
-    case PROP_SYSTEM:
-      priv->system = g_value_dup_string (value);
+    case PROP_TRIPLET:
+      priv->triplet = g_value_dup_boxed (value);
       break;
 
     default:
@@ -167,44 +124,14 @@ ide_local_device_constructed (GObject *object)
 {
   IdeLocalDevice *self = (IdeLocalDevice *)object;
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
-  g_autofree gchar *arch = NULL;
   g_autofree gchar *name = NULL;
-  g_auto(GStrv) parts = NULL;
-  const gchar *system_type;
 
   g_assert (IDE_IS_LOCAL_DEVICE (self));
 
-  G_OBJECT_CLASS (ide_local_device_parent_class)->constructed (object);
+  if (priv->triplet == NULL)
+    priv->triplet = ide_triplet_new_from_system ();
 
-  arch = ide_get_system_arch ();
-  system_type = ide_get_system_type ();
-  parts = g_strsplit (system_type, "-", 3);
-
-  /* Parse our system type into the 3 pieces. We'll use this
-   * to reconstruct our system_type property in case the caller
-   * changed the arch manually (say from x86_64 to i386).
-   */
-  if (parts[0] != NULL)
-    {
-      if (priv->arch == NULL)
-        priv->arch = g_strdup (parts[0]);
-
-      if (parts[1] != NULL)
-        {
-          if (priv->kernel == NULL)
-            priv->kernel = g_strdup (parts[1]);
-
-          if (parts[2] != NULL)
-            {
-              if (priv->system == NULL)
-                priv->system = g_strdup (parts[2]);
-            }
-        }
-    }
-
-  priv->system_type = g_strdup_printf ("%s-%s-%s", priv->arch, priv->kernel, priv->system);
-
-  if (g_strcmp0 (arch, priv->arch) == 0)
+  if (ide_triplet_is_system (priv->triplet))
     {
       /* translators: %s is replaced with the host name */
       name = g_strdup_printf (_("My Computer (%s)"), g_get_host_name ());
@@ -213,13 +140,16 @@ ide_local_device_constructed (GObject *object)
     }
   else
     {
-      g_autofree gchar *id = g_strdup_printf ("local:%s", priv->arch);
+      const gchar *arch = ide_triplet_get_arch (priv->triplet);
+      g_autofree gchar *id = g_strdup_printf ("local:%s", arch);
 
       /* translators: first %s is replaced with the host name, second with CPU architecture */
-      name = g_strdup_printf (_("My Computer (%s) — %s"), g_get_host_name (), priv->arch);
+      name = g_strdup_printf (_("My Computer (%s) — %s"), g_get_host_name (), arch);
       ide_device_set_display_name (IDE_DEVICE (self), name);
       ide_device_set_id (IDE_DEVICE (self), id);
     }
+
+  G_OBJECT_CLASS (ide_local_device_parent_class)->constructed (object);
 }
 
 static void
@@ -228,10 +158,7 @@ ide_local_device_finalize (GObject *object)
   IdeLocalDevice *self = (IdeLocalDevice *)object;
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
 
-  g_clear_pointer (&priv->arch, g_free);
-  g_clear_pointer (&priv->kernel, g_free);
-  g_clear_pointer (&priv->system, g_free);
-  g_clear_pointer (&priv->system_type, g_free);
+  g_clear_pointer (&priv->triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_local_device_parent_class)->finalize (object);
 }
@@ -250,26 +177,12 @@ ide_local_device_class_init (IdeLocalDeviceClass *klass)
   device_class->get_info_async = ide_local_device_get_info_async;
   device_class->get_info_finish = ide_local_device_get_info_finish;
 
-  properties [PROP_ARCH] =
-    g_param_spec_string ("arch",
-                         "Arch",
-                         "The architecture of the local device",
-                         NULL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  properties [PROP_KERNEL] =
-    g_param_spec_string ("kernel",
-                         "Kernel",
-                         "The kernel of the local device",
-                         NULL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  properties [PROP_SYSTEM] =
-    g_param_spec_string ("system",
-                         "System",
-                         "The system of the local device, such as 'gnu'",
-                         NULL,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+  properties [PROP_TRIPLET] =
+    g_param_spec_boxed ("triplet",
+                        "Triplet",
+                        "The #IdeTriplet object describing the local device configuration name",
+                        IDE_TYPE_TRIPLET,
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

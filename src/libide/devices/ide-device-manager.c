@@ -367,15 +367,17 @@ static void
 ide_device_manager_add_local (IdeDeviceManager *self)
 {
   g_autoptr(IdeDevice) device = NULL;
+  g_autoptr(IdeTriplet) triplet = NULL;
   g_autofree gchar *arch = NULL;
   IdeContext *context;
 
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-
+  triplet = ide_triplet_new_from_system ();
   device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
                          "context", context,
+                         "triplet", triplet,
                          NULL);
   ide_device_manager_provider_device_added_cb (self, device, NULL);
 
@@ -389,9 +391,10 @@ ide_device_manager_add_local (IdeDeviceManager *self)
     {
 #if 0
       g_autoptr(IdeDevice) legacy_device = NULL;
+      g_autoptr(IdeTriplet) legacy_triplet = ide_triplet_new ("i386");
 
       legacy_device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
-                                    "arch", "i386",
+                                    "triplet", legacy_triplet,
                                     "context", context,
                                     NULL);
       ide_device_manager_provider_device_added_cb (self, legacy_device, NULL);

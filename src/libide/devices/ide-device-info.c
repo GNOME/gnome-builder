@@ -30,9 +30,7 @@
 struct _IdeDeviceInfo
 {
   GObject parent_instance;
-  gchar *arch;
-  gchar *kernel;
-  gchar *system;
+  IdeTriplet *host_triplet;
   IdeDeviceKind kind;
 };
 
@@ -40,10 +38,8 @@ G_DEFINE_TYPE (IdeDeviceInfo, ide_device_info, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
-  PROP_ARCH,
-  PROP_KERNEL,
   PROP_KIND,
-  PROP_SYSTEM,
+  PROP_HOST_TRIPLET,
   N_PROPS
 };
 
@@ -54,9 +50,7 @@ ide_device_info_finalize (GObject *object)
 {
   IdeDeviceInfo *self = (IdeDeviceInfo *)object;
 
-  g_clear_pointer (&self->arch, g_free);
-  g_clear_pointer (&self->kernel, g_free);
-  g_clear_pointer (&self->system, g_free);
+  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_device_info_parent_class)->finalize (object);
 }
@@ -71,20 +65,12 @@ ide_device_info_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ARCH:
-      g_value_set_string (value, ide_device_info_get_arch (self));
-      break;
-
-    case PROP_KERNEL:
-      g_value_set_string (value, ide_device_info_get_kernel (self));
-      break;
-
     case PROP_KIND:
       g_value_set_enum (value, ide_device_info_get_kind (self));
       break;
 
-    case PROP_SYSTEM:
-      g_value_set_string (value, ide_device_info_get_system (self));
+    case PROP_HOST_TRIPLET:
+      g_value_set_boxed (value, ide_device_info_get_host_triplet (self));
       break;
 
     default:
@@ -102,20 +88,12 @@ ide_device_info_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ARCH:
-      ide_device_info_set_arch (self, g_value_get_string (value));
-      break;
-
-    case PROP_KERNEL:
-      ide_device_info_set_kernel (self, g_value_get_string (value));
-      break;
-
     case PROP_KIND:
       ide_device_info_set_kind (self, g_value_get_enum (value));
       break;
 
-    case PROP_SYSTEM:
-      ide_device_info_set_system (self, g_value_get_string (value));
+    case PROP_HOST_TRIPLET:
+      ide_device_info_set_host_triplet (self, g_value_get_boxed (value));
       break;
 
     default:
@@ -133,20 +111,6 @@ ide_device_info_class_init (IdeDeviceInfoClass *klass)
   object_class->get_property = ide_device_info_get_property;
   object_class->set_property = ide_device_info_set_property;
 
-  properties [PROP_ARCH] =
-    g_param_spec_string ("arch",
-                         "Arch",
-                         "The architecture of the device, such as x86_64",
-                         arch,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  properties [PROP_KERNEL] =
-    g_param_spec_string ("kernel",
-                         "Kernel",
-                         "The operating system kernel, such as Linux",
-                         NULL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
   properties [PROP_KIND] =
     g_param_spec_enum ("kind",
                        "Kind",
@@ -155,12 +119,12 @@ ide_device_info_class_init (IdeDeviceInfoClass *klass)
                        IDE_DEVICE_KIND_COMPUTER,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  properties [PROP_SYSTEM] =
-    g_param_spec_string ("system",
-                         "System",
-                         "The system kind, such as 'gnu'",
-                         NULL,
-                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties [PROP_HOST_TRIPLET] =
+    g_param_spec_boxed ("host-triplet",
+                        "Host Triplet",
+                        "The #IdeTriplet object holding all the configuration name values",
+                        IDE_TYPE_TRIPLET,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -168,7 +132,7 @@ ide_device_info_class_init (IdeDeviceInfoClass *klass)
 static void
 ide_device_info_init (IdeDeviceInfo *self)
 {
-  self->arch = ide_get_system_arch ();
+  self->host_triplet = ide_triplet_new_from_system ();
 }
 
 IdeDeviceInfo *
@@ -177,30 +141,14 @@ ide_device_info_new (void)
   return g_object_new (IDE_TYPE_DEVICE_INFO, NULL);
 }
 
-const gchar *
-ide_device_info_get_arch (IdeDeviceInfo *self)
-{
-  g_return_val_if_fail (IDE_IS_DEVICE_INFO (self), NULL);
-
-  return self->arch;
-}
-
-const gchar *
-ide_device_info_get_kernel (IdeDeviceInfo *self)
-{
-  g_return_val_if_fail (IDE_IS_DEVICE_INFO (self), NULL);
-
-  return self->kernel;
-}
-
-const gchar *
-ide_device_info_get_system (IdeDeviceInfo *self)
-{
-  g_return_val_if_fail (IDE_IS_DEVICE_INFO (self), NULL);
-
-  return self->system;
-}
-
+/**
+ * ide_device_info_get_kind:
+ * @self: An #IdeDeviceInfo
+ *
+ * Get the #IdeDeviceKind of the device describing the type of device @self refers to
+ *
+ * Returns: An #IdeDeviceKind.
+ */
 IdeDeviceKind
 ide_device_info_get_kind (IdeDeviceInfo *self)
 {
@@ -209,34 +157,14 @@ ide_device_info_get_kind (IdeDeviceInfo *self)
   return self->kind;
 }
 
-void
-ide_device_info_set_arch (IdeDeviceInfo *self,
-                          const gchar   *arch)
-{
-  g_return_if_fail (IDE_IS_DEVICE_INFO (self));
 
-  if (g_strcmp0 (arch, self->arch) != 0)
-    {
-      g_free (self->arch);
-      self->arch = g_strdup (arch);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARCH]);
-    }
-}
-
-void
-ide_device_info_set_kernel (IdeDeviceInfo *self,
-                            const gchar   *kernel)
-{
-  g_return_if_fail (IDE_IS_DEVICE_INFO (self));
-
-  if (g_strcmp0 (kernel, self->kernel) != 0)
-    {
-      g_free (self->kernel);
-      self->kernel = g_strdup (kernel);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KERNEL]);
-    }
-}
-
+/**
+ * ide_device_info_set_kind:
+ * @self: An #IdeDeviceInfo
+ * @kind: An #IdeDeviceKind
+ *
+ * Set the #IdeDeviceKind of the device describing the type of device @self refers to
+ */
 void
 ide_device_info_set_kind (IdeDeviceInfo *self,
                           IdeDeviceKind  kind)
@@ -250,16 +178,43 @@ ide_device_info_set_kind (IdeDeviceInfo *self,
     }
 }
 
+/**
+ * ide_device_info_get_host_triplet:
+ * @self: An #IdeDeviceInfo
+ *
+ * Get the #IdeTriplet object describing the configuration name
+ * of the Device (its architecture…)
+ *
+ * Returns: (transfer none) (nullable): An #IdeTriplet.
+ *
+ * Since: 3.30
+ */
+IdeTriplet *
+ide_device_info_get_host_triplet (IdeDeviceInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_DEVICE_INFO (self), NULL);
+
+  return self->host_triplet;
+}
+
+/**
+ * ide_device_info_set_host_triplet:
+ * @self: An #IdeDeviceInfo
+ *
+ * Set the #IdeTriplet object describing the configuration name
+ *
+ * Since: 3.30
+ */
 void
-ide_device_info_set_system (IdeDeviceInfo *self,
-                            const gchar   *system)
+ide_device_info_set_host_triplet (IdeDeviceInfo *self,
+                                  IdeTriplet    *host_triplet)
 {
   g_return_if_fail (IDE_IS_DEVICE_INFO (self));
 
-  if (g_strcmp0 (system, self->system) != 0)
+  if (host_triplet != self->host_triplet)
     {
-      g_free (self->system);
-      self->system = g_strdup (system);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYSTEM]);
+      g_clear_pointer (&self->host_triplet, ide_triplet_unref);
+      self->host_triplet = host_triplet ? ide_triplet_ref (host_triplet) : NULL;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HOST_TRIPLET]);
     }
 }

@@ -196,6 +196,7 @@ G_BEGIN_DECLS
 #include "util/ide-progress.h"
 #include "util/ide-ref-ptr.h"
 #include "util/ide-settings.h"
+#include "util/ide-triplet.h"
 #include "util/ide-uri.h"
 #include "vcs/ide-vcs-config.h"
 #include "vcs/ide-vcs-file-info.h"

@@ -22,7 +22,10 @@
 
 #include <gio/gio.h>
 
+#include "ide-types.h"
 #include "ide-version-macros.h"
+
+#include "util/ide-triplet.h"
 
 G_BEGIN_DECLS
 
@@ -40,26 +43,16 @@ IDE_AVAILABLE_IN_3_28
 G_DECLARE_FINAL_TYPE (IdeDeviceInfo, ide_device_info, IDE, DEVICE_INFO, GObject)
 
 IDE_AVAILABLE_IN_3_28
-IdeDeviceInfo *ide_device_info_new        (void);
+IdeDeviceInfo *ide_device_info_new              (void);
 IDE_AVAILABLE_IN_3_28
-IdeDeviceKind  ide_device_info_get_kind   (IdeDeviceInfo *self);
+IdeDeviceKind  ide_device_info_get_kind         (IdeDeviceInfo *self);
 IDE_AVAILABLE_IN_3_28
-void           ide_device_info_set_kind   (IdeDeviceInfo *self,
-                                           IdeDeviceKind  kind);
-IDE_AVAILABLE_IN_3_28
-const gchar   *ide_device_info_get_kernel (IdeDeviceInfo *self);
-IDE_AVAILABLE_IN_3_28
-void           ide_device_info_set_kernel (IdeDeviceInfo *self,
-                                           const gchar   *kernel);
-IDE_AVAILABLE_IN_3_28
-const gchar   *ide_device_info_get_arch   (IdeDeviceInfo *self);
-IDE_AVAILABLE_IN_3_28
-void           ide_device_info_set_arch   (IdeDeviceInfo *self,
-                                           const gchar   *arch);
-IDE_AVAILABLE_IN_3_28
-const gchar   *ide_device_info_get_system (IdeDeviceInfo *self);
-IDE_AVAILABLE_IN_3_28
-void           ide_device_info_set_system (IdeDeviceInfo *self,
-                                           const gchar   *system);
+void           ide_device_info_set_kind         (IdeDeviceInfo *self,
+                                                 IdeDeviceKind  kind);
+IDE_AVAILABLE_IN_3_30
+IdeTriplet    *ide_device_info_get_host_triplet (IdeDeviceInfo *self);
+IDE_AVAILABLE_IN_3_30
+void           ide_device_info_set_host_triplet (IdeDeviceInfo *self,
+                                                 IdeTriplet    *host_triplet);
 
 G_END_DECLS
