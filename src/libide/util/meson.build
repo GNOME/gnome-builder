@@ -10,6 +10,7 @@ util_headers = [
   'ide-progress.h',
   'ide-ref-ptr.h',
   'ide-settings.h',
+  'ide-triplet.h',
   'ide-uri.h',
 ]
 
@@ -24,6 +25,7 @@ util_sources = [
   'ide-progress.c',
   'ide-ref-ptr.c',
   'ide-settings.c',
+  'ide-triplet.c',
   'ide-uri.c',
 ]
 
