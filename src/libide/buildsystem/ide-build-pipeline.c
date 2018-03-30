@@ -108,6 +108,12 @@ typedef struct
 
 typedef struct
 {
+  IdeBuildPipeline *self;
+  GPtrArray        *addins;
+} IdleLoadState;
+
+typedef struct
+{
   guint   id;
   GRegex *regex;
 } ErrorFormat;
@@ -373,6 +379,16 @@ chained_binding_clear (gpointer data)
 
   g_binding_unbind (binding);
   g_object_unref (binding);
+}
+
+static void
+idle_load_state_free (gpointer data)
+{
+  IdleLoadState *state = data;
+
+  g_clear_pointer (&state->addins, g_ptr_array_unref);
+  g_clear_object (&state->self);
+  g_slice_free (IdleLoadState, state);
 }
 
 static void
@@ -1017,6 +1033,59 @@ register_post_install_commands_stage (IdeBuildPipeline *self,
     }
 }
 
+static void
+collect_pipeline_addins (PeasExtensionSet *set,
+                         PeasPluginInfo   *plugin_info,
+                         PeasExtension    *exten,
+                         gpointer          user_data)
+{
+  GPtrArray *addins = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_BUILD_PIPELINE_ADDIN (exten));
+  g_assert (addins != NULL);
+
+  g_ptr_array_add (addins, g_object_ref (exten));
+}
+
+static gboolean
+ide_build_pipeline_load_cb (IdleLoadState *state)
+{
+  g_assert (state != NULL);
+  g_assert (IDE_IS_BUILD_PIPELINE (state->self));
+  g_assert (state->addins != NULL);
+
+  /*
+   * We only load a single addin per idle callback so that we can return to
+   * the main loop and potentially start the next frame at a higher priority
+   * than the addin loading.
+   */
+
+  if (state->addins->len > 0)
+    {
+      IdeBuildPipelineAddin *addin = g_ptr_array_index (state->addins, state->addins->len - 1);
+      gint64 begin, end;
+
+      begin = g_get_monotonic_time ();
+      ide_build_pipeline_addin_load (addin, state->self);
+      end = g_get_monotonic_time ();
+
+      g_ptr_array_remove_index (state->addins, state->addins->len - 1);
+
+      g_debug ("%s loaded in %lf seconds",
+               G_OBJECT_TYPE_NAME (addin),
+               (end - begin) / (gdouble)G_USEC_PER_SEC);
+
+      if (state->addins->len > 0)
+        return G_SOURCE_CONTINUE;
+    }
+
+  state->self->loaded = TRUE;
+
+  return G_SOURCE_REMOVE;
+}
+
 /**
  * ide_build_pipeline_load:
  *
@@ -1029,14 +1098,14 @@ register_post_install_commands_stage (IdeBuildPipeline *self,
 static void
 ide_build_pipeline_load (IdeBuildPipeline *self)
 {
+  g_autoptr(GPtrArray) addins = NULL;
+  IdleLoadState *state;
   IdeContext *context;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (self->addins == NULL);
-
-  self->loaded = TRUE;
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
@@ -1058,9 +1127,22 @@ ide_build_pipeline_load (IdeBuildPipeline *self)
                     G_CALLBACK (ide_build_pipeline_extension_removed),
                     self);
 
+  /* Collect our addins so we can incrementally load them in an
+   * idle callback to reduce chances of stalling the main loop.
+   */
+  addins = g_ptr_array_new_with_free_func (g_object_unref);
   peas_extension_set_foreach (self->addins,
-                              ide_build_pipeline_extension_added,
-                              self);
+                              collect_pipeline_addins,
+                              addins);
+
+  state = g_slice_new0 (IdleLoadState);
+  state->self = g_object_ref (self);
+  state->addins = g_steal_pointer (&addins);
+
+  g_idle_add_full (G_PRIORITY_LOW,
+                   (GSourceFunc) ide_build_pipeline_load_cb,
+                   state,
+                   idle_load_state_free);
 
   IDE_EXIT;
 }
