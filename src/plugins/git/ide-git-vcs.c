@@ -51,6 +51,12 @@ struct _IdeGitVcs
   GFile          *working_directory;
   GFileMonitor   *monitor;
 
+  /*
+   * If we're in a worktree, we might have a permanent branch name
+   * as we can't change branches.
+   */
+  gchar          *worktree_branch;
+
   guint           changed_timeout;
 
   guint           reloading : 1;
@@ -166,7 +172,6 @@ ide_git_vcs_discover (IdeGitVcs  *self,
   g_autoptr(GFile) parent = NULL;
   g_autoptr(GFile) git = NULL;
   g_autoptr(GFile) child = NULL;
-  GFile *ret;
 
   g_assert (IDE_IS_GIT_VCS (self));
   g_assert (G_IS_FILE (file));
@@ -223,9 +228,7 @@ ide_git_vcs_discover (IdeGitVcs  *self,
       return NULL;
     }
 
-  ret = ide_git_vcs_discover (self, parent, error);
-
-  return ret;
+  return ide_git_vcs_discover (self, parent, error);
 }
 
 static GgitRepository *
@@ -254,6 +257,45 @@ ide_git_vcs_load (IdeGitVcs  *self,
       /* Fallback to libgit2(-glib) discovery */
       if (!(location = ggit_repository_discover (project_file, error)))
         return NULL;
+    }
+
+  /* If @location is a regular file, we might have a git-worktree link */
+  if (g_file_query_file_type (location, 0, NULL) == G_FILE_TYPE_REGULAR)
+    {
+      g_autofree gchar *contents = NULL;
+      gsize len;
+
+      if (g_file_load_contents (location, NULL, &contents, &len, NULL, NULL))
+        {
+          IdeLineReader reader;
+          gchar *line;
+          gsize line_len;
+
+          ide_line_reader_init (&reader, contents, len);
+
+          while ((line = ide_line_reader_next (&reader, &line_len)))
+            {
+              line[line_len] = 0;
+
+              if (g_str_has_prefix (line, "gitdir: "))
+                {
+                  const gchar *branch;
+
+                  g_clear_object (&location);
+                  location = g_file_new_for_path (line + strlen ("gitdir: "));
+
+                  /*
+                   * Worktrees only have a single branch, and it is the name
+                   * of the suffix of .git/worktrees/<name>
+                   */
+                  if (self->worktree_branch == NULL &&
+                      (branch = strrchr (line, G_DIR_SEPARATOR)))
+                    self->worktree_branch = g_strdup (branch + 1);
+
+                  break;
+                }
+            }
+        }
     }
 
   uri = g_file_get_uri (location);
@@ -515,8 +557,12 @@ ide_git_vcs_get_branch_name (IdeVcs *vcs)
   g_assert (IDE_IS_GIT_VCS (self));
 
   g_mutex_lock (&self->repository_mutex);
+  ret = g_strdup (self->worktree_branch);
   ref = ggit_repository_get_head (self->repository, NULL);
   g_mutex_unlock (&self->repository_mutex);
+
+  if (ret != NULL)
+    return ret;
 
   if (ref != NULL)
     {
@@ -751,6 +797,7 @@ ide_git_vcs_finalize (GObject *object)
   IDE_ENTRY;
 
   g_mutex_clear (&self->repository_mutex);
+  g_clear_pointer (&self->worktree_branch, g_free);
 
   G_OBJECT_CLASS (ide_git_vcs_parent_class)->finalize (object);
 
