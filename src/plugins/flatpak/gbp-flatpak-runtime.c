@@ -33,6 +33,8 @@ struct _GbpFlatpakRuntime
 {
   IdeRuntime parent_instance;
 
+  GHashTable *program_paths_cache;
+
   gchar *arch;
   gchar *branch;
   gchar *deploy_dir;
@@ -97,6 +99,9 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  if (g_hash_table_contains (self->program_paths_cache, program))
+    return TRUE;
+
   arch = g_strdup_printf ("--arch=%s", self->arch);
 
   /*
@@ -105,7 +110,7 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
    * has been created and setup. Instead, we will use flatpak to run the
    * runtime which was added in Flatpak 0.6.13.
    */
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                           G_SUBPROCESS_FLAGS_STDERR_SILENCE);
 
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
@@ -121,7 +126,24 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL);
 
   if (subprocess != NULL)
-    return ide_subprocess_wait_check (subprocess, cancellable, NULL);
+    {
+      g_autofree gchar *stdout_buf = NULL;
+
+      if (ide_subprocess_communicate_utf8 (subprocess, NULL, cancellable, &stdout_buf, NULL, NULL))
+        {
+          if (stdout_buf)
+            {
+              g_strstrip (stdout_buf);
+
+              if (g_str_has_prefix (stdout_buf, "/usr/"))
+                g_hash_table_insert (self->program_paths_cache,
+                                     (gchar *)g_intern_string (program),
+                                     NULL);
+            }
+
+          return !dzl_str_empty0 (stdout_buf);
+        }
+    }
 
   return FALSE;
 }
@@ -680,6 +702,7 @@ gbp_flatpak_runtime_finalize (GObject *object)
   g_clear_pointer (&self->deploy_dir, g_free);
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->sdk, g_free);
+  g_clear_pointer (&self->program_paths_cache, g_hash_table_unref);
   g_clear_object (&self->deploy_dir_files);
 
   G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);
@@ -744,6 +767,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
 static void
 gbp_flatpak_runtime_init (GbpFlatpakRuntime *self)
 {
+  self->program_paths_cache = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 static gchar *
