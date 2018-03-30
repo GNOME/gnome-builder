@@ -129,20 +129,6 @@ gb_project_tree_project_file_trashed (GbProjectTree *self,
 }
 
 static void
-gb_project_tree_vcs_changed (GbProjectTree *self,
-                             IdeVcs        *vcs)
-{
-  GActionGroup *group;
-
-  g_assert (GB_IS_PROJECT_TREE (self));
-  g_assert (IDE_IS_VCS (vcs));
-
-  group = gtk_widget_get_action_group (GTK_WIDGET (self), "project-tree");
-  if (group != NULL)
-    g_action_group_activate_action (group, "refresh", NULL);
-}
-
-static void
 gb_project_tree_buffer_saved_cb (GbProjectTree    *self,
                                  IdeBuffer        *buffer,
                                  IdeBufferManager *buffer_manager)
@@ -182,18 +168,9 @@ gb_project_tree_set_context (GbProjectTree *self,
   DzlTreeNode *root;
   IdeProject *project;
   IdeBufferManager *buffer_manager;
-  IdeVcs *vcs;
 
   g_return_if_fail (GB_IS_PROJECT_TREE (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
-
-  vcs = ide_context_get_vcs (context);
-
-  g_signal_connect_object (vcs,
-                           "changed",
-                           G_CALLBACK (gb_project_tree_vcs_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   project = ide_context_get_project (context);
 
