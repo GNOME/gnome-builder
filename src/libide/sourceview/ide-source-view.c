@@ -5479,6 +5479,23 @@ ide_source_view_real_request_documentation (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_undo (GtkSourceView *view)
+{
+  IdeSourceView *self = (IdeSourceView *)view;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  /*
+   * Disable things that could confuse undo. For example, we need to bail on
+   * any in-flight snippets because they just can't deal with the buffer
+   * changes correctly given the GtkTextMark vs run-length design.
+   */
+  ide_source_view_clear_snippets (self);
+
+  GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->undo (view);
+}
+
+static void
 ide_source_view_real_reset (IdeSourceView *self)
 {
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -5735,6 +5752,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
+  GtkSourceViewClass *gsv_class = GTK_SOURCE_VIEW_CLASS (klass);
   GtkBindingSet *binding_set;
   GTypeClass *completion_class;
 
@@ -5760,6 +5778,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   text_view_class->draw_layer = ide_source_view_real_draw_layer;
   text_view_class->insert_at_cursor = ide_source_view_real_insert_at_cursor;
   text_view_class->populate_popup = ide_source_view_real_populate_popup;
+
+  gsv_class->undo = ide_source_view_real_undo;
 
   klass->add_cursor = ide_source_view_real_add_cursor;
   klass->remove_cursors = ide_source_view_real_remove_cursors;
