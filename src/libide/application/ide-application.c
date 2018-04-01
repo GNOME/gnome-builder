@@ -530,7 +530,8 @@ ide_application_startup (GApplication *application)
 
   G_APPLICATION_CLASS (ide_application_parent_class)->startup (application);
 
-  if (self->mode == IDE_APPLICATION_MODE_PRIMARY)
+  if (self->mode == IDE_APPLICATION_MODE_PRIMARY ||
+      self->mode == IDE_APPLICATION_MODE_TOOL)
     ide_application_register_plugin_accessories (self);
 
   _ide_guess_shell ();
