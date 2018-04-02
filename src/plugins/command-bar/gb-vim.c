@@ -751,12 +751,12 @@ gb_vim_command_syntax (GtkWidget      *active_widget,
 
   if (IDE_IS_EDITOR_VIEW (active_widget))
     {
-      IdeSourceView *source_view = ide_editor_view_get_view (IDE_EDITOR_VIEW (active_widget));
+      IdeBuffer *buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (active_widget));
 
       if (g_str_equal (options, "enable") || g_str_equal (options, "on"))
-        g_object_set (source_view, "highlight-syntax", TRUE, NULL);
+        gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (buffer), TRUE);
       else if (g_str_equal (options, "off"))
-        g_object_set (source_view, "highlight-syntax", FALSE, NULL);
+        gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (buffer), FALSE);
       else
         {
           g_set_error (error,
