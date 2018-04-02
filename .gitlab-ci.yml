@@ -24,7 +24,7 @@ flatpak:
         - flatpak build-bundle repo $FLATPAK_ARTIFACT org.gnome.Builder
 
         # Run tests inside the Flatpak env
-        # - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build test
+        - xvfb-run -a -s "-screen 0 1024x768x24" dbus-run-session flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build test
 
     artifacts:
         paths:
