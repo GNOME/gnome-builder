@@ -191,6 +191,7 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
 {
   g_autoptr(IdeConfiguration) config = NULL;
   g_autofree gchar *env_group = NULL;
+  g_autofree gchar *locality = NULL;
   IdeContext *context;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
@@ -212,6 +213,14 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
   load_string (config, self->key_file, config_id, "app-id", "app-id");
   load_strv (config, self->key_file, config_id, "prebuild", "prebuild");
   load_strv (config, self->key_file, config_id, "postbuild", "postbuild");
+
+  if (g_key_file_has_key (self->key_file, config_id, "builddir", NULL))
+    {
+      if (g_key_file_get_boolean (self->key_file, config_id, "builddir", NULL))
+        ide_configuration_set_locality (config, IDE_BUILD_LOCALITY_OUT_OF_TREE);
+      else
+        ide_configuration_set_locality (config, IDE_BUILD_LOCALITY_IN_TREE);
+    }
 
   env_group = g_strdup_printf ("%s.environment", config_id);
   if (g_key_file_has_group (self->key_file, env_group))
@@ -426,6 +435,13 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
 #undef PERSIST_STRING_KEY
 #undef PERSIST_STRV_KEY
+
+      if (ide_configuration_get_locality (config) == IDE_BUILD_LOCALITY_IN_TREE)
+        g_key_file_set_boolean (self->key_file, config_id, "builddir", FALSE);
+      else if (ide_configuration_get_locality (config) == IDE_BUILD_LOCALITY_OUT_OF_TREE)
+        g_key_file_set_boolean (self->key_file, config_id, "builddir", TRUE);
+      else
+        g_key_file_remove_key (self->key_file, config_id, "builddir", NULL);
 
       if (config == ide_configuration_manager_get_current (manager))
         g_key_file_set_boolean (self->key_file, config_id, "default", TRUE);
