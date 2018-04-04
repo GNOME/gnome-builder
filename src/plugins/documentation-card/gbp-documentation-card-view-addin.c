@@ -176,6 +176,9 @@ search_document_cb (gpointer data)
   if (!GTK_SOURCE_IS_VIEW (source_view))
     return G_SOURCE_REMOVE;
 
+  if (!gtk_widget_has_focus (GTK_WIDGET (source_view)))
+    return G_SOURCE_REMOVE;
+
   buffer = ide_editor_view_get_buffer (self->editor_view);
   if (buffer == NULL)
     return G_SOURCE_REMOVE;
