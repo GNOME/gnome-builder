@@ -3329,6 +3329,9 @@ _ide_buffer_set_failure (IdeBuffer    *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_BUFFER (self));
 
+  if (error != NULL)
+    ide_context_warning (priv->context, _("Buffer failed: %s"), error->message);
+
   priv->failed = !!error;
   g_clear_pointer (&priv->failure, g_error_free);
   priv->failure = g_error_copy (error);
