@@ -202,6 +202,7 @@ libide_deps = [
   libgtksource_dep,
   libjson_glib_dep,
   libjsonrpc_glib_dep,
+  libm_dep,
   libpangoft2_dep,
   libpeas_dep,
   libtemplate_glib_dep,
