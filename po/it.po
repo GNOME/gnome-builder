@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-10 03:47+0000\n"
-"PO-Revision-Date: 2018-03-10 18:23+0100\n"
+"POT-Creation-Date: 2018-03-28 16:13+0000\n"
+"PO-Revision-Date: 2018-04-04 08:29+0200\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -452,7 +452,7 @@ msgstr "L'altezza in pixel del riquadro inferiore."
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/application/ide-application.c:684
+#: src/libide/application/ide-application.c:687
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
 #: src/libide/workbench/ide-workbench.c:646
@@ -736,7 +736,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carica o genera una tavolozza utilizzando le preferenze"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5128
+#: src/libide/sourceview/ide-source-view.c:5127
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Rinomina"
@@ -768,7 +768,7 @@ msgstr "Maggiori informazioni su GNOME Builder"
 msgid "Funded By"
 msgstr "Reso possibile da"
 
-#: src/libide/application/ide-application.c:1075
+#: src/libide/application/ide-application.c:1078
 #: src/libide/preferences/ide-preferences-builtin.c:409
 msgid "Projects"
 msgstr "Progetti"
@@ -891,7 +891,7 @@ msgstr "Mostra la finestra delle scorciatoie"
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Creazione di un processo per controllare le modifiche non riuscito: %s"
 
-#: src/libide/buffers/ide-buffer.c:2844
+#: src/libide/buffers/ide-buffer.c:2842
 msgid "The current language lacks a symbol resolver."
 msgstr "Il linguaggio attuale non dispone di un risolutore dei simboli."
 
@@ -899,7 +899,7 @@ msgstr "Il linguaggio attuale non dispone di un risolutore dei simboli."
 msgid "File too large to be opened."
 msgstr "File troppo grande per poter essere aperto."
 
-#: src/libide/buffers/ide-buffer-manager.c:1968
+#: src/libide/buffers/ide-buffer-manager.c:1989
 #, c-format
 msgid "unsaved document %u"
 msgstr "documento %u non salvato"
@@ -908,8 +908,8 @@ msgstr "documento %u non salvato"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:2007
-#: src/libide/buffers/ide-buffer-manager.c:2070
+#: src/libide/buffers/ide-buffer-manager.c:2028
+#: src/libide/buffers/ide-buffer-manager.c:2091
 #: src/libide/editor/ide-editor-view-actions.c:189
 #: src/libide/editor/ide-editor-view-actions.c:310
 #, c-format
@@ -928,12 +928,12 @@ msgstr "Salvataggio della bozza riuscito: %s"
 msgid "%s (Copy)"
 msgstr "%s (copia)"
 
-#: src/libide/buildsystem/ide-build-manager.c:367
+#: src/libide/buildsystem/ide-build-manager.c:369
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Inizializzazione della pipeline di compilazione non riuscita: %s"
 
-#: src/libide/buildsystem/ide-build-manager.c:424
+#: src/libide/buildsystem/ide-build-manager.c:426
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Recupero informazioni sul dispositivo non riuscito: %s"
@@ -958,7 +958,7 @@ msgstr "Pulizia…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2900
 #: src/libide/buildsystem/ide-build-pipeline.c:2957
-#: src/libide/workbench/ide-omni-bar.c:552
+#: src/libide/workbench/ide-omni-bar.c:557
 msgid "Failed"
 msgstr "Non riuscito"
 
@@ -1001,7 +1001,7 @@ msgstr "Esportazione…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2949
 #: src/libide/buildsystem/ide-build-pipeline.c:2953
-#: src/libide/workbench/ide-omni-bar.c:579
+#: src/libide/workbench/ide-omni-bar.c:584
 msgid "Success"
 msgstr "Completato"
 
@@ -1062,7 +1062,7 @@ msgid "Configure Options"
 msgstr "Configura opzioni"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:189
-#: src/libide/workbench/ide-omni-bar.ui:315
+#: src/libide/workbench/ide-omni-bar.ui:314
 msgid "Runtime"
 msgstr "Runtime"
 
@@ -1096,7 +1096,7 @@ msgid "Clear build log"
 msgstr "Pulisci registro compilazione"
 
 #: src/libide/buildui/ide-build-log-panel.ui:49
-#: src/libide/workbench/ide-omni-bar.ui:159
+#: src/libide/workbench/ide-omni-bar.ui:158
 msgid "Cancel build"
 msgstr "Annulla compilazione"
 
@@ -1106,21 +1106,21 @@ msgstr "Salva registro compilazione"
 
 #: src/libide/buildui/ide-build-panel.c:109
 #: src/libide/buildui/ide-build-panel.c:185
-#: src/libide/buildui/ide-build-panel.c:223
+#: src/libide/buildui/ide-build-panel.c:222
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:503
+#: src/libide/workbench/ide-omni-bar.ui:502
 msgid "Warnings"
 msgstr "Avvisi"
 
 #: src/libide/buildui/ide-build-panel.c:118
 #: src/libide/buildui/ide-build-panel.c:186
-#: src/libide/buildui/ide-build-panel.c:224
+#: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:475
+#: src/libide/workbench/ide-omni-bar.ui:474
 msgid "Errors"
 msgstr "Errori"
 
-#: src/libide/buildui/ide-build-panel.c:666
+#: src/libide/buildui/ide-build-panel.c:665
 #: src/libide/buildui/ide-build-workbench-addin.c:171
 msgid "Build Issues"
 msgstr "Errori compilazione"
@@ -1305,12 +1305,16 @@ msgstr "Posizione"
 msgid "Binary"
 msgstr "Binario"
 
-#: src/libide/debugger/ide-debug-manager.c:968
+#: src/libide/debugger/ide-debug-manager.c:970
 #, c-format
 msgid "A suitable debugger could not be found."
 msgstr "Impossibile trovare un debugger adatto."
 
-#: src/libide/devices/ide-device-manager.c:714
+#: src/libide/devices/ide-device-manager.c:577
+msgid "Devices"
+msgstr "Dispositivi"
+
+#: src/libide/devices/ide-device-manager.c:725
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Impossibile distribuire al dispositivo, la pipeline di compilazione non è "
@@ -1447,7 +1451,7 @@ msgstr "Apri file"
 #: src/libide/greeter/ide-greeter-perspective.c:318
 #: src/libide/workbench/ide-workbench-actions.c:81
 #: src/plugins/color-picker/gb-color-picker-prefs.c:207
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:360
 msgid "Open"
 msgstr "Apri"
 
@@ -1460,8 +1464,8 @@ msgstr "Apri"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:95
 #: src/plugins/color-picker/gb-color-picker-prefs.c:211
 #: src/plugins/color-picker/gb-color-picker-prefs.c:238
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:362
-#: src/plugins/terminal/gb-terminal-view-actions.c:271
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
+#: src/plugins/terminal/gb-terminal-view-actions.c:274
 msgid "Cancel"
 msgstr "Annulla"
 
@@ -1477,7 +1481,6 @@ msgstr "Annulla"
 #: src/libide/editor/ide-editor-view-shortcuts.c:61
 #: src/libide/editor/ide-editor-view-shortcuts.c:67
 #: src/libide/editor/ide-editor-view-shortcuts.c:73
-#: src/libide/editor/ide-editor-view-shortcuts.c:79
 #: src/libide/layout/ide-layout-stack-shortcuts.c:32
 #: src/libide/layout/ide-layout-stack-shortcuts.c:39
 #: src/libide/layout/ide-layout-stack-shortcuts.c:46
@@ -1489,6 +1492,7 @@ msgstr "Annulla"
 #: src/plugins/project-tree/gb-project-tree-shortcuts.c:33
 #: src/plugins/project-tree/gb-project-tree-shortcuts.c:39
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:100
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:54
 msgctxt "shortcut window"
 msgid "Editor shortcuts"
 msgstr "Scorciatoie dell'editor"
@@ -1654,7 +1658,7 @@ msgstr "Stampa non riuscita: %s"
 #: src/libide/editor/ide-editor-view-actions.c:244
 #: src/plugins/color-picker/gb-color-picker-prefs.c:234
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: src/plugins/terminal/gb-terminal-view-actions.c:272
+#: src/plugins/terminal/gb-terminal-view-actions.c:275
 msgid "Save"
 msgstr "Salva"
 
@@ -1685,7 +1689,6 @@ msgstr "Salva il documento con un nuovo nome"
 #: src/libide/editor/ide-editor-view-shortcuts.c:62
 #: src/libide/editor/ide-editor-view-shortcuts.c:68
 #: src/libide/editor/ide-editor-view-shortcuts.c:74
-#: src/libide/editor/ide-editor-view-shortcuts.c:80
 #: src/libide/keybindings/ide-shortcuts-window.ui:144
 #: src/libide/keybindings/ide-shortcuts-window.ui:156
 msgctxt "shortcut window"
@@ -1717,12 +1720,6 @@ msgstr "Passa all'errore successivo"
 msgctxt "shortcut window"
 msgid "Move to the previous error"
 msgstr "Passa all'errore precedente"
-
-#: src/libide/editor/ide-editor-view-shortcuts.c:81
-#: src/libide/keybindings/ide-shortcuts-window.ui:163
-msgctxt "shortcut window"
-msgid "Find the next match"
-msgstr "Trova corrispondenza successiva"
 
 #: src/libide/editor/ide-editor-view.ui:43
 msgid "_Reload"
@@ -1945,10 +1942,6 @@ msgstr "_Apri collegamento"
 msgid "_Copy Link Address"
 msgstr "_Copia indirizzo collegamento"
 
-#: src/libide/gtk/menus.ui:252
-msgid "Devices"
-msgstr "Dispositivi"
-
 #: src/libide/ide.c:58
 #, c-format
 msgid "You must call %s() before using libide."
@@ -2073,6 +2066,11 @@ msgstr "Passa al documento precedente"
 msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Mostra elenco dei documenti aperti"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:163
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "Trova corrispondenza successiva"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:170
 msgctxt "shortcut window"
@@ -2954,21 +2952,21 @@ msgstr "Sostituisci «%s» con «%s»"
 msgid "Apply Fix-It"
 msgstr "Applica Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:5127
+#: src/libide/sourceview/ide-source-view.c:5126
 msgid "Rename symbol"
 msgstr "Rinomina simbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5361
+#: src/libide/sourceview/ide-source-view.c:5360
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>riga %u, colonna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5387
+#: src/libide/sourceview/ide-source-view.c:5386
 msgid "No references were found"
 msgstr "Non è stato trovato alcun riferimento"
 
-#: src/libide/sourceview/ide-word-completion-provider.c:558
+#: src/libide/sourceview/ide-word-completion-provider.c:557
 msgid "Builder Word Completion"
 msgstr "Completamento parola"
 
@@ -3072,69 +3070,69 @@ msgstr "Impossibile leggere «%s» come URI assoluto"
 msgid "URI “%s” has no host component"
 msgstr "L'URI «%s» non ha il componente host"
 
-#: src/libide/workbench/ide-omni-bar.c:523
+#: src/libide/workbench/ide-omni-bar.c:528
 msgid "Building"
 msgstr "Compilazione"
 
-#: src/libide/workbench/ide-omni-bar.ui:224
+#: src/libide/workbench/ide-omni-bar.ui:223
 msgid "Update project dependencies"
 msgstr "Aggiorna dipendenze del progetto"
 
-#: src/libide/workbench/ide-omni-bar.ui:243
+#: src/libide/workbench/ide-omni-bar.ui:242
 msgid "Configure build preferences"
 msgstr "Configura preferenze compilazione"
 
-#: src/libide/workbench/ide-omni-bar.ui:265
+#: src/libide/workbench/ide-omni-bar.ui:264
 msgid "Branch"
 msgstr "Ramo"
 
-#: src/libide/workbench/ide-omni-bar.ui:290
+#: src/libide/workbench/ide-omni-bar.ui:289
 msgid "Build Profile"
 msgstr "Profilo compilazione"
 
-#: src/libide/workbench/ide-omni-bar.ui:345
+#: src/libide/workbench/ide-omni-bar.ui:344
 msgid "There is a problem with the current build configuration."
 msgstr "La configurazione di compilazione attuale contiene degli errori."
 
-#: src/libide/workbench/ide-omni-bar.ui:378
+#: src/libide/workbench/ide-omni-bar.ui:377
 msgid "Build status"
 msgstr "Stato compilazione"
 
-#: src/libide/workbench/ide-omni-bar.ui:399
+#: src/libide/workbench/ide-omni-bar.ui:398
 msgid "View build console contents"
 msgstr "Visualizza contenuti console di compilazione"
 
-#: src/libide/workbench/ide-omni-bar.ui:421
+#: src/libide/workbench/ide-omni-bar.ui:420
 msgid "Last build"
 msgstr "Ultima compilazione"
 
-#: src/libide/workbench/ide-omni-bar.ui:448
+#: src/libide/workbench/ide-omni-bar.ui:447
 msgid "Build result"
 msgstr "Risultato compilazione"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:541
+#: src/libide/workbench/ide-omni-bar.ui:540
 msgid "true"
 msgstr "false"
 
-#: src/libide/workbench/ide-omni-bar.ui:546
+#: src/libide/workbench/ide-omni-bar.ui:545
 msgctxt "button"
 msgid "Build"
 msgstr "Compila"
 
-#: src/libide/workbench/ide-omni-bar.ui:553
+#: src/libide/workbench/ide-omni-bar.ui:552
 msgid "Rebuild"
 msgstr "Ri-compila"
 
-#: src/libide/workbench/ide-omni-bar.ui:560
+#: src/libide/workbench/ide-omni-bar.ui:559
 msgid "Clean"
 msgstr "Pulisci"
 
-#: src/libide/workbench/ide-omni-bar.ui:567
+#: src/libide/workbench/ide-omni-bar.ui:566
 msgid "Export Bundle"
 msgstr "Esporta bundle"
 
-#: src/libide/workbench/ide-omni-bar.ui:592 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:591 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Compila progetto"
 
@@ -3396,16 +3394,16 @@ msgstr ""
 "della directory temporanea «%s»: «%s»"
 
 #. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:269
+#: src/plugins/beautifier/gb-beautifier-process.c:262
 #, c-format
 msgid "Beautifier plugin: command error output: %s"
 msgstr "Plugin di abbellimento: output comando: %s"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:279
+#: src/plugins/beautifier/gb-beautifier-process.c:272
 msgid "Beautifier plugin: the command output is empty"
 msgstr "Plugin di abbellimento: l'output del comando è vuoto"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:306
+#: src/plugins/beautifier/gb-beautifier-process.c:299
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "Plugin di abbellimento: l'output non è testo UTF-8 valido"
 
@@ -4040,7 +4038,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Scaricamento sorgenti applicazione…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:660
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Rinomina del manifest flatpack non riuscita: %s"
@@ -4062,27 +4060,27 @@ msgstr "Clona"
 msgid "Creating flatpak workspace"
 msgstr "Creazione spazio di lavoro flatpack"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:265
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:329
 msgid "Preparing build directory"
 msgstr "Preparazione directory di compilazione"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:305
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:380
 msgid "Downloading dependencies"
 msgstr "Scaricamento dipendenze"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:385
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:460
 msgid "Building dependencies"
 msgstr "Compilazione dipendenze"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:437
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
 msgid "Finalizing flatpak build"
 msgstr "Completamento compilazione flatpack"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:483
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:558
 msgid "Exporting staging directory"
 msgstr "Esportazione directory temporanea"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:570
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
 msgid "Creating flatpak bundle"
 msgstr "Creazione bundle flatpack"
 
@@ -4120,12 +4118,12 @@ msgstr[1] "Mostra %u runtime addizionali"
 msgid "Flatpak Runtimes"
 msgstr "Runtime Flatpack"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:776
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:771
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:778
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:773
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4559,7 +4557,7 @@ msgid "Arm Emulation"
 msgstr "Emulazione arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:126
+#: src/plugins/qemu/gbp-qemu-device-provider.c:156
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Mio computer (%s) — %s"
@@ -4827,12 +4825,22 @@ msgstr ""
 "Il file di registro di supporto è stato scritto su «%s». Fornire questo file "
 "come allegato alla segnalazione bug o alla richiesta di supporto."
 
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:279
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
+msgctxt "shortcut window"
+msgid "Symbols"
+msgstr "Simboli"
+
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:56
+msgctxt "shortcut window"
+msgid "Search symbols within document"
+msgstr "Cerca simboli nel documento"
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:304
 msgid "Select Symbol…"
 msgstr "Seleziona simbolo…"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:76
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:77
 msgid "Document Outline"
 msgstr "Struttura documento"
 
@@ -4866,19 +4874,19 @@ msgstr ""
 msgid "CPU"
 msgstr "CPU"
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:358
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:357
 msgid "Open Profile"
 msgstr "Apri profilo"
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:367
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:366
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Acquisizione sysprof (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:373
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:372
 msgid "All Files"
 msgstr "Tutti i file"
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:474
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:473
 #: src/plugins/sysprof/gtk/menus.ui:34
 msgid "Run with Profiler"
 msgstr "Esegui con profiler"
@@ -4887,11 +4895,11 @@ msgstr "Esegui con profiler"
 msgid "Open Sysprof Capture…"
 msgstr "Apri acquisizione sysprof…"
 
-#: src/plugins/terminal/gb-terminal-view-actions.c:263
+#: src/plugins/terminal/gb-terminal-view-actions.c:266
 msgid "Save Terminal Content As"
 msgstr "Salva contenuto terminale come"
 
-#: src/plugins/terminal/gb-terminal-view.c:418
+#: src/plugins/terminal/gb-terminal-view.c:347
 msgid "Untitled terminal"
 msgstr "Terminale senza nome"
 
@@ -4941,8 +4949,8 @@ msgstr "vala diagnostica avvisi errori warnings errors"
 msgid "Run with Valgrind"
 msgstr "Esegui con Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:579
-#: src/plugins/xml-pack/ide-xml-tree-builder.c:524
+#: src/plugins/xml-pack/ide-xml-parser.c:582
+#: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Creazione dell'albero XML non riuscita."
 
@@ -5298,9 +5306,6 @@ msgstr "Buffer caricato, ma non nel gestore del buffer."
 
 #~ msgid "Current language does not support symbol resolvers"
 #~ msgstr "Il linguaggio attuale non supporta i risolutori di simboli"
-
-#~ msgid "Symbols"
-#~ msgstr "Simboli"
 
 #~ msgid "No symbols"
 #~ msgstr "Nessun simbolo"
