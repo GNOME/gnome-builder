@@ -63,7 +63,7 @@ ide_local_device_get_info_async (IdeDevice           *device,
   ide_task_set_check_cancellable (task, FALSE);
 
   info = ide_device_info_new ();
-  ide_device_info_set_triplet (info, priv->triplet);
+  ide_device_info_set_host_triplet (info, priv->triplet);
 
   ide_task_return_pointer (task, g_steal_pointer (&info), g_object_unref);
 }
@@ -91,7 +91,7 @@ ide_local_device_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_TRIPLET:
-      g_value_set_boxed (value, ide_triplet_ref (priv->triplet));
+      g_value_set_boxed (value, priv->triplet);
       break;
 
     default:
@@ -111,9 +111,7 @@ ide_local_device_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_TRIPLET:
-      g_clear_pointer (&priv->triplet, ide_triplet_unref);
-      priv->triplet = ide_triplet_ref (g_value_get_boxed (value));
-
+      priv->triplet = g_value_dup_boxed (value);
       break;
 
     default:
@@ -126,7 +124,6 @@ ide_local_device_constructed (GObject *object)
 {
   IdeLocalDevice *self = (IdeLocalDevice *)object;
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
-  g_autofree gchar *arch = NULL;
   g_autofree gchar *name = NULL;
   g_auto(GStrv) parts = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
@@ -135,14 +132,12 @@ ide_local_device_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_local_device_parent_class)->constructed (object);
 
-  arch = ide_get_system_arch ();
   triplet = ide_triplet_new_from_system ();
   if (priv->triplet == NULL)
     priv->triplet = g_steal_pointer (&triplet);
   else
     {
-      const gchar *current_cpu = ide_triplet_get_cpu (triplet);
-      g_autofree gchar *device_cpu = g_strdup (current_cpu);
+      const gchar *current_arch = ide_triplet_get_arch (triplet);
       g_autofree gchar *device_vendor = NULL;
       g_autofree gchar *device_kernel = NULL;
       g_autofree gchar *device_operating_system = NULL;
@@ -168,7 +163,7 @@ ide_local_device_constructed (GObject *object)
       else
         device_operating_system = g_strdup (ide_triplet_get_operating_system (triplet));
 
-      priv->triplet = ide_triplet_new_with_quadruplet (device_cpu,
+      priv->triplet = ide_triplet_new_with_quadruplet (current_arch,
                                                        device_vendor,
                                                        device_kernel,
                                                        device_operating_system);
@@ -183,11 +178,11 @@ ide_local_device_constructed (GObject *object)
     }
   else
     {
-      const gchar *cpu = ide_triplet_get_cpu (priv->triplet);
-      g_autofree gchar *id = g_strdup_printf ("local:%s", cpu);
+      const gchar *arch = ide_triplet_get_arch (priv->triplet);
+      g_autofree gchar *id = g_strdup_printf ("local:%s", arch);
 
       /* translators: first %s is replaced with the host name, second with CPU architecture */
-      name = g_strdup_printf (_("My Computer (%s) — %s"), g_get_host_name (), cpu);
+      name = g_strdup_printf (_("My Computer (%s) — %s"), g_get_host_name (), arch);
       ide_device_set_display_name (IDE_DEVICE (self), name);
       ide_device_set_id (IDE_DEVICE (self), id);
     }
