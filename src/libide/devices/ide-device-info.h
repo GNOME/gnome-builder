@@ -24,6 +24,7 @@
 
 #include "ide-types.h"
 #include "ide-version-macros.h"
+
 #include "util/ide-triplet.h"
 
 G_BEGIN_DECLS
@@ -42,16 +43,16 @@ IDE_AVAILABLE_IN_3_28
 G_DECLARE_FINAL_TYPE (IdeDeviceInfo, ide_device_info, IDE, DEVICE_INFO, GObject)
 
 IDE_AVAILABLE_IN_3_28
-IdeDeviceInfo *ide_device_info_new         (void);
+IdeDeviceInfo *ide_device_info_new              (void);
 IDE_AVAILABLE_IN_3_28
-IdeDeviceKind  ide_device_info_get_kind    (IdeDeviceInfo *self);
+IdeDeviceKind  ide_device_info_get_kind         (IdeDeviceInfo *self);
 IDE_AVAILABLE_IN_3_28
-void           ide_device_info_set_kind    (IdeDeviceInfo *self,
-                                            IdeDeviceKind  kind);
+void           ide_device_info_set_kind         (IdeDeviceInfo *self,
+                                                 IdeDeviceKind  kind);
 IDE_AVAILABLE_IN_3_30
-IdeTriplet    *ide_device_info_get_triplet (IdeDeviceInfo *self);
+IdeTriplet    *ide_device_info_get_host_triplet (IdeDeviceInfo *self);
 IDE_AVAILABLE_IN_3_30
-void           ide_device_info_set_triplet (IdeDeviceInfo *self,
-                                            IdeTriplet    *triplet);
+void           ide_device_info_set_host_triplet (IdeDeviceInfo *self,
+                                                 IdeTriplet    *host_triplet);
 
 G_END_DECLS
