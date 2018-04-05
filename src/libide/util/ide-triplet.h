@@ -36,11 +36,11 @@ IdeTriplet   *ide_triplet_new                  (const gchar  *full_name);
 IDE_AVAILABLE_IN_3_30
 IdeTriplet   *ide_triplet_new_from_system      (void);
 IDE_AVAILABLE_IN_3_30
-IdeTriplet   *ide_triplet_new_with_triplet     (const gchar  *cpu,
+IdeTriplet   *ide_triplet_new_with_triplet     (const gchar  *arch,
                                                 const gchar  *kernel,
                                                 const gchar  *operating_system);
 IDE_AVAILABLE_IN_3_30
-IdeTriplet   *ide_triplet_new_with_quadruplet  (const gchar  *cpu,
+IdeTriplet   *ide_triplet_new_with_quadruplet  (const gchar  *arch,
                                                 const gchar  *vendor,
                                                 const gchar  *kernel,
                                                 const gchar  *operating_system);
@@ -51,7 +51,7 @@ void          ide_triplet_unref                (IdeTriplet   *self);
 IDE_AVAILABLE_IN_3_30
 const gchar  *ide_triplet_get_full_name        (IdeTriplet   *self);
 IDE_AVAILABLE_IN_3_30
-const gchar  *ide_triplet_get_cpu              (IdeTriplet   *self);
+const gchar  *ide_triplet_get_arch             (IdeTriplet   *self);
 IDE_AVAILABLE_IN_3_30
 const gchar  *ide_triplet_get_vendor           (IdeTriplet   *self);
 IDE_AVAILABLE_IN_3_30

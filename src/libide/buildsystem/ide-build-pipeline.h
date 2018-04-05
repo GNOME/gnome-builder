@@ -74,7 +74,7 @@ const gchar           *ide_build_pipeline_get_builddir            (IdeBuildPipel
 IDE_AVAILABLE_IN_ALL
 const gchar           *ide_build_pipeline_get_srcdir              (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_30
-IdeTriplet            *ide_build_pipeline_get_device_triplet      (IdeBuildPipeline       *self);
+IdeTriplet            *ide_build_pipeline_get_host_triplet        (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 gchar                 *ide_build_pipeline_get_message             (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
