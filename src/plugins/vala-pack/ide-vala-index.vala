@@ -284,7 +284,7 @@ namespace Ide
 		                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			GLib.GenericArray<UnsavedFile>? unsaved_files_copy = null;
+			GLib.GenericArray<unowned UnsavedFile>? unsaved_files_copy = null;
 
 			if (unsaved_files != null) {
 				unsaved_files_copy = unsaved_files.to_array ();
