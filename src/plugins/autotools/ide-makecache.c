@@ -1667,7 +1667,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
             {
               g_autoptr(IdeBuildTarget) target = NULL;
               g_autoptr(GFile) installdir = NULL;
-              const gchar *name = names [i];
+              g_autofree gchar *name = g_path_get_basename (names[i]);
 
               installdir = find_install_dir (key, amdirs);
               if (installdir == NULL)
