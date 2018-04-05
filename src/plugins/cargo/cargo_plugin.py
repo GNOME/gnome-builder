@@ -131,7 +131,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         if not pipeline.is_native():
             build_launcher.push_argv('--target')
-            build_launcher.push_argv(pipeline.get_system_type())
+            build_launcher.push_argv(pipeline.get_host_triplet().get_full_name())
 
         if config.props.parallelism > 0:
             build_launcher.push_argv('-j{}'.format(config.props.parallelism))
