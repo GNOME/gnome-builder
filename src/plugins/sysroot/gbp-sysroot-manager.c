@@ -320,19 +320,21 @@ gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
     {
       g_auto(GStrv) path_parts = NULL;
       g_autofree gchar *additional_paths = NULL;
+      g_autofree gchar *found_pkgconfigs = current_pkgconfigs;
 
       // Prepend the sysroot path to the BASIC_LIBDIRS values
       path_parts = g_strsplit (BASIC_LIBDIRS, ":", 0);
       for (gint i = g_strv_length (path_parts) - 1; i >= 0; i--)
         {
           g_autofree gchar *path_i = NULL;
+          g_autofree gchar *previous_pkgconfigs = found_pkgconfigs;
 
           path_i = g_build_path (G_DIR_SEPARATOR_S, path, path_parts[i], NULL);
-          current_pkgconfigs = g_strjoin (":", path_i, current_pkgconfigs, NULL);
+          found_pkgconfigs = g_strjoin (":", path_i, previous_pkgconfigs, NULL);
         }
 
       additional_paths = sysroot_manager_find_additional_pkgconfig_paths (self, target);
-      current_pkgconfigs = g_strjoin (":", current_pkgconfigs, additional_paths, NULL);
+      current_pkgconfigs = g_strjoin (":", found_pkgconfigs, additional_paths, NULL);
 
       gbp_sysroot_manager_set_target_pkg_config_path (self, target, current_pkgconfigs);
     }
@@ -346,7 +348,9 @@ gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
       regex = g_regex_new (current_path_escaped, 0, 0, &regex_error);
       if (regex_error == NULL)
         {
-          current_pkgconfigs = g_regex_replace_literal (regex, current_pkgconfigs, (gssize) -1, 0, path, 0, &regex_error);
+          g_autofree gchar *previous_pkgconfigs = current_pkgconfigs;
+
+          current_pkgconfigs = g_regex_replace_literal (regex, previous_pkgconfigs, (gssize) -1, 0, path, 0, &regex_error);
           if (regex_error == NULL)
             gbp_sysroot_manager_set_target_pkg_config_path (self, target, current_pkgconfigs);
           else
