@@ -118,7 +118,6 @@ ide_build_target_compare (const IdeBuildTarget *left,
 gchar **
 ide_build_target_get_argv (IdeBuildTarget *self)
 {
-  g_autofree gchar *name = NULL;
   g_auto(GStrv) argv = NULL;
 
   g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), NULL);
@@ -128,10 +127,21 @@ ide_build_target_get_argv (IdeBuildTarget *self)
 
   if (argv == NULL || *argv == NULL)
     {
+      g_autofree gchar *name = ide_build_target_get_name (self);
+      g_autoptr(GFile) dir = ide_build_target_get_install_directory (self);
+
       g_clear_pointer (&argv, g_strfreev);
 
+      if (!g_path_is_absolute (name) && dir != NULL && g_file_is_native (dir))
+        {
+          g_autofree gchar *tmp = g_steal_pointer (&name);
+          g_autoptr(GFile) child = g_file_get_child (dir, tmp);
+
+          name = g_file_get_path (child);
+        }
+
       argv = g_new (gchar *, 2);
-      argv[0] = ide_build_target_get_name (self);
+      argv[0] = g_steal_pointer (&name);
       argv[1] = NULL;
     }
 
