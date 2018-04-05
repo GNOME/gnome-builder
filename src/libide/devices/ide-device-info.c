@@ -30,7 +30,7 @@
 struct _IdeDeviceInfo
 {
   GObject parent_instance;
-  IdeTriplet *triplet;
+  IdeTriplet *host_triplet;
   IdeDeviceKind kind;
 };
 
@@ -39,7 +39,7 @@ G_DEFINE_TYPE (IdeDeviceInfo, ide_device_info, G_TYPE_OBJECT)
 enum {
   PROP_0,
   PROP_KIND,
-  PROP_TRIPLET,
+  PROP_HOST_TRIPLET,
   N_PROPS
 };
 
@@ -50,7 +50,7 @@ ide_device_info_finalize (GObject *object)
 {
   IdeDeviceInfo *self = (IdeDeviceInfo *)object;
 
-  g_clear_pointer (&self->triplet, ide_triplet_unref);
+  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_device_info_parent_class)->finalize (object);
 }
@@ -69,8 +69,8 @@ ide_device_info_get_property (GObject    *object,
       g_value_set_enum (value, ide_device_info_get_kind (self));
       break;
 
-    case PROP_TRIPLET:
-      g_value_set_boxed (value, ide_device_info_get_triplet (self));
+    case PROP_HOST_TRIPLET:
+      g_value_set_boxed (value, ide_device_info_get_host_triplet (self));
       break;
 
     default:
@@ -92,8 +92,8 @@ ide_device_info_set_property (GObject      *object,
       ide_device_info_set_kind (self, g_value_get_enum (value));
       break;
 
-    case PROP_TRIPLET:
-      ide_device_info_set_triplet (self, g_value_get_boxed (value));
+    case PROP_HOST_TRIPLET:
+      ide_device_info_set_host_triplet (self, g_value_get_boxed (value));
       break;
 
     default:
@@ -119,9 +119,9 @@ ide_device_info_class_init (IdeDeviceInfoClass *klass)
                        IDE_DEVICE_KIND_COMPUTER,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  properties [PROP_TRIPLET] =
-    g_param_spec_boxed ("triplet",
-                        "Triplet",
+  properties [PROP_HOST_TRIPLET] =
+    g_param_spec_boxed ("host-triplet",
+                        "Host Triplet",
                         "The #IdeTriplet object holding all the configuration name values",
                         IDE_TYPE_TRIPLET,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -132,7 +132,7 @@ ide_device_info_class_init (IdeDeviceInfoClass *klass)
 static void
 ide_device_info_init (IdeDeviceInfo *self)
 {
-  self->triplet = ide_triplet_new_from_system ();
+  self->host_triplet = ide_triplet_new_from_system ();
 }
 
 IdeDeviceInfo *
@@ -179,7 +179,7 @@ ide_device_info_set_kind (IdeDeviceInfo *self,
 }
 
 /**
- * ide_device_info_get_triplet:
+ * ide_device_info_get_host_triplet:
  * @self: An #IdeDeviceInfo
  *
  * Get the #IdeTriplet object describing the configuration name
@@ -190,15 +190,15 @@ ide_device_info_set_kind (IdeDeviceInfo *self,
  * Since: 3.30
  */
 IdeTriplet *
-ide_device_info_get_triplet (IdeDeviceInfo *self)
+ide_device_info_get_host_triplet (IdeDeviceInfo *self)
 {
   g_return_val_if_fail (IDE_IS_DEVICE_INFO (self), NULL);
 
-  return self->triplet;
+  return self->host_triplet;
 }
 
 /**
- * ide_device_info_set_triplet:
+ * ide_device_info_set_host_triplet:
  * @self: An #IdeDeviceInfo
  *
  * Set the #IdeTriplet object describing the configuration name
@@ -206,12 +206,12 @@ ide_device_info_get_triplet (IdeDeviceInfo *self)
  * Since: 3.30
  */
 void
-ide_device_info_set_triplet (IdeDeviceInfo *self,
-                             IdeTriplet    *triplet)
+ide_device_info_set_host_triplet (IdeDeviceInfo *self,
+                                  IdeTriplet    *host_triplet)
 {
   g_return_if_fail (IDE_IS_DEVICE_INFO (self));
 
-  g_clear_pointer (&self->triplet, ide_triplet_unref);
-  self->triplet = ide_triplet_ref (triplet);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRIPLET]);
+  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
+  self->host_triplet = ide_triplet_ref (host_triplet);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HOST_TRIPLET]);
 }

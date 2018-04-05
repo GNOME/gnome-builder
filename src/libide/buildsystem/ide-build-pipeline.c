@@ -177,7 +177,7 @@ struct _IdeBuildPipeline
    * the pipeline addins may want to use to tweak how the execute
    * the build.
    */
-  IdeTriplet *device_triplet;
+  IdeTriplet *host_triplet;
 
   /*
    * This is an array of PipelineEntry, which contain information we
@@ -1181,9 +1181,9 @@ _ide_build_pipeline_set_device_info (IdeBuildPipeline *self,
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_DEVICE_INFO (info));
 
-  g_clear_pointer (&self->device_triplet, ide_triplet_unref);
+  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
 
-  g_object_get (info, "triplet", &self->device_triplet, NULL);
+  g_object_get (info, "host-triplet", &self->host_triplet, NULL);
 
   IDE_EXIT;
 }
@@ -1311,7 +1311,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->runtime);
   g_clear_object (&self->configuration);
   g_clear_pointer (&self->pipeline, g_array_unref);
-  g_clear_pointer (&self->device_triplet, ide_triplet_unref);
+  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
   g_clear_pointer (&self->srcdir, g_free);
   g_clear_pointer (&self->builddir, g_free);
   g_clear_pointer (&self->errfmts, g_array_unref);
@@ -3760,7 +3760,7 @@ ide_build_pipeline_get_device (IdeBuildPipeline *self)
 }
 
 /**
- * ide_build_pipeline_get_device_triplet:
+ * ide_build_pipeline_get_host_triplet:
  * @self: a #IdeBuildPipeline
  *
  * Gets the architecture, kernel, and system that the pipeline is building for,
@@ -3773,11 +3773,11 @@ ide_build_pipeline_get_device (IdeBuildPipeline *self)
  */
 
 IdeTriplet *
-ide_build_pipeline_get_device_triplet (IdeBuildPipeline *self)
+ide_build_pipeline_get_host_triplet (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
 
-  return ide_triplet_ref (self->device_triplet);
+  return ide_triplet_ref (self->host_triplet);
 }
 
 /**
@@ -3797,7 +3797,7 @@ ide_build_pipeline_is_native (IdeBuildPipeline *self)
 {
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
 
-  return ide_triplet_is_system (self->device_triplet);
+  return ide_triplet_is_system (self->host_triplet);
 }
 
 /**

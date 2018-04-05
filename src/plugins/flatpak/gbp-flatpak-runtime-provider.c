@@ -619,8 +619,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   ide_task_set_source_tag (task, gbp_flatpak_runtime_provider_bootstrap_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  triplet = ide_build_pipeline_get_device_triplet (pipeline);
-  build_arch = ide_triplet_get_cpu (triplet);
+  triplet = ide_build_pipeline_get_host_triplet (pipeline);
+  build_arch = ide_triplet_get_arch (triplet);
   config = ide_build_pipeline_get_configuration (pipeline);
   runtime_id = ide_configuration_get_runtime_id (config);
 
