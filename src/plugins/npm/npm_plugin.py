@@ -104,7 +104,7 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         fetch_launcher.push_argv(npm)
         if not pipeline.is_native():
             fetch_launcher.push_argv('--arch')
-            fetch_launcher.push_argv(pipeline.get_arch())
+            fetch_launcher.push_argv(pipeline.get_host_triplet().get_arch())
         fetch_launcher.push_argv('install')
         self.track(pipeline.connect_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
 
