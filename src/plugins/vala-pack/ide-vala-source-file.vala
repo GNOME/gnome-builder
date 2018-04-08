@@ -99,7 +99,7 @@ namespace Ide
 			this.dirty = true;
 		}
 
-		public void sync (GenericArray<Ide.UnsavedFile> unsaved_files)
+		public void sync (GenericArray<unowned Ide.UnsavedFile> unsaved_files)
 		{
 			var gfile = this.file.file;
 			unsaved_files.foreach((unsaved_file) => {
