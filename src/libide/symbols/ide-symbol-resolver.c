@@ -267,7 +267,7 @@ ide_symbol_resolver_find_references_async (IdeSymbolResolver   *self,
  *
  * Completes an asynchronous request to ide_symbol_resolver_find_references_async().
  *
- * Returns: (transfer container) (element-type Ide.SourceRange): a #GPtrArray
+ * Returns: (transfer full) (element-type Ide.SourceRange): a #GPtrArray
  *   of #IdeSourceRange if successful; otherwise %NULL and @error is set.
  */
 GPtrArray *

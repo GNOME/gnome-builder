@@ -117,11 +117,11 @@ namespace Ide
 		public void load () {}
 		public void unload () {}
 
-		public async GLib.GenericArray<weak Ide.SourceRange> find_references_async (Ide.SourceLocation location,
-		                                                                            GLib.Cancellable? cancellable)
+		public async GLib.GenericArray<Ide.SourceRange> find_references_async (Ide.SourceLocation location,
+		                                                                       GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			return new GLib.GenericArray<weak Ide.SourceRange> ();
+			return new GLib.GenericArray<Ide.SourceRange> ();
 		}
 
 		public async Ide.Symbol? find_nearest_scope_async (Ide.SourceLocation location,
