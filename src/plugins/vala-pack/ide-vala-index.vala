@@ -330,7 +330,7 @@ namespace Ide
 		                                            int line,
 		                                            int column,
 		                                            string? line_text,
-		                                            GLib.GenericArray<unowned Ide.UnsavedFile>? unsaved_files,
+		                                            GLib.GenericArray<Ide.UnsavedFile>? unsaved_files,
 		                                            Ide.ValaCompletionProvider provider,
 		                                            GLib.Cancellable? cancellable,
 		                                            out int result_line,
@@ -394,7 +394,7 @@ namespace Ide
 			return diagnostics;
 		}
 
-		void apply_unsaved_files (GLib.GenericArray<unowned Ide.UnsavedFile> unsaved_files)
+		void apply_unsaved_files (GLib.GenericArray<Ide.UnsavedFile> unsaved_files)
 		{
 			foreach (var source_file in this.code_context.get_source_files ()) {
 				if ((source_file.file_type == Vala.SourceFileType.SOURCE) &&
