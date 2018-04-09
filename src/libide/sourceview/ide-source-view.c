@@ -5057,6 +5057,8 @@ ide_source_view_rename_edits_cb (GObject      *object,
 
   g_assert (edits != NULL);
 
+  IDE_PTR_ARRAY_SET_FREE_FUNC (edits, g_object_unref);
+
   context = ide_buffer_get_context (priv->buffer);
   buffer_manager = ide_context_get_buffer_manager (context);
 

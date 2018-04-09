@@ -31,6 +31,7 @@
 #include "langserv/ide-langserv-rename-provider.h"
 #include "diagnostics/ide-source-location.h"
 #include "threading/ide-task.h"
+#include "util/ide-glib.h"
 
 typedef struct
 {
@@ -341,7 +342,7 @@ ide_langserv_rename_provider_rename_finish (IdeRenameProvider  *provider,
   ret = (ar != NULL);
 
   if (edits != NULL)
-    *edits = g_steal_pointer (&ar);
+    *edits = IDE_PTR_ARRAY_STEAL_FULL (&ar);
 
   IDE_RETURN (ret);
 }
