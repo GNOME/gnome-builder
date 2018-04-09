@@ -390,7 +390,7 @@ ide_g_file_get_children_async (GFile               *file,
  *
  * Completes an asynchronous request to ide_g_file_get_children_async().
  *
- * Returns: (transfer container) (element-type Gio.File): A #GPtrArray
+ * Returns: (transfer full) (element-type Gio.File): A #GPtrArray
  *   of #GFileInfo if successful, otherwise %NULL.
  *
  * Since: 3.28
@@ -400,11 +400,15 @@ ide_g_file_get_children_finish (GFile         *file,
                                 GAsyncResult  *result,
                                 GError       **error)
 {
+  GPtrArray *ret;
+
   g_return_val_if_fail (G_IS_FILE (file), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
   g_return_val_if_fail (ide_task_is_valid (IDE_TASK (result), file), NULL);
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void
@@ -545,17 +549,21 @@ ide_g_file_find_async (GFile               *file,
  *
  * Gets the files that were found which matched the pattern.
  *
- * Returns: (transfer container) (element-type Gio.File): A #GPtrArray of #GFile
+ * Returns: (transfer full) (element-type Gio.File): A #GPtrArray of #GFile
  */
 GPtrArray *
 ide_g_file_find_finish (GFile         *file,
                         GAsyncResult  *result,
                         GError       **error)
 {
+  GPtrArray *ret;
+
   g_return_val_if_fail (G_IS_FILE (file), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 /**
