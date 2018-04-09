@@ -36,8 +36,9 @@
 #include "devices/ide-device-provider.h"
 #include "local/ide-local-device.h"
 #include "plugins/ide-extension-util.h"
-#include "util/ide-posix.h"
 #include "threading/ide-task.h"
+#include "util/ide-glib.h"
+#include "util/ide-posix.h"
 
 struct _IdeDeviceManager
 {
@@ -266,6 +267,7 @@ ide_device_manager_provider_added_cb (PeasExtensionSet *set,
                            G_CONNECT_SWAPPED);
 
   devices = ide_device_provider_get_devices (provider);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (devices, g_object_unref);
 
   for (guint i = 0; i < devices->len; i++)
     {
@@ -302,6 +304,7 @@ ide_device_manager_provider_removed_cb (PeasExtensionSet *set,
   g_assert (IDE_IS_DEVICE_PROVIDER (provider));
 
   devices = ide_device_provider_get_devices (provider);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (devices, g_object_unref);
 
   for (guint i = 0; i < devices->len; i++)
     {

@@ -274,7 +274,7 @@ ide_device_provider_load_finish (IdeDeviceProvider  *self,
  * Gets a new #GPtrArray containing a list of #IdeDevice instances that were
  * registered by the #IdeDeviceProvider
  *
- * Returns: (transfer container) (element-type Ide.Device) (not nullable):
+ * Returns: (transfer full) (element-type Ide.Device) (not nullable):
  *   a #GPtrArray of #IdeDevice.
  *
  * Since: 3.28
@@ -287,7 +287,7 @@ ide_device_provider_get_devices (IdeDeviceProvider *self)
 
   g_return_val_if_fail (IDE_IS_DEVICE_PROVIDER (self), NULL);
 
-  devices = g_ptr_array_new_with_free_func (g_object_unref);
+  devices = g_ptr_array_new ();
 
   if (priv->devices != NULL)
     {
