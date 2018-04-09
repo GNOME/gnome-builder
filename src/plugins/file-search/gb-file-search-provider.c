@@ -70,10 +70,14 @@ gb_file_search_provider_search_finish (IdeSearchProvider  *provider,
                                        GAsyncResult       *result,
                                        GError            **error)
 {
+  GPtrArray *ret;
+
   g_assert (GB_IS_FILE_SEARCH_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void

@@ -26,6 +26,7 @@
 #include "search/ide-search-provider.h"
 #include "search/ide-search-result.h"
 #include "threading/ide-task.h"
+#include "util/ide-glib.h"
 
 #define DEFAULT_MAX_RESULTS 50
 
@@ -193,6 +194,7 @@ ide_search_engine_search_cb (GObject      *object,
   g_assert (G_IS_LIST_STORE (r->store));
 
   ar = ide_search_provider_search_finish (provider, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ar, g_object_unref);
 
   if (error != NULL)
     {
