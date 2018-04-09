@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 
 #include "debugger/ide-debugger-locals-view.h"
+#include "util/ide-glib.h"
 
 struct _IdeDebuggerLocalsView
 {
@@ -293,6 +294,7 @@ ide_debugger_locals_view_load_locals_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   locals = ide_debugger_list_locals_finish (debugger, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (locals, g_object_unref);
 
   if (locals == NULL)
     {
@@ -346,6 +348,7 @@ ide_debugger_locals_view_load_params_cb (GObject      *object,
   g_assert (IDE_IS_DEBUGGER_LOCALS_VIEW (self));
 
   params = ide_debugger_list_params_finish (debugger, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (params, g_object_unref);
 
   if (params == NULL)
     {

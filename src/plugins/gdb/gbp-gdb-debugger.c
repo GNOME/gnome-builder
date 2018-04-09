@@ -1138,10 +1138,14 @@ gbp_gdb_debugger_list_breakpoints_finish (IdeDebugger   *debugger,
                                           GAsyncResult  *result,
                                           GError       **error)
 {
+  GPtrArray *ret;
+
   g_assert (GBP_IS_GDB_DEBUGGER (debugger));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void
@@ -1634,10 +1638,14 @@ gbp_gdb_debugger_list_frames_finish (IdeDebugger   *debugger,
                                      GAsyncResult  *result,
                                      GError       **error)
 {
+  GPtrArray *ret;
+
   g_assert (GBP_IS_GDB_DEBUGGER (debugger));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void
@@ -1980,10 +1988,14 @@ gbp_gdb_debugger_list_locals_finish (IdeDebugger   *debugger,
                                      GAsyncResult  *result,
                                      GError       **error)
 {
+  GPtrArray *ret;
+
   g_assert (GBP_IS_GDB_DEBUGGER (debugger));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void
@@ -2105,10 +2117,14 @@ gbp_gdb_debugger_list_params_finish (IdeDebugger   *debugger,
                                      GAsyncResult  *result,
                                      GError       **error)
 {
+  GPtrArray *ret;
+
   g_assert (GBP_IS_GDB_DEBUGGER (debugger));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void
@@ -2212,10 +2228,14 @@ gbp_gdb_debugger_list_registers_finish (IdeDebugger   *debugger,
                                         GAsyncResult  *result,
                                         GError       **error)
 {
+  GPtrArray *ret;
+
   g_assert (GBP_IS_GDB_DEBUGGER (debugger));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void
@@ -2328,10 +2348,14 @@ gbp_gdb_debugger_disassemble_finish (IdeDebugger   *debugger,
                                      GAsyncResult  *result,
                                      GError       **error)
 {
+  GPtrArray *ret;
+
   g_assert (GBP_IS_GDB_DEBUGGER (debugger));
   g_assert (G_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static gboolean

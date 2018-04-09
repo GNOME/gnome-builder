@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 
 #include "debugger/ide-debugger-threads-view.h"
+#include "util/ide-glib.h"
 
 struct _IdeDebuggerThreadsView
 {
@@ -275,6 +276,7 @@ ide_debugger_threads_view_list_frames_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
 
   frames = ide_debugger_list_frames_finish (debugger, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (frames, g_object_unref);
 
   if (frames == NULL)
     {
