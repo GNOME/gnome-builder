@@ -55,7 +55,7 @@ gboolean        ide_unsaved_files_restore_finish    (IdeUnsavedFiles      *files
                                                      GAsyncResult         *result,
                                                      GError              **error);
 IDE_AVAILABLE_IN_ALL
-GPtrArray      *ide_unsaved_files_to_array          (IdeUnsavedFiles      *files);
+GPtrArray      *ide_unsaved_files_to_array          (IdeUnsavedFiles      *self);
 IDE_AVAILABLE_IN_ALL
 gint64          ide_unsaved_files_get_sequence      (IdeUnsavedFiles      *files);
 IDE_AVAILABLE_IN_ALL
