@@ -31,6 +31,9 @@ G_BEGIN_DECLS
     if ((ar) != NULL)                                           \
       g_ptr_array_set_free_func ((ar), (GDestroyNotify)(func)); \
   } G_STMT_END
+#define IDE_PTR_ARRAY_STEAL_FULL(arptr)        \
+  ({ IDE_PTR_ARRAY_CLEAR_FREE_FUNC (*(arptr)); \
+     g_steal_pointer ((arptr)); })
 
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_gettext                              (const gchar          *message);
