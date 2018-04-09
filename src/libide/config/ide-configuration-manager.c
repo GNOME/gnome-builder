@@ -26,6 +26,7 @@
 
 #include "application/ide-application.h"
 #include "config/ide-configuration-manager.h"
+#include "config/ide-configuration-private.h"
 #include "config/ide-configuration.h"
 #include "config/ide-configuration-provider.h"
 #include "buildconfig/ide-buildconfig-configuration.h"
@@ -503,6 +504,8 @@ ide_configuration_manager_config_added (IdeConfigurationManager  *self,
 
   if (self->current == NULL)
     ide_configuration_manager_set_current (self, config);
+
+  _ide_configuration_attach (config);
 
   IDE_EXIT;
 }
