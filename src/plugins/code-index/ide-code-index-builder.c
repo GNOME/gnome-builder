@@ -941,6 +941,7 @@ add_entries_to_index_next_entries_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   ret = ide_code_index_entries_next_entries_finish (entries, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ret, ide_code_index_entry_free);
 
   if (error != NULL)
     {

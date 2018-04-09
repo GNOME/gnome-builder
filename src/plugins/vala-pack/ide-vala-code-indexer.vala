@@ -99,7 +99,7 @@ namespace Ide
 			return null;
 		}
 
-        public async GLib.GenericArray<weak Ide.CodeIndexEntry> next_entries_async (GLib.Cancellable? cancellable)
+        public async GLib.GenericArray<Ide.CodeIndexEntry> next_entries_async (GLib.Cancellable? cancellable)
 			throws GLib.Error
         {
 			var ret = new GLib.GenericArray<Ide.CodeIndexEntry> ();

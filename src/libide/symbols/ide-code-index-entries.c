@@ -23,6 +23,7 @@
 #include "application/ide-application.h"
 #include "symbols/ide-code-index-entries.h"
 #include "threading/ide-task.h"
+#include "util/ide-glib.h"
 
 G_DEFINE_INTERFACE (IdeCodeIndexEntries, ide_code_index_entries, G_TYPE_OBJECT)
 
@@ -58,10 +59,14 @@ ide_code_index_entries_real_next_entries_finish (IdeCodeIndexEntries  *self,
                                                  GAsyncResult         *result,
                                                  GError              **error)
 {
+  GPtrArray *ret;
+
   g_assert (IDE_IS_CODE_INDEX_ENTRIES (self));
   g_assert (IDE_IS_TASK (result));
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static IdeCodeIndexEntry *
@@ -150,7 +155,7 @@ ide_code_index_entries_next_entries_async (IdeCodeIndexEntries *self,
  *
  * Completes an asynchronous request for the next set of entries from the index.
  *
- * Returns: (transfer container) (element-type Ide.CodeIndexEntry): a #GPtrArray
+ * Returns: (transfer full) (element-type Ide.CodeIndexEntry): a #GPtrArray
  *   of #IdeCodeIndexEntry.
  *
  * Since: 3.30

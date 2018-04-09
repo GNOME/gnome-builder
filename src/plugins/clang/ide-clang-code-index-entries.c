@@ -395,11 +395,15 @@ ide_clang_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *entries,
                                                   GAsyncResult         *result,
                                                   GError              **error)
 {
+  GPtrArray *ret;
+
   g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (entries));
   g_assert (IDE_IS_TASK (result));
   g_assert (ide_task_is_valid (result, entries));
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void
