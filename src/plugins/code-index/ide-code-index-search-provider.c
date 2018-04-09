@@ -105,7 +105,7 @@ ide_code_index_search_provider_search_finish (IdeSearchProvider *provider,
 
   ar = g_task_propagate_pointer (G_TASK (result), error);
 
-  IDE_RETURN (ar);
+  IDE_RETURN (IDE_PTR_ARRAY_STEAL_FULL (&ar));
 }
 
 static void

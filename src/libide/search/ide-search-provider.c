@@ -83,7 +83,7 @@ ide_search_provider_search_async (IdeSearchProvider   *self,
  *
  * Completes a request to a search provider.
  *
- * Returns: (transfer container) (element-type Ide.SearchResult): a #GPtrArray
+ * Returns: (transfer full) (element-type Ide.SearchResult): a #GPtrArray
  *    of #IdeSearchResult elements.
  */
 GPtrArray *
