@@ -1822,7 +1822,7 @@ unregister_auto_save (IdeBufferManager *self,
  *
  * Buffers are generally not added to the buffer list until they have been loaded.
  *
- * Returns: (transfer container) (element-type Ide.Buffer): a #GPtrArray of buffers.
+ * Returns: (transfer full) (element-type Ide.Buffer): a #GPtrArray of buffers.
  */
 GPtrArray *
 ide_buffer_manager_get_buffers (IdeBufferManager *self)
@@ -1842,7 +1842,7 @@ ide_buffer_manager_get_buffers (IdeBufferManager *self)
       g_ptr_array_add (ret, g_object_ref (buffer));
     }
 
-  return g_steal_pointer (&ret);
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 /**
