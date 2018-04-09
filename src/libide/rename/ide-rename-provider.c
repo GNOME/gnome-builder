@@ -114,7 +114,7 @@ ide_rename_provider_rename_async (IdeRenameProvider   *self,
  * ide_rename_provider_rename_finish:
  * @self: An #IdeRenameProvider
  * @result: a #GAsyncResult
- * @edits: (out) (transfer container) (element-type Ide.ProjectEdit) (nullable): A location
+ * @edits: (out) (transfer full) (element-type Ide.ProjectEdit) (optional): A location
  *   for a #GPtrArray of #IdeProjectEdit instances.
  * @error: a location for a #GError, or %NULL.
  *
