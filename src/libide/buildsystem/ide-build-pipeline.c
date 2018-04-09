@@ -935,6 +935,8 @@ register_build_commands_stage (IdeBuildPipeline *self,
 {
   g_autoptr(GError) error = NULL;
   const gchar * const *build_commands;
+  g_autofree gchar *rundir_path = NULL;
+  GFile *rundir;
 
   g_assert (IDE_IS_BUILD_PIPELINE (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -942,6 +944,9 @@ register_build_commands_stage (IdeBuildPipeline *self,
 
   if (NULL == (build_commands = ide_configuration_get_build_commands (self->configuration)))
     return;
+
+  if ((rundir = ide_configuration_get_build_commands_dir (self->configuration)))
+    rundir_path = g_file_get_path (rundir);
 
   for (guint i = 0; build_commands[i]; i++)
     {
@@ -960,6 +965,9 @@ register_build_commands_stage (IdeBuildPipeline *self,
       ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
       ide_subprocess_launcher_push_argv (launcher, "-c");
       ide_subprocess_launcher_push_argv (launcher, build_commands[i]);
+
+      if (rundir_path != NULL)
+        ide_subprocess_launcher_set_cwd (launcher, rundir_path);
 
       stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                             "context", context,
