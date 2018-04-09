@@ -356,6 +356,7 @@ load_find_files_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   ret = ide_g_file_find_finish (file, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ret, g_object_unref);
 
   if (ret == NULL)
     {

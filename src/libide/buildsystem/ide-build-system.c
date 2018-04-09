@@ -623,6 +623,7 @@ ide_build_system_get_build_flags_for_dir_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   infos = ide_g_file_get_children_finish (dir, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (infos, g_object_unref);
 
   if (infos == NULL)
     {
