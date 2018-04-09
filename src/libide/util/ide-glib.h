@@ -24,6 +24,14 @@
 
 G_BEGIN_DECLS
 
+#define IDE_PTR_ARRAY_CLEAR_FREE_FUNC(ar)                       \
+  IDE_PTR_ARRAY_SET_FREE_FUNC(ar, NULL)
+#define IDE_PTR_ARRAY_SET_FREE_FUNC(ar, func)                   \
+  G_STMT_START {                                                \
+    if ((ar) != NULL)                                           \
+      g_ptr_array_set_free_func ((ar), (GDestroyNotify)(func)); \
+  } G_STMT_END
+
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_gettext                              (const gchar          *message);
 IDE_AVAILABLE_IN_ALL
