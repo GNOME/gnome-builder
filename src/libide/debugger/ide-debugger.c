@@ -1292,7 +1292,7 @@ ide_debugger_list_breakpoints_async (IdeDebugger         *self,
  *
  * Gets the list of breakpoints from the debugger.
  *
- * Returns: (transfer container) (element-type Ide.DebuggerBreakpoint): a #GPtrArray
+ * Returns: (transfer full) (element-type Ide.DebuggerBreakpoint): a #GPtrArray
  *   of breakpoints that are registered with the debugger.
  *
  * Since: 3.26
@@ -1581,7 +1581,7 @@ ide_debugger_list_frames_async (IdeDebugger         *self,
  *
  *
  *
- * Returns: (transfer container) (element-type Ide.DebuggerFrame) (nullable): An
+ * Returns: (transfer full) (element-type Ide.DebuggerFrame) (nullable): An
  *   array of debugger frames or %NULL and @error is set.
  */
 GPtrArray *
@@ -1778,7 +1778,7 @@ ide_debugger_list_locals_async (IdeDebugger         *self,
  *
  * Completes an asynchronous request to ide_debugger_list_locals_async().
  *
- * Returns: (transfer container) (element-type Ide.DebuggerVariable): a #GPtrArray of
+ * Returns: (transfer full) (element-type Ide.DebuggerVariable): a #GPtrArray of
  *   #IdeDebuggerVariable if successful; otherwise %NULL and error is set.
  *
  * Since: 3.26
@@ -1837,7 +1837,7 @@ ide_debugger_list_params_async (IdeDebugger         *self,
  *
  * Completes an asynchronous request to ide_debugger_list_params_async().
  *
- * Returns: (transfer container) (element-type Ide.DebuggerVariable): a #GPtrArray of
+ * Returns: (transfer full) (element-type Ide.DebuggerVariable): a #GPtrArray of
  *   #IdeDebuggerVariable if successful; otherwise %NULL and error is set.
  *
  * Since: 3.26
@@ -1884,7 +1884,7 @@ ide_debugger_list_registers_async (IdeDebugger         *self,
  *
  * Completes an asynchronous request to ide_debugger_list_registers_async().
  *
- * Returns: (transfer container) (element-type Ide.DebuggerRegister): a #GPtrArray of
+ * Returns: (transfer full) (element-type Ide.DebuggerRegister): a #GPtrArray of
  *   #IdeDebuggerRegister if successful; otherwise %NULL and error is set.
  *
  * Since: 3.26
@@ -1934,7 +1934,7 @@ ide_debugger_disassemble_async (IdeDebugger                   *self,
  *
  * Completes an asynchronous request to ide_debugger_disassemble_async().
  *
- * Returns: (transfer container) (element-type Ide.DebuggerInstruction): a #GPtrArray
+ * Returns: (transfer full) (element-type Ide.DebuggerInstruction): a #GPtrArray
  *   of #IdeDebuggerInstruction if successful; otherwise %NULL and error is set.
  *
  * Since: 3.26

@@ -23,6 +23,7 @@
 #include <dazzle.h>
 
 #include "debugger/ide-debugger-registers-view.h"
+#include "util/ide-glib.h"
 
 struct _IdeDebuggerRegistersView
 {
@@ -102,6 +103,7 @@ ide_debugger_registers_view_list_registers_cb (GObject      *object,
   gtk_list_store_clear (self->list_store);
 
   registers = ide_debugger_list_registers_finish (debugger, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (registers, g_object_unref);
 
   if (error != NULL)
     {
