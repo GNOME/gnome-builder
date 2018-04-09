@@ -26,6 +26,7 @@
 #include "ide-debug.h"
 #include "ide-enums.h"
 
+#include "application/ide-application.h"
 #include "config/ide-configuration.h"
 #include "config/ide-configuration-manager.h"
 #include "buildsystem/ide-environment.h"
@@ -57,6 +58,7 @@ typedef struct
 
   guint           dirty : 1;
   guint           debug : 1;
+  guint           has_attached : 1;
 
   /*
    * This is used to determine if we can make progress building
@@ -228,33 +230,6 @@ ide_configuration_real_set_runtime (IdeConfiguration *self,
     runtime_id = ide_runtime_get_id (runtime);
 
   ide_configuration_set_runtime_id (self, runtime_id);
-}
-
-static void
-ide_configuration_constructed (GObject *object)
-{
-  IdeConfiguration *self = (IdeConfiguration *)object;
-  IdeContext *context;
-  IdeRuntimeManager *runtime_manager;
-
-  G_OBJECT_CLASS (ide_configuration_parent_class)->constructed (object);
-
-  if (ide_object_is_unloading (IDE_OBJECT (self)))
-    return;
-
-  /* Allow ourselves to be run from unit tests without a valid context */
-  if (NULL != (context = ide_object_get_context (IDE_OBJECT (self))))
-    {
-      runtime_manager = ide_context_get_runtime_manager (context);
-
-      g_signal_connect_object (runtime_manager,
-                               "items-changed",
-                               G_CALLBACK (ide_configuration_runtime_manager_items_changed),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-      ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
-    }
 }
 
 static void
@@ -450,7 +425,6 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_configuration_constructed;
   object_class->finalize = ide_configuration_finalize;
   object_class->get_property = ide_configuration_get_property;
   object_class->set_property = ide_configuration_set_property;
@@ -600,20 +574,15 @@ static void
 ide_configuration_init (IdeConfiguration *self)
 {
   IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+  g_autoptr(IdeEnvironment) env = ide_environment_new ();
 
   priv->runtime_id = g_strdup ("host");
   priv->debug = TRUE;
-  priv->environment = ide_environment_new ();
   priv->parallelism = -1;
   priv->locality = IDE_BUILD_LOCALITY_DEFAULT;
-
   priv->internal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, _value_free);
 
-  g_signal_connect_object (priv->environment,
-                           "changed",
-                           G_CALLBACK (ide_configuration_environment_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+  ide_configuration_set_environment (self, env);
 }
 
 /**
@@ -673,26 +642,28 @@ ide_configuration_set_runtime_id (IdeConfiguration *self,
 
   if (g_strcmp0 (runtime_id, priv->runtime_id) != 0)
     {
-      IdeRuntimeManager *runtime_manager;
-      IdeContext *context;
-      IdeRuntime *runtime;
-
+      priv->runtime_ready = FALSE;
       g_free (priv->runtime_id);
       priv->runtime_id = g_strdup (runtime_id);
+
+      ide_configuration_set_dirty (self, TRUE);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNTIME_ID]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNTIME]);
 
-      context = ide_object_get_context (IDE_OBJECT (self));
-      runtime_manager = ide_context_get_runtime_manager (context);
-      ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
+      if (priv->has_attached)
+        {
+          IdeRuntimeManager *runtime_manager;
+          IdeContext *context;
 
-      runtime = ide_configuration_get_runtime (self);
-      if (runtime != NULL)
-        ide_runtime_prepare_configuration (runtime, self);
+          g_assert (IDE_IS_MAIN_THREAD ());
 
-      ide_configuration_set_dirty (self, TRUE);
-      ide_configuration_emit_changed (self);
+          context = ide_object_get_context (IDE_OBJECT (self));
+          runtime_manager = ide_context_get_runtime_manager (context);
+          ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
+
+          ide_configuration_emit_changed (self);
+        }
     }
 }
 
@@ -956,13 +927,28 @@ ide_configuration_set_environment (IdeConfiguration *self,
 
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
 
-  g_clear_object (&priv->environment);
-  priv->environment = g_object_ref (environment);
-  g_signal_connect_object (priv->environment,
-                           "changed",
-                           G_CALLBACK (ide_configuration_environment_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+  if (priv->environment != environment)
+    {
+      if (priv->environment != NULL)
+        {
+          g_signal_handlers_disconnect_by_func (priv->environment,
+                                                G_CALLBACK (ide_configuration_environment_changed),
+                                                self);
+          g_clear_object (&priv->environment);
+        }
+
+      if (environment != NULL)
+        {
+          priv->environment = g_object_ref (environment);
+          g_signal_connect_object (priv->environment,
+                                   "changed",
+                                   G_CALLBACK (ide_configuration_environment_changed),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENVIRON]);
+    }
 }
 
 const gchar *
@@ -1488,4 +1474,40 @@ ide_configuration_set_build_commands_dir (IdeConfiguration *self,
 
   if (g_set_object (&priv->build_commands_dir, build_commands_dir))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMANDS_DIR]);
+}
+
+void
+_ide_configuration_attach (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+  IdeRuntimeManager *runtime_manager;
+  IdeContext *context;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (priv->has_attached == FALSE);
+
+  priv->has_attached = TRUE;
+
+  /*
+   * We don't start monitoring changed events until we've gotten back
+   * to the main loop (in case of threaded loaders) which happens from
+   * the point where the configuration is added ot the config manager.
+   */
+
+  if (!(context = ide_object_get_context (IDE_OBJECT (self))))
+    {
+      g_critical ("Attempt to register configuration without a context");
+      return;
+    }
+
+  runtime_manager = ide_context_get_runtime_manager (context);
+
+  g_signal_connect_object (runtime_manager,
+                           "items-changed",
+                           G_CALLBACK (ide_configuration_runtime_manager_items_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
 }
