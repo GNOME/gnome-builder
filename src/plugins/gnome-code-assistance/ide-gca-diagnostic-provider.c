@@ -94,7 +94,7 @@ variant_to_diagnostics (DiagnoseState *state,
                         GVariant *variant)
 {
 
-  GPtrArray *ar;
+  g_autoptr(GPtrArray) ar = NULL;
   GVariantIter iter;
   GVariantIter *b;
   GVariantIter *c;
@@ -105,8 +105,7 @@ variant_to_diagnostics (DiagnoseState *state,
 
   g_assert (variant);
 
-  ar = g_ptr_array_new ();
-  g_ptr_array_set_free_func (ar, (GDestroyNotify)ide_diagnostic_unref);
+  ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
 
   g_variant_iter_init (&iter, variant);
 
@@ -167,10 +166,10 @@ variant_to_diagnostics (DiagnoseState *state,
           ide_source_location_unref (end);
         }
 
-      g_ptr_array_add (ar, diag);
+      g_ptr_array_add (ar, g_steal_pointer (&diag));
     }
 
-  return ide_diagnostics_new (ar);
+  return ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&ar));
 }
 
 static void

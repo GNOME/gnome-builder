@@ -40,6 +40,7 @@
 #include "projects/ide-project.h"
 #include "vcs/ide-vcs.h"
 #include "threading/ide-task.h"
+#include "util/ide-glib.h"
 
 typedef struct
 {
@@ -573,7 +574,7 @@ ide_langserv_client_translate_diagnostics (IdeLangservClient *self,
       g_ptr_array_add (ar, g_steal_pointer (&diag));
     }
 
-  return ide_diagnostics_new (g_steal_pointer (&ar));
+  return ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&ar));
 }
 
 static void
