@@ -78,11 +78,15 @@ gbp_flatpak_build_target_provider_get_targets_finish (IdeBuildTargetProvider  *p
                                                       GAsyncResult            *result,
                                                       GError                 **error)
 {
+  GPtrArray *ret;
+
   g_assert (GBP_IS_FLATPAK_BUILD_TARGET_PROVIDER (provider));
   g_assert (G_IS_TASK (result));
   g_assert (g_task_is_valid (G_TASK (result), provider));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 static void

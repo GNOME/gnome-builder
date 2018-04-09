@@ -102,7 +102,7 @@ ide_build_target_provider_get_targets_async (IdeBuildTargetProvider *self,
  *
  * See also: ide_build_target_provider_get_targets_async()
  *
- * Returns: (transfer container) (element-type Ide.BuildTarget): The array of
+ * Returns: (transfer full) (element-type Ide.BuildTarget): The array of
  *   build targets or %NULL upon failure and @error is set.
  */
 GPtrArray *

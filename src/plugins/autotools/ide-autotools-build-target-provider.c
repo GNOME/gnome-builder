@@ -152,7 +152,7 @@ ide_autotools_build_target_provider_get_targets_finish (IdeBuildTargetProvider  
 
   ret = g_task_propagate_pointer (G_TASK (result), error);
 
-  IDE_RETURN (ret);
+  IDE_RETURN (IDE_PTR_ARRAY_STEAL_FULL (&ret));
 }
 
 static void
