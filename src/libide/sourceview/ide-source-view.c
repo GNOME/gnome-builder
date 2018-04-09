@@ -64,6 +64,7 @@
 #include "util/ide-gtk.h"
 #include "vcs/ide-vcs.h"
 #include "workbench/ide-workbench-private.h"
+#include "util/ide-glib.h"
 
 #define INCLUDE_STATEMENTS "^#include[\\s]+[\\\"\\<][^\\s\\\"\\\'\\<\\>[:cntrl:]]+[\\\"\\>]"
 
@@ -5267,6 +5268,8 @@ ide_source_view_find_references_cb (GObject      *object,
   g_assert (G_IS_TASK (task));
 
   references = ide_symbol_resolver_find_references_finish (symbol_resolver, result, &error);
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (references, ide_source_range_unref);
 
   self = g_task_get_source_object (task);
   priv = ide_source_view_get_instance_private (self);

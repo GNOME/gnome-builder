@@ -30,6 +30,7 @@
 #include "langserv/ide-langserv-symbol-resolver.h"
 #include "langserv/ide-langserv-symbol-tree.h"
 #include "langserv/ide-langserv-symbol-tree-private.h"
+#include "util/ide-glib.h"
 
 typedef struct
 {
@@ -657,6 +658,8 @@ ide_langserv_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
   g_assert (G_IS_TASK (result));
 
   ret = g_task_propagate_pointer (G_TASK (result), error);
+
+  IDE_PTR_ARRAY_CLEAR_FREE_FUNC (ret);
 
   IDE_RETURN (ret);
 }
