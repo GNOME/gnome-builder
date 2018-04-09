@@ -201,7 +201,7 @@ ide_xml_validator_validate (IdeXmlValidator   *self,
 
 end:
   if (diagnostics != NULL)
-    *diagnostics = ide_diagnostics_new (self->diagnostics_array);
+    *diagnostics = ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&self->diagnostics_array));
   else
     g_clear_pointer (&self->diagnostics_array, g_ptr_array_unref);
 

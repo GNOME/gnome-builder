@@ -583,7 +583,7 @@ ide_xml_parser_get_analysis_worker (GTask        *task,
       return;
     }
 
-  diagnostics = ide_diagnostics_new (g_steal_pointer (&state->diagnostics_array));
+  diagnostics = ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&state->diagnostics_array));
   ide_xml_analysis_set_diagnostics (analysis, diagnostics);
 
   if (state->file_is_ui)

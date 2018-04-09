@@ -18,10 +18,11 @@
 
 #define G_LOG_DOMAIN "ide-diagnostics"
 
-#include "dazzle.h"
+#include <dazzle.h>
 
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-diagnostics.h"
+#include "util/ide-glib.h"
 
 G_DEFINE_BOXED_TYPE (IdeDiagnostics, ide_diagnostics, ide_diagnostics_ref, ide_diagnostics_unref)
 
@@ -35,7 +36,7 @@ struct _IdeDiagnostics
 
 /**
  * ide_diagnostics_new:
- * @ar: (transfer container) (element-type Ide.Diagnostic) (allow-none): an array of #IdeDiagnostic.
+ * @ar: (transfer full) (element-type Ide.Diagnostic) (nullable): an array of #IdeDiagnostic.
  *
  * Creates a new #IdeDiagnostics container structure for @ar.
  * Ownership of @ar is transfered to the resulting structure.
@@ -48,7 +49,9 @@ ide_diagnostics_new (GPtrArray *ar)
   IdeDiagnostics *ret;
 
   if (ar == NULL)
-    ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+    ar = g_ptr_array_new ();
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_diagnostic_unref);
 
   ret = g_slice_new0 (IdeDiagnostics);
   ret->ref_count = 1;
