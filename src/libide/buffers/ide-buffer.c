@@ -2892,25 +2892,6 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
-/**
- * ide_buffer_get_symbols_finish:
- * @self: an #IdeBuffer.
- *
- * Returns: (transfer container) (element-type Ide.Symbol): a #GPtrArray if successful;
- *   otherwise %NULL.
- */
-GPtrArray *
-ide_buffer_get_symbols_finish (IdeBuffer     *self,
-                               GAsyncResult  *result,
-                               GError       **error)
-{
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
-
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
-}
-
 static gboolean
 ide_buffer_reclaim_timeout (gpointer data)
 {
