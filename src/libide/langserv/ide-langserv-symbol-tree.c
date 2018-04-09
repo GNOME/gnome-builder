@@ -23,6 +23,7 @@
 #include "langserv/ide-langserv-symbol-node.h"
 #include "langserv/ide-langserv-symbol-node-private.h"
 #include "langserv/ide-langserv-symbol-tree.h"
+#include "util/ide-glib.h"
 
 typedef struct
 {
@@ -161,7 +162,7 @@ ide_langserv_symbol_tree_build (IdeLangservSymbolTree *self)
 
 /**
  * ide_langserv_symbol_tree_new:
- * @symbols: (transfer container) (element-type Ide.LangservSymbolNode): The symbols
+ * @symbols: (transfer full) (element-type Ide.LangservSymbolNode): The symbols
  *
  * Creates a new #IdeLangservSymbolTree but takes ownership of @ar.
  *
@@ -174,6 +175,8 @@ ide_langserv_symbol_tree_new (GPtrArray *symbols)
   IdeLangservSymbolTree *self;
 
   g_return_val_if_fail (symbols != NULL, NULL);
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (symbols, g_object_unref);
 
   self = g_object_new (IDE_TYPE_LANGSERV_SYMBOL_TREE, NULL);
   priv = ide_langserv_symbol_tree_get_instance_private (self);

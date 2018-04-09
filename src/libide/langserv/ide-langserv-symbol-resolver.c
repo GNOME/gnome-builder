@@ -418,7 +418,7 @@ ide_langserv_symbol_resolver_document_symbol_cb (GObject      *object,
       g_ptr_array_add (symbols, g_steal_pointer (&symbol));
     }
 
-  tree = ide_langserv_symbol_tree_new (g_steal_pointer (&symbols));
+  tree = ide_langserv_symbol_tree_new (IDE_PTR_ARRAY_STEAL_FULL (&symbols));
 
   ide_task_return_pointer (task, g_steal_pointer (&tree), g_object_unref);
 
