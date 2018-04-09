@@ -135,7 +135,7 @@ namespace Ide
 
 		public Ide.Diagnostics? diagnose ()
 		{
-			var ar = new GLib.GenericArray<unowned Ide.Diagnostic> ();
+			var ar = new GLib.GenericArray<Ide.Diagnostic> ();
 			foreach (var diag in this.diagnostics) {
 				ar.add (diag);
 			}
