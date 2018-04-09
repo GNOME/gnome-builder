@@ -685,6 +685,7 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
                                                 gpointer                 user_data)
 {
   g_autoptr(GTask) task = NULL;
+  g_autoptr(GPtrArray) files_ar = NULL;
   CodeCompleteState *state;
   IdeContext *context;
   IdeUnsavedFiles *unsaved_files;
@@ -698,6 +699,8 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   unsaved_files = ide_context_get_unsaved_files (context);
+  files_ar = ide_unsaved_files_to_array (unsaved_files);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (files_ar, ide_unsaved_file_unref);
 
   task = g_task_new (self, cancellable, callback, user_data);
 
@@ -705,7 +708,7 @@ ide_clang_translation_unit_code_complete_async (IdeClangTranslationUnit *self,
   state->path = g_file_get_path (file);
   state->line = gtk_text_iter_get_line (location);
   state->line_offset = gtk_text_iter_get_line_offset (location);
-  state->unsaved_files = ide_unsaved_files_to_array (unsaved_files);
+  state->unsaved_files = g_steal_pointer (&files_ar);
 
   /*
    * TODO: Technically it is not safe for us to go run this in a thread. We need to ensure

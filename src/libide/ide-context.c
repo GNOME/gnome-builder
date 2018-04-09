@@ -2233,6 +2233,7 @@ ide_context_restore_async (IdeContext          *self,
   self->restored = TRUE;
 
   ar = ide_unsaved_files_to_array (self->unsaved_files);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_unsaved_file_unref);
 
   if (ar->len == 0)
     {

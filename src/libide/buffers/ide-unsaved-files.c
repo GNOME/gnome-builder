@@ -33,6 +33,7 @@
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
 #include "projects/ide-project.h"
+#include "util/ide-glib.h"
 #include "util/ide-line-reader.h"
 
 typedef struct
@@ -682,6 +683,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
 
 /**
  * ide_unsaved_files_to_array:
+ * @self: an #IdeUnsavedFiles
  *
  * This retrieves all of the unsaved file buffers known to the context.
  * These are handy if you need to pass modified state to parsers such as
@@ -692,7 +694,7 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
  * If you would like to hold onto an unsaved file instance, call
  * ide_unsaved_file_ref() to increment its reference count.
  *
- * Returns: (transfer container) (element-type Ide.UnsavedFile): a #GPtrArray
+ * Returns: (transfer full) (element-type Ide.UnsavedFile): a #GPtrArray
  *   containing #IdeUnsavedFile elements.
  */
 GPtrArray *
@@ -721,7 +723,7 @@ ide_unsaved_files_to_array (IdeUnsavedFiles *self)
 
   g_mutex_unlock (&self->mutex);
 
-  return g_steal_pointer (&ar);
+  return IDE_PTR_ARRAY_STEAL_FULL (&ar);
 }
 
 gboolean
@@ -849,6 +851,8 @@ ide_unsaved_files_clear (IdeUnsavedFiles *self)
   g_return_if_fail (IDE_IS_UNSAVED_FILES (self));
 
   ar = ide_unsaved_files_to_array (self);
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_unsaved_file_unref);
 
   g_mutex_lock (&self->mutex);
 

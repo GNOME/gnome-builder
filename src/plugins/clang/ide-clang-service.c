@@ -537,6 +537,7 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
                                                gpointer       user_data)
 {
   g_autoptr(GTask) real_task = NULL;
+  g_autoptr(GPtrArray) files_ar = NULL;
   g_autofree gchar *path = NULL;
   IdeClangService *self = user_data;
   IdeUnsavedFiles *unsaved_files;
@@ -563,12 +564,15 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
       return;
     }
 
+  files_ar = ide_unsaved_files_to_array (unsaved_files);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (files_ar, ide_unsaved_file_unref);
+
   request = g_slice_new0 (ParseRequest);
   request->file = ide_file_new (context, gfile);
   request->index = self->index;
   request->source_filename = g_steal_pointer (&path);
   request->command_line_args = NULL;
-  request->unsaved_files = ide_unsaved_files_to_array (unsaved_files);
+  request->unsaved_files = g_steal_pointer (&files_ar);
   request->sequence = ide_unsaved_files_get_sequence (unsaved_files);
   /*
    * NOTE:
