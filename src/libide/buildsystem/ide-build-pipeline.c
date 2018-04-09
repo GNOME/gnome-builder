@@ -949,6 +949,24 @@ ide_build_pipeline_extension_removed (PeasExtensionSet *set,
 }
 
 static void
+build_command_query_cb (IdeBuildStage    *stage,
+                        IdeBuildPipeline *pipeline,
+                        GCancellable     *cancellable,
+                        gpointer          user_data)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_STAGE_LAUNCHER (stage));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (user_data == NULL);
+
+  ide_build_stage_set_completed (stage, FALSE);
+
+  IDE_EXIT;
+}
+
+static void
 register_build_commands_stage (IdeBuildPipeline *self,
                                IdeContext       *context)
 {
@@ -992,6 +1010,8 @@ register_build_commands_stage (IdeBuildPipeline *self,
                             "context", context,
                             "launcher", launcher,
                             NULL);
+
+      g_signal_connect (stage, "query", G_CALLBACK (build_command_query_cb), NULL);
 
       ide_build_pipeline_connect (self,
                                   IDE_BUILD_PHASE_BUILD | IDE_BUILD_PHASE_AFTER,
