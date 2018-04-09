@@ -54,12 +54,13 @@
 #include "snippets/ide-source-snippets-manager.h"
 #include "testing/ide-test-manager.h"
 #include "transfers/ide-transfer-manager.h"
-#include "util/ide-async-helper.h"
-#include "util/ide-line-reader.h"
-#include "util/ide-settings.h"
 #include "vcs/ide-vcs.h"
 #include "vcs/ide-vcs-monitor.h"
 #include "workbench/ide-workbench.h"
+#include "util/ide-async-helper.h"
+#include "util/ide-glib.h"
+#include "util/ide-line-reader.h"
+#include "util/ide-settings.h"
 
 /**
  * SECTION:ide-context
@@ -1869,6 +1870,8 @@ ide_context_unload_buffer_manager (gpointer             source_object,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   buffers = ide_buffer_manager_get_buffers (self->buffer_manager);
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (buffers, g_object_unref);
 
   task = g_task_new (self, cancellable, callback, user_data);
 
