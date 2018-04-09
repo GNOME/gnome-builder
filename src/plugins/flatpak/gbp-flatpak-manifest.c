@@ -380,6 +380,8 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   dir_name = g_file_get_basename (workdir);
   root_obj = json_node_get_object (root);
 
+  ide_configuration_set_build_commands_dir (IDE_CONFIGURATION (self), workdir);
+
   if (!(primary = discover_primary_module (self, root_obj, dir_name, TRUE, error)))
     return FALSE;
 
