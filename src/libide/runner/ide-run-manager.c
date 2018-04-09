@@ -39,6 +39,7 @@
 #include "runner/ide-runner.h"
 #include "runtimes/ide-runtime.h"
 #include "threading/ide-task.h"
+#include "util/ide-glib.h"
 
 struct _IdeRunManager
 {
@@ -891,6 +892,7 @@ ide_run_manager_provider_get_targets_cb (GObject      *object,
   g_assert (g_list_find (state->providers, provider) != NULL);
 
   ret = ide_build_target_provider_get_targets_finish (provider, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ret, g_object_unref);
 
   if (ret != NULL)
     {

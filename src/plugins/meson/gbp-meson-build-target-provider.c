@@ -415,7 +415,7 @@ gbp_meson_build_target_provider_get_targets_finish (IdeBuildTargetProvider  *pro
     }
 #endif
 
-  IDE_RETURN (ret);
+  IDE_RETURN (IDE_PTR_ARRAY_STEAL_FULL (&ret));
 }
 
 static void
