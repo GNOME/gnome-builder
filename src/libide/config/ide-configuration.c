@@ -44,6 +44,8 @@ typedef struct
   gchar          *runtime_id;
   gchar          *append_path;
 
+  GFile          *build_commands_dir;
+
   IdeEnvironment *environment;
 
   GHashTable     *internal;
@@ -71,6 +73,7 @@ enum {
   PROP_APPEND_PATH,
   PROP_APP_ID,
   PROP_BUILD_COMMANDS,
+  PROP_BUILD_COMMANDS_DIR,
   PROP_CONFIG_OPTS,
   PROP_DEBUG,
   PROP_DIRTY,
@@ -258,6 +261,7 @@ ide_configuration_finalize (GObject *object)
   IdeConfiguration *self = (IdeConfiguration *)object;
   IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
 
+  g_clear_object (&priv->build_commands_dir);
   g_clear_object (&priv->environment);
 
   g_clear_pointer (&priv->build_commands, g_strfreev);
@@ -289,6 +293,10 @@ ide_configuration_get_property (GObject    *object,
 
     case PROP_BUILD_COMMANDS:
       g_value_set_boxed (value, ide_configuration_get_build_commands (self));
+      break;
+
+    case PROP_BUILD_COMMANDS_DIR:
+      g_value_set_object (value, ide_configuration_get_build_commands_dir (self));
       break;
 
     case PROP_DEBUG:
@@ -374,6 +382,10 @@ ide_configuration_set_property (GObject      *object,
       ide_configuration_set_build_commands (self, g_value_get_boxed (value));
       break;
 
+    case PROP_BUILD_COMMANDS_DIR:
+      ide_configuration_set_build_commands_dir (self, g_value_get_object (value));
+      break;
+
     case PROP_DEBUG:
       ide_configuration_set_debug (self, g_value_get_boolean (value));
       break;
@@ -456,6 +468,13 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                         "Build commands",
                         "Build commands",
                         G_TYPE_STRV,
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_BUILD_COMMANDS_DIR] =
+    g_param_spec_object ("build-commands-dir",
+                        "Build commands Dir",
+                        "Directory to run build commands from",
+                        G_TYPE_FILE,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CONFIG_OPTS] =
@@ -1438,4 +1457,33 @@ ide_configuration_set_locality (IdeConfiguration *self,
       priv->locality = locality;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LOCALITY]);
     }
+}
+
+/**
+ * ide_configuration_get_build_commands_dir:
+ * @self: a #IdeConfiguration
+ *
+ * Returns: (transfer none) (nullable): a #GFile or %NULL
+ */
+GFile *
+ide_configuration_get_build_commands_dir (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return priv->build_commands_dir;
+}
+
+void
+ide_configuration_set_build_commands_dir (IdeConfiguration *self,
+                                          GFile            *build_commands_dir)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (!build_commands_dir || G_IS_FILE (build_commands_dir));
+
+  if (g_set_object (&priv->build_commands_dir, build_commands_dir))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMANDS_DIR]);
 }

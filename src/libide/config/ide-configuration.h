@@ -120,6 +120,11 @@ const gchar * const  *ide_configuration_get_build_commands        (IdeConfigurat
 IDE_AVAILABLE_IN_ALL
 void                  ide_configuration_set_build_commands        (IdeConfiguration      *self,
                                                                    const gchar *const    *build_commands);
+IDE_AVAILABLE_IN_3_30
+GFile                *ide_configuration_get_build_commands_dir    (IdeConfiguration      *self);
+IDE_AVAILABLE_IN_3_30
+void                  ide_configuration_set_build_commands_dir    (IdeConfiguration      *self,
+                                                                   GFile                 *build_commands_dir);
 IDE_AVAILABLE_IN_ALL
 const gchar * const  *ide_configuration_get_post_install_commands (IdeConfiguration      *self);
 IDE_AVAILABLE_IN_ALL
