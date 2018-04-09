@@ -5422,6 +5422,8 @@ ide_source_view_find_references_cb (GObject      *object,
 
   g_signal_connect (popover, "hide", G_CALLBACK (gtk_widget_destroy), NULL);
 
+  ide_task_return_boolean (task, TRUE);
+
   IDE_EXIT;
 }
 
@@ -5440,6 +5442,7 @@ ide_source_view_real_find_references (IdeSourceView *self)
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   task = ide_task_new (self, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, ide_source_view_real_find_references);
 
   adapter = ide_buffer_get_symbol_resolvers (priv->buffer);
   n_extensions = ide_extension_set_adapter_get_n_extensions (adapter);
