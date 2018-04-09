@@ -39,9 +39,10 @@
 #include "projects/ide-project-edit.h"
 #include "projects/ide-project-edit-private.h"
 #include "sourceview/ide-completion-words.h"
-#include "util/ide-doc-seq.h"
-#include "util/ide-progress.h"
 #include "vcs/ide-vcs.h"
+#include "util/ide-doc-seq.h"
+#include "util/ide-glib.h"
+#include "util/ide-progress.h"
 
 #define AUTO_SAVE_TIMEOUT_DEFAULT    60
 #define MAX_FILE_SIZE_BYTES_DEFAULT  (1024UL * 1024UL * 10UL)
@@ -2314,7 +2315,7 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
 /**
  * ide_buffer_manager_apply_edits_async:
  * @self: An #IdeBufferManager
- * @edits: (transfer container) (element-type Ide.ProjectEdit): An #GPtrArray of #IdeProjectEdit
+ * @edits: (transfer full) (element-type Ide.ProjectEdit): An #GPtrArray of #IdeProjectEdit
  * @cancellable: (allow-none): a #GCancellable or %NULL
  * @callback: the callback to complete the request
  * @user_data: user data for @callback
@@ -2339,6 +2340,8 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
   g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
   g_return_if_fail (edits != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (edits, g_object_unref);
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_buffer_manager_apply_edits_async);

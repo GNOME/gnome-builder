@@ -5038,7 +5038,7 @@ ide_source_view_rename_edits_cb (GObject      *object,
   buffer_manager = ide_context_get_buffer_manager (context);
 
   ide_buffer_manager_apply_edits_async (buffer_manager,
-                                        g_steal_pointer (&edits),
+                                        IDE_PTR_ARRAY_STEAL_FULL (&edits),
                                         NULL,
                                         ide_source_view_rename_edits_applied,
                                         g_steal_pointer (&self));

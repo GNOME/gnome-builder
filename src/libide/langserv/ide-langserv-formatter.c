@@ -29,6 +29,7 @@
 #include "diagnostics/ide-source-range.h"
 #include "langserv/ide-langserv-formatter.h"
 #include "projects/ide-project-edit.h"
+#include "util/ide-glib.h"
 
 typedef struct
 {
@@ -229,7 +230,7 @@ ide_langserv_formatter_apply_changes (IdeLangservFormatter *self,
   buffer_manager = ide_context_get_buffer_manager (context);
 
   ide_buffer_manager_apply_edits_async (buffer_manager,
-                                        g_steal_pointer (&project_edits),
+                                        IDE_PTR_ARRAY_STEAL_FULL (&project_edits),
                                         NULL, NULL, NULL);
 
   IDE_EXIT;
