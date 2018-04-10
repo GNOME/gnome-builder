@@ -1,6 +1,6 @@
 /* ide-git-vcs.c
  *
- * Copyright © 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -425,7 +425,7 @@ ide_git_vcs_load_monitor_locked (IdeGitVcs  *self,
 }
 
 static void
-ide_git_vcs_reload_worker (GTask        *task,
+ide_git_vcs_reload_worker (IdeTask      *task,
                            gpointer      source_object,
                            gpointer      task_data,
                            GCancellable *cancellable)
@@ -437,7 +437,7 @@ ide_git_vcs_reload_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_GIT_VCS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -445,7 +445,7 @@ ide_git_vcs_reload_worker (GTask        *task,
       !(repository2 = ide_git_vcs_load (self, &error)))
     {
       g_debug ("%s", error->message);
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -455,9 +455,9 @@ ide_git_vcs_reload_worker (GTask        *task,
   g_set_object (&self->change_monitor_repository, repository2);
 
   if (!ide_git_vcs_load_monitor_locked (self, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   g_mutex_unlock (&self->repository_mutex);
 
@@ -470,15 +470,15 @@ ide_git_vcs_reload_async (IdeGitVcs           *self,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_GIT_VCS (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_run_in_thread (task, ide_git_vcs_reload_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_run_in_thread (task, ide_git_vcs_reload_worker);
 
   IDE_EXIT;
 }
@@ -488,7 +488,7 @@ ide_git_vcs_reload_finish (IdeGitVcs     *self,
                            GAsyncResult  *result,
                            GError       **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
   gboolean ret;
 
   IDE_ENTRY;
@@ -497,7 +497,7 @@ ide_git_vcs_reload_finish (IdeGitVcs     *self,
 
   self->reloading = FALSE;
 
-  ret = g_task_propagate_boolean (task, error);
+  ret = ide_task_propagate_boolean (task, error);
 
   if (ret)
     {
@@ -652,7 +652,7 @@ ide_git_vcs_list_status_cb (const gchar     *path,
 }
 
 static void
-ide_git_vcs_list_status_worker (GTask        *task,
+ide_git_vcs_list_status_worker (IdeTask      *task,
                                 gpointer      source_object,
                                 gpointer      task_data,
                                 GCancellable *cancellable)
@@ -666,7 +666,7 @@ ide_git_vcs_list_status_worker (GTask        *task,
   g_autofree gchar *relative = NULL;
   gchar *strv[] = { NULL, NULL };
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_GIT_VCS (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (state != NULL);
@@ -674,16 +674,16 @@ ide_git_vcs_list_status_worker (GTask        *task,
 
   if (!(repository = ggit_repository_open (state->repository_location, &error)))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
   if (!(workdir = ggit_repository_get_workdir (repository)))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to locate working directory");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to locate working directory");
       return;
     }
 
@@ -705,9 +705,9 @@ ide_git_vcs_list_status_worker (GTask        *task,
                                             ide_git_vcs_list_status_cb,
                                             state,
                                             &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
 }
 
 static void
@@ -720,7 +720,7 @@ ide_git_vcs_list_status_async (IdeVcs              *vcs,
                                gpointer             user_data)
 {
   IdeGitVcs *self = (IdeGitVcs *)vcs;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   ListStatus *state;
 
   IDE_ENTRY;
@@ -736,19 +736,19 @@ ide_git_vcs_list_status_async (IdeVcs              *vcs,
   state->recursive = !!include_descendants;
   g_mutex_unlock (&self->repository_mutex);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_git_vcs_list_status_async);
-  g_task_set_priority (task, io_priority);
-  g_task_set_return_on_cancel (task, TRUE);
-  g_task_set_task_data (task, state, list_status_free);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_git_vcs_list_status_async);
+  ide_task_set_priority (task, io_priority);
+  ide_task_set_return_on_cancel (task, TRUE);
+  ide_task_set_task_data (task, state, list_status_free);
 
   if (state->repository_location == NULL)
-    g_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_FAILED,
-                             "No repository loaded");
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "No repository loaded");
   else
-    g_task_run_in_thread (task, ide_git_vcs_list_status_worker);
+    ide_task_run_in_thread (task, ide_git_vcs_list_status_worker);
 
   IDE_EXIT;
 }
@@ -759,9 +759,9 @@ ide_git_vcs_list_status_finish (IdeVcs        *vcs,
                                 GError       **error)
 {
   g_return_val_if_fail (IDE_IS_GIT_VCS (vcs), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -885,16 +885,16 @@ ide_git_vcs_init_async__reload_cb (GObject      *object,
                                    gpointer      user_data)
 {
   IdeGitVcs *self = (IdeGitVcs *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_GIT_VCS (self));
 
   if (!ide_git_vcs_reload_finish (self, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -905,11 +905,11 @@ ide_git_vcs_init_async (GAsyncInitable      *initable,
                         gpointer             user_data)
 {
   IdeGitVcs *self = (IdeGitVcs *)initable;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_GIT_VCS (self));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
   ide_git_vcs_reload_async (self,
                             cancellable,
                             ide_git_vcs_init_async__reload_cb,
@@ -921,11 +921,11 @@ ide_git_vcs_init_finish (GAsyncInitable  *initable,
                          GAsyncResult    *result,
                          GError         **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 static void

@@ -1,6 +1,6 @@
 /* ide-git-genesis-addin.c
  *
- * Copyright © 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,15 +131,15 @@ ide_git_genesis_addin_run_cb (GObject      *object,
 {
   IdeGitCloneWidget *widget = (IdeGitCloneWidget *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_GIT_CLONE_WIDGET (widget));
 
   if (!ide_git_clone_widget_clone_finish (widget, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -149,12 +149,12 @@ ide_git_genesis_addin_run_async (IdeGenesisAddin     *addin,
                                  gpointer             user_data)
 {
   IdeGitGenesisAddin *self = (IdeGitGenesisAddin *)addin;
-  GTask *task;
+  IdeTask *task;
 
   g_return_if_fail (IDE_IS_GIT_GENESIS_ADDIN (addin));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
   ide_git_clone_widget_clone_async (self->clone_widget,
                                     cancellable,
                                     ide_git_genesis_addin_run_cb,
@@ -167,9 +167,9 @@ ide_git_genesis_addin_run_finish (IdeGenesisAddin  *addin,
                                   GError          **error)
 {
   g_return_val_if_fail (IDE_IS_GIT_GENESIS_ADDIN (addin), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static gint

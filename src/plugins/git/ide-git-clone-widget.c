@@ -1,6 +1,6 @@
 /* ide-git-clone-widget.c
  *
- * Copyright © 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -258,7 +258,7 @@ ide_git_clone_widget_init (IdeGitCloneWidget *self)
 static gboolean
 open_after_timeout (gpointer user_data)
 {
-  GTask *task = user_data;
+  IdeTask *task = user_data;
   IdeGitCloneWidget *self;
   IdeWorkbench *workbench;
   g_autoptr(GError) error = NULL;
@@ -266,10 +266,10 @@ open_after_timeout (gpointer user_data)
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
-  req = g_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+  req = ide_task_get_task_data (task);
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
 
   g_assert (req != NULL);
@@ -293,13 +293,13 @@ open_after_timeout (gpointer user_data)
 static gboolean
 finish_animation_in_idle (gpointer data)
 {
-  GTask *task = data;
+  IdeTask *task = data;
   IdeGitCloneWidget *self;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
-  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_TASK (task));
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
 
   dzl_object_animate_full (self->clone_progress,
@@ -325,7 +325,7 @@ finish_animation_in_idle (gpointer data)
 }
 
 static void
-ide_git_clone_widget_worker (GTask        *task,
+ide_git_clone_widget_worker (IdeTask      *task,
                              gpointer      source_object,
                              gpointer      task_data,
                              GCancellable *cancellable)
@@ -340,7 +340,7 @@ ide_git_clone_widget_worker (GTask        *task,
   CloneRequest *req = task_data;
   IdeProgress *progress;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
   g_assert (req != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -372,11 +372,11 @@ ide_git_clone_widget_worker (GTask        *task,
 
   if (repository == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   req->project_file = ggit_repository_get_workdir (repository);
@@ -385,11 +385,11 @@ ide_git_clone_widget_worker (GTask        *task,
                              g_object_ref (task),
                              g_object_unref);
 
-  /* We must complete the task in this worker, as GTask does not support
+  /* We must complete the task in this worker, as IdeTask does not support
    * completing the task asynchronously after work completes. Another option
    * would be to fix things to use mutliple async steps.
    */
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   g_clear_object (&repository);
 }
@@ -400,7 +400,7 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) location = NULL;
   g_autoptr(IdeVcsUri) uri = NULL;
   g_autofree gchar *uristr = NULL;
@@ -409,8 +409,8 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   g_return_if_fail (IDE_IS_GIT_CLONE_WIDGET (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_git_clone_widget_clone_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_git_clone_widget_clone_async);
 
   /*
    * ggit_repository_clone() will block and we don't have a good way to
@@ -420,7 +420,7 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
    * FIXME: Find Ggit API to cancel clone. We might need access to the
    *    GgitRemote so we can ggit_remote_disconnect().
    */
-  g_task_set_return_on_cancel (task, TRUE);
+  ide_task_set_return_on_cancel (task, TRUE);
 
   gtk_label_set_label (self->clone_error_label, NULL);
 
@@ -431,10 +431,10 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
 
   if (uri == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVAL,
-                               _("A valid Git URL is required"));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 _("A valid Git URL is required"));
       return;
     }
 
@@ -455,8 +455,9 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
   gtk_progress_bar_set_fraction (self->clone_progress, 0.0);
   gtk_widget_show (GTK_WIDGET (self->clone_progress));
 
-  g_task_set_task_data (task, req, clone_request_free);
-  g_task_run_in_thread (task, ide_git_clone_widget_worker);
+  ide_task_set_task_data (task, req, clone_request_free);
+  ide_task_set_release_on_propagate (task, FALSE);
+  ide_task_run_in_thread (task, ide_git_clone_widget_worker);
 }
 
 gboolean
@@ -468,9 +469,9 @@ ide_git_clone_widget_clone_finish (IdeGitCloneWidget  *self,
   gboolean ret;
 
   g_return_val_if_fail (IDE_IS_GIT_CLONE_WIDGET (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), &local_error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), &local_error);
 
   /* Only hide progress if we were cancelled */
   if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
