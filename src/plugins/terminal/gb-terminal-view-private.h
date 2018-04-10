@@ -37,7 +37,7 @@ struct _GbTerminalView
 
   GtkRevealer         *search_revealer_top;
 
-  VteTerminal         *terminal_top;
+  IdeTerminal         *terminal_top;
 
   GtkScrollbar        *top_scrollbar;
 

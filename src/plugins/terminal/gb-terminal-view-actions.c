@@ -181,7 +181,7 @@ get_last_focused_terminal_file (GbTerminalView *view)
 static VteTerminal *
 get_last_focused_terminal (GbTerminalView *view)
 {
-  return view->terminal_top;
+  return VTE_TERMINAL (view->terminal_top);
 }
 
 static gchar *

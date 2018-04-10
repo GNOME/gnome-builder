@@ -323,11 +323,11 @@ gb_terminal_realize (GtkWidget *widget)
   if (self->manage_spawn && !self->top_has_spawned)
     {
       self->top_has_spawned = TRUE;
-      gb_terminal_respawn (self, self->terminal_top);
+      gb_terminal_respawn (self, VTE_TERMINAL (self->terminal_top));
     }
 
   if (!self->manage_spawn && self->pty != NULL)
-    vte_terminal_set_pty (self->terminal_top, self->pty);
+    vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), self->pty);
 }
 
 static void
@@ -420,7 +420,7 @@ window_title_changed_cb (VteTerminal    *terminal,
   g_assert (VTE_IS_TERMINAL (terminal));
   g_assert (GB_IS_TERMINAL_VIEW (self));
 
-  title = vte_terminal_get_window_title (self->terminal_top);
+  title = vte_terminal_get_window_title (VTE_TERMINAL (self->terminal_top));
 
   if (title == NULL)
     title = _("Untitled terminal");
@@ -681,9 +681,9 @@ gb_terminal_view_init (GbTerminalView *self)
   gtk_overlay_add_overlay (self->terminal_overlay_top,
                            GTK_WIDGET (self->search_revealer_top));
 
-  gb_terminal_view_connect_terminal (self, self->terminal_top);
+  gb_terminal_view_connect_terminal (self, VTE_TERMINAL (self->terminal_top));
 
-  ide_terminal_search_set_terminal (self->tsearch, self->terminal_top);
+  ide_terminal_search_set_terminal (self->tsearch, VTE_TERMINAL (self->terminal_top));
 
   gb_terminal_view_actions_init (self);
 
@@ -714,8 +714,8 @@ gb_terminal_view_set_pty (GbTerminalView *self,
 
   if (self->terminal_top)
     {
-      vte_terminal_reset (self->terminal_top, TRUE, TRUE);
-      vte_terminal_set_pty (self->terminal_top, pty);
+      vte_terminal_reset (VTE_TERMINAL (self->terminal_top), TRUE, TRUE);
+      vte_terminal_set_pty (VTE_TERMINAL (self->terminal_top), pty);
     }
 }
 
@@ -726,5 +726,5 @@ gb_terminal_view_feed (GbTerminalView *self,
   g_return_if_fail (GB_IS_TERMINAL_VIEW (self));
 
   if (self->terminal_top != NULL)
-    vte_terminal_feed (self->terminal_top, message, -1);
+    vte_terminal_feed (VTE_TERMINAL (self->terminal_top), message, -1);
 }
