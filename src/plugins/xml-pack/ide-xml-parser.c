@@ -340,7 +340,6 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
                              const xmlChar  *name,
                              ...)
 {
-  IdeXmlParser *self = (IdeXmlParser *)state->self;
   IdeDiagnostic *diagnostic;
   xmlParserCtxt *context;
   xmlError *error;
@@ -349,7 +348,8 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
   g_autofree gchar *msg = NULL;
   va_list var_args;
 
-  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_XML_PARSER (state->self));
 
   va_start (var_args, name);
   msg = g_strdup_vprintf ((const gchar *)name, var_args);
@@ -426,10 +426,10 @@ ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
                                        const xmlChar *external_id,
                                        const xmlChar *system_id)
 {
-  IdeXmlParser *self = (IdeXmlParser *)state->self;
   IdeXmlSchemaCacheEntry *entry;
 
-  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_XML_PARSER (state->self));
 
   entry = ide_xml_schema_cache_entry_new ();
   entry->kind = SCHEMA_KIND_DTD;
@@ -472,14 +472,14 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
                                               const xmlChar *target,
                                               const xmlChar *data)
 {
-  IdeXmlParser *self = (IdeXmlParser *)state->self;
   IdeDiagnostic *diagnostic;
   g_autofree gchar *schema_url = NULL;
   const gchar *extension;
   IdeXmlSchemaCacheEntry *entry;
   IdeXmlSchemaKind kind;
 
-  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_XML_PARSER (state->self));
 
   if (NULL != (schema_url = get_schema_url ((const gchar *)data)))
     {

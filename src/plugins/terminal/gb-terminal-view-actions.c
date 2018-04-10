@@ -70,14 +70,13 @@ save_worker (IdeTask      *task,
              gpointer      task_data,
              GCancellable *cancellable)
 {
-  GbTerminalView *view = source_object;
   SaveTask *savetask = (SaveTask *)task_data;
   g_autoptr(GError) error = NULL;
   gboolean ret;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TASK (task));
-  g_assert (GB_IS_TERMINAL_VIEW (view));
+  g_assert (GB_IS_TERMINAL_VIEW (source_object));
   g_assert (savetask != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
