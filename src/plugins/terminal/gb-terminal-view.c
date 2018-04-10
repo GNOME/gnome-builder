@@ -687,7 +687,7 @@ gb_terminal_view_init (GbTerminalView *self)
 
   gb_terminal_view_actions_init (self);
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self->terminal_top));
   gtk_style_context_add_class (style_context, "terminal");
   g_signal_connect_object (style_context,
                            "changed",
