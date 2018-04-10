@@ -1,7 +1,7 @@
 /* ide-code-index-builder.c
  *
- * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
- * Copyright © 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ enum {
   N_PROPS
 };
 
-static void build_tick (GTask *task);
+static void build_tick (IdeTask *task);
 
 G_DEFINE_TYPE (IdeCodeIndexBuilder, ide_code_index_builder, IDE_TYPE_OBJECT)
 
@@ -643,7 +643,7 @@ get_changes_collect_files_cb (gpointer data,
 }
 
 static void
-get_changes_worker (GTask        *task,
+get_changes_worker (IdeTask      *task,
                     gpointer      source_object,
                     gpointer      task_data,
                     GCancellable *cancellable)
@@ -652,7 +652,7 @@ get_changes_worker (GTask        *task,
   GetChangesData *gcd = task_data;
 
   g_assert (!IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_CODE_INDEX_BUILDER (source_object));
   g_assert (gcd != NULL);
   g_assert (IS_GET_CHANGES (gcd));
@@ -660,7 +660,7 @@ get_changes_worker (GTask        *task,
   g_assert (G_IS_FILE (gcd->index_dir));
   g_assert (IDE_IS_VCS (gcd->vcs));
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   /*
@@ -681,7 +681,7 @@ get_changes_worker (GTask        *task,
    */
   to_update = g_ptr_array_new_with_free_func (g_object_unref);
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   /*
@@ -718,7 +718,7 @@ get_changes_worker (GTask        *task,
 
       g_queue_foreach (&files, (GFunc)file_info_free, NULL);
 
-      if (g_task_return_error_if_cancelled (task))
+      if (ide_task_return_error_if_cancelled (task))
         return;
     }
 
@@ -734,9 +734,9 @@ get_changes_worker (GTask        *task,
   g_assert (G_IS_FILE (gcd->data_dir));
   g_assert (G_IS_FILE (gcd->index_dir));
 
-  g_task_return_pointer (task,
-                         g_steal_pointer (&to_update),
-                         (GDestroyNotify) g_ptr_array_unref);
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&to_update),
+                           (GDestroyNotify) g_ptr_array_unref);
 }
 
 /*
@@ -761,7 +761,7 @@ get_changes_async (IdeCodeIndexBuilder *self,
                    GAsyncReadyCallback  callback,
                    gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   GetChangesData *gcd;
   IdeContext *context;
   IdeVcs *vcs;
@@ -775,9 +775,10 @@ get_changes_async (IdeCodeIndexBuilder *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   vcs = ide_context_get_vcs (context);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, get_changes_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, get_changes_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
 
   gcd = g_slice_new0 (GetChangesData);
   gcd->magic = GET_CHANGES_MAGIC;
@@ -786,11 +787,11 @@ get_changes_async (IdeCodeIndexBuilder *self,
   gcd->index_dir = g_object_ref (index_dir);
   gcd->recursive = !!recursive;
   gcd->vcs = g_object_ref (vcs);
-  g_task_set_task_data (task, gcd, (GDestroyNotify)get_changes_data_free);
+  ide_task_set_task_data (task, gcd, (GDestroyNotify)get_changes_data_free);
 
   g_queue_push_head (&gcd->directories, g_object_ref (data_dir));
 
-  ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, get_changes_worker);
+  ide_task_run_in_thread (task, get_changes_worker);
 }
 
 static GPtrArray *
@@ -800,45 +801,36 @@ get_changes_finish (IdeCodeIndexBuilder  *self,
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 /**
  * add_entries_to_index
- * @self: a #IdeCodeIndexBuilder
+ * @entries: (element-type Ide.CodeIndexEntry): the entries to add
  * @file_id: the id within the index
  * @map_builder: the persistent map builder to append
  * @fuzzy_builder: the fuzzy index builder to append
- * @deadline: the deadline to stop processing on this thread. This should
- *   be a time using the monotonic clock, g_get_monotonic_time().
  *
- * This will incrementally add entries to the builder. However,
- * it will stop processing once @deadline has expired.
- *
- * Returns: %TRUE if there are more items to process; otherwise %FALSE
+ * This will incrementally add entries to the builder.
  */
-static gboolean
-add_entries_to_index (IdeCodeIndexEntries     *entries,
+static void
+add_entries_to_index (GPtrArray               *entries,
+                      GFile                   *file,
                       guint32                  file_id,
                       IdePersistentMapBuilder *map_builder,
-                      DzlFuzzyIndexBuilder    *fuzzy_builder,
-                      gint64                   deadline)
+                      DzlFuzzyIndexBuilder    *fuzzy_builder)
 {
   g_autofree gchar *filename = NULL;
-  g_autoptr(GFile) file = NULL;
-  guint count = 0;
   gchar num[16];
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CODE_INDEX_ENTRIES (entries));
+  g_assert (entries != NULL);
+  g_assert (G_IS_FILE (file));
   g_assert (file_id > 0);
   g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (map_builder));
   g_assert (DZL_IS_FUZZY_INDEX_BUILDER (fuzzy_builder));
-
-  file = ide_code_index_entries_get_file (entries);
-  g_assert (G_IS_FILE (file));
 
   /*
    * Storing file_name:id and id:file_name into index, file_name:id will be
@@ -852,18 +844,17 @@ add_entries_to_index (IdeCodeIndexEntries     *entries,
   dzl_fuzzy_index_builder_set_metadata_uint32 (fuzzy_builder, filename, file_id);
   dzl_fuzzy_index_builder_set_metadata_string (fuzzy_builder, num, filename);
 
-  for (;;)
+  IDE_TRACE_MSG ("Adding %u entries for %s", entries->len, filename);
+
+  for (guint i = 0; i < entries->len; i++)
     {
-      g_autoptr(IdeCodeIndexEntry) entry = NULL;
+      IdeCodeIndexEntry *entry = g_ptr_array_index (entries, i);
       const gchar *key;
       const gchar *name;
       IdeSymbolKind kind;
       IdeSymbolFlags flags;
       guint begin_line;
       guint begin_line_offset;
-
-      if (!(entry = ide_code_index_entries_get_next_entry (entries)))
-        break;
 
       key = ide_code_index_entry_get_key (entry);
       name  = ide_code_index_entry_get_name (entry);
@@ -898,21 +889,11 @@ add_entries_to_index (IdeCodeIndexEntries     *entries,
                                                        flags,
                                                        kind),
                                         0);
-
-      if (++count > ADD_ENTRIES_CHUNK_SIZE)
-        {
-          count = 0;
-
-          if (g_get_monotonic_time () >= deadline)
-            return TRUE;
-        }
     }
-
-  return FALSE;
 }
 
 static void
-index_directory_worker (GTask        *task,
+index_directory_worker (IdeTask      *task,
                         gpointer      source_object,
                         gpointer      task_data,
                         GCancellable *cancellable)
@@ -922,7 +903,7 @@ index_directory_worker (GTask        *task,
   g_autoptr(GFile) keys = NULL;
   g_autoptr(GError) error = NULL;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_CODE_INDEX_BUILDER (source_object));
   g_assert (idd != NULL);
   g_assert (IS_INDEX_DIRECTORY (idd));
@@ -938,42 +919,64 @@ index_directory_worker (GTask        *task,
 
   if (!ide_persistent_map_builder_write (idd->map, keys, 0, cancellable, &error) ||
       !dzl_fuzzy_index_builder_write (idd->fuzzy, names, 0, cancellable, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
-static gboolean
-add_entries_to_index_cb (gpointer data)
+static void
+add_entries_to_index_next_entries_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
 {
+  IdeCodeIndexEntries *entries = (IdeCodeIndexEntries *)object;
+  g_autoptr(GPtrArray) ret = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) file = NULL;
   AddEntriesData *task_data;
-  GTask *task = data;
-  gint64 deadline;
-  gboolean has_more;
+  GCancellable *cancellable;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_CODE_INDEX_ENTRIES (entries));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
-  task_data = g_task_get_task_data (task);
+  ret = ide_code_index_entries_next_entries_finish (entries, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ret, ide_code_index_entry_free);
+
+  if (error != NULL)
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  if (ret == NULL || ret->len == 0)
+    {
+      ide_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  cancellable = ide_task_get_cancellable (task);
+  task_data = ide_task_get_task_data (task);
+
   g_assert (task_data != NULL);
   g_assert (IDE_IS_CODE_INDEX_ENTRIES (task_data->entries));
   g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (task_data->map_builder));
   g_assert (DZL_IS_FUZZY_INDEX_BUILDER (task_data->fuzzy_builder));
   g_assert (task_data->file_id > 0);
 
-  /* 1 msec of indexing allowed this cycle */
-  deadline = g_get_monotonic_time () + (G_USEC_PER_SEC / 1000);
-  has_more = add_entries_to_index (task_data->entries,
-                                   task_data->file_id,
-                                   task_data->map_builder,
-                                   task_data->fuzzy_builder,
-                                   deadline);
+  file = ide_code_index_entries_get_file (entries);
 
-  /* Complete task if there's nothing more */
-  if (!has_more)
-    g_task_return_boolean (task, TRUE);
+  add_entries_to_index (ret,
+                        file,
+                        task_data->file_id,
+                        task_data->map_builder,
+                        task_data->fuzzy_builder);
 
-  return has_more;
+  ide_code_index_entries_next_entries_async (entries,
+                                             cancellable,
+                                             add_entries_to_index_next_entries_cb,
+                                             g_steal_pointer (&task));
 }
 
 static void
@@ -986,7 +989,7 @@ add_entries_to_index_async (IdeCodeIndexBuilder     *self,
                             GAsyncReadyCallback      callback,
                             gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   AddEntriesData *task_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -997,11 +1000,12 @@ add_entries_to_index_async (IdeCodeIndexBuilder     *self,
   g_assert (DZL_IS_FUZZY_INDEX_BUILDER (fuzzy_builder));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, add_entries_to_index_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, add_entries_to_index_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   task_data = g_slice_new0 (AddEntriesData);
@@ -1009,13 +1013,12 @@ add_entries_to_index_async (IdeCodeIndexBuilder     *self,
   task_data->map_builder = g_object_ref (map_builder);
   task_data->fuzzy_builder = g_object_ref (fuzzy_builder);
   task_data->file_id = file_id;
-  g_task_set_task_data (task, task_data, (GDestroyNotify)add_entries_data_free);
+  ide_task_set_task_data (task, task_data, (GDestroyNotify)add_entries_data_free);
 
-  /* Super low priority to avoid UI stalls */
-  g_idle_add_full (G_PRIORITY_LOW + 1000,
-                   add_entries_to_index_cb,
-                   g_steal_pointer (&task),
-                   g_object_unref);
+  ide_code_index_entries_next_entries_async (entries,
+                                             cancellable,
+                                             add_entries_to_index_next_entries_cb,
+                                             g_steal_pointer (&task));
 }
 
 static gboolean
@@ -1024,20 +1027,20 @@ add_entries_to_index_finish (IdeCodeIndexBuilder  *self,
                              GError              **error)
 {
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
-dec_active_and_maybe_complete (GTask *task)
+dec_active_and_maybe_complete (IdeTask *task)
 {
   IndexDirectoryData *idd;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  idd = g_task_get_task_data (task);
+  idd = ide_task_get_task_data (task);
   g_assert (idd != NULL);
   g_assert (IS_INDEX_DIRECTORY (idd));
   g_assert (G_IS_FILE (idd->index_dir));
@@ -1049,7 +1052,7 @@ dec_active_and_maybe_complete (GTask *task)
   if (idd->n_active == 0)
     {
       dzl_fuzzy_index_builder_set_metadata_uint32 (idd->fuzzy, "n_files", idd->n_files);
-      g_task_run_in_thread (task, index_directory_worker);
+      ide_task_run_in_thread (task, index_directory_worker);
     }
 }
 
@@ -1060,12 +1063,12 @@ index_directory_add_entries_cb (GObject      *object,
 {
   IdeCodeIndexBuilder *self = (IdeCodeIndexBuilder *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!add_entries_to_index_finish (self, result, &error))
     maybe_log_error (error);
@@ -1081,7 +1084,7 @@ index_directory_index_file_cb (GObject      *object,
   IdeCodeIndexer *indexer = (IdeCodeIndexer *)object;
   g_autoptr(IdeCodeIndexEntries) entries = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   IdeCodeIndexBuilder *self;
   IndexDirectoryData *idd;
   GCancellable *cancellable;
@@ -1089,9 +1092,9 @@ index_directory_index_file_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEXER (indexer));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  idd = g_task_get_task_data (task);
+  idd = ide_task_get_task_data (task);
   g_assert (idd != NULL);
   g_assert (IS_INDEX_DIRECTORY (idd));
   g_assert (G_IS_FILE (idd->index_dir));
@@ -1107,10 +1110,10 @@ index_directory_index_file_cb (GObject      *object,
       return;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
 
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   add_entries_to_index_async (self,
@@ -1132,7 +1135,7 @@ index_directory_async (IdeCodeIndexBuilder *self,
                        GAsyncReadyCallback  callback,
                        gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IndexDirectoryData *idd;
   GHashTableIter iter;
   gpointer k, v;
@@ -1144,11 +1147,12 @@ index_directory_async (IdeCodeIndexBuilder *self,
   g_assert (build_flags != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, index_directory_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, index_directory_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   idd = g_slice_new0 (IndexDirectoryData);
@@ -1156,7 +1160,7 @@ index_directory_async (IdeCodeIndexBuilder *self,
   idd->index_dir = g_object_ref (index_dir);
   idd->fuzzy = dzl_fuzzy_index_builder_new ();
   idd->map = ide_persistent_map_builder_new ();
-  g_task_set_task_data (task, idd, (GDestroyNotify)index_directory_data_free);
+  ide_task_set_task_data (task, idd, (GDestroyNotify)index_directory_data_free);
 
   g_hash_table_iter_init (&iter, build_flags);
 
@@ -1190,7 +1194,7 @@ index_directory_async (IdeCodeIndexBuilder *self,
   idd->n_active--;
 
   if (idd->n_active == 0)
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -1200,10 +1204,10 @@ index_directory_finish (IdeCodeIndexBuilder  *self,
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
-  g_assert (G_IS_TASK (result));
-  g_assert (g_task_is_valid (G_TASK (result), self));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (IDE_TASK (result), self));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -1212,19 +1216,19 @@ build_index_directory_cb (GObject      *object,
                           gpointer      user_data)
 {
   IdeCodeIndexBuilder *self = (IdeCodeIndexBuilder *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   BuildData *bd;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
-  bd = g_task_get_task_data (task);
+  bd = ide_task_get_task_data (task);
   g_assert (bd != NULL);
   g_assert (IS_BUILD_DATA (bd));
   g_assert (G_IS_FILE (bd->building_data_dir));
@@ -1247,7 +1251,7 @@ build_get_build_flags_cb (GObject      *object,
                           gpointer      user_data)
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GHashTable) flags = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) data_dir = NULL;
@@ -1260,9 +1264,9 @@ build_get_build_flags_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  bd = g_task_get_task_data (task);
+  bd = ide_task_get_task_data (task);
   g_assert (bd != NULL);
   g_assert (G_IS_FILE (bd->data_dir));
   g_assert (G_IS_FILE (bd->index_dir));
@@ -1281,10 +1285,10 @@ build_get_build_flags_cb (GObject      *object,
       return;
     }
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
 
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   index_dir = get_index_dir (bd->index_dir, bd->data_dir, data_dir);
@@ -1311,19 +1315,19 @@ build_get_build_flags_cb (GObject      *object,
 }
 
 static void
-build_tick (GTask *task)
+build_tick (IdeTask *task)
 {
   GCancellable *cancellable;
   BuildData *bd;
   GFile *data_dir;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
-  bd = g_task_get_task_data (task);
+  bd = ide_task_get_task_data (task);
   g_assert (bd != NULL);
   g_assert (IS_BUILD_DATA (bd));
   g_assert (G_IS_FILE (bd->data_dir));
@@ -1332,11 +1336,11 @@ build_tick (GTask *task)
 
   if (bd->changes->len == 0)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
-  cancellable = g_task_get_cancellable (task);
+  cancellable = ide_task_get_cancellable (task);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   data_dir = g_ptr_array_index (bd->changes, bd->changes->len - 1);
@@ -1356,15 +1360,15 @@ build_get_changes_cb (GObject      *object,
 {
   IdeCodeIndexBuilder *self = (IdeCodeIndexBuilder *)object;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   BuildData *bd;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_BUILDER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  bd = g_task_get_task_data (task);
+  bd = ide_task_get_task_data (task);
   g_assert (bd != NULL);
   g_assert (bd->magic == BUILD_DATA_MAGIC);
   g_assert (G_IS_FILE (bd->data_dir));
@@ -1375,7 +1379,7 @@ build_get_changes_cb (GObject      *object,
   bd->changes = get_changes_finish (self, result, &error);
 
   if (bd->changes == NULL)
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
     build_tick (task);
 }
@@ -1389,7 +1393,7 @@ ide_code_index_builder_build_async (IdeCodeIndexBuilder *self,
                                     gpointer             user_data)
 {
   g_autofree gchar *relative = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) index_dir = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
@@ -1409,16 +1413,17 @@ ide_code_index_builder_build_async (IdeCodeIndexBuilder *self,
   relative = g_file_get_relative_path (workdir, directory);
   index_dir = ide_context_cache_file (context, "code-index", relative, NULL);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_code_index_builder_build_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_code_index_builder_build_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
 
   bd = g_slice_new0 (BuildData);
   bd->magic = BUILD_DATA_MAGIC;
   bd->data_dir = g_object_ref (directory);
   bd->index_dir = g_steal_pointer (&index_dir);
   bd->build_system = g_object_ref (build_system);
-  g_task_set_task_data (task, bd, (GDestroyNotify)build_data_free);
+  ide_task_set_task_data (task, bd, (GDestroyNotify)build_data_free);
 
   get_changes_async (self,
                      bd->data_dir,
@@ -1436,7 +1441,7 @@ ide_code_index_builder_build_finish (IdeCodeIndexBuilder  *self,
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_BUILDER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
