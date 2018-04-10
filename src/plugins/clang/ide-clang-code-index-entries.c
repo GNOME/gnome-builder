@@ -1,6 +1,6 @@
 /* ide-clang-code-index-entries.c
  *
- * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,12 +47,17 @@ struct _IdeClangCodeIndexEntries
    * GSlice allocated structures holding the raw CXCursor from the
    * translation unit. Since we own the unit/index, these are safe for the
    * lifetime of the object.
+   *
+   * These are manipulated from a worker thread when generating the entries.
    */
   GQueue cursors;
   GQueue decl_cursors;
 
   /* Path to the file that has been parsed. */
   gchar *path;
+
+  /* If we've already run once, (so return empty result). */
+  guint has_run : 1;
 };
 
 static void
@@ -203,6 +208,7 @@ visitor (CXCursor     cursor,
  */
 static IdeCodeIndexEntry *
 ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self,
+                                                  IdeCodeIndexEntryBuilder *builder,
                                                   gboolean                 *finish)
 {
   g_autoptr(CXCursor) cursor = NULL;
@@ -221,8 +227,9 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
   guint column = 0;
   guint offset = 0;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (!IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (self));
+  g_assert (builder != NULL);
   g_assert (finish != NULL);
 
   *finish = FALSE;
@@ -300,33 +307,13 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
       key = clang_getCString (usr);
     }
 
-  return g_object_new (IDE_TYPE_CODE_INDEX_ENTRY,
-                       "name", name,
-                       "key", key,
-                       "kind", kind,
-                       "flags", flags,
-                       "begin-line", line,
-                       "begin-line-offset", column,
-                       NULL);
-}
+  ide_code_index_entry_builder_set_name (builder, name);
+  ide_code_index_entry_builder_set_key (builder, key);
+  ide_code_index_entry_builder_set_kind (builder, kind);
+  ide_code_index_entry_builder_set_flags (builder, flags);
+  ide_code_index_entry_builder_set_range (builder, line, column, 0, 0);
 
-static IdeCodeIndexEntry *
-ide_clang_code_index_entries_get_next_entry (IdeCodeIndexEntries *entries)
-{
-  IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)entries;
-  g_autoptr(IdeCodeIndexEntry) entry = NULL;
-  gboolean finish = FALSE;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (self));
-
-  do
-    entry = ide_clang_code_index_entries_real_get_next_entry (self, &finish);
-  while (entry == NULL && finish == FALSE);
-
-  g_assert (entry == NULL || IDE_IS_CODE_INDEX_ENTRY (entry));
-
-  return g_steal_pointer (&entry);
+  return ide_code_index_entry_builder_build (builder);
 }
 
 static GFile *
@@ -340,10 +327,96 @@ ide_clang_code_index_entries_get_file (IdeCodeIndexEntries *entries)
 }
 
 static void
+ide_clang_code_index_entries_worker (IdeTask      *task,
+                                     gpointer      source_object,
+                                     gpointer      task_data,
+                                     GCancellable *cancellable)
+{
+  IdeClangCodeIndexEntries *self = source_object;
+  g_autoptr(IdeCodeIndexEntryBuilder) builder = NULL;
+  g_autoptr(GPtrArray) ret = NULL;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ret = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_code_index_entry_free);
+  builder = ide_code_index_entry_builder_new ();
+
+  for (;;)
+    {
+      g_autoptr(IdeCodeIndexEntry) entry = NULL;
+      gboolean finish = FALSE;
+
+      if ((entry = ide_clang_code_index_entries_real_get_next_entry (self, builder, &finish)))
+        {
+          g_ptr_array_add (ret, g_steal_pointer (&entry));
+          continue;
+        }
+
+      if (!finish)
+        continue;
+
+      break;
+    }
+
+  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+}
+
+static void
+ide_clang_code_index_entries_next_entries_async (IdeCodeIndexEntries *entries,
+                                                 GCancellable        *cancellable,
+                                                 GAsyncReadyCallback  callback,
+                                                 gpointer             user_data)
+{
+  IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)entries;
+  g_autoptr(IdeTask) task = NULL;
+
+  g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_code_index_entries_next_entries_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW + 1000);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+
+  if (self->has_run)
+    ide_task_return_pointer (task,
+                             g_ptr_array_new_with_free_func ((GDestroyNotify)ide_code_index_entry_free),
+                             (GDestroyNotify)g_ptr_array_unref);
+  else
+    ide_task_run_in_thread (task, ide_clang_code_index_entries_worker);
+
+  self->has_run = TRUE;
+}
+
+static GPtrArray *
+ide_clang_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *entries,
+                                                  GAsyncResult         *result,
+                                                  GError              **error)
+{
+  GPtrArray *ret;
+
+  g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (entries));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (result, entries));
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+}
+
+static void
 index_entries_iface_init (IdeCodeIndexEntriesInterface *iface)
 {
-  iface->get_next_entry = ide_clang_code_index_entries_get_next_entry;
+  /*
+   * We only implement the Async API, not the sync API so that we can generate
+   * the results inside of a thread.
+   */
+
   iface->get_file = ide_clang_code_index_entries_get_file;
+  iface->next_entries_async = ide_clang_code_index_entries_next_entries_async;
+  iface->next_entries_finish = ide_clang_code_index_entries_next_entries_finish;
 }
 
 G_DEFINE_TYPE_WITH_CODE (IdeClangCodeIndexEntries, ide_clang_code_index_entries, G_TYPE_OBJECT,

@@ -1,6 +1,6 @@
 /* ide-code-index-entries.h
  *
- * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #pragma once
 
 #include "ide-object.h"
+#include "ide-version-macros.h"
 
 #include "symbols/ide-code-index-entry.h"
 #include "symbols/ide-symbol.h"
@@ -27,17 +28,36 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_INDEX_ENTRIES (ide_code_index_entries_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeCodeIndexEntries, ide_code_index_entries, IDE, CODE_INDEX_ENTRIES, GObject)
 
 struct _IdeCodeIndexEntriesInterface
 {
   GTypeInterface       parent_iface;
 
-  GFile             *(*get_file)       (IdeCodeIndexEntries *self);
-  IdeCodeIndexEntry *(*get_next_entry) (IdeCodeIndexEntries *self);
+  GFile             *(*get_file)            (IdeCodeIndexEntries  *self);
+  IdeCodeIndexEntry *(*get_next_entry)      (IdeCodeIndexEntries  *self);
+  void               (*next_entries_async)  (IdeCodeIndexEntries  *self,
+                                             GCancellable         *cancellable,
+                                             GAsyncReadyCallback   callback,
+                                             gpointer              user_data);
+  GPtrArray         *(*next_entries_finish) (IdeCodeIndexEntries  *self,
+                                             GAsyncResult         *result,
+                                             GError              **error);
 };
 
-IdeCodeIndexEntry *ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self);
-GFile             *ide_code_index_entries_get_file       (IdeCodeIndexEntries *self);
+IDE_AVAILABLE_IN_ALL
+IdeCodeIndexEntry *ide_code_index_entries_get_next_entry      (IdeCodeIndexEntries  *self);
+IDE_AVAILABLE_IN_ALL
+GFile             *ide_code_index_entries_get_file            (IdeCodeIndexEntries  *self);
+IDE_AVAILABLE_IN_3_28
+void               ide_code_index_entries_next_entries_async  (IdeCodeIndexEntries  *self,
+                                                               GCancellable         *cancellable,
+                                                               GAsyncReadyCallback   callback,
+                                                               gpointer              user_data);
+IDE_AVAILABLE_IN_3_28
+GPtrArray         *ide_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *self,
+                                                               GAsyncResult         *result,
+                                                               GError              **error);
 
 G_END_DECLS

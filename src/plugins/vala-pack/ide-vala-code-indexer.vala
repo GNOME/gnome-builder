@@ -1,6 +1,6 @@
 /* ide-vala-indenter.vala
  *
- * Copyright © 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,11 +99,29 @@ namespace Ide
 			return null;
 		}
 
+        public async GLib.GenericArray<Ide.CodeIndexEntry> next_entries_async (GLib.Cancellable? cancellable)
+			throws GLib.Error
+        {
+			var ret = new GLib.GenericArray<Ide.CodeIndexEntry> ();
+
+			for (;;)
+			{
+				Ide.CodeIndexEntry entry = get_next_entry ();
+
+				if (entry == null)
+					break;
+				ret.add (entry);
+			}
+
+			return ret;
+		}
+
 		void add_children (Ide.ValaSymbolTree tree,
 		                   Ide.SymbolNode? parent,
 		                   string prefix)
 		{
 			var n_children = tree.get_n_children (parent);
+			var builder = new Ide.CodeIndexEntryBuilder ();
 
 			for (var i = 0; i < n_children; i++) {
 				var child = tree.get_nth_child (parent, i) as Ide.ValaSymbolNode;
@@ -145,16 +163,13 @@ namespace Ide
 						break;
 					}
 
-					var entry = new Ide.ValaCodeIndexEntry () {
-						flags = child.flags | Ide.SymbolFlags.IS_DEFINITION,
-						name = search_name,
-						kind = child.kind,
-						begin_line = loc.begin.line,
-						begin_line_offset = loc.begin.column,
-						end_line = loc.end.line,
-						end_line_offset = loc.end.column,
-						key = node.get_full_name ()
-					};
+					builder.set_flags (child.flags | Ide.SymbolFlags.IS_DEFINITION);
+					builder.set_name (search_name);
+					builder.set_key (node.get_full_name ());
+					builder.set_kind (child.kind);
+					builder.set_range (loc.begin.line, loc.begin.column, loc.end.line, loc.end.column);
+
+					var entry = builder.build ();
 
 					this.entries.add (entry);
 				}
@@ -162,9 +177,5 @@ namespace Ide
 				this.add_children (tree, child, name);
 			}
 		}
-	}
-
-	public class ValaCodeIndexEntry : Ide.CodeIndexEntry
-	{
 	}
 }

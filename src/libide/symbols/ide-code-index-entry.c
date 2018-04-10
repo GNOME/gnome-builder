@@ -1,6 +1,6 @@
 /* ide-code-index-entry.c
  *
- * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,288 +18,249 @@
 
 #define G_LOG_DOMAIN "ide-code-index-entry"
 
+#include "config.h"
+
 #include "symbols/ide-code-index-entry.h"
 
-typedef struct
+/**
+ * SECTION:ide-code-index-entry
+ * @title: IdeCodeIndexEntry
+ * @short_description: information about code index entry
+ *
+ * The #IdeCodeIndexEntry structure contains information about something to be
+ * indexed in the code index. It is an immutable data object so that it can be
+ * passed between threads where data is indexed. Plugins should use
+ * #IdeCodeIndexEntryBuilder to create index entries.
+ */
+
+struct _IdeCodeIndexEntry
 {
-  GObject                 parent;
+  gchar          *key;
+  gchar          *name;
 
-  gchar                  *key;
-  gchar                  *name;
+  IdeSymbolKind   kind;
+  IdeSymbolFlags  flags;
 
-  IdeSymbolKind           kind;
-  IdeSymbolFlags          flags;
-
-  guint                   begin_line;
-  guint                   begin_line_offset;
-  guint                   end_line;
-  guint                   end_line_offset;
-} IdeCodeIndexEntryPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (IdeCodeIndexEntry, ide_code_index_entry, G_TYPE_OBJECT)
-
-enum {
-  PROP_0,
-  PROP_KEY,
-  PROP_NAME,
-  PROP_KIND,
-  PROP_FLAGS,
-  PROP_BEGIN_LINE,
-  PROP_BEGIN_LINE_OFFSET,
-  PROP_END_LINE,
-  PROP_END_LINE_OFFSET,
-  N_PROPS
+  guint           begin_line;
+  guint           begin_line_offset;
+  guint           end_line;
+  guint           end_line_offset;
 };
 
-static GParamSpec *properties [N_PROPS];
-
-static void
-ide_code_index_entry_finalize (GObject *object)
+struct _IdeCodeIndexEntryBuilder
 {
-  IdeCodeIndexEntry *self = (IdeCodeIndexEntry *)object;
-  IdeCodeIndexEntryPrivate *priv = ide_code_index_entry_get_instance_private (self);
+  IdeCodeIndexEntry entry;
+};
 
-  g_clear_pointer (&priv->name, g_free);
-  g_clear_pointer (&priv->key, g_free);
+G_DEFINE_BOXED_TYPE (IdeCodeIndexEntry,
+                     ide_code_index_entry,
+                     ide_code_index_entry_copy,
+                     ide_code_index_entry_free)
+G_DEFINE_BOXED_TYPE (IdeCodeIndexEntryBuilder,
+                     ide_code_index_entry_builder,
+                     ide_code_index_entry_builder_copy,
+                     ide_code_index_entry_builder_free)
 
-  G_OBJECT_CLASS (ide_code_index_entry_parent_class)->finalize (object);
-}
-
-static void
-ide_code_index_entry_set_property (GObject       *object,
-                                   guint          prop_id,
-                                   const GValue  *value,
-                                   GParamSpec    *pspec)
+void
+ide_code_index_entry_free (IdeCodeIndexEntry *self)
 {
-  IdeCodeIndexEntry *self = (IdeCodeIndexEntry *)object;
-  IdeCodeIndexEntryPrivate *priv = ide_code_index_entry_get_instance_private (self);
-
-  switch (prop_id)
+  if (self != NULL)
     {
-    case PROP_KEY:
-      g_free (priv->key);
-      priv->key = g_value_dup_string (value);
-      break;
-
-    case PROP_NAME:
-      g_free (priv->name);
-      priv->name = g_value_dup_string (value);
-      break;
-
-    case PROP_KIND:
-      priv->kind = g_value_get_int (value);
-      break;
-
-    case PROP_FLAGS:
-      priv->flags = g_value_get_int (value);
-      break;
-
-    case PROP_BEGIN_LINE:
-      priv->begin_line = g_value_get_uint (value);
-      break;
-
-    case PROP_BEGIN_LINE_OFFSET:
-      priv->begin_line_offset = g_value_get_uint (value);
-      break;
-
-    case PROP_END_LINE:
-      priv->end_line = g_value_get_uint (value);
-      break;
-
-    case PROP_END_LINE_OFFSET:
-      priv->end_line_offset = g_value_get_uint (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      g_clear_pointer (&self->name, g_free);
+      g_clear_pointer (&self->key, g_free);
+      g_slice_free (IdeCodeIndexEntry, self);
     }
 }
 
-static void
-ide_code_index_entry_get_property (GObject    *object,
-                                   guint       prop_id,
-                                   GValue     *value,
-                                   GParamSpec *pspec)
+IdeCodeIndexEntry *
+ide_code_index_entry_copy (const IdeCodeIndexEntry *self)
 {
-  IdeCodeIndexEntry *self = (IdeCodeIndexEntry *)object;
-  IdeCodeIndexEntryPrivate *priv = ide_code_index_entry_get_instance_private (self);
+  IdeCodeIndexEntry *copy = NULL;
 
-  switch (prop_id)
+  if (self != NULL)
     {
-    case PROP_KEY:
-      g_value_set_string (value, priv->key);
-      break;
-
-    case PROP_NAME:
-      g_value_set_string (value, priv->name);
-      break;
-
-    case PROP_KIND:
-      g_value_set_int (value, priv->kind);
-      break;
-
-    case PROP_FLAGS:
-      g_value_set_int (value, priv->flags);
-      break;
-
-    case PROP_BEGIN_LINE:
-      g_value_set_uint (value, priv->begin_line);
-      break;
-
-    case PROP_BEGIN_LINE_OFFSET:
-      g_value_set_uint (value, priv->begin_line_offset);
-      break;
-
-    case PROP_END_LINE:
-      g_value_set_uint (value, priv->end_line);
-      break;
-
-    case PROP_END_LINE_OFFSET:
-      g_value_set_uint (value, priv->end_line_offset);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      copy = g_slice_dup (IdeCodeIndexEntry, self);
+      copy->name = g_strdup (self->name);
+      copy->key = g_strdup (self->key);
     }
-}
 
-static void
-ide_code_index_entry_class_init (IdeCodeIndexEntryClass *klass)
-{
-  GObjectClass *object_class = (GObjectClass *)klass;
-
-  object_class->finalize = ide_code_index_entry_finalize;
-  object_class->set_property = ide_code_index_entry_set_property;
-  object_class->get_property = ide_code_index_entry_get_property;
-
-  properties [PROP_KEY] =
-    g_param_spec_string ("key",
-                         "Key",
-                         "A key unique to declaration.",
-                         NULL,
-                         (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_NAME] =
-    g_param_spec_string ("name",
-                         "Name",
-                         "Name of declaration.",
-                         NULL,
-                         (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_KIND] =
-    g_param_spec_int ("kind",
-                      "Kind",
-                      "Kind of declaration.",
-                       G_MININT, G_MAXINT, IDE_SYMBOL_NONE,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_FLAGS] =
-    g_param_spec_int ("flags",
-                      "Flags",
-                      "Flags of declaration.",
-                       G_MININT, G_MAXINT, IDE_SYMBOL_FLAGS_NONE,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_BEGIN_LINE] =
-    g_param_spec_uint ("begin-line",
-                       "Begin Line",
-                       "Begin Line of declaration.",
-                       0, G_MAXUINT, 0,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_BEGIN_LINE_OFFSET] =
-    g_param_spec_uint ("begin-line-offset",
-                       "Begin Line Offset",
-                       "Begin Line Offset of declaration.",
-                       0, G_MAXUINT, 0,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_END_LINE] =
-    g_param_spec_uint ("end-line",
-                       "End Line",
-                       "End Line of declaration.",
-                       0, G_MAXUINT, 0,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_END_LINE_OFFSET] =
-    g_param_spec_uint ("end-line-offset",
-                       "End Line Offset",
-                       "End Line Offset of declaration.",
-                       0, G_MAXUINT, 0,
-                       (G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, N_PROPS, properties);
-}
-
-static void
-ide_code_index_entry_init (IdeCodeIndexEntry *self)
-{
+  return copy;
 }
 
 const gchar *
-ide_code_index_entry_get_key (IdeCodeIndexEntry *self)
+ide_code_index_entry_get_key (const IdeCodeIndexEntry *self)
 {
-  IdeCodeIndexEntryPrivate *priv = ide_code_index_entry_get_instance_private (self);
+  g_return_val_if_fail (self != NULL, NULL);
 
-  g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRY (self), NULL);
-
-  return priv->key;
+  return self->key;
 }
 
 const gchar *
-ide_code_index_entry_get_name (IdeCodeIndexEntry *self)
+ide_code_index_entry_get_name (const IdeCodeIndexEntry *self)
 {
-  IdeCodeIndexEntryPrivate *priv = ide_code_index_entry_get_instance_private (self);
+  g_return_val_if_fail (self != NULL, NULL);
 
-  g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRY (self), NULL);
-
-  return priv->name;
+  return self->name;
 }
 
 IdeSymbolKind
-ide_code_index_entry_get_kind (IdeCodeIndexEntry *self)
+ide_code_index_entry_get_kind (const IdeCodeIndexEntry *self)
 {
-  IdeCodeIndexEntryPrivate *priv;
+  g_return_val_if_fail (self != NULL, IDE_SYMBOL_NONE);
 
-  g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRY (self), IDE_SYMBOL_NONE);
-
-  priv = ide_code_index_entry_get_instance_private (self);
-  return priv->kind;
+  return self->kind;
 }
 
 IdeSymbolFlags
-ide_code_index_entry_get_flags (IdeCodeIndexEntry *self)
+ide_code_index_entry_get_flags (const IdeCodeIndexEntry *self)
 {
-  IdeCodeIndexEntryPrivate *priv;
+  g_return_val_if_fail (self != NULL, IDE_SYMBOL_FLAGS_NONE);
 
-  g_return_val_if_fail (IDE_IS_CODE_INDEX_ENTRY (self), IDE_SYMBOL_FLAGS_NONE);
+  return self->flags;
+}
 
-  priv = ide_code_index_entry_get_instance_private (self);
-  return priv->flags;
+/**
+ * ide_code_index_entry_get_range:
+ * @self: a #IdeCodeIndexEntry
+ * @begin_line: (out): first line
+ * @begin_line_offset: (out): first line offset
+ * @end_line: (out): last line
+ * @end_line_offset: (out): last line offset
+ *
+ * Since: 3.28.2
+ */
+void
+ide_code_index_entry_get_range (const IdeCodeIndexEntry *self,
+                                guint                   *begin_line,
+                                guint                   *begin_line_offset,
+                                guint                   *end_line,
+                                guint                   *end_line_offset)
+{
+  g_return_if_fail (self != NULL);
+
+  if (begin_line != NULL)
+    *begin_line = self->begin_line;
+
+  if (begin_line_offset != NULL)
+    *begin_line_offset = self->begin_line_offset;
+
+  if (end_line != NULL)
+    *end_line = self->end_line;
+
+  if (end_line_offset != NULL)
+    *end_line_offset = self->end_line_offset;
+}
+
+IdeCodeIndexEntryBuilder *
+ide_code_index_entry_builder_new (void)
+{
+  return g_slice_new0 (IdeCodeIndexEntryBuilder);
 }
 
 void
-ide_code_index_entry_get_range (IdeCodeIndexEntry *self,
-                                guint             *begin_line,
-                                guint             *begin_line_offset,
-                                guint             *end_line,
-                                guint             *end_line_offset)
+ide_code_index_entry_builder_free (IdeCodeIndexEntryBuilder *builder)
 {
-  IdeCodeIndexEntryPrivate *priv;
+  if (builder != NULL)
+    {
+      g_clear_pointer (&builder->entry.key, g_free);
+      g_clear_pointer (&builder->entry.name, g_free);
+      g_slice_free (IdeCodeIndexEntryBuilder, builder);
+    }
+}
 
-  g_return_if_fail (IDE_IS_CODE_INDEX_ENTRY (self));
+void
+ide_code_index_entry_builder_set_range (IdeCodeIndexEntryBuilder *builder,
+                                        guint                     begin_line,
+                                        guint                     begin_line_offset,
+                                        guint                     end_line,
+                                        guint                     end_line_offset)
+{
+  g_return_if_fail (builder != NULL);
 
-  priv = ide_code_index_entry_get_instance_private (self);
+  builder->entry.begin_line = begin_line;
+  builder->entry.begin_line_offset = begin_line_offset;
+  builder->entry.end_line = end_line;
+  builder->entry.end_line_offset = end_line_offset;
+}
 
-  if (begin_line != NULL)
-    *begin_line = priv->begin_line;
+void
+ide_code_index_entry_builder_set_name (IdeCodeIndexEntryBuilder *builder,
+                                       const gchar              *name)
+{
+  g_return_if_fail (builder != NULL);
 
-  if (begin_line_offset != NULL)
-    *begin_line_offset = priv->begin_line_offset;
+  if (name != builder->entry.name)
+    {
+      g_free (builder->entry.name);
+      builder->entry.name = g_strdup (name);
+    }
+}
 
-  if (end_line != NULL)
-    *end_line = priv->end_line;
+void
+ide_code_index_entry_builder_set_key (IdeCodeIndexEntryBuilder *builder,
+                                      const gchar              *key)
+{
+  g_return_if_fail (builder != NULL);
 
-  if (end_line_offset != NULL)
-    *end_line_offset = priv->end_line_offset;
+  if (key != builder->entry.key)
+    {
+      g_free (builder->entry.key);
+      builder->entry.key = g_strdup (key);
+    }
+}
+
+void
+ide_code_index_entry_builder_set_flags (IdeCodeIndexEntryBuilder *builder,
+                                        IdeSymbolFlags            flags)
+{
+  g_return_if_fail (builder != NULL);
+
+  builder->entry.flags = flags;
+}
+
+void
+ide_code_index_entry_builder_set_kind (IdeCodeIndexEntryBuilder *builder,
+                                       IdeSymbolKind             kind)
+{
+  g_return_if_fail (builder != NULL);
+
+  builder->entry.kind = kind;
+}
+
+/**
+ * ide_code_index_entry_builder_build:
+ * @builder: a #IdeCodeIndexEntryBuilder
+ *
+ * Creates an immutable #IdeCodeIndexEntry from the builder content.
+ *
+ * Returns: (transfer full): an #IdeCodeIndexEntry
+ *
+ * Since: 3.28.2
+ */
+IdeCodeIndexEntry *
+ide_code_index_entry_builder_build (IdeCodeIndexEntryBuilder *builder)
+{
+  g_return_val_if_fail (builder != NULL, NULL);
+
+  return ide_code_index_entry_copy (&builder->entry);
+}
+
+/**
+ * ide_code_index_entry_builder_copy:
+ * @builder: a #IdeCodeIndexEntryBuilder
+ *
+ * Returns: (transfer full): a deep copy of @builder
+ *
+ * Since: 3.28.2
+ */
+IdeCodeIndexEntryBuilder *
+ide_code_index_entry_builder_copy (IdeCodeIndexEntryBuilder *builder)
+{
+  IdeCodeIndexEntryBuilder *copy;
+
+  copy = g_slice_dup (IdeCodeIndexEntryBuilder, builder);
+  copy->entry.key = g_strdup (builder->entry.key);
+  copy->entry.name = g_strdup (builder->entry.name);
+
+  return copy;
 }
