@@ -1,4 +1,40 @@
 ==============
+Version 3.28.1
+==============
+
+Changes since last release:
+
+ • Correctness fixes in the xml-pack plugin.
+ • gdb plugin now updates frames properly for selected thread.
+ • Some improvements in the emacs bindings.
+ • The meson plugin handles meson being run outside of the builddir
+   now when extracting targets and tests.
+ • Many fixes in our introspection usage which translates into memory
+   leak fixes for some plugins written in languages other than C.
+ • Bug fixes for a number of build systems including cargo.
+ • The build pipeline is now invalidated when the branch changes.
+ • Right clicking on a project in the greeter now enters selection mode.
+ • The VCS backend now unconditionally ignores minified JSON to protect
+   various subsystems from parsing unnecessary data.
+ • The todo plugin ignores more patterns early on, avoiding loading the
+   content into memory.
+ • Safety fixes to the code-index, buffer manager, terminals, xml parsing,
+   and a number of other subsystems.
+ • The qemu plugin now checks for the 'F' option which is required.
+ • File settings now support setting auto-indent in GSettings. This fixes
+   a regression in the preferences to enable/disable auto-indent on a per
+   langugae basis.
+ • primary+shift+k now activates the symbol search for the document.
+ • Special handling of git worktrees has been added.
+ • Flatpak manifest "simple" build system types now run the build-commands
+   from the srcdir, as is done by flatpak-builder.
+
+Updated Translations:
+
+  Swedish, Indonesian, Lithuanian, Dutch, Czech, Italian,
+  Brazilian Portuguese, Latvian.
+
+==============
 Version 3.28.0
 ==============
 

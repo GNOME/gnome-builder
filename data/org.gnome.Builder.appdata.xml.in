@@ -82,6 +82,32 @@
 
   <releases>
 
+    <release version="3.28.1" date="2018-04-09">
+      <description>
+        <p>
+          Builder 3.28.1 contains a number of bugfixes and translation updates.
+        </p>
+        <ul>
+          <li>Correctness fixes in the xml-pack plugin.</li>
+          <li>gdb plugin now updates frames properly for selected thread.</li>
+          <li>Some improvements in the emacs bindings.</li>
+          <li>The meson plugin handles meson being run outside of the builddir now when extracting targets and tests.</li>
+          <li>Many fixes in our introspection usage which translates into memory leak fixes for some plugins written in languages other than C.</li>
+          <li>Bug fixes for a number of build systems including cargo.</li>
+          <li>The build pipeline is now invalidated when the branch changes.</li>
+          <li>Right clicking on a project in the greeter now enters selection mode.</li>
+          <li>The VCS backend now unconditionally ignores minified JSON to protect various subsystems from parsing unnecessary data.</li>
+          <li>The todo plugin ignores more patterns early on, avoiding loading the content into memory.</li>
+          <li>Safety fixes to the code-index, buffer manager, terminals, xml parsing, and a number of other subsystems.</li>
+          <li>The qemu plugin now checks for the 'F' option which is required.</li>
+          <li>File settings now support setting auto-indent in GSettings. This fixes a regression in the preferences to enable/disable auto-indent on a per langugae basis.</li>
+          <li>primary+shift+k now activates the symbol search for the document.</li>
+          <li>Special handling of git worktrees has been added.</li>
+          <li>Flatpak manifest "simple" build system types now run the build-commands from the srcdir, as is done by flatpak-builder.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.28.0" date="2018-03-13">
       <description>
         <p>
