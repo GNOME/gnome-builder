@@ -443,17 +443,6 @@ ide_layout_grid_remove (GtkContainer *container,
     }
 }
 
-static inline gboolean
-rect_contains_point (cairo_rectangle_int_t *rect,
-                     gint                   x,
-                     gint                   y)
-{
-  return x >= rect->x &&
-         y >= rect->y &&
-         x <= (rect->x + rect->width) &&
-         y <= (rect->y + rect->height);
-}
-
 static gboolean
 ide_layout_grid_get_drop_area (IdeLayoutGrid        *self,
                                gint                  x,
