@@ -1,6 +1,6 @@
 /* ide-ctags-builder.c
  *
- * Copyright © 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -253,7 +253,7 @@ finish_subprocess:
 }
 
 static void
-ide_ctags_builder_build_worker (GTask        *task,
+ide_ctags_builder_build_worker (IdeTask      *task,
                                 gpointer      source_object,
                                 gpointer      task_data_ptr,
                                 GCancellable *cancellable)
@@ -265,7 +265,7 @@ ide_ctags_builder_build_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_CTAGS_BUILDER (source_object));
   g_assert (G_IS_FILE (task_data->directory));
 
@@ -281,7 +281,7 @@ ide_ctags_builder_build_worker (GTask        *task,
                            task_data->recursive,
                            cancellable);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -295,7 +295,7 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
                                gpointer             user_data)
 {
   IdeCtagsBuilder *self = (IdeCtagsBuilder *)builder;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GSettings) settings = NULL;
   g_autofree gchar *destination_path = NULL;
   g_autofree gchar *relative_path = NULL;
@@ -328,11 +328,12 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
   destination_path = ide_context_cache_filename (context, "ctags", relative_path, NULL);
   task_data->destination = g_file_new_for_path (destination_path);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_ctags_builder_build_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task, task_data, build_task_data_free);
-  ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_builder_build_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_ctags_builder_build_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW + 200);
+  ide_task_set_task_data (task, task_data, build_task_data_free);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+  ide_task_run_in_thread (task, ide_ctags_builder_build_worker);
 
   IDE_EXIT;
 }
@@ -347,9 +348,9 @@ ide_ctags_builder_build_finish (IdeTagsBuilder  *builder,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_CTAGS_BUILDER (builder), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
