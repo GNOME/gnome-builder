@@ -39,6 +39,7 @@
 #include "modelines/modeline-parser.h"
 #include "terminal/ide-terminal-private.h"
 #include "threading/ide-thread-pool.h"
+#include "threading/ide-thread-private.h"
 #include "util/ide-battery-monitor.h"
 #include "util/ide-flatpak.h"
 #include "util/ide-posix.h"

@@ -1,13 +1,16 @@
 threading_headers = [
   'ide-thread-pool.h',
+  'ide-task.h',
 ]
 
 threading_sources = [
   'ide-thread-pool.c',
+  'ide-task.c',
 ]
 
 threading_enums = [
   'ide-thread-pool.h',
+  'ide-task.h',
 ]
 
 libide_public_headers += files(threading_headers)

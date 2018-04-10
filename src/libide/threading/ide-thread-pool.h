@@ -1,6 +1,6 @@
 /* ide-thread-pool.h
  *
- * Copyright © 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,10 @@ typedef struct _IdeThreadPool IdeThreadPool;
 
 typedef enum
 {
+  IDE_THREAD_POOL_DEFAULT,
   IDE_THREAD_POOL_COMPILER,
   IDE_THREAD_POOL_INDEXER,
+  IDE_THREAD_POOL_IO,
   IDE_THREAD_POOL_LAST
 } IdeThreadPoolKind;
 
@@ -40,14 +42,18 @@ typedef enum
  */
 typedef void (*IdeThreadFunc) (gpointer user_data);
 
-void     _ide_thread_pool_init     (gboolean              is_worker) G_GNUC_INTERNAL;
 IDE_AVAILABLE_IN_ALL
-void     ide_thread_pool_push      (IdeThreadPoolKind     kind,
-                                    IdeThreadFunc         func,
-                                    gpointer              func_data);
+void     ide_thread_pool_push               (IdeThreadPoolKind  kind,
+                                             IdeThreadFunc      func,
+                                             gpointer           func_data);
+IDE_AVAILABLE_IN_3_28
+void     ide_thread_pool_push_with_priority (IdeThreadPoolKind  kind,
+                                             gint               priority,
+                                             IdeThreadFunc      func,
+                                             gpointer           func_data);
 IDE_AVAILABLE_IN_ALL
-void     ide_thread_pool_push_task (IdeThreadPoolKind     kind,
-                                    GTask                *task,
-                                    GTaskThreadFunc       func);
+void     ide_thread_pool_push_task          (IdeThreadPoolKind  kind,
+                                             GTask             *task,
+                                             GTaskThreadFunc    func);
 
 G_END_DECLS
