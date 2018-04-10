@@ -1,6 +1,6 @@
 /* ide-clang-symbol-node.c
  *
- * Copyright © 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,7 +174,7 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
   IdeClangSymbolNode *self = (IdeClangSymbolNode *)symbol_node;
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(GFile) gfile = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_auto(CXString) cxfilename = {0};
   IdeContext *context;
   const gchar *filename;
@@ -185,9 +185,9 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
 
   g_return_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_clang_symbol_node_get_location_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_symbol_node_get_location_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   cxloc = clang_getCursorLocation (self->cursor);
   clang_getFileLocation (cxloc, &file, &line, &line_offset, NULL);
@@ -202,9 +202,9 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
   gfile = g_file_new_for_path (filename);
   ifile = ide_file_new (context, gfile);
 
-  g_task_return_pointer (task,
-                         ide_source_location_new (ifile, line-1, line_offset-1, 0),
-                         (GDestroyNotify)ide_source_location_unref);
+  ide_task_return_pointer (task,
+                           ide_source_location_new (ifile, line-1, line_offset-1, 0),
+                           (GDestroyNotify)ide_source_location_unref);
 }
 
 static IdeSourceLocation *
@@ -213,9 +213,9 @@ ide_clang_symbol_node_get_location_finish (IdeSymbolNode  *symbol_node,
                                            GError        **error)
 {
   g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (symbol_node), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
