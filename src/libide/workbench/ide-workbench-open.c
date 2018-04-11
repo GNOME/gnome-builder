@@ -1,6 +1,6 @@
 /* ide-workbench-open.c
  *
- * Copyright © 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,15 @@
 
 #define G_LOG_DOMAIN "ide-workbench-open"
 
+#include "config.h"
+
 #include <libpeas/peas.h>
 
+#include "ide-context.h"
+#include "ide-debug.h"
+
 #include "application/ide-application.h"
+#include "threading/ide-task.h"
 #include "util/ide-uri.h"
 #include "workbench/ide-workbench-addin.h"
 #include "workbench/ide-workbench-private.h"
@@ -35,7 +41,7 @@ typedef struct
 typedef struct
 {
   IdeWorkbench         *self;
-  GTask                *task;
+  IdeTask              *task;
   IdeUri               *uri;
   GArray               *loaders;
   gchar                *content_type;
@@ -157,7 +163,7 @@ ide_workbench_open_uri_cb (GObject      *object,
 
   if (ide_workbench_addin_open_finish (addin, result, &error))
     {
-      g_task_return_boolean (open_uri_state->task, TRUE);
+      ide_task_return_boolean (open_uri_state->task, TRUE);
       g_object_unref (open_uri_state->task);
       return;
     }
@@ -171,7 +177,7 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
   IdeWorkbenchLoader *loader;
 
   g_assert (open_uri_state != NULL);
-  g_assert (G_IS_TASK (open_uri_state->task));
+  g_assert (IDE_IS_TASK (open_uri_state->task));
   g_assert (open_uri_state->loaders != NULL);
   g_assert (open_uri_state->uri != NULL);
 
@@ -191,11 +197,11 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
       gchar *uristr;
 
       uristr = ide_uri_to_string (open_uri_state->uri, IDE_URI_HIDE_AUTH_PARAMS);
-      g_task_return_new_error (open_uri_state->task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "No handler responded to \"%s\" with content-type \"%s\"",
-                               uristr, open_uri_state->content_type ?: "");
+      ide_task_return_new_error (open_uri_state->task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "No handler responded to \"%s\" with content-type \"%s\"",
+                                 uristr, open_uri_state->content_type ?: "");
 
       g_clear_object (&open_uri_state->task);
       g_free (uristr);
@@ -209,7 +215,7 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
                                   open_uri_state->uri,
                                   open_uri_state->content_type,
                                   open_uri_state->flags,
-                                  g_task_get_cancellable (open_uri_state->task),
+                                  ide_task_get_cancellable (open_uri_state->task),
                                   ide_workbench_open_uri_cb,
                                   open_uri_state);
 }
@@ -226,7 +232,7 @@ ide_workbench_open_discover_content_type_cb (GObject      *object,
 
   g_assert (G_IS_FILE (file));
   g_assert (open_uri_state != NULL);
-  g_assert (G_IS_TASK (open_uri_state->task));
+  g_assert (IDE_IS_TASK (open_uri_state->task));
 
   file_info = g_file_query_info_finish (file, result, &error);
 
@@ -265,7 +271,7 @@ ide_workbench_open_discover_content_type (IdeWorkbenchOpenUriState *open_uri_sta
   g_autoptr(GFile) file = NULL;
 
   g_assert (open_uri_state != NULL);
-  g_assert (G_IS_TASK (open_uri_state->task));
+  g_assert (IDE_IS_TASK (open_uri_state->task));
   g_assert (open_uri_state->loaders != NULL);
   g_assert (open_uri_state->uri != NULL);
 
@@ -276,7 +282,7 @@ ide_workbench_open_discover_content_type (IdeWorkbenchOpenUriState *open_uri_sta
                              G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
                              G_FILE_QUERY_INFO_NONE,
                              G_PRIORITY_DEFAULT,
-                             g_task_get_cancellable (open_uri_state->task),
+                             ide_task_get_cancellable (open_uri_state->task),
                              ide_workbench_open_discover_content_type_cb,
                              open_uri_state);
   else
@@ -303,16 +309,16 @@ ide_workbench_open_uri_async (IdeWorkbench         *self,
   open_uri_state->uri = ide_uri_ref (uri);
   open_uri_state->content_type = NULL;
   open_uri_state->loaders = g_array_new (FALSE, FALSE, sizeof (IdeWorkbenchLoader));
-  open_uri_state->task = g_task_new (self, cancellable, callback, user_data);
+  open_uri_state->task = ide_task_new (self, cancellable, callback, user_data);
   open_uri_state->hint = g_strdup (hint);
   open_uri_state->flags = flags;
 
   g_array_set_clear_func (open_uri_state->loaders,
                           ide_workbench_loader_destroy);
 
-  g_task_set_task_data (open_uri_state->task,
-                        open_uri_state,
-                        ide_workbench_open_uri_state_free);
+  ide_task_set_task_data (open_uri_state->task,
+                          open_uri_state,
+                          ide_workbench_open_uri_state_free);
 
   ide_workbench_open_discover_content_type (open_uri_state);
 }
@@ -323,9 +329,9 @@ ide_workbench_open_uri_finish (IdeWorkbench  *self,
                                GError       **error)
 {
   g_return_val_if_fail (IDE_IS_WORKBENCH (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -334,15 +340,15 @@ ide_workbench_open_files_cb (GObject      *object,
                              gpointer      user_data)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   OpenFilesState *task_data;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  task_data = g_task_get_task_data (task);
+  task_data = ide_task_get_task_data (task);
   g_assert (task_data != NULL);
   g_assert (task_data->errors != NULL);
   g_assert (task_data->active > 0);
@@ -355,12 +361,12 @@ ide_workbench_open_files_cb (GObject      *object,
   if (task_data->active == 0)
     {
       if (task_data->errors->len > 0)
-        g_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_FAILED,
-                                 "%s", task_data->errors->str);
+        ide_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_FAILED,
+                                   "%s", task_data->errors->str);
       else
-        g_task_return_boolean (task, TRUE);
+        ide_task_return_boolean (task, TRUE);
     }
 }
 
@@ -389,20 +395,20 @@ ide_workbench_open_files_async (IdeWorkbench         *self,
                                 GAsyncReadyCallback   callback,
                                 gpointer              user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   OpenFilesState *task_data;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail ((n_files > 0 && files != NULL) || (n_files == 0));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_workbench_open_files_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_workbench_open_files_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (n_files == 0)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -410,7 +416,7 @@ ide_workbench_open_files_async (IdeWorkbench         *self,
   task_data->errors = g_string_new (NULL);
   task_data->active = n_files;
 
-  g_task_set_task_data (task, task_data, open_files_state_free);
+  ide_task_set_task_data (task, task_data, open_files_state_free);
 
   for (guint i = 0; i < n_files; i++)
     {
@@ -428,12 +434,12 @@ ide_workbench_open_files_finish (IdeWorkbench  *self,
                                  GAsyncResult  *result,
                                  GError       **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_WORKBENCH (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 static void
@@ -441,27 +447,32 @@ ide_workbench_open_project_cb (GObject      *object,
                                GAsyncResult *result,
                                gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GError) error = NULL;
   IdeWorkbench *workbench;
-  guint32 present_time;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   context = ide_context_new_finish (result, &error);
+  g_assert (!context || IDE_IS_CONTEXT (context));
+  g_assert (context || error);
 
   if (context == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
-      return;
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
     }
 
-  workbench = g_task_get_source_object (task);
+  workbench = ide_task_get_source_object (task);
 
   if (workbench->context != NULL)
     {
+      guint32 present_time;
+
       present_time = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "GDK_CURRENT_TIME"));
       workbench = g_object_new (IDE_TYPE_WORKBENCH,
                                 "application", IDE_APPLICATION_DEFAULT,
@@ -472,7 +483,9 @@ ide_workbench_open_project_cb (GObject      *object,
 
   ide_workbench_set_context (workbench, context);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 void
@@ -482,13 +495,14 @@ ide_workbench_open_project_async (IdeWorkbench        *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (G_IS_FILE (file_or_directory));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_workbench_open_project_async);
 
   g_object_set_data (G_OBJECT (task),
                      "GDK_CURRENT_TIME",
@@ -497,7 +511,7 @@ ide_workbench_open_project_async (IdeWorkbench        *self,
   ide_context_new_async (file_or_directory,
                          cancellable,
                          ide_workbench_open_project_cb,
-                         g_object_ref (task));
+                         g_steal_pointer (&task));
 }
 
 gboolean
@@ -506,7 +520,7 @@ ide_workbench_open_project_finish (IdeWorkbench  *self,
                                    GError       **error)
 {
   g_return_val_if_fail (IDE_IS_WORKBENCH (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
