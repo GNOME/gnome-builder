@@ -1,6 +1,6 @@
 /* ide-subprocess-launcher.c
  *
- * Copyright © 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -403,9 +403,9 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
     }
 
   if (should_use_breakout_process (self))
-    g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_host_worker);
+    ide_subprocess_launcher_spawn_host_worker (task, self, NULL, cancellable);
   else
-    g_task_run_in_thread_sync (task, ide_subprocess_launcher_spawn_worker);
+    ide_subprocess_launcher_spawn_worker (task, self, NULL, cancellable);
 
   return g_task_propagate_pointer (task, error);
 }
