@@ -1,6 +1,6 @@
 /* ide-configuration-manager.c
  *
- * Copyright © 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-configuration-manager"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
@@ -31,6 +33,7 @@
 #include "config/ide-configuration-provider.h"
 #include "buildconfig/ide-buildconfig-configuration.h"
 #include "buildconfig/ide-buildconfig-configuration-provider.h"
+#include "threading/ide-task.h"
 
 #define WRITEBACK_DELAY_SEC 3
 
@@ -57,7 +60,7 @@ typedef struct
 
 static void async_initable_iface_init           (GAsyncInitableIface *iface);
 static void list_model_iface_init               (GListModelInterface *iface);
-static void ide_configuration_manager_save_tick (GTask               *task);
+static void ide_configuration_manager_save_tick (IdeTask             *task);
 
 G_DEFINE_TYPE_EXTENDED (IdeConfigurationManager, ide_configuration_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
@@ -111,13 +114,13 @@ ide_configuration_manager_save_cb (GObject      *object,
                                    gpointer      user_data)
 {
   IdeConfigurationProvider *provider = (IdeConfigurationProvider *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!ide_configuration_provider_save_finish (provider, result, &error))
     g_warning ("%s: %s", G_OBJECT_TYPE_NAME (provider), error->message);
@@ -128,7 +131,7 @@ ide_configuration_manager_save_cb (GObject      *object,
 }
 
 static void
-ide_configuration_manager_save_tick (GTask *task)
+ide_configuration_manager_save_tick (IdeTask *task)
 {
   IdeConfigurationProvider *provider;
   GCancellable *cancellable;
@@ -136,14 +139,14 @@ ide_configuration_manager_save_tick (GTask *task)
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  providers = g_task_get_task_data (task);
-  cancellable = g_task_get_cancellable (task);
+  providers = ide_task_get_task_data (task);
+  cancellable = ide_task_get_cancellable (task);
 
   if (providers->len == 0)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
@@ -168,25 +171,25 @@ ide_configuration_manager_save_async (IdeConfigurationManager *self,
                                       gpointer                 user_data)
 {
   g_autoptr(GPtrArray) providers = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_configuration_manager_save_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_configuration_manager_save_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   providers = g_ptr_array_new_with_free_func (g_object_unref);
   peas_extension_set_foreach (self->providers,
                               ide_configuration_manager_collect_providers,
                               providers);
-  g_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
 
   if (providers->len == 0)
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
   else
     ide_configuration_manager_save_tick (task);
 
@@ -199,9 +202,9 @@ ide_configuration_manager_save_finish (IdeConfigurationManager  *self,
                                        GError                  **error)
 {
   g_return_val_if_fail (IDE_IS_CONFIGURATION_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 /**
@@ -553,7 +556,7 @@ ide_configuration_manager_provider_load_cb (GObject      *object,
 
   g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
@@ -659,12 +662,12 @@ ide_configuration_manager_provider_removed (PeasExtensionSet *set,
 static void
 notify_providers_loaded (IdeConfigurationManager *self,
                          GParamSpec              *pspec,
-                         GTask                   *task)
+                         IdeTask                 *task)
 {
   g_autoptr(GVariant) user_value = NULL;
 
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (self->project_settings == NULL)
     return;
@@ -711,7 +714,7 @@ ide_configuration_manager_init_load_cb (GObject      *object,
   IdeConfigurationProvider *provider = (IdeConfigurationProvider *)object;
   IdeConfigurationManager *self;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   GPtrArray *providers;
   IdeContext *context;
 
@@ -720,9 +723,9 @@ ide_configuration_manager_init_load_cb (GObject      *object,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONFIGURATION_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_CONFIGURATION_MANAGER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -737,7 +740,7 @@ ide_configuration_manager_init_load_cb (GObject      *object,
                            G_OBJECT_TYPE_NAME (provider), error->message);
     }
 
-  providers = g_task_get_task_data (task);
+  providers = ide_task_get_task_data (task);
   g_assert (providers != NULL);
   g_assert (providers->len > 0);
 
@@ -745,7 +748,7 @@ ide_configuration_manager_init_load_cb (GObject      *object,
     g_critical ("Failed to locate provider in active set");
 
   if (providers->len == 0)
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -759,15 +762,15 @@ ide_configuration_manager_init_async (GAsyncInitable      *initable,
 {
   IdeConfigurationManager *self = (IdeConfigurationManager *)initable;
   g_autoptr(GPtrArray) providers = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
 
   g_assert (G_IS_ASYNC_INITABLE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_configuration_manager_init_async);
-  g_task_set_priority (task, priority);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_configuration_manager_init_async);
+  ide_task_set_priority (task, priority);
 
   g_signal_connect_swapped (task,
                             "notify::completed",
@@ -798,7 +801,7 @@ ide_configuration_manager_init_async (GAsyncInitable      *initable,
   peas_extension_set_foreach (self->providers,
                               ide_configuration_manager_collect_providers,
                               providers);
-  g_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
 
   for (guint i = 0; i < providers->len; i++)
     {
@@ -815,7 +818,7 @@ ide_configuration_manager_init_async (GAsyncInitable      *initable,
     }
 
   if (providers->len == 0)
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -825,9 +828,9 @@ ide_configuration_manager_init_finish (GAsyncInitable  *initable,
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONFIGURATION_MANAGER (initable));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
