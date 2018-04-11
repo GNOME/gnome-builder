@@ -162,6 +162,8 @@ void          ide_task_report_new_error          (gpointer              source_o
                                                   gint                  code,
                                                   const gchar          *format,
                                                   ...) G_GNUC_PRINTF (7, 8);
+IDE_AVAILABLE_IN_3_30
+void          ide_dump_tasks                     (void);
 
 #ifdef __GNUC__
 # define ide_task_new(self, cancellable, callback, user_data)                      \
