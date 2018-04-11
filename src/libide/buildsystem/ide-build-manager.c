@@ -38,6 +38,7 @@
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime-private.h"
+#include "vcs/ide-vcs.h"
 
 /**
  * SECTION:ide-build-manager
@@ -68,6 +69,8 @@ struct _IdeBuildManager
   IdeBuildPipeline *pipeline;
   GDateTime        *last_build_time;
   DzlSignalGroup   *pipeline_signals;
+
+  gchar            *branch_name;
 
   GTimer           *running_time;
 
@@ -539,6 +542,30 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   IDE_EXIT;
 }
 
+static void
+ide_build_manager_vcs_changed (IdeBuildManager *self,
+                               IdeVcs          *vcs)
+{
+  g_autofree gchar *branch_name = NULL;
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (IDE_IS_VCS (vcs));
+
+  /* Only invalidate the pipeline if they switched branches. Ignore things
+   * like opening up `git gui` or other things that could touch the index
+   * without really changing things out from underneath us.
+   */
+
+  branch_name = ide_vcs_get_branch_name (vcs);
+
+  if (!dzl_str_equal0 (branch_name, self->branch_name))
+    {
+      g_free (self->branch_name);
+      self->branch_name = g_strdup (branch_name);
+      ide_build_manager_invalidate_pipeline (self);
+    }
+}
+
 static gboolean
 initable_init (GInitable     *initable,
                GCancellable  *cancellable,
@@ -560,6 +587,8 @@ initable_init (GInitable     *initable,
   device_manager = ide_context_get_device_manager (context);
   vcs = ide_context_get_vcs (context);
 
+  self->branch_name = ide_vcs_get_branch_name (vcs);
+
   g_signal_connect_object (config_manager,
                            "invalidate",
                            G_CALLBACK (ide_build_manager_invalidate_pipeline),
@@ -574,7 +603,7 @@ initable_init (GInitable     *initable,
 
   g_signal_connect_object (vcs,
                            "changed",
-                           G_CALLBACK (ide_build_manager_invalidate_pipeline),
+                           G_CALLBACK (ide_build_manager_vcs_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -677,6 +706,7 @@ ide_build_manager_finalize (GObject *object)
   g_clear_object (&self->cancellable);
   g_clear_pointer (&self->last_build_time, g_date_time_unref);
   g_clear_pointer (&self->running_time, g_timer_destroy);
+  g_clear_pointer (&self->branch_name, g_free);
 
   dzl_clear_source (&self->timer_source);
 
