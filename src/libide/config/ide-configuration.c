@@ -54,6 +54,8 @@ typedef struct
   gint            parallelism;
   guint           sequence;
 
+  guint           block_changed;
+
   guint           dirty : 1;
   guint           debug : 1;
   guint           has_attached : 1;
@@ -125,11 +127,34 @@ _value_new (GType type)
 }
 
 static void
-ide_configuration_emit_changed (IdeConfiguration *self)
+ide_configuration_block_changed (IdeConfiguration *self)
 {
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
   g_assert (IDE_IS_CONFIGURATION (self));
 
-  g_signal_emit (self, signals [CHANGED], 0);
+  priv->block_changed++;
+}
+
+static void
+ide_configuration_unblock_changed (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_assert (IDE_IS_CONFIGURATION (self));
+
+  priv->block_changed--;
+}
+
+static void
+ide_configuration_emit_changed (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_assert (IDE_IS_CONFIGURATION (self));
+
+  if (priv->block_changed == 0)
+    g_signal_emit (self, signals [CHANGED], 0);
 }
 
 static IdeRuntime *
@@ -879,6 +904,9 @@ ide_configuration_set_dirty (IdeConfiguration *self,
 
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
 
+  if (priv->block_changed)
+    IDE_EXIT;
+
   dirty = !!dirty;
 
   if (dirty != priv->dirty)
@@ -1507,5 +1535,8 @@ _ide_configuration_attach (IdeConfiguration *self)
                            self,
                            G_CONNECT_SWAPPED);
 
+  /* Update the runtime and potentially set prefix, but do not emit changed */
+  ide_configuration_block_changed (self);
   ide_configuration_runtime_manager_items_changed (self, 0, 0, 0, runtime_manager);
+  ide_configuration_unblock_changed (self);
 }
