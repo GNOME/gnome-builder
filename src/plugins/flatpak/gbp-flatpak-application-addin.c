@@ -1,6 +1,6 @@
 /* gbp-flatpak-application-addin.c
  *
- * Copyright © 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ static BuiltinFlatpakRepo builtin_flatpak_repos[] = {
 static void gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self);
 
 static void
-copy_devhelp_docs_into_user_data_dir_worker (GTask        *task,
+copy_devhelp_docs_into_user_data_dir_worker (IdeTask      *task,
                                              gpointer      source_object,
                                              gpointer      task_data,
                                              GCancellable *cancellable)
@@ -136,7 +136,7 @@ copy_devhelp_docs_into_user_data_dir_worker (GTask        *task,
         }
     }
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -144,7 +144,7 @@ copy_devhelp_docs_into_user_data_dir_worker (GTask        *task,
 static void
 copy_devhelp_docs_into_user_data_dir (GbpFlatpakApplicationAddin *self)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) paths = NULL;
 
   IDE_ENTRY;
@@ -170,9 +170,9 @@ copy_devhelp_docs_into_user_data_dir (GbpFlatpakApplicationAddin *self)
 
   paths = g_ptr_array_new_with_free_func (g_free);
 
-  task = g_task_new (self, NULL, NULL, NULL);
-  g_task_set_source_tag (task, copy_devhelp_docs_into_user_data_dir);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, copy_devhelp_docs_into_user_data_dir);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   /*
    * Collect the paths to all of the .Docs runtimes.
@@ -188,7 +188,7 @@ copy_devhelp_docs_into_user_data_dir (GbpFlatpakApplicationAddin *self)
 
       refs = flatpak_installation_list_installed_refs_by_kind (info->installation,
                                                                FLATPAK_REF_KIND_RUNTIME,
-                                                               g_task_get_cancellable (task),
+                                                               ide_task_get_cancellable (task),
                                                                NULL);
       if (refs == NULL)
         continue;
@@ -205,10 +205,10 @@ copy_devhelp_docs_into_user_data_dir (GbpFlatpakApplicationAddin *self)
         }
     }
 
-  g_task_set_task_data (task, g_steal_pointer (&paths), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&paths), (GDestroyNotify)g_ptr_array_unref);
 
   /* Now go copy the the docs over */
-  g_task_run_in_thread (task, copy_devhelp_docs_into_user_data_dir_worker);
+  ide_task_run_in_thread (task, copy_devhelp_docs_into_user_data_dir_worker);
 
   IDE_EXIT;
 }
@@ -581,7 +581,7 @@ ensure_remotes_exist_sync (GCancellable  *cancellable,
 static void
 gbp_flatpak_application_addin_install_completed (GbpFlatpakApplicationAddin *self,
                                                  GParamSpec                 *pspec,
-                                                 GTask                      *task)
+                                                 IdeTask                    *task)
 {
   InstallRequest *request;
 
@@ -589,9 +589,9 @@ gbp_flatpak_application_addin_install_completed (GbpFlatpakApplicationAddin *sel
 
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
   g_assert (pspec != NULL);
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  request = g_task_get_task_data (task);
+  request = ide_task_get_task_data (task);
 
   if (request->ref != NULL && !request->did_added)
     {
@@ -603,7 +603,7 @@ gbp_flatpak_application_addin_install_completed (GbpFlatpakApplicationAddin *sel
 }
 
 static void
-gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
+gbp_flatpak_application_addin_install_runtime_worker (IdeTask      *task,
                                                       gpointer      source_object,
                                                       gpointer      task_data,
                                                       GCancellable *cancellable)
@@ -613,7 +613,7 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (source_object));
   g_assert (request != NULL);
   g_assert (request->id != NULL);
@@ -623,7 +623,7 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
 
   if (!ensure_remotes_exist_sync (cancellable, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -668,9 +668,9 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
                                                           &error);
 
               if (request->ref == NULL)
-                g_task_return_error (task, g_steal_pointer (&error));
+                ide_task_return_error (task, g_steal_pointer (&error));
               else
-                g_task_return_boolean (task, TRUE);
+                ide_task_return_boolean (task, TRUE);
 
               IDE_EXIT;
             }
@@ -733,9 +733,9 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
                                                                &error);
 
                   if (request->ref != NULL)
-                    g_task_return_boolean (task, TRUE);
+                    ide_task_return_boolean (task, TRUE);
                   else
-                    g_task_return_error (task, g_steal_pointer (&error));
+                    ide_task_return_error (task, g_steal_pointer (&error));
 
                   IDE_EXIT;
                 }
@@ -743,11 +743,11 @@ gbp_flatpak_application_addin_install_runtime_worker (GTask        *task,
         }
     }
 
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_FOUND,
-                           "Failed to locate runtime \"%s/%s/%s\" within configured flatpak remotes",
-                           request->id, request->arch ?: "", request->branch ?: "");
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Failed to locate runtime \"%s/%s/%s\" within configured flatpak remotes",
+                             request->id, request->arch ?: "", request->branch ?: "");
 
   IDE_EXIT;
 }
@@ -762,7 +762,7 @@ gbp_flatpak_application_addin_install_runtime_async (GbpFlatpakApplicationAddin 
                                                      GAsyncReadyCallback          callback,
                                                      gpointer                     user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   InstallRequest *request;
 
   IDE_ENTRY;
@@ -786,9 +786,9 @@ gbp_flatpak_application_addin_install_runtime_async (GbpFlatpakApplicationAddin 
   request->installations = g_ptr_array_ref (self->installations);
   request->progress = ide_progress_new ();
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_flatpak_application_addin_install_runtime_async);
-  g_task_set_task_data (task, request, (GDestroyNotify)install_request_free);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_flatpak_application_addin_install_runtime_async);
+  ide_task_set_task_data (task, request, (GDestroyNotify)install_request_free);
 
   g_signal_connect_object (task,
                            "notify::completed",
@@ -799,7 +799,7 @@ gbp_flatpak_application_addin_install_runtime_async (GbpFlatpakApplicationAddin 
   if (progress != NULL)
     *progress = g_object_ref (request->progress);
 
-  g_task_run_in_thread (task, gbp_flatpak_application_addin_install_runtime_worker);
+  ide_task_run_in_thread (task, gbp_flatpak_application_addin_install_runtime_worker);
 
   IDE_EXIT;
 }
@@ -813,9 +813,9 @@ gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin
   g_autoptr(GError) local_error = NULL;
 
   g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  request = g_task_get_task_data (G_TASK (result));
+  request = ide_task_get_task_data (IDE_TASK (result));
 
   /*
    * We might want to immediately notify about the ref so that the
@@ -828,7 +828,7 @@ gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin
       g_signal_emit (self, signals[RUNTIME_ADDED], 0, request->ref);
     }
 
-  if (!g_task_propagate_boolean (G_TASK (result), &local_error))
+  if (!ide_task_propagate_boolean (IDE_TASK (result), &local_error))
     {
       /* Ignore "already installed" errors. */
       if (!g_error_matches (local_error, FLATPAK_ERROR, FLATPAK_ERROR_ALREADY_INSTALLED))
@@ -938,7 +938,7 @@ gbp_flatpak_application_addin_init (GbpFlatpakApplicationAddin *self)
 }
 
 static void
-gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
+gbp_flatpak_application_addin_locate_sdk_worker (IdeTask      *task,
                                                  gpointer      source_object,
                                                  gpointer      task_data,
                                                  GCancellable *cancellable)
@@ -948,7 +948,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (source_object));
   g_assert (locate != NULL);
   g_assert (locate->id != NULL);
@@ -1003,7 +1003,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
 
               if (!g_key_file_load_from_data (keyfile, data, len, 0, &error))
                 {
-                  g_task_return_error (task, g_steal_pointer (&error));
+                  ide_task_return_error (task, g_steal_pointer (&error));
                   IDE_EXIT;
                 }
 
@@ -1015,11 +1015,11 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
 
                   if (g_strv_length (parts) != 3)
                     {
-                      g_task_return_new_error (task,
-                                               G_IO_ERROR,
-                                               G_IO_ERROR_INVALID_DATA,
-                                               "Invalid runtime id %s",
-                                               idstr);
+                      ide_task_return_new_error (task,
+                                                 G_IO_ERROR,
+                                                 G_IO_ERROR_INVALID_DATA,
+                                                 "Invalid runtime id %s",
+                                                 idstr);
                       IDE_EXIT;
                     }
 
@@ -1028,7 +1028,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
                   locate->sdk_branch = g_strdup (parts[2]);
                 }
 
-              g_task_return_boolean (task, TRUE);
+              ide_task_return_boolean (task, TRUE);
 
               IDE_EXIT;
             }
@@ -1047,7 +1047,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
 
   if (!ensure_remotes_exist_sync (cancellable, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
@@ -1103,7 +1103,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
 
                   if (bytes == NULL)
                     {
-                      g_task_return_error (task, g_steal_pointer (&error));
+                      ide_task_return_error (task, g_steal_pointer (&error));
                       IDE_EXIT;
                     }
 
@@ -1112,7 +1112,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
 
                   if (!g_key_file_load_from_data (keyfile, data, len, 0, &error))
                     {
-                      g_task_return_error (task, g_steal_pointer (&error));
+                      ide_task_return_error (task, g_steal_pointer (&error));
                       IDE_EXIT;
                     }
 
@@ -1124,11 +1124,11 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
 
                       if (g_strv_length (parts) != 3)
                         {
-                          g_task_return_new_error (task,
-                                                   G_IO_ERROR,
-                                                   G_IO_ERROR_INVALID_DATA,
-                                                   "Invalid runtime id %s",
-                                                   idstr);
+                          ide_task_return_new_error (task,
+                                                     G_IO_ERROR,
+                                                     G_IO_ERROR_INVALID_DATA,
+                                                     "Invalid runtime id %s",
+                                                     idstr);
                           IDE_EXIT;
                         }
 
@@ -1137,7 +1137,7 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
                       locate->sdk_branch = g_strdup (parts[2]);
                     }
 
-                  g_task_return_boolean (task, TRUE);
+                  ide_task_return_boolean (task, TRUE);
 
                   IDE_EXIT;
                 }
@@ -1145,10 +1145,10 @@ gbp_flatpak_application_addin_locate_sdk_worker (GTask        *task,
         }
     }
 
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_NOT_FOUND,
-                           "Failed to locate corresponding SDK");
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_FOUND,
+                             "Failed to locate corresponding SDK");
 
   IDE_EXIT;
 }
@@ -1162,7 +1162,7 @@ gbp_flatpak_application_addin_locate_sdk_async (GbpFlatpakApplicationAddin  *sel
                                                 GAsyncReadyCallback          callback,
                                                 gpointer                     user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   LocateSdk *locate;
 
   IDE_ENTRY;
@@ -1173,8 +1173,9 @@ gbp_flatpak_application_addin_locate_sdk_async (GbpFlatpakApplicationAddin  *sel
   g_assert (branch != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_flatpak_application_addin_locate_sdk_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_flatpak_application_addin_locate_sdk_async);
+  ide_task_set_release_on_propagate (task, FALSE);
 
   locate = g_slice_new0 (LocateSdk);
   locate->id = g_strdup (runtime_id);
@@ -1182,8 +1183,8 @@ gbp_flatpak_application_addin_locate_sdk_async (GbpFlatpakApplicationAddin  *sel
   locate->branch = g_strdup (branch);
   locate->installations = g_ptr_array_ref (self->installations);
 
-  g_task_set_task_data (task, locate, (GDestroyNotify)locate_sdk_free);
-  g_task_run_in_thread (task, gbp_flatpak_application_addin_locate_sdk_worker);
+  ide_task_set_task_data (task, locate, (GDestroyNotify)locate_sdk_free);
+  ide_task_run_in_thread (task, gbp_flatpak_application_addin_locate_sdk_worker);
 
   IDE_EXIT;
 }
@@ -1201,13 +1202,13 @@ gbp_flatpak_application_addin_locate_sdk_finish (GbpFlatpakApplicationAddin  *se
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   if (ret)
     {
-      LocateSdk *state = g_task_get_task_data (G_TASK (result));
+      LocateSdk *state = ide_task_get_task_data (IDE_TASK (result));
 
       if (sdk_id)
         *sdk_id = g_strdup (state->sdk_id);
@@ -1282,19 +1283,19 @@ gbp_flatpak_application_addin_check_sysdeps_cb (GObject      *object,
                                                 gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_SUBPROCESS (subprocess));
   g_return_if_fail (G_IS_ASYNC_RESULT (result));
-  g_return_if_fail (G_IS_TASK (task));
+  g_return_if_fail (IDE_IS_TASK (task));
 
   if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -1307,7 +1308,7 @@ gbp_flatpak_application_addin_check_sysdeps_async (GbpFlatpakApplicationAddin *s
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -1315,14 +1316,14 @@ gbp_flatpak_application_addin_check_sysdeps_async (GbpFlatpakApplicationAddin *s
   g_return_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gbp_flatpak_application_addin_check_sysdeps_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_flatpak_application_addin_check_sysdeps_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (ide_is_flatpak ())
     {
       /* We bundle flatpak-builder with Builder from flatpak */
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -1335,7 +1336,7 @@ gbp_flatpak_application_addin_check_sysdeps_async (GbpFlatpakApplicationAddin *s
 
   if (subprocess == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       IDE_GOTO (failure);
     }
 
@@ -1358,9 +1359,9 @@ gbp_flatpak_application_addin_check_sysdeps_finish (GbpFlatpakApplicationAddin  
   IDE_ENTRY;
 
   g_return_val_if_fail (GBP_IS_FLATPAK_APPLICATION_ADDIN (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
