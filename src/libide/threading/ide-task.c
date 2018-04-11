@@ -143,6 +143,13 @@ typedef struct
 typedef struct
 {
   /*
+   * @global_link is used to store a pointer to the task in the global
+   * queue during the lifetime of the task. This is a debugging feature
+   * so that we can dump the list of active tasks from the debugger.
+   */
+  GList global_link;
+
+  /*
    * Controls access to our private data. We only access structure
    * data while holding this mutex to ensure that we have consistency
    * between threads which could be accessing internals.
@@ -319,6 +326,9 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+static GQueue global_task_list = G_QUEUE_INIT;
+
+G_LOCK_DEFINE (global_task_list);
 
 static void
 ide_task_cancel_free (IdeTaskCancel *cancel)
@@ -574,6 +584,10 @@ ide_task_finalize (GObject *object)
   IdeTask *self = (IdeTask *)object;
   IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
+  G_LOCK (global_task_list);
+  g_queue_unlink (&global_task_list, &priv->global_link);
+  G_UNLOCK (global_task_list);
+
   if (!priv->return_called)
     g_critical ("%s [%s] finalized before completing",
                 G_OBJECT_TYPE_NAME (self),
@@ -664,6 +678,11 @@ ide_task_init (IdeTask *self)
   priv->release_on_propagate = TRUE;
   priv->priority = G_PRIORITY_DEFAULT;
   priv->main_context = g_main_context_ref_thread_default ();
+  priv->global_link.data = self;
+
+  G_LOCK (global_task_list);
+  g_queue_push_tail_link (&global_task_list, &priv->global_link);
+  G_UNLOCK (global_task_list);
 }
 
 /**
@@ -2031,4 +2050,23 @@ async_result_init_iface (GAsyncResultIface *iface)
   iface->get_user_data = ide_task_get_user_data;
   iface->get_source_object = ide_task_get_source_object_full;
   iface->is_tagged = ide_task_is_tagged;
+}
+
+void
+ide_dump_tasks (void)
+{
+  guint i = 0;
+
+  G_LOCK (global_task_list);
+
+  for (const GList *iter = global_task_list.head; iter; iter = iter->next)
+    {
+      IdeTask *self = iter->data;
+      IdeTaskPrivate *priv = ide_task_get_instance_private (self);
+
+      g_printerr ("[%02d]: %s %s\n", i++, priv->name,
+                  priv->completed ? "completed" : "");
+    }
+
+  G_UNLOCK (global_task_list);
 }
