@@ -233,25 +233,6 @@
                         </child>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="focus-on-click">false</property>
-                        <property name="valign">baseline</property>
-                        <property name="action-name">win.perspective</property>
-                        <property name="action-target">'buildperspective'</property>
-                        <property name="tooltip-text" translatable="yes">Configure build preferences</property>
-                        <property name="visible">true</property>
-                        <style>
-                          <class name="image-button"/>
-                        </style>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">builder-build-configure-symbolic</property>
-                            <property name="visible">true</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
@@ -284,9 +265,63 @@
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+                <property name="margin-top">24</property>
+                <property name="margin-start">24</property>
+                <property name="margin-end">24</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="hexpand">true</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">12</property>
+                    <property name="visible">true</property>
                     <child>
-                      <object class="GtkLabel" id="build_profile_title">
-                        <property name="label" translatable="yes">Build Profile</property>
+                      <object class="GtkLabel" id="popover_config_label">
+                        <property name="valign">baseline</property>
+                        <property name="hexpand">true</property>
+                        <property name="visible">true</property>
+                        <property name="xalign">0.0</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="focus-on-click">false</property>
+                        <property name="valign">baseline</property>
+                        <property name="action-name">win.perspective</property>
+                        <property name="action-target">'buildperspective'</property>
+                        <property name="tooltip-text" translatable="yes">Configure build preferences</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">builder-build-configure-symbolic</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="column-spacing">18</property>
+                    <property name="row-spacing">6</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkLabel" id="device_title">
+                        <property name="label" translatable="yes">Device</property>
                         <property name="visible">true</property>
                         <property name="xalign">1.0</property>
                         <style>
@@ -295,18 +330,19 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="popover_config_label">
+                      <object class="GtkLabel" id="popover_device_label">
+                        <property name="use-markup">true</property>
                         <property name="hexpand">true</property>
                         <property name="visible">true</property>
                         <property name="xalign">0.0</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -320,7 +356,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -332,7 +368,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                   </object>
@@ -594,7 +630,6 @@
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <widgets>
-      <widget name="build_profile_title"/>
       <widget name="build_result_title"/>
       <widget name="error_title"/>
       <widget name="last_build_title"/>
