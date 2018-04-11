@@ -22,12 +22,15 @@
 
 #include <libpeas/peas.h>
 
+#include "ide-context.h"
+#include "ide-debug.h"
+
 #include "application/ide-application.h"
+#include "threading/ide-task.h"
 #include "util/ide-uri.h"
 #include "workbench/ide-workbench-addin.h"
 #include "workbench/ide-workbench-private.h"
 #include "workbench/ide-workbench.h"
-#include "threading/ide-task.h"
 
 typedef struct
 {
@@ -448,23 +451,28 @@ ide_workbench_open_project_cb (GObject      *object,
   g_autoptr(IdeContext) context = NULL;
   g_autoptr(GError) error = NULL;
   IdeWorkbench *workbench;
-  guint32 present_time;
+
+  IDE_ENTRY;
 
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   context = ide_context_new_finish (result, &error);
+  g_assert (!context || IDE_IS_CONTEXT (context));
+  g_assert (context || error);
 
   if (context == NULL)
     {
       ide_task_return_error (task, g_steal_pointer (&error));
-      return;
+      IDE_EXIT;
     }
 
   workbench = ide_task_get_source_object (task);
 
   if (workbench->context != NULL)
     {
+      guint32 present_time;
+
       present_time = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (task), "GDK_CURRENT_TIME"));
       workbench = g_object_new (IDE_TYPE_WORKBENCH,
                                 "application", IDE_APPLICATION_DEFAULT,
@@ -476,6 +484,8 @@ ide_workbench_open_project_cb (GObject      *object,
   ide_workbench_set_context (workbench, context);
 
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 void
@@ -492,6 +502,7 @@ ide_workbench_open_project_async (IdeWorkbench        *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_workbench_open_project_async);
 
   g_object_set_data (G_OBJECT (task),
                      "GDK_CURRENT_TIME",
@@ -500,7 +511,7 @@ ide_workbench_open_project_async (IdeWorkbench        *self,
   ide_context_new_async (file_or_directory,
                          cancellable,
                          ide_workbench_open_project_cb,
-                         g_object_ref (task));
+                         g_steal_pointer (&task));
 }
 
 gboolean
