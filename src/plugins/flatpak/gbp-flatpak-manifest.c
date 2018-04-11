@@ -645,6 +645,7 @@ gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
 static void
 gbp_flatpak_manifest_init (GbpFlatpakManifest *self)
 {
+  ide_configuration_set_prefix (IDE_CONFIGURATION (self), "/app");
 }
 
 GbpFlatpakManifest *
