@@ -28,6 +28,8 @@
 #include "ide-ctags-index.h"
 #include "ide-ctags-service.h"
 
+#define QUEUED_BUILD_TIMEOUT_SECS 5
+
 struct _IdeCtagsService
 {
   IdeObject         parent_instance;
@@ -40,7 +42,6 @@ struct _IdeCtagsService
 
   guint             queued_miner_handler;
   guint             miner_active : 1;
-  guint             needs_recursive_mine : 1;
 };
 
 typedef struct
@@ -49,10 +50,27 @@ typedef struct
   guint  recursive;
 } MineInfo;
 
+typedef struct
+{
+  IdeCtagsService *self;
+  GFile           *directory;
+  gboolean         recursive;
+} QueuedRequest;
+
 static void service_iface_init (IdeServiceInterface *iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsService, ide_ctags_service, IDE_TYPE_OBJECT, 0,
                                 G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
+
+static void
+queued_request_free (gpointer data)
+{
+  QueuedRequest *qr = data;
+
+  g_clear_object (&qr->self);
+  g_clear_object (&qr->directory);
+  g_slice_free (QueuedRequest, qr);
+}
 
 static void
 ide_ctags_service_build_index_init_cb (GObject      *object,
@@ -477,20 +495,20 @@ build_system_tags_cb (GObject      *object,
 static gboolean
 restart_miner (gpointer user_data)
 {
-  g_autofree gpointer *data = user_data;
-  g_autoptr(IdeCtagsService) self = data[0];
-  g_autoptr(GFile) directory = data[1];
+  QueuedRequest *qr = user_data;
   g_autoptr(IdeTagsBuilder) tags_builder = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_CTAGS_SERVICE (self));
+  g_assert (qr != NULL);
+  g_assert (IDE_IS_CTAGS_SERVICE (qr->self));
+  g_assert (G_IS_FILE (qr->directory));
 
-  g_hash_table_remove (self->build_timeout_by_dir, directory);
+  g_hash_table_remove (qr->self->build_timeout_by_dir, qr->directory);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
+  context = ide_object_get_context (IDE_OBJECT (qr->self));
   build_system = ide_context_get_build_system (context);
 
   if (IDE_IS_TAGS_BUILDER (build_system))
@@ -499,34 +517,41 @@ restart_miner (gpointer user_data)
     tags_builder = ide_ctags_builder_new (context);
 
   ide_tags_builder_build_async (tags_builder,
-                                directory,
-                                self->needs_recursive_mine,
+                                qr->directory,
+                                qr->recursive,
                                 NULL,
                                 build_system_tags_cb,
-                                g_object_ref (self));
-
-  self->needs_recursive_mine = FALSE;
+                                g_object_ref (qr->self));
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
 ide_ctags_service_queue_build_for_directory (IdeCtagsService *self,
-                                             GFile           *directory)
+                                             GFile           *directory,
+                                             gboolean         recursive)
 {
   g_assert (IDE_IS_CTAGS_SERVICE (self));
   g_assert (G_IS_FILE (directory));
 
+  if (ide_object_is_unloading (IDE_OBJECT (self)))
+    return;
+
   if (!g_hash_table_lookup (self->build_timeout_by_dir, directory))
     {
-      gpointer *data;
+      QueuedRequest *qr;
       guint source_id;
 
-      data = g_new0 (gpointer, 2);
-      data[0] = g_object_ref (self);
-      data[1] = g_object_ref (directory);
+      qr = g_slice_new (QueuedRequest);
+      qr->self = g_object_ref (self);
+      qr->directory = g_object_ref (directory);
+      qr->recursive = !!recursive;
 
-      source_id = g_timeout_add_seconds (5, restart_miner, data);
+      source_id = g_timeout_add_seconds_full (G_PRIORITY_LOW,
+                                              QUEUED_BUILD_TIMEOUT_SECS,
+                                              restart_miner,
+                                              g_steal_pointer (&qr),
+                                              queued_request_free);
 
       g_hash_table_insert (self->build_timeout_by_dir,
                            g_object_ref (directory),
@@ -540,6 +565,10 @@ ide_ctags_service_buffer_saved (IdeCtagsService  *self,
                                 IdeBufferManager *buffer_manager)
 {
   g_autoptr(GFile) parent = NULL;
+  IdeContext *context;
+  IdeVcs *vcs;
+  GFile *file;
+  GFile *workdir;
 
   IDE_ENTRY;
 
@@ -547,8 +576,15 @@ ide_ctags_service_buffer_saved (IdeCtagsService  *self,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  parent = g_file_get_parent (ide_file_get_file (ide_buffer_get_file (buffer)));
-  ide_ctags_service_queue_build_for_directory (self, parent);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
+
+  file = ide_file_get_file (ide_buffer_get_file (buffer));
+  parent = g_file_get_parent (file);
+
+  if (g_file_has_prefix (file, workdir))
+    ide_ctags_service_queue_build_for_directory (self, parent, FALSE);
 
   IDE_EXIT;
 }
@@ -579,8 +615,7 @@ ide_ctags_service_context_loaded (IdeService *service)
    * Rebuild all ctags for the project at startup of the service.
    * Then we do incrementals from there on out.
    */
-  self->needs_recursive_mine = TRUE;
-  ide_ctags_service_queue_build_for_directory (self, workdir);
+  ide_ctags_service_queue_build_for_directory (self, workdir, TRUE);
 
   IDE_EXIT;
 }
