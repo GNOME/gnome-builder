@@ -33,6 +33,7 @@
 #include "config/ide-configuration-manager.h"
 #include "devices/ide-device-manager.h"
 #include "devices/ide-device-private.h"
+#include "devices/ide-device.h"
 #include "projects/ide-project.h"
 #include "runtimes/ide-runtime.h"
 #include "util/ide-gtk.h"
@@ -149,6 +150,7 @@ struct _IdeOmniBar
   GtkRevealer          *popover_details_revealer;
   GtkLabel             *popover_errors_label;
   GtkLabel             *popover_last_build_time_label;
+  GtkLabel             *popover_device_label;
   GtkLabel             *popover_runtime_label;
   GtkLabel             *popover_project_label;
   GtkLabel             *popover_warnings_label;
@@ -263,6 +265,20 @@ ide_omni_bar_device_manager_notify_progress (IdeOmniBar       *self,
 }
 
 static void
+ide_omni_bar_device_manager_notify_device (IdeOmniBar       *self,
+                                           GParamSpec       *pspec,
+                                           IdeDeviceManager *device_manager)
+{
+  IdeDevice *device;
+
+  g_assert (IDE_IS_OMNI_BAR (self));
+  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+
+  device = ide_device_manager_get_device (device_manager);
+  gtk_label_set_label (self->popover_device_label, ide_device_get_display_name (device));
+}
+
+static void
 ide_omni_bar_context_set (GtkWidget  *widget,
                           IdeContext *context)
 {
@@ -312,6 +328,11 @@ ide_omni_bar_context_set (GtkWidget  *widget,
 
   if (device_manager != NULL)
     {
+      IdeDevice *device;
+
+      device = ide_device_manager_get_device (device_manager);
+      gtk_label_set_label (self->popover_device_label, ide_device_get_display_name (device));
+
       g_signal_connect_object (device_manager,
                                "deploy-started",
                                G_CALLBACK (ide_omni_bar_device_manager_deploy_started),
@@ -325,6 +346,11 @@ ide_omni_bar_context_set (GtkWidget  *widget,
       g_signal_connect_object (device_manager,
                                "notify::progress",
                                G_CALLBACK (ide_omni_bar_device_manager_notify_progress),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (device_manager,
+                               "notify::device",
+                               G_CALLBACK (ide_omni_bar_device_manager_notify_device),
                                self,
                                G_CONNECT_SWAPPED);
     }
@@ -658,6 +684,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_errors_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_last_build_time_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_project_label);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_device_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_runtime_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover_warnings_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, project_label);
