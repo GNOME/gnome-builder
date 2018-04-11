@@ -1,6 +1,6 @@
 /* ide-buildconfig-configuration-provider.c
  *
- * Copyright © 2016 Matthew Leeds <mleeds@redhat.com>
+ * Copyright 2016 Matthew Leeds <mleeds@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "ide-buildconfig-configuration-provider"
 
+#include "config.h"
+
 #include <dazzle.h>
 #include <gio/gio.h>
 #include <glib/gi18n.h>
@@ -33,6 +35,7 @@
 #include "config/ide-configuration.h"
 #include "buildsystem/ide-environment.h"
 #include "vcs/ide-vcs.h"
+#include "threading/ide-task.h"
 
 #define DOT_BUILDCONFIG ".buildconfig"
 
@@ -234,7 +237,7 @@ ide_buildconfig_configuration_provider_load_async (IdeConfigurationProvider *pro
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
   g_autoptr(IdeConfiguration) fallback = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *path = NULL;
   g_auto(GStrv) groups = NULL;
@@ -245,9 +248,9 @@ ide_buildconfig_configuration_provider_load_async (IdeConfigurationProvider *pro
   g_assert (self->key_file == NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_buildconfig_configuration_provider_load_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buildconfig_configuration_provider_load_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   self->key_file = g_key_file_new ();
 
@@ -298,7 +301,7 @@ add_default:
   ide_configuration_provider_emit_added (provider, fallback);
 
 complete:
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -307,10 +310,10 @@ ide_buildconfig_configuration_provider_load_finish (IdeConfigurationProvider  *p
                                                     GError                   **error)
 {
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
-  g_assert (g_task_is_valid (G_TASK (result), provider));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (IDE_TASK (result), provider));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
@@ -319,17 +322,17 @@ ide_buildconfig_configuration_provider_save_cb (GObject      *object,
                                                 gpointer      user_data)
 {
   GFile *file = (GFile *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (!g_file_replace_contents_finish (file, result, NULL, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -340,7 +343,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
   g_autoptr(GHashTable) group_names = NULL;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) file = NULL;
   g_autoptr(GBytes) bytes = NULL;
   g_autoptr(GError) error = NULL;
@@ -356,9 +359,9 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (self->key_file != NULL);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_buildconfig_configuration_provider_save_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buildconfig_configuration_provider_save_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   dirty = self->key_file_dirty;
 
@@ -371,7 +374,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
   if (!dirty)
     {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -497,7 +500,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
   if (!(data = g_key_file_to_data (self->key_file, &length, &error)))
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -507,7 +510,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
     {
       /* Remove the file if it exists, since it would be empty */
       g_file_delete (file, cancellable, NULL);
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
@@ -529,10 +532,10 @@ ide_buildconfig_configuration_provider_save_finish (IdeConfigurationProvider  *p
                                                     GError                   **error)
 {
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (provider));
-  g_assert (G_IS_TASK (result));
-  g_assert (g_task_is_valid (G_TASK (result), provider));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (IDE_TASK (result), provider));
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
