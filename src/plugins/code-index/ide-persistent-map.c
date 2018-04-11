@@ -1,6 +1,7 @@
 /* ide-persistent-map.c
  *
- * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017-2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@
 
 #define G_LOG_DOMAIN "ide-persistent-map"
 
-#include <ide.h>
+#include "config.h"
 
 #include "ide-persistent-map.h"
 
@@ -59,7 +60,7 @@ G_STATIC_ASSERT (sizeof (KVPair) == 8);
 G_DEFINE_TYPE (IdePersistentMap, ide_persistent_map, G_TYPE_OBJECT)
 
 static void
-ide_persistent_map_load_file_worker (GTask        *task,
+ide_persistent_map_load_file_worker (IdeTask      *task,
                                      gpointer      source_object,
                                      gpointer      task_data,
                                      GCancellable *cancellable)
@@ -78,7 +79,7 @@ ide_persistent_map_load_file_worker (GTask        *task,
   gint32 version;
   gsize n_elements;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_PERSISTENT_MAP (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -88,10 +89,10 @@ ide_persistent_map_load_file_worker (GTask        *task,
 
   if (!g_file_is_native (file) || NULL == (path = g_file_get_path (file)))
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_FILENAME,
-                               "Index must be a local file");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_FILENAME,
+                                 "Index must be a local file");
       return;
     }
 
@@ -99,7 +100,7 @@ ide_persistent_map_load_file_worker (GTask        *task,
 
   if (mapped_file == NULL)
     {
-      g_task_return_error (task, g_steal_pointer (&error));
+      ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
@@ -110,10 +111,10 @@ ide_persistent_map_load_file_worker (GTask        *task,
 
   if (data == NULL)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVAL,
-                               "Failed to parse GVariant");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "Failed to parse GVariant");
       return;
     }
 
@@ -123,11 +124,11 @@ ide_persistent_map_load_file_worker (GTask        *task,
 
   if (!g_variant_dict_lookup (dict, "version", "i", &version) || version != 2)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVAL,
-                               "Version mismatch in gvariant. Got %d, expected 1",
-                               version);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "Version mismatch in gvariant. Got %d, expected 1",
+                                 version);
       return;
     }
 
@@ -141,10 +142,10 @@ ide_persistent_map_load_file_worker (GTask        *task,
 
   if (keys == NULL || values == NULL || kvpairs == NULL || metadata == NULL || !self->byte_order)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVAL,
-                               "Invalid GVariant index");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "Invalid GVariant index");
       return;
     }
 
@@ -166,7 +167,7 @@ ide_persistent_map_load_file_worker (GTask        *task,
   g_assert (self->kvpairs != NULL);
   g_assert (self->metadata != NULL);
 
-  g_task_return_boolean (task, TRUE);
+  ide_task_return_boolean (task, TRUE);
 }
 
 gboolean
@@ -175,7 +176,7 @@ ide_persistent_map_load_file (IdePersistentMap *self,
                               GCancellable     *cancellable,
                               GError          **error)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP (self), FALSE);
   g_return_val_if_fail (self->load_called == FALSE, FALSE);
@@ -184,13 +185,13 @@ ide_persistent_map_load_file (IdePersistentMap *self,
 
   self->load_called = TRUE;
 
-  task = g_task_new (self, cancellable, NULL, NULL);
-  g_task_set_source_tag (task, ide_persistent_map_load_file);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_run_in_thread_sync (task, ide_persistent_map_load_file_worker);
+  task = ide_task_new (self, cancellable, NULL, NULL);
+  ide_task_set_source_tag (task, ide_persistent_map_load_file);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+  ide_persistent_map_load_file_worker (task, self, file, cancellable);
 
-  return g_task_propagate_boolean (task, error);
+  return ide_task_propagate_boolean (task, error);
 }
 
 void
@@ -200,7 +201,7 @@ ide_persistent_map_load_file_async (IdePersistentMap    *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_PERSISTENT_MAP (self));
   g_return_if_fail (self->load_called == FALSE);
@@ -209,11 +210,12 @@ ide_persistent_map_load_file_async (IdePersistentMap    *self,
 
   self->load_called = TRUE;
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_persistent_map_load_file_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_run_in_thread (task, ide_persistent_map_load_file_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_persistent_map_load_file_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_run_in_thread (task, ide_persistent_map_load_file_worker);
 }
 
 /**
@@ -230,9 +232,9 @@ ide_persistent_map_load_file_finish (IdePersistentMap  *self,
                                      GError           **error)
 {
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 /**

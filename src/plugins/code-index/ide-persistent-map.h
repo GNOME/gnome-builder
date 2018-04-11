@@ -1,6 +1,6 @@
 /* ide-persistent-map.h
  *
- * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#include <ide.h>
 
 #define IDE_TYPE_PERSISTENT_MAP (ide_persistent_map_get_type ())
 

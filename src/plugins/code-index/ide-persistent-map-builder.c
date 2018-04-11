@@ -1,6 +1,7 @@
 /* ide-persistent-map-builder.c
  *
- * Copyright © 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
+ * Copyright 2017-2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +19,8 @@
 
 #define G_LOG_DOMAIN "ide-persistent-map-builder"
 
-#include <ide.h>
+#include "config.h"
+
 #include <string.h>
 
 #include "ide-persistent-map-builder.h"
@@ -154,7 +156,7 @@ compare_keys (KVPair      *a,
 }
 
 void
-ide_persistent_map_builder_write_worker (GTask        *task,
+ide_persistent_map_builder_write_worker (IdeTask      *task,
                                          gpointer      source_object,
                                          gpointer      task_data,
                                          GCancellable *cancellable)
@@ -168,7 +170,7 @@ ide_persistent_map_builder_write_worker (GTask        *task,
   GVariant *kvpairs;
   GVariant *metadata;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_PERSISTENT_MAP_BUILDER (source_object));
   g_assert (state != NULL);
   g_assert (state->keys != NULL);
@@ -179,18 +181,18 @@ ide_persistent_map_builder_write_worker (GTask        *task,
   g_assert (G_IS_FILE (state->destination));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   if (state->keys->len == 0)
     {
       g_autofree gchar *path = g_file_get_path (state->destination);
 
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_INVALID_DATA,
-                               "No entries to write for \"%s\"",
-                               path);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_DATA,
+                                 "No entries to write for \"%s\"",
+                                 path);
       return;
     }
 
@@ -225,7 +227,7 @@ ide_persistent_map_builder_write_worker (GTask        *task,
 
   data = g_variant_take_ref (g_variant_dict_end (&dict));
 
-  if (g_task_return_error_if_cancelled (task))
+  if (ide_task_return_error_if_cancelled (task))
     return;
 
   if (g_file_replace_contents (state->destination,
@@ -237,9 +239,9 @@ ide_persistent_map_builder_write_worker (GTask        *task,
                                NULL,
                                cancellable,
                                &error))
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
   else
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
 }
 
 gboolean
@@ -249,7 +251,8 @@ ide_persistent_map_builder_write (IdePersistentMapBuilder  *self,
                                   GCancellable             *cancellable,
                                   GError                  **error)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  BuildState *state;
 
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP_BUILDER (self), FALSE);
   g_return_val_if_fail (G_IS_FILE (destination), FALSE);
@@ -257,15 +260,18 @@ ide_persistent_map_builder_write (IdePersistentMapBuilder  *self,
   g_return_val_if_fail (self->state != NULL, FALSE);
   g_return_val_if_fail (self->state->destination == NULL, FALSE);
 
-  self->state->destination = g_object_ref (destination);
+  state = g_steal_pointer (&self->state);
+  state->destination = g_object_ref (destination);
 
-  task = g_task_new (self, cancellable, NULL, NULL);
-  g_task_set_source_tag (task, ide_persistent_map_builder_write);
-  g_task_set_priority (task, io_priority);
-  g_task_set_task_data (task, g_steal_pointer (&self->state), build_state_free);
-  g_task_run_in_thread_sync (task, ide_persistent_map_builder_write_worker);
+  task = ide_task_new (self, cancellable, NULL, NULL);
+  ide_task_set_source_tag (task, ide_persistent_map_builder_write);
+  ide_task_set_priority (task, io_priority);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+  ide_persistent_map_builder_write_worker (task, self, state, cancellable);
 
-  return g_task_propagate_boolean (task, error);
+  build_state_free (state);
+
+  return ide_task_propagate_boolean (task, error);
 }
 
 void
@@ -276,7 +282,7 @@ ide_persistent_map_builder_write_async (IdePersistentMapBuilder *self,
                                         GAsyncReadyCallback      callback,
                                         gpointer                 user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_PERSISTENT_MAP_BUILDER (self));
   g_return_if_fail (G_IS_FILE (destination));
@@ -286,11 +292,12 @@ ide_persistent_map_builder_write_async (IdePersistentMapBuilder *self,
 
   self->state->destination = g_object_ref (destination);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, io_priority);
-  g_task_set_source_tag (task, ide_persistent_map_builder_write_async);
-  g_task_set_task_data (task, g_steal_pointer (&self->state), build_state_free);
-  g_task_run_in_thread (task, ide_persistent_map_builder_write_worker);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_priority (task, io_priority);
+  ide_task_set_source_tag (task, ide_persistent_map_builder_write_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+  ide_task_set_task_data (task, g_steal_pointer (&self->state), build_state_free);
+  ide_task_run_in_thread (task, ide_persistent_map_builder_write_worker);
 }
 
 /**
@@ -308,9 +315,9 @@ ide_persistent_map_builder_write_finish (IdePersistentMapBuilder  *self,
                                          GError                  **error)
 {
   g_return_val_if_fail (IDE_IS_PERSISTENT_MAP_BUILDER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
