@@ -1,10 +1,12 @@
 toolchain_headers = [
+  'ide-simple-toolchain.h',
   'ide-toolchain.h',
   'ide-toolchain-provider.h',
   'ide-toolchain-manager.h'
 ]
 
 toolchain_sources = [
+  'ide-simple-toolchain.c',
   'ide-toolchain.c',
   'ide-toolchain-provider.c',
   'ide-toolchain-manager.c'

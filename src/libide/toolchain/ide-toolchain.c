@@ -32,41 +32,18 @@ typedef struct
 {
   gchar *id;
   IdeTriplet *host_triplet;
-  GHashTable *compilers;
-  gchar *archiver;
-  gchar *strip;
-  gchar *pkg_config;
-  gchar *exe_wrapper;
 } IdeToolchainPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeToolchain, ide_toolchain, IDE_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeToolchain, ide_toolchain, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
   PROP_ID,
   PROP_HOST_TRIPLET,
-  PROP_COMPILERS,
-  PROP_ARCHIVER,
-  PROP_STRIP,
-  PROP_PKG_CONFIG,
-  PROP_EXE_WRAPPER,
   N_PROPS
 };
 
 static GParamSpec *properties [N_PROPS];
-
-IdeToolchain *
-ide_toolchain_new (IdeContext   *context,
-                   const gchar  *id)
-{
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-  g_return_val_if_fail (id != NULL, NULL);
-
-  return g_object_new (IDE_TYPE_TOOLCHAIN,
-                       "context", context,
-                       "id", id,
-                       NULL);
-}
 
 /**
  * ide_toolchain_get_id:
@@ -154,259 +131,84 @@ ide_toolchain_get_host_triplet (IdeToolchain *self)
   return ide_triplet_ref (priv->host_triplet);
 }
 
+const gchar *
+ide_toolchain_real_get_tool_for_language (IdeToolchain  *self,
+                                          const gchar   *language,
+                                          const gchar   *tool_id)
+{
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
+
+  g_critical ("%s has not implemented get_tool_for_language()", G_OBJECT_TYPE_NAME (self));
+
+  return NULL;
+}
+
+GHashTable *
+ide_toolchain_real_get_tools_for_id (IdeToolchain  *self,
+                                     const gchar   *tool_id)
+{
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
+
+  g_critical ("%s has not implemented get_tools_for_id()", G_OBJECT_TYPE_NAME (self));
+
+  return NULL;
+}
+
 /**
- * ide_toolchain_get_compilers:
+ * ide_toolchain_get_tool_for_language:
  * @self: an #IdeToolchain
+ * @language: the language of the tool like %IDE_TOOLCHAIN_LANGUAGE_C.
+ * @tool_id: the identifier of the tool like %IDE_TOOLCHAIN_TOOL_CC
  *
- * Gets the path of the compiler executable
+ * Gets the path of the specified tool for the requested language.
+ * If %IDE_TOOLCHAIN_LANGUAGE_ANY is used in the @language field, the first tool matching @tool_id
+ * will be returned.
  *
- * Returns: (transfer none) (element-type utf8 utf8): A #GHashTable containing a the entries of
- * language and compiler paths.
+ * Returns: (transfer full): A string containing the path of the tool for the given language, or
+ * %NULL is no tool has been found. The returned string should be freed when no longer needed.
+ *
+ * Since: 3.30
+ */
+const gchar *
+ide_toolchain_get_tool_for_language (IdeToolchain *self,
+                                     const gchar  *language,
+                                     const gchar  *tool_id)
+{
+  const gchar *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
+
+  ret = IDE_TOOLCHAIN_GET_CLASS (self)->get_tool_for_language (self, language, tool_id);
+
+  IDE_RETURN (ret);
+}
+
+/**
+ * ide_toolchain_get_tools_for_id:
+ * @self: an #IdeToolchain
+ * @tool_id: the identifier of the tool like %IDE_TOOLCHAIN_TOOL_CC
+ *
+ * Gets the list of all the paths to the specified tool id.
+ *
+ * Returns: (transfer full) (element-type utf8 utf8): A table of language names and paths.
  *
  * Since: 3.30
  */
 GHashTable *
-ide_toolchain_get_compilers (IdeToolchain  *self)
+ide_toolchain_get_tools_for_id (IdeToolchain  *self,
+                                const gchar   *tool_id)
 {
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
+  GHashTable *ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
 
-  return priv->compilers;
-}
+  ret = IDE_TOOLCHAIN_GET_CLASS (self)->get_tools_for_id (self, tool_id);
 
-/**
- * ide_toolchain_get_compiler:
- * @self: an #IdeToolchain
- * @language: the name of the language supported by this compiler
- *
- * Gets the path of the compiler executable
- *
- * Returns: (nullable) (transfer none): A path or %NULL.
- *
- * Since: 3.30
- */
-const gchar *
-ide_toolchain_get_compiler (IdeToolchain  *self,
-                            const gchar   *language)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
-
-  return g_hash_table_lookup (priv->compilers, language);
-}
-
-/**
- * ide_toolchain_set_compiler:
- * @self: an #IdeToolchain
- * @language: the name of the language supported by this compiler
- * @path: (nullable): the path to the archiver executable
- *
- * Sets the path of the compiler executable
- * If the @path is %NULL then the language row will simply be removed from the #GHashTable
- *
- * Since: 3.30
- */
-void
-ide_toolchain_set_compiler (IdeToolchain  *self,
-                            const gchar   *language,
-                            const gchar   *path)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-  const gchar *current_path = ide_toolchain_get_compiler (self, language);
-
-  g_return_if_fail (IDE_IS_TOOLCHAIN (self));
-
-  if (g_strcmp0 (path, current_path) != 0)
-    {
-      if (path == NULL)
-        g_hash_table_remove (priv->compilers, language);
-      else
-        g_hash_table_insert (priv->compilers, g_strdup (language), g_strdup (path));
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COMPILERS]);
-    }
-}
-
-/**
- * ide_toolchain_get_archiver:
- * @self: an #IdeToolchain
- *
- * Gets the path of the archiver executable
- *
- * Returns: (nullable) (transfer none): A path or %NULL.
- *
- * Since: 3.30
- */
-const gchar *
-ide_toolchain_get_archiver (IdeToolchain  *self)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
-
-  return priv->archiver;
-}
-
-/**
- * ide_toolchain_set_archiver:
- * @self: an #IdeToolchain
- * @path: (nullable): the path to the archiver executable
- *
- * Sets the path of the archiver executable
- *
- * Since: 3.30
- */
-void
-ide_toolchain_set_archiver (IdeToolchain  *self,
-                            const gchar   *path)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TOOLCHAIN (self));
-
-  if (g_strcmp0 (path, priv->archiver) != 0)
-    {
-      g_free (priv->archiver);
-      priv->archiver = g_strdup (path);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ARCHIVER]);
-    }
-}
-
-/**
- * ide_toolchain_get_strip:
- * @self: an #IdeToolchain
- *
- * Gets the path of the strip executable
- *
- * Returns: (nullable) (transfer none): A path or %NULL.
- *
- * Since: 3.30
- */
-const gchar *
-ide_toolchain_get_strip (IdeToolchain  *self)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
-
-  return priv->strip;
-}
-
-/**
- * ide_toolchain_set_strip:
- * @self: an #IdeToolchain
- * @path: (nullable): the path to the strip executable
- *
- * Sets the path of the strip executable
- *
- * Since: 3.30
- */
-void
-ide_toolchain_set_strip (IdeToolchain  *self,
-                         const gchar   *path)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TOOLCHAIN (self));
-
-  if (g_strcmp0 (path, priv->strip) != 0)
-    {
-      g_free (priv->strip);
-      priv->strip = g_strdup (path);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIP]);
-    }
-}
-
-/**
- * ide_toolchain_get_pkg_config:
- * @self: an #IdeToolchain
- *
- * Gets the path of the pkg-config executable
- *
- * Returns: (nullable) (transfer none): A path or %NULL.
- *
- * Since: 3.30
- */
-const gchar *
-ide_toolchain_get_pkg_config (IdeToolchain  *self)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
-
-  return priv->pkg_config;
-}
-
-/**
- * ide_toolchain_set_pkg_config:
- * @self: an #IdeToolchain
- * @path: (nullable): the path to the pkg-config executable
- *
- * Sets the path of the pkg-config executable
- *
- * Since: 3.30
- */
-void
-ide_toolchain_set_pkg_config (IdeToolchain  *self,
-                              const gchar   *path)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TOOLCHAIN (self));
-
-  if (g_strcmp0 (path, priv->pkg_config) != 0)
-    {
-      g_free (priv->pkg_config);
-      priv->pkg_config = g_strdup (path);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PKG_CONFIG]);
-    }
-}
-
-/**
- * ide_toolchain_get_exe_wrapper:
- * @self: an #IdeToolchain
- *
- * Gets the path of the wrapper to use when running the compiled executables
- *
- * Returns: (nullable) (transfer none): A path or %NULL.
- *
- * Since: 3.30
- */
-const gchar *
-ide_toolchain_get_exe_wrapper (IdeToolchain  *self)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
-
-  return priv->exe_wrapper;
-}
-
-/**
- * ide_toolchain_set_exe_wrapper:
- * @self: an #IdeToolchain
- * @path: (nullable): the path of the executable wrapper
- *
- * Sets the path of the wrapper to use when running the compiled executables
- *
- * Since: 3.30
- */
-void
-ide_toolchain_set_exe_wrapper (IdeToolchain  *self,
-                               const gchar   *path)
-{
-  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TOOLCHAIN (self));
-
-  if (g_strcmp0 (path, priv->exe_wrapper) != 0)
-    {
-      g_free (priv->exe_wrapper);
-      priv->exe_wrapper = g_strdup (path);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EXE_WRAPPER]);
-    }
+  IDE_RETURN (ret);
 }
 
 static void
@@ -417,11 +219,6 @@ ide_toolchain_finalize (GObject *object)
 
   g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->host_triplet, ide_triplet_unref);
-  g_clear_pointer (&priv->compilers, g_hash_table_unref);
-  g_clear_pointer (&priv->archiver, g_free);
-  g_clear_pointer (&priv->strip, g_free);
-  g_clear_pointer (&priv->pkg_config, g_free);
-  g_clear_pointer (&priv->exe_wrapper, g_free);
 
   G_OBJECT_CLASS (ide_toolchain_parent_class)->finalize (object);
 }
@@ -441,21 +238,6 @@ ide_toolchain_get_property (GObject    *object,
       break;
     case PROP_HOST_TRIPLET:
       g_value_set_boxed (value, ide_toolchain_get_host_triplet (self));
-      break;
-    case PROP_COMPILERS:
-      g_value_set_boxed (value, ide_toolchain_get_compilers (self));
-      break;
-    case PROP_ARCHIVER:
-      g_value_set_string (value, ide_toolchain_get_archiver (self));
-      break;
-    case PROP_STRIP:
-      g_value_set_string (value, ide_toolchain_get_strip (self));
-      break;
-    case PROP_PKG_CONFIG:
-      g_value_set_string (value, ide_toolchain_get_pkg_config (self));
-      break;
-    case PROP_EXE_WRAPPER:
-      g_value_set_string (value, ide_toolchain_get_exe_wrapper (self));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -478,18 +260,6 @@ ide_toolchain_set_property (GObject      *object,
     case PROP_HOST_TRIPLET:
       ide_toolchain_set_host_triplet (self, g_value_get_boxed (value));
       break;
-    case PROP_ARCHIVER:
-      ide_toolchain_set_archiver (self, g_value_get_string (value));
-      break;
-    case PROP_STRIP:
-      ide_toolchain_set_strip (self, g_value_get_string (value));
-      break;
-    case PROP_PKG_CONFIG:
-      ide_toolchain_set_pkg_config (self, g_value_get_string (value));
-      break;
-    case PROP_EXE_WRAPPER:
-      ide_toolchain_set_exe_wrapper (self, g_value_get_string (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -503,6 +273,9 @@ ide_toolchain_class_init (IdeToolchainClass *klass)
   object_class->finalize = ide_toolchain_finalize;
   object_class->get_property = ide_toolchain_get_property;
   object_class->set_property = ide_toolchain_set_property;
+
+  klass->get_tool_for_language = ide_toolchain_real_get_tool_for_language;
+  klass->get_tools_for_id = ide_toolchain_real_get_tools_for_id;
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
@@ -518,41 +291,6 @@ ide_toolchain_class_init (IdeToolchainClass *klass)
                          IDE_TYPE_TRIPLET,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_COMPILERS] =
-    g_param_spec_boxed ("compilers",
-                         "Compilers",
-                         "The table of languages and compiler executables",
-                         G_TYPE_HASH_TABLE,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_ARCHIVER] =
-    g_param_spec_string ("archiver",
-                         "Archiver",
-                         "The path to the archiver executable",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_STRIP] =
-    g_param_spec_string ("strip",
-                         "Strip",
-                         "The path to the strip executable",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_PKG_CONFIG] =
-    g_param_spec_string ("pkg-config",
-                         "PkgConfig",
-                         "The path to the pkg-config executable",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_EXE_WRAPPER] =
-    g_param_spec_string ("exe-wrapper",
-                         "Exe Wrapper",
-                         "The path of the wrapper to use when running the compiled executables",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
-
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -560,6 +298,5 @@ static void
 ide_toolchain_init (IdeToolchain *self)
 {
   IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
-  priv->compilers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
   priv->host_triplet = ide_triplet_new_from_system ();
 }
