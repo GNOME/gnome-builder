@@ -27,6 +27,10 @@ struct _GbpCMakeToolchain
 {
   IdeToolchain            parent_instance;
   gchar                  *file_path;
+  gchar                  *exe_wrapper;
+  gchar                  *archiver;
+  gchar                  *pkg_config;
+  GHashTable             *compilers;
 };
 
 G_DEFINE_TYPE (GbpCMakeToolchain, gbp_cmake_toolchain, IDE_TYPE_TOOLCHAIN)
@@ -145,8 +149,6 @@ _gbp_cmake_toolchain_parse_keyfile (GbpCMakeToolchain  *self,
   g_autofree gchar *system = NULL;
   g_autofree gchar *system_lowercase = NULL;
   g_autofree gchar *cpu = NULL;
-  g_autofree gchar *exe_wrapper = NULL;
-  g_autofree gchar *ar = NULL;
   g_autofree gchar *pkg_config = NULL;
 
   if (!g_key_file_load_from_file (keyfile, filename, G_KEY_FILE_NONE, NULL))
@@ -161,23 +163,31 @@ _gbp_cmake_toolchain_parse_keyfile (GbpCMakeToolchain  *self,
   host_triplet = ide_triplet_new_with_triplet (cpu, system_lowercase, NULL);
   ide_toolchain_set_host_triplet (IDE_TOOLCHAIN(self), host_triplet);
 
-  exe_wrapper = g_key_file_get_string (keyfile, "binaries", "exe_wrapper", NULL);
-  ide_toolchain_set_exe_wrapper (IDE_TOOLCHAIN(self), exe_wrapper);
-
-  ar = g_key_file_get_string (keyfile, "binaries", "ar", NULL);
-  ide_toolchain_set_archiver (IDE_TOOLCHAIN(self), ar);
-
-  pkg_config = g_key_file_get_string (keyfile, "binaries", "pkg_config", NULL);
-  ide_toolchain_set_pkg_config (IDE_TOOLCHAIN(self), pkg_config);
+  self->exe_wrapper = g_key_file_get_string (keyfile, "binaries", "exe_wrapper", NULL);
+  self->archiver = g_key_file_get_string (keyfile, "binaries", "ar", NULL);
+  self->pkg_config = g_key_file_get_string (keyfile, "binaries", "pkg_config", NULL);
 
   compilers = g_key_file_get_keys (keyfile, "compilers", &compilers_length, NULL);
   for (gint i = 0; i < compilers_length; i++)
     {
       g_autofree gchar *compiler_path = g_key_file_get_string (keyfile, "compilers", compilers[i], NULL);
-      ide_toolchain_set_compiler (IDE_TOOLCHAIN(self), compilers[i], compiler_path);
+      g_hash_table_insert (self->compilers, g_strdup (compilers[i]), g_steal_pointer (&compiler_path));
     }
 
   return TRUE;
+}
+
+const gchar *
+gbp_cmake_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
+                                           const gchar   *language,
+                                           const gchar   *tool_id)
+{
+  GbpCMakeToolchain *self = (GbpCMakeToolchain *)toolchain;
+
+  g_return_val_if_fail (GBP_IS_CMAKE_TOOLCHAIN (self), NULL);
+  g_return_val_if_fail (tool_id != NULL, NULL);
+
+  return NULL;
 }
 
 static void
@@ -271,6 +281,10 @@ gbp_cmake_toolchain_finalize (GObject *object)
   GbpCMakeToolchain *self = (GbpCMakeToolchain *)object;
 
   g_clear_pointer (&self->file_path, g_free);
+  g_clear_pointer (&self->exe_wrapper, g_free);
+  g_clear_pointer (&self->archiver, g_free);
+  g_clear_pointer (&self->pkg_config, g_free);
+  g_clear_pointer (&self->compilers, g_hash_table_unref);
 
   G_OBJECT_CLASS (gbp_cmake_toolchain_parent_class)->finalize (object);
 }
@@ -315,10 +329,13 @@ static void
 gbp_cmake_toolchain_class_init (GbpCMakeToolchainClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeToolchainClass *toolchain_class = IDE_TOOLCHAIN_CLASS (klass);
 
   object_class->finalize = gbp_cmake_toolchain_finalize;
   object_class->get_property = gbp_cmake_toolchain_get_property;
   object_class->set_property = gbp_cmake_toolchain_set_property;
+
+  toolchain_class->get_tool_for_language = gbp_cmake_toolchain_get_tool_for_language;
 
   properties [PROP_FILE_PATH] =
     g_param_spec_string ("file-path",
@@ -333,5 +350,5 @@ gbp_cmake_toolchain_class_init (GbpCMakeToolchainClass *klass)
 static void
 gbp_cmake_toolchain_init (GbpCMakeToolchain *self)
 {
-  
+  self->compilers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 }

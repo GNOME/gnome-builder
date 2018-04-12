@@ -25,6 +25,11 @@ struct _GbpMesonToolchain
 {
   IdeToolchain            parent_instance;
   gchar                  *file_path;
+  gchar                  *exe_wrapper;
+  gchar                  *archiver;
+  gchar                  *pkg_config;
+  gchar                  *strip;
+  GHashTable             *compilers;
 };
 
 G_DEFINE_TYPE (GbpMesonToolchain, gbp_meson_toolchain, IDE_TYPE_TOOLCHAIN)
@@ -107,15 +112,18 @@ gbp_meson_toolchain_new (IdeContext   *context,
       g_autofree gchar *exec_path = NULL;
       g_autoptr(GError) key_error = NULL;
 
-      // Well-known binaries that are not compilers, everything else is considered as a compiler
-      if (g_strcmp0 (lang, "ar") == 0 ||
-          g_strcmp0 (lang, "strip") == 0 ||
-          g_strcmp0 (lang, "pkg_config") == 0 ||
-          g_strcmp0 (lang, "exe_wrapper") == 0)
-        continue;
-
-      exec_path = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
-      ide_toolchain_set_compiler (IDE_TOOLCHAIN (toolchain), lang, exec_path);
+      if (g_strcmp0 (lang, "ar") == 0)
+        toolchain->archiver = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+      else if (g_strcmp0 (lang, "strip") == 0)
+        toolchain->strip = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+      else if (g_strcmp0 (lang, "pkg_config") == 0)
+        toolchain->pkg_config = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+      else if (g_strcmp0 (lang, "exe_wrapper") == 0)
+        toolchain->exe_wrapper = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+      else
+        g_hash_table_insert (toolchain->compilers,
+                             g_strdup (lang),
+                             _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error));
     }
 
   return g_steal_pointer (&toolchain);

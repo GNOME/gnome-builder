@@ -30,6 +30,7 @@
 #include "buildsystem/ide-build-private.h"
 #include "config/ide-configuration.h"
 #include "devices/ide-device.h"
+#include "toolchain/ide-simple-toolchain.h"
 #include "toolchain/ide-toolchain.h"
 #include "toolchain/ide-toolchain-manager.h"
 #include "toolchain/ide-toolchain-provider.h"
@@ -102,7 +103,7 @@ ide_toolchain_manager_initable_init (GInitable     *initable,
 {
   IdeToolchainManager *self = (IdeToolchainManager *)initable;
   IdeContext *context;
-  g_autoptr(IdeToolchain) default_toolchain = NULL;
+  g_autoptr(IdeSimpleToolchain) default_toolchain = NULL;
 
   g_assert (IDE_IS_TOOLCHAIN_MANAGER (self));
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -126,8 +127,8 @@ ide_toolchain_manager_initable_init (GInitable     *initable,
                               ide_toolchain_manager_extension_added,
                               self);
 
-  default_toolchain = ide_toolchain_new (context, "default");
-  ide_toolchain_manager_add (self, default_toolchain);
+  default_toolchain = ide_simple_toolchain_new (context, "default");
+  ide_toolchain_manager_add (self, IDE_TOOLCHAIN (default_toolchain));
 
   return TRUE;
 }
