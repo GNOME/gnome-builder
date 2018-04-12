@@ -22,9 +22,8 @@ executable('gnome-builder', gnome_builder_sources,
       dependencies: gnome_builder_plugins_deps + [libide_dep, gnome_builder_plugins_dep],
 )
 
-executable('fusermount-wrapper', ['fusermount-wrapper.c'],
+executable('fusermount', ['fusermount-wrapper.c'],
            install: get_option('fusermount_wrapper'),
-       install_dir: get_option('bindir'),
             c_args: exe_c_args,
          link_args: exe_link_args,
      install_rpath: pkglibdir_abs,
