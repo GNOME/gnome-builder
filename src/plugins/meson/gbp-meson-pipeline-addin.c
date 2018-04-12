@@ -155,6 +155,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       g_autoptr(IdeTriplet) triplet = NULL;
       g_autofree gchar *crossfile_name = NULL;
       const gchar *binary_path;
+      GHashTable *compilers;
 
       crossfile_name = g_strdup_printf ("gnome-builder-%s.crossfile", ide_toolchain_get_id (toolchain));
       crossbuild_file = ide_build_pipeline_build_builddir_path (pipeline, crossfile_name, NULL);
@@ -162,18 +163,28 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       crossbuild_keyfile = g_key_file_new ();
       triplet = ide_toolchain_get_host_triplet (toolchain);
 
-      g_hash_table_foreach (ide_toolchain_get_compilers (toolchain), (GHFunc)add_lang_executable, crossbuild_keyfile);
+      compilers  = ide_toolchain_get_tools_for_id (toolchain,
+                                                   IDE_TOOLCHAIN_TOOL_CC);
+      g_hash_table_foreach (compilers, (GHFunc)add_lang_executable, crossbuild_keyfile);
 
-      binary_path = ide_toolchain_get_archiver (toolchain);
+      binary_path = ide_toolchain_get_tool_for_language (toolchain,
+                                                         IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                         IDE_TOOLCHAIN_TOOL_AR);
       _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "ar", binary_path);
 
-      binary_path = ide_toolchain_get_strip (toolchain);
+      binary_path = ide_toolchain_get_tool_for_language (toolchain,
+                                                         IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                         IDE_TOOLCHAIN_TOOL_STRIP);
       _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "strip", binary_path);
 
-      binary_path = ide_toolchain_get_pkg_config (toolchain);
+      binary_path = ide_toolchain_get_tool_for_language (toolchain,
+                                                         IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                         IDE_TOOLCHAIN_TOOL_PKG_CONFIG);
       _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "pkgconfig", binary_path);
 
-      binary_path = ide_toolchain_get_exe_wrapper (toolchain);
+      binary_path = ide_toolchain_get_tool_for_language (toolchain,
+                                                         IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                         IDE_TOOLCHAIN_TOOL_EXEC);
       _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "exe_wrapper", binary_path);
 
       binary_path = ide_triplet_get_kernel (triplet);
