@@ -1,4 +1,4 @@
-/* host-exec.c
+/* fusermount-wrapper.c
  *
  * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <errno.h>
 #include <ide.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -27,6 +28,25 @@
 #include "threading/ide-thread-pool.h"
 
 static gint exit_code;
+
+static gboolean
+parse_fd (const gchar *str,
+          gint        *fd)
+{
+  gint64 v = g_ascii_strtoll (str, NULL, 10);
+
+  *fd = -1;
+
+  if (v < 0 || v > G_MAXINT)
+    return FALSE;
+
+  if (v == 0 && errno == EINVAL)
+    return FALSE;
+
+  *fd = v;
+
+  return TRUE;
+}
 
 static void
 wait_cb (IdeSubprocess *subprocess,
@@ -67,9 +87,9 @@ main (int   argc,
   g_autoptr(GDBusConnection) bus = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GMainLoop) main_loop = NULL;
-  g_autofree gchar *argv0 = NULL;
   g_autoptr(GError) error = NULL;
-  g_auto(GStrv) env = NULL;
+  const gchar *env;
+  gint fd = -1;
 
   g_log_set_default_handler (log_func, NULL);
 
@@ -78,23 +98,23 @@ main (int   argc,
   if (!(bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error)))
     g_error ("Failed to connect to session bus: %s", error->message);
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDIN_PIPE |
-  	                                       G_SUBPROCESS_FLAGS_STDERR_PIPE);
+  launcher = ide_subprocess_launcher_new (0);
 
-  argv0 = g_path_get_basename (argv[0]);
-  ide_subprocess_launcher_push_argv (launcher, argv0);
+  ide_subprocess_launcher_push_argv (launcher, "fusermount");
   for (guint i = 1; i < argc; i++)
     ide_subprocess_launcher_push_argv (launcher, argv[i]);
 
-  env = g_get_environ ();
-
   ide_subprocess_launcher_set_cwd (launcher, g_get_current_dir ());
-  ide_subprocess_launcher_set_environ (launcher, (const gchar * const *)env);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_take_stdin_fd (launcher, dup (STDIN_FILENO));
   ide_subprocess_launcher_take_stdout_fd (launcher, dup (STDOUT_FILENO));
   ide_subprocess_launcher_take_stderr_fd (launcher, dup (STDERR_FILENO));
+
+  if ((env = g_getenv ("_FUSE_COMMFD")) && parse_fd (env, &fd) && fd > 2)
+    {
+      ide_subprocess_launcher_setenv (launcher, "_FUSE_COMMFD", env, TRUE);
+      ide_subprocess_launcher_take_fd (launcher, fd, fd);
+    }
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     g_error ("ERROR: %s", error->message);

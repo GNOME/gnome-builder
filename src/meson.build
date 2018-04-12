@@ -22,10 +22,9 @@ executable('gnome-builder', gnome_builder_sources,
       dependencies: gnome_builder_plugins_deps + [libide_dep, gnome_builder_plugins_dep],
 )
 
-# Don't install until we actually start using this
-# install_dir: get_option('libexecdir'),
-executable('ide-host-exec', ['host-exec.c'],
-           install: false,
+executable('fusermount-wrapper', ['fusermount-wrapper.c'],
+           install: get_option('fusermount_wrapper'),
+       install_dir: get_option('bindir'),
             c_args: exe_c_args,
          link_args: exe_link_args,
      install_rpath: pkglibdir_abs,

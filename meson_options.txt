@@ -1,6 +1,7 @@
 option('enable_tracing', type: 'boolean', value: false, description: 'Enable tracing of internals for troubleshooting Builder')
 option('enable_profiling', type: 'boolean', value: false, description: 'Enable profiling of the Builder codebase')
 option('enable_rdtscp', type: 'boolean', value: false, description: 'High performance counters')
+option('fusermount_wrapper', type: 'boolean', value: false, description: 'Install fusermount-wrapper when distributing with flatpak')
 
 option('with_safe_path', type: 'string', value: '', description: 'PATH variable to run build commands (default: platform-specific)')
 option('with_channel',
