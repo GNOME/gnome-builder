@@ -25,6 +25,7 @@
 #include "ide-debug.h"
 
 #include "threading/ide-thread-pool.h"
+#include "threading/ide-thread-private.h"
 
 typedef struct
 {
@@ -70,6 +71,10 @@ enum {
 static inline GThreadPool *
 ide_thread_pool_get_pool (IdeThreadPoolKind kind)
 {
+  /* Fallback to allow using without IdeApplication */
+  if G_UNLIKELY (thread_pools [kind].pool == NULL)
+    _ide_thread_pool_init (TRUE);
+
   return thread_pools [kind].pool;
 }
 
