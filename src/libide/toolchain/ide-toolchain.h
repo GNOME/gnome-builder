@@ -34,50 +34,48 @@ struct _IdeToolchainClass
 {
   IdeObjectClass parent;
 
+  const gchar *(*get_tool_for_language) (IdeToolchain  *self,
+                                         const gchar   *language,
+                                         const gchar   *tool_id);
+
+  GHashTable  *(*get_tools_for_id)      (IdeToolchain  *self,
+                                         const gchar   *tool_id);
+
   gpointer _reserved[12];
 };
 
+#define IDE_TOOLCHAIN_TOOL_CC          "cc"
+#define IDE_TOOLCHAIN_TOOL_CPP         "cpp"
+#define IDE_TOOLCHAIN_TOOL_AR          "ar"
+#define IDE_TOOLCHAIN_TOOL_LD          "ld"
+#define IDE_TOOLCHAIN_TOOL_STRIP       "strip"
+#define IDE_TOOLCHAIN_TOOL_EXEC        "exec"
+#define IDE_TOOLCHAIN_TOOL_PKG_CONFIG  "pkg-config"
+
+#define IDE_TOOLCHAIN_LANGUAGE_ANY       "*"
+#define IDE_TOOLCHAIN_LANGUAGE_C         "c"
+#define IDE_TOOLCHAIN_LANGUAGE_CPLUSPLUS "c++"
+#define IDE_TOOLCHAIN_LANGUAGE_PYTHON    "python"
+#define IDE_TOOLCHAIN_LANGUAGE_VALA      "vala"
+#define IDE_TOOLCHAIN_LANGUAGE_FORTRAN   "fortran"
+#define IDE_TOOLCHAIN_LANGUAGE_D         "d"
+
 IDE_AVAILABLE_IN_3_30
-IdeToolchain  *ide_toolchain_new              (IdeContext    *context,
-                                               const gchar   *id);
+const gchar   *ide_toolchain_get_id                (IdeToolchain  *self);
 IDE_AVAILABLE_IN_3_30
-const gchar   *ide_toolchain_get_id           (IdeToolchain  *self);
+void           ide_toolchain_set_id                (IdeToolchain  *self,
+                                                    const gchar   *id);
 IDE_AVAILABLE_IN_3_30
-void           ide_toolchain_set_id           (IdeToolchain  *self,
-                                               const gchar   *id);
+IdeTriplet    *ide_toolchain_get_host_triplet      (IdeToolchain  *self);
 IDE_AVAILABLE_IN_3_30
-IdeTriplet    *ide_toolchain_get_host_triplet (IdeToolchain  *self);
+void           ide_toolchain_set_host_triplet      (IdeToolchain  *self,
+                                                    IdeTriplet    *host_triplet);
 IDE_AVAILABLE_IN_3_30
-void           ide_toolchain_set_host_triplet (IdeToolchain  *self,
-                                               IdeTriplet    *host_triplet);
+const gchar   *ide_toolchain_get_tool_for_language (IdeToolchain  *self,
+                                                    const gchar   *language,
+                                                    const gchar   *tool_id);
 IDE_AVAILABLE_IN_3_30
-const gchar   *ide_toolchain_get_compiler     (IdeToolchain  *self,
-                                               const gchar   *language);
-IDE_AVAILABLE_IN_3_30
-void           ide_toolchain_set_compiler     (IdeToolchain  *self,
-                                               const gchar   *language,
-                                               const gchar   *path);
-IDE_AVAILABLE_IN_3_30
-GHashTable    *ide_toolchain_get_compilers    (IdeToolchain  *self);
-IDE_AVAILABLE_IN_3_30
-const gchar   *ide_toolchain_get_archiver     (IdeToolchain  *self);
-IDE_AVAILABLE_IN_3_30
-void           ide_toolchain_set_archiver     (IdeToolchain  *self,
-                                               const gchar   *path);
-IDE_AVAILABLE_IN_3_30
-const gchar   *ide_toolchain_get_strip        (IdeToolchain  *self);
-IDE_AVAILABLE_IN_3_30
-void           ide_toolchain_set_strip        (IdeToolchain  *self,
-                                               const gchar   *path);
-IDE_AVAILABLE_IN_3_30
-const gchar   *ide_toolchain_get_pkg_config   (IdeToolchain  *self);
-IDE_AVAILABLE_IN_3_30
-void           ide_toolchain_set_pkg_config   (IdeToolchain  *self,
-                                               const gchar   *path);
-IDE_AVAILABLE_IN_3_30
-const gchar   *ide_toolchain_get_exe_wrapper  (IdeToolchain  *self);
-IDE_AVAILABLE_IN_3_30
-void           ide_toolchain_set_exe_wrapper  (IdeToolchain  *self,
-                                               const gchar   *path);
+GHashTable    *ide_toolchain_get_tools_for_id      (IdeToolchain  *self,
+                                                    const gchar   *tool_id);
 
 G_END_DECLS
