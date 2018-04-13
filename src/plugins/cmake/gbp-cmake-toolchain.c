@@ -31,6 +31,7 @@ struct _GbpCMakeToolchain
   gchar                  *archiver;
   gchar                  *pkg_config;
   GHashTable             *compilers;
+  GCancellable           *verify_cancellable;
 };
 
 G_DEFINE_TYPE (GbpCMakeToolchain, gbp_cmake_toolchain, IDE_TYPE_TOOLCHAIN)
@@ -190,13 +191,11 @@ gbp_cmake_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
   return NULL;
 }
 
-static void
-gbp_cmake_toolchain_verify_worker (IdeTask      *task,
-                                   gpointer      source_object,
-                                   gpointer      task_data,
-                                   GCancellable *cancellable)
+/* It is far easier and more reliable to get the variables from cmake itself,
+ * Here is a small projects that exports the content of the cross-file */
+gboolean
+gbp_cmake_toolchain_verify (GbpCMakeToolchain *self)
 {
-  GbpCMakeToolchain *self = source_object;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *tmp_dir = NULL;
   g_autofree gchar *toolchain_arg = NULL;
@@ -205,7 +204,10 @@ gbp_cmake_toolchain_verify_worker (IdeTask      *task,
 
   g_assert (GBP_IS_CMAKE_TOOLCHAIN (self));
 
-  tmp_dir = _gbp_cmake_toolchain_deploy_temporary_cmake (cancellable);
+  g_clear_object (&self->verify_cancellable);
+  self->verify_cancellable = g_cancellable_new ();
+
+  tmp_dir = _gbp_cmake_toolchain_deploy_temporary_cmake (self->verify_cancellable);
   toolchain_arg = g_strdup_printf ("-DCMAKE_TOOLCHAIN_FILE=%s", self->file_path);
 
   cmake_launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE|G_SUBPROCESS_FLAGS_STDERR_SILENCE);
@@ -213,66 +215,20 @@ gbp_cmake_toolchain_verify_worker (IdeTask      *task,
   ide_subprocess_launcher_push_argv (cmake_launcher, ".");
   ide_subprocess_launcher_push_argv (cmake_launcher, toolchain_arg);
   ide_subprocess_launcher_set_cwd (cmake_launcher, tmp_dir);
-  cmake_subprocess = ide_subprocess_launcher_spawn (cmake_launcher, cancellable, &error);
-  if (!ide_subprocess_wait_check (cmake_subprocess, cancellable, &error))
+  cmake_subprocess = ide_subprocess_launcher_spawn (cmake_launcher, self->verify_cancellable, &error);
+  if (!ide_subprocess_wait_check (cmake_subprocess, self->verify_cancellable, &error))
     {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_INVALID_FILENAME,
-                                 "Error Testing CMake Cross-compilation file : %s",
-                                 self->file_path);
+      g_debug ("Error Testing CMake Cross-compilation file : %s", self->file_path);
       return;
     }
 
   if (!_gbp_cmake_toolchain_parse_keyfile (self, tmp_dir))
     {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_INVALID_FILENAME,
-                                 "Error Testing CMake Cross-compilation file : %s",
-                                 self->file_path);
+      g_debug ("Error Testing CMake Cross-compilation file : %s", self->file_path);
       return;
     }
 
-  ide_task_return_boolean (task, TRUE);
-}
-
-/* It is far easier and more reliable to get the variables from cmake itself,
- * Here is a small projects that exports the content of the cross-file */
-void
-gbp_cmake_toolchain_verify_async (GbpCMakeToolchain    *self,
-                                  GCancellable         *cancellable,
-                                  GAsyncReadyCallback   callback,
-                                  gpointer              user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_CMAKE_TOOLCHAIN (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_run_in_thread (task, gbp_cmake_toolchain_verify_worker);
-
-  IDE_EXIT;
-}
-
-gboolean
-gbp_cmake_toolchain_verify_finish (GbpCMakeToolchain  *self,
-                                   GAsyncResult       *result,
-                                   GError            **error)
-{
-  IdeTask *task = (IdeTask *)result;
-  gboolean ret;
-
-  IDE_ENTRY;
-
-  g_return_val_if_fail (GBP_IS_CMAKE_TOOLCHAIN (self), FALSE);
-
-  ret = ide_task_propagate_boolean (task, error);
-
-  IDE_RETURN (ret);
+  return TRUE;
 }
 
 static void
