@@ -2,8 +2,7 @@ project('gnome-builder', 'c',
           license: 'GPL3+',
           version: '3.29.0',
     meson_version: '>= 0.44.0',
-  default_options: [
-                     'c_std=gnu11',
+  default_options: [ 'c_std=gnu11',
                      'cpp_std=c++11',
                      'warning_level=2',
                      'with_channel=other',
@@ -71,6 +70,7 @@ status += [
   'Profiling ............. : @0@'.format(get_option('enable_profiling')),
   'RDTSCP ................ : @0@'.format(get_option('enable_rdtscp')),
   'fusermount ............ : @0@'.format(get_option('fusermount_wrapper')),
+  'tcmalloc_minimal ...... : @0@'.format(get_option('with_tcmalloc')),
   '',
   'Help Docs ............. : @0@'.format(get_option('with_help')),
   'API Docs .............. : @0@'.format(get_option('with_docs')),
@@ -195,10 +195,16 @@ foreach link_arg: test_link_args
     global_link_args += link_arg
   endif
 endforeach
-add_project_link_arguments(
-  global_link_args,
-  language: 'c'
-)
+add_project_link_arguments(global_link_args, language: 'c')
+
+if get_option('with_tcmalloc')
+  tcmalloc_ldflags = [
+    '-Wl,--push-state,--no-as-needed',
+    '-ltcmalloc_minimal',
+    '-Wl,--pop-state'
+  ]
+  add_project_link_arguments(tcmalloc_ldflags, language: 'c')
+endif
 
 # Check if we can use version scripts for ABI exports
 ld_supports_version_script = cc.links('''
