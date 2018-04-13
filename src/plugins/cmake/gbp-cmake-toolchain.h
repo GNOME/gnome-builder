@@ -32,12 +32,6 @@ GbpCMakeToolchain  *gbp_cmake_toolchain_new           (IdeContext           *con
 const gchar        *gbp_cmake_toolchain_get_file_path (GbpCMakeToolchain    *self);
 void                gbp_cmake_toolchain_set_file_path (GbpCMakeToolchain    *self,
                                                        const gchar          *file_path);
-void                gbp_cmake_toolchain_verify_async  (GbpCMakeToolchain    *self,
-                                                       GCancellable         *cancellable,
-                                                       GAsyncReadyCallback   callback,
-                                                       gpointer              user_data);
-gboolean            gbp_cmake_toolchain_verify_finish (GbpCMakeToolchain    *self,
-                                                       GAsyncResult         *result,
-                                                       GError              **error);
+gboolean            gbp_cmake_toolchain_verify        (GbpCMakeToolchain    *self);
 
 G_END_DECLS
