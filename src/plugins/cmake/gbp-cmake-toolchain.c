@@ -194,9 +194,10 @@ gbp_cmake_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
 /* It is far easier and more reliable to get the variables from cmake itself,
  * Here is a small projects that exports the content of the cross-file */
 gboolean
-gbp_cmake_toolchain_verify (GbpCMakeToolchain *self)
+gbp_cmake_toolchain_load (GbpCMakeToolchain *self,
+                          GFile             *file,
+                          GError           **error)
 {
-  g_autoptr(GError) error = NULL;
   g_autofree gchar *tmp_dir = NULL;
   g_autofree gchar *toolchain_arg = NULL;
   g_autoptr(IdeSubprocessLauncher) cmake_launcher = NULL;
@@ -207,6 +208,9 @@ gbp_cmake_toolchain_verify (GbpCMakeToolchain *self)
   g_clear_object (&self->verify_cancellable);
   self->verify_cancellable = g_cancellable_new ();
 
+  g_clear_pointer (&self->file_path, g_free);
+  self->file_path = g_file_get_path (file);
+
   tmp_dir = _gbp_cmake_toolchain_deploy_temporary_cmake (self->verify_cancellable);
   toolchain_arg = g_strdup_printf ("-DCMAKE_TOOLCHAIN_FILE=%s", self->file_path);
 
@@ -215,18 +219,15 @@ gbp_cmake_toolchain_verify (GbpCMakeToolchain *self)
   ide_subprocess_launcher_push_argv (cmake_launcher, ".");
   ide_subprocess_launcher_push_argv (cmake_launcher, toolchain_arg);
   ide_subprocess_launcher_set_cwd (cmake_launcher, tmp_dir);
-  cmake_subprocess = ide_subprocess_launcher_spawn (cmake_launcher, self->verify_cancellable, &error);
-  if (!ide_subprocess_wait_check (cmake_subprocess, self->verify_cancellable, &error))
-    {
-      g_debug ("Error Testing CMake Cross-compilation file : %s", self->file_path);
-      return;
-    }
+  cmake_subprocess = ide_subprocess_launcher_spawn (cmake_launcher, self->verify_cancellable, error);
+  if (cmake_subprocess == NULL)
+    return FALSE;
+
+  if (!ide_subprocess_wait_check (cmake_subprocess, self->verify_cancellable, error))
+    return FALSE;
 
   if (!_gbp_cmake_toolchain_parse_keyfile (self, tmp_dir))
-    {
-      g_debug ("Error Testing CMake Cross-compilation file : %s", self->file_path);
-      return;
-    }
+    return FALSE;
 
   return TRUE;
 }
