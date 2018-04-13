@@ -27,10 +27,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpMesonToolchain, gbp_meson_toolchain, GBP, MESON_TOOLCHAIN, IdeToolchain)
 
-GbpMesonToolchain  *gbp_meson_toolchain_new              (IdeContext             *context,
-                                                          GFile                  *file);
+GbpMesonToolchain  *gbp_meson_toolchain_new              (IdeContext             *context);
+gboolean            gbp_meson_toolchain_load             (GbpMesonToolchain      *self,
+                                                          GFile                  *file,
+                                                          GError                **error);
 const gchar        *gbp_meson_toolchain_get_file_path    (GbpMesonToolchain      *self);
-void                gbp_meson_toolchain_set_file_path    (GbpMesonToolchain      *self,
-                                                          const gchar            *file_path);
 
 G_END_DECLS
