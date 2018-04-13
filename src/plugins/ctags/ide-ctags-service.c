@@ -473,11 +473,11 @@ ide_ctags_service_queue_mine (IdeCtagsService *self)
   if (self->queued_miner_handler == 0 && self->miner_active == FALSE)
     {
       self->queued_miner_handler =
-        g_timeout_add_full (250,
-                            G_PRIORITY_DEFAULT,
-                            ide_ctags_service_do_mine,
-                            g_object_ref (self),
-                            g_object_unref);
+        g_timeout_add_seconds_full (1,
+                                    G_PRIORITY_DEFAULT,
+                                    ide_ctags_service_do_mine,
+                                    g_object_ref (self),
+                                    g_object_unref);
     }
 }
 
