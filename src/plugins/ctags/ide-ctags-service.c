@@ -444,10 +444,12 @@ ide_ctags_service_do_mine (gpointer data)
   info.recursive = TRUE;
   g_array_append_val (mine_info, info);
 
+#if 0
   /* mine: ~/.tags */
   info.path = g_strdup (g_get_home_dir ());
   info.recursive = FALSE;
   g_array_append_val (mine_info, info);
+#endif
 
   /* mine the project tree */
   info.path = g_file_get_path (workdir);
