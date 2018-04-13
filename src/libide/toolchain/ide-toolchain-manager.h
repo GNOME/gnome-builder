@@ -34,11 +34,4 @@ G_DECLARE_FINAL_TYPE (IdeToolchainManager, ide_toolchain_manager, IDE, TOOLCHAIN
 IDE_AVAILABLE_IN_3_30
 IdeToolchain *ide_toolchain_manager_get_toolchain (IdeToolchainManager  *self,
                                                    const gchar          *id);
-IDE_AVAILABLE_IN_3_30
-void          ide_toolchain_manager_add           (IdeToolchainManager  *self,
-                                                   IdeToolchain         *toolchain);
-IDE_AVAILABLE_IN_3_30
-void          ide_toolchain_manager_remove        (IdeToolchainManager  *self,
-                                                   IdeToolchain         *toolchain);
-
 G_END_DECLS
