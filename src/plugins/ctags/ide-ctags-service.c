@@ -458,6 +458,7 @@ ide_ctags_service_do_mine (gpointer data)
 
   task = g_task_new (self, NULL, NULL, NULL);
   g_task_set_source_tag (task, ide_ctags_service_do_mine);
+  g_task_set_priority (task, G_PRIORITY_LOW + 1000);
   g_task_set_task_data (task, g_steal_pointer (&mine_info), (GDestroyNotify)g_array_unref);
   ide_thread_pool_push_task (IDE_THREAD_POOL_INDEXER, task, ide_ctags_service_miner);
 
