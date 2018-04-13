@@ -2,15 +2,15 @@
 # Copyright (C) 2016 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Abigail Brady <morwen@evilmagic.org>, Bastien Nocera <hadess@hadess.net>, 2016.
-# Bruce Cowan <bruce@bcowan.eu>, 2017, 2018.
+# Bruce Cowan <bruce@bcowan.me.uk>, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-09 00:38+0000\n"
-"PO-Revision-Date: 2018-03-09 14:02+0000\n"
-"Last-Translator: Bruce Cowan <bruce@bcowan.eu>\n"
+"POT-Creation-Date: 2018-03-28 16:13+0000\n"
+"PO-Revision-Date: 2018-04-13 13:08+0100\n"
+"Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
@@ -258,12 +258,12 @@ msgid "The number of seconds after modification before auto saving."
 msgstr "The number of seconds after modification before auto saving."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
-#| msgid "Spaces"
 msgid "Spaces Style"
 msgstr "Spaces Style"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
-msgid "How to apply spaces when reformating text."
+#| msgid "How to apply spaces when reformating text."
+msgid "How to apply spaces when reformatting text."
 msgstr "How to apply spaces when reformatting text."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
@@ -318,7 +318,6 @@ msgstr "Use GNOME night light setting to activate night-mode."
 #. projects. Do NOT change the ASCII double quotes ("") to your
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:32
-#| msgid "Projects"
 msgid "\"Projects\""
 msgstr "\"Projects\""
 
@@ -340,12 +339,10 @@ msgid "Restore previously opened files when loading a project."
 msgstr "Restore previously opened files when loading a project."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:43
-#| msgid "Open File"
 msgid "Show Open Files"
 msgstr "Show Open Files"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:44
-#| msgid "Destination file must be within the project tree."
 msgid "Display the open files list in the project sidebar."
 msgstr "Display the open files list in the project sidebar."
 
@@ -358,7 +355,6 @@ msgid "If the plugin should be enabled"
 msgstr "If the plugin should be enabled"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:7
-#| msgid "The configuration to use from .buildconfig"
 msgid "Selected configuration for building"
 msgstr "Selected configuration for building"
 
@@ -451,7 +447,7 @@ msgstr "The height in pixel units of the bottom panel."
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/application/ide-application.c:684
+#: src/libide/application/ide-application.c:687
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
 #: src/libide/workbench/ide-workbench.c:646
@@ -732,7 +728,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Load or generate a palette using the preferences"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5128
+#: src/libide/sourceview/ide-source-view.c:5127
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Rename"
@@ -764,7 +760,7 @@ msgstr "Learn more about GNOME Builder"
 msgid "Funded By"
 msgstr "Funded By"
 
-#: src/libide/application/ide-application.c:1075
+#: src/libide/application/ide-application.c:1078
 #: src/libide/preferences/ide-preferences-builtin.c:409
 msgid "Projects"
 msgstr "Projects"
@@ -826,7 +822,6 @@ msgid "No such tool"
 msgstr "No such tool"
 
 #: src/libide/application/ide-application-command-line.c:405
-#| msgid "Please provide a worker type"
 msgid "Please provide a worker plugin"
 msgstr "Please provide a worker plugin"
 
@@ -873,8 +868,6 @@ msgid "Preferences"
 msgstr "Preferences"
 
 #: src/libide/application/ide-application-shortcuts.c:57
-#| msgctxt "shortcut window"
-#| msgid "Show the shortcuts window"
 msgctxt "shortcut window"
 msgid "Show the preferences window"
 msgstr "Show the preferences window"
@@ -890,7 +883,7 @@ msgstr "Show the shortcuts window"
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Failed to establish a monitor for background changes: %s"
 
-#: src/libide/buffers/ide-buffer.c:2844
+#: src/libide/buffers/ide-buffer.c:2842
 msgid "The current language lacks a symbol resolver."
 msgstr "The current language lacks a symbol resolver."
 
@@ -898,7 +891,7 @@ msgstr "The current language lacks a symbol resolver."
 msgid "File too large to be opened."
 msgstr "File too large to be opened."
 
-#: src/libide/buffers/ide-buffer-manager.c:1968
+#: src/libide/buffers/ide-buffer-manager.c:1989
 #, c-format
 msgid "unsaved document %u"
 msgstr "unsaved document %u"
@@ -907,8 +900,8 @@ msgstr "unsaved document %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:2007
-#: src/libide/buffers/ide-buffer-manager.c:2070
+#: src/libide/buffers/ide-buffer-manager.c:2028
+#: src/libide/buffers/ide-buffer-manager.c:2091
 #: src/libide/editor/ide-editor-view-actions.c:189
 #: src/libide/editor/ide-editor-view-actions.c:310
 #, c-format
@@ -918,7 +911,6 @@ msgstr "Failed to save file: %s"
 #. translators: %s is replaced with the error message
 #: src/libide/buffers/ide-unsaved-files.c:250
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to save draft: %s"
 msgstr "Failed to save draft: %s"
 
@@ -928,15 +920,13 @@ msgstr "Failed to save draft: %s"
 msgid "%s (Copy)"
 msgstr "%s (Copy)"
 
-#: src/libide/buildsystem/ide-build-manager.c:367
+#: src/libide/buildsystem/ide-build-manager.c:369
 #, c-format
-#| msgid "Failed to initialize defaults."
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Failed to initialise build pipeline: %s"
 
-#: src/libide/buildsystem/ide-build-manager.c:424
+#: src/libide/buildsystem/ide-build-manager.c:426
 #, c-format
-#| msgid "Failed to create translation unit: %s"
 msgid "Failed to get device information: %s"
 msgstr "Failed to get device information: %s"
 
@@ -945,7 +935,6 @@ msgid "The build pipeline is in a failed state"
 msgstr "The build pipeline is in a failed state"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:761
-#| msgid "Edit build configuration"
 msgid "The build configuration has errors"
 msgstr "The build configuration has errors"
 
@@ -959,7 +948,7 @@ msgstr "Cleaning…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2900
 #: src/libide/buildsystem/ide-build-pipeline.c:2957
-#: src/libide/workbench/ide-omni-bar.c:531
+#: src/libide/workbench/ide-omni-bar.c:557
 msgid "Failed"
 msgstr "Failed"
 
@@ -993,7 +982,6 @@ msgid "Installing…"
 msgstr "Installing…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2941
-#| msgid "Configuring…"
 msgid "Committing…"
 msgstr "Committing…"
 
@@ -1003,7 +991,7 @@ msgstr "Exporting…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2949
 #: src/libide/buildsystem/ide-build-pipeline.c:2953
-#: src/libide/workbench/ide-omni-bar.c:549
+#: src/libide/workbench/ide-omni-bar.c:584
 msgid "Success"
 msgstr "Success"
 
@@ -1064,7 +1052,7 @@ msgid "Configure Options"
 msgstr "Configure Options"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:189
-#: src/libide/workbench/ide-omni-bar.ui:315
+#: src/libide/workbench/ide-omni-bar.ui:314
 msgid "Runtime"
 msgstr "Runtime"
 
@@ -1098,7 +1086,7 @@ msgid "Clear build log"
 msgstr "Clear build log"
 
 #: src/libide/buildui/ide-build-log-panel.ui:49
-#: src/libide/workbench/ide-omni-bar.ui:159
+#: src/libide/workbench/ide-omni-bar.ui:158
 msgid "Cancel build"
 msgstr "Cancel build"
 
@@ -1108,21 +1096,21 @@ msgstr "Save build log"
 
 #: src/libide/buildui/ide-build-panel.c:109
 #: src/libide/buildui/ide-build-panel.c:185
-#: src/libide/buildui/ide-build-panel.c:223
+#: src/libide/buildui/ide-build-panel.c:222
 #: src/libide/buildui/ide-build-panel.ui:139
-#: src/libide/workbench/ide-omni-bar.ui:503
+#: src/libide/workbench/ide-omni-bar.ui:502
 msgid "Warnings"
 msgstr "Warnings"
 
 #: src/libide/buildui/ide-build-panel.c:118
 #: src/libide/buildui/ide-build-panel.c:186
-#: src/libide/buildui/ide-build-panel.c:224
+#: src/libide/buildui/ide-build-panel.c:223
 #: src/libide/buildui/ide-build-panel.ui:160
-#: src/libide/workbench/ide-omni-bar.ui:475
+#: src/libide/workbench/ide-omni-bar.ui:474
 msgid "Errors"
 msgstr "Errors"
 
-#: src/libide/buildui/ide-build-panel.c:666
+#: src/libide/buildui/ide-build-panel.c:665
 #: src/libide/buildui/ide-build-workbench-addin.c:171
 msgid "Build Issues"
 msgstr "Build Issues"
@@ -1141,7 +1129,6 @@ msgid "—"
 msgstr "—"
 
 #: src/libide/buildui/ide-build-panel.ui:81
-#| msgid "Build status"
 msgid "Build Details"
 msgstr "Build Details"
 
@@ -1308,12 +1295,17 @@ msgstr "Location"
 msgid "Binary"
 msgstr "Binary"
 
-#: src/libide/debugger/ide-debug-manager.c:968
+#: src/libide/debugger/ide-debug-manager.c:970
 #, c-format
 msgid "A suitable debugger could not be found."
 msgstr "A suitable debugger could not be found."
 
-#: src/libide/devices/ide-device-manager.c:714
+#: src/libide/devices/ide-device-manager.c:577
+#| msgid "Device"
+msgid "Devices"
+msgstr "Devices"
+
+#: src/libide/devices/ide-device-manager.c:725
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Cannot deploy to device, build pipeline is not initialised"
 
@@ -1448,7 +1440,7 @@ msgstr "Open File"
 #: src/libide/greeter/ide-greeter-perspective.c:318
 #: src/libide/workbench/ide-workbench-actions.c:81
 #: src/plugins/color-picker/gb-color-picker-prefs.c:207
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:360
 msgid "Open"
 msgstr "Open"
 
@@ -1461,8 +1453,8 @@ msgstr "Open"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:95
 #: src/plugins/color-picker/gb-color-picker-prefs.c:211
 #: src/plugins/color-picker/gb-color-picker-prefs.c:238
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:362
-#: src/plugins/terminal/gb-terminal-view-actions.c:271
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
+#: src/plugins/terminal/gb-terminal-view-actions.c:274
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -1478,7 +1470,6 @@ msgstr "Cancel"
 #: src/libide/editor/ide-editor-view-shortcuts.c:61
 #: src/libide/editor/ide-editor-view-shortcuts.c:67
 #: src/libide/editor/ide-editor-view-shortcuts.c:73
-#: src/libide/editor/ide-editor-view-shortcuts.c:79
 #: src/libide/layout/ide-layout-stack-shortcuts.c:32
 #: src/libide/layout/ide-layout-stack-shortcuts.c:39
 #: src/libide/layout/ide-layout-stack-shortcuts.c:46
@@ -1490,6 +1481,7 @@ msgstr "Cancel"
 #: src/plugins/project-tree/gb-project-tree-shortcuts.c:33
 #: src/plugins/project-tree/gb-project-tree-shortcuts.c:39
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:100
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:54
 msgctxt "shortcut window"
 msgid "Editor shortcuts"
 msgstr "Editor shortcuts"
@@ -1652,7 +1644,7 @@ msgstr "Print failed: %s"
 #: src/libide/editor/ide-editor-view-actions.c:244
 #: src/plugins/color-picker/gb-color-picker-prefs.c:234
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: src/plugins/terminal/gb-terminal-view-actions.c:272
+#: src/plugins/terminal/gb-terminal-view-actions.c:275
 msgid "Save"
 msgstr "Save"
 
@@ -1683,7 +1675,6 @@ msgstr "Save the document with a new name"
 #: src/libide/editor/ide-editor-view-shortcuts.c:62
 #: src/libide/editor/ide-editor-view-shortcuts.c:68
 #: src/libide/editor/ide-editor-view-shortcuts.c:74
-#: src/libide/editor/ide-editor-view-shortcuts.c:80
 #: src/libide/keybindings/ide-shortcuts-window.ui:144
 #: src/libide/keybindings/ide-shortcuts-window.ui:156
 msgctxt "shortcut window"
@@ -1715,12 +1706,6 @@ msgstr "Move to the next error"
 msgctxt "shortcut window"
 msgid "Move to the previous error"
 msgstr "Move to the previous error"
-
-#: src/libide/editor/ide-editor-view-shortcuts.c:81
-#: src/libide/keybindings/ide-shortcuts-window.ui:163
-msgctxt "shortcut window"
-msgid "Find the next match"
-msgstr "Find the next match"
 
 #: src/libide/editor/ide-editor-view.ui:43
 msgid "_Reload"
@@ -1763,7 +1748,6 @@ msgstr ""
 "undone."
 
 #: src/libide/greeter/ide-greeter-perspective.c:1190
-#| msgid "Recent Projects"
 msgid "Delete Project Files"
 msgstr "Delete Project Files"
 
@@ -1781,7 +1765,6 @@ msgid "_Remove"
 msgstr "_Remove"
 
 #: src/libide/greeter/ide-greeter-perspective.ui:124
-#| msgid "Recent Projects"
 msgid "Remove Project Files…"
 msgstr "Remove Project Files…"
 
@@ -1832,7 +1815,6 @@ msgid "_Open Project"
 msgstr "_Open Project"
 
 #: src/libide/gtk/menus.ui:15
-#| msgid "Repository URL"
 msgid "_Clone Repository"
 msgstr "_Clone Repository"
 
@@ -2071,6 +2053,11 @@ msgctxt "shortcut window"
 msgid "Show list of open documents"
 msgstr "Show list of open documents"
 
+#: src/libide/keybindings/ide-shortcuts-window.ui:163
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "Find the next match"
+
 #: src/libide/keybindings/ide-shortcuts-window.ui:170
 msgctxt "shortcut window"
 msgid "Find the previous match"
@@ -2294,7 +2281,6 @@ msgstr "Find text within terminal"
 #. translators: %s is replaced with the error message
 #: src/libide/langserv/ide-langserv-client.c:894
 #, c-format
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize language server: %s"
 msgstr "Failed to initialise language server: %s"
 
@@ -2388,7 +2374,6 @@ msgid "Themes"
 msgstr "Themes"
 
 #: src/libide/preferences/ide-preferences-builtin.c:99
-#| msgid "Dark Theme"
 msgid "Dark Mode"
 msgstr "Dark Mode"
 
@@ -2401,18 +2386,14 @@ msgid "dark theme"
 msgstr "dark theme"
 
 #: src/libide/preferences/ide-preferences-builtin.c:100
-#| msgid "Highlight"
 msgid "Night Light"
 msgstr "Night Light"
 
 #: src/libide/preferences/ide-preferences-builtin.c:100
-#| msgid "Automatically indent"
 msgid "Automatically enable dark mode at night"
 msgstr "Automatically enable dark mode at night"
 
 #: src/libide/preferences/ide-preferences-builtin.c:100
-#| msgctxt "shortcut window"
-#| msgid "Clear highlight"
 msgid "follow night light"
 msgstr "follow night light"
 
@@ -2492,7 +2473,6 @@ msgstr ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 
 #: src/libide/preferences/ide-preferences-builtin.c:154
-#| msgid "Display line numbers"
 msgid "Display list of open files"
 msgstr "Display list of open files"
 
@@ -2736,7 +2716,6 @@ msgid "Insert matching character for { [ ( or \""
 msgstr "Insert matching character for { [ ( or \""
 
 #: src/libide/preferences/ide-preferences-builtin.c:325
-#| msgid "Insert trailing newline"
 msgid "Insert Trailing Newline"
 msgstr "Insert Trailing Newline"
 
@@ -2785,7 +2764,6 @@ msgid "Indent source code as you type"
 msgstr "Indent source code as you type"
 
 #: src/libide/preferences/ide-preferences-builtin.c:336
-#| msgid "Spaces"
 msgid "Spacing"
 msgstr "Spacing"
 
@@ -2794,9 +2772,8 @@ msgid "Space before opening parentheses"
 msgstr "Space before opening brackets"
 
 #: src/libide/preferences/ide-preferences-builtin.c:338
-#| msgid "Matching brackets"
 msgid "Space before opening brackets"
-msgstr "Space before opening brackets"
+msgstr "Space before opening square brackets"
 
 #: src/libide/preferences/ide-preferences-builtin.c:339
 msgid "Space before opening braces"
@@ -2807,17 +2784,14 @@ msgid "Space before opening angles"
 msgstr "Space before opening angle brackets"
 
 #: src/libide/preferences/ide-preferences-builtin.c:341
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before colons"
 msgstr "Prefer a space before colons"
 
 #: src/libide/preferences/ide-preferences-builtin.c:342
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before commas"
 msgstr "Prefer a space before commas"
 
 #: src/libide/preferences/ide-preferences-builtin.c:343
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer a space before semicolons"
 msgstr "Prefer a space before semicolons"
 
@@ -2950,21 +2924,21 @@ msgstr "Replace “%s” with “%s”"
 msgid "Apply Fix-It"
 msgstr "Apply Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:5127
+#: src/libide/sourceview/ide-source-view.c:5126
 msgid "Rename symbol"
 msgstr "Rename symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5361
+#: src/libide/sourceview/ide-source-view.c:5360
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Line %u, Column %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5387
+#: src/libide/sourceview/ide-source-view.c:5386
 msgid "No references were found"
 msgstr "No references were found"
 
-#: src/libide/sourceview/ide-word-completion-provider.c:558
+#: src/libide/sourceview/ide-word-completion-provider.c:557
 msgid "Builder Word Completion"
 msgstr "Builder Word Completion"
 
@@ -2985,17 +2959,14 @@ msgid "Run _all tests"
 msgstr "Run _all tests"
 
 #: src/libide/testing/gtk/menus.ui:12
-#| msgid "_Reload"
 msgid "Reload tests"
 msgstr "Reload tests"
 
 #: src/libide/testing/ide-test-editor-addin.c:73
-#| msgid "Units:"
 msgid "Unit Tests"
 msgstr "Unit Tests"
 
 #: src/libide/testing/ide-test-panel.ui:12
-#| msgid "No beautifier available"
 msgid "No tests available"
 msgstr "No tests available"
 
@@ -3071,71 +3042,69 @@ msgstr "Could not parse “%s” as absolute URI"
 msgid "URI “%s” has no host component"
 msgstr "URI “%s” has no host component"
 
-#: src/libide/workbench/ide-omni-bar.c:511
+#: src/libide/workbench/ide-omni-bar.c:528
 msgid "Building"
 msgstr "Building"
 
-#: src/libide/workbench/ide-omni-bar.ui:224
+#: src/libide/workbench/ide-omni-bar.ui:223
 msgid "Update project dependencies"
 msgstr "Update project dependencies"
 
-#: src/libide/workbench/ide-omni-bar.ui:243
+#: src/libide/workbench/ide-omni-bar.ui:242
 msgid "Configure build preferences"
 msgstr "Configure build preferences"
 
-#: src/libide/workbench/ide-omni-bar.ui:265
+#: src/libide/workbench/ide-omni-bar.ui:264
 msgid "Branch"
 msgstr "Branch"
 
-#: src/libide/workbench/ide-omni-bar.ui:290
+#: src/libide/workbench/ide-omni-bar.ui:289
 msgid "Build Profile"
 msgstr "Build Profile"
 
-#: src/libide/workbench/ide-omni-bar.ui:345
-#| msgid "The name of the build configuration"
+#: src/libide/workbench/ide-omni-bar.ui:344
 msgid "There is a problem with the current build configuration."
 msgstr "There is a problem with the current build configuration."
 
-#: src/libide/workbench/ide-omni-bar.ui:378
+#: src/libide/workbench/ide-omni-bar.ui:377
 msgid "Build status"
 msgstr "Build status"
 
-#: src/libide/workbench/ide-omni-bar.ui:399
+#: src/libide/workbench/ide-omni-bar.ui:398
 msgid "View build console contents"
 msgstr "View build console contents"
 
-#: src/libide/workbench/ide-omni-bar.ui:421
+#: src/libide/workbench/ide-omni-bar.ui:420
 msgid "Last build"
 msgstr "Last build"
 
-#: src/libide/workbench/ide-omni-bar.ui:448
+#: src/libide/workbench/ide-omni-bar.ui:447
 msgid "Build result"
 msgstr "Build result"
 
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
-#: src/libide/workbench/ide-omni-bar.ui:541
+#: src/libide/workbench/ide-omni-bar.ui:540
 msgid "true"
 msgstr "true"
 
-#: src/libide/workbench/ide-omni-bar.ui:546
-#| msgid "Build"
+#: src/libide/workbench/ide-omni-bar.ui:545
 msgctxt "button"
 msgid "Build"
 msgstr "Build"
 
-#: src/libide/workbench/ide-omni-bar.ui:553
+#: src/libide/workbench/ide-omni-bar.ui:552
 msgid "Rebuild"
 msgstr "Rebuild"
 
-#: src/libide/workbench/ide-omni-bar.ui:560
+#: src/libide/workbench/ide-omni-bar.ui:559
 msgid "Clean"
 msgstr "Clean"
 
-#: src/libide/workbench/ide-omni-bar.ui:567
+#: src/libide/workbench/ide-omni-bar.ui:566
 msgid "Export Bundle"
 msgstr "Export Bundle"
 
-#: src/libide/workbench/ide-omni-bar.ui:592 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:591 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Build project"
 
@@ -3176,7 +3145,6 @@ msgid "Trigger a build"
 msgstr "Trigger a build"
 
 #: src/libide/workbench/ide-workbench-shortcuts.c:53
-#| msgid "All files"
 msgctxt "shortcut window"
 msgid "Save all files"
 msgstr "Save all files"
@@ -3199,14 +3167,12 @@ msgid "Building cache…"
 msgstr "Building cache…"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
-#| msgid "Host operating system"
 msgid "Bootstrapping build system"
 msgstr "Bootstrapping build system"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:140
 #: src/plugins/phpize/phpize_plugin.py:226
-#| msgid "Configuring…"
 msgid "Configuring project"
 msgstr "Configuring project"
 
@@ -3215,7 +3181,6 @@ msgstr "Configuring project"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:169
 #: src/plugins/phpize/phpize_plugin.py:238
-#| msgid "Build project"
 msgid "Building project"
 msgstr "Building project"
 
@@ -3322,7 +3287,6 @@ msgstr ""
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:405
 #, c-format
-#| msgid "No beautifier available for “%s”"
 msgid "Beautifier plugin: “%s”"
 msgstr "Beautifier plugin: “%s”"
 
@@ -3395,16 +3359,16 @@ msgstr ""
 "temporary directory: “%s”"
 
 #. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:269
+#: src/plugins/beautifier/gb-beautifier-process.c:262
 #, c-format
 msgid "Beautifier plugin: command error output: %s"
 msgstr "Beautifier plugin: command error output: %s"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:279
+#: src/plugins/beautifier/gb-beautifier-process.c:272
 msgid "Beautifier plugin: the command output is empty"
 msgstr "Beautifier plugin: the command output is empty"
 
-#: src/plugins/beautifier/gb-beautifier-process.c:306
+#: src/plugins/beautifier/gb-beautifier-process.c:299
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
 msgstr "Beautify plugin: the output is not a valid UTF-8 text"
 
@@ -3464,14 +3428,12 @@ msgid "CMake"
 msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:161
-#| msgid "Clone Project"
 msgid "Configure project"
 msgstr "Configure project"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:179
 #: src/plugins/phpize/phpize_plugin.py:248
-#| msgid "Installing rust "
 msgid "Installing project"
 msgstr "Installing project"
 
@@ -3766,7 +3728,6 @@ msgstr "Use the entry below to execute a command"
 #. translators: %s is replaced with the error message
 #: src/plugins/command-bar/gb-command-vim.c:104
 #, c-format
-#| msgid "Command not found: %s"
 msgid "Command failed: %s"
 msgstr "Command failed: %s"
 
@@ -4035,6 +3996,12 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Downloading application sources…"
 
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:660
+#, c-format
+#| msgid "Failed to rename file: %s"
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Failed to remove flatpak manifest: %s"
+
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
 msgstr "Network is not available, skipping downloads"
@@ -4052,30 +4019,27 @@ msgstr "Clone"
 msgid "Creating flatpak workspace"
 msgstr "Creating flatpak workspace"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:265
-#| msgid "Projects directory"
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:329
 msgid "Preparing build directory"
 msgstr "Preparing build directory"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:305
-#| msgid "_Download Dependencies"
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:380
 msgid "Downloading dependencies"
 msgstr "Downloading dependencies"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:385
-#| msgid "Building dependencies…"
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:460
 msgid "Building dependencies"
 msgstr "Building dependencies"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:437
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
 msgid "Finalizing flatpak build"
 msgstr "Finalizing flatpak build"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:483
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:558
 msgid "Exporting staging directory"
 msgstr "Exporting staging directory"
 
-#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:570
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
 msgid "Creating flatpak bundle"
 msgstr "Creating flatpak bundle"
 
@@ -4113,42 +4077,37 @@ msgstr[1] "Show %u more runtimes"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Runtimes"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:776
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:771
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:778
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:773
 #, c-format
-#| msgid "%s <b>%s</b> <span variant='smallcaps'>%s</span>"
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 
 #. Translators: %s is replaced with the runtime identifier
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:78
 #, c-format
-#| msgid "Updated %s %s"
 msgid "Updated %s"
 msgstr "Updated %s"
 
 #. Translators: %s is replaced with the runtime identifier
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:81
 #, c-format
-#| msgid "Updating %s %s"
 msgid "Updating %s"
 msgstr "Updating %s"
 
 #. Translators: %s is replaced with the runtime identifier
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:87
 #, c-format
-#| msgid "Installed %s %s"
 msgid "Installed %s"
 msgstr "Installed %s"
 
 #. Translators: %s is replaced with the runtime identifier
 #: src/plugins/flatpak/gbp-flatpak-transfer.c:90
 #, c-format
-#| msgid "Installing "
 msgid "Installing %s"
 msgstr "Installing %s"
 
@@ -4244,7 +4203,6 @@ msgstr ""
 #. translators: %s is replaced with the error message
 #: src/plugins/git/ide-git-vcs.c:365
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to establish git file monitor: %s"
 msgstr "Failed to establish git file monitor: %s"
 
@@ -4306,17 +4264,14 @@ msgid "Use Jedi to provide completions for the Python language"
 msgstr "Use Jedi to provide completions for the Python language"
 
 #: src/plugins/make/make_plugin.py:137
-#| msgid "Installing rust "
 msgid "Install project"
 msgstr "Install project"
 
 #: src/plugins/make/make_plugin.py:359
-#| msgid "Empty Project"
 msgid "Empty Makefile Project"
 msgstr "Empty Makefile Project"
 
 #: src/plugins/make/make_plugin.py:361
-#| msgid "Create a new empty project"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Create a new empty project using a simple Makefile"
 
@@ -4353,7 +4308,6 @@ msgid "Messages"
 msgstr "Messages"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:12
-#| msgid "Create from existing project"
 msgid "Contribute to an existing project"
 msgstr "Contribute to an existing project"
 
@@ -4408,12 +4362,10 @@ msgid "Project “%s” failed to build"
 msgstr "Project “%s” failed to build"
 
 #: src/plugins/npm/npm_plugin.py:102
-#| msgid "_Download Dependencies"
 msgid "Downloading npm dependencies"
 msgstr "Downloading npm dependencies"
 
 #: src/plugins/phpize/phpize_plugin.py:210
-#| msgid "Bootstrapping…"
 msgid "Bootstrapping project"
 msgstr "Bootstrapping project"
 
@@ -4448,21 +4400,18 @@ msgstr "Cannot load a non-native file in terminal"
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:354
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to spawn terminal: %s"
 msgstr "Failed to spawn terminal: %s"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:619
 #, c-format
-#| msgid "Failed to save file: %s"
 msgid "Failed to rename file: %s"
 msgstr "Failed to rename file: %s"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:710
 #, c-format
-#| msgid "Failed to load file: %s"
 msgid "Failed to trash file: %s"
 msgstr "Failed to move file to wastebasket: %s"
 
@@ -4556,18 +4505,16 @@ msgid "_Refresh"
 msgstr "_Refresh"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
-#: src/plugins/qemu/gbp-qemu-device-provider.c:40
-#| msgid "Emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
 msgid "Aarch64 Emulation"
 msgstr "Aarch64 Emulation"
 
-#: src/plugins/qemu/gbp-qemu-device-provider.c:41
-#| msgid "Emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Arm Emulation"
 msgstr "Arm Emulation"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:122
+#: src/plugins/qemu/gbp-qemu-device-provider.c:156
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "My Computer (%s) %s"
@@ -4734,7 +4681,6 @@ msgstr "Show the spellchecker panel"
 #.
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:139
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:246
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize spellchecking, disabling"
 msgstr "Failed to initialise spellchecking, disabling"
 
@@ -4832,12 +4778,25 @@ msgstr ""
 "The support log file has been written to “%s”. Please provide this file as "
 "an attachment on your bug report or support request."
 
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:279
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
+#| msgid "Symbols"
+msgctxt "shortcut window"
+msgid "Symbols"
+msgstr "Symbols"
+
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:56
+#| msgctxt "shortcut window"
+#| msgid "Switch to the next document"
+msgctxt "shortcut window"
+msgid "Search symbols within document"
+msgstr "Search symbols within document"
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:304
 msgid "Select Symbol…"
 msgstr "Select Symbol…"
 
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:76
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:77
 msgid "Document Outline"
 msgstr "Document Outline"
 
@@ -4871,19 +4830,19 @@ msgstr ""
 msgid "CPU"
 msgstr "CPU"
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:358
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:357
 msgid "Open Profile"
 msgstr "Open Profile"
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:367
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:366
 msgid "Sysprof Capture (*.syscap)"
 msgstr "Sysprof Capture (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:373
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:372
 msgid "All Files"
 msgstr "All Files"
 
-#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:474
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:473
 #: src/plugins/sysprof/gtk/menus.ui:34
 msgid "Run with Profiler"
 msgstr "Run with Profiler"
@@ -4892,11 +4851,11 @@ msgstr "Run with Profiler"
 msgid "Open Sysprof Capture…"
 msgstr "Open Sysprof Capture…"
 
-#: src/plugins/terminal/gb-terminal-view-actions.c:263
+#: src/plugins/terminal/gb-terminal-view-actions.c:266
 msgid "Save Terminal Content As"
 msgstr "Save Terminal Content As"
 
-#: src/plugins/terminal/gb-terminal-view.c:418
+#: src/plugins/terminal/gb-terminal-view.c:347
 msgid "Untitled terminal"
 msgstr "Untitled terminal"
 
@@ -4905,7 +4864,6 @@ msgid "Application Output"
 msgstr "Application Output"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:216
-#| msgid "Application Output"
 msgid "Application exited\r\n"
 msgstr "Application exited\r\n"
 
@@ -4922,7 +4880,6 @@ msgid "New _Build Terminal"
 msgstr "New _Build Terminal"
 
 #: src/plugins/terminal/gtk/menus.ui:54
-#| msgid "New terminal"
 msgid "New terminal in directory"
 msgstr "New terminal in directory"
 
@@ -4948,8 +4905,8 @@ msgstr "vala diagnostics warnings errors"
 msgid "Run with Valgrind"
 msgstr "Run with Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:579
-#: src/plugins/xml-pack/ide-xml-tree-builder.c:524
+#: src/plugins/xml-pack/ide-xml-parser.c:582
+#: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Failed to create the XML tree."
 
@@ -4992,9 +4949,6 @@ msgstr "Buffer loaded but not in the buffer manager."
 
 #~ msgid "Failed to save buffer, ignoring reclamation."
 #~ msgstr "Failed to save buffer, ignoring reclamation."
-
-#~ msgid "Device"
-#~ msgstr "Device"
 
 #~ msgid "========================\n"
 #~ msgstr "========================\n"
@@ -5434,6 +5388,3 @@ msgstr "Buffer loaded but not in the buffer manager."
 
 #~ msgid "Current language does not support symbol resolvers"
 #~ msgstr "Current language does not support symbol resolvers"
-
-#~ msgid "Symbols"
-#~ msgstr "Symbols"
