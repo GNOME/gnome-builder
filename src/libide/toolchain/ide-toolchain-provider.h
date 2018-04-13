@@ -35,17 +35,38 @@ struct _IdeToolchainProviderInterface
 {
   GTypeInterface parent_iface;
 
-  void        (*load)             (IdeToolchainProvider  *self,
-                                   IdeToolchainManager   *manager);
+  void        (*load_async)       (IdeToolchainProvider  *self,
+                                   GCancellable          *cancellable,
+                                   GAsyncReadyCallback    callback,
+                                   gpointer               user_data);
+  gboolean    (*load_finish)      (IdeToolchainProvider  *self,
+                                   GAsyncResult          *result,
+                                   GError               **error);
   void        (*unload)           (IdeToolchainProvider  *self,
                                    IdeToolchainManager   *manager);
+  void        (*added)            (IdeToolchainProvider  *self,
+                                   IdeToolchain          *toolchain);
+  void        (*removed)          (IdeToolchainProvider  *self,
+                                   IdeToolchain          *toolchain);
 };
 
 IDE_AVAILABLE_IN_3_30
-void        ide_toolchain_provider_load   (IdeToolchainProvider  *self,
-                                           IdeToolchainManager   *manager);
+void        ide_toolchain_provider_load_async   (IdeToolchainProvider  *self,
+                                                 GCancellable          *cancellable,
+                                                 GAsyncReadyCallback    callback,
+                                                 gpointer               user_data);
 IDE_AVAILABLE_IN_3_30
-void        ide_toolchain_provider_unload (IdeToolchainProvider  *self,
-                                           IdeToolchainManager   *manager);
+gboolean    ide_toolchain_provider_load_finish  (IdeToolchainProvider  *self,
+                                                 GAsyncResult          *result,
+                                                 GError               **error);
+IDE_AVAILABLE_IN_3_30
+void        ide_toolchain_provider_unload       (IdeToolchainProvider  *self,
+                                                 IdeToolchainManager   *manager);
+IDE_AVAILABLE_IN_3_28
+void        ide_toolchain_provider_emit_added   (IdeToolchainProvider  *self,
+                                                 IdeToolchain          *toolchain);
+IDE_AVAILABLE_IN_3_28
+void        ide_toolchain_provider_emit_removed (IdeToolchainProvider  *self,
+                                                 IdeToolchain          *toolchain);
 
 G_END_DECLS
