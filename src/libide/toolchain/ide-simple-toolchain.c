@@ -45,6 +45,59 @@ ide_simple_toolchain_new (IdeContext   *context,
                        NULL);
 }
 
+typedef struct
+{
+  GHashTable  *found_tools;
+  const gchar *tool_id;
+} SimpleToolchainToolFind;
+
+static void
+tools_find_all_id (gpointer key,
+                   gpointer value,
+                   gpointer user_data)
+{
+  const gchar *tool_key = key;
+  const gchar *tool_path = value;
+  SimpleToolchainToolFind *tool_find = user_data;
+  g_auto(GStrv) tool_parts = NULL;
+
+  g_assert (tool_key != NULL);
+  g_assert (tool_find != NULL);
+
+  tool_parts = g_strsplit (tool_key, ":", 2);
+
+  g_return_if_fail (tool_parts != NULL);
+
+  if (g_strcmp0 (tool_parts[0], tool_find->tool_id) == 0)
+    g_hash_table_insert (tool_find->found_tools, g_strdup (tool_parts[1]), g_strdup (tool_path));
+}
+
+GHashTable *
+ide_simple_toolchain_get_tools_for_id (IdeToolchain  *toolchain,
+                                       const gchar   *tool_id)
+{
+  IdeSimpleToolchain *self = (IdeSimpleToolchain *)toolchain;
+  IdeSimpleToolchainPrivate *priv;
+  SimpleToolchainToolFind *tool_find;
+  g_autoptr(GHashTable) found_tools;
+
+  g_return_val_if_fail (IDE_IS_SIMPLE_TOOLCHAIN (self), NULL);
+  g_return_val_if_fail (tool_id != NULL, NULL);
+
+  priv = ide_simple_toolchain_get_instance_private (self);
+  found_tools = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+  tool_find = g_slice_new (SimpleToolchainToolFind);
+  tool_find->found_tools = found_tools;
+  tool_find->tool_id = tool_id;
+
+  g_hash_table_foreach (priv->tools, tools_find_all_id, tool_find);
+
+  g_slice_free (SimpleToolchainToolFind, tool_find);
+
+  return g_steal_pointer (&found_tools);
+}
+
 const gchar *
 ide_simple_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
                                             const gchar   *language,
@@ -57,7 +110,7 @@ ide_simple_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
   g_return_val_if_fail (tool_id != NULL, NULL);
 
   priv = ide_simple_toolchain_get_instance_private (self);
-  return NULL;
+  return g_hash_table_lookup (priv->tools, g_strconcat (tool_id, ":", language, NULL));
 }
 
 /**

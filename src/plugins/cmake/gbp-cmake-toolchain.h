@@ -32,6 +32,7 @@ GbpCMakeToolchain  *gbp_cmake_toolchain_new           (IdeContext           *con
 const gchar        *gbp_cmake_toolchain_get_file_path (GbpCMakeToolchain    *self);
 void                gbp_cmake_toolchain_set_file_path (GbpCMakeToolchain    *self,
                                                        const gchar          *file_path);
-gboolean            gbp_cmake_toolchain_verify        (GbpCMakeToolchain    *self);
-
+gboolean            gbp_cmake_toolchain_load          (GbpCMakeToolchain    *self,
+                                                       GFile                *file,
+                                                       GError              **error);
 G_END_DECLS
