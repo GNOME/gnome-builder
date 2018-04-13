@@ -236,6 +236,7 @@ static void
 ide_search_entry_class_init (IdeSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   DzlSuggestionEntryClass *suggestion_entry_class = DZL_SUGGESTION_ENTRY_CLASS (klass);
   GtkBindingSet *bindings;
 
@@ -262,6 +263,8 @@ ide_search_entry_class_init (IdeSearchEntryClass *klass)
                                 G_CALLBACK (ide_search_entry_unfocus),
                                 NULL, NULL, NULL, G_TYPE_NONE, 0);
 
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-search-entry.ui");
+
   bindings = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (bindings, GDK_KEY_Escape, 0, "unfocus", 0);
 }
@@ -271,7 +274,12 @@ ide_search_entry_init (IdeSearchEntry *self)
 {
   self->max_results = DEFAULT_SEARCH_MAX;
 
+  gtk_widget_init_template (GTK_WIDGET (self));
+
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "global-search");
 
-  g_signal_connect (self, "changed", G_CALLBACK (ide_search_entry_changed), NULL);
+  g_signal_connect (self,
+                    "changed",
+                    G_CALLBACK (ide_search_entry_changed),
+                    NULL);
 }

@@ -86,6 +86,7 @@
     <file preprocess="xml-stripblanks" alias="ide-terminal-search.ui">terminal/ide-terminal-search.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-transfer-row.ui">transfers/ide-transfer-row.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-transfers-button.ui">transfers/ide-transfers-button.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-search-entry.ui">search/ide-search-entry.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-shortcuts-window.ui">keybindings/ide-shortcuts-window.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-workbench-header-bar.ui">workbench/ide-workbench-header-bar.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-workbench.ui">workbench/ide-workbench.ui</file>
