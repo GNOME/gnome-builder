@@ -69,6 +69,19 @@
     ],
     "modules" : [
         {
+            "name" : "gperftools",
+            "cleanup" : [ "/lib/libtcmalloc_debug.*",
+                          "/lib/libtcmalloc.*",
+                          "/lib/libtcmalloc_and_profiler.*",
+                          "/lib/libtcmalloc_minimal_debug.*" ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/gperftools/gperftools.git"
+                }
+            ]
+        },
+        {
             "name" : "libfuse",
             "cleanup" : [
                 "/bin"
@@ -774,6 +787,7 @@
                 "--libdir=lib",
                 "--buildtype=debugoptimized",
                 "-Dfusermount_wrapper=true",
+                "-Dwith_tcmalloc=true",
                 "-Denable_tracing=true",
                 "-Dwith_help=true",
                 "-Dwith_channel=flatpak-nightly",
