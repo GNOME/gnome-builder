@@ -73,10 +73,11 @@
             "cleanup" : [
                 "/bin",
                 "/lib/libprofiler.*",
-		"/lib/libtcmalloc_debug.*",
-		"/lib/libtcmalloc.*",
-		"/lib/libtcmalloc_and_profiler.*",
-		"/lib/libtcmalloc_minimal_debug.*" ],
+                "/lib/libtcmalloc_debug.*",
+                "/lib/libtcmalloc.*",
+                "/lib/libtcmalloc_and_profiler.*",
+                "/lib/libtcmalloc_minimal_debug.*"
+            ],
             "sources" : [
                 {
                     "type" : "git",
@@ -742,7 +743,7 @@
         },
         {
             "name" : "avahi",
-	    "cleanup" : [
+            "cleanup" : [
                 "/bin"
             ],
             "config-opts" : [
