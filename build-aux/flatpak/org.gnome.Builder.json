@@ -70,10 +70,13 @@
     "modules" : [
         {
             "name" : "gperftools",
-            "cleanup" : [ "/lib/libtcmalloc_debug.*",
-                          "/lib/libtcmalloc.*",
-                          "/lib/libtcmalloc_and_profiler.*",
-                          "/lib/libtcmalloc_minimal_debug.*" ],
+            "cleanup" : [
+                "/bin",
+                "/lib/libprofiler.*",
+		"/lib/libtcmalloc_debug.*",
+		"/lib/libtcmalloc.*",
+		"/lib/libtcmalloc_and_profiler.*",
+		"/lib/libtcmalloc_minimal_debug.*" ],
             "sources" : [
                 {
                     "type" : "git",
@@ -516,7 +519,8 @@
             "name" : "libpeas",
             "cleanup" : [
                 "/bin/*",
-                "/lib/peas-demo"
+                "/lib/peas-demo",
+                "/lib/libpeas-gtk*"
             ],
             "sources" : [
                 {
@@ -562,6 +566,9 @@
             "name" : "json-glib",
             "buildsystem" : "meson",
             "builddir" : true,
+            "cleanup" : [
+                "/bin"
+            ],
             "config-opts" : [
                 "--libdir=/app/lib",
                 "--buildtype=debugoptimized"
@@ -576,9 +583,7 @@
         {
             "name" : "enchant",
             "cleanup" : [
-                "/include",
-                "/lib/pkgconfig",
-                "*.la",
+                "/bin",
                 "/share"
             ],
             "sources" : [
@@ -596,6 +601,7 @@
                 "--disable-gtk-doc-html"
             ],
             "cleanup" : [
+                "/bin",
                 "/include",
                 "/lib/pkgconfig",
                 "*.la",
@@ -706,6 +712,7 @@
                 "--with-system-install-dir=/var/lib/flatpak"
             ],
             "cleanup" : [
+                "/bin/flatpak-bisect",
                 "/etc/profile.d",
                 "/libexec",
                 "/lib/systemd",
@@ -735,6 +742,9 @@
         },
         {
             "name" : "avahi",
+	    "cleanup" : [
+                "/bin"
+            ],
             "config-opts" : [
                 "--with-distro=none",
                 "--disable-qt3",
