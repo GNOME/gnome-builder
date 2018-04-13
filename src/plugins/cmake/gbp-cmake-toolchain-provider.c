@@ -26,168 +26,166 @@
 struct _GbpCMakeToolchainProvider
 {
   IdeObject            parent_instance;
-  IdeToolchainManager *manager;
-  GCancellable        *loading_cancellable;
+  GPtrArray           *toolchains;
 };
 
-void
-cmake_toolchain_provider_search_folder (GbpCMakeToolchainProvider  *self,
-                                        GFile                      *file);
-
-
 static void
-gbp_cmake_toolchain_verify_async_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
+gbp_cmake_toolchain_provider_load_worker (IdeTask      *task,
+                                          gpointer      source_object,
+                                          gpointer      task_data,
+                                          GCancellable *cancellable)
 {
-  GbpCMakeToolchain *toolchain = (GbpCMakeToolchain *)object;
-  GbpCMakeToolchainProvider *provider = user_data;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_CMAKE_TOOLCHAIN (toolchain));
-  g_assert (GBP_IS_CMAKE_TOOLCHAIN_PROVIDER (provider));
-
-  if (!gbp_cmake_toolchain_verify_finish (toolchain, result, &error))
-    IDE_EXIT;
-
-  ide_toolchain_manager_add (provider->manager, IDE_TOOLCHAIN (toolchain));
-  IDE_EXIT;
-}
-
-void
-cmake_toolchain_provider_add_crossfile (GbpCMakeToolchainProvider  *self,
-                                        GFile                      *file)
-{
+  GbpCMakeToolchainProvider *self = source_object;
+  g_autoptr(GPtrArray) toolchains = NULL;
   IdeContext *context;
-  g_autoptr(GbpCMakeToolchain) toolchain = NULL;
+  GPtrArray *files = task_data;
 
+  g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_CMAKE_TOOLCHAIN_PROVIDER (self));
-  g_assert (G_IS_FILE (file));
+  g_assert (files != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  context = ide_object_get_context (IDE_OBJECT (self->manager));
-  toolchain = gbp_cmake_toolchain_new (context, file);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  toolchains = g_ptr_array_new_with_free_func (g_object_unref);
 
-  gbp_cmake_toolchain_verify_async (g_steal_pointer (&toolchain), NULL, gbp_cmake_toolchain_verify_async_cb, self);
-}
-
-void
-cmake_toolchain_enumerate_children_cb (GObject      *object,
-                                       GAsyncResult *result,
-                                       gpointer      user_data)
-{
-  GbpCMakeToolchainProvider *self = (GbpCMakeToolchainProvider *)user_data;
-  GFile *dir = (GFile *)object;
-  g_autoptr(GError) error = NULL;
-  g_autoptr(GPtrArray) infos = NULL;
-
-  g_assert (G_IS_FILE (dir));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_CMAKE_TOOLCHAIN_PROVIDER (self));
-
-  infos = ide_g_file_get_children_finish (dir, result, &error);
-
-  if (infos == NULL)
-    return;
-
-  for (guint i = 0; i < infos->len; i++)
+  for (guint i = 0; i < files->len; i++)
     {
-      GFileInfo *file_info = g_ptr_array_index (infos, i);
-      GFileType file_type = g_file_info_get_file_type (file_info);
+      GFile *file = g_ptr_array_index (files, i);
+      g_autofree gchar *name = NULL;
 
-      if (file_type == G_FILE_TYPE_REGULAR)
+      g_assert (G_IS_FILE (file));
+
+      name = g_file_get_basename (file);
+      /* Cross-compilation files have .cmake extension, we have to blacklist CMakeSystem.cmake
+       * in case we are looking into a build folder */
+      if (g_strcmp0(name, "CMakeSystem.cmake") != 0)
         {
-          const gchar *name = g_file_info_get_name (file_info);
-          /* Cross-compilation files have .cmake extension, we have to blacklist CMakeSystem.cmake
-           * in case we are looking into a build folder */
-          if (g_str_has_suffix (name, ".cmake") && g_strcmp0(name, "CMakeSystem.cmake") != 0)
+          g_autoptr(GError) file_error = NULL;
+          g_autofree gchar *file_path = g_file_get_path (file);
+          g_autofree gchar *file_contents = NULL;
+          gsize file_contents_len;
+
+          /* Cross-compilation files should at least define CMAKE_SYSTEM_NAME and CMAKE_SYSTEM_PROCESSOR */
+          if (g_file_get_contents (file_path,
+                                   &file_contents, &file_contents_len, &file_error))
             {
-              const gchar *content_type = g_file_info_get_content_type (file_info);
-
-              if (g_content_type_is_mime_type (content_type, "text/x-cmake"))
+              const gchar *system_name = g_strstr_len (file_contents,
+                                                       file_contents_len,
+                                                       "CMAKE_SYSTEM_NAME");
+              if (system_name != NULL)
                 {
-                  g_autoptr(GFile) child = g_file_get_child (dir, name);
-                  g_autoptr(GError) file_error = NULL;
-                  g_autofree gchar *file_path = g_file_get_path (child);
-                  g_autofree gchar *file_contents = NULL;
-                  gsize file_contents_len;
-
-                  /* Cross-compilation files should at least define CMAKE_SYSTEM_NAME and CMAKE_SYSTEM_PROCESSOR */
-                  if (g_file_get_contents (file_path,
-                                           &file_contents, &file_contents_len, &file_error))
+                  const gchar *processor_name = g_strstr_len (file_contents,
+                                                              file_contents_len,
+                                                              "CMAKE_SYSTEM_PROCESSOR");
+                  if (processor_name != NULL)
                     {
-                      const gchar *system_name = g_strstr_len (file_contents,
-                                                               file_contents_len,
-                                                               "CMAKE_SYSTEM_NAME");
-                      if (system_name != NULL)
-                        {
-                          const gchar *processor_name = g_strstr_len (file_contents,
-                                                                      file_contents_len,
-                                                                      "CMAKE_SYSTEM_PROCESSOR");
-                          if (processor_name != NULL)
-                            {
-                              cmake_toolchain_provider_add_crossfile (self, child);
-                            }
-                        }
+                      g_autoptr(GbpCMakeToolchain) toolchain = gbp_cmake_toolchain_new (context, file);
+                      if (gbp_cmake_toolchain_verify (toolchain))
+                        g_ptr_array_add (toolchains, g_steal_pointer (&toolchain));
                     }
                 }
-          }
-        }
-      else if (file_type == G_FILE_TYPE_DIRECTORY)
-        {
-          const gchar *name = g_file_info_get_name (file_info);
-          g_autoptr(GFile) child = g_file_get_child (dir, name);
-
-          cmake_toolchain_provider_search_folder (self, child);
+            }
         }
     }
+
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&toolchains),
+                           (GDestroyNotify)g_ptr_array_unref);
 }
 
-void
-cmake_toolchain_provider_search_folder (GbpCMakeToolchainProvider  *self,
-                                        GFile                      *file)
+static void
+load_find_files_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
 {
-  g_assert (GBP_IS_CMAKE_TOOLCHAIN_PROVIDER (self));
+  GFile *file = (GFile *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GPtrArray) ret = NULL;
+
   g_assert (G_IS_FILE (file));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
-  ide_g_file_get_children_async (file,
-                                 G_FILE_ATTRIBUTE_STANDARD_NAME","
-                                 G_FILE_ATTRIBUTE_STANDARD_TYPE","
-                                 G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                                 G_FILE_QUERY_INFO_NONE,
-                                 G_PRIORITY_LOW,
-                                 self->loading_cancellable,
-                                 cmake_toolchain_enumerate_children_cb,
-                                 self);
+  ret = ide_g_file_find_finish (file, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ret, g_object_unref);
+
+  if (ret == NULL)
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  ide_task_set_task_data (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_run_in_thread (task, gbp_cmake_toolchain_provider_load_worker);
 }
 
-void
-gbp_cmake_toolchain_provider_load (IdeToolchainProvider  *provider,
-                                   IdeToolchainManager   *manager)
+static void
+gbp_cmake_toolchain_provider_load_async (IdeToolchainProvider     *provider,
+                                         GCancellable             *cancellable,
+                                         GAsyncReadyCallback       callback,
+                                         gpointer                  user_data)
 {
-  GbpCMakeToolchainProvider *self = (GbpCMakeToolchainProvider *) provider;
+  GbpCMakeToolchainProvider *self = (GbpCMakeToolchainProvider *)provider;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
-  g_autoptr(GFile) project_folder = NULL;
+  IdeVcs *vcs;
+  GFile *workdir;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CMAKE_TOOLCHAIN_PROVIDER (self));
-  g_assert (IDE_IS_TOOLCHAIN_MANAGER (manager));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  self->manager = g_object_ref (manager);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  vcs = ide_context_get_vcs (context);
+  workdir = ide_vcs_get_working_directory (vcs);
 
-  context = ide_object_get_context (IDE_OBJECT (manager));
-  g_return_if_fail (IDE_IS_CONTEXT (context));
-  if (!GBP_IS_CMAKE_BUILD_SYSTEM (ide_context_get_build_system (context)))
-    return;
+  task = ide_task_new (provider, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_cmake_toolchain_provider_load_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  self->loading_cancellable = g_cancellable_new ();
-
-  project_folder = g_file_get_parent (ide_context_get_project_file (context));
-  cmake_toolchain_provider_search_folder (self, project_folder);
+  ide_g_file_find_async (workdir,
+                         "*.cmake",
+                         cancellable,
+                         load_find_files_cb,
+                         g_steal_pointer (&task));
 
   IDE_EXIT;
+}
+
+static gboolean
+gbp_cmake_toolchain_provider_load_finish (IdeToolchainProvider  *provider,
+                                          GAsyncResult          *result,
+                                          GError               **error)
+{
+  GbpCMakeToolchainProvider *self = (GbpCMakeToolchainProvider *)provider;
+  g_autoptr(GPtrArray) toolchains = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CMAKE_TOOLCHAIN_PROVIDER (self));
+  g_assert (IDE_IS_TASK (result));
+  g_assert (ide_task_is_valid (IDE_TASK (result), provider));
+
+  toolchains = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  if (toolchains == NULL)
+    return FALSE;
+
+  g_clear_pointer (&self->toolchains, g_ptr_array_unref);
+  self->toolchains = g_ptr_array_ref (toolchains);
+
+  for (guint i = 0; i < toolchains->len; i++)
+    {
+      IdeToolchain *toolchain = g_ptr_array_index (toolchains, i);
+
+      g_assert (IDE_IS_TOOLCHAIN (toolchain));
+
+      ide_toolchain_provider_emit_added (provider, toolchain);
+    }
+
+  return TRUE;
 }
 
 void
@@ -199,13 +197,14 @@ gbp_cmake_toolchain_provider_unload (IdeToolchainProvider  *provider,
   g_assert (GBP_IS_CMAKE_TOOLCHAIN_PROVIDER (self));
   g_assert (IDE_IS_TOOLCHAIN_MANAGER (manager));
 
-  g_clear_object (&self->manager);
+  g_clear_pointer (&self->toolchains, g_ptr_array_unref);
 }
 
 static void
 toolchain_provider_iface_init (IdeToolchainProviderInterface *iface)
 {
-  iface->load = gbp_cmake_toolchain_provider_load;
+  iface->load_async = gbp_cmake_toolchain_provider_load_async;
+  iface->load_finish = gbp_cmake_toolchain_provider_load_finish;
   iface->unload = gbp_cmake_toolchain_provider_unload;
 }
 
