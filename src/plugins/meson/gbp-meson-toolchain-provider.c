@@ -71,7 +71,7 @@ gbp_meson_toolchain_provider_load_worker (IdeTask      *task,
                                      cancellable,
                                      &file_error);
       content_type = g_file_info_get_content_type (file_info);
-      if (g_content_type_is_mime_type (content_type, "text/plain"))
+      if (!g_content_type_is_mime_type (content_type, "text/plain"))
         {
           g_autoptr(GKeyFile) keyfile = g_key_file_new ();
           g_autofree gchar *path = g_file_get_path (file);
@@ -83,7 +83,15 @@ gbp_meson_toolchain_provider_load_worker (IdeTask      *task,
                   (g_key_file_has_group (keyfile, "host_machine") ||
                    g_key_file_has_group (keyfile, "target_machine")))
                 {
-                  g_autoptr(GbpMesonToolchain) toolchain = gbp_meson_toolchain_new (context, file);
+                  g_autoptr(GError) toolchain_error = NULL;
+                  g_autoptr(GbpMesonToolchain) toolchain = gbp_meson_toolchain_new (context);
+
+                  if (!gbp_meson_toolchain_load (toolchain, file, &toolchain_error))
+                    {
+                      g_debug ("Error loading %s: %s", path, toolchain_error->message);
+                      continue;
+                    }
+
                   g_ptr_array_add (toolchains, g_steal_pointer (&toolchain));
                 }
             }
