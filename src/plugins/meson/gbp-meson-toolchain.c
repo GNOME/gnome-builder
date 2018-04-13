@@ -58,52 +58,53 @@ _g_key_file_get_string_quoted (GKeyFile     *key_file,
 }
 
 GbpMesonToolchain *
-gbp_meson_toolchain_new (IdeContext   *context,
-                         GFile        *file)
+gbp_meson_toolchain_new (IdeContext   *context)
+{
+  g_autoptr(GbpMesonToolchain) toolchain = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  toolchain = g_object_new (GBP_TYPE_MESON_TOOLCHAIN,
+                            "context", context,
+                            NULL);
+
+
+  return g_steal_pointer (&toolchain);
+}
+
+
+gboolean
+gbp_meson_toolchain_load (GbpMesonToolchain  *self,
+                          GFile              *file,
+                          GError            **error)
 {
   g_autofree gchar *path = g_file_get_path (file);
   g_autofree gchar *id = g_strconcat ("meson:", path, NULL);
   g_autofree gchar *arch = NULL;
   g_autofree gchar *system = NULL;
   g_autoptr(GKeyFile) keyfile = g_key_file_new ();
-  g_autoptr(GError) error = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
-  g_autoptr(GError) read_error = NULL;
   g_autoptr(GError) list_error = NULL;
-  g_autofree gchar *read_result = NULL;
-  g_autoptr(GbpMesonToolchain) toolchain = NULL;
   g_auto(GStrv) binaries = NULL;
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  if (!g_key_file_load_from_file (keyfile, path, G_KEY_FILE_NONE, error))
+    return FALSE;
 
-  if (!g_key_file_load_from_file (keyfile, path, G_KEY_FILE_NONE, &error))
-    {
-      g_warning ("Unable to read KeyFile \"%s\": %s", path, read_error->message);
-      return NULL;
-    }
+  arch = _g_key_file_get_string_quoted (keyfile, "host_machine", "cpu_family", error);
+  if (arch == NULL)
+    return FALSE;
 
-  arch = _g_key_file_get_string_quoted (keyfile, "host_machine", "cpu_family", &read_error);
-  if (read_error != NULL)
-    {
-      g_warning ("Unable to get the \"cpu_family`\" key of the `\"host_machine\" group: %s", read_error->message);
-      return NULL;
-    }
-
-  system = _g_key_file_get_string_quoted (keyfile, "host_machine", "system", &read_error);
-  if (read_error != NULL)
-    {
-      g_warning ("Unable to get the \"system`\" key of the `\"host_machine\" group: %s", read_error->message);
-      return NULL;
-    }
+  system = _g_key_file_get_string_quoted (keyfile, "host_machine", "system", error);
+  if (system == NULL)
+    return FALSE;
 
   triplet = ide_triplet_new_with_triplet (arch, system, NULL);
-  toolchain = g_object_new (GBP_TYPE_MESON_TOOLCHAIN,
-                            "context", context,
-                            "file-path", path,
-                            "id", id,
-                            "host-triplet", triplet,
-                            NULL);
+
+  g_clear_pointer (&self->file_path, g_free);
+  self->file_path = g_steal_pointer (&path);
+
+  ide_toolchain_set_id (IDE_TOOLCHAIN(self), id);
+  ide_toolchain_set_host_triplet (IDE_TOOLCHAIN(self), triplet);
 
   binaries = g_key_file_get_keys (keyfile, "binaries", NULL, &list_error);
   for (int i = 0; binaries[i] != NULL; i++)
@@ -113,20 +114,20 @@ gbp_meson_toolchain_new (IdeContext   *context,
       g_autoptr(GError) key_error = NULL;
 
       if (g_strcmp0 (lang, "ar") == 0)
-        toolchain->archiver = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+        self->archiver = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
       else if (g_strcmp0 (lang, "strip") == 0)
-        toolchain->strip = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+        self->strip = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
       else if (g_strcmp0 (lang, "pkg_config") == 0)
-        toolchain->pkg_config = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+        self->pkg_config = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
       else if (g_strcmp0 (lang, "exe_wrapper") == 0)
-        toolchain->exe_wrapper = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+        self->exe_wrapper = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
       else
-        g_hash_table_insert (toolchain->compilers,
+        g_hash_table_insert (self->compilers,
                              g_strdup (lang),
                              _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error));
     }
 
-  return g_steal_pointer (&toolchain);
+  return TRUE;
 }
 
 /**
@@ -145,21 +146,6 @@ gbp_meson_toolchain_get_file_path (GbpMesonToolchain  *self)
   g_return_val_if_fail (GBP_IS_MESON_TOOLCHAIN (self), NULL);
 
   return self->file_path;
-}
-
-void
-gbp_meson_toolchain_set_file_path (GbpMesonToolchain  *self,
-                                   const gchar        *file_path)
-{
-  g_return_if_fail (GBP_IS_MESON_TOOLCHAIN (self));
-  g_return_if_fail (file_path != NULL);
-
-  if (g_strcmp0 (file_path, self->file_path) != 0)
-    {
-      g_clear_pointer (&self->file_path, g_free);
-      self->file_path = g_strdup (file_path);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_PATH]);
-    }
 }
 
 static void
@@ -191,38 +177,19 @@ gbp_meson_toolchain_get_property (GObject    *object,
 }
 
 static void
-gbp_meson_toolchain_set_property (GObject      *object,
-                                  guint         prop_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
-{
-  GbpMesonToolchain *self = GBP_MESON_TOOLCHAIN (object);
-
-  switch (prop_id)
-    {
-    case PROP_FILE_PATH:
-      gbp_meson_toolchain_set_file_path (self, g_value_get_string (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gbp_meson_toolchain_class_init (GbpMesonToolchainClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_meson_toolchain_finalize;
   object_class->get_property = gbp_meson_toolchain_get_property;
-  object_class->set_property = gbp_meson_toolchain_set_property;
 
   properties [PROP_FILE_PATH] =
     g_param_spec_string ("file-path",
                          "File path",
                          "The path of the cross-file",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }

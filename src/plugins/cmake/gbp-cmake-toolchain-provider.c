@@ -52,45 +52,52 @@ gbp_cmake_toolchain_provider_load_worker (IdeTask      *task,
     {
       GFile *file = g_ptr_array_index (files, i);
       g_autofree gchar *name = NULL;
+      g_autoptr(GError) file_error = NULL;
+      g_autofree gchar *file_path = NULL;
+      g_autofree gchar *file_contents = NULL;
+      gsize file_contents_len;
 
       g_assert (G_IS_FILE (file));
 
       name = g_file_get_basename (file);
+      file_path = g_file_get_path (file);
       /* Cross-compilation files have .cmake extension, we have to blacklist CMakeSystem.cmake
        * in case we are looking into a build folder */
-      if (g_strcmp0(name, "CMakeSystem.cmake") != 0)
-        {
-          g_autoptr(GError) file_error = NULL;
-          g_autofree gchar *file_path = g_file_get_path (file);
-          g_autofree gchar *file_contents = NULL;
-          gsize file_contents_len;
+      if (g_strcmp0 (name, "CMakeSystem.cmake") == 0)
+        continue;
 
-          /* Cross-compilation files should at least define CMAKE_SYSTEM_NAME and CMAKE_SYSTEM_PROCESSOR */
-          if (g_file_get_contents (file_path,
-                                   &file_contents, &file_contents_len, &file_error))
+      /* Cross-compilation files should at least define CMAKE_SYSTEM_NAME and CMAKE_SYSTEM_PROCESSOR */
+      if (g_file_get_contents (file_path, &file_contents, &file_contents_len, &file_error))
+        {
+          g_autoptr(GbpCMakeToolchain) toolchain = NULL;
+          g_autoptr(GError) load_error = NULL;
+          const gchar *processor_name;
+          const gchar *system_name;
+
+          system_name = g_strstr_len (file_contents,
+                                      file_contents_len,
+                                      "CMAKE_SYSTEM_NAME");
+          if (system_name == NULL)
+            continue;
+
+          processor_name = g_strstr_len (file_contents,
+                                         file_contents_len,
+                                         "CMAKE_SYSTEM_PROCESSOR");
+          if (processor_name == NULL)
+            continue;
+
+          toolchain = gbp_cmake_toolchain_new (context, file);
+          if (!gbp_cmake_toolchain_load (toolchain, file, &load_error))
             {
-              const gchar *system_name = g_strstr_len (file_contents,
-                                                       file_contents_len,
-                                                       "CMAKE_SYSTEM_NAME");
-              if (system_name != NULL)
-                {
-                  const gchar *processor_name = g_strstr_len (file_contents,
-                                                              file_contents_len,
-                                                              "CMAKE_SYSTEM_PROCESSOR");
-                  if (processor_name != NULL)
-                    {
-                      g_autoptr(GbpCMakeToolchain) toolchain = gbp_cmake_toolchain_new (context, file);
-                      if (gbp_cmake_toolchain_verify (toolchain))
-                        g_ptr_array_add (toolchains, g_steal_pointer (&toolchain));
-                    }
-                }
+              g_debug ("Error loading %s : %s", file_path, load_error->message);
+              continue;
             }
+
+          g_ptr_array_add (toolchains, g_steal_pointer (&toolchain));
         }
     }
 
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&toolchains),
-                           (GDestroyNotify)g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&toolchains), (GDestroyNotify)g_ptr_array_unref);
 }
 
 static void
