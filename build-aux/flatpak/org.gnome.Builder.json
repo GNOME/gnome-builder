@@ -541,6 +541,17 @@
             ]
         },
         {
+            "name" : "amtk",
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://git.gnome.org/browse/amtk"
+                }
+            ]
+        },
+        {
             "name" : "devhelp",
             "buildsystem" : "meson",
             "builddir" : true,
