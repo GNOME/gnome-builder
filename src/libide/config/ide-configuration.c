@@ -954,6 +954,7 @@ ide_configuration_set_environment (IdeConfiguration *self,
   IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (!environment || IDE_IS_ENVIRONMENT (environment));
 
   if (priv->environment != environment)
     {
