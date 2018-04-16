@@ -76,7 +76,7 @@ ide_toolchain_set_id (IdeToolchain  *self,
 
   if (g_strcmp0 (id, priv->id) != 0)
     {
-      g_free (priv->id);
+      g_clear_pointer (&priv->id, g_free);
       priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
     }
@@ -282,7 +282,7 @@ ide_toolchain_class_init (IdeToolchainClass *klass)
                          "Id",
                          "The toolchain identifier",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_HOST_TRIPLET] =
     g_param_spec_boxed ("host-triplet",

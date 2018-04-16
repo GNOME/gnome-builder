@@ -8,6 +8,7 @@ ar=@CMAKE_AR@
 pkg_config=@PKG_CONFIG_EXECUTABLE@
 
 [compilers]
+# The name of the compiler should be the language name as defined with IDE_TOOLCHAIN_LANGUAGE_ keys
 c=@CMAKE_C_COMPILER@
-cpp=@CMAKE_CXX_COMPILER@
+c++=@CMAKE_CXX_COMPILER@
 vala=@CMAKE_VALA_COMPILER@
