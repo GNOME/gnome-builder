@@ -575,7 +575,9 @@ gb_terminal_view_init (GbTerminalView *self)
   self->run_on_host = TRUE;
   self->manage_spawn = TRUE;
 
-  self->tsearch = g_object_new (IDE_TYPE_TERMINAL_SEARCH, NULL);
+  self->tsearch = g_object_new (IDE_TYPE_TERMINAL_SEARCH,
+                                "visible", TRUE,
+                                NULL);
   self->search_revealer_top = ide_terminal_search_get_revealer (self->tsearch);
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -584,8 +586,7 @@ gb_terminal_view_init (GbTerminalView *self)
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "terminal-view-document-menu");
 
-  gtk_overlay_add_overlay (self->terminal_overlay_top,
-                           GTK_WIDGET (self->search_revealer_top));
+  gtk_overlay_add_overlay (self->terminal_overlay_top, GTK_WIDGET (self->tsearch));
 
   gb_terminal_view_connect_terminal (self, self->terminal_top);
 
