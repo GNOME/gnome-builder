@@ -25,14 +25,12 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_CMAKE_TOOLCHAIN (gbp_cmake_toolchain_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCMakeToolchain, gbp_cmake_toolchain, GBP, CMAKE_TOOLCHAIN, IdeToolchain)
+G_DECLARE_FINAL_TYPE (GbpCMakeToolchain, gbp_cmake_toolchain, GBP, CMAKE_TOOLCHAIN, IdeSimpleToolchain)
 
-GbpCMakeToolchain  *gbp_cmake_toolchain_new           (IdeContext           *context,
-                                                       GFile                *file);
+GbpCMakeToolchain  *gbp_cmake_toolchain_new           (IdeContext           *context);
 const gchar        *gbp_cmake_toolchain_get_file_path (GbpCMakeToolchain    *self);
-void                gbp_cmake_toolchain_set_file_path (GbpCMakeToolchain    *self,
-                                                       const gchar          *file_path);
 gboolean            gbp_cmake_toolchain_load          (GbpCMakeToolchain    *self,
                                                        GFile                *file,
+                                                       GCancellable         *cancellable,
                                                        GError              **error);
 G_END_DECLS
