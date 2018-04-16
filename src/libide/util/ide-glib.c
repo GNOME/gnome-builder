@@ -630,3 +630,32 @@ ide_g_host_file_get_contents (const gchar  *path,
 
   return TRUE;
 }
+
+gboolean
+ide_environ_parse (const gchar  *pair,
+                   gchar       **key,
+                   gchar       **value)
+{
+  const gchar *eq;
+
+  g_return_val_if_fail (pair != NULL, FALSE);
+
+  if (key != NULL)
+    *key = NULL;
+
+  if (value != NULL)
+    *value = NULL;
+
+  if ((eq = strchr (pair, '=')))
+    {
+      if (key != NULL)
+        *key = g_strndup (pair, eq - pair);
+
+      if (value != NULL)
+        *value = g_strdup (eq + 1);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}

@@ -35,6 +35,10 @@ G_BEGIN_DECLS
   ({ IDE_PTR_ARRAY_CLEAR_FREE_FUNC (*(arptr)); \
      g_steal_pointer ((arptr)); })
 
+IDE_AVAILABLE_IN_3_30
+gboolean     ide_environ_parse                        (const gchar          *pair,
+                                                       gchar               **key,
+                                                       gchar               **value);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_gettext                              (const gchar          *message);
 IDE_AVAILABLE_IN_ALL
