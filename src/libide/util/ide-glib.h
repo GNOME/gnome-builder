@@ -37,7 +37,7 @@ G_BEGIN_DECLS
 
 #define ide_strv_empty0(strv) (((strv) == NULL) || ((strv)[0] == NULL))
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_28
 gboolean     ide_environ_parse                        (const gchar          *pair,
                                                        gchar               **key,
                                                        gchar               **value);
