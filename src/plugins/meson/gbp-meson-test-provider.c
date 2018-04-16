@@ -56,6 +56,7 @@ gbp_meson_test_provider_load_json (GbpMesonTestProvider *self,
       g_autoptr(IdeEnvironment) env = ide_environment_new ();
       g_autoptr(IdeTest) test = NULL;
       g_autoptr(GFile) workdir = NULL;
+      g_auto(GStrv) environ = NULL;
       const gchar *name;
       const gchar *workdir_path;
       const gchar *group = NULL;
@@ -129,10 +130,14 @@ gbp_meson_test_provider_load_json (GbpMesonTestProvider *self,
 
       g_ptr_array_add (cmd, NULL);
 
+      environ = ide_environment_get_environ (env);
+      if (ide_strv_empty0 (environ))
+        g_clear_pointer (&environ, g_strfreev);
+
       test = g_object_new (GBP_TYPE_MESON_TEST,
                            "command", (gchar **)cmd->pdata,
                            "display-name", name,
-                           "env", env,
+                           "environ", environ,
                            "group", group,
                            "id", name,
                            "timeout", timeout,
@@ -385,7 +390,7 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
   const gchar * const *command;
-  IdeEnvironment *env;
+  const gchar * const *environ;
   const gchar *builddir;
   IdeRuntime *runtime;
   IdeTest *test;
@@ -443,10 +448,18 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   ide_runner_push_args (runner, command);
 
   /* Make sure the environment is respected */
-  if (NULL != (env = gbp_meson_test_get_env (GBP_MESON_TEST (test))))
+  if ((environ = gbp_meson_test_get_environ (GBP_MESON_TEST (test))))
     {
       IdeEnvironment *dest = ide_runner_get_environment (runner);
-      ide_environment_copy_into (env, dest, TRUE);
+
+      for (guint i = 0; environ[i] != NULL; i++)
+        {
+          g_autofree gchar *key = NULL;
+          g_autofree gchar *value = NULL;
+
+          if (ide_environ_parse (environ[i], &key, &value))
+            ide_environment_setenv (dest, key, value);
+        }
     }
 
   ide_test_set_status (test, IDE_TEST_STATUS_RUNNING);
