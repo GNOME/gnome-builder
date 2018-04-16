@@ -42,14 +42,7 @@ struct _IdeTestClass
   GObjectClass parent;
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
+  gpointer _reserved[8];
 };
 
 IDE_AVAILABLE_IN_3_28
