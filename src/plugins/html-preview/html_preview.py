@@ -340,6 +340,10 @@ class HtmlPreviewView(Ide.LayoutView):
     markdown = False
     rst = False
 
+    title_handler = 0
+    changed_handler = 0
+    destroy_handler = 0
+
     def __init__(self, document, sphinx_basedir, sphinx_builddir, *args, **kwargs):
         global old_open
 
@@ -363,9 +367,9 @@ class HtmlPreviewView(Ide.LayoutView):
             elif id == 'rst':
                 self.rst = True
 
-        document.connect('notify::title', self.on_title_changed)
-        document.connect('changed', self.on_changed)
-        self.webview.connect('destroy', self.web_view_destroyed)
+        self.title_handler = document.connect('notify::title', self.on_title_changed)
+        self.changed_handler = document.connect('changed', self.on_changed)
+        self.destroy_handler = self.webview.connect('destroy', self.web_view_destroyed)
 
         self.on_changed(document)
         self.on_title_changed(document)
@@ -374,7 +378,16 @@ class HtmlPreviewView(Ide.LayoutView):
         self.set_title("%s %s" % (buffer.get_title(), _("(Preview)")))
 
     def web_view_destroyed(self, web_view):
-        self.document.disconnect_by_func(self.on_changed)
+        self.document.disconnect(self.title_handler)
+        self.document.disconnect(self.changed_handler)
+        web_view.disconnect(self.destroy_handler)
+
+        self.title_handler = 0
+        self.changed_handler = 0
+        self.destroy_handler = 0
+
+        self.document = None
+        self.webview = None
 
     def get_markdown(self, text):
         text = text.replace("\"", "\\\"").replace("\n", "\\n")
