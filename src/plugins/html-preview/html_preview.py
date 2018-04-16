@@ -116,7 +116,7 @@ class HtmlPreviewData(GObject.Object, Ide.ApplicationAddin):
         assert HtmlPreviewData.MARKDOWN_VIEW_JS
 
     def do_unload(self, app):
-        for state in sphinx_states.items():
+        for state in sphinx_states.values():
             # Be extra sure that we are in the tmp dir
             tmpdir = GLib.get_tmp_dir()
             if state.builddir.startswith(tmpdir):
