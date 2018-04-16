@@ -27,6 +27,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "buildsystem/ide-build-private.h"
 #include "config/ide-configuration.h"
 #include "devices/ide-device.h"
@@ -51,12 +52,12 @@ typedef struct
   gchar            *toolchain_id;
 } PrepareState;
 
-static void list_model_iface_init (GListModelInterface *iface);
-static void initable_iface_init   (GInitableIface      *iface);
+static void list_model_iface_init     (GListModelInterface *iface);
+static void async_initable_iface_init (GAsyncInitableIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeToolchainManager, ide_toolchain_manager, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init)
-                        G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init))
 
 static void
 prepare_state_free (PrepareState *state)
@@ -211,23 +212,102 @@ ide_toolchain_manager_extension_removed (PeasExtensionSet *set,
   ide_toolchain_provider_unload (provider, self);
 }
 
-static gboolean
-ide_toolchain_manager_initable_init (GInitable     *initable,
-                                     GCancellable  *cancellable,
-                                     GError       **error)
+static void
+ide_toolchain_manager_init_load_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeToolchainProvider *provider = (IdeToolchainProvider *)object;
+  IdeToolchainManager *self;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  GPtrArray *providers;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TOOLCHAIN_PROVIDER (provider));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  g_assert (IDE_IS_TOOLCHAIN_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  if (!ide_toolchain_provider_load_finish (provider, result, &error))
+    {
+      g_print ("%s\n", G_OBJECT_TYPE_NAME (provider));
+      g_assert (error != NULL);
+      ide_context_warning (context,
+                           "Failed to initialize toolchain provider: %s: %s",
+                           G_OBJECT_TYPE_NAME (provider), error->message);
+    }
+
+  providers = ide_task_get_task_data (task);
+  g_assert (providers != NULL);
+  g_assert (providers->len > 0);
+
+  if (!g_ptr_array_remove (providers, provider))
+    g_critical ("Failed to locate provider in active set");
+
+  if (providers->len == 0)
+    ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_toolchain_manager_collect_providers (PeasExtensionSet *set,
+                                         PeasPluginInfo   *plugin_info,
+                                         PeasExtension    *exten,
+                                         gpointer          user_data)
+{
+  IdeToolchainProvider *provider = (IdeToolchainProvider *)exten;
+  GPtrArray *providers = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TOOLCHAIN_PROVIDER (provider));
+  g_assert (providers != NULL);
+
+  g_ptr_array_add (providers, g_object_ref (provider));
+}
+
+static void
+ide_toolchain_manager_init_async (GAsyncInitable      *initable,
+                                  gint                 priority,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
 {
   IdeToolchainManager *self = (IdeToolchainManager *)initable;
-  IdeContext *context;
   g_autoptr(IdeSimpleToolchain) default_toolchain = NULL;
+  g_autoptr(GPtrArray) providers = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  IdeContext *context;
   guint idx;
 
-  g_assert (IDE_IS_TOOLCHAIN_MANAGER (self));
+  g_assert (G_IS_ASYNC_INITABLE (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_toolchain_manager_init_async);
+  ide_task_set_priority (task, priority);
+
+  /*g_signal_connect_swapped (task,
+                            "notify::completed",
+                            G_CALLBACK (notify_providers_loaded),
+                            self);*/
+
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
   self->extensions = peas_extension_set_new (peas_engine_get_default (),
                                              IDE_TYPE_TOOLCHAIN_PROVIDER,
-                                            "context", context,
+                                             "context", context,
                                              NULL);
 
   g_signal_connect (self->extensions,
@@ -240,22 +320,52 @@ ide_toolchain_manager_initable_init (GInitable     *initable,
                     G_CALLBACK (ide_toolchain_manager_extension_removed),
                     self);
 
+  providers = g_ptr_array_new_with_free_func (g_object_unref);
   peas_extension_set_foreach (self->extensions,
-                              ide_toolchain_manager_extension_added,
-                              self);
+                              ide_toolchain_manager_collect_providers,
+                              providers);
+  ide_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
 
-  idx = self->toolchains->len;
   default_toolchain = ide_simple_toolchain_new (context, "default");
-  g_ptr_array_add (self->toolchains, g_object_ref (default_toolchain));
+  idx = self->toolchains->len;
+  g_ptr_array_add (self->toolchains, g_steal_pointer (&default_toolchain));
   g_list_model_items_changed (G_LIST_MODEL (self), idx, 0, 1);
 
-  return TRUE;
+  for (guint i = 0; i < providers->len; i++)
+    {
+      IdeToolchainProvider *provider = g_ptr_array_index (providers, i);
+
+      g_assert (IDE_IS_TOOLCHAIN_PROVIDER (provider));
+
+      provider_connect (self, provider);
+
+      ide_toolchain_provider_load_async (provider,
+                                         cancellable,
+                                         ide_toolchain_manager_init_load_cb,
+                                         g_object_ref (task));
+    }
+
+  if (providers->len == 0)
+    ide_task_return_boolean (task, TRUE);
+}
+
+static gboolean
+ide_toolchain_manager_init_finish (GAsyncInitable  *initable,
+                                   GAsyncResult    *result,
+                                   GError         **error)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TOOLCHAIN_MANAGER (initable));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 static void
-initable_iface_init (GInitableIface *iface)
+async_initable_iface_init (GAsyncInitableIface *iface)
 {
-  iface->init = ide_toolchain_manager_initable_init;
+  iface->init_async = ide_toolchain_manager_init_async;
+  iface->init_finish = ide_toolchain_manager_init_finish;
 }
 
 static void
