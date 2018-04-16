@@ -1150,25 +1150,41 @@ ide_context_init_runtimes (gpointer             source_object,
 }
 
 static void
-ide_context_init_toolchains (gpointer             source_object,
-                             GCancellable        *cancellable,
-                             GAsyncReadyCallback  callback,
-                             gpointer             user_data)
+ide_context_init_toolchain_manager_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
 {
-  IdeContext *self = source_object;
-  g_autoptr(GTask) task = NULL;
+  GAsyncInitable *initable = (GAsyncInitable *)object;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_assert (G_IS_ASYNC_INITABLE (initable));
+  g_assert (G_IS_ASYNC_RESULT (result));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_context_init_toolchains);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-
-  if (!g_initable_init (G_INITABLE (self->toolchain_manager), cancellable, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+  if (!g_async_initable_init_finish (initable, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_init_toolchain_manager (gpointer             source_object,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(IdeTask) task = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  g_async_initable_init_async (G_ASYNC_INITABLE (self->toolchain_manager),
+                               G_PRIORITY_DEFAULT,
+                               cancellable,
+                               ide_context_init_toolchain_manager_cb,
+                               g_object_ref (task));
 }
 
 static void
@@ -1839,7 +1855,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_search_engine,
                         ide_context_init_documentation,
                         ide_context_init_runtimes,
-                        ide_context_init_toolchains,
+                        ide_context_init_toolchain_manager,
                         ide_context_init_configuration_manager,
                         ide_context_init_build_manager,
                         ide_context_init_run_manager,
