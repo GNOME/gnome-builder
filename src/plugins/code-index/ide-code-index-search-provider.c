@@ -74,18 +74,23 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
   g_assert (IDE_IS_CODE_INDEX_SERVICE (service));
 
   index = ide_code_index_service_get_index (service);
-  g_assert (IDE_IS_CODE_INDEX_INDEX (index));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_code_index_search_provider_search_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  ide_code_index_index_populate_async (index,
-                                       search_terms,
-                                       max_results,
-                                       cancellable,
-                                       populate_cb,
-                                       g_steal_pointer (&task));
+  if (index == NULL)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Code index is not currently available");
+  else
+    ide_code_index_index_populate_async (index,
+                                         search_terms,
+                                         max_results,
+                                         cancellable,
+                                         populate_cb,
+                                         g_steal_pointer (&task));
 
   IDE_EXIT;
 }
