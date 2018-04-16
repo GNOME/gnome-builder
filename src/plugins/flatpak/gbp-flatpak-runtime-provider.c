@@ -207,9 +207,10 @@ gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
   g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
-  g_signal_handlers_disconnect_by_func (app_addin,
-                                        G_CALLBACK (runtime_added_cb),
-                                        self);
+  if (app_addin != NULL)
+    g_signal_handlers_disconnect_by_func (app_addin,
+                                          G_CALLBACK (runtime_added_cb),
+                                          self);
 
   if (self->runtimes != NULL)
     {
