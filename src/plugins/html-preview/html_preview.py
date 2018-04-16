@@ -189,6 +189,7 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
     def do_load(self, view):
         self.workbench = view.get_ancestor(Ide.Workbench)
         self.view = view
+
         self.can_preview = False
         self.sphinx_basedir = None
         self.sphinx_builddir = None
@@ -196,7 +197,7 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
         group = view.get_action_group('editor-view')
 
         self.action = Gio.SimpleAction(name='preview-as-html', enabled=True)
-        self.action.connect('activate', self.preview_activated)
+        self.activate_handler = self.action.connect('activate', self.preview_activated)
         group.add_action(self.action)
 
         document = view.get_buffer()
@@ -213,9 +214,12 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorViewAddin):
                                       'editor-view.preview-as-html')
 
     def do_unload(self, view):
+        self.action.disconnect(self.activate_handler)
+
         group = view.get_action_group('editor-view')
         group.remove_action('preview-as-html')
 
+        self.action = None
         self.view = None
         self.workbench = None
 
