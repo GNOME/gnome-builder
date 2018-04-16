@@ -83,7 +83,8 @@ class RustUpWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         workbench.connect('unload', unload)
 
     def do_unload(self, workbench):
-        RustupApplicationAddin.instance.workbenches.discard(workbench)
+        if RustupApplicationAddin.instance:
+            RustupApplicationAddin.instance.workbenches.discard(workbench)
 
 _NO_RUSTUP = _('Rustup not installed')
 
