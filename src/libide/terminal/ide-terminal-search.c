@@ -223,8 +223,8 @@ search_overlay_search_cb (VteTerminal    *terminal,
 }
 
 static void
-search_revealer_cb (GtkRevealer      *search_revealer,
-                    GParamSpec       *pspec G_GNUC_UNUSED,
+search_revealer_cb (GtkRevealer       *search_revealer,
+                    GParamSpec        *pspec,
                     IdeTerminalSearch *self)
 {
   g_assert (IDE_IS_TERMINAL_SEARCH (self));
@@ -269,9 +269,9 @@ ide_terminal_search_connect_terminal (IdeTerminalSearch *self)
 
 static void
 ide_terminal_search_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
 {
   IdeTerminalSearch *self = IDE_TERMINAL_SEARCH (object);
 
@@ -391,7 +391,7 @@ ide_terminal_search_get_regex (IdeTerminalSearch *self)
 /**
  * ide_terminal_search_get_wrap_around:
  * @self: a #IdeTerminalSearch
- * 
+ *
  *
  * Since: 3.28
  */
