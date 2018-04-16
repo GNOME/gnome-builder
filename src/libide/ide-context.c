@@ -2152,12 +2152,13 @@ ide_context_restore__load_file_cb (GObject      *object,
 {
   IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
   g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_buffer_manager_load_file_finish (buffer_manager, result, &error))
+  if (!(buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
     {
       g_warning ("%s", error->message);
       /* TODO: add error into grouped error */

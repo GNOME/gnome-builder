@@ -422,6 +422,7 @@ ide_editor_perspective_focus_location_cb (GObject      *object,
                                           gpointer      user_data)
 {
   IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(IdeBuffer) buffer = NULL;
   FocusLocation *state = user_data;
   GError *error = NULL;
 
@@ -432,7 +433,7 @@ ide_editor_perspective_focus_location_cb (GObject      *object,
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (state->self));
   g_assert (state->location != NULL);
 
-  if (!ide_buffer_manager_load_file_finish (bufmgr, result, &error))
+  if (!(buffer = ide_buffer_manager_load_file_finish (bufmgr, result, &error)))
     {
       /* TODO: display warning breifly to the user in the frame? */
       g_warning ("%s", error->message);
