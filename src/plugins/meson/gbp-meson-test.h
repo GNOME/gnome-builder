@@ -26,9 +26,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpMesonTest, gbp_meson_test, GBP, MESON_TEST, IdeTest)
 
+const gchar * const *gbp_meson_test_get_environ (GbpMesonTest *self);
 const gchar * const *gbp_meson_test_get_command (GbpMesonTest *self);
 GFile               *gbp_meson_test_get_workdir (GbpMesonTest *self);
 guint                gbp_meson_test_get_timeout (GbpMesonTest *self);
-IdeEnvironment      *gbp_meson_test_get_env     (GbpMesonTest *self);
 
 G_END_DECLS
