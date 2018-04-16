@@ -35,6 +35,8 @@ G_BEGIN_DECLS
   ({ IDE_PTR_ARRAY_CLEAR_FREE_FUNC (*(arptr)); \
      g_steal_pointer ((arptr)); })
 
+#define ide_strv_empty0(strv) (((strv) == NULL) || ((strv)[0] == NULL))
+
 IDE_AVAILABLE_IN_3_30
 gboolean     ide_environ_parse                        (const gchar          *pair,
                                                        gchar               **key,
