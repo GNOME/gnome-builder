@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_MESON_TOOLCHAIN (gbp_meson_toolchain_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpMesonToolchain, gbp_meson_toolchain, GBP, MESON_TOOLCHAIN, IdeToolchain)
+G_DECLARE_FINAL_TYPE (GbpMesonToolchain, gbp_meson_toolchain, GBP, MESON_TOOLCHAIN, IdeSimpleToolchain)
 
 GbpMesonToolchain  *gbp_meson_toolchain_new              (IdeContext             *context);
 gboolean            gbp_meson_toolchain_load             (GbpMesonToolchain      *self,

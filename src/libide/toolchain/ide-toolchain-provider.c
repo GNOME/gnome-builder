@@ -143,7 +143,6 @@ ide_toolchain_provider_default_init (IdeToolchainProviderInterface *iface)
 /**
  * ide_toolchain_provider_load_async:
  * @self: a #IdeToolchainProvider
- * @manager: a #IdeToolchainManager
  * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: a callback to execute upon completion
  * @user_data: closure data for @callback
