@@ -71,7 +71,7 @@ gbp_meson_toolchain_provider_load_worker (IdeTask      *task,
                                      cancellable,
                                      &file_error);
       content_type = g_file_info_get_content_type (file_info);
-      if (!g_content_type_is_mime_type (content_type, "text/plain"))
+      if (g_content_type_is_mime_type (content_type, "text/plain"))
         {
           g_autoptr(GKeyFile) keyfile = g_key_file_new ();
           g_autofree gchar *path = g_file_get_path (file);

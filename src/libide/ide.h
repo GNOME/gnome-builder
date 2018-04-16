@@ -178,6 +178,7 @@ G_BEGIN_DECLS
 #include "testing/ide-test-provider.h"
 #include "threading/ide-task.h"
 #include "threading/ide-thread-pool.h"
+#include "toolchain/ide-simple-toolchain.h"
 #include "toolchain/ide-toolchain.h"
 #include "toolchain/ide-toolchain-manager.h"
 #include "toolchain/ide-toolchain-provider.h"

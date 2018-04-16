@@ -25,16 +25,11 @@
 
 struct _GbpCMakeToolchain
 {
-  IdeToolchain            parent_instance;
+  IdeSimpleToolchain      parent_instance;
   gchar                  *file_path;
-  gchar                  *exe_wrapper;
-  gchar                  *archiver;
-  gchar                  *pkg_config;
-  GHashTable             *compilers;
-  GCancellable           *verify_cancellable;
 };
 
-G_DEFINE_TYPE (GbpCMakeToolchain, gbp_cmake_toolchain, IDE_TYPE_TOOLCHAIN)
+G_DEFINE_TYPE (GbpCMakeToolchain, gbp_cmake_toolchain, IDE_TYPE_SIMPLE_TOOLCHAIN)
 
 enum {
   PROP_0,
@@ -45,19 +40,14 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 GbpCMakeToolchain *
-gbp_cmake_toolchain_new (IdeContext   *context,
-                         GFile        *file)
+gbp_cmake_toolchain_new (IdeContext   *context)
 {
-  g_autofree gchar *path = g_file_get_path (file);
-  g_autofree gchar *id = g_strconcat ("cmake:", path, NULL);
   g_autoptr(IdeTriplet) triplet = NULL;
   g_autoptr(GbpCMakeToolchain) toolchain = NULL;
 
   triplet = ide_triplet_new_from_system ();
   toolchain = g_object_new (GBP_TYPE_CMAKE_TOOLCHAIN,
                             "context", context,
-                            "file-path", path,
-                            "id", id,
                             "host-triplet", triplet,
                             NULL);
 
@@ -65,12 +55,12 @@ gbp_cmake_toolchain_new (IdeContext   *context,
 }
 
 /**
- * ide_toolchain_get_id:
- * @self: an #IdeToolchain
+ * gbp_cmake_toolchain_get_file_path:
+ * @self: an #GbpCMakeToolchain
  *
- * Gets the internal identifier of the toolchain
+ * Gets the path to the CMake cross-compilation definitions
  *
- * Returns: (transfer none): the unique identifier.
+ * Returns: (transfer none): the path to the CMake cross-compilation definitions file.
  *
  * Since: 3.30
  */
@@ -82,60 +72,56 @@ gbp_cmake_toolchain_get_file_path (GbpCMakeToolchain  *self)
   return self->file_path;
 }
 
-void
-gbp_cmake_toolchain_set_file_path (GbpCMakeToolchain  *self,
-                                   const gchar        *file_path)
-{
-  g_return_if_fail (GBP_IS_CMAKE_TOOLCHAIN (self));
-  g_return_if_fail (file_path != NULL);
-
-  if (g_strcmp0 (file_path, self->file_path) != 0)
-    {
-      g_clear_pointer (&self->file_path, g_free);
-      self->file_path = g_strdup (file_path);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_PATH]);
-    }
-}
-
 static gchar *
-_gbp_cmake_toolchain_deploy_temporary_cmake (GCancellable  *cancellable)
+_gbp_cmake_toolchain_deploy_temporary_cmake (GbpCMakeToolchain  *self,
+                                             GCancellable  *cancellable)
 {
-  g_autoptr(GError) error = NULL;
-  g_autoptr(GFile) cmake_lists_res = NULL;
-  g_autoptr(GFile) cmake_ini_res = NULL;
-  g_autoptr(GFile) cmake_lists = NULL;
-  g_autoptr(GFile) cmake_ini = NULL;
-  g_autoptr(GFile) tmp_file = NULL;
-  g_autofree gchar *tmp_dir = NULL;
+  IdeContext *context;
+  g_autofree gchar *defined_path = NULL;
 
-  tmp_dir = g_dir_make_tmp (".builder-cmake-XXXXXX", &error);
-  if (error != NULL)
+  g_assert (GBP_IS_CMAKE_TOOLCHAIN(self));
+
+  context = ide_object_get_context (IDE_OBJECT(self));
+  defined_path = ide_context_cache_filename (context, "cmake", "toolchain-detection", NULL);
+  if (!g_file_test (defined_path, G_FILE_TEST_EXISTS))
     {
-      //TODO
-      return NULL;
+      g_autoptr(GError) error = NULL;
+      g_autoptr(GFile) tmp_file = g_file_new_for_path (defined_path);
+      g_autoptr(GFile) cmake_lists_res = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/cmake/CMakeLists.txt");
+      g_autoptr(GFile) cmake_ini_res = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/cmake/toolchain-info.ini.cmake");
+      g_autoptr(GFile) cmake_lists = g_file_get_child (tmp_file, "CMakeLists.txt");
+      g_autoptr(GFile) cmake_ini = g_file_get_child (tmp_file, "toolchain-info.ini.cmake");
+
+      if (g_mkdir_with_parents (defined_path, 0750) != 0)
+        {
+          g_critical ("Error creating temporary CMake folder at %s", defined_path);
+          return NULL;
+        }
+
+      g_file_copy (cmake_lists_res, cmake_lists, G_FILE_COPY_NONE, cancellable, NULL, NULL, &error);
+      if (error != NULL)
+        {
+          g_critical ("Error creating temporary CMake folder: %s", error->message);
+          return NULL;
+        }
+
+      g_file_copy (cmake_ini_res, cmake_ini, G_FILE_COPY_NONE, cancellable, NULL, NULL, &error);
+      if (error != NULL)
+        {
+          g_critical ("Error creating temporary CMake folder: %s", error->message);
+          return NULL;
+        }
+  }
+
+  for (guint i = 0; i < G_MAXUINT; i++)
+    {
+      g_autofree gchar *build_folder = g_strdup_printf ("build%u", i);
+      g_autofree gchar *builddir = g_build_filename (defined_path, build_folder, NULL);
+      if (!g_file_test (builddir, G_FILE_TEST_EXISTS) && g_mkdir (builddir, 0750) == 0)
+        return g_steal_pointer (&builddir);
     }
 
-  tmp_file = g_file_new_for_path (tmp_dir);
-  cmake_lists_res = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/cmake/CMakeLists.txt");
-  cmake_ini_res = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/cmake/toolchain-info.ini.cmake");
-  cmake_lists = g_file_get_child (tmp_file, "CMakeLists.txt");
-  cmake_ini = g_file_get_child (tmp_file, "toolchain-info.ini.cmake");
-
-  g_file_copy (cmake_lists_res, cmake_lists, G_FILE_COPY_NONE, cancellable, NULL, NULL, &error);
-  if (error != NULL)
-    {
-      //TODO
-      return NULL;
-    }
-
-  g_file_copy (cmake_ini_res, cmake_ini, G_FILE_COPY_NONE, cancellable, NULL, NULL, &error);
-  if (error != NULL)
-    {
-      //TODO
-      return NULL;
-    }
-
-  return g_steal_pointer (&tmp_dir);
+  return NULL;
 }
 
 static gboolean
@@ -151,6 +137,8 @@ _gbp_cmake_toolchain_parse_keyfile (GbpCMakeToolchain  *self,
   g_autofree gchar *system_lowercase = NULL;
   g_autofree gchar *cpu = NULL;
   g_autofree gchar *pkg_config = NULL;
+  g_autofree gchar *ar_path = NULL;
+  g_autofree gchar *exec_path = NULL;
 
   if (!g_key_file_load_from_file (keyfile, filename, G_KEY_FILE_NONE, NULL))
     return FALSE;
@@ -164,31 +152,35 @@ _gbp_cmake_toolchain_parse_keyfile (GbpCMakeToolchain  *self,
   host_triplet = ide_triplet_new_with_triplet (cpu, system_lowercase, NULL);
   ide_toolchain_set_host_triplet (IDE_TOOLCHAIN(self), host_triplet);
 
-  self->exe_wrapper = g_key_file_get_string (keyfile, "binaries", "exe_wrapper", NULL);
-  self->archiver = g_key_file_get_string (keyfile, "binaries", "ar", NULL);
-  self->pkg_config = g_key_file_get_string (keyfile, "binaries", "pkg_config", NULL);
+  exec_path = g_key_file_get_string (keyfile, "binaries", "exe_wrapper", NULL);
+  ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                              IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                              IDE_TOOLCHAIN_TOOL_EXEC,
+                                              exec_path);
+
+  ar_path = g_key_file_get_string (keyfile, "binaries", "ar", NULL);
+  ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                              IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                              IDE_TOOLCHAIN_TOOL_AR,
+                                              exec_path);
+
+  pkg_config = g_key_file_get_string (keyfile, "binaries", "pkg_config", NULL);
+  ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                              IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                              IDE_TOOLCHAIN_TOOL_PKG_CONFIG,
+                                              pkg_config);
 
   compilers = g_key_file_get_keys (keyfile, "compilers", &compilers_length, NULL);
   for (gint i = 0; i < compilers_length; i++)
     {
       g_autofree gchar *compiler_path = g_key_file_get_string (keyfile, "compilers", compilers[i], NULL);
-      g_hash_table_insert (self->compilers, g_strdup (compilers[i]), g_steal_pointer (&compiler_path));
+      ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                                  compilers[i],
+                                                  IDE_TOOLCHAIN_TOOL_CC,
+                                                  compiler_path);
     }
 
   return TRUE;
-}
-
-const gchar *
-gbp_cmake_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
-                                           const gchar   *language,
-                                           const gchar   *tool_id)
-{
-  GbpCMakeToolchain *self = (GbpCMakeToolchain *)toolchain;
-
-  g_return_val_if_fail (GBP_IS_CMAKE_TOOLCHAIN (self), NULL);
-  g_return_val_if_fail (tool_id != NULL, NULL);
-
-  return NULL;
 }
 
 /* It is far easier and more reliable to get the variables from cmake itself,
@@ -196,37 +188,42 @@ gbp_cmake_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
 gboolean
 gbp_cmake_toolchain_load (GbpCMakeToolchain *self,
                           GFile             *file,
+                          GCancellable      *cancellable,
                           GError           **error)
 {
-  g_autofree gchar *tmp_dir = NULL;
+  g_autofree gchar *build_dir = NULL;
   g_autofree gchar *toolchain_arg = NULL;
   g_autoptr(IdeSubprocessLauncher) cmake_launcher = NULL;
   g_autoptr(IdeSubprocess) cmake_subprocess = NULL;
+  g_autofree gchar *id = NULL;
 
   g_assert (GBP_IS_CMAKE_TOOLCHAIN (self));
-
-  g_clear_object (&self->verify_cancellable);
-  self->verify_cancellable = g_cancellable_new ();
 
   g_clear_pointer (&self->file_path, g_free);
   self->file_path = g_file_get_path (file);
 
-  tmp_dir = _gbp_cmake_toolchain_deploy_temporary_cmake (self->verify_cancellable);
+  id = g_strconcat ("cmake:", self->file_path, NULL);
+  ide_toolchain_set_id (IDE_TOOLCHAIN(self), id);
+
+  build_dir = _gbp_cmake_toolchain_deploy_temporary_cmake (self, cancellable);
+  if (build_dir == NULL)
+    return FALSE;
+
   toolchain_arg = g_strdup_printf ("-DCMAKE_TOOLCHAIN_FILE=%s", self->file_path);
 
   cmake_launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE|G_SUBPROCESS_FLAGS_STDERR_SILENCE);
   ide_subprocess_launcher_push_argv (cmake_launcher, "cmake");
-  ide_subprocess_launcher_push_argv (cmake_launcher, ".");
+  ide_subprocess_launcher_push_argv (cmake_launcher, "..");
   ide_subprocess_launcher_push_argv (cmake_launcher, toolchain_arg);
-  ide_subprocess_launcher_set_cwd (cmake_launcher, tmp_dir);
-  cmake_subprocess = ide_subprocess_launcher_spawn (cmake_launcher, self->verify_cancellable, error);
+  ide_subprocess_launcher_set_cwd (cmake_launcher, build_dir);
+  cmake_subprocess = ide_subprocess_launcher_spawn (cmake_launcher, cancellable, error);
   if (cmake_subprocess == NULL)
     return FALSE;
 
-  if (!ide_subprocess_wait_check (cmake_subprocess, self->verify_cancellable, error))
+  if (!ide_subprocess_wait_check (cmake_subprocess, cancellable, error))
     return FALSE;
 
-  if (!_gbp_cmake_toolchain_parse_keyfile (self, tmp_dir))
+  if (!_gbp_cmake_toolchain_parse_keyfile (self, build_dir))
     return FALSE;
 
   return TRUE;
@@ -238,10 +235,6 @@ gbp_cmake_toolchain_finalize (GObject *object)
   GbpCMakeToolchain *self = (GbpCMakeToolchain *)object;
 
   g_clear_pointer (&self->file_path, g_free);
-  g_clear_pointer (&self->exe_wrapper, g_free);
-  g_clear_pointer (&self->archiver, g_free);
-  g_clear_pointer (&self->pkg_config, g_free);
-  g_clear_pointer (&self->compilers, g_hash_table_unref);
 
   G_OBJECT_CLASS (gbp_cmake_toolchain_parent_class)->finalize (object);
 }
@@ -265,41 +258,19 @@ gbp_cmake_toolchain_get_property (GObject    *object,
 }
 
 static void
-gbp_cmake_toolchain_set_property (GObject      *object,
-                                  guint         prop_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
-{
-  GbpCMakeToolchain *self = GBP_CMAKE_TOOLCHAIN (object);
-
-  switch (prop_id)
-    {
-    case PROP_FILE_PATH:
-      gbp_cmake_toolchain_set_file_path (self, g_value_get_string (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gbp_cmake_toolchain_class_init (GbpCMakeToolchainClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeToolchainClass *toolchain_class = IDE_TOOLCHAIN_CLASS (klass);
 
   object_class->finalize = gbp_cmake_toolchain_finalize;
   object_class->get_property = gbp_cmake_toolchain_get_property;
-  object_class->set_property = gbp_cmake_toolchain_set_property;
-
-  toolchain_class->get_tool_for_language = gbp_cmake_toolchain_get_tool_for_language;
 
   properties [PROP_FILE_PATH] =
     g_param_spec_string ("file-path",
                          "File path",
                          "The path of the cross-file",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -307,5 +278,5 @@ gbp_cmake_toolchain_class_init (GbpCMakeToolchainClass *klass)
 static void
 gbp_cmake_toolchain_init (GbpCMakeToolchain *self)
 {
-  self->compilers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  
 }

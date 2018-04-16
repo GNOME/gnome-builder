@@ -159,6 +159,7 @@ ide_simple_toolchain_class_init (IdeSimpleToolchainClass *klass)
   object_class->finalize = ide_simple_toolchain_finalize;
 
   toolchain_class->get_tool_for_language = ide_simple_toolchain_get_tool_for_language;
+  toolchain_class->get_tools_for_id = ide_simple_toolchain_get_tools_for_id;
 }
 
 static void

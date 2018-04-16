@@ -23,16 +23,11 @@
 
 struct _GbpMesonToolchain
 {
-  IdeToolchain            parent_instance;
+  IdeSimpleToolchain      parent_instance;
   gchar                  *file_path;
-  gchar                  *exe_wrapper;
-  gchar                  *archiver;
-  gchar                  *pkg_config;
-  gchar                  *strip;
-  GHashTable             *compilers;
 };
 
-G_DEFINE_TYPE (GbpMesonToolchain, gbp_meson_toolchain, IDE_TYPE_TOOLCHAIN)
+G_DEFINE_TYPE (GbpMesonToolchain, gbp_meson_toolchain, IDE_TYPE_SIMPLE_TOOLCHAIN)
 
 enum {
   PROP_0,
@@ -58,7 +53,7 @@ _g_key_file_get_string_quoted (GKeyFile     *key_file,
 }
 
 GbpMesonToolchain *
-gbp_meson_toolchain_new (IdeContext   *context)
+gbp_meson_toolchain_new (IdeContext *context)
 {
   g_autoptr(GbpMesonToolchain) toolchain = NULL;
 
@@ -72,6 +67,22 @@ gbp_meson_toolchain_new (IdeContext   *context)
   return g_steal_pointer (&toolchain);
 }
 
+static const gchar *
+meson_toolchain_get_language (const gchar *meson_tool_name)
+{
+  g_return_val_if_fail (meson_tool_name != NULL, NULL);
+
+  if (g_strcmp0 (meson_tool_name, "c") == 0)
+    return IDE_TOOLCHAIN_LANGUAGE_C;
+
+  if (g_strcmp0 (meson_tool_name, "cpp") == 0)
+    return IDE_TOOLCHAIN_LANGUAGE_CPLUSPLUS;
+
+  if (g_strcmp0 (meson_tool_name, "valac") == 0)
+    return IDE_TOOLCHAIN_LANGUAGE_VALA;
+
+  return meson_tool_name;
+}
 
 gboolean
 gbp_meson_toolchain_load (GbpMesonToolchain  *self,
@@ -110,33 +121,46 @@ gbp_meson_toolchain_load (GbpMesonToolchain  *self,
   for (int i = 0; binaries[i] != NULL; i++)
     {
       const gchar *lang = binaries[i];
-      g_autofree gchar *exec_path = NULL;
       g_autoptr(GError) key_error = NULL;
+      g_autofree gchar *exec_path = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
 
       if (g_strcmp0 (lang, "ar") == 0)
-        self->archiver = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+        ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                    IDE_TOOLCHAIN_TOOL_AR,
+                                                    exec_path);
       else if (g_strcmp0 (lang, "strip") == 0)
-        self->strip = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+        ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                    IDE_TOOLCHAIN_TOOL_STRIP,
+                                                    exec_path);
       else if (g_strcmp0 (lang, "pkg_config") == 0)
-        self->pkg_config = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+        ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                    IDE_TOOLCHAIN_TOOL_PKG_CONFIG,
+                                                    exec_path);
       else if (g_strcmp0 (lang, "exe_wrapper") == 0)
-        self->exe_wrapper = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+        ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                    IDE_TOOLCHAIN_TOOL_EXEC,
+                                                    exec_path);
       else
-        g_hash_table_insert (self->compilers,
-                             g_strdup (lang),
-                             _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error));
+        ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
+                                                    meson_toolchain_get_language (lang),
+                                                    IDE_TOOLCHAIN_TOOL_CC,
+                                                    exec_path);
     }
 
   return TRUE;
 }
 
 /**
- * ide_toolchain_get_id:
- * @self: an #IdeToolchain
+ * gbp_meson_toolchain_get_file_path:
+ * @self: an #GbpMesonToolchain
  *
- * Gets the internal identifier of the toolchain
+ * Gets the path to the Meson cross-file
  *
- * Returns: (transfer none): the unique identifier.
+ * Returns: (transfer none): the path to the Meson cross-file.
  *
  * Since: 3.30
  */
