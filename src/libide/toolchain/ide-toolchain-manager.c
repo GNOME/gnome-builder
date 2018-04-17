@@ -44,6 +44,7 @@ struct _IdeToolchainManager
   GCancellable     *cancellable;
   PeasExtensionSet *extensions;
   GPtrArray        *toolchains;
+  guint             loaded : 1;
 };
 
 typedef struct
@@ -358,6 +359,8 @@ ide_toolchain_manager_init_finish (GAsyncInitable  *initable,
   g_assert (IDE_IS_TOOLCHAIN_MANAGER (initable));
   g_assert (IDE_IS_TASK (result));
 
+  IDE_TOOLCHAIN_MANAGER (initable)->loaded = TRUE;
+
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
@@ -391,6 +394,7 @@ ide_toolchain_manager_class_init (IdeToolchainManagerClass *klass)
 static void
 ide_toolchain_manager_init (IdeToolchainManager *self)
 {
+  self->loaded = FALSE;
   self->cancellable = g_cancellable_new ();
   self->toolchains = g_ptr_array_new_with_free_func (g_object_unref);
 }
@@ -459,6 +463,14 @@ ide_toolchain_manager_get_toolchain (IdeToolchainManager *self,
     }
 
   return NULL;
+}
+
+gboolean
+ide_toolchain_manager_is_loaded (IdeToolchainManager  *self)
+{
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN_MANAGER (self), FALSE);
+
+  return self->loaded;
 }
 
 void
