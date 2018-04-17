@@ -189,8 +189,8 @@ clear_unsaved_file (gpointer data)
   g_clear_pointer (&uf->Filename, g_free);
 }
 
-static const gchar *
-discover_llvm_flags (void)
+const gchar *
+ide_clang_service_get_llvm_flags (void)
 {
   static const gchar *llvm_flags;
   g_autoptr(GSubprocess) subprocess = NULL;
@@ -296,7 +296,7 @@ ide_clang_service_parse_worker (IdeTask       *task,
    * included. Add a guard NULL just for extra safety.
    */
   built_argv = g_ptr_array_new ();
-  if (NULL != (llvm_flags = discover_llvm_flags ()))
+  if (NULL != (llvm_flags = ide_clang_service_get_llvm_flags ()))
     g_ptr_array_add (built_argv, (gchar *)llvm_flags);
   for (i = 0; request->command_line_args[i] != NULL; i++)
     g_ptr_array_add (built_argv, request->command_line_args[i]);

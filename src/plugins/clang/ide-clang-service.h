@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClangService, ide_clang_service, IDE, CLANG_SERVICE, IdeObject)
 
+const gchar             *ide_clang_service_get_llvm_flags              (void);
 void                     ide_clang_service_get_translation_unit_async  (IdeClangService      *self,
                                                                         IdeFile              *file,
                                                                         gint64                min_serial,
