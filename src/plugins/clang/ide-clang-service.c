@@ -244,7 +244,7 @@ discover_llvm_flags (void)
 }
 
 static void
-ide_clang_service_parse_worker (GTask        *task,
+ide_clang_service_parse_worker (IdeTask       *task,
                                 gpointer      source_object,
                                 gpointer      task_data,
                                 GCancellable *cancellable)
@@ -264,7 +264,7 @@ ide_clang_service_parse_worker (GTask        *task,
   GArray *ar = NULL;
   gsize i;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_CLANG_SERVICE (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (IDE_IS_FILE (request->file));
@@ -343,11 +343,11 @@ ide_clang_service_parse_worker (GTask        *task,
 
   if (!tu)
     {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               _("Failed to create translation unit: %s"),
-                               detail_error ? detail_error : "");
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 _("Failed to create translation unit: %s"),
+                                 detail_error ? detail_error : "");
       goto cleanup;
     }
 
@@ -355,7 +355,7 @@ ide_clang_service_parse_worker (GTask        *task,
   gfile = ide_file_get_file (request->file);
   ret = _ide_clang_translation_unit_new (context, tu, gfile, index, request->sequence);
 
-  g_task_return_pointer (task, g_object_ref (ret), g_object_unref);
+  ide_task_return_object (task, g_steal_pointer (&ret));
 
 cleanup:
   g_array_unref (ar);
@@ -444,7 +444,7 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
                                        gpointer      user_data)
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeClangService *self;
   ParseRequest *request;
@@ -452,12 +452,12 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
 
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_CLANG_SERVICE (self));
 
-  request = g_task_get_task_data (task);
+  request = ide_task_get_task_data (task);
   g_assert (request != NULL);
 
   argv = ide_build_system_get_build_flags_finish (build_system, result, &error);
@@ -506,9 +506,7 @@ ide_clang_service__get_build_flags_cb (GObject      *object,
   }
 #endif
 
-  ide_thread_pool_push_task (IDE_THREAD_POOL_COMPILER,
-                             task,
-                             ide_clang_service_parse_worker);
+  ide_task_run_in_thread (task, ide_clang_service_parse_worker);
 }
 
 static void
@@ -521,10 +519,10 @@ ide_clang_service_unit_completed_cb (GObject      *object,
   gpointer ret;
 
   g_assert (IDE_IS_CLANG_SERVICE (object));
-  g_assert (G_IS_TASK (result));
+  g_assert (IDE_IS_TASK (result));
   g_assert (G_IS_TASK (task));
 
-  if (!(ret = g_task_propagate_pointer (G_TASK (result), &error)))
+  if (!(ret = ide_task_propagate_object (IDE_TASK (result), &error)))
     g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, ret, g_object_unref);
@@ -536,7 +534,7 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
                                                GTask         *task,
                                                gpointer       user_data)
 {
-  g_autoptr(GTask) real_task = NULL;
+  g_autoptr(IdeTask) real_task = NULL;
   g_autoptr(GPtrArray) files_ar = NULL;
   g_autofree gchar *path = NULL;
   IdeClangService *self = user_data;
@@ -588,13 +586,14 @@ ide_clang_service_get_translation_unit_worker (DzlTaskCache  *cache,
 #endif
                       | CXTranslationUnit_DetailedPreprocessingRecord);
 
-  real_task = g_task_new (self,
-                          g_task_get_cancellable (task),
-                          ide_clang_service_unit_completed_cb,
-                          g_object_ref (task));
-  g_task_set_source_tag (real_task, ide_clang_service_get_translation_unit_worker);
-  g_task_set_priority (real_task, G_PRIORITY_LOW);
-  g_task_set_task_data (real_task, request, parse_request_free);
+  real_task = ide_task_new (self,
+                            g_task_get_cancellable (task),
+                            ide_clang_service_unit_completed_cb,
+                            g_object_ref (task));
+  ide_task_set_source_tag (real_task, ide_clang_service_get_translation_unit_worker);
+  ide_task_set_priority (real_task, G_PRIORITY_LOW);
+  ide_task_set_task_data (real_task, request, parse_request_free);
+  ide_task_set_kind (real_task, IDE_THREAD_POOL_COMPILER);
 
   /*
    * Request the build flags necessary to build this module from the build system.
