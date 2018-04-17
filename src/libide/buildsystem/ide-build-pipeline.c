@@ -3768,11 +3768,23 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self, IdeDeviceInfo *info
 {
   g_autoptr(IdeToolchain) toolchain = NULL;
   g_autoptr(IdeTriplet) toolchain_triplet = NULL;
+  IdeContext *context;
   IdeRuntime *runtime;
   IdeTriplet *device_triplet;
+  IdeToolchainManager *toolchain_manager;
 
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
   g_return_if_fail (IDE_IS_DEVICE_INFO (info));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
+
+  toolchain_manager = ide_context_get_toolchain_manager (context);
+  g_return_if_fail (IDE_IS_TOOLCHAIN_MANAGER (toolchain_manager));
+
+  /* Don't try to initialize too early */
+  if (ide_toolchain_manager_is_loaded (toolchain_manager))
+    return;
 
   toolchain = ide_configuration_get_toolchain (self->configuration);
   runtime = ide_configuration_get_runtime (self->configuration);
@@ -3784,12 +3796,7 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self, IdeDeviceInfo *info
       g_strcmp0 (ide_triplet_get_arch (device_triplet), ide_triplet_get_arch (toolchain_triplet)) != 0 ||
       !ide_runtime_supports_toolchain (runtime, toolchain))
     {
-      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-      IdeToolchainManager *toolchain_manager = ide_context_get_toolchain_manager (context);
       g_autoptr(IdeToolchain) default_toolchain = ide_toolchain_manager_get_toolchain (toolchain_manager, "default");
-
-      g_return_if_fail (IDE_IS_CONTEXT (context));
-      g_return_if_fail (IDE_IS_TOOLCHAIN_MANAGER (toolchain_manager));
 
       _ide_build_pipeline_set_toolchain (self, default_toolchain);
     }
