@@ -21,7 +21,6 @@
 #
 
 import gi
-import os
 import json
 import threading
 
@@ -354,8 +353,12 @@ class JsCodeIndexEntries(GObject.Object, Ide.CodeIndexEntries):
 
 
 class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
+    active = False
+    queue = None
+
     def __init__(self):
         super().__init__()
+        self.queue = []
 
     @staticmethod
     def _get_node_name(node):
@@ -407,10 +410,29 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
             print(repr(ex))
             task.return_error(GLib.Error(message=repr(ex)))
 
+        finally:
+            try:
+                if self.queue:
+                    task = self.queue.pop(0)
+                    launcher = GjsSymbolProvider._get_launcher(self.get_context(), task.file)
+                    proc = launcher.spawn()
+                    proc.communicate_utf8_async(None, task.get_cancellable(), self._index_file_cb, task)
+                    return
+            except Exception as ex:
+                print(repr(ex))
+
+            self.active = False
+
     def do_index_file_async(self, file_, build_flags, cancellable, callback, data):
         task = Gio.Task.new(self, cancellable, callback)
         task.entries = None
         task.file = file_
+
+        if self.active:
+            self.queue.append(task)
+            return
+
+        self.active = True
 
         launcher = GjsSymbolProvider._get_launcher(self.get_context(), file_)
         proc = launcher.spawn()
