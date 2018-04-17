@@ -33,11 +33,18 @@ Changes since last release:
  • Many API improvements to simplify access from language bindings.
  • Flatpak "simple" build systems now run the commands from the srcdir
    matching more closely to what flatpak-builder will do.
- • XML plugin improvements for performance and stability.
+ • XML plugin improvements for performance, stability and DTD tracking.
  • GDB integration now properly updates frames for the selected thread.
+ • Various terminal improvements.
+ • Various memory leak fixes.
+ • The build manager tries to avoid reseting the build pipeline in
+   certain situations.
+ • Support for rofiles-fuse has been added to speed up flatpak cachepoint
+   generation.
+ • Improvements to build flag parsing across entire directories.
 
 Updated Translations:
 
-   Swedish, Indonesian, Lithuanian, Dutch, Czech, Italian,
-   Brazilian Portuguese, Latvian
+   Swedish, Indonesian, Lithuanian, Dutch, Czech, Italian, Brazilian
+   Portuguese, Latvian, Hungarian, British English, German
 

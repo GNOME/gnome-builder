@@ -81,6 +81,20 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.29.1" date="2018-04-16">
+      <description>
+        <p>
+          Builder 3.29.1 is our first development release towards 3.29.1.
+          This mostly includes non-visible changes such as a new thread pool and code-indexer APIs.
+        </p>
+        <ul>
+          <li>A new "Runtime Terminal" option has been added to get a terminal in the same environment as running the application. Contrast this to a "Build Terminal" which is the build environment.</li>
+          <li>A new sysroot plugin to work alternative install roots.</li>
+          <li>Many improvements to plugins.</li>
+          <li>Various performance improvements and memory leak fixes.</li>
+        </ul>
+      </description>
+    </release>
 
     <release version="3.28.0" date="2018-03-13">
       <description>
