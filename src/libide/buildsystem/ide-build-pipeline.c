@@ -1096,11 +1096,11 @@ ide_build_pipeline_load_cb (IdleLoadState *state)
       ide_build_pipeline_addin_load (addin, state->self);
       end = g_get_monotonic_time ();
 
-      g_ptr_array_remove_index (state->addins, state->addins->len - 1);
-
       g_debug ("%s loaded in %lf seconds",
                G_OBJECT_TYPE_NAME (addin),
                (end - begin) / (gdouble)G_USEC_PER_SEC);
+
+      g_ptr_array_remove_index (state->addins, state->addins->len - 1);
 
       if (state->addins->len > 0)
         return G_SOURCE_CONTINUE;
