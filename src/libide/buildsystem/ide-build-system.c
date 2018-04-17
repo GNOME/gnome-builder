@@ -368,7 +368,9 @@ ide_build_system_post_process_build_flags (IdeBuildSystem  *self,
   IdeContext *context;
 
   g_assert (IDE_IS_BUILD_SYSTEM (self));
-  g_assert (flags != NULL);
+
+  if (flags == NULL || flags[0] == NULL)
+    return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_context_get_build_manager (context);
@@ -495,7 +497,9 @@ ide_build_system_get_build_flags_for_files_async (IdeBuildSystem       *self,
  * @result: a #GAsyncResult
  * @error: a location for a #GError or %NULL
  *
- * Returns: Returns a #GHashTable or #IdeFile to #GStrv
+ * Returns: (element-type Gio.File GLib.Strv): a #GHashTable or #IdeFile to #GStrv
+ *
+ * Since: 3.28
  */
 GHashTable *
 ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
@@ -510,6 +514,17 @@ ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   ret = IDE_BUILD_SYSTEM_GET_IFACE (self)->get_build_flags_for_files_finish (self, result, error);
+
+  if (ret != NULL)
+    {
+      GHashTableIter iter;
+      gchar **flags;
+
+      g_hash_table_iter_init (&iter, ret);
+
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&flags))
+        ide_build_system_post_process_build_flags (self, flags);
+    }
 
   IDE_RETURN (ret);
 }
