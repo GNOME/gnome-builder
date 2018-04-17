@@ -213,7 +213,7 @@ gbp_meson_toolchain_class_init (GbpMesonToolchainClass *klass)
                          "File path",
                          "The path of the cross-file",
                          NULL,
-                         (G_PARAM_READABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
