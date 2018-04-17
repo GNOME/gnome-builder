@@ -52,6 +52,8 @@ ide_clang_code_indexer_index_file_worker (IdeTask      *task,
   g_auto(CXTranslationUnit) unit = NULL;
   g_auto(CXIndex) index = NULL;
   g_autofree gchar *path = NULL;
+  g_autoptr(GPtrArray) cooked_flags = NULL;
+  const gchar *llvm;
   enum CXErrorCode code;
 
   g_assert (IDE_IS_TASK (task));
@@ -59,12 +61,22 @@ ide_clang_code_indexer_index_file_worker (IdeTask      *task,
   g_assert (br != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  cooked_flags = g_ptr_array_new ();
+  if ((llvm = ide_clang_service_get_llvm_flags ()))
+    g_ptr_array_add (cooked_flags, (gchar **)llvm);
+  if (br->build_flags != NULL)
+    {
+      for (guint i = 0; br->build_flags[i]; i++)
+        g_ptr_array_add (cooked_flags, br->build_flags[i]);
+    }
+  g_ptr_array_add (cooked_flags, NULL);
+
   path = g_file_get_path (br->file);
   index = clang_createIndex (0, 0);
   code = clang_parseTranslationUnit2 (index,
                                       path,
-                                      (const char * const *)br->build_flags,
-                                      br->build_flags ? g_strv_length (br->build_flags) : 0,
+                                      (const char * const *)cooked_flags->pdata,
+                                      cooked_flags->len - 1,
                                       NULL,
                                       0,
                                       (CXTranslationUnit_DetailedPreprocessingRecord |
@@ -76,6 +88,14 @@ ide_clang_code_indexer_index_file_worker (IdeTask      *task,
 #endif
                                        CXTranslationUnit_SkipFunctionBodies),
                                       &unit);
+
+#if 0
+  if (code != 0)
+    {
+      g_autofree gchar *flags = g_strjoinv (" ", (gchar **)cooked_flags->pdata);
+      g_printerr ("clang %s %s\n", path, flags);
+    }
+#endif
 
   if (code != CXError_Success)
     ide_task_return_new_error (task,
