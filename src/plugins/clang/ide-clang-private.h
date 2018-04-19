@@ -21,6 +21,7 @@
 #include <clang-c/Index.h>
 #include <ide.h>
 
+#include "ide-clang-autocleanups.h"
 #include "ide-clang-service.h"
 #include "ide-clang-symbol-node.h"
 #include "ide-clang-translation-unit.h"
@@ -32,21 +33,11 @@ IdeClangTranslationUnit *_ide_clang_translation_unit_new     (IdeContext        
                                                               GFile              *file,
                                                               IdeHighlightIndex  *index,
                                                               gint64              serial);
-void                     _ide_clang_dispose_diagnostic       (CXDiagnostic       *diag);
-void                     _ide_clang_dispose_index            (CXIndex            *index);
-void                     _ide_clang_dispose_string           (CXString           *str);
-void                     _ide_clang_dispose_unit             (CXTranslationUnit  *unit);
 IdeSymbolNode           *_ide_clang_symbol_node_new          (IdeContext         *context,
                                                               CXCursor            cursor);
 CXCursor                 _ide_clang_symbol_node_get_cursor   (IdeClangSymbolNode *self);
 GArray                  *_ide_clang_symbol_node_get_children (IdeClangSymbolNode *self);
 void                     _ide_clang_symbol_node_set_children (IdeClangSymbolNode *self,
                                                               GArray             *children);
-
-G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXString, _ide_clang_dispose_string)
-G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXIndex, _ide_clang_dispose_index)
-G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXTranslationUnit, _ide_clang_dispose_unit)
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (CXDiagnostic, _ide_clang_dispose_diagnostic)
 
 G_END_DECLS

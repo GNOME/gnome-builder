@@ -20,6 +20,7 @@
 
 #include "ide-clang-code-index-entries.h"
 #include "ide-clang-private.h"
+#include "ide-clang-util.h"
 
  /*
   * This is an implementation of IdeCodeIndexEntries. This will have a TU and
@@ -59,67 +60,6 @@ struct _IdeClangCodeIndexEntries
   /* If we've already run once, (so return empty result). */
   guint has_run : 1;
 };
-
-static void
-cx_cursor_free (CXCursor *cursor)
-{
-  g_slice_free (CXCursor, cursor);
-}
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (CXCursor, cx_cursor_free)
-
-static IdeSymbolKind
-translate_kind (enum CXCursorKind cursor_kind)
-{
-  switch ((int)cursor_kind)
-    {
-    case CXCursor_StructDecl:
-      return IDE_SYMBOL_STRUCT;
-
-    case CXCursor_UnionDecl:
-      return IDE_SYMBOL_UNION;
-
-    case CXCursor_ClassDecl:
-      return IDE_SYMBOL_CLASS;
-
-    case CXCursor_EnumDecl:
-      return IDE_SYMBOL_ENUM;
-
-    case CXCursor_FieldDecl:
-      return IDE_SYMBOL_FIELD;
-
-    case CXCursor_EnumConstantDecl:
-      return IDE_SYMBOL_ENUM_VALUE;
-
-    case CXCursor_FunctionDecl:
-      return IDE_SYMBOL_FUNCTION;
-
-    case CXCursor_CXXMethod:
-      return IDE_SYMBOL_METHOD;
-
-    case CXCursor_VarDecl:
-    case CXCursor_ParmDecl:
-      return IDE_SYMBOL_VARIABLE;
-
-    case CXCursor_TypedefDecl:
-    case CXCursor_NamespaceAlias:
-    case CXCursor_TypeAliasDecl:
-      return IDE_SYMBOL_ALIAS;
-
-    case CXCursor_Namespace:
-      return IDE_SYMBOL_NAMESPACE;
-
-    case CXCursor_FunctionTemplate:
-    case CXCursor_ClassTemplate:
-      return IDE_SYMBOL_TEMPLATE;
-
-    case CXCursor_MacroDefinition:
-      return IDE_SYMBOL_MACRO;
-
-    default:
-      return IDE_SYMBOL_NONE;
-    }
-}
 
 static const gchar *
 get_symbol_prefix (IdeSymbolKind kind)
@@ -289,7 +229,7 @@ ide_clang_code_index_entries_real_get_next_entry (IdeClangCodeIndexEntries *self
       cursor_kind = clang_getCursorKind (temp);
     }
 
-  kind = translate_kind (cursor_kind);
+  kind = ide_clang_translate_kind (cursor_kind);
   prefix = get_symbol_prefix (kind);
   name = g_strconcat (prefix, cname, NULL);
 
@@ -427,10 +367,10 @@ ide_clang_code_index_entries_finalize (GObject *object)
 {
   IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)object;
 
-  g_queue_foreach (&self->decl_cursors, (GFunc)cx_cursor_free, NULL);
+  g_queue_foreach (&self->decl_cursors, (GFunc)_ide_clang_dispose_cursor, NULL);
   g_queue_clear (&self->decl_cursors);
 
-  g_queue_foreach (&self->cursors, (GFunc)cx_cursor_free, NULL);
+  g_queue_foreach (&self->cursors, (GFunc)_ide_clang_dispose_cursor, NULL);
   g_queue_clear (&self->cursors);
 
   g_clear_pointer (&self->unit, clang_disposeTranslationUnit);

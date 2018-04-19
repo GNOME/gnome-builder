@@ -1,0 +1,80 @@
+/* ide-clang-util.h
+ *
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <ide.h>
+
+#include "ide-clang-autocleanups.h"
+
+G_BEGIN_DECLS
+
+static inline IdeSymbolKind
+ide_clang_translate_kind (enum CXCursorKind cursor_kind)
+{
+  switch ((int)cursor_kind)
+    {
+    case CXCursor_StructDecl:
+      return IDE_SYMBOL_STRUCT;
+
+    case CXCursor_UnionDecl:
+      return IDE_SYMBOL_UNION;
+
+    case CXCursor_ClassDecl:
+      return IDE_SYMBOL_CLASS;
+
+    case CXCursor_EnumDecl:
+      return IDE_SYMBOL_ENUM;
+
+    case CXCursor_FieldDecl:
+      return IDE_SYMBOL_FIELD;
+
+    case CXCursor_EnumConstantDecl:
+      return IDE_SYMBOL_ENUM_VALUE;
+
+    case CXCursor_FunctionDecl:
+      return IDE_SYMBOL_FUNCTION;
+
+    case CXCursor_CXXMethod:
+      return IDE_SYMBOL_METHOD;
+
+    case CXCursor_VarDecl:
+    case CXCursor_ParmDecl:
+      return IDE_SYMBOL_VARIABLE;
+
+    case CXCursor_TypedefDecl:
+    case CXCursor_NamespaceAlias:
+    case CXCursor_TypeAliasDecl:
+      return IDE_SYMBOL_ALIAS;
+
+    case CXCursor_Namespace:
+      return IDE_SYMBOL_NAMESPACE;
+
+    case CXCursor_FunctionTemplate:
+    case CXCursor_ClassTemplate:
+      return IDE_SYMBOL_TEMPLATE;
+
+    case CXCursor_MacroDefinition:
+      return IDE_SYMBOL_MACRO;
+
+    default:
+      return IDE_SYMBOL_NONE;
+    }
+}
+
+G_END_DECLS

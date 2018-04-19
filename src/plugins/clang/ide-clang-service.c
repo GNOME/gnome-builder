@@ -818,31 +818,3 @@ ide_clang_service_get_cached_translation_unit (IdeClangService *self,
 
   return cached ? g_object_ref (cached) : NULL;
 }
-
-void
-_ide_clang_dispose_string (CXString *str)
-{
-  if (str != NULL && str->data != NULL)
-    clang_disposeString (*str);
-}
-
-void
-_ide_clang_dispose_diagnostic (CXDiagnostic *diag)
-{
-  if (diag != NULL)
-    clang_disposeDiagnostic (diag);
-}
-
-void
-_ide_clang_dispose_index (CXIndex *idx)
-{
-  if (idx != NULL && *idx != NULL)
-    clang_disposeIndex (*idx);
-}
-
-void
-_ide_clang_dispose_unit (CXTranslationUnit *unit)
-{
-  if (unit != NULL && *unit != NULL)
-    clang_disposeTranslationUnit (*unit);
-}
