@@ -90,21 +90,27 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
   if (ret != NULL)
     {
       GbpSysrootManager *sysroot_manager = NULL;
-      g_autofree gchar *sysroot_cflags = NULL;
+      g_autofree gchar *sysroot_flag = NULL;
       g_autofree gchar *sysroot_libdirs = NULL;
       g_autofree gchar *sysroot_path = NULL;
       g_autofree gchar *pkgconfig_dirs = NULL;
       g_autofree gchar *cflags = NULL;
+      g_autofree gchar *ldflags = NULL;
       g_auto(GStrv) path_parts = NULL;
-      const gchar *env_var = NULL;
+      const gchar *previous_env = NULL;
       const gchar *sysroot_id = NULL;
 
       sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
       sysroot_manager = gbp_sysroot_manager_get_default ();
       sysroot_path = gbp_sysroot_manager_get_target_path (sysroot_manager, sysroot_id);
-      env_var = ide_subprocess_launcher_getenv (ret, "CFLAGS");
-      sysroot_cflags = g_strconcat ("--sysroot=", sysroot_path, NULL);
-      cflags = g_strjoin (" ", sysroot_cflags, env_var, NULL);
+      sysroot_flag = g_strconcat ("--sysroot=", sysroot_path, NULL);
+
+      previous_env = ide_subprocess_launcher_getenv (ret, "CFLAGS");
+      cflags = g_strjoin (" ", sysroot_flag, previous_env, NULL);
+
+      previous_env = ide_subprocess_launcher_getenv (ret, "LDFLAGS");
+      ldflags = g_strjoin (" ", sysroot_flag, previous_env, NULL);
+
       pkgconfig_dirs = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, sysroot_id);
 
       if (!dzl_str_empty0 (pkgconfig_dirs))
@@ -119,6 +125,7 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_set_clear_env (ret, FALSE);
 
       ide_subprocess_launcher_setenv (ret, "CFLAGS", cflags, TRUE);
+      ide_subprocess_launcher_setenv (ret, "LDFLAGS", ldflags, TRUE);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_DIR", "", TRUE);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_SYSROOT_DIR", g_strdup (sysroot_path), TRUE);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_LIBDIR", sysroot_libdirs, TRUE);
