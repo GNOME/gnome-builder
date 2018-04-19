@@ -237,9 +237,11 @@ libide_dep = declare_dependency(
                          libgio_dep,
                          libgtk_dep,
                          libgtksource_dep,
+                         libpeas_dep,
                          libjson_glib_dep,
                          libtemplate_glib_dep,
-                         libjsonrpc_glib_dep ],
+                         libjsonrpc_glib_dep,
+                         libvte_dep ],
             link_with: libide,
   include_directories: include_directories('.'),
 )
