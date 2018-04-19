@@ -21,6 +21,7 @@
 #include <glib/gi18n.h>
 
 #include "gbp-meson-toolchain.h"
+#include "gbp-meson-build-stage-cross-file.h"
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-pipeline-addin.h"
 
@@ -42,31 +43,6 @@ on_stage_query (IdeBuildStage    *stage,
 
   /* Defer to ninja to determine completed status */
   ide_build_stage_set_completed (stage, FALSE);
-}
-
-static void
-_g_key_file_set_string_quoted (GKeyFile *keyfile,
-                               const gchar *group,
-                               const gchar *key,
-                               const gchar *unquoted_value)
-{
-  g_autofree gchar *quoted_value = NULL;
-
-  g_return_if_fail (keyfile != NULL);
-  g_return_if_fail (group != NULL);
-  g_return_if_fail (key != NULL);
-  g_return_if_fail (unquoted_value != NULL);
-
-  quoted_value = g_strdup_printf ("'%s'", unquoted_value);
-  g_key_file_set_string (keyfile, group, key, quoted_value);
-}
-
-static void
-add_lang_executable (gchar *lang,
-                     gchar *path,
-                     GKeyFile *keyfile)
-{
-    _g_key_file_set_string_quoted (keyfile, "binaries", lang, path);
 }
 
 static void
@@ -146,55 +122,17 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (NULL == (meson = ide_configuration_getenv (config, "MESON")))
     meson = "meson";
 
-  /* Create the toolchain file is required */
+  /* Create the toolchain file if required */
   if (GBP_IS_MESON_TOOLCHAIN (toolchain))
     crossbuild_file = g_strdup (gbp_meson_toolchain_get_file_path (GBP_MESON_TOOLCHAIN (toolchain)));
   else if (g_strcmp0 (ide_toolchain_get_id (toolchain), "default") != 0)
     {
-      g_autoptr(GKeyFile) crossbuild_keyfile = NULL;
-      g_autoptr(IdeTriplet) triplet = NULL;
-      g_autofree gchar *crossfile_name = NULL;
-      const gchar *binary_path;
-      GHashTable *compilers;
+      GbpMesonBuildStageCrossFile *cross_file_stage;
+      cross_file_stage = gbp_meson_build_stage_cross_file_new (context, toolchain);
+      crossbuild_file = gbp_meson_build_stage_cross_file_get_path (cross_file_stage, pipeline);
 
-      crossfile_name = g_strdup_printf ("gnome-builder-%s.crossfile", ide_toolchain_get_id (toolchain));
-      crossbuild_file = ide_build_pipeline_build_builddir_path (pipeline, crossfile_name, NULL);
-
-      crossbuild_keyfile = g_key_file_new ();
-      triplet = ide_toolchain_get_host_triplet (toolchain);
-
-      compilers  = ide_toolchain_get_tools_for_id (toolchain,
-                                                   IDE_TOOLCHAIN_TOOL_CC);
-      g_hash_table_foreach (compilers, (GHFunc)add_lang_executable, crossbuild_keyfile);
-
-      binary_path = ide_toolchain_get_tool_for_language (toolchain,
-                                                         IDE_TOOLCHAIN_LANGUAGE_ANY,
-                                                         IDE_TOOLCHAIN_TOOL_AR);
-      _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "ar", binary_path);
-
-      binary_path = ide_toolchain_get_tool_for_language (toolchain,
-                                                         IDE_TOOLCHAIN_LANGUAGE_ANY,
-                                                         IDE_TOOLCHAIN_TOOL_STRIP);
-      _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "strip", binary_path);
-
-      binary_path = ide_toolchain_get_tool_for_language (toolchain,
-                                                         IDE_TOOLCHAIN_LANGUAGE_ANY,
-                                                         IDE_TOOLCHAIN_TOOL_PKG_CONFIG);
-      _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "pkgconfig", binary_path);
-
-      binary_path = ide_toolchain_get_tool_for_language (toolchain,
-                                                         IDE_TOOLCHAIN_LANGUAGE_ANY,
-                                                         IDE_TOOLCHAIN_TOOL_EXEC);
-      _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "exe_wrapper", binary_path);
-
-      binary_path = ide_triplet_get_kernel (triplet);
-      _g_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "system", binary_path);
-
-      binary_path = ide_triplet_get_arch (triplet);
-      _g_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "cpu_family", binary_path);
-
-      if (!g_key_file_save_to_file (crossbuild_keyfile, crossbuild_file, &error))
-        IDE_GOTO (failure);
+      id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_PREPARE, 0, IDE_BUILD_STAGE (cross_file_stage));
+      ide_build_pipeline_addin_track (addin, id);
     }
 
   /* Setup our meson configure stage. */
