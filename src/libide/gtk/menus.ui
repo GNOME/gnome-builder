@@ -57,6 +57,14 @@
         <attribute name="target">buildperspective</attribute>
         <attribute name="verb-icon-name">builder-build-configure-symbolic</attribute>
       </item>
+      <item>
+        <attribute name="accel">&lt;Primary&gt;comma</attribute>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="id">perspective-menu-prefs</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="role">normal</attribute>
+        <attribute name="verb-icon-name">preferences-other-symbolic</attribute>
+      </item>
     </section>
   </menu>
   <menu id="pages-menu">
