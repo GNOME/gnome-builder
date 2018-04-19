@@ -1,11 +1,11 @@
+exe_link_args = [ '-pie' ]
+exe_c_args = [ '-fPIE' ]
+
 subdir('libeditorconfig')
 subdir('gstyle')
 subdir('libide')
 subdir('plugins')
 subdir('tests')
-
-exe_link_args = [ '-pie' ]
-exe_c_args = [ '-fPIE' ]
 
 gnome_builder_sources = [
   'main.c',
