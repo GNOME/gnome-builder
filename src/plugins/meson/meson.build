@@ -8,6 +8,8 @@ meson_resources = gnome.compile_resources(
 
 meson_sources = [
   'meson-plugin.c',
+  'gbp-meson-build-stage-cross-file.c',
+  'gbp-meson-build-stage-cross-file.h',
   'gbp-meson-build-system.c',
   'gbp-meson-build-system.h',
   'gbp-meson-build-target.c',
