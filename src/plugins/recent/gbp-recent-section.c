@@ -238,24 +238,6 @@ gbp_recent_section_collect_selected_cb (GtkWidget *widget,
 }
 
 static void
-gbp_recent_section_delete_selected (IdeGreeterSection *section)
-{
-  GbpRecentSection *self = (GbpRecentSection *)section;
-  IdeRecentProjects *projects;
-  GList *infos = NULL;
-
-  g_assert (GBP_IS_RECENT_SECTION (self));
-
-  gtk_container_foreach (GTK_CONTAINER (self->listbox),
-                         gbp_recent_section_collect_selected_cb,
-                         &infos);
-
-  projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
-  ide_recent_projects_remove (projects, infos);
-  g_list_free_full (infos, g_object_unref);
-}
-
-static void
 gbp_recent_section_reap_cb (GObject      *object,
                             GAsyncResult *result,
                             gpointer      user_data)
@@ -287,7 +269,8 @@ gbp_recent_section_reap_cb (GObject      *object,
 }
 
 static void
-gbp_recent_section_purge_selected (IdeGreeterSection *section)
+gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
+                                        gboolean           purge_sources)
 {
   GbpRecentSection *self = (GbpRecentSection *)section;
   g_autoptr(DzlDirectoryReaper) reaper = NULL;
@@ -331,8 +314,11 @@ gbp_recent_section_purge_selected (IdeGreeterSection *section)
 
       g_assert (G_IS_FILE (directory));
 
-      dzl_directory_reaper_add_directory (reaper, directory, 0);
-      g_ptr_array_add (directories, g_object_ref (directory));
+      if (purge_sources)
+        {
+          dzl_directory_reaper_add_directory (reaper, directory, 0);
+          g_ptr_array_add (directories, g_object_ref (directory));
+        }
 
       /*
        * Also add various cache directories we know are used by
@@ -369,6 +355,18 @@ gbp_recent_section_purge_selected (IdeGreeterSection *section)
                                       g_steal_pointer (&directories));
 
   g_list_free (infos);
+}
+
+static void
+gbp_recent_section_purge_selected (IdeGreeterSection *section)
+{
+  gbp_recent_section_purge_selected_full (section, TRUE);
+}
+
+static void
+gbp_recent_section_delete_selected (IdeGreeterSection *section)
+{
+  gbp_recent_section_purge_selected_full (section, FALSE);
 }
 
 static void
