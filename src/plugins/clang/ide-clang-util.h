@@ -77,4 +77,29 @@ ide_clang_translate_kind (enum CXCursorKind cursor_kind)
     }
 }
 
+static inline IdeDiagnosticSeverity
+ide_clang_translate_severity (enum CXDiagnosticSeverity severity)
+{
+  switch (severity)
+    {
+    case CXDiagnostic_Ignored:
+      return IDE_DIAGNOSTIC_IGNORED;
+
+    case CXDiagnostic_Note:
+      return IDE_DIAGNOSTIC_NOTE;
+
+    case CXDiagnostic_Warning:
+      return IDE_DIAGNOSTIC_WARNING;
+
+    case CXDiagnostic_Error:
+      return IDE_DIAGNOSTIC_ERROR;
+
+    case CXDiagnostic_Fatal:
+      return IDE_DIAGNOSTIC_FATAL;
+
+    default:
+      return 0;
+    }
+}
+
 G_END_DECLS

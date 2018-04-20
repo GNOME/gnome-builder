@@ -362,6 +362,7 @@ ide_clang_index_file_worker (IdeTask      *task,
   g_auto(CXTranslationUnit) unit = NULL;
   g_auto(CXIndex) index = NULL;
   CXCursor root;
+  unsigned options;
   enum CXErrorCode code;
 
   g_assert (IDE_IS_CLANG (source_object));
@@ -370,6 +371,15 @@ ide_clang_index_file_worker (IdeTask      *task,
   g_assert (state->path != NULL);
   g_assert (state->entries != NULL);
 
+  options = CXTranslationUnit_DetailedPreprocessingRecord
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 43)
+          | CXTranslationUnit_SingleFileParse
+#endif
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
+          | CXTranslationUnit_KeepGoing
+#endif
+          | CXTranslationUnit_SkipFunctionBodies;
+
   index = clang_createIndex (0, 0);
   code = clang_parseTranslationUnit2 (index,
                                       state->path,
@@ -377,14 +387,7 @@ ide_clang_index_file_worker (IdeTask      *task,
                                       state->argc,
                                       NULL,
                                       0,
-                                      (CXTranslationUnit_DetailedPreprocessingRecord |
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 43)
-                                       CXTranslationUnit_SingleFileParse |
-#endif
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
-                                       CXTranslationUnit_KeepGoing |
-#endif
-                                       CXTranslationUnit_SkipFunctionBodies),
+                                      options,
                                       &unit);
 
   if (code != CXError_Success)
@@ -501,6 +504,7 @@ ide_clang_index_file_finish (IdeClang      *self,
 typedef struct
 {
   GPtrArray  *diagnostics;
+  GFile      *workdir;
   gchar      *path;
   gchar     **argv;
   guint       argc;
@@ -514,17 +518,178 @@ diagnose_free (gpointer data)
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
   g_clear_pointer (&state->diagnostics, g_ptr_array_unref);
+  g_clear_object (&state->workdir);
 
   g_slice_free (Diagnose, state);
 }
 
-static IdeDiagnostic *
-create_diagnostic (CXDiagnostic diag)
+static gboolean
+cxfile_equal (CXFile  cxfile,
+              GFile  *file)
 {
-  g_assert (diag != NULL);
+  g_auto(CXString) cxstr = {0};
+  g_autofree gchar *path = NULL;
+  const gchar *cstr;
 
+  cxstr = clang_getFileName (cxfile);
+  cstr = clang_getCString (cxstr);
+  path = g_file_get_path (file);
 
-  return NULL;
+  return g_strcmp0 (cstr, path) == 0;
+}
+
+static gchar *
+path_or_uri (GFile *file)
+{
+  return g_file_is_native (file) ?
+         g_file_get_path (file) :
+         g_file_get_uri (file);
+}
+
+static gchar *
+get_path (GFile       *workdir,
+          const gchar *path)
+{
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(GFile) child = NULL;
+
+  if (path == NULL)
+    return path_or_uri (workdir);
+
+  file = g_file_new_for_path (path);
+  if (g_file_has_prefix (file, workdir))
+    return g_strdup (path);
+
+  child = g_file_get_child (workdir, path);
+
+  return path_or_uri (child);
+}
+
+static IdeSourceLocation *
+create_location (GFile             *workdir,
+                 CXSourceLocation   cxloc,
+                 IdeSourceLocation *alternate)
+{
+  g_autofree gchar *path = NULL;
+  g_autoptr(IdeFile) file = NULL;
+  g_autoptr(GFile) gfile = NULL;
+  g_auto(CXString) str = {0};
+  CXFile cxfile = NULL;
+  unsigned line;
+  unsigned column;
+  unsigned offset;
+
+  g_assert (G_IS_FILE (workdir));
+
+  clang_getFileLocation (cxloc, &cxfile, &line, &column, &offset);
+
+  str = clang_getFileName (cxfile);
+
+  if (line == 0 || clang_getCString (str) == NULL)
+    return alternate ? ide_source_location_ref (alternate) : NULL;
+
+  if (line > 0)
+    line--;
+
+  if (column > 0)
+    column--;
+
+  /* TODO: Remove IdeFile from IdeSourceLocation */
+
+  path = get_path (workdir, clang_getCString (str));
+  gfile = g_file_new_for_path (path);
+  file = ide_file_new (NULL, gfile);
+
+  return ide_source_location_new (file, line, column, offset);
+}
+
+static IdeSourceRange *
+create_range (GFile         *workdir,
+              CXSourceRange  cxrange)
+{
+  IdeSourceRange *range = NULL;
+  CXSourceLocation cxbegin;
+  CXSourceLocation cxend;
+  g_autoptr(IdeSourceLocation) begin = NULL;
+  g_autoptr(IdeSourceLocation) end = NULL;
+
+  g_assert (G_IS_FILE (workdir));
+
+  cxbegin = clang_getRangeStart (cxrange);
+  cxend = clang_getRangeEnd (cxrange);
+
+  /* Sometimes the end location does not have a file associated with it,
+   * so we force it to have the IdeFile of the first location.
+   */
+  begin = create_location (workdir, cxbegin, NULL);
+  end = create_location (workdir, cxend, begin);
+
+  if ((begin != NULL) && (end != NULL))
+    range = ide_source_range_new (begin, end);
+
+  return range;
+}
+
+static IdeDiagnostic *
+create_diagnostic (GFile        *workdir,
+                   GFile        *target,
+                   CXDiagnostic *cxdiag)
+{
+  g_autoptr(IdeSourceLocation) loc = NULL;
+  enum CXDiagnosticSeverity cxseverity;
+  IdeDiagnosticSeverity severity;
+  IdeDiagnostic *diag;
+  const gchar *spelling;
+  g_auto(CXString) cxstr = {0};
+  CXSourceLocation cxloc;
+  CXFile cxfile = NULL;
+  guint num_ranges;
+
+  g_assert (!workdir || G_IS_FILE (workdir));
+  g_assert (cxdiag != NULL);
+
+  cxloc = clang_getDiagnosticLocation (cxdiag);
+  clang_getExpansionLocation (cxloc, &cxfile, NULL, NULL, NULL);
+
+  if (cxfile && !cxfile_equal (cxfile, target))
+    return NULL;
+
+  cxseverity = clang_getDiagnosticSeverity (cxdiag);
+  severity = ide_clang_translate_severity (cxseverity);
+
+  cxstr = clang_getDiagnosticSpelling (cxdiag);
+  spelling = clang_getCString (cxstr);
+
+  /*
+   * I thought we could use an approach like the following to get deprecation
+   * status. However, it has so far proven ineffective.
+   *
+   *   cursor = clang_getCursor (self->tu, cxloc);
+   *   avail = clang_getCursorAvailability (cursor);
+   */
+  if ((severity == IDE_DIAGNOSTIC_WARNING) &&
+      (spelling != NULL) &&
+      (strstr (spelling, "deprecated") != NULL))
+    severity = IDE_DIAGNOSTIC_DEPRECATED;
+
+  loc = create_location (workdir, cxloc, NULL);
+
+  diag = ide_diagnostic_new (severity, spelling, loc);
+  num_ranges = clang_getDiagnosticNumRanges (cxdiag);
+
+  for (guint i = 0; i < num_ranges; i++)
+    {
+      CXSourceRange cxrange;
+      IdeSourceRange *range;
+
+      cxrange = clang_getDiagnosticRange (cxdiag, i);
+      range = create_range (workdir, cxrange);
+
+      if (range != NULL)
+        ide_diagnostic_take_range (diag, range);
+    }
+
+  return diag;
 }
 
 static void
@@ -534,6 +699,7 @@ ide_clang_diagnose_worker (IdeTask      *task,
                            GCancellable *cancellable)
 {
   Diagnose *state = task_data;
+  g_autoptr(GFile) file = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
   g_auto(CXIndex) index = NULL;
   enum CXErrorCode code;
@@ -546,15 +712,14 @@ ide_clang_diagnose_worker (IdeTask      *task,
   g_assert (state->path != NULL);
   g_assert (state->diagnostics != NULL);
 
-  options = (clang_defaultEditingTranslationUnitOptions () |
+  options = clang_defaultEditingTranslationUnitOptions ()
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 43)
-             CXTranslationUnit_SingleFileParse |
+          | CXTranslationUnit_SingleFileParse
 #endif
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
-             CXTranslationUnit_KeepGoing |
+          | CXTranslationUnit_KeepGoing
 #endif
-             CXTranslationUnit_DetailedPreprocessingRecord |
-             CXTranslationUnit_SkipFunctionBodies);
+          | CXTranslationUnit_DetailedPreprocessingRecord;
 
   index = clang_createIndex (0, 0);
   code = clang_parseTranslationUnit2 (index,
@@ -577,6 +742,7 @@ ide_clang_diagnose_worker (IdeTask      *task,
     }
 
   n_diags = clang_getNumDiagnostics (unit);
+  file = g_file_new_for_path (state->path);
 
   for (guint i = 0; i < n_diags; i++)
     {
@@ -584,7 +750,7 @@ ide_clang_diagnose_worker (IdeTask      *task,
       g_autoptr(IdeDiagnostic) diag = NULL;
 
       cxdiag = clang_getDiagnostic (unit, i);
-      diag = create_diagnostic (cxdiag);
+      diag = create_diagnostic (state->workdir, file, cxdiag);
 
       if (diag != NULL)
         g_ptr_array_add (state->diagnostics, g_steal_pointer (&diag));
@@ -619,6 +785,7 @@ ide_clang_diagnose_async (IdeClang            *self,
                           gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *parent = NULL;
   Diagnose *state;
 
   g_return_if_fail (IDE_IS_CLANG (self));
@@ -630,6 +797,11 @@ ide_clang_diagnose_async (IdeClang            *self,
   state->argv = ide_clang_cook_flags (argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->diagnostics = g_ptr_array_new ();
+
+  if (self->workdir != NULL)
+    state->workdir = g_object_ref (self->workdir);
+  else
+    state->workdir = g_file_new_for_path ((parent = g_path_get_dirname (path)));
 
   IDE_PTR_ARRAY_SET_FREE_FUNC (state->diagnostics, ide_diagnostic_unref);
 
