@@ -322,7 +322,14 @@ gbp_recent_section_purge_selected (IdeGreeterSection *section)
       g_assert (G_IS_FILE (directory) || G_IS_FILE (file));
 
       if (directory == NULL)
-        directory = parent = g_file_get_parent (file);
+        {
+          if (g_file_query_file_type (file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+            directory = g_object_ref (file);
+          else
+            directory = parent = g_file_get_parent (file);
+        }
+
+      g_assert (G_IS_FILE (directory));
 
       dzl_directory_reaper_add_directory (reaper, directory, 0);
       g_ptr_array_add (directories, g_object_ref (directory));
