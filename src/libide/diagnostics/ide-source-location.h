@@ -59,6 +59,8 @@ gint               ide_source_location_compare         (const IdeSourceLocation 
                                                         const IdeSourceLocation *b);
 IDE_AVAILABLE_IN_ALL
 guint              ide_source_location_hash            (IdeSourceLocation       *self);
+IDE_AVAILABLE_IN_3_30
+GVariant          *ide_source_location_to_variant      (const IdeSourceLocation *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceLocation, ide_source_location_unref)
 

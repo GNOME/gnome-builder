@@ -394,3 +394,71 @@ ide_diagnostic_get_file (IdeDiagnostic *self)
 
   return NULL;
 }
+
+/**
+ * ide_diagnostic_to_variant:
+ * @self: a #IdeDiagnostic
+ *
+ * Creates a #GVariant to represent the diagnostic. This can be useful when
+ * working in subprocesses to serialize the diagnostic.
+ *
+ * This function will never return a floating variant.
+ *
+ * Returns: (transfer full): a #GVariant
+ *
+ * Since: 3.30
+ */
+GVariant *
+ide_diagnostic_to_variant (const IdeDiagnostic *self)
+{
+  GVariantDict dict;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  g_variant_dict_init (&dict, NULL);
+
+  g_variant_dict_insert (&dict, "text", "s", self->text ?: "");
+  g_variant_dict_insert (&dict, "severity", "s", ide_diagnostic_severity_to_string (self->severity));
+
+  if (self->location != NULL)
+    {
+      g_autoptr(GVariant) vloc = ide_source_location_to_variant (self->location);
+      g_variant_dict_insert_value (&dict, "location", vloc);
+    }
+
+  if (self->ranges != NULL && self->ranges->len > 0)
+    {
+      GVariantBuilder builder;
+
+      g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
+
+      for (guint i = 0; i < self->ranges->len; i++)
+        {
+          const IdeSourceRange *range = g_ptr_array_index (self->ranges, i);
+          g_autoptr(GVariant) vrange = ide_source_range_to_variant (range);
+
+          g_variant_builder_add_value (&builder, vrange);
+        }
+
+      g_variant_dict_insert_value (&dict, "ranges", g_variant_builder_end (&builder));
+    }
+
+  if (self->fixits != NULL && self->fixits->len > 0)
+    {
+      GVariantBuilder builder;
+
+      g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
+
+      for (guint i = 0; i < self->ranges->len; i++)
+        {
+          const IdeFixit *fixit = g_ptr_array_index (self->fixits, i);
+          g_autoptr(GVariant) vfixit = ide_fixit_to_variant (fixit);
+
+          g_variant_builder_add_value (&builder, vfixit);
+        }
+
+      g_variant_dict_insert_value (&dict, "fixits", g_variant_builder_end (&builder));
+    }
+
+  return g_variant_ref_sink (g_variant_dict_end (&dict));
+}

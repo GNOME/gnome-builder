@@ -130,3 +130,41 @@ ide_source_range_unref (IdeSourceRange *self)
       DZL_COUNTER_DEC (instances);
     }
 }
+
+/**
+ * ide_source_range_to_variant:
+ * @self: a #IdeSourceRange
+ *
+ * Creates a variant to represent the range.
+ *
+ * This function will never return a floating variant.
+ *
+ * Returns: (transfer full): a #GVariant
+ *
+ * Since: 3.30
+ */
+GVariant *
+ide_source_range_to_variant (const IdeSourceRange *self)
+{
+  GVariantDict dict;
+  g_autoptr(GVariant) begin = NULL;
+  g_autoptr(GVariant) end = NULL;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  g_variant_dict_init (&dict, NULL);
+
+  if (self->begin)
+    {
+      begin = ide_source_location_to_variant (self->begin);
+      g_variant_dict_insert_value (&dict, "begin", begin);
+    }
+
+  if (self->end)
+    {
+      end = ide_source_location_to_variant (self->end);
+      g_variant_dict_insert_value (&dict, "end", end);
+    }
+
+  return g_variant_ref_sink (g_variant_dict_end (&dict));
+}

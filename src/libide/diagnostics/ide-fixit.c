@@ -123,3 +123,31 @@ ide_fixit_get_range (IdeFixit *self)
 
   return self->range;
 }
+
+/**
+ * ide_fixit_to_variant:
+ * @self: a #IdeFixit
+ *
+ * Creates a #GVariant to represent a fixit.
+ *
+ * This function will never return a floating variant.
+ *
+ * Returns: (transfer full): a #GVariant
+ */
+GVariant *
+ide_fixit_to_variant (const IdeFixit *self)
+{
+  GVariantDict dict;
+  g_autoptr(GVariant) vrange = NULL;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  g_variant_dict_init (&dict, NULL);
+
+  vrange = ide_source_range_to_variant (self->range);
+
+  g_variant_dict_insert (&dict, "text", "s", self->text ?: "");
+  g_variant_dict_insert_value (&dict, "range", vrange);
+
+  return g_variant_ref_sink (g_variant_dict_end (&dict));
+}

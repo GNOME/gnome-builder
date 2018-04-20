@@ -83,7 +83,8 @@ gint                   ide_diagnostic_compare              (const IdeDiagnostic 
                                                             const IdeDiagnostic   *b);
 IDE_AVAILABLE_IN_ALL
 guint                  ide_diagnostic_hash                 (IdeDiagnostic         *self);
-
+IDE_AVAILABLE_IN_3_30
+GVariant              *ide_diagnostic_to_variant           (const IdeDiagnostic   *self);
 
 IDE_AVAILABLE_IN_ALL
 const gchar           *ide_diagnostic_severity_to_string   (IdeDiagnosticSeverity severity);

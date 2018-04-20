@@ -240,3 +240,38 @@ ide_source_location_new_for_path (IdeContext  *context,
 
   return ide_source_location_new (ifile, line, line_offset, 0);
 }
+
+/**
+ * ide_source_location_to_variant:
+ * @self: a #IdeSourceLocation
+ *
+ * Serializes the location into a variant that can be used to transport
+ * across IPC boundaries.
+ *
+ * This function will never return a variant with a floating reference.
+ *
+ * Returns: (transfer full): a #GVariant
+ */
+GVariant *
+ide_source_location_to_variant (const IdeSourceLocation *self)
+{
+  GVariantDict dict;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  g_variant_dict_init (&dict, NULL);
+
+  if (self->file != NULL)
+    {
+      GFile *gfile = ide_file_get_file (self->file);
+      g_autofree gchar *uri = g_file_get_uri (gfile);
+
+      g_variant_dict_insert (&dict, "uri", "s", uri);
+    }
+
+  g_variant_dict_insert (&dict, "line", "u", self->line);
+  g_variant_dict_insert (&dict, "line-offset", "u", self->line_offset);
+  g_variant_dict_insert (&dict, "offset", "u", self->offset);
+
+  return g_variant_ref_sink (g_variant_dict_end (&dict));
+}
