@@ -472,6 +472,177 @@ ide_clang_index_file_finish (IdeClang      *self,
   return ret;
 }
 
+/* Diagnose {{{1 */
+
+typedef struct
+{
+  GPtrArray  *diagnostics;
+  gchar      *path;
+  gchar     **argv;
+  guint       argc;
+} Diagnose;
+
+static void
+diagnose_free (gpointer data)
+{
+  Diagnose *state = data;
+
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->diagnostics, g_ptr_array_unref);
+
+  g_slice_free (Diagnose, state);
+}
+
+static IdeDiagnostic *
+create_diagnostic (CXDiagnostic diag)
+{
+  g_assert (diag != NULL);
+
+
+  return NULL;
+}
+
+static void
+ide_clang_diagnose_worker (IdeTask      *task,
+                           gpointer      source_object,
+                           gpointer      task_data,
+                           GCancellable *cancellable)
+{
+  Diagnose *state = task_data;
+  g_auto(CXTranslationUnit) unit = NULL;
+  g_auto(CXIndex) index = NULL;
+  enum CXErrorCode code;
+  unsigned options;
+  guint n_diags;
+
+  g_assert (IDE_IS_CLANG (source_object));
+  g_assert (IDE_IS_TASK (task));
+  g_assert (state != NULL);
+  g_assert (state->path != NULL);
+  g_assert (state->diagnostics != NULL);
+
+  options = (clang_defaultEditingTranslationUnitOptions () |
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 43)
+             CXTranslationUnit_SingleFileParse |
+#endif
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
+             CXTranslationUnit_KeepGoing |
+#endif
+             CXTranslationUnit_DetailedPreprocessingRecord |
+             CXTranslationUnit_SkipFunctionBodies);
+
+  index = clang_createIndex (0, 0);
+  code = clang_parseTranslationUnit2 (index,
+                                      state->path,
+                                      (const char * const *)state->argv,
+                                      state->argc,
+                                      NULL,
+                                      0,
+                                      options,
+                                      &unit);
+
+  if (code != CXError_Success)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to index file \"%s\", exited with code %d",
+                                 state->path, code);
+      return;
+    }
+
+  n_diags = clang_getNumDiagnostics (unit);
+
+  for (guint i = 0; i < n_diags; i++)
+    {
+      g_autoptr(CXDiagnostic) cxdiag = NULL;
+      g_autoptr(IdeDiagnostic) diag = NULL;
+
+      cxdiag = clang_getDiagnostic (unit, i);
+      diag = create_diagnostic (cxdiag);
+
+      if (diag != NULL)
+        g_ptr_array_add (state->diagnostics, g_steal_pointer (&diag));
+    }
+
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&state->diagnostics),
+                           (GDestroyNotify)g_ptr_array_unref);
+}
+
+/**
+ * ide_clang_diagnose_async:
+ * @self: a #IdeClang
+ * @path: the path to the C/C++/Obj-C file on local disk
+ * @argv: the command line arguments for clang
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: a callback to execute up on completion
+ * @user_data: closure data for @callback
+ *
+ * Asynchronously requests that the file be diagnosed.
+ *
+ * This generates diagnostics related to the file after parsing it.
+ *
+ * Since: 3.30
+ */
+void
+ide_clang_diagnose_async (IdeClang            *self,
+                          const gchar         *path,
+                          const gchar * const *argv,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  Diagnose *state;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (Diagnose);
+  state->path = g_strdup (path);
+  state->argv = ide_clang_cook_flags (argv);
+  state->argc = state->argv ? g_strv_length (state->argv) : 0;
+  state->diagnostics = g_ptr_array_new ();
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (state->diagnostics, ide_diagnostic_unref);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_diagnose_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+  ide_task_set_task_data (task, state, diagnose_free);
+  ide_task_run_in_thread (task, ide_clang_diagnose_worker);
+}
+
+/**
+ * ide_clang_diagnose_finish:
+ *
+ * Finishes a request to diagnose a file.
+ *
+ * Returns: (transfer full) (element-type Ide.Diagnostic):
+ *   a #GPtrArray of #IdeDiagnostic
+ *
+ * Since: 3.30
+ */
+GPtrArray *
+ide_clang_diagnose_finish (IdeClang      *self,
+                           GAsyncResult  *result,
+                           GError       **error)
+{
+  GPtrArray *ret;
+
+  g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  IDE_PTR_ARRAY_CLEAR_FREE_FUNC (ret);
+
+  return ret;
+}
+
 /* Get symbol at source location {{{1 */
 
 /* vim:set foldmethod=marker: */

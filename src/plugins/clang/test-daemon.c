@@ -8,6 +8,8 @@ typedef void (*TestFunc) (JsonrpcClient *client,
                           GTask         *task);
 
 static void tick_tests      (JsonrpcClient *client);
+static void test_diagnose   (JsonrpcClient *client,
+                             GTask         *task);
 static void test_index_file (JsonrpcClient *client,
                              GTask         *task);
 
@@ -15,6 +17,7 @@ static gchar **flags;
 static const gchar *path;
 static GMainLoop *main_loop;
 static TestFunc test_funcs[] = {
+  test_diagnose,
   test_index_file,
 };
 
@@ -54,6 +57,45 @@ test_index_file (JsonrpcClient *client,
                              params,
                              NULL,
                              test_index_file_cb,
+                             g_object_ref (task));
+}
+
+static void
+test_diagnose_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  JsonrpcClient *client = (JsonrpcClient *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (G_IS_TASK (task));
+
+  if (!jsonrpc_client_call_finish (client, result, &reply, &error))
+    g_error ("diagnose: %s", error->message);
+
+  g_printerr ("diagnose: %s\n", g_variant_print (reply, TRUE));
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+test_diagnose (JsonrpcClient *client,
+               GTask         *task)
+{
+  g_autoptr(GVariant) params = NULL;
+
+  params = JSONRPC_MESSAGE_NEW (
+    "path", JSONRPC_MESSAGE_PUT_STRING (path),
+    "flags", JSONRPC_MESSAGE_PUT_STRV ((const gchar * const *)flags)
+  );
+
+  jsonrpc_client_call_async (client,
+                             "clang/diagnose",
+                             params,
+                             NULL,
+                             test_diagnose_cb,
                              g_object_ref (task));
 }
 

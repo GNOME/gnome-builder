@@ -242,6 +242,80 @@ handle_index_file (JsonrpcServer *server,
                               client_op_ref (op));
 }
 
+/* Diagnose Handler {{{1 */
+
+static void
+handle_diagnose_cb (IdeClang     *clang,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GPtrArray) diagnostics = NULL;
+  g_autoptr(GError) error = NULL;
+  GVariantBuilder builder;
+
+  g_assert (IDE_IS_CLANG (clang));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if (!(diagnostics = ide_clang_diagnose_finish (clang, result, &error)))
+    {
+      client_op_error (op, error);
+      return;
+    }
+
+  IDE_PTR_ARRAY_SET_FREE_FUNC (diagnostics, ide_diagnostic_unref);
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
+
+  for (guint i = 0; i < diagnostics->len; i++)
+    {
+      G_GNUC_UNUSED IdeDiagnostic *diag = g_ptr_array_index (diagnostics, i);
+
+      g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
+      g_variant_builder_close (&builder);
+    }
+
+  client_op_reply (op, g_variant_builder_end (&builder));
+}
+
+static void
+handle_diagnose (JsonrpcServer *server,
+                 JsonrpcClient *client,
+                 const gchar   *method,
+                 GVariant      *id,
+                 GVariant      *params,
+                 IdeClang      *clang)
+{
+  g_autoptr(GPtrArray) argv = NULL;
+  g_autoptr(ClientOp) op = NULL;
+  g_auto(GStrv) flags = NULL;
+  const gchar *path = NULL;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "clang/diagnose"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  if (!JSONRPC_MESSAGE_PARSE (params, "path", JSONRPC_MESSAGE_GET_STRING (&path)))
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  JSONRPC_MESSAGE_PARSE (params, "flags", JSONRPC_MESSAGE_GET_STRV (&flags));
+
+  ide_clang_diagnose_async (clang,
+                            path,
+                            (const gchar * const *)flags,
+                            op->cancellable,
+                            (GAsyncReadyCallback)handle_diagnose_cb,
+                            client_op_ref (op));
+}
+
 /* Main and Server Setup {{{1 */
 
 static void
@@ -301,6 +375,11 @@ main (gint argc,
   jsonrpc_server_add_handler (server,
                               "clang/indexFile",
                               (JsonrpcServerHandler)handle_index_file,
+                              g_object_ref (clang),
+                              g_object_unref);
+  jsonrpc_server_add_handler (server,
+                              "clang/diagnose",
+                              (JsonrpcServerHandler)handle_diagnose,
                               g_object_ref (clang),
                               g_object_unref);
 

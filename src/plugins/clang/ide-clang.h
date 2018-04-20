@@ -36,5 +36,14 @@ void       ide_clang_index_file_async  (IdeClang             *self,
 GPtrArray *ide_clang_index_file_finish (IdeClang             *self,
                                         GAsyncResult         *result,
                                         GError              **error);
+void       ide_clang_diagnose_async    (IdeClang             *self,
+                                        const gchar          *path,
+                                        const gchar * const  *argv,
+                                        GCancellable         *cancellable,
+                                        GAsyncReadyCallback   callback,
+                                        gpointer              user_data);
+GPtrArray *ide_clang_diagnose_finish   (IdeClang             *self,
+                                        GAsyncResult         *result,
+                                        GError              **error);
 
 G_END_DECLS
