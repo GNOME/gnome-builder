@@ -270,10 +270,10 @@ handle_diagnose_cb (IdeClang     *clang,
 
   for (guint i = 0; i < diagnostics->len; i++)
     {
-      G_GNUC_UNUSED IdeDiagnostic *diag = g_ptr_array_index (diagnostics, i);
+      IdeDiagnostic *diag = g_ptr_array_index (diagnostics, i);
+      g_autoptr(GVariant) var = ide_diagnostic_to_variant (diag);
 
-      g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
-      g_variant_builder_close (&builder);
+      g_variant_builder_add_value (&builder, var);
     }
 
   client_op_reply (op, g_variant_builder_end (&builder));
