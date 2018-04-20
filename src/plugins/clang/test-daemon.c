@@ -128,10 +128,17 @@ test_initialize (JsonrpcClient *client,
 {
   g_autoptr(GVariant) params = NULL;
   g_autofree gchar *root = NULL;
+  g_autofree gchar *uri = NULL;
 
   root = g_path_get_dirname (path);
+  uri = g_strdup_printf ("file://%s", root);
 
-  params = JSONRPC_MESSAGE_NEW ("rootUri", JSONRPC_MESSAGE_PUT_STRING (root));
+  params = JSONRPC_MESSAGE_NEW (
+    "rootUri", JSONRPC_MESSAGE_PUT_STRING (uri),
+    "rootPath", JSONRPC_MESSAGE_PUT_STRING (root),
+    "processId", JSONRPC_MESSAGE_PUT_INT64 (getpid ()),
+    "capabilities", "{", "}"
+  );
 
   jsonrpc_client_call_async (client,
                              "initialize",
