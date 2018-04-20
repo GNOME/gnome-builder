@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeClang, ide_clang, IDE, CLANG, GObject)
 
 IdeClang  *ide_clang_new               (void);
+void       ide_clang_set_workdir       (IdeClang             *self,
+                                        GFile                *workdir);
 void       ide_clang_index_file_async  (IdeClang             *self,
                                         const gchar          *path,
                                         const gchar * const  *argv,

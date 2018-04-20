@@ -316,6 +316,37 @@ handle_diagnose (JsonrpcServer *server,
                             client_op_ref (op));
 }
 
+/* Initialize {{{1 */
+
+static void
+handle_initialize (JsonrpcServer *server,
+                   JsonrpcClient *client,
+                   const gchar   *method,
+                   GVariant      *id,
+                   GVariant      *params,
+                   IdeClang      *clang)
+{
+  g_autoptr(ClientOp) op = NULL;
+  const gchar *uri = NULL;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "initialize"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  if (JSONRPC_MESSAGE_PARSE (params, "rootUri", JSONRPC_MESSAGE_GET_STRING (&uri)))
+    {
+      g_autoptr(GFile) file = g_file_new_for_uri (uri);
+
+      ide_clang_set_workdir (clang, file);
+    }
+
+  client_op_reply (op, NULL);
+}
+
 /* Main and Server Setup {{{1 */
 
 static void
@@ -372,6 +403,11 @@ main (gint argc,
                     G_CALLBACK (on_client_closed_cb),
                     NULL);
 
+  jsonrpc_server_add_handler (server,
+                              "initialize",
+                              (JsonrpcServerHandler)handle_initialize,
+                              g_object_ref (clang),
+                              g_object_unref);
   jsonrpc_server_add_handler (server,
                               "clang/indexFile",
                               (JsonrpcServerHandler)handle_index_file,

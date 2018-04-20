@@ -27,7 +27,8 @@
 
 struct _IdeClang
 {
-  GObject parent;
+  GObject  parent;
+  GFile   *workdir;
 };
 
 G_DEFINE_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
@@ -85,8 +86,21 @@ ide_clang_cook_flags (const gchar * const *flags)
 }
 
 static void
+ide_clang_finalize (GObject *object)
+{
+  IdeClang *self = (IdeClang *)object;
+
+  g_clear_object (&self->workdir);
+
+  G_OBJECT_CLASS (ide_clang_parent_class)->finalize (object);
+}
+
+static void
 ide_clang_class_init (IdeClangClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = ide_clang_finalize;
 }
 
 static void
@@ -98,6 +112,16 @@ IdeClang *
 ide_clang_new (void)
 {
   return g_object_new (IDE_TYPE_CLANG, NULL);
+}
+
+void
+ide_clang_set_workdir (IdeClang *self,
+                       GFile    *workdir)
+{
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (!workdir || G_IS_FILE (workdir));
+
+  g_set_object (&self->workdir, workdir);
 }
 
 /* Index File {{{1 */
