@@ -36,6 +36,11 @@ clang_sources = [
   'clang-plugin.c',
 ]
 
+gnome_builder_clang_sources = [
+  'gnome-builder-clang.c',
+  'ide-clang.c',
+]
+
 add_languages('cpp') # Needed for llvm dep
 llvm_dep = dependency('llvm', version: '>= 3.5')
 clang_include = llvm_dep.get_configtool_variable('includedir')
@@ -53,5 +58,23 @@ clang_dep = declare_dependency(
 gnome_builder_plugins_deps += [clang_dep]
 gnome_builder_plugins_sources += files(clang_sources)
 gnome_builder_plugins_sources += clang_resources[0]
+
+executable('gnome-builder-clang', gnome_builder_clang_sources,
+      dependencies: [clang_dep, libide_dep],
+           gui_app: false,
+           install: true,
+       install_dir: get_option('libexecdir'),
+            c_args: exe_c_args,
+         link_args: exe_link_args,
+     install_rpath: pkglibdir_abs,
+)
+
+executable('test-daemon', ['test-daemon.c'],
+      dependencies: [libjsonrpc_glib_dep],
+           gui_app: false,
+           install: false,
+            c_args: exe_c_args,
+         link_args: exe_link_args,
+)
 
 endif
