@@ -910,14 +910,35 @@ static void
 ide_clang_build_completion (GVariantBuilder    *builder,
                             CXCompletionResult *result)
 {
-  guint kind;
+  GVariantBuilder chunks_builder;
+  guint n_chunks;
 
   g_assert (builder != NULL);
   g_assert (result != NULL);
 
-  kind = translate_completion_kind (result->CursorKind);
+  g_variant_builder_add_parsed (builder, "{%s,<%i>}", "kind",
+                                translate_completion_kind (result->CursorKind));
 
-  g_variant_builder_add_parsed (builder, "{%s,<%i>}", "kind", kind);
+  if (clang_getCompletionAvailability (result->CompletionString))
+    g_variant_builder_add_parsed (builder, "{%s,<%i>}", "availability",
+                                  clang_getCompletionAvailability (result->CompletionString));
+
+  n_chunks = clang_getNumCompletionChunks (result->CompletionString);
+
+  g_variant_builder_init (&chunks_builder, G_VARIANT_TYPE ("aa{sv}"));
+
+  for (guint i = 0; i < n_chunks; i++)
+    {
+      g_auto(CXString) str = clang_getCompletionChunkText (result->CompletionString, i);
+      guint kind = clang_getCompletionChunkKind (result->CompletionString, i);
+
+      g_variant_builder_open (&chunks_builder, G_VARIANT_TYPE_VARDICT);
+      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", clang_getCString (str));
+      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%i>}", "kind", kind);
+      g_variant_builder_close (&chunks_builder);
+    }
+
+  g_variant_builder_add (builder, "{sv}", "chunks", g_variant_builder_end (&chunks_builder));
 }
 
 static void
@@ -980,6 +1001,10 @@ ide_clang_complete_worker (IdeTask      *task,
                                  state->path);
       return;
     }
+
+#if 0
+  clang_sortCodeCompletionResults (results->Results, results->NumResults);
+#endif
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
 

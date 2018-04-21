@@ -362,7 +362,7 @@ handle_complete (JsonrpcServer *server,
 
   g_assert (JSONRPC_IS_SERVER (server));
   g_assert (JSONRPC_IS_CLIENT (client));
-  g_assert (g_str_equal (method, "textDocument/completion"));
+  g_assert (g_str_equal (method, "clang/complete"));
   g_assert (id != NULL);
   g_assert (IDE_IS_CLANG (clang));
 
@@ -508,7 +508,7 @@ main (gint argc,
                               g_object_ref (clang),
                               g_object_unref);
   jsonrpc_server_add_handler (server,
-                              "textDocument/completion",
+                              "clang/complete",
                               (JsonrpcServerHandler)handle_complete,
                               g_object_ref (clang),
                               g_object_unref);

@@ -155,7 +155,7 @@ test_complete (JsonrpcClient *client,
   );
 
   jsonrpc_client_call_async (client,
-                             "textDocument/completion",
+                             "clang/complete",
                              params,
                              NULL,
                              test_complete_cb,
