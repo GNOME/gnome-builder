@@ -10,6 +10,8 @@ typedef void (*TestFunc) (JsonrpcClient *client,
 static void tick_tests      (JsonrpcClient *client);
 static void test_initialize (JsonrpcClient *client,
                              GTask         *task);
+static void test_complete   (JsonrpcClient *client,
+                             GTask         *task);
 static void test_diagnose   (JsonrpcClient *client,
                              GTask         *task);
 static void test_index_file (JsonrpcClient *client,
@@ -20,6 +22,7 @@ static const gchar *path;
 static GMainLoop *main_loop;
 static TestFunc test_funcs[] = {
   test_initialize,
+  test_complete,
   test_diagnose,
   test_index_file,
 };
@@ -99,6 +102,63 @@ test_diagnose (JsonrpcClient *client,
                              params,
                              NULL,
                              test_diagnose_cb,
+                             g_object_ref (task));
+}
+
+static void
+test_complete_cb (GObject      *object,
+                  GAsyncResult *result,
+                  gpointer      user_data)
+{
+  JsonrpcClient *client = (JsonrpcClient *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (G_IS_TASK (task));
+
+  if (!jsonrpc_client_call_finish (client, result, &reply, &error))
+    g_error ("complete: %s", error->message);
+
+  g_printerr ("complete: %s\n", g_variant_print (reply, TRUE));
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+test_complete (JsonrpcClient *client,
+               GTask         *task)
+{
+  g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *uri = NULL;
+  guint line = 0;
+  guint offset = 0;
+
+  uri = g_strdup_printf ("file://%s", path);
+
+  params = JSONRPC_MESSAGE_NEW (
+    "textDocument", "{",
+      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
+    "}",
+    "position", "{",
+      "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+      "character", JSONRPC_MESSAGE_PUT_INT64 (offset),
+    "}",
+    /* would be nice to get this in open/close notifications */
+    "build", "{",
+      "flags", JSONRPC_MESSAGE_PUT_STRV ((const gchar * const *)flags),
+    "}",
+    "context", "{",
+      "triggerKind", JSONRPC_MESSAGE_PUT_INT64 (2), /* Trigger */
+      "triggerCharacter", JSONRPC_MESSAGE_PUT_STRING ("."),
+    "}"
+  );
+
+  jsonrpc_client_call_async (client,
+                             "textDocument/completion",
+                             params,
+                             NULL,
+                             test_complete_cb,
                              g_object_ref (task));
 }
 

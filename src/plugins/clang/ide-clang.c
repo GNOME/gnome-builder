@@ -839,6 +839,205 @@ ide_clang_diagnose_finish (IdeClang      *self,
   return ret;
 }
 
+/* Completion {{{1 */
+
+typedef struct
+{
+  gchar  *path;
+  gchar **argv;
+  gint    argc;
+  guint   line;
+  guint   column;
+} Complete;
+
+static void
+complete_free (gpointer data)
+{
+  Complete *state = data;
+
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_slice_free (Complete, state);
+}
+
+static guint
+translate_completion_kind (enum CXCursorKind kind)
+{
+  switch ((int)kind)
+    {
+    case CXCursor_StructDecl:
+      return IDE_LSP_COMPLETION_STRUCT;
+
+    case CXCursor_ClassDecl:
+      return IDE_LSP_COMPLETION_CLASS;
+
+    case CXCursor_Constructor:
+      return IDE_LSP_COMPLETION_CONSTRUCTOR;
+
+    case CXCursor_Destructor:
+    case CXCursor_CXXMethod:
+      return IDE_LSP_COMPLETION_METHOD;
+
+    case CXCursor_FunctionDecl:
+      return IDE_LSP_COMPLETION_FUNCTION;
+
+    case CXCursor_EnumConstantDecl:
+      return IDE_LSP_COMPLETION_ENUM_MEMBER;
+
+    case CXCursor_EnumDecl:
+      return IDE_LSP_COMPLETION_ENUM;
+
+    case CXCursor_InclusionDirective:
+      return IDE_LSP_COMPLETION_FILE;
+
+    case CXCursor_PreprocessingDirective:
+    case CXCursor_MacroDefinition:
+    case CXCursor_MacroExpansion:
+      return IDE_LSP_COMPLETION_TEXT;
+
+    case CXCursor_TypeRef:
+    case CXCursor_TypeAliasDecl:
+    case CXCursor_TypeAliasTemplateDecl:
+    case CXCursor_TypedefDecl:
+      return IDE_LSP_COMPLETION_CLASS;
+
+    default:
+      return IDE_LSP_COMPLETION_TEXT;
+    }
+}
+
+static void
+ide_clang_build_completion (GVariantBuilder    *builder,
+                            CXCompletionResult *result)
+{
+  guint kind;
+
+  g_assert (builder != NULL);
+  g_assert (result != NULL);
+
+  kind = translate_completion_kind (result->CursorKind);
+
+  g_variant_builder_add_parsed (builder, "{%s,<%i>}", "kind", kind);
+}
+
+static void
+ide_clang_complete_worker (IdeTask      *task,
+                           gpointer      source_object,
+                           gpointer      task_data,
+                           GCancellable *cancellable)
+{
+  Complete *state = task_data;
+  g_autoptr(CXCodeCompleteResults) results = NULL;
+  g_auto(CXTranslationUnit) unit = NULL;
+  g_auto(CXIndex) index = NULL;
+  GVariantBuilder builder;
+  enum CXErrorCode code;
+  unsigned options;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CLANG (source_object));
+  g_assert (state != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* TODO: We need file sync for unsaved buffers */
+
+  options = clang_defaultEditingTranslationUnitOptions ();
+
+  index = clang_createIndex (0, 0);
+  code = clang_parseTranslationUnit2 (index,
+                                      state->path,
+                                      (const char * const *)state->argv,
+                                      state->argc,
+                                      NULL,
+                                      0,
+                                      options,
+                                      &unit);
+
+  if (code != CXError_Success)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to complete \"%s\", exited with code %d",
+                                 state->path, code);
+      return;
+    }
+
+  results = clang_codeCompleteAt (unit,
+                                  state->path,
+                                  state->line,
+                                  state->column,
+                                  NULL,
+                                  0,
+                                  clang_defaultCodeCompleteOptions ());
+
+  if (results == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to complete \"%s\", no results",
+                                 state->path);
+      return;
+    }
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
+
+  for (guint i = 0; i < results->NumResults; i++)
+    {
+      g_variant_builder_open (&builder, G_VARIANT_TYPE_VARDICT);
+      ide_clang_build_completion (&builder, &results->Results[i]);
+      g_variant_builder_close (&builder);
+    }
+
+  ide_task_return_pointer (task,
+                           g_variant_ref_sink (g_variant_builder_end (&builder)),
+                           (GDestroyNotify)g_variant_unref);
+}
+
+void
+ide_clang_complete_async (IdeClang            *self,
+                          const gchar         *path,
+                          guint                line,
+                          guint                column,
+                          const gchar * const *argv,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *parent = NULL;
+  Complete *state;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (Complete);
+  state->path = g_strdup (path);
+  state->argv = ide_clang_cook_flags (argv);
+  state->argc = state->argv ? g_strv_length (state->argv) : 0;
+  state->line = line;
+  state->column = column;
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_complete_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+  ide_task_set_task_data (task, state, complete_free);
+  ide_task_run_in_thread (task, ide_clang_complete_worker);
+}
+
+GVariant *
+ide_clang_complete_finish (IdeClang      *self,
+                           GAsyncResult  *result,
+                           GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
 /* Get symbol at source location {{{1 */
 
 /* vim:set foldmethod=marker: */

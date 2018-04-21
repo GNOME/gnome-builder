@@ -60,10 +60,11 @@ _ide_clang_dispose_cursor (CXCursor *cursor)
   g_slice_free (CXCursor, cursor);
 }
 
-G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXString,          _ide_clang_dispose_string)
-G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXIndex,           _ide_clang_dispose_index)
-G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXTranslationUnit, _ide_clang_dispose_unit)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC    (CXDiagnostic,      _ide_clang_dispose_diagnostic)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC    (CXCursor,          _ide_clang_dispose_cursor)
+G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXString,              _ide_clang_dispose_string)
+G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXIndex,               _ide_clang_dispose_index)
+G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (CXTranslationUnit,     _ide_clang_dispose_unit)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC    (CXDiagnostic,          _ide_clang_dispose_diagnostic)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC    (CXCursor,              _ide_clang_dispose_cursor)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC    (CXCodeCompleteResults, clang_disposeCodeCompleteResults)
 
 G_END_DECLS

@@ -29,6 +29,7 @@
 #include <jsonrpc-glib.h>
 #include <ide.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "ide-clang.h"
@@ -316,6 +317,94 @@ handle_diagnose (JsonrpcServer *server,
                             client_op_ref (op));
 }
 
+/* Completion Handler {{{1 */
+
+static void
+handle_complete_cb (IdeClang     *clang,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GVariant) ret = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_CLANG (clang));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  ret = ide_clang_complete_finish (clang, result, &error);
+
+  if (!ret)
+    {
+      client_op_error (op, error);
+      return;
+    }
+
+  client_op_reply (op, ret);
+}
+
+static void
+handle_complete (JsonrpcServer *server,
+                 JsonrpcClient *client,
+                 const gchar   *method,
+                 GVariant      *id,
+                 GVariant      *params,
+                 IdeClang      *clang)
+{
+  g_autoptr(GPtrArray) argv = NULL;
+  g_autoptr(ClientOp) op = NULL;
+  g_auto(GStrv) flags = NULL;
+  const gchar *uri = NULL;
+  const gchar *path;
+  gboolean r;
+  gint64 line = 0;
+  gint64 column = 0;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "textDocument/completion"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  r = JSONRPC_MESSAGE_PARSE (params,
+    "textDocument", "{",
+      "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+    "}",
+    "position", "{",
+      "line", JSONRPC_MESSAGE_GET_INT64 (&line),
+      "character", JSONRPC_MESSAGE_GET_INT64 (&column),
+    "}"
+  );
+
+  if (!r)
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  if (g_str_has_prefix (uri, "file://"))
+    path = uri + strlen ("file://");
+  else
+    path = uri;
+
+  JSONRPC_MESSAGE_PARSE (params,
+    "build", "{",
+      "flags", JSONRPC_MESSAGE_GET_STRV (&flags),
+    "}"
+  );
+
+  ide_clang_complete_async (clang,
+                            path,
+                            line,
+                            column,
+                            (const gchar * const *)flags,
+                            op->cancellable,
+                            (GAsyncReadyCallback)handle_complete_cb,
+                            client_op_ref (op));
+}
+
 /* Initialize {{{1 */
 
 static void
@@ -416,6 +505,11 @@ main (gint argc,
   jsonrpc_server_add_handler (server,
                               "clang/diagnose",
                               (JsonrpcServerHandler)handle_diagnose,
+                              g_object_ref (clang),
+                              g_object_unref);
+  jsonrpc_server_add_handler (server,
+                              "textDocument/completion",
+                              (JsonrpcServerHandler)handle_complete,
                               g_object_ref (clang),
                               g_object_unref);
 
