@@ -115,6 +115,7 @@ G_BEGIN_DECLS
 #include "langserv/ide-langserv-diagnostic-provider.h"
 #include "langserv/ide-langserv-rename-provider.h"
 #include "langserv/ide-langserv-symbol-resolver.h"
+#include "langserv/ide-langserv-types.h"
 #include "langserv/ide-langserv-util.h"
 #include "layout/ide-layout-grid.h"
 #include "layout/ide-layout-grid-column.h"

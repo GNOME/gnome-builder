@@ -9,6 +9,7 @@ langserv_headers = [
   'ide-langserv-symbol-resolver.h',
   'ide-langserv-symbol-tree.h',
   'ide-langserv-util.h',
+  'ide-langserv-types.h',
 ]
 
 langserv_sources = [
@@ -26,6 +27,11 @@ langserv_sources = [
   'ide-langserv-util.c',
 ]
 
+langserv_enums = [
+  'ide-langserv-types.h',
+]
+
+libide_enum_headers += files(langserv_headers)
 libide_public_headers += files(langserv_headers)
 libide_public_sources += files(langserv_sources)
 
