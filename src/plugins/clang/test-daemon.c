@@ -20,6 +20,8 @@ static void test_locate     (JsonrpcClient *client,
                              GTask         *task);
 static void test_index_file (JsonrpcClient *client,
                              GTask         *task);
+static void test_symtree    (JsonrpcClient *client,
+                             GTask         *task);
 
 static gchar **flags;
 static const gchar *path;
@@ -31,7 +33,47 @@ static TestFunc test_funcs[] = {
   test_find_scope,
   test_index_file,
   test_locate,
+  test_symtree,
 };
+
+static void
+test_symtree_cb (GObject      *object,
+                 GAsyncResult *result,
+                 gpointer      user_data)
+{
+  JsonrpcClient *client = (JsonrpcClient *)object;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (G_IS_TASK (task));
+
+  if (!jsonrpc_client_call_finish (client, result, &reply, &error))
+    g_error ("getSymbolTree: %s", error->message);
+
+  g_printerr ("getSymbolTree: %s\n", g_variant_print (reply, TRUE));
+
+  g_task_return_boolean (task, TRUE);
+}
+
+static void
+test_symtree (JsonrpcClient *client,
+              GTask         *task)
+{
+  g_autoptr(GVariant) params = NULL;
+
+  params = JSONRPC_MESSAGE_NEW (
+    "path", JSONRPC_MESSAGE_PUT_STRING (path),
+    "flags", JSONRPC_MESSAGE_PUT_STRV ((const gchar * const *)flags)
+  );
+
+  jsonrpc_client_call_async (client,
+                             "clang/getSymbolTree",
+                             params,
+                             NULL,
+                             test_symtree_cb,
+                             g_object_ref (task));
+}
 
 static void
 test_locate_cb (GObject      *object,

@@ -1581,4 +1581,201 @@ ide_clang_locate_symbol_finish (IdeClang      *self,
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
+/* Get Symbol Tree {{{1 */
+
+typedef struct
+{
+  GFile           *workdir;
+  gchar           *path;
+  gchar          **argv;
+  gint             argc;
+  GVariantBuilder *current;
+} GetSymbolTree;
+
+static void
+get_symbol_tree_free (gpointer data)
+{
+  GetSymbolTree *state = data;
+
+  g_clear_object (&state->workdir);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_slice_free (GetSymbolTree, state);
+}
+
+static gboolean
+cursor_is_recognized (GetSymbolTree *state,
+                      CXCursor       cursor)
+{
+  enum CXCursorKind kind;
+  gboolean ret = FALSE;
+
+  kind = clang_getCursorKind (cursor);
+
+  switch ((int)kind)
+    {
+    /* TODO: Support way more CXCursorKind. */
+    case CXCursor_ClassDecl:
+    case CXCursor_Constructor:
+    case CXCursor_Destructor:
+    case CXCursor_CXXMethod:
+    case CXCursor_EnumConstantDecl:
+    case CXCursor_EnumDecl:
+    case CXCursor_FieldDecl:
+    case CXCursor_FunctionDecl:
+    case CXCursor_Namespace:
+    case CXCursor_StructDecl:
+    case CXCursor_TypedefDecl:
+    case CXCursor_UnionDecl:
+    case CXCursor_VarDecl:
+      {
+        g_auto(CXString) filename = {0};
+        CXSourceLocation cxloc;
+        CXFile file;
+
+        cxloc = clang_getCursorLocation (cursor);
+        clang_getFileLocation (cxloc, &file, NULL, NULL, NULL);
+        filename = clang_getFileName (file);
+        ret = dzl_str_equal0 (clang_getCString (filename), state->path);
+      }
+      break;
+
+    default:
+      break;
+    }
+
+  return ret;
+}
+
+static enum CXChildVisitResult
+traverse_cursors (CXCursor     cursor,
+                  CXCursor     parent,
+                  CXClientData user_data)
+{
+  GetSymbolTree *state = user_data;
+
+  if (cursor_is_recognized (state, cursor))
+    {
+      g_autoptr(IdeSymbol) symbol = NULL;
+
+      if ((symbol = create_symbol (state->path, cursor, NULL)))
+        {
+          g_autoptr(GVariant) var = ide_symbol_to_variant (symbol);
+          GVariantBuilder *cur = state->current;
+          GVariantBuilder builder;
+          GVariant *children = NULL;
+          GVariantDict dict;
+
+          state->current = &builder;
+
+          g_variant_dict_init (&dict, var);
+          g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
+
+          clang_visitChildren (cursor, traverse_cursors, state);
+
+          children = g_variant_new_variant (g_variant_builder_end (&builder));
+          g_variant_dict_insert_value (&dict, "children", children);
+          g_variant_builder_add_value (cur, g_variant_dict_end (&dict));
+
+          state->current = cur;
+        }
+    }
+
+  return CXChildVisit_Continue;
+}
+
+static void
+ide_clang_get_symbol_tree_worker (IdeTask      *task,
+                                  gpointer      source_object,
+                                  gpointer      task_data,
+                                  GCancellable *cancellable)
+{
+  GetSymbolTree *state = task_data;
+  g_autoptr(GVariant) ret = NULL;
+  g_auto(CXIndex) index = NULL;
+  g_auto(CXTranslationUnit) unit = NULL;
+  GVariantBuilder builder;
+  enum CXErrorCode code;
+  CXCursor cursor;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CLANG (source_object));
+  g_assert (state != NULL);
+  g_assert (state->path != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  index = clang_createIndex (0, 0);
+  code = clang_parseTranslationUnit2 (index,
+                                      state->path,
+                                      (const char * const *)state->argv,
+                                      state->argc,
+                                      NULL,
+                                      0,
+                                      clang_defaultEditingTranslationUnitOptions (),
+                                      &unit);
+
+  if (code != CXError_Success)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to locate symbol at position");
+      return;
+    }
+
+  state->current = &builder;
+
+  cursor = clang_getTranslationUnitCursor (unit);
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
+  clang_visitChildren (cursor, traverse_cursors, state);
+  ret = g_variant_ref_sink (g_variant_builder_end (&builder));
+
+  ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_variant_unref);
+}
+
+void
+ide_clang_get_symbol_tree_async (IdeClang            *self,
+                                 const gchar         *path,
+                                 const gchar * const *argv,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *parent = NULL;
+  GetSymbolTree *state;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (GetSymbolTree);
+  state->path = g_strdup (path);
+  state->argv = ide_clang_cook_flags (argv);
+  state->argc = state->argv ? g_strv_length (state->argv) : 0;
+
+  if (self->workdir != NULL)
+    state->workdir = g_object_ref (self->workdir);
+  else
+    state->workdir = g_file_new_for_path ((parent = g_path_get_dirname (path)));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_get_symbol_tree_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+  ide_task_set_task_data (task, state, get_symbol_tree_free);
+  ide_task_run_in_thread (task, ide_clang_get_symbol_tree_worker);
+}
+
+GVariant *
+ide_clang_get_symbol_tree_finish (IdeClang      *self,
+                                  GAsyncResult  *result,
+                                  GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
 /* vim:set foldmethod=marker: */

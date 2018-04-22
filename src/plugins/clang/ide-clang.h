@@ -80,5 +80,14 @@ void       ide_clang_locate_symbol_async       (IdeClang             *self,
 IdeSymbol *ide_clang_locate_symbol_finish      (IdeClang             *self,
                                                 GAsyncResult         *result,
                                                 GError              **error);
+void       ide_clang_get_symbol_tree_async     (IdeClang             *self,
+                                                const gchar          *path,
+                                                const gchar * const  *argv,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+GVariant  *ide_clang_get_symbol_tree_finish    (IdeClang             *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
 
 G_END_DECLS
