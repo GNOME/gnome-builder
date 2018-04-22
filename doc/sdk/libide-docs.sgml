@@ -100,7 +100,6 @@
       <xi:include href="xml/ide-editor-view.xml"/>
       <xi:include href="xml/ide-editor-view-addin.xml"/>
       <xi:include href="xml/ide-source-view.xml"/>
-      <xi:include href="xml/ide-source-view-mode.xml"/>
       <xi:include href="xml/ide-source-map.xml"/>
     </chapter>
     <chapter>
