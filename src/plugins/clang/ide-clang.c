@@ -25,6 +25,11 @@
 #include "ide-clang.h"
 #include "ide-clang-util.h"
 
+#define IDE_CLANG_HIGHLIGHTER_TYPE          "c:type"
+#define IDE_CLANG_HIGHLIGHTER_FUNCTION_NAME "def:function"
+#define IDE_CLANG_HIGHLIGHTER_ENUM_NAME     "def:constant"
+#define IDE_CLANG_HIGHLIGHTER_MACRO_NAME    "c:macro-name"
+
 struct _IdeClang
 {
   GObject  parent;
@@ -1771,6 +1776,184 @@ GVariant *
 ide_clang_get_symbol_tree_finish (IdeClang      *self,
                                   GAsyncResult  *result,
                                   GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+/* Get Highlight Index {{{1 */
+
+typedef struct
+{
+  GFile  *workdir;
+  gchar  *path;
+  gchar **argv;
+  gint    argc;
+} GetHighlightIndex;
+
+static void
+get_highlight_index_free (gpointer data)
+{
+  GetHighlightIndex *state = data;
+
+  g_clear_object (&state->workdir);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_slice_free (GetHighlightIndex, state);
+}
+
+static enum CXChildVisitResult
+build_index_visitor (CXCursor cursor,
+                     CXCursor     parent,
+                     CXClientData user_data)
+{
+  IdeHighlightIndex *highlight = user_data;
+  enum CXCursorKind kind;
+  const gchar *style_name = NULL;
+
+  g_assert (highlight != NULL);
+
+  kind = clang_getCursorKind (cursor);
+
+  switch ((int)kind)
+    {
+    case CXCursor_TypedefDecl:
+    case CXCursor_TypeAliasDecl:
+    case CXCursor_StructDecl:
+    case CXCursor_ClassDecl:
+      style_name = IDE_CLANG_HIGHLIGHTER_TYPE;
+      break;
+
+    case CXCursor_FunctionDecl:
+      style_name = IDE_CLANG_HIGHLIGHTER_FUNCTION_NAME;
+      break;
+
+    case CXCursor_EnumDecl:
+      style_name = IDE_CLANG_HIGHLIGHTER_ENUM_NAME;
+      clang_visitChildren (cursor, build_index_visitor, user_data);
+      break;
+
+    case CXCursor_EnumConstantDecl:
+      style_name = IDE_CLANG_HIGHLIGHTER_ENUM_NAME;
+      break;
+
+    case CXCursor_MacroDefinition:
+      style_name = IDE_CLANG_HIGHLIGHTER_MACRO_NAME;
+      break;
+
+    default:
+      break;
+    }
+
+  if (style_name != NULL)
+    {
+      g_auto(CXString) cxstr = {0};
+      const gchar *word;
+
+      cxstr = clang_getCursorSpelling (cursor);
+      word = clang_getCString (cxstr);
+      ide_highlight_index_insert (highlight, word, (gpointer)style_name);
+    }
+
+  return CXChildVisit_Continue;
+}
+
+static void
+ide_clang_get_highlight_index_worker (IdeTask      *task,
+                                      gpointer      source_object,
+                                      gpointer      task_data,
+                                      GCancellable *cancellable)
+{
+  static const gchar *common_defines[] = { "NULL", "MIN", "MAX", "__LINE__", "__FILE__" };
+  GetHighlightIndex *state = task_data;
+  g_autoptr(IdeHighlightIndex) highlight = NULL;
+  g_auto(CXIndex) index = NULL;
+  g_auto(CXTranslationUnit) unit = NULL;
+  enum CXErrorCode code;
+  CXCursor cursor;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CLANG (source_object));
+  g_assert (state != NULL);
+  g_assert (state->path != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  index = clang_createIndex (0, 0);
+  code = clang_parseTranslationUnit2 (index,
+                                      state->path,
+                                      (const char * const *)state->argv,
+                                      state->argc,
+                                      NULL,
+                                      0,
+                                      clang_defaultEditingTranslationUnitOptions (),
+                                      &unit);
+
+  if (code != CXError_Success)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to locate symbol at position");
+      return;
+    }
+
+  highlight = ide_highlight_index_new ();
+
+  for (guint i = 0; i < G_N_ELEMENTS (common_defines); i++)
+    ide_highlight_index_insert (highlight, common_defines[i], "c:common-defines");
+  ide_highlight_index_insert (highlight, "TRUE", "c:boolean");
+  ide_highlight_index_insert (highlight, "FALSE", "c:boolean");
+  ide_highlight_index_insert (highlight, "g_autoptr", "c:storage-class");
+  ide_highlight_index_insert (highlight, "g_auto", "c:storage-class");
+  ide_highlight_index_insert (highlight, "g_autofree", "c:storage-class");
+
+  cursor = clang_getTranslationUnitCursor (unit);
+  clang_visitChildren (cursor, build_index_visitor, highlight);
+
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&highlight),
+                           (GDestroyNotify)ide_highlight_index_unref);
+}
+
+void
+ide_clang_get_highlight_index_async (IdeClang            *self,
+                                     const gchar         *path,
+                                     const gchar * const *argv,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *parent = NULL;
+  GetHighlightIndex *state;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (GetHighlightIndex);
+  state->path = g_strdup (path);
+  state->argv = ide_clang_cook_flags (argv);
+  state->argc = state->argv ? g_strv_length (state->argv) : 0;
+
+  if (self->workdir != NULL)
+    state->workdir = g_object_ref (self->workdir);
+  else
+    state->workdir = g_file_new_for_path ((parent = g_path_get_dirname (path)));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_get_highlight_index_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+  ide_task_set_task_data (task, state, get_highlight_index_free);
+  ide_task_run_in_thread (task, ide_clang_get_highlight_index_worker);
+}
+
+IdeHighlightIndex *
+ide_clang_get_highlight_index_finish (IdeClang      *self,
+                                      GAsyncResult  *result,
+                                      GError       **error)
 {
   g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);

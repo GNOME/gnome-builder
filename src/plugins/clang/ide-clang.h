@@ -26,68 +26,77 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClang, ide_clang, IDE, CLANG, GObject)
 
-IdeClang  *ide_clang_new                       (void);
-void       ide_clang_set_workdir               (IdeClang             *self,
-                                                GFile                *workdir);
-void       ide_clang_index_file_async          (IdeClang             *self,
-                                                const gchar          *path,
-                                                const gchar * const  *argv,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-GPtrArray *ide_clang_index_file_finish         (IdeClang             *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void       ide_clang_complete_async            (IdeClang             *self,
-                                                const gchar          *path,
-                                                guint                 line,
-                                                guint                 column,
-                                                const gchar * const  *argv,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-GVariant  *ide_clang_complete_finish           (IdeClang             *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void       ide_clang_diagnose_async            (IdeClang             *self,
-                                                const gchar          *path,
-                                                const gchar * const  *argv,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-GPtrArray *ide_clang_diagnose_finish           (IdeClang             *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void       ide_clang_find_nearest_scope_async  (IdeClang             *self,
-                                                const gchar          *path,
-                                                const gchar * const  *argv,
-                                                guint                 line,
-                                                guint                 column,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-IdeSymbol *ide_clang_find_nearest_scope_finish (IdeClang             *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void       ide_clang_locate_symbol_async       (IdeClang             *self,
-                                                const gchar          *path,
-                                                const gchar * const  *argv,
-                                                guint                 line,
-                                                guint                 column,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-IdeSymbol *ide_clang_locate_symbol_finish      (IdeClang             *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
-void       ide_clang_get_symbol_tree_async     (IdeClang             *self,
-                                                const gchar          *path,
-                                                const gchar * const  *argv,
-                                                GCancellable         *cancellable,
-                                                GAsyncReadyCallback   callback,
-                                                gpointer              user_data);
-GVariant  *ide_clang_get_symbol_tree_finish    (IdeClang             *self,
-                                                GAsyncResult         *result,
-                                                GError              **error);
+IdeClang          *ide_clang_new                        (void);
+void               ide_clang_set_workdir                (IdeClang             *self,
+                                                         GFile                *workdir);
+void               ide_clang_index_file_async           (IdeClang             *self,
+                                                         const gchar          *path,
+                                                         const gchar * const  *argv,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+GPtrArray         *ide_clang_index_file_finish          (IdeClang             *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
+void               ide_clang_complete_async             (IdeClang             *self,
+                                                         const gchar          *path,
+                                                         guint                 line,
+                                                         guint                 column,
+                                                         const gchar * const  *argv,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+GVariant          *ide_clang_complete_finish            (IdeClang             *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
+void               ide_clang_diagnose_async             (IdeClang             *self,
+                                                         const gchar          *path,
+                                                         const gchar * const  *argv,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+GPtrArray         *ide_clang_diagnose_finish            (IdeClang             *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
+void               ide_clang_find_nearest_scope_async   (IdeClang             *self,
+                                                         const gchar          *path,
+                                                         const gchar * const  *argv,
+                                                         guint                 line,
+                                                         guint                 column,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+IdeSymbol         *ide_clang_find_nearest_scope_finish  (IdeClang             *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
+void               ide_clang_locate_symbol_async        (IdeClang             *self,
+                                                         const gchar          *path,
+                                                         const gchar * const  *argv,
+                                                         guint                 line,
+                                                         guint                 column,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+IdeSymbol         *ide_clang_locate_symbol_finish       (IdeClang             *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
+void               ide_clang_get_symbol_tree_async      (IdeClang             *self,
+                                                         const gchar          *path,
+                                                         const gchar * const  *argv,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+GVariant          *ide_clang_get_symbol_tree_finish     (IdeClang             *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
+void               ide_clang_get_highlight_index_async  (IdeClang             *self,
+                                                         const gchar          *path,
+                                                         const gchar * const  *argv,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+IdeHighlightIndex *ide_clang_get_highlight_index_finish (IdeClang             *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
 
 G_END_DECLS

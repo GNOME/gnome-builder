@@ -599,6 +599,72 @@ handle_complete (JsonrpcServer *server,
                             client_op_ref (op));
 }
 
+/* Get Highlight Index {{{1 */
+
+static void
+handle_get_highlight_index_cb (IdeClang     *clang,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(IdeHighlightIndex) index = NULL;
+  g_autoptr(GVariant) ret = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_CLANG (clang));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if ((index = ide_clang_get_highlight_index_finish (clang, result, &error)))
+    ret = ide_highlight_index_to_variant (index);
+
+  if (!ret)
+    client_op_error (op, error);
+  else
+    client_op_reply (op, ret);
+}
+
+static void
+handle_get_highlight_index (JsonrpcServer *server,
+                            JsonrpcClient *client,
+                            const gchar   *method,
+                            GVariant      *id,
+                            GVariant      *params,
+                            IdeClang      *clang)
+{
+  g_autoptr(GPtrArray) argv = NULL;
+  g_autoptr(ClientOp) op = NULL;
+  g_auto(GStrv) flags = NULL;
+  const gchar *path;
+  gboolean r;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "clang/getHighlightIndex"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  r = JSONRPC_MESSAGE_PARSE (params,
+    "path", JSONRPC_MESSAGE_GET_STRING (&path),
+    "flags", JSONRPC_MESSAGE_GET_STRV (&flags)
+  );
+
+  if (!r)
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  ide_clang_get_highlight_index_async (clang,
+                                       path,
+                                       (const gchar * const *)flags,
+                                       op->cancellable,
+                                       (GAsyncReadyCallback)handle_get_highlight_index_cb,
+                                       client_op_ref (op));
+}
+
 /* Initialize {{{1 */
 
 static void
@@ -696,6 +762,7 @@ main (gint argc,
   ADD_HANDLER ("clang/getSymbolTree", handle_get_symbol_tree);
   ADD_HANDLER ("clang/indexFile", handle_index_file);
   ADD_HANDLER ("clang/locateSymbol", handle_locate_symbol);
+  ADD_HANDLER ("clang/getHighlightIndex", handle_get_highlight_index);
 
 #undef ADD_HANDLER
 
