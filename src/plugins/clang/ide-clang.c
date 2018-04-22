@@ -85,6 +85,145 @@ ide_clang_cook_flags (const gchar * const *flags)
   return (gchar **)g_ptr_array_free (cooked, FALSE);
 }
 
+static gboolean
+is_ignored_kind (enum CXCursorKind kind)
+{
+  switch ((int)kind)
+    {
+    case CXCursor_CXXMethod:
+    case CXCursor_ClassDecl:
+    case CXCursor_ClassTemplate:
+    case CXCursor_Constructor:
+    case CXCursor_Destructor:
+    case CXCursor_EnumConstantDecl:
+    case CXCursor_EnumDecl:
+    case CXCursor_FunctionDecl:
+    case CXCursor_FunctionTemplate:
+    case CXCursor_Namespace:
+    case CXCursor_NamespaceAlias:
+    case CXCursor_StructDecl:
+    case CXCursor_TranslationUnit:
+    case CXCursor_TypeAliasDecl:
+    case CXCursor_TypedefDecl:
+    case CXCursor_UnionDecl:
+      return FALSE;
+
+    default:
+      return TRUE;
+    }
+}
+
+static CXCursor
+move_to_previous_sibling (CXTranslationUnit unit,
+                          CXCursor          cursor)
+{
+  CXSourceRange range = clang_getCursorExtent (cursor);
+  CXSourceLocation begin = clang_getRangeStart (range);
+  CXSourceLocation loc;
+  CXFile file;
+  unsigned line;
+  unsigned column;
+
+  clang_getFileLocation (begin, &file, &line, &column, NULL);
+  loc = clang_getLocation (unit, file, line, column - 1);
+
+  return clang_getCursor (unit, loc);
+}
+
+static enum CXChildVisitResult
+find_child_type (CXCursor     cursor,
+                 CXCursor     parent,
+                 CXClientData user_data)
+{
+  enum CXCursorKind *child_kind = user_data;
+  enum CXCursorKind kind = clang_getCursorKind (cursor);
+
+  switch ((int)kind)
+    {
+    case CXCursor_StructDecl:
+    case CXCursor_UnionDecl:
+    case CXCursor_EnumDecl:
+      *child_kind = kind;
+      return CXChildVisit_Break;
+
+    case CXCursor_TypeRef:
+      cursor = clang_getCursorReferenced (cursor);
+      *child_kind = clang_getCursorKind (cursor);
+      return CXChildVisit_Break;
+
+    default:
+      break;
+    }
+
+  return CXChildVisit_Continue;
+}
+
+static IdeSymbolKind
+ide_clang_get_symbol_kind (CXCursor        cursor,
+                           IdeSymbolFlags *flags)
+{
+  enum CXAvailabilityKind availability;
+  enum CXCursorKind cxkind;
+  IdeSymbolFlags local_flags = 0;
+  IdeSymbolKind kind = 0;
+
+  availability = clang_getCursorAvailability (cursor);
+  if (availability == CXAvailability_Deprecated)
+    local_flags |= IDE_SYMBOL_FLAGS_IS_DEPRECATED;
+
+  cxkind = clang_getCursorKind (cursor);
+
+  if (cxkind == CXCursor_TypedefDecl)
+    {
+      enum CXCursorKind child_kind = 0;
+
+      clang_visitChildren (cursor, find_child_type, &child_kind);
+      cxkind = child_kind;
+    }
+
+  switch ((int)cxkind)
+    {
+    case CXCursor_StructDecl:
+      kind = IDE_SYMBOL_STRUCT;
+      break;
+
+    case CXCursor_UnionDecl:
+      kind = IDE_SYMBOL_UNION;
+      break;
+
+    case CXCursor_ClassDecl:
+      kind = IDE_SYMBOL_CLASS;
+      break;
+
+    case CXCursor_FunctionDecl:
+      kind = IDE_SYMBOL_FUNCTION;
+      break;
+
+    case CXCursor_EnumDecl:
+      kind = IDE_SYMBOL_ENUM;
+      break;
+
+    case CXCursor_EnumConstantDecl:
+      kind = IDE_SYMBOL_ENUM_VALUE;
+      break;
+
+    case CXCursor_FieldDecl:
+      kind = IDE_SYMBOL_FIELD;
+      break;
+
+    case CXCursor_InclusionDirective:
+      kind = IDE_SYMBOL_HEADER;
+      break;
+
+    default:
+      break;
+    }
+
+  *flags = local_flags;
+
+  return kind;
+}
+
 static void
 ide_clang_finalize (GObject *object)
 {
@@ -1056,6 +1195,179 @@ GVariant *
 ide_clang_complete_finish (IdeClang      *self,
                            GAsyncResult  *result,
                            GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+/* Find Nearest Scope {{{1 */
+
+typedef struct
+{
+  gchar  *path;
+  gchar **argv;
+  gint    argc;
+  guint   line;
+  guint   column;
+} FindNearestScope;
+
+static void
+find_nearest_scope_free (gpointer data)
+{
+  FindNearestScope *state = data;
+
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_slice_free (FindNearestScope, state);
+}
+
+static void
+ide_clang_find_nearest_scope_worker (IdeTask      *task,
+                                     gpointer      source_object,
+                                     gpointer      task_data,
+                                     GCancellable *cancellable)
+{
+  FindNearestScope *state = task_data;
+  g_autoptr(IdeSourceLocation) symbol_location = NULL;
+  g_autoptr(IdeSymbol) ret = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  g_autoptr(GFile) gfile = NULL;
+  g_auto(CXTranslationUnit) unit = NULL;
+  g_auto(CXString) cxname = {0};
+  g_auto(CXIndex) index = NULL;
+  IdeSymbolKind symkind = 0;
+  IdeSymbolFlags symflags = 0;
+  enum CXCursorKind kind;
+  enum CXErrorCode code;
+  CXSourceLocation loc;
+  CXCursor cursor;
+  CXFile file;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CLANG (source_object));
+  g_assert (state != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* TODO: We need file sync for unsaved buffers */
+
+  index = clang_createIndex (0, 0);
+  code = clang_parseTranslationUnit2 (index,
+                                      state->path,
+                                      (const char * const *)state->argv,
+                                      state->argc,
+                                      NULL,
+                                      0,
+                                      clang_defaultEditingTranslationUnitOptions (),
+                                      &unit);
+
+  if (code != CXError_Success)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to find_nearest_scope \"%s\", exited with code %d",
+                                 state->path, code);
+      return;
+    }
+
+  gfile = g_file_new_for_path (state->path);
+  ifile = ide_file_new (NULL, gfile);
+  file = clang_getFile (unit, state->path);
+  loc = clang_getLocation (unit, file, state->line, state->column);
+  cursor = clang_getCursor (unit, loc);
+
+  if (clang_Cursor_isNull (cursor))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "Failed to locate position in translation unit");
+      return;
+    }
+
+  /*
+   * Macros sort of mess us up and result in us thinking
+   * we are in some sort of InvalidFile condition.
+   */
+  kind = clang_getCursorKind (cursor);
+  if (kind == CXCursor_MacroExpansion)
+    cursor = move_to_previous_sibling (unit, cursor);
+
+  /*
+   * The semantic parent may still be uninteresting to us,
+   * so possibly keep walking up the AST until we get to
+   * something better.
+   */
+  do
+    {
+      cursor = clang_getCursorSemanticParent (cursor);
+      kind = clang_getCursorKind (cursor);
+    }
+  while (!clang_Cursor_isNull (cursor) && is_ignored_kind (kind));
+
+  if (kind == CXCursor_TranslationUnit)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "The location does not have a semantic parent");
+      return;
+    }
+
+  symbol_location = ide_source_location_new (ifile, state->line - 1, state->column - 1, 0);
+  cxname = clang_getCursorSpelling (cursor);
+  symkind = ide_clang_get_symbol_kind (cursor, &symflags);
+
+  ret = ide_symbol_new (clang_getCString (cxname),
+                        symkind,
+                        symflags,
+                        NULL,
+                        NULL,
+                        symbol_location);
+
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&ret),
+                           (GDestroyNotify)ide_symbol_unref);
+}
+
+void
+ide_clang_find_nearest_scope_async (IdeClang            *self,
+                                    const gchar         *path,
+                                    const gchar * const *argv,
+                                    guint                line,
+                                    guint                column,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *parent = NULL;
+  FindNearestScope *state;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (FindNearestScope);
+  state->path = g_strdup (path);
+  state->argv = ide_clang_cook_flags (argv);
+  state->argc = state->argv ? g_strv_length (state->argv) : 0;
+  state->line = line;
+  state->column = column;
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_find_nearest_scope_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+  ide_task_set_task_data (task, state, find_nearest_scope_free);
+  ide_task_run_in_thread (task, ide_clang_find_nearest_scope_worker);
+}
+
+IdeSymbol *
+ide_clang_find_nearest_scope_finish (IdeClang      *self,
+                                     GAsyncResult  *result,
+                                     GError       **error)
 {
   g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);

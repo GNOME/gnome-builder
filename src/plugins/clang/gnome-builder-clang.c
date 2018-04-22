@@ -243,6 +243,80 @@ handle_index_file (JsonrpcServer *server,
                               client_op_ref (op));
 }
 
+/* Find Nearest Scope {{{1 */
+
+static void
+handle_find_nearest_scope_cb (IdeClang     *clang,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(IdeSymbol) scope = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GVariant) ret = NULL;
+
+  g_assert (IDE_IS_CLANG (clang));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  if (!(scope = ide_clang_find_nearest_scope_finish (clang, result, &error)))
+    {
+      client_op_error (op, error);
+      return;
+    }
+
+  ret = ide_symbol_to_variant (scope);
+
+  client_op_reply (op, ret);
+}
+
+static void
+handle_find_nearest_scope (JsonrpcServer *server,
+                           JsonrpcClient *client,
+                           const gchar   *method,
+                           GVariant      *id,
+                           GVariant      *params,
+                           IdeClang      *clang)
+{
+  g_autoptr(GPtrArray) argv = NULL;
+  g_autoptr(ClientOp) op = NULL;
+  g_auto(GStrv) flags = NULL;
+  const gchar *path = NULL;
+  gboolean r;
+  gint64 line = 0;
+  gint64 column = 0;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "clang/find-nearest-scope"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  r = JSONRPC_MESSAGE_PARSE (params,
+    "path", JSONRPC_MESSAGE_GET_STRING (&path),
+    "flags", JSONRPC_MESSAGE_GET_STRV (&flags),
+    "line", JSONRPC_MESSAGE_GET_INT64 (&line),
+    "column", JSONRPC_MESSAGE_GET_INT64 (&column)
+  );
+
+  if (!r)
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  ide_clang_find_nearest_scope_async (clang,
+                                      path,
+                                      (const gchar * const *)flags,
+                                      line,
+                                      column,
+                                      op->cancellable,
+                                      (GAsyncReadyCallback)handle_find_nearest_scope_cb,
+                                      client_op_ref (op));
+}
+
 /* Diagnose Handler {{{1 */
 
 static void
@@ -500,6 +574,11 @@ main (gint argc,
   jsonrpc_server_add_handler (server,
                               "clang/indexFile",
                               (JsonrpcServerHandler)handle_index_file,
+                              g_object_ref (clang),
+                              g_object_unref);
+  jsonrpc_server_add_handler (server,
+                              "clang/find-nearest-scope",
+                              (JsonrpcServerHandler)handle_find_nearest_scope,
                               g_object_ref (clang),
                               g_object_unref);
   jsonrpc_server_add_handler (server,
