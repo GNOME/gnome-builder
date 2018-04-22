@@ -340,3 +340,37 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
 
   return icon_name;
 }
+
+GVariant *
+ide_symbol_to_variant (const IdeSymbol *self)
+{
+  GVariantBuilder builder;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+
+  g_variant_builder_add_parsed (&builder, "{%s,<%i>}", "kind", self->kind);
+  g_variant_builder_add_parsed (&builder, "{%s,<%i>}", "flags", self->flags);
+  g_variant_builder_add_parsed (&builder, "{%s,<%s>}", "name", self->name);
+
+  if (self->declaration_location)
+    {
+      g_autoptr(GVariant) v = ide_source_location_to_variant (self->declaration_location);
+      g_variant_builder_add_parsed (&builder, "{%s,%v}", "declaration", v);
+    }
+
+  if (self->definition_location)
+    {
+      g_autoptr(GVariant) v = ide_source_location_to_variant (self->definition_location);
+      g_variant_builder_add_parsed (&builder, "{%s,%v}", "definition", v);
+    }
+
+  if (self->canonical_location)
+    {
+      g_autoptr(GVariant) v = ide_source_location_to_variant (self->canonical_location);
+      g_variant_builder_add_parsed (&builder, "{%s,%v}", "canonical", v);
+    }
+
+  return g_variant_ref_sink (g_variant_builder_end (&builder));
+}

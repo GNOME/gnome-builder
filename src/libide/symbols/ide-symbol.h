@@ -111,6 +111,8 @@ IdeSymbol         *ide_symbol_new                      (const gchar           *n
                                                         IdeSourceLocation     *declaration_location,
                                                         IdeSourceLocation     *definition_location,
                                                         IdeSourceLocation     *canonical_location);
+IDE_AVAILABLE_IN_3_30
+GVariant          *ide_symbol_to_variant               (const IdeSymbol       *self);
 IDE_AVAILABLE_IN_ALL
 const gchar       *ide_symbol_kind_get_icon_name       (IdeSymbolKind          kind);
 
