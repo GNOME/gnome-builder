@@ -1343,7 +1343,6 @@ ide_clang_find_nearest_scope_async (IdeClang            *self,
                                     gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  g_autofree gchar *parent = NULL;
   FindNearestScope *state;
 
   g_return_if_fail (IDE_IS_CLANG (self));
@@ -1376,5 +1375,190 @@ ide_clang_find_nearest_scope_finish (IdeClang      *self,
 }
 
 /* Get symbol at source location {{{1 */
+
+typedef struct
+{
+  GFile  *workdir;
+  gchar  *path;
+  gchar **argv;
+  gint    argc;
+  guint   line;
+  guint   column;
+} LocateSymbol;
+
+static void
+locate_symbol_free (gpointer data)
+{
+  LocateSymbol *state = data;
+
+  g_clear_object (&state->workdir);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_slice_free (LocateSymbol, state);
+}
+
+static void
+ide_clang_locate_symbol_worker (IdeTask      *task,
+                                gpointer      source_object,
+                                gpointer      task_data,
+                                GCancellable *cancellable)
+{
+  LocateSymbol *state = task_data;
+  g_autoptr(IdeSourceLocation) declaration = NULL;
+  g_autoptr(IdeSourceLocation) definition = NULL;
+  g_autoptr(IdeSourceLocation) canonical = NULL;
+  g_autoptr(IdeSymbol) ret = NULL;
+  g_auto(CXTranslationUnit) unit = NULL;
+  g_auto(CXString) cxstr = {0};
+  g_auto(CXIndex) index = NULL;
+  CXSourceLocation cxlocation;
+  enum CXErrorCode code;
+  IdeSymbolFlags symflags;
+  IdeSymbolKind symkind;
+  CXCursor cursor;
+  CXCursor tmpcursor;
+  CXFile cxfile;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CLANG (source_object));
+  g_assert (state != NULL);
+  g_assert (state->path != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  index = clang_createIndex (0, 0);
+  code = clang_parseTranslationUnit2 (index,
+                                      state->path,
+                                      (const char * const *)state->argv,
+                                      state->argc,
+                                      NULL,
+                                      0,
+                                      clang_defaultEditingTranslationUnitOptions (),
+                                      &unit);
+
+  if (code != CXError_Success)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to find_nearest_scope \"%s\", exited with code %d",
+                                 state->path, code);
+      return;
+    }
+
+  cxfile = clang_getFile (unit, state->path);
+  cxlocation = clang_getLocation (unit, cxfile, state->line, state->column);
+  cursor = clang_getCursor (unit, cxlocation);
+
+  if (clang_Cursor_isNull (cursor))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "Failed to locate cursor at position");
+      return;
+    }
+
+  tmpcursor = clang_getCursorDefinition (cursor);
+
+  if (clang_Cursor_isNull (tmpcursor))
+    tmpcursor = clang_getCursorReferenced (cursor);
+
+  if (!clang_Cursor_isNull (tmpcursor))
+    {
+      CXSourceLocation tmploc;
+      CXSourceRange cxrange;
+
+      cxrange = clang_getCursorExtent (tmpcursor);
+      tmploc = clang_getRangeStart (cxrange);
+
+      if (clang_isCursorDefinition (tmpcursor))
+        definition = create_location (state->workdir, tmploc, NULL);
+      else
+        declaration = create_location (state->workdir, tmploc, NULL);
+
+      cursor = tmpcursor;
+    }
+
+  symkind = ide_clang_get_symbol_kind (cursor, &symflags);
+
+  if (symkind == IDE_SYMBOL_HEADER)
+    {
+      g_auto(CXString) included_file_name = {0};
+      CXFile included_file;
+      const gchar *path;
+
+      included_file = clang_getIncludedFile (cursor);
+      included_file_name = clang_getFileName (included_file);
+      path = clang_getCString (included_file_name);
+
+      if (path != NULL)
+        {
+          g_autoptr(IdeFile) file = NULL;
+          g_autoptr(GFile) gfile = NULL;
+
+          gfile = g_file_new_for_path (path);
+          file = ide_file_new (NULL, gfile);
+
+          g_clear_pointer (&definition, ide_symbol_unref);
+          declaration = ide_source_location_new (file, 0, 0, 0);
+        }
+    }
+
+  cxstr = clang_getCursorDisplayName (cursor);
+  ret = ide_symbol_new (clang_getCString (cxstr), symkind, symflags,
+                        declaration, definition, canonical);
+
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&ret),
+                           (GDestroyNotify)ide_symbol_unref);
+}
+
+void
+ide_clang_locate_symbol_async (IdeClang            *self,
+                               const gchar         *path,
+                               const gchar * const *argv,
+                               guint                line,
+                               guint                column,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *parent = NULL;
+  LocateSymbol *state;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (LocateSymbol);
+  state->path = g_strdup (path);
+  state->argv = ide_clang_cook_flags (argv);
+  state->argc = state->argv ? g_strv_length (state->argv) : 0;
+  state->line = line;
+  state->column = column;
+
+  if (self->workdir != NULL)
+    state->workdir = g_object_ref (self->workdir);
+  else
+    state->workdir = g_file_new_for_path ((parent = g_path_get_dirname (path)));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_locate_symbol_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+  ide_task_set_task_data (task, state, locate_symbol_free);
+  ide_task_run_in_thread (task, ide_clang_locate_symbol_worker);
+}
+
+IdeSymbol *
+ide_clang_locate_symbol_finish (IdeClang      *self,
+                                GAsyncResult  *result,
+                                GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
 
 /* vim:set foldmethod=marker: */

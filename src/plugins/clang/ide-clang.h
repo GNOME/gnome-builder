@@ -69,5 +69,16 @@ void       ide_clang_find_nearest_scope_async  (IdeClang             *self,
 IdeSymbol *ide_clang_find_nearest_scope_finish (IdeClang             *self,
                                                 GAsyncResult         *result,
                                                 GError              **error);
+void       ide_clang_locate_symbol_async       (IdeClang             *self,
+                                                const gchar          *path,
+                                                const gchar * const  *argv,
+                                                guint                 line,
+                                                guint                 column,
+                                                GCancellable         *cancellable,
+                                                GAsyncReadyCallback   callback,
+                                                gpointer              user_data);
+IdeSymbol *ide_clang_locate_symbol_finish      (IdeClang             *self,
+                                                GAsyncResult         *result,
+                                                GError              **error);
 
 G_END_DECLS
