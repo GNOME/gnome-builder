@@ -174,28 +174,14 @@ test_complete (JsonrpcClient *client,
                GTask         *task)
 {
   g_autoptr(GVariant) params = NULL;
-  g_autofree gchar *uri = NULL;
   guint line = 0;
-  guint offset = 0;
-
-  uri = g_strdup_printf ("file://%s", path);
+  guint column = 0;
 
   params = JSONRPC_MESSAGE_NEW (
-    "textDocument", "{",
-      "uri", JSONRPC_MESSAGE_PUT_STRING (uri),
-    "}",
-    "position", "{",
-      "line", JSONRPC_MESSAGE_PUT_INT64 (line),
-      "character", JSONRPC_MESSAGE_PUT_INT64 (offset),
-    "}",
-    /* would be nice to get this in open/close notifications */
-    "build", "{",
-      "flags", JSONRPC_MESSAGE_PUT_STRV ((const gchar * const *)flags),
-    "}",
-    "context", "{",
-      "triggerKind", JSONRPC_MESSAGE_PUT_INT64 (2), /* Trigger */
-      "triggerCharacter", JSONRPC_MESSAGE_PUT_STRING ("."),
-    "}"
+    "path", JSONRPC_MESSAGE_PUT_STRING (path),
+    "flags", JSONRPC_MESSAGE_PUT_STRV ((const gchar * const *)flags),
+    "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+    "column", JSONRPC_MESSAGE_PUT_INT64 (column)
   );
 
   jsonrpc_client_call_async (client,

@@ -428,7 +428,6 @@ handle_complete (JsonrpcServer *server,
   g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
-  const gchar *uri = NULL;
   const gchar *path;
   gboolean r;
   gint64 line = 0;
@@ -443,13 +442,10 @@ handle_complete (JsonrpcServer *server,
   op = client_op_new (client, id);
 
   r = JSONRPC_MESSAGE_PARSE (params,
-    "textDocument", "{",
-      "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
-    "}",
-    "position", "{",
-      "line", JSONRPC_MESSAGE_GET_INT64 (&line),
-      "character", JSONRPC_MESSAGE_GET_INT64 (&column),
-    "}"
+    "path", JSONRPC_MESSAGE_GET_STRING (&path),
+    "flags", JSONRPC_MESSAGE_GET_STRV (&flags),
+    "line", JSONRPC_MESSAGE_GET_INT64 (&line),
+    "column", JSONRPC_MESSAGE_GET_INT64 (&column)
   );
 
   if (!r)
@@ -457,17 +453,6 @@ handle_complete (JsonrpcServer *server,
       client_op_bad_params (op);
       return;
     }
-
-  if (g_str_has_prefix (uri, "file://"))
-    path = uri + strlen ("file://");
-  else
-    path = uri;
-
-  JSONRPC_MESSAGE_PARSE (params,
-    "build", "{",
-      "flags", JSONRPC_MESSAGE_GET_STRV (&flags),
-    "}"
-  );
 
   ide_clang_complete_async (clang,
                             path,
