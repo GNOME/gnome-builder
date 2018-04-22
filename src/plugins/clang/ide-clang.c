@@ -224,6 +224,50 @@ ide_clang_get_symbol_kind (CXCursor        cursor,
   return kind;
 }
 
+static IdeSymbol *
+create_symbol (const gchar  *path,
+               CXCursor      cursor,
+               GError      **error)
+{
+  g_auto(CXString) cxname = {0};
+  g_autoptr(GFile) gfile = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  g_autoptr(IdeSourceLocation) srcloc = NULL;
+  IdeSymbolKind symkind;
+  IdeSymbolFlags symflags = 0;
+  CXSourceLocation loc;
+  guint line;
+  guint column;
+
+  if (clang_Cursor_isNull (cursor))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_FOUND,
+                   "Failed to locate position in translation unit");
+      return NULL;
+    }
+
+  loc = clang_getCursorLocation (cursor);
+  clang_getExpansionLocation (loc, NULL, &line, &column, NULL);
+  gfile = g_file_new_for_path (path);
+  ifile = ide_file_new (NULL, gfile);
+
+  if (line) line--;
+  if (column) column--;
+
+  srcloc = ide_source_location_new (ifile, line, column, 0);
+  cxname = clang_getCursorSpelling (cursor);
+  symkind = ide_clang_get_symbol_kind (cursor, &symflags);
+
+  return ide_symbol_new (clang_getCString (cxname),
+                         symkind,
+                         symflags,
+                         NULL,
+                         NULL,
+                         srcloc);
+}
+
 static void
 ide_clang_finalize (GObject *object)
 {
@@ -1230,15 +1274,10 @@ ide_clang_find_nearest_scope_worker (IdeTask      *task,
                                      GCancellable *cancellable)
 {
   FindNearestScope *state = task_data;
-  g_autoptr(IdeSourceLocation) symbol_location = NULL;
   g_autoptr(IdeSymbol) ret = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
-  g_autoptr(GFile) gfile = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
-  g_auto(CXString) cxname = {0};
   g_auto(CXIndex) index = NULL;
-  IdeSymbolKind symkind = 0;
-  IdeSymbolFlags symflags = 0;
+  g_autoptr(GError) error = NULL;
   enum CXCursorKind kind;
   enum CXErrorCode code;
   CXSourceLocation loc;
@@ -1272,20 +1311,9 @@ ide_clang_find_nearest_scope_worker (IdeTask      *task,
       return;
     }
 
-  gfile = g_file_new_for_path (state->path);
-  ifile = ide_file_new (NULL, gfile);
   file = clang_getFile (unit, state->path);
   loc = clang_getLocation (unit, file, state->line, state->column);
   cursor = clang_getCursor (unit, loc);
-
-  if (clang_Cursor_isNull (cursor))
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_NOT_FOUND,
-                                 "Failed to locate position in translation unit");
-      return;
-    }
 
   /*
    * Macros sort of mess us up and result in us thinking
@@ -1316,20 +1344,12 @@ ide_clang_find_nearest_scope_worker (IdeTask      *task,
       return;
     }
 
-  symbol_location = ide_source_location_new (ifile, state->line - 1, state->column - 1, 0);
-  cxname = clang_getCursorSpelling (cursor);
-  symkind = ide_clang_get_symbol_kind (cursor, &symflags);
-
-  ret = ide_symbol_new (clang_getCString (cxname),
-                        symkind,
-                        symflags,
-                        NULL,
-                        NULL,
-                        symbol_location);
-
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&ret),
-                           (GDestroyNotify)ide_symbol_unref);
+  if (!(ret = create_symbol (state->path, cursor, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&ret),
+                             (GDestroyNotify)ide_symbol_unref);
 }
 
 void
