@@ -288,7 +288,7 @@ handle_find_nearest_scope (JsonrpcServer *server,
 
   g_assert (JSONRPC_IS_SERVER (server));
   g_assert (JSONRPC_IS_CLIENT (client));
-  g_assert (g_str_equal (method, "clang/find-nearest-scope"));
+  g_assert (g_str_equal (method, "clang/findNearestScope"));
   g_assert (id != NULL);
   g_assert (IDE_IS_CLANG (clang));
 
@@ -551,32 +551,16 @@ main (gint argc,
                     G_CALLBACK (on_client_closed_cb),
                     NULL);
 
-  jsonrpc_server_add_handler (server,
-                              "initialize",
-                              (JsonrpcServerHandler)handle_initialize,
-                              g_object_ref (clang),
-                              g_object_unref);
-  jsonrpc_server_add_handler (server,
-                              "clang/indexFile",
-                              (JsonrpcServerHandler)handle_index_file,
-                              g_object_ref (clang),
-                              g_object_unref);
-  jsonrpc_server_add_handler (server,
-                              "clang/find-nearest-scope",
-                              (JsonrpcServerHandler)handle_find_nearest_scope,
-                              g_object_ref (clang),
-                              g_object_unref);
-  jsonrpc_server_add_handler (server,
-                              "clang/diagnose",
-                              (JsonrpcServerHandler)handle_diagnose,
-                              g_object_ref (clang),
-                              g_object_unref);
-  jsonrpc_server_add_handler (server,
-                              "clang/complete",
-                              (JsonrpcServerHandler)handle_complete,
-                              g_object_ref (clang),
-                              g_object_unref);
+#define ADD_HANDLER(method, func) \
+  jsonrpc_server_add_handler (server, method, (JsonrpcServerHandler)func, g_object_ref (clang), g_object_unref)
 
+  ADD_HANDLER ("initialize", handle_initialize);
+  ADD_HANDLER ("clang/indexFile", handle_index_file);
+  ADD_HANDLER ("clang/findNearestScope", handle_find_nearest_scope);
+  ADD_HANDLER ("clang/diagnose", handle_diagnose);
+  ADD_HANDLER ("clang/complete", handle_complete);
+
+#undef ADD_HANDLER
 
   jsonrpc_server_accept_io_stream (server, stream);
 

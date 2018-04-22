@@ -142,7 +142,7 @@ test_find_scope (JsonrpcClient *client,
   );
 
   jsonrpc_client_call_async (client,
-                             "clang/find-nearest-scope",
+                             "clang/findNearestScope",
                              params,
                              NULL,
                              test_find_scope_cb,
