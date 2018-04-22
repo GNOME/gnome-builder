@@ -332,10 +332,6 @@
       <xi:include href="xml/ide-test-provider.xml"/>
       <xi:include href="xml/ide-test.xml"/>
     </chapter>
-    <chapter>
-      <title>Widgets</title>
-      <xi:include href="xml/ide-test-panel.xml"/>
-    </chapter>
   </part>
 
   <part id="libide-projects">
