@@ -149,3 +149,52 @@ ide_highlight_index_dump (IdeHighlightIndex *self)
   g_debug ("IdeHighlightIndex (%p) contains %u items and consumes %s.",
            self, self->count, format);
 }
+
+/**
+ * ide_highlight_index_to_variant:
+ * @self: a #IdeHighlightIndex
+ *
+ * Creates a variant to represent the index. Useful to transport across IPC boundaries.
+ *
+ * Returns: (transfer full): a #GVariant
+ */
+GVariant *
+ide_highlight_index_to_variant (IdeHighlightIndex *self)
+{
+  g_autoptr(GHashTable) arrays = NULL;
+  GHashTableIter iter;
+  const gchar *k, *v;
+  GPtrArray *ar;
+  GVariantDict dict;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  arrays = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify)g_ptr_array_unref);
+
+  g_hash_table_iter_init (&iter, self->index);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&k, (gpointer *)&v))
+    {
+      if G_UNLIKELY (!(ar = g_hash_table_lookup (arrays, v)))
+        {
+          ar = g_ptr_array_new ();
+          g_hash_table_insert (arrays, (gchar *)v, ar);
+        }
+
+      g_ptr_array_add (ar, (gchar *)k);
+    }
+
+  g_variant_dict_init (&dict, NULL);
+
+  g_hash_table_iter_init (&iter, arrays);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&k, (gpointer *)&ar))
+    {
+      GVariant *keys;
+
+      g_ptr_array_add (ar, NULL);
+
+      keys = g_variant_new_strv ((const gchar * const *)ar->pdata, ar->len - 1);
+      g_variant_dict_insert_value (&dict, k, keys);
+    }
+
+  return g_variant_ref_sink (g_variant_dict_end (&dict));
+}
