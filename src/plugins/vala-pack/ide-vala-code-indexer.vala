@@ -56,6 +56,7 @@ namespace Ide
 		}
 
 		public async string generate_key_async (Ide.SourceLocation location,
+		                                        string[]? build_flags,
 		                                        GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{

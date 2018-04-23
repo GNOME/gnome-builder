@@ -75,6 +75,7 @@ ide_code_indexer_real_index_file_finish (IdeCodeIndexer  *self,
 static void
 ide_code_indexer_real_generate_key_async (IdeCodeIndexer      *self,
                                           IdeSourceLocation   *location,
+                                          const gchar * const *build_flags,
                                           GCancellable        *cancellable,
                                           GAsyncReadyCallback  callback,
                                           gpointer             user_data)
@@ -170,17 +171,21 @@ ide_code_indexer_index_file_finish (IdeCodeIndexer  *self,
  * ide_code_indexer_generate_key_async:
  * @self: An #IdeCodeIndexer instance.
  * @location: (not nullable): Source location of refernece.
+ * @build_flags: (nullable) (array zero-terminated=1): array of build flags to parse @file.
  * @cancellable: (nullable): a #GCancellable.
  * @callback: A callback to execute upon indexing.
  * @user_data: User data to pass to @callback.
  *
  * This function will get key of reference located at #IdeSoureLocation.
  *
+ * In 3.30 this function gained the @build_flags parameter.
+ *
  * Since: 3.26
  */
 void
 ide_code_indexer_generate_key_async (IdeCodeIndexer      *self,
                                      IdeSourceLocation   *location,
+                                     const gchar * const *build_flags,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
@@ -190,7 +195,7 @@ ide_code_indexer_generate_key_async (IdeCodeIndexer      *self,
   g_return_if_fail (location != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_CODE_INDEXER_GET_IFACE (self)->generate_key_async (self, location, cancellable, callback, user_data);
+  IDE_CODE_INDEXER_GET_IFACE (self)->generate_key_async (self, location, build_flags, cancellable, callback, user_data);
 }
 
 /**

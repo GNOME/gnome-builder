@@ -194,6 +194,7 @@ ide_clang_code_indexer_generate_key_cb (GObject       *object,
 static void
 ide_clang_code_indexer_generate_key_async (IdeCodeIndexer       *indexer,
                                            IdeSourceLocation    *location,
+                                           const gchar * const  *args,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
                                            gpointer              user_data)

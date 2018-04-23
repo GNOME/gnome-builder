@@ -36,6 +36,7 @@ struct _IdeCodeIndexerInterface
 
   void                 (*generate_key_async)     (IdeCodeIndexer       *self,
                                                   IdeSourceLocation    *location,
+                                                  const gchar * const  *build_flags,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
@@ -67,6 +68,7 @@ IdeCodeIndexEntries  *ide_code_indexer_index_file_finish   (IdeCodeIndexer      
 IDE_AVAILABLE_IN_ALL
 void                  ide_code_indexer_generate_key_async  (IdeCodeIndexer       *self,
                                                             IdeSourceLocation    *location,
+                                                            const gchar * const  *build_flags,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);
