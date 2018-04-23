@@ -33,6 +33,10 @@ clang_sources = [
   'ide-clang-symbol-tree.h',
   'ide-clang-translation-unit.c',
   'ide-clang-translation-unit.h',
+
+  'ide-clang-client.c',
+  'ide-clang-client.h',
+
   'clang-plugin.c',
 ]
 
