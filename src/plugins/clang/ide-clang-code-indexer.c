@@ -22,92 +22,43 @@
 
 #include "ide-clang-code-index-entries.h"
 #include "ide-clang-code-indexer.h"
+#include "ide-clang-client.h"
 #include "ide-clang-private.h"
 #include "ide-clang-service.h"
 #include "ide-clang-translation-unit.h"
 
-typedef struct
+struct _IdeClangCodeIndexer
 {
-  GFile  *file;
-  gchar **build_flags;
-} BuildRequest;
+  IdeObject parent;
+};
+
+static void code_indexer_iface_init (IdeCodeIndexerInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (IdeClangCodeIndexer, ide_clang_code_indexer, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_CODE_INDEXER, code_indexer_iface_init))
 
 static void
-build_request_free (gpointer data)
+ide_clang_code_indexer_index_file_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
 {
-  BuildRequest *br = data;
+  IdeClangClient *client = (IdeClangClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) entries = NULL;
+  g_autoptr(GError) error = NULL;
+  const gchar *path;
 
-  g_clear_object (&br->file);
-  g_clear_pointer (&br->build_flags, g_strfreev);
-  g_slice_free (BuildRequest, br);
-}
-
-static void
-ide_clang_code_indexer_index_file_worker (IdeTask      *task,
-                                          gpointer      source_object,
-                                          gpointer      task_data,
-                                          GCancellable *cancellable)
-{
-  BuildRequest *br = task_data;
-  g_auto(CXTranslationUnit) unit = NULL;
-  g_auto(CXIndex) index = NULL;
-  g_autofree gchar *path = NULL;
-  g_autoptr(GPtrArray) cooked_flags = NULL;
-  const gchar *llvm;
-  enum CXErrorCode code;
-
+  g_assert (IDE_IS_CLANG_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
-  g_assert (IDE_IS_CLANG_CODE_INDEXER (source_object));
-  g_assert (br != NULL);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  cooked_flags = g_ptr_array_new ();
-  if ((llvm = ide_clang_service_get_llvm_flags ()))
-    g_ptr_array_add (cooked_flags, (gchar **)llvm);
-  if (br->build_flags != NULL)
-    {
-      for (guint i = 0; br->build_flags[i]; i++)
-        g_ptr_array_add (cooked_flags, br->build_flags[i]);
-    }
-  g_ptr_array_add (cooked_flags, NULL);
+  path = ide_task_get_task_data (task);
 
-  path = g_file_get_path (br->file);
-  index = clang_createIndex (0, 0);
-  code = clang_parseTranslationUnit2 (index,
-                                      path,
-                                      (const char * const *)cooked_flags->pdata,
-                                      cooked_flags->len - 1,
-                                      NULL,
-                                      0,
-                                      (CXTranslationUnit_DetailedPreprocessingRecord |
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 43)
-                                       CXTranslationUnit_SingleFileParse |
-#endif
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
-                                       CXTranslationUnit_KeepGoing |
-#endif
-                                       CXTranslationUnit_SkipFunctionBodies),
-                                      &unit);
-
-#if 0
-  if (code != 0)
-    {
-      g_autofree gchar *flags = g_strjoinv (" ", (gchar **)cooked_flags->pdata);
-      g_printerr ("clang %s %s\n", path, flags);
-    }
-#endif
-
-  if (code != CXError_Success)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to index \"%s\"",
-                               path);
+  if (!(entries = ide_clang_client_index_file_finish (client, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_pointer (task,
-                             ide_clang_code_index_entries_new (g_steal_pointer (&index),
-                                                               g_steal_pointer (&unit),
-                                                               path),
+                             ide_clang_code_index_entries_new (path, entries),
                              g_object_unref);
 }
 
@@ -121,7 +72,8 @@ ide_clang_code_indexer_index_file_async (IdeCodeIndexer      *indexer,
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)indexer;
   g_autoptr(IdeTask) task = NULL;
-  BuildRequest *br;
+  IdeClangClient *client;
+  IdeContext *context;
 
   g_assert (IDE_IS_CLANG_CODE_INDEXER (self));
   g_assert (G_IS_FILE (file));
@@ -141,12 +93,17 @@ ide_clang_code_indexer_index_file_async (IdeCodeIndexer      *indexer,
       return;
     }
 
-  br = g_slice_new0 (BuildRequest);
-  br->build_flags = g_strdupv ((gchar **)args);
-  br->file = g_object_ref (file);
-  ide_task_set_task_data (task, br, build_request_free);
+  ide_task_set_task_data (task, g_file_get_path (file), g_free);
 
-  ide_task_run_in_thread (task, ide_clang_code_indexer_index_file_worker);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+
+  ide_clang_client_index_file_async (client,
+                                     file,
+                                     args,
+                                     cancellable,
+                                     ide_clang_code_indexer_index_file_cb,
+                                     g_steal_pointer (&task));
 }
 
 static IdeCodeIndexEntries *
@@ -165,28 +122,17 @@ ide_clang_code_indexer_generate_key_cb (GObject       *object,
                                         GAsyncResult  *result,
                                         gpointer       user_data)
 {
-  IdeClangService *service = (IdeClangService *)object;
-  g_autoptr(IdeClangTranslationUnit) unit = NULL;
+  IdeClangClient *client = (IdeClangClient *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *key = NULL;
-  IdeSourceLocation *location;
 
-  g_assert (IDE_IS_CLANG_SERVICE (service));
+  g_assert (IDE_IS_CLANG_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!(unit = ide_clang_service_get_translation_unit_finish (service, result, &error)))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  location = ide_task_get_task_data (task);
-  g_assert (location != NULL);
-
-  if (!(key = ide_clang_translation_unit_generate_key (unit, location)))
-    ide_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_FOUND, "Key not found");
+  if (!(key = ide_clang_client_get_index_key_finish (client, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_pointer (task, g_steal_pointer (&key), g_free);
 }
@@ -201,38 +147,38 @@ ide_clang_code_indexer_generate_key_async (IdeCodeIndexer       *indexer,
 {
   IdeClangCodeIndexer *self = (IdeClangCodeIndexer *)indexer;
   g_autoptr(IdeTask) task = NULL;
-  IdeClangService *service;
+  IdeClangClient *client;
   IdeContext *context;
+  IdeFile *ifile;
+  GFile *file;
+  guint line;
+  guint column;
 
-  g_return_if_fail (IDE_IS_CLANG_CODE_INDEXER (self));
-  g_return_if_fail (location != NULL);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  /*
-   * The key to generate is what clang calls a "USR". That is a stable key that
-   * can be referenced across compilation units.
-   */
+  g_assert (IDE_IS_CLANG_CODE_INDEXER (self));
+  g_assert (location != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_clang_code_indexer_generate_key_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
-
-  ide_task_set_task_data (task,
-                          ide_source_location_ref (location),
-                          (GDestroyNotify)ide_source_location_unref);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
+  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
 
-  service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
-  g_assert (IDE_IS_CLANG_SERVICE (service));
+  ifile = ide_source_location_get_file (location);
+  file = ide_file_get_file (ifile);
+  line = ide_source_location_get_line (location);
+  column = ide_source_location_get_line_offset (location);
 
-  ide_clang_service_get_translation_unit_async (service,
-                                                ide_source_location_get_file (location),
-                                                0,
-                                                cancellable,
-                                                ide_clang_code_indexer_generate_key_cb,
-                                                g_steal_pointer (&task));
+  ide_clang_client_get_index_key_async (client,
+                                        file,
+                                        args,
+                                        line + 1,
+                                        column + 1,
+                                        cancellable,
+                                        ide_clang_code_indexer_generate_key_cb,
+                                        g_steal_pointer (&task));
 }
 
 static gchar *
@@ -254,11 +200,6 @@ code_indexer_iface_init (IdeCodeIndexerInterface *iface)
   iface->generate_key_async = ide_clang_code_indexer_generate_key_async;
   iface->generate_key_finish = ide_clang_code_indexer_generate_key_finish;
 }
-
-struct _IdeClangCodeIndexer { IdeObject parent; };
-
-G_DEFINE_TYPE_WITH_CODE (IdeClangCodeIndexer, ide_clang_code_indexer, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_CODE_INDEXER, code_indexer_iface_init))
 
 static void
 ide_clang_code_indexer_class_init (IdeClangCodeIndexerClass *klass)

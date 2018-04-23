@@ -214,6 +214,7 @@ ide_clang_client_constructed (GObject *object)
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDIN_PIPE);
   if (cwd != NULL)
     ide_subprocess_launcher_set_cwd (launcher, cwd);
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_push_argv (launcher, PACKAGE_LIBEXECDIR"/gnome-builder-clang");
 
   self->supervisor = ide_subprocess_supervisor_new ();
