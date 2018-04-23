@@ -46,6 +46,7 @@ enum {
   SPAWNED,
   SUPERVISE,
   UNSUPERVISE,
+  EXITED,
   N_SIGNALS
 };
 
@@ -159,6 +160,14 @@ ide_subprocess_supervisor_class_init (IdeSubprocessSupervisorClass *klass)
                                 g_signal_accumulator_true_handled, NULL,
                                 NULL,
                                 G_TYPE_BOOLEAN, 1, IDE_TYPE_SUBPROCESS_LAUNCHER);
+
+  signals [EXITED] =
+    g_signal_new_class_handler ("exited",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL, NULL, NULL,
+                                g_cclosure_marshal_VOID__OBJECT,
+                                G_TYPE_NONE, 1, IDE_TYPE_SUBPROCESS);
 }
 
 static void
@@ -341,6 +350,8 @@ ide_subprocess_supervisor_wait_cb (GObject      *object,
 
   if (!ide_subprocess_wait_finish (subprocess, result, &error))
     g_warning ("%s", error->message);
+
+  g_signal_emit (self, signals [EXITED], 0, subprocess);
 
 #ifdef IDE_ENABLE_TRACE
   {
