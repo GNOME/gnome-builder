@@ -415,66 +415,17 @@ ide_clang_client_index_file_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GPtrArray) ret = NULL;
-  GVariantIter iter;
 
   g_assert (IDE_IS_CLANG_CLIENT (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   if (!ide_clang_client_call_finish (self, result, &reply, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  ret = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_code_index_entry_free);
-
-  if (g_variant_iter_init (&iter, reply))
-    {
-      g_autoptr(IdeCodeIndexEntryBuilder) builder = ide_code_index_entry_builder_new ();
-      GVariant *kv;
-
-      while ((kv = g_variant_iter_next_value (&iter)))
-        {
-          const gchar *name = NULL;
-          const gchar *key= NULL;
-          IdeSymbolKind kind = 0;
-          IdeSymbolFlags flags = 0;
-          GVariantDict dict;
-          struct {
-            guint32 line;
-            guint32 column;
-          } begin, end;
-
-          g_variant_dict_init (&dict, kv);
-
-          g_variant_dict_lookup (&dict, "name", "&s", &name);
-          g_variant_dict_lookup (&dict, "key", "&s", &key);
-          g_variant_dict_lookup (&dict, "kind", "i", &kind);
-          g_variant_dict_lookup (&dict, "flags", "i", &flags);
-          g_variant_dict_lookup (&dict, "range", "(uuuu)",
-                                 &begin.line, &begin.column,
-                                 &end.line, &end.column);
-
-          ide_code_index_entry_builder_set_name (builder, name);
-          ide_code_index_entry_builder_set_key (builder, key);
-          ide_code_index_entry_builder_set_flags (builder, flags);
-          ide_code_index_entry_builder_set_kind (builder, kind);
-          ide_code_index_entry_builder_set_range (builder,
-                                                  begin.line, begin.column,
-                                                  end.line, end.column);
-
-          g_ptr_array_add (ret, ide_code_index_entry_builder_build (builder));
-
-          g_variant_dict_clear (&dict);
-          g_variant_unref (kv);
-        }
-    }
-
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&ret),
-                           (GDestroyNotify)g_ptr_array_unref);
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&reply),
+                             (GDestroyNotify)g_variant_unref);
 }
 
 void
@@ -525,24 +476,110 @@ ide_clang_client_index_file_async (IdeClangClient      *self,
  *
  * Completes the async request to get index entries found in the file.
  *
- * Returns: (transfer full) (element-type Ide.CodeIndexEntry):
- *   an array of code index entries found in the file
+ * This returns the raw GVariant so that an #IdeCodeIndexEntries subclass
+ * can create the actual code index entries on a thread once the indexer
+ * is ready for them.
+ *
+ * Returns: (transfer full): a #GVariant containing the indexed data
+ *   or %NULL in case of failure.
  *
  * Since: 3.30
  */
-GPtrArray *
+GVariant *
 ide_clang_client_index_file_finish (IdeClangClient  *self,
                                     GAsyncResult    *result,
                                     GError         **error)
 {
-  GPtrArray *ret;
-
   g_return_val_if_fail (IDE_IS_CLANG_CLIENT (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
 
-  IDE_PTR_ARRAY_CLEAR_FREE_FUNC (ret);
+static void
+ide_clang_client_get_index_key_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeClangClient *self = (IdeClangClient *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(GError) error = NULL;
 
-  return ret;
+  g_assert (IDE_IS_CLANG_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ide_clang_client_call_finish (self, result, &reply, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else if (!g_variant_is_of_type (reply, G_VARIANT_TYPE_STRING))
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_DATA,
+                               "Got a result back that was not a string");
+  else
+    ide_task_return_pointer (task,
+                             g_variant_dup_string (reply, NULL),
+                             g_free);
+}
+
+void
+ide_clang_client_get_index_key_async (IdeClangClient      *self,
+                                      GFile               *file,
+                                      const gchar * const *flags,
+                                      guint                line,
+                                      guint                column,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *path = NULL;
+
+  g_return_if_fail (IDE_IS_CLANG_CLIENT (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (line > 0);
+  g_return_if_fail (column > 0);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_client_get_index_key_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+
+  if (!g_file_is_native (file))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_FILENAME,
+                                 "Only native files are supported");
+      return;
+    }
+
+  path = g_file_get_path (file);
+
+  params = JSONRPC_MESSAGE_NEW (
+    "path", JSONRPC_MESSAGE_PUT_STRING (path),
+    "flags", JSONRPC_MESSAGE_PUT_STRV (flags),
+    "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+    "column", JSONRPC_MESSAGE_PUT_INT64 (column)
+  );
+
+  ide_clang_client_call_async (self,
+                               "clang/getIndexKey",
+                               params,
+                               cancellable,
+                               ide_clang_client_get_index_key_cb,
+                               g_steal_pointer (&task));
+}
+
+gchar *
+ide_clang_client_get_index_key_finish (IdeClangClient  *self,
+                                       GAsyncResult    *result,
+                                       GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG_CLIENT (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }

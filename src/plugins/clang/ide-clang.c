@@ -1961,4 +1961,137 @@ ide_clang_get_highlight_index_finish (IdeClang      *self,
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
+/* Get Index Key {{{1 */
+
+typedef struct
+{
+  gchar  *path;
+  gchar **argv;
+  gint    argc;
+  guint   line;
+  guint   column;
+} GetIndexKey;
+
+static void
+get_index_key_free (gpointer data)
+{
+  GetIndexKey *state = data;
+
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_slice_free (GetIndexKey, state);
+}
+
+static void
+ide_clang_get_index_key_worker (IdeTask      *task,
+                                gpointer      source_object,
+                                gpointer      task_data,
+                                GCancellable *cancellable)
+{
+  GetIndexKey *state = task_data;
+  g_auto(CXIndex) index = NULL;
+  g_auto(CXTranslationUnit) unit = NULL;
+  g_auto(CXString) cxusr = {0};
+  const gchar *usr = NULL;
+  enum CXErrorCode code;
+  enum CXLinkageKind linkage;
+  CXSourceLocation loc;
+  CXCursor declaration;
+  CXCursor cursor;
+  CXFile file;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CLANG (source_object));
+  g_assert (state != NULL);
+  g_assert (state->path != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  index = clang_createIndex (0, 0);
+  code = clang_parseTranslationUnit2 (index,
+                                      state->path,
+                                      (const char * const *)state->argv,
+                                      state->argc,
+                                      NULL,
+                                      0,
+                                      clang_defaultEditingTranslationUnitOptions (),
+                                      &unit);
+
+  if (code != CXError_Success)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to locate symbol at position");
+      return;
+    }
+
+  file = clang_getFile (unit, state->path);
+  loc = clang_getLocation (unit, file, state->line, state->column);
+  cursor = clang_getCursor (unit, loc);
+  declaration = clang_getCursorReferenced (cursor);
+  cxusr = clang_getCursorUSR (declaration);
+  usr = clang_getCString (cxusr);
+  linkage = clang_getCursorLinkage (declaration);
+
+  if (linkage == CXLinkage_Internal || linkage == CXLinkage_NoLinkage || usr == NULL)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to locate referenced cursor");
+  else
+    ide_task_return_pointer (task, g_strdup (usr), g_free);
+}
+
+void
+ide_clang_get_index_key_async (IdeClang            *self,
+                               const gchar         *path,
+                               const gchar * const *argv,
+                               guint                line,
+                               guint                column,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *parent = NULL;
+  GetIndexKey *state;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (GetIndexKey);
+  state->path = g_strdup (path);
+  state->argv = ide_clang_cook_flags (argv);
+  state->argc = state->argv ? g_strv_length (state->argv) : 0;
+  state->line = line;
+  state->column = column;
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_get_index_key_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+  ide_task_set_task_data (task, state, get_index_key_free);
+  ide_task_run_in_thread (task, ide_clang_get_index_key_worker);
+}
+
+/**
+ * ide_clang_get_index_key_finish:
+ * @self: a #IdeClang
+ *
+ * Completes an async request to get the key for the symbol located
+ * at a given source location.
+ *
+ * Returns: (transfer full): the key, or %NULL and @error is set
+ */
+gchar *
+ide_clang_get_index_key_finish (IdeClang      *self,
+                                GAsyncResult  *result,
+                                GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
 /* vim:set foldmethod=marker: */
