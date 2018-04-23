@@ -167,6 +167,7 @@ G_BEGIN_DECLS
 #include "storage/ide-persistent-map-builder.h"
 #include "subprocess/ide-subprocess.h"
 #include "subprocess/ide-subprocess-launcher.h"
+#include "subprocess/ide-subprocess-supervisor.h"
 #include "symbols/ide-code-indexer.h"
 #include "symbols/ide-code-index-entry.h"
 #include "symbols/ide-symbol-resolver.h"
