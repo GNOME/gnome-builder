@@ -63,8 +63,10 @@ gnome_builder_plugins_deps += [clang_dep]
 gnome_builder_plugins_sources += files(clang_sources)
 gnome_builder_plugins_sources += clang_resources[0]
 
+gnome_builder_clang_deps = [ clang_dep, libide_deps, libide_dep ]
+
 executable('gnome-builder-clang', gnome_builder_clang_sources,
-      dependencies: [clang_dep, libide_dep],
+      dependencies: gnome_builder_clang_deps,
            gui_app: false,
            install: true,
        install_dir: get_option('libexecdir'),
