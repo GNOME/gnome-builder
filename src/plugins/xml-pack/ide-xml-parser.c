@@ -431,6 +431,9 @@ ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
   g_assert (state != NULL);
   g_assert (IDE_IS_XML_PARSER (state->self));
 
+  if (dzl_str_empty0 ((gchar *)external_id) || dzl_str_empty0 ((gchar *)system_id))
+    return;
+
   entry = ide_xml_schema_cache_entry_new ();
   entry->kind = SCHEMA_KIND_DTD;
   ide_xml_sax_get_location (state->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
