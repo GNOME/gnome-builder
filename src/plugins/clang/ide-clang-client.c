@@ -61,6 +61,23 @@ call_free (gpointer data)
 }
 
 static void
+ide_clang_client_subprocess_exited (IdeClangClient          *self,
+                                    IdeSubprocess           *subprocess,
+                                    IdeSubprocessSupervisor *supervisor)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CLANG_CLIENT (self));
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+
+  if (self->state == STATE_RUNNING)
+    self->state = STATE_SPAWNING;
+
+  IDE_EXIT;
+}
+
+static void
 ide_clang_client_subprocess_spawned (IdeClangClient          *self,
                                      IdeSubprocess           *subprocess,
                                      IdeSubprocessSupervisor *supervisor)
@@ -73,9 +90,14 @@ ide_clang_client_subprocess_spawned (IdeClangClient          *self,
   GInputStream *input;
   GList *queued;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_CLIENT (self));
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+
+  if (self->state == STATE_SPAWNING)
+    self->state = STATE_RUNNING;
 
   input = ide_subprocess_get_stdout_pipe (subprocess);
   output = ide_subprocess_get_stdin_pipe (subprocess);
@@ -112,6 +134,8 @@ ide_clang_client_subprocess_spawned (IdeClangClient          *self,
                              "initialize",
                              params,
                              NULL, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -152,6 +176,7 @@ ide_clang_client_get_client_async (IdeClangClient      *self,
       break;
 
     default:
+      g_assert_not_reached ();
       break;
     }
 }
@@ -197,6 +222,12 @@ ide_clang_client_constructed (GObject *object)
   g_signal_connect_object (self->supervisor,
                            "spawned",
                            G_CALLBACK (ide_clang_client_subprocess_spawned),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->supervisor,
+                           "exited",
+                           G_CALLBACK (ide_clang_client_subprocess_exited),
                            self,
                            G_CONNECT_SWAPPED);
 
