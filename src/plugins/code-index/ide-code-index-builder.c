@@ -777,7 +777,7 @@ get_changes_async (IdeCodeIndexBuilder *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, get_changes_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   gcd = g_slice_new0 (GetChangesData);
   gcd->magic = GET_CHANGES_MAGIC;
@@ -1002,7 +1002,7 @@ add_entries_to_index_async (IdeCodeIndexBuilder     *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, add_entries_to_index_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   if (ide_task_return_error_if_cancelled (task))
     return;
@@ -1149,7 +1149,7 @@ index_directory_async (IdeCodeIndexBuilder *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, index_directory_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   if (ide_task_return_error_if_cancelled (task))
     return;
@@ -1255,7 +1255,6 @@ build_get_build_flags_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) data_dir = NULL;
   g_autoptr(GFile) index_dir = NULL;
-  g_autofree gchar *relative = NULL;
   IdeCodeIndexBuilder *self;
   GCancellable *cancellable;
   BuildData *bd;
@@ -1415,7 +1414,7 @@ ide_code_index_builder_build_async (IdeCodeIndexBuilder *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_code_index_builder_build_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_kind (task, IDE_THREAD_POOL_INDEXER);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
 
   bd = g_slice_new0 (BuildData);
   bd->magic = BUILD_DATA_MAGIC;
