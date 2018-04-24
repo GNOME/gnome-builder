@@ -80,7 +80,7 @@ ide_clang_code_index_entries_worker (IdeTask      *task,
         {
           g_autoptr(GVariant) unboxed = NULL;
           const gchar *name = NULL;
-          const gchar *key= NULL;
+          const gchar *key = NULL;
           IdeSymbolKind kind = 0;
           IdeSymbolFlags flags = 0;
           GVariantDict dict;
@@ -104,6 +104,9 @@ ide_clang_code_index_entries_worker (IdeTask      *task,
           g_variant_dict_lookup (&dict, "range", "(uuuu)",
                                  &begin.line, &begin.column,
                                  &end.line, &end.column);
+
+          if (dzl_str_empty0 (key))
+            key = NULL;
 
           ide_code_index_entry_builder_set_name (builder, name);
           ide_code_index_entry_builder_set_key (builder, key);
