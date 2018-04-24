@@ -105,6 +105,7 @@ ide_clang_client_subprocess_spawned (IdeClangClient          *self,
 
   g_clear_object (&self->rpc_client);
   self->rpc_client = jsonrpc_client_new (stream);
+  jsonrpc_client_set_use_gvariant (self->rpc_client, TRUE);
 
   queued = g_steal_pointer (&self->get_client.head);
 
