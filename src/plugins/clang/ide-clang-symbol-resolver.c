@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "clang-symbol-resolver"
 
+#include "ide-clang-client.h"
 #include "ide-clang-service.h"
 #include "ide-clang-symbol-resolver.h"
 
@@ -239,34 +240,62 @@ ide_clang_symbol_resolver_find_scope_cb (GObject      *object,
                                          GAsyncResult *result,
                                          gpointer      user_data)
 {
-  IdeClangService *service = (IdeClangService *)object;
-  g_autoptr(IdeClangTranslationUnit) unit = NULL;
+  IdeClangClient *client = (IdeClangClient *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
-  IdeSourceLocation *location;
 
-  g_assert (IDE_IS_CLANG_SERVICE (service));
+  g_assert (IDE_IS_CLANG_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  unit = ide_clang_service_get_translation_unit_finish (service, result, &error);
-
-  if (unit == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  location = ide_task_get_task_data (task);
-  symbol = ide_clang_translation_unit_find_nearest_scope (unit, location, &error);
-
-  if (symbol == NULL)
+  if (!(symbol = ide_clang_client_find_nearest_scope_finish (client, result, &error)))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&symbol),
-                             (GDestroyNotify) ide_symbol_unref);
+                             (GDestroyNotify)ide_symbol_unref);
+}
+
+static void
+find_nearest_scope_flags_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_auto(GStrv) flags = NULL;
+  IdeSourceLocation *location;
+  IdeClangClient *client;
+  GCancellable *cancellable;
+  IdeContext *context;
+  IdeFile *file;
+  GFile *gfile;
+  guint line;
+  guint column;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
+  context = ide_object_get_context (IDE_OBJECT (build_system));
+  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  cancellable = ide_task_get_cancellable (task);
+  location = ide_task_get_task_data (task);
+  file = ide_source_location_get_file (location);
+  gfile = ide_file_get_file (file);
+  line = ide_source_location_get_line (location);
+  column = ide_source_location_get_line_offset (location);
+
+  ide_clang_client_find_nearest_scope_async (client,
+                                             gfile,
+                                             (const gchar * const *)flags,
+                                             line + 1,
+                                             column + 1,
+                                             cancellable,
+                                             ide_clang_symbol_resolver_find_scope_cb,
+                                             g_steal_pointer (&task));
 }
 
 static void
@@ -278,7 +307,7 @@ ide_clang_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver   *symbol_
 {
   IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)symbol_resolver;
   g_autoptr(IdeTask) task = NULL;
-  IdeClangService *service;
+  IdeBuildSystem *build_system;
   IdeContext *context;
   IdeFile *file;
 
@@ -295,15 +324,14 @@ ide_clang_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver   *symbol_
                           (GDestroyNotify) ide_source_location_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
+  build_system = ide_context_get_build_system (context);
   file = ide_source_location_get_file (location);
 
-  ide_clang_service_get_translation_unit_async (service,
-                                                file,
-                                                0,
-                                                cancellable,
-                                                ide_clang_symbol_resolver_find_scope_cb,
-                                                g_steal_pointer (&task));
+  ide_build_system_get_build_flags_async (build_system,
+                                          file,
+                                          cancellable,
+                                          find_nearest_scope_flags_cb,
+                                          g_steal_pointer (&task));
 
   IDE_EXIT;
 }

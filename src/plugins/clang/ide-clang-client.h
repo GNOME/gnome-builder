@@ -26,35 +26,46 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClangClient, ide_clang_client, IDE, CLANG_CLIENT, IdeObject)
 
-void            ide_clang_client_call_async           (IdeClangClient       *self,
-                                                       const gchar          *method,
-                                                       GVariant             *params,
-                                                       GCancellable         *cancellable,
-                                                       GAsyncReadyCallback   callback,
-                                                       gpointer              user_data);
-gboolean        ide_clang_client_call_finish          (IdeClangClient       *self,
-                                                       GAsyncResult         *result,
-                                                       GVariant            **reply,
-                                                       GError              **error);
-void            ide_clang_client_index_file_async     (IdeClangClient       *self,
-                                                       GFile                *file,
-                                                       const gchar * const  *flags,
-                                                       GCancellable         *cancellable,
-                                                       GAsyncReadyCallback   callback,
-                                                       gpointer              user_data);
-GVariant       *ide_clang_client_index_file_finish    (IdeClangClient       *self,
-                                                       GAsyncResult         *result,
-                                                       GError              **error);
-void            ide_clang_client_get_index_key_async  (IdeClangClient       *self,
-                                                       GFile                *file,
-                                                       const gchar * const  *flags,
-                                                       guint                 line,
-                                                       guint                 column,
-                                                       GCancellable         *cancellable,
-                                                       GAsyncReadyCallback   callback,
-                                                       gpointer              user_data);
-gchar          *ide_clang_client_get_index_key_finish (IdeClangClient       *self,
-                                                       GAsyncResult         *result,
-                                                       GError              **error);
+void            ide_clang_client_call_async                (IdeClangClient       *self,
+                                                            const gchar          *method,
+                                                            GVariant             *params,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+gboolean        ide_clang_client_call_finish               (IdeClangClient       *self,
+                                                            GAsyncResult         *result,
+                                                            GVariant            **reply,
+                                                            GError              **error);
+void            ide_clang_client_index_file_async          (IdeClangClient       *self,
+                                                            GFile                *file,
+                                                            const gchar * const  *flags,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+GVariant       *ide_clang_client_index_file_finish         (IdeClangClient       *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
+void            ide_clang_client_get_index_key_async       (IdeClangClient       *self,
+                                                            GFile                *file,
+                                                            const gchar * const  *flags,
+                                                            guint                 line,
+                                                            guint                 column,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+gchar          *ide_clang_client_get_index_key_finish      (IdeClangClient       *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
+void            ide_clang_client_find_nearest_scope_async  (IdeClangClient       *self,
+                                                            GFile                *file,
+                                                            const gchar * const  *flags,
+                                                            guint                 line,
+                                                            guint                 column,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+IdeSymbol      *ide_clang_client_find_nearest_scope_finish (IdeClangClient       *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
 
 G_END_DECLS
