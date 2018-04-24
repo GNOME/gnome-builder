@@ -172,6 +172,66 @@ ide_source_location_new (IdeFile *file,
 }
 
 /**
+ * ide_source_location_new_from_variant:
+ * @self: a #IdeSourceLocation
+ *
+ * Creates a new #IdeSourceLocation using the serialized form from a
+ * previously serialized #GVariant.
+ *
+ * See also: ide_source_location_to_variant()
+ *
+ * Returns: (transfer full) (nullable): a #GVariant if succesful;
+ *   otherwise %NULL.
+ *
+ * Since: 3.30
+ */
+IdeSourceLocation *
+ide_source_location_new_from_variant (GVariant *variant)
+{
+  g_autoptr(GVariant) unboxed = NULL;
+  g_autoptr(IdeFile) ifile = NULL;
+  g_autoptr(GFile) file = NULL;
+  IdeSourceLocation *self;
+  GVariantDict dict;
+  const gchar *uri;
+  guint32 line;
+  guint32 line_offset;
+  guint32 offset;
+
+  if (variant == NULL)
+    return NULL;
+
+  if (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARIANT))
+    variant = unboxed = g_variant_get_variant (variant);
+
+  g_variant_dict_init (&dict, variant);
+
+  if (!g_variant_dict_lookup (&dict, "uri", "&s", &uri))
+    {
+      g_variant_dict_clear (&dict);
+      return NULL;
+    }
+
+  if (!g_variant_dict_lookup (&dict, "line", "u", &line))
+    line = 0;
+
+  if (!g_variant_dict_lookup (&dict, "line-offset", "u", &line_offset))
+    line_offset = 0;
+
+  if (!g_variant_dict_lookup (&dict, "offset", "u", &offset))
+    offset = 0;
+
+  file = g_file_new_for_uri (uri);
+  ifile = ide_file_new (NULL, file);
+
+  self = ide_source_location_new (ifile, line, line_offset, offset);
+
+  g_variant_dict_clear (&dict);
+
+  return self;
+}
+
+/**
  * ide_source_location_get_uri:
  * @self: (in): an #IdeSourceLocation.
  *
