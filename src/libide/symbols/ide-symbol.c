@@ -341,6 +341,17 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
   return icon_name;
 }
 
+/**
+ * ide_symbol_to_variant:
+ * @self: a #IdeSymbol
+ *
+ * This converts the symbol to a #GVariant that is suitable for passing
+ * across an IPC boundary.
+ *
+ * This function will never return a floating reference.
+ *
+ * Returns: (transfer full): a #GVariant
+ */
 GVariant *
 ide_symbol_to_variant (const IdeSymbol *self)
 {
@@ -373,4 +384,55 @@ ide_symbol_to_variant (const IdeSymbol *self)
     }
 
   return g_variant_ref_sink (g_variant_builder_end (&builder));
+}
+
+IdeSymbol *
+ide_symbol_new_from_variant (GVariant *variant)
+{
+  g_autoptr(GVariant) unboxed = NULL;
+  g_autoptr(GVariant) vdecl = NULL;
+  g_autoptr(GVariant) vdef = NULL;
+  g_autoptr(GVariant) vcanon = NULL;
+  g_autoptr(IdeSourceLocation) decl = NULL;
+  g_autoptr(IdeSourceLocation) def = NULL;
+  g_autoptr(IdeSourceLocation) canon = NULL;
+  const gchar *name;
+  IdeSymbolKind kind;
+  IdeSymbolFlags flags;
+  IdeSymbol *self;
+  GVariantDict dict;
+
+  if (variant == NULL)
+    return NULL;
+
+  if (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARIANT))
+    variant = unboxed = g_variant_get_variant (variant);
+
+  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT))
+    return NULL;
+
+  g_variant_dict_init (&dict, variant);
+
+  if (!g_variant_dict_lookup (&dict, "kind", "i", &kind))
+    kind = 0;
+
+  if (!g_variant_dict_lookup (&dict, "flags", "i", &flags))
+    flags = 0;
+
+  if (!g_variant_dict_lookup (&dict, "name", "&s", &name))
+    name = NULL;
+
+  vdecl = g_variant_dict_lookup_value (&dict, "declaration", NULL);
+  vdef = g_variant_dict_lookup_value (&dict, "definition", NULL);
+  vcanon = g_variant_dict_lookup_value (&dict, "canonical", NULL);
+
+  decl = ide_source_location_new_from_variant (vdecl);
+  def = ide_source_location_new_from_variant (vdef);
+  canon = ide_source_location_new_from_variant (vcanon);
+
+  self = ide_symbol_new (name, kind, flags, decl, def, canon);
+
+  g_variant_dict_clear (&dict);
+
+  return self;
 }
