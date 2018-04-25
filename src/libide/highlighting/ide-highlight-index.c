@@ -87,16 +87,14 @@ ide_highlight_index_new_from_variant (GVariant *variant)
 
           while (g_variant_iter_loop (&iter, "{sv}", &key, &value))
             {
-              g_autoptr(GVariant) ar = g_variant_get_variant (value);
-
-              if (g_variant_is_of_type (ar, G_VARIANT_TYPE_STRING_ARRAY))
+              if (g_variant_is_of_type (value, G_VARIANT_TYPE_STRING_ARRAY))
                 {
                   g_autofree const gchar **strv = NULL;
                   const gchar *tag;
                   gsize len;
 
                   tag = g_string_chunk_insert (self->strings, key);
-                  strv = g_variant_get_strv (ar, &len);
+                  strv = g_variant_get_strv (value, &len);
 
                   for (gsize i = 0; i < len; i++)
                     {
