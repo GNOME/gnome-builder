@@ -289,7 +289,7 @@ maybe_log_error (const GError *error)
     return;
 
   if (error != NULL)
-    g_warning ("%s", error->message);
+    g_debug ("%s", error->message);
 }
 
 static void
