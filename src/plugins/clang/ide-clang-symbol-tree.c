@@ -28,18 +28,9 @@
 struct _IdeClangSymbolTree
 {
   GObject    parent_instance;
-
-  IdeRefPtr *native;
+  GVariant  *tree;
   GFile     *file;
-  gchar     *path;
-  GArray    *children;
 };
-
-typedef struct
-{
-  const gchar   *path;
-  GArray        *children;
-} TraversalState;
 
 static void symbol_tree_iface_init (IdeSymbolTreeInterface *iface);
 
@@ -49,11 +40,10 @@ G_DEFINE_TYPE_WITH_CODE (IdeClangSymbolTree, ide_clang_symbol_tree, IDE_TYPE_OBJ
 enum {
   PROP_0,
   PROP_FILE,
-  PROP_NATIVE,
-  LAST_PROP
+  N_PROPS
 };
 
-static GParamSpec *properties [LAST_PROP];
+static GParamSpec *properties [N_PROPS];
 
 /**
  * ide_clang_symbol_tree_get_file:
@@ -71,124 +61,19 @@ ide_clang_symbol_tree_get_file (IdeClangSymbolTree *self)
   return self->file;
 }
 
-static void
-ide_clang_symbol_tree_set_file (IdeClangSymbolTree *self,
-                                GFile              *file)
-{
-  g_return_if_fail (IDE_IS_CLANG_SYMBOL_TREE (self));
-  g_return_if_fail (G_IS_FILE (file));
-
-  self->file = g_object_ref (file);
-  self->path = g_file_get_path (file);
-}
-
-static gboolean
-cursor_is_recognized (TraversalState *state,
-                      CXCursor        cursor)
-{
-  g_auto(CXString) filename = {0};
-  CXSourceLocation cxloc;
-  CXFile file;
-  enum CXCursorKind kind;
-  gboolean ret = FALSE;
-
-  kind = clang_getCursorKind (cursor);
-
-  switch ((int)kind)
-    {
-    /*
-     * TODO: Support way more CXCursorKind.
-     */
-
-    case CXCursor_ClassDecl:
-    case CXCursor_CXXMethod:
-    case CXCursor_EnumConstantDecl:
-    case CXCursor_EnumDecl:
-    case CXCursor_FieldDecl:
-    case CXCursor_FunctionDecl:
-    case CXCursor_Namespace:
-    case CXCursor_StructDecl:
-    case CXCursor_TypedefDecl:
-    case CXCursor_UnionDecl:
-    case CXCursor_VarDecl:
-      cxloc = clang_getCursorLocation (cursor);
-      clang_getFileLocation (cxloc, &file, NULL, NULL, NULL);
-      filename = clang_getFileName (file);
-      ret = dzl_str_equal0 (clang_getCString (filename), state->path);
-      break;
-
-    default:
-      break;
-    }
-
-  return ret;
-}
-
-static enum CXChildVisitResult
-count_recognizable_children (CXCursor     cursor,
-                             CXCursor     parent,
-                             CXClientData user_data)
-{
-  TraversalState *state = user_data;
-
-  if (cursor_is_recognized (state, cursor))
-    g_array_append_val (state->children, cursor);
-
-  return CXChildVisit_Continue;
-}
-
 static guint
 ide_clang_symbol_tree_get_n_children (IdeSymbolTree *symbol_tree,
                                       IdeSymbolNode *parent)
 {
   IdeClangSymbolTree *self = (IdeClangSymbolTree *)symbol_tree;
-  CXTranslationUnit tu;
-  CXCursor cursor;
-  TraversalState state = { 0 };
-  GArray *children = NULL;
-  guint count;
 
-  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_TREE (self), 0);
-  g_return_val_if_fail (!parent || IDE_IS_CLANG_SYMBOL_NODE (parent), 0);
-  g_return_val_if_fail (self->native != NULL, 0);
+  g_assert (IDE_IS_CLANG_SYMBOL_TREE (self));
+  g_assert (!parent || IDE_IS_CLANG_SYMBOL_NODE (parent));
 
   if (parent == NULL)
-    children = self->children;
-  else
-    children = _ide_clang_symbol_node_get_children (IDE_CLANG_SYMBOL_NODE (parent));
+    return self->tree ? g_variant_n_children (self->tree) : 0;
 
-  if (children != NULL)
-    return children->len;
-
-  if (parent == NULL)
-    {
-      tu = ide_ref_ptr_get (self->native);
-      cursor = clang_getTranslationUnitCursor (tu);
-    }
-  else
-    {
-      cursor = _ide_clang_symbol_node_get_cursor (IDE_CLANG_SYMBOL_NODE (parent));
-    }
-
-  children = g_array_new (FALSE, FALSE, sizeof (CXCursor));
-
-  state.path = self->path;
-  state.children = children;
-
-  clang_visitChildren (cursor,
-                       count_recognizable_children,
-                       &state);
-
-  if (parent == NULL)
-    self->children = g_array_ref (children);
-  else
-    _ide_clang_symbol_node_set_children (IDE_CLANG_SYMBOL_NODE (parent), children);
-
-  count = children->len;
-
-  g_array_unref (children);
-
-  return count;
+  return ide_clang_symbol_node_get_n_children (IDE_CLANG_SYMBOL_NODE (parent));
 }
 
 static IdeSymbolNode *
@@ -197,32 +82,25 @@ ide_clang_symbol_tree_get_nth_child (IdeSymbolTree *symbol_tree,
                                      guint          nth)
 {
   IdeClangSymbolTree *self = (IdeClangSymbolTree *)symbol_tree;
+  g_autoptr(GVariant) node = NULL;
   IdeContext *context;
-  GArray *children;
 
-  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_TREE (self), NULL);
-  g_return_val_if_fail (!parent || IDE_IS_SYMBOL_NODE (parent), NULL);
+  g_assert (IDE_IS_CLANG_SYMBOL_TREE (self));
+  g_assert (!parent || IDE_IS_CLANG_SYMBOL_NODE (parent));
+
+  if (parent != NULL)
+    return ide_clang_symbol_node_get_nth_child (IDE_CLANG_SYMBOL_NODE (parent), nth);
+
+  if (self->tree == NULL)
+    return NULL;
+
+  if (nth >= g_variant_n_children (self->tree))
+    return NULL;
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  node = g_variant_get_child_value (self->tree, nth);
 
-  if (parent == NULL)
-    children = self->children;
-  else
-    children = _ide_clang_symbol_node_get_children (IDE_CLANG_SYMBOL_NODE (parent));
-
-  g_assert (children != NULL);
-
-  if (nth < children->len)
-    {
-      CXCursor cursor;
-
-      cursor = g_array_index (children, CXCursor, nth);
-      return _ide_clang_symbol_node_new (context, cursor);
-    }
-
-  g_warning ("nth child %u is out of bounds", nth);
-
-  return NULL;
+  return ide_clang_symbol_node_new (context, node);
 }
 
 static void
@@ -230,9 +108,8 @@ ide_clang_symbol_tree_finalize (GObject *object)
 {
   IdeClangSymbolTree *self = (IdeClangSymbolTree *)object;
 
-  g_clear_pointer (&self->native, ide_ref_ptr_unref);
-  g_clear_pointer (&self->children, g_array_unref);
-  g_clear_pointer (&self->path, g_free);
+  g_clear_pointer (&self->tree, g_variant_unref);
+  g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_clang_symbol_tree_parent_class)->finalize (object);
 }
@@ -251,10 +128,6 @@ ide_clang_symbol_tree_get_property (GObject    *object,
       g_value_set_object (value, ide_clang_symbol_tree_get_file (self));
       break;
 
-    case PROP_NATIVE:
-      g_value_set_boxed (value, self->native);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -271,11 +144,7 @@ ide_clang_symbol_tree_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_FILE:
-      ide_clang_symbol_tree_set_file (self, g_value_get_object (value));
-      break;
-
-    case PROP_NATIVE:
-      self->native = g_value_dup_boxed (value);
+      self->file = g_value_dup_object (value);
       break;
 
     default:
@@ -299,19 +168,36 @@ ide_clang_symbol_tree_class_init (IdeClangSymbolTreeClass *klass)
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_NATIVE] =
-    g_param_spec_boxed ("native",
-                        "Native",
-                        "Native",
-                        IDE_TYPE_REF_PTR,
-                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 ide_clang_symbol_tree_init (IdeClangSymbolTree *self)
 {
+}
+
+IdeClangSymbolTree *
+ide_clang_symbol_tree_new (IdeContext *context,
+                           GFile      *file,
+                           GVariant   *tree)
+{
+  IdeClangSymbolTree *self;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (!tree ||
+                        g_variant_is_of_type (tree, G_VARIANT_TYPE ("av")) ||
+                        g_variant_is_of_type (tree, G_VARIANT_TYPE ("aa{sv}")),
+                        NULL);
+
+  self = g_object_new (IDE_TYPE_CLANG_SYMBOL_TREE,
+                       "context", context,
+                       "file", file,
+                       NULL);
+
+  if (tree != NULL)
+    self->tree = g_variant_ref_sink (tree);
+
+  return self;
 }
 
 static void
