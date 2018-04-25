@@ -20,10 +20,11 @@
 
 #include "config.h"
 
-#include "dazzle.h"
+#include <dazzle.h>
 
 #include "files/ide-file.h"
 #include "diagnostics/ide-diagnostic.h"
+#include "diagnostics/ide-fixit.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
 
@@ -418,7 +419,7 @@ ide_diagnostic_to_variant (const IdeDiagnostic *self)
   g_variant_dict_init (&dict, NULL);
 
   g_variant_dict_insert (&dict, "text", "s", self->text ?: "");
-  g_variant_dict_insert (&dict, "severity", "s", ide_diagnostic_severity_to_string (self->severity));
+  g_variant_dict_insert (&dict, "severity", "i", self->severity);
 
   if (self->location != NULL)
     {
@@ -461,4 +462,96 @@ ide_diagnostic_to_variant (const IdeDiagnostic *self)
     }
 
   return g_variant_ref_sink (g_variant_dict_end (&dict));
+}
+
+/**
+ * ide_diagnostic_new_from_variant:
+ * @variant: (nullable): a #GVariant or %NULL
+ *
+ * Creates a new #GVariant using the data contained in @variant.
+ *
+ * If @variant is %NULL or Upon failure, %NULL is returned.
+ *
+ * Returns: (nullable) (transfer full): a #GVariant or %NULL
+ *
+ * Since: 3.30
+ */
+IdeDiagnostic *
+ide_diagnostic_new_from_variant (GVariant *variant)
+{
+  g_autoptr(IdeSourceLocation) loc = NULL;
+  g_autoptr(GVariant) vloc = NULL;
+  g_autoptr(GVariant) unboxed = NULL;
+  g_autoptr(GVariant) ranges = NULL;
+  g_autoptr(GVariant) fixits = NULL;
+  IdeDiagnostic *self;
+  GVariantDict dict;
+  GVariantIter iter;
+  const gchar *text;
+  guint32 severity;
+
+  if (variant == NULL)
+    return NULL;
+
+  if (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARIANT))
+    variant = unboxed = g_variant_get_variant (variant);
+
+  if (!g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT))
+    return NULL;
+
+  g_variant_dict_init (&dict, variant);
+
+  if (!g_variant_dict_lookup (&dict, "text", "&s", &text))
+    text = NULL;
+
+  if (!g_variant_dict_lookup (&dict, "severity", "u", &severity))
+    severity = 0;
+
+  if ((vloc = g_variant_dict_lookup_value (&dict, "location", NULL)))
+    loc = ide_source_location_new_from_variant (vloc);
+
+  if (!(self = ide_diagnostic_new (severity, text, loc)))
+    goto failure;
+
+  /* Ranges */
+  if ((ranges = g_variant_dict_lookup_value (&dict, "ranges", NULL)))
+    {
+      GVariant *vrange;
+
+      g_variant_iter_init (&iter, ranges);
+
+      while ((vrange = g_variant_iter_next_value (&iter)))
+        {
+          IdeSourceRange *range;
+
+          if ((range = ide_source_range_new_from_variant (vrange)))
+            ide_diagnostic_take_range (self, g_steal_pointer (&range));
+
+          g_variant_unref (vrange);
+        }
+    }
+
+  /* Fixits */
+  if ((fixits = g_variant_dict_lookup_value (&dict, "fixits", NULL)))
+    {
+      GVariant *vfixit;
+
+      g_variant_iter_init (&iter, fixits);
+
+      while ((vfixit = g_variant_iter_next_value (&iter)))
+        {
+          IdeFixit *fixit;
+
+          if ((fixit = ide_fixit_new_from_variant (vfixit)))
+            ide_diagnostic_take_fixit (self, g_steal_pointer (&fixit));
+
+          g_variant_unref (vfixit);
+        }
+    }
+
+failure:
+
+  g_variant_dict_clear (&dict);
+
+  return self;
 }
