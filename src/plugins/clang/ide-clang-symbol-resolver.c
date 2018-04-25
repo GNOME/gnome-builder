@@ -30,43 +30,77 @@ struct _IdeClangSymbolResolver
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeClangSymbolResolver, ide_clang_symbol_resolver, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER,
-                                               symbol_resolver_iface_init))
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
 static void
 ide_clang_symbol_resolver_lookup_symbol_cb (GObject      *object,
                                             GAsyncResult *result,
                                             gpointer      user_data)
 {
-  IdeClangService *service = (IdeClangService *)object;
-  g_autoptr(IdeClangTranslationUnit) unit = NULL;
-  g_autoptr(IdeTask) task = user_data;
+  IdeClangClient *client = (IdeClangClient *)object;
   g_autoptr(IdeSymbol) symbol = NULL;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeSourceLocation *location;
 
-  g_assert (IDE_IS_CLANG_SERVICE (service));
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CLANG_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  if (!(symbol = ide_clang_client_locate_symbol_finish (client, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&symbol),
+                             (GDestroyNotify) ide_symbol_unref);
+
+  IDE_EXIT;
+}
+
+static void
+lookup_symbol_flags_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
+{
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_auto(GStrv) flags = NULL;
+  IdeSourceLocation *location;
+  IdeClangClient *client;
+  GCancellable *cancellable;
+  IdeContext *context;
+  IdeFile *file;
+  GFile *gfile;
+  guint line;
+  guint column;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
+  context = ide_object_get_context (IDE_OBJECT (build_system));
+  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  cancellable = ide_task_get_cancellable (task);
   location = ide_task_get_task_data (task);
+  file = ide_source_location_get_file (location);
+  gfile = ide_file_get_file (file);
+  line = ide_source_location_get_line (location);
+  column = ide_source_location_get_line_offset (location);
 
-  unit = ide_clang_service_get_translation_unit_finish (service, result, &error);
+  ide_clang_client_locate_symbol_async (client,
+                                        gfile,
+                                        (const gchar * const *)flags,
+                                        line + 1,
+                                        column + 1,
+                                        cancellable,
+                                        ide_clang_symbol_resolver_lookup_symbol_cb,
+                                        g_steal_pointer (&task));
 
-  if (unit == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  symbol = ide_clang_translation_unit_lookup_symbol (unit, location, &error);
-
-  if (symbol == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  ide_task_return_pointer (task, g_steal_pointer (&symbol), (GDestroyNotify)ide_symbol_unref);
+  IDE_EXIT;
 }
 
 static void
@@ -77,31 +111,33 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
                                                gpointer             user_data)
 {
   IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)resolver;
-  IdeClangService *service = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  IdeBuildSystem *build_system;
   IdeContext *context;
   IdeFile *file;
-  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
-  g_assert (location != NULL);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
-  file = ide_source_location_get_file (location);
+  g_return_if_fail (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
+  g_return_if_fail (location != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_task_data (task, ide_source_location_ref (location),
-                          (GDestroyNotify)ide_source_location_unref);
+  ide_task_set_source_tag (task, ide_clang_symbol_resolver_lookup_symbol_async);
+  ide_task_set_task_data (task,
+                          ide_source_location_ref (location),
+                          (GDestroyNotify) ide_source_location_unref);
 
-  ide_clang_service_get_translation_unit_async (service,
-                                                file,
-                                                0,
-                                                cancellable,
-                                                ide_clang_symbol_resolver_lookup_symbol_cb,
-                                                g_steal_pointer (&task));
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_context_get_build_system (context);
+  file = ide_source_location_get_file (location);
+
+  ide_build_system_get_build_flags_async (build_system,
+                                          file,
+                                          cancellable,
+                                          lookup_symbol_flags_cb,
+                                          g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -112,14 +148,13 @@ ide_clang_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
                                                 GError            **error)
 {
   IdeSymbol *ret;
-  IdeTask *task = (IdeTask *)result;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_RESOLVER (resolver), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
+  g_assert (IDE_IS_CLANG_SYMBOL_RESOLVER (resolver));
+  g_assert (IDE_IS_TASK (result));
 
-  ret = ide_task_propagate_pointer (task, error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
