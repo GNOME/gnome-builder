@@ -96,5 +96,14 @@ void            ide_clang_client_diagnose_async            (IdeClangClient      
 IdeDiagnostics *ide_clang_client_diagnose_finish           (IdeClangClient       *self,
                                                             GAsyncResult         *result,
                                                             GError              **error);
+void               ide_clang_client_get_highlight_index_async  (IdeClangClient       *self,
+                                                                GFile                *file,
+                                                                const gchar * const  *flags,
+                                                                GCancellable         *cancellable,
+                                                                GAsyncReadyCallback   callback,
+                                                                gpointer              user_data);
+IdeHighlightIndex *ide_clang_client_get_highlight_index_finish (IdeClangClient       *self,
+                                                                GAsyncResult         *result,
+                                                                GError              **error);
 
 G_END_DECLS
