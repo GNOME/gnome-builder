@@ -71,19 +71,43 @@ ide_clang_get_llvm_flags (void)
 }
 
 static gchar **
-ide_clang_cook_flags (const gchar * const *flags)
+ide_clang_cook_flags (const gchar         *path,
+                      const gchar * const *flags)
 {
   GPtrArray *cooked = g_ptr_array_new ();
   const gchar *llvm_flags = ide_clang_get_llvm_flags ();
+  g_autofree gchar *include = NULL;
+  guint pos;
 
   if (llvm_flags != NULL)
     g_ptr_array_add (cooked, g_strdup (llvm_flags));
 
+  pos = cooked->len;
+
+  if (path != NULL)
+    {
+      g_autofree gchar *current = g_path_get_dirname (path);
+      include = g_strdup_printf ("-I%s", current);
+    }
+
   if (flags != NULL)
     {
       for (guint i = 0; flags[i]; i++)
-        g_ptr_array_add (cooked, g_strdup (flags[i]));
+        {
+          g_ptr_array_add (cooked, g_strdup (flags[i]));
+
+          if (g_strcmp0 (include, flags[i]) == 0)
+            g_clear_pointer (&include, g_free);
+        }
     }
+
+  /* Insert -Idirname as first include if we didn't find it in the list of
+   * include paths from the request. That ensures we have something that is
+   * very similar to what clang would do unless they specified the path
+   * somewhere else.
+   */
+  if (include != NULL)
+    g_ptr_array_insert (cooked, pos, g_steal_pointer (&include));
 
   g_ptr_array_add (cooked, NULL);
 
@@ -647,7 +671,7 @@ ide_clang_index_file_async (IdeClang            *self,
 
   state = g_slice_new0 (IndexFile);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->entries = g_ptr_array_new ();
 
@@ -715,13 +739,9 @@ static gboolean
 cxfile_equal (CXFile  cxfile,
               GFile  *file)
 {
-  g_auto(CXString) cxstr = {0};
-  g_autofree gchar *path = NULL;
-  const gchar *cstr;
-
-  cxstr = clang_getFileName (cxfile);
-  cstr = clang_getCString (cxstr);
-  path = g_file_get_path (file);
+  g_auto(CXString) cxstr = clang_getFileName (cxfile);
+  g_autofree gchar *path = g_file_get_path (file);
+  const gchar *cstr = clang_getCString (cxstr);
 
   return g_strcmp0 (cstr, path) == 0;
 }
@@ -901,9 +921,6 @@ ide_clang_diagnose_worker (IdeTask      *task,
   g_assert (state->diagnostics != NULL);
 
   options = clang_defaultEditingTranslationUnitOptions ()
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 43)
-          | CXTranslationUnit_SingleFileParse
-#endif
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
           | CXTranslationUnit_KeepGoing
 #endif
@@ -982,7 +999,7 @@ ide_clang_diagnose_async (IdeClang            *self,
 
   state = g_slice_new0 (Diagnose);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->diagnostics = g_ptr_array_new ();
 
@@ -1228,7 +1245,7 @@ ide_clang_complete_async (IdeClang            *self,
 
   state = g_slice_new0 (Complete);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->line = line;
   state->column = column;
@@ -1376,7 +1393,7 @@ ide_clang_find_nearest_scope_async (IdeClang            *self,
 
   state = g_slice_new0 (FindNearestScope);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->line = line;
   state->column = column;
@@ -1558,7 +1575,7 @@ ide_clang_locate_symbol_async (IdeClang            *self,
 
   state = g_slice_new0 (LocateSymbol);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->line = line;
   state->column = column;
@@ -1757,7 +1774,7 @@ ide_clang_get_symbol_tree_async (IdeClang            *self,
 
   state = g_slice_new0 (GetSymbolTree);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
 
   if (self->workdir != NULL)
@@ -1935,7 +1952,7 @@ ide_clang_get_highlight_index_async (IdeClang            *self,
 
   state = g_slice_new0 (GetHighlightIndex);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
 
   if (self->workdir != NULL)
@@ -2062,7 +2079,7 @@ ide_clang_get_index_key_async (IdeClang            *self,
 
   state = g_slice_new0 (GetIndexKey);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->line = line;
   state->column = column;
