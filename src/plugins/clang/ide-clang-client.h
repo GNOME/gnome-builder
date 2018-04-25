@@ -87,5 +87,14 @@ void            ide_clang_client_get_symbol_tree_async     (IdeClangClient      
 IdeSymbolTree  *ide_clang_client_get_symbol_tree_finish    (IdeClangClient       *self,
                                                             GAsyncResult         *result,
                                                             GError              **error);
+void            ide_clang_client_diagnose_async            (IdeClangClient       *self,
+                                                            GFile                *file,
+                                                            const gchar * const  *flags,
+                                                            GCancellable         *cancellable,
+                                                            GAsyncReadyCallback   callback,
+                                                            gpointer              user_data);
+IdeDiagnostics *ide_clang_client_diagnose_finish           (IdeClangClient       *self,
+                                                            GAsyncResult         *result,
+                                                            GError              **error);
 
 G_END_DECLS
