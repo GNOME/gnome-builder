@@ -193,7 +193,7 @@ ide_source_location_new_from_variant (GVariant *variant)
   g_autoptr(GVariant) unboxed = NULL;
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(GFile) file = NULL;
-  IdeSourceLocation *self;
+  IdeSourceLocation *self = NULL;
   GVariantDict dict;
   const gchar *uri;
   guint32 line;
@@ -209,10 +209,7 @@ ide_source_location_new_from_variant (GVariant *variant)
   g_variant_dict_init (&dict, variant);
 
   if (!g_variant_dict_lookup (&dict, "uri", "&s", &uri))
-    {
-      g_variant_dict_clear (&dict);
-      return NULL;
-    }
+    goto failure;
 
   if (!g_variant_dict_lookup (&dict, "line", "u", &line))
     line = 0;
@@ -228,6 +225,7 @@ ide_source_location_new_from_variant (GVariant *variant)
 
   self = ide_source_location_new (ifile, line, line_offset, offset);
 
+failure:
   g_variant_dict_clear (&dict);
 
   return self;
