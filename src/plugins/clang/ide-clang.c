@@ -1889,6 +1889,7 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
   g_auto(CXIndex) index = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
   enum CXErrorCode code;
+  unsigned options;
   CXCursor cursor;
 
   g_assert (IDE_IS_TASK (task));
@@ -1897,6 +1898,12 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
   g_assert (state->path != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  options = clang_defaultEditingTranslationUnitOptions ()
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
+          | CXTranslationUnit_KeepGoing
+#endif
+          | CXTranslationUnit_DetailedPreprocessingRecord;
+
   index = clang_createIndex (0, 0);
   code = clang_parseTranslationUnit2 (index,
                                       state->path,
@@ -1904,7 +1911,7 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
                                       state->argc,
                                       NULL,
                                       0,
-                                      clang_defaultEditingTranslationUnitOptions (),
+                                      options,
                                       &unit);
 
   if (code != CXError_Success)
