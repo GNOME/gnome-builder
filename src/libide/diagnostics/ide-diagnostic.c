@@ -419,7 +419,7 @@ ide_diagnostic_to_variant (const IdeDiagnostic *self)
   g_variant_dict_init (&dict, NULL);
 
   g_variant_dict_insert (&dict, "text", "s", self->text ?: "");
-  g_variant_dict_insert (&dict, "severity", "i", self->severity);
+  g_variant_dict_insert (&dict, "severity", "u", self->severity);
 
   if (self->location != NULL)
     {
