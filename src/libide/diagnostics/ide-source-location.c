@@ -173,10 +173,12 @@ ide_source_location_new (IdeFile *file,
 
 /**
  * ide_source_location_new_from_variant:
- * @self: a #IdeSourceLocation
+ * @variant: (nullable): a #GVariant or %NULL
  *
  * Creates a new #IdeSourceLocation using the serialized form from a
  * previously serialized #GVariant.
+ *
+ * As a convenience, if @variant is %NULL, %NULL is returned.
  *
  * See also: ide_source_location_to_variant()
  *
