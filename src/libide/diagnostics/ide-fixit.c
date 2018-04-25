@@ -170,9 +170,9 @@ ide_fixit_new_from_variant (GVariant *variant)
   g_autoptr(GVariant) unboxed = NULL;
   g_autoptr(GVariant) vrange = NULL;
   GVariantDict dict;
-  IdeSourceRange *range;
+  IdeSourceRange *range = NULL;
   const gchar *text;
-  IdeFixit *self;
+  IdeFixit *self = NULL;
 
   if (variant == NULL)
     return NULL;
@@ -186,9 +186,14 @@ ide_fixit_new_from_variant (GVariant *variant)
     text = "";
 
   if ((vrange = g_variant_dict_lookup_value (&dict, "range", NULL)))
-    range = ide_source_range_new_from_variant (vrange);
+    {
+      if (!(range = ide_source_range_new_from_variant (vrange)))
+        goto failed;
+    }
 
   self = ide_fixit_new (range, text);
+
+failed:
 
   g_variant_dict_clear (&dict);
 
