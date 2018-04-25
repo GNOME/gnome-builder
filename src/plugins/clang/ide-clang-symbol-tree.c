@@ -233,6 +233,7 @@ ide_clang_symbol_tree_finalize (GObject *object)
   g_clear_pointer (&self->native, ide_ref_ptr_unref);
   g_clear_pointer (&self->children, g_array_unref);
   g_clear_pointer (&self->path, g_free);
+  g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_clang_symbol_tree_parent_class)->finalize (object);
 }
