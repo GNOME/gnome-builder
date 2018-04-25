@@ -43,6 +43,7 @@ struct _IdeHighlightIndex
 
   GStringChunk  *strings;
   GHashTable    *index;
+  GVariant      *variant;
 };
 
 IdeHighlightIndex *
@@ -58,6 +59,65 @@ ide_highlight_index_new (void)
   DZL_COUNTER_INC (instances);
 
   return ret;
+}
+
+IdeHighlightIndex *
+ide_highlight_index_new_from_variant (GVariant *variant)
+{
+  IdeHighlightIndex *self;
+
+  self = ide_highlight_index_new ();
+
+  if (variant != NULL)
+    {
+      g_autoptr(GVariant) unboxed = NULL;
+
+      self->variant = g_variant_ref_sink (variant);
+
+      if (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARIANT))
+        variant = unboxed = g_variant_get_variant (variant);
+
+      if (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARDICT))
+        {
+          GVariantIter iter;
+          GVariant *value;
+          gchar *key;
+
+          g_variant_iter_init (&iter, variant);
+
+          while (g_variant_iter_loop (&iter, "{sv}", &key, &value))
+            {
+              g_autoptr(GVariant) ar = g_variant_get_variant (value);
+
+              if (g_variant_is_of_type (ar, G_VARIANT_TYPE_STRING_ARRAY))
+                {
+                  g_autofree const gchar **strv = NULL;
+                  const gchar *tag;
+                  gsize len;
+
+                  tag = g_string_chunk_insert (self->strings, key);
+                  strv = g_variant_get_strv (ar, &len);
+
+                  for (gsize i = 0; i < len; i++)
+                    {
+                      const gchar *word = strv[i];
+
+                      if (g_hash_table_contains (self->index, word))
+                        continue;
+
+                      /* word is guaranteed to be alive and valid inside our
+                       * variant that we are storing. No need to add to the
+                       * string chunk too.
+                       */
+                      g_hash_table_insert (self->index, (gchar *)word, (gchar *)tag);
+                      self->count++;
+                    }
+                }
+            }
+        }
+    }
+
+  return self;
 }
 
 void
