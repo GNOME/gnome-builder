@@ -160,57 +160,58 @@ ide_clang_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
 }
 
 static void
-ide_clang_symbol_resolver_get_symbol_tree_cb2 (GObject      *object,
-                                               GAsyncResult *result,
-                                               gpointer      user_data)
-{
-  IdeClangTranslationUnit *unit = (IdeClangTranslationUnit *)object;
-  g_autoptr(IdeSymbolTree) ret = NULL;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-
-  ret = ide_clang_translation_unit_get_symbol_tree_finish (unit, result, &error);
-
-  if (ret == NULL)
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, g_steal_pointer (&ret), g_object_unref);
-}
-
-static void
 ide_clang_symbol_resolver_get_symbol_tree_cb (GObject      *object,
                                               GAsyncResult *result,
                                               gpointer      user_data)
 {
-  IdeClangService *service = (IdeClangService *)object;
-  g_autoptr(IdeClangTranslationUnit) unit = NULL;
+  IdeClangClient *client = (IdeClangClient *)object;
   g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeSymbolTree) tree = NULL;
   g_autoptr(GError) error = NULL;
-  GFile *file;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_CLANG_SERVICE (service));
+  g_assert (IDE_IS_CLANG_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  unit = ide_clang_service_get_translation_unit_finish (service, result, &error);
-
-  if (unit == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  file = ide_task_get_task_data (task);
-  g_assert (G_IS_FILE (file));
-
-  ide_clang_translation_unit_get_symbol_tree_async (unit,
-                                                    file,
-                                                    ide_task_get_cancellable (task),
-                                                    ide_clang_symbol_resolver_get_symbol_tree_cb2,
-                                                    g_object_ref (task));
+  if (!(tree = ide_clang_client_get_symbol_tree_finish (client, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_object (task, g_steal_pointer (&tree));
 
   IDE_EXIT;
+}
+
+static void
+get_symbol_tree_flags_cb (GObject      *object,
+                          GAsyncResult *result,
+                          gpointer      user_data)
+{
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_auto(GStrv) flags = NULL;
+  IdeClangClient *client;
+  GCancellable *cancellable;
+  IdeContext *context;
+  GFile *file;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
+  context = ide_object_get_context (IDE_OBJECT (build_system));
+  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  cancellable = ide_task_get_cancellable (task);
+  file = ide_task_get_task_data (task);
+
+  ide_clang_client_get_symbol_tree_async (client,
+                                          file,
+                                          (const gchar * const *)flags,
+                                          cancellable,
+                                          ide_clang_symbol_resolver_get_symbol_tree_cb,
+                                          g_steal_pointer (&task));
 }
 
 static void
@@ -224,30 +225,30 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)resolver;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeFile) ifile = NULL;
-  IdeClangService *service;
+  IdeBuildSystem *build_system;
   IdeContext *context;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
-  g_assert (G_IS_FILE (file));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_CLANG_SERVICE);
+  g_return_if_fail (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (IDE_IS_BUFFER (buffer));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
+  ide_task_set_source_tag (task, ide_clang_symbol_resolver_get_symbol_tree_async);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_context_get_build_system (context);
   ifile = ide_file_new (context, file);
 
-  ide_clang_service_get_translation_unit_async (service,
-                                                ifile,
-                                                0,
-                                                cancellable,
-                                                ide_clang_symbol_resolver_get_symbol_tree_cb,
-                                                g_steal_pointer (&task));
+  ide_build_system_get_build_flags_async (build_system,
+                                          ifile,
+                                          cancellable,
+                                          get_symbol_tree_flags_cb,
+                                          g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -258,14 +259,13 @@ ide_clang_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
                                                   GError            **error)
 {
   IdeSymbolTree *ret;
-  IdeTask *task = (IdeTask *)result;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_RESOLVER (resolver), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = ide_task_propagate_pointer (task, error);
+  ret = ide_task_propagate_object (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

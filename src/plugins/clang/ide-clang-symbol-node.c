@@ -18,151 +18,57 @@
 
 #define G_LOG_DOMAIN "ide-clang-symbol-node"
 
-#include <clang-c/Index.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 
-#include "ide-clang-private.h"
 #include "ide-clang-symbol-node.h"
 
 struct _IdeClangSymbolNode
 {
-  IdeSymbolNode parent_instance;
-
-  CXCursor  cursor;
-  GArray   *children;
+  IdeSymbolNode  parent_instance;
+  IdeSymbol     *symbol;
+  GVariant      *children;
 };
 
 G_DEFINE_TYPE (IdeClangSymbolNode, ide_clang_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
-static enum CXChildVisitResult
-find_child_type (CXCursor     cursor,
-                 CXCursor     parent,
-                 CXClientData user_data)
-{
-  enum CXCursorKind *child_kind = user_data;
-  enum CXCursorKind kind = clang_getCursorKind (cursor);
-
-  switch ((int)kind)
-    {
-    case CXCursor_StructDecl:
-    case CXCursor_UnionDecl:
-    case CXCursor_EnumDecl:
-      *child_kind = kind;
-      return CXChildVisit_Break;
-
-    case CXCursor_TypeRef:
-      cursor = clang_getCursorReferenced (cursor);
-      *child_kind = clang_getCursorKind (cursor);
-      return CXChildVisit_Break;
-
-    default:
-      break;
-    }
-
-  return CXChildVisit_Continue;
-}
-
-static IdeSymbolKind
-get_symbol_kind (CXCursor        cursor,
-                 IdeSymbolFlags *flags)
-{
-  enum CXAvailabilityKind availability;
-  enum CXCursorKind cxkind;
-  IdeSymbolFlags local_flags = 0;
-  IdeSymbolKind kind = 0;
-
-  availability = clang_getCursorAvailability (cursor);
-  if (availability == CXAvailability_Deprecated)
-    local_flags |= IDE_SYMBOL_FLAGS_IS_DEPRECATED;
-
-  cxkind = clang_getCursorKind (cursor);
-
-  if (cxkind == CXCursor_TypedefDecl)
-    {
-      enum CXCursorKind child_kind = 0;
-
-      clang_visitChildren (cursor, find_child_type, &child_kind);
-      cxkind = child_kind;
-    }
-
-  switch ((int)cxkind)
-    {
-    case CXCursor_StructDecl:
-      kind = IDE_SYMBOL_STRUCT;
-      break;
-
-    case CXCursor_UnionDecl:
-      kind = IDE_SYMBOL_UNION;
-      break;
-
-    case CXCursor_ClassDecl:
-      kind = IDE_SYMBOL_CLASS;
-      break;
-
-    case CXCursor_FunctionDecl:
-      kind = IDE_SYMBOL_FUNCTION;
-      break;
-
-    case CXCursor_EnumDecl:
-      kind = IDE_SYMBOL_ENUM;
-      break;
-
-    case CXCursor_EnumConstantDecl:
-      kind = IDE_SYMBOL_ENUM_VALUE;
-      break;
-
-    case CXCursor_FieldDecl:
-      kind = IDE_SYMBOL_FIELD;
-      break;
-
-    case CXCursor_VarDecl:
-      kind = IDE_SYMBOL_VARIABLE;
-      break;
-
-    default:
-      break;
-    }
-
-  *flags = local_flags;
-
-  return kind;
-}
-
 IdeSymbolNode *
-_ide_clang_symbol_node_new (IdeContext *context,
-                            CXCursor    cursor)
+ide_clang_symbol_node_new (IdeContext *context,
+                           GVariant   *node)
 {
+  g_autoptr(IdeSymbol) symbol = NULL;
+  g_autoptr(GVariant) children = NULL;
+  g_autoptr(GVariant) unboxed = NULL;
   IdeClangSymbolNode *self;
-  IdeSymbolFlags flags = 0;
-  IdeSymbolKind kind;
-  g_auto(CXString) cxname = {0};
   const gchar *name;
 
-  g_assert (IDE_IS_CONTEXT (context));
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (node != NULL, NULL);
 
-  kind = get_symbol_kind (cursor, &flags);
-  cxname = clang_getCursorSpelling (cursor);
-  name = clang_getCString (cxname);
+  if (!(symbol = ide_symbol_new_from_variant (node)))
+    return NULL;
+
+  name = ide_symbol_get_name (symbol);
 
   self = g_object_new (IDE_TYPE_CLANG_SYMBOL_NODE,
                        "context", context,
-                       "kind", kind,
-                       "flags", flags,
+                       "kind", ide_symbol_get_kind (symbol),
+                       "flags", ide_symbol_get_flags (symbol),
                        "name", dzl_str_empty0 (name) ? _("anonymous") : name,
                        NULL);
 
-  self->cursor = cursor;
+  self->symbol = g_steal_pointer (&symbol);
+
+  if ((children = g_variant_lookup_value (node, "children", NULL)))
+    {
+      if (g_variant_is_of_type (children, G_VARIANT_TYPE_VARIANT))
+        self->children = g_variant_get_variant (children);
+      else if (g_variant_is_of_type (children, G_VARIANT_TYPE ("aa{sv}")) ||
+               g_variant_is_of_type (children, G_VARIANT_TYPE ("av")))
+        self->children = g_steal_pointer (&children);
+    }
 
   return IDE_SYMBOL_NODE (self);
-}
-
-CXCursor
-_ide_clang_symbol_node_get_cursor (IdeClangSymbolNode *self)
-{
-  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self), clang_getNullCursor ());;
-
-  return self->cursor;
 }
 
 static void
@@ -172,39 +78,28 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
                                           gpointer             user_data)
 {
   IdeClangSymbolNode *self = (IdeClangSymbolNode *)symbol_node;
-  g_autoptr(IdeFile) ifile = NULL;
-  g_autoptr(GFile) gfile = NULL;
   g_autoptr(IdeTask) task = NULL;
-  g_auto(CXString) cxfilename = {0};
-  IdeContext *context;
-  const gchar *filename;
-  CXSourceLocation cxloc;
-  CXFile file;
-  guint line = 0;
-  guint line_offset = 0;
+  IdeSourceLocation *location;
 
   g_return_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_clang_symbol_node_get_location_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  cxloc = clang_getCursorLocation (self->cursor);
-  clang_getFileLocation (cxloc, &file, &line, &line_offset, NULL);
-  cxfilename = clang_getFileName (file);
-  filename = clang_getCString (cxfilename);
-
-  /*
-   * TODO: Remove IdeFile from all this junk.
-   */
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  gfile = g_file_new_for_path (filename);
-  ifile = ide_file_new (context, gfile);
-
-  ide_task_return_pointer (task,
-                           ide_source_location_new (ifile, line-1, line_offset-1, 0),
-                           (GDestroyNotify)ide_source_location_unref);
+  if (self->symbol == NULL ||
+      (!(location = ide_symbol_get_definition_location (self->symbol)) &&
+       !(location = ide_symbol_get_declaration_location (self->symbol)) &&
+       !(location = ide_symbol_get_canonical_location (self->symbol))))
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "Failed to locate location for symbol");
+  else
+    ide_task_return_pointer (task,
+                             ide_source_location_ref (location),
+                             (GDestroyNotify) ide_source_location_unref);
 }
 
 static IdeSourceLocation *
@@ -223,7 +118,8 @@ ide_clang_symbol_node_finalize (GObject *object)
 {
   IdeClangSymbolNode *self = (IdeClangSymbolNode *)object;
 
-  g_clear_pointer (&self->children, g_array_unref);
+  g_clear_pointer (&self->symbol, ide_symbol_unref);
+  g_clear_pointer (&self->children, g_variant_unref);
 
   G_OBJECT_CLASS (ide_clang_symbol_node_parent_class)->finalize (object);
 }
@@ -245,21 +141,28 @@ ide_clang_symbol_node_init (IdeClangSymbolNode *self)
 {
 }
 
-GArray *
-_ide_clang_symbol_node_get_children (IdeClangSymbolNode *self)
+guint
+ide_clang_symbol_node_get_n_children (IdeClangSymbolNode *self)
 {
-  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self), NULL);
+  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self), 0);
 
-  return self->children;
+  return self->children ? g_variant_n_children (self->children) : 0;
 }
 
-void
-_ide_clang_symbol_node_set_children (IdeClangSymbolNode *self,
-                                     GArray             *children)
+IdeSymbolNode *
+ide_clang_symbol_node_get_nth_child (IdeClangSymbolNode *self,
+                                     guint               nth)
 {
-  g_return_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self));
-  g_return_if_fail (self->children == NULL);
-  g_return_if_fail (children != NULL);
+  g_autoptr(GVariant) child = NULL;
+  IdeContext *context;
 
-  self->children = g_array_ref (children);
+  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self), NULL);
+
+  if (self->children == NULL || g_variant_n_children (self->children) <= nth)
+    return NULL;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  child = g_variant_get_child_value (self->children, nth);
+
+  return ide_clang_symbol_node_new (context, child);
 }

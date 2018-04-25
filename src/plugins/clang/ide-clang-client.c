@@ -23,6 +23,7 @@
 #include <jsonrpc-glib.h>
 
 #include "ide-clang-client.h"
+#include "ide-clang-symbol-tree.h"
 
 struct _IdeClangClient
 {
@@ -770,4 +771,85 @@ ide_clang_client_locate_symbol_finish (IdeClangClient  *self,
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+static void
+ide_clang_client_get_symbol_tree_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeClangClient *self = (IdeClangClient *)object;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeContext *context;
+  GFile *file;
+
+  g_assert (IDE_IS_CLANG_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  file = ide_task_get_task_data (task);
+
+  if (!ide_clang_client_call_finish (self, result, &reply, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_object (task, ide_clang_symbol_tree_new (context, file, reply));
+}
+
+void
+ide_clang_client_get_symbol_tree_async (IdeClangClient      *self,
+                                        GFile               *file,
+                                        const gchar * const *flags,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *path = NULL;
+
+  g_return_if_fail (IDE_IS_CLANG_CLIENT (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_client_get_symbol_tree_async);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+
+  if (!g_file_is_native (file))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "File must be a local file");
+      return;
+    }
+
+  path = g_file_get_path (file);
+
+  params = JSONRPC_MESSAGE_NEW (
+    "path", JSONRPC_MESSAGE_PUT_STRING (path),
+    "flags", JSONRPC_MESSAGE_PUT_STRV (flags)
+  );
+
+  ide_clang_client_call_async (self,
+                               "clang/getSymbolTree",
+                               params,
+                               cancellable,
+                               ide_clang_client_get_symbol_tree_cb,
+                               g_steal_pointer (&task));
+}
+
+IdeSymbolTree *
+ide_clang_client_get_symbol_tree_finish (IdeClangClient  *self,
+                                         GAsyncResult    *result,
+                                         GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG_CLIENT (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_object (IDE_TASK (result), error);
 }
