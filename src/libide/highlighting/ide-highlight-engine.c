@@ -418,6 +418,26 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
                                                   NULL);
 }
 
+/**
+ * ide_highlight_engine_advance:
+ * @self: a #IdeHighlightEngine
+ *
+ * This function is useful for #IdeHighlighter implementations that need to
+ * asynchronously do work to process the highlighting.
+ *
+ * If they return from their update function without advancing, nothing will
+ * happen until they call this method to proceed.
+ *
+ * Since: 3.30
+ */
+void
+ide_highlight_engine_advance (IdeHighlightEngine *self)
+{
+  g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (self));
+
+  ide_highlight_engine_queue_work (self);
+}
+
 static gboolean
 invalidate_and_highlight (IdeHighlightEngine *self,
                           GtkTextIter        *begin,
