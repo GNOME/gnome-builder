@@ -1978,6 +1978,12 @@ ide_buffer_set_file (IdeBuffer *self,
 
   if (g_set_object (&priv->file, file))
     {
+      /* If IdeFile doesn't have a context, set it now. We still want to get
+       * rid of IdeFile, but can't do so yet.
+       */
+      if (ide_object_get_context (IDE_OBJECT (file)) == NULL)
+        ide_object_set_context (IDE_OBJECT (file), priv->context);
+
       dzl_signal_group_set_target (priv->file_signals, file);
       ide_file_load_settings_async (priv->file,
                                     NULL,
