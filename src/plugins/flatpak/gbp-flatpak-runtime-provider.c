@@ -103,10 +103,12 @@ static gboolean
 is_same_runtime (GbpFlatpakRuntime   *runtime,
                  FlatpakInstalledRef *ref)
 {
+  g_autofree gchar *arch = NULL;
+
   return (g_strcmp0 (flatpak_ref_get_name (FLATPAK_REF (ref)),
                      gbp_flatpak_runtime_get_platform (runtime)) == 0) &&
          (g_strcmp0 (flatpak_ref_get_arch (FLATPAK_REF (ref)),
-                     gbp_flatpak_runtime_get_arch (runtime)) == 0) &&
+                     arch = ide_runtime_get_arch (IDE_RUNTIME (runtime))) == 0) &&
          (g_strcmp0 (flatpak_ref_get_branch (FLATPAK_REF (ref)),
                      gbp_flatpak_runtime_get_branch (runtime)) == 0);
 }
