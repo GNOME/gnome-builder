@@ -109,5 +109,8 @@ void               ide_clang_get_highlight_index_async  (IdeClang             *s
 IdeHighlightIndex *ide_clang_get_highlight_index_finish (IdeClang             *self,
                                                          GAsyncResult         *result,
                                                          GError              **error);
+void               ide_clang_set_unsaved_file           (IdeClang             *self,
+                                                         GFile                *file,
+                                                         GBytes               *bytes);
 
 G_END_DECLS
