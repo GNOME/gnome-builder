@@ -72,7 +72,6 @@ client_op_error (ClientOp     *op,
                                     error->code,
                                     error->message,
                                     NULL, NULL, NULL);
-  jsonrpc_client_close (op->client, NULL, NULL);
 }
 
 static ClientOp *
