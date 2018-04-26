@@ -116,5 +116,14 @@ void               ide_clang_client_complete_async             (IdeClangClient  
 GVariant          *ide_clang_client_complete_finish            (IdeClangClient       *self,
                                                                 GAsyncResult         *result,
                                                                 GError              **error);
+void               ide_clang_client_set_buffer_async           (IdeClangClient       *self,
+                                                                GFile                *file,
+                                                                GBytes               *bytes,
+                                                                GCancellable         *cancellable,
+                                                                GAsyncReadyCallback   callback,
+                                                                gpointer              user_data);
+gboolean           ide_clang_client_set_buffer_finish          (IdeClangClient       *self,
+                                                                GAsyncResult         *result,
+                                                                GError              **error);
 
 G_END_DECLS
