@@ -65,6 +65,16 @@ ide_toolchain_get_id (IdeToolchain  *self)
   return priv->id;
 }
 
+
+/**
+ * ide_toolchain_set_id:
+ * @self: an #IdeToolchain
+ * @id: the unique identifier
+ *
+ * Sets the internal identifier of the toolchain
+ *
+ * Since: 3.30
+ */
 void
 ide_toolchain_set_id (IdeToolchain  *self,
                       const gchar   *id)

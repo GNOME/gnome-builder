@@ -153,7 +153,7 @@ ide_toolchain_provider_default_init (IdeToolchainProviderInterface *iface)
  * before completing the asynchronous function so that the toolchain
  * manager may be made aware of the toolchains.
  *
- * Since: 3.28
+ * Since: 3.30
  */
 void
 ide_toolchain_provider_load_async (IdeToolchainProvider *self,
@@ -175,6 +175,8 @@ ide_toolchain_provider_load_async (IdeToolchainProvider *self,
  * Completes an asynchronous request to ide_toolchain_provider_load_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.30
  */
 gboolean
 ide_toolchain_provider_load_finish (IdeToolchainProvider  *self,

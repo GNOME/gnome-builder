@@ -443,6 +443,8 @@ list_model_iface_init (GListModelInterface *iface)
  * Gets the toolchain by its internal identifier.
  *
  * Returns: (transfer full): An #IdeToolchain.
+ *
+ * Since: 3.30
  */
 IdeToolchain *
 ide_toolchain_manager_get_toolchain (IdeToolchainManager *self,
@@ -465,6 +467,17 @@ ide_toolchain_manager_get_toolchain (IdeToolchainManager *self,
   return NULL;
 }
 
+/**
+ * ide_toolchain_manager_is_loaded:
+ * @self: An #IdeToolchainManager
+ *
+ * Gets whether all the #IdeToolchainProvider implementations are loaded
+ * and have registered all their #IdeToolchain.
+ *
+ * Returns: %TRUE if all the toolchains are loaded
+ *
+ * Since: 3.30
+ */
 gboolean
 ide_toolchain_manager_is_loaded (IdeToolchainManager  *self)
 {
