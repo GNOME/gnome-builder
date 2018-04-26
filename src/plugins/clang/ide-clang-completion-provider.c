@@ -69,14 +69,14 @@ typedef struct
   gchar *query;
 } IdeClangCompletionState;
 
-static void ide_clang_completion_provider_iface_init (GtkSourceCompletionProviderIface *iface);
+static void completion_provider_iface_init (GtkSourceCompletionProviderIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (IdeClangCompletionProvider,
                         ide_clang_completion_provider,
                         IDE_TYPE_OBJECT,
                         0,
                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
-                                               ide_clang_completion_provider_iface_init)
+                                               completion_provider_iface_init)
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
 
 static void
@@ -762,7 +762,7 @@ ide_clang_completion_provider_class_init (IdeClangCompletionProviderClass *klass
 }
 
 static void
-ide_clang_completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
+completion_provider_iface_init (GtkSourceCompletionProviderIface *iface)
 {
   iface->activate_proposal = ide_clang_completion_provider_activate_proposal;
   iface->get_name = ide_clang_completion_provider_get_name;
