@@ -461,6 +461,10 @@ main (gint   argc,
   subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE,
                                  &error,
 #if 0
+                                 "gdbserver",
+                                 "localhost:8888",
+#endif
+#if 0
                                  "valgrind",
                                  "--suppressions=glib.supp",
                                  "--leak-check=full",
