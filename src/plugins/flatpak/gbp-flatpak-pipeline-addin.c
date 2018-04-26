@@ -64,15 +64,15 @@ enum {
 static gchar *
 get_arch_option (IdeBuildPipeline *pipeline)
 {
-  g_autofree gchar *arch = NULL;
+  g_autoptr(IdeTriplet) triplet = NULL;
   IdeRuntime *runtime;
 
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   runtime = ide_build_pipeline_get_runtime (pipeline);
-  arch = ide_runtime_get_arch (runtime);
+  triplet = ide_runtime_get_triplet (runtime);
 
-  return g_strdup_printf ("--arch=%s", arch);
+  return g_strdup_printf ("--arch=%s", ide_triplet_get_arch (triplet));
 }
 
 static void
