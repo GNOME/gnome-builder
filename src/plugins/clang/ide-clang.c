@@ -1065,52 +1065,6 @@ complete_free (gpointer data)
   g_slice_free (Complete, state);
 }
 
-static guint
-translate_completion_kind (enum CXCursorKind kind)
-{
-  switch ((int)kind)
-    {
-    case CXCursor_StructDecl:
-      return IDE_LSP_COMPLETION_STRUCT;
-
-    case CXCursor_ClassDecl:
-      return IDE_LSP_COMPLETION_CLASS;
-
-    case CXCursor_Constructor:
-      return IDE_LSP_COMPLETION_CONSTRUCTOR;
-
-    case CXCursor_Destructor:
-    case CXCursor_CXXMethod:
-      return IDE_LSP_COMPLETION_METHOD;
-
-    case CXCursor_FunctionDecl:
-      return IDE_LSP_COMPLETION_FUNCTION;
-
-    case CXCursor_EnumConstantDecl:
-      return IDE_LSP_COMPLETION_ENUM_MEMBER;
-
-    case CXCursor_EnumDecl:
-      return IDE_LSP_COMPLETION_ENUM;
-
-    case CXCursor_InclusionDirective:
-      return IDE_LSP_COMPLETION_FILE;
-
-    case CXCursor_PreprocessingDirective:
-    case CXCursor_MacroDefinition:
-    case CXCursor_MacroExpansion:
-      return IDE_LSP_COMPLETION_TEXT;
-
-    case CXCursor_TypeRef:
-    case CXCursor_TypeAliasDecl:
-    case CXCursor_TypeAliasTemplateDecl:
-    case CXCursor_TypedefDecl:
-      return IDE_LSP_COMPLETION_CLASS;
-
-    default:
-      return IDE_LSP_COMPLETION_TEXT;
-    }
-}
-
 static void
 ide_clang_build_completion (GVariantBuilder    *builder,
                             CXCompletionResult *result)
@@ -1121,11 +1075,10 @@ ide_clang_build_completion (GVariantBuilder    *builder,
   g_assert (builder != NULL);
   g_assert (result != NULL);
 
-  g_variant_builder_add_parsed (builder, "{%s,<%i>}", "kind",
-                                translate_completion_kind (result->CursorKind));
+  g_variant_builder_add_parsed (builder, "{%s,<%u>}", "kind", result->CursorKind);
 
   if (clang_getCompletionAvailability (result->CompletionString))
-    g_variant_builder_add_parsed (builder, "{%s,<%i>}", "availability",
+    g_variant_builder_add_parsed (builder, "{%s,<%u>}", "avail",
                                   clang_getCompletionAvailability (result->CompletionString));
 
   n_chunks = clang_getNumCompletionChunks (result->CompletionString);
@@ -1139,7 +1092,7 @@ ide_clang_build_completion (GVariantBuilder    *builder,
 
       g_variant_builder_open (&chunks_builder, G_VARIANT_TYPE_VARDICT);
       g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", clang_getCString (str));
-      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%i>}", "kind", kind);
+      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%u>}", "kind", kind);
       g_variant_builder_close (&chunks_builder);
     }
 
