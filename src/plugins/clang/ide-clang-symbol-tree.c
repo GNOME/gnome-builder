@@ -82,6 +82,7 @@ ide_clang_symbol_tree_get_nth_child (IdeSymbolTree *symbol_tree,
 {
   IdeClangSymbolTree *self = (IdeClangSymbolTree *)symbol_tree;
   g_autoptr(GVariant) node = NULL;
+  IdeSymbolNode *ret;
   IdeContext *context;
 
   g_assert (IDE_IS_CLANG_SYMBOL_TREE (self));
@@ -91,15 +92,18 @@ ide_clang_symbol_tree_get_nth_child (IdeSymbolTree *symbol_tree,
     return ide_clang_symbol_node_get_nth_child (IDE_CLANG_SYMBOL_NODE (parent), nth);
 
   if (self->tree == NULL)
-    return NULL;
+    g_return_val_if_reached (NULL);
 
   if (nth >= g_variant_n_children (self->tree))
-    return NULL;
+    g_return_val_if_reached (NULL);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   node = g_variant_get_child_value (self->tree, nth);
+  ret = ide_clang_symbol_node_new (context, node);
 
-  return ide_clang_symbol_node_new (context, node);
+  g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (ret), NULL);
+
+  return ret;
 }
 
 static void
