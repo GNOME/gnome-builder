@@ -33,7 +33,7 @@ context_loaded (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeRuntimeManager *runtime_manager;
   IdeRuntime *runtime;
-  g_autofree gchar *arch = NULL;
+  g_autoptr(IdeTriplet) triplet = NULL;
 
   context = ide_context_new_finish (result, &error);
   g_assert_no_error (error);
@@ -48,9 +48,9 @@ context_loaded (GObject      *object,
   g_assert_nonnull (runtime);
   g_assert (IDE_IS_RUNTIME (runtime));
 
-  arch = ide_runtime_get_arch (runtime);
-  g_assert_nonnull (arch);
-  g_assert_cmpstr (arch, ==, ide_get_system_arch ());
+  triplet = ide_runtime_get_triplet (runtime);
+  g_assert_nonnull (triplet);
+  g_assert (triplet == ide_triplet_new_from_system ());
 
   g_task_return_boolean (task, TRUE);
 }

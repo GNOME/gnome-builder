@@ -27,6 +27,7 @@
 #include "buildsystem/ide-build-target.h"
 #include "runner/ide-runner.h"
 #include "subprocess/ide-subprocess-launcher.h"
+#include "util/ide-triplet.h"
 
 G_BEGIN_DECLS
 
@@ -57,7 +58,7 @@ struct _IdeRuntimeClass
   GFile                  *(*translate_file)           (IdeRuntime           *self,
                                                        GFile                *file);
   gchar                 **(*get_system_include_dirs)  (IdeRuntime           *self);
-  gchar                  *(*get_arch)                 (IdeRuntime           *self);
+  IdeTriplet             *(*get_triplet)              (IdeRuntime           *self);
 
   gpointer _reserved[12];
 };
@@ -96,7 +97,7 @@ GFile                 *ide_runtime_translate_file           (IdeRuntime         
                                                              GFile                *file);
 IDE_AVAILABLE_IN_3_28
 gchar                **ide_runtime_get_system_include_dirs  (IdeRuntime           *self);
-IDE_AVAILABLE_IN_3_28
-gchar                 *ide_runtime_get_arch                 (IdeRuntime           *self);
+IDE_AVAILABLE_IN_3_30
+IdeTriplet            *ide_runtime_get_triplet              (IdeRuntime           *self);
 
 G_END_DECLS

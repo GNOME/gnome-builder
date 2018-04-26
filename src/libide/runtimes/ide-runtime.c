@@ -553,31 +553,31 @@ ide_runtime_get_system_include_dirs (IdeRuntime *self)
 }
 
 /**
- * ide_runtime_get_arch:
+ * ide_runtime_get_triplet:
  * @self: a #IdeRuntime
  *
- * Get's the architecture of the runtime.
+ * Gets the architecture triplet of the runtime.
  *
  * This can be used to ensure we're compiling for the right architecture
  * given the current device.
  *
- * Returns: (transfer full) (not nullable): the name of the architecture
- *   the runtime will build for.
+ * Returns: (transfer full) (not nullable): the architecture triplet the runtime
+ * will build for.
  *
- * Since: 3.28
+ * Since: 3.30
  */
-gchar *
-ide_runtime_get_arch (IdeRuntime *self)
+IdeTriplet *
+ide_runtime_get_triplet (IdeRuntime *self)
 {
-  gchar *ret = NULL;
+  IdeTriplet *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
 
-  if (IDE_RUNTIME_GET_CLASS (self)->get_arch)
-    ret = IDE_RUNTIME_GET_CLASS (self)->get_arch (self);
+  if (IDE_RUNTIME_GET_CLASS (self)->get_triplet)
+    ret = IDE_RUNTIME_GET_CLASS (self)->get_triplet (self);
 
   if (ret == NULL)
-    ret = ide_get_system_arch ();
+    ret = ide_triplet_new_from_system ();
 
   return ret;
 }
