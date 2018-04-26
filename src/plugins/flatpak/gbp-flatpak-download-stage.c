@@ -84,6 +84,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
   if (self->invalid)
     {
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeTriplet) triplet = NULL;
       g_autofree gchar *arch = NULL;
       g_autofree gchar *arch_param = NULL;
       IdeRuntime *runtime;
@@ -109,8 +110,8 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
         }
 
       runtime = ide_build_pipeline_get_runtime (pipeline);
-      arch = ide_runtime_get_arch (runtime);
-      arch_param = g_strdup_printf ("--arch=%s", arch);
+      triplet = ide_runtime_get_triplet (runtime);
+      arch_param = g_strdup_printf ("--arch=%s", ide_triplet_get_arch (triplet));
 
       ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
       ide_subprocess_launcher_push_argv (launcher, arch_param);

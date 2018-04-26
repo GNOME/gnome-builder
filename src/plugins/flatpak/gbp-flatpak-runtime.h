@@ -34,7 +34,7 @@ GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (IdeContext           *con
                                                        FlatpakInstalledRef  *ref,
                                                        GCancellable         *cancellable,
                                                        GError              **error);
-const gchar         *gbp_flatpak_runtime_get_arch     (GbpFlatpakRuntime    *self);
+IdeTriplet          *gbp_flatpak_runtime_get_triplet  (GbpFlatpakRuntime    *self);
 const gchar         *gbp_flatpak_runtime_get_branch   (GbpFlatpakRuntime    *self);
 const gchar         *gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime    *self);
 const gchar         *gbp_flatpak_runtime_get_sdk      (GbpFlatpakRuntime    *self);

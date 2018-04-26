@@ -162,11 +162,12 @@ gbp_sysroot_runtime_get_system_include_dirs (IdeRuntime *runtime)
   return g_strdupv ((char**) result_paths);
 }
 
-static gchar *
-gbp_sysroot_runtime_get_arch (IdeRuntime *runtime)
+static IdeTriplet *
+gbp_sysroot_runtime_get_triplet (IdeRuntime *runtime)
 {
   GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
   GbpSysrootManager *sysroot_manager = NULL;
+  g_autoptr(IdeTriplet) triplet = NULL;
   const gchar *sysroot_id = NULL;
 
   g_assert (GBP_IS_SYSROOT_RUNTIME (self));
@@ -174,7 +175,8 @@ gbp_sysroot_runtime_get_arch (IdeRuntime *runtime)
   sysroot_manager = gbp_sysroot_manager_get_default ();
   sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
 
-  return gbp_sysroot_manager_get_target_arch (sysroot_manager, sysroot_id);
+  triplet = ide_triplet_new (gbp_sysroot_manager_get_target_arch (sysroot_manager, sysroot_id));
+  return g_steal_pointer (&triplet);
 }
 
 static void
@@ -227,7 +229,7 @@ gbp_sysroot_runtime_class_init (GbpSysrootRuntimeClass *klass)
 
   runtime_class->create_launcher = gbp_sysroot_runtime_create_launcher;
   runtime_class->get_system_include_dirs = gbp_sysroot_runtime_get_system_include_dirs;
-  runtime_class->get_arch = gbp_sysroot_runtime_get_arch;
+  runtime_class->get_triplet = gbp_sysroot_runtime_get_triplet;
 }
 
 static void
