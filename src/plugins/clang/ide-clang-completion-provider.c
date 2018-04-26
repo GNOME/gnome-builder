@@ -19,13 +19,10 @@
 #define G_LOG_DOMAIN "clang-completion-provider"
 
 #include <ide.h>
-#include <string.h>
 
+#include "ide-clang-client.h"
 #include "ide-clang-completion-item.h"
-#include "ide-clang-completion-item-private.h"
 #include "ide-clang-completion-provider.h"
-#include "ide-clang-service.h"
-#include "ide-clang-translation-unit.h"
 
 struct _IdeClangCompletionProvider
 {
@@ -90,6 +87,8 @@ ide_clang_completion_state_free (IdeClangCompletionState *state)
   g_clear_pointer (&state->query, g_free);
   g_slice_free (IdeClangCompletionState, state);
 }
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeClangCompletionState, ide_clang_completion_state_free)
 
 static gint
 sort_by_priority (gconstpointer a,
@@ -255,7 +254,6 @@ ide_clang_completion_provider_update_links (IdeClangCompletionProvider *self,
   IdeClangCompletionItem *item;
   IdeClangCompletionItem *next;
   IdeClangCompletionItem *prev;
-  guint i;
 
   IDE_ENTRY;
 
@@ -278,7 +276,7 @@ ide_clang_completion_provider_update_links (IdeClangCompletionProvider *self,
 
   prev = item;
 
-  for (i = 1; i < (results->len - 1); i++)
+  for (guint i = 1; i < (results->len - 1); i++)
     {
       item = g_ptr_array_index (results, i);
       next = g_ptr_array_index (results, i + 1);
@@ -366,34 +364,41 @@ ide_clang_completion_provider_refilter (IdeClangCompletionProvider *self,
 }
 
 static void
-ide_clang_completion_provider_code_complete_cb (GObject      *object,
-                                                GAsyncResult *result,
-                                                gpointer      user_data)
+ide_clang_completion_provider_complete_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
 {
-  IdeClangTranslationUnit *unit = (IdeClangTranslationUnit *)object;
-  IdeClangCompletionState *state = user_data;
+  IdeClangClient *client = (IdeClangClient *)object;
+  g_autoptr(IdeClangCompletionState) state = user_data;
   g_autoptr(GPtrArray) results = NULL;
-  GError *error = NULL;
+  g_autoptr(GVariant) vresults = NULL;
+  g_autoptr(GError) error = NULL;
+  guint n_items;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_CLANG_TRANSLATION_UNIT (unit));
+  g_assert (IDE_IS_CLANG_CLIENT (client));
   g_assert (state != NULL);
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (state->self));
   g_assert (G_IS_CANCELLABLE (state->cancellable));
   g_assert (IDE_IS_FILE (state->file));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (state->context));
 
-  if (!(results = ide_clang_translation_unit_code_complete_finish (unit, result, &error)))
+  if (!(vresults = ide_clang_client_complete_finish (client, result, &error)))
     {
       g_debug ("%s", error->message);
       if (!g_cancellable_is_cancelled (state->cancellable))
         gtk_source_completion_context_add_proposals (state->context,
                                                      GTK_SOURCE_COMPLETION_PROVIDER (state->self),
                                                      NULL, TRUE);
-      ide_clang_completion_state_free (state);
       IDE_EXIT;
     }
+
+  n_items = (guint)g_variant_n_children (vresults);
+  results = g_ptr_array_new_full (n_items, g_object_unref);
+
+  for (guint i = 0; i < n_items; i++)
+    g_ptr_array_add (results, ide_clang_completion_item_new (vresults, i));
 
   ide_clang_completion_provider_save_results (state->self, results, state->line, state->query);
   ide_clang_completion_provider_update_links (state->self, results);
@@ -423,41 +428,36 @@ ide_clang_completion_provider_code_complete_cb (GObject      *object,
       IDE_TRACE_MSG ("Ignoring completions due to cancellation");
     }
 
-  ide_clang_completion_state_free (state);
-
   IDE_EXIT;
 }
 
 static void
-ide_clang_completion_provider_get_translation_unit_cb (GObject      *object,
-                                                       GAsyncResult *result,
-                                                       gpointer      user_data)
+ide_clang_completion_provider_build_flags_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
 {
-  g_autoptr(IdeClangTranslationUnit) unit = NULL;
-  IdeClangService *service = (IdeClangService *)object;
-  IdeClangCompletionState *state = user_data;
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(IdeClangCompletionState) state = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) flags = NULL;
+  IdeClangClient *client;
+  IdeContext *context;
+  GCancellable *cancellable;
+  GFile *file;
   GtkTextIter iter;
-  GError *error = NULL;
+  guint line;
+  guint column;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_CLANG_SERVICE (service));
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (state != NULL);
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (state->self));
   g_assert (G_IS_CANCELLABLE (state->cancellable));
   g_assert (IDE_IS_FILE (state->file));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (state->context));
 
-  if (!(unit = ide_clang_service_get_translation_unit_finish (service, result, &error)))
-    {
-      g_debug ("%s", error->message);
-      if (!g_cancellable_is_cancelled (state->cancellable))
-        gtk_source_completion_context_add_proposals (state->context,
-                                                     GTK_SOURCE_COMPLETION_PROVIDER (state->self),
-                                                     NULL, TRUE);
-      ide_clang_completion_state_free (state);
-      IDE_EXIT;
-    }
+  flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
 
   /*
    * It's like we are racing with our future self, which coallesced the
@@ -465,19 +465,26 @@ ide_clang_completion_provider_get_translation_unit_cb (GObject      *object,
    * to detect if we were cancelled and short-circuit early.
    */
   if (g_cancellable_is_cancelled (state->cancellable))
-    {
-      ide_clang_completion_state_free (state);
-      IDE_EXIT;
-    }
+    IDE_EXIT;
+
+  context = ide_object_get_context (IDE_OBJECT (build_system));
+  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  file = ide_file_get_file (state->file);
+  cancellable = state->cancellable;
 
   gtk_source_completion_context_get_iter (state->context, &iter);
 
-  ide_clang_translation_unit_code_complete_async (unit,
-                                                  ide_file_get_file (state->file),
-                                                  &iter,
-                                                  NULL,
-                                                  ide_clang_completion_provider_code_complete_cb,
-                                                  state);
+  line = gtk_text_iter_get_line (&iter) + 1;
+  column = gtk_text_iter_get_line_offset (&iter) + 1;
+
+  ide_clang_client_complete_async (client,
+                                   file,
+                                   (const gchar * const *)flags,
+                                   line,
+                                   column,
+                                   cancellable,
+                                   ide_clang_completion_provider_complete_cb,
+                                   g_steal_pointer (&state));
 
   IDE_EXIT;
 }
@@ -490,15 +497,14 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
   IdeClangCompletionState *state;
   GtkSourceCompletionActivation activation;
   g_autoptr(GtkSourceCompletion) completion = NULL;
-  g_autoptr(IdeClangTranslationUnit) tu = NULL;
   g_autofree gchar *line = NULL;
   g_autofree gchar *prefix = NULL;
-  GtkTextIter stop;
-  gunichar ch;
-  GtkTextBuffer *buffer;
-  IdeClangService *service;
-  GtkTextIter iter;
   GtkTextIter begin;
+  GtkTextIter iter;
+  GtkTextIter stop;
+  GtkTextBuffer *buffer;
+  IdeBuildSystem *build_system;
+  gunichar ch;
 
   IDE_ENTRY;
 
@@ -536,9 +542,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
          (ch = gtk_text_iter_get_char (&stop)) &&
          (g_unichar_isalnum (ch) || (ch == '_')) &&
          gtk_text_iter_backward_char (&stop))
-    {
-      /* Do nothing */
-    }
+    { /* Do nothing */ }
 
   ch = gtk_text_iter_get_char (&stop);
 
@@ -579,9 +583,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
       IDE_EXIT;
     }
 
-  service = ide_context_get_service_typed (ide_object_get_context (IDE_OBJECT (self)),
-                                           IDE_TYPE_CLANG_SERVICE);
-
+#if 0
   /*
    * If we are completed interactively, we only want to activate the clang
    * completion provider if a translation unit is immediatley available.
@@ -602,6 +604,7 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
           IDE_EXIT;
         }
     }
+#endif
 
   /* Save the view so we can push a snippet later */
   g_object_get (context, "completion", &completion, NULL);
@@ -623,31 +626,13 @@ ide_clang_completion_provider_populate (GtkSourceCompletionProvider *provider,
                            state->cancellable,
                            G_CONNECT_SWAPPED);
 
-  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
-    {
-      g_assert (tu != NULL);
+  build_system = ide_context_get_build_system (ide_object_get_context (IDE_OBJECT (self)));
 
-      /*
-       * Shortcut if we are interactive to query against the
-       * previous clang translation unit. If this is insufficient
-       * the user can force a completion with ctrl+space.
-       */
-      gtk_source_completion_context_get_iter (context, &iter);
-      ide_clang_translation_unit_code_complete_async (tu,
-                                                      ide_file_get_file (state->file),
-                                                      &iter,
-                                                      NULL,
-                                                      ide_clang_completion_provider_code_complete_cb,
-                                                      state);
-      IDE_EXIT;
-    }
-
-  ide_clang_service_get_translation_unit_async (service,
-                                                state->file,
-                                                0,
-                                                NULL,
-                                                ide_clang_completion_provider_get_translation_unit_cb,
-                                                state);
+  ide_build_system_get_build_flags_async (build_system,
+                                          state->file,
+                                          state->cancellable,
+                                          ide_clang_completion_provider_build_flags_cb,
+                                          state);
 
   IDE_EXIT;
 

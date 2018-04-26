@@ -19,7 +19,6 @@
 #define G_LOG_DOMAIN "clang-symbol-resolver"
 
 #include "ide-clang-client.h"
-#include "ide-clang-service.h"
 #include "ide-clang-symbol-resolver.h"
 
 struct _IdeClangSymbolResolver

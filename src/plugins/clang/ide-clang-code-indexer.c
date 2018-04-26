@@ -23,9 +23,6 @@
 #include "ide-clang-code-index-entries.h"
 #include "ide-clang-code-indexer.h"
 #include "ide-clang-client.h"
-#include "ide-clang-private.h"
-#include "ide-clang-service.h"
-#include "ide-clang-translation-unit.h"
 
 struct _IdeClangCodeIndexer
 {
