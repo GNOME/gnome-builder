@@ -37,7 +37,24 @@ struct _IdeClang
   GHashTable *unsaved_files;
 };
 
+typedef struct
+{
+  struct CXUnsavedFile *files;
+  GPtrArray            *bytes;
+  GPtrArray            *paths;
+  guint                 len;
+} UnsavedFiles;
+
 G_DEFINE_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
+
+static void
+unsaved_files_free (UnsavedFiles *uf)
+{
+  g_clear_pointer (&uf->files, g_free);
+  g_clear_pointer (&uf->bytes, g_ptr_array_unref);
+  g_clear_pointer (&uf->paths, g_ptr_array_unref);
+  g_slice_free (UnsavedFiles, uf);
+}
 
 static const gchar *
 ide_clang_get_llvm_flags (void)
@@ -113,6 +130,48 @@ ide_clang_cook_flags (const gchar         *path,
   g_ptr_array_add (cooked, NULL);
 
   return (gchar **)g_ptr_array_free (cooked, FALSE);
+}
+
+static UnsavedFiles *
+ide_clang_get_unsaved_files (IdeClang *self)
+{
+  UnsavedFiles *ret;
+  GHashTableIter iter;
+  const gchar *path;
+  GArray *ufs;
+  GBytes *bytes;
+
+  g_assert (IDE_IS_CLANG (self));
+
+  ret = g_slice_new0 (UnsavedFiles);
+  ret->len = g_hash_table_size (self->unsaved_files);
+  ret->bytes = g_ptr_array_new_full (ret->len, (GDestroyNotify)g_bytes_unref);
+  ret->paths = g_ptr_array_new_full (ret->len, g_free);
+
+  ufs = g_array_new (FALSE, FALSE, sizeof (struct CXUnsavedFile));
+
+  g_hash_table_iter_init (&iter, self->unsaved_files);
+
+  while (g_hash_table_iter_next (&iter, (gpointer *)&path, (gpointer *)&bytes))
+    {
+      struct CXUnsavedFile uf;
+      const guint8 *data;
+      gsize len;
+
+      data = g_bytes_get_data (bytes, &len);
+
+      uf.Filename = g_strdup (path);
+      uf.Contents = (const gchar *)data;
+      uf.Length = len;
+
+      g_ptr_array_add (ret->bytes, g_bytes_ref (bytes));
+      g_ptr_array_add (ret->paths, (gchar *)uf.Filename);
+      g_array_append_val (ufs, uf);
+    }
+
+  ret->files = (struct CXUnsavedFile *)(gpointer)g_array_free (ufs, FALSE);
+
+  return g_steal_pointer (&ret);
 }
 
 static gboolean
@@ -320,9 +379,7 @@ ide_clang_class_init (IdeClangClass *klass)
 static void
 ide_clang_init (IdeClang *self)
 {
-  self->unsaved_files = g_hash_table_new_full (g_file_hash,
-                                               (GEqualFunc)g_file_equal,
-                                               g_object_unref,
+  self->unsaved_files = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                (GDestroyNotify)g_bytes_unref);
 }
 
@@ -675,6 +732,10 @@ ide_clang_index_file_async (IdeClang            *self,
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  /* We don't use unsaved files here, because we only want to index
+   * the files on disk.
+   */
+
   state = g_slice_new0 (IndexFile);
   state->path = g_strdup (path);
   state->argv = ide_clang_cook_flags (path, argv);
@@ -721,11 +782,12 @@ ide_clang_index_file_finish (IdeClang      *self,
 
 typedef struct
 {
-  GPtrArray  *diagnostics;
-  GFile      *workdir;
-  gchar      *path;
-  gchar     **argv;
-  guint       argc;
+  UnsavedFiles *ufs;
+  GPtrArray    *diagnostics;
+  GFile        *workdir;
+  gchar        *path;
+  gchar       **argv;
+  guint         argc;
 } Diagnose;
 
 static void
@@ -733,11 +795,11 @@ diagnose_free (gpointer data)
 {
   Diagnose *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
   g_clear_pointer (&state->diagnostics, g_ptr_array_unref);
   g_clear_object (&state->workdir);
-
   g_slice_free (Diagnose, state);
 }
 
@@ -937,8 +999,8 @@ ide_clang_diagnose_worker (IdeTask      *task,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       options,
                                       &unit);
 
@@ -1004,6 +1066,7 @@ ide_clang_diagnose_async (IdeClang            *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (Diagnose);
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
   state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
@@ -1054,11 +1117,12 @@ ide_clang_diagnose_finish (IdeClang      *self,
 
 typedef struct
 {
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
-  guint   line;
-  guint   column;
+  UnsavedFiles  *ufs;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
+  guint          line;
+  guint          column;
 } Complete;
 
 static void
@@ -1066,6 +1130,7 @@ complete_free (gpointer data)
 {
   Complete *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (Complete, state);
@@ -1124,8 +1189,6 @@ ide_clang_complete_worker (IdeTask      *task,
   g_assert (state != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* TODO: We need file sync for unsaved buffers */
-
   options = clang_defaultEditingTranslationUnitOptions ();
 
   index = clang_createIndex (0, 0);
@@ -1133,8 +1196,8 @@ ide_clang_complete_worker (IdeTask      *task,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       options,
                                       &unit);
 
@@ -1203,6 +1266,7 @@ ide_clang_complete_async (IdeClang            *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (Complete);
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
   state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
@@ -1231,11 +1295,12 @@ ide_clang_complete_finish (IdeClang      *self,
 
 typedef struct
 {
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
-  guint   line;
-  guint   column;
+  UnsavedFiles  *ufs;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
+  guint          line;
+  guint          column;
 } FindNearestScope;
 
 static void
@@ -1243,6 +1308,7 @@ find_nearest_scope_free (gpointer data)
 {
   FindNearestScope *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (FindNearestScope, state);
@@ -1270,15 +1336,13 @@ ide_clang_find_nearest_scope_worker (IdeTask      *task,
   g_assert (state != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* TODO: We need file sync for unsaved buffers */
-
   index = clang_createIndex (0, 0);
   code = clang_parseTranslationUnit2 (index,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       clang_defaultEditingTranslationUnitOptions (),
                                       &unit);
 
@@ -1351,6 +1415,7 @@ ide_clang_find_nearest_scope_async (IdeClang            *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (FindNearestScope);
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
   state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
@@ -1379,12 +1444,13 @@ ide_clang_find_nearest_scope_finish (IdeClang      *self,
 
 typedef struct
 {
-  GFile  *workdir;
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
-  guint   line;
-  guint   column;
+  UnsavedFiles  *ufs;
+  GFile         *workdir;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
+  guint          line;
+  guint          column;
 } LocateSymbol;
 
 static void
@@ -1392,6 +1458,7 @@ locate_symbol_free (gpointer data)
 {
   LocateSymbol *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
@@ -1431,8 +1498,8 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       clang_defaultEditingTranslationUnitOptions (),
                                       &unit);
 
@@ -1533,6 +1600,7 @@ ide_clang_locate_symbol_async (IdeClang            *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (LocateSymbol);
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
   state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
@@ -1566,6 +1634,7 @@ ide_clang_locate_symbol_finish (IdeClang      *self,
 
 typedef struct
 {
+  UnsavedFiles    *ufs;
   GFile           *workdir;
   gchar           *path;
   gchar          **argv;
@@ -1578,6 +1647,7 @@ get_symbol_tree_free (gpointer data)
 {
   GetSymbolTree *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
@@ -1690,8 +1760,8 @@ ide_clang_get_symbol_tree_worker (IdeTask      *task,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       clang_defaultEditingTranslationUnitOptions (),
                                       &unit);
 
@@ -1732,6 +1802,7 @@ ide_clang_get_symbol_tree_async (IdeClang            *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (GetSymbolTree);
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
   state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
@@ -1763,10 +1834,11 @@ ide_clang_get_symbol_tree_finish (IdeClang      *self,
 
 typedef struct
 {
-  GFile  *workdir;
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
+  UnsavedFiles  *ufs;
+  GFile         *workdir;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
 } GetHighlightIndex;
 
 static void
@@ -1774,6 +1846,7 @@ get_highlight_index_free (gpointer data)
 {
   GetHighlightIndex *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
@@ -1868,8 +1941,8 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       options,
                                       &unit);
 
@@ -1917,6 +1990,7 @@ ide_clang_get_highlight_index_async (IdeClang            *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (GetHighlightIndex);
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
   state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
@@ -1948,11 +2022,12 @@ ide_clang_get_highlight_index_finish (IdeClang      *self,
 
 typedef struct
 {
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
-  guint   line;
-  guint   column;
+  UnsavedFiles  *ufs;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
+  guint          line;
+  guint          column;
 } GetIndexKey;
 
 static void
@@ -1960,6 +2035,7 @@ get_index_key_free (gpointer data)
 {
   GetIndexKey *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (GetIndexKey, state);
@@ -1994,8 +2070,8 @@ ide_clang_get_index_key_worker (IdeTask      *task,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       clang_defaultEditingTranslationUnitOptions (),
                                       &unit);
 
@@ -2044,6 +2120,7 @@ ide_clang_get_index_key_async (IdeClang            *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (GetIndexKey);
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
   state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
@@ -2084,13 +2161,20 @@ ide_clang_set_unsaved_file (IdeClang *self,
                             GFile    *file,
                             GBytes   *bytes)
 {
+  g_autofree gchar *path = NULL;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (G_IS_FILE (file));
 
+  if (!g_file_is_native (file))
+    return;
+
+  path = g_file_get_path (file);
+
   if (bytes == NULL)
-    g_hash_table_remove (self->unsaved_files, file);
+    g_hash_table_remove (self->unsaved_files, path);
   else
-    g_hash_table_insert (self->unsaved_files, g_object_ref (file), g_bytes_ref (bytes));
+    g_hash_table_insert (self->unsaved_files, g_steal_pointer (&path), g_bytes_ref (bytes));
 }
 
 /* vim:set foldmethod=marker: */
