@@ -35,7 +35,7 @@ struct _GbpFlatpakRuntime
 
   GHashTable *program_paths_cache;
 
-  gchar *arch;
+  IdeTriplet *triplet;
   gchar *branch;
   gchar *deploy_dir;
   gchar *platform;
@@ -48,7 +48,7 @@ G_DEFINE_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
 
 enum {
   PROP_0,
-  PROP_ARCH,
+  PROP_TRIPLET,
   PROP_BRANCH,
   PROP_DEPLOY_DIR,
   PROP_PLATFORM,
@@ -102,7 +102,7 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   if (g_hash_table_contains (self->program_paths_cache, program))
     return TRUE;
 
-  arch = g_strdup_printf ("--arch=%s", self->arch);
+  arch = g_strdup_printf ("--arch=%s", ide_triplet_get_arch (self->triplet));
 
   /*
    * To check if a program is available, we don't want to use the normal
@@ -406,7 +406,8 @@ gbp_flatpak_runtime_get_runtime_dir (GbpFlatpakRuntime *self)
            */
           deploy_path = g_file_get_path (self->deploy_dir_files);
           path = g_build_filename (deploy_path, "..", "..", "..", "..", "..",
-                                   name, self->arch, self->branch, "active", "files",
+                                   name, ide_triplet_get_arch (self->triplet),
+                                   self->branch, "active", "files",
                                    NULL);
           if (g_file_test (path, G_FILE_TEST_IS_DIR))
             {
@@ -505,25 +506,25 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
   return NULL;
 }
 
-const gchar *
-gbp_flatpak_runtime_get_arch (GbpFlatpakRuntime *self)
+IdeTriplet *
+gbp_flatpak_runtime_get_triplet (GbpFlatpakRuntime *self)
 {
   g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
 
-  return self->arch;
+  return self->triplet;
 }
 
 void
-gbp_flatpak_runtime_set_arch (GbpFlatpakRuntime *self,
-                              const gchar       *arch)
+gbp_flatpak_runtime_set_triplet (GbpFlatpakRuntime *self,
+                                 IdeTriplet        *triplet)
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
-  if (g_strcmp0 (arch, self->arch) != 0)
+  if (self->triplet != triplet)
     {
-      g_free (self->arch);
-      self->arch = g_strdup (arch);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARCH]);
+      g_clear_pointer (&self->triplet, ide_triplet_unref);
+      self->triplet = ide_triplet_ref (triplet);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRIPLET]);
     }
 }
 
@@ -615,10 +616,10 @@ gbp_flatpak_runtime_get_system_include_dirs (IdeRuntime *runtime)
   return g_strdupv ((gchar **)include_dirs);
 }
 
-static gchar *
-gbp_flatpak_runtime_real_get_arch (IdeRuntime *runtime)
+static IdeTriplet *
+gbp_flatpak_runtime_real_get_triplet (IdeRuntime *runtime)
 {
-  return g_strdup (GBP_FLATPAK_RUNTIME (runtime)->arch);
+  return ide_triplet_ref (GBP_FLATPAK_RUNTIME (runtime)->triplet);
 }
 
 static void
@@ -631,8 +632,8 @@ gbp_flatpak_runtime_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ARCH:
-      g_value_set_string (value, gbp_flatpak_runtime_get_arch (self));
+    case PROP_TRIPLET:
+      g_value_set_boxed (value, gbp_flatpak_runtime_get_triplet (self));
       break;
 
     case PROP_BRANCH:
@@ -666,8 +667,8 @@ gbp_flatpak_runtime_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ARCH:
-      gbp_flatpak_runtime_set_arch (self, g_value_get_string (value));
+    case PROP_TRIPLET:
+      gbp_flatpak_runtime_set_triplet (self, g_value_get_boxed (value));
       break;
 
     case PROP_BRANCH:
@@ -696,7 +697,7 @@ gbp_flatpak_runtime_finalize (GObject *object)
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)object;
 
-  g_clear_pointer (&self->arch, g_free);
+  g_clear_pointer (&self->triplet, ide_triplet_unref);
   g_clear_pointer (&self->branch, g_free);
   g_clear_pointer (&self->runtime_dir, g_free);
   g_clear_pointer (&self->deploy_dir, g_free);
@@ -724,13 +725,13 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
   runtime_class->get_system_include_dirs = gbp_flatpak_runtime_get_system_include_dirs;
-  runtime_class->get_arch = gbp_flatpak_runtime_real_get_arch;
+  runtime_class->get_triplet = gbp_flatpak_runtime_real_get_triplet;
 
-  properties [PROP_ARCH] =
-    g_param_spec_string ("arch",
-                         "Arch",
-                         "Arch",
-                         flatpak_get_default_arch (),
+  properties [PROP_TRIPLET] =
+    g_param_spec_boxed ("triplet",
+                         "Triplet",
+                         "Architecture Triplet",
+                         IDE_TYPE_TRIPLET,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_BRANCH] =
@@ -795,6 +796,7 @@ gbp_flatpak_runtime_new (IdeContext           *context,
   g_autofree gchar *display_name = NULL;
   g_autofree gchar *triplet = NULL;
   g_autoptr(FlatpakRef) sdk_ref = NULL;
+  g_autoptr(IdeTriplet) triplet_object = NULL;
   const gchar *name;
   const gchar *arch;
   const gchar *branch;
@@ -807,6 +809,7 @@ gbp_flatpak_runtime_new (IdeContext           *context,
   arch = flatpak_ref_get_arch (FLATPAK_REF (ref));
   branch = flatpak_ref_get_branch (FLATPAK_REF (ref));
   deploy_dir = flatpak_installed_ref_get_deploy_dir (ref);
+  triplet_object = ide_triplet_new (arch);
   triplet = g_strdup_printf ("%s/%s/%s", name, arch, branch);
   id = g_strdup_printf ("flatpak:%s", triplet);
 
@@ -835,7 +838,7 @@ gbp_flatpak_runtime_new (IdeContext           *context,
   return g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                        "context", context,
                        "id", id,
-                       "arch", arch,
+                       "triplet", triplet_object,
                        "branch", branch,
                        "deploy-dir", deploy_dir,
                        "display-name", display_name,
