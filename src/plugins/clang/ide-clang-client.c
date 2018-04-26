@@ -23,6 +23,7 @@
 #include <jsonrpc-glib.h>
 
 #include "ide-clang-client.h"
+#include "ide-clang-completion-item-private.h"
 #include "ide-clang-symbol-tree.h"
 
 struct _IdeClangClient
@@ -1019,6 +1020,85 @@ IdeHighlightIndex *
 ide_clang_client_get_highlight_index_finish (IdeClangClient  *self,
                                              GAsyncResult    *result,
                                              GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG_CLIENT (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+static void
+ide_clang_client_complete_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IdeClangClient *self = (IdeClangClient *)object;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_CLANG_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ide_clang_client_call_finish (self, result, &reply, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, g_steal_pointer (&reply), g_variant_unref);
+}
+
+void
+ide_clang_client_complete_async (IdeClangClient      *self,
+                                 GFile               *file,
+                                 const gchar * const *flags,
+                                 guint                line,
+                                 guint                column,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GVariant) params = NULL;
+  g_autofree gchar *path = NULL;
+
+  g_return_if_fail (IDE_IS_CLANG_CLIENT (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_client_complete_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
+
+  if (!g_file_is_native (file))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "File must be a local file");
+      return;
+    }
+
+  path = g_file_get_path (file);
+
+  params = JSONRPC_MESSAGE_NEW (
+    "path", JSONRPC_MESSAGE_PUT_STRING (path),
+    "flags", JSONRPC_MESSAGE_PUT_STRV (flags),
+    "line", JSONRPC_MESSAGE_PUT_INT64 (line),
+    "column", JSONRPC_MESSAGE_PUT_INT64 (column)
+  );
+
+  ide_clang_client_call_async (self,
+                               "clang/complete",
+                               params,
+                               cancellable,
+                               ide_clang_client_complete_cb,
+                               g_steal_pointer (&task));
+}
+
+GVariant *
+ide_clang_client_complete_finish (IdeClangClient  *self,
+                                  GAsyncResult    *result,
+                                  GError         **error)
 {
   g_return_val_if_fail (IDE_IS_CLANG_CLIENT (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
