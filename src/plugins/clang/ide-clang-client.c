@@ -20,6 +20,9 @@
 
 #include "config.h"
 
+#include <gio/gunixinputstream.h>
+#include <gio/gunixoutputstream.h>
+#include <glib-unix.h>
 #include <jsonrpc-glib.h>
 
 #include "ide-clang-client.h"
@@ -90,6 +93,7 @@ ide_clang_client_subprocess_spawned (IdeClangClient          *self,
   GOutputStream *output;
   GInputStream *input;
   GList *queued;
+  gint fd;
 
   IDE_ENTRY;
 
@@ -103,6 +107,15 @@ ide_clang_client_subprocess_spawned (IdeClangClient          *self,
   input = ide_subprocess_get_stdout_pipe (subprocess);
   output = ide_subprocess_get_stdin_pipe (subprocess);
   stream = g_simple_io_stream_new (input, output);
+
+  g_assert (G_IS_UNIX_INPUT_STREAM (input));
+  g_assert (G_IS_UNIX_OUTPUT_STREAM (output));
+
+  fd = g_unix_input_stream_get_fd (G_UNIX_INPUT_STREAM (input));
+  g_unix_set_fd_nonblocking (fd, TRUE, NULL);
+
+  fd = g_unix_output_stream_get_fd (G_UNIX_OUTPUT_STREAM (output));
+  g_unix_set_fd_nonblocking (fd, TRUE, NULL);
 
   g_clear_object (&self->rpc_client);
   self->rpc_client = jsonrpc_client_new (stream);
@@ -217,6 +230,10 @@ ide_clang_client_constructed (GObject *object)
   if (cwd != NULL)
     ide_subprocess_launcher_set_cwd (launcher, cwd);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+#if 0
+  ide_subprocess_launcher_push_argv (launcher, "gdbserver");
+  ide_subprocess_launcher_push_argv (launcher, "localhost:8888");
+#endif
   ide_subprocess_launcher_push_argv (launcher, PACKAGE_LIBEXECDIR"/gnome-builder-clang");
 
   self->supervisor = ide_subprocess_supervisor_new ();
