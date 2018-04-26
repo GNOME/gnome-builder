@@ -1121,3 +1121,84 @@ ide_clang_client_complete_finish (IdeClangClient  *self,
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
+
+static void
+ide_clang_client_set_buffer_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  IdeClangClient *self = (IdeClangClient *)object;
+  g_autoptr(GVariant) reply = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_CLANG_CLIENT (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ide_clang_client_call_finish (self, result, &reply, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+}
+
+void
+ide_clang_client_set_buffer_async (IdeClangClient      *self,
+                                   GFile               *file,
+                                   GBytes              *bytes,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *path = NULL;
+  GVariantDict dict;
+  const guint8 *data;
+  gsize len;
+
+  g_return_if_fail (IDE_IS_CLANG_CLIENT (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_client_set_buffer_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_IO);
+
+  if (!g_file_is_native (file))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "File must be a local file");
+      return;
+    }
+
+  path = g_file_get_path (file);
+
+  /* data doesn't need to be utf-8, but it does have to be
+   * a valid byte string (no embedded \0 bytes).
+   */
+  data = g_bytes_get_data (bytes, &len);
+
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert (&dict, "path", "s", path);
+  g_variant_dict_insert (&dict, "bytes", "^ay", data);
+
+  ide_clang_client_call_async (self,
+                               "clang/setBuffer",
+                               g_variant_dict_end (&dict),
+                               cancellable,
+                               ide_clang_client_set_buffer_cb,
+                               g_steal_pointer (&task));
+}
+
+gboolean
+ide_clang_client_set_buffer_finish (IdeClangClient  *self,
+                                    GAsyncResult    *result,
+                                    GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG_CLIENT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
