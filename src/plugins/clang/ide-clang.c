@@ -32,8 +32,9 @@
 
 struct _IdeClang
 {
-  GObject  parent;
-  GFile   *workdir;
+  GObject     parent;
+  GFile      *workdir;
+  GHashTable *unsaved_files;
 };
 
 G_DEFINE_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
@@ -303,6 +304,7 @@ ide_clang_finalize (GObject *object)
   IdeClang *self = (IdeClang *)object;
 
   g_clear_object (&self->workdir);
+  g_clear_pointer (&self->unsaved_files, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_clang_parent_class)->finalize (object);
 }
@@ -318,6 +320,10 @@ ide_clang_class_init (IdeClangClass *klass)
 static void
 ide_clang_init (IdeClang *self)
 {
+  self->unsaved_files = g_hash_table_new_full (g_file_hash,
+                                               (GEqualFunc)g_file_equal,
+                                               g_object_unref,
+                                               (GDestroyNotify)g_bytes_unref);
 }
 
 IdeClang *
@@ -2069,6 +2075,20 @@ ide_clang_get_index_key_finish (IdeClang      *self,
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+void
+ide_clang_set_unsaved_file (IdeClang *self,
+                            GFile    *file,
+                            GBytes   *bytes)
+{
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  if (bytes == NULL)
+    g_hash_table_remove (self->unsaved_files, file);
+  else
+    g_hash_table_insert (self->unsaved_files, g_object_ref (file), g_bytes_ref (bytes));
 }
 
 /* vim:set foldmethod=marker: */
