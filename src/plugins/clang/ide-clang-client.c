@@ -23,7 +23,6 @@
 #include <jsonrpc-glib.h>
 
 #include "ide-clang-client.h"
-#include "ide-clang-completion-item-private.h"
 #include "ide-clang-symbol-tree.h"
 
 struct _IdeClangClient
@@ -1044,7 +1043,7 @@ ide_clang_client_complete_cb (GObject      *object,
   if (!ide_clang_client_call_finish (self, result, &reply, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_pointer (task, g_steal_pointer (&reply), g_variant_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&reply), (GDestroyNotify)g_variant_unref);
 }
 
 void

@@ -21,7 +21,6 @@
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
 
-#include "ide-clang-private.h"
 #include "ide-clang-symbol-node.h"
 #include "ide-clang-symbol-tree.h"
 

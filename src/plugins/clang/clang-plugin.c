@@ -19,18 +19,16 @@
 #include <libpeas/peas.h>
 #include <ide.h>
 
+#include "ide-clang-client.h"
 #include "ide-clang-code-indexer.h"
 #include "ide-clang-completion-item.h"
 #include "ide-clang-completion-provider.h"
 #include "ide-clang-diagnostic-provider.h"
 #include "ide-clang-highlighter.h"
 #include "ide-clang-preferences-addin.h"
-#include "ide-clang-private.h"
-#include "ide-clang-service.h"
 #include "ide-clang-symbol-node.h"
 #include "ide-clang-symbol-resolver.h"
 #include "ide-clang-symbol-tree.h"
-#include "ide-clang-translation-unit.h"
 
 void
 ide_clang_register_types (PeasObjectModule *module)
@@ -46,7 +44,7 @@ ide_clang_register_types (PeasObjectModule *module)
                                               IDE_TYPE_CLANG_SYMBOL_RESOLVER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SERVICE,
-                                              IDE_TYPE_CLANG_SERVICE);
+                                              IDE_TYPE_CLANG_CLIENT);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               IDE_TYPE_CLANG_DIAGNOSTIC_PROVIDER);
