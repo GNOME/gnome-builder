@@ -2077,6 +2077,8 @@ ide_clang_get_index_key_finish (IdeClang      *self,
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
+/* Set Unsaved File {{{1 */
+
 void
 ide_clang_set_unsaved_file (IdeClang *self,
                             GFile    *file,
