@@ -8,6 +8,8 @@ cmake_resources = gnome.compile_resources(
 
 cmake_sources = [
   'cmake-plugin.c',
+  'gbp-cmake-build-stage-cross-file.c',
+  'gbp-cmake-build-stage-cross-file.h',
   'gbp-cmake-build-system.c',
   'gbp-cmake-build-system.h',
   'gbp-cmake-build-target.c',
