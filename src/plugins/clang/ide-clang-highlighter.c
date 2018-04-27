@@ -28,9 +28,11 @@ struct _IdeClangHighlighter
   gint64              change_seq;
   gint64              building_seq;
   guint               waiting_for_unit : 1;
+  guint               queued_source;
 };
 
-static void highlighter_iface_init (IdeHighlighterInterface *iface);
+static void highlighter_iface_init             (IdeHighlighterInterface *iface);
+static void ide_clang_highlighter_queue_udpate (IdeClangHighlighter     *self);
 
 G_DEFINE_TYPE_EXTENDED (IdeClangHighlighter, ide_clang_highlighter, IDE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))
@@ -139,12 +141,7 @@ ide_clang_highlighter_get_index (IdeClangHighlighter *self,
                                  IdeBuffer           *buffer,
                                  gboolean            *transient)
 {
-  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeHighlightIndex) index = NULL;
-  IdeBuildSystem *build_system;
-  IdeClangClient *client;
-  IdeContext *context;
-  IdeFile *file;
   gint64 seq;
   gboolean invalid = FALSE;
 
@@ -184,25 +181,10 @@ ide_clang_highlighter_get_index (IdeClangHighlighter *self,
   if (self->waiting_for_unit)
     goto finish;
 
-  if (!(file = ide_buffer_get_file (buffer)) ||
-      !(context = ide_object_get_context (IDE_OBJECT (self))) ||
-      !(client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT)))
-    goto finish;
-
   self->building_seq = seq;
   self->waiting_for_unit = TRUE;
 
-  task = ide_task_new (self, NULL, NULL, NULL);
-  ide_task_set_source_tag (task, ide_clang_highlighter_get_index);
-  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
-
-  build_system = ide_context_get_build_system (context);
-
-  ide_build_system_get_build_flags_async (build_system,
-                                          file,
-                                          NULL,
-                                          get_index_flags_cb,
-                                          g_steal_pointer (&task));
+  ide_clang_highlighter_queue_udpate (self);
 
 finish:
 
@@ -319,4 +301,57 @@ highlighter_iface_init (IdeHighlighterInterface *iface)
 {
   iface->update = ide_clang_highlighter_real_update;
   iface->set_engine = ide_clang_highlighter_real_set_engine;
+}
+
+static gboolean
+ide_clang_highlighter_do_update (IdeClangHighlighter *self)
+{
+  g_autoptr(IdeTask) task = NULL;
+  IdeBuildSystem *build_system;
+  IdeClangClient *client;
+  IdeContext *context;
+  IdeBuffer *buffer;
+  IdeFile *file;
+
+  g_assert (IDE_IS_CLANG_HIGHLIGHTER (self));
+
+  self->queued_source = 0;
+
+  if (self->engine == NULL ||
+      !(buffer = ide_highlight_engine_get_buffer (self->engine)) ||
+      !(file = ide_buffer_get_file (buffer)) ||
+      !(context = ide_object_get_context (IDE_OBJECT (self))) ||
+      !(client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT)))
+    return G_SOURCE_REMOVE;
+
+  task = ide_task_new (self, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, ide_clang_highlighter_get_index);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+
+  build_system = ide_context_get_build_system (context);
+
+  ide_build_system_get_build_flags_async (build_system,
+                                          file,
+                                          NULL,
+                                          get_index_flags_cb,
+                                          g_steal_pointer (&task));
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_clang_highlighter_queue_udpate (IdeClangHighlighter *self)
+{
+  g_assert (IDE_IS_CLANG_HIGHLIGHTER (self));
+
+  if (self->queued_source != 0)
+    return;
+
+  self->queued_source =
+    g_timeout_add_seconds_full (G_PRIORITY_LOW,
+                                3,
+                                (GSourceFunc)ide_clang_highlighter_do_update,
+                                g_object_ref (self),
+                                g_object_unref);
+
 }
