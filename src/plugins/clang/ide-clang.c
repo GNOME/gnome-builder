@@ -38,6 +38,12 @@
 #define PRIORITY_INDEX_FILE   (500)
 #define PRIORITY_HIGHLIGHT    (300)
 
+#if 0
+# define PROBE G_STMT_START { g_printerr ("PROBE: %s\n", G_STRFUNC); } G_STMT_END
+#else
+# define PROBE G_STMT_START { } G_STMT_END
+#endif
+
 struct _IdeClang
 {
   GObject     parent;
@@ -739,6 +745,8 @@ ide_clang_index_file_async (IdeClang            *self,
   g_autoptr(IdeTask) task = NULL;
   IndexFile *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -1072,6 +1080,8 @@ ide_clang_diagnose_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   Diagnose *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -1273,6 +1283,8 @@ ide_clang_complete_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   Complete *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -1422,6 +1434,8 @@ ide_clang_find_nearest_scope_async (IdeClang            *self,
 {
   g_autoptr(IdeTask) task = NULL;
   FindNearestScope *state;
+
+  PROBE;
 
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
@@ -1608,6 +1622,8 @@ ide_clang_locate_symbol_async (IdeClang            *self,
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *parent = NULL;
   LocateSymbol *state;
+
+  PROBE;
 
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
@@ -1812,6 +1828,8 @@ ide_clang_get_symbol_tree_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   GetSymbolTree *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -2001,6 +2019,8 @@ ide_clang_get_highlight_index_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   GetHighlightIndex *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -2131,6 +2151,8 @@ ide_clang_get_index_key_async (IdeClang            *self,
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *parent = NULL;
   GetIndexKey *state;
+
+  PROBE;
 
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
