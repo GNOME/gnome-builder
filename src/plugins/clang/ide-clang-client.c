@@ -1274,8 +1274,8 @@ ide_clang_client_set_buffer_async (IdeClangClient      *self,
 {
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *path = NULL;
+  const guint8 *data = NULL;
   GVariantDict dict;
-  const guint8 *data;
   gsize len;
 
   g_return_if_fail (IDE_IS_CLANG_CLIENT (self));
@@ -1300,11 +1300,13 @@ ide_clang_client_set_buffer_async (IdeClangClient      *self,
   /* data doesn't need to be utf-8, but it does have to be
    * a valid byte string (no embedded \0 bytes).
    */
-  data = g_bytes_get_data (bytes, &len);
+  if (bytes != NULL)
+    data = g_bytes_get_data (bytes, &len);
 
   g_variant_dict_init (&dict, NULL);
   g_variant_dict_insert (&dict, "path", "s", path);
-  g_variant_dict_insert (&dict, "bytes", "^ay", data);
+  if (data != NULL)
+    g_variant_dict_insert (&dict, "contents", "^ay", data);
 
   ide_clang_client_call_async (self,
                                "clang/setBuffer",

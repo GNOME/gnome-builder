@@ -741,6 +741,46 @@ handle_get_highlight_index (JsonrpcServer *server,
                                        client_op_ref (op));
 }
 
+/* Set Buffer Contents {{{1 */
+
+static void
+handle_set_buffer (JsonrpcServer *server,
+                   JsonrpcClient *client,
+                   const gchar   *method,
+                   GVariant      *id,
+                   GVariant      *params,
+                   IdeClang      *clang)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+  g_autoptr(GFile) file = NULL;
+  const gchar *path = NULL;
+  const gchar *contents = NULL;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "clang/setBuffer"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  if (!JSONRPC_MESSAGE_PARSE (params, "path", JSONRPC_MESSAGE_GET_STRING (&path)))
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  /* Get the new contents (or NULL bytes if we are unsetting it */
+  if (g_variant_lookup (params, "contents", "^&ay", &contents))
+    bytes = g_bytes_new (contents, strlen (contents));
+
+  file = g_file_new_for_path (path);
+  ide_clang_set_unsaved_file (clang, file, bytes);
+
+  client_op_reply (op, g_variant_new_boolean (TRUE));
+}
+
 /* Initialize {{{1 */
 
 static void
@@ -840,6 +880,7 @@ main (gint argc,
   ADD_HANDLER ("clang/indexFile", handle_index_file);
   ADD_HANDLER ("clang/locateSymbol", handle_locate_symbol);
   ADD_HANDLER ("clang/getHighlightIndex", handle_get_highlight_index);
+  ADD_HANDLER ("clang/setBuffer", handle_set_buffer);
 
 #undef ADD_HANDLER
 
