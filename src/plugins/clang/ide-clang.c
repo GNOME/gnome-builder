@@ -30,6 +30,14 @@
 #define IDE_CLANG_HIGHLIGHTER_ENUM_NAME     "def:constant"
 #define IDE_CLANG_HIGHLIGHTER_MACRO_NAME    "c:macro-name"
 
+#define PRIORITY_DIAGNOSE     (-200)
+#define PRIORITY_COMPLETE     (-100)
+#define PRIORITY_GET_LOCATION (-50)
+#define PRIORITY_GET_SYMTREE  (50)
+#define PRIORITY_FIND_SCOPE   (100)
+#define PRIORITY_INDEX_FILE   (500)
+#define PRIORITY_HIGHLIGHT    (300)
+
 struct _IdeClang
 {
   GObject     parent;
@@ -748,6 +756,7 @@ ide_clang_index_file_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_index_file_async);
   ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
   ide_task_set_task_data (task, state, index_file_free);
+  ide_task_set_priority (task, PRIORITY_INDEX_FILE);
   ide_task_run_in_thread (task, ide_clang_index_file_worker);
 }
 
@@ -1083,6 +1092,7 @@ ide_clang_diagnose_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_diagnose_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, diagnose_free);
+  ide_task_set_priority (task, PRIORITY_DIAGNOSE);
   ide_task_run_in_thread (task, ide_clang_diagnose_worker);
 }
 
@@ -1277,6 +1287,7 @@ ide_clang_complete_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_complete_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, complete_free);
+  ide_task_set_priority (task, PRIORITY_COMPLETE);
   ide_task_run_in_thread (task, ide_clang_complete_worker);
 }
 
@@ -1426,6 +1437,7 @@ ide_clang_find_nearest_scope_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_find_nearest_scope_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, find_nearest_scope_free);
+  ide_task_set_priority (task, PRIORITY_FIND_SCOPE);
   ide_task_run_in_thread (task, ide_clang_find_nearest_scope_worker);
 }
 
@@ -1616,6 +1628,7 @@ ide_clang_locate_symbol_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_locate_symbol_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, locate_symbol_free);
+  ide_task_set_priority (task, PRIORITY_GET_LOCATION);
   ide_task_run_in_thread (task, ide_clang_locate_symbol_worker);
 }
 
@@ -1816,6 +1829,7 @@ ide_clang_get_symbol_tree_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_get_symbol_tree_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, get_symbol_tree_free);
+  ide_task_set_priority (task, PRIORITY_GET_SYMTREE);
   ide_task_run_in_thread (task, ide_clang_get_symbol_tree_worker);
 }
 
@@ -2004,6 +2018,7 @@ ide_clang_get_highlight_index_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_get_highlight_index_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, get_highlight_index_free);
+  ide_task_set_priority (task, PRIORITY_HIGHLIGHT);
   ide_task_run_in_thread (task, ide_clang_get_highlight_index_worker);
 }
 
@@ -2131,6 +2146,7 @@ ide_clang_get_index_key_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_get_index_key_async);
   ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
   ide_task_set_task_data (task, state, get_index_key_free);
+  ide_task_set_priority (task, PRIORITY_GET_LOCATION);
   ide_task_run_in_thread (task, ide_clang_get_index_key_worker);
 }
 
