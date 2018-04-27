@@ -35,6 +35,7 @@ struct _IdeClangClient
   IdeSubprocessSupervisor  *supervisor;
   JsonrpcClient            *rpc_client;
   GFile                    *root_uri;
+  GHashTable               *seq_by_file;
   gint                      state;
 };
 
@@ -65,6 +66,71 @@ call_free (gpointer data)
 }
 
 static void
+ide_clang_client_sync_buffers (IdeClangClient *self)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  IdeContext *context;
+  IdeUnsavedFiles *ufs;
+
+  g_assert (IDE_IS_CLANG_CLIENT (self));
+
+  /*
+   * We need to sync buffers to the subprocess, but only those that are of any
+   * consequence to us. So that means C, C++, or Obj-C files and headers.
+   *
+   * Further more, to avoid the chatter, we only want to send updated buffers
+   * for unsaved files which we have not already sent or we'll be way too
+   * chatty and cancel any cached translation units the subprocess has.
+   *
+   * Since the subprocess processes commands in order, we can simply call the
+   * function to set the buffer on the peer and ignore the result (and it will
+   * be used on subsequence commands).
+   */
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  ufs = ide_context_get_unsaved_files (context);
+  ar = ide_unsaved_files_to_array (ufs);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_unsaved_file_unref);
+
+  if (self->seq_by_file == NULL)
+    self->seq_by_file = g_hash_table_new_full (g_file_hash,
+                                               (GEqualFunc)g_file_equal,
+                                               g_object_unref,
+                                               NULL);
+
+  for (guint i = 0; i < ar->len; i++)
+    {
+      IdeUnsavedFile *uf = g_ptr_array_index (ar, i);
+      GFile *file = ide_unsaved_file_get_file (uf);
+      gsize seq = (gsize)ide_unsaved_file_get_sequence (uf);
+      gsize prev = GPOINTER_TO_SIZE (g_hash_table_lookup (self->seq_by_file, file));
+      g_autofree gchar *name = g_file_get_basename (file);
+      const gchar *dot = strrchr (name, '.');
+
+      if (seq <= prev)
+        continue;
+
+      if (dot == NULL || !(g_str_equal (dot, ".c") ||
+                           g_str_equal (dot, ".h") ||
+                           g_str_equal (dot, ".cc") ||
+                           g_str_equal (dot, ".hh") ||
+                           g_str_equal (dot, ".cpp") ||
+                           g_str_equal (dot, ".hpp") ||
+                           g_str_equal (dot, ".cxx") ||
+                           g_str_equal (dot, ".hxx") ||
+                           g_str_equal (dot, ".m")))
+        continue;
+
+      g_hash_table_insert (self->seq_by_file, g_object_ref (file), GSIZE_TO_POINTER (seq));
+
+      ide_clang_client_set_buffer_async (self,
+                                         file,
+                                         ide_unsaved_file_get_content (uf),
+                                         NULL, NULL, NULL);
+    }
+}
+
+static void
 ide_clang_client_subprocess_exited (IdeClangClient          *self,
                                     IdeSubprocess           *subprocess,
                                     IdeSubprocessSupervisor *supervisor)
@@ -77,6 +143,8 @@ ide_clang_client_subprocess_exited (IdeClangClient          *self,
 
   if (self->state == STATE_RUNNING)
     self->state = STATE_SPAWNING;
+
+  g_clear_pointer (&self->seq_by_file, g_hash_table_unref);
 
   IDE_EXIT;
 }
@@ -208,16 +276,49 @@ ide_clang_client_get_client_finish (IdeClangClient  *self,
 }
 
 static void
+ide_clang_client_buffer_saved (IdeClangClient   *self,
+                               IdeBuffer        *buffer,
+                               IdeBufferManager *bufmgr)
+{
+  IdeFile *file;
+  GFile *gfile;
+
+  g_assert (IDE_IS_CLANG_CLIENT (self));
+  g_assert (IDE_BUFFER (buffer));
+  g_assert (IDE_BUFFER_MANAGER (bufmgr));
+
+  /*
+   * We need to clear the cached buffer on the peer (and potentially
+   * pop the translation unit cache) now that the buffer has been
+   * saved to disk and we no longer need the draft.
+   */
+
+  file = ide_buffer_get_file (buffer);
+  gfile = ide_file_get_file (file);
+  if (self->seq_by_file != NULL)
+    g_hash_table_remove (self->seq_by_file, gfile);
+
+  /* skip if thereis no peer */
+  if (self->rpc_client == NULL)
+    return;
+
+  if (gfile != NULL)
+    ide_clang_client_set_buffer_async (self, gfile, NULL, NULL, NULL, NULL);
+}
+
+static void
 ide_clang_client_constructed (GObject *object)
 {
   IdeClangClient *self = (IdeClangClient *)object;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *cwd = NULL;
+  IdeBufferManager *bufmgr;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  bufmgr = ide_context_get_buffer_manager (context);
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
 
@@ -248,6 +349,12 @@ ide_clang_client_constructed (GObject *object)
   g_signal_connect_object (self->supervisor,
                            "exited",
                            G_CALLBACK (ide_clang_client_subprocess_exited),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (bufmgr,
+                           "buffer-saved",
+                           G_CALLBACK (ide_clang_client_buffer_saved),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -297,6 +404,7 @@ ide_clang_client_finalize (GObject *object)
 {
   IdeClangClient *self = (IdeClangClient *)object;
 
+  g_clear_pointer (&self->seq_by_file, g_hash_table_unref);
   g_clear_object (&self->rpc_client);
   g_clear_object (&self->root_uri);
   g_clear_object (&self->supervisor);
@@ -576,6 +684,8 @@ ide_clang_client_get_index_key_async (IdeClangClient      *self,
       return;
     }
 
+  ide_clang_client_sync_buffers (self);
+
   path = g_file_get_path (file);
 
   params = JSONRPC_MESSAGE_NEW (
@@ -668,6 +778,8 @@ ide_clang_client_find_nearest_scope_async (IdeClangClient      *self,
                                  "File must be a local file");
       return;
     }
+
+  ide_clang_client_sync_buffers (self);
 
   path = g_file_get_path (file);
 
@@ -762,6 +874,8 @@ ide_clang_client_locate_symbol_async (IdeClangClient      *self,
       return;
     }
 
+  ide_clang_client_sync_buffers (self);
+
   path = g_file_get_path (file);
 
   params = JSONRPC_MESSAGE_NEW (
@@ -844,6 +958,8 @@ ide_clang_client_get_symbol_tree_async (IdeClangClient      *self,
                                  "File must be a local file");
       return;
     }
+
+  ide_clang_client_sync_buffers (self);
 
   path = g_file_get_path (file);
 
@@ -940,6 +1056,8 @@ ide_clang_client_diagnose_async (IdeClangClient      *self,
       return;
     }
 
+  ide_clang_client_sync_buffers (self);
+
   path = g_file_get_path (file);
 
   params = JSONRPC_MESSAGE_NEW (
@@ -1017,6 +1135,8 @@ ide_clang_client_get_highlight_index_async (IdeClangClient      *self,
       return;
     }
 
+  ide_clang_client_sync_buffers (self);
+
   path = g_file_get_path (file);
 
   params = JSONRPC_MESSAGE_NEW (
@@ -1093,6 +1213,8 @@ ide_clang_client_complete_async (IdeClangClient      *self,
                                  "File must be a local file");
       return;
     }
+
+  ide_clang_client_sync_buffers (self);
 
   path = g_file_get_path (file);
 
