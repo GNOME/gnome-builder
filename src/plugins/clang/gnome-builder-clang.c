@@ -37,6 +37,7 @@
 static guint      in_flight;
 static gboolean   closing;
 static GMainLoop *main_loop;
+static GQueue     ops;
 
 /* Client Operations {{{1 */
 
@@ -46,6 +47,7 @@ typedef struct
   JsonrpcClient *client;
   GVariant      *id;
   GCancellable  *cancellable;
+  GList          link;
 } ClientOp;
 
 static void
@@ -96,6 +98,7 @@ client_op_unref (ClientOp *op)
       g_clear_object (&op->cancellable);
       g_clear_object (&op->client);
       g_clear_pointer (&op->id, g_variant_unref);
+      g_queue_unlink (&ops, &op->link);
       g_slice_free (ClientOp, op);
 
       in_flight--;
@@ -118,6 +121,9 @@ client_op_new (JsonrpcClient *client,
   op->client = g_object_ref (client);
   op->cancellable = g_cancellable_new ();
   op->ref_count = 1;
+  op->link.data = op;
+
+  g_queue_push_tail_link (&ops, &op->link);
 
   ++in_flight;
 
@@ -812,6 +818,49 @@ handle_initialize (JsonrpcServer *server,
   client_op_reply (op, NULL);
 }
 
+/* Cancel Request {{{1 */
+
+static void
+handle_cancel_request (JsonrpcServer *server,
+                       JsonrpcClient *client,
+                       const gchar   *method,
+                       GVariant      *id,
+                       GVariant      *params,
+                       IdeClang      *clang)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GVariant) cid = NULL;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "$/cancelRequest"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  if (params == NULL || !(cid = g_variant_lookup_value (params, "id", NULL)))
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  /* Lookup in-flight command to cancel it */
+
+  for (const GList *iter = ops.head; iter != NULL; iter = iter->next)
+    {
+      ClientOp *ele = iter->data;
+
+      if (g_variant_equal (ele->id, cid))
+        {
+          g_cancellable_cancel (ele->cancellable);
+          break;
+        }
+    }
+
+  client_op_reply (op, NULL);
+}
+
 /* Main and Server Setup {{{1 */
 
 static void
@@ -881,6 +930,7 @@ main (gint argc,
   ADD_HANDLER ("clang/locateSymbol", handle_locate_symbol);
   ADD_HANDLER ("clang/getHighlightIndex", handle_get_highlight_index);
   ADD_HANDLER ("clang/setBuffer", handle_set_buffer);
+  ADD_HANDLER ("$/cancelRequest", handle_cancel_request);
 
 #undef ADD_HANDLER
 

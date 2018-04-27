@@ -48,8 +48,12 @@ enum {
 
 typedef struct
 {
-  gchar    *method;
-  GVariant *params;
+  IdeClangClient *self;
+  GCancellable   *cancellable;
+  gchar          *method;
+  GVariant       *params;
+  GVariant       *id;
+  gulong          cancel_id;
 } Call;
 
 G_DEFINE_TYPE_EXTENDED (IdeClangClient, ide_clang_client, IDE_TYPE_OBJECT, 0,
@@ -60,8 +64,16 @@ call_free (gpointer data)
 {
   Call *c = data;
 
+  if (c->cancel_id != 0)
+    g_cancellable_disconnect (c->cancellable, c->cancel_id);
+
+  c->cancel_id = 0;
+
   g_clear_pointer (&c->method, g_free);
   g_clear_pointer (&c->params, g_variant_unref);
+  g_clear_pointer (&c->id, g_variant_unref);
+  g_clear_object (&c->cancellable);
+  g_clear_object (&c->self);
   g_slice_free (Call, c);
 }
 
@@ -144,6 +156,7 @@ ide_clang_client_subprocess_exited (IdeClangClient          *self,
   if (self->state == STATE_RUNNING)
     self->state = STATE_SPAWNING;
 
+  g_clear_object (&self->rpc_client);
   g_clear_pointer (&self->seq_by_file, g_hash_table_unref);
 
   IDE_EXIT;
@@ -168,6 +181,7 @@ ide_clang_client_subprocess_spawned (IdeClangClient          *self,
   g_assert (IDE_IS_CLANG_CLIENT (self));
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (IDE_IS_SUBPROCESS_SUPERVISOR (supervisor));
+  g_assert (self->rpc_client == NULL);
 
   if (self->state == STATE_SPAWNING)
     self->state = STATE_RUNNING;
@@ -185,7 +199,6 @@ ide_clang_client_subprocess_spawned (IdeClangClient          *self,
   fd = g_unix_output_stream_get_fd (G_UNIX_OUTPUT_STREAM (output));
   g_unix_set_fd_nonblocking (fd, TRUE, NULL);
 
-  g_clear_object (&self->rpc_client);
   self->rpc_client = jsonrpc_client_new (stream);
   jsonrpc_client_set_use_gvariant (self->rpc_client, TRUE);
 
@@ -472,17 +485,46 @@ ide_clang_client_call_get_client_cb (GObject      *object,
       return;
     }
 
+  if (ide_task_return_error_if_cancelled (task))
+    return;
+
   call = ide_task_get_task_data (task);
 
   g_assert (call != NULL);
   g_assert (call->method != NULL);
 
-  jsonrpc_client_call_async (client,
-                             call->method,
-                             call->params,
-                             ide_task_get_cancellable (task),
-                             ide_clang_client_call_cb,
-                             g_object_ref (task));
+  jsonrpc_client_call_with_id_async (client,
+                                     call->method,
+                                     call->params,
+                                     &call->id,
+                                     ide_task_get_cancellable (task),
+                                     ide_clang_client_call_cb,
+                                     g_object_ref (task));
+}
+
+static void
+ide_clang_client_call_cancelled (GCancellable *cancellable,
+                                 Call         *call)
+{
+  g_autoptr(GVariant) params = NULL;
+  GVariantDict dict;
+
+  g_assert (G_IS_CANCELLABLE (cancellable));
+  g_assert (call != NULL);
+  g_assert (call->cancellable == cancellable);
+  g_assert (call->cancel_id != 0);
+  g_assert (IDE_IS_CLANG_CLIENT (call->self));
+
+  if (call->self->rpc_client == NULL)
+    return;
+
+  g_variant_dict_init (&dict, NULL);
+  g_variant_dict_insert_value (&dict, "id", call->id);
+
+  ide_clang_client_call_async (call->self,
+                               "$/cancelRequest",
+                               g_variant_dict_end (&dict),
+                               NULL, NULL, NULL);
 }
 
 void
@@ -501,12 +543,22 @@ ide_clang_client_call_async (IdeClangClient      *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   call = g_slice_new0 (Call);
+  call->self = g_object_ref (self);
   call->method = g_strdup (method);
   call->params = g_variant_ref_sink (params);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_clang_client_call_async);
   ide_task_set_task_data (task, call, call_free);
+
+  if (cancellable != NULL)
+    {
+      call->cancellable = g_object_ref (cancellable);
+      call->cancel_id = g_cancellable_connect (cancellable,
+                                               G_CALLBACK (ide_clang_client_call_cancelled),
+                                               call,
+                                               NULL);
+    }
 
   ide_clang_client_get_client_async (self,
                                      cancellable,
