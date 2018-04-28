@@ -1134,6 +1134,18 @@ ide_task_return_boolean (IdeTask  *self,
   ide_task_return (self, g_steal_pointer (&ret));
 }
 
+/**
+ * ide_task_return_boxed: (skip)
+ * @self: a #IdeTask
+ * @result_type: the #GType of the boxed type
+ * @result: (transfer full): the result to be returned
+ *
+ * This is similar to ide_task_return_pointer(), but allows the task to
+ * know the boxed #GType so that the result may be propagated to chained
+ * tasks.
+ *
+ * Since: 3.30
+ */
 void
 ide_task_return_boxed (IdeTask  *self,
                        GType     result_type,
