@@ -17,6 +17,7 @@
                 <child>
                   <object class="GtkCellRendererText" id="variable_cell">
                     <property name="xalign">0.0</property>
+                    <property name="editable">1</property>
                   </object>
                 </child>
               </object>

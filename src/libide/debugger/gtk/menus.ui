@@ -13,4 +13,12 @@
       </item>
     </section>
   </menu>
+  <menu id="ide-debugger-view-locals-popup-menu">
+    <section id="ide-debugger-view-locals-popup-menu-section">
+      <item>
+        <attribute name="label" translatable="yes">_Watch expression...</attribute>
+        <attribute name="action">debugger.watch-expression</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

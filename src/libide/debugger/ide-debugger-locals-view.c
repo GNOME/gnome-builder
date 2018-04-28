@@ -215,6 +215,68 @@ ide_debugger_locals_view_class_init (IdeDebuggerLocalsViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLocalsView, variable_column);
 }
 
+static gboolean
+ide_debugger_locals_button_press (GtkWidget      *widget,
+                                  GdkEventButton *bevent) 
+{
+  GtkTreeView *self = (GtkTreeView *)widget;
+  GMenu *menu;
+  GtkWidget *menu_widget;
+  gint cell_y;
+  GtkTreePath *tree_path = NULL;
+  GtkAllocation alloc;
+
+  if ((bevent->type == GDK_BUTTON_PRESS) && (bevent->button == GDK_BUTTON_SECONDARY))
+    {
+      if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+        gtk_widget_grab_focus (GTK_WIDGET (self));
+
+      gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (self),
+                                     bevent->x,
+                                     bevent->y,
+                                     &tree_path,
+                                     NULL,
+                                     NULL,
+                                     &cell_y);
+
+      if (tree_path)
+        {
+          //gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+          //gtk_tree_model_get_iter (GTK_TREE_MODEL (self->tree_store), &iter, tree_path);
+          //gtk_tree_model_get (GTK_TREE_MODEL (self->tree_store), &iter, 0, &node, -1);
+
+          menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT,
+                                                 "ide-debugger-view-locals-popup-menu");
+          menu_widget = gtk_menu_new_from_model (G_MENU_MODEL (menu));
+    
+          gtk_menu_attach_to_widget (GTK_MENU(menu_widget),
+                                     GTK_WIDGET (self),
+                                     NULL);
+          g_signal_connect_after (menu,
+                                  "selection-done",
+                                  G_CALLBACK (gtk_widget_destroy),
+                                  NULL);
+    
+          g_object_set (G_OBJECT (menu),
+                        "rect-anchor-dx", alloc.x + alloc.width - 12,
+                        "rect-anchor-dy", bevent->y - cell_y - 3,
+                        NULL);
+          gtk_menu_popup_at_widget (GTK_MENU (menu_widget),
+                                    GTK_WIDGET (self),
+                                    GDK_GRAVITY_NORTH_WEST,
+                                    GDK_GRAVITY_NORTH_WEST,
+                                    (GdkEvent *)bevent);
+          //g_object_unref (node);
+          gtk_tree_path_free (tree_path);
+        }
+
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_STOP;
+  //return GTK_WIDGET_CLASS (ide_tree_parent_class)->button_press_event (widget, button);
+}
+
 static void
 ide_debugger_locals_view_init (IdeDebuggerLocalsView *self)
 {
@@ -243,6 +305,8 @@ ide_debugger_locals_view_init (IdeDebuggerLocalsView *self)
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->value_column),
                                       GTK_CELL_RENDERER (self->value_cell),
                                       string_property_cell_data_func, (gchar *)"value", NULL);
+ 
+  g_signal_connect(self->tree_view, "button-press-event", (GCallback) ide_debugger_locals_button_press, NULL);
 }
 
 GtkWidget *
@@ -387,6 +451,57 @@ ide_debugger_locals_view_load_params_cb (GObject      *object,
 }
 
 void
+ide_debugger_list_expressions (IdeDebuggerLocalsView *self, IdeDebugger *debugger)
+{
+  g_autoptr(GPtrArray) expressions = NULL;
+  GtkTreeIter parent;
+  IdeDebuggerVariable *var;
+
+  g_assert (IDE_IS_DEBUGGER (debugger));
+  g_assert (IDE_IS_DEBUGGER_LOCALS_VIEW (self));
+
+  expressions = g_ptr_array_new ();
+  var = ide_debugger_variable_new ("foo");
+  ide_debugger_variable_set_type_name (var, "char*");
+  ide_debugger_variable_set_value (var, "hola");
+  g_ptr_array_add (expressions, g_steal_pointer (&var));
+
+  var = ide_debugger_variable_new ("bar");
+  ide_debugger_variable_set_type_name (var, "char*");
+  ide_debugger_variable_set_value (var, "adios");
+  g_ptr_array_add (expressions, g_steal_pointer (&var));
+
+  var = ide_debugger_variable_new ("bazz");
+  ide_debugger_variable_set_type_name (var, "char*");
+  ide_debugger_variable_set_value (var, "eco");
+  g_ptr_array_add (expressions, g_steal_pointer (&var));
+
+  gtk_tree_store_append (self->tree_store, &parent, NULL);
+  gtk_tree_store_set (self->tree_store, &parent, 1, _("Expressions"), -1);
+
+  for (guint i = 0; i < expressions->len; i++)
+    {
+      var = g_ptr_array_index (expressions, i);
+      GtkTreeIter iter;
+
+      gtk_tree_store_append (self->tree_store, &iter, &parent);
+      gtk_tree_store_set (self->tree_store, &iter, 0, var, -1);
+
+      /* Add a deummy row that we can backfill when the user requests
+       * that the variable is expanded.
+       */
+      if (ide_debugger_variable_get_has_children (var))
+        {
+          GtkTreeIter dummy;
+
+          gtk_tree_store_append (self->tree_store, &dummy, &iter);
+        }
+    }
+
+  gtk_tree_view_expand_all (self->tree_view);
+}
+
+void
 ide_debugger_locals_view_load_async (IdeDebuggerLocalsView *self,
                                      IdeDebuggerThread     *thread,
                                      IdeDebuggerFrame      *frame,
@@ -429,6 +544,8 @@ ide_debugger_locals_view_load_async (IdeDebuggerLocalsView *self,
                                   cancellable,
                                   ide_debugger_locals_view_load_locals_cb,
                                   g_steal_pointer (&task));
+
+  ide_debugger_list_expressions (self, debugger);
 }
 
 gboolean
