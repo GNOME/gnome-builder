@@ -75,6 +75,69 @@ check_running_state (IdeDebugger *self,
 }
 
 static void
+ide_debugger_watch_expression (IdeDebugger                  *self,
+                               const IdeDebuggerActionEntry *entry,
+                               GVariant                     *param)
+{
+  g_assert (IDE_IS_DEBUGGER (self));
+  g_assert (entry != NULL);
+
+  /*GtkBuilder *builder;*/
+  /*GObject *window;*/
+  /*GObject *button;*/
+
+  /*builder = gtk_builder_new ();*/
+  /*gtk_builder_add_from_file (builder, "builder.ui", NULL);*/
+
+
+  /*GtkBuilder *builder;*/
+  /*GtkWidget *palettes_placeholder;*/
+
+  /*g_type_ensure (GB_TYPE_COLOR_PICKER_PREFS_LIST);*/
+  /*g_type_ensure (GB_TYPE_COLOR_PICKER_PREFS_PALETTE_LIST);*/
+
+  /*builder = gtk_builder_new_from_resource ("/org/gnome/builder/plugins/color-picker-plugin/gtk/color-picker-prefs.ui");*/
+
+  /*self->palettes_box = GB_COLOR_PICKER_PREFS_PALETTE_LIST (gtk_builder_get_object (builder, "palettes_box"));*/
+  /*palettes_placeholder = GTK_WIDGET (gtk_builder_get_object (builder, "palettes_placeholder"));*/
+
+  /*[> Connect signal handlers to the constructed widgets. <]*/
+  /*window = gtk_builder_get_object (builder, "window");*/
+  /*g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);*/
+
+  /*button = gtk_builder_get_object (builder, "button1");*/
+  /*g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);*/
+
+  /*button = gtk_builder_get_object (builder, "button2");*/
+  /*g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);*/
+  /*//TODO: Add a dialog for a new expression*/
+  /*GtkWidget *main_app_window; // Window the dialog should show up on*/
+  /*GtkWidget *dialog;*/
+  /*GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;*/
+  /*dialog = gtk_dialog_new_with_buttons ("My dialog",*/
+                                        /*main_app_window,*/
+                                        /*flags,*/
+                                        /*_("_OK"),*/
+                                        /*GTK_RESPONSE_ACCEPT,*/
+                                        /*_("_Cancel"),*/
+                                        /*GTK_RESPONSE_REJECT,*/
+                                        /*NULL);*/
+
+  /*int result = gtk_dialog_run (GTK_DIALOG (dialog));*/
+  /*switch (result)*/
+    /*{*/
+      /*case GTK_RESPONSE_ACCEPT:*/
+         /*// do_application_specific_something ();*/
+         /*break;*/
+      /*default:*/
+         /*// do_nothing_since_dialog_was_cancelled ();*/
+         /*break;*/
+    /*}*/
+  /*gtk_widget_destroy (dialog);*/
+
+}
+
+static void
 ide_debugger_actions_movement (IdeDebugger                  *self,
                                const IdeDebuggerActionEntry *entry,
                                GVariant                     *param)
@@ -103,6 +166,7 @@ static IdeDebuggerActionEntry action_info[] = {
   { "step-in",   ide_debugger_actions_movement, IDE_DEBUGGER_MOVEMENT_STEP_IN,   RUNNING_STARTED | RUNNING_NOT_ACTIVE },
   { "step-over", ide_debugger_actions_movement, IDE_DEBUGGER_MOVEMENT_STEP_OVER, RUNNING_STARTED | RUNNING_NOT_ACTIVE },
   { "finish",    ide_debugger_actions_movement, IDE_DEBUGGER_MOVEMENT_FINISH,    RUNNING_STARTED | RUNNING_NOT_ACTIVE },
+  { "watch-expression", ide_debugger_watch_expression, IDE_DEBUGGER_MOVEMENT_FINISH,    RUNNING_STARTED | RUNNING_NOT_ACTIVE },
 };
 
 static gboolean
