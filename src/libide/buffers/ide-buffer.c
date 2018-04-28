@@ -54,9 +54,7 @@
 #include "vcs/ide-vcs.h"
 #include "threading/ide-task.h"
 
-#define DEFAULT_DIAGNOSE_TIMEOUT_MSEC          333
 #define SETTLING_DELAY_MSEC                    333
-#define DEFAULT_DIAGNOSE_CONSERVE_TIMEOUT_MSEC 5000
 #define RECLAIMATION_TIMEOUT_SECS              1
 #define MODIFICATION_TIMEOUT_SECS              1
 
