@@ -33,7 +33,7 @@
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "plugins/ide-extension-set-adapter.h"
 
-#define DEFAULT_DIAGNOSE_DELAY 100
+#define DEFAULT_DIAGNOSE_DELAY 333
 
 typedef struct
 {
