@@ -116,10 +116,9 @@ GbpSysrootManager *
 gbp_sysroot_manager_get_default (void)
 {
   static GbpSysrootManager *instance;
+
   if (instance == NULL)
-    {
-      instance = g_object_new (GBP_TYPE_SYSROOT_MANAGER, NULL);
-    }
+    instance = g_object_new (GBP_TYPE_SYSROOT_MANAGER, NULL);
 
   return instance;
 }
