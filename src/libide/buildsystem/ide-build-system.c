@@ -722,3 +722,31 @@ ide_build_system_get_build_flags_for_dir_finish (IdeBuildSystem  *self,
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
+
+/**
+ * ide_build_system_supports_toolchain:
+ * @self: an #IdeBuildSystem
+ * @toolchain: a #IdeToolchain
+ *
+ * Checks whether the build system supports the given toolchain.
+ *
+ * Returns: %TRUE if the toolchain is supported by the build system, %FALSE otherwise
+ */
+gboolean
+ide_build_system_supports_toolchain (IdeBuildSystem *self,
+                                     IdeToolchain   *toolchain)
+{
+  const gchar *toolchain_id;
+
+  g_return_val_if_fail (IDE_IS_BUILD_SYSTEM (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN (toolchain), FALSE);
+
+  toolchain_id = ide_toolchain_get_id (toolchain);
+  if (g_strcmp0 (toolchain_id, "default") == 0)
+    return TRUE;
+
+  if (IDE_BUILD_SYSTEM_GET_IFACE (self)->supports_toolchain)
+    return IDE_BUILD_SYSTEM_GET_IFACE (self)->supports_toolchain (self, toolchain);
+
+  return FALSE;
+}
