@@ -23,6 +23,7 @@
 
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-build-target.h"
+#include "gbp-meson-toolchain.h"
 
 struct _GbpMesonBuildSystem
 {
@@ -664,6 +665,19 @@ gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
   return NULL;
 }
 
+gboolean
+gbp_meson_build_system_supports_toolchain (IdeBuildSystem *self,
+                                           IdeToolchain   *toolchain)
+{
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (self));
+  g_assert (IDE_IS_TOOLCHAIN (toolchain));
+
+  if (GBP_IS_MESON_TOOLCHAIN (toolchain))
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 build_system_iface_init (IdeBuildSystemInterface *iface)
 {
@@ -675,6 +689,7 @@ build_system_iface_init (IdeBuildSystemInterface *iface)
   iface->get_build_flags_for_files_async = gbp_meson_build_system_get_build_flags_for_files_async;
   iface->get_build_flags_for_files_finish = gbp_meson_build_system_get_build_flags_for_files_finish;
   iface->get_builddir = gbp_meson_build_system_get_builddir;
+  iface->supports_toolchain = gbp_meson_build_system_supports_toolchain;
 }
 
 static void
