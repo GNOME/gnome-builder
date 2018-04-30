@@ -19,7 +19,9 @@ sysroot_sources = [
   'gbp-sysroot-runtime-provider.c',
   'gbp-sysroot-runtime-provider.h',
   'gbp-sysroot-subprocess-launcher.c',
-  'gbp-sysroot-subprocess-launcher.h'
+  'gbp-sysroot-subprocess-launcher.h',
+  'gbp-sysroot-toolchain-provider.c',
+  'gbp-sysroot-toolchain-provider.h'
 ]
 
 gnome_builder_plugins_sources += files(sysroot_sources)
