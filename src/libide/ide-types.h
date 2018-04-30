@@ -122,6 +122,10 @@ typedef struct _IdeTest                        IdeTest;
 typedef struct _IdeTestManager                 IdeTestManager;
 typedef struct _IdeTestProvider                IdeTestProvider;
 
+typedef struct _IdeToolchain                   IdeToolchain;
+typedef struct _IdeToolchainManager            IdeToolchainManager;
+typedef struct _IdeToolchainProvider           IdeToolchainProvider;
+
 typedef struct _IdeTransferManager             IdeTransferManager;
 typedef struct _IdeTransfer                    IdeTransfer;
 

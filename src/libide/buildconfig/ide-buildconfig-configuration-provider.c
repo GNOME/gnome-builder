@@ -209,6 +209,7 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
   load_string (config, self->key_file, config_id, "name", "display-name");
   load_string (config, self->key_file, config_id, "run-opts", "run-opts");
   load_string (config, self->key_file, config_id, "runtime", "runtime-id");
+  load_string (config, self->key_file, config_id, "toolchain", "toolchain-id");
   load_string (config, self->key_file, config_id, "prefix", "prefix");
   load_string (config, self->key_file, config_id, "app-id", "app-id");
   load_strv (config, self->key_file, config_id, "prebuild", "prebuild");
@@ -296,6 +297,7 @@ add_default:
                            "display-name", "Default",
                            "id", "default",
                            "runtime-id", "host",
+                           "toolchain-id", "default",
                            NULL);
   ide_configuration_set_dirty (fallback, FALSE);
   ide_configuration_provider_emit_added (provider, fallback);
@@ -426,6 +428,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
       PERSIST_STRING_KEY ("name", get_display_name);
       PERSIST_STRING_KEY ("runtime", get_runtime_id);
+      PERSIST_STRING_KEY ("toolchain", get_toolchain_id);
       PERSIST_STRING_KEY ("config-opts", get_config_opts);
       PERSIST_STRING_KEY ("run-opts", get_run_opts);
       PERSIST_STRING_KEY ("prefix", get_prefix);
@@ -590,6 +593,7 @@ ide_buildconfig_configuration_provider_delete (IdeConfigurationProvider *provide
                                  "display-name", "Default",
                                  "id", "default",
                                  "runtime-id", "host",
+                                 "toolchain-id", "default",
                                  NULL);
 
       /*

@@ -29,10 +29,12 @@ G_BEGIN_DECLS
 void _ide_build_pipeline_cancel          (IdeBuildPipeline *self);
 void _ide_build_pipeline_set_runtime     (IdeBuildPipeline *self,
                                           IdeRuntime       *runtime);
+void _ide_build_pipeline_set_toolchain   (IdeBuildPipeline *self,
+                                          IdeToolchain     *toolchain);
 void _ide_build_pipeline_set_message     (IdeBuildPipeline *self,
                                           const gchar      *message);
 void _ide_build_pipeline_mark_broken     (IdeBuildPipeline *self);
-void _ide_build_pipeline_set_device_info (IdeBuildPipeline *pipeline,
+void _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
                                           IdeDeviceInfo    *info);
 void _ide_build_pipeline_set_pty_size    (IdeBuildPipeline *self,
                                           guint             rows,
