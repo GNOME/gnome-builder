@@ -167,14 +167,16 @@ gbp_sysroot_runtime_get_arch (IdeRuntime *runtime)
 {
   GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
   GbpSysrootManager *sysroot_manager = NULL;
+  g_autoptr(IdeTriplet) triplet = NULL;
   const gchar *sysroot_id = NULL;
 
   g_assert (GBP_IS_SYSROOT_RUNTIME (self));
 
   sysroot_manager = gbp_sysroot_manager_get_default ();
   sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
+  triplet = ide_triplet_new (gbp_sysroot_manager_get_target_arch (sysroot_manager, sysroot_id));
 
-  return gbp_sysroot_manager_get_target_arch (sysroot_manager, sysroot_id);
+  return g_strdup (ide_triplet_get_arch (triplet));
 }
 
 static void

@@ -68,6 +68,7 @@ sysroot_manager_find_additional_pkgconfig_paths (GbpSysrootManager *self,
 {
   g_autofree gchar *path = NULL;
   g_autofree gchar *lib64_path = NULL;
+  g_autofree gchar *target_arch = NULL;
   g_autofree gchar *libmultiarch_path = NULL;
   g_autofree gchar *returned_paths = NULL;
 
@@ -76,44 +77,15 @@ sysroot_manager_find_additional_pkgconfig_paths (GbpSysrootManager *self,
   g_assert (target != NULL);
 
   path = gbp_sysroot_manager_get_target_path (self, target);
-  lib64_path = g_build_path (G_DIR_SEPARATOR_S, path, "usr", "lib64", "pkgconfig", NULL);
-  libmultiarch_path = g_build_path (G_DIR_SEPARATOR_S, path, "usr", "lib", "pkg-config.multiarch", NULL);
+  lib64_path = g_build_filename (path, "usr", "lib64", "pkgconfig", NULL);
+  target_arch = gbp_sysroot_manager_get_target_arch (self, target);
+  libmultiarch_path = g_build_filename (path, "usr", "lib", target_arch, "pkgconfig", NULL);
 
   if (g_file_test (lib64_path, G_FILE_TEST_EXISTS))
-    {
-      returned_paths = lib64_path;
-    }
+    returned_paths = lib64_path;
 
   if (g_file_test (libmultiarch_path, G_FILE_TEST_EXISTS))
-    {
-      g_autoptr(GFileInputStream) file_stream = NULL;
-      g_autoptr(GFile) multiarch_file = g_file_new_for_path (libmultiarch_path);
-      g_autoptr(GError) file_error = NULL;
-
-      file_stream = g_file_read (multiarch_file, NULL, &file_error);
-      if (file_error == NULL)
-        {
-          g_autoptr(GDataInputStream) data_stream = NULL;
-          g_autofree gchar *line = NULL;
-
-          data_stream = g_data_input_stream_new (G_INPUT_STREAM (file_stream));
-          while ((line = (gchar *)g_data_input_stream_read_line_utf8 (data_stream, NULL, NULL, &file_error)) != NULL)
-            {
-              g_autofree gchar *multiarch_path = NULL;
-
-              if (file_error != NULL)
-                {
-                  g_warning ("Error while reading \"%s\": %s", libmultiarch_path, file_error->message);
-                  break;
-                }
-
-              multiarch_path = g_build_path (G_DIR_SEPARATOR_S, path, "usr", "lib", line, "pkgconfig", NULL);
-              returned_paths = g_strjoin (":", multiarch_path, returned_paths, NULL);
-            }
-        }
-      else
-        g_warning ("Unable to read \"%s\": %s", libmultiarch_path, file_error->message);
-    }
+    returned_paths = g_strjoin (":", libmultiarch_path, returned_paths, NULL);
 
   return g_strdup (returned_paths);
 }
