@@ -3,4 +3,8 @@
   <gresource prefix="/org/gnome/builder/plugins">
     <file>cmake.plugin</file>
   </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/cmake">
+    <file>CMakeLists.txt</file>
+    <file>toolchain-info.ini.cmake</file>
+  </gresource>
 </gresources>
