@@ -606,6 +606,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
   IdeConfiguration *config;
+  IdeToolchain *toolchain;
   BootstrapState *state;
   const gchar *runtime_id;
   const gchar *build_arch;
@@ -620,7 +621,8 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
   ide_task_set_source_tag (task, gbp_flatpak_runtime_provider_bootstrap_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  triplet = ide_build_pipeline_get_host_triplet (pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (pipeline);
+  triplet = ide_toolchain_get_host_triplet (toolchain);
   build_arch = ide_triplet_get_arch (triplet);
   config = ide_build_pipeline_get_configuration (pipeline);
   runtime_id = ide_configuration_get_runtime_id (config);
