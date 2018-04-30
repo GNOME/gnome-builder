@@ -166,6 +166,7 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
   IdeConfiguration *configuration;
+  IdeToolchain *toolchain;
   g_autofree gchar *configure_path = NULL;
   g_autofree gchar *host_arg = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
@@ -189,7 +190,8 @@ register_configure_stage (IdeAutotoolsPipelineAddin  *self,
 
   /* --host=triplet */
   configuration = ide_build_pipeline_get_configuration (pipeline);
-  triplet = ide_build_pipeline_get_host_triplet (pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (pipeline);
+  triplet = ide_toolchain_get_host_triplet (toolchain);
   host_arg = g_strdup_printf ("--host=%s", ide_triplet_get_full_name (triplet));
   ide_subprocess_launcher_push_argv (launcher, host_arg);
 
