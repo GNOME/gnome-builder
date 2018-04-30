@@ -124,6 +124,7 @@ gbp_sysroot_toolchain_provider_try_poky (GbpSysrootToolchainProvider *self,
       g_autoptr(IdeSimpleToolchain) toolchain = NULL;
       g_autoptr(GFile) sdk_file = NULL;
       g_autofree gchar *toolchain_id = NULL;
+      g_autofree gchar *display_name = NULL;
       g_autofree gchar *sdk_canonical_path = NULL;
       g_autofree gchar *sdk_tools_path = NULL;
       g_autofree gchar *sdk_cc_path = NULL;
@@ -140,8 +141,9 @@ gbp_sysroot_toolchain_provider_try_poky (GbpSysrootToolchainProvider *self,
       sdk_file = g_file_new_for_path (sdk_path);
       sdk_canonical_path = g_file_get_path (sdk_file);
       toolchain_id = g_strdup_printf ("sysroot:%s", sdk_canonical_path);
+      display_name = g_strdup_printf (_("%s (Sysroot SDK)"), sdk_canonical_path);
       context = ide_object_get_context (IDE_OBJECT (self));
-      toolchain = ide_simple_toolchain_new (context, toolchain_id);
+      toolchain = ide_simple_toolchain_new (context, toolchain_id, display_name);
       ide_toolchain_set_host_triplet (IDE_TOOLCHAIN (toolchain), sysroot_triplet);
 
       sdk_tools_path = g_build_filename (sdk_canonical_path, "usr", "bin", sysroot_basename, NULL);

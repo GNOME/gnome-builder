@@ -40,7 +40,8 @@ struct _IdeSimpleToolchainClass
 
 IDE_AVAILABLE_IN_3_30
 IdeSimpleToolchain  *ide_simple_toolchain_new                    (IdeContext          *context,
-                                                                  const gchar         *id);
+                                                                  const gchar         *id,
+                                                                  const gchar         *display_name);
 IDE_AVAILABLE_IN_3_30
 void                 ide_simple_toolchain_set_tool_for_language  (IdeSimpleToolchain  *self,
                                                                   const gchar         *language,

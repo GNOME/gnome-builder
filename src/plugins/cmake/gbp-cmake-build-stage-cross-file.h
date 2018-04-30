@@ -1,4 +1,4 @@
-/* gbp-meson-toolchain.h
+/* gbp-cmake-build-stage-cross-file.h
  *
  * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
  * Copyright 2018 Collabora Ltd.
@@ -19,20 +19,17 @@
 
 #pragma once
 
-#include <glib/gi18n.h>
-
 #include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MESON_TOOLCHAIN (gbp_meson_toolchain_get_type())
+#define GBP_TYPE_CMAKE_BUILD_STAGE_CROSS_FILE (gbp_cmake_build_stage_cross_file_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpMesonToolchain, gbp_meson_toolchain, GBP, MESON_TOOLCHAIN, IdeSimpleToolchain)
+G_DECLARE_FINAL_TYPE (GbpCMakeBuildStageCrossFile, gbp_cmake_build_stage_cross_file, GBP, CMAKE_BUILD_STAGE_CROSS_FILE, IdeBuildStage)
 
-GbpMesonToolchain  *gbp_meson_toolchain_new              (IdeContext             *context);
-gboolean            gbp_meson_toolchain_load             (GbpMesonToolchain      *self,
-                                                          GFile                  *file,
-                                                          GError                **error);
-const gchar        *gbp_meson_toolchain_get_file_path    (GbpMesonToolchain      *self);
+GbpCMakeBuildStageCrossFile *gbp_cmake_build_stage_cross_file_new      (IdeContext                  *context,
+                                                                        IdeToolchain                *toolchain);
+gchar                       *gbp_cmake_build_stage_cross_file_get_path (GbpCMakeBuildStageCrossFile *stage,
+                                                                        IdeBuildPipeline            *pipeline);
 
 G_END_DECLS

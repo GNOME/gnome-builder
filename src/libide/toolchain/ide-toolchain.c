@@ -31,6 +31,7 @@
 typedef struct
 {
   gchar *id;
+  gchar *display_name;
   IdeTriplet *host_triplet;
 } IdeToolchainPrivate;
 
@@ -39,6 +40,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeToolchain, ide_toolchain, IDE_TYPE_OBJEC
 enum {
   PROP_0,
   PROP_ID,
+  PROP_DISPLAY_NAME,
   PROP_HOST_TRIPLET,
   N_PROPS
 };
@@ -79,6 +81,34 @@ ide_toolchain_set_id (IdeToolchain  *self,
       g_clear_pointer (&priv->id, g_free);
       priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
+    }
+}
+
+
+const gchar *
+ide_toolchain_get_display_name (IdeToolchain  *self)
+{
+  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_TOOLCHAIN (self), NULL);
+
+  return priv->display_name;
+}
+
+void
+ide_toolchain_set_display_name (IdeToolchain  *self,
+                                const gchar   *display_name)
+{
+  IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_TOOLCHAIN (self));
+  g_return_if_fail (display_name != NULL);
+
+  if (g_strcmp0 (display_name, priv->display_name) != 0)
+    {
+      g_clear_pointer (&priv->display_name, g_free);
+      priv->display_name = g_strdup (display_name);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
     }
 }
 
@@ -236,6 +266,9 @@ ide_toolchain_get_property (GObject    *object,
     case PROP_ID:
       g_value_set_string (value, ide_toolchain_get_id (self));
       break;
+    case PROP_DISPLAY_NAME:
+      g_value_set_string (value, ide_toolchain_get_display_name (self));
+      break;
     case PROP_HOST_TRIPLET:
       g_value_set_boxed (value, ide_toolchain_get_host_triplet (self));
       break;
@@ -256,6 +289,9 @@ ide_toolchain_set_property (GObject      *object,
     {
     case PROP_ID:
       ide_toolchain_set_id (self, g_value_get_string (value));
+      break;
+    case PROP_DISPLAY_NAME:
+      ide_toolchain_set_display_name (self, g_value_get_string (value));
       break;
     case PROP_HOST_TRIPLET:
       ide_toolchain_set_host_triplet (self, g_value_get_boxed (value));
@@ -281,6 +317,13 @@ ide_toolchain_class_init (IdeToolchainClass *klass)
     g_param_spec_string ("id",
                          "Id",
                          "The toolchain identifier",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_DISPLAY_NAME] =
+    g_param_spec_string ("display-name",
+                         "Display Name",
+                         "The displayable name of the toolchain",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -91,6 +91,7 @@ gbp_meson_toolchain_load (GbpMesonToolchain  *self,
 {
   g_autofree gchar *path = g_file_get_path (file);
   g_autofree gchar *id = g_strconcat ("meson:", path, NULL);
+  g_autofree gchar *display_name = g_strdup_printf (_("%s (Meson)"), path);
   g_autofree gchar *arch = NULL;
   g_autofree gchar *system = NULL;
   g_autoptr(GKeyFile) keyfile = g_key_file_new ();
@@ -115,6 +116,7 @@ gbp_meson_toolchain_load (GbpMesonToolchain  *self,
   self->file_path = g_steal_pointer (&path);
 
   ide_toolchain_set_id (IDE_TOOLCHAIN(self), id);
+  ide_toolchain_set_display_name (IDE_TOOLCHAIN(self), display_name);
   ide_toolchain_set_host_triplet (IDE_TOOLCHAIN(self), triplet);
 
   binaries = g_key_file_get_keys (keyfile, "binaries", NULL, &list_error);

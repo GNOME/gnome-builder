@@ -66,6 +66,11 @@ IDE_AVAILABLE_IN_3_30
 void           ide_toolchain_set_id                (IdeToolchain  *self,
                                                     const gchar   *id);
 IDE_AVAILABLE_IN_3_30
+const gchar   *ide_toolchain_get_display_name      (IdeToolchain  *self);
+IDE_AVAILABLE_IN_3_30
+void           ide_toolchain_set_display_name      (IdeToolchain  *self,
+                                                    const gchar   *display_name);
+IDE_AVAILABLE_IN_3_30
 IdeTriplet    *ide_toolchain_get_host_triplet      (IdeToolchain  *self);
 IDE_AVAILABLE_IN_3_30
 void           ide_toolchain_set_host_triplet      (IdeToolchain  *self,

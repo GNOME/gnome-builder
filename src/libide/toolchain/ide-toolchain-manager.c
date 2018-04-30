@@ -327,7 +327,8 @@ ide_toolchain_manager_init_async (GAsyncInitable      *initable,
                               providers);
   ide_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
 
-  default_toolchain = ide_simple_toolchain_new (context, "default");
+  default_toolchain = ide_simple_toolchain_new (context, "default", _("Default (Host operating system)"));
+
   idx = self->toolchains->len;
   g_ptr_array_add (self->toolchains, g_steal_pointer (&default_toolchain));
   g_list_model_items_changed (G_LIST_MODEL (self), idx, 0, 1);

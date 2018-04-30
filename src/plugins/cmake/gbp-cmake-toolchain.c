@@ -19,6 +19,7 @@
 
 #define G_LOG_DOMAIN "gbp-cmake-toolchain"
 
+#include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
 #include "gbp-cmake-toolchain.h"
@@ -196,6 +197,7 @@ gbp_cmake_toolchain_load (GbpCMakeToolchain *self,
   g_autoptr(IdeSubprocessLauncher) cmake_launcher = NULL;
   g_autoptr(IdeSubprocess) cmake_subprocess = NULL;
   g_autofree gchar *id = NULL;
+  g_autofree gchar *display_name = NULL;
 
   g_assert (GBP_IS_CMAKE_TOOLCHAIN (self));
 
@@ -204,6 +206,9 @@ gbp_cmake_toolchain_load (GbpCMakeToolchain *self,
 
   id = g_strconcat ("cmake:", self->file_path, NULL);
   ide_toolchain_set_id (IDE_TOOLCHAIN(self), id);
+
+  display_name = g_strdup_printf (_("%s (CMake)"), self->file_path);
+  ide_toolchain_set_display_name (IDE_TOOLCHAIN(self), display_name);
 
   build_dir = _gbp_cmake_toolchain_deploy_temporary_cmake (self, cancellable);
   if (build_dir == NULL)

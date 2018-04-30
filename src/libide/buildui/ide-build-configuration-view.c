@@ -42,6 +42,7 @@ struct _IdeBuildConfigurationView
   IdeEnvironmentEditor *environment_editor;
   GtkEntry             *prefix_entry;
   GtkListBox           *runtime_list_box;
+  GtkListBox           *toolchain_list_box;
   GtkEntry             *workdir_entry;
 };
 
@@ -125,6 +126,68 @@ create_runtime_row (gpointer item,
   return row;
 }
 
+static GtkWidget *
+create_toolchain_row (gpointer item,
+                      gpointer user_data)
+{
+  IdeToolchain *toolchain = item;
+  IdeConfiguration *configuration = user_data;
+  IdeRuntime *runtime;
+  GtkWidget *box;
+  GtkWidget *image;
+  GtkWidget *label;
+  GtkWidget *row;
+  gboolean sensitive;
+
+  g_assert (IDE_IS_TOOLCHAIN (toolchain));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  runtime = ide_configuration_get_runtime (configuration);
+  sensitive = ide_runtime_supports_toolchain (runtime, toolchain);
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "spacing", 12,
+                      "visible", TRUE,
+                      NULL);
+
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "use-markup", TRUE,
+                        "visible", TRUE,
+                        "xalign", 0.0f,
+                        NULL);
+  g_object_bind_property (toolchain, "display-name", label, "label", G_BINDING_SYNC_CREATE);
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "icon-name", "object-select-symbolic",
+                        "visible", TRUE,
+                        NULL);
+  g_object_bind_property_full (configuration, "toolchain",
+                               image, "visible",
+                               G_BINDING_SYNC_CREATE,
+                               map_pointer_to,
+                               NULL,
+                               g_object_ref (toolchain),
+                               g_object_unref);
+  gtk_container_add (GTK_CONTAINER (box), image);
+
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "hexpand", TRUE,
+                        "visible", TRUE,
+                        NULL);
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
+                      "child", box,
+                      "sensitive", sensitive,
+                      "visible", TRUE,
+                      NULL);
+
+  g_object_set_data (G_OBJECT (row), "IDE_TOOLCHAIN", toolchain);
+
+  return row;
+}
+
 static void
 runtime_row_activated (IdeBuildConfigurationView *self,
                        GtkListBoxRow             *row,
@@ -142,6 +205,33 @@ runtime_row_activated (IdeBuildConfigurationView *self,
     ide_configuration_set_runtime (self->configuration, runtime);
 }
 
+static void
+runtime_changed (IdeBuildConfigurationView *self,
+                 GParamSpec                *pspec,
+                 IdeConfiguration          *configuration)
+{
+  GList *children;
+  IdeRuntime *runtime;
+
+  g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
+  g_assert (IDE_IS_CONFIGURATION (configuration));
+
+  runtime = ide_configuration_get_runtime (configuration);
+  children = gtk_container_get_children (GTK_CONTAINER (self->toolchain_list_box));
+  for (const GList *iter = children; iter != NULL; iter = iter->next)
+    {
+      gboolean sensitive;
+      IdeToolchain *toolchain;
+      GtkWidget *widget = iter->data;
+
+      toolchain = g_object_get_data (G_OBJECT (widget), "IDE_TOOLCHAIN");
+      sensitive = ide_runtime_supports_toolchain (runtime, toolchain);
+      gtk_widget_set_sensitive (widget, sensitive);
+    }
+
+  g_list_free (children);
+}
+
 static gboolean
 treat_null_as_empty (GBinding     *binding,
                      const GValue *from_value,
@@ -154,10 +244,28 @@ treat_null_as_empty (GBinding     *binding,
 }
 
 static void
+toolchain_row_activated (IdeBuildConfigurationView *self,
+                         GtkListBoxRow             *row,
+                         GtkListBox                *list_box)
+{
+  IdeToolchain *toolchain;
+
+  g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  toolchain = g_object_get_data (G_OBJECT (row), "IDE_TOOLCHAIN");
+
+  if (self->configuration != NULL)
+    ide_configuration_set_toolchain (self->configuration, toolchain);
+}
+
+static void
 ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
                                       IdeConfiguration          *configuration)
 {
   IdeRuntimeManager *runtime_manager;
+  IdeToolchainManager *toolchain_manager;
   IdeContext *context;
   IdeEnvironment *environment;
 
@@ -166,6 +274,7 @@ ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
 
   context = ide_object_get_context (IDE_OBJECT (configuration));
   runtime_manager = ide_context_get_runtime_manager (context);
+  toolchain_manager = ide_context_get_toolchain_manager (context);
 
   self->display_name_binding =
     g_object_bind_property_full (configuration, "display-name",
@@ -190,6 +299,18 @@ ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
                            create_runtime_row,
                            g_object_ref (configuration),
                            g_object_unref);
+
+  gtk_list_box_bind_model (self->toolchain_list_box,
+                           G_LIST_MODEL (toolchain_manager),
+                           create_toolchain_row,
+                           g_object_ref (configuration),
+                           g_object_unref);
+
+  g_signal_connect_object (configuration,
+                           "notify::runtime",
+                           G_CALLBACK (runtime_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   environment = ide_configuration_get_environment (configuration);
   ide_environment_editor_set_environment (self->environment_editor, environment);
@@ -289,6 +410,7 @@ ide_build_configuration_view_class_init (IdeBuildConfigurationViewClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, environment_editor);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, prefix_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, runtime_list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, toolchain_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, workdir_entry);
 
   g_type_ensure (IDE_TYPE_ENVIRONMENT_EDITOR);
@@ -302,6 +424,12 @@ ide_build_configuration_view_init (IdeBuildConfigurationView *self)
   g_signal_connect_object (self->runtime_list_box,
                            "row-activated",
                            G_CALLBACK (runtime_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->toolchain_list_box,
+                           "row-activated",
+                           G_CALLBACK (toolchain_row_activated),
                            self,
                            G_CONNECT_SWAPPED);
 }

@@ -34,7 +34,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeSimpleToolchain, ide_simple_toolchain, IDE_TYPE_T
 
 IdeSimpleToolchain *
 ide_simple_toolchain_new (IdeContext   *context,
-                          const gchar  *id)
+                          const gchar  *id,
+                          const gchar  *display_name)
 {
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (id != NULL, NULL);
@@ -42,6 +43,7 @@ ide_simple_toolchain_new (IdeContext   *context,
   return g_object_new (IDE_TYPE_SIMPLE_TOOLCHAIN,
                        "context", context,
                        "id", id,
+                       "display-name", display_name,
                        NULL);
 }
 
