@@ -181,6 +181,7 @@ deploy_get_commit_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
   IdeConfiguration *config;
+  IdeToolchain *toolchain;
   const gchar *arch;
   const gchar *app_id;
   DeployState *state;
@@ -201,7 +202,8 @@ deploy_get_commit_cb (GObject      *object,
 
   context = ide_object_get_context (IDE_OBJECT (state->pipeline));
   config = ide_build_pipeline_get_configuration (state->pipeline);
-  triplet = ide_build_pipeline_get_host_triplet (state->pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (state->pipeline);
+  triplet = ide_toolchain_get_host_triplet (toolchain);
   arch = ide_triplet_get_arch (triplet);
   staging_dir = gbp_flatpak_get_staging_dir (state->pipeline);
   repo_dir = gbp_flatpak_get_repo_dir (context);
@@ -311,6 +313,7 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   const gchar *app_id;
   const gchar *arch;
   IdeDevice *device;
+  IdeToolchain *toolchain;
 
   IDE_ENTRY;
 
@@ -323,7 +326,8 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
 
   config = ide_build_pipeline_get_configuration (pipeline);
   device = ide_build_pipeline_get_device (pipeline);
-  triplet = ide_build_pipeline_get_host_triplet (pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (pipeline);
+  triplet = ide_toolchain_get_host_triplet (toolchain);
   arch = ide_triplet_get_arch (triplet);
   app_id = ide_configuration_get_app_id (config);
 
