@@ -1,6 +1,6 @@
-/* cmake-plugin.c
+/* gbp-cmake-toolchain-provider.h
  *
- * Copyright 2017 Martin Blanchard <tchaik@gmx.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors: Corentin Noël <corentin.noel@collabora.com>
  */
 
-#include <libpeas/peas.h>
+#pragma once
+
 #include <ide.h>
 
-#include "gbp-cmake-build-system.h"
-#include "gbp-cmake-pipeline-addin.h"
-#include "gbp-cmake-toolchain-provider.h"
+G_BEGIN_DECLS
 
-void
-gbp_cmake_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, GBP_TYPE_CMAKE_PIPELINE_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, GBP_TYPE_CMAKE_BUILD_SYSTEM);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TOOLCHAIN_PROVIDER, GBP_TYPE_CMAKE_TOOLCHAIN_PROVIDER);
-}
+#define GBP_TYPE_CMAKE_TOOLCHAIN_PROVIDER (gbp_cmake_toolchain_provider_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpCMakeToolchainProvider, gbp_cmake_toolchain_provider, GBP, CMAKE_TOOLCHAIN_PROVIDER, IdeObject)
+
+G_END_DECLS
