@@ -112,7 +112,7 @@ typedef struct
   /*
    * Priority for our GSource attached to @main_context.
    */
-  gint priority;
+  gint complete_priority;
 
   /*
    * The actual result information, broken down by result @type.
@@ -241,6 +241,13 @@ typedef struct
    * Our priority for scheduling tasks in the particular workqueue.
    */
   gint priority;
+
+  /*
+   * The priority for completing the result back on the main context. This
+   * defaults to a value lower than gtk redraw priority to ensure that gtk
+   * has higher priority than task completion.
+   */
+  gint complete_priority;
 
   /*
    * While we're waiting for our return callback, this is set to our
@@ -489,7 +496,7 @@ ide_task_complete (IdeTaskResult *result)
   g_source_set_name (source, "[ide-task] complete result");
   g_source_set_ready_time (source, -1);
   g_source_set_callback (source, ide_task_return_cb, result, NULL);
-  g_source_set_priority (source, result->priority);
+  g_source_set_priority (source, result->complete_priority);
   ret = g_source_attach (source, result->main_context);
   g_source_unref (source);
 
@@ -677,6 +684,7 @@ ide_task_init (IdeTask *self)
   priv->check_cancellable = TRUE;
   priv->release_on_propagate = TRUE;
   priv->priority = G_PRIORITY_DEFAULT;
+  priv->complete_priority = GDK_PRIORITY_REDRAW + 1;
   priv->main_context = g_main_context_ref_thread_default ();
   priv->global_link.data = self;
 
@@ -838,6 +846,34 @@ ide_task_set_priority (IdeTask *self,
   g_mutex_unlock (&priv->mutex);
 }
 
+gint
+ide_task_get_complete_priority (IdeTask *self)
+{
+  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
+  gint ret;
+
+  g_return_val_if_fail (IDE_IS_TASK (self), 0);
+
+  g_mutex_lock (&priv->mutex);
+  ret = priv->complete_priority;
+  g_mutex_unlock (&priv->mutex);
+
+  return ret;
+}
+
+void
+ide_task_set_complete_priority (IdeTask *self,
+                                gint     complete_priority)
+{
+  IdeTaskPrivate *priv = ide_task_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_TASK (self));
+
+  g_mutex_lock (&priv->mutex);
+  priv->complete_priority = complete_priority;
+  g_mutex_unlock (&priv->mutex);
+}
+
 /**
  * ide_task_get_cancellable:
  * @self: a #IdeTask
@@ -877,7 +913,7 @@ ide_task_deliver_result (IdeTask       *self,
 
   result->task = g_object_ref (self);
   result->main_context = g_main_context_ref (priv->main_context);
-  result->priority = priv->priority;
+  result->complete_priority = priv->complete_priority;
 
   g_mutex_lock (&priv->mutex);
 
@@ -1065,7 +1101,7 @@ ide_task_return (IdeTask       *self,
 
   result->task = g_object_ref (self);
   result->main_context = g_main_context_ref (priv->main_context);
-  result->priority = priv->priority;
+  result->complete_priority = priv->complete_priority;
 
   /* We can queue the result immediately if we're not being called
    * while we're inside of a ide_task_run_in_thread() callback. Otherwise,
