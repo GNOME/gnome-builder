@@ -928,3 +928,30 @@ _ide_text_iter_find_chars_forward (GtkTextIter *iter,
 
   return FALSE;
 }
+
+static inline gboolean
+is_symbol_char (gunichar ch)
+{
+  return g_unichar_isalnum (ch) || (ch == '_');
+}
+
+gchar *
+_ide_text_iter_current_symbol (const GtkTextIter *iter)
+{
+  GtkTextIter end = *iter;
+  GtkTextIter begin = *iter;
+  gunichar ch = 0;
+
+  do
+    {
+      if (!gtk_text_iter_backward_char (&begin))
+        break;
+      ch = gtk_text_iter_get_char (&begin);
+    }
+  while (is_symbol_char (ch));
+
+  if (ch && !is_symbol_char (ch))
+    gtk_text_iter_forward_char (&begin);
+
+  return gtk_text_iter_get_slice (&begin, &end);
+}
