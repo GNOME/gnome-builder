@@ -37,6 +37,29 @@ G_BEGIN_DECLS
 
 #define ide_strv_empty0(strv) (((strv) == NULL) || ((strv)[0] == NULL))
 
+#define ide_set_string(ptr,str) (ide_take_string((ptr), g_strdup(str)))
+
+static inline gboolean
+ide_take_string (gchar **ptr,
+                 gchar  *str)
+{
+  if (*ptr != str)
+    {
+      g_free (*ptr);
+      *ptr = str;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static inline void
+ide_clear_string (gchar **ptr)
+{
+  g_free (*ptr);
+  *ptr = NULL;
+}
+
 IDE_AVAILABLE_IN_3_30
 gboolean     ide_environ_parse                        (const gchar          *pair,
                                                        gchar               **key,
