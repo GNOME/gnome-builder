@@ -70,6 +70,8 @@ const gchar  *ide_task_get_name                  (IdeTask              *self);
 IDE_AVAILABLE_IN_3_30
 gint          ide_task_get_priority              (IdeTask              *self);
 IDE_AVAILABLE_IN_3_30
+gint          ide_task_get_complete_priority     (IdeTask              *self);
+IDE_AVAILABLE_IN_3_30
 gpointer      ide_task_get_source_object         (IdeTask              *self);
 IDE_AVAILABLE_IN_3_30
 gpointer      ide_task_get_source_tag            (IdeTask              *self);
@@ -140,6 +142,9 @@ void          ide_task_set_name                  (IdeTask              *self,
 IDE_AVAILABLE_IN_3_30
 void          ide_task_set_priority              (IdeTask              *self,
                                                   gint                  priority);
+IDE_AVAILABLE_IN_3_30
+void          ide_task_set_complete_priority     (IdeTask              *self,
+                                                  gint                  complete_priority);
 IDE_AVAILABLE_IN_3_30
 void          ide_task_set_release_on_propagate  (IdeTask              *self,
                                                   gboolean              release_on_propagate);
