@@ -1245,8 +1245,8 @@ ide_clang_complete_worker (IdeTask      *task,
                                   state->path,
                                   state->line,
                                   state->column,
-                                  NULL,
-                                  0,
+                                  state->ufs->files,
+                                  state->ufs->len,
                                   clang_defaultCodeCompleteOptions ());
 
   if (results == NULL)
