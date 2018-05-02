@@ -1188,7 +1188,7 @@ ide_clang_build_completion (GVariantBuilder    *builder,
       guint kind = clang_getCompletionChunkKind (result->CompletionString, i);
 
       if (kind == CXCompletionChunk_TypedText && typed_text == NULL)
-        typed_text = g_strdup (text);
+        typed_text = g_utf8_casefold (text, -1);
 
       g_variant_builder_open (&chunks_builder, G_VARIANT_TYPE_VARDICT);
       g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", text);
