@@ -1,6 +1,7 @@
-/* gbp-gcc-plugin.c
+/* gbp-gcc-toolchain-provider.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,15 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include <ide.h>
-#include <libpeas/peas.h>
 
-#include "gbp-gcc-pipeline-addin.h"
-#include "gbp-gcc-toolchain-provider.h"
+G_BEGIN_DECLS
 
-void
-gbp_gcc_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, GBP_TYPE_GCC_PIPELINE_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TOOLCHAIN_PROVIDER, GBP_TYPE_GCC_TOOLCHAIN_PROVIDER);
-}
+#define GBP_TYPE_GCC_TOOLCHAIN_PROVIDER (gbp_gcc_toolchain_provider_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpGccToolchainProvider, gbp_gcc_toolchain_provider, GBP, GCC_TOOLCHAIN_PROVIDER, IdeObject)
+
+G_END_DECLS

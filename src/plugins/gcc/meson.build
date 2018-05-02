@@ -10,6 +10,8 @@ gcc_sources = [
   'gbp-gcc-pipeline-addin.c',
   'gbp-gcc-pipeline-addin.h',
   'gbp-gcc-plugin.c',
+  'gbp-gcc-toolchain-provider.c',
+  'gbp-gcc-toolchain-provider.h',
 ]
 
 gnome_builder_plugins_sources += files(gcc_sources)
