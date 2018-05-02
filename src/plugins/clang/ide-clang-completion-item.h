@@ -40,19 +40,24 @@ struct _IdeClangCompletionItem
   const gchar      *icon_name;
   gchar            *markup;
   GVariant         *results;
-  gchar            *typed_text;
+  const gchar      *typed_text;
 };
 
 static inline GVariant *
 ide_clang_completion_item_get_result (const IdeClangCompletionItem *self)
 {
-  return g_variant_get_child_value (self->results, self->index);
+  g_autoptr(GVariant) child = g_variant_get_child_value (self->results, self->index);
+
+  if (g_variant_is_of_type (child, G_VARIANT_TYPE_VARIANT))
+    return g_variant_get_variant (child);
+
+  return g_steal_pointer (&child);
 }
 
-IdeClangCompletionItem *ide_clang_completion_item_new            (GVariant               *results,
-                                                                  guint                   index);
-IdeSourceSnippet       *ide_clang_completion_item_get_snippet    (IdeClangCompletionItem *self,
-                                                                  IdeFileSettings        *file_settings);
-const gchar            *ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self);
+IdeClangCompletionItem *ide_clang_completion_item_new         (GVariant               *results,
+                                                               guint                   index,
+                                                               const gchar            *typed_text);
+IdeSourceSnippet       *ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
+                                                               IdeFileSettings        *file_settings);
 
 G_END_DECLS

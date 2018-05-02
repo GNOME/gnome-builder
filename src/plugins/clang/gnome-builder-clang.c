@@ -632,6 +632,11 @@ handle_complete_cb (IdeClang     *clang,
     client_op_error (op, error);
   else
     client_op_reply (op, ret);
+
+  if (ret)
+    g_printerr ("  Completion: %lu Results\n", g_variant_n_children (ret));
+  else
+    g_printerr ("  Completion: %s\n", error->message);
 }
 
 static void
