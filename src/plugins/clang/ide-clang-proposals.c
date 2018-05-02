@@ -238,6 +238,14 @@ ide_clang_proposals_clear (IdeClangProposals *self)
   g_list_free_full (list, g_object_unref);
 }
 
+static gint
+sort_by_priority (gconstpointer a,
+                  gconstpointer b)
+{
+  return (gint)((IdeClangCompletionItem *)a)->priority -
+         (gint)((IdeClangCompletionItem *)b)->priority;
+}
+
 IdeClangProposals *
 ide_clang_proposals_new (IdeClangClient *client)
 {
@@ -292,6 +300,8 @@ ide_clang_proposals_refilter_array (IdeClangProposals *self)
 
           prev = item;
         }
+
+      self->head = head;
     }
   else
     {
@@ -316,12 +326,12 @@ ide_clang_proposals_refilter_array (IdeClangProposals *self)
 
           prev = item;
         }
+
+      self->head = g_list_sort (head, sort_by_priority);
     }
 
   if (prev != NULL)
     prev->link.next = NULL;
-
-  self->head = head;
 }
 
 static void
@@ -370,7 +380,7 @@ ide_clang_proposals_refilter_list (IdeClangProposals *self)
   if (prev != NULL)
     prev->link.next = NULL;
 
-  self->head = head;
+  self->head = g_list_sort (head, sort_by_priority);
 }
 
 static void
