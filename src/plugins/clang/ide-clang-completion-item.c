@@ -456,6 +456,10 @@ ide_clang_completion_item_new (GVariant    *variant,
 {
   IdeClangCompletionItem *ret;
 
+  g_assert (variant != NULL);
+  g_assert (typed_text != NULL);
+  g_assert (typed_text[0] != 0);
+
   ret = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM, NULL);
   ret->results = g_variant_ref (variant);
   ret->index = index;
