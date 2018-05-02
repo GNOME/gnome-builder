@@ -301,6 +301,9 @@ ide_clang_proposals_refilter_array (IdeClangProposals *self)
           prev = item;
         }
 
+      if (prev != NULL)
+        prev->link.next = NULL;
+
       self->head = head;
     }
   else
@@ -327,11 +330,11 @@ ide_clang_proposals_refilter_array (IdeClangProposals *self)
           prev = item;
         }
 
+      if (prev != NULL)
+        prev->link.next = NULL;
+
       self->head = g_list_sort (head, sort_by_priority);
     }
-
-  if (prev != NULL)
-    prev->link.next = NULL;
 }
 
 static void
