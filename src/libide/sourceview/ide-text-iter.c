@@ -21,9 +21,9 @@
 #include "config.h"
 
 #include <dazzle.h>
-#include <string.h>
-
 #include <gtk/gtk.h>
+#include <gtksourceview/gtksource.h>
+#include <string.h>
 
 #include "ide-debug.h"
 
@@ -938,6 +938,7 @@ is_symbol_char (gunichar ch)
 gchar *
 _ide_text_iter_current_symbol (const GtkTextIter *iter)
 {
+  GtkTextBuffer *buffer;
   GtkTextIter end = *iter;
   GtkTextIter begin = *iter;
   gunichar ch = 0;
@@ -952,6 +953,22 @@ _ide_text_iter_current_symbol (const GtkTextIter *iter)
 
   if (ch && !is_symbol_char (ch))
     gtk_text_iter_forward_char (&begin);
+
+  buffer = gtk_text_iter_get_buffer (iter);
+
+  if (GTK_SOURCE_IS_BUFFER (buffer))
+    {
+      GtkSourceBuffer *gsb = GTK_SOURCE_BUFFER (buffer);
+
+      if (gtk_source_buffer_iter_has_context_class (gsb, &begin, "comment") ||
+          gtk_source_buffer_iter_has_context_class (gsb, &begin, "string") ||
+          gtk_source_buffer_iter_has_context_class (gsb, &end, "comment") ||
+          gtk_source_buffer_iter_has_context_class (gsb, &end, "string"))
+        return NULL;
+    }
+
+  if (gtk_text_iter_equal (&begin, &end))
+    return NULL;
 
   return gtk_text_iter_get_slice (&begin, &end);
 }
