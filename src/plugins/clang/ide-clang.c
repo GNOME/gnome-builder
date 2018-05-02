@@ -38,7 +38,7 @@
 #define PRIORITY_INDEX_FILE   (500)
 #define PRIORITY_HIGHLIGHT    (300)
 
-#if 1
+#if 0
 # define PROBE G_STMT_START { g_printerr ("PROBE: %s\n", G_STRFUNC); } G_STMT_END
 #else
 # define PROBE G_STMT_START { } G_STMT_END
