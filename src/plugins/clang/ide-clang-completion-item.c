@@ -381,8 +381,6 @@ ide_clang_completion_item_get_icon_name (GtkSourceCompletionProposal *proposal)
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
 
-  ide_clang_completion_item_lazy_init (self);
-
   return self->icon_name;
 }
 
