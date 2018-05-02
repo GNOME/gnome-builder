@@ -37,9 +37,12 @@ struct _IdeClangCompletionItem
   gint              typed_text_index : 16;
   guint             initialized : 1;
 
-  const gchar      *icon_name;
+  /* Owned references */
   gchar            *markup;
   GVariant         *results;
+
+  /* Unowned references */
+  const gchar      *icon_name;
   const gchar      *typed_text;
 };
 
