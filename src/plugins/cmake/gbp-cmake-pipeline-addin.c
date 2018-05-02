@@ -165,7 +165,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (configure_launcher, prefix_option);
   if (crossbuild_file != NULL)
     {
-      g_autofree gchar *toolchain_option = g_strdup_printf ("-DCMAKE_TOOLCHAIN_FILE=%s", crossbuild_file);
+      g_autofree gchar *toolchain_option = g_strdup_printf ("-DCMAKE_TOOLCHAIN_FILE=\"%s\"", crossbuild_file);
 
       ide_subprocess_launcher_push_argv (configure_launcher, toolchain_option);
     }
