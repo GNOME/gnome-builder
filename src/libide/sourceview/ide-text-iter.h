@@ -91,6 +91,7 @@ gboolean _ide_text_iter_find_chars_forward       (GtkTextIter              *iter
                                                   const gchar              *str,
                                                   gboolean                  only_at_start);
 IDE_AVAILABLE_IN_3_30
-gchar   *_ide_text_iter_current_symbol           (const GtkTextIter        *iter);
+gchar   *_ide_text_iter_current_symbol           (const GtkTextIter        *iter,
+                                                  GtkTextIter              *out_begin);
 
 G_END_DECLS

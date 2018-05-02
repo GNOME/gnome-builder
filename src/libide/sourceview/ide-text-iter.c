@@ -936,7 +936,8 @@ is_symbol_char (gunichar ch)
 }
 
 gchar *
-_ide_text_iter_current_symbol (const GtkTextIter *iter)
+_ide_text_iter_current_symbol (const GtkTextIter *iter,
+                               GtkTextIter       *out_begin)
 {
   GtkTextBuffer *buffer;
   GtkTextIter end = *iter;
@@ -969,6 +970,9 @@ _ide_text_iter_current_symbol (const GtkTextIter *iter)
 
   if (gtk_text_iter_equal (&begin, &end))
     return NULL;
+
+  if (out_begin != NULL)
+    *out_begin = begin;
 
   return gtk_text_iter_get_slice (&begin, &end);
 }

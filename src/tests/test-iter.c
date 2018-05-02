@@ -52,7 +52,7 @@ test_current_symbol (void)
       GtkTextIter iter;
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, i);
-      word = _ide_text_iter_current_symbol (&iter);
+      word = _ide_text_iter_current_symbol (&iter, NULL);
 
       g_assert_cmpstr (word, ==, expected[i]);
     }
