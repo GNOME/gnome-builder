@@ -449,10 +449,14 @@ ide_clang_proposals_build_worker (IdeTask      *task,
     {
       const gchar *typed_text;
 
-      if (!g_variant_lookup (value, "keyword", "&s", &typed_text))
-        typed_text = NULL;
+      /*
+       * We get a typed_text pointer into the larger buffer, which is
+       * kept around for the lifetime of @variant (so that we don't need
+       * to copy more strings.
+       */
 
-      g_ptr_array_add (ret, ide_clang_completion_item_new (variant, index, typed_text));
+      if (g_variant_lookup (value, "keyword", "&s", &typed_text))
+        g_ptr_array_add (ret, ide_clang_completion_item_new (variant, index, typed_text));
 
       g_variant_unref (value);
       index++;
