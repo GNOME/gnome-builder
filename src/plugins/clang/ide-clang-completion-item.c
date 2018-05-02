@@ -128,7 +128,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 
   g_variant_iter_init (&iter, chunks);
 
-  while (g_variant_iter_loop (&iter, "a{sv}", &chunk))
+  while ((chunk = g_variant_iter_next_value (&iter)))
     {
       g_autofree gchar *escaped = NULL;
       const gchar *text;
@@ -188,6 +188,8 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
         default:
           break;
         }
+
+      g_variant_unref (chunk);
     }
 
   self->markup = g_string_free (g_steal_pointer (&markup), FALSE);
@@ -438,59 +440,26 @@ ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
 }
 
 /**
- * ide_clang_completion_item_get_typed_text:
- * @self: An #IdeClangCompletionItem.
- *
- * Gets the text that would be expected to be typed to insert this completion
- * item into the text editor.
- *
- * Returns: A string which should not be modified or freed.
- */
-const gchar *
-ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
-{
-  if G_UNLIKELY (self->typed_text == NULL)
-    {
-      g_autoptr(GVariant) variant = ide_clang_completion_item_get_result (self);
-      g_autoptr(GVariant) chunks = g_variant_lookup_value (variant, "chunks", G_VARIANT_TYPE ("aa{sv}"));
-      GVariantIter iter;
-      GVariant *value;
-
-      g_variant_iter_init (&iter, chunks);
-
-      while ((value = g_variant_iter_next_value (&iter)))
-        {
-          enum CXCompletionChunkKind kind;
-
-          if (g_variant_lookup (value, "kind", "u", &kind) && kind == CXCompletionChunk_TypedText)
-            {
-              g_variant_lookup (value, "text", "&s", self->typed_text);
-              break;
-            }
-        }
-
-      if (self->typed_text == NULL)
-        self->typed_text = "";
-    }
-
-  return self->typed_text;
-}
-
-/**
  * ide_clang_completion_item_new:
  * @variant: the toplevel variant of all results
  * @index: the index of the item
+ * @typed_text: pointer to typed texted within @variant
  *
+ * The @typed_text parameter is not copied, it is expected to be valid
+ * string found within @variant (and therefore associated with its
+ * life-cycle).
  */
 IdeClangCompletionItem *
-ide_clang_completion_item_new (GVariant *variant,
-                               guint     index)
+ide_clang_completion_item_new (GVariant    *variant,
+                               guint        index,
+                               const gchar *typed_text)
 {
   IdeClangCompletionItem *ret;
 
   ret = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM, NULL);
   ret->results = g_variant_ref (variant);
   ret->index = index;
+  ret->typed_text = typed_text;
 
   return ret;
 }

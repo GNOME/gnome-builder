@@ -38,7 +38,7 @@
 #define PRIORITY_INDEX_FILE   (500)
 #define PRIORITY_HIGHLIGHT    (300)
 
-#if 0
+#if 1
 # define PROBE G_STMT_START { g_printerr ("PROBE: %s\n", G_STRFUNC); } G_STMT_END
 #else
 # define PROBE G_STMT_START { } G_STMT_END
@@ -1165,6 +1165,7 @@ ide_clang_build_completion (GVariantBuilder    *builder,
                             CXCompletionResult *result)
 {
   GVariantBuilder chunks_builder;
+  g_autofree gchar *typed_text = NULL;
   guint n_chunks;
 
   g_assert (builder != NULL);
@@ -1183,13 +1184,20 @@ ide_clang_build_completion (GVariantBuilder    *builder,
   for (guint i = 0; i < n_chunks; i++)
     {
       g_auto(CXString) str = clang_getCompletionChunkText (result->CompletionString, i);
+      const gchar *text = clang_getCString (str);
       guint kind = clang_getCompletionChunkKind (result->CompletionString, i);
 
+      if (kind == CXCompletionChunk_TypedText && typed_text == NULL)
+        typed_text = g_strdup (text);
+
       g_variant_builder_open (&chunks_builder, G_VARIANT_TYPE_VARDICT);
-      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", clang_getCString (str));
+      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", text);
       g_variant_builder_add_parsed (&chunks_builder, "{%s,<%u>}", "kind", kind);
       g_variant_builder_close (&chunks_builder);
     }
+
+  if (typed_text != NULL)
+    g_variant_builder_add_parsed (builder, "{%s,<%s>}", "keyword", typed_text);
 
   g_variant_builder_add (builder, "{sv}", "chunks", g_variant_builder_end (&chunks_builder));
 }
@@ -1299,6 +1307,7 @@ ide_clang_complete_async (IdeClang            *self,
   state->column = column;
 
   task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_check_cancellable (task, FALSE);
   ide_task_set_source_tag (task, ide_clang_complete_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, complete_free);

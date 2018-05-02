@@ -7,6 +7,9 @@ clang_resources = gnome.compile_resources(
 )                                           
 
 clang_sources = [
+  'clang-plugin.c',
+  'ide-clang-client.c',
+  'ide-clang-client.h',
   'ide-clang-code-index-entries.c',
   'ide-clang-code-index-entries.h',
   'ide-clang-code-indexer.c',
@@ -21,15 +24,14 @@ clang_sources = [
   'ide-clang-highlighter.h',
   'ide-clang-preferences-addin.c',
   'ide-clang-preferences-addin.h',
+  'ide-clang-proposals.c',
+  'ide-clang-proposals.h',
   'ide-clang-symbol-node.c',
   'ide-clang-symbol-node.h',
   'ide-clang-symbol-resolver.c',
   'ide-clang-symbol-resolver.h',
   'ide-clang-symbol-tree.c',
   'ide-clang-symbol-tree.h',
-  'ide-clang-client.c',
-  'ide-clang-client.h',
-  'clang-plugin.c',
 ]
 
 gnome_builder_clang_sources = [

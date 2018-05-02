@@ -18,8 +18,6 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
