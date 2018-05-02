@@ -266,7 +266,7 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
 
   g_variant_iter_init (&iter, chunks);
 
-  while (g_variant_iter_loop (&iter, "a{sv}", &vchunk))
+  while ((vchunk = g_variant_iter_next_value (&iter)))
     {
       enum CXCompletionChunkKind kind;
       IdeSourceSnippetChunk *chunk;
@@ -357,6 +357,8 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
         default:
           break;
         }
+
+      g_variant_unref (vchunk);
     }
 
   return g_steal_pointer (&snippet);
