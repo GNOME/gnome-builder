@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "sourceview/ide-word-completion-item.h"
+#include "completion/ide-word-completion-item.h"
 
 typedef struct
 {

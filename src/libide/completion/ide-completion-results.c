@@ -25,7 +25,7 @@
 
 #include "ide-debug.h"
 
-#include "sourceview/ide-completion-results.h"
+#include "completion/ide-completion-results.h"
 #include "util/ide-list-inline.h"
 
 typedef struct

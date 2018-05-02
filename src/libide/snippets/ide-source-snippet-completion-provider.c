@@ -19,9 +19,9 @@
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 
+#include "completion/ide-completion-provider.h"
 #include "snippets/ide-source-snippet-completion-item.h"
 #include "snippets/ide-source-snippet-completion-provider.h"
-#include "sourceview/ide-completion-provider.h"
 
 struct _IdeSourceSnippetCompletionProvider
 {

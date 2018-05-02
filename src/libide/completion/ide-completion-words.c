@@ -20,8 +20,8 @@
 
 #include "config.h"
 
-#include "sourceview/ide-completion-provider.h"
-#include "sourceview/ide-completion-words.h"
+#include "completion/ide-completion-provider.h"
+#include "completion/ide-completion-words.h"
 
 struct _IdeCompletionWords
 {

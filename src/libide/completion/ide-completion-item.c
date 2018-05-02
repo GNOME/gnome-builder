@@ -22,7 +22,7 @@
 
 #include <string.h>
 
-#include "sourceview/ide-completion-item.h"
+#include "completion/ide-completion-item.h"
 
 G_DEFINE_ABSTRACT_TYPE (IdeCompletionItem, ide_completion_item, G_TYPE_OBJECT)
 

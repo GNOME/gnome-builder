@@ -22,7 +22,7 @@
 
 #include "ide-context.h"
 
-#include "sourceview/ide-completion-provider.h"
+#include "completion/ide-completion-provider.h"
 #include "sourceview/ide-text-iter.h"
 
 G_DEFINE_INTERFACE (IdeCompletionProvider, ide_completion_provider, GTK_SOURCE_TYPE_COMPLETION_PROVIDER)

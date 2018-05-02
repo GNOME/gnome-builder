@@ -1,7 +1,4 @@
 sourceview_headers = [
-  'ide-completion-item.h',
-  'ide-completion-provider.h',
-  'ide-completion-results.h',
   'ide-indenter.h',
   'ide-language.h',
   'ide-source-iter.h',
@@ -12,9 +9,6 @@ sourceview_headers = [
 ]
 
 sourceview_sources = [
-  'ide-completion-item.c',
-  'ide-completion-provider.c',
-  'ide-completion-results.c',
   'ide-indenter.c',
   'ide-language.c',
   'ide-source-iter.c',
@@ -25,8 +19,6 @@ sourceview_sources = [
 ]
 
 sourceview_private_sources = [
-  'ide-completion-words.c',
-  'ide-completion-words.h',
   'ide-cursor.c',
   'ide-cursor.h',
   'ide-omni-gutter-renderer.c',
@@ -40,12 +32,6 @@ sourceview_private_sources = [
   'ide-source-view-movements.c',
   'ide-source-view-shortcuts.c',
   'ide-text-util.c',
-  'ide-word-completion-item.c',
-  'ide-word-completion-item.h',
-  'ide-word-completion-provider.c',
-  'ide-word-completion-provider.h',
-  'ide-word-completion-results.c',
-  'ide-word-completion-results.h',
 ]
 
 sourceview_enums = [
