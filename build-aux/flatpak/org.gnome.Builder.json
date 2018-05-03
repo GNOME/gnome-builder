@@ -761,6 +761,7 @@
                 "--with-distro=none",
                 "--disable-qt3",
                 "--disable-qt4",
+                "--disable-qt5",
                 "--disable-gtk",
                 "--disable-gtk3",
                 "--disable-python",
