@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3.28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-28 16:13+0000\n"
-"PO-Revision-Date: 2018-04-05 22:18+0200\n"
+"POT-Creation-Date: 2018-05-03 08:44+0000\n"
+"PO-Revision-Date: 2018-05-03 23:34+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -450,7 +450,7 @@ msgstr "Výška spodního panelu v pixelech."
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/application/ide-application.c:687
+#: src/libide/application/ide-application.c:689
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
 #: src/libide/workbench/ide-workbench.c:646
@@ -735,7 +735,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5127
+#: src/libide/sourceview/ide-source-view.c:5130
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -767,7 +767,7 @@ msgstr "Zjistěte si více o aplikaci Builder GNOME"
 msgid "Funded By"
 msgstr "Financovali"
 
-#: src/libide/application/ide-application.c:1078
+#: src/libide/application/ide-application.c:1080
 #: src/libide/preferences/ide-preferences-builtin.c:409
 msgid "Projects"
 msgstr "Projekty"
@@ -843,7 +843,7 @@ msgstr "Takový sestavovací proces neexistuje"
 #: src/libide/application/ide-application-shortcuts.c:44
 #: src/libide/application/ide-application-shortcuts.c:55
 #: src/libide/application/ide-application-shortcuts.c:66
-#: src/libide/runner/ide-run-manager.c:775
+#: src/libide/runner/ide-run-manager.c:776
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
 #: src/libide/workbench/ide-workbench-shortcuts.c:45
@@ -894,11 +894,11 @@ msgstr "Selhalo ustanovení sledování změn na pozadí: %s"
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
-#: src/libide/buffers/ide-buffer-manager.c:703
+#: src/libide/buffers/ide-buffer-manager.c:704
 msgid "File too large to be opened."
 msgstr "Soubor je příliš velký pro otevření."
 
-#: src/libide/buffers/ide-buffer-manager.c:1989
+#: src/libide/buffers/ide-buffer-manager.c:1990
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
@@ -907,8 +907,8 @@ msgstr "neuložený dokument %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:2028
-#: src/libide/buffers/ide-buffer-manager.c:2091
+#: src/libide/buffers/ide-buffer-manager.c:2029
+#: src/libide/buffers/ide-buffer-manager.c:2092
 #: src/libide/editor/ide-editor-view-actions.c:189
 #: src/libide/editor/ide-editor-view-actions.c:310
 #, c-format
@@ -916,23 +916,23 @@ msgid "Failed to save file: %s"
 msgstr "Selhalo uložení souboru: %s"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:250
+#: src/libide/buffers/ide-unsaved-files.c:251
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr "Selhalo uložení konceptu: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:620
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:639
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (kopie)"
 
-#: src/libide/buildsystem/ide-build-manager.c:369
+#: src/libide/buildsystem/ide-build-manager.c:372
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Selhala inicializace roury sestavení: %s"
 
-#: src/libide/buildsystem/ide-build-manager.c:426
+#: src/libide/buildsystem/ide-build-manager.c:429
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Selhalo získání informací o zařízení: %s"
@@ -945,64 +945,64 @@ msgstr "Roura sestavení je v chybovém stavu"
 msgid "The build configuration has errors"
 msgstr "Konfigurace sestavení má chybu"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2696
+#: src/libide/buildsystem/ide-build-pipeline.c:2724
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Selhalo vytvoření pseudoterminálu. Schopnosti terminálu budou omezené."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2896
+#: src/libide/buildsystem/ide-build-pipeline.c:2924
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2900
-#: src/libide/buildsystem/ide-build-pipeline.c:2957
+#: src/libide/buildsystem/ide-build-pipeline.c:2928
+#: src/libide/buildsystem/ide-build-pipeline.c:2985
 #: src/libide/workbench/ide-omni-bar.c:557
 msgid "Failed"
 msgstr "Selhalo"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2902
-#: src/libide/buildsystem/ide-build-pipeline.c:2965
+#: src/libide/buildsystem/ide-build-pipeline.c:2930
+#: src/libide/buildsystem/ide-build-pipeline.c:2993
 msgid "Ready"
 msgstr "Připraveno"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2917
+#: src/libide/buildsystem/ide-build-pipeline.c:2945
 msgid "Downloading…"
 msgstr "Stahuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2921
+#: src/libide/buildsystem/ide-build-pipeline.c:2949
 msgid "Building dependencies…"
 msgstr "Sestavují se závislosti…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2925
+#: src/libide/buildsystem/ide-build-pipeline.c:2953
 msgid "Bootstrapping…"
 msgstr "Připravuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2929
+#: src/libide/buildsystem/ide-build-pipeline.c:2957
 msgid "Configuring…"
 msgstr "Konfiguruje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2933
+#: src/libide/buildsystem/ide-build-pipeline.c:2961
 msgid "Building…"
 msgstr "Sestavuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2937
+#: src/libide/buildsystem/ide-build-pipeline.c:2965
 msgid "Installing…"
 msgstr "Instaluje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2941
+#: src/libide/buildsystem/ide-build-pipeline.c:2969
 msgid "Committing…"
 msgstr "Zařazuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2945
+#: src/libide/buildsystem/ide-build-pipeline.c:2973
 msgid "Exporting…"
 msgstr "Exportuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2949
-#: src/libide/buildsystem/ide-build-pipeline.c:2953
+#: src/libide/buildsystem/ide-build-pipeline.c:2977
+#: src/libide/buildsystem/ide-build-pipeline.c:2981
 #: src/libide/workbench/ide-omni-bar.c:584
 msgid "Success"
 msgstr "Úspěšné"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2961
+#: src/libide/buildsystem/ide-build-pipeline.c:2989
 msgid "Preparing…"
 msgstr "Připravuje se…"
 
@@ -1255,11 +1255,11 @@ msgstr "Knihovna"
 msgid "Address Range"
 msgstr "Rozsah adres"
 
-#: src/libide/debugger/ide-debugger-locals-view.c:307
+#: src/libide/debugger/ide-debugger-locals-view.c:309
 msgid "Locals"
 msgstr "Lokální"
 
-#: src/libide/debugger/ide-debugger-locals-view.c:361
+#: src/libide/debugger/ide-debugger-locals-view.c:364
 msgid "Parameters"
 msgstr "Parametry"
 
@@ -1307,11 +1307,11 @@ msgstr "Spustitelný program"
 msgid "A suitable debugger could not be found."
 msgstr "Nezdařilo se najít použitelný ladicí program."
 
-#: src/libide/devices/ide-device-manager.c:577
+#: src/libide/devices/ide-device-manager.c:580
 msgid "Devices"
 msgstr "Zařízení"
 
-#: src/libide/devices/ide-device-manager.c:725
+#: src/libide/devices/ide-device-manager.c:728
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Nezdařilo se nasadit do zařízení, sestavovací roura není inicializovaná"
@@ -1330,7 +1330,7 @@ msgid "No file was provided."
 msgstr "Nebyl poskytnut žádný soubor."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:831
+#: src/libide/editor/ide-editor-perspective.c:832
 #: src/libide/preferences/ide-preferences-builtin.c:104
 #: src/libide/preferences/ide-preferences-builtin.c:151
 msgid "Editor"
@@ -1360,22 +1360,22 @@ msgstr "_Cyklicky přecházet přes okraj"
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:97
-#: src/libide/gtk/menus.ui:226
+#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:105
+#: src/libide/gtk/menus.ui:234
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:101
-#: src/libide/gtk/menus.ui:230
+#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:109
+#: src/libide/gtk/menus.ui:238
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:105
+#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:113
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:120
-#: src/libide/gtk/menus.ui:238
+#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:128
+#: src/libide/gtk/menus.ui:246
 msgid "Select _All"
 msgstr "Vybrat vš_e"
 
@@ -1461,7 +1461,7 @@ msgstr "Otevřít"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:211
 #: src/plugins/color-picker/gb-color-picker-prefs.c:238
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
-#: src/plugins/terminal/gb-terminal-view-actions.c:274
+#: src/plugins/terminal/gb-terminal-view-actions.c:273
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -1653,7 +1653,7 @@ msgstr "Selhal tisk: %s"
 #: src/libide/editor/ide-editor-view-actions.c:244
 #: src/plugins/color-picker/gb-color-picker-prefs.c:234
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: src/plugins/terminal/gb-terminal-view-actions.c:275
+#: src/plugins/terminal/gb-terminal-view-actions.c:274
 msgid "Save"
 msgstr "Uložit"
 
@@ -1846,93 +1846,99 @@ msgstr "O _aplikaci"
 msgid "_Quit"
 msgstr "U_končit"
 
-#: src/libide/gtk/menus.ui:65
+#: src/libide/gtk/menus.ui:64
+#: src/libide/preferences/ide-preferences-perspective.c:137
+#: src/libide/preferences/ide-preferences-window.ui:9
+msgid "Preferences"
+msgstr "Předvolby"
+
+#: src/libide/gtk/menus.ui:73
 msgid "Save _All"
 msgstr "Uložit _vše"
 
-#: src/libide/gtk/menus.ui:76
+#: src/libide/gtk/menus.ui:84
 msgid "_Go to Definition"
 msgstr "Pře_jít na definici"
 
-#: src/libide/gtk/menus.ui:82
+#: src/libide/gtk/menus.ui:90
 msgid "_Undo"
 msgstr "_Zpět"
 
-#: src/libide/gtk/menus.ui:86
+#: src/libide/gtk/menus.ui:94
 msgid "_Redo"
 msgstr "Z_novu"
 
-#: src/libide/gtk/menus.ui:92
+#: src/libide/gtk/menus.ui:100
 msgid "C_ut"
 msgstr "_Vyjmout"
 
-#: src/libide/gtk/menus.ui:113
+#: src/libide/gtk/menus.ui:121
 #: src/libide/preferences/ide-preferences-builtin.c:194
 #: src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Zvýrazňování"
 
-#: src/libide/gtk/menus.ui:118 src/libide/gtk/menus.ui:236
+#: src/libide/gtk/menus.ui:126 src/libide/gtk/menus.ui:244
 msgid "Selection"
 msgstr "Výběr"
 
-#: src/libide/gtk/menus.ui:125 src/libide/gtk/menus.ui:243
+#: src/libide/gtk/menus.ui:133 src/libide/gtk/menus.ui:251
 msgid "Select _None"
 msgstr "Z_rušit výběr"
 
-#: src/libide/gtk/menus.ui:131
+#: src/libide/gtk/menus.ui:139
 msgid "All _Upper Case"
 msgstr "Vše vel_kými písmeny"
 
-#: src/libide/gtk/menus.ui:136
+#: src/libide/gtk/menus.ui:144
 msgid "All _Lower Case"
 msgstr "Vše _malými písmeny"
 
-#: src/libide/gtk/menus.ui:141
+#: src/libide/gtk/menus.ui:149
 msgid "_Invert Case"
 msgstr "Obrát_it velikost písmen"
 
-#: src/libide/gtk/menus.ui:146
+#: src/libide/gtk/menus.ui:154
 msgid "_Title Case"
 msgstr "_První písmena velká"
 
-#: src/libide/gtk/menus.ui:153
+#: src/libide/gtk/menus.ui:161
 msgid "Join Lines"
 msgstr "Spojit řádky"
 
-#: src/libide/gtk/menus.ui:157
+#: src/libide/gtk/menus.ui:165
 msgid "Sort Lines"
 msgstr "Seřadit řádky"
 
-#: src/libide/gtk/menus.ui:166
+#: src/libide/gtk/menus.ui:174
 msgid "Zoom"
 msgstr "Přiblížení"
 
-#: src/libide/gtk/menus.ui:168
+#: src/libide/gtk/menus.ui:176
 msgid "Zoom _In"
 msgstr "Přiblíž_it"
 
-#: src/libide/gtk/menus.ui:173
+#: src/libide/gtk/menus.ui:181
 msgid "Zoom _Out"
 msgstr "_Oddálit"
 
-#: src/libide/gtk/menus.ui:179 src/plugins/terminal/gtk/menus.ui:13
+#: src/libide/gtk/menus.ui:187 src/plugins/terminal/gtk/menus.ui:13
 msgid "Reset"
 msgstr "Výchozí"
 
-#: src/libide/gtk/menus.ui:193 src/libide/layout/ide-layout-stack.ui:105
+#: src/libide/gtk/menus.ui:201 src/libide/layout/ide-layout-stack.ui:105
 msgid "Open File…"
 msgstr "Otevřít soubor…"
 
-#: src/libide/gtk/menus.ui:204 src/libide/runner/ide-run-manager.c:1112
+#: src/libide/gtk/menus.ui:212 src/libide/runner/ide-run-manager.c:1114
 msgid "Run"
 msgstr "Spustit"
 
-#: src/libide/gtk/menus.ui:213
+#: src/libide/gtk/menus.ui:221
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
-#: src/libide/gtk/menus.ui:218
+#: src/libide/gtk/menus.ui:226
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
@@ -1941,11 +1947,11 @@ msgstr "_Kopírovat adresu odkazu"
 msgid "You must call %s() before using libide."
 msgstr "Před použitím libide musíte zavolat %s()."
 
-#: src/libide/ide-context.c:2108
+#: src/libide/ide-context.c:2114
 msgid "An unload request is already pending"
 msgstr "Nějaký požadavek na odstranění z paměti již probíhá"
 
-#: src/libide/ide-context.c:2226
+#: src/libide/ide-context.c:2233
 msgid "Context has already been restored."
 msgstr "Kontext již byl obnoven."
 
@@ -2244,7 +2250,7 @@ msgid "Unselect all"
 msgstr "Zrušit všechen výběr"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:398
-#: src/libide/runner/ide-run-manager.c:776
+#: src/libide/runner/ide-run-manager.c:777
 #: src/libide/workbench/ide-workbench-shortcuts.c:46
 msgctxt "shortcut window"
 msgid "Build and Run"
@@ -2287,7 +2293,7 @@ msgid "Find text within terminal"
 msgstr "Hledat text v terminálu"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:894
+#: src/libide/langserv/ide-langserv-client.c:895
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Selhala inicializace serveru pro daný jazyk: %s"
@@ -2871,11 +2877,6 @@ msgstr "Systém správy verzí"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/preferences/ide-preferences-perspective.c:137
-#: src/libide/preferences/ide-preferences-window.ui:9
-msgid "Preferences"
-msgstr "Předvolby"
-
 #: src/libide/projects/ide-project.c:398
 msgid "Destination file must be within the project tree."
 msgstr "Cílový soubor musí být součástí projektového stromu."
@@ -2892,11 +2893,11 @@ msgstr "Zastavit běh"
 msgid "Change run options"
 msgstr "Změnit volby běhu"
 
-#: src/libide/runner/ide-run-manager.c:367
+#: src/libide/runner/ide-run-manager.c:368
 msgid "Cannot run target, another target is running"
 msgstr "Nelze spustit cíl, jiný cíl právě běží"
 
-#: src/libide/runner/ide-run-manager.c:437
+#: src/libide/runner/ide-run-manager.c:438
 msgid "Failed to locate runtime"
 msgstr "Selhalo vyhledání běhového prostředí"
 
@@ -2922,31 +2923,31 @@ msgstr "Selhalo načtení souboru: %s: %s"
 msgid "Click to toggle breakpoint"
 msgstr "Kliknutím přepnete bod přerušení"
 
-#: src/libide/sourceview/ide-source-view.c:4584
+#: src/libide/sourceview/ide-source-view.c:4585
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4586
+#: src/libide/sourceview/ide-source-view.c:4587
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4700
+#: src/libide/sourceview/ide-source-view.c:4701
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: src/libide/sourceview/ide-source-view.c:5126
+#: src/libide/sourceview/ide-source-view.c:5129
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5360
+#: src/libide/sourceview/ide-source-view.c:5365
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5386
+#: src/libide/sourceview/ide-source-view.c:5391
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
@@ -3186,7 +3187,7 @@ msgid "Bootstrapping build system"
 msgstr "Připravuje se sestavovací systém"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:140
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:145
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "Konfiguruje se projekt"
@@ -3194,7 +3195,7 @@ msgstr "Konfiguruje se projekt"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:276
 #: src/plugins/cargo/cargo_plugin.py:150
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:169
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:174
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Sestavuje se projekt"
@@ -3438,7 +3439,7 @@ msgstr "Chyba čtení AST"
 msgid "Failed to create translation unit: %s"
 msgstr "Selhalo vytvoření překladové jednotky: %s"
 
-#: src/plugins/clang/ide-clang-service.c:562
+#: src/plugins/clang/ide-clang-service.c:561
 #: src/plugins/xml-pack/ide-xml-service.c:97
 msgid "File must be saved locally to parse."
 msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
@@ -3460,7 +3461,7 @@ msgid "Configure project"
 msgstr "Konfiguruje se projekt"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:179
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:184
 #: src/plugins/phpize/phpize_plugin.py:248
 msgid "Installing project"
 msgstr "Instaluje se projekt"
@@ -4025,7 +4026,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Stahují se zdroje aplikace…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:660
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Selhalo odstranění manifestu flatpaku: %s"
@@ -4073,17 +4074,17 @@ msgstr "Vytváří se balíček flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
-#: src/plugins/html-preview/html_preview.py:325
-#: src/plugins/html-preview/html_preview.py:335
-#: src/plugins/rustup/rustup_plugin.py:491
-#: src/plugins/rustup/rustup_plugin.py:495
-#: src/plugins/rustup/rustup_plugin.py:612
+#: src/plugins/html-preview/html_preview.py:329
+#: src/plugins/html-preview/html_preview.py:339
+#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:496
+#: src/plugins/rustup/rustup_plugin.py:613
 msgid "Install"
 msgstr "Instalovat"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:97
-#: src/plugins/rustup/rustup_plugin.py:491
-#: src/plugins/rustup/rustup_plugin.py:495
+#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:496
 msgid "Update"
 msgstr "Aktualizovat"
 
@@ -4106,12 +4107,12 @@ msgstr[2] "Zobrazit %u dalších běhových prostředí"
 msgid "Flatpak Runtimes"
 msgstr "Běhová prostředí flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:771
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:795
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:773
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:797
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4229,12 +4230,12 @@ msgid ""
 msgstr "Builder nebyl schopen předat pověření během klonování repozitáře."
 
 #. translators: %s is replaced with the error message
-#: src/plugins/git/ide-git-vcs.c:365
+#: src/plugins/git/ide-git-vcs.c:407
 #, c-format
 msgid "Failed to establish git file monitor: %s"
 msgstr "Selhalo ustanovení sledování souboru v gitu: %s"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:374
 msgid "Code assistance requires a local file."
 msgstr "Průvodce kódem vyžaduje místní soubor."
 
@@ -4271,15 +4272,15 @@ msgstr ""
 msgid "Open Preview"
 msgstr "Otevřít náhled"
 
-#: src/plugins/html-preview/html_preview.py:321
+#: src/plugins/html-preview/html_preview.py:325
 msgid "Your computer is missing python3-docutils"
 msgstr "Ve vašem počítači schází python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:331
+#: src/plugins/html-preview/html_preview.py:335
 msgid "Your computer is missing python3-sphinx"
 msgstr "Ve vašem počítači schází python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:374
+#: src/plugins/html-preview/html_preview.py:382
 msgid "(Preview)"
 msgstr "(náhled)"
 
@@ -4306,6 +4307,17 @@ msgstr "Vytvořit nový prázdný projekt používající jednoduchý Makefile"
 #: src/plugins/meson/gbp-meson-build-system.c:428
 msgid "Meson"
 msgstr "Meson"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:103
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr ""
+"Je načten projekt založený na systému Meson, ale nebyl nalezen sestavovací "
+"systém Ninja."
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:123
+msgid "A Meson-based project is loaded but meson could not be found."
+msgstr ""
+"Je načten projekt založený na systému Meson, ale nebyl nalezen program meson."
 
 #: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
@@ -4572,103 +4584,103 @@ msgstr "Aktualizováno"
 msgid "Reformat tabs"
 msgstr "Přeformátovat tabulátory"
 
-#: src/plugins/rustup/rustup_plugin.py:88
+#: src/plugins/rustup/rustup_plugin.py:89
 msgid "Rustup not installed"
 msgstr "Rustup není nainstalován"
 
-#: src/plugins/rustup/rustup_plugin.py:278
+#: src/plugins/rustup/rustup_plugin.py:279
 msgid "Installing rustup"
 msgstr "Instaluje se rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:280
+#: src/plugins/rustup/rustup_plugin.py:281
 msgid "Updating rustup"
 msgstr "Aktualizuje se rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:282
+#: src/plugins/rustup/rustup_plugin.py:283
 msgid "Installing rust "
 msgstr "Instaluje se rust"
 
-#: src/plugins/rustup/rustup_plugin.py:284
+#: src/plugins/rustup/rustup_plugin.py:285
 msgid "Checking system"
 msgstr "Kontroluje se systém"
 
-#: src/plugins/rustup/rustup_plugin.py:349
+#: src/plugins/rustup/rustup_plugin.py:350
 msgid "Downloading rustup-init"
 msgstr "Stahuje se rustup-init"
 
-#: src/plugins/rustup/rustup_plugin.py:354
+#: src/plugins/rustup/rustup_plugin.py:355
 msgid "Syncing channel updates"
 msgstr "Synchronizují se aktualizace kanálu"
 
-#: src/plugins/rustup/rustup_plugin.py:360
+#: src/plugins/rustup/rustup_plugin.py:361
 msgid "Downloading "
 msgstr "Stahuje se "
 
-#: src/plugins/rustup/rustup_plugin.py:367
+#: src/plugins/rustup/rustup_plugin.py:368
 msgid "Installing "
 msgstr "Instaluje se "
 
-#: src/plugins/rustup/rustup_plugin.py:373
+#: src/plugins/rustup/rustup_plugin.py:374
 msgid "Checking for rustup updates"
 msgstr "Kontrolují se aktualizace pro rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:378
+#: src/plugins/rustup/rustup_plugin.py:379
 msgid "Downloading rustup update"
 msgstr "Stahuje se aktualizace rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:415
+#: src/plugins/rustup/rustup_plugin.py:416
 msgid "Error installing "
 msgstr "Chyba při instalaci"
 
-#: src/plugins/rustup/rustup_plugin.py:417
+#: src/plugins/rustup/rustup_plugin.py:418
 msgid "Error"
 msgstr "Chyba"
 
-#: src/plugins/rustup/rustup_plugin.py:422
+#: src/plugins/rustup/rustup_plugin.py:423
 msgid "Cancelled"
 msgstr "Zrušeno"
 
-#: src/plugins/rustup/rustup_plugin.py:430
+#: src/plugins/rustup/rustup_plugin.py:431
 msgid "Finished"
 msgstr "Dokončeno"
 
-#: src/plugins/rustup/rustup_plugin.py:446
+#: src/plugins/rustup/rustup_plugin.py:447
 msgid "Rustup"
 msgstr "Rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:447
+#: src/plugins/rustup/rustup_plugin.py:448
 msgid "Rustup Toolchains"
 msgstr "Sada programátorských nástrojů Rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:503
+#: src/plugins/rustup/rustup_plugin.py:504
 msgid "Updating"
 msgstr "Aktualizuje se"
 
-#: src/plugins/rustup/rustup_plugin.py:503
+#: src/plugins/rustup/rustup_plugin.py:504
 msgid "Installing"
 msgstr "Instaluje se"
 
 #. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:596
+#: src/plugins/rustup/rustup_plugin.py:597
 msgid "Make default"
 msgstr "Natavit jako výchozí"
 
-#: src/plugins/rustup/rustup_plugin.py:596
+#: src/plugins/rustup/rustup_plugin.py:597
 msgid "Makes the selected toolchain the default rust installation"
 msgstr ""
 "Natavit vybranou sadu programátorských nástrojů jako výchozí pro instalaci "
 "jazyka rust"
 
-#: src/plugins/rustup/rustup_plugin.py:611
+#: src/plugins/rustup/rustup_plugin.py:612
 msgid "Install Rust Channel"
 msgstr "Instalace kanálu Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:616
+#: src/plugins/rustup/rustup_plugin.py:617
 msgid "Enter name of rust channel"
 msgstr "Zadejte název kanálu rust"
 
-#: src/plugins/rustup/rustup_plugin.py:617
+#: src/plugins/rustup/rustup_plugin.py:618
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -4685,17 +4697,17 @@ msgstr ""
 "                        <datum>     = RRRR-MM-DD\n"
 "                        <hostitel>  = <trojice-cíle>"
 
-#: src/plugins/rustup/rustup_plugin.py:642
+#: src/plugins/rustup/rustup_plugin.py:643
 msgid "Install Rustup to manage toolchains here!"
 msgstr ""
 "Nainstalujte Rustup, abyste zde mohli spravovat sadu programátorských "
 "nástrojů!"
 
-#: src/plugins/rustup/rustup_plugin.py:649
+#: src/plugins/rustup/rustup_plugin.py:650
 msgid "No toolchain installed. Click"
 msgstr "Není nainstalována žádná sada programátorských nástrojů. Klikněte na"
 
-#: src/plugins/rustup/rustup_plugin.py:650
+#: src/plugins/rustup/rustup_plugin.py:651
 msgid "to add a new toolchain!"
 msgstr "pro přidání nové sady programátorských nástrojů."
 
@@ -4881,7 +4893,7 @@ msgstr "Spustit s profilerem"
 msgid "Open Sysprof Capture…"
 msgstr "Otevřít záznam Sysprof…"
 
-#: src/plugins/terminal/gb-terminal-view-actions.c:266
+#: src/plugins/terminal/gb-terminal-view-actions.c:265
 msgid "Save Terminal Content As"
 msgstr "Uložení obsahu terminálu jako"
 
@@ -4935,7 +4947,7 @@ msgstr "vala diagnostika varování chyba chyby"
 msgid "Run with Valgrind"
 msgstr "Spustit s nástrojem Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:582
+#: src/plugins/xml-pack/ide-xml-parser.c:585
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Selhalo vytvoření stromu XML"
