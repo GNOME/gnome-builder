@@ -45,6 +45,7 @@ src/libide/buildui/ide-build-perspective.c
 src/libide/buildui/ide-build-workbench-addin.c
 src/libide/buildui/ide-environment-editor.c
 src/libide/buildui/ide-environment-editor-row.ui
+src/libide/completion/ide-word-completion-provider.c
 src/libide/config/ide-configuration-manager.c
 src/libide/debugger/gtk/menus.ui
 src/libide/debugger/ide-debugger-breakpoints-view.ui
@@ -103,7 +104,6 @@ src/libide/snippets/ide-source-snippet-completion-provider.c
 src/libide/snippets/ide-source-snippets-manager.c
 src/libide/sourceview/ide-omni-gutter-renderer.c
 src/libide/sourceview/ide-source-view.c
-src/libide/sourceview/ide-word-completion-provider.c
 src/libide/terminal/ide-terminal-search.ui
 src/libide/testing/gtk/menus.ui
 src/libide/testing/ide-test-editor-addin.c
@@ -128,9 +128,7 @@ src/plugins/beautifier/gb-beautifier-process.c
 src/plugins/beautifier/gtk/menus.ui
 src/plugins/cargo/cargo_plugin.py
 src/plugins/clang/ide-clang-preferences-addin.c
-src/plugins/clang/ide-clang-service.c
 src/plugins/clang/ide-clang-symbol-node.c
-src/plugins/clang/ide-clang-translation-unit.c
 src/plugins/cmake/gbp-cmake-build-system.c
 src/plugins/cmake/gbp-cmake-pipeline-addin.c
 src/plugins/code-index/ide-code-index-index.c
