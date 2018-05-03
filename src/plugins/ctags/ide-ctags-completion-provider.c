@@ -201,6 +201,13 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
   g_clear_pointer (&self->current_word, g_free);
   self->current_word = ide_completion_provider_context_current_word (context);
 
+  if (self->current_word == NULL)
+    IDE_GOTO (word_too_small);
+
+  word_len = strlen (self->current_word);
+  if (word_len < self->minimum_word_size)
+    IDE_GOTO (word_too_small);
+
   allowed = get_allowed_suffixes (context);
 
   if (self->results != NULL)
@@ -212,10 +219,6 @@ ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
         }
       g_clear_pointer (&self->results, g_object_unref);
     }
-
-  word_len = strlen (self->current_word);
-  if (word_len < self->minimum_word_size)
-    IDE_GOTO (word_too_small);
 
   casefold = g_utf8_casefold (self->current_word, -1);
 
