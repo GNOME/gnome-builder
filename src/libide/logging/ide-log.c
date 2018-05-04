@@ -34,6 +34,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <dazzle.h>
+
 #include "ide-debug.h"
 
 #include "logging/ide-log.h"
@@ -90,6 +92,8 @@ static GPtrArray          *channels;
 static GLogFunc            last_handler;
 static int                 log_verbosity;
 static IdeLogLevelStrFunc  log_level_str_func;
+static gchar              *domains;
+static gboolean            has_domains;
 
 G_LOCK_DEFINE (channels_lock);
 
@@ -193,9 +197,16 @@ ide_log_handler (const gchar    *log_domain,
   const gchar *level;
   gchar ftime[32];
   gchar *buffer;
+  gboolean is_debug_level;
 
   if (G_LIKELY (channels->len))
     {
+      is_debug_level = (log_level == G_LOG_LEVEL_DEBUG || log_level == IDE_LOG_LEVEL_TRACE);
+      if (is_debug_level &&
+          has_domains &&
+          (log_domain == NULL || strstr (domains, log_domain) == NULL))
+        return;
+
       switch ((int)log_level)
         {
         case G_LOG_LEVEL_MESSAGE:
@@ -276,6 +287,10 @@ ide_log_init (gboolean     stdout_,
             log_level_str_func = ide_log_level_str_with_color;
         }
 
+      domains = g_strdup (g_getenv ("G_MESSAGES_DEBUG"));
+      if (!dzl_str_empty0 (domains) && strcmp (domains, "all") != 0)
+        has_domains = TRUE;
+
       g_log_set_default_handler (ide_log_handler, NULL);
       g_once_init_leave (&initialized, TRUE);
     }
@@ -297,6 +312,8 @@ ide_log_shutdown (void)
       g_log_set_default_handler (last_handler, NULL);
       last_handler = NULL;
     }
+
+  g_clear_pointer (&domains, g_free);
 }
 
 /**
