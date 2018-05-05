@@ -513,6 +513,10 @@
                 {
                     "type" : "git",
                     "url" : "https://git.gnome.org/browse/libgit2-glib"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "fix-libgit2-glib-pc.patch"
                 }
             ]
         },
