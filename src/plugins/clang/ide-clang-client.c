@@ -512,8 +512,11 @@ ide_clang_client_call_cancelled (GCancellable *cancellable,
   g_assert (G_IS_CANCELLABLE (cancellable));
   g_assert (call != NULL);
   g_assert (call->cancellable == cancellable);
-  g_assert (call->cancel_id != 0);
   g_assert (IDE_IS_CLANG_CLIENT (call->self));
+
+  /* Will be zero if cancelled immediately */
+  if (call->cancel_id == 0)
+    return;
 
   if (call->self->rpc_client == NULL)
     return;
@@ -558,6 +561,8 @@ ide_clang_client_call_async (IdeClangClient      *self,
                                                G_CALLBACK (ide_clang_client_call_cancelled),
                                                call,
                                                NULL);
+      if (ide_task_return_error_if_cancelled (task))
+        return;
     }
 
   ide_clang_client_get_client_async (self,
