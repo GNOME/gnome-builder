@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-04-04 08:28+0000\n"
-"PO-Revision-Date: 2018-04-24 09:18+0200\n"
+"POT-Creation-Date: 2018-05-06 06:40+0000\n"
+"PO-Revision-Date: 2018-05-08 14:47+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -588,7 +588,6 @@ msgid "Build;Develop;"
 msgstr "Construir;Desarrollar;"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
-#| msgid "Builder"
 msgid "Builder Dark"
 msgstr "Builder oscuro"
 
@@ -760,7 +759,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5150
+#: src/libide/sourceview/ide-source-view.c:5153
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renombrar"
@@ -870,7 +869,7 @@ msgstr "No existe el trabajador"
 #: src/libide/application/ide-application-shortcuts.c:44
 #: src/libide/application/ide-application-shortcuts.c:55
 #: src/libide/application/ide-application-shortcuts.c:66
-#: src/libide/runner/ide-run-manager.c:778
+#: src/libide/runner/ide-run-manager.c:779
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
 #: src/libide/workbench/ide-workbench-shortcuts.c:45
@@ -913,26 +912,25 @@ msgid "Show the shortcuts window"
 msgstr "Mostrar la ventana de atajos"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-buffer.c:926
+#: src/libide/buffers/ide-buffer.c:924
 #, c-format
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Falló al establecer un monitor para cambios en segundo plano: %s"
 
-#: src/libide/buffers/ide-buffer.c:2845
+#: src/libide/buffers/ide-buffer.c:2849
 msgid "The current language lacks a symbol resolver."
 msgstr "Al idioma actual le falta un resolutor de símbolos."
 
-#: src/libide/buffers/ide-buffer.c:3333
+#: src/libide/buffers/ide-buffer.c:3318
 #, c-format
-#| msgid "Print failed: %s"
 msgid "Buffer failed: %s"
 msgstr "Fallo el búfer: %s"
 
-#: src/libide/buffers/ide-buffer-manager.c:706
+#: src/libide/buffers/ide-buffer-manager.c:707
 msgid "File too large to be opened."
 msgstr "El archivo es demasiado grande para poder abrirlo."
 
-#: src/libide/buffers/ide-buffer-manager.c:2000
+#: src/libide/buffers/ide-buffer-manager.c:2001
 #, c-format
 msgid "unsaved document %u"
 msgstr "Documento %u sin guardar"
@@ -941,8 +939,8 @@ msgstr "Documento %u sin guardar"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:2039
-#: src/libide/buffers/ide-buffer-manager.c:2102
+#: src/libide/buffers/ide-buffer-manager.c:2040
+#: src/libide/buffers/ide-buffer-manager.c:2103
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -950,7 +948,7 @@ msgid "Failed to save file: %s"
 msgstr "Falló al cargar el archivo: %s:"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:253
+#: src/libide/buffers/ide-unsaved-files.c:254
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr "Falló al guardar el borrador: %s"
@@ -961,84 +959,84 @@ msgstr "Falló al guardar el borrador: %s"
 msgid "%s (Copy)"
 msgstr "%s (copiar)"
 
-#: src/libide/buildsystem/ide-build-manager.c:372
+#: src/libide/buildsystem/ide-build-manager.c:375
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Falló al inicializar la tubería de construcción: %s"
 
-#: src/libide/buildsystem/ide-build-manager.c:429
+#: src/libide/buildsystem/ide-build-manager.c:432
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Falló al obtener la información del dispositivo: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:770
+#: src/libide/buildsystem/ide-build-pipeline.c:767
 msgid "The build pipeline is in a failed state"
 msgstr "LA tubería de construcción está en estado de error"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:780
+#: src/libide/buildsystem/ide-build-pipeline.c:777
 msgid "The build configuration has errors"
 msgstr "La configuración de construcción tiene errores"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2781
+#: src/libide/buildsystem/ide-build-pipeline.c:2810
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Falló la creación de la pseudo-terminal. Sus características estarán "
 "limitadas."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2981
+#: src/libide/buildsystem/ide-build-pipeline.c:3010
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2985
-#: src/libide/buildsystem/ide-build-pipeline.c:3042
+#: src/libide/buildsystem/ide-build-pipeline.c:3014
+#: src/libide/buildsystem/ide-build-pipeline.c:3071
 #: src/libide/workbench/ide-omni-bar.c:559
 msgid "Failed"
 msgstr "Falló"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2987
-#: src/libide/buildsystem/ide-build-pipeline.c:3050
+#: src/libide/buildsystem/ide-build-pipeline.c:3016
+#: src/libide/buildsystem/ide-build-pipeline.c:3079
 msgid "Ready"
 msgstr "Preparado"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3002
+#: src/libide/buildsystem/ide-build-pipeline.c:3031
 msgid "Downloading…"
 msgstr "Descargando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3006
+#: src/libide/buildsystem/ide-build-pipeline.c:3035
 msgid "Building dependencies…"
 msgstr "Construyendo dependencias…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3010
+#: src/libide/buildsystem/ide-build-pipeline.c:3039
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3014
+#: src/libide/buildsystem/ide-build-pipeline.c:3043
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3018
+#: src/libide/buildsystem/ide-build-pipeline.c:3047
 msgid "Building…"
 msgstr "Construyendo…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3022
+#: src/libide/buildsystem/ide-build-pipeline.c:3051
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3026
+#: src/libide/buildsystem/ide-build-pipeline.c:3055
 msgid "Committing…"
 msgstr "Aplicando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3030
+#: src/libide/buildsystem/ide-build-pipeline.c:3059
 msgid "Exporting…"
 msgstr "Exportando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3034
-#: src/libide/buildsystem/ide-build-pipeline.c:3038
+#: src/libide/buildsystem/ide-build-pipeline.c:3063
+#: src/libide/buildsystem/ide-build-pipeline.c:3067
 #: src/libide/workbench/ide-omni-bar.c:586
 msgid "Success"
 msgstr "Correcto"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3046
+#: src/libide/buildsystem/ide-build-pipeline.c:3075
 msgid "Preparing…"
 msgstr "Preparando…"
 
@@ -1192,6 +1190,10 @@ msgstr "Nueva variable…"
 msgid "Remove environment variable"
 msgstr "Quitar variable de entorno"
 
+#: src/libide/completion/ide-word-completion-provider.c:559
+msgid "Builder Word Completion"
+msgstr "Autocompletado de palabras de Builder"
+
 #: src/libide/debugger/gtk/menus.ui:10
 #: src/libide/debugger/ide-debugger-editor-addin.c:429
 msgid "Run with Debugger"
@@ -1292,11 +1294,11 @@ msgstr "Biblioteca"
 msgid "Address Range"
 msgstr "Rango de direcciones"
 
-#: src/libide/debugger/ide-debugger-locals-view.c:310
+#: src/libide/debugger/ide-debugger-locals-view.c:312
 msgid "Locals"
 msgstr "Locales"
 
-#: src/libide/debugger/ide-debugger-locals-view.c:364
+#: src/libide/debugger/ide-debugger-locals-view.c:367
 msgid "Parameters"
 msgstr "Parámetros"
 
@@ -1345,11 +1347,11 @@ msgstr "Binario"
 msgid "A suitable debugger could not be found."
 msgstr "No se pudo encontrar un depurador adecuado."
 
-#: src/libide/devices/ide-device-manager.c:580
+#: src/libide/devices/ide-device-manager.c:586
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: src/libide/devices/ide-device-manager.c:728
+#: src/libide/devices/ide-device-manager.c:734
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "No se puede desplegar en el dispositivo, la tubería de construcción no se ha "
@@ -1369,7 +1371,7 @@ msgid "No file was provided."
 msgstr "No se ha proporcionado ningún archivo."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:833
+#: src/libide/editor/ide-editor-perspective.c:834
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:153
 msgid "Editor"
@@ -1399,22 +1401,22 @@ msgstr "_Volver al principio"
 msgid "Cu_t"
 msgstr "C_ortar"
 
-#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:97
-#: src/libide/gtk/menus.ui:226
+#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:105
+#: src/libide/gtk/menus.ui:234
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:101
-#: src/libide/gtk/menus.ui:230
+#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:109
+#: src/libide/gtk/menus.ui:238
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:105
+#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:113
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:120
-#: src/libide/gtk/menus.ui:238
+#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:128
+#: src/libide/gtk/menus.ui:246
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -1500,7 +1502,7 @@ msgstr "Abrir"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:211
 #: src/plugins/color-picker/gb-color-picker-prefs.c:238
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
-#: src/plugins/terminal/gb-terminal-view-actions.c:274
+#: src/plugins/terminal/gb-terminal-view-actions.c:273
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1693,7 +1695,7 @@ msgstr "Fallo al imprimir: %s"
 #: src/libide/editor/ide-editor-view-actions.c:246
 #: src/plugins/color-picker/gb-color-picker-prefs.c:234
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: src/plugins/terminal/gb-terminal-view-actions.c:275
+#: src/plugins/terminal/gb-terminal-view-actions.c:274
 msgid "Save"
 msgstr "Guardar"
 
@@ -1890,93 +1892,99 @@ msgstr "_Acerca de"
 msgid "_Quit"
 msgstr "_Salir"
 
-#: src/libide/gtk/menus.ui:65
+#: src/libide/gtk/menus.ui:64
+#: src/libide/preferences/ide-preferences-perspective.c:139
+#: src/libide/preferences/ide-preferences-window.ui:9
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: src/libide/gtk/menus.ui:73
 msgid "Save _All"
 msgstr "Guardar todo"
 
-#: src/libide/gtk/menus.ui:76
+#: src/libide/gtk/menus.ui:84
 msgid "_Go to Definition"
 msgstr "_Ir a la definición"
 
-#: src/libide/gtk/menus.ui:82
+#: src/libide/gtk/menus.ui:90
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: src/libide/gtk/menus.ui:86
+#: src/libide/gtk/menus.ui:94
 msgid "_Redo"
 msgstr "_Rehacer"
 
-#: src/libide/gtk/menus.ui:92
+#: src/libide/gtk/menus.ui:100
 msgid "C_ut"
 msgstr "C_ortar"
 
-#: src/libide/gtk/menus.ui:113
+#: src/libide/gtk/menus.ui:121
 #: src/libide/preferences/ide-preferences-builtin.c:196
 #: src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Resaltado"
 
-#: src/libide/gtk/menus.ui:118 src/libide/gtk/menus.ui:236
+#: src/libide/gtk/menus.ui:126 src/libide/gtk/menus.ui:244
 msgid "Selection"
 msgstr "Selección"
 
-#: src/libide/gtk/menus.ui:125 src/libide/gtk/menus.ui:243
+#: src/libide/gtk/menus.ui:133 src/libide/gtk/menus.ui:251
 msgid "Select _None"
 msgstr "No seleccionar _nada"
 
-#: src/libide/gtk/menus.ui:131
+#: src/libide/gtk/menus.ui:139
 msgid "All _Upper Case"
 msgstr "Todo en _mayúsculas"
 
-#: src/libide/gtk/menus.ui:136
+#: src/libide/gtk/menus.ui:144
 msgid "All _Lower Case"
 msgstr "Todo en mi_núsculas"
 
-#: src/libide/gtk/menus.ui:141
+#: src/libide/gtk/menus.ui:149
 msgid "_Invert Case"
 msgstr "_Insertar mayúsculas y minúsculas"
 
-#: src/libide/gtk/menus.ui:146
+#: src/libide/gtk/menus.ui:154
 msgid "_Title Case"
 msgstr "Mayúsculas y minúsculas del _título"
 
-#: src/libide/gtk/menus.ui:153
+#: src/libide/gtk/menus.ui:161
 msgid "Join Lines"
 msgstr "Unir líneas"
 
-#: src/libide/gtk/menus.ui:157
+#: src/libide/gtk/menus.ui:165
 msgid "Sort Lines"
 msgstr "Ordenar líneas"
 
-#: src/libide/gtk/menus.ui:166
+#: src/libide/gtk/menus.ui:174
 msgid "Zoom"
 msgstr "Ampliación"
 
-#: src/libide/gtk/menus.ui:168
+#: src/libide/gtk/menus.ui:176
 msgid "Zoom _In"
 msgstr "_Ampliar"
 
-#: src/libide/gtk/menus.ui:173
+#: src/libide/gtk/menus.ui:181
 msgid "Zoom _Out"
 msgstr "_Reducir"
 
-#: src/libide/gtk/menus.ui:179 src/plugins/terminal/gtk/menus.ui:13
+#: src/libide/gtk/menus.ui:187 src/plugins/terminal/gtk/menus.ui:13
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: src/libide/gtk/menus.ui:193 src/libide/layout/ide-layout-stack.ui:105
+#: src/libide/gtk/menus.ui:201 src/libide/layout/ide-layout-stack.ui:105
 msgid "Open File…"
 msgstr "Abrir archivo…"
 
-#: src/libide/gtk/menus.ui:204 src/libide/runner/ide-run-manager.c:1115
+#: src/libide/gtk/menus.ui:212 src/libide/runner/ide-run-manager.c:1117
 msgid "Run"
 msgstr "Ejecutar"
 
-#: src/libide/gtk/menus.ui:213
+#: src/libide/gtk/menus.ui:221
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
-#: src/libide/gtk/menus.ui:218
+#: src/libide/gtk/menus.ui:226
 msgid "_Copy Link Address"
 msgstr "C_opiar la dirección del enlace"
 
@@ -1985,11 +1993,11 @@ msgstr "C_opiar la dirección del enlace"
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
 
-#: src/libide/ide-context.c:2111
+#: src/libide/ide-context.c:2121
 msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
-#: src/libide/ide-context.c:2229
+#: src/libide/ide-context.c:2240
 msgid "Context has already been restored."
 msgstr "Ya se ha restaurado el contexto."
 
@@ -2289,7 +2297,7 @@ msgid "Unselect all"
 msgstr "Deseleccionar todo"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:398
-#: src/libide/runner/ide-run-manager.c:779
+#: src/libide/runner/ide-run-manager.c:780
 #: src/libide/workbench/ide-workbench-shortcuts.c:46
 msgctxt "shortcut window"
 msgid "Build and Run"
@@ -2332,7 +2340,7 @@ msgid "Find text within terminal"
 msgstr "Buscar texto en la terminal"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:897
+#: src/libide/langserv/ide-langserv-client.c:898
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falló al inicializar el idioma del servidor: %s"
@@ -2402,13 +2410,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Ha ocurrido un problema al realizar la operación."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:210
+#: src/libide/local/ide-local-device.c:137
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Mi equipo (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:219
+#: src/libide/local/ide-local-device.c:147
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Mi equipo (%s) — %s"
@@ -2927,11 +2935,6 @@ msgstr "Control de versiones"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/preferences/ide-preferences-perspective.c:139
-#: src/libide/preferences/ide-preferences-window.ui:9
-msgid "Preferences"
-msgstr "Preferencias"
-
 #: src/libide/projects/ide-project.c:401
 msgid "Destination file must be within the project tree."
 msgstr "El archivo de destino debe estar en el árbol del proyecto."
@@ -2948,11 +2951,11 @@ msgstr "Detener ejecución"
 msgid "Change run options"
 msgstr "Cambiar las opciones de ejecución"
 
-#: src/libide/runner/ide-run-manager.c:370
+#: src/libide/runner/ide-run-manager.c:371
 msgid "Cannot run target, another target is running"
 msgstr "No se puede ejecutar el objetivo, ya ha otro objetivo en ejecución"
 
-#: src/libide/runner/ide-run-manager.c:440
+#: src/libide/runner/ide-run-manager.c:441
 msgid "Failed to locate runtime"
 msgstr "Falló al buscar la rutina"
 
@@ -2978,37 +2981,33 @@ msgstr "Falló al cargar el archivo: %s: %s"
 msgid "Click to toggle breakpoint"
 msgstr "Pulse para cambiar el punto de ruptura"
 
-#: src/libide/sourceview/ide-source-view.c:4607
+#: src/libide/sourceview/ide-source-view.c:4608
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4609
+#: src/libide/sourceview/ide-source-view.c:4610
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4723
+#: src/libide/sourceview/ide-source-view.c:4724
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:5149
+#: src/libide/sourceview/ide-source-view.c:5152
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5383
+#: src/libide/sourceview/ide-source-view.c:5388
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5409
+#: src/libide/sourceview/ide-source-view.c:5414
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
-
-#: src/libide/sourceview/ide-word-completion-provider.c:559
-msgid "Builder Word Completion"
-msgstr "Autocompletado de palabras de Builder"
 
 #: src/libide/terminal/ide-terminal-search.ui:152
 msgid "Regex"
@@ -3240,7 +3239,7 @@ msgid "Bootstrapping build system"
 msgstr "Inicializando sistema de construcción"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:140
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:145
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "Configurando proyecto"
@@ -3248,7 +3247,7 @@ msgstr "Configurando proyecto"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:276
 #: src/plugins/cargo/cargo_plugin.py:150
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:169
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:174
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Construyendo proyecto"
@@ -3467,40 +3466,9 @@ msgstr "Mostrar errores y advertencias proporcionadas por Clang"
 msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos advertencias errors"
 
-#: src/plugins/clang/ide-clang-service.c:325
-msgid "Unknown failure"
-msgstr "Fallo desconocido"
-
-#: src/plugins/clang/ide-clang-service.c:329
-msgid "Clang crashed"
-msgstr "Clang ha fallado"
-
-#: src/plugins/clang/ide-clang-service.c:333
-msgid "Invalid arguments"
-msgstr "Argumentos no válidos"
-
-#: src/plugins/clang/ide-clang-service.c:337
-msgid "AST read error"
-msgstr "Error de lectura AST"
-
-#: src/plugins/clang/ide-clang-service.c:349
-#, c-format
-msgid "Failed to create translation unit: %s"
-msgstr "Falló al crear la unidad de traducción: %s"
-
-#: src/plugins/clang/ide-clang-service.c:562
-#: src/plugins/xml-pack/ide-xml-service.c:95
-msgid "File must be saved locally to parse."
-msgstr ""
-"El archivo debe estar guardado localmente para analizarlo gramaticalmente."
-
-#: src/plugins/clang/ide-clang-symbol-node.c:152
+#: src/plugins/clang/ide-clang-symbol-node.c:57
 msgid "anonymous"
 msgstr "anónimo"
-
-#: src/plugins/clang/ide-clang-translation-unit.c:620
-msgid "clang_codeCompleteAt() only works on local files"
-msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:421
 msgid "CMake"
@@ -3511,7 +3479,7 @@ msgid "Configure project"
 msgstr "Configurar proyecto"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:179
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:184
 #: src/plugins/phpize/phpize_plugin.py:248
 msgid "Installing project"
 msgstr "Instalando proyecto"
@@ -4074,7 +4042,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Descargando fuentes de aplicaciones…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:660
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Falló al quitar el manifiesto de flatpak: %s"
@@ -4122,17 +4090,17 @@ msgstr "Creando paquete flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
-#: src/plugins/html-preview/html_preview.py:325
-#: src/plugins/html-preview/html_preview.py:335
-#: src/plugins/rustup/rustup_plugin.py:491
-#: src/plugins/rustup/rustup_plugin.py:495
-#: src/plugins/rustup/rustup_plugin.py:612
+#: src/plugins/html-preview/html_preview.py:329
+#: src/plugins/html-preview/html_preview.py:339
+#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:496
+#: src/plugins/rustup/rustup_plugin.py:613
 msgid "Install"
 msgstr "Instalar"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:97
-#: src/plugins/rustup/rustup_plugin.py:491
-#: src/plugins/rustup/rustup_plugin.py:495
+#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:496
 msgid "Update"
 msgstr "Actualizar"
 
@@ -4286,7 +4254,7 @@ msgstr ""
 msgid "Failed to establish git file monitor: %s"
 msgstr "Falló al establecer el archivo de monitorización de git: %s"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:374
 msgid "Code assistance requires a local file."
 msgstr "La asistencia de código requiere de un archivo local."
 
@@ -4323,15 +4291,15 @@ msgstr ""
 msgid "Open Preview"
 msgstr "Abrir vista previa"
 
-#: src/plugins/html-preview/html_preview.py:321
+#: src/plugins/html-preview/html_preview.py:325
 msgid "Your computer is missing python3-docutils"
 msgstr "Su equipo no tiene python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:331
+#: src/plugins/html-preview/html_preview.py:335
 msgid "Your computer is missing python3-sphinx"
 msgstr "Su equipo no tiene python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:374
+#: src/plugins/html-preview/html_preview.py:382
 msgid "(Preview)"
 msgstr "(Vista previa)"
 
@@ -4358,6 +4326,20 @@ msgstr "Crear un nuevo proyecto vacío usando un Makefile sencillo"
 #: src/plugins/meson/gbp-meson-build-system.c:428
 msgid "Meson"
 msgstr "Meson"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:103
+#| msgid "A suitable debugger could not be found."
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr ""
+"Se ha cargado un proyecto basado en Meson pero no se ha podido encontrar "
+"Ninja."
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:123
+#| msgid "A suitable debugger could not be found."
+msgid "A Meson-based project is loaded but meson could not be found."
+msgstr ""
+"Se ha cargado un proyecto basado en Meson pero no se ha podido encontrar "
+"meson."
 
 #: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
@@ -4594,7 +4576,7 @@ msgid "Arm Emulation"
 msgstr "Emulación de Arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
-#: src/plugins/qemu/gbp-qemu-device-provider.c:156
+#: src/plugins/qemu/gbp-qemu-device-provider.c:157
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Mi equipo (%s) %s"
@@ -4626,103 +4608,103 @@ msgstr "Actualizado"
 msgid "Reformat tabs"
 msgstr "Volver a formatear pestañas"
 
-#: src/plugins/rustup/rustup_plugin.py:88
+#: src/plugins/rustup/rustup_plugin.py:89
 msgid "Rustup not installed"
 msgstr "Rustup no está instalado"
 
-#: src/plugins/rustup/rustup_plugin.py:278
+#: src/plugins/rustup/rustup_plugin.py:279
 msgid "Installing rustup"
 msgstr "Instalando rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:280
+#: src/plugins/rustup/rustup_plugin.py:281
 msgid "Updating rustup"
 msgstr "Actualizando rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:282
+#: src/plugins/rustup/rustup_plugin.py:283
 msgid "Installing rust "
 msgstr "Instalando rust "
 
-#: src/plugins/rustup/rustup_plugin.py:284
+#: src/plugins/rustup/rustup_plugin.py:285
 msgid "Checking system"
 msgstr "Comprobando el sistema"
 
-#: src/plugins/rustup/rustup_plugin.py:349
+#: src/plugins/rustup/rustup_plugin.py:350
 msgid "Downloading rustup-init"
 msgstr "Descargando rustup-init"
 
-#: src/plugins/rustup/rustup_plugin.py:354
+#: src/plugins/rustup/rustup_plugin.py:355
 msgid "Syncing channel updates"
 msgstr "Sincronizando actualizaciones de canales"
 
-#: src/plugins/rustup/rustup_plugin.py:360
+#: src/plugins/rustup/rustup_plugin.py:361
 msgid "Downloading "
 msgstr "Descargando "
 
-#: src/plugins/rustup/rustup_plugin.py:367
+#: src/plugins/rustup/rustup_plugin.py:368
 msgid "Installing "
 msgstr "Instalando "
 
-#: src/plugins/rustup/rustup_plugin.py:373
+#: src/plugins/rustup/rustup_plugin.py:374
 msgid "Checking for rustup updates"
 msgstr "Comprobando si hay actualizaciones de rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:378
+#: src/plugins/rustup/rustup_plugin.py:379
 msgid "Downloading rustup update"
 msgstr "Descargando actualización de rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:415
+#: src/plugins/rustup/rustup_plugin.py:416
 msgid "Error installing "
 msgstr "Error al instalar"
 
-#: src/plugins/rustup/rustup_plugin.py:417
+#: src/plugins/rustup/rustup_plugin.py:418
 msgid "Error"
 msgstr "Error"
 
-#: src/plugins/rustup/rustup_plugin.py:422
+#: src/plugins/rustup/rustup_plugin.py:423
 msgid "Cancelled"
 msgstr "Cancelado"
 
-#: src/plugins/rustup/rustup_plugin.py:430
+#: src/plugins/rustup/rustup_plugin.py:431
 msgid "Finished"
 msgstr "Terminado"
 
-#: src/plugins/rustup/rustup_plugin.py:446
+#: src/plugins/rustup/rustup_plugin.py:447
 msgid "Rustup"
 msgstr "Rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:447
+#: src/plugins/rustup/rustup_plugin.py:448
 msgid "Rustup Toolchains"
 msgstr "«Toolchains» de Rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:503
+#: src/plugins/rustup/rustup_plugin.py:504
 msgid "Updating"
 msgstr "Actualizando"
 
-#: src/plugins/rustup/rustup_plugin.py:503
+#: src/plugins/rustup/rustup_plugin.py:504
 msgid "Installing"
 msgstr "Instalando"
 
 #. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:596
+#: src/plugins/rustup/rustup_plugin.py:597
 msgid "Make default"
 msgstr "Convertir en predeterminada"
 
-#: src/plugins/rustup/rustup_plugin.py:596
+#: src/plugins/rustup/rustup_plugin.py:597
 msgid "Makes the selected toolchain the default rust installation"
 msgstr ""
 "Hace que la «toolchain» seleccionada sea la instalación de Rust "
 "predeterminada"
 
-#: src/plugins/rustup/rustup_plugin.py:611
+#: src/plugins/rustup/rustup_plugin.py:612
 msgid "Install Rust Channel"
 msgstr "Instalar canal Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:616
+#: src/plugins/rustup/rustup_plugin.py:617
 msgid "Enter name of rust channel"
 msgstr "Introduzca el nombre del canal rust"
 
-#: src/plugins/rustup/rustup_plugin.py:617
+#: src/plugins/rustup/rustup_plugin.py:618
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -4739,15 +4721,15 @@ msgstr ""
 "                        <date>          = YYYY-MM-DD\n"
 "                        <host>          = <target-triple>"
 
-#: src/plugins/rustup/rustup_plugin.py:642
+#: src/plugins/rustup/rustup_plugin.py:643
 msgid "Install Rustup to manage toolchains here!"
 msgstr "Instale Rustup para gestionar las «toolchains»."
 
-#: src/plugins/rustup/rustup_plugin.py:649
+#: src/plugins/rustup/rustup_plugin.py:650
 msgid "No toolchain installed. Click"
 msgstr "No hay «toolchains» instaladas. Pulse"
 
-#: src/plugins/rustup/rustup_plugin.py:650
+#: src/plugins/rustup/rustup_plugin.py:651
 msgid "to add a new toolchain!"
 msgstr "para añadir una «toolchain» nueva."
 
@@ -4864,13 +4846,11 @@ msgstr ""
 "archivo como adjunto en su informe de error o en la solicitud de soporte."
 
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
-#| msgid "Symbols"
 msgctxt "shortcut window"
 msgid "Symbols"
 msgstr "Símbolos"
 
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:56
-#| msgid "Search to the previous document"
 msgctxt "shortcut window"
 msgid "Search symbols within document"
 msgstr "Buscar símbolos en el documento"
@@ -4950,7 +4930,6 @@ msgid "Sysroots"
 msgstr "Sysroots"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
-#| msgid "The name of the project."
 msgid "A name to identify the sysroot."
 msgstr "Un nombre para identificar el sysroot."
 
@@ -4959,7 +4938,6 @@ msgid "Architecture"
 msgstr "Arquitectura"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
-#| msgid "The title of the switch."
 msgid "The system architecture of the sysroot."
 msgstr "La arquitectura del sistema del sysroot."
 
@@ -4976,11 +4954,10 @@ msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
 msgstr "Una ruta opcional separada por comas para especificar PKG_CONFIG_PATH."
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
-#| msgid "_Delete"
 msgid "Delete"
 msgstr "Eliminar"
 
-#: src/plugins/terminal/gb-terminal-view-actions.c:266
+#: src/plugins/terminal/gb-terminal-view-actions.c:265
 msgid "Save Terminal Content As"
 msgstr "Guardar contenido de la terminal como"
 
@@ -4997,8 +4974,6 @@ msgid "Application exited\r\n"
 msgstr "Aplicación terminada\n"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:244
-#| msgctxt "shortcut window"
-#| msgid "Terminal in Build Runtime"
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
 msgstr "Terminal en tiempo de ejecución"
@@ -5016,7 +4991,6 @@ msgid "New _Build Terminal"
 msgstr "Nueva terminal _construída"
 
 #: src/plugins/terminal/gtk/menus.ui:50
-#| msgid "_New Runtime Terminal"
 msgid "New _Runtime Terminal"
 msgstr "_Nueva terminal en tiempo de ejecución"
 
@@ -5046,14 +5020,37 @@ msgstr "diagnósticos de alertas y errores de Vala"
 msgid "Run with Valgrind"
 msgstr "Ejecutar con Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:582
+#: src/plugins/xml-pack/ide-xml-parser.c:585
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Falló al crear el árbol XML."
 
+#: src/plugins/xml-pack/ide-xml-service.c:95
+msgid "File must be saved locally to parse."
+msgstr ""
+"El archivo debe estar guardado localmente para analizarlo gramaticalmente."
+
 #: src/plugins/xml-pack/ide-xml-service.c:337
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Búfer cargado pero no en el gestor de búferes."
+
+#~ msgid "Unknown failure"
+#~ msgstr "Fallo desconocido"
+
+#~ msgid "Clang crashed"
+#~ msgstr "Clang ha fallado"
+
+#~ msgid "Invalid arguments"
+#~ msgstr "Argumentos no válidos"
+
+#~ msgid "AST read error"
+#~ msgstr "Error de lectura AST"
+
+#~ msgid "Failed to create translation unit: %s"
+#~ msgstr "Falló al crear la unidad de traducción: %s"
+
+#~ msgid "clang_codeCompleteAt() only works on local files"
+#~ msgstr "clang_codeCompleteAt() solo funciona con archivos locales"
 
 #~ msgid "The device “%s” could not be found."
 #~ msgstr "No se pudo encontrar el dispositivo «%s»."
