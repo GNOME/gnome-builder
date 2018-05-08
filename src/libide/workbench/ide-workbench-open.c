@@ -45,8 +45,9 @@ typedef struct
   IdeUri               *uri;
   GArray               *loaders;
   gchar                *content_type;
-  IdeWorkbenchOpenFlags flags;
   gchar                *hint;
+  IdeWorkbenchOpenFlags flags;
+  guint                 index;
   guint                 did_collect : 1;
 } IdeWorkbenchOpenUriState;
 
@@ -168,6 +169,8 @@ ide_workbench_open_uri_cb (GObject      *object,
       return;
     }
 
+  open_uri_state->index++;
+
   ide_workbench_open_uri_try_next (open_uri_state);
 }
 
@@ -192,7 +195,7 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
                               open_uri_state->hint);
     }
 
-  if (open_uri_state->loaders->len == 0)
+  if (open_uri_state->index >= open_uri_state->loaders->len)
     {
       gchar *uristr;
 
@@ -209,7 +212,7 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
       return;
     }
 
-  loader = &g_array_index (open_uri_state->loaders, IdeWorkbenchLoader, 0);
+  loader = &g_array_index (open_uri_state->loaders, IdeWorkbenchLoader, open_uri_state->index);
 
   ide_workbench_addin_open_async (loader->addin,
                                   open_uri_state->uri,
