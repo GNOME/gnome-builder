@@ -1218,7 +1218,10 @@ gb_vim_command_substitute (GtkWidget    *active_widget,
       substitute_begin = &selection_begin;
       substitute_end = &selection_end;
     }
-  gb_vim_do_substitute(buffer, substitute_begin, substitute_end, search_text, replace_text, replace_every_occurence_in_line, replace_in_every_line);
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gb_vim_do_substitute (buffer, substitute_begin, substitute_end, search_text, replace_text, replace_every_occurence_in_line, replace_in_every_line);
+  gtk_text_buffer_end_user_action (buffer);
 
   return TRUE;
 
