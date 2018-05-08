@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="GbpMesonToolRow" parent="GtkListBoxRow">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <property name="orientation">horizontal</property>
+        <property name="column-spacing">12</property>
+        <property name="margin">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel" id="name_label">
+            <property name="hexpand">true</property>
+            <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="delete_button">
+            <style>
+              <class name="destructive-action"/>
+            </style>
+            <property name="image">delete-image</property>
+            <property name="visible">true</property>
+            <property name="tooltip_text" translatable="yes">Delete Tool</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkImage" id="delete-image">
+    <property name="icon-name">edit-delete-symbolic</property>
+    <property name="visible">true</property>
+  </object>
+</interface>

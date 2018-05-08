@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="GbpMesonToolchainEditionPreferencesRow" parent="DzlPreferencesBin">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <property name="orientation">horizontal</property>
+        <property name="column-spacing">12</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel" id="display_name">
+            <property name="hexpand">true</property>
+            <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage" id="image">
+            <property name="icon-name">pan-down-symbolic</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkListStore" id="arch_liststore">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">i386-linux-gnu</col>
+      </row>
+      <row>
+        <col id="0">x86_64-linux-gnu</col>
+      </row>
+      <row>
+        <col id="0">arm-linux-gnu</col>
+      </row>
+      <row>
+        <col id="0">aarch64-linux-gnu</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkImage" id="add-image">
+    <property name="visible">true</property>
+    <property name="can_focus">false</property>
+    <property name="icon_name">list-add-symbolic</property>
+  </object>
+  <object class="GtkPopover" id="popover">
+    <property name="relative-to">image</property>
+    <property name="position">bottom</property>
+    <property name="can-focus">true</property>
+    <child>
+      <object class="GtkGrid">
+        <property name="border-width">12</property>
+        <property name="orientation">horizontal</property>
+        <property name="column-spacing">12</property>
+        <property name="row-spacing">12</property>
+        <property name="margin">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel">
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <property name="visible">true</property>
+            <property name="xalign">1.0</property>
+            <property name="label" translatable="yes">Name</property>
+            <property name="tooltip-text" translatable="yes">A name to identify the sysroot.</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="name_entry">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="can-focus">true</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <property name="visible">true</property>
+            <property name="xalign">1.0</property>
+            <property name="label" translatable="yes">Architecture</property>
+            <property name="tooltip-text" translatable="yes">The system architecture of the sysroot.</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="arch_combobox">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="has-entry">true</property>
+            <property name="model">arch_liststore</property>
+            <property name="id-column">0</property>
+            <property name="entry-text-column">0</property>
+            <property name="active">-1</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">true</property>
+            <property name="can_focus">true</property>
+            <property name="shadow_type">in</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="height_request">100</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">true</property>
+                <property name="can_focus">false</property>
+                <child>
+                  <object class="GtkListBox" id="tools_listbox">
+                    <property name="visible">true</property>
+                    <property name="can_focus">false</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Add Tool:</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">true</property>
+            <property name="can_focus">false</property>
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkComboBoxText" id="tool_combobox">
+                <property name="width_request">150</property>
+                <property name="visible">true</property>
+                <property name="can_focus">false</property>
+                <property name="active">0</property>
+                <items>
+                  <item id="cc" translatable="yes">Compiler</item>
+                  <item id="cpp" translatable="yes">Preprocessor</item>
+                  <item id="ar" translatable="yes">Archiver</item>
+                  <item id="ld" translatable="yes">Linker</item>
+                  <item id="strip" translatable="yes">Strip</item>
+                  <item id="exec" translatable="yes">Executable wrapper</item>
+                  <item id="pkg-config" translatable="yes">Package Config</item>
+                </items>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="lang_combobox">
+                <property name="width_request">50</property>
+                <property name="visible">true</property>
+                <property name="can_focus">false</property>
+                <property name="active">0</property>
+                <property name="has_entry">true</property>
+                <items>
+                  <item id="*" translatable="yes">Any language</item>
+                  <item id="c" translatable="yes">C</item>
+                  <item id="c++" translatable="yes">C++</item>
+                  <item id="python" translatable="yes">Python</item>
+                  <item id="vala" translatable="yes">Vala</item>
+                  <item id="fortran" translatable="yes">Fortran</item>
+                  <item id="d" translatable="yes">D</item>
+                </items>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">true</property>
+            <property name="can_focus">false</property>
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="DzlFileChooserEntry" id="path_entry">
+                <property name="visible">true</property>
+                <property name="hexpand">true</property>
+                <property name="can-focus">true</property>
+                <property name="local-only">true</property>
+                <property name="action">GTK_FILE_CHOOSER_ACTION_OPEN</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="add_button">
+                <property name="visible">true</property>
+                <property name="can_focus">true</property>
+                <property name="receives_default">true</property>
+                <property name="image">add-image</property>
+                <property name="always_show_image">true</property>
+                <property name="tooltip_text" translatable="yes">Add Tool</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="delete_button">
+            <style>
+              <class name="destructive-action"/>
+            </style>
+            <property name="label" translatable="yes">Delete</property>
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="can-focus">true</property>
+            <property name="halign">end</property>
+            <property name="margin-top">6</property>
+            <property name="tooltip_text" translatable="yes">Delete Toolchain</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

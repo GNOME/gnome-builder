@@ -88,6 +88,40 @@ gbp_meson_get_toolchain_language (const gchar *meson_tool_name)
 }
 
 const gchar *
+gbp_meson_get_tool_display_name (const gchar *tool_id)
+{
+  g_return_val_if_fail (tool_id != NULL, NULL);
+
+  if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_CC) == 0)
+    return _("Compiler");
+  if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_CPP) == 0)
+    return _("Preprocessor");
+  if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_AR) == 0)
+    return _("Archiver");
+  if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_LD) == 0)
+    return _("Linker");
+  if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_STRIP) == 0)
+    return _("Strip");
+  if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_EXEC) == 0)
+    return _("Executable wrapper");
+  if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_PKG_CONFIG) == 0)
+    return _("Package Config");
+
+  return tool_id;
+}
+
+const gchar *
+gbp_meson_get_tool_binary_name (const gchar *tool_id)
+{
+  if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_PKG_CONFIG) == 0)
+    return "pkgconfig";
+  else if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_EXEC) == 0)
+    return "exe_wrapper";
+  else
+    return tool_id;
+}
+
+const gchar *
 gbp_meson_get_tool_id_from_binary (const gchar *meson_tool_name)
 {
   g_return_val_if_fail (meson_tool_name != NULL, NULL);

@@ -8,6 +8,10 @@ meson_resources = gnome.compile_resources(
 
 meson_sources = [
   'meson-plugin.c',
+  'gbp-meson-toolchain-edition-preferences-addin.c',
+  'gbp-meson-toolchain-edition-preferences-addin.h',
+  'gbp-meson-toolchain-edition-preferences-row.c',
+  'gbp-meson-toolchain-edition-preferences-row.h',
   'gbp-meson-build-stage-cross-file.c',
   'gbp-meson-build-stage-cross-file.h',
   'gbp-meson-build-system.c',
@@ -26,6 +30,8 @@ meson_sources = [
   'gbp-meson-toolchain.h',
   'gbp-meson-toolchain-provider.c',
   'gbp-meson-toolchain-provider.h',
+  'gbp-meson-tool-row.c',
+  'gbp-meson-tool-row.h',
   'gbp-meson-utils.c',
   'gbp-meson-utils.h',
 ]
