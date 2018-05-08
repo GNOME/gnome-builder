@@ -147,7 +147,7 @@ ide_workbench_open_uri_state_free (gpointer data)
   g_clear_pointer (&open_uri_state->uri, ide_uri_unref);
   g_clear_pointer (&open_uri_state->content_type, g_free);
   g_clear_pointer (&open_uri_state->hint, g_free);
-  g_free (open_uri_state);
+  g_slice_free (IdeWorkbenchOpenUriState, open_uri_state);
 }
 
 static void
@@ -307,7 +307,7 @@ ide_workbench_open_uri_async (IdeWorkbench         *self,
   g_return_if_fail (uri != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  open_uri_state = g_new0 (IdeWorkbenchOpenUriState, 1);
+  open_uri_state = g_slice_new0 (IdeWorkbenchOpenUriState);
   open_uri_state->self = self;
   open_uri_state->uri = ide_uri_ref (uri);
   open_uri_state->content_type = NULL;
