@@ -35,6 +35,8 @@ gchar       *gbp_meson_key_file_get_string_quoted       (GKeyFile     *key_file,
                                                          const gchar  *key,
                                                          GError      **error);
 const gchar *gbp_meson_get_toolchain_language           (const gchar  *meson_tool_name);
+const gchar *gbp_meson_get_tool_display_name            (const gchar  *tool_id);
+const gchar *gbp_meson_get_tool_binary_name             (const gchar  *tool_id);
 const gchar *gbp_meson_get_tool_id_from_binary          (const gchar  *meson_tool_name);
 
 G_END_DECLS
