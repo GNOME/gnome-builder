@@ -129,6 +129,7 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_DIR", "", TRUE);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_SYSROOT_DIR", g_strdup (sysroot_path), TRUE);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_LIBDIR", sysroot_libdirs, TRUE);
+      ide_subprocess_launcher_setenv (ret, "QEMU_LD_PREFIX", g_strdup (sysroot_path), TRUE);
     }
   else
     {
