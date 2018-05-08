@@ -996,14 +996,12 @@ gb_vim_do_substitute_line (GtkTextBuffer *buffer,
   gtk_source_search_settings_set_search_text (search_settings, search_text);
   gtk_source_search_settings_set_case_sensitive (search_settings, TRUE);
 
-  while (gtk_source_search_context_forward2 (search_context, begin, &match_begin, &match_end,
-                                             &has_wrapped) && !has_wrapped)
+  while (gtk_source_search_context_forward2 (search_context, begin, &match_begin, &match_end, &has_wrapped) && !has_wrapped)
     {
-      if( gtk_text_iter_get_line(&match_end) != line_number)
+      if (gtk_text_iter_get_line (&match_end) != line_number)
         break;
 
-      if (!gtk_source_search_context_replace2 (search_context, &match_begin, &match_end,
-                                              replace_text, -1, &error))
+      if (!gtk_source_search_context_replace2 (search_context, &match_begin, &match_end, replace_text, -1, &error))
         {
           g_warning ("%s", error->message);
           g_clear_error (&error);
@@ -1012,7 +1010,7 @@ gb_vim_do_substitute_line (GtkTextBuffer *buffer,
 
       *begin = match_end;
 
-      if(!is_global)
+      if (!is_global)
         break;
     }
 
@@ -1034,60 +1032,55 @@ gb_vim_do_substitute (GtkTextBuffer *buffer,
   GtkTextMark *last_line;
   GtkTextIter *current_line;
   GtkTextMark *end_mark;
+  GtkTextMark *insert;
 
   g_assert (search_text);
   g_assert (replace_text);
   g_assert ((!begin && !end) || (begin && end));
 
+  insert = gtk_text_buffer_get_insert (buffer);
+
   if (!begin)
     {
-      if(should_search_all_lines)
-        {
-          gtk_text_buffer_get_start_iter (buffer, &begin_tmp);
-        }
+      if (should_search_all_lines)
+        gtk_text_buffer_get_start_iter (buffer, &begin_tmp);
       else
-        {
-          gtk_text_buffer_get_iter_at_mark(buffer, &begin_tmp,
-                                           gtk_text_buffer_get_insert(buffer));
-        }
+        gtk_text_buffer_get_iter_at_mark (buffer, &begin_tmp, insert);
       begin = &begin_tmp;
     }
 
   if (!end)
     {
-      if(should_search_all_lines)
-        {
-          gtk_text_buffer_get_end_iter (buffer, &end_tmp);
-        }
+      if (should_search_all_lines)
+        gtk_text_buffer_get_end_iter (buffer, &end_tmp);
       else
-        {
-          gtk_text_buffer_get_iter_at_mark(buffer, &end_tmp,
-                                           gtk_text_buffer_get_insert(buffer));
-        }
+        gtk_text_buffer_get_iter_at_mark (buffer, &end_tmp, insert);
       end = &end_tmp;
     }
 
   current_line = begin;
-  last_line = gtk_text_buffer_create_mark(buffer, NULL, current_line, FALSE);
-  end_mark = gtk_text_buffer_create_mark(buffer, NULL, end, FALSE);
+  last_line = gtk_text_buffer_create_mark (buffer, NULL, current_line, FALSE);
+  end_mark = gtk_text_buffer_create_mark (buffer, NULL, end, FALSE);
 
-  for(gint line = gtk_text_iter_get_line(current_line); line <= gtk_text_iter_get_line(end); line++)
+  for (guint line = gtk_text_iter_get_line (current_line);
+       line <= gtk_text_iter_get_line (end);
+       line++)
     {
       gb_vim_do_substitute_line (buffer, current_line, search_text, replace_text, is_global);
-      gtk_text_buffer_get_iter_at_mark(buffer, current_line, last_line);
-      gtk_text_buffer_get_iter_at_mark(buffer, end, end_mark);
+      gtk_text_buffer_get_iter_at_mark (buffer, current_line, last_line);
+      gtk_text_buffer_get_iter_at_mark (buffer, end, end_mark);
       gtk_text_iter_set_line (current_line, line + 1);
     }
 
-  gtk_text_buffer_delete_mark(buffer, last_line);
-  gtk_text_buffer_delete_mark(buffer, end_mark);
+  gtk_text_buffer_delete_mark (buffer, last_line);
+  gtk_text_buffer_delete_mark (buffer, end_mark);
 }
 
 static gboolean
-gb_vim_command_substitute (GtkWidget *active_widget,
-                           const gchar *command,
-                           const gchar *options,
-                           GError **error)
+gb_vim_command_substitute (GtkWidget    *active_widget,
+                           const gchar  *command,
+                           const gchar  *options,
+                           GError      **error)
 {
   IdeSourceView  *source_view;
   GtkTextBuffer *buffer;
@@ -1221,7 +1214,7 @@ gb_vim_command_substitute (GtkWidget *active_widget,
 
   if (gtk_text_buffer_get_has_selection (buffer))
     {
-      gtk_text_buffer_get_selection_bounds(buffer, &selection_begin, &selection_end);
+      gtk_text_buffer_get_selection_bounds (buffer, &selection_begin, &selection_end);
       substitute_begin = &selection_begin;
       substitute_end = &selection_end;
     }
