@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "gbp-meson-build-stage-cross-file.h"
+#include "gbp-meson-utils.h"
 
 struct _GbpMesonBuildStageCrossFile
 {
@@ -32,40 +33,6 @@ struct _GbpMesonBuildStageCrossFile
 G_DEFINE_TYPE (GbpMesonBuildStageCrossFile, gbp_meson_build_stage_cross_file, IDE_TYPE_BUILD_STAGE)
 
 static void
-_g_key_file_set_string_quoted (GKeyFile *keyfile,
-                               const gchar *group,
-                               const gchar *key,
-                               const gchar *unquoted_value)
-{
-  g_autofree gchar *quoted_value = NULL;
-
-  g_return_if_fail (keyfile != NULL);
-  g_return_if_fail (group != NULL);
-  g_return_if_fail (key != NULL);
-  g_return_if_fail (unquoted_value != NULL);
-
-  quoted_value = g_strdup_printf ("'%s'", unquoted_value);
-  g_key_file_set_string (keyfile, group, key, quoted_value);
-}
-
-static void
-_g_key_file_set_string_array_quoted (GKeyFile *keyfile,
-                                     const gchar *group,
-                                     const gchar *key,
-                                     const gchar *unquoted_value)
-{
-  g_autofree gchar *quoted_value = NULL;
-
-  g_return_if_fail (keyfile != NULL);
-  g_return_if_fail (group != NULL);
-  g_return_if_fail (key != NULL);
-  g_return_if_fail (unquoted_value != NULL);
-
-  quoted_value = g_strdup_printf ("['%s']", unquoted_value);
-  g_key_file_set_string (keyfile, group, key, quoted_value);
-}
-
-static void
 add_lang_executable (const gchar *lang,
                      const gchar *path,
                      GKeyFile *keyfile)
@@ -73,7 +40,7 @@ add_lang_executable (const gchar *lang,
   if (g_strcmp0 (lang, IDE_TOOLCHAIN_LANGUAGE_CPLUSPLUS) == 0)
     lang = "cpp";
 
-  _g_key_file_set_string_quoted (keyfile, "binaries", lang, path);
+  gbp_meson_key_file_set_string_quoted (keyfile, "binaries", lang, path);
 }
 
 static void
@@ -136,43 +103,43 @@ gbp_meson_build_stage_cross_file_execute (IdeBuildStage     *stage,
                                                      IDE_TOOLCHAIN_LANGUAGE_ANY,
                                                      IDE_TOOLCHAIN_TOOL_AR);
   if (binary_path != NULL)
-    _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "ar", binary_path);
+    gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "ar", binary_path);
 
   binary_path = ide_toolchain_get_tool_for_language (self->toolchain,
                                                      IDE_TOOLCHAIN_LANGUAGE_ANY,
                                                      IDE_TOOLCHAIN_TOOL_STRIP);
   if (binary_path != NULL)
-    _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "strip", binary_path);
+    gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "strip", binary_path);
 
   binary_path = ide_toolchain_get_tool_for_language (self->toolchain,
                                                      IDE_TOOLCHAIN_LANGUAGE_ANY,
                                                      IDE_TOOLCHAIN_TOOL_PKG_CONFIG);
   if (binary_path != NULL)
-    _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "pkgconfig", binary_path);
+    gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "pkgconfig", binary_path);
 
   binary_path = ide_toolchain_get_tool_for_language (self->toolchain,
                                                      IDE_TOOLCHAIN_LANGUAGE_ANY,
                                                      IDE_TOOLCHAIN_TOOL_EXEC);
   if (binary_path != NULL)
-    _g_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "exe_wrapper", binary_path);
+    gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "binaries", "exe_wrapper", binary_path);
 
   binary_path = ide_triplet_get_kernel (triplet);
-  _g_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "system", binary_path);
+  gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "system", binary_path);
 
   binary_path = ide_triplet_get_arch (triplet);
-  _g_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "cpu_family", binary_path);
+  gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "cpu_family", binary_path);
 
-  _g_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "cpu", binary_path);
-  _g_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "endian", "little");
+  gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "cpu", binary_path);
+  gbp_meson_key_file_set_string_quoted (crossbuild_keyfile, "host_machine", "endian", "little");
 
   env_launcher = ide_build_pipeline_create_launcher (pipeline, error);
   flags = ide_subprocess_launcher_getenv (env_launcher, "CFLAGS");
   if (flags != NULL)
-    _g_key_file_set_string_array_quoted (crossbuild_keyfile, "properties", "c_args", flags);
+    gbp_meson_key_file_set_string_array_quoted (crossbuild_keyfile, "properties", "c_args", flags);
 
   flags = ide_subprocess_launcher_getenv (env_launcher, "LDFLAGS");
   if (flags != NULL)
-    _g_key_file_set_string_array_quoted (crossbuild_keyfile, "properties", "c_link_args", flags);
+    gbp_meson_key_file_set_string_array_quoted (crossbuild_keyfile, "properties", "c_link_args", flags);
 
   crossbuild_file = gbp_meson_build_stage_cross_file_get_path (self, pipeline);
   if (!g_key_file_save_to_file (crossbuild_keyfile, crossbuild_file, error))

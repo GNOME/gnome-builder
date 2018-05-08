@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 
 #include "gbp-meson-toolchain.h"
+#include "gbp-meson-utils.h"
 
 struct _GbpMesonToolchain
 {
@@ -39,21 +40,6 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static gchar *
-_g_key_file_get_string_quoted (GKeyFile     *key_file,
-                               const gchar  *group_name,
-                               const gchar  *key,
-                               GError      **error)
-{
-  g_autofree gchar *value = NULL;
-  value = g_key_file_get_string (key_file, group_name, key, error);
-  /* We need to remove leading and trailing aportrophe */
-  if (value != NULL)
-    return g_utf8_substring (value, 1, g_utf8_strlen (value, -1) - 1);
-
-  return NULL;
-}
-
 GbpMesonToolchain *
 gbp_meson_toolchain_new (IdeContext *context)
 {
@@ -67,23 +53,6 @@ gbp_meson_toolchain_new (IdeContext *context)
 
 
   return g_steal_pointer (&toolchain);
-}
-
-static const gchar *
-meson_toolchain_get_language (const gchar *meson_tool_name)
-{
-  g_return_val_if_fail (meson_tool_name != NULL, NULL);
-
-  if (g_strcmp0 (meson_tool_name, "c") == 0)
-    return IDE_TOOLCHAIN_LANGUAGE_C;
-
-  if (g_strcmp0 (meson_tool_name, "cpp") == 0)
-    return IDE_TOOLCHAIN_LANGUAGE_CPLUSPLUS;
-
-  if (g_strcmp0 (meson_tool_name, "valac") == 0)
-    return IDE_TOOLCHAIN_LANGUAGE_VALA;
-
-  return meson_tool_name;
 }
 
 gboolean
@@ -104,11 +73,11 @@ gbp_meson_toolchain_load (GbpMesonToolchain  *self,
   if (!g_key_file_load_from_file (keyfile, path, G_KEY_FILE_NONE, error))
     return FALSE;
 
-  arch = _g_key_file_get_string_quoted (keyfile, "host_machine", "cpu_family", error);
+  arch = gbp_meson_key_file_get_string_quoted (keyfile, "host_machine", "cpu_family", error);
   if (arch == NULL)
     return FALSE;
 
-  system = _g_key_file_get_string_quoted (keyfile, "host_machine", "system", error);
+  system = gbp_meson_key_file_get_string_quoted (keyfile, "host_machine", "system", error);
   if (system == NULL)
     return FALSE;
 
@@ -122,36 +91,25 @@ gbp_meson_toolchain_load (GbpMesonToolchain  *self,
   ide_toolchain_set_host_triplet (IDE_TOOLCHAIN(self), triplet);
 
   binaries = g_key_file_get_keys (keyfile, "binaries", NULL, &list_error);
+  if (binaries == NULL)
+    return TRUE;
+
   for (int i = 0; binaries[i] != NULL; i++)
     {
       const gchar *lang = binaries[i];
+      const gchar *tool_id = gbp_meson_get_tool_id_from_binary (lang);
       g_autoptr(GError) key_error = NULL;
-      g_autofree gchar *exec_path = _g_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
+      g_autofree gchar *exec_path = gbp_meson_key_file_get_string_quoted (keyfile, "binaries", lang, &key_error);
 
-      if (g_strcmp0 (lang, "ar") == 0)
+      if (g_strcmp0 (tool_id, IDE_TOOLCHAIN_TOOL_CC) == 0)
         ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
-                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
-                                                    IDE_TOOLCHAIN_TOOL_AR,
-                                                    exec_path);
-      else if (g_strcmp0 (lang, "strip") == 0)
-        ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
-                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
-                                                    IDE_TOOLCHAIN_TOOL_STRIP,
-                                                    exec_path);
-      else if (g_strcmp0 (lang, "pkg_config") == 0)
-        ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
-                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
-                                                    IDE_TOOLCHAIN_TOOL_PKG_CONFIG,
-                                                    exec_path);
-      else if (g_strcmp0 (lang, "exe_wrapper") == 0)
-        ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
-                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
-                                                    IDE_TOOLCHAIN_TOOL_EXEC,
+                                                    gbp_meson_get_toolchain_language (lang),
+                                                    IDE_TOOLCHAIN_TOOL_CC,
                                                     exec_path);
       else
         ide_simple_toolchain_set_tool_for_language (IDE_SIMPLE_TOOLCHAIN(self),
-                                                    meson_toolchain_get_language (lang),
-                                                    IDE_TOOLCHAIN_TOOL_CC,
+                                                    IDE_TOOLCHAIN_LANGUAGE_ANY,
+                                                    tool_id,
                                                     exec_path);
     }
 
