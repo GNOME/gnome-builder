@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2018-04-11 10:51+0000\n"
-"PO-Revision-Date: 2018-04-23 20:38+0200\n"
+"PO-Revision-Date: 2018-05-09 17:49+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -886,9 +886,6 @@ msgid "Preferences"
 msgstr "Možnosti"
 
 #: src/libide/application/ide-application-shortcuts.c:57
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Show the shortcuts window"
 msgctxt "shortcut window"
 msgid "Show the preferences window"
 msgstr "Pokaži okno lastnosti"
@@ -2305,10 +2302,9 @@ msgstr "Najdi besedilo znotraj terminala"
 
 #. translators: %s is replaced with the error message
 #: src/libide/langserv/ide-langserv-client.c:895
-#, fuzzy, c-format
-#| msgid "Failed to initialize the debugger"
+#, c-format
 msgid "Failed to initialize language server: %s"
-msgstr "Ni mogoče začeti vstavka iz %s"
+msgstr "Ni mogoče začeti jezikovnega strežnika: %s"
 
 #: src/libide/layout/ide-layout-stack.c:171
 #: src/libide/layout/ide-layout-stack.ui:8
@@ -2465,7 +2461,7 @@ msgstr "Tipkovnica"
 
 #: src/libide/preferences/ide-preferences-builtin.c:138
 msgid "Emulation"
-msgstr "Posnemovanje"
+msgstr "Posnemanje"
 
 #: src/libide/preferences/ide-preferences-builtin.c:139
 msgid "Default keybinding mode which mimics gedit"
@@ -2746,8 +2742,6 @@ msgid "Insert matching character for { [ ( or \""
 msgstr "Vstavi skladen zaključni znak za { [ ( ali \""
 
 #: src/libide/preferences/ide-preferences-builtin.c:325
-#, fuzzy
-#| msgid "Insert trailing newline"
 msgid "Insert Trailing Newline"
 msgstr "Vstavi končno novo vrstico"
 
@@ -2797,8 +2791,6 @@ msgid "Indent source code as you type"
 msgstr "Zamakni izvorno kodo med tipkanjem"
 
 #: src/libide/preferences/ide-preferences-builtin.c:336
-#, fuzzy
-#| msgid "Spaces"
 msgid "Spacing"
 msgstr "Razmik"
 
@@ -2807,10 +2799,8 @@ msgid "Space before opening parentheses"
 msgstr "Presledek pred začetnimi narekovaji"
 
 #: src/libide/preferences/ide-preferences-builtin.c:338
-#, fuzzy
-#| msgid "Matching brackets"
 msgid "Space before opening brackets"
-msgstr "Presledek pred oklepaji"
+msgstr "Presledek pred začetnimi oklepaji"
 
 #: src/libide/preferences/ide-preferences-builtin.c:339
 msgid "Space before opening braces"
@@ -3004,10 +2994,8 @@ msgid "Reload tests"
 msgstr "Ponovno naloži preizkuse"
 
 #: src/libide/testing/ide-test-editor-addin.c:73
-#, fuzzy
-#| msgid "Units:"
 msgid "Unit Tests"
-msgstr "Enota"
+msgstr "Preizkusi enot"
 
 #: src/libide/testing/ide-test-panel.ui:12
 msgid "No tests available"
@@ -4094,9 +4082,8 @@ msgid "Exporting staging directory"
 msgstr "Poteka izvažanje ..."
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
-#, fuzzy
 msgid "Creating flatpak bundle"
-msgstr "Izvozi paket programov"
+msgstr "Ustvarjanje paket programov flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
@@ -4427,17 +4414,12 @@ msgid "Project “%s” failed to build"
 msgstr "Izgradnja projekta »%s« je spodletela"
 
 #: src/plugins/npm/npm_plugin.py:102
-#, fuzzy
-#| msgid "_Download Dependencies"
 msgid "Downloading npm dependencies"
-msgstr "Prejemanje paketov odvisnosti"
+msgstr "Prejemanje odvisnosti npm"
 
 #: src/plugins/phpize/phpize_plugin.py:210
-#, fuzzy
-#| msgid "Bootstrapping…"
 msgid "Bootstrapping project"
 msgstr ""
-"Možnosti za uporabo med zaganjanjem začetnega nalagalnega sistema projekta"
 
 #: src/plugins/project-tree/gb-new-file-popover.c:123
 #: src/plugins/project-tree/gb-rename-file-popover.c:139
@@ -4481,10 +4463,9 @@ msgstr "Preimenovanje datoteke je spodletelo: %s"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/project-tree/gb-project-tree-actions.c:710
-#, fuzzy, c-format
-#| msgid "Failed to load file: %s"
+#, c-format
 msgid "Failed to trash file: %s"
-msgstr "Premikanje v smeti ni bilo uspešno: %s"
+msgstr "Premikanje v smeti je spodletelo: %s"
 
 #: src/plugins/project-tree/gb-project-tree-addin.c:88
 msgid "Project Tree"
@@ -4577,16 +4558,12 @@ msgstr "_Osveži"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:41
-#, fuzzy
-#| msgid "Emacs Emulation"
 msgid "Aarch64 Emulation"
-msgstr "Posnemovanje"
+msgstr "Posnemanje Aarch64"
 
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
-#, fuzzy
-#| msgid "Emulation"
 msgid "Arm Emulation"
-msgstr "Posnemovanje"
+msgstr "Posnemanje Arm"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
 #: src/plugins/qemu/gbp-qemu-device-provider.c:156
@@ -4756,10 +4733,8 @@ msgstr "Pokaži pult jezikovnega preverjanja"
 #.
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:139
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:246
-#, fuzzy
-#| msgid "Failed to initialize the debugger"
 msgid "Failed to initialize spellchecking, disabling"
-msgstr "Začenjanje programa razhroščevanja je spodletelo"
+msgstr "Začenjanje programa črkovanja je spodletelo, program bo onemogočen"
 
 #: src/plugins/spellcheck/gbp-spell-language-popover.c:232
 msgid "No language selected"
