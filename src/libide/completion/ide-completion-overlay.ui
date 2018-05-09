@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeCompletionOverlay" parent="GtkBin">
+    <child>
+      <object class="IdeCompletionView" id="view">
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </template>
+</interface>
