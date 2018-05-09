@@ -23,6 +23,8 @@
 #include "ide-types.h"
 #include "ide-version-macros.h"
 
+#include "completion/ide-completion-types.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_VIEW  (ide_source_view_get_type())
@@ -508,6 +510,11 @@ void                        ide_source_view_scroll_to_iter            (IdeSource
                                                                        gboolean                    animate_scroll);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_scroll_to_insert          (IdeSourceView              *self);
+IDE_AVAILABLE_IN_3_30
+IdeCompletion              *ide_source_view_get_completion            (IdeSourceView              *self);
+IDE_AVAILABLE_IN_3_30
+gboolean                    ide_source_view_is_processing_key         (IdeSourceView              *self);
+
 const gchar                *_ide_source_view_get_mode_name            (IdeSourceView              *self) G_GNUC_INTERNAL;
 void                        _ide_source_view_set_count                (IdeSourceView              *self,
                                                                        gint                        count) G_GNUC_INTERNAL;
