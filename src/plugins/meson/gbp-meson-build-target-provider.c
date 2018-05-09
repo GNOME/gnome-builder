@@ -149,6 +149,7 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
   GbpMesonBuildTargetProvider *self;
   g_autofree gchar *stdout_buf = NULL;
+  g_autofree gchar *quoted_builddir = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(JsonParser) parser = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
@@ -282,10 +283,11 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
   pipeline = ide_build_manager_get_pipeline (build_manager);
   cancellable = ide_task_get_cancellable (task);
 
+  quoted_builddir = g_strdup_printf("\"%s\"", ide_build_pipeline_get_builddir (pipeline));
   ide_subprocess_launcher_push_argv (launcher, "meson");
   ide_subprocess_launcher_push_argv (launcher, "introspect");
   ide_subprocess_launcher_push_argv (launcher, "--installed");
-  ide_subprocess_launcher_push_argv (launcher, ide_build_pipeline_get_builddir (pipeline));
+  ide_subprocess_launcher_push_argv (launcher, quoted_builddir);
 
   all_subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 
@@ -313,6 +315,7 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *quoted_builddir = NULL;
   IdeBuildPipeline *pipeline;
   IdeBuildManager *build_manager;
   IdeBuildSystem *build_system;
@@ -359,10 +362,11 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
       IDE_EXIT;
     }
 
+  quoted_builddir = g_strdup_printf("\"%s\"", ide_build_pipeline_get_builddir (pipeline));
   ide_subprocess_launcher_push_argv (launcher, "meson");
   ide_subprocess_launcher_push_argv (launcher, "introspect");
   ide_subprocess_launcher_push_argv (launcher, "--targets");
-  ide_subprocess_launcher_push_argv (launcher, ide_build_pipeline_get_builddir (pipeline));
+  ide_subprocess_launcher_push_argv (launcher, quoted_builddir);
 
   subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
 

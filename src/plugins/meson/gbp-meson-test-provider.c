@@ -194,6 +194,7 @@ gbp_meson_test_provider_do_reload (GbpMesonTestProvider *self,
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
   const gchar *builddir;
+  g_autofree gchar *quoted_builddir = NULL;
 
   IDE_ENTRY;
 
@@ -208,12 +209,13 @@ gbp_meson_test_provider_do_reload (GbpMesonTestProvider *self,
   ide_subprocess_launcher_set_flags (launcher, G_SUBPROCESS_FLAGS_STDOUT_PIPE);
 
   builddir = ide_build_pipeline_get_builddir (pipeline);
+  quoted_builddir = g_strdup_printf("\"%s\"", builddir);
   ide_subprocess_launcher_set_cwd (launcher, builddir);
 
   ide_subprocess_launcher_push_argv (launcher, "meson");
   ide_subprocess_launcher_push_argv (launcher, "introspect");
   ide_subprocess_launcher_push_argv (launcher, "--tests");
-  ide_subprocess_launcher_push_argv (launcher, builddir);
+  ide_subprocess_launcher_push_argv (launcher, quoted_builddir);
 
   if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     IDE_GOTO (failure);
