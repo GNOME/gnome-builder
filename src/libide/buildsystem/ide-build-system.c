@@ -567,7 +567,7 @@ ide_build_system_get_builddir (IdeBuildSystem   *self,
       else
         name = g_strdup_printf ("%s-%s", config_id, runtime_id);
 
-      g_strdelimit (name, "@:/", '-');
+      g_strdelimit (name, "@:/ ", '-');
 
       ret = ide_context_cache_filename (context, "builds", name, NULL);
     }
