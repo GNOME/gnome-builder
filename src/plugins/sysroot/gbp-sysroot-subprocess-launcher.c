@@ -45,9 +45,9 @@ gbp_sysroot_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
                                        GCancellable           *cancellable,
                                        GError                 **error)
 {
-  g_autofree gchar *argv = NULL;
   const gchar * const *args = NULL;
   g_autoptr(GString) cmd = NULL;
+  gchar *argv = NULL;
 
   g_assert (GBP_IS_SYSROOT_SUBPROCESS_LAUNCHER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -59,12 +59,14 @@ gbp_sysroot_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
 
   argv = ide_subprocess_launcher_pop_argv (self);
   cmd = g_string_new (argv);
+  g_free (argv);
 
   while ((argv = ide_subprocess_launcher_pop_argv (self)) != NULL)
     {
       g_autofree gchar *arg = g_shell_quote(argv);
       g_string_prepend (cmd, " ");
       g_string_prepend (cmd, arg);
+      g_free (argv);
     }
 
   ide_subprocess_launcher_push_argv (self, "sh");
