@@ -1,16 +1,38 @@
 completion_headers = [
+  'ide-completion-compat.h',
+  'ide-completion-context.h',
+  'ide-completion-display.h',
   'ide-completion-item.h',
+  'ide-completion-list-box-row.h',
+  'ide-completion-list-box.h',
+  'ide-completion-overlay.h',
+  'ide-completion-proposal.h',
   'ide-completion-provider.h',
   'ide-completion-results.h',
+  'ide-completion-types.h',
+  'ide-completion-view.h',
+  'ide-completion-window.h',
+  'ide-completion.h',
 ]
 
 completion_sources = [
+  'ide-completion.c',
+  'ide-completion-compat.c',
+  'ide-completion-context.c',
+  'ide-completion-display.c',
   'ide-completion-item.c',
+  'ide-completion-list-box.c',
+  'ide-completion-list-box-row.c',
+  'ide-completion-overlay.c',
+  'ide-completion-proposal.c',
   'ide-completion-provider.c',
   'ide-completion-results.c',
+  'ide-completion-view.c',
+  'ide-completion-window.c',
 ]
 
 completion_private_sources = [
+  'ide-completion-private.h',
   'ide-completion-words.c',
   'ide-completion-words.h',
   'ide-word-completion-item.c',
