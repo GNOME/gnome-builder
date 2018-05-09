@@ -160,12 +160,13 @@ typedef struct
 
   IdeCursor                   *cursor;
 
+  guint                        in_key_press;
+
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
   guint                        completion_visible : 1;
   guint                        enable_word_completion : 1;
   guint                        highlight_current_line : 1;
-  guint                        in_key_press : 1;
   guint                        in_replay_macro : 1;
   guint                        insert_mark_cleared : 1;
   guint                        insert_matching_brace : 1;
@@ -2173,7 +2174,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
    */
   change_sequence = priv->change_sequence;
 
-  priv->in_key_press = TRUE;
+  priv->in_key_press++;
 
   /*
    * If we are in a non-default mode, dispatch the event to the mode. This allows custom
@@ -2318,7 +2319,7 @@ ide_source_view_key_press_event (GtkWidget   *widget,
     ide_source_view_scroll_mark_onscreen (self, insert, FALSE, 0, 0);
 
 cleanup:
-  priv->in_key_press = FALSE;
+  priv->in_key_press--;
 
   return ret;
 }
@@ -8076,4 +8077,14 @@ ide_source_view_set_show_line_numbers (IdeSourceView *self,
 
   ide_omni_gutter_renderer_set_show_line_numbers (priv->omni_renderer, show_line_numbers);
   g_object_notify (G_OBJECT (self), "show-line-numbers");
+}
+
+gboolean
+ide_source_view_is_processing_key (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->in_key_press > 0;
 }
