@@ -31,10 +31,4 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_3_30
 G_DECLARE_FINAL_TYPE (IdeCompletionOverlay, ide_completion_overlay, IDE, COMPLETION_OVERLAY, DzlBin)
 
-IDE_AVAILABLE_IN_3_30
-IdeCompletionContext *ide_completion_overlay_get_context (IdeCompletionOverlay *self);
-IDE_AVAILABLE_IN_3_30
-void                  ide_completion_overlay_set_context (IdeCompletionOverlay *self,
-                                                          IdeCompletionContext *context);
-
 G_END_DECLS

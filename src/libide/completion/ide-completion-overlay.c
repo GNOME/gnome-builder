@@ -280,10 +280,21 @@ ide_completion_overlay_set_context (IdeCompletionOverlay *self,
 }
 
 static void
+ide_completion_overlay_move_cursor (IdeCompletionDisplay *display,
+                                    GtkMovementStep       step,
+                                    gint                  count)
+{
+  g_assert (IDE_IS_COMPLETION_OVERLAY (display));
+
+  _ide_completion_view_move_cursor (IDE_COMPLETION_OVERLAY (display)->view, step, count);
+}
+
+static void
 completion_display_iface_init (IdeCompletionDisplayInterface *iface)
 {
   iface->set_context = (gpointer)ide_completion_overlay_set_context;
   iface->attach = ide_completion_overlay_attach;
   iface->key_press_event = ide_completion_overlay_key_press_event;
   iface->set_n_rows = ide_completion_overlay_set_n_rows;
+  iface->move_cursor = ide_completion_overlay_move_cursor;
 }
