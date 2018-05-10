@@ -40,29 +40,37 @@ IDE_AVAILABLE_IN_3_30
 G_DECLARE_FINAL_TYPE (IdeCompletion, ide_completion, IDE, COMPLETION, GObject)
 
 IDE_AVAILABLE_IN_3_30
-GtkSourceView *ide_completion_get_view            (IdeCompletion         *self);
+IdeCompletionDisplay *ide_completion_get_display         (IdeCompletion *self);
 IDE_AVAILABLE_IN_3_30
-GtkTextBuffer *ide_completion_get_buffer          (IdeCompletion         *self);
+GtkSourceView        *ide_completion_get_view            (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_30
-void           ide_completion_block_interactive   (IdeCompletion         *self);
+GtkTextBuffer        *ide_completion_get_buffer          (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_30
-void           ide_completion_unblock_interactive (IdeCompletion         *self);
+void                  ide_completion_block_interactive   (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_30
-void           ide_completion_add_provider        (IdeCompletion         *self,
-                                                   IdeCompletionProvider *provider);
+void                  ide_completion_unblock_interactive (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_30
-void           ide_completion_remove_provider     (IdeCompletion         *self,
-                                                   IdeCompletionProvider *provider);
+void                  ide_completion_add_provider        (IdeCompletion         *self,
+                                                          IdeCompletionProvider *provider);
 IDE_AVAILABLE_IN_3_30
-guint          ide_completion_get_n_rows          (IdeCompletion         *self);
+void                  ide_completion_remove_provider     (IdeCompletion         *self,
+                                                          IdeCompletionProvider *provider);
 IDE_AVAILABLE_IN_3_30
-void           ide_completion_set_n_rows          (IdeCompletion         *self,
-                                                   guint                  n_rows);
+guint                 ide_completion_get_n_rows          (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_30
-void           ide_completion_hide                (IdeCompletion         *self);
+void                  ide_completion_set_n_rows          (IdeCompletion         *self,
+                                                          guint                  n_rows);
 IDE_AVAILABLE_IN_3_30
-void           ide_completion_show                (IdeCompletion         *self);
+void                  ide_completion_hide                (IdeCompletion         *self);
 IDE_AVAILABLE_IN_3_30
-void           ide_completion_cancel              (IdeCompletion         *self);
+void                  ide_completion_show                (IdeCompletion         *self);
+IDE_AVAILABLE_IN_3_30
+void                  ide_completion_cancel              (IdeCompletion         *self);
+IDE_AVAILABLE_IN_3_30
+gboolean              ide_completion_is_visible          (IdeCompletion         *self);
+IDE_AVAILABLE_IN_3_30
+void                  ide_completion_move_cursor         (IdeCompletion         *self,
+                                                          GtkMovementStep        step,
+                                                          gint                   direction);
 
 G_END_DECLS
