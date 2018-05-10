@@ -36,6 +36,7 @@
 
     <file compressed="true" alias="shared.css">../../data/themes/shared.css</file>
     <file compressed="true" alias="shared/shared-buildui.css">../../data/themes/shared/shared-buildui.css</file>
+    <file compressed="true" alias="shared/shared-completion.css">../../data/themes/shared/shared-completion.css</file>
     <file compressed="true" alias="shared/shared-debugger.css">../../data/themes/shared/shared-debugger.css</file>
     <file compressed="true" alias="shared/shared-editor.css">../../data/themes/shared/shared-editor.css</file>
     <file compressed="true" alias="shared/shared-greeter.css">../../data/themes/shared/shared-greeter.css</file>
