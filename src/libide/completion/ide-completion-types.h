@@ -24,6 +24,7 @@ G_BEGIN_DECLS
 
 typedef struct _IdeCompletion           IdeCompletion;
 typedef struct _IdeCompletionContext    IdeCompletionContext;
+typedef struct _IdeCompletionDisplay    IdeCompletionDisplay;
 typedef struct _IdeCompletionListBox    IdeCompletionListBox;
 typedef struct _IdeCompletionListBoxRow IdeCompletionListBoxRow;
 typedef struct _IdeCompletionOverlay    IdeCompletionOverlay;
@@ -31,8 +32,6 @@ typedef struct _IdeCompletionProposal   IdeCompletionProposal;
 typedef struct _IdeCompletionProvider   IdeCompletionProvider;
 typedef struct _IdeCompletionView       IdeCompletionView;
 typedef struct _IdeCompletionWindow     IdeCompletionWindow;
-
-typedef struct _IdeSourceView           IdeSourceView;
 
 typedef enum
 {

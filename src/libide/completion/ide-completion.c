@@ -23,18 +23,20 @@
 #include <gtk/gtk.h>
 #include <dazzle.h>
 #include <gtksourceview/gtksource.h>
+#include <libpeas/peas.h>
 
 #ifdef GDK_WINDOWING_WAYLAND
 # include <gdk/gdkwayland.h>
 #endif
 
-#include "ide-completion.h"
-#include "ide-completion-context.h"
-#include "ide-completion-display.h"
-#include "ide-completion-overlay.h"
-#include "ide-completion-private.h"
-#include "ide-completion-proposal.h"
-#include "ide-completion-provider.h"
+#include "buffers/ide-buffer.h"
+#include "completion/ide-completion.h"
+#include "completion/ide-completion-context.h"
+#include "completion/ide-completion-display.h"
+#include "completion/ide-completion-overlay.h"
+#include "completion/ide-completion-private.h"
+#include "completion/ide-completion-proposal.h"
+#include "completion/ide-completion-provider.h"
 
 #define DEFAULT_N_ROWS 5
 
@@ -54,6 +56,13 @@ struct _IdeCompletion
    * g_cancellable_cancel() is called.
    */
   GCancellable *cancellable;
+
+  /*
+   * Our extension manager to get providers that were registered by plugins.
+   * We handle extension-added/extension-removed and add the results to the
+   * @providers array so that we can allow manual adding of providers too.
+   */
+  IdeExtensionSetAdapter *addins;
 
   /*
    * An array of providers that have been registered. These will be queried
@@ -390,43 +399,19 @@ ide_completion_create_display (IdeCompletion *self)
 static void
 ide_completion_real_show (IdeCompletion *self)
 {
+  IdeCompletionDisplay *display;
+
   g_assert (IDE_IS_COMPLETION (self));
 
-  if (self->display == NULL)
-    {
-      self->display = ide_completion_create_display (self);
-      ide_completion_display_set_n_rows (self->display, self->n_rows);
-      ide_completion_display_attach (self->display, self->view);
-
-#if 0
-#ifdef GDK_WINDOWING_WAYLAND
-      /*
-       * HACK: We need to show the window and hide it so that we get a proper
-       * positioning on the first "visible" display to the user. To make that
-       * work, we set opacity to transparent and then go through the dance.
-       *
-       * We could remove this if we had the ability to set_use_subsurface() on
-       * the window.
-       *
-       * We only do this on Wayland as it is not an issue on Xorg.
-       */
-      if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
-        {
-          gtk_widget_set_opacity (GTK_WIDGET (self->window), 0.0);
-          g_signal_connect (self->window, "configure-event", G_CALLBACK (configure_hack_cb), NULL);
-          gtk_window_present (GTK_WINDOW (self->window));
-        }
-#endif
-#endif
-    }
+  display = ide_completion_get_display (self);
 
   if (self->context == NULL)
     ide_completion_start (self, IDE_COMPLETION_USER_REQUESTED);
 
-  ide_completion_display_set_context (self->display, self->context);
+  ide_completion_display_set_context (display, self->context);
 
   if (!ide_completion_context_is_empty (self->context))
-    gtk_widget_show (GTK_WIDGET (self->display));
+    gtk_widget_show (GTK_WIDGET (display));
 }
 
 static void
@@ -636,6 +621,119 @@ ide_completion_set_view (IdeCompletion *self,
       g_object_bind_property (view, "buffer",
                               self->buffer_signals, "target",
                               G_BINDING_SYNC_CREATE);
+    }
+}
+
+static void
+ide_completion_addins_extension_added_cb (IdeExtensionSetAdapter *adapter,
+                                          PeasPluginInfo         *plugin_info,
+                                          PeasExtension          *exten,
+                                          gpointer                user_data)
+{
+  IdeCompletionProvider *provider = (IdeCompletionProvider *)exten;
+  IdeCompletion *self = user_data;
+  GtkTextBuffer *buffer;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
+
+  /* TODO: Remove this when no longer necessary */
+
+  if ((buffer = ide_completion_get_buffer (self)) && IDE_IS_BUFFER (buffer))
+    {
+      IdeContext *context = ide_buffer_get_context (IDE_BUFFER (buffer));
+      ide_completion_provider_load (provider, context);
+    }
+
+  ide_completion_add_provider (self, provider);
+}
+
+static void
+ide_completion_addins_extension_removed_cb (IdeExtensionSetAdapter *adapter,
+                                            PeasPluginInfo         *plugin_info,
+                                            PeasExtension          *exten,
+                                            gpointer                user_data)
+{
+  IdeCompletionProvider *provider = (IdeCompletionProvider *)exten;
+  IdeCompletion *self = user_data;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
+
+  ide_completion_remove_provider (self, provider);
+}
+
+static void
+ide_completion_buffer_signals_bind_cb (IdeCompletion   *self,
+                                       GtkSourceBuffer *buffer,
+                                       DzlSignalGroup  *group)
+{
+  GtkSourceLanguage *language;
+  const gchar *language_id = NULL;
+  IdeContext *context;
+
+  g_assert (IDE_IS_COMPLETION (self));
+  g_assert (GTK_SOURCE_IS_BUFFER (buffer));
+  g_assert (DZL_IS_SIGNAL_GROUP (group));
+
+  if (!IDE_IS_BUFFER (buffer))
+    return;
+
+  if ((language = gtk_source_buffer_get_language (buffer)))
+    language_id = gtk_source_language_get_id (language);
+
+  context = ide_buffer_get_context (IDE_BUFFER (buffer));
+
+  self->addins = ide_extension_set_adapter_new (context,
+                                                peas_engine_get_default (),
+                                                IDE_TYPE_COMPLETION_PROVIDER,
+                                                "Completion-Provider-Languages",
+                                                language_id);
+
+  g_signal_connect (self->addins,
+                    "extension-added",
+                    G_CALLBACK (ide_completion_addins_extension_added_cb),
+                    self);
+  g_signal_connect (self->addins,
+                    "extension-removed",
+                    G_CALLBACK (ide_completion_addins_extension_removed_cb),
+                    self);
+
+  ide_extension_set_adapter_foreach (self->addins,
+                                     ide_completion_addins_extension_added_cb,
+                                     self);
+}
+
+static void
+ide_completion_buffer_signals_unbind_cb (IdeCompletion   *self,
+                                         DzlSignalGroup  *group)
+{
+  g_assert (IDE_IS_COMPLETION (self));
+  g_assert (DZL_IS_SIGNAL_GROUP (group));
+
+  g_clear_object (&self->addins);
+}
+
+static void
+ide_completion_buffer_notify_language_cb (IdeCompletion   *self,
+                                          GParamSpec      *pspec,
+                                          GtkSourceBuffer *buffer)
+{
+  g_assert (IDE_IS_COMPLETION (self));
+  g_assert (pspec != NULL);
+  g_assert (GTK_SOURCE_IS_BUFFER (buffer));
+
+  if (self->addins != NULL)
+    {
+      GtkSourceLanguage *language;
+      const gchar *language_id = NULL;
+
+      if ((language = gtk_source_buffer_get_language (buffer)))
+        language_id = gtk_source_language_get_id (language);
+
+      ide_extension_set_adapter_set_value (self->addins, language_id);
     }
 }
 
@@ -897,6 +995,21 @@ ide_completion_init (IdeCompletion *self)
    * possibly start showing the results, or update our previous completion
    * request.
    */
+  g_signal_connect_object (self->buffer_signals,
+                           "bind",
+                           G_CALLBACK (ide_completion_buffer_signals_bind_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->buffer_signals,
+                           "unbind",
+                           G_CALLBACK (ide_completion_buffer_signals_unbind_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  dzl_signal_group_connect_object (self->buffer_signals,
+                                   "notify::language",
+                                   G_CALLBACK (ide_completion_buffer_notify_language_cb),
+                                   self,
+                                   G_CONNECT_AFTER | G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (self->buffer_signals,
                                    "delete-range",
                                    G_CALLBACK (ide_completion_buffer_delete_range_cb),
@@ -1085,22 +1198,6 @@ ide_completion_cancel (IdeCompletion *self)
     }
 }
 
-/**
- * ide_completion_is_visible:
- * @self: a #IdeCompletion
- *
- * Checks if the window is currently being displayed.
- *
- * Returns: %TRUE if the window is being displayed
- */
-gboolean
-ide_completion_is_visible (IdeCompletion *self)
-{
-  g_return_val_if_fail (IDE_IS_COMPLETION (self), FALSE);
-
-  return gtk_widget_get_visible (GTK_WIDGET (self->display));
-}
-
 void
 ide_completion_block_interactive (IdeCompletion *self)
 {
@@ -1157,4 +1254,71 @@ _ide_completion_activate (IdeCompletion         *self,
   self->block_count++;
   ide_completion_provider_activate_poposal (provider, context, proposal, self->current_event);
   self->block_count--;
+}
+
+void
+_ide_completion_set_language_id (IdeCompletion *self,
+                                 const gchar   *language_id)
+{
+  g_return_if_fail (IDE_IS_COMPLETION (self));
+  g_return_if_fail (language_id != NULL);
+
+  ide_extension_set_adapter_set_value (self->addins, language_id);
+}
+
+/**
+ * ide_completion_is_visible:
+ * @self: a #IdeCompletion
+ *
+ * Checks if the completion display is visible.
+ *
+ * Returns: %TRUE if the display is visible
+ *
+ * Since: 3.30
+ */
+gboolean
+ide_completion_is_visible (IdeCompletion *self)
+{
+  g_return_val_if_fail (IDE_IS_COMPLETION (self), FALSE);
+
+  if (self->display != NULL)
+    return gtk_widget_get_visible (GTK_WIDGET (self->display));
+
+  return FALSE;
+}
+
+/**
+ * ide_completion_get_display:
+ * @self: a #IdeCompletion
+ *
+ * Gets the display for completion.
+ *
+ * Returns: (transfer none): an #IdeCompletionDisplay
+ *
+ * Since: 3.30
+ */
+IdeCompletionDisplay *
+ide_completion_get_display (IdeCompletion *self)
+{
+  g_return_val_if_fail (IDE_IS_COMPLETION (self), NULL);
+
+  if (self->display == NULL)
+    {
+      self->display = ide_completion_create_display (self);
+      ide_completion_display_set_n_rows (self->display, self->n_rows);
+      ide_completion_display_attach (self->display, self->view);
+    }
+
+  return self->display;
+}
+
+void
+ide_completion_move_cursor (IdeCompletion   *self,
+                            GtkMovementStep  step,
+                            gint             direction)
+{
+  g_return_if_fail (IDE_IS_COMPLETION (self));
+
+  if (self->display != NULL)
+    ide_completion_display_move_cursor (self->display, step, direction);
 }
