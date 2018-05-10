@@ -22,16 +22,8 @@
 #include <glib/gi18n.h>
 
 #include "ide-ctags-completion-item.h"
-#include "ide-ctags-completion-provider.h"
-#include "ide-ctags-completion-provider-private.h"
 #include "ide-ctags-index.h"
-
-struct _IdeCtagsCompletionItem
-{
-  GObject parent_instance;
-  const IdeCtagsIndexEntry *entry;
-  IdeCtagsCompletionProvider *provider;
-};
+#include "ide-ctags-results.h"
 
 static void proposal_iface_init (IdeCompletionProposalInterface *iface);
 
@@ -44,15 +36,19 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionItem,
 DZL_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances", "Number of IdeCtagsCompletionItems")
 
 IdeCtagsCompletionItem *
-ide_ctags_completion_item_new (IdeCtagsCompletionProvider *provider,
-                               const IdeCtagsIndexEntry   *entry)
+ide_ctags_completion_item_new (IdeCtagsResults          *results,
+                               const IdeCtagsIndexEntry *entry)
 {
   IdeCtagsCompletionItem *self;
 
-  g_return_val_if_fail (entry != NULL, NULL);
+  /*
+   * we hold a reference to results so that we can ensure that
+   * a reference to the index that contains @entry is maintained.
+   * (as indexes are never unref'd from @results until finalized).
+   */
 
   self = g_object_new (IDE_TYPE_CTAGS_COMPLETION_ITEM, NULL);
-  self->provider = provider;
+  self->results = g_object_ref (results);
   self->entry = entry;
 
   return self;

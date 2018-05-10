@@ -55,6 +55,10 @@ typedef struct
   guint8                  padding[3];
 } IdeCtagsIndexEntry;
 
+/* This object is meant to be immutable after loading so that
+ * it can be used from threads safely.
+ */
+
 IdeCtagsIndex            *ide_ctags_index_new           (GFile                    *file,
                                                          const gchar              *path_root,
                                                          guint64                   mtime);
