@@ -34,7 +34,6 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-private.h"
 #include "completion/ide-completion-provider.h"
-#include "completion/ide-word-completion-provider.h"
 #include "diagnostics/ide-diagnostic.h"
 #include "diagnostics/ide-fixit.h"
 #include "diagnostics/ide-source-location.h"
@@ -118,8 +117,6 @@ typedef struct
   IdeExtensionSetAdapter      *completion_providers;
   DzlSignalGroup              *completion_providers_signals;
 
-  IdeWordCompletionProvider   *word_completion_provider;
-
   DzlBindingGroup             *file_setting_bindings;
   DzlSignalGroup              *buffer_signals;
 
@@ -165,7 +162,6 @@ typedef struct
   guint                        auto_indent : 1;
   guint                        completion_blocked : 1;
   guint                        completion_visible : 1;
-  guint                        enable_word_completion : 1;
   guint                        highlight_current_line : 1;
   guint                        in_replay_macro : 1;
   guint                        insert_mark_cleared : 1;
@@ -197,7 +193,6 @@ DZL_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourc
 enum {
   PROP_0,
   PROP_COUNT,
-  PROP_ENABLE_WORD_COMPLETION,
   PROP_FILE_SETTINGS,
   PROP_FONT_NAME,
   PROP_FONT_DESC,
@@ -229,7 +224,6 @@ enum {
   BEGIN_MACRO,
   BEGIN_RENAME,
   BEGIN_USER_ACTION,
-  BEGIN_WORD_COMPLETION,
   CAPTURE_MODIFIER,
   CLEAR_COUNT,
   CLEAR_MODIFIER,
@@ -697,37 +691,6 @@ text_iter_get_line_prefix (const GtkTextIter *iter)
     }
 
   return g_string_free (str, FALSE);
-}
-
-static void
-ide_source_view_reload_word_completion (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  IdeContext *context;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  if ((priv->buffer != NULL) && (context = ide_buffer_get_context (priv->buffer)))
-    {
-      IdeBufferManager *bufmgr;
-      GtkSourceCompletion *completion;
-      GtkSourceCompletionWords *words;
-      GList *list;
-
-      bufmgr = ide_context_get_buffer_manager (context);
-      words = ide_buffer_manager_get_word_completion (bufmgr);
-      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
-      list = gtk_source_completion_get_providers (completion);
-
-      if (priv->enable_word_completion && !g_list_find (list, words))
-        gtk_source_completion_add_provider (completion,
-                                            GTK_SOURCE_COMPLETION_PROVIDER (words),
-                                            NULL);
-      else if (!priv->enable_word_completion && g_list_find (list, words))
-        gtk_source_completion_remove_provider (completion,
-                                               GTK_SOURCE_COMPLETION_PROVIDER (words),
-                                               NULL);
-    }
 }
 
 static void
@@ -1471,7 +1434,6 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   ide_source_view__buffer_notify_style_scheme_cb (self, NULL, buffer);
   ide_source_view__buffer__notify_can_redo (self, NULL, buffer);
   ide_source_view__buffer__notify_can_undo (self, NULL, buffer);
-  ide_source_view_reload_word_completion (self);
   ide_source_view_real_set_mode (self, NULL, IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
 
   insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
@@ -4254,62 +4216,6 @@ ide_source_view_focus_out_event (GtkWidget     *widget,
 }
 
 static void
-ide_source_view_real_begin_word_completion (IdeSourceView *self,
-                                            gint           direction)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceCompletionContext *cc;
-  GtkSourceCompletion *completion;
-  IdeContext *context;
-  GList providers = { 0 };
-  GtkTextIter insert;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  if (direction != 1 && direction != -1)
-    direction = 1;
-
-  if (priv->buffer == NULL || NULL == (context = ide_buffer_get_context (priv->buffer)))
-    return;
-
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
-
-  /* Move to the next row if completion is already visible */
-  if (priv->completion_visible)
-    {
-      g_signal_emit_by_name (completion, "move-cursor", GTK_SCROLL_STEPS, direction);
-      IDE_EXIT;
-    }
-
-  if (priv->word_completion_provider == NULL)
-    {
-      priv->word_completion_provider = g_object_new (IDE_TYPE_WORD_COMPLETION_PROVIDER, NULL);
-      gtk_source_completion_add_provider (completion,
-                                          GTK_SOURCE_COMPLETION_PROVIDER (priv->word_completion_provider),
-                                          NULL);
-    }
-
-  g_object_set (priv->word_completion_provider,
-                "direction", direction,
-                NULL);
-
-  ide_buffer_get_selection_bounds (priv->buffer, &insert, NULL);
-
-  cc = g_object_new (GTK_SOURCE_TYPE_COMPLETION_CONTEXT,
-                     "activation", GTK_SOURCE_COMPLETION_ACTIVATION_USER_REQUESTED,
-                     "completion", completion,
-                     "iter", &insert,
-                     NULL);
-
-  providers.data = priv->word_completion_provider;
-  gtk_source_completion_show (completion, &providers, cc);
-
-  IDE_EXIT;
-}
-
-static void
 ide_source_view_real_begin_macro (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -5575,7 +5481,6 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->mode);
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->file_setting_bindings);
-  g_clear_object (&priv->word_completion_provider);
   g_clear_object (&priv->omni_renderer);
 
   if (priv->command_str != NULL)
@@ -5622,10 +5527,6 @@ ide_source_view_get_property (GObject    *object,
 
     case PROP_COUNT:
       g_value_set_int (value, ide_source_view_get_count (self));
-      break;
-
-    case PROP_ENABLE_WORD_COMPLETION:
-      g_value_set_boolean (value, ide_source_view_get_enable_word_completion (self));
       break;
 
     case PROP_FILE_SETTINGS:
@@ -5711,10 +5612,6 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_COUNT:
       ide_source_view_set_count (self, g_value_get_int (value));
-      break;
-
-    case PROP_ENABLE_WORD_COMPLETION:
-      ide_source_view_set_enable_word_completion (self, g_value_get_boolean (value));
       break;
 
     case PROP_FONT_NAME:
@@ -5817,7 +5714,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->remove_cursors = ide_source_view_real_remove_cursors;
   klass->append_to_count = ide_source_view_real_append_to_count;
   klass->begin_macro = ide_source_view_real_begin_macro;
-  klass->begin_word_completion = ide_source_view_real_begin_word_completion;
   klass->begin_rename = ide_source_view_real_begin_rename;
   klass->capture_modifier = ide_source_view_real_capture_modifier;
   klass->clear_count = ide_source_view_real_clear_count;
@@ -5878,13 +5774,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                         "The Pango font description to use for rendering source.",
                         PANGO_TYPE_FONT_DESCRIPTION,
                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_ENABLE_WORD_COMPLETION] =
-    g_param_spec_boolean ("enable-word-completion",
-                          "Enable Word Completion",
-                          "If words from all buffers can be used to autocomplete.",
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FONT_NAME] =
     g_param_spec_string ("font-name",
@@ -6049,23 +5938,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, begin_rename),
                   NULL, NULL, NULL, G_TYPE_NONE, 0);
-
- /**
-   * IdeSourceView::begin-word-completion:
-   * @self: An #IdeSourceView
-   * @direction: the direction (1 for forward or -1 for backwards)
-   *
-   * This signal is emitted when the user requests word completion with
-   * sorting by distance from the cursor. 1 for forward search, -1 for
-   * backwards search.
-   */
-  signals [BEGIN_WORD_COMPLETION] =
-    g_signal_new ("begin-word-completion",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeSourceViewClass, begin_word_completion),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, G_TYPE_INT);
 
   signals [BEGIN_USER_ACTION] =
     g_signal_new_class_handler ("begin-user-action",
@@ -7876,34 +7748,6 @@ ide_source_view_place_cursor_onscreen (IdeSourceView *self)
   ret = ide_source_view_move_mark_onscreen (self, insert);
 
   IDE_RETURN (ret);
-}
-
-gboolean
-ide_source_view_get_enable_word_completion (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return priv->enable_word_completion;
-}
-
-void
-ide_source_view_set_enable_word_completion (IdeSourceView *self,
-                                            gboolean       enable_word_completion)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  enable_word_completion = !!enable_word_completion;
-
-  if (priv->enable_word_completion != enable_word_completion)
-    {
-      priv->enable_word_completion = enable_word_completion;
-      ide_source_view_reload_word_completion (self);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLE_WORD_COMPLETION]);
-    }
 }
 
 /**
