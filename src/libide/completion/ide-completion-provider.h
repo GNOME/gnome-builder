@@ -66,9 +66,6 @@ struct _IdeCompletionProviderInterface
 };
 
 IDE_AVAILABLE_IN_3_30
-void        ide_completion_provider_load             (IdeCompletionProvider  *self,
-                                                      IdeContext             *context);
-IDE_AVAILABLE_IN_3_30
 GIcon      *ide_completion_provider_get_icon         (IdeCompletionProvider  *self);
 IDE_AVAILABLE_IN_3_30
 gint        ide_completion_provider_get_priority     (IdeCompletionProvider  *self);

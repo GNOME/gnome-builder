@@ -71,5 +71,7 @@ void                     _ide_completion_list_box_row_attach       (IdeCompletio
 gint                     _ide_completion_list_box_row_get_x_offset (IdeCompletionListBoxRow  *self,
                                                                     GtkWidget                *toplevel);
 IdeCompletionOverlay    *_ide_completion_overlay_new               (void);
+void                     _ide_completion_provider_load             (IdeCompletionProvider    *self,
+                                                                    IdeContext               *context);
 
 G_END_DECLS
