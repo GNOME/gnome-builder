@@ -99,6 +99,7 @@ ide_completion_provider_get_title (IdeCompletionProvider *self)
 /**
  * ide_completion_provider_populate_async:
  * @self: an #IdeCompletionProvider
+ * @context: the completion context
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @proposals: (out) (optional): Optional location for a #GListModel that
  *   will be populated interactively.
@@ -117,6 +118,7 @@ ide_completion_provider_get_title (IdeCompletionProvider *self)
  */
 void
 ide_completion_provider_populate_async (IdeCompletionProvider  *self,
+                                        IdeCompletionContext   *context,
                                         GCancellable           *cancellable,
                                         GListModel            **proposals,
                                         GAsyncReadyCallback     callback,
@@ -125,9 +127,10 @@ ide_completion_provider_populate_async (IdeCompletionProvider  *self,
   g_autoptr(GListModel) results = NULL;
 
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (self));
+  g_return_if_fail (IDE_IS_COMPLETION_CONTEXT (context));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_COMPLETION_PROVIDER_GET_IFACE (self)->populate_async (self, cancellable, &results, callback, user_data);
+  IDE_COMPLETION_PROVIDER_GET_IFACE (self)->populate_async (self, context, cancellable, &results, callback, user_data);
 
   if (proposals != NULL)
     *proposals = g_steal_pointer (&results);
