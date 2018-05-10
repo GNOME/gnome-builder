@@ -45,7 +45,6 @@
 #include "plugins/ide-extension-set-adapter.h"
 #include "rename/ide-rename-provider.h"
 #include "snippets/ide-source-snippet-chunk.h"
-#include "snippets/ide-source-snippet-completion-provider.h"
 #include "snippets/ide-source-snippet-context.h"
 #include "snippets/ide-source-snippet-private.h"
 #include "snippets/ide-source-snippet.h"
@@ -110,7 +109,6 @@ typedef struct
   GtkTextMark                 *scroll_mark;
   GQueue                      *selections;
   GQueue                      *snippets;
-  GtkSourceCompletionProvider *snippets_provider;
   DzlAnimation                *hadj_animation;
   DzlAnimation                *vadj_animation;
   IdeOmniGutterRenderer       *omni_renderer;
@@ -204,7 +202,6 @@ enum {
   PROP_SHOW_GRID_LINES,
   PROP_SHOW_LINE_CHANGES,
   PROP_SHOW_LINE_DIAGNOSTICS,
-  PROP_SNIPPET_COMPLETION,
   PROP_OVERSCROLL,
   LAST_PROP,
 
@@ -713,30 +710,6 @@ text_iter_get_line_prefix (const GtkTextIter *iter)
 }
 
 static void
-ide_source_view_reload_snippets (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  IdeSourceSnippets *snippets = NULL;
-  IdeContext *context = NULL;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  if ((priv->buffer != NULL) && (context = ide_buffer_get_context (priv->buffer)))
-    {
-      IdeSourceSnippetsManager *manager;
-      GtkSourceLanguage *source_language;
-
-      manager = ide_context_get_snippets_manager (context);
-      source_language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (priv->buffer));
-      if (source_language != NULL)
-        snippets = ide_source_snippets_manager_get_for_language (manager, source_language);
-    }
-
-  if (priv->snippets_provider != NULL)
-    g_object_set (priv->snippets_provider, "snippets", snippets, NULL);
-}
-
-static void
 ide_source_view_update_auto_indent_override (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
@@ -861,7 +834,6 @@ ide_source_view__buffer_notify_file_cb (IdeSourceView *self,
 
   ide_source_view_reload_language (self);
   ide_source_view_reload_file_settings (self);
-  ide_source_view_reload_snippets (self);
 }
 
 static void
@@ -886,11 +858,6 @@ ide_source_view__buffer_notify_language_cb (IdeSourceView *self,
     ide_extension_adapter_set_value (priv->indenter_adapter, lang_id);
   ide_source_view_update_auto_indent_override (self);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INDENTER]);
-
-  /*
-   * Make sure the snippet engine reloads for the new language.
-   */
-  ide_source_view_reload_snippets (self);
 }
 
 static void
@@ -2126,33 +2093,6 @@ ide_source_view_key_press_event (GtkWidget   *widget,
 
         default:
           break;
-        }
-    }
-
-  /*
-   * We have stolen ownership of Tab from GtkSourceCompletion so that we can
-   * move between snippets at a higher priority than the completion window.
-   * If we don't have a snippet active
-   */
-  if (ide_completion_is_visible (priv->completion) && event->keyval == GDK_KEY_Tab)
-    {
-      GtkSourceCompletion *completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
-      g_signal_emit_by_name (completion, "activate-proposal");
-      ret = TRUE;
-      goto cleanup;
-    }
-
-  /*
-   * Avoid conflicts with global <alt>+N perspective movements.
-   * We might want to adjust those keybindings at somepoint.
-   */
-  if (ide_completion_is_visible (priv->completion) && event->state == GDK_MOD1_MASK)
-    {
-      if ((event->keyval >= GDK_KEY_0 && event->keyval <= GDK_KEY_9) ||
-          (event->keyval >= GDK_KEY_KP_0 && event->keyval <= GDK_KEY_KP_9))
-        {
-          ret = TRUE;
-          goto cleanup;
         }
     }
 
@@ -4265,12 +4205,11 @@ ide_source_view_real_goto_definition (IdeSourceView *self)
 static void
 ide_source_view_real_hide_completion (IdeSourceView *self)
 {
-  GtkSourceCompletion *completion;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
-  gtk_source_completion_hide (completion);
+  ide_completion_hide (priv->completion);
 }
 
 static void
@@ -5379,7 +5318,6 @@ ide_source_view_dispose (GObject *object)
 
   g_clear_object (&priv->capture);
   g_clear_object (&priv->indenter_adapter);
-  g_clear_object (&priv->snippets_provider);
   g_clear_object (&priv->css_provider);
   g_clear_object (&priv->mode);
   g_clear_object (&priv->buffer_signals);
@@ -5483,10 +5421,6 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_show_line_numbers (self));
       break;
 
-    case PROP_SNIPPET_COMPLETION:
-      g_value_set_boolean (value, ide_source_view_get_snippet_completion (self));
-      break;
-
     case PROP_OVERSCROLL:
       g_value_set_int (value, priv->overscroll_num_lines);
       break;
@@ -5564,10 +5498,6 @@ ide_source_view_set_property (GObject      *object,
       ide_source_view_set_show_line_numbers (self, g_value_get_boolean (value));
       break;
 
-    case PROP_SNIPPET_COMPLETION:
-      ide_source_view_set_snippet_completion (self, g_value_get_boolean (value));
-      break;
-
     case PROP_OVERSCROLL:
       ide_source_view_set_overscroll_num_lines (self, g_value_get_int (value));
       break;
@@ -5585,7 +5515,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
   GtkSourceViewClass *gsv_class = GTK_SOURCE_VIEW_CLASS (klass);
   GtkBindingSet *binding_set;
-  GTypeClass *completion_class;
 
   object_class->constructed = ide_source_view_constructed;
   object_class->dispose = ide_source_view_dispose;
@@ -5765,13 +5694,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_override_property (object_class, PROP_SHOW_LINE_NUMBERS, "show-line-numbers");
-
-  properties [PROP_SNIPPET_COMPLETION] =
-    g_param_spec_boolean ("snippet-completion",
-                          "Snippet Completion",
-                          "If snippet expansion should be enabled via the completion window.",
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_OVERSCROLL] =
     g_param_spec_int ("overscroll",
@@ -6491,22 +6413,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   binding_set = gtk_binding_set_by_class (g_type_class_peek (GTK_TYPE_TEXT_VIEW));
   gtk_binding_entry_remove (binding_set, GDK_KEY_period, GDK_CONTROL_MASK);
   gtk_binding_entry_remove (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK);
-
-  /*
-   * Escape is wired up by the GtkSourceCompletion by default. However, some
-   * keybindings may want to control that manually (such as Vim). Vim needs to
-   * go back to normal mode upon Escape to more closely match the traditional
-   * environment.
-   *
-   * We remove the Tab activation from the completion class so that we can
-   * activate it ourselves. Otherwise, it might fire before we have a chance
-   * to steal it to move to the next completion item.
-   */
-  completion_class = g_type_class_ref (GTK_SOURCE_TYPE_COMPLETION);
-  binding_set = gtk_binding_set_by_class (completion_class);
-  gtk_binding_entry_remove (binding_set, GDK_KEY_Escape, 0);
-  gtk_binding_entry_remove (binding_set, GDK_KEY_Tab, 0);
-  g_type_class_unref (completion_class);
 }
 
 static void
@@ -7025,71 +6931,6 @@ ide_source_view_push_snippet (IdeSourceView     *self,
     ide_source_view_pop_snippet (self);
 
   ide_source_view_invalidate_window (self);
-}
-
-/**
- * ide_source_view_get_snippet_completion:
- *
- * Gets the #IdeSourceView:snippet-completion property.
- *
- * If enabled, snippet expansion can be performed via the auto completion drop down.
- */
-gboolean
-ide_source_view_get_snippet_completion (IdeSourceView *self)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
-
-  return priv->snippet_completion;
-}
-
-/**
- * ide_source_view_set_snippet_completion:
- *
- * Sets the #IdeSourceView:snippet-completion property. By setting this property to %TRUE,
- * snippets will be loaded for the currently activated source code language. See #IdeSourceSnippet
- * for more information on what can be provided via a snippet.
- *
- * See also: ide_source_view_get_snippet_completion()
- */
-void
-ide_source_view_set_snippet_completion (IdeSourceView *self,
-                                        gboolean       snippet_completion)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
-
-  snippet_completion = !!snippet_completion;
-
-  if (snippet_completion != priv->snippet_completion)
-    {
-      GtkSourceCompletion *completion;
-
-      priv->snippet_completion = snippet_completion;
-
-      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
-
-      if (snippet_completion)
-        {
-          if (!priv->snippets_provider)
-            {
-              priv->snippets_provider = g_object_new (IDE_TYPE_SOURCE_SNIPPET_COMPLETION_PROVIDER,
-                                                      "source-view", self,
-                                                      NULL);
-              ide_source_view_reload_snippets (self);
-            }
-
-          gtk_source_completion_add_provider (completion, priv->snippets_provider, NULL);
-        }
-      else
-        {
-          gtk_source_completion_remove_provider (completion, priv->snippets_provider, NULL);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SNIPPET_COMPLETION]);
-    }
 }
 
 void
