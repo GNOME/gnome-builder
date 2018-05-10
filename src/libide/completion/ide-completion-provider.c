@@ -174,7 +174,7 @@ ide_completion_provider_activate_poposal (IdeCompletionProvider *self,
  * ide_completion_provider_refilter:
  * @self: an #IdeCompletionProvider
  * @context: an #IdeCompletionContext
- * @results: a #GListModel of results previously provided to the context
+ * @proposals: a #GListModel of results previously provided to the context
  *
  * This requests that the completion provider refilter the results based on
  * changes to the #IdeCompletionContext, such as additional text typed by the
@@ -191,14 +191,14 @@ ide_completion_provider_activate_poposal (IdeCompletionProvider *self,
 gboolean
 ide_completion_provider_refilter (IdeCompletionProvider *self,
                                   IdeCompletionContext  *context,
-                                  GListModel            *results)
+                                  GListModel            *proposals)
 {
   g_return_val_if_fail (IDE_IS_COMPLETION_PROVIDER (self), FALSE);
   g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (context), FALSE);
-  g_return_val_if_fail (G_IS_LIST_MODEL (results), FALSE);
+  g_return_val_if_fail (G_IS_LIST_MODEL (proposals), FALSE);
 
   if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->refilter)
-    return IDE_COMPLETION_PROVIDER_GET_IFACE (self)->refilter (self, context, results);
+    return IDE_COMPLETION_PROVIDER_GET_IFACE (self)->refilter (self, context, proposals);
 
   return FALSE;
 }

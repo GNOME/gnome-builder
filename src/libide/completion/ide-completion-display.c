@@ -71,3 +71,13 @@ ide_completion_display_attach (IdeCompletionDisplay *self,
 
   IDE_COMPLETION_DISPLAY_GET_IFACE (self)->attach (self, view);
 }
+
+void
+ide_completion_display_move_cursor (IdeCompletionDisplay *self,
+                                    GtkMovementStep       step,
+                                    gint                  count)
+{
+  g_return_if_fail (IDE_IS_COMPLETION_DISPLAY (self));
+
+  IDE_COMPLETION_DISPLAY_GET_IFACE (self)->move_cursor (self, step, count);
+}

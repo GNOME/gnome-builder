@@ -349,6 +349,17 @@ ide_completion_window_attach (IdeCompletionDisplay *display,
     gtk_window_set_transient_for (GTK_WINDOW (display), GTK_WINDOW (toplevel));
 }
 
+
+static void
+ide_completion_window_move_cursor (IdeCompletionDisplay *display,
+                                   GtkMovementStep       step,
+                                   gint                  count)
+{
+  g_assert (IDE_IS_COMPLETION_WINDOW (display));
+
+  _ide_completion_view_move_cursor (IDE_COMPLETION_WINDOW (display)->view, step, count);
+}
+
 static void
 completion_display_iface_init (IdeCompletionDisplayInterface *iface)
 {
@@ -356,4 +367,5 @@ completion_display_iface_init (IdeCompletionDisplayInterface *iface)
   iface->set_n_rows = ide_completion_window_set_n_rows;
   iface->attach = ide_completion_window_attach;
   iface->key_press_event = ide_completion_window_key_press_event;
+  iface->move_cursor = ide_completion_window_move_cursor;
 }
