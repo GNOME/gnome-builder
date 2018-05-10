@@ -43,6 +43,9 @@ struct _IdeCompletionDisplayInterface
                                GtkSourceView        *view);
   void     (*set_n_rows)      (IdeCompletionDisplay *self,
                                guint                 n_rows);
+  void     (*move_cursor)     (IdeCompletionDisplay *self,
+                               GtkMovementStep       step,
+                               gint                  count);
 };
 
 IDE_AVAILABLE_IN_3_30
@@ -57,5 +60,9 @@ gboolean ide_completion_display_key_press_event (IdeCompletionDisplay *self,
 IDE_AVAILABLE_IN_3_30
 void     ide_completion_display_set_n_rows      (IdeCompletionDisplay *self,
                                                  guint                 n_rows);
+IDE_AVAILABLE_IN_3_30
+void     ide_completion_display_move_cursor     (IdeCompletionDisplay *self,
+                                                 GtkMovementStep       step,
+                                                 gint                  count);
 
 G_END_DECLS

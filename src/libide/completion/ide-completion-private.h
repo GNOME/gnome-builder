@@ -29,7 +29,12 @@ void                     _ide_completion_view_set_n_rows           (IdeCompletio
 gint                     _ide_completion_view_get_x_offset         (IdeCompletionView        *self);
 gboolean                 _ide_completion_view_handle_key_press     (IdeCompletionView        *self,
                                                                     const GdkEventKey        *event);
+void                     _ide_completion_view_move_cursor          (IdeCompletionView        *self,
+                                                                    GtkMovementStep           step,
+                                                                    gint                      count);
 IdeCompletion           *_ide_completion_new                       (GtkSourceView            *view);
+void                     _ide_completion_set_language_id           (IdeCompletion            *self,
+                                                                    const gchar              *language_id);
 void                     _ide_completion_activate                  (IdeCompletion            *self,
                                                                     IdeCompletionContext     *context,
                                                                     IdeCompletionProvider    *provider,

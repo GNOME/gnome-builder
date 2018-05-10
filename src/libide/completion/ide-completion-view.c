@@ -409,3 +409,13 @@ _ide_completion_view_handle_key_press (IdeCompletionView *self,
 
   return gtk_binding_set_activate (binding_set, event->keyval, event->state, G_OBJECT (self));
 }
+
+void
+_ide_completion_view_move_cursor (IdeCompletionView *self,
+                                  GtkMovementStep    step,
+                                  gint               count)
+{
+  g_return_if_fail (IDE_IS_COMPLETION_VIEW (self));
+
+  g_signal_emit (self, signals [MOVE_CURSOR], 0, step, count);
+}
