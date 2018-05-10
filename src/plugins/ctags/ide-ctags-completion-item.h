@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CTAGS_COMPLETION_ITEM (ide_ctags_completion_item_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeCtagsCompletionItem, ide_ctags_completion_item, IDE, CTAGS_COMPLETION_ITEM, IdeCompletionItem)
+G_DECLARE_FINAL_TYPE (IdeCtagsCompletionItem, ide_ctags_completion_item, IDE, CTAGS_COMPLETION_ITEM, GObject)
 
 IdeCtagsCompletionItem *ide_ctags_completion_item_new         (IdeCtagsCompletionProvider *provider,
                                                                const IdeCtagsIndexEntry   *entry);

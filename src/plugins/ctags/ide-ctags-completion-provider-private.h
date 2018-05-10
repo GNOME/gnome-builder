@@ -24,13 +24,11 @@ G_BEGIN_DECLS
 
 struct _IdeCtagsCompletionProvider
 {
-  IdeObject             parent_instance;
-  gint                  minimum_word_size;
-  GSettings            *settings;
-  GPtrArray            *indexes;
-  IdeCompletionResults *results;
-  gchar                *current_word;
-  IdeSourceView        *view;
+  IdeObject  parent_instance;
+  GSettings *settings;
+  GPtrArray *indexes;
+  gint       minimum_word_size;
+  guint      enabled : 1;
 };
 
 G_END_DECLS
