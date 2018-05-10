@@ -25,6 +25,7 @@
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-completion-provider-private.h"
+#include "ide-ctags-results.h"
 #include "ide-ctags-service.h"
 #include "ide-ctags-util.h"
 
@@ -183,6 +184,23 @@ get_allowed_suffixes (IdeCompletionContext *context)
 }
 
 static void
+ide_ctags_completion_provider_populate_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  IdeCtagsResults *results = (IdeCtagsResults *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_CTAGS_RESULTS (results));
+
+  if (!ide_ctags_results_populate_finish (results, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_object (task, g_object_ref (results));
+}
+
+static void
 ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
                                               IdeCompletionContext   *context,
                                               GCancellable           *cancellable,
@@ -191,12 +209,9 @@ ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
                                               gpointer                user_data)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
-  const gchar * const *allowed;
-  g_autofree gchar *casefold = NULL;
-  g_autofree gchar *word = NULL;
-  g_autoptr(GHashTable) completions = NULL;
+  g_autoptr(IdeCtagsResults) model = NULL;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GListStore) store = NULL;
+  g_autofree gchar *word = NULL;
   GtkTextIter begin, end;
   gint word_len;
 
@@ -215,78 +230,26 @@ ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
       !(word = gtk_text_iter_get_slice (&begin, &end)) ||
       !(word_len = strlen (word)) ||
       strlen (word) < self->minimum_word_size)
-    goto word_too_small;
-
-  allowed = get_allowed_suffixes (context);
-  casefold = g_utf8_casefold (word, -1);
-  store = g_list_store_new (IDE_TYPE_COMPLETION_PROPOSAL);
-  completions = g_hash_table_new (g_str_hash, g_str_equal);
-
-  for (guint i = 0; i < self->indexes->len; i++)
     {
-      g_autofree gchar *copy = g_strdup (word);
-      IdeCtagsIndex *index = g_ptr_array_index (self->indexes, i);
-      const IdeCtagsIndexEntry *entries = NULL;
-      guint tmp_len = word_len;
-      gsize n_entries = 0;
-      gchar gdata_key[64];
-
-      /* NOTE: "ctags-%d" is turned into a GQuark and therefore lives the
-       *       length of the process. But it's generally under 1000 so not a
-       *       really big deal for now.
-       */
-
-      /*
-       * Make sure we hold a reference to the index for the lifetime of the results.
-       * When the results are released, so could our indexes.
-       */
-      g_snprintf (gdata_key, sizeof gdata_key, "ctags-%d", i);
-      g_object_set_data_full (G_OBJECT (store), gdata_key,
-                              g_object_ref (index), g_object_unref);
-
-      while (entries == NULL && copy[0])
-        {
-          if (!(entries = ide_ctags_index_lookup_prefix (index, copy, &n_entries)))
-            copy [--tmp_len] = '\0';
-        }
-
-      if ((entries == NULL) || (n_entries == 0))
-        continue;
-
-      for (guint j = 0; j < n_entries; j++)
-        {
-          const IdeCtagsIndexEntry *entry = &entries [j];
-          guint priority;
-
-          if (g_hash_table_contains (completions, entry->name))
-            continue;
-
-          g_hash_table_add (completions, (gchar *)entry->name);
-
-          if (!ide_ctags_is_allowed (entry, allowed))
-            continue;
-
-          if (ide_completion_item_fuzzy_match (entry->name, casefold, &priority))
-            {
-              g_autoptr(IdeCtagsCompletionItem) item = NULL;
-
-              item = ide_ctags_completion_item_new (self, entry);
-              g_list_store_append (store, item);
-            }
-        }
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Word too short to query ctags");
+      return;
     }
 
-  *results = g_object_ref (G_LIST_MODEL (store));
+  model = ide_ctags_results_new ();
+  ide_ctags_results_set_suffixes (model, get_allowed_suffixes (context));
+  ide_ctags_results_set_word (model, word);
+  for (guint i = 0; i < self->indexes->len; i++)
+    ide_ctags_results_add_index (model, g_ptr_array_index (self->indexes, i));
 
-  ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
-  return;
+  ide_ctags_results_populate_async (model,
+                                    cancellable,
+                                    ide_ctags_completion_provider_populate_cb,
+                                    g_steal_pointer (&task));
 
-word_too_small:
-  ide_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "Word too small to query ctags");
-  return;
+  *results = G_LIST_MODEL (g_steal_pointer (&model));
 }
 
 static GListModel *
@@ -297,7 +260,7 @@ ide_ctags_completion_provider_populate_finish (IdeCompletionProvider  *provider,
   g_return_val_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (provider), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  return ide_task_propagate_object (IDE_TASK (result), error);
 }
 
 static gint
