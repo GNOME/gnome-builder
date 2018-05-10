@@ -964,7 +964,6 @@ ide_completion_class_init (IdeCompletionClass *klass)
                               g_cclosure_marshal_VOID__VOIDv);
 
   binding_set = gtk_binding_set_by_class (klass);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "hide", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, GDK_CONTROL_MASK, "show", 0);
 }
 
