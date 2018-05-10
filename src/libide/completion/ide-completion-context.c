@@ -23,11 +23,12 @@
 #include <dazzle.h>
 #include <string.h>
 
-#include "ide-completion.h"
-#include "ide-completion-context.h"
-#include "ide-completion-private.h"
-#include "ide-completion-proposal.h"
-#include "ide-completion-provider.h"
+#include "completion/ide-completion.h"
+#include "completion/ide-completion-context.h"
+#include "completion/ide-completion-private.h"
+#include "completion/ide-completion-proposal.h"
+#include "completion/ide-completion-provider.h"
+#include "threading/ide-task.h"
 
 struct _IdeCompletionContext
 {
@@ -383,17 +384,17 @@ ide_completion_context_populate_cb (GObject      *object,
   IdeCompletionContext *self;
   CompleteTaskData *task_data;
   g_autoptr(GListModel) results = NULL;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  self = g_task_get_source_object (task);
+  self = ide_task_get_source_object (task);
   g_assert (IDE_IS_COMPLETION_CONTEXT (self));
 
-  task_data = g_task_get_task_data (task);
+  task_data = ide_task_get_task_data (task);
   g_assert (task_data != NULL);
 
   if (!(results = ide_completion_provider_populate_finish (provider, result, &error)))
@@ -406,16 +407,16 @@ ide_completion_context_populate_cb (GObject      *object,
   ide_completion_context_update_empty (self);
 
   if (task_data->n_active == 0)
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
 ide_completion_context_notify_complete_cb (IdeCompletionContext *self,
                                            GParamSpec           *pspec,
-                                           GTask                *task)
+                                           IdeTask                *task)
 {
   g_assert (IDE_IS_COMPLETION_CONTEXT (self));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   self->busy = FALSE;
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
@@ -442,7 +443,7 @@ _ide_completion_context_complete_async (IdeCompletionContext *self,
                                         GAsyncReadyCallback   callback,
                                         gpointer              user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   CompleteTaskData *task_data;
   GtkTextBuffer *buffer;
 
@@ -465,13 +466,13 @@ _ide_completion_context_complete_async (IdeCompletionContext *self,
   self->end_mark = gtk_text_buffer_create_mark (buffer, NULL, end, FALSE);
   g_object_ref (self->end_mark);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, _ide_completion_context_complete_async);
-  g_task_set_priority (task, G_PRIORITY_LOW);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, _ide_completion_context_complete_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   task_data = g_slice_new0 (CompleteTaskData);
   task_data->n_active = self->providers->len;
-  g_task_set_task_data (task, task_data, complete_task_data_free);
+  ide_task_set_task_data (task, task_data, complete_task_data_free);
 
   /* Always notify of busy completion, whether we fail or not */
   g_signal_connect_object (task,
@@ -496,7 +497,7 @@ _ide_completion_context_complete_async (IdeCompletionContext *self,
     }
 
   if (task_data->n_active == 0)
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_boolean (task, TRUE);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 }
@@ -519,9 +520,9 @@ _ide_completion_context_complete_finish (IdeCompletionContext  *self,
                                          GError               **error)
 {
   g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return g_task_propagate_boolean (G_TASK (result), error);
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
 /**
