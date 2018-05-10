@@ -638,12 +638,11 @@ ide_completion_addins_extension_added_cb (IdeExtensionSetAdapter *adapter,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
 
-  /* TODO: Remove this when no longer necessary */
-
   if ((buffer = ide_completion_get_buffer (self)) && IDE_IS_BUFFER (buffer))
     {
+      /* TODO: Remove this when no longer necessary */
       IdeContext *context = ide_buffer_get_context (IDE_BUFFER (buffer));
-      ide_completion_provider_load (provider, context);
+      _ide_completion_provider_load (provider, context);
     }
 
   ide_completion_add_provider (self, provider);
