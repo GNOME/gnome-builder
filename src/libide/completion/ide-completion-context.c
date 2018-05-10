@@ -487,6 +487,7 @@ _ide_completion_context_complete_async (IdeCompletionContext *self,
 
       dzl_cancellable_chain (info->cancellable, cancellable);
       ide_completion_provider_populate_async (info->provider,
+                                              self,
                                               info->cancellable,
                                               &results,
                                               ide_completion_context_populate_cb,
