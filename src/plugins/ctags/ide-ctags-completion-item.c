@@ -28,18 +28,18 @@
 
 struct _IdeCtagsCompletionItem
 {
-  IdeCompletionItem           parent_instance;
-  const IdeCtagsIndexEntry   *entry;
+  GObject parent_instance;
+  const IdeCtagsIndexEntry *entry;
   IdeCtagsCompletionProvider *provider;
 };
 
-static void proposal_iface_init (GtkSourceCompletionProposalIface *iface);
+static void proposal_iface_init (IdeCompletionProposalInterface *iface);
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionItem,
                                 ide_ctags_completion_item,
-                                IDE_TYPE_COMPLETION_ITEM,
+                                G_TYPE_OBJECT,
                                 0,
-                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
+                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
 DZL_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances", "Number of IdeCtagsCompletionItems")
 
@@ -65,22 +65,6 @@ ide_ctags_completion_item_compare (IdeCtagsCompletionItem *itema,
   return ide_ctags_index_entry_compare (itema->entry, itemb->entry);
 }
 
-static gboolean
-ide_ctags_completion_item_match (IdeCompletionItem *item,
-                                 const gchar       *query,
-                                 const gchar       *casefold)
-{
-  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)item;
-
-  if (ide_completion_item_fuzzy_match (self->entry->name, casefold, &item->priority))
-    {
-      if (!dzl_str_equal0 (self->entry->name, query))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
 ide_ctags_completion_item_finalize (GObject *object)
 {
@@ -93,11 +77,8 @@ static void
 ide_ctags_completion_item_class_init (IdeCtagsCompletionItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeCompletionItemClass *item_class = IDE_COMPLETION_ITEM_CLASS (klass);
 
   object_class->finalize = ide_ctags_completion_item_finalize;
-
-  item_class->match = ide_ctags_completion_item_match;
 }
 
 static void
@@ -111,29 +92,9 @@ ide_ctags_completion_item_init (IdeCtagsCompletionItem *self)
   DZL_COUNTER_INC (instances);
 }
 
-static gchar *
-get_markup (GtkSourceCompletionProposal *proposal)
-{
-  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
-
-  if (self->provider->current_word != NULL)
-    return ide_completion_item_fuzzy_highlight (self->entry->name, self->provider->current_word);
-
-  return g_strdup (self->entry->name);
-}
-
-static gchar *
-get_text (GtkSourceCompletionProposal *proposal)
-{
-  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
-
-  return g_strdup (self->entry->name);
-}
-
 static const gchar *
-get_icon_name (GtkSourceCompletionProposal *proposal)
+get_icon_name (IdeCtagsCompletionItem *self)
 {
-  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
   const gchar *icon_name = NULL;
 
   if (self->entry == NULL)
@@ -199,11 +160,21 @@ get_icon_name (GtkSourceCompletionProposal *proposal)
 }
 
 static void
-proposal_iface_init (GtkSourceCompletionProposalIface *iface)
+ide_ctags_completion_item_display (IdeCompletionProposal   *proposal,
+                                   IdeCompletionListBoxRow *row)
 {
-  iface->get_markup = get_markup;
-  iface->get_text = get_text;
-  iface->get_icon_name = get_icon_name;
+  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
+
+  ide_completion_list_box_row_set_icon_name (row, get_icon_name (self));
+  ide_completion_list_box_row_set_left (row, NULL);
+  ide_completion_list_box_row_set_center (row, self->entry->name);
+  ide_completion_list_box_row_set_right (row, NULL);
+}
+
+static void
+proposal_iface_init (IdeCompletionProposalInterface *iface)
+{
+  iface->display = ide_ctags_completion_item_display;
 }
 
 void
