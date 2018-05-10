@@ -1,4 +1,5 @@
 @import url("resource:///org/gnome/builder/themes/shared/shared-buildui.css");
+@import url("resource:///org/gnome/builder/themes/shared/shared-completion.css");
 @import url("resource:///org/gnome/builder/themes/shared/shared-debugger.css");
 @import url("resource:///org/gnome/builder/themes/shared/shared-layout.css");
 @import url("resource:///org/gnome/builder/themes/shared/shared-editor.css");
