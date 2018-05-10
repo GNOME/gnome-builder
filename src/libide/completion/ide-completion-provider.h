@@ -43,6 +43,7 @@ struct _IdeCompletionProviderInterface
   gint        (*get_priority)      (IdeCompletionProvider  *self);
   gchar      *(*get_title)         (IdeCompletionProvider  *self);
   void        (*populate_async)    (IdeCompletionProvider  *self,
+                                    IdeCompletionContext   *context,
                                     GCancellable           *cancellable,
                                     GListModel            **proposals,
                                     GAsyncReadyCallback     callback,
@@ -73,6 +74,7 @@ IDE_AVAILABLE_IN_3_30
 gchar      *ide_completion_provider_get_title        (IdeCompletionProvider  *self);
 IDE_AVAILABLE_IN_3_30
 void        ide_completion_provider_populate_async   (IdeCompletionProvider  *self,
+                                                      IdeCompletionContext   *context,
                                                       GCancellable           *cancellable,
                                                       GListModel            **proposals,
                                                       GAsyncReadyCallback     callback,
