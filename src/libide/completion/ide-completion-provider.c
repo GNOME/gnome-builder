@@ -268,11 +268,12 @@ ide_completion_provider_key_activates (IdeCompletionProvider *self,
 }
 
 void
-ide_completion_provider_load (IdeCompletionProvider *self,
-                              IdeContext            *context)
+_ide_completion_provider_load (IdeCompletionProvider *self,
+                               IdeContext            *context)
 {
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (self));
-  g_return_if_fail (IDE_IS_COMPLETION_CONTEXT (context));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
 
-  IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load (self, context);
+  if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load)
+    IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load (self, context);
 }
