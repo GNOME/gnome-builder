@@ -29,6 +29,8 @@
 # include <gdk/gdkwayland.h>
 #endif
 
+#include "ide-debug.h"
+
 #include "buffers/ide-buffer.h"
 #include "completion/ide-completion.h"
 #include "completion/ide-completion-context.h"
@@ -181,6 +183,8 @@ ide_completion_complete_cb (GObject      *object,
   g_autoptr(IdeCompletion) self = user_data;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_COMPLETION (self));
@@ -191,7 +195,7 @@ ide_completion_complete_cb (GObject      *object,
   if (!_ide_completion_context_complete_finish (context, result, &error))
     {
       g_debug ("%s", error->message);
-      return;
+      IDE_EXIT;
     }
 
   /* Nothing more to do if we don't need post-processing */
@@ -205,17 +209,23 @@ ide_completion_complete_cb (GObject      *object,
    */
   self->needs_refilter = FALSE;
   _ide_completion_context_refilter (context);
+
+  IDE_EXIT;
 }
 
 static void
 ide_completion_set_context (IdeCompletion        *self,
                             IdeCompletionContext *context)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (!context || IDE_IS_COMPLETION_CONTEXT (context));
 
   if (g_set_object (&self->context, context))
     dzl_signal_group_set_target (self->context_signals, context);
+
+  IDE_EXIT;
 }
 
 static inline gboolean
@@ -276,13 +286,15 @@ ide_completion_start (IdeCompletion           *self,
   GtkTextIter begin;
   GtkTextIter end;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (self->context == NULL);
 
   if (!ide_completion_compute_bounds (self, &begin, &end))
     {
       if (activation == IDE_COMPLETION_INTERACTIVE)
-        return;
+        IDE_EXIT;
       begin = end;
     }
 
@@ -300,6 +312,8 @@ ide_completion_start (IdeCompletion           *self,
                                           self->cancellable,
                                           ide_completion_complete_cb,
                                           g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void
@@ -311,6 +325,8 @@ ide_completion_update (IdeCompletion           *self,
   GtkTextIter begin;
   GtkTextIter end;
   GtkTextIter iter;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (self->context != NULL);
@@ -332,7 +348,7 @@ ide_completion_update (IdeCompletion           *self,
           if (self->waiting_for_results)
             {
               self->needs_refilter = TRUE;
-              return;
+              IDE_EXIT;
             }
 
           _ide_completion_context_refilter (self->context);
@@ -343,7 +359,7 @@ ide_completion_update (IdeCompletion           *self,
                 gtk_widget_show (GTK_WIDGET (self->display));
             }
 
-          return;
+          IDE_EXIT;
         }
     }
 
@@ -353,10 +369,10 @@ ide_completion_update (IdeCompletion           *self,
       if (activation == IDE_COMPLETION_INTERACTIVE)
         {
           ide_completion_hide (self);
-          return;
+          IDE_EXIT;
         }
 
-      goto reset;
+      IDE_GOTO (reset);
     }
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->view));
@@ -378,21 +394,27 @@ ide_completion_update (IdeCompletion           *self,
   if (gtk_text_iter_equal (&iter, &end))
     {
       ide_completion_show (self);
-      return;
+      IDE_EXIT;
     }
 
 reset:
   ide_completion_cancel (self);
   ide_completion_start (self, activation);
+
+  IDE_EXIT;
 }
 
 static void
 ide_completion_real_hide (IdeCompletion *self)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_COMPLETION (self));
 
   if (self->display != NULL)
     gtk_widget_hide (GTK_WIDGET (self->display));
+
+  IDE_EXIT;
 }
 
 static IdeCompletionDisplay *
@@ -420,6 +442,8 @@ ide_completion_real_show (IdeCompletion *self)
 {
   IdeCompletionDisplay *display;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_COMPLETION (self));
 
   display = ide_completion_get_display (self);
@@ -431,6 +455,8 @@ ide_completion_real_show (IdeCompletion *self)
 
   if (!ide_completion_context_is_empty (self->context))
     gtk_widget_show (GTK_WIDGET (display));
+
+  IDE_EXIT;
 }
 
 static void
@@ -438,6 +464,8 @@ ide_completion_notify_context_empty_cb (IdeCompletion        *self,
                                         GParamSpec           *pspec,
                                         IdeCompletionContext *context)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (pspec != NULL);
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
@@ -446,6 +474,8 @@ ide_completion_notify_context_empty_cb (IdeCompletion        *self,
     ide_completion_hide (self);
   else
     ide_completion_show (self);
+
+  IDE_EXIT;
 }
 
 static gboolean
@@ -653,6 +683,8 @@ ide_completion_addins_extension_added_cb (IdeExtensionSetAdapter *adapter,
   IdeCompletion *self = user_data;
   GtkTextBuffer *buffer;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
@@ -665,6 +697,8 @@ ide_completion_addins_extension_added_cb (IdeExtensionSetAdapter *adapter,
     }
 
   ide_completion_add_provider (self, provider);
+
+  IDE_EXIT;
 }
 
 static void
@@ -676,11 +710,15 @@ ide_completion_addins_extension_removed_cb (IdeExtensionSetAdapter *adapter,
   IdeCompletionProvider *provider = (IdeCompletionProvider *)exten;
   IdeCompletion *self = user_data;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
 
   ide_completion_remove_provider (self, provider);
+
+  IDE_EXIT;
 }
 
 static void
@@ -691,6 +729,8 @@ ide_completion_buffer_signals_bind_cb (IdeCompletion   *self,
   GtkSourceLanguage *language;
   const gchar *language_id = NULL;
   IdeContext *context;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (GTK_SOURCE_IS_BUFFER (buffer));
@@ -722,16 +762,22 @@ ide_completion_buffer_signals_bind_cb (IdeCompletion   *self,
   ide_extension_set_adapter_foreach (self->addins,
                                      ide_completion_addins_extension_added_cb,
                                      self);
+
+  IDE_EXIT;
 }
 
 static void
 ide_completion_buffer_signals_unbind_cb (IdeCompletion   *self,
                                          DzlSignalGroup  *group)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (DZL_IS_SIGNAL_GROUP (group));
 
   g_clear_object (&self->addins);
+
+  IDE_EXIT;
 }
 
 static void
@@ -739,6 +785,8 @@ ide_completion_buffer_notify_language_cb (IdeCompletion   *self,
                                           GParamSpec      *pspec,
                                           GtkSourceBuffer *buffer)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (pspec != NULL);
   g_assert (GTK_SOURCE_IS_BUFFER (buffer));
@@ -753,12 +801,16 @@ ide_completion_buffer_notify_language_cb (IdeCompletion   *self,
 
       ide_extension_set_adapter_set_value (self->addins, language_id);
     }
+
+  IDE_EXIT;
 }
 
 static void
 ide_completion_dispose (GObject *object)
 {
   IdeCompletion *self = (IdeCompletion *)object;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_COMPLETION (self));
 
@@ -773,12 +825,16 @@ ide_completion_dispose (GObject *object)
     g_ptr_array_remove_range (self->providers, 0, self->providers->len);
 
   G_OBJECT_CLASS (ide_completion_parent_class)->dispose (object);
+
+  IDE_EXIT;
 }
 
 static void
 ide_completion_finalize (GObject *object)
 {
   IdeCompletion *self = (IdeCompletion *)object;
+
+  IDE_ENTRY;
 
   g_clear_object (&self->buffer_signals);
   g_clear_object (&self->context_signals);
@@ -789,6 +845,8 @@ ide_completion_finalize (GObject *object)
   g_clear_weak_pointer (&self->view);
 
   G_OBJECT_CLASS (ide_completion_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -1126,11 +1184,15 @@ void
 ide_completion_add_provider (IdeCompletion         *self,
                              IdeCompletionProvider *provider)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (provider));
 
   g_ptr_array_add (self->providers, g_object_ref (provider));
   g_signal_emit (self, signals [PROVIDER_ADDED], 0, provider);
+
+  IDE_EXIT;
 }
 
 /**
@@ -1149,6 +1211,8 @@ ide_completion_remove_provider (IdeCompletion         *self,
 {
   g_autoptr(IdeCompletionProvider) hold = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (provider));
 
@@ -1156,6 +1220,8 @@ ide_completion_remove_provider (IdeCompletion         *self,
 
   if (g_ptr_array_remove (self->providers, provider))
     g_signal_emit (self, signals [PROVIDER_REMOVED], 0, hold);
+
+  IDE_EXIT;
 }
 
 /**
@@ -1172,9 +1238,16 @@ ide_completion_remove_provider (IdeCompletion         *self,
 void
 ide_completion_show (IdeCompletion *self)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
 
+  if (ide_completion_is_blocked (self))
+    IDE_EXIT;
+
   g_signal_emit (self, signals [SHOW], 0);
+
+  IDE_EXIT;
 }
 
 /**
@@ -1191,14 +1264,20 @@ ide_completion_show (IdeCompletion *self)
 void
 ide_completion_hide (IdeCompletion *self)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
 
   g_signal_emit (self, signals [HIDE], 0);
+
+  IDE_EXIT;
 }
 
 void
 ide_completion_cancel (IdeCompletion *self)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
 
   /* Nothing can re-use in-flight results now */
@@ -1217,30 +1296,42 @@ ide_completion_cancel (IdeCompletion *self)
       ide_completion_display_set_context (self->display, NULL);
       gtk_widget_hide (GTK_WIDGET (self->display));
     }
+
+  IDE_EXIT;
 }
 
 void
 ide_completion_block_interactive (IdeCompletion *self)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
 
   self->block_count++;
 
   ide_completion_cancel (self);
+
+  IDE_EXIT;
 }
 
 void
 ide_completion_unblock_interactive (IdeCompletion *self)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
 
   self->block_count--;
+
+  IDE_EXIT;
 }
 
 void
 ide_completion_set_n_rows (IdeCompletion *self,
                            guint          n_rows)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
   g_return_if_fail (n_rows > 0);
   g_return_if_fail (n_rows <= 32);
@@ -1252,6 +1343,8 @@ ide_completion_set_n_rows (IdeCompletion *self,
         ide_completion_display_set_n_rows (self->display, n_rows);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_N_ROWS]);
     }
+
+  IDE_EXIT;
 }
 
 guint
@@ -1267,6 +1360,8 @@ _ide_completion_activate (IdeCompletion         *self,
                           IdeCompletionProvider *provider,
                           IdeCompletionProposal *proposal)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
   g_return_if_fail (IDE_IS_COMPLETION_CONTEXT (context));
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (provider));
@@ -1275,16 +1370,22 @@ _ide_completion_activate (IdeCompletion         *self,
   self->block_count++;
   ide_completion_provider_activate_poposal (provider, context, proposal, self->current_event);
   self->block_count--;
+
+  IDE_EXIT;
 }
 
 void
 _ide_completion_set_language_id (IdeCompletion *self,
                                  const gchar   *language_id)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
   g_return_if_fail (language_id != NULL);
 
   ide_extension_set_adapter_set_value (self->addins, language_id);
+
+  IDE_EXIT;
 }
 
 /**
@@ -1338,8 +1439,12 @@ ide_completion_move_cursor (IdeCompletion   *self,
                             GtkMovementStep  step,
                             gint             direction)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_COMPLETION (self));
 
   if (self->display != NULL)
     ide_completion_display_move_cursor (self->display, step, direction);
+
+  IDE_EXIT;
 }
