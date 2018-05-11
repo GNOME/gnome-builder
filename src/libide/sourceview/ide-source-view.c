@@ -3858,7 +3858,7 @@ ide_source_view_constructed (GObject *object)
   gtk_source_completion_block_interactive (gtk_source_view_get_completion (GTK_SOURCE_VIEW (self)));
 
   /* Disable completion until focus-in-event */
-  ide_completion_block_interactive (priv->completion);
+  block_interactive (self);
 }
 
 static void
