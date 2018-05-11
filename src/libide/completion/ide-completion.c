@@ -198,17 +198,22 @@ ide_completion_complete_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  /* Nothing more to do if we don't need post-processing */
-  if (context != self->context || self->needs_refilter)
-    return;
+  if (context != self->context)
+    IDE_EXIT;
 
-  /*
-   * At this point, we've gotten our new results for the context. But we had
-   * new content come in since we fired that request. So we need to ask the
-   * providers to further reduce the list based on updated query text.
-   */
-  self->needs_refilter = FALSE;
-  _ide_completion_context_refilter (context);
+  if (self->needs_refilter)
+    {
+      /*
+       * At this point, we've gotten our new results for the context. But we had
+       * new content come in since we fired that request. So we need to ask the
+       * providers to further reduce the list based on updated query text.
+       */
+      self->needs_refilter = FALSE;
+      _ide_completion_context_refilter (context);
+    }
+
+  if (!ide_completion_context_is_empty (context))
+    gtk_widget_show (GTK_WIDGET (self->display));
 
   IDE_EXIT;
 }
