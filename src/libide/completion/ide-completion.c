@@ -361,21 +361,6 @@ ide_completion_real_hide (IdeCompletion *self)
     gtk_widget_hide (GTK_WIDGET (self->display));
 }
 
-#if 0
-#ifdef GDK_WINDOWING_WAYLAND
-static gboolean
-configure_hack_cb (GtkWidget         *window,
-                   GdkEventConfigure *configure,
-                   gpointer           user_data)
-{
-  gtk_widget_hide (window);
-  g_signal_handlers_disconnect_by_func (window, G_CALLBACK (configure_hack_cb), NULL);
-  gtk_widget_set_opacity (window, 1.0);
-  return GDK_EVENT_PROPAGATE;
-}
-#endif
-#endif
-
 static IdeCompletionDisplay *
 ide_completion_create_display (IdeCompletion *self)
 {
@@ -522,11 +507,11 @@ ide_completion_buffer_delete_range_cb (IdeCompletion *self,
   g_assert (end != NULL);
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
-  if (ide_completion_is_blocked (self))
-    return;
-
   if (self->context != NULL)
-    ide_completion_update (self, IDE_COMPLETION_INTERACTIVE);
+    {
+      if (!ide_completion_is_blocked (self))
+        ide_completion_update (self, IDE_COMPLETION_INTERACTIVE);
+    }
 }
 
 static gboolean
