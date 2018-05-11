@@ -228,12 +228,16 @@ get_row_at_y (IdeCompletionListBox *self,
 {
   GtkAllocation alloc;
   guint offset;
+  guint n_items;
 
   gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
 
   offset = ide_completion_list_box_get_offset (self);
 
-  return offset + (y / (alloc.height / self->n_rows));
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->context));
+  n_items = MAX (1, MIN (self->n_rows, n_items));
+
+  return offset + (y / (alloc.height / n_items));
 }
 
 static void
