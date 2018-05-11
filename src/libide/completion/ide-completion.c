@@ -124,6 +124,12 @@ struct _IdeCompletion
 
   /* If we're currently being displayed */
   guint shown : 1;
+
+  /* If we have a completion actively in play */
+  guint waiting_for_results : 1;
+
+  /* If we should refilter after the in-flight context completes */
+  guint needs_refilter : 1;
 };
 
 G_DEFINE_TYPE (IdeCompletion, ide_completion, G_TYPE_OBJECT)
@@ -179,11 +185,26 @@ ide_completion_complete_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_COMPLETION (self));
 
-  if (!_ide_completion_context_complete_finish (context, result, &error))
-    g_debug ("%s", error->message);
+  if (self->context == context)
+    self->waiting_for_results = FALSE;
 
-  if (error != NULL)
-    g_debug ("Providered failed: %s", error->message);
+  if (!_ide_completion_context_complete_finish (context, result, &error))
+    {
+      g_debug ("%s", error->message);
+      return;
+    }
+
+  /* Nothing more to do if we don't need post-processing */
+  if (context != self->context || self->needs_refilter)
+    return;
+
+  /*
+   * At this point, we've gotten our new results for the context. But we had
+   * new content come in since we fired that request. So we need to ask the
+   * providers to further reduce the list based on updated query text.
+   */
+  self->needs_refilter = FALSE;
+  _ide_completion_context_refilter (context);
 }
 
 static void
@@ -270,6 +291,9 @@ ide_completion_start (IdeCompletion           *self,
     _ide_completion_context_add_provider (context, g_ptr_array_index (self->providers, i));
   ide_completion_set_context (self, context);
 
+  self->waiting_for_results = TRUE;
+  self->needs_refilter = FALSE;
+
   _ide_completion_context_complete_async (context,
                                           &begin,
                                           &end,
@@ -301,6 +325,16 @@ ide_completion_update (IdeCompletion           *self,
     {
       if (_ide_completion_context_can_refilter (self->context, &begin, &end))
         {
+          /*
+           * If we're waiting for the results still to come in, then just mark
+           * that we need to do post-processing rather than trying to refilter now
+           */
+          if (self->waiting_for_results)
+            {
+              self->needs_refilter = TRUE;
+              return;
+            }
+
           _ide_completion_context_refilter (self->context);
 
           if (self->display != NULL)
@@ -1166,6 +1200,10 @@ void
 ide_completion_cancel (IdeCompletion *self)
 {
   g_return_if_fail (IDE_IS_COMPLETION (self));
+
+  /* Nothing can re-use in-flight results now */
+  self->waiting_for_results = FALSE;
+  self->needs_refilter = FALSE;
 
   if (self->context != NULL)
     {
