@@ -384,7 +384,7 @@ ide_xml_tree_builder_parse_worker (IdeTask      *task,
               continue;
             }
 
-          if (!ide_xml_validator_validate (self->validator, doc, &diagnostics))
+          if (ide_xml_validator_validate (self->validator, doc, &diagnostics))
             {
               g_autoptr(IdeDiagnostic) diagnostic = NULL;
               g_autofree gchar *uri = NULL;
