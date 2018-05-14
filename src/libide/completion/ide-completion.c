@@ -460,6 +460,8 @@ ide_completion_real_show (IdeCompletion *self)
 
   if (!ide_completion_context_is_empty (self->context))
     gtk_widget_show (GTK_WIDGET (display));
+  else
+    g_printerr ("No results to show\n");
 
   IDE_EXIT;
 }
@@ -654,6 +656,26 @@ do_completion:
     ide_completion_start (self, activation);
   else
     ide_completion_update (self, activation);
+}
+
+static void
+ide_completion_buffer_mark_set_cb (IdeCompletion *self,
+                                   GtkTextMark   *mark,
+                                   GtkTextBuffer *buffer)
+{
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_COMPLETION (self));
+  g_assert (GTK_IS_TEXT_MARK (mark));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  if (mark != gtk_text_buffer_get_insert (buffer))
+    return;
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+  if (_ide_completion_context_iter_invalidates (self->context, &iter))
+    ide_completion_cancel (self);
 }
 
 static void
@@ -1100,6 +1122,11 @@ ide_completion_init (IdeCompletion *self)
                                    G_CALLBACK (ide_completion_buffer_insert_text_after_cb),
                                    self,
                                    G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+  dzl_signal_group_connect_object (self->buffer_signals,
+                                   "mark-set",
+                                   G_CALLBACK (ide_completion_buffer_mark_set_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
   /*
    * We track some events on the view that owns our IdeCompletion instance so
