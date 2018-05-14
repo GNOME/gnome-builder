@@ -143,6 +143,7 @@
   bind "o" { "action" ("layoutgrid", "focus-neighbor", "0") };
   bind "grave" { "move-error" (down) };
   bind "h" { "select-all" (1) };
+  bind "<ctrl>space" { "action" ("history", "move-previous-edit", "") };
 }
 
 @binding-set builder-emacs-source-view-c
