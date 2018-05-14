@@ -31,5 +31,5 @@ ide_c_pack_register_types (PeasObjectModule *module)
   _ide_c_format_provider_register_type (G_TYPE_MODULE (module));
 
   peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_C_INDENTER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_C_FORMAT_PROVIDER);
+  //peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_C_FORMAT_PROVIDER);
 }

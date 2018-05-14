@@ -40,6 +40,8 @@ void                     _ide_completion_activate                  (IdeCompletio
                                                                     IdeCompletionProvider    *provider,
                                                                     IdeCompletionProposal    *proposal);
 IdeCompletionContext    *_ide_completion_context_new               (IdeCompletion            *completion);
+gboolean                 _ide_completion_context_iter_invalidates  (IdeCompletionContext     *self,
+                                                                    const GtkTextIter        *iter);
 void                     _ide_completion_context_add_provider      (IdeCompletionContext     *self,
                                                                     IdeCompletionProvider    *provider);
 void                     _ide_completion_context_remove_provider   (IdeCompletionContext     *self,
