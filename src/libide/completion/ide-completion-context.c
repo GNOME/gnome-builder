@@ -910,3 +910,27 @@ _ide_completion_context_refilter (IdeCompletionContext *self)
       ide_completion_provider_refilter (info->provider, self, info->results);
     }
 }
+
+gboolean
+_ide_completion_context_iter_invalidates (IdeCompletionContext *self,
+                                          const GtkTextIter    *iter)
+{
+  guint line;
+  guint line_offset;
+
+  g_assert (!self || IDE_IS_COMPLETION_CONTEXT (self));
+  g_assert (iter != NULL);
+
+  if (self == NULL)
+    return FALSE;
+
+#if 0
+  line = gtk_text_iter_get_line (iter);
+  if (line != self->line)
+    return TRUE;
+
+  line_offset = gtk_text_iter_get_line_offset (iter);
+#endif
+
+  return FALSE;
+}
