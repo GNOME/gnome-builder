@@ -22,7 +22,7 @@
 
 #include "ide-version-macros.h"
 
-#include "sourceview/ide-completion-item.h"
+#include "completion/ide-completion-item.h"
 
 G_BEGIN_DECLS
 

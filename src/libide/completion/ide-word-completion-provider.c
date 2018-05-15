@@ -26,10 +26,10 @@
 
 #include "ide-debug.h"
 
-#include "sourceview/ide-word-completion-provider.h"
-#include "sourceview/ide-word-completion-item.h"
-#include "sourceview/ide-word-completion-results.h"
-#include "sourceview/ide-completion-provider.h"
+#include "completion/ide-completion-provider.h"
+#include "completion/ide-word-completion-provider.h"
+#include "completion/ide-word-completion-item.h"
+#include "completion/ide-word-completion-results.h"
 
 typedef struct
 {

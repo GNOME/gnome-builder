@@ -442,7 +442,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
         if result.propagate_boolean():
             return result.entries
 
-    def do_generate_key_async(self, location, cancellable, callback, user_data=None):
+    def do_generate_key_async(self, location, flags, cancellable, callback, user_data=None):
         # print('generate key')
         task = Gio.Task.new(self, cancellable, callback)
         task.return_error(GLib.Error('Not implemented'))

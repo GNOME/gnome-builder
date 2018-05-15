@@ -38,6 +38,17 @@ void               ide_clang_index_file_async           (IdeClang             *s
 GPtrArray         *ide_clang_index_file_finish          (IdeClang             *self,
                                                          GAsyncResult         *result,
                                                          GError              **error);
+void               ide_clang_get_index_key_async        (IdeClang             *self,
+                                                         const gchar          *path,
+                                                         const gchar * const  *argv,
+                                                         guint                 line,
+                                                         guint                 column,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+gchar             *ide_clang_get_index_key_finish       (IdeClang             *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
 void               ide_clang_complete_async             (IdeClang             *self,
                                                          const gchar          *path,
                                                          guint                 line,
@@ -98,5 +109,8 @@ void               ide_clang_get_highlight_index_async  (IdeClang             *s
 IdeHighlightIndex *ide_clang_get_highlight_index_finish (IdeClang             *self,
                                                          GAsyncResult         *result,
                                                          GError              **error);
+void               ide_clang_set_unsaved_file           (IdeClang             *self,
+                                                         GFile                *file,
+                                                         GBytes               *bytes);
 
 G_END_DECLS

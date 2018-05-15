@@ -57,7 +57,7 @@ DZL_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number o
 
 static IdeThreadPool thread_pools[] = {
   { NULL, IDE_THREAD_POOL_DEFAULT, 10, 1, FALSE },
-  { NULL, IDE_THREAD_POOL_COMPILER, 1, 1, FALSE },
+  { NULL, IDE_THREAD_POOL_COMPILER, 2, 2, FALSE },
   { NULL, IDE_THREAD_POOL_INDEXER,  1, 1, FALSE },
   { NULL, IDE_THREAD_POOL_IO,       8, 1, FALSE },
   { NULL, IDE_THREAD_POOL_LAST,     0, 0, FALSE }

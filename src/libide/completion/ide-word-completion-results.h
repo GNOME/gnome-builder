@@ -1,4 +1,4 @@
-/* ide-word-completion-item.h
+/* ide-word-completion-results.h
  *
  * Copyright 2017 Umang Jain <mailumangjain@gmail.com>
  *
@@ -20,18 +20,15 @@
 
 #include <gtksourceview/gtksource.h>
 
-#include "sourceview/ide-completion-item.h"
+#include "completion/ide-completion-results.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_WORD_COMPLETION_ITEM (ide_word_completion_item_get_type ())
+#define IDE_TYPE_WORD_COMPLETION_RESULTS (ide_word_completion_results_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeWordCompletionItem, ide_word_completion_item, IDE, WORD_COMPLETION_ITEM, IdeCompletionItem)
+G_DECLARE_FINAL_TYPE (IdeWordCompletionResults, ide_word_completion_results, IDE, WORD_COMPLETION_RESULTS, IdeCompletionResults)
 
-IdeWordCompletionItem *ide_word_completion_item_new        (const gchar           *word,
-                                                            gint                   offset,
-                                                            GIcon                 *icon);
-const gchar           *ide_word_completion_item_get_word   (IdeWordCompletionItem *proposal);
-gint                   ide_word_completion_item_get_offset (IdeWordCompletionItem *proposal);
+IdeWordCompletionResults* ide_word_completion_results_new (const gchar *query,
+                                                           gint         sort_direction);
 
 G_END_DECLS

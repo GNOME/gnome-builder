@@ -127,8 +127,9 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
       ide_subprocess_launcher_setenv (ret, "CFLAGS", cflags, TRUE);
       ide_subprocess_launcher_setenv (ret, "LDFLAGS", ldflags, TRUE);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_DIR", "", TRUE);
-      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_SYSROOT_DIR", g_strdup (sysroot_path), TRUE);
+      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_SYSROOT_DIR", sysroot_path, TRUE);
       ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_LIBDIR", sysroot_libdirs, TRUE);
+      ide_subprocess_launcher_setenv (ret, "QEMU_LD_PREFIX", sysroot_path, TRUE);
     }
   else
     {

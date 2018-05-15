@@ -37,6 +37,7 @@
 static guint      in_flight;
 static gboolean   closing;
 static GMainLoop *main_loop;
+static GQueue     ops;
 
 /* Client Operations {{{1 */
 
@@ -46,6 +47,7 @@ typedef struct
   JsonrpcClient *client;
   GVariant      *id;
   GCancellable  *cancellable;
+  GList          link;
 } ClientOp;
 
 static void
@@ -72,7 +74,6 @@ client_op_error (ClientOp     *op,
                                     error->code,
                                     error->message,
                                     NULL, NULL, NULL);
-  jsonrpc_client_close (op->client, NULL, NULL);
 }
 
 static ClientOp *
@@ -97,6 +98,7 @@ client_op_unref (ClientOp *op)
       g_clear_object (&op->cancellable);
       g_clear_object (&op->client);
       g_clear_pointer (&op->id, g_variant_unref);
+      g_queue_unlink (&ops, &op->link);
       g_slice_free (ClientOp, op);
 
       in_flight--;
@@ -119,6 +121,9 @@ client_op_new (JsonrpcClient *client,
   op->client = g_object_ref (client);
   op->cancellable = g_cancellable_new ();
   op->ref_count = 1;
+  op->link.data = op;
+
+  g_queue_push_tail_link (&ops, &op->link);
 
   ++in_flight;
 
@@ -241,6 +246,83 @@ handle_index_file (JsonrpcServer *server,
                               op->cancellable,
                               (GAsyncReadyCallback)handle_index_file_cb,
                               client_op_ref (op));
+}
+
+/* Get Index Key Handler {{{1 */
+
+static void
+handle_get_index_key_cb (IdeClang     *clang,
+                         GAsyncResult *result,
+                         gpointer      user_data)
+{
+  g_autoptr(ClientOp) op = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *key = NULL;
+  g_autoptr(GVariant) reply = NULL;
+
+  g_assert (IDE_IS_CLANG (clang));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (op != NULL);
+
+  key = ide_clang_get_index_key_finish (clang, result, &error);
+
+  if (key == NULL && error == NULL)
+    g_set_error (&error,
+                 G_IO_ERROR,
+                 G_IO_ERROR_NOT_FOUND,
+                 "Failed to locate key");
+
+  if (error != NULL)
+    client_op_error (op, error);
+  else
+    client_op_reply (op, g_variant_new_string (key));
+}
+
+static void
+handle_get_index_key (JsonrpcServer *server,
+                      JsonrpcClient *client,
+                      const gchar   *method,
+                      GVariant      *id,
+                      GVariant      *params,
+                      IdeClang      *clang)
+{
+  g_autoptr(GPtrArray) argv = NULL;
+  g_autoptr(ClientOp) op = NULL;
+  g_auto(GStrv) flags = NULL;
+  const gchar *path = NULL;
+  gint64 line = 0;
+  gint64 column = 0;
+  gboolean r;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "clang/getIndexKey"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  r = JSONRPC_MESSAGE_PARSE (params,
+    "path", JSONRPC_MESSAGE_GET_STRING (&path),
+    "flags", JSONRPC_MESSAGE_GET_STRV (&flags),
+    "line", JSONRPC_MESSAGE_GET_INT64 (&line),
+    "column", JSONRPC_MESSAGE_GET_INT64 (&column)
+  );
+
+  if (!r)
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  ide_clang_get_index_key_async (clang,
+                                 path,
+                                 (const gchar * const *)flags,
+                                 line,
+                                 column,
+                                 op->cancellable,
+                                 (GAsyncReadyCallback)handle_get_index_key_cb,
+                                 client_op_ref (op));
 }
 
 /* Find Nearest Scope {{{1 */
@@ -665,6 +747,46 @@ handle_get_highlight_index (JsonrpcServer *server,
                                        client_op_ref (op));
 }
 
+/* Set Buffer Contents {{{1 */
+
+static void
+handle_set_buffer (JsonrpcServer *server,
+                   JsonrpcClient *client,
+                   const gchar   *method,
+                   GVariant      *id,
+                   GVariant      *params,
+                   IdeClang      *clang)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+  g_autoptr(GFile) file = NULL;
+  const gchar *path = NULL;
+  const gchar *contents = NULL;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "clang/setBuffer"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  if (!JSONRPC_MESSAGE_PARSE (params, "path", JSONRPC_MESSAGE_GET_STRING (&path)))
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  /* Get the new contents (or NULL bytes if we are unsetting it */
+  if (g_variant_lookup (params, "contents", "^&ay", &contents))
+    bytes = g_bytes_new (contents, strlen (contents));
+
+  file = g_file_new_for_path (path);
+  ide_clang_set_unsaved_file (clang, file, bytes);
+
+  client_op_reply (op, g_variant_new_boolean (TRUE));
+}
+
 /* Initialize {{{1 */
 
 static void
@@ -691,6 +813,49 @@ handle_initialize (JsonrpcServer *server,
       g_autoptr(GFile) file = g_file_new_for_uri (uri);
 
       ide_clang_set_workdir (clang, file);
+    }
+
+  client_op_reply (op, NULL);
+}
+
+/* Cancel Request {{{1 */
+
+static void
+handle_cancel_request (JsonrpcServer *server,
+                       JsonrpcClient *client,
+                       const gchar   *method,
+                       GVariant      *id,
+                       GVariant      *params,
+                       IdeClang      *clang)
+{
+  g_autoptr(ClientOp) op = NULL;
+  g_autoptr(GVariant) cid = NULL;
+
+  g_assert (JSONRPC_IS_SERVER (server));
+  g_assert (JSONRPC_IS_CLIENT (client));
+  g_assert (g_str_equal (method, "$/cancelRequest"));
+  g_assert (id != NULL);
+  g_assert (IDE_IS_CLANG (clang));
+
+  op = client_op_new (client, id);
+
+  if (params == NULL || !(cid = g_variant_lookup_value (params, "id", NULL)))
+    {
+      client_op_bad_params (op);
+      return;
+    }
+
+  /* Lookup in-flight command to cancel it */
+
+  for (const GList *iter = ops.head; iter != NULL; iter = iter->next)
+    {
+      ClientOp *ele = iter->data;
+
+      if (g_variant_equal (ele->id, cid))
+        {
+          g_cancellable_cancel (ele->cancellable);
+          break;
+        }
     }
 
   client_op_reply (op, NULL);
@@ -759,10 +924,13 @@ main (gint argc,
   ADD_HANDLER ("clang/complete", handle_complete);
   ADD_HANDLER ("clang/diagnose", handle_diagnose);
   ADD_HANDLER ("clang/findNearestScope", handle_find_nearest_scope);
+  ADD_HANDLER ("clang/getIndexKey", handle_get_index_key);
   ADD_HANDLER ("clang/getSymbolTree", handle_get_symbol_tree);
   ADD_HANDLER ("clang/indexFile", handle_index_file);
   ADD_HANDLER ("clang/locateSymbol", handle_locate_symbol);
   ADD_HANDLER ("clang/getHighlightIndex", handle_get_highlight_index);
+  ADD_HANDLER ("clang/setBuffer", handle_set_buffer);
+  ADD_HANDLER ("$/cancelRequest", handle_cancel_request);
 
 #undef ADD_HANDLER
 

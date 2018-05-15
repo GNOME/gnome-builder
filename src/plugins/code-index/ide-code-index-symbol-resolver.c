@@ -72,6 +72,62 @@ ide_code_index_symbol_resolver_lookup_cb (GObject      *object,
                                "Failed to locate symbol \"%s\"", key);
 }
 
+typedef struct
+{
+  IdeCodeIndexer    *code_indexer;
+  IdeSourceLocation *location;
+} LookupSymbol;
+
+static void
+lookup_symbol_free (gpointer data)
+{
+  LookupSymbol *state = data;
+
+  g_clear_object (&state->code_indexer);
+  g_clear_pointer (&state->location, ide_source_location_unref);
+  g_slice_free (LookupSymbol, state);
+}
+
+static void
+ide_code_index_symbol_resolver_lookup_flags_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) flags = NULL;
+  LookupSymbol *state;
+  GCancellable *cancellable;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  flags = ide_build_system_get_build_flags_finish (build_system, result, &error);
+
+  if (error != NULL)
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->location != NULL);
+  g_assert (IDE_IS_CODE_INDEXER (state->code_indexer));
+
+  cancellable = ide_task_get_cancellable (task);
+
+  ide_code_indexer_generate_key_async (state->code_indexer,
+                                       state->location,
+                                       (const gchar * const *)flags,
+                                       cancellable,
+                                       ide_code_index_symbol_resolver_lookup_cb,
+                                       g_steal_pointer (&task));
+}
+
 static void
 ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
                                                     IdeSourceLocation   *location,
@@ -83,8 +139,11 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   g_autoptr(IdeTask) task = NULL;
   IdeCodeIndexService *service;
   IdeCodeIndexer *code_indexer;
+  IdeBuildSystem *build_system;
   const gchar *path;
   IdeContext *context;
+  IdeFile *file;
+  LookupSymbol *lookup;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_SYMBOL_RESOLVER (self));
@@ -101,23 +160,36 @@ ide_code_index_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolve
   service = ide_context_get_service_typed (context, IDE_TYPE_CODE_INDEX_SERVICE);
   g_assert (IDE_IS_CODE_INDEX_SERVICE (service));
 
-  path = ide_file_get_path (ide_source_location_get_file (location));
+  file = ide_source_location_get_file (location);
+  path = ide_file_get_path (file);
   g_assert (path != NULL);
 
   code_indexer = ide_code_index_service_get_code_indexer (service, path);
   g_assert (!code_indexer || IDE_IS_CODE_INDEXER (code_indexer));
 
   if (code_indexer == NULL)
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               "Failed to lcoate code indexer");
-  else
-    ide_code_indexer_generate_key_async (code_indexer,
-                                         location,
-                                         cancellable,
-                                         ide_code_index_symbol_resolver_lookup_cb,
-                                         g_steal_pointer (&task));
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Failed to locate code indexer");
+      return;
+    }
+
+  build_system = ide_context_get_build_system (context);
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+
+  lookup = g_slice_new0 (LookupSymbol);
+  lookup->code_indexer = g_object_ref (code_indexer);
+  lookup->location = ide_source_location_ref (location);
+
+  ide_task_set_task_data (task, lookup, lookup_symbol_free);
+
+  ide_build_system_get_build_flags_async (build_system,
+                                          file,
+                                          cancellable,
+                                          ide_code_index_symbol_resolver_lookup_flags_cb,
+                                          g_steal_pointer (&task));
 }
 static IdeSymbol *
 ide_code_index_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,

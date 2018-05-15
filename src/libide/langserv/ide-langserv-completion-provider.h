@@ -22,8 +22,8 @@
 
 #include "ide-object.h"
 
+#include "completion/ide-completion-provider.h"
 #include "langserv/ide-langserv-client.h"
-#include "sourceview/ide-completion-provider.h"
 
 G_BEGIN_DECLS
 

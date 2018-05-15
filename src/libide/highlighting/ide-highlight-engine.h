@@ -52,5 +52,7 @@ IDE_AVAILABLE_IN_ALL
 void                ide_highlight_engine_pause           (IdeHighlightEngine *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_highlight_engine_unpause         (IdeHighlightEngine *self);
+IDE_AVAILABLE_IN_3_30
+void                ide_highlight_engine_advance         (IdeHighlightEngine *self);
 
 G_END_DECLS

@@ -168,3 +168,22 @@ ide_diagnostics_add (IdeDiagnostics *self,
 
   g_ptr_array_add (self->diagnostics, ide_diagnostic_ref (diagnostic));
 }
+
+/**
+ * ide_diagnostics_take:
+ * @self: a #IdeDiagnostics
+ * @diagnostic: (transfer full): an #IdeDiagnostic
+ *
+ * Like ide_diagnostics_add() but steals the reference to @diagnostic.
+ *
+ * Since: 3.30
+ */
+void
+ide_diagnostics_take (IdeDiagnostics *self,
+                      IdeDiagnostic  *diagnostic)
+{
+  g_assert (self != NULL);
+  g_assert (diagnostic != NULL);
+
+  g_ptr_array_add (self->diagnostics, diagnostic);
+}

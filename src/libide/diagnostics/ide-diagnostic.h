@@ -69,6 +69,8 @@ IDE_AVAILABLE_IN_ALL
 IdeDiagnostic         *ide_diagnostic_new                  (IdeDiagnosticSeverity  severity,
                                                             const gchar           *text,
                                                             IdeSourceLocation     *location);
+IDE_AVAILABLE_IN_3_30
+IdeDiagnostic         *ide_diagnostic_new_from_variant     (GVariant              *variant);
 IDE_AVAILABLE_IN_ALL
 void                   ide_diagnostic_add_range            (IdeDiagnostic         *self,
                                                             IdeSourceRange        *range);

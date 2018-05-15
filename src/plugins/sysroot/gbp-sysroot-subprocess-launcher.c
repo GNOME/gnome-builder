@@ -45,8 +45,7 @@ gbp_sysroot_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
                                        GCancellable           *cancellable,
                                        GError                 **error)
 {
-  g_autofree gchar *argv = NULL;
-  const gchar * const *args = NULL;
+  const gchar * const *args;
   g_autoptr(GString) cmd = NULL;
 
   g_assert (GBP_IS_SYSROOT_SUBPROCESS_LAUNCHER (self));
@@ -57,16 +56,15 @@ gbp_sysroot_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
   if (args[0] != NULL && g_strcmp0 (args[0], "sh") == 0 && g_strcmp0 (args[1], "-c") == 0)
     return IDE_SUBPROCESS_LAUNCHER_CLASS (gbp_sysroot_subprocess_launcher_parent_class)->spawn (self, cancellable, error);
 
-  argv = ide_subprocess_launcher_pop_argv (self);
-  cmd = g_string_new (argv);
-
-  while ((argv = ide_subprocess_launcher_pop_argv (self)) != NULL)
+  cmd = g_string_new (NULL);
+  for (guint i = 0; args[i] != NULL; i++)
     {
-      g_autofree gchar *arg = g_shell_quote(argv);
-      g_string_prepend (cmd, " ");
-      g_string_prepend (cmd, arg);
+      g_autofree gchar *quoted = g_shell_quote (args[i]);
+      g_string_append (cmd, quoted);
+      g_string_append_c (cmd, ' ');
     }
 
+  ide_subprocess_launcher_set_argv (self, NULL);
   ide_subprocess_launcher_push_argv (self, "sh");
   ide_subprocess_launcher_push_argv (self, "-c");
   ide_subprocess_launcher_push_argv (self, cmd->str);

@@ -99,7 +99,8 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   if (ninja == NULL)
     {
-      g_debug ("Failed to locate ninja. Meson building is disabled.");
+      ide_context_warning (context,
+                           _("A Meson-based project is loaded but Ninja could not be found."));
       IDE_EXIT;
     }
 
@@ -116,6 +117,10 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   if (NULL == (meson = ide_configuration_getenv (config, "MESON")))
     meson = "meson";
+
+  if (!ide_runtime_contains_program_in_path (runtime, meson, NULL))
+    ide_context_warning (context,
+                         _("A Meson-based project is loaded but meson could not be found."));
 
   /* Setup our meson configure stage. */
 

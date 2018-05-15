@@ -45,8 +45,9 @@ typedef struct
   IdeUri               *uri;
   GArray               *loaders;
   gchar                *content_type;
-  IdeWorkbenchOpenFlags flags;
   gchar                *hint;
+  IdeWorkbenchOpenFlags flags;
+  guint                 index;
   guint                 did_collect : 1;
 } IdeWorkbenchOpenUriState;
 
@@ -146,7 +147,7 @@ ide_workbench_open_uri_state_free (gpointer data)
   g_clear_pointer (&open_uri_state->uri, ide_uri_unref);
   g_clear_pointer (&open_uri_state->content_type, g_free);
   g_clear_pointer (&open_uri_state->hint, g_free);
-  g_free (open_uri_state);
+  g_slice_free (IdeWorkbenchOpenUriState, open_uri_state);
 }
 
 static void
@@ -167,6 +168,8 @@ ide_workbench_open_uri_cb (GObject      *object,
       g_object_unref (open_uri_state->task);
       return;
     }
+
+  open_uri_state->index++;
 
   ide_workbench_open_uri_try_next (open_uri_state);
 }
@@ -192,7 +195,7 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
                               open_uri_state->hint);
     }
 
-  if (open_uri_state->loaders->len == 0)
+  if (open_uri_state->index >= open_uri_state->loaders->len)
     {
       gchar *uristr;
 
@@ -209,7 +212,7 @@ ide_workbench_open_uri_try_next (IdeWorkbenchOpenUriState *open_uri_state)
       return;
     }
 
-  loader = &g_array_index (open_uri_state->loaders, IdeWorkbenchLoader, 0);
+  loader = &g_array_index (open_uri_state->loaders, IdeWorkbenchLoader, open_uri_state->index);
 
   ide_workbench_addin_open_async (loader->addin,
                                   open_uri_state->uri,
@@ -304,7 +307,7 @@ ide_workbench_open_uri_async (IdeWorkbench         *self,
   g_return_if_fail (uri != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  open_uri_state = g_new0 (IdeWorkbenchOpenUriState, 1);
+  open_uri_state = g_slice_new0 (IdeWorkbenchOpenUriState);
   open_uri_state->self = self;
   open_uri_state->uri = ide_uri_ref (uri);
   open_uri_state->content_type = NULL;

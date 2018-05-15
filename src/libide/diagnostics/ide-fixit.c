@@ -151,3 +151,51 @@ ide_fixit_to_variant (const IdeFixit *self)
 
   return g_variant_ref_sink (g_variant_dict_end (&dict));
 }
+
+/**
+ * ide_fixit_new_from_variant:
+ * @variant: (nullable): a #GVariant
+ *
+ * Creates a new #IdeFixit from the variant.
+ *
+ * If @variant is %NULL, %NULL is returned.
+ *
+ * Returns: (transfer full) (nullable): an #IdeFixit or %NULL
+ *
+ * Since: 3.30
+ */
+IdeFixit *
+ide_fixit_new_from_variant (GVariant *variant)
+{
+  g_autoptr(GVariant) unboxed = NULL;
+  g_autoptr(GVariant) vrange = NULL;
+  GVariantDict dict;
+  IdeSourceRange *range = NULL;
+  const gchar *text;
+  IdeFixit *self = NULL;
+
+  if (variant == NULL)
+    return NULL;
+
+  if (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARIANT))
+    variant = unboxed = g_variant_get_variant (variant);
+
+  g_variant_dict_init (&dict, variant);
+
+  if (!g_variant_dict_lookup (&dict, "text", "&s", &text))
+    text = "";
+
+  if ((vrange = g_variant_dict_lookup_value (&dict, "range", NULL)))
+    {
+      if (!(range = ide_source_range_new_from_variant (vrange)))
+        goto failed;
+    }
+
+  self = ide_fixit_new (range, text);
+
+failed:
+
+  g_variant_dict_clear (&dict);
+
+  return self;
+}

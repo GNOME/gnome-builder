@@ -30,13 +30,46 @@
 #define IDE_CLANG_HIGHLIGHTER_ENUM_NAME     "def:constant"
 #define IDE_CLANG_HIGHLIGHTER_MACRO_NAME    "c:macro-name"
 
+#define PRIORITY_DIAGNOSE     (-200)
+#define PRIORITY_COMPLETE     (-100)
+#define PRIORITY_GET_LOCATION (-50)
+#define PRIORITY_GET_SYMTREE  (50)
+#define PRIORITY_FIND_SCOPE   (100)
+#define PRIORITY_INDEX_FILE   (500)
+#define PRIORITY_HIGHLIGHT    (300)
+
+#if 0
+# define PROBE G_STMT_START { g_printerr ("PROBE: %s\n", G_STRFUNC); } G_STMT_END
+#else
+# define PROBE G_STMT_START { } G_STMT_END
+#endif
+
 struct _IdeClang
 {
-  GObject  parent;
-  GFile   *workdir;
+  GObject     parent;
+  GFile      *workdir;
+  GHashTable *unsaved_files;
+  CXIndex     index;
 };
 
+typedef struct
+{
+  struct CXUnsavedFile *files;
+  GPtrArray            *bytes;
+  GPtrArray            *paths;
+  guint                 len;
+} UnsavedFiles;
+
 G_DEFINE_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
+
+static void
+unsaved_files_free (UnsavedFiles *uf)
+{
+  g_clear_pointer (&uf->files, g_free);
+  g_clear_pointer (&uf->bytes, g_ptr_array_unref);
+  g_clear_pointer (&uf->paths, g_ptr_array_unref);
+  g_slice_free (UnsavedFiles, uf);
+}
 
 static const gchar *
 ide_clang_get_llvm_flags (void)
@@ -71,23 +104,89 @@ ide_clang_get_llvm_flags (void)
 }
 
 static gchar **
-ide_clang_cook_flags (const gchar * const *flags)
+ide_clang_cook_flags (const gchar         *path,
+                      const gchar * const *flags)
 {
   GPtrArray *cooked = g_ptr_array_new ();
   const gchar *llvm_flags = ide_clang_get_llvm_flags ();
+  g_autofree gchar *include = NULL;
+  guint pos;
 
   if (llvm_flags != NULL)
     g_ptr_array_add (cooked, g_strdup (llvm_flags));
 
+  pos = cooked->len;
+
+  if (path != NULL)
+    {
+      g_autofree gchar *current = g_path_get_dirname (path);
+      include = g_strdup_printf ("-I%s", current);
+    }
+
   if (flags != NULL)
     {
       for (guint i = 0; flags[i]; i++)
-        g_ptr_array_add (cooked, g_strdup (flags[i]));
+        {
+          g_ptr_array_add (cooked, g_strdup (flags[i]));
+
+          if (g_strcmp0 (include, flags[i]) == 0)
+            g_clear_pointer (&include, g_free);
+        }
     }
+
+  /* Insert -Idirname as first include if we didn't find it in the list of
+   * include paths from the request. That ensures we have something that is
+   * very similar to what clang would do unless they specified the path
+   * somewhere else.
+   */
+  if (include != NULL)
+    g_ptr_array_insert (cooked, pos, g_steal_pointer (&include));
 
   g_ptr_array_add (cooked, NULL);
 
   return (gchar **)g_ptr_array_free (cooked, FALSE);
+}
+
+static UnsavedFiles *
+ide_clang_get_unsaved_files (IdeClang *self)
+{
+  UnsavedFiles *ret;
+  GHashTableIter iter;
+  const gchar *path;
+  GArray *ufs;
+  GBytes *bytes;
+
+  g_assert (IDE_IS_CLANG (self));
+
+  ret = g_slice_new0 (UnsavedFiles);
+  ret->len = g_hash_table_size (self->unsaved_files);
+  ret->bytes = g_ptr_array_new_full (ret->len, (GDestroyNotify)g_bytes_unref);
+  ret->paths = g_ptr_array_new_full (ret->len, g_free);
+
+  ufs = g_array_new (FALSE, FALSE, sizeof (struct CXUnsavedFile));
+
+  g_hash_table_iter_init (&iter, self->unsaved_files);
+
+  while (g_hash_table_iter_next (&iter, (gpointer *)&path, (gpointer *)&bytes))
+    {
+      struct CXUnsavedFile uf;
+      const guint8 *data;
+      gsize len;
+
+      data = g_bytes_get_data (bytes, &len);
+
+      uf.Filename = g_strdup (path);
+      uf.Contents = (const gchar *)data;
+      uf.Length = len;
+
+      g_ptr_array_add (ret->bytes, g_bytes_ref (bytes));
+      g_ptr_array_add (ret->paths, (gchar *)uf.Filename);
+      g_array_append_val (ufs, uf);
+    }
+
+  ret->files = (struct CXUnsavedFile *)(gpointer)g_array_free (ufs, FALSE);
+
+  return g_steal_pointer (&ret);
 }
 
 static gboolean
@@ -279,6 +378,8 @@ ide_clang_finalize (GObject *object)
   IdeClang *self = (IdeClang *)object;
 
   g_clear_object (&self->workdir);
+  g_clear_pointer (&self->unsaved_files, g_hash_table_unref);
+  g_clear_pointer (&self->index, clang_disposeIndex);
 
   G_OBJECT_CLASS (ide_clang_parent_class)->finalize (object);
 }
@@ -294,6 +395,9 @@ ide_clang_class_init (IdeClangClass *klass)
 static void
 ide_clang_init (IdeClang *self)
 {
+  self->index = clang_createIndex (0, 0);
+  self->unsaved_files = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                               (GDestroyNotify)g_bytes_unref);
 }
 
 IdeClang *
@@ -641,13 +745,19 @@ ide_clang_index_file_async (IdeClang            *self,
   g_autoptr(IdeTask) task = NULL;
   IndexFile *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  /* We don't use unsaved files here, because we only want to index
+   * the files on disk.
+   */
+
   state = g_slice_new0 (IndexFile);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->entries = g_ptr_array_new ();
 
@@ -657,6 +767,7 @@ ide_clang_index_file_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_index_file_async);
   ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
   ide_task_set_task_data (task, state, index_file_free);
+  ide_task_set_priority (task, PRIORITY_INDEX_FILE);
   ide_task_run_in_thread (task, ide_clang_index_file_worker);
 }
 
@@ -691,11 +802,13 @@ ide_clang_index_file_finish (IdeClang      *self,
 
 typedef struct
 {
-  GPtrArray  *diagnostics;
-  GFile      *workdir;
-  gchar      *path;
-  gchar     **argv;
-  guint       argc;
+  CXIndex       index;
+  UnsavedFiles *ufs;
+  GPtrArray    *diagnostics;
+  GFile        *workdir;
+  gchar        *path;
+  gchar       **argv;
+  guint         argc;
 } Diagnose;
 
 static void
@@ -703,11 +816,11 @@ diagnose_free (gpointer data)
 {
   Diagnose *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
   g_clear_pointer (&state->diagnostics, g_ptr_array_unref);
   g_clear_object (&state->workdir);
-
   g_slice_free (Diagnose, state);
 }
 
@@ -715,13 +828,9 @@ static gboolean
 cxfile_equal (CXFile  cxfile,
               GFile  *file)
 {
-  g_auto(CXString) cxstr = {0};
-  g_autofree gchar *path = NULL;
-  const gchar *cstr;
-
-  cxstr = clang_getFileName (cxfile);
-  cstr = clang_getCString (cxstr);
-  path = g_file_get_path (file);
+  g_auto(CXString) cxstr = clang_getFileName (cxfile);
+  g_autofree gchar *path = g_file_get_path (file);
+  const gchar *cstr = clang_getCString (cxstr);
 
   return g_strcmp0 (cstr, path) == 0;
 }
@@ -889,7 +998,6 @@ ide_clang_diagnose_worker (IdeTask      *task,
   Diagnose *state = task_data;
   g_autoptr(GFile) file = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
-  g_auto(CXIndex) index = NULL;
   enum CXErrorCode code;
   unsigned options;
   guint n_diags;
@@ -901,21 +1009,17 @@ ide_clang_diagnose_worker (IdeTask      *task,
   g_assert (state->diagnostics != NULL);
 
   options = clang_defaultEditingTranslationUnitOptions ()
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 43)
-          | CXTranslationUnit_SingleFileParse
-#endif
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
           | CXTranslationUnit_KeepGoing
 #endif
           | CXTranslationUnit_DetailedPreprocessingRecord;
 
-  index = clang_createIndex (0, 0);
-  code = clang_parseTranslationUnit2 (index,
+  code = clang_parseTranslationUnit2 (state->index,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       options,
                                       &unit);
 
@@ -976,13 +1080,17 @@ ide_clang_diagnose_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   Diagnose *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (Diagnose);
+  state->index = self->index;
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->diagnostics = g_ptr_array_new ();
 
@@ -997,6 +1105,7 @@ ide_clang_diagnose_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_diagnose_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, diagnose_free);
+  ide_task_set_priority (task, PRIORITY_DIAGNOSE);
   ide_task_run_in_thread (task, ide_clang_diagnose_worker);
 }
 
@@ -1031,11 +1140,13 @@ ide_clang_diagnose_finish (IdeClang      *self,
 
 typedef struct
 {
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
-  guint   line;
-  guint   column;
+  CXIndex        index;
+  UnsavedFiles  *ufs;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
+  guint          line;
+  guint          column;
 } Complete;
 
 static void
@@ -1043,55 +1154,10 @@ complete_free (gpointer data)
 {
   Complete *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (Complete, state);
-}
-
-static guint
-translate_completion_kind (enum CXCursorKind kind)
-{
-  switch ((int)kind)
-    {
-    case CXCursor_StructDecl:
-      return IDE_LSP_COMPLETION_STRUCT;
-
-    case CXCursor_ClassDecl:
-      return IDE_LSP_COMPLETION_CLASS;
-
-    case CXCursor_Constructor:
-      return IDE_LSP_COMPLETION_CONSTRUCTOR;
-
-    case CXCursor_Destructor:
-    case CXCursor_CXXMethod:
-      return IDE_LSP_COMPLETION_METHOD;
-
-    case CXCursor_FunctionDecl:
-      return IDE_LSP_COMPLETION_FUNCTION;
-
-    case CXCursor_EnumConstantDecl:
-      return IDE_LSP_COMPLETION_ENUM_MEMBER;
-
-    case CXCursor_EnumDecl:
-      return IDE_LSP_COMPLETION_ENUM;
-
-    case CXCursor_InclusionDirective:
-      return IDE_LSP_COMPLETION_FILE;
-
-    case CXCursor_PreprocessingDirective:
-    case CXCursor_MacroDefinition:
-    case CXCursor_MacroExpansion:
-      return IDE_LSP_COMPLETION_TEXT;
-
-    case CXCursor_TypeRef:
-    case CXCursor_TypeAliasDecl:
-    case CXCursor_TypeAliasTemplateDecl:
-    case CXCursor_TypedefDecl:
-      return IDE_LSP_COMPLETION_CLASS;
-
-    default:
-      return IDE_LSP_COMPLETION_TEXT;
-    }
 }
 
 static void
@@ -1099,16 +1165,16 @@ ide_clang_build_completion (GVariantBuilder    *builder,
                             CXCompletionResult *result)
 {
   GVariantBuilder chunks_builder;
+  g_autofree gchar *typed_text = NULL;
   guint n_chunks;
 
   g_assert (builder != NULL);
   g_assert (result != NULL);
 
-  g_variant_builder_add_parsed (builder, "{%s,<%i>}", "kind",
-                                translate_completion_kind (result->CursorKind));
+  g_variant_builder_add_parsed (builder, "{%s,<%u>}", "kind", result->CursorKind);
 
   if (clang_getCompletionAvailability (result->CompletionString))
-    g_variant_builder_add_parsed (builder, "{%s,<%i>}", "availability",
+    g_variant_builder_add_parsed (builder, "{%s,<%u>}", "avail",
                                   clang_getCompletionAvailability (result->CompletionString));
 
   n_chunks = clang_getNumCompletionChunks (result->CompletionString);
@@ -1118,13 +1184,20 @@ ide_clang_build_completion (GVariantBuilder    *builder,
   for (guint i = 0; i < n_chunks; i++)
     {
       g_auto(CXString) str = clang_getCompletionChunkText (result->CompletionString, i);
+      const gchar *text = clang_getCString (str);
       guint kind = clang_getCompletionChunkKind (result->CompletionString, i);
 
+      if (kind == CXCompletionChunk_TypedText && typed_text == NULL)
+        typed_text = g_utf8_casefold (text, -1);
+
       g_variant_builder_open (&chunks_builder, G_VARIANT_TYPE_VARDICT);
-      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", clang_getCString (str));
-      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%i>}", "kind", kind);
+      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", text);
+      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%u>}", "kind", kind);
       g_variant_builder_close (&chunks_builder);
     }
+
+  if (typed_text != NULL)
+    g_variant_builder_add_parsed (builder, "{%s,<%s>}", "keyword", typed_text);
 
   g_variant_builder_add (builder, "{sv}", "chunks", g_variant_builder_end (&chunks_builder));
 }
@@ -1138,7 +1211,6 @@ ide_clang_complete_worker (IdeTask      *task,
   Complete *state = task_data;
   g_autoptr(CXCodeCompleteResults) results = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
-  g_auto(CXIndex) index = NULL;
   GVariantBuilder builder;
   enum CXErrorCode code;
   unsigned options;
@@ -1148,17 +1220,14 @@ ide_clang_complete_worker (IdeTask      *task,
   g_assert (state != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* TODO: We need file sync for unsaved buffers */
-
   options = clang_defaultEditingTranslationUnitOptions ();
 
-  index = clang_createIndex (0, 0);
-  code = clang_parseTranslationUnit2 (index,
+  code = clang_parseTranslationUnit2 (state->index,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       options,
                                       &unit);
 
@@ -1176,8 +1245,8 @@ ide_clang_complete_worker (IdeTask      *task,
                                   state->path,
                                   state->line,
                                   state->column,
-                                  NULL,
-                                  0,
+                                  state->ufs->files,
+                                  state->ufs->len,
                                   clang_defaultCodeCompleteOptions ());
 
   if (results == NULL)
@@ -1222,21 +1291,27 @@ ide_clang_complete_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   Complete *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (Complete);
+  state->index = self->index;
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->line = line;
   state->column = column;
 
   task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_check_cancellable (task, FALSE);
   ide_task_set_source_tag (task, ide_clang_complete_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, complete_free);
+  ide_task_set_priority (task, PRIORITY_COMPLETE);
   ide_task_run_in_thread (task, ide_clang_complete_worker);
 }
 
@@ -1255,11 +1330,13 @@ ide_clang_complete_finish (IdeClang      *self,
 
 typedef struct
 {
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
-  guint   line;
-  guint   column;
+  CXIndex        index;
+  UnsavedFiles  *ufs;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
+  guint          line;
+  guint          column;
 } FindNearestScope;
 
 static void
@@ -1267,6 +1344,7 @@ find_nearest_scope_free (gpointer data)
 {
   FindNearestScope *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (FindNearestScope, state);
@@ -1281,7 +1359,6 @@ ide_clang_find_nearest_scope_worker (IdeTask      *task,
   FindNearestScope *state = task_data;
   g_autoptr(IdeSymbol) ret = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
-  g_auto(CXIndex) index = NULL;
   g_autoptr(GError) error = NULL;
   enum CXCursorKind kind;
   enum CXErrorCode code;
@@ -1294,15 +1371,12 @@ ide_clang_find_nearest_scope_worker (IdeTask      *task,
   g_assert (state != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  /* TODO: We need file sync for unsaved buffers */
-
-  index = clang_createIndex (0, 0);
-  code = clang_parseTranslationUnit2 (index,
+  code = clang_parseTranslationUnit2 (state->index,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       clang_defaultEditingTranslationUnitOptions (),
                                       &unit);
 
@@ -1370,13 +1444,17 @@ ide_clang_find_nearest_scope_async (IdeClang            *self,
   g_autoptr(IdeTask) task = NULL;
   FindNearestScope *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (FindNearestScope);
+  state->index = self->index;
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->line = line;
   state->column = column;
@@ -1385,6 +1463,7 @@ ide_clang_find_nearest_scope_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_find_nearest_scope_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, find_nearest_scope_free);
+  ide_task_set_priority (task, PRIORITY_FIND_SCOPE);
   ide_task_run_in_thread (task, ide_clang_find_nearest_scope_worker);
 }
 
@@ -1403,12 +1482,14 @@ ide_clang_find_nearest_scope_finish (IdeClang      *self,
 
 typedef struct
 {
-  GFile  *workdir;
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
-  guint   line;
-  guint   column;
+  CXIndex        index;
+  UnsavedFiles  *ufs;
+  GFile         *workdir;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
+  guint          line;
+  guint          column;
 } LocateSymbol;
 
 static void
@@ -1416,6 +1497,7 @@ locate_symbol_free (gpointer data)
 {
   LocateSymbol *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
@@ -1435,7 +1517,6 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
   g_autoptr(IdeSymbol) ret = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
   g_auto(CXString) cxstr = {0};
-  g_auto(CXIndex) index = NULL;
   CXSourceLocation cxlocation;
   enum CXErrorCode code;
   IdeSymbolFlags symflags;
@@ -1450,13 +1531,12 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
   g_assert (state->path != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  index = clang_createIndex (0, 0);
-  code = clang_parseTranslationUnit2 (index,
+  code = clang_parseTranslationUnit2 (state->index,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       clang_defaultEditingTranslationUnitOptions (),
                                       &unit);
 
@@ -1552,13 +1632,17 @@ ide_clang_locate_symbol_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   LocateSymbol *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (LocateSymbol);
+  state->index = self->index;
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
   state->line = line;
   state->column = column;
@@ -1572,6 +1656,7 @@ ide_clang_locate_symbol_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_locate_symbol_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, locate_symbol_free);
+  ide_task_set_priority (task, PRIORITY_GET_LOCATION);
   ide_task_run_in_thread (task, ide_clang_locate_symbol_worker);
 }
 
@@ -1590,6 +1675,8 @@ ide_clang_locate_symbol_finish (IdeClang      *self,
 
 typedef struct
 {
+  CXIndex          index;
+  UnsavedFiles    *ufs;
   GFile           *workdir;
   gchar           *path;
   gchar          **argv;
@@ -1602,6 +1689,7 @@ get_symbol_tree_free (gpointer data)
 {
   GetSymbolTree *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
@@ -1697,7 +1785,6 @@ ide_clang_get_symbol_tree_worker (IdeTask      *task,
 {
   GetSymbolTree *state = task_data;
   g_autoptr(GVariant) ret = NULL;
-  g_auto(CXIndex) index = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
   GVariantBuilder builder;
   enum CXErrorCode code;
@@ -1709,13 +1796,12 @@ ide_clang_get_symbol_tree_worker (IdeTask      *task,
   g_assert (state->path != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  index = clang_createIndex (0, 0);
-  code = clang_parseTranslationUnit2 (index,
+  code = clang_parseTranslationUnit2 (state->index,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
+                                      state->ufs->files,
+                                      state->ufs->len,
                                       clang_defaultEditingTranslationUnitOptions (),
                                       &unit);
 
@@ -1751,13 +1837,17 @@ ide_clang_get_symbol_tree_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   GetSymbolTree *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (GetSymbolTree);
+  state->index = self->index;
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
 
   if (self->workdir != NULL)
@@ -1769,6 +1859,7 @@ ide_clang_get_symbol_tree_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_get_symbol_tree_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, get_symbol_tree_free);
+  ide_task_set_priority (task, PRIORITY_GET_SYMTREE);
   ide_task_run_in_thread (task, ide_clang_get_symbol_tree_worker);
 }
 
@@ -1787,10 +1878,12 @@ ide_clang_get_symbol_tree_finish (IdeClang      *self,
 
 typedef struct
 {
-  GFile  *workdir;
-  gchar  *path;
-  gchar **argv;
-  gint    argc;
+  CXIndex        index;
+  UnsavedFiles  *ufs;
+  GFile         *workdir;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
 } GetHighlightIndex;
 
 static void
@@ -1798,6 +1891,7 @@ get_highlight_index_free (gpointer data)
 {
   GetHighlightIndex *state = data;
 
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
   g_clear_pointer (&state->path, g_free);
   g_clear_pointer (&state->argv, g_strfreev);
@@ -1869,9 +1963,9 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
   static const gchar *common_defines[] = { "NULL", "MIN", "MAX", "__LINE__", "__FILE__" };
   GetHighlightIndex *state = task_data;
   g_autoptr(IdeHighlightIndex) highlight = NULL;
-  g_auto(CXIndex) index = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
   enum CXErrorCode code;
+  unsigned options;
   CXCursor cursor;
 
   g_assert (IDE_IS_TASK (task));
@@ -1880,14 +1974,19 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
   g_assert (state->path != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  index = clang_createIndex (0, 0);
-  code = clang_parseTranslationUnit2 (index,
+  options = clang_defaultEditingTranslationUnitOptions ()
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
+          | CXTranslationUnit_KeepGoing
+#endif
+          | CXTranslationUnit_DetailedPreprocessingRecord;
+
+  code = clang_parseTranslationUnit2 (state->index,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
-                                      NULL,
-                                      0,
-                                      clang_defaultEditingTranslationUnitOptions (),
+                                      state->ufs->files,
+                                      state->ufs->len,
+                                      options,
                                       &unit);
 
   if (code != CXError_Success)
@@ -1929,13 +2028,17 @@ ide_clang_get_highlight_index_async (IdeClang            *self,
   g_autofree gchar *parent = NULL;
   GetHighlightIndex *state;
 
+  PROBE;
+
   g_return_if_fail (IDE_IS_CLANG (self));
   g_return_if_fail (path != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   state = g_slice_new0 (GetHighlightIndex);
+  state->index = self->index;
+  state->ufs = ide_clang_get_unsaved_files (self);
   state->path = g_strdup (path);
-  state->argv = ide_clang_cook_flags (argv);
+  state->argv = ide_clang_cook_flags (path, argv);
   state->argc = state->argv ? g_strv_length (state->argv) : 0;
 
   if (self->workdir != NULL)
@@ -1947,6 +2050,7 @@ ide_clang_get_highlight_index_async (IdeClang            *self,
   ide_task_set_source_tag (task, ide_clang_get_highlight_index_async);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
   ide_task_set_task_data (task, state, get_highlight_index_free);
+  ide_task_set_priority (task, PRIORITY_HIGHLIGHT);
   ide_task_run_in_thread (task, ide_clang_get_highlight_index_worker);
 }
 
@@ -1959,6 +2063,168 @@ ide_clang_get_highlight_index_finish (IdeClang      *self,
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+/* Get Index Key {{{1 */
+
+typedef struct
+{
+  CXIndex        index;
+  UnsavedFiles  *ufs;
+  gchar         *path;
+  gchar        **argv;
+  gint           argc;
+  guint          line;
+  guint          column;
+} GetIndexKey;
+
+static void
+get_index_key_free (gpointer data)
+{
+  GetIndexKey *state = data;
+
+  g_clear_pointer (&state->ufs, unsaved_files_free);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_slice_free (GetIndexKey, state);
+}
+
+static void
+ide_clang_get_index_key_worker (IdeTask      *task,
+                                gpointer      source_object,
+                                gpointer      task_data,
+                                GCancellable *cancellable)
+{
+  GetIndexKey *state = task_data;
+  g_auto(CXTranslationUnit) unit = NULL;
+  g_auto(CXString) cxusr = {0};
+  const gchar *usr = NULL;
+  enum CXErrorCode code;
+  enum CXLinkageKind linkage;
+  CXSourceLocation loc;
+  CXCursor declaration;
+  CXCursor cursor;
+  CXFile file;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CLANG (source_object));
+  g_assert (state != NULL);
+  g_assert (state->path != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  code = clang_parseTranslationUnit2 (state->index,
+                                      state->path,
+                                      (const char * const *)state->argv,
+                                      state->argc,
+                                      state->ufs->files,
+                                      state->ufs->len,
+                                      clang_defaultEditingTranslationUnitOptions (),
+                                      &unit);
+
+  if (code != CXError_Success)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to locate symbol at position");
+      return;
+    }
+
+  file = clang_getFile (unit, state->path);
+  loc = clang_getLocation (unit, file, state->line, state->column);
+  cursor = clang_getCursor (unit, loc);
+  declaration = clang_getCursorReferenced (cursor);
+  cxusr = clang_getCursorUSR (declaration);
+  usr = clang_getCString (cxusr);
+  linkage = clang_getCursorLinkage (declaration);
+
+  if (linkage == CXLinkage_Internal || linkage == CXLinkage_NoLinkage || usr == NULL)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               "Failed to locate referenced cursor");
+  else
+    ide_task_return_pointer (task, g_strdup (usr), g_free);
+}
+
+void
+ide_clang_get_index_key_async (IdeClang            *self,
+                               const gchar         *path,
+                               const gchar * const *argv,
+                               guint                line,
+                               guint                column,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *parent = NULL;
+  GetIndexKey *state;
+
+  PROBE;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (GetIndexKey);
+  state->index = self->index;
+  state->ufs = ide_clang_get_unsaved_files (self);
+  state->path = g_strdup (path);
+  state->argv = ide_clang_cook_flags (path, argv);
+  state->argc = state->argv ? g_strv_length (state->argv) : 0;
+  state->line = line;
+  state->column = column;
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_clang_get_index_key_async);
+  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+  ide_task_set_task_data (task, state, get_index_key_free);
+  ide_task_set_priority (task, PRIORITY_GET_LOCATION);
+  ide_task_run_in_thread (task, ide_clang_get_index_key_worker);
+}
+
+/**
+ * ide_clang_get_index_key_finish:
+ * @self: a #IdeClang
+ *
+ * Completes an async request to get the key for the symbol located
+ * at a given source location.
+ *
+ * Returns: (transfer full): the key, or %NULL and @error is set
+ */
+gchar *
+ide_clang_get_index_key_finish (IdeClang      *self,
+                                GAsyncResult  *result,
+                                GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_CLANG (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+/* Set Unsaved File {{{1 */
+
+void
+ide_clang_set_unsaved_file (IdeClang *self,
+                            GFile    *file,
+                            GBytes   *bytes)
+{
+  g_autofree gchar *path = NULL;
+
+  g_return_if_fail (IDE_IS_CLANG (self));
+  g_return_if_fail (G_IS_FILE (file));
+
+  if (!g_file_is_native (file))
+    return;
+
+  path = g_file_get_path (file);
+
+  if (bytes == NULL)
+    g_hash_table_remove (self->unsaved_files, path);
+  else
+    g_hash_table_insert (self->unsaved_files, g_steal_pointer (&path), g_bytes_ref (bytes));
 }
 
 /* vim:set foldmethod=marker: */

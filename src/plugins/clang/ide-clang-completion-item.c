@@ -22,8 +22,6 @@
 #include <glib/gi18n.h>
 
 #include "ide-clang-completion-item.h"
-#include "ide-clang-completion-item-private.h"
-#include "ide-clang-private.h"
 
 static void completion_proposal_iface_init (GtkSourceCompletionProposalIface *);
 
@@ -31,37 +29,29 @@ G_DEFINE_TYPE_WITH_CODE (IdeClangCompletionItem, ide_clang_completion_item, G_TY
                          G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL,
                                                 completion_proposal_iface_init))
 
-enum {
-  PROP_0,
-  PROP_INDEX,
-  PROP_RESULTS,
-  LAST_PROP
-};
-
-static GParamSpec *properties [LAST_PROP];
-
 static void
 ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 {
-  CXCompletionResult *result;
-  GString *markup = NULL;
-  unsigned num_chunks;
-  unsigned i;
+  g_autoptr(GVariant) result = NULL;
+  g_autoptr(GVariant) chunks = NULL;
+  g_autoptr(GString) markup = NULL;
+  enum CXCursorKind kind;
+  GVariantIter iter;
+  GVariant *chunk;
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
 
-  if (G_LIKELY (self->initialized))
+  if G_LIKELY (self->initialized)
     return;
 
+  self->initialized = TRUE;
+
   result = ide_clang_completion_item_get_result (self);
-  num_chunks = clang_getNumCompletionChunks (result->CompletionString);
-  markup = g_string_new (NULL);
 
-  g_assert (result);
-  g_assert (num_chunks);
-  g_assert (markup);
+  if (!g_variant_lookup (result, "kind", "u", &kind))
+    kind = 0;
 
-  switch ((int)result->CursorKind)
+  switch ((int)kind)
     {
     case CXCursor_CXXMethod:
     case CXCursor_Constructor:
@@ -131,26 +121,34 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
       break;
     }
 
-  for (i = 0; i < num_chunks; i++)
+  if (!(chunks = g_variant_lookup_value (result, "chunks", NULL)))
+    return;
+
+  markup = g_string_new (NULL);
+
+  g_variant_iter_init (&iter, chunks);
+
+  while ((chunk = g_variant_iter_next_value (&iter)))
     {
-      enum CXCompletionChunkKind kind;
-      const gchar *text;
       g_autofree gchar *escaped = NULL;
-      g_auto(CXString) cxstr = {0};
+      const gchar *text;
+      enum CXCompletionChunkKind ckind;
 
-      kind = clang_getCompletionChunkKind (result->CompletionString, i);
-      cxstr = clang_getCompletionChunkText (result->CompletionString, i);
-      text = clang_getCString (cxstr);
+      if (!g_variant_lookup (chunk, "kind", "u", &ckind))
+        ckind = 0;
 
-      if (text)
-        escaped = g_markup_escape_text (text, -1);
+      if (!g_variant_lookup (chunk, "text", "&s", &text))
+        text = NULL;
+
+      if (text != NULL)
+        text = escaped = g_markup_escape_text (text, -1);
       else
-        escaped = g_strdup ("");
+        text = "";
 
-      switch (kind)
+      switch ((int)ckind)
         {
         case CXCompletionChunk_TypedText:
-          g_string_append_printf (markup, "<b>%s</b>", escaped);
+          g_string_append_printf (markup, "<b>%s</b>", text);
           break;
 
         case CXCompletionChunk_Placeholder:
@@ -170,7 +168,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
         case CXCompletionChunk_HorizontalSpace:
         case CXCompletionChunk_VerticalSpace:
         case CXCompletionChunk_CurrentParameter:
-          g_string_append (markup, escaped);
+          g_string_append (markup, text);
           break;
 
         case CXCompletionChunk_Informative:
@@ -179,20 +177,22 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_ResultType:
-          g_string_append (markup, escaped);
+          g_string_append (markup, text);
           g_string_append_c (markup, ' ');
           break;
 
         case CXCompletionChunk_Optional:
-          g_string_append_printf (markup, "<i>%s</i>", escaped);
+          g_string_append_printf (markup, "<i>%s</i>", text);
           break;
 
         default:
           break;
         }
+
+      g_variant_unref (chunk);
     }
 
-  self->markup = g_string_free (markup, FALSE);
+  self->markup = g_string_free (g_steal_pointer (&markup), FALSE);
 }
 
 static IdeSpacesStyle
@@ -244,10 +244,12 @@ static IdeSourceSnippet *
 ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
                                           IdeFileSettings        *file_settings)
 {
-  CXCompletionResult *result;
-  IdeSourceSnippet *snippet;
+  g_autoptr(IdeSourceSnippet) snippet = NULL;
+  g_autoptr(GVariant) result = NULL;
+  g_autoptr(GVariant) chunks = NULL;
+  GVariantIter iter;
+  GVariant *vchunk;
   IdeSpacesStyle spaces = 0;
-  unsigned num_chunks;
   guint tab_stop = 0;
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
@@ -255,21 +257,26 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
 
   result = ide_clang_completion_item_get_result (self);
   snippet = ide_source_snippet_new (NULL, NULL);
-  num_chunks = clang_getNumCompletionChunks (result->CompletionString);
 
   if (file_settings != NULL)
     spaces = ide_file_settings_get_spaces_style (file_settings);
 
-  for (unsigned i = 0; i < num_chunks; i++)
+  if (!(chunks = g_variant_lookup_value (result, "chunks", NULL)))
+    return NULL;
+
+  g_variant_iter_init (&iter, chunks);
+
+  while ((vchunk = g_variant_iter_next_value (&iter)))
     {
-      g_auto(CXString) cxstr = {0};
       enum CXCompletionChunkKind kind;
       IdeSourceSnippetChunk *chunk;
       const gchar *text;
 
-      kind = clang_getCompletionChunkKind (result->CompletionString, i);
-      cxstr = clang_getCompletionChunkText (result->CompletionString, i);
-      text = clang_getCString (cxstr);
+      if (!g_variant_lookup (vchunk, "kind", "u", &kind))
+        kind = 0;
+
+      if (!g_variant_lookup (vchunk, "text", "&s", &text))
+        text = NULL;
 
       switch (kind)
         {
@@ -350,9 +357,11 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
         default:
           break;
         }
+
+      g_variant_unref (vchunk);
     }
 
-  return snippet;
+  return g_steal_pointer (&snippet);
 }
 
 static gchar *
@@ -374,8 +383,6 @@ ide_clang_completion_item_get_icon_name (GtkSourceCompletionProposal *proposal)
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
 
-  ide_clang_completion_item_lazy_init (self);
-
   return self->icon_name;
 }
 
@@ -384,59 +391,12 @@ ide_clang_completion_item_finalize (GObject *object)
 {
   IdeClangCompletionItem *self = (IdeClangCompletionItem *)object;
 
-  g_clear_pointer (&self->brief_comment, g_free);
-  g_clear_pointer (&self->typed_text, g_free);
+  self->typed_text = NULL;
+
+  g_clear_pointer (&self->results, g_variant_unref);
   g_clear_pointer (&self->markup, g_free);
-  g_clear_pointer (&self->results, ide_ref_ptr_unref);
 
   G_OBJECT_CLASS (ide_clang_completion_item_parent_class)->finalize (object);
-}
-
-static void
-ide_clang_completion_item_get_property (GObject    *object,
-                                        guint       prop_id,
-                                        GValue     *value,
-                                        GParamSpec *pspec)
-{
-  IdeClangCompletionItem *self = IDE_CLANG_COMPLETION_ITEM (object);
-
-  switch (prop_id)
-    {
-    case PROP_INDEX:
-      g_value_set_uint (value, self->index);
-      break;
-
-    case PROP_RESULTS:
-      g_value_set_boxed (value, self->results);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_clang_completion_item_set_property (GObject      *object,
-                                        guint         prop_id,
-                                        const GValue *value,
-                                        GParamSpec   *pspec)
-{
-  IdeClangCompletionItem *self = IDE_CLANG_COMPLETION_ITEM (object);
-
-  switch (prop_id)
-    {
-    case PROP_INDEX:
-      self->index = g_value_get_uint (value);
-      break;
-
-    case PROP_RESULTS:
-      g_clear_pointer (&self->results, ide_ref_ptr_unref);
-      self->results = g_value_dup_boxed (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
 }
 
 static void
@@ -452,33 +412,12 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_clang_completion_item_finalize;
-  object_class->get_property = ide_clang_completion_item_get_property;
-  object_class->set_property = ide_clang_completion_item_set_property;
-
-  properties [PROP_INDEX] =
-    g_param_spec_uint ("index",
-                       "Index",
-                       "The index in the result set.",
-                       0,
-                       G_MAXUINT-1,
-                       0,
-                       (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_RESULTS] =
-    g_param_spec_boxed ("results",
-                        "Results",
-                        "The Clang result set.",
-                        IDE_TYPE_REF_PTR,
-                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
 ide_clang_completion_item_init (IdeClangCompletionItem *self)
 {
   self->link.data = self;
-  self->typed_text_index = -1;
 }
 
 /**
@@ -501,117 +440,30 @@ ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
 }
 
 /**
- * ide_clang_completion_item_get_typed_text:
- * @self: An #IdeClangCompletionItem.
+ * ide_clang_completion_item_new:
+ * @variant: the toplevel variant of all results
+ * @index: the index of the item
+ * @typed_text: pointer to typed texted within @variant
  *
- * Gets the text that would be expected to be typed to insert this completion
- * item into the text editor.
- *
- * Returns: A string which should not be modified or freed.
+ * The @typed_text parameter is not copied, it is expected to be valid
+ * string found within @variant (and therefore associated with its
+ * life-cycle).
  */
-const gchar *
-ide_clang_completion_item_get_typed_text (IdeClangCompletionItem *self)
-{
-  CXCompletionResult *result;
-  g_auto(CXString) cxstr = {0};
-
-  g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self), NULL);
-
-  if (self->typed_text)
-    return self->typed_text;
-
-  result = ide_clang_completion_item_get_result (self);
-
-  /*
-   * Determine the index of the typed text. Each completion result should have
-   * exaction one of these.
-   */
-  if (G_UNLIKELY (self->typed_text_index == -1))
-    {
-      guint num_chunks = clang_getNumCompletionChunks (result->CompletionString);
-
-      for (guint i = 0; i < num_chunks; i++)
-        {
-          enum CXCompletionChunkKind kind;
-
-          kind = clang_getCompletionChunkKind (result->CompletionString, i);
-          if (kind == CXCompletionChunk_TypedText)
-            {
-              self->typed_text_index = i;
-              break;
-            }
-        }
-    }
-
-  if (self->typed_text_index == -1)
-    {
-      /*
-       * FIXME:
-       *
-       * This seems like an implausible result, but we are definitely
-       * hitting it occasionally.
-       */
-      return "";
-    }
-
-#ifdef IDE_ENABLE_TRACE
-  {
-    enum CXCompletionChunkKind kind;
-    unsigned num_chunks;
-
-    g_assert (self->typed_text_index >= 0);
-
-    num_chunks = clang_getNumCompletionChunks (result->CompletionString);
-    g_assert ((gint)num_chunks > self->typed_text_index);
-
-    kind = clang_getCompletionChunkKind (result->CompletionString, self->typed_text_index);
-    g_assert (kind == CXCompletionChunk_TypedText);
-  }
-#endif
-
-  cxstr = clang_getCompletionChunkText (result->CompletionString, self->typed_text_index);
-  self->typed_text = g_strdup (clang_getCString (cxstr));
-
-  return self->typed_text;
-}
-
-/**
- * ide_clang_completion_item_get_brief_comment:
- * @self: An #IdeClangCompletionItem.
- *
- * Gets the brief comment that can be used to show extra information for the
- * result.
- *
- * Returns: A string which should not be modified or freed.
- */
-const gchar *
-ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self)
-{
-  CXCompletionResult *result;
-
-  g_return_val_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self), NULL);
-
-  if (self->brief_comment == NULL)
-    {
-      g_auto(CXString) cxstr = {0};
-
-      result = ide_clang_completion_item_get_result (self);
-      cxstr = clang_getCompletionBriefComment (result->CompletionString);
-      self->brief_comment = g_strdup (clang_getCString (cxstr));
-    }
-
-  return self->brief_comment;
-}
-
 IdeClangCompletionItem *
-ide_clang_completion_item_new (IdeRefPtr *results,
-                               guint      index)
+ide_clang_completion_item_new (GVariant    *variant,
+                               guint        index,
+                               const gchar *typed_text)
 {
   IdeClangCompletionItem *ret;
 
+  g_assert (variant != NULL);
+  g_assert (typed_text != NULL);
+  g_assert (typed_text[0] != 0);
+
   ret = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM, NULL);
-  ret->results = ide_ref_ptr_ref (results);
+  ret->results = g_variant_ref (variant);
   ret->index = index;
+  ret->typed_text = typed_text;
 
   return ret;
 }

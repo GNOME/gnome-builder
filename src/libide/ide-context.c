@@ -521,7 +521,13 @@ ide_context_get_service_typed (IdeContext *self,
         return value;
     }
 
-  return NULL;
+  if (G_TYPE_IS_INSTANTIATABLE (service_type))
+    {
+      service = g_object_new (service_type, "context", self, NULL);
+      g_hash_table_insert (self->services_by_gtype, GSIZE_TO_POINTER (service_type), service);
+    }
+
+  return service;
 }
 
 static void
@@ -1271,12 +1277,13 @@ ide_context_service_added (PeasExtensionSet *set,
   g_assert (IDE_IS_CONTEXT (self));
   g_assert (IDE_IS_SERVICE (exten));
 
-
-  g_hash_table_insert (self->services_by_gtype,
-                       GSIZE_TO_POINTER (G_OBJECT_TYPE (exten)),
-                       exten);
-
-  ide_service_start (IDE_SERVICE (exten));
+  if (!g_hash_table_contains (self->services_by_gtype, GSIZE_TO_POINTER (G_OBJECT_TYPE (exten))))
+    {
+      g_hash_table_insert (self->services_by_gtype,
+                           GSIZE_TO_POINTER (G_OBJECT_TYPE (exten)),
+                           exten);
+      ide_service_start (IDE_SERVICE (exten));
+    }
 }
 
 static void

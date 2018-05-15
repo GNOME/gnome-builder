@@ -968,102 +968,119 @@ gb_vim_command_help (GtkWidget      *active_widget,
   return TRUE;
 }
 
-static gboolean
-gb_vim_match_is_selected (GtkTextBuffer *buffer,
-                          GtkTextIter   *match_begin,
-                          GtkTextIter   *match_end)
-{
-  GtkTextIter sel_begin;
-  GtkTextIter sel_end;
-
-  g_assert (GTK_IS_TEXT_BUFFER (buffer));
-  g_assert (match_begin);
-  g_assert (match_end);
-
-  gtk_text_buffer_get_selection_bounds (buffer, &sel_begin, &sel_end);
-  gtk_text_iter_order (&sel_begin, &sel_end);
-
-  return ((gtk_text_iter_compare (&sel_begin, match_begin) <= 0) &&
-          (gtk_text_iter_compare (&sel_begin, match_end) < 0) &&
-          (gtk_text_iter_compare (&sel_end, match_begin) > 0) &&
-          (gtk_text_iter_compare (&sel_end, match_end) >= 0));
-}
-
 static void
-gb_vim_do_search_and_replace (GtkTextBuffer *buffer,
-                              GtkTextIter   *begin,
-                              GtkTextIter   *end,
-                              const gchar   *search_text,
-                              const gchar   *replace_text,
-                              gboolean       is_global)
+gb_vim_do_substitute_line (GtkTextBuffer *buffer,
+                           GtkTextIter   *begin,
+                           const gchar   *search_text,
+                           const gchar   *replace_text,
+                           gboolean       is_global)
 {
   GtkSourceSearchContext *search_context;
   GtkSourceSearchSettings *search_settings;
-  GtkTextMark *mark;
-  GtkTextIter tmp1;
-  GtkTextIter tmp2;
   GtkTextIter match_begin;
   GtkTextIter match_end;
   gboolean has_wrapped = FALSE;
   GError *error = NULL;
+  gint line_number;
 
-  g_assert (search_text);
-  g_assert (replace_text);
-  g_assert ((!begin && !end) || (begin && end));
+  g_assert(buffer);
+  g_assert(begin);
+  g_assert(search_text);
+  g_assert(replace_text);
 
   search_settings = gtk_source_search_settings_new ();
-  search_context = gtk_source_search_context_new (GTK_SOURCE_BUFFER (buffer), search_settings);
-
-  if (!begin)
-    {
-      gtk_text_buffer_get_start_iter (buffer, &tmp1);
-      begin = &tmp1;
-    }
-
-  if (!end)
-    {
-      gtk_text_buffer_get_end_iter (buffer, &tmp2);
-      end = &tmp2;
-    }
-
-  mark = gtk_text_buffer_create_mark (buffer, NULL, end, FALSE);
+  search_context =  gtk_source_search_context_new (GTK_SOURCE_BUFFER (buffer), search_settings);
+  line_number = gtk_text_iter_get_line(begin);
+  gtk_text_iter_set_line_offset(begin, 0);
 
   gtk_source_search_settings_set_search_text (search_settings, search_text);
   gtk_source_search_settings_set_case_sensitive (search_settings, TRUE);
 
-  while (gtk_source_search_context_forward2 (search_context,
-                                             begin,
-                                             &match_begin,
-                                             &match_end,
-                                             &has_wrapped) && !has_wrapped)
+  while (gtk_source_search_context_forward2 (search_context, begin, &match_begin, &match_end, &has_wrapped) && !has_wrapped)
     {
-      if (is_global || gb_vim_match_is_selected (buffer, &match_begin, &match_end))
+      if (gtk_text_iter_get_line (&match_end) != line_number)
+        break;
+
+      if (!gtk_source_search_context_replace2 (search_context, &match_begin, &match_end, replace_text, -1, &error))
         {
-          if (!gtk_source_search_context_replace2 (search_context, &match_begin, &match_end,
-                                                   replace_text, -1, &error))
-            {
-              g_warning ("%s", error->message);
-              g_clear_error (&error);
-              break;
-            }
+          g_warning ("%s", error->message);
+          g_clear_error (&error);
+          break;
         }
 
       *begin = match_end;
 
-      gtk_text_buffer_get_iter_at_mark (buffer, end, mark);
+      if (!is_global)
+        break;
     }
-
-  gtk_text_buffer_delete_mark (buffer, mark);
 
   g_clear_object (&search_settings);
   g_clear_object (&search_context);
 }
 
+static void
+gb_vim_do_substitute (GtkTextBuffer *buffer,
+                      GtkTextIter   *begin,
+                      GtkTextIter   *end,
+                      const gchar   *search_text,
+                      const gchar   *replace_text,
+                      gboolean       is_global,
+                      gboolean       should_search_all_lines)
+{
+  GtkTextIter begin_tmp;
+  GtkTextIter end_tmp;
+  GtkTextMark *last_line;
+  GtkTextIter *current_line;
+  GtkTextMark *end_mark;
+  GtkTextMark *insert;
+
+  g_assert (search_text);
+  g_assert (replace_text);
+  g_assert ((!begin && !end) || (begin && end));
+
+  insert = gtk_text_buffer_get_insert (buffer);
+
+  if (!begin)
+    {
+      if (should_search_all_lines)
+        gtk_text_buffer_get_start_iter (buffer, &begin_tmp);
+      else
+        gtk_text_buffer_get_iter_at_mark (buffer, &begin_tmp, insert);
+      begin = &begin_tmp;
+    }
+
+  if (!end)
+    {
+      if (should_search_all_lines)
+        gtk_text_buffer_get_end_iter (buffer, &end_tmp);
+      else
+        gtk_text_buffer_get_iter_at_mark (buffer, &end_tmp, insert);
+      end = &end_tmp;
+    }
+
+  current_line = begin;
+  last_line = gtk_text_buffer_create_mark (buffer, NULL, current_line, FALSE);
+  end_mark = gtk_text_buffer_create_mark (buffer, NULL, end, FALSE);
+
+  for (guint line = gtk_text_iter_get_line (current_line);
+       line <= gtk_text_iter_get_line (end);
+       line++)
+    {
+      gb_vim_do_substitute_line (buffer, current_line, search_text, replace_text, is_global);
+      gtk_text_buffer_get_iter_at_mark (buffer, current_line, last_line);
+      gtk_text_buffer_get_iter_at_mark (buffer, end, end_mark);
+      gtk_text_iter_set_line (current_line, line + 1);
+    }
+
+  gtk_text_buffer_delete_mark (buffer, last_line);
+  gtk_text_buffer_delete_mark (buffer, end_mark);
+}
+
 static gboolean
-gb_vim_command_search (GtkWidget      *active_widget,
-                       const gchar    *command,
-                       const gchar    *options,
-                       GError        **error)
+gb_vim_command_substitute (GtkWidget    *active_widget,
+                           const gchar  *command,
+                           const gchar  *options,
+                           GError      **error)
 {
   IdeSourceView  *source_view;
   GtkTextBuffer *buffer;
@@ -1073,8 +1090,13 @@ gb_vim_command_search (GtkWidget      *active_widget,
   const gchar *replace_end = NULL;
   g_autofree gchar *search_text = NULL;
   g_autofree gchar *replace_text = NULL;
+  GtkTextIter *substitute_begin = NULL;
+  GtkTextIter *substitute_end = NULL;
   gunichar separator;
-  gboolean confirm_replace = FALSE;
+  gboolean replace_in_every_line = FALSE;
+  gboolean replace_every_occurence_in_line = FALSE;
+  gboolean replace_ask_for_confirmation = FALSE;
+  GtkTextIter selection_begin, selection_end;
 
   g_assert (GTK_IS_WIDGET (active_widget));
   g_assert (g_str_has_prefix (command, "%s") || g_str_has_prefix (command, "s"));
@@ -1084,8 +1106,12 @@ gb_vim_command_search (GtkWidget      *active_widget,
   else
     return gb_vim_set_source_view_error (error);
 
-  if (*command == '%')
-    command++;
+  if (command[0] == '%')
+    {
+      replace_in_every_line = TRUE;
+      command++;
+    }
+
   command++;
 
   separator = g_utf8_get_char (command);
@@ -1154,10 +1180,11 @@ gb_vim_command_search (GtkWidget      *active_widget,
               switch (*command)
                 {
                 case 'c':
-                  confirm_replace = TRUE;
+                  replace_ask_for_confirmation = TRUE;
                   break;
 
                 case 'g':
+                  replace_every_occurence_in_line = TRUE;
                   break;
 
                 /* what other options are supported? */
@@ -1168,7 +1195,7 @@ gb_vim_command_search (GtkWidget      *active_widget,
         }
     }
 
-  if (confirm_replace)
+  if (replace_ask_for_confirmation)
     {
       GVariant *variant;
       GVariantBuilder builder;
@@ -1187,15 +1214,14 @@ gb_vim_command_search (GtkWidget      *active_widget,
 
   if (gtk_text_buffer_get_has_selection (buffer))
     {
-      GtkTextIter begin;
-      GtkTextIter end;
-
-      gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
-      gtk_text_iter_order (&begin, &end);
-      gb_vim_do_search_and_replace (buffer, &begin, &end, search_text, replace_text, FALSE);
+      gtk_text_buffer_get_selection_bounds (buffer, &selection_begin, &selection_end);
+      substitute_begin = &selection_begin;
+      substitute_end = &selection_end;
     }
-  else
-    gb_vim_do_search_and_replace (buffer, NULL, NULL, search_text, replace_text, TRUE);
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gb_vim_do_substitute (buffer, substitute_begin, substitute_end, search_text, replace_text, replace_every_occurence_in_line, replace_in_every_line);
+  gtk_text_buffer_end_user_action (buffer);
 
   return TRUE;
 
@@ -1235,7 +1261,7 @@ static const GbVimCommand vim_commands[] = {
 };
 
 static gboolean
-looks_like_search_and_replace (const gchar *line)
+looks_like_substitute (const gchar *line)
 {
   g_assert (line);
 
@@ -1303,8 +1329,8 @@ gb_vim_execute (GtkWidget      *active_widget,
 
   if (command == NULL)
     {
-      if (looks_like_search_and_replace (line))
-        return gb_vim_command_search (active_widget, line, "", error);
+      if (looks_like_substitute (line))
+        return gb_vim_command_substitute (active_widget, line, "", error);
 
       g_set_error (error,
                    GB_VIM_ERROR,

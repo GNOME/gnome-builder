@@ -927,6 +927,25 @@ ide_subprocess_launcher_take_stderr_fd (IdeSubprocessLauncher *self,
     }
 }
 
+void
+ide_subprocess_launcher_set_argv (IdeSubprocessLauncher *self,
+                                  const gchar * const   *args)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  g_ptr_array_remove_range (priv->argv, 0, priv->argv->len);
+
+  if (args != NULL)
+    {
+      for (guint i = 0; args[i] != NULL; i++)
+        g_ptr_array_add (priv->argv, g_strdup (args[i]));
+    }
+
+  g_ptr_array_add (priv->argv, NULL);
+}
+
 const gchar * const *
 ide_subprocess_launcher_get_argv (IdeSubprocessLauncher *self)
 {

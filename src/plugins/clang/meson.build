@@ -7,13 +7,15 @@ clang_resources = gnome.compile_resources(
 )                                           
 
 clang_sources = [
+  'clang-plugin.c',
+  'ide-clang-client.c',
+  'ide-clang-client.h',
   'ide-clang-code-index-entries.c',
   'ide-clang-code-index-entries.h',
   'ide-clang-code-indexer.c',
   'ide-clang-code-indexer.h',
   'ide-clang-completion-item.c',
   'ide-clang-completion-item.h',
-  'ide-clang-completion-item-private.h',
   'ide-clang-completion-provider.c',
   'ide-clang-completion-provider.h',
   'ide-clang-diagnostic-provider.c',
@@ -22,22 +24,14 @@ clang_sources = [
   'ide-clang-highlighter.h',
   'ide-clang-preferences-addin.c',
   'ide-clang-preferences-addin.h',
-  'ide-clang-private.h',
-  'ide-clang-service.c',
-  'ide-clang-service.h',
+  'ide-clang-proposals.c',
+  'ide-clang-proposals.h',
   'ide-clang-symbol-node.c',
   'ide-clang-symbol-node.h',
   'ide-clang-symbol-resolver.c',
   'ide-clang-symbol-resolver.h',
   'ide-clang-symbol-tree.c',
   'ide-clang-symbol-tree.h',
-  'ide-clang-translation-unit.c',
-  'ide-clang-translation-unit.h',
-
-  'ide-clang-client.c',
-  'ide-clang-client.h',
-
-  'clang-plugin.c',
 ]
 
 gnome_builder_clang_sources = [
@@ -59,12 +53,18 @@ clang_dep = declare_dependency(
   include_directories: include_directories(clang_include),
 )
 
-gnome_builder_plugins_deps += [clang_dep]
+clang_includes_dep = declare_dependency(
+  include_directories: include_directories(clang_include),
+)
+
+gnome_builder_plugins_deps += [clang_includes_dep]
 gnome_builder_plugins_sources += files(clang_sources)
 gnome_builder_plugins_sources += clang_resources[0]
 
+gnome_builder_clang_deps = [ clang_dep, libide_deps, libide_dep ]
+
 executable('gnome-builder-clang', gnome_builder_clang_sources,
-      dependencies: [clang_dep, libide_dep],
+      dependencies: gnome_builder_clang_deps,
            gui_app: false,
            install: true,
        install_dir: get_option('libexecdir'),

@@ -1,6 +1,6 @@
 ent_conf = configuration_data()
 ent_conf.set('PACKAGE', 'gnome-builder')
-ent_conf.set('PACKAGE_BUGREPORT', 'https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-builder')
+ent_conf.set('PACKAGE_BUGREPORT', 'https://gitlab.gnome.org/GNOME/gnome-builder/issues')
 ent_conf.set('PACKAGE_NAME', 'Builder')
 ent_conf.set('PACKAGE_STRING', 'Builder')
 ent_conf.set('PACKAGE_TARNAME', 'gnome-builder-' + meson.project_version())

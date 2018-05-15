@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
@@ -27,9 +26,41 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClangCompletionItem, ide_clang_completion_item, IDE, CLANG_COMPLETION_ITEM, GObject)
 
-IdeSourceSnippet *ide_clang_completion_item_get_snippet       (IdeClangCompletionItem *self,
+struct _IdeClangCompletionItem
+{
+  GObject           parent_instance;
+
+  GList             link;
+
+  guint             index;
+  guint             priority;
+  gint              typed_text_index : 16;
+  guint             initialized : 1;
+
+  /* Owned references */
+  gchar            *markup;
+  GVariant         *results;
+
+  /* Unowned references */
+  const gchar      *icon_name;
+  const gchar      *typed_text;
+};
+
+static inline GVariant *
+ide_clang_completion_item_get_result (const IdeClangCompletionItem *self)
+{
+  g_autoptr(GVariant) child = g_variant_get_child_value (self->results, self->index);
+
+  if (g_variant_is_of_type (child, G_VARIANT_TYPE_VARIANT))
+    return g_variant_get_variant (child);
+
+  return g_steal_pointer (&child);
+}
+
+IdeClangCompletionItem *ide_clang_completion_item_new         (GVariant               *results,
+                                                               guint                   index,
+                                                               const gchar            *typed_text);
+IdeSourceSnippet       *ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
                                                                IdeFileSettings        *file_settings);
-const gchar      *ide_clang_completion_item_get_typed_text    (IdeClangCompletionItem *self);
-const gchar      *ide_clang_completion_item_get_brief_comment (IdeClangCompletionItem *self);
 
 G_END_DECLS

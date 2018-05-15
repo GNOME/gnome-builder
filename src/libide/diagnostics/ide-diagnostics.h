@@ -45,6 +45,9 @@ IdeDiagnostics *ide_diagnostics_new      (GPtrArray      *ar);
 IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_add      (IdeDiagnostics *self,
                                           IdeDiagnostic  *diagnostic);
+IDE_AVAILABLE_IN_3_30
+void            ide_diagnostics_take     (IdeDiagnostics *self,
+                                          IdeDiagnostic  *diagnostic);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostics, ide_diagnostics_unref)
 

@@ -182,3 +182,10 @@ test_ide_task = executable('test-ide-task', 'test-ide-task.c',
   dependencies: [ ide_test_deps ],
 )
 test('test-ide-task', test_ide_task, env: ide_test_env)
+
+
+test_iter = executable('test-iter', 'test-iter.c',
+  c_args: ide_test_cflags,
+  dependencies: [ ide_test_deps ],
+)
+test('test-iter', test_iter, env: ide_test_env)

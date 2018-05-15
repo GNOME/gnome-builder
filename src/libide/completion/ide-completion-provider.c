@@ -22,7 +22,8 @@
 
 #include "ide-context.h"
 
-#include "sourceview/ide-completion-provider.h"
+#include "completion/ide-completion-provider.h"
+#include "sourceview/ide-text-iter.h"
 
 G_DEFINE_INTERFACE (IdeCompletionProvider, ide_completion_provider, GTK_SOURCE_TYPE_COMPLETION_PROVIDER)
 
@@ -86,29 +87,14 @@ ide_completion_provider_context_in_comment_or_string (GtkSourceCompletionContext
 gchar *
 ide_completion_provider_context_current_word (GtkSourceCompletionContext *context)
 {
-  GtkTextIter end;
-  GtkTextIter begin;
-  gunichar ch = 0;
+  GtkTextIter iter;
 
   g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), NULL);
 
-  if (!gtk_source_completion_context_get_iter (context, &end))
-    return NULL;
+  if (gtk_source_completion_context_get_iter (context, &iter))
+    return _ide_text_iter_current_symbol (&iter, NULL);
 
-  begin = end;
-
-  do
-    {
-      if (!gtk_text_iter_backward_char (&begin))
-        break;
-      ch = gtk_text_iter_get_char (&begin);
-    }
-  while (g_unichar_isalnum (ch) || (ch == '_'));
-
-  if (ch && !g_unichar_isalnum (ch) && (ch != '_'))
-    gtk_text_iter_forward_char (&begin);
-
-  return gtk_text_iter_get_slice (&begin, &end);
+  return NULL;
 }
 
 void

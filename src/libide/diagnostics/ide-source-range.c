@@ -168,3 +168,39 @@ ide_source_range_to_variant (const IdeSourceRange *self)
 
   return g_variant_ref_sink (g_variant_dict_end (&dict));
 }
+
+IdeSourceRange *
+ide_source_range_new_from_variant (GVariant *variant)
+{
+  g_autoptr(GVariant) unboxed = NULL;
+  g_autoptr(GVariant) vbegin = NULL;
+  g_autoptr(GVariant) vend = NULL;
+  g_autoptr(IdeSourceLocation) begin = NULL;
+  g_autoptr(IdeSourceLocation) end = NULL;
+  IdeSourceRange *self = NULL;
+  GVariantDict dict;
+
+  if (variant == NULL)
+    return NULL;
+
+  if (g_variant_is_of_type (variant, G_VARIANT_TYPE_VARIANT))
+    variant = unboxed = g_variant_get_variant (variant);
+
+  g_variant_dict_init (&dict, variant);
+
+  if (!(vbegin = g_variant_dict_lookup_value (&dict, "begin", NULL)) ||
+      !(begin = ide_source_location_new_from_variant (vbegin)))
+    goto failure;
+
+  if (!(vend = g_variant_dict_lookup_value (&dict, "end", NULL)) ||
+      !(end = ide_source_location_new_from_variant (vend)))
+    goto failure;
+
+  self = ide_source_range_new (begin, end);
+
+  g_variant_dict_clear (&dict);
+
+failure:
+
+  return self;
+}
