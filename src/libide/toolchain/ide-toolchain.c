@@ -205,7 +205,7 @@ ide_toolchain_real_get_tools_for_id (IdeToolchain  *self,
  * will be returned.
  *
  * Returns: (transfer none): A string containing the path of the tool for the given language, or
- * %NULL is no tool has been found. The returned string should be freed when no longer needed.
+ * %NULL is no tool has been found.
  *
  * Since: 3.30
  */
