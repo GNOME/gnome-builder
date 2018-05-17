@@ -82,10 +82,13 @@ sysroot_manager_find_additional_pkgconfig_paths (GbpSysrootManager *self,
   libmultiarch_path = g_build_filename (path, "usr", "lib", target_arch, "pkgconfig", NULL);
 
   if (g_file_test (lib64_path, G_FILE_TEST_EXISTS))
-    returned_paths = lib64_path;
+    returned_paths = g_steal_pointer (&lib64_path);
 
   if (g_file_test (libmultiarch_path, G_FILE_TEST_EXISTS))
-    returned_paths = g_strjoin (":", libmultiarch_path, returned_paths, NULL);
+    {
+      g_autofree gchar *previous_returned_path = g_steal_pointer (&returned_paths);
+      returned_paths = g_strjoin (":", libmultiarch_path, previous_returned_path, NULL);
+    }
 
   return g_strdup (returned_paths);
 }
