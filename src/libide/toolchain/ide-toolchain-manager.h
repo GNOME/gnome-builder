@@ -37,4 +37,5 @@ IdeToolchain *ide_toolchain_manager_get_toolchain (IdeToolchainManager  *self,
                                                    const gchar          *id);
 IDE_AVAILABLE_IN_3_30
 gboolean      ide_toolchain_manager_is_loaded     (IdeToolchainManager  *self);
+
 G_END_DECLS

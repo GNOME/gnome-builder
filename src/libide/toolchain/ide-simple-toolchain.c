@@ -81,8 +81,8 @@ ide_simple_toolchain_get_tools_for_id (IdeToolchain  *toolchain,
 {
   IdeSimpleToolchain *self = (IdeSimpleToolchain *)toolchain;
   IdeSimpleToolchainPrivate *priv;
-  SimpleToolchainToolFind *tool_find;
-  g_autoptr(GHashTable) found_tools;
+  SimpleToolchainToolFind tool_find;
+  g_autoptr(GHashTable) found_tools = NULL;
 
   g_return_val_if_fail (IDE_IS_SIMPLE_TOOLCHAIN (self), NULL);
   g_return_val_if_fail (tool_id != NULL, NULL);
@@ -90,13 +90,10 @@ ide_simple_toolchain_get_tools_for_id (IdeToolchain  *toolchain,
   priv = ide_simple_toolchain_get_instance_private (self);
   found_tools = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-  tool_find = g_slice_new (SimpleToolchainToolFind);
-  tool_find->found_tools = found_tools;
-  tool_find->tool_id = tool_id;
+  tool_find.found_tools = found_tools;
+  tool_find.tool_id = tool_id;
 
-  g_hash_table_foreach (priv->tools, tools_find_all_id, tool_find);
-
-  g_slice_free (SimpleToolchainToolFind, tool_find);
+  g_hash_table_foreach (priv->tools, tools_find_all_id, &tool_find);
 
   return g_steal_pointer (&found_tools);
 }
@@ -107,12 +104,11 @@ ide_simple_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
                                             const gchar   *tool_id)
 {
   IdeSimpleToolchain *self = (IdeSimpleToolchain *)toolchain;
-  IdeSimpleToolchainPrivate *priv;
+  IdeSimpleToolchainPrivate *priv = ide_simple_toolchain_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_SIMPLE_TOOLCHAIN (self), NULL);
   g_return_val_if_fail (tool_id != NULL, NULL);
 
-  priv = ide_simple_toolchain_get_instance_private (self);
   return g_hash_table_lookup (priv->tools, g_strconcat (tool_id, ":", language, NULL));
 }
 
@@ -133,13 +129,14 @@ ide_simple_toolchain_set_tool_for_language  (IdeSimpleToolchain  *self,
                                              const gchar         *tool_id,
                                              const gchar         *tool_path)
 {
-  IdeSimpleToolchainPrivate *priv;
+  IdeSimpleToolchainPrivate *priv = ide_simple_toolchain_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_SIMPLE_TOOLCHAIN (self));
   g_return_if_fail (tool_id != NULL);
 
-  priv = ide_simple_toolchain_get_instance_private (self);
-  g_hash_table_insert (priv->tools, g_strconcat (tool_id, ":", language, NULL), g_strdup (tool_path));
+  g_hash_table_insert (priv->tools,
+                       g_strconcat (tool_id, ":", language, NULL),
+                       g_strdup (tool_path));
 }
 
 static void
@@ -169,5 +166,6 @@ static void
 ide_simple_toolchain_init (IdeSimpleToolchain *self)
 {
   IdeSimpleToolchainPrivate *priv = ide_simple_toolchain_get_instance_private (self);
+
   priv->tools = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 }

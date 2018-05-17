@@ -299,10 +299,12 @@ ide_toolchain_manager_init_async (GAsyncInitable      *initable,
   ide_task_set_source_tag (task, ide_toolchain_manager_init_async);
   ide_task_set_priority (task, priority);
 
-  /*g_signal_connect_swapped (task,
+#if 0
+  g_signal_connect_swapped (task,
                             "notify::completed",
                             G_CALLBACK (notify_providers_loaded),
-                            self);*/
+                            self);
+#endif
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -326,7 +328,9 @@ ide_toolchain_manager_init_async (GAsyncInitable      *initable,
   peas_extension_set_foreach (self->extensions,
                               ide_toolchain_manager_collect_providers,
                               providers);
-  ide_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task,
+                          g_ptr_array_ref (providers),
+                          (GDestroyNotify)g_ptr_array_unref);
 
   default_toolchain = ide_simple_toolchain_new (context, "default", _("Default (Host operating system)"));
   idx = self->toolchains->len;
@@ -451,12 +455,10 @@ IdeToolchain *
 ide_toolchain_manager_get_toolchain (IdeToolchainManager *self,
                                      const gchar         *id)
 {
-  guint i;
-
   g_return_val_if_fail (IDE_IS_TOOLCHAIN_MANAGER (self), NULL);
   g_return_val_if_fail (id != NULL, NULL);
 
-  for (i = 0; i < self->toolchains->len; i++)
+  for (guint i = 0; i < self->toolchains->len; i++)
     {
       IdeToolchain *toolchain = g_ptr_array_index (self->toolchains, i);
       const gchar *toolchain_id = ide_toolchain_get_id (toolchain);
@@ -528,6 +530,7 @@ _ide_toolchain_manager_prepare_async (IdeToolchainManager  *self,
     }
 
   toolchain = ide_toolchain_manager_get_toolchain (self, toolchain_id);
+
   if (toolchain == NULL)
     {
       g_task_return_new_error (task,

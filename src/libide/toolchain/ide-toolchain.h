@@ -42,6 +42,7 @@ struct _IdeToolchainClass
   GHashTable  *(*get_tools_for_id)      (IdeToolchain  *self,
                                          const gchar   *tool_id);
 
+  /*< private >*/
   gpointer _reserved[12];
 };
 
