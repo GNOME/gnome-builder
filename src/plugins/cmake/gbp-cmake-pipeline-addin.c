@@ -22,6 +22,8 @@
 #include <glib/gi18n.h>
 
 #include "gbp-cmake-build-system.h"
+#include "gbp-cmake-build-stage-cross-file.h"
+#include "gbp-cmake-toolchain.h"
 #include "gbp-cmake-pipeline-addin.h"
 
 struct _GbpCMakePipelineAddin
@@ -74,10 +76,12 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_autoptr(GError) error = NULL;
   g_autofree gchar *prefix_option = NULL;
   g_autofree gchar *build_ninja = NULL;
+  g_autofree gchar *crossbuild_file = NULL;
   IdeBuildSystem *build_system;
   IdeConfiguration *configuration;
   IdeContext *context;
   IdeRuntime *runtime;
+  IdeToolchain *toolchain;
   const gchar *ninja = NULL;
   const gchar *config_opts;
   const gchar *prefix;
@@ -99,6 +103,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   configuration = ide_build_pipeline_get_configuration (pipeline);
   runtime = ide_build_pipeline_get_runtime (pipeline);
+  toolchain = ide_build_pipeline_get_toolchain (pipeline);
   srcdir = ide_build_pipeline_get_srcdir (pipeline);
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
@@ -133,6 +138,19 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   config_opts = ide_configuration_get_config_opts (configuration);
   parallelism = ide_configuration_get_parallelism (configuration);
 
+  /* Create the toolchain file if required */
+  if (GBP_IS_CMAKE_TOOLCHAIN (toolchain))
+    crossbuild_file = g_strdup (gbp_cmake_toolchain_get_file_path (GBP_CMAKE_TOOLCHAIN (toolchain)));
+  else if (g_strcmp0 (ide_toolchain_get_id (toolchain), "default") != 0)
+    {
+      GbpCMakeBuildStageCrossFile *cross_file_stage;
+      cross_file_stage = gbp_cmake_build_stage_cross_file_new (context, toolchain);
+      crossbuild_file = gbp_cmake_build_stage_cross_file_get_path (cross_file_stage, pipeline);
+
+      id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_PREPARE, 0, IDE_BUILD_STAGE (cross_file_stage));
+      ide_build_pipeline_addin_track (addin, id);
+    }
+
   /* Setup our configure stage. */
 
   prefix_option = g_strdup_printf ("-DCMAKE_INSTALL_PREFIX=%s", prefix);
@@ -145,6 +163,12 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (configure_launcher, "-DCMAKE_EXPORT_COMPILE_COMMANDS=1");
   ide_subprocess_launcher_push_argv (configure_launcher, "-DCMAKE_BUILD_TYPE=RelWithDebInfo");
   ide_subprocess_launcher_push_argv (configure_launcher, prefix_option);
+  if (crossbuild_file != NULL)
+    {
+      g_autofree gchar *toolchain_option = g_strdup_printf ("-DCMAKE_TOOLCHAIN_FILE=\"%s\"", crossbuild_file);
+
+      ide_subprocess_launcher_push_argv (configure_launcher, toolchain_option);
+    }
 
   if (!dzl_str_empty0 (config_opts))
     {

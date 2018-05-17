@@ -622,6 +622,13 @@ gbp_flatpak_runtime_real_get_triplet (IdeRuntime *runtime)
   return ide_triplet_ref (GBP_FLATPAK_RUNTIME (runtime)->triplet);
 }
 
+gboolean
+gbp_flatpak_runtime_supports_toolchain (IdeRuntime   *self,
+                                        IdeToolchain *toolchain)
+{
+  return FALSE;
+}
+
 static void
 gbp_flatpak_runtime_get_property (GObject    *object,
                                   guint       prop_id,
@@ -726,6 +733,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
   runtime_class->get_system_include_dirs = gbp_flatpak_runtime_get_system_include_dirs;
   runtime_class->get_triplet = gbp_flatpak_runtime_real_get_triplet;
+  runtime_class->supports_toolchain = gbp_flatpak_runtime_supports_toolchain;
 
   properties [PROP_TRIPLET] =
     g_param_spec_boxed ("triplet",

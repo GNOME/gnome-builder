@@ -180,6 +180,21 @@ gbp_sysroot_runtime_get_triplet (IdeRuntime *runtime)
   return ide_triplet_new (target_arch);
 }
 
+static gboolean
+gbp_sysroot_runtime_supports_toolchain (IdeRuntime   *runtime,
+                                        IdeToolchain *toolchain)
+{
+  GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
+  g_autoptr(IdeTriplet) host_triplet = NULL;
+  g_autofree gchar *runtime_arch = NULL;
+
+  g_assert (GBP_IS_SYSROOT_RUNTIME (self));
+
+  runtime_arch = ide_runtime_get_arch (runtime);
+  host_triplet = ide_toolchain_get_host_triplet (toolchain);
+  return g_strcmp0 (runtime_arch, ide_triplet_get_arch (host_triplet)) == 0;
+}
+
 static void
 sysroot_runtime_target_name_changed (GbpSysrootRuntime *self,
                                      const gchar       *target,
@@ -231,6 +246,7 @@ gbp_sysroot_runtime_class_init (GbpSysrootRuntimeClass *klass)
   runtime_class->create_launcher = gbp_sysroot_runtime_create_launcher;
   runtime_class->get_system_include_dirs = gbp_sysroot_runtime_get_system_include_dirs;
   runtime_class->get_triplet = gbp_sysroot_runtime_get_triplet;
+  runtime_class->supports_toolchain = gbp_sysroot_runtime_supports_toolchain;
 }
 
 static void
