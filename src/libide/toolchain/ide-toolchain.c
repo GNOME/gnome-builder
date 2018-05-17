@@ -204,7 +204,7 @@ ide_toolchain_real_get_tools_for_id (IdeToolchain  *self,
  * If %IDE_TOOLCHAIN_LANGUAGE_ANY is used in the @language field, the first tool matching @tool_id
  * will be returned.
  *
- * Returns: (transfer full): A string containing the path of the tool for the given language, or
+ * Returns: (transfer none): A string containing the path of the tool for the given language, or
  * %NULL is no tool has been found. The returned string should be freed when no longer needed.
  *
  * Since: 3.30
