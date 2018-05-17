@@ -258,6 +258,7 @@ ide_toolchain_finalize (GObject *object)
   IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
 
   g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->host_triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_toolchain_parent_class)->finalize (object);
