@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-03-28 16:13+0000\n"
-"PO-Revision-Date: 2018-03-31 15:54+0300\n"
+"POT-Creation-Date: 2018-05-01 21:58+0000\n"
+"PO-Revision-Date: 2018-05-17 22:20+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -443,7 +443,7 @@ msgstr "Apatinio skydelio plotis pikseliais."
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/application/ide-application.c:687
+#: src/libide/application/ide-application.c:689
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
 #: src/libide/workbench/ide-workbench.c:646
@@ -728,7 +728,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Įkelti arba generuoti paletę naudojant nustatymus"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5127
+#: src/libide/sourceview/ide-source-view.c:5130
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Pervadinti"
@@ -762,7 +762,7 @@ msgstr "Sužinokite daugiau apie GNOME Kūrėją"
 msgid "Funded By"
 msgstr "Rėmėjai"
 
-#: src/libide/application/ide-application.c:1078
+#: src/libide/application/ide-application.c:1080
 #: src/libide/preferences/ide-preferences-builtin.c:409
 msgid "Projects"
 msgstr "Projektai"
@@ -838,7 +838,7 @@ msgstr "Nėra tokio darbininko"
 #: src/libide/application/ide-application-shortcuts.c:44
 #: src/libide/application/ide-application-shortcuts.c:55
 #: src/libide/application/ide-application-shortcuts.c:66
-#: src/libide/runner/ide-run-manager.c:775
+#: src/libide/runner/ide-run-manager.c:776
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
 #: src/libide/workbench/ide-workbench-shortcuts.c:45
@@ -889,11 +889,11 @@ msgstr "Nepavyko nustatyti monitoriaus foniniams pakeitimams: %s"
 msgid "The current language lacks a symbol resolver."
 msgstr "Dabartinei kalbai trūksta simbolių gavėjo."
 
-#: src/libide/buffers/ide-buffer-manager.c:703
+#: src/libide/buffers/ide-buffer-manager.c:704
 msgid "File too large to be opened."
 msgstr "Failas per didelis atvėrimui."
 
-#: src/libide/buffers/ide-buffer-manager.c:1989
+#: src/libide/buffers/ide-buffer-manager.c:1990
 #, c-format
 msgid "unsaved document %u"
 msgstr "neįrašytas dokumentas %u"
@@ -902,8 +902,8 @@ msgstr "neįrašytas dokumentas %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:2028
-#: src/libide/buffers/ide-buffer-manager.c:2091
+#: src/libide/buffers/ide-buffer-manager.c:2029
+#: src/libide/buffers/ide-buffer-manager.c:2092
 #: src/libide/editor/ide-editor-view-actions.c:189
 #: src/libide/editor/ide-editor-view-actions.c:310
 #, c-format
@@ -911,23 +911,23 @@ msgid "Failed to save file: %s"
 msgstr "Nepavyko įrašyti failo: %s"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:250
+#: src/libide/buffers/ide-unsaved-files.c:251
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr "Nepavyko įrašyti juodraščio: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:620
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:639
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (kopija)"
 
-#: src/libide/buildsystem/ide-build-manager.c:369
+#: src/libide/buildsystem/ide-build-manager.c:372
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
 msgstr "Nepavyko inicializuoti kūrimo konvejerio: %s"
 
-#: src/libide/buildsystem/ide-build-manager.c:426
+#: src/libide/buildsystem/ide-build-manager.c:429
 #, c-format
 msgid "Failed to get device information: %s"
 msgstr "Nepavyko gauti įrenginio informacijos: %s"
@@ -940,64 +940,64 @@ msgstr "Kūrimo konvejeris yra neveiksnios būsenos"
 msgid "The build configuration has errors"
 msgstr "Kūrimo konfigūracijoje yra klaidų"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2696
+#: src/libide/buildsystem/ide-build-pipeline.c:2724
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Nepavyko sukurti pseudo terminalo. Terminalo funkcijos bus ribotos."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2896
+#: src/libide/buildsystem/ide-build-pipeline.c:2924
 msgid "Cleaning…"
 msgstr "Išvaloma…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2900
-#: src/libide/buildsystem/ide-build-pipeline.c:2957
+#: src/libide/buildsystem/ide-build-pipeline.c:2928
+#: src/libide/buildsystem/ide-build-pipeline.c:2985
 #: src/libide/workbench/ide-omni-bar.c:557
 msgid "Failed"
 msgstr "Nepavyko"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2902
-#: src/libide/buildsystem/ide-build-pipeline.c:2965
+#: src/libide/buildsystem/ide-build-pipeline.c:2930
+#: src/libide/buildsystem/ide-build-pipeline.c:2993
 msgid "Ready"
 msgstr "Pasiruošęs"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2917
+#: src/libide/buildsystem/ide-build-pipeline.c:2945
 msgid "Downloading…"
 msgstr "Parsiunčiama…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2921
+#: src/libide/buildsystem/ide-build-pipeline.c:2949
 msgid "Building dependencies…"
 msgstr "Kuriamos priklausomybės…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2925
+#: src/libide/buildsystem/ide-build-pipeline.c:2953
 msgid "Bootstrapping…"
 msgstr "Vykdomas pakopinis paleidimas…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2929
+#: src/libide/buildsystem/ide-build-pipeline.c:2957
 msgid "Configuring…"
 msgstr "Konfigūruojama…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2933
+#: src/libide/buildsystem/ide-build-pipeline.c:2961
 msgid "Building…"
 msgstr "Kuriama…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2937
+#: src/libide/buildsystem/ide-build-pipeline.c:2965
 msgid "Installing…"
 msgstr "Diegiama…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2941
+#: src/libide/buildsystem/ide-build-pipeline.c:2969
 msgid "Committing…"
 msgstr "Nusiunčiama…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2945
+#: src/libide/buildsystem/ide-build-pipeline.c:2973
 msgid "Exporting…"
 msgstr "Eksportuojama…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2949
-#: src/libide/buildsystem/ide-build-pipeline.c:2953
+#: src/libide/buildsystem/ide-build-pipeline.c:2977
+#: src/libide/buildsystem/ide-build-pipeline.c:2981
 #: src/libide/workbench/ide-omni-bar.c:584
 msgid "Success"
 msgstr "Pavyko"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2961
+#: src/libide/buildsystem/ide-build-pipeline.c:2989
 msgid "Preparing…"
 msgstr "Paruošiama…"
 
@@ -1250,11 +1250,11 @@ msgstr "Biblioteka"
 msgid "Address Range"
 msgstr "Adresų rėžis"
 
-#: src/libide/debugger/ide-debugger-locals-view.c:307
+#: src/libide/debugger/ide-debugger-locals-view.c:309
 msgid "Locals"
 msgstr "Vietiniai"
 
-#: src/libide/debugger/ide-debugger-locals-view.c:361
+#: src/libide/debugger/ide-debugger-locals-view.c:364
 msgid "Parameters"
 msgstr "Parametrai"
 
@@ -1302,11 +1302,11 @@ msgstr "Dvejetainis"
 msgid "A suitable debugger could not be found."
 msgstr "Nerasta tinkama derintuvė."
 
-#: src/libide/devices/ide-device-manager.c:577
+#: src/libide/devices/ide-device-manager.c:580
 msgid "Devices"
 msgstr "Įrenginiai"
 
-#: src/libide/devices/ide-device-manager.c:725
+#: src/libide/devices/ide-device-manager.c:728
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Nepavyko patalpinti įrenginyje, neinicijuotas kūrimo konvejeris"
 
@@ -1324,7 +1324,7 @@ msgid "No file was provided."
 msgstr "Nenurodytas failas."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:831
+#: src/libide/editor/ide-editor-perspective.c:832
 #: src/libide/preferences/ide-preferences-builtin.c:104
 #: src/libide/preferences/ide-preferences-builtin.c:151
 msgid "Editor"
@@ -1354,22 +1354,22 @@ msgstr "_Apsupti"
 msgid "Cu_t"
 msgstr "Iš_kirpti"
 
-#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:97
-#: src/libide/gtk/menus.ui:226
+#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:105
+#: src/libide/gtk/menus.ui:234
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:101
-#: src/libide/gtk/menus.ui:230
+#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:109
+#: src/libide/gtk/menus.ui:238
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:105
+#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:113
 msgid "_Delete"
 msgstr "_Trinti"
 
-#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:120
-#: src/libide/gtk/menus.ui:238
+#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:128
+#: src/libide/gtk/menus.ui:246
 msgid "Select _All"
 msgstr "Žymėti _viską"
 
@@ -1455,7 +1455,7 @@ msgstr "Atverti"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:211
 #: src/plugins/color-picker/gb-color-picker-prefs.c:238
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
-#: src/plugins/terminal/gb-terminal-view-actions.c:274
+#: src/plugins/terminal/gb-terminal-view-actions.c:273
 msgid "Cancel"
 msgstr "Atsisakyti"
 
@@ -1646,7 +1646,7 @@ msgstr "Nepavyko atspausdinti: %s"
 #: src/libide/editor/ide-editor-view-actions.c:244
 #: src/plugins/color-picker/gb-color-picker-prefs.c:234
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: src/plugins/terminal/gb-terminal-view-actions.c:275
+#: src/plugins/terminal/gb-terminal-view-actions.c:274
 msgid "Save"
 msgstr "Įrašyti"
 
@@ -1840,93 +1840,99 @@ msgstr "_Apie"
 msgid "_Quit"
 msgstr "_Išeiti"
 
-#: src/libide/gtk/menus.ui:65
+#: src/libide/gtk/menus.ui:64
+#: src/libide/preferences/ide-preferences-perspective.c:137
+#: src/libide/preferences/ide-preferences-window.ui:9
+msgid "Preferences"
+msgstr "Nuostatos"
+
+#: src/libide/gtk/menus.ui:73
 msgid "Save _All"
 msgstr "Įrašyti _viską"
 
-#: src/libide/gtk/menus.ui:76
+#: src/libide/gtk/menus.ui:84
 msgid "_Go to Definition"
 msgstr "_Eiti prie apibrėžimo"
 
-#: src/libide/gtk/menus.ui:82
+#: src/libide/gtk/menus.ui:90
 msgid "_Undo"
 msgstr "_Atšaukti"
 
-#: src/libide/gtk/menus.ui:86
+#: src/libide/gtk/menus.ui:94
 msgid "_Redo"
 msgstr "_Pakartoti"
 
-#: src/libide/gtk/menus.ui:92
+#: src/libide/gtk/menus.ui:100
 msgid "C_ut"
 msgstr "_Iškirpti"
 
-#: src/libide/gtk/menus.ui:113
+#: src/libide/gtk/menus.ui:121
 #: src/libide/preferences/ide-preferences-builtin.c:194
 #: src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Paryškinimas"
 
-#: src/libide/gtk/menus.ui:118 src/libide/gtk/menus.ui:236
+#: src/libide/gtk/menus.ui:126 src/libide/gtk/menus.ui:244
 msgid "Selection"
 msgstr "Žymėjimas"
 
-#: src/libide/gtk/menus.ui:125 src/libide/gtk/menus.ui:243
+#: src/libide/gtk/menus.ui:133 src/libide/gtk/menus.ui:251
 msgid "Select _None"
 msgstr "Nežymėti _nieko"
 
-#: src/libide/gtk/menus.ui:131
+#: src/libide/gtk/menus.ui:139
 msgid "All _Upper Case"
 msgstr "Viską _didžiosiomis raidėmis"
 
-#: src/libide/gtk/menus.ui:136
+#: src/libide/gtk/menus.ui:144
 msgid "All _Lower Case"
 msgstr "Viską _mažosiomis raidėmis"
 
-#: src/libide/gtk/menus.ui:141
+#: src/libide/gtk/menus.ui:149
 msgid "_Invert Case"
 msgstr "_Apversti registrą"
 
-#: src/libide/gtk/menus.ui:146
+#: src/libide/gtk/menus.ui:154
 msgid "_Title Case"
 msgstr "_Pavadinimo registras"
 
-#: src/libide/gtk/menus.ui:153
+#: src/libide/gtk/menus.ui:161
 msgid "Join Lines"
 msgstr "Sujungti eilutes"
 
-#: src/libide/gtk/menus.ui:157
+#: src/libide/gtk/menus.ui:165
 msgid "Sort Lines"
 msgstr "Rikiuoti eilutes"
 
-#: src/libide/gtk/menus.ui:166
+#: src/libide/gtk/menus.ui:174
 msgid "Zoom"
 msgstr "Mastelis"
 
-#: src/libide/gtk/menus.ui:168
+#: src/libide/gtk/menus.ui:176
 msgid "Zoom _In"
 msgstr "_Pritraukti"
 
-#: src/libide/gtk/menus.ui:173
+#: src/libide/gtk/menus.ui:181
 msgid "Zoom _Out"
 msgstr "_Atitolinti"
 
-#: src/libide/gtk/menus.ui:179 src/plugins/terminal/gtk/menus.ui:13
+#: src/libide/gtk/menus.ui:187 src/plugins/terminal/gtk/menus.ui:13
 msgid "Reset"
 msgstr "Atstatyti"
 
-#: src/libide/gtk/menus.ui:193 src/libide/layout/ide-layout-stack.ui:105
+#: src/libide/gtk/menus.ui:201 src/libide/layout/ide-layout-stack.ui:105
 msgid "Open File…"
 msgstr "Atverti failą…"
 
-#: src/libide/gtk/menus.ui:204 src/libide/runner/ide-run-manager.c:1112
+#: src/libide/gtk/menus.ui:212 src/libide/runner/ide-run-manager.c:1114
 msgid "Run"
 msgstr "Vykdyti"
 
-#: src/libide/gtk/menus.ui:213
+#: src/libide/gtk/menus.ui:221
 msgid "_Open Link"
 msgstr "_Atverti saitą"
 
-#: src/libide/gtk/menus.ui:218
+#: src/libide/gtk/menus.ui:226
 msgid "_Copy Link Address"
 msgstr "_Kopijuoti saito adresą"
 
@@ -1935,11 +1941,11 @@ msgstr "_Kopijuoti saito adresą"
 msgid "You must call %s() before using libide."
 msgstr "Turite iškviesti %s() prie naudodami libide."
 
-#: src/libide/ide-context.c:2108
+#: src/libide/ide-context.c:2114
 msgid "An unload request is already pending"
 msgstr "Atlaisvinimo užklausa jau yra"
 
-#: src/libide/ide-context.c:2226
+#: src/libide/ide-context.c:2233
 msgid "Context has already been restored."
 msgstr "Kontekstas jau buvo atkurtas."
 
@@ -2238,7 +2244,7 @@ msgid "Unselect all"
 msgstr "Nežymėti nieko"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:398
-#: src/libide/runner/ide-run-manager.c:776
+#: src/libide/runner/ide-run-manager.c:777
 #: src/libide/workbench/ide-workbench-shortcuts.c:46
 msgctxt "shortcut window"
 msgid "Build and Run"
@@ -2281,7 +2287,7 @@ msgid "Find text within terminal"
 msgstr "Ieškoti teksto terminale"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:894
+#: src/libide/langserv/ide-langserv-client.c:895
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Nepavyko inicijuoti kalbos serverio: %s"
@@ -2861,11 +2867,6 @@ msgstr "Versijavimas"
 msgid "SDKs"
 msgstr "Programavimo komplektai"
 
-#: src/libide/preferences/ide-preferences-perspective.c:137
-#: src/libide/preferences/ide-preferences-window.ui:9
-msgid "Preferences"
-msgstr "Nuostatos"
-
 #: src/libide/projects/ide-project.c:398
 msgid "Destination file must be within the project tree."
 msgstr "Paskirties failas turi būti projekto medžio viduje."
@@ -2882,11 +2883,11 @@ msgstr "Stabdyti vykdymą"
 msgid "Change run options"
 msgstr "Pakeisti vykdymo parametrus"
 
-#: src/libide/runner/ide-run-manager.c:367
+#: src/libide/runner/ide-run-manager.c:368
 msgid "Cannot run target, another target is running"
 msgstr "Negalima vykdyti paskirties, jau vykdoma kita paskirtis"
 
-#: src/libide/runner/ide-run-manager.c:437
+#: src/libide/runner/ide-run-manager.c:438
 msgid "Failed to locate runtime"
 msgstr "Nepavyko rasti vykdymo aplinkos"
 
@@ -2912,31 +2913,31 @@ msgstr "Nepavyko įkelti failo: %s: %s"
 msgid "Click to toggle breakpoint"
 msgstr "Spustelėkite, norėdami perjungti sustojimo tašką"
 
-#: src/libide/sourceview/ide-source-view.c:4584
+#: src/libide/sourceview/ide-source-view.c:4585
 #, c-format
 msgid "Insert “%s”"
 msgstr "Įterpti „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4586
+#: src/libide/sourceview/ide-source-view.c:4587
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Pakeisti „%s“ į „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4700
+#: src/libide/sourceview/ide-source-view.c:4701
 msgid "Apply Fix-It"
 msgstr "Pritaikyti pataisymą"
 
-#: src/libide/sourceview/ide-source-view.c:5126
+#: src/libide/sourceview/ide-source-view.c:5129
 msgid "Rename symbol"
 msgstr "Pervadinti simbolį"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5360
+#: src/libide/sourceview/ide-source-view.c:5365
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Eilutė %u, stulpelis %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5386
+#: src/libide/sourceview/ide-source-view.c:5391
 msgid "No references were found"
 msgstr "Kreipinių nerasta"
 
@@ -3174,7 +3175,7 @@ msgid "Bootstrapping build system"
 msgstr "Daugelio žingsnių kūrimo sistema"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:140
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:145
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "Konfigūruojamas projektas"
@@ -3182,7 +3183,7 @@ msgstr "Konfigūruojamas projektas"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:276
 #: src/plugins/cargo/cargo_plugin.py:150
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:169
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:174
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Kuriamas projektas"
@@ -3417,7 +3418,7 @@ msgstr "AST skaitymo klaida"
 msgid "Failed to create translation unit: %s"
 msgstr "Nepavyko sukurti transliavimo vieneto: %s"
 
-#: src/plugins/clang/ide-clang-service.c:562
+#: src/plugins/clang/ide-clang-service.c:561
 #: src/plugins/xml-pack/ide-xml-service.c:97
 msgid "File must be saved locally to parse."
 msgstr "Failas turi būti įrašytas vietoje skaitymui."
@@ -3439,7 +3440,7 @@ msgid "Configure project"
 msgstr "Konfigūruoti projektą"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:179
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:184
 #: src/plugins/phpize/phpize_plugin.py:248
 msgid "Installing project"
 msgstr "Diegiamas projektas"
@@ -4006,7 +4007,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Parsiunčiami programų šaltiniai…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:660
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Nepavyko pašalinti flatpak manifesto: %s"
@@ -4054,17 +4055,17 @@ msgstr "Kuriamas flatpak rinkinys"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
-#: src/plugins/html-preview/html_preview.py:325
-#: src/plugins/html-preview/html_preview.py:335
-#: src/plugins/rustup/rustup_plugin.py:491
-#: src/plugins/rustup/rustup_plugin.py:495
-#: src/plugins/rustup/rustup_plugin.py:612
+#: src/plugins/html-preview/html_preview.py:329
+#: src/plugins/html-preview/html_preview.py:339
+#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:496
+#: src/plugins/rustup/rustup_plugin.py:613
 msgid "Install"
 msgstr "Įdiegti"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:97
-#: src/plugins/rustup/rustup_plugin.py:491
-#: src/plugins/rustup/rustup_plugin.py:495
+#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:496
 msgid "Update"
 msgstr "Atnaujinti"
 
@@ -4087,12 +4088,12 @@ msgstr[2] "Rodyti dar %u vykdymo aplinkų"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak vykdymo aplinkos"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:771
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:795
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:773
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:797
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4208,12 +4209,12 @@ msgid ""
 msgstr "Kūrėjui nepavyko pateikti tinkamų įgaliojimų klonuojant saugyklą."
 
 #. translators: %s is replaced with the error message
-#: src/plugins/git/ide-git-vcs.c:365
+#: src/plugins/git/ide-git-vcs.c:407
 #, c-format
 msgid "Failed to establish git file monitor: %s"
 msgstr "Nepavyko sukurti git failų stebyklės: %s"
 
-#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:375
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:374
 msgid "Code assistance requires a local file."
 msgstr "Kodo asistentui reikia vietinio failo."
 
@@ -4250,15 +4251,15 @@ msgstr ""
 msgid "Open Preview"
 msgstr "Atverti peržiūrą"
 
-#: src/plugins/html-preview/html_preview.py:321
+#: src/plugins/html-preview/html_preview.py:325
 msgid "Your computer is missing python3-docutils"
 msgstr "Jūsų kompiuteryje nėra python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:331
+#: src/plugins/html-preview/html_preview.py:335
 msgid "Your computer is missing python3-sphinx"
 msgstr "Jūsų kompiuteryje nėra python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:374
+#: src/plugins/html-preview/html_preview.py:382
 msgid "(Preview)"
 msgstr "(Peržiūra)"
 
@@ -4285,6 +4286,16 @@ msgstr "Sukurti naują tuščią projektą naudojant paprasčiausią Makefile"
 #: src/plugins/meson/gbp-meson-build-system.c:428
 msgid "Meson"
 msgstr "Meson"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:103
+#| msgid "A suitable debugger could not be found."
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr "Įkeltas Meson pagrindo projektas, bet Ninja nerastas."
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:123
+#| msgid "A suitable debugger could not be found."
+msgid "A Meson-based project is loaded but meson could not be found."
+msgstr "Įkeltas Meson pagrindo projektas, bet meson nerastas."
 
 #: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
@@ -4552,101 +4563,101 @@ msgstr "Atnaujintas"
 msgid "Reformat tabs"
 msgstr "Performatuoti tabuliaciją"
 
-#: src/plugins/rustup/rustup_plugin.py:88
+#: src/plugins/rustup/rustup_plugin.py:89
 msgid "Rustup not installed"
 msgstr "Rustup neįdiegta"
 
-#: src/plugins/rustup/rustup_plugin.py:278
+#: src/plugins/rustup/rustup_plugin.py:279
 msgid "Installing rustup"
 msgstr "Diegiama rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:280
+#: src/plugins/rustup/rustup_plugin.py:281
 msgid "Updating rustup"
 msgstr "Atnaujinama rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:282
+#: src/plugins/rustup/rustup_plugin.py:283
 msgid "Installing rust "
 msgstr "Diegiama rust "
 
-#: src/plugins/rustup/rustup_plugin.py:284
+#: src/plugins/rustup/rustup_plugin.py:285
 msgid "Checking system"
 msgstr "Tikrinama sistema"
 
-#: src/plugins/rustup/rustup_plugin.py:349
+#: src/plugins/rustup/rustup_plugin.py:350
 msgid "Downloading rustup-init"
 msgstr "Parsiunčiama rustup-init"
 
-#: src/plugins/rustup/rustup_plugin.py:354
+#: src/plugins/rustup/rustup_plugin.py:355
 msgid "Syncing channel updates"
 msgstr "Sinchronizuojami kanalo atnaujinimai"
 
-#: src/plugins/rustup/rustup_plugin.py:360
+#: src/plugins/rustup/rustup_plugin.py:361
 msgid "Downloading "
 msgstr "Parsiunčiama "
 
-#: src/plugins/rustup/rustup_plugin.py:367
+#: src/plugins/rustup/rustup_plugin.py:368
 msgid "Installing "
 msgstr "Diegiama "
 
-#: src/plugins/rustup/rustup_plugin.py:373
+#: src/plugins/rustup/rustup_plugin.py:374
 msgid "Checking for rustup updates"
 msgstr "Tikrinami rustup atnaujinimai"
 
-#: src/plugins/rustup/rustup_plugin.py:378
+#: src/plugins/rustup/rustup_plugin.py:379
 msgid "Downloading rustup update"
 msgstr "Parsiunčiamas rustup atnaujinimas"
 
-#: src/plugins/rustup/rustup_plugin.py:415
+#: src/plugins/rustup/rustup_plugin.py:416
 msgid "Error installing "
 msgstr "Klaida diegiant "
 
-#: src/plugins/rustup/rustup_plugin.py:417
+#: src/plugins/rustup/rustup_plugin.py:418
 msgid "Error"
 msgstr "Klaida"
 
-#: src/plugins/rustup/rustup_plugin.py:422
+#: src/plugins/rustup/rustup_plugin.py:423
 msgid "Cancelled"
 msgstr "Atsisakyta"
 
-#: src/plugins/rustup/rustup_plugin.py:430
+#: src/plugins/rustup/rustup_plugin.py:431
 msgid "Finished"
 msgstr "Užbaigta"
 
-#: src/plugins/rustup/rustup_plugin.py:446
+#: src/plugins/rustup/rustup_plugin.py:447
 msgid "Rustup"
 msgstr "Rustup"
 
-#: src/plugins/rustup/rustup_plugin.py:447
+#: src/plugins/rustup/rustup_plugin.py:448
 msgid "Rustup Toolchains"
 msgstr "Rustup įrankių grandinės"
 
-#: src/plugins/rustup/rustup_plugin.py:503
+#: src/plugins/rustup/rustup_plugin.py:504
 msgid "Updating"
 msgstr "Atnaujinama"
 
-#: src/plugins/rustup/rustup_plugin.py:503
+#: src/plugins/rustup/rustup_plugin.py:504
 msgid "Installing"
 msgstr "Diegiama"
 
 #. set default toolchain button
-#: src/plugins/rustup/rustup_plugin.py:596
+#: src/plugins/rustup/rustup_plugin.py:597
 msgid "Make default"
 msgstr "Padaryti numatytąja"
 
-#: src/plugins/rustup/rustup_plugin.py:596
+#: src/plugins/rustup/rustup_plugin.py:597
 msgid "Makes the selected toolchain the default rust installation"
 msgstr "Padaro pasirinktą įrankių grandinę numatytuoju rust diegimu"
 
-#: src/plugins/rustup/rustup_plugin.py:611
+#: src/plugins/rustup/rustup_plugin.py:612
 msgid "Install Rust Channel"
 msgstr "Įdiegti Rust kanalą"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
-#: src/plugins/rustup/rustup_plugin.py:616
+#: src/plugins/rustup/rustup_plugin.py:617
 msgid "Enter name of rust channel"
 msgstr "Įveskite rust kanalo pavadinimą"
 
-#: src/plugins/rustup/rustup_plugin.py:617
+#: src/plugins/rustup/rustup_plugin.py:618
 msgid ""
 "Standard release channel toolchain names have the following form:\n"
 "                        <channel>[-<date>][-<host>]\n"
@@ -4662,15 +4673,15 @@ msgstr ""
 "                        <data>          = YYYY-MM-DD\n"
 "                        <serveris>          = <target-triple>"
 
-#: src/plugins/rustup/rustup_plugin.py:642
+#: src/plugins/rustup/rustup_plugin.py:643
 msgid "Install Rustup to manage toolchains here!"
 msgstr "Norėdami čia tvarkyti įrankių grandines, įdiekite Rustup!"
 
-#: src/plugins/rustup/rustup_plugin.py:649
+#: src/plugins/rustup/rustup_plugin.py:650
 msgid "No toolchain installed. Click"
 msgstr "Neįdiegta jokia įrankių grandinė. Spustelėkite"
 
-#: src/plugins/rustup/rustup_plugin.py:650
+#: src/plugins/rustup/rustup_plugin.py:651
 msgid "to add a new toolchain!"
 msgstr "norėdami pridėti naują įrankių grandinę!"
 
@@ -4787,14 +4798,11 @@ msgstr ""
 "priedą savo pranešime apie klaidą ar palaikymo užklausoje."
 
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
-#| msgid "Symbols"
 msgctxt "shortcut window"
 msgid "Symbols"
 msgstr "Simboliai"
 
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:56
-#| msgctxt "shortcut window"
-#| msgid "Switch to the next document"
 msgctxt "shortcut window"
 msgid "Search symbols within document"
 msgstr "Ieškoti simbolių dokumente"
@@ -4859,7 +4867,7 @@ msgstr "Vykdyti su profiliatoriumi"
 msgid "Open Sysprof Capture…"
 msgstr "Atverti Sysprof duomenis…"
 
-#: src/plugins/terminal/gb-terminal-view-actions.c:266
+#: src/plugins/terminal/gb-terminal-view-actions.c:265
 msgid "Save Terminal Content As"
 msgstr "Įrašyti terminalo turinį taip"
 
@@ -4913,7 +4921,7 @@ msgstr "vala diagnostika įspėjimai klaidos"
 msgid "Run with Valgrind"
 msgstr "Vykdyti su Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:582
+#: src/plugins/xml-pack/ide-xml-parser.c:585
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Nepavyko sukurti XML medžio."
