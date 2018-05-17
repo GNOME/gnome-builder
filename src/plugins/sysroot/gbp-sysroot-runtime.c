@@ -175,8 +175,8 @@ gbp_sysroot_runtime_get_triplet (IdeRuntime *runtime)
 
   sysroot_manager = gbp_sysroot_manager_get_default ();
   sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
-
   target_arch = gbp_sysroot_manager_get_target_arch (sysroot_manager, sysroot_id);
+
   return ide_triplet_new (target_arch);
 }
 
