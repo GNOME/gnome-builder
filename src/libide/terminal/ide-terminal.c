@@ -492,6 +492,7 @@ ide_terminal_init (IdeTerminal *self)
     }
 
   priv->settings = g_settings_new ("org.gnome.builder.terminal");
+  g_settings_bind (priv->settings, "allow-bold", self, "allow-bold", G_SETTINGS_BIND_GET);
   g_signal_connect_object (priv->settings,
                            "changed::font-name",
                            G_CALLBACK (ide_terminal_font_changed),

@@ -1,5 +1,8 @@
 <schemalist>
   <schema id="org.gnome.builder.terminal" path="/org/gnome/builder/terminal/" gettext-domain="gnome-builder">
+    <key name="allow-bold" type="b">
+      <default>true</default>
+    </key>
     <key name="font-name" type="s">
       <default>"Monospace 11"</default>
     </key>

@@ -105,7 +105,8 @@ ide_preferences_builtin_register_appearance (DzlPreferences *preferences)
   dzl_preferences_add_list_group (preferences, "appearance", "font", _("Font"), GTK_SELECTION_NONE, 10);
   dzl_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.editor", "font-name", _("Editor"), C_("Keywords", "editor font monospace"), 0);
   /* XXX: This belongs in terminal addin */
-  dzl_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 0);
+  dzl_preferences_add_font_button (preferences, "appearance", "font", "org.gnome.builder.terminal", "font-name", _("Terminal"), C_("Keywords", "terminal font monospace"), 1);
+  dzl_preferences_add_switch (preferences, "appearance", "font", "org.gnome.builder.terminal", "allow-bold", NULL, NULL, _("Bold text in terminals"), _("If terminals are allowed to display bold text"), C_("Keywords", "terminal allow bold"), 2);
 
   manager = gtk_source_style_scheme_manager_get_default ();
   scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
