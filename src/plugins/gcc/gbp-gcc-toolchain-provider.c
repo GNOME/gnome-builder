@@ -158,10 +158,10 @@ gbp_gcc_toolchain_provider_load_worker (IdeTask      *task,
 
       basename = g_file_get_basename (file);
       basename_length = g_utf8_strlen (basename, -1);
-      if (basename_length > sizeof ("-gcc"))
+      if (basename_length > strlen ("-gcc"))
         {
           g_autofree gchar *arch = NULL;
-          arch = g_utf8_substring (basename, 0, g_utf8_strlen (basename, -1) - sizeof("-gcc") +1 );
+          arch = g_utf8_substring (basename, 0, g_utf8_strlen (basename, -1) - strlen ("-gcc") + 1);
           /* MinGW is out of the scope of this provider */
           if (g_strrstr (arch, "-") != NULL && g_strrstr (arch, "mingw32") == NULL)
             {
@@ -190,6 +190,8 @@ gbp_gcc_toolchain_provider_search_finish (FileSearching *file_searching,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) ret = NULL;
 
+  g_assert (file_searching != NULL);
+
   task = g_steal_pointer (&file_searching->task);
   ret = g_steal_pointer (&file_searching->found_files);
   gbp_gcc_toolchain_provider_file_searching_free (file_searching);
@@ -205,12 +207,13 @@ gbp_gcc_toolchain_provider_search_finish (FileSearching *file_searching,
 }
 
 static void
-add_all_files (GFile     *array,
+add_all_files (GFile     *file,
                GPtrArray *dest_array)
 {
-  g_assert (G_IS_FILE (array));
+  g_assert (G_IS_FILE (file));
   g_assert (dest_array != NULL);
-  g_ptr_array_add (dest_array, g_object_ref (array));
+
+  g_ptr_array_add (dest_array, g_object_ref (file));
 }
 
 void
@@ -240,13 +243,11 @@ gbp_gcc_toolchain_provider_search_iterate (GObject      *object,
   g_ptr_array_foreach (ret, (GFunc)add_all_files, file_searching->found_files);
   file_searching->folders = g_list_remove (file_searching->folders, file);
   if (file_searching->folders != NULL)
-    {
-      ide_g_file_find_async (file_searching->folders->data,
-                             "*-gcc",
-                             ide_task_get_cancellable (file_searching->task),
-                             gbp_gcc_toolchain_provider_search_iterate,
-                             file_searching);
-    }
+    ide_g_file_find_async (file_searching->folders->data,
+                           "*-gcc",
+                           ide_task_get_cancellable (file_searching->task),
+                           gbp_gcc_toolchain_provider_search_iterate,
+                           file_searching);
   else
     gbp_gcc_toolchain_provider_search_finish (file_searching, NULL);
 }
@@ -281,7 +282,7 @@ gbp_gcc_toolchain_provider_search_init (GbpGccToolchainProvider *self,
   file_searching->folders = folders;
 
   /* GCC */
-  ide_g_file_find_async (g_list_first (folders)->data,
+  ide_g_file_find_async (folders->data,
                          "*-gcc",
                          cancellable,
                          gbp_gcc_toolchain_provider_search_iterate,
@@ -295,7 +296,6 @@ gbp_gcc_toolchain_provider_load_async (IdeToolchainProvider     *provider,
                                        gpointer                  user_data)
 {
   GbpGccToolchainProvider *self = (GbpGccToolchainProvider *)provider;
-  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -375,5 +375,4 @@ gbp_gcc_toolchain_provider_class_init (GbpGccToolchainProviderClass *klass)
 static void
 gbp_gcc_toolchain_provider_init (GbpGccToolchainProvider *self)
 {
-  
 }
