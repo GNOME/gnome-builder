@@ -53,10 +53,12 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
                                    IdeSubprocessLauncher *launcher)
 {
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)runner;
+  g_autofree gchar *doc_portal = NULL;
   IdeConfigurationManager *config_manager;
   IdeConfiguration *config;
   IdeEnvironment *env;
   g_auto(GStrv) environ = NULL;
+  const gchar *app_id;
   IdeContext *context;
   guint i = 0;
 
@@ -66,11 +68,16 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   context = ide_object_get_context (IDE_OBJECT (self));
   config_manager = ide_context_get_configuration_manager (context);
   config = ide_configuration_manager_get_current (config_manager);
+  app_id = ide_configuration_get_app_id (config);
+
+  doc_portal = g_strdup_printf ("--bind-mount=/run/user/%u/doc=/run/user/%u/doc/by-app/%s",
+                                getuid (), getuid (), app_id);
 
   ide_subprocess_launcher_insert_argv (launcher, i++, "flatpak");
   ide_subprocess_launcher_insert_argv (launcher, i++, "build");
   ide_subprocess_launcher_insert_argv (launcher, i++, "--with-appdir");
   ide_subprocess_launcher_insert_argv (launcher, i++, "--allow=devel");
+  ide_subprocess_launcher_insert_argv (launcher, i++, doc_portal);
 
   if (GBP_IS_FLATPAK_MANIFEST (config))
     {
