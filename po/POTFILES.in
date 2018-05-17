@@ -108,6 +108,7 @@ src/libide/terminal/ide-terminal-search.ui
 src/libide/testing/gtk/menus.ui
 src/libide/testing/ide-test-editor-addin.c
 src/libide/testing/ide-test-panel.ui
+src/libide/toolchain/ide-toolchain-manager.c
 src/libide/transfers/ide-pkcon-transfer.c
 src/libide/transfers/ide-transfers-button.ui
 src/libide/util/ide-uri.c
@@ -131,6 +132,7 @@ src/plugins/clang/ide-clang-preferences-addin.c
 src/plugins/clang/ide-clang-symbol-node.c
 src/plugins/cmake/gbp-cmake-build-system.c
 src/plugins/cmake/gbp-cmake-pipeline-addin.c
+src/plugins/cmake/gbp-cmake-toolchain.c
 src/plugins/code-index/ide-code-index-index.c
 src/plugins/code-index/ide-code-index-service.c
 src/plugins/color-picker/data/basic.gstyle.xml
@@ -169,6 +171,7 @@ src/plugins/flatpak/gbp-flatpak-preferences-addin.c
 src/plugins/flatpak/gbp-flatpak-runtime.c
 src/plugins/flatpak/gbp-flatpak-transfer.c
 src/plugins/flatpak/gbp-flatpak-workbench-addin.c
+src/plugins/gcc/gbp-gcc-toolchain-provider.c
 src/plugins/git/ide-git-buffer-change-monitor.c
 src/plugins/git/ide-git-clone-widget.c
 src/plugins/git/ide-git-clone-widget.ui
@@ -185,6 +188,7 @@ src/plugins/jedi/jedi_plugin.py
 src/plugins/make/make_plugin.py
 src/plugins/meson/gbp-meson-build-system.c
 src/plugins/meson/gbp-meson-pipeline-addin.c
+src/plugins/meson/gbp-meson-toolchain.c
 src/plugins/meson-templates/meson_templates.py
 src/plugins/messages/gbp-messages-panel.ui
 src/plugins/newcomers/gbp-newcomers-section.ui
@@ -225,6 +229,7 @@ src/plugins/sysprof/gbp-sysprof-workbench-addin.c
 src/plugins/sysprof/gtk/menus.ui
 src/plugins/sysroot/gbp-sysroot-preferences-addin.c
 src/plugins/sysroot/gbp-sysroot-preferences-row.ui
+src/plugins/sysroot/gbp-sysroot-toolchain-provider.c
 src/plugins/terminal/gb-terminal-view-actions.c
 src/plugins/terminal/gb-terminal-view.c
 src/plugins/terminal/gb-terminal-workbench-addin.c
