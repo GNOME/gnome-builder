@@ -700,6 +700,70 @@
             ]
         },
         {
+            "name" : "e2fsprogs",
+            "buildsystem": "simple",
+            "build-commands": [
+                "./configure --prefix /app", 
+                "make",
+                "make install install-libs"
+            ],
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git"
+                }
+            ]
+        },
+        {
+            "name" : "libgpg-error",
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.31.tar.bz2",
+                    "sha256" : "40d0a823c9329478063903192a1f82496083b277265904878f4bc09e0db7a4ef"
+                }
+            ]
+        },
+        {
+            "name" : "libassuan",
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.1.tar.bz2",
+                    "sha256" : "47f96c37b4f2aac289f0bc1bacfa8bd8b4b209a488d3d15e2229cb6cc9b26449" 
+                }
+            ]
+        },
+        {
+            "name" : "gnupg",
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.7.tar.bz2",
+                    "sha256" : "d95b361ee6ef7eff86af40c8c72bf9313736ac9f7010d6604d78bf83818e976e" 
+                }
+            ]
+        },
+        {
+            "name" : "gpgme",
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.11.1.tar.bz2",
+                    "sha256" : "2d1b111774d2e3dd26dcd7c251819ce4ef774ec5e566251eb9308fa7542fbd6f" 
+                }
+            ]
+        },
+        {
             "name" : "ostree",
             "config-opts" : [
                 "--disable-man"
@@ -744,6 +808,38 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/flatpak/flatpak.git"
+                }
+            ]
+        },
+        {
+
+            "name" : "libdwarf",
+            "buildsystem": "simple",
+            "build-commands": [
+                "./configure --prefix /app --enable-shared", 
+                "make",
+                "make install",
+                "install -dm755 /app/include/libdwarf",
+                "install -m644 libdwarf/dwarf.h libdwarf/libdwarf.h /app/include/libdwarf/"
+            ],
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://www.prevanders.net/libdwarf-20180129.tar.gz",
+                    "sha256" : "8bd91b57064b0c14ade5a009d3a1ce819f1b6ec0e189fc876eb8f42a8720d8a6" 
+                }
+            ]
+        },
+        {
+            "name" : "elfutils",
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://sourceware.org/elfutils/ftp/0.170/elfutils-0.170.tar.bz2",
+                    "sha256" : "1f844775576b79bdc9f9c717a50058d08620323c1e935458223a12f249c9e066" 
                 }
             ]
         },
