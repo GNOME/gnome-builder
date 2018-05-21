@@ -1,0 +1,4965 @@
+# Romanian translation for gnome-builder.
+# Copyright (C) 2018 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+# Floren <>, 2018.
+# Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder gnome-builder-3-28\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
+"POT-Creation-Date: 2018-05-17 19:23+0000\n"
+"PO-Revision-Date: 2018-05-18 08:09+0200\n"
+"Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
+"Language-Team: Gnome Romanian Translation Team\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2);\n"
+"X-Generator: Virtaal 0.7.1\n"
+"X-Project-Style: gnome\n"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+msgid "Build Parallelism"
+msgstr "Generează paralelism"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+"Numărul de lucrători de utilizat când se execută generările. -1 pentru "
+"implicit. 0 pentru numărul de CPU."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Allow network when metered"
+msgstr "Permite rețeaua când este contorizată"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+"Activează transferurile automate în timpul generării cum ar fi descărcări "
+"SDK și dependențe când conexiunea este contorizată."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Suggest Snippet Completion"
+msgstr "Propune completare de bloc"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Allow snippets to be inserted into the document."
+msgstr "Permite blocurilor să fie introduse în document."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Clang based autocompletion (Experimental)"
+msgstr "Completare automată bazată pe Clang (experimental)"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid "Use Clang for autocompletion in the C and C++ languages."
+msgstr "Utilizează Clang pentru completare automată în limbajele C și C++."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Ctags based autocompletion"
+msgstr "Completare automată bazată pe Ctags"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "Use Ctags for autocompletion."
+msgstr "Utilizează Ctags pentru completare automată."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:20
+msgid "Enable auto-completion of words in document"
+msgstr "Activează completarea automată de cuvinte în document"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:21
+msgid ""
+"If enabled, words within the current document will be available for auto-"
+"completion."
+msgstr ""
+"Dacă este activat, cuvintele din documentul curent vor fi disponibile pentru "
+"completare automată."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:25
+msgid "Enable semantic highlighting"
+msgstr "Activează evidențierea semantică"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:26
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+"Dacă este activat, v-a fi furnizată evidențiere adițională în limbajele "
+"suportate pe baza informațiilor extrase din codul sursă."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:30
+msgid "Path to ctags executable"
+msgstr "Calea către executabilul ctags"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:31
+msgid "The path to the ctags executable on the system."
+msgstr "Calea către executabilul ctags pe sistem."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+msgid "Restore last position"
+msgstr "Restaurează ultima poziție"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid "Jump to the last position when reopening a file"
+msgstr "Sari la ultima poziție la redeschiderea unui fișier"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+msgid "Show modified lines"
+msgstr "Arată liniile modificate"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+"Dacă este activat, editorul va arăta adițiile și modificările de linii lângă "
+"codul sursă."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+msgid "Show diagnostics next to line number"
+msgstr "Arată diagnosticările lângă numărul de linie"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid ""
+"If enabled, the editor will show diagnostics to the left to the line numbers."
+msgstr ""
+"Dacă este activat, editorul va afișa diagnosticările la stânga numărului de "
+"linii."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+#: src/libide/editor/ide-editor-properties.ui:88
+msgid "Highlight current line"
+msgstr "Evidențiază linia curentă"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr "Dacă este activat, editorul va evidenția linia care conține cursorul."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+msgid "Highlight matching brackets"
+msgstr "Evidențiază parantezele pătrate pereche"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "Dacă este activat, editorul va evidenția parantezele pătrate pereche."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+#: src/libide/editor/ide-editor-properties.ui:62
+msgid "Show line numbers"
+msgstr "Arată numerele de linie"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+msgid "If enabled, the editor will show line numbers."
+msgstr "Dacă este activat, editorul va arăta numerele de linie."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: src/libide/preferences/ide-preferences-builtin.c:145
+msgid "Smart Backspace"
+msgstr "Backspace inteligent"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+"Backspace va elimina spațiile adiționale pentru a menține alinierea la "
+"dimensiunea indentării."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: src/libide/preferences/ide-preferences-builtin.c:144
+msgid "Smart Home and End"
+msgstr "Început și sfârșit inteligente"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+msgid "Whether or not Home moves to first non-space character."
+msgstr "Dacă se mută sau nu acasă la primul caracter diferit de spațiu."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
+msgid "Show grid lines"
+msgstr "Arată liniile de grilă"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr "Dacă este activat, editorul va arăta liniile de grilă în document."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:83
+#: src/libide/preferences/ide-preferences-builtin.c:172
+msgid "Show overview map"
+msgstr "Arată harta prezentării generale"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+"Dacă este activat, Builder va afișa o hartă a prezentării generale a "
+"fișierului sursă lângă editor."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:88
+msgid "Automatically Hide Overview Map"
+msgstr "Ascunde automat harta prezentării generale"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+"Dacă este activat, Builder va ascunde automat harta prezentării generale "
+"când focalizarea mausului părăsește editorul, sau când se întâmplă o limită "
+"de timp."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:93
+msgid "Draw Spaces"
+msgstr "Desenează spații"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:94
+msgid "The various types of space to draw in the editor."
+msgstr "Tipurile variate de spațiu de desenat în editor."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
+#: src/libide/preferences/ide-preferences-builtin.c:160
+msgid "Overscroll"
+msgstr "Derulare deasupra"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr "Numărul de linii de derulat peste sfârșitul memoriei amortizor."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
+msgid "Wrap Text"
+msgstr "Încadrează text"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+msgid ""
+"If enabled, Builder will automatically wrap text so all of the line text is "
+"visible."
+msgstr ""
+"Dacă este activat, Builder va încadra text automat pentru ca tot textul "
+"liniei să fie vizibil."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:109
+#: src/libide/preferences/ide-preferences-builtin.c:185
+msgid "Autosave Enabled"
+msgstr "Salvare automată activată"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
+msgid "Enable or disable autosave feature."
+msgstr "Activează sau dezactivează funcționalitatea de salvare automată."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:115
+#: src/libide/preferences/ide-preferences-builtin.c:186
+msgid "Autosave Frequency"
+msgstr "Frecvența de salvare automată"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
+msgid "The number of seconds after modification before auto saving."
+msgstr "Numărul de secunde după modificare înainte de salvarea automată."
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
+msgid "Spaces Style"
+msgstr "Stil de spații"
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
+msgid "How to apply spaces when reformatting text."
+msgstr "Cum să se aplice spațiile când se reformatează textul."
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+msgid "Enabled"
+msgstr "Activat"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr "Dacă tipul din extensie este activat."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr "Dimensiune fereastră"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr "Dimensiune fereastră (lățime și înălțime)."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window position"
+msgstr "Poziție fereastră"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window position (x and y)."
+msgstr "Poziție fereastră (x și y)."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:15
+msgid "Window maximized"
+msgstr "Fereastră maximizată"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:16
+msgid "Window maximized state"
+msgstr "Starea de fereastră maximizată"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:20
+msgid "Night Mode"
+msgstr "Modul de noapte"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:21
+msgid "Prefer dark application chrome."
+msgstr "Preferă cromul de aplicație întunecat."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:25
+msgid "Follow system night light"
+msgstr "Urmărește lumina de noapte a sistemului"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:26
+msgid "Use GNOME night light setting to activate night-mode."
+msgstr ""
+"Utilizează configurarea de lumină de noapte GNOME pentru a activa modul de "
+"noapte."
+
+#. Translators: This is the default directory name for user’s
+#. projects. Do NOT change the ASCII double quotes ("") to your
+#. language’s convention, e.g. do not use “” or »«.
+#: data/gsettings/org.gnome.builder.gschema.xml:32
+msgid "\"Projects\""
+msgstr "„Proiecte”"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:33
+#: src/libide/preferences/ide-preferences-builtin.c:412
+msgid "Projects directory"
+msgstr "Dosar proiecte"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:34
+msgid "Directory for all Builder projects."
+msgstr "Dosar pentru toate proiectele Builder."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:38
+msgid "Restore Previous Files"
+msgstr "Restaurează fișierele anterioare"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:39
+msgid "Restore previously opened files when loading a project."
+msgstr "Restaurează fișierele deschise anterior la încărcarea unui proiect."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:43
+msgid "Show Open Files"
+msgstr "Arată fișierele deschise"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:44
+msgid "Display the open files list in the project sidebar."
+msgstr "Afișează lista fișierelor deschise în bara laterală a proiectului."
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Plugin enabled"
+msgstr "Modul activat"
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+msgid "If the plugin should be enabled"
+msgstr "Dacă modulul ar trebui activat"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:7
+msgid "Selected configuration for building"
+msgstr "Configurația selectată pentru generare"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:8
+msgid ""
+"The configuration that has been selected and will be restored the next time "
+"the project loads."
+msgstr ""
+"Configurația care a fost selectată și care va fi restaurată data viitoare "
+"când se încarcă proiectul."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/gtk/menus.ui:84
+msgid "Show Icons"
+msgstr "Arată iconițele"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "If enabled, the project tree will display icons next to each item."
+msgstr ""
+"Dacă este activat, arborele proiectului va afișa iconițe lângă fiecare "
+"element."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/gtk/menus.ui:88
+msgid "Show Ignored Files"
+msgstr "Arată fișierele ignorate"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"Dacă este activat, arborele proiectului va afișa fișierele care sunt "
+"ignorate de VCS."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/gtk/menus.ui:92
+msgid "Sort Directories First"
+msgstr "Sortează mai întâi dosarele"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+"Dacă este activat, arborele proiectului va sorta dosarele înaintea "
+"fișierelor obișnuite."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
+msgid "Show Left Panel"
+msgstr "Arată panoul din stânga"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
+msgid "If enabled, the left panel will be displayed."
+msgstr "Dacă este activat, panoul din stânga va fi afișat."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
+msgid "Left Panel Position"
+msgstr "Poziția panoului din stânga"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
+msgid "The width in pixel units of the left panel."
+msgstr "Lățimea în unități pixel a panoului din stânga."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
+msgid "Show Right Panel"
+msgstr "Arată panoul din dreapta"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
+msgid "If enabled, the right panel will be displayed."
+msgstr "Dacă este activat, panoul din dreapta va fi afișat."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
+msgid "Right Panel Position"
+msgstr "Poziția panoului din dreapta"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
+msgid "The width in pixel units of the right panel."
+msgstr "Lățimea în unități pixel a panoului din dreapta."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
+msgid "Show Bottom Panel"
+msgstr "Arată panoul de jos"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
+msgid "If enabled, the bottom panel will be displayed."
+msgstr "Dacă este activat, panoul de jos va fi afișat."
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
+msgid "Bottom Panel Position"
+msgstr "Poziția panoului de jos"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
+msgid "The height in pixel units of the bottom panel."
+msgstr "Înălțimea în unități pixel a panoului de jos."
+
+#: data/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: src/libide/application/ide-application.c:689
+#: src/libide/greeter/ide-greeter-perspective.ui:195
+#: src/libide/preferences/ide-preferences-builtin.c:139
+#: src/libide/workbench/ide-workbench.c:646
+msgid "Builder"
+msgstr "Generator"
+
+#: data/org.gnome.Builder.appdata.xml.in:8
+#: src/libide/application/ide-application-actions.c:143
+msgid "An IDE for GNOME"
+msgstr "Un IDE pentru GNOME"
+
+#: data/org.gnome.Builder.appdata.xml.in:11
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Builder este un mediu de dezvoltare integrat dezvoltat activ pentru GNOME. "
+"Acesta combină suportul integrat pentru tehnologii GNOME esențiale cum ar fi "
+"GTK+, GLib și API-uri GNOME cu funcționalități care vor fi apreciate de "
+"orice dezvoltator, precum evidențierea sintaxei și blocuri de cod."
+
+#: data/org.gnome.Builder.appdata.xml.in:17
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+"Puteți să vă bazați pe lansări predictibile ale Builder cu fiecare nouă "
+"lansare a GNOME odată la șase luni."
+
+#: data/org.gnome.Builder.appdata.xml.in:21
+msgid "Features:"
+msgstr "Funcționalități:"
+
+#: data/org.gnome.Builder.appdata.xml.in:23
+msgid "Built in syntax highlighting for many languages"
+msgstr "Evidențiere de sintaxă încorporată pentru multe limbaje"
+
+#: data/org.gnome.Builder.appdata.xml.in:24
+msgid "Side-by-side code editors"
+msgstr "Editoare de cod alăturate"
+
+#: data/org.gnome.Builder.appdata.xml.in:25
+msgid "Integration with Git"
+msgstr "Integrare cu Git"
+
+#: data/org.gnome.Builder.appdata.xml.in:26
+msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
+msgstr "Integrare cu Autotools, Cargo, CMake, Meson, Make, și PHPize"
+
+#: data/org.gnome.Builder.appdata.xml.in:27
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Completare automată, evidențiere semantică și diagnosticare bazate pe Clang"
+
+#: data/org.gnome.Builder.appdata.xml.in:28
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Completare automată, evidențierea semanticii, și diagnosticări bazate pe "
+"Python"
+
+#: data/org.gnome.Builder.appdata.xml.in:29
+msgid "Vala based auto-completion and diagnostics"
+msgstr "Completare automată și diagnosticări bazate pe Vala"
+
+#: data/org.gnome.Builder.appdata.xml.in:30
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "Suport pentru indentare automată pentru C, Python, Vala, și XML"
+
+#: data/org.gnome.Builder.appdata.xml.in:31
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr ""
+"Previzualizare în direct de HTML, Markdown, și reStructuredText, și Sphinx"
+
+#: data/org.gnome.Builder.appdata.xml.in:32
+msgid "Optional Vim-style editing"
+msgstr "Editare optimă în stilul Vim"
+
+#: data/org.gnome.Builder.appdata.xml.in:33
+msgid "An integrated software profiler for native applications"
+msgstr "Profiler de software integrat pentru aplicații native"
+
+#: data/org.gnome.Builder.appdata.xml.in:34
+msgid "An integrated debugger for native applications"
+msgstr "Un depanator integrat pentru aplicații native"
+
+#: data/org.gnome.Builder.appdata.xml.in:35
+msgid "Support for building with jhbuild and flatpak runtimes"
+msgstr "Suport pentru generare cu executări jhbuild și flatpak"
+
+#: data/org.gnome.Builder.appdata.xml.in:41
+msgid "Quickly access your projects"
+msgstr "Accesați rapid proiectele"
+
+#: data/org.gnome.Builder.appdata.xml.in:45
+msgid "Create new projects from a variety of templates"
+msgstr "Creați proiecte noi de la o varietate de șabloane"
+
+#: data/org.gnome.Builder.appdata.xml.in:49
+msgid "Integration with Git to clone your projects"
+msgstr "Integrare cu Git pentru a clona proiectele"
+
+#: data/org.gnome.Builder.appdata.xml.in:53
+msgid "The source code editor"
+msgstr "Editorul de cod sursă"
+
+#: data/org.gnome.Builder.appdata.xml.in:57
+msgid "Fast global fuzzy search"
+msgstr "Căutare globală rapidă fuzzy"
+
+#: data/org.gnome.Builder.appdata.xml.in:61
+msgid "Debug with the GNU debugger"
+msgstr "Depanați cu depanatorul GNU"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Construiți programe pentru GNOME"
+
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.Builder.desktop.in.in:7
+msgid "org.gnome.Builder"
+msgstr "org.gnome.Builder"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Develop;Generare;Dezvoltare;Generează;Dezvoltă;"
+
+#: src/gstyle/gstyle-color-panel.c:953
+msgid "Palette: "
+msgstr "Paletă: "
+
+#: src/gstyle/gstyle-color-panel.c:955
+msgid "Palette"
+msgstr "Paletă"
+
+#: src/gstyle/gstyle-color-plane.c:1601
+msgid "Color Plane"
+msgstr "Plan de culoare"
+
+#: src/gstyle/gstyle-color-widget-actions.c:66
+msgid "Color name"
+msgstr "Numele culorii"
+
+#: src/gstyle/gstyle-color-widget-actions.c:68
+msgid "Enter a new name for the color"
+msgstr "Introduceți un nume nou pentru culoare"
+
+#: src/gstyle/gstyle-palette.c:492 src/gstyle/gstyle-palette.c:558
+#, c-format
+msgid "failed to parse line %i\n"
+msgstr "nu s-a putut parsa linia%i\n"
+
+#: src/gstyle/gstyle-palette.c:613
+#, c-format
+msgid "%s: palette is empty\n"
+msgstr "%s: paleta este goală\n"
+
+#: src/gstyle/gstyle-palette.c:719
+#, c-format
+msgid "%s: failed to parse\n"
+msgstr "%s: nu s-a putut parsa\n"
+
+#: src/gstyle/gstyle-palette.c:727
+#, c-format
+msgid "Unable to open %s\n"
+msgstr "Nu s-a putut deschide %s\n"
+
+#: src/gstyle/gstyle-palette.c:765
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr "%s: acest format de fișier nu este suportat\n"
+
+#: src/gstyle/gstyle-palette.c:822
+#, c-format
+msgid "failed to parse\n"
+msgstr "nu s-a putut parsa\n"
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: src/gstyle/gstyle-palette.c:829
+msgid "Generated"
+msgstr "Generat"
+
+#: src/gstyle/gstyle-palette.c:932
+#, c-format
+msgid "Unable to save %s\n"
+msgstr "Nu s-a putut salva %s\n"
+
+#: src/gstyle/gstyle-palette-widget.c:983
+#, c-format
+msgid "Unsaved palette %u"
+msgstr "Paletă nesalvată %u"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr "Componente culoare"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "S"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr "a*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "R"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:451
+msgid "G"
+msgstr "G"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:573
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:433
+msgid "Color strings"
+msgstr "Șiruri colorate"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:634
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:490
+msgid "HEX3"
+msgstr "HEX3"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:645
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:507
+msgid "HEX6"
+msgstr "HEX6"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:656
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:524
+msgid "RGB"
+msgstr "RGB"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:667
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:541
+msgid "RGBA"
+msgstr "RGBA"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:678
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:558
+msgid "HSL"
+msgstr "HSL"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:689
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:575
+msgid "HSLA"
+msgstr "HSLA"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "Palete"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:946
+#: src/plugins/color-picker/gtk/color-picker.ui:49
+msgid "No open palettes"
+msgstr "Nu sunt palete deschise"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr "Încărcați sau generați o paletă utilizând preferințele"
+
+#: src/gstyle/ui/gstyle-color-widget.ui:13
+#: src/libide/sourceview/ide-source-view.c:5130
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+msgid "Rename"
+msgstr "Redenumește"
+
+#: src/gstyle/ui/gstyle-color-widget.ui:19
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "Elimină"
+
+#: src/gstyle/ui/gstyle-rename-popover.ui:35
+#: src/plugins/project-tree/gb-rename-file-popover.ui:35
+#: src/plugins/project-tree/gtk/menus.ui:57
+msgid "_Rename"
+msgstr "_Redenumește"
+
+#: src/libide/application/ide-application-actions.c:149
+msgid "GNOME Builder"
+msgstr "Builder GNOME"
+
+#: src/libide/application/ide-application-actions.c:151
+msgid "translator-credits"
+msgstr "Florentina Mușat <florentina.musat.28@gmail.com>"
+
+#: src/libide/application/ide-application-actions.c:155
+msgid "Learn more about GNOME Builder"
+msgstr "Aflați mai multe despre Builder GNOME"
+
+#: src/libide/application/ide-application-actions.c:158
+msgid "Funded By"
+msgstr "Fondat de"
+
+#: src/libide/application/ide-application.c:1080
+#: src/libide/preferences/ide-preferences-builtin.c:409
+msgid "Projects"
+msgstr "Proiecte"
+
+#: src/libide/application/ide-application-command-line.c:102
+msgid "Commands:"
+msgstr "Comenzi:"
+
+#: src/libide/application/ide-application-command-line.c:187
+msgid "List available subcommands"
+msgstr "Listează comenzile disponibile"
+
+#: src/libide/application/ide-application-command-line.c:194
+msgid "Run Builder in standalone mode"
+msgstr "Rulează Builder în modul autonom"
+
+#: src/libide/application/ide-application-command-line.c:201
+msgid "Show the application’s version"
+msgstr "Arată versiunea aplicației"
+
+#: src/libide/application/ide-application-command-line.c:220
+msgid "Increase verbosity, may be specified multiple times"
+msgstr "Mărește gradul de detalii, poate fi specificată de mai multe ori"
+
+#: src/libide/application/ide-application-command-line.c:227
+msgid "Enter GApplication Service mode"
+msgstr "Intră în modul GApplication Service"
+
+#: src/libide/application/ide-application-command-line.c:234
+msgid "Opens the project specified by PATH"
+msgstr "Deschide proiectul specificat de CALE"
+
+#: src/libide/application/ide-application-command-line.c:235
+msgid "PATH"
+msgstr "CALE"
+
+#: src/libide/application/ide-application-command-line.c:242
+msgid "Clones the project specified by MANIFEST"
+msgstr "Clonează proiectul specificat de MANIFEST"
+
+#: src/libide/application/ide-application-command-line.c:243
+msgid "MANIFEST"
+msgstr "MANIFEST"
+
+#: src/libide/application/ide-application-command-line.c:275
+msgid "COMMAND"
+msgstr "COMANDĂ"
+
+#: src/libide/application/ide-application-command-line.c:338
+msgid "No commands available"
+msgstr "Nu sunt comenzi disponibile"
+
+#: src/libide/application/ide-application-command-line.c:381
+msgid "Please provide a command"
+msgstr "Furnizați o comandă"
+
+#: src/libide/application/ide-application-command-line.c:391
+msgid "No such tool"
+msgstr "Nu există unealta"
+
+#: src/libide/application/ide-application-command-line.c:405
+msgid "Please provide a worker plugin"
+msgstr "Furnizați un modul de lucrător"
+
+#: src/libide/application/ide-application-command-line.c:412
+msgid "Please provide a D-Bus address"
+msgstr "Furnizați o adresă D-Bus"
+
+#: src/libide/application/ide-application-command-line.c:421
+msgid "No such worker"
+msgstr "Niciun astfel de lucrător"
+
+#: src/libide/application/ide-application-shortcuts.c:44
+#: src/libide/application/ide-application-shortcuts.c:55
+#: src/libide/application/ide-application-shortcuts.c:66
+#: src/libide/runner/ide-run-manager.c:776
+#: src/libide/workbench/ide-workbench-shortcuts.c:33
+#: src/libide/workbench/ide-workbench-shortcuts.c:39
+#: src/libide/workbench/ide-workbench-shortcuts.c:45
+#: src/libide/workbench/ide-workbench-shortcuts.c:51
+#: src/libide/workbench/ide-workbench-shortcuts.c:78
+#: src/plugins/command-bar/gb-command-bar.c:694
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:222
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:228
+msgctxt "shortcut window"
+msgid "Workbench shortcuts"
+msgstr "Scurtături de suprafață de lucru"
+
+#: src/libide/application/ide-application-shortcuts.c:45
+#: src/libide/application/ide-application-shortcuts.c:67
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Ajutor"
+
+#: src/libide/application/ide-application-shortcuts.c:46
+msgctxt "shortcut window"
+msgid "Show the help window"
+msgstr "Arată fereastra de ajutor"
+
+#: src/libide/application/ide-application-shortcuts.c:56
+#: src/libide/keybindings/ide-shortcuts-window.ui:25
+#: src/libide/keybindings/ide-shortcuts-window.ui:463
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "Preferințe"
+
+#: src/libide/application/ide-application-shortcuts.c:57
+msgctxt "shortcut window"
+msgid "Show the preferences window"
+msgstr "Arată fereastra de preferințe"
+
+#: src/libide/application/ide-application-shortcuts.c:68
+msgctxt "shortcut window"
+msgid "Show the shortcuts window"
+msgstr "Arată fereastra de scurtături"
+
+#. translators: %s is replaced with the error message
+#: src/libide/buffers/ide-buffer.c:923
+#, c-format
+msgid "Failed to establish a monitor for background changes: %s"
+msgstr "Nu s-a putut stabili un monitor pentru modificările de plan secund: %s"
+
+#: src/libide/buffers/ide-buffer.c:2842
+msgid "The current language lacks a symbol resolver."
+msgstr "Limbajului curent îi lipsește un rezolvator de simbol."
+
+#: src/libide/buffers/ide-buffer-manager.c:704
+msgid "File too large to be opened."
+msgstr "Fișierul este prea mare pentru a putea fi deschis."
+
+#: src/libide/buffers/ide-buffer-manager.c:1990
+#, c-format
+msgid "unsaved document %u"
+msgstr "document nesalvat %u"
+
+#. translators: %s is replaced with the error message
+#. translators: %s is replaced with error message
+#. translators: %s is the error message
+#. translators: %s is the underlying error message
+#: src/libide/buffers/ide-buffer-manager.c:2029
+#: src/libide/buffers/ide-buffer-manager.c:2092
+#: src/libide/editor/ide-editor-view-actions.c:189
+#: src/libide/editor/ide-editor-view-actions.c:310
+#, c-format
+msgid "Failed to save file: %s"
+msgstr "Nu s-a putut salva fișierul: %s"
+
+#. translators: %s is replaced with the error message
+#: src/libide/buffers/ide-unsaved-files.c:251
+#, c-format
+msgid "Failed to save draft: %s"
+msgstr "Nu s-a putut salva ciorna: %s"
+
+#. translators: %s is replaced with the name of the configuration
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:639
+#, c-format
+msgid "%s (Copy)"
+msgstr "%s (copie)"
+
+#: src/libide/buildsystem/ide-build-manager.c:372
+#, c-format
+msgid "Failed to initialize build pipeline: %s"
+msgstr "Nu s-a putut inițializa linia de asamblare a generării: %s"
+
+#: src/libide/buildsystem/ide-build-manager.c:429
+#, c-format
+msgid "Failed to get device information: %s"
+msgstr "Nu s-au putut obține informațiile despre dispozitiv: %s"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:751
+msgid "The build pipeline is in a failed state"
+msgstr "Linia de asamblare a generării este într-o stare eșuată"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:761
+msgid "The build configuration has errors"
+msgstr "Configurația de generare are erori"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2724
+msgid "Pseudo terminal creation failed. Terminal features will be limited."
+msgstr ""
+"Crearea terminalului pseudo a eșuat. Funcționalitățile terminalului vor fi "
+"limitate."
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2924
+msgid "Cleaning…"
+msgstr "Se curăță…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2928
+#: src/libide/buildsystem/ide-build-pipeline.c:2985
+#: src/libide/workbench/ide-omni-bar.c:557
+msgid "Failed"
+msgstr "Eșuat"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2930
+#: src/libide/buildsystem/ide-build-pipeline.c:2993
+msgid "Ready"
+msgstr "Gata"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2945
+msgid "Downloading…"
+msgstr "Se descarcă…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2949
+msgid "Building dependencies…"
+msgstr "Se generează dependențele…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2953
+msgid "Bootstrapping…"
+msgstr "Se trece prin procesul de bootstrap…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2957
+msgid "Configuring…"
+msgstr "Se configurează…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2961
+msgid "Building…"
+msgstr "Se generează…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2965
+msgid "Installing…"
+msgstr "Se instalează…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2969
+msgid "Committing…"
+msgstr "Se comite…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2973
+msgid "Exporting…"
+msgstr "Se exportă…"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2977
+#: src/libide/buildsystem/ide-build-pipeline.c:2981
+#: src/libide/workbench/ide-omni-bar.c:584
+msgid "Success"
+msgstr "Succes"
+
+#: src/libide/buildsystem/ide-build-pipeline.c:2989
+msgid "Preparing…"
+msgstr "Se pregătește…"
+
+#: src/libide/buildsystem/ide-build-stage-transfer.c:127
+msgid "Cannot execute transfer while on metered connection"
+msgstr "Nu se poate executa transferul cu o conexiune contorizată"
+
+#: src/libide/buildui/ide-build-configuration-row.ui:43
+msgid "Duplicate the configuration"
+msgstr "Duplicare configurație"
+
+#: src/libide/buildui/ide-build-configuration-row.ui:59
+msgid "Delete the configuration"
+msgstr "Șterge configurația"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:11
+#: src/libide/preferences/ide-preferences-builtin.c:153
+#: src/libide/preferences/ide-preferences-builtin.c:321
+#: src/libide/preferences/ide-preferences-builtin.c:393
+msgid "General"
+msgstr "General"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:28
+msgid "The name of the build configuration"
+msgstr "Numele configurației de generare"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:37
+msgid "Name"
+msgstr "Nume"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:66
+msgid "Build System"
+msgstr "Sistem de generare"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:96
+msgid "Source Directory"
+msgstr "Dosar sursă"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:118
+msgid "The prefix to use when installing the project"
+msgstr "Prefixul de utilizat la instalarea proiectului"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:127
+msgid "Installation Prefix"
+msgstr "Prefix de instalare"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:148
+msgid "Options to use when bootstrapping the project"
+msgstr "Opțiuni de utilizat în procesul de bootstrap al proiectului"
+
+#. A field with options to pass to build configuration
+#: src/libide/buildui/ide-build-configuration-view.ui:157
+msgid "Configure Options"
+msgstr "Opțiuni de configurare"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:189
+#: src/libide/workbench/ide-omni-bar.ui:314
+msgid "Runtime"
+msgstr "Executare"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:217
+msgid "Environment"
+msgstr "Mediu"
+
+#: src/libide/buildui/ide-build-log-panel.c:257
+#: src/libide/editor/ide-editor-view-actions.c:241
+msgid "Save File"
+msgstr "Salvează fișierul"
+
+#: src/libide/buildui/ide-build-log-panel.c:260
+#: src/libide/editor/gtk/menus.ui:108
+msgid "_Save"
+msgstr "_Salvează"
+
+#: src/libide/buildui/ide-build-log-panel.c:261
+#: src/libide/editor/ide-editor-view.ui:51
+#: src/libide/greeter/ide-greeter-perspective.ui:205
+#: src/libide/greeter/ide-greeter-perspective.ui:253
+msgid "_Cancel"
+msgstr "_Anulează"
+
+#: src/libide/buildui/ide-build-log-panel.c:353
+msgid "Build Output"
+msgstr "Rezultat generare"
+
+#: src/libide/buildui/ide-build-log-panel.ui:32
+msgid "Clear build log"
+msgstr "Eliberează istoricul de generare"
+
+#: src/libide/buildui/ide-build-log-panel.ui:49
+#: src/libide/workbench/ide-omni-bar.ui:158
+msgid "Cancel build"
+msgstr "Anulează generarea"
+
+#: src/libide/buildui/ide-build-log-panel.ui:66
+msgid "Save build log"
+msgstr "Salvează istoricul generării"
+
+#: src/libide/buildui/ide-build-panel.c:109
+#: src/libide/buildui/ide-build-panel.c:185
+#: src/libide/buildui/ide-build-panel.c:222
+#: src/libide/buildui/ide-build-panel.ui:139
+#: src/libide/workbench/ide-omni-bar.ui:502
+msgid "Warnings"
+msgstr "Avertismente"
+
+#: src/libide/buildui/ide-build-panel.c:118
+#: src/libide/buildui/ide-build-panel.c:186
+#: src/libide/buildui/ide-build-panel.c:223
+#: src/libide/buildui/ide-build-panel.ui:160
+#: src/libide/workbench/ide-omni-bar.ui:474
+msgid "Errors"
+msgstr "Erori"
+
+#: src/libide/buildui/ide-build-panel.c:665
+#: src/libide/buildui/ide-build-workbench-addin.c:171
+msgid "Build Issues"
+msgstr "Probleme de generare"
+
+#: src/libide/buildui/ide-build-panel.ui:16
+msgid "Build status:"
+msgstr "Stare generare:"
+
+#: src/libide/buildui/ide-build-panel.ui:33
+msgid "Time completed:"
+msgstr "Timpul în care s-a completat:"
+
+#: src/libide/buildui/ide-build-panel.ui:50
+#: src/libide/buildui/ide-build-panel.ui:65
+msgid "—"
+msgstr "—"
+
+#: src/libide/buildui/ide-build-panel.ui:81
+msgid "Build Details"
+msgstr "Detalii generare"
+
+#: src/libide/buildui/ide-build-panel.ui:95
+msgid "Build pipeline is empty"
+msgstr "Linia de asamblare a generării este goală"
+
+#: src/libide/buildui/ide-build-perspective.c:452 src/libide/gtk/menus.ui:55
+msgid "Build Preferences"
+msgstr "Preferințe de generare"
+
+#: src/libide/buildui/ide-environment-editor.c:67
+msgid "New variable…"
+msgstr "Variabilă nouă…"
+
+#: src/libide/buildui/ide-environment-editor-row.ui:33
+msgid "Remove environment variable"
+msgstr "Elimină variabila de mediu"
+
+#: src/libide/debugger/gtk/menus.ui:10
+#: src/libide/debugger/ide-debugger-editor-addin.c:427
+msgid "Run with Debugger"
+msgstr "Rulează cu depanator"
+
+#: src/libide/debugger/ide-debugger-breakpoints-view.ui:22
+#: src/libide/debugger/ide-debugger-registers-view.ui:13
+msgid "ID"
+msgstr "ID"
+
+#: src/libide/debugger/ide-debugger-breakpoints-view.ui:34
+msgid "File"
+msgstr "Fișier"
+
+#: src/libide/debugger/ide-debugger-breakpoints-view.ui:46
+msgid "Line"
+msgstr "Linie"
+
+#: src/libide/debugger/ide-debugger-breakpoints-view.ui:58
+#: src/libide/debugger/ide-debugger-threads-view.ui:76
+msgid "Function"
+msgstr "Funcție"
+
+#: src/libide/debugger/ide-debugger-breakpoints-view.ui:70
+msgid "Address"
+msgstr "Adresă"
+
+#: src/libide/debugger/ide-debugger-breakpoints-view.ui:81
+#: src/libide/debugger/ide-debugger-locals-view.ui:28
+msgid "Type"
+msgstr "Tip"
+
+#: src/libide/debugger/ide-debugger-breakpoints-view.ui:91
+msgid "Hits"
+msgstr "Coliziuni"
+
+#: src/libide/debugger/ide-debugger-breakpoints-view.ui:102
+msgid "Expression"
+msgstr "Expresie"
+
+#: src/libide/debugger/ide-debugger-controls.ui:17
+msgid "Interrupt the program"
+msgstr "Întrerupe programul"
+
+#: src/libide/debugger/ide-debugger-controls.ui:30
+msgid "Continue running the program"
+msgstr "Continuă rularea programul"
+
+#: src/libide/debugger/ide-debugger-controls.ui:71
+msgid "Execute the current line, stepping into any function calls"
+msgstr "Execută linia curentă, intrând în orice apeluri de funcție"
+
+#: src/libide/debugger/ide-debugger-controls.ui:84
+msgid "Execute the current line, stepping over any function calls"
+msgstr "Execută linia curentă, trecând peste orice apeluri de funcție"
+
+#: src/libide/debugger/ide-debugger-controls.ui:97
+msgid "Run until the end of the function"
+msgstr "Rulează până la sfârșitul funcției"
+
+#: src/libide/debugger/ide-debugger-disassembly-view.ui:5
+msgid "Disassembly"
+msgstr "Dezasamblare"
+
+#: src/libide/debugger/ide-debugger-editor-addin.c:305
+msgid "Debugger"
+msgstr "Depanator"
+
+#: src/libide/debugger/ide-debugger-editor-addin.c:321
+msgid "Threads"
+msgstr "Thread-uri"
+
+#: src/libide/debugger/ide-debugger-editor-addin.c:347
+msgid "Breakpoints"
+msgstr "Puncte de întrerupere"
+
+#: src/libide/debugger/ide-debugger-editor-addin.c:355
+msgid "Libraries"
+msgstr "Bibioteci"
+
+#: src/libide/debugger/ide-debugger-editor-addin.c:363
+msgid "Registers"
+msgstr "Regiștri"
+
+#: src/libide/debugger/ide-debugger-editor-addin.c:371
+msgid "Log"
+msgstr "Istoric"
+
+#: src/libide/debugger/ide-debugger-editor-addin.c:394
+msgid "Failed to initialize the debugger"
+msgstr "Nu s-a putut inițializa depanatorul"
+
+#: src/libide/debugger/ide-debugger-libraries-view.ui:14
+msgid "Library"
+msgstr "Bibliotecă"
+
+#: src/libide/debugger/ide-debugger-libraries-view.ui:26
+msgid "Address Range"
+msgstr "Interval de adresă"
+
+#: src/libide/debugger/ide-debugger-locals-view.c:309
+msgid "Locals"
+msgstr "Locale"
+
+#: src/libide/debugger/ide-debugger-locals-view.c:364
+msgid "Parameters"
+msgstr "Parametri"
+
+#: src/libide/debugger/ide-debugger-locals-view.ui:16
+msgid "Variable"
+msgstr "Variabilă"
+
+#: src/libide/debugger/ide-debugger-locals-view.ui:41
+#: src/libide/debugger/ide-debugger-registers-view.ui:34
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:179
+msgid "Value"
+msgstr "Valoare"
+
+#: src/libide/debugger/ide-debugger-registers-view.ui:23
+msgid "Register"
+msgstr "Registru"
+
+#: src/libide/debugger/ide-debugger-threads-view.ui:19
+msgid "Group"
+msgstr "Grup"
+
+#: src/libide/debugger/ide-debugger-threads-view.ui:42
+msgid "Thread"
+msgstr "Thread"
+
+#: src/libide/debugger/ide-debugger-threads-view.ui:64
+#: src/libide/editor/gtk/menus.ui:62
+msgid "Frame"
+msgstr "Cadru"
+
+#: src/libide/debugger/ide-debugger-threads-view.ui:88
+msgid "Arguments"
+msgstr "Argumente"
+
+#: src/libide/debugger/ide-debugger-threads-view.ui:101
+msgid "Location"
+msgstr "Locație"
+
+#: src/libide/debugger/ide-debugger-threads-view.ui:112
+msgid "Binary"
+msgstr "Binar"
+
+#: src/libide/debugger/ide-debug-manager.c:970
+#, c-format
+msgid "A suitable debugger could not be found."
+msgstr "Nu s-a putut găsi un depanator potrivit."
+
+#: src/libide/devices/ide-device-manager.c:580
+msgid "Devices"
+msgstr "Dispozitive"
+
+#: src/libide/devices/ide-device-manager.c:728
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr "Nu se poate lansa dispozitivul, linia de generare nu este inițializată"
+
+#: src/libide/directory/ide-directory-vcs.c:55
+msgid "unversioned"
+msgstr "neversionat"
+
+#: src/libide/doap/xml-reader.c:327
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "Nu s-a putut parsa XML de la flux"
+
+#: src/libide/editorconfig/ide-editorconfig-file-settings.c:159
+msgid "No file was provided."
+msgstr "Nu s-a furnizat niciun fișier."
+
+#: src/libide/editor/gtk/menus.ui:9
+#: src/libide/editor/ide-editor-perspective.c:832
+#: src/libide/preferences/ide-preferences-builtin.c:104
+#: src/libide/preferences/ide-preferences-builtin.c:151
+msgid "Editor"
+msgstr "Editor"
+
+#: src/libide/editor/gtk/menus.ui:19
+#: src/libide/editor/ide-editor-search-bar.ui:213
+msgid "Regular expressions"
+msgstr "Expresii regulate"
+
+#: src/libide/editor/gtk/menus.ui:23
+#: src/libide/editor/ide-editor-search-bar.ui:227
+#: src/libide/terminal/ide-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "Majuscule semnificative"
+
+#: src/libide/editor/gtk/menus.ui:27
+#: src/libide/editor/ide-editor-search-bar.ui:240
+msgid "Match whole word only"
+msgstr "Potrivește doar întregul cuvânt"
+
+#: src/libide/editor/gtk/menus.ui:31
+msgid "_Wrap Around"
+msgstr "Încad_rează împrejur"
+
+#: src/libide/editor/gtk/menus.ui:37
+msgid "Cu_t"
+msgstr "_Taie"
+
+#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:105
+#: src/libide/gtk/menus.ui:234
+msgid "_Copy"
+msgstr "_Copiază"
+
+#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:109
+#: src/libide/gtk/menus.ui:238
+msgid "_Paste"
+msgstr "Li_pește"
+
+#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:113
+msgid "_Delete"
+msgstr "Șt_erge"
+
+#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:128
+#: src/libide/gtk/menus.ui:246
+msgid "Select _All"
+msgstr "Selecte_ază tot"
+
+#: src/libide/editor/gtk/menus.ui:64
+msgid "Move Left"
+msgstr "Mută la stânga"
+
+#: src/libide/editor/gtk/menus.ui:68
+msgid "Move Right"
+msgstr "Mută la dreapta"
+
+#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:119
+#: src/plugins/devhelp/gtk/menus.ui:11 src/plugins/terminal/gtk/menus.ui:25
+msgid "Close"
+msgstr "Închide"
+
+#: src/libide/editor/gtk/menus.ui:79
+msgid "Document"
+msgstr "Document"
+
+#: src/libide/editor/gtk/menus.ui:82
+msgid "Open in New Frame"
+msgstr "Deschide în cadru nou"
+
+#: src/libide/editor/gtk/menus.ui:87 src/plugins/terminal/gtk/menus.ui:7
+msgid "Split"
+msgstr "Separă"
+
+#: src/libide/editor/gtk/menus.ui:93 src/plugins/devhelp/gtk/menus.ui:7
+msgid "Print…"
+msgstr "Tipărește…"
+
+#: src/libide/editor/gtk/menus.ui:100
+msgid "Document Preferences"
+msgstr "Preferințe document"
+
+#: src/libide/editor/gtk/menus.ui:112
+msgid "Save _As"
+msgstr "S_alvează ca"
+
+#: src/libide/editor/gtk/menus.ui:127
+msgid "New File"
+msgstr "Fișier nou"
+
+#. translators: the user selected a number outside the value range for the document.
+#: src/libide/editor/ide-editor-layout-stack-controls.c:174
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr "Furnizați un număr între 1 și %u"
+
+#: src/libide/editor/ide-editor-layout-stack-controls.ui:23
+msgid "Go to line number"
+msgstr "Salt la linia cu numărul"
+
+#: src/libide/editor/ide-editor-layout-stack-controls.ui:82
+msgid "Go to Line"
+msgstr "Salt la linia"
+
+#: src/libide/editor/ide-editor-layout-stack-controls.ui:83
+msgid "Go"
+msgstr "Start"
+
+#: src/libide/editor/ide-editor-perspective-actions.c:70
+#: src/libide/workbench/ide-workbench-actions.c:78
+msgid "Open File"
+msgstr "Deschide un fișier"
+
+#: src/libide/editor/ide-editor-perspective-actions.c:73
+#: src/libide/greeter/ide-greeter-perspective.c:318
+#: src/libide/workbench/ide-workbench-actions.c:81
+#: src/plugins/color-picker/gb-color-picker-prefs.c:207
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:360
+msgid "Open"
+msgstr "Deschide"
+
+#: src/libide/editor/ide-editor-perspective-actions.c:74
+#: src/libide/editor/ide-editor-view-actions.c:244
+#: src/libide/editor/ide-editor-view-actions.c:351
+#: src/libide/greeter/ide-greeter-perspective.c:317
+#: src/libide/greeter/ide-greeter-perspective.c:1189
+#: src/libide/workbench/ide-workbench-actions.c:82
+#: src/plugins/color-picker/gb-color-picker-prefs.c:95
+#: src/plugins/color-picker/gb-color-picker-prefs.c:211
+#: src/plugins/color-picker/gb-color-picker-prefs.c:238
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:361
+#: src/plugins/terminal/gb-terminal-view-actions.c:273
+msgid "Cancel"
+msgstr "Anulează"
+
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:33
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:39
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:45
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:51
+#: src/libide/editor/ide-editor-view-shortcuts.c:31
+#: src/libide/editor/ide-editor-view-shortcuts.c:37
+#: src/libide/editor/ide-editor-view-shortcuts.c:43
+#: src/libide/editor/ide-editor-view-shortcuts.c:49
+#: src/libide/editor/ide-editor-view-shortcuts.c:55
+#: src/libide/editor/ide-editor-view-shortcuts.c:61
+#: src/libide/editor/ide-editor-view-shortcuts.c:67
+#: src/libide/editor/ide-editor-view-shortcuts.c:73
+#: src/libide/layout/ide-layout-stack-shortcuts.c:32
+#: src/libide/layout/ide-layout-stack-shortcuts.c:39
+#: src/libide/layout/ide-layout-stack-shortcuts.c:46
+#: src/libide/layout/ide-layout-stack-shortcuts.c:53
+#: src/libide/layout/ide-layout-stack-shortcuts.c:60
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:339
+#: src/plugins/comment-code/gbp-comment-code-view-addin.c:370
+#: src/plugins/comment-code/gbp-comment-code-view-addin.c:376
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:33
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:39
+#: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:100
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:54
+msgctxt "shortcut window"
+msgid "Editor shortcuts"
+msgstr "Scurtături de editor"
+
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:34
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:40
+#: src/libide/editor/ide-editor-view-shortcuts.c:32
+#: src/libide/editor/ide-editor-view-shortcuts.c:38
+#: src/libide/keybindings/ide-shortcuts-window.ui:89
+#: src/libide/layout/ide-layout-stack-shortcuts.c:33
+#: src/libide/layout/ide-layout-stack-shortcuts.c:40
+#: src/libide/layout/ide-layout-stack-shortcuts.c:47
+#: src/libide/layout/ide-layout-stack-shortcuts.c:54
+#: src/libide/layout/ide-layout-stack-shortcuts.c:61
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "Fișiere"
+
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:35
+msgctxt "shortcut window"
+msgid "Create a new document"
+msgstr "Creează un document nou"
+
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:41
+#: src/libide/keybindings/ide-shortcuts-window.ui:101
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "Deschide un document"
+
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:46
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:52
+#: src/libide/keybindings/ide-shortcuts-window.ui:69
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "Panouri"
+
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:47
+msgctxt "shortcut window"
+msgid "Toggle navigation panel"
+msgstr "Comută panoul de navigare"
+
+#: src/libide/editor/ide-editor-perspective-shortcuts.c:53
+msgctxt "shortcut window"
+msgid "Toggle utilities panel"
+msgstr "Comută panoul de utilități"
+
+#: src/libide/editor/ide-editor-properties.ui:4
+msgid "Properties"
+msgstr "Proprietăți"
+
+#: src/libide/editor/ide-editor-properties.ui:25
+msgid "Display"
+msgstr "Afișaj"
+
+#: src/libide/editor/ide-editor-properties.ui:75
+#: src/libide/preferences/ide-preferences-builtin.c:328
+msgid "Show right margin"
+msgstr "Arată marginea din dreapta"
+
+#: src/libide/editor/ide-editor-properties.ui:101
+msgid "Insert trailing newline"
+msgstr "Introduce linie nouă din urmă"
+
+#: src/libide/editor/ide-editor-properties.ui:114
+msgid "Overwrite trailing braces and quotations"
+msgstr "Suprascrie parantezele acolade și citatele din urmă"
+
+#: src/libide/editor/ide-editor-properties.ui:123
+msgid "Tabs and Indentation"
+msgstr "Taburi și indentare"
+
+#: src/libide/editor/ide-editor-properties.ui:153
+#: src/libide/preferences/ide-preferences-builtin.c:176
+msgid "Spaces"
+msgstr "Spații"
+
+#: src/libide/editor/ide-editor-properties.ui:164
+#: src/libide/preferences/ide-preferences-builtin.c:177
+msgid "Tabs"
+msgstr "Taburi"
+
+#: src/libide/editor/ide-editor-properties.ui:185
+msgid "2"
+msgstr "2"
+
+#: src/libide/editor/ide-editor-properties.ui:195
+msgid "3"
+msgstr "3"
+
+#: src/libide/editor/ide-editor-properties.ui:205
+msgid "4"
+msgstr "4"
+
+#: src/libide/editor/ide-editor-properties.ui:215
+msgid "8"
+msgstr "8"
+
+#: src/libide/editor/ide-editor-properties.ui:235
+msgid "Auto indent new lines"
+msgstr "Indentează automat liniile noi"
+
+#: src/libide/editor/ide-editor-properties.ui:249
+msgid "Smart backspace"
+msgstr "Backspace inteligent"
+
+#: src/libide/editor/ide-editor-properties.ui:250
+msgid "Enabling smart backspace will treat multiple spaces as a tabs"
+msgstr ""
+"Activarea de backspace inteligent va considera spațiile multiple ca taburi"
+
+#: src/libide/editor/ide-editor-properties.ui:265
+msgid "Language Syntax"
+msgstr "Sintaxă de limbaj"
+
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: src/libide/editor/ide-editor-properties.ui:321
+#: src/libide/preferences/ide-preferences-builtin.c:267
+msgid "Search languages…"
+msgstr "Caută limbajele…"
+
+#: src/libide/editor/ide-editor-search-bar.c:302
+#, c-format
+msgid "%u of %u"
+msgstr "%u din %u"
+
+#: src/libide/editor/ide-editor-search-bar.ui:122
+msgid "Replace"
+msgstr "Înlocuiește"
+
+#: src/libide/editor/ide-editor-search-bar.ui:134
+msgid "Replace All"
+msgstr "Înlocuiește tot"
+
+#: src/libide/editor/ide-editor-search-bar.ui:154
+msgid "Switch between Search and Search-and-Replace"
+msgstr "Comută între caută și caută și înlocuiește"
+
+#: src/libide/editor/ide-editor-search-bar.ui:174
+#: src/libide/terminal/ide-terminal-search.ui:100
+msgid "Show or hide search options such as case sensitivity"
+msgstr ""
+"Arată sau ascunde opțiunile de căutare cum ar fi majuscule semnificative"
+
+#. List of pages that are open
+#: src/libide/editor/ide-editor-sidebar.ui:31
+#: src/libide/layout/ide-layout-stack-header.ui:21
+msgid "Open Pages"
+msgstr "Pagini deschise"
+
+#. translators: %s is the error message
+#: src/libide/editor/ide-editor-view-actions.c:56
+#, c-format
+msgid "Failed to load file: %s"
+msgstr "Nu s-a putut încărca fișierul: %s"
+
+#. translators: %s is the error message
+#: src/libide/editor/ide-editor-view-actions.c:118
+#, c-format
+msgid "Print failed: %s"
+msgstr "Nu s-a putut tipări: %s"
+
+#: src/libide/editor/ide-editor-view-actions.c:244
+#: src/plugins/color-picker/gb-color-picker-prefs.c:234
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: src/plugins/terminal/gb-terminal-view-actions.c:274
+msgid "Save"
+msgstr "Salvează"
+
+#: src/libide/editor/ide-editor-view-actions.c:347
+msgid "Save File As"
+msgstr "Salvează fișierul ca"
+
+#: src/libide/editor/ide-editor-view-actions.c:350
+#: src/plugins/terminal/gtk/menus.ui:21
+msgid "Save As"
+msgstr "Salvează ca"
+
+#: src/libide/editor/ide-editor-view-shortcuts.c:33
+#: src/libide/keybindings/ide-shortcuts-window.ui:108
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "Salvează documentul"
+
+#: src/libide/editor/ide-editor-view-shortcuts.c:39
+msgctxt "shortcut window"
+msgid "Save the document with a new name"
+msgstr "Salvează documentul cu un nume nou"
+
+#: src/libide/editor/ide-editor-view-shortcuts.c:44
+#: src/libide/editor/ide-editor-view-shortcuts.c:50
+#: src/libide/editor/ide-editor-view-shortcuts.c:51
+#: src/libide/editor/ide-editor-view-shortcuts.c:56
+#: src/libide/editor/ide-editor-view-shortcuts.c:62
+#: src/libide/editor/ide-editor-view-shortcuts.c:68
+#: src/libide/editor/ide-editor-view-shortcuts.c:74
+#: src/libide/keybindings/ide-shortcuts-window.ui:144
+#: src/libide/keybindings/ide-shortcuts-window.ui:156
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "Caută și înlocuiește"
+
+#: src/libide/editor/ide-editor-view-shortcuts.c:45
+#: src/libide/keybindings/ide-shortcuts-window.ui:149
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Caută"
+
+#: src/libide/editor/ide-editor-view-shortcuts.c:57
+msgctxt "shortcut window"
+msgid "Move to the next match"
+msgstr "Mută la potrivirea următoare"
+
+#: src/libide/editor/ide-editor-view-shortcuts.c:63
+msgctxt "shortcut window"
+msgid "Move to the previous match"
+msgstr "Mută la potrivirea anterioară"
+
+#: src/libide/editor/ide-editor-view-shortcuts.c:69
+msgctxt "shortcut window"
+msgid "Move to the next error"
+msgstr "Mută la eroarea următoare"
+
+#: src/libide/editor/ide-editor-view-shortcuts.c:75
+msgctxt "shortcut window"
+msgid "Move to the previous error"
+msgstr "Mută la eroarea anterioară"
+
+#: src/libide/editor/ide-editor-view.ui:43
+msgid "_Reload"
+msgstr "_Reîncarcă"
+
+#: src/libide/editor/ide-editor-view.ui:64
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+"Builder a descoperit că acest fișier a fost modificat extern. Doriți să "
+"reîncărcați fișierul?"
+
+#: src/libide/editor/ide-editor-workbench-addin.c:177
+msgid "Toggle navigation panel"
+msgstr "Comută panoul de navigare"
+
+#: src/libide/editor/ide-editor-workbench-addin.c:191
+msgid "Toggle utilities panel"
+msgstr "Comută panoul de utilități"
+
+#: src/libide/greeter/ide-greeter-perspective.c:214
+msgid "Failed to load the project"
+msgstr "Nu s-a putut încărca proiectul"
+
+#: src/libide/greeter/ide-greeter-perspective.c:313
+msgid "Open Project"
+msgstr "Deschide un proiect"
+
+#: src/libide/greeter/ide-greeter-perspective.c:329
+msgid "All Project Types"
+msgstr "Toate tipurile de proiect"
+
+#: src/libide/greeter/ide-greeter-perspective.c:1186
+msgid ""
+"Removing project files will delete them from your computer and cannot be "
+"undone."
+msgstr ""
+"Eliminarea fișierelor de proiect le va șterge de pe calculator și nu se "
+"poate reface."
+
+#: src/libide/greeter/ide-greeter-perspective.c:1190
+msgid "Delete Project Files"
+msgstr "Șterge fișiere de proiect"
+
+#. the action:// link is used to jump to the new-project view
+#: src/libide/greeter/ide-greeter-perspective.ui:52
+msgid "Why not <a href=\"action://app.new-project\">create a new project</a>?"
+msgstr ""
+"De ce nu <a href=\"action://app.new-project\">creați un proiect nou</a>?"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:53
+msgid "No projects found"
+msgstr "Nu s-au găsit proiecte"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:112
+msgid "_Remove"
+msgstr "_Elimină"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:124
+msgid "Remove Project Files…"
+msgstr "Elimină fișiere de proiect…"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:169
+msgid "Select a Project"
+msgstr "Selectați un proiect"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:178
+msgid "Click an item to select"
+msgstr "Clic pe un element pentru a selecta"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:217
+msgid "Open…"
+msgstr "Deschide…"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:232
+msgid "Select projects for removal"
+msgstr "Selectați proiectele pentru eliminare"
+
+#: src/libide/greeter/ide-greeter-perspective.ui:252
+msgid "Return to project selection"
+msgstr "Înapoi la selectarea proiectului"
+
+#: src/libide/gsettings/ide-language-defaults.c:214
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s a conținut ASCII nevalide"
+
+#: src/libide/gsettings/ide-language-defaults.c:229
+#, c-format
+msgid "Failed to parse integer from “%s”"
+msgstr "Nu s-a putut parsa întregul de la „%s”"
+
+#: src/libide/gsettings/ide-language-defaults.c:304
+msgid "language defaults missing version in [global] group."
+msgstr ""
+"configurărilor implicite de limbă le lipsesc versiunea în grupul [global]."
+
+#: src/libide/gsettings/ide-language-defaults.c:398
+msgid "Failed to initialize defaults."
+msgstr "Nu s-au putut inițializa implicitele."
+
+#: src/libide/gtk/menus.ui:7
+msgid "_New Project"
+msgstr "Proiect _nou"
+
+#: src/libide/gtk/menus.ui:11
+msgid "_Open Project"
+msgstr "Deschide un pr_oiect"
+
+#: src/libide/gtk/menus.ui:15
+msgid "_Clone Repository"
+msgstr "_Clonează un depozit"
+
+#: src/libide/gtk/menus.ui:22
+msgid "_Preferences"
+msgstr "_Preferințe"
+
+#: src/libide/gtk/menus.ui:30
+msgid "Keyboard _Shortcuts"
+msgstr "_Scurtături de tastatură"
+
+#: src/libide/gtk/menus.ui:34
+msgid "_Help"
+msgstr "_Ajutor"
+
+#: src/libide/gtk/menus.ui:38
+msgid "_About"
+msgstr "_Despre"
+
+#: src/libide/gtk/menus.ui:42
+msgid "_Quit"
+msgstr "_Ieșire"
+
+#: src/libide/gtk/menus.ui:64
+#: src/libide/preferences/ide-preferences-perspective.c:137
+#: src/libide/preferences/ide-preferences-window.ui:9
+msgid "Preferences"
+msgstr "Preferințe"
+
+#: src/libide/gtk/menus.ui:73
+msgid "Save _All"
+msgstr "S_alvează tot"
+
+#: src/libide/gtk/menus.ui:84
+msgid "_Go to Definition"
+msgstr "Navi_ghează la definiție"
+
+#: src/libide/gtk/menus.ui:90
+msgid "_Undo"
+msgstr "An_ulează"
+
+#: src/libide/gtk/menus.ui:94
+msgid "_Redo"
+msgstr "_Refă"
+
+#: src/libide/gtk/menus.ui:100
+msgid "C_ut"
+msgstr "_Taie"
+
+#: src/libide/gtk/menus.ui:121
+#: src/libide/preferences/ide-preferences-builtin.c:194
+#: src/plugins/spellcheck/gtk/menus.ui:12
+msgid "Highlighting"
+msgstr "Evidențiere"
+
+#: src/libide/gtk/menus.ui:126 src/libide/gtk/menus.ui:244
+msgid "Selection"
+msgstr "Selecție"
+
+#: src/libide/gtk/menus.ui:133 src/libide/gtk/menus.ui:251
+msgid "Select _None"
+msgstr "_Nu selecta nimic"
+
+#: src/libide/gtk/menus.ui:139
+msgid "All _Upper Case"
+msgstr "Totul cu majusc_ule"
+
+#: src/libide/gtk/menus.ui:144
+msgid "All _Lower Case"
+msgstr "Totul cu minuscu_le"
+
+#: src/libide/gtk/menus.ui:149
+msgid "_Invert Case"
+msgstr "_Inversează majusculele semnificative"
+
+#: src/libide/gtk/menus.ui:154
+msgid "_Title Case"
+msgstr "Majuscule semnificative de _titlu"
+
+#: src/libide/gtk/menus.ui:161
+msgid "Join Lines"
+msgstr "Alătură liniile"
+
+#: src/libide/gtk/menus.ui:165
+msgid "Sort Lines"
+msgstr "Sortează liniile"
+
+#: src/libide/gtk/menus.ui:174
+msgid "Zoom"
+msgstr "Focalizare"
+
+#: src/libide/gtk/menus.ui:176
+msgid "Zoom _In"
+msgstr "Măr_ire"
+
+#: src/libide/gtk/menus.ui:181
+msgid "Zoom _Out"
+msgstr "Micș_orare"
+
+#: src/libide/gtk/menus.ui:187 src/plugins/terminal/gtk/menus.ui:13
+msgid "Reset"
+msgstr "Restabilește"
+
+#: src/libide/gtk/menus.ui:201 src/libide/layout/ide-layout-stack.ui:105
+msgid "Open File…"
+msgstr "Deschide un fișier…"
+
+#: src/libide/gtk/menus.ui:212 src/libide/runner/ide-run-manager.c:1114
+msgid "Run"
+msgstr "Rulează"
+
+#: src/libide/gtk/menus.ui:221
+msgid "_Open Link"
+msgstr "_Deschide o legătură"
+
+#: src/libide/gtk/menus.ui:226
+msgid "_Copy Link Address"
+msgstr "_Copiază adresa legăturii"
+
+#: src/libide/ide.c:58
+#, c-format
+msgid "You must call %s() before using libide."
+msgstr "Trebuie să apelați %s() înainte să utilizați libide."
+
+#: src/libide/ide-context.c:2114
+msgid "An unload request is already pending"
+msgstr "O cerere de descărcare este deja în așteptare"
+
+#: src/libide/ide-context.c:2233
+msgid "Context has already been restored."
+msgstr "Contextul a fost restaurat deja."
+
+#: src/libide/ide-object.c:345
+#, c-format
+msgid "No implementations of extension point “%s”."
+msgstr "Nu sunt implementări ale punctului de extensie „%s”."
+
+#: src/libide/ide-object.c:454
+#, c-format
+msgid "Failed to locate %s plugin."
+msgstr "Nu s-a putut localiza modulul %s."
+
+#: src/libide/ide-object.c:589
+msgid "No such extension point."
+msgstr "Nu există un astfel de punct de extensie."
+
+#: src/libide/ide-object.c:599
+msgid "No implementations of extension point."
+msgstr "Nu sunt implementări ale punctului de extensie."
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:10
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "Scurtături de editor"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:14
+#: src/libide/keybindings/ide-shortcuts-window.ui:452
+#: src/libide/workbench/ide-workbench-shortcuts.c:34
+#: src/libide/workbench/ide-workbench-shortcuts.c:52
+#: src/plugins/command-bar/gb-command-bar.c:695
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:223
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:229
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Generale"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:18
+#: src/libide/keybindings/ide-shortcuts-window.ui:456
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "Căutare globală"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:32
+#: src/libide/keybindings/ide-shortcuts-window.ui:470
+#: src/plugins/command-bar/gb-command-bar.c:696
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "Bara de comenzi"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:39
+#: src/libide/keybindings/ide-shortcuts-window.ui:477
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:224
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "Terminal"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:46
+#: src/libide/keybindings/ide-shortcuts-window.ui:484
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:230
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr "Terminal în executarea de generare"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:53
+#: src/libide/keybindings/ide-shortcuts-window.ui:491
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "Scurtături de tastatură"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:60
+msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr "Comută modul de focalizare"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:73
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "Comută panoul din stânga"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:80
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "Comută panoul de jos"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:94
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "Creează un document nou"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:115
+#: src/libide/layout/ide-layout-stack-shortcuts.c:62
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "Închide documentul"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:122
+#: src/libide/keybindings/ide-shortcuts-window.ui:430
+#: src/libide/layout/ide-layout-stack-shortcuts.c:55
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "Comută la documentul următor"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:129
+#: src/libide/keybindings/ide-shortcuts-window.ui:437
+#: src/libide/layout/ide-layout-stack-shortcuts.c:48
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "Comută la documentul anterior"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:136
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "Arată lista de documente deschise"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:163
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "Caută potrivirea următoare"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:170
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "Caută potrivirea anterioară"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:177
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "Eliberează evidențierea"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:185
+#: src/libide/keybindings/ide-shortcuts-window.ui:500
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "Copiere și lipire"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:190
+#: src/libide/keybindings/ide-shortcuts-window.ui:505
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "Copiază textul selectat în clipboard"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:197
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "Taie textul selectat în clipboard"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:204
+#: src/libide/keybindings/ide-shortcuts-window.ui:512
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "Lipește text din clipboard"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:211
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "Duplică linia sau selecția curentă"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:219
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "Anulează și refă"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:224
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "Anulează comanda anterioară"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:231
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "Refă comanda anterioară"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:239
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:340
+#: src/plugins/comment-code/gbp-comment-code-view-addin.c:371
+#: src/plugins/comment-code/gbp-comment-code-view-addin.c:377
+#: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:101
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "Editare"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:244
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "Incrementează numărul la cursor"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:251
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "Decrementează numărul la cursor"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:258
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "Alătură liniile selectate"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:265
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "Arată fereastra de completare"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:272
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "Comută suprascrierea"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:279
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "Reindentează linia"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:286
+msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "Șterge linia"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:293
+msgctxt "shortcut window"
+msgid "Rename symbol"
+msgstr "Redenumește simbolul"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:294
+msgctxt "shortcut window"
+msgid "Requires semantic language support"
+msgstr "Necesită suport de limbaj semantic"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:302
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Navigare"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:307
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "Mută la eroarea următoare în fișier"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:314
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "Mută la eroarea anterioară în fișier"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:321
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "Mută la locația de editare anterioară"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:328
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "Mută la locația de editare următoare"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:335
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "Sari la definiția simbolului"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:342
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr "Mută vizorul în sus în fișier"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:349
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr "Mută vizorul în jos în fișier"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:356
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr "Mută vizorul la sfârșitul fișierului"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:363
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr "Mută vizorul la începutul fișierului"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:370
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr "Mută la paranteza pătrată pereche"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:378
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "Selectări"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:383
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "Selectează tot"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:390
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "Deselectează tot"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:398
+#: src/libide/runner/ide-run-manager.c:777
+#: src/libide/workbench/ide-workbench-shortcuts.c:46
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "Generează și rulează"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:403
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "Generează"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:410
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "Rulează"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:417
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "Profilează"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:425
+msgctxt "shortcut window"
+msgid "Touchpad gestures"
+msgstr "Gesturi touchpad"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:448
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "Scurtături de terminal"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:520
+#: src/libide/workbench/ide-workbench-shortcuts.c:40
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Caută"
+
+#: src/libide/keybindings/ide-shortcuts-window.ui:525
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "Caută text în terminal"
+
+#. translators: %s is replaced with the error message
+#: src/libide/langserv/ide-langserv-client.c:895
+#, c-format
+msgid "Failed to initialize language server: %s"
+msgstr "Nu s-a putut inițializa serverul de limbaj: %s"
+
+#: src/libide/layout/ide-layout-stack.c:171
+#: src/libide/layout/ide-layout-stack.ui:8
+msgid "No Open Pages"
+msgstr "Nu sunt pagini deschise"
+
+#: src/libide/layout/ide-layout-stack-header.ui:48
+msgid "Open file"
+msgstr "Deschide un fișier"
+
+#: src/libide/layout/ide-layout-stack-header.ui:65
+msgid "New file"
+msgstr "Fișier nou"
+
+#: src/libide/layout/ide-layout-stack-header.ui:80
+#: src/libide/layout/ide-layout-stack.ui:89
+msgid "New terminal"
+msgstr "Terminal nou"
+
+#: src/libide/layout/ide-layout-stack-header.ui:96
+msgid "New documentation"
+msgstr "Documentație nouă"
+
+#: src/libide/layout/ide-layout-stack-shortcuts.c:34
+msgctxt "shortcut window"
+msgid "Move document to the right"
+msgstr "Mută documentul la dreapta"
+
+#: src/libide/layout/ide-layout-stack-shortcuts.c:41
+msgctxt "shortcut window"
+msgid "Move document to the left"
+msgstr "Mută documentul la stânga"
+
+#: src/libide/layout/ide-layout-stack.ui:33
+msgid "Open a File or Terminal"
+msgstr "Deschide un fișier sau terminal"
+
+#: src/libide/layout/ide-layout-stack.ui:47
+msgid "Use the page switcher above or use one of the following:"
+msgstr "Utilizați comutatorul de pagină de mai sus sau una din următoarele:"
+
+#: src/libide/layout/ide-layout-stack.ui:62
+msgid "Search"
+msgstr "Caută"
+
+#: src/libide/layout/ide-layout-stack.ui:71
+msgid "Project sidebar"
+msgstr "Bară laterală proiect"
+
+#: src/libide/layout/ide-layout-stack.ui:80
+msgid "File chooser"
+msgstr "Selector de fișier"
+
+#: src/libide/layout/ide-layout-stack.ui:112
+msgid "New Terminal"
+msgstr "Terminal nou"
+
+#: src/libide/layout/ide-layout-stack.ui:124
+msgid "Uh oh, something went wrong"
+msgstr "Ceva nu a mers bine"
+
+#: src/libide/layout/ide-layout-stack.ui:125
+msgid "There was a failure while trying to perform the operation."
+msgstr "A apărut o eroare în timp ce se încerca executarea operației."
+
+#. translators: %s is replaced with the host name
+#: src/libide/local/ide-local-device.c:207
+#, c-format
+msgid "My Computer (%s)"
+msgstr "Calculator (%s)"
+
+#. translators: first %s is replaced with the host name, second with CPU architecture
+#: src/libide/local/ide-local-device.c:216
+#, c-format
+msgid "My Computer (%s) — %s"
+msgstr "Calculator (%s) — %s"
+
+#: src/libide/preferences/ide-preferences-builtin.c:59
+#: src/libide/preferences/ide-preferences-builtin.c:60
+msgid "Extensions"
+msgstr "Extensii"
+
+#: src/libide/preferences/ide-preferences-builtin.c:96
+msgid "Appearance"
+msgstr "Aspect"
+
+#: src/libide/preferences/ide-preferences-builtin.c:98
+msgid "Themes"
+msgstr "Teme"
+
+#: src/libide/preferences/ide-preferences-builtin.c:99
+msgid "Dark Mode"
+msgstr "Mod întunecat"
+
+#: src/libide/preferences/ide-preferences-builtin.c:99
+msgid "Whether Builder should use a dark theme"
+msgstr "Dacă Builder ar trebui sau nu să utilizeze o temă întunecată"
+
+#: src/libide/preferences/ide-preferences-builtin.c:99
+msgid "dark theme"
+msgstr "temă întunecată"
+
+#: src/libide/preferences/ide-preferences-builtin.c:100
+msgid "Night Light"
+msgstr "Lumină de noapte"
+
+#: src/libide/preferences/ide-preferences-builtin.c:100
+msgid "Automatically enable dark mode at night"
+msgstr "Activează automat modul întunecat pe timpul nopții"
+
+#: src/libide/preferences/ide-preferences-builtin.c:100
+msgid "follow night light"
+msgstr "urmărește lumina de noapte"
+
+#: src/libide/preferences/ide-preferences-builtin.c:101
+msgid "Grid Pattern"
+msgstr "Model de grilă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:101
+msgid "Display a grid pattern underneath source code"
+msgstr "Afișează un model de grilă sub codul sursă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:103
+msgid "Font"
+msgstr "Font"
+
+#: src/libide/preferences/ide-preferences-builtin.c:104
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr "editor font monospațiat"
+
+#. XXX: This belongs in terminal addin
+#: src/libide/preferences/ide-preferences-builtin.c:106
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:293
+#: src/plugins/terminal/gtk/menus.ui:5
+msgid "Terminal"
+msgstr "Terminal"
+
+#: src/libide/preferences/ide-preferences-builtin.c:106
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr "terminal font monospațiat"
+
+#: src/libide/preferences/ide-preferences-builtin.c:111
+msgid "Color Scheme"
+msgstr "Schemă de culori"
+
+#: src/libide/preferences/ide-preferences-builtin.c:136
+msgid "Keyboard"
+msgstr "Tastatură"
+
+#: src/libide/preferences/ide-preferences-builtin.c:138
+msgid "Emulation"
+msgstr "Emulare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:139
+msgid "Default keybinding mode which mimics gedit"
+msgstr "Modul de combinație de taste implicit care imită gedit"
+
+#: src/libide/preferences/ide-preferences-builtin.c:140
+msgid "Emacs"
+msgstr "Emacs"
+
+#: src/libide/preferences/ide-preferences-builtin.c:140
+msgid "Emulates the Emacs text editor"
+msgstr "Emulează editorul de text Emacs"
+
+#: src/libide/preferences/ide-preferences-builtin.c:141
+msgid "Vim"
+msgstr "Vim"
+
+#: src/libide/preferences/ide-preferences-builtin.c:141
+msgid "Emulates the Vim text editor"
+msgstr "Emulează editorul de text Vim"
+
+#: src/libide/preferences/ide-preferences-builtin.c:143
+msgid "Movement"
+msgstr "Deplasare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:144
+msgid "Home moves to first non-whitespace character"
+msgstr "Home mută la primul caracter care nu este spațiere"
+
+#: src/libide/preferences/ide-preferences-builtin.c:145
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+"Backspace va elimina spațiul extra pentru a menține alinierea cu indentarea"
+
+#: src/libide/preferences/ide-preferences-builtin.c:154
+msgid "Display list of open files"
+msgstr "Afișează lista fișierelor deschise"
+
+#: src/libide/preferences/ide-preferences-builtin.c:154
+msgid "Display the list of all open files in the project sidebar"
+msgstr ""
+"Afișează lista cu toate fișierele deschise în bara laterală a proiectului"
+
+#: src/libide/preferences/ide-preferences-builtin.c:156
+msgid "Cursor"
+msgstr "Cursor"
+
+#: src/libide/preferences/ide-preferences-builtin.c:157
+msgid "Restore cursor position"
+msgstr "Restaurează poziția cursorului"
+
+#: src/libide/preferences/ide-preferences-builtin.c:157
+msgid "Restore cursor position when a file is reopened"
+msgstr "Restaurează poziția cursorului când un fișier este redeschis"
+
+#: src/libide/preferences/ide-preferences-builtin.c:158
+msgid "Enable text wrapping"
+msgstr "Activează încadrarea de text"
+
+#: src/libide/preferences/ide-preferences-builtin.c:158
+msgid "Wrap text that is too wide to display"
+msgstr "Încadrează textul care este prea larg pentru a fi afișat"
+
+#: src/libide/preferences/ide-preferences-builtin.c:159
+msgid "Scroll Offset"
+msgstr "Decalaj de derulare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:159
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr "Numărul minim de linii de păstrat deasupra și sub cursor"
+
+#: src/libide/preferences/ide-preferences-builtin.c:160
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr "Permite editorului să deruleze peste sfârșitul preîncărcării"
+
+#: src/libide/preferences/ide-preferences-builtin.c:162
+msgid "Line Information"
+msgstr "Informații de linie"
+
+#: src/libide/preferences/ide-preferences-builtin.c:163
+msgid "Line numbers"
+msgstr "Numere de linii"
+
+#: src/libide/preferences/ide-preferences-builtin.c:163
+msgid "Show line number at beginning of each line"
+msgstr "Arată numărul de linie la începutul fiecărei linii"
+
+#: src/libide/preferences/ide-preferences-builtin.c:164
+msgid "Line changes"
+msgstr "Modificări de linie"
+
+#: src/libide/preferences/ide-preferences-builtin.c:164
+msgid "Show if a line was added or modified next to line number"
+msgstr ""
+"Arată dacă o linie a fost adăugată sau modificată lângă numărul de linie"
+
+#: src/libide/preferences/ide-preferences-builtin.c:165
+msgid "Line diagnostics"
+msgstr "Diagnosticări de linie"
+
+#: src/libide/preferences/ide-preferences-builtin.c:165
+msgid "Show an icon next to line numbers indicating type of diagnostic"
+msgstr ""
+"Arată o iconiță lângă numerele de linii care indică tipul de diagnostic"
+
+#: src/libide/preferences/ide-preferences-builtin.c:167
+msgid "Highlight"
+msgstr "Evidențiere"
+
+#: src/libide/preferences/ide-preferences-builtin.c:168
+msgid "Current line"
+msgstr "Linie curentă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:168
+msgid "Make current line stand out with highlights"
+msgstr "Modifică linia curentă să iasă în evidență cu evidențieri"
+
+#: src/libide/preferences/ide-preferences-builtin.c:169
+msgid "Matching brackets"
+msgstr "Paranteze pătrate pereche"
+
+#: src/libide/preferences/ide-preferences-builtin.c:169
+msgid "Highlight matching brackets based on cursor position"
+msgstr "Evidențiază parantezele pătrate pereche pe baza poziției cursorului"
+
+#: src/libide/preferences/ide-preferences-builtin.c:171
+msgid "Code Overview"
+msgstr "Prezentare generală a codului"
+
+#: src/libide/preferences/ide-preferences-builtin.c:172
+msgid "A zoomed out view to enhance navigating source code"
+msgstr "O vizualizare micșorată pentru a îmbunătăți navigarea în codul sursă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:173
+msgid "Automatically hide overview map"
+msgstr "Ascunde automat harta prezentării generale"
+
+#: src/libide/preferences/ide-preferences-builtin.c:173
+msgid "Automatically hide map when editor loses focus"
+msgstr "Ascunde automat harta când editorul pierde focalizarea"
+
+#: src/libide/preferences/ide-preferences-builtin.c:175
+msgid "Visible Whitespace Characters"
+msgstr "Caractere de spațiere vizibile"
+
+#: src/libide/preferences/ide-preferences-builtin.c:178
+msgid "New line and carriage return"
+msgstr "Linie nouă și retur la început de linie"
+
+#: src/libide/preferences/ide-preferences-builtin.c:179
+msgid "Non-breaking spaces"
+msgstr "Spații de unire"
+
+#: src/libide/preferences/ide-preferences-builtin.c:180
+msgid "Spaces inside of text"
+msgstr "Spații din interiorul textului"
+
+#: src/libide/preferences/ide-preferences-builtin.c:181
+msgid "Trailing Only"
+msgstr "Doar cele din urmă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:182
+msgid "Leading Only"
+msgstr "Doar cele din față"
+
+#: src/libide/preferences/ide-preferences-builtin.c:184
+msgid "Autosave"
+msgstr "Salvare automată"
+
+#: src/libide/preferences/ide-preferences-builtin.c:185
+msgid "Enable or disable autosave feature"
+msgstr "Activează sau dezactivează funcționalitatea de salvare automată"
+
+#: src/libide/preferences/ide-preferences-builtin.c:186
+msgid "The number of seconds after modification before auto saving"
+msgstr "Numărul de secunde după modificare înainte de salvarea automată"
+
+#: src/libide/preferences/ide-preferences-builtin.c:192
+msgid "Code Insight"
+msgstr "Înțelegere cod"
+
+#: src/libide/preferences/ide-preferences-builtin.c:195
+msgid "Semantic Highlighting"
+msgstr "Evidențiere semantică"
+
+#: src/libide/preferences/ide-preferences-builtin.c:195
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr ""
+"Utilizează înțelegerea de cod pentru a evidenția informații adiționale "
+"descoperite în fișierul sursă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:197
+msgid "Completion"
+msgstr "Completare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:198
+msgid "Suggest words found in open files"
+msgstr "Propune cuvinte găsite în fișiere deschise"
+
+#: src/libide/preferences/ide-preferences-builtin.c:198
+msgid ""
+"Suggests completions as you type based on words found in any open document"
+msgstr ""
+"Propune completări în timp ce tastați pe baza cuvintelor găsite în orice "
+"document deschis"
+
+#: src/libide/preferences/ide-preferences-builtin.c:199
+msgid "Minimum word size"
+msgstr "Dimensiune de cuvânt minimă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:199
+msgid "Minimum word size for word completion"
+msgstr "Dimensiunea de cuvânt minimă pentru completarea de cuvânt"
+
+#: src/libide/preferences/ide-preferences-builtin.c:200
+msgid "Suggest completions using Ctags"
+msgstr "Propune completări utilizând Ctags"
+
+#: src/libide/preferences/ide-preferences-builtin.c:200
+msgid ""
+"Create and manages a Ctags database for completing class names, functions, "
+"and more"
+msgstr ""
+"Creează și administrează o bază de date Ctags pentru completarea de nume de "
+"clase, funcții, și mai multe"
+
+#: src/libide/preferences/ide-preferences-builtin.c:201
+msgid "Suggest completions using Clang (Experimental)"
+msgstr "Propune completări utilizând Clang (experimental)"
+
+#: src/libide/preferences/ide-preferences-builtin.c:201
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr "Utilizează Clang pentru a propune completări pentru limbajele C și C++"
+
+#: src/libide/preferences/ide-preferences-builtin.c:203
+msgid "Diagnostics"
+msgstr "Diagnosticare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:209
+#: src/libide/snippets/ide-source-snippet-completion-provider.c:329
+msgid "Snippets"
+msgstr "Blocuri"
+
+#: src/libide/preferences/ide-preferences-builtin.c:212
+msgid "Code snippets"
+msgstr "Blocuri de cod"
+
+#: src/libide/preferences/ide-preferences-builtin.c:212
+msgid "Use code fragments to increase typing efficiency"
+msgstr "Utilizează fragmente de cod pentru a mări eficiența la tastare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:256
+msgid "Programming Languages"
+msgstr "Limbaje de programare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:322
+msgid "Trim trailing whitespace"
+msgstr "Scurtează spațierea din urmă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:322
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr ""
+"După salvare, spațierea din urmă de la liniile modificate va fi scurtată."
+
+#: src/libide/preferences/ide-preferences-builtin.c:323
+msgid "Overwrite Braces"
+msgstr "Suprascrie parantezele acolade"
+
+#: src/libide/preferences/ide-preferences-builtin.c:323
+msgid "Overwrite closing braces"
+msgstr "Suprascrie parantezele acolade de închidere"
+
+#: src/libide/preferences/ide-preferences-builtin.c:324
+msgid "Insert Matching Brace"
+msgstr "Introduce paranteza pereche"
+
+#: src/libide/preferences/ide-preferences-builtin.c:324
+msgid "Insert matching character for { [ ( or \""
+msgstr "Introduce caracterul pereche pentru { [ ( sau \""
+
+#: src/libide/preferences/ide-preferences-builtin.c:325
+msgid "Insert Trailing Newline"
+msgstr "Introduce linie nouă din urmă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:325
+msgid "Ensure files end with a newline"
+msgstr "Asigurare că fișierele se termină cu o linie nouă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:327
+msgid "Margins"
+msgstr "Magini"
+
+#: src/libide/preferences/ide-preferences-builtin.c:329
+msgid "Right margin position"
+msgstr "Poziția marginei din dreapta"
+
+#: src/libide/preferences/ide-preferences-builtin.c:329
+msgid "Position in spaces for the right margin"
+msgstr "Poziția în spații pentru marginea din dreapta"
+
+#: src/libide/preferences/ide-preferences-builtin.c:331
+msgid "Indentation"
+msgstr "Indentare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:332
+msgid "Tab width"
+msgstr "Lățime tab"
+
+#: src/libide/preferences/ide-preferences-builtin.c:332
+msgid "Width of a tab character in spaces"
+msgstr "Lățimea în spații a unui caracter tab"
+
+#: src/libide/preferences/ide-preferences-builtin.c:333
+msgid "Insert spaces instead of tabs"
+msgstr "Introduce spații în loc de taburi"
+
+#: src/libide/preferences/ide-preferences-builtin.c:333
+msgid "Prefer spaces over use of tabs"
+msgstr "Preferă spațiile în locul utilizării de taburi"
+
+#: src/libide/preferences/ide-preferences-builtin.c:334
+msgid "Automatically indent"
+msgstr "Indentează automat"
+
+#: src/libide/preferences/ide-preferences-builtin.c:334
+msgid "Indent source code as you type"
+msgstr "Indentează codul sursă în timpul tastării"
+
+#: src/libide/preferences/ide-preferences-builtin.c:336
+msgid "Spacing"
+msgstr "Spațiere"
+
+#: src/libide/preferences/ide-preferences-builtin.c:337
+msgid "Space before opening parentheses"
+msgstr "Spațiu înainte de parantezele de deschidere"
+
+#: src/libide/preferences/ide-preferences-builtin.c:338
+msgid "Space before opening brackets"
+msgstr "Spațiu înainte de parantezele pătrate de deschidere"
+
+#: src/libide/preferences/ide-preferences-builtin.c:339
+msgid "Space before opening braces"
+msgstr "Spațiu înainte de parantezele acolade de deschidere"
+
+#: src/libide/preferences/ide-preferences-builtin.c:340
+msgid "Space before opening angles"
+msgstr "Spațiu înainte de parantezele unghiulare de deschidere"
+
+#: src/libide/preferences/ide-preferences-builtin.c:341
+msgid "Prefer a space before colons"
+msgstr "Preferă un spațiu înainte de două puncte"
+
+#: src/libide/preferences/ide-preferences-builtin.c:342
+msgid "Prefer a space before commas"
+msgstr "Preferă un spațiu înainte de virgule"
+
+#: src/libide/preferences/ide-preferences-builtin.c:343
+msgid "Prefer a space before semicolons"
+msgstr "Preferă un spațiu înainte de punct și virgulă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:353
+#: src/libide/preferences/ide-preferences-builtin.c:371
+msgid "Default"
+msgstr "Implicit"
+
+#: src/libide/preferences/ide-preferences-builtin.c:358
+#: src/libide/preferences/ide-preferences-builtin.c:376
+msgid "Number of CPU"
+msgstr "Numărul de CPU"
+
+#: src/libide/preferences/ide-preferences-builtin.c:391
+msgid "Build"
+msgstr "Generare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:394
+msgid "Build Workers"
+msgstr "Lucrători de generare"
+
+#: src/libide/preferences/ide-preferences-builtin.c:394
+msgid "Number of parallel build workers"
+msgstr "Numărul de lucrători de generare paralelă"
+
+#: src/libide/preferences/ide-preferences-builtin.c:402
+msgid "Network"
+msgstr "Rețea"
+
+#: src/libide/preferences/ide-preferences-builtin.c:403
+msgid "Allow downloads over metered connections"
+msgstr "Permite descărcări prin conexiuni contorizate"
+
+#: src/libide/preferences/ide-preferences-builtin.c:403
+msgid ""
+"Allow the use of metered network connections when automatically downloading "
+"dependencies"
+msgstr ""
+"Permite utilizarea de conexiuni la rețea contorizate când se descarcă "
+"automat dependențe"
+
+#: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Workspace"
+msgstr "Spațiu de lucru"
+
+#: src/libide/preferences/ide-preferences-builtin.c:412
+msgid "A place for all your projects"
+msgstr "Un loc pentru toate proiectele"
+
+#: src/libide/preferences/ide-preferences-builtin.c:413
+msgid "Restore previously opened files"
+msgstr "Restaurează fișierele deschise anterior"
+
+#: src/libide/preferences/ide-preferences-builtin.c:413
+msgid "Open previously opened files when loading a project"
+msgstr "Deschide fișierele deschise anterior la încărcarea unui proiect"
+
+#: src/libide/preferences/ide-preferences-builtin.c:534
+#: src/plugins/create-project/gbp-create-project-widget.ui:179
+msgid "Version Control"
+msgstr "Control de versiune"
+
+#. only the page goes here, plugins will fill in the details
+#: src/libide/preferences/ide-preferences-builtin.c:546
+msgid "SDKs"
+msgstr "SDK-uri"
+
+#: src/libide/projects/ide-project.c:398
+msgid "Destination file must be within the project tree."
+msgstr "Fișierul destinație trebuie să fie în arborele proiectului."
+
+#: src/libide/projects/ide-project.c:644
+msgid "File must be within the project tree."
+msgstr "Fișierul trebuie să fie în arborele proiectului."
+
+#: src/libide/runner/ide-run-button.ui:31
+msgid "Stop running"
+msgstr "Oprește rularea"
+
+#: src/libide/runner/ide-run-button.ui:51
+msgid "Change run options"
+msgstr "Modifică opțiunile de rulare"
+
+#: src/libide/runner/ide-run-manager.c:368
+msgid "Cannot run target, another target is running"
+msgstr "Nu se poate rula ținta, altă țintă rulează"
+
+#: src/libide/runner/ide-run-manager.c:438
+msgid "Failed to locate runtime"
+msgstr "Nu s-a putut localiza executarea"
+
+#: src/libide/runner/ide-runner.c:179
+msgid "Process quit unexpectedly"
+msgstr "Procesul s-a terminat neașteptat"
+
+#: src/libide/runtimes/ide-runtime-manager.c:131
+msgid "Host operating system"
+msgstr "Sistem de operare gazdă"
+
+#: src/libide/snippets/ide-source-snippets-manager.c:195
+#, c-format
+msgid "Failed to open directory: %s"
+msgstr "Nu s-a putut deschide dosarul: %s"
+
+#: src/libide/snippets/ide-source-snippets-manager.c:208
+#, c-format
+msgid "Failed to load file: %s: %s"
+msgstr "Nu s-a putut încărca fișierul %s: %s"
+
+#: src/libide/sourceview/ide-omni-gutter-renderer.c:749
+msgid "Click to toggle breakpoint"
+msgstr "Apăsați clic pentru a comuta indicatorul de întrerupere"
+
+#: src/libide/sourceview/ide-source-view.c:4585
+#, c-format
+msgid "Insert “%s”"
+msgstr "Introduce „%s”"
+
+#: src/libide/sourceview/ide-source-view.c:4587
+#, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "Înlocuiește „%s” cu „%s”"
+
+#: src/libide/sourceview/ide-source-view.c:4701
+msgid "Apply Fix-It"
+msgstr "Aplică repararea"
+
+#: src/libide/sourceview/ide-source-view.c:5129
+msgid "Rename symbol"
+msgstr "Redenumește simbolul"
+
+#. translators: %s is the filename, then line number, column number. <> are pango markup
+#: src/libide/sourceview/ide-source-view.c:5365
+#, c-format
+msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
+msgstr "<b>%s</b> — <small>Rând %u, Coloană %u</small>"
+
+#: src/libide/sourceview/ide-source-view.c:5391
+msgid "No references were found"
+msgstr "Nu s-au găsit referințe"
+
+#: src/libide/sourceview/ide-word-completion-provider.c:557
+msgid "Builder Word Completion"
+msgstr "Completare de cuvânt Builder"
+
+#: src/libide/terminal/ide-terminal-search.ui:152
+msgid "Regex"
+msgstr "Expresie regulată"
+
+#: src/libide/terminal/ide-terminal-search.ui:180
+msgid "Match whole word"
+msgstr "Potrivește un cuvânt întreg"
+
+#: src/libide/terminal/ide-terminal-search.ui:194
+msgid "Wrap around"
+msgstr "Încadrează în jurul"
+
+#: src/libide/testing/gtk/menus.ui:6
+msgid "Run _all tests"
+msgstr "Rulează to_ate testele"
+
+#: src/libide/testing/gtk/menus.ui:12
+msgid "Reload tests"
+msgstr "Reîncarcă testele"
+
+#: src/libide/testing/ide-test-editor-addin.c:73
+msgid "Unit Tests"
+msgstr "Teste unitate"
+
+#: src/libide/testing/ide-test-panel.ui:12
+msgid "No tests available"
+msgstr "Nu sunt teste disponibile"
+
+#: src/libide/testing/ide-test-panel.ui:13
+msgid "Tests will be loaded after building."
+msgstr "Testele vor fi încărcate după generare."
+
+#: src/libide/transfers/ide-pkcon-transfer.c:55
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "Se instalează %u pachet"
+msgstr[1] "Se instalează %u pachete"
+msgstr[2] "Se instalează %u de pachete"
+
+#: src/libide/transfers/ide-transfers-button.ui:35
+msgid "Clear _All"
+msgstr "Elibere_ază tot"
+
+#: src/libide/util/ide-uri.c:181
+#, no-c-format
+msgid "Invalid %-encoding in URI"
+msgstr "Codare % nevalidă în URI"
+
+#: src/libide/util/ide-uri.c:219
+msgid "Non-UTF-8 characters in URI"
+msgstr "Caractere care nu sunt UTF-8 în URI"
+
+#: src/libide/util/ide-uri.c:366 src/libide/util/ide-uri.c:377
+#, c-format
+msgid "Invalid IP literal “%s” in URI"
+msgstr "Literal de IP nevalid „%s” în URI"
+
+#: src/libide/util/ide-uri.c:411
+#, c-format
+msgid "Invalid encoded IP literal “%s” in URI"
+msgstr "Literal codat nevalid pentru IP „%s” în URI"
+
+#: src/libide/util/ide-uri.c:420
+#, c-format
+msgid "Invalid non-ASCII hostname “%s” in URI"
+msgstr "Nume de gazdă care nu este ASCII nevalid „%s” în URI"
+
+#: src/libide/util/ide-uri.c:434
+#, c-format
+msgid "Non-ASCII hostname “%s” forbidden in this URI"
+msgstr "Numele de gazdă care nu este ASCII „%s” nu este permis în acest URI"
+
+#: src/libide/util/ide-uri.c:457
+#, c-format
+msgid "Could not parse port “%s” in URI"
+msgstr "Nu s-a putut parsa portul „%s” de la URI"
+
+#: src/libide/util/ide-uri.c:464
+#, c-format
+msgid "Port “%s” in URI is out of range"
+msgstr "Portul „%s” de la URI este în afara domeniului"
+
+#: src/libide/util/ide-uri.c:590
+msgid "Base URI is not absolute"
+msgstr "URI de bază nu este absolut"
+
+#: src/libide/util/ide-uri.c:615
+msgid "URI is not absolute, and no base URI was provided"
+msgstr "URI nu este absolut, și nu s-a furnizat niciun URI de bază"
+
+#: src/libide/util/ide-uri.c:660
+#, c-format
+msgid "Could not parse “%s” as absolute URI"
+msgstr "Nu s-a putut parsa „%s” ca URI absolut"
+
+#: src/libide/util/ide-uri.c:1203
+#, c-format
+msgid "URI “%s” has no host component"
+msgstr "URI „%s” nu are nicio componentă de gazdă"
+
+#: src/libide/workbench/ide-omni-bar.c:528
+msgid "Building"
+msgstr "Se generează"
+
+#: src/libide/workbench/ide-omni-bar.ui:223
+msgid "Update project dependencies"
+msgstr "Actualizează dependențele proiectului"
+
+#: src/libide/workbench/ide-omni-bar.ui:242
+msgid "Configure build preferences"
+msgstr "Configurează preferințele de generare"
+
+#: src/libide/workbench/ide-omni-bar.ui:264
+msgid "Branch"
+msgstr "Ramură"
+
+#: src/libide/workbench/ide-omni-bar.ui:289
+msgid "Build Profile"
+msgstr "Profil de generare"
+
+#: src/libide/workbench/ide-omni-bar.ui:344
+msgid "There is a problem with the current build configuration."
+msgstr "A apărut o problemă cu configurarea de generare curentă."
+
+#: src/libide/workbench/ide-omni-bar.ui:377
+msgid "Build status"
+msgstr "Stare generare"
+
+#: src/libide/workbench/ide-omni-bar.ui:398
+msgid "View build console contents"
+msgstr "Vizualizează conținuturile consolei de generare"
+
+#: src/libide/workbench/ide-omni-bar.ui:420
+msgid "Last build"
+msgstr "Ultima generare"
+
+#: src/libide/workbench/ide-omni-bar.ui:447
+msgid "Build result"
+msgstr "Rezultat generare"
+
+#. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
+#: src/libide/workbench/ide-omni-bar.ui:540
+msgid "true"
+msgstr "true"
+
+#: src/libide/workbench/ide-omni-bar.ui:545
+msgctxt "button"
+msgid "Build"
+msgstr "Generează"
+
+#: src/libide/workbench/ide-omni-bar.ui:552
+msgid "Rebuild"
+msgstr "Regenerează"
+
+#: src/libide/workbench/ide-omni-bar.ui:559
+msgid "Clean"
+msgstr "Curăță"
+
+#: src/libide/workbench/ide-omni-bar.ui:566
+msgid "Export Bundle"
+msgstr "Exportă pachetul"
+
+#: src/libide/workbench/ide-omni-bar.ui:591 src/plugins/make/make_plugin.py:123
+msgid "Build project"
+msgstr "Generează proiectul"
+
+#: src/libide/workbench/ide-workbench-actions.c:218
+msgid "Builder Statistics"
+msgstr "Statistici Builder"
+
+#: src/libide/workbench/ide-workbench.c:644
+#, c-format
+msgid "%s — Builder"
+msgstr "Builder — %s"
+
+#: src/libide/workbench/ide-workbench-header-bar.ui:51
+msgid "Transfers"
+msgstr "Transferuri"
+
+#: src/libide/workbench/ide-workbench-header-bar.ui:57
+msgid "Show workbench menu"
+msgstr "Arată meniul suprafeței de lucru"
+
+#: src/libide/workbench/ide-workbench-header-bar.ui:96
+msgid "Press Ctrl+. to search"
+msgstr "Apăsați Ctrl+. pentru a căuta"
+
+#: src/libide/workbench/ide-workbench-shortcuts.c:35
+msgctxt "shortcut window"
+msgid "Toggle window to fullscreen"
+msgstr "Comută fereastra la ecran complet"
+
+#: src/libide/workbench/ide-workbench-shortcuts.c:41
+msgctxt "shortcut window"
+msgid "Focus to the global search entry"
+msgstr "Focalizează la intrarea de căutare globală"
+
+#: src/libide/workbench/ide-workbench-shortcuts.c:47
+msgctxt "shortcut window"
+msgid "Trigger a build"
+msgstr "Declanșează o generare"
+
+#: src/libide/workbench/ide-workbench-shortcuts.c:53
+msgctxt "shortcut window"
+msgid "Save all files"
+msgstr "Salvează toate fișierele"
+
+#: src/libide/workbench/ide-workbench-shortcuts.c:79
+msgctxt "shortcut window"
+msgid "Perspectives"
+msgstr "Perspective"
+
+#: src/main.c:118
+msgid ""
+"GNOME Builder requires a desktop session with D-Bus. Please set "
+"DBUS_SESSION_BUS_ADDRESS."
+msgstr ""
+"Builder GNOME necesită o sesiune desktop cu D-Bus. Stabiliți "
+"DBUS_SESSION_BUS_ADDRESS."
+
+#: src/plugins/autotools/ide-autotools-makecache-stage.c:194
+msgid "Building cache…"
+msgstr "Se generează cache…"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
+msgid "Bootstrapping build system"
+msgstr "Se trece prin procesul de bootstrap al sistemului de generare"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:145
+#: src/plugins/phpize/phpize_plugin.py:226
+msgid "Configuring project"
+msgstr "Se configurează proiectul"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:276
+#: src/plugins/cargo/cargo_plugin.py:150
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:186
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:174
+#: src/plugins/phpize/phpize_plugin.py:238
+msgid "Building project"
+msgstr "Se generează proiectul"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:303
+msgid "Caching build commands"
+msgstr "Se adaugă în cache comenzile de generare"
+
+#: src/plugins/autotools-templates/autotools_templates/__init__.py:265
+msgid "Shared Library (Autotools)"
+msgstr "Bibliotecă partajată (Autotools)"
+
+#: src/plugins/autotools-templates/autotools_templates/__init__.py:267
+msgid "Create a new autotools project with a shared library"
+msgstr "Creează un proiect autotools nou cu o bibliotecă partajată"
+
+#: src/plugins/autotools-templates/autotools_templates/__init__.py:291
+msgid "Empty Project (Autotools)"
+msgstr "Proiect gol (Autotools)"
+
+#: src/plugins/autotools-templates/autotools_templates/__init__.py:294
+msgid "Create a new empty autotools project"
+msgstr "Creează un proiect autotools gol nou"
+
+#: src/plugins/autotools-templates/autotools_templates/__init__.py:308
+msgid "GNOME Application (Autotools)"
+msgstr "Aplicație GNOME (Autotools)"
+
+#: src/plugins/autotools-templates/autotools_templates/__init__.py:310
+msgid "Create a new flatpak-ready GNOME application"
+msgstr "Creează o aplicație GNOME gata de flatpak nouă"
+
+#. translators: %s and %s are replaced with source file path and the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:155
+#, c-format
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgstr ""
+"Modul de cosmetizare: eroare la copierea fișierului de configurare gresource "
+"pentru „%s”: %s"
+
+#. translators: %s is replaced with the source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:163
+#, c-format
+msgid "Beautifier plugin: error creating temporary config file for “%s”"
+msgstr ""
+"Modul de cosmetizare: eroare la creare fișierului de configurare temporar "
+"pentru „%s”"
+
+#. translators: %s is replaced with the .ini source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:207
+#, c-format
+msgid "Beautifier plugin: Can’t read .ini file: %s"
+msgstr "Modul de cosmetizare: nu se poate citi fișierul .ini: %s"
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:255
+#, c-format
+msgid ""
+"Beautifier plugin: neither command nor command-pattern keys found: entry "
+"“%s” disabled"
+msgstr ""
+"Modul de cosmetizare: nu s-a găsit comanda și nici cheile de model de "
+"comandă: intrarea „%s” dezactivată"
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:265
+#, c-format
+msgid ""
+"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
+"disabled"
+msgstr ""
+"Modul de cosmetizare: s-a găsit atât comanda cât și cheile de model de "
+"comandă: intrarea „%s” dezactivată"
+
+#. translators: %s and %s are replaced with the config path and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:289
+#, c-format
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgstr ""
+"Modul de cosmetizare: nu există calea de configurare „%s”, intrarea „%s” "
+"dezactivată"
+
+#. translators: %s is replaced with the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:306
+#, c-format
+msgid ""
+"Beautifier plugin: command key out of possible values: entry “%s” disabled"
+msgstr ""
+"Modul de cosmetizare: cheia de comandă este în afara valorilor posibile: "
+"intrarea „%s” dezactivată"
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:331
+#, c-format
+msgid ""
+"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
+"entry “%s” disabled"
+msgstr ""
+"Modul de cosmetizare: @c@ în cheia de model de comandă „%s” dar nu s-a "
+"stabilit niciun fișier de configurare: intrarea „%s” dezactivată"
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:363
+#, c-format
+msgid ""
+"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
+msgstr ""
+"Modul de cosmetizare: nu se poate crea fișierul temporar pentru „%s”: "
+"intrarea „%s” dezactivată"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:405
+#, c-format
+msgid "Beautifier plugin: “%s”"
+msgstr "Modul de cosmetizare: „%s”"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:506
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:55
+#, c-format
+msgid "Beautifier plugin: %s"
+msgstr "Modul de cosmetizare: %s"
+
+#. translators: %s is replaced with a path name
+#: src/plugins/beautifier/gb-beautifier-config.c:545
+#, c-format
+msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+msgstr ""
+"Modul de cosmetizare: nu se poate citi următorul fișier de resursă: „%s”"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:86
+msgid "Beautifier Plugin: the view is not a GtkSourceView"
+msgstr "Modul de cosmetizare: vizualizarea nu este una GtkSourceView"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:93
+msgid "Beautifier Plugin: no default beautifier found"
+msgstr "Modul de cosmetizare: niciun modul de cosmetizare implicit disponibil"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:99
+msgid "Beautifier Plugin: the buffer is not writable"
+msgstr "Modul de cosmetizare: preîncărcarea nu este inscripționabilă"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:107
+msgid "Beautifier Plugin: Nothing selected"
+msgstr "Modul de cosmetizare: nu s-a selectat nimic"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:242
+#, c-format
+msgid "No beautifier available for “%s”"
+msgstr "Niciun modul de cosmetizare disponibil pentru „%s”"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:244
+#, c-format
+msgid "No beautifier available"
+msgstr "Niciun modul de cosmetizare disponibil"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:341
+msgctxt "shortcut window"
+msgid "Beautify the code"
+msgstr "Cosmetizează codul"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:342
+msgctxt "shortcut window"
+msgid "Trigger the default entry"
+msgstr "Declanșează intrarea implicită"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:371
+#, c-format
+msgid "Beautifier plugin: no valid entries, disabling: %s"
+msgstr "Modul de cosmetizare: nu sunt intrări valide, se dezactivează: %s"
+
+#. translators: %s and %s are replaced with the temporary dir and the file path
+#: src/plugins/beautifier/gb-beautifier-helper.c:61
+#: src/plugins/beautifier/gb-beautifier-helper.c:86
+#: src/plugins/beautifier/gb-beautifier-helper.c:112
+#: src/plugins/beautifier/gb-beautifier-helper.c:133
+#, c-format
+msgid ""
+"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+"temporary directory: “%s”"
+msgstr ""
+"Modul de cosmetizare: s-a blocat încercarea de a elimina un fișier în afara "
+"dosarului temporar „%s”: „%s”"
+
+#. translators: %s is replaced with the command error message
+#: src/plugins/beautifier/gb-beautifier-process.c:262
+#, c-format
+msgid "Beautifier plugin: command error output: %s"
+msgstr "Modul de cosmetizare: rezultatul erorii de comandă: %s"
+
+#: src/plugins/beautifier/gb-beautifier-process.c:272
+msgid "Beautifier plugin: the command output is empty"
+msgstr "Modul de cosmetizare: rezultatul comenzii este gol"
+
+#: src/plugins/beautifier/gb-beautifier-process.c:299
+msgid "Beautify plugin: the output is not a valid UTF-8 text"
+msgstr "Modul de cosmetizare: rezultatul nu este un text UTF-8 valid"
+
+#: src/plugins/beautifier/gtk/menus.ui:9
+msgid "Beautify"
+msgstr "Cosmetizează"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:62
+msgid "Clang"
+msgstr "Clang"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:63
+msgid "Show errors and warnings provided by Clang"
+msgstr "Arată erorile și avertismentele furnizate de Clang"
+
+#. translators: keywords used when searching for preferences
+#: src/plugins/clang/ide-clang-preferences-addin.c:65
+msgid "clang diagnostics warnings errors"
+msgstr "clang diagnostics warnings errors diagnosticare avertismente erori"
+
+#: src/plugins/clang/ide-clang-service.c:325
+msgid "Unknown failure"
+msgstr "Eșec necunoscut"
+
+#: src/plugins/clang/ide-clang-service.c:329
+msgid "Clang crashed"
+msgstr "Clang a căzut"
+
+#: src/plugins/clang/ide-clang-service.c:333
+msgid "Invalid arguments"
+msgstr "Argumente nevalide"
+
+#: src/plugins/clang/ide-clang-service.c:337
+msgid "AST read error"
+msgstr "Eroare de citire AST"
+
+#: src/plugins/clang/ide-clang-service.c:349
+#, c-format
+msgid "Failed to create translation unit: %s"
+msgstr "Nu s-a putut crea unitatea de traducere: %s"
+
+#: src/plugins/clang/ide-clang-service.c:561
+#: src/plugins/xml-pack/ide-xml-service.c:97
+msgid "File must be saved locally to parse."
+msgstr "Fișierul trebuie salvat local pentru a fi parsat."
+
+#: src/plugins/clang/ide-clang-symbol-node.c:152
+msgid "anonymous"
+msgstr "anonim"
+
+#: src/plugins/clang/ide-clang-translation-unit.c:620
+msgid "clang_codeCompleteAt() only works on local files"
+msgstr "clang_codeCompleteAt() funcționează doar pe fișiere locale"
+
+#: src/plugins/cmake/gbp-cmake-build-system.c:421
+msgid "CMake"
+msgstr "CMake"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:161
+msgid "Configure project"
+msgstr "Configurează proiectul"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:205
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:184
+#: src/plugins/phpize/phpize_plugin.py:248
+msgid "Installing project"
+msgstr "Se instalează proiectul"
+
+#. translators: "Declaration" is describing a function that is defined in a header
+#. *              file (.h) rather than a source file (.c).
+#.
+#: src/plugins/code-index/ide-code-index-index.c:277
+msgid "Declaration"
+msgstr "Declarație"
+
+#: src/plugins/code-index/ide-code-index-service.c:618
+msgid "Indexing Source Code"
+msgstr "Se indexează codul sursă"
+
+#: src/plugins/code-index/ide-code-index-service.c:619
+msgid "Search, diagnostics and autocompletion may be limited until complete."
+msgstr ""
+"Căutarea, diagnosticările și completarea automată ar putea să fie limitate "
+"până ce este complet."
+
+#: src/plugins/color-picker/data/basic.gstyle.xml:20
+msgid "Basic"
+msgstr "De bază"
+
+#: src/plugins/color-picker/gb-color-picker-editor-addin.c:288
+msgid "Colors"
+msgstr "Culori"
+
+#. translators: %s is replaced with the name of the color palette.
+#: src/plugins/color-picker/gb-color-picker-prefs.c:86
+#, c-format
+msgid "Save changes to palette “%s” before closing?"
+msgstr "Salvați modificările la paleta „%s” înainte de a închide?"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:94
+msgid "Close without Saving"
+msgstr "Închide fără a salva"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:96
+msgid "Save As…"
+msgstr "Salvează ca…"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:204
+msgid "Load palette"
+msgstr "Încarcă paleta"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:231
+msgid "Save palette"
+msgstr "Salvează paleta"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:704
+msgid "All files"
+msgstr "Toate fișierele"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:708
+msgid "All supported palettes formats"
+msgstr "Toate formatele de palete suportate"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:713
+msgid "GIMP palette"
+msgstr "Paletă GIMP"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:717
+msgid "GNOME Builder palette"
+msgstr "Paletă Builder GNOME"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
+msgid "Palette name"
+msgstr "Numele paletei"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+msgid "Enter a new name for the palette"
+msgstr "Introduceți un nume nou pentru paletă"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+msgid "HSV visibility"
+msgstr "Vizibilitate HSV"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+msgid "If the HSV components are visible."
+msgstr "Dacă sunt vizibile componentele HSV."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "LAB visibility"
+msgstr "Vizibilitate LAB"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+msgid "If the LAB components are visible."
+msgstr "Dacă sunt vizibile componentele LAB."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "RGB visibility"
+msgstr "Vizibilitate RGB"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+msgid "If the RGB components are visible."
+msgstr "Dacă sunt vizibile componentele RGB."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+msgid "RGB unit"
+msgstr "Unitate RGB"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr "Unitatea utilizată pentru șirurile și componenta RGB."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+msgid "Selected palette ID"
+msgstr "ID-ul paletei selectate"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr "ID-ul paletei selectate dintre cele încărcate."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+msgid "Color strings visibility"
+msgstr "Vizibilitate șiruri colorate"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+msgid "The visible color strings."
+msgstr "Șirurile colorate vizibile."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+msgid "Color filter"
+msgstr "Filtru de culoare"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr "Filtrul utilizat pe scalele de culori și planul de culoare."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr "Componentele culorii"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "Vizibilitate:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr ""
+"Selectați spațiile de culoare pentru care doriți să vedeți glisoare în panou."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
+msgid "HSV"
+msgstr "HSV"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
+msgid "Hue Saturation Value"
+msgstr "Valoarea de saturație a nuanței"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "Roșu verde albastru"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "Unități:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+"Selectați tipul de unitate pe care doriți să îl utilizați pentru componente "
+"RGB și șiruri în panou."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "Procent"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "Filtre:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or “None”."
+msgstr "Selectați un filtru care acționează asupra culorilor sau „nimic”."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "Nimic"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr "Acromatopsie (monocromie)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr "Acromatomalie (monocromie de con albastru)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr "Deuteranopie (nu distinge verde)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr "Deuteranomalie (distinge slab verde)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr "Protanopie (nu distinge roșu)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr "Protanomalie (distinge slab roșu)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr "Tritanopie (nu distinge albastru)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr "Tritanomalie (distinge slab albastru)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr "Sigur pentru web"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr "Selectați șirurile de culori pe care doriți să le vedeți în panou."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr "Opțiuni palete"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:615
+msgid "Palette view mode:"
+msgstr "Modul vizualizare paletă:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "Listează"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr "Specimene"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr "Administrare paletă"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "Încarcă"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr "De la documentul curent"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr ""
+"Selectați paleta pe care doriți să o vedeți în panou sau închideți una."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr "Nu sunt palete încărcate"
+
+#: src/plugins/color-picker/gtk/color-picker-preview.ui:45
+msgid "No selected palettes"
+msgstr "Nu sunt palete selectate"
+
+#: src/plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr "Selectați un fișier de paletă"
+
+#: src/plugins/color-picker/gtk/color-picker.ui:62
+msgid "Try loading or generating a palette using the menu"
+msgstr "Încercați să încărcați sau să generați o paletă utilizând meniul"
+
+#: src/plugins/color-picker/gtk/menus.ui:7
+msgid "Highlight colors"
+msgstr "Culori de evidențiere"
+
+#: src/plugins/command-bar/gb-command-bar.c:281
+#, c-format
+msgid "Command not found: %s"
+msgstr "Nu s-a putut găsi comanda: %s"
+
+#: src/plugins/command-bar/gb-command-bar.c:593
+msgid "Use the entry below to execute a command"
+msgstr "Utilizați intrarea de mai jos pentru a executa o comandă"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/command-bar/gb-command-vim.c:104
+#, c-format
+msgid "Command failed: %s"
+msgstr "Comandă eșuată: %s"
+
+#: src/plugins/command-bar/gb-vim.c:87
+#, c-format
+msgid "Number required"
+msgstr "Număr necesar"
+
+#: src/plugins/command-bar/gb-vim.c:97
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "%s nu este valid pentru %s"
+
+#: src/plugins/command-bar/gb-vim.c:155
+#, c-format
+msgid "Cannot find language “%s”"
+msgstr "Nu s-a putut găsi limbajul „%s”"
+
+#: src/plugins/command-bar/gb-vim.c:312
+#, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr "Această comandă necesită ca GtkSourceView să fie focalizată"
+
+#: src/plugins/command-bar/gb-vim.c:323
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr "Această comandă necesită ca o vizualizare să fie focalizată"
+
+#: src/plugins/command-bar/gb-vim.c:380
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Opțiune necunoscută: %s"
+
+#: src/plugins/command-bar/gb-vim.c:423
+#, c-format
+msgid "Cannot find colorscheme “%s”"
+msgstr "Nu se poate găsi schema de culori „%s”"
+
+#: src/plugins/command-bar/gb-vim.c:464 src/plugins/command-bar/gb-vim.c:596
+#, c-format
+msgid "Failed to locate working directory"
+msgstr "Nu s-a putut localiza dosarul de lucru"
+
+#: src/plugins/command-bar/gb-vim.c:765
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr "Subcomandă :syntax nevalidă: %s"
+
+#: src/plugins/command-bar/gb-vim.c:1206
+#, c-format
+msgid "Invalid search and replace request"
+msgstr "Cerere de căutare și înlocuire nevalidă"
+
+#: src/plugins/command-bar/gb-vim.c:1312
+#, c-format
+msgid "Not a command: %s"
+msgstr "Nu este o comandă: %s"
+
+#: src/plugins/comment-code/gbp-comment-code-view-addin.c:372
+msgctxt "shortcut window"
+msgid "Comment the code"
+msgstr "Comentează codul"
+
+#: src/plugins/comment-code/gbp-comment-code-view-addin.c:378
+msgctxt "shortcut window"
+msgid "Uncomment the code"
+msgstr "Decomentează codul"
+
+#: src/plugins/comment-code/gtk/menus.ui:9
+msgid "Comment code"
+msgstr "Comentează codul"
+
+#: src/plugins/comment-code/gtk/menus.ui:14
+msgid "Uncomment code"
+msgstr "Decomentează codul"
+
+#: src/plugins/c-pack/ide-c-format-provider.c:283
+#: src/plugins/python-pack/ide-python-format-provider.c:240
+msgid "Format Strings"
+msgstr "Șiruri de formatare"
+
+#: src/plugins/create-project/gbp-create-project-genesis-addin.c:158
+msgid "New Project"
+msgstr "Proiect nou"
+
+#: src/plugins/create-project/gbp-create-project-genesis-addin.c:224
+msgid "New…"
+msgstr "Nou…"
+
+#: src/plugins/create-project/gbp-create-project-genesis-addin.c:230
+msgid "Create"
+msgstr "Creează"
+
+#: src/plugins/create-project/gbp-create-project-tool.c:136
+msgid "List available templates"
+msgstr "Listează șabloanele disponibile"
+
+#: src/plugins/create-project/gbp-create-project-tool.c:138
+msgid "Project template to generate"
+msgstr "Șablonul de proiect de generat"
+
+#: src/plugins/create-project/gbp-create-project-tool.c:140
+msgid "The target language (if supported)"
+msgstr "Limbajul țintă (dacă este suportat)"
+
+#: src/plugins/create-project/gbp-create-project-tool.c:142
+msgid "The version control to use or “none” to disable"
+msgstr "Versiunea de control de utilizat sau „nimic” pentru a dezactiva"
+
+#: src/plugins/create-project/gbp-create-project-tool.c:143
+msgid "git"
+msgstr "git"
+
+#: src/plugins/create-project/gbp-create-project-tool.c:149
+msgid "create-project [OPTION...] PROJECT_NAME"
+msgstr "create-project [OPȚIUNE...] NUME_PROIECT"
+
+#: src/plugins/create-project/gbp-create-project-tool.c:198
+#, c-format
+msgid "Filename must be ASCII and may not contain : or ="
+msgstr ""
+"Numele de fișier trebuie să fie scris în ASCII și nu poate să conțină : sau ="
+
+#: src/plugins/create-project/gbp-create-project-tool.c:372
+msgid "Please specify a project name.\n"
+msgstr "Specificați un nume de proiect.\n"
+
+#: src/plugins/create-project/gbp-create-project-tool.c:388
+msgid "Please specify a project template with --template=\n"
+msgstr "Specificați un șablon de proiect cu --template=\n"
+
+#: src/plugins/create-project/gbp-create-project-widget.c:174
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+"Au fost utilizate caractere ce ar putea cauza probleme tehnice ca nume de "
+"proiect"
+
+#: src/plugins/create-project/gbp-create-project-widget.c:177
+#: src/plugins/create-project/gbp-create-project-widget.ui:104
+msgid "Your project will be created within a new child directory."
+msgstr "Proiectul va fi creat într-un dosar inferior nou."
+
+#: src/plugins/create-project/gbp-create-project-widget.c:183
+msgid "Directory already exists with that name"
+msgstr "Există deja un dosar cu acel nume"
+
+#. translators: %s is replaced with a short-form file-system path to the project
+#: src/plugins/create-project/gbp-create-project-widget.c:201
+#, c-format
+msgid "Your project will be created within %s."
+msgstr "Proiectul va fi creat în %s."
+
+#: src/plugins/create-project/gbp-create-project-widget.c:617
+msgid "A failure occurred while initializing version control"
+msgstr "A apărut o eroare în timpul inițializării versiunii de control"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:29
+msgid "Project Name"
+msgstr "Numele proiectului"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:57
+msgid ""
+"Unique name that is used for your project’s folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+"Nume unic care este utilizat pentru dosarul proiectului și alte resurse "
+"tehnice. Ar trebui să fie scris cu minuscule fără spații și nu poate să "
+"înceapă cu un număr."
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:76
+msgid "Project Location"
+msgstr "Locația proiectului"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:93
+#: src/plugins/git/ide-git-clone-widget.ui:78
+msgid "Select Project Directory"
+msgstr "Selectați dosarul proiectului"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:123
+msgid "Language"
+msgstr "Limbaj"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:146
+msgid "License"
+msgstr "Licență"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:161
+msgid "GPLv3+"
+msgstr "GPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:162
+msgid "LGPLv3+"
+msgstr "LGPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:163
+msgid "AGPLv3+"
+msgstr "AGPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:164
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:165
+msgid "GPLv2+"
+msgstr "GPLv2+"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:166
+msgid "LGPLv2.1+"
+msgstr "LGPLv2.1+"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:167
+msgid "No license"
+msgstr "Nicio licență"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:200
+msgid "Uses the Git version control system"
+msgstr "Utilizează sistemul de control al versiunii Git"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:289
+msgid "Select a Template"
+msgstr "Selectează un șablon"
+
+#: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
+msgid "Select Documentation…"
+msgstr "Selectați o documentație…"
+
+#: src/plugins/devhelp/gbp-devhelp-view.c:206
+#: src/plugins/devhelp/gtk/menus.ui:5
+msgid "Documentation"
+msgstr "Documentație"
+
+#: src/plugins/devhelp/gtk/menus.ui:21
+msgid "New Documentation Page"
+msgstr "Pagină de documentație nouă"
+
+#: src/plugins/documentation-card/gbp-documentation-card.ui:36
+msgid "_Show more"
+msgstr "_Arată mai multe"
+
+#: src/plugins/eslint/eslint_plugin.py:143
+msgid "ESlint"
+msgstr "ESlint"
+
+#: src/plugins/eslint/eslint_plugin.py:144
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr "Activează utilizarea de ESLint, care ar putea executa cod în proiect"
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/eslint/eslint_plugin.py:146
+msgid "eslint javascript lint code execute execution"
+msgstr "eslint javascript lint code execute execution cod execută executare"
+
+#: src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+msgid "Enable ESLint"
+msgstr "Activează ESlint"
+
+#: src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Activează utilizarea de eslint pentru a găsi diagnosticări adiționale în "
+"fișiere JavaScript. Aceasta poate să rezulte în execuția de cod în proiect."
+
+#: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:38
+msgid "Downloading application sources…"
+msgstr "Se descarcă sursele aplicației…"
+
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Nu s-a putut elimina manifestul flatpak: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
+msgid "Network is not available, skipping downloads"
+msgstr "Rețeaua nu este disponibilă, se sare peste descărcări"
+
+#: src/plugins/flatpak/gbp-flatpak-genesis-addin.c:93
+msgid "Clone App"
+msgstr "Clonează aplicația"
+
+#: src/plugins/flatpak/gbp-flatpak-genesis-addin.c:190
+#: src/plugins/git/ide-git-genesis-addin.c:190
+msgid "Clone"
+msgstr "Clonează"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:150
+msgid "Creating flatpak workspace"
+msgstr "Se creează spațiul de lucru flatpak"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:329
+msgid "Preparing build directory"
+msgstr "Se pregătește dosarul de generare"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:380
+msgid "Downloading dependencies"
+msgstr "Se descarcă dependențele"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:460
+msgid "Building dependencies"
+msgstr "Se generează dependențele"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
+msgid "Finalizing flatpak build"
+msgstr "Se finalizează generarea flatpak"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:558
+msgid "Exporting staging directory"
+msgstr "Se exportă dosarul de introducere"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
+msgid "Creating flatpak bundle"
+msgstr "Se creează pachetul flatpak"
+
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
+#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
+#: src/plugins/html-preview/html_preview.py:329
+#: src/plugins/html-preview/html_preview.py:339
+#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:496
+#: src/plugins/rustup/rustup_plugin.py:613
+msgid "Install"
+msgstr "Instalează"
+
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:97
+#: src/plugins/rustup/rustup_plugin.py:492
+#: src/plugins/rustup/rustup_plugin.py:496
+msgid "Update"
+msgstr "Actualizează"
+
+#. translators: keywords are used to match search keywords in preferences
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:296
+#, c-format
+msgid "flatpak %s %s %s"
+msgstr "flatpak %s %s %s"
+
+#. translators: %u is the number of hidden runtimes to be shown
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:311
+#, c-format
+msgid "Show %u more runtime"
+msgid_plural "show %u more runtimes"
+msgstr[0] "Arată încă %u executare"
+msgstr[1] "arată încă %u executări"
+msgstr[2] "arată încă %u de executări"
+
+#: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:393
+msgid "Flatpak Runtimes"
+msgstr "Executări flatpak"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:795
+#, c-format
+msgid "%s <b>%s</b>"
+msgstr "%s <b>%s</b>"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:797
+#, c-format
+msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:78
+#, c-format
+msgid "Updated %s"
+msgstr "Actualizat %s"
+
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:81
+#, c-format
+msgid "Updating %s"
+msgstr "Se actualizează %s"
+
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:87
+#, c-format
+msgid "Installed %s"
+msgstr "Instalat %s"
+
+#. Translators: %s is replaced with the runtime identifier
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:90
+#, c-format
+msgid "Installing %s"
+msgstr "Se instalează %s"
+
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:116
+msgid "Failed to install runtime"
+msgstr "Nu s-a putut instala executarea"
+
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:118
+msgid "Runtime has been updated"
+msgstr "Executarea a fost actualizată"
+
+#: src/plugins/flatpak/gbp-flatpak-transfer.c:120
+msgid "Runtime has been installed"
+msgstr "Executarea a fost instalată"
+
+#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:79
+msgid "Your computer is missing flatpak-builder"
+msgstr "Calculatorul nu are flatpak-builder"
+
+#: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:80
+msgid ""
+"This program is necessary for building Flatpak applications. Would you like "
+"to install it?"
+msgstr ""
+"Acest program este necesar pentru generarea de aplicații Flatpak. Doriți să "
+"îl instalați?"
+
+#: src/plugins/git/ide-git-buffer-change-monitor.c:201
+msgid "Cannot provide diff, no backing file provided."
+msgstr "Nu se poate oferi diff, niciun fișier de rezervă furnizat."
+
+#: src/plugins/git/ide-git-buffer-change-monitor.c:676
+#, c-format
+msgid "Repository does not have a working directory."
+msgstr "Depozitul nu are un dosar de lucru."
+
+#: src/plugins/git/ide-git-buffer-change-monitor.c:687
+#, c-format
+msgid "File is not under control of git working directory."
+msgstr "Fișierul nu se află sub controlul unui dosar de lucru git."
+
+#: src/plugins/git/ide-git-buffer-change-monitor.c:753
+#, c-format
+msgid "The requested file does not exist within the git index."
+msgstr "Fișierul solicitat nu există în indexul git."
+
+#: src/plugins/git/ide-git-clone-widget.c:158
+#: src/plugins/git/ide-git-clone-widget.c:437
+msgid "A valid Git URL is required"
+msgstr "Un URL Git valid este necesar"
+
+#. translators: %s is replaced with the path to the project
+#: src/plugins/git/ide-git-clone-widget.c:171
+#, c-format
+msgid "Your project will be created at %s"
+msgstr "Proiectul va fi creat la %s"
+
+#: src/plugins/git/ide-git-clone-widget.ui:37
+msgid "Use Git to create a local copy of a remotely hosted project."
+msgstr ""
+"Utilizați Git pentru a crea o copie locală a unui proiect găzduit la "
+"distanță."
+
+#: src/plugins/git/ide-git-clone-widget.ui:66
+msgid "user@host:repository.git"
+msgstr "user@host:repository.git"
+
+#: src/plugins/git/ide-git-clone-widget.ui:67
+msgid "Enter the URL of your project’s source code repository"
+msgstr "Introduceți URL-ul depozitului de cod sursă al proiectului"
+
+#: src/plugins/git/ide-git-clone-widget.ui:107
+msgid "Repository URL"
+msgstr "URL depozit"
+
+#: src/plugins/git/ide-git-clone-widget.ui:115
+msgid "Project Destination"
+msgstr "Destinație proiect"
+
+#: src/plugins/git/ide-git-genesis-addin.c:93
+msgid "Clone Project"
+msgstr "Clonează proiectul"
+
+#: src/plugins/git/ide-git-genesis-addin.c:184
+msgid "Clone…"
+msgstr "Clonează…"
+
+#: src/plugins/git/ide-git-remote-callbacks.c:193
+#, c-format
+msgid ""
+"Builder failed to provide appropriate credentials when cloning repository."
+msgstr ""
+"Builder nu a putut furniza certificările adecvate în timpul clonării "
+"depozitului."
+
+#. translators: %s is replaced with the error message
+#: src/plugins/git/ide-git-vcs.c:407
+#, c-format
+msgid "Failed to establish git file monitor: %s"
+msgstr ""
+"Nu s-a putut stabili programul de monitorizare de fișiere al lui git: %s"
+
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:374
+msgid "Code assistance requires a local file."
+msgstr "Asistența de cod necesită un fișier local."
+
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:62
+msgid "Pylint"
+msgstr "Pylint"
+
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+"Activează utilizarea de pylint, care ar putea să execute cod în proiect"
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "pylint python lint code execute execution"
+msgstr "pylint python lint code execute execution cod execută executare"
+
+#: src/plugins/gnome-code-assistance/ide-gca-service.c:181
+msgid "No language specified"
+msgstr "Niciun limbaj specificat"
+
+#: src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
+msgid "Enable Pylint"
+msgstr "Activează Pylint"
+
+#: src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+msgid ""
+"Enable the use of pylint to find additional diagnostics in Python programs. "
+"This may result in the execution of code in your project."
+msgstr ""
+"Activează utilizarea de pylint pentru a găsi diagnosticări adiționale în "
+"programe Python. Aceasta poate să rezulte în execuția de cod în proiect."
+
+#: src/plugins/html-preview/gtk/menus.ui:7
+msgid "Open Preview"
+msgstr "Deschide previzualizarea"
+
+#: src/plugins/html-preview/html_preview.py:325
+msgid "Your computer is missing python3-docutils"
+msgstr "Calculatorului îi lipsește python3-docutils"
+
+#: src/plugins/html-preview/html_preview.py:335
+msgid "Your computer is missing python3-sphinx"
+msgstr "Calculatorului îi lipsește python3-sphinx"
+
+#: src/plugins/html-preview/html_preview.py:382
+msgid "(Preview)"
+msgstr "(Previzualizare)"
+
+#: src/plugins/jedi/jedi_plugin.py:752
+msgid "Suggest Python completions"
+msgstr "Propune completări Python"
+
+#: src/plugins/jedi/jedi_plugin.py:753
+msgid "Use Jedi to provide completions for the Python language"
+msgstr "Utilizează Jedi pentru a furniza completări pentru limbajul Python"
+
+#: src/plugins/make/make_plugin.py:137
+msgid "Install project"
+msgstr "Instalează proiectul"
+
+#: src/plugins/make/make_plugin.py:359
+msgid "Empty Makefile Project"
+msgstr "Proiect Makefile gol"
+
+#: src/plugins/make/make_plugin.py:361
+msgid "Create a new empty project using a simple Makefile"
+msgstr "Creează un proiect gol nou utilizând un Makefile simplu"
+
+#: src/plugins/meson/gbp-meson-build-system.c:428
+msgid "Meson"
+msgstr "Meson"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:103
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr "Un proiect bazat pe Meson a fost încărcat, dar Ninja nu a fost găsit."
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:123
+msgid "A Meson-based project is loaded but meson could not be found."
+msgstr "Un proiect bazat pe Meson a fost încărcat, dar meson nu a fost găsit."
+
+#: src/plugins/meson-templates/meson_templates.py:250
+msgid "GNOME Application"
+msgstr "Aplicație GNOME"
+
+#: src/plugins/meson-templates/meson_templates.py:252
+msgid "Create a new GNOME application"
+msgstr "Creează o nouă aplicație GNOME"
+
+#: src/plugins/meson-templates/meson_templates.py:319
+msgid "Shared Library"
+msgstr "Bibiotecă partajată"
+
+#: src/plugins/meson-templates/meson_templates.py:321
+msgid "Create a new project with a shared library"
+msgstr "Creează un proiect nou cu o bibliotecă partajată"
+
+#: src/plugins/meson-templates/meson_templates.py:337
+msgid "Empty Project"
+msgstr "Proiect gol"
+
+#: src/plugins/meson-templates/meson_templates.py:339
+msgid "Create a new empty project"
+msgstr "Creează un nou proiect gol"
+
+#: src/plugins/messages/gbp-messages-panel.ui:5
+msgid "Messages"
+msgstr "Mesaje"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:12
+msgid "Contribute to an existing project"
+msgstr "Contribuiți la un proiect existent"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:32
+msgid "Polari"
+msgstr "Polari"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:42
+msgid "Games"
+msgstr "Jocuri"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:52
+msgid "Maps"
+msgstr "Hărți"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:62
+msgid "Todo"
+msgstr "De completat"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:71
+msgid "Music"
+msgstr "Muzică"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:80
+msgid "Nautilus"
+msgstr "Nautilus"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
+msgid "Photos"
+msgstr "Fotografii"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:98
+msgid "Calendar"
+msgstr "Calendar"
+
+#: src/plugins/notification/ide-notification-addin.c:98
+msgid "Build successful"
+msgstr "Generare cu succes"
+
+#: src/plugins/notification/ide-notification-addin.c:99
+#, c-format
+msgid "Project “%s” has completed building"
+msgstr "Proiectul „%s” a completat generarea"
+
+#: src/plugins/notification/ide-notification-addin.c:103
+msgid "Build failed"
+msgstr "Generarea a eșuat"
+
+#: src/plugins/notification/ide-notification-addin.c:104
+#, c-format
+msgid "Project “%s” failed to build"
+msgstr "Proiectul „%s” a eșuat la generare"
+
+#: src/plugins/npm/npm_plugin.py:102
+msgid "Downloading npm dependencies"
+msgstr "Se descarcă dependențe npm"
+
+#: src/plugins/phpize/phpize_plugin.py:210
+msgid "Bootstrapping project"
+msgstr "Se trece prin procesul de bootstrap al proiectului"
+
+#: src/plugins/project-tree/gb-new-file-popover.c:123
+#: src/plugins/project-tree/gb-rename-file-popover.c:139
+msgid "A folder with that name already exists."
+msgstr "Un dosar cu acel nume există deja."
+
+#: src/plugins/project-tree/gb-new-file-popover.c:126
+#: src/plugins/project-tree/gb-rename-file-popover.c:142
+msgid "A file with that name already exists."
+msgstr "Un fișier cu acel nume există deja."
+
+#: src/plugins/project-tree/gb-new-file-popover.c:348
+#: src/plugins/project-tree/gb-new-file-popover.ui:13
+#: src/plugins/project-tree/gb-rename-file-popover.ui:13
+msgid "File Name"
+msgstr "Numele fișierului"
+
+#: src/plugins/project-tree/gb-new-file-popover.c:350
+msgid "Folder Name"
+msgstr "Numele dosarului"
+
+#: src/plugins/project-tree/gb-new-file-popover.ui:35
+msgid "_Create"
+msgstr "_Creează"
+
+#: src/plugins/project-tree/gb-project-tree-actions.c:325
+msgid "Cannot load a non-native file in terminal"
+msgstr "Nu se poate încărca un fișier non-nativ în terminal"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/project-tree/gb-project-tree-actions.c:354
+#, c-format
+msgid "Failed to spawn terminal: %s"
+msgstr "Nu s-a putut crea terminalul: %s"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/project-tree/gb-project-tree-actions.c:619
+#, c-format
+msgid "Failed to rename file: %s"
+msgstr "Nu s-a putut redenumi fișierul: %s"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/project-tree/gb-project-tree-actions.c:710
+#, c-format
+msgid "Failed to trash file: %s"
+msgstr "Nu s-a putut trimite la gunoi fișierul: %s"
+
+#: src/plugins/project-tree/gb-project-tree-addin.c:88
+msgid "Project Tree"
+msgstr "Arbore proiect"
+
+#: src/plugins/project-tree/gb-project-tree-builder.c:451
+msgid "Empty"
+msgstr "Gol"
+
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:34
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:40
+msgctxt "shortcut window"
+msgid "Project tree"
+msgstr "Arbore proiect"
+
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:35
+msgctxt "shortcut window"
+msgid "Rename a file"
+msgstr "Redenumește un fișier"
+
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:41
+msgctxt "shortcut window"
+msgid "Move a file to the trash"
+msgstr "Mută un fișier la gunoi"
+
+#: src/plugins/project-tree/gb-rename-file-popover.c:79
+#, c-format
+msgid "Rename %s"
+msgstr "Redenumește %s"
+
+#: src/plugins/project-tree/gtk/menus.ui:6
+msgid "Re_veal in Project Tree"
+msgstr "Dez_văluie în arborele proiectului"
+
+#: src/plugins/project-tree/gtk/menus.ui:14
+msgid "_New"
+msgstr "_Nou"
+
+#: src/plugins/project-tree/gtk/menus.ui:17
+msgid "_Empty File"
+msgstr "Fiși_er gol"
+
+#: src/plugins/project-tree/gtk/menus.ui:23
+msgid "_New Folder"
+msgstr "Dosar _nou"
+
+#: src/plugins/project-tree/gtk/menus.ui:29
+msgid "_Open"
+msgstr "_Deschide"
+
+#: src/plugins/project-tree/gtk/menus.ui:34
+msgid "Open _With"
+msgstr "Deschide _cu"
+
+#: src/plugins/project-tree/gtk/menus.ui:37
+msgid "Source Code Editor"
+msgstr "Editor cod sursă"
+
+#: src/plugins/project-tree/gtk/menus.ui:47
+msgid "_Open Containing Folder"
+msgstr "Deschide d_osarul conținător"
+
+#: src/plugins/project-tree/gtk/menus.ui:51
+msgid "_Open in Terminal"
+msgstr "_Deschide în terminal"
+
+#: src/plugins/project-tree/gtk/menus.ui:64
+msgid "Mo_ve to Trash"
+msgstr "_Mută la gunoi"
+
+#: src/plugins/project-tree/gtk/menus.ui:71
+msgid "_Build"
+msgstr "_Generează"
+
+#: src/plugins/project-tree/gtk/menus.ui:75
+msgid "_Rebuild"
+msgstr "_Regenerează"
+
+#: src/plugins/project-tree/gtk/menus.ui:81
+msgid "Display Options"
+msgstr "Opțiuni de afișaj"
+
+#: src/plugins/project-tree/gtk/menus.ui:98
+msgid "_Collapse All Nodes"
+msgstr "_Restrânge toate nodurile"
+
+#: src/plugins/project-tree/gtk/menus.ui:102
+msgid "_Refresh"
+msgstr "_Reîmprospătează"
+
+#. translators: format is "CPU emulation". Only translate "emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:41
+msgid "Aarch64 Emulation"
+msgstr "Emulare Aarch64"
+
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+msgid "Arm Emulation"
+msgstr "Emulare Arm"
+
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#: src/plugins/qemu/gbp-qemu-device-provider.c:156
+#, c-format
+msgid "My Computer (%s) %s"
+msgstr "Calculator (%s) %s"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
+msgid "Words matching selection"
+msgstr "Cuvinte care se potrivesc cu selecția"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:49
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr ""
+"Evidențiază toate aparițiile cuvintelor care se potrivesc cu selecția curentă"
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "quick highlight words matching current selection"
+msgstr ""
+"quick highlight words matching current selection rapid evidențiere cuvinte "
+"potrivire curent selecție"
+
+#: src/plugins/recent/gbp-recent-section.ui:26
+msgid "Recent Projects"
+msgstr "Proiecte recente"
+
+#: src/plugins/recent/gbp-recent-section.ui:41
+msgid "Updated"
+msgstr "Actualizat"
+
+#: src/plugins/retab/gtk/menus.ui:9
+msgid "Reformat tabs"
+msgstr "Reformatează taburile"
+
+#: src/plugins/rustup/rustup_plugin.py:89
+msgid "Rustup not installed"
+msgstr "Rustup neinstalat"
+
+#: src/plugins/rustup/rustup_plugin.py:279
+msgid "Installing rustup"
+msgstr "Se instalează rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:281
+msgid "Updating rustup"
+msgstr "Se actualizează rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:283
+msgid "Installing rust "
+msgstr "Se instalează rust "
+
+#: src/plugins/rustup/rustup_plugin.py:285
+msgid "Checking system"
+msgstr "Se verifică sistemul"
+
+#: src/plugins/rustup/rustup_plugin.py:350
+msgid "Downloading rustup-init"
+msgstr "Se descarcă rustup-init"
+
+#: src/plugins/rustup/rustup_plugin.py:355
+msgid "Syncing channel updates"
+msgstr "Se sincronizează actualizările de canal"
+
+#: src/plugins/rustup/rustup_plugin.py:361
+msgid "Downloading "
+msgstr "Se descarcă "
+
+#: src/plugins/rustup/rustup_plugin.py:368
+msgid "Installing "
+msgstr "Se instalează "
+
+#: src/plugins/rustup/rustup_plugin.py:374
+msgid "Checking for rustup updates"
+msgstr "Se verifică după actualizări rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:379
+msgid "Downloading rustup update"
+msgstr "Se descarcă actualizarea rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:416
+msgid "Error installing "
+msgstr "Eroare la instalarea "
+
+#: src/plugins/rustup/rustup_plugin.py:418
+msgid "Error"
+msgstr "Eroare"
+
+#: src/plugins/rustup/rustup_plugin.py:423
+msgid "Cancelled"
+msgstr "Anulat"
+
+#: src/plugins/rustup/rustup_plugin.py:431
+msgid "Finished"
+msgstr "Terminat"
+
+#: src/plugins/rustup/rustup_plugin.py:447
+msgid "Rustup"
+msgstr "Rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:448
+msgid "Rustup Toolchains"
+msgstr "Ansambluri de unelte Rustup"
+
+#: src/plugins/rustup/rustup_plugin.py:504
+msgid "Updating"
+msgstr "Se actualizează"
+
+#: src/plugins/rustup/rustup_plugin.py:504
+msgid "Installing"
+msgstr "Se instalează"
+
+#. set default toolchain button
+#: src/plugins/rustup/rustup_plugin.py:597
+msgid "Make default"
+msgstr "Stabilește ca implicit"
+
+#: src/plugins/rustup/rustup_plugin.py:597
+msgid "Makes the selected toolchain the default rust installation"
+msgstr "Stabilește ansamblul de unelte selectat ca instalarea rust implicită"
+
+#: src/plugins/rustup/rustup_plugin.py:612
+msgid "Install Rust Channel"
+msgstr "Instalează canal Rust"
+
+#. translators: channel is stable, beta, nightly, with optional architecture and date
+#: src/plugins/rustup/rustup_plugin.py:617
+msgid "Enter name of rust channel"
+msgstr "Introduceți numele canalului rust"
+
+#: src/plugins/rustup/rustup_plugin.py:618
+msgid ""
+"Standard release channel toolchain names have the following form:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+msgstr ""
+"Numele de ansambluri de unelte pentru canalele de lansare standard au "
+"următoarea formă:\n"
+"                        <channel>[-<date>][-<host>]\n"
+"\n"
+"                        <channel>    = stable|beta|nightly|<version>\n"
+"                        <date>          = YYYY-MM-DD\n"
+"                        <host>          = <target-triple>"
+
+#: src/plugins/rustup/rustup_plugin.py:643
+msgid "Install Rustup to manage toolchains here!"
+msgstr "Instalați Rustup pentru a administra ansambluri de unelte aici!"
+
+#: src/plugins/rustup/rustup_plugin.py:650
+msgid "No toolchain installed. Click"
+msgstr "Niciun ansamblu de unelte instalat. Apăsați clic"
+
+#: src/plugins/rustup/rustup_plugin.py:651
+msgid "to add a new toolchain!"
+msgstr "pentru a adăuga un nou ansamblu de unelte!"
+
+#: src/plugins/spellcheck/gbp-spell-editor-addin.c:51
+msgid "Spelling"
+msgstr "Ortografie"
+
+#: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:102
+msgctxt "shortcut window"
+msgid "Show the spellchecker panel"
+msgstr "Arată panoul de corector ortografic"
+
+#. We might find ourselves in a race here and the buffer
+#. * addins are already in destruction. Therefore, silently
+#. * fail any further setup.
+#.
+#: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:139
+#: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:246
+msgid "Failed to initialize spellchecking, disabling"
+msgstr "Nu s-a putut inițializa corectarea ortografică, se dezactivează"
+
+#: src/plugins/spellcheck/gbp-spell-language-popover.c:232
+msgid "No language selected"
+msgstr "Nu este selectată nicio limbă"
+
+#: src/plugins/spellcheck/gbp-spell-navigator.c:480
+msgid "No language set. Check your dictionary installation."
+msgstr "Nu este stabilită nicio limbă. Verificați instalarea dicționarului."
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:119
+msgid "No suggestions"
+msgstr "Nu sunt sugestii"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:212
+msgid "Completed spell checking"
+msgstr "S-a completat corectarea ortografică"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:255
+msgid "The word is not in the dictionary"
+msgstr "Acest cuvânt nu este în dicționar"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:426
+msgid "This word is already in the personal dictionary"
+msgstr "Acest cuvânt este deja în dicționarul personal"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:429
+#, c-format
+msgid "This word is already in the %s dictionary"
+msgstr "Acest cuvânt este deja în dicționarul %s"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:17
+msgid "Misspelled"
+msgstr "Scris greșit"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:86
+msgid "_Ignore"
+msgstr "_Ignore"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:95
+msgid "Ignore _All"
+msgstr "Ignoră _tot"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:114
+msgid "Change _to"
+msgstr "Modifică _la"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:147
+msgid "Cha_nge"
+msgstr "_Modifică"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:156
+msgid "Change A_ll"
+msgstr "Modifică _tot"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:175
+msgid "_Suggestions"
+msgstr "_Sugestii"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:212
+msgid "Add Word"
+msgstr "Adaugă un cuvânt"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:238
+msgid "A_dd"
+msgstr "A_daugă"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:254
+msgid "Dictionary"
+msgstr "Dicționar"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:304
+msgid "_Language"
+msgstr "_Limbaj"
+
+#: src/plugins/spellcheck/gtk/menus.ui:6
+msgid "Check _Spelling"
+msgstr "Verifică _ortografia"
+
+#: src/plugins/spellcheck/gtk/menus.ui:14
+msgid "Underline misspelled words"
+msgstr "Subliniază cuvintele scrise greșit"
+
+#: src/plugins/support/gtk/menus.ui:7
+msgid "Generate Support Log"
+msgstr "Generează istoricul de suport"
+
+#: src/plugins/support/ide-support-application-addin.c:79
+#, c-format
+msgid ""
+"The support log file has been written to “%s”. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+"Fișierul de istoric de suport a fost scris la „%s”. Furnizați acest fișier "
+"ca un atașament la raportul de defecțiune sau la cererea de suport."
+
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
+msgctxt "shortcut window"
+msgid "Symbols"
+msgstr "Simboluri"
+
+#: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:56
+msgctxt "shortcut window"
+msgid "Search symbols within document"
+msgstr "Caută simboluri în document"
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:304
+msgid "Select Symbol…"
+msgstr "Selectați un simbol…"
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:77
+msgid "Document Outline"
+msgstr "Schiță document"
+
+#: src/plugins/sysmon/gb-sysmon-panel.ui:5
+msgid "System Monitor"
+msgstr "Monitor de sistem"
+
+#: src/plugins/sysprof/gbp-sysprof-perspective.c:135
+#: src/plugins/sysprof/gtk/menus.ui:20
+msgid "Profiler"
+msgstr "Profiler"
+
+#: src/plugins/sysprof/gbp-sysprof-perspective.ui:20
+msgid "Failure"
+msgstr "Eșec"
+
+#: src/plugins/sysprof/gbp-sysprof-perspective.ui:28
+msgid "_Close"
+msgstr "În_chide"
+
+#. the action:// link is used to run the project
+#: src/plugins/sysprof/gbp-sysprof-perspective.ui:49
+msgid ""
+"Select <a href=\"action://run-manager.run-with-handler::profiler\">Run with "
+"profiler</a> from the run menu to begin"
+msgstr ""
+"Selectați <a href=\"action://run-manager.run-with-handler::profiler"
+"\">rulează cu profiler</a> de la meniul de rulare pentru a începe"
+
+#: src/plugins/sysprof/gbp-sysprof-perspective.ui:81
+msgid "CPU"
+msgstr "CPU"
+
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:357
+msgid "Open Profile"
+msgstr "Deschide profilul"
+
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:366
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Captură Sysprof (*.syscap)"
+
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:372
+msgid "All Files"
+msgstr "Toate fișierele"
+
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:473
+#: src/plugins/sysprof/gtk/menus.ui:34
+msgid "Run with Profiler"
+msgstr "Rulează cu profiler"
+
+#: src/plugins/sysprof/gtk/menus.ui:8
+msgid "Open Sysprof Capture…"
+msgstr "Deschide o captură Sysprof…"
+
+#: src/plugins/terminal/gb-terminal-view-actions.c:265
+msgid "Save Terminal Content As"
+msgstr "Salvează conținutul terminalului ca"
+
+#: src/plugins/terminal/gb-terminal-view.c:347
+msgid "Untitled terminal"
+msgstr "Terminal neintitulat"
+
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:176
+msgid "Application Output"
+msgstr "Rezultat aplicație"
+
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:216
+msgid "Application exited\r\n"
+msgstr "Aplicația a ieșit\r\n"
+
+#: src/plugins/terminal/gtk/menus.ui:17
+msgid "Reset and Clear"
+msgstr "Restabilește și eliberează"
+
+#: src/plugins/terminal/gtk/menus.ui:36
+msgid "New _Terminal"
+msgstr "_Terminal nou"
+
+#: src/plugins/terminal/gtk/menus.ui:44
+msgid "New _Build Terminal"
+msgstr "Terminal de _generare nou"
+
+#: src/plugins/terminal/gtk/menus.ui:54
+msgid "New terminal in directory"
+msgstr "Terminal nou în dosarul"
+
+#: src/plugins/todo/gbp-todo-workbench-addin.c:115
+msgid "TODO/FIXMEs"
+msgstr "TODO/FIXMEs"
+
+#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
+msgid "Show errors and warnings provided by Vala"
+msgstr "Arată erorile și avertismentele furnizate de Vala"
+
+#. translators: keywords used when searching for preferences
+#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:36
+msgid "vala diagnostics warnings errors"
+msgstr "vala diagnostics warnings errors diagnosticare avertismente erori"
+
+#: src/plugins/valgrind/gtk/menus.ui:10
+#: src/plugins/valgrind/valgrind_plugin.py:53
+msgid "Run with Valgrind"
+msgstr "Rulează cu Valgrind"
+
+#: src/plugins/xml-pack/ide-xml-parser.c:585
+#: src/plugins/xml-pack/ide-xml-tree-builder.c:523
+msgid "Failed to create the XML tree."
+msgstr "Nu s-a putut crea arborele XML."
+
+#: src/plugins/xml-pack/ide-xml-service.c:339
+msgid "Buffer loaded but not in the buffer manager."
+msgstr "Preîncărcarea s-a încărcat dar nu în administratorul de preîncărcare."
