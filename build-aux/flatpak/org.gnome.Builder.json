@@ -1,7 +1,7 @@
 {
     "app-id" : "org.gnome.Builder",
     "runtime" : "org.gnome.Sdk",
-    "runtime-version" : "master",
+    "runtime-version" : "3.28",
     "sdk" : "org.gnome.Sdk",
     "command" : "gnome-builder",
     "tags" : [
@@ -714,7 +714,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://github.com/ostreedev/ostree.git"
+                    "url" : "https://github.com/ostreedev/ostree.git",
+                    "tag" : "v2018.5"
                 }
             ]
         },
