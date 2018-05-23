@@ -1,4 +1,36 @@
 ==============
+Version 3.29.2
+==============
+
+Changes since last release:
+
+ • Fixes for DTD and RNG processing in xml-pack plugin
+ • Improvements to the vim-style search and replace command
+ • Continued improvements to the new sysroot plugin
+ • A new IdeToolchain abstraction has been added to help with systems
+   where multiple toolchains can exist within a runtime. We expect this
+   to be used later on for some cross-compiling.
+ • Various build systems have been migrated to toolchain support
+ • Various memory leak fixes
+ • Improved support for using subprocesses to perform compiler work
+ • Clang support has been moved out-of-process using the new
+   gnome-builder-clang subprocess. Clang-based auto-completion is temporarily
+   disabled until a future development release.
+ • A preferences button has been re-added to the perspective switcher
+ • Memory overhead of the clang plugin has been vastly reduced
+ • The code-indexer now uses less memory
+ • The highlighter can now deal with delayed requests to load a new
+   highlight index. It more correctly follows up on incorrectly highlighted
+   lines of code.
+ • A spinloop was fixed when opening certain files with double-click from
+   the project tree.
+
+Updated Translations:
+
+   Swedish, Lithuanian, Hungarian, Spanish, Romanian, Turkish, Indonesian,
+   Czech, German, Slovenian, Italian, Brazilian Portuguese, Polish
+
+==============
 Version 3.29.1
 ==============
 
