@@ -96,6 +96,7 @@ typedef struct
   IdePersistentMapBuilder *map_builder;
   DzlFuzzyIndexBuilder    *fuzzy_builder;
   guint32                  file_id;
+  guint                    has_called : 1;
 } AddEntriesData;
 
 enum {
@@ -950,14 +951,22 @@ add_entries_to_index_next_entries_cb (GObject      *object,
       return;
     }
 
-  if (ret == NULL || ret->len == 0)
+  g_assert (ret != NULL);
+
+  cancellable = ide_task_get_cancellable (task);
+  task_data = ide_task_get_task_data (task);
+
+  /*
+   * Make sure that we at least insert the result set once, but ignore the
+   * follow up call if it has 0 results.
+   */
+  if (ret->len == 0 && task_data->has_called)
     {
       ide_task_return_boolean (task, TRUE);
       return;
     }
 
-  cancellable = ide_task_get_cancellable (task);
-  task_data = ide_task_get_task_data (task);
+  task_data->has_called = TRUE;
 
   g_assert (task_data != NULL);
   g_assert (IDE_IS_CODE_INDEX_ENTRIES (task_data->entries));
@@ -973,10 +982,13 @@ add_entries_to_index_next_entries_cb (GObject      *object,
                         task_data->map_builder,
                         task_data->fuzzy_builder);
 
-  ide_code_index_entries_next_entries_async (entries,
-                                             cancellable,
-                                             add_entries_to_index_next_entries_cb,
-                                             g_steal_pointer (&task));
+  if (ret->len > 0)
+    ide_code_index_entries_next_entries_async (entries,
+                                               cancellable,
+                                               add_entries_to_index_next_entries_cb,
+                                               g_steal_pointer (&task));
+  else
+    ide_task_return_boolean (task, TRUE);
 }
 
 static void
