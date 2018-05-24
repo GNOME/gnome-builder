@@ -68,6 +68,19 @@ cx_cursor_free (CXCursor *cursor)
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (CXCursor, cx_cursor_free)
 
+static void
+ide_clang_code_index_entries_drop_state (IdeClangCodeIndexEntries *self)
+{
+  g_queue_foreach (&self->decl_cursors, (GFunc)cx_cursor_free, NULL);
+  g_queue_clear (&self->decl_cursors);
+
+  g_queue_foreach (&self->cursors, (GFunc)cx_cursor_free, NULL);
+  g_queue_clear (&self->cursors);
+
+  g_clear_pointer (&self->unit, clang_disposeTranslationUnit);
+  g_clear_pointer (&self->index, clang_disposeIndex);
+}
+
 static IdeSymbolKind
 translate_kind (enum CXCursorKind cursor_kind)
 {
@@ -403,6 +416,9 @@ ide_clang_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *entries,
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
+  /* Drop state as early as possible */
+  ide_clang_code_index_entries_drop_state (IDE_CLANG_CODE_INDEX_ENTRIES (entries));
+
   return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
@@ -427,14 +443,7 @@ ide_clang_code_index_entries_finalize (GObject *object)
 {
   IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)object;
 
-  g_queue_foreach (&self->decl_cursors, (GFunc)cx_cursor_free, NULL);
-  g_queue_clear (&self->decl_cursors);
-
-  g_queue_foreach (&self->cursors, (GFunc)cx_cursor_free, NULL);
-  g_queue_clear (&self->cursors);
-
-  g_clear_pointer (&self->unit, clang_disposeTranslationUnit);
-  g_clear_pointer (&self->index, clang_disposeIndex);
+  ide_clang_code_index_entries_drop_state (self);
 
   G_OBJECT_CLASS(ide_clang_code_index_entries_parent_class)->finalize (object);
 }
