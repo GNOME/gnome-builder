@@ -1788,5 +1788,5 @@ _ide_breakout_subprocess_new (const gchar                 *cwd,
   if (!g_initable_init (G_INITABLE (ret), cancellable, error))
     return NULL;
 
-  return g_steal_pointer (&ret);
+  return IDE_SUBPROCESS (g_steal_pointer (&ret));
 }
