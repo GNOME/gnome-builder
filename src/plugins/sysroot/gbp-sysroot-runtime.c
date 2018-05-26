@@ -39,7 +39,7 @@ GbpSysrootRuntime *
 gbp_sysroot_runtime_new (IdeContext  *context,
                          const gchar *sysroot_id)
 {
-  g_autoptr(IdeRuntime) runtime = NULL;
+  g_autoptr(GbpSysrootRuntime) runtime = NULL;
   g_autofree gchar *built_id = NULL;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);

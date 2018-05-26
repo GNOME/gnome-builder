@@ -181,7 +181,7 @@ gbp_sysroot_toolchain_provider_try_poky (GbpSysrootToolchainProvider *self,
       if (qemu_static_path != NULL)
         ide_simple_toolchain_set_tool_for_language (toolchain, IDE_TOOLCHAIN_LANGUAGE_ANY, IDE_TOOLCHAIN_TOOL_EXEC, qemu_static_path);
 
-      return g_steal_pointer (&toolchain);
+      return IDE_TOOLCHAIN (g_steal_pointer (&toolchain));
     }
 
   return NULL;
