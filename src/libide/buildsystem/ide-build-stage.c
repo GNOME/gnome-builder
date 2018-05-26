@@ -538,7 +538,7 @@ ide_build_stage_execute_async (IdeBuildStage       *self,
 
       g_clear_object (&priv->stdout_stream);
 
-      priv->stdout_stream = g_steal_pointer (&stream);
+      priv->stdout_stream = G_OUTPUT_STREAM (g_steal_pointer (&stream));
     }
 
   IDE_BUILD_STAGE_GET_CLASS (self)->execute_async (self, pipeline, cancellable, callback, user_data);
