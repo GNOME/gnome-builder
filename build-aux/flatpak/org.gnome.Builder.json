@@ -512,7 +512,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://git.gnome.org/browse/libgit2-glib"
+                    "url" : "https://gitlab.gnome.org/GNOME/libgit2-glib.git"
                 },
                 {
                     "type" : "patch",
@@ -539,7 +539,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://git.gnome.org/browse/gtksourceview",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git",
                     "branch" : "gnome-3-24"
                 }
             ]
@@ -551,7 +551,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://git.gnome.org/browse/amtk"
+                    "url" : "https://gitlab.gnome.org/GNOME/amtk.git"
                 }
             ]
         },
@@ -574,7 +574,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://git.gnome.org/browse/devhelp"
+                    "url" : "https://gitlab.gnome.org/GNOME/devhelp.git"
                 }
             ]
         },
@@ -626,7 +626,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://git.gnome.org/browse/gspell"
+                    "url" : "https://gitlab.gnome.org/GNOME/gspell.git"
                 }
             ]
         },
@@ -650,7 +650,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://git.gnome.org/browse/sysprof"
+                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git"
                 }
             ]
         },
