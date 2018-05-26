@@ -253,7 +253,7 @@ ide_langserv_formatter_format_call_cb (GObject      *object,
 
   if (!ide_langserv_client_call_finish (client, result, &reply, &error))
     {
-      g_task_return_error (task, g_steal_pointer (&task));
+      g_task_return_error (task, g_steal_pointer (&error));
       return;
     }
 
