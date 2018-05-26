@@ -242,7 +242,7 @@ ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline  *pipeline,
   stage->runtime = g_object_ref (runtime);
   stage->cache_file = g_file_new_for_path (cache_path);
 
-  IDE_RETURN (g_steal_pointer (&stage));
+  return IDE_BUILD_STAGE (g_steal_pointer (&stage));
 }
 
 IdeMakecache *
