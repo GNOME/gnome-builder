@@ -32,6 +32,8 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Ide
 
+Ide.vcs_register_ignored('node_modules')
+
 class NPMBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
 
