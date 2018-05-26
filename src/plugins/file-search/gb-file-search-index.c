@@ -380,7 +380,7 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
                                  "title", markup,
                                  "path", filename,
                                  NULL);
-          ide_search_reducer_take (&reducer, g_steal_pointer (&result));
+          ide_search_reducer_take (&reducer, IDE_SEARCH_RESULT (g_steal_pointer (&result)));
         }
     }
 
