@@ -65,6 +65,9 @@
                         <property name="max-width-chars">50</property>
                         <property name="placeholder-text" translatable="yes">user@host:repository.git</property>
                         <property name="tooltip-text" translatable="yes">Enter the URL of your project’s source code repository</property>
+                        <property name="primary-icon-name">builder-vcs-git-symbolic</property>
+                        <property name="primary-icon-activatable">true</property>
+                        <property name="primary-icon-tooltip-text" translatable="yes">Change default branch</property>
                         <property name="valign">baseline</property>
                         <property name="visible">true</property>
                       </object>

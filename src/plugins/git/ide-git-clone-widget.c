@@ -31,6 +31,7 @@ struct _IdeGitCloneWidget
   GtkBin                parent_instance;
 
   gchar                *child_name;
+  gchar                *branch_name;
 
   DzlFileChooserEntry  *clone_location_entry;
   GtkEntry             *clone_uri_entry;
@@ -182,6 +183,59 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
 }
 
 static void
+branch_popover_activate_cb (IdeGitCloneWidget *self,
+                            const gchar       *text,
+                            DzlSimplePopover  *popover)
+{
+  g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
+  g_assert (DZL_IS_SIMPLE_POPOVER (popover));
+
+  if (text == NULL || *text == 0)
+    text = "master";
+
+  g_free (self->branch_name);
+  self->branch_name = g_strdup (text);
+}
+
+static void
+ide_git_clone_widget_icon_press_cb (IdeGitCloneWidget    *self,
+                                    GtkEntryIconPosition  pos,
+                                    const GdkEvent       *event,
+                                    GtkEntry             *entry)
+{
+  GtkPopover *popover;
+
+  g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
+  g_assert (event != NULL);
+  g_assert (GTK_IS_ENTRY (entry));
+
+  if (pos != GTK_ENTRY_ICON_PRIMARY)
+    return;
+
+  popover = g_object_new (DZL_TYPE_SIMPLE_POPOVER,
+                          "button-text", _("Apply"),
+                          "ready", TRUE,
+                          "title", _("Remote Branch to Clone"),
+                          "text", self->branch_name,
+                          "relative-to", entry,
+                          "position", GTK_POS_LEFT,
+                          NULL);
+
+  g_signal_connect_object (popover,
+                           "activate",
+                           G_CALLBACK (branch_popover_activate_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect (popover,
+                    "closed",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
+
+  gtk_popover_popup (popover);
+}
+
+static void
 ide_git_clone_widget_finalize (GObject *object)
 {
   IdeGitCloneWidget *self = (IdeGitCloneWidget *)object;
@@ -241,6 +295,8 @@ ide_git_clone_widget_init (IdeGitCloneWidget *self)
 {
   g_autoptr(GFile) projects_dir = NULL;
 
+  self->branch_name = g_strdup ("master");
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   projects_dir = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
@@ -251,6 +307,12 @@ ide_git_clone_widget_init (IdeGitCloneWidget *self)
   g_signal_connect_object (self->clone_uri_entry,
                            "changed",
                            G_CALLBACK (ide_git_clone_widget_uri_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->clone_uri_entry,
+                           "icon-press",
+                           G_CALLBACK (ide_git_clone_widget_icon_press_cb),
                            self,
                            G_CONNECT_SWAPPED);
 }
@@ -359,7 +421,7 @@ ide_git_clone_widget_worker (IdeTask      *task,
 
   clone_options = ggit_clone_options_new ();
   ggit_clone_options_set_is_bare (clone_options, FALSE);
-  ggit_clone_options_set_checkout_branch (clone_options, "master");
+  ggit_clone_options_set_checkout_branch (clone_options, self->branch_name);
   ggit_clone_options_set_fetch_options (clone_options, fetch_options);
   g_clear_pointer (&fetch_options, ggit_fetch_options_free);
 
