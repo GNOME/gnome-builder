@@ -93,41 +93,11 @@ void
 ide_application_discover_plugins (IdeApplication *self)
 {
   PeasEngine *engine = peas_engine_get_default ();
-  const GList *list;
-  gchar *path;
+  g_autofree gchar *path = NULL;
   g_autoptr(GError) error = NULL;
+  const GList *list;
 
   g_return_if_fail (IDE_IS_APPLICATION (self));
-
-  if (g_getenv ("GB_IN_TREE_PLUGINS") != NULL)
-    {
-      GDir *dir;
-
-      g_irepository_prepend_search_path (BUILDDIR"/src/gstyle");
-      g_irepository_prepend_search_path (BUILDDIR"/src/libide");
-
-      if ((dir = g_dir_open (BUILDDIR"/src/plugins", 0, NULL)))
-        {
-          const gchar *name;
-
-          while ((name = g_dir_read_name (dir)))
-            {
-              path = g_build_filename (BUILDDIR, "src", "plugins", name, NULL);
-              peas_engine_prepend_search_path (engine, path, path);
-              g_free (path);
-            }
-
-          g_dir_close (dir);
-        }
-    }
-  else
-    {
-      g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
-
-      peas_engine_prepend_search_path (engine,
-                                       PACKAGE_LIBDIR"/gnome-builder/plugins",
-                                       PACKAGE_DATADIR"/gnome-builder/plugins");
-    }
 
   /*
    * We have access to ~/.local/share/gnome-builder/ for plugins even when we are
@@ -145,6 +115,16 @@ ide_application_discover_plugins (IdeApplication *self)
       peas_engine_prepend_search_path (engine, plugins_dir, plugins_dir);
     }
 
+  path = g_build_filename (g_get_user_data_dir (), "gnome-builder", "plugins", NULL);
+  peas_engine_prepend_search_path (engine, path, NULL);
+
+  g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
+  peas_engine_prepend_search_path (engine,
+                                   PACKAGE_LIBDIR"/gnome-builder/plugins",
+                                   PACKAGE_DATADIR"/gnome-builder/plugins");
+
+  peas_engine_prepend_search_path (engine, "resource:///org/gnome/builder/plugins/", NULL);
+
   if (!g_irepository_require (NULL, "Ide", "1.0", 0, &error) ||
       !g_irepository_require (NULL, "Gtk", "3.0", 0, &error) ||
       !g_irepository_require (NULL, "Dazzle", "1.0", 0, &error))
@@ -154,12 +134,6 @@ ide_application_discover_plugins (IdeApplication *self)
       /* Avoid spamming stderr with Ide import tracebacks */
       peas_engine_enable_loader (engine, "python3");
     }
-
-  peas_engine_prepend_search_path (engine, "resource:///org/gnome/builder/plugins/", NULL);
-
-  path = g_build_filename (g_get_user_data_dir (), "gnome-builder", "plugins", NULL);
-  peas_engine_prepend_search_path (engine, path, NULL);
-  g_free (path);
 
   list = peas_engine_get_plugin_list (engine);
 
