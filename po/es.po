@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-05-21 20:10+0000\n"
-"PO-Revision-Date: 2018-05-22 10:08+0200\n"
+"POT-Creation-Date: 2018-05-28 05:19+0000\n"
+"PO-Revision-Date: 2018-05-28 17:52+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -969,74 +969,74 @@ msgstr "Falló al inicializar la tubería de construcción: %s"
 msgid "Failed to get device information: %s"
 msgstr "Falló al obtener la información del dispositivo: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:769
+#: src/libide/buildsystem/ide-build-pipeline.c:776
 msgid "The build pipeline is in a failed state"
 msgstr "LA tubería de construcción está en estado de error"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:779
+#: src/libide/buildsystem/ide-build-pipeline.c:786
 msgid "The build configuration has errors"
 msgstr "La configuración de construcción tiene errores"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2805
+#: src/libide/buildsystem/ide-build-pipeline.c:2813
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Falló la creación de la pseudo-terminal. Sus características estarán "
 "limitadas."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3005
+#: src/libide/buildsystem/ide-build-pipeline.c:3013
 msgid "Cleaning…"
 msgstr "Limpiando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3009
-#: src/libide/buildsystem/ide-build-pipeline.c:3066
+#: src/libide/buildsystem/ide-build-pipeline.c:3017
+#: src/libide/buildsystem/ide-build-pipeline.c:3074
 #: src/libide/workbench/ide-omni-bar.c:559
 msgid "Failed"
 msgstr "Falló"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3011
-#: src/libide/buildsystem/ide-build-pipeline.c:3074
+#: src/libide/buildsystem/ide-build-pipeline.c:3019
+#: src/libide/buildsystem/ide-build-pipeline.c:3082
 msgid "Ready"
 msgstr "Preparado"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3026
+#: src/libide/buildsystem/ide-build-pipeline.c:3034
 msgid "Downloading…"
 msgstr "Descargando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3030
+#: src/libide/buildsystem/ide-build-pipeline.c:3038
 msgid "Building dependencies…"
 msgstr "Construyendo dependencias…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3034
+#: src/libide/buildsystem/ide-build-pipeline.c:3042
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3038
+#: src/libide/buildsystem/ide-build-pipeline.c:3046
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3042
+#: src/libide/buildsystem/ide-build-pipeline.c:3050
 msgid "Building…"
 msgstr "Construyendo…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3046
+#: src/libide/buildsystem/ide-build-pipeline.c:3054
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3050
+#: src/libide/buildsystem/ide-build-pipeline.c:3058
 msgid "Committing…"
 msgstr "Aplicando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3054
+#: src/libide/buildsystem/ide-build-pipeline.c:3062
 msgid "Exporting…"
 msgstr "Exportando…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3058
-#: src/libide/buildsystem/ide-build-pipeline.c:3062
+#: src/libide/buildsystem/ide-build-pipeline.c:3066
+#: src/libide/buildsystem/ide-build-pipeline.c:3070
 #: src/libide/workbench/ide-omni-bar.c:586
 msgid "Success"
 msgstr "Correcto"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3070
+#: src/libide/buildsystem/ide-build-pipeline.c:3078
 msgid "Preparing…"
 msgstr "Preparando…"
 
@@ -1064,6 +1064,7 @@ msgid "The name of the build configuration"
 msgstr "El nombre de la configuración de construcción"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:37
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
 msgstr "Nombre"
@@ -1099,6 +1100,12 @@ msgid "Runtime"
 msgstr "Tiempo de ejecución"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
+#| msgid "Rustup Toolchains"
+msgid "Toolchain"
+msgstr "«Toolchain»"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:245
 msgid "Environment"
 msgstr "Entorno"
 
@@ -2488,8 +2495,6 @@ msgid "terminal font monospace"
 msgstr "tipografía monoespaciada de la terminal"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
-#| msgctxt "shortcut window"
-#| msgid "Find text within terminal"
 msgid "Bold text in terminals"
 msgstr "Texto en negrita en la terminal"
 
@@ -3057,7 +3062,6 @@ msgid "Tests will be loaded after building."
 msgstr "Las pruebas se cargarán después de la construcción."
 
 #: src/libide/toolchain/ide-toolchain-manager.c:335
-#| msgid "Host operating system"
 msgid "Default (Host operating system)"
 msgstr "Predeterminado (sistema operativo del equipo)"
 
@@ -3506,7 +3510,6 @@ msgstr "Instalando proyecto"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:215
 #, c-format
-#| msgid "CMake"
 msgid "%s (CMake)"
 msgstr "%s (CMake)"
 
@@ -3974,7 +3977,7 @@ msgid "Project Location"
 msgstr "Ubicación del proyecto"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:93
-#: src/plugins/git/ide-git-clone-widget.ui:78
+#: src/plugins/git/ide-git-clone-widget.ui:81
 msgid "Select Project Directory"
 msgstr "Seleccionar la carpeta de proyectos"
 
@@ -4232,16 +4235,24 @@ msgstr "El archivo no está bajo el control de la carpeta de trabajo de git."
 msgid "The requested file does not exist within the git index."
 msgstr "El archivo solicitado no existe dentro del índice de git."
 
-#: src/plugins/git/ide-git-clone-widget.c:158
-#: src/plugins/git/ide-git-clone-widget.c:437
+#: src/plugins/git/ide-git-clone-widget.c:159
+#: src/plugins/git/ide-git-clone-widget.c:499
 msgid "A valid Git URL is required"
 msgstr "Se necesita un URL de Git válido"
 
 #. translators: %s is replaced with the path to the project
-#: src/plugins/git/ide-git-clone-widget.c:171
+#: src/plugins/git/ide-git-clone-widget.c:172
 #, c-format
 msgid "Your project will be created at %s"
 msgstr "Su proyecto se creará en %s"
+
+#: src/plugins/git/ide-git-clone-widget.c:216
+msgid "Apply"
+msgstr "Aplicar"
+
+#: src/plugins/git/ide-git-clone-widget.c:218
+msgid "Remote Branch to Clone"
+msgstr "Rama remota que clonar"
 
 #: src/plugins/git/ide-git-clone-widget.ui:37
 msgid "Use Git to create a local copy of a remotely hosted project."
@@ -4255,11 +4266,16 @@ msgstr "usuario@equipo:repositorio.git"
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Introduzca el URL del repositorio de código fuente de su proyecto"
 
-#: src/plugins/git/ide-git-clone-widget.ui:107
+#: src/plugins/git/ide-git-clone-widget.ui:70
+#| msgid "Make default"
+msgid "Change default branch"
+msgstr "Cambiar la rama predeterminada"
+
+#: src/plugins/git/ide-git-clone-widget.ui:110
 msgid "Repository URL"
 msgstr "URL del repositorio"
 
-#: src/plugins/git/ide-git-clone-widget.ui:115
+#: src/plugins/git/ide-git-clone-widget.ui:118
 msgid "Project Destination"
 msgstr "Destino del proyecto"
 
@@ -4334,11 +4350,11 @@ msgstr "Su equipo no tiene python3-sphinx"
 msgid "(Preview)"
 msgstr "(Vista previa)"
 
-#: src/plugins/jedi/jedi_plugin.py:752
+#: src/plugins/jedi/jedi_plugin.py:766
 msgid "Suggest Python completions"
 msgstr "Sugerir completado en Python"
 
-#: src/plugins/jedi/jedi_plugin.py:753
+#: src/plugins/jedi/jedi_plugin.py:767
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Usar Jedi para completado en el lenguaje Python"
 
@@ -4372,9 +4388,132 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain.c:66
 #, c-format
-#| msgid "Meson"
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
+#| msgid "to add a new toolchain!"
+msgid "Add toolchain"
+msgstr "Añadir «toolchain»"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
+msgid "Define a new custom toolchain targeting a specific platform"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:407
+msgid "No Provided Tool"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
+msgid "A name to identify the sysroot."
+msgstr "Un nombre para identificar el sysroot."
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
+msgid "Architecture"
+msgstr "Arquitectura"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
+msgid "The system architecture of the sysroot."
+msgstr "La arquitectura del sistema del sysroot."
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
+#| msgid "Add sysroot"
+msgid "Add Tool:"
+msgstr "Añadir herramienta:"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
+#: src/plugins/meson/gbp-meson-utils.c:96
+#| msgid "Completion"
+msgid "Compiler"
+msgstr "Compilador"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Preprocessor"
+msgstr "Preprocesador"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
+#: src/plugins/meson/gbp-meson-utils.c:100
+#| msgid "Architecture"
+msgid "Archiver"
+msgstr "Archivador"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Linker"
+msgstr "Enlazador"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Strip"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Executable wrapper"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:177
+#: src/plugins/meson/gbp-meson-utils.c:108
+#| msgid "Package Config Path"
+msgid "Package Config"
+msgstr "Configuración del paquete"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
+#| msgid "Language"
+msgid "Any language"
+msgstr "Cualquier idioma"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
+msgid "C"
+msgstr "C"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
+msgid "C++"
+msgstr "C++"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
+msgid "Python"
+msgstr "Python"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
+#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:194
+msgid "Fortran"
+msgstr "Fortran"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
+#| msgid "ID"
+msgid "D"
+msgstr "D"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:227
+#| msgid "Add sysroot"
+msgid "Add Tool"
+msgstr "Añadir herramienta"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:242
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
+msgid "Delete"
+msgstr "Eliminar"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:248
+#| msgctxt "shortcut window"
+#| msgid "Delete line"
+msgid "Delete Toolchain"
+msgstr "Eliminar «toolchain»"
+
+#: src/plugins/meson/gbp-meson-tool-row.ui:25
+#| msgctxt "shortcut window"
+#| msgid "Delete line"
+msgid "Delete Tool"
+msgstr "Eliminar herramienta"
 
 #: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
@@ -4458,7 +4597,7 @@ msgstr "Fallo al construir"
 msgid "Project “%s” failed to build"
 msgstr "El proyecto «%s» ha fallado al construirse"
 
-#: src/plugins/npm/npm_plugin.py:102
+#: src/plugins/npm/npm_plugin.py:111
 msgid "Downloading npm dependencies"
 msgstr "Descargando dependencias npm"
 
@@ -4960,18 +5099,6 @@ msgstr ""
 msgid "Sysroots"
 msgstr "Sysroots"
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
-msgid "A name to identify the sysroot."
-msgstr "Un nombre para identificar el sysroot."
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
-msgid "Architecture"
-msgstr "Arquitectura"
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
-msgid "The system architecture of the sysroot."
-msgstr "La arquitectura del sistema del sysroot."
-
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
 msgstr "Una ruta absoluta del sistema de archivos para el sysroot."
@@ -4983,10 +5110,6 @@ msgstr "Ruta de configuración del paquete"
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
 msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
 msgstr "Una ruta opcional separada por comas para especificar PKG_CONFIG_PATH."
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
-msgid "Delete"
-msgstr "Eliminar"
 
 #: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:147
 #, c-format
@@ -5037,10 +5160,6 @@ msgstr "Nueva terminal en una carpeta"
 #: src/plugins/todo/gbp-todo-workbench-addin.c:115
 msgid "TODO/FIXMEs"
 msgstr "POR HACER/CORREGIR"
-
-#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:33
-msgid "Vala"
-msgstr "Vala"
 
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
@@ -7034,9 +7153,6 @@ msgstr "Búfer cargado pero no en el gestor de búferes."
 
 #~ msgid "The position of the pane."
 #~ msgstr "La posición del panel."
-
-#~ msgid "C"
-#~ msgstr "C"
 
 #~ msgid "Language id does not match a C language."
 #~ msgstr "El identificador no coincide con el lenguaje C."
