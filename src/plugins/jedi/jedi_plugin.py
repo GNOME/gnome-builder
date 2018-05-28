@@ -91,8 +91,14 @@ try:
     import jedi
     from jedi.evaluate.compiled import CompiledObject
     from jedi.evaluate.compiled import get_special_object
-    from jedi.evaluate.compiled import _create_from_name
-    from jedi.evaluate.context import Context
+    try:
+        # 0.12
+        from jedi.evaluate.compiled import create_from_name
+        from jedi.evaluate.base_context import Context
+    except ImportError:
+        # Pre 0.12
+        from jedi.evaluate.compiled import _create_from_name as create_from_name
+        from jedi.evaluate.context import Context
     from jedi.evaluate.docstrings import _evaluate_for_statement_string
     from jedi.evaluate.imports import Importer
 
@@ -175,23 +181,31 @@ try:
                         pass
             return module_list
 
-    original_jedi_get_module = jedi.evaluate.compiled.fake.get_module
+    try:
+        # Pre 0.12 workaround
+        # TODO: What needs to be fixed here for 0.12?
+        original_jedi_get_module = jedi.evaluate.compiled.fake.get_module
+        def patched_jedi_get_module(obj):
+            "Work around a weird bug in jedi"
+            try:
+                return original_jedi_get_module(obj)
+            except ImportError as e:
+                if e.msg == "No module named 'gi._gobject._gobject'":
+                    return original_jedi_get_module('gi._gobject')
+        jedi.evaluate.compiled.fake.get_module = patched_jedi_get_module
+    except:
+        pass
 
-    def patched_jedi_get_module(obj):
-        "Work around a weird bug in jedi"
-        try:
-            return original_jedi_get_module(obj)
-        except ImportError as e:
-            if e.msg == "No module named 'gi._gobject._gobject'":
-                return original_jedi_get_module('gi._gobject')
-
-    jedi.evaluate.compiled.fake.get_module = patched_jedi_get_module
     jedi.evaluate.compiled.CompiledObject = PatchedJediCompiledObject
-    jedi.evaluate.instance.CompiledBoundMethod = PatchedCompiledBoundMethod
+    try:
+        jedi.evaluate.instance.CompiledBoundMethod = PatchedCompiledBoundMethod
+    except AttributeError:
+        jedi.evaluate.context.instance.CompiledBoundMethod = PatchedCompiledBoundMethod
     jedi.evaluate.imports.Importer = PatchedJediImporter
     HAS_JEDI = True
-except ImportError:
+except ImportError as ex:
     print("jedi not found, python auto-completion not possible.")
+    print(ex)
     HAS_JEDI = False
 
 GIR_PATH_LIST = []
@@ -376,7 +390,7 @@ class JediCompletionProvider(Ide.Object, GtkSource.CompletionProvider, Ide.Compl
         return False
 
     def do_populate(self, context):
-        self.current_word = Ide.CompletionProvider.context_current_word(context)
+        self.current_word = Ide.CompletionProvider.context_current_word(context) or ''
         self.current_word_lower = self.current_word.lower()
 
         _, iter = context.get_iter()
