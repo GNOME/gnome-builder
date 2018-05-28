@@ -154,6 +154,13 @@ struct _IdeBuildPipeline
   IdeDevice *device;
 
   /*
+   * The cached triplet for the device we're compiling for. This allows
+   * plugins to avoid some classes of work when building for the same
+   * system that Builder is running upon.
+   */
+  IdeTriplet *host_triplet;
+
+  /*
    * The runtime we're using to build. This may be different than what
    * is specified in the IdeConfiguration, as the @device could alter
    * what architecture we're building for (and/or cross-compiling).
@@ -1305,6 +1312,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_pointer (&self->errfmt_top_dir, g_free);
   g_clear_pointer (&self->errfmt_current_dir, g_free);
   g_clear_pointer (&self->chained_bindings, g_ptr_array_free);
+  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->finalize (object);
 
@@ -3774,6 +3782,8 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
   IdeTriplet *device_triplet;
   IdeToolchainManager *toolchain_manager;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (self));
   g_return_if_fail (IDE_IS_DEVICE_INFO (info));
 
@@ -3783,16 +3793,22 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
   toolchain_manager = ide_context_get_toolchain_manager (context);
   g_return_if_fail (IDE_IS_TOOLCHAIN_MANAGER (toolchain_manager));
 
-  /* Don't try to initialize too early */
-  if (ide_toolchain_manager_is_loaded (toolchain_manager))
-    return;
-
   toolchain = ide_configuration_get_toolchain (self->configuration);
   runtime = ide_configuration_get_runtime (self->configuration);
   device_triplet = ide_device_info_get_host_triplet (info);
   toolchain_triplet = ide_toolchain_get_host_triplet (toolchain);
 
-  // TODO fallback to the most compatible toolchain instead of the default one
+  if (self->host_triplet != device_triplet)
+    {
+      g_clear_pointer (&self->host_triplet, ide_triplet_unref);
+      self->host_triplet = ide_triplet_ref (device_triplet);
+    }
+
+  /* Don't try to initialize too early */
+  if (ide_toolchain_manager_is_loaded (toolchain_manager))
+    IDE_EXIT;
+
+  /* TODO: fallback to most compatible toolchain instead of default */
   if (toolchain == NULL ||
       g_strcmp0 (ide_triplet_get_arch (device_triplet), ide_triplet_get_arch (toolchain_triplet)) != 0 ||
       !ide_runtime_supports_toolchain (runtime, toolchain))
@@ -3801,6 +3817,8 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
 
       _ide_build_pipeline_set_toolchain (self, default_toolchain);
     }
+
+  IDE_EXIT;
 }
 
 /**
@@ -3838,4 +3856,48 @@ ide_build_pipeline_is_ready (IdeBuildPipeline *self)
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
 
   return self->loaded;
+}
+
+/**
+ * ide_build_pipeline_get_host_triplet:
+ * @self: a #IdeBuildPipeline
+ *
+ * Gets the "host" triplet which specifies where the build results will run.
+ *
+ * This is a convenience wrapper around getting the triplet from the device
+ * set for the build pipeline.
+ *
+ * Returns: (transfer none): an #IdeTriplet
+ *
+ * Since: 3.30
+ */
+IdeTriplet *
+ide_build_pipeline_get_host_triplet (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), NULL);
+
+  return self->host_triplet;
+}
+
+/**
+ * ide_build_pipeline_is_native:
+ * @self: a #IdeBuildPipeline
+ *
+ * This is a helper to check if the triplet that we are compiling
+ * for matches the host system. That allows some plugins to do less
+ * work by avoiding some cross-compiling work.
+ *
+ * Returns: %FALSE if we're possibly cross-compiling, otherwise %TRUE
+ *
+ * Since: 3.30
+ */
+gboolean
+ide_build_pipeline_is_native (IdeBuildPipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (self), FALSE);
+
+  if (self->host_triplet != NULL)
+    return ide_triplet_is_system (self->host_triplet);
+
+  return FALSE;
 }

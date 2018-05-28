@@ -59,7 +59,9 @@ typedef enum
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeBuildPipeline, ide_build_pipeline, IDE, BUILD_PIPELINE, IdeObject)
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_30
+gboolean               ide_build_pipeline_is_native               (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_is_ready                (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_ALL
 gboolean               ide_build_pipeline_get_busy                (IdeBuildPipeline       *self);
@@ -67,6 +69,8 @@ IDE_AVAILABLE_IN_ALL
 IdeConfiguration      *ide_build_pipeline_get_configuration       (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_28
 IdeDevice             *ide_build_pipeline_get_device              (IdeBuildPipeline       *self);
+IDE_AVAILABLE_IN_3_30
+IdeTriplet            *ide_build_pipeline_get_host_triplet        (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_28
 IdeRuntime            *ide_build_pipeline_get_runtime             (IdeBuildPipeline       *self);
 IDE_AVAILABLE_IN_3_30
