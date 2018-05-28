@@ -101,14 +101,15 @@ class NPMPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         # Fetch dependencies so that we no longer need network access
         fetch_launcher = pipeline.create_launcher()
-        fetch_launcher.set_name(_("Downloading npm dependencies"))
         fetch_launcher.set_cwd(package_json.get_parent().get_path())
         fetch_launcher.push_argv(npm)
         if not pipeline.is_native():
             fetch_launcher.push_argv('--arch')
             fetch_launcher.push_argv(pipeline.get_host_triplet().get_arch())
         fetch_launcher.push_argv('install')
-        self.track(pipeline.connect_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
+        stage = Ide.BuildStageLauncher.new(context, fetch_launcher)
+        stage.set_name(_("Downloading npm dependencies"))
+        self.track(pipeline.connect(Ide.BuildPhase.DOWNLOADS, 0, stage))
 
 
 # The scripts used by the npm build system during build
