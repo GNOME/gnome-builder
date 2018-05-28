@@ -189,6 +189,11 @@ src/plugins/make/make_plugin.py
 src/plugins/meson/gbp-meson-build-system.c
 src/plugins/meson/gbp-meson-pipeline-addin.c
 src/plugins/meson/gbp-meson-toolchain.c
+src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c
+src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c
+src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui
+src/plugins/meson/gbp-meson-tool-row.ui
+src/plugins/meson/gbp-meson-utils.c
 src/plugins/meson-templates/meson_templates.py
 src/plugins/messages/gbp-messages-panel.ui
 src/plugins/newcomers/gbp-newcomers-section.ui
