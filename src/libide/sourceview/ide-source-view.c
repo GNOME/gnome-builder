@@ -189,6 +189,7 @@ DZL_DEFINE_COUNTER (instances, "IdeSourceView", "Instances", "Number of IdeSourc
 
 enum {
   PROP_0,
+  PROP_COMPLETION_N_ROWS,
   PROP_COUNT,
   PROP_FILE_SETTINGS,
   PROP_FONT_NAME,
@@ -5389,6 +5390,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, priv->auto_indent);
       break;
 
+    case PROP_COMPLETION_N_ROWS:
+      g_value_set_uint (value, ide_completion_get_n_rows (priv->completion));
+      break;
+
     case PROP_COUNT:
       g_value_set_int (value, ide_source_view_get_count (self));
       break;
@@ -5468,6 +5473,10 @@ ide_source_view_set_property (GObject      *object,
     case PROP_AUTO_INDENT:
       priv->auto_indent = !!g_value_get_boolean (value);
       ide_source_view_update_auto_indent_override (self);
+      break;
+
+    case PROP_COMPLETION_N_ROWS:
+      ide_completion_set_n_rows (priv->completion, g_value_get_uint (value));
       break;
 
     case PROP_COUNT:
@@ -5606,6 +5615,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->swap_selection_bounds = ide_source_view_real_swap_selection_bounds;
 
   g_object_class_override_property (object_class, PROP_AUTO_INDENT, "auto-indent");
+
+  properties [PROP_COMPLETION_N_ROWS] =
+    g_param_spec_uint ("completion-n-rows",
+                       "Completion N Rows",
+                       "The number of completion rows to display to the user",
+                       1, 32, 5,
+                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_COUNT] =
     g_param_spec_int ("count",
