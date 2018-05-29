@@ -43,6 +43,12 @@ struct _IdeCompletionListBox
   IdeCompletionContext *context;
 
   /*
+   * The handler for IdeCompletionContecxt::items-chaged which should
+   * be disconnected when no longer needed.
+   */
+  gulong items_changed_handler;
+
+  /*
    * The number of rows we expect to have visible to the user.
    */
   guint n_rows;
@@ -536,6 +542,9 @@ ide_completion_list_box_update_cb (GtkWidget     *widget,
   if (self->context != NULL)
     state.n_items = g_list_model_get_n_items (G_LIST_MODEL (self->context));
 
+  state.position = MIN (state.position, MAX (state.n_items, self->n_rows) - self->n_rows);
+  state.selected = MIN (self->selected, state.n_items ? state.n_items - 1 : 0);
+
   if (gtk_adjustment_get_upper (self->vadjustment) != state.n_items)
     gtk_adjustment_set_upper (self->vadjustment, state.n_items);
 
@@ -559,9 +568,12 @@ ide_completion_list_box_queue_update (IdeCompletionListBox *self)
   g_assert (IDE_IS_COMPLETION_LIST_BOX (self));
 
   if (self->queued_update == 0)
-    self->queued_update = gtk_widget_add_tick_callback (GTK_WIDGET (self),
-                                                        ide_completion_list_box_update_cb,
-                                                        NULL, NULL);
+    {
+      self->queued_update = gtk_widget_add_tick_callback (GTK_WIDGET (self),
+                                                          ide_completion_list_box_update_cb,
+                                                          NULL, NULL);
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+    }
 }
 
 GtkWidget *
@@ -708,15 +720,31 @@ ide_completion_list_box_set_context (IdeCompletionListBox *self,
   g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX (self));
   g_return_if_fail (!context || IDE_IS_COMPLETION_CONTEXT (context));
 
-  if (g_set_object (&self->context, context))
+  if (self->context == context)
+    return;
+
+  if (self->context != NULL && self->items_changed_handler != 0)
     {
-      self->selected = 0;
-      gtk_adjustment_set_value (self->vadjustment, 0);
-
-      ide_completion_list_box_queue_update (self);
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
+      g_signal_handler_disconnect (self->context, self->items_changed_handler);
+      self->items_changed_handler = 0;
     }
+
+  g_set_object (&self->context, context);
+
+  if (self->context != NULL)
+    self->items_changed_handler =
+      g_signal_connect_object (self->context,
+                               "items-changed",
+                               G_CALLBACK (ide_completion_list_box_queue_update),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+  self->selected = 0;
+  gtk_adjustment_set_value (self->vadjustment, 0);
+
+  ide_completion_list_box_queue_update (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
 }
 
 static void
