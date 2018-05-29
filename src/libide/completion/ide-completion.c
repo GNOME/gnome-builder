@@ -345,30 +345,30 @@ ide_completion_update (IdeCompletion           *self,
    * be able to refine a previous query instead of making a new one which can
    * save on a lot of backend work.
    */
-  if (ide_completion_compute_bounds (self, &begin, &end))
+  ide_completion_compute_bounds (self, &begin, &end);
+
+  if (_ide_completion_context_can_refilter (self->context, &begin, &end))
     {
-      if (_ide_completion_context_can_refilter (self->context, &begin, &end))
+      IdeCompletionDisplay *display = ide_completion_get_display (self);
+
+      /*
+       * If we're waiting for the results still to come in, then just mark
+       * that we need to do post-processing rather than trying to refilter now
+       */
+      if (self->waiting_for_results)
         {
-          /*
-           * If we're waiting for the results still to come in, then just mark
-           * that we need to do post-processing rather than trying to refilter now
-           */
-          if (self->waiting_for_results)
-            {
-              self->needs_refilter = TRUE;
-              IDE_EXIT;
-            }
-
-          _ide_completion_context_refilter (self->context);
-
-          if (self->display != NULL)
-            {
-              if (!ide_completion_context_is_empty (self->context))
-                gtk_widget_show (GTK_WIDGET (self->display));
-            }
-
+          self->needs_refilter = TRUE;
           IDE_EXIT;
         }
+
+      _ide_completion_context_refilter (self->context);
+
+      if (!ide_completion_context_is_empty (self->context))
+        gtk_widget_show (GTK_WIDGET (display));
+      else
+        gtk_widget_hide (GTK_WIDGET (display));
+
+      IDE_EXIT;
     }
 
   if (!ide_completion_context_get_bounds (self->context, &begin, &end) ||
@@ -463,6 +463,8 @@ ide_completion_real_show (IdeCompletion *self)
 
   if (!ide_completion_context_is_empty (self->context))
     gtk_widget_show (GTK_WIDGET (display));
+  else
+    gtk_widget_hide (GTK_WIDGET (display));
 
   IDE_EXIT;
 }
