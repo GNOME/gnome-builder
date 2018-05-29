@@ -161,7 +161,7 @@ gbp_gcc_toolchain_provider_load_worker (IdeTask      *task,
       if (basename_length > strlen ("-gcc"))
         {
           g_autofree gchar *arch = NULL;
-          arch = g_utf8_substring (basename, 0, g_utf8_strlen (basename, -1) - strlen ("-gcc") + 1);
+          arch = g_utf8_substring (basename, 0, g_utf8_strlen (basename, -1) - strlen ("-gcc"));
           /* MinGW is out of the scope of this provider */
           if (g_strrstr (arch, "-") != NULL && g_strrstr (arch, "mingw32") == NULL)
             {
