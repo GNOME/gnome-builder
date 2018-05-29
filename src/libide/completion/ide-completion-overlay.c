@@ -155,6 +155,12 @@ ide_completion_overlay_get_child_position_cb (IdeCompletionOverlay *self,
   if (!(context = ide_completion_view_get_context (self->view)))
     return FALSE;
 
+  if (ide_completion_context_is_empty (context))
+    {
+      gtk_widget_hide (GTK_WIDGET (self));
+      return TRUE;
+    }
+
   gtk_widget_get_allocation (GTK_WIDGET (overlay), &alloc);
 
   view = ide_completion_context_get_view (context);
