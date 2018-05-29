@@ -27,7 +27,6 @@ struct _IdeCtagsCompletionProvider
   IdeObject  parent_instance;
   GSettings *settings;
   GPtrArray *indexes;
-  gint       minimum_word_size;
   guint      enabled : 1;
 };
 

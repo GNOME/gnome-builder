@@ -154,7 +154,6 @@ changed_enabled_cb (IdeCtagsCompletionProvider *self,
 static void
 ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
 {
-  self->minimum_word_size = 3;
   self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
   self->settings = g_settings_new ("org.gnome.builder.code-insight");
 
@@ -213,7 +212,6 @@ ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *word = NULL;
   GtkTextIter begin, end;
-  gint word_len;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
@@ -225,18 +223,17 @@ ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_ctags_completion_provider_populate_async);
 
-  if (!self->enabled ||
-      !ide_completion_context_get_bounds (context, &begin, &end) ||
-      !(word = gtk_text_iter_get_slice (&begin, &end)) ||
-      !(word_len = strlen (word)) ||
-      strlen (word) < self->minimum_word_size)
+  if (!self->enabled)
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_SUPPORTED,
-                                 "Word too short to query ctags");
+                                 "Completion not currently enabled");
       return;
     }
+
+  ide_completion_context_get_bounds (context, &begin, &end);
+  word = gtk_text_iter_get_slice (&begin, &end);
 
   model = ide_ctags_results_new ();
   ide_ctags_results_set_suffixes (model, get_allowed_suffixes (context));
@@ -324,6 +321,26 @@ ide_ctags_completion_provider_activate_proposal (IdeCompletionProvider *provider
   gtk_text_buffer_end_user_action (buffer);
 }
 
+static gboolean
+ide_ctags_completion_provider_refilter (IdeCompletionProvider *self,
+                                        IdeCompletionContext  *context,
+                                        GListModel            *model)
+{
+  g_autofree gchar *word = NULL;
+  GtkTextIter begin, end;
+
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_CTAGS_RESULTS (model));
+
+  ide_completion_context_get_bounds (context, &begin, &end);
+  word = gtk_text_iter_get_slice (&begin, &end);
+  ide_ctags_results_set_word (IDE_CTAGS_RESULTS (model), word);
+  ide_ctags_results_refilter (IDE_CTAGS_RESULTS (model));
+
+  return TRUE;
+}
+
 static void
 provider_iface_init (IdeCompletionProviderInterface *iface)
 {
@@ -332,6 +349,7 @@ provider_iface_init (IdeCompletionProviderInterface *iface)
   iface->activate_proposal = ide_ctags_completion_provider_activate_proposal;
   iface->populate_async = ide_ctags_completion_provider_populate_async;
   iface->populate_finish = ide_ctags_completion_provider_populate_finish;
+  iface->refilter = ide_ctags_completion_provider_refilter;
 }
 
 void
