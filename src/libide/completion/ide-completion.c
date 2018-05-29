@@ -478,10 +478,19 @@ ide_completion_notify_context_empty_cb (IdeCompletion        *self,
   g_assert (pspec != NULL);
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
 
+  if (context != self->context)
+    IDE_EXIT;
+
   if (ide_completion_context_is_empty (context))
-    ide_completion_hide (self);
+    {
+      if (self->display != NULL)
+        gtk_widget_hide (GTK_WIDGET (self->display));
+    }
   else
-    ide_completion_show (self);
+    {
+      IdeCompletionDisplay *display = ide_completion_get_display (self);
+      gtk_widget_show (GTK_WIDGET (display));
+    }
 
   IDE_EXIT;
 }
