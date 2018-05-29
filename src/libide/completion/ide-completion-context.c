@@ -52,6 +52,7 @@ typedef struct
   GCancellable          *cancellable;
   GListModel            *results;
   GError                *error;
+  gulong                 items_changed_handler;
 } ProviderInfo;
 
 typedef struct
@@ -78,6 +79,12 @@ static void
 clear_provider_info (gpointer data)
 {
   ProviderInfo *info = data;
+
+  if (info->items_changed_handler != 0)
+    {
+      g_signal_handler_disconnect (info->results, info->items_changed_handler);
+      info->items_changed_handler = 0;
+    }
 
   g_clear_object (&info->provider);
   g_clear_object (&info->cancellable);
@@ -336,6 +343,39 @@ _ide_completion_context_remove_provider (IdeCompletionContext  *self,
 }
 
 static void
+ide_completion_context_items_changed_cb (IdeCompletionContext  *self,
+                                         guint                  position,
+                                         guint                  removed,
+                                         guint                  added,
+                                         GListModel            *results)
+{
+  guint real_position = 0;
+
+  g_assert (IDE_IS_COMPLETION_CONTEXT (self));
+  g_assert (G_IS_LIST_MODEL (results));
+
+  if (removed == 0 && added == 0)
+    return;
+
+  for (guint i = 0; i < self->providers->len; i++)
+    {
+      ProviderInfo *info = &g_array_index (self->providers, ProviderInfo, i);
+
+      if (info->results == results)
+        {
+          g_list_model_items_changed (G_LIST_MODEL (self),
+                                      real_position + position,
+                                      removed,
+                                      added);
+          break;
+        }
+
+      if (info->results != NULL)
+        real_position += g_list_model_get_n_items (info->results);
+    }
+}
+
+static void
 ide_completion_context_set_results_for_provider (IdeCompletionContext  *self,
                                                  IdeCompletionProvider *provider,
                                                  GListModel            *results)
@@ -356,7 +396,7 @@ ide_completion_context_set_results_for_provider (IdeCompletionContext  *self,
           guint n_added = 0;
 
           if (info->results == results)
-            return;
+            break;
 
           if (info->results != NULL)
             n_removed = g_list_model_get_n_items (info->results);
@@ -364,8 +404,23 @@ ide_completion_context_set_results_for_provider (IdeCompletionContext  *self,
           if (results != NULL)
             n_added = g_list_model_get_n_items (results);
 
-          if (g_set_object (&info->results, results))
-            g_list_model_items_changed (G_LIST_MODEL (self), position, n_removed, n_added);
+          if (info->items_changed_handler != 0)
+            {
+              g_signal_handler_disconnect (info->results, info->items_changed_handler);
+              info->items_changed_handler = 0;
+            }
+
+          g_set_object (&info->results, results);
+
+          if (info->results != NULL)
+            info->items_changed_handler =
+              g_signal_connect_object (info->results,
+                                       "items-changed",
+                                       G_CALLBACK (ide_completion_context_items_changed_cb),
+                                       self,
+                                       G_CONNECT_SWAPPED);
+
+          g_list_model_items_changed (G_LIST_MODEL (self), position, n_removed, n_added);
 
           break;
         }
