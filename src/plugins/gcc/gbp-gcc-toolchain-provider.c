@@ -158,10 +158,10 @@ gbp_gcc_toolchain_provider_load_worker (IdeTask      *task,
 
       basename = g_file_get_basename (file);
       basename_length = g_utf8_strlen (basename, -1);
-      if (basename_length > strlen ("-gcc"))
+      if (basename_length > sizeof ("-gcc"))
         {
           g_autofree gchar *arch = NULL;
-          arch = g_utf8_substring (basename, 0, g_utf8_strlen (basename, -1) - strlen ("-gcc") + 1);
+          arch = g_utf8_substring (basename, 0, g_utf8_strlen (basename, -1) - sizeof ("-gcc") + 1);
           /* MinGW is out of the scope of this provider */
           if (g_strrstr (arch, "-") != NULL && g_strrstr (arch, "mingw32") == NULL)
             {
