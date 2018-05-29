@@ -213,7 +213,10 @@ ide_completion_complete_cb (GObject      *object,
     }
 
   if (!ide_completion_context_is_empty (context))
-    gtk_widget_show (GTK_WIDGET (self->display));
+    {
+      IdeCompletionDisplay *display = ide_completion_get_display (self);
+      gtk_widget_show (GTK_WIDGET (display));
+    }
 
   IDE_EXIT;
 }
