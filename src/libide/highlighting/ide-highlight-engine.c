@@ -311,7 +311,7 @@ ide_highlight_engine_apply_style (const GtkTextIter *begin,
 static gboolean
 ide_highlight_engine_tick (IdeHighlightEngine *self)
 {
-  GtkTextBuffer *buffer;
+  g_autoptr(GtkTextBuffer) buffer = NULL;
   GtkTextIter iter;
   GtkTextIter invalid_begin;
   GtkTextIter invalid_end;
