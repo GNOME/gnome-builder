@@ -1,4 +1,37 @@
 ==============
+Version 3.28.2
+==============
+
+Changes since last release:
+
+ • A leak of buffers when using semantic highlighting as been fixed,
+   which has the potential to significantly reduce memory usage for some
+   languages such as C.
+ • Various fixes with DTD validation.
+ • Various correctness fixes in API usage.
+ • The new task and threading engine has been backported which provides
+   a new layer of saftey for our threading usage.
+ • Various fixes for the flatpak plugin.
+ • Ctags tries to be more careful to avoid recursive mining and no longer
+   attempts to load ~/.tags.
+ • The clang plugin tries harder to cook cflags delivered to libclang.
+ • A preferences menu item was added back to the perspective selector. It
+   still uses a dialog for preferences.
+ • The recent-projects plugin performs additional checks to avoid recursive
+   directory cleanup when that would result in deleting some external data.
+ • A number of miscellaneous memory leaks have been plugged.
+ • When meson/ninja are not found, a message is displayed to the user in
+   the messages pane.
+ • The clang plugin will try to drop state as soon as possible to help keep
+   memory usage down.
+ • The npm modules now marks "node_modules" as an ignored pattern.
+
+Updated Translations:
+
+  Swedish, Indonesian, Lithuanian, Hungarian, British English, Romanian,
+  Czech, German, Slovenian, Italian, Turkish, Polish, Brazilian Portuguese
+
+==============
 Version 3.28.1
 ==============
 

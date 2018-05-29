@@ -81,6 +81,28 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.28.2" date="2018-05-28">
+      <description>
+        <p>
+          Builder 3.28.2 contains a number of important bugfixes and translation updates.
+        </p>
+        <ul>
+          <li>A leak of buffers when using semantic highlighting as been fixed, which has the potential to significantly reduce memory usage for some languages such as C.</li>
+          <li>Various fixes with DTD validation.</li>
+          <li>Various correctness fixes in API usage.</li>
+          <li>The new task and threading engine has been backported which provides a new layer of saftey for our threading usage.</li>
+          <li>Various fixes for the flatpak plugin.</li>
+          <li>Ctags tries to be more careful to avoid recursive mining and no longer attempts to load ~/.tags.</li>
+          <li>The clang plugin tries harder to cook cflags delivered to libclang.</li>
+          <li>A preferences menu item was added back to the perspective selector. It still uses a dialog for preferences.</li>
+          <li>The recent-projects plugin performs additional checks to avoid recursive directory cleanup when that would result in deleting some external data.</li>
+          <li>A number of miscellaneous memory leaks have been plugged.</li>
+          <li>When meson/ninja are not found, a message is displayed to the user in the messages pane.</li>
+          <li>The clang plugin will try to drop state as soon as possible to help keep memory usage down.</li>
+          <li>The npm modules now marks "node_modules" as an ignored pattern.</li>
+        </ul>
+      </description>
+    </release>
 
     <release version="3.28.1" date="2018-04-09">
       <description>
