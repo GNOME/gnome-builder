@@ -4,6 +4,7 @@
 # gradle_plugin.py
 #
 # Copyright 2018 danigm <danigm@wadobo.com>
+# Copyright 2018 Alberto Fanjul <albfan@gnome.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,9 +46,6 @@ class GradleBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_init_async(self, io_priority, cancellable, callback, data):
         task = Gio.Task.new(self, cancellable, callback)
 
-        # This is all done synchronously, doing it in a thread would probably
-        # be somewhat ideal although unnecessary at this time.
-
         try:
             # Maybe this is a gradlew
             if self.props.project_file.get_basename() in ('build.gradle',):
@@ -82,7 +80,6 @@ class GradlePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         context = self.get_context()
         build_system = context.get_build_system()
 
-        # Ignore pipeline unless this is a gradle project
         if type(build_system) != GradleBuildSystem:
             return
 
@@ -130,13 +127,11 @@ class GradleBuildTarget(Ide.Object, Ide.BuildTarget):
     def do_get_language(self):
         return 'java'
 
-    # Try to run command from srcdir
     def do_get_cwd(self):
         context = self.get_context()
         project_file = context.get_project_file()
         return project_file.get_parent().get_path()
 
-    # Try to run command from srcdir
     def do_get_install_directory(self):
         context = self.get_context()
         project_file = context.get_project_file()
@@ -145,8 +140,8 @@ class GradleBuildTarget(Ide.Object, Ide.BuildTarget):
     def do_get_argv(self):
         context = self.get_context()
         project_file = context.get_project_file()
-        #hack to run from srcdir
-        return [project_file.get_parent().get_path() + "/gradlew", "run"]
+        path = project_file.get_parent().get_path()
+        return [path + "/gradlew", "run"]
 
     def do_get_priority(self):
         return 0
