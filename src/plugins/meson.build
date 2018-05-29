@@ -44,6 +44,7 @@ subdir('html-preview')
 subdir('jedi')
 subdir('jhbuild')
 subdir('make')
+subdir('maven')
 subdir('meson')
 subdir('meson-templates')
 subdir('messages')
@@ -126,6 +127,7 @@ status += [
   'Python Jedi ........... : @0@'.format(get_option('with_jedi')),
   'JHBuild ............... : @0@'.format(get_option('with_jhbuild')),
   'Make .................. : @0@'.format(get_option('with_make')),
+  'Maven.................. : @0@'.format(get_option('with_maven')),
   'Meson ................. : @0@'.format(get_option('with_meson')),
   'Mono .................. : @0@'.format(get_option('with_mono')),
   'Notifications ......... : @0@'.format(get_option('with_notification')),
