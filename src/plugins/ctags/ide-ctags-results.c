@@ -26,6 +26,7 @@ struct _IdeCtagsResults
 {
   GObject parent_instance;
   const gchar * const *suffixes;
+  GCancellable *refilter_cancellable;
   gchar *word;
   GPtrArray *indexes;
   GArray *items;
@@ -101,6 +102,7 @@ ide_ctags_results_finalize (GObject *object)
 {
   IdeCtagsResults *self = (IdeCtagsResults *)object;
 
+  g_clear_object (&self->refilter_cancellable);
   g_clear_pointer (&self->items, g_array_unref);
   g_clear_pointer (&self->indexes, g_ptr_array_unref);
   g_clear_pointer (&self->word, g_free);
@@ -225,7 +227,6 @@ ide_ctags_results_populate_async (IdeCtagsResults     *self,
   g_return_if_fail (IDE_IS_CTAGS_RESULTS (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_ctags_results_populate_async);
   ide_task_set_priority (task, G_PRIORITY_HIGH);
@@ -314,4 +315,33 @@ ide_ctags_results_add_index (IdeCtagsResults *self,
   g_assert (IDE_IS_CTAGS_INDEX (index));
 
   g_ptr_array_add (self->indexes, g_object_ref (index));
+}
+
+static void
+ide_ctags_results_refilter_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  IdeCtagsResults *self = (IdeCtagsResults *)object;
+
+  g_assert (IDE_IS_CTAGS_RESULTS (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (user_data == NULL);
+
+  if (ide_ctags_results_populate_finish (self, result, NULL))
+    g_clear_object (&self->refilter_cancellable);
+}
+
+void
+ide_ctags_results_refilter (IdeCtagsResults *self)
+{
+  g_return_if_fail (IDE_IS_CTAGS_RESULTS (self));
+
+  g_cancellable_cancel (self->refilter_cancellable);
+  self->refilter_cancellable = g_cancellable_new();
+
+  ide_ctags_results_populate_async (self,
+                                    self->refilter_cancellable,
+                                    ide_ctags_results_refilter_cb,
+                                    NULL);
 }
