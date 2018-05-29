@@ -373,6 +373,8 @@ ide_completion_context_items_changed_cb (IdeCompletionContext  *self,
       if (info->results != NULL)
         real_position += g_list_model_get_n_items (info->results);
     }
+
+  ide_completion_context_update_empty (self);
 }
 
 static void
@@ -428,6 +430,8 @@ ide_completion_context_set_results_for_provider (IdeCompletionContext  *self,
       if (info->results != NULL)
         position += g_list_model_get_n_items (info->results);
     }
+
+  ide_completion_context_update_empty (self);
 }
 
 static void
