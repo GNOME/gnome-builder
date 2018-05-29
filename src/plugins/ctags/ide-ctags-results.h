@@ -35,6 +35,7 @@ void             ide_ctags_results_add_index       (IdeCtagsResults      *self,
                                                     IdeCtagsIndex        *index);
 void             ide_ctags_results_set_word        (IdeCtagsResults      *self,
                                                     const gchar          *word);
+void             ide_ctags_results_refilter        (IdeCtagsResults      *self);
 void             ide_ctags_results_populate_async  (IdeCtagsResults      *self,
                                                     GCancellable         *cancellable,
                                                     GAsyncReadyCallback   callback,
