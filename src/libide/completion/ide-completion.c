@@ -659,12 +659,11 @@ do_completion:
 }
 
 static void
-ide_completion_buffer_mark_set_cb (IdeCompletion *self,
-                                   GtkTextMark   *mark,
-                                   GtkTextBuffer *buffer)
+ide_completion_buffer_mark_set_cb (IdeCompletion     *self,
+                                   const GtkTextIter *iter,
+                                   GtkTextMark       *mark,
+                                   GtkTextBuffer     *buffer)
 {
-  GtkTextIter iter;
-
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (GTK_IS_TEXT_MARK (mark));
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
@@ -672,9 +671,7 @@ ide_completion_buffer_mark_set_cb (IdeCompletion *self,
   if (mark != gtk_text_buffer_get_insert (buffer))
     return;
 
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
-
-  if (_ide_completion_context_iter_invalidates (self->context, &iter))
+  if (_ide_completion_context_iter_invalidates (self->context, iter))
     ide_completion_cancel (self);
 }
 
