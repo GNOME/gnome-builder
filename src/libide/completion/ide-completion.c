@@ -463,8 +463,6 @@ ide_completion_real_show (IdeCompletion *self)
 
   if (!ide_completion_context_is_empty (self->context))
     gtk_widget_show (GTK_WIDGET (display));
-  else
-    g_printerr ("No results to show\n");
 
   IDE_EXIT;
 }
