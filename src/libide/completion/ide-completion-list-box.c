@@ -236,6 +236,9 @@ get_row_at_y (IdeCompletionListBox *self,
   guint offset;
   guint n_items;
 
+  g_assert (IDE_IS_COMPLETION_LIST_BOX (self));
+  g_assert (G_IS_LIST_MODEL (self->context));
+
   gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
 
   offset = ide_completion_list_box_get_offset (self);
@@ -255,6 +258,9 @@ multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 {
   g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
   g_assert (IDE_IS_COMPLETION_LIST_BOX (self));
+
+  if (self->context == NULL)
+    return;
 
   self->selected = get_row_at_y (self, y);
   ide_completion_list_box_queue_update (self);
