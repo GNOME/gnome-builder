@@ -195,6 +195,10 @@ _ide_editor_view_init_settings (IdeEditorView *self)
                                 G_SETTINGS_BIND_GET,
                                 get_wrap_mode, NULL, NULL, NULL);
 
+  g_settings_bind (self->editor_settings, "completion-n-rows",
+                   source_view, "completion-n-rows",
+                   G_SETTINGS_BIND_GET);
+
   g_settings_bind (self->editor_settings, "show-map",
                    self, "show-map",
                    G_SETTINGS_BIND_GET);
