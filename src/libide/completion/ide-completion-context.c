@@ -881,27 +881,26 @@ _ide_completion_context_can_refilter (IdeCompletionContext *self,
   g_return_val_if_fail (begin != NULL, FALSE);
   g_return_val_if_fail (end != NULL, FALSE);
 
-  if (ide_completion_context_get_bounds (self, &old_begin, &old_end))
+  ide_completion_context_get_bounds (self, &old_begin, &old_end);
+
+  if (gtk_text_iter_equal (&old_begin, begin))
     {
-      if (gtk_text_iter_equal (&old_begin, begin))
+      /*
+       * TODO: We can probably get smarter about this by asking all of
+       * the providers if they can refilter the new word (and only reload
+       * the data for those that cannot.
+       *
+       * Also, we might want to deal with that by copying the context
+       * into a new context and query using that.
+       */
+      if (gtk_text_iter_compare (&old_end, end) <= 0)
         {
-          /*
-           * TODO: We can probably get smarter about this by asking all of
-           * the providers if they can refilter the new word (and only reload
-           * the data for those that cannot.
-           *
-           * Also, we might want to deal with that by copying the context
-           * into a new context and query using that.
-           */
-          if (gtk_text_iter_compare (&old_end, end) <= 0)
-            {
-              GtkTextBuffer *buffer = gtk_text_iter_get_buffer (begin);
+          GtkTextBuffer *buffer = gtk_text_iter_get_buffer (begin);
 
-              gtk_text_buffer_move_mark (buffer, self->begin_mark, begin);
-              gtk_text_buffer_move_mark (buffer, self->end_mark, end);
+          gtk_text_buffer_move_mark (buffer, self->begin_mark, begin);
+          gtk_text_buffer_move_mark (buffer, self->end_mark, end);
 
-              return TRUE;
-            }
+          return TRUE;
         }
     }
 
