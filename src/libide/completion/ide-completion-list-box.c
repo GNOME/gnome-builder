@@ -704,6 +704,27 @@ ide_completion_list_box_get_context (IdeCompletionListBox *self)
   return self->context;
 }
 
+static void
+ide_completion_list_box_items_changed_cb (IdeCompletionListBox *self,
+                                          guint                 position,
+                                          guint                 removed,
+                                          guint                 added,
+                                          GListModel           *model)
+{
+  guint offset;
+
+  g_assert (IDE_IS_COMPLETION_LIST_BOX (self));
+  g_assert (G_IS_LIST_MODEL (model));
+
+  offset = ide_completion_list_box_get_offset (self);
+
+  /* Skip widget resize if results are not visible */
+  if (position >= offset + self->n_rows)
+    return;
+
+  ide_completion_list_box_queue_update (self);
+}
+
 /**
  * ide_completion_list_box_set_context:
  * @self: a #IdeCompletionListBox
@@ -735,7 +756,7 @@ ide_completion_list_box_set_context (IdeCompletionListBox *self,
     self->items_changed_handler =
       g_signal_connect_object (self->context,
                                "items-changed",
-                               G_CALLBACK (ide_completion_list_box_queue_update),
+                               G_CALLBACK (ide_completion_list_box_items_changed_cb),
                                self,
                                G_CONNECT_SWAPPED);
 
