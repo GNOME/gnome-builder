@@ -185,7 +185,7 @@ ide_completion_overlay_get_child_position_cb (IdeCompletionOverlay *self,
   x_offset = _ide_completion_view_get_x_offset (self->view);
 
 /* TODO: Figure out where 9 is coming from */
-#define EXTRA_SHIFT 9
+#define EXTRA_SHIFT 11
 
   out_rect->x = rect.x - x_offset - border.left + EXTRA_SHIFT;
   out_rect->y = rect.y + rect.height;
