@@ -3807,7 +3807,9 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
   IdeContext *ide_context;
   IdeSourceSnippetContext *context;
   IdeFile *file;
-  GFile *gfile;
+  GFile *gfile = NULL;
+  g_autoptr(GFile) gparentfile = NULL;
+
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_SOURCE_SNIPPET (snippet));
@@ -3821,17 +3823,39 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
           (gfile = ide_file_get_file (file)))
         {
           g_autofree gchar *name = NULL;
+          g_autofree gchar *path = NULL;
+          g_autofree gchar *dirname = NULL;
 
           name = g_file_get_basename (gfile);
+          gparentfile = g_file_get_parent(gfile);
+          dirname = g_file_get_path (gparentfile);
+          path = g_file_get_path (gfile);
           ide_source_snippet_context_add_variable (context, "filename", name);
+          ide_source_snippet_context_add_variable (context, "dirname", dirname);
+          ide_source_snippet_context_add_variable (context, "path", path);
         }
 
       if ((ide_context = ide_buffer_get_context (priv->buffer)))
         {
           IdeVcs *vcs;
           IdeVcsConfig *vcs_config;
+          GFile *workdir;
 
           vcs = ide_context_get_vcs (ide_context);
+          workdir = ide_vcs_get_working_directory (vcs);
+          if (workdir && gfile)
+            {
+              g_autofree gchar *relative_path = NULL;
+              relative_path = g_file_get_relative_path (workdir, gfile);
+              ide_source_snippet_context_add_variable (context, "relative_path", relative_path);
+            }
+          if (workdir && gparentfile)
+            {
+              g_autofree gchar *relative_dirname = NULL;
+              relative_dirname = g_file_get_relative_path (workdir, gparentfile);
+              ide_source_snippet_context_add_variable (context, "relative_dirname", relative_dirname);
+            }
+
           if ((vcs_config = ide_vcs_get_config (vcs)))
             {
               GValue value = G_VALUE_INIT;
