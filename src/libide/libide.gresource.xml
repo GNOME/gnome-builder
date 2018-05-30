@@ -4,6 +4,7 @@
     <file alias="c.snippets">../../data/snippets/c.snippets</file>
     <file alias="chdr.snippets">../../data/snippets/chdr.snippets</file>
     <file alias="gobject.snippets">../../data/snippets/gobject.snippets</file>
+    <file alias="java.snippets">../../data/snippets/java.snippets</file>
     <file alias="js.snippets">../../data/snippets/js.snippets</file>
     <file alias="licenses.snippets">../../data/snippets/licenses.snippets</file>
     <file alias="main.snippets">../../data/snippets/main.snippets</file>

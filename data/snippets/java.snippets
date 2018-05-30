@@ -1,0 +1,64 @@
+snippet clas
+- desc Creates a java class definition
+- scope java, groovy
+	package ${$relative_dirname|descend_path|descend_path|descend_path|slash_to_dots};
+	
+	public class ${$filename|stripsuffix}
+	  {
+	    $0
+	  }
+snippet iface
+- desc Creates a java interface definition
+- scope java, groovy
+	package ${$relative_dirname|descend_path|descend_path|descend_path|slash_to_dots};
+	
+	public interface ${$filename|stripsuffix}
+	  {
+	    $0
+	  }
+snippet psvm
+- desc Creates main java method
+- scope java, groovy
+	public static void main(String[] args)
+	  {
+	    $0
+	  }
+snippet itar
+- desc Creates a for loop
+- scope java, groovy
+	for (int ${1:i = 0}; ${2:i < }; ${3:i++})
+	  {
+	    $0
+	  }
+snippet iter
+- desc Creates a for each loop on a collection
+- scope java, groovy
+	for (${2:type} ${3:var}: ${1:collection})
+	  {
+	    $0
+	  }
+snippet itit
+- desc Creates a for loop on an iterator
+- scope java, groovy
+	while (${1:it}.hasNext())
+	  {
+	    Object next = $1.next();
+	    $0
+	  }
+snippet comment
+- scope java, groovy
+	/*
+	 * $0
+	 */
+snippet javadoc
+- scope java, groovy
+	/**
+	 * $0
+	 */
+snippet sout
+- scope java
+	System.out.println($0);
+snippet serr
+- scope java
+	System.err.println($0);
+
