@@ -187,6 +187,7 @@ ide_completion_complete_cb (GObject      *object,
   IdeCompletionContext *context = (IdeCompletionContext *)object;
   g_autoptr(IdeCompletion) self = user_data;
   g_autoptr(GError) error = NULL;
+  IdeCompletionDisplay *display;
 
   IDE_ENTRY;
 
@@ -217,11 +218,12 @@ ide_completion_complete_cb (GObject      *object,
       _ide_completion_context_refilter (context);
     }
 
+  display = ide_completion_get_display (self);
+
   if (!ide_completion_context_is_empty (context))
-    {
-      IdeCompletionDisplay *display = ide_completion_get_display (self);
-      gtk_widget_show (GTK_WIDGET (display));
-    }
+    gtk_widget_show (GTK_WIDGET (display));
+  else
+    gtk_widget_hide (GTK_WIDGET (display));
 
   IDE_EXIT;
 }
@@ -325,6 +327,16 @@ ide_completion_start (IdeCompletion           *self,
                                           self->cancellable,
                                           ide_completion_complete_cb,
                                           g_object_ref (self));
+
+  if (self->display != NULL)
+    {
+      ide_completion_display_set_context (self->display, context);
+
+      if (!ide_completion_context_is_empty (context))
+        gtk_widget_show (GTK_WIDGET (self->display));
+      else
+        gtk_widget_hide (GTK_WIDGET (self->display));
+    }
 
   IDE_EXIT;
 }
@@ -496,6 +508,7 @@ ide_completion_notify_context_empty_cb (IdeCompletion        *self,
   else
     {
       IdeCompletionDisplay *display = ide_completion_get_display (self);
+
       gtk_widget_show (GTK_WIDGET (display));
     }
 
@@ -1477,6 +1490,7 @@ ide_completion_get_display (IdeCompletion *self)
       ide_completion_display_set_n_rows (self->display, self->n_rows);
       ide_completion_display_attach (self->display, self->view);
       _ide_completion_display_set_font_desc (self->display, self->font_desc);
+      ide_completion_display_set_context (self->display, self->context);
     }
 
   return self->display;
