@@ -23,57 +23,67 @@
 
 G_BEGIN_DECLS
 
-IdeCompletionWindow     *_ide_completion_window_new                (GtkWidget                *view);
-void                     _ide_completion_view_set_n_rows           (IdeCompletionView        *self,
-                                                                    guint                     n_rows);
-gint                     _ide_completion_view_get_x_offset         (IdeCompletionView        *self);
-gboolean                 _ide_completion_view_handle_key_press     (IdeCompletionView        *self,
-                                                                    const GdkEventKey        *event);
-void                     _ide_completion_view_move_cursor          (IdeCompletionView        *self,
-                                                                    GtkMovementStep           step,
-                                                                    gint                      count);
-IdeCompletion           *_ide_completion_new                       (GtkSourceView            *view);
-void                     _ide_completion_set_language_id           (IdeCompletion            *self,
-                                                                    const gchar              *language_id);
-void                     _ide_completion_activate                  (IdeCompletion            *self,
-                                                                    IdeCompletionContext     *context,
-                                                                    IdeCompletionProvider    *provider,
-                                                                    IdeCompletionProposal    *proposal);
-IdeCompletionContext    *_ide_completion_context_new               (IdeCompletion            *completion);
-gboolean                 _ide_completion_context_iter_invalidates  (IdeCompletionContext     *self,
-                                                                    const GtkTextIter        *iter);
-void                     _ide_completion_context_add_provider      (IdeCompletionContext     *self,
-                                                                    IdeCompletionProvider    *provider);
-void                     _ide_completion_context_remove_provider   (IdeCompletionContext     *self,
-                                                                    IdeCompletionProvider    *provider);
-gboolean                 _ide_completion_context_can_refilter      (IdeCompletionContext     *self,
-                                                                    const GtkTextIter        *begin,
-                                                                    const GtkTextIter        *end);
-void                     _ide_completion_context_refilter          (IdeCompletionContext     *self);
-void                     _ide_completion_context_complete_async    (IdeCompletionContext     *self,
-                                                                    const GtkTextIter        *begin,
-                                                                    const GtkTextIter        *end,
-                                                                    GCancellable             *cancellable,
-                                                                    GAsyncReadyCallback       callback,
-                                                                    gpointer                  user_data);
-gboolean                 _ide_completion_context_complete_finish   (IdeCompletionContext     *self,
-                                                                    GAsyncResult             *result,
-                                                                    GError                  **error);
-gboolean                 _ide_completion_context_get_proposal      (IdeCompletionContext     *self,
-                                                                    guint                     position,
-                                                                    IdeCompletionProvider   **provider,
-                                                                    IdeCompletionProposal   **proposal);
-gboolean                 _ide_completion_list_box_key_activates    (IdeCompletionListBox     *self,
-                                                                    const GdkEventKey        *key);
-IdeCompletionListBoxRow *_ide_completion_list_box_get_first        (IdeCompletionListBox     *self);
-void                     _ide_completion_list_box_row_attach       (IdeCompletionListBoxRow  *self,
-                                                                    GtkSizeGroup             *left,
-                                                                    GtkSizeGroup             *center,
-                                                                    GtkSizeGroup             *right);
-gint                     _ide_completion_list_box_row_get_x_offset (IdeCompletionListBoxRow  *self,
-                                                                    GtkWidget                *toplevel);
+IdeCompletionWindow     *_ide_completion_window_new                (GtkWidget                   *view);
+void                     _ide_completion_view_set_font_desc        (IdeCompletionView           *self,
+                                                                    const PangoFontDescription  *font_desc);
+void                     _ide_completion_view_set_n_rows           (IdeCompletionView           *self,
+                                                                    guint                        n_rows);
+gint                     _ide_completion_view_get_x_offset         (IdeCompletionView           *self);
+gboolean                 _ide_completion_view_handle_key_press     (IdeCompletionView           *self,
+                                                                    const GdkEventKey           *event);
+void                     _ide_completion_view_move_cursor          (IdeCompletionView           *self,
+                                                                    GtkMovementStep              step,
+                                                                    gint                         count);
+IdeCompletion           *_ide_completion_new                       (GtkSourceView               *view);
+void                     _ide_completion_set_font_description      (IdeCompletion               *self,
+                                                                    const PangoFontDescription  *font_desc);
+void                     _ide_completion_set_language_id           (IdeCompletion               *self,
+                                                                    const gchar                 *language_id);
+void                     _ide_completion_activate                  (IdeCompletion               *self,
+                                                                    IdeCompletionContext        *context,
+                                                                    IdeCompletionProvider       *provider,
+                                                                    IdeCompletionProposal       *proposal);
+IdeCompletionContext    *_ide_completion_context_new               (IdeCompletion               *completion);
+gboolean                 _ide_completion_context_iter_invalidates  (IdeCompletionContext        *self,
+                                                                    const GtkTextIter           *iter);
+void                     _ide_completion_context_add_provider      (IdeCompletionContext        *self,
+                                                                    IdeCompletionProvider       *provider);
+void                     _ide_completion_context_remove_provider   (IdeCompletionContext        *self,
+                                                                    IdeCompletionProvider       *provider);
+gboolean                 _ide_completion_context_can_refilter      (IdeCompletionContext        *self,
+                                                                    const GtkTextIter           *begin,
+                                                                    const GtkTextIter           *end);
+void                     _ide_completion_context_refilter          (IdeCompletionContext        *self);
+void                     _ide_completion_context_complete_async    (IdeCompletionContext        *self,
+                                                                    const GtkTextIter           *begin,
+                                                                    const GtkTextIter           *end,
+                                                                    GCancellable                *cancellable,
+                                                                    GAsyncReadyCallback          callback,
+                                                                    gpointer                     user_data);
+gboolean                 _ide_completion_context_complete_finish   (IdeCompletionContext        *self,
+                                                                    GAsyncResult                *result,
+                                                                    GError                     **error);
+gboolean                 _ide_completion_context_get_proposal      (IdeCompletionContext        *self,
+                                                                    guint                        position,
+                                                                    IdeCompletionProvider      **provider,
+                                                                    IdeCompletionProposal      **proposal);
+void                     _ide_completion_display_set_font_desc     (IdeCompletionDisplay        *self,
+                                                                    const PangoFontDescription  *font_desc);
+gboolean                 _ide_completion_list_box_key_activates    (IdeCompletionListBox        *self,
+                                                                    const GdkEventKey           *key);
+void                     _ide_completion_list_box_set_font_desc    (IdeCompletionListBox        *self,
+                                                                    const PangoFontDescription  *font_desc);
+IdeCompletionListBoxRow *_ide_completion_list_box_get_first        (IdeCompletionListBox        *self);
+void                     _ide_completion_list_box_row_attach       (IdeCompletionListBoxRow     *self,
+                                                                    GtkSizeGroup                *left,
+                                                                    GtkSizeGroup                *center,
+                                                                    GtkSizeGroup                *right);
+void                     _ide_completion_list_box_row_set_attrs    (IdeCompletionListBoxRow     *self,
+                                                                    PangoAttrList               *attrs);
+gint                     _ide_completion_list_box_row_get_x_offset (IdeCompletionListBoxRow     *self,
+                                                                    GtkWidget                   *toplevel);
 IdeCompletionOverlay    *_ide_completion_overlay_new               (void);
-void                     _ide_completion_provider_load             (IdeCompletionProvider    *self,
-                                                                    IdeContext               *context);
+void                     _ide_completion_provider_load             (IdeCompletionProvider       *self,
+                                                                    IdeContext                  *context);
 
 G_END_DECLS

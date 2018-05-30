@@ -296,6 +296,15 @@ ide_completion_overlay_move_cursor (IdeCompletionDisplay *display,
 }
 
 static void
+ide_completion_overlay_set_font_desc (IdeCompletionDisplay       *display,
+                                      const PangoFontDescription *font_desc)
+{
+  g_assert (IDE_IS_COMPLETION_OVERLAY (display));
+
+  _ide_completion_view_set_font_desc (IDE_COMPLETION_OVERLAY (display)->view, font_desc);
+}
+
+static void
 completion_display_iface_init (IdeCompletionDisplayInterface *iface)
 {
   iface->set_context = (gpointer)ide_completion_overlay_set_context;
@@ -303,4 +312,5 @@ completion_display_iface_init (IdeCompletionDisplayInterface *iface)
   iface->key_press_event = ide_completion_overlay_key_press_event;
   iface->set_n_rows = ide_completion_overlay_set_n_rows;
   iface->move_cursor = ide_completion_overlay_move_cursor;
+  iface->set_font_desc = ide_completion_overlay_set_font_desc;
 }

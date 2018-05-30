@@ -936,6 +936,9 @@ ide_source_view_rebuild_css (IdeSourceView *self)
       if (priv->omni_renderer != NULL)
         _ide_omni_gutter_renderer_reset_font (priv->omni_renderer);
 
+      if (priv->completion != NULL)
+        _ide_completion_set_font_description (priv->completion, font_desc);
+
       g_clear_pointer (&copy, pango_font_description_free);
     }
 }
