@@ -25,13 +25,11 @@
 #include "ide-ctags-index.h"
 #include "ide-ctags-results.h"
 
-static void proposal_iface_init (IdeCompletionProposalInterface *iface);
-
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionItem,
                                 ide_ctags_completion_item,
                                 G_TYPE_OBJECT,
                                 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
+                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 DZL_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances", "Number of IdeCtagsCompletionItems")
 
@@ -86,91 +84,6 @@ static void
 ide_ctags_completion_item_init (IdeCtagsCompletionItem *self)
 {
   DZL_COUNTER_INC (instances);
-}
-
-static const gchar *
-get_icon_name (IdeCtagsCompletionItem *self)
-{
-  const gchar *icon_name = NULL;
-
-  if (self->entry == NULL)
-    return NULL;
-
-  switch (self->entry->kind)
-    {
-    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
-      icon_name = "lang-class-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
-      icon_name = "lang-enum-value-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
-      icon_name = "lang-enum-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
-    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
-      icon_name = "lang-function-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
-      icon_name = "text-x-generic-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_IMPORT:
-      icon_name = "lang-include-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
-      icon_name = "struct-field-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_UNION:
-      icon_name = "lang-union-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
-      icon_name = "lang-typedef-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
-      icon_name = "lang-struct-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
-      icon_name = "lang-variable-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
-      icon_name = "lang-define-symbolic";
-      break;
-
-    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
-    default:
-      break;
-    }
-
-  return icon_name;
-}
-
-static void
-ide_ctags_completion_item_display (IdeCompletionProposal   *proposal,
-                                   IdeCompletionListBoxRow *row)
-{
-  IdeCtagsCompletionItem *self = (IdeCtagsCompletionItem *)proposal;
-
-  ide_completion_list_box_row_set_icon_name (row, get_icon_name (self));
-  ide_completion_list_box_row_set_left (row, NULL);
-  ide_completion_list_box_row_set_center (row, self->entry->name);
-  ide_completion_list_box_row_set_right (row, NULL);
-}
-
-static void
-proposal_iface_init (IdeCompletionProposalInterface *iface)
-{
-  iface->display = ide_ctags_completion_item_display;
 }
 
 void

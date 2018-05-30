@@ -23,6 +23,7 @@
 #include "ide-completion-context.h"
 #include "ide-completion-proposal.h"
 #include "ide-completion-provider.h"
+#include "ide-completion-list-box-row.h"
 
 G_DEFINE_INTERFACE (IdeCompletionProvider, ide_completion_provider, G_TYPE_OBJECT)
 
@@ -279,4 +280,17 @@ _ide_completion_provider_load (IdeCompletionProvider *self,
 
   if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load)
     IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load (self, context);
+}
+
+void
+ide_completion_provider_display_proposal (IdeCompletionProvider   *self,
+                                          IdeCompletionListBoxRow *row,
+                                          IdeCompletionProposal   *proposal)
+{
+  g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (self));
+  g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
+  g_return_if_fail (IDE_IS_COMPLETION_PROPOSAL (proposal));
+
+  if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal)
+    IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal (self, row, proposal);
 }
