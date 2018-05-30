@@ -362,6 +362,8 @@ struct _IdeSourceViewClass
   gpointer _reserved24;
 };
 
+IDE_AVAILABLE_IN_3_30
+gboolean                    ide_source_view_has_snippet               (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
