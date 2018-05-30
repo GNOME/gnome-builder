@@ -51,23 +51,3 @@ ide_completion_proposal_get_comment (IdeCompletionProposal *self)
 
   return NULL;
 }
-
-void
-_ide_completion_proposal_display (IdeCompletionProposal   *self,
-                                  IdeCompletionListBoxRow *row)
-{
-  static GQuark provider_quark;
-  IdeCompletionProvider *provider;
-
-  g_assert (IDE_IS_COMPLETION_PROPOSAL (self));
-  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
-
-  /* keep in sync with ide-completion-context.c */
-  if G_UNLIKELY (provider_quark == 0)
-    provider_quark = g_quark_from_static_string ("IDE_COMPLETION_PROPOSAL_PROVIDER");
-
-  if ((provider = g_object_get_qdata (G_OBJECT (self), provider_quark)))
-    ide_completion_provider_display_proposal (provider, row, self);
-  else
-    g_assert_not_reached ();
-}

@@ -632,7 +632,7 @@ ide_completion_context_get_n_items (GListModel *model)
 }
 
 gboolean
-_ide_completion_context_get_proposal (IdeCompletionContext   *self,
+ide_completion_context_get_item_full (IdeCompletionContext   *self,
                                       guint                   position,
                                       IdeCompletionProvider **provider,
                                       IdeCompletionProposal **proposal)
@@ -679,18 +679,11 @@ ide_completion_context_get_item (GListModel *model,
 {
   IdeCompletionContext *self = (IdeCompletionContext *)model;
   g_autoptr(IdeCompletionProposal) proposal = NULL;
-  g_autoptr(IdeCompletionProvider) provider = NULL;
 
   g_assert (IDE_IS_COMPLETION_CONTEXT (self));
 
-  if (_ide_completion_context_get_proposal (self, position, &provider, &proposal))
-    {
-      g_object_set_qdata_full (G_OBJECT (proposal),
-                               provider_quark,
-                               g_steal_pointer (&provider),
-                               g_object_unref);
-      return g_steal_pointer (&proposal);
-    }
+  if (ide_completion_context_get_item_full (self, position, NULL, &proposal))
+    return g_steal_pointer (&proposal);
 
   return NULL;
 }
