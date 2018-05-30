@@ -1,4 +1,24 @@
 ==============
+Version 3.29.3
+==============
+
+Changes since last release:
+
+ • Initial support for the gradle build system.
+ • Updated sensible defaults for the Java programming language.
+ • Various performance and correctness fixes.
+ • Additional support for sysroots and toolchain selection.
+ • A memory leak of editor buffers has been fixed.
+ • The jedi plugin was updated to support more recent releases.
+ • The code indexer and other plugins will now ignore the node_modules
+   directory when the npm plugin has been loaded.
+ • You can now specify a branch name other than "master" when cloning
+   a git repository.
+ • Plugins in ~/.local/share/gnome-builder/plugins will have higher
+   priority which simplifies the process of creating and testing new
+   plugins out-of-tree such as when using Flatpak.
+
+==============
 Version 3.29.2
 ==============
 
