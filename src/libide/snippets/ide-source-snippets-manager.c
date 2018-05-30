@@ -117,6 +117,8 @@
  *  - stripsuffix: removes a filename suffix, such as ".txt" from the input
  *  - class: guess the class name from the input text
  *  - instance: guess the instance name from the input text
+ *  - slash_to_dots: replaces "/" with "."
+ *  - descend_path: removes first leading path
  *
  * You may chain multiple post-processing functions together.
  *

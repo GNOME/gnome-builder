@@ -409,6 +409,25 @@ filter_space (const gchar *input)
 }
 
 static gchar *
+filter_descend_path (const gchar *input)
+{
+   const char* pos = strstr(input, "/");
+   if (pos == input)
+     {
+       input++;
+       pos = strstr(input, "/");
+     }
+   if (pos)
+     {
+       pos++;
+
+       return g_strdup (pos);
+     }
+
+   return NULL;
+}
+
+static gchar *
 filter_stripsuffix (const gchar *input)
 {
   const gchar *endpos;
@@ -420,6 +439,31 @@ filter_stripsuffix (const gchar *input)
     return g_strndup (input, (endpos - input));
 
   return g_strdup (input);
+}
+
+static gchar *
+filter_slash_to_dots (const gchar *input)
+{
+  gunichar c;
+  GString *str;
+
+  str = g_string_new (NULL);
+
+  for (; *input; input = g_utf8_next_char (input))
+    {
+      c = g_utf8_get_char (input);
+
+      if (c == '/')
+        {
+          g_string_append_c (str, '.');
+        }
+      else
+        {
+          g_string_append_c (str, c);
+        }
+    }
+
+  return g_string_free (str, FALSE);
 }
 
 static gchar *
@@ -681,6 +725,8 @@ ide_source_snippet_context_class_init (IdeSourceSnippetContextClass *klass)
   g_hash_table_insert (filters, (gpointer) "space", filter_space);
   g_hash_table_insert (filters, (gpointer) "stripsuffix", filter_stripsuffix);
   g_hash_table_insert (filters, (gpointer) "instance", filter_instance);
+  g_hash_table_insert (filters, (gpointer) "slash_to_dots", filter_slash_to_dots);
+  g_hash_table_insert (filters, (gpointer) "descend_path", filter_descend_path);
 }
 
 static void
