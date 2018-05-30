@@ -942,16 +942,18 @@ gbp_spell_widget_unbind_addin (GbpSpellWidget *self,
 {
   g_assert (GBP_IS_SPELL_WIDGET (self));
   g_assert (DZL_IS_SIGNAL_GROUP (editor_view_addin_signals));
-  g_assert (self->editor_view_addin != NULL);
 
-  gbp_spell_editor_view_addin_end_checking (self->editor_view_addin);
-  gbp_spell_dict_set_checker (self->dict, NULL);
-  self->language = NULL;
-  gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button), NULL);
+  if (self->editor_view_addin != NULL)
+    {
+      gbp_spell_editor_view_addin_end_checking (self->editor_view_addin);
+      gbp_spell_dict_set_checker (self->dict, NULL);
+      self->language = NULL;
+      gspell_language_chooser_set_language (GSPELL_LANGUAGE_CHOOSER (self->language_chooser_button), NULL);
 
-  g_clear_object (&self->editor_view_addin);
+      g_clear_object (&self->editor_view_addin);
 
-  _gbp_spell_widget_update_actions (self);
+      _gbp_spell_widget_update_actions (self);
+    }
 }
 
 static void
