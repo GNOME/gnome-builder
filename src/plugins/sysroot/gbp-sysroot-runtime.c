@@ -23,7 +23,6 @@
 
 #include "gbp-sysroot-runtime.h"
 #include "gbp-sysroot-manager.h"
-#include "gbp-sysroot-subprocess-launcher.h"
 
 // This is a list of common libdirs to use
 #define RUNTIME_PREFIX "sysroot:"
@@ -84,8 +83,8 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
 
   g_assert (GBP_IS_SYSROOT_RUNTIME (self));
 
-  ret = gbp_sysroot_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                             G_SUBPROCESS_FLAGS_STDERR_PIPE);
+  ret = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                     G_SUBPROCESS_FLAGS_STDERR_PIPE);
 
   if (ret != NULL)
     {

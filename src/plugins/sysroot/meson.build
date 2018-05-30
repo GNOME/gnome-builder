@@ -18,8 +18,6 @@ sysroot_sources = [
   'gbp-sysroot-runtime.h',
   'gbp-sysroot-runtime-provider.c',
   'gbp-sysroot-runtime-provider.h',
-  'gbp-sysroot-subprocess-launcher.c',
-  'gbp-sysroot-subprocess-launcher.h',
   'gbp-sysroot-toolchain-provider.c',
   'gbp-sysroot-toolchain-provider.h'
 ]
