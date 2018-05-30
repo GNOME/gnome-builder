@@ -37,6 +37,9 @@ struct _IdeCompletionListBox
   /* The event box for button press events */
   GtkEventBox *events;
 
+  /* Font stylign for rows */
+  PangoAttrList *font_attrs;
+
   /*
    * The completion context that is being displayed.
    */
@@ -309,6 +312,7 @@ ide_completion_list_box_finalize (GObject *object)
   g_clear_object (&self->right_size_group);
   g_clear_object (&self->hadjustment);
   g_clear_object (&self->vadjustment);
+  g_clear_pointer (&self->font_attrs, pango_attr_list_unref);
 
   G_OBJECT_CLASS (ide_completion_list_box_parent_class)->finalize (object);
 }
@@ -623,6 +627,8 @@ ide_completion_list_box_set_n_rows (IdeCompletionListBox *self,
                                                self->left_size_group,
                                                self->center_size_group,
                                                self->right_size_group);
+          _ide_completion_list_box_row_set_attrs (IDE_COMPLETION_LIST_BOX_ROW (row),
+                                                  self->font_attrs);
           gtk_container_add (GTK_CONTAINER (self), row);
         }
 
@@ -873,4 +879,32 @@ _ide_completion_list_box_key_activates (IdeCompletionListBox *self,
     }
 
   return FALSE;
+}
+
+static void
+update_font_desc (GtkWidget *widget,
+                  gpointer   user_data)
+{
+  PangoAttrList *attrs = user_data;
+
+  if (IDE_IS_COMPLETION_LIST_BOX_ROW (widget))
+    _ide_completion_list_box_row_set_attrs (IDE_COMPLETION_LIST_BOX_ROW (widget), attrs);
+}
+
+void
+_ide_completion_list_box_set_font_desc (IdeCompletionListBox       *self,
+                                        const PangoFontDescription *font_desc)
+{
+  g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX (self));
+
+  g_clear_pointer (&self->font_attrs, pango_attr_list_unref);
+
+  if (font_desc)
+    {
+      self->font_attrs = pango_attr_list_new ();
+      if (font_desc)
+        pango_attr_list_insert (self->font_attrs, pango_attr_font_desc_new (font_desc));
+    }
+
+  gtk_container_foreach (GTK_CONTAINER (self->box), update_font_desc, self->font_attrs);
 }
