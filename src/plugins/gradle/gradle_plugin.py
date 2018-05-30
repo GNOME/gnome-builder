@@ -68,7 +68,7 @@ class GradleBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return task.propagate_boolean()
 
     def do_get_priority(self):
-        return -200
+        return 500
 
 class GradlePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
