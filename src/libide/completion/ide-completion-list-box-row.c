@@ -272,3 +272,14 @@ _ide_completion_list_box_row_get_x_offset (IdeCompletionListBoxRow *self,
 
   return x;
 }
+
+void
+_ide_completion_list_box_row_set_attrs (IdeCompletionListBoxRow *self,
+                                        PangoAttrList           *attrs)
+{
+  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (self));
+
+  gtk_label_set_attributes (self->left, attrs);
+  gtk_label_set_attributes (self->center, attrs);
+  gtk_label_set_attributes (self->right, attrs);
+}
