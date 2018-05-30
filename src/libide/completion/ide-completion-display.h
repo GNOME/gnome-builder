@@ -35,17 +35,19 @@ struct _IdeCompletionDisplayInterface
 {
   GTypeInterface parent_iface;
 
-  void     (*set_context)     (IdeCompletionDisplay *self,
-                               IdeCompletionContext *context);
-  gboolean (*key_press_event) (IdeCompletionDisplay *self,
-                               const GdkEventKey    *key);
-  void     (*attach)          (IdeCompletionDisplay *self,
-                               GtkSourceView        *view);
-  void     (*set_n_rows)      (IdeCompletionDisplay *self,
-                               guint                 n_rows);
-  void     (*move_cursor)     (IdeCompletionDisplay *self,
-                               GtkMovementStep       step,
-                               gint                  count);
+  void     (*set_context)     (IdeCompletionDisplay       *self,
+                               IdeCompletionContext       *context);
+  gboolean (*key_press_event) (IdeCompletionDisplay       *self,
+                               const GdkEventKey          *key);
+  void     (*attach)          (IdeCompletionDisplay       *self,
+                               GtkSourceView              *view);
+  void     (*set_font_desc)   (IdeCompletionDisplay       *self,
+                               const PangoFontDescription *font_desc);
+  void     (*set_n_rows)      (IdeCompletionDisplay       *self,
+                               guint                       n_rows);
+  void     (*move_cursor)     (IdeCompletionDisplay       *self,
+                               GtkMovementStep             step,
+                               gint                        count);
 };
 
 IDE_AVAILABLE_IN_3_30

@@ -113,6 +113,11 @@ struct _IdeCompletion
   const GdkEventKey *current_event;
 
   /*
+   * Our cached font description to apply to views.
+   */
+  PangoFontDescription *font_desc;
+
+  /*
    * This value is incremented/decremented based on if we need to suppress
    * visibility of the completion window (and avoid doing queries).
    */
@@ -878,6 +883,7 @@ ide_completion_finalize (GObject *object)
   g_clear_object (&self->context);
   g_clear_object (&self->cancellable);
   g_clear_pointer (&self->providers, g_ptr_array_unref);
+  g_clear_pointer (&self->font_desc, pango_font_description_free);
   g_clear_weak_pointer (&self->view);
 
   G_OBJECT_CLASS (ide_completion_parent_class)->finalize (object);
@@ -1470,6 +1476,7 @@ ide_completion_get_display (IdeCompletion *self)
       self->display = ide_completion_create_display (self);
       ide_completion_display_set_n_rows (self->display, self->n_rows);
       ide_completion_display_attach (self->display, self->view);
+      _ide_completion_display_set_font_desc (self->display, self->font_desc);
     }
 
   return self->display;
@@ -1488,4 +1495,19 @@ ide_completion_move_cursor (IdeCompletion   *self,
     ide_completion_display_move_cursor (self->display, step, direction);
 
   IDE_EXIT;
+}
+
+void
+_ide_completion_set_font_description (IdeCompletion              *self,
+                                      const PangoFontDescription *font_desc)
+{
+  g_return_if_fail (IDE_IS_COMPLETION (self));
+
+  if (font_desc != self->font_desc)
+    {
+      pango_font_description_free (self->font_desc);
+      self->font_desc = pango_font_description_copy (font_desc);
+      if (self->display != NULL)
+        _ide_completion_display_set_font_desc (self->display, font_desc);
+    }
 }

@@ -419,3 +419,12 @@ _ide_completion_view_move_cursor (IdeCompletionView *self,
 
   g_signal_emit (self, signals [MOVE_CURSOR], 0, step, count);
 }
+
+void
+_ide_completion_view_set_font_desc (IdeCompletionView          *self,
+                                    const PangoFontDescription *font_desc)
+{
+  g_assert (IDE_IS_COMPLETION_VIEW (self));
+
+  _ide_completion_list_box_set_font_desc (self->list_box, font_desc);
+}

@@ -81,3 +81,13 @@ ide_completion_display_move_cursor (IdeCompletionDisplay *self,
 
   IDE_COMPLETION_DISPLAY_GET_IFACE (self)->move_cursor (self, step, count);
 }
+
+void
+_ide_completion_display_set_font_desc (IdeCompletionDisplay       *self,
+                                       const PangoFontDescription *font_desc)
+{
+  g_return_if_fail (IDE_IS_COMPLETION_DISPLAY (self));
+
+  if (IDE_COMPLETION_DISPLAY_GET_IFACE (self)->set_font_desc)
+    IDE_COMPLETION_DISPLAY_GET_IFACE (self)->set_font_desc (self, font_desc);
+}
