@@ -39,6 +39,74 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionProvider,
                                 0,
                                 G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
+static const gchar *
+get_icon_name (IdeCtagsCompletionItem *item)
+{
+  const gchar *icon_name = NULL;
+
+  if (item->entry == NULL)
+    return NULL;
+
+  switch (item->entry->kind)
+    {
+    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
+      icon_name = "lang-class-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
+      icon_name = "lang-enum-value-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
+      icon_name = "lang-enum-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
+    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
+      icon_name = "lang-function-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
+      icon_name = "text-x-generic-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_IMPORT:
+      icon_name = "lang-include-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
+      icon_name = "struct-field-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_UNION:
+      icon_name = "lang-union-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
+      icon_name = "lang-typedef-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
+      icon_name = "lang-struct-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
+      icon_name = "lang-variable-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+      icon_name = "lang-define-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
+    default:
+      break;
+    }
+
+  return icon_name;
+}
+
+
 void
 ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
                                          IdeCtagsIndex              *index)
@@ -342,6 +410,20 @@ ide_ctags_completion_provider_refilter (IdeCompletionProvider *self,
 }
 
 static void
+ide_ctags_completion_provider_display_proposal (IdeCompletionProvider   *provider,
+                                                IdeCompletionListBoxRow *row,
+                                                IdeCompletionProposal   *proposal)
+{
+  IdeCtagsCompletionItem *item = IDE_CTAGS_COMPLETION_ITEM (proposal);
+
+  ide_completion_list_box_row_set_icon_name (row, get_icon_name (item));
+  ide_completion_list_box_row_set_left (row, NULL);
+  ide_completion_list_box_row_set_center (row, item->entry->name);
+  ide_completion_list_box_row_set_right (row, NULL);
+}
+
+
+static void
 provider_iface_init (IdeCompletionProviderInterface *iface)
 {
   iface->load = ide_ctags_completion_provider_load;
@@ -350,6 +432,7 @@ provider_iface_init (IdeCompletionProviderInterface *iface)
   iface->populate_async = ide_ctags_completion_provider_populate_async;
   iface->populate_finish = ide_ctags_completion_provider_populate_finish;
   iface->refilter = ide_ctags_completion_provider_refilter;
+  iface->display_proposal = ide_ctags_completion_provider_display_proposal;
 }
 
 void
