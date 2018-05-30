@@ -74,6 +74,7 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+static GQuark provider_quark;
 
 static void
 clear_provider_info (gpointer data)
@@ -290,6 +291,8 @@ ide_completion_context_class_init (IdeCompletionContextClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  provider_quark = g_quark_from_static_string ("IDE_COMPLETION_PROPOSAL_PROVIDER");
 }
 
 static void
@@ -676,11 +679,18 @@ ide_completion_context_get_item (GListModel *model,
 {
   IdeCompletionContext *self = (IdeCompletionContext *)model;
   g_autoptr(IdeCompletionProposal) proposal = NULL;
+  g_autoptr(IdeCompletionProvider) provider = NULL;
 
   g_assert (IDE_IS_COMPLETION_CONTEXT (self));
 
-  if (_ide_completion_context_get_proposal (self, position, NULL, &proposal))
-    return g_steal_pointer (&proposal);
+  if (_ide_completion_context_get_proposal (self, position, &provider, &proposal))
+    {
+      g_object_set_qdata_full (G_OBJECT (proposal),
+                               provider_quark,
+                               g_steal_pointer (&provider),
+                               g_object_unref);
+      return g_steal_pointer (&proposal);
+    }
 
   return NULL;
 }

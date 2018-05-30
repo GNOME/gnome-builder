@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "ide-completion-proposal.h"
+#include "ide-completion-provider.h"
 #include "ide-completion-list-box-row.h"
 
 G_DEFINE_INTERFACE (IdeCompletionProposal, ide_completion_proposal, G_TYPE_OBJECT)
@@ -28,17 +29,6 @@ G_DEFINE_INTERFACE (IdeCompletionProposal, ide_completion_proposal, G_TYPE_OBJEC
 static void
 ide_completion_proposal_default_init (IdeCompletionProposalInterface *iface)
 {
-}
-
-void
-ide_completion_proposal_display (IdeCompletionProposal   *self,
-                                 IdeCompletionListBoxRow *row)
-{
-  g_return_if_fail (IDE_IS_COMPLETION_PROPOSAL (self));
-  g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
-
-  if (IDE_COMPLETION_PROPOSAL_GET_IFACE (self)->display)
-    IDE_COMPLETION_PROPOSAL_GET_IFACE (self)->display (self, row);
 }
 
 /**
@@ -60,4 +50,24 @@ ide_completion_proposal_get_comment (IdeCompletionProposal *self)
     return IDE_COMPLETION_PROPOSAL_GET_IFACE (self)->get_comment (self);
 
   return NULL;
+}
+
+void
+_ide_completion_proposal_display (IdeCompletionProposal   *self,
+                                  IdeCompletionListBoxRow *row)
+{
+  static GQuark provider_quark;
+  IdeCompletionProvider *provider;
+
+  g_assert (IDE_IS_COMPLETION_PROPOSAL (self));
+  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
+
+  /* keep in sync with ide-completion-context.c */
+  if G_UNLIKELY (provider_quark == 0)
+    provider_quark = g_quark_from_static_string ("IDE_COMPLETION_PROPOSAL_PROVIDER");
+
+  if ((provider = g_object_get_qdata (G_OBJECT (self), provider_quark)))
+    ide_completion_provider_display_proposal (provider, row, self);
+  else
+    g_assert_not_reached ();
 }

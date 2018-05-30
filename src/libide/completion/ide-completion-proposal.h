@@ -34,13 +34,9 @@ struct _IdeCompletionProposalInterface
 {
   GTypeInterface parent_iface;
 
-  void   (*display)     (IdeCompletionProposal   *self,
-                         IdeCompletionListBoxRow *row);
   gchar *(*get_comment) (IdeCompletionProposal   *self);
 };
 
-void   ide_completion_proposal_display     (IdeCompletionProposal   *self,
-                                            IdeCompletionListBoxRow *row);
-gchar *ide_completion_proposal_get_comment (IdeCompletionProposal   *self);
+gchar *ide_completion_proposal_get_comment (IdeCompletionProposal *self);
 
 G_END_DECLS
