@@ -177,11 +177,7 @@ ide_completion_list_box_row_set_proposal (IdeCompletionListBoxRow *self,
   g_return_if_fail (!proposal || IDE_IS_COMPLETION_PROPOSAL (proposal));
 
   if (g_set_object (&self->proposal, proposal))
-    {
-      if (proposal != NULL)
-        _ide_completion_proposal_display (proposal, self);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROPOSAL]);
-    }
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROPOSAL]);
 }
 
 void

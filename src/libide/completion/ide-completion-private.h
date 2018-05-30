@@ -63,10 +63,6 @@ void                     _ide_completion_context_complete_async    (IdeCompletio
 gboolean                 _ide_completion_context_complete_finish   (IdeCompletionContext        *self,
                                                                     GAsyncResult                *result,
                                                                     GError                     **error);
-gboolean                 _ide_completion_context_get_proposal      (IdeCompletionContext        *self,
-                                                                    guint                        position,
-                                                                    IdeCompletionProvider      **provider,
-                                                                    IdeCompletionProposal      **proposal);
 void                     _ide_completion_display_set_font_desc     (IdeCompletionDisplay        *self,
                                                                     const PangoFontDescription  *font_desc);
 gboolean                 _ide_completion_list_box_key_activates    (IdeCompletionListBox        *self,

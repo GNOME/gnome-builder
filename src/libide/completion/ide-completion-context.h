@@ -49,5 +49,10 @@ IDE_AVAILABLE_IN_3_30
 gchar         *ide_completion_context_get_word        (IdeCompletionContext   *self);
 IDE_AVAILABLE_IN_3_30
 gchar         *ide_completion_context_get_line_text   (IdeCompletionContext   *self);
+IDE_AVAILABLE_IN_3_30
+gboolean       ide_completion_context_get_item_full   (IdeCompletionContext   *self,
+                                                       guint                   position,
+                                                       IdeCompletionProvider **provider,
+                                                       IdeCompletionProposal **proposal);
 
 G_END_DECLS

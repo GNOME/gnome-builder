@@ -514,6 +514,7 @@ ide_completion_list_box_update_row_cb (GtkWidget *widget,
                                        gpointer   user_data)
 {
   g_autoptr(IdeCompletionProposal) proposal = NULL;
+  g_autoptr(IdeCompletionProvider) provider = NULL;
   UpdateState *state = user_data;
 
   g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (widget));
@@ -525,9 +526,15 @@ ide_completion_list_box_update_row_cb (GtkWidget *widget,
     gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_SELECTED);
 
   if (state->context != NULL && state->position < state->n_items)
-    proposal = g_list_model_get_item (G_LIST_MODEL (state->context), state->position);
+    ide_completion_context_get_item_full (state->context, state->position, &provider, &proposal);
 
   ide_completion_list_box_row_set_proposal (IDE_COMPLETION_LIST_BOX_ROW (widget), proposal);
+
+  if (provider && proposal)
+    ide_completion_provider_display_proposal (provider,
+                                              IDE_COMPLETION_LIST_BOX_ROW (widget),
+                                              proposal);
+
   gtk_widget_set_visible (widget, proposal != NULL);
 
   state->position++;
@@ -692,7 +699,7 @@ ide_completion_list_box_get_selected (IdeCompletionListBox   *self,
 
       if (self->selected < n_items)
         {
-          _ide_completion_context_get_proposal (self->context, self->selected, provider, proposal);
+          ide_completion_context_get_item_full (self->context, self->selected, provider, proposal);
           return TRUE;
         }
     }
