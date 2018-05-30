@@ -7691,3 +7691,23 @@ ide_source_view_get_completion (IdeSourceView *self)
 
   return priv->completion;
 }
+
+/**
+ * ide_source_view_has_snippet:
+ * @self: a #IdeSourceView
+ *
+ * Checks if there is an active snippet.
+ *
+ * Returns: %TRUE if there is an active snippet.
+ *
+ * Since: 3.30
+ */
+gboolean
+ide_source_view_has_snippet (IdeSourceView *self)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return priv->snippets->length > 0;
+}
