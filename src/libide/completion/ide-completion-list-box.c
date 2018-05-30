@@ -697,9 +697,10 @@ ide_completion_list_box_get_selected (IdeCompletionListBox   *self,
     {
       guint n_items = g_list_model_get_n_items (G_LIST_MODEL (self->context));
 
-      if (self->selected < n_items)
+      if (n_items > 0)
         {
-          ide_completion_context_get_item_full (self->context, self->selected, provider, proposal);
+          guint selected = MIN (self->selected, n_items - 1);
+          ide_completion_context_get_item_full (self->context, selected, provider, proposal);
           return TRUE;
         }
     }
