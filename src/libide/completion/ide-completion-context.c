@@ -973,8 +973,8 @@ gboolean
 _ide_completion_context_iter_invalidates (IdeCompletionContext *self,
                                           const GtkTextIter    *iter)
 {
-  guint line;
-  guint line_offset;
+  GtkTextIter begin, end;
+  GtkTextBuffer *buffer;
 
   g_assert (!self || IDE_IS_COMPLETION_CONTEXT (self));
   g_assert (iter != NULL);
@@ -982,13 +982,11 @@ _ide_completion_context_iter_invalidates (IdeCompletionContext *self,
   if (self == NULL)
     return FALSE;
 
-#if 0
-  line = gtk_text_iter_get_line (iter);
-  if (line != self->line)
-    return TRUE;
+  buffer = gtk_text_iter_get_buffer (iter);
 
-  line_offset = gtk_text_iter_get_line_offset (iter);
-#endif
+  gtk_text_buffer_get_iter_at_mark (buffer, &begin, self->begin_mark);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end, self->end_mark);
 
-  return FALSE;
+  return gtk_text_iter_compare (&begin, iter) <= 0 &&
+         gtk_text_iter_compare (&end, iter) >= 0;
 }
