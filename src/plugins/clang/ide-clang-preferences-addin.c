@@ -24,6 +24,7 @@
 struct _IdeClangPreferencesAddin
 {
   GObject parent;
+  guint   completion_id;
   guint   diagnose_id;
 };
 
@@ -64,6 +65,18 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
                                                   /* translators: keywords used when searching for preferences */
                                                   _("clang diagnostics warnings errors"),
                                                   50);
+
+  self->completion_id = dzl_preferences_add_switch (preferences,
+                                                    "code-insight",
+                                                    "completion",
+                                                    "org.gnome.builder.extension-type",
+                                                    "enabled",
+                                                    "/org/gnome/builder/extension-types/clang-plugin/IdeCompletionProvider/",
+                                                    NULL,
+                                                    _("Suggest completions using Clang (Experimental)"),
+                                                    _("Use Clang to suggest completions for C and C++ languages"),
+                                                    NULL,
+                                                    20);
 }
 
 static void
@@ -75,6 +88,7 @@ ide_clang_preferences_addin_unload (IdePreferencesAddin *addin,
   g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
   g_assert (DZL_IS_PREFERENCES (preferences));
 
+  dzl_preferences_remove_id (preferences, self->completion_id);
   dzl_preferences_remove_id (preferences, self->diagnose_id);
 }
 

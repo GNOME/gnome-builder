@@ -5,11 +5,6 @@
       <summary>Suggest Snippet Completion</summary>
       <description>Allow snippets to be inserted into the document.</description>
     </key>
-    <key name="clang-autocompletion" type="b">
-      <default>false</default>
-      <summary>Clang based autocompletion (Experimental)</summary>
-      <description>Use Clang for autocompletion in the C and C++ languages.</description>
-    </key>
     <key name="ctags-autocompletion" type="b">
       <default>true</default>
       <summary>Ctags based autocompletion</summary>
