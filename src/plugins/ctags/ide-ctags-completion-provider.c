@@ -412,13 +412,18 @@ ide_ctags_completion_provider_refilter (IdeCompletionProvider *self,
 static void
 ide_ctags_completion_provider_display_proposal (IdeCompletionProvider   *provider,
                                                 IdeCompletionListBoxRow *row,
+                                                IdeCompletionContext    *context,
+                                                const gchar             *typed_text,
                                                 IdeCompletionProposal   *proposal)
 {
   IdeCtagsCompletionItem *item = IDE_CTAGS_COMPLETION_ITEM (proposal);
+  g_autofree gchar *highlight = NULL;
+
+  highlight = ide_completion_item_fuzzy_highlight (item->entry->name, typed_text);
 
   ide_completion_list_box_row_set_icon_name (row, get_icon_name (item));
   ide_completion_list_box_row_set_left (row, NULL);
-  ide_completion_list_box_row_set_center (row, item->entry->name);
+  ide_completion_list_box_row_set_center_markup (row, highlight);
   ide_completion_list_box_row_set_right (row, NULL);
 }
 

@@ -23,14 +23,11 @@
 
 #include "ide-clang-completion-item.h"
 
-static void completion_proposal_iface_init (GtkSourceCompletionProposalIface *);
-
 G_DEFINE_TYPE_WITH_CODE (IdeClangCompletionItem, ide_clang_completion_item, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL,
-                                                completion_proposal_iface_init))
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void
-ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
+ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
 {
   g_autoptr(GVariant) result = NULL;
   g_autoptr(GVariant) chunks = NULL;
@@ -40,11 +37,6 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
   GVariant *chunk;
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
-
-  if G_LIKELY (self->initialized)
-    return;
-
-  self->initialized = TRUE;
 
   result = ide_clang_completion_item_get_result (self);
 
@@ -61,16 +53,19 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
     case CXCursor_ObjCClassMethodDecl:
     case CXCursor_ObjCInstanceMethodDecl:
       self->icon_name = "lang-method-symbolic";
+      self->kind = IDE_SYMBOL_METHOD;
       break;
 
     case CXCursor_ConversionFunction:
     case CXCursor_FunctionDecl:
     case CXCursor_FunctionTemplate:
       self->icon_name = "lang-function-symbolic";
+      self->kind = IDE_SYMBOL_FUNCTION;
       break;
 
     case CXCursor_FieldDecl:
       self->icon_name = "struct-field-symbolic";
+      self->kind = IDE_SYMBOL_FIELD;
       break;
 
     case CXCursor_VarDecl:
@@ -87,6 +82,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
 
     case CXCursor_StructDecl:
       self->icon_name = "lang-struct-symbolic";
+      self->kind = IDE_SYMBOL_STRUCT;
       break;
 
     case CXCursor_UnionDecl:
@@ -106,14 +102,17 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
     case CXCursor_TemplateTypeParameter:
     case CXCursor_TemplateTemplateParameter:
       self->icon_name  = "lang-class-symbolic";
+      self->kind = IDE_SYMBOL_CLASS;
       break;
 
     case CXCursor_EnumConstantDecl:
       self->icon_name = "lang-enum-value-symbolic";
+      self->kind = IDE_SYMBOL_ENUM_VALUE;
       break;
 
     case CXCursor_EnumDecl:
       self->icon_name = "lang-enum-symbolic";
+      self->kind = IDE_SYMBOL_ENUM;
       break;
 
     case CXCursor_NotImplemented:
@@ -140,15 +139,10 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
       if (!g_variant_lookup (chunk, "text", "&s", &text))
         text = NULL;
 
-      if (text != NULL)
-        text = escaped = g_markup_escape_text (text, -1);
-      else
-        text = "";
-
       switch ((int)ckind)
         {
         case CXCompletionChunk_TypedText:
-          g_string_append_printf (markup, "<b>%s</b>", text);
+          self->typed_text = text;
           break;
 
         case CXCompletionChunk_Placeholder:
@@ -177,8 +171,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
           break;
 
         case CXCompletionChunk_ResultType:
-          g_string_append (markup, text);
-          g_string_append_c (markup, ' ');
+          self->return_type = text;
           break;
 
         case CXCompletionChunk_Optional:
@@ -192,7 +185,7 @@ ide_clang_completion_item_lazy_init (IdeClangCompletionItem *self)
       g_variant_unref (chunk);
     }
 
-  self->markup = g_string_free (g_steal_pointer (&markup), FALSE);
+  self->params = g_string_free (g_steal_pointer (&markup), FALSE);
 }
 
 static IdeSpacesStyle
@@ -364,28 +357,6 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
   return g_steal_pointer (&snippet);
 }
 
-static gchar *
-ide_clang_completion_item_get_markup (GtkSourceCompletionProposal *proposal)
-{
-  IdeClangCompletionItem *self = (IdeClangCompletionItem *)proposal;
-
-  g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
-
-  ide_clang_completion_item_lazy_init (self);
-
-  return g_strdup (self->markup);
-}
-
-static const gchar *
-ide_clang_completion_item_get_icon_name (GtkSourceCompletionProposal *proposal)
-{
-  IdeClangCompletionItem *self = (IdeClangCompletionItem *)proposal;
-
-  g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
-
-  return self->icon_name;
-}
-
 static void
 ide_clang_completion_item_finalize (GObject *object)
 {
@@ -394,16 +365,9 @@ ide_clang_completion_item_finalize (GObject *object)
   self->typed_text = NULL;
 
   g_clear_pointer (&self->results, g_variant_unref);
-  g_clear_pointer (&self->markup, g_free);
+  g_clear_pointer (&self->params, g_free);
 
   G_OBJECT_CLASS (ide_clang_completion_item_parent_class)->finalize (object);
-}
-
-static void
-completion_proposal_iface_init (GtkSourceCompletionProposalIface *iface)
-{
-  iface->get_icon_name = ide_clang_completion_item_get_icon_name;
-  iface->get_markup = ide_clang_completion_item_get_markup;
 }
 
 static void
@@ -417,7 +381,6 @@ ide_clang_completion_item_class_init (IdeClangCompletionItemClass *klass)
 static void
 ide_clang_completion_item_init (IdeClangCompletionItem *self)
 {
-  self->link.data = self;
 }
 
 /**
@@ -443,27 +406,29 @@ ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
  * ide_clang_completion_item_new:
  * @variant: the toplevel variant of all results
  * @index: the index of the item
- * @typed_text: pointer to typed texted within @variant
+ * @keyword: pointer to folded form of the text
  *
- * The @typed_text parameter is not copied, it is expected to be valid
+ * The @keyword parameter is not copied, it is expected to be valid
  * string found within @variant (and therefore associated with its
  * life-cycle).
  */
 IdeClangCompletionItem *
 ide_clang_completion_item_new (GVariant    *variant,
                                guint        index,
-                               const gchar *typed_text)
+                               const gchar *keyword)
 {
   IdeClangCompletionItem *ret;
 
   g_assert (variant != NULL);
-  g_assert (typed_text != NULL);
-  g_assert (typed_text[0] != 0);
+  g_assert (keyword != NULL);
+  g_assert (keyword[0] != 0);
 
   ret = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM, NULL);
   ret->results = g_variant_ref (variant);
   ret->index = index;
-  ret->typed_text = typed_text;
+  ret->typed_text = keyword;
+
+  ide_clang_completion_item_do_init (ret);
 
   return ret;
 }
