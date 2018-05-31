@@ -48,15 +48,9 @@ ide_clang_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               IDE_TYPE_CLANG_DIAGNOSTIC_PROVIDER);
-#if 0
-  /* Disabled until the new Completion Engine lands. GtkSourceView cannot keep
-   * up with the performance due to some O(n²) issues in the hot path. We'll
-   * be working on the new completion engine next.
-   */
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_COMPLETION_PROVIDER,
                                               IDE_TYPE_CLANG_COMPLETION_PROVIDER);
-#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               IDE_TYPE_CLANG_PREFERENCES_ADDIN);
