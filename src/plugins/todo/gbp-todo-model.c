@@ -64,6 +64,7 @@ static const gchar *exclude_dirs[] = {
   ".flatpak-builder",
   ".git",
   ".svn",
+  "node_modules",
 };
 
 /* This is an optimization to avoid reading files in from disk that
@@ -71,6 +72,8 @@ static const gchar *exclude_dirs[] = {
  * for that information.
  */
 static const gchar *exclude_files[] = {
+  "*~",
+  "*.swp",
   "*.m4",
   "*.po",
   "*.min.js.*",
