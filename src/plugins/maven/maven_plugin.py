@@ -67,7 +67,7 @@ class MavenBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return task.propagate_boolean()
 
     def do_get_priority(self):
-        return -200
+        return 400
 
 class MavenPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
