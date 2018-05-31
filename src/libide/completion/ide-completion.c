@@ -118,6 +118,12 @@ struct _IdeCompletion
   PangoFontDescription *font_desc;
 
   /*
+   * If we have a queued update to refilter after deletions, this will be
+   * set to the GSource id.
+   */
+  guint queued_update;
+
+  /*
    * This value is incremented/decremented based on if we need to suppress
    * visibility of the completion window (and avoid doing queries).
    */
@@ -305,6 +311,8 @@ ide_completion_start (IdeCompletion           *self,
 
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (self->context == NULL);
+
+  dzl_clear_source (&self->queued_update);
 
   if (!ide_completion_compute_bounds (self, &begin, &end))
     {
@@ -596,6 +604,41 @@ ide_completion_view_move_cursor_cb (IdeCompletion   *self,
     ide_completion_cancel (self);
 }
 
+static gboolean
+ide_completion_queued_update_cb (gpointer user_data)
+{
+  IdeCompletion *self = user_data;
+
+  g_assert (IDE_IS_COMPLETION (self));
+
+  self->queued_update = 0;
+
+  ide_completion_update (self, IDE_COMPLETION_INTERACTIVE);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_completion_queue_update (IdeCompletion *self)
+{
+  g_assert (IDE_IS_COMPLETION (self));
+
+  dzl_clear_source (&self->queued_update);
+
+  /*
+   * We hit this code path when the user has deleted text. We want to
+   * introduce just a bit of delay so that deleting under heavy key
+   * repeat will not stall doing lots of refiltering.
+   */
+
+  self->queued_update =
+    gdk_threads_add_timeout_full (G_PRIORITY_LOW,
+                                  20,
+                                  ide_completion_queued_update_cb,
+                                  self,
+                                  NULL);
+}
+
 static void
 ide_completion_buffer_delete_range_cb (IdeCompletion *self,
                                        GtkTextIter   *begin,
@@ -611,7 +654,7 @@ ide_completion_buffer_delete_range_cb (IdeCompletion *self,
   if (self->context != NULL)
     {
       if (!ide_completion_is_blocked (self))
-        ide_completion_update (self, IDE_COMPLETION_INTERACTIVE);
+        ide_completion_queue_update (self);
     }
 }
 
@@ -643,6 +686,8 @@ ide_completion_buffer_insert_text_after_cb (IdeCompletion *self,
   g_assert (text != NULL);
   g_assert (len > 0);
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  dzl_clear_source (&self->queued_update);
 
   if (ide_completion_is_blocked (self) || !is_single_char (text, len))
     {
