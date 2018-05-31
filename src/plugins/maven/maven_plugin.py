@@ -32,6 +32,11 @@ from gi.repository import Ide
 
 _ = Ide.gettext
 
+_ATTRIBUTES = ",".join([
+    Gio.FILE_ATTRIBUTE_STANDARD_NAME,
+    Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+    Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON,
+])
 
 class MavenBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
@@ -165,3 +170,113 @@ class MavenBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
     def do_get_targets_finish(self, result):
         if result.propagate_boolean():
             return result.targets
+
+class MavenIdeTestProvider(Ide.TestProvider):
+
+    def do_run_async(self, test, pipeline, cancellable, callback, data):
+        print("run async")
+        task = Gio.Task.new(self, cancellable, callback)
+        task.set_priority(GLib.PRIORITY_LOW)
+
+        context = self.get_context()
+        build_system = context.get_build_system()
+
+        if type(build_system) != MavenBuildSystem:
+            task.return_error(GLib.Error('Not maven build system',
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.NOT_SUPPORTED))
+            return
+
+        #task.targets = [MavenBuildTarget(context=self.get_context())]
+        #task.return_boolean(True)
+       
+        # TODO: example maven project used is https://gitlab.gnome.org/albfan/pressme
+
+        # TODO: run test
+        #http://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html
+       
+        # different way to run all or selected test
+        # mvn -Dtest=AppTest test | grep -v "\[INFO\]"
+        # mvn -Dtest=AppTest#testApp test | grep -v "\[INFO\]" | grep -v "\[ERROR\]"
+        # mvn -Dtest=AppTest#testAppFail test | grep -v "\[INFO\]" | grep -v "\[ERROR\]"
+
+        # TODO: parse results in file target/surefire-reports/TEST-org.gnome.examples.AppTest.xml
+
+        #  <testcase classname="org.gnome.examples.AppTest" name="testApp" time="0.003"/>
+        #  <testcase classname="org.gnome.examples.AppTest" name="testAppFail" time="0.009">
+        #    <failure type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError
+        #	at junit.framework.Assert.fail(Assert.java:47)
+        #	at junit.framework.Assert.assertTrue(Assert.java:20)
+        #	at junit.framework.Assert.assertTrue(Assert.java:27)
+        #	at org.gnome.examples.AppTest.testAppFail(AppTest.java:41)
+        #    </failure>
+        #  </testcase>
+
+    def do_run_finish(self, result):
+        print("finish")
+        # TODO: Cannot find doc about Gio.Task to understand this
+        if result.propagate_boolean():
+            return result.targets
+
+    def do_reload(self):
+
+        context = self.get_context()
+        build_system = context.get_build_system()
+
+        if type(build_system) != MavenBuildSystem:
+            task.return_error(GLib.Error('Not maven build system',
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.NOT_SUPPORTED))
+            return
+
+        # find all files in test directory
+        # http://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html
+        build_manager = context.get_build_manager()
+        pipeline = build_manager.get_pipeline()
+        srcdir = pipeline.get_srcdir()
+        test_suite = Gio.File.new_for_path(srcdir + '/src/test/java')
+        test_suite.enumerate_children_async(_ATTRIBUTES,
+                                        Gio.FileQueryInfoFlags.NONE,
+                                        GLib.PRIORITY_LOW,
+                                        None,
+                                        self.on_enumerator_loaded,
+                                        None)
+
+    def on_enumerator_loaded(self, parent, result, data):
+        try:
+            # DEBUG
+            # import pdb
+            # mypdb=pdb.Pdb(stdin=open('fifo_stdin','r'), stdout=open('fifo_stdout','w'))
+            # mypdb.set_trace()
+
+            enumerator = parent.enumerate_children_finish(result)
+            info = enumerator.next_file(None)
+
+            while info is not None:
+                name = info.get_name()
+                gfile = parent.get_child(name)
+                if info.get_file_type() == Gio.FileType.DIRECTORY:
+                    gfile.enumerate_children_async(_ATTRIBUTES,
+                                                    Gio.FileQueryInfoFlags.NONE,
+                                                    GLib.PRIORITY_LOW,
+                                                    None,
+                                                    self.on_enumerator_loaded,
+                                                    None)
+                else:
+                    #TODO Ask java through introspection for classes with TestCase and its public void methods 
+                    # or Annotation @Test methods
+                    result, contents, etag = gfile.load_contents()
+                    tests = [x for x in str(contents).split('\\n') if 'public void' in x]
+                    tests = [v.replace("()", "").replace("public void ","") for v in tests]
+                    classname=name.replace(".java", "")
+                    for testname in tests:
+                        test = Ide.Test(group=classname, id=1, display_name=testname)
+                        self.add(test)
+
+                info = enumerator.next_file(None)
+
+            enumerator.close()
+
+        except Exception as ex:
+            Ide.warning(repr(ex))
+            return
