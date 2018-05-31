@@ -109,6 +109,12 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
       self->kind = IDE_SYMBOL_CLASS;
       break;
 
+    case CXCursor_MacroDefinition:
+    case CXCursor_MacroExpansion:
+      self->icon_name = "lang-define-symbolic";
+      self->kind = IDE_SYMBOL_MACRO;
+      break;
+
     case CXCursor_EnumConstantDecl:
       self->icon_name = "lang-enum-value-symbolic";
       self->kind = IDE_SYMBOL_ENUM_VALUE;
