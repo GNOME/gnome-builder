@@ -1,6 +1,6 @@
 /* ide-clang-completion-provider.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 #include <ide.h>
 
 G_BEGIN_DECLS
-
-#define IDE_CLANG_COMPLETION_PROVIDER_PRIORITY 200
 
 #define IDE_TYPE_CLANG_COMPLETION_PROVIDER (ide_clang_completion_provider_get_type())
 
