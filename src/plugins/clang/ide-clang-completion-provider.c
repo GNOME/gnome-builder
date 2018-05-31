@@ -62,10 +62,15 @@ ide_clang_completion_provider_key_activates (IdeCompletionProvider *provider,
 {
   IdeClangCompletionItem *item = IDE_CLANG_COMPLETION_ITEM (proposal);
 
-  if (item->kind == IDE_SYMBOL_FIELD)
-    return key->keyval == GDK_KEY_period ||
-           key->keyval == GDK_KEY_semicolon;
+  /* We add suffix ; if pressed */
+  if (key->keyval == GDK_KEY_semicolon)
+    return TRUE;
 
+  /* Try to dereference field/variable */
+  if (item->kind == IDE_SYMBOL_FIELD || item->kind == IDE_SYMBOL_VARIABLE)
+    return key->keyval == GDK_KEY_period;
+
+  /* Open parens for function */
   if (item->kind == IDE_SYMBOL_FUNCTION)
     return key->keyval == GDK_KEY_parenleft;
 
@@ -81,6 +86,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   g_autoptr(IdeSourceSnippet) snippet = NULL;
+  IdeClangCompletionItem *item;
   GtkTextBuffer *buffer;
   GtkTextView *view;
   IdeFile *file;
@@ -104,16 +110,34 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
   if (ide_completion_context_get_bounds (context, &begin, &end))
     gtk_text_buffer_delete (buffer, &begin, &end);
 
-  snippet = ide_clang_completion_item_get_snippet (IDE_CLANG_COMPLETION_ITEM (proposal),
-                                                   ide_file_peek_settings (file));
-  ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
+  item = IDE_CLANG_COMPLETION_ITEM (proposal);
+  snippet = ide_clang_completion_item_get_snippet (item, ide_file_peek_settings (file));
 
-#if 0
-  if (key->keyval == GDK_KEY_period)
-    gtk_text_buffer_insert (buffer, &begin, "->", -1);
+  /*
+   * If we are completing field or variable types, we might want to add
+   * a . or -> to the snippet based on the input character.
+   */
+  if (item->kind == IDE_SYMBOL_FIELD || item->kind == IDE_SYMBOL_VARIABLE)
+    {
+      if (key->keyval == GDK_KEY_period || key->keyval == GDK_KEY_minus)
+        {
+          g_autoptr(IdeSourceSnippetChunk) chunk = ide_source_snippet_chunk_new ();
+          if (strchr (item->return_type, '*'))
+            ide_source_snippet_chunk_set_spec (chunk, "->");
+          else
+            ide_source_snippet_chunk_set_spec (chunk, ".");
+          ide_source_snippet_add_chunk (snippet, chunk);
+        }
+    }
+
   if (key->keyval == GDK_KEY_semicolon)
-    gtk_text_buffer_insert (buffer, &begin, ";", -1);
-#endif
+    {
+      g_autoptr(IdeSourceSnippetChunk) chunk = ide_source_snippet_chunk_new ();
+      ide_source_snippet_chunk_set_spec (chunk, ";");
+      ide_source_snippet_add_chunk (snippet, chunk);
+    }
+
+  ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
 
   gtk_text_buffer_end_user_action (buffer);
 }

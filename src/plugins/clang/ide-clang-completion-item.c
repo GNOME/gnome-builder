@@ -69,7 +69,11 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
       break;
 
     case CXCursor_VarDecl:
+      self->icon_name = "lang-variable-symbolic";
+      self->kind = IDE_SYMBOL_VARIABLE;
       /* local? */
+      break;
+
     case CXCursor_ParmDecl:
     case CXCursor_ObjCIvarDecl:
     case CXCursor_ObjCPropertyDecl:
