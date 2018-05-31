@@ -33,7 +33,7 @@ struct _IdeClangCompletionProvider
 static gint
 ide_clang_completion_provider_get_priority (IdeCompletionProvider *provider)
 {
-  return 200;
+  return 100;
 }
 
 static gboolean
