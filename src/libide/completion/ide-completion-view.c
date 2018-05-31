@@ -391,9 +391,20 @@ _ide_completion_view_handle_key_press (IdeCompletionView *self,
                                        const GdkEventKey *event)
 {
   GtkBindingSet *binding_set;
+  GtkTextView *view;
 
   g_return_val_if_fail (IDE_IS_COMPLETION_VIEW (self), GDK_EVENT_PROPAGATE);
   g_return_val_if_fail (event != NULL, GDK_EVENT_PROPAGATE);
+
+  /*
+   * If we have a snippet active, we don't want to activate with tab since
+   * that could advance the snippet (and should take precedence).
+   */
+  if (self->context != NULL &&
+      event->keyval == GDK_KEY_Tab &&
+      (view = ide_completion_context_get_view (self->context)) &&
+      ide_source_view_has_snippet (IDE_SOURCE_VIEW (view)))
+    return FALSE;
 
   /* The key-press might cause the proposal to activate as well as insert some
    * extra data. For example, a C completion provider might convert '.' to '->'
