@@ -53,6 +53,8 @@ struct _IdeCompletionProviderInterface
                                     GError                  **error);
   void        (*display_proposal)  (IdeCompletionProvider    *self,
                                     IdeCompletionListBoxRow  *row,
+                                    IdeCompletionContext     *context,
+                                    const gchar              *typed_text,
                                     IdeCompletionProposal    *proposal);
   void        (*activate_proposal) (IdeCompletionProvider    *self,
                                     IdeCompletionContext     *context,
@@ -89,6 +91,8 @@ GListModel *ide_completion_provider_populate_finish  (IdeCompletionProvider    *
 IDE_AVAILABLE_IN_3_30
 void        ide_completion_provider_display_proposal (IdeCompletionProvider    *self,
                                                       IdeCompletionListBoxRow  *row,
+                                                      IdeCompletionContext     *context,
+                                                      const gchar              *typed_text,
                                                       IdeCompletionProposal    *proposal);
 IDE_AVAILABLE_IN_3_30
 void        ide_completion_provider_activate_poposal (IdeCompletionProvider    *self,

@@ -531,9 +531,19 @@ ide_completion_list_box_update_row_cb (GtkWidget *widget,
   ide_completion_list_box_row_set_proposal (IDE_COMPLETION_LIST_BOX_ROW (widget), proposal);
 
   if (provider && proposal)
-    ide_completion_provider_display_proposal (provider,
-                                              IDE_COMPLETION_LIST_BOX_ROW (widget),
-                                              proposal);
+    {
+      g_autofree gchar *typed_text = NULL;
+      GtkTextIter begin, end;
+
+      if (ide_completion_context_get_bounds (state->context, &begin, &end))
+        typed_text = gtk_text_iter_get_slice (&begin, &end);
+
+      ide_completion_provider_display_proposal (provider,
+                                                IDE_COMPLETION_LIST_BOX_ROW (widget),
+                                                state->context,
+                                                typed_text,
+                                                proposal);
+    }
 
   gtk_widget_set_visible (widget, proposal != NULL);
 
