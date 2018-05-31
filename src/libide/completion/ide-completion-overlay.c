@@ -115,6 +115,8 @@ ide_completion_overlay_init (IdeCompletionOverlay *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  gtk_widget_set_can_focus (GTK_WIDGET (self), FALSE);
+
   g_signal_connect_swapped (self->view,
                             "reposition",
                             G_CALLBACK (gtk_widget_queue_resize),
