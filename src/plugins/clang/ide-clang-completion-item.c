@@ -74,14 +74,18 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
       /* local? */
       break;
 
+    case CXCursor_Namespace:
+    case CXCursor_NamespaceAlias:
+    case CXCursor_NamespaceRef:
+      self->icon_name = "lang-namespace-symbolic";
+      self->kind = IDE_SYMBOL_NAMESPACE;
+      break;
+
     case CXCursor_ParmDecl:
     case CXCursor_ObjCIvarDecl:
     case CXCursor_ObjCPropertyDecl:
     case CXCursor_ObjCSynthesizeDecl:
     case CXCursor_NonTypeTemplateParameter:
-    case CXCursor_Namespace:
-    case CXCursor_NamespaceAlias:
-    case CXCursor_NamespaceRef:
       break;
 
     case CXCursor_StructDecl:
@@ -90,6 +94,10 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
       break;
 
     case CXCursor_UnionDecl:
+      self->icon_name  = "lang-union-symbolic";
+      self->kind = IDE_SYMBOL_UNION;
+      break;
+
     case CXCursor_ClassDecl:
     case CXCursor_TypeRef:
     case CXCursor_TemplateRef:
