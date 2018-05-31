@@ -285,12 +285,15 @@ _ide_completion_provider_load (IdeCompletionProvider *self,
 void
 ide_completion_provider_display_proposal (IdeCompletionProvider   *self,
                                           IdeCompletionListBoxRow *row,
+                                          IdeCompletionContext    *context,
+                                          const gchar             *typed_text,
                                           IdeCompletionProposal   *proposal)
 {
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (self));
   g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
+  g_return_if_fail (IDE_IS_COMPLETION_CONTEXT (context));
   g_return_if_fail (IDE_IS_COMPLETION_PROPOSAL (proposal));
 
   if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal)
-    IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal (self, row, proposal);
+    IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal (self, row, context, typed_text, proposal);
 }
