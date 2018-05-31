@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeCompletionListBoxRow" parent="GtkListBoxRow">
+    <property name="can-focus">false</property>
     <child>
       <object class="GtkBox" id="box">
+        <property name="can-focus">false</property>
         <property name="orientation">horizontal</property>
         <property name="visible">true</property>
         <child>
@@ -13,6 +15,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="left">
+            <property name="can-focus">false</property>
             <property name="xalign">1.0</property>
             <property name="hexpand">false</property>
             <property name="visible">true</property>
@@ -26,6 +29,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="center">
+            <property name="can-focus">false</property>
             <property name="xalign">0.0</property>
             <property name="hexpand">true</property>
             <property name="visible">true</property>
@@ -39,6 +43,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="right">
+            <property name="can-focus">false</property>
             <property name="xalign">1.0</property>
             <property name="hexpand">false</property>
             <property name="visible">true</property>
