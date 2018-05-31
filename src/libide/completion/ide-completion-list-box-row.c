@@ -177,7 +177,16 @@ ide_completion_list_box_row_set_proposal (IdeCompletionListBoxRow *self,
   g_return_if_fail (!proposal || IDE_IS_COMPLETION_PROPOSAL (proposal));
 
   if (g_set_object (&self->proposal, proposal))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROPOSAL]);
+    {
+      if (proposal == NULL)
+        {
+          gtk_label_set_label (self->left, NULL);
+          gtk_label_set_label (self->center, NULL);
+          gtk_label_set_label (self->right, NULL);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROPOSAL]);
+    }
 }
 
 void
