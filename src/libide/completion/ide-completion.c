@@ -890,6 +890,13 @@ ide_completion_finalize (GObject *object)
 
   IDE_ENTRY;
 
+  if (self->display != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->display));
+
+  dzl_clear_source (&self->queued_update);
+
+  g_clear_object (&self->cancellable);
+  g_clear_object (&self->addins);
   g_clear_object (&self->buffer_signals);
   g_clear_object (&self->context_signals);
   g_clear_object (&self->view_signals);
@@ -1487,6 +1494,10 @@ ide_completion_get_display (IdeCompletion *self)
   if (self->display == NULL)
     {
       self->display = ide_completion_create_display (self);
+      g_signal_connect (self->display,
+                        "destroy",
+                        G_CALLBACK (gtk_widget_destroyed),
+                        &self->display);
       ide_completion_display_set_n_rows (self->display, self->n_rows);
       ide_completion_display_attach (self->display, self->view);
       _ide_completion_display_set_font_desc (self->display, self->font_desc);
