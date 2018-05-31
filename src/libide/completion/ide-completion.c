@@ -1521,6 +1521,21 @@ _ide_completion_set_font_description (IdeCompletion              *self,
     {
       pango_font_description_free (self->font_desc);
       self->font_desc = pango_font_description_copy (font_desc);
+
+      /*
+       * Work around issue where when a proposal provides "<b>markup</b>" and
+       * the weight is set in the font description, the <b> markup will not
+       * have it's weight respected. This seems to be happening because the
+       * weight mask is getting set in pango_font_description_from_string()
+       * even if the the value is set to normal. That matter is complicated
+       * because PangoAttrFontDesc and PangoAttrWeight will both have the
+       * same starting offset in the PangoLayout.
+       *
+       * https://bugzilla.gnome.org/show_bug.cgi?id=755968
+       */
+      if (PANGO_WEIGHT_NORMAL == pango_font_description_get_weight (self->font_desc))
+        pango_font_description_unset_fields (self->font_desc, PANGO_FONT_MASK_WEIGHT);
+
       if (self->display != NULL)
         _ide_completion_display_set_font_desc (self->display, font_desc);
     }
