@@ -182,6 +182,7 @@ src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 src/plugins/gnome-code-assistance/ide-gca-service.c
 src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml
+src/plugins/gradle/gradle_plugin.py
 src/plugins/html-preview/gtk/menus.ui
 src/plugins/html-preview/html_preview.py
 src/plugins/jedi/jedi_plugin.py
