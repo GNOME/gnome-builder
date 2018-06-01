@@ -270,11 +270,11 @@ get_space_before_mask (enum CXCompletionChunkKind kind)
     }
 }
 
-static IdeSourceSnippet *
+static IdeSnippet *
 ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
                                           IdeFileSettings        *file_settings)
 {
-  g_autoptr(IdeSourceSnippet) snippet = NULL;
+  g_autoptr(IdeSnippet) snippet = NULL;
   g_autoptr(GVariant) result = NULL;
   g_autoptr(GVariant) chunks = NULL;
   GVariantIter iter;
@@ -286,7 +286,7 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
   g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
 
   result = ide_clang_completion_item_get_result (self);
-  snippet = ide_source_snippet_new (NULL, NULL);
+  snippet = ide_snippet_new (NULL, NULL);
 
   if (file_settings != NULL)
     spaces = ide_file_settings_get_spaces_style (file_settings);
@@ -299,7 +299,7 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
   while ((vchunk = g_variant_iter_next_value (&iter)))
     {
       enum CXCompletionChunkKind kind;
-      IdeSourceSnippetChunk *chunk;
+      IdeSnippetChunk *chunk;
       const gchar *text;
 
       if (!g_variant_lookup (vchunk, "kind", "u", &kind))
@@ -311,27 +311,27 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
       switch (kind)
         {
         case CXCompletionChunk_TypedText:
-          chunk = ide_source_snippet_chunk_new ();
-          ide_source_snippet_chunk_set_text (chunk, text);
-          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_source_snippet_add_chunk (snippet, chunk);
+          chunk = ide_snippet_chunk_new ();
+          ide_snippet_chunk_set_text (chunk, text);
+          ide_snippet_chunk_set_text_set (chunk, TRUE);
+          ide_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
         case CXCompletionChunk_Text:
-          chunk = ide_source_snippet_chunk_new ();
-          ide_source_snippet_chunk_set_text (chunk, text);
-          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_source_snippet_add_chunk (snippet, chunk);
+          chunk = ide_snippet_chunk_new ();
+          ide_snippet_chunk_set_text (chunk, text);
+          ide_snippet_chunk_set_text_set (chunk, TRUE);
+          ide_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
         case CXCompletionChunk_Placeholder:
-          chunk = ide_source_snippet_chunk_new ();
-          ide_source_snippet_chunk_set_text (chunk, text);
-          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_source_snippet_chunk_set_tab_stop (chunk, ++tab_stop);
-          ide_source_snippet_add_chunk (snippet, chunk);
+          chunk = ide_snippet_chunk_new ();
+          ide_snippet_chunk_set_text (chunk, text);
+          ide_snippet_chunk_set_text_set (chunk, TRUE);
+          ide_snippet_chunk_set_tab_stop (chunk, ++tab_stop);
+          ide_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
@@ -353,31 +353,31 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
         case CXCompletionChunk_HorizontalSpace:
           if (spaces & get_space_before_mask (kind))
             {
-              chunk = ide_source_snippet_chunk_new ();
-              ide_source_snippet_chunk_set_text (chunk, " ");
-              ide_source_snippet_chunk_set_text_set (chunk, TRUE);
-              ide_source_snippet_add_chunk (snippet, chunk);
+              chunk = ide_snippet_chunk_new ();
+              ide_snippet_chunk_set_text (chunk, " ");
+              ide_snippet_chunk_set_text_set (chunk, TRUE);
+              ide_snippet_add_chunk (snippet, chunk);
               g_clear_object (&chunk);
             }
-          chunk = ide_source_snippet_chunk_new ();
-          ide_source_snippet_chunk_set_text (chunk, text);
-          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_source_snippet_add_chunk (snippet, chunk);
+          chunk = ide_snippet_chunk_new ();
+          ide_snippet_chunk_set_text (chunk, text);
+          ide_snippet_chunk_set_text_set (chunk, TRUE);
+          ide_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
         case CXCompletionChunk_VerticalSpace:
           /* insert the vertical space */
-          chunk = ide_source_snippet_chunk_new ();
-          ide_source_snippet_chunk_set_text (chunk, text);
-          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_source_snippet_add_chunk (snippet, chunk);
+          chunk = ide_snippet_chunk_new ();
+          ide_snippet_chunk_set_text (chunk, text);
+          ide_snippet_chunk_set_text_set (chunk, TRUE);
+          ide_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           /* now perform indentation */
-          chunk = ide_source_snippet_chunk_new ();
-          ide_source_snippet_chunk_set_text (chunk, "\t");
-          ide_source_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_source_snippet_add_chunk (snippet, chunk);
+          chunk = ide_snippet_chunk_new ();
+          ide_snippet_chunk_set_text (chunk, "\t");
+          ide_snippet_chunk_set_text_set (chunk, TRUE);
+          ide_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
@@ -425,11 +425,11 @@ ide_clang_completion_item_init (IdeClangCompletionItem *self)
  * @self: an #IdeClangCompletionItem.
  * @file_settings: (nullable): an #IdeFileSettings or %NULL
  *
- * Gets the #IdeSourceSnippet to be inserted when expanding this completion item.
+ * Gets the #IdeSnippet to be inserted when expanding this completion item.
  *
- * Returns: (transfer full): An #IdeSourceSnippet.
+ * Returns: (transfer full): An #IdeSnippet.
  */
-IdeSourceSnippet *
+IdeSnippet *
 ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
                                        IdeFileSettings        *file_settings)
 {

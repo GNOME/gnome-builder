@@ -39,7 +39,7 @@ struct _IdeCtagsCompletionItem
 IdeCtagsCompletionItem *ide_ctags_completion_item_new         (IdeCtagsResults            *results,
                                                                const IdeCtagsIndexEntry   *entry);
 gboolean                ide_ctags_completion_item_is_function (IdeCtagsCompletionItem     *self);
-IdeSourceSnippet       *ide_ctags_completion_item_get_snippet (IdeCtagsCompletionItem     *self,
+IdeSnippet             *ide_ctags_completion_item_get_snippet (IdeCtagsCompletionItem     *self,
                                                                IdeFileSettings            *file_settings);
 
 G_END_DECLS

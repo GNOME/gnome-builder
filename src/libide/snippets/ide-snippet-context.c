@@ -1,4 +1,4 @@
-/* ide-source-snippet-context.c
+/* ide-snippet-context.c
  *
  * Copyright 2013 Christian Hergert <christian@hergert.me>
  *
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-source-snippets-context"
+#define G_LOG_DOMAIN "ide-snippets-context"
 
 #include "config.h"
 
@@ -24,25 +24,25 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
-#include "snippets/ide-source-snippet-context.h"
+#include "ide-snippet-context.h"
 
 /**
- * SECTION:ide-source-snippet-context
- * @title: IdeSourceSnippetContext
- * @short_description: Context for expanding #IdeSourceSnippetChunk
+ * SECTION:ide-snippet-context
+ * @title: IdeSnippetContext
+ * @short_description: Context for expanding #IdeSnippetChunk
  *
  * This class is currently used primary as a hashtable. However, the longer
  * term goal is to have it hold onto a GjsContext as well as other languages
- * so that #IdeSourceSnippetChunk can expand themselves by executing
+ * so that #IdeSnippetChunk can expand themselves by executing
  * script within the context.
  *
- * The #IdeSourceSnippet will build the context and then expand each of the
+ * The #IdeSnippet will build the context and then expand each of the
  * chunks during the insertion/edit phase.
  *
- * Since: 3.18
+ * Since: 3.30
  */
 
-struct _IdeSourceSnippetContext
+struct _IdeSnippetContext
 {
   GObject     parent_instance;
 
@@ -53,12 +53,12 @@ struct _IdeSourceSnippetContext
   guint       use_spaces : 1;
 };
 
-struct _IdeSourceSnippetContextClass
+struct _IdeSnippetContextClass
 {
   GObjectClass parent;
 };
 
-G_DEFINE_TYPE (IdeSourceSnippetContext, ide_source_snippet_context, G_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeSnippetContext, ide_snippet_context, G_TYPE_OBJECT)
 
 enum {
   CHANGED,
@@ -70,20 +70,20 @@ typedef gchar *(*InputFilter) (const gchar *input);
 static GHashTable *filters;
 static guint signals[LAST_SIGNAL];
 
-IdeSourceSnippetContext *
-ide_source_snippet_context_new (void)
+IdeSnippetContext *
+ide_snippet_context_new (void)
 {
-  return g_object_new (IDE_TYPE_SOURCE_SNIPPET_CONTEXT, NULL);
+  return g_object_new (IDE_TYPE_SNIPPET_CONTEXT, NULL);
 }
 
 void
-ide_source_snippet_context_dump (IdeSourceSnippetContext *context)
+ide_snippet_context_dump (IdeSnippetContext *context)
 {
   GHashTableIter iter;
   gpointer key;
   gpointer value;
 
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
 
   g_hash_table_iter_init (&iter, context->variables);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -91,42 +91,42 @@ ide_source_snippet_context_dump (IdeSourceSnippetContext *context)
 }
 
 void
-ide_source_snippet_context_clear_variables (IdeSourceSnippetContext *context)
+ide_snippet_context_clear_variables (IdeSnippetContext *context)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
 
   g_hash_table_remove_all (context->variables);
 }
 
 void
-ide_source_snippet_context_add_variable (IdeSourceSnippetContext *context,
+ide_snippet_context_add_variable (IdeSnippetContext *context,
                                         const gchar            *key,
                                         const gchar            *value)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   g_return_if_fail (key);
 
   g_hash_table_replace (context->variables, g_strdup (key), g_strdup (value));
 }
 
 void
-ide_source_snippet_context_add_shared_variable (IdeSourceSnippetContext *context,
+ide_snippet_context_add_shared_variable (IdeSnippetContext *context,
                                                 const gchar             *key,
                                                 const gchar             *value)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   g_return_if_fail (key);
 
   g_hash_table_replace (context->shared, g_strdup (key), g_strdup (value));
 }
 
 const gchar *
-ide_source_snippet_context_get_variable (IdeSourceSnippetContext *context,
+ide_snippet_context_get_variable (IdeSnippetContext *context,
                                         const gchar            *key)
 {
   const gchar *ret;
 
-  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context), NULL);
+  g_return_val_if_fail (IDE_IS_SNIPPET_CONTEXT (context), NULL);
 
   if (!(ret = g_hash_table_lookup (context->variables, key)))
     ret = g_hash_table_lookup (context->shared, key);
@@ -521,7 +521,7 @@ scan_forward (const gchar  *input,
 }
 
 gchar *
-ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
+ide_snippet_context_expand (IdeSnippetContext *context,
                                    const gchar             *input)
 {
   const gchar *expand;
@@ -532,7 +532,7 @@ ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
   glong n;
   gint i;
 
-  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context), NULL);
+  g_return_val_if_fail (IDE_IS_SNIPPET_CONTEXT (context), NULL);
   g_return_val_if_fail (input, NULL);
 
   is_dynamic = (*input == '$');
@@ -564,7 +564,7 @@ ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
               input--;
               g_snprintf (key, sizeof key, "%ld", n);
               key[sizeof key - 1] = '\0';
-              expand = ide_source_snippet_context_get_variable (context, key);
+              expand = ide_snippet_context_get_variable (context, key);
               if (expand)
                 g_string_append (str, expand);
               continue;
@@ -576,7 +576,7 @@ ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
                   g_autofree gchar *lkey = NULL;
 
                   lkey = g_strndup (input, strchr (input, '|') - input);
-                  expand = ide_source_snippet_context_get_variable (context, lkey);
+                  expand = ide_snippet_context_get_variable (context, lkey);
                   if (expand)
                     {
                       g_string_append (str, expand);
@@ -587,7 +587,7 @@ ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
                 }
               else
                 {
-                  expand = ide_source_snippet_context_get_variable (context, input);
+                  expand = ide_snippet_context_get_variable (context, input);
                   if (expand)
                     g_string_append (str, expand);
                   else
@@ -615,7 +615,7 @@ ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
 
               input = endpos;
 
-              expanded = ide_source_snippet_context_expand (context, slice);
+              expanded = ide_snippet_context_expand (context, slice);
 
               g_string_append (str, expanded);
 
@@ -649,58 +649,58 @@ ide_source_snippet_context_expand (IdeSourceSnippetContext *context,
 }
 
 void
-ide_source_snippet_context_set_tab_width (IdeSourceSnippetContext *context,
+ide_snippet_context_set_tab_width (IdeSnippetContext *context,
                                          gint                    tab_width)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   context->tab_width = tab_width;
 }
 
 void
-ide_source_snippet_context_set_use_spaces (IdeSourceSnippetContext *context,
+ide_snippet_context_set_use_spaces (IdeSnippetContext *context,
                                           gboolean                use_spaces)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   context->use_spaces = !!use_spaces;
 }
 
 void
-ide_source_snippet_context_set_line_prefix (IdeSourceSnippetContext *context,
+ide_snippet_context_set_line_prefix (IdeSnippetContext *context,
                                            const gchar            *line_prefix)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   g_free (context->line_prefix);
   context->line_prefix = g_strdup (line_prefix);
 }
 
 void
-ide_source_snippet_context_emit_changed (IdeSourceSnippetContext *context)
+ide_snippet_context_emit_changed (IdeSnippetContext *context)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   g_signal_emit (context, signals[CHANGED], 0);
 }
 
 static void
-ide_source_snippet_context_finalize (GObject *object)
+ide_snippet_context_finalize (GObject *object)
 {
-  IdeSourceSnippetContext *context = (IdeSourceSnippetContext *)object;
+  IdeSnippetContext *context = (IdeSnippetContext *)object;
 
   g_clear_pointer (&context->shared, (GDestroyNotify)g_hash_table_unref);
   g_clear_pointer (&context->variables, (GDestroyNotify)g_hash_table_unref);
   g_clear_pointer (&context->line_prefix, g_free);
 
-  G_OBJECT_CLASS (ide_source_snippet_context_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_snippet_context_parent_class)->finalize (object);
 }
 
 static void
-ide_source_snippet_context_class_init (IdeSourceSnippetContextClass *klass)
+ide_snippet_context_class_init (IdeSnippetContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_source_snippet_context_finalize;
+  object_class->finalize = ide_snippet_context_finalize;
 
   signals[CHANGED] = g_signal_new ("changed",
-                                    IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
+                                    IDE_TYPE_SNIPPET_CONTEXT,
                                     G_SIGNAL_RUN_FIRST,
                                     0,
                                     NULL, NULL, NULL,
@@ -725,7 +725,7 @@ ide_source_snippet_context_class_init (IdeSourceSnippetContextClass *klass)
 }
 
 static void
-ide_source_snippet_context_init (IdeSourceSnippetContext *context)
+ide_snippet_context_init (IdeSnippetContext *context)
 {
   GDateTime *dt;
   gchar *str;

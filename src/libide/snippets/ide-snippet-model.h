@@ -1,0 +1,42 @@
+/* ide-snippet-model.h
+ *
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <gio/gio.h>
+
+#include "ide-version-macros.h"
+#include "ide-snippet-storage.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_SNIPPET_MODEL (ide_snippet_model_get_type())
+
+IDE_AVAILABLE_IN_3_30
+G_DECLARE_FINAL_TYPE (IdeSnippetModel, ide_snippet_model, IDE, SNIPPET_MODEL, GObject)
+
+IDE_AVAILABLE_IN_3_30
+IdeSnippetModel *ide_snippet_model_new          (IdeSnippetStorage *storage);
+IDE_AVAILABLE_IN_3_30
+void             ide_snippet_model_set_language (IdeSnippetModel   *self,
+                                                 const gchar       *language_id);
+IDE_AVAILABLE_IN_3_30
+void             ide_snippet_model_set_prefix   (IdeSnippetModel   *self,
+                                                 const gchar       *prefix);
+
+G_END_DECLS

@@ -53,7 +53,7 @@
 #include "runtimes/ide-runtime-manager.h"
 #include "search/ide-search-engine.h"
 #include "search/ide-search-provider.h"
-#include "snippets/ide-source-snippets-manager.h"
+#include "snippets/ide-snippet-storage.h"
 #include "testing/ide-test-manager.h"
 #include "toolchain/ide-toolchain-manager.h"
 #include "transfers/ide-transfer-manager.h"
@@ -82,7 +82,7 @@
  * #IdeBufferManager, #IdeBuildManager, #IdeBuildSystem,
  * #IdeConfigurationManager, #IdeDiagnosticsManager, #IdeDebugManager,
  * #IdeDeviceManager, #IdeRuntimeManager, #IdeRunManager, #IdeSearchEngine,
- * #IdeSourceSnippetsManager, #IdeTestManager, #IdeProject, and #IdeVcs.
+ * #IdeSnippetStorage, #IdeTestManager, #IdeProject, and #IdeVcs.
  *
  * ## Services
  *
@@ -124,7 +124,7 @@ struct _IdeContext
   IdeRuntimeManager        *runtime_manager;
   IdeToolchainManager      *toolchain_manager;
   IdeSearchEngine          *search_engine;
-  IdeSourceSnippetsManager *snippets_manager;
+  IdeSnippetStorage        *snippets;
   IdeTestManager           *test_manager;
   IdeProject               *project;
   GFile                    *project_file;
@@ -168,7 +168,7 @@ enum {
   PROP_RUNTIME_MANAGER,
   PROP_TOOLCHAIN_MANAGER,
   PROP_SEARCH_ENGINE,
-  PROP_SNIPPETS_MANAGER,
+  PROP_SNIPPETS,
   PROP_VCS,
   PROP_UNSAVED_FILES,
   LAST_PROP
@@ -316,18 +316,20 @@ ide_context_get_documentation (IdeContext *self)
 }
 
 /**
- * ide_context_get_snippets_manager:
+ * ide_context_get_snippets:
  *
- * Gets the #IdeContext:snippets-manager property.
+ * Gets the #IdeContext:snippets property.
  *
- * Returns: (transfer none): An #IdeSourceSnippetsManager.
+ * Returns: (transfer none): An #IdeSnippetStorage.
+ *
+ * Since: 3.30
  */
-IdeSourceSnippetsManager *
-ide_context_get_snippets_manager (IdeContext *self)
+IdeSnippetStorage *
+ide_context_get_snippets (IdeContext *self)
 {
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
-  return self->snippets_manager;
+  return self->snippets;
 }
 
 /**
@@ -675,8 +677,8 @@ ide_context_get_property (GObject    *object,
       g_value_set_object (value, ide_context_get_search_engine (self));
       break;
 
-    case PROP_SNIPPETS_MANAGER:
-      g_value_set_object (value, ide_context_get_snippets_manager (self));
+    case PROP_SNIPPETS:
+      g_value_set_object (value, ide_context_get_snippets (self));
       break;
 
     case PROP_UNSAVED_FILES:
@@ -793,12 +795,12 @@ ide_context_class_init (IdeContextClass *klass)
                          IDE_TYPE_SEARCH_ENGINE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_SNIPPETS_MANAGER] =
-    g_param_spec_object ("snippets-manager",
-                         "Snippets Manager",
+  properties [PROP_SNIPPETS] =
+    g_param_spec_object ("snippets",
+                         "Snippets",
                          "The snippets manager for the context.",
-                         IDE_TYPE_SOURCE_SNIPPETS_MANAGER,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         IDE_TYPE_SNIPPET_STORAGE,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_UNSAVED_FILES] =
     g_param_spec_object ("unsaved-files",
@@ -935,7 +937,7 @@ ide_context_init (IdeContext *self)
                                       "context", self,
                                       NULL);
 
-  self->snippets_manager = g_object_new (IDE_TYPE_SOURCE_SNIPPETS_MANAGER, NULL);
+  self->snippets = ide_snippet_storage_new ();
 
   IDE_EXIT;
 }
@@ -1270,13 +1272,15 @@ ide_context_init_snippets_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
-  IdeSourceSnippetsManager *manager = (IdeSourceSnippetsManager *)object;
+  IdeSnippetStorage *storage = (IdeSnippetStorage *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPETS_MANAGER (manager));
+  g_assert (IDE_IS_SNIPPET_STORAGE (storage));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
-  if (!ide_source_snippets_manager_load_finish (manager, result, &error))
+  if (!ide_snippet_storage_load_finish (storage, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -1295,10 +1299,10 @@ ide_context_init_snippets (gpointer             source_object,
 
   task = ide_task_new (self, cancellable, callback, user_data);
 
-  ide_source_snippets_manager_load_async (self->snippets_manager,
-                                          cancellable,
-                                          ide_context_init_snippets_cb,
-                                          g_object_ref (task));
+  ide_snippet_storage_load_async (self->snippets,
+                                  cancellable,
+                                  ide_context_init_snippets_cb,
+                                  g_object_ref (task));
 }
 
 static void
