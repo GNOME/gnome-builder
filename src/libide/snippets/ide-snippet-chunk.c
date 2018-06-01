@@ -1,4 +1,4 @@
-/* ide-source-snippet-chunk.c
+/* ide-snippet-chunk.c
  *
  * Copyright 2013 Christian Hergert <christian@hergert.me>
  *
@@ -22,27 +22,27 @@
 
 #include <glib/gi18n.h>
 
-#include "snippets/ide-source-snippet-chunk.h"
-#include "snippets/ide-source-snippet-context.h"
+#include "ide-snippet-chunk.h"
+#include "ide-snippet-context.h"
 
 /**
- * SECTION:ide-source-snippet-chunk
- * @title: IdeSourceSnippetChunk
+ * SECTION:ide-snippet-chunk
+ * @title: IdeSnippetChunk
  * @short_description: An chunk of text within the source snippet
  *
- * The #IdeSourceSnippetChunk represents a single chunk of text that
+ * The #IdeSnippetChunk represents a single chunk of text that
  * may or may not be an edit point within the snippet. Chunks that are
  * an edit point (also called a tab stop) have the
- * #IdeSourceSnippetChunk:tab-stop property set.
+ * #IdeSnippetChunk:tab-stop property set.
  *
- * Since: 3.18
+ * Since: 3.30
  */
 
-struct _IdeSourceSnippetChunk
+struct _IdeSnippetChunk
 {
   GObject                  parent_instance;
 
-  IdeSourceSnippetContext *context;
+  IdeSnippetContext *context;
   guint                    context_changed_handler;
   gint                     tab_stop;
   gchar                   *spec;
@@ -50,7 +50,7 @@ struct _IdeSourceSnippetChunk
   guint                    text_set : 1;
 };
 
-G_DEFINE_TYPE (IdeSourceSnippetChunk, ide_source_snippet_chunk, G_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeSnippetChunk, ide_snippet_chunk, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
@@ -64,27 +64,27 @@ enum {
 
 static GParamSpec *properties[LAST_PROP];
 
-IdeSourceSnippetChunk *
-ide_source_snippet_chunk_new (void)
+IdeSnippetChunk *
+ide_snippet_chunk_new (void)
 {
-  return g_object_new (IDE_TYPE_SOURCE_SNIPPET_CHUNK, NULL);
+  return g_object_new (IDE_TYPE_SNIPPET_CHUNK, NULL);
 }
 
 /**
- * ide_source_snippet_chunk_copy:
+ * ide_snippet_chunk_copy:
  *
  * Copies the source snippet.
  *
- * Returns: (transfer full): An #IdeSourceSnippetChunk.
+ * Returns: (transfer full): An #IdeSnippetChunk.
  */
-IdeSourceSnippetChunk *
-ide_source_snippet_chunk_copy (IdeSourceSnippetChunk *chunk)
+IdeSnippetChunk *
+ide_snippet_chunk_copy (IdeSnippetChunk *chunk)
 {
-  IdeSourceSnippetChunk *ret;
+  IdeSnippetChunk *ret;
 
-  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk), NULL);
+  g_return_val_if_fail (IDE_IS_SNIPPET_CHUNK (chunk), NULL);
 
-  ret = g_object_new (IDE_TYPE_SOURCE_SNIPPET_CHUNK,
+  ret = g_object_new (IDE_TYPE_SNIPPET_CHUNK,
                       "spec", chunk->spec,
                       "tab-stop", chunk->tab_stop,
                       NULL);
@@ -93,43 +93,43 @@ ide_source_snippet_chunk_copy (IdeSourceSnippetChunk *chunk)
 }
 
 static void
-on_context_changed (IdeSourceSnippetContext *context,
-                    IdeSourceSnippetChunk   *chunk)
+on_context_changed (IdeSnippetContext *context,
+                    IdeSnippetChunk   *chunk)
 {
   gchar *text;
 
-  g_assert (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
-  g_assert (IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_assert (IDE_IS_SNIPPET_CHUNK (chunk));
+  g_assert (IDE_IS_SNIPPET_CONTEXT (context));
 
   if (!chunk->text_set)
     {
-      text = ide_source_snippet_context_expand (context, chunk->spec);
-      ide_source_snippet_chunk_set_text (chunk, text);
+      text = ide_snippet_context_expand (context, chunk->spec);
+      ide_snippet_chunk_set_text (chunk, text);
       g_free (text);
     }
 }
 
 /**
- * ide_source_snippet_chunk_get_context:
+ * ide_snippet_chunk_get_context:
  *
  * Gets the context for the snippet insertion.
  *
- * Returns: (transfer none): An #IdeSourceSnippetContext.
+ * Returns: (transfer none): An #IdeSnippetContext.
  */
-IdeSourceSnippetContext *
-ide_source_snippet_chunk_get_context (IdeSourceSnippetChunk *chunk)
+IdeSnippetContext *
+ide_snippet_chunk_get_context (IdeSnippetChunk *chunk)
 {
-  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk), NULL);
+  g_return_val_if_fail (IDE_IS_SNIPPET_CHUNK (chunk), NULL);
 
   return chunk->context;
 }
 
 void
-ide_source_snippet_chunk_set_context (IdeSourceSnippetChunk   *chunk,
-                                      IdeSourceSnippetContext *context)
+ide_snippet_chunk_set_context (IdeSnippetChunk   *chunk,
+                                      IdeSnippetContext *context)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
-  g_return_if_fail (!context || IDE_IS_SOURCE_SNIPPET_CONTEXT (context));
+  g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
+  g_return_if_fail (!context || IDE_IS_SNIPPET_CONTEXT (context));
 
   if (context != chunk->context)
     {
@@ -158,17 +158,17 @@ ide_source_snippet_chunk_set_context (IdeSourceSnippetChunk   *chunk,
 }
 
 const gchar *
-ide_source_snippet_chunk_get_spec (IdeSourceSnippetChunk *chunk)
+ide_snippet_chunk_get_spec (IdeSnippetChunk *chunk)
 {
-  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk), NULL);
+  g_return_val_if_fail (IDE_IS_SNIPPET_CHUNK (chunk), NULL);
   return chunk->spec;
 }
 
 void
-ide_source_snippet_chunk_set_spec (IdeSourceSnippetChunk *chunk,
+ide_snippet_chunk_set_spec (IdeSnippetChunk *chunk,
                                    const gchar           *spec)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
+  g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
 
   g_free (chunk->spec);
   chunk->spec = g_strdup (spec);
@@ -176,33 +176,33 @@ ide_source_snippet_chunk_set_spec (IdeSourceSnippetChunk *chunk,
 }
 
 gint
-ide_source_snippet_chunk_get_tab_stop (IdeSourceSnippetChunk *chunk)
+ide_snippet_chunk_get_tab_stop (IdeSnippetChunk *chunk)
 {
-  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk), 0);
+  g_return_val_if_fail (IDE_IS_SNIPPET_CHUNK (chunk), 0);
   return chunk->tab_stop;
 }
 
 void
-ide_source_snippet_chunk_set_tab_stop (IdeSourceSnippetChunk *chunk,
+ide_snippet_chunk_set_tab_stop (IdeSnippetChunk *chunk,
                                        gint                   tab_stop)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
+  g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
   chunk->tab_stop = tab_stop;
   g_object_notify_by_pspec (G_OBJECT (chunk), properties[PROP_TAB_STOP]);
 }
 
 const gchar *
-ide_source_snippet_chunk_get_text (IdeSourceSnippetChunk *chunk)
+ide_snippet_chunk_get_text (IdeSnippetChunk *chunk)
 {
-  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk), NULL);
+  g_return_val_if_fail (IDE_IS_SNIPPET_CHUNK (chunk), NULL);
   return chunk->text ? chunk->text : "";
 }
 
 void
-ide_source_snippet_chunk_set_text (IdeSourceSnippetChunk *chunk,
+ide_snippet_chunk_set_text (IdeSnippetChunk *chunk,
                                    const gchar           *text)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
+  g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
 
   if (chunk->text != text)
     {
@@ -213,18 +213,18 @@ ide_source_snippet_chunk_set_text (IdeSourceSnippetChunk *chunk,
 }
 
 gboolean
-ide_source_snippet_chunk_get_text_set (IdeSourceSnippetChunk *chunk)
+ide_snippet_chunk_get_text_set (IdeSnippetChunk *chunk)
 {
-  g_return_val_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk), FALSE);
+  g_return_val_if_fail (IDE_IS_SNIPPET_CHUNK (chunk), FALSE);
 
   return chunk->text_set;
 }
 
 void
-ide_source_snippet_chunk_set_text_set (IdeSourceSnippetChunk *chunk,
+ide_snippet_chunk_set_text_set (IdeSnippetChunk *chunk,
                                        gboolean               text_set)
 {
-  g_return_if_fail (IDE_IS_SOURCE_SNIPPET_CHUNK (chunk));
+  g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
 
   text_set = !!text_set;
 
@@ -236,45 +236,45 @@ ide_source_snippet_chunk_set_text_set (IdeSourceSnippetChunk *chunk,
 }
 
 static void
-ide_source_snippet_chunk_finalize (GObject *object)
+ide_snippet_chunk_finalize (GObject *object)
 {
-  IdeSourceSnippetChunk *chunk = (IdeSourceSnippetChunk *)object;
+  IdeSnippetChunk *chunk = (IdeSnippetChunk *)object;
 
   g_clear_pointer (&chunk->spec, g_free);
   g_clear_pointer (&chunk->text, g_free);
   g_clear_object (&chunk->context);
 
-  G_OBJECT_CLASS (ide_source_snippet_chunk_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_snippet_chunk_parent_class)->finalize (object);
 }
 
 static void
-ide_source_snippet_chunk_get_property (GObject    *object,
+ide_snippet_chunk_get_property (GObject    *object,
                                        guint       prop_id,
                                        GValue     *value,
                                        GParamSpec *pspec)
 {
-  IdeSourceSnippetChunk *chunk = IDE_SOURCE_SNIPPET_CHUNK (object);
+  IdeSnippetChunk *chunk = IDE_SNIPPET_CHUNK (object);
 
   switch (prop_id)
     {
     case PROP_CONTEXT:
-      g_value_set_object (value, ide_source_snippet_chunk_get_context (chunk));
+      g_value_set_object (value, ide_snippet_chunk_get_context (chunk));
       break;
 
     case PROP_SPEC:
-      g_value_set_string (value, ide_source_snippet_chunk_get_spec (chunk));
+      g_value_set_string (value, ide_snippet_chunk_get_spec (chunk));
       break;
 
     case PROP_TAB_STOP:
-      g_value_set_int (value, ide_source_snippet_chunk_get_tab_stop (chunk));
+      g_value_set_int (value, ide_snippet_chunk_get_tab_stop (chunk));
       break;
 
     case PROP_TEXT:
-      g_value_set_string (value, ide_source_snippet_chunk_get_text (chunk));
+      g_value_set_string (value, ide_snippet_chunk_get_text (chunk));
       break;
 
     case PROP_TEXT_SET:
-      g_value_set_boolean (value, ide_source_snippet_chunk_get_text_set (chunk));
+      g_value_set_boolean (value, ide_snippet_chunk_get_text_set (chunk));
       break;
 
     default:
@@ -283,33 +283,33 @@ ide_source_snippet_chunk_get_property (GObject    *object,
 }
 
 static void
-ide_source_snippet_chunk_set_property (GObject      *object,
+ide_snippet_chunk_set_property (GObject      *object,
                                        guint         prop_id,
                                        const GValue *value,
                                        GParamSpec   *pspec)
 {
-  IdeSourceSnippetChunk *chunk = IDE_SOURCE_SNIPPET_CHUNK (object);
+  IdeSnippetChunk *chunk = IDE_SNIPPET_CHUNK (object);
 
   switch (prop_id)
     {
     case PROP_CONTEXT:
-      ide_source_snippet_chunk_set_context (chunk, g_value_get_object (value));
+      ide_snippet_chunk_set_context (chunk, g_value_get_object (value));
       break;
 
     case PROP_TAB_STOP:
-      ide_source_snippet_chunk_set_tab_stop (chunk, g_value_get_int (value));
+      ide_snippet_chunk_set_tab_stop (chunk, g_value_get_int (value));
       break;
 
     case PROP_SPEC:
-      ide_source_snippet_chunk_set_spec (chunk, g_value_get_string (value));
+      ide_snippet_chunk_set_spec (chunk, g_value_get_string (value));
       break;
 
     case PROP_TEXT:
-      ide_source_snippet_chunk_set_text (chunk, g_value_get_string (value));
+      ide_snippet_chunk_set_text (chunk, g_value_get_string (value));
       break;
 
     case PROP_TEXT_SET:
-      ide_source_snippet_chunk_set_text_set (chunk, g_value_get_boolean (value));
+      ide_snippet_chunk_set_text_set (chunk, g_value_get_boolean (value));
       break;
 
     default:
@@ -318,19 +318,19 @@ ide_source_snippet_chunk_set_property (GObject      *object,
 }
 
 static void
-ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
+ide_snippet_chunk_class_init (IdeSnippetChunkClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_source_snippet_chunk_finalize;
-  object_class->get_property = ide_source_snippet_chunk_get_property;
-  object_class->set_property = ide_source_snippet_chunk_set_property;
+  object_class->finalize = ide_snippet_chunk_finalize;
+  object_class->get_property = ide_snippet_chunk_get_property;
+  object_class->set_property = ide_snippet_chunk_set_property;
 
   properties[PROP_CONTEXT] =
     g_param_spec_object ("context",
                          "Context",
                          "The snippet context.",
-                         IDE_TYPE_SOURCE_SNIPPET_CONTEXT,
+                         IDE_TYPE_SNIPPET_CONTEXT,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_SPEC] =
@@ -367,7 +367,7 @@ ide_source_snippet_chunk_class_init (IdeSourceSnippetChunkClass *klass)
 }
 
 static void
-ide_source_snippet_chunk_init (IdeSourceSnippetChunk *chunk)
+ide_snippet_chunk_init (IdeSnippetChunk *chunk)
 {
   chunk->tab_stop = -1;
   chunk->spec = g_strdup ("");

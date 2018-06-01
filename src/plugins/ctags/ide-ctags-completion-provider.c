@@ -350,7 +350,7 @@ ide_ctags_completion_provider_activate_proposal (IdeCompletionProvider *provider
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
   IdeCtagsCompletionItem *item = (IdeCtagsCompletionItem *)proposal;
   g_autofree gchar *slice = NULL;
-  g_autoptr(IdeSourceSnippet) snippet = NULL;
+  g_autoptr(IdeSnippet) snippet = NULL;
   IdeFileSettings *file_settings = NULL;
   GtkTextBuffer *buffer;
   GtkTextView *view;

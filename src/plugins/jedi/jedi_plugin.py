@@ -737,22 +737,22 @@ class JediWorker(GObject.Object, Ide.Worker):
                                       None)
 
 def JediSnippet(proposal):
-    snippet = Ide.SourceSnippet()
-    snippet.add_chunk(Ide.SourceSnippetChunk(text=proposal.completion_text, text_set=True))
+    snippet = Ide.Snippet()
+    snippet.add_chunk(Ide.SnippetChunk(text=proposal.completion_text, text_set=True))
 
     # Add parameter completion for functions.
     if proposal.completion_type == _TYPE_FUNCTION:
-        snippet.add_chunk(Ide.SourceSnippetChunk(text='(', text_set=True))
+        snippet.add_chunk(Ide.SnippetChunk(text='(', text_set=True))
         params = proposal.completion_params
         if params:
             tab_stop = 0
             for param in params[:-1]:
                 tab_stop += 1
-                snippet.add_chunk(Ide.SourceSnippetChunk(text=param, text_set=True, tab_stop=tab_stop))
-                snippet.add_chunk(Ide.SourceSnippetChunk(text=', ', text_set=True))
+                snippet.add_chunk(Ide.SnippetChunk(text=param, text_set=True, tab_stop=tab_stop))
+                snippet.add_chunk(Ide.SnippetChunk(text=', ', text_set=True))
             tab_stop += 1
-            snippet.add_chunk(Ide.SourceSnippetChunk(text=params[-1], text_set=True, tab_stop=tab_stop))
-        snippet.add_chunk(Ide.SourceSnippetChunk(text=')', text_set=True))
+            snippet.add_chunk(Ide.SnippetChunk(text=params[-1], text_set=True, tab_stop=tab_stop))
+        snippet.add_chunk(Ide.SnippetChunk(text=')', text_set=True))
 
     return snippet
 

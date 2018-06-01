@@ -101,43 +101,43 @@ ide_ctags_completion_item_is_function (IdeCtagsCompletionItem *self)
   return self->entry->kind == IDE_CTAGS_INDEX_ENTRY_FUNCTION;
 }
 
-IdeSourceSnippet *
+IdeSnippet *
 ide_ctags_completion_item_get_snippet (IdeCtagsCompletionItem *self,
                                        IdeFileSettings        *file_settings)
 {
-  g_autoptr(IdeSourceSnippet) ret = NULL;
-  g_autoptr(IdeSourceSnippetChunk) chunk1 = NULL;
+  g_autoptr(IdeSnippet) ret = NULL;
+  g_autoptr(IdeSnippetChunk) chunk1 = NULL;
 
   g_return_val_if_fail (IDE_IS_CTAGS_COMPLETION_ITEM (self), NULL);
   g_return_val_if_fail (!file_settings || IDE_IS_FILE_SETTINGS (file_settings), NULL);
 
-  ret = ide_source_snippet_new (NULL, NULL);
+  ret = ide_snippet_new (NULL, NULL);
 
-  chunk1 = ide_source_snippet_chunk_new ();
-  ide_source_snippet_chunk_set_spec (chunk1, self->entry->name);
-  ide_source_snippet_add_chunk (ret, chunk1);
+  chunk1 = ide_snippet_chunk_new ();
+  ide_snippet_chunk_set_spec (chunk1, self->entry->name);
+  ide_snippet_add_chunk (ret, chunk1);
 
   if (ide_ctags_completion_item_is_function (self))
     {
-      g_autoptr(IdeSourceSnippetChunk) chunk2 = ide_source_snippet_chunk_new ();
-      g_autoptr(IdeSourceSnippetChunk) chunk3 = ide_source_snippet_chunk_new ();
-      g_autoptr(IdeSourceSnippetChunk) chunk4 = ide_source_snippet_chunk_new ();
+      g_autoptr(IdeSnippetChunk) chunk2 = ide_snippet_chunk_new ();
+      g_autoptr(IdeSnippetChunk) chunk3 = ide_snippet_chunk_new ();
+      g_autoptr(IdeSnippetChunk) chunk4 = ide_snippet_chunk_new ();
       IdeSpacesStyle style = IDE_SPACES_STYLE_BEFORE_LEFT_PAREN;
 
       if (file_settings != NULL)
         style = ide_file_settings_get_spaces_style (file_settings);
 
       if (style & IDE_SPACES_STYLE_BEFORE_LEFT_PAREN)
-        ide_source_snippet_chunk_set_spec (chunk2, " (");
+        ide_snippet_chunk_set_spec (chunk2, " (");
       else
-        ide_source_snippet_chunk_set_spec (chunk2, "(");
+        ide_snippet_chunk_set_spec (chunk2, "(");
 
-      ide_source_snippet_chunk_set_tab_stop (chunk3, 0);
-      ide_source_snippet_chunk_set_spec (chunk4, ")");
+      ide_snippet_chunk_set_tab_stop (chunk3, 0);
+      ide_snippet_chunk_set_spec (chunk4, ")");
 
-      ide_source_snippet_add_chunk (ret, chunk2);
-      ide_source_snippet_add_chunk (ret, chunk3);
-      ide_source_snippet_add_chunk (ret, chunk4);
+      ide_snippet_add_chunk (ret, chunk2);
+      ide_snippet_add_chunk (ret, chunk3);
+      ide_snippet_add_chunk (ret, chunk4);
     }
 
   return g_steal_pointer (&ret);

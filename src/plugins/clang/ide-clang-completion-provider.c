@@ -85,7 +85,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
                                                  const GdkEventKey     *key)
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
-  g_autoptr(IdeSourceSnippet) snippet = NULL;
+  g_autoptr(IdeSnippet) snippet = NULL;
   IdeClangCompletionItem *item;
   GtkTextBuffer *buffer;
   GtkTextView *view;
@@ -121,20 +121,20 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
     {
       if (key->keyval == GDK_KEY_period || key->keyval == GDK_KEY_minus)
         {
-          g_autoptr(IdeSourceSnippetChunk) chunk = ide_source_snippet_chunk_new ();
+          g_autoptr(IdeSnippetChunk) chunk = ide_snippet_chunk_new ();
           if (strchr (item->return_type, '*'))
-            ide_source_snippet_chunk_set_spec (chunk, "->");
+            ide_snippet_chunk_set_spec (chunk, "->");
           else
-            ide_source_snippet_chunk_set_spec (chunk, ".");
-          ide_source_snippet_add_chunk (snippet, chunk);
+            ide_snippet_chunk_set_spec (chunk, ".");
+          ide_snippet_add_chunk (snippet, chunk);
         }
     }
 
   if (key->keyval == GDK_KEY_semicolon)
     {
-      g_autoptr(IdeSourceSnippetChunk) chunk = ide_source_snippet_chunk_new ();
-      ide_source_snippet_chunk_set_spec (chunk, ";");
-      ide_source_snippet_add_chunk (snippet, chunk);
+      g_autoptr(IdeSnippetChunk) chunk = ide_snippet_chunk_new ();
+      ide_snippet_chunk_set_spec (chunk, ";");
+      ide_snippet_add_chunk (snippet, chunk);
     }
 
   ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
