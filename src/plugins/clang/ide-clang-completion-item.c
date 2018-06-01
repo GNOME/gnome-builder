@@ -23,8 +23,27 @@
 
 #include "ide-clang-completion-item.h"
 
+static gchar *
+ide_clang_completion_item_get_comment (IdeCompletionProposal *proposal)
+{
+  IdeClangCompletionItem *self = (IdeClangCompletionItem *)proposal;
+  g_autoptr(GVariant) result = ide_clang_completion_item_get_result (self);
+  const gchar *str;
+
+  if (g_variant_lookup (result, "comment", "&s", &str))
+    return g_strdup (str);
+
+  return NULL;
+}
+
+static void
+proposal_iface_init (IdeCompletionProposalInterface *iface)
+{
+  iface->get_comment = ide_clang_completion_item_get_comment;
+}
+
 G_DEFINE_TYPE_WITH_CODE (IdeClangCompletionItem, ide_clang_completion_item, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
 static void
 ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
