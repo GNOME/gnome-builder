@@ -187,6 +187,7 @@ src/plugins/html-preview/gtk/menus.ui
 src/plugins/html-preview/html_preview.py
 src/plugins/jedi/jedi_plugin.py
 src/plugins/make/make_plugin.py
+src/plugins/maven/maven_plugin.py
 src/plugins/meson/gbp-meson-build-system.c
 src/plugins/meson/gbp-meson-pipeline-addin.c
 src/plugins/meson/gbp-meson-toolchain.c
