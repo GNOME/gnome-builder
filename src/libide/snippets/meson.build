@@ -7,17 +7,17 @@ snippets_headers = [
 ]
 
 snippets_sources = [
-  'ide-snippet-parser.h',
-  'ide-snippet-private.h',
-]
-
-snippets_private_sources = [
   'ide-snippet.c',
   'ide-snippet-chunk.c',
   'ide-snippet-context.c',
   'ide-snippet-model.c',
   'ide-snippet-parser.c',
   'ide-snippet-storage.c',
+]
+
+snippets_private_sources = [
+  'ide-snippet-parser.h',
+  'ide-snippet-private.h',
 ]
 
 libide_public_headers += files(snippets_headers)

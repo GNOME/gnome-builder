@@ -1,0 +1,11 @@
+[Plugin]
+Module=snippets-plugin
+Name=Snippets
+Description=Support for snippets in a variety of languages
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;
+Builtin=true
+Hidden=true
+Embedded=gbp_snippets_register_types
+X-Completion-Provider-Languages=*
