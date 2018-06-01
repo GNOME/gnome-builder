@@ -1166,12 +1166,19 @@ ide_clang_build_completion (GVariantBuilder    *builder,
 {
   GVariantBuilder chunks_builder;
   g_autofree gchar *typed_text = NULL;
+  g_auto(CXString) comment = {0};
+  const gchar *comment_cstr;
   guint n_chunks;
 
   g_assert (builder != NULL);
   g_assert (result != NULL);
 
   g_variant_builder_add_parsed (builder, "{%s,<%u>}", "kind", result->CursorKind);
+
+  comment = clang_getCompletionBriefComment (result->CompletionString);
+  comment_cstr = clang_getCString (comment);
+  if (comment_cstr && *comment_cstr)
+    g_variant_builder_add_parsed (builder, "{%s,<%s>}", "comment", comment_cstr);
 
   if (clang_getCompletionAvailability (result->CompletionString))
     g_variant_builder_add_parsed (builder, "{%s,<%u>}", "avail",
