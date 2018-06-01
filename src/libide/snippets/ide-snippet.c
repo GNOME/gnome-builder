@@ -25,10 +25,11 @@
 
 #include "ide-debug.h"
 
-#include "ide-snippet.h"
-#include "ide-snippet-private.h"
-#include "ide-snippet-chunk.h"
-#include "ide-snippet-context.h"
+#include "completion/ide-completion-proposal.h"
+#include "snippets/ide-snippet.h"
+#include "snippets/ide-snippet-private.h"
+#include "snippets/ide-snippet-chunk.h"
+#include "snippets/ide-snippet-context.h"
 
 /**
  * SECTION:ide-snippet
@@ -74,7 +75,21 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (IdeSnippet, ide_snippet, G_TYPE_OBJECT)
+static gchar *
+ide_snippet_get_comment (IdeCompletionProposal *proposal)
+{
+  return g_strdup (IDE_SNIPPET (proposal)->description);
+}
+
+static void
+proposal_iface_init (IdeCompletionProposalInterface *iface)
+{
+  iface->get_comment = ide_snippet_get_comment;
+}
+
+G_DEFINE_TYPE_WITH_CODE (IdeSnippet, ide_snippet, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL,
+                                                proposal_iface_init))
 
 DZL_DEFINE_COUNTER (instances, "Snippets", "N Snippets", "Number of IdeSnippet instances.");
 

@@ -230,7 +230,7 @@ ide_snippet_storage_add (IdeSnippetStorage *self,
 }
 
 /**
- * ide_snippet_storage_query:
+ * ide_snippet_storage_foreach:
  * @self: a #IdeSnippetStorage
  * @foreach: (scope call): the closure to call for each info
  * @user_data: closure data for @foreach

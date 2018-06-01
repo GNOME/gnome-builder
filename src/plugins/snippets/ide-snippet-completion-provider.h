@@ -18,20 +18,12 @@
 
 #pragma once
 
-#include "completion/ide-completion-provider.h"
-#include "snippets/ide-snippet.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SNIPPET_COMPLETION_PROVIDER (ide_snippet_completion_provider_get_type())
 
-IDE_AVAILABLE_IN_3_30
 G_DECLARE_FINAL_TYPE (IdeSnippetCompletionProvider, ide_snippet_completion_provider, IDE, SNIPPET_COMPLETION_PROVIDER, IdeObject)
-
-IDE_AVAILABLE_IN_3_30
-IdeSnippetCompletionProvider *ide_snippet_completion_provider_new          (void);
-IDE_AVAILABLE_IN_3_30
-void                          ide_snippet_completion_provider_set_language (IdeSnippetCompletionProvider *self,
-                                                                            const gchar                  *lang_id);
 
 G_END_DECLS
