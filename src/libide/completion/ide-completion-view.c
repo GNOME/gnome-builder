@@ -92,16 +92,16 @@ on_notify_proposal_cb (IdeCompletionView    *self,
                        IdeCompletionListBox *list_box)
 {
   g_autoptr(IdeCompletionProposal) proposal = NULL;
+  g_autoptr(IdeCompletionProvider) provider = NULL;
   g_autofree gchar *comment = NULL;
 
   g_assert (IDE_IS_COMPLETION_VIEW (self));
   g_assert (pspec != NULL);
   g_assert (IDE_IS_COMPLETION_LIST_BOX (list_box));
 
-  proposal = ide_completion_list_box_get_proposal (list_box);
+  if (ide_completion_list_box_get_selected (list_box, &provider, &proposal))
+    comment = ide_completion_provider_get_comment (provider, proposal);
 
-  if (proposal != NULL)
-    comment = ide_completion_proposal_get_comment (proposal);
   gtk_label_set_label (self->details, comment);
   gtk_widget_set_visible (GTK_WIDGET (self->details), comment && *comment);
 }

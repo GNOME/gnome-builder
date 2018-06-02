@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "ide-snippet-model"
 
 #include "ide-snippet-model.h"
+#include "ide-snippet-completion-item.h"
 
 struct _IdeSnippetModel
 {
@@ -135,7 +136,7 @@ ide_snippet_model_set_language (IdeSnippetModel *self,
 static GType
 ide_snippet_model_get_item_type (GListModel *model)
 {
-  return IDE_TYPE_SNIPPET;
+  return IDE_TYPE_SNIPPET_COMPLETION_ITEM;
 }
 
 static guint
@@ -150,20 +151,7 @@ ide_snippet_model_get_item (GListModel *model,
 {
   IdeSnippetModel *self = IDE_SNIPPET_MODEL (model);
   const IdeSnippetInfo *info = g_ptr_array_index (self->items, position);
-  g_autoptr(IdeSnippetParser) parser = ide_snippet_parser_new ();
-  g_autoptr(GError) error = NULL;
-  GList *items;
-
-  if (!ide_snippet_parser_load_from_data (parser, info->begin, info->len, &error))
-    {
-      g_message ("Failed to parse snippet: %s\n", error->message);
-      return ide_snippet_new (NULL, NULL);
-    }
-
-  if (!(items = ide_snippet_parser_get_snippets (parser)))
-    return ide_snippet_new (NULL, NULL);
-
-  return g_object_ref (items->data);
+  return ide_snippet_completion_item_new (self->storage, info);
 }
 
 static void

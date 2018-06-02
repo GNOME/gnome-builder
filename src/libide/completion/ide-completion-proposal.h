@@ -18,9 +18,8 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <glib-object.h>
 
-#include "ide-completion-types.h"
 #include "ide-version-macros.h"
 
 G_BEGIN_DECLS
@@ -33,10 +32,6 @@ G_DECLARE_INTERFACE (IdeCompletionProposal, ide_completion_proposal, IDE, COMPLE
 struct _IdeCompletionProposalInterface
 {
   GTypeInterface parent_iface;
-
-  gchar *(*get_comment) (IdeCompletionProposal   *self);
 };
-
-gchar *ide_completion_proposal_get_comment (IdeCompletionProposal *self);
 
 G_END_DECLS
