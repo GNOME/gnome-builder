@@ -9,12 +9,21 @@ completionview > * {
   border: 1px solid @borders;
   box-shadow: 0px 0px 3px @wm_shadow;
   padding: 0px 3px 0px 3px;
-  background: @content_view_bg;
+  /* on light themes, this won't really do much, but for
+   * dark themes, it gives us some contrast from dark backgrounds
+   * such as the builder-dark theme.
+   */
+  background-color: shade(@content_view_bg, 1.5);
   border-radius: 5px;
 }
 
 completionview list {
   padding: 3px 0 3px 0;
+  background-color: transparent;
+}
+
+completionview list row:not(:selected) {
+  background-color: transparent;
 }
 
 completionview list row {
