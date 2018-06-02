@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "ide-snippet-completion-provider.h"
 
 #include "ide-snippet-completion-provider.h"
+#include "ide-snippet-model.h"
 
 struct _IdeSnippetCompletionProvider
 {
@@ -159,6 +160,7 @@ ide_snippet_completion_provider_display_proposal (IdeCompletionProvider   *provi
                                                   const gchar             *typed_text,
                                                   IdeCompletionProposal   *proposal)
 {
+  g_autofree gchar *highlight = NULL;
   const gchar *trigger;
 
   g_assert (IDE_IS_SNIPPET_COMPLETION_PROVIDER (provider));
@@ -167,11 +169,12 @@ ide_snippet_completion_provider_display_proposal (IdeCompletionProvider   *provi
   g_assert (IDE_IS_SNIPPET (proposal));
 
   trigger = ide_snippet_get_trigger (IDE_SNIPPET (proposal));
+  highlight = ide_completion_item_fuzzy_highlight (trigger, typed_text);
 
   /* TODO: have jimmac make us a real icon */
   ide_completion_list_box_row_set_icon_name (row, "ui-section-symbolic");
   ide_completion_list_box_row_set_left (row, NULL);
-  ide_completion_list_box_row_set_center (row, trigger);
+  ide_completion_list_box_row_set_center_markup (row, highlight);
   ide_completion_list_box_row_set_right (row, NULL);
 }
 

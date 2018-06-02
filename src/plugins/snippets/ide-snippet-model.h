@@ -18,24 +18,17 @@
 
 #pragma once
 
-#include <gio/gio.h>
-
-#include "ide-version-macros.h"
-#include "ide-snippet-storage.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SNIPPET_MODEL (ide_snippet_model_get_type())
 
-IDE_AVAILABLE_IN_3_30
 G_DECLARE_FINAL_TYPE (IdeSnippetModel, ide_snippet_model, IDE, SNIPPET_MODEL, GObject)
 
-IDE_AVAILABLE_IN_3_30
 IdeSnippetModel *ide_snippet_model_new          (IdeSnippetStorage *storage);
-IDE_AVAILABLE_IN_3_30
 void             ide_snippet_model_set_language (IdeSnippetModel   *self,
                                                  const gchar       *language_id);
-IDE_AVAILABLE_IN_3_30
 void             ide_snippet_model_set_prefix   (IdeSnippetModel   *self,
                                                  const gchar       *prefix);
 

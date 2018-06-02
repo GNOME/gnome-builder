@@ -162,7 +162,7 @@ G_BEGIN_DECLS
 #include "snippets/ide-snippet.h"
 #include "snippets/ide-snippet-chunk.h"
 #include "snippets/ide-snippet-context.h"
-#include "snippets/ide-snippet-model.h"
+#include "snippets/ide-snippet-parser.h"
 #include "snippets/ide-snippet-storage.h"
 #include "sourceview/ide-indenter.h"
 #include "sourceview/ide-language.h"

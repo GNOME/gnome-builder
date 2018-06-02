@@ -1,7 +1,6 @@
 snippets_headers = [
   'ide-snippet-chunk.h',
   'ide-snippet-context.h',
-  'ide-snippet-model.h',
   'ide-snippet-storage.h',
   'ide-snippet.h',
 ]
@@ -10,7 +9,6 @@ snippets_sources = [
   'ide-snippet.c',
   'ide-snippet-chunk.c',
   'ide-snippet-context.c',
-  'ide-snippet-model.c',
   'ide-snippet-parser.c',
   'ide-snippet-storage.c',
 ]
