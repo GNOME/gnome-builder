@@ -297,3 +297,30 @@ ide_completion_provider_display_proposal (IdeCompletionProvider   *self,
   if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal)
     IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal (self, row, context, typed_text, proposal);
 }
+
+/**
+ * ide_completion_provider_get_comment:
+ * @self: an #IdeCompletionProvider
+ * @proposal: an #IdeCompletionProposal
+ *
+ * If the completion proposal has a comment, the provider should return
+ * a newly allocated string containing it.
+ *
+ * This is displayed at the bottom of the completion window.
+ *
+ * Returns: (transfer full) (nullable): A new string or %NULL
+ *
+ * Since: 3.30
+ */
+gchar *
+ide_completion_provider_get_comment (IdeCompletionProvider *self,
+                                     IdeCompletionProposal *proposal)
+{
+  g_return_val_if_fail (IDE_IS_COMPLETION_PROVIDER (self), NULL);
+  g_return_val_if_fail (IDE_IS_COMPLETION_PROPOSAL (proposal), NULL);
+
+  if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->get_comment)
+    return IDE_COMPLETION_PROVIDER_GET_IFACE (self)->get_comment (self, proposal);
+
+  return NULL;
+}

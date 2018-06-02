@@ -69,6 +69,8 @@ struct _IdeCompletionProviderInterface
   gboolean    (*key_activates)     (IdeCompletionProvider    *self,
                                     IdeCompletionProposal    *proposal,
                                     const GdkEventKey        *key);
+  gchar      *(*get_comment)       (IdeCompletionProvider    *self,
+                                    IdeCompletionProposal    *proposal);
 };
 
 IDE_AVAILABLE_IN_3_30
@@ -111,5 +113,8 @@ IDE_AVAILABLE_IN_3_30
 gboolean    ide_completion_provider_key_activates    (IdeCompletionProvider    *self,
                                                       IdeCompletionProposal    *proposal,
                                                       const GdkEventKey        *key);
+IDE_AVAILABLE_IN_3_30
+gchar      *ide_completion_provider_get_comment      (IdeCompletionProvider    *self,
+                                                      IdeCompletionProposal    *proposal);
 
 G_END_DECLS

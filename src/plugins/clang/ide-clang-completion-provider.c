@@ -274,6 +274,19 @@ ide_clang_completion_provider_display_proposal (IdeCompletionProvider   *provide
   ide_completion_list_box_row_set_center_markup (row, markup);
 }
 
+static gchar *
+ide_clang_completion_provider_get_comment (IdeCompletionProvider *provider,
+                                           IdeCompletionProposal *proposal)
+{
+  IdeClangCompletionItem *item = IDE_CLANG_COMPLETION_ITEM (proposal);
+  g_autoptr(GVariant) result = ide_clang_completion_item_get_result (item);
+  gchar *str = NULL;
+
+  g_variant_lookup (result, "comment", "s", &str);
+
+  return str;
+}
+
 static void
 provider_iface_init (IdeCompletionProviderInterface *iface)
 {
@@ -287,6 +300,7 @@ provider_iface_init (IdeCompletionProviderInterface *iface)
   iface->populate_async = ide_clang_completion_provider_populate_async;
   iface->populate_finish = ide_clang_completion_provider_populate_finish;
   iface->display_proposal = ide_clang_completion_provider_display_proposal;
+  iface->get_comment = ide_clang_completion_provider_get_comment;
 }
 
 G_DEFINE_TYPE_WITH_CODE (IdeClangCompletionProvider, ide_clang_completion_provider, IDE_TYPE_OBJECT,

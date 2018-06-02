@@ -16,9 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #define G_LOG_DOMAIN "ide-snippet-completion-provider.h"
 
 #include "ide-snippet-completion-provider.h"
+#include "ide-snippet-completion-item.h"
 #include "ide-snippet-model.h"
 
 struct _IdeSnippetCompletionProvider
@@ -161,15 +164,15 @@ ide_snippet_completion_provider_display_proposal (IdeCompletionProvider   *provi
                                                   IdeCompletionProposal   *proposal)
 {
   g_autofree gchar *highlight = NULL;
-  const gchar *trigger;
+  const IdeSnippetInfo *info;
 
   g_assert (IDE_IS_SNIPPET_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_SNIPPET (proposal));
+  g_assert (IDE_IS_SNIPPET_COMPLETION_ITEM (proposal));
 
-  trigger = ide_snippet_get_trigger (IDE_SNIPPET (proposal));
-  highlight = ide_completion_item_fuzzy_highlight (trigger, typed_text);
+  info = ide_snippet_completion_item_get_info (IDE_SNIPPET_COMPLETION_ITEM (proposal));
+  highlight = ide_completion_item_fuzzy_highlight (info->name, typed_text);
 
   /* TODO: have jimmac make us a real icon */
   ide_completion_list_box_row_set_icon_name (row, "ui-section-symbolic");
@@ -184,22 +187,36 @@ ide_snippet_completion_provider_activate_proposal (IdeCompletionProvider *provid
                                                    IdeCompletionProposal *proposal,
                                                    const GdkEventKey     *key)
 {
+  g_autoptr(IdeSnippet) snippet = NULL;
   GtkTextIter begin, end;
   GtkTextBuffer *buffer;
   GtkTextView *view;
 
   g_assert (IDE_IS_SNIPPET_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_SNIPPET (proposal));
+  g_assert (IDE_IS_SNIPPET_COMPLETION_ITEM (proposal));
 
   buffer = ide_completion_context_get_buffer (context);
   view = ide_completion_context_get_view (context);
 
+  if (!(snippet = ide_snippet_completion_item_get_snippet (IDE_SNIPPET_COMPLETION_ITEM (proposal))))
+    return;
+
   gtk_text_buffer_begin_user_action (buffer);
   if (ide_completion_context_get_bounds (context, &begin, &end))
     gtk_text_buffer_delete (buffer, &begin, &end);
-  ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), IDE_SNIPPET (proposal), &begin);
+  ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
   gtk_text_buffer_end_user_action (buffer);
+}
+
+static gchar *
+ide_snippet_completion_provider_get_comment (IdeCompletionProvider *provider,
+                                             IdeCompletionProposal *proposal)
+{
+  IdeSnippetCompletionItem *item = IDE_SNIPPET_COMPLETION_ITEM (proposal);
+  const IdeSnippetInfo *info = ide_snippet_completion_item_get_info (item);
+
+  return info ? g_strdup (info->desc) : NULL;
 }
 
 static void
@@ -213,4 +230,5 @@ provider_iface_init (IdeCompletionProviderInterface *iface)
   iface->refilter = ide_snippet_completion_provider_refilter;
   iface->display_proposal = ide_snippet_completion_provider_display_proposal;
   iface->activate_proposal = ide_snippet_completion_provider_activate_proposal;
+  iface->get_comment = ide_snippet_completion_provider_get_comment;
 }
