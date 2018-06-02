@@ -20,9 +20,7 @@
 
 #define G_LOG_DOMAIN "ide-snippet-model"
 
-#include "ide-snippet.h"
 #include "ide-snippet-model.h"
-#include "ide-snippet-parser.h"
 
 struct _IdeSnippetModel
 {
