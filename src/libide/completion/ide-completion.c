@@ -613,7 +613,8 @@ ide_completion_queued_update_cb (gpointer user_data)
 
   self->queued_update = 0;
 
-  ide_completion_update (self, IDE_COMPLETION_INTERACTIVE);
+  if (self->context != NULL)
+    ide_completion_update (self, IDE_COMPLETION_INTERACTIVE);
 
   return G_SOURCE_REMOVE;
 }
