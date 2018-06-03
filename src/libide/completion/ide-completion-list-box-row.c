@@ -212,7 +212,17 @@ void
 ide_completion_list_box_row_set_center_markup (IdeCompletionListBoxRow *self,
                                                const gchar             *center_markup)
 {
+  g_autofree gchar *adjusted = NULL;
+
   g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX_ROW (self));
+
+  /*
+   * HACK: For some reason labels ending in a <span fgalpha=xxx> span
+   *       cause fgalpha to effect external pango contexts and i have
+   *       no idea how/why that is happening.
+   */
+  if (center_markup != NULL && g_str_has_suffix (center_markup, "</span>"))
+    center_markup = adjusted = g_strdup_printf ("%s ", center_markup);
 
   gtk_label_set_label (self->center, center_markup);
   gtk_label_set_use_markup (self->center, TRUE);
