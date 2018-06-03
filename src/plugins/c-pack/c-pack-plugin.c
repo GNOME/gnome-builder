@@ -20,12 +20,8 @@
 
 #include "ide-c-indenter.h"
 
-void _ide_c_indenter_register_type (GTypeModule *module);
-
 void
 ide_c_pack_register_types (PeasObjectModule *module)
 {
-  _ide_c_indenter_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_C_INDENTER);
 }

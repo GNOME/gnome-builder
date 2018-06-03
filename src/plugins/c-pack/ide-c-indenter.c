@@ -51,8 +51,8 @@ struct _IdeCIndenter
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCIndenter, ide_c_indenter, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeCIndenter, ide_c_indenter, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
 
 enum {
   COMMENT_NONE,
@@ -1449,11 +1449,6 @@ ide_c_indenter_class_init (IdeCIndenterClass *klass)
 }
 
 static void
-ide_c_indenter_class_finalize (IdeCIndenterClass *klass)
-{
-}
-
-static void
 ide_c_indenter_init (IdeCIndenter *self)
 {
   self->condition_indent = -1;
@@ -1461,10 +1456,4 @@ ide_c_indenter_init (IdeCIndenter *self)
   self->post_scope_indent = -1;
   self->directive_indent = G_MININT;
   self->case_indent = 0;
-}
-
-void
-_ide_c_indenter_register_type (GTypeModule *module)
-{
-  ide_c_indenter_register_type (module);
 }
