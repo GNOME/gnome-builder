@@ -914,6 +914,11 @@ ide_completion_dispose (GObject *object)
 
   g_assert (IDE_IS_COMPLETION (self));
 
+  if (self->display != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->display));
+
+  g_assert (self->display == NULL);
+
   dzl_signal_group_set_target (self->context_signals, NULL);
   dzl_signal_group_set_target (self->buffer_signals, NULL);
   dzl_signal_group_set_target (self->view_signals, NULL);
@@ -935,9 +940,6 @@ ide_completion_finalize (GObject *object)
   IdeCompletion *self = (IdeCompletion *)object;
 
   IDE_ENTRY;
-
-  if (self->display != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->display));
 
   dzl_clear_source (&self->queued_update);
 
