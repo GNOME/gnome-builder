@@ -344,6 +344,7 @@ ide_clang_client_constructed (GObject *object)
   if (cwd != NULL)
     ide_subprocess_launcher_set_cwd (launcher, cwd);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+  ide_subprocess_launcher_setenv (launcher, "DZL_COUNTER_DISABLE_SHM", "1", TRUE);
 #if 0
   ide_subprocess_launcher_push_argv (launcher, "gdbserver");
   ide_subprocess_launcher_push_argv (launcher, "localhost:8888");
