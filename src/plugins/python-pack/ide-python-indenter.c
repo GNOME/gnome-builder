@@ -37,8 +37,8 @@ struct _IdePythonIndenter
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdePythonIndenter, ide_python_indenter, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdePythonIndenter, ide_python_indenter, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
 
 static gboolean
 in_pydoc (const GtkTextIter *iter)
@@ -810,17 +810,6 @@ ide_python_indenter_class_init (IdePythonIndenterClass *klass)
 }
 
 static void
-ide_python_indenter_class_finalize (IdePythonIndenterClass *klass)
-{
-}
-
-static void
 ide_python_indenter_init (IdePythonIndenter *self)
 {
-}
-
-void
-_ide_python_indenter_register_type (GTypeModule *module)
-{
-  ide_python_indenter_register_type (module);
 }
