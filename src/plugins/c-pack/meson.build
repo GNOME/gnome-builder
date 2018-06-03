@@ -12,8 +12,6 @@ c_pack_sources = [
   'c-parse-helper.h',
   'ide-c-indenter.c',
   'ide-c-indenter.h',
-  'ide-c-format-provider.c',
-  'ide-c-format-provider.h',
 ]
 
 gnome_builder_plugins_sources += files(c_pack_sources)
