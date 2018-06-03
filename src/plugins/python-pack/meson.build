@@ -9,8 +9,6 @@ python_pack_resources = gnome.compile_resources(
 python_pack_sources = [
   'ide-python-indenter.c',
   'ide-python-indenter.h',
-  'ide-python-format-provider.c',
-  'ide-python-format-provider.h',
   'python-pack-plugin.c',
 ]
 
