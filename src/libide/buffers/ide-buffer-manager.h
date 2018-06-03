@@ -80,8 +80,6 @@ void                      ide_buffer_manager_set_focus_buffer    (IdeBufferManag
 IDE_AVAILABLE_IN_ALL
 GPtrArray                *ide_buffer_manager_get_buffers         (IdeBufferManager     *self);
 IDE_AVAILABLE_IN_ALL
-GtkSourceCompletionWords *ide_buffer_manager_get_word_completion (IdeBufferManager     *self);
-IDE_AVAILABLE_IN_ALL
 guint                     ide_buffer_manager_get_n_buffers       (IdeBufferManager     *self);
 IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_manager_has_file            (IdeBufferManager     *self,
