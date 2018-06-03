@@ -33,14 +33,14 @@ completion_sources = [
 
 completion_private_sources = [
   'ide-completion-private.h',
-  'ide-completion-words.c',
-  'ide-completion-words.h',
-  'ide-word-completion-item.c',
-  'ide-word-completion-item.h',
-  'ide-word-completion-provider.c',
-  'ide-word-completion-provider.h',
-  'ide-word-completion-results.c',
-  'ide-word-completion-results.h',
+# 'ide-completion-words.c',
+# 'ide-completion-words.h',
+# 'ide-word-completion-item.c',
+# 'ide-word-completion-item.h',
+# 'ide-word-completion-provider.c',
+# 'ide-word-completion-provider.h',
+# 'ide-word-completion-results.c',
+# 'ide-word-completion-results.h',
 ]
 
 
