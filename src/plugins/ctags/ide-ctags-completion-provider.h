@@ -30,8 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsCompletionProvider, ide_ctags_completion_provider, IDE, CTAGS_COMPLETION_PROVIDER, IdeObject)
 
-GtkSourceCompletionProvider *ide_ctags_completion_provider_new       (void);
-void                         ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
-                                                                      IdeCtagsIndex              *index);
+void ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
+                                              IdeCtagsIndex              *index);
 
 G_END_DECLS
