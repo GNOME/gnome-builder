@@ -993,3 +993,26 @@ _ide_completion_context_iter_invalidates (IdeCompletionContext *self,
   return gtk_text_iter_compare (&begin, iter) <= 0 &&
          gtk_text_iter_compare (&end, iter) >= 0;
 }
+
+/**
+ * ide_completion_context_get_line_text:
+ * @self: a #IdeCompletionContext
+ *
+ * This is a convenience helper to get the line text up until the insertion
+ * cursor for the current completion.
+ *
+ * Returns: a newly allocated string
+ *
+ * Since: 3.30
+ */
+gchar *
+ide_completion_context_get_line_text (IdeCompletionContext *self)
+{
+  GtkTextIter begin, end;
+
+  g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (self), NULL);
+
+  ide_completion_context_get_bounds (self, &begin, &end);
+  gtk_text_iter_set_line_offset (&begin, 0);
+  return gtk_text_iter_get_slice (&begin, &end);
+}
