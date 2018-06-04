@@ -62,6 +62,7 @@ G_BEGIN_DECLS
 #include "buildsystem/ide-environment-variable.h"
 #include "buildsystem/ide-environment.h"
 #include "buildsystem/ide-simple-build-target.h"
+#include "completion/ide-completion.h"
 #include "completion/ide-completion-compat.h"
 #include "completion/ide-completion-context.h"
 #include "completion/ide-completion-item.h"
