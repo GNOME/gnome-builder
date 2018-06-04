@@ -23,7 +23,6 @@
 #include "ide-context.h"
 #include "ide-version-macros.h"
 
-#include "completion/ide-completion-compat.h"
 #include "completion/ide-completion-types.h"
 
 G_BEGIN_DECLS
