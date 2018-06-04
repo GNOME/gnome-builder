@@ -66,14 +66,14 @@ void                ide_application_get_worker_async       (IdeApplication      
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
- GDBusProxy         *ide_application_get_worker_finish     (IdeApplication       *self,
+GDBusProxy         *ide_application_get_worker_finish      (IdeApplication       *self,
                                                             GAsyncResult         *result,
                                                             GError              **error);
 IDE_AVAILABLE_IN_ALL
- gboolean            ide_application_open_project          (IdeApplication       *self,
+gboolean            ide_application_open_project           (IdeApplication       *self,
                                                             GFile                *file);
 IDE_AVAILABLE_IN_ALL
- void                ide_application_add_reaper            (IdeApplication       *self,
+void                ide_application_add_reaper             (IdeApplication       *self,
                                                             DzlDirectoryReaper   *reaper);
 IDE_AVAILABLE_IN_3_28
 GFile              *ide_application_get_projects_directory (IdeApplication       *self);
