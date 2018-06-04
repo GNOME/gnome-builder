@@ -27,12 +27,10 @@ import gi
 import os
 
 gi.require_version('Ide', '1.0')
-gi.require_version('GtkSource', '3.0')
 
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import GObject
-from gi.repository import GtkSource
 from gi.repository import Ide
 
 DEV_MODE = False
