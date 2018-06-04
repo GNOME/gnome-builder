@@ -1204,7 +1204,7 @@ ide_task_return_boxed (IdeTask  *self,
 /**
  * ide_task_return_object:
  * @self: a #IdeTask
- * @instance: (transfer full): a #GObject instance
+ * @instance: (transfer full) (type GObject.Object): a #GObject instance
  *
  * Returns a new object instance.
  *
@@ -1606,6 +1606,21 @@ ide_task_propagate_int (IdeTask  *self,
   return res->u.v_int;
 }
 
+/**
+ * ide_task_propagate_object:
+ * @self: a #IdeTask
+ * @error: a location for a #GError, or %NULL
+ *
+ * Returns an object if the task completed with an object. Otherwise, %NULL
+ * is returned.
+ *
+ * @error is set if the task completed with an error.
+ *
+ * Returns: (transfer full) (type GObject.Object): a #GObject or %NULL
+ *   and @error may be set.
+ *
+ * Since: 3.30
+ */
 gpointer
 ide_task_propagate_object (IdeTask  *self,
                            GError  **error)
