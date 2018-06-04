@@ -111,7 +111,7 @@ class GoSymbolResolver(Ide.LangservSymbolResolver, Ide.SymbolResolver):
 ## This is supported as of a few weeks ago, but at least for me, it seems
 ## awfully crashy, so I'm going to leave it disabled by default so as to
 ## not give a bad impression
-#class GoCompletionProvider(Ide.LangservCompletionProvider, GtkSource.CompletionProvider, Ide.CompletionProvider):
+#class GoCompletionProvider(Ide.LangservCompletionProvider, Ide.CompletionProvider):
 #    def do_load(self, context):
 #        GoService.bind_client(self)
 
