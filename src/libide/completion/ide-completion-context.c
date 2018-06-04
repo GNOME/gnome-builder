@@ -832,31 +832,13 @@ ide_completion_context_get_start_iter (IdeCompletionContext *self,
   return FALSE;
 }
 
-static gboolean
-ide_completion_context_get_end_iter (IdeCompletionContext *self,
-                                     GtkTextIter          *iter)
-{
-  g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (self), FALSE);
-  g_return_val_if_fail (self->completion != NULL, FALSE);
-  g_return_val_if_fail (iter != NULL, FALSE);
-
-  if (self->begin_mark != NULL)
-    {
-      GtkTextBuffer *buffer = gtk_text_mark_get_buffer (self->begin_mark);
-      gtk_text_buffer_get_iter_at_mark (buffer, iter, self->begin_mark);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 /**
  * ide_completion_context_get_word:
  * @self: a #IdeCompletionContext
  *
  * Gets the word that is being completed up to the position of the insert mark.
  *
- * Returns: (nullable) (transfer full): a string containing the current word
+ * Returns: (transfer full): a string containing the current word
  */
 gchar *
 ide_completion_context_get_word (IdeCompletionContext *self)
@@ -865,11 +847,8 @@ ide_completion_context_get_word (IdeCompletionContext *self)
 
   g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (self), NULL);
 
-  if (ide_completion_context_get_start_iter (self, &begin) &&
-      ide_completion_context_get_end_iter (self, &end))
-    return gtk_text_iter_get_slice (&begin, &end);
-
-  return NULL;
+  ide_completion_context_get_bounds (self, &begin, &end);
+  return gtk_text_iter_get_slice (&begin, &end);
 }
 
 gboolean
