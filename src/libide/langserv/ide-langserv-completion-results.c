@@ -97,7 +97,7 @@ ide_langserv_completion_results_get_n_items (GListModel *model)
 
   g_assert (IDE_IS_LANGSERV_COMPLETION_RESULTS (self));
 
-  return self->results ? g_variant_n_children (self->results) : 0;
+  return self->items->len;
 }
 
 static gpointer
@@ -106,11 +106,13 @@ ide_langserv_completion_results_get_item (GListModel *model,
 {
   IdeLangservCompletionResults *self = (IdeLangservCompletionResults *)model;
   g_autoptr(GVariant) child = NULL;
+  const Item *item;
 
   g_assert (IDE_IS_LANGSERV_COMPLETION_RESULTS (self));
   g_assert (self->results != NULL);
 
-  child = g_variant_get_child_value (self->results, position);
+  item = &g_array_index (self->items, Item, position);
+  child = g_variant_get_child_value (self->results, item->index);
 
   return ide_langserv_completion_item_new (child);
 }
@@ -123,10 +125,18 @@ list_model_iface_init (GListModelInterface *iface)
   iface->get_item_type = ide_langserv_completion_results_get_item_type;
 }
 
+static gint
+compare_items (const Item *a,
+               const Item *b)
+{
+  return (gint)a->priority - (gint)b->priority;
+}
+
 void
 ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
                                           const gchar                  *typed_text)
 {
+  g_autofree gchar *query = NULL;
   GVariantIter iter;
   GVariant *node;
   guint index = 0;
@@ -146,7 +156,7 @@ ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
 
       for (guint i = 0; i < n_items; i++)
         {
-          Item item = { i };
+          Item item = { .index = i };
           g_array_append_val (self->items, item);
         }
 
@@ -155,16 +165,19 @@ ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
       return;
     }
 
+  query = g_utf8_strdown (typed_text, -1);
+
   g_variant_iter_init (&iter, self->results);
 
   while (g_variant_iter_loop (&iter, "v", &node))
     {
-      const gchar *detail;
+      const gchar *label;
       guint priority;
 
-      g_variant_lookup (node, "detail", "&s", &detail);
+      if (!g_variant_lookup (node, "label", "&s", &label))
+        continue;
 
-      if (ide_completion_item_fuzzy_match (detail, typed_text, &priority))
+      if (ide_completion_item_fuzzy_match (label, query, &priority))
         {
           Item item = { .index = index, .priority = priority };
           g_array_append_val (self->items, item);
@@ -172,6 +185,8 @@ ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
 
       index++;
     }
+
+  g_array_sort (self->items, (GCompareFunc)compare_items);
 
   g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, index);
 }
