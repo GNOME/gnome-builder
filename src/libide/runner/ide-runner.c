@@ -1395,7 +1395,7 @@ ide_runner_set_cwd (IdeRunner   *self,
 /**
  * ide_runner_push_args:
  * @self: a #IdeRunner
- * @args: an array of args to add
+ * @args: (array zero-terminated=1) (element-type utf8) (nullable): the arguments
  *
  * Helper to call ide_runner_append_argv() for every argument
  * contained in @args.
@@ -1407,7 +1407,9 @@ ide_runner_push_args (IdeRunner           *self,
                       const gchar * const *args)
 {
   g_return_if_fail (IDE_IS_RUNNER (self));
-  g_return_if_fail (args != NULL);
+
+  if (args == NULL)
+    return;
 
   for (guint i = 0; args[i] != NULL; i++)
     ide_runner_append_argv (self, args[i]);
