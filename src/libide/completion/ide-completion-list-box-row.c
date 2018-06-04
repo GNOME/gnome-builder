@@ -189,6 +189,12 @@ ide_completion_list_box_row_set_proposal (IdeCompletionListBoxRow *self,
     }
 }
 
+/**
+ * ide_completion_list_box_row_set_left:
+ * @self: a #IdeCompletionListBoxRow
+ * @left: (nullable): text for the left column
+ *
+ */
 void
 ide_completion_list_box_row_set_left (IdeCompletionListBoxRow *self,
                                       const gchar             *left)
@@ -198,6 +204,12 @@ ide_completion_list_box_row_set_left (IdeCompletionListBoxRow *self,
   gtk_label_set_label (self->left, left);
 }
 
+/**
+ * ide_completion_list_box_row_set_center:
+ * @self: a #IdeCompletionListBoxRow
+ * @center: (nullable): text for the center column
+ *
+ */
 void
 ide_completion_list_box_row_set_center (IdeCompletionListBoxRow *self,
                                         const gchar             *center)
@@ -208,6 +220,12 @@ ide_completion_list_box_row_set_center (IdeCompletionListBoxRow *self,
   gtk_label_set_label (self->center, center);
 }
 
+/**
+ * ide_completion_list_box_row_set_center_markup:
+ * @self: a #IdeCompletionListBoxRow
+ * @center_markup: (nullable): markup for the center column
+ *
+ */
 void
 ide_completion_list_box_row_set_center_markup (IdeCompletionListBoxRow *self,
                                                const gchar             *center_markup)
@@ -228,6 +246,12 @@ ide_completion_list_box_row_set_center_markup (IdeCompletionListBoxRow *self,
   gtk_label_set_use_markup (self->center, TRUE);
 }
 
+/**
+ * ide_completion_list_box_row_set_right:
+ * @self: a #IdeCompletionListBoxRow
+ * @right: (nullable): text for the right column
+ *
+ */
 void
 ide_completion_list_box_row_set_right (IdeCompletionListBoxRow *self,
                                        const gchar             *right)
@@ -237,6 +261,12 @@ ide_completion_list_box_row_set_right (IdeCompletionListBoxRow *self,
   gtk_label_set_label (self->right, right);
 }
 
+/**
+ * ide_completion_list_box_row_set_icon_name:
+ * @self: a #IdeCompletionListBoxRow
+ * @icon_name: (nullable): an icon-name or %NULL
+ *
+ */
 void
 ide_completion_list_box_row_set_icon_name (IdeCompletionListBoxRow *self,
                                            const gchar             *icon_name)
