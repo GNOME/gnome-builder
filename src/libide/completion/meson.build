@@ -1,5 +1,4 @@
 completion_headers = [
-  'ide-completion-compat.h',
   'ide-completion-context.h',
   'ide-completion-display.h',
   'ide-completion-item.h',
@@ -8,7 +7,6 @@ completion_headers = [
   'ide-completion-overlay.h',
   'ide-completion-proposal.h',
   'ide-completion-provider.h',
-  'ide-completion-results.h',
   'ide-completion-types.h',
   'ide-completion-view.h',
   'ide-completion-window.h',
@@ -17,7 +15,6 @@ completion_headers = [
 
 completion_sources = [
   'ide-completion.c',
-  'ide-completion-compat.c',
   'ide-completion-context.c',
   'ide-completion-display.c',
   'ide-completion-item.c',
@@ -26,7 +23,6 @@ completion_sources = [
   'ide-completion-overlay.c',
   'ide-completion-proposal.c',
   'ide-completion-provider.c',
-  'ide-completion-results.c',
   'ide-completion-view.c',
   'ide-completion-window.c',
 ]
