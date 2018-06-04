@@ -118,7 +118,7 @@ gbp_retab_view_addin_action (GSimpleAction *action,
   GbpRetabViewAddin *self = user_data;
   IdeSourceView *source_view;
   GtkTextBuffer *buffer;
-  GtkSourceCompletion *completion;
+  IdeCompletion *completion;
   guint tab_width;
   gint start_line;
   gint end_line;
@@ -137,7 +137,7 @@ gbp_retab_view_addin_action (GSimpleAction *action,
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
   editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (source_view));
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (source_view));
+  completion = ide_source_view_get_completion (IDE_SOURCE_VIEW (source_view));
   tab_width = gtk_source_view_get_tab_width(GTK_SOURCE_VIEW (source_view));
   to_spaces = gtk_source_view_get_insert_spaces_instead_of_tabs(GTK_SOURCE_VIEW (source_view));
 
@@ -153,7 +153,7 @@ gbp_retab_view_addin_action (GSimpleAction *action,
   start_line = gtk_text_iter_get_line (&begin);
   end_line = gtk_text_iter_get_line (&end);
 
-  gtk_source_completion_block_interactive (completion);
+  ide_completion_block_interactive (completion);
   gtk_text_buffer_begin_user_action (buffer);
 
   for (gint line = start_line; line <= end_line; ++line)
@@ -164,7 +164,7 @@ gbp_retab_view_addin_action (GSimpleAction *action,
     }
 
   gtk_text_buffer_end_user_action (buffer);
-  gtk_source_completion_unblock_interactive (completion);
+  ide_completion_unblock_interactive (completion);
 }
 
 static const GActionEntry actions[] = {
