@@ -116,7 +116,7 @@ namespace Ide
 			if (comment != null)
 				return comment.content;
 
-			return null;
+			return (proposal as ValaCompletionItem).symbol.get_full_name ();
 		}
 
 		public bool key_activates (Ide.CompletionProposal proposal,
