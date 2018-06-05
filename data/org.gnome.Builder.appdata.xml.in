@@ -2,7 +2,7 @@
 <!-- Copyright 2014 Igor Gnatenko <ignatenko@src.gnome.org> -->
 <component type="desktop">
   <id>org.gnome.Builder.desktop</id>
-  <metadata_license>CC0</metadata_license>
+  <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+ and GPL-2.0+ and LGPL-3.0+ and LGPL-2.0+ and MIT</project_license>
   <name>Builder</name>
   <summary>An IDE for GNOME</summary>
@@ -39,23 +39,23 @@
   <screenshots>
     <screenshot type="default">
       <caption>Quickly access your projects</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/01-greeter.png</image>
+      <image width="1600" height="900">https://gitlab.gnome.org/GNOME/gnome-builder/raw/master/data/appdata/01-greeter.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Create new projects from a variety of templates</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/02-template.png</image>
+      <image width="1600" height="900">https://gitlab.gnome.org/GNOME/gnome-builder/raw/master/data/appdata/02-template.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Integration with Git to clone your projects</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/03-clone.png</image>
+      <image width="1600" height="900">https://gitlab.gnome.org/GNOME/gnome-builder/raw/master/data/appdata/03-clone.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>The source code editor</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/04-editor.png</image>
+      <image width="1600" height="900">https://gitlab.gnome.org/GNOME/gnome-builder/raw/master/data/appdata/04-editor.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Fast global fuzzy search</caption>
-      <image width="1600" height="900">https://git.gnome.org/browse/gnome-builder/plain/data/appdata/05-search.png</image>
+      <image width="1600" height="900">https://gitlab.gnome.org/GNOME/gnome-builder/raw/master/data/appdata/05-search.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Debug with the GNU debugger</caption>
@@ -317,5 +317,33 @@
       </description>
     </release>
   </releases>
-
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="violence-desecration">none</content_attribute>
+    <content_attribute id="violence-slavery">none</content_attribute>
+    <content_attribute id="violence-worship">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="sex-homosexuality">none</content_attribute>
+    <content_attribute id="sex-prostitution">none</content_attribute>
+    <content_attribute id="sex-adultery">none</content_attribute>
+    <content_attribute id="sex-appearance">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">intense</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">none</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">none</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
 </component>
