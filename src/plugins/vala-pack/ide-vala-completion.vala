@@ -61,8 +61,6 @@ namespace Ide
 
 			if (!member_access.match (current_text, 0, out match_info))
 				return null;
-			else if (match_info.fetch(0).length < 2)
-				return null;
 
 			start_pos.line = this.location.line;
 			start_pos.column = this.location.column - (int)match_info.fetch (2).length;
