@@ -53,7 +53,7 @@ class CompletionProvider(Ide.Object, Ide.CompletionProvider):
         text = context.get_line_text()
         if not text.startswith('from gi.repository import'):
             task.return_error(Ide.NotSupportedError())
-            return None,
+            return
 
         text = text.replace('from gi.repository import', '').strip().lower()
 
@@ -63,8 +63,6 @@ class CompletionProvider(Ide.Object, Ide.CompletionProvider):
                 proposals.append(library)
 
         task.return_object(proposals)
-
-        return None,
 
     def do_populate_finish(self, task):
         return task.propagate_object()

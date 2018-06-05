@@ -208,7 +208,6 @@ static void
 ide_langserv_completion_provider_populate_async (IdeCompletionProvider  *provider,
                                                  IdeCompletionContext   *context,
                                                  GCancellable           *cancellable,
-                                                 GListModel            **proposals,
                                                  GAsyncReadyCallback     callback,
                                                  gpointer                user_data)
 {
@@ -226,9 +225,6 @@ ide_langserv_completion_provider_populate_async (IdeCompletionProvider  *provide
 
   g_assert (IDE_IS_LANGSERV_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (proposals != NULL);
-
-  *proposals = NULL;
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_langserv_completion_provider_populate_async);

@@ -211,7 +211,6 @@ static void
 ide_clang_completion_provider_populate_async (IdeCompletionProvider  *provider,
                                               IdeCompletionContext   *context,
                                               GCancellable           *cancellable,
-                                              GListModel            **proposals,
                                               GAsyncReadyCallback     callback,
                                               gpointer                user_data)
 {
@@ -231,8 +230,6 @@ ide_clang_completion_provider_populate_async (IdeCompletionProvider  *provider,
 
   if (self->proposals == NULL)
     self->proposals = ide_clang_proposals_new (self->client);
-
-  *proposals = g_object_ref (G_LIST_MODEL (self->proposals));
 
   ide_clang_proposals_populate_async (self->proposals,
                                       &begin,

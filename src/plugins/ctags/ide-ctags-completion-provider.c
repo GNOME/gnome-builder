@@ -271,7 +271,6 @@ static void
 ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
                                               IdeCompletionContext   *context,
                                               GCancellable           *cancellable,
-                                              GListModel            **results,
                                               GAsyncReadyCallback     callback,
                                               gpointer                user_data)
 {
@@ -284,9 +283,6 @@ ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-  g_assert (results != NULL);
-
-  *results = NULL;
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_ctags_completion_provider_populate_async);
@@ -313,8 +309,6 @@ ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
                                     cancellable,
                                     ide_ctags_completion_provider_populate_cb,
                                     g_steal_pointer (&task));
-
-  *results = G_LIST_MODEL (g_steal_pointer (&model));
 }
 
 static GListModel *

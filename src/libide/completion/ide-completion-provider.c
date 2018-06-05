@@ -102,18 +102,11 @@ ide_completion_provider_get_title (IdeCompletionProvider *self)
  * @self: an #IdeCompletionProvider
  * @context: the completion context
  * @cancellable: (nullable): a #GCancellable, or %NULL
- * @proposals: (out) (optional): Optional location for a #GListModel that
- *   will be populated interactively.
  * @callback: (nullable) (scope async) (closure user_data): a #GAsyncReadyCallback
  *   or %NULL. Called when the provider has completed loading proposals.
  * @user_data: closure data for @callback
  *
  * Asynchronously requests the provider populate the contents.
- *
- * This operation should not complete until it has finished loading proposals.
- * If the provider can incrementally update the result set, it should set
- * @proposals and insert items before it completes the asynchronous operation.
- * That allows the UI to backfill the result list.
  *
  * Since: 3.28
  */
@@ -121,7 +114,6 @@ void
 ide_completion_provider_populate_async (IdeCompletionProvider  *self,
                                         IdeCompletionContext   *context,
                                         GCancellable           *cancellable,
-                                        GListModel            **proposals,
                                         GAsyncReadyCallback     callback,
                                         gpointer                user_data)
 {
@@ -131,12 +123,7 @@ ide_completion_provider_populate_async (IdeCompletionProvider  *self,
   g_return_if_fail (IDE_IS_COMPLETION_CONTEXT (context));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_COMPLETION_PROVIDER_GET_IFACE (self)->populate_async (self, context, cancellable, &results, callback, user_data);
-
-  if (proposals != NULL)
-    *proposals = g_steal_pointer (&results);
-  else
-    *proposals = NULL;
+  IDE_COMPLETION_PROVIDER_GET_IFACE (self)->populate_async (self, context, cancellable, callback, user_data);
 }
 
 /**
@@ -282,6 +269,23 @@ _ide_completion_provider_load (IdeCompletionProvider *self,
     IDE_COMPLETION_PROVIDER_GET_IFACE (self)->load (self, context);
 }
 
+/**
+ * ide_completion_provider_display_proposal:
+ * @self: a #IdeCompletionProvider
+ * @row: an #IdeCompletionListBoxRow
+ * @context: an #IdeCompletionContext
+ * @typed_text: (nullable): the typed text for the proposal
+ * @proposal: an #IdeCompletionProposal
+ *
+ * Requests that the provider update @row with values from @proposal.
+ *
+ * The design rational about having this operation part of the
+ * #IdeCompletionProvider interface (as opposed to the #IdeCompletionProposal
+ * interface) is that it allows for some optimizations and code simplification
+ * on behalf of completion providers.
+ *
+ * Since: 3.30
+ */
 void
 ide_completion_provider_display_proposal (IdeCompletionProvider   *self,
                                           IdeCompletionListBoxRow *row,
@@ -293,6 +297,9 @@ ide_completion_provider_display_proposal (IdeCompletionProvider   *self,
   g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
   g_return_if_fail (IDE_IS_COMPLETION_CONTEXT (context));
   g_return_if_fail (IDE_IS_COMPLETION_PROPOSAL (proposal));
+
+  if (typed_text == NULL)
+    typed_text = "";
 
   if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal)
     IDE_COMPLETION_PROVIDER_GET_IFACE (self)->display_proposal (self, row, context, typed_text, proposal);
