@@ -44,6 +44,9 @@ IDE_AVAILABLE_IN_3_30
 void                   ide_completion_list_box_row_set_left          (IdeCompletionListBoxRow *self,
                                                                       const gchar             *left);
 IDE_AVAILABLE_IN_3_30
+void                   ide_completion_list_box_row_set_left_markup   (IdeCompletionListBoxRow *self,
+                                                                      const gchar             *left_markup);
+IDE_AVAILABLE_IN_3_30
 void                   ide_completion_list_box_row_set_right         (IdeCompletionListBoxRow *self,
                                                                       const gchar             *right);
 IDE_AVAILABLE_IN_3_30
