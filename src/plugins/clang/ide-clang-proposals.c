@@ -112,6 +112,7 @@ typedef struct
 {
   guint index;
   guint priority;
+  const gchar *keyword;
 } Item;
 
 enum {
@@ -290,21 +291,47 @@ sort_by_priority (gconstpointer a,
 }
 
 static void
-ide_clang_proposals_do_refilter (IdeClangProposals *self)
+ide_clang_proposals_do_refilter (IdeClangProposals *self,
+                                 gboolean           fast_refilter)
 {
+  g_autofree gchar *folded = NULL;
   guint old_len = 0;
   guint n_items;
 
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
 
-  /*
-   * This filter will look through all entries in the array. Compare to
-   * ide_clang_proposals_refilter_list() which only looks at items that have
-   * already been filtered and is therefore only usable when typing
-   * additional characters.
-   */
+  old_len = self->match_indexes->len;
 
-  if ((old_len = self->match_indexes->len))
+  if (self->filter != NULL)
+    folded = g_utf8_casefold (self->filter, -1);
+
+  if (fast_refilter)
+    {
+      for (guint i = old_len; i > 0; i--)
+        {
+          Item *item = &g_array_index (self->match_indexes, Item, i - 1);
+          const gchar *keyword = item->keyword;
+
+          if (keyword == NULL)
+            {
+              g_autoptr(GVariant) child = g_variant_get_child_value (self->results, item->index);
+              if (!g_variant_lookup (child, "keyword", "&s", &keyword))
+                keyword = NULL;
+            }
+
+          if (keyword == NULL ||
+              !ide_completion_item_fuzzy_match (keyword, folded, &item->priority))
+            g_array_remove_index_fast (self->match_indexes, i - 1);
+        }
+
+      g_array_sort (self->match_indexes, sort_by_priority);
+
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->match_indexes->len);
+
+      return;
+    }
+
+  if (old_len > 0)
     g_array_remove_range (self->match_indexes, 0, old_len);
 
   n_items = self->results ? g_variant_n_children (self->results) : 0;
@@ -319,7 +346,6 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self)
     }
   else if (self->results != NULL)
     {
-      g_autofree gchar *folded = g_utf8_casefold (self->filter, -1);
       GVariantIter iter;
       GVariant *value;
       guint index = 0;
@@ -338,7 +364,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self)
 
           if (g_variant_lookup (value, "keyword", "&s", &typed_text))
             {
-              Item item = { index, 0 };
+              Item item = { index, 0, typed_text };
 
               if (ide_completion_item_fuzzy_match (typed_text, folded, &item.priority))
                 g_array_append_val (self->match_indexes, item);
@@ -371,7 +397,7 @@ ide_clang_proposals_flush (IdeClangProposals *self,
       self->results = g_variant_ref (results);
     }
 
-  ide_clang_proposals_do_refilter (self);
+  ide_clang_proposals_do_refilter (self, FALSE);
 
   list = g_steal_pointer (&self->queued_tasks.head);
   self->queued_tasks.head = NULL;
@@ -612,8 +638,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
   if (self->filter == NULL || (word && g_str_has_prefix (word, self->filter)))
     {
       ide_set_string (&self->filter, word);
-      /* TODO: Refilter using the embedded array? */
-      ide_clang_proposals_do_refilter (self);
+      ide_clang_proposals_do_refilter (self, TRUE);
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
@@ -623,7 +648,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
    * clear the linked list and update by walking the whole array.
    */
   ide_set_string (&self->filter, word);
-  ide_clang_proposals_do_refilter (self);
+  ide_clang_proposals_do_refilter (self, FALSE);
   ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
@@ -671,10 +696,13 @@ void
 ide_clang_proposals_refilter (IdeClangProposals *self,
                               const gchar       *word)
 {
+  gboolean fast_refilter;
+
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
 
+  fast_refilter = self->filter && word && g_str_has_prefix (word, self->filter);
   ide_set_string (&self->filter, word);
-  ide_clang_proposals_do_refilter (self);
+  ide_clang_proposals_do_refilter (self, fast_refilter);
 }
 
 static guint
