@@ -50,12 +50,12 @@ struct _IdeHtmlCompletionProvider
 
 static void completion_provider_init (GtkSourceCompletionProviderIface *);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeHtmlCompletionProvider,
-                                ide_html_completion_provider,
-                                IDE_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_init)
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
+G_DEFINE_TYPE_EXTENDED (IdeHtmlCompletionProvider,
+                        ide_html_completion_provider,
+                        IDE_TYPE_OBJECT,
+                        0,
+                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_init)
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
 
 static gchar *
 get_word (GtkSourceCompletionContext *context)
@@ -451,11 +451,6 @@ static GdkPixbuf *
 ide_html_completion_provider_get_icon (GtkSourceCompletionProvider *provider)
 {
   return NULL;
-}
-
-static void
-ide_html_completion_provider_class_finalize (IdeHtmlCompletionProviderClass *klass)
-{
 }
 
 static void
@@ -911,8 +906,6 @@ completion_provider_init (GtkSourceCompletionProviderIface *iface)
 void
 ide_html_completion_register_types (PeasObjectModule *module)
 {
-  ide_html_completion_provider_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_COMPLETION_PROVIDER,
                                               IDE_TYPE_HTML_COMPLETION_PROVIDER);
