@@ -17,6 +17,7 @@
  */
 
 using GLib;
+using Gtk;
 using Ide;
 using Vala;
 
@@ -33,7 +34,15 @@ namespace Ide
 
 		public bool is_trigger (Gtk.TextIter iter, unichar ch)
 		{
-			return ch == '.';
+			if (ch == '.')
+			{
+				var buffer = iter.get_buffer () as Gtk.SourceBuffer;
+
+				return !buffer.iter_has_context_class (iter, "comment") &&
+				       !buffer.iter_has_context_class (iter, "string");
+			}
+
+			return false;
 		}
 
 		public bool refilter (Ide.CompletionContext context,
