@@ -238,6 +238,10 @@ namespace Ide
 					this.filtered.add (item);
 			}
 
+			this.filtered.sort ((a, b) => {
+				return (int)a.priority - (int)b.priority;
+			});
+
 			this.items_changed (0, old_len, this.filtered.length);
 		}
 

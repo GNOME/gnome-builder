@@ -25,7 +25,7 @@ namespace Ide
 	public class ValaCompletionItem : GLib.Object, Ide.CompletionProposal
 	{
 		internal Vala.Symbol symbol;
-		uint priority;
+		internal uint priority;
 
 		public ValaCompletionItem (Vala.Symbol symbol)
 		{
