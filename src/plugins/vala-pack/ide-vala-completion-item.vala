@@ -25,7 +25,6 @@ namespace Ide
 	public class ValaCompletionItem : GLib.Object, Ide.CompletionProposal
 	{
 		internal Vala.Symbol symbol;
-		string label;
 		uint priority;
 
 		public ValaCompletionItem (Vala.Symbol symbol)
@@ -82,13 +81,17 @@ namespace Ide
 		    return in.replace ("<", "&lt;").replace (">", "&gt;");
 		}
 
-		public void build_label ()
+		public string get_markup (string? typed_text)
 		{
 			GLib.StringBuilder str = new GLib.StringBuilder ();
 
+			var highlight = Ide.CompletionItem.fuzzy_highlight (this.symbol.name, typed_text != null ? typed_text : "");
+
+			if (highlight != null)
+				str.append(highlight);
+
 			if (this.symbol is Vala.Method) {
 				var method = symbol as Vala.Method;
-				str.append(method.name);
 				var type_params = method.get_type_parameters ();
 				if (type_params.size > 0) {
 					str.append ("&lt;");
@@ -120,22 +123,9 @@ namespace Ide
 					str.truncate (str.len - 2);
 				}
 				str.append (")</span>");
-			} else {
-				str.append (this.symbol.name);
 			}
 
-			/* Steal the string instead of strdup */
-			this.label = (owned)str.str;
-		}
-
-		public string get_markup (string? typed_text) {
-			return Ide.CompletionItem.fuzzy_highlight (this.get_label (), typed_text != null ? typed_text : "");
-		}
-
-		public unowned string get_label () {
-			if (this.label == null)
-				this.build_label ();
-			return this.label;
+			return str.str;
 		}
 
 		public string? get_return_type () {
