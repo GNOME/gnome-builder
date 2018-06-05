@@ -50,7 +50,7 @@ namespace Ide
 			Ide.ValaCompletionResults results = null;
 			var buffer = context.get_buffer () as Ide.Buffer;
 			var file = buffer.get_file ();
-			Gtk.TextIter iter;
+			Gtk.TextIter iter, begin;
 
 			if (file.is_temporary) {
 				throw new GLib.IOError.NOT_SUPPORTED ("Cannot complete on temporary files");
@@ -59,6 +59,11 @@ namespace Ide
 			buffer.sync_to_unsaved_files ();
 
 			context.get_bounds (out iter, null);
+
+			begin = iter;
+			begin.set_line_offset (0);
+			var line_text = begin.get_slice (iter);
+
 			var line = iter.get_line ();
 			var line_offset = iter.get_line_offset ();
 
@@ -74,6 +79,7 @@ namespace Ide
 				results = index.code_complete (file.file,
 				                               line + 1,
 				                               line_offset + 1,
+				                               line_text,
 				                               unsaved_files_copy,
 				                               cancellable,
 				                               out res_line,
