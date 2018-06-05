@@ -116,6 +116,7 @@ namespace Ide
 		public bool key_activates (Ide.CompletionProposal proposal,
 		                           Gdk.EventKey key)
 		{
+#if 0
 			var item = proposal as ValaCompletionItem;
 
 			if (key.keyval == Gdk.Key.period) {
@@ -128,6 +129,7 @@ namespace Ide
 			if (key.keyval == Gdk.Key.semicolon) {
 				return true;
 			}
+#endif
 
 			return false;
 		}
