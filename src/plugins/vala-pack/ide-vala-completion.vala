@@ -25,61 +25,39 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaCompletion: GLib.Object
+	public class ValaCompletion : GLib.Object
 	{
-		static Regex member_access;
-		static Regex member_access_split;
-		static Regex function_call;
-
 		Vala.CodeContext context;
 		Vala.SourceLocation location;
-		string current_text;
 		Vala.Block? nearest;
-
-		static construct {
-			try {
-				member_access = new Regex("""((?:\w+(?:\s*\([^()]*\))?\.)*)(\w*)$""");
-				member_access_split = new Regex ("""(\s*\([^()]*\))?\.""");
-				function_call = new Regex("""(new )?((?:\w+(?:\s*\([^()]*\))?\.)*)(\w+)\s*\(([^(,)]+,)*([^(,)]*)$""");
-			} catch (RegexError err) {
-				critical("Regular expressions failed to compile : %s", err.message);
-			}
-		}
 
 		public ValaCompletion (Vala.CodeContext context,
 		                       Vala.SourceLocation location,
-		                       string current_text,
 		                       Vala.Block? nearest)
 		{
 			this.context = context;
 			this.location = location;
-			this.current_text = current_text;
 			this.nearest = nearest;
 		}
 
-		public GLib.List<Vala.Symbol>? run (ref Vala.SourceLocation start_pos)
+		public void run (Ide.ValaCompletionResults ret, ref Vala.SourceLocation start_pos)
 		{
-			MatchInfo match_info;
-
-			if (!member_access.match (current_text, 0, out match_info))
-				return null;
-			else if (match_info.fetch(0).length < 2)
-				return null;
-
 			start_pos.line = this.location.line;
-			start_pos.column = this.location.column - (int)match_info.fetch (2).length;
+			start_pos.column = this.location.column;
 
-			var names = member_access_split.split (match_info.fetch (1));
+			if (nearest != null) {
+				for (var sym = (Vala.Symbol) nearest; sym != null; sym = sym.parent_symbol) {
+					symbol_lookup_inherited (ret, sym);
+				}
 
-			var syms = lookup_symbol (construct_member_access (names),
-			                          match_info.fetch (2),
-			                          true,
-			                          nearest);
-
-			return syms;
+				foreach (var ns in nearest.source_reference.file.current_using_directives) {
+					symbol_lookup_inherited (ret, ns.namespace_symbol);
+				}
+			}
 		}
 
-		GLib.List<Vala.Symbol> lookup_symbol (Vala.Expression? inner, string name, bool prefix_match, Vala.Block? block)
+#if 0
+		GLib.List<Vala.Symbol> lookup_symbol (Vala.Expression? inner, Vala.Block? block)
 		{
 			var matching_symbols = new GLib.List<Vala.Symbol> ();
 
@@ -88,101 +66,78 @@ namespace Ide
 
 			if (inner == null) {
 				for (var sym = (Vala.Symbol) block; sym != null; sym = sym.parent_symbol) {
-					matching_symbols.concat (symbol_lookup_inherited (sym, name, prefix_match));
+					matching_symbols.concat (symbol_lookup_inherited (sym));
 				}
 
 				foreach (var ns in block.source_reference.file.current_using_directives) {
-					matching_symbols.concat (symbol_lookup_inherited (ns.namespace_symbol, name, prefix_match));
+					matching_symbols.concat (symbol_lookup_inherited (ns.namespace_symbol));
 				}
 			} else if (inner.symbol_reference != null) {
-					matching_symbols.concat (symbol_lookup_inherited (inner.symbol_reference, name, prefix_match));
+					matching_symbols.concat (symbol_lookup_inherited (inner.symbol_reference));
 			} else if (inner is Vala.MemberAccess) {
 				var inner_ma = (Vala.MemberAccess) inner;
 				var matching = lookup_symbol (inner_ma.inner, inner_ma.member_name, false, block);
 				if (matching != null)
-					matching_symbols.concat (symbol_lookup_inherited (matching.data, name, prefix_match));
+					matching_symbols.concat (symbol_lookup_inherited (matching.data));
 			} else if (inner is Vala.MethodCall) {
 				var inner_inv = (Vala.MethodCall) inner;
 				var inner_ma = inner_inv.call as Vala.MemberAccess;
 				if (inner_ma != null) {
 					var matching = lookup_symbol (inner_ma.inner, inner_ma.member_name, false, block);
 					if (matching != null)
-						matching_symbols.concat (symbol_lookup_inherited (matching.data, name, prefix_match, true));
+						matching_symbols.concat (symbol_lookup_inherited (matching.data, true));
 				}
 			}
 
 			return matching_symbols;
 		}
+#endif
 
-		GLib.List<Vala.Symbol> symbol_lookup_inherited (Vala.Symbol? sym,
-		                                                string name,
-		                                                bool prefix_match,
-		                                                bool invocation = false)
+		void symbol_lookup_inherited (Ide.ValaCompletionResults results,
+		                              Vala.Symbol? sym,
+		                              bool invocation = false)
 		{
-			GLib.List<Vala.Symbol> result = null;
-
 			// This may happen if we cannot find all the needed packages
 			if (sym == null)
-				return result;
+				return;
 
 			var symbol_table = sym.scope.get_symbol_table ();
 
 			if (symbol_table != null) {
 				foreach (string key in symbol_table.get_keys()) {
-					if (((prefix_match && key.has_prefix (name)) || key == name)) {
-						result.append (symbol_table[key]);
-					}
+					results.add (symbol_table[key]);
 				}
 			}
 
 			if (invocation && sym is Vala.Method) {
 				var func = (Vala.Method) sym;
-				result.concat (symbol_lookup_inherited (func.return_type.data_type, name, prefix_match));
+				symbol_lookup_inherited (results, func.return_type.data_type);
 			} else if (sym is Vala.Class) {
 				var cl = (Vala.Class) sym;
 				foreach (var base_type in cl.get_base_types ()) {
-					result.concat (symbol_lookup_inherited (base_type.data_type, name, prefix_match));
+					symbol_lookup_inherited (results, base_type.data_type);
 				}
 			} else if (sym is Vala.Struct) {
 				var st = (Vala.Struct) sym;
-				result.concat (symbol_lookup_inherited (st.base_type.data_type, name, prefix_match));
+				symbol_lookup_inherited (results, st.base_type.data_type);
 			} else if (sym is Vala.Interface) {
 				var iface = (Vala.Interface) sym;
 				foreach (var prerequisite in iface.get_prerequisites ()) {
-					result.concat (symbol_lookup_inherited (prerequisite.data_type, name, prefix_match));
+					symbol_lookup_inherited (results, prerequisite.data_type);
 				}
 			} else if (sym is Vala.LocalVariable) {
 				var variable = (Vala.LocalVariable) sym;
-				result.concat (symbol_lookup_inherited (variable.variable_type.data_type, name, prefix_match));
+				symbol_lookup_inherited (results, variable.variable_type.data_type);
 			} else if (sym is Vala.Field) {
 				var field = (Vala.Field) sym;
-				result.concat (symbol_lookup_inherited (field.variable_type.data_type, name, prefix_match));
+				symbol_lookup_inherited (results, field.variable_type.data_type);
 			} else if (sym is Vala.Property) {
 				var prop = (Vala.Property) sym;
-				result.concat (symbol_lookup_inherited (prop.property_type.data_type, name, prefix_match));
+				symbol_lookup_inherited (results, prop.property_type.data_type);
 			} else if (sym is Vala.Parameter) {
 				var fp = (Vala.Parameter) sym;
-				result.concat (symbol_lookup_inherited (fp.variable_type.data_type, name, prefix_match));
+				symbol_lookup_inherited (results, fp.variable_type.data_type);
 			}
-
-			return result;
-		}
-
-		Vala.Expression construct_member_access (string[] names)
-		{
-			Vala.Expression expr = null;
-
-			for (var i = 0; names[i] != null; i++) {
-				if (names[i] != "") {
-					expr = new Vala.MemberAccess (expr, names[i]);
-					if (names[i+1] != null && names[i+1].chug ().has_prefix ("(")) {
-						expr = new Vala.MethodCall (expr);
-						i++;
-					}
-				}
-			}
-
-			return expr;
 		}
 	}
 }
