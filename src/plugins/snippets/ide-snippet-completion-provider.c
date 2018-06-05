@@ -90,7 +90,6 @@ static void
 ide_snippet_completion_provider_populate_async (IdeCompletionProvider  *provider,
                                                 IdeCompletionContext   *context,
                                                 GCancellable           *cancellable,
-                                                GListModel            **proposals,
                                                 GAsyncReadyCallback     callback,
                                                 gpointer                user_data)
 {
@@ -108,8 +107,6 @@ ide_snippet_completion_provider_populate_async (IdeCompletionProvider  *provider
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_snippet_completion_provider_populate_async);
-
-  *proposals = g_object_ref (G_LIST_MODEL (self->model));
 
   if (ide_completion_context_get_bounds (context, &begin, &end))
     prefix = gtk_text_iter_get_slice (&begin, &end);

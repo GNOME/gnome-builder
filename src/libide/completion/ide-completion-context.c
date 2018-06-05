@@ -546,16 +546,13 @@ _ide_completion_context_complete_async (IdeCompletionContext *self,
   for (guint i = 0; i < self->providers->len; i++)
     {
       const ProviderInfo *info = &g_array_index (self->providers, ProviderInfo, i);
-      g_autoptr(GListModel) results = NULL;
 
       dzl_cancellable_chain (info->cancellable, cancellable);
       ide_completion_provider_populate_async (info->provider,
                                               self,
                                               info->cancellable,
-                                              &results,
                                               ide_completion_context_populate_cb,
                                               g_object_ref (task));
-      ide_completion_context_set_results_for_provider (self, info->provider, results);
     }
 
   if (task_data->n_active == 0)
