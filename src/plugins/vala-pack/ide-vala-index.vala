@@ -329,6 +329,7 @@ namespace Ide
 		public Ide.ValaCompletionResults code_complete (GLib.File file,
 		                                                int line,
 		                                                int column,
+		                                                string? line_text,
 		                                                GLib.GenericArray<Ide.UnsavedFile>? unsaved_files,
 		                                                GLib.Cancellable? cancellable,
 		                                                out int result_line,
@@ -355,7 +356,7 @@ namespace Ide
 						var locator = new Ide.ValaLocator ();
 						var nearest = locator.locate (source_file, line, column);
 
-						this.add_completions (source_file, ref line, ref column, nearest, result);
+						this.add_completions (source_file, ref line, ref column, line_text, nearest, result);
 					}
 
 					Vala.CodeContext.pop ();
@@ -418,15 +419,18 @@ namespace Ide
 		void add_completions (Ide.ValaSourceFile source_file,
 		                      ref int line,
 		                      ref int column,
+		                      string? line_text,
 		                      Vala.Symbol? nearest,
 		                      Ide.ValaCompletionResults results)
 		{
 			var block = nearest as Vala.Block;
 			Vala.SourceLocation cursor = Vala.SourceLocation (null, line, column);
 
-			var completion = new Ide.ValaCompletion (this.code_context, cursor, block);
+			var completion = new Ide.ValaCompletion (this.code_context, cursor, line_text, block);
 
-			completion.run (results, ref cursor);
+			foreach (var symbol in completion.run (ref cursor)) {
+				results.add (symbol);
+			}
 
 			line = cursor.line;
 			column = cursor.column;
