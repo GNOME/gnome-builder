@@ -109,12 +109,36 @@ namespace Ide
 			return null;
 		}
 
+		string? condense (string input)
+		{
+			var lines = input.split ("\n");
+
+			foreach (var line in lines) {
+				line = line.strip ();
+
+				/* skip empty lines */
+				if (line == "" || line == "*")
+					continue;
+
+				/* skip past func_name: lines */
+				if (line.has_suffix (":"))
+					continue;
+
+				if (line.has_prefix ("*"))
+					return line.substring(1).strip();
+
+				return line;
+			}
+
+			return null;
+		}
+
 		public string? get_comment (Ide.CompletionProposal proposal)
 		{
 			var comment = (proposal as ValaCompletionItem).symbol.comment;
 
-			if (comment != null)
-				return comment.content;
+			if (comment != null && comment.content != null)
+				return condense (comment.content);
 
 			return (proposal as ValaCompletionItem).symbol.get_full_name ();
 		}
