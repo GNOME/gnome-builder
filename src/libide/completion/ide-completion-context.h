@@ -29,6 +29,11 @@ IDE_AVAILABLE_IN_3_30
 G_DECLARE_FINAL_TYPE (IdeCompletionContext, ide_completion_context, IDE, COMPLETION_CONTEXT, GObject)
 
 IDE_AVAILABLE_IN_3_30
+const gchar   *ide_completion_context_get_language    (IdeCompletionContext   *self);
+IDE_AVAILABLE_IN_3_30
+gboolean       ide_completion_context_is_language     (IdeCompletionContext   *self,
+                                                       const gchar            *language);
+IDE_AVAILABLE_IN_3_30
 GtkTextBuffer *ide_completion_context_get_buffer      (IdeCompletionContext   *self);
 IDE_AVAILABLE_IN_3_30
 GtkTextView   *ide_completion_context_get_view        (IdeCompletionContext   *self);
