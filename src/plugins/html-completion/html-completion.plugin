@@ -5,5 +5,5 @@ Description=Provides auto-completion when authoring HTML documents
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-X-Completion-Provider-Languages=asp,dtl,html,php
+X-Completion-Provider-Languages=asp,dtl,html,php,css
 Embedded=ide_html_completion_register_types

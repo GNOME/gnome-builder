@@ -292,7 +292,10 @@ ide_html_completion_provider_populate_async (IdeCompletionProvider *provider,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_html_completion_provider_populate_async);
 
-  whereami (context, &kind, &element);
+  if (ide_completion_context_is_language (context, "css"))
+    kind = IDE_HTML_PROPOSAL_CSS_PROPERTY;
+  else
+    whereami (context, &kind, &element);
 
   if ((word = ide_completion_context_get_word (context)))
     casefold = g_utf8_casefold (word, -1);
@@ -330,7 +333,10 @@ ide_html_completion_provider_refilter (IdeCompletionProvider *provider,
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_HTML_PROPOSALS (proposals));
 
-  whereami (context, &kind, &element);
+  if (ide_completion_context_is_language (context, "css"))
+    kind = IDE_HTML_PROPOSAL_CSS_PROPERTY;
+  else
+    whereami (context, &kind, &element);
 
   if ((word = ide_completion_context_get_word (context)))
     casefold = g_utf8_casefold (word, -1);
