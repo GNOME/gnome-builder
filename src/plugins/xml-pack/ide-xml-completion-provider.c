@@ -83,12 +83,12 @@ static void      completion_provider_init (GtkSourceCompletionProviderIface *);
 static gboolean  process_matching_state   (MatchingState                    *state,
                                            IdeXmlRngDefine                  *define);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeXmlCompletionProvider,
-                                ide_xml_completion_provider,
-                                IDE_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_init)
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
+G_DEFINE_TYPE_EXTENDED (IdeXmlCompletionProvider,
+                        ide_xml_completion_provider,
+                        IDE_TYPE_OBJECT,
+                        0,
+                        G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_init)
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
 
 enum {
   PROP_0,
@@ -1141,11 +1141,6 @@ ide_xml_completion_provider_set_property (GObject      *object,
 }
 
 static void
-ide_xml_completion_provider_class_finalize (IdeXmlCompletionProviderClass *klass)
-{
-}
-
-static void
 ide_xml_completion_provider_class_init (IdeXmlCompletionProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1166,10 +1161,4 @@ completion_provider_init (GtkSourceCompletionProviderIface *iface)
 {
   iface->get_icon = ide_xml_completion_provider_get_icon;
   iface->populate = ide_xml_completion_provider_populate;
-}
-
-void
-_ide_xml_completion_provider_register_type (GTypeModule *module)
-{
-  ide_xml_completion_provider_register_type (module);
 }
