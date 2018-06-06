@@ -385,6 +385,21 @@ ide_html_completion_provider_activate_proposal (IdeCompletionProvider *provider,
       ide_snippet_add_chunk (snippet, chunk2);
     }
 
+  if (kind == IDE_HTML_PROPOSAL_CSS_PROPERTY)
+    {
+      g_autoptr(IdeSnippetChunk) chunk1 = ide_snippet_chunk_new ();
+      g_autoptr(IdeSnippetChunk) chunk2 = ide_snippet_chunk_new ();
+      g_autoptr(IdeSnippetChunk) chunk3 = ide_snippet_chunk_new ();
+
+      ide_snippet_chunk_set_spec (chunk1, ": ");
+      ide_snippet_chunk_set_tab_stop (chunk2, 0);
+      ide_snippet_chunk_set_spec (chunk3, ";");
+
+      ide_snippet_add_chunk (snippet, chunk1);
+      ide_snippet_add_chunk (snippet, chunk2);
+      ide_snippet_add_chunk (snippet, chunk3);
+    }
+
   ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
 
   gtk_text_buffer_end_user_action (buffer);
