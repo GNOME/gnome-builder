@@ -992,3 +992,50 @@ ide_completion_context_get_line_text (IdeCompletionContext *self)
   gtk_text_iter_set_line_offset (&begin, 0);
   return gtk_text_iter_get_slice (&begin, &end);
 }
+
+/**
+ * ide_completion_context_get_language:
+ * @self: a #IdeCompletionContext
+ *
+ * Gets the language identifier which can be useful for providers that support
+ * multiple languages.
+ *
+ * Returns: (nullable): a language identifier or %NULL
+ *
+ * Since: 3.30
+ */
+const gchar *
+ide_completion_context_get_language (IdeCompletionContext *self)
+{
+  GtkTextBuffer *buffer;
+  GtkSourceLanguage *language;
+
+  g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (self), NULL);
+
+  if (!(buffer = ide_completion_context_get_buffer (self)))
+    return NULL;
+
+  if (!(language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
+    return NULL;
+
+  return gtk_source_language_get_id (language);
+}
+
+/**
+ * ide_completion_context_is_language:
+ * @self: a #IdeCompletionContext
+ *
+ * Helper to check the language of the underlying buffer.
+ *
+ * Returns: %TRUE if @language matches; otherwise %FALSE.
+ *
+ * Since: 3.30
+ */
+gboolean
+ide_completion_context_is_language (IdeCompletionContext *self,
+                                    const gchar          *language)
+{
+  g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (self), FALSE);
+
+  return g_strcmp0 (language, ide_completion_context_get_language (self)) == 0;
+}
