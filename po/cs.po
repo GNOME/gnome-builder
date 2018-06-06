@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-05-20 19:28+0000\n"
-"PO-Revision-Date: 2018-05-21 09:51+0200\n"
+"POT-Creation-Date: 2018-05-31 22:10+0000\n"
+"PO-Revision-Date: 2018-06-06 10:46+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -752,7 +752,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5153
+#: src/libide/sourceview/ide-source-view.c:5177
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -960,72 +960,72 @@ msgstr "Selhala inicializace roury sestavení: %s"
 msgid "Failed to get device information: %s"
 msgstr "Selhalo získání informací o zařízení: %s"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:769
+#: src/libide/buildsystem/ide-build-pipeline.c:776
 msgid "The build pipeline is in a failed state"
 msgstr "Roura sestavení je v chybovém stavu"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:779
+#: src/libide/buildsystem/ide-build-pipeline.c:786
 msgid "The build configuration has errors"
 msgstr "Konfigurace sestavení má chybu"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2805
+#: src/libide/buildsystem/ide-build-pipeline.c:2813
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "Selhalo vytvoření pseudoterminálu. Schopnosti terminálu budou omezené."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3005
+#: src/libide/buildsystem/ide-build-pipeline.c:3013
 msgid "Cleaning…"
 msgstr "Čistí se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3009
-#: src/libide/buildsystem/ide-build-pipeline.c:3066
+#: src/libide/buildsystem/ide-build-pipeline.c:3017
+#: src/libide/buildsystem/ide-build-pipeline.c:3074
 #: src/libide/workbench/ide-omni-bar.c:559
 msgid "Failed"
 msgstr "Selhalo"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3011
-#: src/libide/buildsystem/ide-build-pipeline.c:3074
+#: src/libide/buildsystem/ide-build-pipeline.c:3019
+#: src/libide/buildsystem/ide-build-pipeline.c:3082
 msgid "Ready"
 msgstr "Připraveno"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3026
+#: src/libide/buildsystem/ide-build-pipeline.c:3034
 msgid "Downloading…"
 msgstr "Stahuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3030
+#: src/libide/buildsystem/ide-build-pipeline.c:3038
 msgid "Building dependencies…"
 msgstr "Sestavují se závislosti…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3034
+#: src/libide/buildsystem/ide-build-pipeline.c:3042
 msgid "Bootstrapping…"
 msgstr "Připravuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3038
+#: src/libide/buildsystem/ide-build-pipeline.c:3046
 msgid "Configuring…"
 msgstr "Konfiguruje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3042
+#: src/libide/buildsystem/ide-build-pipeline.c:3050
 msgid "Building…"
 msgstr "Sestavuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3046
+#: src/libide/buildsystem/ide-build-pipeline.c:3054
 msgid "Installing…"
 msgstr "Instaluje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3050
+#: src/libide/buildsystem/ide-build-pipeline.c:3058
 msgid "Committing…"
 msgstr "Zařazuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3054
+#: src/libide/buildsystem/ide-build-pipeline.c:3062
 msgid "Exporting…"
 msgstr "Exportuje se…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3058
-#: src/libide/buildsystem/ide-build-pipeline.c:3062
+#: src/libide/buildsystem/ide-build-pipeline.c:3066
+#: src/libide/buildsystem/ide-build-pipeline.c:3070
 #: src/libide/workbench/ide-omni-bar.c:586
 msgid "Success"
 msgstr "Úspěšné"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3070
+#: src/libide/buildsystem/ide-build-pipeline.c:3078
 msgid "Preparing…"
 msgstr "Připravuje se…"
 
@@ -1053,6 +1053,7 @@ msgid "The name of the build configuration"
 msgstr "Název konfigurace sestavení"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:37
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 msgid "Name"
 msgstr "Název"
@@ -1088,6 +1089,11 @@ msgid "Runtime"
 msgstr "Běhové prostředí"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
+msgid "Toolchain"
+msgstr "Sada nástrojů"
+
+#: src/libide/buildui/ide-build-configuration-view.ui:245
 msgid "Environment"
 msgstr "Proměnné prostředí"
 
@@ -2952,12 +2958,12 @@ msgstr "Proces se neočekávaně ukončil"
 msgid "Host operating system"
 msgstr "Hostitelský operační systém"
 
-#: src/libide/snippets/ide-source-snippets-manager.c:198
+#: src/libide/snippets/ide-source-snippets-manager.c:200
 #, c-format
 msgid "Failed to open directory: %s"
 msgstr "Selhalo otevření složky: %s"
 
-#: src/libide/snippets/ide-source-snippets-manager.c:211
+#: src/libide/snippets/ide-source-snippets-manager.c:213
 #, c-format
 msgid "Failed to load file: %s: %s"
 msgstr "Selhalo načtení souboru: %s: %s"
@@ -2966,31 +2972,31 @@ msgstr "Selhalo načtení souboru: %s: %s"
 msgid "Click to toggle breakpoint"
 msgstr "Kliknutím přepnete bod přerušení"
 
-#: src/libide/sourceview/ide-source-view.c:4608
+#: src/libide/sourceview/ide-source-view.c:4632
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4610
+#: src/libide/sourceview/ide-source-view.c:4634
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4724
+#: src/libide/sourceview/ide-source-view.c:4748
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: src/libide/sourceview/ide-source-view.c:5152
+#: src/libide/sourceview/ide-source-view.c:5176
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5388
+#: src/libide/sourceview/ide-source-view.c:5412
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5414
+#: src/libide/sourceview/ide-source-view.c:5438
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
@@ -3238,6 +3244,7 @@ msgstr "Konfiguruje se projekt"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:150
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/gradle/gradle_plugin.py:111
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
@@ -3946,7 +3953,7 @@ msgid "Project Location"
 msgstr "Umístění projektu"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:93
-#: src/plugins/git/ide-git-clone-widget.ui:78
+#: src/plugins/git/ide-git-clone-widget.ui:81
 msgid "Select Project Directory"
 msgstr "Výběr složky projektu"
 
@@ -4203,16 +4210,24 @@ msgstr "Soubor není pod správou pracovní složky git."
 msgid "The requested file does not exist within the git index."
 msgstr "Požadovaný soubor neexistuje v indexu git."
 
-#: src/plugins/git/ide-git-clone-widget.c:158
-#: src/plugins/git/ide-git-clone-widget.c:437
+#: src/plugins/git/ide-git-clone-widget.c:159
+#: src/plugins/git/ide-git-clone-widget.c:499
 msgid "A valid Git URL is required"
 msgstr "Je vyžadována platná adresa URL pro Git"
 
 #. translators: %s is replaced with the path to the project
-#: src/plugins/git/ide-git-clone-widget.c:171
+#: src/plugins/git/ide-git-clone-widget.c:172
 #, c-format
 msgid "Your project will be created at %s"
 msgstr "Váš projekt bude vytvořen ve složce %s"
+
+#: src/plugins/git/ide-git-clone-widget.c:216
+msgid "Apply"
+msgstr "Použít"
+
+#: src/plugins/git/ide-git-clone-widget.c:218
+msgid "Remote Branch to Clone"
+msgstr "Vzdálená větev, která se má naklonovat"
 
 #: src/plugins/git/ide-git-clone-widget.ui:37
 msgid "Use Git to create a local copy of a remotely hosted project."
@@ -4226,11 +4241,15 @@ msgstr "uzivatel@pocitac:repozitar.git"
 msgid "Enter the URL of your project’s source code repository"
 msgstr "Zadejte adresu URL repozitáře se zdrojovými kódy vašeho projektu"
 
-#: src/plugins/git/ide-git-clone-widget.ui:107
+#: src/plugins/git/ide-git-clone-widget.ui:70
+msgid "Change default branch"
+msgstr "Změnit výchozí větev"
+
+#: src/plugins/git/ide-git-clone-widget.ui:110
 msgid "Repository URL"
 msgstr "Adresa URL repozitáře"
 
-#: src/plugins/git/ide-git-clone-widget.ui:115
+#: src/plugins/git/ide-git-clone-widget.ui:118
 msgid "Project Destination"
 msgstr "Cíl projektu"
 
@@ -4303,11 +4322,11 @@ msgstr "Ve vašem počítači schází python3-sphinx"
 msgid "(Preview)"
 msgstr "(náhled)"
 
-#: src/plugins/jedi/jedi_plugin.py:752
+#: src/plugins/jedi/jedi_plugin.py:766
 msgid "Suggest Python completions"
 msgstr "Navrhovat dokončování pro Python"
 
-#: src/plugins/jedi/jedi_plugin.py:753
+#: src/plugins/jedi/jedi_plugin.py:767
 msgid "Use Jedi to provide completions for the Python language"
 msgstr "Používat Jedi pro dokončování v jazyce Python."
 
@@ -4342,6 +4361,118 @@ msgstr ""
 #, c-format
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
+msgid "Add toolchain"
+msgstr "Přidat sadu nástrojů"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
+msgid "Define a new custom toolchain targeting a specific platform"
+msgstr "Definovat novou vlastní sadu nástrojů cílící na určitou platformu"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:407
+msgid "No Provided Tool"
+msgstr "Není poskytován žádný nástroj"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
+msgid "A name to identify the sysroot."
+msgstr "Název pro rozlišení systémového kořene."
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
+msgid "Architecture"
+msgstr "Architektura"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
+msgid "The system architecture of the sysroot."
+msgstr "Systémová architektura systémového kořenu."
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
+msgid "Add Tool:"
+msgstr "Přidat nástroj:"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
+#: src/plugins/meson/gbp-meson-utils.c:96
+msgid "Compiler"
+msgstr "Kompilátor"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Preprocessor"
+msgstr "Preprocesor"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Archiver"
+msgstr "Archivátor"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Linker"
+msgstr "Linker"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Strip"
+msgstr "Striper"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Executable wrapper"
+msgstr "Nadstavbu programu"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:177
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Package Config"
+msgstr "Konfigurátor balíčků"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
+msgid "Any language"
+msgstr "Libovolný jazyk"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
+msgid "C"
+msgstr "C"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
+msgid "C++"
+msgstr "C++"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
+msgid "Python"
+msgstr "Python"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
+#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:33
+msgid "Vala"
+msgstr "Vala"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:194
+msgid "Fortran"
+msgstr "Fortran"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
+msgid "D"
+msgstr "D"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:227
+msgid "Add Tool"
+msgstr "Přidat nástroj"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:242
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
+msgid "Delete"
+msgstr "Smazat"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:248
+msgid "Delete Toolchain"
+msgstr "Odebrat sadu nástrojů"
+
+#: src/plugins/meson/gbp-meson-tool-row.ui:25
+msgid "Delete Tool"
+msgstr "Odebrat nástroj"
 
 #: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
@@ -4425,7 +4556,7 @@ msgstr "Sestavení selhalo"
 msgid "Project “%s” failed to build"
 msgstr "Sestavení projektu „%s“ selhalo"
 
-#: src/plugins/npm/npm_plugin.py:102
+#: src/plugins/npm/npm_plugin.py:111
 msgid "Downloading npm dependencies"
 msgstr "Stahují se závislosti npm"
 
@@ -4892,10 +5023,6 @@ msgstr ""
 "Začněte tím, v nabídce vyberete <a href=\"action://run-manager.run-with-"
 "handler::profiler\">Spustit s profilerem</a>"
 
-#: src/plugins/sysprof/gbp-sysprof-perspective.ui:81
-msgid "CPU"
-msgstr "Procesor"
-
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:357
 msgid "Open Profile"
 msgstr "Otevření záznamu profilování"
@@ -4929,18 +5056,6 @@ msgstr "Definuje nový systémový kořen cíle pro sestavení vůči jinému c�
 msgid "Sysroots"
 msgstr "Systémové kořeny"
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
-msgid "A name to identify the sysroot."
-msgstr "Název pro rozlišení systémového kořene."
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
-msgid "Architecture"
-msgstr "Architektura"
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
-msgid "The system architecture of the sysroot."
-msgstr "Systémová architektura systémového kořenu."
-
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
 msgstr "Absolutní souborová cesta k systémovému kořenu."
@@ -4952,10 +5067,6 @@ msgstr "Cesta ke konfiguraci balíčku"
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
 msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
 msgstr "Volitelné čárkou oddělené cesty určující PKG_CONFIG_PATH."
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
-msgid "Delete"
-msgstr "Smazat"
 
 #: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:147
 #, c-format
@@ -5006,10 +5117,6 @@ msgstr "Nový terminál ve složce"
 #: src/plugins/todo/gbp-todo-workbench-addin.c:115
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXME"
-
-#: src/plugins/vala-pack/ide-vala-preferences-addin.vala:33
-msgid "Vala"
-msgstr "Vala"
 
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
