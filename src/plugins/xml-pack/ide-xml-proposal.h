@@ -1,6 +1,6 @@
-/* ide-xml-completion-provider.h
+/* ide-xml-proposal.h
  *
- * Copyright 2017 Sebastien Lafargue <slafargue@gnome.org>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,13 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_XML_COMPLETION_PROVIDER (ide_xml_completion_provider_get_type())
+#define IDE_TYPE_XML_PROPOSAL (ide_xml_proposal_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeXmlCompletionProvider, ide_xml_completion_provider, IDE, XML_COMPLETION_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeXmlProposal, ide_xml_proposal, IDE, XML_PROPOSAL, GObject)
+
+IdeXmlProposal *ide_xml_proposal_new       (const gchar    *text,
+                                            const gchar    *label);
+const gchar    *ide_xml_proposal_get_label (IdeXmlProposal *self);
+const gchar    *ide_xml_proposal_get_text  (IdeXmlProposal *self);
 
 G_END_DECLS
