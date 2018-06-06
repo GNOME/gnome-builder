@@ -1076,9 +1076,31 @@ ide_xml_completion_provider_refilter (IdeCompletionProvider *provider,
                                       IdeCompletionContext  *context,
                                       GListModel            *model)
 {
+  g_autofree gchar *word = NULL;
+  g_autofree gchar *casefold = NULL;
+  guint n_items;
+
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
   g_assert (G_IS_LIST_MODEL (model));
+
+  n_items = g_list_model_get_n_items (model);
+  word = ide_completion_context_get_word (context);
+  casefold = g_utf8_casefold (word, -1);
+
+  /* TODO: This doesn't work with backspace. We need to track things
+   *       separately (with a custom model or something.
+   */
+
+  for (guint i = n_items; i > 0; i--)
+    {
+      g_autoptr(IdeXmlProposal) proposal = g_list_model_get_item (model, i - 1);
+      const gchar *label = ide_xml_proposal_get_label (proposal);
+      guint priority;
+
+      if (!ide_completion_item_fuzzy_match (label, casefold, &priority))
+        g_list_store_remove (G_LIST_STORE (model), i - 1);
+    }
 
   return TRUE;
 }
