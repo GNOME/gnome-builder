@@ -169,7 +169,7 @@ ide_snippet_completion_provider_display_proposal (IdeCompletionProvider   *provi
   g_assert (IDE_IS_SNIPPET_COMPLETION_ITEM (proposal));
 
   info = ide_snippet_completion_item_get_info (IDE_SNIPPET_COMPLETION_ITEM (proposal));
-  highlight = ide_completion_item_fuzzy_highlight (info->name, typed_text);
+  highlight = ide_completion_fuzzy_highlight (info->name, typed_text);
 
   /* TODO: have jimmac make us a real icon */
   ide_completion_list_box_row_set_icon_name (row, "ui-section-symbolic");

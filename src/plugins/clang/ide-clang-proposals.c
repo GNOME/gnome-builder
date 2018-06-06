@@ -320,7 +320,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
             }
 
           if (keyword == NULL ||
-              !ide_completion_item_fuzzy_match (keyword, folded, &item->priority))
+              !ide_completion_fuzzy_match (keyword, folded, &item->priority))
             g_array_remove_index_fast (self->match_indexes, i - 1);
         }
 
@@ -366,7 +366,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
             {
               Item item = { index, 0, typed_text };
 
-              if (ide_completion_item_fuzzy_match (typed_text, folded, &item.priority))
+              if (ide_completion_fuzzy_match (typed_text, folded, &item.priority))
                 g_array_append_val (self->match_indexes, item);
             }
 

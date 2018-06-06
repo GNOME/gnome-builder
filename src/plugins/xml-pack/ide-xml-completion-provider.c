@@ -1098,7 +1098,7 @@ ide_xml_completion_provider_refilter (IdeCompletionProvider *provider,
       const gchar *label = ide_xml_proposal_get_label (proposal);
       guint priority;
 
-      if (!ide_completion_item_fuzzy_match (label, casefold, &priority))
+      if (!ide_completion_fuzzy_match (label, casefold, &priority))
         g_list_store_remove (G_LIST_STORE (model), i - 1);
     }
 

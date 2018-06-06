@@ -85,7 +85,7 @@ namespace Ide
 		{
 			GLib.StringBuilder str = new GLib.StringBuilder ();
 
-			var highlight = Ide.CompletionItem.fuzzy_highlight (this.symbol.name, typed_text != null ? typed_text : "");
+			var highlight = Ide.Completion.fuzzy_highlight (this.symbol.name, typed_text != null ? typed_text : "");
 
 			if (highlight != null)
 				str.append(highlight);

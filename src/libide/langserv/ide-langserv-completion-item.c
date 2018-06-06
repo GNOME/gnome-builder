@@ -24,7 +24,7 @@
 
 #include "ide-debug.h"
 
-#include "completion/ide-completion-item.h"
+#include "completion/ide-completion.h"
 #include "langserv/ide-langserv-completion-item.h"
 #include "langserv/ide-langserv-util.h"
 #include "snippets/ide-snippet-chunk.h"
@@ -95,7 +95,7 @@ ide_langserv_completion_item_get_markup (IdeLangservCompletionItem *self,
 {
   g_return_val_if_fail (IDE_IS_LANGSERV_COMPLETION_ITEM (self), NULL);
 
-  return ide_completion_item_fuzzy_highlight (self->label, typed_text);
+  return ide_completion_fuzzy_highlight (self->label, typed_text);
 }
 
 const gchar *

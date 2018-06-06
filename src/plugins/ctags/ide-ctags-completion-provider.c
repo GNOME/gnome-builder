@@ -413,7 +413,7 @@ ide_ctags_completion_provider_display_proposal (IdeCompletionProvider   *provide
   IdeCtagsCompletionItem *item = IDE_CTAGS_COMPLETION_ITEM (proposal);
   g_autofree gchar *highlight = NULL;
 
-  highlight = ide_completion_item_fuzzy_highlight (item->entry->name, typed_text);
+  highlight = ide_completion_fuzzy_highlight (item->entry->name, typed_text);
 
   ide_completion_list_box_row_set_icon_name (row, get_icon_name (item));
   ide_completion_list_box_row_set_left (row, NULL);

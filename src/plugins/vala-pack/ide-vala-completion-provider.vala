@@ -294,7 +294,7 @@ namespace Ide
 				return true;
 			}
 
-			if (Ide.CompletionItem.fuzzy_match (item.get_name (), this.filter, out priority))
+			if (Ide.Completion.fuzzy_match (item.get_name (), this.filter, out priority))
 			{
 				item.set_priority (priority);
 				return true;

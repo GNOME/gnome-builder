@@ -185,7 +185,7 @@ ide_ctags_results_populate_worker (IdeTask      *task,
           if (!ide_ctags_is_allowed (entry, p->suffixes))
             continue;
 
-          if (ide_completion_item_fuzzy_match (entry->name, p->casefold, &priority))
+          if (ide_completion_fuzzy_match (entry->name, p->casefold, &priority))
             {
               Item item;
 

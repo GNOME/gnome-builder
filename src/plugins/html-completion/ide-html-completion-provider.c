@@ -422,7 +422,7 @@ ide_html_completion_provider_display_proposal (IdeCompletionProvider   *provider
   g_assert (IDE_IS_HTML_PROPOSAL (proposal));
 
   word = ide_html_proposal_get_word (IDE_HTML_PROPOSAL (proposal));
-  markup = ide_completion_item_fuzzy_highlight (word, typed_text);
+  markup = ide_completion_fuzzy_highlight (word, typed_text);
   kind = ide_html_proposal_get_kind (IDE_HTML_PROPOSAL (proposal));
 
   switch (kind)

@@ -72,5 +72,12 @@ IDE_AVAILABLE_IN_3_30
 void                  ide_completion_move_cursor         (IdeCompletion         *self,
                                                           GtkMovementStep        step,
                                                           gint                   direction);
+IDE_AVAILABLE_IN_3_30
+gboolean              ide_completion_fuzzy_match         (const gchar           *haystack,
+                                                          const gchar           *casefold_needle,
+                                                          guint                 *priority);
+IDE_AVAILABLE_IN_3_30
+gchar                *ide_completion_fuzzy_highlight     (const gchar           *haystack,
+                                                          const gchar           *casefold_query);
 
 G_END_DECLS

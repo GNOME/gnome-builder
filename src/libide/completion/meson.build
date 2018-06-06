@@ -1,7 +1,6 @@
 completion_headers = [
   'ide-completion-context.h',
   'ide-completion-display.h',
-  'ide-completion-item.h',
   'ide-completion-list-box-row.h',
   'ide-completion-list-box.h',
   'ide-completion-overlay.h',
@@ -17,7 +16,6 @@ completion_sources = [
   'ide-completion.c',
   'ide-completion-context.c',
   'ide-completion-display.c',
-  'ide-completion-item.c',
   'ide-completion-list-box.c',
   'ide-completion-list-box-row.c',
   'ide-completion-overlay.c',
