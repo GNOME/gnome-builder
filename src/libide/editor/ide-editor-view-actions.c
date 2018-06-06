@@ -538,6 +538,19 @@ ide_editor_view_actions_properties (GSimpleAction *action,
   _ide_editor_perspective_show_properties (IDE_EDITOR_PERSPECTIVE (editor), self);
 }
 
+static void
+ide_editor_view_actions_toggle_map (GSimpleAction *action,
+                                    GVariant      *variant,
+                                    gpointer       user_data)
+{
+  IdeEditorView *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+
+  ide_editor_view_set_show_map (self, !ide_editor_view_get_show_map (self));
+}
+
 static const GActionEntry editor_view_entries[] = {
   { "activate-next-search-result", ide_editor_view_actions_activate_next_search_result },
   { "find", ide_editor_view_actions_find },
@@ -552,6 +565,7 @@ static const GActionEntry editor_view_entries[] = {
   { "reload", ide_editor_view_actions_reload },
   { "save", ide_editor_view_actions_save },
   { "save-as", ide_editor_view_actions_save_as },
+  { "toggle-map", ide_editor_view_actions_toggle_map },
 };
 
 void
