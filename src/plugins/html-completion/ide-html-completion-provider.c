@@ -414,6 +414,7 @@ ide_html_completion_provider_display_proposal (IdeCompletionProvider   *provider
 {
   g_autofree gchar *markup = NULL;
   const gchar *word;
+  IdeHtmlProposalKind kind;
 
   g_assert (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
@@ -422,8 +423,25 @@ ide_html_completion_provider_display_proposal (IdeCompletionProvider   *provider
 
   word = ide_html_proposal_get_word (IDE_HTML_PROPOSAL (proposal));
   markup = ide_completion_item_fuzzy_highlight (word, typed_text);
+  kind = ide_html_proposal_get_kind (IDE_HTML_PROPOSAL (proposal));
 
-  ide_completion_list_box_row_set_icon_name (row, NULL);
+  switch (kind)
+    {
+    case IDE_HTML_PROPOSAL_CSS_PROPERTY:
+      /* probably could use something css specific */
+      ide_completion_list_box_row_set_icon_name (row, "ui-property-symbolic");
+      break;
+
+    case IDE_HTML_PROPOSAL_ELEMENT_START:
+    case IDE_HTML_PROPOSAL_ELEMENT_END:
+    case IDE_HTML_PROPOSAL_ATTRIBUTE_NAME:
+    case IDE_HTML_PROPOSAL_ATTRIBUTE_VALUE:
+    case IDE_HTML_PROPOSAL_NONE:
+    default:
+      ide_completion_list_box_row_set_icon_name (row, NULL);
+      break;
+    }
+
   ide_completion_list_box_row_set_left (row, NULL);
   ide_completion_list_box_row_set_right (row, NULL);
   ide_completion_list_box_row_set_center_markup (row, markup);
