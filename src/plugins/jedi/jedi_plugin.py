@@ -535,7 +535,7 @@ class JediCompletionProvider(Ide.Object, GtkSource.CompletionProvider, Ide.Compl
         self.context = None
 
 
-class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
+class JediCompletionProposal(GObject.Object, GtkSource.CompletionProposal):
     def __init__(self, provider, context, variant, index, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.provider = provider
@@ -572,7 +572,7 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
 
     def do_match(self, query, casefold):
         label = self.completion_label
-        ret, priority = Ide.CompletionItem.fuzzy_match(label, self.provider.current_word_lower)
+        ret, priority = Ide.Completion.fuzzy_match(label, self.provider.current_word_lower)
         # Penalize words that start with __ like __eq__.
         if label.startswith('__'):
             priority += 1000
@@ -581,7 +581,7 @@ class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
 
     def do_get_markup(self):
         label = self.completion_label
-        name = Ide.CompletionItem.fuzzy_highlight(label, self.provider.current_word_lower)
+        name = Ide.Completion.fuzzy_highlight(label, self.provider.current_word_lower)
         if self.completion_type == _TYPE_FUNCTION:
             params = self.completion_params
             if params is not None:

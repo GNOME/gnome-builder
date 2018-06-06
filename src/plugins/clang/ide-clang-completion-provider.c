@@ -261,7 +261,7 @@ ide_clang_completion_provider_display_proposal (IdeCompletionProvider   *provide
   g_autofree gchar *markup = NULL;
   g_autofree gchar *highlight = NULL;
 
-  highlight = ide_completion_item_fuzzy_highlight (item->typed_text, typed_text);
+  highlight = ide_completion_fuzzy_highlight (item->typed_text, typed_text);
   ide_completion_list_box_row_set_icon_name (row, item->icon_name);
   ide_completion_list_box_row_set_left (row, item->return_type);
   markup = g_strdup_printf ("%s%s<span fgalpha='32767'>%s</span>",

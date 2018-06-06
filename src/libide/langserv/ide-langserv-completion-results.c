@@ -22,7 +22,7 @@
 
 #include "ide-debug.h"
 
-#include "completion/ide-completion-item.h"
+#include "completion/ide-completion.h"
 #include "langserv/ide-langserv-completion-item.h"
 #include "langserv/ide-langserv-completion-results.h"
 
@@ -177,7 +177,7 @@ ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
       if (!g_variant_lookup (node, "label", "&s", &label))
         continue;
 
-      if (ide_completion_item_fuzzy_match (label, query, &priority))
+      if (ide_completion_fuzzy_match (label, query, &priority))
         {
           Item item = { .index = index, .priority = priority };
           g_array_append_val (self->items, item);
