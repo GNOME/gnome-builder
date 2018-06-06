@@ -3176,7 +3176,7 @@ msgstr "Resultado de la construcción"
 #. translators: valid values are 'true' or 'false', untranslated. If the buttons in the build popover are too large because of translations, set to false to disable homogeneous sizing
 #: src/libide/workbench/ide-omni-bar.ui:540
 msgid "true"
-msgstr "cierto"
+msgstr "true"
 
 #: src/libide/workbench/ide-omni-bar.ui:545
 msgctxt "button"
