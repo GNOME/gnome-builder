@@ -1,6 +1,6 @@
-/* ide-html-completion-provider.h
+/* ide-html-proposal.h
  *
- * Copyright 2014 Christian Hergert <christian@hergert.me>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,12 +18,20 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <ide.h>
+
+#include "ide-html-proposals.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_HTML_COMPLETION_PROVIDER (ide_html_completion_provider_get_type())
+#define IDE_TYPE_HTML_PROPOSAL (ide_html_proposal_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeHtmlCompletionProvider, ide_html_completion_provider, IDE, HTML_COMPLETION_PROVIDER, GObject)
+G_DECLARE_FINAL_TYPE (IdeHtmlProposal, ide_html_proposal, IDE, HTML_PROPOSAL, GObject)
+
+IdeHtmlProposal     *ide_html_proposal_new         (const gchar         *word,
+                                                    IdeHtmlProposalKind  kind);
+const gchar         *ide_html_proposal_get_word    (IdeHtmlProposal     *word);
+IdeSnippet          *ide_html_proposal_get_snippet (IdeHtmlProposal     *self);
+IdeHtmlProposalKind  ide_html_proposal_get_kind    (IdeHtmlProposal     *self);
 
 G_END_DECLS

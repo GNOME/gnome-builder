@@ -1,6 +1,6 @@
-/* ide-html-completion-provider.h
+/* html-completion-plugin.c
  *
- * Copyright 2014 Christian Hergert <christian@hergert.me>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,14 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include <ide.h>
+#include <libpeas/peas.h>
 
-#include <glib-object.h>
+#include "ide-html-completion-provider.h"
 
-G_BEGIN_DECLS
-
-#define IDE_TYPE_HTML_COMPLETION_PROVIDER (ide_html_completion_provider_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeHtmlCompletionProvider, ide_html_completion_provider, IDE, HTML_COMPLETION_PROVIDER, GObject)
-
-G_END_DECLS
+void
+ide_html_completion_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              IDE_TYPE_HTML_COMPLETION_PROVIDER);
+}
