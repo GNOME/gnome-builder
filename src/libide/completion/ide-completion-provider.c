@@ -114,6 +114,10 @@ ide_completion_provider_get_title (IdeCompletionProvider *self)
  *
  * Asynchronously requests the provider populate the contents.
  *
+ * For completion providers that can provide intermediate results immediately,
+ * use ide_completion_context_set_proposals_for_provider() to notify of results
+ * while the async operation is in progress.
+ *
  * Since: 3.28
  */
 void

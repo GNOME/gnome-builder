@@ -232,6 +232,14 @@ ide_clang_completion_provider_populate_async (IdeCompletionProvider  *provider,
   if (self->proposals == NULL)
     self->proposals = ide_clang_proposals_new (self->client);
 
+  /* Deliver results immediately until our updated results come in. Often what
+   * the user wants will be in the previous list too, and that can drop the
+   * latency a bit.
+   */
+  ide_completion_context_set_proposals_for_provider (context,
+                                                     provider,
+                                                     G_LIST_MODEL (self->proposals));
+
   ide_clang_proposals_populate_async (self->proposals,
                                       &begin,
                                       word,
