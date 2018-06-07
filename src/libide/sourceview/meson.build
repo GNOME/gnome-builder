@@ -6,6 +6,7 @@ sourceview_headers = [
   'ide-source-style-scheme.h',
   'ide-source-view.h',
   'ide-text-iter.h',
+  'ide-source-search-context.h',
 ]
 
 sourceview_sources = [
@@ -16,6 +17,7 @@ sourceview_sources = [
   'ide-source-style-scheme.c',
   'ide-source-view.c',
   'ide-text-iter.c',
+  'ide-source-search-context.c',
 ]
 
 sourceview_private_sources = [
