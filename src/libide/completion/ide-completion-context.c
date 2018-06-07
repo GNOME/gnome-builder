@@ -382,10 +382,24 @@ ide_completion_context_items_changed_cb (IdeCompletionContext  *self,
   ide_completion_context_update_empty (self);
 }
 
-static void
-ide_completion_context_set_results_for_provider (IdeCompletionContext  *self,
-                                                 IdeCompletionProvider *provider,
-                                                 GListModel            *results)
+/**
+ * ide_completion_context_set_proposals_for_provider:
+ * @self: an #IdeCompletionContext
+ * @provider: an #IdeCompletionProvider
+ * @results: (nullable): a #GListModel or %NULL
+ *
+ * This function allows providers to update their results for a context
+ * outside of a call to ide_completion_provider_populate_async(). This
+ * can be used to immediately return results for a provider while it does
+ * additional asynchronous work. Doing so will allow the completions to
+ * update while the operation is in progress.
+ *
+ * Since: 3.30
+ */
+void
+ide_completion_context_set_proposals_for_provider (IdeCompletionContext  *self,
+                                                   IdeCompletionProvider *provider,
+                                                   GListModel            *results)
 {
   guint position = 0;
 
@@ -403,7 +417,7 @@ ide_completion_context_set_results_for_provider (IdeCompletionContext  *self,
           guint n_added = 0;
 
           if (info->results == results)
-            break;
+            return;
 
           if (info->results != NULL)
             n_removed = g_list_model_get_n_items (info->results);
@@ -464,7 +478,7 @@ ide_completion_context_populate_cb (GObject      *object,
   if (!(results = ide_completion_provider_populate_finish (provider, result, &error)))
     ide_completion_context_mark_failed (self, provider, error);
   else
-    ide_completion_context_set_results_for_provider (self, provider, results);
+    ide_completion_context_set_proposals_for_provider (self, provider, results);
 
   task_data->n_active--;
 
