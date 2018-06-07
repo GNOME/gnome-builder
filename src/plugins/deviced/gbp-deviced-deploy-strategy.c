@@ -284,7 +284,7 @@ deploy_commit_cb (GObject      *object,
   state = ide_task_get_task_data (task);
 
   if (!ide_build_pipeline_build_finish (pipeline, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&task));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
     gbp_deviced_device_get_commit_async (state->device,
                                          state->app_id,
