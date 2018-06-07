@@ -448,7 +448,8 @@ ide_html_completion_provider_display_proposal (IdeCompletionProvider   *provider
 }
 
 static gint
-ide_html_completion_provider_get_priority (IdeCompletionProvider *provider)
+ide_html_completion_provider_get_priority (IdeCompletionProvider *provider,
+                                           IdeCompletionContext  *context)
 {
   return 200;
 }

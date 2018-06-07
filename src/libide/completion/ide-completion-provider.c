@@ -56,23 +56,29 @@ ide_completion_provider_get_icon (IdeCompletionProvider *self)
 /**
  * ide_completion_provider_get_priority:
  * @self: an #IdeCompletionProvider
+ * @context: an #IdeCompletionContext
  *
  * Gets the priority for the completion provider.
  *
  * This value is used to group all of the providers proposals together
  * when displayed, with relation to other providers.
  *
+ * The @context is provided as some providers may want to lower their
+ * priority based on the position of the completion.
+ *
  * Returns: an integer specific to the provider
  *
  * Since: 3.28
  */
 gint
-ide_completion_provider_get_priority (IdeCompletionProvider *self)
+ide_completion_provider_get_priority (IdeCompletionProvider *self,
+                                      IdeCompletionContext  *context)
 {
   g_return_val_if_fail (IDE_IS_COMPLETION_PROVIDER (self), 0);
+  g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (context), 0);
 
   if (IDE_COMPLETION_PROVIDER_GET_IFACE (self)->get_priority)
-    return IDE_COMPLETION_PROVIDER_GET_IFACE (self)->get_priority (self);
+    return IDE_COMPLETION_PROVIDER_GET_IFACE (self)->get_priority (self, context);
 
   return 0;
 }

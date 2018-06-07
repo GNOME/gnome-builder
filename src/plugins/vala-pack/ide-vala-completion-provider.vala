@@ -108,7 +108,7 @@ namespace Ide
 			return "Vala";
 		}
 
-		public int get_priority ()
+		public int get_priority (Ide.CompletionContext context)
 		{
 			return 200;
 		}
