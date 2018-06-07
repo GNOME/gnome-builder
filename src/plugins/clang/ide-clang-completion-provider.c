@@ -31,7 +31,8 @@ struct _IdeClangCompletionProvider
 };
 
 static gint
-ide_clang_completion_provider_get_priority (IdeCompletionProvider *provider)
+ide_clang_completion_provider_get_priority (IdeCompletionProvider *provider,
+                                            IdeCompletionContext  *context)
 {
   return 100;
 }

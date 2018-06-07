@@ -75,8 +75,22 @@ ide_snippet_completion_provider_load (IdeCompletionProvider *provider,
 }
 
 static gint
-ide_snippet_completion_provider_get_priority (IdeCompletionProvider *provider)
+ide_snippet_completion_provider_get_priority (IdeCompletionProvider *provider,
+                                              IdeCompletionContext  *context)
 {
+  GtkTextIter begin, end;
+
+  if (ide_completion_context_get_bounds (context, &begin, &end))
+    {
+      while (!gtk_text_iter_starts_line (&begin) &&
+             gtk_text_iter_backward_char (&begin))
+        {
+          /* Penalize the priority if we aren't at the beginning of the line */
+          if (!g_unichar_isspace (gtk_text_iter_get_char (&begin)))
+            return 500;
+        }
+    }
+
   return -100;
 }
 

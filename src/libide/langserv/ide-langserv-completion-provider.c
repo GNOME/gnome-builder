@@ -163,7 +163,8 @@ ide_langserv_completion_provider_set_client (IdeLangservCompletionProvider *self
 }
 
 static gint
-ide_langserv_completion_provider_get_priority (IdeCompletionProvider *provider)
+ide_langserv_completion_provider_get_priority (IdeCompletionProvider *provider,
+                                               IdeCompletionContext  *context)
 {
   return IDE_LANGSERV_COMPLETION_PROVIDER_PRIORITY;
 }

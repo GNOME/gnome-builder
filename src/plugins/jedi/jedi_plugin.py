@@ -432,7 +432,7 @@ class JediCompletionProvider(Ide.Object, Ide.CompletionProvider):
     def do_get_icon(self):
         return None
 
-    def do_get_priority(self):
+    def do_get_priority(self, context):
         return 200
 
     def do_load(self, context):
@@ -509,9 +509,6 @@ class JediCompletionProvider(Ide.Object, Ide.CompletionProvider):
 
     def do_populate_finish(self, result):
         return result.propagate_object()
-
-    def do_get_priority(self):
-        return 200
 
     def do_refilter(self, context, model):
         word = context.get_word().lower()

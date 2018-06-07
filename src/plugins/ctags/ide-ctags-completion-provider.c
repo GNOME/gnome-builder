@@ -323,7 +323,8 @@ ide_ctags_completion_provider_populate_finish (IdeCompletionProvider  *provider,
 }
 
 static gint
-ide_ctags_completion_provider_get_priority (IdeCompletionProvider *provider)
+ide_ctags_completion_provider_get_priority (IdeCompletionProvider *provider,
+                                            IdeCompletionContext  *context)
 {
   return IDE_CTAGS_COMPLETION_PROVIDER_PRIORITY;
 }

@@ -39,7 +39,8 @@ struct _IdeCompletionProviderInterface
   void        (*load)              (IdeCompletionProvider    *self,
                                     IdeContext               *context);
   GIcon      *(*get_icon)          (IdeCompletionProvider    *self);
-  gint        (*get_priority)      (IdeCompletionProvider    *self);
+  gint        (*get_priority)      (IdeCompletionProvider    *self,
+                                    IdeCompletionContext     *context);
   gchar      *(*get_title)         (IdeCompletionProvider    *self);
   void        (*populate_async)    (IdeCompletionProvider    *self,
                                     IdeCompletionContext     *context,
@@ -74,7 +75,8 @@ struct _IdeCompletionProviderInterface
 IDE_AVAILABLE_IN_3_30
 GIcon      *ide_completion_provider_get_icon         (IdeCompletionProvider    *self);
 IDE_AVAILABLE_IN_3_30
-gint        ide_completion_provider_get_priority     (IdeCompletionProvider    *self);
+gint        ide_completion_provider_get_priority     (IdeCompletionProvider    *self,
+                                                      IdeCompletionContext     *context);
 IDE_AVAILABLE_IN_3_30
 gchar      *ide_completion_provider_get_title        (IdeCompletionProvider    *self);
 IDE_AVAILABLE_IN_3_30

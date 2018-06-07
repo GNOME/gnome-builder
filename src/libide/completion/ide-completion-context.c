@@ -95,13 +95,15 @@ clear_provider_info (gpointer data)
 
 static gint
 compare_provider_info (gconstpointer a,
-                       gconstpointer b)
+                       gconstpointer b,
+                       gpointer      user_data)
 {
+  IdeCompletionContext *self = user_data;
   const ProviderInfo *info_a = a;
   const ProviderInfo *info_b = b;
 
-  return ide_completion_provider_get_priority (info_a->provider) -
-         ide_completion_provider_get_priority (info_b->provider);
+  return ide_completion_provider_get_priority (info_a->provider, self) -
+         ide_completion_provider_get_priority (info_b->provider, self);
 }
 
 static void
@@ -319,7 +321,7 @@ _ide_completion_context_add_provider (IdeCompletionContext  *self,
   info.results = NULL;
 
   g_array_append_val (self->providers, info);
-  g_array_sort (self->providers, compare_provider_info);
+  g_array_sort_with_data (self->providers, compare_provider_info, self);
 }
 
 void
@@ -508,6 +510,7 @@ _ide_completion_context_complete_async (IdeCompletionContext *self,
   g_autoptr(IdeTask) task = NULL;
   CompleteTaskData *task_data;
   GtkTextBuffer *buffer;
+  guint n_items;
 
   g_return_if_fail (IDE_IS_COMPLETION_CONTEXT (self));
   g_return_if_fail (self->has_populated == FALSE);
@@ -554,6 +557,11 @@ _ide_completion_context_complete_async (IdeCompletionContext *self,
                                               ide_completion_context_populate_cb,
                                               g_object_ref (task));
     }
+
+  /* Providers may adjust their position based on our new marks */
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
+  g_array_sort_with_data (self->providers, compare_provider_info, self);
+  g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
 
   if (task_data->n_active == 0)
       ide_task_return_boolean (task, TRUE);

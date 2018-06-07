@@ -82,7 +82,7 @@ class CompletionProvider(Ide.Object, Ide.CompletionProvider):
         buffer.insert(begin, proposal.completion, -1)
         buffer.end_user_action()
 
-    def do_get_priority(self):
+    def do_get_priority(self, context):
         # This provider only activates when it is very likely that we
         # want the results. So use high priority (negative is better).
         return -1000
