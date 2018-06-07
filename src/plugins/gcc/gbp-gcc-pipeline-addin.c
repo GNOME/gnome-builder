@@ -20,11 +20,11 @@
 
 #include "gbp-gcc-pipeline-addin.h"
 
-#define ERROR_FORMAT_REGEX               \
-  "(?<filename>[a-zA-Z0-9\\-\\.\\/_]+):" \
-  "(?<line>\\d+):"                       \
-  "(?<column>\\d+): "                    \
-  "(?<level>[\\w\\s]+): "                \
+#define ERROR_FORMAT_REGEX                  \
+  "(?<filename>[a-zA-Z0-9\\+\\-\\.\\/_]+):" \
+  "(?<line>\\d+):"                          \
+  "(?<column>\\d+): "                       \
+  "(?<level>[\\w\\s]+): "                   \
   "(?<message>.*)"
 
 struct _GbpGccPipelineAddin
