@@ -66,6 +66,24 @@ find_runtime (IdeWorkbench *workbench)
   return ide_configuration_get_runtime (config);
 }
 
+static gchar *
+find_builddir (IdeWorkbench *workbench)
+{
+  IdeContext *context;
+  IdeBuildManager *build_manager;
+  IdeBuildPipeline *pipeline;
+  const gchar *builddir = NULL;
+
+  if ((context = ide_workbench_get_context (workbench)) &&
+      (build_manager = ide_context_get_build_manager (context)) &&
+      (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
+      (builddir = ide_build_pipeline_get_builddir (pipeline)) &&
+      g_file_test (builddir, G_FILE_TEST_IS_DIR))
+    return g_strdup (builddir);
+
+  return NULL;
+}
+
 static void
 new_terminal_activate (GSimpleAction *action,
                        GVariant      *param,
@@ -86,7 +104,10 @@ new_terminal_activate (GSimpleAction *action,
   name = g_action_get_name (G_ACTION (action));
 
   if (g_strcmp0 (name, "new-terminal-in-runtime") == 0)
-    runtime = find_runtime (self->workbench);
+    {
+      runtime = find_runtime (self->workbench);
+      cwd = find_builddir (self->workbench);
+    }
   else if (g_strcmp0 (name, "debug-terminal") == 0)
     run_on_host = FALSE;
 
