@@ -271,7 +271,7 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
   IdeSourceView *source_view;
   GtkTextBuffer *buffer;
   const gchar *param;
-  GtkSourceCompletion *completion;
+  IdeCompletion *completion;
   GtkSourceLanguage *lang;
   const gchar *start_tag;
   const gchar *end_tag = NULL;
@@ -291,7 +291,7 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
     return;
 
   editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (source_view));
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (source_view));
+  completion = ide_source_view_get_completion (IDE_SOURCE_VIEW (source_view));
   lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
   if (!editable || lang == NULL)
     return;
@@ -340,25 +340,25 @@ gbp_comment_code_view_addin_comment_action (GSimpleAction *action,
      if (indent == G_MAXINT)
        return;
 
-      gtk_source_completion_block_interactive (completion);
+      ide_completion_block_interactive (completion);
       gtk_text_buffer_begin_user_action (buffer);
 
       for (gint line = start_line; line <= end_line; ++line)
         gbp_comment_code_view_addin_comment_line (buffer, start_tag, end_tag, line, indent, block_comment);
 
       gtk_text_buffer_end_user_action (buffer);
-      gtk_source_completion_unblock_interactive (completion);
+      ide_completion_unblock_interactive (completion);
     }
   else if (*param == '1')
     {
-      gtk_source_completion_block_interactive (completion);
+      ide_completion_block_interactive (completion);
       gtk_text_buffer_begin_user_action (buffer);
 
       for (gint line = start_line; line <= end_line; ++line)
         gbp_comment_code_view_addin_uncomment_line (buffer, start_tag, end_tag, line, block_comment);
 
       gtk_text_buffer_end_user_action (buffer);
-      gtk_source_completion_unblock_interactive (completion);
+      ide_completion_unblock_interactive (completion);
     }
   else
     g_assert_not_reached ();
