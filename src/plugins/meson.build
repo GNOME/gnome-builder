@@ -73,6 +73,7 @@ subdir('terminal')
 subdir('todo')
 subdir('vala-pack')
 subdir('valgrind')
+subdir('words')
 subdir('xml-pack')
 
 gnome_builder_plugins = shared_library(
@@ -152,6 +153,7 @@ status += [
   'Todo .................. : @0@'.format(get_option('with_todo')),
   'Vala Language Pack .... : @0@'.format(get_option('with_vala_pack')),
   'Valgrind .............. : @0@'.format(get_option('with_valgrind')),
+  'Word Completion ....... : @0@'.format(get_option('with_words')),
   'XML Language Pack ..... : @0@'.format(get_option('with_xml_pack')),
   '', '',
 
