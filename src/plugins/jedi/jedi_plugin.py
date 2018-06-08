@@ -55,6 +55,7 @@ from gi.repository import GtkSource
 from gi.repository import Ide
 from gi.types import GObjectMeta
 from gi.types import StructMeta
+
 _ = Ide.gettext
 
 gi_importer = DynamicImporter('gi.repository')
@@ -86,6 +87,12 @@ _ICONS = {
     _TYPE_IMPORT: 'lang-namespace-symbolic',
     _TYPE_MODULE: 'lang-namespace-symbolic',
 }
+
+_PROXY_TASK = None
+
+def return_error(task, error):
+    #print(repr(error))
+    task.return_error(GLib.Error(message=repr(error)))
 
 try:
     import jedi
@@ -362,243 +369,151 @@ def update_doc_db_on_startup():
 
 update_doc_db_on_startup()
 
-class JediCompletionProvider(Ide.Object, GtkSource.CompletionProvider, Ide.CompletionProvider):
+def get_proxy_cb(app, result, task):
+    try:
+        worker = app.get_worker_finish(result)
+        task.return_object(worker)
+    except Exception as ex:
+        return_error(task, ex)
+
+def get_proxy_async(cancellable, callback, data):
+    global _PROXY_TASK
+
+    task = Ide.Task.new(None, None, callback, data)
+    task.set_name('get-jedi-proxy')
+
+    if _PROXY_TASK:
+        _PROXY_TASK.chain(task)
+        return
+
+    task.set_release_on_propagate(False)
+    _PROXY_TASK = task
+
+    app = Gio.Application.get_default()
+    app.get_worker_async('jedi_plugin', None, get_proxy_cb, task)
+
+def get_proxy_finish(result):
+    return result.propagate_object()
+
+def code_complete_cb(proxy, result, task):
+    try:
+        variant = proxy.call_finish(result)
+        task.variant = variant.get_child_value(0)
+        task.return_boolean(True)
+    except Exception as ex:
+        return_error(task, ex)
+
+def code_complete_async(proxy, filename, line, line_offset, text, cancellable, callback, data=None):
+    task = Ide.Task.new(proxy, cancellable, callback, data)
+    task.set_name('jedi-code-complete')
+
+    proxy.call('CodeComplete',
+               GLib.Variant('(siis)', (filename, line, line_offset, text)),
+               0, 10000, cancellable, code_complete_cb, task)
+
+def code_complete_finish(proxy, task):
+    task.propagate_boolean()
+    return task.variant
+
+class JediCompletionProvider(Ide.Object, Ide.CompletionProvider):
     context = None
     current_word = None
     results = None
     thread = None
-    line_str = None
     line = -1
     line_offset = -1
     loading_proxy = False
 
     proxy = None
 
-    def do_get_name(self):
-        return 'Jedi Provider'
+    def do_get_title(self):
+        return 'Jedi'
 
     def do_get_icon(self):
         return None
 
-    def invalidates(self, line_str):
-        if not line_str.startswith(self.line_str):
-            return True
-        suffix = line_str[len(self.line_str):]
-        for ch in suffix:
-            if ch in (')', '.', ']'):
-                return True
-        return False
-
-    def do_populate(self, context):
-        self.current_word = Ide.CompletionProvider.context_current_word(context) or ''
-        self.current_word_lower = self.current_word.lower()
-
-        _, iter = context.get_iter()
-
-        begin = iter.copy()
-        begin.set_line_offset(0)
-        line_str = begin.get_slice(iter)
-
-        # If we have no results yet, but a thread is active and mostly matches
-        # our line prefix, then we should just let that one continue but tell
-        # it to deliver to our new context.
-        if self.context is not None:
-            if not line_str.startswith(self.line_str):
-                self.cancellable.cancel()
-        self.context = context
-
-        if iter.get_line() == self.line and not self.invalidates(line_str):
-            if self.results and self.results.replay(self.current_word):
-                self.results.present(self, context)
-                return
-
-        self.line_str = line_str
-
-        buffer = iter.get_buffer()
-
-        begin, end = buffer.get_bounds()
-        filename = (iter.get_buffer()
-                        .get_file()
-                        .get_file()
-                        .get_path())
-
-        text = buffer.get_text(begin, end, True)
-        line = iter.get_line() + 1
-        column = iter.get_line_offset()
-
-        self.line = iter.get_line()
-        self.line_offset = iter.get_line_offset()
-
-        results = Ide.CompletionResults(query=self.current_word)
-
-        self.cancellable = cancellable = Gio.Cancellable()
-        context.connect('cancelled', lambda *_: cancellable.cancel())
-
-        def async_handler(proxy, result, user_data):
-            (self, results, context) = user_data
-
-            try:
-                variant = proxy.call_finish(result)
-                # unwrap outer tuple
-                variant = variant.get_child_value(0)
-                for i in range(variant.n_children()):
-                    proposal = JediCompletionProposal(self, context, variant, i)
-                    results.take_proposal(proposal)
-                self.complete(context, results)
-            except Exception as ex:
-                if isinstance(ex, GLib.Error) and \
-                   ex.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
-                    return
-                print(repr(ex))
-                context.add_proposals(self, [], True)
-
-        self.proxy.call('CodeComplete',
-                        GLib.Variant('(siis)', (filename, self.line, self.line_offset, text)),
-                        0, 10000, cancellable, async_handler, (self, results, context))
-
-    def do_match(self, context):
-        if not HAS_JEDI:
-            return False
-
-        if not self.proxy and not self.loading_proxy:
-            def get_worker_cb(app, result):
-                self.loading_proxy = False
-                self.proxy = app.get_worker_finish(result)
-            self.loading_proxy = True
-            app = Gio.Application.get_default()
-            app.get_worker_async('jedi_plugin', None, get_worker_cb)
-
-        if not self.proxy:
-            return False
-
-        if context.get_activation() == GtkSource.CompletionActivation.INTERACTIVE:
-            _, iter = context.get_iter()
-            iter.backward_char()
-            ch = iter.get_char()
-            if not (ch in ('_', '.') or ch.isalnum()):
-                return False
-            buffer = iter.get_buffer()
-            if Ide.CompletionProvider.context_in_comment_or_string(context):
-                return False
-
-        return True
-
-    def do_get_start_iter(self, context, proposal):
-        _, iter = context.get_iter()
-        if self.line != -1 and self.line_offset != -1:
-            iter.set_line(self.line)
-            iter.set_line_offset(0)
-            line_offset = self.line_offset
-            while not iter.ends_line() and line_offset > 0:
-                if not iter.forward_char():
-                    break
-                line_offset -= 1
-        return True, iter
-
-    def do_activate_proposal(self, proposal, iter):
-        # We may have generated completions a few characters before
-        # our current insertion mark. So let's delete any of that
-        # transient text.
-        if iter.get_line() == self.line:
-            begin = iter.copy()
-            begin.set_line_offset(0)
-            line_offset = self.line_offset
-            while not begin.ends_line() and line_offset > 0:
-                if not begin.forward_char():
-                    break
-                line_offset -= 1
-            buffer = iter.get_buffer()
-            buffer.begin_user_action()
-            buffer.delete(begin, iter)
-            buffer.end_user_action()
-
-        snippet = JediSnippet(proposal)
-        proposal.context.props.completion.props.view.push_snippet(snippet, None)
-
-        self.results = None
-        self.line = -1
-        self.line_offset = -1
-
-        return True, None
-
-    def do_get_interactive_delay(self):
-        return -1
-
-    def do_get_priority(self):
+    def do_get_priority(self, context):
         return 200
 
-    def complete(self, context, results):
-        # If context and self.context are not the same, that means
-        # we stole the results of this task for a later completion.
-        self.results = results
-        self.results.present(self, self.context)
-        self.context = None
+    def do_load(self, context):
+        pass
 
+    def do_get_comment(self, proposal):
+        return proposal.get_comment()
 
-class JediCompletionProposal(Ide.CompletionItem, GtkSource.CompletionProposal):
-    def __init__(self, provider, context, variant, index, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.provider = provider
-        self.context = context
-        self._variant = variant
-        self._index = index
+    def do_activate_proposal(self, context, proposal, key):
+        buffer = context.get_buffer()
+        view = context.get_view()
 
-    @property
-    def variant(self):
-        return self._variant.get_child_value(self._index)
+        _, begin, end = context.get_bounds()
 
-    @property
-    def completion_type(self):
-        return self.variant.get_child_value(0).get_int32()
+        snippet = proposal.get_snippet()
 
-    @property
-    def completion_label(self):
-        return self.variant.get_child_value(1).get_string()
+        buffer.begin_user_action()
+        buffer.delete(begin, end)
+        view.push_snippet(snippet, begin)
+        buffer.end_user_action()
 
-    @property
-    def completion_text(self):
-        return self.variant.get_child_value(2).get_string()
+    def do_display_proposal(self, row, context, typed_text, proposal):
+        casefold = typed_text.lower()
 
-    @property
-    def completion_params(self):
-        return self.variant.get_child_value(3).unpack()
+        row.set_icon_name(proposal.get_icon_name())
+        row.set_left(None)
+        row.set_center_markup(proposal.get_markup(casefold))
+        row.set_right(None)
 
-    @property
-    def completion_doc(self):
-        return self.variant.get_child_value(4).get_string()
+    def do_is_trigger(self, iter, ch):
+        if ch == '.':
+            buffer = iter.get_buffer()
+            if buffer.iter_has_context_class(iter, 'string') or \
+               buffer.iter_has_context_class(iter, 'comment'):
+                return False
+            return True
+        return False
 
-    def do_get_label(self):
-        return self.completion_label
+    def do_populate_async(self, context, cancellable, callback, data):
+        task = Ide.Task.new(self, None, callback)
+        task.set_name('jedi-completion')
 
-    def do_match(self, query, casefold):
-        label = self.completion_label
-        ret, priority = Ide.CompletionItem.fuzzy_match(label, self.provider.current_word_lower)
-        # Penalize words that start with __ like __eq__.
-        if label.startswith('__'):
-            priority += 1000
-        self.set_priority(priority)
-        return ret
+        self.current_word = context.get_word()
+        self.current_word_lower = self.current_word.lower()
 
-    def do_get_markup(self):
-        label = self.completion_label
-        name = Ide.CompletionItem.fuzzy_highlight(label, self.provider.current_word_lower)
-        if self.completion_type == _TYPE_FUNCTION:
-            params = self.completion_params
-            if params is not None:
-                return ''.join([name, '(', ', '.join(self.completion_params), ')'])
-            else:
-                return name + '()'
-        return name
+        _, iter, _ = context.get_bounds()
 
-    def do_get_text(self):
-        return self.completion_text
+        buffer = context.get_buffer()
 
-    def do_get_icon_name(self):
-        return _ICONS.get(self.completion_type, None)
+        begin, end = buffer.get_bounds()
 
-    def do_get_info(self):
-        return self.completion_doc
+        task.filename = buffer.get_file().get_file().get_path()
+        task.line = iter.get_line()
+        task.line_offset = iter.get_line_offset()
+        #if task.line_offset > 0:
+        #    task.line_offset -= 1
+        task.text = buffer.get_text(begin, end, True)
 
+        def code_complete_cb(obj, result, task):
+            try:
+                variant = code_complete_finish(obj, result)
+                task.return_object(JediResults(variant))
+            except Exception as ex:
+                return_error(task, ex)
+
+        def get_proxy_cb(obj, result, task):
+            try:
+                proxy = get_proxy_finish(result)
+                code_complete_async(proxy, task.filename, task.line, task.line_offset, task.text, task.get_cancellable(), code_complete_cb, task)
+            except Exception as ex:
+                return_error(task, ex)
+
+        get_proxy_async(None, get_proxy_cb, task)
+
+    def do_populate_finish(self, result):
+        return result.propagate_object()
+
+    def do_refilter(self, context, model):
+        word = context.get_word().lower()
+        model.refilter(word)
+        return True
 
 class JediCompletionRequest:
     did_run = False
@@ -736,26 +651,6 @@ class JediWorker(GObject.Object, Ide.Worker):
                                       'org.gnome.builder.plugins.jedi',
                                       None)
 
-def JediSnippet(proposal):
-    snippet = Ide.SourceSnippet()
-    snippet.add_chunk(Ide.SourceSnippetChunk(text=proposal.completion_text, text_set=True))
-
-    # Add parameter completion for functions.
-    if proposal.completion_type == _TYPE_FUNCTION:
-        snippet.add_chunk(Ide.SourceSnippetChunk(text='(', text_set=True))
-        params = proposal.completion_params
-        if params:
-            tab_stop = 0
-            for param in params[:-1]:
-                tab_stop += 1
-                snippet.add_chunk(Ide.SourceSnippetChunk(text=param, text_set=True, tab_stop=tab_stop))
-                snippet.add_chunk(Ide.SourceSnippetChunk(text=', ', text_set=True))
-            tab_stop += 1
-            snippet.add_chunk(Ide.SourceSnippetChunk(text=params[-1], text_set=True, tab_stop=tab_stop))
-        snippet.add_chunk(Ide.SourceSnippetChunk(text=')', text_set=True))
-
-    return snippet
-
 
 class JediPreferences(GObject.Object, Ide.PreferencesAddin):
     def do_load(self, prefs):
@@ -769,3 +664,101 @@ class JediPreferences(GObject.Object, Ide.PreferencesAddin):
 
     def do_unload(self, prefs):
         prefs.remove_id(self.completion_id)
+
+class JediResults(GObject.Object, Gio.ListModel):
+    variant = None
+    items = None
+
+    def __init__(self, variant, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.variant = variant
+        self.items = []
+        for i in range(variant.n_children()):
+            self.items.append((i,0))
+
+    def do_get_item_type(self):
+        return type(Ide.CompletionProposal)
+
+    def do_get_n_items(self):
+        return len(self.items)
+
+    def do_get_item(self, position):
+        idx,_ = self.items[position]
+        return JediResult(self.variant.get_child_value(idx))
+
+    def refilter(self, casefold):
+        old_len = len(self.items)
+        self.items = []
+        for i in range(self.variant.n_children()):
+            child = self.variant.get_child_value(i)
+            label = child.get_child_value(1).get_string()
+            match, priority = Ide.Completion.fuzzy_match(label, casefold)
+            if match:
+                self.items.append((i, priority))
+        self.items.sort(key=lambda x: x[1])
+        self.items_changed(0, old_len, len(self.items))
+
+class JediResult(GObject.Object, Ide.CompletionProposal):
+    def __init__(self, variant):
+        super().__init__()
+        self.variant = variant
+
+    def get_kind(self):
+        return self.variant.get_child_value(0).get_int32()
+
+    def get_icon_name(self):
+        kind = self.get_kind()
+        return _ICONS.get(kind, None)
+
+    def get_label(self):
+        return self.variant.get_child_value(1).get_string()
+
+    def get_markup(self, casefold):
+        markup = Ide.Completion.fuzzy_highlight(self.get_label(), casefold)
+
+        kind = self.get_kind()
+        if kind == _TYPE_FUNCTION:
+            parts = []
+            params = self.get_params()
+            for p in params:
+                if p.startswith('param '):
+                    parts.append(p[6:])
+            markup += ''.join(['<span fgalpha="32762">(', ', '.join(parts), ')</span>'])
+
+        return markup
+
+    def get_text(self):
+        return self.variant.get_child_value(2).get_string()
+
+    def get_comment(self):
+        comment = self.variant.get_child_value(4).get_string()
+        if comment and '\n' in comment:
+            return comment[:comment.index('\n')]
+        return comment
+
+    def get_params(self):
+        return self.variant.get_child_value(3).unpack()
+
+    def get_snippet(self):
+        snippet = Ide.Snippet.new(None, None)
+        snippet.add_chunk(Ide.SnippetChunk(spec=self.get_text()))
+
+        # Add parameter completion for functions.
+        kind = self.get_kind()
+        if kind == _TYPE_FUNCTION:
+            snippet.add_chunk(Ide.SnippetChunk(text='(', text_set=True))
+            params = self.get_params()
+            if params:
+                tab_stop = 0
+                for param in params[:-1]:
+                    tab_stop += 1
+                    if param.startswith('param '):
+                        param = param[6:]
+                    snippet.add_chunk(Ide.SnippetChunk(text=param, text_set=True, tab_stop=tab_stop))
+                    snippet.add_chunk(Ide.SnippetChunk(text=', ', text_set=True))
+                tab_stop += 1
+                snippet.add_chunk(Ide.SnippetChunk(text=params[-1], text_set=True, tab_stop=tab_stop))
+            snippet.add_chunk(Ide.SnippetChunk(text=')', text_set=True))
+
+        return snippet
+
