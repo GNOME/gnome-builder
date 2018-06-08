@@ -3,11 +3,6 @@ snippets_headers = [
   'ide-snippet-context.h',
   'ide-snippet-storage.h',
   'ide-snippet.h',
-  'ide-source-snippet-chunk.h',
-  'ide-source-snippet-context.h',
-  'ide-source-snippet.h',
-  'ide-source-snippets-manager.h',
-  'ide-source-snippets.h',
 ]
 
 snippets_sources = [
@@ -16,23 +11,11 @@ snippets_sources = [
   'ide-snippet-context.c',
   'ide-snippet-parser.c',
   'ide-snippet-storage.c',
-  'ide-source-snippet-chunk.c',
-  'ide-source-snippet-context.c',
-  'ide-source-snippet.c',
-  'ide-source-snippets-manager.c',
-  'ide-source-snippets.c',
 ]
 
 snippets_private_sources = [
   'ide-snippet-parser.h',
   'ide-snippet-private.h',
-  'ide-source-snippet-completion-item.c',
-  'ide-source-snippet-completion-item.h',
-  'ide-source-snippet-completion-provider.c',
-  'ide-source-snippet-completion-provider.h',
-  'ide-source-snippet-parser.c',
-  'ide-source-snippet-parser.h',
-  'ide-source-snippet-private.h',
 ]
 
 libide_public_headers += files(snippets_headers)

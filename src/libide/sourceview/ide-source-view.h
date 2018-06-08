@@ -362,10 +362,12 @@ struct _IdeSourceViewClass
   gpointer _reserved24;
 };
 
+IDE_AVAILABLE_IN_3_30
+gboolean                    ide_source_view_has_snippet               (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
-IdeSourceSnippet           *ide_source_view_get_current_snippet       (IdeSourceView              *self);
+IdeSnippet                 *ide_source_view_get_current_snippet       (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 guint                       ide_source_view_get_visual_column         (IdeSourceView              *self,
                                                                        const GtkTextIter          *location);
@@ -424,7 +426,7 @@ IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_push_snippet              (IdeSourceView              *self,
-                                                                       IdeSourceSnippet           *snippet,
+                                                                       IdeSnippet                 *snippet,
                                                                        const GtkTextIter          *location);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_rollback_search           (IdeSourceView              *self);
