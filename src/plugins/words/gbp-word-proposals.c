@@ -389,6 +389,27 @@ gbp_word_proposals_refilter (GbpWordProposals *self,
   self->last_word = g_strdup (word);
 }
 
+void
+gbp_word_proposals_clear (GbpWordProposals *self)
+{
+  guint old_len;
+
+  g_return_if_fail (GBP_IS_WORD_PROPOSALS (self));
+
+  if ((old_len = self->items->len))
+    g_array_remove_range (self->items, 0, old_len);
+
+  if (self->unfiltered->len)
+    g_ptr_array_remove_range (self->unfiltered, 0, self->unfiltered->len);
+
+  g_string_chunk_clear (self->words);
+  g_hash_table_remove_all (self->words_dedup);
+
+  g_clear_pointer (&self->last_word, g_free);
+
+  g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, 0);
+}
+
 static GType
 gbp_word_proposals_get_item_type (GListModel *model)
 {

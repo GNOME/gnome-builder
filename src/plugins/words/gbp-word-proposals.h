@@ -37,5 +37,6 @@ gboolean          gbp_word_proposals_populate_finish (GbpWordProposals      *sel
                                                       GError               **error);
 void              gbp_word_proposals_refilter        (GbpWordProposals      *self,
                                                       const gchar           *word);
+void              gbp_word_proposals_clear           (GbpWordProposals      *self);
 
 G_END_DECLS

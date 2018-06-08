@@ -107,6 +107,7 @@ gbp_word_completion_provider_populate_async (IdeCompletionProvider *provider,
                                              gpointer               user_data)
 {
   GbpWordCompletionProvider *self = (GbpWordCompletionProvider *)provider;
+  IdeCompletionActivation activation;
   g_autoptr(IdeTask) task = NULL;
 
   g_assert (GBP_IS_WORD_COMPLETION_PROVIDER (self));
@@ -118,6 +119,18 @@ gbp_word_completion_provider_populate_async (IdeCompletionProvider *provider,
 
   if (self->proposals == NULL)
     self->proposals = gbp_word_proposals_new ();
+
+  /*
+   * Avoid extra processing unless the user requested completion, since
+   * scanning the buffer is rather expensive.
+   */
+  activation = ide_completion_context_get_activation (context);
+  if (activation != IDE_COMPLETION_USER_REQUESTED)
+    {
+      gbp_word_proposals_clear (self->proposals);
+      ide_task_return_boolean (task, TRUE);
+      return;
+    }
 
   ide_completion_context_set_proposals_for_provider (context,
                                                      provider,
