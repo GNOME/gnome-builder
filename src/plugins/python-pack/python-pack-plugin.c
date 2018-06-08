@@ -19,23 +19,9 @@
 #include <libpeas/peas.h>
 
 #include "ide-python-indenter.h"
-#include "ide-python-format-provider.h"
-
-void _ide_python_indenter_register_type (GTypeModule *module);
-void _ide_python_format_provider_register_type (GTypeModule *module);
 
 void
 ide_python_pack_register_types (PeasObjectModule *module)
 {
-  _ide_python_indenter_register_type (G_TYPE_MODULE (module));
-  _ide_python_format_provider_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_PYTHON_INDENTER);
-  /*
-   * TODO: I think we should make a generic interface for format providers
-   *       so that we don't take up a "completion provider" for them in the
-   *       plugins. That way, the sourceview can own the completion provider
-   *       and change the format provider when the language changes.
-   */
-  peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_PYTHON_FORMAT_PROVIDER);
 }
