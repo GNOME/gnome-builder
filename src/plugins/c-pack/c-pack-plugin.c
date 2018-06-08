@@ -19,17 +19,9 @@
 #include <libpeas/peas.h>
 
 #include "ide-c-indenter.h"
-#include "ide-c-format-provider.h"
-
-void _ide_c_indenter_register_type (GTypeModule *module);
-void _ide_c_format_provider_register_type (GTypeModule *module);
 
 void
 ide_c_pack_register_types (PeasObjectModule *module)
 {
-  _ide_c_indenter_register_type (G_TYPE_MODULE (module));
-  _ide_c_format_provider_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_C_INDENTER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_C_FORMAT_PROVIDER);
 }
