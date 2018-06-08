@@ -230,7 +230,7 @@ process_communicate_utf8_cb (GObject      *object,
   const gchar *stdout_str = NULL;
   const gchar *stderr_str = NULL;
   g_autoptr(GError) error = NULL;
-  GtkSourceCompletion *completion;
+  IdeCompletion *completion;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
@@ -274,9 +274,9 @@ process_communicate_utf8_cb (GObject      *object,
   else if (g_utf8_validate (stdout_str, -1, NULL))
     {
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (state->source_view));
-      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (state->source_view));
+      completion = ide_source_view_get_completion (IDE_SOURCE_VIEW (state->source_view));
 
-      gtk_source_completion_block_interactive (completion);
+      ide_completion_block_interactive (completion);
       gtk_text_buffer_begin_user_action (buffer);
 
       gtk_text_buffer_get_iter_at_mark (buffer, &begin, state->begin_mark);
@@ -291,7 +291,7 @@ process_communicate_utf8_cb (GObject      *object,
       g_signal_emit_by_name (state->source_view, "selection-theatric", IDE_SOURCE_VIEW_THEATRIC_EXPAND);
 
       gtk_text_buffer_end_user_action (buffer);
-      gtk_source_completion_unblock_interactive (completion);
+      ide_completion_unblock_interactive (completion);
 
       ide_task_return_boolean (task, TRUE);
     }
