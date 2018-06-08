@@ -30,10 +30,12 @@ G_DECLARE_FINAL_TYPE (IdeClangProposals, ide_clang_proposals, IDE, CLANG_PROPOSA
 
 IdeClangProposals *ide_clang_proposals_new             (IdeClangClient       *client);
 IdeClangClient    *ide_clang_proposals_get_client      (IdeClangProposals    *self);
-const GList       *ide_clang_proposals_get_list        (IdeClangProposals    *self);
+void               ide_clang_proposals_clear           (IdeClangProposals    *self);
+void               ide_clang_proposals_refilter        (IdeClangProposals    *self,
+                                                        const gchar          *word);
 void               ide_clang_proposals_populate_async  (IdeClangProposals    *self,
                                                         const GtkTextIter    *iter,
-                                                        gboolean              user_requested,
+                                                        const gchar          *word,
                                                         GCancellable         *cancellable,
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data);

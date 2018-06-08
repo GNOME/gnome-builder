@@ -30,18 +30,17 @@ struct _IdeClangCompletionItem
 {
   GObject           parent_instance;
 
-  GList             link;
-
   guint             index;
   guint             priority;
-  gint              typed_text_index : 16;
-  guint             initialized : 1;
+  IdeSymbolKind     kind;
 
   /* Owned references */
-  gchar            *markup;
+  gchar            *params;
   GVariant         *results;
 
   /* Unowned references */
+  const gchar      *keyword;
+  const gchar      *return_type;
   const gchar      *icon_name;
   const gchar      *typed_text;
 };
@@ -59,8 +58,8 @@ ide_clang_completion_item_get_result (const IdeClangCompletionItem *self)
 
 IdeClangCompletionItem *ide_clang_completion_item_new         (GVariant               *results,
                                                                guint                   index,
-                                                               const gchar            *typed_text);
-IdeSourceSnippet       *ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
+                                                               const gchar            *keyword);
+IdeSnippet             *ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
                                                                IdeFileSettings        *file_settings);
 
 G_END_DECLS
