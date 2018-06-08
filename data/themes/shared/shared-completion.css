@@ -1,0 +1,48 @@
+completionview,
+completionwindow,
+completionoverlay {
+  background: transparent;
+}
+
+completionview > * {
+  margin: 5px 6px 6px 6px;
+  border: 1px solid @borders;
+  box-shadow: 0px 0px 3px @wm_shadow;
+  padding: 0px 3px 0px 3px;
+  /* on light themes, this won't really do much, but for
+   * dark themes, it gives us some contrast from dark backgrounds
+   * such as the builder-dark theme.
+   */
+  background-color: shade(@content_view_bg, 1.5);
+  border-radius: 5px;
+}
+
+completionview list {
+  padding: 3px 0 3px 0;
+  background-color: transparent;
+}
+
+completionview list row:not(:selected) {
+  background-color: transparent;
+}
+
+completionview list row {
+  border-radius: 3px;
+  padding: 3px;
+}
+
+completionview list image:first-child {
+  min-width: 16px;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+completionview list label.left {
+  margin-right: 12px;
+  opacity: 0.55;
+}
+
+completionview list label.right {
+  margin-left: 12px;
+  opacity: 0.55;
+}

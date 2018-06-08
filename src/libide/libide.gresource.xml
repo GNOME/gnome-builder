@@ -36,6 +36,7 @@
 
     <file compressed="true" alias="shared.css">../../data/themes/shared.css</file>
     <file compressed="true" alias="shared/shared-buildui.css">../../data/themes/shared/shared-buildui.css</file>
+    <file compressed="true" alias="shared/shared-completion.css">../../data/themes/shared/shared-completion.css</file>
     <file compressed="true" alias="shared/shared-debugger.css">../../data/themes/shared/shared-debugger.css</file>
     <file compressed="true" alias="shared/shared-editor.css">../../data/themes/shared/shared-editor.css</file>
     <file compressed="true" alias="shared/shared-greeter.css">../../data/themes/shared/shared-greeter.css</file>
@@ -61,6 +62,10 @@
   </gresource>
 
   <gresource prefix="/org/gnome/builder/ui">
+    <file preprocess="xml-stripblanks" alias="ide-completion-list-box-row.ui">completion/ide-completion-list-box-row.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-completion-overlay.ui">completion/ide-completion-overlay.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-completion-view.ui">completion/ide-completion-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-completion-window.ui">completion/ide-completion-window.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-debugger-breakpoints-view.ui">debugger/ide-debugger-breakpoints-view.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-debugger-controls.ui">debugger/ide-debugger-controls.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-debugger-disassembly-view.ui">debugger/ide-debugger-disassembly-view.ui</file>
