@@ -106,6 +106,10 @@ typedef struct _IdeSettings                    IdeSettings;
 typedef struct _IdeSourceLocation              IdeSourceLocation;
 typedef struct _IdeSourceRange                 IdeSourceRange;
 
+typedef struct _IdeSnippet                     IdeSnippet;
+typedef struct _IdeSnippetChunk                IdeSnippetChunk;
+typedef struct _IdeSnippetContext              IdeSnippetContext;
+typedef struct _IdeSnippetStorage              IdeSnippetStorage;
 typedef struct _IdeSourceSnippet               IdeSourceSnippet;
 typedef struct _IdeSourceSnippetChunk          IdeSourceSnippetChunk;
 typedef struct _IdeSourceSnippetContext        IdeSourceSnippetContext;
