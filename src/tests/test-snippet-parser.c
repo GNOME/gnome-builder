@@ -1,7 +1,7 @@
 #include <ide.h>
 #include <stdlib.h>
 
-#include "snippets/ide-source-snippet-parser.h"
+#include "snippets/ide-snippet-parser.h"
 
 gint
 main (gint   argc,
@@ -26,7 +26,7 @@ main (gint   argc,
   for (i = 1; i < argc; i++)
     {
       const gchar *filename = argv [i];
-      g_autoptr(IdeSourceSnippetParser) parser = NULL;
+      g_autoptr(IdeSnippetParser) parser = NULL;
       g_autoptr(GFile) file = NULL;
 
       if (!g_file_test (filename, G_FILE_TEST_IS_REGULAR))
@@ -37,35 +37,35 @@ main (gint   argc,
 
       file = g_file_new_for_commandline_arg (filename);
 
-      parser = ide_source_snippet_parser_new ();
+      parser = ide_snippet_parser_new ();
 
-      if (!ide_source_snippet_parser_load_from_file (parser, file, &error))
+      if (!ide_snippet_parser_load_from_file (parser, file, &error))
         {
           g_printerr ("%s\n", error->message);
           return EXIT_FAILURE;
         }
 
       {
-        for (GList *iter = ide_source_snippet_parser_get_snippets (parser);
+        for (GList *iter = ide_snippet_parser_get_snippets (parser);
              iter != NULL;
              iter = iter->next)
           {
-            IdeSourceSnippet *snippet = iter->data;
+            IdeSnippet *snippet = iter->data;
 
             g_print ("=====================================\n");
             g_print ("Snippet: %s with language %s\n",
-                     ide_source_snippet_get_trigger (snippet),
-                     ide_source_snippet_get_language (snippet));
+                     ide_snippet_get_trigger (snippet),
+                     ide_snippet_get_language (snippet));
 
-            for (guint j = 0; j < ide_source_snippet_get_n_chunks (snippet); j++)
+            for (guint j = 0; j < ide_snippet_get_n_chunks (snippet); j++)
               {
-                IdeSourceSnippetChunk *chunk = ide_source_snippet_get_nth_chunk (snippet, j);
-                gint tab_stop = ide_source_snippet_chunk_get_tab_stop (chunk);
+                IdeSnippetChunk *chunk = ide_snippet_get_nth_chunk (snippet, j);
+                gint tab_stop = ide_snippet_chunk_get_tab_stop (chunk);
 
                 if (tab_stop > 0)
-                  g_print ("TAB STOP %02d (%02d): %s\n", tab_stop, j, ide_source_snippet_chunk_get_spec (chunk));
+                  g_print ("TAB STOP %02d (%02d): %s\n", tab_stop, j, ide_snippet_chunk_get_spec (chunk));
                 else
-                  g_print ("TEXT        (%02d): %s\n", j, ide_source_snippet_chunk_get_spec (chunk));
+                  g_print ("TEXT        (%02d): %s\n", j, ide_snippet_chunk_get_spec (chunk));
               }
           }
       }
