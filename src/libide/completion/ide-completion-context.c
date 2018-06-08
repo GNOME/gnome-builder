@@ -41,6 +41,8 @@ struct _IdeCompletionContext
   GtkTextMark *begin_mark;
   GtkTextMark *end_mark;
 
+  IdeCompletionActivation activation;
+
   guint busy : 1;
   guint has_populated : 1;
   guint empty : 1;
@@ -503,6 +505,7 @@ ide_completion_context_notify_complete_cb (IdeCompletionContext *self,
 /**
  * _ide_completion_context_complete_async:
  * @self: a #IdeCompletionContext
+ * @activation: how we are being activated
  * @iter: a #GtkTextIter
  * @cancellable: (nullable): a #GCancellable or %NULL
  * @callback: (nullable): a callback or %NULL
@@ -514,12 +517,13 @@ ide_completion_context_notify_complete_cb (IdeCompletionContext *self,
  * Since: 3.30
  */
 void
-_ide_completion_context_complete_async (IdeCompletionContext *self,
-                                        const GtkTextIter    *begin,
-                                        const GtkTextIter    *end,
-                                        GCancellable         *cancellable,
-                                        GAsyncReadyCallback   callback,
-                                        gpointer              user_data)
+_ide_completion_context_complete_async (IdeCompletionContext    *self,
+                                        IdeCompletionActivation  activation,
+                                        const GtkTextIter       *begin,
+                                        const GtkTextIter       *end,
+                                        GCancellable            *cancellable,
+                                        GAsyncReadyCallback      callback,
+                                        gpointer                 user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   CompleteTaskData *task_data;
@@ -534,6 +538,7 @@ _ide_completion_context_complete_async (IdeCompletionContext *self,
   g_return_if_fail (end != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  self->activation = activation;
   self->has_populated = TRUE;
   self->busy = TRUE;
 
@@ -1060,4 +1065,20 @@ ide_completion_context_is_language (IdeCompletionContext *self,
   g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (self), FALSE);
 
   return g_strcmp0 (language, ide_completion_context_get_language (self)) == 0;
+}
+
+/**
+ * ide_completion_context_get_activation:
+ * @self: a #IdeCompletionContext
+ *
+ * Gets the mode for which the context was activated.
+ *
+ * Since: 3.30
+ */
+IdeCompletionActivation
+ide_completion_context_get_activation (IdeCompletionContext *self)
+{
+  g_return_val_if_fail (IDE_IS_COMPLETION_CONTEXT (self), 0);
+
+  return self->activation;
 }

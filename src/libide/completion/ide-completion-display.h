@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-version-macros.h"
 

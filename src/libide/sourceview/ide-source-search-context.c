@@ -104,7 +104,7 @@ ide_source_search_context_backward_async (GtkSourceSearchContext *search,
 
 /**
  * ide_source_search_context_backward_finish2:
- * @self: a #GtkSourceSearchContext
+ * @search: a #GtkSourceSearchContext
  * @result: a #GAsyncResult
  * @match_begin: (out): a #GtkTextIter
  * @match_end: (out): a #GtkTextIter

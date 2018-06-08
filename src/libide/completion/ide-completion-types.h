@@ -18,8 +18,6 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
-
 G_BEGIN_DECLS
 
 typedef struct _IdeCompletion           IdeCompletion;
@@ -32,6 +30,13 @@ typedef struct _IdeCompletionProposal   IdeCompletionProposal;
 typedef struct _IdeCompletionProvider   IdeCompletionProvider;
 typedef struct _IdeCompletionView       IdeCompletionView;
 typedef struct _IdeCompletionWindow     IdeCompletionWindow;
+
+typedef enum
+{
+  IDE_COMPLETION_INTERACTIVE,
+  IDE_COMPLETION_USER_REQUESTED,
+  IDE_COMPLETION_TRIGGERED,
+} IdeCompletionActivation;
 
 typedef enum
 {

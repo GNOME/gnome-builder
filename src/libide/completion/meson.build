@@ -25,6 +25,10 @@ completion_sources = [
   'ide-completion-window.c',
 ]
 
+completion_enums = [
+  'ide-completion-types.h',
+]
+
 completion_private_sources = [
   'ide-completion-private.h',
 # 'ide-completion-words.c',
@@ -41,5 +45,6 @@ completion_private_sources = [
 libide_public_headers += files(completion_headers)
 libide_public_sources += files(completion_sources)
 libide_private_sources += files(completion_private_sources)
+libide_enum_headers += files(completion_enums)
 
 install_headers(completion_headers, subdir: join_paths(libide_header_subdir, 'completion'))

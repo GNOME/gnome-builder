@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-completion-display"
-
 #include "config.h"
+
+#define G_LOG_DOMAIN "ide-completion-display"
 
 #include "completion/ide-completion-context.h"
 #include "completion/ide-completion-display.h"

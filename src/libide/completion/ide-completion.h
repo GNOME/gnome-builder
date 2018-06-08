@@ -29,13 +29,6 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION (ide_completion_get_type())
 
-typedef enum
-{
-  IDE_COMPLETION_INTERACTIVE,
-  IDE_COMPLETION_USER_REQUESTED,
-  IDE_COMPLETION_TRIGGERED,
-} IdeCompletionActivation;
-
 IDE_AVAILABLE_IN_3_30
 G_DECLARE_FINAL_TYPE (IdeCompletion, ide_completion, IDE, COMPLETION, GObject)
 

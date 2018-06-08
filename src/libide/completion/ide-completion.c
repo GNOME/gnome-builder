@@ -331,6 +331,7 @@ ide_completion_start (IdeCompletion           *self,
   self->needs_refilter = FALSE;
 
   _ide_completion_context_complete_async (context,
+                                          activation,
                                           &begin,
                                           &end,
                                           self->cancellable,

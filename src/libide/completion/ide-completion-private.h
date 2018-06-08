@@ -55,6 +55,7 @@ gboolean                 _ide_completion_context_can_refilter      (IdeCompletio
                                                                     const GtkTextIter           *end);
 void                     _ide_completion_context_refilter          (IdeCompletionContext        *self);
 void                     _ide_completion_context_complete_async    (IdeCompletionContext        *self,
+                                                                    IdeCompletionActivation      activation,
                                                                     const GtkTextIter           *begin,
                                                                     const GtkTextIter           *end,
                                                                     GCancellable                *cancellable,
