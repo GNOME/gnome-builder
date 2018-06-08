@@ -5,13 +5,11 @@ completion_headers = [
   'ide-completion-list-box.h',
   'ide-completion-overlay.h',
   'ide-completion-proposal.h',
-  'ide-completion-item.h',
   'ide-completion-provider.h',
   'ide-completion-types.h',
   'ide-completion-view.h',
   'ide-completion-window.h',
   'ide-completion.h',
-  'ide-completion-results.h',
 ]
 
 completion_sources = [
@@ -22,7 +20,6 @@ completion_sources = [
   'ide-completion-list-box-row.c',
   'ide-completion-overlay.c',
   'ide-completion-proposal.c',
-  'ide-completion-item.c',
   'ide-completion-provider.c',
   'ide-completion-view.c',
   'ide-completion-window.c',
@@ -30,7 +27,6 @@ completion_sources = [
 
 completion_enums = [
   'ide-completion-types.h',
-  'ide-completion-results.c',
 ]
 
 completion_private_sources = [

@@ -25,6 +25,7 @@
 #include <pango/pangofc-fontmap.h>
 
 #include "buffers/ide-buffer-private.h"
+#include "completion/ide-completion.h"
 #include "editor/ide-editor-private.h"
 #include "sourceview/ide-line-change-gutter-renderer.h"
 #include "util/ide-gtk.h"
@@ -506,20 +507,20 @@ search_revealer_notify_reveal_child (IdeEditorView *self,
                                      GParamSpec    *pspec,
                                      GtkRevealer   *revealer)
 {
-  GtkSourceCompletion *completion;
+  IdeCompletion *completion;
 
   g_return_if_fail (IDE_IS_EDITOR_VIEW (self));
   g_return_if_fail (pspec != NULL);
   g_return_if_fail (GTK_IS_REVEALER (revealer));
 
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->source_view));
+  completion = ide_source_view_get_completion (IDE_SOURCE_VIEW (self->source_view));
 
   if (!gtk_revealer_get_reveal_child (revealer))
     {
       ide_editor_search_end_interactive (self->search);
 
       /* Restore completion that we blocked below. */
-      gtk_source_completion_unblock_interactive (completion);
+      ide_completion_unblock_interactive (completion);
     }
   else
     {
@@ -530,7 +531,7 @@ search_revealer_notify_reveal_child (IdeEditorView *self,
        * slows things down like search/replace functionality. We'll
        * restore it above when we clear state.
        */
-      gtk_source_completion_block_interactive (completion);
+      ide_completion_block_interactive (completion);
     }
 }
 
