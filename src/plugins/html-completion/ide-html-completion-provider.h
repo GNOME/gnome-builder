@@ -18,13 +18,12 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
-#include <ide.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_HTML_COMPLETION_PROVIDER (ide_html_completion_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeHtmlCompletionProvider, ide_html_completion_provider, IDE, HTML_COMPLETION_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeHtmlCompletionProvider, ide_html_completion_provider, IDE, HTML_COMPLETION_PROVIDER, GObject)
 
 G_END_DECLS

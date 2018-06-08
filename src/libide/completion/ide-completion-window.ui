@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeCompletionWindow" parent="GtkWindow">
+    <property name="can-focus">false</property>
+    <child>
+      <object class="IdeCompletionView" id="view">
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -7,8 +7,10 @@ html_completion_resources = gnome.compile_resources(
 )
 
 html_completion_sources = [
-	'ide-html-completion-provider.c',
-	'ide-html-completion-provider.h',
+  'html-completion-plugin.c',
+  'ide-html-completion-provider.c',
+  'ide-html-proposal.c',
+  'ide-html-proposals.c',
 ]
 
 gnome_builder_plugins_sources += files(html_completion_sources)

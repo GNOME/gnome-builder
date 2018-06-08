@@ -161,8 +161,10 @@ namespace Ide {
 			variable.accept_children (this);
 		}
 		public override void visit_end_full_expression (Vala.Expression expr) {
-			if (expr is Vala.LambdaExpression)
-				visit_method ((expr as Vala.LambdaExpression).method);
+			if (expr is Vala.LambdaExpression) {
+				if ((expr as Vala.LambdaExpression).method != null)
+					visit_method ((expr as Vala.LambdaExpression).method);
+			}
 			if (expr is Vala.MethodCall) {
 				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list()) {
 					visit_expression (e);
@@ -170,8 +172,10 @@ namespace Ide {
 			}
 		}
 		public override void visit_expression (Vala.Expression expr) {
-			if (expr is Vala.LambdaExpression)
-				visit_method ((expr as Vala.LambdaExpression).method);
+			if (expr is Vala.LambdaExpression) {
+				if ((expr as Vala.LambdaExpression).method != null)
+					visit_method ((expr as Vala.LambdaExpression).method);
+			}
 			if (expr is Vala.MethodCall) {
 				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list())
 					visit_expression (e);

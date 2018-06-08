@@ -68,8 +68,8 @@ IDE_AVAILABLE_IN_ALL
 IdeSettings              *ide_context_get_settings              (IdeContext           *self,
                                                                  const gchar          *schema_id,
                                                                  const gchar          *relative_path);
-IDE_AVAILABLE_IN_ALL
-IdeSourceSnippetsManager *ide_context_get_snippets_manager      (IdeContext           *self);
+IDE_AVAILABLE_IN_3_30
+IdeSnippetStorage        *ide_context_get_snippets              (IdeContext           *self);
 IDE_AVAILABLE_IN_3_28
 IdeTestManager           *ide_context_get_test_manager          (IdeContext           *self);
 IDE_AVAILABLE_IN_ALL

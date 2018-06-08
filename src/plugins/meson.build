@@ -63,6 +63,7 @@ subdir('retab')
 subdir('rust-langserv')
 subdir('rustup')
 subdir('spellcheck')
+subdir('snippets')
 subdir('support')
 subdir('symbol-tree')
 subdir('sysmon')
@@ -72,6 +73,7 @@ subdir('terminal')
 subdir('todo')
 subdir('vala-pack')
 subdir('valgrind')
+subdir('words')
 subdir('xml-pack')
 
 gnome_builder_plugins = shared_library(
@@ -141,6 +143,7 @@ status += [
   'Retab ................. : @0@'.format(get_option('with_retab')),
   'Rust Language Server .. : @0@'.format(get_option('with_rust_langserv')),
   'RustUp ................ : @0@'.format(get_option('with_rustup')),
+  'Snippets .............. : @0@'.format(get_option('with_snippets')),
   'Spellchecking ......... : @0@'.format(get_option('with_spellcheck')),
   'Support Tool .......... : @0@'.format(get_option('with_support')),
   'Symbol Tree ........... : @0@'.format(get_option('with_symbol_tree')),
@@ -150,6 +153,7 @@ status += [
   'Todo .................. : @0@'.format(get_option('with_todo')),
   'Vala Language Pack .... : @0@'.format(get_option('with_vala_pack')),
   'Valgrind .............. : @0@'.format(get_option('with_valgrind')),
+  'Word Completion ....... : @0@'.format(get_option('with_words')),
   'XML Language Pack ..... : @0@'.format(get_option('with_xml_pack')),
   '', '',
 

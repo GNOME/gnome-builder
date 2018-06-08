@@ -39,66 +39,61 @@ from gi.repository import Ide
 # 2 minutes
 CACHE_EXPIRE_USEC = 2 * 60 * 1000 * 1000
 
-_NamespaceIcon = Gio.ThemedIcon.new('lang-namespace-symbolic')
-
-class CompletionProvider(Ide.Object,
-                         GtkSource.CompletionProvider,
-                         Ide.CompletionProvider):
+class CompletionProvider(Ide.Object, Ide.CompletionProvider):
     _libraries = None
     _libraries_expire_at = 0
 
-    def do_get_name(self):
-        return 'Python GObject Introspection Imports Provider'
+    def do_get_title(self):
+        return 'Python G-I Imports'
 
-    def do_get_icon(self):
-        return None
+    def do_populate_async(self, context, cancellable, callback, data):
+        task = Ide.Task.new(self, cancellable, callback)
+        task.set_name('python gi imports')
 
-    def do_populate(self, context):
-
-        _, iter = context.get_iter()
-        buffer = iter.get_buffer()
-
-        copy = iter.copy()
-        copy.set_line_offset(0)
-        text = buffer.get_text(copy, iter, True)
-
+        text = context.get_line_text()
         if not text.startswith('from gi.repository import'):
-            context.add_proposals(self, [], True)
+            task.return_error(Ide.NotSupportedError())
             return
-
-        line = iter.get_line() + 1
-        column = iter.get_line_offset()
 
         text = text.replace('from gi.repository import', '').strip().lower()
 
-        proposals = []
-        for library_name in self.get_libraries():
-            if library_name.lower().startswith(text):
-                proposal = CompletionProposal(self, context, library_name, text)
-                proposals.append(proposal)
-        context.add_proposals(self, proposals, True)
+        proposals = Gio.ListStore.new(Ide.CompletionProposal)
+        for library in self.get_libraries():
+            if library.matches(text):
+                proposals.append(library)
 
-    def do_match(self, context):
+        task.return_object(proposals)
+
+    def do_populate_finish(self, task):
+        return task.propagate_object()
+
+    def do_display_proposal(self, row, context, typed_text, proposal):
+        row.set_icon_name('lang-namespace-symbolic')
+        row.set_left(None)
+        row.set_center(proposal.completion)
+        row.set_right(None)
+
+    def do_activate_proposal(self, context, proposal, key):
+        _, begin, end = context.get_bounds()
+        buffer = context.get_buffer()
+
+        buffer.begin_user_action()
+        buffer.delete(begin, end)
+        buffer.insert(begin, proposal.completion, -1)
+        buffer.end_user_action()
+
+    def do_get_priority(self, context):
+        # This provider only activates when it is very likely that we
+        # want the results. So use high priority (negative is better).
+        return -1000
+
+    def do_refilter(self, context, proposals):
+        text = context.get_word().lower()
+        proposals.remove_all()
+        for library in self.get_libraries():
+            if library.matches(text):
+                proposals.append(library)
         return True
-
-    def do_get_info_widget(self, proposal):
-        return None
-
-    def do_update_info(self, proposal, info):
-        pass
-
-    def do_get_start_iter(self, context, proposal):
-        _, iter = context.get_iter()
-        return True, iter
-
-    def do_activate_proposal(self, provider, proposal):
-        return False, None
-
-    def do_get_interactive_delay(self):
-        return -1
-
-    def do_get_priority(self):
-        return 201
 
     def get_libraries(self):
         now = GLib.get_monotonic_time()
@@ -107,43 +102,25 @@ class CompletionProvider(Ide.Object,
 
         self._libraries = []
         self._libraries_expire_at = now + CACHE_EXPIRE_USEC
+        found = {}
 
         for directory in GIRepository.Repository.get_search_path():
             if os.path.exists(directory):
                 for filename in os.listdir(directory):
                     name = filename.split('-')[0]
-                    if name not in self._libraries:
-                        self._libraries.append(name)
+                    if name not in found:
+                        self._libraries.append(CompletionProposal(name))
+                        found[name] = None
 
-        self._libraries.sort()
+        self._libraries.sort(key=lambda x: x.completion)
 
         return self._libraries
 
-class CompletionProposal(GObject.Object, GtkSource.CompletionProposal):
-    def __init__(self, provider, context, completion, start_text, *args, **kwargs):
+class CompletionProposal(GObject.Object, Ide.CompletionProposal):
+    def __init__(self, completion, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.provider = provider
-        self.context = context
         self.completion = completion
-        self.complete = completion[len(start_text):]
+        self.lower = completion.lower()
 
-    def do_get_label(self):
-        return self.completion
-
-    def do_get_markup(self):
-        return self.completion
-
-    def do_get_text(self):
-        return self.complete
-
-    def do_get_gicon(self):
-        return _NamespaceIcon
-
-    def do_hash(self):
-        return hash(self.completion)
-
-    def do_equal(self, other):
-        return False
-
-    def do_changed(self):
-        pass
+    def matches(self, text):
+        return self.lower.startswith(text)

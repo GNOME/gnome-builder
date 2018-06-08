@@ -44,10 +44,18 @@ struct _IdeClangProposals
   IdeClangClient *client;
 
   /*
-   * Our current array of items that have been inflated to be filtered based
-   * on the currently typed word.
+   * The most recent GVariant we received from the peer.
    */
-  GPtrArray *items;
+  GVariant *results;
+
+  /*
+   * Instead of inflating GObjects for each of our matches, we instead keep
+   * an index for all of the items that match the current result set. When
+   * the new result variant is returned, this is set to an array that is 1:1
+   * of the variant indexes or filtered based on the typed_text to only include
+   * the items that match).
+   */
+  GArray *match_indexes;
 
   /*
    * The word we are trying to filter. If we are waiting on a previous query
@@ -55,11 +63,6 @@ struct _IdeClangProposals
    * We post-filter requests based on the filter once we receive it.
    */
   gchar *filter;
-
-  /*
-   * The head of the filtered list.
-   */
-  GList *head;
 
   /*
    * @line is the line we last performed a completion request upon. We cannot
@@ -105,13 +108,23 @@ typedef struct
   guint           query_id;
 } Query;
 
+typedef struct
+{
+  guint index;
+  guint priority;
+  const gchar *keyword;
+} Item;
+
 enum {
   PROP_0,
   PROP_CLIENT,
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeClangProposals, ide_clang_proposals, G_TYPE_OBJECT)
+static void list_model_iface_init (GListModelInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (IdeClangProposals, ide_clang_proposals, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 static GParamSpec *properties [N_PROPS];
 
@@ -136,7 +149,15 @@ ide_clang_proposals_finalize (GObject *object)
 {
   IdeClangProposals *self = (IdeClangProposals *)object;
 
+  g_assert (self->queued_tasks.head == NULL);
+  g_assert (self->queued_tasks.tail == NULL);
+  g_assert (self->queued_tasks.length == 0);
+
   g_clear_object (&self->client);
+  g_clear_object (&self->cancellable);
+  g_clear_pointer (&self->filter, g_free);
+  g_clear_pointer (&self->match_indexes, g_array_unref);
+  g_clear_pointer (&self->results, g_variant_unref);
 
   G_OBJECT_CLASS (ide_clang_proposals_parent_class)->finalize (object);
 }
@@ -203,47 +224,42 @@ ide_clang_proposals_init (IdeClangProposals *self)
 {
   self->line = -1;
   self->line_offset = -1;
+  self->match_indexes = g_array_new (FALSE, FALSE, sizeof (Item));
 }
 
-static void
+void
 ide_clang_proposals_clear (IdeClangProposals *self)
 {
   GList *list;
+  guint old_len;
 
   g_assert (IDE_IS_CLANG_CLIENT (self));
 
   self->line = -1;
   self->line_offset = -1;
-  self->head = NULL;
 
   ide_clear_string (&self->filter);
-  g_clear_pointer (&self->items, g_ptr_array_unref);
+
+  if ((old_len = self->match_indexes->len))
+    g_array_remove_range (self->match_indexes, 0, self->match_indexes->len);
 
   list = g_steal_pointer (&self->queued_tasks.head);
-
   self->queued_tasks.head = NULL;
   self->queued_tasks.tail = NULL;
   self->queued_tasks.length = 0;
 
+  g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, 0);
+
   for (const GList *iter = list; iter != NULL; iter = iter->next)
     {
-      IdeTask *task = iter->data;
-
+      g_autoptr(IdeTask) task = iter->data;
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_CANCELLED,
                                  "Completion request was invalidated");
     }
 
-  g_list_free_full (list, g_object_unref);
-}
-
-static gint
-sort_by_priority (gconstpointer a,
-                  gconstpointer b)
-{
-  return (gint)((IdeClangCompletionItem *)a)->priority -
-         (gint)((IdeClangCompletionItem *)b)->priority;
+  g_list_free (list);
 }
 
 IdeClangProposals *
@@ -264,155 +280,133 @@ ide_clang_proposals_get_client (IdeClangProposals *self)
   return self->client;
 }
 
-static void
-ide_clang_proposals_refilter_array (IdeClangProposals *self)
+static gint
+sort_by_priority (gconstpointer a,
+                  gconstpointer b)
 {
-  IdeClangCompletionItem *prev = NULL;
-  GList *head = NULL;
+  const Item *ai = a;
+  const Item *bi = b;
 
-  g_assert (IDE_IS_CLANG_PROPOSALS (self));
-
-  /*
-   * This filter will look through all entries in the array. Compare to
-   * ide_clang_proposals_refilter_list() which only looks at items that have
-   * already been filtered and is therefore only usable when typing
-   * additional characters.
-   */
-
-  if (self->items == NULL || self->items->len == 0)
-    return;
-
-  if (self->filter == NULL || self->filter[0] == 0)
-    {
-      for (guint i = 0; i < self->items->len; i++)
-        {
-          IdeClangCompletionItem *item = g_ptr_array_index (self->items, i);
-
-          if (prev != NULL)
-            {
-              item->link.prev = &prev->link;
-              prev->link.next = &item->link;
-            }
-          else
-            {
-              head = &item->link;
-            }
-
-          prev = item;
-        }
-
-      if (prev != NULL)
-        prev->link.next = NULL;
-
-      self->head = head;
-    }
-  else
-    {
-      g_autofree gchar *folded = g_utf8_casefold (self->filter, -1);
-
-      for (guint i = 0; i < self->items->len; i++)
-        {
-          IdeClangCompletionItem *item = g_ptr_array_index (self->items, i);
-
-          if (!ide_completion_item_fuzzy_match (item->typed_text, folded, &item->priority))
-            continue;
-
-          if (prev != NULL)
-            {
-              item->link.prev = &prev->link;
-              prev->link.next = &item->link;
-            }
-          else
-            {
-              head = &item->link;
-            }
-
-          prev = item;
-        }
-
-      if (prev != NULL)
-        prev->link.next = NULL;
-
-      self->head = g_list_sort (head, sort_by_priority);
-    }
+  return (gint)ai->priority - (gint)bi->priority;
 }
 
 static void
-ide_clang_proposals_refilter_list (IdeClangProposals *self)
+ide_clang_proposals_do_refilter (IdeClangProposals *self,
+                                 gboolean           fast_refilter)
 {
   g_autofree gchar *folded = NULL;
-  IdeClangCompletionItem *prev = NULL;
-  GList *head = NULL;
+  guint old_len = 0;
+  guint n_items;
 
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
 
-  /*
-   * This function only looks at items that have been previously
-   * filtered. This is useful so that we look at less and less
-   * data upon each key-press.
-   */
+  old_len = self->match_indexes->len;
 
-  if (self->filter == NULL || self->filter[0] == 0)
+  if (self->filter != NULL)
+    folded = g_utf8_casefold (self->filter, -1);
+
+  if (fast_refilter)
     {
-      ide_clang_proposals_refilter_array (self);
+      for (guint i = old_len; i > 0; i--)
+        {
+          Item *item = &g_array_index (self->match_indexes, Item, i - 1);
+          const gchar *keyword = item->keyword;
+
+          if (keyword == NULL)
+            {
+              g_autoptr(GVariant) child = g_variant_get_child_value (self->results, item->index);
+              if (!g_variant_lookup (child, "keyword", "&s", &keyword))
+                keyword = NULL;
+            }
+
+          if (keyword == NULL ||
+              !ide_completion_fuzzy_match (keyword, folded, &item->priority))
+            g_array_remove_index_fast (self->match_indexes, i - 1);
+        }
+
+      g_array_sort (self->match_indexes, sort_by_priority);
+
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->match_indexes->len);
+
       return;
     }
 
-  folded = g_utf8_casefold (self->filter, -1);
+  if (old_len > 0)
+    g_array_remove_range (self->match_indexes, 0, old_len);
 
-  for (const GList *iter = self->head; iter != NULL; iter = iter->next)
+  n_items = self->results ? g_variant_n_children (self->results) : 0;
+
+  if (self->filter == NULL || self->filter[0] == 0)
     {
-      IdeClangCompletionItem *item = iter->data;
-
-      if (!ide_completion_item_fuzzy_match (item->typed_text, folded, &item->priority))
-        continue;
-
-      if (prev != NULL)
+      for (guint i = 0; i < n_items; i++)
         {
-          item->link.prev = &prev->link;
-          prev->link.next = &item->link;
+          Item item = { i, i };
+          g_array_append_val (self->match_indexes, item);
         }
-      else
+    }
+  else if (self->results != NULL)
+    {
+      GVariantIter iter;
+      GVariant *value;
+      guint index = 0;
+
+      g_variant_iter_init (&iter, self->results);
+
+      while ((value = g_variant_iter_next_value (&iter)))
         {
-          head = &item->link;
+          const gchar *typed_text;
+
+          /*
+           * We get a typed_text pointer into the larger buffer, which is
+           * kept around for the lifetime of @variant (so that we don't need
+           * to copy more strings.
+           */
+
+          if (g_variant_lookup (value, "keyword", "&s", &typed_text))
+            {
+              Item item = { index, 0, typed_text };
+
+              if (ide_completion_fuzzy_match (typed_text, folded, &item.priority))
+                g_array_append_val (self->match_indexes, item);
+            }
+
+          g_variant_unref (value);
+
+          index++;
         }
 
-      prev = item;
+      g_array_sort (self->match_indexes, sort_by_priority);
     }
 
-  if (prev != NULL)
-    prev->link.next = NULL;
-
-  self->head = g_list_sort (head, sort_by_priority);
+  g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->match_indexes->len);
 }
 
 static void
 ide_clang_proposals_flush (IdeClangProposals *self,
-                           GPtrArray         *items,
+                           GVariant          *results,
                            const GError      *error)
 {
   GList *list;
 
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
-  g_assert (items != NULL || error != NULL);
+  g_assert (results != NULL || error != NULL);
 
-  g_clear_pointer (&self->items, g_ptr_array_unref);
-
-  if (items != NULL)
+  if (results != self->results)
     {
-      self->items = g_ptr_array_ref (items);
-      ide_clang_proposals_refilter_array (self);
+      g_clear_pointer (&self->results, g_variant_unref);
+      self->results = g_variant_ref (results);
     }
 
-  list = g_steal_pointer (&self->queued_tasks.head);
+  ide_clang_proposals_do_refilter (self, FALSE);
 
+  list = g_steal_pointer (&self->queued_tasks.head);
   self->queued_tasks.head = NULL;
   self->queued_tasks.tail = NULL;
   self->queued_tasks.length = 0;
 
   for (const GList *iter = list; iter != NULL; iter = iter->next)
     {
-      IdeTask *task = iter->data;
+      g_autoptr(IdeTask) task = iter->data;
 
       if (error != NULL)
         ide_task_return_error (task, g_error_copy (error));
@@ -420,80 +414,7 @@ ide_clang_proposals_flush (IdeClangProposals *self,
         ide_task_return_boolean (task, TRUE);
     }
 
-  g_list_free_full (list, g_object_unref);
-}
-
-static void
-ide_clang_proposals_build_worker (IdeTask      *task,
-                                  gpointer      source_object,
-                                  gpointer      task_data,
-                                  GCancellable *cancellable)
-{
-  GVariant *variant = task_data;
-  g_autoptr(GPtrArray) ret = NULL;
-  GVariant *value;
-  GVariantIter iter;
-  guint n_children;
-  guint index = 0;
-
-  g_assert (IDE_IS_TASK (task));
-  g_assert (IDE_IS_CLANG_PROPOSALS (source_object));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  n_children = (guint)g_variant_n_children (variant);
-  ret = g_ptr_array_new_full (n_children, g_object_unref);
-
-  g_variant_iter_init (&iter, variant);
-
-  while ((value = g_variant_iter_next_value (&iter)))
-    {
-      const gchar *typed_text;
-
-      /*
-       * We get a typed_text pointer into the larger buffer, which is
-       * kept around for the lifetime of @variant (so that we don't need
-       * to copy more strings.
-       */
-
-      if (g_variant_lookup (value, "keyword", "&s", &typed_text))
-        g_ptr_array_add (ret, ide_clang_completion_item_new (variant, index, typed_text));
-
-      g_variant_unref (value);
-      index++;
-    }
-
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&ret),
-                           (GDestroyNotify)g_ptr_array_unref);
-}
-
-static void
-ide_clang_proposals_build_async (IdeClangProposals   *self,
-                                 GVariant            *results,
-                                 GCancellable        *cancellable,
-                                 GAsyncReadyCallback  callback,
-                                 gpointer             user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-
-  g_assert (IDE_IS_CLANG_PROPOSALS (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_clang_proposals_build_async);
-  ide_task_set_task_data (task, g_variant_ref (results), (GDestroyNotify)g_variant_unref);
-  ide_task_run_in_thread (task, ide_clang_proposals_build_worker);
-}
-
-static GPtrArray *
-ide_clang_proposals_build_finish (IdeClangProposals  *self,
-                                  GAsyncResult       *result,
-                                  GError            **error)
-{
-  g_assert (IDE_IS_CLANG_PROPOSALS (self));
-  g_assert (IDE_IS_TASK (result));
-
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  g_list_free (list);
 }
 
 static void
@@ -626,29 +547,6 @@ ide_clang_proposals_query_finish (IdeClangProposals  *self,
 }
 
 static void
-build_results_cb (GObject      *object,
-                  GAsyncResult *result,
-                  gpointer      user_data)
-{
-  IdeClangProposals *self = (IdeClangProposals *)object;
-  g_autoptr(GPtrArray) items = NULL;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_CLANG_PROPOSALS (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (user_data == NULL);
-
-  if (!(items = ide_clang_proposals_build_finish (self, result, &error)))
-    ide_clang_proposals_flush (self, NULL, error);
-  else
-    ide_clang_proposals_flush (self, items, NULL);
-
-  IDE_EXIT;
-}
-
-static void
 query_subprocess_cb (GObject      *object,
                      GAsyncResult *result,
                      gpointer      user_data)
@@ -663,28 +561,9 @@ query_subprocess_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (user_data == NULL);
 
-  /*
-   * Currently, to integrate with GtkSourceView we need to inflate an object
-   * for each result. However, since that can easily be on the order of 20,000
-   * results, we need to do as little work as possible. Therefore, the
-   * completion objects just get an index+variant which can be accessed in
-   * O(1) running time but more importantly, is delayed until accessed.
-   *
-   * This is basically just being implemented so that we can land the clang
-   * subprocess. As soon as that lands, we'll start replacing the completion
-   * engine and avoid having to create the objects altogether in favor of a
-   * GListModel based approach.
-   */
+  ret = ide_clang_proposals_query_finish (self, result, &error);
 
-  if (!(ret = ide_clang_proposals_query_finish (self, result, &error)))
-    ide_clang_proposals_flush (self, NULL, error);
-  else
-    ide_clang_proposals_build_async (self,
-                                     ret,
-                                     self->cancellable,
-                                     build_results_cb,
-                                     NULL);
-
+  ide_clang_proposals_flush (self, ret, error);
 
   IDE_EXIT;
 }
@@ -692,14 +571,13 @@ query_subprocess_cb (GObject      *object,
 void
 ide_clang_proposals_populate_async (IdeClangProposals   *self,
                                     const GtkTextIter   *iter,
-                                    gboolean             user_requested,
+                                    const gchar         *word,
                                     GCancellable        *cancellable,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
   g_autoptr(GCancellable) prev_cancellable = NULL;
   g_autoptr(IdeTask) task = NULL;
-  g_autofree gchar *word = NULL;
   g_autofree gchar *slice = NULL;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
@@ -720,21 +598,6 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
   ide_task_set_task_data (task, g_object_ref (buffer), g_object_unref);
 
   begin = *iter;
-  word = _ide_text_iter_current_symbol (iter, &begin);
-
-  if (dzl_str_empty0 (word))
-    {
-      /*
-       * If we have nothing to complete, then we want to try to avoid doing any
-       * sort of work unless the user force-requested the completion.
-       */
-      if (!user_requested)
-        {
-          ide_clang_proposals_clear (self);
-          ide_task_return_boolean (task, TRUE);
-          IDE_EXIT;
-        }
-    }
 
   if (self->line < 0 || self->line_offset < 0)
     IDE_GOTO (query_client);
@@ -755,7 +618,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
    */
   if (!g_queue_is_empty (&self->queued_tasks))
     {
-      ide_take_string (&self->filter, g_steal_pointer (&word));
+      ide_set_string (&self->filter, word);
       g_queue_push_tail (&self->queued_tasks, g_steal_pointer (&task));
       IDE_EXIT;
     }
@@ -774,8 +637,8 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
    */
   if (self->filter == NULL || (word && g_str_has_prefix (word, self->filter)))
     {
-      ide_take_string (&self->filter, g_steal_pointer (&word));
-      ide_clang_proposals_refilter_list (self);
+      ide_set_string (&self->filter, word);
+      ide_clang_proposals_do_refilter (self, TRUE);
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
@@ -784,8 +647,8 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
    * So we can reuse the results, but since the user backspaced we have to
    * clear the linked list and update by walking the whole array.
    */
-  ide_take_string (&self->filter, g_steal_pointer (&word));
-  ide_clang_proposals_refilter_array (self);
+  ide_set_string (&self->filter, word);
+  ide_clang_proposals_do_refilter (self, FALSE);
   ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
@@ -802,6 +665,8 @@ query_client:
   self->line_offset = gtk_text_iter_get_line_offset (&begin);
 
   g_queue_push_tail (&self->queued_tasks, g_steal_pointer (&task));
+
+  ide_set_string (&self->filter, word);
 
   ide_clang_proposals_query_async (self,
                                    file,
@@ -827,10 +692,49 @@ ide_clang_proposals_populate_finish (IdeClangProposals  *self,
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
-const GList *
-ide_clang_proposals_get_list (IdeClangProposals *self)
+void
+ide_clang_proposals_refilter (IdeClangProposals *self,
+                              const gchar       *word)
 {
-  g_return_val_if_fail (IDE_IS_CLANG_PROPOSALS (self), NULL);
+  gboolean fast_refilter;
 
-  return self->head;
+  g_assert (IDE_IS_CLANG_PROPOSALS (self));
+
+  fast_refilter = self->filter && word && g_str_has_prefix (word, self->filter);
+  ide_set_string (&self->filter, word);
+  ide_clang_proposals_do_refilter (self, fast_refilter);
+}
+
+static guint
+ide_clang_proposals_get_n_items (GListModel *model)
+{
+  return IDE_CLANG_PROPOSALS (model)->match_indexes->len;
+}
+
+static GType
+ide_clang_proposals_get_item_type (GListModel *model)
+{
+  return IDE_TYPE_CLANG_COMPLETION_ITEM;
+}
+
+static gpointer
+ide_clang_proposals_get_item (GListModel *model,
+                              guint       position)
+{
+  IdeClangProposals *self = IDE_CLANG_PROPOSALS (model);
+  Item *item = &g_array_index (self->match_indexes, Item, position);
+  g_autoptr(GVariant) child = g_variant_get_child_value (self->results, item->index);
+  const gchar *keyword = NULL;
+
+  g_variant_lookup (child, "keyword", "&s", &keyword);
+
+  return ide_clang_completion_item_new (self->results, item->index, keyword);
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item = ide_clang_proposals_get_item;
+  iface->get_item_type = ide_clang_proposals_get_item_type;
+  iface->get_n_items = ide_clang_proposals_get_n_items;
 }

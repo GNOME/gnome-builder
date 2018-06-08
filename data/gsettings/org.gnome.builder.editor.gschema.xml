@@ -115,5 +115,11 @@
       <summary>Autosave Frequency</summary>
       <description>The number of seconds after modification before auto saving.</description>
     </key>
+    <key name="completion-n-rows" type="i">
+      <default>7</default>
+      <range min="1" max="32"/>
+      <summary>Completion Row Count</summary>
+      <description>The number of completion rows to display to the user.</description>
+    </key>
   </schema>
 </schemalist>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeCompletionListBoxRow" parent="GtkListBoxRow">
+    <property name="can-focus">false</property>
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="can-focus">false</property>
+        <property name="orientation">horizontal</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkImage" id="image">
+            <property name="valign">center</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="left">
+            <property name="can-focus">false</property>
+            <property name="xalign">1.0</property>
+            <property name="hexpand">false</property>
+            <property name="single-line-mode">true</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="left"/>
+            </style>
+            <attributes>
+              <attribute name="family" value="monospace"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="center">
+            <property name="can-focus">false</property>
+            <property name="xalign">0.0</property>
+            <property name="hexpand">true</property>
+            <property name="single-line-mode">true</property>
+            <property name="visible">true</property>
+            <attributes>
+              <attribute name="family" value="monospace"/>
+            </attributes>
+            <style>
+              <class name="center"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="right">
+            <property name="can-focus">false</property>
+            <property name="xalign">1.0</property>
+            <property name="hexpand">false</property>
+            <property name="single-line-mode">true</property>
+            <property name="visible">true</property>
+            <attributes>
+              <attribute name="family" value="monospace"/>
+            </attributes>
+            <style>
+              <class name="right"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,0 +1,9 @@
+[Plugin]
+Module=words-plugin
+Name=Word Completion
+Description=Provides completiones based on words in the document
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2017-2018 Umang Jain, Christian Hergert
+Depends=editor;
+Builtin=true
+Embedded=gbp_words_register_types

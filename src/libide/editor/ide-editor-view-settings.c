@@ -195,6 +195,10 @@ _ide_editor_view_init_settings (IdeEditorView *self)
                                 G_SETTINGS_BIND_GET,
                                 get_wrap_mode, NULL, NULL, NULL);
 
+  g_settings_bind (self->editor_settings, "completion-n-rows",
+                   source_view, "completion-n-rows",
+                   G_SETTINGS_BIND_GET);
+
   g_settings_bind (self->editor_settings, "show-map",
                    self, "show-map",
                    G_SETTINGS_BIND_GET);
@@ -220,8 +224,4 @@ _ide_editor_view_init_settings (IdeEditorView *self)
   on_draw_spaces_changed (self, "draw-spaces", self->editor_settings);
 
   self->insight_settings = g_settings_new ("org.gnome.builder.code-insight");
-
-  g_settings_bind (self->insight_settings, "word-completion",
-                   source_view, "enable-word-completion",
-                   G_SETTINGS_BIND_GET);
 }

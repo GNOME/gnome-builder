@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 G_BEGIN_DECLS
@@ -26,7 +25,5 @@ G_BEGIN_DECLS
 #define IDE_TYPE_XML_COMPLETION_PROVIDER (ide_xml_completion_provider_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeXmlCompletionProvider, ide_xml_completion_provider, IDE, XML_COMPLETION_PROVIDER, IdeObject)
-
-IdeXmlCompletionProvider *ide_xml_completion_provider_new (void);
 
 G_END_DECLS
