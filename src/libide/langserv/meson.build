@@ -1,6 +1,8 @@
 langserv_headers = [
   'ide-langserv-client.h',
+  'ide-langserv-completion-item.h',
   'ide-langserv-completion-provider.h',
+  'ide-langserv-completion-results.h',
   'ide-langserv-diagnostic-provider.h',
   'ide-langserv-formatter.h',
   'ide-langserv-highlighter.h',
@@ -14,7 +16,9 @@ langserv_headers = [
 
 langserv_sources = [
   'ide-langserv-client.c',
+  'ide-langserv-completion-item.c',
   'ide-langserv-completion-provider.c',
+  'ide-langserv-completion-results.c',
   'ide-langserv-diagnostic-provider.c',
   'ide-langserv-formatter.c',
   'ide-langserv-highlighter.c',
