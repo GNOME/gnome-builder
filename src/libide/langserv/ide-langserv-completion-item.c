@@ -124,6 +124,17 @@ ide_langserv_completion_item_get_detail (IdeLangservCompletionItem *self)
   return self->detail;
 }
 
+/**
+ * ide_langserv_completion_item_get_snippet:
+ * @self: a #IdeLangservCompletionItem
+ *
+ * Creates a new snippet for the completion item to be inserted into
+ * the document.
+ *
+ * Returns: (transfer full): an #IdeSnippet
+ *
+ * Since: 3.30
+ */
 IdeSnippet *
 ide_langserv_completion_item_get_snippet (IdeLangservCompletionItem *self)
 {

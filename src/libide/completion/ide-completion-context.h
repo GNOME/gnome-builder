@@ -44,7 +44,7 @@ gboolean       ide_completion_context_is_empty                   (IdeCompletionC
 IDE_AVAILABLE_IN_3_30
 void           ide_completion_context_set_proposals_for_provider (IdeCompletionContext  *self,
                                                                   IdeCompletionProvider *provider,
-                                                                  GListModel            *model);
+                                                                  GListModel            *results);
 IDE_AVAILABLE_IN_3_30
 IdeCompletion *ide_completion_context_get_completion             (IdeCompletionContext   *self);
 IDE_AVAILABLE_IN_3_30

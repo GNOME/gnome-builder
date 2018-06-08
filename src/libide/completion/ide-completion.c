@@ -1675,19 +1675,19 @@ ide_completion_fuzzy_match (const gchar *haystack,
 
 /**
  * ide_completion_fuzzy_highlight:
- * @str: the string to be highlighted
- * @match: the typed-text used to highlight @str
+ * @haystack: the string to be highlighted
+ * @casefold_query: the typed-text used to highlight @haystack
  *
- * This will add &lt;b&gt; tags around matched characters in @str
- * based on @match.
+ * This will add &lt;b&gt; tags around matched characters in @haystack
+ * based on @casefold_query.
  *
  * Returns: a newly allocated string
  *
  * Since: 3.30
  */
 gchar *
-ide_completion_fuzzy_highlight (const gchar *str,
-                                const gchar *match)
+ide_completion_fuzzy_highlight (const gchar *haystack,
+                                const gchar *casefold_query)
 {
   static const gchar *begin = "<b>";
   static const gchar *end = "</b>";
@@ -1696,15 +1696,15 @@ ide_completion_fuzzy_highlight (const gchar *str,
   gunichar match_ch;
   gboolean element_open = FALSE;
 
-  if (str == NULL || match == NULL)
-    return g_strdup (str);
+  if (haystack == NULL || casefold_query == NULL)
+    return g_strdup (haystack);
 
   ret = g_string_new (NULL);
 
-  for (; *str; str = g_utf8_next_char (str))
+  for (; *haystack; haystack = g_utf8_next_char (haystack))
     {
-      str_ch = g_utf8_get_char (str);
-      match_ch = g_utf8_get_char (match);
+      str_ch = g_utf8_get_char (haystack);
+      match_ch = g_utf8_get_char (casefold_query);
 
       if ((str_ch == match_ch) || (g_unichar_tolower (str_ch) == g_unichar_tolower (match_ch)))
         {
@@ -1717,7 +1717,7 @@ ide_completion_fuzzy_highlight (const gchar *str,
           g_string_append_unichar (ret, str_ch);
 
           /* TODO: We could seek to the next char and append in a batch. */
-          match = g_utf8_next_char (match);
+          casefold_query = g_utf8_next_char (casefold_query);
         }
       else
         {
