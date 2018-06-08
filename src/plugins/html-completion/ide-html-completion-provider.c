@@ -18,79 +18,22 @@
 
 #define G_LOG_DOMAIN "html-completion"
 
-#include <dazzle.h>
-#include <libpeas/peas.h>
-#include <string.h>
-
 #include "ide-html-completion-provider.h"
-
-static GHashTable *element_attrs;
-static DzlTrie *css_styles;
-static DzlTrie *elements;
-
-enum {
-  MODE_NONE,
-  MODE_ELEMENT_START,
-  MODE_ELEMENT_END,
-  MODE_ATTRIBUTE_NAME,
-  MODE_ATTRIBUTE_VALUE,
-  MODE_CSS,
-};
-
-typedef struct
-{
-  GList *results;
-  gint mode;
-} SearchState;
+#include "ide-html-proposal.h"
+#include "ide-html-proposals.h"
 
 struct _IdeHtmlCompletionProvider
 {
-  IdeObject parent_instance;
+  GObject parent_instance;
+  IdeHtmlProposals *proposals;
 };
 
-static void completion_provider_init (GtkSourceCompletionProviderIface *);
+static void completion_provider_init (IdeCompletionProviderInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeHtmlCompletionProvider,
-                                ide_html_completion_provider,
-                                IDE_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_init)
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, NULL))
-
-static gchar *
-get_word (GtkSourceCompletionContext *context)
-{
-  GtkTextIter word_start;
-  GtkTextIter iter;
-  gchar *word = NULL;
-
-  g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), NULL);
-
-  if (gtk_source_completion_context_get_iter (context, &iter))
-    {
-      word_start = iter;
-
-      do {
-        gunichar ch;
-
-        if (!gtk_text_iter_backward_char (&word_start))
-          break;
-
-        ch = gtk_text_iter_get_char (&word_start);
-
-        if (g_unichar_isalnum (ch) || ch == '_')
-          continue;
-
-        gtk_text_iter_forward_char (&word_start);
-        break;
-
-      } while (TRUE);
-
-      word = gtk_text_iter_get_slice (&word_start, &iter);
-    }
-
-  return word;
-}
+G_DEFINE_TYPE_WITH_CODE (IdeHtmlCompletionProvider,
+                         ide_html_completion_provider,
+                         G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, completion_provider_init))
 
 static gboolean
 in_element (const GtkTextIter *iter)
@@ -113,7 +56,7 @@ in_element (const GtkTextIter *iter)
           gtk_text_iter_backward_char (&copy);
           ch = gtk_text_iter_get_char (&copy);
           if (ch == '<')
-            return MODE_ELEMENT_END;
+            return IDE_HTML_PROPOSAL_ELEMENT_END;
         }
 
       if (ch == '>')
@@ -191,30 +134,27 @@ in_attribute_named (const GtkTextIter *iter,
   return ret;
 }
 
-static gint
-get_mode (GtkSourceCompletionContext *context)
+static IdeHtmlProposalKind
+get_mode (const GtkTextIter *iter)
 {
-  GtkTextIter iter;
   GtkTextIter back;
 
-  g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), -1);
-
-  gtk_source_completion_context_get_iter (context, &iter);
+  g_assert (iter != NULL);
 
   /*
    * Ignore the = after attribute name.
    */
-  back = iter;
+  back = *iter;
   gtk_text_iter_backward_char (&back);
   if (gtk_text_iter_get_char (&back) == '=')
-    return MODE_NONE;
+    return IDE_HTML_PROPOSAL_NONE;
 
   /*
    * Check for various state inside of element start (<).
    */
-  if (in_element (&iter))
+  if (in_element (iter))
     {
-      GtkTextIter copy = iter;
+      GtkTextIter copy = *iter;
       gunichar ch;
 
       /*
@@ -230,11 +170,11 @@ get_mode (GtkSourceCompletionContext *context)
 
               gtk_text_iter_backward_char (&copy2);
               if (gtk_text_iter_get_char (&copy2) == '<')
-                return MODE_ELEMENT_END;
+                return IDE_HTML_PROPOSAL_ELEMENT_END;
             }
 
           if (ch == '<')
-            return MODE_ELEMENT_START;
+            return IDE_HTML_PROPOSAL_ELEMENT_START;
 
           if (g_unichar_isalnum (ch))
             continue;
@@ -245,15 +185,15 @@ get_mode (GtkSourceCompletionContext *context)
       /*
        * Now check to see if we are in an attribute value.
        */
-      if (in_attribute_value (&iter, '"') || in_attribute_value (&iter, '\''))
+      if (in_attribute_value (iter, '"') || in_attribute_value (iter, '\''))
         {
           /*
            * If the attribute name is style, then we are in CSS.
            */
-          if (in_attribute_named (&iter, "style"))
-            return MODE_CSS;
+          if (in_attribute_named (iter, "style"))
+            return IDE_HTML_PROPOSAL_CSS_PROPERTY;
 
-          return MODE_ATTRIBUTE_VALUE;
+          return IDE_HTML_PROPOSAL_ATTRIBUTE_VALUE;
         }
 
       /*
@@ -262,42 +202,10 @@ get_mode (GtkSourceCompletionContext *context)
        */
       ch = gtk_text_iter_get_char (&back);
       if (ch != '\'' && ch != '"')
-        return MODE_ATTRIBUTE_NAME;
+        return IDE_HTML_PROPOSAL_ATTRIBUTE_NAME;
     }
 
-  return MODE_NONE;
-}
-
-static gboolean
-traverse_cb (DzlTrie        *trie,
-             const gchar *key,
-             gpointer     value,
-             gpointer     user_data)
-{
-  SearchState *state = user_data;
-  GtkSourceCompletionItem *item;
-  const gchar *text = key;
-  gchar *tmp = NULL;
-
-  g_return_val_if_fail (trie, FALSE);
-  g_return_val_if_fail (state, FALSE);
-
-  if (state->mode == MODE_ATTRIBUTE_NAME)
-    {
-      tmp = g_strdup_printf ("%s=", key);
-      text = tmp;
-    }
-
-  item = g_object_new (GTK_SOURCE_TYPE_COMPLETION_ITEM,
-                       "text", text,
-                       "label", key,
-                       NULL);
-
-  state->results = g_list_prepend (state->results, item);
-
-  g_free (tmp);
-
-  return FALSE;
+  return IDE_HTML_PROPOSAL_NONE;
 }
 
 static gboolean
@@ -308,592 +216,289 @@ find_space (gunichar ch,
 }
 
 static gchar *
-get_element (GtkSourceCompletionContext *context)
+get_element (const GtkTextIter *iter)
 {
-  GtkTextIter iter;
   GtkTextIter begin;
   GtkTextIter end;
   GtkTextIter match_begin;
   GtkTextIter match_end;
 
-  g_return_val_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context), NULL);
+  g_assert (iter != NULL);
 
-  gtk_source_completion_context_get_iter (context, &iter);
-
-  if (gtk_text_iter_backward_search (&iter, "<", GTK_TEXT_SEARCH_TEXT_ONLY,
-                                     &match_begin, &match_end, NULL))
+  if (gtk_text_iter_backward_search (iter, "<", GTK_TEXT_SEARCH_TEXT_ONLY, &match_begin, &match_end, NULL))
     {
       end = begin = match_end;
 
-      if (gtk_text_iter_forward_find_char (&end, find_space, NULL, &iter))
+      if (gtk_text_iter_forward_find_char (&end, find_space, NULL, iter))
         return gtk_text_iter_get_slice (&begin, &end);
     }
 
   return NULL;
 }
 
-static gint
-sort_completion_items (gconstpointer a,
-                       gconstpointer b)
-{
-  gchar *astr;
-  gchar *bstr;
-  gint ret;
-
-  /*
-   * XXX: This is very much not ideal. We are allocating a string for every
-   *      compare! But we don't have accessor funcs into the completion item.
-   *      We should probably make our completion item class.
-   */
-
-  g_object_get (GTK_SOURCE_COMPLETION_ITEM (a),
-                "label", &astr,
-                NULL);
-  g_object_get (GTK_SOURCE_COMPLETION_ITEM (b),
-                "label", &bstr,
-                NULL);
-
-  ret = g_strcmp0 (astr, bstr);
-
-  g_free (astr);
-  g_free (bstr);
-
-  return ret;
-}
-
 static void
-ide_html_completion_provider_populate (GtkSourceCompletionProvider *provider,
-                                      GtkSourceCompletionContext  *context)
+whereami (IdeCompletionContext  *context,
+          IdeHtmlProposalKind   *kind,
+          gchar                **element)
 {
-  SearchState state = { 0 };
-  DzlTrie *trie = NULL;
-  gchar *word;
-  gint mode;
+  GtkTextIter begin, end;
 
-  g_return_if_fail (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
-  g_return_if_fail (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (kind != NULL);
+  g_assert (element != NULL);
 
-  mode = get_mode (context);
-  word = get_word (context);
+  ide_completion_context_get_bounds (context, &begin, &end);
 
-  switch (mode)
+  *kind = get_mode (&begin);
+  *element = NULL;
+
+  switch (*kind)
     {
-    case MODE_NONE:
+    case IDE_HTML_PROPOSAL_ELEMENT_START:
+    case IDE_HTML_PROPOSAL_ELEMENT_END:
+      *element = ide_completion_context_get_word (context);
       break;
 
-    case MODE_ELEMENT_END:
-    case MODE_ELEMENT_START:
-      trie = elements;
+    case IDE_HTML_PROPOSAL_ATTRIBUTE_NAME:
+      *element = get_element (&begin);
       break;
 
-    case MODE_ATTRIBUTE_NAME:
-      {
-        gchar *element;
-
-        if ((element = get_element (context)))
-          {
-            trie = g_hash_table_lookup (element_attrs, element);
-            g_free (element);
-          }
-
-        break;
-      }
-
-    case MODE_CSS:
-      trie = css_styles;
-      break;
-
-    case MODE_ATTRIBUTE_VALUE:
-      break;
-
+    case IDE_HTML_PROPOSAL_NONE:
+    case IDE_HTML_PROPOSAL_ATTRIBUTE_VALUE:
+    case IDE_HTML_PROPOSAL_CSS_PROPERTY:
     default:
       break;
     }
-
-  state.mode = mode;
-
-  /*
-   * Load the values for the context.
-   */
-  if (trie && word)
-    {
-      dzl_trie_traverse (trie, word, G_PRE_ORDER, G_TRAVERSE_LEAVES, -1,
-                     traverse_cb, &state);
-    }
-
-  /*
-   * If we are in an attribute, also load the global attributes values.
-   */
-  if (mode == MODE_ATTRIBUTE_NAME)
-    {
-      DzlTrie *global;
-
-      global = g_hash_table_lookup (element_attrs, "*");
-      dzl_trie_traverse (global, word, G_PRE_ORDER, G_TRAVERSE_LEAVES, -1,
-                     traverse_cb, &state);
-    }
-
-  /*
-   * TODO: Not exactly an ideal sort mechanism.
-   */
-  state.results = g_list_sort (state.results, sort_completion_items);
-
-  gtk_source_completion_context_add_proposals (context, provider,
-                                               state.results, TRUE);
-
-  g_list_foreach (state.results, (GFunc)g_object_unref, NULL);
-  g_list_free (state.results);
-
-  g_free (word);
-}
-
-static GdkPixbuf *
-ide_html_completion_provider_get_icon (GtkSourceCompletionProvider *provider)
-{
-  return NULL;
 }
 
 static void
-ide_html_completion_provider_class_finalize (IdeHtmlCompletionProviderClass *klass)
+ide_html_completion_provider_populate_async (IdeCompletionProvider *provider,
+                                             IdeCompletionContext  *context,
+                                             GCancellable          *cancellable,
+                                             GAsyncReadyCallback    callback,
+                                             gpointer               user_data)
 {
+  IdeHtmlCompletionProvider *self = (IdeHtmlCompletionProvider *)provider;
+  g_autoptr(IdeTask) task = NULL;
+  IdeHtmlProposalKind kind = 0;
+  g_autofree gchar *element = NULL;
+  g_autofree gchar *word = NULL;
+  g_autofree gchar *casefold = NULL;
+
+  g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_html_completion_provider_populate_async);
+
+  if (ide_completion_context_is_language (context, "css"))
+    kind = IDE_HTML_PROPOSAL_CSS_PROPERTY;
+  else
+    whereami (context, &kind, &element);
+
+  if ((word = ide_completion_context_get_word (context)))
+    casefold = g_utf8_casefold (word, -1);
+
+  if (self->proposals == NULL)
+    self->proposals = ide_html_proposals_new ();
+
+  ide_html_proposals_refilter (self->proposals, kind, element, casefold);
+
+  ide_task_return_object (task, g_object_ref (self->proposals));
+}
+
+static GListModel *
+ide_html_completion_provider_populate_finish (IdeCompletionProvider  *provider,
+                                              GAsyncResult           *result,
+                                              GError                **error)
+{
+  g_assert (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_object (IDE_TASK (result), error);
+}
+
+static gboolean
+ide_html_completion_provider_refilter (IdeCompletionProvider *provider,
+                                       IdeCompletionContext  *context,
+                                       GListModel            *proposals)
+{
+  IdeHtmlProposalKind kind = 0;
+  g_autofree gchar *element = NULL;
+  g_autofree gchar *word = NULL;
+  g_autofree gchar *casefold = NULL;
+
+  g_assert (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_HTML_PROPOSALS (proposals));
+
+  if (ide_completion_context_is_language (context, "css"))
+    kind = IDE_HTML_PROPOSAL_CSS_PROPERTY;
+  else
+    whereami (context, &kind, &element);
+
+  if ((word = ide_completion_context_get_word (context)))
+    casefold = g_utf8_casefold (word, -1);
+
+  ide_html_proposals_refilter (IDE_HTML_PROPOSALS (proposals), kind, element, casefold);
+
+  return TRUE;
+}
+
+static void
+ide_html_completion_provider_activate_proposal (IdeCompletionProvider *provider,
+                                                IdeCompletionContext  *context,
+                                                IdeCompletionProposal *proposal,
+                                                const GdkEventKey     *key)
+{
+  g_autoptr(IdeSnippet) snippet = NULL;
+  IdeHtmlProposal *item = (IdeHtmlProposal *)proposal;
+  IdeHtmlProposalKind kind;
+  GtkTextBuffer *buffer;
+  GtkTextView *view;
+  GtkTextIter begin, end;
+
+  g_assert (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_HTML_PROPOSAL (item));
+
+  snippet = ide_html_proposal_get_snippet (item);
+  kind = ide_html_proposal_get_kind (item);
+
+  buffer = ide_completion_context_get_buffer (context);
+  view = ide_completion_context_get_view (context);
+
+  gtk_text_buffer_begin_user_action (buffer);
+  if (ide_completion_context_get_bounds (context, &begin, &end))
+    gtk_text_buffer_delete (buffer, &begin, &end);
+
+  if (kind == IDE_HTML_PROPOSAL_ELEMENT_START && gtk_text_iter_get_char (&begin) != '>')
+    {
+      g_autoptr(IdeSnippetChunk) chunk1 = ide_snippet_chunk_new ();
+      g_autoptr(IdeSnippetChunk) chunk2 = ide_snippet_chunk_new ();
+
+      ide_snippet_chunk_set_tab_stop (chunk1, 0);
+      ide_snippet_chunk_set_spec (chunk2, ">");
+
+      ide_snippet_add_chunk (snippet, chunk1);
+      ide_snippet_add_chunk (snippet, chunk2);
+    }
+
+  if (kind == IDE_HTML_PROPOSAL_CSS_PROPERTY)
+    {
+      g_autoptr(IdeSnippetChunk) chunk1 = ide_snippet_chunk_new ();
+      g_autoptr(IdeSnippetChunk) chunk2 = ide_snippet_chunk_new ();
+      g_autoptr(IdeSnippetChunk) chunk3 = ide_snippet_chunk_new ();
+
+      ide_snippet_chunk_set_spec (chunk1, ": ");
+      ide_snippet_chunk_set_tab_stop (chunk2, 0);
+      ide_snippet_chunk_set_spec (chunk3, ";");
+
+      ide_snippet_add_chunk (snippet, chunk1);
+      ide_snippet_add_chunk (snippet, chunk2);
+      ide_snippet_add_chunk (snippet, chunk3);
+    }
+
+  ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
+
+  gtk_text_buffer_end_user_action (buffer);
+}
+
+static void
+ide_html_completion_provider_display_proposal (IdeCompletionProvider   *provider,
+                                               IdeCompletionListBoxRow *row,
+                                               IdeCompletionContext    *context,
+                                               const gchar             *typed_text,
+                                               IdeCompletionProposal   *proposal)
+{
+  g_autofree gchar *markup = NULL;
+  const gchar *word;
+  IdeHtmlProposalKind kind;
+
+  g_assert (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
+  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_HTML_PROPOSAL (proposal));
+
+  word = ide_html_proposal_get_word (IDE_HTML_PROPOSAL (proposal));
+  markup = ide_completion_fuzzy_highlight (word, typed_text);
+  kind = ide_html_proposal_get_kind (IDE_HTML_PROPOSAL (proposal));
+
+  switch (kind)
+    {
+    case IDE_HTML_PROPOSAL_CSS_PROPERTY:
+      /* probably could use something css specific */
+      ide_completion_list_box_row_set_icon_name (row, "ui-property-symbolic");
+      break;
+
+    case IDE_HTML_PROPOSAL_ELEMENT_START:
+    case IDE_HTML_PROPOSAL_ELEMENT_END:
+    case IDE_HTML_PROPOSAL_ATTRIBUTE_NAME:
+    case IDE_HTML_PROPOSAL_ATTRIBUTE_VALUE:
+    case IDE_HTML_PROPOSAL_NONE:
+    default:
+      ide_completion_list_box_row_set_icon_name (row, NULL);
+      break;
+    }
+
+  ide_completion_list_box_row_set_left (row, NULL);
+  ide_completion_list_box_row_set_right (row, NULL);
+  ide_completion_list_box_row_set_center_markup (row, markup);
+}
+
+static gint
+ide_html_completion_provider_get_priority (IdeCompletionProvider *provider,
+                                           IdeCompletionContext  *context)
+{
+  return 200;
+}
+
+static gboolean
+in_comment (const GtkTextIter *iter)
+{
+  GtkTextBuffer *buffer = gtk_text_iter_get_buffer (iter);
+
+  return gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), iter, "string") &&
+         gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), iter, "comment");
+}
+
+static gboolean
+ide_html_completion_provider_is_trigger (IdeCompletionProvider *provider,
+                                         const GtkTextIter     *iter,
+                                         gunichar               ch)
+{
+  if (ch == ' ')
+    {
+      GtkTextIter cur = *iter;
+      gunichar prev;
+
+      if (gtk_text_iter_backward_char (&cur) &&
+          (prev = gtk_text_iter_get_char (&cur)) &&
+          !g_unichar_isspace (prev) &&
+          !in_comment (&cur))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+ide_html_completion_provider_finalize (GObject *object)
+{
+  IdeHtmlCompletionProvider *self = (IdeHtmlCompletionProvider *)object;
+
+  g_clear_object (&self->proposals);
+
+  G_OBJECT_CLASS (ide_html_completion_provider_parent_class)->finalize (object);
 }
 
 static void
 ide_html_completion_provider_class_init (IdeHtmlCompletionProviderClass *klass)
 {
-  elements = dzl_trie_new (NULL);
-  element_attrs = g_hash_table_new (g_str_hash, g_str_equal);
-  css_styles = dzl_trie_new (NULL);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-#define ADD_ELEMENT(str)        dzl_trie_insert(elements,str,str)
-#define ADD_STRING(dict, str)   dzl_trie_insert(dict,str,str)
-#define ADD_ATTRIBUTE(ele,attr) \
-  G_STMT_START { \
-    DzlTrie *t = g_hash_table_lookup (element_attrs, ele); \
-    if (!t) { \
-      t = dzl_trie_new (NULL); \
-      g_hash_table_insert (element_attrs, ele, t); \
-    } \
-    dzl_trie_insert (t,attr,attr); \
-  } G_STMT_END
-
-  /*
-   * TODO: We should determine what are valid attributes for given elements
-   *       and only provide those based upon the completion context.
-   */
-
-  /*
-   * http://www.w3.org/TR/html-markup/elements.html
-   */
-
-  ADD_ELEMENT ("a");
-  ADD_ELEMENT ("abbr");
-  ADD_ELEMENT ("acronym");
-  ADD_ELEMENT ("address");
-  ADD_ELEMENT ("applet");
-  ADD_ELEMENT ("area");
-  ADD_ELEMENT ("article");
-  ADD_ELEMENT ("aside");
-  ADD_ELEMENT ("audio");
-  ADD_ELEMENT ("b");
-  ADD_ELEMENT ("base");
-  ADD_ELEMENT ("basefont");
-  ADD_ELEMENT ("bdi");
-  ADD_ELEMENT ("bdo");
-  ADD_ELEMENT ("big");
-  ADD_ELEMENT ("blockquote");
-  ADD_ELEMENT ("body");
-  ADD_ELEMENT ("br");
-  ADD_ELEMENT ("button");
-  ADD_ELEMENT ("canvas");
-  ADD_ELEMENT ("caption");
-  ADD_ELEMENT ("center");
-  ADD_ELEMENT ("cite");
-  ADD_ELEMENT ("code");
-  ADD_ELEMENT ("col");
-  ADD_ELEMENT ("colgroup");
-  ADD_ELEMENT ("datalist");
-  ADD_ELEMENT ("dd");
-  ADD_ELEMENT ("del");
-  ADD_ELEMENT ("details");
-  ADD_ELEMENT ("dfn");
-  ADD_ELEMENT ("dialog");
-  ADD_ELEMENT ("dir");
-  ADD_ELEMENT ("div");
-  ADD_ELEMENT ("dl");
-  ADD_ELEMENT ("dt");
-  ADD_ELEMENT ("em");
-  ADD_ELEMENT ("embed");
-  ADD_ELEMENT ("fieldset");
-  ADD_ELEMENT ("figcaption");
-  ADD_ELEMENT ("figure");
-  ADD_ELEMENT ("font");
-  ADD_ELEMENT ("footer");
-  ADD_ELEMENT ("form");
-  ADD_ELEMENT ("frame");
-  ADD_ELEMENT ("frameset");
-  ADD_ELEMENT ("head");
-  ADD_ELEMENT ("header");
-  ADD_ELEMENT ("hgroup");
-  ADD_ELEMENT ("h1");
-  ADD_ELEMENT ("h2");
-  ADD_ELEMENT ("h3");
-  ADD_ELEMENT ("h4");
-  ADD_ELEMENT ("h5");
-  ADD_ELEMENT ("h6");
-  ADD_ELEMENT ("hr");
-  ADD_ELEMENT ("html");
-  ADD_ELEMENT ("i");
-  ADD_ELEMENT ("iframe");
-  ADD_ELEMENT ("img");
-  ADD_ELEMENT ("input");
-  ADD_ELEMENT ("ins");
-  ADD_ELEMENT ("kbd");
-  ADD_ELEMENT ("keygen");
-  ADD_ELEMENT ("label");
-  ADD_ELEMENT ("legend");
-  ADD_ELEMENT ("li");
-  ADD_ELEMENT ("link");
-  ADD_ELEMENT ("main");
-  ADD_ELEMENT ("map");
-  ADD_ELEMENT ("mark");
-  ADD_ELEMENT ("menu");
-  ADD_ELEMENT ("menuitem");
-  ADD_ELEMENT ("meta");
-  ADD_ELEMENT ("meter");
-  ADD_ELEMENT ("nav");
-  ADD_ELEMENT ("noframes");
-  ADD_ELEMENT ("noscript");
-  ADD_ELEMENT ("object");
-  ADD_ELEMENT ("ol");
-  ADD_ELEMENT ("optgroup");
-  ADD_ELEMENT ("option");
-  ADD_ELEMENT ("output");
-  ADD_ELEMENT ("p");
-  ADD_ELEMENT ("param");
-  ADD_ELEMENT ("pre");
-  ADD_ELEMENT ("progress");
-  ADD_ELEMENT ("q");
-  ADD_ELEMENT ("rp");
-  ADD_ELEMENT ("rt");
-  ADD_ELEMENT ("ruby");
-  ADD_ELEMENT ("s");
-  ADD_ELEMENT ("samp");
-  ADD_ELEMENT ("script");
-  ADD_ELEMENT ("section");
-  ADD_ELEMENT ("select");
-  ADD_ELEMENT ("small");
-  ADD_ELEMENT ("source");
-  ADD_ELEMENT ("span");
-  ADD_ELEMENT ("strike");
-  ADD_ELEMENT ("strong");
-  ADD_ELEMENT ("style");
-  ADD_ELEMENT ("sub");
-  ADD_ELEMENT ("summary");
-  ADD_ELEMENT ("sup");
-  ADD_ELEMENT ("table");
-  ADD_ELEMENT ("tbody");
-  ADD_ELEMENT ("td");
-  ADD_ELEMENT ("textarea");
-  ADD_ELEMENT ("tfoot");
-  ADD_ELEMENT ("th");
-  ADD_ELEMENT ("thead");
-  ADD_ELEMENT ("time");
-  ADD_ELEMENT ("title");
-  ADD_ELEMENT ("tr");
-  ADD_ELEMENT ("track");
-  ADD_ELEMENT ("tt");
-  ADD_ELEMENT ("u");
-  ADD_ELEMENT ("ul");
-  ADD_ELEMENT ("var");
-  ADD_ELEMENT ("video");
-  ADD_ELEMENT ("wbr");
-
-  ADD_ATTRIBUTE ("*", "accesskey");
-  ADD_ATTRIBUTE ("*", "class");
-  ADD_ATTRIBUTE ("*", "contenteditable");
-  ADD_ATTRIBUTE ("*", "contextmenu");
-  ADD_ATTRIBUTE ("*", "dir");
-  ADD_ATTRIBUTE ("*", "draggable");
-  ADD_ATTRIBUTE ("*", "dropzone");
-  ADD_ATTRIBUTE ("*", "hidden");
-  ADD_ATTRIBUTE ("*", "id");
-  ADD_ATTRIBUTE ("*", "lang");
-  ADD_ATTRIBUTE ("*", "spellcheck");
-  ADD_ATTRIBUTE ("*", "style");
-  ADD_ATTRIBUTE ("*", "tabindex");
-  ADD_ATTRIBUTE ("*", "title");
-  ADD_ATTRIBUTE ("*", "translate");
-
-  ADD_ATTRIBUTE ("a", "href");
-  ADD_ATTRIBUTE ("a", "target");
-  ADD_ATTRIBUTE ("a", "rel");
-  ADD_ATTRIBUTE ("a", "hreflang");
-  ADD_ATTRIBUTE ("a", "media");
-  ADD_ATTRIBUTE ("a", "type");
-
-  ADD_ATTRIBUTE ("area", "alt");
-  ADD_ATTRIBUTE ("area", "href");
-  ADD_ATTRIBUTE ("area", "target");
-  ADD_ATTRIBUTE ("area", "rel");
-  ADD_ATTRIBUTE ("area", "media");
-  ADD_ATTRIBUTE ("area", "hreflang");
-  ADD_ATTRIBUTE ("area", "type");
-  ADD_ATTRIBUTE ("area", "shape");
-  ADD_ATTRIBUTE ("area", "coords");
-
-  ADD_ATTRIBUTE ("audio", "autoplay");
-  ADD_ATTRIBUTE ("audio", "preload");
-  ADD_ATTRIBUTE ("audio", "controls");
-  ADD_ATTRIBUTE ("audio", "loop");
-  ADD_ATTRIBUTE ("audio", "mediagroup");
-  ADD_ATTRIBUTE ("audio", "muted");
-  ADD_ATTRIBUTE ("audio", "src");
-
-  ADD_ATTRIBUTE ("base", "href");
-  ADD_ATTRIBUTE ("base", "target");
-
-  ADD_ATTRIBUTE ("blockquote", "cite");
-
-  ADD_ATTRIBUTE ("button", "type");
-  ADD_ATTRIBUTE ("button", "name");
-  ADD_ATTRIBUTE ("button", "disabled");
-  ADD_ATTRIBUTE ("button", "form");
-  ADD_ATTRIBUTE ("button", "value");
-  ADD_ATTRIBUTE ("button", "formaction");
-  ADD_ATTRIBUTE ("button", "autofocus");
-  ADD_ATTRIBUTE ("button", "formmethod");
-  ADD_ATTRIBUTE ("button", "formtarget");
-  ADD_ATTRIBUTE ("button", "formnovalidate");
-
-  ADD_ATTRIBUTE ("canvas", "height");
-  ADD_ATTRIBUTE ("canvas", "width");
-
-  ADD_ATTRIBUTE ("col", "span");
-
-  ADD_ATTRIBUTE ("colgroup", "span");
-
-  ADD_ATTRIBUTE ("command", "type");
-  ADD_ATTRIBUTE ("command", "label");
-  ADD_ATTRIBUTE ("command", "icon");
-  ADD_ATTRIBUTE ("command", "radiogroup");
-  ADD_ATTRIBUTE ("command", "checked");
-  ADD_ATTRIBUTE ("command", "type");
-
-  ADD_ATTRIBUTE ("del", "cite");
-  ADD_ATTRIBUTE ("del", "datetime");
-
-  ADD_ATTRIBUTE ("details", "open");
-
-  ADD_ATTRIBUTE ("embed", "src");
-  ADD_ATTRIBUTE ("embed", "type");
-  ADD_ATTRIBUTE ("embed", "height");
-  ADD_ATTRIBUTE ("embed", "width");
-
-  ADD_ATTRIBUTE ("fieldset", "name");
-  ADD_ATTRIBUTE ("fieldset", "disabled");
-  ADD_ATTRIBUTE ("fieldset", "form");
-
-  ADD_ATTRIBUTE ("form", "action");
-  ADD_ATTRIBUTE ("form", "method");
-  ADD_ATTRIBUTE ("form", "enctype");
-  ADD_ATTRIBUTE ("form", "name");
-  ADD_ATTRIBUTE ("form", "accept-charset");
-  ADD_ATTRIBUTE ("form", "novalidate");
-  ADD_ATTRIBUTE ("form", "target");
-  ADD_ATTRIBUTE ("form", "autocomplete");
-
-  ADD_ATTRIBUTE ("html", "manifest");
-
-  ADD_ATTRIBUTE ("iframe", "src");
-  ADD_ATTRIBUTE ("iframe", "srcdoc");
-  ADD_ATTRIBUTE ("iframe", "name");
-  ADD_ATTRIBUTE ("iframe", "width");
-  ADD_ATTRIBUTE ("iframe", "height");
-  ADD_ATTRIBUTE ("iframe", "sandbox");
-  ADD_ATTRIBUTE ("iframe", "seamless");
-
-  ADD_ATTRIBUTE ("img", "src");
-  ADD_ATTRIBUTE ("img", "alt");
-  ADD_ATTRIBUTE ("img", "height");
-  ADD_ATTRIBUTE ("img", "width");
-  ADD_ATTRIBUTE ("img", "usemap");
-  ADD_ATTRIBUTE ("img", "ismap");
-
-  ADD_ATTRIBUTE ("input", "accept");
-  ADD_ATTRIBUTE ("input", "alt");
-  ADD_ATTRIBUTE ("input", "autocomplete");
-  ADD_ATTRIBUTE ("input", "autofocus");
-  ADD_ATTRIBUTE ("input", "dirname");
-  ADD_ATTRIBUTE ("input", "disabled");
-  ADD_ATTRIBUTE ("input", "form");
-  ADD_ATTRIBUTE ("input", "formaction");
-  ADD_ATTRIBUTE ("input", "formenctype");
-  ADD_ATTRIBUTE ("input", "formmethod");
-  ADD_ATTRIBUTE ("input", "formnovalidate");
-  ADD_ATTRIBUTE ("input", "formtarget");
-  ADD_ATTRIBUTE ("input", "height");
-  ADD_ATTRIBUTE ("input", "list");
-  ADD_ATTRIBUTE ("input", "list");
-  ADD_ATTRIBUTE ("input", "max");
-  ADD_ATTRIBUTE ("input", "maxlength");
-  ADD_ATTRIBUTE ("input", "min");
-  ADD_ATTRIBUTE ("input", "multiple");
-  ADD_ATTRIBUTE ("input", "name");
-  ADD_ATTRIBUTE ("input", "pattern");
-  ADD_ATTRIBUTE ("input", "placeholder");
-  ADD_ATTRIBUTE ("input", "readonly");
-  ADD_ATTRIBUTE ("input", "required");
-  ADD_ATTRIBUTE ("input", "size");
-  ADD_ATTRIBUTE ("input", "src");
-  ADD_ATTRIBUTE ("input", "step");
-  ADD_ATTRIBUTE ("input", "type");
-  ADD_ATTRIBUTE ("input", "value");
-  ADD_ATTRIBUTE ("input", "width");
-
-  ADD_ATTRIBUTE ("ins", "cite");
-  ADD_ATTRIBUTE ("ins", "datetime");
-
-  ADD_ATTRIBUTE ("keygen", "challenge");
-  ADD_ATTRIBUTE ("keygen", "keytype");
-  ADD_ATTRIBUTE ("keygen", "autofocus");
-  ADD_ATTRIBUTE ("keygen", "name");
-  ADD_ATTRIBUTE ("keygen", "disabled");
-  ADD_ATTRIBUTE ("keygen", "form");
-
-  ADD_ATTRIBUTE ("label", "for");
-  ADD_ATTRIBUTE ("label", "form");
-
-  ADD_ATTRIBUTE ("li", "value");
-
-  ADD_ATTRIBUTE ("link", "href");
-  ADD_ATTRIBUTE ("link", "rel");
-  ADD_ATTRIBUTE ("link", "hreflang");
-  ADD_ATTRIBUTE ("link", "media");
-  ADD_ATTRIBUTE ("link", "type");
-  ADD_ATTRIBUTE ("link", "sizes");
-
-  ADD_ATTRIBUTE ("map", "name");
-
-  ADD_ATTRIBUTE ("menu", "type");
-  ADD_ATTRIBUTE ("menu", "label");
-
-  ADD_ATTRIBUTE ("meta", "http-equiv");
-  ADD_ATTRIBUTE ("meta", "content");
-  ADD_ATTRIBUTE ("meta", "charset");
-
-  ADD_ATTRIBUTE ("meter", "high");
-  ADD_ATTRIBUTE ("meter", "low");
-  ADD_ATTRIBUTE ("meter", "max");
-  ADD_ATTRIBUTE ("meter", "min");
-  ADD_ATTRIBUTE ("meter", "optimum");
-  ADD_ATTRIBUTE ("meter", "value");
-
-  ADD_ATTRIBUTE ("object", "data");
-  ADD_ATTRIBUTE ("object", "type");
-  ADD_ATTRIBUTE ("object", "height");
-  ADD_ATTRIBUTE ("object", "width");
-  ADD_ATTRIBUTE ("object", "usemap");
-  ADD_ATTRIBUTE ("object", "name");
-  ADD_ATTRIBUTE ("object", "form");
-
-  ADD_ATTRIBUTE ("ol", "start");
-  ADD_ATTRIBUTE ("ol", "reversed");
-  ADD_ATTRIBUTE ("ol", "type");
-
-  ADD_ATTRIBUTE ("optgroup", "label");
-  ADD_ATTRIBUTE ("optgroup", "disabled");
-
-  ADD_ATTRIBUTE ("option", "disabled");
-  ADD_ATTRIBUTE ("option", "selected");
-  ADD_ATTRIBUTE ("option", "label");
-  ADD_ATTRIBUTE ("option", "value");
-
-  ADD_ATTRIBUTE ("output", "name");
-  ADD_ATTRIBUTE ("output", "form");
-  ADD_ATTRIBUTE ("output", "for");
-
-  ADD_ATTRIBUTE ("param", "name");
-  ADD_ATTRIBUTE ("param", "value");
-
-  ADD_ATTRIBUTE ("progress", "value");
-  ADD_ATTRIBUTE ("progress", "max");
-
-  ADD_ATTRIBUTE ("q", "cite");
-
-  ADD_ATTRIBUTE ("script", "type");
-  ADD_ATTRIBUTE ("script", "language");
-  ADD_ATTRIBUTE ("script", "src");
-  ADD_ATTRIBUTE ("script", "defer");
-  ADD_ATTRIBUTE ("script", "async");
-  ADD_ATTRIBUTE ("script", "charset");
-
-  ADD_ATTRIBUTE ("select", "name");
-  ADD_ATTRIBUTE ("select", "disabled");
-  ADD_ATTRIBUTE ("select", "form");
-  ADD_ATTRIBUTE ("select", "size");
-  ADD_ATTRIBUTE ("select", "multiple");
-  ADD_ATTRIBUTE ("select", "autofocus");
-  ADD_ATTRIBUTE ("select", "required");
-
-  ADD_ATTRIBUTE ("source", "src");
-  ADD_ATTRIBUTE ("source", "type");
-  ADD_ATTRIBUTE ("source", "media");
-
-  ADD_ATTRIBUTE ("style", "type");
-  ADD_ATTRIBUTE ("style", "media");
-  ADD_ATTRIBUTE ("style", "scoped");
-
-  ADD_ATTRIBUTE ("table", "border");
-
-  ADD_ATTRIBUTE ("td", "colspan");
-  ADD_ATTRIBUTE ("td", "rowspan");
-  ADD_ATTRIBUTE ("td", "headers");
-
-  ADD_ATTRIBUTE ("textarea", "name");
-  ADD_ATTRIBUTE ("textarea", "disabled");
-  ADD_ATTRIBUTE ("textarea", "form");
-  ADD_ATTRIBUTE ("textarea", "readonly");
-  ADD_ATTRIBUTE ("textarea", "maxlength");
-  ADD_ATTRIBUTE ("textarea", "autofocus");
-  ADD_ATTRIBUTE ("textarea", "required");
-  ADD_ATTRIBUTE ("textarea", "placeholder");
-  ADD_ATTRIBUTE ("textarea", "dirname");
-  ADD_ATTRIBUTE ("textarea", "rows");
-  ADD_ATTRIBUTE ("textarea", "wrap");
-  ADD_ATTRIBUTE ("textarea", "cols");
-
-  ADD_ATTRIBUTE ("th", "scope");
-  ADD_ATTRIBUTE ("th", "colspan");
-  ADD_ATTRIBUTE ("th", "rowspan");
-  ADD_ATTRIBUTE ("th", "headers");
-
-  ADD_ATTRIBUTE ("time", "datetime");
-
-  ADD_ATTRIBUTE ("track", "kind");
-  ADD_ATTRIBUTE ("track", "src");
-  ADD_ATTRIBUTE ("track", "srclang");
-  ADD_ATTRIBUTE ("track", "label");
-  ADD_ATTRIBUTE ("track", "default");
-
-  ADD_ATTRIBUTE ("video", "autoplay");
-  ADD_ATTRIBUTE ("video", "preload");
-  ADD_ATTRIBUTE ("video", "controls");
-  ADD_ATTRIBUTE ("video", "loop");
-  ADD_ATTRIBUTE ("video", "poster");
-  ADD_ATTRIBUTE ("video", "height");
-  ADD_ATTRIBUTE ("video", "width");
-  ADD_ATTRIBUTE ("video", "mediagroup");
-  ADD_ATTRIBUTE ("video", "muted");
-  ADD_ATTRIBUTE ("video", "src");
-
-  ADD_STRING (css_styles, "border");
-  ADD_STRING (css_styles, "background");
-  ADD_STRING (css_styles, "background-image");
-  ADD_STRING (css_styles, "background-color");
-  ADD_STRING (css_styles, "text-align");
-
-#undef ADD_STRING
+  object_class->finalize = ide_html_completion_provider_finalize;
 }
 
 static void
@@ -902,18 +507,13 @@ ide_html_completion_provider_init (IdeHtmlCompletionProvider *self)
 }
 
 static void
-completion_provider_init (GtkSourceCompletionProviderIface *iface)
+completion_provider_init (IdeCompletionProviderInterface *iface)
 {
-  iface->get_icon = ide_html_completion_provider_get_icon;
-  iface->populate = ide_html_completion_provider_populate;
-}
-
-void
-ide_html_completion_register_types (PeasObjectModule *module)
-{
-  ide_html_completion_provider_register_type (G_TYPE_MODULE (module));
-
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMPLETION_PROVIDER,
-                                              IDE_TYPE_HTML_COMPLETION_PROVIDER);
+  iface->populate_async = ide_html_completion_provider_populate_async;
+  iface->populate_finish = ide_html_completion_provider_populate_finish;
+  iface->refilter = ide_html_completion_provider_refilter;
+  iface->activate_proposal = ide_html_completion_provider_activate_proposal;
+  iface->display_proposal = ide_html_completion_provider_display_proposal;
+  iface->get_priority = ide_html_completion_provider_get_priority;
+  iface->is_trigger = ide_html_completion_provider_is_trigger;
 }
