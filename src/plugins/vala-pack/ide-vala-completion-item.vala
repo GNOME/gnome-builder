@@ -22,28 +22,24 @@ using Vala;
 
 namespace Ide
 {
-	public class ValaCompletionItem: Ide.CompletionItem, Gtk.SourceCompletionProposal
+	public class ValaCompletionItem : GLib.Object, Ide.CompletionProposal
 	{
-		static uint hash_seed;
-
 		internal Vala.Symbol symbol;
-		weak Ide.ValaCompletionProvider provider;
-		string label;
+		internal uint priority;
 
-		static construct {
-			hash_seed = "IdeValaCompletionItem".hash ();
-		}
-
-		public ValaCompletionItem (Vala.Symbol symbol, Ide.ValaCompletionProvider provider)
+		public ValaCompletionItem (Vala.Symbol symbol)
 		{
 			this.symbol = symbol;
-			this.provider = provider;
+		}
 
-			/* Unfortunate we have to do this here, because it would
-			 * be better to do this lazy. But that would require access to
-			 * the code context while it could be getting mutated.
-			 */
-			this.build_label ();
+		public void set_priority (uint priority)
+		{
+			this.priority = priority;
+		}
+
+		public unowned string get_name ()
+		{
+			return this.symbol.name;
 		}
 
 		public unowned string? get_icon_name ()
@@ -61,7 +57,12 @@ namespace Ide
 			else if (symbol is Vala.Property)
 				return "struct-field-symbolic";
 			else if (symbol is Vala.Struct)
+			{
+				var str = symbol as Vala.Struct;
+				if (str.is_boolean_type () || str.is_integer_type () || str.is_floating_type ())
+					return "lang-typedef-symbolic";
 				return "lang-struct-symbolic";
+			}
 			else if (symbol is Vala.Class)
 				return "lang-class-symbolic";
 			else if (symbol is Vala.Enum)
@@ -74,26 +75,23 @@ namespace Ide
 			return null;
 		}
 
-		public override bool match (string query, string casefold)
-		{
-			uint priority = 0;
-			bool result = Ide.CompletionItem.fuzzy_match (this.symbol.name, casefold, out priority);
-			this.set_priority (priority);
-			return result;
-		}
-
-		private string esc_angle_brackets (string in) {
+		string? esc_angle_brackets (string? in) {
+			if (in == null)
+				return null;
 		    return in.replace ("<", "&lt;").replace (">", "&gt;");
 		}
 
-		public void build_label ()
+		public string get_markup (string? typed_text)
 		{
 			GLib.StringBuilder str = new GLib.StringBuilder ();
 
+			var highlight = Ide.Completion.fuzzy_highlight (this.symbol.name, typed_text != null ? typed_text : "");
+
+			if (highlight != null)
+				str.append(highlight);
+
 			if (this.symbol is Vala.Method) {
 				var method = symbol as Vala.Method;
-				str.append (esc_angle_brackets (method.return_type.to_qualified_string (symbol.owner)));
-				str.append_printf (" %s", method.name);
 				var type_params = method.get_type_parameters ();
 				if (type_params.size > 0) {
 					str.append ("&lt;");
@@ -104,7 +102,7 @@ namespace Ide
 					str.truncate (str.len - 1);
 					str.append ("&gt;");
 				}
-				str.append (" (");
+				str.append (" <span fgalpha='32767'>(");
 				var parameters = method.get_parameters ();
 				foreach (var param in parameters) {
 					if (param.ellipsis) {
@@ -117,46 +115,57 @@ namespace Ide
 					else if (param.direction == ParameterDirection.REF)
 						str.append ("ref ");
 
-					str.append_printf ("%s, ", esc_angle_brackets (param.variable_type.to_qualified_string (method.owner)));
+					var escaped = esc_angle_brackets (param.variable_type.to_qualified_string (method.owner));
+					if (escaped != null)
+						str.append_printf ("%s, ", escaped);
 				}
 				if (parameters.size > 0) {
 					str.truncate (str.len - 2);
 				}
-				str.append_c (')');
-			} else {
-				str.append (this.symbol.name);
+				str.append (")</span>");
 			}
 
-			/* Steal the string instead of strdup */
-			this.label = (owned)str.str;
+			return str.str;
 		}
 
-		public string get_markup () {
-			if (this.provider.query != null)
-				return Ide.CompletionItem.fuzzy_highlight (this.label, this.provider.query);
-			return this.label;
-		}
-
-		public string get_label () {
-			return this.label;
-		}
-
-		public string get_text ()
-		{
-			return this.symbol.name;
-		}
-
-		public string? get_info () {
+		public string? get_return_type () {
+			if (this.symbol is Vala.Method) {
+				var method = this.symbol as Vala.Method;
+				return esc_angle_brackets (method.return_type.to_qualified_string (this.symbol.owner));
+			}
+			if (this.symbol is Vala.Property) {
+				var prop = this.symbol as Vala.Property;
+				return esc_angle_brackets (prop.property_type.to_qualified_string (this.symbol.owner));
+			}
+			if (this.symbol is Vala.Variable) {
+				var variable = this.symbol as Vala.Variable;
+				return esc_angle_brackets (variable.variable_type.to_qualified_string (this.symbol.owner));
+			}
 			return null;
 		}
 
-		public unowned GLib.Icon? get_gicon () {
+		public string? get_misc () {
+			if (this.symbol is Vala.Class) {
+				var klass = this.symbol as Vala.Class;
+				if (klass.is_abstract)
+					return _("Abstract");
+				if (klass.is_compact)
+					return _("Compact");
+				if (klass.is_immutable)
+					return _("Immutable");
+			}
 			return null;
 		}
 
-		public uint hash ()
+		public Ide.Snippet get_snippet ()
 		{
-			return this.symbol.name.hash () ^ hash_seed;
+			var snippet = new Ide.Snippet (null, null);
+			var chunk = new Ide.SnippetChunk ();
+
+			chunk.set_spec (this.symbol.name);
+			snippet.add_chunk (chunk);
+
+			return snippet;
 		}
 	}
 }

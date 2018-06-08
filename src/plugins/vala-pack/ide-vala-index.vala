@@ -326,19 +326,18 @@ namespace Ide
 			return true;
 		}
 
-		public Ide.CompletionResults code_complete (GLib.File file,
-		                                            int line,
-		                                            int column,
-		                                            string? line_text,
-		                                            GLib.GenericArray<Ide.UnsavedFile>? unsaved_files,
-		                                            Ide.ValaCompletionProvider provider,
-		                                            GLib.Cancellable? cancellable,
-		                                            out int result_line,
-		                                            out int result_column)
+		public Ide.ValaCompletionResults code_complete (GLib.File file,
+		                                                int line,
+		                                                int column,
+		                                                string? line_text,
+		                                                GLib.GenericArray<Ide.UnsavedFile>? unsaved_files,
+		                                                GLib.Cancellable? cancellable,
+		                                                out int result_line,
+		                                                out int result_column)
 		{
-			var result = new Ide.CompletionResults (provider.query);
+			var result = new Ide.ValaCompletionResults ();
 
-			if ((cancellable == null) || !cancellable.is_cancelled ()) {
+			if (!cancellable.is_cancelled ()) {
 				lock (this.code_context) {
 					Vala.CodeContext.push (this.code_context);
 
@@ -354,11 +353,10 @@ namespace Ide
 
 					if (this.source_files.contains (file)) {
 						var source_file = this.source_files [file];
-						string? text = (line_text == null) ? source_file.get_source_line (line) : line_text;
 						var locator = new Ide.ValaLocator ();
 						var nearest = locator.locate (source_file, line, column);
 
-						this.add_completions (source_file, ref line, ref column, text, nearest, result, provider);
+						this.add_completions (source_file, ref line, ref column, line_text, nearest, result);
 					}
 
 					Vala.CodeContext.pop ();
@@ -421,24 +419,17 @@ namespace Ide
 		void add_completions (Ide.ValaSourceFile source_file,
 		                      ref int line,
 		                      ref int column,
-		                      string line_text,
+		                      string? line_text,
 		                      Vala.Symbol? nearest,
-		                      Ide.CompletionResults results,
-		                      Ide.ValaCompletionProvider provider)
+		                      Ide.ValaCompletionResults results)
 		{
 			var block = nearest as Vala.Block;
 			Vala.SourceLocation cursor = Vala.SourceLocation (null, line, column);
 
-			// TODO: our list building could use a lot of low-hanging optimizations.
-			//       the list/array/list in particular.
-			//       it would be nice to stay as an array as long as possible.
-
 			var completion = new Ide.ValaCompletion (this.code_context, cursor, line_text, block);
-			var list = completion.run (ref cursor);
 
-			foreach (var symbol in list) {
-				if (symbol.name != null && symbol.name[0] != '\0')
-					results.take_proposal (new Ide.ValaCompletionItem (symbol, provider));
+			foreach (var symbol in completion.run (ref cursor)) {
+				results.add (symbol);
 			}
 
 			line = cursor.line;
