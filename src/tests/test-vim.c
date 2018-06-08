@@ -47,7 +47,7 @@ new_context_cb (GObject      *object,
   GtkWidget *window;
   GtkWidget *widget;
   IdeBuffer *buffer;
-  GtkSourceCompletion *completion;
+  IdeCompletion *completion;
   IdeContext *context;
 
   context = ide_context_new_finish (result, &error);
@@ -72,8 +72,8 @@ new_context_cb (GObject      *object,
                              NULL);
       gtk_container_add (GTK_CONTAINER (window), widget);
 
-      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (widget));
-      gtk_source_completion_block_interactive (completion);
+      completion = ide_source_view_get_completion (IDE_SOURCE_VIEW (widget));
+      ide_completion_block_interactive (completion);
 
       gtk_window_present (GTK_WINDOW (window));
 
