@@ -253,8 +253,6 @@ struct _IdeSourceViewClass
                                        gint                     digit);
   void (*auto_indent)                 (IdeSourceView           *self);
   void (*begin_macro)                 (IdeSourceView           *self);
-  void (*begin_word_completion)       (IdeSourceView           *self,
-                                       gint                     direction);
   void (*capture_modifier)            (IdeSourceView           *self);
   void (*clear_count)                 (IdeSourceView           *self);
   void (*clear_modifier)              (IdeSourceView           *self);
@@ -378,8 +376,6 @@ void                        ide_source_view_get_visual_position       (IdeSource
 IDE_AVAILABLE_IN_ALL
 gint                        ide_source_view_get_count                 (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
-gboolean                    ide_source_view_get_enable_word_completion(IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
 IdeFileSettings            *ide_source_view_get_file_settings         (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
@@ -436,9 +432,6 @@ void                        ide_source_view_save_search               (IdeSource
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_set_count                 (IdeSourceView              *self,
                                                                        gint                        count);
-IDE_AVAILABLE_IN_ALL
-void                        ide_source_view_set_enable_word_completion(IdeSourceView              *self,
-                                                                       gboolean                    enable_word_copletion);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_set_font_desc             (IdeSourceView              *self,
                                                                        const PangoFontDescription *font_desc);
