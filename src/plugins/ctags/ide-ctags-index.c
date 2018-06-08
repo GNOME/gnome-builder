@@ -26,6 +26,10 @@
 
 #include "ide-ctags-index.h"
 
+/* This object is meant to be immutable after loading so that
+ * it can be used from threads safely.
+ */
+
 struct _IdeCtagsIndex
 {
   IdeObject  parent_instance;

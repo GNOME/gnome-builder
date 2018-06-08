@@ -18,22 +18,28 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
 #include <ide.h>
 
 #include "ide-ctags-index.h"
-#include "ide-ctags-completion-provider.h"
+#include "ide-ctags-results.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_CTAGS_COMPLETION_ITEM (ide_ctags_completion_item_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeCtagsCompletionItem, ide_ctags_completion_item, IDE, CTAGS_COMPLETION_ITEM, IdeCompletionItem)
+G_DECLARE_FINAL_TYPE (IdeCtagsCompletionItem, ide_ctags_completion_item, IDE, CTAGS_COMPLETION_ITEM, GObject)
 
-IdeCtagsCompletionItem *ide_ctags_completion_item_new         (IdeCtagsCompletionProvider *provider,
+struct _IdeCtagsCompletionItem
+{
+  GObject parent_instance;
+  const IdeCtagsIndexEntry *entry;
+  IdeCtagsResults *results;
+};
+
+IdeCtagsCompletionItem *ide_ctags_completion_item_new         (IdeCtagsResults            *results,
                                                                const IdeCtagsIndexEntry   *entry);
 gboolean                ide_ctags_completion_item_is_function (IdeCtagsCompletionItem     *self);
-IdeSourceSnippet       *ide_ctags_completion_item_get_snippet (IdeCtagsCompletionItem     *self,
+IdeSnippet             *ide_ctags_completion_item_get_snippet (IdeCtagsCompletionItem     *self,
                                                                IdeFileSettings            *file_settings);
 
 G_END_DECLS

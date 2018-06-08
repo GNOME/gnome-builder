@@ -25,11 +25,11 @@
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-completion-provider-private.h"
+#include "ide-ctags-results.h"
 #include "ide-ctags-service.h"
 #include "ide-ctags-util.h"
 
-static void provider_iface_init  (GtkSourceCompletionProviderIface *iface);
-static void provider2_iface_init (IdeCompletionProviderInterface   *iface);
+static void provider_iface_init (IdeCompletionProviderInterface *iface);
 
 static GHashTable *reserved;
 
@@ -37,15 +37,81 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionProvider,
                                 ide_ctags_completion_provider,
                                 IDE_TYPE_OBJECT,
                                 0,
-                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, provider_iface_init)
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider2_iface_init))
+                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
+
+static const gchar *
+get_icon_name (IdeCtagsCompletionItem *item)
+{
+  const gchar *icon_name = NULL;
+
+  if (item->entry == NULL)
+    return NULL;
+
+  switch (item->entry->kind)
+    {
+    case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
+      icon_name = "lang-class-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
+      icon_name = "lang-enum-value-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
+      icon_name = "lang-enum-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
+    case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
+      icon_name = "lang-function-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
+      icon_name = "text-x-generic-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_IMPORT:
+      icon_name = "lang-include-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
+      icon_name = "struct-field-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_UNION:
+      icon_name = "lang-union-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_TYPEDEF:
+      icon_name = "lang-typedef-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
+      icon_name = "lang-struct-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
+      icon_name = "lang-variable-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_DEFINE:
+      icon_name = "lang-define-symbolic";
+      break;
+
+    case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
+    default:
+      break;
+    }
+
+  return icon_name;
+}
+
 
 void
 ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
                                          IdeCtagsIndex              *index)
 {
   GFile *file;
-  gsize i;
 
   g_return_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
   g_return_if_fail (!index || IDE_IS_CTAGS_INDEX (index));
@@ -53,7 +119,7 @@ ide_ctags_completion_provider_add_index (IdeCtagsCompletionProvider *self,
 
   file = ide_ctags_index_get_file (index);
 
-  for (i = 0; i < self->indexes->len; i++)
+  for (guint i = 0; i < self->indexes->len; i++)
     {
       IdeCtagsIndex *item = g_ptr_array_index (self->indexes, i);
       GFile *item_file = ide_ctags_index_get_file (item);
@@ -102,10 +168,8 @@ ide_ctags_completion_provider_finalize (GObject *object)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
 
-  g_clear_pointer (&self->current_word, g_free);
   g_clear_pointer (&self->indexes, g_ptr_array_unref);
   g_clear_object (&self->settings);
-  g_clear_object (&self->results);
 
   G_OBJECT_CLASS (ide_ctags_completion_provider_parent_class)->finalize (object);
 }
@@ -145,197 +209,124 @@ ide_ctags_completion_provider_class_finalize (IdeCtagsCompletionProviderClass *k
 }
 
 static void
-ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
+changed_enabled_cb (IdeCtagsCompletionProvider *self,
+                    const gchar                *key,
+                    GSettings                  *settings)
 {
-  self->minimum_word_size = 3;
-  self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
-  self->settings = g_settings_new ("org.gnome.builder.code-insight");
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  self->enabled = g_settings_get_boolean (settings, "ctags-autocompletion");
 }
 
-static gchar *
-ide_ctags_completion_provider_get_name (GtkSourceCompletionProvider *provider)
+static void
+ide_ctags_completion_provider_init (IdeCtagsCompletionProvider *self)
 {
-  return g_strdup ("Ctags");
+  self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
+  self->settings = g_settings_new ("org.gnome.builder.code-insight");
+
+  g_signal_connect_object (self->settings,
+                           "changed::ctags-autocompletion",
+                           G_CALLBACK (changed_enabled_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  changed_enabled_cb (self, NULL, self->settings);
 }
 
 static const gchar * const *
-get_allowed_suffixes (GtkSourceCompletionContext *context)
+get_allowed_suffixes (IdeCompletionContext *context)
 {
-  GtkTextIter iter;
-  GtkSourceBuffer *buffer;
   GtkSourceLanguage *language;
+  GtkTextBuffer *buffer;
   const gchar *lang_id = NULL;
 
-  if (!gtk_source_completion_context_get_iter (context, &iter))
-    return NULL;
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
 
-  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (&iter));
-  if ((language = gtk_source_buffer_get_language (buffer)))
+  buffer = ide_completion_context_get_buffer (context);
+  if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
     lang_id = gtk_source_language_get_id (language);
 
   return ide_ctags_get_allowed_suffixes (lang_id);
 }
 
 static void
-ide_ctags_completion_provider_populate (GtkSourceCompletionProvider *provider,
-                                        GtkSourceCompletionContext  *context)
+ide_ctags_completion_provider_populate_cb (GObject      *object,
+                                           GAsyncResult *result,
+                                           gpointer      user_data)
+{
+  IdeCtagsResults *results = (IdeCtagsResults *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_CTAGS_RESULTS (results));
+
+  if (!ide_ctags_results_populate_finish (results, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_object (task, g_object_ref (results));
+}
+
+static void
+ide_ctags_completion_provider_populate_async (IdeCompletionProvider  *provider,
+                                              IdeCompletionContext   *context,
+                                              GCancellable           *cancellable,
+                                              GAsyncReadyCallback     callback,
+                                              gpointer                user_data)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
-  const gchar * const *allowed;
-  g_autofree gchar *casefold = NULL;
-  g_autoptr(GHashTable) completions = NULL;
-  g_autoptr(GtkSourceCompletion) completion = NULL;
-  gint word_len;
-
-  IDE_ENTRY;
+  g_autoptr(IdeCtagsResults) model = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autofree gchar *word = NULL;
+  GtkTextIter begin, end;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
-  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  g_object_get (context,
-                "completion", &completion,
-                NULL);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_ctags_completion_provider_populate_async);
 
-  self->view = IDE_SOURCE_VIEW (gtk_source_completion_get_view (completion));
-
-  g_clear_pointer (&self->current_word, g_free);
-  self->current_word = ide_completion_provider_context_current_word (context);
-
-  if (self->current_word == NULL)
-    IDE_GOTO (word_too_small);
-
-  word_len = strlen (self->current_word);
-  if (word_len < self->minimum_word_size)
-    IDE_GOTO (word_too_small);
-
-  allowed = get_allowed_suffixes (context);
-
-  if (self->results != NULL)
+  if (!self->enabled)
     {
-      if (ide_completion_results_replay (self->results, self->current_word))
-        {
-          ide_completion_results_present (self->results, provider, context);
-          IDE_EXIT;
-        }
-      g_clear_pointer (&self->results, g_object_unref);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Completion not currently enabled");
+      return;
     }
 
-  casefold = g_utf8_casefold (self->current_word, -1);
+  ide_completion_context_get_bounds (context, &begin, &end);
+  word = gtk_text_iter_get_slice (&begin, &end);
 
-  self->results = ide_completion_results_new (self->current_word);
-
-  completions = g_hash_table_new (g_str_hash, g_str_equal);
-
+  model = ide_ctags_results_new ();
+  ide_ctags_results_set_suffixes (model, get_allowed_suffixes (context));
+  ide_ctags_results_set_word (model, word);
   for (guint i = 0; i < self->indexes->len; i++)
-    {
-      g_autofree gchar *copy = g_strdup (self->current_word);
-      IdeCtagsIndex *index = g_ptr_array_index (self->indexes, i);
-      const IdeCtagsIndexEntry *entries = NULL;
-      guint tmp_len = word_len;
-      gsize n_entries = 0;
-      gchar gdata_key[64];
+    ide_ctags_results_add_index (model, g_ptr_array_index (self->indexes, i));
 
-      /* NOTE: "ctags-%d" is turned into a GQuark and therefore lives the
-       *       length of the process. But it's generally under 1000 so not a
-       *       really big deal for now.
-       */
+  ide_ctags_results_populate_async (model,
+                                    cancellable,
+                                    ide_ctags_completion_provider_populate_cb,
+                                    g_steal_pointer (&task));
+}
 
-      /*
-       * Make sure we hold a reference to the index for the lifetime of the results.
-       * When the results are released, so could our indexes.
-       */
-      g_snprintf (gdata_key, sizeof gdata_key, "ctags-%d", i);
-      g_object_set_data_full (G_OBJECT (self->results), gdata_key,
-                              g_object_ref (index), g_object_unref);
+static GListModel *
+ide_ctags_completion_provider_populate_finish (IdeCompletionProvider  *provider,
+                                               GAsyncResult           *result,
+                                               GError                **error)
+{
+  g_return_val_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (provider), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-      while (entries == NULL && *copy)
-        {
-          if (!(entries = ide_ctags_index_lookup_prefix (index, copy, &n_entries)))
-            copy [--tmp_len] = '\0';
-        }
-
-      if ((entries == NULL) || (n_entries == 0))
-        continue;
-
-      for (guint j = 0; j < n_entries; j++)
-        {
-          const IdeCtagsIndexEntry *entry = &entries [j];
-          IdeCtagsCompletionItem *item;
-
-          if (g_hash_table_contains (completions, entry->name))
-            continue;
-
-          g_hash_table_add (completions, (gchar *)entry->name);
-
-          if (!ide_ctags_is_allowed (entry, allowed))
-            continue;
-
-          item = ide_ctags_completion_item_new (self, entry);
-
-          if (!ide_completion_item_match (IDE_COMPLETION_ITEM (item), self->current_word, casefold))
-            {
-              g_object_unref (item);
-              continue;
-            }
-
-          ide_completion_results_take_proposal (self->results, IDE_COMPLETION_ITEM (item));
-        }
-    }
-
-  ide_completion_results_present (self->results, provider, context);
-
-  IDE_EXIT;
-
-word_too_small:
-  gtk_source_completion_context_add_proposals (context, provider, NULL, TRUE);
-
-  IDE_EXIT;
+  return ide_task_propagate_object (IDE_TASK (result), error);
 }
 
 static gint
-ide_ctags_completion_provider_get_priority (GtkSourceCompletionProvider *provider)
+ide_ctags_completion_provider_get_priority (IdeCompletionProvider *provider,
+                                            IdeCompletionContext  *context)
 {
   return IDE_CTAGS_COMPLETION_PROVIDER_PRIORITY;
-}
-
-static gboolean
-ide_ctags_completion_provider_match (GtkSourceCompletionProvider *provider,
-                                     GtkSourceCompletionContext  *context)
-{
-  IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
-  GtkSourceCompletionActivation activation;
-  GtkTextIter iter;
-
-  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
-  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
-
-  if (!gtk_source_completion_context_get_iter (context, &iter))
-    return FALSE;
-
-  activation = gtk_source_completion_context_get_activation (context);
-
-  if (activation == GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE)
-    {
-      gunichar ch;
-
-      if (gtk_text_iter_starts_line (&iter))
-        return FALSE;
-
-      gtk_text_iter_backward_char (&iter);
-
-      ch = gtk_text_iter_get_char (&iter);
-
-      if (!g_unichar_isalnum (ch) && ch != '_')
-        return FALSE;
-    }
-
-  if (ide_completion_provider_context_in_comment_or_string (context))
-    return FALSE;
-
-  if (!g_settings_get_boolean (self->settings, "ctags-autocompletion"))
-    return FALSE;
-
-  return TRUE;
 }
 
 static gboolean
@@ -345,73 +336,103 @@ is_reserved_word (const gchar *word)
   return g_hash_table_contains (reserved, word);
 }
 
-static gboolean
-ide_ctags_completion_provider_activate_proposal (GtkSourceCompletionProvider *provider,
-                                                 GtkSourceCompletionProposal *proposal,
-                                                 GtkTextIter                 *iter)
+static void
+ide_ctags_completion_provider_activate_proposal (IdeCompletionProvider *provider,
+                                                 IdeCompletionContext  *context,
+                                                 IdeCompletionProposal *proposal,
+                                                 const GdkEventKey     *key)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
   IdeCtagsCompletionItem *item = (IdeCtagsCompletionItem *)proposal;
-  g_auto(GStrv) contexts = NULL;
+  g_autofree gchar *slice = NULL;
+  g_autoptr(IdeSnippet) snippet = NULL;
   IdeFileSettings *file_settings = NULL;
   GtkTextBuffer *buffer;
-  IdeFile *file;
+  GtkTextView *view;
   GtkTextIter begin;
+  GtkTextIter end;
+  IdeFile *file;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
-  g_assert (self->view != NULL);
-  g_assert (IDE_IS_SOURCE_VIEW (self->view));
   g_assert (IDE_IS_CTAGS_COMPLETION_ITEM (item));
-  g_assert (iter != NULL);
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
 
-  begin = *iter;
+  ide_completion_context_get_bounds (context, &begin, &end);
 
-  buffer = gtk_text_iter_get_buffer (iter);
+  view = ide_completion_context_get_view (context);
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+
+  buffer = ide_completion_context_get_buffer (context);
   g_assert (IDE_IS_BUFFER (buffer));
 
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
   g_assert (IDE_IS_FILE (file));
 
   file_settings = ide_file_peek_settings (file);
+  g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
 
-  if (_ide_source_iter_backward_visible_word_start (&begin))
-    {
-      g_autofree gchar *slice = gtk_text_iter_get_slice (&begin, iter);
-      g_autoptr(IdeSourceSnippet) snippet = NULL;
+  slice = gtk_text_iter_get_slice (&begin, &end);
 
-      /* Ignore reserved words */
-      if (is_reserved_word (slice))
-        return TRUE;
+  if (is_reserved_word (slice))
+    return;
 
-      snippet = ide_ctags_completion_item_get_snippet (item, file_settings);
+  snippet = ide_ctags_completion_item_get_snippet (item, file_settings);
 
-      gtk_text_buffer_begin_user_action (buffer);
-      gtk_text_buffer_delete (buffer, &begin, iter);
-      ide_source_view_push_snippet (self->view, snippet, iter);
-      gtk_text_buffer_end_user_action (buffer);
-
-      return TRUE;
-    }
-
-  /* Fallback and let the default handler take care of things */
-
-  return FALSE;
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
+  gtk_text_buffer_end_user_action (buffer);
 }
 
-static void
-provider_iface_init (GtkSourceCompletionProviderIface *iface)
+static gboolean
+ide_ctags_completion_provider_refilter (IdeCompletionProvider *self,
+                                        IdeCompletionContext  *context,
+                                        GListModel            *model)
 {
-  iface->get_name = ide_ctags_completion_provider_get_name;
-  iface->get_priority = ide_ctags_completion_provider_get_priority;
-  iface->match = ide_ctags_completion_provider_match;
-  iface->populate = ide_ctags_completion_provider_populate;
-  iface->activate_proposal = ide_ctags_completion_provider_activate_proposal;
+  g_autofree gchar *word = NULL;
+  GtkTextIter begin, end;
+
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_CTAGS_RESULTS (model));
+
+  ide_completion_context_get_bounds (context, &begin, &end);
+  word = gtk_text_iter_get_slice (&begin, &end);
+  ide_ctags_results_set_word (IDE_CTAGS_RESULTS (model), word);
+  ide_ctags_results_refilter (IDE_CTAGS_RESULTS (model));
+
+  return TRUE;
 }
 
 static void
-provider2_iface_init (IdeCompletionProviderInterface *iface)
+ide_ctags_completion_provider_display_proposal (IdeCompletionProvider   *provider,
+                                                IdeCompletionListBoxRow *row,
+                                                IdeCompletionContext    *context,
+                                                const gchar             *typed_text,
+                                                IdeCompletionProposal   *proposal)
+{
+  IdeCtagsCompletionItem *item = IDE_CTAGS_COMPLETION_ITEM (proposal);
+  g_autofree gchar *highlight = NULL;
+
+  highlight = ide_completion_fuzzy_highlight (item->entry->name, typed_text);
+
+  ide_completion_list_box_row_set_icon_name (row, get_icon_name (item));
+  ide_completion_list_box_row_set_left (row, NULL);
+  ide_completion_list_box_row_set_center_markup (row, highlight);
+  ide_completion_list_box_row_set_right (row, NULL);
+}
+
+
+static void
+provider_iface_init (IdeCompletionProviderInterface *iface)
 {
   iface->load = ide_ctags_completion_provider_load;
+  iface->get_priority = ide_ctags_completion_provider_get_priority;
+  iface->activate_proposal = ide_ctags_completion_provider_activate_proposal;
+  iface->populate_async = ide_ctags_completion_provider_populate_async;
+  iface->populate_finish = ide_ctags_completion_provider_populate_finish;
+  iface->refilter = ide_ctags_completion_provider_refilter;
+  iface->display_proposal = ide_ctags_completion_provider_display_proposal;
 }
 
 void
