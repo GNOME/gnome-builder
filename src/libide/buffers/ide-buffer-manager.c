@@ -33,7 +33,6 @@
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-private.h"
 #include "buffers/ide-unsaved-files.h"
-#include "completion/ide-completion-words.h"
 #include "diagnostics/ide-diagnostics-manager.h"
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
@@ -57,7 +56,6 @@ struct _IdeBufferManager
   GPtrArray                *buffers;
   GHashTable               *timeouts;
   IdeBuffer                *focus_buffer;
-  GtkSourceCompletionWords *word_completion;
   GSettings                *settings;
   GHashTable               *loading;
 
@@ -114,7 +112,6 @@ enum {
   PROP_AUTO_SAVE,
   PROP_AUTO_SAVE_TIMEOUT,
   PROP_FOCUS_BUFFER,
-  PROP_MINIMUM_WORD_SIZE,
   LAST_PROP
 };
 
@@ -412,8 +409,6 @@ ide_buffer_manager_track_buffer (IdeBufferManager *self,
   if (self->auto_save)
     register_auto_save (self, buffer);
 
-  gtk_source_completion_words_register (self->word_completion, GTK_TEXT_BUFFER (buffer));
-
   g_signal_connect_object (buffer,
                            "changed",
                            G_CALLBACK (ide_buffer_manager_buffer_changed),
@@ -494,8 +489,6 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
 
   /* Stealing ownership from self->buffers */
   g_ptr_array_remove_index (self->buffers, position);
-
-  gtk_source_completion_words_unregister (self->word_completion, GTK_TEXT_BUFFER (buffer));
 
   unregister_auto_save (self, buffer);
 
@@ -1456,8 +1449,6 @@ ide_buffer_manager_dispose (GObject *object)
       ide_buffer_manager_remove_buffer (self, buffer);
     }
 
-  g_clear_object (&self->word_completion);
-
   G_OBJECT_CLASS (ide_buffer_manager_parent_class)->dispose (object);
 }
 
@@ -1506,10 +1497,6 @@ ide_buffer_manager_get_property (GObject    *object,
       g_value_set_object (value, ide_buffer_manager_get_focus_buffer (self));
       break;
 
-    case PROP_MINIMUM_WORD_SIZE:
-      g_object_get_property (G_OBJECT (self->word_completion), "minimum-word-size", value);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1537,10 +1524,6 @@ ide_buffer_manager_set_property (GObject      *object,
 
     case PROP_FOCUS_BUFFER:
       ide_buffer_manager_set_focus_buffer (self, g_value_get_object (value));
-      break;
-
-    case PROP_MINIMUM_WORD_SIZE:
-      g_object_set_property (G_OBJECT (self->word_completion), "minimum-word-size", value);
       break;
 
     default:
@@ -1580,15 +1563,6 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                          "The currently focused buffer.",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_MINIMUM_WORD_SIZE] =
-    g_param_spec_uint ("minimum-word-size",
-                       "Minimum Word Size",
-                       "The minimum word size for word completion.",
-                       0,
-                       G_MAXUINT,
-                       0,
-                       (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
@@ -1756,14 +1730,12 @@ ide_buffer_manager_init (IdeBufferManager *self)
   self->buffers = g_ptr_array_new ();
   self->max_file_size = MAX_FILE_SIZE_BYTES_DEFAULT;
   self->timeouts = g_hash_table_new (g_direct_hash, g_direct_equal);
-  self->word_completion = g_object_new (IDE_TYPE_COMPLETION_WORDS, NULL);
   self->settings = g_settings_new ("org.gnome.builder.editor");
   self->loading = g_hash_table_new_full ((GHashFunc)ide_file_hash,
                                          (GEqualFunc)ide_file_equal,
                                          g_object_unref,
                                          g_object_unref);
 
-  g_settings_bind (self->settings, "minimum-word-size", self->word_completion, "minimum-word-size", G_SETTINGS_BIND_GET);
   g_settings_bind (self->settings, "auto-save", self, "auto-save", G_SETTINGS_BIND_GET);
   g_settings_bind (self->settings, "auto-save-timeout", self, "auto-save-timeout", G_SETTINGS_BIND_GET);
 }
@@ -1843,24 +1815,6 @@ ide_buffer_manager_get_buffers (IdeBufferManager *self)
     }
 
   return IDE_PTR_ARRAY_STEAL_FULL (&ret);
-}
-
-/**
- * ide_buffer_manager_get_word_completion:
- * @self: an #IdeBufferManager.
- *
- * Gets the #GtkSourceCompletionWords completion provider that will complete
- * words using the loaded documents.
- *
- * Returns: (transfer none): a #GtkSourceCompletionWords
- */
-GtkSourceCompletionWords *
-ide_buffer_manager_get_word_completion (IdeBufferManager *self)
-{
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (IDE_IS_BUFFER_MANAGER (self), NULL);
-
-  return self->word_completion;
 }
 
 /**
