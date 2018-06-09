@@ -51,6 +51,8 @@ G_DEFINE_TYPE_WITH_CODE (IdeCompletionWindow, ide_completion_window, GTK_TYPE_WI
                                                 completion_display_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+
+#if !GTK_CHECK_VERSION(3, 23, 0)
 static void (*MoveToRect) (GdkWindow          *window,
                            const GdkRectangle *rect,
                            GdkGravity          rect_anchor,
@@ -58,6 +60,7 @@ static void (*MoveToRect) (GdkWindow          *window,
                            GdkAnchorHints      anchor_hints,
                            gint                rect_anchor_dx,
                            gint                rect_anchor_dy);
+#endif
 
 gboolean
 _ide_completion_window_reposition (IdeCompletionWindow *self)
@@ -124,13 +127,18 @@ _ide_completion_window_reposition (IdeCompletionWindow *self)
 /* TODO: figure out where this comes from */
 #define EXTRA_SPACE 9
 
-  MoveToRect (window,
-              &rect,
-              GDK_GRAVITY_SOUTH_WEST,
-              GDK_GRAVITY_NORTH_WEST,
-              GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
-              -x_offset + EXTRA_SPACE,
-              0);
+#if !GTK_CHECK_VERSION(3, 23, 0)
+  MoveToRect
+#else
+  gdk_window_move_to_rect
+#endif
+                          (window,
+                           &rect,
+                           GDK_GRAVITY_SOUTH_WEST,
+                           GDK_GRAVITY_NORTH_WEST,
+                           GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                           -x_offset + EXTRA_SPACE,
+                           0);
 
   return TRUE;
 }
@@ -210,7 +218,6 @@ ide_completion_window_class_init (IdeCompletionWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  gpointer *vtable;
 
   object_class->get_property = ide_completion_window_get_property;
   object_class->set_property = ide_completion_window_set_property;
@@ -231,17 +238,22 @@ ide_completion_window_class_init (IdeCompletionWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-completion-window.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeCompletionWindow, view);
 
-  /*
-   * HACK: We don't have access to GDK_PRIVATE_CALL() for obvious reasons.
-   *       However, we are likely to get this in gtk+ 3.24 which will mean
-   *       we can delete this crazy hack before our 3.30 release.
-   *
-   *       We call gdk_private__() to get the GdkPrivateVTable and know that
-   *       the offset of move_to_rect is at 12*sizeof(void*).
-   */
-  vtable = gdk__private__ ();
-  MoveToRect = vtable[12];
-  g_assert (MoveToRect != NULL);
+#if !GTK_CHECK_VERSION(3, 23, 0)
+  if (gtk_get_minor_version () < 23)
+    {
+      /*
+       * HACK: We don't have access to GDK_PRIVATE_CALL() for obvious reasons.
+       *       However, we are likely to get this in gtk+ 3.24 which will mean
+       *       we can delete this crazy hack before our 3.30 release.
+       *
+       *       We call gdk_private__() to get the GdkPrivateVTable and know that
+       *       the offset of move_to_rect is at 12*sizeof(void*).
+       */
+      gpointer *vtable = gdk__private__ ();
+      MoveToRect = vtable[12];
+      g_assert (MoveToRect != NULL);
+    }
+#endif
 
   g_type_ensure (IDE_TYPE_COMPLETION_VIEW);
 }
