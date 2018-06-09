@@ -643,10 +643,10 @@ ide_completion_queue_update (IdeCompletion *self)
 }
 
 static void
-ide_completion_buffer_delete_range_cb (IdeCompletion *self,
-                                       GtkTextIter   *begin,
-                                       GtkTextIter   *end,
-                                       GtkTextBuffer *buffer)
+ide_completion_buffer_delete_range_after_cb (IdeCompletion *self,
+                                             GtkTextIter   *begin,
+                                             GtkTextIter   *end,
+                                             GtkTextBuffer *buffer)
 {
   g_assert (IDE_IS_COMPLETION (self));
   g_assert (IDE_IS_SOURCE_VIEW (self->view));
@@ -1199,7 +1199,7 @@ ide_completion_init (IdeCompletion *self)
                                    G_CONNECT_AFTER | G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (self->buffer_signals,
                                    "delete-range",
-                                   G_CALLBACK (ide_completion_buffer_delete_range_cb),
+                                   G_CALLBACK (ide_completion_buffer_delete_range_after_cb),
                                    self,
                                    G_CONNECT_AFTER | G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (self->buffer_signals,
