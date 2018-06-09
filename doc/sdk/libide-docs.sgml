@@ -108,9 +108,10 @@
     </chapter>
     <chapter>
       <title>Auto-completion</title>
-      <xi:include href="xml/ide-completion-item.xml"/>
+      <xi:include href="xml/ide-completion.xml"/>
+      <xi:include href="xml/ide-completion-context.xml"/>
       <xi:include href="xml/ide-completion-provider.xml"/>
-      <xi:include href="xml/ide-completion-results.xml"/>
+      <xi:include href="xml/ide-completion-list-box-row.xml"/>
     </chapter>
     <chapter>
       <title>Semantic Highlighting</title>
@@ -130,11 +131,10 @@
     </chapter>
     <chapter>
       <title>Snippets</title>
-      <xi:include href="xml/ide-source-snippets-manager.xml"/>
-      <xi:include href="xml/ide-source-snippet.xml"/>
-      <xi:include href="xml/ide-source-snippet-chunk.xml"/>
-      <xi:include href="xml/ide-source-snippet-context.xml"/>
-      <xi:include href="xml/ide-source-snippets.xml"/>
+      <xi:include href="xml/ide-snippet.xml"/>
+      <xi:include href="xml/ide-snippet-chunk.xml"/>
+      <xi:include href="xml/ide-snippet-context.xml"/>
+      <xi:include href="xml/ide-snippet-storage.xml"/>
     </chapter>
   </part>
 
