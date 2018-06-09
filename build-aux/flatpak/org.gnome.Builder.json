@@ -713,9 +713,9 @@
             ],
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://github.com/ostreedev/ostree.git",
-                    "tag" : "v2018.5"
+                    "type" : "archive",
+                    "url" : "https://github.com/ostreedev/ostree/releases/download/v2018.5/libostree-2018.5.tar.xz",
+                    "sha256" : "ad0f5a0e7a7f22f87c72b318b2cfdbe8cf908a1a469ec94eb72984bbb3690261"
                 }
             ]
         },
@@ -743,8 +743,9 @@
             ],
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://github.com/flatpak/flatpak.git"
+                    "type" : "archive",
+                    "url" : "https://github.com/flatpak/flatpak/releases/download/0.11.8.1/flatpak-0.11.8.1.tar.xz",
+                    "sha256" : "9b2356a105da2d0a0332150f5a242a78ca3957f991db5d785c256fdad00cd06a"
                 }
             ]
         },
@@ -752,8 +753,9 @@
             "name" : "flatpak-builder",
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "https://github.com/flatpak/flatpak-builder"
+                    "type" : "archive",
+                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/0.10.10/flatpak-builder-0.10.10.tar.xz",
+                    "sha256" : "c299985b230cdb052c6b8f8e912fc7e735b1a3868b2e008c49456ee16a160c2c"
                 }
             ]
         },
