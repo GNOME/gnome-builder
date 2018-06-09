@@ -45,7 +45,6 @@ src/libide/buildui/ide-build-perspective.c
 src/libide/buildui/ide-build-workbench-addin.c
 src/libide/buildui/ide-environment-editor.c
 src/libide/buildui/ide-environment-editor-row.ui
-src/libide/completion/ide-word-completion-provider.c
 src/libide/config/ide-configuration-manager.c
 src/libide/debugger/gtk/menus.ui
 src/libide/debugger/ide-debugger-breakpoints-view.ui
@@ -100,8 +99,6 @@ src/libide/runner/ide-run-button.ui
 src/libide/runner/ide-run-manager.c
 src/libide/runner/ide-runner.c
 src/libide/runtimes/ide-runtime-manager.c
-src/libide/snippets/ide-source-snippet-completion-provider.c
-src/libide/snippets/ide-source-snippets-manager.c
 src/libide/sourceview/ide-omni-gutter-renderer.c
 src/libide/sourceview/ide-source-view.c
 src/libide/terminal/ide-terminal-search.ui
@@ -150,7 +147,6 @@ src/plugins/command-bar/gb-command-vim.c
 src/plugins/command-bar/gb-vim.c
 src/plugins/comment-code/gbp-comment-code-view-addin.c
 src/plugins/comment-code/gtk/menus.ui
-src/plugins/c-pack/ide-c-format-provider.c
 src/plugins/create-project/gbp-create-project-genesis-addin.c
 src/plugins/create-project/gbp-create-project-tool.c
 src/plugins/create-project/gbp-create-project-widget.c
@@ -211,7 +207,6 @@ src/plugins/project-tree/gb-project-tree-shortcuts.c
 src/plugins/project-tree/gb-rename-file-popover.c
 src/plugins/project-tree/gb-rename-file-popover.ui
 src/plugins/project-tree/gtk/menus.ui
-src/plugins/python-pack/ide-python-format-provider.c
 src/plugins/qemu/gbp-qemu-device-provider.c
 src/plugins/quick-highlight/gbp-quick-highlight-preferences.c
 src/plugins/recent/gbp-recent-section.ui
@@ -242,6 +237,7 @@ src/plugins/terminal/gb-terminal-view.c
 src/plugins/terminal/gb-terminal-workbench-addin.c
 src/plugins/terminal/gtk/menus.ui
 src/plugins/todo/gbp-todo-workbench-addin.c
+src/plugins/vala-pack/ide-vala-completion-item.vala
 src/plugins/vala-pack/ide-vala-preferences-addin.vala
 src/plugins/valgrind/gtk/menus.ui
 src/plugins/valgrind/valgrind_plugin.py
