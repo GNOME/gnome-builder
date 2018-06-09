@@ -42,6 +42,12 @@ ide_clang_completion_provider_is_trigger (IdeCompletionProvider *provider,
                                           const GtkTextIter     *iter,
                                           gunichar               ch)
 {
+  GtkTextBuffer *buffer = gtk_text_iter_get_buffer (iter);
+
+  if (gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), iter, "comment") ||
+      gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), iter, "string"))
+    return FALSE;
+
   if (ch == '.' || ch == '(')
     return TRUE;
 
