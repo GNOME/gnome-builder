@@ -210,7 +210,8 @@ ide_completion_overlay_get_child_position_cb (IdeCompletionOverlay *self,
   if (out_rect->x < 0)
     {
       out_rect->x = 0;
-      out_rect->width = alloc.width;
+      if (out_rect->width > alloc.width)
+        out_rect->width = alloc.width;
     }
 
   if (out_rect->y + out_rect->height > alloc.height)
