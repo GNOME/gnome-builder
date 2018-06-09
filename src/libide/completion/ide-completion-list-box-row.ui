@@ -31,6 +31,7 @@
         <child>
           <object class="GtkLabel" id="center">
             <property name="can-focus">false</property>
+            <property name="ellipsize">end</property>
             <property name="xalign">0.0</property>
             <property name="hexpand">true</property>
             <property name="single-line-mode">true</property>
@@ -46,6 +47,7 @@
         <child>
           <object class="GtkLabel" id="right">
             <property name="can-focus">false</property>
+            <property name="ellipsize">end</property>
             <property name="xalign">1.0</property>
             <property name="hexpand">false</property>
             <property name="single-line-mode">true</property>
