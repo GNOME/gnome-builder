@@ -657,7 +657,24 @@ ide_completion_buffer_delete_range_after_cb (IdeCompletion *self,
   if (self->context != NULL)
     {
       if (!ide_completion_is_blocked (self))
-        ide_completion_queue_update (self);
+        {
+          GtkTextIter b, e;
+
+          ide_completion_context_get_bounds (self->context, &b, &e);
+
+          /*
+           * If they just backspaced all of the text, then we want to just hide
+           * the completion window since that can get a bit intrusive.
+           */
+          if (gtk_text_iter_equal (&b, &e))
+            {
+              dzl_clear_source (&self->queued_update);
+              ide_completion_hide (self);
+              return;
+            }
+
+          ide_completion_queue_update (self);
+        }
     }
 }
 
