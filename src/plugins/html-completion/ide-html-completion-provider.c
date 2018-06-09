@@ -260,7 +260,8 @@ whereami (IdeCompletionContext  *context,
       break;
 
     case IDE_HTML_PROPOSAL_ATTRIBUTE_NAME:
-      *element = get_element (&begin);
+      if (!(*element = get_element (&begin)))
+        *kind = IDE_HTML_PROPOSAL_NONE;
       break;
 
     case IDE_HTML_PROPOSAL_NONE:
