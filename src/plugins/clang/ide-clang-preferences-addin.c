@@ -73,7 +73,7 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
                                                     "enabled",
                                                     "/org/gnome/builder/extension-types/clang-plugin/IdeCompletionProvider/",
                                                     NULL,
-                                                    _("Suggest completions using Clang (Experimental)"),
+                                                    _("Suggest completions using Clang"),
                                                     _("Use Clang to suggest completions for C and C++ languages"),
                                                     NULL,
                                                     20);
