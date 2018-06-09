@@ -174,6 +174,7 @@ ide_snippet_completion_provider_display_proposal (IdeCompletionProvider   *provi
                                                   const gchar             *typed_text,
                                                   IdeCompletionProposal   *proposal)
 {
+  g_autofree gchar *escaped = NULL;
   g_autofree gchar *highlight = NULL;
   const IdeSnippetInfo *info;
 
@@ -183,9 +184,11 @@ ide_snippet_completion_provider_display_proposal (IdeCompletionProvider   *provi
   g_assert (IDE_IS_SNIPPET_COMPLETION_ITEM (proposal));
 
   info = ide_snippet_completion_item_get_info (IDE_SNIPPET_COMPLETION_ITEM (proposal));
-  highlight = ide_completion_fuzzy_highlight (info->name, typed_text);
+  escaped = g_markup_escape_text (info->name, -1);
+  highlight = ide_completion_fuzzy_highlight (escaped, typed_text);
 
   /* TODO: have jimmac make us a real icon */
+
   ide_completion_list_box_row_set_icon_name (row, "ui-section-symbolic");
   ide_completion_list_box_row_set_left (row, NULL);
   ide_completion_list_box_row_set_center_markup (row, highlight);
@@ -200,8 +203,10 @@ ide_snippet_completion_provider_activate_proposal (IdeCompletionProvider *provid
 {
   g_autoptr(IdeSnippet) snippet = NULL;
   GtkTextIter begin, end;
+  GtkSourceLanguage *lang;
   GtkTextBuffer *buffer;
   GtkTextView *view;
+  const gchar *lang_id = NULL;
 
   g_assert (IDE_IS_SNIPPET_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
@@ -210,8 +215,10 @@ ide_snippet_completion_provider_activate_proposal (IdeCompletionProvider *provid
   buffer = ide_completion_context_get_buffer (context);
   view = ide_completion_context_get_view (context);
 
-  if (!(snippet = ide_snippet_completion_item_get_snippet (IDE_SNIPPET_COMPLETION_ITEM (proposal))))
-    return;
+  if ((lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
+    lang_id = gtk_source_language_get_id (lang);
+
+  snippet = ide_snippet_completion_item_get_snippet (IDE_SNIPPET_COMPLETION_ITEM (proposal), lang_id);
 
   gtk_text_buffer_begin_user_action (buffer);
   if (ide_completion_context_get_bounds (context, &begin, &end))

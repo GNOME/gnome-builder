@@ -70,7 +70,8 @@ ide_snippet_completion_item_new (IdeSnippetStorage    *storage,
 }
 
 IdeSnippet *
-ide_snippet_completion_item_get_snippet (IdeSnippetCompletionItem *self)
+ide_snippet_completion_item_get_snippet (IdeSnippetCompletionItem *self,
+                                         const gchar              *language)
 {
   g_autoptr(IdeSnippetParser) parser = NULL;
   g_autoptr(GError) error = NULL;
@@ -88,10 +89,22 @@ ide_snippet_completion_item_get_snippet (IdeSnippetCompletionItem *self)
       return ide_snippet_new (NULL, NULL);
     }
 
-  if (!(items = ide_snippet_parser_get_snippets (parser)))
-    return ide_snippet_new (NULL, NULL);
+  items = ide_snippet_parser_get_snippets (parser);
 
-  return g_object_ref (items->data);
+  /*
+   * We might have parsed snippets for the other languages too, so we need to
+   * make sure we the proper one for the current language.
+   */
+  for (const GList *iter = items; iter != NULL; iter = iter->next)
+    {
+      IdeSnippet *snippet = iter->data;
+      const gchar *lang_id = ide_snippet_get_language (snippet);
+
+      if (g_strcmp0 (lang_id, language) == 0)
+        return g_object_ref (snippet);
+    }
+
+  return ide_snippet_new (NULL, NULL);
 }
 
 const IdeSnippetInfo *

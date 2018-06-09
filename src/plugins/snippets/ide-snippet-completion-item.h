@@ -28,7 +28,8 @@ G_DECLARE_FINAL_TYPE (IdeSnippetCompletionItem, ide_snippet_completion_item, IDE
 
 IdeSnippetCompletionItem *ide_snippet_completion_item_new         (IdeSnippetStorage        *storage,
                                                                    const IdeSnippetInfo     *info);
-IdeSnippet               *ide_snippet_completion_item_get_snippet (IdeSnippetCompletionItem *self);
+IdeSnippet               *ide_snippet_completion_item_get_snippet (IdeSnippetCompletionItem *self,
+                                                                   const gchar              *language);
 const IdeSnippetInfo     *ide_snippet_completion_item_get_info    (IdeSnippetCompletionItem *self);
 
 G_END_DECLS
