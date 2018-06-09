@@ -172,7 +172,7 @@ flush_load_state (IdeSnippetStorage *self,
     }
 
 cleanup:
-  g_clear_pointer (&state->name, g_free);
+  /* Leave name in-tact */
   g_clear_pointer (&state->desc, g_free);
   g_clear_pointer (&state->scopes, g_free);
 }
@@ -188,6 +188,7 @@ ide_snippet_storage_add (IdeSnippetStorage *self,
   const gchar *line;
   gsize line_len;
   gsize len;
+  gboolean found_data = FALSE;
 
   g_return_if_fail (IDE_IS_SNIPPET_STORAGE (self));
   g_return_if_fail (bytes != NULL);
@@ -209,15 +210,30 @@ ide_snippet_storage_add (IdeSnippetStorage *self,
     {
       if (str_starts_with (line, line_len, "snippet "))
         {
-          if (state.name)
+          if (state.name && found_data)
             flush_load_state (self, default_scope, &state);
           state.beginptr = line;
           COPY_AFTER (name, "snippet ");
+          found_data = FALSE;
         }
       else if (str_starts_with (line, line_len, "- desc "))
-        COPY_AFTER (desc, "- desc");
+        {
+          COPY_AFTER (desc, "- desc");
+        }
       else if (str_starts_with (line, line_len, "- scope "))
-        COPY_AFTER (scopes, "- scope ");
+        {
+          /* We could have repeated scopes, so if we get a folloup -scope, we need
+           * to flush the previous and then update beginptr/endptr.
+           */
+          if (state.name && found_data)
+            flush_load_state (self, default_scope, &state);
+          COPY_AFTER (scopes, "- scope ");
+          found_data = FALSE;
+        }
+      else
+        {
+          found_data = TRUE;
+        }
 
       state.endptr = line + line_len;
     }
@@ -227,6 +243,10 @@ ide_snippet_storage_add (IdeSnippetStorage *self,
   flush_load_state (self, default_scope, &state);
 
   g_array_sort (self->infos, snippet_info_compare);
+
+  g_clear_pointer (&state.name, g_free);
+  g_clear_pointer (&state.desc, g_free);
+  g_clear_pointer (&state.scopes, g_free);
 }
 
 /**
