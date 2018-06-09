@@ -1541,6 +1541,11 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
   object_class->get_property = ide_buffer_manager_get_property;
   object_class->set_property = ide_buffer_manager_set_property;
 
+  g_type_ensure (GTK_SOURCE_TYPE_BUFFER);
+  g_type_ensure (GTK_SOURCE_TYPE_FILE);
+  g_type_ensure (GTK_SOURCE_TYPE_FILE_LOADER);
+  g_type_ensure (GTK_SOURCE_TYPE_FILE_SAVER);
+
   properties [PROP_AUTO_SAVE] =
     g_param_spec_boolean ("auto-save",
                           "Auto Save",
