@@ -188,24 +188,16 @@ ide_completion_overlay_get_child_position_cb (IdeCompletionOverlay *self,
 
 /* TODO: Figure out where 11 is coming from */
 #define EXTRA_SHIFT 11
+  x_offset -= EXTRA_SHIFT;
 
-  out_rect->x = rect.x - x_offset - border.left + EXTRA_SHIFT;
+  out_rect->x = rect.x - x_offset - border.left;
   out_rect->y = rect.y + rect.height;
   out_rect->height = nat.height;
   out_rect->width = nat.width;
 
-  if (out_rect->x + out_rect->width > alloc.width)
-    out_rect->x = alloc.width - out_rect->width;
-
-  if (out_rect->x < 0)
-    out_rect->x = 0;
-
-  if (out_rect->y + out_rect->height > alloc.height)
-    out_rect->y = rect.y - out_rect->height;
-
   /*
-   * If we can keep the position in place by using the minimum size,
-   * then prefer to do that before shifting.
+   * If we can keep the position in place by using the minimum size (or
+   * larger up to the overlay bounds), then prefer to do that before shifting.
    */
   if (out_rect->x + out_rect->width > alloc.width)
     {
@@ -214,6 +206,15 @@ ide_completion_overlay_get_child_position_cb (IdeCompletionOverlay *self,
       else
         out_rect->width = alloc.width - min.width;
     }
+
+  if (out_rect->x < 0)
+    {
+      out_rect->x = 0;
+      out_rect->width = alloc.width;
+    }
+
+  if (out_rect->y + out_rect->height > alloc.height)
+    out_rect->y = rect.y - out_rect->height;
 
 #if 0
   g_print ("Position: %d,%d  %dx%d\n",
