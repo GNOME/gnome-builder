@@ -147,7 +147,6 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
 
   while ((chunk = g_variant_iter_next_value (&iter)))
     {
-      g_autofree gchar *escaped = NULL;
       const gchar *text;
       enum CXCompletionChunkKind ckind;
 
