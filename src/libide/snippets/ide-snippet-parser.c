@@ -636,6 +636,14 @@ ide_snippet_parser_load_from_data (IdeSnippetParser  *parser,
   return TRUE;
 }
 
+/**
+ * ide_snippet_parser_get_snippets:
+ * @parser: a #IdeSnippetParser
+ *
+ * Get the list of all the snippets loaded.
+ *
+ * Returns: (transfer none) (element-type Ide.Snippet): a #GList of #IdeSnippets items.
+ */
 GList *
 ide_snippet_parser_get_snippets (IdeSnippetParser *parser)
 {
