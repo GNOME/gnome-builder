@@ -52,7 +52,6 @@ G_DEFINE_TYPE_WITH_CODE (IdeCompletionWindow, ide_completion_window, GTK_TYPE_WI
 
 static GParamSpec *properties [N_PROPS];
 
-#if !GTK_CHECK_VERSION(3, 23, 0)
 static void (*MoveToRect) (GdkWindow          *window,
                            const GdkRectangle *rect,
                            GdkGravity          rect_anchor,
@@ -60,7 +59,6 @@ static void (*MoveToRect) (GdkWindow          *window,
                            GdkAnchorHints      anchor_hints,
                            gint                rect_anchor_dx,
                            gint                rect_anchor_dy);
-#endif
 
 gboolean
 _ide_completion_window_reposition (IdeCompletionWindow *self)
@@ -127,18 +125,13 @@ _ide_completion_window_reposition (IdeCompletionWindow *self)
 /* TODO: figure out where this comes from */
 #define EXTRA_SPACE 9
 
-#if !GTK_CHECK_VERSION(3, 23, 0)
-  MoveToRect
-#else
-  gdk_window_move_to_rect
-#endif
-                          (window,
-                           &rect,
-                           GDK_GRAVITY_SOUTH_WEST,
-                           GDK_GRAVITY_NORTH_WEST,
-                           GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_RESIZE_X,
-                           -x_offset + EXTRA_SPACE,
-                           0);
+  MoveToRect (window,
+              &rect,
+              GDK_GRAVITY_SOUTH_WEST,
+              GDK_GRAVITY_NORTH_WEST,
+              GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_RESIZE_X,
+              -x_offset + EXTRA_SPACE,
+              0);
 
   return TRUE;
 }
@@ -238,8 +231,9 @@ ide_completion_window_class_init (IdeCompletionWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-completion-window.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeCompletionWindow, view);
 
-#if !GTK_CHECK_VERSION(3, 23, 0)
-  if (gtk_get_minor_version () < 23)
+#if GTK_CHECK_VERSION(3, 23, 0)
+  MoveToRect = gdk_window_move_to_rect;
+#else
     {
       /*
        * HACK: We don't have access to GDK_PRIVATE_CALL() for obvious reasons.
