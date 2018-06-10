@@ -17,11 +17,11 @@ schema_conf = configuration_data()
 schema_conf.set('ECTAGS', ctags_path)
 
 configure_file(
-  input: 'org.gnome.builder.code-insight.gschema.xml.in',
-  output: 'org.gnome.builder.code-insight.gschema.xml',
+          input: 'org.gnome.builder.code-insight.gschema.xml.in',
+         output: 'org.gnome.builder.code-insight.gschema.xml',
   configuration: schema_conf,
-  install: true,
-  install_dir: schema_dir,
+        install: true,
+    install_dir: schema_dir,
 )
 
 install_data([
