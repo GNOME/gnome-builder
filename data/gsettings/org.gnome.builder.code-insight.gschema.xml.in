@@ -10,11 +10,6 @@
       <summary>Ctags based autocompletion</summary>
       <description>Use Ctags for autocompletion.</description>
     </key>
-    <key name="word-completion" type="b">
-      <default>true</default>
-      <summary>Enable auto-completion of words in document</summary>
-      <description>If enabled, words within the current document will be available for auto-completion.</description>
-    </key>
     <key name="semantic-highlighting" type="b">
       <default>true</default>
       <summary>Enable semantic highlighting</summary>
