@@ -136,7 +136,7 @@ _ide_completion_window_reposition (IdeCompletionWindow *self)
                            &rect,
                            GDK_GRAVITY_SOUTH_WEST,
                            GDK_GRAVITY_NORTH_WEST,
-                           GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                           GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_RESIZE_X,
                            -x_offset + EXTRA_SPACE,
                            0);
 
