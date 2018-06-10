@@ -143,15 +143,15 @@ ide_snippet_parser_finish (IdeSnippetParser *parser)
 
 static void
 ide_snippet_parser_do_part_simple (IdeSnippetParser *parser,
-                                          const gchar            *line)
+                                   const gchar      *line)
 {
   g_string_append (parser->cur_text, line);
 }
 
 static void
 ide_snippet_parser_do_part_n (IdeSnippetParser *parser,
-                                     gint                    n,
-                                     const gchar            *inner)
+                              gint              n,
+                              const gchar      *inner)
 {
   IdeSnippetChunk *chunk;
 
@@ -167,7 +167,7 @@ ide_snippet_parser_do_part_n (IdeSnippetParser *parser,
 
 static void
 ide_snippet_parser_do_part_linked (IdeSnippetParser *parser,
-                                          gint                    n)
+                                   gint              n)
 {
   IdeSnippetChunk *chunk;
   gchar text[12];
@@ -189,7 +189,7 @@ ide_snippet_parser_do_part_linked (IdeSnippetParser *parser,
 
 static void
 ide_snippet_parser_do_part_named (IdeSnippetParser *parser,
-                                         const gchar            *name)
+                                  const gchar      *name)
 {
   IdeSnippetChunk *chunk;
   gchar *spec;
@@ -304,7 +304,7 @@ parse_variable (const gchar  *line,
 
 static void
 ide_snippet_parser_do_part (IdeSnippetParser *parser,
-                                   const gchar            *line)
+                            const gchar      *line)
 {
   const gchar *dollar;
   gchar *str;
@@ -387,14 +387,14 @@ parse_dollar:
 
 static void
 ide_snippet_parser_do_snippet (IdeSnippetParser *parser,
-                                      const gchar            *line)
+                               const gchar      *line)
 {
   parser->cur_name = g_strstrip (g_strdup (&line[8]));
 }
 
 static void
 ide_snippet_parser_do_snippet_scope (IdeSnippetParser *parser,
-                                            const gchar            *line)
+                                     const gchar      *line)
 {
   gchar **scope_list;
   GList *iter;
@@ -424,7 +424,7 @@ ide_snippet_parser_do_snippet_scope (IdeSnippetParser *parser,
 
 static void
 ide_snippet_parser_do_snippet_description (IdeSnippetParser *parser,
-                                                  const gchar            *line)
+                                           const gchar      *line)
 {
   if (parser->cur_desc)
     {
@@ -437,8 +437,8 @@ ide_snippet_parser_do_snippet_description (IdeSnippetParser *parser,
 
 static void
 ide_snippet_parser_feed_line (IdeSnippetParser *parser,
-                                     gchar                  *basename,
-                                     const gchar            *line)
+                              gchar            *basename,
+                              const gchar      *line)
 {
   const gchar *orig = line;
 
