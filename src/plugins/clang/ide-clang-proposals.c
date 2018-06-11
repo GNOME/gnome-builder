@@ -692,6 +692,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
 
 query_client:
 
+  ide_buffer_sync_to_unsaved_files (IDE_BUFFER (buffer));
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
 
   prev_cancellable = g_steal_pointer (&self->cancellable);
