@@ -197,11 +197,18 @@ ide_preferences_builtin_register_code_insight (DzlPreferences *preferences)
   dzl_preferences_add_list_group (preferences, "code-insight", "highlighting", _("Highlighting"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_switch (preferences, "code-insight", "highlighting", "org.gnome.builder.code-insight", "semantic-highlighting", NULL, NULL, _("Semantic Highlighting"), _("Use code insight to highlight additional information discovered in source file"), NULL, 0);
 
-  dzl_preferences_add_list_group (preferences, "code-insight", "completion", _("Completion"), GTK_SELECTION_NONE, 100);
-  dzl_preferences_add_spin_button (preferences, "code-insight", "completion", "org.gnome.builder.editor", "completion-n-rows", NULL, _("Completions Display Size"), _("Number of completions to display"), NULL, -1);
-  dzl_preferences_add_switch (preferences, "code-insight", "completion", "org.gnome.builder.code-insight", "ctags-autocompletion", NULL, NULL, _("Suggest completions using Ctags"), _("Create and manages a Ctags database for completing class names, functions, and more"), NULL, 10);
-
   dzl_preferences_add_list_group (preferences, "code-insight", "diagnostics", _("Diagnostics"), GTK_SELECTION_NONE, 200);
+}
+
+static void
+ide_preferences_builtin_register_completion (DzlPreferences *preferences)
+{
+  dzl_preferences_add_page (preferences, "completion", _("Completion"), 325);
+
+  dzl_preferences_add_list_group (preferences, "completion", "general", _("General"), GTK_SELECTION_NONE, 0);
+  dzl_preferences_add_spin_button (preferences, "completion", "general", "org.gnome.builder.editor", "completion-n-rows", NULL, _("Completions Display Size"), _("Number of completions to display"), NULL, -1);
+
+  dzl_preferences_add_list_group (preferences, "completion", "providers", _("Completion Providers"), GTK_SELECTION_NONE, 100);
 }
 
 static void
@@ -209,8 +216,7 @@ ide_preferences_builtin_register_snippets (DzlPreferences *preferences)
 {
   dzl_preferences_add_page (preferences, "snippets", _("Snippets"), 350);
 
-  dzl_preferences_add_list_group (preferences, "snippets", "completion", NULL, GTK_SELECTION_NONE, 0);
-  dzl_preferences_add_switch (preferences, "snippets", "completion", "org.gnome.builder.code-insight", "snippet-completion", NULL, NULL, _("Code snippets"), _("Use code fragments to increase typing efficiency"), NULL, 0);
+  /* TODO: Add snippet editor widget + languages */
 }
 
 static void
@@ -554,6 +560,7 @@ _ide_preferences_builtin_register (DzlPreferences *preferences)
   ide_preferences_builtin_register_editor (preferences);
   ide_preferences_builtin_register_languages (preferences);
   ide_preferences_builtin_register_code_insight (preferences);
+  ide_preferences_builtin_register_completion (preferences);
   ide_preferences_builtin_register_snippets (preferences);
   ide_preferences_builtin_register_keyboard (preferences);
   ide_preferences_builtin_register_plugins (preferences);

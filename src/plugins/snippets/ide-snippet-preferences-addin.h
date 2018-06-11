@@ -1,4 +1,4 @@
-/* snippets-plugin.c
+/* ide-snippet-preferences-addin.h
  *
  * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
@@ -16,19 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ide.h>
-#include <libpeas/peas.h>
+#pragma once
 
-#include "ide-snippet-completion-provider.h"
-#include "ide-snippet-preferences-addin.h"
+#include <glib-object.h>
 
-void
-gbp_snippets_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMPLETION_PROVIDER,
-                                              IDE_TYPE_SNIPPET_COMPLETION_PROVIDER);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              IDE_TYPE_SNIPPET_PREFERENCES_ADDIN);
-}
+G_BEGIN_DECLS
+
+#define IDE_TYPE_SNIPPET_PREFERENCES_ADDIN (ide_snippet_preferences_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeSnippetPreferencesAddin, ide_snippet_preferences_addin, IDE, SNIPPET_PREFERENCES_ADDIN, GObject)
+
+G_END_DECLS

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.builder.clang" path="/org/gnome/builder/plugins/clang/" gettext-domain="gnome-builder">
+    <key name="complete-parens" type="b">
+      <default>true</default>
+      <summary>Complete parentheses</summary>
+      <description>If parentheses should be included when completing.</description>
+    </key>
+    <key name="complete-params" type="b">
+      <default>true</default>
+      <summary>Complete parameters</summary>
+      <description>If parameters should be included when completing. Requires complete-parentheses.</description>
+    </key>
+  </schema>
+</schemalist>

@@ -655,10 +655,11 @@ class JediWorker(GObject.Object, Ide.Worker):
 class JediPreferences(GObject.Object, Ide.PreferencesAddin):
     def do_load(self, prefs):
         self.completion_id = prefs.add_switch(
-                'code-insight', 'completion',
-                'org.gnome.builder.extension-type', 'enabled', '/',
+                'completion', 'providers',
+                'org.gnome.builder.extension-type', 'enabled',
+                '/org/gnome/builder/extension-types/jedi_plugin/IdeCompletionProvider/',
                 None,
-                _("Suggest Python completions"),
+                _("Suggest completions from Python"),
                 _("Use Jedi to provide completions for the Python language"),
                 None, 30)
 

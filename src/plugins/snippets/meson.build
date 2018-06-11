@@ -11,6 +11,7 @@ snippets_sources = [
   'ide-snippet-completion-provider.c',
   'ide-snippet-completion-item.c',
   'ide-snippet-model.c',
+  'ide-snippet-preferences-addin.c',
 ]
 
 gnome_builder_plugins_sources += files(snippets_sources)

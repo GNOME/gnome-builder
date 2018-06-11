@@ -12,6 +12,7 @@ ctags_sources = [
   'ide-ctags-completion-provider.c',
   'ide-ctags-highlighter.c',
   'ide-ctags-index.c',
+  'ide-ctags-preferences-addin.c',
   'ide-ctags-service.c',
   'ide-ctags-results.c',
   'ide-ctags-symbol-node.c',

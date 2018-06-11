@@ -24,6 +24,7 @@
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-highlighter.h"
 #include "ide-ctags-index.h"
+#include "ide-ctags-preferences-addin.h"
 #include "ide-ctags-service.h"
 #include "ide-ctags-symbol-resolver.h"
 
@@ -48,6 +49,7 @@ ide_ctags_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_CTAGS_COMPLETION_PROVIDER);
   peas_object_module_register_extension_type (module, IDE_TYPE_HIGHLIGHTER, IDE_TYPE_CTAGS_HIGHLIGHTER);
   peas_object_module_register_extension_type (module, IDE_TYPE_SERVICE, IDE_TYPE_CTAGS_SERVICE);
+  peas_object_module_register_extension_type (module, IDE_TYPE_PREFERENCES_ADDIN, IDE_TYPE_CTAGS_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module, IDE_TYPE_SYMBOL_RESOLVER, IDE_TYPE_CTAGS_SYMBOL_RESOLVER);
 
   ide_vcs_register_ignored ("tags.??????");

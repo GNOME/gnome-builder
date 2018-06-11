@@ -81,4 +81,6 @@ executable('test-daemon', ['test-daemon.c'],
          link_args: exe_link_args,
 )
 
+install_data(['org.gnome.builder.clang.gschema.xml'], install_dir: schema_dir)
+
 endif

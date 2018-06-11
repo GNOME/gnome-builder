@@ -257,6 +257,7 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
   g_autoptr(IdeSnippet) snippet = NULL;
   g_autoptr(GVariant) result = NULL;
   g_autoptr(GVariant) chunks = NULL;
+  g_autoptr(GSettings) settings = NULL;
   GVariantIter iter;
   GVariant *vchunk;
   IdeSpacesStyle spaces = 0;
@@ -264,6 +265,8 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
   g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
+
+  settings = g_settings_new ("org.gnome.builder.clang");
 
   result = ide_clang_completion_item_get_result (self);
   snippet = ide_snippet_new (NULL, NULL);
@@ -287,6 +290,29 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
 
       if (!g_variant_lookup (vchunk, "text", "&s", &text))
         text = NULL;
+
+      if (!g_settings_get_boolean (settings, "complete-parens"))
+        {
+          if (kind != CXCompletionChunk_TypedText)
+            continue;
+        }
+
+      if (!g_settings_get_boolean (settings, "complete-params"))
+        {
+          if (kind == CXCompletionChunk_Placeholder)
+            continue;
+
+          if (kind == CXCompletionChunk_RightParen)
+            {
+              /* Insert | cursor right before right paren if we aren't
+               * adding params but parents is enabled.
+               */
+              chunk = ide_snippet_chunk_new ();
+              ide_snippet_chunk_set_tab_stop (chunk, 0);
+              ide_snippet_add_chunk (snippet, chunk);
+              g_clear_object (&chunk);
+            }
+        }
 
       switch (kind)
         {

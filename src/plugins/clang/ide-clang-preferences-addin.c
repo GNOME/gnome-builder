@@ -26,6 +26,8 @@ struct _IdeClangPreferencesAddin
   GObject parent;
   guint   completion_id;
   guint   diagnose_id;
+  guint   parens_id;
+  guint   params_id;
 };
 
 static void preferences_addin_iface_init (IdePreferencesAddinInterface *iface);
@@ -67,8 +69,8 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
                                                   50);
 
   self->completion_id = dzl_preferences_add_switch (preferences,
-                                                    "code-insight",
                                                     "completion",
+                                                    "providers",
                                                     "org.gnome.builder.extension-type",
                                                     "enabled",
                                                     "/org/gnome/builder/extension-types/clang-plugin/IdeCompletionProvider/",
@@ -77,6 +79,32 @@ ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
                                                     _("Use Clang to suggest completions for C and C++ languages"),
                                                     NULL,
                                                     20);
+
+  dzl_preferences_add_list_group (preferences, "completion", "clang", _("Clang Options"), GTK_SELECTION_NONE, 300);
+
+  self->parens_id = dzl_preferences_add_switch (preferences,
+                                                "completion",
+                                                "clang",
+                                                "org.gnome.builder.clang",
+                                                "complete-parens",
+                                                NULL,
+                                                NULL,
+                                                _("Complete Parenthesis"),
+                                                _("Include parenthesis when completing clang proposals"),
+                                                NULL,
+                                                0);
+
+  self->params_id = dzl_preferences_add_switch (preferences,
+                                                "completion",
+                                                "clang",
+                                                "org.gnome.builder.clang",
+                                                "complete-params",
+                                                NULL,
+                                                NULL,
+                                                _("Complete Parameters"),
+                                                _("Include parameters and types when completing clang proposals"),
+                                                NULL,
+                                                10);
 }
 
 static void
@@ -90,6 +118,8 @@ ide_clang_preferences_addin_unload (IdePreferencesAddin *addin,
 
   dzl_preferences_remove_id (preferences, self->completion_id);
   dzl_preferences_remove_id (preferences, self->diagnose_id);
+  dzl_preferences_remove_id (preferences, self->parens_id);
+  dzl_preferences_remove_id (preferences, self->params_id);
 }
 
 static void

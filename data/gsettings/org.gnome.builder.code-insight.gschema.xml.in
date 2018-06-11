@@ -1,10 +1,5 @@
 <schemalist>
   <schema id="org.gnome.builder.code-insight" path="/org/gnome/builder/code-insight/" gettext-domain="gnome-builder">
-    <key name="snippet-completion" type="b">
-      <default>true</default>
-      <summary>Suggest Snippet Completion</summary>
-      <description>Allow snippets to be inserted into the document.</description>
-    </key>
     <key name="ctags-autocompletion" type="b">
       <default>true</default>
       <summary>Ctags based autocompletion</summary>
