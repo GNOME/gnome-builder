@@ -16,7 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #define G_LOG_DOMAIN "ide-clang-proposals"
+
+#include <clang-c/Index.h>
 
 #include "ide-clang-completion-item.h"
 #include "ide-clang-proposals.h"
@@ -111,7 +115,8 @@ typedef struct
 typedef struct
 {
   guint index;
-  guint priority;
+  guint priority : 24;
+  gint kind : 8;
   const gchar *keyword;
 } Item;
 
@@ -286,8 +291,28 @@ sort_by_priority (gconstpointer a,
 {
   const Item *ai = a;
   const Item *bi = b;
+  gint ret;
 
-  return (gint)ai->priority - (gint)bi->priority;
+  if (!(ret = (gint)ai->kind - (gint)bi->kind))
+    ret = (gint)ai->priority - (gint)bi->priority;
+
+  return ret;
+}
+
+static gint
+kind_priority (enum CXCursorKind kind)
+{
+  switch ((gint)kind)
+    {
+    case CXCursor_FieldDecl:
+      return -2;
+
+    case CXCursor_VarDecl:
+      return -1;
+
+    default:
+      return 0;
+    }
 }
 
 static void
@@ -311,6 +336,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
         {
           Item *item = &g_array_index (self->match_indexes, Item, i - 1);
           const gchar *keyword = item->keyword;
+          guint priority;
 
           if (keyword == NULL)
             {
@@ -319,9 +345,10 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
                 keyword = NULL;
             }
 
-          if (keyword == NULL ||
-              !ide_completion_fuzzy_match (keyword, folded, &item->priority))
+          if (keyword == NULL || !ide_completion_fuzzy_match (keyword, folded, &priority))
             g_array_remove_index_fast (self->match_indexes, i - 1);
+          else
+            item->priority = priority;
         }
 
       g_array_sort (self->match_indexes, sort_by_priority);
@@ -340,7 +367,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
     {
       for (guint i = 0; i < n_items; i++)
         {
-          Item item = { i, i };
+          Item item = { i, i, 0 };
           g_array_append_val (self->match_indexes, item);
         }
     }
@@ -364,10 +391,19 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
 
           if (g_variant_lookup (value, "keyword", "&s", &typed_text))
             {
-              Item item = { index, 0, typed_text };
+              Item item = { index, 0, 0, typed_text };
+              guint priority;
 
-              if (ide_completion_fuzzy_match (typed_text, folded, &item.priority))
-                g_array_append_val (self->match_indexes, item);
+              if (ide_completion_fuzzy_match (typed_text, folded, &priority))
+                {
+                  enum CXCursorKind kind = 0;
+
+                  g_variant_lookup (value, "kind", "u", &kind);
+
+                  item.priority = priority;
+                  item.kind = kind_priority (kind);
+                  g_array_append_val (self->match_indexes, item);
+                }
             }
 
           g_variant_unref (value);
