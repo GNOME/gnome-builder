@@ -5243,7 +5243,7 @@ ide_source_view_real_find_references (IdeSourceView *self)
   data->location = ide_buffer_get_insert_location (priv->buffer);
   ide_task_set_task_data (task, data, (GDestroyNotify)find_references_task_data_free);
 
-  ide_extension_set_adapter_foreach (adapter, find_references_task_get_extension, data);
+  ide_extension_set_adapter_foreach_by_priority (adapter, find_references_task_get_extension, data);
   g_assert (data->resolvers->len > 0);
 
   resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
