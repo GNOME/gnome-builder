@@ -1239,6 +1239,8 @@ ide_greeter_perspective_destroy (GtkWidget *widget)
 {
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)widget;
 
+  g_clear_object (&self->genesis_set);
+
   if (self->titlebar != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->titlebar));
 
