@@ -485,6 +485,8 @@ ide_completion_real_show (IdeCompletion *self)
 
   if (self->context == NULL)
     ide_completion_start (self, IDE_COMPLETION_USER_REQUESTED);
+  else
+    ide_completion_update (self, IDE_COMPLETION_USER_REQUESTED);
 
   ide_completion_display_set_context (display, self->context);
 
