@@ -423,7 +423,46 @@ ide_application_actions_load_flatpak (GSimpleAction *action,
   ide_application_actions_load_workbench_view (self, "GbpFlatpakGenesisAddin", manifest);
 }
 
+static gint
+type_compare (gconstpointer a,
+              gconstpointer b)
+{
+  GType *ta = (GType *)a;
+  GType *tb = (GType *)b;
+
+  return g_type_get_instance_count (*ta) - g_type_get_instance_count (*tb);
+}
+
+static void
+ide_application_actions_stats (GSimpleAction *action,
+                               GVariant *args,
+                               gpointer user_data)
+{
+  guint n_types = 0;
+  g_autofree GType *types = g_type_children (G_TYPE_OBJECT, &n_types);
+  gboolean found = FALSE;
+
+  g_printerr ("Type Counts\n");
+
+  qsort (types, n_types, sizeof (GType), type_compare);
+
+  for (guint i = 0; i < n_types; i++)
+    {
+      gint count = g_type_get_instance_count (types[i]);
+
+      if (count)
+        {
+          found = TRUE;
+          g_printerr ("  %60s : %d\n", g_type_name (types[i]), g_type_get_instance_count (types[i]));
+        }
+    }
+
+  if (!found)
+    g_printerr ("No stats were found, was GOBJECT_DEBUG=instance-count set?\n");
+}
+
 static const GActionEntry IdeApplicationActions[] = {
+  { "about:types",  ide_application_actions_stats },
   { "about",        ide_application_actions_about },
   { "clone",        ide_application_actions_clone },
   { "dayhack",      ide_application_actions_dayhack },
