@@ -47,15 +47,15 @@ namespace Ide
 			if (symbol is Vala.LocalVariable)
 				return "lang-variable-symbolic";
 			else if (symbol is Vala.Field)
-				return "struct-field-symbolic";
+				return "lang-struct-field-symbolic";
 			else if (symbol is Vala.Subroutine)
 				return "lang-function-symbolic";
 			else if (symbol is Vala.Namespace)
 				return "lang-include-symbolic";
 			else if (symbol is Vala.MemberAccess)
-				return "struct-field-symbolic";
+				return "lang-struct-field-symbolic";
 			else if (symbol is Vala.Property)
-				return "struct-field-symbolic";
+				return "lang-struct-field-symbolic";
 			else if (symbol is Vala.Struct)
 			{
 				var str = symbol as Vala.Struct;

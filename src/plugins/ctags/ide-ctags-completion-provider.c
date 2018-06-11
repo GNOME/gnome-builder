@@ -75,7 +75,7 @@ get_icon_name (IdeCtagsCompletionItem *item)
       break;
 
     case IDE_CTAGS_INDEX_ENTRY_MEMBER:
-      icon_name = "struct-field-symbolic";
+      icon_name = "lang-struct-field-symbolic";
       break;
 
     case IDE_CTAGS_INDEX_ENTRY_UNION:

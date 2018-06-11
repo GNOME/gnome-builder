@@ -233,8 +233,11 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
       icon_name = "lang-struct-symbolic";
       break;
 
-    case IDE_SYMBOL_SCALAR:
     case IDE_SYMBOL_FIELD:
+      icon_name = "lang-struct-field-symbolic";
+      break;
+
+    case IDE_SYMBOL_SCALAR:
     case IDE_SYMBOL_VARIABLE:
       icon_name = "lang-variable-symbolic";
       break;

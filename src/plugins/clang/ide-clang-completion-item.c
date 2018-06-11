@@ -64,7 +64,7 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
       break;
 
     case CXCursor_FieldDecl:
-      self->icon_name = "struct-field-symbolic";
+      self->icon_name = "lang-struct-field-symbolic";
       self->kind = IDE_SYMBOL_FIELD;
       break;
 

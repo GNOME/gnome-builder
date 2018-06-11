@@ -63,7 +63,7 @@ gbp_devhelp_menu_button_pixbuf_data_func (GtkCellLayout   *cell_layout,
       switch (link_type)
         {
         case DH_LINK_TYPE_PROPERTY:
-          icon_name = "struct-field-symbolic";
+          icon_name = "lang-struct-field-symbolic";
           break;
 
         case DH_LINK_TYPE_FUNCTION:
