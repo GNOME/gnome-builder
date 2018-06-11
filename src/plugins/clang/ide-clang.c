@@ -319,6 +319,20 @@ ide_clang_get_symbol_kind (CXCursor        cursor,
       kind = IDE_SYMBOL_HEADER;
       break;
 
+    case CXCursor_VarDecl:
+      kind = IDE_SYMBOL_VARIABLE;
+      break;
+
+    case CXCursor_NamespaceAlias:
+      kind = IDE_SYMBOL_NAMESPACE;
+      break;
+
+    case CXCursor_CXXMethod:
+    case CXCursor_Destructor:
+    case CXCursor_Constructor:
+      kind = IDE_SYMBOL_METHOD;
+      break;
+
     default:
       break;
     }
