@@ -178,7 +178,7 @@ gbp_symbol_layout_stack_addin_cursor_moved_cb (gpointer user_data)
           data->buffer = g_object_ref (buffer);
           ide_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
 
-          ide_extension_set_adapter_foreach (adapter, get_extension, data);
+          ide_extension_set_adapter_foreach_by_priority (adapter, get_extension, data);
           g_assert (data->resolvers->len > 0);
 
           resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
@@ -326,7 +326,7 @@ gbp_symbol_layout_stack_addin_update_tree (GbpSymbolLayoutStackAddin *self,
   data->buffer = g_object_ref (buffer);
   ide_task_set_task_data (task, data, (GDestroyNotify)symbol_resolver_task_data_free);
 
-  ide_extension_set_adapter_foreach (adapter, get_extension, data);
+  ide_extension_set_adapter_foreach_by_priority (adapter, get_extension, data);
   g_assert (data->resolvers->len > 0);
 
   resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
