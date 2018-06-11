@@ -507,7 +507,6 @@ static void
 ide_clang_client_call_cancelled (GCancellable *cancellable,
                                  Call         *call)
 {
-  g_autoptr(GVariant) params = NULL;
   GVariantDict dict;
 
   g_assert (G_IS_CANCELLABLE (cancellable));

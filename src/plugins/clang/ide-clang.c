@@ -1309,7 +1309,6 @@ ide_clang_complete_async (IdeClang            *self,
                           gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  g_autofree gchar *parent = NULL;
   Complete *state;
 
   PROBE;
@@ -2179,7 +2178,6 @@ ide_clang_get_index_key_async (IdeClang            *self,
                                gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  g_autofree gchar *parent = NULL;
   GetIndexKey *state;
 
   PROBE;
