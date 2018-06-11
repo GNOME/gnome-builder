@@ -127,6 +127,7 @@ src/plugins/beautifier/gtk/menus.ui
 src/plugins/cargo/cargo_plugin.py
 src/plugins/clang/ide-clang-preferences-addin.c
 src/plugins/clang/ide-clang-symbol-node.c
+src/plugins/clang/org.gnome.builder.clang.gschema.xml
 src/plugins/cmake/gbp-cmake-build-system.c
 src/plugins/cmake/gbp-cmake-pipeline-addin.c
 src/plugins/cmake/gbp-cmake-toolchain.c
