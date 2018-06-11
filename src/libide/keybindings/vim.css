@@ -1963,6 +1963,9 @@
   bind "<ctrl>e" { "movement" (screen-up, 0, 0, 1) };
   bind "<ctrl>y" { "movement" (screen-down, 0, 0, 1) };
 
+  bind "<ctrl>n" { "cycle-completion" (down) };
+  bind "<ctrl>p" { "cycle-completion" (up) };
+
   /* raw keycode (to some degree) */
   bind "<ctrl>v" { "capture-modifier" ()
                    "insert-modifier" (0)

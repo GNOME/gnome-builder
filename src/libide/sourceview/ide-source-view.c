@@ -2773,7 +2773,10 @@ ide_source_view_real_cycle_completion (IdeSourceView    *self,
   completion = ide_source_view_get_completion (self);
 
   if (!ide_completion_is_visible (completion))
-    return;
+    {
+      ide_completion_show (completion);
+      return;
+    }
 
   switch (direction)
     {
