@@ -2859,7 +2859,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
   data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
   data->location = g_steal_pointer (&srcloc);
 
-  ide_extension_set_adapter_foreach (adapter, lookup_symbol_get_extension, data);
+  ide_extension_set_adapter_foreach_by_priority (adapter, lookup_symbol_get_extension, data);
   g_assert (data->resolvers->len > 0);
 
   ide_task_set_task_data (task, data, (GDestroyNotify)lookup_symbol_task_data_free);
