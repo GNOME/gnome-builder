@@ -108,8 +108,10 @@ ide_ctags_index_entry_kind_to_symbol_kind (IdeCtagsIndexEntryKind kind)
       return IDE_SYMBOL_ENUM_VALUE;
 
     case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
-    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
       return IDE_SYMBOL_FUNCTION;
+
+    case IDE_CTAGS_INDEX_ENTRY_MEMBER:
+      return IDE_SYMBOL_FIELD;
 
     case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
       return IDE_SYMBOL_STRUCT;
