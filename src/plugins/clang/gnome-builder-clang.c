@@ -839,7 +839,9 @@ handle_cancel_request (JsonrpcServer *server,
 
   op = client_op_new (client, id);
 
-  if (params == NULL || !(cid = g_variant_lookup_value (params, "id", NULL)))
+  if (params == NULL ||
+      !(cid = g_variant_lookup_value (params, "id", NULL)) ||
+      g_variant_equal (id, cid))
     {
       client_op_bad_params (op);
       return;
