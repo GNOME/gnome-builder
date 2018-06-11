@@ -22,6 +22,7 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <stdlib.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -597,6 +598,74 @@ ide_extension_set_adapter_foreach (IdeExtensionSetAdapter            *self,
       PeasExtension *exten = value;
 
       foreach_func (self, plugin_info, exten, user_data);
+    }
+}
+
+typedef struct
+{
+  PeasPluginInfo *plugin_info;
+  PeasExtension  *exten;
+  gint            priority;
+} SortedInfo;
+
+static gint
+sort_by_priority (gconstpointer a,
+                  gconstpointer b)
+{
+  const SortedInfo *sa = a;
+  const SortedInfo *sb = b;
+
+  /* Greater values are higher priority */
+
+  return sb->priority - sa->priority;
+}
+
+/**
+ * ide_extension_set_adapter_foreach_by_priority:
+ * @self: an #IdeExtensionSetAdapter
+ * @foreach_func: (scope call): A callback
+ * @user_data: user data for @foreach_func
+ *
+ * Calls @foreach_func for every extension loaded by the extension set.
+ */
+void
+ide_extension_set_adapter_foreach_by_priority (IdeExtensionSetAdapter            *self,
+                                               IdeExtensionSetAdapterForeachFunc  foreach_func,
+                                               gpointer                           user_data)
+{
+  g_autoptr(GArray) sorted = NULL;
+  g_autofree gchar *prio_key = NULL;
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
+  g_return_if_fail (foreach_func != NULL);
+
+  prio_key = g_strdup_printf ("%s-Priority", self->key);
+  sorted = g_array_new (FALSE, FALSE, sizeof (SortedInfo));
+
+  g_hash_table_iter_init (&iter, self->extensions);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      PeasPluginInfo *plugin_info = key;
+      PeasExtension *exten = value;
+      const gchar *priostr = peas_plugin_info_get_external_data (plugin_info, prio_key);
+      gint prio = priostr ? atoi (priostr) : 0;
+      SortedInfo info = { plugin_info, exten, prio };
+
+      g_array_append_val (sorted, info);
+    }
+
+  g_array_sort (sorted, sort_by_priority);
+
+  for (guint i = 0; i < sorted->len; i++)
+    {
+      const SortedInfo *info = &g_array_index (sorted, SortedInfo, i);
+
+      foreach_func (self, info->plugin_info, info->exten, user_data);
     }
 }
 

@@ -61,6 +61,10 @@ IDE_AVAILABLE_IN_ALL
 void                    ide_extension_set_adapter_foreach            (IdeExtensionSetAdapter            *self,
                                                                       IdeExtensionSetAdapterForeachFunc  foreach_func,
                                                                       gpointer                           user_data);
+IDE_AVAILABLE_IN_3_30
+void                    ide_extension_set_adapter_foreach_by_priority(IdeExtensionSetAdapter            *self,
+                                                                      IdeExtensionSetAdapterForeachFunc  foreach_func,
+                                                                      gpointer                           user_data);
 IDE_AVAILABLE_IN_ALL
 PeasExtension          *ide_extension_set_adapter_get_extension      (IdeExtensionSetAdapter            *self,
                                                                       PeasPluginInfo                    *plugin_info);
