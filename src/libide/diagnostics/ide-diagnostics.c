@@ -102,20 +102,15 @@ void
 ide_diagnostics_merge (IdeDiagnostics *self,
                        IdeDiagnostics *other)
 {
-  gsize i;
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (other != NULL);
 
-  g_return_if_fail (self);
-  g_return_if_fail (other);
+  if (self->diagnostics == NULL)
+    self->diagnostics = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
 
-  if (!self->diagnostics)
+  if (other->diagnostics != NULL)
     {
-      self->diagnostics = g_ptr_array_new_with_free_func (
-        (GDestroyNotify)ide_diagnostic_unref);
-    }
-
-  if (other->diagnostics)
-    {
-      for (i = 0; i < other->diagnostics->len; i++)
+      for (guint i = 0; i < other->diagnostics->len; i++)
         {
           IdeDiagnostic *diag;
 
