@@ -225,6 +225,12 @@ ide_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
   DiffLine key = { line + 1, 0 }; /* Git is 1-based */
   DiffLine *ret;
 
+  /* Don't imply changes we don't know are real, in the case that
+   * we failed to communicate with git properly about the blob diff.
+   */
+  if (self->in_failed_state)
+    return IDE_BUFFER_LINE_CHANGE_NONE;
+
   if (self->lines == NULL || self->lines->data == NULL)
     {
       /* If within working directory, synthesize line addition. */
