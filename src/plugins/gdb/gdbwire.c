@@ -609,6 +609,9 @@ gdbwire_logger_log(const char *file, int line, enum gdbwire_logger_level level,
     char *buf;
     int size;
 
+    if (fmt == NULL)
+      return;
+
     va_list ap;
     va_start(ap, fmt);
 
