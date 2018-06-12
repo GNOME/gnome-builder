@@ -102,6 +102,15 @@ JavaScript</property>
                 <property name="languages">C</property>
               </object>
             </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Boxes</property>
+                <property name="icon-name">org.gnome.Boxes</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-boxes.git</property>
+                <property name="visible">true</property>
+                <property name="languages">Vala</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

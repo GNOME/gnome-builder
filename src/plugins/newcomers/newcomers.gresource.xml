@@ -12,6 +12,7 @@
 
   <!-- Icons used by the greeter for newcomer projects -->
   <gresource prefix="/org/gnome/builder/icons">
+    <file alias="256x256/apps/org.gnome.Boxes.png">icons/org.gnome.Boxes.png</file>
     <file alias="256x256/apps/org.gnome.Maps.png">icons/org.gnome.Maps.png</file>
     <file alias="256x256/apps/org.gnome.Music.png">icons/org.gnome.Music.png</file>
     <file alias="256x256/apps/org.gnome.Photos.png">icons/org.gnome.Photos.png</file>
