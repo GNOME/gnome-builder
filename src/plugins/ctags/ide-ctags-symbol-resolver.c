@@ -387,7 +387,7 @@ ide_ctags_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
             }
           else if (is_linenum (entry->pattern))
             {
-              IdeSymbol *symbol;
+              g_autoptr(IdeSymbol) symbol = NULL;
               gint64 parsed;
 
               parsed = g_ascii_strtoll (entry->pattern, NULL, 10);
@@ -396,7 +396,9 @@ ide_ctags_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
                 goto failure;
 
               symbol = create_symbol (self, entry, parsed, 0, 0);
-              ide_task_return_pointer (task, symbol, (GDestroyNotify)ide_symbol_unref);
+              ide_task_return_pointer (task,
+                                       g_steal_pointer (&symbol),
+                                       (GDestroyNotify)ide_symbol_unref);
               return;
             }
         }
@@ -780,7 +782,9 @@ ide_ctags_symbol_resolver_get_location_async (IdeCtagsSymbolResolver   *self,
         goto not_a_number;
 
       symbol = create_symbol (self, entry, parsed, 0, 0);
-      ide_task_return_pointer (task, symbol, (GDestroyNotify)ide_symbol_unref);
+      ide_task_return_pointer (task,
+                               g_steal_pointer (&symbol),
+                               (GDestroyNotify)ide_symbol_unref);
 
       IDE_EXIT;
     }
@@ -839,7 +843,7 @@ ide_ctags_symbol_resolver_get_location_finish (IdeCtagsSymbolResolver  *self,
 
   if (symbol != NULL)
     {
-      if (NULL != (ret = ide_symbol_get_declaration_location (symbol)))
+      if ((ret = ide_symbol_get_declaration_location (symbol)))
         ide_source_location_ref (ret);
       else
         g_set_error (error,
