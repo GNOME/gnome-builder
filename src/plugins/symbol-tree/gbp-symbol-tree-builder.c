@@ -100,6 +100,8 @@ gbp_symbol_tree_builder_get_location_cb (GObject      *object,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_SYMBOL_NODE (node));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_SYMBOL_TREE_BUILDER (self));
 
   location = ide_symbol_node_get_location_finish (node, result, &error);
@@ -130,6 +132,7 @@ gbp_symbol_tree_builder_node_activated (DzlTreeBuilder *builder,
   IDE_ENTRY;
 
   g_assert (GBP_IS_SYMBOL_TREE_BUILDER (self));
+  g_assert (!node || DZL_IS_TREE_NODE (node));
 
   item = dzl_tree_node_get_item (node);
 
@@ -143,7 +146,7 @@ gbp_symbol_tree_builder_node_activated (DzlTreeBuilder *builder,
       IDE_RETURN (TRUE);
     }
 
-  g_warning ("IdeSymbolNode did not create a source location");
+  g_warning ("Not a symbol node, ignoring request");
 
   IDE_RETURN (FALSE);
 }
