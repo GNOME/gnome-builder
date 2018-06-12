@@ -1486,6 +1486,8 @@ ide_buffer_dispose (GObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
+  ide_buffer_set_diagnostics (self, NULL);
+
   dzl_clear_source (&priv->settling_handler);
   dzl_clear_source (&priv->reclamation_handler);
   dzl_clear_source (&priv->check_modified_timeout);
