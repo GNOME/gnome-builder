@@ -38,17 +38,21 @@ ide_xml_diagnostic_provider_diagnose_cb (GObject      *object,
                                          gpointer      user_data)
 {
   IdeXmlService *service = (IdeXmlService *)object;
+  g_autoptr(IdeDiagnostics) ret = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeDiagnostics *diagnostics;
 
   IDE_ENTRY;
 
-  if (NULL == (diagnostics = ide_xml_service_get_diagnostics_finish (service, result, &error)))
+  g_assert (IDE_IS_XML_SERVICE (service));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!(ret = ide_xml_service_get_diagnostics_finish (service, result, &error)))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_pointer (task,
-                             ide_diagnostics_ref (diagnostics),
+                             g_steal_pointer (&ret),
                              (GDestroyNotify)ide_diagnostics_unref);
 
   IDE_EXIT;
@@ -70,6 +74,8 @@ ide_xml_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_XML_DIAGNOSTIC_PROVIDER (self));
+  g_return_if_fail (IDE_IS_FILE (file));
+  g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -93,15 +99,14 @@ ide_xml_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provider,
                                              GAsyncResult           *result,
                                              GError                **error)
 {
-  IdeTask *task = (IdeTask *)result;
   IdeDiagnostics *ret;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_XML_DIAGNOSTIC_PROVIDER (provider), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ret = ide_task_propagate_pointer (task, error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

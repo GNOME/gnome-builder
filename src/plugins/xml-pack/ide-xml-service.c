@@ -537,18 +537,20 @@ ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
   g_autoptr(GTask) task = NULL;
   IdeXmlAnalysis *cached;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_XML_SERVICE (self));
   g_return_if_fail (IDE_IS_FILE (ifile));
   g_return_if_fail (IDE_IS_BUFFER (buffer) || buffer == NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_xml_service_get_diagnostics_async);
 
   /*
    * If we have a cached analysis with some diagnostics,
    * and it is new enough, then re-use it.
    */
-  if (NULL != (cached = dzl_task_cache_peek (self->analyses, ifile)))
+  if ((cached = dzl_task_cache_peek (self->analyses, ifile)))
     {
       IdeContext *context;
       IdeUnsavedFiles *unsaved_files;
@@ -560,13 +562,14 @@ ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
       context = ide_object_get_context (IDE_OBJECT (self));
       unsaved_files = ide_context_get_unsaved_files (context);
 
-      if (NULL != (uf = ide_unsaved_files_get_unsaved_file (unsaved_files, gfile)) &&
+      if ((uf = ide_unsaved_files_get_unsaved_file (unsaved_files, gfile)) &&
           ide_xml_analysis_get_sequence (cached) == ide_unsaved_file_get_sequence (uf))
         {
-          diagnostics = ide_diagnostics_ref (ide_xml_analysis_get_diagnostics (cached));
+          diagnostics = ide_xml_analysis_get_diagnostics (cached);
           g_assert (diagnostics != NULL);
-
-          g_task_return_pointer (task, diagnostics, (GDestroyNotify)ide_diagnostics_unref);
+          g_task_return_pointer (task,
+                                 ide_diagnostics_ref (diagnostics),
+                                 (GDestroyNotify)ide_diagnostics_unref);
           return;
         }
     }
@@ -592,13 +595,11 @@ ide_xml_service_get_diagnostics_finish (IdeXmlService  *self,
                                         GAsyncResult   *result,
                                         GError        **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
   g_return_val_if_fail (G_IS_TASK (result), NULL);
   g_return_val_if_fail (error != NULL, NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static void
