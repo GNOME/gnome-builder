@@ -205,7 +205,7 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
   diff = g_slice_new0 (DiffTask);
   diff->file = g_object_ref (gfile);
   diff->repository = g_object_ref (self->repository);
-  diff->lines = g_array_new (FALSE, FALSE, sizeof (DiffLine));
+  diff->lines = g_array_sized_new (FALSE, FALSE, sizeof (DiffLine), 32);
   diff->content = ide_buffer_get_content (self->buffer);
   diff->blob = self->cached_blob ? g_object_ref (self->cached_blob) : NULL;
 
@@ -224,7 +224,7 @@ ide_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
   DiffLine key = { line + 1, 0 }; /* Git is 1-based */
   DiffLine *ret;
 
-  if (self->lines == NULL)
+  if (self->lines == NULL || self->lines->len == 0)
     {
       /* If within working directory, synthesize line addition. */
       if (self->is_child_of_workdir)
@@ -507,6 +507,7 @@ find_or_add_line (GArray *array,
   DiffLine *ret;
 
   g_assert (array != NULL);
+  g_assert (array->data != NULL);
   g_assert (line >= 0);
 
   ret = bsearch (&key, (gconstpointer)array->data,
