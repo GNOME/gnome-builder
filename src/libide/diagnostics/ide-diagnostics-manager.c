@@ -25,6 +25,7 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
+#include "application/ide-application.h"
 #include "buffers/ide-buffer.h"
 #include "buffers/ide-buffer-manager.h"
 #include "diagnostics/ide-diagnostic.h"
@@ -276,6 +277,7 @@ ide_diagnostics_group_add (IdeDiagnosticsGroup   *group,
 {
   IdeDiagnostics *diagnostics;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (group != NULL);
   g_assert (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
   g_assert (diagnostic != NULL);
@@ -311,6 +313,7 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self));
@@ -338,7 +341,7 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
        * so it is probably related to disposal.
        */
       g_warning ("Failed to locate group, possibly disposed.");
-      return;
+      IDE_EXIT;
     }
 
   /*
