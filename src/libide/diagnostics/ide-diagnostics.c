@@ -26,6 +26,9 @@
 #include "diagnostics/ide-diagnostics.h"
 #include "util/ide-glib.h"
 
+#define DIAGNOSTICS_MAGIC   0x82645329
+#define IS_DIAGNOSTICS(ptr) ((ptr)->magic == DIAGNOSTICS_MAGIC)
+
 G_DEFINE_BOXED_TYPE (IdeDiagnostics, ide_diagnostics, ide_diagnostics_ref, ide_diagnostics_unref)
 
 DZL_DEFINE_COUNTER (instances, "IdeDiagnostics", "Instances", "Number of IdeDiagnostics")
@@ -33,6 +36,7 @@ DZL_DEFINE_COUNTER (instances, "IdeDiagnostics", "Instances", "Number of IdeDiag
 struct _IdeDiagnostics
 {
   volatile gint  ref_count;
+  guint          magic;
   GPtrArray     *diagnostics;
 };
 
@@ -57,6 +61,7 @@ ide_diagnostics_new (GPtrArray *ar)
 
   ret = g_slice_new0 (IdeDiagnostics);
   ret->ref_count = 1;
+  ret->magic = DIAGNOSTICS_MAGIC;
   ret->diagnostics = ar;
 
   DZL_COUNTER_INC (instances);
@@ -68,6 +73,7 @@ IdeDiagnostics *
 ide_diagnostics_ref (IdeDiagnostics *self)
 {
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTICS (self), NULL);
   g_return_val_if_fail (self->ref_count > 0, NULL);
 
   g_atomic_int_inc (&self->ref_count);
@@ -79,6 +85,7 @@ void
 ide_diagnostics_unref (IdeDiagnostics *self)
 {
   g_return_if_fail (self);
+  g_return_if_fail (IS_DIAGNOSTICS (self));
   g_return_if_fail (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
@@ -103,7 +110,12 @@ ide_diagnostics_merge (IdeDiagnostics *self,
                        IdeDiagnostics *other)
 {
   g_return_if_fail (self != NULL);
+  g_return_if_fail (IS_DIAGNOSTICS (self));
   g_return_if_fail (other != NULL);
+  g_return_if_fail (IS_DIAGNOSTICS (other));
+
+  if (self->diagnostics == NULL && other->diagnostics == NULL)
+    return;
 
   if (self->diagnostics == NULL)
     self->diagnostics = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
@@ -132,6 +144,7 @@ gsize
 ide_diagnostics_get_size (IdeDiagnostics *self)
 {
   g_return_val_if_fail (self, 0);
+  g_return_val_if_fail (IS_DIAGNOSTICS (self), 0);
 
   return self->diagnostics ? self->diagnostics->len : 0;
 }
@@ -148,6 +161,7 @@ ide_diagnostics_index (IdeDiagnostics *self,
                        gsize           index)
 {
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTICS (self), NULL);
   g_return_val_if_fail (self->diagnostics, NULL);
   g_return_val_if_fail (index < self->diagnostics->len, NULL);
 
@@ -158,8 +172,9 @@ void
 ide_diagnostics_add (IdeDiagnostics *self,
                      IdeDiagnostic  *diagnostic)
 {
-  g_assert (self != NULL);
-  g_assert (diagnostic != NULL);
+  g_return_if_fail (self);
+  g_return_if_fail (IS_DIAGNOSTICS (self));
+  g_return_if_fail (diagnostic);
 
   g_ptr_array_add (self->diagnostics, ide_diagnostic_ref (diagnostic));
 }
@@ -177,8 +192,9 @@ void
 ide_diagnostics_take (IdeDiagnostics *self,
                       IdeDiagnostic  *diagnostic)
 {
-  g_assert (self != NULL);
-  g_assert (diagnostic != NULL);
+  g_return_if_fail (self);
+  g_return_if_fail (IS_DIAGNOSTICS (self));
+  g_return_if_fail (diagnostic);
 
   g_ptr_array_add (self->diagnostics, diagnostic);
 }
