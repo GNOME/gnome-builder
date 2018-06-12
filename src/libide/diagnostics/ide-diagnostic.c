@@ -28,6 +28,9 @@
 #include "diagnostics/ide-source-location.h"
 #include "diagnostics/ide-source-range.h"
 
+#define DIAGNOSTIC_MAGIC   0x82645328
+#define IS_DIAGNOSTIC(ptr) ((ptr)->magic == DIAGNOSTIC_MAGIC)
+
 G_DEFINE_BOXED_TYPE (IdeDiagnostic, ide_diagnostic, ide_diagnostic_ref, ide_diagnostic_unref)
 
 DZL_DEFINE_COUNTER (instances, "IdeDiagnostic", "Instances", "Number of IdeDiagnostic")
@@ -36,17 +39,20 @@ struct _IdeDiagnostic
 {
   volatile gint          ref_count;
   IdeDiagnosticSeverity  severity;
+  guint                  hash;
+  guint                  magic;
   gchar                 *text;
   IdeSourceLocation     *location;
   GPtrArray             *fixits;
   GPtrArray             *ranges;
-  guint                  hash;
 };
 
 guint
 ide_diagnostic_hash (IdeDiagnostic *self)
 {
   guint hash = self->hash;
+
+  g_assert (IS_DIAGNOSTIC (self));
 
   if (hash == 0)
     {
@@ -66,6 +72,7 @@ IdeDiagnostic *
 ide_diagnostic_ref (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
   g_return_val_if_fail (self->ref_count > 0, NULL);
 
   g_atomic_int_inc (&self->ref_count);
@@ -77,15 +84,18 @@ void
 ide_diagnostic_unref (IdeDiagnostic *self)
 {
   g_return_if_fail (self);
+  g_return_if_fail (IS_DIAGNOSTIC (self));
   g_return_if_fail (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
+      self->magic = 0xAAAAAAAA;
+
       g_clear_pointer (&self->location, ide_source_location_unref);
       g_clear_pointer (&self->text, g_free);
       g_clear_pointer (&self->ranges, g_ptr_array_unref);
       g_clear_pointer (&self->fixits, g_ptr_array_unref);
-      g_free (self);
+      g_slice_free (IdeDiagnostic, self);
 
       DZL_COUNTER_DEC (instances);
     }
@@ -95,6 +105,7 @@ IdeDiagnosticSeverity
 ide_diagnostic_get_severity (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, IDE_DIAGNOSTIC_IGNORED);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), IDE_DIAGNOSTIC_IGNORED);
 
   return self->severity;
 }
@@ -103,6 +114,8 @@ const gchar *
 ide_diagnostic_get_text (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   return self->text;
 }
@@ -110,12 +123,14 @@ ide_diagnostic_get_text (IdeDiagnostic *self)
 /**
  * ide_diagnostic_get_text_for_display:
  *
- * This creates a new string that is formatted using the diagnostics line number, column, severity,
- * and message text in the format "line:column: severity: message".
+ * This creates a new string that is formatted using the diagnostics line
+ * number, column, severity, and message text in the format "line:column:
+ * severity: message".
  *
- * This can be convenient when wanting to quickly display a diagnostic such as in a tooltip.
+ * This can be convenient when wanting to quickly display a diagnostic such as
+ * in a tooltip.
  *
- * Returns: (transfer full): A string containing the text formatted for display.
+ * Returns: (transfer full): string containing the text formatted for display.
  */
 gchar *
 ide_diagnostic_get_text_for_display (IdeDiagnostic *self)
@@ -126,10 +141,13 @@ ide_diagnostic_get_text_for_display (IdeDiagnostic *self)
   guint column = 0;
 
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   severity = ide_diagnostic_severity_to_string (self->severity);
   location = ide_diagnostic_get_location (self);
-  if (location)
+
+  if (location != NULL)
     {
       line = ide_source_location_get_line (location) + 1;
       column = ide_source_location_get_line_offset (location) + 1;
@@ -142,6 +160,8 @@ guint
 ide_diagnostic_get_num_ranges (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, 0);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), 0);
+  g_return_val_if_fail (self->ref_count > 0, 0);
 
   return self->ranges ? self->ranges->len : 0;
 }
@@ -159,6 +179,8 @@ ide_diagnostic_get_range (IdeDiagnostic *self,
                           guint          index)
 {
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   if (self->ranges)
     {
@@ -181,6 +203,8 @@ IdeSourceLocation *
 ide_diagnostic_get_location (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   if (self->location)
     return self->location;
@@ -216,8 +240,9 @@ ide_diagnostic_new (IdeDiagnosticSeverity  severity,
 {
   IdeDiagnostic *ret;
 
-  ret = g_new0 (IdeDiagnostic, 1);
+  ret = g_slice_new0 (IdeDiagnostic);
   ret->ref_count = 1;
+  ret->magic = DIAGNOSTIC_MAGIC;
   ret->severity = severity;
   ret->text = g_strdup (text);
   ret->location = location ? ide_source_location_ref (location) : NULL;
@@ -240,6 +265,8 @@ ide_diagnostic_take_fixit (IdeDiagnostic *self,
                            IdeFixit      *fixit)
 {
   g_return_if_fail (self);
+  g_return_if_fail (IS_DIAGNOSTIC (self));
+  g_return_if_fail (self->ref_count > 0);
   g_return_if_fail (fixit);
 
   if (self->fixits == NULL)
@@ -263,6 +290,8 @@ ide_diagnostic_take_range (IdeDiagnostic  *self,
                            IdeSourceRange *range)
 {
   g_return_if_fail (self);
+  g_return_if_fail (IS_DIAGNOSTIC (self));
+  g_return_if_fail (self->ref_count > 0);
   g_return_if_fail (range);
 
   if (self->ranges == NULL)
@@ -287,6 +316,8 @@ ide_diagnostic_add_range (IdeDiagnostic  *self,
                           IdeSourceRange *range)
 {
   g_return_if_fail (self);
+  g_return_if_fail (IS_DIAGNOSTIC (self));
+  g_return_if_fail (self->ref_count > 0);
   g_return_if_fail (range);
 
   ide_diagnostic_take_range (self, ide_source_range_ref (range));
@@ -324,6 +355,8 @@ guint
 ide_diagnostic_get_num_fixits (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, 0);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), 0);
+  g_return_val_if_fail (self->ref_count > 0, 0);
 
   return (self->fixits != NULL) ? self->fixits->len : 0;
 }
@@ -343,6 +376,8 @@ ide_diagnostic_get_fixit (IdeDiagnostic *self,
                           guint          index)
 {
   g_return_val_if_fail (self, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
   g_return_val_if_fail (self->fixits, NULL);
   g_return_val_if_fail (index < self->fixits->len, NULL);
 
@@ -356,7 +391,9 @@ ide_diagnostic_compare (const IdeDiagnostic *a,
   gint ret;
 
   g_assert (a != NULL);
+  g_assert (IS_DIAGNOSTIC (a));
   g_assert (b != NULL);
+  g_assert (IS_DIAGNOSTIC (b));
 
   /* Severity is 0..N where N is more important. So reverse comparator. */
   if (0 != (ret = (gint)b->severity - (gint)a->severity))
@@ -384,6 +421,8 @@ GFile *
 ide_diagnostic_get_file (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   if (self->location != NULL)
     {
@@ -415,6 +454,8 @@ ide_diagnostic_to_variant (const IdeDiagnostic *self)
   GVariantDict dict;
 
   g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   g_variant_dict_init (&dict, NULL);
 
