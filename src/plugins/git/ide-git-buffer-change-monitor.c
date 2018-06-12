@@ -224,7 +224,7 @@ ide_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
   DiffLine key = { line + 1, 0 }; /* Git is 1-based */
   DiffLine *ret;
 
-  if (self->lines == NULL || self->lines->len == 0)
+  if (self->lines == NULL || self->lines->data == NULL)
     {
       /* If within working directory, synthesize line addition. */
       if (self->is_child_of_workdir)
