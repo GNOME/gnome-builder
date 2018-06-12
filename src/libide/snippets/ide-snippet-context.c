@@ -100,8 +100,8 @@ ide_snippet_context_clear_variables (IdeSnippetContext *context)
 
 void
 ide_snippet_context_add_variable (IdeSnippetContext *context,
-                                        const gchar            *key,
-                                        const gchar            *value)
+                                  const gchar       *key,
+                                  const gchar       *value)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   g_return_if_fail (key);
@@ -111,8 +111,8 @@ ide_snippet_context_add_variable (IdeSnippetContext *context,
 
 void
 ide_snippet_context_add_shared_variable (IdeSnippetContext *context,
-                                                const gchar             *key,
-                                                const gchar             *value)
+                                         const gchar       *key,
+                                         const gchar       *value)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   g_return_if_fail (key);
@@ -122,7 +122,7 @@ ide_snippet_context_add_shared_variable (IdeSnippetContext *context,
 
 const gchar *
 ide_snippet_context_get_variable (IdeSnippetContext *context,
-                                        const gchar            *key)
+                                  const gchar       *key)
 {
   const gchar *ret;
 
@@ -522,7 +522,7 @@ scan_forward (const gchar  *input,
 
 gchar *
 ide_snippet_context_expand (IdeSnippetContext *context,
-                                   const gchar             *input)
+                            const gchar       *input)
 {
   const gchar *expand;
   gunichar c;
@@ -650,7 +650,7 @@ ide_snippet_context_expand (IdeSnippetContext *context,
 
 void
 ide_snippet_context_set_tab_width (IdeSnippetContext *context,
-                                         gint                    tab_width)
+                                   gint               tab_width)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   context->tab_width = tab_width;
@@ -658,7 +658,7 @@ ide_snippet_context_set_tab_width (IdeSnippetContext *context,
 
 void
 ide_snippet_context_set_use_spaces (IdeSnippetContext *context,
-                                          gboolean                use_spaces)
+                                    gboolean           use_spaces)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   context->use_spaces = !!use_spaces;
@@ -666,7 +666,7 @@ ide_snippet_context_set_use_spaces (IdeSnippetContext *context,
 
 void
 ide_snippet_context_set_line_prefix (IdeSnippetContext *context,
-                                           const gchar            *line_prefix)
+                                     const gchar       *line_prefix)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CONTEXT (context));
   g_free (context->line_prefix);

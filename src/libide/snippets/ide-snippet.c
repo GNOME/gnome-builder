@@ -92,7 +92,7 @@ static GParamSpec * properties[LAST_PROP];
  */
 IdeSnippet *
 ide_snippet_new (const gchar *trigger,
-                        const gchar *language)
+                 const gchar *language)
 {
   return g_object_new (IDE_TYPE_SNIPPET,
                        "trigger", trigger,
@@ -178,7 +178,7 @@ ide_snippet_get_n_chunks (IdeSnippet *self)
  */
 IdeSnippetChunk *
 ide_snippet_get_nth_chunk (IdeSnippet *self,
-                                  guint             n)
+                           guint       n)
 {
   g_return_val_if_fail (IDE_IS_SNIPPET (self), 0);
 
@@ -212,8 +212,8 @@ ide_snippet_get_trigger (IdeSnippet *self)
  * Sets the trigger for the snippet.
  */
 void
-ide_snippet_set_trigger (IdeSnippet *self,
-                                const gchar      *trigger)
+ide_snippet_set_trigger (IdeSnippet  *self,
+                         const gchar *trigger)
 {
   g_return_if_fail (IDE_IS_SNIPPET (self));
 
@@ -252,8 +252,8 @@ ide_snippet_get_language (IdeSnippet *self)
  * This should match the #GtkSourceLanguage:id identifier.
  */
 void
-ide_snippet_set_language (IdeSnippet *self,
-                                 const gchar      *language)
+ide_snippet_set_language (IdeSnippet  *self,
+                          const gchar *language)
 {
   g_return_if_fail (IDE_IS_SNIPPET (self));
 
@@ -288,8 +288,8 @@ ide_snippet_get_description (IdeSnippet *self)
  * Sets the description for the snippet.
  */
 void
-ide_snippet_set_description (IdeSnippet *self,
-                                    const gchar      *description)
+ide_snippet_set_description (IdeSnippet  *self,
+                             const gchar *description)
 {
   g_return_if_fail (IDE_IS_SNIPPET (self));
 
@@ -301,8 +301,8 @@ ide_snippet_set_description (IdeSnippet *self,
 }
 
 static gint
-ide_snippet_get_offset (IdeSnippet *self,
-                               GtkTextIter      *iter)
+ide_snippet_get_offset (IdeSnippet  *self,
+                        GtkTextIter *iter)
 {
   GtkTextIter begin;
   gint ret;
@@ -318,8 +318,8 @@ ide_snippet_get_offset (IdeSnippet *self,
 }
 
 static gint
-ide_snippet_get_index (IdeSnippet *self,
-                              GtkTextIter      *iter)
+ide_snippet_get_index (IdeSnippet  *self,
+                       GtkTextIter *iter)
 {
   gint offset;
   gint run;
@@ -350,8 +350,8 @@ ide_snippet_get_index (IdeSnippet *self,
 }
 
 static gboolean
-ide_snippet_within_bounds (IdeSnippet *self,
-                                  GtkTextIter      *iter)
+ide_snippet_within_bounds (IdeSnippet  *self,
+                           GtkTextIter *iter)
 {
   GtkTextIter begin;
   GtkTextIter end;
@@ -370,8 +370,8 @@ ide_snippet_within_bounds (IdeSnippet *self,
 }
 
 gboolean
-ide_snippet_insert_set (IdeSnippet *self,
-                               GtkTextMark      *mark)
+ide_snippet_insert_set (IdeSnippet  *self,
+                        GtkTextMark *mark)
 {
   GtkTextIter iter;
 
@@ -389,10 +389,10 @@ ide_snippet_insert_set (IdeSnippet *self,
 }
 
 static void
-ide_snippet_get_nth_chunk_range (IdeSnippet *self,
-                                        gint              n,
-                                        GtkTextIter      *begin,
-                                        GtkTextIter      *end)
+ide_snippet_get_nth_chunk_range (IdeSnippet  *self,
+                                 gint         n,
+                                 GtkTextIter *begin,
+                                 GtkTextIter *end)
 {
   gint run;
   gint i;
@@ -417,9 +417,9 @@ ide_snippet_get_nth_chunk_range (IdeSnippet *self,
 
 void
 ide_snippet_get_chunk_range (IdeSnippet      *self,
-                                    IdeSnippetChunk *chunk,
-                                    GtkTextIter           *begin,
-                                    GtkTextIter           *end)
+                             IdeSnippetChunk *chunk,
+                             GtkTextIter     *begin,
+                             GtkTextIter     *end)
 {
   IdeSnippetChunk *item;
   guint i;
@@ -443,7 +443,7 @@ ide_snippet_get_chunk_range (IdeSnippet      *self,
 
 static void
 ide_snippet_select_chunk (IdeSnippet *self,
-                                 gint              n)
+                          gint        n)
 {
   GtkTextIter begin;
   GtkTextIter end;
@@ -651,9 +651,9 @@ ide_snippet_update_tags (IdeSnippet *self)
 }
 
 gboolean
-ide_snippet_begin (IdeSnippet *self,
-                          GtkTextBuffer    *buffer,
-                          GtkTextIter      *iter)
+ide_snippet_begin (IdeSnippet    *self,
+                   GtkTextBuffer *buffer,
+                   GtkTextIter   *iter)
 {
   IdeSnippetContext *context;
   gboolean ret;
@@ -739,7 +739,7 @@ ide_snippet_unpause (IdeSnippet *self)
 
 void
 ide_snippet_add_chunk (IdeSnippet      *self,
-                              IdeSnippetChunk *chunk)
+                       IdeSnippetChunk *chunk)
 {
   gint tab_stop;
 
@@ -757,7 +757,7 @@ ide_snippet_add_chunk (IdeSnippet      *self,
 
 gchar *
 ide_snippet_get_nth_text (IdeSnippet *self,
-                                 gint              n)
+                          gint        n)
 {
   GtkTextIter iter;
   GtkTextIter end;
@@ -781,9 +781,9 @@ ide_snippet_get_nth_text (IdeSnippet *self,
 }
 
 static void
-ide_snippet_replace_chunk_text (IdeSnippet *self,
-                                       gint              n,
-                                       const gchar      *text)
+ide_snippet_replace_chunk_text (IdeSnippet  *self,
+                                gint         n,
+                                const gchar *text)
 {
   GtkTextIter begin;
   GtkTextIter end;
@@ -844,11 +844,11 @@ ide_snippet_rewrite_updated_chunks (IdeSnippet *self)
 }
 
 void
-ide_snippet_before_insert_text (IdeSnippet *self,
-                                       GtkTextBuffer    *buffer,
-                                       GtkTextIter      *iter,
-                                       gchar            *text,
-                                       gint              len)
+ide_snippet_before_insert_text (IdeSnippet    *self,
+                                GtkTextBuffer *buffer,
+                                GtkTextIter   *iter,
+                                gchar         *text,
+                                gint           len)
 {
   gint utf8_len;
   gint n;
@@ -875,11 +875,11 @@ ide_snippet_before_insert_text (IdeSnippet *self,
 }
 
 void
-ide_snippet_after_insert_text (IdeSnippet *self,
-                                      GtkTextBuffer    *buffer,
-                                      GtkTextIter      *iter,
-                                      gchar            *text,
-                                      gint              len)
+ide_snippet_after_insert_text (IdeSnippet    *self,
+                               GtkTextBuffer *buffer,
+                               GtkTextIter   *iter,
+                               gchar         *text,
+                               gint           len)
 {
   IdeSnippetChunk *chunk;
   GtkTextMark *here;
@@ -919,10 +919,10 @@ ide_snippet_after_insert_text (IdeSnippet *self,
 }
 
 void
-ide_snippet_before_delete_range (IdeSnippet *self,
-                                        GtkTextBuffer    *buffer,
-                                        GtkTextIter      *begin,
-                                        GtkTextIter      *end)
+ide_snippet_before_delete_range (IdeSnippet    *self,
+                                 GtkTextBuffer *buffer,
+                                 GtkTextIter   *begin,
+                                 GtkTextIter   *end)
 {
   gint *run;
   gint len;
@@ -989,10 +989,10 @@ ide_snippet_before_delete_range (IdeSnippet *self,
 }
 
 void
-ide_snippet_after_delete_range (IdeSnippet *self,
-                                       GtkTextBuffer    *buffer,
-                                       GtkTextIter      *begin,
-                                       GtkTextIter      *end)
+ide_snippet_after_delete_range (IdeSnippet    *self,
+                                GtkTextBuffer *buffer,
+                                GtkTextIter   *begin,
+                                GtkTextIter   *end)
 {
   GtkTextMark *here;
 
@@ -1132,9 +1132,9 @@ ide_snippet_finalize (GObject *object)
 
 static void
 ide_snippet_get_property (GObject    *object,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
 {
   IdeSnippet *self = IDE_SNIPPET (object);
 
@@ -1175,9 +1175,9 @@ ide_snippet_get_property (GObject    *object,
 
 static void
 ide_snippet_set_property (GObject      *object,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
+                          guint         prop_id,
+                          const GValue *value,
+                          GParamSpec   *pspec)
 {
   IdeSnippet *self = IDE_SNIPPET (object);
 

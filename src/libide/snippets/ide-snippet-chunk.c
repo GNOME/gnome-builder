@@ -40,14 +40,14 @@
 
 struct _IdeSnippetChunk
 {
-  GObject                  parent_instance;
+  GObject            parent_instance;
 
   IdeSnippetContext *context;
-  guint                    context_changed_handler;
-  gint                     tab_stop;
-  gchar                   *spec;
-  gchar                   *text;
-  guint                    text_set : 1;
+  guint              context_changed_handler;
+  gint               tab_stop;
+  gchar             *spec;
+  gchar             *text;
+  guint              text_set : 1;
 };
 
 G_DEFINE_TYPE (IdeSnippetChunk, ide_snippet_chunk, G_TYPE_OBJECT)
@@ -126,7 +126,7 @@ ide_snippet_chunk_get_context (IdeSnippetChunk *chunk)
 
 void
 ide_snippet_chunk_set_context (IdeSnippetChunk   *chunk,
-                                      IdeSnippetContext *context)
+                               IdeSnippetContext *context)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
   g_return_if_fail (!context || IDE_IS_SNIPPET_CONTEXT (context));
@@ -166,7 +166,7 @@ ide_snippet_chunk_get_spec (IdeSnippetChunk *chunk)
 
 void
 ide_snippet_chunk_set_spec (IdeSnippetChunk *chunk,
-                                   const gchar           *spec)
+                            const gchar     *spec)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
 
@@ -184,7 +184,7 @@ ide_snippet_chunk_get_tab_stop (IdeSnippetChunk *chunk)
 
 void
 ide_snippet_chunk_set_tab_stop (IdeSnippetChunk *chunk,
-                                       gint                   tab_stop)
+                                gint             tab_stop)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
   chunk->tab_stop = tab_stop;
@@ -200,7 +200,7 @@ ide_snippet_chunk_get_text (IdeSnippetChunk *chunk)
 
 void
 ide_snippet_chunk_set_text (IdeSnippetChunk *chunk,
-                                   const gchar           *text)
+                            const gchar     *text)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
 
@@ -222,7 +222,7 @@ ide_snippet_chunk_get_text_set (IdeSnippetChunk *chunk)
 
 void
 ide_snippet_chunk_set_text_set (IdeSnippetChunk *chunk,
-                                       gboolean               text_set)
+                                gboolean         text_set)
 {
   g_return_if_fail (IDE_IS_SNIPPET_CHUNK (chunk));
 
@@ -249,9 +249,9 @@ ide_snippet_chunk_finalize (GObject *object)
 
 static void
 ide_snippet_chunk_get_property (GObject    *object,
-                                       guint       prop_id,
-                                       GValue     *value,
-                                       GParamSpec *pspec)
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
 {
   IdeSnippetChunk *chunk = IDE_SNIPPET_CHUNK (object);
 
@@ -284,9 +284,9 @@ ide_snippet_chunk_get_property (GObject    *object,
 
 static void
 ide_snippet_chunk_set_property (GObject      *object,
-                                       guint         prop_id,
-                                       const GValue *value,
-                                       GParamSpec   *pspec)
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
 {
   IdeSnippetChunk *chunk = IDE_SNIPPET_CHUNK (object);
 
