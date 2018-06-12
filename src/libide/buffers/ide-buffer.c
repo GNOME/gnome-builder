@@ -555,7 +555,6 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUFFER (self));
-  g_assert (diagnostics != NULL);
 
   if (diagnostics != priv->diagnostics)
     {
