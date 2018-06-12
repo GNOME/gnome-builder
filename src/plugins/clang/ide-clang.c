@@ -1549,6 +1549,7 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
   CXCursor cursor;
   CXCursor tmpcursor;
   CXFile cxfile;
+  unsigned options;
 
   g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_CLANG (source_object));
@@ -1556,13 +1557,16 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
   g_assert (state->path != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  options = clang_defaultEditingTranslationUnitOptions ()
+          | CXTranslationUnit_DetailedPreprocessingRecord;
+
   code = clang_parseTranslationUnit2 (state->index,
                                       state->path,
                                       (const char * const *)state->argv,
                                       state->argc,
                                       state->ufs->files,
                                       state->ufs->len,
-                                      clang_defaultEditingTranslationUnitOptions (),
+                                      options,
                                       &unit);
 
   if (code != CXError_Success)
