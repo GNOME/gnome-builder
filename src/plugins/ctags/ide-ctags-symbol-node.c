@@ -42,6 +42,7 @@ ide_ctags_symbol_node_get_location_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_CTAGS_SYMBOL_RESOLVER (resolver));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   location = ide_ctags_symbol_resolver_get_location_finish (resolver, result, &error);
@@ -64,6 +65,7 @@ ide_ctags_symbol_node_get_location_async (IdeSymbolNode       *node,
   g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_CTAGS_SYMBOL_NODE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_ctags_symbol_node_get_location_async);
