@@ -79,8 +79,11 @@ ide_xml_analysis_set_diagnostics (IdeXmlAnalysis *self,
   g_return_if_fail (self != NULL);
   g_return_if_fail (diagnostics != NULL);
 
-  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
-  self->diagnostics = ide_diagnostics_ref (diagnostics);
+  if (diagnostics != self->diagnostics)
+    {
+      g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+      self->diagnostics = ide_diagnostics_ref (diagnostics);
+    }
 }
 
 void
