@@ -187,9 +187,7 @@ ide_snippet_completion_provider_display_proposal (IdeCompletionProvider   *provi
   escaped = g_markup_escape_text (info->name, -1);
   highlight = ide_completion_fuzzy_highlight (escaped, typed_text);
 
-  /* TODO: have jimmac make us a real icon */
-
-  ide_completion_list_box_row_set_icon_name (row, "ui-section-symbolic");
+  ide_completion_list_box_row_set_icon_name (row, "completion-snippet-symbolic");
   ide_completion_list_box_row_set_left (row, NULL);
   ide_completion_list_box_row_set_center_markup (row, highlight);
   ide_completion_list_box_row_set_right (row, NULL);

@@ -172,7 +172,7 @@ gbp_word_completion_provider_display_proposal (IdeCompletionProvider   *provider
   word = gbp_word_proposal_get_word (GBP_WORD_PROPOSAL (proposal));
   markup = ide_completion_fuzzy_highlight (word, typed_text);
 
-  ide_completion_list_box_row_set_icon_name (row, NULL);
+  ide_completion_list_box_row_set_icon_name (row, "completion-word-symbolic");
   ide_completion_list_box_row_set_left (row, NULL);
   ide_completion_list_box_row_set_center_markup (row, markup);
   ide_completion_list_box_row_set_right (row, NULL);
