@@ -2850,6 +2850,8 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
       return;
     }
 
+  ide_buffer_sync_to_unsaved_files (self);
+
   line = gtk_text_iter_get_line (location);
   line_offset = gtk_text_iter_get_line_offset (location);
   offset = gtk_text_iter_get_offset (location);
