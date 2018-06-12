@@ -624,20 +624,21 @@ ide_xml_service_context_loaded (IdeService *service)
 
 typedef struct
 {
-  GTask         *task;
-  IdeFile       *ifile;
-  IdeBuffer     *buffer;
-  gint           line;
-  gint           line_offset;
+  IdeFile   *ifile;
+  IdeBuffer *buffer;
+  gint       line;
+  gint       line_offset;
 } PositionState;
 
 static void
 position_state_free (PositionState *state)
 {
   g_assert (state != NULL);
+  g_assert (IDE_IS_MAIN_THREAD ());
 
-  g_object_unref (state->ifile);
-  g_object_unref (state->buffer);
+  g_clear_object (&state->ifile);
+  g_clear_object (&state->buffer);
+  g_slice_free (PositionState, state);
 }
 
 static inline gboolean
@@ -805,7 +806,7 @@ get_position (IdeXmlService   *self,
               gint             line,
               gint             line_offset)
 {
-  IdeXmlPosition *position;
+  IdeXmlPosition *position = NULL;
   IdeXmlSymbolNode *root_node;
   IdeXmlSymbolNode *current_node, *child_node;
   IdeXmlSymbolNode *candidate_node = NULL;
@@ -962,27 +963,36 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
                                              gpointer      user_data)
 {
   IdeXmlService *self = (IdeXmlService *)object;
-  PositionState *state = (PositionState *)user_data;
-  g_autoptr(GTask) task = state->task;
-  IdeXmlPosition *position;
-  IdeXmlAnalysis *analysis = NULL;
+  g_autoptr(IdeXmlPosition) position = NULL;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeXmlAnalysis *analysis;
+  PositionState *state;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_XML_SERVICE (self));
 
-  analysis = ide_xml_service_get_analysis_finish (self, result, &error);
-  if (analysis != NULL)
+  if (!(analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
     {
-      position = get_position (self, analysis, (GtkTextBuffer *)state->buffer, state->line, state->line_offset);
-      g_task_return_pointer (task, position, g_object_unref);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
     }
-  else
-    g_task_return_error (task, g_steal_pointer (&error));
 
-  position_state_free (state);
+  state = ide_task_get_task_data (task);
+
+  position = get_position (self,
+                           analysis,
+                           GTK_TEXT_BUFFER (state->buffer),
+                           state->line,
+                           state->line_offset);
+
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&position),
+                           g_object_unref);
 
   IDE_EXIT;
 }
@@ -997,8 +1007,8 @@ ide_xml_service_get_position_from_cursor_async (IdeXmlService       *self,
                                                 GAsyncReadyCallback  callback,
                                                 gpointer             user_data)
 {
+  g_autoptr(IdeTask) task = NULL;
   PositionState *state;
-  g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
 
@@ -1007,21 +1017,23 @@ ide_xml_service_get_position_from_cursor_async (IdeXmlService       *self,
   g_return_if_fail (IDE_IS_BUFFER (buffer) || buffer == NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_xml_service_get_position_from_cursor_async);
 
   state = g_slice_new0 (PositionState);
-  state->task = g_steal_pointer (&task);
   state->ifile = g_object_ref (ifile);
   state->buffer = g_object_ref (buffer);
   state->line = line;
   state->line_offset = line_offset;
+
+  ide_task_set_task_data (task, state, (GDestroyNotify)position_state_free);
 
   ide_xml_service_get_analysis_async (self,
                                       ifile,
                                       buffer,
                                       cancellable,
                                       ide_xml_service_get_position_from_cursor_cb,
-                                      state);
+                                      g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -1031,13 +1043,10 @@ ide_xml_service_get_position_from_cursor_finish (IdeXmlService  *self,
                                                  GAsyncResult   *result,
                                                  GError        **error)
 {
-  GTask *task = (GTask *)result;
-
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
-  g_return_val_if_fail (error != NULL, NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
