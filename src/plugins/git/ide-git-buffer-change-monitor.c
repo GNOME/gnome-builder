@@ -66,6 +66,7 @@ struct _IdeGitBufferChangeMonitor
   guint                   in_calculation : 1;
   guint                   delete_range_requires_recalculation : 1;
   guint                   is_child_of_workdir : 1;
+  guint                   in_failed_state : 1;
 };
 
 typedef struct
@@ -205,7 +206,7 @@ ide_git_buffer_change_monitor_calculate_async (IdeGitBufferChangeMonitor *self,
   diff = g_slice_new0 (DiffTask);
   diff->file = g_object_ref (gfile);
   diff->repository = g_object_ref (self->repository);
-  diff->lines = g_array_new (FALSE, FALSE, sizeof (DiffLine));
+  diff->lines = g_array_sized_new (FALSE, FALSE, sizeof (DiffLine), 32);
   diff->content = ide_buffer_get_content (self->buffer);
   diff->blob = self->cached_blob ? g_object_ref (self->cached_blob) : NULL;
 
@@ -224,7 +225,13 @@ ide_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
   DiffLine key = { line + 1, 0 }; /* Git is 1-based */
   DiffLine *ret;
 
-  if (self->lines == NULL)
+  /* Don't imply changes we don't know are real, in the case that
+   * we failed to communicate with git properly about the blob diff.
+   */
+  if (self->in_failed_state)
+    return IDE_BUFFER_LINE_CHANGE_NONE;
+
+  if (self->lines == NULL || self->lines->data == NULL)
     {
       /* If within working directory, synthesize line addition. */
       if (self->is_child_of_workdir)
@@ -267,13 +274,20 @@ ide_git_buffer_change_monitor__calculate_cb (GObject      *object,
 
   if (lines == NULL)
     {
-      if (!g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
-        g_message ("%s", error->message);
+      if (!self->in_failed_state && !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
+        {
+          ide_object_warning (self,
+                              /* translators: %s is replaced with the error string from git */
+                              _("There was a failure while calculating line changes from git. The exact error was: %s"),
+                              error->message);
+          self->in_failed_state = TRUE;
+        }
     }
   else
     {
       g_clear_pointer (&self->lines, g_array_unref);
       self->lines = g_steal_pointer (&lines);
+      self->in_failed_state = FALSE;
     }
 
   ide_buffer_change_monitor_emit_changed (IDE_BUFFER_CHANGE_MONITOR (self));
@@ -507,6 +521,7 @@ find_or_add_line (GArray *array,
   DiffLine *ret;
 
   g_assert (array != NULL);
+  g_assert (array->data != NULL);
   g_assert (line >= 0);
 
   ret = bsearch (&key, (gconstpointer)array->data,
