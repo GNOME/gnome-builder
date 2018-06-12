@@ -333,6 +333,11 @@ ide_clang_get_symbol_kind (CXCursor        cursor,
       kind = IDE_SYMBOL_METHOD;
       break;
 
+    case CXCursor_MacroDefinition:
+    case CXCursor_MacroExpansion:
+      kind = IDE_SYMBOL_MACRO;
+      break;
+
     default:
       break;
     }
