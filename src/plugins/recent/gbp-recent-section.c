@@ -237,6 +237,43 @@ gbp_recent_section_collect_selected_cb (GtkWidget *widget,
     }
 }
 
+static gboolean
+can_purge_project_directory (GFile *directory)
+{
+  g_autoptr(GFile) projects_dir = NULL;
+  g_autofree gchar *uri = NULL;
+  GFileType file_type;
+
+  g_assert (G_IS_FILE (directory));
+
+  uri = g_file_get_uri (directory);
+  file_type = g_file_query_file_type (directory, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL);
+
+  if (file_type != G_FILE_TYPE_DIRECTORY)
+    {
+      g_critical ("Refusing to purge non-directory \"%s\"", uri);
+      return FALSE;
+    }
+
+  projects_dir = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
+  g_assert (G_IS_FILE (projects_dir));
+
+  /* Refuse to delete anything outside of projects dir to be paranoid */
+  if (!g_file_has_prefix (directory, projects_dir))
+    {
+      g_critical ("Refusing to purge \"%s\" as it is outside of projects directory", uri);
+      return FALSE;
+    }
+
+  if (g_file_equal (directory, projects_dir))
+    {
+      g_critical ("Refusing to purge the projects directory");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 gbp_recent_section_reap_cb (GObject      *object,
                             GAsyncResult *result,
@@ -316,8 +353,11 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
 
       if (purge_sources)
         {
-          dzl_directory_reaper_add_directory (reaper, directory, 0);
-          g_ptr_array_add (directories, g_object_ref (directory));
+          if (can_purge_project_directory (directory))
+            {
+              dzl_directory_reaper_add_directory (reaper, directory, 0);
+              g_ptr_array_add (directories, g_object_ref (directory));
+            }
         }
 
       /*
