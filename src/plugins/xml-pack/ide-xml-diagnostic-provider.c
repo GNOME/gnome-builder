@@ -106,24 +106,9 @@ ide_xml_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provider,
   IDE_RETURN (ret);
 }
 
-IdeXmlDiagnosticProvider *
-ide_xml_diagnostic_provider_new (void)
-{
-  return g_object_new (IDE_TYPE_XML_DIAGNOSTIC_PROVIDER, NULL);
-}
-
-static void
-ide_xml_diagnostic_provider_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (ide_xml_diagnostic_provider_parent_class)->finalize (object);
-}
-
 static void
 ide_xml_diagnostic_provider_class_init (IdeXmlDiagnosticProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = ide_xml_diagnostic_provider_finalize;
 }
 
 static void

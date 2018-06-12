@@ -27,6 +27,4 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlDiagnosticProvider, ide_xml_diagnostic_provider, IDE, XML_DIAGNOSTIC_PROVIDER, IdeObject)
 
-IdeXmlDiagnosticProvider *ide_xml_diagnostic_provider_new (void);
-
 G_END_DECLS
