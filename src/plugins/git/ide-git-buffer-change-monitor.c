@@ -66,6 +66,7 @@ struct _IdeGitBufferChangeMonitor
   guint                   in_calculation : 1;
   guint                   delete_range_requires_recalculation : 1;
   guint                   is_child_of_workdir : 1;
+  guint                   in_failed_state : 1;
 };
 
 typedef struct
@@ -267,13 +268,17 @@ ide_git_buffer_change_monitor__calculate_cb (GObject      *object,
 
   if (lines == NULL)
     {
-      if (!g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
-        g_message ("%s", error->message);
+      if (!self->in_failed_state && !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
+        {
+          g_warning ("Failed to calculate git line changes: %s", error->message);
+          self->in_failed_state = TRUE;
+        }
     }
   else
     {
       g_clear_pointer (&self->lines, g_array_unref);
       self->lines = g_steal_pointer (&lines);
+      self->in_failed_state = FALSE;
     }
 
   ide_buffer_change_monitor_emit_changed (IDE_BUFFER_CHANGE_MONITOR (self));
