@@ -414,11 +414,19 @@ snippet gsignal
 		              ${8:0});
 snippet async
 - scope c
+	/**
+	 * ${$2|functify}_$1_async:
+	 * @self: an #$2
+	 * @cancellable: (nullable): a #GCancellable
+	 * @callback: a #GAsyncReadyCallback to execute upon completion
+	 * @user_data: closure data for @callback
+	 *
+	 */
 	void
 	${$2|functify}_${1:do_something}_async (${2:$filename|stripsuffix|camelize} *self,
-	${$2|space} ${$1|space}          GCancellable *cancellable,
-	${$2|space} ${$1|space}          GAsyncReadyCallback callback,
-	${$2|space} ${$1|space}          gpointer user_data)
+	${$2|space} ${$1|space}         GCancellable *cancellable,
+	${$2|space} ${$1|space}         GAsyncReadyCallback callback,
+	${$2|space} ${$1|space}         gpointer user_data)
 	{
 		g_autoptr(GTask) task = NULL;
 
@@ -426,21 +434,29 @@ snippet async
 		g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
 		task = g_task_new (self, cancellable, callback, user_data);
+		g_task_set_source_tag (task, ${$2|functify}_$1_async);
 
 		$0
 	}
 snippet finish
 - scope c
+	/**
+	 * ${$2|functify}_$1_finish:
+	 * @self: an #$2
+	 * @result: a #GAsyncResult provided to callback
+	 * @error: a location for a #GError, or %NULL
+	 *
+	 * Returns:
+	 */
 	gboolean
 	${$2|functify}_${1:do_something}_finish (${2:$filename|stripsuffix|camelize} *self,
-	${$2|space} ${$1|space}           GAsyncResult *result,
-	${$2|space} ${$1|space}           GError **error)
+	${$2|space} ${$1|space}          GAsyncResult *result,
+	${$2|space} ${$1|space}          GError **error)
 	{
-		GTask *task = (GTask *)result;
-
 		g_return_val_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self), ${3:FALSE});
+		g_return_val_if_fail (G_IS_TASK (result), $3);
 
-		return g_task_propagate_${4:boolean} (task, error);
+		return g_task_propagate_${4:boolean} (G_TASK (result), error);
 	}
 snippet Private
 - desc Define a local for the GObject's private data.
