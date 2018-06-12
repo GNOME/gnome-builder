@@ -130,6 +130,9 @@ struct _IdeCompletion
    */
   guint block_count;
 
+  /* Re-entrancy protection for ide_completion_show(). */
+  guint showing;
+
   /*
    * The number of rows to display. This is propagated to the window if/when
    * the window is created.
@@ -1381,7 +1384,10 @@ ide_completion_show (IdeCompletion *self)
   if (ide_completion_is_blocked (self))
     IDE_EXIT;
 
-  g_signal_emit (self, signals [SHOW], 0);
+  self->showing++;
+  if (self->showing == 1)
+    g_signal_emit (self, signals [SHOW], 0);
+  self->showing--;
 
   IDE_EXIT;
 }
