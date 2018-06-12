@@ -270,7 +270,10 @@ ide_git_buffer_change_monitor__calculate_cb (GObject      *object,
     {
       if (!self->in_failed_state && !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
         {
-          g_warning ("Failed to calculate git line changes: %s", error->message);
+          ide_object_warning (self,
+                              /* translators: %s is replaced with the error string from git */
+                              _("There was a failure while calculating line changes from git. The exact error was: %s"),
+                              error->message);
           self->in_failed_state = TRUE;
         }
     }
