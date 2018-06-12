@@ -59,20 +59,20 @@ JavaScript</property>
             </child>
             <child>
               <object class="GbpNewcomersProject">
-                <property name="name" translatable="yes">Todo</property>
-                <property name="icon-name">org.gnome.Todo</property>
-                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-todo.git</property>
-                <property name="visible">true</property>
-                <property name="languages">C</property>
-              </object>
-            </child>
-            <child>
-              <object class="GbpNewcomersProject">
                 <property name="name" translatable="yes">Music</property>
                 <property name="icon-name">org.gnome.Music</property>
                 <property name="uri">https://gitlab.gnome.org/GNOME/gnome-music.git</property>
                 <property name="visible">true</property>
                 <property name="languages">Python</property>
+              </object>
+            </child>
+            <child>
+              <object class="GbpNewcomersProject">
+                <property name="name" translatable="yes">Todo</property>
+                <property name="icon-name">org.gnome.Todo</property>
+                <property name="uri">https://gitlab.gnome.org/GNOME/gnome-todo.git</property>
+                <property name="visible">true</property>
+                <property name="languages">C</property>
               </object>
             </child>
             <child>
