@@ -91,8 +91,6 @@ add_lang_executable (const gchar *lang,
                      const gchar *path,
                      gchar **content)
 {
-  g_autofree gchar *lang_compiler = NULL;
-
   if (g_strcmp0 (lang, IDE_TOOLCHAIN_LANGUAGE_C) == 0)
     _gbp_cmake_file_set_quoted (content, "CMAKE_C_COMPILER", path);
   else if (g_strcmp0 (lang, IDE_TOOLCHAIN_LANGUAGE_CPLUSPLUS) == 0)

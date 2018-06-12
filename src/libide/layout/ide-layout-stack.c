@@ -649,9 +649,9 @@ ide_layout_stack_pan_end (IdeLayoutStack   *self,
 
       IDE_TRACE_MSG ("Moving view to a previously non-existant column");
 
-      gtk_container_remove (GTK_CONTAINER (priv->stack), GTK_WIDGET (priv->pan_view));
-      gtk_widget_show (GTK_WIDGET (priv->pan_view));
-      gtk_container_add (GTK_CONTAINER (dest_priv->stack), GTK_WIDGET (priv->pan_view));
+      gtk_container_remove (GTK_CONTAINER (priv->stack), GTK_WIDGET (view));
+      gtk_widget_show (GTK_WIDGET (view));
+      gtk_container_add (GTK_CONTAINER (dest_priv->stack), GTK_WIDGET (view));
     }
 
 cleanup:

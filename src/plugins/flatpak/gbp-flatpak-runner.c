@@ -57,7 +57,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   IdeConfigurationManager *config_manager;
   IdeConfiguration *config;
   IdeEnvironment *env;
-  g_auto(GStrv) environ = NULL;
+  g_auto(GStrv) environ_ = NULL;
   const gchar *app_id;
   IdeContext *context;
   guint i = 0;
@@ -122,11 +122,11 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
 
   /* Proxy environment stuff to the launcher */
   if ((env = ide_runner_get_environment (runner)) &&
-      (environ = ide_environment_get_environ (env)))
+      (environ_ = ide_environment_get_environ (env)))
     {
-      for (guint j = 0; environ[j]; j++)
+      for (guint j = 0; environ_[j]; j++)
         {
-          g_autofree gchar *arg = g_strdup_printf ("--env=%s", environ[j]);
+          g_autofree gchar *arg = g_strdup_printf ("--env=%s", environ_[j]);
           ide_subprocess_launcher_insert_argv (launcher, i++, arg);
         }
     }

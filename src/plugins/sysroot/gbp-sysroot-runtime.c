@@ -96,7 +96,6 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
       g_autofree gchar *pkgconfig_dirs = NULL;
       g_autofree gchar *cflags = NULL;
       g_autofree gchar *ldflags = NULL;
-      g_auto(GStrv) path_parts = NULL;
       const gchar *previous_env = NULL;
       const gchar *sysroot_id = NULL;
 

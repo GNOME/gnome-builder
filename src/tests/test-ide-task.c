@@ -251,7 +251,6 @@ test_ide_task_is_valid (void)
   g_autoptr(GObject) obj = g_object_new (G_TYPE_OBJECT, NULL);
   g_autoptr(IdeTask) task = ide_task_new (NULL, NULL, NULL, NULL);
   g_autoptr(IdeTask) task2 = ide_task_new (obj, NULL, NULL, NULL);
-  g_autoptr(GError) error = NULL;
 
   g_assert (ide_task_is_valid (task, NULL));
   g_assert (!ide_task_is_valid (task, obj));
@@ -434,7 +433,6 @@ test_ide_task_completed_threaded (void)
   g_autoptr(GObject) obj = g_object_new (G_TYPE_OBJECT, NULL);
   g_autoptr(GCancellable) cancellable = g_cancellable_new ();
   g_autoptr(IdeTask) task = ide_task_new (obj, cancellable, check_int, g_main_loop_ref (main_loop));
-  g_autoptr(GError) error = NULL;
   guint count = 0;
 
   g_signal_connect (task, "notify::completed", G_CALLBACK (inc_completed), &count);
@@ -467,7 +465,6 @@ test_ide_task_task_data_threaded (void)
   g_autoptr(GObject) obj = g_object_new (G_TYPE_OBJECT, NULL);
   g_autoptr(GCancellable) cancellable = g_cancellable_new ();
   g_autoptr(IdeTask) task = ide_task_new (obj, cancellable, check_int, g_main_loop_ref (main_loop));
-  g_autoptr(GError) error = NULL;
   gint *n = g_new0 (gint, 1);
 
   ide_task_set_task_data (task, n, g_free);
@@ -523,7 +520,6 @@ test_ide_task_task_data_set_in_thread (void)
 {
   g_autoptr(GMainLoop) main_loop = g_main_loop_new (NULL, FALSE);
   g_autoptr(IdeTask) task = ide_task_new (NULL, NULL, set_in_thread_cb, g_main_loop_ref (main_loop));
-  g_autoptr(GError) error = NULL;
 
   ide_task_run_in_thread (task, set_in_thread_worker);
   g_main_loop_run (main_loop);

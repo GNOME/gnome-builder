@@ -260,15 +260,15 @@ gbp_gcc_toolchain_provider_search_init (GbpGccToolchainProvider *self,
 {
   GList *folders = NULL;
   g_autoptr (IdeTask) task = NULL;
-  g_auto(GStrv) environ = NULL;
+  g_auto(GStrv) environ_ = NULL;
   g_auto(GStrv) paths = NULL;
   const gchar *path_env;
   FileSearching *file_searching;
 
   g_assert (GBP_IS_GCC_TOOLCHAIN_PROVIDER (self));
 
-  environ = g_get_environ ();
-  path_env = g_environ_getenv (environ, "PATH");
+  environ_ = g_get_environ ();
+  path_env = g_environ_getenv (environ_, "PATH");
   paths = g_strsplit (path_env, ":", -1);
   for (int i = 0; paths[i] != NULL; i++)
     folders = g_list_append (folders, g_file_new_for_path (paths[i]));

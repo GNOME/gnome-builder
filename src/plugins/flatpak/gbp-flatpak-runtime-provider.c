@@ -650,7 +650,6 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
 
   if (GBP_IS_FLATPAK_MANIFEST (state->config))
     {
-      g_autofree gchar *platform_id = NULL;
       IdeTransferManager *transfer_manager;
       GbpFlatpakApplicationAddin *addin;
       const gchar * const *sdk_exts;

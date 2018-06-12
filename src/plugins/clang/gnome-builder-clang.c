@@ -219,7 +219,6 @@ handle_index_file (JsonrpcServer *server,
                    GVariant      *params,
                    IdeClang      *clang)
 {
-  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
   const gchar *path = NULL;
@@ -258,7 +257,6 @@ handle_get_index_key_cb (IdeClang     *clang,
   g_autoptr(ClientOp) op = user_data;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *key = NULL;
-  g_autoptr(GVariant) reply = NULL;
 
   g_assert (IDE_IS_CLANG (clang));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -286,7 +284,6 @@ handle_get_index_key (JsonrpcServer *server,
                       GVariant      *params,
                       IdeClang      *clang)
 {
-  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
   const gchar *path = NULL;
@@ -360,7 +357,6 @@ handle_find_nearest_scope (JsonrpcServer *server,
                            GVariant      *params,
                            IdeClang      *clang)
 {
-  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
   const gchar *path = NULL;
@@ -444,7 +440,6 @@ handle_diagnose (JsonrpcServer *server,
                  GVariant      *params,
                  IdeClang      *clang)
 {
-  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
   const gchar *path = NULL;
@@ -508,7 +503,6 @@ handle_locate_symbol (JsonrpcServer *server,
                       GVariant      *params,
                       IdeClang      *clang)
 {
-  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
   const gchar *path;
@@ -578,7 +572,6 @@ handle_get_symbol_tree (JsonrpcServer *server,
                         GVariant      *params,
                         IdeClang      *clang)
 {
-  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
   const gchar *path;
@@ -642,7 +635,6 @@ handle_complete (JsonrpcServer *server,
                  GVariant      *params,
                  IdeClang      *clang)
 {
-  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
   const gchar *path;
@@ -714,7 +706,6 @@ handle_get_highlight_index (JsonrpcServer *server,
                             GVariant      *params,
                             IdeClang      *clang)
 {
-  g_autoptr(GPtrArray) argv = NULL;
   g_autoptr(ClientOp) op = NULL;
   g_auto(GStrv) flags = NULL;
   const gchar *path;

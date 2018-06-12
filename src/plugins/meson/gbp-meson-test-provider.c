@@ -56,7 +56,7 @@ gbp_meson_test_provider_load_json (GbpMesonTestProvider *self,
       g_autoptr(IdeEnvironment) env = ide_environment_new ();
       g_autoptr(IdeTest) test = NULL;
       g_autoptr(GFile) workdir = NULL;
-      g_auto(GStrv) environ = NULL;
+      g_auto(GStrv) environ_ = NULL;
       const gchar *name;
       const gchar *workdir_path;
       const gchar *group = NULL;
@@ -130,14 +130,14 @@ gbp_meson_test_provider_load_json (GbpMesonTestProvider *self,
 
       g_ptr_array_add (cmd, NULL);
 
-      environ = ide_environment_get_environ (env);
-      if (ide_strv_empty0 (environ))
-        g_clear_pointer (&environ, g_strfreev);
+      environ_ = ide_environment_get_environ (env);
+      if (ide_strv_empty0 (environ_))
+        g_clear_pointer (&environ_, g_strfreev);
 
       test = g_object_new (GBP_TYPE_MESON_TEST,
                            "command", (gchar **)cmd->pdata,
                            "display-name", name,
-                           "environ", environ,
+                           "environ", environ_,
                            "group", group,
                            "id", name,
                            "timeout", timeout,
@@ -384,13 +384,12 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
                                       gpointer      user_data)
 {
   IdeBuildPipeline *pipeline = (IdeBuildPipeline *)object;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeRunner) runner = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
   const gchar * const *command;
-  const gchar * const *environ;
+  const gchar * const *environ_;
   const gchar *builddir;
   IdeRuntime *runtime;
   IdeTest *test;
@@ -448,16 +447,16 @@ gbp_meson_test_provider_run_build_cb (GObject      *object,
   ide_runner_push_args (runner, command);
 
   /* Make sure the environment is respected */
-  if ((environ = gbp_meson_test_get_environ (GBP_MESON_TEST (test))))
+  if ((environ_ = gbp_meson_test_get_environ (GBP_MESON_TEST (test))))
     {
       IdeEnvironment *dest = ide_runner_get_environment (runner);
 
-      for (guint i = 0; environ[i] != NULL; i++)
+      for (guint i = 0; environ_[i] != NULL; i++)
         {
           g_autofree gchar *key = NULL;
           g_autofree gchar *value = NULL;
 
-          if (ide_environ_parse (environ[i], &key, &value))
+          if (ide_environ_parse (environ_[i], &key, &value))
             ide_environment_setenv (dest, key, value);
         }
     }

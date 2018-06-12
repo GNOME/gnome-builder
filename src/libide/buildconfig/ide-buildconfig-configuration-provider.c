@@ -191,7 +191,6 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
 {
   g_autoptr(IdeConfiguration) config = NULL;
   g_autofree gchar *env_group = NULL;
-  g_autofree gchar *locality = NULL;
   IdeContext *context;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));

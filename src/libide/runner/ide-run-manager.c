@@ -406,7 +406,6 @@ static void
 do_run_async (IdeRunManager *self,
               IdeTask       *task)
 {
-  g_auto(GStrv) run_argv = NULL;
   IdeBuildTarget *build_target;
   IdeContext *context;
   IdeConfigurationManager *config_manager;

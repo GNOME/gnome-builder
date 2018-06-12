@@ -127,8 +127,6 @@ ide_completion_provider_populate_async (IdeCompletionProvider  *self,
                                         GAsyncReadyCallback     callback,
                                         gpointer                user_data)
 {
-  g_autoptr(GListModel) results = NULL;
-
   g_return_if_fail (IDE_IS_COMPLETION_PROVIDER (self));
   g_return_if_fail (IDE_IS_COMPLETION_CONTEXT (context));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));

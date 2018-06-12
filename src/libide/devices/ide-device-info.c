@@ -105,7 +105,6 @@ static void
 ide_device_info_class_init (IdeDeviceInfoClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  g_autofree gchar *arch = ide_get_system_arch ();
 
   object_class->finalize = ide_device_info_finalize;
   object_class->get_property = ide_device_info_get_property;

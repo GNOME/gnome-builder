@@ -266,7 +266,6 @@ static void
 manifest_needs_reload (GbpFlatpakConfigurationProvider *self,
                        GbpFlatpakManifest              *manifest)
 {
-  g_autoptr(IdeTask) task = NULL;
   GFile *file;
 
   IDE_ENTRY;

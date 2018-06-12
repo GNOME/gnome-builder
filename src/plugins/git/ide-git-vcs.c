@@ -170,7 +170,6 @@ ide_git_vcs_discover (IdeGitVcs  *self,
 {
   g_autofree gchar *name = NULL;
   g_autoptr(GFile) parent = NULL;
-  g_autoptr(GFile) git = NULL;
   g_autoptr(GFile) child = NULL;
 
   g_assert (IDE_IS_GIT_VCS (self));

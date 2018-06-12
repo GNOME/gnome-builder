@@ -100,7 +100,6 @@ gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
                                  const gchar    *path)
 {
   g_autoptr(GFile) file = NULL;
-  g_autoptr(GFile) result = NULL;
   IdeRuntime *runtime = NULL;
   IdeRunner *runner;
 
@@ -2638,7 +2637,6 @@ gbp_gdb_debugger_connect (GbpGdbDebugger *self,
                           GIOStream      *io_stream,
                           GCancellable   *cancellable)
 {
-  g_autoptr(GError) error = NULL;
   GInputStream *stream;
 
   g_return_if_fail (GBP_IS_GDB_DEBUGGER (self));

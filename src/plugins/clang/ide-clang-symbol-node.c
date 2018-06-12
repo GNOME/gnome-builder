@@ -38,7 +38,6 @@ ide_clang_symbol_node_new (IdeContext *context,
 {
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GVariant) children = NULL;
-  g_autoptr(GVariant) unboxed = NULL;
   IdeClangSymbolNode *self;
   const gchar *name;
 

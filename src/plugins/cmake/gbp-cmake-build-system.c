@@ -186,7 +186,6 @@ gbp_cmake_build_system_load_commands_config_cb (GObject      *object,
   GbpCMakeBuildSystem *self = (GbpCMakeBuildSystem *)object;
   g_autoptr(IdeCompileCommands) compile_commands = NULL;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GFileMonitor) monitor = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) file = NULL;
   g_autofree gchar *path = NULL;

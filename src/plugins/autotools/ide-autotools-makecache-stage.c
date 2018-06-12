@@ -200,7 +200,6 @@ ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline  *pipeline,
                                                 GError           **error)
 {
   g_autoptr(IdeAutotoolsMakecacheStage) stage = NULL;
-  g_autoptr(GFile) cache_file = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *cache_path = NULL;
   const gchar *make = "make";

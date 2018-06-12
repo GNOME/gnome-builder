@@ -49,7 +49,6 @@ gbp_todo_panel_cell_data_func (GtkCellLayout   *cell_layout,
                                gpointer         data)
 {
   g_autoptr(GbpTodoItem) item = NULL;
-  g_autofree gchar *markup = NULL;
   const gchar *message;
 
   gtk_tree_model_get (tree_model, iter, 0, &item, -1);

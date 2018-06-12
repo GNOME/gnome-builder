@@ -143,12 +143,6 @@ query_free (gpointer data)
   g_slice_free (Query, q);
 }
 
-static inline gboolean
-is_symbol_char (gunichar ch)
-{
-  return g_unichar_isalnum (ch) || ch == '_';
-}
-
 static void
 ide_clang_proposals_finalize (GObject *object)
 {
@@ -614,7 +608,6 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
 {
   g_autoptr(GCancellable) prev_cancellable = NULL;
   g_autoptr(IdeTask) task = NULL;
-  g_autofree gchar *slice = NULL;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter previous;

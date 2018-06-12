@@ -255,7 +255,6 @@ gbp_meson_toolchain_provider_load_async (IdeToolchainProvider     *provider,
                                          gpointer                  user_data)
 {
   GbpMesonToolchainProvider *self = (GbpMesonToolchainProvider *)provider;
-  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 

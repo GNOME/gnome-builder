@@ -356,7 +356,7 @@ ide_snippet_storage_query (IdeSnippetStorage        *self,
       if (g_strcmp0 (base->lang, lang) != 0)
         break;
 
-      if (!g_str_has_prefix (base->name, prefix) != 0)
+      if (!g_str_has_prefix (base->name, prefix))
         break;
 
       foreach (self, base, user_data);

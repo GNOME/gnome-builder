@@ -267,5 +267,5 @@ ide_extension_new (PeasEngine     *engine,
                                         plugin_info,
                                         type,
                                         params->len,
-                                        (GParameter *)params->data);
+                                        (GParameter *)(gpointer)params->data);
 }

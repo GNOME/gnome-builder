@@ -516,7 +516,6 @@ ide_build_stage_execute_async (IdeBuildStage       *self,
                                gpointer             user_data)
 {
   IdeBuildStagePrivate *priv = ide_build_stage_get_instance_private (self);
-  g_autoptr(IdeTask) task = NULL;
 
   g_return_if_fail (IDE_IS_BUILD_STAGE (self));
   g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));

@@ -257,7 +257,6 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
                                 gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GListStore) store = NULL;
   Request *r;
 
   g_return_if_fail (IDE_IS_SEARCH_ENGINE (self));

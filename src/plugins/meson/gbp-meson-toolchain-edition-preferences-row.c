@@ -379,7 +379,6 @@ gbp_meson_toolchain_edition_preferences_row_show_popup (GbpMesonToolchainEdition
 static void
 gbp_meson_toolchain_edition_preferences_row_constructed (GObject *object)
 {
-  g_autofree gchar *value = NULL;
   GbpMesonToolchainEditionPreferencesRow *self = (GbpMesonToolchainEditionPreferencesRow *) object;
   GtkWidget *label;
 

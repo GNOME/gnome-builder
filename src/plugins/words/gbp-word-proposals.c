@@ -341,7 +341,6 @@ void
 gbp_word_proposals_refilter (GbpWordProposals *self,
                              const gchar      *word)
 {
-  g_autofree gchar *casefold = NULL;
   guint old_len = 0;
 
   g_return_if_fail (GBP_IS_WORD_PROPOSALS (self));

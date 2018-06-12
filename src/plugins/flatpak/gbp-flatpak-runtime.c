@@ -803,7 +803,6 @@ gbp_flatpak_runtime_new (IdeContext           *context,
   g_autofree gchar *id = NULL;
   g_autofree gchar *display_name = NULL;
   g_autofree gchar *triplet = NULL;
-  g_autoptr(FlatpakRef) sdk_ref = NULL;
   g_autoptr(IdeTriplet) triplet_object = NULL;
   const gchar *name;
   const gchar *arch;

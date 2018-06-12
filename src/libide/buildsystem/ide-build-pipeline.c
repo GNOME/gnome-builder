@@ -3329,7 +3329,6 @@ ide_build_pipeline_clean_finish (IdeBuildPipeline  *self,
 static gboolean
 can_remove_builddir (IdeBuildPipeline *self)
 {
-  g_autofree gchar *name = NULL;
   g_autofree gchar *_build = NULL;
   g_autoptr(GFile) builddir = NULL;
   g_autoptr(GFile) cache = NULL;

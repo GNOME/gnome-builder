@@ -184,7 +184,6 @@ gbp_meson_build_system_load_commands_config_cb (GObject      *object,
   GbpMesonBuildSystem *self = (GbpMesonBuildSystem *)object;
   g_autoptr(IdeCompileCommands) compile_commands = NULL;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GFileMonitor) monitor = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) file = NULL;
   g_autofree gchar *path = NULL;
@@ -444,7 +443,6 @@ gbp_meson_build_system_get_build_flags_for_files_cb (GObject      *object,
   g_autoptr(IdeCompileCommands) compile_commands = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GFile) directory = NULL;
   g_autoptr(GHashTable) ret = NULL;
   g_auto(GStrv) system_includes = NULL;
   IdeConfigurationManager *config_manager;

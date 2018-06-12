@@ -491,7 +491,6 @@ get_source (GbpFlatpakCloneWidget  *self,
   JsonArray *sources = NULL;
   guint num_modules;
   ModuleSource *src;
-  g_autoptr(IdeVcsUri) uri = NULL;
   GPtrArray *patches;
 
   parser = json_parser_new ();
@@ -576,7 +575,6 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) destination = NULL;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *path = NULL;
   DownloadRequest *req;
   ModuleSource *src;
 

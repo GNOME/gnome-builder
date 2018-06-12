@@ -158,7 +158,6 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_autoptr(SpSource) proc_source = NULL;
   g_autoptr(SpSource) perf_source = NULL;
   g_autoptr(SpSource) hostinfo_source = NULL;
-  g_autofree gchar *sysroot = NULL;
   IdeContext *context;
 
   g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));

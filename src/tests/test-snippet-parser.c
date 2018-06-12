@@ -8,14 +8,10 @@ main (gint   argc,
       gchar *argv[])
 {
   GOptionContext *context;
-  GOptionEntry entries[] = {
-    NULL
-  };
   GError *error = NULL;
   gint i;
 
   context = g_option_context_new ("[FILES...] - test snippet parsing");
-  g_option_context_add_main_entries (context, entries, NULL);
 
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {

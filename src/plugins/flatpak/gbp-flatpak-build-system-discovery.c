@@ -62,7 +62,6 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
       g_autoptr(GFileInfo) info = infoptr;
       g_autoptr(GMatchInfo) match_info = NULL;
       g_autoptr(GFile) file = NULL;
-      g_autofree gchar *path = NULL;
       GFileType file_type;
       const gchar *name;
 

@@ -930,7 +930,6 @@ static gboolean
 sigterm_handler (gpointer user_data)
 {
   IdeBreakoutSubprocess *self = user_data;
-  g_autoptr(GDBusConnection) bus = NULL;
 
   IDE_ENTRY;
 
@@ -955,7 +954,6 @@ static gboolean
 sigint_handler (gpointer user_data)
 {
   IdeBreakoutSubprocess *self = user_data;
-  g_autoptr(GDBusConnection) bus = NULL;
 
   IDE_ENTRY;
 
@@ -1028,16 +1026,6 @@ maybe_create_output_stream (GOutputStream **ret,
     }
 
   *fdptr = -1;
-}
-
-static inline void
-set_error_from_errno (GError **error)
-{
-  g_set_error (error,
-               G_IO_ERROR,
-               g_io_error_from_errno (errno),
-               "%s",
-               g_strerror (errno));
 }
 
 static void

@@ -213,7 +213,6 @@ ide_g_file_get_uncanonical_relative_path (GFile *file,
 {
   g_autoptr(GFile) ancestor = NULL;
   g_autoptr(GString) relatives = NULL;
-  g_autofree gchar *scheme = NULL;
   g_autofree gchar *path = NULL;
   g_autofree gchar *suffix = NULL;
 

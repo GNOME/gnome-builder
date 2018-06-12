@@ -421,7 +421,6 @@ ide_ctags_service_do_mine (gpointer data)
   IdeCtagsService *self = data;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GArray) mine_info = NULL;
-  g_autofree gchar *path = NULL;
   IdeContext *context;
   MineInfo info;
   GFile *workdir;

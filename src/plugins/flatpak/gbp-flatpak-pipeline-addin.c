@@ -601,7 +601,6 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autofree gchar *staging_dir = NULL;
   g_autofree gchar *repo_dir = NULL;
-  g_autofree gchar *export_path = NULL;
   g_autofree gchar *dest_path = NULL;
   g_autofree gchar *arch = NULL;
   g_autofree gchar *name = NULL;
