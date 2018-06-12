@@ -1345,13 +1345,21 @@ gstyle_color_plane_set_mode (GstyleColorPlane     *self,
 }
 
 static void
+gstyle_color_plane_destroy (GtkWidget *widget)
+{
+  GstyleColorPlane *self = (GstyleColorPlane *)widget;
+  GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
+
+  g_clear_pointer (&priv->surface, cairo_surface_destroy);
+
+  GTK_WIDGET_CLASS (gstyle_color_plane_parent_class)->destroy (widget);
+}
+
+static void
 gstyle_color_plane_finalize (GObject *object)
 {
   GstyleColorPlane *self = (GstyleColorPlane *)object;
   GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
-
-  if (priv->surface)
-    cairo_surface_destroy (priv->surface);
 
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->long_press_gesture);
@@ -1450,6 +1458,7 @@ gstyle_color_plane_class_init (GstyleColorPlaneClass *klass)
   widget_class->draw = gstyle_color_plane_draw;
   widget_class->size_allocate = gstyle_color_plane_size_allocate;
   widget_class->key_press_event = gstyle_color_plane_key_press;
+  widget_class->destroy = gstyle_color_plane_destroy;
 
   properties [PROP_MODE] =
     g_param_spec_enum ("mode",
