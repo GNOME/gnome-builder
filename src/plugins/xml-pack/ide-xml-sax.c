@@ -251,7 +251,7 @@ get_tag_location (IdeXmlSax    *self,
                   if (ch == '\n')
                     --end_line_number;
 
-                  if (!g_unichar_isspace(ch))
+                  if (!g_unichar_isspace (ch) || current == base)
                     break;
 
                   current = g_utf8_prev_char (current);
