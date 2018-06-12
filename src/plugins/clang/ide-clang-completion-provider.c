@@ -69,17 +69,19 @@ ide_clang_completion_provider_key_activates (IdeCompletionProvider *provider,
 {
   IdeClangCompletionItem *item = IDE_CLANG_COMPLETION_ITEM (proposal);
 
-  /* We add suffix ; if pressed */
-  if (key->keyval == GDK_KEY_semicolon)
-    return TRUE;
-
   /* Try to dereference field/variable */
   if (item->kind == IDE_SYMBOL_FIELD || item->kind == IDE_SYMBOL_VARIABLE)
     return key->keyval == GDK_KEY_period;
 
+#if 0
+  /* We add suffix ; if pressed */
+  if (key->keyval == GDK_KEY_semicolon)
+    return TRUE;
+
   /* Open parens for function */
   if (item->kind == IDE_SYMBOL_FUNCTION)
     return key->keyval == GDK_KEY_parenleft;
+#endif
 
   return FALSE;
 
