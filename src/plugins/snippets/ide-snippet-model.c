@@ -75,6 +75,20 @@ ide_snippet_model_new (IdeSnippetStorage *storage)
   return self;
 }
 
+static gint
+compare_items (gconstpointer a,
+               gconstpointer b)
+{
+  const IdeSnippetInfo *ai = *(const IdeSnippetInfo **)a;
+  const IdeSnippetInfo *bi = *(const IdeSnippetInfo **)b;
+
+  /* At this point, everything matches prefix, so we just want
+   * to use the shorter string.
+   */
+
+  return (gint)strlen (ai->name) - (gint)strlen (bi->name);
+}
+
 static void
 foreach_cb (IdeSnippetStorage    *storage,
             const IdeSnippetInfo *info,
@@ -100,6 +114,8 @@ ide_snippet_model_update (IdeSnippetModel *self)
     g_ptr_array_remove_range (self->items, 0, self->items->len);
 
   ide_snippet_storage_query (self->storage, self->language, self->prefix, foreach_cb, self);
+
+  g_ptr_array_sort (self->items, compare_items);
 
   if (old_len || self->items->len)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->items->len);
