@@ -421,6 +421,7 @@ snippet gsignal
 		              ${8:0});
 snippet async
 - scope c
+- desc Create the async function for an async/finish pair
 	/**
 	 * ${$2|functify}_$1_async:
 	 * @self: an #$2
@@ -445,8 +446,15 @@ snippet async
 
 		$0
 	}
+- scope chdr
+- desc Create the header declaration for an async function
+	void ${$2|functify}_${1:do_something}_async (${2:$filename|stripsuffix|camelize} *self,
+	     ${$2|space} ${$1|space}         GCancellable *cancellable,
+	     ${$2|space} ${$1|space}         GAsyncReadyCallback callback,
+	     ${$2|space} ${$1|space}         gpointer user_data);
 snippet finish
 - scope c
+- desc Create the finish function for an async/finish pair
 	/**
 	 * ${$2|functify}_$1_finish:
 	 * @self: an #$2
@@ -465,6 +473,11 @@ snippet finish
 
 		return g_task_propagate_${4:boolean} (G_TASK (result), error);
 	}
+- scope chdr
+- desc Create the header declaration for a finish function
+	gboolean ${$2|functify}_${1:do_something}_finish (${2:$filename|stripsuffix|camelize} *self,
+	         ${$2|space} ${$1|space}          GAsyncResult *result,
+	         ${$2|space} ${$1|space}          GError **error);
 snippet Private
 - desc Define a local for the GObject's private data.
 - scope c, chdr
