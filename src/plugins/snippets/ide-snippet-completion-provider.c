@@ -78,6 +78,7 @@ static gint
 ide_snippet_completion_provider_get_priority (IdeCompletionProvider *provider,
                                               IdeCompletionContext  *context)
 {
+#if 0
   GtkTextIter begin, end;
 
   if (ide_completion_context_get_bounds (context, &begin, &end))
@@ -90,6 +91,7 @@ ide_snippet_completion_provider_get_priority (IdeCompletionProvider *provider,
             return 500;
         }
     }
+#endif
 
   return -100;
 }
