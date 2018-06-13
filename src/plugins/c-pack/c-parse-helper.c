@@ -27,9 +27,9 @@ parameter_free (Parameter *p)
 {
   if (p)
     {
-      g_free (p->name);
-      g_free (p->type);
-      g_free (p);
+      g_clear_pointer (&p->name, g_free);
+      g_clear_pointer (&p->type, g_free);
+      g_slice_free (Parameter, p);
     }
 }
 
@@ -38,7 +38,7 @@ parameter_copy (const Parameter *src)
 {
   Parameter *copy;
 
-  copy = g_new0 (Parameter, 1);
+  copy = g_slice_new0 (Parameter);
   copy->name = g_strdup (src->name);
   copy->type = g_strdup (src->type);
   copy->ellipsis = src->ellipsis;
