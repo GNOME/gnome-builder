@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-05-01 21:58+0000\n"
-"PO-Revision-Date: 2018-05-02 00:22+0200\n"
+"POT-Creation-Date: 2018-06-12 22:28+0000\n"
+"PO-Revision-Date: 2018-06-13 16:42+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -3908,7 +3908,7 @@ msgstr "Projekt zostanie utworzony w %s."
 
 #: src/plugins/create-project/gbp-create-project-widget.c:617
 msgid "A failure occurred while initializing version control"
-msgstr "Wystąpiło niepowodzenie podczas inicjowania systemu kontroli wersji"
+msgstr "Wystąpił błąd podczas inicjowania systemu kontroli wersji"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:29
 msgid "Project Name"
@@ -4160,21 +4160,29 @@ msgid ""
 "to install it?"
 msgstr "Jest on wymagany do budowania programów Flatpak. Zainstalować go?"
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:201
+#: src/plugins/git/ide-git-buffer-change-monitor.c:202
 msgid "Cannot provide diff, no backing file provided."
 msgstr "Nie można dostarczyć różnicy, nie podano pliku na dysku."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:676
+#. translators: %s is replaced with the error string from git
+#: src/plugins/git/ide-git-buffer-change-monitor.c:281
+#, c-format
+msgid ""
+"There was a failure while calculating line changes from git. The exact error "
+"was: %s"
+msgstr "Wystąpił błąd podczas obliczania zmian wierszy z systemu git: %s"
+
+#: src/plugins/git/ide-git-buffer-change-monitor.c:691
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "Repozytorium nie ma katalogu roboczego."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:687
+#: src/plugins/git/ide-git-buffer-change-monitor.c:702
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "Plik nie jest pod kontrolą katalogu roboczego systemu git."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:753
+#: src/plugins/git/ide-git-buffer-change-monitor.c:768
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "Żądany plik nie istnieje w indeksie systemu git."
@@ -4399,7 +4407,7 @@ msgstr "Zbudowanie się nie powiodło"
 msgid "Project “%s” failed to build"
 msgstr "Zbudowanie projektu „%s” się nie powiodło"
 
-#: src/plugins/npm/npm_plugin.py:102
+#: src/plugins/npm/npm_plugin.py:104
 msgid "Downloading npm dependencies"
 msgstr "Pobieranie zależności npm"
 
