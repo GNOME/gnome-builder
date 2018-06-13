@@ -188,3 +188,12 @@ test_iter = executable('test-iter', 'test-iter.c',
   dependencies: [ ide_test_deps ],
 )
 test('test-iter', test_iter, env: ide_test_env)
+
+
+test_hdr_format = executable('test-hdr-format', [
+  'test-hdr-format.c',
+  '../plugins/c-pack/c-parse-helper.c',
+],
+        c_args: ide_test_cflags,
+  dependencies: [ ide_test_deps ],
+)
