@@ -601,7 +601,7 @@ gstyle_color_scale_finalize (GObject *object)
   g_clear_pointer (&self->custom_color_stops, g_sequence_free);
   g_clear_pointer (&self->checkered_pattern, cairo_pattern_destroy);
   g_clear_pointer (&self->pattern, cairo_pattern_destroy);
-  g_clear_pointer (&self->data_surface, cairo_pattern_destroy);
+  g_clear_pointer (&self->data_surface, cairo_surface_destroy);
 
   g_clear_pointer (&self->data_raw, g_free);
   g_clear_pointer (&self->data_raw_filtered, g_free);
