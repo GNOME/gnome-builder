@@ -10,3 +10,4 @@ src/plugins/vala-pack/ide-vala-preferences-addin.c
 # though master does not.
 # https://bugzilla.gnome.org/show_bug.cgi?id=695008#c7
 submodules
+subprojects
