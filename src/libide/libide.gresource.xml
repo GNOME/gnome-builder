@@ -58,6 +58,7 @@
     <file alias="default.css">keybindings/default.css</file>
     <file alias="emacs.css">keybindings/emacs.css</file>
     <file alias="shared.css">keybindings/shared.css</file>
+    <file alias="sublime.css">keybindings/sublime.css</file>
     <file alias="vim.css">keybindings/vim.css</file>
   </gresource>
 

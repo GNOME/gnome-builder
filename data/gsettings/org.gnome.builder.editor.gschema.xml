@@ -16,6 +16,7 @@
         <choice value="default"/>
         <choice value="emacs"/>
         <choice value="vim"/>
+        <choice value="sublime"/>
       </choices>
       <default>'default'</default>
     </key>
