@@ -86,7 +86,7 @@ getword (const gchar  *str,
     {
       gunichar ch = g_utf8_get_char (pos);
 
-      if (ch == '*' || g_unichar_isspace (ch))
+      if (ch == '*' || ch == '(' || g_unichar_isspace (ch))
         {
           *endptr = pos;
           return g_strndup (str, pos - str);
