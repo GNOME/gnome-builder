@@ -372,7 +372,10 @@ hdr_format_string (const gchar *data,
           g_string_append (out, rtype);
         }
       else
-        g_string_append (out, "void");
+        {
+          g_string_append (out, "void");
+          rlen = 4;
+        }
 
       for (guint j = rlen; j < long_ret; j++)
         g_string_append_c (out, ' ');
