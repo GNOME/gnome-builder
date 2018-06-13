@@ -95,6 +95,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
+  g_autofree gchar *word = NULL;
   g_autoptr(IdeSnippet) snippet = NULL;
   GtkTextBuffer *buffer;
   GtkTextView *view;
@@ -113,6 +114,24 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
 
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
   g_assert (IDE_IS_FILE (file));
+
+  /*
+   * If the typed text matches the typed text of the item, and the user
+   * it enter, then just skip the result and instead insert a newline.
+   */
+  if (key->keyval == GDK_KEY_Return || key->keyval == GDK_KEY_KP_Enter)
+    {
+      if ((word = ide_completion_context_get_word (context)))
+        {
+          if (dzl_str_equal0 (word, item->typed_text))
+            {
+              ide_completion_context_get_bounds (context, &begin, &end);
+              gtk_text_buffer_insert (buffer, &end, "\n", -1);
+
+              return;
+            }
+        }
+      }
 
   gtk_text_buffer_begin_user_action (buffer);
 
