@@ -94,8 +94,8 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
                                                  const GdkEventKey     *key)
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
+  IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
   g_autoptr(IdeSnippet) snippet = NULL;
-  IdeClangCompletionItem *item;
   GtkTextBuffer *buffer;
   GtkTextView *view;
   IdeFile *file;
@@ -103,7 +103,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_CLANG_COMPLETION_ITEM (proposal));
+  g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
 
   buffer = ide_completion_context_get_buffer (context);
   view = ide_completion_context_get_view (context);
@@ -119,7 +119,6 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
   if (ide_completion_context_get_bounds (context, &begin, &end))
     gtk_text_buffer_delete (buffer, &begin, &end);
 
-  item = IDE_CLANG_COMPLETION_ITEM (proposal);
   snippet = ide_clang_completion_item_get_snippet (item, ide_file_peek_settings (file));
 
   /*
