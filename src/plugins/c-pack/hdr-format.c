@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include "c-parse-helper.h"
+#include "hdr-format.h"
 
 typedef struct
 {

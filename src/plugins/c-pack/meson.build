@@ -9,9 +9,9 @@ c_pack_resources = gnome.compile_resources(
 c_pack_sources = [
   'c-pack-plugin.c',
   'c-parse-helper.c',
-  'c-parse-helper.h',
+  'hdr-format.c',
   'ide-c-indenter.c',
-  'ide-c-indenter.h',
+  'cpack-editor-view-addin.c',
 ]
 
 gnome_builder_plugins_sources += files(c_pack_sources)
