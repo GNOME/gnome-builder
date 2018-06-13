@@ -156,7 +156,6 @@ discover_groups (GbCommandGactionProvider *provider)
   GtkWidget *widget;
   GbGroup *gb_group = NULL;
   GList *list = NULL;
-  GType type;
 
   g_return_val_if_fail (GB_IS_COMMAND_GACTION_PROVIDER (provider), NULL);
 
@@ -173,11 +172,6 @@ discover_groups (GbCommandGactionProvider *provider)
 #ifdef GB_DEBUG_ACTIONS
       show_prefix_actions (G_OBJECT (widget));
 #endif
-
-      /* We exclude these types, they're already in the widgets hierarchy */
-      type = G_OBJECT_TYPE (widget);
-      if (type == IDE_TYPE_EDITOR_VIEW)
-        continue;
 
       prefixes = gtk_widget_list_action_prefixes (widget);
 
