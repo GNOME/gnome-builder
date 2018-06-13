@@ -698,6 +698,12 @@ query_client:
 
   ide_set_string (&self->filter, word);
 
+  /* If we have previous results, refilter them immediately so that if we're
+   * attached as intermediate results, we have something useful to display.
+   */
+  if (self->results != NULL)
+    ide_clang_proposals_do_refilter (self, FALSE);
+
   ide_clang_proposals_query_async (self,
                                    file,
                                    self->line + 1,
