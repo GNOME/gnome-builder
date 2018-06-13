@@ -73,11 +73,22 @@ IdeLangservCompletionResults *
 ide_langserv_completion_results_new (GVariant *results)
 {
   IdeLangservCompletionResults *self;
+  g_autoptr(GVariant) items = NULL;
 
   g_return_val_if_fail (results != NULL, NULL);
 
   self = g_object_new (IDE_TYPE_LANGSERV_COMPLETION_RESULTS, NULL);
   self->results = g_variant_ref_sink (results);
+
+  if ((items = g_variant_lookup_value (results, "items", NULL)))
+    {
+      g_clear_pointer (&self->results, g_variant_unref);
+
+      if (g_variant_is_of_type (items, G_VARIANT_TYPE_VARIANT))
+        self->results = g_variant_get_variant (items);
+      else
+        self->results = g_steal_pointer (&items);
+    }
 
   ide_langserv_completion_results_refilter (self, NULL);
 
