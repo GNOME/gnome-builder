@@ -278,6 +278,7 @@ ide_clang_completion_provider_display_proposal (IdeCompletionProvider   *provide
   g_autofree gchar *escaped = NULL;
   g_autofree gchar *markup = NULL;
   g_autofree gchar *highlight = NULL;
+  g_autofree gchar *params_escaped = NULL;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
@@ -285,13 +286,15 @@ ide_clang_completion_provider_display_proposal (IdeCompletionProvider   *provide
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
 
   escaped = g_markup_escape_text (item->typed_text, -1);
+  if (item->params != NULL)
+    params_escaped = g_markup_escape_text (item->params, -1);
   highlight = ide_completion_fuzzy_highlight (escaped, typed_text);
   ide_completion_list_box_row_set_icon_name (row, item->icon_name);
   ide_completion_list_box_row_set_left (row, item->return_type);
   markup = g_strdup_printf ("%s%s<span fgalpha='32767'>%s</span>",
                             highlight,
                             item->params ? " " : "",
-                            item->params ?: "");
+                            params_escaped ?: "");
   ide_completion_list_box_row_set_center_markup (row, markup);
 }
 
