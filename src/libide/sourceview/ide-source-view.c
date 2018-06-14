@@ -168,6 +168,7 @@ typedef struct
   guint                        show_grid_lines : 1;
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
+  guint                        waiting_for_symbol : 1;
 } IdeSourceViewPrivate;
 
 typedef struct
@@ -2386,6 +2387,8 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
 
   priv = ide_source_view_get_instance_private (data->self);
 
+  priv->waiting_for_symbol = FALSE;
+
   symbol = ide_buffer_get_symbol_at_location_finish (buffer, result, &error);
 
   if (symbol == NULL)
@@ -2567,6 +2570,12 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
 
       ide_source_view_reset_definition_highlight (self);
     }
+
+  /* Skip work if we're already active */
+  if (priv->waiting_for_symbol)
+    return ret;
+
+  priv->waiting_for_symbol = TRUE;
 
   data = g_slice_new0 (DefinitionHighlightData);
   data->self = self;
