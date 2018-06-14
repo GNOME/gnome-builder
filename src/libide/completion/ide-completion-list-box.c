@@ -863,7 +863,7 @@ ide_completion_list_box_move_cursor (IdeCompletionListBox *self,
   if (step == GTK_MOVEMENT_PAGES)
     direction *= self->n_rows;
 
-  if ((self->selected + direction) > n_items)
+  if (((gint)self->selected + direction) > n_items)
     self->selected = n_items - 1;
   else if (((gint)self->selected + direction) < 0)
     self->selected = 0;
