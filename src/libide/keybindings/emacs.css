@@ -117,6 +117,8 @@
 
   /* Add back emoji */
   bind "<ctrl>semicolon" { "insert-emoji" () };
+
+  bind "<ctrl>m" { "insert-at-cursor" ("\n") };
 }
 
 @binding-set builder-emacs-source-view-has-indenter
