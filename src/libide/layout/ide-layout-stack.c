@@ -209,7 +209,11 @@ ide_layout_stack_notify_visible_child (IdeLayoutStack *self,
   if (gtk_widget_in_destruction (GTK_WIDGET (self)))
     return;
 
-  visible_child = gtk_stack_get_visible_child (priv->stack);
+  if ((visible_child = gtk_stack_get_visible_child (priv->stack)))
+    {
+      if (gtk_widget_in_destruction (visible_child))
+        visible_child = NULL;
+    }
 
   /*
    * Mux/Proxy actions to our level so that they also be activated
