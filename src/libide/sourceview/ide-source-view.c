@@ -5355,6 +5355,7 @@ ide_source_view_dispose (GObject *object)
       priv->delay_size_allocate_chainup = 0;
     }
 
+  g_clear_object (&priv->completion);
   g_clear_object (&priv->capture);
   g_clear_object (&priv->indenter_adapter);
   g_clear_object (&priv->css_provider);
