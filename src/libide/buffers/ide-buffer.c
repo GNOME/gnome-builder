@@ -806,7 +806,15 @@ ide_buffer_mark_set (GtkTextBuffer     *buffer,
                      const GtkTextIter *iter,
                      GtkTextMark       *mark)
 {
+  IdeBuffer *self = (IdeBuffer *)buffer;
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_assert (IDE_IS_BUFFER (self));
+
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->mark_set (buffer, iter, mark);
+
+  if (priv->loading)
+    return;
 
   if (G_UNLIKELY (mark == gtk_text_buffer_get_insert (buffer)))
     ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
