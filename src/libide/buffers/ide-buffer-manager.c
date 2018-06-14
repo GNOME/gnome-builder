@@ -474,15 +474,15 @@ ide_buffer_manager_remove_buffer (IdeBufferManager *self,
       if (ele == buffer)
         {
           position = i;
-          break;
+          goto found;
         }
     }
 
-  if (position == -1)
-    {
-      IDE_TRACE_MSG ("failed to locate buffer %p within buffer manager", buffer);
-      IDE_EXIT;
-    }
+  IDE_TRACE_MSG ("failed to locate buffer %p within buffer manager", buffer);
+
+  IDE_EXIT;
+
+found:
 
   /* Stash the cursor position for next time we open the file */
   ide_buffer_manager_save_cursor_position (self, buffer);
