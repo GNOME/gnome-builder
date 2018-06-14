@@ -1629,7 +1629,7 @@ _ide_completion_set_font_description (IdeCompletion              *self,
 
 /**
  * ide_completion_fuzzy_match:
- * @haystack: the string to be searched.
+ * @haystack: (nullable): the string to be searched.
  * @casefold_needle: A g_utf8_casefold() version of the needle.
  * @priority: (out) (allow-none): An optional location for the score of the match
  *
@@ -1650,6 +1650,9 @@ ide_completion_fuzzy_match (const gchar *haystack,
                             guint       *priority)
 {
   gint real_score = 0;
+
+  if (haystack == NULL || haystack[0] == 0)
+    return FALSE;
 
   for (; *casefold_needle; casefold_needle = g_utf8_next_char (casefold_needle))
     {
