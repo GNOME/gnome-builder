@@ -54,16 +54,18 @@ filter_symbols_cb (DzlTree     *tree,
                    DzlTreeNode *node,
                    gpointer     user_data)
 {
-  DzlPatternSpec *spec = user_data;
+  const gchar *casefold = user_data;
   const gchar *text = dzl_tree_node_get_text (node);
+  guint priority;
 
-  return dzl_pattern_spec_match (spec, text);
+  return ide_completion_fuzzy_match (text, casefold, &priority);
 }
 
 static void
 gbp_symbol_menu_button_search_changed (GbpSymbolMenuButton *self,
                                        GtkSearchEntry      *search_entry)
 {
+  g_autofree gchar *casefold = NULL;
   const gchar *text;
 
   g_assert (GBP_IS_SYMBOL_MENU_BUTTON (self));
@@ -71,13 +73,18 @@ gbp_symbol_menu_button_search_changed (GbpSymbolMenuButton *self,
 
   text = gtk_entry_get_text (GTK_ENTRY (search_entry));
 
+  if (!dzl_str_empty0 (text))
+    casefold = g_utf8_casefold (text, -1);
+
+  gbp_symbol_tree_builder_set_filter (GBP_SYMBOL_TREE_BUILDER (self->tree_builder), casefold);
+
   if (dzl_str_empty0 (text))
     dzl_tree_set_filter (self->tree, NULL, NULL, NULL);
   else
     dzl_tree_set_filter (self->tree,
                          filter_symbols_cb,
-                         dzl_pattern_spec_new (text),
-                         (GDestroyNotify)dzl_pattern_spec_unref);
+                         g_steal_pointer (&casefold),
+                         g_free);
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (self->tree));
 }

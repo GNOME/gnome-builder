@@ -26,4 +26,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSymbolTreeBuilder, gbp_symbol_tree_builder, GBP, SYMBOL_TREE_BUILDER, DzlTreeBuilder)
 
+void gbp_symbol_tree_builder_set_filter (GbpSymbolTreeBuilder *self,
+                                         const gchar          *filter);
+
 G_END_DECLS

@@ -26,6 +26,7 @@
 struct _GbpSymbolTreeBuilder
 {
   DzlTreeBuilder parent_instance;
+  gchar *filter;
 };
 
 G_DEFINE_TYPE (GbpSymbolTreeBuilder, gbp_symbol_tree_builder, DZL_TYPE_TREE_BUILDER)
@@ -152,15 +153,63 @@ gbp_symbol_tree_builder_node_activated (DzlTreeBuilder *builder,
 }
 
 static void
+gbp_symbol_tree_builder_cell_data_func (DzlTreeBuilder  *builder,
+                                        DzlTreeNode     *node,
+                                        GtkCellRenderer *cell)
+{
+  GbpSymbolTreeBuilder *self = (GbpSymbolTreeBuilder *)builder;
+  g_autofree gchar *markup = NULL;
+  const gchar *text = NULL;
+
+  g_assert (GBP_IS_SYMBOL_TREE_BUILDER (self));
+  g_assert (DZL_IS_TREE_NODE (node));
+  g_assert (GTK_IS_CELL_RENDERER (cell));
+
+  if (self->filter == NULL || !GTK_IS_CELL_RENDERER_TEXT (cell))
+    return;
+
+  text = dzl_tree_node_get_text (node);
+  markup = ide_completion_fuzzy_highlight (text, self->filter);
+  g_object_set (cell, "markup", markup, NULL);
+}
+
+static void
+gbp_symbol_tree_builder_finalize (GObject *object)
+{
+  GbpSymbolTreeBuilder *self = (GbpSymbolTreeBuilder *)object;
+
+  g_clear_pointer (&self->filter, g_free);
+
+  G_OBJECT_CLASS (gbp_symbol_tree_builder_parent_class)->finalize (object);
+}
+
+static void
 gbp_symbol_tree_builder_class_init (GbpSymbolTreeBuilderClass *klass)
 {
   DzlTreeBuilderClass *builder_class = DZL_TREE_BUILDER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gbp_symbol_tree_builder_finalize;
 
   builder_class->build_children = gbp_symbol_tree_builder_build_children;
   builder_class->node_activated = gbp_symbol_tree_builder_node_activated;
+  builder_class->cell_data_func = gbp_symbol_tree_builder_cell_data_func;
 }
 
 static void
 gbp_symbol_tree_builder_init (GbpSymbolTreeBuilder *self)
 {
+}
+
+void
+gbp_symbol_tree_builder_set_filter (GbpSymbolTreeBuilder *self,
+                                    const gchar          *filter)
+{
+  g_return_if_fail (GBP_IS_SYMBOL_TREE_BUILDER (self));
+
+  if (!dzl_str_equal0 (self->filter, filter))
+    {
+      g_free (self->filter);
+      self->filter = g_strdup (filter);
+    }
 }
