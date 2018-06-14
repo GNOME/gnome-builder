@@ -492,6 +492,7 @@ ide_project_rename_file_async (IdeProject          *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_project_rename_file_async);
+  ide_task_set_release_on_propagate (task, FALSE);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
