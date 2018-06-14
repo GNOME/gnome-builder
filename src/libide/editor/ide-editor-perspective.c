@@ -527,7 +527,14 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
 
   stack = gtk_widget_get_ancestor (GTK_WIDGET (lookup.view), IDE_TYPE_LAYOUT_STACK);
   ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack), IDE_LAYOUT_VIEW (lookup.view));
-  ide_editor_view_scroll_to_line_offset (lookup.view, line, line_offset);
+
+  /*
+   * Ignore 0:0 so that we don't jump from the previous cursor position,
+   * if any. It's somewhat problematic if we know we need to go to 0:0,
+   * but that is less likely.
+   */
+  if (line || line_offset)
+    ide_editor_view_scroll_to_line_offset (lookup.view, line, line_offset);
 
   IDE_EXIT;
 }
