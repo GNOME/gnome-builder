@@ -382,16 +382,20 @@ ide_completion_update (IdeCompletion           *self,
       IdeCompletionDisplay *display = ide_completion_get_display (self);
 
       /*
+       * Make sure we update providers that have already delivered results
+       * even though some of them won't be ready yet.
+       */
+      _ide_completion_context_refilter (self->context);
+
+      /*
        * If we're waiting for the results still to come in, then just mark
-       * that we need to do post-processing rather than trying to refilter now
+       * that we need to do post-processing rather than trying to refilter now.
        */
       if (self->waiting_for_results)
         {
           self->needs_refilter = TRUE;
           IDE_EXIT;
         }
-
-      _ide_completion_context_refilter (self->context);
 
       if (!ide_completion_context_is_empty (self->context))
         gtk_widget_show (GTK_WIDGET (display));
