@@ -758,8 +758,8 @@ ide_buffer_manager__load_file_read_cb (GObject      *object,
 {
   GFile *file = (GFile *)object;
   g_autoptr(GFileInputStream) stream = NULL;
+  g_autoptr(GtkSourceFile) source_file = NULL;
   g_autoptr(IdeTask) task = user_data;
-  GtkSourceFile *source_file;
   LoadState *state;
 
   IDE_ENTRY;
@@ -1091,13 +1091,13 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
   IdeFile *file = (IdeFile *)object;
   g_autoptr(IdeFileSettings) file_settings = NULL;
   g_autoptr(IdeTask) task = user_data;
-  SaveState *state;
-  GtkSourceFileSaver *saver;
-  GtkSourceFile *source_file;
-  GtkSourceNewlineType newline_type;
-  const GtkSourceEncoding *encoding;
-  const gchar *charset;
+  g_autoptr(GtkSourceFile) source_file = NULL;
   g_autoptr(GError) error = NULL;
+  const GtkSourceEncoding *encoding;
+  GtkSourceNewlineType newline_type;
+  GtkSourceFileSaver *saver;
+  const gchar *charset;
+  SaveState *state;
 
   IDE_ENTRY;
 
@@ -1153,15 +1153,16 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
   if (!ide_file_equal (file, ide_buffer_get_file (state->buffer)))
     {
       IdeFile *orig_file = ide_buffer_get_file (state->buffer);
+      g_autoptr(GtkSourceFile) orig_source_file = NULL;
 
       if (orig_file)
         {
-          source_file = _ide_file_get_source_file (orig_file);
+          orig_source_file = _ide_file_get_source_file (orig_file);
 
-          if (source_file)
+          if (orig_source_file)
             {
-              encoding = gtk_source_file_get_encoding (source_file);
-              newline_type = gtk_source_file_get_newline_type (source_file);
+              encoding = gtk_source_file_get_encoding (orig_source_file);
+              newline_type = gtk_source_file_get_newline_type (orig_source_file);
             }
         }
     }

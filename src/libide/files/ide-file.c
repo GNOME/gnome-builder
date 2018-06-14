@@ -36,6 +36,8 @@ struct _IdeFile
 {
   IdeObject          parent_instance;
 
+  GMutex             mutex;
+
   gchar             *content_type;
   GFile             *file;
   IdeFileSettings   *file_settings;
@@ -196,24 +198,24 @@ ide_file_set_file (IdeFile *self,
  *
  * Gets the GtkSourceFile for the #IdeFile.
  *
- * Returns: (transfer none): a #GtkSourceFile.
+ * Returns: (transfer full): a #GtkSourceFile.
  */
 GtkSourceFile *
 _ide_file_get_source_file (IdeFile *self)
 {
+  GtkSourceFile *ret;
+
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
 
-  if (g_once_init_enter (&self->source_file))
-    {
-      GtkSourceFile *source_file;
+  g_mutex_lock (&self->mutex);
+  if (self->source_file == NULL)
+    self->source_file = g_object_new (GTK_SOURCE_TYPE_FILE,
+                                      "location", self->file,
+                                      NULL);
+  ret = g_object_ref (self->source_file);
+  g_mutex_unlock (&self->mutex);
 
-      source_file = gtk_source_file_new ();
-      gtk_source_file_set_location (source_file, self->file);
-
-      g_once_init_leave (&self->source_file, source_file);
-    }
-
-  return self->source_file;
+  return ret;
 }
 
 const gchar *
@@ -221,12 +223,11 @@ ide_file_get_path (IdeFile *self)
 {
   g_return_val_if_fail (IDE_IS_FILE (self), NULL);
 
-  if (g_once_init_enter (&self->path))
-    {
-      IdeContext *context;
-      gchar *path = NULL;
+  g_mutex_lock (&self->mutex);
 
-      context = ide_object_get_context (IDE_OBJECT (self));
+  if (self->path == NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
 
       if (context != NULL)
         {
@@ -234,14 +235,14 @@ ide_file_get_path (IdeFile *self)
           GFile *workdir = ide_vcs_get_working_directory (vcs);
 
           if (g_file_has_prefix (self->file, workdir))
-            path = g_file_get_relative_path (workdir, self->file);
+            self->path = g_file_get_relative_path (workdir, self->file);
         }
 
-      if (path == NULL)
-        path = g_file_get_path (self->file);
-
-      g_once_init_leave (&self->path, path);
+      if (self->path == NULL)
+        self->path = g_file_get_path (self->file);
     }
+
+  g_mutex_unlock (&self->mutex);
 
   return self->path;
 }
@@ -442,6 +443,8 @@ ide_file_finalize (GObject *object)
   g_clear_pointer (&self->path, g_free);
   g_clear_pointer (&self->content_type, g_free);
 
+  g_mutex_clear (&self->mutex);
+
   G_OBJECT_CLASS (ide_file_parent_class)->finalize (object);
 
   DZL_COUNTER_DEC (instances);
@@ -564,9 +567,11 @@ ide_file_class_init (IdeFileClass *klass)
 }
 
 static void
-ide_file_init (IdeFile *file)
+ide_file_init (IdeFile *self)
 {
   DZL_COUNTER_INC (instances);
+
+  g_mutex_init (&self->mutex);
 }
 
 static gboolean
