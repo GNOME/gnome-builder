@@ -57,9 +57,11 @@ struct _IdeCompletionListBox
   guint n_rows;
 
   /*
-   * The currently selected index within the result set.
+   * The currently selected index within the result set. Signed to
+   * ensure our math in various places allows going negative to catch
+   * lower edge.
    */
-  guint selected;
+  gint selected;
 
   /*
    * This is set whenever we make a change that requires updating the
@@ -825,7 +827,7 @@ ide_completion_list_box_move_cursor (IdeCompletionListBox *self,
                                      GtkMovementStep       step,
                                      gint                  direction)
 {
-  guint n_items;
+  gint n_items;
   gint offset;
 
   g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX (self));
@@ -834,6 +836,10 @@ ide_completion_list_box_move_cursor (IdeCompletionListBox *self,
     return;
 
   if (!(n_items = g_list_model_get_n_items (G_LIST_MODEL (self->context))))
+    return;
+
+  /* n_items is signed so that we can do negative comparison */
+  if (n_items < 0)
     return;
 
   if (step == GTK_MOVEMENT_BUFFER_ENDS)
@@ -863,9 +869,9 @@ ide_completion_list_box_move_cursor (IdeCompletionListBox *self,
   if (step == GTK_MOVEMENT_PAGES)
     direction *= self->n_rows;
 
-  if (((gint)self->selected + direction) > n_items)
+  if ((self->selected + direction) > n_items)
     self->selected = n_items - 1;
-  else if (((gint)self->selected + direction) < 0)
+  else if ((self->selected + direction) < 0)
     self->selected = 0;
   else
     self->selected += direction;
