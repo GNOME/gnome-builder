@@ -144,7 +144,10 @@ handle_reply_cb (JsonrpcClient *client,
   g_assert (op->client == client);
 
   if (!jsonrpc_client_reply_finish (client, result, &error))
-    g_warning ("Reply failed: %s", error->message);
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Reply failed: %s", error->message);
+    }
 }
 
 static void
