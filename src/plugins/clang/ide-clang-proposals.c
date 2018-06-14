@@ -232,7 +232,7 @@ ide_clang_proposals_clear (IdeClangProposals *self)
   GList *list;
   guint old_len;
 
-  g_assert (IDE_IS_CLANG_CLIENT (self));
+  g_assert (IDE_IS_CLANG_PROPOSALS (self));
 
   self->line = -1;
   self->line_offset = -1;
