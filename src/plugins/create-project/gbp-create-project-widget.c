@@ -39,6 +39,7 @@ struct _GbpCreateProjectWidget
   GtkSwitch            *versioning_switch;
   DzlRadioBox          *license_chooser;
   GtkLabel             *destination_label;
+  GtkBox               *preview;
 
   guint                 invalid_directory : 1;
 };
@@ -77,6 +78,44 @@ sort_by_name (gconstpointer a,
     return 1;
 
   return g_utf8_collate (*astr, *bstr);
+}
+
+static void
+gbp_create_project_widget_update_preview (GbpCreateProjectWidget *self)
+{
+  g_autoptr(IdeProjectTemplate) template = NULL;
+  g_auto(GStrv) files = NULL;
+  GtkWidget *child;
+  GList *children;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  gtk_container_foreach (GTK_CONTAINER (self->preview),
+                         (GtkCallback)gtk_widget_destroy,
+                         NULL);
+
+  if (!(children = gtk_flow_box_get_selected_children (self->project_template_chooser)))
+    return;
+
+  child = gtk_bin_get_child (GTK_BIN (children->data));
+  g_object_get (child, "template", &template, NULL);
+  g_list_free (children);
+
+  if (!(files = ide_project_template_list_files (template)))
+    return;
+
+  for (guint i = 0; files[i] != NULL; i++)
+    {
+      GtkWidget *label;
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "label", files[i],
+                            "ellipsize", PANGO_ELLIPSIZE_END,
+                            "xalign", 0.0f,
+                            "visible", TRUE,
+                            NULL);
+      gtk_container_add (GTK_CONTAINER (self->preview), label);
+    }
 }
 
 static void
@@ -202,6 +241,8 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
       gtk_label_set_label (self->destination_label, formatted);
     }
 
+  gbp_create_project_widget_update_preview (self);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
 
@@ -261,6 +302,8 @@ gbp_create_project_widget_language_changed (GbpCreateProjectWidget *self,
 
   gbp_create_project_widget_refilter (self);
 
+  gbp_create_project_widget_update_preview (self);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
 
@@ -270,6 +313,8 @@ gbp_create_project_widget_template_selected (GbpCreateProjectWidget *self,
                                              GtkFlowBoxChild        *child)
 {
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  gbp_create_project_widget_update_preview (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
@@ -476,6 +521,7 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_switch);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, license_chooser);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, destination_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, preview);
 }
 
 static void

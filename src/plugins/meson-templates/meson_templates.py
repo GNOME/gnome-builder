@@ -344,3 +344,11 @@ class EmptyProjectTemplate(MesonTemplate):
     def prepare_files(self, files):
         files['resources/src/meson-empty.build'] = 'src/meson.build'
 
+    def do_list_files(self):
+        return [
+            'src/'
+            'src/meson.build',
+            'meson.build',
+            'COPYING',
+        ]
+

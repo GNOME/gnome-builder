@@ -178,3 +178,29 @@ ide_project_template_compare (IdeProjectTemplate *a,
 
   return ret;
 }
+
+/**
+ * ide_project_template_list_files:
+ * @self: a #IdeProjectTemplate
+ *
+ * This returns a list of files and directories describing the files
+ * to be expanded. This is used by the creation wizard to give the user
+ * a preview of what is to be done.
+ *
+ * Files that end in a trailing slash (/) will be displayed as directories
+ * in the preview pane.
+ *
+ * The resulting file names should be relative to the project root.
+ *
+ * Returns: (transfer full) (array zero-terminated=1): an array of files
+ */
+gchar **
+ide_project_template_list_files (IdeProjectTemplate *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
+
+  if (IDE_PROJECT_TEMPLATE_GET_IFACE (self)->list_files)
+    return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->list_files (self);
+
+  return NULL;
+}

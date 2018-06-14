@@ -48,6 +48,7 @@ struct _IdeProjectTemplateInterface
                                   GAsyncResult         *result,
                                   GError              **error);
   gint        (*get_priority)    (IdeProjectTemplate   *self);
+  gchar     **(*list_files)      (IdeProjectTemplate   *self);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -64,6 +65,8 @@ IDE_AVAILABLE_IN_ALL
 gchar     **ide_project_template_get_languages   (IdeProjectTemplate  *self);
 IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_icon_name   (IdeProjectTemplate  *self);
+IDE_AVAILABLE_IN_3_30
+gchar     **ide_project_template_list_files      (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_project_template_expand_async    (IdeProjectTemplate   *self,
                                                   GHashTable           *params,
