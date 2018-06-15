@@ -17,8 +17,7 @@
                           "clear-selection" ()
                           "remove-cursors" ()
                           "redo" () };
-  bind "<ctrl>c" { "copy-clipboard" () };
-  bind "<ctrl>x" { "cut-clipboard" () };
+
   bind "<ctrl>v" { "paste-clipboard-extended" (1, 0, 0) };
   bind "<alt>slash" { "cycle-completion" (down) };
 
@@ -26,18 +25,6 @@
   bind "<alt>F9" { "sort" (1, 0) };
   bind "<shift>F9" { "sort" (0, 0) };
 
-  bind "<ctrl>bracketleft" { "save-insert-mark" ()
-                             "movement" (first-char, 0, 1, 0)
-                             "movement" (line-end, 1, 1, 0)
-                             "indent-selection" (-1)
-                             "clear-selection" ()
-                             "restore-insert-mark" () };
-  bind "<ctrl>bracketright" { "save-insert-mark" ()
-                              "movement" (first-char, 0, 1, 0)
-                              "movement" (line-end, 1, 1, 0)
-                              "indent-selection" (1)
-                              "clear-selection" ()
-                              "restore-insert-mark" () };
   bind "<ctrl><alt>i" { "reindent" () };
   bind "<ctrl><shift>Up" { "move-lines" (0, -1) };
   bind "<ctrl><shift>Down" { "move-lines" (0, 1) };
@@ -85,9 +72,6 @@
   bind "<alt><shift>Down" { "add-cursor" (column) };
   bind "Escape" { "reset" () };
   bind "<ctrl>a" { "select-all" (1) };
-  /* Expand selection to line */
-  bind "<ctrl>l" { "movement" (first-char, 0, 0, 0)
-                   "movement" (line-end, 1, 0, 0) };
   /* Expand selection to brackets: this should be Ctrl+Shift+M, but that's
    * hardcoded to uncomment the current line */
   bind "<alt><shift>m" { "movement" (match-special, 1, 0, 0) };
@@ -102,7 +86,6 @@
   bind "<shift>F3" { "action" ("editor-view", "move-previous-search-result", "") };
   bind "<ctrl>h" { "action" ("editor-view", "find-replace", "") };
   bind "<ctrl><shift>e" { "action" ("editor-view", "find-replace", "") };
-  bind "<ctrl>d" { "add-cursor" (match) };
 
   bind "<ctrl>quoteleft" { "action" ("dockbin", "bottom-visible", "") };
   bind "<shift>F11" { "action" ("win", "fullscreen", "") };
@@ -163,9 +146,6 @@
 
   /* These don't originally have bindings in Sublime */
   bind "<ctrl>k" { "action" ("layoutstack", "show-list", "") };
-  bind "<ctrl>u" { "change-case" (upper) };
-  bind "<alt>u" { "change-case" (lower) };
-  bind "<ctrl>asciitilde" { "change-case" (toggle) };
   bind "<ctrl>0" { "reset-font-size" () };
   bind "<ctrl>KP_0" { "reset-font-size" () };
 
@@ -220,18 +200,12 @@
    *   Alt+Q Wrap Paragraph At Ruler; needs an action for this
    *
    * Known issues:
-   *   Ctrl+C and Ctrl+X should copy and cut the current line if there is no
-   *     selection.
-   *   Ctrl+U, Alt+U, and Ctrl+Shift+~ should operate on the current word if
-   *     there is no selection.
-   *   Ctrl+L should add the next line to the selection if there is already a
-   *     selection.
-   *   Ctrl+D should select the current word if there is no selection.
-   *   Ctrl+[, Ctrl+] Indent and Unindent; these only work on single lines.
-   *     Tab and Shift+Tab work on an entire selection, but these bindings seem
-   *     to be hardcoded in GtkSourceView. They should also preserve the place
-   *     of the insert mark relative to the text (instead of relative to the
-   *     line offset.)
+   *   Ctrl+D and Ctrl+L: The transition to the 'has-selection' state doesn't
+   *     happen when the selection is initiated from a keybinding, so pressing
+   *     Ctrl+D twice doesn't select a word and its next occurrence, and
+   *     likewise pressing Ctrl+L twice doesn't select two lines.
+   *   Ctrl+[, Ctrl+] Indent and Unindent; These should preserve the place of
+   *     the insert mark relative to the text, instead of the line offset.
    *   Some shortcuts (Ctrl+Enter, Ctrl+M, Ctrl+Shift+M, Ctrl+Shift+U, F9)
    *     apparently can't be overridden.
    *   Ctrl+Alt+Q doesn't toggle macro recording. Instead, use Ctrl+Super+Q to
@@ -242,6 +216,77 @@
    *     in order to avoid a separate Ctrl+K state.
    */
 }
+
+/* Keys that work differently depending on whether there is text selected */
+@binding-set sublime-ide-source-view-no-selection
+{
+  /* Ctrl+C without anything selected copies the entire line incl. newline */
+  bind "<ctrl>c" { "save-insert-mark" ()
+                   "movement" (first-char, 0, 0, 0)
+                   "movement" (line-end, 1, 0, 0)
+                   "copy-clipboard" ()
+                   "clear-selection" ()
+                   "restore-insert-mark" () };
+  /* Ditto Ctrl+X for cut */
+  bind "<ctrl>x" { "movement" (first-char, 0, 0, 0)
+                   "movement" (line-end, 1, 0, 0)
+                   "copy-clipboard" ()
+                   "delete-selection" () };
+  /* Expand selection to word - is Quick Add Next when there's a selection */
+  bind "<ctrl>d" { "movement" (previous-word-end, 0, 1, 1)
+                   "movement" (next-word-start, 0, 1, 0)
+                   "movement" (next-word-end, 1, 0, 1) };
+  bind "<ctrl>bracketleft" { "save-insert-mark" ()
+                             "movement" (first-char, 0, 1, 0)
+                             "movement" (line-end, 1, 1, 0)
+                             "indent-selection" (-1)
+                             "clear-selection" ()
+                             "restore-insert-mark" () };
+  bind "<ctrl>bracketright" { "save-insert-mark" ()
+                              "movement" (first-char, 0, 1, 0)
+                              "movement" (line-end, 1, 1, 0)
+                              "indent-selection" (1)
+                              "clear-selection" ()
+                              "restore-insert-mark" () };
+  /* Expand selection to line */
+  bind "<ctrl>l" { "movement" (first-char, 0, 0, 0)
+                   "movement" (line-end, 1, 0, 0) };
+
+  /* These don't originally have bindings in Sublime */
+  bind "<ctrl>u" { "save-insert-mark" ()
+                   "movement" (previous-word-end, 0, 1, 1)
+                   "movement" (next-word-start, 0, 1, 0)
+                   "movement" (next-word-end, 1, 0, 1)
+                   "change-case" (upper)
+                   "restore-insert-mark" () };
+  bind "<alt>u" { "save-insert-mark" ()
+                  "movement" (previous-word-end, 0, 1, 1)
+                  "movement" (next-word-start, 0, 1, 0)
+                  "movement" (next-word-end, 1, 0, 1)
+                  "change-case" (lower)
+                  "restore-insert-mark" () };
+  bind "<ctrl>asciitilde" { "save-insert-mark" ()
+                            "movement" (previous-word-end, 0, 1, 1)
+                            "movement" (next-word-start, 0, 1, 0)
+                            "movement" (next-word-end, 1, 0, 1)
+                            "change-case" (toggle)
+                            "restore-insert-mark" () };
+}
+
+@binding-set sublime-ide-source-view-has-selection
+{
+  bind "<ctrl>c" { "copy-clipboard" () };
+  bind "<ctrl>x" { "cut-clipboard" () };
+  bind "<ctrl>d" { "add-cursor" (match) };
+  bind "<ctrl>bracketleft" { "indent-selection" (-1) };
+  bind "<ctrl>bracketright" { "indent-selection" (1) };
+  bind "<ctrl>l" { "movement" (line-end, 1, 0, 0) };
+
+  bind "<ctrl>u" { "change-case" (upper) };
+  bind "<alt>u" { "change-case" (lower) };
+  bind "<ctrl>asciitilde" { "change-case" (toggle) };
+}
+
 
 @binding-set sublime-workbench-bindings
 {
@@ -257,6 +302,13 @@ window.workbench {
 
 .sourceview,
 idesourceviewmode.default {
-  -gtk-key-bindings: sublime-ide-source-view,
+  -gtk-key-bindings: sublime-ide-source-view-no-selection,
+                     sublime-ide-source-view,
+                     sublime-workbench-bindings;
+}
+
+idesourceviewmode.default.has-selection {
+  -gtk-key-bindings: sublime-ide-source-view-has-selection,
+                     sublime-ide-source-view,
                      sublime-workbench-bindings;
 }
