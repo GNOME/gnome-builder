@@ -1,0 +1,8 @@
+[Plugin]
+Module=d_langserver_plugin
+Loader=python3
+Name=D Language Server Plugins
+Description=Provides autocompletion, linting, etc. for the D programming language.
+Copyright=Copyright © 2018 Clipsey
+Builtin=true
+X-Symbol-Resolver-Languages=d

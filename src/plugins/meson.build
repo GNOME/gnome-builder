@@ -38,6 +38,7 @@ subdir('git')
 subdir('gjs-symbols')
 subdir('gnome-code-assistance')
 subdir('go-langserv')
+subdir('d-langserv')
 subdir('history')
 subdir('html-completion')
 subdir('html-preview')
@@ -123,6 +124,7 @@ status += [
   'GJS Symbol Resolver ... : @0@'.format(get_option('with_gjs_symbols')),
   'GNOME Code Assistance . : @0@'.format(get_option('with_gnome_code_assistance')),
   'Go Language Server .... : @0@'.format(get_option('with_go_langserv')),
+  'D Language Server .... : @0@'.format(get_option('with_d_langserv')),
   'History ............... : @0@'.format(get_option('with_history')),
   'HTML Completion ....... : @0@'.format(get_option('with_html_completion')),
   'HTML Preview .......... : @0@'.format(get_option('with_html_preview')),
