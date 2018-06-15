@@ -3,12 +3,25 @@ data/{{appid}}.appdata.xml.in
 data/{{appid}}.gschema.xml
 {{if ui_file}}
 src/{{ui_file}}
+
 {{end}}
-{{if language == "c"}}src/main.c
-src/{{prefix}}-window.c{{end}}
-{{if language == "vala"}}src/main.vala
-src/window.vala{{end}}
-{{if language == "javascript"}}src/main.js
-src/window.js{{end}}
-{{if language == "python"}}src/main.py
-src/window.py{{end}}
+{{if language == "c"}}
+src/main.c
+src/{{prefix}}-window.c
+
+{{end}}
+{{if language == "vala"}}
+src/main.vala
+src/window.vala
+
+{{end}}
+{{if language == "javascript"}}
+src/main.js
+src/window.js
+
+{{end}}
+{{if language == "python"}}
+src/main.py
+src/window.py
+
+{{end}}
