@@ -90,7 +90,6 @@ class DService(Ide.Object, Ide.Service):
             launcher.push_argv(pname)
 
             # require DLang support
-            launcher.push_argv("--skip-configuration")
             launcher.push_argv("--require")
             launcher.push_argv("D")
 
