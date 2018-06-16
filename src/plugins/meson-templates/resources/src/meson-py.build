@@ -27,7 +27,6 @@ configure_file(
 
 {{name_}}_sources = [
   '__init__.py',
-  'gi_composites.py',
   'main.py',
   'window.py',
 ]
