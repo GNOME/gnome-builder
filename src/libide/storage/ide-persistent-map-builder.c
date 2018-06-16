@@ -156,7 +156,7 @@ compare_keys (KVPair      *a,
   return g_strcmp0 (keys + a->key, keys + b->key);
 }
 
-void
+static void
 ide_persistent_map_builder_write_worker (IdeTask      *task,
                                          gpointer      source_object,
                                          gpointer      task_data,
