@@ -41,6 +41,12 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
+/**
+ * ide_project_item_new:
+ * @parent: (nullable): an #IdeProjectItem
+ *
+ * Returns: (transfer full): an #IdeProjectItem
+ */
 IdeProjectItem *
 ide_project_item_new (IdeProjectItem *parent)
 {

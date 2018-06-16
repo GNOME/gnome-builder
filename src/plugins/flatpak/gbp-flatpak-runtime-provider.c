@@ -716,32 +716,6 @@ gbp_flatpak_runtime_provider_bootstrap_finish (IdeRuntimeProvider  *provider,
 }
 
 static void
-gbp_flatpak_runtime_provider_locate_sdk_async (GbpFlatpakRuntimeProvider *self,
-                                               const gchar               *id,
-                                               const gchar               *arch,
-                                               const gchar               *branch,
-                                               GCancellable              *cancellable,
-                                               GAsyncReadyCallback        callback,
-                                               gpointer                   user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
-  g_assert (id != NULL);
-  g_assert (arch != NULL);
-  g_assert (branch != NULL);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_flatpak_runtime_provider_locate_sdk_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
-
-  IDE_EXIT;
-}
-
-static void
 runtime_provider_iface_init (IdeRuntimeProviderInterface *iface)
 {
   iface->load = gbp_flatpak_runtime_provider_load;

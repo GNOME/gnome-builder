@@ -326,7 +326,7 @@ get_binary_name (GbpFlatpakRuntime *self,
   }
 }
 
-IdeRunner *
+static IdeRunner *
 gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
                                    IdeBuildTarget *build_target)
 {
@@ -514,7 +514,7 @@ gbp_flatpak_runtime_get_triplet (GbpFlatpakRuntime *self)
   return self->triplet;
 }
 
-void
+static void
 gbp_flatpak_runtime_set_triplet (GbpFlatpakRuntime *self,
                                  IdeTriplet        *triplet)
 {
@@ -536,7 +536,7 @@ gbp_flatpak_runtime_get_branch (GbpFlatpakRuntime *self)
   return self->branch;
 }
 
-void
+static void
 gbp_flatpak_runtime_set_branch (GbpFlatpakRuntime *self,
                                 const gchar       *branch)
 {
@@ -558,7 +558,7 @@ gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime *self)
   return self->platform;
 }
 
-void
+static void
 gbp_flatpak_runtime_set_platform (GbpFlatpakRuntime *self,
                                   const gchar       *platform)
 {
@@ -595,7 +595,7 @@ gbp_flatpak_runtime_get_sdk_name (GbpFlatpakRuntime *self)
     return g_strndup (self->sdk, slash - self->sdk);
 }
 
-void
+static void
 gbp_flatpak_runtime_set_sdk (GbpFlatpakRuntime *self,
                              const gchar       *sdk)
 {
@@ -622,7 +622,7 @@ gbp_flatpak_runtime_real_get_triplet (IdeRuntime *runtime)
   return ide_triplet_ref (GBP_FLATPAK_RUNTIME (runtime)->triplet);
 }
 
-gboolean
+static gboolean
 gbp_flatpak_runtime_supports_toolchain (IdeRuntime   *self,
                                         IdeToolchain *toolchain)
 {

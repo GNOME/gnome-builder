@@ -111,6 +111,6 @@ IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_manager_get_auto_save         (IdeBufferManager *self);
 IDE_AVAILABLE_IN_ALL
 void                      ide_buffer_manager_set_auto_save         (IdeBufferManager *self,
-                                                                    gboolean          auto_save_timeout);
+                                                                    gboolean          auto_save);
 
 G_END_DECLS

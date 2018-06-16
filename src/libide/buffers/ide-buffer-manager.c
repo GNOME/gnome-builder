@@ -264,6 +264,7 @@ ide_buffer_manager_get_auto_save (IdeBufferManager *self)
 
 /**
  * ide_buffer_manager_set_auto_save:
+ * @self: an #IdeBufferManager
  * @auto_save: %TRUE if auto-save should be enabled.
  *
  * Sets the #IdeBufferManager:auto-save property. If this is %TRUE, then a

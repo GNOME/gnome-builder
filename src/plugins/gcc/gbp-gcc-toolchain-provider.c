@@ -183,7 +183,7 @@ gbp_gcc_toolchain_provider_load_worker (IdeTask      *task,
                            (GDestroyNotify)g_ptr_array_unref);
 }
 
-void
+static void
 gbp_gcc_toolchain_provider_search_finish (FileSearching *file_searching,
                                           GError        *error)
 {
@@ -216,7 +216,7 @@ add_all_files (GFile     *file,
   g_ptr_array_add (dest_array, g_object_ref (file));
 }
 
-void
+static void
 gbp_gcc_toolchain_provider_search_iterate (GObject      *object,
                                            GAsyncResult *result,
                                            gpointer      user_data)
@@ -252,7 +252,7 @@ gbp_gcc_toolchain_provider_search_iterate (GObject      *object,
     gbp_gcc_toolchain_provider_search_finish (file_searching, NULL);
 }
 
-void
+static void
 gbp_gcc_toolchain_provider_search_init (GbpGccToolchainProvider *self,
                                         GCancellable            *cancellable,
                                         GAsyncReadyCallback      callback,
@@ -341,7 +341,7 @@ gbp_gcc_toolchain_provider_load_finish (IdeToolchainProvider  *provider,
   return TRUE;
 }
 
-void
+static void
 gbp_gcc_toolchain_provider_unload (IdeToolchainProvider  *provider,
                                    IdeToolchainManager   *manager)
 {

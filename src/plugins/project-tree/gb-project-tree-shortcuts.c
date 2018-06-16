@@ -24,6 +24,7 @@
 #include <dazzle.h>
 
 #include "gb-project-tree.h"
+#include "gb-project-tree-private.h"
 
 #define I_(s) g_intern_static_string(s)
 

@@ -51,13 +51,6 @@ ide_ctags_completion_item_new (IdeCtagsResults          *results,
   return self;
 }
 
-gint
-ide_ctags_completion_item_compare (IdeCtagsCompletionItem *itema,
-                                   IdeCtagsCompletionItem *itemb)
-{
-  return ide_ctags_index_entry_compare (itema->entry, itemb->entry);
-}
-
 static void
 ide_ctags_completion_item_finalize (GObject *object)
 {
