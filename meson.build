@@ -104,6 +104,8 @@ add_global_arguments([
   '-DIDE_COMPILATION',
 ], language: 'c')
 
+libide_args = []
+
 cc = meson.get_compiler('c')
 global_c_args = []
 test_c_args = [
@@ -172,6 +174,10 @@ foreach arg: test_c_args
     global_c_args += arg
   endif
 endforeach
+
+if cc.has_multi_arguments('-Wmissing-declarations')
+  libide_args += '-Wmissing-declarations'
+endif
 
 # Detect and set symbol visibility
 hidden_visibility_args = []

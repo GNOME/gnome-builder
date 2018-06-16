@@ -18,15 +18,17 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
+#define G_LOG_DOMAIN "testing-plugin"
 
-#include "ide-version-macros.h"
+#include "object-modules.h"
 
 #include "editor/ide-editor-addin.h"
 #include "testing/ide-test-editor-addin.h"
 
-_IDE_EXTERN void
+void
 ide_test_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_ADDIN, IDE_TYPE_TEST_EDITOR_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_EDITOR_ADDIN,
+                                              IDE_TYPE_TEST_EDITOR_ADDIN);
 }

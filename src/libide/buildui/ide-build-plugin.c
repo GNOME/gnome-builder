@@ -16,18 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-build-plugin"
-
 #include "config.h"
 
-#include <libpeas/peas.h>
+#define G_LOG_DOMAIN "ide-build-plugin"
 
-#include "ide-version-macros.h"
+#include "object-modules.h"
 
-#include "workbench/ide-workbench-addin.h"
 #include "buildui/ide-build-workbench-addin.h"
+#include "workbench/ide-workbench-addin.h"
 
-_IDE_EXTERN void
+void
 ide_build_tool_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

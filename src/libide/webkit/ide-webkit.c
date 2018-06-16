@@ -18,12 +18,11 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
 #include <webkit2/webkit2.h>
 
-#include "ide-version-macros.h"
+#include "object-modules.h"
 
-_IDE_EXTERN void
+void
 ide_webkit_register_types (PeasObjectModule *module)
 {
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);

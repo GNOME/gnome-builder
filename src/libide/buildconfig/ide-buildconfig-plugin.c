@@ -16,20 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-buildsystem-plugin"
-
 #include "config.h"
 
-#include <libpeas/peas.h>
+#define G_LOG_DOMAIN "ide-buildsystem-plugin"
 
-#include "ide-version-macros.h"
+#include "object-modules.h"
 
 #include "buildconfig/ide-buildconfig-configuration-provider.h"
 #include "buildconfig/ide-buildconfig-pipeline-addin.h"
 #include "buildsystem/ide-build-pipeline-addin.h"
 #include "config/ide-configuration-provider.h"
 
-_IDE_EXTERN void
+void
 ide_buildconfig_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,

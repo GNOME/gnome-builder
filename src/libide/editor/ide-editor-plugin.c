@@ -16,18 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define G_LOG_DOMAIN "ide-editor-plugin"
-
 #include "config.h"
 
-#include <libpeas/peas.h>
+#define G_LOG_DOMAIN "ide-editor-plugin"
 
-#include "ide-version-macros.h"
+#include "object-modules.h"
 
 #include "editor/ide-editor-layout-stack-addin.h"
 #include "editor/ide-editor-workbench-addin.h"
 
-_IDE_EXTERN void
+void
 ide_editor_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module, IDE_TYPE_LAYOUT_STACK_ADDIN, IDE_TYPE_EDITOR_LAYOUT_STACK_ADDIN);

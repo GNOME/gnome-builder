@@ -18,15 +18,15 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
+#define G_LOG_DOMAIN "ide-debugger-plugin"
 
-#include "ide-version-macros.h"
+#include "object-modules.h"
 
 #include "debugger/ide-debugger-editor-addin.h"
 #include "editor/ide-editor-addin.h"
 #include "editor/ide-editor-view-addin.h"
 
-_IDE_EXTERN void
+void
 ide_debugger_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
