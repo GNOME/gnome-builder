@@ -24,11 +24,11 @@ G_BEGIN_DECLS
 
 typedef struct
 {
-  gchar  *name;
-  guint8  red;
-  guint8  green;
-  guint8  blue;
-  guint8  index;
+  const gchar *name;
+  guint8       red;
+  guint8       green;
+  guint8       blue;
+  guint8       index;
 } NamedColor;
 
 G_GNUC_UNUSED

@@ -1501,8 +1501,8 @@ gstyle_color_widget_class_init (GstyleColorWidgetClass *klass)
 
 
 static const GtkTargetEntry dnd_targets [] = {
-  {"GSTYLE_COLOR_WIDGET", GTK_TARGET_SAME_APP, 0},
-  {"application/x-color", 0, 0},
+  { (gchar *)"GSTYLE_COLOR_WIDGET", GTK_TARGET_SAME_APP, 0 },
+  { (gchar *)"application/x-color", 0, 0 },
 };
 
 static void
