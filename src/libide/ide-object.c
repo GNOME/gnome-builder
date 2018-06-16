@@ -28,6 +28,7 @@
 #include "ide-object.h"
 
 #include "application/ide-application.h"
+#include "threading/ide-task.h"
 
 /**
  * SECTION:ide-object
@@ -54,13 +55,13 @@
 
 typedef struct
 {
+  GMutex      mutex;
   IdeContext *context;
   guint       is_destroyed : 1;
 } IdeObjectPrivate;
 
 typedef struct
 {
-  GTask *task;            /* back pointer */
   GList *objects;         /* list of objects to try */
   GList *iter;            /* current iter of objects */
   gchar *extension_point; /* name of extension point */
@@ -75,8 +76,8 @@ typedef struct
   gint       io_priority;
 } InitExtensionAsyncState;
 
-static void ide_object_new_async_try_next (InitAsyncState *state);
-static void ide_object_new_for_extension_async_try_next (GTask *task);
+static void ide_object_new_async_try_next               (IdeTask *task);
+static void ide_object_new_for_extension_async_try_next (IdeTask *task);
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeObject, ide_object, G_TYPE_OBJECT)
 
@@ -171,9 +172,12 @@ ide_object_real_set_context (IdeObject  *self,
                              IdeContext *context)
 {
   IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+  gboolean notify = FALSE;
 
   g_assert (IDE_IS_OBJECT (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
+
+  g_mutex_lock (&priv->mutex);
 
   if (context != priv->context)
     {
@@ -193,8 +197,13 @@ ide_object_real_set_context (IdeObject  *self,
                              self);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONTEXT]);
+      notify = TRUE;
     }
+
+  g_mutex_unlock (&priv->mutex);
+
+  if (notify)
+    ide_object_notify_in_main (self, properties [PROP_CONTEXT]);
 }
 
 static void
@@ -218,6 +227,17 @@ ide_object_dispose (GObject *object)
     ide_object_destroy (self);
 
   g_object_unref (self);
+}
+
+static void
+ide_object_finalize (GObject *object)
+{
+  IdeObject *self = (IdeObject *)object;
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+
+  g_mutex_clear (&priv->mutex);
+
+  G_OBJECT_CLASS (ide_object_parent_class)->finalize (object);
 }
 
 static void
@@ -264,6 +284,7 @@ ide_object_class_init (IdeObjectClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_object_dispose;
+  object_class->finalize = ide_object_finalize;
   object_class->get_property = ide_object_get_property;
   object_class->set_property = ide_object_set_property;
 
@@ -294,6 +315,9 @@ ide_object_class_init (IdeObjectClass *klass)
 static void
 ide_object_init (IdeObject *self)
 {
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+
+  g_mutex_init (&priv->mutex);
 }
 
 static void
@@ -303,9 +327,9 @@ init_async_state_free (gpointer data)
 
   if (state)
     {
-      g_free (state->extension_point);
-      g_list_foreach (state->objects, (GFunc)g_object_unref, NULL);
-      g_list_free (state->objects);
+      g_clear_pointer (&state->extension_point, g_free);
+      g_list_free_full (state->objects, g_object_unref);
+      state->objects = NULL;
       g_slice_free (InitAsyncState, state);
     }
 }
@@ -315,49 +339,65 @@ ide_object_init_async_cb (GObject      *source_object,
                           GAsyncResult *result,
                           gpointer      user_data)
 {
-  InitAsyncState *state = user_data;
   IdeObject *object = (IdeObject *)source_object;
-  GError *error = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
 
-  g_return_if_fail (!object || IDE_IS_OBJECT (object));
-  g_return_if_fail (state);
+  IDE_ENTRY;
+
+  g_assert (!object || IDE_IS_OBJECT (object));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
   if (!g_async_initable_init_finish (G_ASYNC_INITABLE (object), result, &error))
     {
-      ide_object_new_async_try_next (state);
-      return;
+      g_message ("Failed to init %s: %s",
+                 G_OBJECT_TYPE_NAME (object),
+                 error->message);
+      ide_object_new_async_try_next (task);
+      IDE_EXIT;
     }
 
-  g_task_return_pointer (state->task, g_object_ref (object), g_object_unref);
-  g_object_unref (state->task);
+  ide_task_return_pointer (task, g_object_ref (object), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
-ide_object_new_async_try_next (InitAsyncState *state)
+ide_object_new_async_try_next (IdeTask *task)
 {
+  InitAsyncState *state;
   IdeObject *object;
 
-  g_return_if_fail (state);
+  IDE_ENTRY;
 
-  if (!state->iter)
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->objects != NULL);
+
+  if (state->iter == NULL)
     {
-      g_task_return_new_error (state->task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               _("No implementations of extension point “%s”."),
-                               state->extension_point);
-      g_object_unref (state->task);
-      return;
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 _("No implementations of extension point “%s”."),
+                                 state->extension_point);
+      IDE_EXIT;
     }
 
   object = state->iter->data;
   state->iter = state->iter->next;
 
   g_async_initable_init_async (G_ASYNC_INITABLE (object),
-                               state->io_priority,
-                               g_task_get_cancellable (state->task),
+                               ide_task_get_priority (task),
+                               ide_task_get_cancellable (task),
                                ide_object_init_async_cb,
-                               state);
+                               g_object_ref (task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -395,17 +435,19 @@ extension_init_cb (GObject      *object,
                    GAsyncResult *result,
                    gpointer      user_data)
 {
-  g_autoptr(GTask) task = user_data;
   GAsyncInitable *initable = (GAsyncInitable *)object;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   InitExtensionAsyncState *state;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
   g_assert (G_IS_ASYNC_INITABLE (initable));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
+  g_assert (state != NULL);
 
   if (!g_async_initable_init_finish (initable, result, &error))
     {
@@ -419,42 +461,42 @@ extension_init_cb (GObject      *object,
                      G_OBJECT_TYPE_NAME (initable), error->message);
 
       if ((guint)state->position == state->plugins->len)
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          IDE_EXIT;
-        }
+        ide_task_return_error (task, g_steal_pointer (&error));
+      else
+        ide_object_new_for_extension_async_try_next (task);
 
-      ide_object_new_for_extension_async_try_next (task);
       IDE_EXIT;
     }
 
-  IDE_TRACE_MSG ("initialization of %s was successful", G_OBJECT_TYPE_NAME (initable));
+  IDE_TRACE_MSG ("initialization of %s was successful",
+                 G_OBJECT_TYPE_NAME (initable));
 
-  g_task_return_pointer (task, g_object_ref (initable), g_object_unref);
+  ide_task_return_pointer (task, g_object_ref (initable), g_object_unref);
 
   IDE_EXIT;
 }
 
 static void
-ide_object_new_for_extension_async_try_next (GTask *task)
+ide_object_new_for_extension_async_try_next (IdeTask *task)
 {
   InitExtensionAsyncState *state;
   GAsyncInitable *initable;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  state = g_task_get_task_data (task);
+  state = ide_task_get_task_data (task);
+  g_assert (state != NULL);
 
   if ((guint)state->position == state->plugins->len)
     {
       IDE_TRACE_MSG ("No more %s extensions to try", g_type_name (state->plugin_type));
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               _("Failed to locate %s plugin."),
-                               g_type_name (state->plugin_type));
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 _("Failed to locate %s plugin."),
+                                 g_type_name (state->plugin_type));
       IDE_EXIT;
     }
 
@@ -463,8 +505,8 @@ ide_object_new_for_extension_async_try_next (GTask *task)
   IDE_TRACE_MSG ("Initializing object of type %s", G_OBJECT_TYPE_NAME (initable));
 
   g_async_initable_init_async (initable,
-                               state->io_priority,
-                               g_task_get_cancellable (task),
+                               ide_task_get_priority (task),
+                               ide_task_get_cancellable (task),
                                extension_init_cb,
                                g_object_ref (task));
 
@@ -503,10 +545,10 @@ ide_object_new_for_extension_async (GType                 interface_gtype,
                                     const gchar          *first_property,
                                     ...)
 {
-  PeasEngine *engine;
-  PeasExtensionSet *set;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(PeasExtensionSet) set = NULL;
   InitExtensionAsyncState *state;
+  PeasEngine *engine;
   va_list args;
 
   g_return_if_fail (G_TYPE_IS_INTERFACE (interface_gtype));
@@ -518,7 +560,9 @@ ide_object_new_for_extension_async (GType                 interface_gtype,
   set = peas_extension_set_new_valist (engine, interface_gtype, first_property, args);
   va_end (args);
 
-  task = g_task_new (NULL, cancellable, callback, user_data);
+  task = ide_task_new (NULL, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_object_new_for_extension_async);
+  ide_task_set_name (task, g_type_name (interface_gtype));
 
   state = g_slice_new0 (InitExtensionAsyncState);
   state->plugins = g_ptr_array_new_with_free_func (g_object_unref);
@@ -539,11 +583,9 @@ ide_object_new_for_extension_async (GType                 interface_gtype,
     }
 #endif
 
-  g_task_set_task_data (task, state, extension_async_state_free);
+  ide_task_set_task_data (task, state, extension_async_state_free);
 
   ide_object_new_for_extension_async_try_next (task);
-
-  g_clear_object (&set);
 }
 
 /**
@@ -573,42 +615,45 @@ ide_object_new_async (const gchar          *extension_point,
                       const gchar          *first_property,
                       ...)
 {
+  g_autoptr(IdeTask) task = NULL;
   GIOExtensionPoint *point;
   InitAsyncState *state;
   const GList *extensions;
-  const GList *iter;
   va_list args;
+
+  IDE_ENTRY;
 
   g_return_if_fail (extension_point);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  point = g_io_extension_point_lookup (extension_point);
+  task = ide_task_new (NULL, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_object_new_async);
+  ide_task_set_priority (task, io_priority);
 
-  if (!point)
+  if (!(point = g_io_extension_point_lookup (extension_point)))
     {
-      g_task_report_new_error (NULL, callback, user_data, ide_object_new_async,
-                               G_IO_ERROR, G_IO_ERROR_NOT_FOUND,
-                               _("No such extension point."));
-      return;
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 _("No such extension point."));
+      IDE_EXIT;
     }
 
-  extensions = g_io_extension_point_get_extensions (point);
-
-  if (!extensions)
+  if (!(extensions = g_io_extension_point_get_extensions (point)))
     {
-      g_task_report_new_error (NULL, callback, user_data, ide_object_new_async,
-                               G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                               _("No implementations of extension point."));
-      return;
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 _("No implementations of extension point."));
+      IDE_EXIT;
     }
 
   state = g_slice_new0 (InitAsyncState);
   state->extension_point = g_strdup (extension_point);
   state->io_priority = io_priority;
-  state->task = g_task_new (NULL, cancellable, callback, user_data);
-  g_task_set_task_data (state->task, state, init_async_state_free);
+  ide_task_set_task_data (task, state, init_async_state_free);
 
-  for (iter = extensions; iter; iter = iter->next)
+  for (const GList *iter = extensions; iter; iter = iter->next)
     {
       GIOExtension *extension = iter->data;
       GObject *object;
@@ -624,12 +669,11 @@ ide_object_new_async (const gchar          *extension_point,
       va_end (args);
 
       state->objects = g_list_append (state->objects, object);
-
-      if (!state->iter)
-        state->iter = state->objects;
     }
 
-  ide_object_new_async_try_next (state);
+  state->iter = state->objects;
+
+  ide_object_new_async_try_next (task);
 }
 
 /**
@@ -648,11 +692,9 @@ IdeObject *
 ide_object_new_finish  (GAsyncResult  *result,
                         GError       **error)
 {
-  GTask *task = (GTask *)result;
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
-
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 /**
