@@ -62,6 +62,7 @@ struct _IdeXmlSchemaCacheEntry
   guint64            mtime;
 };
 
+GType                       ide_xml_schema_cache_entry_get_type      (void);
 IdeXmlSchemaCacheEntry     *ide_xml_schema_cache_entry_new           (void);
 IdeXmlSchemaCacheEntry     *ide_xml_schema_cache_entry_new_full      (GBytes                 *content,
                                                                       const gchar            *error_message);
