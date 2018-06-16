@@ -1592,7 +1592,7 @@ gstyle_palette_widget_init (GstylePaletteWidget *self)
   GtkStyleContext *context;
 
   static const GtkTargetEntry dnd_targets [] = {
-    {"GSTYLE_COLOR_WIDGET", GTK_TARGET_SAME_APP, 0},
+    { (gchar *)"GSTYLE_COLOR_WIDGET", GTK_TARGET_SAME_APP, 0 },
   };
 
   gtk_widget_init_template (GTK_WIDGET (self));

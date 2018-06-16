@@ -26,7 +26,7 @@
 
 typedef struct
 {
-  gchar *rgb;
+  const gchar *rgb;
 
   gdouble h;
   gdouble s;

@@ -32,18 +32,17 @@
 
 G_DEFINE_TYPE (GstyleColorPanel, gstyle_color_panel, GTK_TYPE_BOX)
 
-static gchar * comp_names [N_GSTYLE_COLOR_COMPONENT] =
-  {
-    "hsv_h",
-    "hsv_s",
-    "hsv_v",
-    "lab_l",
-    "lab_a",
-    "lab_b",
-    "rgb_red",
-    "rgb_green",
-    "rgb_blue"
-  };
+static const gchar *comp_names [N_GSTYLE_COLOR_COMPONENT] = {
+  "hsv_h",
+  "hsv_s",
+  "hsv_v",
+  "lab_l",
+  "lab_a",
+  "lab_b",
+  "rgb_red",
+  "rgb_green",
+  "rgb_blue"
+};
 
 /* Conversion between component and color plane mode :
  * component without a corresponding mode return

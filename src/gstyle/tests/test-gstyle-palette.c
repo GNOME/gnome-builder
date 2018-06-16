@@ -23,7 +23,7 @@
 #include "gstyle-palette.h"
 
 static GstylePalette *
-load_palette (gchar *name)
+load_palette (const gchar *name)
 {
   GstylePalette *palette;
   g_autoptr (GFile) file = NULL;
