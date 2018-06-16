@@ -766,7 +766,7 @@ get_element_proposals (IdeXmlPosition *position,
   CompletionItem *completion_item;
   IdeXmlProposal *item;
   GList *results = NULL;
-  gchar *start = "";
+  const gchar *start = "";
 
   g_assert (position != NULL);
   g_assert (items != NULL);
