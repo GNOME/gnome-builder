@@ -61,4 +61,32 @@ snippet sout
 snippet serr
 - scope java
 	System.err.println($0);
+snippet mavenCentral
+- desc Include mavenCentral repository
+- scope gradle
+	repositories {
+	   mavenCentral()
+	}
+	$0
+snippet jcenter
+- desc Include jcenter repository
+- scope gradle
+	repositories {
+	   jcenter()
+	}
+	$0
+snippet compile
+- desc Add compile dep
+- scope gradle
+	compile '$1:$2:$3'
+	$0
+snippet testcompile
+- desc Add test compile dep
+- scope gradle
+	testCompile '$1:$2:$3'
+	$0
+snippet java
+- scope gradle
+	apply plugin: 'java'
+	$0
 
