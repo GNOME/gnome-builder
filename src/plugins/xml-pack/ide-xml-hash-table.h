@@ -30,7 +30,7 @@ typedef struct _IdeXmlHashTable IdeXmlHashTable;
 
 struct _IdeXmlHashTable
 {
-  guint ref_count;
+  volatile gint   ref_count;
 
   GHashTable     *table;
   GDestroyNotify  free_func;

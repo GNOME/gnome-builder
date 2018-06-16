@@ -45,7 +45,7 @@ struct _IdeXmlPosition
   gint                  child_pos;
   gchar                 quote;
 
-  guint                 ref_count;
+  volatile gint         ref_count;
 };
 
 GType                     ide_xml_position_get_type             (void);

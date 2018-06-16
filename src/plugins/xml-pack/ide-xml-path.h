@@ -30,11 +30,9 @@ typedef struct _IdeXmlPath IdeXmlPath;
 
 struct _IdeXmlPath
 {
-  guint      ref_count;
-
-  GPtrArray *nodes;
-
-  guint      start_at_root : 1;
+  volatile gint  ref_count;
+  GPtrArray     *nodes;
+  guint          start_at_root : 1;
 };
 
 GType       ide_xml_path_get_type      (void);

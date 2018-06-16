@@ -30,7 +30,7 @@ typedef struct _IdeXmlRngGrammar IdeXmlRngGrammar;
 
 struct _IdeXmlRngGrammar
 {
-  guint   ref_count;
+  volatile gint     ref_count;
 
   IdeXmlRngDefine  *start_defines;
 

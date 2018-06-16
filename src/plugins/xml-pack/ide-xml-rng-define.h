@@ -58,7 +58,7 @@ typedef enum
 
 struct _IdeXmlRngDefine
 {
-  guint ref_count;
+  volatile gint        ref_count;
 
   xmlChar             *name;
   xmlChar             *ns;
