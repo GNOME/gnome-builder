@@ -205,7 +205,7 @@ ide_xml_position_kind_get_str (IdeXmlPositionKind kind)
   return kind_str;
 }
 
-const gchar *
+static const gchar *
 ide_xml_position_detail_get_str (IdeXmlPositionDetail detail)
 {
   const gchar *detail_str = NULL;

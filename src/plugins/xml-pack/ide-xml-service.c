@@ -360,7 +360,7 @@ ide_xml_service_get_analysis_async (IdeXmlService       *self,
                               g_steal_pointer (&task));
 }
 
-IdeXmlAnalysis *
+static IdeXmlAnalysis *
 ide_xml_service_get_analysis_finish (IdeXmlService  *self,
                                      GAsyncResult   *result,
                                      GError        **error)
