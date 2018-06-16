@@ -18,9 +18,9 @@
 
 #pragma once
 
-#include "ide-xml-symbol-node.h"
-
 #include <glib-object.h>
+
+#include "ide-xml-symbol-node.h"
 
 G_BEGIN_DECLS
 
@@ -37,17 +37,17 @@ struct _IdeXmlPath
   guint      start_at_root : 1;
 };
 
-IdeXmlPath     *ide_xml_path_new              (void);
-IdeXmlPath     *ide_xml_path_new_from_node    (IdeXmlSymbolNode *node);
-IdeXmlPath     *ide_xml_path_copy             (IdeXmlPath       *self);
-IdeXmlPath     *ide_xml_path_ref              (IdeXmlPath       *self);
-void            ide_xml_path_unref            (IdeXmlPath       *self);
-
-void            ide_xml_path_append_node      (IdeXmlPath       *self,
-                                               IdeXmlSymbolNode *node);
-void            ide_xml_path_dump             (IdeXmlPath       *self);
-void            ide_xml_path_prepend_node     (IdeXmlPath       *self,
-                                               IdeXmlSymbolNode *node);
+GType       ide_xml_path_get_type      (void);
+IdeXmlPath *ide_xml_path_new           (void);
+IdeXmlPath *ide_xml_path_new_from_node (IdeXmlSymbolNode *node);
+IdeXmlPath *ide_xml_path_copy          (IdeXmlPath       *self);
+IdeXmlPath *ide_xml_path_ref           (IdeXmlPath       *self);
+void        ide_xml_path_unref         (IdeXmlPath       *self);
+void        ide_xml_path_append_node   (IdeXmlPath       *self,
+                                        IdeXmlSymbolNode *node);
+void        ide_xml_path_dump          (IdeXmlPath       *self);
+void        ide_xml_path_prepend_node  (IdeXmlPath       *self,
+                                        IdeXmlSymbolNode *node);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlPath, ide_xml_path_unref)
 

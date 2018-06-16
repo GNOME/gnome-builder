@@ -18,8 +18,9 @@
 
 #pragma once
 
-#include <libxml/tree.h>
 #include <glib-object.h>
+#include <libxml/tree.h>
+
 #include "ide-xml-symbol-node.h"
 
 G_BEGIN_DECLS
@@ -79,21 +80,22 @@ struct _IdeXmlRngDefine
   guint                is_mandatory : 1;
 };
 
-IdeXmlRngDefine     *ide_xml_rng_define_new                 (xmlNode             *node,
-                                                             IdeXmlRngDefine     *parent,
-                                                             const guchar        *name,
-                                                             IdeXmlRngDefineType  type);
-void                 ide_xml_rng_define_append              (IdeXmlRngDefine     *self,
-                                                             IdeXmlRngDefine     *def);
-const gchar         *ide_xml_rng_define_get_type_name       (IdeXmlRngDefine     *self);
-gboolean             ide_xml_rng_define_is_nameclass_match  (IdeXmlRngDefine     *define,
-                                                             IdeXmlSymbolNode    *node);
-void                 ide_xml_rng_define_propagate_parent    (IdeXmlRngDefine     *self,
-                                                             IdeXmlRngDefine     *parent);
-IdeXmlRngDefine     *ide_xml_rng_define_ref                 (IdeXmlRngDefine     *self);
-void                 ide_xml_rng_define_unref               (IdeXmlRngDefine     *self);
-void                 ide_xml_rng_define_dump_tree           (IdeXmlRngDefine     *self,
-                                                             gboolean             recursive);
+GType            ide_xml_rng_define_get_type           (void);
+IdeXmlRngDefine *ide_xml_rng_define_new                (xmlNode             *node,
+                                                        IdeXmlRngDefine     *parent,
+                                                        const guchar        *name,
+                                                        IdeXmlRngDefineType  type);
+void             ide_xml_rng_define_append             (IdeXmlRngDefine     *self,
+                                                        IdeXmlRngDefine     *def);
+const gchar     *ide_xml_rng_define_get_type_name      (IdeXmlRngDefine     *self);
+gboolean         ide_xml_rng_define_is_nameclass_match (IdeXmlRngDefine     *define,
+                                                        IdeXmlSymbolNode    *node);
+void             ide_xml_rng_define_propagate_parent   (IdeXmlRngDefine     *self,
+                                                        IdeXmlRngDefine     *parent);
+IdeXmlRngDefine *ide_xml_rng_define_ref                (IdeXmlRngDefine     *self);
+void             ide_xml_rng_define_unref              (IdeXmlRngDefine     *self);
+void             ide_xml_rng_define_dump_tree          (IdeXmlRngDefine     *self,
+                                                        gboolean             recursive);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlRngDefine, ide_xml_rng_define_unref)
 

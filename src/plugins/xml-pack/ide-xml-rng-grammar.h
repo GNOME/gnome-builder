@@ -42,6 +42,7 @@ struct _IdeXmlRngGrammar
   IdeXmlRngGrammar *children;
 };
 
+GType                 ide_xml_rng_grammar_get_type  (void);
 IdeXmlRngGrammar     *ide_xml_rng_grammar_new       (void);
 void                  ide_xml_rng_grammar_add_child (IdeXmlRngGrammar *self,
                                                      IdeXmlRngGrammar *child);

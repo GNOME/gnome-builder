@@ -48,6 +48,7 @@ struct _IdeXmlPosition
   guint                 ref_count;
 };
 
+GType                     ide_xml_position_get_type             (void);
 IdeXmlPosition           *ide_xml_position_new                  (IdeXmlSymbolNode      *node,
                                                                  const gchar           *prefix,
                                                                  IdeXmlPositionKind     kind,

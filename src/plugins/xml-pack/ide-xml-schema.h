@@ -36,10 +36,11 @@ struct _IdeXmlSchema
   IdeXmlRngGrammar *top_grammar;
 };
 
-IdeXmlSchema     *ide_xml_schema_new   (void);
-IdeXmlSchema     *ide_xml_schema_copy  (IdeXmlSchema *self);
-IdeXmlSchema     *ide_xml_schema_ref   (IdeXmlSchema *self);
-void              ide_xml_schema_unref (IdeXmlSchema *self);
+GType         ide_xml_schema_get_type (void);
+IdeXmlSchema *ide_xml_schema_new      (void);
+IdeXmlSchema *ide_xml_schema_copy     (IdeXmlSchema *self);
+IdeXmlSchema *ide_xml_schema_ref      (IdeXmlSchema *self);
+void          ide_xml_schema_unref    (IdeXmlSchema *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlSchema, ide_xml_schema_unref)
 
