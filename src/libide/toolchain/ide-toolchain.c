@@ -171,7 +171,7 @@ ide_toolchain_get_host_triplet (IdeToolchain *self)
   return ide_triplet_ref (priv->host_triplet);
 }
 
-const gchar *
+static const gchar *
 ide_toolchain_real_get_tool_for_language (IdeToolchain  *self,
                                           const gchar   *language,
                                           const gchar   *tool_id)
@@ -183,7 +183,7 @@ ide_toolchain_real_get_tool_for_language (IdeToolchain  *self,
   return NULL;
 }
 
-GHashTable *
+static GHashTable *
 ide_toolchain_real_get_tools_for_id (IdeToolchain  *self,
                                      const gchar   *tool_id)
 {

@@ -31,6 +31,7 @@
 #include "devices/ide-device.h"
 #include "runtimes/ide-runtime.h"
 #include "runtimes/ide-runtime-manager.h"
+#include "runtimes/ide-runtime-private.h"
 #include "runtimes/ide-runtime-provider.h"
 #include "threading/ide-task.h"
 

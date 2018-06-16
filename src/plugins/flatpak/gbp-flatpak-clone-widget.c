@@ -391,12 +391,12 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
   else if (req->src->type == TYPE_ARCHIVE)
     {
       uristr = ide_vcs_uri_to_string (req->src->uri);
-      req->project_file = fetch_archive (uristr,
-                                         req->src->sha,
-                                         req->src->name,
-                                         req->destination,
-                                         self->strip_components,
-                                         &error);
+      req->project_file = gbp_flatpak_sources_fetch_archive (uristr,
+                                                             req->src->sha,
+                                                             req->src->name,
+                                                             req->destination,
+                                                             self->strip_components,
+                                                             &error);
       if (error != NULL)
         {
           ide_task_return_error (task, g_steal_pointer (&error));
@@ -406,11 +406,11 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
 
   for (i = 0; req->src->patches[i]; i++)
     {
-      if (!apply_patch (req->src->patches[i],
-                        req->project_file,
-                        self->strip_components,
-                        &error))
-        {
+      if (!gbp_flatpak_sources_apply_patch (req->src->patches[i],
+                                            req->project_file,
+                                            self->strip_components,
+                                            &error))
+      {
           ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }

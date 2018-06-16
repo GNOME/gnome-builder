@@ -25,11 +25,10 @@
 #include "ide-ctags-index.h"
 #include "ide-ctags-results.h"
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionItem,
-                                ide_ctags_completion_item,
-                                G_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
+G_DEFINE_TYPE_WITH_CODE (IdeCtagsCompletionItem,
+                         ide_ctags_completion_item,
+                         G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 DZL_DEFINE_COUNTER (instances, "IdeCtagsCompletionItem", "Instances", "Number of IdeCtagsCompletionItems")
 
@@ -76,20 +75,9 @@ ide_ctags_completion_item_class_init (IdeCtagsCompletionItemClass *klass)
 }
 
 static void
-ide_ctags_completion_item_class_finalize (IdeCtagsCompletionItemClass *klass)
-{
-}
-
-static void
 ide_ctags_completion_item_init (IdeCtagsCompletionItem *self)
 {
   DZL_COUNTER_INC (instances);
-}
-
-void
-_ide_ctags_completion_item_register_type (GTypeModule *module)
-{
-  ide_ctags_completion_item_register_type (module);
 }
 
 gboolean

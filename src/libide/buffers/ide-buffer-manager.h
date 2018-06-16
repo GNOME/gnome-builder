@@ -102,5 +102,15 @@ IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_manager_apply_edits_finish  (IdeBufferManager     *self,
                                                                   GAsyncResult         *result,
                                                                   GError              **error);
+IDE_AVAILABLE_IN_ALL
+guint                     ide_buffer_manager_get_auto_save_timeout (IdeBufferManager *self);
+IDE_AVAILABLE_IN_ALL
+void                      ide_buffer_manager_set_auto_save_timeout (IdeBufferManager *self,
+                                                                    guint             auto_save_timeout);
+IDE_AVAILABLE_IN_ALL
+gboolean                  ide_buffer_manager_get_auto_save         (IdeBufferManager *self);
+IDE_AVAILABLE_IN_ALL
+void                      ide_buffer_manager_set_auto_save         (IdeBufferManager *self,
+                                                                    gboolean          auto_save_timeout);
 
 G_END_DECLS

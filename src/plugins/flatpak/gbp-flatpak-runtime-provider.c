@@ -715,7 +715,7 @@ gbp_flatpak_runtime_provider_bootstrap_finish (IdeRuntimeProvider  *provider,
   IDE_RETURN (ret);
 }
 
-void
+static void
 gbp_flatpak_runtime_provider_locate_sdk_async (GbpFlatpakRuntimeProvider *self,
                                                const gchar               *id,
                                                const gchar               *arch,

@@ -32,6 +32,8 @@ G_DECLARE_FINAL_TYPE (IdeProgress, ide_progress, IDE, PROGRESS, GObject)
 IDE_AVAILABLE_IN_ALL
 IdeProgress *ide_progress_new                       (void);
 IDE_AVAILABLE_IN_ALL
+gboolean     ide_progress_get_completed             (IdeProgress *self);
+IDE_AVAILABLE_IN_ALL
 gdouble      ide_progress_get_fraction              (IdeProgress *self);
 IDE_AVAILABLE_IN_ALL
 gchar       *ide_progress_get_message               (IdeProgress *self);

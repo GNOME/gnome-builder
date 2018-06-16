@@ -219,12 +219,6 @@ ide_langserv_diagnostic_provider_init (IdeLangservDiagnosticProvider *self)
                                    G_CONNECT_SWAPPED);
 }
 
-IdeLangservDiagnosticProvider *
-ide_langserv_diagnostic_provider_new (void)
-{
-  return g_object_new (IDE_TYPE_LANGSERV_DIAGNOSTIC_PROVIDER, NULL);
-}
-
 /**
  * ide_langserv_diagnostic_provider_get_client:
  *

@@ -44,7 +44,7 @@ _create_tool_path (const gchar *base_path,
   return g_steal_pointer (&tool_path);
 }
 
-gchar *
+static gchar *
 _test_sdk_dirs (const gchar *basepath,
                 const gchar *dir)
 {
@@ -83,7 +83,7 @@ _test_sdk_dirs (const gchar *basepath,
 }
 
 /* Yocto systems are the most used ones, but the native toolchain is in a different folder */
-IdeToolchain *
+static IdeToolchain *
 gbp_sysroot_toolchain_provider_try_poky (GbpSysrootToolchainProvider *self,
                                          const gchar                 *sysroot_id)
 {
@@ -280,7 +280,7 @@ gbp_sysroot_toolchain_provider_load_finish (IdeToolchainProvider  *provider,
   return TRUE;
 }
 
-void
+static void
 gbp_sysroot_toolchain_provider_unload (IdeToolchainProvider  *provider,
                                        IdeToolchainManager   *manager)
 {

@@ -26,5 +26,4 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbCommandVim, gb_command_vim, GB, COMMAND_VIM, GbCommand)
 
-
 G_END_DECLS

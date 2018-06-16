@@ -159,5 +159,7 @@ IDE_AVAILABLE_IN_3_28
 gboolean                  ide_buffer_get_failed                    (IdeBuffer            *self);
 IDE_AVAILABLE_IN_3_28
 const GError             *ide_buffer_get_failure                   (IdeBuffer            *self);
+IDE_AVAILABLE_IN_ALL
+gboolean                  ide_buffer_get_has_diagnostics           (IdeBuffer            *self);
 
 G_END_DECLS

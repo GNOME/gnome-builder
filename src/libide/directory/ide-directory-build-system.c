@@ -53,12 +53,6 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
-IdeDirectoryBuildSystem *
-ide_directory_build_system_new (void)
-{
-  return g_object_new (IDE_TYPE_DIRECTORY_BUILD_SYSTEM, NULL);
-}
-
 static void
 ide_directory_build_system_finalize (GObject *object)
 {

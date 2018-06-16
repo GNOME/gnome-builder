@@ -18,14 +18,13 @@
 
 #pragma once
 
-GFile    *fetch_archive (const gchar  *url,
-                         const gchar  *sha,
-                         const gchar  *module_name,
-                         GFile        *destination,
-                         guint         strip_components,
-                         GError      **error);
-
-gboolean  apply_patch (const gchar  *path,
-                       GFile        *source_dir,
-                       guint         strip_components,
-                       GError      **error);
+GFile    *gbp_flatpak_sources_fetch_archive (const gchar  *url,
+                                             const gchar  *sha,
+                                             const gchar  *module_name,
+                                             GFile        *destination,
+                                             guint         strip_components,
+                                             GError      **error);
+gboolean  gbp_flatpak_sources_apply_patch   (const gchar  *path,
+                                             GFile        *source_dir,
+                                             guint         strip_components,
+                                             GError      **error);

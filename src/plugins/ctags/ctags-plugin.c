@@ -30,7 +30,6 @@
 
 void _ide_ctags_index_register_type (GTypeModule *module);
 void _ide_ctags_builder_register_type (GTypeModule *module);
-void _ide_ctags_completion_item_register_type (GTypeModule *module);
 void _ide_ctags_completion_provider_register_type (GTypeModule *module);
 void _ide_ctags_highlighter_register_type (GTypeModule *module);
 void _ide_ctags_service_register_type (GTypeModule *module);
@@ -40,7 +39,6 @@ void
 ide_ctags_register_types (PeasObjectModule *module)
 {
   _ide_ctags_index_register_type (G_TYPE_MODULE (module));
-  _ide_ctags_completion_item_register_type (G_TYPE_MODULE (module));
   _ide_ctags_completion_provider_register_type (G_TYPE_MODULE (module));
   _ide_ctags_highlighter_register_type (G_TYPE_MODULE (module));
   _ide_ctags_service_register_type (G_TYPE_MODULE (module));

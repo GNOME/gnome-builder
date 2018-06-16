@@ -128,7 +128,7 @@ toolchain_edition_preferences_get_add_widget (GbpMesonToolchainEditionPreference
   return bin;
 }
 
-void
+static void
 gbp_meson_toolchain_edition_preferences_addin_load_finish (GObject      *object,
                                                            GAsyncResult *result,
                                                            gpointer      user_data)

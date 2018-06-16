@@ -58,7 +58,7 @@ gbp_documentation_card__button_clicked (GbpDocumentationCard *self,
 
 }
 
-void
+static void
 gbp_documentation_card_closed (GtkPopover *popover)
 {
   GbpDocumentationCard *self = (GbpDocumentationCard *)popover;

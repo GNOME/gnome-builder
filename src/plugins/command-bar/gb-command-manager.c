@@ -38,17 +38,6 @@ gb_command_manager_new (void)
   return g_object_new (GB_TYPE_COMMAND_MANAGER, NULL);
 }
 
-GbCommandManager *
-gb_command_manager_get_default (void)
-{
-  static GbCommandManager *instance;
-
-  if (!instance)
-    instance = gb_command_manager_new ();
-
-  return instance;
-}
-
 static gint
 provider_compare_func (gconstpointer a,
                        gconstpointer b)

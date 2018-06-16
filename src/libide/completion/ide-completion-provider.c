@@ -20,10 +20,11 @@
 
 #define G_LOG_DOMAIN "ide-completion-provider"
 
-#include "ide-completion-context.h"
-#include "ide-completion-proposal.h"
-#include "ide-completion-provider.h"
-#include "ide-completion-list-box-row.h"
+#include "completion/ide-completion-context.h"
+#include "completion/ide-completion-private.h"
+#include "completion/ide-completion-proposal.h"
+#include "completion/ide-completion-provider.h"
+#include "completion/ide-completion-list-box-row.h"
 
 G_DEFINE_INTERFACE (IdeCompletionProvider, ide_completion_provider, G_TYPE_OBJECT)
 

@@ -47,5 +47,8 @@ IdeDebuggerBreakpoints *ide_debug_manager_get_breakpoints_for_file (IdeDebugMana
 IDE_AVAILABLE_IN_ALL
 gboolean                ide_debug_manager_supports_language        (IdeDebugManager        *self,
                                                                     const gchar            *language_id);
+IDE_AVAILABLE_IN_ALL
+IdeDebugger            *ide_debug_manager_find_debugger            (IdeDebugManager        *self,
+                                                                    IdeRunner              *runner);
 
 G_END_DECLS

@@ -350,7 +350,7 @@ uri_cleanup (const char *uri_string)
   return g_string_free (copy, FALSE);
 }
 
-gboolean
+static gboolean
 parse_host (const gchar       *raw_host,
             IdeUriParseFlags   flags,
             gchar            **host,
@@ -472,7 +472,7 @@ parse_port (const gchar  *raw_port,
   return TRUE;
 }
 
-gboolean
+static gboolean
 parse_userinfo (const gchar       *raw_userinfo,
                 IdeUriParseFlags   flags,
                 gchar            **user,

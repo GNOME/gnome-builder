@@ -206,13 +206,13 @@ get_devhelp_book (GbpDevhelpDocumentationProvider *self,
   return TRUE;
 }
 
-gchar *
+static gchar *
 gbp_devhelp_documentation_provider_get_name (IdeDocumentationProvider *provider)
 {
   return g_strdup ("Devhelp");
 }
 
-gboolean
+static gboolean
 start_get_info (IdeDocumentationProvider *provider,
                 IdeDocumentationInfo     *info)
 {
@@ -233,7 +233,7 @@ start_get_info (IdeDocumentationProvider *provider,
   return xml_parse (self, tokens[0], tokens[1], info);
 }
 
-void
+static void
 gbp_devhelp_documentation_provider_get_info (IdeDocumentationProvider *provider,
                                              IdeDocumentationInfo     *info)
 {
@@ -253,7 +253,7 @@ gbp_devhelp_documentation_provider_get_info (IdeDocumentationProvider *provider,
     }
 }
 
-IdeDocumentationContext
+static IdeDocumentationContext
 gbp_devhelp_documentation_provider_get_context (IdeDocumentationProvider *provider)
 {
   GbpDevhelpDocumentationProvider *self = (GbpDevhelpDocumentationProvider *)provider;

@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "editor/ide-editor-private.h"
 #include "editor/ide-editor-search-bar.h"
 
 static void

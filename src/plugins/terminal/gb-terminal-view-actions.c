@@ -48,7 +48,7 @@ savetask_free (gpointer data)
     }
 }
 
-gboolean
+static gboolean
 gb_terminal_view_actions_save_finish (GbTerminalView  *view,
                                       GAsyncResult    *result,
                                       GError         **error)

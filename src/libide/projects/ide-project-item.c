@@ -129,7 +129,7 @@ ide_project_item_get_parent (IdeProjectItem *item)
   return priv->parent;
 }
 
-void
+static void
 ide_project_item_set_parent (IdeProjectItem *item,
                              IdeProjectItem *parent)
 {

@@ -28,6 +28,7 @@
 #include "util/ide-gtk.h"
 #include "workbench/ide-perspective.h"
 #include "workbench/ide-workbench.h"
+#include "workbench/ide-workbench-private.h"
 #include "workbench/ide-workbench-header-bar.h"
 
 typedef struct

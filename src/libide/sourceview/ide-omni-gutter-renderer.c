@@ -35,6 +35,7 @@
 #include "debugger/ide-debugger-private.h"
 #include "files/ide-file.h"
 #include "sourceview/ide-omni-gutter-renderer.h"
+#include "sourceview/ide-omni-gutter-renderer-private.h"
 #include "sourceview/ide-source-view.h"
 
 /**

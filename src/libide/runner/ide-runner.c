@@ -1257,36 +1257,6 @@ ide_runner_take_fd (IdeRunner *self,
   return dest_fd;
 }
 
-guint
-ide_runner_get_n_fd_mappings (IdeRunner *self)
-{
-  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_RUNNER (self), 0);
-
-  return priv->fd_mapping ? priv->fd_mapping->len : 0;
-}
-
-gint
-ide_runner_get_nth_fd_maping (IdeRunner *self,
-                              guint      i,
-                              gint      *dest_fd)
-{
-  IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
-  FdMapping *map;
-
-  g_return_val_if_fail (IDE_IS_RUNNER (self), -1);
-  g_return_val_if_fail (priv->fd_mapping != NULL, -1);
-  g_return_val_if_fail (i < priv->fd_mapping->len, -1);
-  g_return_val_if_fail (dest_fd != NULL, -1);
-
-  map = &g_array_index (priv->fd_mapping, FdMapping, i);
-
-  *dest_fd = map->dest_fd;
-
-  return map->source_fd;
-}
-
 /**
  * ide_runner_get_runtime:
  * @self: An #IdeRuntime

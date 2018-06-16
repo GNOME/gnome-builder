@@ -40,6 +40,9 @@ GFile        *ide_project_info_get_file              (IdeProjectInfo  *self);
 IDE_AVAILABLE_IN_ALL
 IdeDoap      *ide_project_info_get_doap              (IdeProjectInfo  *self);
 IDE_AVAILABLE_IN_ALL
+void          ide_project_info_set_doap              (IdeProjectInfo  *self,
+                                                      IdeDoap         *doap);
+IDE_AVAILABLE_IN_ALL
 const gchar  *ide_project_info_get_build_system_name (IdeProjectInfo  *self);
 IDE_AVAILABLE_IN_ALL
 const gchar  *ide_project_info_get_description       (IdeProjectInfo  *self);

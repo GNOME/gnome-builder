@@ -663,7 +663,7 @@ gbp_meson_build_system_get_builddir (IdeBuildSystem   *build_system,
   return NULL;
 }
 
-gboolean
+static gboolean
 gbp_meson_build_system_supports_toolchain (IdeBuildSystem *self,
                                            IdeToolchain   *toolchain)
 {

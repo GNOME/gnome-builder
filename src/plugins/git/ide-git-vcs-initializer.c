@@ -30,12 +30,6 @@ static void vcs_initializer_init (IdeVcsInitializerInterface *iface);
 G_DEFINE_TYPE_EXTENDED (IdeGitVcsInitializer, ide_git_vcs_initializer, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_INITIALIZER, vcs_initializer_init))
 
-IdeGitVcsInitializer *
-ide_git_vcs_initializer_new (void)
-{
-  return g_object_new (IDE_TYPE_GIT_VCS_INITIALIZER, NULL);
-}
-
 static void
 ide_git_vcs_initializer_class_init (IdeGitVcsInitializerClass *klass)
 {

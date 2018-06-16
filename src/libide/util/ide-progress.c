@@ -55,7 +55,7 @@ ide_progress_get_completed (IdeProgress *self)
   return self->completed;
 }
 
-void
+static void
 ide_progress_set_completed (IdeProgress *self,
                             gboolean     completed)
 {

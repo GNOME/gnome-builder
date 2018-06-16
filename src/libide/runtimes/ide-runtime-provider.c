@@ -51,7 +51,7 @@ ide_runtime_provider_real_can_install (IdeRuntimeProvider *self,
   return FALSE;
 }
 
-void
+static void
 ide_runtime_provider_real_install_async (IdeRuntimeProvider  *self,
                                          const gchar         *runtime_id,
                                          GCancellable        *cancellable,
@@ -66,7 +66,7 @@ ide_runtime_provider_real_install_async (IdeRuntimeProvider  *self,
                              G_OBJECT_TYPE_NAME (self));
 }
 
-gboolean
+static gboolean
 ide_runtime_provider_real_install_finish (IdeRuntimeProvider  *self,
                                           GAsyncResult        *result,
                                           GError             **error)
@@ -112,7 +112,7 @@ ide_runtime_provider_real_bootstrap_cb (GObject      *object,
     ide_task_return_pointer (task, g_object_ref (runtime), g_object_unref);
 }
 
-void
+static void
 ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
                                            IdeBuildPipeline    *pipeline,
                                            GCancellable        *cancellable,
@@ -152,7 +152,7 @@ ide_runtime_provider_real_bootstrap_async (IdeRuntimeProvider  *self,
   IDE_EXIT;
 }
 
-IdeRuntime *
+static IdeRuntime *
 ide_runtime_provider_real_bootstrap_finish (IdeRuntimeProvider  *self,
                                             GAsyncResult        *result,
                                             GError             **error)

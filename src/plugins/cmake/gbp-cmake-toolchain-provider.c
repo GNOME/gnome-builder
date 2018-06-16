@@ -196,7 +196,7 @@ gbp_cmake_toolchain_provider_load_finish (IdeToolchainProvider  *provider,
   return TRUE;
 }
 
-void
+static void
 gbp_cmake_toolchain_provider_unload (IdeToolchainProvider  *provider,
                                      IdeToolchainManager   *manager)
 {

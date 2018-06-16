@@ -35,6 +35,8 @@ struct _IdeProjectItemClass
 };
 
 IDE_AVAILABLE_IN_ALL
+IdeProjectItem *ide_project_item_new          (IdeProjectItem *parent);
+IDE_AVAILABLE_IN_ALL
 IdeProjectItem *ide_project_item_get_parent   (IdeProjectItem *item);
 IDE_AVAILABLE_IN_ALL
 void            ide_project_item_append       (IdeProjectItem *item,

@@ -132,7 +132,7 @@ gbp_meson_toolchain_provider_load_worker (IdeTask      *task,
                            (GDestroyNotify)g_ptr_array_unref);
 }
 
-void
+static void
 meson_toolchain_provider_search_finish (FileSearching *file_searching,
                                         GError        *error)
 {
@@ -153,7 +153,7 @@ meson_toolchain_provider_search_finish (FileSearching *file_searching,
   ide_task_run_in_thread (task, gbp_meson_toolchain_provider_load_worker);
 }
 
-void
+static void
 add_all_files (GFile     *array,
                GPtrArray *dest_array)
 {
@@ -162,7 +162,7 @@ add_all_files (GFile     *array,
   g_ptr_array_add (dest_array, g_object_ref (array));
 }
 
-void
+static void
 meson_toolchain_provider_search_iterate (GObject      *object,
                                          GAsyncResult *result,
                                          gpointer      user_data)
@@ -200,7 +200,7 @@ meson_toolchain_provider_search_iterate (GObject      *object,
     meson_toolchain_provider_search_finish (file_searching, NULL);
 }
 
-void
+static void
 meson_toolchain_provider_search_init (GbpMesonToolchainProvider *self,
                                       GCancellable              *cancellable,
                                       GAsyncReadyCallback        callback,
@@ -300,7 +300,7 @@ gbp_meson_toolchain_provider_load_finish (IdeToolchainProvider  *provider,
   return TRUE;
 }
 
-void
+static void
 gbp_meson_toolchain_provider_unload (IdeToolchainProvider  *provider,
                                      IdeToolchainManager   *manager)
 {

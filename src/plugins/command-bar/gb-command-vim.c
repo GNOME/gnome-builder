@@ -43,7 +43,7 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
-GtkWidget *
+static GtkWidget *
 gb_command_vim_get_active_widget (GbCommandVim *vim)
 {
   g_return_val_if_fail (GB_IS_COMMAND_VIM (vim), NULL);
@@ -62,7 +62,7 @@ gb_command_vim_set_active_widget (GbCommandVim *vim,
     g_object_notify_by_pspec (G_OBJECT (vim), properties [PROP_ACTIVE_WIDGET]);
 }
 
-const gchar *
+static const gchar *
 gb_command_vim_get_command_text (GbCommandVim *vim)
 {
   g_return_val_if_fail (GB_IS_COMMAND_VIM (vim), NULL);
@@ -70,7 +70,7 @@ gb_command_vim_get_command_text (GbCommandVim *vim)
   return vim->command_text;
 }
 
-void
+static void
 gb_command_vim_set_command_text (GbCommandVim *vim,
                                  const gchar  *command_text)
 {

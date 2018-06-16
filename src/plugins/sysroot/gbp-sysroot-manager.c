@@ -419,7 +419,7 @@ gbp_sysroot_manager_list (GbpSysrootManager *self)
   return g_key_file_get_groups (self->key_file, NULL);
 }
 
-void
+static void
 gbp_sysroot_manager_finalize (GObject *object)
 {
   GbpSysrootManager *self = GBP_SYSROOT_MANAGER(object);
