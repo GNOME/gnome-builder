@@ -548,7 +548,7 @@ ide_clang_client_call_async (IdeClangClient      *self,
   call = g_slice_new0 (Call);
   call->self = g_object_ref (self);
   call->method = g_strdup (method);
-  call->params = g_variant_ref_sink (params);
+  call->params = params ? g_variant_ref_sink (params) : NULL;
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_clang_client_call_async);

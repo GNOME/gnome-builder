@@ -424,7 +424,7 @@ ide_clang_proposals_flush (IdeClangProposals *self,
   if (results != self->results)
     {
       g_clear_pointer (&self->results, g_variant_unref);
-      self->results = g_variant_ref (results);
+      self->results = results ? g_variant_ref (results) : NULL;
     }
 
   ide_clang_proposals_do_refilter (self, FALSE);

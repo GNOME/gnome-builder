@@ -138,6 +138,7 @@ ide_clang_code_index_entries_next_entries_async (IdeCodeIndexEntries *entries,
   g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_CLANG_CODE_INDEX_ENTRIES (self));
+  g_assert (self->entries != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
