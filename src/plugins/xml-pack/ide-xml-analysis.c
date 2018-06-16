@@ -93,8 +93,7 @@ ide_xml_analysis_set_root_node (IdeXmlAnalysis   *self,
   g_return_if_fail (self != NULL);
   g_return_if_fail (root_node != NULL);
 
-  g_clear_object (&self->root_node);
-  self->root_node = g_object_ref (root_node);
+  g_set_object (&self->root_node, root_node);
 }
 
 void
