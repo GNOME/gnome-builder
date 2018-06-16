@@ -228,6 +228,8 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
   ide_environment_setenv (env, "TERM", "xterm-256color");
   ide_environment_setenv (env, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
 
+  gb_terminal_view_feed (self->run_terminal, _("Application starting...\r\n"));
+
 failure:
 
   g_clear_object (&pty);
