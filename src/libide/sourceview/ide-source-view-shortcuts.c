@@ -23,6 +23,7 @@
 #include <dazzle.h>
 
 #include "sourceview/ide-source-view.h"
+#include "sourceview/ide-source-view-private.h"
 
 /* static const DzlShortcutEntry source_view_shortcuts[] = { */
 /*   { NULL } */

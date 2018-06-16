@@ -23,6 +23,7 @@
 #include "langserv/ide-langserv-symbol-node.h"
 #include "langserv/ide-langserv-symbol-node-private.h"
 #include "langserv/ide-langserv-symbol-tree.h"
+#include "langserv/ide-langserv-symbol-tree-private.h"
 #include "util/ide-glib.h"
 
 typedef struct

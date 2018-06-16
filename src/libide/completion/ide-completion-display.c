@@ -22,6 +22,7 @@
 
 #include "completion/ide-completion-context.h"
 #include "completion/ide-completion-display.h"
+#include "completion/ide-completion-private.h"
 #include "sourceview/ide-source-view.h"
 
 G_DEFINE_INTERFACE (IdeCompletionDisplay, ide_completion_display, GTK_TYPE_WIDGET)

@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "layout/ide-layout-grid.h"
+#include "layout/ide-layout-private.h"
 
 static void
 ide_layout_grid_actions_focus_neighbor (GSimpleAction *action,
