@@ -18,18 +18,9 @@
 
 #pragma once
 
-G_BEGIN_DECLS
+#include "ide-types.h"
 
-typedef struct _IdeCompletion           IdeCompletion;
-typedef struct _IdeCompletionContext    IdeCompletionContext;
-typedef struct _IdeCompletionDisplay    IdeCompletionDisplay;
-typedef struct _IdeCompletionListBox    IdeCompletionListBox;
-typedef struct _IdeCompletionListBoxRow IdeCompletionListBoxRow;
-typedef struct _IdeCompletionOverlay    IdeCompletionOverlay;
-typedef struct _IdeCompletionProposal   IdeCompletionProposal;
-typedef struct _IdeCompletionProvider   IdeCompletionProvider;
-typedef struct _IdeCompletionView       IdeCompletionView;
-typedef struct _IdeCompletionWindow     IdeCompletionWindow;
+G_BEGIN_DECLS
 
 typedef enum
 {

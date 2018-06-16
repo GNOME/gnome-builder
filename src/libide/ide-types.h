@@ -32,6 +32,17 @@ typedef struct _IdeBuildStage                  IdeBuildStage;
 typedef struct _IdeBuildSystem                 IdeBuildSystem;
 typedef struct _IdeBuildTarget                 IdeBuildTarget;
 
+typedef struct _IdeCompletion                  IdeCompletion;
+typedef struct _IdeCompletionContext           IdeCompletionContext;
+typedef struct _IdeCompletionDisplay           IdeCompletionDisplay;
+typedef struct _IdeCompletionListBox           IdeCompletionListBox;
+typedef struct _IdeCompletionListBoxRow        IdeCompletionListBoxRow;
+typedef struct _IdeCompletionOverlay           IdeCompletionOverlay;
+typedef struct _IdeCompletionProposal          IdeCompletionProposal;
+typedef struct _IdeCompletionProvider          IdeCompletionProvider;
+typedef struct _IdeCompletionView              IdeCompletionView;
+typedef struct _IdeCompletionWindow            IdeCompletionWindow;
+
 typedef struct _IdeConfiguration               IdeConfiguration;
 typedef struct _IdeConfigurationManager        IdeConfigurationManager;
 
@@ -132,6 +143,10 @@ typedef struct _IdeUnsavedFile                 IdeUnsavedFile;
 typedef struct _IdeUnsavedFiles                IdeUnsavedFiles;
 
 typedef struct _IdeVcs                         IdeVcs;
+typedef struct _IdeVcsConfig                   IdeVcsConfig;
 typedef struct _IdeVcsMonitor                  IdeVcsMonitor;
+typedef struct _IdeVcsInitializer              IdeVcsInitializer;
+typedef struct _IdeVcsFileInfo                 IdeVcsFileInfo;
+typedef struct _IdeVcsUri                      IdeVcsUri;
 
 G_END_DECLS
