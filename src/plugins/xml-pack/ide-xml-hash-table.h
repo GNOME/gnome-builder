@@ -20,7 +20,7 @@
 
 #include <libxml/xmlstring.h>
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -44,6 +44,7 @@ typedef void (*IdeXmlHashTableArrayScanFunc) (const gchar *name,
                                               GPtrArray   *array,
                                               gpointer     data);
 
+GType                ide_xml_hash_table_get_type    (void);
 IdeXmlHashTable     *ide_xml_hash_table_new         (GDestroyNotify                free_func);
 gboolean             ide_xml_hash_table_add         (IdeXmlHashTable              *self,
                                                      const gchar                  *name,
