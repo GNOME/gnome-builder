@@ -38,21 +38,20 @@ typedef gboolean (*GbVimCommandFunc) (GtkWidget      *active_widget,
 
 typedef struct
 {
-  gchar         *name;
+  const gchar  *name;
   GbVimSetFunc  func;
 } GbVimSet;
 
 typedef struct
 {
-  gchar *name;
-  gchar *alias;
+  const gchar *name;
+  const gchar *alias;
 } GbVimSetAlias;
 
 typedef struct
 {
-  gchar             *name;
+  const gchar      *name;
   GbVimCommandFunc  func;
-  gchar            *options_sup;
 } GbVimCommand;
 
 typedef struct
@@ -1234,29 +1233,29 @@ invalid_request:
 }
 
 static const GbVimCommand vim_commands[] = {
-  { "bdelete",     gb_vim_command_quit, NULL },
-  { "bnext",       gb_vim_command_bnext , NULL},
-  { "bprevious",   gb_vim_command_bprevious, NULL },
-  { "buffers",     gb_vim_command_buffers, NULL },
-  { "cnext",       gb_vim_command_cnext, NULL },
-  { "colorscheme", gb_vim_command_colorscheme, NULL },
-  { "cprevious",   gb_vim_command_cprevious, NULL },
-  { "edit",        gb_vim_command_edit, NULL },
-  { "help",        gb_vim_command_help, NULL },
-  { "ls",          gb_vim_command_buffers, NULL },
-  { "make",        gb_vim_command_make, NULL },
-  { "nohl",        gb_vim_command_nohl, NULL },
-  { "open",        gb_vim_command_edit, NULL },
-  { "quit",        gb_vim_command_quit, NULL },
-  { "set",         gb_vim_command_set, NULL },
-  { "sort",        gb_vim_command_sort, NULL },
-  { "split",       gb_vim_command_split, NULL },
-  { "syntax",      gb_vim_command_syntax, NULL },
-  { "tabe",        gb_vim_command_tabe, NULL },
-  { "vsplit",      gb_vim_command_vsplit, NULL },
-  { "w",           gb_vim_command_write, NULL },
-  { "wq",          gb_vim_command_wq, NULL },
-  { "write",       gb_vim_command_write, NULL },
+  { "bdelete",     gb_vim_command_quit },
+  { "bnext",       gb_vim_command_bnext },
+  { "bprevious",   gb_vim_command_bprevious },
+  { "buffers",     gb_vim_command_buffers },
+  { "cnext",       gb_vim_command_cnext },
+  { "colorscheme", gb_vim_command_colorscheme },
+  { "cprevious",   gb_vim_command_cprevious },
+  { "edit",        gb_vim_command_edit },
+  { "help",        gb_vim_command_help },
+  { "ls",          gb_vim_command_buffers },
+  { "make",        gb_vim_command_make },
+  { "nohl",        gb_vim_command_nohl },
+  { "open",        gb_vim_command_edit },
+  { "quit",        gb_vim_command_quit },
+  { "set",         gb_vim_command_set },
+  { "sort",        gb_vim_command_sort },
+  { "split",       gb_vim_command_split },
+  { "syntax",      gb_vim_command_syntax },
+  { "tabe",        gb_vim_command_tabe },
+  { "vsplit",      gb_vim_command_vsplit },
+  { "w",           gb_vim_command_write },
+  { "wq",          gb_vim_command_wq },
+  { "write",       gb_vim_command_write },
   { NULL }
 };
 
@@ -1271,13 +1270,17 @@ looks_like_substitute (const gchar *line)
 }
 
 static const GbVimCommand *
-lookup_command (const gchar *name)
+lookup_command (const gchar  *name,
+                gchar       **options_sup)
 {
-  static GbVimCommand line_command = { "__line__", gb_vim_jump_to_line, NULL };
+  static GbVimCommand line_command = { "__line__", gb_vim_jump_to_line };
   gint line;
   gsize i;
 
   g_assert (name);
+  g_assert (options_sup);
+
+  *options_sup = NULL;
 
   for (i = 0; vim_commands [i].name; i++)
     {
@@ -1286,10 +1289,10 @@ lookup_command (const gchar *name)
     }
 
   if (g_ascii_isdigit (*name) && int32_parse (&line, name, 0, G_MAXINT32, "line", NULL))
-  {
-    line_command.options_sup = g_strdup (name);
-    return &line_command;
-  }
+    {
+      *options_sup = g_strdup (name);
+      return &line_command;
+    }
 
   return NULL;
 }
@@ -1300,6 +1303,7 @@ gb_vim_execute (GtkWidget      *active_widget,
                 GError        **error)
 {
   g_autofree gchar *name_slice = NULL;
+  g_autofree gchar *options_sup = NULL;
   const GbVimCommand *command;
   const gchar *command_name = line;
   const gchar *options;
@@ -1325,7 +1329,7 @@ gb_vim_execute (GtkWidget      *active_widget,
       options = g_utf8_next_char (options);
     }
 
-  command = lookup_command (command_name);
+  command = lookup_command (command_name, &options_sup);
 
   if (command == NULL)
     {
@@ -1341,13 +1345,12 @@ gb_vim_execute (GtkWidget      *active_widget,
       return FALSE;
     }
 
-  if (command->options_sup)
-    all_options = g_strconcat (options, " ", command->options_sup, NULL);
+  if (options_sup)
+    all_options = g_strconcat (options, " ", options_sup, NULL);
   else
     all_options = g_strdup (options);
 
   result = command->func (active_widget, command_name, all_options, error);
-  g_free (command->options_sup);
 
   return result;
 }
