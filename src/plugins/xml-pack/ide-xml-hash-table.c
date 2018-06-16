@@ -48,21 +48,20 @@ ide_xml_hash_table_array_scan (IdeXmlHashTable              *self,
 {
   GHashTableIter iter;
   gpointer key, value;
-  GPtrArray *array;
-  const gchar *name;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (func != NULL);
   g_return_if_fail (data != NULL);
 
   g_hash_table_iter_init (&iter, self->table);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-  {
-    array = (GPtrArray *)value;
-    name = (const gchar *)key;
 
-    func (name, array, data);
-  }
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GPtrArray *array = (GPtrArray *)value;
+      const gchar *name = (const gchar *)key;
+
+      func (name, array, data);
+    }
 }
 
 void
@@ -72,26 +71,25 @@ ide_xml_hash_table_full_scan (IdeXmlHashTable         *self,
 {
   GHashTableIter iter;
   gpointer key, value;
-  GPtrArray *array;
-  const gchar *name;
-  gpointer content;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (func != NULL);
   g_return_if_fail (data != NULL);
 
   g_hash_table_iter_init (&iter, self->table);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-  {
-    array = (GPtrArray *)value;
-    name = (const gchar *)key;
 
-    for (gint i = 0; i < array->len; ++i)
-      {
-        content = g_ptr_array_index (array, i);
-        func (name, content, data);
-      }
-  }
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GPtrArray *array = (GPtrArray *)value;
+      const gchar *name = (const gchar *)key;
+
+      for (gint i = 0; i < array->len; ++i)
+        {
+          gpointer content = g_ptr_array_index (array, i);
+
+          func (name, content, data);
+        }
+    }
 }
 
 gboolean
@@ -111,11 +109,16 @@ ide_xml_hash_table_add (IdeXmlHashTable *self,
       g_hash_table_insert (self->table, g_strdup (name), array);
     }
   else
-    for (gint i = 0; i < array->len; ++i)
-      if (data == g_ptr_array_index (array, i))
-        return FALSE;
+    {
+      for (gint i = 0; i < array->len; ++i)
+        {
+          if (data == g_ptr_array_index (array, i))
+            return FALSE;
+        }
+    }
 
   g_ptr_array_add (array, data);
+
   return TRUE;
 }
 

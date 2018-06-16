@@ -103,10 +103,12 @@ ide_xml_analysis_set_schemas (IdeXmlAnalysis *self,
 {
   g_return_if_fail (self != NULL);
 
-  g_clear_pointer (&self->schemas, g_ptr_array_unref);
-
-  if (schemas != NULL)
-    self->schemas = g_ptr_array_ref (schemas);
+  if (self->schemas != schemas)
+    {
+      g_clear_pointer (&self->schemas, g_ptr_array_unref);
+      if (schemas != NULL)
+        self->schemas = g_ptr_array_ref (schemas);
+    }
 }
 
 void
