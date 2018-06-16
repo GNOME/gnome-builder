@@ -293,8 +293,8 @@ static void
 gb_project_tree_init (GbProjectTree *self)
 {
   static const GtkTargetEntry drag_targets[] = {
-    { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 },
-    { "text/uri-list", 0, 0 },
+    { (gchar *)"GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 },
+    { (gchar *)"text/uri-list", 0, 0 },
   };
   DzlTreeBuilder *builder;
   GMenu *menu;

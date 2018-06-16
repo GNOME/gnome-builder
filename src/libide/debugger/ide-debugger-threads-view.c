@@ -762,27 +762,27 @@ ide_debugger_threads_view_init (IdeDebuggerThreadsView *self)
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->group_column),
                                       GTK_CELL_RENDERER (self->group_cell),
-                                      string_property_cell_data_func, "id", NULL);
+                                      string_property_cell_data_func, (gchar *)"id", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->thread_column),
                                       GTK_CELL_RENDERER (self->thread_cell),
-                                      string_property_cell_data_func, "id", NULL);
+                                      string_property_cell_data_func, (gchar *)"id", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->depth_column),
                                       GTK_CELL_RENDERER (self->depth_cell),
-                                      int_property_cell_data_func, "depth", NULL);
+                                      int_property_cell_data_func, (gchar *)"depth", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->function_column),
                                       GTK_CELL_RENDERER (self->function_cell),
-                                      string_property_cell_data_func, "function", NULL);
+                                      string_property_cell_data_func, (gchar *)"function", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->args_column),
                                       GTK_CELL_RENDERER (self->args_cell),
-                                      argv_property_cell_data_func, "args", NULL);
+                                      argv_property_cell_data_func, (gchar *)"args", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->location_column),
                                       GTK_CELL_RENDERER (self->location_cell),
-                                      location_property_cell_data_func, NULL, NULL);
+                                      location_property_cell_data_func, (gchar *)NULL, NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->binary_column),
                                       GTK_CELL_RENDERER (self->binary_cell),

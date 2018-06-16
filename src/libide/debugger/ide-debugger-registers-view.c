@@ -279,15 +279,15 @@ ide_debugger_registers_view_init (IdeDebuggerRegistersView *self)
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->id_column),
                                       GTK_CELL_RENDERER (self->id_cell),
-                                      string_property_cell_data_func, "id", NULL);
+                                      string_property_cell_data_func, (gchar *)"id", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->name_column),
                                       GTK_CELL_RENDERER (self->name_cell),
-                                      string_property_cell_data_func, "name", NULL);
+                                      string_property_cell_data_func, (gchar *)"name", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->value_column),
                                       GTK_CELL_RENDERER (self->value_cell),
-                                      string_property_cell_data_func, "value", NULL);
+                                      string_property_cell_data_func, (gchar *)"value", NULL);
 }
 
 GtkWidget *

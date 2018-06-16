@@ -2385,7 +2385,7 @@ static void
 gbp_gdb_debugger_prepare (IdeDebugger *debugger,
                           IdeRunner   *runner)
 {
-  static gchar *prepend_argv[] = { "gdb", "--interpreter=mi2", "--args" };
+  static const gchar *prepend_argv[] = { "gdb", "--interpreter=mi2", "--args" };
   GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
   int tty_fd;
 

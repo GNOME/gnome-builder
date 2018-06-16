@@ -322,7 +322,7 @@ ide_debugger_libraries_view_init (IdeDebuggerLibrariesView *self)
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->target_column),
                                       GTK_CELL_RENDERER (self->target_cell),
-                                      string_property_cell_data_func, "target-name", NULL);
+                                      string_property_cell_data_func, (gchar *)"target-name", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->range_column),
                                       GTK_CELL_RENDERER (self->range_cell),

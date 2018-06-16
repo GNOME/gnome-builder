@@ -61,14 +61,14 @@ ide_ctags_builder_class_init (IdeCtagsBuilderClass *klass)
    *       if files are ignored via the VCS.
    */
 
-  g_hash_table_insert (ignored, ".git", NULL);
-  g_hash_table_insert (ignored, ".bzr", NULL);
-  g_hash_table_insert (ignored, ".svn", NULL);
-  g_hash_table_insert (ignored, ".flatpak-builder", NULL);
-  g_hash_table_insert (ignored, ".libs", NULL);
-  g_hash_table_insert (ignored, ".deps", NULL);
-  g_hash_table_insert (ignored, "autom4te.cache", NULL);
-  g_hash_table_insert (ignored, "build-aux", NULL);
+  g_hash_table_insert (ignored, (gchar *)".git", NULL);
+  g_hash_table_insert (ignored, (gchar *)".bzr", NULL);
+  g_hash_table_insert (ignored, (gchar *)".svn", NULL);
+  g_hash_table_insert (ignored, (gchar *)".flatpak-builder", NULL);
+  g_hash_table_insert (ignored, (gchar *)".libs", NULL);
+  g_hash_table_insert (ignored, (gchar *)".deps", NULL);
+  g_hash_table_insert (ignored, (gchar *)"autom4te.cache", NULL);
+  g_hash_table_insert (ignored, (gchar *)"build-aux", NULL);
 }
 
 static void

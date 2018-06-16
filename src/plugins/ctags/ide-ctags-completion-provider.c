@@ -178,29 +178,18 @@ static void
 ide_ctags_completion_provider_class_init (IdeCtagsCompletionProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  static const gchar *reserved_keywords[] = {
+    "break", "continue", "default", "do", "elif", "else", "enum", "for",
+    "goto", "if", "pass", "return", "struct", "sizeof", "switch", "typedef",
+    "union", "while",
+  };
 
   object_class->dispose = ide_ctags_completion_provider_dispose;
   object_class->finalize = ide_ctags_completion_provider_finalize;
 
   reserved = g_hash_table_new (g_str_hash, g_str_equal);
-  g_hash_table_insert (reserved, "break", NULL);
-  g_hash_table_insert (reserved, "continue", NULL);
-  g_hash_table_insert (reserved, "default", NULL);
-  g_hash_table_insert (reserved, "do", NULL);
-  g_hash_table_insert (reserved, "elif", NULL);
-  g_hash_table_insert (reserved, "else", NULL);
-  g_hash_table_insert (reserved, "enum", NULL);
-  g_hash_table_insert (reserved, "for", NULL);
-  g_hash_table_insert (reserved, "goto", NULL);
-  g_hash_table_insert (reserved, "if", NULL);
-  g_hash_table_insert (reserved, "pass", NULL);
-  g_hash_table_insert (reserved, "return", NULL);
-  g_hash_table_insert (reserved, "struct", NULL);
-  g_hash_table_insert (reserved, "sizeof", NULL);
-  g_hash_table_insert (reserved, "switch", NULL);
-  g_hash_table_insert (reserved, "typedef", NULL);
-  g_hash_table_insert (reserved, "union", NULL);
-  g_hash_table_insert (reserved, "while", NULL);
+  for (guint i = 0; i < G_N_ELEMENTS (reserved_keywords); i++)
+    g_hash_table_insert (reserved, (gchar *)reserved_keywords[i], NULL);
 }
 
 static void

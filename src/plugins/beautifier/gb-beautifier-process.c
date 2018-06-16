@@ -203,9 +203,9 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
     return NULL;
 
   args = g_ptr_array_new ();
-  g_ptr_array_add (args, "clang-format");
-  g_ptr_array_add (args, "-style=file");
-  g_ptr_array_add (args, tmp_src_path);
+  g_ptr_array_add (args, (gchar *)"clang-format");
+  g_ptr_array_add (args, (gchar *)"-style=file");
+  g_ptr_array_add (args, (gchar *)tmp_src_path);
   g_ptr_array_add (args, NULL);
 
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);

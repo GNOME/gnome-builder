@@ -141,7 +141,7 @@ ide_worker_process_respawn (IdeWorkerProcess *self)
   launcher = g_subprocess_launcher_new (G_SUBPROCESS_FLAGS_NONE);
   args = g_ptr_array_new ();
   g_ptr_array_add (args, self->argv0); /* gnome-builder */
-  g_ptr_array_add (args, "--type=worker");
+  g_ptr_array_add (args,(gchar *) "--type=worker");
   g_ptr_array_add (args, plugin); /* --plugin= */
   g_ptr_array_add (args, dbus_address); /* --dbus-address= */
   g_ptr_array_add (args, verbosity > 0 ? verbosearg->str : NULL);

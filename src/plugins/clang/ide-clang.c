@@ -2030,12 +2030,12 @@ ide_clang_get_highlight_index_worker (IdeTask      *task,
   highlight = ide_highlight_index_new ();
 
   for (guint i = 0; i < G_N_ELEMENTS (common_defines); i++)
-    ide_highlight_index_insert (highlight, common_defines[i], "c:common-defines");
-  ide_highlight_index_insert (highlight, "TRUE", "c:boolean");
-  ide_highlight_index_insert (highlight, "FALSE", "c:boolean");
-  ide_highlight_index_insert (highlight, "g_autoptr", "c:storage-class");
-  ide_highlight_index_insert (highlight, "g_auto", "c:storage-class");
-  ide_highlight_index_insert (highlight, "g_autofree", "c:storage-class");
+    ide_highlight_index_insert (highlight, common_defines[i], (gpointer)"c:common-defines");
+  ide_highlight_index_insert (highlight, "TRUE", (gpointer)"c:boolean");
+  ide_highlight_index_insert (highlight, "FALSE", (gpointer)"c:boolean");
+  ide_highlight_index_insert (highlight, "g_autoptr", (gpointer)"c:storage-class");
+  ide_highlight_index_insert (highlight, "g_auto", (gpointer)"c:storage-class");
+  ide_highlight_index_insert (highlight, "g_autofree", (gpointer)"c:storage-class");
 
   cursor = clang_getTranslationUnitCursor (unit);
   clang_visitChildren (cursor, build_index_visitor, highlight);

@@ -20,8 +20,7 @@
 
 G_DEFINE_BOXED_TYPE (IdeXmlRngDefine, ide_xml_rng_define, ide_xml_rng_define_ref, ide_xml_rng_define_unref)
 
-static gchar *type_names [] =
-{
+static const gchar *type_names [] = {
   "noop",
   "define",
   "empty",

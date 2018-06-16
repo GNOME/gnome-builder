@@ -896,7 +896,7 @@ ide_layout_grid_init (IdeLayoutGrid *self)
 {
   IdeLayoutGridPrivate *priv = ide_layout_grid_get_instance_private (self);
   static const GtkTargetEntry target_entries[] = {
-    { "text/uri-list", 0, 0 },
+    { (gchar *)"text/uri-list", 0, 0 },
   };
 
   gtk_drag_dest_set (GTK_WIDGET (self),

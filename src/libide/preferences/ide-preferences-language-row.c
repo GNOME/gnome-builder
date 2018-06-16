@@ -49,8 +49,8 @@ static guint signals [LAST_SIGNAL];
 static void
 ide_preferences_language_row_activate (IdePreferencesLanguageRow *self)
 {
+  g_autoptr(GHashTable) map = NULL;
   GtkWidget *preferences;
-  GHashTable *map;
 
   g_assert (IDE_IS_PREFERENCES_LANGUAGE_ROW (self));
 
@@ -62,9 +62,8 @@ ide_preferences_language_row_activate (IdePreferencesLanguageRow *self)
     return;
 
   map = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
-  g_hash_table_insert (map, "{id}", g_strdup (self->id));
+  g_hash_table_insert (map, (gchar *)"{id}", g_strdup (self->id));
   dzl_preferences_set_page (DZL_PREFERENCES (preferences), "languages.id", map);
-  g_hash_table_unref (map);
 }
 
 static void

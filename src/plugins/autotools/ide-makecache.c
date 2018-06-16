@@ -660,18 +660,18 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
       argv = g_ptr_array_new ();
       g_ptr_array_add (argv, (gchar *)lookup->self->make_name);
-      g_ptr_array_add (argv, "-C");
+      g_ptr_array_add (argv, (gchar *)"-C");
       g_ptr_array_add (argv, (gchar *)(subdir ?: "."));
-      g_ptr_array_add (argv, "-s");
-      g_ptr_array_add (argv, "-i");
-      g_ptr_array_add (argv, "-n");
-      g_ptr_array_add (argv, "-W");
+      g_ptr_array_add (argv, (gchar *)"-s");
+      g_ptr_array_add (argv, (gchar *)"-i");
+      g_ptr_array_add (argv, (gchar *)"-n");
+      g_ptr_array_add (argv, (gchar *)"-W");
       g_ptr_array_add (argv, (gchar *)relpath);
       g_ptr_array_add (argv, (gchar *)targetstr);
-      g_ptr_array_add (argv, "V=1");
-      g_ptr_array_add (argv, "CC="FAKE_CC);
-      g_ptr_array_add (argv, "CXX="FAKE_CXX);
-      g_ptr_array_add (argv, "VALAC="FAKE_VALAC);
+      g_ptr_array_add (argv, (gchar *)"V=1");
+      g_ptr_array_add (argv, (gchar *)"CC="FAKE_CC);
+      g_ptr_array_add (argv, (gchar *)"CXX="FAKE_CXX);
+      g_ptr_array_add (argv, (gchar *)"VALAC="FAKE_VALAC);
       g_ptr_array_add (argv, NULL);
 
 #ifdef IDE_ENABLE_TRACE

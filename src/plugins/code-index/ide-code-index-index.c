@@ -425,7 +425,7 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
     }
   else if (str[1] != NULL)
     {
-      gchar *prefix = "\0";
+      const gchar *prefix = "\0";
 
       if (g_str_has_prefix ("function", str[0]))
         prefix = "f";

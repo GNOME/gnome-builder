@@ -437,7 +437,7 @@ ide_snippet_parser_do_snippet_description (IdeSnippetParser *parser,
 
 static void
 ide_snippet_parser_feed_line (IdeSnippetParser *parser,
-                              gchar            *basename,
+                              const gchar      *basename,
                               const gchar      *line)
 {
   const gchar *orig = line;

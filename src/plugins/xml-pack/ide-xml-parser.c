@@ -49,16 +49,18 @@ color_tag_free (gpointer *data)
   g_free (tag->bg);
 }
 
+#define STATIC_COLOR_TAG(a,b,c) \
+  { (gchar*)a, (gchar *)b, (gchar *)c }
+
 /* Keep it in sync with ColorTagId enum */
-static ColorTag default_color_tags [] =
-{
-  { "label",       "#000000", "#D5E7FC" }, // COLOR_TAG_LABEL
-  { "id",          "#000000", "#D9E7BD" }, // COLOR_TAG_ID
-  { "style-class", "#000000", "#DFCD9B" }, // COLOR_TAG_STYLE_CLASS
-  { "type",        "#000000", "#F4DAC3" }, // COLOR_TAG_TYPE
-  { "parent",      "#000000", "#DEBECF" }, // COLOR_TAG_PARENT
-  { "class",       "#000000", "#FFEF98" }, // COLOR_TAG_CLASS
-  { "attribute",   "#000000", "#F0E68C" }, // COLOR_TAG_ATTRIBUTE
+static ColorTag default_color_tags [] = {
+  STATIC_COLOR_TAG ("label",       "#000000", "#D5E7FC" ), // COLOR_TAG_LABEL
+  STATIC_COLOR_TAG ("id",          "#000000", "#D9E7BD" ), // COLOR_TAG_ID
+  STATIC_COLOR_TAG ("style-class", "#000000", "#DFCD9B" ), // COLOR_TAG_STYLE_CLASS
+  STATIC_COLOR_TAG ("type",        "#000000", "#F4DAC3" ), // COLOR_TAG_TYPE
+  STATIC_COLOR_TAG ("parent",      "#000000", "#DEBECF" ), // COLOR_TAG_PARENT
+  STATIC_COLOR_TAG ("class",       "#000000", "#FFEF98" ), // COLOR_TAG_CLASS
+  STATIC_COLOR_TAG ("attribute",   "#000000", "#F0E68C" ), // COLOR_TAG_ATTRIBUTE
   { NULL },
 };
 

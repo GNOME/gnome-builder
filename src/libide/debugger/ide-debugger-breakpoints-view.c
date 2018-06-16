@@ -504,19 +504,19 @@ ide_debugger_breakpoints_view_init (IdeDebuggerBreakpointsView *self)
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->id_column),
                                       GTK_CELL_RENDERER (self->id_cell),
-                                      string_property_cell_data_func, "id", NULL);
+                                      string_property_cell_data_func, (gchar *)"id", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->file_column),
                                       GTK_CELL_RENDERER (self->file_cell),
-                                      string_property_cell_data_func, "file", NULL);
+                                      string_property_cell_data_func, (gchar *)"file", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->line_column),
                                       GTK_CELL_RENDERER (self->line_cell),
-                                      int_property_cell_data_func, "line", NULL);
+                                      int_property_cell_data_func, (gchar *)"line", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->function_column),
                                       GTK_CELL_RENDERER (self->function_cell),
-                                      string_property_cell_data_func, "function", NULL);
+                                      string_property_cell_data_func, (gchar *)"function", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->address_column),
                                       GTK_CELL_RENDERER (self->address_cell),
@@ -524,7 +524,7 @@ ide_debugger_breakpoints_view_init (IdeDebuggerBreakpointsView *self)
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->hits_column),
                                       GTK_CELL_RENDERER (self->hits_cell),
-                                      int_property_cell_data_func, "count", NULL);
+                                      int_property_cell_data_func, (gchar *)"count", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->type_column),
                                       GTK_CELL_RENDERER (self->type_cell),
@@ -534,11 +534,11 @@ ide_debugger_breakpoints_view_init (IdeDebuggerBreakpointsView *self)
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->spec_column),
                                       GTK_CELL_RENDERER (self->spec_cell),
-                                      string_property_cell_data_func, "spec", NULL);
+                                      string_property_cell_data_func, (gchar *)"spec", NULL);
 
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (self->enabled_column),
                                       GTK_CELL_RENDERER (self->enabled_cell),
-                                      bool_property_cell_data_func, "enabled", NULL);
+                                      bool_property_cell_data_func, (gchar *)"enabled", NULL);
 
   g_signal_connect_swapped (self->enabled_cell,
                             "toggled",

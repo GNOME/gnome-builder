@@ -318,12 +318,12 @@ patch (GFile       *dir,
   args = g_ptr_array_new ();
   if (use_git)
     {
-      g_ptr_array_add (args, "git");
-      g_ptr_array_add (args, "apply");
+      g_ptr_array_add (args, (gchar *) "git");
+      g_ptr_array_add (args, (gchar *) "apply");
     }
   else
     {
-      g_ptr_array_add (args, "patch");
+      g_ptr_array_add (args, (gchar *) "patch");
     }
 
   while ((arg = va_arg (ap, const gchar *)))
@@ -337,7 +337,7 @@ patch (GFile       *dir,
     }
   else
     {
-      g_ptr_array_add (args, "-i");
+      g_ptr_array_add (args, (gchar *) "-i");
       g_ptr_array_add (args, (char *) patch_path);
     }
 
