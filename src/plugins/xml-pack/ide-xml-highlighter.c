@@ -39,12 +39,10 @@ struct _IdeXmlHighlighter
 
 static void highlighter_iface_init (IdeHighlighterInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeXmlHighlighter,
-                                ide_xml_highlighter,
-                                IDE_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER,
-                                                       highlighter_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeXmlHighlighter,
+                         ide_xml_highlighter,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))
 
 static gboolean
 ide_xml_highlighter_highlight_timeout_handler (gpointer data)
@@ -263,11 +261,6 @@ ide_xml_highlighter_class_init (IdeXmlHighlighterClass *klass)
 }
 
 static void
-ide_xml_highlighter_class_finalize (IdeXmlHighlighterClass *klass)
-{
-}
-
-static void
 ide_xml_highlighter_init (IdeXmlHighlighter *self)
 {
   self->signal_group = dzl_signal_group_new (IDE_TYPE_BUFFER);
@@ -294,10 +287,4 @@ static void
 highlighter_iface_init (IdeHighlighterInterface *iface)
 {
   iface->set_engine = ide_xml_highlighter_real_set_engine;
-}
-
-void
-_ide_xml_highlighter_register_type (GTypeModule *module)
-{
-  ide_xml_highlighter_register_type (module);
 }

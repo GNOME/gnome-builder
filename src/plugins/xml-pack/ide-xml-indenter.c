@@ -34,8 +34,8 @@ struct _IdeXmlIndenter
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeXmlIndenter, ide_xml_indenter, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeXmlIndenter, ide_xml_indenter, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
 
 static gunichar
 text_iter_peek_next_char (const GtkTextIter *location)
@@ -456,17 +456,6 @@ ide_xml_indenter_class_init (IdeXmlIndenterClass *klass)
 }
 
 static void
-ide_xml_indenter_class_finalize (IdeXmlIndenterClass *klass)
-{
-}
-
-static void
 ide_xml_indenter_init (IdeXmlIndenter *self)
 {
-}
-
-void
-_ide_xml_indenter_register_type (GTypeModule *module)
-{
-  ide_xml_indenter_register_type (module);
 }

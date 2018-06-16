@@ -30,8 +30,8 @@ struct _IdeXmlSymbolResolver
 
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeXmlSymbolResolver, ide_xml_symbol_resolver, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeXmlSymbolResolver, ide_xml_symbol_resolver, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
 static void
 ide_xml_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
@@ -163,19 +163,8 @@ ide_xml_symbol_resolver_class_init (IdeXmlSymbolResolverClass *klass)
 }
 
 static void
-ide_xml_symbol_resolver_class_finalize (IdeXmlSymbolResolverClass *klass)
-{
-}
-
-static void
 ide_xml_symbol_resolver_init (IdeXmlSymbolResolver *self)
 {
-}
-
-void
-_ide_xml_symbol_resolver_register_type (GTypeModule *module)
-{
-  ide_xml_symbol_resolver_register_type (module);
 }
 
 static void

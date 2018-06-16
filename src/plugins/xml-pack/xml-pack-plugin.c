@@ -25,19 +25,9 @@
 #include "ide-xml-service.h"
 #include "ide-xml-symbol-resolver.h"
 
-void _ide_xml_highlighter_register_type (GTypeModule *module);
-void _ide_xml_indenter_register_type (GTypeModule *module);
-void _ide_xml_symbol_resolver_register_type (GTypeModule *module);
-void _ide_xml_service_register_type (GTypeModule *module);
-
 void
 ide_xml_register_types (PeasObjectModule *module)
 {
-  _ide_xml_highlighter_register_type (G_TYPE_MODULE (module));
-  _ide_xml_indenter_register_type (G_TYPE_MODULE (module));
-  _ide_xml_symbol_resolver_register_type (G_TYPE_MODULE (module));
-  _ide_xml_service_register_type (G_TYPE_MODULE (module));
-
   peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_XML_COMPLETION_PROVIDER);
   peas_object_module_register_extension_type (module, IDE_TYPE_DIAGNOSTIC_PROVIDER, IDE_TYPE_XML_DIAGNOSTIC_PROVIDER);
   peas_object_module_register_extension_type (module, IDE_TYPE_HIGHLIGHTER, IDE_TYPE_XML_HIGHLIGHTER);

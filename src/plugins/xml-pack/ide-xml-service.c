@@ -45,8 +45,8 @@ struct _IdeXmlService
 
 static void service_iface_init (IdeServiceInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeXmlService, ide_xml_service, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeXmlService, ide_xml_service, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
 
 static void
 ide_xml_service_build_tree_cb2 (GObject      *object,
@@ -1131,19 +1131,8 @@ service_iface_init (IdeServiceInterface *iface)
 }
 
 static void
-ide_xml_service_class_finalize (IdeXmlServiceClass *klass)
-{
-}
-
-static void
 ide_xml_service_init (IdeXmlService *self)
 {
-}
-
-void
-_ide_xml_service_register_type (GTypeModule *module)
-{
-  ide_xml_service_register_type (module);
 }
 
 /**
