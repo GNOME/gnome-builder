@@ -215,6 +215,7 @@ test_ide_task_null_object (void)
 }
 
 typedef gchar FooStr;
+GType foo_str_get_type (void);
 G_DEFINE_BOXED_TYPE (FooStr, foo_str, g_strdup, g_free)
 
 static void
