@@ -38,6 +38,7 @@ struct _IdeXmlAnalysis
   gint64            sequence;
 };
 
+GType               ide_xml_analysis_get_type            (void);
 IdeDiagnostics     *ide_xml_analysis_get_diagnostics     (IdeXmlAnalysis   *self);
 IdeXmlSymbolNode   *ide_xml_analysis_get_root_node       (IdeXmlAnalysis   *self);
 gint64              ide_xml_analysis_get_sequence        (IdeXmlAnalysis   *self);
