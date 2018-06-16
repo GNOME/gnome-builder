@@ -298,7 +298,6 @@ class GnomeProjectTemplate(MesonTemplate):
             meson_file = 'resources/src/meson-js.build'
         elif self.language == 'python':
             files['resources/src/hello.py.in'] = 'src/%(name)s.in'
-            files['resources/src/gi_composites.py'] = 'src/gi_composites.py'
             files['resources/src/__init__.py'] = 'src/__init__.py'
             files['resources/src/window.py'] = 'src/window.py'
             files['resources/src/main.py'] = 'src/main.py'
