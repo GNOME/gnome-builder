@@ -22,6 +22,7 @@
 
 #include <dazzle.h>
 
+#include "editor/ide-editor-private.h"
 #include "editor/ide-editor-sidebar.h"
 #include "layout/ide-layout-private.h"
 #include "layout/ide-layout-stack.h"

@@ -60,8 +60,8 @@ static void (*MoveToRect) (GdkWindow          *window,
                            gint                rect_anchor_dx,
                            gint                rect_anchor_dy);
 
-gboolean
-_ide_completion_window_reposition (IdeCompletionWindow *self)
+static gboolean
+ide_completion_window_reposition (IdeCompletionWindow *self)
 {
   IdeCompletionContext *context;
   GtkRequisition min, nat;
@@ -143,7 +143,7 @@ ide_completion_window_real_show (GtkWidget *widget)
 
   g_assert (IDE_IS_COMPLETION_WINDOW (self));
 
-  _ide_completion_window_reposition (self);
+  ide_completion_window_reposition (self);
 
   GTK_WIDGET_CLASS (ide_completion_window_parent_class)->show (widget);
 }
@@ -165,7 +165,7 @@ ide_completion_window_real_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (ide_completion_window_parent_class)->realize (widget);
 
-  _ide_completion_window_reposition (self);
+  ide_completion_window_reposition (self);
 }
 
 static void
@@ -265,7 +265,7 @@ ide_completion_window_init (IdeCompletionWindow *self)
 
   g_signal_connect_swapped (self->view,
                             "reposition",
-                            G_CALLBACK (_ide_completion_window_reposition),
+                            G_CALLBACK (ide_completion_window_reposition),
                             self);
 }
 

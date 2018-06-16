@@ -75,7 +75,7 @@ tools_find_all_id (gpointer key,
     g_hash_table_insert (tool_find->found_tools, g_strdup (tool_parts[1]), g_strdup (tool_path));
 }
 
-GHashTable *
+static GHashTable *
 ide_simple_toolchain_get_tools_for_id (IdeToolchain  *toolchain,
                                        const gchar   *tool_id)
 {
@@ -98,7 +98,7 @@ ide_simple_toolchain_get_tools_for_id (IdeToolchain  *toolchain,
   return g_steal_pointer (&found_tools);
 }
 
-const gchar *
+static const gchar *
 ide_simple_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
                                             const gchar   *language,
                                             const gchar   *tool_id)

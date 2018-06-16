@@ -26,6 +26,7 @@
 
 #include "buildsystem/ide-build-pipeline.h"
 #include "buildsystem/ide-build-stage.h"
+#include "buildsystem/ide-build-stage-private.h"
 #include "subprocess/ide-subprocess.h"
 #include "threading/ide-task.h"
 

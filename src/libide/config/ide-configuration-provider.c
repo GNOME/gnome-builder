@@ -53,7 +53,7 @@ ide_configuration_provider_real_load_async (IdeConfigurationProvider *self,
                            G_OBJECT_TYPE_NAME (self));
 }
 
-gboolean
+static gboolean
 ide_configuration_provider_real_load_finish (IdeConfigurationProvider  *self,
                                              GAsyncResult              *result,
                                              GError                   **error)
@@ -84,7 +84,7 @@ ide_configuration_provider_real_unload (IdeConfigurationProvider *self)
 
 }
 
-void
+static void
 ide_configuration_provider_real_save_async (IdeConfigurationProvider *self,
                                             GCancellable             *cancellable,
                                             GAsyncReadyCallback       callback,
@@ -102,7 +102,7 @@ ide_configuration_provider_real_save_async (IdeConfigurationProvider *self,
                            G_OBJECT_TYPE_NAME (self));
 }
 
-gboolean
+static gboolean
 ide_configuration_provider_real_save_finish (IdeConfigurationProvider  *self,
                                              GAsyncResult              *result,
                                              GError                   **error)

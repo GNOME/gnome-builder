@@ -55,7 +55,7 @@ ide_toolchain_provider_real_load_async (IdeToolchainProvider *self,
                            G_OBJECT_TYPE_NAME (self));
 }
 
-gboolean
+static gboolean
 ide_toolchain_provider_real_load_finish (IdeToolchainProvider  *self,
                                          GAsyncResult          *result,
                                          GError               **error)

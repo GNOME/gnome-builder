@@ -55,6 +55,9 @@ gint          ide_project_info_get_priority          (IdeProjectInfo  *self);
 IDE_AVAILABLE_IN_ALL
 GDateTime    *ide_project_info_get_last_modified_at  (IdeProjectInfo  *self);
 IDE_AVAILABLE_IN_ALL
+void          ide_project_info_set_last_modified_at  (IdeProjectInfo  *self,
+                                                      GDateTime       *modified_at);
+IDE_AVAILABLE_IN_ALL
 const gchar * const *
               ide_project_info_get_languages         (IdeProjectInfo  *self);
 IDE_AVAILABLE_IN_ALL

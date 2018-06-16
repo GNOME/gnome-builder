@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "debugger/ide-debugger-breakpoint.h"
+#include "debugger/ide-debugger-private.h"
 #include "debugger/ide-debugger-types.h"
 
 typedef struct

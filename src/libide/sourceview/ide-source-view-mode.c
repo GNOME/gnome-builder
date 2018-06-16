@@ -65,7 +65,7 @@ get_param (IdeSourceViewMode *self,
   gtk_style_context_get_style_property (context, param, value);
 }
 
-gboolean
+static gboolean
 get_boolean_param (IdeSourceViewMode *self,
                    const gchar       *param)
 {
@@ -80,7 +80,7 @@ get_boolean_param (IdeSourceViewMode *self,
   return ret;
 }
 
-gchar *
+static gchar *
 get_string_param (IdeSourceViewMode *self,
                   const gchar       *param)
 {

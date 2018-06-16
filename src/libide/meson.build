@@ -6,7 +6,6 @@ libide_generated_headers = []
 libide_public_headers = []
 libide_public_sources = []
 libide_private_sources = []
-libide_args = []
 
 version_data = configuration_data()
 version_data.set('MAJOR_VERSION', MAJOR_VERSION)

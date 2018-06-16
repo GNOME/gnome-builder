@@ -69,7 +69,7 @@ static void ide_unsaved_files_update_locked (IdeUnsavedFiles *self,
                                              GFile           *file,
                                              GBytes          *content);
 
-gchar *
+static gchar *
 get_drafts_directory (IdeContext *context)
 {
   IdeProject *project;

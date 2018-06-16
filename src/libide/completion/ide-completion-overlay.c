@@ -284,10 +284,12 @@ ide_completion_overlay_key_press_event (IdeCompletionDisplay *display,
   return _ide_completion_view_handle_key_press (self->view, event);
 }
 
-void
-ide_completion_overlay_set_context (IdeCompletionOverlay *self,
+static void
+ide_completion_overlay_set_context (IdeCompletionDisplay *display,
                                     IdeCompletionContext *context)
 {
+  IdeCompletionOverlay *self = (IdeCompletionOverlay *)display;
+
   g_return_if_fail (IDE_IS_COMPLETION_OVERLAY (self));
   g_return_if_fail (!context || IDE_IS_COMPLETION_CONTEXT (context));
 
@@ -317,7 +319,7 @@ ide_completion_overlay_set_font_desc (IdeCompletionDisplay       *display,
 static void
 completion_display_iface_init (IdeCompletionDisplayInterface *iface)
 {
-  iface->set_context = (gpointer)ide_completion_overlay_set_context;
+  iface->set_context = ide_completion_overlay_set_context;
   iface->attach = ide_completion_overlay_attach;
   iface->key_press_event = ide_completion_overlay_key_press_event;
   iface->set_n_rows = ide_completion_overlay_set_n_rows;

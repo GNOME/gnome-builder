@@ -418,7 +418,7 @@ ide_device_manager_get_n_items (GListModel *list_model)
   return self->devices->len;
 }
 
-gpointer
+static gpointer
 ide_device_manager_get_item (GListModel *list_model,
                              guint       position)
 {

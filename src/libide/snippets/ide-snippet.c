@@ -755,7 +755,7 @@ ide_snippet_add_chunk (IdeSnippet      *self,
   self->max_tab_stop = MAX (self->max_tab_stop, tab_stop);
 }
 
-gchar *
+static gchar *
 ide_snippet_get_nth_text (IdeSnippet *self,
                           gint        n)
 {

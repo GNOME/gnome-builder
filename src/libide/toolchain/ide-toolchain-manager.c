@@ -36,6 +36,7 @@
 #include "toolchain/ide-simple-toolchain.h"
 #include "toolchain/ide-toolchain.h"
 #include "toolchain/ide-toolchain-manager.h"
+#include "toolchain/ide-toolchain-private.h"
 #include "toolchain/ide-toolchain-provider.h"
 
 struct _IdeToolchainManager

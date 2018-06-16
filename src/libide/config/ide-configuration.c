@@ -29,6 +29,7 @@
 #include "application/ide-application.h"
 #include "config/ide-configuration.h"
 #include "config/ide-configuration-manager.h"
+#include "config/ide-configuration-private.h"
 #include "buildsystem/ide-environment.h"
 #include "runtimes/ide-runtime-manager.h"
 #include "runtimes/ide-runtime.h"
