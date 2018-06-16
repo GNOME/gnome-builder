@@ -1,5 +1,13 @@
 @import url("resource:///org/gnome/builder/themes/shared.css");
 
+/* soften the headerbar a bit which looks too chunky give the widget density
+ * near the bottom border.
+ */
+window.workbench headerbar {
+  border-bottom: 1px solid @borders;
+  background-image: none;
+}
+
 idelayoutstackheader > button:last-child {
   margin-right: 3px;
 }
