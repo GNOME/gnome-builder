@@ -105,7 +105,7 @@ IdeXmlRngGrammar *
 ide_xml_rng_grammar_ref (IdeXmlRngGrammar *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
-  g_return_val_if_fail (self->ref_count, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   g_atomic_int_inc (&self->ref_count);
 
@@ -116,7 +116,7 @@ void
 ide_xml_rng_grammar_unref (IdeXmlRngGrammar *self)
 {
   g_return_if_fail (self != NULL);
-  g_return_if_fail (self->ref_count);
+  g_return_if_fail (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     ide_xml_rng_grammar_free (self);
