@@ -230,6 +230,8 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
 
   gb_terminal_view_feed (self->run_terminal, _("Application starting...\r\n"));
 
+  dzl_dock_item_present (DZL_DOCK_ITEM (self->run_panel));
+
 failure:
 
   g_clear_object (&pty);
