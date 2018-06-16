@@ -33,6 +33,11 @@ from gi.repository import Ide
 
 _ = Ide.gettext
 
+_ATTRIBUTES = ",".join([
+    Gio.FILE_ATTRIBUTE_STANDARD_NAME,
+    Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+    Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON,
+])
 
 class GradleBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
@@ -162,3 +167,121 @@ class GradleBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
     def do_get_targets_finish(self, result):
         if result.propagate_boolean():
             return result.targets
+
+class GradleIdeTestProvider(Ide.TestProvider):
+
+    def do_run_async(self, test, pipeline, cancellable, callback, data):
+        task = Ide.Task.new(self, cancellable, callback)
+        task.set_priority(GLib.PRIORITY_LOW)
+
+        context = self.get_context()
+        build_system = context.get_build_system()
+
+        if type(build_system) != GradleBuildSystem:
+            task.return_error(GLib.Error('Not gradle build system',
+                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
+                                         code=Gio.IOErrorEnum.NOT_SUPPORTED))
+            return
+
+        task.targets = [GradleBuildTarget(context=self.get_context())]
+
+        try:
+            runtime = pipeline.get_runtime()
+            runner = runtime.create_runner()
+            if not runner:
+               task.return_error(Ide.NotSupportedError())
+
+            runner.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE)
+
+            srcdir = pipeline.get_srcdir()
+            runner.set_cwd(srcdir)
+
+            commands = test.get_command()
+
+            for command in commands:
+               runner.append_argv(command)
+
+            test.set_status(Ide.TestStatus.RUNNING)
+
+            def run_test_cb(runner, result, data):
+                try:
+                    runner.run_finish(result)
+                    test.set_status(Ide.TestStatus.SUCCESS)
+                except:
+                    test.set_status(Ide.TestStatus.FAILED)
+                finally:
+                    task.return_boolean(True)
+
+            runner.run_async(cancellable, run_test_cb, task)
+        except Exception as ex:
+            task.return_error(ex)
+
+    def do_run_finish(self, result):
+        if result.propagate_boolean():
+            return result.targets
+
+    def do_reload(self):
+
+        context = self.get_context()
+        build_system = context.get_build_system()
+
+        if type(build_system) != GradleBuildSystem:
+            return
+
+        # find all files in test directory
+        build_manager = context.get_build_manager()
+        pipeline = build_manager.get_pipeline()
+        srcdir = pipeline.get_srcdir()
+        test_suite = Gio.File.new_for_path(os.path.join(srcdir, 'src/test/java'))
+        test_suite.enumerate_children_async(_ATTRIBUTES,
+                                            Gio.FileQueryInfoFlags.NONE,
+                                            GLib.PRIORITY_LOW,
+                                            None,
+                                            self.on_enumerator_loaded,
+                                            None)
+
+    def on_enumerator_loaded(self, parent, result, data):
+        try:
+            enumerator = parent.enumerate_children_finish(result)
+            info = enumerator.next_file(None)
+
+            while info is not None:
+                name = info.get_name()
+                gfile = parent.get_child(name)
+                if info.get_file_type() == Gio.FileType.DIRECTORY:
+                    gfile.enumerate_children_async(_ATTRIBUTES,
+                                                    Gio.FileQueryInfoFlags.NONE,
+                                                    GLib.PRIORITY_LOW,
+                                                    None,
+                                                    self.on_enumerator_loaded,
+                                                    None)
+                else:
+                    #TODO Ask java through introspection for classes with TestCase and its public void methods 
+                    # or Annotation @Test methods
+                    result, contents, etag = gfile.load_contents()
+                    tests = [x for x in str(contents).split('\\n') if 'public void' in x]
+                    tests = [v.replace("()", "").replace("public void","").strip() for v in tests]
+                    classname=name.replace(".java", "")
+
+                    for testname in tests:
+                        # it has to be junit 4.x
+                        command = ["./gradlew", "test", "--tests", "{}.{}".format(classname, testname)]
+
+                        test = GradleTest(group=classname, id=classname+testname, display_name=testname)
+                        test.set_command(command)
+                        self.add(test)
+
+                info = enumerator.next_file(None)
+
+            enumerator.close()
+
+        except Exception as ex:
+            Ide.warning(repr(ex))
+
+class GradleTest(Ide.Test):
+
+    def get_command(self):
+        return self.command
+
+    def set_command(self, command):
+        self.command = command
