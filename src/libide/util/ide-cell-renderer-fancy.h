@@ -32,6 +32,10 @@ G_DECLARE_FINAL_TYPE (IdeCellRendererFancy, ide_cell_renderer_fancy, IDE, CELL_R
 IDE_AVAILABLE_IN_ALL
 GtkCellRenderer *ide_cell_renderer_fancy_new        (void);
 IDE_AVAILABLE_IN_ALL
+const gchar     *ide_cell_renderer_fancy_get_body   (IdeCellRendererFancy *self);
+IDE_AVAILABLE_IN_ALL
+const gchar     *ide_cell_renderer_fancy_get_title  (IdeCellRendererFancy *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_cell_renderer_fancy_take_title (IdeCellRendererFancy *self,
                                                      gchar                *title);
 IDE_AVAILABLE_IN_ALL
