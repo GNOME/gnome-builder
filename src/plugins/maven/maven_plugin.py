@@ -229,9 +229,6 @@ class MavenIdeTestProvider(Ide.TestProvider):
         build_system = context.get_build_system()
 
         if type(build_system) != MavenBuildSystem:
-            task.return_error(GLib.Error('Not maven build system',
-                                         domain=GLib.quark_to_string(Gio.io_error_quark()),
-                                         code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
         # find all files in test directory
