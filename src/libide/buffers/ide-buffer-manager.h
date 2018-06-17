@@ -36,81 +36,80 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeBufferManager, ide_buffer_manager, IDE, BUFFER_MANAGER, IdeObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeBuffer                *ide_buffer_manager_create_temporary_buffer
-                                                                 (IdeBufferManager     *self);
+IdeBuffer *ide_buffer_manager_create_temporary_buffer (IdeBufferManager       *self);
 IDE_AVAILABLE_IN_ALL
-void                      ide_buffer_manager_load_file_async     (IdeBufferManager     *self,
-                                                                  IdeFile              *file,
-                                                                  gboolean              force_reload,
-                                                                  IdeWorkbenchOpenFlags flags,
-                                                                  IdeProgress         **progress,
-                                                                  GCancellable         *cancellable,
-                                                                  GAsyncReadyCallback   callback,
-                                                                  gpointer              user_data);
+void       ide_buffer_manager_load_file_async         (IdeBufferManager       *self,
+                                                       IdeFile                *file,
+                                                       gboolean                force_reload,
+                                                       IdeWorkbenchOpenFlags   flags,
+                                                       IdeProgress           **progress,
+                                                       GCancellable           *cancellable,
+                                                       GAsyncReadyCallback     callback,
+                                                       gpointer                user_data);
 IDE_AVAILABLE_IN_ALL
-IdeBuffer                *ide_buffer_manager_load_file_finish    (IdeBufferManager     *self,
-                                                                  GAsyncResult         *result,
-                                                                  GError              **error);
+IdeBuffer *ide_buffer_manager_load_file_finish        (IdeBufferManager       *self,
+                                                       GAsyncResult           *result,
+                                                       GError                **error);
 IDE_AVAILABLE_IN_ALL
-void                      ide_buffer_manager_save_file_async     (IdeBufferManager     *self,
-                                                                  IdeBuffer            *buffer,
-                                                                  IdeFile              *file,
-                                                                  IdeProgress         **progress,
-                                                                  GCancellable         *cancellable,
-                                                                  GAsyncReadyCallback   callback,
-                                                                  gpointer              user_data);
+void       ide_buffer_manager_save_file_async         (IdeBufferManager       *self,
+                                                       IdeBuffer              *buffer,
+                                                       IdeFile                *file,
+                                                       IdeProgress           **progress,
+                                                       GCancellable           *cancellable,
+                                                       GAsyncReadyCallback     callback,
+                                                       gpointer                user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean                  ide_buffer_manager_save_file_finish    (IdeBufferManager     *self,
-                                                                  GAsyncResult         *result,
-                                                                  GError              **error);
+gboolean   ide_buffer_manager_save_file_finish        (IdeBufferManager       *self,
+                                                       GAsyncResult           *result,
+                                                       GError                **error);
 IDE_AVAILABLE_IN_ALL
-void                      ide_buffer_manager_save_all_async      (IdeBufferManager     *self,
-                                                                  GCancellable         *cancellable,
-                                                                  GAsyncReadyCallback   callback,
-                                                                  gpointer              user_data);
+void       ide_buffer_manager_save_all_async          (IdeBufferManager       *self,
+                                                       GCancellable           *cancellable,
+                                                       GAsyncReadyCallback     callback,
+                                                       gpointer                user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean                  ide_buffer_manager_save_all_finish     (IdeBufferManager     *self,
-                                                                  GAsyncResult         *result,
-                                                                  GError              **error);
+gboolean   ide_buffer_manager_save_all_finish         (IdeBufferManager       *self,
+                                                       GAsyncResult           *result,
+                                                       GError                **error);
 IDE_AVAILABLE_IN_ALL
-IdeBuffer                *ide_buffer_manager_get_focus_buffer    (IdeBufferManager     *self);
+IdeBuffer *ide_buffer_manager_get_focus_buffer        (IdeBufferManager       *self);
 IDE_AVAILABLE_IN_ALL
-void                      ide_buffer_manager_set_focus_buffer    (IdeBufferManager     *self,
-                                                                  IdeBuffer            *buffer);
+void       ide_buffer_manager_set_focus_buffer        (IdeBufferManager       *self,
+                                                       IdeBuffer              *buffer);
 IDE_AVAILABLE_IN_ALL
-GPtrArray                *ide_buffer_manager_get_buffers         (IdeBufferManager     *self);
+GPtrArray *ide_buffer_manager_get_buffers             (IdeBufferManager       *self);
 IDE_AVAILABLE_IN_ALL
-guint                     ide_buffer_manager_get_n_buffers       (IdeBufferManager     *self);
+guint      ide_buffer_manager_get_n_buffers           (IdeBufferManager       *self);
 IDE_AVAILABLE_IN_ALL
-gboolean                  ide_buffer_manager_has_file            (IdeBufferManager     *self,
-                                                                  GFile                *file);
+gboolean   ide_buffer_manager_has_file                (IdeBufferManager       *self,
+                                                       GFile                  *file);
 IDE_AVAILABLE_IN_ALL
-IdeBuffer                *ide_buffer_manager_find_buffer         (IdeBufferManager     *self,
-                                                                  GFile                *file);
+IdeBuffer *ide_buffer_manager_find_buffer             (IdeBufferManager       *self,
+                                                       GFile                  *file);
 IDE_AVAILABLE_IN_ALL
-gsize                     ide_buffer_manager_get_max_file_size   (IdeBufferManager     *self);
+gsize      ide_buffer_manager_get_max_file_size       (IdeBufferManager       *self);
 IDE_AVAILABLE_IN_ALL
-void                      ide_buffer_manager_set_max_file_size   (IdeBufferManager     *self,
-                                                                  gsize                 max_file_size);
+void       ide_buffer_manager_set_max_file_size       (IdeBufferManager       *self,
+                                                       gsize                   max_file_size);
 IDE_AVAILABLE_IN_ALL
-void                      ide_buffer_manager_apply_edits_async   (IdeBufferManager     *self,
-                                                                  GPtrArray            *edits,
-                                                                  GCancellable         *cancellable,
-                                                                  GAsyncReadyCallback   callback,
-                                                                  gpointer              user_data);
+void       ide_buffer_manager_apply_edits_async       (IdeBufferManager       *self,
+                                                       GPtrArray              *edits,
+                                                       GCancellable           *cancellable,
+                                                       GAsyncReadyCallback     callback,
+                                                       gpointer                user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean                  ide_buffer_manager_apply_edits_finish  (IdeBufferManager     *self,
-                                                                  GAsyncResult         *result,
-                                                                  GError              **error);
+gboolean   ide_buffer_manager_apply_edits_finish      (IdeBufferManager       *self,
+                                                       GAsyncResult           *result,
+                                                       GError                **error);
 IDE_AVAILABLE_IN_ALL
-guint                     ide_buffer_manager_get_auto_save_timeout (IdeBufferManager *self);
+guint      ide_buffer_manager_get_auto_save_timeout   (IdeBufferManager       *self);
 IDE_AVAILABLE_IN_ALL
-void                      ide_buffer_manager_set_auto_save_timeout (IdeBufferManager *self,
-                                                                    guint             auto_save_timeout);
+void       ide_buffer_manager_set_auto_save_timeout   (IdeBufferManager       *self,
+                                                       guint                   auto_save_timeout);
 IDE_AVAILABLE_IN_ALL
-gboolean                  ide_buffer_manager_get_auto_save         (IdeBufferManager *self);
+gboolean   ide_buffer_manager_get_auto_save           (IdeBufferManager       *self);
 IDE_AVAILABLE_IN_ALL
-void                      ide_buffer_manager_set_auto_save         (IdeBufferManager *self,
-                                                                    gboolean          auto_save);
+void       ide_buffer_manager_set_auto_save           (IdeBufferManager       *self,
+                                                       gboolean                auto_save);
 
 G_END_DECLS

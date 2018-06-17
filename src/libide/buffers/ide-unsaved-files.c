@@ -32,6 +32,7 @@
 #include "ide-global.h"
 
 #include "application/ide-application.h"
+#include "buffers/ide-buffer-private.h"
 #include "buffers/ide-unsaved-file.h"
 #include "buffers/ide-unsaved-files.h"
 #include "projects/ide-project.h"

@@ -27,23 +27,25 @@
 
 G_BEGIN_DECLS
 
-PeasExtensionSet *_ide_buffer_get_addins            (IdeBuffer        *self);
-void              _ide_buffer_set_changed_on_volume (IdeBuffer        *self,
-                                                     gboolean          changed_on_volume);
-void              _ide_buffer_set_loading           (IdeBuffer        *self,
-                                                     gboolean          loading);
-void              _ide_buffer_cancel_cursor_restore (IdeBuffer        *self);
-gboolean          _ide_buffer_can_restore_cursor    (IdeBuffer        *self);
-void              _ide_buffer_set_mtime             (IdeBuffer        *self,
-                                                     const GTimeVal   *mtime);
-void              _ide_buffer_set_read_only         (IdeBuffer        *buffer,
-                                                     gboolean          read_only);
-void              _ide_buffer_set_failure           (IdeBuffer        *self,
-                                                     const GError     *error);
-IdeHighlightEngine *
-                  _ide_buffer_get_highlight_engine  (IdeBuffer        *self);
-
-void              _ide_buffer_manager_reclaim       (IdeBufferManager *self,
-                                                     IdeBuffer        *buffer);
+PeasExtensionSet   *_ide_buffer_get_addins            (IdeBuffer        *self);
+void                _ide_buffer_set_changed_on_volume (IdeBuffer        *self,
+                                                       gboolean          changed_on_volume);
+void                _ide_buffer_set_loading           (IdeBuffer        *self,
+                                                       gboolean          loading);
+void                _ide_buffer_cancel_cursor_restore (IdeBuffer        *self);
+gboolean            _ide_buffer_can_restore_cursor    (IdeBuffer        *self);
+void                _ide_buffer_set_mtime             (IdeBuffer        *self,
+                                                       const GTimeVal   *mtime);
+void                _ide_buffer_set_read_only         (IdeBuffer        *buffer,
+                                                       gboolean          read_only);
+void                _ide_buffer_set_failure           (IdeBuffer        *self,
+                                                       const GError     *error);
+IdeHighlightEngine *_ide_buffer_get_highlight_engine  (IdeBuffer        *self);
+void                _ide_buffer_manager_reclaim       (IdeBufferManager *self,
+                                                       IdeBuffer        *buffer);
+IdeUnsavedFile     *_ide_unsaved_file_new             (GFile            *file,
+                                                       GBytes           *content,
+                                                       const gchar      *temp_path,
+                                                       gint64            sequence);
 
 G_END_DECLS

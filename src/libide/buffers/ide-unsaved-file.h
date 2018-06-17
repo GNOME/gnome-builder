@@ -44,10 +44,6 @@ IDE_AVAILABLE_IN_ALL
 gboolean        ide_unsaved_file_persist       (IdeUnsavedFile  *self,
                                                 GCancellable    *cancellable,
                                                 GError         **error);
-IdeUnsavedFile *_ide_unsaved_file_new          (GFile           *file,
-                                                GBytes          *content,
-                                                const gchar     *temp_path,
-                                                gint64           sequence) G_GNUC_INTERNAL;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeUnsavedFile, ide_unsaved_file_unref)
 

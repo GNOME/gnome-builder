@@ -24,6 +24,7 @@
 
 #include "application/ide-application.h"
 #include "buffers/ide-unsaved-file.h"
+#include "buffers/ide-buffer-private.h"
 
 /*
  * This type is meant to be created and then immutable after that.
