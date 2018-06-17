@@ -37,7 +37,7 @@ You might find yourself running Builder from Builder.
 By default, that will activate and bring-forward your previous instance of Builder.
 If you run Builder from the command-line with ``--standalone``, it will not communicate with another instance of Builder.
 
-.. _libide: https://git.gnome.org//browse/gnome-builder/tree/libide/
-.. _git: https://git.gnome.org//browse/gnome-builder/tree/plugins/git/
-.. _`existing plugins`: https://git.gnome.org//browse/gnome-builder/tree/plugins/
+.. _libide: https://gitlab.gnome.org/GNOME/gnome-builder/tree/master/src/libide/
+.. _git: https://gitlab.gnome.org/GNOME/gnome-builder/tree/master/src/plugins/git
+.. _`existing plugins`: https://gitlab.gnome.org/GNOME/gnome-builder/tree/master/src/plugins
 
