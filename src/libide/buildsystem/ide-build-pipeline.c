@@ -1624,7 +1624,7 @@ ide_build_pipeline_stage_execute_cb (GObject      *object,
 
   ide_build_stage_set_completed (stage, !self->failed);
 
-  g_clear_pointer (&self->chained_bindings, g_ptr_array_free);
+  g_clear_pointer (&self->chained_bindings, g_ptr_array_unref);
   self->chained_bindings = g_ptr_array_new_with_free_func (g_object_unref);
 
   if (self->failed == FALSE)
