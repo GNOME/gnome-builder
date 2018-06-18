@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-06-13 23:06+0000\n"
-"PO-Revision-Date: 2018-06-14 15:12+0200\n"
+"POT-Creation-Date: 2018-06-17 22:18+0000\n"
+"PO-Revision-Date: 2018-06-18 13:24+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -578,11 +578,11 @@ msgstr "Výchozí barevné schéma pro Builder"
 msgid "Basic"
 msgstr "Základní"
 
-#: src/gstyle/gstyle-color-panel.c:953
+#: src/gstyle/gstyle-color-panel.c:952
 msgid "Palette: "
 msgstr "Paleta:"
 
-#: src/gstyle/gstyle-color-panel.c:955
+#: src/gstyle/gstyle-color-panel.c:954
 msgid "Palette"
 msgstr "Paleta"
 
@@ -633,7 +633,7 @@ msgstr "selhalo zpracování\n"
 msgid "Generated"
 msgstr "Vygenerovaná"
 
-#: src/gstyle/gstyle-palette.c:932
+#: src/gstyle/gstyle-palette.c:933
 #, c-format
 msgid "Unable to save %s\n"
 msgstr "Nelze uložit %s\n"
@@ -733,7 +733,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4932
+#: src/libide/sourceview/ide-source-view.c:4941
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -848,9 +848,9 @@ msgstr "Takový sestavovací proces neexistuje"
 #: src/libide/workbench/ide-workbench-shortcuts.c:51
 #: src/libide/workbench/ide-workbench-shortcuts.c:78
 #: src/plugins/command-bar/gb-command-bar.c:694
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:251
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:257
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:263
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:255
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:261
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:267
 msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Klávesové zkratky pracovních nástrojů"
@@ -884,25 +884,25 @@ msgid "Show the shortcuts window"
 msgstr "Zobrazit okno s klávesovými zkratkami"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-buffer.c:923
+#: src/libide/buffers/ide-buffer.c:931
 #, c-format
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Selhalo ustanovení sledování změn na pozadí: %s"
 
-#: src/libide/buffers/ide-buffer.c:2850
+#: src/libide/buffers/ide-buffer.c:2858
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
-#: src/libide/buffers/ide-buffer.c:3321
+#: src/libide/buffers/ide-buffer.c:3329
 #, c-format
 msgid "Buffer failed: %s"
 msgstr "Selhala vyrovnávací paměť: %s"
 
-#: src/libide/buffers/ide-buffer-manager.c:700
+#: src/libide/buffers/ide-buffer-manager.c:701
 msgid "File too large to be opened."
 msgstr "Soubor je příliš velký pro otevření."
 
-#: src/libide/buffers/ide-buffer-manager.c:1960
+#: src/libide/buffers/ide-buffer-manager.c:1962
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
@@ -911,8 +911,8 @@ msgstr "neuložený dokument %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:1999
-#: src/libide/buffers/ide-buffer-manager.c:2062
+#: src/libide/buffers/ide-buffer-manager.c:2001
+#: src/libide/buffers/ide-buffer-manager.c:2064
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -920,7 +920,7 @@ msgid "Failed to save file: %s"
 msgstr "Selhalo uložení souboru: %s"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-unsaved-files.c:254
+#: src/libide/buffers/ide-unsaved-files.c:255
 #, c-format
 msgid "Failed to save draft: %s"
 msgstr "Selhalo uložení konceptu: %s"
@@ -1343,7 +1343,7 @@ msgid "No file was provided."
 msgstr "Nebyl poskytnut žádný soubor."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:834
+#: src/libide/editor/ide-editor-perspective.c:841
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:154
 msgid "Editor"
@@ -1498,8 +1498,8 @@ msgstr "Zrušit"
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:339
 #: src/plugins/comment-code/gbp-comment-code-view-addin.c:370
 #: src/plugins/comment-code/gbp-comment-code-view-addin.c:376
-#: src/plugins/project-tree/gb-project-tree-shortcuts.c:33
-#: src/plugins/project-tree/gb-project-tree-shortcuts.c:39
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:34
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:40
 #: src/plugins/spellcheck/gbp-spell-editor-view-addin.c:100
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:54
 msgctxt "shortcut window"
@@ -1968,21 +1968,21 @@ msgstr "Nějaký požadavek na odstranění z paměti již probíhá"
 msgid "Context has already been restored."
 msgstr "Kontext již byl obnoven."
 
-#: src/libide/ide-object.c:347
+#: src/libide/ide-object.c:386
 #, c-format
 msgid "No implementations of extension point “%s”."
 msgstr "Neexistuje žádná implementace rozšiřujícího bodu „%s“."
 
-#: src/libide/ide-object.c:456
+#: src/libide/ide-object.c:498
 #, c-format
 msgid "Failed to locate %s plugin."
 msgstr "Selhalo vyhledání zásuvnéhop modulu %s."
 
-#: src/libide/ide-object.c:591
+#: src/libide/ide-object.c:638
 msgid "No such extension point."
 msgstr "Takový rozšiřující bod neexistuje."
 
-#: src/libide/ide-object.c:601
+#: src/libide/ide-object.c:647
 msgid "No implementations of extension point."
 msgstr "Není žádná implementace rozšiřujícího bodu."
 
@@ -1996,9 +1996,9 @@ msgstr "Klávesové zkratky editoru"
 #: src/libide/workbench/ide-workbench-shortcuts.c:34
 #: src/libide/workbench/ide-workbench-shortcuts.c:52
 #: src/plugins/command-bar/gb-command-bar.c:695
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:252
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:258
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:264
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:256
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:262
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:268
 msgctxt "shortcut window"
 msgid "General"
 msgstr "Obecné"
@@ -2018,14 +2018,14 @@ msgstr "Příkazová lišta"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:39
 #: src/libide/keybindings/ide-shortcuts-window.ui:477
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:253
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:257
 msgctxt "shortcut window"
 msgid "Terminal"
 msgstr "Terminál"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:46
 #: src/libide/keybindings/ide-shortcuts-window.ui:484
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:259
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:263
 msgctxt "shortcut window"
 msgid "Terminal in Build Runtime"
 msgstr "Terminál v běhovém prostředí sestavení"
@@ -2444,7 +2444,7 @@ msgstr "editor font písmo monospace"
 
 #. XXX: This belongs in terminal addin
 #: src/libide/preferences/ide-preferences-builtin.c:108
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:335
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:339
 #: src/plugins/terminal/gtk/menus.ui:5
 msgid "Terminal"
 msgstr "Terminál"
@@ -2872,7 +2872,7 @@ msgstr "SDK"
 msgid "Destination file must be within the project tree."
 msgstr "Cílový soubor musí být součástí projektového stromu."
 
-#: src/libide/projects/ide-project.c:647
+#: src/libide/projects/ide-project.c:648
 msgid "File must be within the project tree."
 msgstr "Soubor musí být součástí projektového stromu."
 
@@ -2896,39 +2896,39 @@ msgstr "Selhalo vyhledání běhového prostředí"
 msgid "Process quit unexpectedly"
 msgstr "Proces se neočekávaně ukončil"
 
-#: src/libide/runtimes/ide-runtime-manager.c:134
+#: src/libide/runtimes/ide-runtime-manager.c:135
 msgid "Host operating system"
 msgstr "Hostitelský operační systém"
 
-#: src/libide/sourceview/ide-omni-gutter-renderer.c:751
+#: src/libide/sourceview/ide-omni-gutter-renderer.c:752
 msgid "Click to toggle breakpoint"
 msgstr "Kliknutím přepnete bod přerušení"
 
-#: src/libide/sourceview/ide-source-view.c:4387
+#: src/libide/sourceview/ide-source-view.c:4396
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4389
+#: src/libide/sourceview/ide-source-view.c:4398
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4503
+#: src/libide/sourceview/ide-source-view.c:4512
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: src/libide/sourceview/ide-source-view.c:4931
+#: src/libide/sourceview/ide-source-view.c:4940
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5167
+#: src/libide/sourceview/ide-source-view.c:5176
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5193
+#: src/libide/sourceview/ide-source-view.c:5202
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
@@ -2964,7 +2964,7 @@ msgstr "Žádné testy nejsou k dispozici"
 msgid "Tests will be loaded after building."
 msgstr "Testy budou načteny po sestavení."
 
-#: src/libide/toolchain/ide-toolchain-manager.c:335
+#: src/libide/toolchain/ide-toolchain-manager.c:336
 msgid "Default (Host operating system)"
 msgstr "Výchozí (hostitelský operační systém)"
 
@@ -3176,8 +3176,8 @@ msgstr "Konfiguruje se projekt"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:150
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
-#: src/plugins/gradle/gradle_plugin.py:111
-#: src/plugins/maven/maven_plugin.py:104
+#: src/plugins/gradle/gradle_plugin.py:116
+#: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
@@ -3462,7 +3462,7 @@ msgid "Configure project"
 msgstr "Konfiguruje se projekt"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
-#: src/plugins/maven/maven_plugin.py:115
+#: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
 msgid "Installing project"
@@ -3764,57 +3764,57 @@ msgstr "Použijte pole níže k provedení příkazu"
 msgid "Command failed: %s"
 msgstr "Příkaz selhal: %s"
 
-#: src/plugins/command-bar/gb-vim.c:87
+#: src/plugins/command-bar/gb-vim.c:86
 #, c-format
 msgid "Number required"
 msgstr "Požadováno číslo"
 
-#: src/plugins/command-bar/gb-vim.c:97
+#: src/plugins/command-bar/gb-vim.c:96
 #, c-format
 msgid "%s is invalid for %s"
 msgstr "%s je neplatný pro %s"
 
-#: src/plugins/command-bar/gb-vim.c:155
+#: src/plugins/command-bar/gb-vim.c:154
 #, c-format
 msgid "Cannot find language “%s”"
 msgstr "Nelze najít jazyk „%s“"
 
-#: src/plugins/command-bar/gb-vim.c:312
+#: src/plugins/command-bar/gb-vim.c:311
 #, c-format
 msgid "This command requires a GtkSourceView to be focused"
 msgstr "Tento příkaz vyžaduje, aby byl zaměřeno GtkSourceView"
 
-#: src/plugins/command-bar/gb-vim.c:323
+#: src/plugins/command-bar/gb-vim.c:322
 #, c-format
 msgid "This command requires a view to be focused"
 msgstr "Tento příkaz vyžaduje, aby bylo zaměřeno zobrazení"
 
-#: src/plugins/command-bar/gb-vim.c:380
+#: src/plugins/command-bar/gb-vim.c:379
 #, c-format
 msgid "Unknown option: %s"
 msgstr "Neznámá volba: %s"
 
-#: src/plugins/command-bar/gb-vim.c:423
+#: src/plugins/command-bar/gb-vim.c:422
 #, c-format
 msgid "Cannot find colorscheme “%s”"
 msgstr "Nelze najít barevné schéma „%s“"
 
-#: src/plugins/command-bar/gb-vim.c:464 src/plugins/command-bar/gb-vim.c:596
+#: src/plugins/command-bar/gb-vim.c:463 src/plugins/command-bar/gb-vim.c:595
 #, c-format
 msgid "Failed to locate working directory"
 msgstr "Selhalo vyhledání pracovní složky"
 
-#: src/plugins/command-bar/gb-vim.c:765
+#: src/plugins/command-bar/gb-vim.c:764
 #, c-format
 msgid "Invalid :syntax subcommand: %s"
 msgstr "Neplatná syntax podřízeného příkazu: %s"
 
-#: src/plugins/command-bar/gb-vim.c:1232
+#: src/plugins/command-bar/gb-vim.c:1231
 #, c-format
 msgid "Invalid search and replace request"
 msgstr "Neplatný požadavek na hledání a nahrazování"
 
-#: src/plugins/command-bar/gb-vim.c:1338
+#: src/plugins/command-bar/gb-vim.c:1342
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nejedná se o příkaz: %s"
@@ -4171,7 +4171,7 @@ msgstr ""
 "Tento program je nutný k sestavování aplikací Flatpak. Přejete si jej "
 "nainstalovat?"
 
-#: src/plugins/gcc/gbp-gcc-toolchain-provider.c:103
+#: src/plugins/gcc/gbp-gcc-toolchain-provider.c:87
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
 msgstr "Křížový kompilátor GCC %s (systém)"
@@ -4617,18 +4617,18 @@ msgstr "Strom projektu"
 msgid "Empty"
 msgstr "Prázdný"
 
-#: src/plugins/project-tree/gb-project-tree-shortcuts.c:34
-#: src/plugins/project-tree/gb-project-tree-shortcuts.c:40
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:35
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:41
 msgctxt "shortcut window"
 msgid "Project tree"
 msgstr "Strom projektu"
 
-#: src/plugins/project-tree/gb-project-tree-shortcuts.c:35
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:36
 msgctxt "shortcut window"
 msgid "Rename a file"
 msgstr "Přejmenovat soubor"
 
-#: src/plugins/project-tree/gb-project-tree-shortcuts.c:41
+#: src/plugins/project-tree/gb-project-tree-shortcuts.c:42
 msgctxt "shortcut window"
 msgid "Move a file to the trash"
 msgstr "Přesunout soubor do koše"
@@ -4995,7 +4995,7 @@ msgctxt "shortcut window"
 msgid "Search symbols within document"
 msgstr "Hledat symboly v dokumentu"
 
-#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:304
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:311
 msgid "Select Symbol…"
 msgstr "Vybrat symbol…"
 
@@ -5092,11 +5092,15 @@ msgstr "Nepojmenovaný terminál"
 msgid "Application Output"
 msgstr "Výstup aplikace"
 
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:245
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:231
+msgid "Application starting...\r\n"
+msgstr "Aplikace se spouští…\r\n"
+
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:249
 msgid "Application exited\r\n"
 msgstr "Aplikace skončila\r\n"
 
-#: src/plugins/terminal/gb-terminal-workbench-addin.c:265
+#: src/plugins/terminal/gb-terminal-workbench-addin.c:269
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
 msgstr "Terminál v běhovém prostředí"
@@ -5151,7 +5155,7 @@ msgstr "vala diagnostika varování chyba chyby"
 msgid "Run with Valgrind"
 msgstr "Spustit s nástrojem Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:585
+#: src/plugins/xml-pack/ide-xml-parser.c:587
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Selhalo vytvoření stromu XML"
