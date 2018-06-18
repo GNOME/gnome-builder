@@ -27,6 +27,7 @@
 #include "ide-debug.h"
 
 #include "application/ide-application.h"
+#include "buildsystem/ide-build-system.h"
 #include "buffers/ide-buffer-addin.h"
 #include "buffers/ide-buffer-change-monitor.h"
 #include "buffers/ide-buffer-manager.h"
@@ -3417,4 +3418,74 @@ _ide_buffer_set_auto_save (IdeBuffer *self,
   priv->auto_save_timeout = auto_save_timeout;
 
   ide_buffer_queue_auto_save (self);
+}
+
+static void
+ide_buffer_get_build_flags_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  IdeBuildSystem *build_system = (IdeBuildSystem *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) build_flags = NULL;
+
+  g_assert (IDE_IS_BUILD_SYSTEM (build_system));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  build_flags = ide_build_system_get_build_flags_finish (build_system, result, &error);
+
+  if (error != NULL)
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, g_steal_pointer (&build_flags), (GDestroyNotify)g_strfreev);
+}
+
+void
+ide_buffer_get_build_flags_async (IdeBuffer           *self,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  g_autoptr(IdeTask) task = NULL;
+  IdeBuildSystem *build_system;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_buffer_get_build_flags_async);
+
+  build_system = ide_context_get_build_system (priv->context);
+
+  ide_build_system_get_build_flags_async (build_system,
+                                          priv->file,
+                                          cancellable,
+                                          ide_buffer_get_build_flags_cb,
+                                          g_steal_pointer (&task));
+}
+
+/**
+ * ide_buffer_get_build_flags_finish:
+ * @self: a #IdeBuffer
+ * @result: the result provided to callback
+ * @error: location for a #GError, or %NULL
+ *
+ * Completes a request to get the build flags for the buffer.
+ *
+ * Returns: (transfer full) (array zero-terminated=1): an array of build flags
+ *
+ * Since: 3.30
+ */
+gchar **
+ide_buffer_get_build_flags_finish (IdeBuffer     *self,
+                                   GAsyncResult  *result,
+                                   GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }

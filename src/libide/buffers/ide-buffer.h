@@ -161,5 +161,14 @@ IDE_AVAILABLE_IN_3_28
 const GError             *ide_buffer_get_failure                   (IdeBuffer            *self);
 IDE_AVAILABLE_IN_ALL
 gboolean                  ide_buffer_get_has_diagnostics           (IdeBuffer            *self);
+IDE_AVAILABLE_IN_3_30
+void                      ide_buffer_get_build_flags_async         (IdeBuffer            *self,
+                                                                    GCancellable         *cancellable,
+                                                                    GAsyncReadyCallback   callback,
+                                                                    gpointer              user_data);
+IDE_AVAILABLE_IN_3_30
+gchar                   **ide_buffer_get_build_flags_finish        (IdeBuffer            *self,
+                                                                    GAsyncResult         *result,
+                                                                    GError              **error);
 
 G_END_DECLS
