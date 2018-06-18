@@ -309,8 +309,8 @@ static void ide_source_view_maybe_overwrite          (IdeSourceView         *sel
 static void
 find_references_task_data_free (FindReferencesTaskData *data)
 {
-  g_clear_pointer (&data->resolvers, g_ptr_array_unref);
-  g_clear_pointer (&data->location, ide_source_location_unref);
+  dzl_clear_pointer (&data->resolvers, g_ptr_array_unref);
+  dzl_clear_pointer (&data->location, ide_source_location_unref);
   g_slice_free (FindReferencesTaskData, data);
 }
 
@@ -939,7 +939,7 @@ ide_source_view_rebuild_css (IdeSourceView *self)
       if (priv->completion != NULL)
         _ide_completion_set_font_description (priv->completion, font_desc);
 
-      g_clear_pointer (&copy, pango_font_description_free);
+      dzl_clear_pointer (&copy, pango_font_description_free);
     }
 }
 
@@ -1245,7 +1245,7 @@ ide_source_view_reset_definition_highlight (IdeSourceView *self)
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (priv->definition_src_location)
-    g_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
+    dzl_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
 
   if (priv->buffer != NULL)
     {
@@ -2419,7 +2419,7 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
       GtkTextIter word_end;
 
       if (priv->definition_src_location != NULL && priv->definition_src_location != srcloc)
-        g_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
+        dzl_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
 
       if (priv->definition_src_location == NULL)
         priv->definition_src_location = ide_source_location_ref (srcloc);
@@ -5383,11 +5383,11 @@ ide_source_view_finalize (GObject *object)
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
-  g_clear_pointer (&priv->display_name, g_free);
-  g_clear_pointer (&priv->font_desc, pango_font_description_free);
-  g_clear_pointer (&priv->selections, g_queue_free);
-  g_clear_pointer (&priv->snippets, g_queue_free);
-  g_clear_pointer (&priv->include_regex, g_regex_unref);
+  dzl_clear_pointer (&priv->display_name, g_free);
+  dzl_clear_pointer (&priv->font_desc, pango_font_description_free);
+  dzl_clear_pointer (&priv->selections, g_queue_free);
+  dzl_clear_pointer (&priv->snippets, g_queue_free);
+  dzl_clear_pointer (&priv->include_regex, g_regex_unref);
 
   DZL_COUNTER_DEC (instances);
 
@@ -6647,7 +6647,7 @@ ide_source_view_set_font_desc (IdeSourceView              *self,
 
   if (font_desc != priv->font_desc)
     {
-      g_clear_pointer (&priv->font_desc, pango_font_description_free);
+      dzl_clear_pointer (&priv->font_desc, pango_font_description_free);
 
       if (font_desc)
         priv->font_desc = pango_font_description_copy (font_desc);

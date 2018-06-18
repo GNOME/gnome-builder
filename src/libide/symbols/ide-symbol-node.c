@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-enums.h"
@@ -78,7 +79,7 @@ ide_symbol_node_finalize (GObject *object)
   IdeSymbolNode *self = (IdeSymbolNode *)object;
   IdeSymbolNodePrivate *priv = ide_symbol_node_get_instance_private (self);
 
-  g_clear_pointer (&priv->name, g_free);
+  dzl_clear_pointer (&priv->name, g_free);
 
   G_OBJECT_CLASS (ide_symbol_node_parent_class)->finalize (object);
 }

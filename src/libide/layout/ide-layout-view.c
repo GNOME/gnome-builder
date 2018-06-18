@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <string.h>
 
 #include "layout/ide-layout-view.h"
@@ -123,7 +124,7 @@ ide_layout_view_finalize (GObject *object)
   IdeLayoutView *self = (IdeLayoutView *)object;
   IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
 
-  g_clear_pointer (&priv->title, g_free);
+  dzl_clear_pointer (&priv->title, g_free);
 
   G_OBJECT_CLASS (ide_layout_view_parent_class)->finalize (object);
 }

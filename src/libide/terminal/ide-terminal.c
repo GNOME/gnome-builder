@@ -117,10 +117,10 @@ popup_menu_detach (GtkWidget *attach_widget,
   g_assert (GTK_IS_MENU (menu));
   g_assert (priv->popup_menu == NULL || GTK_IS_WIDGET (priv->popup_menu));
 
-  g_clear_pointer (&priv->url, g_free);
+  dzl_clear_pointer (&priv->url, g_free);
 
   if (priv->popup_menu == GTK_WIDGET (menu))
-    g_clear_pointer (&priv->popup_menu, gtk_widget_destroy);
+    dzl_clear_pointer (&priv->popup_menu, gtk_widget_destroy);
 }
 
 static void
@@ -150,7 +150,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       clipboard_contains_text = gtk_selection_data_targets_include_text (data);
       have_selection = vte_terminal_get_has_selection (VTE_TERMINAL (self));
 
-      g_clear_pointer (&priv->popup_menu, gtk_widget_destroy);
+      dzl_clear_pointer (&priv->popup_menu, gtk_widget_destroy);
 
       priv->url = vte_terminal_match_check_event (VTE_TERMINAL (self), event, NULL);
 
@@ -339,7 +339,7 @@ ide_terminal_font_changed (IdeTerminal *self,
     font_desc = pango_font_description_from_string (font_name);
 
   vte_terminal_set_font (VTE_TERMINAL (self), font_desc);
-  g_clear_pointer (&font_desc, pango_font_description_free);
+  dzl_clear_pointer (&font_desc, pango_font_description_free);
 }
 
 static void
@@ -381,7 +381,7 @@ ide_terminal_destroy (GtkWidget *widget)
   g_assert (IDE_IS_TERMINAL (self));
 
   g_clear_object (&priv->settings);
-  g_clear_pointer (&priv->url, g_free);
+  dzl_clear_pointer (&priv->url, g_free);
 
   GTK_WIDGET_CLASS (ide_terminal_parent_class)->destroy (widget);
 }

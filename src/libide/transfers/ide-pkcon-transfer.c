@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
@@ -198,8 +199,8 @@ ide_pkcon_transfer_finalize (GObject *object)
 {
   IdePkconTransfer *self = (IdePkconTransfer *)object;
 
-  g_clear_pointer (&self->packages, g_strfreev);
-  g_clear_pointer (&self->status, g_free);
+  dzl_clear_pointer (&self->packages, g_strfreev);
+  dzl_clear_pointer (&self->status, g_free);
 
   G_OBJECT_CLASS (ide_pkcon_transfer_parent_class)->finalize (object);
 }

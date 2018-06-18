@@ -99,7 +99,7 @@ tests_by_provider_free (gpointer data)
 {
   TestsByProvider *info = data;
 
-  g_clear_pointer (&info->tests, g_ptr_array_unref);
+  dzl_clear_pointer (&info->tests, g_ptr_array_unref);
   g_clear_object (&info->provider);
   g_slice_free (TestsByProvider, info);
 }
@@ -116,7 +116,7 @@ ide_test_manager_dispose (GObject *object)
     }
 
   g_clear_object (&self->providers);
-  g_clear_pointer (&self->tests_by_provider, g_ptr_array_unref);
+  dzl_clear_pointer (&self->tests_by_provider, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_test_manager_parent_class)->dispose (object);
 }

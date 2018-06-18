@@ -687,8 +687,8 @@ ide_langserv_client_finalize (GObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
-  g_clear_pointer (&priv->diagnostics_by_file, g_hash_table_unref);
-  g_clear_pointer (&priv->languages, g_ptr_array_unref);
+  dzl_clear_pointer (&priv->diagnostics_by_file, g_hash_table_unref);
+  dzl_clear_pointer (&priv->languages, g_ptr_array_unref);
   g_clear_object (&priv->rpc_client);
   g_clear_object (&priv->buffer_manager_signals);
   g_clear_object (&priv->project_signals);

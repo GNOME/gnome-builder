@@ -96,8 +96,8 @@ async_state_free (gpointer data)
 
   if (state != NULL)
     {
-      g_clear_pointer (&state->drafts_directory, g_free);
-      g_clear_pointer (&state->unsaved_files, g_ptr_array_unref);
+      dzl_clear_pointer (&state->drafts_directory, g_free);
+      dzl_clear_pointer (&state->unsaved_files, g_ptr_array_unref);
       g_slice_free (AsyncState, state);
     }
 }
@@ -112,12 +112,12 @@ unsaved_file_free (gpointer data)
   if (uf != NULL)
     {
       g_clear_object (&uf->file);
-      g_clear_pointer (&uf->content, g_bytes_unref);
+      dzl_clear_pointer (&uf->content, g_bytes_unref);
 
       if (uf->temp_path != NULL)
         {
            g_unlink (uf->temp_path);
-           g_clear_pointer (&uf->temp_path, g_free);
+           dzl_clear_pointer (&uf->temp_path, g_free);
         }
 
       if (uf->temp_fd != -1)
@@ -645,7 +645,7 @@ ide_unsaved_files_update_locked (IdeUnsavedFiles *self,
         {
           if (content != unsaved->content)
             {
-              g_clear_pointer (&unsaved->content, g_bytes_unref);
+              dzl_clear_pointer (&unsaved->content, g_bytes_unref);
               unsaved->content = g_bytes_ref (content);
               unsaved->sequence = self->sequence;
             }
@@ -826,7 +826,7 @@ ide_unsaved_files_finalize (GObject *object)
   g_assert (IDE_IS_MAIN_THREAD ());
 
   g_mutex_clear (&self->mutex);
-  g_clear_pointer (&self->unsaved_files, g_ptr_array_unref);
+  dzl_clear_pointer (&self->unsaved_files, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_unsaved_files_parent_class)->finalize (object);
 }

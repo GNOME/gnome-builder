@@ -210,7 +210,7 @@ ide_project_finalize (GObject *object)
   IdeProject *self = (IdeProject *)object;
 
   g_clear_object (&self->root);
-  g_clear_pointer (&self->name, g_free);
+  dzl_clear_pointer (&self->name, g_free);
   g_rw_lock_clear (&self->rw_lock);
 
   G_OBJECT_CLASS (ide_project_parent_class)->finalize (object);

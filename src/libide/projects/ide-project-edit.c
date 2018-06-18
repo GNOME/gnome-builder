@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "projects/ide-project-edit.h"
 #include "projects/ide-project-edit-private.h"
 
@@ -50,8 +52,8 @@ ide_project_edit_finalize (GObject *object)
   IdeProjectEdit *self = (IdeProjectEdit *)object;
   IdeProjectEditPrivate *priv = ide_project_edit_get_instance_private (self);
 
-  g_clear_pointer (&priv->range, ide_source_range_unref);
-  g_clear_pointer (&priv->replacement, g_free);
+  dzl_clear_pointer (&priv->range, ide_source_range_unref);
+  dzl_clear_pointer (&priv->replacement, g_free);
 
   G_OBJECT_CLASS (ide_project_edit_parent_class)->finalize (object);
 }
@@ -167,7 +169,7 @@ ide_project_edit_set_range (IdeProjectEdit *self,
 
   if (priv->range != range)
     {
-      g_clear_pointer (&priv->range, ide_source_range_unref);
+      dzl_clear_pointer (&priv->range, ide_source_range_unref);
       priv->range = ide_source_range_ref (range);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RANGE]);
     }

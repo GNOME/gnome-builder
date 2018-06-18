@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "buildsystem/ide-environment-variable.h"
 
 struct _IdeEnvironmentVariable
@@ -45,8 +47,8 @@ ide_environment_variable_finalize (GObject *object)
 {
   IdeEnvironmentVariable *self = (IdeEnvironmentVariable *)object;
 
-  g_clear_pointer (&self->key, g_free);
-  g_clear_pointer (&self->value, g_free);
+  dzl_clear_pointer (&self->key, g_free);
+  dzl_clear_pointer (&self->value, g_free);
 
   G_OBJECT_CLASS (ide_environment_variable_parent_class)->finalize (object);
 }

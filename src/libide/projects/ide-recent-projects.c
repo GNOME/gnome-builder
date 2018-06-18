@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
@@ -242,9 +243,9 @@ ide_recent_projects_finalize (GObject *object)
 {
   IdeRecentProjects *self = (IdeRecentProjects *)object;
 
-  g_clear_pointer (&self->projects, g_sequence_free);
-  g_clear_pointer (&self->recent_uris, g_hash_table_unref);
-  g_clear_pointer (&self->file_uri, g_free);
+  dzl_clear_pointer (&self->projects, g_sequence_free);
+  dzl_clear_pointer (&self->recent_uris, g_hash_table_unref);
+  dzl_clear_pointer (&self->file_uri, g_free);
 
   G_OBJECT_CLASS (ide_recent_projects_parent_class)->finalize (object);
 }

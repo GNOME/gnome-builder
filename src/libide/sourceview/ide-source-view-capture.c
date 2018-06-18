@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-source-view-capture"
+
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "sourceview/ide-source-view-capture.h"
@@ -185,7 +188,7 @@ ide_source_view_capture_record_event (IdeSourceViewCapture *self,
 static void
 clear_frame (CaptureFrame *frame)
 {
-  g_clear_pointer (&frame->event, gdk_event_free);
+  dzl_clear_pointer (&frame->event, gdk_event_free);
 }
 
 static void
@@ -194,8 +197,8 @@ ide_source_view_capture_finalize (GObject *object)
   IdeSourceViewCapture *self = (IdeSourceViewCapture *)object;
 
   g_clear_object (&self->view);
-  g_clear_pointer (&self->frames, g_array_unref);
-  g_clear_pointer (&self->starting_state.mode_name, g_free);
+  dzl_clear_pointer (&self->frames, g_array_unref);
+  dzl_clear_pointer (&self->starting_state.mode_name, g_free);
 
   G_OBJECT_CLASS (ide_source_view_capture_parent_class)->finalize (object);
 }

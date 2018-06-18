@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "documentation/ide-documentation-proposal.h"
 
 typedef struct
@@ -172,9 +174,9 @@ ide_documentation_proposal_finalize (GObject *object)
   IdeDocumentationProposal *self = (IdeDocumentationProposal *)object;
   IdeDocumentationProposalPrivate *priv = ide_documentation_proposal_get_instance_private (self);
 
-  g_clear_pointer (&priv->header, g_free);
-  g_clear_pointer (&priv->text, g_free);
-  g_clear_pointer (&priv->uri, g_free);
+  dzl_clear_pointer (&priv->header, g_free);
+  dzl_clear_pointer (&priv->text, g_free);
+  dzl_clear_pointer (&priv->uri, g_free);
 
   G_OBJECT_CLASS (ide_documentation_proposal_parent_class)->finalize (object);
 }

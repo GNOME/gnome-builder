@@ -209,8 +209,8 @@ ide_settings_finalize (GObject *object)
   IdeSettings *self = (IdeSettings *)object;
 
   g_clear_object (&self->settings_sandwich);
-  g_clear_pointer (&self->relative_path, g_free);
-  g_clear_pointer (&self->schema_id, g_free);
+  dzl_clear_pointer (&self->relative_path, g_free);
+  dzl_clear_pointer (&self->schema_id, g_free);
 
   G_OBJECT_CLASS (ide_settings_parent_class)->finalize (object);
 }

@@ -133,8 +133,8 @@ ide_unsaved_file_unref (IdeUnsavedFile *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
-      g_clear_pointer (&self->temp_path, g_free);
-      g_clear_pointer (&self->content, g_bytes_unref);
+      dzl_clear_pointer (&self->temp_path, g_free);
+      dzl_clear_pointer (&self->content, g_bytes_unref);
       g_clear_object (&self->file);
       g_slice_free (IdeUnsavedFile, self);
     }

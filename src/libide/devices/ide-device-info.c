@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "ide-device-info.h"
 #include "ide-enums.h"
 
@@ -50,7 +52,7 @@ ide_device_info_finalize (GObject *object)
 {
   IdeDeviceInfo *self = (IdeDeviceInfo *)object;
 
-  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
+  dzl_clear_pointer (&self->host_triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_device_info_parent_class)->finalize (object);
 }
@@ -212,7 +214,7 @@ ide_device_info_set_host_triplet (IdeDeviceInfo *self,
 
   if (host_triplet != self->host_triplet)
     {
-      g_clear_pointer (&self->host_triplet, ide_triplet_unref);
+      dzl_clear_pointer (&self->host_triplet, ide_triplet_unref);
       self->host_triplet = host_triplet ? ide_triplet_ref (host_triplet) : NULL;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HOST_TRIPLET]);
     }

@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "debugger/ide-debugger.h"
 #include "debugger/ide-debugger-address-map.h"
 #include "debugger/ide-debugger-private.h"
@@ -320,8 +322,8 @@ ide_debugger_finalize (GObject *object)
   IdeDebugger *self = (IdeDebugger *)object;
   IdeDebuggerPrivate *priv = ide_debugger_get_instance_private (self);
 
-  g_clear_pointer (&priv->map, ide_debugger_address_map_free);
-  g_clear_pointer (&priv->display_name, g_free);
+  dzl_clear_pointer (&priv->map, ide_debugger_address_map_free);
+  dzl_clear_pointer (&priv->display_name, g_free);
   g_clear_object (&priv->breakpoints);
   g_clear_object (&priv->threads);
   g_clear_object (&priv->thread_groups);

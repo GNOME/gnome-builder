@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "debugger/ide-debugger-thread-group.h"
 
 typedef struct
@@ -47,9 +49,9 @@ ide_debugger_thread_group_finalize (GObject *object)
   IdeDebuggerThreadGroup *self = (IdeDebuggerThreadGroup *)object;
   IdeDebuggerThreadGroupPrivate *priv = ide_debugger_thread_group_get_instance_private (self);
 
-  g_clear_pointer (&priv->id, g_free);
-  g_clear_pointer (&priv->exit_code, g_free);
-  g_clear_pointer (&priv->pid, g_free);
+  dzl_clear_pointer (&priv->id, g_free);
+  dzl_clear_pointer (&priv->exit_code, g_free);
+  dzl_clear_pointer (&priv->pid, g_free);
 
   G_OBJECT_CLASS (ide_debugger_thread_group_parent_class)->finalize (object);
 }

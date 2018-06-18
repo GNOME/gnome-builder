@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "langserv/ide-langserv-symbol-node.h"
 #include "langserv/ide-langserv-symbol-node-private.h"
 #include "langserv/ide-langserv-symbol-tree.h"
@@ -89,7 +91,7 @@ ide_langserv_symbol_tree_finalize (GObject *object)
   IdeLangservSymbolTree *self = (IdeLangservSymbolTree *)object;
   IdeLangservSymbolTreePrivate *priv = ide_langserv_symbol_tree_get_instance_private (self);
 
-  g_clear_pointer (&priv->symbols, g_ptr_array_unref);
+  dzl_clear_pointer (&priv->symbols, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_langserv_symbol_tree_parent_class)->finalize (object);
 }

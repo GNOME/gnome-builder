@@ -58,8 +58,8 @@ ide_fixit_new (IdeSourceRange *source_range,
 static void
 ide_fixit_destroy (IdeFixit *self)
 {
-  g_clear_pointer (&self->range, ide_source_range_unref);
-  g_clear_pointer (&self->text, g_free);
+  dzl_clear_pointer (&self->range, ide_source_range_unref);
+  dzl_clear_pointer (&self->text, g_free);
   g_slice_free (IdeFixit, self);
 
   DZL_COUNTER_DEC (instances);

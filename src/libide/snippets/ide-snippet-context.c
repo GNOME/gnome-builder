@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <errno.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -685,9 +686,9 @@ ide_snippet_context_finalize (GObject *object)
 {
   IdeSnippetContext *context = (IdeSnippetContext *)object;
 
-  g_clear_pointer (&context->shared, (GDestroyNotify)g_hash_table_unref);
-  g_clear_pointer (&context->variables, (GDestroyNotify)g_hash_table_unref);
-  g_clear_pointer (&context->line_prefix, g_free);
+  dzl_clear_pointer (&context->shared, g_hash_table_unref);
+  dzl_clear_pointer (&context->variables, g_hash_table_unref);
+  dzl_clear_pointer (&context->line_prefix, g_free);
 
   G_OBJECT_CLASS (ide_snippet_context_parent_class)->finalize (object);
 }

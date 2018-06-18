@@ -393,7 +393,7 @@ ide_editor_search_dispose (GObject *object)
   g_clear_object (&self->context);
   g_clear_object (&self->settings);
   g_clear_object (&self->lookahead_cancellable);
-  g_clear_pointer (&self->replacement_text, g_free);
+  dzl_clear_pointer (&self->replacement_text, g_free);
 
   G_OBJECT_CLASS (ide_editor_search_parent_class)->dispose (object);
 }

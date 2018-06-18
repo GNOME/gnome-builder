@@ -170,7 +170,7 @@ ide_keybindings_reload (IdeKeybindings *self)
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&provider))
         gtk_style_context_remove_provider_for_screen (screen, provider);
 
-      g_clear_pointer (&self->plugin_providers, g_hash_table_unref);
+      dzl_clear_pointer (&self->plugin_providers, g_hash_table_unref);
     }
 
   self->plugin_providers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
@@ -279,7 +279,7 @@ ide_keybindings_finalize (GObject *object)
   IDE_ENTRY;
 
   g_clear_object (&self->css_provider);
-  g_clear_pointer (&self->mode, g_free);
+  dzl_clear_pointer (&self->mode, g_free);
 
   G_OBJECT_CLASS (ide_keybindings_parent_class)->finalize (object);
 

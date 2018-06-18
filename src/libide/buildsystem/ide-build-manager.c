@@ -553,7 +553,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
 
   g_clear_object (&self->pipeline);
 
-  g_clear_pointer (&self->running_time, g_timer_destroy);
+  dzl_clear_pointer (&self->running_time, g_timer_destroy);
 
   self->diagnostic_count = 0;
   self->error_count = 0;
@@ -775,9 +775,9 @@ ide_build_manager_finalize (GObject *object)
   g_clear_object (&self->pipeline);
   g_clear_object (&self->pipeline_signals);
   g_clear_object (&self->cancellable);
-  g_clear_pointer (&self->last_build_time, g_date_time_unref);
-  g_clear_pointer (&self->running_time, g_timer_destroy);
-  g_clear_pointer (&self->branch_name, g_free);
+  dzl_clear_pointer (&self->last_build_time, g_date_time_unref);
+  dzl_clear_pointer (&self->running_time, g_timer_destroy);
+  dzl_clear_pointer (&self->branch_name, g_free);
 
   dzl_clear_source (&self->timer_source);
 
@@ -1447,7 +1447,7 @@ ide_build_manager_execute_async (IdeBuildManager     *self,
    */
   if ((phase & IDE_BUILD_PHASE_MASK) >= IDE_BUILD_PHASE_BUILD)
     {
-      g_clear_pointer (&self->last_build_time, g_date_time_unref);
+      dzl_clear_pointer (&self->last_build_time, g_date_time_unref);
       self->last_build_time = g_date_time_new_now_local ();
       self->diagnostic_count = 0;
       self->warning_count = 0;

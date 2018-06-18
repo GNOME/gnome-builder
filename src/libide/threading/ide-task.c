@@ -340,7 +340,7 @@ G_LOCK_DEFINE (global_task_list);
 static void
 ide_task_cancel_free (IdeTaskCancel *cancel)
 {
-  g_clear_pointer (&cancel->main_context, g_main_context_unref);
+  dzl_clear_pointer (&cancel->main_context, g_main_context_unref);
   g_clear_object (&cancel->task);
   g_slice_free (IdeTaskCancel, cancel);
 }
@@ -466,7 +466,7 @@ ide_task_result_free (IdeTaskResult *result)
     }
 
   g_clear_object (&result->task);
-  g_clear_pointer (&result->main_context, g_main_context_unref);
+  dzl_clear_pointer (&result->main_context, g_main_context_unref);
   g_slice_free (IdeTaskResult, result);
 }
 
@@ -579,7 +579,7 @@ ide_task_dispose (GObject *object)
   ide_task_release (self, TRUE);
 
   g_mutex_lock (&priv->mutex);
-  g_clear_pointer (&priv->result, ide_task_result_free);
+  dzl_clear_pointer (&priv->result, ide_task_result_free);
   g_mutex_unlock (&priv->mutex);
 
   G_OBJECT_CLASS (ide_task_parent_class)->dispose (object);
@@ -619,7 +619,7 @@ ide_task_finalize (GObject *object)
   g_assert (priv->chained == NULL);
   g_assert (priv->thread_result == NULL);
 
-  g_clear_pointer (&priv->main_context, g_main_context_unref);
+  dzl_clear_pointer (&priv->main_context, g_main_context_unref);
   g_clear_object (&priv->cancellable);
   g_mutex_clear (&priv->mutex);
 

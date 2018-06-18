@@ -514,11 +514,11 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
    */
   for (iter = self->private_tags; iter; iter = iter->next)
     gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
-  g_clear_pointer (&self->private_tags, g_slist_free);
+  dzl_clear_pointer (&self->private_tags, g_slist_free);
 
   for (iter = self->public_tags; iter; iter = iter->next)
     gtk_text_buffer_remove_tag (buffer, iter->data, &begin, &end);
-  g_clear_pointer (&self->public_tags, g_slist_free);
+  dzl_clear_pointer (&self->public_tags, g_slist_free);
 
   if (self->highlighter == NULL)
     IDE_EXIT;
@@ -760,8 +760,8 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
         }
     }
 
-  g_clear_pointer (&self->public_tags, g_slist_free);
-  g_clear_pointer (&self->private_tags, g_slist_free);
+  dzl_clear_pointer (&self->public_tags, g_slist_free);
+  dzl_clear_pointer (&self->private_tags, g_slist_free);
 
   g_clear_object (&self->invalid_begin);
   g_clear_object (&self->invalid_end);

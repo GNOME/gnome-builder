@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "debugger/ide-debugger-register.h"
 
 typedef struct
@@ -47,9 +49,9 @@ ide_debugger_register_finalize (GObject *object)
   IdeDebuggerRegister *self = (IdeDebuggerRegister *)object;
   IdeDebuggerRegisterPrivate *priv = ide_debugger_register_get_instance_private (self);
 
-  g_clear_pointer (&priv->id, g_free);
-  g_clear_pointer (&priv->name, g_free);
-  g_clear_pointer (&priv->value, g_free);
+  dzl_clear_pointer (&priv->id, g_free);
+  dzl_clear_pointer (&priv->name, g_free);
+  dzl_clear_pointer (&priv->value, g_free);
 
   G_OBJECT_CLASS (ide_debugger_register_parent_class)->finalize (object);
 }

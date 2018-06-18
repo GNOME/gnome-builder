@@ -504,7 +504,7 @@ ide_layout_stack_pan_begin (IdeLayoutStack   *self,
                                      "height", alloc.height,
                                      NULL);
 
-  g_clear_pointer (&surface, cairo_surface_destroy);
+  dzl_clear_pointer (&surface, cairo_surface_destroy);
 
   /* Hide the view while we begin the possible transition to another
    * layout stack.
@@ -753,12 +753,12 @@ ide_layout_stack_destroy (GtkWidget *widget)
 
   g_assert (IDE_IS_LAYOUT_STACK (self));
 
-  g_clear_pointer (&priv->in_transition, g_ptr_array_unref);
+  dzl_clear_pointer (&priv->in_transition, g_ptr_array_unref);
 
   if (priv->views != NULL)
     {
       g_list_model_items_changed (G_LIST_MODEL (self), 0, priv->views->len, 0);
-      g_clear_pointer (&priv->views, g_ptr_array_unref);
+      dzl_clear_pointer (&priv->views, g_ptr_array_unref);
     }
 
   g_clear_object (&priv->addins);

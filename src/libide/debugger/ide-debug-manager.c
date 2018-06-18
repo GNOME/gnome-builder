@@ -542,7 +542,7 @@ ide_debug_manager_finalize (GObject *object)
   IdeDebugManager *self = (IdeDebugManager *)object;
 
   g_clear_object (&self->debugger_signals);
-  g_clear_pointer (&self->breakpoints, g_hash_table_unref);
+  dzl_clear_pointer (&self->breakpoints, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_debug_manager_parent_class)->finalize (object);
 }

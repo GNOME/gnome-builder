@@ -86,8 +86,8 @@ ide_environment_editor_row_disconnect (IdeEnvironmentEditorRow *self)
   g_assert (IDE_IS_ENVIRONMENT_EDITOR_ROW (self));
   g_assert (IDE_IS_ENVIRONMENT_VARIABLE (self->variable));
 
-  g_clear_pointer (&self->key_binding, g_binding_unbind);
-  g_clear_pointer (&self->value_binding, g_binding_unbind);
+  dzl_clear_pointer (&self->key_binding, g_binding_unbind);
+  dzl_clear_pointer (&self->value_binding, g_binding_unbind);
 }
 
 static void

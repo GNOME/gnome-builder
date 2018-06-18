@@ -327,7 +327,7 @@ init_async_state_free (gpointer data)
 
   if (state)
     {
-      g_clear_pointer (&state->extension_point, g_free);
+      dzl_clear_pointer (&state->extension_point, g_free);
       g_list_free_full (state->objects, g_object_unref);
       state->objects = NULL;
       g_slice_free (InitAsyncState, state);

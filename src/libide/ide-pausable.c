@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "ide-pausable.h"
 
 struct _IdePausable
@@ -56,8 +58,8 @@ ide_pausable_finalize (GObject *object)
 {
   IdePausable *self = (IdePausable *)object;
 
-  g_clear_pointer (&self->title, g_free);
-  g_clear_pointer (&self->subtitle, g_free);
+  dzl_clear_pointer (&self->title, g_free);
+  dzl_clear_pointer (&self->subtitle, g_free);
 
   G_OBJECT_CLASS (ide_pausable_parent_class)->finalize (object);
 }

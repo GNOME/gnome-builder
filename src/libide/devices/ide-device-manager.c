@@ -121,7 +121,7 @@ static void
 deploy_state_free (DeployState *state)
 {
   g_clear_object (&state->pipeline);
-  g_clear_pointer (&state->strategies, g_ptr_array_unref);
+  dzl_clear_pointer (&state->strategies, g_ptr_array_unref);
   g_slice_free (DeployState, state);
 }
 
@@ -462,7 +462,7 @@ ide_device_manager_finalize (GObject *object)
 {
   IdeDeviceManager *self = (IdeDeviceManager *)object;
 
-  g_clear_pointer (&self->devices, g_ptr_array_unref);
+  dzl_clear_pointer (&self->devices, g_ptr_array_unref);
   g_clear_object (&self->menu);
   g_clear_object (&self->menu_section);
 

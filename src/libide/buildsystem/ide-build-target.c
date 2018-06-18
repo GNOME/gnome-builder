@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "buildsystem/ide-build-target.h"
 
 G_DEFINE_INTERFACE (IdeBuildTarget, ide_build_target, IDE_TYPE_OBJECT)
@@ -132,7 +134,7 @@ ide_build_target_get_argv (IdeBuildTarget *self)
       g_autofree gchar *name = ide_build_target_get_name (self);
       g_autoptr(GFile) dir = ide_build_target_get_install_directory (self);
 
-      g_clear_pointer (&argv, g_strfreev);
+      dzl_clear_pointer (&argv, g_strfreev);
 
       if (!g_path_is_absolute (name) && dir != NULL && g_file_is_native (dir))
         {

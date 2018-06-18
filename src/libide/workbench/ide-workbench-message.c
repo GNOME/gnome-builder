@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "workbench/ide-workbench-message.h"
 
 struct _IdeWorkbenchMessage
@@ -49,7 +51,7 @@ ide_workbench_message_finalize (GObject *object)
 {
   IdeWorkbenchMessage *self = (IdeWorkbenchMessage *)object;
 
-  g_clear_pointer (&self->id, g_free);
+  dzl_clear_pointer (&self->id, g_free);
 
   G_OBJECT_CLASS (ide_workbench_message_parent_class)->finalize (object);
 }

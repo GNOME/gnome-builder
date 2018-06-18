@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "documentation/ide-documentation-info.h"
 #include "documentation/ide-documentation-proposal.h"
 
@@ -91,8 +93,8 @@ ide_documentation_info_finalize (GObject *object)
 {
   IdeDocumentationInfo *self = (IdeDocumentationInfo *)object;
 
-  g_clear_pointer (&self->input, g_free);
-  g_clear_pointer (&self->proposals, g_ptr_array_unref);
+  dzl_clear_pointer (&self->input, g_free);
+  dzl_clear_pointer (&self->proposals, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_documentation_info_parent_class)->finalize (object);
 }

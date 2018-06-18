@@ -89,7 +89,7 @@ ide_toolchain_set_id (IdeToolchain  *self,
 
   if (g_strcmp0 (id, priv->id) != 0)
     {
-      g_clear_pointer (&priv->id, g_free);
+      dzl_clear_pointer (&priv->id, g_free);
       priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
     }
@@ -116,7 +116,7 @@ ide_toolchain_set_display_name (IdeToolchain  *self,
 
   if (g_strcmp0 (display_name, priv->display_name) != 0)
     {
-      g_clear_pointer (&priv->display_name, g_free);
+      dzl_clear_pointer (&priv->display_name, g_free);
       priv->display_name = g_strdup (display_name);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
     }
@@ -141,7 +141,7 @@ ide_toolchain_set_host_triplet (IdeToolchain *self,
 
   if (host_triplet != priv->host_triplet)
     {
-      g_clear_pointer (&priv->host_triplet, ide_triplet_unref);
+      dzl_clear_pointer (&priv->host_triplet, ide_triplet_unref);
       priv->host_triplet = ide_triplet_ref (host_triplet);
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HOST_TRIPLET]);
     }
@@ -257,9 +257,9 @@ ide_toolchain_finalize (GObject *object)
   IdeToolchain *self = (IdeToolchain *)object;
   IdeToolchainPrivate *priv = ide_toolchain_get_instance_private (self);
 
-  g_clear_pointer (&priv->id, g_free);
-  g_clear_pointer (&priv->display_name, g_free);
-  g_clear_pointer (&priv->host_triplet, ide_triplet_unref);
+  dzl_clear_pointer (&priv->id, g_free);
+  dzl_clear_pointer (&priv->display_name, g_free);
+  dzl_clear_pointer (&priv->host_triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_toolchain_parent_class)->finalize (object);
 }

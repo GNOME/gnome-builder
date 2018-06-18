@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <glib-object.h>
+#include <dazzle.h>
 #include <gobject/gvaluecollector.h>
 #include <stdlib.h>
 
@@ -161,8 +161,8 @@ find_property_type (GType        type,
       if (pspec != NULL)
         ret = pspec->value_type;
 
-      g_clear_pointer (&klass, g_type_class_unref);
-      g_clear_pointer (&iface, g_type_default_interface_unref);
+      dzl_clear_pointer (&klass, g_type_class_unref);
+      dzl_clear_pointer (&iface, g_type_default_interface_unref);
 
       if (ret != G_TYPE_INVALID)
         return ret;

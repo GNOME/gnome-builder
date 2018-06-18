@@ -298,7 +298,7 @@ ide_configuration_manager_finalize (GObject *object)
 
   g_clear_object (&self->current);
   g_clear_object (&self->cancellable);
-  g_clear_pointer (&self->configs, g_array_unref);
+  dzl_clear_pointer (&self->configs, g_array_unref);
 
   G_OBJECT_CLASS (ide_configuration_manager_parent_class)->finalize (object);
 }

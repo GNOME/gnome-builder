@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "ide-debug.h"
 
 #include "diagnostics/ide-source-location.h"
@@ -109,7 +111,7 @@ ide_langserv_symbol_node_finalize (GObject *object)
   IdeLangservSymbolNode *self = (IdeLangservSymbolNode *)object;
   IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
 
-  g_clear_pointer (&priv->parent_name, g_free);
+  dzl_clear_pointer (&priv->parent_name, g_free);
   g_clear_object (&priv->file);
 
   G_OBJECT_CLASS (ide_langserv_symbol_node_parent_class)->finalize (object);

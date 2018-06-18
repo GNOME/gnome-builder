@@ -292,7 +292,7 @@ ide_project_info_set_last_modified_at (IdeProjectInfo *self,
 
   if (last_modified_at != self->last_modified_at)
     {
-      g_clear_pointer (&self->last_modified_at, g_date_time_unref);
+      dzl_clear_pointer (&self->last_modified_at, g_date_time_unref);
       self->last_modified_at = last_modified_at ? g_date_time_ref (last_modified_at) : NULL;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_MODIFIED_AT]);
     }
@@ -326,11 +326,11 @@ ide_project_info_finalize (GObject *object)
 {
   IdeProjectInfo *self = (IdeProjectInfo *)object;
 
-  g_clear_pointer (&self->last_modified_at, g_date_time_unref);
-  g_clear_pointer (&self->build_system_name, g_free);
-  g_clear_pointer (&self->description, g_free);
-  g_clear_pointer (&self->languages, g_strfreev);
-  g_clear_pointer (&self->name, g_free);
+  dzl_clear_pointer (&self->last_modified_at, g_date_time_unref);
+  dzl_clear_pointer (&self->build_system_name, g_free);
+  dzl_clear_pointer (&self->description, g_free);
+  dzl_clear_pointer (&self->languages, g_strfreev);
+  dzl_clear_pointer (&self->name, g_free);
   g_clear_object (&self->directory);
   g_clear_object (&self->file);
 
@@ -619,7 +619,7 @@ ide_project_info_set_vcs_uri (IdeProjectInfo *self,
 
   if (self->vcs_uri != vcs_uri)
     {
-      g_clear_pointer (&self->vcs_uri, ide_vcs_uri_unref);
+      dzl_clear_pointer (&self->vcs_uri, ide_vcs_uri_unref);
       self->vcs_uri = ide_vcs_uri_ref (vcs_uri);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VCS_URI]);
     }

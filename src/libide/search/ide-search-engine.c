@@ -74,7 +74,7 @@ request_destroy (Request *r)
 {
   g_assert (r->outstanding == 0);
   g_clear_object (&r->store);
-  g_clear_pointer (&r->query, g_free);
+  dzl_clear_pointer (&r->query, g_free);
   r->task = NULL;
   g_slice_free (Request, r);
 }

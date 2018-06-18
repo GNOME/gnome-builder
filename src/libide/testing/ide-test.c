@@ -66,9 +66,9 @@ ide_test_finalize (GObject *object)
 
   priv->provider = NULL;
 
-  g_clear_pointer (&priv->group, g_free);
-  g_clear_pointer (&priv->id, g_free);
-  g_clear_pointer (&priv->display_name, g_free);
+  dzl_clear_pointer (&priv->group, g_free);
+  dzl_clear_pointer (&priv->id, g_free);
+  dzl_clear_pointer (&priv->display_name, g_free);
 
   G_OBJECT_CLASS (ide_test_parent_class)->finalize (object);
 }

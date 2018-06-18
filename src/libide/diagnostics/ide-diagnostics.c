@@ -90,7 +90,7 @@ ide_diagnostics_unref (IdeDiagnostics *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
-      g_clear_pointer (&self->diagnostics, g_ptr_array_unref);
+      dzl_clear_pointer (&self->diagnostics, g_ptr_array_unref);
       g_slice_free (IdeDiagnostics, self);
 
       DZL_COUNTER_DEC (instances);

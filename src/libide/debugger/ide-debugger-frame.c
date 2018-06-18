@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "debugger/ide-debugger-frame.h"
 
 typedef struct
@@ -55,10 +57,10 @@ ide_debugger_frame_finalize (GObject *object)
   IdeDebuggerFrame *self = (IdeDebuggerFrame *)object;
   IdeDebuggerFramePrivate *priv = ide_debugger_frame_get_instance_private (self);
 
-  g_clear_pointer (&priv->args, g_strfreev);
-  g_clear_pointer (&priv->file, g_free);
-  g_clear_pointer (&priv->function, g_free);
-  g_clear_pointer (&priv->library, g_free);
+  dzl_clear_pointer (&priv->args, g_strfreev);
+  dzl_clear_pointer (&priv->file, g_free);
+  dzl_clear_pointer (&priv->function, g_free);
+  dzl_clear_pointer (&priv->library, g_free);
 
   G_OBJECT_CLASS (ide_debugger_frame_parent_class)->finalize (object);
 }

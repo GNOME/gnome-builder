@@ -100,15 +100,15 @@ ide_application_make_skeleton_dirs (IdeApplication *self)
 
   path = g_build_filename (g_get_user_data_dir (), "gnome-builder", NULL);
   g_mkdir_with_parents (path, 0750);
-  g_clear_pointer (&path, g_free);
+  dzl_clear_pointer (&path, g_free);
 
   path = g_build_filename (g_get_user_config_dir (), "gnome-builder", NULL);
   g_mkdir_with_parents (path, 0750);
-  g_clear_pointer (&path, g_free);
+  dzl_clear_pointer (&path, g_free);
 
   path = g_build_filename (g_get_user_config_dir (), "gnome-builder", "snippets", NULL);
   g_mkdir_with_parents (path, 0750);
-  g_clear_pointer (&path, g_free);
+  dzl_clear_pointer (&path, g_free);
 
   projects_dir = ide_application_get_projects_directory (self);
   g_assert (G_IS_FILE (projects_dir));
@@ -633,14 +633,14 @@ ide_application_finalize (GObject *object)
 {
   IdeApplication *self = (IdeApplication *)object;
 
-  g_clear_pointer (&self->test_funcs, g_list_free);
-  g_clear_pointer (&self->dbus_address, g_free);
-  g_clear_pointer (&self->tool_arguments, g_strfreev);
-  g_clear_pointer (&self->started_at, g_date_time_unref);
-  g_clear_pointer (&self->plugin_css, g_hash_table_unref);
-  g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
-  g_clear_pointer (&self->reapers, g_ptr_array_unref);
-  g_clear_pointer (&self->plugin_gresources, g_hash_table_unref);
+  dzl_clear_pointer (&self->test_funcs, g_list_free);
+  dzl_clear_pointer (&self->dbus_address, g_free);
+  dzl_clear_pointer (&self->tool_arguments, g_strfreev);
+  dzl_clear_pointer (&self->started_at, g_date_time_unref);
+  dzl_clear_pointer (&self->plugin_css, g_hash_table_unref);
+  dzl_clear_pointer (&self->plugin_settings, g_hash_table_unref);
+  dzl_clear_pointer (&self->reapers, g_ptr_array_unref);
+  dzl_clear_pointer (&self->plugin_gresources, g_hash_table_unref);
   g_clear_object (&self->worker_manager);
   g_clear_object (&self->keybindings);
   g_clear_object (&self->recent_projects);

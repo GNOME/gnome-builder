@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -154,9 +155,9 @@ ide_source_view_mode_destroy (GtkWidget *widget)
   IdeSourceViewMode *self = IDE_SOURCE_VIEW_MODE (widget);
 
   g_clear_object (&self->view);
-  g_clear_pointer (&self->name, g_free);
-  g_clear_pointer (&self->default_mode, g_free);
-  g_clear_pointer (&self->display_name, g_free);
+  dzl_clear_pointer (&self->name, g_free);
+  dzl_clear_pointer (&self->default_mode, g_free);
+  dzl_clear_pointer (&self->display_name, g_free);
   self->type = 0;
 
   GTK_WIDGET_CLASS (ide_source_view_mode_parent_class)->destroy (widget);

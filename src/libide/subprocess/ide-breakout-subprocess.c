@@ -1047,7 +1047,7 @@ ide_breakout_subprocess_complete_command_locked (IdeBreakoutSubprocess *self,
    * after the process has exited.
    */
   self->client_pid = 0;
-  g_clear_pointer (&self->identifier, g_free);
+  dzl_clear_pointer (&self->identifier, g_free);
 
   /* Remove our sources used for signal propagation */
   dzl_clear_source (&self->sigint_id);
@@ -1384,7 +1384,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
    * We don't want to allow these FDs to be used again.
    */
   self->fd_mapping_len = 0;
-  g_clear_pointer (&self->fd_mapping, g_free);
+  dzl_clear_pointer (&self->fd_mapping, g_free);
 
 
   /*
@@ -1585,11 +1585,11 @@ ide_breakout_subprocess_finalize (GObject *object)
   g_assert_cmpint (self->sigterm_id, ==, 0);
   g_assert_cmpint (self->exited_subscription, ==, 0);
 
-  g_clear_pointer (&self->identifier, g_free);
-  g_clear_pointer (&self->cwd, g_free);
-  g_clear_pointer (&self->argv, g_strfreev);
-  g_clear_pointer (&self->env, g_strfreev);
-  g_clear_pointer (&self->main_context, g_main_context_unref);
+  dzl_clear_pointer (&self->identifier, g_free);
+  dzl_clear_pointer (&self->cwd, g_free);
+  dzl_clear_pointer (&self->argv, g_strfreev);
+  dzl_clear_pointer (&self->env, g_strfreev);
+  dzl_clear_pointer (&self->main_context, g_main_context_unref);
 
   g_clear_object (&self->stdin_pipe);
   g_clear_object (&self->stdout_pipe);
@@ -1610,7 +1610,7 @@ ide_breakout_subprocess_finalize (GObject *object)
 
   for (guint i = 0; i < self->fd_mapping_len; i++)
     close (self->fd_mapping[i].source_fd);
-  g_clear_pointer (&self->fd_mapping, g_free);
+  dzl_clear_pointer (&self->fd_mapping, g_free);
 
   G_OBJECT_CLASS (ide_breakout_subprocess_parent_class)->finalize (object);
 

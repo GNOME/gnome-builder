@@ -510,7 +510,7 @@ ide_runner_finalize (GObject *object)
         }
     }
 
-  g_clear_pointer (&priv->fd_mapping, g_array_unref);
+  dzl_clear_pointer (&priv->fd_mapping, g_array_unref);
 
   if (priv->tty_fd != -1)
     {

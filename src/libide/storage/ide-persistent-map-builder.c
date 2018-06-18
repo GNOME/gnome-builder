@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <string.h>
 
 #include "storage/ide-persistent-map-builder.h"
@@ -77,11 +78,11 @@ build_state_free (gpointer data)
 {
   BuildState *state = data;
 
-  g_clear_pointer (&state->keys, g_byte_array_unref);
-  g_clear_pointer (&state->keys_hash, g_hash_table_unref);
-  g_clear_pointer (&state->values, g_ptr_array_unref);
-  g_clear_pointer (&state->kvpairs, g_array_unref);
-  g_clear_pointer (&state->metadata, g_variant_dict_unref);
+  dzl_clear_pointer (&state->keys, g_byte_array_unref);
+  dzl_clear_pointer (&state->keys_hash, g_hash_table_unref);
+  dzl_clear_pointer (&state->values, g_ptr_array_unref);
+  dzl_clear_pointer (&state->kvpairs, g_array_unref);
+  dzl_clear_pointer (&state->metadata, g_variant_dict_unref);
   g_clear_object (&state->destination);
   g_slice_free (BuildState, state);
 }
@@ -326,7 +327,7 @@ ide_persistent_map_builder_finalize (GObject *object)
 {
   IdePersistentMapBuilder *self = (IdePersistentMapBuilder *)object;
 
-  g_clear_pointer (&self->state, build_state_free);
+  dzl_clear_pointer (&self->state, build_state_free);
 
   G_OBJECT_CLASS (ide_persistent_map_builder_parent_class)->finalize (object);
 }

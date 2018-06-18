@@ -136,8 +136,8 @@ edit_state_free (gpointer data)
 
   if (state != NULL)
     {
-      g_clear_pointer (&state->edits, g_ptr_array_unref);
-      g_clear_pointer (&state->buffers, g_hash_table_unref);
+      dzl_clear_pointer (&state->edits, g_ptr_array_unref);
+      dzl_clear_pointer (&state->buffers, g_hash_table_unref);
       g_slice_free (EditState, state);
     }
 }
@@ -1369,9 +1369,9 @@ ide_buffer_manager_finalize (GObject *object)
   if (self->buffers->len)
     g_warning ("Not all buffers have been destroyed.");
 
-  g_clear_pointer (&self->buffers, g_ptr_array_unref);
-  g_clear_pointer (&self->loading, g_hash_table_unref);
-  g_clear_pointer (&self->timeouts, g_hash_table_unref);
+  dzl_clear_pointer (&self->buffers, g_ptr_array_unref);
+  dzl_clear_pointer (&self->loading, g_hash_table_unref);
+  dzl_clear_pointer (&self->timeouts, g_hash_table_unref);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_buffer_manager_parent_class)->finalize (object);

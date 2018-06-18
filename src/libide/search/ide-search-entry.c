@@ -124,7 +124,7 @@ delayed_activate_free (gpointer data)
   DelayedActivate *da = data;
 
   g_clear_object (&da->editor);
-  g_clear_pointer (&da->location, ide_source_location_unref);
+  dzl_clear_pointer (&da->location, ide_source_location_unref);
   g_slice_free (DelayedActivate, da);
 }
 

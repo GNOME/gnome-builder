@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "devices/ide-device-provider.h"
 
 typedef struct
@@ -98,7 +100,7 @@ ide_device_provider_dispose (GObject *object)
   IdeDeviceProvider *self = (IdeDeviceProvider *)object;
   IdeDeviceProviderPrivate *priv = ide_device_provider_get_instance_private (self);
 
-  g_clear_pointer (&priv->devices, g_ptr_array_unref);
+  dzl_clear_pointer (&priv->devices, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_device_provider_parent_class)->dispose (object);
 }

@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <stdlib.h>
 
 #include "ide-debug.h"
@@ -101,7 +102,7 @@ ide_debugger_breakpoints_dispose (GObject *object)
 {
   IdeDebuggerBreakpoints *self = (IdeDebuggerBreakpoints *)object;
 
-  g_clear_pointer (&self->lines, g_array_unref);
+  dzl_clear_pointer (&self->lines, g_array_unref);
 
   G_OBJECT_CLASS (ide_debugger_breakpoints_parent_class)->dispose (object);
 }

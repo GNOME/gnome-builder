@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "buildconfig/ide-buildconfig-configuration.h"
 
 struct _IdeBuildconfigConfiguration
@@ -46,8 +48,8 @@ ide_buildconfig_configuration_finalize (GObject *object)
 {
   IdeBuildconfigConfiguration *self = (IdeBuildconfigConfiguration *)object;
 
-  g_clear_pointer (&self->prebuild, g_strfreev);
-  g_clear_pointer (&self->postbuild, g_strfreev);
+  dzl_clear_pointer (&self->prebuild, g_strfreev);
+  dzl_clear_pointer (&self->postbuild, g_strfreev);
 
   G_OBJECT_CLASS (ide_buildconfig_configuration_parent_class)->finalize (object);
 }

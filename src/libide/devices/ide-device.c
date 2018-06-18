@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-debug.h"
@@ -192,8 +193,8 @@ ide_device_finalize (GObject *object)
   IdeDevice *self = (IdeDevice *)object;
   IdeDevicePrivate *priv = ide_device_get_instance_private (self);
 
-  g_clear_pointer (&priv->display_name, g_free);
-  g_clear_pointer (&priv->id, g_free);
+  dzl_clear_pointer (&priv->display_name, g_free);
+  dzl_clear_pointer (&priv->id, g_free);
 
   G_OBJECT_CLASS (ide_device_parent_class)->finalize (object);
 }

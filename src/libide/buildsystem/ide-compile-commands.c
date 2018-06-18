@@ -97,7 +97,7 @@ compile_info_free (gpointer data)
     {
       g_clear_object (&info->directory);
       g_clear_object (&info->file);
-      g_clear_pointer (&info->command, g_free);
+      dzl_clear_pointer (&info->command, g_free);
       g_slice_free (CompileInfo, info);
     }
 }
@@ -107,8 +107,8 @@ ide_compile_commands_finalize (GObject *object)
 {
   IdeCompileCommands *self = (IdeCompileCommands *)object;
 
-  g_clear_pointer (&self->info_by_file, g_hash_table_unref);
-  g_clear_pointer (&self->vala_info, g_ptr_array_unref);
+  dzl_clear_pointer (&self->info_by_file, g_hash_table_unref);
+  dzl_clear_pointer (&self->vala_info, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_compile_commands_parent_class)->finalize (object);
 }

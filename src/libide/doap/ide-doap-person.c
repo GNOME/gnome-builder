@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "doap/ide-doap-person.h"
@@ -98,8 +99,8 @@ ide_doap_person_finalize (GObject *object)
 {
   IdeDoapPerson *self = (IdeDoapPerson *)object;
 
-  g_clear_pointer (&self->email, g_free);
-  g_clear_pointer (&self->name, g_free);
+  dzl_clear_pointer (&self->email, g_free);
+  dzl_clear_pointer (&self->name, g_free);
 
   G_OBJECT_CLASS (ide_doap_person_parent_class)->finalize (object);
 }

@@ -20,6 +20,7 @@
 
 #define G_LOG_DOMAIN "ide-langserv-completion-item"
 
+#include <dazzle.h>
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"
@@ -47,7 +48,7 @@ ide_langserv_completion_item_finalize (GObject *object)
 {
   IdeLangservCompletionItem *self = (IdeLangservCompletionItem *)object;
 
-  g_clear_pointer (&self->variant, g_variant_unref);
+  dzl_clear_pointer (&self->variant, g_variant_unref);
 
   G_OBJECT_CLASS (ide_langserv_completion_item_parent_class)->finalize (object);
 }

@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "buildsystem/ide-build-target.h"
 #include "buildsystem/ide-simple-build-target.h"
 
@@ -47,10 +49,10 @@ ide_simple_build_target_finalize (GObject *object)
   IdeSimpleBuildTargetPrivate *priv = ide_simple_build_target_get_instance_private (self);
 
   g_clear_object (&priv->install_directory);
-  g_clear_pointer (&priv->name, g_free);
-  g_clear_pointer (&priv->argv, g_strfreev);
-  g_clear_pointer (&priv->cwd, g_free);
-  g_clear_pointer (&priv->language, g_free);
+  dzl_clear_pointer (&priv->name, g_free);
+  dzl_clear_pointer (&priv->argv, g_strfreev);
+  dzl_clear_pointer (&priv->cwd, g_free);
+  dzl_clear_pointer (&priv->language, g_free);
 
   G_OBJECT_CLASS (ide_simple_build_target_parent_class)->finalize (object);
 }

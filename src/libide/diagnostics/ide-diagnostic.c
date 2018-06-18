@@ -91,10 +91,10 @@ ide_diagnostic_unref (IdeDiagnostic *self)
     {
       self->magic = 0xAAAAAAAA;
 
-      g_clear_pointer (&self->location, ide_source_location_unref);
-      g_clear_pointer (&self->text, g_free);
-      g_clear_pointer (&self->ranges, g_ptr_array_unref);
-      g_clear_pointer (&self->fixits, g_ptr_array_unref);
+      dzl_clear_pointer (&self->location, ide_source_location_unref);
+      dzl_clear_pointer (&self->text, g_free);
+      dzl_clear_pointer (&self->ranges, g_ptr_array_unref);
+      dzl_clear_pointer (&self->fixits, g_ptr_array_unref);
       g_slice_free (IdeDiagnostic, self);
 
       DZL_COUNTER_DEC (instances);

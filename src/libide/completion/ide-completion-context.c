@@ -175,7 +175,7 @@ ide_completion_context_dispose (GObject *object)
 {
   IdeCompletionContext *self = (IdeCompletionContext *)object;
 
-  g_clear_pointer (&self->providers, g_array_unref);
+  dzl_clear_pointer (&self->providers, g_array_unref);
   g_clear_object (&self->completion);
 
   if (self->begin_mark != NULL)

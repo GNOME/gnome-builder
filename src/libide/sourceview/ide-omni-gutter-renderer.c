@@ -560,7 +560,7 @@ ide_omni_gutter_renderer_recalculate_size (IdeOmniGutterRenderer *self)
   /*
    * Stash the font description for future use.
    */
-  g_clear_pointer (&self->scaled_font_desc, pango_font_description_free);
+  dzl_clear_pointer (&self->scaled_font_desc, pango_font_description_free);
   self->scaled_font_desc = ide_source_view_get_scaled_font_desc (IDE_SOURCE_VIEW (view));
 
   /*
@@ -1270,12 +1270,12 @@ ide_omni_gutter_renderer_reload_icons (IdeOmniGutterRenderer *self)
    *       multiple instances.
    */
 
-  g_clear_pointer (&self->note_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->warning_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->error_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->note_selected_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->warning_selected_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->error_selected_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->note_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->warning_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->error_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->note_selected_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->warning_selected_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->error_selected_surface, cairo_surface_destroy);
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   if (view == NULL)
@@ -1474,22 +1474,22 @@ ide_omni_gutter_renderer_dispose (GObject *object)
   dzl_clear_source (&self->resize_source);
 
   g_clear_object (&self->breakpoints);
-  g_clear_pointer (&self->lines, g_array_unref);
+  dzl_clear_pointer (&self->lines, g_array_unref);
 
-  g_clear_pointer (&self->scaled_font_desc, pango_font_description_free);
+  dzl_clear_pointer (&self->scaled_font_desc, pango_font_description_free);
 
   g_clear_object (&self->view_signals);
   g_clear_object (&self->buffer_signals);
 
-  g_clear_pointer (&self->note_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->warning_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->error_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->note_selected_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->warning_selected_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->error_selected_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->note_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->warning_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->error_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->note_selected_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->warning_selected_surface, cairo_surface_destroy);
+  dzl_clear_pointer (&self->error_selected_surface, cairo_surface_destroy);
 
   g_clear_object (&self->layout);
-  g_clear_pointer (&self->bold_attrs, pango_attr_list_unref);
+  dzl_clear_pointer (&self->bold_attrs, pango_attr_list_unref);
 
   G_OBJECT_CLASS (ide_omni_gutter_renderer_parent_class)->dispose (object);
 }

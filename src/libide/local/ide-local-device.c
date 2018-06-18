@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 #include <sys/utsname.h>
@@ -158,7 +159,7 @@ ide_local_device_finalize (GObject *object)
   IdeLocalDevice *self = (IdeLocalDevice *)object;
   IdeLocalDevicePrivate *priv = ide_local_device_get_instance_private (self);
 
-  g_clear_pointer (&priv->triplet, ide_triplet_unref);
+  dzl_clear_pointer (&priv->triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_local_device_parent_class)->finalize (object);
 }

@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <dazzle.h>
 #include <errno.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -125,7 +126,7 @@ ide_snippet_parser_finish (IdeSnippetParser *parser)
   if (parser->cur_name)
     ide_snippet_parser_store(parser);
 
-  g_clear_pointer (&parser->cur_name, g_free);
+  dzl_clear_pointer (&parser->cur_name, g_free);
 
   g_string_truncate (parser->cur_text, 0);
   g_string_truncate (parser->snippet_text, 0);

@@ -978,8 +978,8 @@ ide_completion_finalize (GObject *object)
   g_clear_object (&self->view_signals);
   g_clear_object (&self->context);
   g_clear_object (&self->cancellable);
-  g_clear_pointer (&self->providers, g_ptr_array_unref);
-  g_clear_pointer (&self->font_desc, pango_font_description_free);
+  dzl_clear_pointer (&self->providers, g_ptr_array_unref);
+  dzl_clear_pointer (&self->font_desc, pango_font_description_free);
   g_clear_weak_pointer (&self->view);
 
   G_OBJECT_CLASS (ide_completion_parent_class)->finalize (object);

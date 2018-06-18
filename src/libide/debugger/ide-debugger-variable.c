@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "debugger/ide-debugger-variable.h"
 
 typedef struct
@@ -49,9 +51,9 @@ ide_debugger_variable_finalize (GObject *object)
   IdeDebuggerVariable *self = (IdeDebuggerVariable *)object;
   IdeDebuggerVariablePrivate *priv = ide_debugger_variable_get_instance_private (self);
 
-  g_clear_pointer (&priv->name, g_free);
-  g_clear_pointer (&priv->type_name, g_free);
-  g_clear_pointer (&priv->value, g_free);
+  dzl_clear_pointer (&priv->name, g_free);
+  dzl_clear_pointer (&priv->type_name, g_free);
+  dzl_clear_pointer (&priv->value, g_free);
 
   G_OBJECT_CLASS (ide_debugger_variable_parent_class)->finalize (object);
 }

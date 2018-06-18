@@ -66,7 +66,7 @@ static void
 prepare_state_free (PrepareState *state)
 {
   g_clear_object (&state->pipeline);
-  g_clear_pointer (&state->runtime_id, g_free);
+  dzl_clear_pointer (&state->runtime_id, g_free);
   g_slice_free (PrepareState, state);
 }
 
@@ -158,7 +158,7 @@ ide_runtime_manager_dispose (GObject *object)
   IdeRuntimeManager *self = (IdeRuntimeManager *)object;
 
   _ide_runtime_manager_unload (self);
-  g_clear_pointer (&self->runtimes, g_ptr_array_unref);
+  dzl_clear_pointer (&self->runtimes, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_runtime_manager_parent_class)->dispose (object);
 }
