@@ -540,6 +540,14 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtksourceview-Add-maven-language-file.patch"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtksourceview-log-guess-language.patch"
                 }
             ]
         },
