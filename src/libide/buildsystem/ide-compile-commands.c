@@ -591,7 +591,7 @@ ide_compile_commands_filter_vala (IdeCompileCommands   *self,
         }
     }
 
-  g_free (*argv);
+  g_strfreev (*argv);
 
   g_ptr_array_add (ar, NULL);
   *argv = (gchar **)g_ptr_array_free (ar, FALSE);
