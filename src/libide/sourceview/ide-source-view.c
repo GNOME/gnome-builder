@@ -1593,6 +1593,10 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
       ch[0] = '"';
       break;
 
+    case GDK_KEY_less:
+      ch[0] = '>';
+      break;
+
 #if 0
     /*
      * TODO: We should avoid this when we are in comments, etc. That will
