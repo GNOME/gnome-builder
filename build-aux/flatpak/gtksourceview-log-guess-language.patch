@@ -1,0 +1,59 @@
+From 1fd56595e10b9406d3995a643e14a52b87498710 Mon Sep 17 00:00:00 2001
+From: Alberto Fanjul <albertofanjul@gmail.com>
+Date: Tue, 19 Jun 2018 01:32:21 +0200
+Subject: [PATCH 3/3] log guess language
+
+---
+ gtksourceview/gtksourcelanguagemanager.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/gtksourceview/gtksourcelanguagemanager.c b/gtksourceview/gtksourcelanguagemanager.c
+index 3f56a35c..5a1594e6 100644
+--- a/gtksourceview/gtksourcelanguagemanager.c
++++ b/gtksourceview/gtksourcelanguagemanager.c
+@@ -485,6 +485,7 @@ pick_langs_for_filename (GtkSourceLanguageManager *lm,
+ 			 * to include them literally in a pattern.  */
+ 			if (g_pattern_match_simple (*gptr, filename_utf8))
+ 			{
++            g_info("pick language: %s", gtk_source_language_get_name(lang));
+ 				langs = g_slist_prepend (langs, lang);
+ 			}
+ 		}
+@@ -674,12 +675,17 @@ gtk_source_language_manager_guess_language (GtkSourceLanguageManager *lm,
+ 		if (content_type != NULL)
+ 		{
+ 			GSList *l;
+-
++         for (l = langs; l != NULL; l = g_slist_next (l))
++			{
++				lang = GTK_SOURCE_LANGUAGE (l->data);
++            g_info("language: %s", gtk_source_language_get_name(lang));
++         }
+ 			for (l = langs; l != NULL; l = g_slist_next (l))
+ 			{
+ 				gchar **mime_types, **gptr;
+ 
+ 				lang = GTK_SOURCE_LANGUAGE (l->data);
++            g_info("language: %s", gtk_source_language_get_name(lang));
+ 				mime_types = gtk_source_language_get_mime_types (lang);
+ 
+ 				for (gptr = mime_types; gptr != NULL && *gptr != NULL; gptr++)
+@@ -687,6 +693,7 @@ gtk_source_language_manager_guess_language (GtkSourceLanguageManager *lm,
+ 					gchar *content;
+ 
+ 					content = g_content_type_from_mime_type (*gptr);
++               g_info("mimetype: %s", content);
+ 
+ 					if (content != NULL && g_content_type_is_a (content_type, content))
+ 					{
+@@ -704,6 +711,7 @@ gtk_source_language_manager_guess_language (GtkSourceLanguageManager *lm,
+ 						g_slist_free (langs);
+ 						g_free (content);
+ 
++                  g_info("language: %s", gtk_source_language_get_name(lang));
+ 						return lang;
+ 					}
+ 					g_free (content);
+-- 
+2.17.1
+
