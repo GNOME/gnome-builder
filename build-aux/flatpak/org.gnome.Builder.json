@@ -541,6 +541,18 @@
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git",
                     "branch" : "gnome-3-24"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtksourceview-Add-gradle-language-file.patch"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtksourceview-Add-maven-language-file.patch"
+                },
+                {
+                    "type" : "patch",
+                    "path" : "gtksourceview-log-guess-language.patch"
                 }
             ]
         },
