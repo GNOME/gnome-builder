@@ -71,8 +71,8 @@ enum {
   NUM_TAG_PROPERTIES
 };
 
-G_DEFINE_TYPE (IdeTaggedEntry, ide_tagged_entry, GTK_TYPE_SEARCH_ENTRY)
-G_DEFINE_TYPE (IdeTaggedEntryTag, ide_tagged_entry_tag, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeTaggedEntry, ide_tagged_entry, GTK_TYPE_SEARCH_ENTRY)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeTaggedEntryTag, ide_tagged_entry_tag, G_TYPE_OBJECT)
 
 static guint signals[LAST_SIGNAL] = { 0, };
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
@@ -959,7 +959,6 @@ ide_tagged_entry_class_init (IdeTaggedEntryClass *klass)
                           "Whether the close button should be shown in tags.", TRUE,
                           G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS);
 
-  g_type_class_add_private (klass, sizeof (IdeTaggedEntryPrivate));
   g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 }
 
@@ -1061,7 +1060,6 @@ ide_tagged_entry_tag_class_init (IdeTaggedEntryTagClass *klass)
                          "Style of the tag.", "entry-tag",
                          G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_type_class_add_private (klass, sizeof (IdeTaggedEntryTagPrivate));
   g_object_class_install_properties (oclass, NUM_TAG_PROPERTIES, tag_properties);
 }
 
