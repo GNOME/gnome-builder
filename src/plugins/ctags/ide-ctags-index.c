@@ -52,9 +52,8 @@ enum {
 
 static void async_initable_iface_init (GAsyncInitableIface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsIndex, ide_ctags_index, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
-                                                       async_initable_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeCtagsIndex, ide_ctags_index, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init))
 
 DZL_DEFINE_COUNTER (instances, "IdeCtagsIndex", "Instances", "Number of IdeCtagsIndex instances.")
 DZL_DEFINE_COUNTER (index_entries, "IdeCtagsIndex", "N Entries", "Number of entries in indexes.")
@@ -416,11 +415,6 @@ ide_ctags_index_class_init (IdeCtagsIndexClass *klass)
 }
 
 static void
-ide_ctags_index_class_finalize (IdeCtagsIndexClass *klass)
-{
-}
-
-static void
 ide_ctags_index_init (IdeCtagsIndex *self)
 {
   DZL_COUNTER_INC (instances);
@@ -624,12 +618,6 @@ ide_ctags_index_lookup_prefix (IdeCtagsIndex *self,
 {
   return ide_ctags_index_lookup_full (self, keyword, length,
                                       ide_ctags_index_entry_compare_prefix);
-}
-
-void
-_ide_ctags_index_register_type (GTypeModule *module)
-{
-  ide_ctags_index_register_type (module);
 }
 
 guint64

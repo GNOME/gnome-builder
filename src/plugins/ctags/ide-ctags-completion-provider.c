@@ -33,11 +33,10 @@ static void provider_iface_init (IdeCompletionProviderInterface *iface);
 
 static GHashTable *reserved;
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsCompletionProvider,
-                                ide_ctags_completion_provider,
-                                IDE_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeCtagsCompletionProvider,
+                         ide_ctags_completion_provider,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
 static const gchar *
 get_icon_name (IdeCtagsCompletionItem *item)
@@ -190,11 +189,6 @@ ide_ctags_completion_provider_class_init (IdeCtagsCompletionProviderClass *klass
   reserved = g_hash_table_new (g_str_hash, g_str_equal);
   for (guint i = 0; i < G_N_ELEMENTS (reserved_keywords); i++)
     g_hash_table_insert (reserved, (gchar *)reserved_keywords[i], NULL);
-}
-
-static void
-ide_ctags_completion_provider_class_finalize (IdeCtagsCompletionProviderClass *klass)
-{
 }
 
 static void
@@ -422,10 +416,4 @@ provider_iface_init (IdeCompletionProviderInterface *iface)
   iface->populate_finish = ide_ctags_completion_provider_populate_finish;
   iface->refilter = ide_ctags_completion_provider_refilter;
   iface->display_proposal = ide_ctags_completion_provider_display_proposal;
-}
-
-void
-_ide_ctags_completion_provider_register_type (GTypeModule *module)
-{
-  ide_ctags_completion_provider_register_type (module);
 }

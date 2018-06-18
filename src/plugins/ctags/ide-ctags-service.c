@@ -59,8 +59,8 @@ typedef struct
 
 static void service_iface_init (IdeServiceInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsService, ide_ctags_service, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeCtagsService, ide_ctags_service, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
 
 static void
 queued_request_free (gpointer data)
@@ -675,11 +675,6 @@ service_iface_init (IdeServiceInterface *iface)
 }
 
 static void
-ide_ctags_service_class_finalize (IdeCtagsServiceClass *klass)
-{
-}
-
-static void
 ide_ctags_service_init (IdeCtagsService *self)
 {
   self->highlighters = g_ptr_array_new ();
@@ -701,12 +696,6 @@ ide_ctags_service_init (IdeCtagsService *self)
                                       NULL);
 
   dzl_task_cache_set_name (self->indexes, "ctags index cache");
-}
-
-void
-_ide_ctags_service_register_type (GTypeModule *module)
-{
-  ide_ctags_service_register_type (module);
 }
 
 /**

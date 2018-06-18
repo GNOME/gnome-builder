@@ -47,12 +47,11 @@ enum {
 
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsSymbolResolver,
-                                ide_ctags_symbol_resolver,
-                                IDE_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER,
-                                                       symbol_resolver_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeCtagsSymbolResolver,
+                         ide_ctags_symbol_resolver,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER,
+                                                symbol_resolver_iface_init))
 
 static void
 lookup_symbol_free (gpointer data)
@@ -719,11 +718,6 @@ ide_ctags_symbol_resolver_class_init (IdeCtagsSymbolResolverClass *klass)
 }
 
 static void
-ide_ctags_symbol_resolver_class_finalize (IdeCtagsSymbolResolverClass *klass)
-{
-}
-
-static void
 ide_ctags_symbol_resolver_init (IdeCtagsSymbolResolver *resolver)
 {
 }
@@ -735,12 +729,6 @@ symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
   iface->lookup_symbol_finish = ide_ctags_symbol_resolver_lookup_symbol_finish;
   iface->get_symbol_tree_async = ide_ctags_symbol_resolver_get_symbol_tree_async;
   iface->get_symbol_tree_finish = ide_ctags_symbol_resolver_get_symbol_tree_finish;
-}
-
-void
-_ide_ctags_symbol_resolver_register_type (GTypeModule *module)
-{
-  ide_ctags_symbol_resolver_register_type (module);
 }
 
 void

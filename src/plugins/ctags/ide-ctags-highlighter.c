@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #define G_LOG_DOMAIN "ide-ctags-highlighter"
 
 #include <glib/gi18n.h>
@@ -34,12 +36,11 @@ struct _IdeCtagsHighlighter
 
 static void highlighter_iface_init (IdeHighlighterInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeCtagsHighlighter,
-                                ide_ctags_highlighter,
-                                IDE_TYPE_OBJECT,
-                                0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER,
-                                                       highlighter_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeCtagsHighlighter,
+                         ide_ctags_highlighter,
+                         IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER,
+                                                highlighter_iface_init))
 
 static inline gboolean
 accepts_char (gunichar ch)
@@ -281,11 +282,6 @@ ide_ctags_highlighter_class_init (IdeCtagsHighlighterClass *klass)
 }
 
 static void
-ide_ctags_highlighter_class_finalize (IdeCtagsHighlighterClass *klass)
-{
-}
-
-static void
 ide_ctags_highlighter_init (IdeCtagsHighlighter *self)
 {
   self->indexes = g_ptr_array_new_with_free_func (g_object_unref);
@@ -296,10 +292,4 @@ highlighter_iface_init (IdeHighlighterInterface *iface)
 {
   iface->update = ide_ctags_highlighter_real_update;
   iface->set_engine = ide_ctags_highlighter_real_set_engine;
-}
-
-void
-_ide_ctags_highlighter_register_type (GTypeModule *module)
-{
-  ide_ctags_highlighter_register_type (module);
 }
