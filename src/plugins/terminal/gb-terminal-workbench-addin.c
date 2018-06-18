@@ -162,6 +162,9 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
   IdeEnvironment *env;
   VtePty *pty = NULL;
   int tty_fd;
+  GDateTime *now;
+  GString *msg;
+  gchar *tmp;
 
   IDE_ENTRY;
 
@@ -228,7 +231,16 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
   ide_environment_setenv (env, "TERM", "xterm-256color");
   ide_environment_setenv (env, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
 
-  gb_terminal_view_feed (self->run_terminal, _("Application starting...\r\n"));
+  msg = g_string_new("Application started at");
+
+  now = g_date_time_new_now_local ();
+  tmp = g_date_time_format (now, "%H:%M:%S");
+  g_string_append_printf (msg, " %s... \r\n", tmp);
+
+  g_free (tmp);
+  g_date_time_unref(now);
+
+  gb_terminal_view_feed (self->run_terminal, _(g_string_free(msg, FALSE)));
 
   dzl_dock_item_present (DZL_DOCK_ITEM (self->run_panel));
 
