@@ -1350,7 +1350,7 @@ gstyle_color_plane_destroy (GtkWidget *widget)
   GstyleColorPlane *self = (GstyleColorPlane *)widget;
   GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
 
-  g_clear_pointer (&priv->surface, cairo_surface_destroy);
+  gstyle_clear_pointer (&priv->surface, cairo_surface_destroy);
 
   GTK_WIDGET_CLASS (gstyle_color_plane_parent_class)->destroy (widget);
 }

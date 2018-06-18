@@ -1213,7 +1213,7 @@ gstyle_color_finalize (GObject *object)
 {
   GstyleColor *self = GSTYLE_COLOR (object);
 
-  g_clear_pointer (&self->name, g_free);
+  gstyle_clear_pointer (&self->name, g_free);
 
   G_OBJECT_CLASS (gstyle_color_parent_class)->finalize (object);
 }

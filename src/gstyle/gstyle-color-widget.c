@@ -1351,8 +1351,8 @@ gstyle_color_widget_finalize (GObject *object)
   g_clear_object (&self->filtered_color);
   g_clear_object (&self->default_provider);
 
-  g_clear_pointer (&self->checkered_pattern, cairo_pattern_destroy);
-  g_clear_pointer (&self->target_list, gtk_target_list_unref);
+  gstyle_clear_pointer (&self->checkered_pattern, cairo_pattern_destroy);
+  gstyle_clear_pointer (&self->target_list, gtk_target_list_unref);
 
   G_OBJECT_CLASS (gstyle_color_widget_parent_class)->finalize (object);
 }

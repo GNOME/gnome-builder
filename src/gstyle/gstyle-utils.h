@@ -88,4 +88,14 @@ gstyle_utils_cmp_border (GtkBorder border1,
 #define gstyle_clear_weak_pointer(ptr) g_clear_weak_pointer(ptr)
 #define gstyle_set_weak_pointer(ptr,obj) g_set_weak_pointer(ptr,obj)
 
+/* A more type-correct form of gstyle_clear_pointer(), to help find bugs. */
+#define gstyle_clear_pointer(pptr, free_func)                   \
+  G_STMT_START {                                             \
+    G_STATIC_ASSERT (sizeof (*(pptr)) == sizeof (gpointer)); \
+    typeof(*(pptr)) _dzl_tmp_clear = *(pptr);                \
+    *(pptr) = NULL;                                          \
+    if (_dzl_tmp_clear)                                      \
+      free_func (_dzl_tmp_clear);                            \
+  } G_STMT_END
+
 G_END_DECLS
