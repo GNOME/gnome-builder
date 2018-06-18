@@ -73,7 +73,7 @@ parser_state_free (ParserState *state)
   g_clear_object (&state->stack);
 
   g_clear_pointer (&state->content, g_bytes_unref);
-  g_clear_pointer (&state->schemas, g_array_unref);
+  g_clear_pointer (&state->schemas, g_ptr_array_unref);
 
   g_slice_free (ParserState, state);
 }
