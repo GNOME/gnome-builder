@@ -1247,7 +1247,7 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_pointer (&self->errfmts, g_array_unref);
   g_clear_pointer (&self->errfmt_top_dir, g_free);
   g_clear_pointer (&self->errfmt_current_dir, g_free);
-  g_clear_pointer (&self->chained_bindings, g_ptr_array_free);
+  g_clear_pointer (&self->chained_bindings, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->finalize (object);
 
