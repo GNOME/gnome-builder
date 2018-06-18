@@ -302,9 +302,9 @@ find_end (gunichar ch,
 
 static gchar *
 ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
-                                               GtkTextIter             *begin,
-                                               GtkTextIter             *end,
-                                               gint                    *cursor_offset)
+                                    GtkTextIter    *begin,
+                                    GtkTextIter    *end,
+                                    gint           *cursor_offset)
 {
   GtkTextIter match_begin;
   GtkTextIter match_end;

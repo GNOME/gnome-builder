@@ -29,8 +29,8 @@
 
 G_BEGIN_DECLS
 
-typedef gboolean (*PostProcessingCallback)                       (IdeXmlParser           *self,
-                                                                  IdeXmlSymbolNode       *root_node);
+typedef gboolean (*PostProcessingCallback) (IdeXmlParser     *self,
+                                            IdeXmlSymbolNode *root_node);
 
 typedef enum _BuildState
 {
