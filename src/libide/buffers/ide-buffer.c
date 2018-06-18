@@ -107,8 +107,12 @@ typedef struct
 
   guint                   settling_handler;
 
+  guint                   auto_save_handler;
+  guint                   auto_save_timeout;
+
   gsize                   change_count;
 
+  guint                   auto_save : 1;
   guint                   cancel_cursor_restore : 1;
   guint                   changed_on_volume : 1;
   guint                   highlight_diagnostics : 1;
@@ -169,6 +173,46 @@ lookup_symbol_task_data_free (LookUpSymbolData *data)
   g_slice_free (LookUpSymbolData, data);
 }
 
+static gboolean
+ide_buffer_auto_save_cb (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+  IdeBufferManager *bufmgr;
+  IdeFile *file;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  priv->auto_save_handler = 0;
+
+  if (priv->context == NULL)
+    return G_SOURCE_REMOVE;
+
+  bufmgr = ide_context_get_buffer_manager (priv->context);
+  file = ide_buffer_get_file (self);
+
+  ide_buffer_manager_save_file_async (bufmgr, self, file, NULL, NULL, NULL, NULL);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_buffer_queue_auto_save (IdeBuffer *self)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  dzl_clear_source (&priv->auto_save_handler);
+
+  if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self)))
+    priv->auto_save_handler =
+      gdk_threads_add_timeout_seconds_full (G_PRIORITY_DEFAULT,
+                                            priv->auto_save_timeout,
+                                            (GSourceFunc)ide_buffer_auto_save_cb,
+                                            g_object_ref (self),
+                                            g_object_unref);
+}
+
 static void
 lookup_symbol_get_extension (IdeExtensionSetAdapter *set,
                              PeasPluginInfo         *plugin_info,
@@ -197,6 +241,8 @@ ide_buffer_settled_cb (gpointer user_data)
 
   priv->settling_handler = 0;
   g_signal_emit (self, signals [CHANGE_SETTLED], 0);
+
+  ide_buffer_queue_auto_save (self);
 
   return G_SOURCE_REMOVE;
 }
@@ -1495,6 +1541,7 @@ ide_buffer_dispose (GObject *object)
 
   ide_buffer_set_diagnostics (self, NULL);
 
+  dzl_clear_source (&priv->auto_save_handler);
   dzl_clear_source (&priv->settling_handler);
   dzl_clear_source (&priv->reclamation_handler);
   dzl_clear_source (&priv->check_modified_timeout);
@@ -1889,6 +1936,7 @@ ide_buffer_init (IdeBuffer *self)
 
   priv->loading = TRUE;
   priv->highlight_diagnostics = TRUE;
+  priv->auto_save_timeout = 60;
 
   priv->file_signals = dzl_signal_group_new (IDE_TYPE_FILE);
   dzl_signal_group_connect_object (priv->file_signals,
@@ -3353,4 +3401,20 @@ _ide_buffer_get_highlight_engine (IdeBuffer *self)
   g_assert (IDE_IS_BUFFER (self));
 
   return priv->highlight_engine;
+}
+
+void
+_ide_buffer_set_auto_save (IdeBuffer *self,
+                           gboolean   auto_save,
+                           guint      auto_save_timeout)
+{
+  IdeBufferPrivate *priv = ide_buffer_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (auto_save_timeout > 0);
+
+  priv->auto_save = !!auto_save;
+  priv->auto_save_timeout = auto_save_timeout;
+
+  ide_buffer_queue_auto_save (self);
 }

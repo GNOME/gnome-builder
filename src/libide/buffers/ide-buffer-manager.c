@@ -67,13 +67,6 @@ struct _IdeBufferManager
 
 typedef struct
 {
-  IdeBufferManager *self;
-  IdeBuffer        *buffer;
-  guint             source_id;
-} AutoSave;
-
-typedef struct
-{
   IdeBuffer            *buffer;
   IdeFile              *file;
   IdeProgress          *progress;
@@ -130,11 +123,6 @@ enum {
 
   LAST_SIGNAL
 };
-
-static void register_auto_save   (IdeBufferManager *self,
-                                  IdeBuffer        *buffer);
-static void unregister_auto_save (IdeBufferManager *self,
-                                  IdeBuffer        *buffer);
 
 static GParamSpec *properties [LAST_PROP];
 static guint signals [LAST_SIGNAL];
@@ -237,8 +225,14 @@ ide_buffer_manager_set_auto_save_timeout (IdeBufferManager *self,
   if (self->auto_save_timeout != auto_save_timeout)
     {
       self->auto_save_timeout = auto_save_timeout;
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                properties [PROP_AUTO_SAVE_TIMEOUT]);
+
+      for (guint i = 0; i < self->buffers->len; i++)
+        {
+          IdeBuffer *buffer = g_ptr_array_index (self->buffers, i);
+          _ide_buffer_set_auto_save (buffer, self->auto_save, auto_save_timeout);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTO_SAVE_TIMEOUT]);
     }
 }
 
@@ -282,24 +276,16 @@ ide_buffer_manager_set_auto_save (IdeBufferManager *self,
 
   if (self->auto_save != auto_save)
     {
-      gsize i;
-
       self->auto_save = auto_save;
 
-      for (i = 0; i < self->buffers->len; i++)
+      for (guint i = 0; i < self->buffers->len; i++)
         {
-          IdeBuffer *buffer;
+          IdeBuffer *buffer = g_ptr_array_index (self->buffers, i);
 
-          buffer = g_ptr_array_index (self->buffers, i);
-
-          if (auto_save)
-            register_auto_save (self, buffer);
-          else
-            unregister_auto_save (self, buffer);
+          _ide_buffer_set_auto_save (buffer, auto_save, self->auto_save_timeout);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                properties [PROP_AUTO_SAVE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AUTO_SAVE]);
     }
 }
 
@@ -344,81 +330,6 @@ ide_buffer_manager_set_focus_buffer (IdeBufferManager *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FOCUS_BUFFER]);
     }
-}
-
-static gboolean
-ide_buffer_manager_auto_save_cb (gpointer data)
-{
-  AutoSave *state = data;
-  gboolean saved = FALSE;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (state != NULL);
-  g_assert (IDE_IS_BUFFER_MANAGER (state->self));
-  g_assert (IDE_IS_BUFFER (state->buffer));
-  g_assert (state->source_id > 0);
-
-  if (!ide_buffer_get_changed_on_volume (state->buffer))
-    {
-      IdeFile *file = ide_buffer_get_file (state->buffer);
-
-      if (file != NULL)
-        {
-          ide_buffer_manager_save_file_async (state->self,
-                                              state->buffer,
-                                              file,
-                                              NULL,
-                                              NULL,
-                                              NULL,
-                                              NULL);
-          saved = TRUE;
-        }
-    }
-
-  if (!saved)
-    unregister_auto_save (state->self, state->buffer);
-
-  return G_SOURCE_REMOVE;
-}
-
-
-static void
-ide_buffer_manager_buffer_changed (IdeBufferManager *self,
-                                   IdeBuffer        *buffer)
-{
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
-  g_return_if_fail (IDE_IS_BUFFER (buffer));
-
-  if (self->auto_save)
-    {
-      unregister_auto_save (self, buffer);
-      register_auto_save (self, buffer);
-    }
-}
-
-static void
-ide_buffer_manager_track_buffer (IdeBufferManager *self,
-                                 IdeBuffer        *buffer)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUFFER_MANAGER (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  if (self->auto_save)
-    register_auto_save (self, buffer);
-
-  g_signal_connect_object (buffer,
-                           "changed",
-                           G_CALLBACK (ide_buffer_manager_buffer_changed),
-                           self,
-                           (G_CONNECT_SWAPPED | G_CONNECT_AFTER));
-
-  g_list_model_items_changed (G_LIST_MODEL (self), self->buffers->len - 1, 0, 1);
-
-  IDE_EXIT;
 }
 
 static void
@@ -490,12 +401,6 @@ found:
 
   /* Stealing ownership from self->buffers */
   g_ptr_array_remove_index (self->buffers, position);
-
-  unregister_auto_save (self, buffer);
-
-  g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (ide_buffer_manager_buffer_changed),
-                                        self);
 
   /*
    * Notify anything that needs a pointer to the buffer to cleanup,
@@ -584,6 +489,7 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
     {
       g_ptr_array_add (self->buffers, g_object_ref (state->buffer));
       DZL_COUNTER_INC (registered);
+      g_list_model_items_changed (G_LIST_MODEL (self), self->buffers->len - 1, 0, 1);
     }
 
   if (!gtk_source_file_loader_load_finish (loader, result, &error))
@@ -605,9 +511,6 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
     }
 
   gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (state->buffer), FALSE);
-
-  if (state->is_new)
-    ide_buffer_manager_track_buffer (self, state->buffer);
 
   /* try to restore the insertion cursor */
   if (g_settings_get_boolean (self->settings, "restore-insert-mark"))
@@ -640,6 +543,8 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 
   if (!_ide_context_is_restoring (context))
     ide_buffer_manager_set_focus_buffer (self, state->buffer);
+
+  _ide_buffer_set_auto_save (state->buffer, self->auto_save, self->auto_save_timeout);
 
   g_signal_emit (self, signals [BUFFER_LOADED], 0, state->buffer);
 
@@ -1251,7 +1156,7 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
         }
 
       ide_task_return_boolean (task, TRUE);
-      IDE_GOTO (unmodified);
+      IDE_EXIT;
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
@@ -1278,9 +1183,6 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
                                 cancellable,
                                 ide_buffer_manager_save_file__load_settings_cb,
                                 g_object_ref (task));
-
-unmodified:
-  unregister_auto_save (self, buffer);
 
   IDE_EXIT;
 }
@@ -1747,52 +1649,6 @@ ide_buffer_manager_init (IdeBufferManager *self)
   g_settings_bind (self->settings, "auto-save-timeout", self, "auto-save-timeout", G_SETTINGS_BIND_GET);
 }
 
-static void
-register_auto_save (IdeBufferManager *self,
-                    IdeBuffer        *buffer)
-{
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_BUFFER_MANAGER (self));
-  g_return_if_fail (IDE_IS_BUFFER (buffer));
-  g_return_if_fail (!g_hash_table_lookup (self->timeouts, buffer));
-  g_return_if_fail (self->auto_save_timeout > 0);
-
-  if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)))
-    {
-      AutoSave *state;
-
-      state = g_slice_new0 (AutoSave);
-      dzl_set_weak_pointer (&state->buffer, buffer);
-      dzl_set_weak_pointer (&state->self, self);
-      state->source_id = g_timeout_add_seconds (self->auto_save_timeout,
-                                                ide_buffer_manager_auto_save_cb,
-                                                state);
-      g_hash_table_insert (self->timeouts, buffer, state);
-    }
-}
-
-static void
-unregister_auto_save (IdeBufferManager *self,
-                      IdeBuffer        *buffer)
-{
-  AutoSave *state;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUFFER_MANAGER (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  state = g_hash_table_lookup (self->timeouts, buffer);
-
-  if (state != NULL)
-    {
-      g_hash_table_remove (self->timeouts, buffer);
-      dzl_clear_source (&state->source_id);
-      dzl_clear_weak_pointer (&state->buffer);
-      dzl_clear_weak_pointer (&state->self);
-      g_slice_free (AutoSave, state);
-    }
-}
-
 /**
  * ide_buffer_manager_get_buffers:
  *
@@ -1974,7 +1830,7 @@ ide_buffer_manager_create_temporary_buffer (IdeBufferManager *self)
 
   g_ptr_array_add (self->buffers, g_object_ref (buffer));
   DZL_COUNTER_INC (registered);
-  ide_buffer_manager_track_buffer (self, buffer);
+  g_list_model_items_changed (G_LIST_MODEL (self), self->buffers->len - 1, 0, 1);
 
   g_signal_emit (self, signals [BUFFER_LOADED], 0, buffer);
 

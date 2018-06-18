@@ -41,6 +41,9 @@ void                _ide_buffer_set_read_only         (IdeBuffer        *buffer,
 void                _ide_buffer_set_failure           (IdeBuffer        *self,
                                                        const GError     *error);
 IdeHighlightEngine *_ide_buffer_get_highlight_engine  (IdeBuffer        *self);
+void                _ide_buffer_set_auto_save         (IdeBuffer        *self,
+                                                       gboolean          auto_save,
+                                                       guint             auto_save_timeout);
 void                _ide_buffer_manager_reclaim       (IdeBufferManager *self,
                                                        IdeBuffer        *buffer);
 IdeUnsavedFile     *_ide_unsaved_file_new             (GFile            *file,
