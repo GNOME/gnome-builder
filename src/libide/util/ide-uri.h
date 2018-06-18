@@ -63,111 +63,95 @@ typedef enum
 
 IDE_AVAILABLE_IN_ALL
 GType        ide_uri_get_type        (void);
-
 IDE_AVAILABLE_IN_ALL
-char *       ide_uri_to_string       (IdeUri               *uri,
+char        *ide_uri_to_string       (IdeUri               *uri,
                                       IdeUriToStringFlags   flags);
-
 IDE_AVAILABLE_IN_ALL
-IdeUri *     ide_uri_copy            (IdeUri               *uri);
+IdeUri      *ide_uri_copy            (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
-IdeUri *     ide_uri_ref             (IdeUri               *uri);
+IdeUri      *ide_uri_ref             (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_unref           (IdeUri               *uri);
-
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_uri_get_scheme      (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_scheme      (IdeUri               *uri,
-                                      const gchar        *scheme);
-
+                                      const gchar          *scheme);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_uri_get_user        (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_user        (IdeUri               *uri,
-                                      const gchar        *user);
-
+                                      const gchar          *user);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_uri_get_password    (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_password    (IdeUri               *uri,
-                                      const gchar        *password);
-
+                                      const gchar          *password);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_uri_get_auth_params (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_auth_params (IdeUri               *uri,
-                                      const gchar        *auth_params);
-
+                                      const gchar          *auth_params);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_uri_get_host        (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_host        (IdeUri               *uri,
-                                      const gchar        *host);
-
+                                      const gchar          *host);
 IDE_AVAILABLE_IN_ALL
 gushort      ide_uri_get_port        (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_port        (IdeUri               *uri,
-                                      gushort             port);
-
+                                      gushort               port);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_uri_get_path        (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_path        (IdeUri               *uri,
-                                      const gchar        *path);
-
+                                      const gchar          *path);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_uri_get_query       (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_query       (IdeUri               *uri,
-                                      const gchar        *query);
-
+                                      const gchar          *query);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_uri_get_fragment    (IdeUri               *uri);
 IDE_AVAILABLE_IN_ALL
 void         ide_uri_set_fragment    (IdeUri               *uri,
-                                      const gchar        *fragment);
-
-
+                                      const gchar          *fragment);
 IDE_AVAILABLE_IN_ALL
-void         ide_uri_split           (const gchar        *uri_string,
-                                      gboolean            strict,
-                                      gchar             **scheme,
-                                      gchar             **userinfo,
-                                      gchar             **host,
-                                      gchar             **port,
-                                      gchar             **path,
-                                      gchar             **query,
-                                      gchar             **fragment);
+void         ide_uri_split           (const gchar          *uri_string,
+                                      gboolean              strict,
+                                      gchar               **scheme,
+                                      gchar               **userinfo,
+                                      gchar               **host,
+                                      gchar               **port,
+                                      gchar               **path,
+                                      gchar               **query,
+                                      gchar               **fragment);
 IDE_AVAILABLE_IN_ALL
-GHashTable * ide_uri_parse_params    (const gchar        *params,
-                                      gssize              length,
-                                      gchar               separator,
-                                      gboolean            case_insensitive);
+GHashTable  *ide_uri_parse_params    (const gchar          *params,
+                                      gssize                length,
+                                      gchar                 separator,
+                                      gboolean              case_insensitive);
 IDE_AVAILABLE_IN_ALL
-gboolean     ide_uri_parse_host      (const gchar        *uri_string,
-                                      IdeUriParseFlags    flags,
-                                      gchar             **scheme,
-                                      gchar             **host,
-                                      gushort            *port,
-                                      GError            **error);
-
+gboolean     ide_uri_parse_host      (const gchar          *uri_string,
+                                      IdeUriParseFlags      flags,
+                                      gchar               **scheme,
+                                      gchar               **host,
+                                      gushort              *port,
+                                      GError              **error);
 IDE_AVAILABLE_IN_ALL
-gchar *      ide_uri_build           (const gchar        *scheme,
-                                      const gchar        *userinfo,
-                                      const gchar        *host,
-                                      const gchar        *port,
-                                      const gchar        *path,
-                                      const gchar        *query,
-                                      const gchar        *fragment);
-
+gchar       *ide_uri_build           (const gchar          *scheme,
+                                      const gchar          *userinfo,
+                                      const gchar          *host,
+                                      const gchar          *port,
+                                      const gchar          *path,
+                                      const gchar          *query,
+                                      const gchar          *fragment);
 IDE_AVAILABLE_IN_ALL
-gboolean     ide_uri_is_file         (IdeUri             *uri,
-                                      GFile              *file);
-
+gboolean     ide_uri_is_file         (IdeUri               *uri,
+                                      GFile                *file);
 IDE_AVAILABLE_IN_ALL
-GFile       *ide_uri_to_file         (IdeUri             *uri);
+GFile       *ide_uri_to_file         (IdeUri               *uri);
 
 
 /**
