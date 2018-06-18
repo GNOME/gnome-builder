@@ -324,20 +324,16 @@ ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
 
   copy = *begin;
 
-  if (gtk_text_iter_backward_search (&copy, "<", GTK_TEXT_SEARCH_TEXT_ONLY,
-                                     &match_begin, &match_end, NULL))
+  if (gtk_text_iter_backward_search (&copy, "<", GTK_TEXT_SEARCH_TEXT_ONLY, &match_begin, &match_end, NULL))
     {
-      gchar *text;
+      g_autofree gchar *text = NULL;
 
       /* avoid closing elements on spurious > */
       gtk_text_iter_backward_char (&copy);
       text = gtk_text_iter_get_slice (&match_begin, &copy);
+
       if (strchr (text, '>'))
-        {
-          g_free (text);
-          return NULL;
-        }
-      g_free (text);
+        return NULL;
 
       gtk_text_iter_forward_char (&match_begin);
       if (gtk_text_iter_get_char (&match_begin) == '/')
@@ -354,7 +350,10 @@ ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
 
           if (slice && *slice && *slice != '!')
             {
-              ret = g_strdup_printf ("</%s>", slice);
+              if (gtk_text_iter_get_char (end) == '>')
+                ret = g_strdup_printf ("</%s", slice);
+              else
+                ret = g_strdup_printf ("</%s>", slice);
               *cursor_offset = -strlen (ret);
             }
 
