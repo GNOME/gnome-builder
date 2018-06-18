@@ -85,10 +85,7 @@ gstyle_utils_cmp_border (GtkBorder border1,
     return TRUE;
 }
 
-#define gstyle_clear_weak_pointer(ptr) \
-  (*(ptr) ? (g_object_remove_weak_pointer((GObject*)*(ptr), (gpointer*)ptr),*(ptr)=NULL,1) : 0)
-
-#define gstyle_set_weak_pointer(ptr,obj) \
-  ((obj!=*(ptr))?(gstyle_clear_weak_pointer(ptr),*(ptr)=obj,((obj)?g_object_add_weak_pointer((GObject*)obj,(gpointer*)ptr),NULL:NULL),1):0)
+#define gstyle_clear_weak_pointer(ptr) g_clear_weak_pointer(ptr)
+#define gstyle_set_weak_pointer(ptr,obj) g_set_weak_pointer(ptr,obj)
 
 G_END_DECLS
