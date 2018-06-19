@@ -81,6 +81,19 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.28.3" date="2018-06-19">
+      <description>
+        <p>
+          Builder 3.28.3 contains a number of critical bugfixes and translation updates.
+        </p>
+        <ul>
+          <li>Fixes for a number of crashers and potential data loss.</li>
+          <li>The editor more reliably restores cursor position.</li>
+          <li>The todo plugin more aggresively ignores some common build tooling directories.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.28.2" date="2018-05-28">
       <description>
         <p>
