@@ -81,6 +81,15 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.29.3" date="2018-06-18">
+      <description>
+        <p>
+          This release includes a brand new auto-completion engine which allows for considerably less overhead.
+          A number of critical bug fixes are included as well.
+        </p>
+      </description>
+    </release>
+
     <release version="3.29.1" date="2018-04-16">
       <description>
         <p>
