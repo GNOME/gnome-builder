@@ -48,7 +48,7 @@ typedef struct
   IdeXmlRngDefine  *define;
   GPtrArray        *children;
   GPtrArray        *items;
-  const gchar      *prefix;
+  gchar            *prefix;
   gint              child_cursor;
   gint              define_cursor;
 
@@ -163,7 +163,7 @@ state_stack_pop (MatchingState *state)
     return FALSE;
 
   item = &g_array_index (state->stack, StateStackItem, len - 1);
-  g_clear_pointer (&state->children, g_ptr_array_unref);
+  dzl_clear_pointer (&state->children, g_ptr_array_unref);
 
   state->children = item->children;
   state->candidate_node = item->candidate_node;
@@ -384,8 +384,9 @@ completion_item_new (const gchar     *label,
 static void
 completion_item_free (CompletionItem *item)
 {
-  g_clear_pointer (&item->label, g_free);
-  g_clear_pointer (&item->define, ide_xml_rng_define_unref);
+  dzl_clear_pointer (&item->label, g_free);
+  dzl_clear_pointer (&item->define, ide_xml_rng_define_unref);
+  g_slice_free (CompletionItem, item);
 }
 
 static MatchingState *
@@ -451,9 +452,11 @@ matching_state_free (MatchingState *state)
   g_clear_object (&state->parent_node);
   g_clear_object (&state->candidate_node);
 
-  g_clear_pointer (&state->prefix, g_free);
-  g_clear_pointer (&state->children, g_ptr_array_unref);
-  g_clear_pointer (&state->stack, g_array_unref);
+  dzl_clear_pointer (&state->prefix, g_free);
+  dzl_clear_pointer (&state->children, g_ptr_array_unref);
+  dzl_clear_pointer (&state->stack, g_array_unref);
+
+  g_slice_free (MatchingState, state);
 }
 
 static MatchingState *

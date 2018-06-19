@@ -19,14 +19,13 @@
 #include "ide-xml-completion-values.h"
 #include "ide-xml-position.h"
 
-typedef struct _MatchingState
+typedef struct
 {
-  IdeXmlRngDefine  *define;
-  GPtrArray        *match_values;
-  const gchar      *values;
-  const gchar      *prefix;
+  IdeXmlRngDefine *define;
+  gchar           *values;
+  gchar           *prefix;
 
-  guint             is_initial_state : 1;
+  guint            is_initial_state : 1;
 } MatchingState;
 
 static GPtrArray * process_matching_state (MatchingState   *state,
@@ -50,7 +49,7 @@ value_match_item_free (gpointer data)
 {
   ValueMatchItem *item = (ValueMatchItem *)data;
 
-  g_clear_pointer (&item->name, g_free);
+  dzl_clear_pointer (&item->name, g_free);
   g_slice_free (ValueMatchItem, item);
 }
 
@@ -95,8 +94,8 @@ matching_state_new (IdeXmlRngDefine  *define,
   state = g_slice_new0 (MatchingState);
 
   state->define = define;
-  state->values = (values != NULL) ? g_strdup (values) : NULL;
-  state->prefix = (prefix != NULL) ? g_strdup (prefix) : NULL;
+  state->values = g_strdup (values);
+  state->prefix = g_strdup (prefix);
 
   state->is_initial_state = FALSE;
 
@@ -106,8 +105,9 @@ matching_state_new (IdeXmlRngDefine  *define,
 static void
 matching_state_free (MatchingState *state)
 {
-  g_clear_pointer (&state->values, g_free);
-  g_clear_pointer (&state->prefix, g_free);
+  dzl_clear_pointer (&state->values, g_free);
+  dzl_clear_pointer (&state->prefix, g_free);
+  g_slice_free (MatchingState, state);
 }
 
 static GPtrArray *
