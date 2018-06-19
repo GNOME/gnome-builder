@@ -931,7 +931,7 @@ ide_clang_translation_unit_lookup_symbol (IdeClangTranslationUnit  *self,
           gfile = g_file_new_for_path (path);
           file = ide_file_new (context, gfile);
 
-          g_clear_pointer (&definition, ide_symbol_unref);
+          g_clear_pointer (&definition, ide_source_location_unref);
           declaration = ide_source_location_new (file, 0, 0, 0);
         }
     }
