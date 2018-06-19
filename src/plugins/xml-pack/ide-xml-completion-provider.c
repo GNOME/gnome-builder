@@ -461,6 +461,8 @@ matching_state_free (MatchingState *state)
   g_clear_pointer (&state->prefix, g_free);
   g_clear_pointer (&state->children, g_ptr_array_unref);
   g_clear_pointer (&state->stack, g_array_unref);
+
+  g_slice_free (MatchingState, state);
 }
 
 static MatchingState *
