@@ -19,7 +19,6 @@
 #include <libpeas/peas.h>
 
 #include "ide-c-indenter.h"
-#include "cpack-completion-provider.h"
 #include "cpack-editor-view-addin.h"
 
 void
@@ -27,5 +26,4 @@ ide_c_pack_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_C_INDENTER);
   peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_VIEW_ADDIN, CPACK_TYPE_EDITOR_VIEW_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, CPACK_TYPE_COMPLETION_PROVIDER);
 }

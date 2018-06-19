@@ -11,7 +11,6 @@ c_pack_sources = [
   'c-parse-helper.c',
   'hdr-format.c',
   'ide-c-indenter.c',
-  'cpack-completion-provider.c',
   'cpack-editor-view-addin.c',
 ]
 
