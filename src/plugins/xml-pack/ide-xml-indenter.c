@@ -34,8 +34,8 @@ struct _IdeXmlIndenter
 
 static void indenter_iface_init (IdeIndenterInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeXmlIndenter, ide_xml_indenter, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeXmlIndenter, ide_xml_indenter, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
 
 static gunichar
 text_iter_peek_next_char (const GtkTextIter *location)
@@ -302,9 +302,9 @@ find_end (gunichar ch,
 
 static gchar *
 ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
-                                               GtkTextIter             *begin,
-                                               GtkTextIter             *end,
-                                               gint                    *cursor_offset)
+                                    GtkTextIter    *begin,
+                                    GtkTextIter    *end,
+                                    gint           *cursor_offset)
 {
   GtkTextIter match_begin;
   GtkTextIter match_end;
@@ -324,20 +324,16 @@ ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
 
   copy = *begin;
 
-  if (gtk_text_iter_backward_search (&copy, "<", GTK_TEXT_SEARCH_TEXT_ONLY,
-                                     &match_begin, &match_end, NULL))
+  if (gtk_text_iter_backward_search (&copy, "<", GTK_TEXT_SEARCH_TEXT_ONLY, &match_begin, &match_end, NULL))
     {
-      gchar *text;
+      g_autofree gchar *text = NULL;
 
       /* avoid closing elements on spurious > */
       gtk_text_iter_backward_char (&copy);
       text = gtk_text_iter_get_slice (&match_begin, &copy);
+
       if (strchr (text, '>'))
-        {
-          g_free (text);
-          return NULL;
-        }
-      g_free (text);
+        return NULL;
 
       gtk_text_iter_forward_char (&match_begin);
       if (gtk_text_iter_get_char (&match_begin) == '/')
@@ -354,7 +350,10 @@ ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
 
           if (slice && *slice && *slice != '!')
             {
-              ret = g_strdup_printf ("</%s>", slice);
+              if (gtk_text_iter_get_char (end) == '>')
+                ret = g_strdup_printf ("</%s", slice);
+              else
+                ret = g_strdup_printf ("</%s>", slice);
               *cursor_offset = -strlen (ret);
             }
 
@@ -456,17 +455,6 @@ ide_xml_indenter_class_init (IdeXmlIndenterClass *klass)
 }
 
 static void
-ide_xml_indenter_class_finalize (IdeXmlIndenterClass *klass)
-{
-}
-
-static void
 ide_xml_indenter_init (IdeXmlIndenter *self)
 {
-}
-
-void
-_ide_xml_indenter_register_type (GTypeModule *module)
-{
-  ide_xml_indenter_register_type (module);
 }

@@ -30,8 +30,8 @@ struct _IdeXmlSymbolResolver
 
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (IdeXmlSymbolResolver, ide_xml_symbol_resolver, IDE_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeXmlSymbolResolver, ide_xml_symbol_resolver, IDE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
 
 static void
 ide_xml_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
@@ -41,20 +41,20 @@ ide_xml_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
                                              gpointer             user_data)
 {
   IdeXmlSymbolResolver *self = (IdeXmlSymbolResolver *)resolver;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_XML_SYMBOL_RESOLVER (self));
   g_assert (location != NULL);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_xml_symbol_resolver_lookup_symbol_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_xml_symbol_resolver_lookup_symbol_async);
 
-  g_task_return_new_error (task,
-                           G_IO_ERROR,
-                           G_IO_ERROR_UNKNOWN,
-                           "No symbol lookup for xml files.");
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_UNKNOWN,
+                             "No symbol lookup for xml files.");
 
   IDE_EXIT;
 }
@@ -64,12 +64,12 @@ ide_xml_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *resolver,
                                               GAsyncResult       *result,
                                               GError            **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_RESOLVER (resolver), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 static void
@@ -78,24 +78,24 @@ ide_xml_symbol_resolver_get_symbol_tree_cb (GObject      *object,
                                             gpointer      user_data)
 {
   IdeXmlService *service = (IdeXmlService *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeXmlSymbolNode) root_node = NULL;
   IdeXmlSymbolTree *symbol_tree;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
   g_assert (IDE_IS_XML_SERVICE (service));
 
   root_node = ide_xml_service_get_root_node_finish (service, result, &error);
   if (root_node != NULL)
     {
       symbol_tree = ide_xml_symbol_tree_new (root_node);
-      g_task_return_pointer (task, symbol_tree, g_object_unref);
+      ide_task_return_pointer (task, symbol_tree, g_object_unref);
     }
   else
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
 
   IDE_EXIT;
 }
@@ -109,7 +109,7 @@ ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                gpointer             user_data)
 {
   IdeXmlSymbolResolver *self = (IdeXmlSymbolResolver *)resolver;
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
   IdeXmlService *service;
   g_autoptr(IdeFile) ifile = NULL;
@@ -123,9 +123,9 @@ ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_context_get_service_typed (context, IDE_TYPE_XML_SERVICE);
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  g_task_set_source_tag (task, ide_xml_symbol_resolver_get_symbol_tree_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_set_source_tag (task, ide_xml_symbol_resolver_get_symbol_tree_async);
 
   ifile = ide_file_new (context, file);
 
@@ -145,14 +145,14 @@ ide_xml_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *resolver,
                                                 GError            **error)
 {
   IdeSymbolTree *ret;
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_RESOLVER (resolver), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  ret = g_task_propagate_pointer (task, error);
+  ret = ide_task_propagate_pointer (task, error);
 
   IDE_RETURN (ret);
 }
@@ -163,19 +163,8 @@ ide_xml_symbol_resolver_class_init (IdeXmlSymbolResolverClass *klass)
 }
 
 static void
-ide_xml_symbol_resolver_class_finalize (IdeXmlSymbolResolverClass *klass)
-{
-}
-
-static void
 ide_xml_symbol_resolver_init (IdeXmlSymbolResolver *self)
 {
-}
-
-void
-_ide_xml_symbol_resolver_register_type (GTypeModule *module)
-{
-  ide_xml_symbol_resolver_register_type (module);
 }
 
 static void

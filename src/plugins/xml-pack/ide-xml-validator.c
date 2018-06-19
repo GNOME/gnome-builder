@@ -193,7 +193,7 @@ ide_xml_validator_validate (IdeXmlValidator   *self,
                                 (xmlRelaxNGValidityWarningFunc)ide_xml_valid_warning,
                                 &state);
 
-      ret = xmlRelaxNGValidateDoc (rng_valid_context, doc);
+      ret = (xmlRelaxNGValidateDoc (rng_valid_context, doc) == 0);
       xmlRelaxNGFreeValidCtxt (rng_valid_context);
     }
   else

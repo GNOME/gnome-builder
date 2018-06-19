@@ -79,8 +79,11 @@ ide_xml_analysis_set_diagnostics (IdeXmlAnalysis *self,
   g_return_if_fail (self != NULL);
   g_return_if_fail (diagnostics != NULL);
 
-  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
-  self->diagnostics = ide_diagnostics_ref (diagnostics);
+  if (diagnostics != self->diagnostics)
+    {
+      g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+      self->diagnostics = ide_diagnostics_ref (diagnostics);
+    }
 }
 
 void
@@ -90,8 +93,7 @@ ide_xml_analysis_set_root_node (IdeXmlAnalysis   *self,
   g_return_if_fail (self != NULL);
   g_return_if_fail (root_node != NULL);
 
-  g_clear_object (&self->root_node);
-  self->root_node = g_object_ref (root_node);
+  g_set_object (&self->root_node, root_node);
 }
 
 void
@@ -100,10 +102,12 @@ ide_xml_analysis_set_schemas (IdeXmlAnalysis *self,
 {
   g_return_if_fail (self != NULL);
 
-  g_clear_pointer (&self->schemas, g_ptr_array_unref);
-
-  if (schemas != NULL)
-    self->schemas = g_ptr_array_ref (schemas);
+  if (self->schemas != schemas)
+    {
+      g_clear_pointer (&self->schemas, g_ptr_array_unref);
+      if (schemas != NULL)
+        self->schemas = g_ptr_array_ref (schemas);
+    }
 }
 
 void
@@ -143,7 +147,7 @@ IdeXmlAnalysis *
 ide_xml_analysis_ref (IdeXmlAnalysis *self)
 {
   g_return_val_if_fail (self, NULL);
-  g_return_val_if_fail (self->ref_count, NULL);
+  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   g_atomic_int_inc (&self->ref_count);
 
@@ -154,7 +158,7 @@ void
 ide_xml_analysis_unref (IdeXmlAnalysis *self)
 {
   g_return_if_fail (self);
-  g_return_if_fail (self->ref_count);
+  g_return_if_fail (self->ref_count > 0);
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     ide_xml_analysis_free (self);
