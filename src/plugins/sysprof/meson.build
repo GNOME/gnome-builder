@@ -15,8 +15,8 @@ sysprof_sources = [
 ]
 
 gnome_builder_plugins_deps += [
-  dependency('sysprof-2', version: '>= 3.28.0'),
-  dependency('sysprof-ui-2', version: '>= 3.28.0'),
+  dependency('sysprof-2', version: '>= 3.29.3'),
+  dependency('sysprof-ui-2', version: '>= 3.29.3'),
 ]
 
 gnome_builder_plugins_sources += files(sysprof_sources)

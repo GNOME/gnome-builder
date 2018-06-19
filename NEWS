@@ -4,7 +4,13 @@ Version 3.29.3
 
 Changes since last release:
 
- • Initial support for the gradle build system.
+ • A new completion engine has been added, replacing the use of
+   GtkSourceCompletion. Information about the new engine can be found at
+   https://blogs.gnome.org/chergert/2018/06/09/a-new-completion-engine-for-builder/
+ • Helpers to format GNOME-style header function blocks has been added. Run
+   the "format-decls" command from the command bar with an editor selection.
+ • Updated AppData and OARS.
+ • Initial support for the gradle and maven build system.
  • Updated sensible defaults for the Java programming language.
  • Various performance and correctness fixes.
  • Additional support for sysroots and toolchain selection.
@@ -17,6 +23,19 @@ Changes since last release:
  • Plugins in ~/.local/share/gnome-builder/plugins will have higher
    priority which simplifies the process of creating and testing new
    plugins out-of-tree such as when using Flatpak.
+ • Correctness fixes in a number of plugins and libide.
+ • Language server protocol conformance improvements.
+ • A new "toggle-map" GAction allows quickly enabling the overview map.
+ • The snippet engine got improvements to reduce runtime memory overhead.
+ • Boxes was added to the newcomers section.
+ • GCC Warnings were vastly increased this cycle, including lots of fixes
+   but also new potentials for -Werror failures.
+ • The headerbar on Adwaita has been tweaked to be less busy due to the
+   proximity of controls.
+
+Updated Translations:
+
+  Brazilian, Portuguese, Czech, Spanish, Swedish
 
 ==============
 Version 3.29.2
