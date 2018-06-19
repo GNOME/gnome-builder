@@ -128,7 +128,7 @@ ide_application_discover_plugins (IdeApplication *self)
   if (!g_irepository_require (NULL, "Ide", "1.0", 0, &error) ||
       !g_irepository_require (NULL, "Gtk", "3.0", 0, &error) ||
       !g_irepository_require (NULL, "Dazzle", "1.0", 0, &error))
-    g_warning ("Cannot enable Python 3 plugins: %s", error->message);
+    g_message ("Cannot enable Python 3 plugins: %s", error->message);
   else
     {
       /* Avoid spamming stderr with Ide import tracebacks */
