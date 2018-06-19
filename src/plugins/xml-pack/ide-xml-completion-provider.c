@@ -393,6 +393,7 @@ completion_item_free (CompletionItem *item)
 {
   g_clear_pointer (&item->label, g_free);
   g_clear_pointer (&item->define, ide_xml_rng_define_unref);
+  g_slice_free (CompletionItem, item);
 }
 
 static MatchingState *
