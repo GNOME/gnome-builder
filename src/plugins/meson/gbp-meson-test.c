@@ -47,8 +47,8 @@ gbp_meson_test_finalize (GObject *object)
 {
   GbpMesonTest *self = (GbpMesonTest *)object;
 
-  g_clear_pointer (&self->command, g_strfreev);
-  g_clear_pointer (&self->environ, g_strfreev);
+  dzl_clear_pointer (&self->command, g_strfreev);
+  dzl_clear_pointer (&self->environ, g_strfreev);
   g_clear_object (&self->workdir);
 
   G_OBJECT_CLASS (gbp_meson_test_parent_class)->finalize (object);

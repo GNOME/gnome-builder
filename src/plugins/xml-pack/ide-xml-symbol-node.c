@@ -117,11 +117,11 @@ ide_xml_symbol_node_finalize (GObject *object)
 {
   IdeXmlSymbolNode *self = (IdeXmlSymbolNode *)object;
 
-  g_clear_pointer (&self->children, g_array_unref);
-  g_clear_pointer (&self->attributes, g_array_unref);
+  dzl_clear_pointer (&self->children, g_array_unref);
+  dzl_clear_pointer (&self->attributes, g_array_unref);
 
-  g_clear_pointer (&self->element_name, g_free);
-  g_clear_pointer (&self->value, g_free);
+  dzl_clear_pointer (&self->element_name, g_free);
+  dzl_clear_pointer (&self->value, g_free);
 
   g_clear_object (&self->file);
   g_clear_object (&self->parent);
@@ -548,7 +548,7 @@ ide_xml_symbol_node_set_element_name (IdeXmlSymbolNode *self,
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
   g_return_if_fail (!dzl_str_empty0 (element_name));
 
-  g_clear_pointer (&self->element_name, g_free);
+  dzl_clear_pointer (&self->element_name, g_free);
 
   if (element_name != NULL)
     self->element_name = g_strdup (element_name);
@@ -585,7 +585,7 @@ ide_xml_symbol_node_set_value (IdeXmlSymbolNode *self,
 {
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
 
-  g_clear_pointer (&self->value, g_free);
+  dzl_clear_pointer (&self->value, g_free);
 
   if (value != NULL)
     self->value = g_strdup (value);
@@ -668,7 +668,7 @@ ide_xml_symbol_node_set_attributes (IdeXmlSymbolNode  *self,
 
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
 
-  g_clear_pointer (&self->attributes, g_array_unref);
+  dzl_clear_pointer (&self->attributes, g_array_unref);
   if (attributes == NULL)
     return;
 

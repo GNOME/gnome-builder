@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "c-parser"
 
+#include <dazzle.h>
 #include <string.h>
 
 #include "c-parse-helper.h"
@@ -27,8 +28,8 @@ parameter_free (Parameter *p)
 {
   if (p)
     {
-      g_clear_pointer (&p->name, g_free);
-      g_clear_pointer (&p->type, g_free);
+      dzl_clear_pointer (&p->name, g_free);
+      dzl_clear_pointer (&p->type, g_free);
       g_slice_free (Parameter, p);
     }
 }
@@ -243,7 +244,7 @@ parse_parameters (const gchar *text)
 
 failure:
   g_slist_foreach (ret, (GFunc)parameter_free, NULL);
-  g_clear_pointer (&ret, g_slist_free);
+  dzl_clear_pointer (&ret, g_slist_free);
 
 cleanup:
   g_strfreev (parts);

@@ -132,7 +132,7 @@ gbp_meson_test_provider_load_json (GbpMesonTestProvider *self,
 
       environ_ = ide_environment_get_environ (env);
       if (ide_strv_empty0 (environ_))
-        g_clear_pointer (&environ_, g_strfreev);
+        dzl_clear_pointer (&environ_, g_strfreev);
 
       test = g_object_new (GBP_TYPE_MESON_TEST,
                            "command", (gchar **)cmd->pdata,

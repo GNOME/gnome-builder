@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "gb-command-result.h"
@@ -144,8 +145,8 @@ gb_command_result_finalize (GObject *object)
 {
   GbCommandResult *self = GB_COMMAND_RESULT (object);
 
-  g_clear_pointer (&self->command_text, g_free);
-  g_clear_pointer (&self->result_text, g_free);
+  dzl_clear_pointer (&self->command_text, g_free);
+  dzl_clear_pointer (&self->result_text, g_free);
 
   G_OBJECT_CLASS (gb_command_result_parent_class)->finalize (object);
 }

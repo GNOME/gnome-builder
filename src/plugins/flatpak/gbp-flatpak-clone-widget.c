@@ -79,7 +79,7 @@ module_source_free (void *data)
 {
   ModuleSource *src = data;
 
-  g_clear_pointer (&src->uri, ide_vcs_uri_unref);
+  dzl_clear_pointer (&src->uri, ide_vcs_uri_unref);
   g_free (src->branch);
   g_free (src->sha);
   g_strfreev (src->patches);
@@ -150,10 +150,10 @@ gbp_flatpak_clone_widget_finalize (GObject *object)
 {
   GbpFlatpakCloneWidget *self = (GbpFlatpakCloneWidget *)object;
 
-  g_clear_pointer (&self->app_id_override, g_free);
-  g_clear_pointer (&self->child_name, g_free);
-  g_clear_pointer (&self->id, g_free);
-  g_clear_pointer (&self->manifest, g_free);
+  dzl_clear_pointer (&self->app_id_override, g_free);
+  dzl_clear_pointer (&self->child_name, g_free);
+  dzl_clear_pointer (&self->id, g_free);
+  dzl_clear_pointer (&self->manifest, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_clone_widget_parent_class)->finalize (object);
 }
@@ -355,7 +355,7 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
           clone_options = ggit_clone_options_new ();
           ggit_clone_options_set_is_bare (clone_options, FALSE);
           ggit_clone_options_set_fetch_options (clone_options, fetch_options);
-          g_clear_pointer (&fetch_options, ggit_fetch_options_free);
+          dzl_clear_pointer (&fetch_options, ggit_fetch_options_free);
 
           uristr = ide_vcs_uri_to_string (req->src->uri);
           repository = ggit_repository_clone (uristr, req->destination, clone_options, &error);

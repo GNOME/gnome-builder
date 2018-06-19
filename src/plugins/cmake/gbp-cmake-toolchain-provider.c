@@ -181,7 +181,7 @@ gbp_cmake_toolchain_provider_load_finish (IdeToolchainProvider  *provider,
   if (toolchains == NULL)
     return FALSE;
 
-  g_clear_pointer (&self->toolchains, g_ptr_array_unref);
+  dzl_clear_pointer (&self->toolchains, g_ptr_array_unref);
   self->toolchains = g_ptr_array_ref (toolchains);
 
   for (guint i = 0; i < toolchains->len; i++)
@@ -205,7 +205,7 @@ gbp_cmake_toolchain_provider_unload (IdeToolchainProvider  *provider,
   g_assert (GBP_IS_CMAKE_TOOLCHAIN_PROVIDER (self));
   g_assert (IDE_IS_TOOLCHAIN_MANAGER (manager));
 
-  g_clear_pointer (&self->toolchains, g_ptr_array_unref);
+  dzl_clear_pointer (&self->toolchains, g_ptr_array_unref);
 }
 
 static void

@@ -81,7 +81,7 @@ task_state_free (gpointer data)
   g_assert (state != NULL);
 
   g_clear_object (&state->file);
-  g_clear_pointer (&state->hash_table, g_hash_table_unref);
+  dzl_clear_pointer (&state->hash_table, g_hash_table_unref);
   g_slice_free (TaskState, state);
 }
 
@@ -323,7 +323,7 @@ gbp_spell_dict_get_dict_words_cb (GObject      *object,
     }
   else
     {
-      g_clear_pointer (&self->words, g_hash_table_unref);
+      dzl_clear_pointer (&self->words, g_hash_table_unref);
       self->words = g_hash_table_ref (words);
       self->init_status = INIT_DONE;
 
@@ -370,7 +370,7 @@ gbp_spell_dict_set_dict (GbpSpellDict         *self,
       enchant_broker_free_dict (self->broker, self->dict);
       self->dict = NULL;
 
-      g_clear_pointer (&self->words, g_hash_table_unref);
+      dzl_clear_pointer (&self->words, g_hash_table_unref);
     }
 }
 
@@ -463,13 +463,13 @@ gbp_spell_dict_finalize (GObject *object)
     {
       if (self->dict != NULL)
         enchant_broker_free_dict (self->broker, self->dict);
-      g_clear_pointer (&self->broker, enchant_broker_free);
+      dzl_clear_pointer (&self->broker, enchant_broker_free);
     }
 
   if (self->words != NULL)
     {
       g_hash_table_remove_all (self->words);
-      g_clear_pointer (&self->words, g_hash_table_unref);
+      dzl_clear_pointer (&self->words, g_hash_table_unref);
     }
 
   G_OBJECT_CLASS (gbp_spell_dict_parent_class)->finalize (object);

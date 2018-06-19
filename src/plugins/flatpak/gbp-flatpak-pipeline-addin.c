@@ -738,7 +738,7 @@ gbp_flatpak_pipeline_addin_unload (IdeBuildPipelineAddin *addin,
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  g_clear_pointer (&self->state_dir, g_free);
+  dzl_clear_pointer (&self->state_dir, g_free);
 }
 
 /* GObject boilerplate */

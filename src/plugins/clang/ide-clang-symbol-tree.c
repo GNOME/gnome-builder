@@ -111,7 +111,7 @@ ide_clang_symbol_tree_finalize (GObject *object)
 {
   IdeClangSymbolTree *self = (IdeClangSymbolTree *)object;
 
-  g_clear_pointer (&self->tree, g_variant_unref);
+  dzl_clear_pointer (&self->tree, g_variant_unref);
   g_clear_object (&self->file);
 
   G_OBJECT_CLASS (ide_clang_symbol_tree_parent_class)->finalize (object);

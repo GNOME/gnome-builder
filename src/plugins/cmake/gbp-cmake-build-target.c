@@ -65,7 +65,7 @@ gbp_cmake_build_target_finalize (GObject *object)
   GbpCMakeBuildTarget *self = (GbpCMakeBuildTarget *)object;
 
   g_clear_object (&self->install_directory);
-  g_clear_pointer (&self->name, g_free);
+  dzl_clear_pointer (&self->name, g_free);
 
   G_OBJECT_CLASS (gbp_cmake_build_target_parent_class)->finalize (object);
 }

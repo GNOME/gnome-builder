@@ -77,10 +77,10 @@ bootstrap_state_free (gpointer data)
   g_assert (state != NULL);
 
   g_clear_object (&state->config);
-  g_clear_pointer (&state->runtime_id, g_free);
-  g_clear_pointer (&state->name, g_free);
-  g_clear_pointer (&state->arch, g_free);
-  g_clear_pointer (&state->branch, g_free);
+  dzl_clear_pointer (&state->runtime_id, g_free);
+  dzl_clear_pointer (&state->name, g_free);
+  dzl_clear_pointer (&state->arch, g_free);
+  dzl_clear_pointer (&state->branch, g_free);
   g_slice_free (BootstrapState, state);
 }
 
@@ -89,12 +89,12 @@ install_runtime_free (gpointer data)
 {
   InstallRuntime *install = data;
 
-  g_clear_pointer (&install->id, g_free);
-  g_clear_pointer (&install->arch, g_free);
-  g_clear_pointer (&install->branch, g_free);
-  g_clear_pointer (&install->sdk_id, g_free);
-  g_clear_pointer (&install->sdk_arch, g_free);
-  g_clear_pointer (&install->sdk_branch, g_free);
+  dzl_clear_pointer (&install->id, g_free);
+  dzl_clear_pointer (&install->arch, g_free);
+  dzl_clear_pointer (&install->branch, g_free);
+  dzl_clear_pointer (&install->sdk_id, g_free);
+  dzl_clear_pointer (&install->sdk_arch, g_free);
+  dzl_clear_pointer (&install->sdk_branch, g_free);
 
   g_slice_free (InstallRuntime, install);
 }
@@ -224,7 +224,7 @@ gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider *provider,
         }
     }
 
-  g_clear_pointer (&self->runtimes, g_ptr_array_unref);
+  dzl_clear_pointer (&self->runtimes, g_ptr_array_unref);
 
   dzl_clear_weak_pointer (&self->manager);
 

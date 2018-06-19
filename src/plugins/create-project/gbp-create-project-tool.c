@@ -81,12 +81,12 @@ gbp_create_project_tool_finalize (GObject *object)
   GbpCreateProjectTool *self = (GbpCreateProjectTool *)object;
 
   g_list_foreach (self->project_templates, (GFunc)g_object_unref, NULL);
-  g_clear_pointer (&self->project_templates, g_list_free);
-  g_clear_pointer (&self->args, g_strfreev);
-  g_clear_pointer (&self->language, g_free);
-  g_clear_pointer (&self->template, g_free);
-  g_clear_pointer (&self->name, g_free);
-  g_clear_pointer (&self->vcs, g_free);
+  dzl_clear_pointer (&self->project_templates, g_list_free);
+  dzl_clear_pointer (&self->args, g_strfreev);
+  dzl_clear_pointer (&self->language, g_free);
+  dzl_clear_pointer (&self->template, g_free);
+  dzl_clear_pointer (&self->name, g_free);
+  dzl_clear_pointer (&self->vcs, g_free);
 
   G_OBJECT_CLASS (gbp_create_project_tool_parent_class)->finalize (object);
 }

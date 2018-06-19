@@ -541,7 +541,7 @@ gbp_flatpak_configuration_provider_load_finish (IdeConfigurationProvider  *provi
   if (configs == NULL)
     return FALSE;
 
-  g_clear_pointer (&self->configs, g_ptr_array_unref);
+  dzl_clear_pointer (&self->configs, g_ptr_array_unref);
   self->configs = g_ptr_array_ref (configs);
 
   for (guint i = 0; i < configs->len; i++)
@@ -592,7 +592,7 @@ gbp_flatpak_configuration_provider_unload (IdeConfigurationProvider *provider)
           ide_configuration_provider_emit_removed (provider, config);
         }
 
-      g_clear_pointer (&self->configs, g_ptr_array_unref);
+      dzl_clear_pointer (&self->configs, g_ptr_array_unref);
     }
 
   IDE_EXIT;
@@ -684,7 +684,7 @@ gbp_flatpak_configuration_provider_finalize (GObject *object)
 {
   GbpFlatpakConfigurationProvider *self = (GbpFlatpakConfigurationProvider *)object;
 
-  g_clear_pointer (&self->configs, g_ptr_array_unref);
+  dzl_clear_pointer (&self->configs, g_ptr_array_unref);
 
   G_OBJECT_CLASS (gbp_flatpak_configuration_provider_parent_class)->finalize (object);
 }

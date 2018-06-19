@@ -256,8 +256,8 @@ parse_command_text (const gchar  *command_text,
   return TRUE;
 
 failure:
-  g_clear_pointer (&ret_name, g_free);
-  g_clear_pointer (&ret_params, g_variant_unref);
+  dzl_clear_pointer (&ret_name, g_free);
+  dzl_clear_pointer (&ret_params, g_variant_unref);
 
   return FALSE;
 }
@@ -401,7 +401,7 @@ gb_command_gaction_provider_lookup (GbCommandProvider *provider,
                               NULL);
     }
 
-  g_clear_pointer (&params, g_variant_unref);
+  dzl_clear_pointer (&params, g_variant_unref);
   g_free (command_name);
   g_list_free_full (gb_groups, (GDestroyNotify)gb_group_free);
 

@@ -87,7 +87,7 @@ directory_index_free (DirectoryIndex *data)
 static void
 populate_task_data_free (PopulateTaskData *data)
 {
-  g_clear_pointer (&data->query, g_free);
+  dzl_clear_pointer (&data->query, g_free);
 
   for (guint i = 0; i < data->fuzzy_matches->len; i++)
     {
@@ -95,7 +95,7 @@ populate_task_data_free (PopulateTaskData *data)
       g_clear_object (&(dzl_heap_index(data->fuzzy_matches, FuzzyMatch, i).match));
     }
 
-  g_clear_pointer (&data->fuzzy_matches, dzl_heap_unref);
+  dzl_clear_pointer (&data->fuzzy_matches, dzl_heap_unref);
 
   g_slice_free (PopulateTaskData, data);
 }
@@ -552,8 +552,8 @@ ide_code_index_index_finalize (GObject *object)
 {
   IdeCodeIndexIndex *self = (IdeCodeIndexIndex *)object;
 
-  g_clear_pointer (&self->directories, g_hash_table_unref);
-  g_clear_pointer (&self->indexes, g_ptr_array_unref);
+  dzl_clear_pointer (&self->directories, g_hash_table_unref);
+  dzl_clear_pointer (&self->indexes, g_ptr_array_unref);
 
   g_mutex_clear (&self->mutex);
 

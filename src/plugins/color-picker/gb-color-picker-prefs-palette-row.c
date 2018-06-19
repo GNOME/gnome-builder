@@ -338,9 +338,9 @@ gb_color_picker_prefs_palette_row_finalize (GObject *object)
   if (self->settings != NULL)
     gb_color_picker_prefs_palette_row_disconnect (DZL_PREFERENCES_BIN (self), self->settings);
 
-  g_clear_pointer (&self->key, g_free);
-  g_clear_pointer (&self->target, g_variant_unref);
-  g_clear_pointer (&self->palette_id, g_free);
+  dzl_clear_pointer (&self->key, g_free);
+  dzl_clear_pointer (&self->target, g_variant_unref);
+  dzl_clear_pointer (&self->palette_id, g_free);
   g_clear_object (&self->popover_menu);
 
   G_OBJECT_CLASS (gb_color_picker_prefs_palette_row_parent_class)->finalize (object);

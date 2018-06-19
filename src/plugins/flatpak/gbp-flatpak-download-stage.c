@@ -149,7 +149,7 @@ gbp_flatpak_download_stage_finalize (GObject *object)
 
   g_assert (GBP_IS_FLATPAK_DOWNLOAD_STAGE (self));
 
-  g_clear_pointer (&self->state_dir, g_free);
+  dzl_clear_pointer (&self->state_dir, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_download_stage_parent_class)->finalize (object);
 }

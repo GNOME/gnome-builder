@@ -707,7 +707,7 @@ gbp_spell_widget__language_notify_cb (GbpSpellWidget *self,
           gtk_list_box_select_row (self->suggestions_box, row);
         }
 
-      g_clear_pointer (&self->words_array, g_ptr_array_unref);
+      dzl_clear_pointer (&self->words_array, g_ptr_array_unref);
 
       if (current_language == NULL)
         {
@@ -813,7 +813,7 @@ gbp_spell_widget__dict__loaded_cb (GbpSpellWidget *self,
 
   self->words_array = gbp_spell_dict_get_words (self->dict);
   dict_fill_listbox (self, self->words_array);
-  g_clear_pointer (&self->words_array, g_ptr_array_unref);
+  dzl_clear_pointer (&self->words_array, g_ptr_array_unref);
 }
 
 static void
@@ -976,7 +976,7 @@ gbp_spell_widget_destroy (GtkWidget *widget)
   g_clear_object (&self->editor_view_addin);
   g_clear_object (&self->editor_view_addin_signals);
   g_clear_object (&self->dict);
-  g_clear_pointer (&self->words_array, g_ptr_array_unref);
+  dzl_clear_pointer (&self->words_array, g_ptr_array_unref);
 
   GTK_WIDGET_CLASS (gbp_spell_widget_parent_class)->destroy (widget);
 }

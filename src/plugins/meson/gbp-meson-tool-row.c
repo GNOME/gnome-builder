@@ -152,9 +152,9 @@ gbp_meson_tool_row_finalize (GObject *object)
 {
   GbpMesonToolRow *self = (GbpMesonToolRow *) object;
 
-  g_clear_pointer (&self->tool_path, g_free);
-  g_clear_pointer (&self->tool_id, g_free);
-  g_clear_pointer (&self->lang_id, g_free);
+  dzl_clear_pointer (&self->tool_path, g_free);
+  dzl_clear_pointer (&self->tool_id, g_free);
+  dzl_clear_pointer (&self->lang_id, g_free);
 
   G_OBJECT_CLASS (gbp_meson_tool_row_parent_class)->finalize (object);
 }

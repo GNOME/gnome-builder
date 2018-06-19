@@ -52,7 +52,7 @@ gb_file_search_index_set_root_directory (GbFileSearchIndex *self,
 
   if (g_set_object (&self->root_directory, root_directory))
     {
-      g_clear_pointer (&self->fuzzy, dzl_fuzzy_mutable_index_unref);
+      dzl_clear_pointer (&self->fuzzy, dzl_fuzzy_mutable_index_unref);
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ROOT_DIRECTORY]);
     }
@@ -64,7 +64,7 @@ gb_file_search_index_finalize (GObject *object)
   GbFileSearchIndex *self = (GbFileSearchIndex *)object;
 
   g_clear_object (&self->root_directory);
-  g_clear_pointer (&self->fuzzy, dzl_fuzzy_mutable_index_unref);
+  dzl_clear_pointer (&self->fuzzy, dzl_fuzzy_mutable_index_unref);
 
   G_OBJECT_CLASS (gb_file_search_index_parent_class)->finalize (object);
 }
@@ -222,7 +222,7 @@ populate_from_dir (DzlFuzzyMutableIndex *fuzzy,
         }
     }
 
-  g_clear_pointer (&children, g_ptr_array_unref);
+  dzl_clear_pointer (&children, g_ptr_array_unref);
 }
 
 static void

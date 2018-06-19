@@ -241,7 +241,7 @@ ide_gca_service_finalize (GObject *object)
       g_clear_object (&self->bus);
     }
 
-  g_clear_pointer (&self->proxy_cache, g_hash_table_unref);
+  dzl_clear_pointer (&self->proxy_cache, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_gca_service_parent_class)->finalize (object);
 }

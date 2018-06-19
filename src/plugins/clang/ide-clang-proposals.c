@@ -154,9 +154,9 @@ ide_clang_proposals_finalize (GObject *object)
 
   g_clear_object (&self->client);
   g_clear_object (&self->cancellable);
-  g_clear_pointer (&self->filter, g_free);
-  g_clear_pointer (&self->match_indexes, g_array_unref);
-  g_clear_pointer (&self->results, g_variant_unref);
+  dzl_clear_pointer (&self->filter, g_free);
+  dzl_clear_pointer (&self->match_indexes, g_array_unref);
+  dzl_clear_pointer (&self->results, g_variant_unref);
 
   G_OBJECT_CLASS (ide_clang_proposals_parent_class)->finalize (object);
 }
@@ -423,7 +423,7 @@ ide_clang_proposals_flush (IdeClangProposals *self,
 
   if (results != self->results)
     {
-      g_clear_pointer (&self->results, g_variant_unref);
+      dzl_clear_pointer (&self->results, g_variant_unref);
       self->results = results ? g_variant_ref (results) : NULL;
     }
 

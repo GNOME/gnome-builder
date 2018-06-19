@@ -407,8 +407,8 @@ ide_clang_completion_item_finalize (GObject *object)
 
   self->typed_text = NULL;
 
-  g_clear_pointer (&self->results, g_variant_unref);
-  g_clear_pointer (&self->params, g_free);
+  dzl_clear_pointer (&self->results, g_variant_unref);
+  dzl_clear_pointer (&self->params, g_free);
 
   G_OBJECT_CLASS (ide_clang_completion_item_parent_class)->finalize (object);
 }

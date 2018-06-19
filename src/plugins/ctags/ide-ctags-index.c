@@ -254,8 +254,8 @@ ide_ctags_index_build_index (IdeTask      *task,
   IDE_EXIT;
 
 failure:
-  g_clear_pointer (&contents, g_free);
-  g_clear_pointer (&index, g_array_unref);
+  dzl_clear_pointer (&contents, g_free);
+  dzl_clear_pointer (&index, g_array_unref);
 
   if (error != NULL)
     ide_task_return_error (task, g_steal_pointer (&error));
@@ -370,9 +370,9 @@ ide_ctags_index_finalize (GObject *object)
     }
 
   g_clear_object (&self->file);
-  g_clear_pointer (&self->index, g_array_unref);
-  g_clear_pointer (&self->buffer, g_bytes_unref);
-  g_clear_pointer (&self->path_root, g_free);
+  dzl_clear_pointer (&self->index, g_array_unref);
+  dzl_clear_pointer (&self->buffer, g_bytes_unref);
+  dzl_clear_pointer (&self->path_root, g_free);
 
   G_OBJECT_CLASS (ide_ctags_index_parent_class)->finalize (object);
 

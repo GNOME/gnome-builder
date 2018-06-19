@@ -70,7 +70,7 @@ gbp_sysprof_perspective_finalize (GObject *object)
 {
   GbpSysprofPerspective *self = (GbpSysprofPerspective *)object;
 
-  g_clear_pointer (&self->reader, sp_capture_reader_unref);
+  dzl_clear_pointer (&self->reader, sp_capture_reader_unref);
 
   G_OBJECT_CLASS (gbp_sysprof_perspective_parent_class)->finalize (object);
 }
@@ -223,7 +223,7 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
 
       if (self->reader != NULL)
         {
-          g_clear_pointer (&self->reader, sp_capture_reader_unref);
+          dzl_clear_pointer (&self->reader, sp_capture_reader_unref);
           sp_callgraph_view_set_profile (self->callgraph_view, NULL);
           sp_visualizer_view_set_reader (self->visualizers, NULL);
           gtk_stack_set_visible_child_name (self->stack, "empty");

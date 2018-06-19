@@ -37,10 +37,10 @@ typedef struct
 static void
 clear_chunk (Chunk *chunk)
 {
-  g_clear_pointer (&chunk->pre, g_free);
-  g_clear_pointer (&chunk->return_type, g_free);
-  g_clear_pointer (&chunk->identifier, g_free);
-  g_clear_pointer (&chunk->post, g_free);
+  dzl_clear_pointer (&chunk->pre, g_free);
+  dzl_clear_pointer (&chunk->return_type, g_free);
+  dzl_clear_pointer (&chunk->identifier, g_free);
+  dzl_clear_pointer (&chunk->post, g_free);
   g_slist_free_full (chunk->params, (GDestroyNotify)parameter_free);
   chunk->params = NULL;
 }
@@ -237,7 +237,7 @@ push_chunk (GArray      *ar,
 
   chunk.post = g_strstrip (g_strdup (str));
   if (chunk.post[0] == 0)
-    g_clear_pointer (&chunk.post, g_free);
+    dzl_clear_pointer (&chunk.post, g_free);
 
   g_array_append_val (ar, chunk);
 

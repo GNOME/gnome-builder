@@ -95,7 +95,7 @@ ide_ctags_symbol_tree_finalize (GObject *object)
 {
   IdeCtagsSymbolTree *self = (IdeCtagsSymbolTree *)object;
 
-  g_clear_pointer (&self->ar, g_ptr_array_unref);
+  dzl_clear_pointer (&self->ar, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_ctags_symbol_tree_parent_class)->finalize (object);
 }

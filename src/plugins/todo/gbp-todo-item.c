@@ -18,6 +18,8 @@
 
 #define G_LOG_DOMAIN "gbp-todo-item"
 
+#include <dazzle.h>
+
 #include "gbp-todo-item.h"
 
 #define MAX_TODO_LINES 5
@@ -38,7 +40,7 @@ gbp_todo_item_finalize (GObject *object)
 {
   GbpTodoItem *self = (GbpTodoItem *)object;
 
-  g_clear_pointer (&self->bytes, g_bytes_unref);
+  dzl_clear_pointer (&self->bytes, g_bytes_unref);
 
   G_OBJECT_CLASS (gbp_todo_item_parent_class)->finalize (object);
 }

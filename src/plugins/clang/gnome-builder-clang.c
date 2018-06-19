@@ -97,7 +97,7 @@ client_op_unref (ClientOp *op)
     {
       g_clear_object (&op->cancellable);
       g_clear_object (&op->client);
-      g_clear_pointer (&op->id, g_variant_unref);
+      dzl_clear_pointer (&op->id, g_variant_unref);
       g_queue_unlink (&ops, &op->link);
       g_slice_free (ClientOp, op);
 

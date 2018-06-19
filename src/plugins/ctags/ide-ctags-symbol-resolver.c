@@ -437,7 +437,7 @@ tree_resolver_state_free (gpointer data)
 
   if (state != NULL)
     {
-      g_clear_pointer (&state->indexes, g_ptr_array_unref);
+      dzl_clear_pointer (&state->indexes, g_ptr_array_unref);
       g_clear_object (&state->file);
       g_slice_free (TreeResolverState, state);
     }

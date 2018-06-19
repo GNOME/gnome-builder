@@ -42,9 +42,9 @@ ide_snippet_model_finalize (GObject *object)
 {
   IdeSnippetModel *self = (IdeSnippetModel *)object;
 
-  g_clear_pointer (&self->language, g_free);
-  g_clear_pointer (&self->prefix, g_free);
-  g_clear_pointer (&self->items, g_ptr_array_unref);
+  dzl_clear_pointer (&self->language, g_free);
+  dzl_clear_pointer (&self->prefix, g_free);
+  dzl_clear_pointer (&self->items, g_ptr_array_unref);
   g_clear_object (&self->storage);
 
   G_OBJECT_CLASS (ide_snippet_model_parent_class)->finalize (object);

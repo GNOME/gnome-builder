@@ -84,7 +84,7 @@ gbp_meson_toolchain_load (GbpMesonToolchain  *self,
 
   triplet = ide_triplet_new_with_triplet (arch, system, NULL);
 
-  g_clear_pointer (&self->file_path, g_free);
+  dzl_clear_pointer (&self->file_path, g_free);
   self->file_path = g_steal_pointer (&path);
 
   ide_toolchain_set_id (IDE_TOOLCHAIN(self), id);
@@ -140,7 +140,7 @@ gbp_meson_toolchain_finalize (GObject *object)
 {
   GbpMesonToolchain *self = (GbpMesonToolchain *)object;
 
-  g_clear_pointer (&self->file_path, g_free);
+  dzl_clear_pointer (&self->file_path, g_free);
 
   G_OBJECT_CLASS (gbp_meson_toolchain_parent_class)->finalize (object);
 }

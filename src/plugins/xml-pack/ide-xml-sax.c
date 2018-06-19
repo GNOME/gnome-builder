@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -175,7 +176,7 @@ ide_xml_sax_parse (IdeXmlSax   *self,
   wellformed = self->context->wellFormed;
 
   self->context->sax = NULL;
-  g_clear_pointer (&self->context, xmlFreeParserCtxt);
+  dzl_clear_pointer (&self->context, xmlFreeParserCtxt);
 
   return wellformed;
 }

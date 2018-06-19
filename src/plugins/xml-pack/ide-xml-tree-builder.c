@@ -69,8 +69,8 @@ tree_builder_state_free (TreeBuilderState *state)
 {
   g_assert (state != NULL);
 
-  g_clear_pointer (&state->content, g_bytes_unref);
-  g_clear_pointer (&state->analysis, ide_xml_analysis_unref);
+  dzl_clear_pointer (&state->content, g_bytes_unref);
+  dzl_clear_pointer (&state->analysis, ide_xml_analysis_unref);
   g_clear_object (&state->file);
   g_slice_free (TreeBuilderState, state);
 }
@@ -133,7 +133,7 @@ fetch_schema_state_free (FetchSchemasState *state)
 {
   g_assert (state != NULL);
 
-  g_clear_pointer (&state->schemas, g_ptr_array_unref);
+  dzl_clear_pointer (&state->schemas, g_ptr_array_unref);
   g_clear_object (&state->self);
   g_clear_object (&state->task);
   g_slice_free (FetchSchemasState, state);
@@ -167,7 +167,7 @@ fetch_schemas_cb (GObject      *object,
       if (cache_entry->content != NULL &&
           entry->content != cache_entry->content)
         {
-          g_clear_pointer (&entry->content, g_bytes_unref);
+          dzl_clear_pointer (&entry->content, g_bytes_unref);
           entry->content = g_bytes_ref (cache_entry->content);
         }
 
@@ -181,7 +181,7 @@ fetch_schemas_cb (GObject      *object,
       if (cache_entry->schema != NULL &&
           entry->schema != cache_entry->schema)
         {
-          g_clear_pointer (&entry->schema, ide_xml_schema_unref);
+          dzl_clear_pointer (&entry->schema, ide_xml_schema_unref);
           entry->schema = ide_xml_schema_ref (cache_entry->schema);
         }
 

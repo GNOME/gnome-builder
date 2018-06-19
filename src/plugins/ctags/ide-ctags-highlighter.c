@@ -268,7 +268,7 @@ ide_ctags_highlighter_finalize (GObject *object)
       dzl_clear_weak_pointer (&self->service);
     }
 
-  g_clear_pointer (&self->indexes, g_ptr_array_unref);
+  dzl_clear_pointer (&self->indexes, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_ctags_highlighter_parent_class)->finalize (object);
 }

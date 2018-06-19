@@ -64,7 +64,7 @@ gb_file_search_result_finalize (GObject *object)
   GbFileSearchResult *self = (GbFileSearchResult *)object;
 
   dzl_clear_weak_pointer (&self->context);
-  g_clear_pointer (&self->path, g_free);
+  dzl_clear_pointer (&self->path, g_free);
 
   G_OBJECT_CLASS (gb_file_search_result_parent_class)->finalize (object);
 }

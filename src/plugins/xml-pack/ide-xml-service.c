@@ -156,14 +156,14 @@ ide_xml_service_load_schema_cb3 (GObject      *object,
           else
             {
               /* TODO: get parse error ? */
-              g_clear_pointer (&cache_entry->content, g_bytes_unref);
+              dzl_clear_pointer (&cache_entry->content, g_bytes_unref);
               cache_entry->state = SCHEMA_STATE_CANT_PARSE;
             }
         }
       else
         {
           /* TODO: set error message */
-          g_clear_pointer (&cache_entry->content, g_bytes_unref);
+          dzl_clear_pointer (&cache_entry->content, g_bytes_unref);
           cache_entry->state = SCHEMA_STATE_WRONG_FILE_TYPE;
         }
     }

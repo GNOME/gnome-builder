@@ -84,7 +84,7 @@ lookup_symbol_free (gpointer data)
   LookupSymbol *state = data;
 
   g_clear_object (&state->code_indexer);
-  g_clear_pointer (&state->location, ide_source_location_unref);
+  dzl_clear_pointer (&state->location, ide_source_location_unref);
   g_slice_free (LookupSymbol, state);
 }
 

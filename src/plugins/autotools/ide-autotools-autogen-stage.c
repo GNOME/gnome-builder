@@ -130,7 +130,7 @@ ide_autotools_autogen_stage_finalize (GObject *object)
 {
   IdeAutotoolsAutogenStage *self = (IdeAutotoolsAutogenStage *)object;
 
-  g_clear_pointer (&self->srcdir, g_free);
+  dzl_clear_pointer (&self->srcdir, g_free);
 
   G_OBJECT_CLASS (ide_autotools_autogen_stage_parent_class)->finalize (object);
 }

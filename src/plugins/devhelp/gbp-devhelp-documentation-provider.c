@@ -200,7 +200,7 @@ get_devhelp_book (GbpDevhelpDocumentationProvider *self,
   if (link == NULL)
     return FALSE;
 
-  g_clear_pointer (&self->uri, g_free);
+  dzl_clear_pointer (&self->uri, g_free);
   self->uri = dh_link_get_uri (link);
 
   return TRUE;
@@ -225,7 +225,7 @@ start_get_info (IdeDocumentationProvider *provider,
     return FALSE;
 
   tokens = g_strsplit (self->uri, "#", -1 );
-  g_clear_pointer (&self->uri, g_free);
+  dzl_clear_pointer (&self->uri, g_free);
 
   if (tokens == NULL || g_strv_length (tokens) != 2)
     return FALSE;

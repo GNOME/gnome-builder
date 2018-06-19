@@ -649,9 +649,9 @@ ide_ctags_service_finalize (GObject *object)
 
   g_clear_object (&self->indexes);
   g_clear_object (&self->cancellable);
-  g_clear_pointer (&self->highlighters, g_ptr_array_unref);
-  g_clear_pointer (&self->completions, g_ptr_array_unref);
-  g_clear_pointer (&self->build_timeout_by_dir, g_hash_table_unref);
+  dzl_clear_pointer (&self->highlighters, g_ptr_array_unref);
+  dzl_clear_pointer (&self->completions, g_ptr_array_unref);
+  dzl_clear_pointer (&self->build_timeout_by_dir, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_ctags_service_parent_class)->finalize (object);
 

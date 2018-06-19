@@ -130,8 +130,8 @@ diff_task_free (gpointer data)
       g_clear_object (&diff->file);
       g_clear_object (&diff->blob);
       g_clear_object (&diff->repository);
-      g_clear_pointer (&diff->lines, g_array_unref);
-      g_clear_pointer (&diff->content, g_bytes_unref);
+      dzl_clear_pointer (&diff->lines, g_array_unref);
+      dzl_clear_pointer (&diff->content, g_bytes_unref);
       g_slice_free (DiffTask, diff);
     }
 }
@@ -285,7 +285,7 @@ ide_git_buffer_change_monitor__calculate_cb (GObject      *object,
     }
   else
     {
-      g_clear_pointer (&self->lines, g_array_unref);
+      dzl_clear_pointer (&self->lines, g_array_unref);
       self->lines = g_steal_pointer (&lines);
       self->in_failed_state = FALSE;
     }
@@ -751,11 +751,11 @@ ide_git_buffer_change_monitor_calculate_threaded (IdeGitBufferChangeMonitor  *se
 
     cleanup:
       g_clear_object (&blob);
-      g_clear_pointer (&entry_oid, ggit_oid_free);
-      g_clear_pointer (&entry, ggit_tree_entry_unref);
+      dzl_clear_pointer (&entry_oid, ggit_oid_free);
+      dzl_clear_pointer (&entry, ggit_tree_entry_unref);
       g_clear_object (&tree);
       g_clear_object (&commit);
-      g_clear_pointer (&oid, ggit_oid_free);
+      dzl_clear_pointer (&oid, ggit_oid_free);
       g_clear_object (&head);
     }
 

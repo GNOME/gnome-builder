@@ -167,7 +167,7 @@ ide_ctags_completion_provider_finalize (GObject *object)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
 
-  g_clear_pointer (&self->indexes, g_ptr_array_unref);
+  dzl_clear_pointer (&self->indexes, g_ptr_array_unref);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_ctags_completion_provider_parent_class)->finalize (object);

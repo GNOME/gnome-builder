@@ -49,8 +49,8 @@ deploy_state_free (DeployState *state)
 {
   g_clear_object (&state->pipeline);
   g_clear_object (&state->device);
-  g_clear_pointer (&state->app_id, g_free);
-  g_clear_pointer (&state->flatpak_path, g_free);
+  dzl_clear_pointer (&state->app_id, g_free);
+  dzl_clear_pointer (&state->flatpak_path, g_free);
   if (state->progress_data_destroy)
     state->progress_data_destroy (state->progress_data);
   g_slice_free (DeployState, state);

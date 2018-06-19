@@ -90,9 +90,9 @@ ide_xml_schema_cache_entry_free (IdeXmlSchemaCacheEntry *self)
   g_assert (self != NULL);
   g_assert (self->ref_count == 0);
 
-  g_clear_pointer (&self->content, g_bytes_unref);
+  dzl_clear_pointer (&self->content, g_bytes_unref);
   g_clear_object (&self->file);
-  g_clear_pointer (&self->error_message, g_free);
+  dzl_clear_pointer (&self->error_message, g_free);
 
   g_slice_free (IdeXmlSchemaCacheEntry, self);
 }

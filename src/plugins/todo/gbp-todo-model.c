@@ -95,7 +95,7 @@ result_info_free (gpointer data)
   ResultInfo *info = data;
 
   g_clear_object (&info->self);
-  g_clear_pointer (&info->items, g_ptr_array_unref);
+  dzl_clear_pointer (&info->items, g_ptr_array_unref);
   g_slice_free (ResultInfo, info);
 }
 

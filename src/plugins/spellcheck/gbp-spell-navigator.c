@@ -285,7 +285,7 @@ gbp_spell_navigator_dispose (GObject *object)
   GbpSpellNavigator *self = (GbpSpellNavigator *)object;
 
   g_clear_object (&self->view);
-  g_clear_pointer (&self->words_count, g_hash_table_unref);
+  dzl_clear_pointer (&self->words_count, g_hash_table_unref);
 
   if (self->buffer != NULL)
     {
