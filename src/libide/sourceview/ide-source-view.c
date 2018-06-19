@@ -1158,12 +1158,17 @@ ide_source_view__buffer_notify_has_selection_cb (IdeSourceView *self,
                                                  GParamSpec    *pspec,
                                                  IdeBuffer     *buffer)
 {
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  gboolean has_selection;
   IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+
+  has_selection = gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (buffer));
+  ide_source_view_mode_set_has_selection (priv->mode, has_selection);
 
   if (workbench == NULL)
     return;
 
-  if (gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (buffer)))
+  if (has_selection)
     ide_workbench_set_selection_owner (workbench, G_OBJECT (self));
   else if (ide_workbench_get_selection_owner (workbench) == G_OBJECT (self))
     ide_workbench_set_selection_owner (workbench, NULL);

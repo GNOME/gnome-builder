@@ -39,6 +39,8 @@ gboolean               ide_source_view_mode_get_keep_mark_on_char        (IdeSou
 IdeSourceViewModeType  ide_source_view_mode_get_mode_type                (IdeSourceViewMode     *self);
 void                   ide_source_view_mode_set_has_indenter             (IdeSourceViewMode     *self,
                                                                           gboolean               has_indenter);
+void                   ide_source_view_mode_set_has_selection            (IdeSourceViewMode     *self,
+                                                                          gboolean               has_selection);
 IdeSourceViewMode     *_ide_source_view_mode_new                         (GtkWidget             *view,
                                                                           const char            *mode,
                                                                           IdeSourceViewModeType  type) G_GNUC_INTERNAL;

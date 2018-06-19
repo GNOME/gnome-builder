@@ -598,3 +598,19 @@ ide_source_view_mode_set_has_indenter (IdeSourceViewMode *self,
   else
     gtk_style_context_remove_class (style_context, "has-indenter");
 }
+
+void
+ide_source_view_mode_set_has_selection (IdeSourceViewMode *self,
+                                        gboolean           has_selection)
+{
+  GtkStyleContext *style_context;
+
+  g_assert (IDE_IS_SOURCE_VIEW_MODE (self));
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  if (has_selection)
+    gtk_style_context_add_class (style_context, "has-selection");
+  else
+    gtk_style_context_remove_class (style_context, "has-selection");
+}

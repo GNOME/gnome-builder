@@ -1,0 +1,314 @@
+@import url("resource:///org/gnome/builder/keybindings/shared.css");
+
+@binding-set sublime-ide-source-view
+{
+  bind "<ctrl>n" { "action" ("editor", "new-file", "") };
+  bind "<ctrl>o" { "action" ("win", "open-with-dialog", "") };
+  bind "<ctrl>s" { "action" ("editor-view", "save", "") };
+  bind "<ctrl><shift>s" { "action" ("editor-view", "save-as", "") };
+  bind "<ctrl>w" { "action" ("layoutstack", "close-view", "") };
+  bind "<ctrl>q" { "action" ("app", "quit", "") };
+
+  bind "<ctrl>z" { "clear-count" ()
+                   "clear-selection" ()
+                   "remove-cursors" ()
+                   "undo" () };
+  bind "<ctrl><shift>z" { "clear-count" ()
+                          "clear-selection" ()
+                          "remove-cursors" ()
+                          "redo" () };
+
+  bind "<ctrl>v" { "paste-clipboard-extended" (1, 0, 0) };
+  bind "<alt>slash" { "cycle-completion" (down) };
+
+  /* This should be F9, but that is hardcoded to hide the sidebar instead */
+  bind "<alt>F9" { "sort" (1, 0) };
+  bind "<shift>F9" { "sort" (0, 0) };
+
+  bind "<ctrl><alt>i" { "reindent" () };
+  bind "<ctrl><shift>Up" { "move-lines" (0, -1) };
+  bind "<ctrl><shift>Down" { "move-lines" (0, 1) };
+  bind "<ctrl><shift>d" { "duplicate-entire-line" () };
+  bind "<ctrl><shift>k" { "delete-from-cursor" (paragraphs, 1) };
+  bind "<ctrl>j" { "join-lines" () };
+
+  /* Insert line above */
+  bind "<ctrl><shift>Return" { "begin-user-action" ()
+                               "movement" (first-char, 0, 0, 0)
+                               "insert-at-cursor" ("\n")
+                               "move-cursor" (display-lines, -1, 0)
+                               "reindent" ()
+                               "end-user-action" () };
+  bind "<ctrl><shift>KP_Enter" { "begin-user-action" ()
+                                 "movement" (first-char, 0, 0, 0)
+                                 "insert-at-cursor" ("\n")
+                                 "move-cursor" (display-lines, -1, 0)
+                                 "reindent" ()
+                                 "end-user-action" () };
+  /* Insert line below. This should be Ctrl+Enter but that is hardcoded to
+   * open the command bar. So we add Alt+Enter instead, but also accept
+   * Ctrl+Enter on the keypad */
+  bind "<alt>Return" { "begin-user-action" ()
+                        "movement" (line-end, 0, 1, 0)
+                        "insert-at-cursor" ("\n")
+                        "reindent" ()
+                        "end-user-action" () };
+  bind "<alt>KP_Enter" { "begin-user-action" ()
+                         "movement" (line-end, 0, 1, 0)
+                         "insert-at-cursor" ("\n")
+                         "reindent" ()
+                         "end-user-action" () };
+  bind "<ctrl>KP_Enter" { "begin-user-action" ()
+                          "movement" (line-end, 0, 1, 0)
+                          "insert-at-cursor" ("\n")
+                          "reindent" ()
+                          "end-user-action" () };
+
+  bind "<ctrl>Delete" { "delete-from-cursor" (words, 1) };
+  bind "<ctrl>KP_Delete" { "delete-from-cursor" (words, 1) };
+  bind "<ctrl>BackSpace" { "delete-from-cursor" (words, -1) };
+  bind "<ctrl>t" { "move-words" (1) };
+
+  bind "<alt><shift>Down" { "add-cursor" (column) };
+  bind "Escape" { "reset" () };
+  bind "<ctrl>a" { "select-all" (1) };
+  /* Expand selection to brackets: this should be Ctrl+Shift+M, but that's
+   * hardcoded to uncomment the current line */
+  bind "<alt><shift>m" { "movement" (match-special, 1, 0, 0) };
+  bind "<ctrl><shift>a" { "select-tag" (1) };
+
+  bind "<ctrl>f" { "action" ("editor-view", "find", "") };
+  /* Make "Incremental search" and "Use selection for search" do the same thing
+   * as Ctrl+F, in Builder they are all the same anyway */
+  bind "<ctrl>i" { "action" ("editor-view", "find", "") };
+  bind "<ctrl>e" { "action" ("editor-view", "find", "") };
+  bind "F3" { "action" ("editor-view", "move-next-search-result", "") };
+  bind "<shift>F3" { "action" ("editor-view", "move-previous-search-result", "") };
+  bind "<ctrl>h" { "action" ("editor-view", "find-replace", "") };
+  bind "<ctrl><shift>e" { "action" ("editor-view", "find-replace", "") };
+
+  bind "<ctrl>quoteleft" { "action" ("dockbin", "bottom-visible", "") };
+  bind "<shift>F11" { "action" ("win", "fullscreen", "") };
+  bind "F6" { "action" ("spellcheck", "spellcheck", "") };
+
+  bind "<alt>exclam" { "action" ("layoutstack", "split-view", "''") };
+  bind "<alt><shift>KP_1" { "action" ("layoutstack", "split-view", "''") };
+
+  bind "<ctrl>r" { "action" ("symbol-tree", "search", "") };
+  bind "F12" { "goto-definition" () };
+  bind "<ctrl>g" { "action" ("editor-view", "goto-line", "") };
+  bind "<alt>minus" { "action" ("history", "move-previous-edit", "") };
+  bind "<alt>underscore" { "action" ("history", "move-next-edit", "") };
+  /* Goto matching bracket; should be Ctrl+M but that is hardcoded to comment
+   * out the current line */
+  bind "<alt>m" { "movement" (match-special, 0, 1, 1) };
+  bind "<super><shift>h" { "clear-selection" ()
+                           "movement" (previous-word-end, 0, 1, 1)
+                           "movement" (next-word-start, 0, 1, 0)
+                           "movement" (next-word-end, 1, 0, 1)
+                           "request-documentation" ()
+                           "clear-count" ()
+                           "clear-selection" () };
+  bind "<ctrl><super>e" { "move-error" (down) };
+  bind "<ctrl><super><shift>e" { "move-error" (up) };
+
+  bind "<ctrl>Page_Up" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl>KP_Page_Up" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl>Page_Down" { "action" ("layoutstack", "next-view", "") };
+  bind "<ctrl>KP_Page_Down" { "action" ("layoutstack", "next-view", "") };
+  bind "<ctrl>Tab" { "action" ("layoutstack", "next-view", "") };
+  bind "<ctrl><shift>Tab" { "action" ("layoutstack", "previous-view", "") };
+  bind "<alt>o" { "action" ("win", "find-other-file", "") };
+
+  bind "<ctrl>Up" { "movement" (screen-up, 0, 0, 0) };
+  bind "<ctrl>KP_Up" { "movement" (screen-up, 0, 0, 0) };
+  bind "<ctrl>Down" { "movement" (screen-down, 0, 0, 0) };
+  bind "<ctrl>KP_Down" { "movement" (screen-down, 0, 0, 0) };
+
+  bind "<ctrl><shift>p" { "action" ("win", "show-command-bar", "") };
+  bind "<ctrl>b" { "action" ("build-manager", "build", "") };
+  /* Ctrl+Shift+B is Build with Build System in Sublime Text; Builder doesn't
+   * have this concept. Instead you configure the build system in the Build
+   * Preferences perspective, so let's have that keybinding take us there. */
+  bind "<ctrl><shift>b" { "action" ("buildui", "configure", "''") };
+
+  /* Sublime has a "Toggle macro recording" key. Builder has begin/end
+   * recording, so we add an extra shortcut for end */
+  bind "<ctrl><alt>q" { "begin-macro" () };
+  bind "<ctrl><super>q" { "end-macro" () };
+  bind "<ctrl><alt><shift>q" { "replay-macro" (1) };
+
+  bind "<ctrl>minus" { "decrease-font-size" () };
+  bind "<ctrl>KP_Subtract" { "decrease-font-size" () };
+  bind "<ctrl>plus" { "increase-font-size" () };
+  bind "<ctrl>equal" { "increase-font-size" () };
+  bind "<ctrl>KP_Add" { "increase-font-size" () };
+
+  /* These don't originally have bindings in Sublime */
+  bind "<ctrl>k" { "action" ("layoutstack", "show-list", "") };
+  bind "<ctrl>0" { "reset-font-size" () };
+  bind "<ctrl>KP_0" { "reset-font-size" () };
+
+  /* Not in Sublime Text by default, but nice macros */
+  bind "<ctrl>semicolon" { "save-insert-mark" ()
+                           "movement" (line-end, 0, 1, 0)
+                           "insert-at-cursor" (";")
+                           "restore-insert-mark" () };
+  bind "<ctrl>comma" { "save-insert-mark" ()
+                       "movement" (line-end, 0, 1, 0)
+                       "insert-at-cursor" (",")
+                       "restore-insert-mark" () };
+  /* Add back emoji with a different shortcut */
+  bind "<ctrl>colon" { "insert-emoji" () };
+
+  /* Not bound:
+   *   Ctrl+Shift+Space Expand selection to scope; Highlighting scope is a
+   *     concept that doesn't exist in Builder
+   *   Ctrl+Alt+Shift+P Show scope name; ditto
+   *   F4, Shift+F4 Previous/next search result in results panel; Builder
+   *     doesn't have a results panel
+   *   Ctrl+1, Ctrl+Shift+1, etc; Builder doesn't have multiple layout stacks
+   *   Alt+Shift+2, etc; Builder can open vertical splits and close them, which
+   *     is already plenty of flexibility for splitting windows
+   *
+   * Not yet bound, but probably could be with some extra code:
+   *   Ctrl+Shift+T Reopen last closed file
+   *   Ctrl+Shift+V Paste and indent; needs extra parameter to
+   *     paste-clipboard-extended, to select pasted text so we can reindent it
+   *   Ctrl+Shift+J Expand selection to indentation; selects every contiguous
+   *     line at the current indendation level or deeper. Needs movement type
+   *   Alt+1, Alt+2, etc. Go to position in stack; needs a goto-view action in
+   *     ide-layout-stack-actions.c
+   *   Alt+. Close Tag; nice to have for editing HTML
+   *   Alt+Shift+W Wrap Selection with Tag; inserts <p> and </p> around the
+   *     selection, and selects both "p"'s
+   *   Ctrl+Alt+Shift+K Goto Previous Git Difference
+   *   Ctrl+Shift+F Find in Files, Ctrl+Shift+R Goto Symbol in Project; Builder
+   *     doesn't have global search yet
+   *   Ctrl+F2 Toggle Bookmark, etc; GtkSourceView doesn't have actions for this
+   *   Ctrl+/, Ctrl+Shift+/ Toggle Line/Block Comment; comment/uncomment seems
+   *     to be hardcoded to Ctrl+M and Ctrl+Shift+M
+   *   Ctrl+Shift+L Split Selection into Lines
+   *   Alt+Shift+Up/Down Add Cursor on Previous/Next Line; currently
+   *     add_cursor(column) only works if there's a selection.
+   *   Ctrl+F3 Quick Find; expands selection to current word if no selection,
+   *     and jumps immediately to next match
+   *   Alt+F3 Quick Find All; expands selection to current word if no selection,
+   *     and selects all matches
+   *   F4 Build Results; needs an action to go to the Build Issues pane of the
+   *     sidebar
+   *   Alt+Q Wrap Paragraph At Ruler; needs an action for this
+   *
+   * Known issues:
+   *   Ctrl+D and Ctrl+L: The transition to the 'has-selection' state doesn't
+   *     happen when the selection is initiated from a keybinding, so pressing
+   *     Ctrl+D twice doesn't select a word and its next occurrence, and
+   *     likewise pressing Ctrl+L twice doesn't select two lines.
+   *   Ctrl+[, Ctrl+] Indent and Unindent; These should preserve the place of
+   *     the insert mark relative to the text, instead of the line offset.
+   *   Some shortcuts (Ctrl+Enter, Ctrl+M, Ctrl+Shift+M, Ctrl+Shift+U, F9)
+   *     apparently can't be overridden.
+   *   Ctrl+Alt+Q doesn't toggle macro recording. Instead, use Ctrl+Super+Q to
+   *     stop recording.
+   *   Ctrl+Alt+P, Switch Project, doesn't work when the editor view is focused.
+   *   Previous Error and Next Error were originally bound to Ctrl+K, P and
+   *     Ctrl+K, N on SublimeLinter for Linux. We use the shortcuts from macOS
+   *     in order to avoid a separate Ctrl+K state.
+   */
+}
+
+/* Keys that work differently depending on whether there is text selected */
+@binding-set sublime-ide-source-view-no-selection
+{
+  /* Ctrl+C without anything selected copies the entire line incl. newline */
+  bind "<ctrl>c" { "save-insert-mark" ()
+                   "movement" (first-char, 0, 0, 0)
+                   "movement" (line-end, 1, 0, 0)
+                   "copy-clipboard" ()
+                   "clear-selection" ()
+                   "restore-insert-mark" () };
+  /* Ditto Ctrl+X for cut */
+  bind "<ctrl>x" { "movement" (first-char, 0, 0, 0)
+                   "movement" (line-end, 1, 0, 0)
+                   "copy-clipboard" ()
+                   "delete-selection" () };
+  /* Expand selection to word - is Quick Add Next when there's a selection */
+  bind "<ctrl>d" { "movement" (previous-word-end, 0, 1, 1)
+                   "movement" (next-word-start, 0, 1, 0)
+                   "movement" (next-word-end, 1, 0, 1) };
+  bind "<ctrl>bracketleft" { "save-insert-mark" ()
+                             "movement" (first-char, 0, 1, 0)
+                             "movement" (line-end, 1, 1, 0)
+                             "indent-selection" (-1)
+                             "clear-selection" ()
+                             "restore-insert-mark" () };
+  bind "<ctrl>bracketright" { "save-insert-mark" ()
+                              "movement" (first-char, 0, 1, 0)
+                              "movement" (line-end, 1, 1, 0)
+                              "indent-selection" (1)
+                              "clear-selection" ()
+                              "restore-insert-mark" () };
+  /* Expand selection to line */
+  bind "<ctrl>l" { "movement" (first-char, 0, 0, 0)
+                   "movement" (line-end, 1, 0, 0) };
+
+  /* These don't originally have bindings in Sublime */
+  bind "<ctrl>u" { "save-insert-mark" ()
+                   "movement" (previous-word-end, 0, 1, 1)
+                   "movement" (next-word-start, 0, 1, 0)
+                   "movement" (next-word-end, 1, 0, 1)
+                   "change-case" (upper)
+                   "restore-insert-mark" () };
+  bind "<alt>u" { "save-insert-mark" ()
+                  "movement" (previous-word-end, 0, 1, 1)
+                  "movement" (next-word-start, 0, 1, 0)
+                  "movement" (next-word-end, 1, 0, 1)
+                  "change-case" (lower)
+                  "restore-insert-mark" () };
+  bind "<ctrl>asciitilde" { "save-insert-mark" ()
+                            "movement" (previous-word-end, 0, 1, 1)
+                            "movement" (next-word-start, 0, 1, 0)
+                            "movement" (next-word-end, 1, 0, 1)
+                            "change-case" (toggle)
+                            "restore-insert-mark" () };
+}
+
+@binding-set sublime-ide-source-view-has-selection
+{
+  bind "<ctrl>c" { "copy-clipboard" () };
+  bind "<ctrl>x" { "cut-clipboard" () };
+  bind "<ctrl>d" { "add-cursor" (match) };
+  bind "<ctrl>bracketleft" { "indent-selection" (-1) };
+  bind "<ctrl>bracketright" { "indent-selection" (1) };
+  bind "<ctrl>l" { "movement" (line-end, 1, 0, 0) };
+
+  bind "<ctrl>u" { "change-case" (upper) };
+  bind "<alt>u" { "change-case" (lower) };
+  bind "<ctrl>asciitilde" { "change-case" (toggle) };
+}
+
+
+@binding-set sublime-workbench-bindings
+{
+  bind "<ctrl>less" { "action" ("app", "preferences", "") };
+  bind "<ctrl>p" { "action" ("win", "global-search", "") };
+  /* No quick project switcher in Builder, but we bind this to Open Project */
+  bind "<ctrl><alt>p" { "action" ("app", "open-project", "") };
+}
+
+window.workbench {
+  -gtk-key-bindings: sublime-workbench-bindings;
+}
+
+.sourceview,
+idesourceviewmode.default {
+  -gtk-key-bindings: sublime-ide-source-view-no-selection,
+                     sublime-ide-source-view,
+                     sublime-workbench-bindings;
+}
+
+idesourceviewmode.default.has-selection {
+  -gtk-key-bindings: sublime-ide-source-view-has-selection,
+                     sublime-ide-source-view,
+                     sublime-workbench-bindings;
+}
