@@ -147,8 +147,6 @@ GVariant *
 ide_source_range_to_variant (const IdeSourceRange *self)
 {
   GVariantDict dict;
-  g_autoptr(GVariant) begin = NULL;
-  g_autoptr(GVariant) end = NULL;
 
   g_return_val_if_fail (self != NULL, NULL);
 
@@ -156,14 +154,18 @@ ide_source_range_to_variant (const IdeSourceRange *self)
 
   if (self->begin)
     {
-      begin = ide_source_location_to_variant (self->begin);
-      g_variant_dict_insert_value (&dict, "begin", begin);
+      g_autoptr(GVariant) begin = NULL;
+
+      if ((begin = ide_source_location_to_variant (self->begin)))
+        g_variant_dict_insert_value (&dict, "begin", begin);
     }
 
   if (self->end)
     {
-      end = ide_source_location_to_variant (self->end);
-      g_variant_dict_insert_value (&dict, "end", end);
+      g_autoptr(GVariant) end = NULL;
+
+      if ((end = ide_source_location_to_variant (self->end)))
+        g_variant_dict_insert_value (&dict, "end", end);
     }
 
   return g_variant_ref_sink (g_variant_dict_end (&dict));

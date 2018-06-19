@@ -521,6 +521,13 @@ ide_clang_client_call_cancelled (GCancellable *cancellable,
   if (call->self->rpc_client == NULL)
     return;
 
+  /* Will be NULL if cancelled between getting build flags
+   * and submitting request. Task will also be cancelled to
+   * handle the cleanup on that side.
+   */
+  if (call->id == NULL)
+    return;
+
   g_variant_dict_init (&dict, NULL);
   g_variant_dict_insert_value (&dict, "id", call->id);
 

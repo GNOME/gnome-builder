@@ -465,7 +465,9 @@ ide_diagnostic_to_variant (const IdeDiagnostic *self)
   if (self->location != NULL)
     {
       g_autoptr(GVariant) vloc = ide_source_location_to_variant (self->location);
-      g_variant_dict_insert_value (&dict, "location", vloc);
+
+      if (vloc != NULL)
+        g_variant_dict_insert_value (&dict, "location", vloc);
     }
 
   if (self->ranges != NULL && self->ranges->len > 0)

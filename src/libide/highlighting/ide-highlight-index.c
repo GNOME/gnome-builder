@@ -249,7 +249,7 @@ ide_highlight_index_to_variant (IdeHighlightIndex *self)
       g_ptr_array_add (ar, NULL);
 
       keys = g_variant_new_strv ((const gchar * const *)ar->pdata, ar->len - 1);
-      g_variant_dict_insert_value (&dict, k, keys);
+      g_variant_dict_insert_value (&dict, k, g_steal_pointer (&keys));
     }
 
   return g_variant_ref_sink (g_variant_dict_end (&dict));
