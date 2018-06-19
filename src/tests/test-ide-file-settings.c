@@ -29,7 +29,7 @@ test_filesettings (GCancellable        *cancellable,
                    gpointer             user_data)
 {
   g_autoptr(GTask) task = g_task_new (NULL, cancellable, callback, user_data);
-  IdeFileSettings *settings = NULL;
+  IdeFileSettings *settings;
   IdeContext *dummy;
   IdeFile *file;
   GFile *gfile;
@@ -45,7 +45,6 @@ test_filesettings (GCancellable        *cancellable,
                            "file", file,
                            "context", dummy,
                            NULL);
-  g_object_add_weak_pointer (G_OBJECT (settings), (gpointer *)&settings);
 
   ide_file_settings_set_tab_width (settings, 8);
   g_assert_cmpint (ide_file_settings_get_tab_width (settings), ==, 8);
@@ -92,8 +91,7 @@ test_filesettings (GCancellable        *cancellable,
   ide_file_settings_set_show_right_margin (settings, FALSE);
   g_assert_false (ide_file_settings_get_show_right_margin (settings));
 
-  g_object_unref (settings);
-  g_assert (settings == NULL);
+  g_clear_object (&settings);
   g_clear_object (&file);
   g_clear_object (&gfile);
   g_clear_object (&dummy);
