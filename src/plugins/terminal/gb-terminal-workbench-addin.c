@@ -237,7 +237,7 @@ on_run_manager_run (GbTerminalWorkbenchAddin *self,
   /* translators: %s is replaced with the current local time of day */
   formatted = g_strdup_printf (_("Application started at %s\r\n"), tmp);
 
-  gb_terminal_view_feed (self->run_terminal, _(formatted));
+  gb_terminal_view_feed (self->run_terminal, formatted);
 
   dzl_dock_item_present (DZL_DOCK_ITEM (self->run_panel));
 
