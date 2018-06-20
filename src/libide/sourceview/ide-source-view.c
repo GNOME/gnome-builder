@@ -1534,6 +1534,14 @@ count_chars_on_line (IdeSourceView      *view,
 }
 
 static gboolean
+is_xmlish (const gchar *lang_id)
+{
+  return (g_strcmp0 (lang_id, "xml") == 0) ||
+         (g_strcmp0 (lang_id, "html") == 0);
+
+}
+
+static gboolean
 ide_source_view_maybe_insert_match (IdeSourceView *self,
                                     GdkEventKey   *event)
 {
@@ -1541,6 +1549,7 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
   GtkSourceBuffer *sbuf;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  const gchar *lang_id;
   GtkTextIter iter;
   GtkTextIter prev_iter;
   GtkTextIter next_iter;
@@ -1599,6 +1608,8 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
       break;
 
     case GDK_KEY_less:
+      if (!(lang_id = ide_buffer_get_language_id (IDE_BUFFER (buffer))) || !is_xmlish (lang_id))
+        return FALSE;
       ch[0] = '>';
       break;
 
