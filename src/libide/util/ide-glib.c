@@ -389,7 +389,7 @@ ide_g_file_get_children_async (GFile               *file,
  *
  * Completes an asynchronous request to ide_g_file_get_children_async().
  *
- * Returns: (transfer full) (element-type Gio.File): A #GPtrArray
+ * Returns: (transfer full) (element-type Gio.FileInfo): A #GPtrArray
  *   of #GFileInfo if successful, otherwise %NULL.
  *
  * Since: 3.28
