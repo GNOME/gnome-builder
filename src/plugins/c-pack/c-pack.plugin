@@ -7,6 +7,5 @@ Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
 X-Indenter-Languages=c,chdr
 X-Indenter-Languages-Priority=0
-X-Completion-Provider-Languages=c,chdr
-X-Completion-Provider-Languages-Priority=0
+X-Completion-Provider-Languages=c,chdr,cpp,cpphdr
 Embedded=ide_c_pack_register_types

@@ -1,6 +1,6 @@
-/* c-pack-plugin.c
+/* cpack-completion-item.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright © 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#pragma once
 
-#include "ide-c-indenter.h"
-#include "cpack-completion-provider.h"
-#include "cpack-editor-view-addin.h"
+#include <glib-object.h>
 
-void
-ide_c_pack_register_types (PeasObjectModule *module)
+G_BEGIN_DECLS
+
+#define CPACK_TYPE_COMPLETION_ITEM (cpack_completion_item_get_type())
+
+G_DECLARE_FINAL_TYPE (CpackCompletionItem, cpack_completion_item, CPACK, COMPLETION_ITEM, GObject)
+
+struct _CpackCompletionItem
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_C_INDENTER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_VIEW_ADDIN, CPACK_TYPE_EDITOR_VIEW_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, CPACK_TYPE_COMPLETION_PROVIDER);
-}
+  GObject parent_instance;
+  gchar  *name;
+};
+
+CpackCompletionItem *cpack_completion_item_new (const gchar *word);
+
+G_END_DECLS

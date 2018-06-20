@@ -1,6 +1,6 @@
-/* c-pack-plugin.c
+/* cpack-completion-provider.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#pragma once
 
-#include "ide-c-indenter.h"
-#include "cpack-completion-provider.h"
-#include "cpack-editor-view-addin.h"
+#include <ide.h>
 
-void
-ide_c_pack_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_C_INDENTER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_EDITOR_VIEW_ADDIN, CPACK_TYPE_EDITOR_VIEW_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, CPACK_TYPE_COMPLETION_PROVIDER);
-}
+G_BEGIN_DECLS
+
+#define CPACK_TYPE_COMPLETION_PROVIDER (cpack_completion_provider_get_type())
+
+G_DECLARE_FINAL_TYPE (CpackCompletionProvider, cpack_completion_provider, CPACK, COMPLETION_PROVIDER, IdeObject)
+
+G_END_DECLS
