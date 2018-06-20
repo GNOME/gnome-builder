@@ -170,5 +170,7 @@ IDE_AVAILABLE_IN_3_30
 gchar                   **ide_buffer_get_build_flags_finish        (IdeBuffer            *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
+IDE_AVAILABLE_IN_3_30
+const gchar              *ide_buffer_get_language_id               (IdeBuffer            *self);
 
 G_END_DECLS

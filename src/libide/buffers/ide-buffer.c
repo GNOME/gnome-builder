@@ -3489,3 +3489,24 @@ ide_buffer_get_build_flags_finish (IdeBuffer     *self,
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
+
+/**
+ * ide_buffer_get_language_id:
+ * @self: a #IdeBuffer
+ *
+ * A helper to get the language identifier of the buffers current language.
+ *
+ * Returns: (nullable): a string containing the language id, or %NULL
+ */
+const gchar *
+ide_buffer_get_language_id (IdeBuffer *self)
+{
+  GtkSourceLanguage *lang;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  if ((lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self))))
+    return gtk_source_language_get_id (lang);
+
+  return NULL;
+}
