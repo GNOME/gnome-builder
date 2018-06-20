@@ -35,17 +35,8 @@ G_DEFINE_TYPE_WITH_CODE (CpackCompletionProvider, cpack_completion_provider, IDE
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
 static void
-cpack_completion_provider_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (cpack_completion_provider_parent_class)->finalize (object);
-}
-
-static void
 cpack_completion_provider_class_init (CpackCompletionProviderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = cpack_completion_provider_finalize;
 }
 
 static void
