@@ -309,6 +309,7 @@ ide_breakout_subprocess_wait_async (IdeSubprocess       *subprocess,
 
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_breakout_subprocess_wait_async);
+  g_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
 
   locker = g_mutex_locker_new (&self->waiter_mutex);
 
@@ -755,6 +756,7 @@ ide_breakout_subprocess_communicate_internal (IdeBreakoutSubprocess *subprocess,
 
   task = g_task_new (subprocess, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_breakout_subprocess_communicate_internal);
+  g_task_set_priority (task, G_PRIORITY_DEFAULT_IDLE);
 
   state = g_slice_new0 (CommunicateState);
   g_task_set_task_data (task, state, ide_subprocess_communicate_state_free);
