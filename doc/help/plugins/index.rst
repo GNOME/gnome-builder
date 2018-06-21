@@ -21,7 +21,6 @@ You may also chooser to implement extensions in C or Vala.
    symbols/index
    building/index
    processes/index
-   autocompletion
    devices
    running
    keybindings
