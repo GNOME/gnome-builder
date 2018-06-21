@@ -143,7 +143,7 @@ create_toolchain_row (gpointer item,
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
   runtime = ide_configuration_get_runtime (configuration);
-  sensitive = ide_runtime_supports_toolchain (runtime, toolchain);
+  sensitive = runtime && ide_runtime_supports_toolchain (runtime, toolchain);
 
   box = g_object_new (GTK_TYPE_BOX,
                       "spacing", 12,
