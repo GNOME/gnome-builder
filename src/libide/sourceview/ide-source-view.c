@@ -2101,6 +2101,8 @@ ide_source_view_key_press_event (GtkWidget   *widget,
               ide_source_view_block_handlers (self);
               if (!ide_snippet_move_next (snippet))
                 ide_source_view_pop_snippet (self);
+              ide_completion_cancel (priv->completion);
+              /* TODO: ask snippet if we should auto-display completion options? */
               ide_source_view_scroll_to_insert (self);
               ide_source_view_unblock_handlers (self);
               ret = TRUE;
