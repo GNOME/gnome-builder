@@ -1,4 +1,14 @@
 ==============
+Version 3.28.3
+==============
+
+Changes since last release:
+
+ • Fixes for a number of crashers and potential data loss.
+ • The editor more reliably restores cursor position.
+ • The todo plugin more aggresively ignores some common build tooling directories.
+
+==============
 Version 3.28.2
 ==============
 
