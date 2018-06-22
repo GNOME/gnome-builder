@@ -60,6 +60,13 @@ enum {
   COMMENT_C99
 };
 
+static inline gboolean
+text_iter_isspace (const GtkTextIter *iter)
+{
+  gunichar ch = gtk_text_iter_get_char (iter);
+  return g_unichar_isspace (ch);
+}
+
 static inline guint
 get_post_scope_indent (IdeCIndenter *c)
 {
@@ -1345,9 +1352,22 @@ ide_c_indenter_format (IdeIndenter    *indenter,
   switch (event->keyval) {
   case GDK_KEY_Return:
   case GDK_KEY_KP_Enter:
-    gtk_text_iter_assign (&begin_copy, begin);
+    begin_copy = *begin;
     ret = c_indenter_indent (c, view, buffer, begin);
-    gtk_text_iter_assign (begin, &begin_copy);
+    *begin = begin_copy;
+
+    if (!dzl_str_empty0 (ret))
+      {
+        /*
+         * If we have additional space after where our new indentation
+         * will occur, we should chomp it up so that the text starts
+         * immediately after our new indentation.
+         *
+         * GNOME/gnome-builder#545
+         */
+        while (text_iter_isspace (end) && !gtk_text_iter_ends_line (end))
+          gtk_text_iter_forward_char (end);
+      }
 
     /*
      * If we are inserting a newline right before a closing brace (for example
