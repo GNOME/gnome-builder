@@ -73,6 +73,8 @@ G_BEGIN_DECLS
 #include "config/ide-configuration.h"
 #include "config/ide-configuration-manager.h"
 #include "config/ide-configuration-provider.h"
+#include "config/ide-config-view.h"
+#include "config/ide-config-view-addin.h"
 #include "debugger/ide-debug-manager.h"
 #include "debugger/ide-debugger-breakpoint.h"
 #include "debugger/ide-debugger-breakpoints.h"
