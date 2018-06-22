@@ -2,12 +2,16 @@ config_headers = [
   'ide-configuration-manager.h',
   'ide-configuration-provider.h',
   'ide-configuration.h',
+  'ide-config-view.h',
+  'ide-config-view-addin.h',
 ]
 
 config_sources = [
   'ide-configuration-manager.c',
   'ide-configuration-provider.c',
   'ide-configuration.c',
+  'ide-config-view.c',
+  'ide-config-view-addin.c',
 ]
 
 config_enums = [
