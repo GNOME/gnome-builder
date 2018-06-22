@@ -23,8 +23,8 @@
 #include <glib/gi18n.h>
 
 #include "buildui/ide-build-configuration-row.h"
-#include "buildui/ide-build-configuration-view.h"
 #include "buildui/ide-build-perspective.h"
+#include "config/ide-config-view.h"
 
 struct _IdeBuildPerspective
 {
@@ -34,7 +34,7 @@ struct _IdeBuildPerspective
   IdeConfigurationManager   *configuration_manager;
 
   GtkListBox                *list_box;
-  IdeBuildConfigurationView *view;
+  IdeConfigView             *view;
 };
 
 enum {
@@ -172,7 +172,7 @@ ide_build_perspective_row_selected (IdeBuildPerspective      *self,
 
       configuration = ide_build_configuration_row_get_configuration (row);
       g_set_object (&self->configuration, configuration);
-      ide_build_configuration_view_set_configuration (self->view, configuration);
+      ide_config_view_set_config (self->view, configuration);
 
       gtk_container_foreach (GTK_CONTAINER (list_box),
                              update_selected_state,
@@ -269,6 +269,23 @@ ide_build_perspective_grab_focus (GtkWidget *widget)
 }
 
 static void
+header_cb (GtkListBoxRow *row,
+           GtkListBoxRow *before,
+           gpointer       user_data)
+{
+  if (before == NULL)
+    gtk_list_box_row_set_header (row,
+                                 g_object_new (GTK_TYPE_LABEL,
+                                               "label", _("<b>Configurations</b>"),
+                                               "opacity", 0.55,
+                                               "margin", 6,
+                                               "use-markup", TRUE,
+                                               "xalign", 0.0f,
+                                               "visible", TRUE,
+                                               NULL));
+}
+
+static void
 ide_build_perspective_finalize (GObject *object)
 {
   IdeBuildPerspective *self = (IdeBuildPerspective *)object;
@@ -357,7 +374,7 @@ ide_build_perspective_class_init (IdeBuildPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPerspective, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeBuildPerspective, view);
 
-  g_type_ensure (IDE_TYPE_BUILD_CONFIGURATION_VIEW);
+  g_type_ensure (IDE_TYPE_CONFIG_VIEW);
 }
 
 static const GActionEntry actions[] = {
@@ -383,6 +400,8 @@ ide_build_perspective_init (IdeBuildPerspective *self)
                            G_CALLBACK (ide_build_perspective_row_activated),
                            self,
                            G_CONNECT_SWAPPED);
+
+  gtk_list_box_set_header_func (self->list_box, header_cb, NULL, NULL);
 
   group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (group), actions, G_N_ELEMENTS (actions), self);

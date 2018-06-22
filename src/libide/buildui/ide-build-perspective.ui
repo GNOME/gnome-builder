@@ -27,17 +27,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="hscrollbar-policy">never</property>
+          <object class="IdeConfigView" id="view">
+            <property name="expand">true</property>
             <property name="visible">true</property>
-            <property name="propagate-natural-height">true</property>
-            <property name="propagate-natural-width">true</property>
-            <child>
-              <object class="IdeBuildConfigurationView" id="view">
-                <property name="expand">true</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
           </object>
         </child>
       </object>
