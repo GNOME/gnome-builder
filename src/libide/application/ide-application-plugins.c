@@ -125,9 +125,10 @@ ide_application_discover_plugins (IdeApplication *self)
 
   peas_engine_prepend_search_path (engine, "resource:///org/gnome/builder/plugins/", NULL);
 
-  if (!g_irepository_require (NULL, "Ide", "1.0", 0, &error) ||
+  if (!g_irepository_require (NULL, "GtkSource", "4", 0, &error) ||
       !g_irepository_require (NULL, "Gtk", "3.0", 0, &error) ||
-      !g_irepository_require (NULL, "Dazzle", "1.0", 0, &error))
+      !g_irepository_require (NULL, "Dazzle", "1.0", 0, &error) ||
+      !g_irepository_require (NULL, "Ide", "1.0", 0, &error))
     g_message ("Cannot enable Python 3 plugins: %s", error->message);
   else
     {

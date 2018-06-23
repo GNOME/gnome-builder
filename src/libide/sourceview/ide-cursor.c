@@ -347,8 +347,8 @@ ide_cursor_add_cursor_by_match (IdeCursor *self)
   if (g_strcmp0 (gtk_source_search_settings_get_search_text (search_settings), text) != 0)
     gtk_source_search_settings_set_search_text (search_settings, text);
 
-  if (!gtk_source_search_context_forward2 (search_context, &end,
-                                           &match_begin, &match_end, &has_wrapped_around))
+  if (!gtk_source_search_context_forward (search_context, &end,
+                                          &match_begin, &match_end, &has_wrapped_around))
     return;
 
   if (self->cursors == NULL)

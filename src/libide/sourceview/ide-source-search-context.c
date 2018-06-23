@@ -88,7 +88,7 @@ ide_source_search_context_backward_async (GtkSourceSearchContext *search,
    * We should remove the code once issue 8 is fixed.
    */
 
-  if (gtk_source_search_context_backward2 (search, iter, &begin, &end, &wrapped))
+  if (gtk_source_search_context_backward (search, iter, &begin, &end, &wrapped))
     {
       data->wrapped = wrapped;
       data->buffer = g_object_ref (GTK_TEXT_BUFFER (gtk_source_search_context_get_buffer (search)));

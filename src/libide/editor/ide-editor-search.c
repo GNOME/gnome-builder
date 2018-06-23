@@ -195,11 +195,11 @@ add_matches (GtkTextView            *text_view,
   g_assert (begin);
   g_assert (end);
 
-  if (!gtk_source_search_context_forward2 (search_context,
-                                           begin,
-                                           &first_begin,
-                                           &match_end,
-                                           &has_wrapped))
+  if (!gtk_source_search_context_forward (search_context,
+                                          begin,
+                                          &first_begin,
+                                          &match_end,
+                                          &has_wrapped))
     return 0;
 
   add_match (text_view, region, &first_begin, &match_end);
@@ -208,11 +208,11 @@ add_matches (GtkTextView            *text_view,
     {
       gtk_text_iter_assign (&new_begin, &match_end);
 
-      if (gtk_source_search_context_forward2 (search_context,
-                                              &new_begin,
-                                              &match_begin,
-                                              &match_end,
-                                              &has_wrapped) &&
+      if (gtk_source_search_context_forward (search_context,
+                                             &new_begin,
+                                             &match_begin,
+                                             &match_end,
+                                             &has_wrapped) &&
           (gtk_text_iter_compare (&match_begin, end) < 0) &&
           (gtk_text_iter_compare (&first_begin, &match_begin) != 0))
         {
@@ -935,7 +935,7 @@ ide_editor_search_scan_forward_cb (GObject      *object,
   if (self->view == NULL)
     return;
 
-  r = gtk_source_search_context_forward_finish2 (context, result, &begin, &end, NULL, NULL);
+  r = gtk_source_search_context_forward_finish (context, result, &begin, &end, NULL, NULL);
 
   if (r == TRUE)
     {
@@ -1355,7 +1355,7 @@ ide_editor_search_forward_cb (GObject      *object,
   g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (context));
   g_assert (IDE_IS_EDITOR_SEARCH (self));
 
-  if (gtk_source_search_context_forward_finish2 (context, result, &begin, &end, NULL, NULL))
+  if (gtk_source_search_context_forward_finish (context, result, &begin, &end, NULL, NULL))
     {
       if (self->view != NULL)
         {
@@ -1408,7 +1408,7 @@ ide_editor_search_backward_cb (GObject      *object,
   g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (context));
   g_assert (IDE_IS_EDITOR_SEARCH (self));
 
-  if (gtk_source_search_context_forward_finish2 (context, result, &begin, &end, NULL, NULL))
+  if (gtk_source_search_context_forward_finish (context, result, &begin, &end, NULL, NULL))
     {
       if (self->view != NULL)
         {
@@ -1638,7 +1638,7 @@ ide_editor_search_replace (IdeEditorSearch *self)
   context = ide_editor_search_acquire_context (self);
 
   /* Replace the current word */
-  gtk_source_search_context_replace2 (context, &begin, &end, replacement, -1, NULL);
+  gtk_source_search_context_replace (context, &begin, &end, replacement, -1, NULL);
 
   /* Now scan to the next search result */
   ide_editor_search_move (self, IDE_EDITOR_SEARCH_NEXT);
