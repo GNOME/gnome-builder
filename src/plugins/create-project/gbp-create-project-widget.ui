@@ -162,6 +162,7 @@
                       <item id="lgpl_3" translatable="yes">LGPLv3+</item>
                       <item id="agpl_3" translatable="yes">AGPLv3+</item>
                       <item id="mit_x11" translatable="yes">MIT/X11</item>
+                      <item id="apache_2" translatable="yes">Apache 2.0</item>
                       <item id="gpl_2" translatable="yes">GPLv2+</item>
                       <item id="lgpl_2_1" translatable="yes">LGPLv2.1+</item>
                       <item id="none" translatable="yes">No license</item>
