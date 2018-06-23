@@ -167,13 +167,13 @@ ide_application_register_search_paths (IdeApplication *self)
   style_path = g_build_filename (g_get_home_dir (),
                                  ".local",
                                  "share",
-                                 "gtksourceview-3.0",
+                                 "gtksourceview-4",
                                  "styles",
                                  NULL);
   gtk_source_style_scheme_manager_append_search_path (manager, style_path);
 
   gtk_source_style_scheme_manager_append_search_path (manager,
-                                                      PACKAGE_DATADIR"/gtksourceview-3.0/styles/");
+                                                      PACKAGE_DATADIR"/gtksourceview-4/styles/");
 
   /* We can use styles from gedit too */
   gedit_path = g_build_filename (g_get_user_data_dir (), "gedit", "styles", NULL);
@@ -188,7 +188,7 @@ ide_application_register_search_paths (IdeApplication *self)
   lang_path = g_build_filename (g_get_home_dir (),
                                 ".local",
                                 "share",
-                                "gtksourceview-3.0",
+                                "gtksourceview-4",
                                 "language-specs",
                                 NULL);
   if (!g_strv_contains (path, lang_path))

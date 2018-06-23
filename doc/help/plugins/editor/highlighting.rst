@@ -10,7 +10,7 @@ By providing an XML description of the syntax, GtkSourceView can automatically h
 Thankfully, GtkSourceView already supports a large number of languages so the chances you need to add a new language is low.
 However, if you do, we suggest that you work with GtkSourceView to ensure that all applications, such as Gedit, benefit from your work.
 
-Chances are you can find existing language syntax files on your system in ``/usr/share/gtksourceview-3.0/language-specs/``.
+Chances are you can find existing language syntax files on your system in ``/usr/share/gtksourceview-4/language-specs/``.
 These language-spec files serve as a great example of how to make your own.
 If it is not there, chances are there is already a ``.lang`` file created but it has not yet been merged upstream.
 

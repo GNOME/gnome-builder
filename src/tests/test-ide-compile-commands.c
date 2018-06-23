@@ -65,7 +65,7 @@ test_compile_commands_basic (void)
   g_assert_cmpstr (valastrv[0], ==, "--pkg");
   g_assert_cmpstr (valastrv[1], ==, "json-glib-1.0");
   g_assert_cmpstr (valastrv[2], ==, "--pkg");
-  g_assert_cmpstr (valastrv[3], ==, "gtksourceview-3.0");
+  g_assert_cmpstr (valastrv[3], ==, "gtksourceview-4");
 }
 
 gint

@@ -271,7 +271,7 @@ pkgg.generate(
          name: 'Libide',
      filebase: 'libide-1.0',
   description: 'Libide contains the components used to build the GNOME Builder IDE.',
-     requires: [ 'gtk+-3.0', 'gtksourceview-3.0', 'libdazzle-1.0', 'template-glib-1.0', 'jsonrpc-glib-1.0', 'libpeas-1.0', 'vte-2.91' ],
+     requires: [ 'gtk+-3.0', 'gtksourceview-4', 'libdazzle-1.0', 'template-glib-1.0', 'jsonrpc-glib-1.0', 'libpeas-1.0', 'vte-2.91' ],
   install_dir: join_paths(pkglibdir, 'pkgconfig'),
 )
 
@@ -304,7 +304,7 @@ libide_vapi = gnome.generate_vapi('libide-' + libide_api_version,
   install_dir: pkgvapidir,
      packages: [ 'gio-2.0',
                  'gtk+-3.0',
-                 'gtksourceview-3.0',
+                 'gtksourceview-4',
                  'json-glib-1.0',
                  'libdazzle-1.0',
                  'libpeas-1.0',

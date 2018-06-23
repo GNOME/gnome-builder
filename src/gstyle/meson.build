@@ -147,7 +147,7 @@ if get_option('with_vapi')
 
   libgstyle_vapi = gnome.generate_vapi('gstyle-private',
         sources: libgstyle_gir[0],
-       packages: ['gio-2.0', 'gtk+-3.0', 'gtksourceview-3.0'],
+       packages: ['gio-2.0', 'gtk+-3.0', 'gtksourceview-4'],
         install: true,
     install_dir: pkgvapidir,
   )
