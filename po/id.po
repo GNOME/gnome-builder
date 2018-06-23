@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-05-04 15:49+0000\n"
-"PO-Revision-Date: 2018-05-06 13:37+0700\n"
+"POT-Creation-Date: 2018-06-22 19:24+0000\n"
+"PO-Revision-Date: 2018-06-23 10:14+0700\n"
 "Last-Translator: Andika Triwidada <atriwidada@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -884,12 +884,12 @@ msgid "Show the shortcuts window"
 msgstr "Tampilkan jendela pintasan"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-buffer.c:923
+#: src/libide/buffers/ide-buffer.c:931
 #, c-format
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Gagal menyiapkan pemantau untuk perubahan di belakang: %s"
 
-#: src/libide/buffers/ide-buffer.c:2842
+#: src/libide/buffers/ide-buffer.c:2850
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
@@ -1329,7 +1329,7 @@ msgid "No file was provided."
 msgstr "Tidak ada berkas yang diberikan."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:832
+#: src/libide/editor/ide-editor-perspective.c:839
 #: src/libide/preferences/ide-preferences-builtin.c:104
 #: src/libide/preferences/ide-preferences-builtin.c:151
 msgid "Editor"
@@ -4161,22 +4161,32 @@ msgstr ""
 "Program ini diperlukan untuk membangun aplikasi Flatpak. Apakah Anda ingin "
 "menginstalnya?"
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:201
+#: src/plugins/git/ide-git-buffer-change-monitor.c:202
 msgid "Cannot provide diff, no backing file provided."
 msgstr ""
 "Tidak bisa menyediakan diff, tidak ada berkas pendukung yang disediakan."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:676
+#. translators: %s is replaced with the error string from git
+#: src/plugins/git/ide-git-buffer-change-monitor.c:281
+#, c-format
+msgid ""
+"There was a failure while calculating line changes from git. The exact error "
+"was: %s"
+msgstr ""
+"Terjadi kegagalan saat menghitung perubahan baris dari git. Kesalahan tepat "
+"adalah: %s"
+
+#: src/plugins/git/ide-git-buffer-change-monitor.c:691
 #, c-format
 msgid "Repository does not have a working directory."
 msgstr "Repositori tak punya suatu direktori kerja."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:687
+#: src/plugins/git/ide-git-buffer-change-monitor.c:702
 #, c-format
 msgid "File is not under control of git working directory."
 msgstr "Berkas tidak di bawah kendali dari direktori kerja git."
 
-#: src/plugins/git/ide-git-buffer-change-monitor.c:753
+#: src/plugins/git/ide-git-buffer-change-monitor.c:768
 #, c-format
 msgid "The requested file does not exist within the git index."
 msgstr "Berkas yang diminta tak ada di dalam indeks git."
@@ -4399,7 +4409,7 @@ msgstr "Bangun Gagal"
 msgid "Project “%s” failed to build"
 msgstr "Proyek \"%s\" gagal dibangun"
 
-#: src/plugins/npm/npm_plugin.py:102
+#: src/plugins/npm/npm_plugin.py:104
 msgid "Downloading npm dependencies"
 msgstr "Mengunduh dependensi npm"
 
@@ -4940,7 +4950,7 @@ msgstr "vala diagnostik peringatan kesalahan"
 msgid "Run with Valgrind"
 msgstr "Jalankan dengan Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:585
+#: src/plugins/xml-pack/ide-xml-parser.c:587
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Gagal membuat pohon XML."
