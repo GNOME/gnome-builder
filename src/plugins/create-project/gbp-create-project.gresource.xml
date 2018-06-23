@@ -11,6 +11,7 @@
 
   <gresource prefix="/org/gnome/builder/plugins/create-project-plugin/license/full">
     <file compressed="true" alias="agpl_3">resources/agpl_3_full</file>
+    <file compressed="true" alias="apache_2">resources/apache_2_full</file>
     <file compressed="true" alias="gpl_2">resources/gpl_2_full</file>
     <file compressed="true" alias="gpl_3">resources/gpl_3_full</file>
     <file compressed="true" alias="lgpl_2_1">resources/lgpl_2_1_full</file>
@@ -20,6 +21,7 @@
 
   <gresource prefix="/org/gnome/builder/plugins/create-project-plugin/license/short">
     <file compressed="true" alias="agpl_3">resources/agpl_3_short</file>
+    <file compressed="true" alias="apache_2">resources/apache_2_short</file>
     <file compressed="true" alias="gpl_2">resources/gpl_2_short</file>
     <file compressed="true" alias="gpl_3">resources/gpl_3_short</file>
     <file compressed="true" alias="lgpl_2_1">resources/lgpl_2_1_short</file>
