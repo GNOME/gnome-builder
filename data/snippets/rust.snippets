@@ -1,0 +1,164 @@
+snippet allow
+- scope rust
+	#[allow(${1:lint})]$0
+
+snippet deny
+- scope rust
+	#[deny(${1:lint})]$0
+
+snippet warn
+- scope rust
+	#[warn(${1:lint})]$0
+
+snippet derive
+- scope rust
+	#[derive(${1:Trait})]$0
+
+snippet struct
+- scope rust
+	struct ${1:StructName} {
+	    $0
+	}
+
+snippet enum
+- scope rust
+	enum ${1:EnumName} {
+	    $0
+	}
+
+snippet trait
+- scope rust
+	trait ${1:TraitName} {
+	    $0
+	}
+
+snippet impl
+- scope rust
+	impl ${1:StructName} {
+	    $0
+	}
+
+snippet fn
+- scope rust
+	fn ${1:function_name}(${2:&self}) {
+	    ${3:unimplemented!()}
+	}
+
+snippet fnr
+- scope rust
+	fn ${1:function_name}(${2:&self}) -> ${3:TypeName} {
+	    ${4:unimplemented!()}
+	}
+
+snippet fns
+- scope rust
+	fn ${1:function_name}(${2:&self});$0
+
+snippet fnrs
+- scope rust
+	fn ${1:function_name}(${2:&self}) -> ${3:TypeName};$0
+
+snippet macro
+- scope rust
+	macro_rules! ${1:macro_name} {
+	    ( ${2:expression} ) => {
+	        $0
+	    };
+	}
+
+snippet loop
+- scope rust
+	loop {
+	    $0
+	}
+
+snippet for
+- scope rust
+	for ${1:variable} in ${2:iterator}.iter() {
+	    $0
+	}
+
+snippet while
+- scope rust
+	while ${1:expression} {
+	    $0
+	}
+
+snippet if
+- scope rust
+	if ${1:expression} {
+	    $0
+	}
+
+snippet match
+- scope rust
+	match ${1:expression} {
+	    $0
+	}
+
+snippet let
+- scope rust
+	let ${1:variable} = ${2:expression};$0
+
+snippet type
+- scope rust
+	type ${1:AliasName} = ${2:TypeName};$0
+
+snippet fmt
+- scope rust
+	format!("${1:{}}", ${2:expression})$0
+
+snippet write
+- scope rust
+	write!(${1:buffer}, "${2:{}}", ${3:expression});$0
+
+snippet writeln
+- scope rust
+	writeln!(${1:buffer}, "${2:{}}", ${3:expression});$0
+
+snippet print
+- scope rust
+	print!("${1:{}}", ${2:expression});$0
+
+snippet println
+- scope rust
+	println!("${1:{}}", ${2:expression});$0
+
+snippet eprint
+- scope rust
+	eprint!("${1:{}}", ${2:expression});$0
+
+snippet eprintln
+- scope rust
+	eprintln!("${1:{}}", ${2:expression});$0
+
+snippet assert
+- scope rust
+	assert!(${1:expression});$0
+
+snippet assert_eq
+- scope rust
+	assert_eq!(${1:expression1}, ${2:expression2});$0
+
+snippet assert_ne
+- scope rust
+	assert_ne!(${1:expression1}, ${2:expression2});$0
+
+snippet testmod
+- scope rust
+	#[cfg(test)]
+	mod tests {
+	    use super::*;
+
+	    #[test]
+	    fn ${1:function_name}() {
+	        ${2:unimplemented!()}
+	    }
+	}
+
+snippet test
+- scope rust
+	#[test]
+	fn ${1:function_name}() {
+	    ${2:unimplemented!()}
+	}
