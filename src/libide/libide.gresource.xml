@@ -10,6 +10,7 @@
     <file alias="main.snippets">../../data/snippets/main.snippets</file>
     <file alias="python.snippets">../../data/snippets/python.snippets</file>
     <file alias="rpmspec.snippets">../../data/snippets/rpmspec.snippets</file>
+    <file alias="rust.snippets">../../data/snippets/rust.snippets</file>
     <file alias="shebang.snippets">../../data/snippets/shebang.snippets</file>
     <file alias="vala.snippets">../../data/snippets/vala.snippets</file>
     <file alias="xml.snippets">../../data/snippets/xml.snippets</file>
