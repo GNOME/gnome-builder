@@ -1435,12 +1435,12 @@ ide_completion_cancel (IdeCompletion *self)
       g_cancellable_cancel (self->cancellable);
       g_clear_object (&self->cancellable);
       ide_completion_set_context (self, NULL);
-    }
 
-  if (self->display != NULL)
-    {
-      ide_completion_display_set_context (self->display, NULL);
-      gtk_widget_hide (GTK_WIDGET (self->display));
+      if (self->display != NULL)
+        {
+          ide_completion_display_set_context (self->display, NULL);
+          gtk_widget_hide (GTK_WIDGET (self->display));
+        }
     }
 
   IDE_EXIT;
