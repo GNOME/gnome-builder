@@ -230,6 +230,7 @@ ide_ctags_results_populate_async (IdeCtagsResults     *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_ctags_results_populate_async);
   ide_task_set_priority (task, G_PRIORITY_HIGH);
+  ide_task_set_complete_priority (task, G_PRIORITY_LOW);
 
   if (self->word == NULL)
     {
