@@ -82,6 +82,13 @@ void         ide_g_task_return_error_from_main        (GTask                *tas
 IDE_AVAILABLE_IN_3_28
 gchar       *ide_g_file_get_uncanonical_relative_path (GFile                *file,
                                                        GFile                *other);
+IDE_AVAILABLE_IN_3_30
+void         ide_g_file_find_with_depth_async         (GFile                *file,
+                                                       const gchar          *pattern,
+                                                       guint                 max_depth,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
 IDE_AVAILABLE_IN_3_28
 void         ide_g_file_find_async                    (GFile                *file,
                                                        const gchar          *pattern,

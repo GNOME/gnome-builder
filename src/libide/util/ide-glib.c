@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "ide-glib"
 
+#include <dazzle.h>
 #include <string.h>
 
 #include "config.h"
@@ -410,11 +411,25 @@ ide_g_file_get_children_finish (GFile         *file,
   return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
+typedef struct
+{
+  GPatternSpec *spec;
+  guint         depth;
+} Find;
+
+static void
+find_free (Find *f)
+{
+  dzl_clear_pointer (&f->spec, g_pattern_spec_free);
+  g_slice_free (Find, f);
+}
+
 static void
 populate_descendants_matching (GFile        *file,
                                GCancellable *cancellable,
                                GPtrArray    *results,
-                               GPatternSpec *spec)
+                               GPatternSpec *spec,
+                               guint         depth)
 {
   g_autoptr(GFileEnumerator) enumerator = NULL;
   g_autoptr(GPtrArray) children = NULL;
@@ -422,6 +437,9 @@ populate_descendants_matching (GFile        *file,
   g_assert (G_IS_FILE (file));
   g_assert (results != NULL);
   g_assert (spec != NULL);
+
+  if (depth == 0)
+    return;
 
   enumerator = g_file_enumerate_children (file,
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
@@ -467,7 +485,7 @@ populate_descendants_matching (GFile        *file,
 
           /* Don't recurse into known bad directories */
           if (!ide_vcs_is_ignored (NULL, child, NULL))
-            populate_descendants_matching (child, cancellable, results, spec);
+            populate_descendants_matching (child, cancellable, results, spec, depth - 1);
         }
     }
 }
@@ -479,17 +497,76 @@ ide_g_file_find_worker (IdeTask      *task,
                         GCancellable *cancellable)
 {
   GFile *file = source_object;
-  GPatternSpec *spec = task_data;
+  Find *f = task_data;
   g_autoptr(GPtrArray) ret = NULL;
 
   g_assert (IDE_IS_TASK (task));
   g_assert (G_IS_FILE (file));
-  g_assert (spec != NULL);
+  g_assert (f != NULL);
+  g_assert (f->spec != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
-  populate_descendants_matching (file, cancellable, ret, spec);
+  populate_descendants_matching (file, cancellable, ret, f->spec, f->depth);
   ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+}
+
+/**
+ * ide_g_file_find_with_depth_async:
+ * @file: a #IdeGlib
+ * @pattern: the glob pattern to search for using GPatternSpec
+ * @max_depth: maximum tree depth to search
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: a callback to execute upon completion
+ * @user_data: closure data for @callback
+ *
+ * Searches descendants of @file for files matching @pattern.
+ *
+ * Only up to @max_depth subdirectories will be searched. However, if
+ * @max_depth is zero, then all directories will be searched.
+ *
+ * You may only match on the filename, not the directory.
+ *
+ * Since: 3.30
+ */
+void
+ide_g_file_find_with_depth_async (GFile               *file,
+                                  const gchar         *pattern,
+                                  guint                depth,
+                                  GCancellable        *cancellable,
+                                  GAsyncReadyCallback  callback,
+                                  gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  Find *f;
+
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (pattern != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (depth == 0)
+    depth = G_MAXUINT;
+
+  task = ide_task_new (file, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_g_file_find_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW + 100);
+
+  f = g_slice_new0 (Find);
+  f->spec = g_pattern_spec_new (pattern);
+  f->depth = depth;
+  ide_task_set_task_data (task, f, (GDestroyNotify)find_free);
+
+  if (f->spec == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "Invalid pattern spec: %s",
+                                 pattern);
+      return;
+    }
+
+  ide_task_run_in_thread (task, ide_g_file_find_worker);
 }
 
 /**
@@ -513,31 +590,7 @@ ide_g_file_find_async (GFile               *file,
                        GAsyncReadyCallback  callback,
                        gpointer             user_data)
 {
-  g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GPatternSpec) spec = NULL;
-
-  g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (pattern != NULL);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (file, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_g_file_find_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW + 100);
-
-  spec = g_pattern_spec_new (pattern);
-
-  if (spec == NULL)
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_INVAL,
-                                 "Invalid pattern spec: %s",
-                                 pattern);
-      return;
-    }
-
-  ide_task_set_task_data (task, g_steal_pointer (&spec), (GDestroyNotify)g_pattern_spec_free);
-  ide_task_run_in_thread (task, ide_g_file_find_worker);
+  ide_g_file_find_with_depth_async (file, pattern, G_MAXUINT, cancellable, callback, user_data);
 }
 
 /**
