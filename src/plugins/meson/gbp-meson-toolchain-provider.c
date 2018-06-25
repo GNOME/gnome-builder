@@ -25,6 +25,8 @@
 #include "gbp-meson-toolchain-provider.h"
 #include "gbp-meson-build-system.h"
 
+#define MESON_TOOLCHAIN_FIND_MAX_DEPTH 3
+
 struct _GbpMesonToolchainProvider
 {
   IdeObject            parent_instance;
@@ -255,11 +257,12 @@ meson_toolchain_provider_search_init (GbpMesonToolchainProvider *self,
   file_searching->folders = folders;
 
   /* Unfortunately there is no file extension for this */
-  ide_g_file_find_async (g_list_first (folders)->data,
-                         "*",
-                         cancellable,
-                         meson_toolchain_provider_search_iterate,
-                         file_searching);
+  ide_g_file_find_with_depth_async (g_list_first (folders)->data,
+                                    "*",
+                                    MESON_TOOLCHAIN_FIND_MAX_DEPTH,
+                                    cancellable,
+                                    meson_toolchain_provider_search_iterate,
+                                    file_searching);
 }
 
 static void

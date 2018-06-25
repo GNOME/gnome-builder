@@ -24,6 +24,8 @@
 #include "gbp-cmake-toolchain-provider.h"
 #include "gbp-cmake-build-system.h"
 
+#define CMAKE_TOOLCHAIN_MAX_FIND_DEPTH 3
+
 struct _GbpCMakeToolchainProvider
 {
   IdeObject            parent_instance;
@@ -154,11 +156,12 @@ gbp_cmake_toolchain_provider_load_async (IdeToolchainProvider     *provider,
   ide_task_set_source_tag (task, gbp_cmake_toolchain_provider_load_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  ide_g_file_find_async (workdir,
-                         "*.cmake",
-                         cancellable,
-                         load_find_files_cb,
-                         g_steal_pointer (&task));
+  ide_g_file_find_with_depth_async (workdir,
+                                    "*.cmake",
+                                    CMAKE_TOOLCHAIN_MAX_FIND_DEPTH,
+                                    cancellable,
+                                    load_find_files_cb,
+                                    g_steal_pointer (&task));
 
   IDE_EXIT;
 }
