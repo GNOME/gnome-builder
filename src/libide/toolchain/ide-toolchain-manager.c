@@ -135,9 +135,13 @@ ide_toolchain_manager_toolchain_load_cb (GObject      *object,
   context = ide_object_get_context (IDE_OBJECT (self));
 
   if (!ide_toolchain_provider_load_finish (provider, result, &error))
-    ide_context_warning (context,
-                         "Failed to initialize toolchain provider: %s: %s",
-                         G_OBJECT_TYPE_NAME (provider), error->message);
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        ide_context_warning (context,
+                             "Failed to initialize toolchain provider: %s: %s",
+                             G_OBJECT_TYPE_NAME (provider), error->message);
+    }
 
   IDE_EXIT;
 }
@@ -242,11 +246,11 @@ ide_toolchain_manager_init_load_cb (GObject      *object,
 
   if (!ide_toolchain_provider_load_finish (provider, result, &error))
     {
-      g_print ("%s\n", G_OBJECT_TYPE_NAME (provider));
-      g_assert (error != NULL);
-      ide_context_warning (context,
-                           "Failed to initialize toolchain provider: %s: %s",
-                           G_OBJECT_TYPE_NAME (provider), error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
+          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        ide_context_warning (context,
+                             "Failed to initialize toolchain provider: %s: %s",
+                             G_OBJECT_TYPE_NAME (provider), error->message);
     }
 
   providers = ide_task_get_task_data (task);
