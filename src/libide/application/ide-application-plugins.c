@@ -28,6 +28,9 @@
 #include "application/ide-application-private.h"
 #include "util/ide-flatpak.h"
 
+static GSettings *_ide_application_plugin_get_settings (IdeApplication *self,
+                                                        const gchar    *module_name);
+
 static const gchar *blacklisted_plugins[] = {
   "build-tools-plugin", /* Renamed to buildui */
 };
@@ -37,6 +40,7 @@ ide_application_can_load_plugin (IdeApplication *self,
                                  PeasPluginInfo *plugin_info)
 {
   const gchar *module_name;
+  const gchar **deps;
 
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (plugin_info != NULL);
@@ -85,6 +89,21 @@ ide_application_can_load_plugin (IdeApplication *self,
    * This is not entirely different from libtool's interface age. Presumably,
    * Gedit's IAge is similar here, but we would need it per-structure.
    */
+
+  /*
+   * If this plugin has dependencies, we need to check that the dependencies
+   * can also be loaded.
+   */
+  if ((deps = peas_plugin_info_get_dependencies (plugin_info)))
+    {
+      for (guint i = 0; deps[i]; i++)
+        {
+          GSettings *settings = _ide_application_plugin_get_settings (self, deps[i]);
+
+          if (!g_settings_get_boolean (settings, "enabled"))
+            return FALSE;
+        }
+    }
 
   return TRUE;
 }
