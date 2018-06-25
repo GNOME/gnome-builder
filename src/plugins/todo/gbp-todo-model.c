@@ -432,8 +432,14 @@ gbp_todo_model_mine_worker (IdeTask      *task,
           continue;
         }
 
-      if (dzl_str_empty0 (line))
-        continue;
+      if (dzl_str_empty0 (line) || len > 256)
+        {
+          /* cancel anything if the line is too long so that we don't get into
+           * pathological cases.
+           */
+          g_clear_object (&item);
+          continue;
+        }
 
       /* Try to match the first line */
       if (item == NULL)
