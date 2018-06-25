@@ -255,11 +255,11 @@ gbp_todo_model_class_init (GbpTodoModelClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  line1 = g_regex_new ("(.*):(\\d+):(.*)", 0, 0, &error);
+  line1 = g_regex_new ("([a-zA-Z0-9\\+\\-\\.\\/_]+):(\\d+):(.*)", 0, 0, &error);
   g_assert_no_error (error);
   g_assert (line1 != NULL);
 
-  line2 = g_regex_new ("(.*)-(\\d+)-(.*)", 0, 0, &error);
+  line2 = g_regex_new ("([a-zA-Z0-9\\+\\-\\.\\/_]+)-(\\d+)-(.*)", 0, 0, &error);
   g_assert_no_error (error);
   g_assert (line2 != NULL);
 }
