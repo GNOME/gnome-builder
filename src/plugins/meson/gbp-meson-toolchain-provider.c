@@ -20,6 +20,7 @@
 
 #define G_LOG_DOMAIN "gbp-meson-toolchain-provider"
 
+#include "gbp-meson-build-system.h"
 #include "gbp-meson-toolchain.h"
 #include "gbp-meson-toolchain-provider.h"
 #include "gbp-meson-build-system.h"
@@ -212,14 +213,31 @@ meson_toolchain_provider_search_init (GbpMesonToolchainProvider *self,
   g_autofree gchar *user_folder_path = NULL;
   const gchar * const *system_data_dirs;
   IdeContext *context;
+  IdeBuildSystem *build_system;
   FileSearching *file_searching;
 
   g_assert (GBP_IS_MESON_TOOLCHAIN_PROVIDER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, meson_toolchain_provider_search_init);
+  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_context_get_build_system (context);
+
+  if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Not using meson, ignoring toolchain provider");
+      return;
+    }
 
   system_data_dirs = g_get_system_data_dirs ();
-  for (gint i = 0; system_data_dirs[i] != NULL; i++)
+
+  for (guint i = 0; system_data_dirs[i] != NULL; i++)
     {
       g_autofree gchar *subfolder = g_build_filename (system_data_dirs[i], "meson", "cross", NULL);
 
@@ -231,10 +249,6 @@ meson_toolchain_provider_search_init (GbpMesonToolchainProvider *self,
 
   project_folder = g_file_get_parent (ide_context_get_project_file (context));
   folders = g_list_append (folders, g_steal_pointer(&project_folder));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, meson_toolchain_provider_search_init);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   file_searching = meson_toolchain_provider_file_searching_new ();
   file_searching->task = g_steal_pointer (&task);
