@@ -332,7 +332,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
           const gchar *keyword = item->keyword;
           guint priority;
 
-          if (keyword == NULL)
+          if G_UNLIKELY (keyword == NULL)
             {
               g_autoptr(GVariant) child = g_variant_get_child_value (self->results, item->index);
               if (!g_variant_lookup (child, "keyword", "&s", &keyword))
