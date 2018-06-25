@@ -716,6 +716,9 @@ ide_completion_buffer_insert_text_after_cb (IdeCompletion *self,
   g_assert (len > 0);
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
 
+  if (ide_buffer_get_loading (IDE_BUFFER (buffer)))
+    return;
+
   dzl_clear_source (&self->queued_update);
 
   if (ide_completion_is_blocked (self) || !is_single_char (text, len))
