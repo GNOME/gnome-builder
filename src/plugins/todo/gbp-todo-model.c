@@ -405,6 +405,20 @@ gbp_todo_model_mine_worker (IdeTask      *task,
       arg = g_strdup_printf ("%s(:| )", keyword);
       ide_subprocess_launcher_push_argv (launcher, "-e");
       ide_subprocess_launcher_push_argv (launcher, arg);
+
+      if (m->use_git_grep)
+        {
+          /* Avoid pathological lines up front before reading them into
+           * the UI process memory space.
+           *
+           * Note that we do this *after* our TODO: match because it causes
+           * grep to have to look at every line up to it. So to do this in
+           * reverse order is incredibly slow.
+           */
+          ide_subprocess_launcher_push_argv (launcher, "--and");
+          ide_subprocess_launcher_push_argv (launcher, "-e");
+          ide_subprocess_launcher_push_argv (launcher, "^.{0,256}$");
+        }
     }
 
   if (g_file_query_file_type (m->file, 0, NULL) != G_FILE_TYPE_DIRECTORY)
