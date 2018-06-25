@@ -1440,6 +1440,7 @@ ide_build_pipeline_constructed (GObject *object)
 
   toolchain_manager = ide_context_get_toolchain_manager (context);
   self->toolchain = ide_toolchain_manager_get_toolchain (toolchain_manager, "default");
+
   IDE_EXIT;
 }
 
@@ -3779,7 +3780,7 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
   IdeContext *context;
   IdeRuntime *runtime;
   IdeTriplet *device_triplet;
-  IdeToolchainManager *toolchain_manager;
+  IdeToolchainManager *manager;
 
   IDE_ENTRY;
 
@@ -3789,8 +3790,8 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
-  toolchain_manager = ide_context_get_toolchain_manager (context);
-  g_return_if_fail (IDE_IS_TOOLCHAIN_MANAGER (toolchain_manager));
+  manager = ide_context_get_toolchain_manager (context);
+  g_return_if_fail (IDE_IS_TOOLCHAIN_MANAGER (manager));
 
   toolchain = ide_configuration_get_toolchain (self->configuration);
   runtime = ide_configuration_get_runtime (self->configuration);
@@ -3804,16 +3805,19 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
     }
 
   /* Don't try to initialize too early */
-  if (ide_toolchain_manager_is_loaded (toolchain_manager))
+  if (ide_toolchain_manager_is_loaded (manager))
     IDE_EXIT;
 
   /* TODO: fallback to most compatible toolchain instead of default */
+
   if (toolchain == NULL ||
-      g_strcmp0 (ide_triplet_get_arch (device_triplet), ide_triplet_get_arch (toolchain_triplet)) != 0 ||
+      g_strcmp0 (ide_triplet_get_arch (device_triplet),
+                 ide_triplet_get_arch (toolchain_triplet)) != 0 ||
       !ide_runtime_supports_toolchain (runtime, toolchain))
     {
-      g_autoptr(IdeToolchain) default_toolchain = ide_toolchain_manager_get_toolchain (toolchain_manager, "default");
+      g_autoptr(IdeToolchain) default_toolchain = NULL;
 
+      default_toolchain = ide_toolchain_manager_get_toolchain (manager, "default");
       _ide_build_pipeline_set_toolchain (self, default_toolchain);
     }
 
