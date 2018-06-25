@@ -560,6 +560,29 @@ gbp_todo_model_mine_worker (IdeTask      *task,
         }
     }
 
+  /* We might have a trailing item w/o final -- */
+  if (item != NULL)
+    {
+      if (m->use_git_grep)
+        {
+          g_ptr_array_add (items, g_steal_pointer (&item));
+        }
+      else
+        {
+          const gchar *pathstr = gbp_todo_item_get_path (item);
+
+          /*
+           * self->vcs is only set at construction, so safe to
+           * access via a worker thread. ide_vcs_path_is_ignored()
+           * is expected to be thread-safe as well.
+           */
+          if (!ide_vcs_path_is_ignored (self->vcs, pathstr, NULL))
+            g_ptr_array_add (items, g_steal_pointer (&item));
+          else
+            g_clear_object (&item);
+        }
+    }
+
   g_debug ("Located %u TODO items in %0.4lf seconds",
            items->len, g_timer_elapsed (timer, NULL));
 
