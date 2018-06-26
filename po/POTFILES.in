@@ -214,6 +214,7 @@ src/plugins/quick-highlight/gbp-quick-highlight-preferences.c
 src/plugins/recent/gbp-recent-section.ui
 src/plugins/retab/gtk/menus.ui
 src/plugins/rustup/rustup_plugin.py
+src/plugins/snippets/ide-snippet-completion-item.c
 src/plugins/snippets/ide-snippet-preferences-addin.c
 src/plugins/spellcheck/gbp-spell-editor-addin.c
 src/plugins/spellcheck/gbp-spell-editor-view-addin.c

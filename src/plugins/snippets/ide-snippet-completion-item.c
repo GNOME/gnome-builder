@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-snippet-completion-item"
 
+#include <glib/gi18n.h>
+
 #include "ide-snippet-completion-item.h"
 
 struct _IdeSnippetCompletionItem
@@ -84,10 +86,7 @@ ide_snippet_completion_item_get_snippet (IdeSnippetCompletionItem *self,
   parser = ide_snippet_parser_new ();
 
   if (!ide_snippet_parser_load_from_data (parser, self->info->begin, self->info->len, &error))
-    {
-      g_message ("Failed to parse snippet: %s", error->message);
-      return ide_snippet_new (NULL, NULL);
-    }
+    goto failure;
 
   items = ide_snippet_parser_get_snippets (parser);
 
@@ -104,7 +103,22 @@ ide_snippet_completion_item_get_snippet (IdeSnippetCompletionItem *self,
         return g_object_ref (snippet);
     }
 
-  return ide_snippet_new (NULL, NULL);
+failure:
+    {
+      g_autoptr(IdeSnippet) snippet = NULL;
+      g_autoptr(IdeSnippetChunk) chunk = NULL;
+      g_autofree gchar *failed_text = NULL;
+
+      failed_text = g_strdup_printf (_("Failed to parse snippet “%s”"), self->info->name);
+
+      snippet = ide_snippet_new (NULL, NULL);
+      chunk = ide_snippet_chunk_new ();
+      ide_snippet_chunk_set_text (chunk, failed_text);
+      ide_snippet_chunk_set_text_set (chunk, TRUE);
+      ide_snippet_add_chunk (snippet, chunk);
+
+      return g_steal_pointer (&snippet);
+    }
 }
 
 const IdeSnippetInfo *
