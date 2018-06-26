@@ -1407,83 +1407,6 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
   IDE_EXIT;
 }
 
-static void
-ide_source_view_maybe_overwrite (IdeSourceView *self,
-                                 GtkTextIter   *iter,
-                                 const gchar   *text,
-                                 gint           len)
-{
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextBuffer *buffer;
-  GtkTextIter insert;
-  GtkTextIter next;
-  gunichar ch;
-  gunichar next_ch;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (iter != NULL);
-  g_assert (text != NULL);
-  g_assert (len > 0);
-
-  /*
-   * Some auto-indenters will perform triggers on certain key-press that we
-   * would hijack by otherwise "doing nothing" during this key-press. So to
-   * avoid that, we actually delete the previous value and then allow this
-   * key-press event to continue.
-   */
-
-  if (!priv->overwrite_braces)
-    return;
-
-  /*
-   * WORKAROUND:
-   *
-   * If we are inside of a snippet, then let's not do anything. It really
-   * messes with the position tracking. Once we can better integrate these
-   * things, go ahead and remove this.
-   */
-  if (priv->snippets->length)
-    return;
-
-  /*
-   * Ignore this if it wasn't a single character insertion.
-   */
-  if (len != 1)
-    return;
-
-  /*
-   * Short circuit if there is already a selection.
-   */
-  buffer = gtk_text_iter_get_buffer (iter);
-  if (gtk_text_buffer_get_has_selection (buffer))
-      return;
-
-  /*
-   * @iter is pointing at the location we just inserted text. Since we
-   * know we only inserted one character, lets move past it and compare
-   * to see if we want to overwrite.
-   */
-  gtk_text_buffer_get_iter_at_mark (buffer, &insert, gtk_text_buffer_get_insert (buffer));
-  ch = g_utf8_get_char (text);
-  next_ch = gtk_text_iter_get_char (&insert);
-
-  switch (ch)
-    {
-    case ')': case ']': case '}': case '"': case '\'': case ';':
-      if (ch == next_ch)
-        break;
-      /* fall through */
-    default:
-      return;
-    }
-
-  next = insert;
-
-  gtk_text_iter_forward_char (&next);
-  gtk_text_buffer_delete (buffer, &insert, &next);
-  *iter = insert;
-}
-
 static gboolean
 is_closing_char (gunichar ch)
 {
@@ -1541,6 +1464,104 @@ is_xmlish (const gchar *lang_id)
   return (g_strcmp0 (lang_id, "xml") == 0) ||
          (g_strcmp0 (lang_id, "html") == 0);
 
+}
+
+static void
+ide_source_view_maybe_overwrite (IdeSourceView *self,
+                                 GtkTextIter   *iter,
+                                 const gchar   *text,
+                                 gint           len)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextBuffer *buffer;
+  GtkTextIter insert;
+  GtkTextIter next;
+  gunichar ch;
+  gunichar next_ch;
+  gunichar match;
+  guint count_open;
+  guint count_close;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (iter != NULL);
+  g_assert (text != NULL);
+  g_assert (len > 0);
+
+  /*
+   * Some auto-indenters will perform triggers on certain key-press that we
+   * would hijack by otherwise "doing nothing" during this key-press. So to
+   * avoid that, we actually delete the previous value and then allow this
+   * key-press event to continue.
+   */
+
+  if (!priv->overwrite_braces)
+    return;
+
+  /*
+   * WORKAROUND:
+   *
+   * If we are inside of a snippet, then let's not do anything. It really
+   * messes with the position tracking. Once we can better integrate these
+   * things, go ahead and remove this.
+   */
+  if (priv->snippets->length)
+    return;
+
+  /*
+   * Ignore this if it wasn't a single character insertion.
+   */
+  if (len != 1)
+    return;
+
+  /*
+   * Short circuit if there is already a selection.
+   */
+  buffer = gtk_text_iter_get_buffer (iter);
+  if (gtk_text_buffer_get_has_selection (buffer))
+      return;
+
+  /*
+   * @iter is pointing at the location we just inserted text. Since we
+   * know we only inserted one character, lets move past it and compare
+   * to see if we want to overwrite.
+   */
+  gtk_text_buffer_get_iter_at_mark (buffer, &insert, gtk_text_buffer_get_insert (buffer));
+  ch = g_utf8_get_char (text);
+  next_ch = gtk_text_iter_get_char (&insert);
+
+  switch (ch)
+    {
+    case ')': case ']': case '}': case '"': case '\'': case ';':
+      if (ch == next_ch)
+        {
+          if (ch == '"')
+            break;
+
+          switch (ch)
+            {
+            case ']':  match = '[';  break;
+            case '}':  match = '{';  break;
+            case ')':  match = '(';  break;
+            case '\'': match = '\''; break;
+            case '>':  match = '<';  break;
+            default:   match = 0;    break;
+            }
+
+          count_open = count_chars_on_line (self, match, iter);
+          count_close = count_chars_on_line (self, ch, iter);
+          if (count_close != count_open)
+            break;
+        }
+      /* fall through */
+    default:
+      return;
+    }
+
+  next = insert;
+
+  gtk_text_iter_forward_char (&next);
+  gtk_text_buffer_delete (buffer, &insert, &next);
+  *iter = insert;
 }
 
 static gboolean
