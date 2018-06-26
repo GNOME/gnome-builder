@@ -7,7 +7,6 @@ snippet lang
 snippet import
 	const ${1:ModuleName} = imports.${2:path}.${$1|decapitalize};
 	$0
-
 snippet class
 	const ${1:ClassName} = new Lang.Class({
 		Name: '$1',
@@ -30,7 +29,6 @@ snippet gobject
 			$0
 		},
 	});
-
 snippet gproperty
 	'${1:foo}': GObject.ParamSpec.${2:int}('$1',
 		'${3:$1|capitalize}', '${4:Property description}',
