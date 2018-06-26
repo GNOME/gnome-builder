@@ -85,7 +85,7 @@ ide_snippet_completion_item_get_snippet (IdeSnippetCompletionItem *self,
 
   parser = ide_snippet_parser_new ();
 
-  if (!ide_snippet_parser_load_from_data (parser, self->info->begin, self->info->len, &error))
+  if (!ide_snippet_parser_load_from_data (parser, self->info->lang, self->info->begin, self->info->len, &error))
     goto failure;
 
   items = ide_snippet_parser_get_snippets (parser);

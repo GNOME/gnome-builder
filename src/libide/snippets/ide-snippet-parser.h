@@ -33,6 +33,7 @@ IDE_AVAILABLE_IN_3_30
 IdeSnippetParser *ide_snippet_parser_new            (void);
 IDE_AVAILABLE_IN_3_30
 gboolean          ide_snippet_parser_load_from_data (IdeSnippetParser  *parser,
+                                                     const gchar       *defalut_language,
                                                      const gchar       *data,
                                                      gssize             data_len,
                                                      GError           **error);

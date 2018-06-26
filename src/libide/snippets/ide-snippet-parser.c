@@ -598,6 +598,7 @@ again:
 
 gboolean
 ide_snippet_parser_load_from_data (IdeSnippetParser  *parser,
+                                   const gchar       *default_language,
                                    const gchar       *data,
                                    gssize             data_len,
                                    GError           **error)
@@ -629,7 +630,7 @@ ide_snippet_parser_load_from_data (IdeSnippetParser  *parser,
         }
 
       copy = g_strndup (line, line_len);
-      ide_snippet_parser_feed_line (parser, "<data>", copy);
+      ide_snippet_parser_feed_line (parser, default_language, copy);
     }
 
   ide_snippet_parser_finish (parser);
