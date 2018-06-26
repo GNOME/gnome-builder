@@ -144,6 +144,17 @@ ide_build_log_panel_window_title_changed (IdeBuildLogPanel *self,
 }
 
 static void
+ide_build_log_panel_grab_focus (GtkWidget *widget)
+{
+  IdeBuildLogPanel *self = (IdeBuildLogPanel *)widget;
+
+  g_assert (IDE_IS_BUILD_LOG_PANEL (self));
+
+  if (self->terminal != NULL)
+    gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
+}
+
+static void
 ide_build_log_panel_finalize (GObject *object)
 {
   IdeBuildLogPanel *self = (IdeBuildLogPanel *)object;
@@ -211,6 +222,8 @@ ide_build_log_panel_class_init (IdeBuildLogPanelClass *klass)
   object_class->finalize = ide_build_log_panel_finalize;
   object_class->get_property = ide_build_log_panel_get_property;
   object_class->set_property = ide_build_log_panel_set_property;
+
+  widget_class->grab_focus = ide_build_log_panel_grab_focus;
 
   gtk_widget_class_set_css_name (widget_class, "buildlogpanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-log-panel.ui");
