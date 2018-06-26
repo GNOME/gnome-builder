@@ -144,12 +144,11 @@
             ]
         },
         {
-            "name" : "ctags",
+            "name" : "universal-ctags",
             "sources" : [
                 {
-                    "type" : "archive",
-                    "url" : "http://downloads.sourceforge.net/project/ctags/ctags/5.8/ctags-5.8.tar.gz",
-                    "sha256" : "0e44b45dcabe969e0bbbb11e30c246f81abe5d32012db37395eb57d66e9e99c7"
+                    "type" : "git",
+                    "url" : "https://github.com/universal-ctags/ctags.git"
                 }
             ]
         },
@@ -815,6 +814,7 @@
             "config-opts" : [
                 "--libdir=lib",
                 "--buildtype=debugoptimized",
+                "-Dctags_path=/app/bin/ctags",
                 "-Dfusermount_wrapper=true",
                 "-Dwith_tcmalloc=true",
                 "-Denable_tracing=true",
