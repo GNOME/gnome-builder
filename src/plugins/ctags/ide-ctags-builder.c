@@ -140,6 +140,10 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
   ide_subprocess_launcher_setenv (launcher, "TMPDIR", cwd, TRUE);
   ide_subprocess_launcher_set_stdout_file_path (launcher, tags_path);
 
+#ifdef __linux__
+  ide_subprocess_launcher_push_argv (launcher, "nice");
+#endif
+
   ide_subprocess_launcher_push_argv (launcher, ctags);
   ide_subprocess_launcher_push_argv (launcher, "-f");
   ide_subprocess_launcher_push_argv (launcher, "-");
