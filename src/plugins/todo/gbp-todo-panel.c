@@ -288,6 +288,7 @@ gbp_todo_panel_init (GbpTodoPanel *self)
   GtkTreeSelection *selection;
 
   self->stack = g_object_new (GTK_TYPE_STACK,
+                              "transition-duration", 333,
                               "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
                               "homogeneous", FALSE,
                               "visible", TRUE,
