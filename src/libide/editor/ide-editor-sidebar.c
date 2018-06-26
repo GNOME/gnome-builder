@@ -93,11 +93,20 @@ ide_editor_sidebar_stack_notify_visible_child (IdeEditorSidebar *self,
                                                GParamSpec       *pspec,
                                                GtkStack         *stack)
 {
+  GtkWidget *visible_child;
+
   g_assert (IDE_IS_EDITOR_SIDEBAR (self));
   g_assert (G_IS_PARAM_SPEC_OBJECT (pspec));
   g_assert (GTK_IS_STACK (stack));
 
+  if (gtk_widget_in_destruction (GTK_WIDGET (self)) ||
+      gtk_widget_in_destruction (GTK_WIDGET (stack)))
+    return;
+
   ide_editor_sidebar_update_title (self);
+
+  if ((visible_child = gtk_stack_get_visible_child (stack)) && DZL_IS_DOCK_ITEM (visible_child))
+    dzl_dock_item_emit_presented (DZL_DOCK_ITEM (visible_child));
 }
 
 static void
