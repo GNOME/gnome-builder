@@ -92,7 +92,11 @@ ide_build_workbench_addin_view_output (GSimpleAction *action,
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_BUILD_WORKBENCH_ADDIN (self));
 
+  /* bring forward all necessary widgetry */
   ide_workbench_focus (self->workbench, GTK_WIDGET (self->build_log_panel));
+
+  /* drop the transient grab */
+  dzl_dock_item_present (DZL_DOCK_ITEM (self->build_log_panel));
 }
 
 static void
