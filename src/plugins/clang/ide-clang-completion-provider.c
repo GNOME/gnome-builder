@@ -30,10 +30,41 @@ struct _IdeClangCompletionProvider
   IdeClangProposals *proposals;
 };
 
+static gboolean
+is_field_access (IdeCompletionContext *context)
+{
+  GtkTextIter begin, end;
+
+  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+
+  ide_completion_context_get_bounds (context, &begin, &end);
+
+  if (gtk_text_iter_backward_char (&begin))
+    {
+      if (gtk_text_iter_get_char (&begin) == '>')
+        {
+          if (gtk_text_iter_backward_char (&begin))
+            {
+              if (gtk_text_iter_get_char (&begin) == '-')
+                return TRUE;
+            }
+        }
+
+      if (gtk_text_iter_get_char (&begin) == '.')
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static gint
 ide_clang_completion_provider_get_priority (IdeCompletionProvider *provider,
                                             IdeCompletionContext  *context)
 {
+  /* Place results before snippets */
+  if (is_field_access (context))
+    return -200;
+
   return 100;
 }
 
@@ -262,9 +293,10 @@ ide_clang_completion_provider_populate_async (IdeCompletionProvider  *provider,
    * the user wants will be in the previous list too, and that can drop the
    * latency a bit.
    */
-  ide_completion_context_set_proposals_for_provider (context,
-                                                     provider,
-                                                     G_LIST_MODEL (self->proposals));
+  if (!is_field_access (context))
+    ide_completion_context_set_proposals_for_provider (context,
+                                                       provider,
+                                                       G_LIST_MODEL (self->proposals));
 
   ide_clang_proposals_populate_async (self->proposals,
                                       &begin,
