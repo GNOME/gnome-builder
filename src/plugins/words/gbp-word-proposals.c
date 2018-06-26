@@ -100,6 +100,7 @@ gbp_word_proposals_finalize (GObject *object)
 
   dzl_clear_pointer (&self->unfiltered, g_ptr_array_unref);
   dzl_clear_pointer (&self->items, g_array_unref);
+  dzl_clear_pointer (&self->words_dedup, g_hash_table_unref);
   dzl_clear_pointer (&self->words, g_string_chunk_free);
   dzl_clear_pointer (&self->last_word, g_free);
 
@@ -253,6 +254,7 @@ gbp_word_proposals_populate_async (GbpWordProposals     *self,
       g_array_remove_range (self->items, 0, old_len);
       if (self->unfiltered->len > 0)
         g_ptr_array_remove_range (self->unfiltered, 0, self->unfiltered->len);
+      g_hash_table_remove_all (self->words_dedup);
       g_string_chunk_clear (self->words);
       g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, 0);
     }
@@ -401,8 +403,8 @@ gbp_word_proposals_clear (GbpWordProposals *self)
   if (self->unfiltered->len)
     g_ptr_array_remove_range (self->unfiltered, 0, self->unfiltered->len);
 
-  g_string_chunk_clear (self->words);
   g_hash_table_remove_all (self->words_dedup);
+  g_string_chunk_clear (self->words);
 
   dzl_clear_pointer (&self->last_word, g_free);
 
