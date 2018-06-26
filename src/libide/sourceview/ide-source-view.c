@@ -321,7 +321,8 @@ block_interactive (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  ide_completion_block_interactive (priv->completion);
+  if (priv->completion)
+    ide_completion_block_interactive (priv->completion);
 }
 
 static void
@@ -331,7 +332,8 @@ unblock_interactive (IdeSourceView *self)
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  ide_completion_unblock_interactive (priv->completion);
+  if (priv->completion != NULL)
+    ide_completion_unblock_interactive (priv->completion);
 }
 
 static void
