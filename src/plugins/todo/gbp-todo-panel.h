@@ -26,10 +26,11 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_TODO_PANEL (gbp_todo_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTodoPanel, gbp_todo_panel, GBP, TODO_PANEL, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpTodoPanel, gbp_todo_panel, GBP, TODO_PANEL, DzlDockWidget)
 
-GbpTodoModel *gbp_todo_panel_get_model (GbpTodoPanel *self);
-void          gbp_todo_panel_set_model (GbpTodoPanel *self,
-                                        GbpTodoModel *model);
+GbpTodoModel *gbp_todo_panel_get_model  (GbpTodoPanel *self);
+void          gbp_todo_panel_set_model  (GbpTodoPanel *self,
+                                         GbpTodoModel *model);
+void          gbp_todo_panel_make_ready (GbpTodoPanel *self);
 
 G_END_DECLS

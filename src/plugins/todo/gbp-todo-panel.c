@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "gbp-todo-panel"
 
+#include <glib/gi18n.h>
 #include <ide.h>
 
 #include "gbp-todo-item.h"
@@ -25,13 +26,15 @@
 
 struct _GbpTodoPanel
 {
-  GtkBin        parent_instance;
+  DzlDockWidget  parent_instance;
 
-  GtkTreeView  *tree_view;
-  GbpTodoModel *model;
+  GbpTodoModel  *model;
+
+  GtkTreeView   *tree_view;
+  GtkStack      *stack;
 };
 
-G_DEFINE_TYPE (GbpTodoPanel, gbp_todo_panel, GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbpTodoPanel, gbp_todo_panel, DZL_TYPE_DOCK_WIDGET)
 
 enum {
   PROP_0,
@@ -281,13 +284,32 @@ static void
 gbp_todo_panel_init (GbpTodoPanel *self)
 {
   GtkWidget *scroller;
+  GtkWidget *empty;
   GtkTreeSelection *selection;
+
+  self->stack = g_object_new (GTK_TYPE_STACK,
+                              "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
+                              "homogeneous", FALSE,
+                              "visible", TRUE,
+                              NULL);
+  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->stack));
+
+  empty = g_object_new (DZL_TYPE_EMPTY_STATE,
+                        "title", _("Loading TODOs…"),
+                        "subtitle", _("Please wait while we scan your project"),
+                        "icon-name", "emblem-ok-symbolic",
+                        "valign", GTK_ALIGN_START,
+                        "visible", TRUE,
+                        NULL);
+  gtk_container_add (GTK_CONTAINER (self->stack), empty);
 
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                            "visible", TRUE,
                            "vexpand", TRUE,
                            NULL);
-  gtk_container_add (GTK_CONTAINER (self), scroller);
+  gtk_container_add_with_properties (GTK_CONTAINER (self->stack), scroller,
+                                     "name", "todos",
+                                     NULL);
 
   self->tree_view = g_object_new (IDE_TYPE_FANCY_TREE_VIEW,
                                   "has-tooltip", TRUE,
@@ -347,4 +369,12 @@ gbp_todo_panel_set_model (GbpTodoPanel *self,
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODEL]);
     }
+}
+
+void
+gbp_todo_panel_make_ready (GbpTodoPanel *self)
+{
+  g_return_if_fail (GBP_IS_TODO_PANEL (self));
+
+  gtk_stack_set_visible_child_name (self->stack, "todos");
 }

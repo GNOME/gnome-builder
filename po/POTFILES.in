@@ -240,6 +240,7 @@ src/plugins/terminal/gb-terminal-view-actions.c
 src/plugins/terminal/gb-terminal-view.c
 src/plugins/terminal/gb-terminal-workbench-addin.c
 src/plugins/terminal/gtk/menus.ui
+src/plugins/todo/gbp-todo-panel.c
 src/plugins/todo/gbp-todo-workbench-addin.c
 src/plugins/vala-pack/ide-vala-completion-item.vala
 src/plugins/vala-pack/ide-vala-preferences-addin.vala

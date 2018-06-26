@@ -26,9 +26,14 @@
 struct _GbpTodoWorkbenchAddin
 {
   GObject       parent_instance;
+
   GbpTodoPanel *panel;
   GbpTodoModel *model;
   GCancellable *cancellable;
+  GFile        *workdir;
+
+  guint         has_presented : 1;
+  guint         is_global_mining : 1;
 };
 
 static void
@@ -44,8 +49,34 @@ gbp_todo_workbench_addin_mine_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_TODO_MODEL (model));
 
+  /* We only do this once, safe to re-clear on per-file mining */
+  self->is_global_mining = FALSE;
+
   if (!gbp_todo_model_mine_finish (model, result, &error))
     ide_widget_warning (self->panel, "todo: %s", error->message);
+
+  if (self->panel != NULL)
+    gbp_todo_panel_make_ready (self->panel);
+}
+
+static void
+gbp_todo_workbench_addin_presented_cb (GbpTodoWorkbenchAddin *self,
+                                       GbpTodoPanel          *panel)
+{
+  g_assert (GBP_IS_TODO_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_TODO_PANEL (panel));
+
+  if (self->has_presented)
+    return;
+
+  self->has_presented = TRUE;
+  self->is_global_mining = TRUE;
+
+  gbp_todo_model_mine_async (self->model,
+                             self->workdir,
+                             self->cancellable,
+                             gbp_todo_workbench_addin_mine_cb,
+                             g_object_ref (self));
 }
 
 static void
@@ -60,6 +91,9 @@ gbp_todo_workbench_addin_buffer_saved (GbpTodoWorkbenchAddin *self,
   g_assert (self->model != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+
+  if (!self->has_presented || self->is_global_mining)
+    return;
 
   file = ide_buffer_get_file (buffer);
   gfile = ide_file_get_file (file);
@@ -94,6 +128,8 @@ gbp_todo_workbench_addin_load (IdeWorkbenchAddin *addin,
   editor = ide_workbench_get_perspective_by_name (workbench, "editor");
   sidebar = ide_editor_perspective_get_sidebar (IDE_EDITOR_PERSPECTIVE (editor));
 
+  self->workdir = g_object_ref (workdir);
+
   g_signal_connect_object (bufmgr,
                            "buffer-saved",
                            G_CALLBACK (gbp_todo_workbench_addin_buffer_saved),
@@ -106,6 +142,11 @@ gbp_todo_workbench_addin_load (IdeWorkbenchAddin *addin,
                               "model", self->model,
                               "visible", TRUE,
                               NULL);
+  g_signal_connect_object (self->panel,
+                           "presented",
+                           G_CALLBACK (gbp_todo_workbench_addin_presented_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   g_signal_connect (self->panel,
                     "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
@@ -117,12 +158,6 @@ gbp_todo_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   NULL, NULL,
                                   GTK_WIDGET (self->panel),
                                   200);
-
-  gbp_todo_model_mine_async (self->model,
-                             workdir,
-                             self->cancellable,
-                             gbp_todo_workbench_addin_mine_cb,
-                             g_object_ref (self));
 }
 
 static void
@@ -148,7 +183,10 @@ gbp_todo_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   gtk_widget_destroy (GTK_WIDGET (self->panel));
 
+  g_assert (self->panel == NULL);
+
   g_clear_object (&self->model);
+  g_clear_object (&self->workdir);
 }
 
 static void
