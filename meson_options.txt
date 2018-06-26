@@ -17,6 +17,8 @@ option('with_vapi', type: 'boolean')
 option('with_help', type: 'boolean')
 option('with_docs', type: 'boolean', value: false)
 
+option('ctags_path', type: 'string', value: '')
+
 # Plugins
 # Ideally we want many of these to be defined in the plugin dir:
 #   https://github.com/mesonbuild/meson/issues/707
