@@ -481,11 +481,12 @@ gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provide
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_g_file_find_async (workdir,
-                         "*.json",
-                         cancellable,
-                         load_find_files_cb,
-                         g_steal_pointer (&task));
+  ide_g_file_find_with_depth_async (workdir,
+                                    "*.json",
+                                    DISCOVERY_MAX_DEPTH,
+                                    cancellable,
+                                    load_find_files_cb,
+                                    g_steal_pointer (&task));
 
   IDE_EXIT;
 }
