@@ -336,7 +336,7 @@ cpack_completion_results_populate_async (CpackCompletionResults *self,
   if (self->unfiltered && self->unfiltered->len)
     g_ptr_array_remove_range (self->unfiltered, 0, self->unfiltered->len);
 
-  if (self->items && self->items->len == 0)
+  if (self->items && self->items->len)
     {
       old_len = self->items->len;
       g_array_remove_range (self->items, 0, self->items->len);
