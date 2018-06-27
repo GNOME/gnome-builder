@@ -242,6 +242,8 @@ cpack_completion_results_populate_cb (GObject      *object,
           const gchar *name = g_file_info_get_name (info);
           const gchar *word;
 
+          g_assert (G_IS_FILE_INFO (info));
+
           if (name == NULL)
             continue;
 
@@ -253,7 +255,7 @@ cpack_completion_results_populate_cb (GObject      *object,
           if (!(word = g_hash_table_lookup (self->words, name)))
             {
               word = g_string_chunk_insert (self->strings, name);
-              g_hash_table_add (self->words, (gchar *)name);
+              g_hash_table_add (self->words, (gchar *)word);
               g_ptr_array_add (self->unfiltered, (gchar *)word);
             }
         }
