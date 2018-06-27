@@ -717,6 +717,7 @@ get_changes_worker (IdeTask      *task,
         g_ptr_array_add (to_update, g_steal_pointer (&dir));
 
       g_queue_foreach (&files, (GFunc)file_info_free, NULL);
+      g_queue_clear (&files);
 
       if (ide_task_return_error_if_cancelled (task))
         return;
