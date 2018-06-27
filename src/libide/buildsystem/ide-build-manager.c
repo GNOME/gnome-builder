@@ -759,6 +759,8 @@ ide_build_manager_real_build_finished (IdeBuildManager  *self,
 
       ide_diagnostics_manager_rediagnose (diagnostics, buffer);
     }
+
+  self->needs_rediagnose = FALSE;
 }
 
 static void
@@ -1141,6 +1143,7 @@ ide_build_manager_init (IdeBuildManager *self)
   ide_build_manager_update_action_enabled (self);
 
   self->cancellable = g_cancellable_new ();
+  self->needs_rediagnose = TRUE;
 
   self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_BUILD_PIPELINE);
 
