@@ -32,7 +32,9 @@ typedef struct
   const gchar *lang;
   const gchar *name;
   const gchar *desc;
+
   /*< private >*/
+  const gchar *default_lang;
   const gchar *begin;
   goffset      len;
 } IdeSnippetInfo;

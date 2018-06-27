@@ -153,6 +153,7 @@ flush_load_state (IdeSnippetStorage *self,
 
   info.begin = state->beginptr;
   info.len = state->endptr - state->beginptr;
+  info.default_lang = g_string_chunk_insert_const (self->strings, default_scope);
 
   if (scopes != NULL)
     {
