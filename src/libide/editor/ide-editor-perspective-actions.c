@@ -102,9 +102,53 @@ ide_editor_perspective_actions_open_file (GSimpleAction *action,
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (chooser));
 }
 
+static void
+collect_views (GtkWidget *widget,
+               gpointer   user_data)
+{
+  IdeLayoutView *view = (IdeLayoutView *)widget;
+  GPtrArray *views = user_data;
+
+  g_assert (views != NULL);
+  g_assert (IDE_IS_LAYOUT_VIEW (view));
+
+  g_ptr_array_add (views, g_object_ref (view));
+}
+
+static void
+ide_editor_perspective_actions_close_all (GSimpleAction *action,
+                                          GVariant      *param,
+                                          gpointer       user_data)
+{
+  IdeEditorPerspective *self = user_data;
+  g_autoptr(GPtrArray) views = NULL;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  /* First collect all the views and hold a reference to them
+   * so that we do not need to worry about contains being destroyed
+   * as we work through the list.
+   */
+  views = g_ptr_array_new_full (0, g_object_unref);
+  ide_layout_grid_foreach_view (self->grid, collect_views, views);
+
+  for (guint i = 0; i < views->len; i++)
+    {
+      IdeLayoutView *view = g_ptr_array_index (views, i);
+
+      /* TODO: Should we allow suspending the close with
+       *       agree_to_close_async()?
+       */
+
+      gtk_widget_destroy (GTK_WIDGET (view));
+    }
+}
+
 static const GActionEntry editor_actions[] = {
   { "new-file", ide_editor_perspective_actions_new_file },
   { "open-file", ide_editor_perspective_actions_open_file },
+  { "close-all", ide_editor_perspective_actions_close_all },
 };
 
 void

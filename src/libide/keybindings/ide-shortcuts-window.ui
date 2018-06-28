@@ -118,6 +118,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
+                <property name="accelerator">&lt;primary&gt;&lt;shift&gt;w</property>
+                <property name="title" translatable="yes" context="shortcut window">Close all documents</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
                 <property name="accelerator">&lt;ctrl&gt;&lt;alt&gt;Page_Down</property>
                 <property name="title" translatable="yes" context="shortcut window">Switch to the next document</property>
               </object>

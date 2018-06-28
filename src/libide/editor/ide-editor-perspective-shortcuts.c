@@ -51,6 +51,12 @@ static const DzlShortcutEntry editor_perspective_entries[] = {
     NC_("shortcut window", "Editor shortcuts"),
     NC_("shortcut window", "Panels"),
     NC_("shortcut window", "Toggle utilities panel") },
+
+  { "org.gnome.builder.editor.close-all",
+    0, NULL,
+    NC_("shortcut window", "Editor shortcuts"),
+    NC_("shortcut window", "Files"),
+    NC_("shortcut window", "Close all files") },
 };
 
 void
@@ -85,6 +91,12 @@ _ide_editor_perspective_init_shortcuts (IdeEditorPerspective *self)
                                               I_("<Control>F9"),
                                               DZL_SHORTCUT_PHASE_CAPTURE | DZL_SHORTCUT_PHASE_GLOBAL,
                                               I_("dockbin.bottom-visible"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.editor.close-all"),
+                                              I_("<Primary><Shift>w"),
+                                              DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("editor.close-all"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              editor_perspective_entries,
