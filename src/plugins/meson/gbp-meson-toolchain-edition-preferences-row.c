@@ -76,6 +76,7 @@ meson_toolchain_edition_preferences_row_name_changed (GbpMesonToolchainEditionPr
       return;
     }
 
+  g_message ("%s", possible_path);
   if (!g_file_test (possible_path, G_FILE_TEST_EXISTS))
     {
       g_autoptr(GFile) source = g_file_new_for_path (self->toolchain_path);
