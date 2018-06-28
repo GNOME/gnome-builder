@@ -111,6 +111,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">true</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;alt&gt;s</property>
+                <property name="title" translatable="yes" context="shortcut window">Save all documents</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">true</property>
                 <property name="accelerator">&lt;ctrl&gt;w</property>
                 <property name="title" translatable="yes" context="shortcut window">Close the document</property>
               </object>
