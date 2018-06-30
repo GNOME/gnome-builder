@@ -41,6 +41,7 @@
 #include "diagnostics/ide-source-range.h"
 #include "files/ide-file-settings.h"
 #include "files/ide-file.h"
+#include "hover/ide-hover-private.h"
 #include "plugins/ide-extension-adapter.h"
 #include "plugins/ide-extension-set-adapter.h"
 #include "rename/ide-rename-provider.h"
@@ -113,6 +114,7 @@ typedef struct
   IdeOmniGutterRenderer       *omni_renderer;
 
   IdeCompletion               *completion;
+  IdeHover                    *hover;
 
   DzlBindingGroup             *file_setting_bindings;
   DzlSignalGroup              *buffer_signals;
@@ -845,21 +847,21 @@ ide_source_view__buffer_notify_language_cb (IdeSourceView *self,
                                             IdeBuffer     *buffer)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceLanguage *language;
-  const gchar *lang_id = NULL;
+  const gchar *lang_id;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
-    lang_id = gtk_source_language_get_id (language);
+  lang_id = ide_buffer_get_language_id (buffer);
 
-  /*
-   * Update the indenter, which is provided by a plugin.
-   */
+  /* Update the indenter, which is provided by a plugin. */
   if (priv->indenter_adapter != NULL)
     ide_extension_adapter_set_value (priv->indenter_adapter, lang_id);
   ide_source_view_update_auto_indent_override (self);
+
+  /* Reload hover providers by language */
+  _ide_hover_set_language (priv->hover, lang_id);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INDENTER]);
 }
 
@@ -1333,6 +1335,8 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
     }
 
   context = ide_buffer_get_context (buffer);
+
+  _ide_hover_set_context (priv->hover, context);
 
   priv->indenter_adapter = ide_extension_adapter_new (context,
                                                       peas_engine_get_default (),
@@ -5379,6 +5383,7 @@ ide_source_view_dispose (GObject *object)
       priv->delay_size_allocate_chainup = 0;
     }
 
+  g_clear_object (&priv->hover);
   g_clear_object (&priv->completion);
   g_clear_object (&priv->capture);
   g_clear_object (&priv->indenter_adapter);
@@ -6499,12 +6504,14 @@ ide_source_view_init (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  DZL_COUNTER_INC (instances);
+
+  gtk_widget_add_events (GTK_WIDGET (self), GDK_ENTER_NOTIFY_MASK);
+
   priv->include_regex = g_regex_new (INCLUDE_STATEMENTS,
                                      G_REGEX_OPTIMIZE,
                                      0,
                                      NULL);
-
-  DZL_COUNTER_INC (instances);
 
   priv->target_line_column = 0;
   priv->snippets = g_queue_new ();
@@ -6512,6 +6519,8 @@ ide_source_view_init (IdeSourceView *self)
   priv->font_scale = FONT_SCALE_NORMAL;
   priv->command_str = g_string_sized_new (32);
   priv->overscroll_num_lines = DEFAULT_OVERSCROLL_NUM_LINES;
+
+  priv->hover = _ide_hover_new (self);
 
   priv->file_setting_bindings = dzl_binding_group_new ();
   dzl_binding_group_bind (priv->file_setting_bindings, "auto-indent",
