@@ -23,8 +23,10 @@
 #include "object-modules.h"
 
 #include "debugger/ide-debugger-editor-addin.h"
+#include "debugger/ide-debugger-hover-provider.h"
 #include "editor/ide-editor-addin.h"
 #include "editor/ide-editor-view-addin.h"
+#include "hover/ide-hover-provider.h"
 
 void
 ide_debugger_register_types (PeasObjectModule *module)
@@ -32,4 +34,7 @@ ide_debugger_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,
                                               IDE_TYPE_DEBUGGER_EDITOR_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_HOVER_PROVIDER,
+                                              IDE_TYPE_DEBUGGER_HOVER_PROVIDER);
 }
