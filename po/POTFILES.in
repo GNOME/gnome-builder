@@ -51,6 +51,7 @@ src/libide/debugger/ide-debugger-breakpoints-view.ui
 src/libide/debugger/ide-debugger-controls.ui
 src/libide/debugger/ide-debugger-disassembly-view.ui
 src/libide/debugger/ide-debugger-editor-addin.c
+src/libide/debugger/ide-debugger-hover-provider.c
 src/libide/debugger/ide-debugger-libraries-view.ui
 src/libide/debugger/ide-debugger-locals-view.c
 src/libide/debugger/ide-debugger-locals-view.ui
@@ -63,6 +64,7 @@ src/libide/directory/ide-directory-vcs.c
 src/libide/doap/xml-reader.c
 src/libide/editorconfig/ide-editorconfig-file-settings.c
 src/libide/editor/gtk/menus.ui
+src/libide/editor/ide-editor-hover-provider.c
 src/libide/editor/ide-editor-layout-stack-controls.c
 src/libide/editor/ide-editor-layout-stack-controls.ui
 src/libide/editor/ide-editor-perspective-actions.c
