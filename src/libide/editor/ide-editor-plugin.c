@@ -22,12 +22,20 @@
 
 #include "object-modules.h"
 
+#include "editor/ide-editor-hover-provider.h"
 #include "editor/ide-editor-layout-stack-addin.h"
 #include "editor/ide-editor-workbench-addin.h"
 
 void
 ide_editor_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_LAYOUT_STACK_ADDIN, IDE_TYPE_EDITOR_LAYOUT_STACK_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_WORKBENCH_ADDIN, IDE_TYPE_EDITOR_WORKBENCH_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_HOVER_PROVIDER,
+                                              IDE_TYPE_EDITOR_HOVER_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_LAYOUT_STACK_ADDIN,
+                                              IDE_TYPE_EDITOR_LAYOUT_STACK_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              IDE_TYPE_EDITOR_WORKBENCH_ADDIN);
 }
