@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeDebuggerHoverControls" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="homogeneous">true</property>
+        <property name="halign">center</property>
+        <property name="orientation">horizontal</property>
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkToggleButton" id="nobreak">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">No break</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="breakpoint">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Breakpoint</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="countpoint">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Countpoint</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

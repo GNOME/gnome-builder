@@ -1,0 +1,19 @@
+popover.hoverer {
+  padding: 8px 12px;
+}
+
+popover.hoverer > box > :not(:first-child) {
+  margin-top: 8px;
+}
+
+popover.hoverer > box > box > .title {
+  opacity: 0.55;
+  font-weight: bold;
+  font-size: 0.8333em;
+  margin-bottom: 2px;
+}
+
+popover.hoverer > box > box box.linked button {
+  padding: 0px 6px;
+  font-size: 0.9em;
+}

@@ -41,6 +41,7 @@
 #include "diagnostics/ide-source-range.h"
 #include "files/ide-file-settings.h"
 #include "files/ide-file.h"
+#include "hover/ide-hover-private.h"
 #include "plugins/ide-extension-adapter.h"
 #include "plugins/ide-extension-set-adapter.h"
 #include "rename/ide-rename-provider.h"
@@ -113,6 +114,7 @@ typedef struct
   IdeOmniGutterRenderer       *omni_renderer;
 
   IdeCompletion               *completion;
+  IdeHover                    *hover;
 
   DzlBindingGroup             *file_setting_bindings;
   DzlSignalGroup              *buffer_signals;
@@ -845,21 +847,21 @@ ide_source_view__buffer_notify_language_cb (IdeSourceView *self,
                                             IdeBuffer     *buffer)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceLanguage *language;
-  const gchar *lang_id = NULL;
+  const gchar *lang_id;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
-    lang_id = gtk_source_language_get_id (language);
+  lang_id = ide_buffer_get_language_id (buffer);
 
-  /*
-   * Update the indenter, which is provided by a plugin.
-   */
+  /* Update the indenter, which is provided by a plugin. */
   if (priv->indenter_adapter != NULL)
     ide_extension_adapter_set_value (priv->indenter_adapter, lang_id);
   ide_source_view_update_auto_indent_override (self);
+
+  /* Reload hover providers by language */
+  _ide_hover_set_language (priv->hover, lang_id);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INDENTER]);
 }
 
@@ -1333,6 +1335,8 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
     }
 
   context = ide_buffer_get_context (buffer);
+
+  _ide_hover_set_context (priv->hover, context);
 
   priv->indenter_adapter = ide_extension_adapter_new (context,
                                                       peas_engine_get_default (),
@@ -2623,44 +2627,6 @@ ide_source_view_real_motion_notify_event (GtkWidget      *widget,
 cleanup:
   ide_source_view_reset_definition_highlight (self);
   return ret;
-}
-
-static gboolean
-ide_source_view_query_tooltip (GtkWidget  *widget,
-                               gint        x,
-                               gint        y,
-                               gboolean    keyboard_mode,
-                               GtkTooltip *tooltip)
-{
-  IdeSourceView *self = (IdeSourceView *)widget;
-  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkTextView *text_view = (GtkTextView *)widget;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (GTK_IS_TEXT_VIEW (text_view));
-  g_assert (GTK_IS_TOOLTIP (tooltip));
-
-  if (priv->buffer != NULL)
-    {
-      IdeDiagnostic *diagnostic;
-      GtkTextIter iter;
-
-      gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_WIDGET, x, y, &x, &y);
-      gtk_text_view_get_iter_at_location (text_view, &iter, x, y);
-      diagnostic = ide_buffer_get_diagnostic_at_iter (priv->buffer, &iter);
-
-      if (diagnostic)
-        {
-          g_autofree gchar *str = NULL;
-
-          str = ide_diagnostic_get_text_for_display (diagnostic);
-          gtk_tooltip_set_text (tooltip, str);
-
-          return TRUE;
-        }
-    }
-
-  return FALSE;
 }
 
 static void
@@ -5379,6 +5345,7 @@ ide_source_view_dispose (GObject *object)
       priv->delay_size_allocate_chainup = 0;
     }
 
+  g_clear_object (&priv->hover);
   g_clear_object (&priv->completion);
   g_clear_object (&priv->capture);
   g_clear_object (&priv->indenter_adapter);
@@ -5601,7 +5568,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->focus_out_event = ide_source_view_focus_out_event;
   widget_class->key_press_event = ide_source_view_key_press_event;
   widget_class->key_release_event = ide_source_view_key_release_event;
-  widget_class->query_tooltip = ide_source_view_query_tooltip;
   widget_class->scroll_event = ide_source_view_scroll_event;
   widget_class->size_allocate = ide_source_view_size_allocate;
   widget_class->style_updated = ide_source_view_real_style_updated;
@@ -6499,12 +6465,15 @@ ide_source_view_init (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
+  DZL_COUNTER_INC (instances);
+
+  gtk_widget_add_events (GTK_WIDGET (self), GDK_ENTER_NOTIFY_MASK);
+  gtk_widget_set_has_tooltip (GTK_WIDGET (self), FALSE);
+
   priv->include_regex = g_regex_new (INCLUDE_STATEMENTS,
                                      G_REGEX_OPTIMIZE,
                                      0,
                                      NULL);
-
-  DZL_COUNTER_INC (instances);
 
   priv->target_line_column = 0;
   priv->snippets = g_queue_new ();
@@ -6512,6 +6481,8 @@ ide_source_view_init (IdeSourceView *self)
   priv->font_scale = FONT_SCALE_NORMAL;
   priv->command_str = g_string_sized_new (32);
   priv->overscroll_num_lines = DEFAULT_OVERSCROLL_NUM_LINES;
+
+  priv->hover = _ide_hover_new (self);
 
   priv->file_setting_bindings = dzl_binding_group_new ();
   dzl_binding_group_bind (priv->file_setting_bindings, "auto-indent",
