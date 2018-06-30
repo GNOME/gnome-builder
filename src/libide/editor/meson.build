@@ -19,26 +19,20 @@ editor_sources = [
 ]
 
 editor_private_sources = [
+  'ide-editor-hover-provider.c',
   'ide-editor-layout-stack-addin.c',
-  'ide-editor-layout-stack-addin.h',
   'ide-editor-layout-stack-controls.c',
-  'ide-editor-layout-stack-controls.h',
   'ide-editor-perspective-actions.c',
   'ide-editor-perspective-shortcuts.c',
   'ide-editor-plugin.c',
   'ide-editor-print-operation.c',
-  'ide-editor-print-operation.h',
-  'ide-editor-private.h',
   'ide-editor-properties.c',
-  'ide-editor-properties.h',
   'ide-editor-search-bar.c',
   'ide-editor-search-bar-shortcuts.c',
-  'ide-editor-search-bar.h',
   'ide-editor-view-actions.c',
   'ide-editor-view-settings.c',
   'ide-editor-view-shortcuts.c',
   'ide-editor-workbench-addin.c',
-  'ide-editor-workbench-addin.h',
 ]
 
 libide_public_headers += files(editor_headers)

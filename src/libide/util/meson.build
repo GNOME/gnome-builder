@@ -30,6 +30,7 @@ util_sources = [
 ]
 
 util_private_sources = [
+  'gs-markdown.c',
   'ide-async-helper.c',
   'ide-battery-monitor.c',
   'ide-doc-seq.c',
