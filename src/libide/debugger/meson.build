@@ -31,26 +31,17 @@ debugger_sources = [
 debugger_private_sources = [
   'ide-debugger-actions.c',
   'ide-debugger-address-map.c',
-  'ide-debugger-address-map.h',
   'ide-debugger-breakpoints-view.c',
-  'ide-debugger-breakpoints-view.h',
   'ide-debugger-controls.c',
-  'ide-debugger-controls.h',
   'ide-debugger-disassembly-view.c',
-  'ide-debugger-disassembly-view.h',
   'ide-debugger-editor-addin.c',
-  'ide-debugger-editor-addin.h',
   'ide-debugger-fallbacks.c',
+  'ide-debugger-hover-provider.c',
   'ide-debugger-libraries-view.c',
-  'ide-debugger-libraries-view.h',
   'ide-debugger-locals-view.c',
-  'ide-debugger-locals-view.h',
   'ide-debugger-plugin.c',
-  'ide-debugger-private.h',
   'ide-debugger-registers-view.c',
-  'ide-debugger-registers-view.h',
   'ide-debugger-threads-view.c',
-  'ide-debugger-threads-view.h',
 ]
 
 libide_public_headers += files(debugger_headers)

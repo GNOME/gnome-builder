@@ -1,6 +1,6 @@
-/* object-modules.h
+/* ide-marked-view.h
  *
- * Copyright © 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,23 +18,21 @@
 
 #pragma once
 
-#include "config.h"
-
-#include <libpeas/peas.h>
+#include <gtk/gtk.h>
 
 #include "ide-version-macros.h"
 
+#include "hover/ide-marked-content.h"
+
 G_BEGIN_DECLS
 
-_IDE_EXTERN void ide_build_tool_register_types  (PeasObjectModule *module);
-_IDE_EXTERN void ide_buildconfig_register_types (PeasObjectModule *module);
-_IDE_EXTERN void ide_debugger_register_types    (PeasObjectModule *module);
-_IDE_EXTERN void ide_directory_register_types   (PeasObjectModule *module);
-_IDE_EXTERN void ide_editor_register_types      (PeasObjectModule *module);
-_IDE_EXTERN void ide_test_register_types        (PeasObjectModule *module);
+#define IDE_TYPE_MARKED_VIEW (ide_marked_view_get_type())
 
-#if ENABLE_WEBKIT
-_IDE_EXTERN void ide_webkit_register_types      (PeasObjectModule *module);
-#endif
+IDE_AVAILABLE_IN_3_30
+G_DECLARE_FINAL_TYPE (IdeMarkedView, ide_marked_view, IDE, MARKED_VIEW, GtkBin)
+
+IDE_AVAILABLE_IN_3_30
+GtkWidget *ide_marked_view_new (const gchar      *title,
+                                IdeMarkedContent *content);
 
 G_END_DECLS
