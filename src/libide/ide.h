@@ -118,6 +118,8 @@ G_BEGIN_DECLS
 #include "highlighting/ide-highlight-engine.h"
 #include "highlighting/ide-highlight-index.h"
 #include "highlighting/ide-highlighter.h"
+#include "hover/ide-hover-context.h"
+#include "hover/ide-hover-provider.h"
 #include "langserv/ide-langserv-client.h"
 #include "langserv/ide-langserv-completion-item.h"
 #include "langserv/ide-langserv-completion-provider.h"
