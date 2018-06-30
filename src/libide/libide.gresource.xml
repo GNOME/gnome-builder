@@ -41,6 +41,7 @@
     <file compressed="true" alias="shared/shared-debugger.css">../../data/themes/shared/shared-debugger.css</file>
     <file compressed="true" alias="shared/shared-editor.css">../../data/themes/shared/shared-editor.css</file>
     <file compressed="true" alias="shared/shared-greeter.css">../../data/themes/shared/shared-greeter.css</file>
+    <file compressed="true" alias="shared/shared-hoverer.css">../../data/themes/shared/shared-hoverer.css</file>
     <file compressed="true" alias="shared/shared-layout.css">../../data/themes/shared/shared-layout.css</file>
     <file compressed="true" alias="shared/shared-omnibar.css">../../data/themes/shared/shared-omnibar.css</file>
     <file compressed="true" alias="shared/shared-search.css">../../data/themes/shared/shared-search.css</file>
@@ -71,6 +72,7 @@
     <file preprocess="xml-stripblanks" alias="ide-debugger-breakpoints-view.ui">debugger/ide-debugger-breakpoints-view.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-debugger-controls.ui">debugger/ide-debugger-controls.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-debugger-disassembly-view.ui">debugger/ide-debugger-disassembly-view.ui</file>
+    <file preprocess="xml-stripblanks" alias="ide-debugger-hover-controls.ui">debugger/ide-debugger-hover-controls.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-debugger-libraries-view.ui">debugger/ide-debugger-libraries-view.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-debugger-locals-view.ui">debugger/ide-debugger-locals-view.ui</file>
     <file preprocess="xml-stripblanks" alias="ide-debugger-registers-view.ui">debugger/ide-debugger-registers-view.ui</file>
