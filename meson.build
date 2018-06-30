@@ -97,6 +97,8 @@ config_h.set10('ENABLE_NLS', true) # Always enabled
 config_h.set_quoted('SRCDIR', meson.source_root())
 config_h.set_quoted('BUILDDIR', meson.build_root())
 
+config_h.set10('ENABLE_WEBKIT', get_option('with_webkit'))
+
 add_global_arguments([
   '-DHAVE_CONFIG_H',
   '-I' + meson.build_root(), # config.h

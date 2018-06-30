@@ -1,0 +1,9 @@
+popover.hoverer {
+  padding: 8px 12px;
+}
+
+markedview .title {
+  opacity: 0.55;
+  font-weight: bold;
+  font-size: 0.8333em;
+}
