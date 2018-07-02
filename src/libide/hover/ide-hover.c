@@ -31,8 +31,8 @@
 #include "sourceview/ide-source-iter.h"
 #include "util/ide-gtk.h"
 
-#define GRACE_X 50
-#define GRACE_Y 50
+#define GRACE_X 20
+#define GRACE_Y 20
 #define MOTION_SETTLE_TIMEOUT_MSEC 500
 
 typedef enum
