@@ -36,8 +36,8 @@
         "--filesystem=/etc/ssl:ro",
         "--filesystem=/etc/pki:ro",
         "--filesystem=/etc/ca-certificates:ro",
-        "--filesystem=~/.local/share/flatpak",
-        "--filesystem=~/.local/share/meson",
+        "--filesystem=xdg-data/flatpak",
+        "--filesystem=xdg-data/meson",
         "--filesystem=/var/lib/flatpak"
     ],
     "x-run-args" : [
