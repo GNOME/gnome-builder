@@ -438,6 +438,22 @@ ide_hover_leave_notify_event_cb (IdeHover               *self,
 }
 
 static gboolean
+ide_hover_scroll_event_cb (IdeHover             *self,
+                           const GdkEventScroll *event,
+                           IdeSourceView        *view)
+{
+  g_assert (IDE_IS_HOVER (self));
+  g_assert (event != NULL);
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+  g_assert (!self->popover || IDE_IS_HOVER_POPOVER (self->popover));
+
+  if (self->popover != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->popover));
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
 ide_hover_motion_notify_event_cb (IdeHover             *self,
                                   const GdkEventMotion *event,
                                   IdeSourceView        *view)
@@ -591,6 +607,12 @@ ide_hover_init (IdeHover *self)
   dzl_signal_group_connect_object (self->signals,
                                    "motion-notify-event",
                                    G_CALLBACK (ide_hover_motion_notify_event_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  dzl_signal_group_connect_object (self->signals,
+                                   "scroll-event",
+                                   G_CALLBACK (ide_hover_scroll_event_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
