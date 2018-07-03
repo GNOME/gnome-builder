@@ -107,8 +107,12 @@ debugger_log (IdeDebuggerEditorAddin *self,
       while (NULL != (line = ide_line_reader_next (&reader, &line_len)))
         {
           vte_terminal_feed (VTE_TERMINAL (self->log_view), line, line_len);
-          if (line[line_len] == '\r' || line[line_len] == '\n')
-            vte_terminal_feed (VTE_TERMINAL (self->log_view), "\r\n", 2);
+
+          if ((line + line_len) < (str + len))
+            {
+              if (line[line_len] == '\r' || line[line_len] == '\n')
+                vte_terminal_feed (VTE_TERMINAL (self->log_view), "\r\n", 2);
+            }
         }
     }
 }
