@@ -105,7 +105,7 @@ struct _IdeOmniGutterRenderer
     GdkRGBA fg;
     GdkRGBA bg;
     gboolean bold;
-  } text, current, bkpt;
+  } text, current, bkpt, ctpt;
   GdkRGBA stopped_bg;
   struct {
     GdkRGBA add;
@@ -361,23 +361,6 @@ reload_style_colors (IdeOmniGutterRenderer *self,
   if (!style_get_is_bold (scheme, "current-line-number", &self->current.bold))
     self->current.bold = TRUE;
 
-  /*
-   * These debugger:: prefix values come from Builder's style-scheme xml
-   * as well as in the IdeBuffer class. Other style schemes may also
-   * support them, though.
-   */
-  if (!get_style_rgba (scheme, "debugger::current-breakpoint", BACKGROUND, &self->stopped_bg))
-    gdk_rgba_parse (&self->stopped_bg, "#fcaf3e");
-
-  if (!get_style_rgba (scheme, "debugger::breakpoint", FOREGROUND, &self->bkpt.fg))
-    get_style_rgba (scheme, "selection", FOREGROUND, &self->bkpt.fg);
-
-  if (!get_style_rgba (scheme, "debugger::breakpoint", BACKGROUND, &self->bkpt.bg))
-    get_style_rgba (scheme, "selection", BACKGROUND, &self->bkpt.bg);
-
-  if (!style_get_is_bold (scheme, "debugger::breakpoint", &self->bkpt.bold))
-    self->bkpt.bold = FALSE;
-
   /* These gutter:: prefix values come from Builder's style-scheme xml
    * files, but other style schemes may also support them now too.
    */
@@ -389,6 +372,34 @@ reload_style_colors (IdeOmniGutterRenderer *self,
 
   if (!get_style_rgba (scheme, "gutter::removed-line", FOREGROUND, &self->changes.remove))
     gdk_rgba_parse (&self->changes.remove, "#ef2929");
+
+  /*
+   * These debugger:: prefix values come from Builder's style-scheme xml
+   * as well as in the IdeBuffer class. Other style schemes may also
+   * support them, though.
+   */
+  if (!get_style_rgba (scheme, "debugger::current-breakpoint", BACKGROUND, &self->stopped_bg))
+    gdk_rgba_parse (&self->stopped_bg, "#fcaf3e");
+
+  if (!get_style_rgba (scheme, "debugger::breakpoint", FOREGROUND, &self->bkpt.fg))
+    get_style_rgba (scheme, "selection", FOREGROUND, &self->bkpt.fg);
+  if (!get_style_rgba (scheme, "debugger::breakpoint", BACKGROUND, &self->bkpt.bg))
+    get_style_rgba (scheme, "selection", BACKGROUND, &self->bkpt.bg);
+  if (!style_get_is_bold (scheme, "debugger::breakpoint", &self->bkpt.bold))
+    self->bkpt.bold = FALSE;
+
+  /* Slight different color for countpoint, fallback to mix(selection,diff:add) */
+  if (!get_style_rgba (scheme, "debugger::countpoint", FOREGROUND, &self->ctpt.fg))
+    get_style_rgba (scheme, "selection", FOREGROUND, &self->ctpt.fg);
+  if (!get_style_rgba (scheme, "debugger::countpoint", BACKGROUND, &self->ctpt.bg))
+    {
+      get_style_rgba (scheme, "selection", BACKGROUND, &self->ctpt.bg);
+      self->ctpt.bg.red = (self->ctpt.bg.red + self->changes.add.red) / 2.0;
+      self->ctpt.bg.green = (self->ctpt.bg.green + self->changes.add.green) / 2.0;
+      self->ctpt.bg.blue = (self->ctpt.bg.blue + self->changes.add.blue) / 2.0;
+    }
+  if (!style_get_is_bold (scheme, "debugger::countpoint", &self->ctpt.bold))
+    self->ctpt.bold = FALSE;
 }
 
 static void
@@ -886,7 +897,10 @@ draw_breakpoint_bg (IdeOmniGutterRenderer        *self,
   cairo_line_to (cr, area.x, dzl_cairo_rectangle_y2 (&area));
   cairo_close_path (cr);
 
-  rgba = self->bkpt.bg;
+  if (info->is_countpoint)
+    rgba = self->ctpt.bg;
+  else
+    rgba = self->bkpt.bg;
 
   /*
    * Tweak the brightness based on if we are in pre-light and
