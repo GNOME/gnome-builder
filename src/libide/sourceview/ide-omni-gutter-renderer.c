@@ -716,47 +716,6 @@ ide_omni_gutter_renderer_query_activatable (GtkSourceGutterRenderer *renderer,
   return TRUE;
 }
 
-static gboolean
-ide_omni_gutter_renderer_query_tooltip (GtkSourceGutterRenderer *renderer,
-                                        GtkTextIter             *iter,
-                                        GdkRectangle            *area,
-                                        gint                     x,
-                                        gint                     y,
-                                        GtkTooltip              *tooltip)
-{
-  IdeOmniGutterRenderer *self = (IdeOmniGutterRenderer *)renderer;
-  g_autoptr(GString) text = NULL;
-  GtkTextBuffer *buffer;
-  IdeDiagnostic *diag;
-
-  g_assert (IDE_IS_OMNI_GUTTER_RENDERER (renderer));
-  g_assert (iter != NULL);
-  g_assert (area != NULL);
-  g_assert (GTK_IS_TOOLTIP (tooltip));
-
-  text = g_string_new (NULL);
-
-  buffer = gtk_text_iter_get_buffer (iter);
-  if ((diag = ide_buffer_get_diagnostic_at_iter (IDE_BUFFER (buffer), iter)))
-    {
-      g_autofree gchar *disp = NULL;
-
-      disp = ide_diagnostic_get_text_for_display (diag);
-      g_string_append (text, disp);
-    }
-
-  if (self->breakpoints != NULL)
-    {
-      if (text->len > 0)
-        g_string_append (text, "\n\n");
-      g_string_append (text, _("Click to toggle breakpoint"));
-    }
-
-  gtk_tooltip_set_text (tooltip, text->str);
-
-  return text->len > 0;
-}
-
 static void
 animate_at_iter (IdeOmniGutterRenderer *self,
                  GdkRectangle          *area,
@@ -1563,7 +1522,6 @@ ide_omni_gutter_renderer_class_init (IdeOmniGutterRendererClass *klass)
   renderer_class->begin = ide_omni_gutter_renderer_begin;
   renderer_class->end = ide_omni_gutter_renderer_end;
   renderer_class->query_activatable = ide_omni_gutter_renderer_query_activatable;
-  renderer_class->query_tooltip = ide_omni_gutter_renderer_query_tooltip;
   renderer_class->activate = ide_omni_gutter_renderer_activate;
 
   properties [PROP_SHOW_LINE_CHANGES] =
