@@ -1224,6 +1224,12 @@ gbp_gdb_debugger_insert_breakpoint_async (IdeDebugger           *debugger,
   if (!ide_debugger_breakpoint_get_enabled (breakpoint))
     g_string_append (command, " -d");
 
+  /*
+   * We don't have a strict "countpoint", so we just set a really high
+   * number for the ignore count in gdb.
+   */
+  if (ide_debugger_breakpoint_get_mode (breakpoint) == IDE_DEBUGGER_BREAK_COUNTPOINT)
+    g_string_append_printf (command, " -i %d", G_MAXINT);
 
   file = ide_debugger_breakpoint_get_file (breakpoint);
   func = ide_debugger_breakpoint_get_function (breakpoint);
