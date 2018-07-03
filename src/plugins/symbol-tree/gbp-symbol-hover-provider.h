@@ -1,6 +1,6 @@
-/* symbol-tree-plugin.c
+/* gbp-symbol-hover-provider.h
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <libpeas/peas.h>
+#pragma once
+
 #include <ide.h>
 
-#include "gbp-symbol-layout-stack-addin.h"
-#include "gbp-symbol-hover-provider.h"
+G_BEGIN_DECLS
 
-void
-gbp_symbol_tree_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_LAYOUT_STACK_ADDIN,
-                                              GBP_TYPE_SYMBOL_LAYOUT_STACK_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_HOVER_PROVIDER,
-                                              GBP_TYPE_SYMBOL_HOVER_PROVIDER);
-}
+#define GBP_TYPE_SYMBOL_HOVER_PROVIDER (gbp_symbol_hover_provider_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpSymbolHoverProvider, gbp_symbol_hover_provider, GBP, SYMBOL_HOVER_PROVIDER, GObject)
+
+G_END_DECLS

@@ -7,6 +7,7 @@ symbol_tree_resources = gnome.compile_resources(
 )
 
 symbol_tree_sources = [
+  'gbp-symbol-hover-provider.c',
   'gbp-symbol-layout-stack-addin.c',
   'gbp-symbol-layout-stack-addin.h',
   'gbp-symbol-menu-button.c',
