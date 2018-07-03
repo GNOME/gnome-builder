@@ -6,15 +6,10 @@
          xmlns="http://usefulinc.com/ns/doap#">
 
   <name xml:lang="en">Builder</name>
-  <shortdesc xml:lang="en">
-    An IDE for writing GNOME-based software
-  </shortdesc>
-  <description xml:lang="en">
-    Builder is an IDE for writing GNOME-based software.
-    It is currently under heavy development.
-  </description>
+  <shortdesc xml:lang="en">An IDE for writing GNOME-based software</shortdesc>
+  <description xml:lang="en">Builder is an IDE for writing GNOME-based software. It is currently under heavy development.</description>
   <homepage rdf:resource="https://wiki.gnome.org/Apps/Builder" />
-  <download-page rdf:resource="http://download.gnome.org/sources/gnome-builder/" />
+  <download-page rdf:resource="https://download.gnome.org/sources/gnome-builder/" />
   <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gnome-builder/issues" />
 
   <category rdf:resource="http://api.gnome.org/doap-extensions#apps" />
