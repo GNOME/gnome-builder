@@ -143,7 +143,6 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
 
           label = g_object_new (GTK_TYPE_LABEL,
                                 "visible", TRUE,
-                                "margin-left", 6,
                                 "xalign", 0.0f,
                                 "use-markup", TRUE,
                                 "label", markup,
