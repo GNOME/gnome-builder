@@ -222,7 +222,8 @@ discover_environ (GbpFlatpakManifest *self,
 
   env = ide_configuration_get_environment (IDE_CONFIGURATION (self));
 
-  if ((obj = json_object_get_object_member (build_options, "env")))
+  if (json_object_has_member (build_options, "env") &&
+      (obj = json_object_get_object_member (build_options, "env")))
     {
       JsonObjectIter iter;
       const gchar *key;
