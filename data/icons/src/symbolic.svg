@@ -41,9 +41,9 @@
      inkscape:window-height="1016"
      id="namedview88"
      showgrid="false"
-     inkscape:zoom="2"
-     inkscape:cx="104.73034"
-     inkscape:cy="30.628214"
+     inkscape:zoom="1"
+     inkscape:cx="58.951733"
+     inkscape:cy="3.8723188"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -2013,16 +2013,16 @@
          d="m 174.07536,195.54759 c -0.84433,0 -1.5,0.67241 -1.5,1.51674 v 4.98326 l -1,1 1,1.09375 v 4.85938 c 0,1.09375 0.7266,1.56897 1.5,1.54687"
          style="color:#000000;overflow:visible;fill:none;stroke:#2e3436;stroke-width:0.99999976;stroke-linejoin:round;stroke-opacity:1;enable-background:new" />
       <path
-         sodipodi:nodetypes="cccc"
+         sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
          id="path1631"
-         d="m 164.07536,210.02864 v -3.98105 h 4 c 0,0 2,0.003 2,2.00325 v 1.99675"
+         d="m 164.07536,210.02864 v -4.98105 h 4 c 0,0 2,0.003 2,2.00325 v 2.99675"
          style="color:#000000;overflow:visible;fill:none;stroke:#2e3436;stroke-width:2;stroke-linecap:square;stroke-opacity:1;enable-background:new" />
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path1633"
-         d="m 167.07536,210.04759 v -4"
+         d="m 167.07536,210.04759 v -5"
          style="color:#000000;overflow:visible;fill:none;stroke:#2e3436;stroke-width:2;stroke-linecap:square;stroke-opacity:1;enable-background:new" />
       <path
          style="color:#000000;overflow:visible;fill:none;stroke:#2e3436;stroke-width:0.99999976;stroke-linejoin:round;stroke-opacity:1;enable-background:new"
@@ -2284,13 +2284,13 @@
          sodipodi:nodetypes="ccccccc" />
       <path
          style="color:#000000;overflow:visible;fill:none;stroke:#2e3436;stroke-width:2;stroke-linecap:square;stroke-opacity:1;enable-background:new"
-         d="m 170.07536,210.04759 v -1.99675 c 0,-2.00025 -2,-2.00325 -2,-2.00325 0,0 -2,0 -2,2"
+         d="m 170.07536,210.04759 v -2.99675 c 0,-2.00025 -2,-2.00325 -2,-2.00325 0,0 -2,0 -2,2"
          id="path1896"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cccc" />
       <path
          style="color:#000000;overflow:visible;fill:none;stroke:#2e3436;stroke-width:2;stroke-linecap:square;stroke-opacity:1;enable-background:new"
-         d="m 166.07536,210.04759 v -4"
+         d="m 166.07536,210.04759 v -5"
          id="path1898"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cc" />
