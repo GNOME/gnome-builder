@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <g color="#000" font-weight="400" font-family="sans-serif" white-space="normal" fill="#2e3436" fill-rule="evenodd">
+        <path d="M3.988 3.99a1 1 0 0 0-.693 1.719L4.592 7 3.295 8.291a1 1 0 1 0 1.41 1.418l2.008-2a1 1 0 0 0 0-1.418l-2.008-2a1 1 0 0 0-.717-.3zM9 10a1 1 0 1 0 0 2h3a1 1 0 1 0 0-2z" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal" overflow="visible"/>
+    </g>
+</svg>
