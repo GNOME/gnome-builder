@@ -1,26 +1,46 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg xmlns:cc='http://creativecommons.org/ns#' xmlns:dc='http://purl.org/dc/elements/1.1/' sodipodi:docname='builder-unit-tests-pass-symbolic.svg' height='16' id='svg7384' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns:svg='http://www.w3.org/2000/svg' version='1.1' inkscape:version='0.92.2 (5c3e80d, 2017-08-06)' width='16' xmlns='http://www.w3.org/2000/svg'>
-  <metadata id='metadata90'>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="16"
+   version="1.1"
+   id="svg7384"
+   height="16">
+  <metadata
+     id="metadata90">
     <rdf:RDF>
-      <cc:Work rdf:about=''>
+      <cc:Work
+         rdf:about="">
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource='http://purl.org/dc/dcmitype/StillImage'/>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>Gnome Symbolic Icon Theme</dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview inkscape:bbox-nodes='true' inkscape:bbox-paths='true' bordercolor='#666666' borderlayer='true' borderopacity='1' inkscape:current-layer='layer2' inkscape:cx='38.707076' inkscape:cy='14.019941' gridtolerance='10' inkscape:guide-bbox='true' guidetolerance='10' id='namedview88' inkscape:object-nodes='true' inkscape:object-paths='true' objecttolerance='10' pagecolor='#555753' inkscape:pageopacity='1' inkscape:pageshadow='2' showborder='false' showgrid='false' showguides='true' inkscape:showpageshadow='false' inkscape:snap-bbox='false' inkscape:snap-bbox-midpoints='false' inkscape:snap-global='true' inkscape:snap-grids='true' inkscape:snap-intersection-paths='true' inkscape:snap-nodes='true' inkscape:snap-others='false' inkscape:snap-to-guides='true' inkscape:window-height='1376' inkscape:window-maximized='1' inkscape:window-width='3440' inkscape:window-x='0' inkscape:window-y='27' inkscape:zoom='1'>
-    <inkscape:grid empspacing='2' enabled='true' id='grid4866' originx='-60.057285' originy='-40' snapvisiblegridlinesonly='true' spacingx='1' spacingy='1' type='xygrid' visible='true'/>
-  </sodipodi:namedview>
-  <title id='title9167'>Gnome Symbolic Icon Theme</title>
-  <defs id='defs7386'/>
-  <g inkscape:groupmode='layer' id='layer2' inkscape:label='actions' transform='translate(-60.057285,40)'>
-    
-    <path inkscape:connector-curvature='0' d='m 68.234375,-38.996094 c -2.156013,-0.07063 -4.277439,0.859461 -5.681641,2.59961 -1.872268,2.320198 -2.068056,5.582154 -0.486328,8.109375 1.581728,2.527221 4.600697,3.777304 7.50586,3.107421 2.905162,-0.669882 5.073282,-3.115413 5.388672,-6.080078 a 1.0001,1.0001 0 1 0 -1.988282,-0.210937 c -0.225944,2.123878 -1.768359,3.863848 -3.849609,4.34375 -2.08125,0.479902 -4.228183,-0.410209 -5.361328,-2.220703 -1.133146,-1.810494 -0.993632,-4.130785 0.347656,-5.792969 1.341288,-1.662184 3.578862,-2.287561 5.587891,-1.5625 a 1.0001,1.0001 0 1 0 0.679687,-1.880859 c -0.701087,-0.253024 -1.423907,-0.388568 -2.142578,-0.41211 z' id='circle1616' style='color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate'/>
-    <path inkscape:connector-curvature='0' d='m 73.167969,-37.457031 -5.292969,5.292969 -2.417969,-2.417969 -1.414062,1.414062 3.832031,3.832031 6.707031,-6.707031 z' id='path1624' style='color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate'/>
+  <title
+     id="title9167">Gnome Symbolic Icon Theme</title>
+  <defs
+     id="defs7386" />
+  <g
+     transform="translate(-60.020469,40.3563)"
+     id="layer1" />
+  <g
+     transform="translate(-60.020469,40.3563)"
+     id="layer2">
+    <path
+       id="circle1616"
+       d="m 68.150391,-39.353516 c -2.20211,-0.05692 -4.36148,0.930849 -5.75,2.748047 -1.851362,2.422931 -1.918399,5.776032 -0.166016,8.271485 1.752383,2.495452 4.93036,3.571252 7.837891,2.652343 2.907531,-0.918908 4.890625,-3.624544 4.890625,-6.673828 a 1.0001,1.0001 0 1 0 -2,0 c 0,2.185049 -1.408716,4.109109 -3.492188,4.767578 -2.083471,0.65847 -4.343891,-0.106345 -5.599609,-1.894531 -1.255719,-1.788185 -1.207504,-4.173938 0.11914,-5.910156 1.326644,-1.736218 3.614629,-2.407774 5.669922,-1.666016 a 1.0008692,1.0008692 0 1 0 0.679688,-1.882812 c -0.717052,-0.258785 -1.455417,-0.393136 -2.189453,-0.41211 z"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#2e3436;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+    <path
+       id="path1624"
+       d="m 73.130859,-37.8125 -5.292968,5.292969 -2.417969,-2.417969 -1.414063,1.414062 3.832032,3.832032 6.707031,-6.707032 z"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#2e3436;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
   </g>
-  <g inkscape:groupmode='layer' id='layer1' inkscape:label='autocomplete' transform='translate(-60.057285,40)'/>
-  <g inkscape:groupmode='layer' id='layer3' inkscape:label='symboltree' transform='translate(-60.057285,40)'/>
+  <g
+     transform="translate(-60.020469,40.3563)"
+     id="layer3" />
 </svg>
