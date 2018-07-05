@@ -120,6 +120,7 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
   tt = g_strdup_printf ("<tt><span size='smaller'>%s</span></tt>", name);
   gtk_container_add (GTK_CONTAINER (box),
                      g_object_new (GTK_TYPE_LABEL,
+                                   "ellipsize", PANGO_ELLIPSIZE_END,
                                    "visible", TRUE,
                                    "xalign", 0.0f,
                                    "margin-bottom", 3,
