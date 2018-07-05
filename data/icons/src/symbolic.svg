@@ -41,9 +41,9 @@
      inkscape:window-height="1016"
      id="namedview88"
      showgrid="false"
-     inkscape:zoom="2"
-     inkscape:cx="-17.0253"
-     inkscape:cy="-78.484858"
+     inkscape:zoom="1"
+     inkscape:cx="227.0909"
+     inkscape:cy="8.156015"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -1490,15 +1490,16 @@
          inkscape:connector-curvature="0" />
     </g>
     <g
-       transform="translate(56.586846,-195.02344)"
+       transform="translate(56.864197,-195.02344)"
        id="g17567"
        inkscape:label="lang-define">
       <path
-         style="color:#000000;overflow:visible;color-interpolation-filters:linearRGB;fill:#2e3436;fill-opacity:1;stroke-width:2;stroke-linecap:round;image-rendering:auto;text-rendering:auto;enable-background:accumulate;stroke:none"
-         d="m 8,49 a 7,7 0 0 0 -7,7 7,7 0 0 0 7,7 7,7 0 0 0 7,-7 7,7 0 0 0 -7,-7 z m -1.7011719,3.972656 h 1.9726563 l -0.2226563,0.972656 h 1.0664063 l 0.2226562,-0.972656 h 1.9707034 l -0.222656,0.972656 h 2.033203 l -0.191407,1.083985 h -2.033203 l -0.425781,1.910156 h 2.033203 l -0.191406,1.083985 h -2.033203 l -0.207032,0.970703 H 8.0976562 L 8.3046875,58.023438 H 7.2402344 L 7.0332031,58.994141 H 5.0605469 L 5.2675781,58.023438 H 3.2792969 L 3.4707031,56.939453 H 5.4589844 L 5.8847656,55.029297 H 3.8964844 l 0.1914062,-1.083985 h 1.9882813 z m 1.5585938,2.056641 -0.4257813,1.910156 h 1.0644532 l 0.4277343,-1.910156 z"
-         transform="translate(163.13581,147)"
+         style="color:#000000;overflow:visible;color-interpolation-filters:linearRGB;fill:#2e3436;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;image-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         d="m 228,0.9765625 c -3.86599,0 -7,3.134007 -7,7 0,3.8659935 3.13401,6.9999995 7,6.9999995 3.86599,0 7,-3.134006 7,-6.9999995 0,-3.865993 -3.13401,-7 -7,-7 z M 225.5293,5 h 2 l -0.17578,1 h 2 l 0.17578,-1 h 1.90759 l -0.17578,1 H 232 v 1 h -0.91663 l -0.25915,2 H 232 v 1 h -1.35352 l -0.17578,1 h -2 l 0.17578,-1 h -2 l -0.17578,1 h -1.86931 l 0.13844,-1 H 224 V 9 h 0.8989 l 0.27688,-2 H 224 V 6 h 1.35352 z m 1.42244,1.8879813 -0.4449,2.2053676 h 2.50408 l 0.42944,-2.2053676 z"
+         transform="translate(-56.864197,195.02344)"
          id="path17573"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ssssscccccccccccccccccccccccccccccccccc" />
       <rect
          style="fill:none"
          id="rect17569"
