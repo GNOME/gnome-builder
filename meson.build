@@ -230,6 +230,10 @@ add_project_link_arguments(global_link_args, language: 'c')
 
 if get_option('with_tcmalloc')
   tcmalloc_ldflags = [
+    '-fno-builtin-malloc',
+    '-fno-builtin-calloc',
+    '-fno-builtin-realloc',
+    '-fno-builtin-free',
     '-Wl,--push-state,--no-as-needed',
     '-ltcmalloc_minimal',
     '-Wl,--pop-state'
