@@ -584,6 +584,8 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_flatpak_clone_widget_clone_async);
+  ide_task_set_release_on_propagate (task, FALSE);
 
   src = get_source (self, &error);
   if (src == NULL)
