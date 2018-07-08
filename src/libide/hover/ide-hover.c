@@ -170,7 +170,7 @@ ide_hover_popover_destroy_cb (IdeHover        *self,
   self->state = IDE_HOVER_STATE_INITIAL;
 }
 
-static void
+static gboolean
 ide_hover_get_bounds (IdeHover    *self,
                       GtkTextIter *begin,
                       GtkTextIter *end)
@@ -187,7 +187,7 @@ ide_hover_get_bounds (IdeHover    *self,
     {
       memset (begin, 0, sizeof *begin);
       memset (end, 0, sizeof *end);
-      return;
+      return FALSE;
     }
 
   g_assert (GTK_IS_TEXT_VIEW (view));
@@ -198,7 +198,8 @@ ide_hover_get_bounds (IdeHover    *self,
                                          self->motion_y,
                                          &x, &y);
 
-  gtk_text_view_get_iter_at_location (view, &iter, x, y);
+  if (!gtk_text_view_get_iter_at_location (view, &iter, x, y))
+    return FALSE;
 
   if (!_ide_source_iter_inside_word (&iter))
     {
@@ -208,7 +209,7 @@ ide_hover_get_bounds (IdeHover    *self,
       *end = *begin;
       gtk_text_iter_forward_to_line_end (end);
 
-      return;
+      return TRUE;
     }
 
   if (!_ide_source_iter_starts_full_word (&iter))
@@ -218,6 +219,8 @@ ide_hover_get_bounds (IdeHover    *self,
   *end = iter;
 
   _ide_source_iter_forward_full_word_end (end);
+
+  return TRUE;
 }
 
 static gboolean
@@ -240,6 +243,10 @@ ide_hover_motion_timeout_cb (gpointer data)
 
   /* Ignore signal if we're already processing */
   if (self->state != IDE_HOVER_STATE_INITIAL)
+    return G_SOURCE_REMOVE;
+
+  /* Make sure we're over text */
+  if (!ide_hover_get_bounds (self, &begin, &end))
     return G_SOURCE_REMOVE;
 
   if (self->popover == NULL)
@@ -281,8 +288,6 @@ ide_hover_motion_timeout_cb (gpointer data)
     }
 
   self->state = IDE_HOVER_STATE_DISPLAY;
-
-  ide_hover_get_bounds (self, &begin, &end);
   gtk_text_view_get_iter_location (GTK_TEXT_VIEW (view), &begin, &begin_rect);
   gtk_text_view_get_iter_location (GTK_TEXT_VIEW (view), &end, &end_rect);
   gdk_rectangle_union (&begin_rect, &end_rect, &rect);
