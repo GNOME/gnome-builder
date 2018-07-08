@@ -1408,15 +1408,15 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
 }
 
 static gboolean
-is_closing_char (gunichar ch)
+is_opening_char (gunichar ch)
 {
   switch (ch)
     {
-    case '}':
-    case ')':
+    case '{':
+    case '(':
     case '"':
     case '\'':
-    case ']':
+    case '[':
       return TRUE;
 
     default:
@@ -1575,7 +1575,6 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
   const gchar *lang_id;
   GtkTextIter iter;
   GtkTextIter prev_iter;
-  GtkTextIter next_iter;
   gunichar next_ch = 0;
   gchar ch[2] = { 0 };
 
@@ -1656,16 +1655,13 @@ ide_source_view_maybe_insert_match (IdeSourceView *self,
    *
    *  - We are at EOF
    *  - The next character is whitespace
-   *  - The next character is a closing brace.
+   *  - The next character is punctuation
+   *  - The next character is not a opening brace.
    *  - If the char is ", then there must be an even number already on
    *    the current line.
    */
 
-  next_iter = iter;
-  if (gtk_text_iter_forward_char (&next_iter))
-    next_ch = gtk_text_iter_get_char (&next_iter);
-
-  if (!next_ch || g_unichar_isspace (next_ch) || is_closing_char (next_ch))
+  if (!next_ch || g_unichar_isspace (next_ch) || (g_unichar_ispunct (next_ch) && !is_opening_char (next_ch)))
     {
       /*
        * Special case for working with double quotes.
