@@ -500,6 +500,12 @@ ide_git_clone_widget_clone_async (IdeGitCloneWidget   *self,
       return;
     }
 
+  if (g_strcmp0 ("ssh", ide_vcs_uri_get_scheme (uri)) == 0)
+    {
+      if (ide_vcs_uri_get_user (uri) == NULL)
+        ide_vcs_uri_set_user (uri, g_get_user_name ());
+    }
+
   if (self->child_name)
     {
       g_autoptr(GFile) child = g_file_get_child (location, self->child_name);
