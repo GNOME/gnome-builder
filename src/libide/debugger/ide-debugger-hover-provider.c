@@ -30,8 +30,8 @@
 #include "debugger/ide-debugger-hover-controls.h"
 #include "debugger/ide-debugger-hover-provider.h"
 #include "files/ide-file.h"
-#include "hover/ide-marked-content.h"
 #include "threading/ide-task.h"
+#include "util/ide-marked-content.h"
 
 struct _IdeDebuggerHoverProvider
 {
