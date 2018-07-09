@@ -6,6 +6,8 @@ util_headers = [
   'ide-gtk.h',
   'ide-line-reader.h',
   'ide-list-inline.h',
+  'ide-marked-content.h',
+  'ide-marked-view.h',
   'ide-posix.h',
   'ide-progress.h',
   'ide-ref-ptr.h',
@@ -21,6 +23,8 @@ util_sources = [
   'ide-glib.c',
   'ide-gtk.c',
   'ide-line-reader.c',
+  'ide-marked-content.c',
+  'ide-marked-view.c',
   'ide-posix.c',
   'ide-progress.c',
   'ide-ref-ptr.c',
@@ -38,8 +42,13 @@ util_private_sources = [
   'ptyintercept.c',
 ]
 
+util_enums = [
+  'ide-marked-content.h',
+]
+
 libide_public_headers += files(util_headers)
 libide_public_sources += files(util_sources)
 libide_private_sources += files(util_private_sources)
+libide_enum_headers += files(util_enums)
 
 install_headers(util_headers, subdir: join_paths(libide_header_subdir, 'util'))
