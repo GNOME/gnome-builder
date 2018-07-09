@@ -26,7 +26,7 @@
 # include <webkit2/webkit2.h>
 #endif
 
-#include "hover/ide-marked-view.h"
+#include "util/ide-marked-view.h"
 #include "util/gs-markdown.h"
 
 struct _IdeMarkedView

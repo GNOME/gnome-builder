@@ -22,7 +22,7 @@
 
 #include "hover/ide-hover-context.h"
 #include "hover/ide-hover-provider.h"
-#include "hover/ide-marked-content.h"
+#include "util/ide-marked-content.h"
 
 G_BEGIN_DECLS
 

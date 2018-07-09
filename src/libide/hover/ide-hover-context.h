@@ -25,7 +25,7 @@
 
 #include "ide-version-macros.h"
 
-#include "ide-marked-content.h"
+#include "util/ide-marked-content.h"
 
 G_BEGIN_DECLS
 

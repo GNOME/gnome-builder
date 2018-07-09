@@ -22,7 +22,7 @@
 
 #define G_LOG_DOMAIN "ide-marked-content"
 
-#include "ide-marked-content.h"
+#include "util/ide-marked-content.h"
 
 #define IDE_MARKED_CONTENT_MAGIC 0x81124633
 
