@@ -16,7 +16,6 @@
 #include "files/ide-indent-style.h"
 #include "files/ide-spaces-style.h"
 #include "highlighting/ide-highlighter.h"
-#include "hover/ide-marked-content.h"
 #include "langserv/ide-langserv-types.h"
 #include "runtimes/ide-runtime.h"
 #include "sourceview/ide-source-view.h"
@@ -25,6 +24,7 @@
 #include "threading/ide-task.h"
 #include "threading/ide-thread-pool.h"
 #include "transfers/ide-transfer.h"
+#include "util/ide-marked-content.h"
 #include "vcs/ide-vcs-config.h"
 #include "vcs/ide-vcs-file-info.h"
 

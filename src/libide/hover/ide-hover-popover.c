@@ -24,7 +24,7 @@
 
 #include "hover/ide-hover-context-private.h"
 #include "hover/ide-hover-popover-private.h"
-#include "hover/ide-marked-view.h"
+#include "util/ide-marked-view.h"
 
 struct _IdeHoverPopover
 {
