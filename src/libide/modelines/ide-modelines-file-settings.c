@@ -92,7 +92,7 @@ ide_modelines_file_settings_constructed (GObject *object)
                            "buffer-loaded",
                            G_CALLBACK (buffer_loaded_cb),
                            self,
-                           G_CONNECT_SWAPPED);
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (buffer_manager,
                            "buffer-saved",
