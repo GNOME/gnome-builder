@@ -138,9 +138,9 @@ create_launcher (IdeAutotoolsMakeStage  *self,
    */
   if (dzl_str_equal0 ("all", make_target))
     {
-      ide_subprocess_launcher_setenv (launcher, "LANG", "C", TRUE);
-      ide_subprocess_launcher_setenv (launcher, "LC_ALL", "C", TRUE);
-      ide_subprocess_launcher_setenv (launcher, "LC_MESSAGES", "C", TRUE);
+      ide_subprocess_launcher_setenv (launcher, "LANG", "C.UTF-8", TRUE);
+      ide_subprocess_launcher_setenv (launcher, "LC_ALL", "C.UTF-8", TRUE);
+      ide_subprocess_launcher_setenv (launcher, "LC_MESSAGES", "C.UTF-8", TRUE);
     }
 
   return g_steal_pointer (&launcher);
