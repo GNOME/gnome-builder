@@ -134,8 +134,8 @@ find_property_type (GType        type,
   for (guint i = 0; i < types->len; i++)
     {
       GType prereq_type = g_array_index (types, GType, i);
-      GObjectClass *klass = NULL;
-      GTypeInterface *iface = NULL;
+      GObjectClass *klass, *unref_class = NULL;
+      GTypeInterface *iface, *unref_iface = NULL;
       GParamSpec *pspec = NULL;
       GType ret = G_TYPE_INVALID;
 
@@ -147,12 +147,14 @@ find_property_type (GType        type,
 
       if (G_TYPE_IS_OBJECT (prereq_type))
         {
-          klass = g_type_class_ref (prereq_type);
+          if (!(klass = g_type_class_peek (prereq_type)))
+            klass = unref_class = g_type_class_ref (prereq_type);
           pspec = g_object_class_find_property (klass, name);
         }
       else if (G_TYPE_IS_INTERFACE (prereq_type))
         {
-          iface = g_type_default_interface_ref (prereq_type);
+          if (!(iface = g_type_default_interface_peek (prereq_type)))
+            iface = unref_iface = g_type_default_interface_ref (prereq_type);
           pspec = g_object_interface_find_property (iface, name);
         }
       else
@@ -161,8 +163,8 @@ find_property_type (GType        type,
       if (pspec != NULL)
         ret = pspec->value_type;
 
-      dzl_clear_pointer (&klass, g_type_class_unref);
-      dzl_clear_pointer (&iface, g_type_default_interface_unref);
+      dzl_clear_pointer (&unref_class, g_type_class_unref);
+      dzl_clear_pointer (&unref_iface, g_type_default_interface_unref);
 
       if (ret != G_TYPE_INVALID)
         return ret;

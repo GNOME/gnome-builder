@@ -2307,7 +2307,7 @@ ide_build_pipeline_connect (IdeBuildPipeline *self,
                             gint              priority,
                             IdeBuildStage    *stage)
 {
-  GFlagsClass *klass;
+  GFlagsClass *klass, *unref_class = NULL;
   guint ret = 0;
 
   IDE_ENTRY;
@@ -2319,7 +2319,8 @@ ide_build_pipeline_connect (IdeBuildPipeline *self,
                         (phase & IDE_BUILD_PHASE_WHENCE_MASK) == IDE_BUILD_PHASE_BEFORE ||
                         (phase & IDE_BUILD_PHASE_WHENCE_MASK) == IDE_BUILD_PHASE_AFTER, 0);
 
-  klass = g_type_class_ref (IDE_TYPE_BUILD_PHASE);
+  if (!(klass = g_type_class_peek (IDE_TYPE_BUILD_PHASE)))
+    klass = unref_class = g_type_class_ref (IDE_TYPE_BUILD_PHASE);
 
   for (guint i = 0; i < klass->n_values; i++)
     {
@@ -2373,7 +2374,8 @@ ide_build_pipeline_connect (IdeBuildPipeline *self,
   g_warning ("No such pipeline phase %02x", phase);
 
 cleanup:
-  g_type_class_unref (klass);
+  if (unref_class != NULL)
+    g_type_class_unref (unref_class);
 
   IDE_RETURN (ret);
 }
@@ -2428,7 +2430,7 @@ gboolean
 ide_build_pipeline_request_phase (IdeBuildPipeline *self,
                                   IdeBuildPhase     phase)
 {
-  GFlagsClass *klass;
+  GFlagsClass *klass, *unref_class = NULL;
   gboolean ret = FALSE;
 
   IDE_ENTRY;
@@ -2442,7 +2444,8 @@ ide_build_pipeline_request_phase (IdeBuildPipeline *self,
    */
   phase &= IDE_BUILD_PHASE_MASK;
 
-  klass = g_type_class_ref (IDE_TYPE_BUILD_PHASE);
+  if (!(klass = g_type_class_peek (IDE_TYPE_BUILD_PHASE)))
+    klass = unref_class = g_type_class_ref (IDE_TYPE_BUILD_PHASE);
 
   for (guint i = 0; i < klass->n_values; i++)
     {
@@ -2487,7 +2490,8 @@ cleanup:
         }
     }
 
-  g_type_class_unref (klass);
+  if (unref_class != NULL)
+    g_type_class_unref (unref_class);
 
   IDE_RETURN (ret);
 }

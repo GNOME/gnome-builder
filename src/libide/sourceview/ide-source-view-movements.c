@@ -1998,16 +1998,17 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
 #ifdef IDE_ENABLE_TRACE
   {
     GEnumValue *enum_value;
-    GEnumClass *enum_class;
+    GEnumClass *enum_class, *enum_class_unref = NULL;
 
-    enum_class = g_type_class_ref (IDE_TYPE_SOURCE_VIEW_MOVEMENT);
+    if (!(enum_class = g_type_class_peek (IDE_TYPE_SOURCE_VIEW_MOVEMENT)))
+      enum_class = enum_class_unref = g_type_class_ref (IDE_TYPE_SOURCE_VIEW_MOVEMENT);
     enum_value = g_enum_get_value (enum_class, movement);
     IDE_TRACE_MSG ("movement(%s, extend_selection=%s, exclusive=%s, count=%u)",
                    enum_value->value_nick,
                    extend_selection ? "YES" : "NO",
                    exclusive ? "YES" : "NO",
                    count);
-    g_type_class_unref (enum_class);
+    dzl_clear_pointer (&enum_class_unref, g_type_class_unref);
   }
 #endif
 

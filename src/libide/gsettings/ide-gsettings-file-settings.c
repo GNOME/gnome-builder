@@ -67,8 +67,11 @@ spaces_style_get (GValue   *value,
                   gpointer  user_data)
 {
   g_autofree const gchar **strv = g_variant_get_strv (variant, NULL);
-  GFlagsClass *klass = g_type_class_ref (IDE_TYPE_SPACES_STYLE);
+  GFlagsClass *klass, *unref_class = NULL;
   guint flags = 0;
+
+  if (!(klass = g_type_class_peek (IDE_TYPE_SPACES_STYLE)))
+    klass = unref_class = g_type_class_ref (IDE_TYPE_SPACES_STYLE);
 
   for (guint i = 0; strv[i] != NULL; i++)
     {
@@ -83,9 +86,10 @@ spaces_style_get (GValue   *value,
       flags |= val->value;
     }
 
-  g_type_class_unref (klass);
-
   g_value_set_flags (value, flags);
+
+  if (unref_class != NULL)
+    g_type_class_unref (unref_class);
 
   return TRUE;
 }
