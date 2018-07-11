@@ -41,9 +41,9 @@ class _Gio_DBusMethodInfo:
     in_args = None
     out_signature = None
 
-def DBusMethod(dbus_interface, in_signature=None, out_signature=None, async=False):
+def DBusMethod(dbus_interface, in_signature=None, out_signature=None, is_async=False):
     def decorator(func):
-        func._is_async = async
+        func._is_async = is_async
 
         func._dbus_method = _Gio_DBusMethodInfo()
         func._dbus_method.interface = dbus_interface
@@ -54,7 +54,7 @@ def DBusMethod(dbus_interface, in_signature=None, out_signature=None, async=Fals
         in_signature_list = GLib.Variant.split_signature('('+in_signature+')')
         arg_names = inspect.getargspec(func).args
         arg_names.pop(0) # eat "self" argument
-        if async: arg_names.pop(0) # eat "invocation"
+        if is_async: arg_names.pop(0) # eat "invocation"
         if len(in_signature) != len(arg_names):
             raise TypeError('specified signature %s for method %s does not match length of arguments' % (str(in_signature_list), func.func_name))
         for pair in zip(in_signature_list, arg_names):

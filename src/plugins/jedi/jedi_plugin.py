@@ -688,7 +688,7 @@ class JediService(Ide.DBusService):
         self.queue = {}
         self.handler_id = 0
 
-    @Ide.DBusMethod('org.gnome.builder.plugins.jedi', in_signature='siis', out_signature='a(issass)', async=True)
+    @Ide.DBusMethod('org.gnome.builder.plugins.jedi', in_signature='siis', out_signature='a(issass)', is_async=True)
     def CodeComplete(self, invocation, filename, line, column, content):
         if filename in self.queue:
             request = self.queue.pop(filename)
