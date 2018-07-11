@@ -65,6 +65,13 @@ ide_debugger_hover_provider_hover_async (IdeHoverProvider    *provider,
   ide_task_set_source_tag (task, ide_debugger_hover_provider_hover_async);
 
   buffer = IDE_BUFFER (gtk_text_iter_get_buffer (iter));
+
+  if (gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), iter, "comment"))
+    {
+      ide_task_return_boolean (task, TRUE);
+      return;
+    }
+
   lang_id = ide_buffer_get_language_id (buffer);
   icontext = ide_buffer_get_context (buffer);
   dbgmgr = ide_context_get_debug_manager (icontext);
