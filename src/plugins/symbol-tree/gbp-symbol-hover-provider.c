@@ -24,6 +24,8 @@
 
 #include "gbp-symbol-hover-provider.h"
 
+#define SYMBOL_TREE_HOVER_PRIORITY 100
+
 struct _GbpSymbolHoverProvider
 {
   GObject parent_instance;
@@ -157,7 +159,7 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
         }
     }
 
-  ide_hover_context_add_widget (context, _("Symbol"), box);
+  ide_hover_context_add_widget (context, SYMBOL_TREE_HOVER_PRIORITY, _("Symbol"), box);
   ide_task_return_boolean (task, TRUE);
 }
 

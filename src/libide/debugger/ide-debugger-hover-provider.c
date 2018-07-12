@@ -33,6 +33,8 @@
 #include "threading/ide-task.h"
 #include "util/ide-marked-content.h"
 
+#define DEBUGGER_HOVER_PRIORITY 1000
+
 struct _IdeDebuggerHoverProvider
 {
   GObject parent_instance;
@@ -84,7 +86,7 @@ ide_debugger_hover_provider_hover_async (IdeHoverProvider    *provider,
       GtkWidget *controls;
 
       controls = ide_debugger_hover_controls_new (dbgmgr, gfile, line + 1);
-      ide_hover_context_add_widget (context, _("Debugger"), controls);
+      ide_hover_context_add_widget (context, DEBUGGER_HOVER_PRIORITY, _("Debugger"), controls);
     }
 
   ide_task_return_boolean (task, TRUE);
