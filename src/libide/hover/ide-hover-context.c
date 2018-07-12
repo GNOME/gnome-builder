@@ -39,6 +39,7 @@ typedef struct
   gchar            *title;
   IdeMarkedContent *content;
   GtkWidget        *widget;
+  gint              priority;
 } Item;
 
 typedef struct
@@ -83,8 +84,19 @@ ide_hover_context_init (IdeHoverContext *self)
   g_array_set_clear_func (self->content, (GDestroyNotify) clear_item);
 }
 
+static gint
+item_compare (gconstpointer a,
+              gconstpointer b)
+{
+  const Item *item_a = a;
+  const Item *item_b = b;
+
+  return item_a->priority - item_b->priority;
+}
+
 void
 ide_hover_context_add_content (IdeHoverContext  *self,
+                               gint              priority,
                                const gchar      *title,
                                IdeMarkedContent *content)
 {
@@ -96,12 +108,15 @@ ide_hover_context_add_content (IdeHoverContext  *self,
   item.title = g_strdup (title);
   item.content = ide_marked_content_ref (content);
   item.widget = NULL;
+  item.priority = priority;
 
   g_array_append_val (self->content, item);
+  g_array_sort (self->content, item_compare);
 }
 
 void
 ide_hover_context_add_widget (IdeHoverContext *self,
+                              gint             priority,
                               const gchar     *title,
                               GtkWidget       *widget)
 {
@@ -113,8 +128,10 @@ ide_hover_context_add_widget (IdeHoverContext *self,
   item.title = g_strdup (title);
   item.content = NULL;
   item.widget = g_object_ref_sink (widget);
+  item.priority = priority;
 
   g_array_append_val (self->content, item);
+  g_array_sort (self->content, item_compare);
 }
 
 void
