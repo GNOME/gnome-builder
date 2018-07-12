@@ -27,6 +27,8 @@
 #include "editor/ide-editor-hover-provider.h"
 #include "threading/ide-task.h"
 
+#define DIAGNOSTICS_HOVER_PRIORITY 500
+
 struct _IdeEditorHoverProvider
 {
   GObject parent_instance;
@@ -67,7 +69,10 @@ ide_editor_hover_provider_hover_async (IdeHoverProvider    *provider,
           content = ide_marked_content_new_from_data (text,
                                                       strlen (text),
                                                       IDE_MARKED_KIND_PLAINTEXT);
-          ide_hover_context_add_content (context, _("Diagnostics"), content);
+          ide_hover_context_add_content (context,
+                                         DIAGNOSTICS_HOVER_PRIORITY,
+                                         _("Diagnostics"),
+                                         content);
         }
     }
 
