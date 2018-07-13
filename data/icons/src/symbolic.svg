@@ -41,9 +41,9 @@
      inkscape:window-height="1016"
      id="namedview88"
      showgrid="false"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="-33.488931"
-     inkscape:cy="-182.18098"
+     inkscape:zoom="1"
+     inkscape:cx="60.00322"
+     inkscape:cy="-148.58331"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -2686,9 +2686,10 @@
          style="fill:none" />
       <path
          style="color:#000000;overflow:visible;color-interpolation-filters:linearRGB;fill:#2e3436;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;image-rendering:auto;text-rendering:auto;enable-background:accumulate"
-         d="m 168.72669,197 -0.53125,3.00586 h -1.98828 l -0.19141,1.08398 h 1.98828 L 167.31263,205 h -1.98828 l -0.19141,1.08398 h 1.98828 L 166.6056,209 h 1.97265 l 0.51563,-2.91602 h 3.06445 L 171.6427,209 h 1.97266 l 0.51563,-2.91602 h 2.0332 L 176.3556,205 h -2.03321 l 0.69141,-3.91016 h 2.0332 l 0.19141,-1.08398 h -2.0332 L 175.73646,197 h -1.97071 l -0.53125,3.00586 h -3.0664 L 170.69935,197 Z m 1.25,4.08984 h 3.06641 L 172.34974,205 h -3.06446 z"
+         d="m 168.13581,196 v 3 h -2 v 2 h 2 v 4 h -2 v 2 h 2 v 3 h 2 v -3 h 3 v 3 h 2 v -3 h 2 v -2 h -2 v -4 h 2 v -2 h -2 v -3 h -2 v 3 h -3 v -3 z m 2,5 h 3 v 4 h -3 z"
          id="rect17543"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccc" />
     </g>
     <g
        transform="translate(-143.1358,-55.02344)"
@@ -2696,11 +2697,9 @@
        inkscape:label="lang-define">
       <path
          style="color:#000000;overflow:visible;color-interpolation-filters:linearRGB;fill:#2e3436;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;image-rendering:auto;text-rendering:auto;enable-background:accumulate"
-         d="m 228,0.9765625 c -3.86599,0 -7,3.134007 -7,7 0,3.8659935 3.13401,6.9999995 7,6.9999995 3.86599,0 7,-3.134006 7,-6.9999995 0,-3.865993 -3.13401,-7 -7,-7 z M 225.5293,5 h 2 l -0.17578,1 h 2 l 0.17578,-1 h 1.90759 l -0.17578,1 H 232 v 1 h -0.91663 l -0.25915,2 H 232 v 1 h -1.35352 l -0.17578,1 h -2 l 0.17578,-1 h -2 l -0.17578,1 h -1.86931 l 0.13844,-1 H 224 V 9 h 0.8989 l 0.27688,-2 H 224 V 6 h 1.35352 z m 1.42244,1.8879813 -0.4449,2.2053676 h 2.50408 l 0.42944,-2.2053676 z"
-         transform="translate(-56.864197,195.02344)"
-         id="path17573"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ssssscccccccccccccccccccccccccccccccccc" />
+         d="M 28 140.97656 C 24.13401 140.97656 21 144.11057 21 147.97656 C 21 151.84256 24.13401 154.97656 28 154.97656 C 31.86599 154.97656 35 151.84256 35 147.97656 C 35 144.11057 31.86599 140.97656 28 140.97656 z M 25 144 L 27 144 L 27 146 L 29 146 L 29 144 L 31 144 L 31 146 L 32 146 L 32 147 L 31 147 L 31 149 L 32 149 L 32 150 L 31 150 L 31 152 L 29 152 L 29 150 L 27 150 L 27 152 L 25 152 L 25 150 L 24 150 L 24 149 L 25 149 L 25 147 L 24 147 L 24 146 L 25 146 L 25 144 z M 27 147 L 27 149 L 29 149 L 29 147 L 27 147 z "
+         transform="translate(143.1358,55.02344)"
+         id="path17573" />
       <rect
          style="fill:none"
          id="rect17569"
