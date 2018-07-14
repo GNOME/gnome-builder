@@ -436,8 +436,7 @@ create_open_page_row (gpointer item,
                         "hexpand", FALSE,
                         "visible", TRUE,
                         NULL);
-  g_object_bind_property (view, "icon-name", image, "icon-name",
-                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (view, "icon", image, "gicon", G_BINDING_SYNC_CREATE);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
 
   label = g_object_new (DZL_TYPE_BOLDING_LABEL,
