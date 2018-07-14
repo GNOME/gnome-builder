@@ -28,6 +28,7 @@
 #include "completion/ide-completion.h"
 #include "editor/ide-editor-private.h"
 #include "sourceview/ide-line-change-gutter-renderer.h"
+#include "util/ide-glib.h"
 #include "util/ide-gtk.h"
 
 #define AUTO_HIDE_TIMEOUT_SECONDS 5
@@ -86,6 +87,39 @@ ide_editor_view_load_fonts (IdeEditorView *self)
 
   pango_font_description_free (font_desc);
   g_object_unref (font_map);
+}
+
+static void
+ide_editor_view_update_icon (IdeEditorView *self)
+{
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *content_type = NULL;
+  g_autofree gchar *sniff = NULL;
+  g_autoptr(GIcon) icon = NULL;
+  GtkTextIter begin, end;
+  IdeFile *file;
+  GFile *gfile;
+
+  g_assert (IDE_IS_EDITOR_VIEW (self));
+  g_assert (IDE_IS_BUFFER (self->buffer));
+
+  /* Get first 1024 bytes to help determine content type */
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end);
+  if (gtk_text_iter_get_offset (&end) > 1024)
+    gtk_text_iter_set_offset (&end, 1024);
+  sniff = gtk_text_iter_get_slice (&begin, &end);
+
+  /* Now get basename for content type */
+  file = ide_buffer_get_file (self->buffer);
+  gfile = ide_file_get_file (file);
+  name = g_file_get_basename (gfile);
+
+  /* Guess content type */
+  content_type = g_content_type_guess (name, (const guchar *)sniff, strlen (sniff), NULL);
+
+  /* Update icon to match guess */
+  icon = ide_g_content_type_get_symbolic_icon (content_type);
+  ide_layout_view_set_icon (IDE_LAYOUT_VIEW (self), icon);
 }
 
 static void
@@ -158,6 +192,8 @@ ide_editor_view_buffer_loaded (IdeEditorView *self,
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
+  ide_editor_view_update_icon (self);
+
   /* Scroll to the insertion location once the buffer
    * has loaded. This is useful if it is not onscreen.
    */
@@ -199,8 +235,7 @@ ide_editor_view_buffer_notify_language (IdeEditorView *self,
                                         GParamSpec    *pspec,
                                         IdeBuffer     *buffer)
 {
-  GtkSourceLanguage *language;
-  const gchar *language_id = NULL;
+  const gchar *lang_id = NULL;
 
   g_assert (IDE_IS_EDITOR_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -208,14 +243,15 @@ ide_editor_view_buffer_notify_language (IdeEditorView *self,
   if (self->addins == NULL)
     return;
 
-  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
-  if (language != NULL)
-    language_id = gtk_source_language_get_id (language);
+  lang_id = ide_buffer_get_language_id (buffer);
 
-  ide_extension_set_adapter_set_value (self->addins, language_id);
+  /* Update extensions that change based on language */
+  ide_extension_set_adapter_set_value (self->addins, lang_id);
   ide_extension_set_adapter_foreach (self->addins,
                                      ide_editor_view_buffer_notify_language_cb,
-                                     (gpointer)language_id);
+                                     (gpointer)lang_id);
+
+  ide_editor_view_update_icon (self);
 }
 
 static void
@@ -333,6 +369,7 @@ ide_editor_view_set_buffer (IdeEditorView *self,
       gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->source_view),
                                 GTK_TEXT_BUFFER (buffer));
       gtk_drag_dest_unset (GTK_WIDGET (self->source_view));
+      ide_editor_view_update_icon (self);
     }
 }
 
