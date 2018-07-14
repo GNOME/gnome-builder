@@ -523,6 +523,8 @@ ide_application_startup (GApplication *application)
       _ide_application_init_color (self);
       _ide_application_reap_legacy (self);
 
+      gtk_icon_theme_prepend_search_path (gtk_icon_theme_get_default (), PACKAGE_ICONDIR);
+
       modeline_parser_init ();
     }
 
