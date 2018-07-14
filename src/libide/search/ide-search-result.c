@@ -24,8 +24,9 @@
 
 typedef struct
 {
-  gfloat score;
-  guint  priority;
+  GIcon  *icon;
+  gfloat  score;
+  guint   priority;
 } IdeSearchResultPrivate;
 
 enum {
@@ -38,6 +39,31 @@ enum {
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSearchResult, ide_search_result, DZL_TYPE_SUGGESTION)
 
 static GParamSpec *properties [N_PROPS];
+
+static GIcon *
+ide_search_result_real_get_icon (DzlSuggestion *suggestion)
+{
+  IdeSearchResult *self = (IdeSearchResult *)suggestion;
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_assert (IDE_IS_SEARCH_RESULT (self));
+
+  if (priv->icon != NULL)
+    return g_object_ref (priv->icon);
+
+  return DZL_SUGGESTION_CLASS (ide_search_result_parent_class)->get_icon (suggestion);
+}
+
+static void
+ide_search_result_finalize (GObject *object)
+{
+  IdeSearchResult *self = (IdeSearchResult *)object;
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_clear_object (&priv->icon);
+
+  G_OBJECT_CLASS (ide_search_result_parent_class)->finalize (object);
+}
 
 static void
 ide_search_result_get_property (GObject    *object,
@@ -89,9 +115,13 @@ static void
 ide_search_result_class_init (IdeSearchResultClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  DzlSuggestionClass *suggestion_class = DZL_SUGGESTION_CLASS (klass);
 
+  object_class->finalize = ide_search_result_finalize;
   object_class->get_property = ide_search_result_get_property;
   object_class->set_property = ide_search_result_set_property;
+
+  suggestion_class->get_icon = ide_search_result_real_get_icon;
 
   properties [PROP_SCORE] =
     g_param_spec_float ("score",
@@ -218,4 +248,16 @@ ide_search_result_get_source_location (IdeSearchResult *self)
     return IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location (self);
 
   return NULL;
+}
+
+void
+ide_search_result_set_icon (IdeSearchResult *self,
+                            GIcon           *icon)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+
+  /* don't notify, since it's not really needed */
+  g_set_object (&priv->icon, icon);
 }

@@ -66,5 +66,8 @@ gfloat             ide_search_result_get_score           (IdeSearchResult       
 IDE_AVAILABLE_IN_ALL
 void               ide_search_result_set_score           (IdeSearchResult       *self,
                                                           gfloat                 score);
+IDE_AVAILABLE_IN_3_30
+void               ide_search_result_set_icon            (IdeSearchResult       *self,
+                                                          GIcon                 *icon);
 
 G_END_DECLS
