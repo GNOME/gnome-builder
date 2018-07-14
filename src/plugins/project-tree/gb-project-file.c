@@ -17,6 +17,7 @@
  */
 
 #include <glib/gi18n.h>
+#include <ide.h>
 
 #include "gb-project-file.h"
 
@@ -259,6 +260,30 @@ gb_project_file_get_icon_name (GbProjectFile *self)
     return "folder-symbolic";
 
   return "text-x-generic-symbolic";
+}
+
+/**
+ * gb_project_file_get_icon:
+ * @self: a #GbProjectFile
+ *
+ * Gets the gicon for the node, which may be a themed icon.
+ *
+ * Returns: (transfer full): the #GIcon for the node
+ */
+GIcon *
+gb_project_file_get_icon (GbProjectFile *self)
+{
+  const gchar *content_type;
+
+  g_return_val_if_fail (GB_IS_PROJECT_FILE (self), NULL);
+
+  if (gb_project_file_get_is_directory (self))
+    return g_icon_new_for_string ("folder-symbolic", NULL);
+
+  if ((content_type = g_file_info_get_attribute_string (self->file_info, G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE)))
+    return ide_g_content_type_get_symbolic_icon (content_type);
+
+  return g_icon_new_for_string ("text-x-generic-symbolic", NULL);
 }
 
 const gchar *

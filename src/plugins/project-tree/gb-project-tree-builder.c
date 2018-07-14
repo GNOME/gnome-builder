@@ -67,9 +67,9 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   g_autoptr(GFileInfo) file_info = NULL;
   g_autoptr(GbProjectFile) item = NULL;
   g_autoptr(DzlTreeNode) first = NULL;
+  g_autoptr(GIcon) icon = NULL;
   DzlTreeNode *child;
   const gchar *display_name;
-  const gchar *icon_name;
   const gchar *expanded = NULL;
   gboolean is_dir;
 
@@ -80,6 +80,7 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   file_info = g_file_query_info (file,
                                  G_FILE_ATTRIBUTE_STANDARD_NAME","
                                  G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
+                                 G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE","
                                  G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                  G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
                                  NULL, NULL);
@@ -98,7 +99,7 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   /* Now create our new node for the child. */
   item = gb_project_file_new (file, file_info);
   display_name = gb_project_file_get_display_name (item);
-  icon_name = gb_project_file_get_icon_name (item);
+  icon = gb_project_file_get_icon (item);
 
   is_dir = g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY;
 
@@ -108,7 +109,7 @@ gb_project_tree_builder_add (GbProjectTreeBuilder *self,
   child = g_object_new (DZL_TYPE_TREE_NODE,
                         "children-possible", is_dir,
                         "reset-on-collapse", is_dir,
-                        "icon-name", icon_name,
+                        "gicon", icon,
                         "expanded-icon-name", expanded,
                         "text", display_name,
                         "item", item,
@@ -386,6 +387,7 @@ build_file (GbProjectTreeBuilder *self,
   enumerator = g_file_enumerate_children (file,
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
                                           G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
+                                          G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                           G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
                                           NULL,
@@ -399,10 +401,10 @@ build_file (GbProjectTreeBuilder *self,
       g_autoptr(GFileInfo) item_file_info = file_info_ptr;
       g_autoptr(GFile) item_file = NULL;
       g_autoptr(GbProjectFile) item = NULL;
+      g_autoptr(GIcon) icon = NULL;
       DzlTreeNode *child;
       const gchar *name;
       const gchar *display_name;
-      const gchar *icon_name;
       const gchar *expanded = NULL;
       gboolean ignored;
       gboolean is_dir;
@@ -417,14 +419,14 @@ build_file (GbProjectTreeBuilder *self,
       item = gb_project_file_new (item_file, item_file_info);
 
       display_name = gb_project_file_get_display_name (item);
-      icon_name = gb_project_file_get_icon_name (item);
+      icon = gb_project_file_get_icon (item);
       is_dir = g_file_info_get_file_type (item_file_info) == G_FILE_TYPE_DIRECTORY;
 
       if (is_dir)
         expanded = "folder-open-symbolic";
 
       child = g_object_new (DZL_TYPE_TREE_NODE,
-                            "icon-name", icon_name,
+                            "gicon", icon,
                             "children-possible", is_dir,
                             "reset-on-collapse", is_dir,
                             "expanded-icon-name", expanded,

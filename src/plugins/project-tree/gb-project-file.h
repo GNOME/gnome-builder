@@ -37,6 +37,7 @@ void           gb_project_file_set_file_info             (GbProjectFile *self,
 gboolean       gb_project_file_get_is_directory          (GbProjectFile *self);
 const gchar   *gb_project_file_get_display_name          (GbProjectFile *self);
 const gchar   *gb_project_file_get_icon_name             (GbProjectFile *self);
+GIcon         *gb_project_file_get_icon                  (GbProjectFile *self);
 gint           gb_project_file_compare_directories_first (GbProjectFile *a,
                                                           GbProjectFile *b);
 gint           gb_project_file_compare                   (GbProjectFile *a,
