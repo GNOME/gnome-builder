@@ -31,6 +31,7 @@ typedef struct
   const gchar *menu_id;
   const gchar *icon_name;
   gchar       *title;
+  GIcon       *icon;
 
   GdkRGBA      primary_color_bg;
   GdkRGBA      primary_color_fg;
@@ -46,6 +47,7 @@ enum {
   PROP_0,
   PROP_CAN_SPLIT,
   PROP_FAILED,
+  PROP_ICON,
   PROP_ICON_NAME,
   PROP_MENU_ID,
   PROP_MODIFIED,
@@ -125,6 +127,7 @@ ide_layout_view_finalize (GObject *object)
   IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
 
   dzl_clear_pointer (&priv->title, g_free);
+  g_clear_object (&priv->icon);
 
   G_OBJECT_CLASS (ide_layout_view_parent_class)->finalize (object);
 }
@@ -149,6 +152,10 @@ ide_layout_view_get_property (GObject    *object,
 
     case PROP_ICON_NAME:
       g_value_set_static_string (value, ide_layout_view_get_icon_name (self));
+      break;
+
+    case PROP_ICON:
+      g_value_set_object (value, ide_layout_view_get_icon (self));
       break;
 
     case PROP_MENU_ID:
@@ -196,6 +203,10 @@ ide_layout_view_set_property (GObject      *object,
 
     case PROP_ICON_NAME:
       ide_layout_view_set_icon_name (self, g_value_get_string (value));
+      break;
+
+    case PROP_ICON:
+      ide_layout_view_set_icon (self, g_value_get_object (value));
       break;
 
     case PROP_MENU_ID:
@@ -251,6 +262,13 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
                           "If the view has failed or crashed",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ICON] =
+    g_param_spec_object ("icon",
+                         "Icon",
+                         "A GIcon for the view",
+                         G_TYPE_ICON,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
@@ -491,6 +509,44 @@ ide_layout_view_set_modified (IdeLayoutView *self,
     }
 }
 
+/**
+ * ide_layout_view_get_icon:
+ * @self: a #IdeLayoutView
+ *
+ * Gets the #GIcon to represent the view.
+ *
+ * Returns: (transfer none) (nullable): A #GIcon or %NULL
+ *
+ * Since: 3.30
+ */
+GIcon *
+ide_layout_view_get_icon (IdeLayoutView *self)
+{
+  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_LAYOUT_VIEW (self), NULL);
+
+  if (priv->icon == NULL)
+    {
+      if (priv->icon_name != NULL)
+        priv->icon = g_icon_new_for_string (priv->icon_name, NULL);
+    }
+
+  return priv->icon;
+}
+
+void
+ide_layout_view_set_icon (IdeLayoutView *self,
+                          GIcon         *icon)
+{
+  IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LAYOUT_VIEW (self));
+
+  if (g_set_object (&priv->icon, icon))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON]);
+}
+
 const gchar *
 ide_layout_view_get_icon_name (IdeLayoutView *self)
 {
@@ -514,6 +570,7 @@ ide_layout_view_set_icon_name (IdeLayoutView *self,
   if (icon_name != priv->icon_name)
     {
       priv->icon_name = icon_name;
+      g_clear_object (&priv->icon);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
     }
 }

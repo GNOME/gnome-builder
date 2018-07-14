@@ -71,6 +71,11 @@ const gchar   *ide_layout_view_get_icon_name         (IdeLayoutView        *self
 IDE_AVAILABLE_IN_ALL
 void           ide_layout_view_set_icon_name         (IdeLayoutView        *self,
                                                       const gchar          *icon_name);
+IDE_AVAILABLE_IN_3_30
+GIcon         *ide_layout_view_get_icon              (IdeLayoutView        *self);
+IDE_AVAILABLE_IN_3_30
+void           ide_layout_view_set_icon              (IdeLayoutView        *self,
+                                                      GIcon                *icon);
 IDE_AVAILABLE_IN_ALL
 gboolean       ide_layout_view_get_failed            (IdeLayoutView        *self);
 IDE_AVAILABLE_IN_ALL
