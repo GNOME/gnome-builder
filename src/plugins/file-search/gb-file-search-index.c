@@ -352,8 +352,8 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
           g_autofree gchar *free_me = NULL;
           g_autofree gchar *free_me_sym = NULL;
           const gchar *filename = match->key;
-          const gchar *icon_name = "text-x-generic-symbolic";
           g_autofree gchar *content_type = NULL;
+          g_autoptr(GIcon) themed_icon = NULL;
 
           escaped = g_markup_escape_text (match->key, -1);
           markup = dzl_fuzzy_highlight (escaped, delimited->str, FALSE);
@@ -362,24 +362,19 @@ gb_file_search_index_populate (GbFileSearchIndex *self,
            * Try to get a more appropriate icon, but by filename only.
            * Sniffing would be way too slow here.
            */
-          content_type = g_content_type_guess (filename, NULL, 0, NULL);
-          if (content_type != NULL)
-            icon_name = free_me = g_content_type_get_generic_icon_name (content_type);
-
-          /* Cheat and simply append -symbolic to the name.  This isn't
-           * strictly correct, but seems to work and doesn't require that we
-           * create lots of GIcon instances and pass them around.
-           */
-          if (!g_str_has_suffix (icon_name, "-symbolic"))
-            icon_name = free_me_sym = g_strdup_printf ("%s-symbolic", icon_name);
+          if ((content_type = g_content_type_guess (filename, NULL, 0, NULL)))
+            themed_icon = ide_g_content_type_get_symbolic_icon (content_type);
 
           result = g_object_new (GB_TYPE_FILE_SEARCH_RESULT,
                                  "context", context,
-                                 "icon-name", icon_name,
                                  "score", match->score,
                                  "title", markup,
                                  "path", filename,
                                  NULL);
+
+          if (themed_icon != NULL)
+            ide_search_result_set_icon (IDE_SEARCH_RESULT (result), themed_icon);
+
           ide_search_reducer_take (&reducer, IDE_SEARCH_RESULT (g_steal_pointer (&result)));
         }
     }
