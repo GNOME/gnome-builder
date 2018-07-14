@@ -116,5 +116,7 @@ gboolean     ide_g_host_file_get_contents             (const gchar          *pat
                                                        gchar               **contents,
                                                        gsize                *len,
                                                        GError              **error);
+IDE_AVAILABLE_IN_3_30
+GIcon       *ide_g_content_type_get_symbolic_icon     (const gchar          *content_type);
 
 G_END_DECLS
