@@ -107,7 +107,7 @@ find_and_apply_content (Hover *h)
                         "halign", GTK_ALIGN_FILL,
                         "height-request", 200,
                         "hexpand", FALSE,
-                        "valign", GTK_ALIGN_FILL,
+                        "valign", GTK_ALIGN_START,
                         "vexpand", FALSE,
                         "width-request", 400,
                         NULL);
