@@ -21,7 +21,6 @@
 
 #include "gbp-devhelp-editor-addin.h"
 #include "gbp-devhelp-editor-view-addin.h"
-#include "gbp-devhelp-documentation-provider.h"
 #include "gbp-devhelp-hover-provider.h"
 #include "gbp-devhelp-layout-stack-addin.h"
 
@@ -40,7 +39,4 @@ gbp_devhelp_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_LAYOUT_STACK_ADDIN,
                                               GBP_TYPE_DEVHELP_LAYOUT_STACK_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_DOCUMENTATION_PROVIDER,
-                                              GBP_TYPE_DEVHELP_DOCUMENTATION_PROVIDER);
 }
