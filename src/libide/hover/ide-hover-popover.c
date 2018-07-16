@@ -145,6 +145,26 @@ ide_hover_popover_query_cb (GObject      *object,
 }
 
 static void
+ide_hover_popover_get_preferred_height (GtkWidget *widget,
+                                        gint      *min_height,
+                                        gint      *nat_height)
+{
+  g_assert (IDE_IS_HOVER_POPOVER (widget));
+  g_assert (min_height != NULL);
+  g_assert (nat_height != NULL);
+
+  GTK_WIDGET_CLASS (ide_hover_popover_parent_class)->get_preferred_height (widget, min_height, nat_height);
+
+  /*
+   * If we have embedded webkit views, they can get some bogus size requests
+   * sometimes. So try to detect that and prevent giant popovers.
+   */
+
+  if (*nat_height > 1024)
+    *nat_height = *min_height;
+}
+
+static void
 ide_hover_popover_destroy (GtkWidget *widget)
 {
   IdeHoverPopover *self = (IdeHoverPopover *)widget;
@@ -185,6 +205,7 @@ ide_hover_popover_class_init (IdeHoverPopoverClass *klass)
   object_class->get_property = ide_hover_popover_get_property;
 
   widget_class->destroy = ide_hover_popover_destroy;
+  widget_class->get_preferred_height = ide_hover_popover_get_preferred_height;
 
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
