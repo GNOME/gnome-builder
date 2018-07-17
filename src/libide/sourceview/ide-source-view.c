@@ -5916,21 +5916,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
 
-  /**
-   * IdeSourceView:documentation-requested:
-   * @self: an #IdeSourceView
-   * @word: the word that was requested
-   *
-   * This is emitted by the default request-documentation handler to
-   * locate the documentation for the currently selected word.
-   */
-  signals [DOCUMENTATION_REQUESTED] =
-    g_signal_new ("documentation-requested",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
-                  G_TYPE_NONE, 1, G_TYPE_STRING);
-
   signals [DECREASE_FONT_SIZE] =
     g_signal_new ("decrease-font-size",
                   G_TYPE_FROM_CLASS (klass),

@@ -11,7 +11,6 @@ devhelp_sources = [
   'gbp-devhelp-hover-provider.c',
   'gbp-devhelp-layout-stack-addin.c',
   'gbp-devhelp-editor-addin.c',
-  'gbp-devhelp-editor-view-addin.c',
   'gbp-devhelp-plugin.c',
   'gbp-devhelp-search.c',
   'gbp-devhelp-view.c',
