@@ -589,7 +589,7 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
   dzl_gtk_widget_remove_style_class (GTK_WIDGET (self), "building");
 }
 
-static void
+static gboolean
 ide_omni_bar__build_button__query_tooltip (IdeOmniBar *self,
                                            gint        x,
                                            gint        y,
@@ -602,6 +602,8 @@ ide_omni_bar__build_button__query_tooltip (IdeOmniBar *self,
   g_assert (GTK_IS_BUTTON (button));
 
   gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->build_button_shortcut));
+
+  return TRUE;
 }
 
 static void
