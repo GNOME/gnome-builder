@@ -82,12 +82,23 @@ find_and_apply_content (Hover *h)
 
   for (guint i = 0; i < G_N_ELEMENTS (names); i++)
     {
+      const gchar *word = names[i];
+      g_autofree gchar *freeme = NULL;
       DhLink *item;
 
-      if (dzl_str_empty0 (names[i]))
+      if (dzl_str_empty0 (word))
         continue;
 
-      if ((item = dh_keyword_model_filter (model, names[i], NULL, NULL)))
+      for (guint j = 0; word[j]; j++)
+        {
+          if (!g_ascii_isalnum (word[j]) && word[j] != '_')
+            {
+              word = freeme = g_strndup (word, j);
+              break;
+            }
+        }
+
+      if ((item = dh_keyword_model_filter (model, word, NULL, NULL)))
         {
           g_autoptr(IdeMarkedContent) content = NULL;
           GtkWidget *view;
