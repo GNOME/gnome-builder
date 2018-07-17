@@ -426,7 +426,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
   launcher = create_subprocess_launcher ();
 
   ide_subprocess_launcher_set_cwd (launcher, src_dir);
-  ide_subprocess_launcher_set_run_on_host (launcher, FALSE);
+  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
 
   if (ide_is_flatpak ())
