@@ -40,6 +40,7 @@ struct _IdeRunButton
   DzlMenuButton        *menu_button;
   GtkButton            *stop_button;
   GtkShortcutsShortcut *run_shortcut;
+  GtkLabel             *run_tooltip_message;
 };
 
 G_DEFINE_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_BOX)
@@ -140,12 +141,32 @@ ide_run_button_query_tooltip (IdeRunButton *self,
 
       if (g_strcmp0 (info->id, handler) == 0)
         {
-          g_object_set (self->run_shortcut,
-                        "accelerator", info->accel,
-                        "title", info->title,
-                        "visible", TRUE,
-                        NULL);
-          gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_shortcut));
+          gboolean enabled;
+          /* Figure out if the run action is enabled. If it
+           * is not, then we should inform the user that
+           * the project cannot be run yet because the
+           * build pipeline is not yet configured. */
+          g_action_group_query_action (G_ACTION_GROUP (run_manager),
+                                       "run",
+                                       &enabled,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       NULL);
+
+          if (enabled)
+            {
+              g_object_set (self->run_shortcut,
+                            "accelerator", info->accel,
+                            "title", info->title,
+                            "visible", TRUE,
+                            NULL);
+              gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_shortcut));
+            }
+          else
+            {
+              gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_tooltip_message));
+            }
 
           return TRUE;
         }
@@ -165,6 +186,7 @@ ide_run_button_class_init (IdeRunButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, menu_button);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_shortcut);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, stop_button);
+  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_tooltip_message);
 }
 
 static void
