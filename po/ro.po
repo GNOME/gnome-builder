@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-01 15:28+0000\n"
-"PO-Revision-Date: 2018-07-01 18:34+0300\n"
+"POT-Creation-Date: 2018-07-17 17:21+0000\n"
+"PO-Revision-Date: 2018-07-17 20:28+0300\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28 [at] gmail [dot] "
 "com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.0.9\n"
 "X-Project-Style: gnome\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
@@ -437,7 +437,7 @@ msgstr "Înălțimea în unități pixel a panoului de jos."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:690
+#: src/libide/application/ide-application.c:692
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:648
@@ -771,7 +771,7 @@ msgstr "Aflați mai multe despre Builder GNOME"
 msgid "Funded By"
 msgstr "Fondat de"
 
-#: src/libide/application/ide-application.c:1086
+#: src/libide/application/ide-application.c:1088
 #: src/libide/preferences/ide-preferences-builtin.c:417
 msgid "Projects"
 msgstr "Proiecte"
@@ -955,66 +955,66 @@ msgstr "Linia de asamblare a generării este într-o stare eșuată"
 msgid "The build configuration has errors"
 msgstr "Configurația de generare are erori"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2814
+#: src/libide/buildsystem/ide-build-pipeline.c:2818
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Crearea terminalului pseudo a eșuat. Funcționalitățile terminalului vor fi "
 "limitate."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3014
+#: src/libide/buildsystem/ide-build-pipeline.c:3018
 msgid "Cleaning…"
 msgstr "Se curăță…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3018
-#: src/libide/buildsystem/ide-build-pipeline.c:3075
-#: src/libide/workbench/ide-omni-bar.c:559
+#: src/libide/buildsystem/ide-build-pipeline.c:3022
+#: src/libide/buildsystem/ide-build-pipeline.c:3079
+#: src/libide/workbench/ide-omni-bar.c:560
 msgid "Failed"
 msgstr "Eșuat"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3020
-#: src/libide/buildsystem/ide-build-pipeline.c:3083
+#: src/libide/buildsystem/ide-build-pipeline.c:3024
+#: src/libide/buildsystem/ide-build-pipeline.c:3087
 msgid "Ready"
 msgstr "Gata"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3035
+#: src/libide/buildsystem/ide-build-pipeline.c:3039
 msgid "Downloading…"
 msgstr "Se descarcă…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3039
+#: src/libide/buildsystem/ide-build-pipeline.c:3043
 msgid "Building dependencies…"
 msgstr "Se generează dependențele…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3043
+#: src/libide/buildsystem/ide-build-pipeline.c:3047
 msgid "Bootstrapping…"
 msgstr "Se trece prin procesul de bootstrap…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3047
+#: src/libide/buildsystem/ide-build-pipeline.c:3051
 msgid "Configuring…"
 msgstr "Se configurează…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3051
+#: src/libide/buildsystem/ide-build-pipeline.c:3055
 msgid "Building…"
 msgstr "Se generează…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3055
+#: src/libide/buildsystem/ide-build-pipeline.c:3059
 msgid "Installing…"
 msgstr "Se instalează…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3059
+#: src/libide/buildsystem/ide-build-pipeline.c:3063
 msgid "Committing…"
 msgstr "Se comite…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3063
+#: src/libide/buildsystem/ide-build-pipeline.c:3067
 msgid "Exporting…"
 msgstr "Se exportă…"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3067
 #: src/libide/buildsystem/ide-build-pipeline.c:3071
-#: src/libide/workbench/ide-omni-bar.c:586
+#: src/libide/buildsystem/ide-build-pipeline.c:3075
+#: src/libide/workbench/ide-omni-bar.c:587
 msgid "Success"
 msgstr "Succes"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3079
+#: src/libide/buildsystem/ide-build-pipeline.c:3083
 msgid "Preparing…"
 msgstr "Se pregătește…"
 
@@ -1176,7 +1176,7 @@ msgid "Remove environment variable"
 msgstr "Elimină variabila de mediu"
 
 #: src/libide/debugger/gtk/menus.ui:10
-#: src/libide/debugger/ide-debugger-editor-addin.c:429
+#: src/libide/debugger/ide-debugger-editor-addin.c:433
 msgid "Run with Debugger"
 msgstr "Rulează cu depanator"
 
@@ -1239,31 +1239,31 @@ msgstr "Rulează până la sfârșitul funcției"
 msgid "Disassembly"
 msgstr "Dezasamblare"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:307
+#: src/libide/debugger/ide-debugger-editor-addin.c:311
 msgid "Debugger"
 msgstr "Depanator"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:323
+#: src/libide/debugger/ide-debugger-editor-addin.c:327
 msgid "Threads"
 msgstr "Thread-uri"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:349
+#: src/libide/debugger/ide-debugger-editor-addin.c:353
 msgid "Breakpoints"
 msgstr "Puncte de întrerupere"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:357
+#: src/libide/debugger/ide-debugger-editor-addin.c:361
 msgid "Libraries"
 msgstr "Bibioteci"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:365
+#: src/libide/debugger/ide-debugger-editor-addin.c:369
 msgid "Registers"
 msgstr "Regiștri"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:373
+#: src/libide/debugger/ide-debugger-editor-addin.c:377
 msgid "Log"
 msgstr "Istoric"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:396
+#: src/libide/debugger/ide-debugger-editor-addin.c:400
 msgid "Failed to initialize the debugger"
 msgstr "Nu s-a putut inițializa depanatorul"
 
@@ -2916,11 +2916,17 @@ msgstr "Fișierul destinație trebuie să fie în arborele proiectului."
 msgid "File must be within the project tree."
 msgstr "Fișierul trebuie să fie în arborele proiectului."
 
-#: src/libide/runner/ide-run-button.ui:31
+#: src/libide/runner/ide-run-button.ui:6
+msgid "The project cannot be run while the build pipeline is being set up"
+msgstr ""
+"Proiectul nu poate fi rulat în timp ce se configurează linia de asamblare a "
+"generării"
+
+#: src/libide/runner/ide-run-button.ui:35
 msgid "Stop running"
 msgstr "Oprește rularea"
 
-#: src/libide/runner/ide-run-button.ui:51
+#: src/libide/runner/ide-run-button.ui:55
 msgid "Change run options"
 msgstr "Modifică opțiunile de rulare"
 
@@ -3077,7 +3083,7 @@ msgstr "Nu s-a putut parsa „%s” ca URI absolut"
 msgid "URI “%s” has no host component"
 msgstr "URI „%s” nu are nicio componentă de gazdă"
 
-#: src/libide/workbench/ide-omni-bar.c:530
+#: src/libide/workbench/ide-omni-bar.c:531
 msgid "Building"
 msgstr "Se generează"
 
@@ -3142,6 +3148,12 @@ msgstr "Exportă pachetul"
 #: src/libide/workbench/ide-omni-bar.ui:591 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Generează proiectul"
+
+#: src/libide/workbench/ide-omni-bar.ui:596
+msgid "The project cannot be built while the build pipeline is being set up"
+msgstr ""
+"Proiectul nu poate fi generat în timp ce se configurează linia de asamblare "
+"a generării"
 
 #: src/libide/workbench/ide-workbench-actions.c:220
 msgid "Builder Statistics"
@@ -4659,7 +4671,7 @@ msgstr "Nu s-a putut trimite la gunoi fișierul: %s"
 msgid "Project Tree"
 msgstr "Arbore proiect"
 
-#: src/plugins/project-tree/gb-project-tree-builder.c:451
+#: src/plugins/project-tree/gb-project-tree-builder.c:453
 msgid "Empty"
 msgstr "Gol"
 
