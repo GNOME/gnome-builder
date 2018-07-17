@@ -111,7 +111,7 @@ ide_run_button_context_set (GtkWidget  *widget,
     ide_run_button_load (self, context);
 }
 
-static void
+static gboolean
 ide_run_button_query_tooltip (IdeRunButton *self,
                               gint          x,
                               gint          y,
@@ -146,9 +146,12 @@ ide_run_button_query_tooltip (IdeRunButton *self,
                         "visible", TRUE,
                         NULL);
           gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_shortcut));
-          break;
+
+          return TRUE;
         }
     }
+
+  return FALSE;
 }
 
 static void
