@@ -591,6 +591,10 @@
     <property name="title" translatable="yes">Build project</property>
     <property name="visible">true</property>
   </object>
+  <object class="GtkLabel" id="build_tooltip_message">
+    <property name="visible">true</property>
+    <property name="label" translatable="yes">The project cannot be built while the build pipeline is being set up</property>
+  </object>
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <widgets>

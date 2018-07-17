@@ -135,6 +135,7 @@ struct _IdeOmniBar
   GtkLabel             *build_result_mode_label;
   GtkButton            *build_button;
   GtkShortcutsShortcut *build_button_shortcut;
+  GtkLabel             *build_tooltip_message;
   GtkButton            *cancel_button;
   GtkLabel             *config_name_label;
   GtkLabel             *config_ready_label;
@@ -589,7 +590,7 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
   dzl_gtk_widget_remove_style_class (GTK_WIDGET (self), "building");
 }
 
-static void
+static gboolean
 ide_omni_bar__build_button__query_tooltip (IdeOmniBar *self,
                                            gint        x,
                                            gint        y,
@@ -597,11 +598,37 @@ ide_omni_bar__build_button__query_tooltip (IdeOmniBar *self,
                                            GtkTooltip *tooltip,
                                            GtkButton  *button)
 {
+  IdeContext *context;
+  IdeBuildManager *build_manager;
+  gboolean enabled;
+
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (GTK_IS_TOOLTIP (tooltip));
   g_assert (GTK_IS_BUTTON (button));
 
-  gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->build_button_shortcut));
+  if (NULL == (context = ide_widget_get_context (GTK_WIDGET (self))))
+    return FALSE;
+
+  build_manager = ide_context_get_build_manager (context);
+
+  /* Figure out if the run action is enabled. If it
+   * is not, then we should inform the user that
+   * the project cannot be run yet because the
+   * build pipeline is not yet configured. */
+  g_action_group_query_action (G_ACTION_GROUP (build_manager),
+                               "build",
+                               &enabled,
+                               NULL,
+                               NULL,
+                               NULL,
+                               NULL);
+
+  if (enabled)
+    gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->build_button_shortcut));
+  else
+    gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->build_tooltip_message));
+
+  return TRUE;
 }
 
 static void
@@ -640,6 +667,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button_shortcut);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_tooltip_message);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_diagnostics_image);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, cancel_button);

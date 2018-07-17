@@ -2,6 +2,10 @@
 <interface>
   <object class="GtkShortcutsShortcut" id="run_shortcut">
   </object>
+  <object class="GtkLabel" id="run_tooltip_message">
+    <property name="label" translatable="yes">The project cannot be run while the build pipeline is being set up</property>
+    <property name="visible">true</property>
+  </object>
   <template class="IdeRunButton" parent="GtkBox">
     <property name="orientation">horizontal</property>
     <style>
