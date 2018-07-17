@@ -329,6 +329,38 @@ ide_hover_delay_display (IdeHover *self)
                                   self, NULL);
 }
 
+void
+_ide_hover_display (IdeHover          *self,
+                    const GtkTextIter *iter)
+{
+  IdeSourceView *view;
+  GdkRectangle rect;
+
+  g_assert (IDE_IS_HOVER (self));
+  g_assert (iter != NULL);
+
+  if (self->state != IDE_HOVER_STATE_INITIAL)
+    return;
+
+  if (!(view = dzl_signal_group_get_target (self->signals)))
+    return;
+
+  g_assert (GTK_IS_TEXT_VIEW (view));
+
+  dzl_clear_source (&self->delay_display_source);
+
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (view), iter, &rect);
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (view),
+                                         GTK_TEXT_WINDOW_TEXT,
+                                         rect.x, rect.y,
+                                         &rect.x, &rect.y);
+
+  self->motion_x = rect.x;
+  self->motion_y = rect.y;
+
+  ide_hover_motion_timeout_cb (self);
+}
+
 static inline gboolean
 should_ignore_event (IdeSourceView  *view,
                      GdkWindow      *event_window)
