@@ -230,7 +230,6 @@ enum {
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
   CYCLE_COMPLETION,
-  DOCUMENTATION_REQUESTED,
   DECREASE_FONT_SIZE,
   DELETE_SELECTION,
   DRAW_BUBBLES,
@@ -5277,31 +5276,17 @@ ide_source_view_real_find_references (IdeSourceView *self)
 static void
 ide_source_view_real_request_documentation (IdeSourceView *self)
 {
-  g_autofree gchar *word = NULL;
-  GtkTextBuffer *buffer;
-  GtkTextIter begin;
-  GtkTextIter end;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkTextIter iter;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  if (priv->buffer == NULL)
+    return;
 
-  if (!gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
-    {
-      gtk_text_iter_order (&begin, &end);
+  ide_buffer_get_selection_bounds (priv->buffer, &iter, NULL);
 
-      if (!_ide_source_iter_starts_extra_natural_word (&begin))
-        {
-          _ide_source_iter_backward_extra_natural_word_start (&begin);
-          end = begin;
-        }
-
-      _ide_source_iter_forward_extra_natural_word_end (&end);
-    }
-
-  word = gtk_text_iter_get_slice (&begin, &end);
-
-  g_signal_emit (self, signals [DOCUMENTATION_REQUESTED], 0, word);
+  _ide_hover_display (priv->hover, &iter);
 }
 
 static void

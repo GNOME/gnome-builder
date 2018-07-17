@@ -28,10 +28,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeHover, ide_hover, IDE, HOVER, GObject)
 
-IdeHover *_ide_hover_new          (IdeSourceView *view);
-void      _ide_hover_set_context  (IdeHover      *self,
-                                   IdeContext    *context);
-void      _ide_hover_set_language (IdeHover      *self,
-                                   const gchar   *language);
+IdeHover *_ide_hover_new          (IdeSourceView     *view);
+void      _ide_hover_display      (IdeHover          *self,
+                                   const GtkTextIter *iter);
+void      _ide_hover_set_context  (IdeHover          *self,
+                                   IdeContext        *context);
+void      _ide_hover_set_language (IdeHover          *self,
+                                   const gchar       *language);
 
 G_END_DECLS
