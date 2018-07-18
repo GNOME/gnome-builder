@@ -51,6 +51,7 @@ src/libide/debugger/ide-debugger-breakpoints-view.ui
 src/libide/debugger/ide-debugger-controls.ui
 src/libide/debugger/ide-debugger-disassembly-view.ui
 src/libide/debugger/ide-debugger-editor-addin.c
+src/libide/debugger/ide-debugger-hover-controls.ui
 src/libide/debugger/ide-debugger-hover-provider.c
 src/libide/debugger/ide-debugger-libraries-view.ui
 src/libide/debugger/ide-debugger-locals-view.c
@@ -155,10 +156,10 @@ src/plugins/create-project/gbp-create-project-tool.c
 src/plugins/create-project/gbp-create-project-widget.c
 src/plugins/create-project/gbp-create-project-widget.ui
 src/plugins/ctags/ide-ctags-preferences-addin.c
+src/plugins/devhelp/gbp-devhelp-hover-provider.c
 src/plugins/devhelp/gbp-devhelp-menu-button.ui
 src/plugins/devhelp/gbp-devhelp-view.c
 src/plugins/devhelp/gtk/menus.ui
-src/plugins/documentation-card/gbp-documentation-card.ui
 src/plugins/eslint/eslint_plugin.py
 src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml
 src/plugins/find-other-file/find_other_file.py
@@ -227,6 +228,7 @@ src/plugins/spellcheck/gbp-spell-widget.ui
 src/plugins/spellcheck/gtk/menus.ui
 src/plugins/support/gtk/menus.ui
 src/plugins/support/ide-support-application-addin.c
+src/plugins/symbol-tree/gbp-symbol-hover-provider.c
 src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c
 src/plugins/symbol-tree/gbp-symbol-menu-button.c
 src/plugins/symbol-tree/gbp-symbol-menu-button.ui
