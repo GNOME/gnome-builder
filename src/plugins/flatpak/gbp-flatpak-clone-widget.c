@@ -25,6 +25,8 @@
 #include "gbp-flatpak-clone-widget.h"
 #include "gbp-flatpak-sources.h"
 
+#define G_LOG_DOMAIN "gbp-flatpak-clone-widget"
+
 #define ANIMATION_DURATION_MSEC 250
 
 struct _GbpFlatpakCloneWidget
