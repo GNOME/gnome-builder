@@ -1,4 +1,36 @@
 ==============
+Version 3.29.4
+==============
+
+Changes since last release:
+
+ • A new "interactive tooltip" based on GtkPopover has been added
+   to the editor along with plugin support for "hover providers"
+   which roughly matches the language server protocol
+ • Builder now depends on GtkSourceView 4.0
+ • A number of performance issues have been fixed on large projects
+ • The todo plugin now uses "git grep" when available
+ • Enable clang support for Objective-C
+ • Avoid use of "async" keyword for Python 3.7 support
+ • Use tooltips to display broken/unsatisfied build pipelines
+ • Add support for a number of bundled mimetype icons and other
+   icon quality improvements
+ • Additional license support in templates
+ • Additional snippets for various languages
+ • Improvements to character overwrite support in the editor
+ • Various toolchain improvements
+ • Various vim emulation improvements
+ • A successful build/configure will cause diagnostics to be reloaded
+   in the open source code views
+ • Simple support for gdb countpoints
+ • SSH+git clone improvements when private keys are used
+
+Updated Translations:
+ 
+  German, Romanian
+
+
+==============
 Version 3.29.3
 ==============
 
