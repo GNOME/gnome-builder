@@ -660,15 +660,42 @@ ide_hover_init (IdeHover *self)
                                    G_CONNECT_SWAPPED);
 }
 
-IdeHover *
-_ide_hover_new (IdeSourceView *view)
+static void
+ide_hover_extension_added_cb (IdeExtensionSetAdapter *set,
+                              PeasPluginInfo         *plugin_info,
+                              PeasExtension          *exten,
+                              gpointer                user_data)
 {
-  IdeHover *self;
+  IdeHover *self = user_data;
+  IdeHoverProvider *provider = (IdeHoverProvider *)exten;
+  IdeSourceView *view;
 
-  self = g_object_new (IDE_TYPE_HOVER, NULL);
-  dzl_signal_group_set_target (self->signals, view);
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (IDE_IS_HOVER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_HOVER_PROVIDER (provider));
 
-  return self;
+  view = dzl_signal_group_get_target (self->signals);
+  ide_hover_provider_load (provider, view);
+}
+
+static void
+ide_hover_extension_removed_cb (IdeExtensionSetAdapter *set,
+                                PeasPluginInfo         *plugin_info,
+                                PeasExtension          *exten,
+                                gpointer                user_data)
+{
+  IdeHover *self = user_data;
+  IdeHoverProvider *provider = (IdeHoverProvider *)exten;
+  IdeSourceView *view;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (IDE_IS_HOVER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_HOVER_PROVIDER (provider));
+
+  view = dzl_signal_group_get_target (self->signals);
+  ide_hover_provider_unload (provider, view);
 }
 
 void
@@ -686,6 +713,20 @@ _ide_hover_set_context (IdeHover   *self,
                                                    IDE_TYPE_HOVER_PROVIDER,
                                                    "Hover-Provider-Languages",
                                                    NULL);
+
+  g_signal_connect (self->providers,
+                    "extension-added",
+                    G_CALLBACK (ide_hover_extension_added_cb),
+                    self);
+
+  g_signal_connect (self->providers,
+                    "extension-removed",
+                    G_CALLBACK (ide_hover_extension_removed_cb),
+                    self);
+
+  ide_extension_set_adapter_foreach (self->providers,
+                                     ide_hover_extension_added_cb,
+                                     self);
 }
 
 void
@@ -696,4 +737,15 @@ _ide_hover_set_language (IdeHover    *self,
 
   if (self->providers != NULL)
     ide_extension_set_adapter_set_value (self->providers, language);
+}
+
+IdeHover *
+_ide_hover_new (IdeSourceView *view)
+{
+  IdeHover *self;
+
+  self = g_object_new (IDE_TYPE_HOVER, NULL);
+  dzl_signal_group_set_target (self->signals, view);
+
+  return self;
 }
