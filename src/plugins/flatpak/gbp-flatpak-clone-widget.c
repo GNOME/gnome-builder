@@ -344,43 +344,31 @@ check_directory_exists_and_nonempty (GFile         *directory,
   return TRUE;
 }
 
-static void
-gbp_flatpak_clone_widget_worker (IdeTask      *task,
-                                 gpointer      source_object,
-                                 gpointer      task_data,
-                                 GCancellable *cancellable)
+static gboolean
+download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
+                                      DownloadRequest        *req,
+                                      GCancellable           *cancellable,
+                                      gboolean               *out_did_download,
+                                      GError                **error)
 {
-  GbpFlatpakCloneWidget *self = source_object;
-  DownloadRequest *req = task_data;
   g_autofree gchar *uristr = NULL;
-  GgitFetchOptions *fetch_options;
-  g_autoptr(GgitCheckoutOptions) checkout_options = NULL;
-  g_autoptr(GgitCloneOptions) clone_options = NULL;
-  g_autoptr(GgitObject) parsed_rev = NULL;
-  g_autoptr(GgitRemoteCallbacks) callbacks = NULL;
-  g_autoptr(GgitRepository) repository = NULL;
-  g_autoptr(IdeProgress) progress = NULL;
-  g_autoptr(GFile) src = NULL;
-  g_autoptr(GFile) dst = NULL;
-  g_autoptr(GFile) build_config = NULL;
-  g_autoptr(GKeyFile) build_config_keyfile = NULL;
-  g_autofree gchar *manifest_contents = NULL;
-  g_autofree gchar *build_config_path = NULL;
-  g_autofree gchar *manifest_hash = NULL;
-  g_autofree gchar *runtime_id = NULL;
-  g_autofree gchar *manifest_file_name = NULL;
   g_autoptr(GError) error = NULL;
-  gsize manifest_contents_len;
-  GType git_callbacks_type;
-  guint i;
 
-  g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (self));
   g_assert (req != NULL);
+  g_assert (out_did_download != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (req->src->type == TYPE_GIT)
     {
+      GgitFetchOptions *fetch_options;
+      g_autoptr(GgitCheckoutOptions) checkout_options = NULL;
+      g_autoptr(GgitCloneOptions) clone_options = NULL;
+      g_autoptr(GgitObject) parsed_rev = NULL;
+      g_autoptr(GgitRemoteCallbacks) callbacks = NULL;
+      g_autoptr(GgitRepository) repository = NULL;
+      g_autoptr(IdeProgress) progress = NULL;
+      GType git_callbacks_type;
+
       /* First, try to open an existing repository at this path */
       repository = ggit_repository_open (req->destination, &error);
 
@@ -439,10 +427,17 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
               if (error != NULL)
                 {
                   ide_task_return_error (task, g_steal_pointer (&error));
-                  return;
+                  return FALSE;
                 }
             }
+
+          *out_did_download = TRUE;
         }
+      else
+        {
+          *out_did_download = FALSE;
+        }
+
       req->project_file = ggit_repository_get_workdir (repository);
     }
   else if (req->src->type == TYPE_ARCHIVE)
@@ -457,7 +452,7 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
                                                 &error))
         {
           ide_task_return_error (task, g_steal_pointer (&error));
-          return;
+          return FALSE;
         }
 
       /* If the target directory already exists and was non-empty,
@@ -470,6 +465,7 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
           g_debug ("Re-using non-empty source dir %s already at "
                    "destination", req->src->name);
           req->project_file = g_steal_pointer (&source_dir);
+          *out_did_download = FALSE;
         }
       else
         {
@@ -485,9 +481,59 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
           if (error != NULL)
             {
               ide_task_return_error (task, g_steal_pointer (&error));
-              return;
+              return FALSE;
             }
+
+          *out_did_download = TRUE;
         }
+    }
+
+  return TRUE;
+}
+
+static void
+gbp_flatpak_clone_widget_worker (IdeTask      *task,
+                                 gpointer      source_object,
+                                 gpointer      task_data,
+                                 GCancellable *cancellable)
+{
+  GbpFlatpakCloneWidget *self = source_object;
+  DownloadRequest *req = task_data;
+  gboolean did_download = FALSE;
+  g_autoptr(GFile) src = NULL;
+  g_autoptr(GFile) dst = NULL;
+  g_autoptr(GFile) build_config = NULL;
+  g_autoptr(GKeyFile) build_config_keyfile = NULL;
+  g_autofree gchar *manifest_contents = NULL;
+  g_autofree gchar *build_config_path = NULL;
+  g_autofree gchar *manifest_hash = NULL;
+  g_autofree gchar *runtime_id = NULL;
+  g_autofree gchar *manifest_file_name = NULL;
+  g_autoptr(GError) error = NULL;
+  gsize manifest_contents_len;
+  guint i;
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (self));
+  g_assert (req != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (!download_flatpak_sources_if_required (self,
+                                             req,
+                                             &did_download,
+                                             cancellable,
+                                             &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  /* No need to do any of the following, we can assume that
+   * we already have it there. */
+  if (!did_download)
+    {
+      ide_task_return_boolean (task, TRUE);
+      return;
     }
 
   for (i = 0; req->src->patches[i]; i++)
