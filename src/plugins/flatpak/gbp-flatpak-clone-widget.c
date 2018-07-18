@@ -352,7 +352,7 @@ download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
                                       GError                **error)
 {
   g_autofree gchar *uristr = NULL;
-  g_autoptr(GError) error = NULL;
+  g_autoptr(GError) local_error = NULL;
 
   g_assert (req != NULL);
   g_assert (out_did_download != NULL);
@@ -370,16 +370,16 @@ download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
       GType git_callbacks_type;
 
       /* First, try to open an existing repository at this path */
-      repository = ggit_repository_open (req->destination, &error);
+      repository = ggit_repository_open (req->destination, &local_error);
 
       if (repository == NULL &&
-          !g_error_matches (error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
+          !g_error_matches (local_error, GGIT_ERROR, GGIT_ERROR_NOTFOUND))
         {
-          ide_task_return_error (task, g_steal_pointer (&error));
-          return;
+          g_propagate_error (error, g_steal_pointer (&local_error));
+          return FALSE;
         }
 
-      g_clear_error (&error);
+      g_clear_error (&local_error);
 
       if (repository == NULL)
         {
@@ -403,30 +403,30 @@ download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
           dzl_clear_pointer (&fetch_options, ggit_fetch_options_free);
 
           uristr = ide_vcs_uri_to_string (req->src->uri);
-          repository = ggit_repository_clone (uristr, req->destination, clone_options, &error);
+          repository = ggit_repository_clone (uristr, req->destination, clone_options, &local_error);
           if (repository == NULL)
             {
-              ide_task_return_error (task, g_steal_pointer (&error));
-              return;
+              g_propagate_error (error, g_steal_pointer (&local_error));
+              return FALSE;
             }
 
           /* Now check out the revision, when specified */
           if (req->src->branch != NULL)
             {
-              parsed_rev = ggit_repository_revparse (repository, req->src->branch, &error);
+              parsed_rev = ggit_repository_revparse (repository, req->src->branch, &local_error);
               if (parsed_rev == NULL)
                 {
-                  ide_task_return_error (task, g_steal_pointer (&error));
-                  return;
+                  g_propagate_error (error, g_steal_pointer (&local_error));
+                  return FALSE;
                 }
 
               checkout_options = ggit_checkout_options_new ();
               ggit_repository_reset (repository, parsed_rev, GGIT_RESET_HARD,
-                                     checkout_options, &error);
+                                     checkout_options, &local_error);
 
-              if (error != NULL)
+              if (local_error != NULL)
                 {
-                  ide_task_return_error (task, g_steal_pointer (&error));
+                  g_propagate_error (error, g_steal_pointer (&local_error));
                   return FALSE;
                 }
             }
@@ -449,9 +449,9 @@ download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
       if (!check_directory_exists_and_nonempty (source_dir,
                                                 &exists_and_nonempty,
                                                 cancellable,
-                                                &error))
+                                                &local_error))
         {
-          ide_task_return_error (task, g_steal_pointer (&error));
+          g_propagate_error (error, g_steal_pointer (&local_error));
           return FALSE;
         }
 
@@ -477,10 +477,10 @@ download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
                                                                  req->src->name,
                                                                  req->destination,
                                                                  self->strip_components,
-                                                                 &error);
-          if (error != NULL)
+                                                                 &local_error);
+          if (local_error != NULL)
             {
-              ide_task_return_error (task, g_steal_pointer (&error));
+              g_propagate_error (error, g_steal_pointer (&local_error));
               return FALSE;
             }
 
@@ -520,8 +520,8 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
 
   if (!download_flatpak_sources_if_required (self,
                                              req,
-                                             &did_download,
                                              cancellable,
+                                             &did_download,
                                              &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
