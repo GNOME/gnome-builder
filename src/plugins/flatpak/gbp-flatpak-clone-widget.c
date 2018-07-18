@@ -289,6 +289,61 @@ gbp_flatpak_clone_widget_worker_completed (IdeTask    *task,
   g_timeout_add (ANIMATION_DURATION_MSEC, open_after_timeout, g_object_ref (task));
 }
 
+static gboolean
+check_directory_exists_and_nonempty (GFile         *directory,
+                                     gboolean      *out_directory_exists_and_nonempty,
+                                     GCancellable  *cancellable,
+                                     GError       **error)
+{
+  g_autoptr(GError) local_error = NULL;
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  g_autoptr(GFileInfo) info = NULL;
+  g_autofree gchar *path = g_file_get_path (directory);
+
+  g_assert (G_IS_FILE (directory));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (out_directory_exists_and_nonempty != NULL);
+
+  *out_directory_exists_and_nonempty = FALSE;
+  enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          cancellable,
+                                          &local_error);
+
+  if (enumerator == NULL)
+    {
+      if (g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        {
+          *out_directory_exists_and_nonempty = FALSE;
+          return TRUE;
+        }
+
+      g_propagate_error (error, g_steal_pointer (&local_error));
+      return FALSE;
+    }
+
+  /* Check for at least one child in the directory - if there is
+   * one then the directory is non-empty. Otherwise, the directory
+   * is either empty or an error occurred. */
+  info = g_file_enumerator_next_file (enumerator, cancellable, &local_error);
+
+  if (info != NULL)
+    {
+      *out_directory_exists_and_nonempty = TRUE;
+      return TRUE;
+    }
+
+  if (local_error != NULL)
+    {
+      g_propagate_error (error, g_steal_pointer (&local_error));
+      return FALSE;
+    }
+
+  *out_directory_exists_and_nonempty = FALSE;
+  return TRUE;
+}
+
 static void
 gbp_flatpak_clone_widget_worker (IdeTask      *task,
                                  gpointer      source_object,
@@ -392,17 +447,46 @@ gbp_flatpak_clone_widget_worker (IdeTask      *task,
     }
   else if (req->src->type == TYPE_ARCHIVE)
     {
-      uristr = ide_vcs_uri_to_string (req->src->uri);
-      req->project_file = gbp_flatpak_sources_fetch_archive (uristr,
-                                                             req->src->sha,
-                                                             req->src->name,
-                                                             req->destination,
-                                                             self->strip_components,
-                                                             &error);
-      if (error != NULL)
+      g_autoptr(GFile) source_dir = g_file_get_child (req->destination,
+                                                      req->src->name);
+      gboolean exists_and_nonempty = FALSE;
+
+      if (!check_directory_exists_and_nonempty (source_dir,
+                                                &exists_and_nonempty,
+                                                cancellable,
+                                                &error))
         {
           ide_task_return_error (task, g_steal_pointer (&error));
           return;
+        }
+
+      /* If the target directory already exists and was non-empty,
+       * then we have probably already checked out this project
+       * using GbpFlatpakCloneWidget. In that case, we don't want
+       * to overwrite it, we should get just return the source_dir
+       * directly. */
+      if (exists_and_nonempty)
+        {
+          g_debug ("Re-using non-empty source dir %s already at "
+                   "destination", req->src->name);
+          req->project_file = g_steal_pointer (&source_dir);
+        }
+      else
+        {
+          uristr = ide_vcs_uri_to_string (req->src->uri);
+          g_debug ("Fetching source archive from %s", uristr);
+
+          req->project_file = gbp_flatpak_sources_fetch_archive (uristr,
+                                                                 req->src->sha,
+                                                                 req->src->name,
+                                                                 req->destination,
+                                                                 self->strip_components,
+                                                                 &error);
+          if (error != NULL)
+            {
+              ide_task_return_error (task, g_steal_pointer (&error));
+              return;
+            }
         }
     }
 
