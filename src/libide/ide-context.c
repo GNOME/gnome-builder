@@ -2305,11 +2305,14 @@ _ide_context_is_restoring (IdeContext *self)
 
 /**
  * ide_context_get_settings:
+ * @self: an #IdeContext
+ * @schema_id: the #GSettings schema identifier
+ * @relative_path: (nullable): the path for the settings or %NULL
  *
  * Gets an #IdeSettings representing the given #GSettingsSchema.
  *
- * relative_path will be used to apply multiple layers of settings. Project settings will be
- * applied to first, followed by global settings.
+ * @relative_path will be used to apply multiple layers of settings.
+ * Project settings will be applied to first, followed by global settings.
  *
  * Returns: (transfer full): An #IdeSettings.
  */
