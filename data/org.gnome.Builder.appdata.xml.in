@@ -81,6 +81,15 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.29.4" date="2018-07-17">
+      <description>
+        <p>
+          This release includes a brand new interactive tooltip for the source code editor.
+          A number of critical bug fixes are included as well.
+        </p>
+      </description>
+    </release>
+
     <release version="3.29.3" date="2018-06-18">
       <description>
         <p>
