@@ -18,7 +18,6 @@
 
 using GLib;
 using Ide;
-using Vala;
 
 namespace Ide
 {
@@ -30,11 +29,18 @@ namespace Ide
 		                                             GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var service = Ide.ValaService.from_context (this.get_context ());
-			var unsaved_files = Ide.UnsavedFiles.from_context (this.get_context ());
-			yield service.index.parse_file (file, unsaved_files, cancellable);
-			var results = yield service.index.get_diagnostics (file, cancellable);
-			return results;
+			unowned Ide.Context context = this.get_context ();
+			unowned Ide.BuildSystem? build_system = Ide.BuildSystem.from_context (context);
+
+			string[] flags = {};
+			try {
+				flags = yield build_system.get_build_flags_async (file, cancellable);
+			} catch (GLib.Error err) {
+				warning (err.message);
+			}
+
+			unowned Ide.ValaClient client = Ide.ValaClient.from_context (context);
+			return yield client.diagnose_async (file, flags, cancellable);
 		}
 
 		public void load () {}
