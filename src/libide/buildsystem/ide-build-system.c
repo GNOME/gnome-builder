@@ -492,12 +492,12 @@ ide_build_system_get_build_flags_for_files_async (IdeBuildSystem       *self,
 }
 
 /**
- * ide_build_system_get_build_flags_for_files_finish: (skip)
+ * ide_build_system_get_build_flags_for_files_finish:
  * @self: an #IdeBuildSystem
  * @result: a #GAsyncResult
  * @error: a location for a #GError or %NULL
  *
- * Returns: (element-type Gio.File GLib.Strv): a #GHashTable or #IdeFile to #GStrv
+ * Returns: (element-type IdeFile GStrv) (transfer full): a #GHashTable or #IdeFile to #GStrv
  *
  * Since: 3.28
  */
@@ -705,12 +705,12 @@ ide_build_system_get_build_flags_for_dir_async (IdeBuildSystem      *self,
 }
 
 /**
- * ide_build_system_get_build_flags_for_dir_finish: (skip)
+ * ide_build_system_get_build_flags_for_dir_finish:
  * @self: an #IdeBuildSystem
  * @result: a #GAsyncResult
  * @error: a location for a #GError or %NULL
  *
- * Returns: a #GHashTable of #IdeFile to #GStrv
+ * Returns: (element-type IdeFile GStrv) (transfer full): a #GHashTable of #IdeFile to #GStrv
  */
 GHashTable *
 ide_build_system_get_build_flags_for_dir_finish (IdeBuildSystem  *self,

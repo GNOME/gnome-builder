@@ -33,6 +33,41 @@ namespace Ide
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
+			if (!file.is_native ())
+				throw new GLib.IOError.NOT_SUPPORTED ("Only native files are supported");
+
+			unowned Ide.ValaClient? client = (Ide.ValaClient)context.get_service_typed (typeof (Ide.ValaClient));
+			try {
+				var entries = yield client.index_file_async (file, build_flags, cancellable);
+				return new ValaCodeIndexEntries (file, entries);
+			} catch (Error e) {
+				throw e;
+			}
+		}
+
+		public async string generate_key_async (Ide.SourceLocation location,
+		                                        [CCode (array_length = false, array_null_terminated = true)] string[]? build_flags,
+		                                        GLib.Cancellable? cancellable)
+			throws GLib.Error
+		{
+			unowned Ide.ValaClient? client = (Ide.ValaClient)context.get_service_typed (typeof (Ide.ValaClient));
+			unowned Ide.File ifile = location.get_file ();
+			var line = location.get_line () + 1;
+			var column = location.get_line_offset () + 1;
+			try {
+				return yield client.get_index_key_async (ifile.file, build_flags, line, column, cancellable);
+			} catch (Error e) {
+				throw e;
+			}
+		}
+	}
+	/*public class ValaCodeIndexer : Ide.Object, Ide.CodeIndexer
+	{
+		public async Ide.CodeIndexEntries index_file_async (GLib.File file,
+		                                                    [CCode (array_length = false, array_null_terminated = true)] string[]? build_flags,
+		                                                    GLib.Cancellable? cancellable)
+			throws GLib.Error
+		{
 			var context = this.get_context ();
 			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
 			var index = service.index;
@@ -56,7 +91,7 @@ namespace Ide
 		}
 
 		public async string generate_key_async (Ide.SourceLocation location,
-		                                        string[]? build_flags,
+		                                        [CCode (array_length = false, array_null_terminated = true)] string[]? build_flags,
 		                                        GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
@@ -73,10 +108,11 @@ namespace Ide
 
 			return symbol.get_full_name ();
 		}
-	}
+	}*/
 
 	public class ValaCodeIndexEntries : GLib.Object, Ide.CodeIndexEntries
 	{
+		GLib.Variant ventries;
 		GLib.GenericArray<Ide.CodeIndexEntry> entries;
 		GLib.File file;
 		uint pos;
@@ -86,11 +122,12 @@ namespace Ide
 			return this.file;
 		}
 
-		public ValaCodeIndexEntries (GLib.File file, Ide.ValaSymbolTree tree)
+		public ValaCodeIndexEntries (GLib.File file, GLib.Variant entries)
 		{
 			this.entries = new GLib.GenericArray<Ide.CodeIndexEntry> ();
 			this.file = file;
-			this.add_children (tree, null, "");
+			this.ventries = entries;
+			//this.add_children (tree, null, "");
 		}
 
 		public Ide.CodeIndexEntry? get_next_entry ()
