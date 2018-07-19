@@ -29,89 +29,38 @@ namespace Ide
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
-			var index = service.index;
-			var symbol_tree = yield index.get_symbol_tree (file, cancellable);
+			var build_system = this.context.get_build_system ();
+			var ifile = new Ide.File (context, file);
 
-			return symbol_tree;
-		}
-
-		Ide.Symbol? create_symbol (Ide.File file, Vala.Symbol symbol)
-		{
-			var kind = Ide.SymbolKind.NONE;
-			if (symbol is Vala.Class)
-				kind = Ide.SymbolKind.CLASS;
-			else if (symbol is Vala.Subroutine) {
-				if (symbol.is_instance_member ())
-					kind = Ide.SymbolKind.METHOD;
-				else
-					kind = Ide.SymbolKind.FUNCTION;
-			}
-			else if (symbol is Vala.Struct) kind = Ide.SymbolKind.STRUCT;
-			else if (symbol is Vala.Field) kind = Ide.SymbolKind.FIELD;
-			else if (symbol is Vala.Enum) kind = Ide.SymbolKind.ENUM;
-			else if (symbol is Vala.EnumValue) kind = Ide.SymbolKind.ENUM_VALUE;
-			else if (symbol is Vala.Variable) kind = Ide.SymbolKind.VARIABLE;
-			else if (symbol is Vala.Namespace) kind = Ide.SymbolKind.NAMESPACE;
-
-			var flags = Ide.SymbolFlags.NONE;
-			if (symbol.is_instance_member ())
-				flags |= Ide.SymbolFlags.IS_MEMBER;
-
-			var binding = get_member_binding (symbol);
-			if (binding != null && binding == Vala.MemberBinding.STATIC)
-				flags |= Ide.SymbolFlags.IS_STATIC;
-
-			if (symbol.version.deprecated)
-				flags |= Ide.SymbolFlags.IS_DEPRECATED;
-
-			var source_reference = symbol.source_reference;
-
-			if (source_reference != null) {
-				var loc = new Ide.SourceLocation (file,
-												  source_reference.begin.line - 1,
-												  source_reference.begin.column - 1,
-												  0);
-				return new Ide.Symbol (symbol.name, kind, flags, loc, loc, loc);
+			string[] flags = {};
+			try {
+				flags = yield build_system.get_build_flags_async (ifile, cancellable);
+			} catch (GLib.Error err) {
+				warning (err.message);
 			}
 
-			return null;
+			unowned Ide.ValaClient client = (Ide.ValaClient)get_context ().get_service_typed (typeof (Ide.ValaClient));
+			return yield client.get_symbol_tree_async (file, flags, cancellable);
 		}
 
 		public async Ide.Symbol? lookup_symbol_async (Ide.SourceLocation location,
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
-			var index = service.index;
-			var file = location.get_file ();
+			var build_system = context.get_build_system ();
+			unowned Ide.File ifile = location.get_file ();
 			var line = (int)location.get_line () + 1;
 			var column = (int)location.get_line_offset () + 1;
 
-			Vala.Symbol? symbol = yield index.find_symbol_at (file.get_file (), line, column);
+			string[] flags = {};
+			try {
+				flags = yield build_system.get_build_flags_async (ifile, cancellable);
+			} catch (GLib.Error err) {
+				warning (err.message);
+			}
 
-			if (symbol != null)
-				return create_symbol (file, symbol);
-
-			return null;
-		}
-
-		// a member binding is Instance, Class, or Static
-		private Vala.MemberBinding? get_member_binding (Vala.Symbol sym)
-		{
-			if (sym is Vala.Constructor)
-				return ((Vala.Constructor)sym).binding;
-			if (sym is Vala.Destructor)
-				return ((Vala.Destructor)sym).binding;
-			if (sym is Vala.Field)
-				return ((Vala.Field)sym).binding;
-			if (sym is Vala.Method)
-				return ((Vala.Method)sym).binding;
-			if (sym is Vala.Property)
-				return ((Vala.Property)sym).binding;
-			return null;
+			unowned Ide.ValaClient client = (Ide.ValaClient)get_context ().get_service_typed (typeof (Ide.ValaClient));
+			return yield client.locate_symbol_async (ifile.file, flags, line, column, cancellable);
 		}
 
 		public void load () {}
@@ -128,30 +77,22 @@ namespace Ide
 		                                                   GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
-			var index = service.index;
-			var file = location.get_file ();
+			var build_system = context.get_build_system ();
+			unowned Ide.File ifile = location.get_file ();
 			var line = (int)location.get_line () + 1;
 			var column = (int)location.get_line_offset () + 1;
 
-			var symbol = yield index.find_symbol_at (file.get_file (), line, column);
-
-			while (symbol != null) {
-				if (symbol is Vala.Class ||
-					symbol is Vala.Subroutine ||
-					symbol is Vala.Namespace ||
-					symbol is Vala.Struct)
-					break;
-
-				if (symbol.owner != null)
-					symbol = symbol.owner.owner;
-				else
-					symbol = symbol.parent_symbol;
+			string[] flags = {};
+			try {
+				flags = yield build_system.get_build_flags_async (ifile, cancellable);
+			} catch (GLib.Error err) {
+				warning (err.message);
 			}
 
+			unowned Ide.ValaClient client = (Ide.ValaClient)get_context ().get_service_typed (typeof (Ide.ValaClient));
+			var symbol = yield client.locate_symbol_async (ifile.file, flags, line, column, cancellable);
 			if (symbol != null)
-				return create_symbol (file, symbol);
+				return symbol;
 
 			throw new GLib.IOError.NOT_FOUND ("Failed to locate nearest scope");
 		}
