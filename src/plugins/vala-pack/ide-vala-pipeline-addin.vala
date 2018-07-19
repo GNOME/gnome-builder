@@ -19,7 +19,6 @@
 using GLib;
 using Gtk;
 using Ide;
-using Vala;
 
 namespace Ide
 {

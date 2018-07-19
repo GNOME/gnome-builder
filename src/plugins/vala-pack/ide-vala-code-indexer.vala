@@ -33,45 +33,32 @@ namespace Ide
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
-			var index = service.index;
-			var tree = index.get_symbol_tree_sync (file, cancellable);
+			if (!file.is_native ())
+				throw new GLib.IOError.NOT_SUPPORTED ("Only native files are supported");
 
-			Ide.CodeIndexEntries? ret = null;
-
-			Ide.ThreadPool.push (Ide.ThreadPoolKind.INDEXER, () => {
-				index.do_locked (_ => {
-					ret = new Ide.ValaCodeIndexEntries (file, tree as Ide.ValaSymbolTree);
-				});
-				GLib.Idle.add(index_file_async.callback);
-			});
-
-			yield;
-
-			if (ret == null)
-				throw new GLib.IOError.FAILED ("failed to build entries");
-
-			return ret;
+			unowned Ide.ValaClient? client = (Ide.ValaClient)context.get_service_typed (typeof (Ide.ValaClient));
+			try {
+				var entries = yield client.index_file_async (file, build_flags, cancellable);
+				return new ValaCodeIndexEntries (file, entries);
+			} catch (Error e) {
+				throw e;
+			}
 		}
 
 		public async string generate_key_async (Ide.SourceLocation location,
-		                                        string[]? build_flags,
+		                                        [CCode (array_length = false, array_null_terminated = true)] string[]? build_flags,
 		                                        GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
-			var index = service.index;
-			var file = location.get_file ();
+			unowned Ide.ValaClient? client = (Ide.ValaClient)context.get_service_typed (typeof (Ide.ValaClient));
+			unowned Ide.File ifile = location.get_file ();
 			var line = location.get_line () + 1;
 			var column = location.get_line_offset () + 1;
-			Vala.Symbol? symbol = yield index.find_symbol_at (file.get_file (), (int)line, (int)column);
-
-			if (symbol == null)
-				throw new GLib.IOError.FAILED ("failed to locate symbol");
-
-			return symbol.get_full_name ();
+			try {
+				return yield client.get_index_key_async (ifile.file, build_flags, line, column, cancellable);
+			} catch (Error e) {
+				throw e;
+			}
 		}
 	}
 
@@ -86,11 +73,36 @@ namespace Ide
 			return this.file;
 		}
 
-		public ValaCodeIndexEntries (GLib.File file, Ide.ValaSymbolTree tree)
+		public ValaCodeIndexEntries (GLib.File file, GLib.Variant ventries)
 		{
-			this.entries = new GLib.GenericArray<Ide.CodeIndexEntry> ();
+			entries = new GLib.GenericArray<Ide.CodeIndexEntry> ();
 			this.file = file;
-			this.add_children (tree, null, "");
+			var iter = ventries.iterator ();
+			Ide.SymbolFlags flags;
+			Ide.SymbolKind kind;
+			string key;
+			string name;
+			uint begin_line;
+			uint begin_line_offset;
+			uint end_line;
+			uint end_line_offset;
+			while (iter.next ("(usisuuuu)",
+			                  out flags,
+			                  out key,
+			                  out kind,
+			                  out name,
+			                  out begin_line,
+			                  out begin_line_offset,
+			                  out end_line,
+			                  out end_line_offset)) {
+				var entry_builder = new Ide.CodeIndexEntryBuilder ();
+				entry_builder.set_flags (flags);
+				entry_builder.set_key (key);
+				entry_builder.set_kind (kind);
+				entry_builder.set_name (name);
+				entry_builder.set_range (begin_line, begin_line_offset, end_line, end_line_offset);
+				entries.add (entry_builder.build ());
+			}
 		}
 
 		public Ide.CodeIndexEntry? get_next_entry ()
@@ -115,68 +127,6 @@ namespace Ide
 			}
 
 			return ret;
-		}
-
-		void add_children (Ide.ValaSymbolTree tree,
-		                   Ide.SymbolNode? parent,
-		                   string prefix)
-		{
-			var n_children = tree.get_n_children (parent);
-			var builder = new Ide.CodeIndexEntryBuilder ();
-
-			for (var i = 0; i < n_children; i++) {
-				var child = tree.get_nth_child (parent, i) as Ide.ValaSymbolNode;
-				string name = null;
-
-				if (is_null_or_empty (prefix))
-					name = child.name;
-				else if (child.name != null && child.name[0] == '.')
-					name = "%s%s".printf (prefix, child.name);
-				else if (child.name != null)
-					name = "%s.%s".printf (prefix, child.name);
-				else
-					continue;
-
-				if (child.node is Vala.Symbol) {
-					var node = child.node as Vala.Symbol;
-					var loc = node.source_reference;
-					var search_name = name;
-
-					// NOTE: I don't like that we do the prefix stuff here,
-					//       but we don't have a good place to do it yet.
-					switch (child.kind) {
-					case Ide.SymbolKind.FUNCTION:
-					case Ide.SymbolKind.METHOD:
-						search_name = "f\x1F%s".printf (name);
-						break;
-
-					case Ide.SymbolKind.VARIABLE:
-					case Ide.SymbolKind.CONSTANT:
-						search_name = "v\x1F%s".printf (name);
-						break;
-
-					case Ide.SymbolKind.CLASS:
-						search_name = "c\x1F%s".printf (name);
-						break;
-
-					default:
-						search_name = "x\x1F%s".printf (name);
-						break;
-					}
-
-					builder.set_flags (child.flags | Ide.SymbolFlags.IS_DEFINITION);
-					builder.set_name (search_name);
-					builder.set_key (node.get_full_name ());
-					builder.set_kind (child.kind);
-					builder.set_range (loc.begin.line, loc.begin.column, loc.end.line, loc.end.column);
-
-					var entry = builder.build ();
-
-					this.entries.add (entry);
-				}
-
-				this.add_children (tree, child, name);
-			}
 		}
 	}
 }
