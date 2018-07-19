@@ -26,8 +26,9 @@ namespace Ide
 	{
 		Ide.ValaIndex _index;
 
-		public static Ide.ValaService from_context (Ide.Context context) {
-			return (Ide.ValaService)context.ensure_child_typed (typeof (ValaService));
+		public static unowned Ide.ValaService from_context (Ide.Context context) {
+			var service = (Ide.ValaService)context.ensure_child_typed (typeof (ValaService));
+			return (Ide.ValaService)context.peek_child_typed (typeof (ValaService));
 		}
 
 		public unowned string get_name () {
