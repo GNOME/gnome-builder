@@ -18,18 +18,17 @@
 
 using GLib;
 using Gtk;
-using Vala;
 
 namespace Ide
 {
 	public class ValaCompletionItem : GLib.Object, Ide.CompletionProposal
 	{
-		internal Vala.Symbol symbol;
+		//internal Vala.Symbol symbol;
 		internal uint priority;
 
-		public ValaCompletionItem (Vala.Symbol symbol)
+		public ValaCompletionItem (Ide.Symbol symbol)
 		{
-			this.symbol = symbol;
+			//this.symbol = symbol;
 		}
 
 		public void set_priority (uint priority)
@@ -39,12 +38,13 @@ namespace Ide
 
 		public unowned string get_name ()
 		{
-			return this.symbol.name;
+			//return this.symbol.name;
+			return "";
 		}
 
 		public unowned string? get_icon_name ()
 		{
-			if (symbol is Vala.LocalVariable)
+			/*if (symbol is Vala.LocalVariable)
 				return "lang-variable-symbolic";
 			else if (symbol is Vala.Field)
 				return "lang-struct-field-symbolic";
@@ -70,7 +70,7 @@ namespace Ide
 			else if (symbol is Vala.EnumValue)
 				return "lang-enum-value-symbolic";
 			else if (symbol is Vala.Delegate)
-				return "lang-typedef-symbolic";
+				return "lang-typedef-symbolic";*/
 
 			return null;
 		}
@@ -83,7 +83,7 @@ namespace Ide
 
 		public string get_markup (string? typed_text)
 		{
-			GLib.StringBuilder str = new GLib.StringBuilder ();
+			/*GLib.StringBuilder str = new GLib.StringBuilder ();
 
 			var highlight = Ide.Completion.fuzzy_highlight (this.symbol.name, typed_text != null ? typed_text : "");
 
@@ -125,11 +125,12 @@ namespace Ide
 				str.append (")</span>");
 			}
 
-			return str.str;
+			return str.str;*/
+			return "";
 		}
 
 		public string? get_return_type () {
-			if (this.symbol is Vala.Method) {
+			/*if (this.symbol is Vala.Method) {
 				var method = this.symbol as Vala.Method;
 				return esc_angle_brackets (method.return_type.to_qualified_string (this.symbol.owner));
 			}
@@ -140,12 +141,12 @@ namespace Ide
 			if (this.symbol is Vala.Variable) {
 				var variable = this.symbol as Vala.Variable;
 				return esc_angle_brackets (variable.variable_type.to_qualified_string (this.symbol.owner));
-			}
+			}*/
 			return null;
 		}
 
 		public string? get_misc () {
-			if (this.symbol is Vala.Class) {
+			/*if (this.symbol is Vala.Class) {
 				var klass = this.symbol as Vala.Class;
 				if (klass.is_abstract)
 					return _("Abstract");
@@ -153,7 +154,7 @@ namespace Ide
 					return _("Compact");
 				if (klass.is_immutable)
 					return _("Immutable");
-			}
+			}*/
 			return null;
 		}
 
@@ -162,7 +163,7 @@ namespace Ide
 			var snippet = new Ide.Snippet (null, null);
 			var chunk = new Ide.SnippetChunk ();
 
-			chunk.set_spec (this.symbol.name);
+			//chunk.set_spec (this.symbol.name);
 			snippet.add_chunk (chunk);
 
 			return snippet;
