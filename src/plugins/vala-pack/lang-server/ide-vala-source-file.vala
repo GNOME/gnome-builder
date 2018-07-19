@@ -37,16 +37,12 @@
  */
 
 using GLib;
-using Ide;
 using Vala;
 
 namespace Ide
 {
 	public class ValaSourceFile: Vala.SourceFile
 	{
-		ArrayList<Ide.Diagnostic> diagnostics;
-		internal Ide.File file;
-
 		public ValaSourceFile (Vala.CodeContext context,
 		                       Vala.SourceFileType type,
 		                       string filename,
@@ -55,34 +51,24 @@ namespace Ide
 		{
 			base (context, type, filename, content, cmdline);
 
-			this.file = new Ide.File (null, GLib.File.new_for_path (filename));
-			this.diagnostics = new ArrayList<Ide.Diagnostic> ();
-
-			this.add_default_namespace ();
-			this.dirty = true;
+			add_default_namespace ();
+			dirty = true;
 		}
 
 		public bool dirty { get; set; }
 
-		public GLib.File get_file ()
-		{
-			return this.file.file;
-		}
-
 		public void reset ()
 		{
-			this.diagnostics.clear ();
-
 			/* Copy the node list since we will be mutating while iterating */
 			var copy = new ArrayList<Vala.CodeNode> ();
 			foreach (var node in this.get_nodes ()) {
 				copy.add (node);
 			}
 
-			var entry_point = this.context.entry_point;
+			var entry_point = context.entry_point;
 
 			foreach (var node in copy) {
-				this.remove_node (node);
+				remove_node (node);
 
 				if (node is Vala.Symbol) {
 					var symbol = (Vala.Symbol)node;
@@ -90,56 +76,27 @@ namespace Ide
 						symbol.owner.remove (symbol.name);
 					}
 					if (symbol == entry_point) {
-						this.context.entry_point = null;
+						context.entry_point = null;
 					}
 				}
 			}
 
-			this.add_default_namespace ();
-			this.dirty = true;
+			add_default_namespace ();
+			dirty = true;
 		}
 
-		public void sync (GenericArray<Ide.UnsavedFile> unsaved_files)
+		public void sync (GLib.Bytes? bytes)
 		{
-			var gfile = this.file.file;
-			unsaved_files.foreach((unsaved_file) => {
-				if (unsaved_file.get_file ().equal (gfile)) {
-					var bytes = unsaved_file.get_content ();
-
-					if (bytes.get_data () != (uint8[]) this.content) {
-						this.content = (string)bytes.get_data ();
-						this.reset ();
-						return;
-					}
-				}
-			});
-		}
-
-		public void report (Vala.SourceReference source_reference,
-		                    string message,
-		                    Ide.DiagnosticSeverity severity)
-		{
-			var begin = new Ide.SourceLocation (this.file,
-			                                    source_reference.begin.line - 1,
-			                                    source_reference.begin.column - 1,
-			                                    0);
-			var end = new Ide.SourceLocation (this.file,
-			                                  source_reference.end.line - 1,
-			                                  source_reference.end.column - 1,
-			                                  0);
-
-			var diag = new Ide.Diagnostic (severity, message, begin);
-			diag.take_range (new Ide.SourceRange (begin, end));
-			this.diagnostics.add (diag);
-		}
-
-		public Ide.Diagnostics? diagnose ()
-		{
-			var ar = new GLib.GenericArray<Ide.Diagnostic> ();
-			foreach (var diag in this.diagnostics) {
-				ar.add (diag);
+			if (bytes == null) {
+				content = null;
+				reset ();
 			}
-			return new Ide.Diagnostics (ar);
+
+			unowned uint8[] data = bytes.get_data ();
+			if (data != content.data) {
+				content = (string)data;
+				reset ();
+			}
 		}
 
 		void add_default_namespace ()

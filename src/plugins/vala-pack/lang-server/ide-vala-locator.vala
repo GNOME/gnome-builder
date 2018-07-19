@@ -20,10 +20,10 @@
 namespace Ide {
 	public class ValaLocator: Vala.CodeVisitor {
 		struct Location {
-			int line;
-			int column;
+			uint line;
+			uint column;
 
-			public Location (int line, int column) {
+			public Location (uint line, uint column) {
 				this.line = line;
 				this.column = column;
 			}
@@ -45,18 +45,18 @@ namespace Ide {
 		}
 
 		Location location;
-		Vala.Symbol innermost;
+		Vala.CodeNode innermost;
 		Location innermost_begin;
 		Location innermost_end;
 
-		public Vala.Symbol? locate (Vala.SourceFile file, int line, int column) {
+		public Vala.CodeNode? locate (Vala.SourceFile file, uint line, uint column) {
 			location = Location (line, column);
 			innermost = null;
 			file.accept_children(this);
 			return innermost;
 		}
 
-		bool update_location (Vala.Symbol s) {
+		bool update_location (Vala.CodeNode s) {
 			if (!location.inside (s.source_reference))
 				return false;
 
@@ -71,6 +71,21 @@ namespace Ide {
 			}
 
 			return false;
+		}
+
+		private bool covers_location (Vala.SourceReference source_ref) {
+			unowned source_ref.begin
+			if (source_ref.begin.line > location.line)
+				return false;
+
+			if (source_ref.end.line < location.line)
+				return false;
+
+			if (source_ref.begin.line == location.line && )
+				return false;
+
+			if (source_ref.end.line < location.line)
+				return false;
 		}
 
 		public override void visit_block (Vala.Block b) {
@@ -98,11 +113,20 @@ namespace Ide {
 				return;
 			iface.accept_children(this);
 		}
-
+		public override void visit_member_access (Vala.MemberAccess expr) {
+			if (update_location (expr))
+				return;
+			expr.accept_children(this);
+		}
 		public override void visit_method (Vala.Method m) {
 			if (update_location (m))
 				return;
 			m.accept_children(this);
+		}
+		public override void visit_method_call (Vala.MethodCall expr) {
+			if (update_location (expr))
+				return;
+			expr.accept_children(this);
 		}
 		public override void visit_creation_method (Vala.CreationMethod m) {
 			if (update_location (m))
@@ -177,8 +201,13 @@ namespace Ide {
 					visit_method ((expr as Vala.LambdaExpression).method);
 			}
 			if (expr is Vala.MethodCall) {
+				update_location (expr);
 				foreach (Vala.Expression e in (expr as Vala.MethodCall).get_argument_list())
 					visit_expression (e);
+
+			}
+			if (expr is Vala.Assignment) {
+				(expr as Vala.Assignment).accept_children (this);
 			}
 		}
 	}
