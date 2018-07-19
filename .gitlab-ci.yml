@@ -4,39 +4,44 @@ stages:
 flatpak:
     image: registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:3.28
     stage: test
-
     variables:
         GIT_SUBMODULE_STRATEGY: normal
-        FLATPAK_ARTIFACT: gnome-builder-git.flatpak
+
+        # Replace with your manifest path
+        MANIFEST_PATH: "build-aux/flatpak/org.gnome.Builder.json"
+        RUNTIME_REPO: "https://sdk.gnome.org/gnome-nightly.flatpakrepo"
+        # Replace with your application name, as written in the manifest
+        FLATPAK_MODULE: "gnome-builder-git.flatpak"
+        # Make sure to keep this in sync with the Flatpak manifest, all arguments
+        # are passed except the config-args because we build it ourselves
+        MESON_ARGS: - > "--buildtype=debugoptimized
+                        -Dctags_path=/app/bin/ctags
+                        -Dfusermount_wrapper=true
+                        -Dwith_tcmalloc=true
+                        -Denable_tracing=true
+                        -Dwith_help=true
+                        -Dwith_channel=flatpak-nightly
+                        -Dwith_deviced=true"
+        DBUS_ID: "org.gnome.Builder"
 
     script:
-        # Create a neme for the .flatpak bundle that will be extracted
-        # - export FLATPAK_ARTIFACT=gnome-builder-${COMMIT_REF_SHA}.flatpak
-
-        # Build the flatpak repo
-        - flatpak-builder --stop-at=gnome-builder app build-aux/flatpak/org.gnome.Builder.json
-        - flatpak build app meson --prefix=/app _build
+        - flatpak-builder --stop-at=${FLATPAK_MODULE} app ${MANIFEST_PATH}
+        # Make sure to keep this in sync with the Flatpak manifest, all arguments
+        # are passed except the config-args because we build it ourselves
+        - flatpak build app meson --prefix=/app ${MESON_ARGS} _build
         - flatpak build app ninja -C _build install
-        - flatpak-builder --finish-only --repo=repo app build-aux/flatpak/org.gnome.Builder.json
-
-        # Make a flatpak for people to test
-        - flatpak build-bundle repo $FLATPAK_ARTIFACT --runtime-repo=https://sdk.gnome.org/gnome-nightly.flatpakrepo org.gnome.Builder
-
-        # Run tests inside the Flatpak env
-        # - flatpak-builder --run app build-aux/flatpak/org.gnome.Builder.json ninja -C _build tes
+        - flatpak-builder --finish-only --repo=repo app ${MANIFEST_PATH}
+        # Run automatic tests inside the Flatpak env
+        - xvfb-run -a -s "-screen 0 1024x768x24" flatpak build app ninja -C _build test
+        # Generate a Flatpak bundle
+        - flatpak build-bundle repo ${BUNDLE} --runtime-repo=${RUNTIME_REPO} ${DBUS_ID}
 
     artifacts:
         paths:
-            - $FLATPAK_ARTIFACT
-        expire_in: 2 days
-
+            - ${BUNDLE}
+            - _build/meson-logs/meson-log.txt
+            - _build/meson-logs/testlog.txt
+        expire_in: 30 days
     cache:
-        # JOB_NAME - Each job will have it's own cache
-        # COMMIT_REF_SLUG = Lowercase name of the branch
-        # ^ Keep diffrerent caches for each branch
-        key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
         paths:
-            # Cache .flatpak-builder
-            - .flatpak-builder/cache/
-            - .flatpak-builder/downloads/
-            - .flatpak-builder/git/
+             - .flatpak-builder/cache
