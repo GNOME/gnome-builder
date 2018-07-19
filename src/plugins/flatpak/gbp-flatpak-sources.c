@@ -1,6 +1,6 @@
 /* gbp-flatpak-sources.c
  *
- * Copyright © 2016 Endless Mobile, Inc.
+ * Copyright 2016 Endless Mobile, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,13 +44,13 @@ typedef enum {
   ZIP
 } ArchiveType;
 
-gboolean
+static gboolean
 is_tar (ArchiveType type)
 {
   return (type >= TAR) && (type <= TAR_XZ);
 }
 
-const char *
+static const char *
 tar_decompress_flag (ArchiveType type)
 {
   if (type == TAR_GZIP)
@@ -71,7 +71,7 @@ tar_decompress_flag (ArchiveType type)
     return NULL;
 }
 
-ArchiveType
+static ArchiveType
 get_type (GFile *archivefile)
 {
   g_autofree gchar *base_name = NULL;
@@ -318,12 +318,12 @@ patch (GFile       *dir,
   args = g_ptr_array_new ();
   if (use_git)
     {
-      g_ptr_array_add (args, "git");
-      g_ptr_array_add (args, "apply");
+      g_ptr_array_add (args, (gchar *) "git");
+      g_ptr_array_add (args, (gchar *) "apply");
     }
   else
     {
-      g_ptr_array_add (args, "patch");
+      g_ptr_array_add (args, (gchar *) "patch");
     }
 
   while ((arg = va_arg (ap, const gchar *)))
@@ -337,7 +337,7 @@ patch (GFile       *dir,
     }
   else
     {
-      g_ptr_array_add (args, "-i");
+      g_ptr_array_add (args, (gchar *) "-i");
       g_ptr_array_add (args, (char *) patch_path);
     }
 
@@ -434,7 +434,7 @@ create_uncompress_directory (GFile   *dest,
   return uncompress_dest;
 }
 
-SoupSession *
+static SoupSession *
 get_soup_session (void)
 {
   return soup_session_new_with_options (SOUP_SESSION_USER_AGENT, PACKAGE_NAME,
@@ -566,12 +566,12 @@ extract_archive (GFile   *destination,
 }
 
 GFile *
-fetch_archive (const gchar  *url,
-               const gchar  *sha,
-               const gchar  *module_name,
-               GFile        *destination,
-               guint         strip_components,
-               GError      **error)
+gbp_flatpak_sources_fetch_archive (const gchar  *url,
+                                   const gchar  *sha,
+                                   const gchar  *module_name,
+                                   GFile        *destination,
+                                   guint         strip_components,
+                                   GError      **error)
 {
   g_autoptr(GFile) archive_file = NULL;
   g_autoptr(GFile) source_dir = NULL;
@@ -605,10 +605,10 @@ fetch_archive (const gchar  *url,
 }
 
 gboolean
-apply_patch (const gchar  *path,
-             GFile        *source_dir,
-             guint         strip_components,
-             GError      **error)
+gbp_flatpak_sources_apply_patch (const gchar  *path,
+                                 GFile        *source_dir,
+                                 guint         strip_components,
+                                 GError      **error)
 {
   g_autoptr(GFile) patchfile = NULL;
   g_autofree char *patch_path = NULL;
