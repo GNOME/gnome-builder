@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "gbp-flatpak-clone-widget"
+
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
@@ -24,8 +26,6 @@
 
 #include "gbp-flatpak-clone-widget.h"
 #include "gbp-flatpak-sources.h"
-
-#define G_LOG_DOMAIN "gbp-flatpak-clone-widget"
 
 #define ANIMATION_DURATION_MSEC 250
 
