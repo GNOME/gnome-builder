@@ -19,17 +19,16 @@
 using GLib;
 using Gtk;
 using Ide;
-using Vala;
 
 namespace Ide
 {
 	public class ValaCompletionProvider: Ide.Object, Ide.CompletionProvider
 	{
-		Ide.ValaService? service;
+		Ide.ValaClient client;
 
 		public void load (Ide.Context context)
 		{
-			this.service = Ide.ValaService.from_context (context);
+			client = Ide.ValaClient.from_context (context);
 		}
 
 		public bool is_trigger (Gtk.TextIter iter, unichar ch)
@@ -77,27 +76,7 @@ namespace Ide
 			var line = iter.get_line ();
 			var line_offset = iter.get_line_offset ();
 
-			var index = this.service.index;
-			var unsaved_files = Ide.UnsavedFiles.from_context (this.get_context ());
-
-			/* make a copy for threaded access */
-			var unsaved_files_copy = unsaved_files.to_array ();
-
-			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
-				int res_line = -1;
-				int res_column = -1;
-				results = index.code_complete (file,
-				                               line + 1,
-				                               line_offset + 1,
-				                               line_text,
-				                               unsaved_files_copy,
-				                               cancellable,
-				                               out res_line,
-				                               out res_column);
-				GLib.Idle.add (this.populate_async.callback);
-			});
-
-			yield;
+			var proposals = yield client.proposals_populate_async (file, line + 1, line_offset + 1, line_text, cancellable);
 
 			if (cancellable.is_cancelled () || results == null)
 				throw new GLib.IOError.CANCELLED ("operation was cancelled");
@@ -145,12 +124,13 @@ namespace Ide
 
 		public string? get_comment (Ide.CompletionProposal proposal)
 		{
-			var comment = (proposal as ValaCompletionItem).symbol.comment;
+			/*var comment = (proposal as ValaCompletionItem).symbol.comment;
 
 			if (comment != null && comment.content != null)
 				return condense (comment.content);
 
-			return (proposal as ValaCompletionItem).symbol.get_full_name ();
+			return (proposal as ValaCompletionItem).symbol.get_full_name ();*/
+			return null;
 		}
 
 		public bool key_activates (Ide.CompletionProposal proposal,
@@ -252,7 +232,7 @@ namespace Ide
 			return this.filtered[position];
 		}
 
-		public void add (Vala.Symbol symbol)
+		public void add (Ide.Symbol symbol)
 		{
 			var item = new ValaCompletionItem (symbol);
 

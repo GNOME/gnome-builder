@@ -77,6 +77,19 @@
         "*.a"
     ],
     "modules" : [
+        {
+            "name" : "meson",
+            "buildsystem" : "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=${FLATPAK_DEST}"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/mesonbuild/meson.git"
+                }
+            ]
+        },
         "python-deps.json",
         {
             "name" : "gperftools",
