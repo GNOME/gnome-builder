@@ -31,6 +31,6 @@ public void peas_register_types (GLib.TypeModule module)
 	peas.register_extension_type (typeof (Ide.DiagnosticProvider), typeof (Ide.ValaDiagnosticProvider));
 	peas.register_extension_type (typeof (Ide.Indenter), typeof (Ide.ValaIndenter));
 	peas.register_extension_type (typeof (Ide.PreferencesAddin), typeof (Ide.ValaPreferencesAddin));
-	peas.register_extension_type (typeof (Ide.Service), typeof (Ide.ValaService));
 	peas.register_extension_type (typeof (Ide.SymbolResolver), typeof (Ide.ValaSymbolResolver));
+	peas.register_extension_type (typeof (Ide.Service), typeof (Ide.ValaClient));
 }
