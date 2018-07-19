@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-06-12 22:28+0000\n"
-"PO-Revision-Date: 2018-06-13 16:42+0200\n"
+"POT-Creation-Date: 2018-07-19 16:47+0000\n"
+"PO-Revision-Date: 2018-07-19 19:28+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -888,12 +888,12 @@ msgid "Show the shortcuts window"
 msgstr "Wyświetlenie okna skrótów"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-buffer.c:923
+#: src/libide/buffers/ide-buffer.c:931
 #, c-format
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Założenie monitora zmian w tle się nie powiodło: %s"
 
-#: src/libide/buffers/ide-buffer.c:2842
+#: src/libide/buffers/ide-buffer.c:2850
 msgid "The current language lacks a symbol resolver."
 msgstr "Obecny język nie ma mechanizmu rozwiązywania symboli."
 
@@ -960,7 +960,7 @@ msgstr "Czyszczenie…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2928
 #: src/libide/buildsystem/ide-build-pipeline.c:2985
-#: src/libide/workbench/ide-omni-bar.c:557
+#: src/libide/workbench/ide-omni-bar.c:558
 msgid "Failed"
 msgstr "Niepowodzenie"
 
@@ -1003,7 +1003,7 @@ msgstr "Eksportowanie…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2977
 #: src/libide/buildsystem/ide-build-pipeline.c:2981
-#: src/libide/workbench/ide-omni-bar.c:584
+#: src/libide/workbench/ide-omni-bar.c:585
 msgid "Success"
 msgstr "Powodzenie"
 
@@ -1161,7 +1161,7 @@ msgid "Remove environment variable"
 msgstr "Usuń zmienną środowiskową"
 
 #: src/libide/debugger/gtk/menus.ui:10
-#: src/libide/debugger/ide-debugger-editor-addin.c:427
+#: src/libide/debugger/ide-debugger-editor-addin.c:431
 msgid "Run with Debugger"
 msgstr "Wykonaj za pomocą debugera"
 
@@ -1224,31 +1224,31 @@ msgstr "Wykonuje do końca funkcji"
 msgid "Disassembly"
 msgstr "Deasembler"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:305
+#: src/libide/debugger/ide-debugger-editor-addin.c:309
 msgid "Debugger"
 msgstr "Debuger"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:321
+#: src/libide/debugger/ide-debugger-editor-addin.c:325
 msgid "Threads"
 msgstr "Wątki"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:347
+#: src/libide/debugger/ide-debugger-editor-addin.c:351
 msgid "Breakpoints"
 msgstr "Punkty przerwania"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:355
+#: src/libide/debugger/ide-debugger-editor-addin.c:359
 msgid "Libraries"
 msgstr "Biblioteki"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:363
+#: src/libide/debugger/ide-debugger-editor-addin.c:367
 msgid "Registers"
 msgstr "Rejestry"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:371
+#: src/libide/debugger/ide-debugger-editor-addin.c:375
 msgid "Log"
 msgstr "Dziennik"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:394
+#: src/libide/debugger/ide-debugger-editor-addin.c:398
 msgid "Failed to initialize the debugger"
 msgstr "Zainicjowanie debugera się nie powiodło"
 
@@ -1334,7 +1334,7 @@ msgid "No file was provided."
 msgstr "Nie podano żadnego pliku."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:832
+#: src/libide/editor/ide-editor-perspective.c:839
 #: src/libide/preferences/ide-preferences-builtin.c:104
 #: src/libide/preferences/ide-preferences-builtin.c:151
 msgid "Editor"
@@ -2888,11 +2888,15 @@ msgstr "Plik docelowy musi być w drzewie projektu."
 msgid "File must be within the project tree."
 msgstr "Plik musi być w drzewie projektu."
 
-#: src/libide/runner/ide-run-button.ui:31
+#: src/libide/runner/ide-run-button.ui:6
+msgid "The project cannot be run while the build pipeline is being set up"
+msgstr "Projekt nie może być wykonywany, kiedy potok budowania jest ustawiany"
+
+#: src/libide/runner/ide-run-button.ui:35
 msgid "Stop running"
 msgstr "Zatrzymuje wykonywanie"
 
-#: src/libide/runner/ide-run-button.ui:51
+#: src/libide/runner/ide-run-button.ui:55
 msgid "Change run options"
 msgstr "Zmienia opcje wykonywania"
 
@@ -3059,7 +3063,7 @@ msgstr "Nie można przetworzyć „%s” jako bezwzględnego adresu URI"
 msgid "URI “%s” has no host component"
 msgstr "Adres URI „%s” nie ma części komputera"
 
-#: src/libide/workbench/ide-omni-bar.c:528
+#: src/libide/workbench/ide-omni-bar.c:529
 msgid "Building"
 msgstr "Budowanie"
 
@@ -3124,6 +3128,10 @@ msgstr "Wyeksportuj pakiet"
 #: src/libide/workbench/ide-omni-bar.ui:591 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Budowanie projektu"
+
+#: src/libide/workbench/ide-omni-bar.ui:596
+msgid "The project cannot be built while the build pipeline is being set up"
+msgstr "Projekt nie może być budowany, kiedy potok budowania jest ustawiany"
 
 #: src/libide/workbench/ide-workbench-actions.c:218
 msgid "Builder Statistics"
@@ -4023,7 +4031,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Pobieranie źródeł programu…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:662
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Usunięcie manifestu Flatpak się nie powiodło: %s"
@@ -4951,7 +4959,7 @@ msgstr "vala diagnostyka ostrzeżenia błędy"
 msgid "Run with Valgrind"
 msgstr "Wykonaj za pomocą Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:585
+#: src/plugins/xml-pack/ide-xml-parser.c:587
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Utworzenie drzewa XML się nie powiodło."
