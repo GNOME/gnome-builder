@@ -37,7 +37,6 @@ namespace Ide
 		Vala.CodeContext code_context;
 		Vala.Parser parser;
 		HashMap<GLib.File,Ide.ValaSourceFile> source_files;
-		Ide.ValaDiagnostics report;
 
 		public ValaIndex (Ide.Context context)
 		{
@@ -113,9 +112,6 @@ namespace Ide
 
 			this.code_context.add_external_package ("glib-2.0");
 			this.code_context.add_external_package ("gobject-2.0");
-
-			this.report = new Ide.ValaDiagnostics ();
-			this.code_context.report = this.report;
 
 			this.parser = new Vala.Parser ();
 			this.parser.parse (this.code_context);
@@ -307,12 +303,7 @@ namespace Ide
 						if (unsaved_files_copy != null)
 							this.apply_unsaved_files (unsaved_files_copy);
 
-						this.report.clear ();
 						this.reparse ();
-						if (this.report.get_errors () == 0 &&
-						        (cancellable == null || !cancellable.is_cancelled ())) {
-						    this.code_context.check ();
-						}
 
 						GLib.Idle.add(this.parse_file.callback);
 
@@ -344,12 +335,7 @@ namespace Ide
 					if (unsaved_files != null)
 						this.apply_unsaved_files (unsaved_files);
 
-					this.report.clear ();
 					this.reparse ();
-					if (this.report.get_errors () == 0 &&
-					        (cancellable == null || !cancellable.is_cancelled ())) {
-					    this.code_context.check ();
-					}
 
 					if (this.source_files.contains (file)) {
 						var source_file = this.source_files [file];
@@ -404,7 +390,6 @@ namespace Ide
 
 		void reparse ()
 		{
-			this.report.clear ();
 
 			foreach (var source_file in this.code_context.get_source_files ()) {
 				if (source_file.get_nodes ().size == 0) {

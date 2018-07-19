@@ -29,10 +29,17 @@ namespace Ide
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var service = (Ide.ValaService)get_context ().get_service_typed (typeof (Ide.ValaService));
-			yield service.index.parse_file (file.file, get_context ().unsaved_files, cancellable);
-			var results = yield service.index.get_diagnostics (file.file, cancellable);
-			return results;
+			var build_system = this.context.get_build_system ();
+
+			string[] flags = {};
+			try {
+				flags = yield build_system.get_build_flags_async (file, cancellable);
+			} catch (GLib.Error err) {
+				warning (err.message);
+			}
+
+			unowned Ide.ValaClient client = (Ide.ValaClient)get_context ().get_service_typed (typeof (Ide.ValaClient));
+			return yield client.diagnose_async (file.file, flags, cancellable);
 		}
 
 		public void load () {}

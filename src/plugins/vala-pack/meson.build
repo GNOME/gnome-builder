@@ -9,15 +9,15 @@ add_languages('vala')
 valac = find_program ('valac')
 libvala_version = run_command(valac, '--api-version').stdout().strip()
 libvala = dependency('libvala-@0@'.format(libvala_version))
+vala_config_dep = meson.get_compiler('vala').find_library('config', dirs: join_paths(meson.current_source_dir()))
 
 vala_pack_sources = [
-  'config.vapi',
+  'ide-vala-client.vala',
   'ide-vala-service.vala',
   'ide-vala-code-indexer.vala',
   'ide-vala-completion.vala',
   'ide-vala-completion-item.vala',
   'ide-vala-completion-provider.vala',
-  'ide-vala-diagnostics.vala',
   'ide-vala-diagnostic-provider.vala',
   'ide-vala-indenter.vala',
   'ide-vala-index.vala',
@@ -35,6 +35,7 @@ vala_pack_deps = [
   libide_vapi,
   libpeas_dep,
   libide_plugin_dep,
+  vala_config_dep
 ]
 
 shared_module('vala-pack-plugin', vala_pack_sources,
@@ -50,16 +51,21 @@ shared_module('vala-pack-plugin', vala_pack_sources,
                   '--pkg=libpeas-1.0',
                   '--pkg=gtksourceview-4',
                   '--pkg=gio-2.0',
+                  '--pkg=gio-unix-2.0',
+                  '--pkg=jsonrpc-glib-1.0',
                   '--pkg=libvala-' + libvala_version,
                   '--pkg=libdazzle-1.0',
                 ],
         c_args: [ '-DVALA_VERSION="@0@"'.format(libvala_version),
                   '-DLOG_DOMAIN="vala-pack-plugin"',
                   '-DGETTEXT_PACKAGE="gnome-builder"',
+                  '-DPACKAGE_LIBEXECDIR="@0@"'.format(join_paths(get_option('prefix'), get_option('libexecdir'))),
                   '-DPACKAGE_DATADIR="@0@"'.format(join_paths(get_option('prefix'), get_option('datadir'), 'gnome-builder')),
 		  '-Wno-incompatible-pointer-types',
                 ],
 )
+
+subdir('lang-server')
 
 configure_file(
           input: 'vala-pack.plugin',

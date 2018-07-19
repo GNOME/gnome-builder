@@ -24,22 +24,50 @@ namespace Ide
 {
 	public class ValaSymbolTreeVisitor: Vala.CodeVisitor
 	{
-		HashMap<Vala.CodeNode?,ArrayList<Vala.CodeNode>> table;
-		GLib.Queue<ArrayList<Vala.CodeNode>> queue;
+		Vala.HashMap<Vala.CodeNode?,Vala.ArrayList<Vala.CodeNode>> table;
+		GLib.Queue<Vala.ArrayList<Vala.CodeNode>> queue;
 
 		public ValaSymbolTreeVisitor ()
 		{
-			this.table = new HashMap<Vala.CodeNode?,ArrayList<Vala.CodeNode>> ();
-			this.queue = new GLib.Queue<ArrayList<Vala.CodeNode>> ();
+			this.table = new Vala.HashMap<Vala.CodeNode?,Vala.ArrayList<Vala.CodeNode>> ();
+			this.queue = new GLib.Queue<Vala.ArrayList<Vala.CodeNode>> ();
 
-			var root = new ArrayList<Vala.CodeNode> ();
+			var root = new Vala.ArrayList<Vala.CodeNode> ();
 			this.table [null] = root;
 			this.queue.push_head (root);
 		}
 
-		public Ide.SymbolTree? build_tree ()
+		public GLib.Variant build_tree ()
 		{
-			return new Ide.ValaSymbolTree (this.table);
+			var variant_builder = new GLib.VariantBuilder (new GLib.VariantType ("aa{sv}"));
+			Vala.ArrayList<Vala.CodeNode>? list = table[null];
+			if (list != null) {
+				foreach (var element in list) {
+					variant_builder.add_value (create_node (element));
+				}
+			}
+
+			return variant_builder.end ();
+		}
+
+		private GLib.Variant create_node (Vala.CodeNode node) {
+			Vala.ArrayList<Vala.CodeNode>? list = table[node];
+			GLib.Variant? root_variant = null;
+			var symbol = node as Vala.Symbol;
+			if (symbol != null) {
+				root_variant = Ide.vala_to_ide_symbol (symbol).to_variant ();
+			}
+
+			var variantdict = new GLib.VariantDict (root_variant);
+			var variant_builder = new GLib.VariantBuilder (new GLib.VariantType ("aa{sv}"));
+			if (list != null) {
+				foreach (var element in list) {
+					variant_builder.add_value (create_node (element));
+				}
+			}
+
+			variantdict.insert_value ("children", variant_builder.end ());
+			return variantdict.end ();
 		}
 
 		void visit_generic (Vala.CodeNode node)
@@ -70,77 +98,6 @@ namespace Ide
 
 		public override void visit_block (Vala.Block node) { node.accept_children (this); }
 		public override void visit_source_file (Vala.SourceFile source_file) { source_file.accept_children (this); }
-	}
-
-	public class ValaSymbolTree2 : Ide.Object, Ide.SymbolTree
-	{
-		public GLib.File file { get; construct; }
-		public GLib.Variant tree { get; construct; }
-
-		public ValaSymbolTree2 (Ide.Context context, GLib.File file, GLib.Variant tree)
-		{
-			GLib.Object (context: context, file: file, tree: tree);
-		}
-
-		public uint get_n_children (Ide.SymbolNode? node)
-		{
-			if (node != null)
-				return (node as ValaSymbolNode2).n_children;
-
-			return (uint)tree.n_children ();
-		}
-
-		public Ide.SymbolNode? get_nth_child (Ide.SymbolNode? node, uint nth)
-		{
-			if (node != null)
-				return (node as ValaSymbolNode2).get_nth_child (nth);
-
-			var child_val = tree.get_child_value (nth);
-			return new ValaSymbolNode2 (context, child_val);
-		}
-	}
-
-	public class ValaSymbolNode2 : Ide.SymbolNode
-	{
-		public GLib.Variant children { get; construct; }
-		public Ide.Symbol symbol { get; construct; }
-
-		public uint n_children
-		{
-			get {
-				return (uint)children.n_children ();
-			}
-		}
-
-		public ValaSymbolNode2 (Ide.Context context, GLib.Variant node)
-		{
-			var _symbol = new Ide.Symbol.from_variant (node);
-
-			var tmp_children = node.lookup_value ("children", null);
-			if (tmp_children.is_of_type (GLib.VariantType.VARIANT)) {
-				tmp_children = tmp_children.get_variant ();
-			} else if (!tmp_children.is_of_type (new GLib.VariantType ("aa{sv}")) &&
-			           !tmp_children.is_of_type (new GLib.VariantType ("aa{sv}"))) {
-				tmp_children = null;
-			}
-
-			GLib.Object (context: context,
-			             children: tmp_children,
-			             symbol: _symbol,
-			             kind: _symbol.get_kind (),
-			             flags: _symbol.get_flags (),
-			             name: _symbol.get_name ());
-		}
-
-		construct {
-			
-		}
-
-		public ValaSymbolNode2 get_nth_child (uint nth)
-		{
-			var child_val = children.get_child_value (nth);
-			return new ValaSymbolNode2 (context, child_val);
-		}
 	}
 
 	public class ValaSymbolTree : GLib.Object, Ide.SymbolTree
@@ -216,9 +173,9 @@ namespace Ide
 		public override async Ide.SourceLocation? get_location_async (GLib.Cancellable? cancellable)
 		{
 			var source_reference = this.node.source_reference;
-			var file = (source_reference.file as Ide.ValaSourceFile).file;
+			var idefile = new Ide.File (null, GLib.File.new_for_path (source_reference.file.filename));
 
-			return new Ide.SourceLocation (file,
+			return new Ide.SourceLocation (idefile,
 			                               source_reference.begin.line - 1,
 			                               source_reference.begin.column - 1,
 			                               0);
