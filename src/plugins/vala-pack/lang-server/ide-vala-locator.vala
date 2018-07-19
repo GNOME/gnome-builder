@@ -20,10 +20,10 @@
 namespace Ide {
 	public class ValaLocator: Vala.CodeVisitor {
 		struct Location {
-			int line;
-			int column;
+			uint line;
+			uint column;
 
-			public Location (int line, int column) {
+			public Location (uint line, uint column) {
 				this.line = line;
 				this.column = column;
 			}
@@ -45,18 +45,18 @@ namespace Ide {
 		}
 
 		Location location;
-		Vala.Symbol innermost;
+		Vala.CodeNode innermost;
 		Location innermost_begin;
 		Location innermost_end;
 
-		public Vala.Symbol? locate (Vala.SourceFile file, int line, int column) {
+		public Vala.CodeNode? locate (Vala.SourceFile file, uint line, uint column) {
 			location = Location (line, column);
 			innermost = null;
 			file.accept_children(this);
 			return innermost;
 		}
 
-		bool update_location (Vala.Symbol s) {
+		bool update_location (Vala.CodeNode s) {
 			if (!location.inside (s.source_reference))
 				return false;
 
@@ -98,11 +98,20 @@ namespace Ide {
 				return;
 			iface.accept_children(this);
 		}
-
+		public override void visit_member_access (Vala.MemberAccess expr) {
+			if (update_location (expr))
+				return;
+			expr.accept_children(this);
+		}
 		public override void visit_method (Vala.Method m) {
 			if (update_location (m))
 				return;
 			m.accept_children(this);
+		}
+		public override void visit_method_call (Vala.MethodCall expr) {
+			if (update_location (expr))
+				return;
+			expr.accept_children(this);
 		}
 		public override void visit_creation_method (Vala.CreationMethod m) {
 			if (update_location (m))
