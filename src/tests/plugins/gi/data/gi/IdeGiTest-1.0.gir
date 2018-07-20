@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<repository version="1.2"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <include name="GObject" version="2.0"/>
+  <c:include name="idegitest.h"/>
+  <package name="libidegitest-1.0"/>
+  <namespace name="IdeGiTest"
+             version="1.0"
+             shared-library="libidegitest-1.0.so.1"
+             c:identifier-prefixes="Igt"
+             c:symbol-prefixes="igt">
+    <class name="ClassA"
+           c:symbol-prefix="class_a"
+           c:type="IgtClassA"
+           parent="GObject.Object"
+           glib:type-name="IgtClassA"
+           glib:get-type="igt_class_a_get_type"
+           glib:type-struct="IgtClassAClass">
+      <constructor name="new" c:identifier="igt_class_a_new">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">a new #IgtClassA object.</doc>
+          <type name="ClassA" c:type="IgtClassA*"/>
+        </return-value>
+      </constructor>
+      <function name="function_a"
+                c:identifier="igt_class_a_function_a"
+                version="1.0">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">return value (#IgtClassA) of function_a of #IgtClassA.</doc>
+          <type name="ClassA" c:type="IgtClassA*"/>
+        </return-value>
+        <parameters>
+          <parameter name="str" transfer-ownership="none">
+            <doc xml:space="preserve">parameter (const utf8 C string) of function_a of #IgtClassA.</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </function>
+      <virtual-method name="virtual_method">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">return value (void) of virtual_method of #IgtClassA.</doc>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="instance" transfer-ownership="none">
+            <doc xml:space="preserve">instance parameter (#IgtClassA) of virtual_method of #IgtClassA.</doc>
+            <type name="ClassA" c:type="IgtClassA*"/>
+          </instance-parameter>
+          <parameter name="param" transfer-ownership="none">
+            <doc xml:space="preserve">parameter (const utf8 C string ) of virtual_method of #IgtClassA.</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <method name="method_a" c:identifier="igt_class_a_method_a">
+        <doc xml:space="preserve">method_a of #IgtClassA object.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">return value (%TRUE or %FALSE) of method_a of #IgtClassA</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="instance" transfer-ownership="none">
+            <doc xml:space="preserve">instance parameter (#IgtClassA) of method_a of #IgtClassA.</doc>
+            <type name="ClassA" c:type="IgtClassA*"/>
+          </instance-parameter>
+          <parameter name="str" transfer-ownership="none">
+            <doc xml:space="preserve">parameter (const utf8 C string ) of method_a of #IgtClassA.</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <field name="parent_instance">
+        <doc xml:space="preserve">#IgtClassA field.</doc>
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
+      <property name="property-a"
+                writable="1"
+                transfer-ownership="none">
+        <doc xml:space="preserve">property-a of #IgtClassA.</doc>
+        <type name="gboolean" c:type="gboolean"/>
+      </property>
+      <glib:signal name="signal-a">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">return value (void) of signal-a of #IgtClassA.</doc>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="param" transfer-ownership="none">
+            <doc xml:space="preserve">param (utf8 C string) for signal signal-a of #IgtClassA</doc>
+            <type name="utf8" c:type="gchar*"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
+    </class>
+    <record name="ClassAClass"
+            c:type="ClassAClass"
+            glib:is-gtype-struct-for="ClassA">
+      <field name="parent_class">
+        <type name="GObject.ObjectClass" c:type="GObjectClass"/>
+      </field>
+    </record>
+    <record name="Record"
+            c:type="IgtRecord"
+            glib:type-name="IgtRecord"
+            glib:get-type="igt_record_get_type"
+            c:symbol-prefix="record">
+      <constructor name="new" c:identifier="igt_record_new">
+        <doc xml:space="preserve">a record constructor of #IgtRecord.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve">return value (Igt.Record) of #IgtRecord constructor.</doc>
+          <type name="Record" c:type="IgtRecord*"/>
+        </return-value>
+        <parameters>
+          <parameter name="parameter_a" transfer-ownership="none">
+            <doc xml:space="preserve">parameter (gint) of #IgtRecord constructor.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <field name="parent_class">
+        <type name="Gtk.BoxClass" c:type="GtkBoxClass"/>
+      </field>
+      <field name="record_field">
+        <callback name="callback">
+          <return-value transfer-ownership="none">
+            <doc xml:space="preserve">return value (void) of #IgtRecord record_field callback.</doc>
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="search" transfer-ownership="none">
+              <doc xml:space="preserve">parameter (gint) of #IgtRecord record_field callback.</doc>
+              <type name="gint" c:type="gint"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <method name="method_b" c:identifier="igt_record_method_b">
+        <doc xml:space="preserve">Igt.Record.method_b.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">return value of Igt.Record.method_b.</doc>
+          <type name="gint" c:type="gint"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="param_a" transfer-ownership="none">
+            <doc xml:space="preserve">instance parameter of Igt.Record.method_b.</doc>
+            <type name="Record" c:type="gconstpointer"/>
+          </instance-parameter>
+          <parameter name="b" transfer-ownership="none">
+            <doc xml:space="preserve">parameter of Igt.Record.method_b.</doc>
+            <type name="Record" c:type="gconstpointer"/>
+          </parameter>
+        </parameters>
+      </method>
+    </record>
+    <glib:boxed glib:name="Boxed"
+                c:symbol-prefix="boxed"
+                glib:type-name="IgtBoxed"
+                glib:get-type="igt_boxed_get_type">
+    </glib:boxed>
+    <bitfield name="Bitfield"
+              glib:type-name="IgtBitfield"
+              glib:get-type="igt_bitfield_get_type"
+              c:type="IgtBitfield">
+      <member name="field1"
+              value="0"
+              c:identifier="IGT_BITFIELD_FIELD1"
+              glib:nick="field1_nick">
+        <doc xml:space="preserve">Igt.Bitfield.field1 (value 0)</doc>
+      </member>
+      <member name="field2"
+              value="1"
+              c:identifier="IGT_BITFIELD_FIELD2"
+              glib:nick="field2_nick">
+        <doc xml:space="preserve">Igt.Bitfield.field2 (value 1)</doc>
+      </member>
+    </bitfield>
+    <enumeration name="Enum1"
+                 glib:type-name="IgtEnum1"
+                 glib:get-type="igt_enum1_get_type"
+                 c:type="IgtEnum1">
+      <doc xml:space="preserve">#IgtEnum1 enumeration.</doc>
+      <member name="member1"
+              value="0"
+              c:identifier="IGT_ENUM1_MEMBER1"
+              glib:nick="member1_nick">
+        <doc xml:space="preserve">Igt.Enum1.member1 (value 0)</doc>
+      </member>
+      <member name="member2"
+              value="1"
+              c:identifier="IGT_ENUM1_MEMBER2"
+              glib:nick="member2_nick">
+        <doc xml:space="preserve">Igt.Enum1.member2 (value 1)</doc>
+      </member>
+      <function name="enum_function" c:identifier="igt_enum1_enum_function">
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve">return value (const utf8 C string) of #IgtEnum1 enum_function.</doc>
+          <type name="utf8" c:type="const gchar*"/>
+        </return-value>
+        <parameters>
+          <parameter name="param" transfer-ownership="none">
+            <doc xml:space="preserve">parameter (Igt.Enum1) of #IgtEnum1 enum_function.</doc>
+            <type name="Enum1" c:type="IgtEnum1"/>
+          </parameter>
+        </parameters>
+      </function>
+    </enumeration>
+    <alias name="Alias" c:type="IgtAlias">
+      <type name="gpointer" c:type="gpointer"/>
+    </alias>
+    <constant name="NS_CONSTANT" value="1" c:type="IGT_NS_CONSTANT">
+      <doc xml:space="preserve">#Igt constant</doc>
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <function name="ns_function" c:identifier="igt_ns_function">
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">return value (const utf8 C string) of #Igt ns_function.</doc>
+        <type name="utf8" c:type="const gchar*"/>
+      </return-value>
+      <parameters>
+        <parameter name="param" transfer-ownership="none">
+          <doc xml:space="preserve">parameter (const utf8 C string) of #Igt ns_function.</doc>
+          <type name="utf8" c:type="const gchar *"/>
+        </parameter>
+      </parameters>
+    </function>
+    <union name="IgtUnion" c:type="IgtUnion"/>
+    <callback name="ns_callback">
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">return value (void) of #Igt ns_callback callback.</doc>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="search" transfer-ownership="none">
+          <doc xml:space="preserve">parameter (gint) of #Igt ns_callback callback.</doc>
+          <type name="gint" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </callback>
+  </namespace>
+</repository>
