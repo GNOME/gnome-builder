@@ -21,19 +21,19 @@
 
 #include "ide-xml-symbol-node.h"
 
-typedef struct _Attribute
+typedef struct
 {
   gchar *name;
   gchar *value;
 } Attribute;
 
-typedef struct _NodeEntry
+typedef struct
 {
   IdeXmlSymbolNode *node;
   guint             is_internal : 1;
 } NodeEntry;
 
-typedef struct _NodeRange
+typedef struct
 {
   gint  start_line;
   gint  start_line_offset;

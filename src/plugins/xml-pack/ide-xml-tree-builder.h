@@ -29,13 +29,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlTreeBuilder, ide_xml_tree_builder, IDE, XML_TREE_BUILDER, IdeObject)
 
-void                 ide_xml_tree_builder_build_tree_async       (IdeXmlTreeBuilder     *self,
-                                                                  GFile                 *file,
-                                                                  GCancellable          *cancellable,
-                                                                  GAsyncReadyCallback    callback,
-                                                                  gpointer               user_data);
-IdeXmlAnalysis      *ide_xml_tree_builder_build_tree_finish      (IdeXmlTreeBuilder     *self,
-                                                                  GAsyncResult          *result,
-                                                                  GError               **error);
+void            ide_xml_tree_builder_build_tree_async  (IdeXmlTreeBuilder    *self,
+                                                        GFile                *file,
+                                                        GCancellable         *cancellable,
+                                                        GAsyncReadyCallback   callback,
+                                                        gpointer              user_data);
+IdeXmlAnalysis *ide_xml_tree_builder_build_tree_finish (IdeXmlTreeBuilder    *self,
+                                                        GAsyncResult         *result,
+                                                        GError              **error);
+
 
 G_END_DECLS

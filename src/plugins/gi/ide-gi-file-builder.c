@@ -441,7 +441,7 @@ ide_gi_file_builder_generate_async (IdeGiFileBuilder    *self,
   state->version_count = version_count;
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_task_data (task, state, (GDestroyNotify)task_state_free);
+  ide_task_set_task_data (task, state, task_state_free);
 
   ide_task_run_in_thread (task, ide_gi_file_builder_worker);
 }

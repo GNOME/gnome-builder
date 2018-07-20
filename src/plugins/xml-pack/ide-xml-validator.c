@@ -40,7 +40,7 @@ struct _IdeXmlValidator
   guint             dtd_use_subsets : 1;
 };
 
-typedef struct _ValidState
+typedef struct
 {
   IdeXmlValidator  *self;
   IdeXmlSchemaKind  kind;
@@ -59,10 +59,10 @@ ide_xml_validator_get_kind (IdeXmlValidator *self)
 }
 
 static IdeDiagnostic *
-create_diagnostic (IdeXmlValidator        *self,
-                   GFile                  *file,
-                   xmlError               *error,
-                   IdeDiagnosticSeverity   severity)
+create_diagnostic (IdeXmlValidator       *self,
+                   GFile                 *file,
+                   xmlError              *error,
+                   IdeDiagnosticSeverity  severity)
 {
   IdeContext *context;
   IdeDiagnostic *diagnostic;
@@ -91,7 +91,7 @@ ide_xml_valid_error (ValidState  *state,
 {
   IdeXmlValidator *self = state->self;
   IdeDiagnostic *diagnostic;
-  g_autoptr (GFile) file = NULL;
+  g_autoptr(GFile) file = NULL;
 
   g_assert (IDE_IS_XML_VALIDATOR (self));
 
@@ -111,7 +111,7 @@ ide_xml_valid_warning (ValidState  *state,
 {
   IdeXmlValidator *self = state->self;
   IdeDiagnostic *diagnostic;
-  g_autoptr (GFile) file = NULL;
+  g_autoptr(GFile) file = NULL;
 
   g_assert (IDE_IS_XML_VALIDATOR (self));
 
@@ -133,9 +133,9 @@ ide_xml_valid_warning (ValidState  *state,
  * Returns: %TRUE if the validation succeeded, %FALSE otherwise
  */
 gboolean
-ide_xml_validator_validate (IdeXmlValidator   *self,
-                            xmlDoc            *doc,
-                            IdeDiagnostics   **diagnostics)
+ide_xml_validator_validate (IdeXmlValidator  *self,
+                            xmlDoc           *doc,
+                            IdeDiagnostics  **diagnostics)
 {
   xmlValidCtxt *dtd_valid_context;
   xmlSchemaValidCtxt *xml_schema_valid_context;
@@ -155,7 +155,7 @@ ide_xml_validator_validate (IdeXmlValidator   *self,
 
   if (self->kind == SCHEMA_KIND_DTD)
     {
-      if (NULL == (dtd_valid_context = xmlNewValidCtxt ()))
+      if (!(dtd_valid_context = xmlNewValidCtxt ()))
         goto end;
 
       state.dtd_valid_context = dtd_valid_context;
@@ -172,7 +172,7 @@ ide_xml_validator_validate (IdeXmlValidator   *self,
     }
   else if (self->kind == SCHEMA_KIND_XML_SCHEMA)
     {
-      if (NULL == (xml_schema_valid_context = xmlSchemaNewValidCtxt (self->xml_schema)))
+      if (!(xml_schema_valid_context = xmlSchemaNewValidCtxt (self->xml_schema)))
         goto end;
 
       xmlSchemaSetValidErrors (xml_schema_valid_context,
@@ -185,7 +185,7 @@ ide_xml_validator_validate (IdeXmlValidator   *self,
     }
   else if (self->kind == SCHEMA_KIND_RNG)
     {
-      if (NULL == (rng_valid_context = xmlRelaxNGNewValidCtxt (self->rng)))
+      if (!(rng_valid_context = xmlRelaxNGNewValidCtxt (self->rng)))
         goto end;
 
       xmlRelaxNGSetValidErrors (rng_valid_context,

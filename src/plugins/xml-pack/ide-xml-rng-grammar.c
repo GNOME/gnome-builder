@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
+
 #include "ide-xml-rng-grammar.h"
 
 G_DEFINE_BOXED_TYPE (IdeXmlRngGrammar, ide_xml_rng_grammar, ide_xml_rng_grammar_ref, ide_xml_rng_grammar_unref)
@@ -86,17 +88,11 @@ ide_xml_rng_grammar_free (IdeXmlRngGrammar *self)
   g_assert (self);
   g_assert_cmpint (self->ref_count, ==, 0);
 
-  ide_xml_hash_table_unref (self->defines);
-  ide_xml_hash_table_unref (self->refs);
-
-  if (self->next != NULL)
-    ide_xml_rng_grammar_unref (self->next);
-
-  if (self->children != NULL)
-    ide_xml_rng_grammar_unref (self->children);
-
-  if (self->start_defines != NULL)
-    ide_xml_rng_define_unref (self->start_defines);
+  dzl_clear_pointer (&self->defines, ide_xml_hash_table_unref);
+  dzl_clear_pointer (&self->refs, ide_xml_hash_table_unref);
+  dzl_clear_pointer (&self->next, ide_xml_rng_grammar_unref);
+  dzl_clear_pointer (&self->children, ide_xml_rng_grammar_unref);
+  dzl_clear_pointer (&self->start_defines, ide_xml_rng_define_unref);
 
   g_slice_free (IdeXmlRngGrammar, self);
 }

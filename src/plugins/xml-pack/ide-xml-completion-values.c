@@ -45,20 +45,18 @@ value_match_item_new (const gchar *value)
 }
 
 static void
-value_match_item_free (gpointer data)
+value_match_item_free (ValueMatchItem *item)
 {
-  ValueMatchItem *item = (ValueMatchItem *)data;
-
   g_clear_pointer (&item->name, g_free);
+
   g_slice_free (ValueMatchItem, item);
 }
 
 static GPtrArray *
 match_values_new (void)
 {
-  GPtrArray *ar;
+  GPtrArray *ar = g_ptr_array_new_with_free_func ((GDestroyNotify)value_match_item_free);
 
-  ar = g_ptr_array_new_with_free_func ((GDestroyNotify)value_match_item_free);
   return ar;
 }
 
@@ -74,7 +72,7 @@ match_values_add (GPtrArray *to_values,
   if (from_values == NULL)
     return;
 
-  for (gint i = 0; i < from_values->len; ++i)
+  for (guint i = 0; i < from_values->len; ++i)
     {
       from_item = g_ptr_array_index (from_values, i);
       to_item = value_match_item_new (from_item->name);
@@ -107,6 +105,7 @@ matching_state_free (MatchingState *state)
 {
   g_clear_pointer (&state->values, g_free);
   g_clear_pointer (&state->prefix, g_free);
+
   g_slice_free (MatchingState, state);
 }
 
@@ -140,21 +139,20 @@ process_choice (MatchingState *state)
 
   g_assert (state->define->type == IDE_XML_RNG_DEFINE_CHOICE);
 
-  if ((defines = state->define->content))
+  defines = state->define->content;
+  while (defines != NULL)
     {
-      match_values = match_values_new ();
-      while (defines != NULL)
+      g_autoptr(GPtrArray) match = process_matching_state (state, defines);
+
+      if (match != NULL)
         {
-          g_autoptr (GPtrArray) match = NULL;
+          if (match_values == NULL)
+            match_values = match_values_new ();
 
-          if ((match = process_matching_state (state, defines)))
-            {
-              /* TODO: use move */
-              match_values_add (match_values, match);
-            }
-
-          defines = defines->next;
+          match_values_add (match_values, match);
         }
+
+      defines = defines->next;
     }
 
   return match_values;
@@ -172,20 +170,20 @@ process_group (MatchingState *state)
             state->define->type == IDE_XML_RNG_DEFINE_ONEORMORE ||
             state->define->type == IDE_XML_RNG_DEFINE_OPTIONAL);
 
-  if ((defines = state->define->content))
+  defines = state->define->content;
+  while (defines != NULL)
     {
-      while (defines != NULL)
+      g_autoptr(GPtrArray) match = NULL;
+
+      if ((match = process_matching_state (state, defines)))
         {
-          g_autoptr (GPtrArray) match = NULL;
+          if (match_values == NULL)
+            match_values = match_values_new ();
 
-          match_values = match_values_new ();
-          if ((match = process_matching_state (state, defines)))
-            {
-              match_values_add (match_values, match);
-            }
-
-          defines = defines->next;
+          match_values_add (match_values, match);
         }
+
+      defines = defines->next;
     }
 
   return match_values;

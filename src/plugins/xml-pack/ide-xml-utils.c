@@ -54,7 +54,7 @@ ide_xml_utils_is_name_char (gunichar ch)
           (ch >= 0x203F && ch <= 0x2040));
 }
 
-/* Return TRUE if we found spaces */
+/* Return %TRUE if we found spaces, cursor is updated to the new position */
 static inline gboolean
 skip_whitespaces (const gchar **cursor)
 {
@@ -124,14 +124,14 @@ jump_to_next_attribute (const gchar **cursor)
   *cursor = p;
 }
 
-/* Return FALSE if not valid */
+/* Return %FALSE if not valid, cursor is updated to the new position */
 gboolean
 ide_xml_utils_skip_element_name (const gchar **cursor)
 {
   const gchar *p = *cursor;
   gunichar ch;
 
-  g_return_val_if_fail (cursor != NULL, FALSE);
+  g_return_val_if_fail (cursor != NULL && *cursor != NULL, FALSE);
 
   if (!(ch = g_utf8_get_char (p)))
     return TRUE;
@@ -155,7 +155,7 @@ ide_xml_utils_skip_element_name (const gchar **cursor)
   return TRUE;
 }
 
-/* Return FALSE at the end of the string */
+/* Return %FALSE at the end of the string, cursor is updated to the new position */
 gboolean
 ide_xml_utils_skip_attribute_value (const gchar **cursor,
                                     gchar         term)
@@ -175,14 +175,14 @@ ide_xml_utils_skip_attribute_value (const gchar **cursor,
   return (ch != 0);
 }
 
-/* Return FALSE if not valid */
+/* Return %FALSE if not valid, cursor is updated to the new position */
 gboolean
 ide_xml_utils_skip_attribute_name (const gchar **cursor)
 {
   const gchar *p = *cursor;
   gunichar ch;
 
-  g_return_val_if_fail (cursor != NULL, FALSE);
+  g_return_val_if_fail (cursor != NULL && *cursor != NULL, FALSE);
 
   if (!(ch = g_utf8_get_char (p)))
     return TRUE;
