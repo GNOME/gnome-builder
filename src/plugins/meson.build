@@ -90,9 +90,26 @@ gnome_builder_plugins = shared_library(
   install_rpath: pkglibdir_abs,
 )
 
+gnome_builder_plugins_objects = gnome_builder_plugins.extract_all_objects()
+
+gnome_builder_plugins_export_all = shared_library(
+  'gnome-builder-plugins-export-all',
+  gnome_builder_plugins_sources,
+
+   dependencies: gnome_builder_plugins_deps,
+  #       objects: gnome_builder_plugins_objects,
+         c_args: gnome_builder_plugins_args,
+      link_with: gnome_builder_plugins_link_with,
+)
+
 gnome_builder_plugins_dep = declare_dependency(
    dependencies: libide_deps,
       link_with: gnome_builder_plugins_link_with + [gnome_builder_plugins],
+)
+
+gnome_builder_plugins_export_all_dep = declare_dependency(
+   dependencies: libide_deps,
+      link_with: gnome_builder_plugins_link_with + [gnome_builder_plugins_export_all],
 )
 
 status += [
