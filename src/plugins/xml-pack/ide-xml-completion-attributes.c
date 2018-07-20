@@ -56,11 +56,11 @@ match_item_new (IdeXmlRngDefine *define,
 }
 
 static void
-match_item_free (gpointer data)
+match_item_free (MatchItem *item)
 {
-  MatchItem *item = (MatchItem *)data;
-
   dzl_clear_pointer (&item->name, g_free);
+
+  g_slice_free (MatchItem, item);
 }
 
 static GPtrArray *
@@ -114,8 +114,9 @@ static void
 matching_state_free (MatchingState *state)
 {
   g_clear_object (&state->node);
-
   dzl_clear_pointer (&state->node_attr, g_ptr_array_unref);
+
+  g_slice_free (MatchingState, state);
 }
 
 static GPtrArray *

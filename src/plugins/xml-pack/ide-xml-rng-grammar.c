@@ -67,16 +67,17 @@ ide_xml_rng_grammar_add_child (IdeXmlRngGrammar *self,
   IdeXmlRngGrammar *tmp_grammar;
 
   g_return_if_fail (self != NULL);
+  g_return_if_fail (child != NULL);
 
   if (self->children == NULL)
-    self->children = child;
+    self->children = ide_xml_rng_grammar_ref (child);
   else
     {
       tmp_grammar = self->children;
       while (tmp_grammar->next != NULL)
         tmp_grammar = tmp_grammar->next;
 
-      tmp_grammar->next = child;
+      tmp_grammar->next = ide_xml_rng_grammar_ref (child);
     }
 
   child->parent = self;

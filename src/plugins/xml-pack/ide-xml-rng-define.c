@@ -205,7 +205,7 @@ ide_xml_rng_define_append (IdeXmlRngDefine *self,
   while (last->next != NULL)
     last = last->next;
 
-  last->next = def;
+  last->next = ide_xml_rng_define_ref (def);
 }
 
 void
