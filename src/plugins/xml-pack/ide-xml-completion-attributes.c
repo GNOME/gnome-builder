@@ -186,7 +186,7 @@ process_choice (MatchingState *state)
   node_has_attr = (state->node_attr->len > 0);
   while (defines != NULL)
     {
-      if (NULL != (match = process_matching_state (state, defines)))
+      if ((match = process_matching_state (state, defines)))
         {
           pos = get_match_children_min_pos (match);
           if (pos != -1 && pos < min_pos)
@@ -238,7 +238,7 @@ process_group (MatchingState *state)
 
   while (defines != NULL)
     {
-      if (NULL != (match = process_matching_state (state, defines)))
+      if ((match = process_matching_state (state, defines)))
         {
           /* TODO: use move */
           match_children_add (match_children, match);
@@ -266,7 +266,7 @@ process_attributes_group (MatchingState *state)
 
   while (defines != NULL)
     {
-      if (NULL != (match = process_matching_state (state, defines)))
+      if ((match = process_matching_state (state, defines)))
         {
           /* TODO: use move */
           match_children_add (match_children, match);
@@ -376,7 +376,7 @@ create_initial_matching_state (IdeXmlRngDefine  *define,
   state = matching_state_new (define, node);
   if (node != NULL)
     {
-      if (NULL != (attributes = ide_xml_symbol_node_get_attributes_names (node)))
+      if ((attributes = ide_xml_symbol_node_get_attributes_names (node)))
         {
           for (gint i = 0; attributes [i] != NULL; i++)
             g_ptr_array_add (state->node_attr, (gchar *)attributes [i]);

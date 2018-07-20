@@ -41,7 +41,7 @@ collect_attributes (IdeXmlParser  *self,
   string = g_string_new (NULL);
   while (l [0] != NULL && *l [0] != '\0')
     {
-      value = ide_xml_parser_get_color_tag (self, l [0], COLOR_TAG_ATTRIBUTE, TRUE, TRUE, TRUE);
+      value = _ide_xml_parser_get_color_tag (self, l [0], COLOR_TAG_ATTRIBUTE, TRUE, TRUE, TRUE);
       g_string_append (string, value);
       g_free (value);
       g_string_append (string, l [1]);
@@ -71,7 +71,7 @@ ide_xml_parser_generic_start_element_sax_cb (ParserState    *state,
   g_object_set (node, "use-markup", TRUE, NULL);
 
   state->attributes = (const gchar **)attributes;
-  ide_xml_parser_state_processing (self, state, (const gchar *)name, node, IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT, FALSE);
+  _ide_xml_parser_state_processing (self, state, (const gchar *)name, node, IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT, FALSE);
 }
 
 static void
@@ -86,7 +86,7 @@ ide_xml_parser_generic_comment_sax_cb (ParserState   *state,
 
   strip_name = g_strstrip (g_strdup ((const gchar *)name));
   node = ide_xml_symbol_node_new (strip_name, NULL, NULL, IDE_SYMBOL_XML_COMMENT);
-  ide_xml_parser_state_processing (self, state, "comment", node, IDE_XML_SAX_CALLBACK_TYPE_COMMENT, FALSE);
+  _ide_xml_parser_state_processing (self, state, "comment", node, IDE_XML_SAX_CALLBACK_TYPE_COMMENT, FALSE);
 }
 
 static void
@@ -100,7 +100,7 @@ ide_xml_parser_generic_cdata_sax_cb (ParserState   *state,
   g_assert (IDE_IS_XML_PARSER (self));
 
   node = ide_xml_symbol_node_new ("cdata", NULL, NULL, IDE_SYMBOL_XML_CDATA);
-  ide_xml_parser_state_processing (self, state, "cdata", node, IDE_XML_SAX_CALLBACK_TYPE_CDATA, FALSE);
+  _ide_xml_parser_state_processing (self, state, "cdata", node, IDE_XML_SAX_CALLBACK_TYPE_CDATA, FALSE);
 }
 
 void
@@ -112,18 +112,18 @@ ide_xml_parser_generic_setup (IdeXmlParser *self,
 
   ide_xml_sax_clear (state->sax_parser);
   ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT, ide_xml_parser_generic_start_element_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT, ide_xml_parser_end_element_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT, _ide_xml_parser_end_element_sax_cb);
   ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_COMMENT, ide_xml_parser_generic_comment_sax_cb);
   ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_CDATA, ide_xml_parser_generic_cdata_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_CHAR, ide_xml_parser_characters_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_CHAR, _ide_xml_parser_characters_sax_cb);
 
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_INTERNAL_SUBSET, ide_xml_parser_internal_subset_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_EXTERNAL_SUBSET, ide_xml_parser_external_subset_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_PROCESSING_INSTRUCTION, ide_xml_parser_processing_instruction_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_INTERNAL_SUBSET, _ide_xml_parser_internal_subset_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_EXTERNAL_SUBSET, _ide_xml_parser_external_subset_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_PROCESSING_INSTRUCTION, _ide_xml_parser_processing_instruction_sax_cb);
 
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_WARNING, ide_xml_parser_warning_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_ERROR, ide_xml_parser_error_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_FATAL_ERROR, ide_xml_parser_fatal_error_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_WARNING, _ide_xml_parser_warning_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_ERROR, _ide_xml_parser_error_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_FATAL_ERROR, _ide_xml_parser_fatal_error_sax_cb);
 
-  ide_xml_parser_set_post_processing_callback (self, NULL);
+  _ide_xml_parser_set_post_processing_callback (self, NULL);
 }

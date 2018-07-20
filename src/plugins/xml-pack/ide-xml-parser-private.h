@@ -32,14 +32,14 @@ G_BEGIN_DECLS
 typedef gboolean (*PostProcessingCallback) (IdeXmlParser     *self,
                                             IdeXmlSymbolNode *root_node);
 
-typedef enum _BuildState
+typedef enum
 {
   BUILD_STATE_NORMAL,
   BUILD_STATE_WAIT_END_ELEMENT,
   BUILD_STATE_GET_CONTENT,
 } BuildState;
 
-typedef enum _ColorTagId
+typedef enum
 {
   COLOR_TAG_LABEL,
   COLOR_TAG_ID,
@@ -49,6 +49,13 @@ typedef enum _ColorTagId
   COLOR_TAG_CLASS,
   COLOR_TAG_ATTRIBUTE,
 } ColorTagId;
+
+typedef enum
+{
+  ERROR_STATE_NONE,
+  ERROR_STATE_MISSING_TAG_END,
+  ERROR_STATE_MISSING_END_TAG_MISSMATCH,
+} ErrorState;
 
 struct _IdeXmlParser
 {
@@ -61,67 +68,88 @@ struct _IdeXmlParser
 typedef struct _ParserState
 {
   IdeXmlParser      *self;
+
   GFile             *file;
   GBytes            *content;
   IdeXmlAnalysis    *analysis;
+  GPtrArray         *schemas;
   GPtrArray         *diagnostics_array;
+  GPtrArray         *requires_array;
+  IdeXmlSax         *sax_parser;
+  IdeXmlStack       *stack;
   IdeXmlSymbolNode  *root_node;
+
+  IdeTask           *analysis_task;
   IdeXmlSymbolNode  *parent_node;
   IdeXmlSymbolNode  *current_node;
   const gchar      **attributes;
   BuildState         build_state;
   gint               current_depth;
-  GPtrArray         *schemas;
   gint64             sequence;
+  guint              modversion_count;
 
-  IdeXmlSax         *sax_parser;
-  IdeXmlStack       *stack;
+  ErrorState         error_state;
+  gchar             *error_data_str;
 
-  guint              error_missing_tag_end : 1;
   guint              file_is_ui : 1;
 } ParserState;
 
-void             ide_xml_parser_set_post_processing_callback     (IdeXmlParser           *self,
-                                                                  PostProcessingCallback  callback);
-IdeDiagnostic   *ide_xml_parser_create_diagnostic                (ParserState            *state,
-                                                                  const gchar            *msg,
-                                                                  IdeDiagnosticSeverity   severity);
-gchar           *ide_xml_parser_get_color_tag                    (IdeXmlParser           *self,
-                                                                  const gchar            *str,
-                                                                  ColorTagId              id,
-                                                                  gboolean                space_before,
-                                                                  gboolean                space_after,
-                                                                  gboolean                space_inside);
-void             ide_xml_parser_state_processing                 (IdeXmlParser           *self,
-                                                                  ParserState            *state,
-                                                                  const gchar            *element_name,
-                                                                  IdeXmlSymbolNode       *node,
-                                                                  IdeXmlSaxCallbackType   callback_type,
-                                                                  gboolean                is_internal);
-void             ide_xml_parser_end_element_sax_cb               (ParserState            *state,
-                                                                  const xmlChar          *name);
-void             ide_xml_parser_warning_sax_cb                   (ParserState            *state,
-                                                                  const xmlChar          *name,
-                                                                  ...);
-void             ide_xml_parser_error_sax_cb                     (ParserState            *state,
-                                                                  const xmlChar          *name,
-                                                                  ...);
-void             ide_xml_parser_fatal_error_sax_cb               (ParserState            *state,
-                                                                  const xmlChar          *name,
-                                                                  ...);
-void             ide_xml_parser_internal_subset_sax_cb           (ParserState            *state,
-                                                                  const xmlChar          *name,
-                                                                  const xmlChar          *external_id,
-                                                                  const xmlChar          *system_id);
-void             ide_xml_parser_external_subset_sax_cb           (ParserState            *state,
-                                                                  const xmlChar          *name,
-                                                                  const xmlChar          *external_id,
-                                                                  const xmlChar          *system_id);
-void             ide_xml_parser_processing_instruction_sax_cb    (ParserState            *state,
-                                                                  const xmlChar          *target,
-                                                                  const xmlChar          *data);
-void             ide_xml_parser_characters_sax_cb                (ParserState            *state,
-                                                                  const xmlChar          *name,
-                                                                  gint                    len);
+typedef struct
+{
+  gchar   *runtime_id;
+  gchar   *package;
+  gchar   *ns_name;
+  guint16  ns_major_version;
+  guint16  ns_minor_version;
+  guint16  mod_major_version;
+  guint16  mod_minor_version;
+  gint     start_line;
+  gint     start_line_offset;
+  gint     end_line;
+  gint     end_line_offset;
+} RequireEntry;
+
+void             _ide_xml_parser_set_post_processing_callback     (IdeXmlParser           *self,
+                                                                   PostProcessingCallback  callback);
+IdeDiagnostic   *_ide_xml_parser_create_diagnostic                (ParserState            *state,
+                                                                   const gchar            *msg,
+                                                                   IdeDiagnosticSeverity   severity);
+gchar           *_ide_xml_parser_get_color_tag                    (IdeXmlParser           *self,
+                                                                   const gchar            *str,
+                                                                   ColorTagId              id,
+                                                                   gboolean                space_before,
+                                                                   gboolean                space_after,
+                                                                   gboolean                space_inside);
+void             _ide_xml_parser_state_processing                 (IdeXmlParser           *self,
+                                                                   ParserState            *state,
+                                                                   const gchar            *element_name,
+                                                                   IdeXmlSymbolNode       *node,
+                                                                   IdeXmlSaxCallbackType   callback_type,
+                                                                   gboolean                is_internal);
+void             _ide_xml_parser_end_element_sax_cb               (ParserState            *state,
+                                                                   const xmlChar          *name);
+void             _ide_xml_parser_warning_sax_cb                   (ParserState            *state,
+                                                                   const xmlChar          *name,
+                                                                   ...);
+void             _ide_xml_parser_error_sax_cb                     (ParserState            *state,
+                                                                   const xmlChar          *name,
+                                                                   ...);
+void             _ide_xml_parser_fatal_error_sax_cb               (ParserState            *state,
+                                                                   const xmlChar          *name,
+                                                                   ...);
+void             _ide_xml_parser_internal_subset_sax_cb           (ParserState            *state,
+                                                                   const xmlChar          *name,
+                                                                   const xmlChar          *external_id,
+                                                                   const xmlChar          *system_id);
+void             _ide_xml_parser_external_subset_sax_cb           (ParserState            *state,
+                                                                   const xmlChar          *name,
+                                                                   const xmlChar          *external_id,
+                                                                   const xmlChar          *system_id);
+void             _ide_xml_parser_processing_instruction_sax_cb    (ParserState            *state,
+                                                                   const xmlChar          *target,
+                                                                   const xmlChar          *data);
+void             _ide_xml_parser_characters_sax_cb                (ParserState            *state,
+                                                                   const xmlChar          *name,
+                                                                   gint                    len);
 
 G_END_DECLS

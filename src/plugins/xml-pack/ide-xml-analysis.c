@@ -43,6 +43,41 @@ ide_xml_analysis_get_diagnostics (IdeXmlAnalysis *self)
 }
 
 /**
+ * ide_xml_analysis_get_is_ui:
+ * @self: A #IdeXmlAnalysis.
+ *
+ * Returns: If the analysis comes from a GtkBuilder UI file.
+ *
+ */
+gboolean
+ide_xml_analysis_get_is_ui (IdeXmlAnalysis *self)
+{
+  g_return_val_if_fail (self, FALSE);
+
+  return self->is_ui;
+}
+
+/**
+ * ide_xml_analysis_get_require:
+ * @self: A #IdeXmlAnalysis.
+ *
+ * Return the current #IdeGiRequire, creating it on-demand if there's none yet.
+ *
+ * Returns: (nullable) (transfer none): a #IdeGiRequire object or %NULL.
+ *
+ */
+IdeGiRequire *
+ide_xml_analysis_get_require (IdeXmlAnalysis *self)
+{
+  g_return_val_if_fail (self, NULL);
+
+  if (self->require == NULL)
+    self->require = ide_gi_require_new ();
+
+  return self->require;
+}
+
+/**
  * ide_xml_analysis_get_diagnostics:
  * @self: an #IdeXmlAnalysis.
  *
@@ -84,6 +119,26 @@ ide_xml_analysis_set_diagnostics (IdeXmlAnalysis *self,
       g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
       self->diagnostics = ide_diagnostics_ref (diagnostics);
     }
+}
+
+void
+ide_xml_analysis_set_is_ui (IdeXmlAnalysis   *self,
+                            gboolean          is_ui)
+{
+  g_return_if_fail (self != NULL);
+
+  self->is_ui = is_ui;
+}
+
+void
+ide_xml_analysis_set_require (IdeXmlAnalysis *self,
+                              IdeGiRequire   *require)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (require != NULL);
+
+  g_clear_pointer (&self->require, ide_gi_require_unref);
+  self->require = ide_gi_require_ref (require);
 }
 
 void
@@ -139,6 +194,7 @@ ide_xml_analysis_free (IdeXmlAnalysis *self)
 
   g_clear_object (&self->root_node);
   g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+  g_clear_pointer (&self->require, ide_gi_require_unref);
 
   g_slice_free (IdeXmlAnalysis, self);
 }

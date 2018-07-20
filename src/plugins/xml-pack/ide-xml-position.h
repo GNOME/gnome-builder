@@ -22,6 +22,7 @@
 
 #include "ide-xml-types.h"
 #include "ide-xml-analysis.h"
+#include "ide-xml-detail.h"
 #include "ide-xml-symbol-node.h"
 
 G_BEGIN_DECLS
@@ -41,7 +42,7 @@ struct _IdeXmlPosition
   gchar                *detail_name;
   gchar                *detail_value;
   IdeXmlPositionKind    kind;
-  IdeXmlPositionDetail  detail;
+  IdeXmlDetail         *detail;
   gint                  child_pos;
   gchar                 quote;
 
@@ -50,26 +51,19 @@ struct _IdeXmlPosition
 
 GType                     ide_xml_position_get_type             (void);
 IdeXmlPosition           *ide_xml_position_new                  (IdeXmlSymbolNode      *node,
-                                                                 const gchar           *prefix,
                                                                  IdeXmlPositionKind     kind,
-                                                                 IdeXmlPositionDetail   detail,
-                                                                 const gchar           *detail_name,
-                                                                 const gchar           *detail_value,
-                                                                 gchar                  quote);
+                                                                 IdeXmlDetail          *detail);
 IdeXmlPosition           *ide_xml_position_copy                 (IdeXmlPosition        *self);
 IdeXmlPosition           *ide_xml_position_ref                  (IdeXmlPosition        *self);
 void                      ide_xml_position_unref                (IdeXmlPosition        *self);
 IdeXmlAnalysis           *ide_xml_position_get_analysis         (IdeXmlPosition        *self);
 gint                      ide_xml_position_get_child_pos        (IdeXmlPosition        *self);
-IdeXmlPositionDetail      ide_xml_position_get_detail           (IdeXmlPosition        *self);
-const gchar              *ide_xml_position_get_detail_name      (IdeXmlPosition        *self);
-const gchar              *ide_xml_position_get_detail_value     (IdeXmlPosition        *self);
+IdeXmlDetail             *ide_xml_position_get_detail           (IdeXmlPosition        *self);
 IdeXmlPositionKind        ide_xml_position_get_kind             (IdeXmlPosition        *self);
 IdeXmlSymbolNode         *ide_xml_position_get_next_sibling     (IdeXmlPosition        *self);
 IdeXmlSymbolNode         *ide_xml_position_get_child_node       (IdeXmlPosition        *self);
 IdeXmlSymbolNode         *ide_xml_position_get_node             (IdeXmlPosition        *self);
 IdeXmlSymbolNode         *ide_xml_position_get_parent_node      (IdeXmlPosition        *self);
-const gchar              *ide_xml_position_get_prefix           (IdeXmlPosition        *self);
 IdeXmlSymbolNode         *ide_xml_position_get_previous_sibling (IdeXmlPosition        *self);
 void                      ide_xml_position_set_analysis         (IdeXmlPosition        *self,
                                                                  IdeXmlAnalysis        *analysis);

@@ -20,15 +20,27 @@
 
 #include <ide.h>
 
+#include "ide-xml-types.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_XML_PROPOSAL (ide_xml_proposal_get_type())
 
 G_DECLARE_FINAL_TYPE (IdeXmlProposal, ide_xml_proposal, IDE, XML_PROPOSAL, GObject)
 
-IdeXmlProposal *ide_xml_proposal_new       (const gchar    *text,
-                                            const gchar    *label);
-const gchar    *ide_xml_proposal_get_label (IdeXmlProposal *self);
-const gchar    *ide_xml_proposal_get_text  (IdeXmlProposal *self);
+IdeXmlProposal       *ide_xml_proposal_new                 (const gchar          *text,
+                                                            const gchar          *header,
+                                                            const gchar          *label,
+                                                            const gchar          *prefix,
+                                                            gint                  insert_position,
+                                                            IdeXmlPositionKind    kind,
+                                                            IdeXmlCompletionType  completion_type);
+const gchar          *ide_xml_proposal_get_header          (IdeXmlProposal       *self);
+gint                  ide_xml_proposal_get_insert_position (IdeXmlProposal       *self);
+IdeXmlPositionKind    ide_xml_proposal_get_kind            (IdeXmlProposal       *self);
+const gchar          *ide_xml_proposal_get_label           (IdeXmlProposal       *self);
+const gchar          *ide_xml_proposal_get_text            (IdeXmlProposal       *self);
+const gchar          *ide_xml_proposal_get_prefix          (IdeXmlProposal       *self);
+IdeXmlCompletionType  ide_xml_proposal_get_completion_type (IdeXmlProposal       *self);
 
 G_END_DECLS

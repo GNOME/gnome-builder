@@ -318,9 +318,9 @@ load_include (IdeXmlRngParser *self,
   g_assert (node != NULL);
   g_assert (!dzl_str_empty0 (url));
 
-  if (NULL != (xml_include_docs_stack_lookup (self, url)) ||
-      NULL == (ns = get_node_closest_ns (node)) ||
-      NULL == (href_doc = xmlReadFile (url, NULL, 0)))
+  if ((xml_include_docs_stack_lookup (self, url)) ||
+      (ns = get_node_closest_ns (node)) ||
+      (href_doc = xmlReadFile (url, NULL, 0)))
     return NULL;
 
   xml_doc.is_external_ref = TRUE;
@@ -331,7 +331,7 @@ load_include (IdeXmlRngParser *self,
   xml_doc_ref = &g_array_index (self->xml_include_docs, XmlDocument, self->xml_include_docs->len - 1);
 
   g_queue_push_head (&self->xml_include_docs_stack, xml_doc_ref);
-  if (NULL != (root = xmlDocGetRootElement(href_doc)))
+  if ((root = xmlDocGetRootElement(href_doc)))
     {
       ide_xml_rng_parser_cleanup (self, root);
       if (xmlHasProp(root, NS_PROP))
@@ -377,7 +377,7 @@ load_externalref (IdeXmlRngParser *self,
   g_assert (node != NULL);
   g_assert (!dzl_str_empty0 (url));
 
-  if (NULL != (xml_externalref_docs_stack_lookup (self, url)) ||
+  if ((xml_externalref_docs_stack_lookup (self, url)) ||
       NULL == (ns = get_node_closest_ns (node)) ||
       NULL == (href_doc = xmlReadFile (url, NULL, 0)))
     return NULL;
@@ -390,7 +390,7 @@ load_externalref (IdeXmlRngParser *self,
   xml_doc_ref = &g_array_index (self->xml_externalref_docs, XmlDocument, self->xml_externalref_docs->len - 1);
 
   g_queue_push_head (&self->xml_externalref_docs_stack, xml_doc_ref);
-  if (NULL != (root = xmlDocGetRootElement(href_doc)))
+  if ((root = xmlDocGetRootElement(href_doc)))
     {
       ide_xml_rng_parser_cleanup (self, root);
       if (xmlHasProp(root, NS_PROP))
@@ -475,7 +475,7 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
                         }
 
                       xmlUnsetProp (current, (const guchar *)"name");
-                      if (NULL != (ns = xmlGetProp (current, NS_PROP)))
+                      if ((ns = xmlGetProp (current, NS_PROP)))
                         xmlSetProp (text_node, NS_PROP, ns);
                       else if (dzl_str_equal0 (current->name, "attribute"))
                         xmlSetProp (text_node, NS_PROP, (const guchar *)"");
@@ -511,12 +511,12 @@ ide_xml_rng_parser_cleanup (IdeXmlRngParser *self,
                       g_autoxmlfree guchar *local = NULL;
                       g_autoxmlfree guchar *prefix = NULL;
 
-                      if (NULL != (name = xmlNodeGetContent (current)) &&
-                          NULL != (local = xmlSplitQName2 (name, &prefix)))
+                      if ((name = xmlNodeGetContent (current)) &&
+                          (local = xmlSplitQName2 (name, &prefix)))
                         {
                           xmlNsPtr ns_node;
 
-                          if (NULL != (ns_node = xmlSearchNs (current->doc, current, prefix)))
+                          if ((ns_node = xmlSearchNs (current->doc, current, prefix)))
                             {
                               xmlSetProp (current, NS_PROP, ns_node->href);
                               xmlNodeSetContent (current, local);
@@ -654,7 +654,7 @@ parse_except_name_class (IdeXmlRngParser *self,
     {
       type = (is_attribute) ? IDE_XML_RNG_DEFINE_ATTRIBUTE : IDE_XML_RNG_DEFINE_ELEMENT;
       current = ide_xml_rng_define_new (child, def, NULL, type);
-      if (NULL != (tmp_def = parse_name_class (self, child, current)))
+      if ((tmp_def = parse_name_class (self, child, current)))
         {
           if (last == NULL)
             def->content = current;
@@ -737,14 +737,14 @@ parse_name_class (IdeXmlRngParser *self,
       IdeXmlRngDefine *last = NULL, *choice_parent;
 
       def = ide_xml_rng_define_new (node, current, NULL, IDE_XML_RNG_DEFINE_CHOICE);
-      if (NULL != (child = node->children))
+      if ((child = node->children))
         {
           choice_parent = self->current_def;
           self->current_def = def;
 
           while (child != NULL)
             {
-              if (NULL != (tmp_def = parse_name_class (self, child, def)))
+              if ((tmp_def = parse_name_class (self, child, def)))
                 {
                   if (last == NULL)
                     last = def->name_class = tmp_def;
@@ -907,7 +907,7 @@ parse_externalref (IdeXmlRngParser *self,
   g_assert (IDE_IS_XML_RNG_PARSER (self));
   g_assert (node != NULL);
 
-  if (NULL != (doc = node->psvi))
+  if ((doc = node->psvi))
     {
       def = ide_xml_rng_define_new (node, self->current_def, NULL, IDE_XML_RNG_DEFINE_EXTERNALREF);
       if (doc->content == NULL)
@@ -920,7 +920,7 @@ parse_externalref (IdeXmlRngParser *self,
               tmp = node;
               while (tmp != NULL && tmp->type == XML_ELEMENT_NODE)
                 {
-                  if (NULL != (ns = xmlGetProp(tmp, NS_PROP)))
+                  if ((ns = xmlGetProp(tmp, NS_PROP)))
                     break;
 
                   tmp = tmp->parent;
@@ -973,7 +973,7 @@ parse_attribute (IdeXmlRngParser *self,
 
   old_flags = self->flags;
   self->flags |= XML_RNG_FLAGS_IN_ATTRIBUTE;
-  if (NULL != (current = parse_name_class (self, child, def)))
+  if ((current = parse_name_class (self, child, def)))
     {
       ide_xml_rng_define_unref (current);
       child = child->next;
@@ -983,7 +983,7 @@ parse_attribute (IdeXmlRngParser *self,
     {
       parent = self->current_def;
       self->current_def = def;
-      if (NULL != (current = parse_pattern (self, child)))
+      if ((current = parse_pattern (self, child)))
         switch (current->type)
           {
           case IDE_XML_RNG_DEFINE_EMPTY:
@@ -1190,7 +1190,7 @@ parse_element (IdeXmlRngParser *self,
   def = ide_xml_rng_define_new (node, parent, NULL, IDE_XML_RNG_DEFINE_ELEMENT);
   self->current_def = def;
 
-  if (NULL != (current = parse_name_class (self, child, def)))
+  if ((current = parse_name_class (self, child, def)))
     {
       ide_xml_rng_define_unref (current);
       child = child->next;
@@ -1201,7 +1201,7 @@ parse_element (IdeXmlRngParser *self,
 
   while (child != NULL)
     {
-      if (NULL != (current = parse_pattern (self, child)))
+      if ((current = parse_pattern (self, child)))
         {
           switch (current->type)
             {
@@ -1300,7 +1300,7 @@ parse_patterns (IdeXmlRngParser *self,
         }
       else
         {
-          if (NULL != (current = parse_pattern (self, nodes)))
+          if ((current = parse_pattern (self, nodes)))
             {
               if (def == NULL)
                 def = last = current;
@@ -1384,7 +1384,7 @@ parse_define (IdeXmlRngParser *self,
   g_assert (IDE_IS_XML_RNG_PARSER (self));
   g_assert (nodes != NULL);
 
-  if (NULL != (name = _strip (xmlGetProp (nodes, (const guchar *)"name"))))
+  if ((name = _strip (xmlGetProp (nodes, (const guchar *)"name"))))
     {
       parent = self->current_def;
 
@@ -1410,8 +1410,8 @@ parse_include (IdeXmlRngParser *self,
   g_assert (IDE_IS_XML_RNG_PARSER (self));
   g_assert (node != NULL);
 
-  if (NULL != (include = node->psvi) &&
-      NULL != (root = xmlDocGetRootElement(include->doc)) &&
+  if ((include = node->psvi) &&
+      (root = xmlDocGetRootElement(include->doc)) &&
       dzl_str_equal0 (root->name, "grammar") &&
       root->children != NULL)
     {
@@ -1444,7 +1444,7 @@ merge_starts (IdeXmlRngParser  *self,
           current->node->parent != NULL &&
           dzl_str_equal0 (current->node->parent->name, "start"))
         {
-          if (NULL != (combine = xmlGetProp(current->node->parent, (const guchar *)"combine")))
+          if ((combine = xmlGetProp(current->node->parent, (const guchar *)"combine")))
             {
               if (dzl_str_equal0 (combine, "choice"))
                 {
@@ -1501,7 +1501,7 @@ merge_defines_func (const gchar *name,
   for (gint i = 0; i <array->len; ++i)
     {
       current = g_ptr_array_index (array, i);
-      if (NULL != (combine = xmlGetProp(current->node, (const guchar *)"combine")))
+      if ((combine = xmlGetProp(current->node, (const guchar *)"combine")))
         {
           if (dzl_str_equal0 (combine, "choice"))
             {
@@ -1588,7 +1588,7 @@ merge_refs_func (const gchar *name,
     return;
 
   /* TODO: grammar->defines need to be linked by hash  ? */
-  if (NULL != (def_array = ide_xml_hash_table_lookup (grammar->defines, name)))
+  if ((def_array = ide_xml_hash_table_lookup (grammar->defines, name)))
     {
       def = g_ptr_array_index (def_array, 0);
       for (gint i = 0; i <array->len; ++i)
@@ -1937,7 +1937,7 @@ parse_document (IdeXmlRngParser *self,
   else
     {
       schema->top_grammar = ide_xml_rng_grammar_new ();
-      if (NULL != (old_grammar = self->grammars))
+      if ((old_grammar = self->grammars))
         ide_xml_rng_grammar_add_child (self->grammars, schema->top_grammar);
 
       self->grammars = schema->top_grammar;
@@ -1987,7 +1987,7 @@ ide_xml_rng_parser_parse (IdeXmlRngParser *self,
 
   url = g_file_get_uri (file);
   options = XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING;
-  if (NULL != (doc = xmlReadMemory (schema_data, schema_size, url, NULL, options)))
+  if ((doc = xmlReadMemory (schema_data, schema_size, url, NULL, options)))
   {
     if (NULL == (root = xmlDocGetRootElement (doc)) ||
         !ide_xml_rng_parser_cleanup (self, root))

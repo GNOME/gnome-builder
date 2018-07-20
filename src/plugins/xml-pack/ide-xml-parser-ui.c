@@ -18,15 +18,22 @@
 
 #define G_LOG_DOMAIN "ide-xml-parser-ui"
 
+#include <glib/gi18n.h>
 #include <dazzle.h>
+#include <ide.h>
 
 #include "ide-xml-parser-ui.h"
 #include "ide-xml-parser.h"
 #include "ide-xml-sax.h"
 #include "ide-xml-stack.h"
 #include "ide-xml-tree-builder-utils-private.h"
+#include "ide-xml-utils.h"
 
-static const gchar *
+#include "../gi/ide-gi-namespace.h"
+#include "../gi/ide-gi-require.h"
+#include "../gi/ide-gi-service.h"
+
+static inline const gchar *
 get_attribute (const guchar **list,
                const gchar   *name,
                const gchar   *replacement)
@@ -35,6 +42,123 @@ get_attribute (const guchar **list,
 
   value = list_get_attribute (list, name);
   return dzl_str_empty0 (value) ? ((replacement != NULL) ? replacement : NULL) : value;
+}
+
+static const gchar *
+get_runtime_id (IdeContext *context)
+{
+  IdeConfigurationManager *conf_manager = ide_context_get_configuration_manager (context);
+  IdeConfiguration *config = ide_configuration_manager_get_current (conf_manager);
+
+  return ide_configuration_get_runtime_id (config);
+}
+
+static void
+requires_preprocess (IdeXmlParser *self,
+                     ParserState  *state,
+                     const gchar  *package,
+                     const gchar  *modversion)
+{
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+  g_autoptr(IdeGiVersion) version = NULL;
+  IdeGiService *gi_service;
+  IdeGiRepository *repository;
+  const gchar *runtime_id;
+  guint16 mod_major_version;
+  guint16 mod_minor_version;
+  GArray *ar;
+  gboolean has_matches = FALSE;
+
+  if (dzl_str_empty0 (package))
+    {
+      IdeDiagnostic *diagnostic = _ide_xml_parser_create_diagnostic (state,
+                                                                     _("A Package name is needed"),
+                                                                       IDE_DIAGNOSTIC_WARNING);
+      g_ptr_array_add (state->diagnostics_array, diagnostic);
+      return;
+    }
+
+  /* Specific Gtk+ case where we infer the namespace version from the modversion */
+  if (dzl_str_equal0 (package, "gtk+"))
+    {
+      if (ide_xml_utils_parse_version (modversion, &mod_major_version, &mod_minor_version, NULL))
+        {
+          RequireEntry *entry = g_slice_new0 (RequireEntry);
+
+          entry->runtime_id = g_strdup (get_runtime_id (context));
+          entry->package = g_strdup_printf ("gtk+-%d.0", mod_major_version);
+          entry->mod_major_version = mod_major_version;
+          entry->mod_minor_version = mod_minor_version;
+          entry->ns_name = g_strdup ("Gtk");
+          entry->ns_major_version = mod_major_version;
+          entry->ns_minor_version = 0;
+
+          ide_xml_sax_get_location (state->sax_parser,
+                                    &entry->start_line, &entry->start_line_offset,
+                                    &entry->end_line, &entry->end_line_offset,
+                                    NULL,
+                                    NULL);
+
+          g_ptr_array_add (state->requires_array, entry);
+        }
+
+      return;
+    }
+
+  if (!(gi_service = ide_context_get_service_typed (context, IDE_TYPE_GI_SERVICE)) ||
+      !(repository = ide_gi_service_get_repository (gi_service)) ||
+      !(version = ide_gi_repository_get_current_version (repository)))
+    return;
+
+  if ((ar = ide_gi_version_complete_prefix (version,
+                                            NULL,
+                                            IDE_GI_PREFIX_TYPE_PACKAGE,
+                                            FALSE,
+                                            TRUE,
+                                            package)))
+    {
+      runtime_id = get_runtime_id (context);
+      for (guint i =0; i < ar->len; i++)
+        {
+          IdeGiCompletePrefixItem *item = &g_array_index (ar, IdeGiCompletePrefixItem, i);
+
+          if (dzl_str_equal0 (package, item->word) &&
+              ide_xml_utils_parse_version (modversion, &mod_major_version, &mod_minor_version, NULL))
+            {
+              const gchar *ns_name = ide_gi_namespace_get_name (item->ns);
+              RequireEntry *entry;
+
+              /* Blacklist some broken .gir */
+              if (dzl_str_equal0 (ns_name, "Gladeui"))
+                continue;
+
+              entry = g_slice_new0 (RequireEntry);
+              entry->runtime_id = g_strdup (runtime_id);
+              entry->package = g_strdup (package);
+              entry->mod_major_version = mod_major_version;
+              entry->mod_minor_version = mod_minor_version;
+              entry->ns_name = g_strdup (ns_name);
+              entry->ns_major_version = item->major_version;
+              entry->ns_minor_version = item->minor_version;
+
+              ide_xml_sax_get_location (state->sax_parser,
+                                        &entry->start_line, &entry->start_line_offset,
+                                        &entry->end_line, &entry->end_line_offset,
+                                        NULL,
+                                        NULL);
+
+              g_ptr_array_add (state->requires_array, entry);
+              has_matches = TRUE;
+            }
+        }
+    }
+
+  if (!has_matches)
+    {
+      g_autofree gchar *msg = g_strdup_printf (_("Package don't exist or is not installed: %s"), package);
+      g_ptr_array_add (state->diagnostics_array,
+                       _ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_WARNING));
+    }
 }
 
 static void
@@ -64,12 +188,23 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   if (dzl_str_equal0 (name, "property"))
     {
       if (dzl_str_equal0 (parent_name, "object") ||
-          dzl_str_equal0 (parent_name, "template"))
+          dzl_str_equal0 (parent_name, "template") ||
+          dzl_str_equal0 (parent_name, "packing"))
         {
           value = get_attribute (attributes, "name", NULL);
           node = ide_xml_symbol_node_new (value, NULL, "property", IDE_SYMBOL_UI_PROPERTY);
           is_internal = TRUE;
           state->build_state = BUILD_STATE_GET_CONTENT;
+        }
+    }
+  if (dzl_str_equal0 (name, "signal"))
+    {
+      if (dzl_str_equal0 (parent_name, "object") ||
+          dzl_str_equal0 (parent_name, "template"))
+        {
+          value = get_attribute (attributes, "name", NULL);
+          node = ide_xml_symbol_node_new (value, NULL, "signal", IDE_SYMBOL_UI_SIGNAL);
+          is_internal = TRUE;
         }
     }
   else if (dzl_str_equal0 (name, "attribute"))
@@ -94,16 +229,16 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
     {
       g_string_append (string, "child");
 
-      if (NULL != (value = get_attribute (attributes, "type", NULL)))
+      if ((value = get_attribute (attributes, "type", NULL)))
         {
-          label = ide_xml_parser_get_color_tag (self, "type", COLOR_TAG_TYPE, TRUE, TRUE, TRUE);
+          label = _ide_xml_parser_get_color_tag (self, "type", COLOR_TAG_TYPE, TRUE, TRUE, TRUE);
           g_string_append (string, label);
           g_string_append (string, value);
         }
 
-      if (NULL != (value = get_attribute (attributes, "internal-child", NULL)))
+      if ((value = get_attribute (attributes, "internal-child", NULL)))
         {
-          label = ide_xml_parser_get_color_tag (self, "internal", COLOR_TAG_TYPE, TRUE, TRUE, TRUE);
+          label = _ide_xml_parser_get_color_tag (self, "internal", COLOR_TAG_TYPE, TRUE, TRUE, TRUE);
           g_string_append (string, label);
           g_string_append (string, value);
         }
@@ -114,14 +249,14 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   else if (dzl_str_equal0 (name, "object"))
     {
       value = get_attribute (attributes, "class", "?");
-      label = ide_xml_parser_get_color_tag (self, "class", COLOR_TAG_CLASS, TRUE, TRUE, TRUE);
+      label = _ide_xml_parser_get_color_tag (self, "class", COLOR_TAG_CLASS, TRUE, TRUE, TRUE);
       g_string_append (string, label);
       g_string_append (string, value);
 
-      if (NULL != (value = list_get_attribute (attributes, "id")))
+      if ((value = list_get_attribute (attributes, "id")))
         {
           g_free (label);
-          label = ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
+          label = _ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
           g_string_append (string, label);
           g_string_append (string, value);
         }
@@ -132,13 +267,13 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   else if (dzl_str_equal0 (name, "template"))
     {
       value = get_attribute (attributes, "class", "?");
-      label = ide_xml_parser_get_color_tag (self, "class", COLOR_TAG_CLASS, TRUE, TRUE, TRUE);
+      label = _ide_xml_parser_get_color_tag (self, "class", COLOR_TAG_CLASS, TRUE, TRUE, TRUE);
       g_string_append (string, label);
       g_string_append (string, value);
       g_free (label);
 
       value = get_attribute (attributes, "parent", "?");
-      label = ide_xml_parser_get_color_tag (self, "parent", COLOR_TAG_PARENT, TRUE, TRUE, TRUE);
+      label = _ide_xml_parser_get_color_tag (self, "parent", COLOR_TAG_PARENT, TRUE, TRUE, TRUE);
       g_string_append (string, label);
       g_string_append (string, value);
 
@@ -156,7 +291,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   else if (dzl_str_equal0 (name, "menu"))
     {
       value = get_attribute (attributes, "id", "?");
-      label = ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
+      label = _ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
       g_string_append (string, label);
       g_string_append (string, value);
 
@@ -166,7 +301,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   else if (dzl_str_equal0 (name, "submenu"))
     {
       value = get_attribute (attributes, "id", "?");
-      label = ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
+      label = _ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
       g_string_append (string, label);
       g_string_append (string, value);
 
@@ -176,7 +311,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   else if (dzl_str_equal0 (name, "section"))
     {
       value = get_attribute (attributes, "id", "?");
-      label = ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
+      label = _ide_xml_parser_get_color_tag (self, "id", COLOR_TAG_ID, TRUE, TRUE, TRUE);
       g_string_append (string, label);
       g_string_append (string, value);
 
@@ -187,9 +322,26 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
     {
       node = ide_xml_symbol_node_new ("item", NULL, "item", IDE_SYMBOL_UI_ITEM);
     }
+  else if (dzl_str_equal0 (name, "requires"))
+    {
+      requires_preprocess (self,
+                           state,
+                           get_attribute (attributes, "lib", NULL),
+                           get_attribute (attributes, "version", ""));
+      is_internal = TRUE;
+    }
+  else if (dzl_str_equal0 (name, "interface"))
+    {
+      is_internal = TRUE;
+    }
 
   state->attributes = (const gchar **)attributes;
-  ide_xml_parser_state_processing (self, state, (const gchar *)name, node, IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT, is_internal);
+  _ide_xml_parser_state_processing (self,
+                                    state,
+                                    (const gchar *)name,
+                                    node,
+                                    IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT,
+                                    is_internal);
 }
 
 static const gchar *
@@ -240,7 +392,7 @@ node_post_processing_collect_style_classes (IdeXmlParser      *self,
           if (dzl_str_empty0 (name))
             continue;
 
-          class_tag = ide_xml_parser_get_color_tag (self, name, COLOR_TAG_STYLE_CLASS, TRUE, TRUE, TRUE);
+          class_tag = _ide_xml_parser_get_color_tag (self, name, COLOR_TAG_STYLE_CLASS, TRUE, TRUE, TRUE);
           g_string_append (label, class_tag);
           g_string_append (label, " ");
         }
@@ -263,13 +415,13 @@ node_post_processing_add_label (IdeXmlParser      *self,
   g_assert (IDE_IS_XML_PARSER (self));
   g_assert (IDE_IS_XML_SYMBOL_NODE (node));
 
-  if (NULL != (value = get_menu_attribute_value (node, "label")))
+  if ((value = get_menu_attribute_value (node, "label")))
     {
       g_object_get (node, "name", &label, NULL);
       name = g_string_new (label);
       g_free (label);
 
-      label = ide_xml_parser_get_color_tag (self, "label", COLOR_TAG_LABEL, TRUE, TRUE, TRUE);
+      label = _ide_xml_parser_get_color_tag (self, "label", COLOR_TAG_LABEL, TRUE, TRUE, TRUE);
 
       g_string_append (name, label);
       g_string_append (name, value);
@@ -325,16 +477,16 @@ ide_xml_parser_ui_setup (IdeXmlParser *self,
 
   ide_xml_sax_clear (state->sax_parser);
   ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT, ide_xml_parser_ui_start_element_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT, ide_xml_parser_end_element_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_CHAR, ide_xml_parser_characters_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT, _ide_xml_parser_end_element_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_CHAR, _ide_xml_parser_characters_sax_cb);
 
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_INTERNAL_SUBSET, ide_xml_parser_internal_subset_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_EXTERNAL_SUBSET, ide_xml_parser_external_subset_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_PROCESSING_INSTRUCTION, ide_xml_parser_processing_instruction_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_INTERNAL_SUBSET, _ide_xml_parser_internal_subset_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_EXTERNAL_SUBSET, _ide_xml_parser_external_subset_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_PROCESSING_INSTRUCTION, _ide_xml_parser_processing_instruction_sax_cb);
 
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_WARNING, ide_xml_parser_warning_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_ERROR, ide_xml_parser_error_sax_cb);
-  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_FATAL_ERROR, ide_xml_parser_fatal_error_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_WARNING, _ide_xml_parser_warning_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_ERROR, _ide_xml_parser_error_sax_cb);
+  ide_xml_sax_set_callback (state->sax_parser, IDE_XML_SAX_CALLBACK_TYPE_FATAL_ERROR, _ide_xml_parser_fatal_error_sax_cb);
 
-  ide_xml_parser_set_post_processing_callback (self, ide_xml_parser_ui_post_processing);
+  _ide_xml_parser_set_post_processing_callback (self, ide_xml_parser_ui_post_processing);
 }

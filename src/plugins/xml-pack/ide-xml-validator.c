@@ -234,9 +234,9 @@ ide_xml_validator_set_schema (IdeXmlValidator  *self,
           ret = TRUE;
         }
 
-      if (NULL != (dtd_doc = xmlParseMemory (data, size)))
+      if ((dtd_doc = xmlParseMemory (data, size)))
         {
-          if (NULL != (self->dtd = xmlNewDtd (dtd_doc, NULL, NULL, NULL)))
+          if ((self->dtd = xmlNewDtd (dtd_doc, NULL, NULL, NULL)))
             ret = TRUE;
 
           xmlFreeDoc (dtd_doc);
@@ -244,14 +244,14 @@ ide_xml_validator_set_schema (IdeXmlValidator  *self,
     }
   else if (kind == SCHEMA_KIND_RNG)
     {
-      if (NULL != (rng_parser = xmlRelaxNGNewMemParserCtxt (data, size)) &&
-          NULL != (self->rng = xmlRelaxNGParse (rng_parser)))
+      if ((rng_parser = xmlRelaxNGNewMemParserCtxt (data, size)) &&
+          (self->rng = xmlRelaxNGParse (rng_parser)))
         ret = TRUE;
     }
   else if (kind == SCHEMA_KIND_XML_SCHEMA)
     {
-      if (NULL != (schema_parser = xmlSchemaNewMemParserCtxt (data, size)) &&
-          NULL != (self->xml_schema = xmlSchemaParse (schema_parser)))
+      if ((schema_parser = xmlSchemaNewMemParserCtxt (data, size)) &&
+          (self->xml_schema = xmlSchemaParse (schema_parser)))
         ret = TRUE;
     }
   else

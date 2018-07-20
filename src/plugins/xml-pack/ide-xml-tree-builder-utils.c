@@ -50,12 +50,12 @@ get_schema_url (const gchar *data)
   gchar *begin;
   gchar *end;
 
-  if (NULL != (begin = strstr (data, "href=\"")))
+  if ((begin = strstr (data, "href=\"")))
     {
       end = begin += HREF_LEN;
       while (end != NULL)
         {
-          if (NULL != (end = strchr (begin, '"')))
+          if ((end = strchr (begin, '"')))
             {
               if (*(end - 1) != '\\')
                 return g_strndup (begin, end - begin);

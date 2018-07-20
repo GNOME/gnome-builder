@@ -107,7 +107,7 @@ build_indent (IdeXmlIndenter *xml,
       memset (needle, ' ', xml->tab_width);
       needle [xml->tab_width] = '\0';
 
-      while (NULL != (tab = strstr (pos, needle)))
+      while ((tab = strstr (pos, needle)))
         {
           g_string_append_len (translated, pos, tab - pos);
           g_string_append_c (translated, '\t');

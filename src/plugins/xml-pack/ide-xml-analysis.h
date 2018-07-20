@@ -21,6 +21,8 @@
 #include "diagnostics/ide-diagnostics.h"
 #include "ide-xml-symbol-node.h"
 
+#include "../gi/ide-gi-require.h"
+
 #include <glib-object.h>
 
 G_BEGIN_DECLS
@@ -35,16 +37,25 @@ struct _IdeXmlAnalysis
   IdeXmlSymbolNode *root_node;
   IdeDiagnostics   *diagnostics;
   GPtrArray        *schemas;       // array of IdeXmlSchemaCacheEntry
+  IdeGiRequire     *require;
   gint64            sequence;
+
+  guint             is_ui : 1;
 };
 
 GType               ide_xml_analysis_get_type            (void);
 IdeDiagnostics     *ide_xml_analysis_get_diagnostics     (IdeXmlAnalysis   *self);
+gboolean            ide_xml_analysis_get_is_ui           (IdeXmlAnalysis   *self);
+IdeGiRequire       *ide_xml_analysis_get_require         (IdeXmlAnalysis   *self);
 IdeXmlSymbolNode   *ide_xml_analysis_get_root_node       (IdeXmlAnalysis   *self);
 gint64              ide_xml_analysis_get_sequence        (IdeXmlAnalysis   *self);
 GPtrArray          *ide_xml_analysis_get_schemas         (IdeXmlAnalysis   *self);
 void                ide_xml_analysis_set_diagnostics     (IdeXmlAnalysis   *self,
                                                           IdeDiagnostics   *diagnostics);
+void                ide_xml_analysis_set_is_ui            (IdeXmlAnalysis  *self,
+                                                          gboolean          is_ui);
+void                ide_xml_analysis_set_require         (IdeXmlAnalysis   *self,
+                                                          IdeGiRequire     *require);
 void                ide_xml_analysis_set_root_node       (IdeXmlAnalysis   *self,
                                                           IdeXmlSymbolNode *root_node);
 void                ide_xml_analysis_set_sequence        (IdeXmlAnalysis   *self,

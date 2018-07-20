@@ -43,6 +43,15 @@ void                ide_xml_service_get_diagnostics_async              (IdeXmlSe
                                                                         GCancellable         *cancellable,
                                                                         GAsyncReadyCallback   callback,
                                                                         gpointer              user_data);
+void                ide_xml_service_get_modversion_async               (IdeXmlService        *self,
+                                                                        const gchar          *runtime_name,
+                                                                        const gchar          *lib,
+                                                                        GCancellable         *cancellable,
+                                                                        GAsyncReadyCallback   callback,
+                                                                        gpointer              user_data);
+gchar              *ide_xml_service_get_modversion_finish              (IdeXmlService        *self,
+                                                                        GAsyncResult         *result,
+                                                                        GError              **error);
 void                ide_xml_service_get_position_from_cursor_async     (IdeXmlService        *self,
                                                                         IdeFile              *ifile,
                                                                         IdeBuffer            *buffer,
