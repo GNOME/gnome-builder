@@ -1,0 +1,8 @@
+[Plugin]
+Module=gi-plugin
+Name=GI service
+Description=Provides typelib similar API with IDE needs
+Authors=Sébastien Lafargue <slafargue@gnome.org>
+Copyright=Copyright © 2018 Sébastien Lafargue
+Builtin=true
+Embedded=ide_gi_register_types
