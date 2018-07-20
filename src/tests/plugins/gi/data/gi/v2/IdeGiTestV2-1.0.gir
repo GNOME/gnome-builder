@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<repository version="1.2"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <package name="libidegitestv2-1.0"/>
+  <namespace name="IdeGiTestV2"
+             version="1.0"
+             c:identifier-prefixes="Igtv2"
+             c:symbol-prefixes="igtv2">
+    <union name="Igtv2Union" c:type="Igtv2Union"/>
+  </namespace>
+</repository>
