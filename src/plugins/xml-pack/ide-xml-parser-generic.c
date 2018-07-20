@@ -30,7 +30,6 @@ collect_attributes (IdeXmlParser  *self,
                     const gchar  **attributes)
 {
   GString *string;
-  gchar *value;
   const gchar **l = attributes;
 
   g_assert (IDE_IS_XML_PARSER (self));
@@ -41,9 +40,9 @@ collect_attributes (IdeXmlParser  *self,
   string = g_string_new (NULL);
   while (l [0] != NULL && *l [0] != '\0')
     {
-      value = _ide_xml_parser_get_color_tag (self, l [0], COLOR_TAG_ATTRIBUTE, TRUE, TRUE, TRUE);
+      g_autofree gchar *value = _ide_xml_parser_get_color_tag (self, l [0], COLOR_TAG_ATTRIBUTE, TRUE, TRUE, TRUE);
+
       g_string_append (string, value);
-      g_free (value);
       g_string_append (string, l [1]);
 
       l += 2;
@@ -58,9 +57,9 @@ ide_xml_parser_generic_start_element_sax_cb (ParserState    *state,
                                              const xmlChar **attributes)
 {
   IdeXmlParser *self = (IdeXmlParser *)state->self;
-  IdeXmlSymbolNode *node = NULL;
   g_autofree gchar *attr = NULL;
   g_autofree gchar *label = NULL;
+  IdeXmlSymbolNode *node;
 
   g_assert (IDE_IS_XML_PARSER (self));
 
@@ -79,8 +78,8 @@ ide_xml_parser_generic_comment_sax_cb (ParserState   *state,
                                        const xmlChar *name)
 {
   IdeXmlParser *self = (IdeXmlParser *)state->self;
-  IdeXmlSymbolNode *node = NULL;
   g_autofree gchar *strip_name = NULL;
+  IdeXmlSymbolNode *node;
 
   g_assert (IDE_IS_XML_PARSER (self));
 
@@ -95,7 +94,7 @@ ide_xml_parser_generic_cdata_sax_cb (ParserState   *state,
                                      gint           len)
 {
   IdeXmlParser *self = (IdeXmlParser *)state->self;
-  IdeXmlSymbolNode *node = NULL;
+  IdeXmlSymbolNode *node;
 
   g_assert (IDE_IS_XML_PARSER (self));
 

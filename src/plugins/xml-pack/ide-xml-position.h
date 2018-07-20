@@ -33,50 +33,49 @@ typedef struct _IdeXmlPosition IdeXmlPosition;
 
 struct _IdeXmlPosition
 {
-  IdeXmlAnalysis       *analysis;
-  IdeXmlSymbolNode     *node;
-  IdeXmlSymbolNode     *child_node;
-  IdeXmlSymbolNode     *previous_sibling_node;
-  IdeXmlSymbolNode     *next_sibling_node;
-  gchar                *prefix;
-  gchar                *detail_name;
-  gchar                *detail_value;
-  IdeXmlPositionKind    kind;
-  IdeXmlDetail         *detail;
-  gint                  child_pos;
-  gchar                 quote;
+  IdeXmlAnalysis     *analysis;
+  IdeXmlSymbolNode   *node;
+  IdeXmlSymbolNode   *child_node;
+  IdeXmlSymbolNode   *previous_sibling_node;
+  IdeXmlSymbolNode   *next_sibling_node;
+  gchar              *prefix;
+  gchar              *detail_name;
+  gchar              *detail_value;
+  IdeXmlPositionKind  kind;
+  IdeXmlDetail       *detail;
+  gint                child_pos;
+  gchar               quote;
 
-  volatile gint         ref_count;
+  volatile gint       ref_count;
 };
 
-GType                     ide_xml_position_get_type             (void);
-IdeXmlPosition           *ide_xml_position_new                  (IdeXmlSymbolNode      *node,
-                                                                 IdeXmlPositionKind     kind,
-                                                                 IdeXmlDetail          *detail);
-IdeXmlPosition           *ide_xml_position_copy                 (IdeXmlPosition        *self);
-IdeXmlPosition           *ide_xml_position_ref                  (IdeXmlPosition        *self);
-void                      ide_xml_position_unref                (IdeXmlPosition        *self);
-IdeXmlAnalysis           *ide_xml_position_get_analysis         (IdeXmlPosition        *self);
-gint                      ide_xml_position_get_child_pos        (IdeXmlPosition        *self);
-IdeXmlDetail             *ide_xml_position_get_detail           (IdeXmlPosition        *self);
-IdeXmlPositionKind        ide_xml_position_get_kind             (IdeXmlPosition        *self);
-IdeXmlSymbolNode         *ide_xml_position_get_next_sibling     (IdeXmlPosition        *self);
-IdeXmlSymbolNode         *ide_xml_position_get_child_node       (IdeXmlPosition        *self);
-IdeXmlSymbolNode         *ide_xml_position_get_node             (IdeXmlPosition        *self);
-IdeXmlSymbolNode         *ide_xml_position_get_parent_node      (IdeXmlPosition        *self);
-IdeXmlSymbolNode         *ide_xml_position_get_previous_sibling (IdeXmlPosition        *self);
-void                      ide_xml_position_set_analysis         (IdeXmlPosition        *self,
-                                                                 IdeXmlAnalysis        *analysis);
-void                      ide_xml_position_set_child_node       (IdeXmlPosition        *self,
-                                                                 IdeXmlSymbolNode      *child_node);
-void                      ide_xml_position_set_child_pos        (IdeXmlPosition        *self,
-                                                                 gint                   child_pos);
-void                      ide_xml_position_set_siblings         (IdeXmlPosition        *self,
-                                                                 IdeXmlSymbolNode      *previous_sibling_node,
-                                                                 IdeXmlSymbolNode      *next_sibling_node);
-
-void                      ide_xml_position_print                (IdeXmlPosition        *self);
-const gchar              *ide_xml_position_kind_get_str         (IdeXmlPositionKind     kind);
+GType               ide_xml_position_get_type             (void);
+IdeXmlPosition     *ide_xml_position_new                  (IdeXmlSymbolNode   *node,
+                                                           IdeXmlPositionKind  kind,
+                                                           IdeXmlDetail       *detail);
+IdeXmlPosition     *ide_xml_position_copy                 (IdeXmlPosition     *self);
+IdeXmlPosition     *ide_xml_position_ref                  (IdeXmlPosition     *self);
+void                ide_xml_position_unref                (IdeXmlPosition     *self);
+IdeXmlAnalysis     *ide_xml_position_get_analysis         (IdeXmlPosition     *self);
+gint                ide_xml_position_get_child_pos        (IdeXmlPosition     *self);
+IdeXmlDetail       *ide_xml_position_get_detail           (IdeXmlPosition     *self);
+IdeXmlPositionKind  ide_xml_position_get_kind             (IdeXmlPosition     *self);
+IdeXmlSymbolNode   *ide_xml_position_get_next_sibling     (IdeXmlPosition     *self);
+IdeXmlSymbolNode   *ide_xml_position_get_child_node       (IdeXmlPosition     *self);
+IdeXmlSymbolNode   *ide_xml_position_get_node             (IdeXmlPosition     *self);
+IdeXmlSymbolNode   *ide_xml_position_get_parent_node      (IdeXmlPosition     *self);
+IdeXmlSymbolNode   *ide_xml_position_get_previous_sibling (IdeXmlPosition     *self);
+void                ide_xml_position_set_analysis         (IdeXmlPosition     *self,
+                                                           IdeXmlAnalysis     *analysis);
+void                ide_xml_position_set_child_node       (IdeXmlPosition     *self,
+                                                           IdeXmlSymbolNode   *child_node);
+void                ide_xml_position_set_child_pos        (IdeXmlPosition     *self,
+                                                           gint                child_pos);
+void                ide_xml_position_set_siblings         (IdeXmlPosition     *self,
+                                                           IdeXmlSymbolNode   *previous_sibling_node,
+                                                           IdeXmlSymbolNode   *next_sibling_node);
+void                ide_xml_position_print                (IdeXmlPosition     *self);
+const gchar        *ide_xml_position_kind_get_str         (IdeXmlPositionKind  kind);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlPosition, ide_xml_position_unref)
 

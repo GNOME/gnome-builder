@@ -156,6 +156,7 @@ requires_preprocess (IdeXmlParser *self,
   if (!has_matches)
     {
       g_autofree gchar *msg = g_strdup_printf (_("Package don't exist or is not installed: %s"), package);
+
       g_ptr_array_add (state->diagnostics_array,
                        _ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_WARNING));
     }
@@ -348,15 +349,15 @@ static const gchar *
 get_menu_attribute_value (IdeXmlSymbolNode *node,
                           const gchar      *name)
 {
-  IdeXmlSymbolNode *child;
-  gint n_children;
+  guint n_children;
 
   g_assert (IDE_IS_XML_SYMBOL_NODE (node));
 
   n_children = ide_xml_symbol_node_get_n_internal_children (node);
-  for (gint i = 0; i < n_children; ++i)
+  for (guint i = 0; i < n_children; ++i)
     {
-      child = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_internal_child (node, i));
+      IdeXmlSymbolNode *child = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_internal_child (node, i));
+
       if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_UI_MENU_ATTRIBUTE &&
           dzl_str_equal0 (ide_symbol_node_get_name (IDE_SYMBOL_NODE (child)), name))
         {
@@ -368,24 +369,23 @@ get_menu_attribute_value (IdeXmlSymbolNode *node,
 }
 
 static void
-node_post_processing_collect_style_classes (IdeXmlParser      *self,
-                                            IdeXmlSymbolNode  *node)
+node_post_processing_collect_style_classes (IdeXmlParser     *self,
+                                            IdeXmlSymbolNode *node)
 {
-  IdeXmlSymbolNode *child;
   g_autoptr(GString) label = NULL;
-  gint n_children;
+  guint n_children;
 
   g_assert (IDE_IS_XML_PARSER (self));
   g_assert (IDE_IS_XML_SYMBOL_NODE (node));
 
   label = g_string_new (NULL);
   n_children = ide_xml_symbol_node_get_n_internal_children (node);
-  for (gint i = 0; i < n_children; ++i)
+  for (guint i = 0; i < n_children; ++i)
     {
       g_autofree gchar *class_tag = NULL;
+      IdeXmlSymbolNode *child = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_internal_child (node, i));
       const gchar *name;
 
-      child = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_internal_child (node, i));
       if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_UI_STYLE_CLASS)
         {
           name = ide_symbol_node_get_name (IDE_SYMBOL_NODE (child));
@@ -405,8 +405,8 @@ node_post_processing_collect_style_classes (IdeXmlParser      *self,
 }
 
 static void
-node_post_processing_add_label (IdeXmlParser      *self,
-                                IdeXmlSymbolNode  *node)
+node_post_processing_add_label (IdeXmlParser     *self,
+                                IdeXmlSymbolNode *node)
 {
   const gchar *value;
   g_autoptr(GString) name = NULL;
@@ -433,13 +433,10 @@ node_post_processing_add_label (IdeXmlParser      *self,
 }
 
 static gboolean
-ide_xml_parser_ui_post_processing (IdeXmlParser      *self,
-                                   IdeXmlSymbolNode  *root_node)
+ide_xml_parser_ui_post_processing (IdeXmlParser     *self,
+                                   IdeXmlSymbolNode *root_node)
 {
   g_autoptr(GPtrArray) ar = NULL;
-  IdeXmlSymbolNode *node;
-  const gchar *element_name;
-  gint n_children;
 
   g_assert (IDE_IS_XML_PARSER (self));
   g_assert (IDE_IS_XML_SYMBOL_NODE (root_node));
@@ -449,13 +446,12 @@ ide_xml_parser_ui_post_processing (IdeXmlParser      *self,
 
   while (ar->len > 0)
     {
-      node = g_ptr_array_remove_index (ar, ar->len - 1);
+      IdeXmlSymbolNode *node = g_ptr_array_remove_index (ar, ar->len - 1);
+      gint n_children = ide_xml_symbol_node_get_n_children (node);
+      const gchar *element_name = ide_xml_symbol_node_get_element_name (node);
 
-      n_children = ide_xml_symbol_node_get_n_children (node);
-      for (gint i = 0; i < n_children; ++i)
+      for (guint i = 0; i < n_children; ++i)
         g_ptr_array_add (ar, ide_xml_symbol_node_get_nth_child (node, i));
-
-      element_name = ide_xml_symbol_node_get_element_name (node);
 
       if (dzl_str_equal0 (element_name, "style"))
         node_post_processing_collect_style_classes (self, node);

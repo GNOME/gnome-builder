@@ -122,8 +122,8 @@ ide_xml_analysis_set_diagnostics (IdeXmlAnalysis *self,
 }
 
 void
-ide_xml_analysis_set_is_ui (IdeXmlAnalysis   *self,
-                            gboolean          is_ui)
+ide_xml_analysis_set_is_ui (IdeXmlAnalysis *self,
+                            gboolean        is_ui)
 {
   g_return_if_fail (self != NULL);
 
@@ -166,8 +166,8 @@ ide_xml_analysis_set_schemas (IdeXmlAnalysis *self,
 }
 
 void
-ide_xml_analysis_set_sequence (IdeXmlAnalysis   *self,
-                               gint64            sequence)
+ide_xml_analysis_set_sequence (IdeXmlAnalysis *self,
+                               gint64          sequence)
 {
   g_return_if_fail (self != NULL);
 

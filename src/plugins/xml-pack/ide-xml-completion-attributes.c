@@ -20,7 +20,7 @@
 
 #include "ide-xml-position.h"
 
-typedef struct _MatchingState
+typedef struct
 {
   IdeXmlSymbolNode *node;
   IdeXmlRngDefine  *define;
@@ -76,16 +76,14 @@ static void
 match_children_add (GPtrArray *to_children,
                     GPtrArray *from_children)
 {
-  MatchItem *to_item;
-  MatchItem *from_item;
-
   g_assert (to_children != NULL);
   g_assert (from_children != NULL);
 
-  for (gint i = 0; i < from_children->len; ++i)
+  for (guint i = 0; i < from_children->len; ++i)
     {
-      from_item = g_ptr_array_index (from_children, i);
-      to_item = match_item_new (from_item->define, from_item->name, from_item->pos, from_item->is_optional);
+      MatchItem *from_item = g_ptr_array_index (from_children, i);
+      MatchItem *to_item = match_item_new (from_item->define, from_item->name, from_item->pos, from_item->is_optional);
+
       g_ptr_array_add (to_children, to_item);
     }
 }
@@ -97,12 +95,13 @@ matching_state_new (IdeXmlRngDefine  *define,
   MatchingState *state;
 
   g_assert (define != NULL);
+  g_assert (IDE_IS_XML_SYMBOL_NODE (node) || node == NULL);
 
   state = g_slice_new0 (MatchingState);
 
   state->define = define;
   state->orig_define = define;
-  state->node = node;
+  g_set_object (&state->node, node);
 
   state->node_attr = g_ptr_array_new_with_free_func (g_free);
   state->is_initial_state = FALSE;
@@ -148,7 +147,7 @@ get_match_children_min_pos (GPtrArray *match_children)
 
   g_assert (match_children != NULL);
 
-  for (gint i = 0; i < match_children->len; i++)
+  for (guint i = 0; i < match_children->len; i++)
     {
       item = g_ptr_array_index (match_children, i);
       if (item->pos == -1)
@@ -167,9 +166,8 @@ get_match_children_min_pos (GPtrArray *match_children)
 static GPtrArray *
 process_choice (MatchingState *state)
 {
-  GPtrArray *match_children;
-  GPtrArray *match;
-  GPtrArray *tmp_matches;
+  g_autoptr(GPtrArray) tmp_matches = NULL;
+  g_autoptr(GPtrArray) match_children = NULL;
   GPtrArray *min_pos_match = NULL;
   IdeXmlRngDefine *defines;
   gboolean node_has_attr G_GNUC_UNUSED;
@@ -179,14 +177,16 @@ process_choice (MatchingState *state)
   g_assert (state->define->type == IDE_XML_RNG_DEFINE_CHOICE);
 
   match_children = match_children_new ();
-  if (NULL == (defines = state->define->content))
-    return match_children;
+  if (!(defines = state->define->content))
+    return g_steal_pointer (&match_children);;
 
   tmp_matches = g_ptr_array_new_with_free_func ((GDestroyNotify)g_ptr_array_unref);
   node_has_attr = (state->node_attr->len > 0);
   while (defines != NULL)
     {
-      if ((match = process_matching_state (state, defines)))
+      GPtrArray *match = process_matching_state (state, defines);
+
+      if (match != NULL)
         {
           pos = get_match_children_min_pos (match);
           if (pos != -1 && pos < min_pos)
@@ -204,18 +204,14 @@ process_choice (MatchingState *state)
     }
 
   if (min_pos_match != NULL)
-    {
-      g_ptr_array_unref (match_children);
-      g_ptr_array_unref (tmp_matches);
-
-      return min_pos_match;
-    }
+    return min_pos_match;
   else
     {
-      for (gint i = 0; i < tmp_matches->len; i++)
-        match_children_add (match_children, g_ptr_array_index (tmp_matches, i));
+      for (guint i = 0; i < tmp_matches->len; i++)
+        match_children_add (match_children,
+                            g_ptr_array_ref (g_ptr_array_index (tmp_matches, i)));
 
-      return match_children;
+      return g_steal_pointer (&match_children);
     }
 }
 
@@ -223,7 +219,6 @@ static GPtrArray *
 process_group (MatchingState *state)
 {
   GPtrArray *match_children;
-  GPtrArray *match;
   IdeXmlRngDefine *defines;
 
   g_assert (state->define->type == IDE_XML_RNG_DEFINE_GROUP ||
@@ -233,17 +228,15 @@ process_group (MatchingState *state)
             state->define->type == IDE_XML_RNG_DEFINE_OPTIONAL);
 
   match_children = match_children_new ();
-  if (NULL == (defines = state->define->content))
+  if (!(defines = state->define->content))
     return match_children;
 
   while (defines != NULL)
     {
-      if ((match = process_matching_state (state, defines)))
-        {
-          /* TODO: use move */
-          match_children_add (match_children, match);
-          g_ptr_array_unref (match);
-        }
+      g_autoptr(GPtrArray) match = process_matching_state (state, defines);
+
+      if (match != NULL)
+        match_children_add (match_children, match);
 
       defines = defines->next;
     }
@@ -255,23 +248,20 @@ static GPtrArray *
 process_attributes_group (MatchingState *state)
 {
   GPtrArray *match_children;
-  GPtrArray *match;
   IdeXmlRngDefine *defines;
 
   g_assert (state->define->type == IDE_XML_RNG_DEFINE_ELEMENT);
 
   match_children = match_children_new ();
-  if (NULL == (defines = state->define->attributes))
+  if (!(defines = state->define->attributes))
     return match_children;
 
   while (defines != NULL)
     {
-      if ((match = process_matching_state (state, defines)))
-        {
-          /* TODO: use move */
-          match_children_add (match_children, match);
-          g_ptr_array_unref (match);
-        }
+      g_autoptr(GPtrArray) match = process_matching_state (state, defines);
+
+      if (match != NULL)
+        match_children_add (match_children, match);
 
       defines = defines->next;
     }
@@ -372,13 +362,14 @@ create_initial_matching_state (IdeXmlRngDefine  *define,
   gchar **attributes;
 
   g_assert (define != NULL);
+  g_assert (IDE_IS_XML_SYMBOL_NODE (node) || node == NULL);
 
   state = matching_state_new (define, node);
   if (node != NULL)
     {
       if ((attributes = ide_xml_symbol_node_get_attributes_names (node)))
         {
-          for (gint i = 0; attributes [i] != NULL; i++)
+          for (guint i = 0; attributes [i] != NULL; i++)
             g_ptr_array_add (state->node_attr, (gchar *)attributes [i]);
 
           g_free (attributes);
@@ -413,22 +404,21 @@ alphabetical_sort_func (gpointer *a,
   return g_ascii_strcasecmp (match_b->name, match_a->name);
 }
 
-/* Remove completion items already in the current node and
- * filter the list by alphabetical order. */
+/* Remove completion items already in the current node and filter the list by alphabetical order. */
 static void
 match_children_filter (GPtrArray *match_children,
                        GPtrArray *node_attributes)
 {
-  MatchItem *match;
-  guint index;
-  gint i = 0;
+  guint i = 0;
 
   g_assert (match_children != NULL);
   g_assert (node_attributes != NULL);
 
   while (i < match_children->len)
     {
-      match = g_ptr_array_index (match_children, i);
+      MatchItem *match = g_ptr_array_index (match_children, i);
+      guint index;
+
       if (g_ptr_array_find_with_equal_func (node_attributes, match, (GEqualFunc)compare_attribute_names, &index))
         g_ptr_array_remove_index_fast (match_children, i);
       else
@@ -441,10 +431,11 @@ match_children_filter (GPtrArray *match_children,
 static void
 propagate_mandatory (MatchingState *state)
 {
-  IdeXmlRngDefine *define = state->define;
+  IdeXmlRngDefine *define;
 
   g_assert (state != NULL);
 
+  define = state->define;
   while (define != state->orig_define)
     {
       if (define->type == IDE_XML_RNG_DEFINE_OPTIONAL || define->type == IDE_XML_RNG_DEFINE_ZEROORMORE)
@@ -462,7 +453,7 @@ set_position (MatchingState *state)
 
   g_assert (state != NULL);
 
-  if (NULL == (attribute = (const gchar *)state->define->name) ||
+  if (!(attribute = (const gchar *)state->define->name) ||
       !g_ptr_array_find_with_equal_func (state->node_attr, attribute, (GEqualFunc)g_str_equal, &index))
     {
       index = -1;
@@ -556,7 +547,7 @@ set_attributes_position (MatchingState   *state,
   state->define = old_define;
 }
 
-/* Return an array of MatchItem */
+/* Return an array of MatchItem or %NULL */
 GPtrArray *
 ide_xml_completion_attributes_get_matches (IdeXmlRngDefine  *define,
                                            IdeXmlSymbolNode *node,

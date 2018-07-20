@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
 #include <ide.h>
 
 #include "ide-xml-hash-table.h"
@@ -83,7 +84,7 @@ ide_xml_hash_table_full_scan (IdeXmlHashTable         *self,
       GPtrArray *array = (GPtrArray *)value;
       const gchar *name = (const gchar *)key;
 
-      for (gint i = 0; i < array->len; ++i)
+      for (guint i = 0; i < array->len; ++i)
         {
           gpointer content = g_ptr_array_index (array, i);
 
@@ -103,14 +104,14 @@ ide_xml_hash_table_add (IdeXmlHashTable *self,
   g_return_val_if_fail (!dzl_str_empty0 (name), FALSE);
   g_return_val_if_fail (data != NULL, FALSE);
 
-  if (NULL == (array = g_hash_table_lookup (self->table, name)))
+  if (!(array = g_hash_table_lookup (self->table, name)))
     {
       array = g_ptr_array_new_with_free_func (self->free_func);
       g_hash_table_insert (self->table, g_strdup (name), array);
     }
   else
     {
-      for (gint i = 0; i < array->len; ++i)
+      for (guint i = 0; i < array->len; ++i)
         {
           if (data == g_ptr_array_index (array, i))
             return FALSE;
@@ -138,7 +139,7 @@ ide_xml_hash_table_free (IdeXmlHashTable *self)
   g_assert (self);
   g_assert_cmpint (self->ref_count, ==, 0);
 
-  g_hash_table_unref (self->table);
+  dzl_clear_pointer (&self->table, g_hash_table_unref);
 
   g_slice_free (IdeXmlHashTable, self);
 }

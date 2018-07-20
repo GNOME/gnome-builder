@@ -20,7 +20,6 @@
 
 typedef gboolean (*iter_func) (GtkTextIter *iter);
 
-
 static gboolean
 find_end_element_char (gunichar ch,
                        gpointer user_data)
@@ -59,9 +58,7 @@ ide_xml_in_element (const GtkTextIter *iter)
   g_return_val_if_fail (iter != NULL, FALSE);
 
   do {
-    gunichar ch;
-
-    ch = gtk_text_iter_get_char (&copy);
+    gunichar ch = gtk_text_iter_get_char (&copy);
 
     if (ch == '/')
       {
@@ -74,7 +71,7 @@ ide_xml_in_element (const GtkTextIter *iter)
     /*
      * If the iter char points to end of the element '>'
      * we are still inside the element.This is the reason
-     * we check for equality of the copy and iter
+     * we check for equality of the copy and iter.
      */
     if (ch == '>' && !gtk_text_iter_equal (&copy, iter))
       return FALSE;
@@ -94,7 +91,6 @@ ide_xml_get_current_element (const GtkTextIter *iter,
   g_return_val_if_fail (start != NULL, FALSE);
   g_return_val_if_fail (end != NULL, FALSE);
 
-
   if(find_char (gtk_text_iter_backward_char, iter, start, '<') &&
      find_char (gtk_text_iter_forward_char,iter, end, '>') &&
      gtk_text_iter_compare (start, end) < 0)
@@ -108,7 +104,6 @@ ide_xml_find_next_element (const GtkTextIter *iter,
                            GtkTextIter       *start,
                            GtkTextIter       *end)
 {
-
   g_return_val_if_fail (iter != NULL,  FALSE);
   g_return_val_if_fail (start != NULL, FALSE);
   g_return_val_if_fail (end != NULL,   FALSE);
@@ -148,7 +143,6 @@ ide_xml_get_element_tag_type (const GtkTextIter *start,
   gunichar start_ch;
   gunichar end_ch;
 
-
   g_return_val_if_fail (ide_xml_in_element (start) &&
                         gtk_text_iter_get_char (start) == '<', IDE_XML_ELEMENT_TAG_UNKNOWN);
   g_return_val_if_fail (ide_xml_in_element (start) &&
@@ -186,9 +180,7 @@ gchar
                         gtk_text_iter_get_char (end) == '>', NULL);
   g_return_val_if_fail (gtk_text_iter_compare (start, end) < 0, FALSE);
 
-  /*
-   * We need to move pass by the start '<' and closing '/' char of the element
-   */
+  /* We need to move pass by the start '<' and closing '/' char of the element */
   while (gtk_text_iter_get_char (&begin) == '<' || gtk_text_iter_get_char (&begin) == '/')
     gtk_text_iter_forward_char (&begin);
 
@@ -197,10 +189,7 @@ gchar
     return NULL;
 
   curr = begin;
-  /*
-   * Find the end of the element name by iterating over it until we find
-   * a '/' or '>' or ' ' char
-   */
+  /* Find the end of the element name by iterating over it until we find a '/' or '>' or ' ' char */
   if (gtk_text_iter_forward_find_char (&curr, find_end_element_char, NULL, end) &&
       gtk_text_iter_compare (&begin,&curr) < 0)
     return gtk_text_iter_get_slice (&begin, &curr);
@@ -217,7 +206,7 @@ ide_xml_find_closing_element (const GtkTextIter *start,
   IdeXmlElementTagType tag_type;
   GQueue *element_queue;
   guint element_queue_length = 0;
-  gchar *element_name = NULL;
+  gchar *element_name;
 
   g_return_val_if_fail (found_element_start != NULL, FALSE);
   g_return_val_if_fail (found_element_end != NULL, FALSE);
@@ -226,8 +215,7 @@ ide_xml_find_closing_element (const GtkTextIter *start,
   if (tag_type != IDE_XML_ELEMENT_TAG_START)
     return FALSE;
 
-  element_name = ide_xml_get_element_name (start, end);
-  if (element_name == NULL)
+  if (!(element_name = ide_xml_get_element_name (start, end)))
     return FALSE;
 
   element_queue = g_queue_new();
@@ -239,14 +227,12 @@ ide_xml_find_closing_element (const GtkTextIter *start,
       tag_type = ide_xml_get_element_tag_type (found_element_start, found_element_end);
       if (tag_type == IDE_XML_ELEMENT_TAG_START)
         {
-          element_name = ide_xml_get_element_name (found_element_start, found_element_end);
-          if (element_name != NULL)
+          if ((element_name = ide_xml_get_element_name (found_element_start, found_element_end)))
             g_queue_push_head(element_queue, element_name);
         }
       else if (tag_type == IDE_XML_ELEMENT_TAG_END)
         {
-          element_name = ide_xml_get_element_name (found_element_start, found_element_end);
-          if (element_name != NULL)
+          if ((element_name = ide_xml_get_element_name (found_element_start, found_element_end)))
             {
               if(g_strcmp0 (g_queue_peek_head (element_queue), element_name) == 0)
                 {
@@ -280,7 +266,7 @@ ide_xml_find_opening_element (const GtkTextIter *start,
   IdeXmlElementTagType tag_type;
   GQueue *element_queue;
   guint element_queue_length = 0;
-  gchar *element_name = NULL;
+  gchar *element_name;
 
   g_return_val_if_fail (found_element_start != NULL, FALSE);
   g_return_val_if_fail (found_element_end != NULL, FALSE);
@@ -289,8 +275,7 @@ ide_xml_find_opening_element (const GtkTextIter *start,
   if (tag_type != IDE_XML_ELEMENT_TAG_END)
     return FALSE;
 
-  element_name = ide_xml_get_element_name (start, end);
-  if (element_name == NULL)
+  if ((element_name = ide_xml_get_element_name (start, end)))
     return FALSE;
 
   element_queue = g_queue_new();
@@ -302,14 +287,12 @@ ide_xml_find_opening_element (const GtkTextIter *start,
       tag_type = ide_xml_get_element_tag_type (found_element_start, found_element_end);
       if (tag_type == IDE_XML_ELEMENT_TAG_END)
         {
-          element_name = ide_xml_get_element_name (found_element_start, found_element_end);
-          if (element_name != NULL)
+          if ((element_name = ide_xml_get_element_name (found_element_start, found_element_end)))
             g_queue_push_head(element_queue, element_name);
         }
       else if (tag_type == IDE_XML_ELEMENT_TAG_START)
         {
-          element_name = ide_xml_get_element_name (found_element_start, found_element_end);
-          if (element_name != NULL)
+          if ((element_name = ide_xml_get_element_name (found_element_start, found_element_end)))
             {
               if(g_strcmp0 (g_queue_peek_head(element_queue), element_name) == 0)
                 {

@@ -23,10 +23,10 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  IDE_XML_ELEMENT_TAG_UNKNOWN    = 0,
-  IDE_XML_ELEMENT_TAG_START      = 1,
-  IDE_XML_ELEMENT_TAG_END        = 2,
-  IDE_XML_ELEMENT_TAG_START_END  = 3,
+  IDE_XML_ELEMENT_TAG_UNKNOWN   = 0,
+  IDE_XML_ELEMENT_TAG_START     = 1,
+  IDE_XML_ELEMENT_TAG_END       = 2,
+  IDE_XML_ELEMENT_TAG_START_END = 3,
 } IdeXmlElementTagType;
 
 gboolean             ide_xml_in_element            (const GtkTextIter *iter);

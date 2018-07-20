@@ -233,7 +233,7 @@ ide_xml_service_load_schema_cb3 (GObject      *object,
   GFile *file = (GFile *)object;
   SchemaState *state = (SchemaState *)user_data;
   IdeXmlSchema *schema;
-  g_autoptr (IdeXmlRngParser) rng_parser = NULL;
+  g_autoptr(IdeXmlRngParser) rng_parser = NULL;
   IdeXmlSchemaCacheEntry *cache_entry;
   IdeXmlSchemaKind kind;
   g_autoptr(GError) error = NULL;
@@ -293,7 +293,7 @@ ide_xml_service_load_schema_cb2 (GObject      *object,
   GFile *file = (GFile *)object;
   SchemaState *state = (SchemaState *)user_data;
   IdeXmlSchemaCacheEntry *cache_entry;
-  g_autoptr (GFileInfo) file_info = NULL;
+  g_autoptr(GFileInfo) file_info = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (G_IS_FILE (file));
