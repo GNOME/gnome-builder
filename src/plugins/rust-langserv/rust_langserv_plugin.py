@@ -195,3 +195,9 @@ class RustHighlighter(Ide.LangservHighlighter):
 class RustFormatter(Ide.LangservFormatter):
     def do_load(self):
         RustService.bind_client(self)
+
+class RustHoverProvider(Ide.LangservHoverProvider):
+    def do_prepare(self):
+        self.props.category = 'Rust'
+        self.props.priority = 200
+        RustService.bind_client(self)
