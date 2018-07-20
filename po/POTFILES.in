@@ -173,6 +173,7 @@ src/plugins/flatpak/gbp-flatpak-runtime.c
 src/plugins/flatpak/gbp-flatpak-transfer.c
 src/plugins/flatpak/gbp-flatpak-workbench-addin.c
 src/plugins/gcc/gbp-gcc-toolchain-provider.c
+src/plugins/gi/ide-gi-service.c
 src/plugins/git/ide-git-buffer-change-monitor.c
 src/plugins/git/ide-git-clone-widget.c
 src/plugins/git/ide-git-clone-widget.ui
@@ -251,5 +252,6 @@ src/plugins/vala-pack/ide-vala-preferences-addin.vala
 src/plugins/valgrind/gtk/menus.ui
 src/plugins/valgrind/valgrind_plugin.py
 src/plugins/xml-pack/ide-xml-parser.c
+src/plugins/xml-pack/ide-xml-parser-ui.c
 src/plugins/xml-pack/ide-xml-service.c
 src/plugins/xml-pack/ide-xml-tree-builder.c
