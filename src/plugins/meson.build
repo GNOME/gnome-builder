@@ -3,7 +3,7 @@ plugindatadir = join_paths(get_option('datadir'), 'gnome-builder/plugins')
 
 gnome_builder_plugins_sources = ['gnome-builder-plugins.c']
 gnome_builder_plugins_args = []
-gnome_builder_plugins_deps = [libpeas_dep, libide_plugin_dep, libide_dep]
+gnome_builder_plugins_deps = [libpeas_dep, libide_plugin_dep, libide_dep, libdazzle_dep]
 gnome_builder_plugins_link_with = []
 gnome_builder_plugins_link_deps = join_paths(meson.current_source_dir(), 'plugins.map')
 gnome_builder_plugins_link_args = [
