@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-04 21:50+0000\n"
-"PO-Revision-Date: 2018-07-05 15:43+0200\n"
-"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
+"POT-Creation-Date: 2018-07-19 19:43+0000\n"
+"PO-Revision-Date: 2018-07-20 21:58+0200\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -444,7 +444,7 @@ msgstr "Die Höhe der unteren Leiste in Pixeleinheiten."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:690
+#: src/libide/application/ide-application.c:692
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:648
@@ -751,7 +751,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4965
+#: src/libide/sourceview/ide-source-view.c:4947
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Umbenennen"
@@ -788,7 +788,7 @@ msgstr "Erfahren Sie mehr über GNOME Builder"
 msgid "Funded By"
 msgstr "Gefördert von"
 
-#: src/libide/application/ide-application.c:1086
+#: src/libide/application/ide-application.c:1088
 #: src/libide/preferences/ide-preferences-builtin.c:417
 msgid "Projects"
 msgstr "Projekte"
@@ -974,66 +974,66 @@ msgstr "Die Erstellungskette ist in einem fehlerhaften Zustand"
 msgid "The build configuration has errors"
 msgstr "Die Erstellungskonfiguration ist fehlerhaft"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:2814
+#: src/libide/buildsystem/ide-build-pipeline.c:2818
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Die Erstellung eines Pseudo-Terminals ist fehlgeschlagen. Terminal-"
 "Funktionsmerkmale werden nur eingeschränkt verfügbar sein."
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3014
+#: src/libide/buildsystem/ide-build-pipeline.c:3018
 msgid "Cleaning…"
 msgstr "Wird aufgeräumt …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3018
-#: src/libide/buildsystem/ide-build-pipeline.c:3075
-#: src/libide/workbench/ide-omni-bar.c:559
+#: src/libide/buildsystem/ide-build-pipeline.c:3022
+#: src/libide/buildsystem/ide-build-pipeline.c:3079
+#: src/libide/workbench/ide-omni-bar.c:560
 msgid "Failed"
 msgstr "Gescheitert"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3020
-#: src/libide/buildsystem/ide-build-pipeline.c:3083
+#: src/libide/buildsystem/ide-build-pipeline.c:3024
+#: src/libide/buildsystem/ide-build-pipeline.c:3087
 msgid "Ready"
 msgstr "Bereit"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3035
+#: src/libide/buildsystem/ide-build-pipeline.c:3039
 msgid "Downloading…"
 msgstr "Wird heruntergeladen …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3039
+#: src/libide/buildsystem/ide-build-pipeline.c:3043
 msgid "Building dependencies…"
 msgstr "Abhängigkeiten werden erstellt …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3043
+#: src/libide/buildsystem/ide-build-pipeline.c:3047
 msgid "Bootstrapping…"
 msgstr "Bootstrapping …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3047
+#: src/libide/buildsystem/ide-build-pipeline.c:3051
 msgid "Configuring…"
 msgstr "Konfiguration läuft …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3051
+#: src/libide/buildsystem/ide-build-pipeline.c:3055
 msgid "Building…"
 msgstr "Erstellung …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3055
+#: src/libide/buildsystem/ide-build-pipeline.c:3059
 msgid "Installing…"
 msgstr "Installieren …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3059
+#: src/libide/buildsystem/ide-build-pipeline.c:3063
 msgid "Committing…"
 msgstr "Wird eingespielt …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3063
+#: src/libide/buildsystem/ide-build-pipeline.c:3067
 msgid "Exporting…"
 msgstr "Wird exportiert …"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3067
 #: src/libide/buildsystem/ide-build-pipeline.c:3071
-#: src/libide/workbench/ide-omni-bar.c:586
+#: src/libide/buildsystem/ide-build-pipeline.c:3075
+#: src/libide/workbench/ide-omni-bar.c:587
 msgid "Success"
 msgstr "Erfolg"
 
-#: src/libide/buildsystem/ide-build-pipeline.c:3079
+#: src/libide/buildsystem/ide-build-pipeline.c:3083
 msgid "Preparing…"
 msgstr "Wird vorbereitet …"
 
@@ -1262,6 +1262,7 @@ msgid "Disassembly"
 msgstr "Disassemblieren"
 
 #: src/libide/debugger/ide-debugger-editor-addin.c:311
+#: src/libide/debugger/ide-debugger-hover-provider.c:89
 msgid "Debugger"
 msgstr "Debugger"
 
@@ -1288,6 +1289,18 @@ msgstr "Protokoll"
 #: src/libide/debugger/ide-debugger-editor-addin.c:400
 msgid "Failed to initialize the debugger"
 msgstr "Debugger konnte nicht initialisiert werden"
+
+#: src/libide/debugger/ide-debugger-hover-controls.ui:16
+msgid "No break"
+msgstr ""
+
+#: src/libide/debugger/ide-debugger-hover-controls.ui:22
+msgid "Breakpoint"
+msgstr "Breakpoint"
+
+#: src/libide/debugger/ide-debugger-hover-controls.ui:28
+msgid "Countpoint"
+msgstr ""
 
 #: src/libide/debugger/ide-debugger-libraries-view.ui:14
 msgid "Library"
@@ -1465,6 +1478,11 @@ msgstr "Speichern _unter"
 #: src/libide/editor/gtk/menus.ui:127
 msgid "New File"
 msgstr "Neue Datei"
+
+#: src/libide/editor/ide-editor-hover-provider.c:74
+#: src/libide/preferences/ide-preferences-builtin.c:201
+msgid "Diagnostics"
+msgstr "Fehlerdiagnose"
 
 #. translators: the user selected a number outside the value range for the document.
 #: src/libide/editor/ide-editor-layout-stack-controls.c:176
@@ -2009,11 +2027,11 @@ msgstr "Verweisadresse _kopieren"
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: src/libide/ide-context.c:2184
+#: src/libide/ide-context.c:2133
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2252
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
@@ -2749,10 +2767,6 @@ msgstr ""
 "Codeeinblick verwenden, um in der Quelldatei gefundene zusätzliche "
 "Informationen anzeigen"
 
-#: src/libide/preferences/ide-preferences-builtin.c:201
-msgid "Diagnostics"
-msgstr "Fehlerdiagnose"
-
 #: src/libide/preferences/ide-preferences-builtin.c:207
 msgid "Completion"
 msgstr "Vervollständigung"
@@ -2955,11 +2969,17 @@ msgstr "Die Zieldatei muss innerhalb des Projektbaums sein."
 msgid "File must be within the project tree."
 msgstr "Die Datei muss innerhalb des Projektbaums sein."
 
-#: src/libide/runner/ide-run-button.ui:31
+#: src/libide/runner/ide-run-button.ui:6
+msgid "The project cannot be run while the build pipeline is being set up"
+msgstr ""
+"Das Projekt kann nicht ausgeführt werden, während die Erstellungskette "
+"eingerichtet wird"
+
+#: src/libide/runner/ide-run-button.ui:35
 msgid "Stop running"
 msgstr "Ausführung anhalten"
 
-#: src/libide/runner/ide-run-button.ui:51
+#: src/libide/runner/ide-run-button.ui:55
 msgid "Change run options"
 msgstr "Ausführungsoptionen ändern"
 
@@ -2980,35 +3000,31 @@ msgstr "Prozess wurde unerwartet beendet"
 msgid "Host operating system"
 msgstr "Wirtsbetriebssystem"
 
-#: src/libide/sourceview/ide-omni-gutter-renderer.c:752
-msgid "Click to toggle breakpoint"
-msgstr "Klicken, um den Breakpoint umzuschalten"
-
-#: src/libide/sourceview/ide-source-view.c:4420
+#: src/libide/sourceview/ide-source-view.c:4402
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: src/libide/sourceview/ide-source-view.c:4422
+#: src/libide/sourceview/ide-source-view.c:4404
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: src/libide/sourceview/ide-source-view.c:4536
+#: src/libide/sourceview/ide-source-view.c:4518
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: src/libide/sourceview/ide-source-view.c:4964
+#: src/libide/sourceview/ide-source-view.c:4946
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5200
+#: src/libide/sourceview/ide-source-view.c:5182
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Zeile %u, Spalte %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5226
+#: src/libide/sourceview/ide-source-view.c:5208
 msgid "No references were found"
 msgstr "Keine Referenzen gefunden"
 
@@ -3117,7 +3133,7 @@ msgstr "»%s« konnte nicht als absolute Adresse ausgewertet werden"
 msgid "URI “%s” has no host component"
 msgstr "Adresse »%s« hat keine Rechner-Komponente"
 
-#: src/libide/workbench/ide-omni-bar.c:530
+#: src/libide/workbench/ide-omni-bar.c:531
 msgid "Building"
 msgstr "Erstellung läuft"
 
@@ -3182,6 +3198,12 @@ msgstr "Bundle exportieren"
 #: src/libide/workbench/ide-omni-bar.ui:591 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Projekt erstellen"
+
+#: src/libide/workbench/ide-omni-bar.ui:596
+msgid "The project cannot be built while the build pipeline is being set up"
+msgstr ""
+"Das Projekt kann nicht erstellt werden, während die Erstellungskette "
+"eingerichtet wird"
 
 #: src/libide/workbench/ide-workbench-actions.c:220
 msgid "Builder Statistics"
@@ -3554,6 +3576,7 @@ msgstr "%s (CMake)"
 #. *              file (.h) rather than a source file (.c).
 #.
 #: src/plugins/code-index/ide-code-index-index.c:276
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:81
 msgid "Declaration"
 msgstr "Deklaration"
 
@@ -4085,6 +4108,10 @@ msgstr "Vervollständigungen unter Benutzung von Ctags vorschlagen"
 msgid "Use Ctags to suggest completions for a variety of languages"
 msgstr "Ctags für die Vervollständigung verschiedener Sprachen verwenden"
 
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:128
+msgid "Devhelp"
+msgstr "Devhelp"
+
 #: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
 msgid "Select Documentation…"
 msgstr "Handbuch wählen …"
@@ -4097,10 +4124,6 @@ msgstr "Handbuch"
 #: src/plugins/devhelp/gtk/menus.ui:21
 msgid "New Documentation Page"
 msgstr "Neue Dokumentationsseite"
-
-#: src/plugins/documentation-card/gbp-documentation-card.ui:36
-msgid "_Show more"
-msgstr "_Mehr anzeigen"
 
 #: src/plugins/eslint/eslint_plugin.py:143
 msgid "ESlint"
@@ -4724,7 +4747,7 @@ msgstr "Datei konnte nicht in den Papierkorb verschoben werden: %s"
 msgid "Project Tree"
 msgstr "Projektbaum"
 
-#: src/plugins/project-tree/gb-project-tree-builder.c:451
+#: src/plugins/project-tree/gb-project-tree-builder.c:453
 msgid "Empty"
 msgstr "Leer"
 
@@ -5097,6 +5120,25 @@ msgid ""
 msgstr ""
 "Die Protokolldatei für Supportanfragen wurde unter »%s« abgelegt. Bitte "
 "fügen Sie diese Datei allen Supportanfragen oder Fehleranzeigen bei."
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
+#| msgid "_Go to Definition"
+msgid "Definition"
+msgstr "Definition"
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
+msgid "Canonincal"
+msgstr ""
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
+msgid "Unnamed Symbol"
+msgstr "Unbenanntes Symbol"
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:162
+#| msgctxt "shortcut window"
+#| msgid "Symbols"
+msgid "Symbol"
+msgstr "Symbol"
 
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
 msgctxt "shortcut window"
