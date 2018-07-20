@@ -182,7 +182,6 @@ test_ide_task = executable('test-ide-task', 'test-ide-task.c',
 )
 test('test-ide-task', test_ide_task, env: ide_test_env)
 
-
 test_iter = executable('test-iter', 'test-iter.c',
   c_args: ide_test_cflags,
   dependencies: [ ide_test_deps ],
@@ -197,3 +196,5 @@ test_hdr_format = executable('test-hdr-format', [
         c_args: ide_test_cflags,
   dependencies: [ ide_test_deps ],
 )
+
+subdir('plugins')
