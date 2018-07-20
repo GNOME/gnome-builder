@@ -11,6 +11,7 @@ xml_pack_sources = [
   'ide-xml-completion-attributes.c',
   'ide-xml-completion-values.c',
   'ide-xml-completion-provider.c',
+  'ide-xml-detail.c',
   'ide-xml-diagnostic-provider.c',
   'ide-xml-hash-table.c',
   'ide-xml-highlighter.c',

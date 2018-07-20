@@ -288,7 +288,7 @@ ide_xml_tree_builder_parse_worker (IdeTask      *task,
 {
   IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)source_object;
   TreeBuilderState *state = (TreeBuilderState *)task_data;
-  g_autoptr (GPtrArray) schemas = NULL;
+  g_autoptr(GPtrArray) schemas = NULL;
   IdeContext *context;
   const gchar *doc_data;
   xmlDoc *doc;
@@ -329,7 +329,7 @@ ide_xml_tree_builder_parse_worker (IdeTask      *task,
           IdeXmlSchemaCacheEntry *entry = g_ptr_array_index (schemas, i);
           const gchar *schema_data;
           gsize schema_size;
-          g_autoptr (IdeDiagnostics) diagnostics = NULL;
+          g_autoptr(IdeDiagnostics) diagnostics = NULL;
           gboolean schema_ret = FALSE;
 
           if (entry->kind == SCHEMA_KIND_RNG || entry->kind == SCHEMA_KIND_XML_SCHEMA)

@@ -156,8 +156,6 @@ ide_xml_sax_parse (IdeXmlSax   *self,
                    const gchar *uri,
                    gpointer     user_data)
 {
-  gboolean wellformed;
-
   g_return_val_if_fail (IDE_IS_XML_SAX (self), FALSE);
   g_return_val_if_fail (data != NULL, FALSE);
   g_return_val_if_fail (length > 0, FALSE);
@@ -171,14 +169,12 @@ ide_xml_sax_parse (IdeXmlSax   *self,
   self->context->sax = &self->handler;
   self->handler.initialized = XML_SAX2_MAGIC;
   xmlCtxtUseOptions (self->context, XML_PARSE_RECOVER | XML_PARSE_NOENT);
-
   xmlParseDocument (self->context);
-  wellformed = self->context->wellFormed;
 
   self->context->sax = NULL;
   dzl_clear_pointer (&self->context, xmlFreeParserCtxt);
 
-  return wellformed;
+  return TRUE;
 }
 
 static void
@@ -198,7 +194,6 @@ get_tag_location (IdeXmlSax    *self,
   const gchar *end_line_start;
   gint start_line_number;
   gint end_line_number;
-  gint size_offset = 1;
   gunichar ch;
   gboolean end_line_found = FALSE;
 
@@ -223,16 +218,10 @@ get_tag_location (IdeXmlSax    *self,
     {
       /* End element case */
       if (current > base && g_utf8_get_char (current - 1) == '>')
-        {
-          --current;
-          size_offset = 0;
-        }
+        --current;
       /* Auto-closed start element case */
       else if (ch == '/' && g_utf8_get_char (current + 1) == '>')
-        {
-          ++current;
-          size_offset = 2;
-        }
+        ++current;
       /* Not properly closed tag */
       else
         {
@@ -240,8 +229,11 @@ get_tag_location (IdeXmlSax    *self,
           if (ch == '<')
             {
               /* Empty node */
+              gint col = xmlSAX2GetColumnNumber (self->context);
+
               *line = *end_line = end_line_number;
-              *line_offset = *end_line_offset = xmlSAX2GetColumnNumber (self->context) - 1;
+              *line_offset = col - 1;
+              *end_line_offset = col;
               *size = 1;
               return;
             }
@@ -259,15 +251,14 @@ get_tag_location (IdeXmlSax    *self,
                   ch = g_utf8_get_char (current);
                 }
 
-              end_current = current;
+              end_current = current + 1;
               *end_line = start_line_number = end_line_number;
-              size_offset = 0;
               goto next;
             }
         }
     }
 
-  end_current = current;
+  end_current = current + 1;
   if (g_utf8_get_char (current) != '>')
     {
       *line = start_line_number;
@@ -326,9 +317,10 @@ next:
   *line_offset = (current - line_start) + 1;
   *end_line_offset = (end_current - end_line_start) + 1;
   *content = current;
-  *size = (const gchar *)input->cur - current + size_offset;
+  *size = end_current - current;
 }
 
+/* Returns %TRUE if the current location has a end point, %FALSE otherwise */
 gboolean
 ide_xml_sax_get_location (IdeXmlSax    *self,
                           gint         *start_line,

@@ -140,14 +140,14 @@ process_choice (MatchingState *state)
 
   g_assert (state->define->type == IDE_XML_RNG_DEFINE_CHOICE);
 
-  if (NULL != (defines = state->define->content))
+  if ((defines = state->define->content))
     {
       match_values = match_values_new ();
       while (defines != NULL)
         {
           g_autoptr (GPtrArray) match = NULL;
 
-          if (NULL != (match = process_matching_state (state, defines)))
+          if ((match = process_matching_state (state, defines)))
             {
               /* TODO: use move */
               match_values_add (match_values, match);
@@ -172,14 +172,14 @@ process_group (MatchingState *state)
             state->define->type == IDE_XML_RNG_DEFINE_ONEORMORE ||
             state->define->type == IDE_XML_RNG_DEFINE_OPTIONAL);
 
-  if (NULL != (defines = state->define->content))
+  if ((defines = state->define->content))
     {
       while (defines != NULL)
         {
           g_autoptr (GPtrArray) match = NULL;
 
           match_values = match_values_new ();
-          if (NULL != (match = process_matching_state (state, defines)))
+          if ((match = process_matching_state (state, defines)))
             {
               match_values_add (match_values, match);
             }

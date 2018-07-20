@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define G_LOG_DOMAIN "ide-xml-parser"
+
 #include <glib/gi18n.h>
 #include <glib-object.h>
 
@@ -26,9 +28,13 @@
 #include "ide-xml-parser-ui.h"
 #include "ide-xml-parser-private.h"
 #include "ide-xml-sax.h"
+#include "ide-xml-service.h"
 #include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-stack.h"
 #include "ide-xml-tree-builder-utils-private.h"
+#include "ide-xml-utils.h"
+
+#include "../gi/ide-gi-service.h"
 
 typedef struct _ColorTag
 {
@@ -65,10 +71,23 @@ static ColorTag default_color_tags [] = {
 };
 
 static void
+require_entry_free (gpointer *data)
+{
+  RequireEntry *entry = (RequireEntry *)data;
+
+  g_free (entry->runtime_id);
+  g_free (entry->package);
+  g_free (entry->ns_name);
+
+  g_slice_free (RequireEntry, entry);
+}
+
+static void
 parser_state_free (ParserState *state)
 {
   dzl_clear_pointer (&state->analysis, ide_xml_analysis_unref);
   dzl_clear_pointer (&state->diagnostics_array, g_ptr_array_unref);
+  dzl_clear_pointer (&state->requires_array, g_ptr_array_unref);
   g_clear_object (&state->file);
   g_clear_object (&state->root_node);
   g_clear_object (&state->sax_parser);
@@ -76,6 +95,8 @@ parser_state_free (ParserState *state)
 
   dzl_clear_pointer (&state->content, g_bytes_unref);
   dzl_clear_pointer (&state->schemas, g_ptr_array_unref);
+
+  dzl_clear_pointer (&state->error_data_str, g_free);
 
   g_slice_free (ParserState, state);
 }
@@ -93,51 +114,52 @@ ide_xml_parser_file_is_ui (GFile       *file,
   g_assert (data != NULL);
   g_assert (size > 0);
 
+  /* Very relaxed GtkBuilder ui files detection
+   * so that we can get completion from the start
+   */
+
   path = g_file_get_path (file);
   if (g_str_has_suffix (path, ".ui") || g_str_has_suffix (path, ".glade"))
     {
       buffer_size = (size < 256) ? size : 256;
+      if (size == 0)
+        return TRUE;
+
       buffer = g_strndup (data, buffer_size);
-      if (NULL != (strstr (buffer, "<interface>")))
+      if (*buffer == '<')
         return TRUE;
     }
 
   return FALSE;
 }
 
-IdeDiagnostic *
-ide_xml_parser_create_diagnostic (ParserState            *state,
-                                  const gchar            *msg,
-                                  IdeDiagnosticSeverity   severity)
+static IdeDiagnostic *
+ide_xml_parser_create_custom_diagnostic (IdeXmlParser          *self,
+                                         GFile                 *file,
+                                         const gchar           *msg,
+                                         gint                   start_line,
+                                         gint                   start_line_offset,
+                                         gint                   end_line,
+                                         gint                   end_line_offset,
+                                         IdeDiagnosticSeverity  severity)
 {
-  IdeXmlParser *self = (IdeXmlParser *)state->self;
-  IdeContext *context;
   IdeDiagnostic *diagnostic;
+  IdeContext *context;
   g_autoptr(IdeSourceLocation) start_loc = NULL;
   g_autoptr(IdeSourceLocation) end_loc = NULL;
   g_autoptr(IdeFile) ifile = NULL;
-  gint start_line;
-  gint start_line_offset;
-  gint end_line;
-  gint end_line_offset;
-  gsize size;
 
   g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (G_IS_FILE (file));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  ide_xml_sax_get_location (state->sax_parser,
-                            &start_line, &start_line_offset,
-                            &end_line, &end_line_offset,
-                            NULL,
-                            &size);
-
-  ifile = ide_file_new (context, state->file);
+  ifile = ide_file_new (context, file);
   start_loc = ide_source_location_new (ifile,
                                        start_line - 1,
                                        start_line_offset - 1,
                                        0);
 
-  if (size > 0)
+  if (end_line > -1)
     {
       IdeSourceRange *range;
 
@@ -156,13 +178,64 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
   return diagnostic;
 }
 
+IdeDiagnostic *
+_ide_xml_parser_create_diagnostic (ParserState            *state,
+                                   const gchar            *msg,
+                                   IdeDiagnosticSeverity   severity)
+{
+  IdeXmlParser *self = (IdeXmlParser *)state->self;
+  gint start_line;
+  gint start_line_offset;
+  gint end_line;
+  gint end_line_offset;
+  gsize size;
+
+  g_assert (IDE_IS_XML_PARSER (self));
+
+  ide_xml_sax_get_location (state->sax_parser,
+                            &start_line, &start_line_offset,
+                            &end_line, &end_line_offset,
+                            NULL,
+                            &size);
+
+  if (size == 0)
+    end_line = -1;
+
+  return ide_xml_parser_create_custom_diagnostic (self,
+                                                  state->file,
+                                                  msg,
+                                                  start_line, start_line_offset,
+                                                  end_line, end_line_offset,
+                                                  severity);
+}
+
+static void
+set_error_state (ParserState *state,
+                 ErrorState   error_state,
+                 gchar       *data_str)
+{
+  g_assert (state != NULL);
+
+  state->error_state = error_state;
+  state->error_data_str = g_strdup (data_str);
+}
+
+static void
+clear_error_state (ParserState *state)
+{
+  g_assert (state != NULL);
+
+  state->error_state = ERROR_STATE_NONE;
+  dzl_clear_pointer (&state->error_data_str,g_free);
+}
+
 void
-ide_xml_parser_state_processing (IdeXmlParser          *self,
-                                 ParserState           *state,
-                                 const gchar           *element_name,
-                                 IdeXmlSymbolNode      *node,
-                                 IdeXmlSaxCallbackType  callback_type,
-                                 gboolean               is_internal)
+_ide_xml_parser_state_processing (IdeXmlParser          *self,
+                                  ParserState           *state,
+                                  const gchar           *element_name,
+                                  IdeXmlSymbolNode      *node,
+                                  IdeXmlSaxCallbackType  callback_type,
+                                  gboolean               is_internal)
 {
   IdeXmlSymbolNode *parent_node;
   G_GNUC_UNUSED IdeXmlSymbolNode *popped_node;
@@ -178,22 +251,25 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
 
   g_assert (IDE_IS_XML_SYMBOL_NODE (node) || node == NULL);
 
+  state->build_state = BUILD_STATE_NORMAL;
+
   if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_CHAR && IDE_IS_XML_SYMBOL_NODE (node))
     {
       ide_xml_symbol_node_set_value (state->current_node, element_name);
       return;
     }
 
-  if (state->error_missing_tag_end)
+  depth = ide_xml_sax_get_depth (state->sax_parser);
+
+  if (state->error_state == ERROR_STATE_MISSING_TAG_END)
     {
       erroneous_element_name = ide_xml_symbol_node_get_element_name (state->parent_node);
       /* TODO: we need better node comparaison (ns) here */
       if (!dzl_str_equal0 (erroneous_element_name, element_name))
         {
-          if (ide_xml_stack_is_empty (state->stack))
+          if (!(popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth)))
             goto error;
 
-          popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth);
           ide_xml_symbol_node_set_state (popped_node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
           dzl_clear_pointer (&popped_element_name, g_free);
 
@@ -201,62 +277,37 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
           g_assert (state->parent_node != NULL);
         }
     }
+  /* else if (state->error_state == ERROR_STATE_MISSING_END_TAG_MISSMATCH) */
+  /*   { */
+  /*     g_assert (callback_type == IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT); */
 
-  depth = ide_xml_sax_get_depth (state->sax_parser);
-  ide_xml_sax_get_location (state->sax_parser, &start_line, &start_line_offset, &end_line, &end_line_offset, &content, &size);
+      /* Remove the unpaired node from the stack */
+  /*     if (!(popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth))) */
+  /*       goto error; */
 
-  /* No node mean not created by one of the specific parser */
-  if (node == NULL)
-    {
-      if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT)
-        {
-          node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_XML_ELEMENT);
-          ide_xml_symbol_node_set_location (node, g_object_ref (state->file),
-                                            start_line, start_line_offset,
-                                            end_line, end_line_offset,
-                                            size);
+  /*     g_assert (dzl_str_equal0 (popped_element_name, element_name)); */
+  /*     ide_xml_symbol_node_set_state (popped_node, IDE_XML_SYMBOL_NODE_STATE_MISSING_END_TAG); */
+  /*     dzl_clear_pointer (&popped_element_name, g_free); */
+  /*   } */
 
-          ide_xml_stack_push (state->stack, element_name, node, state->parent_node, depth);
-          ide_xml_symbol_node_take_internal_child (state->parent_node, node);
-          state->parent_node = node;
+  ide_xml_sax_get_location (state->sax_parser,
+                            &start_line,
+                            &start_line_offset,
+                            &end_line,
+                            &end_line_offset,
+                            &content,
+                            &size);
 
-          ide_xml_symbol_node_set_attributes (node, state->attributes);
-          state->attributes = NULL;
-        }
-      else if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT)
-        {
-          while (TRUE)
-            {
-              if (ide_xml_stack_is_empty (state->stack))
-                goto error;
+  /* No node means not created by one of the specific parser */
+  if (node == NULL && callback_type != IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT)
+    node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_XML_ELEMENT);
 
-              popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth);
-              if (dzl_str_equal0 (popped_element_name, element_name))
-                {
-                  ide_xml_symbol_node_set_end_tag_location (popped_node,
-                                                            start_line, start_line_offset,
-                                                            end_line, end_line_offset,
-                                                            size);
-                  state->parent_node = parent_node;
-                  g_assert (state->parent_node != NULL);
-
-                  break;
-                }
-            }
-        }
-
-      state->current_depth = depth;
-      state->current_node = node;
-      state->error_missing_tag_end = FALSE;
-
-      return;
-    }
-
-  ide_xml_symbol_node_set_location (node,
-                                    g_object_ref (state->file),
-                                    start_line, start_line_offset,
-                                    end_line, end_line_offset,
-                                    size);
+  if (node != NULL)
+    ide_xml_symbol_node_set_location (node,
+                                      g_object_ref (state->file),
+                                      start_line, start_line_offset,
+                                      end_line, end_line_offset,
+                                      size);
 
   /* TODO: take end elements into account and use:
    * || ABS (depth - current_depth) > 1
@@ -281,46 +332,74 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
     }
   else if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT)
     {
-      /* TODO: compare current with popped */
-      if (ide_xml_stack_is_empty (state->stack))
-        goto error;
+      /* In case of missmatch, element_name is the expected end element,
+       * the found end element is in state->error_data_str.
+       */
 
-      popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth);
-      state->parent_node = parent_node;
-      g_assert (state->parent_node != NULL);
+      while (TRUE)
+        {
+          if (!(popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth)))
+            goto  error;
+
+          if (dzl_str_equal0 (popped_element_name, element_name))
+            {
+              if (state->error_state == ERROR_STATE_MISSING_END_TAG_MISSMATCH)
+                ide_xml_symbol_node_set_state (popped_node, IDE_XML_SYMBOL_NODE_STATE_END_TAG_MISSMATCH);
+
+              ide_xml_symbol_node_set_end_tag_location (popped_node,
+                                                        start_line, start_line_offset,
+                                                        end_line, end_line_offset,
+                                                        size);
+              state->parent_node = parent_node;
+              g_assert (state->parent_node != NULL);
+
+              break;
+            }
+        }
     }
   else
-    ide_xml_symbol_node_take_child (state->parent_node, node);
+    {
+      if (is_internal)
+        ide_xml_symbol_node_take_internal_child (state->parent_node, node);
+      else
+        ide_xml_symbol_node_take_child (state->parent_node, node);
+    }
 
+  clear_error_state (state);
   state->current_depth = depth;
   state->current_node = node;
-  state->error_missing_tag_end = FALSE;
 
   return;
 
 error:
+  clear_error_state (state);
   g_warning ("Xml nodes stack empty\n");
   return;
 }
 
 void
-ide_xml_parser_end_element_sax_cb (ParserState    *state,
-                                   const xmlChar  *name)
+_ide_xml_parser_end_element_sax_cb (ParserState   *state,
+                                    const xmlChar *name)
 {
   IdeXmlParser *self = (IdeXmlParser *)state->self;
 
   g_assert (IDE_IS_XML_PARSER (self));
 
-  ide_xml_parser_state_processing (self, state, (const gchar *)name, NULL, IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT, FALSE);
+  _ide_xml_parser_state_processing (self,
+                                    state,
+                                    (const gchar *)name,
+                                    NULL,
+                                    IDE_XML_SAX_CALLBACK_TYPE_END_ELEMENT,
+                                    FALSE);
 }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
 
 void
-ide_xml_parser_warning_sax_cb (ParserState    *state,
-                               const xmlChar  *name,
-                               ...)
+_ide_xml_parser_warning_sax_cb (ParserState   *state,
+                                const xmlChar *name,
+                                ...)
 {
   IdeDiagnostic *diagnostic;
   g_autofree gchar *msg = NULL;
@@ -333,14 +412,14 @@ ide_xml_parser_warning_sax_cb (ParserState    *state,
   msg = g_strdup_vprintf ((const gchar *)name, var_args);
   va_end (var_args);
 
-  diagnostic = ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_WARNING);
+  diagnostic = _ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_WARNING);
   g_ptr_array_add (state->diagnostics_array, diagnostic);
 }
 
 void
-ide_xml_parser_error_sax_cb (ParserState    *state,
-                             const xmlChar  *name,
-                             ...)
+_ide_xml_parser_error_sax_cb (ParserState   *state,
+                              const xmlChar *name,
+                              ...)
 {
   IdeDiagnostic *diagnostic;
   xmlParserCtxt *context;
@@ -357,7 +436,7 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
   msg = g_strdup_vprintf ((const gchar *)name, var_args);
   va_end (var_args);
 
-  diagnostic = ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_ERROR);
+  diagnostic = _ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_ERROR);
   g_ptr_array_add (state->diagnostics_array, diagnostic);
 
   context = ide_xml_sax_get_context (state->sax_parser);
@@ -369,7 +448,7 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
       if (error->code == XML_ERR_GT_REQUIRED)
         {
           /* If a tag is not closed, we want the following nodes to be siblings, not children */
-          state->error_missing_tag_end = TRUE;
+          set_error_state (state, ERROR_STATE_MISSING_TAG_END, NULL);
         }
       else if (error->code == XML_ERR_NAME_REQUIRED && context->instate == XML_PARSER_CONTENT)
         {
@@ -382,9 +461,14 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
           prev = current - 1;
           if (prev >= base && *prev == '<')
             {
-              /* '<' only case, no name tag, node not created, we need to do it ourself */
+              /* '<' only, no name tag, or '<>', empty node, node not created, we need to do it ourself*/
               node = ide_xml_symbol_node_new ("internal", NULL, NULL, IDE_SYMBOL_XML_ELEMENT);
-              ide_xml_symbol_node_set_state (node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
+
+              if (*current == '>')
+                ide_xml_symbol_node_set_state (node, IDE_XML_SYMBOL_NODE_STATE_EMPTY);
+              else
+                ide_xml_symbol_node_set_state (node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
+
               ide_xml_symbol_node_take_internal_child (state->parent_node, node);
 
               ide_xml_sax_get_location (state->sax_parser,
@@ -397,13 +481,15 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
                                                 size);
             }
         }
+      else if (error->code == XML_ERR_TAG_NAME_MISMATCH)
+        set_error_state (state, ERROR_STATE_MISSING_END_TAG_MISSMATCH, error->str2);
     }
 }
 
 void
-ide_xml_parser_fatal_error_sax_cb (ParserState    *state,
-                                   const xmlChar  *name,
-                                   ...)
+_ide_xml_parser_fatal_error_sax_cb (ParserState   *state,
+                                    const xmlChar *name,
+                                    ...)
 {
   IdeDiagnostic *diagnostic;
   g_autofree gchar *msg = NULL;
@@ -416,17 +502,17 @@ ide_xml_parser_fatal_error_sax_cb (ParserState    *state,
   msg = g_strdup_vprintf ((const gchar *)name, var_args);
   va_end (var_args);
 
-  diagnostic = ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_FATAL);
+  diagnostic = _ide_xml_parser_create_diagnostic (state, msg, IDE_DIAGNOSTIC_FATAL);
   g_ptr_array_add (state->diagnostics_array, diagnostic);
 }
 
 #pragma GCC diagnostic pop
 
 void
-ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
-                                       const xmlChar *name,
-                                       const xmlChar *external_id,
-                                       const xmlChar *system_id)
+_ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
+                                        const xmlChar *name,
+                                        const xmlChar *external_id,
+                                        const xmlChar *system_id)
 {
   IdeXmlSchemaCacheEntry *entry;
 
@@ -443,10 +529,10 @@ ide_xml_parser_internal_subset_sax_cb (ParserState   *state,
 }
 
 void
-ide_xml_parser_external_subset_sax_cb (ParserState   *state,
-                                       const xmlChar *name,
-                                       const xmlChar *external_id,
-                                       const xmlChar *system_id)
+_ide_xml_parser_external_subset_sax_cb (ParserState   *state,
+                                        const xmlChar *name,
+                                        const xmlChar *external_id,
+                                        const xmlChar *system_id)
 {
   g_assert (state != NULL);
   g_assert (IDE_IS_XML_PARSER (state->self));
@@ -473,9 +559,9 @@ get_absolute_schema_file (GFile       *file,
 }
 
 void
-ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
-                                              const xmlChar *target,
-                                              const xmlChar *data)
+_ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
+                                               const xmlChar *target,
+                                               const xmlChar *data)
 {
   IdeDiagnostic *diagnostic;
   g_autofree gchar *schema_url = NULL;
@@ -486,9 +572,9 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
   g_assert (state != NULL);
   g_assert (IDE_IS_XML_PARSER (state->self));
 
-  if (NULL != (schema_url = get_schema_url ((const gchar *)data)))
+  if ((schema_url = get_schema_url ((const gchar *)data)))
     {
-      if (NULL != (extension = strrchr (schema_url, '.')))
+      if ((extension = strrchr (schema_url, '.')))
         {
           ++extension;
           if (dzl_str_equal0 (extension, "rng"))
@@ -506,7 +592,11 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
           entry->file = get_absolute_schema_file (state->file, schema_url);;
           entry->kind = kind;
 
-          ide_xml_sax_get_location (state->sax_parser, &entry->line, &entry->col, NULL, NULL, NULL, NULL);
+          ide_xml_sax_get_location (state->sax_parser,
+                                    &entry->line,
+                                    &entry->col,
+                                    NULL, NULL, NULL, NULL);
+
           /* Needed to pass the kind to the service schema fetcher */
           g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
 
@@ -515,17 +605,17 @@ ide_xml_parser_processing_instruction_sax_cb (ParserState   *state,
           return;
         }
 fail:
-      diagnostic = ide_xml_parser_create_diagnostic (state,
-                                                     "Schema type not supported",
+      diagnostic = _ide_xml_parser_create_diagnostic (state,
+                                                     _("Schema type not supported"),
                                                      IDE_DIAGNOSTIC_WARNING);
       g_ptr_array_add (state->diagnostics_array, diagnostic);
     }
 }
 
 void
-ide_xml_parser_characters_sax_cb (ParserState    *state,
-                                  const xmlChar  *name,
-                                  gint            len)
+_ide_xml_parser_characters_sax_cb (ParserState   *state,
+                                   const xmlChar *name,
+                                   gint           len)
 {
   IdeXmlParser *self = (IdeXmlParser *)state->self;
   g_autofree gchar *element_value = NULL;
@@ -536,9 +626,76 @@ ide_xml_parser_characters_sax_cb (ParserState    *state,
     return;
 
   element_value = g_strndup ((gchar *)name, len);
-  state->build_state = BUILD_STATE_NORMAL;
+  _ide_xml_parser_state_processing (self,
+                                    state,
+                                    element_value,
+                                    NULL,
+                                    IDE_XML_SAX_CALLBACK_TYPE_CHAR,
+                                    FALSE);
+}
 
-  ide_xml_parser_state_processing (self, state, element_value, NULL, IDE_XML_SAX_CALLBACK_TYPE_CHAR, FALSE);
+/* Here name can be either a package name or a namespace */
+static gchar *
+split_package_name (const gchar *fullname,
+                    guint16     *package_major_version,
+                    guint16     *package_minor_version,
+                    gboolean    *has_version)
+{
+  gchar *name = NULL;
+  const gchar *cursor = fullname;
+  guint16 tmp_major_version;
+  guint16 tmp_minor_version;
+
+  *package_major_version = 0;
+  *package_minor_version = 0;
+  *has_version = FALSE;
+
+  if ((cursor = strrchr (cursor, '-')) &&
+      g_ascii_isdigit (*(cursor + 1)))
+    {
+      name = g_strndup (fullname, cursor - fullname);
+      if  (ide_xml_utils_parse_version (cursor + 1, &tmp_major_version, &tmp_minor_version, NULL))
+        {
+          *package_major_version = tmp_major_version;
+          *package_minor_version = tmp_minor_version;
+          *has_version = TRUE;
+        }
+
+      return name;
+    }
+
+  return strdup (fullname);
+}
+
+static void
+analysis_process (IdeXmlParser *self,
+                  ParserState  *state)
+{
+  IdeXmlSchemaCacheEntry *entry;
+  g_autoptr(IdeDiagnostics) diagnostics = NULL;
+
+  g_assert (IDE_IS_XML_PARSER (self));
+
+  diagnostics = ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&state->diagnostics_array));
+  ide_xml_analysis_set_diagnostics (state->analysis, diagnostics);
+
+  if (state->file_is_ui)
+    {
+      entry = ide_xml_schema_cache_entry_new ();
+      entry->kind = SCHEMA_KIND_RNG;
+      entry->file = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/xml-pack-plugin/schemas/gtkbuilder.rng");
+      g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
+      g_ptr_array_add (state->schemas, entry);
+    }
+
+  if (state->schemas != NULL && state->schemas->len > 0)
+    ide_xml_analysis_set_schemas (state->analysis, g_steal_pointer (&state->schemas));
+
+  ide_xml_analysis_set_sequence (state->analysis, state->sequence);
+
+  ide_task_return_pointer (state->analysis_task,
+                           g_steal_pointer (&state->analysis),
+                           (GDestroyNotify)ide_xml_analysis_unref);
 }
 
 static void
@@ -549,9 +706,6 @@ ide_xml_parser_get_analysis_worker (IdeTask      *task,
 {
   IdeXmlParser *self = (IdeXmlParser *)source_object;
   ParserState *state = (ParserState *)task_data;
-  IdeXmlAnalysis *analysis;
-  IdeXmlSchemaCacheEntry *entry;
-  g_autoptr(IdeDiagnostics) diagnostics = NULL;
   g_autofree gchar *uri = NULL;
   const gchar *doc_data;
   gsize doc_size;
@@ -567,19 +721,15 @@ ide_xml_parser_get_analysis_worker (IdeTask      *task,
   doc_data = g_bytes_get_data (state->content, &doc_size);
 
   state->file_is_ui = ide_xml_parser_file_is_ui (state->file, doc_data, doc_size);
+  ide_xml_analysis_set_is_ui (state->analysis, state->file_is_ui);
+
   if (state->file_is_ui)
     ide_xml_parser_ui_setup (self, state);
   else
     ide_xml_parser_generic_setup (self, state);
 
   uri = g_file_get_uri (state->file);
-  ide_xml_sax_parse (state->sax_parser, doc_data, doc_size, uri, state);
-
-  if (self->post_processing_callback != NULL)
-    (self->post_processing_callback)(self, state->root_node);
-
-  analysis = g_steal_pointer (&state->analysis);
-  if (analysis == NULL)
+  if (!ide_xml_sax_parse (state->sax_parser, doc_data, doc_size, uri, state))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -588,23 +738,141 @@ ide_xml_parser_get_analysis_worker (IdeTask      *task,
       return;
     }
 
-  diagnostics = ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&state->diagnostics_array));
-  ide_xml_analysis_set_diagnostics (analysis, diagnostics);
+  if (self->post_processing_callback != NULL)
+    (self->post_processing_callback)(self, state->root_node);
 
-  if (state->file_is_ui)
+  ide_task_return_boolean (task, TRUE);
+}
+
+typedef struct
+{
+  IdeXmlParser *parser;
+  ParserState  *parser_state;
+  RequireEntry *entry;
+} RequireState;
+
+static void
+add_warning_at_entry (IdeXmlParser *self,
+                      ParserState  *state,
+                      RequireEntry *entry,
+                      const gchar  *msg)
+{
+  g_ptr_array_add (state->diagnostics_array,
+                   ide_xml_parser_create_custom_diagnostic (self,
+                                                            state->file,
+                                                            msg,
+                                                            entry->start_line,
+                                                            entry->start_line_offset,
+                                                            entry->end_line,
+                                                            entry->end_line_offset,
+                                                            IDE_DIAGNOSTIC_WARNING));
+}
+
+static void
+analysis_requires_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  RequireState *req_state = (RequireState *)user_data;
+  IdeXmlParser *self = req_state->parser;
+  ParserState *state = req_state->parser_state;
+  RequireEntry *entry = req_state->entry;
+  g_autoptr(GError) error = NULL;
+  gchar *modversion;
+
+  g_assert (req_state != NULL);
+  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_MAIN_THREAD ());
+
+  if ((modversion = ide_task_propagate_pointer (IDE_TASK (result), &error)))
     {
-      entry = ide_xml_schema_cache_entry_new ();
-      entry->kind = SCHEMA_KIND_RNG;
-      entry->file = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/xml-pack-plugin/schemas/gtkbuilder.rng");
-      g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
-      g_ptr_array_add (state->schemas, entry);
+      g_autofree gchar *package_name = NULL;
+      IdeGiRequire *require = ide_xml_analysis_get_require (state->analysis);
+      IdeGiRequireBound bound;
+      guint16 package_major_version;
+      guint16 package_minor_version;
+      guint16 pkg_mod_major_version;
+      guint16 pkg_mod_minor_version;
+      gboolean has_version;
+
+      package_name = split_package_name (entry->package,
+                                         &package_major_version,
+                                         &package_minor_version,
+                                         &has_version);
+
+      ide_xml_utils_parse_version (modversion, &pkg_mod_major_version, &pkg_mod_minor_version, NULL);
+
+      bound = (IdeGiRequireBound) {IDE_GI_REQUIRE_COMP_GREATER_OR_EQUAL,
+                                   entry->ns_major_version,
+                                   entry->ns_minor_version};
+
+      ide_gi_require_add (require, entry->ns_name, bound);
+
+      if (entry->mod_major_version != pkg_mod_major_version ||
+          entry->mod_minor_version > pkg_mod_minor_version)
+        {
+          g_autofree gchar *msg = g_strdup_printf (_("The highest version found is: %s"), modversion);
+          add_warning_at_entry (self, state, entry, msg);
+        }
+    }
+  else
+    add_warning_at_entry (self, state, entry, error->message);
+
+  g_slice_free (RequireState, req_state);
+  if (--state->modversion_count == 0)
+    analysis_process (self, state);
+}
+
+static void
+analysis_worker_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  IdeXmlParser *self = (IdeXmlParser *)object;
+  ParserState *state = (ParserState *)user_data;
+  IdeContext *context;
+  IdeXmlService *xml_service;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_XML_PARSER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_MAIN_THREAD ());
+
+  if (!ide_task_propagate_boolean (IDE_TASK (result), &error))
+    {
+      g_autoptr(IdeTask) analysis_task = g_steal_pointer (&state->analysis_task);
+
+      ide_task_return_error (analysis_task, g_steal_pointer (&error));
+      return;
     }
 
-  if (state->schemas != NULL && state->schemas->len > 0)
-    ide_xml_analysis_set_schemas (analysis, g_steal_pointer (&state->schemas));
+  if (0 == (state->modversion_count = state->requires_array->len))
+    {
+      analysis_process (self, state);
+      return;
+    }
 
-  ide_xml_analysis_set_sequence (analysis, state->sequence);
-  ide_task_return_pointer (task, analysis, (GDestroyNotify)ide_xml_analysis_unref);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  xml_service = ide_context_get_service_typed (context, IDE_TYPE_XML_SERVICE);
+
+  for (guint i = 0; i < state->requires_array->len; i++)
+    {
+      RequireEntry *entry = g_ptr_array_index (state->requires_array, i);
+      RequireState *req_state = g_slice_new0 (RequireState);
+
+      req_state->parser = self;
+      req_state->parser_state = state;
+      req_state->entry = entry;
+
+      ide_xml_service_get_modversion_async (xml_service,
+                                            entry->runtime_id,
+                                            entry->package,
+                                            NULL,
+                                            analysis_requires_cb,
+                                            req_state);
+    }
 }
 
 void
@@ -616,15 +884,17 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
-  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeTask) worker_task = NULL;
+  IdeTask *analysis_task;
   ParserState *state;
 
   g_return_if_fail (IDE_IS_XML_PARSER (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (content != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_xml_parser_get_analysis_async);
-  ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
+  analysis_task = ide_task_new (self, cancellable, callback, user_data);
 
   state = g_slice_new0 (ParserState);
   state->self = self;
@@ -632,21 +902,31 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->content = g_bytes_ref (content);
   state->sequence = sequence;
   state->diagnostics_array = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+  state->requires_array = g_ptr_array_new_with_free_func ((GDestroyNotify)require_entry_free);
   state->schemas = g_ptr_array_new_with_free_func (g_object_unref);
   state->sax_parser = ide_xml_sax_new ();
   state->stack = ide_xml_stack_new ();
+  state->analysis_task = analysis_task;
 
   state->build_state = BUILD_STATE_NORMAL;
 
   state->analysis = ide_xml_analysis_new (-1);
   state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE);
+  ide_xml_symbol_node_set_is_root (state->root_node, TRUE);
   ide_xml_analysis_set_root_node (state->analysis, state->root_node);
 
   state->parent_node = state->root_node;
   ide_xml_stack_push (state->stack, "root", state->root_node, NULL, 0);
 
-  ide_task_set_task_data (task, state, parser_state_free);
-  ide_task_run_in_thread (task, ide_xml_parser_get_analysis_worker);
+  ide_task_set_task_data (analysis_task, state, parser_state_free);
+  ide_task_set_source_tag (analysis_task, ide_xml_parser_get_analysis_async);
+
+  worker_task = ide_task_new (self, cancellable, analysis_worker_cb, state);
+  ide_task_set_task_data (worker_task, state, NULL);
+  ide_task_set_source_tag (worker_task, ide_xml_parser_get_analysis_async);
+  ide_task_set_kind (worker_task, IDE_TASK_KIND_INDEXER);
+
+  ide_task_run_in_thread (worker_task, ide_xml_parser_get_analysis_worker);
 }
 
 IdeXmlAnalysis *
@@ -661,12 +941,12 @@ ide_xml_parser_get_analysis_finish (IdeXmlParser  *self,
 }
 
 gchar *
-ide_xml_parser_get_color_tag (IdeXmlParser *self,
-                              const gchar  *str,
-                              ColorTagId    id,
-                              gboolean      space_before,
-                              gboolean      space_after,
-                              gboolean      space_inside)
+_ide_xml_parser_get_color_tag (IdeXmlParser *self,
+                               const gchar  *str,
+                               ColorTagId    id,
+                               gboolean      space_before,
+                               gboolean      space_after,
+                               gboolean      space_inside)
 {
   ColorTag *tag;
 
@@ -691,10 +971,7 @@ init_color_tags (IdeXmlParser *self)
   g_autofree gchar *scheme_name = NULL;
   GtkSourceStyleSchemeManager *manager;
   GtkSourceStyleScheme *scheme;
-  gchar *tag_name;
   GtkSourceStyle *style;
-  gchar *foreground;
-  gchar *background;
   ColorTag tag;
   ColorTag *tag_ptr;
   gboolean tag_set;
@@ -712,9 +989,13 @@ init_color_tags (IdeXmlParser *self)
       tag_set = FALSE;
       if (scheme != NULL)
         {
-          tag_name = g_strconcat ("symboltree::", tag_ptr->name, NULL);
-          if (NULL != (style = gtk_source_style_scheme_get_style (scheme, tag_name)))
+          g_autofree gchar *tag_name = g_strconcat ("symboltree::", tag_ptr->name, NULL);
+
+          if ((style = gtk_source_style_scheme_get_style (scheme, tag_name)))
             {
+              g_autofree gchar *foreground = NULL;
+              g_autofree gchar *background = NULL;
+
               g_object_get (style, "foreground", &foreground, NULL);
               g_object_get (style, "background", &background, NULL);
               if (foreground != NULL && background != NULL)
@@ -724,12 +1005,7 @@ init_color_tags (IdeXmlParser *self)
                   tag.fg = g_steal_pointer (&foreground);
                   tag.bg = g_steal_pointer (&background);
                 }
-
-              g_free (foreground);
-              g_free (background);
             }
-
-          g_free (tag_name);
         }
 
       if (!tag_set)
@@ -745,8 +1021,8 @@ init_color_tags (IdeXmlParser *self)
 }
 
 void
-ide_xml_parser_set_post_processing_callback (IdeXmlParser           *self,
-                                             PostProcessingCallback  callback)
+_ide_xml_parser_set_post_processing_callback (IdeXmlParser           *self,
+                                              PostProcessingCallback  callback)
 {
   g_return_if_fail (IDE_IS_XML_PARSER (self));
 

@@ -60,6 +60,7 @@ struct _IdeXmlSymbolNode
   NodeRange               end_tag;
 
   guint                   has_end_tag : 1;
+  guint                   is_root     : 1;
 };
 
 typedef enum
@@ -173,7 +174,7 @@ ide_xml_symbol_node_new (const gchar   *name,
   return self;
 }
 
-/* Return the number of visible chldren, walking down in the hierarchy
+/* Return the number of visible children, walking down in the hierarchy
  * by skiping internal ones to find them.
  */
 guint
@@ -202,9 +203,9 @@ ide_xml_symbol_node_get_n_children (IdeXmlSymbolNode *self)
   return nb_children;
 }
 
-/* Return the nth_child visible node, walking down in the hierarchy
- * by skiping internal ones to find them.
- * *current_pos is use as a start position and to track the current position
+/* Return a ref on the nth child visible node, or %NULL,
+ * walking down in the hierarchy by skiping internal ones to find them.
+ * current_pos is use as a start position and to track the current position
  * between the recursive calls */
 IdeSymbolNode *
 ide_xml_symbol_node_get_nth_child_deep (IdeXmlSymbolNode *self,
@@ -241,6 +242,7 @@ ide_xml_symbol_node_get_nth_child_deep (IdeXmlSymbolNode *self,
   return NULL;
 }
 
+/* Return a ref on the nth child or %NULL */
 static IdeSymbolNode *
 get_nth_child (IdeXmlSymbolNode *self,
                guint             nth_child,
@@ -260,7 +262,7 @@ get_nth_child (IdeXmlSymbolNode *self,
               if (entry->is_internal)
                 {
                   if (pos == nth_child)
-                    return (IdeSymbolNode *)g_object_ref (entry->node);
+                    return g_object_ref (IDE_SYMBOL_NODE (entry->node));
 
                   ++pos;
                 }
@@ -272,7 +274,7 @@ get_nth_child (IdeXmlSymbolNode *self,
           if (nth_child < self->children->len)
             {
               entry = &g_array_index (self->children, NodeEntry, nth_child);
-              return (IdeSymbolNode *)g_object_ref (entry->node);
+              return g_object_ref (IDE_SYMBOL_NODE (entry->node));
             }
 
           break;
@@ -289,8 +291,8 @@ get_nth_child (IdeXmlSymbolNode *self,
   return NULL;
 }
 
-/* Return the nth_child visible node, walking down in the hierarchy
- * by skiping internal ones to find them.
+/* Return a ref on the nth child visible node or %NULL if out of bounds,
+ * walking down in the hierarchy by skiping internal ones to find them.
  */
 IdeSymbolNode *
 ide_xml_symbol_node_get_nth_child (IdeXmlSymbolNode *self,
@@ -317,6 +319,7 @@ ide_xml_symbol_node_get_n_internal_children (IdeXmlSymbolNode *self)
   return self->nb_internal_children;
 }
 
+/* Return a ref on the nth child internal node or %NULL */
 IdeSymbolNode *
 ide_xml_symbol_node_get_nth_internal_child (IdeXmlSymbolNode *self,
                                             guint             nth_child)
@@ -325,13 +328,11 @@ ide_xml_symbol_node_get_nth_internal_child (IdeXmlSymbolNode *self,
 
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
-  if (NULL == (child = get_nth_child (self, nth_child, NODE_WALKER_INTERNAL)))
-    {
-      g_warning ("nth child %u is out of bounds", nth_child);
-      return NULL;
-    }
+  if ((child = get_nth_child (self, nth_child, NODE_WALKER_INTERNAL)))
+    return child;
 
-  return child;
+  g_warning ("nth child %u is out of bounds", nth_child);
+  return NULL;
 }
 
 /* Return the number of direct chldren (visibles and internals) for this particular node */
@@ -343,7 +344,8 @@ ide_xml_symbol_node_get_n_direct_children (IdeXmlSymbolNode *self)
   return self->nb_children + self->nb_internal_children;
 }
 
-/* Return the nth_child direct node (visible or internal) */
+/* Return a ref on the nth child direct node (visible or internal)
+ * or %NULL if out of bounds */
 IdeSymbolNode *
 ide_xml_symbol_node_get_nth_direct_child (IdeXmlSymbolNode *self,
                                           guint             nth_child)
@@ -352,13 +354,11 @@ ide_xml_symbol_node_get_nth_direct_child (IdeXmlSymbolNode *self,
 
   g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), NULL);
 
-  if (NULL == (child = get_nth_child (self, nth_child, NODE_WALKER_DIRECT_ALL)))
-    {
-      g_warning ("nth child %u is out of bounds", nth_child);
-      return NULL;
-    }
+  if ((child = get_nth_child (self, nth_child, NODE_WALKER_DIRECT_ALL)))
+    return child;
 
-  return child;
+  g_warning ("nth child %u is out of bounds", nth_child);
+  return NULL;
 }
 
 static void
@@ -378,6 +378,8 @@ take_child (IdeXmlSymbolNode *self,
 {
   NodeEntry node_entry;
 
+  g_assert (self != child);
+
   if (self->children == NULL)
     {
       self->children = g_array_new (FALSE, TRUE, sizeof (NodeEntry));
@@ -389,13 +391,10 @@ take_child (IdeXmlSymbolNode *self,
 
   g_array_append_val (self->children, node_entry);
 
-  if (child != self)
-    {
-      if (child->parent != NULL)
-        g_object_unref (child->parent);
+  if (child->parent != NULL)
+    g_object_unref (child->parent);
 
-      child->parent = g_object_ref (self);
-    }
+  child->parent = g_object_ref (self);
 }
 
 void
@@ -554,10 +553,27 @@ ide_xml_symbol_node_set_element_name (IdeXmlSymbolNode *self,
     self->element_name = g_strdup (element_name);
 }
 
+gboolean
+ide_xml_symbol_node_is_root (IdeXmlSymbolNode *self)
+{
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), FALSE);
+
+  return self->is_root;
+}
+
+void
+ide_xml_symbol_node_set_is_root (IdeXmlSymbolNode *self,
+                                 gboolean          is_root)
+{
+  g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
+
+    self->is_root = is_root;
+}
+
 IdeXmlSymbolNodeState
 ide_xml_symbol_node_get_state (IdeXmlSymbolNode *self)
 {
-  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self),  IDE_XML_SYMBOL_NODE_STATE_UNKNOW);
+  g_return_val_if_fail (IDE_IS_XML_SYMBOL_NODE (self), IDE_XML_SYMBOL_NODE_STATE_UNKNOW);
 
   return self->state;
 }
@@ -610,7 +626,7 @@ is_in_range (NodeRange range,
     return -1;
 
   if (line > range.end_line ||
-      (line == range.end_line && line_offset > range.end_line_offset))
+      (line == range.end_line && line_offset >= range.end_line_offset))
     return 1;
 
   return 0;

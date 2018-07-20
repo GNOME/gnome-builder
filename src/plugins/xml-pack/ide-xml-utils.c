@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "ide-xml-utils.h"
 
 static inline gboolean
@@ -39,8 +42,8 @@ is_name_start_char (gunichar ch)
           (ch >= 0x10000 && ch <= 0xEFFFF));
 }
 
-static inline gboolean
-is_name_char (gunichar ch)
+gboolean
+ide_xml_utils_is_name_char (gunichar ch)
 {
   return (is_name_start_char (ch) ||
           ch == '-' ||
@@ -139,7 +142,7 @@ ide_xml_utils_skip_element_name (const gchar **cursor)
   p = g_utf8_next_char (p);
   while ((ch = g_utf8_get_char (p)))
     {
-      if (!is_name_char (ch))
+      if (!ide_xml_utils_is_name_char (ch))
         {
           *cursor = p;
           return g_unichar_isspace (ch);
@@ -196,7 +199,7 @@ ide_xml_utils_skip_attribute_name (const gchar **cursor)
   p = g_utf8_next_char (p);
   while ((ch = g_utf8_get_char (p)))
     {
-      if (!is_name_char (ch))
+      if (!ide_xml_utils_is_name_char (ch))
         {
           *cursor = p;
           if (g_unichar_isspace (ch) || ch == '=')
@@ -213,4 +216,83 @@ ide_xml_utils_skip_attribute_name (const gchar **cursor)
 
   *cursor = p;
   return TRUE;
+}
+
+gboolean
+ide_xml_utils_parse_version (const gchar *version,
+                             guint16     *major,
+                             guint16     *minor,
+                             guint16     *micro)
+{
+  gchar *end;
+  guint64 tmp_major = 0;
+  guint64 tmp_minor = 0;
+  guint64 tmp_micro = 0;
+
+  g_assert (version != NULL);
+
+  tmp_major = g_ascii_strtoull (version, &end, 10);
+  if (tmp_major >= 0x100 || end == version)
+    return FALSE;
+
+  if (*end == '\0')
+    goto next;
+
+  if (*end != '.')
+    return FALSE;
+
+  version = end + 1;
+  tmp_minor = g_ascii_strtoull (version, &end, 10);
+  if (tmp_minor >= 0x100 || end == version)
+    return FALSE;
+
+  if (*end == '\0')
+    goto next;
+
+  if (*end != '.')
+    return FALSE;
+
+  version = end + 1;
+  tmp_micro = g_ascii_strtoull (version, &end, 10);
+  if (tmp_micro >= 0x100 || end == version)
+    return FALSE;
+
+next:
+  if (major != NULL)
+    *major = tmp_major;
+
+  if (minor != NULL)
+    *minor = tmp_minor;
+
+  if (micro != NULL)
+    *micro = tmp_micro;
+
+  return TRUE;
+}
+
+/* Return 1 if v1 > v2, 0 if v1 == v2 or -1 if v1 < v2 */
+gint
+ide_xml_utils_version_compare (guint16 major_v1,
+                               guint16 minor_v1,
+                               guint16 micro_v1,
+                               guint16 major_v2,
+                               guint16 minor_v2,
+                               guint16 micro_v2)
+{
+  if (major_v1 > major_v2)
+    return 1;
+  else if (major_v1 == major_v2)
+    {
+      if (minor_v1 > minor_v2)
+        return 1;
+      else if (minor_v1 == minor_v2)
+        {
+          if (micro_v1 > micro_v2)
+            return 1;
+          else if (micro_v1 == micro_v2)
+            return 0;
+        }
+    }
+
+  return -1;
 }
