@@ -33,6 +33,7 @@ subdir('gradle')
 subdir('gcc')
 subdir('gdb')
 subdir('gettext')
+subdir('gi')
 subdir('git')
 subdir('gjs-symbols')
 subdir('gnome-code-assistance')
@@ -118,6 +119,7 @@ status += [
   'GCC ................... : @0@'.format(get_option('with_gcc')),
   'GDB ................... : @0@'.format(get_option('with_gdb')),
   'Gettext ............... : @0@'.format(get_option('with_gettext')),
+  'Gi .................... : @0@'.format(get_option('with_gi')),
   'Git ................... : @0@'.format(get_option('with_git')),
   'GJS Symbol Resolver ... : @0@'.format(get_option('with_gjs_symbols')),
   'GNOME Code Assistance . : @0@'.format(get_option('with_gnome_code_assistance')),
