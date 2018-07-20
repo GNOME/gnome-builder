@@ -43,6 +43,9 @@ ide_xml_schema_copy (IdeXmlSchema *self)
 
   copy = ide_xml_schema_new ();
 
+  if (self->top_grammar != NULL)
+    copy->top_grammar = ide_xml_rng_grammar_ref (self->top_grammar);
+
   return copy;
 }
 
