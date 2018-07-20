@@ -43,7 +43,10 @@ typedef enum
 {
   IDE_XML_SYMBOL_NODE_STATE_UNKNOW,
   IDE_XML_SYMBOL_NODE_STATE_OK,
-  IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED
+  IDE_XML_SYMBOL_NODE_STATE_MISSING_END_TAG,
+  IDE_XML_SYMBOL_NODE_STATE_END_TAG_MISSMATCH,
+  IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED,
+  IDE_XML_SYMBOL_NODE_STATE_EMPTY
 } IdeXmlSymbolNodeState;
 
 IdeXmlSymbolNode                 *ide_xml_symbol_node_new                           (const gchar            *name,
@@ -58,6 +61,7 @@ void                              ide_xml_symbol_node_take_child                
 void                              ide_xml_symbol_node_take_internal_child           (IdeXmlSymbolNode       *self,
                                                                                      IdeXmlSymbolNode       *child);
 const gchar                      *ide_xml_symbol_node_get_element_name              (IdeXmlSymbolNode       *self);
+gboolean                          ide_xml_symbol_node_is_root                       (IdeXmlSymbolNode       *self);
 GFile *                           ide_xml_symbol_node_get_location                  (IdeXmlSymbolNode       *self,
                                                                                      gint                   *start_line,
                                                                                      gint                   *start_line_offset,
@@ -116,5 +120,7 @@ const gchar                      *ide_xml_symbol_node_get_attribute_value       
                                                                                      const gchar            *name);
 void                              ide_xml_symbol_node_set_attributes                (IdeXmlSymbolNode       *self,
                                                                                      const gchar           **attributes);
+void                              ide_xml_symbol_node_set_is_root                   (IdeXmlSymbolNode       *self,
+                                                                                     gboolean                is_root);
 
 G_END_DECLS

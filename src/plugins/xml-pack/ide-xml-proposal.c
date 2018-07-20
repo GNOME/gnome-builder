@@ -20,13 +20,20 @@
 
 #define G_LOG_DOMAIN "ide-xml-proposal"
 
+#include <ide.h>
+
 #include "ide-xml-proposal.h"
 
 struct _IdeXmlProposal
 {
-  GObject parent_instance;
-  gchar *label;
-  gchar *text;
+  GObject               parent_instance;
+  gchar                *header;
+  gchar                *label;
+  gchar                *text;
+  gchar                *prefix;
+  gint                  insert_position;
+  IdeXmlCompletionType  completion_type;
+  IdeXmlPositionKind    kind;
 };
 
 G_DEFINE_TYPE_WITH_CODE (IdeXmlProposal, ide_xml_proposal, G_TYPE_OBJECT,
@@ -37,8 +44,10 @@ ide_xml_proposal_finalize (GObject *object)
 {
   IdeXmlProposal *self = (IdeXmlProposal *)object;
 
+  dzl_clear_pointer (&self->header, g_free);
   dzl_clear_pointer (&self->label, g_free);
   dzl_clear_pointer (&self->text, g_free);
+  dzl_clear_pointer (&self->prefix, g_free);
 
   G_OBJECT_CLASS (ide_xml_proposal_parent_class)->finalize (object);
 }
@@ -57,16 +66,32 @@ ide_xml_proposal_init (IdeXmlProposal *self)
 }
 
 IdeXmlProposal *
-ide_xml_proposal_new (const gchar *text,
-                      const gchar *label)
+ide_xml_proposal_new (const gchar          *text,
+                      const gchar          *header,
+                      const gchar          *label,
+                      const gchar          *prefix,
+                      gint                  insert_position,
+                      IdeXmlPositionKind    kind,
+                      IdeXmlCompletionType  completion_type)
 {
   IdeXmlProposal *self;
   
   self = g_object_new (IDE_TYPE_XML_PROPOSAL, NULL);
   self->text = g_strdup (text);
+  self->header = g_strdup (header);
   self->label = g_strdup (label);
+  self->prefix = g_strdup (prefix);
+  self->insert_position = insert_position;
+  self->completion_type = completion_type;
+  self->kind = kind;
 
   return self;
+}
+
+const gchar *
+ide_xml_proposal_get_header (IdeXmlProposal *self)
+{
+  return self->header;
 }
 
 const gchar *
@@ -79,4 +104,37 @@ const gchar *
 ide_xml_proposal_get_text (IdeXmlProposal *self)
 {
   return self->text;
+}
+
+const gchar *
+ide_xml_proposal_get_prefix (IdeXmlProposal *self)
+{
+  return self->prefix;
+}
+
+IdeXmlPositionKind
+ide_xml_proposal_get_kind (IdeXmlProposal *self)
+{
+  return self->kind;
+}
+
+/**
+ * ide_xml_proposal_insert_position:
+ *
+ * Get the insert position, relative to the text given by ide_xml_proposal_get_text.
+ * Value -1 mean the cursor will be at the end of the inserted text,
+ * otherwise, move n characters forward.
+ *
+ * Returns: index in utf8 characters quantity.
+ */
+gint
+ide_xml_proposal_get_insert_position (IdeXmlProposal *self)
+{
+  return self->insert_position;
+}
+
+IdeXmlCompletionType
+ide_xml_proposal_get_completion_type (IdeXmlProposal *self)
+{
+  return self->completion_type;
 }

@@ -39,6 +39,7 @@ struct _IdeXmlService
 
   DzlTaskCache      *analyses;
   DzlTaskCache      *schemas;
+  DzlTaskCache      *modversions;
   IdeXmlTreeBuilder *tree_builder;
   GCancellable      *cancellable;
 };
@@ -47,6 +48,110 @@ static void service_iface_init (IdeServiceInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (IdeXmlService, ide_xml_service, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
+
+#define MAX_EXPECTED_VERSION_LEN 20
+
+typedef struct
+{
+  GTask *task;
+  gchar *id;
+} ModVersionState;
+
+static void
+mod_version_state_free (gpointer data)
+{
+  ModVersionState *state = (ModVersionState *)data;
+
+  g_assert (state != NULL);
+
+  dzl_clear_pointer (&state->id, g_free);
+  g_clear_object (&state->task);
+  g_slice_free (ModVersionState, state);
+}
+
+static void
+ide_xml_service_get_modversion_cb1 (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  ModVersionState *state = (ModVersionState *)user_data;
+  g_autoptr(GBytes) stdout_buf = NULL;
+  g_autoptr(GError) error = NULL;
+  const gchar *version;
+  gsize len;
+
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (state != NULL);
+
+  if (ide_subprocess_communicate_finish (subprocess, result, &stdout_buf, NULL, &error))
+    {
+      version = (const gchar *)g_bytes_get_data (stdout_buf, &len);
+      if (len > 0 && len < MAX_EXPECTED_VERSION_LEN)
+        g_task_return_pointer (state->task, g_strdup (version), g_free);
+      else
+        {
+          error = g_error_new (G_IO_ERROR,
+                               G_IO_ERROR_FAILED,
+                               _("Package don't exist or is not installed: %s"),
+                               state->id);
+          g_task_return_error (state->task, g_steal_pointer (&error));
+        }
+    }
+  else
+    g_task_return_error (state->task, g_steal_pointer (&error));
+
+  mod_version_state_free (state);
+}
+
+static void
+ide_xml_service_get_modversion_cb (DzlTaskCache  *cache,
+                                   gconstpointer  key,
+                                   GTask         *task,
+                                   gpointer       user_data)
+{
+  IdeXmlService *self = user_data;
+  const gchar *id = (const gchar *)key;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GError) error = NULL;
+  ModVersionState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_XML_SERVICE (self));
+  g_assert (DZL_IS_TASK_CACHE (cache));
+  g_assert (!dzl_str_empty0 (id));
+  g_assert (G_IS_TASK (task));
+
+  id = strrchr (id, '@');
+  g_assert (id != NULL);
+  id++;
+
+  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+
+  ide_subprocess_launcher_push_argv (launcher, "pkg-config");
+  ide_subprocess_launcher_push_argv (launcher, id);
+  ide_subprocess_launcher_push_argv (launcher, "--modversion");
+
+  if ((subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
+    {
+      state = g_slice_new0 (ModVersionState);
+      state->task = g_object_ref (task);
+      state->id = g_strdup (id);
+
+      ide_subprocess_communicate_async (subprocess,
+                                        NULL,
+                                        NULL,
+                                        ide_xml_service_get_modversion_cb1,
+                                        state);
+    }
+  else
+    g_task_return_error (task, g_steal_pointer (&error));
+
+  IDE_EXIT;
+}
 
 static void
 ide_xml_service_build_tree_cb2 (GObject      *object,
@@ -86,21 +191,17 @@ ide_xml_service_build_tree_cb (DzlTaskCache  *cache,
   g_assert (IDE_IS_FILE (ifile));
   g_assert (G_IS_TASK (task));
 
-  if (NULL == (gfile = ide_file_get_file (ifile)) ||
-      NULL == (path = g_file_get_path (gfile)))
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_NOT_SUPPORTED,
-                               _("File must be saved locally to parse."));
-      return;
-    }
-
-  ide_xml_tree_builder_build_tree_async (self->tree_builder,
-                                         gfile,
-                                         g_task_get_cancellable (task),
-                                         ide_xml_service_build_tree_cb2,
-                                         g_object_ref (task));
+  if (NULL == (gfile = ide_file_get_file (ifile)) || NULL == (path = g_file_get_path (gfile)))
+    g_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             _("File must be saved locally to parse."));
+  else
+    ide_xml_tree_builder_build_tree_async (self->tree_builder,
+                                           gfile,
+                                           g_task_get_cancellable (task),
+                                           ide_xml_service_build_tree_cb2,
+                                           g_object_ref (task));
 
   IDE_EXIT;
 }
@@ -112,6 +213,17 @@ typedef struct
   IdeXmlSchemaCacheEntry *cache_entry;
 } SchemaState;
 
+static void
+schema_state_free (gpointer data)
+{
+  SchemaState *state = (SchemaState *)data;
+
+  g_assert (state != NULL);
+
+  g_clear_object (&state->task);
+  dzl_clear_pointer (&state->cache_entry, ide_xml_schema_cache_entry_unref);
+}
+
 /* Parse schema phase */
 static void
 ide_xml_service_load_schema_cb3 (GObject      *object,
@@ -120,7 +232,6 @@ ide_xml_service_load_schema_cb3 (GObject      *object,
 {
   GFile *file = (GFile *)object;
   SchemaState *state = (SchemaState *)user_data;
-  GTask *task;
   IdeXmlSchema *schema;
   g_autoptr (IdeXmlRngParser) rng_parser = NULL;
   IdeXmlSchemaCacheEntry *cache_entry;
@@ -133,7 +244,6 @@ ide_xml_service_load_schema_cb3 (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (state != NULL);
 
-  task = state->task;
   cache_entry = state->cache_entry;
   kind = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (file), "kind"));
 
@@ -148,7 +258,7 @@ ide_xml_service_load_schema_cb3 (GObject      *object,
       if (kind == SCHEMA_KIND_RNG)
         {
           rng_parser = ide_xml_rng_parser_new ();
-          if (NULL != (schema = ide_xml_rng_parser_parse (rng_parser, content, len, file)))
+          if ((schema = ide_xml_rng_parser_parse (rng_parser, content, len, file)))
             {
               cache_entry->schema = schema;
               cache_entry->state = SCHEMA_STATE_PARSED;
@@ -168,9 +278,10 @@ ide_xml_service_load_schema_cb3 (GObject      *object,
         }
     }
 
-  g_object_unref (state->task);
-  g_slice_free (SchemaState, state);
-  g_task_return_pointer (task, cache_entry, (GDestroyNotify)ide_xml_schema_cache_entry_unref);
+  g_task_return_pointer (state->task,
+                         g_steal_pointer (&state->cache_entry),
+                         (GDestroyNotify)ide_xml_schema_cache_entry_unref);
+  schema_state_free (state);
 }
 
 /* Get content phase */
@@ -184,15 +295,13 @@ ide_xml_service_load_schema_cb2 (GObject      *object,
   IdeXmlSchemaCacheEntry *cache_entry;
   g_autoptr (GFileInfo) file_info = NULL;
   g_autoptr(GError) error = NULL;
-  GTask *task;
 
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (state != NULL);
 
-  task = state->task;
   cache_entry = state->cache_entry;
-  if (NULL != (file_info = g_file_query_info_finish (file, result, &error)))
+  if ((file_info = g_file_query_info_finish (file, result, &error)))
     {
       cache_entry->mtime = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
       g_file_load_contents_async (file,
@@ -205,9 +314,10 @@ ide_xml_service_load_schema_cb2 (GObject      *object,
       cache_entry->error_message = g_strdup (error->message);
       cache_entry->state = SCHEMA_STATE_CANT_LOAD;
 
-      g_object_unref (state->task);
-      g_slice_free (SchemaState, state);
-      g_task_return_pointer (task, cache_entry, (GDestroyNotify)ide_xml_schema_cache_entry_unref);
+      g_task_return_pointer (state->task,
+                             g_steal_pointer (&state->cache_entry),
+                             (GDestroyNotify)ide_xml_schema_cache_entry_unref);
+      schema_state_free (state);
     }
 }
 
@@ -253,28 +363,40 @@ ide_xml_service_get_analysis_cb (GObject      *object,
                                  gpointer      user_data)
 {
   DzlTaskCache *cache = (DzlTaskCache *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
   g_autoptr(GError) error = NULL;
 
   g_assert (DZL_IS_TASK_CACHE (cache));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (NULL == (analysis = dzl_task_cache_get_finish (cache, result, &error)))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_pointer (task, g_steal_pointer (&analysis), (GDestroyNotify)ide_xml_analysis_unref);
+    ide_task_return_pointer (task, g_steal_pointer (&analysis), (GDestroyNotify)ide_xml_analysis_unref);
 }
 
 typedef struct
 {
   IdeXmlService *self;
-  GTask         *task;
+  IdeTask       *task;
   GCancellable  *cancellable;
   IdeFile       *ifile;
   IdeBuffer     *buffer;
 } TaskState;
+
+static void
+task_state_free (gpointer data)
+{
+  TaskState *state = (TaskState *)data;
+
+  g_assert (state != NULL);
+
+  g_clear_object (&state->task);
+  g_clear_object (&state->ifile);
+  g_clear_object (&state->buffer);
+}
 
 static void
 ide_xml_service__buffer_loaded_cb (IdeBuffer *buffer,
@@ -297,9 +419,7 @@ ide_xml_service__buffer_loaded_cb (IdeBuffer *buffer,
                             ide_xml_service_get_analysis_cb,
                             g_steal_pointer (&state->task));
 
-  g_object_unref (state->buffer);
-  g_object_unref (state->ifile);
-  g_slice_free (TaskState, state);
+  task_state_free (state);
 }
 
 static void
@@ -310,7 +430,7 @@ ide_xml_service_get_analysis_async (IdeXmlService       *self,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
   IdeBufferManager *manager;
   GFile *gfile;
@@ -320,7 +440,7 @@ ide_xml_service_get_analysis_async (IdeXmlService       *self,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
   context = ide_object_get_context (IDE_OBJECT (self));
   manager = ide_context_get_buffer_manager (context);
   gfile = ide_file_get_file (ifile);
@@ -331,10 +451,10 @@ ide_xml_service_get_analysis_async (IdeXmlService       *self,
 
       if (!ide_buffer_get_loading (buffer))
         {
-          g_task_return_new_error (task,
-                                   G_IO_ERROR,
-                                   G_IO_ERROR_NOT_SUPPORTED,
-                                   _("Buffer loaded but not in the buffer manager."));
+          ide_task_return_new_error (task,
+                                     G_IO_ERROR,
+                                     G_IO_ERROR_NOT_SUPPORTED,
+                                     _("Buffer loaded but not in the buffer manager."));
           return;
         }
 
@@ -365,12 +485,12 @@ ide_xml_service_get_analysis_finish (IdeXmlService  *self,
                                      GAsyncResult   *result,
                                      GError        **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (task), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (task), NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 static void
@@ -379,21 +499,21 @@ ide_xml_service_get_root_node_cb (GObject      *object,
                                   gpointer      user_data)
 {
   IdeXmlService *self = (IdeXmlService *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
   IdeXmlSymbolNode *root_node;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_XML_SERVICE (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
   if (NULL == (analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
-    g_task_return_error (task, g_steal_pointer (&error));
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
     {
       root_node = g_object_ref (ide_xml_analysis_get_root_node (analysis));
-      g_task_return_pointer (task, root_node, g_object_unref);
+      ide_task_return_pointer (task, root_node, g_object_unref);
     }
 }
 
@@ -420,7 +540,7 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeXmlAnalysis *cached;
 
   g_return_if_fail (IDE_IS_XML_SERVICE (self));
@@ -428,13 +548,13 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
   g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
 
   /*
    * If we have a cached analysis with a valid root_node,
    * and it is new enough, then re-use it.
    */
-  if (NULL != (cached = dzl_task_cache_peek (self->analyses, ifile)))
+  if ((cached = dzl_task_cache_peek (self->analyses, ifile)))
     {
       IdeContext *context;
       IdeUnsavedFiles *unsaved_files;
@@ -446,13 +566,12 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
       context = ide_object_get_context (IDE_OBJECT (self));
       unsaved_files = ide_context_get_unsaved_files (context);
 
-      if (NULL != (uf = ide_unsaved_files_get_unsaved_file (unsaved_files, gfile)) &&
+      if ((uf = ide_unsaved_files_get_unsaved_file (unsaved_files, gfile)) &&
           ide_xml_analysis_get_sequence (cached) == ide_unsaved_file_get_sequence (uf))
         {
           root_node = g_object_ref (ide_xml_analysis_get_root_node (cached));
-          g_assert (IDE_IS_XML_SYMBOL_NODE (root_node));
 
-          g_task_return_pointer (task, root_node, g_object_unref);
+          ide_task_return_pointer (task, root_node, g_object_unref);
           return;
         }
     }
@@ -471,20 +590,20 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
  * Completes an asychronous request to get a root node for a given file.
  * See ide_xml_service_get_root_node_async() for more information.
  *
- * Returns: (transfer full): An #IdeXmlSymbolNode or %NULL up on failure.
+ * Returns: (transfer full): An #IdeXmlSymbolNode or %NULL upon failure.
  */
 IdeXmlSymbolNode *
 ide_xml_service_get_root_node_finish (IdeXmlService  *self,
                                       GAsyncResult   *result,
                                       GError        **error)
 {
-  GTask *task = (GTask *)result;
+  IdeTask *task = (IdeTask *)result;
 
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
   g_return_val_if_fail (error != NULL, NULL);
 
-  return g_task_propagate_pointer (task, error);
+  return ide_task_propagate_pointer (task, error);
 }
 
 static void
@@ -493,21 +612,21 @@ ide_xml_service_get_diagnostics_cb (GObject      *object,
                                     gpointer      user_data)
 {
   IdeXmlService  *self = (IdeXmlService *)object;
-  g_autoptr(GTask) task = user_data;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeXmlAnalysis) analysis = NULL;
   IdeDiagnostics *diagnostics;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_XML_SERVICE (self));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  if (NULL == (analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
-    g_task_return_error (task, g_steal_pointer (&error));
+  if (!(analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
     {
       diagnostics = ide_diagnostics_ref (ide_xml_analysis_get_diagnostics (analysis));
-      g_task_return_pointer (task, diagnostics, (GDestroyNotify)ide_diagnostics_unref);
+      ide_task_return_pointer (task, diagnostics, (GDestroyNotify)ide_diagnostics_unref);
     }
 }
 
@@ -534,7 +653,7 @@ ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
                                        GAsyncReadyCallback  callback,
                                        gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
+  g_autoptr(IdeTask) task = NULL;
   IdeXmlAnalysis *cached;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
@@ -543,8 +662,8 @@ ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
   g_return_if_fail (IDE_IS_BUFFER (buffer) || buffer == NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_source_tag (task, ide_xml_service_get_diagnostics_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_xml_service_get_diagnostics_async);
 
   /*
    * If we have a cached analysis with some diagnostics,
@@ -567,9 +686,9 @@ ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
         {
           diagnostics = ide_xml_analysis_get_diagnostics (cached);
           g_assert (diagnostics != NULL);
-          g_task_return_pointer (task,
-                                 ide_diagnostics_ref (diagnostics),
-                                 (GDestroyNotify)ide_diagnostics_unref);
+          ide_task_return_pointer (task,
+                                   ide_diagnostics_ref (diagnostics),
+                                   (GDestroyNotify)ide_diagnostics_unref);
           return;
         }
     }
@@ -596,10 +715,10 @@ ide_xml_service_get_diagnostics_finish (IdeXmlService  *self,
                                         GError        **error)
 {
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
-  g_return_val_if_fail (G_IS_TASK (result), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
   g_return_val_if_fail (error != NULL, NULL);
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -634,7 +753,6 @@ static void
 position_state_free (PositionState *state)
 {
   g_assert (state != NULL);
-  g_assert (IDE_IS_MAIN_THREAD ());
 
   g_clear_object (&state->ifile);
   g_clear_object (&state->buffer);
@@ -666,145 +784,193 @@ skip_all_name (const gchar **cursor)
     *cursor = g_utf8_next_char (*cursor);
 }
 
-static IdeXmlPositionDetail
-get_detail (IdeXmlSymbolNode  *node,
-            const gchar       *prefix,
-            gunichar           next_ch,
-            gchar            **name,
-            gchar            **value,
-            gchar             *quote)
+static IdeXmlDetail *
+get_attr_value_pair (const gchar  *insert_ptr,
+                     const gchar **cursor,
+                     gboolean     *has_more_pairs)
 {
-  IdeXmlPositionDetail detail;
-  const gchar *cursor, *start;
-  const gchar *name_start;
-  gsize name_size;
-  gboolean has_spaces = FALSE;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *value = NULL;
+  g_autofree gchar *prefix = NULL;
+  const gchar *name_start = NULL;
+  const gchar *name_end = NULL;
+  const gchar *value_start = NULL;
+  const gchar *value_end = NULL;
+  IdeXmlDetailMember member = IDE_XML_DETAIL_MEMBER_NONE;
+  IdeXmlDetailSide side = IDE_XML_DETAIL_SIDE_NONE;
+  gboolean member_set = FALSE;
+  gssize name_len = -1;
+  gssize value_len = -1;
+  gchar quote = 0;
 
-  g_assert (IDE_IS_XML_SYMBOL_NODE (node));
-  g_assert (prefix != NULL);
-  g_assert (value != NULL);
+  *has_more_pairs = FALSE;
 
-  *name = NULL;
-  *value = NULL;
-  *quote = 0;
+  /* Skip the whitespaces before the name */
+  if (!skip_whitespaces (cursor))
+    return NULL;
 
-  cursor = prefix;
-  detail =  IDE_XML_POSITION_DETAIL_IN_NAME;
-  if (!ide_xml_utils_skip_element_name (&cursor))
-    return IDE_XML_POSITION_DETAIL_NONE;
-
-  if (*cursor == 0)
+  if (*cursor > insert_ptr)
     {
-      if (!g_unichar_isspace (next_ch) &&
-          next_ch != '<' &&
-          next_ch != '>' &&
-          next_ch != '/')
-        return IDE_XML_POSITION_DETAIL_NONE;
-      else
+      name_start = name_end = insert_ptr;
+      goto finish;
+    }
+
+  /* Attribute name */
+  name_start = *cursor;
+  if (!ide_xml_utils_skip_attribute_name (cursor))
+    return NULL;
+
+  name_end = *cursor;
+  if (**cursor == 0)
+    goto finish;
+
+  /* Skip the whitespaces between the name and the = */
+  skip_whitespaces (cursor);
+
+  if (**cursor != '=')
+    return NULL;
+
+  /* Skip the '=' and the whitespaces after it */
+  (*cursor)++;
+  skip_whitespaces (cursor);
+  if (**cursor == 0)
+    return NULL;
+
+  if (**cursor != '"' && **cursor != '\'')
+    {
+      skip_all_name (cursor);
+      return NULL;
+    }
+
+  quote = **cursor;
+  (*cursor)++;
+  value_start = *cursor;
+
+  /* Attribute value */
+  if (!ide_xml_utils_skip_attribute_value (cursor, quote))
+    goto finish;
+
+  value_end = (*cursor) - 1;
+  /* Pairs need to be space-separated */
+  if (*cursor < insert_ptr)
+    {
+      gunichar ch = g_utf8_get_char (*cursor);
+
+      if (g_unichar_isspace (ch))
+        *has_more_pairs = TRUE;
+    }
+
+finish:
+  if (name_start != NULL && name_end != NULL)
+    {
+      name_len = name_end - name_start;
+
+      if (insert_ptr >= name_start && insert_ptr <= name_end)
         {
-          *name = g_strdup (prefix);
-          return detail;
+          member = IDE_XML_DETAIL_MEMBER_ATTRIBUTE_NAME;
+          member_set = TRUE;
+
+          if (insert_ptr == name_start)
+            side = IDE_XML_DETAIL_SIDE_LEFT;
+          else if (insert_ptr == name_end)
+            side = IDE_XML_DETAIL_SIDE_RIGHT;
+          else
+            side = IDE_XML_DETAIL_SIDE_MIDDLE;
+
+          prefix = g_strndup (name_start, insert_ptr - name_start);
         }
     }
 
-  detail =  IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME;
-  /* Whitespaces after the element name */
-  skip_whitespaces (&cursor);
-  if (*cursor == 0)
-    return detail;
-
-  while (TRUE)
+  if (value_start != NULL && value_end != NULL)
     {
-      *quote = 0;
-      start = cursor;
-      /* Attribute name */
-      if (!ide_xml_utils_skip_attribute_name (&cursor))
-        continue;
+      value_len = value_end - value_start;
 
-      if (*cursor == 0)
+      if (!member_set)
         {
-          if (!g_unichar_isspace (next_ch) && next_ch != '=')
-            return IDE_XML_POSITION_DETAIL_NONE;
-
-          *name = g_strndup (start, cursor - start);
-          return detail;
-        }
-
-      name_start = start;
-      name_size = cursor - start;
-      /* Whitespaces between the name and the = */
-      skip_whitespaces (&cursor);
-      if (*cursor == 0)
-        return detail;
-
-      if (*cursor != '=')
-        continue;
-      else
-        cursor++;
-
-      /* Whitespaces after the = */
-      /* TODO: at this point we need to add quoted around the value */
-      detail =  IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_VALUE;
-      skip_whitespaces (&cursor);
-      if (*cursor == 0)
-        {
-          *name = g_strndup (name_start, name_size);
-          return detail;
-        }
-
-      *quote = *cursor;
-      start = ++cursor;
-      if (*quote != '"' && *quote != '\'')
-        {
-          *quote = 0;
-          if (!g_unichar_isspace(*(cursor -1)))
+          if (insert_ptr >= value_start && insert_ptr <= value_end)
             {
-              skip_all_name (&cursor);
-              if (*cursor == 0)
-                return IDE_XML_POSITION_DETAIL_NONE;
+              member = IDE_XML_DETAIL_MEMBER_ATTRIBUTE_VALUE;
+              member_set = TRUE;
 
-              skip_whitespaces (&cursor);
-              if (*cursor == 0)
-                return IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME;
+              if (insert_ptr == value_start)
+                side = IDE_XML_DETAIL_SIDE_LEFT;
+              else if (insert_ptr == value_end)
+                side = IDE_XML_DETAIL_SIDE_RIGHT;
+              else
+                side = IDE_XML_DETAIL_SIDE_MIDDLE;
+
+              prefix = g_strndup (value_start, insert_ptr - value_start);
             }
-
-          continue;
         }
+    }
 
-      /* Attribute value */
-      if (!ide_xml_utils_skip_attribute_value (&cursor, *quote))
+  if (!member_set)
+    return NULL;
+
+  if (name_len > -1)
+    name = g_strndup (name_start, name_len);
+
+  if (value_len > -1)
+    value = g_strndup (value_start, value_len);
+
+  return ide_xml_detail_new (name, value, prefix, member, side, quote);
+}
+
+static IdeXmlDetail *
+get_detail (const gchar        *content,
+            const gchar        *insert_ptr,
+            IdeXmlPositionKind  kind)
+{
+  const gchar *cursor = content;
+  gboolean has_more_pairs = TRUE;
+
+  if (insert_ptr == NULL ||
+      !ide_xml_utils_skip_element_name (&cursor))
+    goto fail;
+
+  if (cursor >= insert_ptr)
+    {
+      IdeXmlDetailSide side;
+      g_autofree gchar *name = g_strndup (content, cursor - content);
+      g_autofree gchar *prefix = g_strndup (content, insert_ptr - content);;
+
+      if (insert_ptr == content)
+        side = IDE_XML_DETAIL_SIDE_LEFT;
+      else if (insert_ptr == cursor)
+        side = IDE_XML_DETAIL_SIDE_RIGHT;
+      else
+        side = IDE_XML_DETAIL_SIDE_MIDDLE;
+
+      return ide_xml_detail_new (name, NULL, prefix,
+                                 IDE_XML_DETAIL_MEMBER_NAME,
+                                 side,
+                                 0);
+    }
+
+  if (kind == IDE_XML_POSITION_KIND_IN_START_TAG)
+    {
+      while (cursor <= insert_ptr && has_more_pairs)
         {
-          *name = g_strndup (name_start, name_size);
-          *value = g_strndup (start, cursor - start);
-          return detail;
-        }
+          IdeXmlDetail *detail;
 
-      detail =  IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME;
-      /* Whitespaces after the attribute value */
-      if (skip_whitespaces (&cursor))
-        has_spaces = TRUE;
+          if ((detail = get_attr_value_pair (insert_ptr, &cursor, &has_more_pairs)))
+            return detail;
+        };
+    }
 
-      if (*cursor == 0)
-        {
-          *quote = 0;
-          return (has_spaces) ? IDE_XML_POSITION_DETAIL_IN_ATTRIBUTE_NAME : IDE_XML_POSITION_DETAIL_NONE;
-        }
-
-      if (!has_spaces)
-        {
-          skip_all_name (&cursor);
-          if (*cursor == 0)
-            return IDE_XML_POSITION_DETAIL_NONE;
-        }
-    };
+fail:
+  return ide_xml_detail_new (NULL, NULL, NULL,
+                             IDE_XML_DETAIL_MEMBER_NONE,
+                             IDE_XML_DETAIL_SIDE_NONE,
+                             0);
 }
 
 static IdeXmlPosition *
-get_position (IdeXmlService   *self,
-              IdeXmlAnalysis  *analysis,
-              GtkTextBuffer   *buffer,
-              gint             line,
-              gint             line_offset)
+get_position (IdeXmlService  *self,
+              IdeXmlAnalysis *analysis,
+              GtkTextBuffer  *buffer,
+              gint            line,
+              gint            line_offset)
 {
   IdeXmlPosition *position = NULL;
   IdeXmlSymbolNode *root_node;
@@ -814,19 +980,15 @@ get_position (IdeXmlService   *self,
   IdeXmlSymbolNode *previous_sibling_node = NULL;
   IdeXmlSymbolNode *next_sibling_node = NULL;
   IdeXmlSymbolNodeRelativePosition rel_pos;
-  IdeXmlPositionKind candidate_kind;
-  IdeXmlPositionDetail detail = IDE_XML_POSITION_DETAIL_NONE;
-  g_autofree gchar *prefix = NULL;
-  g_autofree gchar *detail_name = NULL;
-  g_autofree gchar *detail_value = NULL;
-  GtkTextIter start, end;
-  gunichar next_ch = 0;
+  IdeXmlPositionKind candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
+  g_autoptr(IdeXmlDetail) detail = NULL;
+  const gchar *insert_ptr;
+  GtkTextIter start, cursor, end;
   gint start_line, start_line_offset;
+  gint end_line, end_line_offset;
   guint n_children;
   gint child_pos = -1;
-  gint n = 0;
-  gchar quote = 0;
-  gboolean has_prefix = FALSE;
+  gint prefix_size = 0;
 
   g_assert (IDE_IS_XML_SERVICE (self));
   g_assert (analysis != NULL);
@@ -837,9 +999,12 @@ get_position (IdeXmlService   *self,
     {
 loop:
       if (0 == (n_children = ide_xml_symbol_node_get_n_direct_children (current_node)))
-        goto result;
+        {
+          child_pos = 0;
+          goto result;
+        }
 
-      for (n = 0; n < n_children; ++n)
+      for (guint n = 0; n < n_children; ++n)
         {
           child_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (current_node, n));
           child_pos = n;
@@ -850,13 +1015,11 @@ loop:
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_START_TAG:
               candidate_node = child_node;
               candidate_kind = IDE_XML_POSITION_KIND_IN_START_TAG;
-              has_prefix = TRUE;
               goto result;
 
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_IN_END_TAG:
               candidate_node = child_node;
               candidate_kind = IDE_XML_POSITION_KIND_IN_END_TAG;
-              has_prefix = TRUE;
               goto result;
 
             case IDE_XML_SYMBOL_NODE_RELATIVE_POSITION_BEFORE:
@@ -890,12 +1053,13 @@ loop:
     }
 
 result:
+  /* Empty tree case */
   if (candidate_node == NULL)
     {
-      /* Empty tree case */
       candidate_node = root_node;
       candidate_kind = IDE_XML_POSITION_KIND_IN_CONTENT;
     }
+  /* Node not closed case */
   else if (candidate_kind == IDE_XML_POSITION_KIND_IN_CONTENT)
     {
       if (previous_node != NULL &&
@@ -904,42 +1068,112 @@ result:
           candidate_node = previous_node;
           /* TODO: detect the IN_END_TAG case */
           candidate_kind = IDE_XML_POSITION_KIND_IN_START_TAG;
-          has_prefix = TRUE;
         }
     }
 
-  if (has_prefix)
-    {
-      ide_xml_symbol_node_get_location (candidate_node, &start_line, &start_line_offset, NULL, NULL, NULL);
-      gtk_text_buffer_get_iter_at_line_index (buffer, &start, start_line - 1, start_line_offset - 1);
-      gtk_text_buffer_get_iter_at_line_index (buffer, &end, line - 1, line_offset - 1);
-
-      if (gtk_text_iter_get_char (&start) == '<')
-        gtk_text_iter_forward_char (&start);
-
-      next_ch = gtk_text_iter_get_char (&end);
-      if (!gtk_text_iter_equal (&start, &end))
-        {
-          prefix = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-          detail = get_detail (candidate_node, prefix, next_ch, &detail_name, &detail_value, &quote);
-        }
-      else
-        detail = IDE_XML_POSITION_DETAIL_IN_NAME;
-    }
+  gtk_text_buffer_get_iter_at_line_index (buffer, &cursor, line - 1, line_offset - 1);
 
   if (candidate_kind == IDE_XML_POSITION_KIND_IN_CONTENT)
     {
-      position = ide_xml_position_new (candidate_node, prefix, candidate_kind, detail, detail_name, detail_value, quote);
+      g_autofree gchar *content_prefix = NULL;
+
+      start = cursor;
+      while (gtk_text_iter_backward_char (&start))
+        {
+          gunichar ch = gtk_text_iter_get_char (&start);
+
+          if (ch == '>' || g_unichar_isspace (ch))
+            {
+              gtk_text_iter_forward_char (&start);
+              break;
+            }
+        }
+
+      content_prefix = gtk_text_buffer_get_text (buffer, &start, &cursor, FALSE);
+      detail = ide_xml_detail_new (NULL, NULL, content_prefix,
+                                   IDE_XML_DETAIL_MEMBER_NONE,
+                                   IDE_XML_DETAIL_SIDE_NONE,
+                                   0);
+      position = ide_xml_position_new (candidate_node,
+                                       candidate_kind,
+                                       detail);
+
       ide_xml_position_set_analysis (position, analysis);
       ide_xml_position_set_child_pos (position, child_pos);
     }
   else if (candidate_kind == IDE_XML_POSITION_KIND_IN_START_TAG ||
            candidate_kind == IDE_XML_POSITION_KIND_IN_END_TAG)
     {
+      g_autofree gchar *content = NULL;
+      g_autofree gchar *node_prefix = NULL;
+      gsize content_len;
+      gint order;
+
+      if (candidate_kind == IDE_XML_POSITION_KIND_IN_START_TAG)
+        ide_xml_symbol_node_get_location (candidate_node,
+                                          &start_line,
+                                          &start_line_offset,
+                                          &end_line,
+                                          &end_line_offset,
+                                          NULL);
+      else
+        ide_xml_symbol_node_get_end_tag_location (candidate_node,
+                                                  &start_line,
+                                                  &start_line_offset,
+                                                  &end_line,
+                                                  &end_line_offset,
+                                                  NULL);
+
+      gtk_text_buffer_get_iter_at_line_index (buffer, &start, start_line - 1, start_line_offset - 1);
+      gtk_text_buffer_get_iter_at_line_index (buffer, &end, end_line - 1, end_line_offset - 1);
+
+      /* Exclude the opening '<' or '</' from the content */
+      if (gtk_text_iter_get_char (&start) == '<')
+        gtk_text_iter_forward_char (&start);
+
+      if (candidate_kind == IDE_XML_POSITION_KIND_IN_END_TAG)
+        {
+          g_assert (gtk_text_iter_get_char (&start) == '/');
+          gtk_text_iter_forward_char (&start);
+        }
+
+      /* We get the node's content and a pointer to the cursor position */
+      insert_ptr = content = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+
+      /* Exclude the closing '>' or '/>' from the content */
+      content_len = strlen (content);
+      if (g_str_has_suffix (content, "/>"))
+        content_len -= 2;
+      else if (g_str_has_suffix (content, ">"))
+        content_len -= 1;
+
+      *(content + content_len) = '\0';
+
+      order = gtk_text_iter_compare (&start, &cursor);
+      if (order == -1)
+        {
+          node_prefix = gtk_text_buffer_get_text (buffer, &start, &cursor, FALSE);
+          prefix_size = strlen (node_prefix);
+          insert_ptr = content + prefix_size;
+        }
+      else if (order == 1)
+        {
+          /* Means we are in the end tag, juste before the '/',
+           * we just tag this case by setting insert_ptr to NULL
+           */
+          g_assert (candidate_kind == IDE_XML_POSITION_KIND_IN_END_TAG);
+          insert_ptr = NULL;
+        }
+
+      detail = get_detail (content, insert_ptr, candidate_kind);
+
       child_node = candidate_node;
       candidate_node = ide_xml_symbol_node_get_parent (child_node);
 
-      position = ide_xml_position_new (candidate_node, prefix, candidate_kind, detail, detail_name, detail_value, quote);
+      position = ide_xml_position_new (candidate_node,
+                                       candidate_kind,
+                                       detail);
+
       ide_xml_position_set_analysis (position, analysis);
       ide_xml_position_set_child_node (position, child_node);
     }
@@ -949,7 +1183,7 @@ result:
   if (child_pos > 0)
     previous_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos - 1));
 
-  if (child_pos < n_children)
+  if (child_pos < ide_xml_symbol_node_get_n_direct_children (candidate_node))
     next_sibling_node = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_direct_child (candidate_node, child_pos));
 
   ide_xml_position_set_siblings (position, previous_sibling_node, next_sibling_node);
@@ -963,36 +1197,32 @@ ide_xml_service_get_position_from_cursor_cb (GObject      *object,
                                              gpointer      user_data)
 {
   IdeXmlService *self = (IdeXmlService *)object;
-  g_autoptr(IdeXmlPosition) position = NULL;
+  IdeXmlAnalysis *analysis;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeXmlAnalysis *analysis;
-  PositionState *state;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TASK (task));
-  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_XML_SERVICE (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
   if (!(analysis = ide_xml_service_get_analysis_finish (self, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
     {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
+      PositionState *state = ide_task_get_task_data (task);
+      IdeXmlPosition *position = get_position (self,
+                                               analysis,
+                                               GTK_TEXT_BUFFER (state->buffer),
+                                               state->line,
+                                               state->line_offset);
+
+      ide_task_return_pointer (task,
+                               position,
+                               g_object_unref);
     }
-
-  state = ide_task_get_task_data (task);
-
-  position = get_position (self,
-                           analysis,
-                           GTK_TEXT_BUFFER (state->buffer),
-                           state->line,
-                           state->line_offset);
-
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&position),
-                           g_object_unref);
 
   IDE_EXIT;
 }
@@ -1082,6 +1312,25 @@ ide_xml_service_start (IdeService *service)
                                       NULL);
 
   dzl_task_cache_set_name (self->schemas, "xml schemas cache");
+
+  self->modversions = dzl_task_cache_new ((GHashFunc)g_str_hash,
+                                          (GEqualFunc)g_str_equal,
+                                          (GBoxedCopyFunc)g_strdup,
+                                          (GBoxedFreeFunc)g_free,
+                                          (GBoxedCopyFunc)g_strdup,
+                                          (GBoxedFreeFunc)g_free,
+                                          DEFAULT_EVICTION_MSEC,
+                                          ide_xml_service_get_modversion_cb,
+                                          self,
+                                          NULL);
+
+  dzl_task_cache_set_name (self->analyses, "pkgconfig modversion cache");
+
+  /* TODO: populate async and track changes in:
+   * - runtime/app for flatpak
+   * - local typelib dir for host/jhbuild
+   * - selected runtime
+   */
 }
 
 static void
@@ -1097,6 +1346,7 @@ ide_xml_service_stop (IdeService *service)
   g_clear_object (&self->cancellable);
   g_clear_object (&self->analyses);
   g_clear_object (&self->schemas);
+  g_clear_object (&self->modversions);
 }
 
 static void
@@ -1152,8 +1402,8 @@ ide_xml_service_get_cached_root_node (IdeXmlService *self,
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (gfile), NULL);
 
-  if (NULL != (analysis = dzl_task_cache_peek (self->analyses, gfile)) &&
-      NULL != (cached = ide_xml_analysis_get_root_node (analysis)))
+  if ((analysis = dzl_task_cache_peek (self->analyses, gfile)) &&
+      (cached = ide_xml_analysis_get_root_node (analysis)))
     return g_object_ref (cached);
 
   return NULL;
@@ -1176,8 +1426,8 @@ ide_xml_service_get_cached_diagnostics (IdeXmlService *self,
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
   g_return_val_if_fail (IDE_IS_FILE (gfile), NULL);
 
-  if (NULL != (analysis = dzl_task_cache_peek (self->analyses, gfile)) &&
-      NULL != (cached = ide_xml_analysis_get_diagnostics (analysis)))
+  if ((analysis = dzl_task_cache_peek (self->analyses, gfile)) &&
+      (cached = ide_xml_analysis_get_diagnostics (analysis)))
     return ide_diagnostics_ref (cached);
 
   return NULL;
@@ -1196,4 +1446,60 @@ ide_xml_service_get_schemas_cache (IdeXmlService *self)
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
 
   return self->schemas;
+}
+
+static void
+fetch_modversion_cb (GObject      *object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  DzlTaskCache *modversions = (DzlTaskCache *)object;
+  g_autoptr(IdeTask) task = (IdeTask *)user_data;
+  g_autoptr(GError) error = NULL;
+  gchar *modversion;
+
+  if (!(modversion = dzl_task_cache_get_finish (modversions, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, modversion, g_free);
+}
+
+void
+ide_xml_service_get_modversion_async (IdeXmlService       *self,
+                                      const gchar         *runtime_name,
+                                      const gchar         *lib,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autofree gchar *key = NULL;
+  IdeTask *task;
+
+  g_return_if_fail (IDE_IS_XML_SERVICE (self));
+  g_return_if_fail (!dzl_str_empty0 (runtime_name));
+  g_return_if_fail (!dzl_str_empty0 (lib));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  key = g_strconcat (runtime_name, "@", lib, NULL);
+
+  dzl_task_cache_get_async (self->modversions,
+                            key,
+                            FALSE,
+                            cancellable,
+                            fetch_modversion_cb,
+                            task);
+}
+
+gchar *
+ide_xml_service_get_modversion_finish (IdeXmlService  *self,
+                                       GAsyncResult   *result,
+                                       GError        **error)
+{
+  IdeTask *task = (IdeTask *)result;
+
+  g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  return ide_task_propagate_pointer (task, error);
 }
