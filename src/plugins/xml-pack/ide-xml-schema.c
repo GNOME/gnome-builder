@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
+
 #include "ide-xml-schema.h"
 
 G_DEFINE_BOXED_TYPE (IdeXmlSchema, ide_xml_schema, ide_xml_schema_ref, ide_xml_schema_unref)
@@ -50,8 +52,7 @@ ide_xml_schema_free (IdeXmlSchema *self)
   g_assert (self);
   g_assert_cmpint (self->ref_count, ==, 0);
 
-  if (self->top_grammar != NULL)
-    ide_xml_rng_grammar_unref (self->top_grammar);
+  dzl_clear_pointer (&self->top_grammar, ide_xml_rng_grammar_unref);
 
   g_slice_free (IdeXmlSchema, self);
 }

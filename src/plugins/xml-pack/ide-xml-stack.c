@@ -19,7 +19,7 @@
 #include "ide-xml-stack.h"
 #include <ide.h>
 
-typedef struct _StackItem
+typedef struct
 {
   gchar            *name;
   IdeXmlSymbolNode *node;
@@ -43,13 +43,13 @@ ide_xml_stack_new (void)
 }
 
 void
-ide_xml_stack_push (IdeXmlStack       *self,
-                    const gchar       *name,
-                    IdeXmlSymbolNode  *node,
-                    IdeXmlSymbolNode  *parent,
-                    gint               depth)
+ide_xml_stack_push (IdeXmlStack      *self,
+                    const gchar      *name,
+                    IdeXmlSymbolNode *node,
+                    IdeXmlSymbolNode *parent,
+                    gint              depth)
 {
-  StackItem item;
+  StackItem item = {0};
 
   g_return_if_fail (IDE_IS_XML_STACK (self));
   g_return_if_fail (!dzl_str_empty0 (name));

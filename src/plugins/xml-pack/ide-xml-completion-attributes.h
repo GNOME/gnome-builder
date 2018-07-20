@@ -27,7 +27,7 @@
 
 G_BEGIN_DECLS
 
-typedef struct _MatchItem
+typedef struct
 {
   IdeXmlRngDefine *define;
   gchar           *name;
@@ -35,8 +35,8 @@ typedef struct _MatchItem
   gboolean         is_optional;
 } MatchItem;
 
-GPtrArray           *ide_xml_completion_attributes_get_matches       (IdeXmlRngDefine     *define,
-                                                                      IdeXmlSymbolNode    *node,
-                                                                      gboolean             filtered);
+GPtrArray *ide_xml_completion_attributes_get_matches (IdeXmlRngDefine  *define,
+                                                      IdeXmlSymbolNode *node,
+                                                      gboolean          filtered);
 
 G_END_DECLS

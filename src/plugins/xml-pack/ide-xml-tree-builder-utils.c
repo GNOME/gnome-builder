@@ -24,7 +24,7 @@
 
 const gchar *
 list_get_attribute (const guchar **attributes,
-                    const gchar  *name)
+                    const gchar   *name)
 {
   const guchar **l = attributes;
 

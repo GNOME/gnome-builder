@@ -30,15 +30,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlValidator, ide_xml_validator, IDE, XML_VALIDATOR, IdeObject)
 
-IdeXmlValidator       *ide_xml_validator_new        (IdeContext       *context);
-IdeXmlSchemaKind       ide_xml_validator_get_kind   (IdeXmlValidator  *self);
-gboolean               ide_xml_validator_set_schema (IdeXmlValidator  *self,
-                                                     IdeXmlSchemaKind  kind,
-                                                     const gchar      *data,
-                                                     gsize             size);
-
-gboolean               ide_xml_validator_validate   (IdeXmlValidator  *self,
-                                                     xmlDoc           *doc,
-                                                     IdeDiagnostics  **diagnostics);
+IdeXmlValidator  *ide_xml_validator_new        (IdeContext        *context);
+IdeXmlSchemaKind  ide_xml_validator_get_kind   (IdeXmlValidator   *self);
+gboolean          ide_xml_validator_set_schema (IdeXmlValidator   *self,
+                                                IdeXmlSchemaKind   kind,
+                                                const gchar       *data,
+                                                gsize              size);
+gboolean          ide_xml_validator_validate   (IdeXmlValidator   *self,
+                                                xmlDoc            *doc,
+                                                IdeDiagnostics   **diagnostics);
 
 G_END_DECLS

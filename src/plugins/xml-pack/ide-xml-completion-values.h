@@ -27,7 +27,7 @@
 
 G_BEGIN_DECLS
 
-typedef struct _ValueMatchItem
+typedef struct
 {
   gchar    *name;
 } ValueMatchItem;

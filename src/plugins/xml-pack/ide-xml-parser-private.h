@@ -65,7 +65,7 @@ struct _IdeXmlParser
   PostProcessingCallback  post_processing_callback;
 };
 
-typedef struct _ParserState
+typedef struct
 {
   IdeXmlParser      *self;
 

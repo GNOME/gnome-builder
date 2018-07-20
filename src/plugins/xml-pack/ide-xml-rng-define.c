@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
+
 #include "ide-xml-rng-define.h"
 
 G_DEFINE_BOXED_TYPE (IdeXmlRngDefine, ide_xml_rng_define, ide_xml_rng_define_ref, ide_xml_rng_define_unref)
@@ -63,6 +65,8 @@ dump_tree (IdeXmlRngDefine *self,
   g_autofree gchar *pad = NULL;
   guchar *name = NULL;
 
+  g_assert (self);
+
   pad = g_strnfill (indent, ' ');
   while (def != NULL)
     {
@@ -74,34 +78,34 @@ dump_tree (IdeXmlRngDefine *self,
           if (def->node != NULL &&
               NULL != (name = xmlGetProp (def->node, (const guchar *)"name")))
             {
-              printf ("%s%s [%s]:%p\n", pad, type_name, name, def->content);
+              g_print ("%s%s [%s]:%p\n", pad, type_name, name, def->content);
               xmlFree (name);
             }
           else
-            printf ("%s%s: %p\n", pad, type_name, def->content);
+            g_print ("%s%s: %p\n", pad, type_name, def->content);
         }
       else
         {
           if (def->name == NULL)
-            printf ("%s%s\n", pad, type_name);
+            g_print ("%s%s\n", pad, type_name);
           else
-            printf ("%s%s [%s]\n", pad, type_name, def->name);
+            g_print ("%s%s [%s]\n", pad, type_name, def->name);
 
           if (def->content != NULL)
             {
-              printf ("%s>content:\n", pad);
+              g_print ("%s>content:\n", pad);
               dump_tree (def->content, indent + 1);
             }
 
           if (def->attributes != NULL)
             {
-              printf ("%s>attributes:\n", pad);
+              g_print ("%s>attributes:\n", pad);
               dump_tree (def->attributes, indent + 1);
             }
 
           if (def->name_class != NULL)
             {
-              printf ("%s>name classes:\n", pad);
+              g_print ("%s>name classes:\n", pad);
               dump_tree (def->name_class, indent + 1);
             }
         }
@@ -124,9 +128,9 @@ ide_xml_rng_define_dump_tree (IdeXmlRngDefine *self,
     {
       type_name = type_names [self->type];
       if (self->name == NULL)
-        printf ("%s\n", type_name);
+        g_print ("%s\n", type_name);
       else
-        printf ("%s [%s]\n", type_name, self->name);
+        g_print ("%s [%s]\n", type_name, self->name);
     }
 }
 
@@ -157,23 +161,13 @@ ide_xml_rng_define_free (IdeXmlRngDefine *self)
   g_assert (self);
   g_assert_cmpint (self->ref_count, ==, 0);
 
-  if (self->name != NULL)
-    xmlFree (self->name);
+  dzl_clear_pointer (&self->name, xmlFree);
+  dzl_clear_pointer (&self->ns, xmlFree);
 
-  if (self->ns != NULL)
-    xmlFree (self->ns);
-
-  if (self->next != NULL)
-    ide_xml_rng_define_unref (self->next);
-
-  if (self->content != NULL)
-    ide_xml_rng_define_unref (self->content);
-
-  if (self->attributes != NULL)
-    ide_xml_rng_define_unref (self->attributes);
-
-  if (self->name_class != NULL)
-    ide_xml_rng_define_unref (self->name_class);
+  dzl_clear_pointer (&self->next, ide_xml_rng_define_unref);
+  dzl_clear_pointer (&self->content, ide_xml_rng_define_unref);
+  dzl_clear_pointer (&self->attributes, ide_xml_rng_define_unref);
+  dzl_clear_pointer (&self->name_class, ide_xml_rng_define_unref);
 
   g_slice_free (IdeXmlRngDefine, self);
 }
@@ -255,7 +249,7 @@ ide_xml_rng_define_is_nameclass_match (IdeXmlRngDefine  *define,
   else if (namespace != NULL && (define->name != NULL || define->ns != NULL))
     return FALSE;
 
- if (NULL == (nc = define->name_class))
+ if (!(nc = define->name_class))
    return TRUE;
 
   if (nc->type == IDE_XML_RNG_DEFINE_EXCEPT)
