@@ -7,3 +7,4 @@ Copyright=Copyright © 2015 Christian Hergert
 Depends=editor;webkit;
 Builtin=true
 Embedded=gbp_devhelp_register_types
+X-Hover-Provider-Languages=c,chdr,cpp,cpphdr
