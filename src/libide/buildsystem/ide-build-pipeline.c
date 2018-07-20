@@ -366,6 +366,7 @@ enum {
   DIAGNOSTIC,
   STARTED,
   FINISHED,
+  PHASE_FINISHED,
   N_SIGNALS
 };
 
@@ -904,6 +905,16 @@ ide_build_pipeline_real_started (IdeBuildPipeline *self)
 static void
 ide_build_pipeline_real_finished (IdeBuildPipeline *self,
                                   gboolean          failed)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_PIPELINE (self));
+
+  IDE_EXIT;
+}
+
+static void
+ide_build_pipeline_real_phase_finished (IdeBuildPipeline *self)
 {
   IDE_ENTRY;
 
@@ -1643,6 +1654,21 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
                                 G_CALLBACK (ide_build_pipeline_real_finished),
                                 NULL, NULL, NULL,
                                 G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
+  /**
+   * IdeBuildPipeline::phase-finished:
+   * @self: An #IdeBuildPipeline
+   * @phase: the #IdeBuildPhase just finished
+   *
+   * This signal is emitted when the build process has finished executing a phase.
+   */
+  signals [PHASE_FINISHED] =
+    g_signal_new_class_handler ("phase-finished",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (ide_build_pipeline_real_phase_finished),
+                                NULL, NULL, NULL,
+                                G_TYPE_NONE, 1, IDE_TYPE_BUILD_PHASE);
 }
 
 static void
@@ -1862,6 +1888,19 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
            */
           ide_build_pipeline_try_chain (self, entry->stage, self->position + 1);
 
+          /* Notify the end of the previous phase */
+          if (self->position > 0 && !(entry->phase & IDE_BUILD_PHASE_WHENCE_MASK))
+            {
+              const PipelineEntry *prev_entry = &g_array_index (self->pipeline,
+                                                                PipelineEntry,
+                                                                self->position - 1);
+              IdeBuildPhase phase = (entry->phase & IDE_BUILD_PHASE_MASK);
+              IdeBuildPhase prev_phase = (prev_entry->phase & IDE_BUILD_PHASE_MASK);
+
+              if (phase != prev_phase)
+                g_signal_emit (self, signals [PHASE_FINISHED], 0, prev_phase);
+            }
+
           _ide_build_stage_execute_with_query_async (entry->stage,
                                                      self,
                                                      cancellable,
@@ -1875,6 +1914,8 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
         }
     }
 
+  /* Notify the last phase */
+  g_signal_emit (self, signals [PHASE_FINISHED], 0, td->phase);
   ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
