@@ -1,5 +1,6 @@
 stages:
     - test
+    - review
 
 variables:
     BUNDLE: "gnome-builder-git.flatpak"
@@ -17,15 +18,7 @@ flatpak:
         FLATPAK_MODULE: "gnome-builder"
         # Make sure to keep this in sync with the Flatpak manifest, all arguments
         # are passed except the config-args because we build it ourselves
-        MESON_ARGS: |
-                    "--buildtype=debugoptimized
-                    -Dctags_path=/app/bin/ctags
-                    -Dfusermount_wrapper=true
-                    -Dwith_tcmalloc=true
-                    -Denable_tracing=true
-                    -Dwith_help=true
-                    -Dwith_channel=flatpak-nightly
-                    -Dwith_deviced=true"
+        MESON_ARGS: "--buildtype=debugoptimized -Dctags_path=/app/bin/ctags -Dfusermount_wrapper=true -Dwith_tcmalloc=true -Denable_tracing=true -Dwith_help=true -Dwith_channel=flatpak-nightly -Dwith_deviced=true"
         DBUS_ID: "org.gnome.Builder"
 
     script:
@@ -50,3 +43,27 @@ flatpak:
     cache:
         paths:
              - .flatpak-builder/cache
+
+review:
+    stage: review
+    dependencies:
+        - flatpak
+    script:
+        - echo "Generating flatpak deployment"
+    artifacts:
+        paths:
+            - ${BUNDLE}
+        expire_in: 30 days
+    environment:
+        name: review/$CI_COMMIT_REF_NAME
+        url: https://gitlab.gnome.org/$CI_PROJECT_PATH/-/jobs/$CI_JOB_ID/artifacts/raw/${BUNDLE}
+        on_stop: stop_review
+
+stop_review:
+    stage: review
+    script:
+        - echo "Stopping flatpak deployment"
+    when: manual
+    environment:
+        name: review/$CI_COMMIT_REF_NAME
+        action: stop
