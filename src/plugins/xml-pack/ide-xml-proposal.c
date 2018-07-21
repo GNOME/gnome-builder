@@ -22,6 +22,8 @@
 
 #include <ide.h>
 
+#include "../gi/ide-gi-objects.h"
+
 #include "ide-xml-proposal.h"
 
 struct _IdeXmlProposal
@@ -31,6 +33,7 @@ struct _IdeXmlProposal
   gchar                *label;
   gchar                *text;
   gchar                *prefix;
+  gpointer              data;
   gint                  insert_position;
   IdeXmlCompletionType  completion_type;
   IdeXmlPositionKind    kind;
@@ -43,6 +46,12 @@ static void
 ide_xml_proposal_finalize (GObject *object)
 {
   IdeXmlProposal *self = (IdeXmlProposal *)object;
+
+  if (self->completion_type == IDE_XML_COMPLETION_TYPE_UI_PROPERTY ||
+      self->completion_type == IDE_XML_COMPLETION_TYPE_UI_SIGNAL)
+    {
+      g_clear_pointer (&self->data, ide_gi_base_unref);
+    }
 
   g_clear_pointer (&self->header, g_free);
   g_clear_pointer (&self->label, g_free);
@@ -70,6 +79,7 @@ ide_xml_proposal_new (const gchar          *text,
                       const gchar          *header,
                       const gchar          *label,
                       const gchar          *prefix,
+                      gpointer              data,
                       gint                  insert_position,
                       IdeXmlPositionKind    kind,
                       IdeXmlCompletionType  completion_type)
@@ -81,6 +91,7 @@ ide_xml_proposal_new (const gchar          *text,
   self->header = g_strdup (header);
   self->label = g_strdup (label);
   self->prefix = g_strdup (prefix);
+  self->data = data;
   self->insert_position = insert_position;
   self->completion_type = completion_type;
   self->kind = kind;
@@ -92,6 +103,12 @@ const gchar *
 ide_xml_proposal_get_header (IdeXmlProposal *self)
 {
   return self->header;
+}
+
+gpointer
+ide_xml_proposal_get_data (IdeXmlProposal *self)
+{
+  return self->data;
 }
 
 const gchar *

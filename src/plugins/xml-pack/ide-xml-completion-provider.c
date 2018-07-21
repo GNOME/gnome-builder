@@ -836,7 +836,14 @@ get_element_proposals (IdeXmlPosition *position,
       else
         continue;
 
-      item = ide_xml_proposal_new (string->str, NULL, label, prefix, pos, kind, IDE_XML_COMPLETION_TYPE_ELEMENT);
+      item = ide_xml_proposal_new (string->str,
+                                   NULL,
+                                   label,
+                                   prefix,
+                                   NULL,
+                                   pos,
+                                   kind,
+                                   IDE_XML_COMPLETION_TYPE_ELEMENT);
       results = g_list_prepend (results, item);
     }
 
@@ -875,6 +882,7 @@ get_attributes_proposals (IdeXmlPosition  *position,
                                        match_item->is_optional ? "optional" : NULL,
                                        name,
                                        detail->prefix,
+                                       NULL,
                                        pos,
                                        kind,
                                        IDE_XML_COMPLETION_TYPE_ATTRIBUTE);
@@ -933,6 +941,7 @@ get_values_proposals (IdeXmlPosition  *position,
                                                                   NULL,
                                                                   value_match_item->name,
                                                                   detail->prefix,
+                                                                  NULL,
                                                                   -1,
                                                                   kind,
                                                                   IDE_XML_COMPLETION_TYPE_VALUE));
@@ -994,6 +1003,7 @@ try_get_gtype_proposals (IdeXmlCompletionProvider *self,
                                                namespace,
                                                src_item->word,
                                                detail->value,
+                                               NULL,
                                                -1,
                                                kind,
                                                IDE_XML_COMPLETION_TYPE_UI_GTYPE);
@@ -1045,6 +1055,7 @@ append_object_properties (IdeGiBase       *object,
                                                                    NULL,
                                                                    name,
                                                                    word,
+                                                                   g_steal_pointer (&prop),
                                                                    -1,
                                                                    kind,
                                                                    IDE_XML_COMPLETION_TYPE_UI_PROPERTY));
@@ -1169,6 +1180,7 @@ append_object_signals (IdeGiBase       *object,
                                                          NULL,
                                                          name,
                                                          word,
+                                                         g_steal_pointer (&signal),
                                                          -1,
                                                          kind,
                                                          IDE_XML_COMPLETION_TYPE_UI_SIGNAL);
@@ -1307,6 +1319,7 @@ try_get_requires_lib_proposals (IdeXmlCompletionProvider *self,
                                            NULL,
                                            prefix_item->word,
                                            detail->prefix,
+                                           NULL,
                                            -1,
                                            kind,
                                            IDE_XML_COMPLETION_TYPE_UI_PACKAGE);
@@ -1697,6 +1710,33 @@ ide_xml_completion_provider_activate_proposal (IdeCompletionProvider *provider,
     }
 }
 
+static gchar *
+ide_xml_completion_provider_get_comment (IdeCompletionProvider *provider,
+                                         IdeCompletionProposal *proposal)
+{
+  IdeXmlProposal *item = (IdeXmlProposal *)proposal;
+  IdeXmlCompletionType type;
+  g_autoptr(IdeGiDoc) doc = NULL;
+  gpointer data;
+
+  type = ide_xml_proposal_get_completion_type (item);
+  if (type == IDE_XML_COMPLETION_TYPE_UI_PROPERTY ||
+      type == IDE_XML_COMPLETION_TYPE_UI_SIGNAL)
+    {
+      data = ide_xml_proposal_get_data (item);
+      if ((doc = ide_gi_base_get_doc ((IdeGiBase *)data)))
+        return g_strdup (ide_gi_doc_get_doc (doc));
+    }
+
+  return NULL;
+}
+
+static gchar *
+ide_xml_completion_provider_get_title (IdeCompletionProvider *provider)
+{
+  return g_strdup ("Xml Completion");
+}
+
 static void
 ide_xml_completion_provider_finalize (GObject *object)
 {
@@ -1723,6 +1763,8 @@ completion_provider_init (IdeCompletionProviderInterface *iface)
   iface->display_proposal = ide_xml_completion_provider_display_proposal;
   iface->populate_async = ide_xml_completion_provider_populate_async;
   iface->populate_finish = ide_xml_completion_provider_populate_finish;
+  iface->get_comment = ide_xml_completion_provider_get_comment;
+  iface->get_title = ide_xml_completion_provider_get_title;
   /* We don't use refilter currently because we don't get a good 'begin'
    * bound, so the searched word, so refilter triggering.
    */
