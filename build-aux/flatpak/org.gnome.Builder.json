@@ -461,7 +461,10 @@
         },
         {
             "name" : "uncrustify",
-            "buildsystem" : "cmake",
+            "buildsystem" : "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
             "builddir" : true,
             "sources" : [
                 {
@@ -473,8 +476,9 @@
         },
         {
             "name" : "libssh2",
-            "cmake" : true,
+            "buildsystem" : "cmake-ninja",
             "config-opts" : [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
                 "-DBUILD_SHARED_LIBS:BOOL=ON"
             ],
@@ -488,8 +492,9 @@
         },
         {
             "name" : "libgit2",
-            "cmake" : true,
+            "buildsystem" : "cmake-ninja",
             "config-opts" : [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DBUILD_SHARED_LIBS:BOOL=ON",
                 "-DTHREADSAFE=ON"
             ],
