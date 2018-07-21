@@ -48,7 +48,8 @@ ide_xml_proposal_finalize (GObject *object)
   IdeXmlProposal *self = (IdeXmlProposal *)object;
 
   if (self->completion_type == IDE_XML_COMPLETION_TYPE_UI_PROPERTY ||
-      self->completion_type == IDE_XML_COMPLETION_TYPE_UI_SIGNAL)
+      self->completion_type == IDE_XML_COMPLETION_TYPE_UI_SIGNAL ||
+      self->completion_type == IDE_XML_COMPLETION_TYPE_UI_GTYPE)
     {
       dzl_clear_pointer (&self->data, ide_gi_base_unref);
     }
