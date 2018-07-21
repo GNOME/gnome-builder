@@ -19,6 +19,7 @@
 #define G_LOG_DOMAIN "xml-completion-provider"
 
 #include <dazzle.h>
+#include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
 #include <ide.h>
 #include <libpeas/peas.h>
@@ -40,6 +41,7 @@
 #include "ide-xml-service.h"
 #include "ide-xml-symbol-node.h"
 #include "ide-xml-types.h"
+#include "ide-xml-utils.h"
 
 struct _IdeXmlCompletionProvider
 {
@@ -1724,6 +1726,7 @@ ide_xml_completion_provider_get_comment (IdeCompletionProvider *provider,
   IdeXmlCompletionType type;
   g_autoptr(IdeGiDoc) doc = NULL;
   gpointer data;
+  gboolean has_more;
 
   type = ide_xml_proposal_get_completion_type (item);
 
@@ -1733,7 +1736,24 @@ ide_xml_completion_provider_get_comment (IdeCompletionProvider *provider,
     {
       data = ide_xml_proposal_get_data (item);
       if ((doc = ide_gi_base_get_doc ((IdeGiBase *)data)))
-        return g_strdup (ide_gi_doc_get_doc (doc));
+        {
+          const gchar *text = ide_gi_doc_get_doc (doc);
+          gsize len;
+
+          if (text != NULL && 0 != (len = ide_xml_utils_get_text_limit (text, 2, 20, &has_more)))
+            {
+              if (has_more)
+                {
+                  GString *str = g_string_sized_new (len + 20);
+
+                  g_string_append_len (str, text, len);
+                  g_string_append (str, _(" [More…]"));
+                  return g_string_free (str, FALSE);
+                }
+              else
+                return g_strndup (text, len);
+            }
+        }
     }
 
   return NULL;

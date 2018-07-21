@@ -22,6 +22,10 @@
 
 G_BEGIN_DECLS
 
+gsize         ide_xml_utils_get_text_limit         (const gchar  *text,
+                                                    gsize         paragraphs,
+                                                    gsize         lines,
+                                                    gboolean     *has_moore);
 gboolean      ide_xml_utils_is_name_char           (gunichar      ch);
 gboolean      ide_xml_utils_skip_attribute_name    (const gchar **cursor);
 gboolean      ide_xml_utils_skip_attribute_value   (const gchar **cursor,

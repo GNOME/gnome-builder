@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <dazzle.h>
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -295,4 +297,60 @@ ide_xml_utils_version_compare (guint16 major_v1,
     }
 
   return -1;
+}
+
+#define LIMIT_MAX_CHARS = 1000;
+
+/* Get the size of the text after limiting it to
+ * n paragraphs or n lines.
+ *
+ * A value of 0 for lines or paragraphs means a not used limit.
+ */
+gsize
+ide_xml_utils_get_text_limit (const gchar *text,
+                              gsize        paragraphs,
+                              gsize        lines,
+                              gboolean    *has_more)
+{
+  const gchar *cursor, *limit, *end;
+  gboolean para_limit = (paragraphs > 0);
+  gboolean lines_limit = (lines > 0);
+  gsize len;
+  gsize count;
+
+  if (dzl_str_empty0 (text))
+    return 0;
+
+  len = strlen (text);
+  end = text + len;
+  cursor = limit = text;
+  while (cursor < end)
+    {
+      if (!(cursor = strchr (cursor, '\n')))
+        break;
+
+      limit = cursor;
+      if (lines_limit && --lines == 0)
+        break;
+
+      cursor++;
+      if (*cursor != '\n')
+        continue;
+
+      if (para_limit && --paragraphs == 0)
+        break;
+
+      cursor++;
+    }
+
+  if (cursor == NULL)
+    {
+      *has_more = FALSE;
+      limit = text + len;
+    }
+  else
+   *has_more = (cursor < end && *(++cursor) != '\0');
+
+  count = limit - text;
+  return count;
 }

@@ -251,6 +251,7 @@ src/plugins/vala-pack/ide-vala-completion-item.vala
 src/plugins/vala-pack/ide-vala-preferences-addin.vala
 src/plugins/valgrind/gtk/menus.ui
 src/plugins/valgrind/valgrind_plugin.py
+src/plugins/xml-pack/ide-xml-completion-provider.c
 src/plugins/xml-pack/ide-xml-parser.c
 src/plugins/xml-pack/ide-xml-parser-ui.c
 src/plugins/xml-pack/ide-xml-service.c
