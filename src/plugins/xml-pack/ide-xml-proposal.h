@@ -32,9 +32,11 @@ IdeXmlProposal       *ide_xml_proposal_new                 (const gchar         
                                                             const gchar          *header,
                                                             const gchar          *label,
                                                             const gchar          *prefix,
+                                                            gpointer              data,
                                                             gint                  insert_position,
                                                             IdeXmlPositionKind    kind,
                                                             IdeXmlCompletionType  completion_type);
+gpointer              ide_xml_proposal_get_data            (IdeXmlProposal       *self);
 const gchar          *ide_xml_proposal_get_header          (IdeXmlProposal       *self);
 gint                  ide_xml_proposal_get_insert_position (IdeXmlProposal       *self);
 IdeXmlPositionKind    ide_xml_proposal_get_kind            (IdeXmlProposal       *self);
