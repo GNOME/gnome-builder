@@ -996,15 +996,21 @@ try_get_gtype_proposals (IdeXmlCompletionProvider *self,
 
           if (src_item->is_buildable)
             {
-              g_autofree gchar *namespace = g_strdup_printf ("%s %d.%d",
-                                                             ide_gi_namespace_get_name (src_item->ns),
-                                                             src_item->major_version,
-                                                             src_item->minor_version);
+              g_autofree gchar *namespace = NULL;
+              IdeGiBase *object;
+
+              namespace = g_strdup_printf ("%s %d.%d",
+                                           ide_gi_namespace_get_name (src_item->ns),
+                                           src_item->major_version,
+                                           src_item->minor_version);
+              object = ide_gi_namespace_get_object (src_item->ns,
+                                                    src_item->object_type,
+                                                    src_item->object_offset);
               dst_item = ide_xml_proposal_new (src_item->word,
                                                namespace,
                                                src_item->word,
                                                detail->value,
-                                               NULL,
+                                               object,
                                                -1,
                                                kind,
                                                IDE_XML_COMPLETION_TYPE_UI_GTYPE);
@@ -1721,8 +1727,10 @@ ide_xml_completion_provider_get_comment (IdeCompletionProvider *provider,
   gpointer data;
 
   type = ide_xml_proposal_get_completion_type (item);
+
   if (type == IDE_XML_COMPLETION_TYPE_UI_PROPERTY ||
-      type == IDE_XML_COMPLETION_TYPE_UI_SIGNAL)
+      type == IDE_XML_COMPLETION_TYPE_UI_SIGNAL ||
+      type == IDE_XML_COMPLETION_TYPE_UI_GTYPE)
     {
       data = ide_xml_proposal_get_data (item);
       if ((doc = ide_gi_base_get_doc ((IdeGiBase *)data)))
