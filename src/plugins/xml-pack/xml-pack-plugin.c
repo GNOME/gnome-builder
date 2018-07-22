@@ -20,6 +20,8 @@
 
 #include "ide-xml-completion-provider.h"
 #include "ide-xml-diagnostic-provider.h"
+#include "ide-xml-hover-provider.h"
+
 #include "ide-xml-highlighter.h"
 #include "ide-xml-indenter.h"
 #include "ide-xml-service.h"
@@ -30,6 +32,8 @@ ide_xml_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_XML_COMPLETION_PROVIDER);
   peas_object_module_register_extension_type (module, IDE_TYPE_DIAGNOSTIC_PROVIDER, IDE_TYPE_XML_DIAGNOSTIC_PROVIDER);
+  peas_object_module_register_extension_type (module, IDE_TYPE_HOVER_PROVIDER, IDE_TYPE_XML_HOVER_PROVIDER);
+
   peas_object_module_register_extension_type (module, IDE_TYPE_HIGHLIGHTER, IDE_TYPE_XML_HIGHLIGHTER);
   peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_XML_INDENTER);
   peas_object_module_register_extension_type (module, IDE_TYPE_SYMBOL_RESOLVER, IDE_TYPE_XML_SYMBOL_RESOLVER);
