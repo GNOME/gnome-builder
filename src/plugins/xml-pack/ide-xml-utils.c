@@ -354,3 +354,69 @@ ide_xml_utils_get_text_limit (const gchar *text,
   count = limit - text;
   return count;
 }
+
+static gboolean
+gi_class_walker (IdeGiBase             *object,
+                 const gchar           *name,
+                 IdeXmlUtilsWalkerFunc  func,
+                 GHashTable            *visited,
+                 gpointer               data)
+{
+  g_autofree gchar *qname = NULL;
+  IdeGiBlobType type;
+  guint16 n_interfaces;
+
+  qname = ide_gi_base_get_qualified_name (object);
+  if (g_hash_table_contains (visited, qname))
+    return FALSE;
+
+  if (func (object, name, data))
+    return TRUE;
+
+  g_hash_table_add (visited, g_steal_pointer (&qname));
+
+  type = ide_gi_base_get_object_type (object);
+  if (type == IDE_GI_BLOB_TYPE_CLASS)
+    {
+      g_autoptr(IdeGiClass) parent_class = ide_gi_class_get_parent ((IdeGiClass *)object);
+
+      if (parent_class != NULL && gi_class_walker ((IdeGiBase *)parent_class, name, func, visited, data))
+        return TRUE;
+
+      n_interfaces = ide_gi_class_get_n_interfaces ((IdeGiClass *)object);
+      for (guint i = 0; i < n_interfaces; i++)
+        {
+          g_autoptr(IdeGiInterface) interface = ide_gi_class_get_interface ((IdeGiClass *)object, i);
+
+          if (interface != NULL && gi_class_walker ((IdeGiBase *)interface, name, func, visited, data))
+            return TRUE;
+        }
+    }
+  else if (type == IDE_GI_BLOB_TYPE_INTERFACE)
+    {
+      n_interfaces = ide_gi_interface_get_n_prerequisites ((IdeGiInterface *)object);
+      for (guint i = 0; i < n_interfaces; i++)
+        {
+          g_autoptr(IdeGiBase) base = ide_gi_interface_get_prerequisite ((IdeGiInterface *)object, i);
+
+          if (base != NULL && gi_class_walker (base, name, func, visited, data))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+gboolean
+ide_xml_utils_gi_class_walker (IdeGiBase             *object,
+                               const gchar           *name,
+                               IdeXmlUtilsWalkerFunc  func,
+                               gpointer               data)
+{
+  g_autoptr(GHashTable) visited = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  g_assert (ide_gi_base_get_object_type (object) == IDE_GI_BLOB_TYPE_CLASS);
+  g_assert (func != NULL);
+
+  return gi_class_walker (object, name, func, visited, data);
+}

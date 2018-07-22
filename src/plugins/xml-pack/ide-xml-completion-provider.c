@@ -1040,86 +1040,42 @@ alphabetical_sort_func (gconstpointer a,
                              ide_xml_proposal_get_label (item_b));
 }
 
-static void
-append_object_properties (IdeGiBase       *object,
-                          const gchar     *word,
-                          IdeXmlPosition  *position,
-                          GList          **results)
+typedef struct
 {
-  IdeXmlPositionKind kind;
+  IdeXmlPositionKind  kind;
+  GList              *results;
+} WalkerState;
+
+static gboolean
+property_walker_func (IdeGiBase   *object,
+                      const gchar *name,
+                      gpointer     data)
+{
+  WalkerState *state = (WalkerState *)data;
   guint n_props;
 
-  g_assert (object != NULL);
-  g_assert (results != NULL);
-
   n_props = ide_gi_class_get_n_properties ((IdeGiClass *)object);
-  kind = ide_xml_position_get_kind (position);
   for (guint i = 0; i < n_props; i++)
     {
       g_autoptr(IdeGiProperty) prop = ide_gi_class_get_property ((IdeGiClass *)object, i);
-      const gchar *name = ide_gi_base_get_name ((IdeGiBase *)prop);
+      const gchar *found_name = ide_gi_base_get_name ((IdeGiBase *)prop);
 
-      if (dzl_str_empty0 (word) || g_str_has_prefix (name, word))
-        *results = g_list_prepend (*results, ide_xml_proposal_new (name,
-                                                                   NULL,
-                                                                   name,
-                                                                   word,
-                                                                   g_steal_pointer (&prop),
-                                                                   -1,
-                                                                   kind,
-                                                                   IDE_XML_COMPLETION_TYPE_UI_PROPERTY));
-    }
-}
-
-static void
-fetch_object_properties (IdeGiBase       *object,
-                         const gchar     *word,
-                         IdeXmlPosition  *position,
-                         GList          **results,
-                         GHashTable      *visited)
-{
-  g_autofree gchar *qname = NULL;
-  IdeGiBlobType type;
-  guint16 n_interfaces;
-
-  g_assert (object != NULL);
-  g_assert (results != NULL);
-
-  qname = ide_gi_base_get_qualified_name (object);
-  if (g_hash_table_contains (visited, qname))
-    return;
-
-  append_object_properties (object, word, position, results);
-  g_hash_table_add (visited, g_steal_pointer (&qname));
-
-  type = ide_gi_base_get_object_type (object);
-  if (type == IDE_GI_BLOB_TYPE_CLASS)
-    {
-      g_autoptr(IdeGiClass) parent_class = ide_gi_class_get_parent ((IdeGiClass *)object);
-
-      if ((parent_class ))
-        fetch_object_properties ((IdeGiBase *)parent_class, word, position, results, visited);
-
-      n_interfaces = ide_gi_class_get_n_interfaces ((IdeGiClass *)object);
-      for (guint i = 0; i < n_interfaces; i++)
+      if (dzl_str_empty0 (name) || g_str_has_prefix (found_name, name))
         {
-          g_autoptr(IdeGiInterface) interface = ide_gi_class_get_interface ((IdeGiClass *)object, i);
-
-          if (interface != NULL)
-            fetch_object_properties ((IdeGiBase *)interface, word, position, results, visited);
+          IdeXmlProposal *result = ide_xml_proposal_new (found_name,
+                                                         NULL,
+                                                         found_name,
+                                                         name,
+                                                         g_steal_pointer (&prop),
+                                                         -1,
+                                                         state->kind,
+                                                         IDE_XML_COMPLETION_TYPE_UI_PROPERTY);
+          state->results = g_list_prepend (state->results, result);
         }
     }
-  else if (type == IDE_GI_BLOB_TYPE_INTERFACE)
-    {
-      n_interfaces = ide_gi_interface_get_n_prerequisites ((IdeGiInterface *)object);
-      for (guint i = 0; i < n_interfaces; i++)
-        {
-          g_autoptr(IdeGiBase) base = ide_gi_interface_get_prerequisite ((IdeGiInterface *)object, i);
 
-          if (base != NULL)
-            fetch_object_properties (base, word, position, results, visited);
-        }
-    }
+  /* We want to get all the possible properties so just return FALSE to keep walking */
+  return FALSE;
 }
 
 static GList *
@@ -1150,103 +1106,54 @@ try_get_property_name_proposals (IdeXmlCompletionProvider *self,
   req = ide_gi_require_copy (ide_xml_analysis_get_require (analysis));
   version_req = ide_gi_version_get_highest_versions (version);
   ide_gi_require_merge (req, version_req, IDE_GI_REQUIRE_MERGE_STRATEGY_KEEP_SOURCE);
-
   detail = ide_xml_position_get_detail (position);
 
   if ((object = ide_gi_version_lookup_gtype (version, req, gtype_name)) &&
       ide_gi_base_get_object_type (object) == IDE_GI_BLOB_TYPE_CLASS)
     {
-      g_autoptr(GHashTable) visited = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-      fetch_object_properties (object, detail->value, position, &results, visited);
+      WalkerState *state = g_slice_new0 (WalkerState);
+
+      state->kind = ide_xml_position_get_kind (position);
+      state->results = results;
+
+      ide_xml_utils_gi_class_walker (object, detail->value, property_walker_func, state);
+      results = g_list_sort (state->results, alphabetical_sort_func);
+      g_slice_free (WalkerState, state);
     }
 
-  results = g_list_sort (results, alphabetical_sort_func);
   return results;
 }
 
-static void
-append_object_signals (IdeGiBase       *object,
-                       const gchar     *word,
-                       IdeXmlPosition  *position,
-                       GList          **results)
+static gboolean
+signal_walker_func (IdeGiBase   *object,
+                    const gchar *name,
+                    gpointer     data)
 {
-  IdeXmlPositionKind kind;
+  WalkerState *state = (WalkerState *)data;
   guint n_signals;
 
-  g_assert (object != NULL);
-  g_assert (results != NULL);
-
   n_signals = ide_gi_class_get_n_signals ((IdeGiClass *)object);
-  kind = ide_xml_position_get_kind (position);
   for (guint i = 0; i < n_signals; i++)
     {
       g_autoptr(IdeGiSignal) signal = ide_gi_class_get_signal ((IdeGiClass *)object, i);
-      const gchar *name = ide_gi_base_get_name ((IdeGiBase *)signal);
+      const gchar *found_name = ide_gi_base_get_name ((IdeGiBase *)signal);
 
-      if (dzl_str_empty0 (word) || g_str_has_prefix (name, word))
+      if (dzl_str_empty0 (name) || g_str_has_prefix (found_name, name))
         {
-          IdeXmlProposal *result = ide_xml_proposal_new (name,
+          IdeXmlProposal *result = ide_xml_proposal_new (found_name,
                                                          NULL,
+                                                         found_name,
                                                          name,
-                                                         word,
                                                          g_steal_pointer (&signal),
                                                          -1,
-                                                         kind,
+                                                         state->kind,
                                                          IDE_XML_COMPLETION_TYPE_UI_SIGNAL);
-          *results = g_list_prepend (*results, result);
+          state->results = g_list_prepend (state->results, result);
         }
     }
-}
 
-static void
-fetch_object_signals (IdeGiBase       *object,
-                      const gchar     *word,
-                      IdeXmlPosition  *position,
-                      GList          **results,
-                      GHashTable      *visited)
-{
-  g_autofree gchar *qname = NULL;
-  IdeGiBlobType type;
-  guint16 n_interfaces;
-
-  g_assert (object != NULL);
-  g_assert (results != NULL);
-
-  qname = ide_gi_base_get_qualified_name (object);
-  if (g_hash_table_contains (visited, qname))
-    return;
-
-  append_object_signals (object, word, position, results);
-  g_hash_table_add (visited, g_steal_pointer (&qname));
-
-  type = ide_gi_base_get_object_type (object);
-  if (type == IDE_GI_BLOB_TYPE_CLASS)
-    {
-      g_autoptr(IdeGiClass) parent_class = ide_gi_class_get_parent ((IdeGiClass *)object);
-
-      if ((parent_class ))
-        fetch_object_signals ((IdeGiBase *)parent_class, word, position, results, visited);
-
-      n_interfaces = ide_gi_class_get_n_interfaces ((IdeGiClass *)object);
-      for (guint i = 0; i < n_interfaces; i++)
-        {
-          g_autoptr(IdeGiInterface) interface = ide_gi_class_get_interface ((IdeGiClass *)object, i);
-
-          if (interface != NULL)
-            fetch_object_signals ((IdeGiBase *)interface, word, position, results, visited);
-        }
-    }
-  else if (type == IDE_GI_BLOB_TYPE_INTERFACE)
-    {
-      n_interfaces = ide_gi_interface_get_n_prerequisites ((IdeGiInterface *)object);
-      for (guint i = 0; i < n_interfaces; i++)
-        {
-          g_autoptr(IdeGiBase) base = ide_gi_interface_get_prerequisite ((IdeGiInterface *)object, i);
-
-          if (base != NULL)
-            fetch_object_signals (base, word, position, results, visited);
-        }
-    }
+  /* We want to get all the possible signals so just return FALSE to keep walking */
+  return FALSE;
 }
 
 static GList *
@@ -1283,11 +1190,16 @@ try_get_signal_name_proposals (IdeXmlCompletionProvider *self,
   if ((object = ide_gi_version_lookup_gtype (version, req, gtype_name)) &&
       ide_gi_base_get_object_type (object) == IDE_GI_BLOB_TYPE_CLASS)
     {
-      g_autoptr(GHashTable) visited = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-      fetch_object_signals (object, detail->value, position, &results, visited);
+      WalkerState *state = g_slice_new0 (WalkerState);
+
+      state->kind = ide_xml_position_get_kind (position);
+      state->results = results;
+
+      ide_xml_utils_gi_class_walker (object, detail->value, signal_walker_func, state);
+      results = g_list_sort (state->results, alphabetical_sort_func);
+      g_slice_free (WalkerState, state);
     }
 
-  results = g_list_sort (results, alphabetical_sort_func);
   return results;
 }
 
