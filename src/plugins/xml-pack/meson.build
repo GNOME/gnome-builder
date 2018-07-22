@@ -15,6 +15,7 @@ xml_pack_sources = [
   'ide-xml-diagnostic-provider.c',
   'ide-xml-hash-table.c',
   'ide-xml-highlighter.c',
+  'ide-xml-hover-provider.c',
   'ide-xml-indenter.c',
   'ide-xml-parser.c',
   'ide-xml-parser-generic.c',
