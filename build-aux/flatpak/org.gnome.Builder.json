@@ -154,6 +154,20 @@
             ]
         },
         {
+            "name" : "python3-parso",
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "pip3.5 install --prefix=/app parso-0.3.1-py2.py3-none-any.whl"
+            ],
+            "sources" : [
+                {
+                    "type" : "file",
+                    "url" : "https://files.pythonhosted.org/packages/09/51/9c48a46334be50c13d25a3afe55fa05c445699304c5ad32619de953a2305/parso-0.3.1-py2.py3-none-any.whl",
+                    "sha256" : "895c63e93b94ac1e1690f5fdd40b65f07c8171e3e53cbd7793b5b96c0e0a7f24"
+                }
+            ]
+        },
+        {
             "name" : "python3-jedi",
             "buildsystem" : "simple",
             "build-commands" : [
