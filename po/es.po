@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-21 19:55+0000\n"
-"PO-Revision-Date: 2018-05-28 17:52+0200\n"
+"POT-Creation-Date: 2018-07-23 10:47+0000\n"
+"PO-Revision-Date: 2018-07-23 13:07+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -3193,7 +3193,8 @@ msgstr "Limpiar"
 msgid "Export Bundle"
 msgstr "Exportar como paquete"
 
-#: src/libide/workbench/ide-omni-bar.ui:591 src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:591
+#: src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Construir proyecto"
 
@@ -3504,10 +3505,9 @@ msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Usar Clang para sugerir completado en los lenguajes C y C++"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:83
-#, fuzzy
 #| msgid "Configure Options"
 msgid "Clang Options"
-msgstr "Configurar opciones"
+msgstr "Opciones de Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:92
 msgid "Complete Parenthesis"
@@ -4065,7 +4065,7 @@ msgstr "MIT/X11"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:165
 msgid "Apache 2.0"
-msgstr ""
+msgstr "Apache 2.0"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:166
 msgid "GPLv2+"
@@ -4099,7 +4099,7 @@ msgstr "Usar Clang para sugerir completado en los lenguajes C y C++"
 
 #: src/plugins/devhelp/gbp-devhelp-hover-provider.c:128
 msgid "Devhelp"
-msgstr ""
+msgstr "Devhelp"
 
 #: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
 msgid "Select Documentation…"
@@ -4651,7 +4651,7 @@ msgstr "Calendario"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:107
 msgid "Boxes"
-msgstr ""
+msgstr "Cajas"
 
 #: src/plugins/notification/ide-notification-addin.c:98
 msgid "Build successful"
@@ -5110,27 +5110,24 @@ msgstr ""
 "archivo como adjunto en su informe de error o en la solicitud de soporte."
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
-#, fuzzy
 #| msgid "_Go to Definition"
 msgid "Definition"
-msgstr "_Ir a la definición"
+msgstr "Definición"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
 msgid "Canonincal"
 msgstr ""
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
-#, fuzzy
 #| msgid "Rename symbol"
 msgid "Unnamed Symbol"
-msgstr "Renombrar símbolo"
+msgstr "Símbolo sin nombre"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:162
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Symbols"
 msgid "Symbol"
-msgstr "Símbolos"
+msgstr "Símbolo"
 
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
 msgctxt "shortcut window"
@@ -5303,7 +5300,7 @@ msgstr ""
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:155
 msgid "Immutable"
-msgstr ""
+msgstr "Inmutable"
 
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
