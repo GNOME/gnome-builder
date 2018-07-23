@@ -155,17 +155,15 @@
         },
         {
             "name" : "python3-jedi",
-            "no-autogen" : true,
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "pip3.5 install --prefix=/app jedi-0.12.1-py2.py3-none-any.whl"
+            ],
             "sources" : [
                 {
-                    "type" : "archive",
+                    "type" : "file",
                     "url" : "https://files.pythonhosted.org/packages/3d/68/8bbf0ef969095a13ba0d4c77c1945bd86e9811960d052510551d29a2f23b/jedi-0.12.1-py2.py3-none-any.whl",
                     "sha256" : "c254b135fb39ad76e78d4d8f92765ebc9bf92cbc76f49e97ade1d5f5121e1f6f"
-                },
-                {
-                    "type" : "file",
-                    "path" : "setuptools-makefile",
-                    "dest-filename" : "Makefile"
                 }
             ]
         },
