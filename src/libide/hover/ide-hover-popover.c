@@ -52,7 +52,7 @@ struct _IdeHoverPopover
   GCancellable *cancellable;
 
   /*
-   * The position where the hover operation began.
+   * The position where the hover operation began, in buffer coordinates.
    */
   GdkRectangle hovered_at;
 
@@ -260,7 +260,7 @@ ide_hover_popover_class_init (IdeHoverPopoverClass *klass)
   properties [PROP_HOVERED_AT] =
     g_param_spec_boxed ("hovered-at",
                          "Hovered At",
-                         "The position that the hover originated",
+                         "The position that the hover originated in buffer coordinates",
                          GDK_TYPE_RECTANGLE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   
@@ -319,14 +319,12 @@ _ide_hover_popover_show (IdeHoverPopover *self)
       GTK_IS_TEXT_VIEW (view))
     {
       GtkTextIter iter;
-      gint x, y;
 
-      gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view),
-                                             GTK_TEXT_WINDOW_WIDGET,
-                                             self->hovered_at.x,
-                                             self->hovered_at.y,
-                                             &x, &y);
-      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view), &iter, x, y);
+      /* hovered_at is in buffer coordinates */
+      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view),
+                                          &iter,
+                                          self->hovered_at.x,
+                                          self->hovered_at.y);
 
       _ide_hover_context_query_async (self->context,
                                       &iter,
