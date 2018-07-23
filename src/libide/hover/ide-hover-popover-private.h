@@ -29,10 +29,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeHoverPopover, ide_hover_popover, IDE, HOVER_POPOVER, GtkPopover)
 
-IdeHoverContext *_ide_hover_popover_get_context  (IdeHoverPopover  *self);
-void             _ide_hover_popover_add_provider (IdeHoverPopover  *self,
-                                                  IdeHoverProvider *provider);
-void             _ide_hover_popover_show         (IdeHoverPopover  *self);
-void             _ide_hover_popover_hide         (IdeHoverPopover  *self);
+IdeHoverContext *_ide_hover_popover_get_context    (IdeHoverPopover    *self);
+void             _ide_hover_popover_add_provider   (IdeHoverPopover    *self,
+                                                    IdeHoverProvider   *provider);
+void             _ide_hover_popover_show           (IdeHoverPopover    *self);
+void             _ide_hover_popover_hide           (IdeHoverPopover    *self);
+void             _ide_hover_popover_set_hovered_at (IdeHoverPopover    *self,
+                                                    const GdkRectangle *hovered_at);
 
 G_END_DECLS

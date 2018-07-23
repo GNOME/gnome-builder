@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "ide-hover-popover"
 
 #include <dazzle.h>
+#include <string.h>
 
 #include "hover/ide-hover-context-private.h"
 #include "hover/ide-hover-popover-private.h"
@@ -51,6 +52,11 @@ struct _IdeHoverPopover
   GCancellable *cancellable;
 
   /*
+   * The position where the hover operation began.
+   */
+  GdkRectangle hovered_at;
+
+  /*
    * If we've had any providers added, so that we can short-circuit
    * in that case without having to display the popover.
    */
@@ -60,6 +66,7 @@ struct _IdeHoverPopover
 enum {
   PROP_0,
   PROP_CONTEXT,
+  PROP_HOVERED_AT,
   N_PROPS
 };
 
@@ -164,6 +171,18 @@ ide_hover_popover_get_preferred_height (GtkWidget *widget,
     *nat_height = *min_height;
 }
 
+void
+_ide_hover_popover_set_hovered_at (IdeHoverPopover    *self,
+                                   const GdkRectangle *hovered_at)
+{
+  g_assert (IDE_IS_HOVER_POPOVER (self));
+
+  if (hovered_at != NULL)
+    self->hovered_at = *hovered_at;
+  else
+    memset (&self->hovered_at, 0, sizeof self->hovered_at);
+}
+
 static void
 ide_hover_popover_destroy (GtkWidget *widget)
 {
@@ -191,6 +210,29 @@ ide_hover_popover_get_property (GObject    *object,
       g_value_set_object (value, _ide_hover_popover_get_context (self));
       break;
 
+    case PROP_HOVERED_AT:
+      g_value_set_boxed (value, &self->hovered_at);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_hover_popover_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  IdeHoverPopover *self = IDE_HOVER_POPOVER (object);
+
+  switch (prop_id)
+    {
+    case PROP_HOVERED_AT:
+      _ide_hover_popover_set_hovered_at (self, g_value_get_boxed (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -203,6 +245,7 @@ ide_hover_popover_class_init (IdeHoverPopoverClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->get_property = ide_hover_popover_get_property;
+  object_class->set_property = ide_hover_popover_set_property;
 
   widget_class->destroy = ide_hover_popover_destroy;
   widget_class->get_preferred_height = ide_hover_popover_get_preferred_height;
@@ -213,6 +256,13 @@ ide_hover_popover_class_init (IdeHoverPopoverClass *klass)
                          "The hover context to display to the user",
                          IDE_TYPE_HOVER_CONTEXT,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_HOVERED_AT] =
+    g_param_spec_boxed ("hovered-at",
+                         "Hovered At",
+                         "The position that the hover originated",
+                         GDK_TYPE_RECTANGLE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -258,7 +308,6 @@ _ide_hover_popover_add_provider (IdeHoverPopover  *self,
 void
 _ide_hover_popover_show (IdeHoverPopover *self)
 {
-  GdkRectangle rect;
   GtkWidget *view;
 
   g_return_if_fail (IDE_IS_HOVER_POPOVER (self));
@@ -267,19 +316,16 @@ _ide_hover_popover_show (IdeHoverPopover *self)
   if (self->has_providers &&
       !g_cancellable_is_cancelled (self->cancellable) &&
       (view = gtk_popover_get_relative_to (GTK_POPOVER (self))) &&
-      GTK_IS_TEXT_VIEW (view) &&
-      gtk_popover_get_pointing_to (GTK_POPOVER (self), &rect))
+      GTK_IS_TEXT_VIEW (view))
     {
       GtkTextIter iter;
       gint x, y;
 
-      /* Get the center of the box */
-      x = rect.x + (rect.width / 2);
-      y = rect.y + (rect.height / 2);
-
       gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view),
                                              GTK_TEXT_WINDOW_WIDGET,
-                                             x, y, &x, &y);
+                                             self->hovered_at.x,
+                                             self->hovered_at.y,
+                                             &x, &y);
       gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view), &iter, x, y);
 
       _ide_hover_context_query_async (self->context,

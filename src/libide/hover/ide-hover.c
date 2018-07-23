@@ -173,7 +173,8 @@ ide_hover_popover_destroy_cb (IdeHover        *self,
 static gboolean
 ide_hover_get_bounds (IdeHover    *self,
                       GtkTextIter *begin,
-                      GtkTextIter *end)
+                      GtkTextIter *end,
+                      GtkTextIter *hover)
 {
   GtkTextView *view;
   GtkTextIter iter;
@@ -182,13 +183,14 @@ ide_hover_get_bounds (IdeHover    *self,
   g_assert (IDE_IS_HOVER (self));
   g_assert (begin != NULL);
   g_assert (end != NULL);
+  g_assert (hover != NULL);
+
+  memset (begin, 0, sizeof *begin);
+  memset (end, 0, sizeof *end);
+  memset (hover, 0, sizeof *hover);
 
   if (!(view = dzl_signal_group_get_target (self->signals)))
-    {
-      memset (begin, 0, sizeof *begin);
-      memset (end, 0, sizeof *end);
-      return FALSE;
-    }
+    return FALSE;
 
   g_assert (GTK_IS_TEXT_VIEW (view));
 
@@ -200,6 +202,8 @@ ide_hover_get_bounds (IdeHover    *self,
 
   if (!gtk_text_view_get_iter_at_location (view, &iter, x, y))
     return FALSE;
+
+  *hover = iter;
 
   if (!_ide_source_iter_inside_word (&iter))
     {
@@ -231,8 +235,10 @@ ide_hover_motion_timeout_cb (gpointer data)
   GdkRectangle rect;
   GdkRectangle begin_rect;
   GdkRectangle end_rect;
+  GdkRectangle hover_rect;
   GtkTextIter begin;
   GtkTextIter end;
+  GtkTextIter hover;
 
   g_assert (IDE_IS_HOVER (self));
 
@@ -246,7 +252,7 @@ ide_hover_motion_timeout_cb (gpointer data)
     return G_SOURCE_REMOVE;
 
   /* Make sure we're over text */
-  if (!ide_hover_get_bounds (self, &begin, &end))
+  if (!ide_hover_get_bounds (self, &begin, &end, &hover))
     return G_SOURCE_REMOVE;
 
   if (self->popover == NULL)
@@ -290,11 +296,14 @@ ide_hover_motion_timeout_cb (gpointer data)
   self->state = IDE_HOVER_STATE_DISPLAY;
   gtk_text_view_get_iter_location (GTK_TEXT_VIEW (view), &begin, &begin_rect);
   gtk_text_view_get_iter_location (GTK_TEXT_VIEW (view), &end, &end_rect);
+  gtk_text_view_get_iter_location (GTK_TEXT_VIEW (view), &hover, &hover_rect);
   gdk_rectangle_union (&begin_rect, &end_rect, &rect);
 
   gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (view),
                                          GTK_TEXT_WINDOW_WIDGET,
                                          rect.x, rect.y, &rect.x, &rect.y);
+
+  _ide_hover_popover_set_hovered_at (self->popover, &hover_rect);
 
   if (gtk_text_iter_equal (&begin, &end) &&
       gtk_text_iter_starts_line (&begin))
