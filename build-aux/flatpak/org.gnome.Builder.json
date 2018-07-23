@@ -474,7 +474,7 @@
         {
             "name" : "uncrustify",
             "buildsystem" : "cmake-ninja",
-            "config-opts": [
+            "config-opts" : [
                 "-DCMAKE_BUILD_TYPE=Release"
             ],
             "builddir" : true,
