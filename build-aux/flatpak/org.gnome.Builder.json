@@ -197,8 +197,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://pypi.python.org/packages/20/b3/9f245de14b7696e2d2a386c0b09032a2ff6625270761d6543827e667d8de/lxml-3.8.0.tar.gz",
-                    "sha256" : "736f72be15caad8116891eb6aa4a078b590d231fdc63818c40c21624ac71db96"
+                    "url" : "https://files.pythonhosted.org/packages/54/a6/43be8cf1cc23e3fa208cab04ba2f9c3b7af0233aab32af6b5089122b44cd/lxml-4.2.3.tar.gz",
+                    "sha256" : "622f7e40faef13d232fb52003661f2764ce6cdef3edb0a59af7c1559e4cc36d1"
                 },
                 {
                     "type" : "file",
@@ -229,13 +229,13 @@
             "name" : "python3-six",
             "buildsystem" : "simple",
             "build-commands" : [
-                "pip3.5 install --prefix=/app six-1.10.0-py2.py3-none-any.whl"
+                "pip3.5 install --prefix=/app six-1.11.0-py2.py3-none-any.whl"
             ],
             "sources" : [
                 {
                     "type" : "file",
-                    "url" : "https://pypi.python.org/packages/c8/0a/b6723e1bc4c516cb687841499455a8505b44607ab535be01091c0f24f079/six-1.10.0-py2.py3-none-any.whl",
-                    "sha256" : "0ff78c403d9bccf5a425a6d31a12aa6b47f1c21ca4dc2573a7e2f32a97335eb1"
+                    "url" : "https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl",
+                    "sha256" : "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"
                 }
             ]
         },
@@ -730,8 +730,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/ostreedev/ostree/releases/download/v2018.5/libostree-2018.5.tar.xz",
-                    "sha256" : "ad0f5a0e7a7f22f87c72b318b2cfdbe8cf908a1a469ec94eb72984bbb3690261"
+                    "url" : "https://github.com/ostreedev/ostree/releases/download/v2018.7/libostree-2018.7.tar.xz",
+                    "sha256" : "483e359fd934f3fb1abde2cd8ff9c5bccb97e2a37d52ed8bedfa9ab1290883d9"
                 }
             ]
         },
@@ -760,8 +760,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak/releases/download/0.11.8.1/flatpak-0.11.8.1.tar.xz",
-                    "sha256" : "9b2356a105da2d0a0332150f5a242a78ca3957f991db5d785c256fdad00cd06a"
+                    "url" : "https://github.com/flatpak/flatpak/releases/download/0.99.3/flatpak-0.99.3.tar.xz",
+                    "sha256" : "d3ab44c8174f9c2b69b09ac630d5d1987bfe529226d7eca6ac1c7d8f438fa671"
                 }
             ]
         },
@@ -770,8 +770,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/0.10.10/flatpak-builder-0.10.10.tar.xz",
-                    "sha256" : "c299985b230cdb052c6b8f8e912fc7e735b1a3868b2e008c49456ee16a160c2c"
+                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/0.99.3/flatpak-builder-0.99.3.tar.xz",
+                    "sha256" : "93de343e09cc1e929234623e1b241e3a4330e76e7c18cccd3543f13d3ccb036b"
                 }
             ]
         },
