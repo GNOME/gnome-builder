@@ -90,7 +90,28 @@ struct _IdeHover
   guint dismiss_source;
 };
 
+static gboolean ide_hover_dismiss_cb (gpointer data);
+
 G_DEFINE_TYPE (IdeHover, ide_hover, G_TYPE_OBJECT)
+
+static void
+ide_hover_queue_dismiss (IdeHover *self)
+{
+  g_assert (IDE_IS_HOVER (self));
+
+  if (self->dismiss_source)
+    g_source_remove (self->dismiss_source);
+
+  /*
+   * Give ourselves just enough time to get the crossing event
+   * into the popover before we try to dismiss the popover.
+   */
+  self->dismiss_source =
+    gdk_threads_add_timeout_full (G_PRIORITY_HIGH,
+                                  1,
+                                  ide_hover_dismiss_cb,
+                                  self, NULL);
+}
 
 static void
 ide_hover_popover_closed_cb (IdeHover        *self,
@@ -132,12 +153,33 @@ ide_hover_popover_leave_notify_event_cb (IdeHover               *self,
                                          const GdkEventCrossing *event,
                                          IdeHoverPopover        *popover)
 {
+  GtkWidget *child;
+
   g_assert (IDE_IS_HOVER (self));
   g_assert (event != NULL);
   g_assert (IDE_IS_HOVER_POPOVER (popover));
 
   if (self->state == IDE_HOVER_STATE_IN_POPOVER)
     self->state = IDE_HOVER_STATE_DISPLAY;
+
+  /* If the window that we are crossing into is not a descendant of our
+   * popover window, then we want to dismiss. This is rather annoying to
+   * track and suffers the same issue as with GtkNotebook tabs containing
+   * buttons (where it's possible to break the prelight state tracking).
+   *
+   * In future Gtk releases, we may be able to use GtkEventControllerMotion.
+   */
+
+  if ((child = gtk_bin_get_child (GTK_BIN (popover))))
+    {
+      GdkRectangle point = { event->x, event->y, 1, 1 };
+      GtkAllocation alloc;
+
+      gtk_widget_get_allocation (child, &alloc);
+
+      if (!dzl_cairo_rectangle_contains_rectangle (&alloc, &point))
+        ide_hover_queue_dismiss (self);
+    }
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -467,18 +509,7 @@ ide_hover_leave_notify_event_cb (IdeHover               *self,
   if (should_ignore_event (view, event->window))
     return GDK_EVENT_PROPAGATE;
 
-  if (self->dismiss_source)
-    g_source_remove (self->dismiss_source);
-
-  /*
-   * Give ourselves just enough time to get the crossing event
-   * into the popover before we try to dismiss the popover.
-   */
-  self->dismiss_source =
-    gdk_threads_add_timeout_full (G_PRIORITY_HIGH,
-                                  1,
-                                  ide_hover_dismiss_cb,
-                                  self, NULL);
+  ide_hover_queue_dismiss (self);
 
   return GDK_EVENT_PROPAGATE;
 }
