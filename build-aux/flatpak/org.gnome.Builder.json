@@ -38,7 +38,8 @@
         "--filesystem=/etc/ca-certificates:ro",
         "--filesystem=~/.local/share/flatpak",
         "--filesystem=xdg-data/meson",
-        "--filesystem=/var/lib/flatpak"
+        "--filesystem=/var/lib/flatpak",
+        "--env=G_SLICE=always-malloc"
     ],
     "x-run-args" : [
         "--standalone",
