@@ -295,6 +295,9 @@ ide_application_load_plugins (IdeApplication *self)
       GSettings *settings;
       const gchar *module_name;
 
+      if (peas_plugin_info_is_loaded (plugin_info))
+        continue;
+
       module_name = peas_plugin_info_get_module_name (plugin_info);
       settings = _ide_application_plugin_get_settings (self, module_name);
 
