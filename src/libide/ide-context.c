@@ -52,6 +52,7 @@
 #include "runtimes/ide-runtime-manager.h"
 #include "search/ide-search-engine.h"
 #include "search/ide-search-provider.h"
+#include "session/ide-session.h"
 #include "snippets/ide-snippet-storage.h"
 #include "testing/ide-test-manager.h"
 #include "toolchain/ide-toolchain-manager.h"
@@ -122,6 +123,7 @@ struct _IdeContext
   IdeRuntimeManager        *runtime_manager;
   IdeToolchainManager      *toolchain_manager;
   IdeSearchEngine          *search_engine;
+  IdeSession               *session;
   IdeSnippetStorage        *snippets;
   IdeTestManager           *test_manager;
   IdeProject               *project;
@@ -594,6 +596,7 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
   g_clear_object (&self->runtime_manager);
+  g_clear_object (&self->session);
   g_clear_object (&self->toolchain_manager);
   g_clear_object (&self->test_manager);
   g_clear_object (&self->unsaved_files);
@@ -908,6 +911,10 @@ ide_context_init (IdeContext *self)
                                       NULL);
 
   self->snippets = ide_snippet_storage_new ();
+
+  self->session = g_object_new (IDE_TYPE_SESSION,
+                                "context", self,
+                                NULL);
 
   IDE_EXIT;
 }
@@ -1295,6 +1302,46 @@ ide_context_init_tests (gpointer             source_object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_init_session_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  IdeSession *session = (IdeSession *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ide_session_restore_finish (session, result, &error))
+    g_warning ("Failed to restore session: %s", error->message);
+
+  ide_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_init_session (gpointer             source_object,
+                          GCancellable        *cancellable,
+                          GAsyncReadyCallback  callback,
+                          gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(IdeTask) task = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_context_init_session);
+
+  ide_session_restore_async (self->session,
+                             cancellable,
+                             ide_context_init_session_cb,
+                             g_steal_pointer (&task));
 }
 
 static void
@@ -1821,6 +1868,7 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_run_manager,
                         ide_context_init_diagnostics_manager,
                         ide_context_init_tests,
+                        ide_context_init_session,
                         ide_context_init_loaded,
                         NULL);
 }
@@ -1987,6 +2035,52 @@ ide_context_unload_configuration_manager (gpointer             source_object,
 }
 
 static void
+ide_context_unload_session_save_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeSession *session = (IdeSession *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  /* unfortunate if this happens, but not much we can do */
+  if (!ide_session_save_finish (session, result, &error))
+    g_warning ("Failed to save session: %s", error->message);
+
+  ide_task_return_boolean (task, TRUE);
+}
+
+static void
+ide_context_unload_session (gpointer             source_object,
+                            GCancellable        *cancellable,
+                            GAsyncReadyCallback  callback,
+                            gpointer             user_data)
+{
+  IdeContext *self = source_object;
+  g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_SESSION (self->session));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_context_unload_session);
+
+  ide_session_save_async (self->session,
+                          cancellable,
+                          ide_context_unload_session_save_cb,
+                          g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static void
 ide_context_unload__unsaved_files_save_cb (GObject      *object,
                                            GAsyncResult *result,
                                            gpointer      user_data)
@@ -2086,6 +2180,7 @@ ide_context_do_unload_locked (IdeContext *self)
                         ide_task_get_cancellable (task),
                         ide_context_unload_cb,
                         g_object_ref (task),
+                        ide_context_unload_session,
                         ide_context_unload_configuration_manager,
                         ide_context_unload_buffer_manager,
                         ide_context_unload_unsaved_files,

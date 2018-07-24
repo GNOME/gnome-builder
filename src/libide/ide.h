@@ -157,6 +157,8 @@ G_BEGIN_DECLS
 #include "search/ide-search-reducer.h"
 #include "search/ide-search-result.h"
 #include "search/ide-tagged-entry.h"
+#include "session/ide-session.h"
+#include "session/ide-session-addin.h"
 #include "snippets/ide-snippet.h"
 #include "snippets/ide-snippet-chunk.h"
 #include "snippets/ide-snippet-context.h"
