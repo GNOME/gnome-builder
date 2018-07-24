@@ -680,7 +680,7 @@ get_entries_worker (IdeTask      *task,
   result->entries = g_steal_pointer (&entries);
   result->has_default = has_default;
 
-  ide_task_return_pointer (task, result, NULL);
+  ide_task_return_pointer (task, result, gb_beautifier_entries_result_free);
 }
 
 void
