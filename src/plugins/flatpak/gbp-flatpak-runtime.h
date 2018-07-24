@@ -27,9 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTIME, IdeRuntime)
 
-/* TODO: Get rid of this with custom installation */
-#define FLATPAK_REPO_NAME "gnome-builder-builds"
-
 GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (IdeContext           *context,
                                                        FlatpakInstalledRef  *ref,
                                                        GCancellable         *cancellable,

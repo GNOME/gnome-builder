@@ -307,34 +307,6 @@ locate_sdk_free (LocateSdk *locate)
   g_slice_free (LocateSdk, locate);
 }
 
-static gboolean
-gbp_flatpak_application_addin_remove_old_repo (GbpFlatpakApplicationAddin  *self,
-                                               GCancellable                *cancellable,
-                                               GError                     **error)
-{
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) process = NULL;
-  gboolean ret = FALSE;
-
-  IDE_ENTRY;
-
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_SILENCE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
-
-  ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "remote-delete");
-  ide_subprocess_launcher_push_argv (launcher, "--user");
-  ide_subprocess_launcher_push_argv (launcher, "--force");
-  ide_subprocess_launcher_push_argv (launcher, FLATPAK_REPO_NAME);
-
-  process = ide_subprocess_launcher_spawn (launcher, cancellable, error);
-
-  if (process != NULL)
-    ret = ide_subprocess_wait (process, cancellable, error);
-
-  IDE_RETURN (ret);
-}
-
 static void
 gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self)
 {
@@ -422,7 +394,6 @@ gbp_flatpak_application_addin_load (IdeApplicationAddin *addin,
 
   instance = self;
 
-  gbp_flatpak_application_addin_remove_old_repo (self, NULL, NULL);
   gbp_flatpak_application_addin_reload (self);
 
   /*
@@ -455,7 +426,6 @@ gbp_flatpak_application_addin_unload (IdeApplicationAddin *addin,
   instance = NULL;
 
   dzl_clear_pointer (&self->installations, g_ptr_array_unref);
-  gbp_flatpak_application_addin_remove_old_repo (self, NULL, NULL);
 
   IDE_EXIT;
 }
