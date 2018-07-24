@@ -672,10 +672,17 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_autoptr(GError) error = NULL;
   IdeConfiguration *config;
   IdeContext *context;
-  IdeRuntime *runtime;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  config = ide_build_pipeline_get_configuration (pipeline);
+
+  if (!GBP_IS_FLATPAK_MANIFEST (config))
+    {
+      g_message ("Not using flatpak manifest, refusing to add flatpak build pipeline stages");
+      return;
+    }
 
   sniff_flatpak_builder_version (self);
 
@@ -695,20 +702,6 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
                                           ide_get_program_name (),
                                           "flatpak-builder",
                                           NULL);
-    }
-
-  config = ide_build_pipeline_get_configuration (pipeline);
-
-  /* TODO: Once we have GbpFlatpakConfiguration, we can check for
-   *       that (and it should only allow for valid flatpak runtimes).
-   */
-
-  runtime = ide_configuration_get_runtime (config);
-
-  if (!GBP_IS_FLATPAK_RUNTIME (runtime))
-    {
-      g_message ("Configuration is not using flatpak, ignoring pipeline");
-      return;
     }
 
   /*
