@@ -255,10 +255,10 @@ create_document_row (gpointer item,
                                                       NULL),
                                "visible", TRUE,
                                NULL);
-  g_signal_connect (close_button,
-                    "clicked",
-                    G_CALLBACK (close_view_cb),
-                    self);
+  g_signal_connect_object (close_button,
+                           "clicked",
+                           G_CALLBACK (close_view_cb),
+                           self, 0);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (close_button), "image-button");
 
   g_object_bind_property (item, "icon-name", image, "icon-name", G_BINDING_SYNC_CREATE);
@@ -695,10 +695,10 @@ ide_layout_stack_header_init (IdeLayoutStackHeader *self)
    * hide the popover.
    */
 
-  g_signal_connect (self->title_list_box,
-                    "row-activated",
-                    G_CALLBACK (ide_layout_stack_header_view_row_activated),
-                    self);
+  g_signal_connect_object (self->title_list_box,
+                           "row-activated",
+                           G_CALLBACK (ide_layout_stack_header_view_row_activated),
+                           self, 0);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_container_set_reallocate_redraws (GTK_CONTAINER (self), TRUE);
