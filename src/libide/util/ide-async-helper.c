@@ -90,7 +90,7 @@ ide_async_helper_run (gpointer             source_object,
   va_end (args);
 
   task = ide_task_new (source_object, cancellable, callback, user_data);
-  ide_task_set_task_data (task, funcs, (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, funcs, g_ptr_array_unref);
 
   step1 (source_object,
          cancellable,

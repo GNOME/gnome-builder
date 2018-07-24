@@ -277,7 +277,7 @@ gbp_spell_dict_get_words_async (GbpSpellDict        *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_spell_dict_get_words_async);
-  ide_task_set_task_data (task, state, (GDestroyNotify)task_state_free);
+  ide_task_set_task_data (task, state, task_state_free);
 
   dict_filename = g_strconcat (gspell_language_get_code (self->language), ".dic", NULL);
   path = g_build_filename (g_get_user_config_dir (), "enchant", dict_filename, NULL);

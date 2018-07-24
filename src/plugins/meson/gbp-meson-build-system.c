@@ -611,7 +611,7 @@ gbp_meson_build_system_get_build_flags_for_files_async (IdeBuildSystem      *bui
   copy = g_ptr_array_new_with_free_func (g_object_unref);
   for (guint i = 0; i < files->len; i++)
     g_ptr_array_add (copy, g_object_ref (g_ptr_array_index (files, i)));
-  ide_task_set_task_data (task, g_steal_pointer (&copy), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&copy), g_ptr_array_unref);
 
   gbp_meson_build_system_load_commands_async (self,
                                               cancellable,

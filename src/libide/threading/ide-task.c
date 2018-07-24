@@ -1792,9 +1792,9 @@ ide_task_set_task_data_cb (gpointer data)
 }
 
 void
-ide_task_set_task_data (IdeTask        *self,
-                        gpointer        task_data,
-                        GDestroyNotify  task_data_destroy)
+(ide_task_set_task_data) (IdeTask        *self,
+                          gpointer        task_data,
+                          GDestroyNotify  task_data_destroy)
 {
   IdeTaskPrivate *priv = ide_task_get_instance_private (self);
   g_autoptr(IdeTaskData) old_task_data = NULL;

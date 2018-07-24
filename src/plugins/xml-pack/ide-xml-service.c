@@ -1026,7 +1026,7 @@ ide_xml_service_get_position_from_cursor_async (IdeXmlService       *self,
   state->line = line;
   state->line_offset = line_offset;
 
-  ide_task_set_task_data (task, state, (GDestroyNotify)position_state_free);
+  ide_task_set_task_data (task, state, position_state_free);
 
   ide_xml_service_get_analysis_async (self,
                                       ifile,

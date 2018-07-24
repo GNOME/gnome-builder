@@ -480,7 +480,7 @@ gbp_flatpak_runtime_provider_install_async (IdeRuntimeProvider  *provider,
   install->arch = g_steal_pointer (&arch);
   install->branch = g_steal_pointer (&branch);
 
-  ide_task_set_task_data (task, install, (GDestroyNotify)install_runtime_free);
+  ide_task_set_task_data (task, install, install_runtime_free);
 
   gbp_flatpak_application_addin_locate_sdk_async (gbp_flatpak_application_addin_get_default (),
                                                   install->id,

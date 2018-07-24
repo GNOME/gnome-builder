@@ -251,7 +251,7 @@ ide_ctags_results_populate_async (IdeCtagsResults     *self,
   for (guint i = 0; i < self->indexes->len; i++)
     g_ptr_array_add (p->indexes, g_object_ref (g_ptr_array_index (self->indexes, i)));
 
-  ide_task_set_task_data (task, p, (GDestroyNotify)populate_free);
+  ide_task_set_task_data (task, p, populate_free);
   ide_task_run_in_thread (task, ide_ctags_results_populate_worker);
 }
 

@@ -126,7 +126,7 @@ load_find_files_cb (GObject      *object,
       return;
     }
 
-  ide_task_set_task_data (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&ret), g_ptr_array_unref);
   ide_task_run_in_thread (task, gbp_cmake_toolchain_provider_load_worker);
 }
 

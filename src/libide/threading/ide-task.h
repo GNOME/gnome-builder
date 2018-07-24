@@ -177,6 +177,14 @@ void          ide_dump_tasks                     (void);
     ide_task_set_name (__ide_task, g_intern_static_string (G_STRLOC));             \
     __ide_task;                                                                    \
   })
+# define ide_task_set_task_data(t,d,n)                        \
+  G_STMT_START {                                              \
+    __typeof__((d)) __task_data = (d);                        \
+    (ide_task_set_task_data) ((t),                            \
+                              __task_data,                    \
+                              0 ? (((n) (__task_data)), NULL) \
+                                : ((GDestroyNotify)(n)));     \
+  } G_STMT_END
 #endif
 
 G_END_DECLS

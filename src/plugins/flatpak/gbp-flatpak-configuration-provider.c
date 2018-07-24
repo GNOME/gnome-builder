@@ -122,7 +122,7 @@ gbp_flatpak_configuration_provider_save_async (IdeConfigurationProvider *provide
         g_ptr_array_add (ar, g_object_ref (manifest));
     }
 
-  ide_task_set_task_data (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&ar), g_ptr_array_unref);
 
   manifest_save_tick (task);
 
@@ -363,7 +363,7 @@ load_find_files_cb (GObject      *object,
       return;
     }
 
-  ide_task_set_task_data (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&ret), g_ptr_array_unref);
   ide_task_run_in_thread (task, gbp_flatpak_configuration_provider_load_worker);
 }
 

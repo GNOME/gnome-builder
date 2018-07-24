@@ -672,7 +672,7 @@ gbp_todo_model_mine_async (GbpTodoModel        *self,
   m->file = g_object_ref (file);
   m->workdir = g_object_ref (workdir);
   m->use_git_grep = is_typed (self->vcs, "IdeGitVcs");
-  ide_task_set_task_data (task, m, (GDestroyNotify)mine_free);
+  ide_task_set_task_data (task, m, mine_free);
 
   ide_task_run_in_thread (task, gbp_todo_model_mine_worker);
 }

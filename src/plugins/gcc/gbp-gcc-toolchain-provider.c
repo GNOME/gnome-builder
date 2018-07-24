@@ -253,7 +253,7 @@ gbp_gcc_toolchain_provider_search_init (GbpGccToolchainProvider *self,
   fs = g_slice_new0 (FileSearching);
   fs->found_files = g_ptr_array_new_with_free_func (g_object_unref);
   fs->folders = folders;
-  ide_task_set_task_data (task, fs, (GDestroyNotify)file_searching_free);
+  ide_task_set_task_data (task, fs, file_searching_free);
 
   /* GCC */
   ide_g_file_find_async (folders->data,

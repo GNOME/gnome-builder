@@ -145,7 +145,7 @@ ide_clang_code_index_entries_next_entries_async (IdeCodeIndexEntries *entries,
   ide_task_set_source_tag (task, ide_clang_code_index_entries_next_entries_async);
   ide_task_set_priority (task, G_PRIORITY_LOW + 1000);
   ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
-  ide_task_set_task_data (task, g_variant_ref (self->entries), (GDestroyNotify)g_variant_unref);
+  ide_task_set_task_data (task, g_variant_ref (self->entries), g_variant_unref);
 
   if (self->has_run)
     ide_task_return_pointer (task,

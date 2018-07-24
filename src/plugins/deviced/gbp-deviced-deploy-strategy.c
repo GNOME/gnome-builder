@@ -341,7 +341,7 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
   state->progress = progress;
   state->progress_data = progress_data;
   state->progress_data_destroy = progress_data_destroy;
-  ide_task_set_task_data (task, state, (GDestroyNotify)deploy_state_free);
+  ide_task_set_task_data (task, state, deploy_state_free);
 
   /*
    * First make sure we've built up to the point where we have a

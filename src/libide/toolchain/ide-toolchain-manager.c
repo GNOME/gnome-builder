@@ -335,7 +335,7 @@ ide_toolchain_manager_init_async (GAsyncInitable      *initable,
                               providers);
   ide_task_set_task_data (task,
                           g_ptr_array_ref (providers),
-                          (GDestroyNotify)g_ptr_array_unref);
+                          g_ptr_array_unref);
 
   default_toolchain = ide_simple_toolchain_new (context, "default", _("Default (Host operating system)"));
   idx = self->toolchains->len;

@@ -193,7 +193,7 @@ gbp_devhelp_hover_provider_hover_async (IdeHoverProvider    *provider,
   h = g_slice_new0 (Hover);
   h->context = g_object_ref (context);
   h->word = _ide_text_iter_current_symbol (iter, NULL);
-  ide_task_set_task_data (task, h, (GDestroyNotify)hover_free);
+  ide_task_set_task_data (task, h, hover_free);
 
   buffer = IDE_BUFFER (gtk_text_iter_get_buffer (iter));
   g_assert (IDE_IS_BUFFER (buffer));

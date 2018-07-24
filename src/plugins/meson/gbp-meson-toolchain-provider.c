@@ -152,7 +152,7 @@ meson_toolchain_provider_search_finish (FileSearching *file_searching,
       return;
     }
 
-  ide_task_set_task_data (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&ret), g_ptr_array_unref);
   ide_task_run_in_thread (task, gbp_meson_toolchain_provider_load_worker);
 }
 

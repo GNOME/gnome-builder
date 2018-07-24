@@ -531,7 +531,7 @@ ide_xml_tree_builder_build_tree_async (IdeXmlTreeBuilder   *self,
 
   ide_task_set_task_data (task,
                           g_steal_pointer (&state),
-                          (GDestroyNotify)tree_builder_state_free);
+                          tree_builder_state_free);
 
   ide_xml_parser_get_analysis_async (self->parser,
                                      file,

@@ -512,7 +512,7 @@ set_in_thread_worker (IdeTask      *task,
   /* its invalid to call set_task_data() after return, but okay here.
    * this obviously invalidates @task_data.
    */
-  ide_task_set_task_data (task, GINT_TO_POINTER (0x1234), NULL);
+  ide_task_set_task_data (task, GINT_TO_POINTER (0x1234), (GDestroyNotify)NULL);
   ide_task_return_boolean (task, TRUE);
 }
 

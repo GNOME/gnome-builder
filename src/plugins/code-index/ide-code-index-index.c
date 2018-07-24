@@ -447,7 +447,7 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
       data->query = g_strconcat (prefix, "\x1F", str[1], NULL);
     }
 
-  ide_task_set_task_data (task, data, (GDestroyNotify)populate_task_data_free);
+  ide_task_set_task_data (task, data, populate_task_data_free);
 
   locker = g_mutex_locker_new (&self->mutex);
 

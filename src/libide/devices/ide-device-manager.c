@@ -957,7 +957,7 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
   state = g_slice_new0 (DeployState);
   state->pipeline = g_object_ref (pipeline);
   state->strategies = g_ptr_array_new_with_free_func (g_object_unref);
-  ide_task_set_task_data (task, state, (GDestroyNotify)deploy_state_free);
+  ide_task_set_task_data (task, state, deploy_state_free);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   set = peas_extension_set_new (peas_engine_get_default (),

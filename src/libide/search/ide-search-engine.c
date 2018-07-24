@@ -275,7 +275,7 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   r->task = task;
   r->store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
   r->outstanding = 0;
-  ide_task_set_task_data (task, r, (GDestroyNotify)request_destroy);
+  ide_task_set_task_data (task, r, request_destroy);
 
   peas_extension_set_foreach (self->extensions,
                               ide_search_engine_search_foreach,

@@ -126,7 +126,7 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   ide_task_set_source_tag (task, ide_clang_symbol_resolver_lookup_symbol_async);
   ide_task_set_task_data (task,
                           ide_source_location_ref (location),
-                          (GDestroyNotify) ide_source_location_unref);
+                          ide_source_location_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_system = ide_context_get_build_system (context);
@@ -355,7 +355,7 @@ ide_clang_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver   *symbol_
   ide_task_set_source_tag (task, ide_clang_symbol_resolver_find_nearest_scope_async);
   ide_task_set_task_data (task,
                           ide_source_location_ref (location),
-                          (GDestroyNotify) ide_source_location_unref);
+                          ide_source_location_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_system = ide_context_get_build_system (context);

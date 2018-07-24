@@ -1051,7 +1051,7 @@ ide_xml_completion_provider_populate_async (IdeCompletionProvider *provider,
   state->line = gtk_text_iter_get_line (&iter) + 1;
   state->line_offset = gtk_text_iter_get_line_offset (&iter) + 1;
 
-  ide_task_set_task_data (task, state, (GDestroyNotify)populate_state_free);
+  ide_task_set_task_data (task, state, populate_state_free);
 
   ide_xml_service_get_position_from_cursor_async (service,
                                                   state->ifile,

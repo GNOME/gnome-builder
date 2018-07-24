@@ -356,7 +356,7 @@ _ide_runtime_manager_prepare_async (IdeRuntimeManager   *self,
   state = g_slice_new0 (PrepareState);
   state->runtime_id = g_strdup (runtime_id);
   state->pipeline = g_object_ref (pipeline);
-  ide_task_set_task_data (task, state, (GDestroyNotify)prepare_state_free);
+  ide_task_set_task_data (task, state, prepare_state_free);
 
   if (runtime_id == NULL)
     {

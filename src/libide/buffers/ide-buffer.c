@@ -2922,7 +2922,7 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
   ide_extension_set_adapter_foreach_by_priority (adapter, lookup_symbol_get_extension, data);
   g_assert (data->resolvers->len > 0);
 
-  ide_task_set_task_data (task, data, (GDestroyNotify)lookup_symbol_task_data_free);
+  ide_task_set_task_data (task, data, lookup_symbol_task_data_free);
 
   resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
 

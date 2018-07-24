@@ -554,7 +554,7 @@ ide_g_file_find_with_depth_async (GFile               *file,
   f = g_slice_new0 (Find);
   f->spec = g_pattern_spec_new (pattern);
   f->depth = depth;
-  ide_task_set_task_data (task, f, (GDestroyNotify)find_free);
+  ide_task_set_task_data (task, f, find_free);
 
   if (f->spec == NULL)
     {

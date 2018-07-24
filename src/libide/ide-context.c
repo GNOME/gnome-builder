@@ -2279,7 +2279,7 @@ ide_context_restore_async (IdeContext          *self,
 
   self->restoring = TRUE;
 
-  ide_task_set_task_data (task, g_ptr_array_ref (ar), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_ptr_array_ref (ar), g_ptr_array_unref);
 
   g_idle_add (restore_in_idle, g_object_ref (task));
 }

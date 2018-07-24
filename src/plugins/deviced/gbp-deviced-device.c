@@ -627,7 +627,7 @@ gbp_deviced_device_install_bundle_async (GbpDevicedDevice      *self,
   state->progress = progress;
   state->progress_data = progress_data;
   state->progress_data_destroy = progress_data_destroy;
-  ide_task_set_task_data (task, state, (GDestroyNotify)install_bundle_state_free);
+  ide_task_set_task_data (task, state, install_bundle_state_free);
 
   gbp_deviced_device_get_client_async (self,
                                        cancellable,

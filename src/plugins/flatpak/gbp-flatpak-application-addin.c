@@ -205,7 +205,7 @@ copy_devhelp_docs_into_user_data_dir (GbpFlatpakApplicationAddin *self)
         }
     }
 
-  ide_task_set_task_data (task, g_steal_pointer (&paths), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_steal_pointer (&paths), g_ptr_array_unref);
 
   /* Now go copy the the docs over */
   ide_task_run_in_thread (task, copy_devhelp_docs_into_user_data_dir_worker);
@@ -788,7 +788,7 @@ gbp_flatpak_application_addin_install_runtime_async (GbpFlatpakApplicationAddin 
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_application_addin_install_runtime_async);
-  ide_task_set_task_data (task, request, (GDestroyNotify)install_request_free);
+  ide_task_set_task_data (task, request, install_request_free);
 
   g_signal_connect_object (task,
                            "notify::completed",
@@ -1183,7 +1183,7 @@ gbp_flatpak_application_addin_locate_sdk_async (GbpFlatpakApplicationAddin  *sel
   locate->branch = g_strdup (branch);
   locate->installations = g_ptr_array_ref (self->installations);
 
-  ide_task_set_task_data (task, locate, (GDestroyNotify)locate_sdk_free);
+  ide_task_set_task_data (task, locate, locate_sdk_free);
   ide_task_run_in_thread (task, gbp_flatpak_application_addin_locate_sdk_worker);
 
   IDE_EXIT;

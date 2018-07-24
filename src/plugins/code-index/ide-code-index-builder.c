@@ -788,7 +788,7 @@ get_changes_async (IdeCodeIndexBuilder *self,
   gcd->index_dir = g_object_ref (index_dir);
   gcd->recursive = !!recursive;
   gcd->vcs = g_object_ref (vcs);
-  ide_task_set_task_data (task, gcd, (GDestroyNotify)get_changes_data_free);
+  ide_task_set_task_data (task, gcd, get_changes_data_free);
 
   g_queue_push_head (&gcd->directories, g_object_ref (data_dir));
 
@@ -1025,7 +1025,7 @@ add_entries_to_index_async (IdeCodeIndexBuilder     *self,
   task_data->map_builder = g_object_ref (map_builder);
   task_data->fuzzy_builder = g_object_ref (fuzzy_builder);
   task_data->file_id = file_id;
-  ide_task_set_task_data (task, task_data, (GDestroyNotify)add_entries_data_free);
+  ide_task_set_task_data (task, task_data, add_entries_data_free);
 
   ide_code_index_entries_next_entries_async (entries,
                                              cancellable,
@@ -1172,7 +1172,7 @@ index_directory_async (IdeCodeIndexBuilder *self,
   idd->index_dir = g_object_ref (index_dir);
   idd->fuzzy = dzl_fuzzy_index_builder_new ();
   idd->map = ide_persistent_map_builder_new ();
-  ide_task_set_task_data (task, idd, (GDestroyNotify)index_directory_data_free);
+  ide_task_set_task_data (task, idd, index_directory_data_free);
 
   g_hash_table_iter_init (&iter, build_flags);
 
@@ -1434,7 +1434,7 @@ ide_code_index_builder_build_async (IdeCodeIndexBuilder *self,
   bd->data_dir = g_object_ref (directory);
   bd->index_dir = g_steal_pointer (&index_dir);
   bd->build_system = g_object_ref (build_system);
-  ide_task_set_task_data (task, bd, (GDestroyNotify)build_data_free);
+  ide_task_set_task_data (task, bd, build_data_free);
 
   get_changes_async (self,
                      bd->data_dir,

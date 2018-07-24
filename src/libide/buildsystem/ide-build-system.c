@@ -201,7 +201,7 @@ ide_build_system_real_get_build_flags_for_files_async (IdeBuildSystem       *sel
                                        g_object_unref,
                                        (GDestroyNotify)g_strfreev);
 
-  ide_task_set_task_data (task, data, (GDestroyNotify)get_build_flags_data_free);
+  ide_task_set_task_data (task, data, get_build_flags_data_free);
 
   ide_build_system_get_build_flags_async (self,
                                           g_ptr_array_index (files, 0),

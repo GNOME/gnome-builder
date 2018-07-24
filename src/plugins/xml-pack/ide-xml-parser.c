@@ -645,7 +645,7 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->parent_node = state->root_node;
   ide_xml_stack_push (state->stack, "root", state->root_node, NULL, 0);
 
-  ide_task_set_task_data (task, state, (GDestroyNotify)parser_state_free);
+  ide_task_set_task_data (task, state, parser_state_free);
   ide_task_run_in_thread (task, ide_xml_parser_get_analysis_worker);
 }
 

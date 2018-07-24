@@ -370,7 +370,7 @@ cpack_completion_results_populate_async (CpackCompletionResults *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, cpack_completion_results_populate_async);
-  ide_task_set_task_data (task, p, (GDestroyNotify)populate_free);
+  ide_task_set_task_data (task, p, populate_free);
 
   cpack_completion_results_populate (task);
 }

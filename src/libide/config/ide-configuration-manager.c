@@ -186,7 +186,7 @@ ide_configuration_manager_save_async (IdeConfigurationManager *self,
   peas_extension_set_foreach (self->providers,
                               ide_configuration_manager_collect_providers,
                               providers);
-  ide_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_ptr_array_ref (providers), g_ptr_array_unref);
 
   if (providers->len == 0)
     ide_task_return_boolean (task, TRUE);
@@ -801,7 +801,7 @@ ide_configuration_manager_init_async (GAsyncInitable      *initable,
   peas_extension_set_foreach (self->providers,
                               ide_configuration_manager_collect_providers,
                               providers);
-  ide_task_set_task_data (task, g_ptr_array_ref (providers), (GDestroyNotify)g_ptr_array_unref);
+  ide_task_set_task_data (task, g_ptr_array_ref (providers), g_ptr_array_unref);
 
   for (guint i = 0; i < providers->len; i++)
     {

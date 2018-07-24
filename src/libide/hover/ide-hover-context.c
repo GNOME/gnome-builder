@@ -196,7 +196,7 @@ _ide_hover_context_query_async (IdeHoverContext     *self,
 
   q = g_slice_new0 (Query);
   q->active = self->providers->len;
-  ide_task_set_task_data (task, q, (GDestroyNotify)query_free);
+  ide_task_set_task_data (task, q, query_free);
 
   for (guint i = 0; i < self->providers->len; i++)
     {
