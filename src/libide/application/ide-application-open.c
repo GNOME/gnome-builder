@@ -207,6 +207,14 @@ ide_application_open_tick (IdeTask *task)
                                     cancellable,
                                     ide_application_open_project_cb,
                                     g_object_ref (task));
+
+  /*
+   * We can show the window immediately, so that resources are starting
+   * to load while the project is loaded in the background. It causes some
+   * reshuffling of UI while things load, but it "feels" faster to the user
+   * even though its the same amount of time to being usable.
+   */
+  gtk_window_present (GTK_WINDOW (workbench));
 }
 
 void
