@@ -22,6 +22,8 @@ gi_sources = [
   'ide-gi-file-builder.h',
   'ide-gi-file-builder-result.c',
   'ide-gi-file-builder-result.h',
+  'ide-gi-formater.c',
+  'ide-gi-formater.h',
   'ide-gi-helper.c',
   'ide-gi-helper.h',
   'ide-gi-index.c',

@@ -23,7 +23,9 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+#include <webkit2/webkit2.h>
 
+#include "../gi/ide-gi-formater.h"
 #include "../gi/ide-gi-objects.h"
 #include "../gi/ide-gi-service.h"
 
@@ -64,36 +66,51 @@ hover_state_free (HoverState *state)
   g_slice_free (HoverState, state);
 }
 
+GtkWidget *
+build_web_view (void)
+{
+  GtkWidget *wv;
+
+  wv = webkit_web_view_new ();
+  g_object_set (wv,
+                "align", GTK_ALIGN_FILL,
+                "expand", TRUE,
+                NULL);
+
+  return wv;
+}
+
 static void
 add_proposal (IdeXmlHoverProvider *self,
               IdeHoverContext     *context,
               IdeGiBase           *base)
 {
-  g_autoptr(IdeGiDoc) doc = NULL;
+  g_autofree gchar *content = NULL;
+  GtkWidget *web_view;
+  GtkWidget *widget;
 
-  if (base != NULL && (doc = ide_gi_base_get_doc (base)))
-    {
-      const gchar *text = ide_gi_doc_get_doc (doc);
-      GtkWidget *widget = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                                        "expand", TRUE,
-                                        "width-request", 500,
-                                        "max-content-height", 200,
-                                        "propagate-natural-height", TRUE,
-                                        "valign", GTK_ALIGN_START,
-                                        NULL);
-      GtkWidget *label = g_object_new (GTK_TYPE_LABEL,
-                                       "label", text,
-                                       "valign", GTK_ALIGN_START,
-                                       "halign", GTK_ALIGN_START,
-                                       "visible", TRUE,
-                                       NULL);
+  content = ide_gi_formater_get_doc (base, IDE_GI_FORMATER_TYPE_HTML);
+  if (dzl_str_empty0 (content))
+    return;
 
-      gtk_container_add (GTK_CONTAINER (widget), label);
-      ide_hover_context_add_widget (context,
-                                    XML_HOVER_PROVIDER_PRIORITY,
-                                    _("GI"),
-                                    widget);
-    }
+  widget = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                         "width-request", 400,
+                         "height-request", 200,
+                         "expand", TRUE,
+                         "max-content-height", 400,
+                         "propagate-natural-height", TRUE,
+                         "valign", GTK_ALIGN_START,
+                         NULL);
+
+  web_view = build_web_view ();
+  webkit_web_view_load_html (WEBKIT_WEB_VIEW (web_view), content, NULL);
+
+  gtk_container_add (GTK_CONTAINER (widget), web_view);
+  gtk_widget_show_all (widget);
+  ide_hover_context_add_widget (context,
+                                XML_HOVER_PROVIDER_PRIORITY,
+                                _("GI"),
+                                widget);
 }
 
 static gboolean
