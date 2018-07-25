@@ -64,12 +64,12 @@
   <color name="dark3"                        value="#4d5558"/>
 
   <!-- Global Settings -->
-  <style name="text"                        foreground="aluminium3" background="dark1"/>
+  <style name="text"                        foreground="aluminium3"/>
   <style name="selection"                   foreground="aluminium1" background="aluminium4"/>
   <style name="cursor"                      foreground="aluminium2"/>
-  <style name="current-line"                background="dark2"/>
-  <style name="current-line-number"         background="dark2"/>
-  <style name="line-numbers"                foreground="dark3" background="dark1"/>
+  <style name="current-line"                background="#rgba(255,255,255,.05)"/>
+  <style name="current-line-number"         background="#rgba(0,0,0,.25)"/>
+  <style name="line-numbers"                foreground="dark3" background="#rgba(0,0,0,.1)"/>
   <style name="draw-spaces"                 foreground="dark3"/>
   <style name="background-pattern"          background="dark2"/>
   <style name="map-overlay"                 background="#rgba(136,138,133,0.25)"/>
