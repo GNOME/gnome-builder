@@ -16,21 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include <libxml/parser.h>
 
 #include "ide-xml-parser.h"
 #include "ide-xml-parser-generic.h"
 #include "ide-xml-sax.h"
 #include "ide-xml-stack.h"
+#include "ide-xml-utils.h"
 
 #include "ide-xml-parser-generic.h"
 
+#define NODE_NAME_LIMIT 60
+
+static gchar ellipsis [] = " …";
+
 static gchar *
 collect_attributes (IdeXmlParser  *self,
-                    const gchar  **attributes)
+                    const gchar  **attributes,
+                    gsize          limit)
 {
   GString *string;
   const gchar **l = attributes;
+  gsize total_len = 0;
 
   g_assert (IDE_IS_XML_PARSER (self));
 
@@ -40,7 +48,16 @@ collect_attributes (IdeXmlParser  *self,
   string = g_string_new (NULL);
   while (l [0] != NULL && *l [0] != '\0')
     {
-      g_autofree gchar *value = _ide_xml_parser_get_color_tag (self, l [0], COLOR_TAG_ATTRIBUTE, TRUE, TRUE, TRUE);
+      g_autofree gchar *value = NULL;
+
+      total_len += strlen (l[0]) + strlen (l[1]) + sizeof (ellipsis);
+      if (total_len > limit)
+        {
+          g_string_append (string, ellipsis);
+          break;
+        }
+
+      value = _ide_xml_parser_get_color_tag (self, l [0], COLOR_TAG_ATTRIBUTE, TRUE, TRUE, TRUE);
 
       g_string_append (string, value);
       g_string_append (string, l [1]);
@@ -63,7 +80,7 @@ ide_xml_parser_generic_start_element_sax_cb (ParserState    *state,
 
   g_assert (IDE_IS_XML_PARSER (self));
 
-  attr = collect_attributes (self, (const gchar **)attributes);
+  attr = collect_attributes (self, (const gchar **)attributes, NODE_NAME_LIMIT - strlen ((gchar *)name));
   label = g_strconcat ((const gchar *)name, attr, NULL);
 
   node = ide_xml_symbol_node_new (label, NULL, (gchar *)name, IDE_SYMBOL_XML_ELEMENT);
@@ -83,7 +100,7 @@ ide_xml_parser_generic_comment_sax_cb (ParserState   *state,
 
   g_assert (IDE_IS_XML_PARSER (self));
 
-  strip_name = g_strstrip (g_strdup ((const gchar *)name));
+  strip_name = ide_xml_utils_limit_str ((const gchar *)name, NODE_NAME_LIMIT, TRUE, TRUE);
   node = ide_xml_symbol_node_new (strip_name, NULL, NULL, IDE_SYMBOL_XML_COMMENT);
   _ide_xml_parser_state_processing (self, state, "comment", node, IDE_XML_SAX_CALLBACK_TYPE_COMMENT, FALSE);
 }
