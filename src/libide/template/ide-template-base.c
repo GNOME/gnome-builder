@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gstdio.h>
 #include <errno.h>
 #include <string.h>

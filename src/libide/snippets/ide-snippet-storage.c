@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "ide-snippet-storage"
 
-#include <dazzle.h>
 #include <stdlib.h>
 #include <string.h>
 

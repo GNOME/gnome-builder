@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "ide-completion.h"
 #include "ide-completion-context.h"
 #include "ide-completion-display.h"

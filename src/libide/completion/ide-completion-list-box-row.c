@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "ide-completion-list-box-row.h"
 #include "ide-completion-private.h"
 

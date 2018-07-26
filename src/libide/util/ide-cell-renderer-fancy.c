@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "util/ide-cell-renderer-fancy.h"
 
 #define TITLE_SPACING 3

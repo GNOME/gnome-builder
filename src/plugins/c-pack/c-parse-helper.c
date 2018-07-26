@@ -18,7 +18,6 @@
 
 #define G_LOG_DOMAIN "c-parser"
 
-#include <dazzle.h>
 #include <string.h>
 
 #include "c-parse-helper.h"

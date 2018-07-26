@@ -21,8 +21,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "storage/ide-persistent-map.h"
 #include "threading/ide-task.h"
 

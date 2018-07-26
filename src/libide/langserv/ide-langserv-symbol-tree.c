@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "langserv/ide-langserv-symbol-node.h"
 #include "langserv/ide-langserv-symbol-node-private.h"
 #include "langserv/ide-langserv-symbol-tree.h"

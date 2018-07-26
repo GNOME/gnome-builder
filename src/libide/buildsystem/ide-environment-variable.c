@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "buildsystem/ide-environment-variable.h"
 
 struct _IdeEnvironmentVariable

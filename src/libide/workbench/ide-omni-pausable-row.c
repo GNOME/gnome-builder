@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <dazzle.h>
+
 #include "ide-pausable.h"
 
 #include "workbench/ide-omni-pausable-row.h"

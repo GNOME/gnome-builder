@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "buildsystem/ide-build-target.h"
 
 G_DEFINE_INTERFACE (IdeBuildTarget, ide_build_target, IDE_TYPE_OBJECT)

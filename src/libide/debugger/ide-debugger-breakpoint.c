@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "debugger/ide-debugger-breakpoint.h"
 #include "debugger/ide-debugger-private.h"
 #include "debugger/ide-debugger-types.h"

@@ -18,8 +18,6 @@
 
 #pragma once
 
-#include <dazzle.h>
-
 #include "ide-types.h"
 
 G_BEGIN_DECLS

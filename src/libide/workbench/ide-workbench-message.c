@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "workbench/ide-workbench-message.h"
 
 struct _IdeWorkbenchMessage

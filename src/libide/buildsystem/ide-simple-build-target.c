@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "buildsystem/ide-build-target.h"
 #include "buildsystem/ide-simple-build-target.h"
 

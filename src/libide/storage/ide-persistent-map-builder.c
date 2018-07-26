@@ -21,7 +21,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <string.h>
 
 #include "storage/ide-persistent-map-builder.h"

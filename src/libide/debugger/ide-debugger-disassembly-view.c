@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <gtksourceview/gtksource.h>
 
 #include "debugger/ide-debugger-disassembly-view.h"

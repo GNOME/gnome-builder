@@ -18,7 +18,6 @@
 
 #define G_LOG_DOMAIN "ide-glib"
 
-#include <dazzle.h>
 #include <string.h>
 
 #include "config.h"

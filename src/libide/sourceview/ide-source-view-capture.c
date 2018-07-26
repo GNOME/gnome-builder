@@ -18,7 +18,6 @@
 
 #define G_LOG_DOMAIN "ide-source-view-capture"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "sourceview/ide-source-view-capture.h"

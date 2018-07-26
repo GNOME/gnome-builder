@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "debugger/ide-debugger-thread.h"
 
 typedef struct

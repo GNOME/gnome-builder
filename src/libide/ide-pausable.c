@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "ide-pausable.h"
 
 struct _IdePausable

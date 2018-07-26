@@ -20,8 +20,6 @@
 
 #define G_LOG_DOMAIN "ide-langserv-completion-results.h"
 
-#include <dazzle.h>
-
 #include "ide-debug.h"
 
 #include "completion/ide-completion.h"

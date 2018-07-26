@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "ide-debugger-hover-provider"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-context.h"

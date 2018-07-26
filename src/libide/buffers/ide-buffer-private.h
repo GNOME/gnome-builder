@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <dazzle.h>
 #include <libpeas/peas.h>
 
 #include "buffers/ide-buffer.h"

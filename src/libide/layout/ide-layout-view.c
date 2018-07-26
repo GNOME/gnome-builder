@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <string.h>
 
 #include "layout/ide-layout-view.h"

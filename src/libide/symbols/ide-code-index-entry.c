@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "symbols/ide-code-index-entry.h"
 
 /**

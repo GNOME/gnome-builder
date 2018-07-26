@@ -20,8 +20,6 @@
 
 #define G_LOG_DOMAIN "ide-marked-view"
 
-#include <dazzle.h>
-
 #if ENABLE_WEBKIT
 # include <webkit2/webkit2.h>
 #endif

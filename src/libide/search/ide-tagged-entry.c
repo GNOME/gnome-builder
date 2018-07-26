@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <math.h>
 
 #include "ide-tagged-entry.h"

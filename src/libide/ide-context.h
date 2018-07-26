@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <dazzle.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 

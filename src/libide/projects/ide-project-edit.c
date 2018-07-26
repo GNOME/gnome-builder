@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "projects/ide-project-edit.h"
 #include "projects/ide-project-edit-private.h"
 

@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "ide-langserv-completion-item"
 
-#include <dazzle.h>
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"

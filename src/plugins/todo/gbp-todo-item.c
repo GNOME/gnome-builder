@@ -18,8 +18,6 @@
 
 #define G_LOG_DOMAIN "gbp-todo-item"
 
-#include <dazzle.h>
-
 #include "gbp-todo-item.h"
 
 #define MAX_TODO_LINES 5

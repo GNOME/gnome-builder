@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "devices/ide-device-provider.h"
 
 typedef struct

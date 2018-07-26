@@ -25,7 +25,6 @@
 #endif
 
 #include <errno.h>
-#include <dazzle.h>
 #include <fcntl.h>
 #include <glib-unix.h>
 #include <stdlib.h>

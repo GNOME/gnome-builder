@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "ide-device-info.h"
 #include "ide-enums.h"
 

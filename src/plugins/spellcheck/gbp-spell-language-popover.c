@@ -22,7 +22,6 @@
 #include "gbp-spell-language-popover.h"
 
 #include <glib/gi18n.h>
-#include <dazzle.h>
 
 #include "util/ide-gtk.h"
 #include "workbench/ide-workbench.h"

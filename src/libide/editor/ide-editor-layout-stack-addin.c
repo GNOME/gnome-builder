@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "editor/ide-editor-layout-stack-addin.h"
 #include "editor/ide-editor-layout-stack-controls.h"
 #include "editor/ide-editor-view.h"

@@ -18,7 +18,6 @@
 
 #define G_LOG_DOMAIN "command-gaction"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 

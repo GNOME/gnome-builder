@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <gobject/gvaluecollector.h>
 #include <stdlib.h>
 

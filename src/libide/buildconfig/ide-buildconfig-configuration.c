@@ -20,8 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "buildconfig/ide-buildconfig-configuration.h"
 
 struct _IdeBuildconfigConfiguration
