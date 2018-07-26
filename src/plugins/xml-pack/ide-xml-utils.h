@@ -37,6 +37,10 @@ gboolean ide_xml_utils_gi_class_walker      (IdeGiBase              *object,
                                              IdeXmlUtilsWalkerFunc   func,
                                              gpointer                data);
 gboolean ide_xml_utils_is_name_char         (gunichar                ch);
+gchar   *ide_xml_utils_limit_str             (const gchar           *str,
+                                             gsize                   limit,
+                                             gboolean                strip,
+                                             gboolean                add_ellipsis);
 gboolean ide_xml_utils_skip_attribute_name  (const gchar           **cursor);
 gboolean ide_xml_utils_skip_attribute_value (const gchar           **cursor,
                                              gchar                   term);

@@ -420,3 +420,65 @@ ide_xml_utils_gi_class_walker (IdeGiBase             *object,
 
   return gi_class_walker (object, name, func, visited, data);
 }
+
+/* Return a copy of str, limited to 'limit' chars,
+ * with possibly stripped whitespaces and added
+ * ellispsis at te end.
+ */
+gchar *
+ide_xml_utils_limit_str (const gchar *str,
+                         gsize        limit,
+                         gboolean     strip,
+                         gboolean     add_ellipsis)
+{
+  const gchar *begin = str;
+  const gchar *end;
+  gsize count = 0;
+  gunichar ch;
+
+  g_return_val_if_fail (!dzl_str_empty0 (str), NULL);
+  g_return_val_if_fail (limit > 0, NULL);
+
+  if (strip)
+    for (begin = (gchar*) str; *begin && g_ascii_isspace (*begin); begin++)
+     ;
+
+  end = begin;
+  while ((ch = g_utf8_get_char (end)))
+    {
+      if (++count > limit)
+        break;
+
+      end = g_utf8_next_char (end);
+    }
+
+  if (end > begin)
+    {
+      if (strip)
+        {
+          do
+            {
+              --end;
+              if (!g_ascii_isspace (*end))
+                {
+                  end++;
+                  break;
+                }
+
+              count--;
+            } while (end > begin);
+        }
+    }
+
+  if (add_ellipsis && count > limit)
+    {
+      GString *new_str = g_string_sized_new (end - begin + 4);
+
+      g_string_append_len (new_str, begin, end - begin);
+      g_string_append (new_str, " …");
+
+      return g_string_free (new_str, FALSE);
+    }
+  else
+    return g_strndup (begin, end - begin);
+}
