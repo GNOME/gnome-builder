@@ -168,9 +168,9 @@ lookup_symbol_task_data_free (LookUpSymbolData *data)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
 
-  dzl_clear_pointer (&data->resolvers, g_ptr_array_unref);
-  dzl_clear_pointer (&data->location, ide_source_location_unref);
-  dzl_clear_pointer (&data->symbol, ide_symbol_unref);
+  g_clear_pointer (&data->resolvers, g_ptr_array_unref);
+  g_clear_pointer (&data->location, ide_source_location_unref);
+  g_clear_pointer (&data->symbol, ide_symbol_unref);
   g_slice_free (LookUpSymbolData, data);
 }
 
@@ -607,7 +607,7 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
     {
       ide_buffer_clear_diagnostics (self);
 
-      dzl_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
+      g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
 
       if (diagnostics != NULL)
         {
@@ -782,7 +782,7 @@ ide_buffer_changed (GtkTextBuffer *buffer)
 
   priv->change_count++;
 
-  dzl_clear_pointer (&priv->content, g_bytes_unref);
+  g_clear_pointer (&priv->content, g_bytes_unref);
 
   ide_buffer_delay_settling (self);
 }
@@ -1547,7 +1547,7 @@ ide_buffer_dispose (GObject *object)
   dzl_clear_source (&priv->reclamation_handler);
   dzl_clear_source (&priv->check_modified_timeout);
 
-  dzl_clear_pointer (&priv->failure, g_error_free);
+  g_clear_pointer (&priv->failure, g_error_free);
 
   if (priv->context != NULL)
     {
@@ -1576,8 +1576,8 @@ ide_buffer_dispose (GObject *object)
   if (priv->diagnostics_manager_signals != NULL)
     dzl_signal_group_set_target (priv->diagnostics_manager_signals, NULL);
 
-  dzl_clear_pointer (&priv->diagnostics_line_cache, g_hash_table_unref);
-  dzl_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
+  g_clear_pointer (&priv->diagnostics_line_cache, g_hash_table_unref);
+  g_clear_pointer (&priv->diagnostics, ide_diagnostics_unref);
   g_clear_object (&priv->diagnostics_manager_signals);
   g_clear_object (&priv->addins);
   g_clear_object (&priv->highlight_engine);
@@ -1602,8 +1602,8 @@ ide_buffer_finalize (GObject *object)
 
   g_clear_object (&priv->file_signals);
   g_clear_object (&priv->file);
-  dzl_clear_pointer (&priv->title, g_free);
-  dzl_clear_pointer (&priv->content, g_bytes_unref);
+  g_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&priv->content, g_bytes_unref);
 
   if (priv->context != NULL)
     {
@@ -1991,7 +1991,7 @@ ide_buffer_update_title (IdeBuffer *self)
         title = g_file_get_path (gfile);
     }
 
-  dzl_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&priv->title, g_free);
   priv->title = g_strdup (title);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }
@@ -2822,7 +2822,7 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
           (ide_symbol_get_definition_location (data->symbol) == NULL &&
            ide_symbol_get_declaration_location (symbol)))
         {
-          dzl_clear_pointer (&data->symbol, ide_symbol_unref);
+          g_clear_pointer (&data->symbol, ide_symbol_unref);
           data->symbol = g_steal_pointer (&symbol);
         }
     }
@@ -3378,7 +3378,7 @@ _ide_buffer_set_failure (IdeBuffer    *self,
     ide_context_warning (priv->context, _("Buffer failed: %s"), error->message);
 
   priv->failed = !!error;
-  dzl_clear_pointer (&priv->failure, g_error_free);
+  g_clear_pointer (&priv->failure, g_error_free);
   priv->failure = g_error_copy (error);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FAILED]);
 }

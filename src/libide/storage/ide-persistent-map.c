@@ -325,12 +325,12 @@ ide_persistent_map_finalize (GObject *object)
   self->keys = NULL;
   self->kvpairs = NULL;
 
-  dzl_clear_pointer (&self->data, g_variant_unref);
-  dzl_clear_pointer (&self->keys_var, g_variant_unref);
-  dzl_clear_pointer (&self->values, g_variant_unref);
-  dzl_clear_pointer (&self->kvpairs_var, g_variant_unref);
-  dzl_clear_pointer (&self->metadata, g_variant_dict_unref);
-  dzl_clear_pointer (&self->mapped_file, g_mapped_file_unref);
+  g_clear_pointer (&self->data, g_variant_unref);
+  g_clear_pointer (&self->keys_var, g_variant_unref);
+  g_clear_pointer (&self->values, g_variant_unref);
+  g_clear_pointer (&self->kvpairs_var, g_variant_unref);
+  g_clear_pointer (&self->metadata, g_variant_dict_unref);
+  g_clear_pointer (&self->mapped_file, g_mapped_file_unref);
 
   G_OBJECT_CLASS (ide_persistent_map_parent_class)->finalize (object);
 }

@@ -436,7 +436,7 @@ gbp_flatpak_preferences_addin_unload (IdePreferencesAddin *addin,
       dzl_preferences_remove_id (preferences, id);
     }
 
-  dzl_clear_pointer (&self->ids, g_array_unref);
+  g_clear_pointer (&self->ids, g_array_unref);
 
   IDE_EXIT;
 }

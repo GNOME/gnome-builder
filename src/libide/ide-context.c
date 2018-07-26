@@ -583,9 +583,9 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->downloads_dir);
   g_clear_object (&self->home_dir);
 
-  dzl_clear_pointer (&self->build_system_hint, g_free);
-  dzl_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
-  dzl_clear_pointer (&self->recent_projects_path, g_free);
+  g_clear_pointer (&self->build_system_hint, g_free);
+  g_clear_pointer (&self->services_by_gtype, g_hash_table_unref);
+  g_clear_pointer (&self->recent_projects_path, g_free);
 
   g_clear_object (&self->build_system);
   g_clear_object (&self->configuration_manager);

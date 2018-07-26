@@ -85,9 +85,9 @@ ide_transfer_finalize (GObject *object)
   IdeTransfer *self = (IdeTransfer *)object;
   IdeTransferPrivate *priv = ide_transfer_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->icon_name, g_free);
-  dzl_clear_pointer (&priv->status, g_free);
-  dzl_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&priv->icon_name, g_free);
+  g_clear_pointer (&priv->status, g_free);
+  g_clear_pointer (&priv->title, g_free);
   g_clear_object (&priv->cancellable);
 
   G_OBJECT_CLASS (ide_transfer_parent_class)->finalize (object);

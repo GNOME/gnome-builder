@@ -79,7 +79,7 @@ ide_symbol_node_finalize (GObject *object)
   IdeSymbolNode *self = (IdeSymbolNode *)object;
   IdeSymbolNodePrivate *priv = ide_symbol_node_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->name, g_free);
+  g_clear_pointer (&priv->name, g_free);
 
   G_OBJECT_CLASS (ide_symbol_node_parent_class)->finalize (object);
 }

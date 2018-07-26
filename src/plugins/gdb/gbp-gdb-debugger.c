@@ -248,7 +248,7 @@ gbp_gdb_debugger_cache_register_names (GbpGdbDebugger           *self,
                                  g_strdup (iter->variant.cstring));
         }
 
-      dzl_clear_pointer (&self->register_names, g_hash_table_unref);
+      g_clear_pointer (&self->register_names, g_hash_table_unref);
       self->register_names = g_steal_pointer (&hash);
     }
 }
@@ -1083,7 +1083,7 @@ gbp_gdb_debugger_reload_breakpoints_cb (GObject      *object,
     }
 
 cleanup:
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 /*
@@ -1166,7 +1166,7 @@ gbp_gdb_debugger_insert_breakpoint_cb (GObject      *object,
   if (output == NULL || gbp_gdb_debugger_unwrap (output, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
-      dzl_clear_pointer (&output, gdbwire_mi_output_free);
+      g_clear_pointer (&output, gdbwire_mi_output_free);
       return;
     }
 
@@ -1325,7 +1325,7 @@ gbp_gdb_debugger_remove_breakpoint_cb (GObject      *object,
       ide_task_return_boolean (task, TRUE);
     }
 
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -1405,7 +1405,7 @@ gbp_gdb_debugger_list_register_names_cb (GObject      *object,
   gbp_gdb_debugger_cache_register_names (self, output);
 
 cleanup:
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -1429,7 +1429,7 @@ gbp_gdb_debugger_move_cb (GObject      *object,
   else
     ide_task_return_boolean (task, TRUE);
 
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -1605,7 +1605,7 @@ gbp_gdb_debugger_list_frames_cb (GObject      *object,
   ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
 
 cleanup:
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -1674,7 +1674,7 @@ gbp_gdb_debugger_interrupt_cb (GObject      *object,
   else
     ide_task_return_boolean (task, TRUE);
 
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -1739,7 +1739,7 @@ gbp_gdb_debugger_send_signal_cb (GObject      *object,
   else
     ide_task_return_boolean (task, TRUE);
 
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 
@@ -1805,7 +1805,7 @@ gbp_gdb_debugger_modify_breakpoint_cb (GObject      *object,
 
   gbp_gdb_debugger_reload_breakpoints (self);
 
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -1949,7 +1949,7 @@ gbp_gdb_debugger_list_locals_cb (GObject      *object,
   ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
 
 cleanup:
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -2081,7 +2081,7 @@ gbp_gdb_debugger_list_params_cb (GObject      *object,
   ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
 
 cleanup:
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -2201,7 +2201,7 @@ gbp_gdb_debugger_list_registers_cb (GObject      *object,
   ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
 
 cleanup:
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -2313,7 +2313,7 @@ gbp_gdb_debugger_disassemble_cb (GObject      *object,
   ide_task_return_pointer (task, g_steal_pointer (&ar), (GDestroyNotify)g_ptr_array_unref);
 
 cleanup:
-  dzl_clear_pointer (&output, gdbwire_mi_output_free);
+  g_clear_pointer (&output, gdbwire_mi_output_free);
 }
 
 static void
@@ -2502,9 +2502,9 @@ gbp_gdb_debugger_finalize (GObject *object)
 
   g_clear_object (&self->io_stream);
   g_clear_object (&self->read_cancellable);
-  dzl_clear_pointer (&self->parser, gdbwire_mi_parser_destroy);
-  dzl_clear_pointer (&self->read_buffer, g_free);
-  dzl_clear_pointer (&self->register_names, g_hash_table_unref);
+  g_clear_pointer (&self->parser, gdbwire_mi_parser_destroy);
+  g_clear_pointer (&self->read_buffer, g_free);
+  g_clear_pointer (&self->register_names, g_hash_table_unref);
   g_queue_clear (&self->cmdqueue);
 
   G_OBJECT_CLASS (gbp_gdb_debugger_parent_class)->finalize (object);

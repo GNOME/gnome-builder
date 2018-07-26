@@ -273,8 +273,8 @@ ide_runtime_finalize (GObject *object)
   IdeRuntime *self = (IdeRuntime *)object;
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->id, g_free);
-  dzl_clear_pointer (&priv->display_name, g_free);
+  g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->display_name, g_free);
 
   G_OBJECT_CLASS (ide_runtime_parent_class)->finalize (object);
 }

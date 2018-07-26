@@ -50,10 +50,10 @@ typedef struct
 static void
 populate_free (Populate *state)
 {
-  dzl_clear_pointer (&state->word, g_free);
-  dzl_clear_pointer (&state->casefold, g_free);
-  dzl_clear_pointer (&state->indexes, g_ptr_array_unref);
-  dzl_clear_pointer (&state->items, g_array_unref);
+  g_clear_pointer (&state->word, g_free);
+  g_clear_pointer (&state->casefold, g_free);
+  g_clear_pointer (&state->indexes, g_ptr_array_unref);
+  g_clear_pointer (&state->items, g_array_unref);
   g_slice_free (Populate, state);
 }
 
@@ -103,9 +103,9 @@ ide_ctags_results_finalize (GObject *object)
   IdeCtagsResults *self = (IdeCtagsResults *)object;
 
   g_clear_object (&self->refilter_cancellable);
-  dzl_clear_pointer (&self->items, g_array_unref);
-  dzl_clear_pointer (&self->indexes, g_ptr_array_unref);
-  dzl_clear_pointer (&self->word, g_free);
+  g_clear_pointer (&self->items, g_array_unref);
+  g_clear_pointer (&self->indexes, g_ptr_array_unref);
+  g_clear_pointer (&self->word, g_free);
 
   G_OBJECT_CLASS (ide_ctags_results_parent_class)->finalize (object);
 }

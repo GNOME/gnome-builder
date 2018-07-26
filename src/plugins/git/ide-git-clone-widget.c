@@ -64,7 +64,7 @@ clone_request_free (gpointer data)
 
   if (req != NULL)
     {
-      dzl_clear_pointer (&req->uri, ide_vcs_uri_unref);
+      g_clear_pointer (&req->uri, ide_vcs_uri_unref);
       g_clear_object (&req->location);
       g_clear_object (&req->project_file);
       g_slice_free (CloneRequest, req);
@@ -101,7 +101,7 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
   g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
   g_assert (GTK_IS_ENTRY (entry));
 
-  dzl_clear_pointer (&self->child_name, g_free);
+  g_clear_pointer (&self->child_name, g_free);
 
   text = gtk_entry_get_text (entry);
   str = g_string_new (NULL);
@@ -240,7 +240,7 @@ ide_git_clone_widget_finalize (GObject *object)
 {
   IdeGitCloneWidget *self = (IdeGitCloneWidget *)object;
 
-  dzl_clear_pointer (&self->child_name, g_free);
+  g_clear_pointer (&self->child_name, g_free);
 
   G_OBJECT_CLASS (ide_git_clone_widget_parent_class)->finalize (object);
 }
@@ -423,7 +423,7 @@ ide_git_clone_widget_worker (IdeTask      *task,
   ggit_clone_options_set_is_bare (clone_options, FALSE);
   ggit_clone_options_set_checkout_branch (clone_options, self->branch_name);
   ggit_clone_options_set_fetch_options (clone_options, fetch_options);
-  dzl_clear_pointer (&fetch_options, ggit_fetch_options_free);
+  g_clear_pointer (&fetch_options, ggit_fetch_options_free);
 
   uristr = ide_vcs_uri_to_string (req->uri);
 

@@ -269,7 +269,7 @@ gbp_recent_project_row_finalize (GObject *object)
 
   g_clear_object (&self->project_info);
   g_clear_object (&self->bindings);
-  dzl_clear_pointer (&self->search_text, g_free);
+  g_clear_pointer (&self->search_text, g_free);
 
   G_OBJECT_CLASS (gbp_recent_project_row_parent_class)->finalize (object);
 }

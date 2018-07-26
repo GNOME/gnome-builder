@@ -503,7 +503,7 @@ ide_tagged_entry_tag_draw (IdeTaggedEntryTag *tag,
    */
   if (state != tag->priv->last_button_state)
     {
-      dzl_clear_pointer (&tag->priv->close_surface, cairo_surface_destroy);
+      g_clear_pointer (&tag->priv->close_surface, cairo_surface_destroy);
       ide_tagged_entry_tag_ensure_close_surface (tag, context);
 
       tag->priv->last_button_state = state;
@@ -984,7 +984,7 @@ ide_tagged_entry_tag_finalize (GObject *obj)
     ide_tagged_entry_tag_unrealize (tag);
 
   g_clear_object (&priv->layout);
-  dzl_clear_pointer (&priv->close_surface, cairo_surface_destroy);
+  g_clear_pointer (&priv->close_surface, cairo_surface_destroy);
   g_free (priv->label);
   g_free (priv->style);
 

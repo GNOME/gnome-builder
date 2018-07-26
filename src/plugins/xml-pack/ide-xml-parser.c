@@ -67,15 +67,15 @@ static ColorTag default_color_tags [] = {
 static void
 parser_state_free (ParserState *state)
 {
-  dzl_clear_pointer (&state->analysis, ide_xml_analysis_unref);
-  dzl_clear_pointer (&state->diagnostics_array, g_ptr_array_unref);
+  g_clear_pointer (&state->analysis, ide_xml_analysis_unref);
+  g_clear_pointer (&state->diagnostics_array, g_ptr_array_unref);
   g_clear_object (&state->file);
   g_clear_object (&state->root_node);
   g_clear_object (&state->sax_parser);
   g_clear_object (&state->stack);
 
-  dzl_clear_pointer (&state->content, g_bytes_unref);
-  dzl_clear_pointer (&state->schemas, g_ptr_array_unref);
+  g_clear_pointer (&state->content, g_bytes_unref);
+  g_clear_pointer (&state->schemas, g_ptr_array_unref);
 
   g_slice_free (ParserState, state);
 }
@@ -195,7 +195,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
 
           popped_node = ide_xml_stack_pop (state->stack, &popped_element_name, &parent_node, &depth);
           ide_xml_symbol_node_set_state (popped_node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
-          dzl_clear_pointer (&popped_element_name, g_free);
+          g_clear_pointer (&popped_element_name, g_free);
 
           state->parent_node = parent_node;
           g_assert (state->parent_node != NULL);
@@ -775,7 +775,7 @@ ide_xml_parser_finalize (GObject *object)
 {
   IdeXmlParser *self = (IdeXmlParser *)object;
 
-  dzl_clear_pointer (&self->color_tags, g_array_unref);
+  g_clear_pointer (&self->color_tags, g_array_unref);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_xml_parser_parent_class)->finalize (object);

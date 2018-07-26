@@ -71,7 +71,7 @@ ide_ref_ptr_unref (IdeRefPtr *self)
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
       if (self->free_func)
-        dzl_clear_pointer (&self->data, self->free_func);
+        g_clear_pointer (&self->data, self->free_func);
 
       g_slice_free (IdeRefPtr, self);
 

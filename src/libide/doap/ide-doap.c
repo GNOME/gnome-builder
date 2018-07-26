@@ -299,14 +299,14 @@ ide_doap_finalize (GObject *object)
 {
   IdeDoap *self = (IdeDoap *)object;
 
-  dzl_clear_pointer (&self->bug_database, g_free);
-  dzl_clear_pointer (&self->category, g_free);
-  dzl_clear_pointer (&self->description, g_free);
-  dzl_clear_pointer (&self->download_page, g_free);
-  dzl_clear_pointer (&self->homepage, g_free);
-  dzl_clear_pointer (&self->languages, g_ptr_array_unref);
-  dzl_clear_pointer (&self->name, g_free);
-  dzl_clear_pointer (&self->shortdesc, g_free);
+  g_clear_pointer (&self->bug_database, g_free);
+  g_clear_pointer (&self->category, g_free);
+  g_clear_pointer (&self->description, g_free);
+  g_clear_pointer (&self->download_page, g_free);
+  g_clear_pointer (&self->homepage, g_free);
+  g_clear_pointer (&self->languages, g_ptr_array_unref);
+  g_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->shortdesc, g_free);
 
   g_list_free_full (self->maintainers, g_object_unref);
   self->maintainers = NULL;

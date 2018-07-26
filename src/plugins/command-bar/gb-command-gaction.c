@@ -67,7 +67,7 @@ gb_command_gaction_set_action_name (GbCommandGaction *gaction,
 
   if (gaction->action_name != action_name)
     {
-      dzl_clear_pointer (&gaction->action_name, g_free);
+      g_clear_pointer (&gaction->action_name, g_free);
       gaction->action_name = g_strdup (action_name);
     }
 }
@@ -80,7 +80,7 @@ gb_command_gaction_set_parameters (GbCommandGaction *gaction,
 
   if (gaction->parameters != variant)
     {
-      dzl_clear_pointer (&gaction->parameters, g_variant_unref);
+      g_clear_pointer (&gaction->parameters, g_variant_unref);
       gaction->parameters = g_variant_ref (variant);
     }
 }
@@ -106,8 +106,8 @@ gb_command_gaction_finalize (GObject *object)
   GbCommandGaction *self = GB_COMMAND_GACTION (object);
 
   g_clear_object (&self->action_group);
-  dzl_clear_pointer (&self->action_name, g_free);
-  dzl_clear_pointer (&self->parameters, g_variant_unref);
+  g_clear_pointer (&self->action_name, g_free);
+  g_clear_pointer (&self->parameters, g_variant_unref);
 
   G_OBJECT_CLASS (gb_command_gaction_parent_class)->finalize (object);
 }

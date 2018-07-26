@@ -111,7 +111,7 @@ ide_langserv_symbol_node_finalize (GObject *object)
   IdeLangservSymbolNode *self = (IdeLangservSymbolNode *)object;
   IdeLangservSymbolNodePrivate *priv = ide_langserv_symbol_node_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->parent_name, g_free);
+  g_clear_pointer (&priv->parent_name, g_free);
   g_clear_object (&priv->file);
 
   G_OBJECT_CLASS (ide_langserv_symbol_node_parent_class)->finalize (object);

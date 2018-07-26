@@ -77,7 +77,7 @@ ide_langserv_highlighter_set_index (IdeLangservHighlighter *self,
 
   g_assert (IDE_IS_LANGSERV_HIGHLIGHTER (self));
 
-  dzl_clear_pointer (&priv->index, ide_highlight_index_unref);
+  g_clear_pointer (&priv->index, ide_highlight_index_unref);
   if (index != NULL)
     priv->index = ide_highlight_index_ref (index);
 
@@ -273,7 +273,7 @@ ide_langserv_highlighter_dispose (GObject *object)
 
   dzl_clear_source (&priv->queued_update);
 
-  dzl_clear_pointer (&priv->index, ide_highlight_index_unref);
+  g_clear_pointer (&priv->index, ide_highlight_index_unref);
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->client);
 

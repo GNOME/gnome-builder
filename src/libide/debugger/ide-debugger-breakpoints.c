@@ -102,7 +102,7 @@ ide_debugger_breakpoints_dispose (GObject *object)
 {
   IdeDebuggerBreakpoints *self = (IdeDebuggerBreakpoints *)object;
 
-  dzl_clear_pointer (&self->lines, g_array_unref);
+  g_clear_pointer (&self->lines, g_array_unref);
 
   G_OBJECT_CLASS (ide_debugger_breakpoints_parent_class)->dispose (object);
 }

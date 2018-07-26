@@ -105,7 +105,7 @@ discover_state_free (gpointer data)
   g_assert (state->active == 0);
 
   g_list_free_full (state->providers, g_object_unref);
-  dzl_clear_pointer (&state->results, g_ptr_array_unref);
+  g_clear_pointer (&state->results, g_ptr_array_unref);
   g_slice_free (DiscoverState, state);
 }
 

@@ -49,8 +49,8 @@ ide_debugger_instruction_finalize (GObject *object)
   IdeDebuggerInstruction *self = (IdeDebuggerInstruction *)object;
   IdeDebuggerInstructionPrivate *priv = ide_debugger_instruction_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->display, g_free);
-  dzl_clear_pointer (&priv->function, g_free);
+  g_clear_pointer (&priv->display, g_free);
+  g_clear_pointer (&priv->function, g_free);
 
   G_OBJECT_CLASS (ide_debugger_instruction_parent_class)->finalize (object);
 }

@@ -119,7 +119,7 @@ gbp_meson_build_target_finalize (GObject *object)
   GbpMesonBuildTarget *self = (GbpMesonBuildTarget *)object;
 
   g_clear_object (&self->install_directory);
-  dzl_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->name, g_free);
 
   G_OBJECT_CLASS (gbp_meson_build_target_parent_class)->finalize (object);
 }

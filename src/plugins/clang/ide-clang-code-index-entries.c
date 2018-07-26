@@ -194,8 +194,8 @@ ide_clang_code_index_entries_finalize (GObject *object)
 {
   IdeClangCodeIndexEntries *self = (IdeClangCodeIndexEntries *)object;
 
-  dzl_clear_pointer (&self->entries, g_variant_unref);
-  dzl_clear_pointer (&self->path, g_free);
+  g_clear_pointer (&self->entries, g_variant_unref);
+  g_clear_pointer (&self->path, g_free);
 
   G_OBJECT_CLASS(ide_clang_code_index_entries_parent_class)->finalize (object);
 }

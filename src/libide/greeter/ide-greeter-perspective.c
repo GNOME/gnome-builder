@@ -171,7 +171,7 @@ ide_greeter_perspective_apply_filter_all (IdeGreeterPerspective *self)
 
   g_assert (IDE_IS_GREETER_PERSPECTIVE (self));
 
-  dzl_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
+  g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
 
   if (NULL != (text = gtk_entry_get_text (GTK_ENTRY (self->search_entry))))
     self->pattern_spec = dzl_pattern_spec_new (text);
@@ -1255,7 +1255,7 @@ ide_greeter_perspective_finalize (GObject *object)
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)object;
 
   dzl_clear_weak_pointer (&self->ready_binding);
-  dzl_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
+  g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
   g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_greeter_perspective_parent_class)->finalize (object);

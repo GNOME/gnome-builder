@@ -178,7 +178,7 @@ gbp_symbol_tree_builder_finalize (GObject *object)
 {
   GbpSymbolTreeBuilder *self = (GbpSymbolTreeBuilder *)object;
 
-  dzl_clear_pointer (&self->filter, g_free);
+  g_clear_pointer (&self->filter, g_free);
 
   G_OBJECT_CLASS (gbp_symbol_tree_builder_parent_class)->finalize (object);
 }

@@ -81,7 +81,7 @@ ide_xml_analysis_set_diagnostics (IdeXmlAnalysis *self,
 
   if (diagnostics != self->diagnostics)
     {
-      dzl_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+      g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
       self->diagnostics = ide_diagnostics_ref (diagnostics);
     }
 }
@@ -104,7 +104,7 @@ ide_xml_analysis_set_schemas (IdeXmlAnalysis *self,
 
   if (self->schemas != schemas)
     {
-      dzl_clear_pointer (&self->schemas, g_ptr_array_unref);
+      g_clear_pointer (&self->schemas, g_ptr_array_unref);
       if (schemas != NULL)
         self->schemas = g_ptr_array_ref (schemas);
     }
@@ -138,7 +138,7 @@ ide_xml_analysis_free (IdeXmlAnalysis *self)
   g_assert_cmpint (self->ref_count, ==, 0);
 
   g_clear_object (&self->root_node);
-  dzl_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
+  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
 
   g_slice_free (IdeXmlAnalysis, self);
 }

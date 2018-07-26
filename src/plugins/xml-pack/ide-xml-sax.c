@@ -176,7 +176,7 @@ ide_xml_sax_parse (IdeXmlSax   *self,
   wellformed = self->context->wellFormed;
 
   self->context->sax = NULL;
-  dzl_clear_pointer (&self->context, xmlFreeParserCtxt);
+  g_clear_pointer (&self->context, xmlFreeParserCtxt);
 
   return wellformed;
 }

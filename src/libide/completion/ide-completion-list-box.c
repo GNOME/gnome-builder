@@ -314,7 +314,7 @@ ide_completion_list_box_finalize (GObject *object)
   g_clear_object (&self->right_size_group);
   g_clear_object (&self->hadjustment);
   g_clear_object (&self->vadjustment);
-  dzl_clear_pointer (&self->font_attrs, pango_attr_list_unref);
+  g_clear_pointer (&self->font_attrs, pango_attr_list_unref);
 
   G_OBJECT_CLASS (ide_completion_list_box_parent_class)->finalize (object);
 }
@@ -921,7 +921,7 @@ _ide_completion_list_box_set_font_desc (IdeCompletionListBox       *self,
 {
   g_return_if_fail (IDE_IS_COMPLETION_LIST_BOX (self));
 
-  dzl_clear_pointer (&self->font_attrs, pango_attr_list_unref);
+  g_clear_pointer (&self->font_attrs, pango_attr_list_unref);
 
   if (font_desc)
     {

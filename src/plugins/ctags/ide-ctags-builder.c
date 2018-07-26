@@ -47,7 +47,7 @@ build_task_data_free (gpointer data)
 
   g_clear_object (&task_data->directory);
   g_clear_object (&task_data->destination);
-  dzl_clear_pointer (&task_data->ctags, g_free);
+  g_clear_pointer (&task_data->ctags, g_free);
 
   g_slice_free (BuildTaskData, task_data);
 }

@@ -206,7 +206,7 @@ ide_notification_addin_unload (IdeBuildPipelineAddin *addin,
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  dzl_clear_pointer (&self->last_msg_body, g_free);
+  g_clear_pointer (&self->last_msg_body, g_free);
 }
 
 static void

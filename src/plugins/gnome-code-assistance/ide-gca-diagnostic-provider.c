@@ -57,7 +57,7 @@ diagnose_state_free (gpointer data)
     {
       g_clear_object (&state->file);
       g_free (state->language_id);
-      dzl_clear_pointer (&state->unsaved_file, ide_unsaved_file_unref);
+      g_clear_pointer (&state->unsaved_file, ide_unsaved_file_unref);
       g_slice_free (DiagnoseState, state);
     }
 }
@@ -487,7 +487,7 @@ ide_gca_diagnostic_provider_finalize (GObject *object)
 {
   IdeGcaDiagnosticProvider *self = (IdeGcaDiagnosticProvider *)object;
 
-  dzl_clear_pointer (&self->document_cache, g_hash_table_unref);
+  g_clear_pointer (&self->document_cache, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_gca_diagnostic_provider_parent_class)->finalize (object);
 }

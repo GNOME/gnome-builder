@@ -66,7 +66,7 @@ static void
 prepare_state_free (PrepareState *state)
 {
   g_clear_object (&state->pipeline);
-  dzl_clear_pointer (&state->toolchain_id, g_free);
+  g_clear_pointer (&state->toolchain_id, g_free);
   g_slice_free (PrepareState, state);
 }
 
@@ -387,7 +387,7 @@ ide_toolchain_manager_dispose (GObject *object)
   IdeToolchainManager *self = (IdeToolchainManager *)object;
 
   g_clear_object (&self->extensions);
-  dzl_clear_pointer (&self->toolchains, g_ptr_array_unref);
+  g_clear_pointer (&self->toolchains, g_ptr_array_unref);
   g_clear_object (&self->cancellable);
 
   G_OBJECT_CLASS (ide_toolchain_manager_parent_class)->dispose (object);

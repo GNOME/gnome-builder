@@ -426,13 +426,13 @@ ide_subprocess_launcher_finalize (GObject *object)
             close (map->source_fd);
         }
 
-      dzl_clear_pointer (&priv->fd_mapping, g_array_unref);
+      g_clear_pointer (&priv->fd_mapping, g_array_unref);
     }
 
-  dzl_clear_pointer (&priv->argv, g_ptr_array_unref);
-  dzl_clear_pointer (&priv->cwd, g_free);
-  dzl_clear_pointer (&priv->environ, g_strfreev);
-  dzl_clear_pointer (&priv->stdout_file_path, g_free);
+  g_clear_pointer (&priv->argv, g_ptr_array_unref);
+  g_clear_pointer (&priv->cwd, g_free);
+  g_clear_pointer (&priv->environ, g_strfreev);
+  g_clear_pointer (&priv->stdout_file_path, g_free);
 
   if (priv->stdin_fd != -1)
     {

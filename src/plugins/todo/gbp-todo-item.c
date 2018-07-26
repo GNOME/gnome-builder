@@ -40,7 +40,7 @@ gbp_todo_item_finalize (GObject *object)
 {
   GbpTodoItem *self = (GbpTodoItem *)object;
 
-  dzl_clear_pointer (&self->bytes, g_bytes_unref);
+  g_clear_pointer (&self->bytes, g_bytes_unref);
 
   G_OBJECT_CLASS (gbp_todo_item_parent_class)->finalize (object);
 }

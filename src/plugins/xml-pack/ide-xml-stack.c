@@ -156,7 +156,7 @@ ide_xml_stack_finalize (GObject *object)
 {
   IdeXmlStack *self = (IdeXmlStack *)object;
 
-  dzl_clear_pointer (&self->array, g_array_unref);
+  g_clear_pointer (&self->array, g_array_unref);
 
   G_OBJECT_CLASS (ide_xml_stack_parent_class)->finalize (object);
 }

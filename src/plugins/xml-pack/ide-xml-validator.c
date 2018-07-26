@@ -203,7 +203,7 @@ end:
   if (diagnostics != NULL)
     *diagnostics = ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&self->diagnostics_array));
   else
-    dzl_clear_pointer (&self->diagnostics_array, g_ptr_array_unref);
+    g_clear_pointer (&self->diagnostics_array, g_ptr_array_unref);
 
   self->diagnostics_array = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
 
@@ -275,10 +275,10 @@ ide_xml_validator_finalize (GObject *object)
 {
   IdeXmlValidator *self = (IdeXmlValidator *)object;
 
-  dzl_clear_pointer (&self->dtd, xmlFreeDtd);
-  dzl_clear_pointer (&self->rng, xmlRelaxNGFree);
-  dzl_clear_pointer (&self->xml_schema, xmlSchemaFree);
-  dzl_clear_pointer (&self->diagnostics_array, g_ptr_array_unref);
+  g_clear_pointer (&self->dtd, xmlFreeDtd);
+  g_clear_pointer (&self->rng, xmlRelaxNGFree);
+  g_clear_pointer (&self->xml_schema, xmlSchemaFree);
+  g_clear_pointer (&self->diagnostics_array, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_xml_validator_parent_class)->finalize (object);
 }

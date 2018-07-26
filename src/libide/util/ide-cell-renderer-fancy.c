@@ -250,8 +250,8 @@ ide_cell_renderer_fancy_finalize (GObject *object)
 {
   IdeCellRendererFancy *self = (IdeCellRendererFancy *)object;
 
-  dzl_clear_pointer (&self->body, g_free);
-  dzl_clear_pointer (&self->title, g_free);
+  g_clear_pointer (&self->body, g_free);
+  g_clear_pointer (&self->title, g_free);
 
   G_OBJECT_CLASS (ide_cell_renderer_fancy_parent_class)->finalize (object);
 }

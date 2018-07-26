@@ -554,19 +554,19 @@ gbp_flatpak_manifest_finalize (GObject *object)
   g_clear_object (&self->file);
   g_clear_object (&self->file_monitor);
 
-  dzl_clear_pointer (&self->root, json_node_unref);
+  g_clear_pointer (&self->root, json_node_unref);
 
-  dzl_clear_pointer (&self->build_args, g_strfreev);
-  dzl_clear_pointer (&self->command, g_free);
-  dzl_clear_pointer (&self->finish_args, g_strfreev);
-  dzl_clear_pointer (&self->runtime, g_free);
-  dzl_clear_pointer (&self->runtime_version, g_free);
-  dzl_clear_pointer (&self->sdk, g_free);
-  dzl_clear_pointer (&self->sdk_extensions, g_strfreev);
+  g_clear_pointer (&self->build_args, g_strfreev);
+  g_clear_pointer (&self->command, g_free);
+  g_clear_pointer (&self->finish_args, g_strfreev);
+  g_clear_pointer (&self->runtime, g_free);
+  g_clear_pointer (&self->runtime_version, g_free);
+  g_clear_pointer (&self->sdk, g_free);
+  g_clear_pointer (&self->sdk_extensions, g_strfreev);
 
-  dzl_clear_pointer (&self->primary, json_object_unref);
-  dzl_clear_pointer (&self->primary_module, g_free);
-  dzl_clear_pointer (&self->config_opts, g_strfreev);
+  g_clear_pointer (&self->primary, json_object_unref);
+  g_clear_pointer (&self->primary_module, g_free);
+  g_clear_pointer (&self->config_opts, g_strfreev);
 
   G_OBJECT_CLASS (gbp_flatpak_manifest_parent_class)->finalize (object);
 }

@@ -261,9 +261,9 @@ gbp_flatpak_transfer_finalize (GObject *object)
 {
   GbpFlatpakTransfer *self = (GbpFlatpakTransfer *)object;
 
-  dzl_clear_pointer (&self->id, g_free);
-  dzl_clear_pointer (&self->arch, g_free);
-  dzl_clear_pointer (&self->branch, g_free);
+  g_clear_pointer (&self->id, g_free);
+  g_clear_pointer (&self->arch, g_free);
+  g_clear_pointer (&self->branch, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_transfer_parent_class)->finalize (object);
 }

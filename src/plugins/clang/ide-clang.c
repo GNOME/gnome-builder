@@ -65,9 +65,9 @@ G_DEFINE_TYPE (IdeClang, ide_clang, G_TYPE_OBJECT)
 static void
 unsaved_files_free (UnsavedFiles *uf)
 {
-  dzl_clear_pointer (&uf->files, g_free);
-  dzl_clear_pointer (&uf->bytes, g_ptr_array_unref);
-  dzl_clear_pointer (&uf->paths, g_ptr_array_unref);
+  g_clear_pointer (&uf->files, g_free);
+  g_clear_pointer (&uf->bytes, g_ptr_array_unref);
+  g_clear_pointer (&uf->paths, g_ptr_array_unref);
   g_slice_free (UnsavedFiles, uf);
 }
 
@@ -130,7 +130,7 @@ ide_clang_cook_flags (const gchar         *path,
           g_ptr_array_add (cooked, g_strdup (flags[i]));
 
           if (g_strcmp0 (include, flags[i]) == 0)
-            dzl_clear_pointer (&include, g_free);
+            g_clear_pointer (&include, g_free);
         }
     }
 
@@ -397,8 +397,8 @@ ide_clang_finalize (GObject *object)
   IdeClang *self = (IdeClang *)object;
 
   g_clear_object (&self->workdir);
-  dzl_clear_pointer (&self->unsaved_files, g_hash_table_unref);
-  dzl_clear_pointer (&self->index, clang_disposeIndex);
+  g_clear_pointer (&self->unsaved_files, g_hash_table_unref);
+  g_clear_pointer (&self->index, clang_disposeIndex);
 
   G_OBJECT_CLASS (ide_clang_parent_class)->finalize (object);
 }
@@ -452,9 +452,9 @@ index_file_free (gpointer data)
 {
   IndexFile *state = data;
 
-  dzl_clear_pointer (&state->path, g_free);
-  dzl_clear_pointer (&state->argv, g_strfreev);
-  dzl_clear_pointer (&state->entries, g_ptr_array_unref);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->entries, g_ptr_array_unref);
 
   g_queue_foreach (&state->decl_cursors, (GFunc)_ide_clang_dispose_cursor, NULL);
   g_queue_clear (&state->decl_cursors);
@@ -835,10 +835,10 @@ diagnose_free (gpointer data)
 {
   Diagnose *state = data;
 
-  dzl_clear_pointer (&state->ufs, unsaved_files_free);
-  dzl_clear_pointer (&state->path, g_free);
-  dzl_clear_pointer (&state->argv, g_strfreev);
-  dzl_clear_pointer (&state->diagnostics, g_ptr_array_unref);
+  g_clear_pointer (&state->ufs, unsaved_files_free);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->diagnostics, g_ptr_array_unref);
   g_clear_object (&state->workdir);
   g_slice_free (Diagnose, state);
 }
@@ -1173,9 +1173,9 @@ complete_free (gpointer data)
 {
   Complete *state = data;
 
-  dzl_clear_pointer (&state->ufs, unsaved_files_free);
-  dzl_clear_pointer (&state->path, g_free);
-  dzl_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->ufs, unsaved_files_free);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (Complete, state);
 }
 
@@ -1369,9 +1369,9 @@ find_nearest_scope_free (gpointer data)
 {
   FindNearestScope *state = data;
 
-  dzl_clear_pointer (&state->ufs, unsaved_files_free);
-  dzl_clear_pointer (&state->path, g_free);
-  dzl_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->ufs, unsaved_files_free);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (FindNearestScope, state);
 }
 
@@ -1522,10 +1522,10 @@ locate_symbol_free (gpointer data)
 {
   LocateSymbol *state = data;
 
-  dzl_clear_pointer (&state->ufs, unsaved_files_free);
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
-  dzl_clear_pointer (&state->path, g_free);
-  dzl_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (LocateSymbol, state);
 }
 
@@ -1633,7 +1633,7 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
           gfile = g_file_new_for_path (path);
           file = ide_file_new (NULL, gfile);
 
-          dzl_clear_pointer (&definition, ide_source_location_unref);
+          g_clear_pointer (&definition, ide_source_location_unref);
           declaration = ide_source_location_new (file, 0, 0, 0);
         }
     }
@@ -1718,10 +1718,10 @@ get_symbol_tree_free (gpointer data)
 {
   GetSymbolTree *state = data;
 
-  dzl_clear_pointer (&state->ufs, unsaved_files_free);
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
-  dzl_clear_pointer (&state->path, g_free);
-  dzl_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (GetSymbolTree, state);
 }
 
@@ -1920,10 +1920,10 @@ get_highlight_index_free (gpointer data)
 {
   GetHighlightIndex *state = data;
 
-  dzl_clear_pointer (&state->ufs, unsaved_files_free);
+  g_clear_pointer (&state->ufs, unsaved_files_free);
   g_clear_object (&state->workdir);
-  dzl_clear_pointer (&state->path, g_free);
-  dzl_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (GetHighlightIndex, state);
 }
 
@@ -2112,9 +2112,9 @@ get_index_key_free (gpointer data)
 {
   GetIndexKey *state = data;
 
-  dzl_clear_pointer (&state->ufs, unsaved_files_free);
-  dzl_clear_pointer (&state->path, g_free);
-  dzl_clear_pointer (&state->argv, g_strfreev);
+  g_clear_pointer (&state->ufs, unsaved_files_free);
+  g_clear_pointer (&state->path, g_free);
+  g_clear_pointer (&state->argv, g_strfreev);
   g_slice_free (GetIndexKey, state);
 }
 

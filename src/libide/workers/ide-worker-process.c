@@ -234,10 +234,10 @@ ide_worker_process_finalize (GObject *object)
 {
   IdeWorkerProcess *self = (IdeWorkerProcess *)object;
 
-  dzl_clear_pointer (&self->argv0, g_free);
-  dzl_clear_pointer (&self->plugin_name, g_free);
-  dzl_clear_pointer (&self->dbus_address, g_free);
-  dzl_clear_pointer (&self->tasks, g_ptr_array_unref);
+  g_clear_pointer (&self->argv0, g_free);
+  g_clear_pointer (&self->plugin_name, g_free);
+  g_clear_pointer (&self->dbus_address, g_free);
+  g_clear_pointer (&self->tasks, g_ptr_array_unref);
   g_clear_object (&self->connection);
   g_clear_object (&self->subprocess);
   g_clear_object (&self->worker);

@@ -325,9 +325,9 @@ ide_build_configuration_view_disconnect (IdeBuildConfigurationView *self,
 
   gtk_list_box_bind_model (self->runtime_list_box, NULL, NULL, NULL, NULL);
 
-  dzl_clear_pointer (&self->configure_binding, g_binding_unbind);
-  dzl_clear_pointer (&self->display_name_binding, g_binding_unbind);
-  dzl_clear_pointer (&self->prefix_binding, g_binding_unbind);
+  g_clear_pointer (&self->configure_binding, g_binding_unbind);
+  g_clear_pointer (&self->display_name_binding, g_binding_unbind);
+  g_clear_pointer (&self->prefix_binding, g_binding_unbind);
 }
 
 static void

@@ -175,8 +175,8 @@ ide_highlight_index_finalize (IdeHighlightIndex *self)
 {
   IDE_ENTRY;
 
-  dzl_clear_pointer (&self->strings, g_string_chunk_free);
-  dzl_clear_pointer (&self->index, g_hash_table_unref);
+  g_clear_pointer (&self->strings, g_string_chunk_free);
+  g_clear_pointer (&self->index, g_hash_table_unref);
   g_slice_free (IdeHighlightIndex, self);
 
   DZL_COUNTER_DEC (instances);

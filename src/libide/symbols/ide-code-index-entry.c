@@ -68,8 +68,8 @@ ide_code_index_entry_free (IdeCodeIndexEntry *self)
 {
   if (self != NULL)
     {
-      dzl_clear_pointer (&self->name, g_free);
-      dzl_clear_pointer (&self->key, g_free);
+      g_clear_pointer (&self->name, g_free);
+      g_clear_pointer (&self->key, g_free);
       g_slice_free (IdeCodeIndexEntry, self);
     }
 }
@@ -164,8 +164,8 @@ ide_code_index_entry_builder_free (IdeCodeIndexEntryBuilder *builder)
 {
   if (builder != NULL)
     {
-      dzl_clear_pointer (&builder->entry.key, g_free);
-      dzl_clear_pointer (&builder->entry.name, g_free);
+      g_clear_pointer (&builder->entry.key, g_free);
+      g_clear_pointer (&builder->entry.name, g_free);
       g_slice_free (IdeCodeIndexEntryBuilder, builder);
     }
 }

@@ -64,9 +64,9 @@ symbol_resolver_task_data_free (SymbolResolverTaskData *data)
   g_assert (data->buffer != NULL);
   g_assert (IDE_IS_BUFFER (data->buffer));
 
-  dzl_clear_pointer (&data->resolvers, g_ptr_array_unref);
+  g_clear_pointer (&data->resolvers, g_ptr_array_unref);
   g_clear_object (&data->buffer);
-  dzl_clear_pointer (&data->location, ide_source_location_unref);
+  g_clear_pointer (&data->location, ide_source_location_unref);
   g_slice_free (SymbolResolverTaskData, data);
 }
 

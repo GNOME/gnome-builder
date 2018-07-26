@@ -49,7 +49,7 @@ struct _IdeVcsUri
 static inline void
 ide_vcs_uri_set_dirty (IdeVcsUri *self)
 {
-  dzl_clear_pointer (&self->non_destructive_uri, g_free);
+  g_clear_pointer (&self->non_destructive_uri, g_free);
 }
 
 static gboolean
@@ -119,7 +119,7 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
 
       ret = TRUE;
     }
-  dzl_clear_pointer (&match_info, g_match_info_free);
+  g_clear_pointer (&match_info, g_match_info_free);
 
   if (ret)
     return ret;
@@ -165,7 +165,7 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
 
       ret = TRUE;
     }
-  dzl_clear_pointer (&match_info, g_match_info_free);
+  g_clear_pointer (&match_info, g_match_info_free);
 
   if (ret)
     return ret;
@@ -195,7 +195,7 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
 
       ret = TRUE;
     }
-  dzl_clear_pointer (&match_info, g_match_info_free);
+  g_clear_pointer (&match_info, g_match_info_free);
 
   if (ret)
     return ret;
@@ -317,7 +317,7 @@ ide_vcs_uri_set_scheme (IdeVcsUri   *self,
     {
       const gchar *tmp;
 
-      dzl_clear_pointer (&self->scheme, g_free);
+      g_clear_pointer (&self->scheme, g_free);
 
       if (scheme != NULL && (tmp = strchr (scheme, ':')))
         self->scheme = g_strndup (scheme, tmp - scheme);
@@ -341,7 +341,7 @@ ide_vcs_uri_set_user (IdeVcsUri   *self,
     {
       const gchar *tmp;
 
-      dzl_clear_pointer (&self->user, g_free);
+      g_clear_pointer (&self->user, g_free);
 
       if (user != NULL && (tmp = strchr (user, '@')))
         self->user = g_strndup (user, tmp - user);
@@ -453,7 +453,7 @@ ide_vcs_uri_is_valid (const gchar *uri_string)
 
       uri = ide_vcs_uri_new (uri_string);
       ret = !!uri;
-      dzl_clear_pointer (&uri, ide_vcs_uri_unref);
+      g_clear_pointer (&uri, ide_vcs_uri_unref);
     }
 
   return ret;

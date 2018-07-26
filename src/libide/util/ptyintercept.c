@@ -221,8 +221,8 @@ _pty_intercept_side_close (pty_intercept_side_t *side)
 
   clear_source (&side->in_watch);
   clear_source (&side->out_watch);
-  dzl_clear_pointer (&side->channel, g_io_channel_unref);
-  dzl_clear_pointer (&side->out_bytes, g_bytes_unref);
+  g_clear_pointer (&side->channel, g_io_channel_unref);
+  g_clear_pointer (&side->out_bytes, g_bytes_unref);
 }
 
 static gboolean
@@ -276,7 +276,7 @@ _pty_intercept_out_cb (GIOChannel   *channel,
       return G_SOURCE_CONTINUE;
     }
 
-  dzl_clear_pointer (&us->out_bytes, g_bytes_unref);
+  g_clear_pointer (&us->out_bytes, g_bytes_unref);
 
   /*
    * We wrote all the data to this side, so now we can wait for more
@@ -542,13 +542,13 @@ pty_intercept_clear (pty_intercept_t *self)
 
   clear_source (&self->slave.in_watch);
   clear_source (&self->slave.out_watch);
-  dzl_clear_pointer (&self->slave.channel, g_io_channel_unref);
-  dzl_clear_pointer (&self->slave.out_bytes, g_bytes_unref);
+  g_clear_pointer (&self->slave.channel, g_io_channel_unref);
+  g_clear_pointer (&self->slave.out_bytes, g_bytes_unref);
 
   clear_source (&self->master.in_watch);
   clear_source (&self->master.out_watch);
-  dzl_clear_pointer (&self->master.channel, g_io_channel_unref);
-  dzl_clear_pointer (&self->master.out_bytes, g_bytes_unref);
+  g_clear_pointer (&self->master.channel, g_io_channel_unref);
+  g_clear_pointer (&self->master.out_bytes, g_bytes_unref);
 
   memset (self, 0, sizeof *self);
 }

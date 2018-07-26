@@ -904,7 +904,7 @@ gb_project_tree_builder_dispose (GObject *object)
 {
   GbProjectTreeBuilder *self = (GbProjectTreeBuilder *)object;
 
-  dzl_clear_pointer (&self->expanded, g_hash_table_unref);
+  g_clear_pointer (&self->expanded, g_hash_table_unref);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (gb_project_tree_builder_parent_class)->dispose (object);

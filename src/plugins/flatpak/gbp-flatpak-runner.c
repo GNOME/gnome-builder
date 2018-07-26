@@ -161,8 +161,8 @@ gbp_flatpak_runner_finalize (GObject *object)
 {
   GbpFlatpakRunner *self = (GbpFlatpakRunner *)object;
 
-  dzl_clear_pointer (&self->build_path, g_free);
-  dzl_clear_pointer (&self->binary_path, g_free);
+  g_clear_pointer (&self->build_path, g_free);
+  g_clear_pointer (&self->binary_path, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_runner_parent_class)->finalize (object);
 }

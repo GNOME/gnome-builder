@@ -201,8 +201,8 @@ ide_file_settings_finalize (GObject *object)
   IdeFileSettings *self = (IdeFileSettings *)object;
   IdeFileSettingsPrivate *priv = ide_file_settings_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->children, g_ptr_array_unref);
-  dzl_clear_pointer (&priv->encoding, g_free);
+  g_clear_pointer (&priv->children, g_ptr_array_unref);
+  g_clear_pointer (&priv->encoding, g_free);
   dzl_clear_weak_pointer (&priv->file);
 
   G_OBJECT_CLASS (ide_file_settings_parent_class)->finalize (object);

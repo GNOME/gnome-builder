@@ -545,7 +545,7 @@ ide_build_panel_destroy (GtkWidget *widget)
   if (self->pipeline_signals != NULL)
     dzl_signal_group_set_target (self->pipeline_signals, NULL);
 
-  dzl_clear_pointer (&self->diags_hash, g_hash_table_unref);
+  g_clear_pointer (&self->diags_hash, g_hash_table_unref);
 
   g_clear_object (&self->pipeline_signals);
   g_clear_object (&self->pipeline);

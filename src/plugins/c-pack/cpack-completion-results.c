@@ -56,7 +56,7 @@ G_DEFINE_TYPE_WITH_CODE (CpackCompletionResults, cpack_completion_results, G_TYP
 static void
 populate_free (Populate *p)
 {
-  dzl_clear_pointer (&p->dirs, g_ptr_array_unref);
+  g_clear_pointer (&p->dirs, g_ptr_array_unref);
   g_slice_free (Populate, p);
 }
 
@@ -65,10 +65,10 @@ cpack_completion_results_finalize (GObject *object)
 {
   CpackCompletionResults *self = (CpackCompletionResults *)object;
 
-  dzl_clear_pointer (&self->strings, g_string_chunk_free);
-  dzl_clear_pointer (&self->words, g_hash_table_unref);
-  dzl_clear_pointer (&self->unfiltered, g_ptr_array_unref);
-  dzl_clear_pointer (&self->items, g_array_unref);
+  g_clear_pointer (&self->strings, g_string_chunk_free);
+  g_clear_pointer (&self->words, g_hash_table_unref);
+  g_clear_pointer (&self->unfiltered, g_ptr_array_unref);
+  g_clear_pointer (&self->items, g_array_unref);
 
   G_OBJECT_CLASS (cpack_completion_results_parent_class)->finalize (object);
 }

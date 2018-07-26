@@ -158,7 +158,7 @@ gbp_sysroot_runtime_provider_unload (IdeRuntimeProvider *provider,
         }
     }
 
-  dzl_clear_pointer (&self->runtimes, g_ptr_array_unref);
+  g_clear_pointer (&self->runtimes, g_ptr_array_unref);
 
   IDE_EXIT;
 }

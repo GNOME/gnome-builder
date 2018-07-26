@@ -188,7 +188,7 @@ ide_source_view_capture_record_event (IdeSourceViewCapture *self,
 static void
 clear_frame (CaptureFrame *frame)
 {
-  dzl_clear_pointer (&frame->event, gdk_event_free);
+  g_clear_pointer (&frame->event, gdk_event_free);
 }
 
 static void
@@ -197,8 +197,8 @@ ide_source_view_capture_finalize (GObject *object)
   IdeSourceViewCapture *self = (IdeSourceViewCapture *)object;
 
   g_clear_object (&self->view);
-  dzl_clear_pointer (&self->frames, g_array_unref);
-  dzl_clear_pointer (&self->starting_state.mode_name, g_free);
+  g_clear_pointer (&self->frames, g_array_unref);
+  g_clear_pointer (&self->starting_state.mode_name, g_free);
 
   G_OBJECT_CLASS (ide_source_view_capture_parent_class)->finalize (object);
 }

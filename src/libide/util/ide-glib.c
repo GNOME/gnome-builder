@@ -420,7 +420,7 @@ typedef struct
 static void
 find_free (Find *f)
 {
-  dzl_clear_pointer (&f->spec, g_pattern_spec_free);
+  g_clear_pointer (&f->spec, g_pattern_spec_free);
   g_slice_free (Find, f);
 }
 

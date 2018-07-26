@@ -424,7 +424,7 @@ gbp_sysroot_manager_finalize (GObject *object)
 {
   GbpSysrootManager *self = GBP_SYSROOT_MANAGER(object);
 
-  dzl_clear_pointer (&self->key_file, g_key_file_free);
+  g_clear_pointer (&self->key_file, g_key_file_free);
 
   G_OBJECT_CLASS (gbp_sysroot_manager_parent_class)->finalize (object);
 }

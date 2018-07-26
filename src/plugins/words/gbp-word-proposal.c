@@ -38,7 +38,7 @@ gbp_word_proposal_finalize (GObject *object)
 {
   GbpWordProposal *self = (GbpWordProposal *)object;
 
-  dzl_clear_pointer (&self->word, g_free);
+  g_clear_pointer (&self->word, g_free);
 
   G_OBJECT_CLASS (gbp_word_proposal_parent_class)->finalize (object);
 }

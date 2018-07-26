@@ -32,7 +32,7 @@ cpack_completion_item_finalize (GObject *object)
 {
   CpackCompletionItem *self = (CpackCompletionItem *)object;
 
-  dzl_clear_pointer (&self->name, g_free);
+  g_clear_pointer (&self->name, g_free);
 
   G_OBJECT_CLASS (cpack_completion_item_parent_class)->finalize (object);
 }

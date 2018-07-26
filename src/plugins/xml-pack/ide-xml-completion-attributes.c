@@ -60,7 +60,7 @@ match_item_free (gpointer data)
 {
   MatchItem *item = (MatchItem *)data;
 
-  dzl_clear_pointer (&item->name, g_free);
+  g_clear_pointer (&item->name, g_free);
 }
 
 static GPtrArray *
@@ -116,7 +116,7 @@ matching_state_free (MatchingState *state)
 {
   g_clear_object (&state->node);
 
-  dzl_clear_pointer (&state->node_attr, g_ptr_array_unref);
+  g_clear_pointer (&state->node_attr, g_ptr_array_unref);
 }
 
 static GPtrArray *
@@ -191,7 +191,7 @@ process_choice (MatchingState *state)
           pos = get_match_children_min_pos (match);
           if (pos != -1 && pos < min_pos)
             {
-              dzl_clear_pointer (&min_pos_match, g_ptr_array_unref);
+              g_clear_pointer (&min_pos_match, g_ptr_array_unref);
 
               min_pos = pos;
               min_pos_match = g_ptr_array_ref (match);

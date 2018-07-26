@@ -69,9 +69,9 @@ call_free (gpointer data)
 
   c->cancel_id = 0;
 
-  dzl_clear_pointer (&c->method, g_free);
-  dzl_clear_pointer (&c->params, g_variant_unref);
-  dzl_clear_pointer (&c->id, g_variant_unref);
+  g_clear_pointer (&c->method, g_free);
+  g_clear_pointer (&c->params, g_variant_unref);
+  g_clear_pointer (&c->id, g_variant_unref);
   g_clear_object (&c->cancellable);
   g_clear_object (&c->self);
   g_slice_free (Call, c);
@@ -157,7 +157,7 @@ ide_clang_client_subprocess_exited (IdeClangClient          *self,
     self->state = STATE_SPAWNING;
 
   g_clear_object (&self->rpc_client);
-  dzl_clear_pointer (&self->seq_by_file, g_hash_table_unref);
+  g_clear_pointer (&self->seq_by_file, g_hash_table_unref);
 
   IDE_EXIT;
 }
@@ -419,7 +419,7 @@ ide_clang_client_finalize (GObject *object)
 {
   IdeClangClient *self = (IdeClangClient *)object;
 
-  dzl_clear_pointer (&self->seq_by_file, g_hash_table_unref);
+  g_clear_pointer (&self->seq_by_file, g_hash_table_unref);
   g_clear_object (&self->rpc_client);
   g_clear_object (&self->root_uri);
   g_clear_object (&self->supervisor);

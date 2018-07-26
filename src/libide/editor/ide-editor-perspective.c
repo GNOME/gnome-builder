@@ -448,7 +448,7 @@ ide_editor_perspective_focus_location_cb (GObject      *object,
 
 cleanup:
   g_clear_object (&state->self);
-  dzl_clear_pointer (&state->location, ide_source_location_unref);
+  g_clear_pointer (&state->location, ide_source_location_unref);
   g_slice_free (FocusLocation, state);
 
   IDE_EXIT;

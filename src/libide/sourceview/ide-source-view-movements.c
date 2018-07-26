@@ -2008,7 +2008,7 @@ _ide_source_view_apply_movement (IdeSourceView         *self,
                    extend_selection ? "YES" : "NO",
                    exclusive ? "YES" : "NO",
                    count);
-    dzl_clear_pointer (&enum_class_unref, g_type_class_unref);
+    g_clear_pointer (&enum_class_unref, g_type_class_unref);
   }
 #endif
 

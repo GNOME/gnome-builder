@@ -271,15 +271,15 @@ ide_configuration_finalize (GObject *object)
   g_clear_object (&priv->build_commands_dir);
   g_clear_object (&priv->environment);
 
-  dzl_clear_pointer (&priv->build_commands, g_strfreev);
-  dzl_clear_pointer (&priv->internal, g_hash_table_unref);
-  dzl_clear_pointer (&priv->config_opts, g_free);
-  dzl_clear_pointer (&priv->display_name, g_free);
-  dzl_clear_pointer (&priv->id, g_free);
-  dzl_clear_pointer (&priv->post_install_commands, g_strfreev);
-  dzl_clear_pointer (&priv->prefix, g_free);
-  dzl_clear_pointer (&priv->runtime_id, g_free);
-  dzl_clear_pointer (&priv->app_id, g_free);
+  g_clear_pointer (&priv->build_commands, g_strfreev);
+  g_clear_pointer (&priv->internal, g_hash_table_unref);
+  g_clear_pointer (&priv->config_opts, g_free);
+  g_clear_pointer (&priv->display_name, g_free);
+  g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->post_install_commands, g_strfreev);
+  g_clear_pointer (&priv->prefix, g_free);
+  g_clear_pointer (&priv->runtime_id, g_free);
+  g_clear_pointer (&priv->app_id, g_free);
 
   G_OBJECT_CLASS (ide_configuration_parent_class)->finalize (object);
 }

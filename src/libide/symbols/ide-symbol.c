@@ -176,10 +176,10 @@ ide_symbol_unref (IdeSymbol *self)
 
   if (g_atomic_int_dec_and_test (&self->ref_count))
     {
-      dzl_clear_pointer (&self->declaration_location, ide_source_location_unref);
-      dzl_clear_pointer (&self->definition_location, ide_source_location_unref);
-      dzl_clear_pointer (&self->canonical_location, ide_source_location_unref);
-      dzl_clear_pointer (&self->name, g_free);
+      g_clear_pointer (&self->declaration_location, ide_source_location_unref);
+      g_clear_pointer (&self->definition_location, ide_source_location_unref);
+      g_clear_pointer (&self->canonical_location, ide_source_location_unref);
+      g_clear_pointer (&self->name, g_free);
       g_slice_free (IdeSymbol, self);
 
       DZL_COUNTER_DEC (instances);

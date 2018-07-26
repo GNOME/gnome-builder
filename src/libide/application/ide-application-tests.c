@@ -74,7 +74,7 @@ ide_application_run_tests_cb (GObject      *object,
   else
     g_application_release (G_APPLICATION (test->self));
 
-  dzl_clear_pointer (&test->name, g_free);
+  g_clear_pointer (&test->name, g_free);
   g_clear_object (&test->self);
   g_slice_free (AsyncTest, test);
 }

@@ -83,7 +83,7 @@ ide_transfer_manager_finalize (GObject *object)
 {
   IdeTransferManager *self = (IdeTransferManager *)object;
 
-  dzl_clear_pointer (&self->transfers, g_ptr_array_unref);
+  g_clear_pointer (&self->transfers, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_transfer_manager_parent_class)->finalize (object);
 }

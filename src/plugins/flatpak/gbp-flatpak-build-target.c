@@ -78,7 +78,7 @@ gbp_flatpak_build_target_finalize (GObject *object)
 {
   GbpFlatpakBuildTarget *self = (GbpFlatpakBuildTarget *)object;
 
-  dzl_clear_pointer (&self->command, g_free);
+  g_clear_pointer (&self->command, g_free);
 
   G_OBJECT_CLASS (gbp_flatpak_build_target_parent_class)->finalize (object);
 }

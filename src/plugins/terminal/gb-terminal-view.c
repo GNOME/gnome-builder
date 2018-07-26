@@ -511,8 +511,8 @@ gb_terminal_view_finalize (GObject *object)
   GbTerminalView *self = GB_TERMINAL_VIEW (object);
 
   g_clear_object (&self->save_as_file_top);
-  dzl_clear_pointer (&self->cwd, g_free);
-  dzl_clear_pointer (&self->selection_buffer, g_free);
+  g_clear_pointer (&self->cwd, g_free);
+  g_clear_pointer (&self->selection_buffer, g_free);
   g_clear_object (&self->pty);
   g_clear_object (&self->runtime);
 

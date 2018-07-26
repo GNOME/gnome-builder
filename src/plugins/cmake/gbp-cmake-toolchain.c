@@ -206,7 +206,7 @@ gbp_cmake_toolchain_load (GbpCMakeToolchain *self,
 
   g_assert (GBP_IS_CMAKE_TOOLCHAIN (self));
 
-  dzl_clear_pointer (&self->file_path, g_free);
+  g_clear_pointer (&self->file_path, g_free);
   self->file_path = g_file_get_path (file);
 
   id = g_strconcat ("cmake:", self->file_path, NULL);
@@ -244,7 +244,7 @@ gbp_cmake_toolchain_finalize (GObject *object)
 {
   GbpCMakeToolchain *self = (GbpCMakeToolchain *)object;
 
-  dzl_clear_pointer (&self->file_path, g_free);
+  g_clear_pointer (&self->file_path, g_free);
 
   G_OBJECT_CLASS (gbp_cmake_toolchain_parent_class)->finalize (object);
 }

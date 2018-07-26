@@ -119,22 +119,22 @@ build_data_free (BuildData *self)
   g_clear_object (&self->index_dir);
   g_clear_object (&self->building_data_dir);
   g_clear_object (&self->building_index_dir);
-  dzl_clear_pointer (&self->changes, g_ptr_array_unref);
+  g_clear_pointer (&self->changes, g_ptr_array_unref);
   g_slice_free (BuildData, self);
 }
 
 static void
 indexer_info_free (IndexerInfo *info)
 {
-  dzl_clear_pointer (&info->specs, g_ptr_array_unref);
-  dzl_clear_pointer (&info->mime_types, g_ptr_array_unref);
+  g_clear_pointer (&info->specs, g_ptr_array_unref);
+  g_clear_pointer (&info->mime_types, g_ptr_array_unref);
   g_slice_free (IndexerInfo, info);
 }
 
 static void
 get_changes_data_free (GetChangesData *self)
 {
-  dzl_clear_pointer (&self->indexers, indexer_info_free);
+  g_clear_pointer (&self->indexers, indexer_info_free);
   g_clear_object (&self->data_dir);
   g_clear_object (&self->index_dir);
   g_clear_object (&self->vcs);
@@ -155,7 +155,7 @@ add_entries_data_free (AddEntriesData *self)
 static void
 file_info_free (FileInfo *file_info)
 {
-  dzl_clear_pointer (&file_info->name, g_free);
+  g_clear_pointer (&file_info->name, g_free);
   g_clear_object (&file_info->directory);
   g_slice_free (FileInfo, file_info);
 }

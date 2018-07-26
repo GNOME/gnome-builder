@@ -81,7 +81,7 @@ ide_test_provider_dispose (GObject *object)
       g_list_model_items_changed (G_LIST_MODEL (self), 0, len, 0);
     }
 
-  dzl_clear_pointer (&priv->items, g_ptr_array_unref);
+  g_clear_pointer (&priv->items, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_test_provider_parent_class)->dispose (object);
 }

@@ -222,7 +222,7 @@ gb_command_bar_show (GbCommandBar *self)
   gtk_widget_hide (GTK_WIDGET (self->completion_scroller));
 
   self->history_current = NULL;
-  dzl_clear_pointer (&self->saved_text, g_free);
+  g_clear_pointer (&self->saved_text, g_free);
   self->saved_position_valid = FALSE;
 
   gtk_entry_set_text (self->entry, "");
@@ -390,7 +390,7 @@ gb_command_bar_complete (GbCommandBar *self)
     }
   else
     {
-      dzl_clear_pointer (&self->last_completion, g_free);
+      g_clear_pointer (&self->last_completion, g_free);
 
       completions = gb_command_manager_complete (self->command_manager, current_prefix);
 
@@ -506,7 +506,7 @@ gb_command_bar_move_history (GbCommandBar     *self,
 
   if (self->history_current == NULL)
     {
-      dzl_clear_pointer (&self->saved_text, g_free);
+      g_clear_pointer (&self->saved_text, g_free);
       self->saved_text = g_strdup (gtk_entry_get_text (self->entry));
     }
   self->history_current = l;
@@ -631,8 +631,8 @@ gb_command_bar_finalize (GObject *object)
 
   dzl_clear_weak_pointer (&self->workbench);
 
-  dzl_clear_pointer (&self->last_completion, g_free);
-  dzl_clear_pointer (&self->saved_text, g_free);
+  g_clear_pointer (&self->last_completion, g_free);
+  g_clear_pointer (&self->saved_text, g_free);
   g_queue_free_full (self->history, g_free);
   dzl_clear_weak_pointer (&self->last_focus);
 

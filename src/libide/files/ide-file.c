@@ -86,7 +86,7 @@ _ide_file_set_content_type (IdeFile     *self,
 
   if (0 != g_strcmp0 (self->content_type, content_type))
     {
-      dzl_clear_pointer (&self->content_type, g_free);
+      g_clear_pointer (&self->content_type, g_free);
       g_clear_object (&self->language);
       self->content_type = g_strdup (content_type);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGE]);
@@ -130,7 +130,7 @@ ide_file_create_language (IdeFile *self)
     content_type = g_content_type_guess (filename, NULL, 0, &uncertain);
 
   if (uncertain)
-    dzl_clear_pointer (&content_type, g_free);
+    g_clear_pointer (&content_type, g_free);
   else if (self->content_type == NULL)
     self->content_type = g_strdup (content_type);
 
@@ -254,7 +254,7 @@ ide_file_set_path (IdeFile     *self,
   g_return_if_fail (IDE_IS_FILE (self));
   g_return_if_fail (!self->path);
 
-  dzl_clear_pointer (&self->path, g_free);
+  g_clear_pointer (&self->path, g_free);
   self->path = g_strdup (path);
 }
 
@@ -440,8 +440,8 @@ ide_file_finalize (GObject *object)
   g_clear_object (&self->file);
   g_clear_object (&self->source_file);
   g_clear_object (&self->language);
-  dzl_clear_pointer (&self->path, g_free);
-  dzl_clear_pointer (&self->content_type, g_free);
+  g_clear_pointer (&self->path, g_free);
+  g_clear_pointer (&self->content_type, g_free);
 
   g_mutex_clear (&self->mutex);
 

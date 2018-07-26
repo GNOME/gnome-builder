@@ -143,10 +143,10 @@ ide_workbench_open_uri_state_free (gpointer data)
 {
   IdeWorkbenchOpenUriState *open_uri_state = data;
 
-  dzl_clear_pointer (&open_uri_state->loaders, g_array_unref);
-  dzl_clear_pointer (&open_uri_state->uri, ide_uri_unref);
-  dzl_clear_pointer (&open_uri_state->content_type, g_free);
-  dzl_clear_pointer (&open_uri_state->hint, g_free);
+  g_clear_pointer (&open_uri_state->loaders, g_array_unref);
+  g_clear_pointer (&open_uri_state->uri, ide_uri_unref);
+  g_clear_pointer (&open_uri_state->content_type, g_free);
+  g_clear_pointer (&open_uri_state->hint, g_free);
   g_slice_free (IdeWorkbenchOpenUriState, open_uri_state);
 }
 

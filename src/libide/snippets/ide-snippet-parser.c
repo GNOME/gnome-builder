@@ -126,7 +126,7 @@ ide_snippet_parser_finish (IdeSnippetParser *parser)
   if (parser->cur_name)
     ide_snippet_parser_store(parser);
 
-  dzl_clear_pointer (&parser->cur_name, g_free);
+  g_clear_pointer (&parser->cur_name, g_free);
 
   g_string_truncate (parser->cur_text, 0);
   g_string_truncate (parser->snippet_text, 0);

@@ -89,7 +89,7 @@ ide_code_index_search_result_finalize (GObject *object)
 {
   IdeCodeIndexSearchResult *self = (IdeCodeIndexSearchResult *)object;
 
-  dzl_clear_pointer (&self->location, ide_source_location_unref);
+  g_clear_pointer (&self->location, ide_source_location_unref);
 
   G_OBJECT_CLASS (ide_code_index_search_result_parent_class)->finalize (object);
 }

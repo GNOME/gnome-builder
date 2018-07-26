@@ -392,7 +392,7 @@ idle_load_state_free (gpointer data)
 {
   IdleLoadState *state = data;
 
-  dzl_clear_pointer (&state->addins, g_ptr_array_unref);
+  g_clear_pointer (&state->addins, g_ptr_array_unref);
   g_clear_object (&state->self);
   g_slice_free (IdleLoadState, state);
 }
@@ -405,7 +405,7 @@ task_data_free (gpointer data)
   if (td != NULL)
     {
       if (td->type == TASK_CLEAN)
-        dzl_clear_pointer (&td->clean.stages, g_ptr_array_unref);
+        g_clear_pointer (&td->clean.stages, g_ptr_array_unref);
       td->type = 0;
       td->task = NULL;
       g_slice_free (TaskData, td);
@@ -435,7 +435,7 @@ clear_error_format (gpointer data)
   ErrorFormat *errfmt = data;
 
   errfmt->id = 0;
-  dzl_clear_pointer (&errfmt->regex, g_regex_unref);
+  g_clear_pointer (&errfmt->regex, g_regex_unref);
 }
 
 static inline const gchar *
@@ -1305,14 +1305,14 @@ ide_build_pipeline_finalize (GObject *object)
   g_clear_object (&self->runtime);
   g_clear_object (&self->toolchain);
   g_clear_object (&self->configuration);
-  dzl_clear_pointer (&self->pipeline, g_array_unref);
-  dzl_clear_pointer (&self->srcdir, g_free);
-  dzl_clear_pointer (&self->builddir, g_free);
-  dzl_clear_pointer (&self->errfmts, g_array_unref);
-  dzl_clear_pointer (&self->errfmt_top_dir, g_free);
-  dzl_clear_pointer (&self->errfmt_current_dir, g_free);
-  dzl_clear_pointer (&self->chained_bindings, g_ptr_array_unref);
-  dzl_clear_pointer (&self->host_triplet, ide_triplet_unref);
+  g_clear_pointer (&self->pipeline, g_array_unref);
+  g_clear_pointer (&self->srcdir, g_free);
+  g_clear_pointer (&self->builddir, g_free);
+  g_clear_pointer (&self->errfmts, g_array_unref);
+  g_clear_pointer (&self->errfmt_top_dir, g_free);
+  g_clear_pointer (&self->errfmt_current_dir, g_free);
+  g_clear_pointer (&self->chained_bindings, g_ptr_array_unref);
+  g_clear_pointer (&self->host_triplet, ide_triplet_unref);
 
   G_OBJECT_CLASS (ide_build_pipeline_parent_class)->finalize (object);
 
@@ -1333,7 +1333,7 @@ ide_build_pipeline_dispose (GObject *object)
 
   ide_build_pipeline_unload (self);
 
-  dzl_clear_pointer (&self->message, g_free);
+  g_clear_pointer (&self->message, g_free);
 
   g_clear_object (&self->pty);
   fd = pty_fd_steal (&self->pty_slave);
@@ -1696,7 +1696,7 @@ ide_build_pipeline_stage_execute_cb (GObject      *object,
 
   ide_build_stage_set_completed (stage, !self->failed);
 
-  dzl_clear_pointer (&self->chained_bindings, g_ptr_array_unref);
+  g_clear_pointer (&self->chained_bindings, g_ptr_array_unref);
   self->chained_bindings = g_ptr_array_new_with_free_func (g_object_unref);
 
   if (self->failed == FALSE)
@@ -1816,8 +1816,8 @@ ide_build_pipeline_tick_execute (IdeBuildPipeline *self,
   _ide_build_pipeline_set_message (self, NULL);
 
   /* Clear cached directory enter/leave tracking */
-  dzl_clear_pointer (&self->errfmt_current_dir, g_free);
-  dzl_clear_pointer (&self->errfmt_top_dir, g_free);
+  g_clear_pointer (&self->errfmt_current_dir, g_free);
+  g_clear_pointer (&self->errfmt_top_dir, g_free);
 
   /* Short circuit now if the task was cancelled */
   if (ide_task_return_error_if_cancelled (task))
@@ -1897,7 +1897,7 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
   self->requested_mask = 0;
   self->in_clean = FALSE;
 
-  dzl_clear_pointer (&self->message, g_free);
+  g_clear_pointer (&self->message, g_free);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
 
   /*
@@ -2180,7 +2180,7 @@ ide_build_pipeline_do_flush (gpointer data)
   self->in_clean = (task_data->type == TASK_CLEAN);
 
   /* Clear any lingering message */
-  dzl_clear_pointer (&self->message, g_free);
+  g_clear_pointer (&self->message, g_free);
 
   /*
    * The following logs some helpful information about the build to our
@@ -3759,7 +3759,7 @@ _ide_build_pipeline_set_runtime (IdeBuildPipeline *self,
       context = ide_object_get_context (IDE_OBJECT (self));
       build_system = ide_context_get_build_system (context);
 
-      dzl_clear_pointer (&self->builddir, g_free);
+      g_clear_pointer (&self->builddir, g_free);
       self->builddir = ide_build_system_get_builddir (build_system, self);
     }
 }
@@ -3804,7 +3804,7 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
 
   if (self->host_triplet != device_triplet)
     {
-      dzl_clear_pointer (&self->host_triplet, ide_triplet_unref);
+      g_clear_pointer (&self->host_triplet, ide_triplet_unref);
       self->host_triplet = ide_triplet_ref (device_triplet);
     }
 

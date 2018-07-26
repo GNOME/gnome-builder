@@ -285,10 +285,10 @@ install_info_new (GbpFlatpakApplicationAddin *self,
 static void
 install_request_free (InstallRequest *request)
 {
-  dzl_clear_pointer (&request->id, g_free);
-  dzl_clear_pointer (&request->arch, g_free);
-  dzl_clear_pointer (&request->branch, g_free);
-  dzl_clear_pointer (&request->installations, g_ptr_array_unref);
+  g_clear_pointer (&request->id, g_free);
+  g_clear_pointer (&request->arch, g_free);
+  g_clear_pointer (&request->branch, g_free);
+  g_clear_pointer (&request->installations, g_ptr_array_unref);
   g_clear_object (&request->progress);
   g_clear_object (&request->ref);
   g_slice_free (InstallRequest, request);
@@ -297,13 +297,13 @@ install_request_free (InstallRequest *request)
 static void
 locate_sdk_free (LocateSdk *locate)
 {
-  dzl_clear_pointer (&locate->id, g_free);
-  dzl_clear_pointer (&locate->arch, g_free);
-  dzl_clear_pointer (&locate->branch, g_free);
-  dzl_clear_pointer (&locate->sdk_id, g_free);
-  dzl_clear_pointer (&locate->sdk_arch, g_free);
-  dzl_clear_pointer (&locate->sdk_branch, g_free);
-  dzl_clear_pointer (&locate->installations, g_ptr_array_unref);
+  g_clear_pointer (&locate->id, g_free);
+  g_clear_pointer (&locate->arch, g_free);
+  g_clear_pointer (&locate->branch, g_free);
+  g_clear_pointer (&locate->sdk_id, g_free);
+  g_clear_pointer (&locate->sdk_arch, g_free);
+  g_clear_pointer (&locate->sdk_branch, g_free);
+  g_clear_pointer (&locate->installations, g_ptr_array_unref);
   g_slice_free (LocateSdk, locate);
 }
 
@@ -321,7 +321,7 @@ gbp_flatpak_application_addin_reload (GbpFlatpakApplicationAddin *self)
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (self));
 
   /* Clear any previous installations */
-  dzl_clear_pointer (&self->installations, g_ptr_array_unref);
+  g_clear_pointer (&self->installations, g_ptr_array_unref);
   self->installations = g_ptr_array_new_with_free_func ((GDestroyNotify)install_info_free);
 
   /*
@@ -425,7 +425,7 @@ gbp_flatpak_application_addin_unload (IdeApplicationAddin *addin,
 
   instance = NULL;
 
-  dzl_clear_pointer (&self->installations, g_ptr_array_unref);
+  g_clear_pointer (&self->installations, g_ptr_array_unref);
 
   IDE_EXIT;
 }

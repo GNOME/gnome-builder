@@ -117,8 +117,8 @@ ide_clang_symbol_node_finalize (GObject *object)
 {
   IdeClangSymbolNode *self = (IdeClangSymbolNode *)object;
 
-  dzl_clear_pointer (&self->symbol, ide_symbol_unref);
-  dzl_clear_pointer (&self->children, g_variant_unref);
+  g_clear_pointer (&self->symbol, ide_symbol_unref);
+  g_clear_pointer (&self->children, g_variant_unref);
 
   G_OBJECT_CLASS (ide_clang_symbol_node_parent_class)->finalize (object);
 }

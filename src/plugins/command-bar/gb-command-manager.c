@@ -142,7 +142,7 @@ gb_command_manager_finalize (GObject *object)
 {
   GbCommandManager *self = GB_COMMAND_MANAGER (object);
 
-  dzl_clear_pointer (&self->providers, g_ptr_array_unref);
+  g_clear_pointer (&self->providers, g_ptr_array_unref);
 
   G_OBJECT_CLASS (gb_command_manager_parent_class)->finalize (object);
 }

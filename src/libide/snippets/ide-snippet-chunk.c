@@ -241,8 +241,8 @@ ide_snippet_chunk_finalize (GObject *object)
 {
   IdeSnippetChunk *chunk = (IdeSnippetChunk *)object;
 
-  dzl_clear_pointer (&chunk->spec, g_free);
-  dzl_clear_pointer (&chunk->text, g_free);
+  g_clear_pointer (&chunk->spec, g_free);
+  g_clear_pointer (&chunk->text, g_free);
   g_clear_object (&chunk->context);
 
   G_OBJECT_CLASS (ide_snippet_chunk_parent_class)->finalize (object);

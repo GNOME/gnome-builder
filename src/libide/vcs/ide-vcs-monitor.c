@@ -145,7 +145,7 @@ ide_vcs_monitor_list_status_cb (GObject      *object,
       ide_vcs_monitor_add_parents (status_by_file, file, workdir, status);
     }
 
-  dzl_clear_pointer (&self->status_by_file, g_hash_table_unref);
+  g_clear_pointer (&self->status_by_file, g_hash_table_unref);
   self->status_by_file = g_steal_pointer (&status_by_file);
 
   g_signal_emit (self, signals[RELOADED], 0);
@@ -223,7 +223,7 @@ ide_vcs_monitor_vcs_changed_cb (IdeVcsMonitor *self,
   g_assert (IDE_IS_VCS (vcs));
 
   /* Everything is invalidated by new VCS index, reload now */
-  dzl_clear_pointer (&self->status_by_file, g_hash_table_unref);
+  g_clear_pointer (&self->status_by_file, g_hash_table_unref);
   ide_vcs_monitor_queue_reload (self);
 
   IDE_EXIT;
@@ -306,7 +306,7 @@ ide_vcs_monitor_dispose (GObject *object)
   IdeVcsMonitor *self = (IdeVcsMonitor *)object;
 
   dzl_clear_source (&self->cache_source);
-  dzl_clear_pointer (&self->status_by_file, g_hash_table_unref);
+  g_clear_pointer (&self->status_by_file, g_hash_table_unref);
 
   if (self->monitor != NULL)
     {

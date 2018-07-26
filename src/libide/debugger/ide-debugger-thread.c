@@ -47,8 +47,8 @@ ide_debugger_thread_finalize (GObject *object)
   IdeDebuggerThread *self = (IdeDebuggerThread *)object;
   IdeDebuggerThreadPrivate *priv = ide_debugger_thread_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->id, g_free);
-  dzl_clear_pointer (&priv->group, g_free);
+  g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->group, g_free);
 
   G_OBJECT_CLASS (ide_debugger_thread_parent_class)->finalize (object);
 }

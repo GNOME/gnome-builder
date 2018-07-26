@@ -281,7 +281,7 @@ search_entry_changed (IdeEditorSearchBar *self,
                            error ? error->message : NULL);
       gtk_widget_set_visible (GTK_WIDGET (self->search_text_error), error != NULL);
 
-      dzl_clear_pointer (&attrs, pango_attr_list_unref);
+      g_clear_pointer (&attrs, pango_attr_list_unref);
     }
 }
 

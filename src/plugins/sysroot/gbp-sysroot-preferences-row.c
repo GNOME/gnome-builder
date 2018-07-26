@@ -202,7 +202,7 @@ gbp_sysroot_preferences_row_finalize (GObject *object)
 {
   GbpSysrootPreferencesRow *self = (GbpSysrootPreferencesRow *) object;
 
-  dzl_clear_pointer (&self->sysroot_id, g_free);
+  g_clear_pointer (&self->sysroot_id, g_free);
 
   G_OBJECT_CLASS (gbp_sysroot_preferences_row_parent_class)->finalize (object);
 }

@@ -64,7 +64,7 @@ command_arg_clear_func (gpointer data)
 
   g_assert (arg != NULL);
 
-  dzl_clear_pointer (&arg->str, g_free);
+  g_clear_pointer (&arg->str, g_free);
 }
 
 static gboolean
@@ -389,7 +389,7 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
           if (0 == g_strcmp0 (default_profile, profile))
             {
               *has_default = entry.is_default = TRUE;
-              dzl_clear_pointer (&default_profile, g_free);
+              g_clear_pointer (&default_profile, g_free);
             }
           else
             entry.is_default = FALSE;
@@ -632,7 +632,7 @@ get_entries_worker (IdeTask      *task,
   add_entries_from_base_path (self, user_config_path, entries, map, &ret_has_default);
   has_default |= ret_has_default;
 
-  dzl_clear_pointer (&map, g_array_unref);
+  g_clear_pointer (&map, g_array_unref);
 
   /* Project wide config */
   if (NULL != (project = ide_context_get_project (self->context)))
@@ -644,9 +644,9 @@ get_entries_worker (IdeTask      *task,
           map = gb_beautifier_config_get_map (self, configdir);
           add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
           has_default |= ret_has_default;
-          dzl_clear_pointer (&configdir, g_free);
+          g_clear_pointer (&configdir, g_free);
 
-          dzl_clear_pointer (&map, g_array_unref);
+          g_clear_pointer (&map, g_array_unref);
         }
       else if (NULL != (vcs = ide_context_get_vcs (self->context)))
         {
@@ -662,7 +662,7 @@ get_entries_worker (IdeTask      *task,
           add_entries_from_base_path (self, project_config_path, entries, map, &ret_has_default);
           has_default |= ret_has_default;
 
-          dzl_clear_pointer (&map, g_array_unref);
+          g_clear_pointer (&map, g_array_unref);
         }
     }
 
@@ -671,10 +671,10 @@ get_entries_worker (IdeTask      *task,
 
   map = gb_beautifier_config_get_map (self, configdir);
   add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
-  dzl_clear_pointer (&configdir, g_free);
+  g_clear_pointer (&configdir, g_free);
   has_default |= ret_has_default;
 
-  dzl_clear_pointer (&map, g_array_unref);
+  g_clear_pointer (&map, g_array_unref);
 
   result = g_slice_new0 (GbBeautifierEntriesResult);
   result->entries = g_steal_pointer (&entries);

@@ -747,8 +747,8 @@ ide_buildconfig_configuration_provider_finalize (GObject *object)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)object;
 
-  dzl_clear_pointer (&self->configs, g_ptr_array_unref);
-  dzl_clear_pointer (&self->key_file, g_key_file_free);
+  g_clear_pointer (&self->configs, g_ptr_array_unref);
+  g_clear_pointer (&self->key_file, g_key_file_free);
 
   G_OBJECT_CLASS (ide_buildconfig_configuration_provider_parent_class)->finalize (object);
 }

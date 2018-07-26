@@ -50,7 +50,7 @@ ide_html_proposals_finalize (GObject *object)
 {
   IdeHtmlProposals *self = (IdeHtmlProposals *)object;
 
-  dzl_clear_pointer (&self->items, g_array_unref);
+  g_clear_pointer (&self->items, g_array_unref);
 
   G_OBJECT_CLASS (ide_html_proposals_parent_class)->finalize (object);
 }

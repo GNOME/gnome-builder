@@ -155,7 +155,7 @@ ide_project_item_finalize (GObject *object)
   IdeProjectItemPrivate *priv = ide_project_item_get_instance_private (self);
 
   dzl_clear_weak_pointer (&priv->parent);
-  dzl_clear_pointer (&priv->children, g_sequence_free);
+  g_clear_pointer (&priv->children, g_sequence_free);
 
   G_OBJECT_CLASS (ide_project_item_parent_class)->finalize (object);
 }

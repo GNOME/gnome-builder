@@ -74,9 +74,9 @@ ide_snippet_storage_finalize (GObject *object)
 {
   IdeSnippetStorage *self = (IdeSnippetStorage *)object;
 
-  dzl_clear_pointer (&self->bytes, g_ptr_array_unref);
-  dzl_clear_pointer (&self->strings, g_string_chunk_free);
-  dzl_clear_pointer (&self->infos, g_array_unref);
+  g_clear_pointer (&self->bytes, g_ptr_array_unref);
+  g_clear_pointer (&self->strings, g_string_chunk_free);
+  g_clear_pointer (&self->infos, g_array_unref);
 
   G_OBJECT_CLASS (ide_snippet_storage_parent_class)->finalize (object);
 }
@@ -175,8 +175,8 @@ flush_load_state (IdeSnippetStorage *self,
 
 cleanup:
   /* Leave name in-tact */
-  dzl_clear_pointer (&state->desc, g_free);
-  dzl_clear_pointer (&state->scopes, g_free);
+  g_clear_pointer (&state->desc, g_free);
+  g_clear_pointer (&state->scopes, g_free);
 }
 
 void
@@ -246,9 +246,9 @@ ide_snippet_storage_add (IdeSnippetStorage *self,
 
   g_array_sort (self->infos, snippet_info_compare);
 
-  dzl_clear_pointer (&state.name, g_free);
-  dzl_clear_pointer (&state.desc, g_free);
-  dzl_clear_pointer (&state.scopes, g_free);
+  g_clear_pointer (&state.name, g_free);
+  g_clear_pointer (&state.desc, g_free);
+  g_clear_pointer (&state.scopes, g_free);
 }
 
 /**

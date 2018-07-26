@@ -171,10 +171,10 @@ clear_file_expansion (gpointer data)
 
   g_clear_object (&expansion->file);
   g_clear_object (&expansion->stream);
-  dzl_clear_pointer (&expansion->scope, tmpl_scope_unref);
+  g_clear_pointer (&expansion->scope, tmpl_scope_unref);
   g_clear_object (&expansion->destination);
   g_clear_object (&expansion->template);
-  dzl_clear_pointer (&expansion->result, g_free);
+  g_clear_pointer (&expansion->result, g_free);
 }
 
 static void
@@ -221,7 +221,7 @@ ide_template_base_finalize (GObject *object)
   IdeTemplateBase *self = (IdeTemplateBase *)object;
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->files, g_array_unref);
+  g_clear_pointer (&priv->files, g_array_unref);
   g_clear_object (&priv->locator);
 
   G_OBJECT_CLASS (ide_template_base_parent_class)->finalize (object);
@@ -717,7 +717,7 @@ ide_template_base_reset (IdeTemplateBase *self)
 
   g_return_if_fail (IDE_IS_TEMPLATE_BASE (self));
 
-  dzl_clear_pointer (&priv->files, g_array_unref);
+  g_clear_pointer (&priv->files, g_array_unref);
   priv->files = g_array_new (FALSE, TRUE, sizeof (FileExpansion));
 
   priv->has_expanded = FALSE;

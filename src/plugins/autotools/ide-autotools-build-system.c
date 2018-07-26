@@ -543,7 +543,7 @@ ide_autotools_build_system_finalize (GObject *object)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
 
-  dzl_clear_pointer (&self->tarball_name, g_free);
+  g_clear_pointer (&self->tarball_name, g_free);
   g_clear_object (&self->project_file);
 
   G_OBJECT_CLASS (ide_autotools_build_system_parent_class)->finalize (object);

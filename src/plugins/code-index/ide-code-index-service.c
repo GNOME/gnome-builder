@@ -571,8 +571,8 @@ ide_code_index_service_stop (IdeService *service)
   g_clear_object (&self->builder);
   g_queue_foreach (&self->build_queue, (GFunc)build_data_unref, NULL);
   g_queue_clear (&self->build_queue);
-  dzl_clear_pointer (&self->build_dirs, g_hash_table_unref);
-  dzl_clear_pointer (&self->code_indexers, g_hash_table_unref);
+  g_clear_pointer (&self->build_dirs, g_hash_table_unref);
+  g_clear_pointer (&self->code_indexers, g_hash_table_unref);
 
   unregister_pausable (self);
 }

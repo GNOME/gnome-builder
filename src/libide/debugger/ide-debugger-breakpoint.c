@@ -77,7 +77,7 @@ ide_debugger_breakpoint_real_reset (IdeDebuggerBreakpoint *self)
 
   g_assert (IDE_IS_DEBUGGER_BREAKPOINT (self));
 
-  dzl_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->id, g_free);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
 }
 
@@ -87,11 +87,11 @@ ide_debugger_breakpoint_finalize (GObject *object)
   IdeDebuggerBreakpoint *self = (IdeDebuggerBreakpoint *)object;
   IdeDebuggerBreakpointPrivate *priv = ide_debugger_breakpoint_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->function, g_free);
-  dzl_clear_pointer (&priv->id, g_free);
-  dzl_clear_pointer (&priv->file, g_free);
-  dzl_clear_pointer (&priv->spec, g_free);
-  dzl_clear_pointer (&priv->thread, g_free);
+  g_clear_pointer (&priv->function, g_free);
+  g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->file, g_free);
+  g_clear_pointer (&priv->spec, g_free);
+  g_clear_pointer (&priv->thread, g_free);
 
   G_OBJECT_CLASS (ide_debugger_breakpoint_parent_class)->finalize (object);
 }

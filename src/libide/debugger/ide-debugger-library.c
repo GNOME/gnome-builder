@@ -50,10 +50,10 @@ ide_debugger_library_finalize (GObject *object)
   IdeDebuggerLibrary *self = (IdeDebuggerLibrary *)object;
   IdeDebuggerLibraryPrivate *priv = ide_debugger_library_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->id, g_free);
-  dzl_clear_pointer (&priv->host_name, g_free);
-  dzl_clear_pointer (&priv->ranges, g_ptr_array_unref);
-  dzl_clear_pointer (&priv->target_name, g_free);
+  g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->host_name, g_free);
+  g_clear_pointer (&priv->ranges, g_ptr_array_unref);
+  g_clear_pointer (&priv->target_name, g_free);
 
   G_OBJECT_CLASS (ide_debugger_library_parent_class)->finalize (object);
 }

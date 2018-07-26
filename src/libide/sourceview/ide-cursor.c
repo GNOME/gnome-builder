@@ -115,7 +115,7 @@ ide_cursor_dispose (GObject *object)
 
     }
 
-  dzl_clear_pointer (&self->cursors, g_list_free);
+  g_clear_pointer (&self->cursors, g_list_free);
 
   G_OBJECT_CLASS (ide_cursor_parent_class)->dispose (object);
 }
@@ -221,7 +221,7 @@ ide_cursor_remove_cursors (IdeCursor *self)
           g_slice_free (VirtualCursor, vc);
         }
 
-      dzl_clear_pointer (&self->cursors, g_list_free);
+      g_clear_pointer (&self->cursors, g_list_free);
     }
 }
 

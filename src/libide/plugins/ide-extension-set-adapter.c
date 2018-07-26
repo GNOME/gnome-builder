@@ -345,10 +345,10 @@ ide_extension_set_adapter_finalize (GObject *object)
     }
 
   g_clear_object (&self->engine);
-  dzl_clear_pointer (&self->key, g_free);
-  dzl_clear_pointer (&self->value, g_free);
-  dzl_clear_pointer (&self->extensions, g_hash_table_unref);
-  dzl_clear_pointer (&self->settings, g_ptr_array_unref);
+  g_clear_pointer (&self->key, g_free);
+  g_clear_pointer (&self->value, g_free);
+  g_clear_pointer (&self->extensions, g_hash_table_unref);
+  g_clear_pointer (&self->settings, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_extension_set_adapter_parent_class)->finalize (object);
 }

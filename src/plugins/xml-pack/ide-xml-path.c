@@ -104,7 +104,7 @@ ide_xml_path_free (IdeXmlPath *self)
   g_assert (self);
   g_assert_cmpint (self->ref_count, ==, 0);
 
-  dzl_clear_pointer (&self->nodes, g_ptr_array_unref);
+  g_clear_pointer (&self->nodes, g_ptr_array_unref);
 
   g_slice_free (IdeXmlPath, self);
 }

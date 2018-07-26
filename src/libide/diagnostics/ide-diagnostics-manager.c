@@ -177,7 +177,7 @@ free_diagnostics (gpointer data)
 {
   IdeDiagnostics *diagnostics = data;
 
-  dzl_clear_pointer (&diagnostics, ide_diagnostics_unref);
+  g_clear_pointer (&diagnostics, ide_diagnostics_unref);
 }
 
 static void
@@ -192,7 +192,7 @@ ide_diagnostics_group_free (gpointer data)
 
   group->magic = 0;
 
-  dzl_clear_pointer (&group->diagnostics_by_provider, g_hash_table_unref);
+  g_clear_pointer (&group->diagnostics_by_provider, g_hash_table_unref);
   g_weak_ref_clear (&group->buffer_wr);
   g_clear_object (&group->adapter);
   g_clear_object (&group->file);
@@ -590,7 +590,7 @@ ide_diagnostics_manager_finalize (GObject *object)
   IdeDiagnosticsManager *self = (IdeDiagnosticsManager *)object;
 
   dzl_clear_source (&self->queued_diagnose_source);
-  dzl_clear_pointer (&self->groups_by_file, g_hash_table_unref);
+  g_clear_pointer (&self->groups_by_file, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_diagnostics_manager_parent_class)->finalize (object);
 }
@@ -853,7 +853,7 @@ ide_diagnostics_manager_clear_by_provider (IdeDiagnosticsManager *self,
            * are other providers loaded for this group.
            */
           if (g_hash_table_size (group->diagnostics_by_provider) == 0)
-            dzl_clear_pointer (&group->diagnostics_by_provider, g_hash_table_unref);
+            g_clear_pointer (&group->diagnostics_by_provider, g_hash_table_unref);
 
           /*
            * TODO: If this provider is not part of this group, we can possibly
@@ -1190,7 +1190,7 @@ ide_diagnostics_manager_buffer_unloaded (IdeDiagnosticsManager *self,
    */
   if (group->diagnostics_by_provider != NULL &&
       g_hash_table_size (group->diagnostics_by_provider) == 0)
-    dzl_clear_pointer (&group->diagnostics_by_provider, g_hash_table_unref);
+    g_clear_pointer (&group->diagnostics_by_provider, g_hash_table_unref);
 
   g_signal_handlers_disconnect_by_func (buffer,
                                         G_CALLBACK (ide_diagnostics_manager_buffer_changed),

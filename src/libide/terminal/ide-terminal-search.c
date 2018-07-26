@@ -125,7 +125,7 @@ update_regex (IdeTerminalSearch *self)
       vte_regex_unref (self->regex);
     }
 
-  dzl_clear_pointer (&self->regex_pattern, g_free);
+  g_clear_pointer (&self->regex_pattern, g_free);
 
   if (search_text[0] != '\0')
     {

@@ -126,7 +126,7 @@ ide_layout_view_finalize (GObject *object)
   IdeLayoutView *self = (IdeLayoutView *)object;
   IdeLayoutViewPrivate *priv = ide_layout_view_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&priv->title, g_free);
   g_clear_object (&priv->icon);
 
   G_OBJECT_CLASS (ide_layout_view_parent_class)->finalize (object);

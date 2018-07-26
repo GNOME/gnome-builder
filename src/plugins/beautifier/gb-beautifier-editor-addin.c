@@ -466,7 +466,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
           gb_beautifier_helper_config_entry_remove_temp_files (self, entry);
         }
 
-      dzl_clear_pointer (&self->entries, g_array_unref);
+      g_clear_pointer (&self->entries, g_array_unref);
     }
 
   dzl_clear_weak_pointer (&self->editor);
@@ -474,7 +474,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
     {
       tmp_file = g_file_new_for_path (self->tmp_dir);
       gb_beautifier_helper_remove_temp_for_file (self, tmp_file);
-      dzl_clear_pointer (&self->tmp_dir, g_free);
+      g_clear_pointer (&self->tmp_dir, g_free);
     }
 
   self->context = NULL;

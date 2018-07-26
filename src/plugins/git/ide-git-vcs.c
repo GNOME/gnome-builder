@@ -796,7 +796,7 @@ ide_git_vcs_finalize (GObject *object)
   IDE_ENTRY;
 
   g_mutex_clear (&self->repository_mutex);
-  dzl_clear_pointer (&self->worktree_branch, g_free);
+  g_clear_pointer (&self->worktree_branch, g_free);
 
   G_OBJECT_CLASS (ide_git_vcs_parent_class)->finalize (object);
 

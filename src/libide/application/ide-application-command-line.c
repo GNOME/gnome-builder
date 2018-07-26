@@ -485,8 +485,8 @@ ide_application_local_command_line (GApplication   *application,
   g_application_activate (application);
 
 cleanup:
-  dzl_clear_pointer (&plugin, g_free);
-  dzl_clear_pointer (&dbus_address, g_free);
+  g_clear_pointer (&plugin, g_free);
+  g_clear_pointer (&dbus_address, g_free);
   g_clear_error (&error);
   g_option_context_free (context);
 

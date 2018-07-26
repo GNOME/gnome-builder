@@ -522,7 +522,7 @@ gbp_flatpak_runtime_set_triplet (GbpFlatpakRuntime *self,
 
   if (self->triplet != triplet)
     {
-      dzl_clear_pointer (&self->triplet, ide_triplet_unref);
+      g_clear_pointer (&self->triplet, ide_triplet_unref);
       self->triplet = ide_triplet_ref (triplet);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TRIPLET]);
     }
@@ -704,13 +704,13 @@ gbp_flatpak_runtime_finalize (GObject *object)
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)object;
 
-  dzl_clear_pointer (&self->triplet, ide_triplet_unref);
-  dzl_clear_pointer (&self->branch, g_free);
-  dzl_clear_pointer (&self->runtime_dir, g_free);
-  dzl_clear_pointer (&self->deploy_dir, g_free);
-  dzl_clear_pointer (&self->platform, g_free);
-  dzl_clear_pointer (&self->sdk, g_free);
-  dzl_clear_pointer (&self->program_paths_cache, g_hash_table_unref);
+  g_clear_pointer (&self->triplet, ide_triplet_unref);
+  g_clear_pointer (&self->branch, g_free);
+  g_clear_pointer (&self->runtime_dir, g_free);
+  g_clear_pointer (&self->deploy_dir, g_free);
+  g_clear_pointer (&self->platform, g_free);
+  g_clear_pointer (&self->sdk, g_free);
+  g_clear_pointer (&self->program_paths_cache, g_hash_table_unref);
   g_clear_object (&self->deploy_dir_files);
 
   G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);

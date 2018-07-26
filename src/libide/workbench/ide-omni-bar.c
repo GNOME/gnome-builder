@@ -638,7 +638,7 @@ ide_omni_bar_destroy (GtkWidget *widget)
 
   g_assert (IDE_IS_OMNI_BAR (self));
 
-  dzl_clear_pointer (&self->looper_source, g_source_destroy);
+  g_clear_pointer (&self->looper_source, g_source_destroy);
   g_clear_object (&self->gesture);
 
   g_clear_object (&self->build_manager_bindings);

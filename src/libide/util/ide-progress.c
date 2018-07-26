@@ -186,7 +186,7 @@ ide_progress_finalize (GObject *object)
 {
   IdeProgress *self = (IdeProgress *)object;
 
-  dzl_clear_pointer (&self->message, g_free);
+  g_clear_pointer (&self->message, g_free);
   g_mutex_clear (&self->mutex);
 
   G_OBJECT_CLASS (ide_progress_parent_class)->finalize (object);

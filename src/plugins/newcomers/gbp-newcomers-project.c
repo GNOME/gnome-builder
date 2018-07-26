@@ -72,7 +72,7 @@ gbp_newcomers_project_destroy (GtkWidget *widget)
 {
   GbpNewcomersProject *self = GBP_NEWCOMERS_PROJECT (widget);
 
-  dzl_clear_pointer (&self->uri, g_free);
+  g_clear_pointer (&self->uri, g_free);
 
   GTK_WIDGET_CLASS (gbp_newcomers_project_parent_class)->destroy (widget);
 }

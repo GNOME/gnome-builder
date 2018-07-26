@@ -230,8 +230,8 @@ gbp_meson_toolchain_edition_preferences_addin_unload (IdePreferencesAddin *addin
       dzl_preferences_remove_id (preferences, id);
     }
 
-  dzl_clear_pointer (&self->ids, g_array_unref);
-  dzl_clear_pointer (&self->cancellable, g_object_unref);
+  g_clear_pointer (&self->ids, g_array_unref);
+  g_clear_pointer (&self->cancellable, g_object_unref);
 
   IDE_EXIT;
 }

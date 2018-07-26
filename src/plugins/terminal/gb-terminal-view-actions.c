@@ -43,7 +43,7 @@ savetask_free (gpointer data)
       g_clear_object (&savetask->file);
       g_clear_object (&savetask->stream);
       g_clear_object (&savetask->terminal);
-      dzl_clear_pointer (&savetask->buffer, g_free);
+      g_clear_pointer (&savetask->buffer, g_free);
       g_slice_free (SaveTask, savetask);
     }
 }

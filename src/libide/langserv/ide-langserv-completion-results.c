@@ -51,8 +51,8 @@ ide_langserv_completion_results_finalize (GObject *object)
 {
   IdeLangservCompletionResults *self = (IdeLangservCompletionResults *)object;
 
-  dzl_clear_pointer (&self->results, g_variant_unref);
-  dzl_clear_pointer (&self->items, g_array_unref);
+  g_clear_pointer (&self->results, g_variant_unref);
+  g_clear_pointer (&self->items, g_array_unref);
 
   G_OBJECT_CLASS (ide_langserv_completion_results_parent_class)->finalize (object);
 }
@@ -84,7 +84,7 @@ ide_langserv_completion_results_new (GVariant *results)
 
   if ((items = g_variant_lookup_value (results, "items", NULL)))
     {
-      dzl_clear_pointer (&self->results, g_variant_unref);
+      g_clear_pointer (&self->results, g_variant_unref);
 
       if (g_variant_is_of_type (items, G_VARIANT_TYPE_VARIANT))
         self->results = g_variant_get_variant (items);

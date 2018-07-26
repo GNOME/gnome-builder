@@ -57,8 +57,8 @@ static GParamSpec *properties [N_PROPS];
 static void
 get_build_flags_data_free (GetBuildFlagsData *data)
 {
-  dzl_clear_pointer (&data->files, g_ptr_array_unref);
-  dzl_clear_pointer (&data->flags, g_hash_table_unref);
+  g_clear_pointer (&data->files, g_ptr_array_unref);
+  g_clear_pointer (&data->flags, g_hash_table_unref);
   g_slice_free (GetBuildFlagsData, data);
 }
 

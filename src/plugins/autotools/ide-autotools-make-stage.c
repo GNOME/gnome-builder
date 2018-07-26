@@ -215,7 +215,7 @@ ide_autotools_make_stage_execute_async (IdeBuildStage       *stage,
     }
 
   /* Clear the chained target so we do not run it again */
-  dzl_clear_pointer (&self->chained_target, g_free);
+  g_clear_pointer (&self->chained_target, g_free);
 
   /* Log the process arguments to stdout */
   argv = ide_subprocess_launcher_get_argv (launcher);
@@ -369,7 +369,7 @@ ide_autotools_make_stage_chain (IdeBuildStage *stage,
       if ((g_strcmp0 (self->target, "all") == 0) &&
           (g_strcmp0 (IDE_AUTOTOOLS_MAKE_STAGE (next)->target, "install") == 0))
       {
-        dzl_clear_pointer (&self->chained_target, g_free);
+        g_clear_pointer (&self->chained_target, g_free);
         self->chained_target = g_strdup ("install");
         return TRUE;
       }
@@ -383,9 +383,9 @@ ide_autotools_make_stage_finalize (GObject *object)
 {
   IdeAutotoolsMakeStage *self = (IdeAutotoolsMakeStage *)object;
 
-  dzl_clear_pointer (&self->target, g_free);
-  dzl_clear_pointer (&self->chained_target, g_free);
-  dzl_clear_pointer (&self->clean_target, g_free);
+  g_clear_pointer (&self->target, g_free);
+  g_clear_pointer (&self->chained_target, g_free);
+  g_clear_pointer (&self->clean_target, g_free);
 
   G_OBJECT_CLASS (ide_autotools_make_stage_parent_class)->finalize (object);
 }

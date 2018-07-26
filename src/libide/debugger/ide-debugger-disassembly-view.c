@@ -47,7 +47,7 @@ ide_debugger_disassembly_view_destroy (GtkWidget *widget)
 {
   IdeDebuggerDisassemblyView *self = (IdeDebuggerDisassemblyView *)widget;
 
-  dzl_clear_pointer (&self->instructions, g_ptr_array_unref);
+  g_clear_pointer (&self->instructions, g_ptr_array_unref);
 
   GTK_WIDGET_CLASS (ide_debugger_disassembly_view_parent_class)->destroy (widget);
 }
@@ -101,7 +101,7 @@ ide_debugger_disassembly_view_set_instructions (IdeDebuggerDisassemblyView *self
   if (self->instructions == instructions)
     return;
 
-  dzl_clear_pointer (&self->instructions, g_ptr_array_unref);
+  g_clear_pointer (&self->instructions, g_ptr_array_unref);
   if (instructions != NULL)
     self->instructions = g_ptr_array_ref (instructions);
 

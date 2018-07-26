@@ -82,10 +82,10 @@ process_state_free (gpointer data)
   g_clear_object (&state->tmp_src_file);
   g_clear_object (&state->tmp_workdir_file);
 
-  dzl_clear_pointer (&state->lang_id, g_free);
-  dzl_clear_pointer (&state->text, g_free);
+  g_clear_pointer (&state->lang_id, g_free);
+  g_clear_pointer (&state->text, g_free);
 
-  dzl_clear_pointer (&state->command_args_strs, g_ptr_array_unref);
+  g_clear_pointer (&state->command_args_strs, g_ptr_array_unref);
 
   g_slice_free (ProcessState, state);
 }

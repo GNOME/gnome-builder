@@ -686,9 +686,9 @@ ide_snippet_context_finalize (GObject *object)
 {
   IdeSnippetContext *context = (IdeSnippetContext *)object;
 
-  dzl_clear_pointer (&context->shared, g_hash_table_unref);
-  dzl_clear_pointer (&context->variables, g_hash_table_unref);
-  dzl_clear_pointer (&context->line_prefix, g_free);
+  g_clear_pointer (&context->shared, g_hash_table_unref);
+  g_clear_pointer (&context->variables, g_hash_table_unref);
+  g_clear_pointer (&context->line_prefix, g_free);
 
   G_OBJECT_CLASS (ide_snippet_context_parent_class)->finalize (object);
 }

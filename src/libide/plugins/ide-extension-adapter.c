@@ -340,8 +340,8 @@ ide_extension_adapter_finalize (GObject *object)
   g_clear_object (&self->engine);
   g_clear_object (&self->settings);
   g_clear_object (&self->settings_signals);
-  dzl_clear_pointer (&self->key, g_free);
-  dzl_clear_pointer (&self->value, g_free);
+  g_clear_pointer (&self->key, g_free);
+  g_clear_pointer (&self->value, g_free);
 
   G_OBJECT_CLASS (ide_extension_adapter_parent_class)->finalize (object);
 }

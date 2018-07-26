@@ -94,7 +94,7 @@ ide_ctags_symbol_node_finalize (GObject *object)
 {
   IdeCtagsSymbolNode *self = (IdeCtagsSymbolNode *)object;
 
-  dzl_clear_pointer (&self->children, g_ptr_array_unref);
+  g_clear_pointer (&self->children, g_ptr_array_unref);
   self->entry = NULL;
   g_clear_object (&self->index);
 

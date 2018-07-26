@@ -258,8 +258,8 @@ ide_build_stage_finalize (GObject *object)
 
   ide_build_stage_clear_observer (self);
 
-  dzl_clear_pointer (&priv->name, g_free);
-  dzl_clear_pointer (&priv->stdout_path, g_free);
+  g_clear_pointer (&priv->name, g_free);
+  g_clear_pointer (&priv->stdout_path, g_free);
   g_clear_object (&priv->queued_execute);
   g_clear_object (&priv->stdout_stream);
 

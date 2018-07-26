@@ -37,8 +37,8 @@ ide_xml_proposal_finalize (GObject *object)
 {
   IdeXmlProposal *self = (IdeXmlProposal *)object;
 
-  dzl_clear_pointer (&self->label, g_free);
-  dzl_clear_pointer (&self->text, g_free);
+  g_clear_pointer (&self->label, g_free);
+  g_clear_pointer (&self->text, g_free);
 
   G_OBJECT_CLASS (ide_xml_proposal_parent_class)->finalize (object);
 }

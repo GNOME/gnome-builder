@@ -163,8 +163,8 @@ find_property_type (GType        type,
       if (pspec != NULL)
         ret = pspec->value_type;
 
-      dzl_clear_pointer (&unref_class, g_type_class_unref);
-      dzl_clear_pointer (&unref_iface, g_type_default_interface_unref);
+      g_clear_pointer (&unref_class, g_type_class_unref);
+      g_clear_pointer (&unref_iface, g_type_default_interface_unref);
 
       if (ret != G_TYPE_INVALID)
         return ret;

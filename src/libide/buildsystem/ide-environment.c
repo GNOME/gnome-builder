@@ -48,7 +48,7 @@ ide_environment_finalize (GObject *object)
 {
   IdeEnvironment *self = (IdeEnvironment *)object;
 
-  dzl_clear_pointer (&self->variables, g_ptr_array_unref);
+  g_clear_pointer (&self->variables, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_environment_parent_class)->finalize (object);
 }

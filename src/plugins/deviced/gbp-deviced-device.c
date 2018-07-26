@@ -51,8 +51,8 @@ static GParamSpec *properties [N_PROPS];
 static void
 install_bundle_state_free (InstallBundleState *state)
 {
-  dzl_clear_pointer (&state->local_path, g_free);
-  dzl_clear_pointer (&state->remote_path, g_free);
+  g_clear_pointer (&state->local_path, g_free);
+  g_clear_pointer (&state->remote_path, g_free);
   if (state->progress_data_destroy)
     state->progress_data_destroy (state->progress_data);
   g_slice_free (InstallBundleState, state);

@@ -79,8 +79,8 @@ file_flags_lookup_free (gpointer data)
 
   g_clear_object (&lookup->self);
   g_clear_object (&lookup->file);
-  dzl_clear_pointer (&lookup->targets, g_ptr_array_unref);
-  dzl_clear_pointer (&lookup->relative_path, g_free);
+  g_clear_pointer (&lookup->targets, g_ptr_array_unref);
+  g_clear_pointer (&lookup->relative_path, g_free);
   g_slice_free (FileFlagsLookup, lookup);
 }
 
@@ -89,8 +89,8 @@ file_targets_lookup_free (gpointer data)
 {
   FileTargetsLookup *lookup = data;
 
-  dzl_clear_pointer (&lookup->path, g_free);
-  dzl_clear_pointer (&lookup->mapped, g_mapped_file_unref);
+  g_clear_pointer (&lookup->path, g_free);
+  g_clear_pointer (&lookup->mapped, g_mapped_file_unref);
   g_slice_free (FileTargetsLookup, lookup);
 }
 
@@ -1021,8 +1021,8 @@ ide_makecache_finalize (GObject *object)
   g_clear_object (&self->runtime);
   g_clear_object (&self->parent);
 
-  dzl_clear_pointer (&self->mapped, g_mapped_file_unref);
-  dzl_clear_pointer (&self->build_targets, g_ptr_array_unref);
+  g_clear_pointer (&self->mapped, g_mapped_file_unref);
+  g_clear_pointer (&self->build_targets, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
 

@@ -94,9 +94,9 @@ ide_xml_position_free (IdeXmlPosition *self)
   if (self->analysis != NULL)
     ide_xml_analysis_unref (self->analysis);
 
-  dzl_clear_pointer (&self->prefix, g_free);
-  dzl_clear_pointer (&self->detail_name, g_free);
-  dzl_clear_pointer (&self->detail_value, g_free);
+  g_clear_pointer (&self->prefix, g_free);
+  g_clear_pointer (&self->detail_name, g_free);
+  g_clear_pointer (&self->detail_value, g_free);
 
   g_clear_object (&self->node);
   g_clear_object (&self->child_node);

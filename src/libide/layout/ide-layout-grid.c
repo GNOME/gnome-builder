@@ -756,7 +756,7 @@ ide_layout_grid_finalize (GObject *object)
   g_assert (priv->focus_column.tail == NULL);
   g_assert (priv->focus_column.length == 0);
 
-  dzl_clear_pointer (&priv->stack_info, g_array_unref);
+  g_clear_pointer (&priv->stack_info, g_array_unref);
   g_clear_object (&priv->toplevel_signals);
 
   G_OBJECT_CLASS (ide_layout_grid_parent_class)->finalize (object);

@@ -1107,8 +1107,8 @@ ide_snippet_dispose (GObject *object)
       self->mark_end = NULL;
     }
 
-  dzl_clear_pointer (&self->runs, g_array_unref);
-  dzl_clear_pointer (&self->chunks, g_ptr_array_unref);
+  g_clear_pointer (&self->runs, g_array_unref);
+  g_clear_pointer (&self->chunks, g_ptr_array_unref);
 
   g_clear_object (&self->buffer);
   g_clear_object (&self->snippet_context);
@@ -1121,8 +1121,8 @@ ide_snippet_finalize (GObject *object)
 {
   IdeSnippet *self = (IdeSnippet *)object;
 
-  dzl_clear_pointer (&self->description, g_free);
-  dzl_clear_pointer (&self->trigger, g_free);
+  g_clear_pointer (&self->description, g_free);
+  g_clear_pointer (&self->trigger, g_free);
   g_clear_object (&self->buffer);
 
   G_OBJECT_CLASS (ide_snippet_parent_class)->finalize (object);

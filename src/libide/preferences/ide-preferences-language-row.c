@@ -117,7 +117,7 @@ ide_preferences_language_row_finalize (GObject *object)
 {
   IdePreferencesLanguageRow *self = (IdePreferencesLanguageRow *)object;
 
-  dzl_clear_pointer (&self->id, g_free);
+  g_clear_pointer (&self->id, g_free);
 
   G_OBJECT_CLASS (ide_preferences_language_row_parent_class)->finalize (object);
 }

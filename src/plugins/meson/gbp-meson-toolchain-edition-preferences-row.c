@@ -333,7 +333,7 @@ gbp_meson_toolchain_edition_preferences_row_set_property (GObject      *object,
     {
     case PROP_TOOLCHAIN_PATH:
       if (self->toolchain_path != NULL)
-        dzl_clear_pointer (&self->toolchain_path, g_free);
+        g_clear_pointer (&self->toolchain_path, g_free);
 
       self->toolchain_path = g_value_dup_string (value);
 
@@ -355,7 +355,7 @@ gbp_meson_toolchain_edition_preferences_row_finalize (GObject *object)
 {
   GbpMesonToolchainEditionPreferencesRow *self = (GbpMesonToolchainEditionPreferencesRow *) object;
 
-  dzl_clear_pointer (&self->toolchain_path, g_free);
+  g_clear_pointer (&self->toolchain_path, g_free);
 
   G_OBJECT_CLASS (gbp_meson_toolchain_edition_preferences_row_parent_class)->finalize (object);
 }

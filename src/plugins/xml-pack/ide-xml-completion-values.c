@@ -49,7 +49,7 @@ value_match_item_free (gpointer data)
 {
   ValueMatchItem *item = (ValueMatchItem *)data;
 
-  dzl_clear_pointer (&item->name, g_free);
+  g_clear_pointer (&item->name, g_free);
   g_slice_free (ValueMatchItem, item);
 }
 
@@ -105,8 +105,8 @@ matching_state_new (IdeXmlRngDefine  *define,
 static void
 matching_state_free (MatchingState *state)
 {
-  dzl_clear_pointer (&state->values, g_free);
-  dzl_clear_pointer (&state->prefix, g_free);
+  g_clear_pointer (&state->values, g_free);
+  g_clear_pointer (&state->prefix, g_free);
   g_slice_free (MatchingState, state);
 }
 

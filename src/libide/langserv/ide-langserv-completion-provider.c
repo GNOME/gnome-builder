@@ -64,7 +64,7 @@ ide_langserv_completion_provider_finalize (GObject *object)
   IdeLangservCompletionProviderPrivate *priv = ide_langserv_completion_provider_get_instance_private (self);
 
   g_clear_object (&priv->client);
-  dzl_clear_pointer (&priv->word, g_free);
+  g_clear_pointer (&priv->word, g_free);
 
   G_OBJECT_CLASS (ide_langserv_completion_provider_parent_class)->finalize (object);
 }
@@ -241,7 +241,7 @@ ide_langserv_completion_provider_populate_async (IdeCompletionProvider  *provide
 
   ide_completion_context_get_bounds (context, &iter, &end);
 
-  dzl_clear_pointer (&priv->word, g_free);
+  g_clear_pointer (&priv->word, g_free);
   priv->word = ide_completion_context_get_word (context);
 
   buffer = ide_completion_context_get_buffer (context);

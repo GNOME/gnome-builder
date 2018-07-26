@@ -52,7 +52,7 @@ clear_path (gpointer data)
 {
   Path *p = data;
 
-  dzl_clear_pointer (&p->path, g_free);
+  g_clear_pointer (&p->path, g_free);
 }
 
 static void
@@ -165,7 +165,7 @@ ide_build_stage_mkdirs_finalize (GObject *object)
   IdeBuildStageMkdirs *self = (IdeBuildStageMkdirs *)object;
   IdeBuildStageMkdirsPrivate *priv = ide_build_stage_mkdirs_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->paths, g_array_unref);
+  g_clear_pointer (&priv->paths, g_array_unref);
 
   G_OBJECT_CLASS (ide_build_stage_mkdirs_parent_class)->finalize (object);
 }

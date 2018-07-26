@@ -110,9 +110,9 @@ ide_build_log_finalize (GObject *object)
 {
   IdeBuildLog *self = (IdeBuildLog *)object;
 
-  dzl_clear_pointer (&self->log_queue, g_async_queue_unref);
-  dzl_clear_pointer (&self->log_source, g_source_destroy);
-  dzl_clear_pointer (&self->observers, g_array_unref);
+  g_clear_pointer (&self->log_queue, g_async_queue_unref);
+  g_clear_pointer (&self->log_source, g_source_destroy);
+  g_clear_pointer (&self->observers, g_array_unref);
 
   G_OBJECT_CLASS (ide_build_log_parent_class)->finalize (object);
 }

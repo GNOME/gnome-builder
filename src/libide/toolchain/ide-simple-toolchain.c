@@ -145,7 +145,7 @@ ide_simple_toolchain_finalize (GObject *object)
   IdeSimpleToolchain *self = (IdeSimpleToolchain *)object;
   IdeSimpleToolchainPrivate *priv = ide_simple_toolchain_get_instance_private (self);
 
-  dzl_clear_pointer (&priv->tools, g_hash_table_unref);
+  g_clear_pointer (&priv->tools, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_simple_toolchain_parent_class)->finalize (object);
 }
