@@ -355,8 +355,8 @@ ide_xml_tree_builder_parse_worker (IdeTask      *task,
                   diagnostic = create_diagnostic (context,
                                                   entry->error_message,
                                                   state->file,
-                                                  entry->line + 1,
-                                                  entry->col + 1,
+                                                  entry->line,
+                                                  entry->col,
                                                   IDE_DIAGNOSTIC_ERROR);
                   ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
                   continue;
@@ -405,8 +405,8 @@ ide_xml_tree_builder_parse_worker (IdeTask      *task,
               diagnostic = create_diagnostic (context,
                                               msg,
                                               state->file,
-                                              entry->line + 1,
-                                              entry->col + 1,
+                                              entry->line,
+                                              entry->col,
                                               IDE_DIAGNOSTIC_ERROR);
               ide_diagnostics_add (state->analysis->diagnostics, diagnostic);
             }
