@@ -469,93 +469,42 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 }
 
 static gboolean
-register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
-                             IdeBuildPipeline         *pipeline,
-                             IdeContext               *context,
-                             GError                  **error)
+register_build_cleanup_finish_export_stage (GbpFlatpakPipelineAddin  *self,
+                                            IdeBuildPipeline         *pipeline,
+                                            IdeContext               *context,
+                                            GError                  **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeBuildStage) stage = NULL;
   g_autofree gchar *staging_dir = NULL;
-  const gchar * const *finish_args;
-  const gchar *command;
   IdeConfiguration *config;
   guint stage_id;
-
-  g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  config = ide_build_pipeline_get_configuration (pipeline);
-  if (!GBP_IS_FLATPAK_MANIFEST (config))
-    return TRUE;
-
-  command = gbp_flatpak_manifest_get_command (GBP_FLATPAK_MANIFEST (config));
-  finish_args = gbp_flatpak_manifest_get_finish_args (GBP_FLATPAK_MANIFEST (config));
-  staging_dir = gbp_flatpak_get_staging_dir (pipeline);
-
-  launcher = create_subprocess_launcher ();
-
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "build-finish");
-
-  if (command != NULL)
-    {
-      ide_subprocess_launcher_push_argv (launcher, "--command");
-      ide_subprocess_launcher_push_argv (launcher, command);
-    }
-
-  ide_subprocess_launcher_push_args (launcher, finish_args);
-  ide_subprocess_launcher_push_argv (launcher, staging_dir);
-
-  stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
-                        "name", _("Finalizing flatpak build"),
-                        "context", context,
-                        "launcher", launcher,
-                        NULL);
-
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_FINISH, stage);
-  ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
-
-  return TRUE;
-}
-
-static gboolean
-register_build_export_stage (GbpFlatpakPipelineAddin  *self,
-                             IdeBuildPipeline         *pipeline,
-                             IdeContext               *context,
-                             GError                  **error)
-{
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeBuildStage) stage = NULL;
   g_autofree gchar *arch = NULL;
-  g_autofree gchar *repo_dir = NULL;
-  g_autofree gchar *staging_dir = NULL;
-  IdeConfiguration *config;
-  guint stage_id;
+  g_autofree gchar *manifest_path = NULL;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
+  arch = get_arch_option (pipeline);
   config = ide_build_pipeline_get_configuration (pipeline);
   if (!GBP_IS_FLATPAK_MANIFEST (config))
     return TRUE;
 
+  manifest_path = gbp_flatpak_manifest_get_path (GBP_FLATPAK_MANIFEST (config));
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
-  repo_dir = gbp_flatpak_get_repo_dir (context);
-  arch = get_arch_option (pipeline);
 
   launcher = create_subprocess_launcher ();
 
-  ide_subprocess_launcher_push_argv (launcher, "flatpak");
-  ide_subprocess_launcher_push_argv (launcher, "build-export");
+  ide_subprocess_launcher_push_argv (launcher, "flatpak-builder");
+  ide_subprocess_launcher_push_argv (launcher, "--finish-only");
   ide_subprocess_launcher_push_argv (launcher, arch);
-  ide_subprocess_launcher_push_argv (launcher, repo_dir);
+
   ide_subprocess_launcher_push_argv (launcher, staging_dir);
+  ide_subprocess_launcher_push_argv (launcher, manifest_path);
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
-                        "name", _("Exporting staging directory"),
+                        "name", _("Cleanup, finalizing and export flatpak build"),
                         "context", context,
                         "launcher", launcher,
                         NULL);
@@ -565,6 +514,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
                     G_CALLBACK (always_run_query_handler),
                     NULL);
 
+  //stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_FINISH, stage);
   stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_EXPORT, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
@@ -716,8 +666,7 @@ gbp_flatpak_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       !register_build_init_stage (self, pipeline, context, &error) ||
       !register_downloads_stage (self, pipeline, context, &error) ||
       !register_dependencies_stage (self, pipeline, context, &error) ||
-      !register_build_finish_stage (self, pipeline, context, &error) ||
-      !register_build_export_stage (self, pipeline, context, &error) ||
+      !register_build_cleanup_finish_export_stage (self, pipeline, context, &error) ||
       !register_build_bundle_stage (self, pipeline, context, &error))
     g_warning ("%s", error->message);
 }
