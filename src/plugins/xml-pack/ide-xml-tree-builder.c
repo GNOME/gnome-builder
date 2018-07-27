@@ -171,10 +171,9 @@ fetch_schemas_cb (GObject      *object,
           entry->content = g_bytes_ref (cache_entry->content);
         }
 
-      if (cache_entry->error_message != NULL &&
-          entry->error_message != cache_entry->error_message)
+      if (cache_entry->error_message != NULL)
         {
-          g_free (error->message);
+          g_free (entry->error_message);
           entry->error_message = g_strdup (cache_entry->error_message);
         }
 
@@ -187,6 +186,11 @@ fetch_schemas_cb (GObject      *object,
 
       entry->state = cache_entry->state;
       entry->mtime = cache_entry->mtime;
+    }
+  else
+    {
+      g_free (entry->error_message);
+      entry->error_message = g_strdup (error->message);
     }
 
   count = ide_task_get_task_data (state->task);
