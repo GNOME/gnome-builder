@@ -81,6 +81,25 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+    <release version="3.28.4" date="2018-07-27">
+      <description>
+        <p>
+          Builder 3.28.4 contains a number of critical bugfixes and translation updates.
+        </p>
+        <ul>
+          <li>Improvements to C indenter.</li>
+          <li>Protections against pathological lines when parsing To-do's</li>
+          <li>To-do plugin now uses "git grep" when possible</li>
+          <li>Some guards against very large projects (Mesa, WebKit, Chromium) were added. We still suggest disabling CTags on this size of project.</li>
+          <li>Diagnostics are re-processed after initial build pipeline configure</li>
+          <li>Fix for loading a project based on a flatpak manifest (gnome-buidler -m)</li>
+          <li>Fix for SSH authentication when no username is supplied</li>
+          <li>emacs-style modeline improvements on initial load of buffer</li>
+          <li>Cloning a project from a manifest will now detect some situations where downloads can be avoided</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.28.3" date="2018-06-19">
       <description>
         <p>

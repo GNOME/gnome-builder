@@ -1,4 +1,27 @@
 ==============
+Version 3.28.4
+==============
+
+Changes since last release:
+
+ • Improvements to C indenter.
+ • More safety improvements using IdeTask
+ • Protections against pathological lines when parsing To-do's
+ • To-do plugin now uses "git grep" when possible
+ • Some guards against very large projects (Mesa, WebKit, Chromium) were
+   added. We still suggest disabling CTags on this size of project.
+ • Diagnostics are re-processed after initial build pipeline configure
+ • Fix for loading a project based on a flatpak manifest (gnome-buidler -m)
+ • Fix for SSH authentication when no username is supplied
+ • emacs-style modeline improvements on initial load of buffer
+ • Cloning a project from a manifest will now detect some situations where
+   downloads can be avoided
+
+Updated Translations:
+
+  German, Brazilian Portuguese, Polish, Italian, Hungarian, Indonesian
+
+==============
 Version 3.28.3
 ==============
 
