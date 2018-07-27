@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-23 10:47+0000\n"
-"PO-Revision-Date: 2018-07-23 13:07+0200\n"
+"POT-Creation-Date: 2018-07-23 13:06+0000\n"
+"PO-Revision-Date: 2018-07-27 13:22+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -1279,7 +1279,6 @@ msgid "No break"
 msgstr ""
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:22
-#, fuzzy
 #| msgid "Breakpoints"
 msgid "Breakpoint"
 msgstr "Puntos de interrupción"
@@ -1588,12 +1587,11 @@ msgid "Toggle utilities panel"
 msgstr "Conmutar el panel de utilidades"
 
 #: src/libide/editor/ide-editor-perspective-shortcuts.c:59
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Save all files"
 msgctxt "shortcut window"
 msgid "Close all files"
-msgstr "Guardar todos los archivos"
+msgstr "Cerrar todos los archivos"
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -1922,10 +1920,9 @@ msgid "Save _All"
 msgstr "Guardar todo"
 
 #: src/libide/gtk/menus.ui:80
-#, fuzzy
 #| msgid "_Close All"
 msgid "Close _All"
-msgstr "_Cerrar todo"
+msgstr "Cerrar _todo"
 
 #: src/libide/gtk/menus.ui:91
 msgid "_Go to Definition"
@@ -2115,12 +2112,11 @@ msgid "Create new document"
 msgstr "Crear un nuevo documento"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:115
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Save all documents"
-msgstr "Guardar el documento"
+msgstr "Guardar todos los documentos"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:122
 #: src/libide/layout/ide-layout-stack-shortcuts.c:62
@@ -2129,12 +2125,11 @@ msgid "Close the document"
 msgstr "Cerrar el documento."
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:129
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Close the document"
 msgctxt "shortcut window"
 msgid "Close all documents"
-msgstr "Cerrar el documento."
+msgstr "Cerrar todos los documentos"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:136
 #: src/libide/keybindings/ide-shortcuts-window.ui:444
@@ -2777,13 +2772,12 @@ msgstr ""
 
 #: src/libide/preferences/ide-preferences-builtin.c:210
 msgid "Number of completions to display"
-msgstr ""
+msgstr "Número de completados que se mostrarán"
 
 #: src/libide/preferences/ide-preferences-builtin.c:212
-#, fuzzy
 #| msgid "Completion"
 msgid "Completion Providers"
-msgstr "Completado"
+msgstr "Proveedores de completado"
 
 #: src/libide/preferences/ide-preferences-builtin.c:218
 msgid "Snippets"
@@ -3193,8 +3187,7 @@ msgstr "Limpiar"
 msgid "Export Bundle"
 msgstr "Exportar como paquete"
 
-#: src/libide/workbench/ide-omni-bar.ui:591
-#: src/plugins/make/make_plugin.py:123
+#: src/libide/workbench/ide-omni-bar.ui:591 src/plugins/make/make_plugin.py:123
 msgid "Build project"
 msgstr "Construir proyecto"
 
@@ -3495,23 +3488,21 @@ msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos advertencias errors"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:78
-#, fuzzy
 #| msgid "Suggest completions using Ctags"
 msgid "Suggest completions using Clang"
-msgstr "Sugerir completado usando Ctags"
+msgstr "Sugerir completado usando Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:79
 msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Usar Clang para sugerir completado en los lenguajes C y C++"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:83
-#| msgid "Configure Options"
 msgid "Clang Options"
 msgstr "Opciones de Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:92
 msgid "Complete Parenthesis"
-msgstr ""
+msgstr "Completar paréntesis"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:93
 msgid "Include parenthesis when completing clang proposals"
@@ -3533,21 +3524,17 @@ msgstr "anónimo"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr ""
+msgstr "Completar paréntesis"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
-#, fuzzy
 #| msgid "If snippet expansion should be enabled via the completion window."
 msgid "If parentheses should be included when completing."
-msgstr ""
-"Si se debe completar la expansión de fragmentos mediante la ventana de "
-"completado."
+msgstr "Indica si se deben incluir los paréntesis al completar."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-#, fuzzy
 #| msgid "Parameters"
 msgid "Complete parameters"
-msgstr "Parámetros"
+msgstr "Completar parámetros"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
@@ -4995,7 +4982,7 @@ msgstr "Sugerir completado usando Jedi"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:52
 msgid "Use registered snippets to suggest completion proposals"
-msgstr ""
+msgstr "Usar fragmentos registrados para las sugerir propuestas de completado"
 
 #: src/plugins/spellcheck/gbp-spell-editor-addin.c:51
 msgid "Spelling"
@@ -5110,7 +5097,6 @@ msgstr ""
 "archivo como adjunto en su informe de error o en la solicitud de soporte."
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
-#| msgid "_Go to Definition"
 msgid "Definition"
 msgstr "Definición"
 
@@ -5119,13 +5105,10 @@ msgid "Canonincal"
 msgstr ""
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
-#| msgid "Rename symbol"
 msgid "Unnamed Symbol"
 msgstr "Símbolo sin nombre"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:162
-#| msgctxt "shortcut window"
-#| msgid "Symbols"
 msgid "Symbol"
 msgstr "Símbolo"
 
