@@ -90,13 +90,13 @@ gbp_create_project_template_icon_set_property (GObject      *object,
 }
 
 static void
-gbp_create_project_template_icon_finalize (GObject *object)
+gbp_create_project_template_icon_destroy (GtkWidget *widget)
 {
-  GbpCreateProjectTemplateIcon *self = GBP_CREATE_PROJECT_TEMPLATE_ICON (object);
+  GbpCreateProjectTemplateIcon *self = (GbpCreateProjectTemplateIcon *)widget;
 
-  g_object_unref (self->template);
+  g_clear_object (&self->template);
 
-  G_OBJECT_CLASS (gbp_create_project_template_icon_parent_class)->finalize (object);
+  GTK_WIDGET_CLASS (gbp_create_project_template_icon_parent_class)->destroy (widget);
 }
 
 static void
@@ -107,7 +107,8 @@ gbp_create_project_template_icon_class_init (GbpCreateProjectTemplateIconClass *
 
   object_class->set_property = gbp_create_project_template_icon_set_property;
   object_class->get_property = gbp_create_project_template_icon_get_property;
-  object_class->finalize = gbp_create_project_template_icon_finalize;
+
+  widget_class->destroy = gbp_create_project_template_icon_destroy;
 
   properties [PROP_TEMPLATE] =
     g_param_spec_object ("template",
