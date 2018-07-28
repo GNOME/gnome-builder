@@ -447,9 +447,10 @@ ide_session_save_async (IdeSession          *self,
 
   s = g_slice_new0 (Save);
   s->addins = g_ptr_array_new_with_free_func (g_object_unref);
-  g_variant_dict_init (&s->dict, NULL);
   peas_extension_set_foreach (self->addins, collect_addins_cb, s->addins);
   s->active = s->addins->len;
+  g_variant_dict_init (&s->dict, NULL);
+  s->dict_needs_clear = TRUE;
   ide_task_set_task_data (task, s, save_free);
 
   if (s->active == 0)
