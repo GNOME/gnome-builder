@@ -173,7 +173,14 @@ meson_toolchain_provider_search_iterate (GObject      *object,
     }
 
   g_ptr_array_foreach (ret, (GFunc)add_all_files, fs->found_files);
-  fs->folders = g_list_remove (fs->folders, file);
+
+  /* Remove the item from the list, ensuring we drop our
+   * reference from the linked-list too.
+   */
+  g_assert (fs->folders != NULL);
+  g_assert (fs->folders->data == (gpointer)file);
+  fs->folders = g_list_delete_link (fs->folders, fs->folders);
+  g_object_unref (file);
 
   if (fs->folders != NULL)
     {
