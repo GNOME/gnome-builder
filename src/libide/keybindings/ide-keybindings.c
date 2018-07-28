@@ -280,6 +280,7 @@ ide_keybindings_finalize (GObject *object)
 
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->mode, g_free);
+  g_clear_pointer (&self->plugin_providers, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_keybindings_parent_class)->finalize (object);
 
