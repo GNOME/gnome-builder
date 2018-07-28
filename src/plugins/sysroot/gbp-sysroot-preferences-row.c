@@ -226,19 +226,31 @@ gbp_sysroot_preferences_row_show_popup (GbpSysrootPreferencesRow *self)
 static void
 gbp_sysroot_preferences_row_constructed (GObject *object)
 {
-  GbpSysrootManager *sysroot_manager = NULL;
+  GbpSysrootPreferencesRow *self = (GbpSysrootPreferencesRow *)object;
+  GbpSysrootManager *sysroot_manager;
+  g_autoptr(GFile) file = NULL;
   g_autofree gchar *value = NULL;
-  GbpSysrootPreferencesRow *self = (GbpSysrootPreferencesRow *) object;
+  g_autofree gchar *path = NULL;
+  g_autofree gchar *name = NULL;
+
+  g_assert (GBP_IS_SYSROOT_PREFERENCES_ROW (self));
 
   sysroot_manager = gbp_sysroot_manager_get_default ();
-  gtk_entry_set_text (self->name_entry,
-                      gbp_sysroot_manager_get_target_name (sysroot_manager, self->sysroot_id));
+
+  name = gbp_sysroot_manager_get_target_name (sysroot_manager, self->sysroot_id);
+  path = gbp_sysroot_manager_get_target_path (sysroot_manager, self->sysroot_id);
+
+  gtk_entry_set_text (self->name_entry, name ?: "");
   gtk_combo_box_set_active_id (self->arch_combobox, gbp_sysroot_manager_get_target_arch (sysroot_manager, self->sysroot_id));
-  dzl_file_chooser_entry_set_file (self->sysroot_entry,
-                      g_file_new_for_path (gbp_sysroot_manager_get_target_path (sysroot_manager, self->sysroot_id)));
+
+  if (path)
+    {
+      file = g_file_new_for_path (path);
+      dzl_file_chooser_entry_set_file (self->sysroot_entry, file);
+    }
+
   value = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, self->sysroot_id);
-  if (value != NULL)
-    gtk_entry_set_text (self->pkg_config_entry, value);
+  gtk_entry_set_text (self->pkg_config_entry, value ?: "");
 
   g_signal_connect_object (self->name_entry,
                            "changed",
