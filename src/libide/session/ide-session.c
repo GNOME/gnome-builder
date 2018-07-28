@@ -43,6 +43,7 @@ typedef struct
   GPtrArray    *addins;
   GVariantDict  dict;
   gint          active;
+  guint         dict_needs_clear : 1;
 } Save;
 
 typedef struct
@@ -69,6 +70,9 @@ save_free (Save *s)
 {
   g_assert (s != NULL);
   g_assert (s->active == 0);
+
+  if (s->dict_needs_clear)
+    g_variant_dict_clear (&s->dict);
 
   g_clear_pointer (&s->addins, g_ptr_array_unref);
   g_slice_free (Save, s);
@@ -371,6 +375,8 @@ ide_session_save_addin_save_cb (GObject      *object,
   if (variant != NULL)
     {
       g_assert (!g_variant_is_floating (variant));
+
+      s->dict_needs_clear = TRUE;
       g_variant_dict_insert_value (&s->dict, G_OBJECT_TYPE_NAME (addin), variant);
     }
 
@@ -383,6 +389,8 @@ ide_session_save_addin_save_cb (GObject      *object,
       g_autoptr(GFile) file = NULL;
       GCancellable *cancellable;
       IdeContext *context;
+
+      s->dict_needs_clear = FALSE;
 
       state = g_variant_take_ref (g_variant_dict_end (&s->dict));
       bytes = g_variant_get_data_as_bytes (state);
