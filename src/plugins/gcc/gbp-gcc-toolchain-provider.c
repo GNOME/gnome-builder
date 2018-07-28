@@ -213,7 +213,14 @@ gbp_gcc_toolchain_provider_search_iterate (GObject      *object,
   IDE_PTR_ARRAY_SET_FREE_FUNC (ret, g_object_unref);
 
   g_ptr_array_foreach (ret, (GFunc)add_all_files, fs->found_files);
-  fs->folders = g_list_remove (fs->folders, file);
+
+  /* Remove the item from the list, ensuring we drop our
+   * reference from the linked-list too.
+   */
+  g_assert (fs->folders != NULL);
+  g_assert (fs->folders->data == (gpointer)file);
+  fs->folders = g_list_delete_link (fs->folders, fs->folders);
+  g_object_unref (file);
 
   if (fs->folders != NULL)
     ide_g_file_find_async (fs->folders->data,
@@ -252,11 +259,11 @@ gbp_gcc_toolchain_provider_search_init (GbpGccToolchainProvider *self,
 
   fs = g_slice_new0 (FileSearching);
   fs->found_files = g_ptr_array_new_with_free_func (g_object_unref);
-  fs->folders = folders;
+  fs->folders = g_steal_pointer (&folders);
   ide_task_set_task_data (task, fs, file_searching_free);
 
   /* GCC */
-  ide_g_file_find_async (folders->data,
+  ide_g_file_find_async (fs->folders->data,
                          "*-gcc",
                          cancellable,
                          gbp_gcc_toolchain_provider_search_iterate,
