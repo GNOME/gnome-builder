@@ -1,197 +1,274 @@
 snippet allow
-- scope rust
-	#[allow(${1:lint})]$0
-
+- desc #[allow(…)]
+	#[allow(${1:lint})]
+	$0
 snippet deny
-- scope rust
-	#[deny(${1:lint})]$0
-
+- desc #[deny(…)]
+	#[deny(${1:lint})]
+	$0
 snippet forbid
-- scope rust
-	#[forbid(${1:lint})]$0
-
+- desc #[forbid(…)]
+	#[forbid(${1:lint})]
+	$0
 snippet warn
-- scope rust
-	#[warn(${1:lint})]$0
-
+- desc #[warn(…)]
+	#[warn(${1:lint})]
+	$0
 snippet deprecated
-- scope rust
-	#[deprecated(since = "${1:version}", note = "${2:note}")]$0
-
+- desc #[deprecated(…)]
+	#[deprecated(since = "${1:version}", note = "${2:reason}")]
+	$0
+snippet must_use
+- desc #[must_use]
+	#[must_use]
+	$0
+snippet should_panic
+- desc #[should_panic(…)]
+	#[should_panic(expected = "${1:reason}")]
+	$0
 snippet cfg
-- scope rust
-	#[cfg(${1:key} = "${2:value}")]$0
-
+- desc #[cfg(…)]
+	#[cfg(${1:expression})]
+	$0
 snippet derive
-- scope rust
-	#[derive(${1:Trait})]$0
-
+- desc #[derive(…)]
+	#[derive(${1:Debug})]
+	$0
+snippet repr
+- desc #[repr(…)]
+	#[repr(${1:C})]
+	$0
+snippet link
+- desc #[link(…)]
+	#[link(name = "${1:library}")]
+	$0
+snippet no_mangle
+- desc #[no_mangle]
+	#[no_mangle]
+	$0
+snippet inline
+- desc #[inline]
+	#[inline]
+	$0
 snippet struct
-- scope rust
 	struct ${1:StructName} {
 	    $0
 	}
-
+snippet tuple
+- desc Create tuple struct
+	struct ${1:TupleName}(${2:i32});$0
+snippet unit
+- desc Create unit-like struct
+	struct ${1:StructName};$0
 snippet union
-- scope rust
 	#[repr(C)]
 	union ${1:UnionName} {
 	    $0
 	}
-
 snippet enum
-- scope rust
 	enum ${1:EnumName} {
 	    $0
 	}
-
 snippet trait
-- scope rust
 	trait ${1:TraitName} {
 	    $0
 	}
-
 snippet impl
-- scope rust
-	impl ${1:StructName} {
+	impl ${1:Type} {
 	    $0
 	}
-
-snippet fn
-- scope rust
-	fn ${1:function_name}(${2:&self}) {
-	    ${3:unimplemented!()}
+snippet impltrait
+- desc Implement trait
+	impl ${1:Trait} for ${2:Type} {
+	    $0
 	}
-
-snippet fnr
-- scope rust
-	fn ${1:function_name}(${2:&self}) -> ${3:TypeName} {
-	    ${4:unimplemented!()}
-	}
-
-snippet fns
-- scope rust
-	fn ${1:function_name}(${2:&self});$0
-
-snippet fnrs
-- scope rust
-	fn ${1:function_name}(${2:&self}) -> ${3:TypeName};$0
-
-snippet macro
-- scope rust
-	macro_rules! ${1:macro_name} {
-	    ( ${2:expression} ) => {
+snippet default
+- desc Implement Default trait
+	impl Default for ${1:Type} {
+	    fn default() -> Self {
 	        $0
-	    };
+	    }
 	}
-
-snippet unsafe
-- scope rust
-	unsafe {
+snippet drop
+- desc Implement Drop trait
+	impl Drop for ${1:Type} {
+	    fn drop(&mut self) {
+	        $0
+	    }
+	}
+snippet constructor
+- desc Create a constructor
+	#[inline]
+	pub fn ${1:new}(${2}) -> Self {
+	    Self {}$0
+	}
+snippet builder
+- desc Create a builder
+	struct ${1:Struct}Builder {
 	    $0
 	}
 
-snippet loop
-- scope rust
-	loop {
+	impl $1Builder {
+	    #[inline]
+	    pub fn new() -> Self {
+	        Self {}
+	    }
+
+	    pub fn build(&self) -> $1 {
+	        unimplemented!()
+	    }
+	}
+snippet fn
+	fn ${1:function_name}(${2:&mut self}) {
+	    unimplemented!()$0
+	}
+snippet fnr
+- desc Create function with return
+	fn ${1:function_name}(${2:&mut self}) -> ${3:&mut Self} {
+	    unimplemented!()$0
+	}
+snippet fns
+- desc Create function signature
+	fn ${1:function_name}(${2:&mut self});$0
+snippet fnrs
+- desc Create function signature with return
+	fn ${1:function_name}(${2:&mut self}) -> ${3:&mut Self};$0
+snippet closure
+- desc Create closure
+	|${1}| {
 	    $0
 	}
-
-snippet for
-- scope rust
-	for ${1:variable} in ${2:iterator}.iter() {
+snippet move
+- desc Create move closure
+	move |${1}| {
 	    $0
 	}
-
-snippet while
-- scope rust
-	while ${1:expression} {
-	    $0
-	}
-
-snippet if
-- scope rust
-	if ${1:expression} {
-	    $0
-	}
-
 snippet match
-- scope rust
 	match ${1:expression} {
 	    $0
 	}
-
+snippet option
+- desc Pattern matching for Option
+	match ${1:expression} {
+	    None => ${2},
+	    Some(${3:val}) => ${4},
+	}$0
+snippet result
+- desc Pattern matching for Result
+	match ${1:expression} {
+	    Ok(${2:val}) => ${3},
+	    Err(${4:err}) => ${5},
+	}$0
+snippet if
+	if ${1:condition} {
+	    $0
+	}
+snippet else
+	else {
+	    $0
+	}
+snippet elseif
+- desc else if
+	else if ${1:condition} {
+	    $0
+	}
+snippet iflet
+- desc if let
+	if let ${1:Some(val)} = ${2:expression} {
+	    $0
+	}
+snippet while
+	while ${1:condition} {
+	    $0
+	}
+snippet whilelet
+- desc while let
+	while let ${1:Some(val)} = ${2:expression} {
+	    $0
+	}
+snippet for
+	for ${1:item} in ${2:collection}.iter() {
+	    $0
+	}
+snippet loop
+	loop {
+	    $0
+	}
+snippet unsafe
+	unsafe {
+	    $0
+	}
+snippet extern
+	extern {
+	    $0
+	}
 snippet const
-- scope rust
 	const ${1:CONST_NAME}: ${2:type} = ${3:expression};$0
-
 snippet static
-- scope rust
 	static ${1:STATIC_NAME}: ${2:type} = ${3:expression};$0
-
 snippet let
-- scope rust
 	let ${1:variable} = ${2:expression};$0
-
 snippet type
-- scope rust
-	type ${1:AliasName} = ${2:TypeName};$0
-
-snippet fmt
-- scope rust
+	type ${1:Alias} = ${2:Type};$0
+snippet vec
+- desc vec![…]
+	vec![${1:expression}; ${2:size}];$0
+snippet format_args
+- desc format_args!(…)
+	format_args!("${1:{}}", ${2:expression})$0
+snippet format
+- desc format!(…)
 	format!("${1:{}}", ${2:expression})$0
-
 snippet write
-- scope rust
+- desc write!(…)
 	write!(${1:buffer}, "${2:{}}", ${3:expression});$0
-
 snippet writeln
-- scope rust
+- desc writeln!(…)
 	writeln!(${1:buffer}, "${2:{}}", ${3:expression});$0
-
 snippet print
-- scope rust
+- desc print!(…)
 	print!("${1:{}}", ${2:expression});$0
-
 snippet println
-- scope rust
+- desc println!(…)
 	println!("${1:{}}", ${2:expression});$0
-
 snippet eprint
-- scope rust
+- desc eprint!(…)
 	eprint!("${1:{}}", ${2:expression});$0
-
 snippet eprintln
-- scope rust
+- desc eprintln!(…)
 	eprintln!("${1:{}}", ${2:expression});$0
-
+snippet panic
+- desc panic!(…)
+	panic!("${1:{}}", ${2:expression});$0
+snippet unreachable
+- desc unreachable!(…)
+	unreachable!("${1:reason}")$0
+snippet unimplemented
+- desc unimplemented!(…)
+	unimplemented!()$0
 snippet assert
-- scope rust
+- desc assert!(…)
 	assert!(${1:expression});$0
-
 snippet assert_eq
-- scope rust
+- desc assert_eq!(…)
 	assert_eq!(${1:expression1}, ${2:expression2});$0
-
 snippet assert_ne
-- scope rust
+- desc assert_ne!(…)
 	assert_ne!(${1:expression1}, ${2:expression2});$0
-
-snippet testmod
-- scope rust
+snippet testsmod
+- desc Create tests module
 	#[cfg(test)]
 	mod tests {
 	    use super::*;
 
 	    #[test]
 	    fn ${1:function_name}() {
-	        ${2:unimplemented!()}
+	        unimplemented!()$0
 	    }
 	}
-
 snippet test
-- scope rust
+- desc Create test
 	#[test]
 	fn ${1:function_name}() {
-	    ${2:unimplemented!()}
+	    unimplemented!()$0
 	}

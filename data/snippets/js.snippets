@@ -7,6 +7,9 @@ snippet lang
 snippet import
 	const ${1:ModuleName} = imports.${2:path}.${$1|decapitalize};
 	$0
+snippet require
+	const ${1:ModuleName} = require("${$1|lower}");
+	$0
 snippet class
 	const ${1:ClassName} = new Lang.Class({
 		Name: '$1',
@@ -35,3 +38,83 @@ snippet gproperty
 		$0),
 snippet gsignal
 	'${1:signal}': {$0},
+snippet function
+	function ${1:name}(${2}) {
+		$0
+	}
+snippet arrow
+- desc Create arrow function
+	(${1}) => {
+		$0
+	}
+snippet if
+	if (${1:condition}) {
+		$0
+	}
+snippet else
+	else {
+		$0
+	}
+snippet elseif
+- desc else if
+	else if (${1:condition}) {
+		$0
+	}
+snippet switch
+	switch (${1:expression}) {
+		case ${2:value}:
+			$0
+			break;
+	}
+snippet case
+	case ${1:value}:
+		$0
+		break;
+snippet default
+	default:
+		$0
+		break;
+snippet while
+	while (${1:condition}) {
+		$0
+	}
+snippet for
+	for (${1:let i = 0}; ${2:i < }; ${3:i++}) {
+		$0
+	}
+snippet forin
+- desc for … in
+	for (${1:let item} in ${2:enumerable}) {
+		$0
+	}
+snippet forof
+- desc for … of
+	for (${1:let item} of ${2:iterable}) {
+		$0
+	}
+snippet try
+	try {
+		$0
+	}
+snippet catch
+	catch (${1:e}) {
+		$0
+	}
+snippet finally
+	finally {
+		$0
+	}
+snippet const
+	const ${1:variable} = ${2:expression};$0
+snippet let
+	let ${1:variable} = ${2:expression};$0
+snippet var
+	var ${1:variable} = ${2:expression};$0
+snippet log
+	console.log("${1:message}");$0
+snippet error
+	console.error("${1:message}");$0
+snippet info
+	console.info("${1:message}");$0
+snippet warn
+	console.warn("${1:message}");$0

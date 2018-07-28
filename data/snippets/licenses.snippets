@@ -18,6 +18,7 @@ snippet apache
 	 *
 	 * SPDX-License-Identifier: Apache-2.0
 	 */
+
 	$0
 - scope python, python3
 	# ${1:$filename}
@@ -37,6 +38,7 @@ snippet apache
 	# limitations under the License.
 	#
 	# SPDX-License-Identifier: Apache-2.0
+
 	$0
 - scope c-sharp, rust
 	// ${1:$filename}
@@ -56,6 +58,7 @@ snippet apache
 	// limitations under the License.
 	//
 	// SPDX-License-Identifier: Apache-2.0
+
 	$0
 snippet gpl
 - scope c, chdr, cpp, css, js, vala, java
@@ -78,6 +81,7 @@ snippet gpl
 	 *
 	 * SPDX-License-Identifier: GPL-3.0-or-later
 	 */
+
 	$0
 - scope python, python3
 	# ${1:$filename}
@@ -98,6 +102,7 @@ snippet gpl
 	# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	#
 	# SPDX-License-Identifier: GPL-3.0-or-later
+
 	$0
 - scope c-sharp, rust
 	// ${1:$filename}
@@ -118,6 +123,7 @@ snippet gpl
 	// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	//
 	// SPDX-License-Identifier: GPL-3.0-or-later
+
 	$0
 snippet lgpl
 - scope c, chdr, cpp, css, js, vala, java
@@ -140,6 +146,7 @@ snippet lgpl
 	 *
 	 * SPDX-License-Identifier: LGPL-3.0-or-later
 	 */
+
 	$0
 - scope python, python3
 	# ${1:$filename}
@@ -160,6 +167,7 @@ snippet lgpl
 	# License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	#
 	# SPDX-License-Identifier: LGPL-3.0-or-later
+
 	$0
 - scope c-sharp, rust
 	// ${1:$filename}
@@ -180,6 +188,7 @@ snippet lgpl
 	// License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	//
 	// SPDX-License-Identifier: LGPL-3.0-or-later
+
 	$0
 snippet mit
 - scope c, chdr, cpp, css, js, vala, java
@@ -207,6 +216,7 @@ snippet mit
 	 *
 	 * SPDX-License-Identifier: MIT
 	 */
+
 	$0
 - scope c-sharp, rust
 	// ${1:$filename}
@@ -232,6 +242,7 @@ snippet mit
 	// IN THE SOFTWARE.
 	//
 	// SPDX-License-Identifier: MIT
+
 	$0
 - scope python, python3
 	# ${1:$filename}
@@ -257,9 +268,11 @@ snippet mit
 	# IN THE SOFTWARE.
 	#
 	# SPDX-License-Identifier: MIT
+
 	$0
 snippet mitapache
 - scope c, chdr, cpp, css, js, vala, java
+- desc MIT OR Apache
 	/* ${1:$filename}
 	 *
 	 * Copyright $year ${2:$fullname} <${3:$email}>
@@ -272,8 +285,10 @@ snippet mitapache
 	 *
 	 * SPDX-License-Identifier: (MIT OR Apache-2.0)
 	 */
+
 	$0
 - scope python, python3
+- desc MIT OR Apache
 	# ${1:$filename}
 	#
 	# Copyright $year ${2:$fullname} <${3:$email}>
@@ -285,8 +300,10 @@ snippet mitapache
 	# except according to those terms.
 	#
 	# SPDX-License-Identifier: (MIT OR Apache-2.0)
+
 	$0
 - scope c-sharp, rust
+- desc MIT OR Apache
 	// ${1:$filename}
 	//
 	// Copyright $year ${2:$fullname} <${3:$email}>
@@ -298,4 +315,5 @@ snippet mitapache
 	// except according to those terms.
 	//
 	// SPDX-License-Identifier: (MIT OR Apache-2.0)
+
 	$0

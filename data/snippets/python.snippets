@@ -21,6 +21,32 @@ snippet class
 			${4:pass}
 	
 	$0
+snippet if
+	if ${1:condition}:
+		$0
+snippet else
+	else:
+		$0
+snippet elif
+	elif ${1:condition}:
+		$0
+snippet while
+	while ${1:condition}:
+		$0
+snippet for
+	for ${1:item} in ${2:collection}:
+		$0
+snippet try
+	try:
+		$0
+snippet except
+	except ${1:Exception}:
+		$0
+snippet finally
+	finally:
+		$0
+snippet lambda
+	lambda ${1:name}: $0
 snippet gobject
 - scope python
 	class ${1:ClassName}(${2:GObject.Object}):
