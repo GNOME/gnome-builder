@@ -280,6 +280,7 @@ ide_configuration_finalize (GObject *object)
   g_clear_pointer (&priv->prefix, g_free);
   g_clear_pointer (&priv->runtime_id, g_free);
   g_clear_pointer (&priv->app_id, g_free);
+  g_clear_pointer (&priv->toolchain_id, g_free);
 
   G_OBJECT_CLASS (ide_configuration_parent_class)->finalize (object);
 }
