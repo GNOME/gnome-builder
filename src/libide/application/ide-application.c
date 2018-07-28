@@ -648,6 +648,7 @@ ide_application_finalize (GObject *object)
   g_clear_object (&self->recent_projects);
   g_clear_object (&self->settings);
   g_clear_object (&self->color_proxy);
+  g_clear_object (&self->projects_directory);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
 }
