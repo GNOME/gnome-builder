@@ -1,6 +1,6 @@
 snippet class
 - scope vala
-- desc Create Class
+- desc Create class
 	class ${1:$filename|stripsuffix|camelize} : ${2:Object} {
 		public $1 () {
 			$0
@@ -14,7 +14,7 @@ snippet comment
 	 */
 snippet async
 - scope vala
-- desc call an async function
+- desc Call an async function
 	${1:func}.begin (${2:args, }(obj, res) => {
 		${3:var result = }$1.end (res);$0
 	});

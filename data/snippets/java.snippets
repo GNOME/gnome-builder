@@ -1,5 +1,5 @@
 snippet clas
-- desc Creates a java class definition
+- desc Create class definition
 - scope java, groovy
 	package ${$relative_dirname|descend_path|descend_path|descend_path|slash_to_dots};
 	
@@ -8,7 +8,7 @@ snippet clas
 	    $0
 	  }
 snippet iface
-- desc Creates a java interface definition
+- desc Create interface definition
 - scope java, groovy
 	package ${$relative_dirname|descend_path|descend_path|descend_path|slash_to_dots};
 	
@@ -24,21 +24,21 @@ snippet psvm
 	    $0
 	  }
 snippet itar
-- desc Creates a for loop
+- desc Create a for loop
 - scope java, groovy
 	for (int ${1:i = 0}; ${2:i < }; ${3:i++})
 	  {
 	    $0
 	  }
 snippet iter
-- desc Creates a for each loop on a collection
+- desc Create a for each loop on a collection
 - scope java, groovy
 	for (${2:type} ${3:var}: ${1:collection})
 	  {
 	    $0
 	  }
 snippet itit
-- desc Creates a for loop on an iterator
+- desc Create a for loop on an iterator
 - scope java, groovy
 	while (${1:it}.hasNext())
 	  {
@@ -61,4 +61,3 @@ snippet sout
 snippet serr
 - scope java
 	System.err.println($0);
-

@@ -1,23 +1,113 @@
 snippet Widget
-- desc Quick definition for a GtkWidget local.
 - scope c, chdr
+- desc Quick definition for a GtkWidget local
 	GtkWidget *
 snippet function_prefix
 - scope c, chdr
 	${$filename|stripsuffix|functify}_
-snippet forloop
+snippet struct
+- scope c, chdr
+	typedef struct
+	{
+	    $0
+	} ${1:StructName};
+snippet union
+- scope c, chdr
+	typedef union
+	{
+	    $0
+	} ${1:UnionName};
+snippet enum
+- scope c, chdr
+	typedef enum
+	{
+	    $0
+	} ${1:EnumName};
+snippet fn
+- scope c, chdr
+- desc Create function
+	${1:void}
+	${2:function_name} (${3:void})
+	{
+	    $0
+	}
+snippet fns
+- scope c, chdr
+- desc Create function signature
+	${1:void}
+	${2:function_name} (${3:void});$0
+snippet if
+- scope c, chdr
+	if (${1:condition})
+	  {
+	    $0
+	  }
+snippet else
+- scope c, chdr
+	else
+	  {
+	    $0
+	  }
+snippet elseif
+- scope c, chdr
+- desc else if
+	else if (${1:condition})
+	  {
+	    $0
+	  }
+snippet switch
+- scope c, chdr
+	switch (${1:expression})
+	  {
+	  case ${2:value}:
+	    $0
+	    break;
+	  }
+snippet case
+- scope c, chdr
+	case ${1:value}:
+	  $0
+	  break;
+snippet default
+- scope c, chdr
+	default:
+	  $0
+	  break;
+snippet while
+- scope c, chdr
+	while (${1:condition})
+	  {
+	    $0
+	  }
+snippet for
 - scope c, chdr
 	for (${1:i = 0}; ${2:i < }; ${3:i++})
 	  {
 	    $0
 	  }
+snippet var
+- scope c, chdr
+- desc Create variable
+	${1:type} ${2:variable} = ${3:expression};$0
+snippet printf
+- scope c, chdr
+- desc printf(…)
+	printf("${1:%s\\n}", ${2:expression});$0
+snippet eprintf
+- scope c, chdr
+- desc eprintf(…)
+	eprintf("${1:%s\\n}", ${2:expression});$0
+snippet scanf
+- scope c, chdr
+- desc scanf(…)
+	scanf("${1:%d}", ${2:variable});$0
 snippet include
 - scope c, chdr
-- desc Include a file relative to the file or configured include paths.
+- desc Include a file relative to the file or configured include paths
 	#include "${1}"$0
 snippet Include
 - scope c, chdr
-- desc Include a file from the global include path.
+- desc Include a file from the global include path
 	#include <${1}>$0
 snippet Classname
 - scope c, chdr
