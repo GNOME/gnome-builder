@@ -241,6 +241,7 @@ ide_git_clone_widget_finalize (GObject *object)
   IdeGitCloneWidget *self = (IdeGitCloneWidget *)object;
 
   g_clear_pointer (&self->child_name, g_free);
+  g_clear_pointer (&self->branch_name, g_free);
 
   G_OBJECT_CLASS (ide_git_clone_widget_parent_class)->finalize (object);
 }
