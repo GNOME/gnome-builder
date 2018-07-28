@@ -1085,6 +1085,8 @@ ide_clang_client_diagnose_cb (GObject      *object,
 
       if (diag != NULL)
         ide_diagnostics_take (ret, g_steal_pointer (&diag));
+
+      g_variant_unref (v);
     }
 
   ide_task_return_pointer (task,
