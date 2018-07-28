@@ -63,6 +63,7 @@ ide_hover_context_dispose (GObject *object)
   IdeHoverContext *self = (IdeHoverContext *)object;
 
   g_clear_pointer (&self->content, g_array_unref);
+  g_clear_pointer (&self->providers, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_hover_context_parent_class)->dispose (object);
 }
