@@ -47,10 +47,11 @@ gbp_sysroot_runtime_new (IdeContext  *context,
 
   built_id = g_strconcat (RUNTIME_PREFIX, sysroot_id, NULL);
   runtime = g_object_new (GBP_TYPE_SYSROOT_RUNTIME,
-                          "id", g_steal_pointer (&built_id),
+                          "id", built_id,
                           "context", context,
                           "display-name", "",
                           NULL);
+
   return g_steal_pointer (&runtime);
 }
 
