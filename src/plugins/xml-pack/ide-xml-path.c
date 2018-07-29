@@ -20,6 +20,23 @@
 
 G_DEFINE_BOXED_TYPE (IdeXmlPath, ide_xml_path, ide_xml_path_ref, ide_xml_path_unref)
 
+gboolean
+ide_xml_path_is_root_only (IdeXmlPath *self)
+{
+  g_return_val_if_fail (self != NULL, FALSE);
+
+  return self->is_root_only;
+}
+
+void
+ide_xml_path_set_is_root_only  (IdeXmlPath *self,
+                                gboolean    is_root_only)
+{
+  g_return_if_fail (self != NULL);
+
+  self->is_root_only = is_root_only;
+}
+
 void
 ide_xml_path_append_node (IdeXmlPath       *self,
                           IdeXmlSymbolNode *node)

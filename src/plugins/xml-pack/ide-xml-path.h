@@ -32,20 +32,23 @@ struct _IdeXmlPath
 {
   volatile gint  ref_count;
   GPtrArray     *nodes;
-  guint          start_at_root : 1;
+  guint          is_root_only : 1;
 };
 
-GType       ide_xml_path_get_type      (void);
-IdeXmlPath *ide_xml_path_new           (void);
-IdeXmlPath *ide_xml_path_new_from_node (IdeXmlSymbolNode *node);
-IdeXmlPath *ide_xml_path_copy          (IdeXmlPath       *self);
-IdeXmlPath *ide_xml_path_ref           (IdeXmlPath       *self);
-void        ide_xml_path_unref         (IdeXmlPath       *self);
-void        ide_xml_path_append_node   (IdeXmlPath       *self,
-                                        IdeXmlSymbolNode *node);
-void        ide_xml_path_dump          (IdeXmlPath       *self);
-void        ide_xml_path_prepend_node  (IdeXmlPath       *self,
-                                        IdeXmlSymbolNode *node);
+GType       ide_xml_path_get_type         (void);
+gboolean    ide_xml_path_is_root_only     (IdeXmlPath       *self);
+IdeXmlPath *ide_xml_path_new              (void);
+IdeXmlPath *ide_xml_path_new_from_node    (IdeXmlSymbolNode *node);
+IdeXmlPath *ide_xml_path_copy             (IdeXmlPath       *self);
+IdeXmlPath *ide_xml_path_ref              (IdeXmlPath       *self);
+void        ide_xml_path_unref            (IdeXmlPath       *self);
+void        ide_xml_path_append_node      (IdeXmlPath       *self,
+                                           IdeXmlSymbolNode *node);
+void        ide_xml_path_dump             (IdeXmlPath       *self);
+void        ide_xml_path_prepend_node     (IdeXmlPath       *self,
+                                           IdeXmlSymbolNode *node);
+void        ide_xml_path_set_is_root_only (IdeXmlPath       *self,
+                                           gboolean          is_root_only);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeXmlPath, ide_xml_path_unref)
 

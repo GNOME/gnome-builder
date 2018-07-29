@@ -243,7 +243,10 @@ get_path (IdeXmlSymbolNode *node,
     g_warning ("partial path, we don't reach the root node");
 
   if (path->nodes->len == 0)
-    ide_xml_path_prepend_node (path, root_node);
+    {
+      ide_xml_path_prepend_node (path, root_node);
+      ide_xml_path_set_is_root_only (path, TRUE);
+    }
 
   return path;
 }
@@ -369,14 +372,16 @@ get_matching_candidates (IdeXmlCompletionProvider *self,
       schema = schema_entry->schema;
       grammar = schema->top_grammar;
 
-      if (path->nodes->len > 1)
+      if (ide_xml_path_is_root_only (path))
+        {
+          /* We add the start element that for the completion at root level */
+          g_ptr_array_add (candidates, grammar->start_defines);
+        }
+      else
         {
           get_matching_nodes (path, 0, grammar->start_defines, candidates_tmp);
           move_candidates (candidates, candidates_tmp);
         }
-      else
-        /* We add the start element that for the completion at root level */
-        g_ptr_array_add (candidates, grammar->start_defines);
     }
 
   return candidates;
