@@ -100,7 +100,7 @@ snippet eprintf
 snippet scanf
 - scope c, chdr
 - desc scanf(…)
-	scanf("${1:%d}", ${2:variable});$0
+	scanf("${1:%d}", ${2:&variable});$0
 snippet include
 - scope c, chdr
 - desc Include a file relative to the file or configured include paths

@@ -103,6 +103,31 @@ snippet gobject
 	$1 *${$1|functify}_new (void);
 	$0
 	G_END_DECLS
+- scope js
+- desc Create GObject
+	var $1 = GObject.registerClass(
+	class ${1:ClassName} extends ${2:GObject.Object} {
+		_init(${3}) {
+			super._init();
+			$0
+		}
+	});
+- scope python
+- desc Create GObject
+	class ${1:ClassName}(${2:GObject.Object}):
+
+		def __init__(self${3:,}):
+			$2.__init__(self)
+
+	$0
+- scope python3
+- desc Create GObject
+	class ${1:ClassName}(${2:GObject.Object}):
+
+		def __init__(self${3:,}):
+			super().__init__()
+
+	$0
 snippet gobject_final
 - scope c
 - desc Create GObject for a non-derivable class
@@ -406,6 +431,14 @@ snippet gproperty
 		             ${$2|space}   G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class, PROP_$1,
 	                                 properties [PROP_$1]);
+- scope js
+- desc Add GObject property
+	${1:foo}: GObject.ParamSpec.${2:int}('$1',
+		'${3:$1|capitalize}', '${4:Property description}',
+		$0),
+- scope python, python3
+- desc Add GObject property
+	${1:foo} = GObject.Property(type=${2:int}, default=${3:0})$0
 snippet gsignal
 - scope c
 - desc Add GObject signal
@@ -419,6 +452,12 @@ snippet gsignal
 		              ${6:g_cclosure_marshal_generic},
 		              ${7:G_TYPE_NONE},
 		              ${8:0});
+- scope js
+- desc Add GObject signal
+	${1:signal}: {$0},
+- scope python, python3
+- desc Add GObject signal
+	"${1:signal}": (GObject.SignalFlags.${2:RUN_FIRST}, ${3:None}, (${4:int,}))$0
 snippet async
 - scope c
 - desc Create the async function for an async/finish pair

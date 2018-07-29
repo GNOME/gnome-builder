@@ -187,7 +187,7 @@ snippet whilelet
 	    $0
 	}
 snippet for
-	for ${1:item} in ${2:collection}.iter() {
+	for ${1:item} in ${2:collection.iter()} {
 	    $0
 	}
 snippet loop
@@ -212,7 +212,7 @@ snippet type
 	type ${1:Alias} = ${2:Type};$0
 snippet vec
 - desc vec![…]
-	vec![${1:expression}; ${2:size}];$0
+	vec![${1:expression}; ${2:size}]$0
 snippet format_args
 - desc format_args!(…)
 	format_args!("${1:{}}", ${2:expression})$0
@@ -221,25 +221,25 @@ snippet format
 	format!("${1:{}}", ${2:expression})$0
 snippet write
 - desc write!(…)
-	write!(${1:buffer}, "${2:{}}", ${3:expression});$0
+	write!(${1:buffer}, "${2:{}}", ${3:expression})$0
 snippet writeln
 - desc writeln!(…)
-	writeln!(${1:buffer}, "${2:{}}", ${3:expression});$0
+	writeln!(${1:buffer}, "${2:{}}", ${3:expression})$0
 snippet print
 - desc print!(…)
-	print!("${1:{}}", ${2:expression});$0
+	print!("${1:{}}", ${2:expression})$0
 snippet println
 - desc println!(…)
-	println!("${1:{}}", ${2:expression});$0
+	println!("${1:{}}", ${2:expression})$0
 snippet eprint
 - desc eprint!(…)
-	eprint!("${1:{}}", ${2:expression});$0
+	eprint!("${1:{}}", ${2:expression})$0
 snippet eprintln
 - desc eprintln!(…)
-	eprintln!("${1:{}}", ${2:expression});$0
+	eprintln!("${1:{}}", ${2:expression})$0
 snippet panic
 - desc panic!(…)
-	panic!("${1:{}}", ${2:expression});$0
+	panic!("${1:{}}", ${2:expression})$0
 snippet unreachable
 - desc unreachable!(…)
 	unreachable!("${1:reason}")$0
@@ -248,13 +248,13 @@ snippet unimplemented
 	unimplemented!()$0
 snippet assert
 - desc assert!(…)
-	assert!(${1:expression});$0
+	assert!(${1:expression})$0
 snippet assert_eq
 - desc assert_eq!(…)
-	assert_eq!(${1:expression1}, ${2:expression2});$0
+	assert_eq!(${1:expression1}, ${2:expression2})$0
 snippet assert_ne
 - desc assert_ne!(…)
-	assert_ne!(${1:expression1}, ${2:expression2});$0
+	assert_ne!(${1:expression1}, ${2:expression2})$0
 snippet testsmod
 - desc Create tests module
 	#[cfg(test)]

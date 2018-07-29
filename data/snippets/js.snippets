@@ -1,50 +1,39 @@
+snippet import
+	import "${1:./module.js}";
+	$0
+snippet from
+	import ${1:Module} from "${2:./}${3:$1|lower}";
+	$0
+snippet require
+	const ${1:Module} = require("${2:./}${3:$1|lower}");
+	$0
 snippet gi
 	const ${1:Gtk} = imports.gi.$1;
 	$0
 snippet lang
 	const ${1:Lang} = imports.${$1|decapitalize};
 	$0
-snippet import
-	const ${1:ModuleName} = imports.${2:path}.${$1|decapitalize};
-	$0
-snippet require
-	const ${1:ModuleName} = require("${$1|lower}");
+snippet imports
+	const ${1:Module} = imports.${2:path}.${$1|decapitalize};
 	$0
 snippet class
-	const ${1:ClassName} = new Lang.Class({
-		Name: '$1',
-
-		_init: function () {
+	class ${1:ClassName} {
+		constructor(${2}) {
 			$0
-		},
-	});
-snippet gobject
-	const ${1:ClassName} = new Lang.Class({
-		Name: '$1',
-		GTypeName: '${2:$1}',
-		Extends: ${3:GObject.Object},
-
-	${4:	Properties: {},}
-	${5:	Signals: {},}
-
-		_init: function (props={}) {
-			this.parent(props);
-			$0
-		},
-	});
-snippet gproperty
-	'${1:foo}': GObject.ParamSpec.${2:int}('$1',
-		'${3:$1|capitalize}', '${4:Property description}',
-		$0),
-snippet gsignal
-	'${1:signal}': {$0},
+		}
+	}
+snippet method
+- desc Create class method
+	${1:name}(${2}) {
+		$0
+	}
 snippet function
 	function ${1:name}(${2}) {
 		$0
 	}
 snippet arrow
 - desc Create arrow function
-	(${1}) => {
+	${1:()} => {
 		$0
 	}
 snippet if
@@ -71,6 +60,7 @@ snippet case
 		$0
 		break;
 snippet default
+- desc default … break
 	default:
 		$0
 		break;
@@ -97,7 +87,7 @@ snippet try
 		$0
 	}
 snippet catch
-	catch (${1:e}) {
+	catch (${1:err}) {
 		$0
 	}
 snippet finally
