@@ -5,6 +5,7 @@
 # Artur de Aquino Morais <artur.morais93@outlook.com>, 2016.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2016-2018.
 # Enrico Nicoletto <liverig@gmail.com>, 2016, 2018.
+# Ricardo Silva Veloso <ricvelozo@gmail.com>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
@@ -1578,7 +1579,7 @@ msgstr "Sobrescrever chaves e aspas"
 
 #: src/libide/editor/ide-editor-properties.ui:123
 msgid "Tabs and Indentation"
-msgstr "Abas e recuo"
+msgstr "Tabulações e recuo"
 
 #: src/libide/editor/ide-editor-properties.ui:153
 #: src/libide/preferences/ide-preferences-builtin.c:176
@@ -2626,7 +2627,7 @@ msgstr "Nova linha e retorno de carro"
 
 #: src/libide/preferences/ide-preferences-builtin.c:179
 msgid "Non-breaking spaces"
-msgstr "Espaços não-quebra"
+msgstr "Espaços rígidos"
 
 #: src/libide/preferences/ide-preferences-builtin.c:180
 msgid "Spaces inside of text"
@@ -4627,7 +4628,7 @@ msgstr "Atualizado"
 
 #: src/plugins/retab/gtk/menus.ui:9
 msgid "Reformat tabs"
-msgstr "Reformatar abas"
+msgstr "Reformatar tabulações"
 
 #: src/plugins/rustup/rustup_plugin.py:89
 msgid "Rustup not installed"
