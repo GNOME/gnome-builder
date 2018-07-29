@@ -63,7 +63,6 @@ dump_tree (IdeXmlRngDefine *self,
   IdeXmlRngDefine *def = self;
   const gchar *type_name;
   g_autofree gchar *pad = NULL;
-  guchar *name = NULL;
 
   g_assert (self);
 
@@ -75,14 +74,12 @@ dump_tree (IdeXmlRngDefine *self,
           def->type == IDE_XML_RNG_DEFINE_PARENTREF ||
           def->type == IDE_XML_RNG_DEFINE_EXTERNALREF)
         {
-          if (def->node != NULL &&
-              NULL != (name = xmlGetProp (def->node, (const guchar *)"name")))
-            {
-              g_print ("%s%s [%s]:%p\n", pad, type_name, name, def->content);
-              xmlFree (name);
-            }
-          else
-            g_print ("%s%s: %p\n", pad, type_name, def->content);
+          g_print ("%s%s:%p (%s [%s])\n",
+                   pad,
+                   type_name,
+                   def->content,
+                   ide_xml_rng_define_get_type_name (def->content),
+                   def->content->name);
         }
       else
         {

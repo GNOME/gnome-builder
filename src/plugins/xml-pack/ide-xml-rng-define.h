@@ -67,8 +67,12 @@ struct _IdeXmlRngDefine
   IdeXmlRngDefine     *content;
   IdeXmlRngDefine     *attributes;
   IdeXmlRngDefine     *name_class;
-  xmlNode             *node;
   IdeXmlRngDefineType  type;
+
+  /* This xmlNode is used internally at schema parsing time but
+   * is not valid anymore.
+   */
+  xmlNode             *node;
 
   gint16               depth;
   gint                 pos;
