@@ -8,7 +8,7 @@ snippet import
 	import $0
 snippet from
 - scope python, python3
-	from ${1} import $0
+	from ${1:__future__} import $0
 snippet def
 - scope python, python3
 	def ${1:function}(${2}):
@@ -22,50 +22,41 @@ snippet class
 	
 	$0
 snippet if
+- scope python, python3
 	if ${1:condition}:
 		$0
 snippet else
+- scope python, python3
 	else:
 		$0
 snippet elif
+- scope python, python3
 	elif ${1:condition}:
 		$0
 snippet while
+- scope python, python3
 	while ${1:condition}:
 		$0
 snippet for
+- scope python, python3
 	for ${1:item} in ${2:collection}:
 		$0
 snippet try
+- scope python, python3
 	try:
 		$0
 snippet except
+- scope python, python3
 	except ${1:Exception}:
 		$0
 snippet finally
+- scope python, python3
 	finally:
 		$0
+snippet with
+- scope python, python3
+	with ${1:expression} as ${2:variable}:
+		$0
 snippet lambda
+- scope python, python3
 	lambda ${1:name}: $0
-snippet gobject
-- scope python
-	class ${1:ClassName}(${2:GObject.Object}):
-
-		def __init__(self${3:,}):
-			$2.__init__(self)
-	
-	$0
-- scope python3
-	class ${1:ClassName}(${2:GObject.Object}):
-
-		def __init__(self${3:,}):
-			super().__init__()
-	
-	$0
-snippet gsignal
-- desc Entry in __gsignals__ dictionary
-- scope python, python3
-	"${1:signal}": (GObject.SignalFlags.${2:RUN_FIRST}, ${3:None}, (${4:int,}))$0
-snippet gproperty
-- scope python, python3
-	${1:foo} = GObject.Property(type=${2:int}, default=${3:0})$0
