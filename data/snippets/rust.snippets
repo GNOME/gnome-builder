@@ -1,18 +1,22 @@
 snippet allow
-- desc #[allow(…)]
-	#[allow(${1:lint})]
+- desc #![allow(…)]
+	#${1:!}[allow(${2:lint})]
 	$0
 snippet deny
-- desc #[deny(…)]
-	#[deny(${1:lint})]
+- desc #![deny(…)]
+	#${1:!}[deny(${2:lint})]
 	$0
 snippet forbid
-- desc #[forbid(…)]
-	#[forbid(${1:lint})]
+- desc #![forbid(…)]
+	#${1:!}[forbid(${2:lint})]
 	$0
 snippet warn
-- desc #[warn(…)]
-	#[warn(${1:lint})]
+- desc #![warn(…)]
+	#${1:!}[warn(${2:lint})]
+	$0
+snippet doc
+- desc #![doc(…)]
+	#${1:!}[doc(${2:hidden})]
 	$0
 snippet deprecated
 - desc #[deprecated(…)]
@@ -27,8 +31,12 @@ snippet should_panic
 	#[should_panic(expected = "${1:reason}")]
 	$0
 snippet cfg
-- desc #[cfg(…)]
-	#[cfg(${1:expression})]
+- desc #![cfg(…)]
+	#${1:!}[cfg(${2:expression})]
+	$0
+snippet cfg_attr
+- desc #![cfg_attr(…)]
+	#${1:!}[cfg_attr(${2:expression}, ${3:attribute})]
 	$0
 snippet derive
 - desc #[derive(…)]
