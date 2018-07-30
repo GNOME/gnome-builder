@@ -229,7 +229,7 @@ libide = shared_library('ide-' + libide_api_version,
   dependencies: libide_deps,
         c_args: libide_args,
        install: true,
-   install_dir: pkglibdir,
+   install_dir: pkglibdir_abs,
  install_rpath: pkglibdir_abs,
 )
 
