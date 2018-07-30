@@ -1423,6 +1423,7 @@ populate_cb (GObject      *object,
             }
 
           results = get_element_proposals (position, items, detail->prefix);
+          results = g_list_sort (results, alphabetical_sort_func);
           add_to_store (proposals, results);
         }
     }
