@@ -26,7 +26,7 @@ snippet enum
 snippet fn
 - scope c, chdr
 - desc Create function
-	${1:void}
+	${1:static void}
 	${2:function_name} (${3:void})
 	{
 	    $0
@@ -34,8 +34,7 @@ snippet fn
 snippet fns
 - scope c, chdr
 - desc Create function signature
-	${1:void}
-	${2:function_name} (${3:void});$0
+	${1:void} ${2:function_name} (${3:void});$0
 snippet if
 - scope c, chdr
 	if (${1:condition})
