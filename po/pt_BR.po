@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2018-07-20 22:52+0000\n"
-"PO-Revision-Date: 2018-07-20 19:50-0200\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"PO-Revision-Date: 2018-07-30 00:55-0300\n"
+"Last-Translator: Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Virtaal 1.0.0-beta1\n"
+"X-Generator: Poedit 2.0.8\n"
 "X-Project-Style: gnome\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
@@ -68,11 +68,11 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
-msgstr "Caminho para executável ctags"
+msgstr "Caminho para executável do Ctags"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "The path to the ctags executable on the system."
-msgstr "O caminho para o executável ctags no sistema."
+msgstr "O caminho para o executável do Ctags no sistema."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid "Restore last position"
@@ -172,8 +172,8 @@ msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr ""
-"Caso habilitado, o Builder irá exibir um mapa com a visão geral do arquivo "
-"de código próximo ao editor."
+"Caso habilitado, o Construtor irá exibir um mapa com a visão geral do "
+"arquivo de código próximo ao editor."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid "Automatically Hide Overview Map"
@@ -184,8 +184,8 @@ msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
-"Caso habilitado, o Builder irá ocultar automaticamente o mapa de visão geral "
-"quando o foco do mouse deixar o editor ou um tempo de espera (timeout) "
+"Caso habilitado, o Construtor irá ocultar automaticamente o mapa de visão "
+"geral quando o foco do mouse deixar o editor ou um tempo de espera (timeout) "
 "ocorrer."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:90
@@ -214,8 +214,8 @@ msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
 msgstr ""
-"Caso habilitado, o Builder irá quebrar o texto automaticamente para que todo "
-"o texto das linhas estejam visíveis."
+"Caso habilitado, o Construtor irá quebrar o texto automaticamente para que "
+"todo o texto das linhas estejam visíveis."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/libide/preferences/ide-preferences-builtin.c:189
@@ -236,16 +236,12 @@ msgid "The number of seconds after modification before auto saving."
 msgstr "O número de segundos após modificação antes de salvar automaticamente."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:118
-#, fuzzy
-#| msgid "Completion"
 msgid "Completion Row Count"
-msgstr "Completamento"
+msgstr "Número de linhas de completamento"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:119
-#, fuzzy
-#| msgid "The number of lines to scroll beyond the end of the buffer."
 msgid "The number of completion rows to display to the user."
-msgstr "O número de linhas para rolar além do fim do buffer."
+msgstr "O número de linhas de completamento para mostrar para o usuário."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -317,7 +313,7 @@ msgstr "Diretório de projetos"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Directory for all Builder projects."
-msgstr "Diretório para todos os projetos do Builder."
+msgstr "Diretório para todos os projetos do Construtor."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Restore Previous Files"
@@ -445,7 +441,7 @@ msgstr "A altura em unidades de pixel do painel inferior."
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:648
 msgid "Builder"
-msgstr "Builder"
+msgstr "Construtor"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
 #: src/libide/application/ide-application-actions.c:143
@@ -459,8 +455,8 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"O Builder é um Ambiente de Desenvolvimento Integrado (IDE) para o GNOME, com "
-"desenvolvimento ativo. Ele combina suporte integrado às principais "
+"O Construtor é um Ambiente de Desenvolvimento Integrado (IDE) para o GNOME, "
+"com desenvolvimento ativo. Ele combina suporte integrado às principais "
 "tecnologias do GNOME como o GTK+, GLib, e APIs do GNOME com recursos que "
 "qualquer desenvolvedor irá apreciar, como realce de sintaxe e trechos de "
 "código."
@@ -470,8 +466,8 @@ msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
-"Você pode contar com lançamentos predizíveis do Builder a cada seis meses, "
-"quando ocorrem novos lançamentos do GNOME."
+"Você pode contar com lançamentos predizíveis do Construtor a cada seis "
+"meses, quando ocorrem novos lançamentos do GNOME."
 
 #: data/org.gnome.Builder.appdata.xml.in:21
 msgid "Features:"
@@ -569,19 +565,17 @@ msgid "Build;Develop;"
 msgstr "Construir;Compilar;Desenvolver;"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
-#, fuzzy
-#| msgid "Builder"
 msgid "Builder Dark"
-msgstr "Builder"
+msgstr "Construtor escuro"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:28
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
-"Esquema de cores escuras para o Builder usando a paleta de cores do Tango"
+"Esquema de cores escuras para o Construtor usando a paleta de cores do Tango"
 
 #: data/style-schemes/builder.style-scheme.xml:24
 msgid "The default color scheme for Builder"
-msgstr "O esquema de cores padrão para o Builder"
+msgstr "O esquema de cores padrão para o Construtor"
 
 #: src/gstyle/data/palettes/basic.gstyle.xml:20
 msgid "Basic"
@@ -769,18 +763,19 @@ msgstr "_Renomear"
 
 #: src/libide/application/ide-application-actions.c:149
 msgid "GNOME Builder"
-msgstr "GNOME Builder"
+msgstr "GNOME Construtor"
 
 #: src/libide/application/ide-application-actions.c:151
 msgid "translator-credits"
 msgstr ""
 "Enrico Nicoletto\n"
 "Gustavo Marques\n"
-"Rafael Fontenelle"
+"Rafael Fontenelle\n"
+"Ricardo Silva Veloso"
 
 #: src/libide/application/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
-msgstr "Aprenda mais sobre o GNOME Builder"
+msgstr "Aprenda mais sobre o GNOME Construtor"
 
 #: src/libide/application/ide-application-actions.c:158
 msgid "Funded By"
@@ -801,7 +796,7 @@ msgstr "Lista de todos os subcomandos disponíveis"
 
 #: src/libide/application/ide-application-command-line.c:194
 msgid "Run Builder in standalone mode"
-msgstr "Executa Builder em modo independente"
+msgstr "Executa o Construtor em modo independente"
 
 #: src/libide/application/ide-application-command-line.c:201
 msgid "Show the application’s version"
@@ -917,10 +912,9 @@ msgid "The current language lacks a symbol resolver."
 msgstr "O idioma atual carece de um resolvedor de símbolos."
 
 #: src/libide/buffers/ide-buffer.c:3378
-#, fuzzy, c-format
-#| msgid "Print failed: %s"
+#, c-format
 msgid "Buffer failed: %s"
-msgstr "Impressão falhou: %s"
+msgstr "Falha no buffer: %s"
 
 #: src/libide/buffers/ide-buffer-manager.c:606
 msgid "File too large to be opened."
@@ -1098,10 +1092,8 @@ msgstr "Runtime"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
-#, fuzzy
-#| msgid "Rustup Toolchains"
 msgid "Toolchain"
-msgstr "Cadeia de ferramentas Rustup"
+msgstr "Cadeia de ferramentas"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:245
 msgid "Environment"
@@ -1291,17 +1283,13 @@ msgstr "Falha ao inicializar o depurador"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:16
 msgid "No break"
-msgstr ""
+msgstr "Sem interrupção"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:22
-#, fuzzy
-#| msgid "Breakpoints"
 msgid "Breakpoint"
-msgstr "Pontos de interrupção"
+msgstr "Interrupção"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:28
-#, fuzzy
-#| msgid "Count"
 msgid "Countpoint"
 msgstr "Contagem"
 
@@ -1603,12 +1591,9 @@ msgid "Toggle utilities panel"
 msgstr "Ativa o painel de utilitários"
 
 #: src/libide/editor/ide-editor-perspective-shortcuts.c:59
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Save all files"
 msgctxt "shortcut window"
 msgid "Close all files"
-msgstr "Salva todos os arquivos"
+msgstr "Fecha todos os arquivos"
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -1801,7 +1786,7 @@ msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
 msgstr ""
-"O Builder descobriu que este arquivo foi modificado externamente. Você "
+"O Construtor descobriu que este arquivo foi modificado externamente. Você "
 "gostaria de recarregar o arquivo?"
 
 #: src/libide/editor/ide-editor-workbench-addin.c:180
@@ -1935,8 +1920,6 @@ msgid "Save _All"
 msgstr "_Salvar tudo"
 
 #: src/libide/gtk/menus.ui:80
-#, fuzzy
-#| msgid "_Close All"
 msgid "Close _All"
 msgstr "_Fechar tudo"
 
@@ -2128,12 +2111,9 @@ msgid "Create new document"
 msgstr "Cria um novo documento"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:115
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Save all documents"
-msgstr "Salva o documento"
+msgstr "Salva todos os documentos"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:122
 #: src/libide/layout/ide-layout-stack-shortcuts.c:62
@@ -2142,12 +2122,9 @@ msgid "Close the document"
 msgstr "Fecha o documento"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:129
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Close the document"
 msgctxt "shortcut window"
 msgid "Close all documents"
-msgstr "Fecha o documento"
+msgstr "Fecha todos os documentos"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:136
 #: src/libide/keybindings/ide-shortcuts-window.ui:444
@@ -2494,7 +2471,7 @@ msgstr "Modo escuro"
 
 #: src/libide/preferences/ide-preferences-builtin.c:101
 msgid "Whether Builder should use a dark theme"
-msgstr "Se Builder deve usar um tema escuro"
+msgstr "Se o Construtor deve usar um tema escuro"
 
 #: src/libide/preferences/ide-preferences-builtin.c:101
 msgid "dark theme"
@@ -2542,20 +2519,17 @@ msgid "terminal font monospace"
 msgstr "terminal fonte monoespaçada"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Find text within terminal"
 msgid "Bold text in terminals"
-msgstr "Terminal sem título"
+msgstr "Texto em negrito em terminais"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
 msgid "If terminals are allowed to display bold text"
-msgstr ""
+msgstr "Se é permitido terminais mostrarem texto em negrito"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
 msgctxt "Keywords"
 msgid "terminal allow bold"
-msgstr ""
+msgstr "terminal permitir negrito"
 
 #: src/libide/preferences/ide-preferences-builtin.c:114
 msgid "Color Scheme"
@@ -2590,16 +2564,12 @@ msgid "Emulates the Vim text editor"
 msgstr "Emula o editor de texto Vim"
 
 #: src/libide/preferences/ide-preferences-builtin.c:145
-#, fuzzy
-#| msgid "Result Text"
 msgid "Sublime Text"
-msgstr "Texto do resultado"
+msgstr "Sublime Text"
 
 #: src/libide/preferences/ide-preferences-builtin.c:145
-#, fuzzy
-#| msgid "Emulates the Vim text editor"
 msgid "Emulates the Sublime Text editor"
-msgstr "Emula o editor de texto Vim"
+msgstr "Emula o editor de texto Sublime Text"
 
 #: src/libide/preferences/ide-preferences-builtin.c:147
 msgid "Movement"
@@ -2780,21 +2750,19 @@ msgstr "Completamento"
 
 #: src/libide/preferences/ide-preferences-builtin.c:210
 msgid "Completions Display Size"
-msgstr ""
+msgstr "Tamanho da lista de completamentos"
 
 #: src/libide/preferences/ide-preferences-builtin.c:210
 msgid "Number of completions to display"
-msgstr ""
+msgstr "Número de completamentos para mostrar"
 
 #: src/libide/preferences/ide-preferences-builtin.c:212
-#, fuzzy
-#| msgid "Completion"
 msgid "Completion Providers"
-msgstr "Completamento"
+msgstr "Provedores de completamento"
 
 #: src/libide/preferences/ide-preferences-builtin.c:218
 msgid "Snippets"
-msgstr "Trechos"
+msgstr "Trechos de código"
 
 #: src/libide/preferences/ide-preferences-builtin.c:264
 msgid "Programming Languages"
@@ -3071,10 +3039,8 @@ msgid "Tests will be loaded after building."
 msgstr "Testes serão carregados após compilação."
 
 #: src/libide/toolchain/ide-toolchain-manager.c:340
-#, fuzzy
-#| msgid "Host operating system"
 msgid "Default (Host operating system)"
-msgstr "Sistema operacional hospedeiro"
+msgstr "Padrão (Sistema operacional hospedeiro)"
 
 #: src/libide/transfers/ide-pkcon-transfer.c:59
 #, c-format
@@ -3219,12 +3185,12 @@ msgstr ""
 
 #: src/libide/workbench/ide-workbench-actions.c:220
 msgid "Builder Statistics"
-msgstr "Estatísticas do Builder"
+msgstr "Estatísticas do Construtor"
 
 #: src/libide/workbench/ide-workbench.c:646
 #, c-format
 msgid "%s — Builder"
-msgstr "%s — Builder"
+msgstr "%s — Construtor"
 
 #: src/libide/workbench/ide-workbench-header-bar.ui:51
 msgid "Transfers"
@@ -3268,7 +3234,7 @@ msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
 msgstr ""
-"GNOME Builder requer uma sessão com D-Bus. Por favor, definida "
+"O GNOME Construtor requer uma sessão com D-Bus. Por favor, definida "
 "DBUS_SESSION_BUS_ADDRESS."
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:194
@@ -3508,38 +3474,32 @@ msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos avisos erros"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:78
-#, fuzzy
-#| msgid "Suggest completions using Ctags"
 msgid "Suggest completions using Clang"
-msgstr "Sugerir completamentos usando Ctags"
+msgstr "Sugerir completamentos usando Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:79
 msgid "Use Clang to suggest completions for C and C++ languages"
-msgstr "Usa Clang para sugerir completação nas linguagens C e C++"
+msgstr "Usa Clang para sugerir completamentos nas linguagens C e C++"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:83
-#, fuzzy
-#| msgid "Configure Options"
 msgid "Clang Options"
-msgstr "Opções de configuração"
+msgstr "Opções do Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:92
 msgid "Complete Parenthesis"
-msgstr ""
+msgstr "Completar parênteses"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:93
 msgid "Include parenthesis when completing clang proposals"
-msgstr ""
+msgstr "Inclui parênteses ao completar com Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:104
-#, fuzzy
-#| msgid "Parameters"
 msgid "Complete Parameters"
-msgstr "Parâmetros"
+msgstr "Completar parâmetros"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:105
 msgid "Include parameters and types when completing clang proposals"
-msgstr ""
+msgstr "Inclui parâmetros e tipos ao completar com Clang"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:56
 msgid "anonymous"
@@ -3547,25 +3507,23 @@ msgstr "anônimo"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr ""
+msgstr "Completar parênteses"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
-#, fuzzy
-#| msgid "If whitespace should be trimmed before saving."
 msgid "If parentheses should be included when completing."
-msgstr "Se espaço em branco deve ser apagado antes de salvar."
+msgstr "Se parênteses devem ser incluídos ao completar."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-#, fuzzy
-#| msgid "Parameters"
 msgid "Complete parameters"
-msgstr "Parâmetros"
+msgstr "Completar parâmetros"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
 msgstr ""
+"Se os parâmetros devem ser incluídos ao completar. Requer completar "
+"parênteses."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:420
 msgid "CMake"
@@ -3583,10 +3541,9 @@ msgid "Installing project"
 msgstr "Instalando projeto"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:215
-#, fuzzy, c-format
-#| msgid "CMake"
+#, c-format
 msgid "%s (CMake)"
-msgstr "CMake"
+msgstr "%s (CMake)"
 
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
@@ -3646,7 +3603,7 @@ msgstr "Paleta do GIMP"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:717
 msgid "GNOME Builder palette"
-msgstr "Paleta do GNOME Builder"
+msgstr "Paleta do GNOME Construtor"
 
 #: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
 msgid "Palette name"
@@ -4078,7 +4035,7 @@ msgstr "MIT/X11"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:165
 msgid "Apache 2.0"
-msgstr ""
+msgstr "Apache 2.0"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:166
 msgid "GPLv2+"
@@ -4105,14 +4062,12 @@ msgid "Suggest completions using Ctags"
 msgstr "Sugerir completamentos usando Ctags"
 
 #: src/plugins/ctags/ide-ctags-preferences-addin.c:52
-#, fuzzy
-#| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Use Ctags to suggest completions for a variety of languages"
-msgstr "Usa Clang para sugerir completação nas linguagens C e C++"
+msgstr "Usa Ctags para sugerir completamentos para uma variedade de linguagens"
 
 #: src/plugins/devhelp/gbp-devhelp-hover-provider.c:128
 msgid "Devhelp"
-msgstr ""
+msgstr "Devhelp"
 
 #: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
 msgid "Select Documentation…"
@@ -4230,7 +4185,7 @@ msgstr "flatpak %s %s %s"
 msgid "Show %u more runtime"
 msgid_plural "show %u more runtimes"
 msgstr[0] "Mostrar mais %u runtime"
-msgstr[1] "Mostrar mais %u runtimes"
+msgstr[1] "mostrar mais %u runtimes"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:393
 msgid "Flatpak Runtimes"
@@ -4297,7 +4252,7 @@ msgstr ""
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:87
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
-msgstr ""
+msgstr "Compilador cruzado para %s do GCC (Sistema)"
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:202
 msgid "Cannot provide diff, no backing file provided."
@@ -4340,11 +4295,11 @@ msgstr "Seu projeto será criado em %s"
 
 #: src/plugins/git/ide-git-clone-widget.c:216
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: src/plugins/git/ide-git-clone-widget.c:218
 msgid "Remote Branch to Clone"
-msgstr ""
+msgstr "Ramo remoto para clonar"
 
 #: src/plugins/git/ide-git-clone-widget.ui:37
 msgid "Use Git to create a local copy of a remotely hosted project."
@@ -4360,10 +4315,8 @@ msgid "Enter the URL of your project’s source code repository"
 msgstr "Digite a URL do repositório de código-fonte do seu projeto"
 
 #: src/plugins/git/ide-git-clone-widget.ui:70
-#, fuzzy
-#| msgid "Make default"
 msgid "Change default branch"
-msgstr "Tornar padrão"
+msgstr "Mudar ramo padrão"
 
 #: src/plugins/git/ide-git-clone-widget.ui:110
 msgid "Repository URL"
@@ -4386,7 +4339,8 @@ msgstr "Clonar…"
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
-"Builder falhou em fornecer credenciais apropriadas ao clonar o repositório."
+"O Construtor falhou em fornecer credenciais apropriadas ao clonar o "
+"repositório."
 
 #. translators: %s is replaced with the error message
 #: src/plugins/git/ide-git-vcs.c:406
@@ -4444,10 +4398,8 @@ msgid "(Preview)"
 msgstr "(Visualização)"
 
 #: src/plugins/jedi/jedi_plugin.py:662
-#, fuzzy
-#| msgid "Suggest completions using Ctags"
 msgid "Suggest completions from Python"
-msgstr "Sugerir completamentos usando Ctags"
+msgstr "Sugerir completamentos a partir do Python"
 
 #: src/plugins/jedi/jedi_plugin.py:663
 msgid "Use Jedi to provide completions for the Python language"
@@ -4482,100 +4434,91 @@ msgstr ""
 "localizado."
 
 #: src/plugins/meson/gbp-meson-toolchain.c:66
-#, fuzzy, c-format
-#| msgid "Meson"
+#, c-format
 msgid "%s (Meson)"
-msgstr "Meson"
+msgstr "%s (Meson)"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
-#, fuzzy
-#| msgid "to add a new toolchain!"
 msgid "Add toolchain"
-msgstr "para adicionar uma nova cadeia de ferramenta!"
+msgstr "Adicionar cadeia de ferramentas"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
 msgid "Define a new custom toolchain targeting a specific platform"
-msgstr ""
+msgstr "Define uma nova cadeia de ferramentas para uma plataforma específica"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:406
 msgid "No Provided Tool"
-msgstr ""
+msgstr "Nenhuma ferramenta fornecida"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
-msgstr ""
+msgstr "Um nome para identificar a raiz de sistema."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
 msgid "Architecture"
-msgstr ""
+msgstr "Arquitetura"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
-msgstr ""
+msgstr "A arquitetura do sistema da raiz de sistema."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
 msgid "Add Tool:"
-msgstr ""
+msgstr "Adicionar ferramenta:"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
 #: src/plugins/meson/gbp-meson-utils.c:96
-#, fuzzy
-#| msgid "Completion"
 msgid "Compiler"
-msgstr "Completamento"
+msgstr "Compilador"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
 #: src/plugins/meson/gbp-meson-utils.c:98
 msgid "Preprocessor"
-msgstr ""
+msgstr "Pré-processador"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
 #: src/plugins/meson/gbp-meson-utils.c:100
 msgid "Archiver"
-msgstr ""
+msgstr "Arquivador"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
 #: src/plugins/meson/gbp-meson-utils.c:102
 msgid "Linker"
-msgstr ""
+msgstr "Ligador"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
 #: src/plugins/meson/gbp-meson-utils.c:104
 msgid "Strip"
-msgstr ""
+msgstr "Descascador"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
 #: src/plugins/meson/gbp-meson-utils.c:106
 msgid "Executable wrapper"
-msgstr ""
+msgstr "Empacotador de executável"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:177
 #: src/plugins/meson/gbp-meson-utils.c:108
-#, fuzzy
-#| msgid "Packaging:"
 msgid "Package Config"
-msgstr "Empacotamento:"
+msgstr "Configuração do pacote"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-#, fuzzy
-#| msgid "Language"
 msgid "Any language"
-msgstr "Linguagem"
+msgstr "Qualquer linguagem"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
 msgid "C++"
-msgstr ""
+msgstr "C++"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:33
@@ -4584,40 +4527,28 @@ msgstr "Vala"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:194
 msgid "Fortran"
-msgstr ""
+msgstr "Fortran"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
-#, fuzzy
-#| msgid "ID"
 msgid "D"
-msgstr "ID"
+msgstr "D"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:227
-#, fuzzy
-#| msgid "Add Word"
 msgid "Add Tool"
-msgstr "Adicionar palavra"
+msgstr "Adicionar ferramenta"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:242
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
-#, fuzzy
-#| msgid "_Delete"
 msgid "Delete"
-msgstr "_Excluir"
+msgstr "Excluir"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:248
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Delete line"
 msgid "Delete Toolchain"
-msgstr "Exclui a linha"
+msgstr "Excluir cadeia de ferramentas"
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Delete line"
 msgid "Delete Tool"
-msgstr "Exclui a linha"
+msgstr "Excluir ferramenta"
 
 #: src/plugins/meson-templates/meson_templates.py:250
 msgid "GNOME Application"
@@ -4685,7 +4616,7 @@ msgstr "Agenda"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:107
 msgid "Boxes"
-msgstr ""
+msgstr "Boxes"
 
 #: src/plugins/notification/ide-notification-addin.c:98
 msgid "Build successful"
@@ -4895,15 +4826,15 @@ msgstr "Rustup não instalado"
 
 #: src/plugins/rustup/rustup_plugin.py:279
 msgid "Installing rustup"
-msgstr "Instalando rustup"
+msgstr "Instalando o Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:281
 msgid "Updating rustup"
-msgstr "Atualizando rustup"
+msgstr "Atualizando o Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:283
 msgid "Installing rust "
-msgstr "Instalando rust "
+msgstr "Instalando o Rust "
 
 #: src/plugins/rustup/rustup_plugin.py:285
 msgid "Checking system"
@@ -4911,7 +4842,7 @@ msgstr "Verificando o sistema"
 
 #: src/plugins/rustup/rustup_plugin.py:350
 msgid "Downloading rustup-init"
-msgstr "Baixando rustup-init"
+msgstr "Baixando o rustup-init"
 
 #: src/plugins/rustup/rustup_plugin.py:355
 msgid "Syncing channel updates"
@@ -4927,11 +4858,11 @@ msgstr "Instalando "
 
 #: src/plugins/rustup/rustup_plugin.py:374
 msgid "Checking for rustup updates"
-msgstr "Verificando por atualizações do rustup"
+msgstr "Verificando por atualizações do Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:379
 msgid "Downloading rustup update"
-msgstr "Baixando atualização do rustup"
+msgstr "Baixando atualização do Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:416
 msgid "Error installing "
@@ -4955,7 +4886,7 @@ msgstr "Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:448
 msgid "Rustup Toolchains"
-msgstr "Cadeia de ferramentas Rustup"
+msgstr "Cadeias de ferramentas do Rustup"
 
 #: src/plugins/rustup/rustup_plugin.py:504
 msgid "Updating"
@@ -4972,16 +4903,16 @@ msgstr "Tornar padrão"
 
 #: src/plugins/rustup/rustup_plugin.py:597
 msgid "Makes the selected toolchain the default rust installation"
-msgstr "Faz da cadeia de ferramentas selecionada a instalação padrão de rust"
+msgstr "Faz da cadeia de ferramentas selecionada a instalação padrão do Rust"
 
 #: src/plugins/rustup/rustup_plugin.py:612
 msgid "Install Rust Channel"
-msgstr "Instalar canal rust"
+msgstr "Instalar canal do Rust"
 
 #. translators: channel is stable, beta, nightly, with optional architecture and date
 #: src/plugins/rustup/rustup_plugin.py:617
 msgid "Enter name of rust channel"
-msgstr "Digite um nome de canal rust"
+msgstr "Digite um nome de canal do Rust"
 
 #: src/plugins/rustup/rustup_plugin.py:618
 msgid ""
@@ -5002,7 +4933,7 @@ msgstr ""
 
 #: src/plugins/rustup/rustup_plugin.py:643
 msgid "Install Rustup to manage toolchains here!"
-msgstr "Instale Rustup para gerenciar cadeias de instalações aqui!"
+msgstr "Instale o Rustup para gerenciar cadeias de ferramentas aqui!"
 
 #: src/plugins/rustup/rustup_plugin.py:650
 msgid "No toolchain installed. Click"
@@ -5010,23 +4941,20 @@ msgstr "Nenhuma cadeia de ferramentas instalada. Clique"
 
 #: src/plugins/rustup/rustup_plugin.py:651
 msgid "to add a new toolchain!"
-msgstr "para adicionar uma nova cadeia de ferramenta!"
+msgstr "para adicionar uma nova cadeia de ferramentas!"
 
 #: src/plugins/snippets/ide-snippet-completion-item.c:112
-#, fuzzy, c-format
-#| msgid "Failed to parse integer from “%s”"
+#, c-format
 msgid "Failed to parse snippet “%s”"
-msgstr "Falha ao analisar inteiro do “%s”"
+msgstr "Falha ao analisar trecho de código “%s”"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:51
-#, fuzzy
-#| msgid "Suggest Completions using Jedi"
 msgid "Suggest Completions from Snippets"
-msgstr "Sugerir completação usando Jedi"
+msgstr "Sugerir completamentos a partir de trechos de código"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:52
 msgid "Use registered snippets to suggest completion proposals"
-msgstr ""
+msgstr "Usar trechos de código registrados para sugestões de completamentos"
 
 #: src/plugins/spellcheck/gbp-spell-editor-addin.c:51
 msgid "Spelling"
@@ -5141,27 +5069,20 @@ msgstr ""
 "arquivo como um anexo em seu relatório de erro ou requisição de suporte."
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
-#, fuzzy
-#| msgid "_Go to Definition"
 msgid "Definition"
-msgstr "_Ir para a definição"
+msgstr "Definição"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
 msgid "Canonincal"
-msgstr ""
+msgstr "Canônico"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
-#, fuzzy
-#| msgid "Rename symbol"
 msgid "Unnamed Symbol"
-msgstr "Renomear símbolo"
+msgstr "Símbolo sem nome"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:162
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Symbols"
 msgid "Symbol"
-msgstr "Símbolos"
+msgstr "Símbolo"
 
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
 msgctxt "shortcut window"
@@ -5231,36 +5152,38 @@ msgstr "Abrir captura do Sysprof…"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:80
 msgid "Add sysroot"
-msgstr ""
+msgstr "Adicionar raiz de sistema"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:87
 msgid "Define a new sysroot target to build against a different target"
-msgstr ""
+msgstr "Define uma nova raiz de sistema para compilar"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:135
 msgid "Sysroots"
-msgstr ""
+msgstr "Raízes de sistema"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
-msgstr ""
+msgstr "Um caminho absoluto para a raiz de sistema."
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
 msgid "Package Config Path"
-msgstr ""
+msgstr "Caminho da configuração do pacote"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
 msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
 msgstr ""
+"Uma lista de caminhos separados por vírgula opcional para especificar "
+"PKG_CONFIG_PATH."
 
 #: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:147
 #, c-format
 msgid "%s (Sysroot SDK)"
-msgstr ""
+msgstr "%s (SDK de raiz de sistema)"
 
 #: src/plugins/terminal/gb-terminal-view-actions.c:265
 msgid "Save Terminal Content As"
-msgstr "Salvar conteúdo do Terminal como"
+msgstr "Salvar conteúdo do terminal como"
 
 #: src/plugins/terminal/gb-terminal-view.c:426
 msgid "Untitled terminal"
@@ -5272,22 +5195,18 @@ msgstr "Saída do aplicativo"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:238
-#, fuzzy, c-format
-#| msgid "Application exited\r\n"
+#, c-format
 msgid "Application started at %s\r\n"
-msgstr "Aplicativo encerrado\r\n"
+msgstr "Aplicativo iniciado às %s\r\n"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:258
 msgid "Application exited\r\n"
 msgstr "Aplicativo encerrado\r\n"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:278
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Terminal in Build Runtime"
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
-msgstr "Terminal em Runtime de compilação"
+msgstr "Terminal em execução"
 
 #: src/plugins/terminal/gtk/menus.ui:17
 msgid "Reset and Clear"
@@ -5299,29 +5218,23 @@ msgstr "Novo _terminal"
 
 #: src/plugins/terminal/gtk/menus.ui:43
 msgid "New _Build Terminal"
-msgstr "_Novo terminal de compilação"
+msgstr "Novo terminal de _compilação"
 
 #: src/plugins/terminal/gtk/menus.ui:50
-#, fuzzy
-#| msgid "_New Runtime Terminal"
 msgid "New _Runtime Terminal"
-msgstr "_Novo terminal de runtime"
+msgstr "Novo terminal de _execução"
 
 #: src/plugins/terminal/gtk/menus.ui:60
 msgid "New terminal in directory"
 msgstr "Novo terminal no diretório"
 
 #: src/plugins/todo/gbp-todo-panel.c:299
-#, fuzzy
-#| msgid "Downloading…"
 msgid "Loading TODOs…"
-msgstr "Baixando…"
+msgstr "Carregando TODOs…"
 
 #: src/plugins/todo/gbp-todo-panel.c:300
-#, fuzzy
-#| msgid "Integration with Git to clone your projects"
 msgid "Please wait while we scan your project"
-msgstr "Integração com Git para clonar seus projetos"
+msgstr "Por favor, aguarde enquanto examinamos seu projeto"
 
 #: src/plugins/todo/gbp-todo-workbench-addin.c:156
 msgid "TODO/FIXMEs"
@@ -5329,15 +5242,15 @@ msgstr "TODO/FIXMEs"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:151
 msgid "Abstract"
-msgstr ""
+msgstr "Abstrato"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:153
 msgid "Compact"
-msgstr ""
+msgstr "Compacto"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:155
 msgid "Immutable"
-msgstr ""
+msgstr "Imutável"
 
 #: src/plugins/vala-pack/ide-vala-preferences-addin.vala:34
 msgid "Show errors and warnings provided by Vala"
