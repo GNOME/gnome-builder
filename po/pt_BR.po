@@ -562,7 +562,7 @@ msgstr "org.gnome.Builder"
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
-msgstr "Construir;Compilar;Desenvolver;Construtor"
+msgstr "Construir;Compilar;Desenvolver;Construtor;"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
