@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <jsonrpc-glib.h>
 
 #include "ide-debug.h"
