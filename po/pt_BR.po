@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-20 22:52+0000\n"
-"PO-Revision-Date: 2018-07-30 00:55-0300\n"
-"Last-Translator: Ricardo Silva Veloso <ricvelozo@gmail.com>\n"
+"POT-Creation-Date: 2018-07-30 05:13+0000\n"
+"PO-Revision-Date: 2018-07-30 16:24-0200\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Virtaal 1.0.0-beta1\n"
 "X-Project-Style: gnome\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
@@ -172,8 +172,8 @@ msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr ""
-"Caso habilitado, o Construtor irá exibir um mapa com a visão geral do "
-"arquivo de código próximo ao editor."
+"Caso habilitado, o Builder irá exibir um mapa com a visão geral do arquivo "
+"de código próximo ao editor."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid "Automatically Hide Overview Map"
@@ -184,8 +184,8 @@ msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
-"Caso habilitado, o Construtor irá ocultar automaticamente o mapa de visão "
-"geral quando o foco do mouse deixar o editor ou um tempo de espera (timeout) "
+"Caso habilitado, o Builder irá ocultar automaticamente o mapa de visão geral "
+"quando o foco do mouse deixar o editor ou um tempo de espera (timeout) "
 "ocorrer."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:90
@@ -214,8 +214,8 @@ msgid ""
 "If enabled, Builder will automatically wrap text so all of the line text is "
 "visible."
 msgstr ""
-"Caso habilitado, o Construtor irá quebrar o texto automaticamente para que "
-"todo o texto das linhas estejam visíveis."
+"Caso habilitado, o Builder irá quebrar o texto automaticamente para que todo "
+"o texto das linhas estejam visíveis."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/libide/preferences/ide-preferences-builtin.c:189
@@ -313,7 +313,7 @@ msgstr "Diretório de projetos"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Directory for all Builder projects."
-msgstr "Diretório para todos os projetos do Construtor."
+msgstr "Diretório para todos os projetos do Builder."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
 msgid "Restore Previous Files"
@@ -436,12 +436,12 @@ msgstr "A altura em unidades de pixel do painel inferior."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:692
+#: src/libide/application/ide-application.c:693
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:648
 msgid "Builder"
-msgstr "Construtor"
+msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
 #: src/libide/application/ide-application-actions.c:143
@@ -455,8 +455,8 @@ msgid ""
 "as GTK+, GLib, and GNOME APIs with features that any developer will "
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
-"O Construtor é um Ambiente de Desenvolvimento Integrado (IDE) para o GNOME, "
-"com desenvolvimento ativo. Ele combina suporte integrado às principais "
+"O Builder é um Ambiente de Desenvolvimento Integrado (IDE) para o GNOME, com "
+"desenvolvimento ativo. Ele combina suporte integrado às principais "
 "tecnologias do GNOME como o GTK+, GLib, e APIs do GNOME com recursos que "
 "qualquer desenvolvedor irá apreciar, como realce de sintaxe e trechos de "
 "código."
@@ -466,8 +466,8 @@ msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
-"Você pode contar com lançamentos predizíveis do Construtor a cada seis "
-"meses, quando ocorrem novos lançamentos do GNOME."
+"Você pode contar com lançamentos predizíveis do Builder a cada seis meses, "
+"quando ocorrem novos lançamentos do GNOME."
 
 #: data/org.gnome.Builder.appdata.xml.in:21
 msgid "Features:"
@@ -562,20 +562,20 @@ msgstr "org.gnome.Builder"
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
-msgstr "Construir;Compilar;Desenvolver;"
+msgstr "Construir;Compilar;Desenvolver;Construtor"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
-msgstr "Construtor escuro"
+msgstr "Builder escuro"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:28
 msgid "Dark color scheme for Builder using the Tango color palette"
 msgstr ""
-"Esquema de cores escuras para o Construtor usando a paleta de cores do Tango"
+"Esquema de cores escuras para o Builder usando a paleta de cores do Tango"
 
 #: data/style-schemes/builder.style-scheme.xml:24
 msgid "The default color scheme for Builder"
-msgstr "O esquema de cores padrão para o Construtor"
+msgstr "O esquema de cores padrão para o Builder"
 
 #: src/gstyle/data/palettes/basic.gstyle.xml:20
 msgid "Basic"
@@ -763,7 +763,7 @@ msgstr "_Renomear"
 
 #: src/libide/application/ide-application-actions.c:149
 msgid "GNOME Builder"
-msgstr "GNOME Construtor"
+msgstr "GNOME Builder"
 
 #: src/libide/application/ide-application-actions.c:151
 msgid "translator-credits"
@@ -775,13 +775,13 @@ msgstr ""
 
 #: src/libide/application/ide-application-actions.c:155
 msgid "Learn more about GNOME Builder"
-msgstr "Aprenda mais sobre o GNOME Construtor"
+msgstr "Aprenda mais sobre o GNOME Builder"
 
 #: src/libide/application/ide-application-actions.c:158
 msgid "Funded By"
 msgstr "Fundado por"
 
-#: src/libide/application/ide-application.c:1088
+#: src/libide/application/ide-application.c:1089
 #: src/libide/preferences/ide-preferences-builtin.c:417
 msgid "Projects"
 msgstr "Projetos"
@@ -796,7 +796,7 @@ msgstr "Lista de todos os subcomandos disponíveis"
 
 #: src/libide/application/ide-application-command-line.c:194
 msgid "Run Builder in standalone mode"
-msgstr "Executa o Construtor em modo independente"
+msgstr "Executa o Builder em modo independente"
 
 #: src/libide/application/ide-application-command-line.c:201
 msgid "Show the application’s version"
@@ -1253,7 +1253,7 @@ msgid "Disassembly"
 msgstr "Desmontagem"
 
 #: src/libide/debugger/ide-debugger-editor-addin.c:311
-#: src/libide/debugger/ide-debugger-hover-provider.c:89
+#: src/libide/debugger/ide-debugger-hover-provider.c:88
 msgid "Debugger"
 msgstr "Depurador"
 
@@ -1786,7 +1786,7 @@ msgid ""
 "Builder has discovered that this file has been modified externally. Would "
 "you like to reload the file?"
 msgstr ""
-"O Construtor descobriu que este arquivo foi modificado externamente. Você "
+"O Builder descobriu que este arquivo foi modificado externamente. Você "
 "gostaria de recarregar o arquivo?"
 
 #: src/libide/editor/ide-editor-workbench-addin.c:180
@@ -2014,11 +2014,11 @@ msgstr "_Copiar endereço do link"
 msgid "You must call %s() before using libide."
 msgstr "Você tem que chamar %s() antes de usar libide."
 
-#: src/libide/ide-context.c:2133
+#: src/libide/ide-context.c:2228
 msgid "An unload request is already pending"
 msgstr "Uma requisição para descarregar já está pendente"
 
-#: src/libide/ide-context.c:2252
+#: src/libide/ide-context.c:2347
 msgid "Context has already been restored."
 msgstr "O contexto já foi restaurado."
 
@@ -2441,13 +2441,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Houve uma falha ao tentar realizar a operação."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:138
+#: src/libide/local/ide-local-device.c:137
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Meu computador (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:148
+#: src/libide/local/ide-local-device.c:147
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Meu computador (%s) — %s"
@@ -2471,7 +2471,7 @@ msgstr "Modo escuro"
 
 #: src/libide/preferences/ide-preferences-builtin.c:101
 msgid "Whether Builder should use a dark theme"
-msgstr "Se o Construtor deve usar um tema escuro"
+msgstr "Se o Builder deve usar um tema escuro"
 
 #: src/libide/preferences/ide-preferences-builtin.c:101
 msgid "dark theme"
@@ -3042,7 +3042,7 @@ msgstr "Testes serão carregados após compilação."
 msgid "Default (Host operating system)"
 msgstr "Padrão (Sistema operacional hospedeiro)"
 
-#: src/libide/transfers/ide-pkcon-transfer.c:59
+#: src/libide/transfers/ide-pkcon-transfer.c:58
 #, c-format
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
@@ -3185,12 +3185,12 @@ msgstr ""
 
 #: src/libide/workbench/ide-workbench-actions.c:220
 msgid "Builder Statistics"
-msgstr "Estatísticas do Construtor"
+msgstr "Estatísticas do Builder"
 
 #: src/libide/workbench/ide-workbench.c:646
 #, c-format
 msgid "%s — Builder"
-msgstr "%s — Construtor"
+msgstr "%s — Builder"
 
 #: src/libide/workbench/ide-workbench-header-bar.ui:51
 msgid "Transfers"
@@ -3234,7 +3234,7 @@ msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
 msgstr ""
-"O GNOME Construtor requer uma sessão com D-Bus. Por favor, definida "
+"O GNOME Builder requer uma sessão com D-Bus. Por favor, definida "
 "DBUS_SESSION_BUS_ADDRESS."
 
 #: src/plugins/autotools/ide-autotools-makecache-stage.c:194
@@ -3603,7 +3603,7 @@ msgstr "Paleta do GIMP"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:717
 msgid "GNOME Builder palette"
-msgstr "Paleta do GNOME Construtor"
+msgstr "Paleta do GNOME Builder"
 
 #: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
 msgid "Palette name"
@@ -4283,7 +4283,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "O arquivo requisitado não existe dentro do índice do git."
 
 #: src/plugins/git/ide-git-clone-widget.c:159
-#: src/plugins/git/ide-git-clone-widget.c:499
+#: src/plugins/git/ide-git-clone-widget.c:500
 msgid "A valid Git URL is required"
 msgstr "Uma URL Git válida é necessária"
 
@@ -4339,8 +4339,7 @@ msgstr "Clonar…"
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr ""
-"O Construtor falhou em fornecer credenciais apropriadas ao clonar o "
-"repositório."
+"O Builder falhou em fornecer credenciais apropriadas ao clonar o repositório."
 
 #. translators: %s is replaced with the error message
 #: src/plugins/git/ide-git-vcs.c:406
@@ -4974,7 +4973,7 @@ msgstr "Mostra o painel de verificação ortográfica"
 msgid "Failed to initialize spellchecking, disabling"
 msgstr "Falha ao inicializar verificação ortográfica, desabilitando"
 
-#: src/plugins/spellcheck/gbp-spell-language-popover.c:232
+#: src/plugins/spellcheck/gbp-spell-language-popover.c:231
 msgid "No language selected"
 msgstr "Nenhum idioma selecionado"
 
