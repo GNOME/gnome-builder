@@ -19,6 +19,8 @@ option('with_docs', type: 'boolean', value: false)
 
 option('ctags_path', type: 'string', value: '')
 
+option('python_libprefix', type: 'string')
+
 # Plugins
 # Ideally we want many of these to be defined in the plugin dir:
 #   https://github.com/mesonbuild/meson/issues/707
