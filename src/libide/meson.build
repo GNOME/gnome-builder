@@ -164,6 +164,10 @@ if get_option('with_editorconfig')
 endif
 
 # We want to find the subdirectory to install our override into:
+python_libprefix = get_option('python_libprefix')
+if python_libprefix != ''
+  pygobject_override_dir = join_paths(get_option('libdir'), python_libprefix, 'site_packages', 'gi', 'overrides')
+else
 python3 = find_program('python3')
 
 get_overridedir = '''
@@ -192,6 +196,7 @@ if ret.returncode() != 0
   error('Failed to determine pygobject overridedir')
 else
   pygobject_override_dir = join_paths(get_option('libdir'), ret.stdout().strip())
+endif
 endif
 
 install_data('Ide.py', install_dir: pygobject_override_dir)
