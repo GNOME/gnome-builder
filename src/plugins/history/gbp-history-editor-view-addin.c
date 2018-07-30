@@ -55,7 +55,7 @@ gbp_history_editor_view_addin_stack_set (IdeEditorViewAddin *addin,
   g_assert (stack_addin != NULL);
   g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (stack_addin));
 
-  dzl_set_weak_pointer (&self->stack_addin, GBP_HISTORY_LAYOUT_STACK_ADDIN (stack_addin));
+  g_set_weak_pointer (&self->stack_addin, GBP_HISTORY_LAYOUT_STACK_ADDIN (stack_addin));
 
   IDE_EXIT;
 }
@@ -265,7 +265,7 @@ gbp_history_editor_view_addin_unload (IdeEditorViewAddin *addin,
                                         G_CALLBACK (gbp_history_editor_view_addin_delete_range),
                                         self);
 
-  dzl_clear_weak_pointer (&self->stack_addin);
+  g_clear_weak_pointer (&self->stack_addin);
 
   self->editor = NULL;
 }

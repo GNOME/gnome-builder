@@ -63,7 +63,7 @@ gb_file_search_result_finalize (GObject *object)
 {
   GbFileSearchResult *self = (GbFileSearchResult *)object;
 
-  dzl_clear_weak_pointer (&self->context);
+  g_clear_weak_pointer (&self->context);
   g_clear_pointer (&self->path, g_free);
 
   G_OBJECT_CLASS (gb_file_search_result_parent_class)->finalize (object);
@@ -99,7 +99,7 @@ gb_file_search_result_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_CONTEXT:
-      dzl_set_weak_pointer (&self->context, g_value_get_object (value));
+      g_set_weak_pointer (&self->context, g_value_get_object (value));
       break;
 
     case PROP_PATH:

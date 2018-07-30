@@ -49,7 +49,7 @@ gbp_create_project_genesis_addin_finalize (GObject *object)
 {
   GbpCreateProjectGenesisAddin *self = (GbpCreateProjectGenesisAddin *)object;
 
-  dzl_clear_weak_pointer (&self->widget);
+  g_clear_weak_pointer (&self->widget);
 
   G_OBJECT_CLASS (gbp_create_project_genesis_addin_parent_class)->finalize (object);
 }
@@ -123,7 +123,7 @@ gbp_create_project_genesis_addin_get_widget (IdeGenesisAddin *addin)
       widget = g_object_new (GBP_TYPE_CREATE_PROJECT_WIDGET,
                              "visible", TRUE,
                              NULL);
-      dzl_set_weak_pointer (&self->widget, widget);
+      g_set_weak_pointer (&self->widget, widget);
 
       /*
        * TODO: You need to watch for changes in the widget's entries, and when

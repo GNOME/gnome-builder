@@ -693,7 +693,7 @@ update_title_for_matching_addin (PeasExtensionSet *set,
 
       if (binding != NULL)
         {
-          dzl_clear_weak_pointer (&state->self->ready_binding);
+          g_clear_weak_pointer (&state->self->ready_binding);
           g_binding_unbind (binding);
         }
 
@@ -702,7 +702,7 @@ update_title_for_matching_addin (PeasExtensionSet *set,
                                         state->self->genesis_continue_button,
                                         "sensitive",
                                         G_BINDING_SYNC_CREATE);
-      dzl_set_weak_pointer (&state->self->ready_binding, binding);
+      g_set_weak_pointer (&state->self->ready_binding, binding);
 
       gtk_label_set_label (state->self->genesis_title, title);
       gtk_button_set_label (state->self->genesis_continue_button, next);
@@ -1254,7 +1254,7 @@ ide_greeter_perspective_finalize (GObject *object)
 {
   IdeGreeterPerspective *self = (IdeGreeterPerspective *)object;
 
-  dzl_clear_weak_pointer (&self->ready_binding);
+  g_clear_weak_pointer (&self->ready_binding);
   g_clear_pointer (&self->pattern_spec, dzl_pattern_spec_unref);
   g_clear_object (&self->cancellable);
 

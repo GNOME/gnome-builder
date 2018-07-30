@@ -5330,13 +5330,13 @@ ide_source_view_dispose (GObject *object)
   if (priv->hadj_animation)
     {
       dzl_animation_stop (priv->hadj_animation);
-      dzl_clear_weak_pointer (&priv->hadj_animation);
+      g_clear_weak_pointer (&priv->hadj_animation);
     }
 
   if (priv->vadj_animation)
     {
       dzl_animation_stop (priv->vadj_animation);
-      dzl_clear_weak_pointer (&priv->vadj_animation);
+      g_clear_weak_pointer (&priv->vadj_animation);
     }
 
   ide_source_view_clear_snippets (self);
@@ -7408,7 +7408,7 @@ ide_source_view_scroll_to_iter (IdeSourceView        *self,
       if (priv->hadj_animation != NULL)
         {
           dzl_animation_stop (priv->hadj_animation);
-          dzl_clear_weak_pointer (&priv->hadj_animation);
+          g_clear_weak_pointer (&priv->hadj_animation);
         }
 
       priv->hadj_animation =
@@ -7424,7 +7424,7 @@ ide_source_view_scroll_to_iter (IdeSourceView        *self,
       if (priv->vadj_animation != NULL)
         {
           dzl_animation_stop (priv->vadj_animation);
-          dzl_clear_weak_pointer (&priv->vadj_animation);
+          g_clear_weak_pointer (&priv->vadj_animation);
         }
 
       priv->vadj_animation =

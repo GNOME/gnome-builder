@@ -98,7 +98,7 @@ ide_git_remote_callbacks__notify_fraction_cb (gpointer data)
 
   if ((animation = self->animation))
     {
-      dzl_clear_weak_pointer (&self->animation);
+      g_clear_weak_pointer (&self->animation);
       dzl_animation_stop (animation);
     }
 
@@ -108,7 +108,7 @@ ide_git_remote_callbacks__notify_fraction_cb (gpointer data)
                                   NULL,
                                   "fraction", self->fraction,
                                   NULL);
-  dzl_set_weak_pointer (&self->animation, animation);
+  g_set_weak_pointer (&self->animation, animation);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FRACTION]);
 

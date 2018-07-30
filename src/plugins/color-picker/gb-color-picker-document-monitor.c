@@ -514,7 +514,7 @@ gb_color_picker_document_monitor_set_buffer (GbColorPickerDocumentMonitor *self,
   if (self->buffer != buffer && self->buffer != NULL)
     stop_monitor (self);
 
-  if (dzl_set_weak_pointer (&self->buffer, buffer))
+  if (g_set_weak_pointer (&self->buffer, buffer))
     {
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUFFER]);
 
@@ -544,7 +544,7 @@ gb_color_picker_document_monitor_finalize (GObject *object)
 {
   GbColorPickerDocumentMonitor *self = (GbColorPickerDocumentMonitor *)object;
 
-  dzl_clear_weak_pointer (&self->buffer);
+  g_clear_weak_pointer (&self->buffer);
 
   G_OBJECT_CLASS (gb_color_picker_document_monitor_parent_class)->finalize (object);
 }

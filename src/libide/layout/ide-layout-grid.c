@@ -542,7 +542,7 @@ ide_layout_grid_drag_motion (GtkWidget      *widget,
   if (priv->drag_anim != NULL)
     {
       dzl_animation_stop (priv->drag_anim);
-      dzl_clear_weak_pointer (&priv->drag_anim);
+      g_clear_weak_pointer (&priv->drag_anim);
     }
 
   gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
@@ -573,7 +573,7 @@ ide_layout_grid_drag_motion (GtkWidget      *widget,
                                   "y", area.y,
                                   "height", area.height,
                                   NULL);
-  dzl_set_weak_pointer (&priv->drag_anim, drag_anim);
+  g_set_weak_pointer (&priv->drag_anim, drag_anim);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
@@ -688,7 +688,7 @@ ide_layout_grid_drag_leave (GtkWidget      *widget,
   if (priv->drag_anim != NULL)
     {
       dzl_animation_stop (priv->drag_anim);
-      dzl_clear_weak_pointer (&priv->drag_anim);
+      g_clear_weak_pointer (&priv->drag_anim);
     }
 
   g_clear_object (&priv->drag_theatric);
@@ -709,7 +709,7 @@ ide_layout_grid_drag_failed (GtkWidget      *widget,
   if (priv->drag_anim != NULL)
     {
       dzl_animation_stop (priv->drag_anim);
-      dzl_clear_weak_pointer (&priv->drag_anim);
+      g_clear_weak_pointer (&priv->drag_anim);
     }
 
   g_clear_object (&priv->drag_theatric);

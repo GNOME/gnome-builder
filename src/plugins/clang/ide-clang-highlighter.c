@@ -270,7 +270,7 @@ ide_clang_highlighter_real_set_engine (IdeHighlighter     *highlighter,
 {
   IdeClangHighlighter *self = (IdeClangHighlighter *)highlighter;
 
-  dzl_set_weak_pointer (&self->engine, engine);
+  g_set_weak_pointer (&self->engine, engine);
 }
 
 static void
@@ -278,7 +278,7 @@ ide_clang_highlighter_finalize (GObject *object)
 {
   IdeClangHighlighter *self = (IdeClangHighlighter *)object;
 
-  dzl_clear_weak_pointer (&self->engine);
+  g_clear_weak_pointer (&self->engine);
 
   G_OBJECT_CLASS (ide_clang_highlighter_parent_class)->finalize (object);
 }

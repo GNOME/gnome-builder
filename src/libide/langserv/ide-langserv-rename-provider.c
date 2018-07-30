@@ -60,7 +60,7 @@ ide_langserv_rename_provider_set_buffer (IdeLangservRenameProvider *self,
 {
   IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
 
-  dzl_set_weak_pointer (&priv->buffer, buffer);
+  g_set_weak_pointer (&priv->buffer, buffer);
 }
 
 static void
@@ -70,7 +70,7 @@ ide_langserv_rename_provider_finalize (GObject *object)
   IdeLangservRenameProviderPrivate *priv = ide_langserv_rename_provider_get_instance_private (self);
 
   g_clear_object (&priv->client);
-  dzl_clear_weak_pointer (&priv->buffer);
+  g_clear_weak_pointer (&priv->buffer);
 
   G_OBJECT_CLASS (ide_langserv_rename_provider_parent_class)->finalize (object);
 }

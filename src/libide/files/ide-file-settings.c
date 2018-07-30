@@ -162,7 +162,7 @@ ide_file_settings_set_file (IdeFileSettings *self,
   g_return_if_fail (IDE_IS_FILE_SETTINGS (self));
   g_return_if_fail (IDE_IS_FILE (file));
 
-  if (dzl_set_weak_pointer (&priv->file, file))
+  if (g_set_weak_pointer (&priv->file, file))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE]);
 }
 
@@ -203,7 +203,7 @@ ide_file_settings_finalize (GObject *object)
 
   g_clear_pointer (&priv->children, g_ptr_array_unref);
   g_clear_pointer (&priv->encoding, g_free);
-  dzl_clear_weak_pointer (&priv->file);
+  g_clear_weak_pointer (&priv->file);
 
   G_OBJECT_CLASS (ide_file_settings_parent_class)->finalize (object);
 

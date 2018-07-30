@@ -252,7 +252,7 @@ ide_ctags_highlighter_real_set_engine (IdeHighlighter      *highlighter,
   context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
 
-  dzl_set_weak_pointer (&self->service, service);
+  g_set_weak_pointer (&self->service, service);
 
   ide_ctags_service_register_highlighter (service, self);
 }
@@ -265,7 +265,7 @@ ide_ctags_highlighter_finalize (GObject *object)
   if (self->service != NULL)
     {
       ide_ctags_service_unregister_highlighter (self->service, self);
-      dzl_clear_weak_pointer (&self->service);
+      g_clear_weak_pointer (&self->service);
     }
 
   g_clear_pointer (&self->indexes, g_ptr_array_unref);

@@ -318,7 +318,7 @@ ide_buffer_manager_set_focus_buffer (IdeBufferManager *self,
 
   previous = self->focus_buffer;
 
-  if (dzl_set_weak_pointer (&self->focus_buffer, buffer))
+  if (g_set_weak_pointer (&self->focus_buffer, buffer))
     {
       /* notify that we left the previous buffer */
       if (previous)
@@ -1343,7 +1343,7 @@ ide_buffer_manager_dispose (GObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
-  dzl_clear_weak_pointer (&self->focus_buffer);
+  g_clear_weak_pointer (&self->focus_buffer);
 
   while (self->buffers->len)
     {

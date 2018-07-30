@@ -427,7 +427,7 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
 
-  dzl_set_weak_pointer (&self->editor, editor);
+  g_set_weak_pointer (&self->editor, editor);
   workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
   self->context = ide_workbench_get_context (workbench);
   ide_object_set_context (IDE_OBJECT (self), self->context);
@@ -469,7 +469,7 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
       g_clear_pointer (&self->entries, g_array_unref);
     }
 
-  dzl_clear_weak_pointer (&self->editor);
+  g_clear_weak_pointer (&self->editor);
   if (self->tmp_dir != NULL)
     {
       tmp_file = g_file_new_for_path (self->tmp_dir);
@@ -506,7 +506,7 @@ gb_beautifier_editor_addin_view_set (IdeEditorAddin *addin,
 
   if (view != NULL)
     {
-      dzl_set_weak_pointer (&self->current_view, view);
+      g_set_weak_pointer (&self->current_view, view);
       setup_view_cb (GTK_WIDGET (view), self);
     }
   else
