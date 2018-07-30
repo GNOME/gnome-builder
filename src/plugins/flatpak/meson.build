@@ -52,6 +52,7 @@ flatpak_sources = [
 
 gnome_builder_plugins_deps += [
   dependency('flatpak', version: '>= 0.8.0'),
+  dependency('ostree-1'),
   dependency('libsoup-2.4', version: '>= 2.52.0'),
   libgit_dep,
 ]
