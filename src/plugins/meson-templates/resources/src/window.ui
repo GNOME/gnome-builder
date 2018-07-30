@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <requires lib="gtk+" version="3.20"/>
 {{if language == "c++"}}
   <object class="GtkHeaderBar" id="headerbar">
     <property name="can_focus">False</property>
@@ -19,8 +20,12 @@
     <property name="default-width">600</property>
     <property name="default-height">300</property>
     <child type="titlebar">
-      <object class="GtkHeaderBar" id="header_bar">
-        <property name="visible">True</property>
+    {{if language == "javascript"}}
+  <object class="GtkHeaderBar" id="headerBar">
+    {{else}}
+  <object class="GtkHeaderBar" id="header_bar">
+    {{end}}
+    <property name="visible">True</property>
         <property name="show-close-button">True</property>
         <property name="title">Hello, World!</property>
       </object>

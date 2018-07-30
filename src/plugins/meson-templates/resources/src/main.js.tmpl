@@ -7,26 +7,25 @@ pkg.require({
   'Gtk': '3.0'
 });
 
-const Gio = imports.gi.Gio;
-const Gtk = imports.gi.Gtk;
+const { Gio, Gtk } = imports.gi;
 
-const Window = imports.window;
+const { {{PreFix}}Window } = imports.window;
 
 function main(argv) {
+    const application = new Gtk.Application({
+        application_id: '{{appid}}',
+        flags: Gio.ApplicationFlags.FLAGS_NONE,
+    });
 
-  let app = new Gtk.Application({
-      application_id: '{{appid}}',
-      flags: Gio.ApplicationFlags.FLAGS_NONE,
-  });
+    application.connect('activate', app => {
+        let window = app.get_active_window();
+        
+        if(!window) {
+            window = new {{PreFix}}Window(app);
+        }
 
-  app.connect('activate', app => {
-      let win = app.active_window;
+        window.present();
+    });
 
-      if (!win)
-          win = new Window.{{PreFix}}Window(app);
-
-      win.present();
-  });
-
-  return app.run(argv);
+    return application.run(argv);
 }
