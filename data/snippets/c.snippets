@@ -9,19 +9,19 @@ snippet struct
 - scope c, chdr
 	typedef struct
 	{
-	    $0
+		$0
 	} ${1:StructName};
 snippet union
 - scope c, chdr
 	typedef union
 	{
-	    $0
+		$0
 	} ${1:UnionName};
 snippet enum
 - scope c, chdr
 	typedef enum
 	{
-	    $0
+		$0
 	} ${1:EnumName};
 snippet fn
 - scope c, chdr
@@ -29,7 +29,7 @@ snippet fn
 	${1:static void}
 	${2:function_name} (${3:void})
 	{
-	    $0
+		$0
 	}
 snippet fns
 - scope c, chdr
@@ -38,52 +38,52 @@ snippet fns
 snippet if
 - scope c, chdr
 	if (${1:condition})
-	  {
-	    $0
-	  }
+		{
+			$0
+		}
 snippet else
 - scope c, chdr
 	else
-	  {
-	    $0
-	  }
+		{
+			$0
+		}
 snippet elseif
 - scope c, chdr
 - desc else if
 	else if (${1:condition})
-	  {
-	    $0
-	  }
+		{
+			$0
+		}
 snippet switch
 - scope c, chdr
 	switch (${1:expression})
-	  {
-	  case ${2:value}:
-	    $0
-	    break;
-	  }
+		{
+		case ${2:value}:
+			$0
+			break;
+		}
 snippet case
 - scope c, chdr
 	case ${1:value}:
-	  $0
-	  break;
+		$0
+		break;
 snippet default
 - scope c, chdr
 	default:
-	  $0
-	  break;
+		$0
+		break;
 snippet while
 - scope c, chdr
 	while (${1:condition})
-	  {
-	    $0
-	  }
+		{
+			$0
+		}
 snippet for
 - scope c, chdr
 	for (${1:i = 0}; ${2:i < }; ${3:i++})
-	  {
-	    $0
-	  }
+		{
+			$0
+		}
 snippet var
 - scope c, chdr
 - desc Create variable
