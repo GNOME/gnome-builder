@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-23 13:06+0000\n"
-"PO-Revision-Date: 2018-07-27 13:22+0200\n"
+"POT-Creation-Date: 2018-07-28 01:01+0000\n"
+"PO-Revision-Date: 2018-07-31 11:50+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -242,10 +242,9 @@ msgid "Completion Row Count"
 msgstr "Completado"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:119
-#, fuzzy
 #| msgid "The number of lines to scroll beyond the end of the buffer."
 msgid "The number of completion rows to display to the user."
-msgstr "El número de líneas que desplazarse más allá del final del búfer."
+msgstr "El número de filas de completado que mostrar al usuario."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -1246,7 +1245,7 @@ msgid "Disassembly"
 msgstr "Desensamblado"
 
 #: src/libide/debugger/ide-debugger-editor-addin.c:311
-#: src/libide/debugger/ide-debugger-hover-provider.c:89
+#: src/libide/debugger/ide-debugger-hover-provider.c:88
 msgid "Debugger"
 msgstr "Depurador"
 
@@ -1279,7 +1278,6 @@ msgid "No break"
 msgstr ""
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:22
-#| msgid "Breakpoints"
 msgid "Breakpoint"
 msgstr "Puntos de interrupción"
 
@@ -1587,8 +1585,6 @@ msgid "Toggle utilities panel"
 msgstr "Conmutar el panel de utilidades"
 
 #: src/libide/editor/ide-editor-perspective-shortcuts.c:59
-#| msgctxt "shortcut window"
-#| msgid "Save all files"
 msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Cerrar todos los archivos"
@@ -1920,7 +1916,6 @@ msgid "Save _All"
 msgstr "Guardar todo"
 
 #: src/libide/gtk/menus.ui:80
-#| msgid "_Close All"
 msgid "Close _All"
 msgstr "Cerrar _todo"
 
@@ -2015,11 +2010,11 @@ msgstr "C_opiar la dirección del enlace"
 msgid "You must call %s() before using libide."
 msgstr "Debe llamar a %s() antes de usar libide"
 
-#: src/libide/ide-context.c:2133
+#: src/libide/ide-context.c:2228
 msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
-#: src/libide/ide-context.c:2252
+#: src/libide/ide-context.c:2347
 msgid "Context has already been restored."
 msgstr "Ya se ha restaurado el contexto."
 
@@ -2112,8 +2107,6 @@ msgid "Create new document"
 msgstr "Crear un nuevo documento"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:115
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Save all documents"
 msgstr "Guardar todos los documentos"
@@ -2125,8 +2118,6 @@ msgid "Close the document"
 msgstr "Cerrar el documento."
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:129
-#| msgctxt "shortcut window"
-#| msgid "Close the document"
 msgctxt "shortcut window"
 msgid "Close all documents"
 msgstr "Cerrar todos los documentos"
@@ -2446,13 +2437,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Ha ocurrido un problema al realizar la operación."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:138
+#: src/libide/local/ide-local-device.c:137
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Mi equipo (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:148
+#: src/libide/local/ide-local-device.c:147
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Mi equipo (%s) — %s"
@@ -2775,7 +2766,6 @@ msgid "Number of completions to display"
 msgstr "Número de completados que se mostrarán"
 
 #: src/libide/preferences/ide-preferences-builtin.c:212
-#| msgid "Completion"
 msgid "Completion Providers"
 msgstr "Proveedores de completado"
 
@@ -3057,7 +3047,7 @@ msgstr "Las pruebas se cargarán después de la construcción."
 msgid "Default (Host operating system)"
 msgstr "Predeterminado (sistema operativo del equipo)"
 
-#: src/libide/transfers/ide-pkcon-transfer.c:59
+#: src/libide/transfers/ide-pkcon-transfer.c:58
 #, c-format
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
@@ -3488,7 +3478,6 @@ msgid "clang diagnostics warnings errors"
 msgstr "clang diagnósticos advertencias errors"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:78
-#| msgid "Suggest completions using Ctags"
 msgid "Suggest completions using Clang"
 msgstr "Sugerir completado usando Clang"
 
@@ -3509,10 +3498,9 @@ msgid "Include parenthesis when completing clang proposals"
 msgstr ""
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:104
-#, fuzzy
 #| msgid "Parameters"
 msgid "Complete Parameters"
-msgstr "Parámetros"
+msgstr "Completado de  parámetros"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:105
 msgid "Include parameters and types when completing clang proposals"
@@ -3527,12 +3515,10 @@ msgid "Complete parentheses"
 msgstr "Completar paréntesis"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
-#| msgid "If snippet expansion should be enabled via the completion window."
 msgid "If parentheses should be included when completing."
 msgstr "Indica si se deben incluir los paréntesis al completar."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-#| msgid "Parameters"
 msgid "Complete parameters"
 msgstr "Completar parámetros"
 
@@ -4079,10 +4065,9 @@ msgid "Suggest completions using Ctags"
 msgstr "Sugerir completado usando Ctags"
 
 #: src/plugins/ctags/ide-ctags-preferences-addin.c:52
-#, fuzzy
 #| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Use Ctags to suggest completions for a variety of languages"
-msgstr "Usar Clang para sugerir completado en los lenguajes C y C++"
+msgstr "Usar Ctags para sugerir completado para una variedad de lenguajes"
 
 #: src/plugins/devhelp/gbp-devhelp-hover-provider.c:128
 msgid "Devhelp"
@@ -5002,7 +4987,7 @@ msgstr "Mostrar el panel de revisión ortográfica"
 msgid "Failed to initialize spellchecking, disabling"
 msgstr "Falló al inicializar la revisión ortográfica, desactivando."
 
-#: src/plugins/spellcheck/gbp-spell-language-popover.c:232
+#: src/plugins/spellcheck/gbp-spell-language-popover.c:231
 msgid "No language selected"
 msgstr "No se ha seleccionado ningún idioma"
 
@@ -5264,10 +5249,9 @@ msgid "Loading TODOs…"
 msgstr "Descargando…"
 
 #: src/plugins/todo/gbp-todo-panel.c:300
-#, fuzzy
 #| msgid "Integration with Git to clone your projects"
 msgid "Please wait while we scan your project"
-msgstr "Integración con Git para clonar sus proyectos"
+msgstr "Espere mientras se analiza su proyecto"
 
 #: src/plugins/todo/gbp-todo-workbench-addin.c:156
 msgid "TODO/FIXMEs"
@@ -5279,7 +5263,7 @@ msgstr ""
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:153
 msgid "Compact"
-msgstr ""
+msgstr "Compactar"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:155
 msgid "Immutable"
