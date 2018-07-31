@@ -98,7 +98,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
     def do_expand_async(self, params, cancellable, callback, data):
         self.reset()
 
-        task = Gio.Task.new(self, cancellable, callback)
+        task = Ide.Task.new(self, cancellable, callback)
 
         if 'language' in params:
             self.language = params['language'].get_string().lower()
