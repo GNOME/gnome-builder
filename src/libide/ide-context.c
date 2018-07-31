@@ -2254,6 +2254,8 @@ ide_context_unload_finish (IdeContext    *self,
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
+  g_object_run_dispose (G_OBJECT (self));
+
   IDE_RETURN (ret);
 }
 
