@@ -81,19 +81,18 @@ sort_by_name (gconstpointer a,
 
 static void
 gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
-                                         GList                  *project_templates)
+                                         const GList            *templates)
 {
   g_autoptr(GHashTable) languages = NULL;
+  g_autofree const gchar **keys = NULL;
   const GList *iter;
-  const gchar **keys;
   guint len;
-  guint i;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
   languages = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-  for (iter = project_templates; iter != NULL; iter = iter->next)
+  for (iter = templates; iter != NULL; iter = iter->next)
     {
       IdeProjectTemplate *template = iter->data;
       g_auto(GStrv) template_languages = NULL;
@@ -102,15 +101,14 @@ gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
 
       template_languages = ide_project_template_get_languages (template);
 
-      for (i = 0; template_languages [i]; i++)
+      for (guint i = 0; template_languages [i]; i++)
         g_hash_table_add (languages, g_strdup (template_languages [i]));
     }
 
   keys = (const gchar **)g_hash_table_get_keys_as_array (languages, &len);
   qsort (keys, len, sizeof (gchar *), sort_by_name);
-  for (i = 0; keys [i]; i++)
-    dzl_radio_box_add_item (self->project_language_chooser, keys [i], keys [i]);
-  g_free (keys);
+  for (guint i = 0; keys[i]; i++)
+    dzl_radio_box_add_item (self->project_language_chooser, keys[i], keys[i]);
 }
 
 static gboolean
@@ -295,13 +293,11 @@ project_template_sort_func (GtkFlowBoxChild *child1,
 
 static void
 gbp_create_project_widget_add_template_buttons (GbpCreateProjectWidget *self,
-                                                GList                  *project_templates)
+                                                GList                  *templates)
 {
-  const GList *iter;
-
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  for (iter = project_templates; iter != NULL; iter = iter->next)
+  for (const GList *iter = templates; iter; iter = iter->next)
     {
       IdeProjectTemplate *template = iter->data;
       GbpCreateProjectTemplateIcon *template_icon;
@@ -320,10 +316,6 @@ gbp_create_project_widget_add_template_buttons (GbpCreateProjectWidget *self,
       gtk_container_add (GTK_CONTAINER (template_container), GTK_WIDGET (template_icon));
       gtk_flow_box_insert (self->project_template_chooser, GTK_WIDGET (template_container), -1);
     }
-
-  gtk_flow_box_invalidate_sort (self->project_template_chooser);
-
-  gbp_create_project_widget_refilter (self);
 }
 
 static void
@@ -344,6 +336,9 @@ template_providers_foreach_cb (PeasExtensionSet *set,
 
   gbp_create_project_widget_add_template_buttons (self, templates);
   gbp_create_project_widget_add_languages (self, templates);
+
+  gtk_flow_box_invalidate_sort (self->project_template_chooser);
+  gbp_create_project_widget_refilter (self);
 
   g_list_free_full (templates, g_object_unref);
 }

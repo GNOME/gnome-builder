@@ -56,6 +56,7 @@ gbp_create_project_template_icon_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
+
 static void
 gbp_create_project_template_icon_set_property (GObject      *object,
                                                guint         prop_id,
