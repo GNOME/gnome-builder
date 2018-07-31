@@ -574,10 +574,11 @@ ide_snippet_update_context (IdeSnippet *self)
 
   for (guint i = 0; i < self->chunks->len; i++)
     {
-      IdeSnippetChunk *chunk;
+      IdeSnippetChunk *chunk = g_ptr_array_index (self->chunks, i);
       gint tab_stop;
 
-      chunk = g_ptr_array_index (self->chunks, i);
+      g_assert (IDE_IS_SNIPPET_CHUNK (chunk));
+
       tab_stop = ide_snippet_chunk_get_tab_stop (chunk);
 
       if (tab_stop > 0)
