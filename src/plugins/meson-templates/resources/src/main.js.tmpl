@@ -18,13 +18,13 @@ function main(argv) {
     });
 
     application.connect('activate', app => {
-        let window = app.get_active_window();
+        let activeWindow = app.activeWindow;
         
-        if(!window) {
-            window = new {{PreFix}}Window(app);
+        if (!activeWindow) {
+            activeWindow = new {{PreFix}}Window(app);
         }
 
-        window.present();
+        activeWindow.present();
     });
 
     return application.run(argv);
