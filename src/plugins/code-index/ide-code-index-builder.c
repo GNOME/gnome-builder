@@ -661,7 +661,7 @@ get_changes_worker (IdeTask      *task,
   g_assert (IDE_IS_VCS (gcd->vcs));
 
   if (ide_task_return_error_if_cancelled (task))
-    return;
+    goto cancelled;
 
   /*
    * If we are recursive, collect all the directories we need to look
@@ -682,7 +682,7 @@ get_changes_worker (IdeTask      *task,
   to_update = g_ptr_array_new_with_free_func (g_object_unref);
 
   if (ide_task_return_error_if_cancelled (task))
-    return;
+    goto cancelled;
 
   /*
    * Process directories to check for changes, while ensuring we have not
@@ -720,8 +720,10 @@ get_changes_worker (IdeTask      *task,
       g_queue_clear (&files);
 
       if (ide_task_return_error_if_cancelled (task))
-        return;
+        goto cancelled;
     }
+
+cancelled:
 
   /* In case we were cancelled */
   if (gcd->directories.length > 0)
@@ -731,13 +733,17 @@ get_changes_worker (IdeTask      *task,
     }
 
   g_assert (gcd->directories.length == 0);
-  g_assert (IDE_IS_VCS (gcd->vcs));
-  g_assert (G_IS_FILE (gcd->data_dir));
-  g_assert (G_IS_FILE (gcd->index_dir));
 
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&to_update),
-                           (GDestroyNotify) g_ptr_array_unref);
+  if (!ide_task_had_error (task))
+    {
+      g_assert (IDE_IS_VCS (gcd->vcs));
+      g_assert (G_IS_FILE (gcd->data_dir));
+      g_assert (G_IS_FILE (gcd->index_dir));
+
+      ide_task_return_pointer (task,
+                               g_steal_pointer (&to_update),
+                               (GDestroyNotify)g_ptr_array_unref);
+    }
 }
 
 /*
