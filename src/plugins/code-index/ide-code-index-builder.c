@@ -720,7 +720,7 @@ get_changes_worker (IdeTask      *task,
       g_queue_clear (&files);
 
       if (ide_task_return_error_if_cancelled (task))
-        goto cancelled;
+        break;
     }
 
 cancelled:
