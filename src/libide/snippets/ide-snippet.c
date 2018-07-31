@@ -565,6 +565,9 @@ ide_snippet_update_context (IdeSnippet *self)
 
   g_return_if_fail (IDE_IS_SNIPPET (self));
 
+  if (self->chunks == NULL || self->chunks->len == 0)
+    IDE_EXIT;
+
   context = ide_snippet_get_context (self);
 
   ide_snippet_context_emit_changed (context);
