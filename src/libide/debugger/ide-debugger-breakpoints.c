@@ -350,7 +350,7 @@ _ide_debugger_breakpoints_remove (IdeDebuggerBreakpoints *self,
             {
               g_array_remove_index (self->lines, i);
               g_signal_emit (self, signals [CHANGED], 0);
-              IDE_EXIT;
+              break;
             }
         }
 
