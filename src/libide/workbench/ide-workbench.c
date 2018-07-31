@@ -110,6 +110,12 @@ ide_workbench_unload_cb (GObject      *object,
   gtk_widget_destroy (GTK_WIDGET (self));
 
   g_clear_object (&self->context);
+
+#ifdef IDE_ENABLE_TRACE
+  /* Flush out any pending work */
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+#endif
 }
 
 static gboolean
