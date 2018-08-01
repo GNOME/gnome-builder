@@ -116,7 +116,14 @@ gstyle_color_to_hsla (GstyleColor *self,
 static gchar *
 truncate_trailing_zeros (gdouble number)
 {
+  /* Switch to "C" locale to avoid problems with decimal separators */
+  gchar *locale_backup = setlocale(LC_NUMERIC, NULL);
+  setlocale(LC_NUMERIC, "C");
+
   gint c = g_snprintf(TRUNCATE_BUF, 6, "%.2f", number);
+
+  /* Restore locale */
+  setlocale(LC_NUMERIC, locale_backup);
 
   --c;
   while(TRUNCATE_BUF[c] == '0')
