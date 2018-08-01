@@ -48,6 +48,14 @@ struct _IdeXmlCompletionProvider
   IdeObject parent_instance;
 };
 
+typedef enum
+{
+  MATCHING_POSITION_NONE,
+  MATCHING_POSITION_BEFORE,
+  MATCHING_POSITION_CANDIDATE,
+  MATCHING_POSITION_AFTER
+} MatchingPosition;
+
 typedef struct
 {
   GArray           *stack;
@@ -60,16 +68,22 @@ typedef struct
   gchar            *prefix;
   gint              child_cursor;
   gint              define_cursor;
+  MatchingPosition  match_pos;
 
   guint             is_initial_state : 1;
   guint             is_in_root_node  : 1;
-  guint             retry : 1;
+  guint             can_continue     : 1;
+  guint             retry            : 1;
 } MatchingState;
 
 typedef struct
 {
   GPtrArray        *children;
   IdeXmlSymbolNode *candidate_node;
+  MatchingPosition  match_pos;
+
+  guint             can_continue : 1;
+  guint             retry        : 1;
 } StateStackItem;
 
 typedef struct
@@ -157,13 +171,14 @@ state_stack_new (void)
 static void
 state_stack_push (MatchingState *state)
 {
-  StateStackItem item;
+  StateStackItem item = {0};
 
   g_assert (state->stack != NULL);
   g_assert (IDE_IS_XML_SYMBOL_NODE (state->candidate_node));
 
   item.children = copy_children (state->children);
-  item.candidate_node = g_object_ref (state->candidate_node);
+  if (state->candidate_node != NULL)
+    item.candidate_node = g_object_ref (state->candidate_node);
 
   g_array_append_val (state->stack, item);
 }
@@ -218,6 +233,10 @@ state_stack_peek (MatchingState *state)
   g_clear_pointer (&state->children, g_ptr_array_unref);
   state->children = copy_children (item->children);
   g_set_object (&state->candidate_node, item->candidate_node);
+
+  state->can_continue = item->can_continue;
+  state->match_pos = item->match_pos;
+  state->retry = item->retry;
 
   return TRUE;
 }
@@ -460,6 +479,10 @@ matching_state_copy (MatchingState *state)
 
   new_state->children = copy_children (state->children);
 
+  new_state->can_continue = state->can_continue;
+  new_state->match_pos = state->match_pos;
+  new_state->retry = state->retry;
+
   return new_state;
 }
 
@@ -545,7 +568,6 @@ is_element_matching (MatchingState *state)
   if (state->children->len == 0)
     return FALSE;
 
-  state->retry = FALSE;
   node = g_ptr_array_index (state->children, 0);
 
   if (state->candidate_node == node)
@@ -554,34 +576,43 @@ is_element_matching (MatchingState *state)
       if (dzl_str_empty0 (state->prefix) || g_str_has_prefix ((gchar *)state->define->name, state->prefix))
         {
           g_clear_object (&state->candidate_node);
-          state->retry = TRUE;
+
 
           item = completion_item_new (name, state->define);
           g_ptr_array_add (state->items, item);
 
+          state->match_pos = MATCHING_POSITION_CANDIDATE;
           return TRUE;
         }
       else
-        return FALSE;
+        {
+          state->match_pos = MATCHING_POSITION_NONE;
+          return FALSE;
+        }
     }
   else if (is_define_equal_node (state->define, node))
     {
       g_ptr_array_remove_index (state->children, 0);
+      state->match_pos = MATCHING_POSITION_BEFORE;
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      state->match_pos = MATCHING_POSITION_NONE;
+      return FALSE;
+    }
 }
 
 static gboolean
 is_choice_matching (MatchingState *state)
 {
   IdeXmlRngDefine *defines;
+  gboolean is_matching = FALSE;
 
   g_assert (state->define->type == IDE_XML_RNG_DEFINE_CHOICE);
 
-  if (NULL == (defines = state->define->content))
-    return TRUE;
+  if (!(defines = state->define->content))
+    return FALSE;
 
   state_stack_push (state);
 
@@ -589,75 +620,67 @@ is_choice_matching (MatchingState *state)
     {
       if (process_matching_state (state, defines))
         {
-          if (state->retry)
-            state->retry = FALSE;
-          else
+          is_matching = TRUE;
+
+          /* If the candidate node match, we still want to try the other branches */
+          if (state->match_pos == MATCHING_POSITION_BEFORE)
             {
               state_stack_drop (state);
+              state->can_continue = FALSE;
               return TRUE;
             }
         }
 
       if ((defines = defines->next))
         state_stack_peek (state);
-      else
-        state_stack_pop (state);
     }
 
-  state->retry = FALSE;
-  return FALSE;
+  state_stack_pop (state);
+  return is_matching;
 }
 
 static gboolean
 is_n_matching (MatchingState *state)
 {
-  IdeXmlRngDefine *defines;
+  IdeXmlRngDefine *defines = state->define->content;
   IdeXmlRngDefineType type = state->define->type;
-  gboolean is_child_matching;
   gboolean is_matching = FALSE;
 
   g_assert (type == IDE_XML_RNG_DEFINE_ZEROORMORE ||
             type == IDE_XML_RNG_DEFINE_ONEORMORE ||
             type == IDE_XML_RNG_DEFINE_OPTIONAL);
 
+  if (defines == NULL)
+    return FALSE;
+
+  g_assert (defines->next == NULL);
+
   state_stack_push (state);
 
-loop:
-  /* Only ZeroOrMore or optionnal match if there's no children */
-  if (NULL == (defines = state->define->content))
-    return !(type == IDE_XML_RNG_DEFINE_ONEORMORE);
-
-  is_child_matching = TRUE;
-  while (defines != NULL)
+  while (TRUE)
     {
-      if (!process_matching_state (state, defines))
+      if (process_matching_state (state, defines))
         {
-          is_child_matching = FALSE;
-          break;
+          is_matching = TRUE;
+
+          if (state->match_pos == MATCHING_POSITION_BEFORE &&
+              (type == IDE_XML_RNG_DEFINE_ONEORMORE || type == IDE_XML_RNG_DEFINE_ZEROORMORE))
+            {
+              continue;
+            }
+          else
+            {
+              state_stack_drop (state);
+              break;
+            }
         }
 
-      defines = defines->next;
-    }
-
-  if (is_child_matching)
-    {
-      is_matching = TRUE;
-      state_stack_drop (state);
-      if ((type == IDE_XML_RNG_DEFINE_ONEORMORE || type == IDE_XML_RNG_DEFINE_ZEROORMORE) &&
-          state->candidate_node != NULL)
-        {
-          state_stack_push (state);
-          goto loop;
-        }
-    }
-  else
-    {
       state_stack_pop (state);
+      break;
     }
 
-  state->retry = FALSE;
-  if (type == IDE_XML_RNG_DEFINE_OPTIONAL || type == IDE_XML_RNG_DEFINE_ZEROORMORE)
-    return TRUE;
+  if (type == IDE_XML_RNG_DEFINE_ONEORMORE || type == IDE_XML_RNG_DEFINE_ZEROORMORE)
+    state->can_continue = TRUE;
 
   return is_matching;
 }
@@ -677,7 +700,7 @@ is_group_matching (MatchingState *state)
     defines = state->define->content;
 
   if (defines == NULL)
-    return TRUE;
+    return FALSE;
 
   state->is_in_root_node = FALSE;
   state->is_initial_state = FALSE;
@@ -691,20 +714,95 @@ is_group_matching (MatchingState *state)
           break;
         }
 
-      if ((defines = defines->next))
+      defines = defines->next;
+    }
+
+  if (is_matching)
+    state_stack_drop (state);
+  else
+    state_stack_pop (state);
+
+  state->can_continue = FALSE;
+  return is_matching;
+}
+
+typedef struct
+{
+  IdeXmlRngDefine *define;
+  guint            match : 1;
+} DefineEntry;
+
+static gboolean
+is_interleave_matching (MatchingState *state)
+{
+  g_autoptr(GArray) def_children = NULL;
+  IdeXmlRngDefine *defines, *def;
+  gboolean is_matching = FALSE;
+  gboolean is_loop_matching;
+  guint i;
+
+  g_assert (state->define->type == IDE_XML_RNG_DEFINE_INTERLEAVE);
+
+  if (!(defines = state->define->content))
+    return FALSE;
+
+  state_stack_push (state);
+
+  def_children = g_array_new (FALSE, FALSE, sizeof (DefineEntry));
+  while (defines != NULL)
+    {
+      DefineEntry entry = {defines, FALSE};
+
+      g_array_append_val (def_children, entry);
+      defines = defines->next;
+    }
+
+loop:
+  i = 0;
+  is_loop_matching = FALSE;
+
+  while (i < def_children->len)
+    {
+      DefineEntry *entry = &g_array_index (def_children, DefineEntry, i);
+
+      def = entry->define;
+      state_stack_push (state);
+
+      if (process_matching_state (state, def))
         {
+          is_loop_matching = is_matching = TRUE;
+          entry->match = TRUE;
+
+          /* Restore the candidate node to try if it apply to the next define */
+          if (state->match_pos == MATCHING_POSITION_CANDIDATE)
+            {
+              state_stack_peek (state);
+              g_array_remove_index (def_children, i);
+            }
+          else
+            {
+              state_stack_drop (state);
+              if (!state->can_continue)
+                g_array_remove_index (def_children, i);
+            }
+        }
+      else
+        {
+          entry->match = FALSE;
           state_stack_drop (state);
-          state_stack_push (state);
+          i++;
         }
     }
 
-  state->retry = FALSE;
-  if (is_matching)
-    {
-      state_stack_drop (state);
-      return TRUE;
-    }
+  if (is_loop_matching)
+    goto loop;
 
+  if (is_matching)
+    state_stack_drop (state);
+  else
+    state_stack_pop (state);
+
+  state->can_continue = FALSE;
   return is_matching;
 }
 
@@ -713,29 +811,30 @@ process_matching_state (MatchingState   *state,
                         IdeXmlRngDefine *define)
 {
   IdeXmlRngDefine *old_define;
-  IdeXmlRngDefineType type;
   gboolean is_matching = FALSE;
 
   g_assert (state != NULL);
   g_assert (define != NULL);
 
-  if (state->candidate_node == NULL)
+  state->can_continue = FALSE;
+
+  /* If the candidate node has matched, we don't need to search for more */
+  if (state->match_pos == MATCHING_POSITION_CANDIDATE)
     return TRUE;
+
+  state->match_pos = MATCHING_POSITION_NONE;
 
   old_define = state->define;
   state->define = define;
 
-  if (state->is_initial_state)
-    {
-      type = IDE_XML_RNG_DEFINE_GROUP;
-    }
-  else
-    type = define->type;
-
-  switch (type)
+  switch (define->type)
     {
     case IDE_XML_RNG_DEFINE_ELEMENT:
-      is_matching = is_element_matching (state);
+      if (state->is_initial_state)
+        is_matching = is_group_matching (state);
+      else
+        is_matching = is_element_matching (state);
+
       break;
 
     case IDE_XML_RNG_DEFINE_NOOP:
@@ -771,7 +870,7 @@ process_matching_state (MatchingState   *state,
       break;
 
     case IDE_XML_RNG_DEFINE_INTERLEAVE:
-      is_matching = FALSE;
+      is_matching = is_interleave_matching (state);
       break;
 
     case IDE_XML_RNG_DEFINE_GROUP:
