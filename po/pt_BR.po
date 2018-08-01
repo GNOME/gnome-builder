@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-30 05:13+0000\n"
-"PO-Revision-Date: 2018-07-30 16:24-0200\n"
+"POT-Creation-Date: 2018-07-30 20:15+0000\n"
+"PO-Revision-Date: 2018-07-31 20:52-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Virtaal 1.0.0-beta1\n"
+"X-Generator: Poedit 2.0.9\n"
 "X-Project-Style: gnome\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
@@ -566,7 +566,7 @@ msgstr "Construir;Compilar;Desenvolver;Construtor;"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
 msgid "Builder Dark"
-msgstr "Builder escuro"
+msgstr "Builder Dark"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:28
 msgid "Dark color scheme for Builder using the Tango color palette"
@@ -2533,7 +2533,7 @@ msgstr "terminal permitir negrito"
 
 #: src/libide/preferences/ide-preferences-builtin.c:114
 msgid "Color Scheme"
-msgstr "Esquema da cor"
+msgstr "Esquema de cores"
 
 #: src/libide/preferences/ide-preferences-builtin.c:139
 msgid "Keyboard"
@@ -3726,7 +3726,7 @@ msgstr "Filtros:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
 msgid "Select a filter that act on the colors or “None”."
-msgstr "Selecione um filtro que aja nas cores ou “None” (nenhum)."
+msgstr "Selecione um filtro que aja nas cores ou “Nenhum”."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
@@ -4104,7 +4104,7 @@ msgid ""
 "Enable the use of eslint to find additional diagnostics in JavaScript files. "
 "This may result in the execution of code in your project."
 msgstr ""
-"Habilita o uso do eslint para localizar diagnósticos adicionais em programa "
+"Habilita o uso do ESLint para localizar diagnósticos adicionais em programa "
 "JavaScript. Isso pode resultar na execução do código de seu projeto."
 
 #: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:38
@@ -4285,7 +4285,7 @@ msgstr "O arquivo requisitado não existe dentro do índice do git."
 #: src/plugins/git/ide-git-clone-widget.c:159
 #: src/plugins/git/ide-git-clone-widget.c:500
 msgid "A valid Git URL is required"
-msgstr "Uma URL Git válida é necessária"
+msgstr "É necessário uma URL do Git válida"
 
 #. translators: %s is replaced with the path to the project
 #: src/plugins/git/ide-git-clone-widget.c:172
@@ -4357,7 +4357,7 @@ msgstr "Pylint"
 
 #: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:63
 msgid "Enable the use of pylint, which may execute code in your project"
-msgstr "Habilita o uso do pylint, que pode executar código no seu projeto"
+msgstr "Habilita o uso do Pylint, que pode executar código no seu projeto"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
@@ -4377,7 +4377,7 @@ msgid ""
 "Enable the use of pylint to find additional diagnostics in Python programs. "
 "This may result in the execution of code in your project."
 msgstr ""
-"Habilita o uso do pylint para localizar diagnósticos adicionais em programa "
+"Habilita o uso do Pylint para localizar diagnósticos adicionais em programa "
 "Python. Isso pode resultar na execução do código de seu projeto."
 
 #: src/plugins/html-preview/gtk/menus.ui:7
