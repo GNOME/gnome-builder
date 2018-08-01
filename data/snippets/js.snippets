@@ -2,19 +2,22 @@ snippet import
 	import "${1:./module.js}";
 	$0
 snippet from
-	import ${1:Module} from "${2:./}${3:$1|lower}";
-	$0
-snippet require
-	const ${1:Module} = require("${2:./}${3:$1|lower}");
-	$0
-snippet gi
-	const ${1:Gtk} = imports.gi.$1;
-	$0
-snippet lang
-	const ${1:Lang} = imports.${$1|decapitalize};
+- desc import … from
+	import ${1:{ Module }} from "${2:./module.js}";
 	$0
 snippet imports
 	const ${1:Module} = imports.${2:path}.${$1|decapitalize};
+	$0
+snippet gi
+- desc imports.gi
+	const ${1:{ GObject, Gtk }} = imports.gi;
+	$0
+snippet lang
+- desc imports.lang
+	const ${1:Lang} = imports.${$1|decapitalize};
+	$0
+snippet require
+	const ${1:Module} = require("${2:./}${3:$1|lower}");
 	$0
 snippet class
 	class ${1:ClassName} {
