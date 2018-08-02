@@ -227,6 +227,13 @@ snippet gobject_boxed_ref
 
 	G_DEFINE_BOXED_TYPE (${2:$1|camelize}, ${3:$1|functify}, $3_ref, $3_unref)
 
+	/**
+	 * $3_new:
+	 *
+	 * Creates a new #$2.
+	 *
+	 * Returns: (transfer full): A newly created #$2
+	 */
 	$2 *
 	$3_new (void)
 	{
@@ -238,6 +245,15 @@ snippet gobject_boxed_ref
 		return self;
 	}
 
+	/**
+	 * $3_copy:
+	 * @self: a #$2
+	 *
+	 * Makes a deep copy of a #$2.
+	 *
+	 * Returns: (transfer full): A newly created #$2 with the same
+	 *   contents as @self
+	 */
 	$2 *
 	$3_copy ($2 *self)
 	{
@@ -260,6 +276,14 @@ snippet gobject_boxed_ref
 		g_slice_free ($2, self);
 	}
 
+	/**
+	 * $3_ref:
+	 * @self: A #$2
+	 *
+	 * Increments the reference count of @self by one.
+	 *
+	 * Returns: (transfer none): @self
+	 */
 	$2 *
 	$3_ref ($2 *self)
 	{
@@ -271,6 +295,13 @@ snippet gobject_boxed_ref
 		return self;
 	}
 
+	/**
+	 * $3_unref:
+	 * @self: (transfer none): A #$2
+	 *
+	 * Decrements the reference count of @self by one, freeing the structure when
+	 * the reference count reaches zero.
+	 */
 	void
 	$3_unref ($2 *self)
 	{
@@ -288,19 +319,21 @@ snippet gobject_boxed_ref
 
 	G_BEGIN_DECLS
 
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type())
+	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type ())
 
 	typedef struct _$1 ${1:$filename|stripsuffix|camelize};
 
 	struct _$1
 	{
+		/*< private >*/
 		guint ref_count;
 	};
 
-	$1     *$4_new   (void);
-	$1     *$4_copy  ($1 *self);
-	$1     *$4_ref   ($1 *self);
-	void${$1|space}  $4_unref ($1 *self);
+	GType${$1|space} $4_get_type (void) G_GNUC_CONST;
+	$1     *$4_new      (void);
+	$1     *$4_copy     ($1 *self);
+	$1     *$4_ref      ($1 *self);
+	void${$1|space}  $4_unref    ($1 *self);
 	$0
 	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_unref)
 	$0
@@ -317,6 +350,13 @@ snippet gobject_boxed_copy
 		$0;
 	};
 
+	/**
+	 * $3_new:
+	 *
+	 * Creates a new #$2.
+	 *
+	 * Returns: (transfer full): A newly created #$2
+	 */
 	$2 *
 	$3_new (void)
 	{
@@ -327,6 +367,15 @@ snippet gobject_boxed_copy
 		return self;
 	}
 
+	/**
+	 * $3_copy:
+	 * @self: a #$2
+	 *
+	 * Makes a deep copy of a #$2.
+	 *
+	 * Returns: (transfer full): A newly created #$2 with the same
+	 *   contents as @self
+	 */
 	$2 *
 	$3_copy ($2 *self)
 	{
@@ -339,6 +388,13 @@ snippet gobject_boxed_copy
 		return copy;
 	}
 
+	/**
+	 * $3_free:
+	 * @self: a #$2
+	 *
+	 * Frees a #$2 allocated using $3_new()
+	 * or $3_copy().
+	 */
 	void
 	$3_free ($2 *self)
 	{
@@ -354,13 +410,14 @@ snippet gobject_boxed_copy
 
 	G_BEGIN_DECLS
 
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type())
+	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type ())
 
 	typedef struct _$1 ${1:$filename|stripsuffix|camelize};
 
-	$1     *$4_new   (void);
-	$1     *$4_copy  ($1 *self);
-	void${$1|space}  $4_free  ($1 *self);
+	GType${$1|space} $4_get_type (void) G_GNUC_CONST;
+	$1     *$4_new      (void);
+	$1     *$4_copy     ($1 *self);
+	void${$1|space}  $4_free     ($1 *self);
 	$0
 	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_free)
 	$0
