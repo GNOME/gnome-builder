@@ -72,6 +72,7 @@ typedef struct
   IdeProgress          *progress;
   GtkSourceFileLoader  *loader;
   guint                 is_new : 1;
+  guint                 rehighlight : 1;
   IdeWorkbenchOpenFlags flags;
   guint                 line;
   guint                 line_offset;
@@ -512,6 +513,9 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
 
   gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (state->buffer), FALSE);
 
+  gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (state->buffer),
+                                          state->rehighlight);
+
   /* try to restore the insertion cursor */
   if (g_settings_get_boolean (self->settings, "restore-insert-mark"))
     gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (state->buffer), &iter,
@@ -644,6 +648,9 @@ ide_buffer_manager__load_file_query_info_cb (GObject      *object,
   g_signal_emit (self, signals [LOAD_BUFFER], 0, state->buffer, create_new_view);
 
   cancellable = ide_task_get_cancellable (task);
+
+  state->rehighlight = gtk_source_buffer_get_highlight_syntax (GTK_SOURCE_BUFFER (state->buffer));
+  gtk_source_buffer_set_highlight_syntax (GTK_SOURCE_BUFFER (state->buffer), FALSE);
 
   gtk_source_file_loader_load_async (state->loader,
                                      G_PRIORITY_LOW,
