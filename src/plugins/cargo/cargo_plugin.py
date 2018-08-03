@@ -33,6 +33,11 @@ from gi.repository import Ide
 _ = Ide.gettext
 
 _CARGO = 'cargo'
+_ERROR_FORMAT_REGEX = ("(?<filename>[a-zA-Z0-9\\+\\-\\.\\/_]+):"
+                       "(?<line>\\d+):"
+                       "(?<column>\\d+): "
+                       "(?<level>[\\w\\[a-zA-Z0-9\\]\\s]+): "
+                       "(?<message>.*)")
 
 class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
@@ -101,6 +106,8 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         if type(build_system) != CargoBuildSystem:
             return
 
+        self.error_format_id = pipeline.add_error_format(_ERROR_FORMAT_REGEX, GLib.RegexCompileFlags.CASELESS);
+
         cargo_toml = build_system.props.project_file.get_path()
         config = pipeline.get_configuration()
         builddir = pipeline.get_builddir()
@@ -122,12 +129,14 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_launcher = pipeline.create_launcher()
         build_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
         build_launcher.push_argv(cargo)
-        build_launcher.push_argv('build')
-        build_launcher.push_argv('--verbose')
+        build_launcher.push_argv('rustc')
         build_launcher.push_argv('--manifest-path')
         build_launcher.push_argv(cargo_toml)
         build_launcher.push_argv('--message-format')
         build_launcher.push_argv('human')
+        build_launcher.push_argv('--')
+        build_launcher.push_argv('--error-format')
+        build_launcher.push_argv('short')
 
         if not pipeline.is_native():
             build_launcher.push_argv('--target')
