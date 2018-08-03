@@ -116,10 +116,13 @@ gstyle_color_to_hsla (GstyleColor *self,
 static gchar *
 truncate_trailing_zeros (gdouble number)
 {
-  gint c = g_snprintf(TRUNCATE_BUF, 6, "%.2f", number);
+  guint i = (guint)number;
+  guint f = (number - i) * 100;
+  gint c = g_snprintf (TRUNCATE_BUF, 5, "%d.%d", i, f);
 
+  /* Format the number string, e.g. "0.50" => "0.5"; "1.0" => "1" */
   --c;
-  while(TRUNCATE_BUF[c] == '0')
+  while (TRUNCATE_BUF[c] == '0')
     c--;
 
   if (TRUNCATE_BUF[c] == '.')
