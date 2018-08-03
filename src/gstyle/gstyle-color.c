@@ -23,6 +23,7 @@
 #include <dazzle.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <locale.h>
 
 #include "gstyle-private.h"
 #include "gstyle-colorlexer.h"
@@ -117,16 +118,26 @@ static gchar *
 truncate_trailing_zeros (gdouble number)
 {
   /* Switch to "C" locale to avoid problems with decimal separators */
-  gchar *locale_backup = setlocale(LC_NUMERIC, NULL);
-  setlocale(LC_NUMERIC, "C");
+  locale_t bk_locale = uselocale (NULL);
+  locale_t base_locale = duplocale (bk_locale);
+  locale_t new_locale = newlocale (LC_ALL, "C", base_locale); /* Just LC_NUMERIC doesn't work */
 
-  gint c = g_snprintf(TRUNCATE_BUF, 6, "%.2f", number);
+  if (new_locale != NULL)
+    uselocale (new_locale);
+
+  gint c = g_snprintf (TRUNCATE_BUF, 6, "%.2f", number);
 
   /* Restore locale */
-  setlocale(LC_NUMERIC, locale_backup);
+  uselocale (bk_locale);
 
+  if (new_locale != NULL)
+    freelocale (new_locale);
+  else
+    freelocale (base_locale);
+
+  /* Format the number string, e.g. "0.50" => "0.5"; "1.0" => "1" */
   --c;
-  while(TRUNCATE_BUF[c] == '0')
+  while (TRUNCATE_BUF[c] == '0')
     c--;
 
   if (TRUNCATE_BUF[c] == '.')
