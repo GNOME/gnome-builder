@@ -8,8 +8,6 @@ autotools_resources = gnome.compile_resources(
 
 autotools_sources = [
   'autotools-plugin.c',
-  'ide-autotools-application-addin.c',
-  'ide-autotools-application-addin.h',
   'ide-autotools-autogen-stage.c',
   'ide-autotools-autogen-stage.h',
   'ide-autotools-build-system.c',
