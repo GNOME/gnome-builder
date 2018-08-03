@@ -315,6 +315,8 @@ ide_vcs_monitor_dispose (GObject *object)
       g_clear_object (&self->monitor);
     }
 
+  g_clear_object (&self->root);
+
   G_OBJECT_CLASS (ide_vcs_monitor_parent_class)->dispose (object);
 }
 
