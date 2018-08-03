@@ -69,15 +69,6 @@
 G_DEFINE_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
 
 static GThread *main_thread;
-static const gchar *legacy_dirs[] = {
-  "buffers",
-  "builds",
-  "code-index",
-  "flatpak",
-  "install",
-  "tags",
-  NULL,
-};
 
 void
 _ide_application_set_mode (IdeApplication     *self,
@@ -404,76 +395,6 @@ build_legacy_cache_directory (const gchar *name)
 }
 
 static void
-ide_application_reap_legacy_cb (GObject      *object,
-                                GAsyncResult *result,
-                                gpointer      user_data)
-{
-  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
-  g_autoptr(IdeApplication) self = user_data;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_APPLICATION (self));
-
-  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
-    {
-      g_warning ("Failure reaping legacy data: %s", error->message);
-      IDE_EXIT;
-    }
-
-  for (guint i = 0; legacy_dirs[i] != NULL; i++)
-    {
-      g_autoptr(GFile) directory = NULL;
-      const gchar *name = legacy_dirs[i];
-
-      directory = build_legacy_cache_directory (name);
-      g_file_delete_async (directory, G_PRIORITY_LOW, NULL, NULL, NULL);
-    }
-
-  IDE_EXIT;
-}
-
-/*
- * _ide_application_reap_legacy:
- *
- * This is meant to remove a bunch of legacy directories we no longer use.
- * Since it can take a while, we do it in the background at startup if we
- * discover they are there.
- */
-static void
-_ide_application_reap_legacy (IdeApplication *self)
-{
-  g_autoptr(DzlDirectoryReaper) reaper = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  reaper = dzl_directory_reaper_new ();
-
-  /* Cleanup a number of old directories no longer used */
-  for (guint i = 0; legacy_dirs[i] != NULL; i++)
-    {
-      g_autoptr(GFile) directory = NULL;
-      const gchar *name = legacy_dirs[i];
-
-      directory = build_legacy_cache_directory (name);
-      dzl_directory_reaper_add_directory (reaper, directory, 0);
-    }
-
-  /* Do this asynchronously so we don't block the program at shutdown. */
-  dzl_directory_reaper_execute_async (reaper,
-                                      NULL,
-                                      ide_application_reap_legacy_cb,
-                                      g_object_ref (self));
-
-  IDE_EXIT;
-}
-
-static void
 projects_directory_changed_cb (IdeApplication *self,
                                const gchar    *key,
                                GSettings      *settings)
@@ -521,7 +442,6 @@ ide_application_startup (GApplication *application)
       ide_application_actions_init (self);
       _ide_application_init_shortcuts (self);
       _ide_application_init_color (self);
-      _ide_application_reap_legacy (self);
 
       gtk_icon_theme_prepend_search_path (gtk_icon_theme_get_default (), PACKAGE_ICONDIR);
 
