@@ -75,6 +75,9 @@ ide_workbench_notify_visible_child (IdeWorkbench *self,
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (GTK_IS_STACK (stack));
 
+  if (self->unloading)
+    return;
+
   perspective = gtk_stack_get_visible_child (stack);
 
   if (perspective != NULL)
