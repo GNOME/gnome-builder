@@ -457,9 +457,12 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   self->root = json_node_ref (root);
   self->primary = json_object_ref (primary);
 
+  if (!validate_properties (self, error))
+    return FALSE;
+
   ide_configuration_set_dirty (IDE_CONFIGURATION (self), FALSE);
 
-  return validate_properties (self, error);
+  return TRUE;
 }
 
 static void

@@ -326,6 +326,8 @@ gbp_flatpak_configuration_provider_load_worker (IdeTask      *task,
           continue;
         }
 
+      g_assert (ide_configuration_get_dirty (IDE_CONFIGURATION (manifest)) == FALSE);
+
       g_signal_connect_object (manifest,
                                "needs-reload",
                                G_CALLBACK (manifest_needs_reload),
@@ -550,6 +552,7 @@ gbp_flatpak_configuration_provider_load_finish (IdeConfigurationProvider  *provi
       IdeConfiguration *config = g_ptr_array_index (configs, i);
 
       g_assert (IDE_IS_CONFIGURATION (config));
+      g_assert (ide_configuration_get_dirty (config) == FALSE);
 
       ide_configuration_provider_emit_added (provider, config);
     }
