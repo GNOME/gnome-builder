@@ -562,7 +562,24 @@ ide_context_dispose (GObject *object)
     }
 
   g_list_store_remove_all (self->pausables);
+
+  /* Request disposal of internal objects so that we help
+   * break any potential reference cycles.
+   */
+
   g_object_run_dispose (G_OBJECT (self->monitor));
+  g_object_run_dispose (G_OBJECT (self->debug_manager));
+  g_object_run_dispose (G_OBJECT (self->build_system));
+  g_object_run_dispose (G_OBJECT (self->device_manager));
+  g_object_run_dispose (G_OBJECT (self->run_manager));
+  g_object_run_dispose (G_OBJECT (self->run_manager));
+  g_object_run_dispose (G_OBJECT (self->runtime_manager));
+  g_object_run_dispose (G_OBJECT (self->toolchain_manager));
+  g_object_run_dispose (G_OBJECT (self->configuration_manager));
+  g_object_run_dispose (G_OBJECT (self->session));
+  g_object_run_dispose (G_OBJECT (self->unsaved_files));
+  g_object_run_dispose (G_OBJECT (self->vcs));
+  g_object_run_dispose (G_OBJECT (self->recent_manager));
 
   G_OBJECT_CLASS (ide_context_parent_class)->dispose (object);
 
@@ -2155,10 +2172,6 @@ ide_context_unload_cb (GObject      *object,
   g_assert (IDE_IS_CONTEXT (self));
   g_assert (IDE_IS_TASK (unload_task));
   g_assert (IDE_IS_TASK (task));
-
-  g_clear_object (&self->device_manager);
-  g_clear_object (&self->runtime_manager);
-  g_clear_object (&self->toolchain_manager);
 
   if (!ide_task_propagate_boolean (unload_task, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
