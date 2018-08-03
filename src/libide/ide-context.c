@@ -2913,6 +2913,7 @@ ide_context_cache_filename (IdeContext  *self,
 IdeVcsMonitor *
 ide_context_get_monitor (IdeContext *self)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
 
   if (self->monitor == NULL)
