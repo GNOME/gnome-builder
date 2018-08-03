@@ -106,7 +106,9 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         if type(build_system) != CargoBuildSystem:
             return
 
-        self.error_format_id = pipeline.add_error_format(_ERROR_FORMAT_REGEX, GLib.RegexCompileFlags.CASELESS);
+        self.error_format_id = pipeline.add_error_format(_ERROR_FORMAT_REGEX,
+                                                         GLib.RegexCompileFlags.OPTIMIZE |
+                                                         GLib.RegexCompileFlags.CASELESS);
 
         cargo_toml = build_system.props.project_file.get_path()
         config = pipeline.get_configuration()
@@ -138,7 +140,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_launcher.push_argv('--error-format')
         build_launcher.push_argv('short')
         build_launcher.push_argv('--remap-path-prefix')
-        build_launcher.push_argv('='+pipeline.get_srcdir())
+        build_launcher.push_argv('=' + pipeline.get_srcdir())
 
         if not pipeline.is_native():
             build_launcher.push_argv('--target')
