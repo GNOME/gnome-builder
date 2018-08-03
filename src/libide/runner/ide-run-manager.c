@@ -141,9 +141,11 @@ ide_run_handler_info_free (gpointer data)
 }
 
 static void
-ide_run_manager_finalize (GObject *object)
+ide_run_manager_dispose (GObject *object)
 {
   IdeRunManager *self = (IdeRunManager *)object;
+
+  self->handler = NULL;
 
   g_clear_object (&self->cancellable);
   g_clear_object (&self->build_target);
@@ -151,7 +153,7 @@ ide_run_manager_finalize (GObject *object)
   g_list_free_full (self->handlers, ide_run_handler_info_free);
   self->handlers = NULL;
 
-  G_OBJECT_CLASS (ide_run_manager_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_run_manager_parent_class)->dispose (object);
 }
 
 static void
@@ -275,7 +277,7 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_run_manager_finalize;
+  object_class->dispose = ide_run_manager_dispose;
   object_class->get_property = ide_run_manager_get_property;
   object_class->set_property = ide_run_manager_set_property;
 
