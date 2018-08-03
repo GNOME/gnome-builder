@@ -194,6 +194,11 @@ ide_workbench_delete_event (GtkWidget   *widget,
    */
   gtk_widget_hide (GTK_WIDGET (self));
 
+  dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self), NULL, "IDE_PERSPECTIVE_ACTIONS");
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "build-manager", NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "run-manager", NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "device-manager", NULL);
+
   /*
    * Now start unloading addins, which will cascade into the removal
    * of perspectives and other bits and pieces (like editor addins).
