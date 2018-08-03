@@ -601,6 +601,7 @@ ide_context_finalize (GObject *object)
   g_clear_object (&self->project);
   g_clear_object (&self->project_file);
   g_clear_object (&self->recent_manager);
+  g_clear_object (&self->run_manager);
   g_clear_object (&self->runtime_manager);
   g_clear_object (&self->test_manager);
   g_clear_object (&self->unsaved_files);
