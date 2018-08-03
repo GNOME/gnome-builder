@@ -53,6 +53,31 @@ static void gb_terminal_view_connect_terminal (GbTerminalView *self,
 static void gb_terminal_respawn               (GbTerminalView *self,
                                                VteTerminal    *terminal);
 
+static gboolean
+shell_supports_login (const gchar *shell)
+{
+  g_autofree gchar *name = NULL;
+
+  /* Shells that support --login */
+  static const gchar *supported[] = {
+    "bash",
+  };
+
+  if (shell == NULL)
+    return FALSE;
+
+  if (!(name = g_path_get_basename (shell)))
+    return FALSE;
+
+  for (guint i = 0; i < G_N_ELEMENTS (supported); i++)
+    {
+      if (g_str_equal (name, supported[i]))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gb_terminal_view_wait_cb (GObject      *object,
                           GAsyncResult *result,
@@ -263,6 +288,8 @@ gb_terminal_respawn (GbTerminalView *self,
   ide_subprocess_launcher_set_run_on_host (launcher, self->run_on_host);
   ide_subprocess_launcher_set_clear_env (launcher, FALSE);
   ide_subprocess_launcher_push_argv (launcher, shell);
+  if (shell_supports_login (shell))
+    ide_subprocess_launcher_push_argv (launcher, "--login");
   ide_subprocess_launcher_take_stdin_fd (launcher, tty_fd);
   ide_subprocess_launcher_take_stdout_fd (launcher, stdout_fd);
   ide_subprocess_launcher_take_stderr_fd (launcher, stderr_fd);
