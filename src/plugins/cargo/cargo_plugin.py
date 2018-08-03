@@ -137,6 +137,8 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_launcher.push_argv('--')
         build_launcher.push_argv('--error-format')
         build_launcher.push_argv('short')
+        build_launcher.push_argv('--remap-path-prefix')
+        build_launcher.push_argv('='+pipeline.get_srcdir())
 
         if not pipeline.is_native():
             build_launcher.push_argv('--target')
