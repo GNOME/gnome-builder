@@ -799,7 +799,7 @@ ide_run_manager_remove_handler (IdeRunManager *self,
 
       if (g_strcmp0 (info->id, id) == 0)
         {
-          self->handlers = g_list_remove_link (self->handlers, iter);
+          self->handlers = g_list_delete_link (self->handlers, iter);
 
           if (self->handler == info && self->handlers != NULL)
             self->handler = self->handlers->data;
