@@ -3360,7 +3360,9 @@ can_remove_builddir (IdeBuildPipeline *self)
    */
   context = ide_object_get_context (IDE_OBJECT (self));
   _build = ide_context_build_filename (context, "_build", NULL);
-  if (g_str_equal (_build, self->builddir))
+  if (g_str_equal (_build, self->builddir) &&
+      g_file_test (_build, G_FILE_TEST_IS_DIR) &&
+      !g_file_test (_build, G_FILE_TEST_IS_SYMLINK))
     return TRUE;
 
   g_debug ("%s is not in a cache directory, will not delete it", self->builddir);
