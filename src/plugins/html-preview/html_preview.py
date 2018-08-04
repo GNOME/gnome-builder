@@ -144,6 +144,7 @@ class HtmlWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         self.workbench.insert_action_group('html-preview', group)
 
     def do_unload(self, workbench):
+        workbench.insert_action_group('html-preview', None)
         self.workbench = None
 
     def install_docutils(self):
