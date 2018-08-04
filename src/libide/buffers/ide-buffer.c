@@ -1570,6 +1570,7 @@ ide_buffer_dispose (GObject *object)
   if (priv->change_monitor != NULL)
     {
       dzl_clear_signal_handler (priv->change_monitor, &priv->change_monitor_changed_handler);
+      g_object_run_dispose (G_OBJECT (priv->change_monitor));
       g_clear_object (&priv->change_monitor);
     }
 
