@@ -25,6 +25,12 @@
 #include "gdbwire.h"
 #pragma GCC diagnostic pop
 
+struct ide_debugger_breakpoint_remove_info {
+  gchar *id;
+  gchar *path;
+  int line;
+};
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_GDB_DEBUGGER (gbp_gdb_debugger_get_type())
