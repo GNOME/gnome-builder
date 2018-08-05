@@ -13,16 +13,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-19 19:43+0000\n"
-"PO-Revision-Date: 2018-07-20 21:58+0200\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2018-08-03 23:58+0000\n"
+"PO-Revision-Date: 2018-08-05 13:24+0200\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.0.9\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -444,10 +444,10 @@ msgstr "Die Höhe der unteren Leiste in Pixeleinheiten."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:692
+#: src/libide/application/ide-application.c:613
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
-#: src/libide/workbench/ide-workbench.c:648
+#: src/libide/workbench/ide-workbench.c:662
 msgid "Builder"
 msgstr "Builder"
 
@@ -788,7 +788,7 @@ msgstr "Erfahren Sie mehr über GNOME Builder"
 msgid "Funded By"
 msgstr "Gefördert von"
 
-#: src/libide/application/ide-application.c:1088
+#: src/libide/application/ide-application.c:1009
 #: src/libide/preferences/ide-preferences-builtin.c:417
 msgid "Projects"
 msgstr "Projekte"
@@ -864,7 +864,7 @@ msgstr "Kein solcher Worker"
 #: src/libide/application/ide-application-shortcuts.c:44
 #: src/libide/application/ide-application-shortcuts.c:55
 #: src/libide/application/ide-application-shortcuts.c:66
-#: src/libide/runner/ide-run-manager.c:778
+#: src/libide/runner/ide-run-manager.c:780
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
 #: src/libide/workbench/ide-workbench-shortcuts.c:45
@@ -923,11 +923,11 @@ msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 msgid "Buffer failed: %s"
 msgstr "Puffer fehlgeschlagen: %s"
 
-#: src/libide/buffers/ide-buffer-manager.c:606
+#: src/libide/buffers/ide-buffer-manager.c:610
 msgid "File too large to be opened."
 msgstr "Datei ist zu groß zum Öffnen."
 
-#: src/libide/buffers/ide-buffer-manager.c:1818
+#: src/libide/buffers/ide-buffer-manager.c:1825
 #, c-format
 msgid "unsaved document %u"
 msgstr "Ungesichertes Dokument %u"
@@ -936,8 +936,8 @@ msgstr "Ungesichertes Dokument %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:1857
-#: src/libide/buffers/ide-buffer-manager.c:1920
+#: src/libide/buffers/ide-buffer-manager.c:1864
+#: src/libide/buffers/ide-buffer-manager.c:1927
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -1262,7 +1262,7 @@ msgid "Disassembly"
 msgstr "Disassemblieren"
 
 #: src/libide/debugger/ide-debugger-editor-addin.c:311
-#: src/libide/debugger/ide-debugger-hover-provider.c:89
+#: src/libide/debugger/ide-debugger-hover-provider.c:88
 msgid "Debugger"
 msgstr "Debugger"
 
@@ -1292,7 +1292,7 @@ msgstr "Debugger konnte nicht initialisiert werden"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:16
 msgid "No break"
-msgstr ""
+msgstr "Keine Pause"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:22
 msgid "Breakpoint"
@@ -1300,7 +1300,7 @@ msgstr "Breakpoint"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:28
 msgid "Countpoint"
-msgstr ""
+msgstr "Countpoint"
 
 #: src/libide/debugger/ide-debugger-libraries-view.ui:14
 msgid "Library"
@@ -2010,7 +2010,7 @@ msgstr "Zurücksetzen"
 msgid "Open File…"
 msgstr "Datei öffnen …"
 
-#: src/libide/gtk/menus.ui:219 src/libide/runner/ide-run-manager.c:1116
+#: src/libide/gtk/menus.ui:219 src/libide/runner/ide-run-manager.c:1118
 msgid "Run"
 msgstr "Ausführen"
 
@@ -2027,11 +2027,11 @@ msgstr "Verweisadresse _kopieren"
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: src/libide/ide-context.c:2133
+#: src/libide/ide-context.c:2242
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: src/libide/ide-context.c:2252
+#: src/libide/ide-context.c:2363
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
@@ -2341,7 +2341,7 @@ msgid "Unselect all"
 msgstr "Alles abwählen"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:412
-#: src/libide/runner/ide-run-manager.c:779
+#: src/libide/runner/ide-run-manager.c:781
 #: src/libide/workbench/ide-workbench-shortcuts.c:46
 msgctxt "shortcut window"
 msgid "Build and Run"
@@ -2454,13 +2454,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "Beim Versuch, den Vorgang auszuführen, ist ein Fehler aufgetreten."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:138
+#: src/libide/local/ide-local-device.c:137
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Mein Rechner (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:148
+#: src/libide/local/ide-local-device.c:147
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Mein Rechner (%s) — %s"
@@ -2949,7 +2949,7 @@ msgstr "Zuvor geöffnete Dateien öffnen"
 
 #: src/libide/preferences/ide-preferences-builtin.c:421
 msgid "Open previously opened files when loading a project"
-msgstr "Zuvor geöffnete Dateien beim Laden eines Projekts öffnen."
+msgstr "Zuvor geöffnete Dateien beim Laden eines Projekts öffnen"
 
 #: src/libide/preferences/ide-preferences-builtin.c:542
 #: src/plugins/create-project/gbp-create-project-widget.ui:180
@@ -2983,12 +2983,12 @@ msgstr "Ausführung anhalten"
 msgid "Change run options"
 msgstr "Ausführungsoptionen ändern"
 
-#: src/libide/runner/ide-run-manager.c:371
+#: src/libide/runner/ide-run-manager.c:373
 msgid "Cannot run target, another target is running"
 msgstr ""
 "Ziel kann nicht ausgeführt werden, ein anderes Ziel wird bereits ausgeführt"
 
-#: src/libide/runner/ide-run-manager.c:440
+#: src/libide/runner/ide-run-manager.c:442
 msgid "Failed to locate runtime"
 msgstr "Laufzeit konnte nicht gefunden werden"
 
@@ -3065,7 +3065,7 @@ msgstr "Tests werden nach der Erstellung geladen."
 msgid "Default (Host operating system)"
 msgstr "Vorgabe (Wirtsbetriebssystem)"
 
-#: src/libide/transfers/ide-pkcon-transfer.c:59
+#: src/libide/transfers/ide-pkcon-transfer.c:58
 #, c-format
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
@@ -3209,7 +3209,7 @@ msgstr ""
 msgid "Builder Statistics"
 msgstr "Builder-Statistiken"
 
-#: src/libide/workbench/ide-workbench.c:646
+#: src/libide/workbench/ide-workbench.c:660
 #, c-format
 msgid "%s — Builder"
 msgstr "%s – Builder"
@@ -3504,7 +3504,7 @@ msgstr "Vervollständigungen unter Benutzung von Clang vorschlagen"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:79
 msgid "Use Clang to suggest completions for C and C++ languages"
-msgstr "Clang für die Vervollständigung von C und C++ verwenden."
+msgstr "Clang für die Vervollständigung von C und C++ verwenden"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:83
 msgid "Clang Options"
@@ -4003,29 +4003,29 @@ msgstr "Bitte geben Sie einen Projektnamen an.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Bitte geben Sie eine Projektvorlage mit --template= an\n"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:174
+#: src/plugins/create-project/gbp-create-project-widget.c:172
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr ""
 "Es wurden Zeichen verwendet, die technische Probleme in Projektnamen "
 "verursachen können"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:177
+#: src/plugins/create-project/gbp-create-project-widget.c:175
 #: src/plugins/create-project/gbp-create-project-widget.ui:104
 msgid "Your project will be created within a new child directory."
 msgstr "Das Projekt wird in einem neuen Unterordner erstellt."
 
-#: src/plugins/create-project/gbp-create-project-widget.c:183
+#: src/plugins/create-project/gbp-create-project-widget.c:181
 msgid "Directory already exists with that name"
 msgstr "Ordner mit diesem Namen existiert bereits"
 
 #. translators: %s is replaced with a short-form file-system path to the project
-#: src/plugins/create-project/gbp-create-project-widget.c:201
+#: src/plugins/create-project/gbp-create-project-widget.c:199
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "Ihr Projekt wird innerhalb von %s erstellt."
 
-#: src/plugins/create-project/gbp-create-project-widget.c:617
+#: src/plugins/create-project/gbp-create-project-widget.c:612
 msgid "A failure occurred while initializing version control"
 msgstr "Beim Initialisieren der Versionskontrolle ist ein Fehler aufgetreten"
 
@@ -4156,7 +4156,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Anwendungsquellen werden heruntergeladen …"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:664
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Flatpak-Manifest konnte nicht entfernt werden: %s"
@@ -4330,7 +4330,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "Die angeforderte Datei existiert nicht im git-Index."
 
 #: src/plugins/git/ide-git-clone-widget.c:159
-#: src/plugins/git/ide-git-clone-widget.c:499
+#: src/plugins/git/ide-git-clone-widget.c:500
 msgid "A valid Git URL is required"
 msgstr "Eine gültige git-Adresse wird benötigt"
 
@@ -4989,7 +4989,7 @@ msgstr "Installieren Sie Rustup, um hier Toolchains zu verwalten!"
 
 #: src/plugins/rustup/rustup_plugin.py:650
 msgid "No toolchain installed. Click"
-msgstr "Keine Toolchain installiert. Klicken Sie,"
+msgstr "Keine Toolchain installiert. Klicken Sie"
 
 #: src/plugins/rustup/rustup_plugin.py:651
 msgid "to add a new toolchain!"
@@ -5027,7 +5027,7 @@ msgid "Failed to initialize spellchecking, disabling"
 msgstr ""
 "Rechtschreibprüfung konnte nicht initialisiert werden, wird deaktiviert"
 
-#: src/plugins/spellcheck/gbp-spell-language-popover.c:232
+#: src/plugins/spellcheck/gbp-spell-language-popover.c:231
 msgid "No language selected"
 msgstr "Keine Sprache gewählt"
 
@@ -5122,21 +5122,18 @@ msgstr ""
 "fügen Sie diese Datei allen Supportanfragen oder Fehleranzeigen bei."
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
-#| msgid "_Go to Definition"
 msgid "Definition"
 msgstr "Definition"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
 msgid "Canonincal"
-msgstr ""
+msgstr "Kanonisch"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
 msgid "Unnamed Symbol"
 msgstr "Unbenanntes Symbol"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:162
-#| msgctxt "shortcut window"
-#| msgid "Symbols"
 msgid "Symbol"
 msgstr "Symbol"
 
@@ -5241,7 +5238,7 @@ msgstr "%s (Systemwurzel-SDK)"
 msgid "Save Terminal Content As"
 msgstr "Terminalinhalt speichern unter"
 
-#: src/plugins/terminal/gb-terminal-view.c:426
+#: src/plugins/terminal/gb-terminal-view.c:453
 msgid "Untitled terminal"
 msgstr "Unbenanntes Terminal"
 
