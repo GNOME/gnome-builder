@@ -1295,6 +1295,17 @@ gbp_gdb_debugger_insert_breakpoint_finish (IdeDebugger   *debugger,
 }
 
 static void
+ide_debugger_breakpoint_remove_info_free (IdeDebuggerBreakpointRemoveInfo *info)
+{
+  g_assert (info);
+
+  g_clear_pointer (&info->id, g_free);
+  g_clear_pointer (&info->path, g_free);
+
+  g_slice_free (IdeDebuggerBreakpointRemoveInfo, info);
+}
+
+static void
 gbp_gdb_debugger_remove_breakpoint_cb (GObject      *object,
                                        GAsyncResult *result,
                                        gpointer      user_data)
@@ -1314,12 +1325,20 @@ gbp_gdb_debugger_remove_breakpoint_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     {
-      const gchar *id = ide_task_get_task_data (task);
+      IdeDebuggerBreakpointRemoveInfo *info = ide_task_get_task_data (task);
+      const gchar *id = info->id;
+      const gchar *path = info->path;
+      const int line = info->line;
+
       g_autoptr(IdeDebuggerBreakpoint) breakpoint = NULL;
 
       g_assert (id != NULL);
 
       breakpoint = ide_debugger_breakpoint_new (id);
+      ide_debugger_breakpoint_set_line (breakpoint, line);
+      ide_debugger_breakpoint_set_file (breakpoint, path);
+      ide_debugger_breakpoint_set_mode (breakpoint, IDE_DEBUGGER_BREAK_BREAKPOINT);
+
       ide_debugger_emit_breakpoint_removed (IDE_DEBUGGER (self), breakpoint);
 
       ide_task_return_boolean (task, TRUE);
@@ -1339,17 +1358,22 @@ gbp_gdb_debugger_remove_breakpoint_async (IdeDebugger           *debugger,
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *command = NULL;
   const gchar *id;
+  IdeDebuggerBreakpointRemoveInfo *info;
 
   g_assert (IDE_IS_DEBUGGER (self));
   g_assert (IDE_IS_DEBUGGER_BREAKPOINT (breakpoint));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  info = g_slice_new0(IdeDebuggerBreakpointRemoveInfo);
   id = ide_debugger_breakpoint_get_id (breakpoint);
+  info->id = g_strdup(id);
+  info->path = g_strdup(ide_debugger_breakpoint_get_file (breakpoint));
+  info->line = ide_debugger_breakpoint_get_line (breakpoint);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, gbp_gdb_debugger_remove_breakpoint_async);
-  ide_task_set_task_data (task, g_strdup (id), g_free);
+  ide_task_set_task_data (task, info, ide_debugger_breakpoint_remove_info_free);
   ide_task_set_return_on_cancel (task, TRUE);
 
   if (id == NULL)
