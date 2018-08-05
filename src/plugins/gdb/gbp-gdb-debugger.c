@@ -1314,12 +1314,11 @@ gbp_gdb_debugger_remove_breakpoint_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     {
-      const gchar *id = ide_task_get_task_data (task);
-      g_autoptr(IdeDebuggerBreakpoint) breakpoint = NULL;
+      IdeDebuggerBreakpoint *breakpoint = ide_task_get_task_data (task);
 
-      g_assert (id != NULL);
+      g_assert (IDE_IS_DEBUGGER_BREAKPOINT (breakpoint));
+      g_assert (ide_debugger_breakpoint_get_id (breakpoint) != NULL);
 
-      breakpoint = ide_debugger_breakpoint_new (id);
       ide_debugger_emit_breakpoint_removed (IDE_DEBUGGER (self), breakpoint);
 
       ide_task_return_boolean (task, TRUE);
@@ -1349,7 +1348,7 @@ gbp_gdb_debugger_remove_breakpoint_async (IdeDebugger           *debugger,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, gbp_gdb_debugger_remove_breakpoint_async);
-  ide_task_set_task_data (task, g_strdup (id), g_free);
+  ide_task_set_task_data (task, g_object_ref (breakpoint), g_object_unref);
   ide_task_set_return_on_cancel (task, TRUE);
 
   if (id == NULL)
