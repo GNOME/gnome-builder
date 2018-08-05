@@ -120,6 +120,8 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
       ide_subprocess_launcher_insert_argv (launcher, i++, "--socket=wayland");
     }
 
+  ide_subprocess_launcher_insert_argv (launcher, i++, "--talk-name=org.freedesktop.portal.*");
+
   /* Proxy environment stuff to the launcher */
   if ((env = ide_runner_get_environment (runner)) &&
       (environ = ide_environment_get_environ (env)))
