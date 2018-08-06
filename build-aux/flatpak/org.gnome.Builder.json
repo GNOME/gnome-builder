@@ -800,7 +800,8 @@
                 "--disable-tests",
                 "--disable-libdaemon",
                 "--disable-compat-libdns_sd",
-                "--disable-compat-howl"
+                "--disable-compat-howl",
+                "--disable-libevent"
             ],
             "sources" : [
                 {
