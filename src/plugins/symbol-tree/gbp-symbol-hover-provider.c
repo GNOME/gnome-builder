@@ -80,7 +80,7 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
   } loc[3] = {
     { _("Declaration"), NULL },
     { _("Definition"), NULL },
-    { _("Canonincal"), NULL },
+    { _("Canonical"), NULL },
   };
 
   g_assert (IDE_IS_BUFFER (buffer));
