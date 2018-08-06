@@ -385,15 +385,6 @@ ide_application_register_settings (IdeApplication *self)
   IDE_EXIT;
 }
 
-static GFile *
-build_legacy_cache_directory (const gchar *name)
-{
-  return g_file_new_build_filename (g_get_user_cache_dir (),
-                                    ide_get_program_name (),
-                                    name,
-                                    NULL);
-}
-
 static void
 projects_directory_changed_cb (IdeApplication *self,
                                const gchar    *key,
