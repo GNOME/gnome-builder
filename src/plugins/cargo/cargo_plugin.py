@@ -136,11 +136,6 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_launcher.push_argv(cargo_toml)
         build_launcher.push_argv('--message-format')
         build_launcher.push_argv('human')
-        build_launcher.push_argv('--')
-        build_launcher.push_argv('--error-format')
-        build_launcher.push_argv('short')
-        build_launcher.push_argv('--remap-path-prefix')
-        build_launcher.push_argv('=' + pipeline.get_srcdir())
 
         if not pipeline.is_native():
             build_launcher.push_argv('--target')
@@ -151,6 +146,12 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         if not config.props.debug:
             build_launcher.push_argv('--release')
+
+        build_launcher.push_argv('--')
+        build_launcher.push_argv('--error-format')
+        build_launcher.push_argv('short')
+        build_launcher.push_argv('--remap-path-prefix')
+        build_launcher.push_argv('=' + pipeline.get_srcdir())
 
         clean_launcher = pipeline.create_launcher()
         clean_launcher.setenv('CARGO_TARGET_DIR', builddir, True)
