@@ -1291,8 +1291,7 @@ build_get_build_flags_cb (GObject      *object,
   g_assert (bd->changes->len > 0);
   g_assert (IDE_IS_BUILD_SYSTEM (bd->build_system));
 
-  data_dir = g_object_ref (g_ptr_array_index (bd->changes, bd->changes->len - 1));
-  g_ptr_array_remove_index (bd->changes, bd->changes->len - 1);
+  data_dir = g_ptr_array_steal_index (bd->changes, bd->changes->len - 1);
   g_assert (G_IS_FILE (data_dir));
 
   if (!(flags = ide_build_system_get_build_flags_for_dir_finish (build_system, result, &error)))
