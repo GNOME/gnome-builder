@@ -437,7 +437,6 @@ remove_indexes_in_dir (GFile        *index_dir,
 
 static gboolean
 directory_needs_update (GFile        *index_dir,
-                        GFile        *directory,
                         GQueue       *file_infos,
                         GCancellable *cancellable)
 {
@@ -448,7 +447,6 @@ directory_needs_update (GFile        *index_dir,
   guint n_files;
 
   g_assert (G_IS_FILE (index_dir));
-  g_assert (G_IS_FILE (directory));
   g_assert (file_infos != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -713,7 +711,7 @@ get_changes_worker (IdeTask      *task,
 
       if (files.length == 0)
         remove_indexes_in_dir (index_dir, cancellable);
-      else if (directory_needs_update (index_dir, dir, &files, cancellable))
+      else if (directory_needs_update (index_dir, &files, cancellable))
         g_ptr_array_add (to_update, g_file_dup (dir));
 
       g_queue_foreach (&files, (GFunc)file_info_free, NULL);
