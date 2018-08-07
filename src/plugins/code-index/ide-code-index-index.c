@@ -80,6 +80,7 @@ directory_index_free (DirectoryIndex *data)
   g_clear_object (&data->symbol_names);
   g_clear_object (&data->symbol_keys);
   g_clear_object (&data->directory);
+  g_clear_object (&data->source_directory);
   g_slice_free (DirectoryIndex, data);
 
   DZL_COUNTER_DEC (code_indexes);
