@@ -527,10 +527,10 @@ filter_ignored (IdeVcs            *vcs,
         {
           GList *tmp = iter->next;
           g_queue_delete_link (file_infos, iter);
+          file_info_free (info);
           if (tmp == NULL)
             break;
           iter = tmp;
-          file_info_free (info);
           goto again;
         }
     }
