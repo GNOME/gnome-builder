@@ -56,8 +56,10 @@ typedef struct
   gulong          cancel_id;
 } Call;
 
+static void service_iface_init (IdeServiceInterface *iface);
+
 G_DEFINE_TYPE_EXTENDED (IdeClangClient, ide_clang_client, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, NULL))
+                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
 
 static void
 call_free (gpointer data)
@@ -1395,4 +1397,18 @@ ide_clang_client_set_buffer_finish (IdeClangClient  *self,
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
+ide_clang_client_stop (IdeService *service)
+{
+  g_assert (IDE_IS_CLANG_CLIENT (service));
+
+  g_object_run_dispose (G_OBJECT (service));
+}
+
+static void
+service_iface_init (IdeServiceInterface *iface)
+{
+  iface->stop = ide_clang_client_stop;
 }
