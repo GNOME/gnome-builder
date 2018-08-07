@@ -63,6 +63,19 @@ typedef struct
 
 G_DEFINE_TYPE (GbpGdbDebugger, gbp_gdb_debugger, IDE_TYPE_DEBUGGER)
 
+#define DEBUG_LOG(dir,msg)                                 \
+  G_STMT_START {                                           \
+    IdeLineReader reader;                                  \
+    const gchar *line;                                     \
+    gsize len;                                             \
+    ide_line_reader_init (&reader, msg, -1);               \
+    while ((line = ide_line_reader_next (&reader, &len)))  \
+      {                                                    \
+        g_autofree gchar *copy = g_strndup (line, len);    \
+        g_debug ("%s: %s", dir, copy);                     \
+      }                                                    \
+  } G_STMT_END
+
 static void
 gbp_gdb_debugger_set_context (IdeObject  *object,
                               IdeContext *context)
@@ -172,7 +185,7 @@ gbp_gdb_debugger_unwrap (const struct gdbwire_mi_output  *output,
           output->variant.result_record->result->kind == GDBWIRE_MI_CSTRING)
         msg = output->variant.result_record->result->variant.cstring;
 
-      g_debug ("%s", msg);
+      g_debug ("gdb-error: %s", msg);
 
       g_set_error_literal (error,
                            G_IO_ERROR,
@@ -2606,7 +2619,7 @@ gbp_gdb_debugger_read_cb (GObject      *object,
 
   if (n_read <= 0)
     {
-      g_debug ("empty read from peer, possibly closed?");
+      g_message ("empty read from peer, possibly closed?");
       return;
     }
 
@@ -2837,9 +2850,7 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
       ide_task_return_pointer (task, NULL, NULL);
     }
 
-#if 0
-  g_print (">>> %s", str->str);
-#endif
+  DEBUG_LOG ("to-gdb", str->str);
 
   bytes = g_string_free_to_bytes (str);
   g_object_set_data_full (G_OBJECT (task), "REQUEST_BYTES",
@@ -2872,8 +2883,15 @@ gbp_gdb_debugger_exec_finish (GbpGdbDebugger  *self,
                               GAsyncResult    *result,
                               GError         **error)
 {
+  struct gdbwire_mi_output *ret;
+
   g_return_val_if_fail (GBP_IS_GDB_DEBUGGER (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  if (ret != NULL)
+    DEBUG_LOG ("from-gdb", ret->line);
+
+  return g_steal_pointer (&ret);
 }
