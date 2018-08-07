@@ -571,9 +571,11 @@ dict_create_word_row (GbpSpellWidget *self,
   label = g_object_new (GTK_TYPE_LABEL,
                        "label", word,
                        "halign", GTK_ALIGN_START,
+                        "visible", TRUE,
                        NULL);
 
   button = gtk_button_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_set_visible (button, TRUE);
   gtk_widget_set_can_focus (button, FALSE);
   g_signal_connect_swapped (button,
                             "clicked",
@@ -583,14 +585,21 @@ dict_create_word_row (GbpSpellWidget *self,
   style_context = gtk_widget_get_style_context (button);
   gtk_style_context_add_class (style_context, "close");
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_HORIZONTAL,
+                      "expand", TRUE,
+                      "spacing", 6,
+                      "visible", TRUE,
+                      NULL);
+
   gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
   gtk_box_pack_end (GTK_BOX (box), button, FALSE, FALSE, 0);
 
   row = gtk_list_box_row_new ();
+  gtk_widget_set_visible (row, TRUE);
+
   gtk_container_add (GTK_CONTAINER (row), box);
   g_object_set_data_full (G_OBJECT (row), "word", g_strdup (word), g_free);
-  gtk_widget_show_all (row);
 
   return row;
 }
