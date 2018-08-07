@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-03 23:58+0000\n"
-"PO-Revision-Date: 2018-08-05 13:24+0200\n"
+"POT-Creation-Date: 2018-08-06 20:39+0000\n"
+"PO-Revision-Date: 2018-08-07 14:45+0200\n"
 "Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -444,7 +444,7 @@ msgstr "Die Höhe der unteren Leiste in Pixeleinheiten."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:613
+#: src/libide/application/ide-application.c:604
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:662
@@ -788,7 +788,7 @@ msgstr "Erfahren Sie mehr über GNOME Builder"
 msgid "Funded By"
 msgstr "Gefördert von"
 
-#: src/libide/application/ide-application.c:1009
+#: src/libide/application/ide-application.c:1000
 #: src/libide/preferences/ide-preferences-builtin.c:417
 msgid "Projects"
 msgstr "Projekte"
@@ -914,11 +914,11 @@ msgstr ""
 "Eine Überwachung für Änderungen im Hintergrund konnte nicht eingerichtet "
 "werden: %s"
 
-#: src/libide/buffers/ide-buffer.c:2907
+#: src/libide/buffers/ide-buffer.c:2908
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
-#: src/libide/buffers/ide-buffer.c:3378
+#: src/libide/buffers/ide-buffer.c:3379
 #, c-format
 msgid "Buffer failed: %s"
 msgstr "Puffer fehlgeschlagen: %s"
@@ -4204,8 +4204,8 @@ msgstr "Flatpak-Bündel erstellen"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
-#: src/plugins/html-preview/html_preview.py:329
-#: src/plugins/html-preview/html_preview.py:339
+#: src/plugins/html-preview/html_preview.py:330
+#: src/plugins/html-preview/html_preview.py:340
 #: src/plugins/rustup/rustup_plugin.py:492
 #: src/plugins/rustup/rustup_plugin.py:496
 #: src/plugins/rustup/rustup_plugin.py:613
@@ -4435,15 +4435,15 @@ msgstr ""
 msgid "Open Preview"
 msgstr "Vorschau öffnen"
 
-#: src/plugins/html-preview/html_preview.py:325
+#: src/plugins/html-preview/html_preview.py:326
 msgid "Your computer is missing python3-docutils"
 msgstr "Ihrem Rechner fehlt das Paket python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:335
+#: src/plugins/html-preview/html_preview.py:336
 msgid "Your computer is missing python3-sphinx"
 msgstr "Ihrem Rechner fehlt python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:382
+#: src/plugins/html-preview/html_preview.py:383
 msgid "(Preview)"
 msgstr "(Vorschau)"
 
@@ -5126,7 +5126,7 @@ msgid "Definition"
 msgstr "Definition"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
-msgid "Canonincal"
+msgid "Canonical"
 msgstr "Kanonisch"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
