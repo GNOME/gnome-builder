@@ -384,6 +384,9 @@ ide_clang_client_dispose (GObject *object)
 
   self->state = STATE_SHUTDOWN;
 
+  if (self->seq_by_file != NULL)
+    g_hash_table_remove_all (self->seq_by_file);
+
   if (self->supervisor != NULL)
     {
       g_autoptr(IdeSubprocessSupervisor) supervisor = g_steal_pointer (&self->supervisor);
