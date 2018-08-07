@@ -134,10 +134,17 @@ ide_code_indexer_index_file_async (IdeCodeIndexer      *self,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
+  g_autoptr(GFile) copy = NULL;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CODE_INDEXER (self));
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+#ifdef IDE_ENABLE_TRACE
+  /* Simplify leak detection */
+  file = copy = g_file_dup (file);
+#endif
 
   return IDE_CODE_INDEXER_GET_IFACE (self)->index_file_async (self, file, build_flags, cancellable, callback, user_data);
 }
