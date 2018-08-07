@@ -148,8 +148,8 @@ directory_index_new (GFile         *directory,
   dir_index = g_slice_new0 (DirectoryIndex);
   dir_index->symbol_keys = g_steal_pointer (&symbol_keys);
   dir_index->symbol_names = g_steal_pointer (&symbol_names);
-  dir_index->directory = g_object_ref (directory);
-  dir_index->source_directory = g_object_ref (source_directory);
+  dir_index->directory = g_file_dup (directory);
+  dir_index->source_directory = g_file_dup (source_directory);
 
   DZL_COUNTER_INC (code_indexes);
 
