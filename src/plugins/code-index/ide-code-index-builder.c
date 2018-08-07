@@ -415,7 +415,7 @@ get_index_dir (GFile *index_root,
   if (relative != NULL)
     return g_file_get_child (index_root, relative);
   else
-    return g_object_ref (index_root);
+    return g_file_dup (index_root);
 }
 
 static void
@@ -585,7 +585,7 @@ find_all_files_typed (GFile        *root,
 
           fi = g_slice_new0 (FileInfo);
           fi->magic = FILE_INFO_MAGIC;
-          fi->directory = g_object_ref (root);
+          fi->directory = g_file_dup (root);
           fi->name = g_strdup (g_file_info_get_name (info));
           fi->file_type = g_file_info_get_file_type (info);
           fi->content_type = g_intern_string (g_file_info_get_content_type (info));
@@ -707,14 +707,14 @@ get_changes_worker (IdeTask      *task,
       filter_ignored (gcd->vcs, &files, gcd->indexers);
 
       if (!(relative = g_file_get_relative_path (gcd->index_dir, dir)))
-        index_dir = g_object_ref (gcd->index_dir);
+        index_dir = g_file_dup (gcd->index_dir);
       else
         index_dir = g_file_get_child (gcd->index_dir, relative);
 
       if (files.length == 0)
         remove_indexes_in_dir (index_dir, cancellable);
       else if (directory_needs_update (index_dir, dir, &files, cancellable))
-        g_ptr_array_add (to_update, g_steal_pointer (&dir));
+        g_ptr_array_add (to_update, g_file_dup (dir));
 
       g_queue_foreach (&files, (GFunc)file_info_free, NULL);
       g_queue_clear (&files);
@@ -790,13 +790,13 @@ get_changes_async (IdeCodeIndexBuilder *self,
   gcd = g_slice_new0 (GetChangesData);
   gcd->magic = GET_CHANGES_MAGIC;
   gcd->indexers = collect_indexer_info ();
-  gcd->data_dir = g_object_ref (data_dir);
-  gcd->index_dir = g_object_ref (index_dir);
+  gcd->data_dir = g_file_dup (data_dir);
+  gcd->index_dir = g_file_dup (index_dir);
   gcd->recursive = !!recursive;
   gcd->vcs = g_object_ref (vcs);
   ide_task_set_task_data (task, gcd, get_changes_data_free);
 
-  g_queue_push_head (&gcd->directories, g_object_ref (data_dir));
+  g_queue_push_head (&gcd->directories, g_file_dup (data_dir));
 
   ide_task_run_in_thread (task, get_changes_worker);
 }
@@ -1175,7 +1175,7 @@ index_directory_async (IdeCodeIndexBuilder *self,
 
   idd = g_slice_new0 (IndexDirectoryData);
   idd->magic = INDEX_DIRECTORY_MAGIC;
-  idd->index_dir = g_object_ref (index_dir);
+  idd->index_dir = g_file_dup (index_dir);
   idd->fuzzy = dzl_fuzzy_index_builder_new ();
   idd->map = ide_persistent_map_builder_new ();
   ide_task_set_task_data (task, idd, index_directory_data_free);
@@ -1349,6 +1349,7 @@ build_tick (IdeTask *task)
   g_assert (G_IS_FILE (bd->data_dir));
   g_assert (G_IS_FILE (bd->index_dir));
   g_assert (IDE_IS_BUILD_SYSTEM (bd->build_system));
+  g_assert (bd->changes != NULL);
 
   if (bd->changes->len == 0)
     {
@@ -1437,7 +1438,7 @@ ide_code_index_builder_build_async (IdeCodeIndexBuilder *self,
 
   bd = g_slice_new0 (BuildData);
   bd->magic = BUILD_DATA_MAGIC;
-  bd->data_dir = g_object_ref (directory);
+  bd->data_dir = g_file_dup (directory);
   bd->index_dir = g_steal_pointer (&index_dir);
   bd->build_system = g_object_ref (build_system);
   ide_task_set_task_data (task, bd, build_data_free);
