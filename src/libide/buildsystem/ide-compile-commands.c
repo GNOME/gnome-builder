@@ -697,7 +697,7 @@ ide_compile_commands_lookup (IdeCompileCommands   *self,
         ide_compile_commands_filter_vala (self, info, &argv);
 
       if (directory != NULL)
-        *directory = g_object_ref (info->directory);
+        *directory = g_file_dup (info->directory);
 
       return g_steal_pointer (&argv);
     }
