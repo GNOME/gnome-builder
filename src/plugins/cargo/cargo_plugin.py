@@ -102,13 +102,15 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         context = self.get_context()
         build_system = context.get_build_system()
 
-        # Ignore pipeline unless this is a cargo project
-        if type(build_system) != CargoBuildSystem:
-            return
-
+        # Always register the error regex
         self.error_format_id = pipeline.add_error_format(_ERROR_FORMAT_REGEX,
                                                          GLib.RegexCompileFlags.OPTIMIZE |
                                                          GLib.RegexCompileFlags.CASELESS);
+
+
+        # Ignore pipeline unless this is a cargo project
+        if type(build_system) != CargoBuildSystem:
+            return
 
         cargo_toml = build_system.props.project_file.get_path()
         config = pipeline.get_configuration()
@@ -165,6 +167,10 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
         self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
+
+    def do_unload(self, pipeline):
+        if self.error_format_id:
+            pipeline.remove_error_format(self.error_format_id)
 
     def _query(self, stage, pipeline, cancellable):
         # Always defer to cargo to check if build is needed
