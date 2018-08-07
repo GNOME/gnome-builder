@@ -32,8 +32,8 @@
 
 #include "gstyle-eyedropper.h"
 
-#define ZOOM_AREA_WIDTH 100
-#define ZOOM_AREA_HEIGHT 100
+#define ZOOM_AREA_WIDTH 200
+#define ZOOM_AREA_HEIGHT 200
 
 /* The spot coords is the oriented distance between the window and the cursor
  * that mean the cursor is never inside the window, this also mean that the cursor
@@ -615,7 +615,6 @@ static void
 gstyle_eyedropper_set_source_event (GstyleEyedropper *self,
                                     GdkEvent         *event)
 {
-  GtkWidget *source;
   GtkStyleContext *context;
   GdkRectangle monitor_rect;
   GtkWidget *box;
@@ -628,7 +627,6 @@ gstyle_eyedropper_set_source_event (GstyleEyedropper *self,
   g_return_if_fail (event != NULL);
 
   self->seat = g_object_ref (gdk_event_get_seat (event));
-  source = gtk_get_event_widget (event);
   self->screen = gdk_event_get_screen (event);
   g_signal_connect_swapped (self->screen,
                             "size-changed",
@@ -672,15 +670,14 @@ gstyle_eyedropper_set_source_event (GstyleEyedropper *self,
       gtk_window_move (GTK_WINDOW (self->window), x, y);
     }
 
-  gtk_widget_show_all (self->window);
-
   gtk_widget_add_events (self->window,
                          GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
 
   self->cursor = gdk_cursor_new_from_name (gdk_screen_get_display (self->screen), "cell");
+
   gtk_grab_add (self->window);
   status = gdk_seat_grab (self->seat,
-                          gtk_widget_get_window (source),
+                          gtk_widget_get_window (self->window),
                           GDK_SEAT_CAPABILITY_ALL,
                           FALSE,
                           self->cursor,
