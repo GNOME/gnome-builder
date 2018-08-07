@@ -562,19 +562,26 @@ ide_code_index_service_stop (IdeService *service)
 {
   IdeCodeIndexService *self = (IdeCodeIndexService *)service;
 
+  g_assert (IDE_IS_CODE_INDEX_SERVICE (self));
+
+  unregister_pausable (self);
+
   g_cancellable_cancel (self->cancellable);
   g_clear_object (&self->cancellable);
 
   self->stopped = TRUE;
 
-  g_clear_object (&self->index);
-  g_clear_object (&self->builder);
   g_queue_foreach (&self->build_queue, (GFunc)build_data_unref, NULL);
   g_queue_clear (&self->build_queue);
+
   g_clear_pointer (&self->build_dirs, g_hash_table_unref);
   g_clear_pointer (&self->code_indexers, g_hash_table_unref);
 
-  unregister_pausable (self);
+  g_object_run_dispose (G_OBJECT (self->builder));
+  g_clear_object (&self->builder);
+
+  g_object_run_dispose (G_OBJECT (self->index));
+  g_clear_object (&self->index);
 }
 
 static void
