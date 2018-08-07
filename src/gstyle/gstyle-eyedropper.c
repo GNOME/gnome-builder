@@ -633,16 +633,25 @@ gstyle_eyedropper_set_source_event (GstyleEyedropper *self,
                             G_CALLBACK (gstyle_eyedropper_screen_size_changed_cb),
                             self);
 
-  self->window = g_object_ref_sink (gtk_window_new (GTK_WINDOW_POPUP));
+  self->window = g_object_ref_sink (g_object_new (GTK_TYPE_WINDOW,
+                                                  "type", GTK_WINDOW_POPUP,
+                                                  "visible", TRUE,
+                                                  NULL));
   gtk_window_set_screen (GTK_WINDOW (self->window),self->screen);
   gtk_widget_set_name (self->window, "gstyleeyedropper");
   context = gtk_widget_get_style_context (self->window);
   self->default_provider = gstyle_css_provider_init_default (gtk_style_context_get_screen (context));
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_VERTICAL,
+                      "spacing", 6,
+                      "visible", TRUE,
+                      NULL);
   gtk_container_add (GTK_CONTAINER (self->window), box);
 
-  self->zoom_area = gtk_drawing_area_new ();
+  self->zoom_area = g_object_new (GTK_TYPE_DRAWING_AREA,
+                                  "visible", TRUE,
+                                  NULL);
   gtk_widget_set_size_request (self->zoom_area, ZOOM_AREA_WIDTH, ZOOM_AREA_HEIGHT);
   gtk_container_add (GTK_CONTAINER (box), self->zoom_area);
 
@@ -650,6 +659,7 @@ gstyle_eyedropper_set_source_event (GstyleEyedropper *self,
                          "fallback-name-kind", GSTYLE_COLOR_KIND_RGB_HEX6,
                          "fallback-name-visible", TRUE,
                          "color", self->color,
+                         "visible", TRUE,
                          NULL);
   gtk_container_add (GTK_CONTAINER (box), swatch);
 

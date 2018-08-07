@@ -121,12 +121,15 @@ test_color_plane (void)
   g_signal_connect_swapped (mode_box, "changed", G_CALLBACK (mode_changed), plane);
 
   box = GTK_WIDGET (gtk_builder_get_object (builder, "editor_box"));
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = g_object_new (GTK_TYPE_WINDOW,
+                         "type", GTK_WINDOW_TOPLEVEL,
+                         "default-width", 400,
+                         "default-height", 400,
+                         "visible", TRUE,
+                         NULL);
   gtk_container_add (GTK_CONTAINER (window), box);
-  gtk_window_set_default_size (GTK_WINDOW (window), 400,400);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
-  gtk_widget_show_all (window);
   gtk_main ();
 }
 

@@ -252,10 +252,10 @@ test_filter (void)
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
   gtk_container_add (GTK_CONTAINER (window), box);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
-  gtk_widget_show_all (window);
   gtk_main ();
 }
 

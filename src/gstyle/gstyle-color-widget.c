@@ -173,7 +173,6 @@ gstyle_color_widget_drag_gesture_update (GtkGestureDrag    *gesture,
   gtk_window_set_screen (GTK_WINDOW (self->dnd_window), gtk_widget_get_screen (GTK_WIDGET (self)));
 
   gtk_container_add (GTK_CONTAINER (self->dnd_window), GTK_WIDGET (self->dnd_color_widget));
-  gtk_widget_show_all (self->dnd_window);
   gtk_widget_set_opacity (self->dnd_window, GSTYLE_COLOR_WIDGET_DRAG_ICON_OPACITY);
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
@@ -1561,6 +1560,7 @@ gstyle_color_widget_init (GstyleColorWidget *self)
 
   gstyle_color_widget_actions_init (self);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+  gtk_widget_set_visible (GTK_WIDGET (self), TRUE);
 }
 
 GType
