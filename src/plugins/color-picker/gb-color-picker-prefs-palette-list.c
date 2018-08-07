@@ -135,30 +135,40 @@ gb_color_picker_prefs_palette_list_init_ui (GbColorPickerPrefsPaletteList *self)
 
   g_assert (GB_IS_COLOR_PICKER_PREFS_PALETTE_LIST (self));
 
-  image = gtk_image_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_MENU);
-  self->plus_button = gtk_button_new ();
+  image = g_object_new (GTK_TYPE_IMAGE,
+                        "icon-name", "list-add-symbolic",
+                        "icon-size", GTK_ICON_SIZE_MENU,
+                        "visible", TRUE,
+                        NULL);
+  self->plus_button = g_object_new (GTK_TYPE_BUTTON,
+                                    "hexpand", TRUE,
+                                    "visible", TRUE,
+                                    NULL);
 
-  gtk_widget_set_hexpand (self->plus_button, TRUE);
   gtk_container_add (GTK_CONTAINER (self->plus_button), image);
 
   context = gtk_widget_get_style_context (self->plus_button);
   gtk_style_context_add_class (context, "flat");
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_propagate_natural_height(GTK_SCROLLED_WINDOW (scrolled_window), TRUE);
+  scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                                  "hscrollbar-policy", GTK_POLICY_NEVER,
+                                  "propagate-natural-height", TRUE,
+                                  "visible", TRUE,
+                                  NULL);
 
-  self->list_box = GTK_LIST_BOX (gtk_list_box_new ());
-  gtk_list_box_set_selection_mode (self->list_box, GTK_SELECTION_NONE);
+  self->list_box = g_object_new (GTK_TYPE_LIST_BOX,
+                                 "selection-mode", GTK_SELECTION_NONE,
+                                 "visible", TRUE,
+                                 NULL);
+
   gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET (self->list_box));
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
   /* As we overwrite the add vfunc we need to call its parent */
   GTK_CONTAINER_CLASS (gb_color_picker_prefs_palette_list_parent_class)->add (GTK_CONTAINER (self), self->plus_button);
   GTK_CONTAINER_CLASS (gb_color_picker_prefs_palette_list_parent_class)->add (GTK_CONTAINER (self), scrolled_window);
-
-  gtk_widget_show_all (GTK_WIDGET (self));
 }
+
 static void
 gb_color_picker_prefs_palette_list_class_init (GbColorPickerPrefsPaletteListClass *klass)
 {
