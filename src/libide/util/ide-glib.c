@@ -322,6 +322,8 @@ ide_g_file_get_children_worker (IdeTask      *task,
       g_ptr_array_add (children, g_steal_pointer (&file_info));
     }
 
+  g_file_enumerator_close (enumerator, NULL, NULL);
+
   ide_task_return_pointer (task,
                            g_steal_pointer (&children),
                            (GDestroyNotify) g_ptr_array_unref);
