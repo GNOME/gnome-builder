@@ -193,6 +193,7 @@ ide_log_handler (const gchar    *log_domain,
   const gchar *level;
   gchar ftime[32];
   gchar *buffer;
+  const gchar *domains = NULL;
 
   if (G_LIKELY (channels->len))
     {
@@ -201,26 +202,34 @@ ide_log_handler (const gchar    *log_domain,
         case G_LOG_LEVEL_MESSAGE:
           if (log_verbosity < 1)
             return;
+          domains = g_getenv ("IDE_MESSAGES_MESSAGE");
           break;
 
         case G_LOG_LEVEL_INFO:
           if (log_verbosity < 2)
             return;
+          domains = g_getenv ("IDE_MESSAGES_INFO");
           break;
 
         case G_LOG_LEVEL_DEBUG:
           if (log_verbosity < 3)
             return;
+          domains = g_getenv ("IDE_MESSAGES_DEBUG");
           break;
 
         case IDE_LOG_LEVEL_TRACE:
           if (log_verbosity < 4)
             return;
+          domains = g_getenv ("IDE_MESSAGES_TRACE");
           break;
 
         default:
           break;
         }
+
+      if (domains != NULL && g_strcmp0 (domains, "all") != 0 &&
+          (log_domain == NULL || !strstr (domains, log_domain)))
+        return;
 
       level = log_level_str_func (log_level);
       g_get_current_time (&tv);
