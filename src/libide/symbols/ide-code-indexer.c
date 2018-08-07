@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include "ide-debug.h"
+
 #include "application/ide-application.h"
 #include "symbols/ide-code-indexer.h"
 
@@ -134,7 +136,9 @@ ide_code_indexer_index_file_async (IdeCodeIndexer      *self,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
+#ifdef IDE_ENABLE_TRACE
   g_autoptr(GFile) copy = NULL;
+#endif
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CODE_INDEXER (self));
