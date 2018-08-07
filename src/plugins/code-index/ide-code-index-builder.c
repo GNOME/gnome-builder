@@ -1393,6 +1393,7 @@ build_get_changes_cb (GObject      *object,
   g_assert (IDE_IS_BUILD_SYSTEM (bd->build_system));
 
   bd->changes = get_changes_finish (self, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (bd->changes, g_object_unref);
 
   if (bd->changes == NULL)
     ide_task_return_error (task, g_steal_pointer (&error));
