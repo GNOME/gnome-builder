@@ -681,6 +681,9 @@ ide_workbench_set_context (IdeWorkbench *self,
   g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (self->context == NULL);
 
+  if (self->unloading)
+    IDE_EXIT;
+
   g_set_object (&self->context, context);
 
   project = ide_context_get_project (context);
