@@ -472,6 +472,11 @@ ide_workbench_open_project_cb (GObject      *object,
 
   workbench = ide_task_get_source_object (task);
 
+  g_assert (IDE_IS_WORKBENCH (workbench));
+
+  if (workbench->unloading)
+    goto cancelled;
+
   if (workbench->context != NULL)
     {
       guint32 present_time;
@@ -486,6 +491,7 @@ ide_workbench_open_project_cb (GObject      *object,
 
   ide_workbench_set_context (workbench, context);
 
+cancelled:
   ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
