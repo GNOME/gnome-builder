@@ -837,6 +837,7 @@
                 "-Dctags_path=/app/bin/ctags",
                 "-Dfusermount_wrapper=true",
                 "-Dwith_tcmalloc=true",
+                "-Dpython_libprefix=python3.7",
                 "-Denable_tracing=true",
                 "-Dwith_help=true",
                 "-Dwith_channel=flatpak-nightly",
