@@ -49,6 +49,9 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
   g_assert (results != NULL);
   g_assert (depth < DISCOVERY_MAX_DEPTH);
 
+  if (g_cancellable_is_cancelled (cancellable))
+    return;
+
   enumerator = g_file_enumerate_children (directory,
                                           G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK","
                                           G_FILE_ATTRIBUTE_STANDARD_NAME","
@@ -56,6 +59,9 @@ gbp_flatpak_build_system_discovery_find_manifests (GFile        *directory,
                                           G_FILE_QUERY_INFO_NONE,
                                           cancellable,
                                           NULL);
+
+  if (enumerator == NULL)
+    return;
 
   while (NULL != (infoptr = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
     {
