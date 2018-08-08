@@ -184,9 +184,12 @@ ide_application_actions_help_cb (GObject      *object,
    */
   if (g_network_monitor_can_reach_finish (monitor, result, NULL))
     {
+      g_debug ("Can reach documentation site, opening online");
       if (gtk_show_uri_on_window (focused_window, DOCS_URI, gtk_get_current_event_time (), NULL))
         IDE_EXIT;
     }
+
+  g_debug ("Cannot reach online documentation, trying locally");
 
   /*
    * We failed to reach the online site for some reason (offline, transient error, etc),
@@ -203,9 +206,15 @@ ide_application_actions_help_cb (GObject      *object,
       else
         uri = "file://"PACKAGE_DOCDIR"/en/index.html";
 
+      g_debug ("Documentation URI: %s", uri);
+
       if (!gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
         g_warning ("Failed to load documentation: %s", error->message);
+
+      IDE_EXIT;
     }
+
+  g_debug ("No locally installed documentation to display");
 
   IDE_EXIT;
 }
