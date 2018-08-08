@@ -89,9 +89,6 @@
         },
         {
             "name" : "libfuse",
-            "cleanup" : [
-                "/bin"
-            ],
             "config-opts" : [
                 "UDEV_RULES_PATH=/app/etc/udev/rules.d",
                 "INIT_D_PATH=/app/etc/init.d"
@@ -850,7 +847,7 @@
                 {
                     "disable-shallow-clone" : true,
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/gnome-builder.git"
+                    "url" : "file:///home/christian/Projects/gnome-builder/.git"
                 }
             ]
         }
