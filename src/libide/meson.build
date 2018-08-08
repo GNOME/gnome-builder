@@ -185,8 +185,10 @@ except ImportError:
   purelibdir = sysconfig.get_path('purelib')
   overridedir = os.path.join(purelibdir, 'gi', 'overrides')
 
-if overridedir.startswith(libdir): # Should always be True..
+if overridedir.startswith(libdir):
   overridedir = overridedir[len(libdir) + 1:]
+else:
+  overridedir = overridedir[len('/usr/lib') + 1:]
 
 print(overridedir)
 '''
