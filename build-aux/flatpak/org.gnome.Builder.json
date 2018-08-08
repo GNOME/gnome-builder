@@ -77,7 +77,8 @@
                 "/lib/libtcmalloc_debug.*",
                 "/lib/libtcmalloc.*",
                 "/lib/libtcmalloc_and_profiler.*",
-                "/lib/libtcmalloc_minimal_debug.*"
+                "/lib/libtcmalloc_minimal_debug.*",
+                "/share/doc"
             ],
             "sources" : [
                 {
@@ -493,6 +494,9 @@
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DCMAKE_INSTALL_LIBDIR:PATH=/app/lib",
                 "-DBUILD_SHARED_LIBS:BOOL=ON"
+            ],
+            "cleanup" : [
+                "/share/doc"
             ],
             "sources" : [
                 {
