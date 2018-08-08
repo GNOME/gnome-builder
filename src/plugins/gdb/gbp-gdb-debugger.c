@@ -1255,7 +1255,7 @@ gbp_gdb_debugger_insert_breakpoint_async (IdeDebugger           *debugger,
    * future to get the right thing.
    */
   gfile = g_file_new_for_path (file);
-  translated_file = ide_g_file_get_uncanonical_relative_path (self->builddir, gfile);
+  //translated_file = ide_g_file_get_uncanonical_relative_path (self->builddir, gfile);
   if (translated_file != NULL)
     file = translated_file;
 
