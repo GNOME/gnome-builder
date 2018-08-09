@@ -14,7 +14,7 @@ option('with_channel',
 option('with_editorconfig', type: 'boolean')
 option('with_webkit', type: 'boolean')
 option('with_vapi', type: 'boolean')
-option('with_help', type: 'boolean')
+option('with_help', type: 'boolean', value: false)
 option('with_docs', type: 'boolean', value: false)
 
 option('ctags_path', type: 'string', value: '')
