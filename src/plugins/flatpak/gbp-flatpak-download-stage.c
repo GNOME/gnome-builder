@@ -62,7 +62,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Ignore downloads if there is no connection */
-  if (!g_network_monitor_get_network_available (g_network_monitor_get_default ()))
+  if (!ide_application_has_network (IDE_APPLICATION_DEFAULT))
     {
       ide_build_stage_log (stage,
                            IDE_BUILD_LOG_STDOUT,
