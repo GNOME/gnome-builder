@@ -219,17 +219,6 @@
     </chapter>
   </part>
 
-  <part id="libide-documentation">
-    <title>The Documentation Subsystem</title>
-    <chapter>
-      <title>API Reference</title>
-      <xi:include href="xml/ide-documentation-info.xml"/>
-      <xi:include href="xml/ide-documentation-proposal.xml"/>
-      <xi:include href="xml/ide-documentation-provider.xml"/>
-      <xi:include href="xml/ide-documentation.xml"/>
-    </chapter>
-  </part>
-
   <part id="libide-refactoring">
     <title>Refactoring</title>
     <xi:include href="xml/ide-rename-provider.xml"/>
