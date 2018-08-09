@@ -33,13 +33,20 @@ util_sources = [
   'ide-uri.c',
 ]
 
+# .h files used for gtk-doc ignores
 util_private_sources = [
   'gs-markdown.c',
+  'gs-markdown.h',
   'ide-async-helper.c',
+  'ide-async-helper.h',
   'ide-battery-monitor.c',
+  'ide-battery-monitor.h',
   'ide-doc-seq.c',
+  'ide-doc-seq.h',
   'ide-window-settings.c',
+  'ide-window-settings.h',
   'ptyintercept.c',
+  'ptyintercept.h',
 ]
 
 util_enums = [
