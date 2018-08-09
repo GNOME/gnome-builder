@@ -10,7 +10,9 @@ hover_sources = [
 
 hover_private_sources = [
   'ide-hover.c',
+  'ide-hover-private.h',
   'ide-hover-popover.c',
+  'ide-hover-popover-private.h',
 ]
 
 libide_public_headers += files(hover_headers)
