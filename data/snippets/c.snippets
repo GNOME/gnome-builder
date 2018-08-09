@@ -5,24 +5,6 @@ snippet Widget
 snippet function_prefix
 - scope c, chdr
 	${$filename|stripsuffix|functify}_
-snippet struct
-- scope c, chdr
-	typedef struct
-	{
-		$0
-	} ${1:StructName};
-snippet union
-- scope c, chdr
-	typedef union
-	{
-		$0
-	} ${1:UnionName};
-snippet enum
-- scope c, chdr
-	typedef enum
-	{
-		$0
-	} ${1:EnumName};
 snippet fn
 - scope c, chdr
 - desc Create function
