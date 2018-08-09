@@ -531,10 +531,6 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/libgit2-glib.git"
-                },
-                {
-                    "type" : "patch",
-                    "path" : "fix-libgit2-glib-pc.patch"
                 }
             ]
         },
