@@ -206,6 +206,9 @@ static void
 gbp_flatpak_download_stage_init (GbpFlatpakDownloadStage *self)
 {
   self->invalid = TRUE;
+
+  /* Allow downloads to fail in case we can still make progress */
+  ide_build_stage_launcher_set_ignore_exit_status (IDE_BUILD_STAGE_LAUNCHER (self), TRUE);
 }
 
 void
