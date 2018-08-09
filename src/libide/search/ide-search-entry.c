@@ -179,6 +179,10 @@ suggestion_activated (DzlSuggestionEntry *entry,
                                     g_steal_pointer (&da),
                                     delayed_activate_free);
     }
+
+  /* Chain up to properly clear entry buffer */
+  if (DZL_SUGGESTION_ENTRY_CLASS (ide_search_entry_parent_class)->suggestion_activated)
+    DZL_SUGGESTION_ENTRY_CLASS (ide_search_entry_parent_class)->suggestion_activated (entry, suggestion);
 }
 
 static void
