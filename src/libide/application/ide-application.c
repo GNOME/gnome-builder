@@ -560,6 +560,7 @@ ide_application_finalize (GObject *object)
   g_clear_object (&self->settings);
   g_clear_object (&self->color_proxy);
   g_clear_object (&self->projects_directory);
+  g_clear_object (&self->network_monitor);
 
   G_OBJECT_CLASS (ide_application_parent_class)->finalize (object);
 }
@@ -1007,4 +1008,60 @@ ide_application_get_projects_directory (IdeApplication *self)
     }
 
   return g_object_ref (self->projects_directory);
+}
+
+static void
+ide_application_network_changed_cb (IdeApplication  *self,
+                                    gboolean         available,
+                                    GNetworkMonitor *monitor)
+{
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (G_IS_NETWORK_MONITOR (monitor));
+
+  self->has_network = !!available;
+}
+
+/**
+ * ide_application_has_network:
+ * @self: (nullable): a #IdeApplication
+ *
+ * This is a helper that uses an internal #GNetworkMonitor to track if we
+ * have access to the network. It works around some issues we've seen in
+ * the wild that make determining if we have network access difficult.
+ *
+ * Returns: %TRUE if we think there is network access.
+ *
+ * Since: 3.30
+ */
+gboolean
+ide_application_has_network (IdeApplication *self)
+{
+  g_return_val_if_fail (!self || IDE_IS_APPLICATION (self), FALSE);
+
+  if (self == NULL)
+    self = IDE_APPLICATION_DEFAULT;
+
+  if (self->network_monitor == NULL)
+    {
+      self->network_monitor = g_object_ref (g_network_monitor_get_default ());
+
+      g_signal_connect_object (self->network_monitor,
+                               "network-changed",
+                               G_CALLBACK (ide_application_network_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      self->has_network = g_network_monitor_get_network_available (self->network_monitor);
+
+      /*
+       * FIXME: Ignore the network portal initially for now.
+       *
+       * See https://gitlab.gnome.org/GNOME/glib/merge_requests/227 for more
+       * information about when this is fixed.
+       */
+      if (!self->has_network && ide_is_flatpak ())
+        self->has_network = TRUE;
+    }
+
+  return self->has_network;
 }
