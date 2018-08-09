@@ -5,7 +5,7 @@ install_data('mono_plugin.py', install_dir: plugindir)
 configure_file(
           input: 'mono.plugin',
          output: 'mono.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

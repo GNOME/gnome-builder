@@ -5,7 +5,7 @@ install_data('jedi_plugin.py', install_dir: plugindir)
 configure_file(
           input: 'jedi.plugin',
          output: 'jedi.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

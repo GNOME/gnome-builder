@@ -301,7 +301,7 @@ if get_option('with_vapi')
 configure_file(
           input: 'libide-' + libide_api_version + '.deps',
          output: 'libide-' + libide_api_version + '.deps',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: pkgvapidir,
 )

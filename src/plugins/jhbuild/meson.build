@@ -5,7 +5,7 @@ install_data('jhbuild_plugin.py', install_dir: plugindir)
 configure_file(
           input: 'jhbuild.plugin',
          output: 'jhbuild.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

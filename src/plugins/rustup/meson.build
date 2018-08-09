@@ -13,7 +13,7 @@ install_data('rustup_plugin.py', install_dir: plugindir)
 configure_file(
           input: 'rustup.plugin',
          output: 'rustup.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

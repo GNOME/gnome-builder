@@ -8,7 +8,7 @@ install_data('org.gnome.builder.plugins.eslint.gschema.xml',
 configure_file(
           input: 'eslint.plugin',
          output: 'eslint.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

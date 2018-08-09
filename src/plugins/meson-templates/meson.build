@@ -13,7 +13,7 @@ install_data('meson_templates.py', install_dir: plugindir)
 configure_file(
           input: 'meson-templates.plugin',
          output: 'meson-templates.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

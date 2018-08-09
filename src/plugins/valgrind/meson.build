@@ -14,7 +14,7 @@ valgrind_resources = gnome.compile_resources(
 configure_file(
           input: 'valgrind.plugin',
          output: 'valgrind.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

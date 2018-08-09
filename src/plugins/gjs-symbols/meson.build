@@ -5,7 +5,7 @@ install_data('gjs_symbols.py', install_dir: plugindir)
 configure_file(
           input: 'gjs_symbols.plugin',
          output: 'gjs_symbols.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

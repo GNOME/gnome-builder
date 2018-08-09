@@ -5,7 +5,7 @@ install_data('phpize_plugin.py', install_dir: plugindir)
 configure_file(
           input: 'phpize.plugin',
          output: 'phpize.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

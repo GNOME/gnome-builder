@@ -5,7 +5,7 @@ install_data('cargo_plugin.py', install_dir: plugindir)
 configure_file(
           input: 'cargo.plugin',
          output: 'cargo.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

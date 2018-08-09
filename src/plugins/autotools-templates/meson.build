@@ -9,7 +9,7 @@ install_subdir('autotools_templates/resources', install_dir: autotools_template_
 configure_file(
           input: 'autotools-templates.plugin',
          output: 'autotools-templates.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )

@@ -64,7 +64,7 @@ shared_module('vala-pack-plugin', vala_pack_sources,
 configure_file(
           input: 'vala-pack.plugin',
          output: 'vala-pack.plugin',
-  configuration: configuration_data(),
+           copy: true,
         install: true,
     install_dir: plugindir,
 )
