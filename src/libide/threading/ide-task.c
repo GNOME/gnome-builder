@@ -1010,6 +1010,12 @@ ide_task_return_cb (gpointer user_data)
   return G_SOURCE_REMOVE;
 }
 
+static gboolean
+ide_task_return_dummy_cb (gpointer data)
+{
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_task_return (IdeTask       *self,
                  IdeTaskResult *result)
@@ -1031,6 +1037,8 @@ ide_task_return (IdeTask       *self,
 
   if (priv->return_called)
     {
+      GSource *source;
+
       if (result->type == IDE_TASK_RESULT_CANCELLED)
         {
           /* We already had a result, and now raced to be notified of
@@ -1041,21 +1049,28 @@ ide_task_return (IdeTask       *self,
           return;
         }
 
-      /*
-       * We already failed this task, but we need to ensure that the data
-       * is released from the main context rather than potentially on a
-       * thread (as we could be now).
-       *
-       * Since this can only happen when return_on_cancel is set, we can
-       * be assured the main context is alive because that is our contract
-       * with the API consumer.
+      /* If we haven't been cancelled, then we reached this path multiple
+       * times by programmer error.
        */
       if (!priv->got_cancel)
-        {
-          /* leak result to ensure we don't free anything in the wrong context */
-          g_critical ("Attempted to set task result multiple times, leaking result");
-          return;
-        }
+        g_critical ("Attempted to set result on task [%s] multiple times", priv->name);
+
+      /*
+       * This task has already returned, but we need to ensure that we pass
+       * the data back to the main context so that it is freed appropriately.
+       */
+
+      source = g_idle_source_new ();
+      g_source_set_name (source, "[ide-task] finalize task result");
+      g_source_set_ready_time (source, -1);
+      g_source_set_callback (source,
+                             ide_task_return_dummy_cb,
+                             result,
+                             (GDestroyNotify)ide_task_result_free);
+      g_source_attach (source, priv->main_context);
+      g_source_unref (source);
+
+      return;
     }
 
   priv->return_called = TRUE;
