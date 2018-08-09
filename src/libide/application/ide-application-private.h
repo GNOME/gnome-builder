@@ -68,6 +68,10 @@ struct _IdeApplication
   GSettings           *settings;
 
   GDBusProxy          *color_proxy;
+
+  /* Work around network portal errors */
+  GNetworkMonitor     *network_monitor;
+  guint                has_network : 1;
 } DZL_ALIGNED_END(8);
 
 void     ide_application_discover_plugins           (IdeApplication        *self) G_GNUC_INTERNAL;
