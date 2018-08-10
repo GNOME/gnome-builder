@@ -912,6 +912,7 @@ gbp_gdb_debugger_output_callback (void                     *context,
                                   struct gdbwire_mi_output *output)
 {
   GbpGdbDebugger *self = context;
+  gboolean flatpak_output;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (output != NULL);
@@ -921,8 +922,10 @@ gbp_gdb_debugger_output_callback (void                     *context,
     {
     case GDBWIRE_MI_OUTPUT_PARSE_ERROR:
       ide_object_warning (self, "Failed to parse gdb communication: %s", output->line);
+      flatpak_output = strstr(output->line, "(flatpak build") != 0;
       gdbwire_mi_output_free (output);
-      gbp_gdb_debugger_panic (self);
+      if (flatpak_output == FALSE)
+        gbp_gdb_debugger_panic (self);
       break;
 
     case GDBWIRE_MI_OUTPUT_OOB:
