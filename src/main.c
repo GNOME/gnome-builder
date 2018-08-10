@@ -108,6 +108,9 @@ main (int   argc,
   /* Setup our gdb fork()/exec() helper */
   bug_buddy_init ();
 
+  /* Always ignore SIGPIPE */
+  signal (SIGPIPE, SIG_IGN);
+
   /*
    * We require a desktop session that provides a properly working
    * DBus environment. Bail if for some reason that is not the case.
