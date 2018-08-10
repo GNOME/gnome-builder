@@ -1992,8 +1992,7 @@ gbp_gdb_debugger_list_locals_async (IdeDebugger         *debugger,
 
   depth = ide_debugger_frame_get_depth (frame);
   command = g_strdup_printf ("9999-stack-select-frame %u\n"
-                             "@@@@-stack-list-locals --simple-values\n"
-                             "9999-stack-select-frame",
+                             "@@@@-stack-list-locals --simple-values\n",
                              depth);
 
   gbp_gdb_debugger_exec_async (self,
