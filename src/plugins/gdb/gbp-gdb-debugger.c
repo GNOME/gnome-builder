@@ -916,6 +916,7 @@ gbp_gdb_debugger_output_callback (void                     *context,
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (output != NULL);
 
+  DEBUG_LOG ("callback from-gdb", output->line);
   switch (output->kind)
     {
     case GDBWIRE_MI_OUTPUT_PARSE_ERROR:
