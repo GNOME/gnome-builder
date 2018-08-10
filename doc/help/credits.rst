@@ -7,6 +7,6 @@ Many contributors have helped create and improve Builder to the state you find i
 
 Artwork, code and documentation by
 
-.. include:: ../AUTHORS
+.. include:: ../../AUTHORS
    :start-line: 2
    :literal:
