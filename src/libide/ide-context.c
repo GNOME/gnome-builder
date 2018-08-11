@@ -2350,6 +2350,8 @@ ide_context_restore_async (IdeContext          *self,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) ar = NULL;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_CONTEXT (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -2361,7 +2363,7 @@ ide_context_restore_async (IdeContext          *self,
                                  G_IO_ERROR,
                                  G_IO_ERROR_FAILED,
                                  _("Context has already been restored."));
-      return;
+      IDE_EXIT;
     }
 
   self->restored = TRUE;
@@ -2372,7 +2374,7 @@ ide_context_restore_async (IdeContext          *self,
   if (ar->len == 0)
     {
       ide_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
     }
 
   if (ar->len > RESTORE_FILES_MAX_FILES)
@@ -2385,7 +2387,7 @@ ide_context_restore_async (IdeContext          *self,
        */
       ide_unsaved_files_clear (self->unsaved_files);
       ide_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
     }
 
   self->restoring = TRUE;
@@ -2400,12 +2402,16 @@ ide_context_restore_finish (IdeContext    *self,
                             GAsyncResult  *result,
                             GError       **error)
 {
-  IdeTask *task = (IdeTask *)result;
+  gboolean ret;
+
+  IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (task), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return ide_task_propagate_boolean (task, error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 gboolean
