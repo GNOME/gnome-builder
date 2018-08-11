@@ -2356,6 +2356,16 @@ ide_context_restore_async (IdeContext          *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_context_restore_async);
+
+  if (self->unloading)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 _("Context already unloading, cannot restore."));
+      IDE_EXIT;
+    }
 
   if (self->restored)
     {
