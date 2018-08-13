@@ -139,7 +139,7 @@ ide_vcs_monitor_list_status_cb (GObject      *object,
       status = ide_vcs_file_info_get_status (info);
 
       g_hash_table_insert (status_by_file,
-                           g_object_ref (file),
+                           g_file_dup (file),
                            g_steal_pointer (&info));
 
       ide_vcs_monitor_add_parents (status_by_file, file, workdir, status);
