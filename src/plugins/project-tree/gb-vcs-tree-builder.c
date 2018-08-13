@@ -50,7 +50,7 @@ gb_vcs_tree_builder_cell_data_func (DzlTreeBuilder  *builder,
                                     GtkCellRenderer *cell)
 {
   GbVcsTreeBuilder *self = (GbVcsTreeBuilder *)builder;
-  IdeVcsFileInfo *info;
+  g_autoptr(IdeVcsFileInfo) info = NULL;
   GObject *item;
   GFile *file;
   IdeVcsFileStatus status;
