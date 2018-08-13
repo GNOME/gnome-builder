@@ -89,6 +89,21 @@
             ]
         },
         {
+            "name" : "uncrustify",
+            "buildsystem" : "cmake-ninja",
+            "config-opts" : [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://github.com/uncrustify/uncrustify/archive/uncrustify-0.66.1.tar.gz",
+                    "sha256" : "0862778fb692ce9859f4ece5e801db72841d8d76d9304e2da52bdd098b05331f"
+                }
+            ]
+        },
+        {
             "name" : "libfuse",
             "config-opts" : [
                 "UDEV_RULES_PATH=/app/etc/udev/rules.d",
