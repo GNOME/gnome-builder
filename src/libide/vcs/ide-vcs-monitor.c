@@ -412,7 +412,7 @@ ide_vcs_monitor_init (IdeVcsMonitor *self)
  * can wait for #IdeVcsMonitor::reloaded and query again if you expect
  * the info to be there.
  * 
- * Returns: (transfer none) (nullable): an #IdeVcsFileInfo or %NULL
+ * Returns: (transfer full) (nullable): an #IdeVcsFileInfo or %NULL
  *
  * Since: 3.28
  */
