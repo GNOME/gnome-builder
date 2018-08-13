@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-06-19 22:15+0000\n"
-"PO-Revision-Date: 2018-06-20 19:28+0200\n"
+"POT-Creation-Date: 2018-08-09 02:19+0000\n"
+"PO-Revision-Date: 2018-08-13 09:51+0200\n"
 "Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -456,10 +456,10 @@ msgstr "Az alsó panel magassága képpontokban megadva."
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/application/ide-application.c:689
+#: src/libide/application/ide-application.c:690
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
-#: src/libide/workbench/ide-workbench.c:646
+#: src/libide/workbench/ide-workbench.c:654
 msgid "Builder"
 msgstr "Építő"
 
@@ -777,7 +777,7 @@ msgstr "Tudjon meg többet a GNOME Építőről"
 msgid "Funded By"
 msgstr "Támogatta"
 
-#: src/libide/application/ide-application.c:1080
+#: src/libide/application/ide-application.c:1081
 #: src/libide/preferences/ide-preferences-builtin.c:409
 msgid "Projects"
 msgstr "Projektek"
@@ -904,11 +904,11 @@ msgstr "Nem sikerült figyelőt létrehozni a háttérbeli változásokhoz: %s"
 msgid "The current language lacks a symbol resolver."
 msgstr "Az aktuális nyelvhez nem tartozik szimbólumfeloldó."
 
-#: src/libide/buffers/ide-buffer-manager.c:704
+#: src/libide/buffers/ide-buffer-manager.c:707
 msgid "File too large to be opened."
 msgstr "A fájl túl nagy a megnyitáshoz."
 
-#: src/libide/buffers/ide-buffer-manager.c:1990
+#: src/libide/buffers/ide-buffer-manager.c:1996
 #, c-format
 msgid "unsaved document %u"
 msgstr "mentetlen dokumentum %u"
@@ -917,8 +917,8 @@ msgstr "mentetlen dokumentum %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:2029
-#: src/libide/buffers/ide-buffer-manager.c:2092
+#: src/libide/buffers/ide-buffer-manager.c:2035
+#: src/libide/buffers/ide-buffer-manager.c:2098
 #: src/libide/editor/ide-editor-view-actions.c:189
 #: src/libide/editor/ide-editor-view-actions.c:310
 #, c-format
@@ -967,7 +967,7 @@ msgstr "Takarítás…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2928
 #: src/libide/buildsystem/ide-build-pipeline.c:2985
-#: src/libide/workbench/ide-omni-bar.c:557
+#: src/libide/workbench/ide-omni-bar.c:558
 msgid "Failed"
 msgstr "Sikertelen"
 
@@ -1010,7 +1010,7 @@ msgstr "Exportálás…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2977
 #: src/libide/buildsystem/ide-build-pipeline.c:2981
-#: src/libide/workbench/ide-omni-bar.c:584
+#: src/libide/workbench/ide-omni-bar.c:585
 msgid "Success"
 msgstr "Sikeres"
 
@@ -1168,7 +1168,7 @@ msgid "Remove environment variable"
 msgstr "Környezeti változó eltávolítása"
 
 #: src/libide/debugger/gtk/menus.ui:10
-#: src/libide/debugger/ide-debugger-editor-addin.c:427
+#: src/libide/debugger/ide-debugger-editor-addin.c:431
 msgid "Run with Debugger"
 msgstr "Futtatás hibakeresővel"
 
@@ -1231,31 +1231,31 @@ msgstr "Futás a függvény végéig"
 msgid "Disassembly"
 msgstr "Visszafejtés"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:305
+#: src/libide/debugger/ide-debugger-editor-addin.c:309
 msgid "Debugger"
 msgstr "Hibakereső"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:321
+#: src/libide/debugger/ide-debugger-editor-addin.c:325
 msgid "Threads"
 msgstr "Szálak"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:347
+#: src/libide/debugger/ide-debugger-editor-addin.c:351
 msgid "Breakpoints"
 msgstr "Töréspontok"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:355
+#: src/libide/debugger/ide-debugger-editor-addin.c:359
 msgid "Libraries"
 msgstr "Programkönyvtárak"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:363
+#: src/libide/debugger/ide-debugger-editor-addin.c:367
 msgid "Registers"
 msgstr "Regiszterek"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:371
+#: src/libide/debugger/ide-debugger-editor-addin.c:375
 msgid "Log"
 msgstr "Napló"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:394
+#: src/libide/debugger/ide-debugger-editor-addin.c:398
 msgid "Failed to initialize the debugger"
 msgstr "A hibakereső előkészítése meghiúsult"
 
@@ -1965,11 +1965,11 @@ msgstr "Hivatkozás _címének másolása"
 msgid "You must call %s() before using libide."
 msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 
-#: src/libide/ide-context.c:2114
+#: src/libide/ide-context.c:2115
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: src/libide/ide-context.c:2233
+#: src/libide/ide-context.c:2234
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
@@ -2900,11 +2900,17 @@ msgstr "A célfájlnak a projektfán belül kell lennie."
 msgid "File must be within the project tree."
 msgstr "A fájlnak a projektfán belül kell lennie."
 
-#: src/libide/runner/ide-run-button.ui:31
+#: src/libide/runner/ide-run-button.ui:6
+msgid "The project cannot be run while the build pipeline is being set up"
+msgstr ""
+"A projekt nem futtatható, amíg az összeállítási műveletsor beállítás alatt "
+"van"
+
+#: src/libide/runner/ide-run-button.ui:35
 msgid "Stop running"
 msgstr "Futás leállítása"
 
-#: src/libide/runner/ide-run-button.ui:51
+#: src/libide/runner/ide-run-button.ui:55
 msgid "Change run options"
 msgstr "Futtatási beállítások módosítása"
 
@@ -3070,7 +3076,7 @@ msgstr "A(z) „%s” nem dolgozható fel abszolút URI-ként"
 msgid "URI “%s” has no host component"
 msgstr "A(z) „%s” URI-nak nincs gépnév része"
 
-#: src/libide/workbench/ide-omni-bar.c:528
+#: src/libide/workbench/ide-omni-bar.c:529
 msgid "Building"
 msgstr "Összeállítás"
 
@@ -3136,11 +3142,17 @@ msgstr "Csomag exportálása"
 msgid "Build project"
 msgstr "Projekt összeállítása"
 
+#: src/libide/workbench/ide-omni-bar.ui:596
+msgid "The project cannot be built while the build pipeline is being set up"
+msgstr ""
+"A projekt nem állítható össze, amíg az összeállítási folyamat beállítás "
+"alatt van"
+
 #: src/libide/workbench/ide-workbench-actions.c:218
 msgid "Builder Statistics"
 msgstr "Építő statisztikák"
 
-#: src/libide/workbench/ide-workbench.c:644
+#: src/libide/workbench/ide-workbench.c:652
 #, c-format
 msgid "%s — Builder"
 msgstr "%s – Építő"
@@ -3474,7 +3486,7 @@ msgstr "Projekt telepítése"
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:277
+#: src/plugins/code-index/ide-code-index-index.c:278
 msgid "Declaration"
 msgstr "Deklaráció"
 
@@ -4038,7 +4050,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Alkalmazásforrások letöltése…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "A flatpak leíró eltávolítása meghiúsult: %s"
