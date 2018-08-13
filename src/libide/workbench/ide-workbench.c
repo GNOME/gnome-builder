@@ -686,6 +686,8 @@ ide_workbench_set_context (IdeWorkbench *self,
 
   g_set_object (&self->context, context);
 
+  _ide_context_set_workbench (context, GTK_WIDGET (self));
+
   project = ide_context_get_project (context);
   g_object_bind_property_full (project, "name",
                                self, "title",
