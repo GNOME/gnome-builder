@@ -36,6 +36,8 @@ editor_private_sources = [
   'ide-editor-search-bar.c',
   'ide-editor-search-bar.h',
   'ide-editor-search-bar-shortcuts.c',
+  'ide-editor-session-addin.c',
+  'ide-editor-session-addin.h',
   'ide-editor-view-actions.c',
   'ide-editor-view-settings.c',
   'ide-editor-view-shortcuts.c',
