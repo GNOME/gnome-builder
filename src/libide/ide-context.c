@@ -2313,7 +2313,7 @@ restore_in_idle (gpointer user_data)
 {
   g_autoptr(IdeFile) ifile = NULL;
   g_autoptr(IdeTask) task = user_data;
-  IdeUnsavedFile *uf;
+  g_autoptr(IdeUnsavedFile) uf = NULL;
   IdeContext *self;
   GPtrArray *ar;
   GFile *file;
@@ -2335,10 +2335,9 @@ restore_in_idle (gpointer user_data)
   g_assert (ar != NULL);
   g_assert (ar->len > 0);
 
-  uf = g_ptr_array_index (ar, ar->len - 1);
+  uf = g_ptr_array_steal_index (ar, ar->len - 1);
   file = ide_unsaved_file_get_file (uf);
   ifile = ide_file_new (self, file);
-  g_ptr_array_remove_index (ar, ar->len - 1);
 
   ide_buffer_manager_load_file_async (self->buffer_manager,
                                       ifile,
