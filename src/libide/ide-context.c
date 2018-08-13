@@ -1266,10 +1266,11 @@ ide_context_init_unsaved_files (gpointer             source_object,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_context_init_unsaved_files);
+
   ide_unsaved_files_restore_async (self->unsaved_files,
                                    cancellable,
                                    ide_context_init_unsaved_files_cb,
-				   g_steal_pointer (&task));
+                                   g_steal_pointer (&task));
 }
 
 static void
