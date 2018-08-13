@@ -1334,46 +1334,6 @@ ide_context_init_tests (gpointer             source_object,
 }
 
 static void
-ide_context_init_session_cb (GObject      *object,
-                             GAsyncResult *result,
-                             gpointer      user_data)
-{
-  IdeSession *session = (IdeSession *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_SESSION (session));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  if (!ide_session_restore_finish (session, result, &error))
-    g_warning ("Failed to restore session: %s", error->message);
-
-  ide_task_return_boolean (task, TRUE);
-}
-
-static void
-ide_context_init_session (gpointer             source_object,
-                          GCancellable        *cancellable,
-                          GAsyncReadyCallback  callback,
-                          gpointer             user_data)
-{
-  IdeContext *self = source_object;
-  g_autoptr(IdeTask) task = NULL;
-
-  g_assert (IDE_IS_CONTEXT (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_context_init_session);
-
-  ide_session_restore_async (self->session,
-                             cancellable,
-                             ide_context_init_session_cb,
-                             g_steal_pointer (&task));
-}
-
-static void
 ide_context_service_added (PeasExtensionSet *set,
                            PeasPluginInfo   *info,
                            PeasExtension    *exten,
@@ -1897,7 +1857,6 @@ ide_context_init_async (GAsyncInitable      *initable,
                         ide_context_init_run_manager,
                         ide_context_init_diagnostics_manager,
                         ide_context_init_tests,
-                        ide_context_init_session,
                         ide_context_init_loaded,
                         NULL);
 }
@@ -2284,71 +2243,30 @@ ide_context_unload_finish (IdeContext    *self,
   IDE_RETURN (ret);
 }
 
-static gboolean restore_in_idle (gpointer user_data);
-
 static void
-ide_context_restore__load_file_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
+ide_context_session_restore_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
 {
-  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  IdeSession *session = (IdeSession *)object;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GError) error = NULL;
 
-  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!(buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
+  if (!ide_session_restore_finish (session, result, &error))
     {
-      g_warning ("%s", error->message);
-      /* TODO: add error into grouped error */
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        g_warning ("Failed to restore session: %s", error->message);
     }
 
-  g_idle_add (restore_in_idle, g_object_ref (task));
-}
+  ide_task_return_boolean (task, TRUE);
 
-static gboolean
-restore_in_idle (gpointer user_data)
-{
-  g_autoptr(IdeFile) ifile = NULL;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(IdeUnsavedFile) uf = NULL;
-  IdeContext *self;
-  GPtrArray *ar;
-  GFile *file;
-
-  g_assert (IDE_IS_TASK (task));
-
-  self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_CONTEXT (self));
-
-  ar = ide_task_get_task_data (task);
-
-  if (ar == NULL || ar->len == 0)
-    {
-      self->restoring = FALSE;
-      ide_task_return_boolean (task, TRUE);
-      return G_SOURCE_REMOVE;
-    }
-
-  g_assert (ar != NULL);
-  g_assert (ar->len > 0);
-
-  uf = g_ptr_array_steal_index (ar, ar->len - 1);
-  file = ide_unsaved_file_get_file (uf);
-  ifile = ide_file_new (self, file);
-
-  ide_buffer_manager_load_file_async (self->buffer_manager,
-                                      ifile,
-                                      FALSE,
-                                      IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND,
-                                      NULL,
-                                      ide_task_get_cancellable (task),
-                                      ide_context_restore__load_file_cb,
-                                      g_object_ref (task));
-
-  return G_SOURCE_REMOVE;
+  IDE_EXIT;
 }
 
 void
@@ -2387,36 +2305,12 @@ ide_context_restore_async (IdeContext          *self,
     }
 
   self->restored = TRUE;
-
-  ar = ide_unsaved_files_to_array (self->unsaved_files);
-  IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_unsaved_file_unref);
-
-  if (ar->len == 0)
-    {
-      ide_task_return_boolean (task, TRUE);
-      IDE_EXIT;
-    }
-
-  if (ar->len > RESTORE_FILES_MAX_FILES)
-    {
-      /*
-       * To protect from some insanity, ignore attempts to restore files if
-       * they are over RESTORE_FILES_MAX_FILES. Just prune and go back to
-       * normal.  This should help in situations where hadn't pruned the
-       * unsaved files list.
-       */
-      ide_unsaved_files_clear (self->unsaved_files);
-      ide_task_return_boolean (task, TRUE);
-      IDE_EXIT;
-    }
-
   self->restoring = TRUE;
 
-  ide_task_set_task_data (task,
-                          g_steal_pointer (&ar),
-                          g_ptr_array_unref);
-
-  g_idle_add (restore_in_idle, g_object_ref (task));
+  ide_session_restore_async (self->session,
+                             cancellable,
+                             ide_context_session_restore_cb,
+                             g_steal_pointer (&task));
 }
 
 gboolean
