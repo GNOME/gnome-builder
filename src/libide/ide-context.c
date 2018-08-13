@@ -136,6 +136,8 @@ struct _IdeContext
   IdeUnsavedFiles          *unsaved_files;
   IdeVcs                   *vcs;
 
+  GtkWidget                *workbench;
+
   IdeBuildLog              *log;
   guint                     log_id;
 
@@ -580,6 +582,14 @@ ide_context_dispose (GObject *object)
   g_object_run_dispose (G_OBJECT (self->unsaved_files));
   g_object_run_dispose (G_OBJECT (self->vcs));
   g_object_run_dispose (G_OBJECT (self->recent_manager));
+
+  if (self->workbench != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->workbench,
+                                            G_CALLBACK (gtk_widget_destroyed),
+                                            &self->workbench);
+      self->workbench = NULL;
+    }
 
   G_OBJECT_CLASS (ide_context_parent_class)->dispose (object);
 
@@ -3060,4 +3070,39 @@ ide_context_is_unloading (IdeContext *self)
   g_return_val_if_fail (IDE_IS_CONTEXT (self), FALSE);
 
   return self->unloading;
+}
+
+/**
+ * ide_context_get_workbench:
+ * @self: a #IdeContext
+ *
+ * When a workbench has registered itself with this context, you can use this
+ * to get the #IdeWorkbench instance.
+ *
+ * Returns: (transfer none) (nullable): an #IdeWorkbench, or %NULL
+ *
+ * Since: 3.30
+ */
+GtkWidget *
+ide_context_get_workbench (IdeContext *self)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  return self->workbench;
+}
+
+void
+_ide_context_set_workbench (IdeContext *self,
+                            GtkWidget  *workbench)
+{
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (GTK_IS_WIDGET (workbench));
+  g_return_if_fail (self->workbench == NULL);
+
+  self->workbench = workbench;
+
+  g_signal_connect (self->workbench,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->workbench);
 }

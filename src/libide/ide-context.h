@@ -146,7 +146,11 @@ IdeVcsMonitor            *ide_context_get_monitor               (IdeContext     
 IDE_AVAILABLE_IN_3_28
 gboolean                  ide_context_is_unloading              (IdeContext           *self);
 
+IDE_AVAILABLE_IN_3_30
+GtkWidget                *ide_context_get_workbench             (IdeContext           *self);
 GListModel               *_ide_context_get_pausables            (IdeContext           *self) G_GNUC_INTERNAL;
 gboolean                  _ide_context_is_restoring             (IdeContext           *self) G_GNUC_INTERNAL;
+void                      _ide_context_set_workbench            (IdeContext           *self,
+                                                                 GtkWidget            *workbench) G_GNUC_INTERNAL;
 
 G_END_DECLS
