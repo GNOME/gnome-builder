@@ -201,7 +201,10 @@ ide_session_restore_load_cb (GObject      *object,
 
   if (!(bytes = g_file_load_bytes_finish (file, result, NULL, &error)))
     {
-      ide_task_return_error (task, g_steal_pointer (&error));
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        ide_task_return_boolean (task, TRUE);
+      else
+        ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
