@@ -110,6 +110,9 @@ ide_workbench_unload_cb (GObject      *object,
   if (!ide_context_unload_finish (context, result, &error))
     g_warning ("Failed to unload context: %s", error->message);
 
+  /* Now that we've unloaded, release the addins too. */
+  g_clear_object (&self->addins);
+
   gtk_widget_destroy (GTK_WIDGET (self));
 
   g_clear_object (&self->context);
@@ -202,12 +205,6 @@ ide_workbench_delete_event (GtkWidget   *widget,
   gtk_widget_insert_action_group (GTK_WIDGET (self), "run-manager", NULL);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "device-manager", NULL);
 
-  /*
-   * Now start unloading addins, which will cascade into the removal
-   * of perspectives and other bits and pieces (like editor addins).
-   */
-  g_clear_object (&self->addins);
-
   if (self->context != NULL)
     {
       self->cancellable = g_cancellable_new ();
@@ -217,6 +214,12 @@ ide_workbench_delete_event (GtkWidget   *widget,
                                 g_object_ref (self));
       return GDK_EVENT_STOP;
     }
+
+  /*
+   * Now start unloading addins, which will cascade into the removal
+   * of perspectives and other bits and pieces (like editor addins).
+   */
+  g_clear_object (&self->addins);
 
   return GDK_EVENT_PROPAGATE;
 }
