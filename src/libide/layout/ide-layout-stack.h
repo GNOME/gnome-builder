@@ -78,5 +78,9 @@ IDE_AVAILABLE_IN_ALL
 void           ide_layout_stack_foreach_view          (IdeLayoutStack       *self,
                                                        GtkCallback           callback,
                                                        gpointer              user_data);
+IDE_AVAILABLE_IN_3_30
+void           ide_layout_stack_add_with_depth        (IdeLayoutStack       *self,
+                                                       GtkWidget            *widget,
+                                                       guint                 position);
 
 G_END_DECLS

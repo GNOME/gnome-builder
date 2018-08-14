@@ -1388,3 +1388,18 @@ ide_layout_stack_addin_find_by_module_name (IdeLayoutStack *stack,
 
   return ret ? IDE_LAYOUT_STACK_ADDIN (ret) : NULL;
 }
+
+void
+ide_layout_stack_add_with_depth (IdeLayoutStack *self,
+                                 GtkWidget      *widget,
+                                 guint           position)
+{
+  IdeLayoutStackPrivate *priv = ide_layout_stack_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LAYOUT_STACK (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_container_add_with_properties (GTK_CONTAINER (priv->stack), widget,
+                                     "position", position,
+                                     NULL);
+}
