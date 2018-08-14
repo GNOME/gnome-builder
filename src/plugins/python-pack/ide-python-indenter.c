@@ -56,6 +56,20 @@ in_pydoc (const GtkTextIter *iter)
 }
 
 static gboolean
+in_str (const GtkTextIter *iter)
+{
+  GtkTextIter copy = *iter;
+  GtkSourceBuffer *buffer;
+
+  buffer = GTK_SOURCE_BUFFER (gtk_text_iter_get_buffer (iter));
+
+  if (gtk_source_buffer_iter_has_context_class (buffer, &copy, "string"))
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
 line_starts_with (GtkTextIter *line,
                   const gchar *prefix)
 {
@@ -244,6 +258,24 @@ copy_indent_minus_tab (IdePythonIndenter *python,
 
   if (tab_width <= str->len)
     g_string_truncate (str, str->len - tab_width);
+
+  return g_string_free (str, FALSE);
+}
+
+static gchar *
+copy_indent_plus_hash (IdePythonIndenter *python,
+             GtkTextIter       *begin,
+             GtkTextIter       *end,
+             GtkTextIter       *copy)
+{
+  GString *str;
+  gchar *copied;
+
+  copied = copy_indent (python, begin, end, copy);
+  str = g_string_new (copied);
+  g_free (copied);
+
+  g_string_append (str, "# ");
 
   return g_string_free (str, FALSE);
 }
@@ -698,7 +730,12 @@ ide_python_indenter_format (IdeIndenter *indenter,
   ch = gtk_text_iter_get_char (&iter);
 
   if (in_pydoc (&iter))
-    return copy_indent (python, begin, end, &iter);
+    {
+      if (line_starts_with (&iter, "#") && !in_str (&iter))
+        return copy_indent_plus_hash (python, begin, end, &iter);
+      else
+        return copy_indent (python, begin, end, &iter);
+    }
 
   switch (ch)
     {
