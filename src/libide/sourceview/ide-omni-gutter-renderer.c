@@ -1197,8 +1197,8 @@ get_icon_surface (IdeOmniGutterRenderer *self,
                   gint                   size,
                   gboolean               selected)
 {
+  g_autoptr(GtkIconInfo) info = NULL;
   GtkIconTheme *icon_theme;
-  GtkIconInfo *info;
   GdkScreen *screen;
   GtkIconLookupFlags flags;
   gint scale;
