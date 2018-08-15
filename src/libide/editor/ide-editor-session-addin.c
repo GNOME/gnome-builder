@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#define G_LOG_DOMAIN "ide-editor-session-addin.h"
+#define G_LOG_DOMAIN "ide-editor-session-addin"
 
 #include <gtk/gtk.h>
 
