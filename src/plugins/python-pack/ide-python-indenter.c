@@ -264,9 +264,9 @@ copy_indent_minus_tab (IdePythonIndenter *python,
 
 static gchar *
 copy_indent_plus_hash (IdePythonIndenter *python,
-             GtkTextIter       *begin,
-             GtkTextIter       *end,
-             GtkTextIter       *copy)
+                       GtkTextIter       *begin,
+                       GtkTextIter       *end,
+                       GtkTextIter       *copy)
 {
   GString *str;
   gchar *copied;
@@ -276,6 +276,39 @@ copy_indent_plus_hash (IdePythonIndenter *python,
   g_free (copied);
 
   g_string_append (str, "# ");
+
+  return g_string_free (str, FALSE);
+}
+
+static gchar *
+maybe_insert_match (IdePythonIndenter *python,
+                    GtkTextIter       *begin,
+                    GtkTextIter       *end,
+                    GtkTextIter       *iter,
+                    gint              *cursor_offset,
+                    gunichar          ch)
+{
+  GtkTextIter after = *begin;
+  GString *str;
+  gunichar match;
+  gint i = 3;
+
+  if (gtk_text_iter_get_char (&after) == ch)
+    return NULL;
+
+  if (!gtk_text_iter_backward_chars (iter, 2))
+    return NULL;
+
+  while ((match = gtk_text_iter_get_char (iter)) && i--)
+    if (match != ch)
+      return NULL;
+
+  *cursor_offset -= 3;
+
+  if (ch == '\'')
+    str = g_string_new ("'''");
+  else
+    str = g_string_new ("\"\"\"");
 
   return g_string_free (str, FALSE);
 }
@@ -714,6 +747,14 @@ ide_python_indenter_format (IdeIndenter *indenter,
       return maybe_unindent_else_or_elif (python, text_view, begin, end);
     }
 
+  if (event->keyval == GDK_KEY_apostrophe || event->keyval == GDK_KEY_quotedbl)
+    {
+      if (ch != '\'' && ch != '"')
+        return NULL;
+
+      return maybe_insert_match (python, begin, end, &iter, cursor_offset, ch);
+    }
+
   iter = *begin;
   line = gtk_text_iter_get_line (&iter);
 
@@ -816,8 +857,7 @@ ide_python_indenter_is_trigger (IdeIndenter *indenter,
   guint modifier_state;
 
   modifier_state = gdk_keymap_get_modifier_state (keymap);
-  if (modifier_state & GDK_SHIFT_MASK ||
-      modifier_state & GDK_CONTROL_MASK ||
+  if (modifier_state & GDK_CONTROL_MASK ||
       modifier_state & GDK_MOD1_MASK)
     return FALSE;
 
@@ -825,6 +865,8 @@ ide_python_indenter_is_trigger (IdeIndenter *indenter,
     {
     case GDK_KEY_e:
     case GDK_KEY_f:
+    case GDK_KEY_apostrophe:
+    case GDK_KEY_quotedbl:
     case GDK_KEY_KP_Enter:
     case GDK_KEY_Return:
       return TRUE;
