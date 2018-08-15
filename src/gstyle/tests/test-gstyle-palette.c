@@ -57,7 +57,7 @@ test_palette (void)
   GstylePalette *palette;
 
   printf ("\n");
-  palette = load_palette ("palette.gstyle.xml");
+  palette = load_palette ("palette.xml");
   g_object_unref (palette);
 
   palette = load_palette ("palette.gpl");
