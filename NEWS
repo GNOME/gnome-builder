@@ -1,3 +1,30 @@
+===============
+Version 3.29.91
+===============
+
+Changes since last release:
+
+ • gdb breakpoint control improvements
+ • Build system improvements for NixOS and Flatpak
+ • Many memory safety and leak improvements
+ • Icon installation has changed slightly. Please let us know if
+   you have issues on your distribution.
+ • A hover provider for language server protocol was added, including
+   for rls.
+ • The buffer manager now avoids highlighting while loading the underlying
+   buffers from storage.
+ • Terminals now use --login when using bash.
+ • SIGPIPE is disabled on startup.
+ • A new session manager that can restore your vertical and horizontal splits.
+ • Applications can now talk to portals by default when using flatpak.
+ • Improvements to embedded snippets language defaults.
+ • Avoid re-downloading of artifacts when possible.
+
+Updated Translations:
+
+  Swedish, German, Lithuanian, Spanish, Turkish, Catalan, Italian,
+  Brazilian Portuguese, Polish
+
 ==============
 Version 3.29.4
 ==============

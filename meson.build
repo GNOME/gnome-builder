@@ -1,6 +1,6 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
-          version: '3.29.4',
+          version: '3.29.91',
     meson_version: '>= 0.47.1',
   default_options: [ 'c_std=gnu11',
                      'cpp_std=c++11',
@@ -248,13 +248,13 @@ ld_supports_version_script = cc.links('''
 message('Linker supports --version-script: @0@'.format(ld_supports_version_script))
 
 # Commonly used deps
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.4')
+libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.91')
 libgio_dep = dependency('gio-2.0', version: '>= 2.57.2')
 libgiounix_dep = dependency('gio-unix-2.0')
 libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.26')
 libgtksource_dep = dependency('gtksourceview-4', version: '>= 4.0.0')
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
-libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.29.3')
+libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.29.91')
 libm_dep = cc.find_library('m', required: false)
 libpangoft2_dep = dependency('pangoft2', version: '>= 1.38.0')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')

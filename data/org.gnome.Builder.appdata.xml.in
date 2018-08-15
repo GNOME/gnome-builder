@@ -81,6 +81,16 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
+
+    <release version="3.29.91" date="2018-08-15">
+      <description>
+        <p>
+          A number of critical bug fixes and memory leaks were fixed this release.
+          Additionally, projects now restore their sessions including horizontal and vertical splits.
+        </p>
+      </description>
+    </release>
+
     <release version="3.29.4" date="2018-07-17">
       <description>
         <p>
