@@ -565,7 +565,6 @@ ide_task_thread_func (gpointer data)
 
   g_assert (source_object == NULL);
   g_assert (cancellable == NULL);
-  g_assert (task == NULL);
 }
 
 static void
