@@ -38,6 +38,7 @@
 #include "subprocess/ide-subprocess-launcher.h"
 #include "workbench/ide-workbench.h"
 #include "util/ide-flatpak.h"
+#include "util/ide-gtk.h"
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -212,31 +213,8 @@ ide_application_actions_help_cb (GObject      *object,
 
       g_debug ("Documentation URI: %s", uri);
 
-      if (ide_is_flatpak ())
-        {
-          g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-          g_autoptr(IdeSubprocess) subprocess = NULL;
-
-          /* We can't currently trust gtk_show_uri_on_window() because it tries
-           * to open our HTML page with Builder inside our current flatpak
-           * environment! We need to ensure this is fixed upstream, but it's
-           * currently unclear how to do so since we register handles for html.
-           */
-
-          launcher = ide_subprocess_launcher_new (0);
-          ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-          ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-          ide_subprocess_launcher_push_argv (launcher, "xdg-open");
-          ide_subprocess_launcher_push_argv (launcher, uri);
-
-          if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
-            g_warning ("Failed to spawn xdg-open for documentation: %s", error->message);
-        }
-      else
-        {
-          if (!gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
-            g_warning ("Failed to load documentation: %s", error->message);
-        }
+      if (!ide_gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
+        g_warning ("Failed to load documentation: %s", error->message);
 
       IDE_EXIT;
     }

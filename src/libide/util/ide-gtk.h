@@ -46,5 +46,10 @@ IDE_AVAILABLE_IN_3_28
 void          ide_widget_warning             (gpointer                 instance,
                                               const gchar             *format,
                                               ...) G_GNUC_PRINTF (2, 3);
+IDE_AVAILABLE_IN_3_30
+gboolean      ide_gtk_show_uri_on_window     (GtkWindow               *window,
+                                              const gchar             *uri,
+                                              guint32                  timestamp,
+                                              GError                 **error);
 
 G_END_DECLS

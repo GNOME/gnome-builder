@@ -20,7 +20,12 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+
 #include "application/ide-application.h"
+#include "subprocess/ide-subprocess.h"
+#include "subprocess/ide-subprocess-launcher.h"
+#include "util/ide-flatpak.h"
 #include "util/ide-gtk.h"
 
 static GQuark quark_handler;
@@ -224,4 +229,42 @@ ide_widget_warning (gpointer     instance,
     ide_context_emit_log (context, G_LOG_LEVEL_WARNING, str, -1);
   else
     g_warning ("%s", str);
+}
+
+gboolean
+ide_gtk_show_uri_on_window (GtkWindow    *window,
+                            const gchar  *uri,
+                            guint32       timestamp,
+                            GError      **error)
+{
+  g_return_val_if_fail (!window || GTK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (uri != NULL, FALSE);
+
+  if (ide_is_flatpak ())
+    {
+      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeSubprocess) subprocess = NULL;
+
+      /* We can't currently trust gtk_show_uri_on_window() because it tries
+       * to open our HTML page with Builder inside our current flatpak
+       * environment! We need to ensure this is fixed upstream, but it's
+       * currently unclear how to do so since we register handles for html.
+       */
+
+      launcher = ide_subprocess_launcher_new (0);
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
+      ide_subprocess_launcher_push_argv (launcher, "xdg-open");
+      ide_subprocess_launcher_push_argv (launcher, uri);
+
+      if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, error)))
+        return FALSE;
+    }
+  else
+    {
+      if (!gtk_show_uri_on_window (window, uri, gtk_get_current_event_time (), error))
+        return FALSE;
+    }
+
+  return TRUE;
 }
