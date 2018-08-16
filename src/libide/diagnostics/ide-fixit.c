@@ -149,7 +149,7 @@ ide_fixit_to_variant (const IdeFixit *self)
   if ((vrange = ide_source_range_to_variant (self->range)))
     g_variant_dict_insert_value (&dict, "range", vrange);
 
-  return g_variant_ref_sink (g_variant_dict_end (&dict));
+  return g_variant_take_ref (g_variant_dict_end (&dict));
 }
 
 /**

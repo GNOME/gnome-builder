@@ -504,7 +504,7 @@ ide_diagnostic_to_variant (const IdeDiagnostic *self)
       g_variant_dict_insert_value (&dict, "fixits", g_variant_builder_end (&builder));
     }
 
-  return g_variant_ref_sink (g_variant_dict_end (&dict));
+  return g_variant_take_ref (g_variant_dict_end (&dict));
 }
 
 /**

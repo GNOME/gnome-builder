@@ -168,7 +168,7 @@ ide_source_range_to_variant (const IdeSourceRange *self)
         g_variant_dict_insert_value (&dict, "end", end);
     }
 
-  return g_variant_ref_sink (g_variant_dict_end (&dict));
+  return g_variant_take_ref (g_variant_dict_end (&dict));
 }
 
 IdeSourceRange *

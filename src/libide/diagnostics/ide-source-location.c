@@ -333,5 +333,5 @@ ide_source_location_to_variant (const IdeSourceLocation *self)
   g_variant_dict_insert (&dict, "line-offset", "u", self->line_offset);
   g_variant_dict_insert (&dict, "offset", "u", self->offset);
 
-  return g_variant_ref_sink (g_variant_dict_end (&dict));
+  return g_variant_take_ref (g_variant_dict_end (&dict));
 }

@@ -252,5 +252,5 @@ ide_highlight_index_to_variant (IdeHighlightIndex *self)
       g_variant_dict_insert_value (&dict, k, g_steal_pointer (&keys));
     }
 
-  return g_variant_ref_sink (g_variant_dict_end (&dict));
+  return g_variant_take_ref (g_variant_dict_end (&dict));
 }

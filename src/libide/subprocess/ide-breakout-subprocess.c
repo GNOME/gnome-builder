@@ -1476,7 +1476,7 @@ ide_breakout_subprocess_initable_init (GInitable     *initable,
                           g_variant_builder_end (g_steal_pointer (&fd_builder)),
                           g_variant_builder_end (g_steal_pointer (&env_builder)),
                           self->clear_env ? FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV : 0);
-  g_variant_ref_sink (params);
+  g_variant_take_ref (params);
 
 #ifdef IDE_ENABLE_TRACE
   {

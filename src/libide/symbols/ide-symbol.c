@@ -386,7 +386,7 @@ ide_symbol_to_variant (const IdeSymbol *self)
       g_variant_builder_add_parsed (&builder, "{%s,%v}", "canonical", v);
     }
 
-  return g_variant_ref_sink (g_variant_builder_end (&builder));
+  return g_variant_take_ref (g_variant_builder_end (&builder));
 }
 
 IdeSymbol *
