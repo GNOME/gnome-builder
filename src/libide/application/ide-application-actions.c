@@ -194,14 +194,16 @@ ide_application_actions_help_cb (GObject      *object,
    */
   if (g_file_test (PACKAGE_DOCDIR"/en/index.html", G_FILE_TEST_IS_REGULAR))
     {
-      const gchar *uri;
-      g_autofree gchar *real_uri = NULL;
+      g_autofree gchar *file_base = NULL;
+      g_autofree gchar *uri = NULL;
       g_autoptr(GError) error = NULL;
 
       if (ide_is_flatpak ())
-        uri = real_uri = ide_flatpak_get_app_path ("/share/doc/gnome-builder/en/index.html");
+        file_base = ide_flatpak_get_app_path ("/share/doc/gnome-builder");
       else
-        uri = "file://"PACKAGE_DOCDIR"/en/index.html";
+        file_base = g_strdup (PACKAGE_DOCDIR);
+
+      uri = g_strdup_printf ("file://%s/en/index.html", file_base);
 
       if (!gtk_show_uri_on_window (focused_window, uri, gtk_get_current_event_time (), &error))
         g_warning ("Failed to load documentation: %s", error->message);
