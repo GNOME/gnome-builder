@@ -1,0 +1,14 @@
+[Plugin]
+Module=clang_langserv_plugin
+Loader=python3
+Name=Clang Language Server Integration
+Description=Provides auto-completion, diagnostics, and other IDE features
+Authors=Christian Hergert <christian@hergert.me>, Nathaniel McCallum <npmccallum@redhat.com>
+Copyright=Copyright © 2016-2018 Christian Hergert, Nathaniel McCallum
+Builtin=true
+X-Completion-Provider-Languages=c,chdr,cpp,cpphdr,objc
+X-Diagnostic-Provider-Languages=c,chdr,cpp,cpphdr,objc
+X-Formatter-Languages=c,chdr,cpp,cpphdr,objc
+X-Highlighter-Languages=c,chdr,cpp,cpphdr,objc
+X-Rename-Provider-Languages=c,chdr,cpp,cpphdr,objc
+X-Symbol-Resolver-Languages=c,chdr,cpp,cpphdr,objc
