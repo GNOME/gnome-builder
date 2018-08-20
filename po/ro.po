@@ -7,10 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-07-17 17:21+0000\n"
-"PO-Revision-Date: 2018-07-17 20:28+0300\n"
-"Last-Translator: Florentina Mușat <florentina.musat.28 [at] gmail [dot] "
-"com>\n"
+"POT-Creation-Date: 2018-08-16 20:07+0000\n"
+"PO-Revision-Date: 2018-08-19 18:01+0200\n"
+"Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Poedit 2.0.9\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Project-Style: gnome\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
@@ -437,15 +436,15 @@ msgstr "Înălțimea în unități pixel a panoului de jos."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:692
+#: src/libide/application/ide-application.c:605
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
-#: src/libide/workbench/ide-workbench.c:648
+#: src/libide/workbench/ide-workbench.c:665
 msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/application/ide-application-actions.c:143
+#: src/libide/application/ide-application-actions.c:146
 msgid "An IDE for GNOME"
 msgstr "Un IDE pentru GNOME"
 
@@ -739,7 +738,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Încărcați sau generați o paletă utilizând preferințele"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4965
+#: src/libide/sourceview/ide-source-view.c:4947
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Redenumește"
@@ -755,23 +754,23 @@ msgstr "Elimină"
 msgid "_Rename"
 msgstr "_Redenumește"
 
-#: src/libide/application/ide-application-actions.c:149
+#: src/libide/application/ide-application-actions.c:152
 msgid "GNOME Builder"
 msgstr "Builder GNOME"
 
-#: src/libide/application/ide-application-actions.c:151
+#: src/libide/application/ide-application-actions.c:154
 msgid "translator-credits"
 msgstr "Florentina Mușat <florentina.musat.28 [at] gmail [dot] com>, 2018"
 
-#: src/libide/application/ide-application-actions.c:155
+#: src/libide/application/ide-application-actions.c:158
 msgid "Learn more about GNOME Builder"
 msgstr "Aflați mai multe despre Builder GNOME"
 
-#: src/libide/application/ide-application-actions.c:158
+#: src/libide/application/ide-application-actions.c:161
 msgid "Funded By"
 msgstr "Fondat de"
 
-#: src/libide/application/ide-application.c:1088
+#: src/libide/application/ide-application.c:1001
 #: src/libide/preferences/ide-preferences-builtin.c:417
 msgid "Projects"
 msgstr "Proiecte"
@@ -847,7 +846,7 @@ msgstr "Niciun astfel de lucrător"
 #: src/libide/application/ide-application-shortcuts.c:44
 #: src/libide/application/ide-application-shortcuts.c:55
 #: src/libide/application/ide-application-shortcuts.c:66
-#: src/libide/runner/ide-run-manager.c:778
+#: src/libide/runner/ide-run-manager.c:780
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
 #: src/libide/workbench/ide-workbench-shortcuts.c:45
@@ -895,20 +894,20 @@ msgstr "Arată fereastra de scurtături"
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Nu s-a putut stabili un monitor pentru modificările de plan secund: %s"
 
-#: src/libide/buffers/ide-buffer.c:2907
+#: src/libide/buffers/ide-buffer.c:2908
 msgid "The current language lacks a symbol resolver."
 msgstr "Limbajului curent îi lipsește un rezolvator de simbol."
 
-#: src/libide/buffers/ide-buffer.c:3378
+#: src/libide/buffers/ide-buffer.c:3379
 #, c-format
 msgid "Buffer failed: %s"
 msgstr "Preîncărcarea a eșuat: %s"
 
-#: src/libide/buffers/ide-buffer-manager.c:606
+#: src/libide/buffers/ide-buffer-manager.c:610
 msgid "File too large to be opened."
 msgstr "Fișierul este prea mare pentru a putea fi deschis."
 
-#: src/libide/buffers/ide-buffer-manager.c:1818
+#: src/libide/buffers/ide-buffer-manager.c:1825
 #, c-format
 msgid "unsaved document %u"
 msgstr "document nesalvat %u"
@@ -917,8 +916,8 @@ msgstr "document nesalvat %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:1857
-#: src/libide/buffers/ide-buffer-manager.c:1920
+#: src/libide/buffers/ide-buffer-manager.c:1864
+#: src/libide/buffers/ide-buffer-manager.c:1927
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -1240,6 +1239,7 @@ msgid "Disassembly"
 msgstr "Dezasamblare"
 
 #: src/libide/debugger/ide-debugger-editor-addin.c:311
+#: src/libide/debugger/ide-debugger-hover-provider.c:88
 msgid "Debugger"
 msgstr "Depanator"
 
@@ -1266,6 +1266,18 @@ msgstr "Istoric"
 #: src/libide/debugger/ide-debugger-editor-addin.c:400
 msgid "Failed to initialize the debugger"
 msgstr "Nu s-a putut inițializa depanatorul"
+
+#: src/libide/debugger/ide-debugger-hover-controls.ui:16
+msgid "No break"
+msgstr "Nu sunt întreruperi"
+
+#: src/libide/debugger/ide-debugger-hover-controls.ui:22
+msgid "Breakpoint"
+msgstr "Punct de întrerupere"
+
+#: src/libide/debugger/ide-debugger-hover-controls.ui:28
+msgid "Countpoint"
+msgstr "Punct de numărare"
 
 #: src/libide/debugger/ide-debugger-libraries-view.ui:14
 msgid "Library"
@@ -1439,6 +1451,11 @@ msgstr "S_alvează ca"
 #: src/libide/editor/gtk/menus.ui:127
 msgid "New File"
 msgstr "Fișier nou"
+
+#: src/libide/editor/ide-editor-hover-provider.c:74
+#: src/libide/preferences/ide-preferences-builtin.c:201
+msgid "Diagnostics"
+msgstr "Diagnosticare"
 
 #. translators: the user selected a number outside the value range for the document.
 #: src/libide/editor/ide-editor-layout-stack-controls.c:176
@@ -1964,7 +1981,7 @@ msgstr "Restabilește"
 msgid "Open File…"
 msgstr "Deschide un fișier…"
 
-#: src/libide/gtk/menus.ui:219 src/libide/runner/ide-run-manager.c:1116
+#: src/libide/gtk/menus.ui:219 src/libide/runner/ide-run-manager.c:1118
 msgid "Run"
 msgstr "Rulează"
 
@@ -1981,9 +1998,13 @@ msgstr "_Copiază adresa legăturii"
 msgid "You must call %s() before using libide."
 msgstr "Trebuie să apelați %s() înainte să utilizați libide."
 
-#: src/libide/ide-context.c:2184
+#: src/libide/ide-context.c:2212
 msgid "An unload request is already pending"
 msgstr "O cerere de descărcare este deja în așteptare"
+
+#: src/libide/ide-context.c:2294
+msgid "Context already unloading, cannot restore."
+msgstr "Contextul se eliberează deja, nu se poate restaura."
 
 #: src/libide/ide-context.c:2303
 msgid "Context has already been restored."
@@ -2295,7 +2316,7 @@ msgid "Unselect all"
 msgstr "Deselectează tot"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:412
-#: src/libide/runner/ide-run-manager.c:779
+#: src/libide/runner/ide-run-manager.c:781
 #: src/libide/workbench/ide-workbench-shortcuts.c:46
 msgctxt "shortcut window"
 msgid "Build and Run"
@@ -2408,13 +2429,13 @@ msgid "There was a failure while trying to perform the operation."
 msgstr "A apărut o eroare în timp ce se încerca executarea operației."
 
 #. translators: %s is replaced with the host name
-#: src/libide/local/ide-local-device.c:138
+#: src/libide/local/ide-local-device.c:137
 #, c-format
 msgid "My Computer (%s)"
 msgstr "Calculator (%s)"
 
 #. translators: first %s is replaced with the host name, second with CPU architecture
-#: src/libide/local/ide-local-device.c:148
+#: src/libide/local/ide-local-device.c:147
 #, c-format
 msgid "My Computer (%s) — %s"
 msgstr "Calculator (%s) — %s"
@@ -2711,10 +2732,6 @@ msgstr ""
 "Utilizează înțelegerea de cod pentru a evidenția informații adiționale "
 "descoperite în fișierul sursă"
 
-#: src/libide/preferences/ide-preferences-builtin.c:201
-msgid "Diagnostics"
-msgstr "Diagnosticare"
-
 #: src/libide/preferences/ide-preferences-builtin.c:207
 msgid "Completion"
 msgstr "Completare"
@@ -2930,11 +2947,11 @@ msgstr "Oprește rularea"
 msgid "Change run options"
 msgstr "Modifică opțiunile de rulare"
 
-#: src/libide/runner/ide-run-manager.c:371
+#: src/libide/runner/ide-run-manager.c:373
 msgid "Cannot run target, another target is running"
 msgstr "Nu se poate rula ținta, altă țintă rulează"
 
-#: src/libide/runner/ide-run-manager.c:440
+#: src/libide/runner/ide-run-manager.c:442
 msgid "Failed to locate runtime"
 msgstr "Nu s-a putut localiza executarea"
 
@@ -2946,35 +2963,31 @@ msgstr "Procesul s-a terminat neașteptat"
 msgid "Host operating system"
 msgstr "Sistem de operare gazdă"
 
-#: src/libide/sourceview/ide-omni-gutter-renderer.c:752
-msgid "Click to toggle breakpoint"
-msgstr "Apăsați clic pentru a comuta indicatorul de întrerupere"
-
-#: src/libide/sourceview/ide-source-view.c:4420
+#: src/libide/sourceview/ide-source-view.c:4402
 #, c-format
 msgid "Insert “%s”"
 msgstr "Introduce „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4422
+#: src/libide/sourceview/ide-source-view.c:4404
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Înlocuiește „%s” cu „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4536
+#: src/libide/sourceview/ide-source-view.c:4518
 msgid "Apply Fix-It"
 msgstr "Aplică repararea"
 
-#: src/libide/sourceview/ide-source-view.c:4964
+#: src/libide/sourceview/ide-source-view.c:4946
 msgid "Rename symbol"
 msgstr "Redenumește simbolul"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5200
+#: src/libide/sourceview/ide-source-view.c:5182
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rând %u, Coloană %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5226
+#: src/libide/sourceview/ide-source-view.c:5208
 msgid "No references were found"
 msgstr "Nu s-au găsit referințe"
 
@@ -3014,7 +3027,7 @@ msgstr "Testele vor fi încărcate după generare."
 msgid "Default (Host operating system)"
 msgstr "Implicit (sistem de operare gazdă)"
 
-#: src/libide/transfers/ide-pkcon-transfer.c:59
+#: src/libide/transfers/ide-pkcon-transfer.c:58
 #, c-format
 msgid "Installing %u package"
 msgid_plural "Installing %u packages"
@@ -3159,7 +3172,7 @@ msgstr ""
 msgid "Builder Statistics"
 msgstr "Statistici Builder"
 
-#: src/libide/workbench/ide-workbench.c:646
+#: src/libide/workbench/ide-workbench.c:663
 #, c-format
 msgid "%s — Builder"
 msgstr "Builder — %s"
@@ -3201,7 +3214,7 @@ msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Perspective"
 
-#: src/main.c:117
+#: src/main.c:120
 msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
@@ -3224,7 +3237,7 @@ msgid "Configuring project"
 msgstr "Se configurează proiectul"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
-#: src/plugins/cargo/cargo_plugin.py:150
+#: src/plugins/cargo/cargo_plugin.py:166
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
@@ -3520,15 +3533,16 @@ msgstr "%s (CMake)"
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:276
+#: src/plugins/code-index/ide-code-index-index.c:277
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:81
 msgid "Declaration"
 msgstr "Declarație"
 
-#: src/plugins/code-index/ide-code-index-service.c:618
+#: src/plugins/code-index/ide-code-index-service.c:625
 msgid "Indexing Source Code"
 msgstr "Se indexează codul sursă"
 
-#: src/plugins/code-index/ide-code-index-service.c:619
+#: src/plugins/code-index/ide-code-index-service.c:626
 msgid "Search, diagnostics and autocompletion may be limited until complete."
 msgstr ""
 "Căutarea, diagnosticările și completarea automată ar putea să fie limitate "
@@ -3933,29 +3947,29 @@ msgstr "Specificați un nume de proiect.\n"
 msgid "Please specify a project template with --template=\n"
 msgstr "Specificați un șablon de proiect cu --template=\n"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:174
+#: src/plugins/create-project/gbp-create-project-widget.c:172
 msgid ""
 "Characters were used which might cause technical issues as a project name"
 msgstr ""
 "Au fost utilizate caractere ce ar putea cauza probleme tehnice ca nume de "
 "proiect"
 
-#: src/plugins/create-project/gbp-create-project-widget.c:177
+#: src/plugins/create-project/gbp-create-project-widget.c:175
 #: src/plugins/create-project/gbp-create-project-widget.ui:104
 msgid "Your project will be created within a new child directory."
 msgstr "Proiectul va fi creat într-un dosar inferior nou."
 
-#: src/plugins/create-project/gbp-create-project-widget.c:183
+#: src/plugins/create-project/gbp-create-project-widget.c:181
 msgid "Directory already exists with that name"
 msgstr "Există deja un dosar cu acel nume"
 
 #. translators: %s is replaced with a short-form file-system path to the project
-#: src/plugins/create-project/gbp-create-project-widget.c:201
+#: src/plugins/create-project/gbp-create-project-widget.c:199
 #, c-format
 msgid "Your project will be created within %s."
 msgstr "Proiectul va fi creat în %s."
 
-#: src/plugins/create-project/gbp-create-project-widget.c:617
+#: src/plugins/create-project/gbp-create-project-widget.c:612
 msgid "A failure occurred while initializing version control"
 msgstr "A apărut o eroare în timpul inițializării versiunii de control"
 
@@ -4039,6 +4053,10 @@ msgid "Use Ctags to suggest completions for a variety of languages"
 msgstr ""
 "Utilizați Ctags pentru a sugera completări pentru o varietate de limbaje"
 
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:128
+msgid "Devhelp"
+msgstr "Ajutor pentru dezvoltatori"
+
 #: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
 msgid "Select Documentation…"
 msgstr "Selectați o documentație…"
@@ -4051,10 +4069,6 @@ msgstr "Documentație"
 #: src/plugins/devhelp/gtk/menus.ui:21
 msgid "New Documentation Page"
 msgstr "Pagină de documentație nouă"
-
-#: src/plugins/documentation-card/gbp-documentation-card.ui:36
-msgid "_Show more"
-msgstr "_Arată mai multe"
 
 #: src/plugins/eslint/eslint_plugin.py:143
 msgid "ESlint"
@@ -4085,7 +4099,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Se descarcă sursele aplicației…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:664
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Nu s-a putut elimina manifestul flatpak: %s"
@@ -4133,8 +4147,8 @@ msgstr "Se creează pachetul flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
-#: src/plugins/html-preview/html_preview.py:329
-#: src/plugins/html-preview/html_preview.py:339
+#: src/plugins/html-preview/html_preview.py:330
+#: src/plugins/html-preview/html_preview.py:340
 #: src/plugins/rustup/rustup_plugin.py:492
 #: src/plugins/rustup/rustup_plugin.py:496
 #: src/plugins/rustup/rustup_plugin.py:613
@@ -4259,7 +4273,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "Fișierul solicitat nu există în indexul git."
 
 #: src/plugins/git/ide-git-clone-widget.c:159
-#: src/plugins/git/ide-git-clone-widget.c:499
+#: src/plugins/git/ide-git-clone-widget.c:500
 msgid "A valid Git URL is required"
 msgstr "Un URL Git valid este necesar"
 
@@ -4364,15 +4378,15 @@ msgstr ""
 msgid "Open Preview"
 msgstr "Deschide previzualizarea"
 
-#: src/plugins/html-preview/html_preview.py:325
+#: src/plugins/html-preview/html_preview.py:326
 msgid "Your computer is missing python3-docutils"
 msgstr "Calculatorului îi lipsește python3-docutils"
 
-#: src/plugins/html-preview/html_preview.py:335
+#: src/plugins/html-preview/html_preview.py:336
 msgid "Your computer is missing python3-sphinx"
 msgstr "Calculatorului îi lipsește python3-sphinx"
 
-#: src/plugins/html-preview/html_preview.py:382
+#: src/plugins/html-preview/html_preview.py:383
 msgid "(Preview)"
 msgstr "(Previzualizare)"
 
@@ -4955,7 +4969,7 @@ msgstr "Arată panoul de corector ortografic"
 msgid "Failed to initialize spellchecking, disabling"
 msgstr "Nu s-a putut inițializa corectarea ortografică, se dezactivează"
 
-#: src/plugins/spellcheck/gbp-spell-language-popover.c:232
+#: src/plugins/spellcheck/gbp-spell-language-popover.c:231
 msgid "No language selected"
 msgstr "Nu este selectată nicio limbă"
 
@@ -5048,6 +5062,22 @@ msgid ""
 msgstr ""
 "Fișierul de istoric de suport a fost scris la „%s”. Furnizați acest fișier "
 "ca un atașament la raportul de defecțiune sau la cererea de suport."
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
+msgid "Definition"
+msgstr "Definiție"
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
+msgid "Canonical"
+msgstr "Canonical"
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
+msgid "Unnamed Symbol"
+msgstr "Simbol nedenumit"
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:162
+msgid "Symbol"
+msgstr "Simbol"
 
 #: src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c:55
 msgctxt "shortcut window"
@@ -5151,7 +5181,7 @@ msgstr "%s (SDK sysroot)"
 msgid "Save Terminal Content As"
 msgstr "Salvează conținutul terminalului ca"
 
-#: src/plugins/terminal/gb-terminal-view.c:426
+#: src/plugins/terminal/gb-terminal-view.c:453
 msgid "Untitled terminal"
 msgstr "Terminal neintitulat"
 
@@ -5244,6 +5274,12 @@ msgstr "Fișierul trebuie salvat local pentru a fi parsat."
 #: src/plugins/xml-pack/ide-xml-service.c:337
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Preîncărcarea s-a încărcat dar nu în administratorul de preîncărcare."
+
+#~ msgid "Click to toggle breakpoint"
+#~ msgstr "Apăsați clic pentru a comuta indicatorul de întrerupere"
+
+#~ msgid "_Show more"
+#~ msgstr "_Arată mai multe"
 
 #~ msgid "Suggest Snippet Completion"
 #~ msgstr "Propune completare de bloc"
