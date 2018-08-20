@@ -16,6 +16,7 @@ subdir('beautifier')
 subdir('c-pack')
 subdir('cargo')
 subdir('clang')
+subdir('clang-langserv')
 subdir('cmake')
 subdir('code-index')
 subdir('color-picker')
@@ -102,6 +103,7 @@ status += [
   'C Language Pack ....... : @0@'.format(get_option('with_c_pack')),
   'Cargo ................. : @0@'.format(get_option('with_cargo')),
   'Clang ................. : @0@'.format(get_option('with_clang')),
+  'Clang Language Server.. : @0@'.format(get_option('with_clang_langserv')),
   'CMake ................. : @0@'.format(get_option('with_cmake')),
   'Color Picker .......... : @0@'.format(get_option('with_color_picker')),
   'Command Bar ........... : @0@'.format(get_option('with_command_bar')),
