@@ -120,8 +120,15 @@ gbp_sysroot_manager_get_default (void)
 {
   static GbpSysrootManager *instance;
 
+  /* TODO: This needs to be attached to the IdeContext somehow, as this is
+   *       not ideal when two contexts are loaded and sharing occurs.
+   */
+
   if (instance == NULL)
-    instance = g_object_new (GBP_TYPE_SYSROOT_MANAGER, NULL);
+    {
+      instance = g_object_new (GBP_TYPE_SYSROOT_MANAGER, NULL);
+      g_object_add_weak_pointer (G_OBJECT (instance), (gpointer *)&instance);
+    }
 
   return instance;
 }

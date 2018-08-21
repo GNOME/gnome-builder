@@ -82,6 +82,8 @@ sysroot_runtime_provider_target_changed (GbpSysrootRuntimeProvider              
                                          GbpSysrootManagerTargetModificationType  mod_type,
                                          gpointer                                 user_data)
 {
+  g_assert (GBP_IS_SYSROOT_RUNTIME_PROVIDER (self));
+
   if (mod_type == GBP_SYSROOT_MANAGER_TARGET_CREATED)
     sysroot_runtime_provider_add_target (self, target);
   else if (mod_type == GBP_SYSROOT_MANAGER_TARGET_REMOVED)
@@ -125,10 +127,14 @@ gbp_sysroot_runtime_provider_load (IdeRuntimeProvider *provider,
       sysroot_runtime_provider_add_target (self, sysroots[i]);
     }
 
-  g_signal_connect_swapped (sysroot_manager,
-                            "target-changed",
-                            G_CALLBACK (sysroot_runtime_provider_target_changed),
-                            self);
+  /* Hold extra ref during plugin load */
+  g_object_ref (sysroot_manager);
+
+  g_signal_connect_object (sysroot_manager,
+                           "target-changed",
+                           G_CALLBACK (sysroot_runtime_provider_target_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   IDE_EXIT;
 }
@@ -146,6 +152,12 @@ gbp_sysroot_runtime_provider_unload (IdeRuntimeProvider *provider,
   g_assert (IDE_IS_RUNTIME_MANAGER (manager));
 
   sysroot_manager = gbp_sysroot_manager_get_default ();
+
+  /* Drop shared instance if last instance usage */
+  if (G_OBJECT (sysroot_manager)->ref_count == 2)
+    g_object_unref (sysroot_manager);
+
+  /* Drop our ref from project load */
   g_object_unref (sysroot_manager);
 
   if (self->runtimes != NULL)
