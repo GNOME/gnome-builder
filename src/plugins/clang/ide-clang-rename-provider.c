@@ -84,6 +84,18 @@ ide_clang_rename_provider_communicate_cb (GObject      *object,
   g_assert (buffer != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
+  /*
+   * If the buffer has trailing newline set, then just remove the added \n we
+   * will get at the end of the buffer.
+   */
+  if (gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (buffer)))
+    {
+      gsize len = strlen (stdout_buf);
+
+      if (len > 0 && stdout_buf[len-1] == '\n')
+        stdout_buf[len-1] = 0;
+    }
+
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin_iter, &end_iter);
   begin = ide_buffer_get_iter_location (buffer, &begin_iter);
   end = ide_buffer_get_iter_location (buffer, &end_iter);
