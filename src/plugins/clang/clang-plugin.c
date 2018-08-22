@@ -26,6 +26,7 @@
 #include "ide-clang-diagnostic-provider.h"
 #include "ide-clang-highlighter.h"
 #include "ide-clang-preferences-addin.h"
+#include "ide-clang-rename-provider.h"
 #include "ide-clang-symbol-node.h"
 #include "ide-clang-symbol-resolver.h"
 #include "ide-clang-symbol-tree.h"
@@ -54,4 +55,7 @@ ide_clang_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               IDE_TYPE_CLANG_PREFERENCES_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RENAME_PROVIDER,
+                                              IDE_TYPE_CLANG_RENAME_PROVIDER);
 }

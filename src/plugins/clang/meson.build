@@ -26,6 +26,8 @@ clang_sources = [
   'ide-clang-preferences-addin.h',
   'ide-clang-proposals.c',
   'ide-clang-proposals.h',
+  'ide-clang-rename-provider.c',
+  'ide-clang-rename-provider.h',
   'ide-clang-symbol-node.c',
   'ide-clang-symbol-node.h',
   'ide-clang-symbol-resolver.c',
