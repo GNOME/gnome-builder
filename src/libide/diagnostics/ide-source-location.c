@@ -335,3 +335,24 @@ ide_source_location_to_variant (const IdeSourceLocation *self)
 
   return g_variant_take_ref (g_variant_dict_end (&dict));
 }
+
+/**
+ * ide_source_location_get_path:
+ * @self: a #IdeSourceLocation
+ *
+ * Gets the path for the file represented by the location.
+ *
+ * Will return %NULL if the path is not native.
+ *
+ * Returns: (nullable): a path or %NULL if not local
+ */
+const gchar *
+ide_source_location_get_path (IdeSourceLocation *self)
+{
+  if (self == NULL)
+    return NULL;
+
+  g_return_val_if_fail (IDE_IS_FILE (self->file), NULL);
+
+  return ide_file_get_path (self->file);
+}

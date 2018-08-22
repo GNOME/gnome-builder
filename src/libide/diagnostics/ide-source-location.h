@@ -56,6 +56,8 @@ IDE_AVAILABLE_IN_ALL
 IdeFile           *ide_source_location_get_file         (IdeSourceLocation       *self);
 IDE_AVAILABLE_IN_ALL
 IdeUri            *ide_source_location_get_uri          (IdeSourceLocation       *self);
+IDE_AVAILABLE_IN_3_30
+const gchar       *ide_source_location_get_path         (IdeSourceLocation       *self);
 IDE_AVAILABLE_IN_ALL
 gint               ide_source_location_compare          (const IdeSourceLocation *a,
                                                          const IdeSourceLocation *b);
