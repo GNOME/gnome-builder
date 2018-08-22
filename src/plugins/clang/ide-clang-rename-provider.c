@@ -69,6 +69,16 @@ ide_clang_rename_provider_communicate_cb (GObject      *object,
   if (ide_task_return_error_if_cancelled (task))
     IDE_EXIT;
 
+  if (dzl_str_empty0 (stdout_buf) || (stdout_buf[0] == '\n' && stdout_buf[1] == 0))
+    {
+      /* Don't allow deleting the buffer contents */
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to get replacement buffer for file");
+      IDE_EXIT;
+    }
+
   buffer = ide_task_get_task_data (task);
 
   g_assert (buffer != NULL);
