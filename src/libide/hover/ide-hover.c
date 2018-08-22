@@ -416,12 +416,15 @@ static inline gboolean
 should_ignore_event (IdeSourceView  *view,
                      GdkWindow      *event_window)
 {
-  GdkWindow *window;
+  GdkWindow *text_window;
+  GdkWindow *gutter_window;
 
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
-  window = gtk_text_view_get_window (GTK_TEXT_VIEW (view), GTK_TEXT_WINDOW_WIDGET);
-  return window != event_window;
+  text_window = gtk_text_view_get_window (GTK_TEXT_VIEW (view), GTK_TEXT_WINDOW_TEXT);
+  gutter_window = gtk_text_view_get_window (GTK_TEXT_VIEW (view), GTK_TEXT_WINDOW_LEFT);
+
+  return (event_window != text_window && event_window != gutter_window);
 }
 
 static gboolean
