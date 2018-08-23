@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "ide-clang-rename-provider"
 
-#include "ide-clang-client.h"
 #include "ide-clang-rename-provider.h"
 
 struct _IdeClangRenameProvider
