@@ -180,6 +180,11 @@ class RustCompletionProvider(Ide.LangservCompletionProvider):
     def do_load(self, context):
         RustService.bind_client(self)
 
+    def do_get_priority(self, context):
+        # This provider only activates when it is very likely that we
+        # want the results. So use high priority (negative is better).
+        return -1000
+
 class RustRenameProvider(Ide.LangservRenameProvider):
     def do_load(self):
         RustService.bind_client(self)
