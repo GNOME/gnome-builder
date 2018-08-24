@@ -19,21 +19,7 @@ object.
         def do_diagnose_async(self, file: Ide.File, buffer: Ide.Buffer, cancellable, callback, user_data):
             task = Gio.Task.new(self, cancellable, callback)
             task.diagnostics_list = []
-    
-            context = self.get_context()
-            unsaved_file = context.get_unsaved_files().get_unsaved_file(file.get_file())
-            pipeline = self.get_context().get_build_manager().get_pipeline()
-            srcdir = pipeline.get_srcdir()
-    
-            if unsaved_file:
-                file_content = unsaved_file.get_content().get_data().decode('utf-8')
-            else:
-                file_content = None
-    
-            threading.Thread(target=self.execute, args=(task, srcdir, file, file_content),
-                             name='golint-thread').start()
-    
-        def execute(self, task: Gio.Task, srcdir: str, file: Ide.File, file_content: str):
+            
             try:
                 start = Ide.SourceLocation.new(file, 0, 0, 0)
                 severity = Ide.DiagnosticSeverity.WARNING
@@ -47,7 +33,6 @@ object.
                 task.return_boolean(True)
     
             task.return_boolean(True)
-    
     
         def do_diagnose_finish(self, result: Gio.Task) -> Ide.Diagnostics:
             if result.propagate_boolean():
