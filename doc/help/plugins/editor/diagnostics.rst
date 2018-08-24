@@ -53,7 +53,7 @@ specify the diagnostic priority.
 For example, a C diagnostic plugin will have a plugin file that look similar to
 this:
 
-.. code-block
+.. code-block::
 
     # my_plugin.plugin
     
