@@ -16,7 +16,7 @@ object.
 .. code-block:: python3
 
     # my_plugin.py
-
+    
     import gi
     gi.require_version('Ide', '1.0')
     from gi.repository import (
@@ -24,18 +24,18 @@ object.
         Gio,
         GLib
     )
-
-
+    
+    
     class MyDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
         def do_diagnose_async(self, file: Ide.File, buffer: Ide.Buffer, cancellable, callback, user_data):
             task = Gio.Task.new(self, cancellable, callback)
             task.diagnostics_list = []
-            
+    
             start = Ide.SourceLocation.new(file, 0, 0, 0)
             severity = Ide.DiagnosticSeverity.WARNING
             error_message = 'Diagnostic example'
-        
-            diagnostic = Ide.Diagnostic.new(severity, error_message, start
+    
+            diagnostic = Ide.Diagnostic.new(severity, error_message, start)
             task.diagnostics_list.append(diagnostic)
     
             task.return_boolean(True)
