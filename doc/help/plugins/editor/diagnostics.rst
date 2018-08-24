@@ -15,7 +15,7 @@ object.
 
 .. code-block:: python3
 
-    #!/usr/bin/env python3
+    # my_plugin.py
 
     import gi
     gi.require_version('Ide', '1.0')
@@ -49,3 +49,20 @@ You also need to register the plugin as a diagnostic provider in the ``.plugin``
 file. There is a ``X-Diagnostic-Provider-Languages`` field which specify the 
 supported languages and ``X-Diagnostic-Provider-Languages-Priority`` which 
 specify the diagnostic priority.
+
+For example, a C diagnostic plugin will have a plugin file that look similar to
+this:
+
+.. code-block
+
+    # my_plugin.plugin
+    
+    [Plugin]
+    Module=my_plugin
+    Name=my_plugin
+    Loader=python3
+    Description=Provides C diagnostics
+    Authors=Author Name <authorname@mailprovider.com>
+    Copyright=Copyright © 2017 Author Name <authorname@mailprovider.com>
+    X-Diagnostic-Provider-Languages=c
+    X-Diagnostic-Provider-Languages-Priority=100
