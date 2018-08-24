@@ -85,8 +85,8 @@ snippet impl
 	impl ${1:Type} {
 	    $0
 	}
-snippet impltrait
-- desc Implement trait
+snippet implfor
+- desc impl … for
 	impl ${1:Trait} for ${2:Type} {
 	    $0
 	}
@@ -104,7 +104,7 @@ snippet drop
 	        $0
 	    }
 	}
-snippet constructor
+snippet new
 - desc Create a constructor
 	#[inline]
 	pub fn ${1:new}(${2}) -> Self {
