@@ -1340,7 +1340,7 @@
              "delete-selection" ()
              "end-macro" () };
   bind "<shift>w" { "begin-macro" ()
-                    "movement" (next-word-start-newline-stop, 1, 1, 1)
+                    "movement" (next-full-word-start-newline-stop, 1, 1, 1)
                     "copy-clipboard" ()
                     "delete-selection" ()
                     "end-macro" () };
