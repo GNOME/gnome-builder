@@ -68,7 +68,6 @@ status += [
   '',
   'Tracing ............... : @0@'.format(get_option('enable_tracing')),
   'Profiling ............. : @0@'.format(get_option('enable_profiling')),
-  'RDTSCP ................ : @0@'.format(get_option('enable_rdtscp')),
   'fusermount ............ : @0@'.format(get_option('fusermount_wrapper')),
   'tcmalloc_minimal ...... : @0@'.format(get_option('with_tcmalloc')),
   '',
