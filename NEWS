@@ -1,4 +1,24 @@
 ===============
+Version 3.29.92
+===============
+
+Changes since last release:
+
+ • Workarounds for various network portal issues and HTTP url opening.
+ • The clang plugin now supports renaming symbols within a file. This uses
+   the clang-rename binary, and therefore is limited to the same restrictions
+   as that tool (which match those of clangd).
+ • Various build system improvements to simplify downstream packaging.
+ • Some snippet and rust completion improvements.
+ • The hover popover tries to handle more corner cases.
+ • "dW" now uses the proper full-word mode under vim emulation.
+
+Updated Translations:
+
+  French, Kazakh, British English, Korean, Chinese (Taiwan), Romanian, Finnish,
+  Indonesian, Czech, Brazilian
+
+===============
 Version 3.29.91
 ===============
 

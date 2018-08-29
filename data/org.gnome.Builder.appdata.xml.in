@@ -82,6 +82,16 @@
 
   <releases>
 
+    <release version="3.29.92" date="2018-08-29">
+      <description>
+        <p>
+          This is a relatively small update release as we progress to 3.30.
+          Of note is rename symbol support for C and C++ languages when using clang.
+          Additionally, the hover popver has seen some improvements.
+        </p>
+      </description>
+    </release>
+
     <release version="3.29.91" date="2018-08-15">
       <description>
         <p>
