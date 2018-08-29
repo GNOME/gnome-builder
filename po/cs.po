@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3.28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-06-13 17:40+0000\n"
-"PO-Revision-Date: 2018-06-14 14:06+0200\n"
+"POT-Creation-Date: 2018-08-26 13:58+0000\n"
+"PO-Revision-Date: 2018-08-29 08:15+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -450,15 +450,15 @@ msgstr "Výška spodního panelu v pixelech."
 
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
-#: src/libide/application/ide-application.c:689
+#: src/libide/application/ide-application.c:690
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:139
-#: src/libide/workbench/ide-workbench.c:646
+#: src/libide/workbench/ide-workbench.c:654
 msgid "Builder"
 msgstr "Builder"
 
 #: data/org.gnome.Builder.appdata.xml.in:8
-#: src/libide/application/ide-application-actions.c:143
+#: src/libide/application/ide-application-actions.c:145
 msgid "An IDE for GNOME"
 msgstr "IDE pro GNOME"
 
@@ -751,23 +751,23 @@ msgstr "Odstranit"
 msgid "_Rename"
 msgstr "_Přejmenovat"
 
-#: src/libide/application/ide-application-actions.c:149
+#: src/libide/application/ide-application-actions.c:151
 msgid "GNOME Builder"
 msgstr "Builder GNOME"
 
-#: src/libide/application/ide-application-actions.c:151
+#: src/libide/application/ide-application-actions.c:153
 msgid "translator-credits"
 msgstr "Marek Černocký <marek@manet.cz>"
 
-#: src/libide/application/ide-application-actions.c:155
+#: src/libide/application/ide-application-actions.c:157
 msgid "Learn more about GNOME Builder"
 msgstr "Zjistěte si více o aplikaci Builder GNOME"
 
-#: src/libide/application/ide-application-actions.c:158
+#: src/libide/application/ide-application-actions.c:160
 msgid "Funded By"
 msgstr "Financovali"
 
-#: src/libide/application/ide-application.c:1080
+#: src/libide/application/ide-application.c:1081
 #: src/libide/preferences/ide-preferences-builtin.c:409
 msgid "Projects"
 msgstr "Projekty"
@@ -885,20 +885,20 @@ msgid "Show the shortcuts window"
 msgstr "Zobrazit okno s klávesovými zkratkami"
 
 #. translators: %s is replaced with the error message
-#: src/libide/buffers/ide-buffer.c:923
+#: src/libide/buffers/ide-buffer.c:931
 #, c-format
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Selhalo ustanovení sledování změn na pozadí: %s"
 
-#: src/libide/buffers/ide-buffer.c:2842
+#: src/libide/buffers/ide-buffer.c:2850
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
-#: src/libide/buffers/ide-buffer-manager.c:704
+#: src/libide/buffers/ide-buffer-manager.c:707
 msgid "File too large to be opened."
 msgstr "Soubor je příliš velký pro otevření."
 
-#: src/libide/buffers/ide-buffer-manager.c:1990
+#: src/libide/buffers/ide-buffer-manager.c:1996
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
@@ -907,8 +907,8 @@ msgstr "neuložený dokument %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:2029
-#: src/libide/buffers/ide-buffer-manager.c:2092
+#: src/libide/buffers/ide-buffer-manager.c:2035
+#: src/libide/buffers/ide-buffer-manager.c:2098
 #: src/libide/editor/ide-editor-view-actions.c:189
 #: src/libide/editor/ide-editor-view-actions.c:310
 #, c-format
@@ -939,7 +939,7 @@ msgstr "Selhalo získání informací o zařízení: %s"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:751
 msgid "The build pipeline is in a failed state"
-msgstr "Roura sestavení je v chybovém stavu"
+msgstr "Sestavovací roura je v chybovém stavu"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:761
 msgid "The build configuration has errors"
@@ -955,7 +955,7 @@ msgstr "Čistí se…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2928
 #: src/libide/buildsystem/ide-build-pipeline.c:2985
-#: src/libide/workbench/ide-omni-bar.c:557
+#: src/libide/workbench/ide-omni-bar.c:558
 msgid "Failed"
 msgstr "Selhalo"
 
@@ -998,7 +998,7 @@ msgstr "Exportuje se…"
 
 #: src/libide/buildsystem/ide-build-pipeline.c:2977
 #: src/libide/buildsystem/ide-build-pipeline.c:2981
-#: src/libide/workbench/ide-omni-bar.c:584
+#: src/libide/workbench/ide-omni-bar.c:585
 msgid "Success"
 msgstr "Úspěšné"
 
@@ -1141,7 +1141,7 @@ msgstr "Podrobnosti o sestavení"
 
 #: src/libide/buildui/ide-build-panel.ui:95
 msgid "Build pipeline is empty"
-msgstr "Roura sestavení je prázdná"
+msgstr "Sestavovací roura je prázdná"
 
 #: src/libide/buildui/ide-build-perspective.c:452 src/libide/gtk/menus.ui:55
 msgid "Build Preferences"
@@ -1156,7 +1156,7 @@ msgid "Remove environment variable"
 msgstr "Odstranit proměnnou prostředí"
 
 #: src/libide/debugger/gtk/menus.ui:10
-#: src/libide/debugger/ide-debugger-editor-addin.c:427
+#: src/libide/debugger/ide-debugger-editor-addin.c:431
 msgid "Run with Debugger"
 msgstr "Spustit s ladicím programem"
 
@@ -1219,31 +1219,31 @@ msgstr "Běžet do konce funkce"
 msgid "Disassembly"
 msgstr "Převést na assembler"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:305
+#: src/libide/debugger/ide-debugger-editor-addin.c:309
 msgid "Debugger"
 msgstr "Ladicí program"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:321
+#: src/libide/debugger/ide-debugger-editor-addin.c:325
 msgid "Threads"
 msgstr "Vlákna"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:347
+#: src/libide/debugger/ide-debugger-editor-addin.c:351
 msgid "Breakpoints"
 msgstr "Body přerušení"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:355
+#: src/libide/debugger/ide-debugger-editor-addin.c:359
 msgid "Libraries"
 msgstr "Knihovny"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:363
+#: src/libide/debugger/ide-debugger-editor-addin.c:367
 msgid "Registers"
 msgstr "Registry"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:371
+#: src/libide/debugger/ide-debugger-editor-addin.c:375
 msgid "Log"
 msgstr "Záznam"
 
-#: src/libide/debugger/ide-debugger-editor-addin.c:394
+#: src/libide/debugger/ide-debugger-editor-addin.c:398
 msgid "Failed to initialize the debugger"
 msgstr "Selhala inicializace ladicího programu"
 
@@ -1330,7 +1330,7 @@ msgid "No file was provided."
 msgstr "Nebyl poskytnut žádný soubor."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:832
+#: src/libide/editor/ide-editor-perspective.c:839
 #: src/libide/preferences/ide-preferences-builtin.c:104
 #: src/libide/preferences/ide-preferences-builtin.c:151
 msgid "Editor"
@@ -1947,11 +1947,11 @@ msgstr "_Kopírovat adresu odkazu"
 msgid "You must call %s() before using libide."
 msgstr "Před použitím libide musíte zavolat %s()."
 
-#: src/libide/ide-context.c:2114
+#: src/libide/ide-context.c:2115
 msgid "An unload request is already pending"
 msgstr "Nějaký požadavek na odstranění z paměti již probíhá"
 
-#: src/libide/ide-context.c:2233
+#: src/libide/ide-context.c:2234
 msgid "Context has already been restored."
 msgstr "Kontext již byl obnoven."
 
@@ -2885,11 +2885,16 @@ msgstr "Cílový soubor musí být součástí projektového stromu."
 msgid "File must be within the project tree."
 msgstr "Soubor musí být součástí projektového stromu."
 
-#: src/libide/runner/ide-run-button.ui:31
+#: src/libide/runner/ide-run-button.ui:6
+msgid "The project cannot be run while the build pipeline is being set up"
+msgstr ""
+"Projekt není možné spustit ve chvíli, kdy se nastavuje sestavovací roura"
+
+#: src/libide/runner/ide-run-button.ui:35
 msgid "Stop running"
 msgstr "Zastavit běh"
 
-#: src/libide/runner/ide-run-button.ui:51
+#: src/libide/runner/ide-run-button.ui:55
 msgid "Change run options"
 msgstr "Změnit volby běhu"
 
@@ -3058,7 +3063,7 @@ msgstr "Nelze zpracovat „%s“ jako absolutní URI"
 msgid "URI “%s” has no host component"
 msgstr "Adresa URI „%s“ nemá část určující hostitele"
 
-#: src/libide/workbench/ide-omni-bar.c:528
+#: src/libide/workbench/ide-omni-bar.c:529
 msgid "Building"
 msgstr "Sestavuje se"
 
@@ -3124,11 +3129,16 @@ msgstr "Exportovat balík"
 msgid "Build project"
 msgstr "Sestavit projekt"
 
+#: src/libide/workbench/ide-omni-bar.ui:596
+msgid "The project cannot be built while the build pipeline is being set up"
+msgstr ""
+"Projekt není možné sestavit ve chvíli, kdy se nastavuje sestavovací roura"
+
 #: src/libide/workbench/ide-workbench-actions.c:218
 msgid "Builder Statistics"
 msgstr "Statistiky aplikace Builder"
 
-#: src/libide/workbench/ide-workbench.c:644
+#: src/libide/workbench/ide-workbench.c:652
 #, c-format
 msgid "%s — Builder"
 msgstr "%s – Builder"
@@ -3469,7 +3479,7 @@ msgstr "Instaluje se projekt"
 #. translators: "Declaration" is describing a function that is defined in a header
 #. *              file (.h) rather than a source file (.c).
 #.
-#: src/plugins/code-index/ide-code-index-index.c:277
+#: src/plugins/code-index/ide-code-index-index.c:278
 msgid "Declaration"
 msgstr "Deklarace"
 
@@ -4026,7 +4036,7 @@ msgstr ""
 msgid "Downloading application sources…"
 msgstr "Stahují se zdroje aplikace…"
 
-#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:661
+#: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
 msgstr "Selhalo odstranění manifestu flatpaku: %s"
@@ -4957,7 +4967,7 @@ msgstr "vala diagnostika varování chyba chyby"
 msgid "Run with Valgrind"
 msgstr "Spustit s nástrojem Valgrind"
 
-#: src/plugins/xml-pack/ide-xml-parser.c:585
+#: src/plugins/xml-pack/ide-xml-parser.c:587
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:523
 msgid "Failed to create the XML tree."
 msgstr "Selhalo vytvoření stromu XML"
