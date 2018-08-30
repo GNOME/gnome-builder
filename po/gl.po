@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2018-08-11 03:27+0000\n"
-"PO-Revision-Date: 2018-08-30 01:53+0200\n"
+"PO-Revision-Date: 2018-08-30 19:36+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Proxecto Trasno <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -902,7 +902,7 @@ msgstr "Ao linguaxe actual fáltalle un resolutor de símbolos."
 #, c-format
 #| msgid "Print failed: %s"
 msgid "Buffer failed: %s"
-msgstr "Fallou o búfer: %s"
+msgstr "Fallou a construción: %s"
 
 #: src/libide/buffers/ide-buffer-manager.c:610
 msgid "File too large to be opened."
@@ -1586,7 +1586,7 @@ msgstr "Trocar panel de utilidades"
 #| msgid "Save all files"
 msgctxt "shortcut window"
 msgid "Close all files"
-msgstr "Pechar todos os ficheiros"
+msgstr "Gardar todos os ficheiros"
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -1915,7 +1915,7 @@ msgstr "Gardar _todo"
 #: src/libide/gtk/menus.ui:80
 #| msgid "_Close All"
 msgid "Close _All"
-msgstr "Pechar _todo"
+msgstr "_Pechar todo"
 
 #: src/libide/gtk/menus.ui:91
 msgid "_Go to Definition"
@@ -2127,7 +2127,7 @@ msgstr "Pechar o documento"
 #| msgid "Close the document"
 msgctxt "shortcut window"
 msgid "Close all documents"
-msgstr "Pechar todos os documentos"
+msgstr "Gardar todos os documentos"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:136
 #: src/libide/keybindings/ide-shortcuts-window.ui:444
@@ -2525,7 +2525,7 @@ msgstr "tipo de letra monoespaciado do terminal"
 #| msgctxt "shortcut window"
 #| msgid "Find text within terminal"
 msgid "Bold text in terminals"
-msgstr "Texto en negriña nos terminais"
+msgstr "Bucar texto na terminal"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
 msgid "If terminals are allowed to display bold text"
@@ -3488,7 +3488,7 @@ msgstr "clang diagnóstico avisos erros"
 #: src/plugins/clang/ide-clang-preferences-addin.c:78
 #| msgid "Suggest completions using Ctags"
 msgid "Suggest completions using Clang"
-msgstr "Suxerir completados usando Clang"
+msgstr "Suxerir completado usando Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:79
 msgid "Use Clang to suggest completions for C and C++ languages"
@@ -4283,6 +4283,8 @@ msgid ""
 "There was a failure while calculating line changes from git. The exact error "
 "was: %s"
 msgstr ""
+"Produciuse un fallo ao calcular os cambios de liña desde git. O erro exacto "
+"foi: %s"
 
 #: src/plugins/git/ide-git-buffer-change-monitor.c:691
 #, c-format
@@ -4312,11 +4314,11 @@ msgstr "O seu proxecto crearase en %s"
 
 #: src/plugins/git/ide-git-clone-widget.c:216
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: src/plugins/git/ide-git-clone-widget.c:218
 msgid "Remote Branch to Clone"
-msgstr ""
+msgstr "Rama remota a clonar"
 
 #: src/plugins/git/ide-git-clone-widget.ui:37
 msgid "Use Git to create a local copy of a remotely hosted project."
@@ -4417,10 +4419,9 @@ msgid "(Preview)"
 msgstr "(Previsualización)"
 
 #: src/plugins/jedi/jedi_plugin.py:662
-#, fuzzy
 #| msgid "Suggest completions using Ctags"
 msgid "Suggest completions from Python"
-msgstr "Suxerir completado usando Ctags"
+msgstr "Suxerir completados desde Python"
 
 #: src/plugins/jedi/jedi_plugin.py:663
 msgid "Use Jedi to provide completions for the Python language"
@@ -4443,16 +4444,14 @@ msgid "Meson"
 msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:108
-#, fuzzy
 #| msgid "A suitable debugger could not be found."
 msgid "A Meson-based project is loaded but Ninja could not be found."
-msgstr "Non é posíbel atopar un depurador axeitado."
+msgstr "Cargouse un proxecto baseado en Meson pero Ninja non se atopou."
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:128
-#, fuzzy
 #| msgid "A suitable debugger could not be found."
 msgid "A Meson-based project is loaded but meson could not be found."
-msgstr "Non é posíbel atopar un depurador axeitado."
+msgstr "Cargouse un proxecto baseado en Meson pero meson non se atopou."
 
 #: src/plugins/meson/gbp-meson-toolchain.c:66
 #, c-format
@@ -4461,41 +4460,40 @@ msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
-#, fuzzy
 #| msgid "to add a new toolchain!"
 msgid "Add toolchain"
-msgstr "para engadir un novo toolchain!"
+msgstr "Engadir conxunto de ferramentas"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr ""
+"Define un novo conxunto de ferramentas personalizado enfocado a unha "
+"plataforma específica"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:406
 msgid "No Provided Tool"
-msgstr ""
+msgstr "Nonn se forneceu ningunha ferramenta"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
-#, fuzzy
 #| msgid "The name of the project."
 msgid "A name to identify the sysroot."
-msgstr "O nome do proxecto"
+msgstr "O nome para identificar o sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
 msgid "Architecture"
-msgstr ""
+msgstr "Arquitectura"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
-#, fuzzy
 #| msgid "The title of the switch."
 msgid "The system architecture of the sysroot."
-msgstr "A descrición do trocador."
+msgstr "A arquitectura do sistema de sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
 msgid "Add Tool:"
-msgstr ""
+msgstr "Engadir ferramenta:"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
 #: src/plugins/meson/gbp-meson-utils.c:96
@@ -5204,8 +5202,8 @@ msgstr "Engadir sysroot"
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:87
 msgid "Define a new sysroot target to build against a different target"
 msgstr ""
-"Define un novo obxectivo de sysroot para construír fronte a un obxectivo "
-"distinto"
+"Define un novo obxectivo de sysroot para construír contra un obxectivo "
+"diferente"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:135
 msgid "Sysroots"
@@ -5213,7 +5211,7 @@ msgstr "Sysroots"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
-msgstr "Unha ruta absoluta do sistema ao sysroot."
+msgstr "Unha ruta de sistema de ficheiros absoluta ao sysroot."
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
 msgid "Package Config Path"
@@ -5257,7 +5255,7 @@ msgstr "O aplicativo saíu\n"
 #| msgid "Terminal in Build Runtime"
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
-msgstr "Terminal en tempo de execución"
+msgstr "Terminal en tempo de execución de construción"
 
 #: src/plugins/terminal/gtk/menus.ui:17
 msgid "Reset and Clear"
@@ -5274,7 +5272,7 @@ msgstr "_Novo Terminal de construción"
 #: src/plugins/terminal/gtk/menus.ui:50
 #| msgid "New _Build Terminal"
 msgid "New _Runtime Terminal"
-msgstr "_Novo Terminal en tempo de execución"
+msgstr "_Novo Terminal de construción"
 
 #: src/plugins/terminal/gtk/menus.ui:60
 msgid "New terminal in directory"
