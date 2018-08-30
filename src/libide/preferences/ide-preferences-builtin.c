@@ -208,6 +208,7 @@ ide_preferences_builtin_register_completion (DzlPreferences *preferences)
 
   dzl_preferences_add_list_group (preferences, "completion", "general", _("General"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_spin_button (preferences, "completion", "general", "org.gnome.builder.editor", "completion-n-rows", NULL, _("Completions Display Size"), _("Number of completions to display"), NULL, -1);
+  dzl_preferences_add_switch (preferences, "completion", "general", "org.gnome.builder.editor", "interactive-completion", NULL, NULL, _("Interactive Completion"), _("Display code suggestions interactively as you type"), NULL, 0);
 
   dzl_preferences_add_list_group (preferences, "completion", "providers", _("Completion Providers"), GTK_SELECTION_NONE, 100);
 }

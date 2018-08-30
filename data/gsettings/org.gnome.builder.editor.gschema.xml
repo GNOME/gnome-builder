@@ -118,5 +118,10 @@
       <summary>Completion Row Count</summary>
       <description>The number of completion rows to display to the user.</description>
     </key>
+    <key name="interactive-completion" type="b">
+      <default>true</default>
+      <summary>Interactive Completion</summary>
+      <description>If enabled, Builder will automatically display completion proposals as you type.</description>
+    </key>
   </schema>
 </schemalist>

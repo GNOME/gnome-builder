@@ -199,6 +199,10 @@ _ide_editor_view_init_settings (IdeEditorView *self)
                    source_view, "completion-n-rows",
                    G_SETTINGS_BIND_GET);
 
+  g_settings_bind (self->editor_settings, "interactive-completion",
+                   source_view, "interactive-completion",
+                   G_SETTINGS_BIND_GET);
+
   g_settings_bind (self->editor_settings, "show-map",
                    self, "show-map",
                    G_SETTINGS_BIND_GET);

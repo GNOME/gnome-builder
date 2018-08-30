@@ -164,6 +164,7 @@ typedef struct
   guint                        in_replay_macro : 1;
   guint                        insert_mark_cleared : 1;
   guint                        insert_matching_brace : 1;
+  guint                        interactive_completion : 1;
   guint                        overwrite_braces : 1;
   guint                        recording_macro : 1;
   guint                        scrolling_to_scroll_mark : 1;
@@ -199,6 +200,7 @@ enum {
   PROP_INDENTER,
   PROP_INDENT_STYLE,
   PROP_INSERT_MATCHING_BRACE,
+  PROP_INTERACTIVE_COMPLETION,
   PROP_MODE_DISPLAY_NAME,
   PROP_OVERWRITE_BRACES,
   PROP_SCROLL_OFFSET,
@@ -335,6 +337,27 @@ unblock_interactive (IdeSourceView *self)
 
   if (priv->completion != NULL)
     ide_completion_unblock_interactive (priv->completion);
+}
+
+static void
+ide_source_view_set_interactive_completion (IdeSourceView *self,
+                                            gboolean       interactive_completion)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  interactive_completion = !!interactive_completion;
+
+  if (interactive_completion != priv->interactive_completion)
+    {
+      priv->interactive_completion = interactive_completion;
+
+      if (interactive_completion)
+        unblock_interactive (self);
+      else
+        block_interactive (self);
+    }
 }
 
 static void
@@ -5426,6 +5449,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_insert_matching_brace (self));
       break;
 
+    case PROP_INTERACTIVE_COMPLETION:
+      g_value_set_boolean (value, priv->interactive_completion);
+      break;
+
     case PROP_MODE_DISPLAY_NAME:
       g_value_set_string (value, ide_source_view_get_mode_display_name (self));
       break;
@@ -5509,6 +5536,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_INSERT_MATCHING_BRACE:
       ide_source_view_set_insert_matching_brace (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_INTERACTIVE_COMPLETION:
+      ide_source_view_set_interactive_completion (self, g_value_get_boolean (value));
       break;
 
     case PROP_OVERWRITE:
@@ -5678,6 +5709,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                        IDE_TYPE_INDENT_STYLE,
                        IDE_INDENT_STYLE_TABS,
                        (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_INTERACTIVE_COMPLETION] =
+    g_param_spec_boolean ("interactive-completion",
+                          "Interactive Completion",
+                          "If completion should be completed interactively",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_INSERT_MATCHING_BRACE] =
     g_param_spec_boolean ("insert-matching-brace",
@@ -6462,6 +6500,7 @@ ide_source_view_init (IdeSourceView *self)
                                      0,
                                      NULL);
 
+  priv->interactive_completion = TRUE;
   priv->target_line_column = 0;
   priv->snippets = g_queue_new ();
   priv->selections = g_queue_new ();
