@@ -608,3 +608,37 @@ snippet vfail
 - desc Snippet for g_return_val_if_fail()
 - scope c, chdr
 	g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)}, ${2:NULL});$0
+snippet gobj_get_property
+- desc Create a get_property handler
+- scope c
+	static void
+	${1:$filename|stripsuffix|functify}_get_property (GObject    *object,
+	${$1|space}               guint       prop_id,
+	${$1|space}               GValue     *value,
+	${$1|space}               GParamSpec *pspec)
+	{
+		${2:$filename|stripsuffix|camelize} *self = ${3:$2|functify|upper} (object);
+
+		switch (prop_id)
+			{$0
+			default:
+				G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			}
+	}
+snippet gobj_set_property
+- desc Create a set_property handler
+- scope c
+	static void
+	${1:$filename|stripsuffix|functify}_set_property (GObject      *object,
+	${$1|space}               guint         prop_id,
+	${$1|space}               const GValue *value,
+	${$1|space}               GParamSpec   *pspec)
+	{
+		${2:$filename|stripsuffix|camelize} *self = ${3:$2|functify|upper} (object);
+
+		switch (prop_id)
+			{$0
+			default:
+				G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			}
+	}
