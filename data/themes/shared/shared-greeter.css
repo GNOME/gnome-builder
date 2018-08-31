@@ -7,7 +7,7 @@ greeter flowboxchild {
 }
 
 greeter flowboxchild:selected label {
-  color: white;
+  color: @theme_selected_fg_color;
 }
 
 greeter flowboxchild dzlpillbox {
