@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-11 03:27+0000\n"
-"PO-Revision-Date: 2018-09-02 03:15+0200\n"
+"POT-Creation-Date: 2018-09-02 19:44+0000\n"
+"PO-Revision-Date: 2018-09-02 23:32+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -253,22 +253,14 @@ msgstr "Antallet af fuldførelsesrækker, brugeren skal vises."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/preferences/ide-preferences-builtin.c:211
-#, fuzzy
-#| msgid "Suggest Snippet Completion"
 msgid "Interactive Completion"
-msgstr "Foreslå fuldførelse af tekststumper"
+msgstr "Interaktiv fuldførelse"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
-#, fuzzy
-#| msgid ""
-#| "If enabled, Builder will automatically wrap text so all of the line text is "
-#| "visible."
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
-msgstr ""
-"Hvis slået til vil Builder automatisk ombryde tekst, så hele tekstlinjen er "
-"synlig."
+msgstr "Hvis slået til vil Builder automatisk vise fuldførelsesforslag, mens du skriver."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -481,9 +473,9 @@ msgid ""
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
 "Builder er et integreret udviklingsmiljø til GNOME som udvikles aktivt. "
-"Builder kombinerer integreret understøttelse af essentielle "
-"GNOME-teknologier såsom GTK+, Glib og GNOME-API'er med funktioner som "
-"udviklere vil have brug for såsom syntaksfremhævning og tekststumper."
+"Builder kombinerer integreret understøttelse af essentielle GNOME-"
+"teknologier såsom GTK+, Glib og GNOME-API'er med funktioner som udviklere "
+"vil have brug for såsom syntaksfremhævning og tekststumper."
 
 #: data/org.gnome.Builder.appdata.xml.in:17
 msgid ""
@@ -2686,8 +2678,7 @@ msgstr "Linjediagnostik"
 
 #: src/libide/preferences/ide-preferences-builtin.c:169
 msgid "Show an icon next to line numbers indicating type of diagnostic"
-msgstr ""
-"Vis et ikon ved siden af linjenumrene, som angiver typen af diagnostik"
+msgstr "Vis et ikon ved siden af linjenumrene, som angiver typen af diagnostik"
 
 #: src/libide/preferences/ide-preferences-builtin.c:171
 msgid "Highlight"
@@ -2791,7 +2782,7 @@ msgstr "Antallet af fuldførelser, der skal vises"
 
 #: src/libide/preferences/ide-preferences-builtin.c:211
 msgid "Display code suggestions interactively as you type"
-msgstr ""
+msgstr "Vis kodeforslag interaktivt, mens du skriver"
 
 #: src/libide/preferences/ide-preferences-builtin.c:213
 msgid "Completion Providers"
@@ -3211,8 +3202,7 @@ msgstr "Kompilér projektet"
 
 #: src/libide/workbench/ide-omni-bar.ui:596
 msgid "The project cannot be built while the build pipeline is being set up"
-msgstr ""
-"Projektet kan ikke kompileres, mens kompileringsrørledningen sættes op"
+msgstr "Projektet kan ikke kompileres, mens kompileringsrørledningen sættes op"
 
 #: src/libide/workbench/ide-workbench-actions.c:220
 msgid "Builder Statistics"
@@ -3323,11 +3313,10 @@ msgstr "Opret et nyt flatpak-klart GNOME-program"
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:155
 #, c-format
-msgid ""
-"Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
-"Udvidelsesmodulet Beautifier: fejl ved kopiering af "
-"gresource-konfigurationsfil for “%s”: %s"
+"Udvidelsesmodulet Beautifier: fejl ved kopiering af gresource-"
+"konfigurationsfil for “%s”: %s"
 
 #. translators: %s is replaced with the source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:163
@@ -3366,8 +3355,7 @@ msgstr ""
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:289
 #, c-format
-msgid ""
-"Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
 msgstr ""
 "Udvidelsesmodulet Beautifier: konfigurationsstien “%s” findes ikke; posten "
 "“%s” deaktiveret"
@@ -3541,7 +3529,7 @@ msgstr "anonym"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr ""
+msgstr "Fuldfør parenteser"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
@@ -3554,9 +3542,9 @@ msgstr "Fuldfør parametre"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
-"If parameters should be included when completing. Requires "
-"complete-parentheses."
-msgstr ""
+"If parameters should be included when completing. Requires complete-"
+"parentheses."
+msgstr "Om parametre skal inkluderes ved fuldførelse. Kræver complete-parentheses."
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:420
 msgid "CMake"
@@ -3712,8 +3700,7 @@ msgid "Visibility:"
 msgstr "Synlighed:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid ""
-"Select the color spaces for which you want to see sliders in the panel."
+msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr "Vælg de farverum, der skal have skydere i panelet."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
@@ -4372,8 +4359,7 @@ msgstr "Klon …"
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
-msgstr ""
-"Builder kunne ikke afgive passende akkreditiver ved kloning fra arkiv."
+msgstr "Builder kunne ikke afgive passende akkreditiver ved kloning fra arkiv."
 
 #. translators: %s is replaced with the error message
 #: src/plugins/git/ide-git-vcs.c:406
@@ -5335,8 +5321,8 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgstr "Slå autofuldførelse til for ord i dokumentet"
 
 #~ msgid ""
-#~ "If enabled, words within the current document will be available for "
-#~ "auto-completion."
+#~ "If enabled, words within the current document will be available for auto-"
+#~ "completion."
 #~ msgstr ""
 #~ "Hvis slået til, vil ord i det nuværende dokument kunne vælges til "
 #~ "autofuldførelse."
@@ -5347,7 +5333,8 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgid ""
 #~ "Suggests completions as you type based on words found in any open document"
 #~ msgstr ""
-#~ "Foreslå fuldførelse mens du skriver, ud fra ord fundet i alle åbne dokumenter"
+#~ "Foreslå fuldførelse mens du skriver, ud fra ord fundet i alle åbne "
+#~ "dokumenter"
 
 #~ msgid "Minimum word size"
 #~ msgstr "Mindste ordstørrelse"
@@ -5356,11 +5343,11 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgstr "Mindste ordstørrelse for fuldførelse"
 
 #~ msgid ""
-#~ "Create and manages a Ctags database for completing class names, functions, "
-#~ "and more"
+#~ "Create and manages a Ctags database for completing class names, "
+#~ "functions, and more"
 #~ msgstr ""
-#~ "Opret og håndtér en Ctags-database til at afslutte klassenavne, funktioner "
-#~ "osv."
+#~ "Opret og håndtér en Ctags-database til at afslutte klassenavne, "
+#~ "funktioner osv."
 
 #~ msgid "Suggest completions using Clang (Experimental)"
 #~ msgstr "Foreslå fuldførelse ved brug af Clang (Eksperimentel)"
@@ -5422,8 +5409,8 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgid "Saturation"
 #~ msgstr "Farvemætning"
 
-#~ # https://en.wikipedia.org/wiki/Lab_color_space
-#~ # Ved ikke lige om der er nogen grund til at oversætte noget særligt mht. dette
+# https://en.wikipedia.org/wiki/Lab_color_space
+# Ved ikke lige om der er nogen grund til at oversætte noget særligt mht. dette
 #~ msgid "Cielab l"
 #~ msgstr "Cielab l"
 
@@ -5475,7 +5462,7 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgid "            Environment: %s\n"
 #~ msgstr "            Miljø: %s\n"
 
-#~ # ?
+# ?
 #~ msgid "===============\n"
 #~ msgstr "===============\n"
 
@@ -5485,7 +5472,7 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgid " Build ran for: %"
 #~ msgstr " Kompilering kørte i: %"
 
-#~ # ??
+# ??
 #~ msgid "=================\n"
 #~ msgstr "=================\n"
 
@@ -5690,7 +5677,7 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgid "Line %u, Column %u"
 #~ msgstr "Linje %u, kolonne %u"
 
-#~ # ?
+# ?
 #~ msgid "OVR"
 #~ msgstr "OVR"
 
@@ -5701,11 +5688,11 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgstr "Prøv at åbne en fil ved at skrive i søgeboksen i toppen"
 
 #~ msgid ""
-#~ "Spell checker error: no language set. It’s maybe because no dictionaries are "
-#~ "installed."
+#~ "Spell checker error: no language set. It’s maybe because no dictionaries "
+#~ "are installed."
 #~ msgstr ""
-#~ "Fejl ved stavekontrol: Intet sprog angivet. Det skyldes måske, at der ikke "
-#~ "er installeret nogen ordbøger."
+#~ "Fejl ved stavekontrol: Intet sprog angivet. Det skyldes måske, at der "
+#~ "ikke er installeret nogen ordbøger."
 
 #~ msgid "Options"
 #~ msgstr "Indstillinger"
@@ -6145,7 +6132,7 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgid "source style scheme source tango solarized builder syntax"
 #~ msgstr "kilde stil skema kilde tango solariseret builder syntaks"
 
-#~ # %s er et tal jf. omkringliggende kildekode
+# %s er et tal jf. omkringliggende kildekode
 #~ msgid "%s more"
 #~ msgstr "%s mere"
 
@@ -6227,10 +6214,11 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgstr "Bufferen "
 
 #~ msgid ""
-#~ "Failed to load DBus connection. Code assistance will be disabled. \"%s\" (%s)"
+#~ "Failed to load DBus connection. Code assistance will be disabled. \"%s"
+#~ "\" (%s)"
 #~ msgstr ""
-#~ "Kunne ikke indlæse DBus-forbindelse. Kodeassistancen vil blive deaktiveret. "
-#~ "“%s” (%s)"
+#~ "Kunne ikke indlæse DBus-forbindelse. Kodeassistancen vil blive "
+#~ "deaktiveret. “%s” (%s)"
 
 #~ msgid "The code assistant to render."
 #~ msgstr "Kodeassistancen, som skal renderes."
@@ -6308,7 +6296,8 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgstr "Dokument for devhelp-visningen."
 
 #~ msgid ""
-#~ "If you don't save, changes from the last %ld second will be permanently lost."
+#~ "If you don't save, changes from the last %ld second will be permanently "
+#~ "lost."
 #~ msgid_plural ""
 #~ "If you don't save, changes from the last %ld seconds will be permanently "
 #~ "lost."
@@ -6331,11 +6320,12 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ "Hvis du ikke gemmer, vil ændringer fra det seneste minut og %ld sekund gå "
 #~ "tabt."
 #~ msgstr[1] ""
-#~ "Hvis du ikke gemmer, vil ændringer fra det seneste minut og %ld sekunder gå "
-#~ "tabt."
+#~ "Hvis du ikke gemmer, vil ændringer fra det seneste minut og %ld sekunder "
+#~ "gå tabt."
 
 #~ msgid ""
-#~ "If you don't save, changes from the last %ld minute will be permanently lost."
+#~ "If you don't save, changes from the last %ld minute will be permanently "
+#~ "lost."
 #~ msgid_plural ""
 #~ "If you don't save, changes from the last %ld minutes will be permanently "
 #~ "lost."
@@ -6355,7 +6345,8 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ "If you don't save, changes from the last hour and %d minutes will be "
 #~ "permanently lost."
 #~ msgstr[0] ""
-#~ "Hvis du ikke gemmer, vil ændringer fra den seneste time og %d minut gå tabt."
+#~ "Hvis du ikke gemmer, vil ændringer fra den seneste time og %d minut gå "
+#~ "tabt."
 #~ msgstr[1] ""
 #~ "Hvis du ikke gemmer, vil ændringer fra den seneste time og %d minutter gå "
 #~ "tabt."
@@ -6363,7 +6354,8 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 #~ msgid ""
 #~ "If you don't save, changes from the last %d hour will be permanently lost."
 #~ msgid_plural ""
-#~ "If you don't save, changes from the last %d hours will be permanently lost."
+#~ "If you don't save, changes from the last %d hours will be permanently "
+#~ "lost."
 #~ msgstr[0] ""
 #~ "Hvis du ikke gemmer, vil ændringer fra den seneste %d time gå tabt."
 #~ msgstr[1] ""
@@ -6963,4 +6955,3 @@ msgstr "Buffer indlæst, men ikke i bufferhåndteringen."
 
 #~ msgid "The navigation list for the workbench."
 #~ msgstr "Navigationslisten for arbejdsbordet."
-
