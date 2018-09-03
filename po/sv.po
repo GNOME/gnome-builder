@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-09-02 22:10+0200\n"
-"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
+"POT-Creation-Date: 2018-09-02 20:13+0000\n"
+"PO-Revision-Date: 2018-09-03 16:37+0800\n"
+"Last-Translator: Sebastian Rasmussen <sebras@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -3518,7 +3518,6 @@ msgid "Complete parameters"
 msgstr "Komplettera parametrar"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
-#, fuzzy
 msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
@@ -4248,7 +4247,7 @@ msgstr ""
 "installera det?"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:87
-#, fuzzy, c-format
+#, c-format
 msgid "GCC %s Cross-Compiler (System)"
 msgstr "GCC %s korskompilator (System)"
 
@@ -4496,7 +4495,6 @@ msgstr "Strip"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
 #: src/plugins/meson/gbp-meson-utils.c:106
-#, fuzzy
 msgid "Executable wrapper"
 msgstr "Körbart omslagsskript"
 
@@ -5177,7 +5175,7 @@ msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
 msgstr "En valfri kommaseparerad sökväg för att ange PKG_CONFIG_PATH."
 
 #: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Sysroot SDK)"
 msgstr "%s (systemrots-SDK)"
 
@@ -5245,12 +5243,10 @@ msgid "Abstract"
 msgstr "Abstrakt"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:153
-#, fuzzy
 msgid "Compact"
 msgstr "Kompakt"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:155
-#, fuzzy
 msgid "Immutable"
 msgstr "Oföränderlig"
 
