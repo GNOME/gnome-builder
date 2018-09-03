@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-builder-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-16 20:07+0000\n"
-"PO-Revision-Date: 2018-08-19 18:01+0200\n"
+"POT-Creation-Date: 2018-08-30 20:49+0000\n"
+"PO-Revision-Date: 2018-08-31 20:23+0200\n"
 "Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -240,6 +240,19 @@ msgstr "Numărul de rânduri ale completării"
 msgid "The number of completion rows to display to the user."
 msgstr "Numărul de rânduri de completări de afișat utilizatorului."
 
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: src/libide/preferences/ide-preferences-builtin.c:211
+msgid "Interactive Completion"
+msgstr "Completare interactivă"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+msgid ""
+"If enabled, Builder will automatically display completion proposals as you "
+"type."
+msgstr ""
+"Dacă este activat, Builder va afișa automat propuneri de completare pe "
+"măsură ce tastați."
+
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
 msgstr "Stil de spații"
@@ -306,7 +319,7 @@ msgid "\"Projects\""
 msgstr "„Proiecte”"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/preferences/ide-preferences-builtin.c:420
+#: src/libide/preferences/ide-preferences-builtin.c:421
 msgid "Projects directory"
 msgstr "Dosar proiecte"
 
@@ -738,7 +751,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Încărcați sau generați o paletă utilizând preferințele"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4947
+#: src/libide/sourceview/ide-source-view.c:4970
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Redenumește"
@@ -771,7 +784,7 @@ msgid "Funded By"
 msgstr "Fondat de"
 
 #: src/libide/application/ide-application.c:1001
-#: src/libide/preferences/ide-preferences-builtin.c:417
+#: src/libide/preferences/ide-preferences-builtin.c:418
 msgid "Projects"
 msgstr "Proiecte"
 
@@ -1032,8 +1045,8 @@ msgstr "Șterge configurația"
 #: src/libide/buildui/ide-build-configuration-view.ui:11
 #: src/libide/preferences/ide-preferences-builtin.c:157
 #: src/libide/preferences/ide-preferences-builtin.c:209
-#: src/libide/preferences/ide-preferences-builtin.c:329
-#: src/libide/preferences/ide-preferences-builtin.c:401
+#: src/libide/preferences/ide-preferences-builtin.c:330
+#: src/libide/preferences/ide-preferences-builtin.c:402
 msgid "General"
 msgstr "General"
 
@@ -1588,7 +1601,7 @@ msgid "Display"
 msgstr "Afișaj"
 
 #: src/libide/editor/ide-editor-properties.ui:75
-#: src/libide/preferences/ide-preferences-builtin.c:336
+#: src/libide/preferences/ide-preferences-builtin.c:337
 msgid "Show right margin"
 msgstr "Arată marginea din dreapta"
 
@@ -1649,7 +1662,7 @@ msgstr "Sintaxă de limbaj"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
 #: src/libide/editor/ide-editor-properties.ui:321
-#: src/libide/preferences/ide-preferences-builtin.c:275
+#: src/libide/preferences/ide-preferences-builtin.c:276
 msgid "Search languages…"
 msgstr "Caută limbajele…"
 
@@ -2744,154 +2757,158 @@ msgstr "Dimensiunea afișajului completărilor"
 msgid "Number of completions to display"
 msgstr "Numărul de completări de afișat"
 
-#: src/libide/preferences/ide-preferences-builtin.c:212
+#: src/libide/preferences/ide-preferences-builtin.c:211
+msgid "Display code suggestions interactively as you type"
+msgstr "Afișează sugestii de cod interactiv în timp ce tastați"
+
+#: src/libide/preferences/ide-preferences-builtin.c:213
 msgid "Completion Providers"
 msgstr "Furnizori de completări"
 
-#: src/libide/preferences/ide-preferences-builtin.c:218
+#: src/libide/preferences/ide-preferences-builtin.c:219
 msgid "Snippets"
 msgstr "Blocuri"
 
-#: src/libide/preferences/ide-preferences-builtin.c:264
+#: src/libide/preferences/ide-preferences-builtin.c:265
 msgid "Programming Languages"
 msgstr "Limbaje de programare"
 
-#: src/libide/preferences/ide-preferences-builtin.c:330
+#: src/libide/preferences/ide-preferences-builtin.c:331
 msgid "Trim trailing whitespace"
 msgstr "Scurtează spațierea din urmă"
 
-#: src/libide/preferences/ide-preferences-builtin.c:330
+#: src/libide/preferences/ide-preferences-builtin.c:331
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 "După salvare, spațierea din urmă de la liniile modificate va fi scurtată."
 
-#: src/libide/preferences/ide-preferences-builtin.c:331
+#: src/libide/preferences/ide-preferences-builtin.c:332
 msgid "Overwrite Braces"
 msgstr "Suprascrie parantezele acolade"
 
-#: src/libide/preferences/ide-preferences-builtin.c:331
+#: src/libide/preferences/ide-preferences-builtin.c:332
 msgid "Overwrite closing braces"
 msgstr "Suprascrie parantezele acolade de închidere"
 
-#: src/libide/preferences/ide-preferences-builtin.c:332
+#: src/libide/preferences/ide-preferences-builtin.c:333
 msgid "Insert Matching Brace"
 msgstr "Introduce paranteza pereche"
 
-#: src/libide/preferences/ide-preferences-builtin.c:332
+#: src/libide/preferences/ide-preferences-builtin.c:333
 msgid "Insert matching character for { [ ( or \""
 msgstr "Introduce caracterul pereche pentru { [ ( sau \""
 
-#: src/libide/preferences/ide-preferences-builtin.c:333
+#: src/libide/preferences/ide-preferences-builtin.c:334
 msgid "Insert Trailing Newline"
 msgstr "Introduce linie nouă din urmă"
 
-#: src/libide/preferences/ide-preferences-builtin.c:333
+#: src/libide/preferences/ide-preferences-builtin.c:334
 msgid "Ensure files end with a newline"
 msgstr "Asigurare că fișierele se termină cu o linie nouă"
 
-#: src/libide/preferences/ide-preferences-builtin.c:335
+#: src/libide/preferences/ide-preferences-builtin.c:336
 msgid "Margins"
 msgstr "Magini"
 
-#: src/libide/preferences/ide-preferences-builtin.c:337
+#: src/libide/preferences/ide-preferences-builtin.c:338
 msgid "Right margin position"
 msgstr "Poziția marginei din dreapta"
 
-#: src/libide/preferences/ide-preferences-builtin.c:337
+#: src/libide/preferences/ide-preferences-builtin.c:338
 msgid "Position in spaces for the right margin"
 msgstr "Poziția în spații pentru marginea din dreapta"
 
-#: src/libide/preferences/ide-preferences-builtin.c:339
+#: src/libide/preferences/ide-preferences-builtin.c:340
 msgid "Indentation"
 msgstr "Indentare"
 
-#: src/libide/preferences/ide-preferences-builtin.c:340
+#: src/libide/preferences/ide-preferences-builtin.c:341
 msgid "Tab width"
 msgstr "Lățime tab"
 
-#: src/libide/preferences/ide-preferences-builtin.c:340
+#: src/libide/preferences/ide-preferences-builtin.c:341
 msgid "Width of a tab character in spaces"
 msgstr "Lățimea în spații a unui caracter tab"
 
-#: src/libide/preferences/ide-preferences-builtin.c:341
+#: src/libide/preferences/ide-preferences-builtin.c:342
 msgid "Insert spaces instead of tabs"
 msgstr "Introduce spații în loc de taburi"
 
-#: src/libide/preferences/ide-preferences-builtin.c:341
+#: src/libide/preferences/ide-preferences-builtin.c:342
 msgid "Prefer spaces over use of tabs"
 msgstr "Preferă spațiile în locul utilizării de taburi"
 
-#: src/libide/preferences/ide-preferences-builtin.c:342
+#: src/libide/preferences/ide-preferences-builtin.c:343
 msgid "Automatically indent"
 msgstr "Indentează automat"
 
-#: src/libide/preferences/ide-preferences-builtin.c:342
+#: src/libide/preferences/ide-preferences-builtin.c:343
 msgid "Indent source code as you type"
 msgstr "Indentează codul sursă în timpul tastării"
 
-#: src/libide/preferences/ide-preferences-builtin.c:344
+#: src/libide/preferences/ide-preferences-builtin.c:345
 msgid "Spacing"
 msgstr "Spațiere"
 
-#: src/libide/preferences/ide-preferences-builtin.c:345
+#: src/libide/preferences/ide-preferences-builtin.c:346
 msgid "Space before opening parentheses"
 msgstr "Spațiu înainte de parantezele de deschidere"
 
-#: src/libide/preferences/ide-preferences-builtin.c:346
+#: src/libide/preferences/ide-preferences-builtin.c:347
 msgid "Space before opening brackets"
 msgstr "Spațiu înainte de parantezele pătrate de deschidere"
 
-#: src/libide/preferences/ide-preferences-builtin.c:347
+#: src/libide/preferences/ide-preferences-builtin.c:348
 msgid "Space before opening braces"
 msgstr "Spațiu înainte de parantezele acolade de deschidere"
 
-#: src/libide/preferences/ide-preferences-builtin.c:348
+#: src/libide/preferences/ide-preferences-builtin.c:349
 msgid "Space before opening angles"
 msgstr "Spațiu înainte de parantezele unghiulare de deschidere"
 
-#: src/libide/preferences/ide-preferences-builtin.c:349
+#: src/libide/preferences/ide-preferences-builtin.c:350
 msgid "Prefer a space before colons"
 msgstr "Preferă un spațiu înainte de două puncte"
 
-#: src/libide/preferences/ide-preferences-builtin.c:350
+#: src/libide/preferences/ide-preferences-builtin.c:351
 msgid "Prefer a space before commas"
 msgstr "Preferă un spațiu înainte de virgule"
 
-#: src/libide/preferences/ide-preferences-builtin.c:351
+#: src/libide/preferences/ide-preferences-builtin.c:352
 msgid "Prefer a space before semicolons"
 msgstr "Preferă un spațiu înainte de punct și virgulă"
 
-#: src/libide/preferences/ide-preferences-builtin.c:361
-#: src/libide/preferences/ide-preferences-builtin.c:379
+#: src/libide/preferences/ide-preferences-builtin.c:362
+#: src/libide/preferences/ide-preferences-builtin.c:380
 msgid "Default"
 msgstr "Implicit"
 
-#: src/libide/preferences/ide-preferences-builtin.c:366
-#: src/libide/preferences/ide-preferences-builtin.c:384
+#: src/libide/preferences/ide-preferences-builtin.c:367
+#: src/libide/preferences/ide-preferences-builtin.c:385
 msgid "Number of CPU"
 msgstr "Numărul de CPU"
 
-#: src/libide/preferences/ide-preferences-builtin.c:399
+#: src/libide/preferences/ide-preferences-builtin.c:400
 msgid "Build"
 msgstr "Generare"
 
-#: src/libide/preferences/ide-preferences-builtin.c:402
+#: src/libide/preferences/ide-preferences-builtin.c:403
 msgid "Build Workers"
 msgstr "Lucrători de generare"
 
-#: src/libide/preferences/ide-preferences-builtin.c:402
+#: src/libide/preferences/ide-preferences-builtin.c:403
 msgid "Number of parallel build workers"
 msgstr "Numărul de lucrători de generare paralelă"
 
-#: src/libide/preferences/ide-preferences-builtin.c:410
+#: src/libide/preferences/ide-preferences-builtin.c:411
 msgid "Network"
 msgstr "Rețea"
 
-#: src/libide/preferences/ide-preferences-builtin.c:411
+#: src/libide/preferences/ide-preferences-builtin.c:412
 msgid "Allow downloads over metered connections"
 msgstr "Permite descărcări prin conexiuni contorizate"
 
-#: src/libide/preferences/ide-preferences-builtin.c:411
+#: src/libide/preferences/ide-preferences-builtin.c:412
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2899,29 +2916,29 @@ msgstr ""
 "Permite utilizarea de conexiuni la rețea contorizate când se descarcă "
 "automat dependențe"
 
-#: src/libide/preferences/ide-preferences-builtin.c:419
+#: src/libide/preferences/ide-preferences-builtin.c:420
 msgid "Workspace"
 msgstr "Spațiu de lucru"
 
-#: src/libide/preferences/ide-preferences-builtin.c:420
+#: src/libide/preferences/ide-preferences-builtin.c:421
 msgid "A place for all your projects"
 msgstr "Un loc pentru toate proiectele"
 
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:422
 msgid "Restore previously opened files"
 msgstr "Restaurează fișierele deschise anterior"
 
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:422
 msgid "Open previously opened files when loading a project"
 msgstr "Deschide fișierele deschise anterior la încărcarea unui proiect"
 
-#: src/libide/preferences/ide-preferences-builtin.c:542
+#: src/libide/preferences/ide-preferences-builtin.c:543
 #: src/plugins/create-project/gbp-create-project-widget.ui:180
 msgid "Version Control"
 msgstr "Control de versiune"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/preferences/ide-preferences-builtin.c:554
+#: src/libide/preferences/ide-preferences-builtin.c:555
 msgid "SDKs"
 msgstr "SDK-uri"
 
@@ -2963,31 +2980,31 @@ msgstr "Procesul s-a terminat neașteptat"
 msgid "Host operating system"
 msgstr "Sistem de operare gazdă"
 
-#: src/libide/sourceview/ide-source-view.c:4402
+#: src/libide/sourceview/ide-source-view.c:4425
 #, c-format
 msgid "Insert “%s”"
 msgstr "Introduce „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4404
+#: src/libide/sourceview/ide-source-view.c:4427
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Înlocuiește „%s” cu „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4518
+#: src/libide/sourceview/ide-source-view.c:4541
 msgid "Apply Fix-It"
 msgstr "Aplică repararea"
 
-#: src/libide/sourceview/ide-source-view.c:4946
+#: src/libide/sourceview/ide-source-view.c:4969
 msgid "Rename symbol"
 msgstr "Redenumește simbolul"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5182
+#: src/libide/sourceview/ide-source-view.c:5205
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Rând %u, Coloană %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5208
+#: src/libide/sourceview/ide-source-view.c:5231
 msgid "No references were found"
 msgstr "Nu s-au găsit referințe"
 
@@ -5280,9 +5297,6 @@ msgstr "Preîncărcarea s-a încărcat dar nu în administratorul de preîncărc
 
 #~ msgid "_Show more"
 #~ msgstr "_Arată mai multe"
-
-#~ msgid "Suggest Snippet Completion"
-#~ msgstr "Propune completare de bloc"
 
 #~ msgid "Allow snippets to be inserted into the document."
 #~ msgstr "Permite blocurilor să fie introduse în document."
