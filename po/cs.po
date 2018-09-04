@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-28 15:55+0000\n"
-"PO-Revision-Date: 2018-08-29 10:22+0200\n"
+"POT-Creation-Date: 2018-08-30 20:49+0000\n"
+"PO-Revision-Date: 2018-09-04 10:21+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -241,6 +241,19 @@ msgid "The number of completion rows to display to the user."
 msgstr ""
 "Počet řádků, které je možné nabídnou uživateli ve funkci dokončování slov."
 
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: src/libide/preferences/ide-preferences-builtin.c:211
+msgid "Interactive Completion"
+msgstr "Interaktivní dokončování"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+msgid ""
+"If enabled, Builder will automatically display completion proposals as you "
+"type."
+msgstr ""
+"Když je zapnuto, bude Builder automaticky zobrazovat návrhy na dokončení "
+"toho, co zrovna píšete."
+
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
 msgstr "Styl mezer"
@@ -305,7 +318,7 @@ msgid "\"Projects\""
 msgstr "\"Projekty\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/preferences/ide-preferences-builtin.c:420
+#: src/libide/preferences/ide-preferences-builtin.c:421
 msgid "Projects directory"
 msgstr "Složka s projekty"
 
@@ -733,7 +746,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Načtěte nebo vygenerujte paletu pomocí předvoleb"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4947
+#: src/libide/sourceview/ide-source-view.c:4970
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Přejmenovat"
@@ -766,7 +779,7 @@ msgid "Funded By"
 msgstr "Financovali"
 
 #: src/libide/application/ide-application.c:1001
-#: src/libide/preferences/ide-preferences-builtin.c:417
+#: src/libide/preferences/ide-preferences-builtin.c:418
 msgid "Projects"
 msgstr "Projekty"
 
@@ -1025,8 +1038,8 @@ msgstr "Smazat konfiguraci"
 #: src/libide/buildui/ide-build-configuration-view.ui:11
 #: src/libide/preferences/ide-preferences-builtin.c:157
 #: src/libide/preferences/ide-preferences-builtin.c:209
-#: src/libide/preferences/ide-preferences-builtin.c:329
-#: src/libide/preferences/ide-preferences-builtin.c:401
+#: src/libide/preferences/ide-preferences-builtin.c:330
+#: src/libide/preferences/ide-preferences-builtin.c:402
 msgid "General"
 msgstr "Obecné"
 
@@ -1582,7 +1595,7 @@ msgid "Display"
 msgstr "Zobrazení"
 
 #: src/libide/editor/ide-editor-properties.ui:75
-#: src/libide/preferences/ide-preferences-builtin.c:336
+#: src/libide/preferences/ide-preferences-builtin.c:337
 msgid "Show right margin"
 msgstr "Zobrazovat pravý okraj"
 
@@ -1642,7 +1655,7 @@ msgstr "Syntax jazyka"
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
 #: src/libide/editor/ide-editor-properties.ui:321
-#: src/libide/preferences/ide-preferences-builtin.c:275
+#: src/libide/preferences/ide-preferences-builtin.c:276
 msgid "Search languages…"
 msgstr "Vyhledat jazyky…"
 
@@ -2735,153 +2748,157 @@ msgstr "Velikost zobrazení návrhů"
 msgid "Number of completions to display"
 msgstr "Počet návrhů na dokončení, které se smí zobrazit"
 
-#: src/libide/preferences/ide-preferences-builtin.c:212
+#: src/libide/preferences/ide-preferences-builtin.c:211
+msgid "Display code suggestions interactively as you type"
+msgstr "Zobrazovat interaktivně návrhy kódu během vašeho psaní"
+
+#: src/libide/preferences/ide-preferences-builtin.c:213
 msgid "Completion Providers"
 msgstr "Poskytovatelé dokončování"
 
-#: src/libide/preferences/ide-preferences-builtin.c:218
+#: src/libide/preferences/ide-preferences-builtin.c:219
 msgid "Snippets"
 msgstr "Úryvky"
 
-#: src/libide/preferences/ide-preferences-builtin.c:264
+#: src/libide/preferences/ide-preferences-builtin.c:265
 msgid "Programming Languages"
 msgstr "Programovací jazyky"
 
-#: src/libide/preferences/ide-preferences-builtin.c:330
+#: src/libide/preferences/ide-preferences-builtin.c:331
 msgid "Trim trailing whitespace"
 msgstr "Odstraňovat koncové mezery"
 
-#: src/libide/preferences/ide-preferences-builtin.c:330
+#: src/libide/preferences/ide-preferences-builtin.c:331
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr "Při ukládání u změněných řádků odstranit koncové bílé znaky."
 
-#: src/libide/preferences/ide-preferences-builtin.c:331
+#: src/libide/preferences/ide-preferences-builtin.c:332
 msgid "Overwrite Braces"
 msgstr "Přepisovat závorky"
 
-#: src/libide/preferences/ide-preferences-builtin.c:331
+#: src/libide/preferences/ide-preferences-builtin.c:332
 msgid "Overwrite closing braces"
 msgstr "Přepisovat zavírací závorky"
 
-#: src/libide/preferences/ide-preferences-builtin.c:332
+#: src/libide/preferences/ide-preferences-builtin.c:333
 msgid "Insert Matching Brace"
 msgstr "Vkládat odpovídající závorku"
 
-#: src/libide/preferences/ide-preferences-builtin.c:332
+#: src/libide/preferences/ide-preferences-builtin.c:333
 msgid "Insert matching character for { [ ( or \""
 msgstr "Vkládat odpovídající znak pro { [ ( nebo \""
 
-#: src/libide/preferences/ide-preferences-builtin.c:333
+#: src/libide/preferences/ide-preferences-builtin.c:334
 msgid "Insert Trailing Newline"
 msgstr "Vkládat koncový nový řádek"
 
-#: src/libide/preferences/ide-preferences-builtin.c:333
+#: src/libide/preferences/ide-preferences-builtin.c:334
 msgid "Ensure files end with a newline"
 msgstr "Zajistí, že soubory budou končit novým řádkem"
 
-#: src/libide/preferences/ide-preferences-builtin.c:335
+#: src/libide/preferences/ide-preferences-builtin.c:336
 msgid "Margins"
 msgstr "Okraje"
 
-#: src/libide/preferences/ide-preferences-builtin.c:337
+#: src/libide/preferences/ide-preferences-builtin.c:338
 msgid "Right margin position"
 msgstr "Pozice pravého okraje"
 
-#: src/libide/preferences/ide-preferences-builtin.c:337
+#: src/libide/preferences/ide-preferences-builtin.c:338
 msgid "Position in spaces for the right margin"
 msgstr "Pozice pravého okraje v počtu mezer"
 
-#: src/libide/preferences/ide-preferences-builtin.c:339
+#: src/libide/preferences/ide-preferences-builtin.c:340
 msgid "Indentation"
 msgstr "Odsazení"
 
-#: src/libide/preferences/ide-preferences-builtin.c:340
+#: src/libide/preferences/ide-preferences-builtin.c:341
 msgid "Tab width"
 msgstr "Šířka tabulátoru"
 
-#: src/libide/preferences/ide-preferences-builtin.c:340
+#: src/libide/preferences/ide-preferences-builtin.c:341
 msgid "Width of a tab character in spaces"
 msgstr "Šířka znaku tabulátor v počtu mezer"
 
-#: src/libide/preferences/ide-preferences-builtin.c:341
+#: src/libide/preferences/ide-preferences-builtin.c:342
 msgid "Insert spaces instead of tabs"
 msgstr "Vkládat mezery namísto tabulátorů"
 
-#: src/libide/preferences/ide-preferences-builtin.c:341
+#: src/libide/preferences/ide-preferences-builtin.c:342
 msgid "Prefer spaces over use of tabs"
 msgstr "Dávat přednost mezerám před použitím tabulátorů"
 
-#: src/libide/preferences/ide-preferences-builtin.c:342
+#: src/libide/preferences/ide-preferences-builtin.c:343
 msgid "Automatically indent"
 msgstr "Automaticky odsazovat"
 
-#: src/libide/preferences/ide-preferences-builtin.c:342
+#: src/libide/preferences/ide-preferences-builtin.c:343
 msgid "Indent source code as you type"
 msgstr "Odsazovat zdrojový kód podle toho, jak píšete"
 
-#: src/libide/preferences/ide-preferences-builtin.c:344
+#: src/libide/preferences/ide-preferences-builtin.c:345
 msgid "Spacing"
 msgstr "Mezery"
 
-#: src/libide/preferences/ide-preferences-builtin.c:345
+#: src/libide/preferences/ide-preferences-builtin.c:346
 msgid "Space before opening parentheses"
 msgstr "Mezera před otevírací kulatou závorkou"
 
-#: src/libide/preferences/ide-preferences-builtin.c:346
+#: src/libide/preferences/ide-preferences-builtin.c:347
 msgid "Space before opening brackets"
 msgstr "Mezera před otevírací hranatou závorkou"
 
-#: src/libide/preferences/ide-preferences-builtin.c:347
+#: src/libide/preferences/ide-preferences-builtin.c:348
 msgid "Space before opening braces"
 msgstr "Mezera před otevírací složenou závorkou"
 
-#: src/libide/preferences/ide-preferences-builtin.c:348
+#: src/libide/preferences/ide-preferences-builtin.c:349
 msgid "Space before opening angles"
 msgstr "Mezera před otevírací lomenou závorkou"
 
-#: src/libide/preferences/ide-preferences-builtin.c:349
+#: src/libide/preferences/ide-preferences-builtin.c:350
 msgid "Prefer a space before colons"
 msgstr "Dávat přednost mezerám před dvojtečkami"
 
-#: src/libide/preferences/ide-preferences-builtin.c:350
+#: src/libide/preferences/ide-preferences-builtin.c:351
 msgid "Prefer a space before commas"
 msgstr "Dávat přednost mezerám před čárkami"
 
-#: src/libide/preferences/ide-preferences-builtin.c:351
+#: src/libide/preferences/ide-preferences-builtin.c:352
 msgid "Prefer a space before semicolons"
 msgstr "Dávat přednost mezerám před středníky"
 
-#: src/libide/preferences/ide-preferences-builtin.c:361
-#: src/libide/preferences/ide-preferences-builtin.c:379
+#: src/libide/preferences/ide-preferences-builtin.c:362
+#: src/libide/preferences/ide-preferences-builtin.c:380
 msgid "Default"
 msgstr "Výchozí"
 
-#: src/libide/preferences/ide-preferences-builtin.c:366
-#: src/libide/preferences/ide-preferences-builtin.c:384
+#: src/libide/preferences/ide-preferences-builtin.c:367
+#: src/libide/preferences/ide-preferences-builtin.c:385
 msgid "Number of CPU"
 msgstr "Počet CPU"
 
-#: src/libide/preferences/ide-preferences-builtin.c:399
+#: src/libide/preferences/ide-preferences-builtin.c:400
 msgid "Build"
 msgstr "Sestavení"
 
-#: src/libide/preferences/ide-preferences-builtin.c:402
+#: src/libide/preferences/ide-preferences-builtin.c:403
 msgid "Build Workers"
 msgstr "Sestavovací procesy"
 
-#: src/libide/preferences/ide-preferences-builtin.c:402
+#: src/libide/preferences/ide-preferences-builtin.c:403
 msgid "Number of parallel build workers"
 msgstr "Počet souběžných sestavovacích procesů"
 
-#: src/libide/preferences/ide-preferences-builtin.c:410
+#: src/libide/preferences/ide-preferences-builtin.c:411
 msgid "Network"
 msgstr "Síť"
 
-#: src/libide/preferences/ide-preferences-builtin.c:411
+#: src/libide/preferences/ide-preferences-builtin.c:412
 msgid "Allow downloads over metered connections"
 msgstr "Povolit stahování přes měřená připojení"
 
-#: src/libide/preferences/ide-preferences-builtin.c:411
+#: src/libide/preferences/ide-preferences-builtin.c:412
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2889,29 +2906,29 @@ msgstr ""
 "Povolit použití měřených síťových připojení, když se automaticky stahují "
 "závislosti"
 
-#: src/libide/preferences/ide-preferences-builtin.c:419
+#: src/libide/preferences/ide-preferences-builtin.c:420
 msgid "Workspace"
 msgstr "Pracovní plocha"
 
-#: src/libide/preferences/ide-preferences-builtin.c:420
+#: src/libide/preferences/ide-preferences-builtin.c:421
 msgid "A place for all your projects"
 msgstr "Místo pro všechny vaše projekty"
 
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:422
 msgid "Restore previously opened files"
 msgstr "Obnovovat naposledy otevřené soubory"
 
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:422
 msgid "Open previously opened files when loading a project"
 msgstr "Po načtení projektu otevřít naposledy otevřené soubory"
 
-#: src/libide/preferences/ide-preferences-builtin.c:542
+#: src/libide/preferences/ide-preferences-builtin.c:543
 #: src/plugins/create-project/gbp-create-project-widget.ui:180
 msgid "Version Control"
 msgstr "Systém správy verzí"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/preferences/ide-preferences-builtin.c:554
+#: src/libide/preferences/ide-preferences-builtin.c:555
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2952,31 +2969,31 @@ msgstr "Proces se neočekávaně ukončil"
 msgid "Host operating system"
 msgstr "Hostitelský operační systém"
 
-#: src/libide/sourceview/ide-source-view.c:4402
+#: src/libide/sourceview/ide-source-view.c:4425
 #, c-format
 msgid "Insert “%s”"
 msgstr "Vložit „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4404
+#: src/libide/sourceview/ide-source-view.c:4427
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Nahradit „%s“ pomocí „%s“"
 
-#: src/libide/sourceview/ide-source-view.c:4518
+#: src/libide/sourceview/ide-source-view.c:4541
 msgid "Apply Fix-It"
 msgstr "Použít opravu"
 
-#: src/libide/sourceview/ide-source-view.c:4946
+#: src/libide/sourceview/ide-source-view.c:4969
 msgid "Rename symbol"
 msgstr "Přejmenovat symbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5182
+#: src/libide/sourceview/ide-source-view.c:5205
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>řádek %u, sloupec %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5208
+#: src/libide/sourceview/ide-source-view.c:5231
 msgid "No references were found"
 msgstr "Nebyly nalezeny žádné odkazy"
 
