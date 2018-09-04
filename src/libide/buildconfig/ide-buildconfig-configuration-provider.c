@@ -616,6 +616,7 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *prov
   g_autofree gchar *new_config_id = NULL;
   g_autofree gchar *new_name = NULL;
   IdeConfigurationManager *manager;
+  IdeEnvironment *env;
   const gchar *config_id;
   const gchar *name;
   IdeContext *context;
@@ -641,11 +642,15 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *prov
   /* translators: %s is replaced with the name of the configuration */
   new_name = g_strdup_printf (_("%s (Copy)"), name);
 
+  env = ide_configuration_get_environment (config);
+
   new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
                              "id", new_config_id,
                              "context", context,
                              "display-name", new_name,
                              NULL);
+
+  ide_environment_copy_into (env, ide_configuration_get_environment (new_config), TRUE);
 
   pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (new_config), &n_pspecs);
 
