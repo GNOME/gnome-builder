@@ -1,3 +1,19 @@
+==============
+Version 3.30.0
+==============
+
+Changes since last (beta) release:
+
+ • Allow disabling interactive completion
+ • Additional gobject snippets
+ • Theme fixes for non-Adwaita themes
+ • Build Config fixes when duplicating environments
+
+Updated Translations:
+
+  Swedish, Danish, Hungarian, Korean, Romanian, Turkish, Galician, Indonesian,
+  Czech, German, Italian, Polish, Brazilian Portuguese
+
 ===============
 Version 3.29.92
 ===============

@@ -82,6 +82,23 @@
 
   <releases>
 
+    <release version="3.30.0" date="2018-09-04">
+      <description>
+        <p>
+          After six months of development, Builder 3.30 is finally here.
+          Some notable improvements include:
+        </p>
+        <ul>
+          <li>A new completion engine that is faster and more scalable.</li>
+          <li>Interactive tooltips in the source code editor.</li>
+          <li>Builder now saves your session and restores it upon re-opening the project.</li>
+          <li>Clang has been moved out of process and requires significantly less memory when combined with Clang 6.0 or newer.</li>
+          <li>Initial support for sysroots and non-standard toolchains.</li>
+          <li>Builder now uses even less memory.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.29.92" date="2018-08-29">
       <description>
         <p>
