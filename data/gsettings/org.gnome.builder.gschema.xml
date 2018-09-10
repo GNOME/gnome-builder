@@ -43,5 +43,10 @@
       <summary>Show Open Files</summary>
       <description>Display the open files list in the project sidebar.</description>
     </key>
+    <key name="clear-cache-at-startup" type="b">
+      <default>true</default>
+      <summary>Clear build caches at startup</summary>
+      <description>If enabled, Builder will clear build caches upon startup.</description>
+    </key>
   </schema>
 </schemalist>

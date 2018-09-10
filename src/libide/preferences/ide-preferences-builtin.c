@@ -408,6 +408,8 @@ ide_preferences_builtin_register_build (DzlPreferences *preferences)
   g_signal_connect (widget, "input", G_CALLBACK (workers_input), NULL);
   g_signal_connect (widget, "output", G_CALLBACK (workers_output), NULL);
 
+  dzl_preferences_add_switch (preferences, "build", "basic", "org.gnome.builder", "clear-cache-at-startup", NULL, NULL, _("Clear build cache at startup"), _("Expired caches will be purged when Builder is started"), NULL, 10);
+
   dzl_preferences_add_list_group (preferences, "build", "network", _("Network"), GTK_SELECTION_NONE, 100);
   dzl_preferences_add_switch (preferences, "build", "network", "org.gnome.builder.build", "allow-network-when-metered", NULL, NULL, _("Allow downloads over metered connections"), _("Allow the use of metered network connections when automatically downloading dependencies"), NULL, 10);
 }

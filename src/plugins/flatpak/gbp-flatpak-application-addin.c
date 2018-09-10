@@ -384,8 +384,7 @@ gbp_flatpak_application_addin_load (IdeApplicationAddin *addin,
                                     IdeApplication      *application)
 {
   GbpFlatpakApplicationAddin *self = (GbpFlatpakApplicationAddin *)addin;
-  g_autoptr(DzlDirectoryReaper) reaper = NULL;
-  g_autoptr(GFile) builds_dir = NULL;
+  g_autoptr(GSettings) settings = NULL;
 
   IDE_ENTRY;
 
@@ -396,18 +395,32 @@ gbp_flatpak_application_addin_load (IdeApplicationAddin *addin,
 
   gbp_flatpak_application_addin_reload (self);
 
-  /*
-   * Cleanup old build data to avoid an ever-growing cache directory.
-   * Any build data older than 3 days can be wiped.
-   */
-  reaper = dzl_directory_reaper_new ();
-  builds_dir = g_file_new_build_filename (g_get_user_cache_dir (),
-                                          ide_get_program_name (),
-                                          "flatpak-builder",
-                                          "build",
-                                          NULL);
-  dzl_directory_reaper_add_directory (reaper, builds_dir, G_TIME_SPAN_DAY * 3);
-  dzl_directory_reaper_execute_async (reaper, NULL, NULL, NULL);
+  settings = g_settings_new ("org.gnome.builder");
+
+  if (g_settings_get_boolean (settings, "clear-cache-at-startup"))
+    {
+      g_autoptr(DzlDirectoryReaper) reaper = NULL;
+      g_autoptr(GFile) builds_dir = NULL;
+      g_autofree gchar *path = NULL;
+
+      path = g_build_filename (g_get_user_cache_dir (),
+                               ide_get_program_name (),
+                               "flatpak-builder",
+                               "build",
+                               NULL);
+
+      IDE_TRACE_MSG ("Clearing flatpak build cache \"%s\"", path);
+
+      /*
+       * Cleanup old build data to avoid an ever-growing cache directory.
+       * Any build data older than 3 days can be wiped.
+       */
+
+      reaper = dzl_directory_reaper_new ();
+      builds_dir = g_file_new_for_path (path);
+      dzl_directory_reaper_add_directory (reaper, builds_dir, G_TIME_SPAN_DAY * 3);
+      dzl_directory_reaper_execute_async (reaper, NULL, NULL, NULL);
+    }
 
   IDE_EXIT;
 }
