@@ -181,7 +181,7 @@ void
 gstyle_color_panel_set_filter (GstyleColorPanel  *self,
                                GstyleColorFilter  filter)
 {
-  GstyleColorFilterFunc filter_func;
+  GstyleColorFilterFunc filter_func = NULL;
 
   g_return_if_fail (GSTYLE_IS_COLOR_PANEL (self));
 
@@ -839,7 +839,7 @@ static void
 set_preferred_unit (GstyleColorPanel *self,
                    GstyleColorUnit  preferred_unit)
 {
-  GIcon *icon;
+  GIcon *icon = NULL;
 
   g_assert (GSTYLE_IS_COLOR_PANEL (self));
 
@@ -974,7 +974,7 @@ void
 _gstyle_color_panel_update_prefs_page (GstyleColorPanel *self,
                                        const gchar      *page_name)
 {
-  GstyleColorPanelPrefs prefs_type;
+  GstyleColorPanelPrefs prefs_type = GSTYLE_COLOR_PANEL_PREFS_COMPONENTS;
 
   g_assert (GSTYLE_IS_COLOR_PANEL (self));
 

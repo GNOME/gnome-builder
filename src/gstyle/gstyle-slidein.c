@@ -339,7 +339,7 @@ animate_stop (GstyleSlidein *self)
 static void
 animation_done_cb (GstyleSlidein *self)
 {
-  GstyleSlideinDirectionType animation_direction;
+  GstyleSlideinDirectionType animation_direction = GSTYLE_SLIDEIN_DIRECTION_TYPE_NONE;
 
   g_assert (GSTYLE_IS_SLIDEIN (self));
 

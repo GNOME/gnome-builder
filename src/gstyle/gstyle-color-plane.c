@@ -236,7 +236,7 @@ set_cursor_from_xyz (GstyleColorPlane *self,
   gdouble hsv_h, hsv_s, hsv_v;
   GstyleCielab lab;
   GdkRGBA rgba = {0};
-  gdouble x, y;
+  gdouble x = 0.0, y = 0.0;
 
   g_assert (GSTYLE_IS_COLOR_PLANE (self));
   g_assert (xyz != NULL);
@@ -361,7 +361,7 @@ gstyle_color_plane_set_preferred_unit (GstyleColorPlane *self,
                                        GstyleColorUnit   preferred_unit)
 {
   GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
-  gdouble max_range;
+  gdouble max_range = 0.0;
 
   g_return_if_fail (GSTYLE_IS_COLOR_PLANE (self));
 
@@ -1261,7 +1261,7 @@ gstyle_color_plane_set_mode (GstyleColorPlane     *self,
 {
   GstyleColorPlanePrivate *priv = gstyle_color_plane_get_instance_private (self);
   gdouble hsv_h, hsv_s, hsv_v;
-  gdouble ref_val;
+  gdouble ref_val = 0.0;
   GstyleCielab lab;
   GdkRGBA rgba = {0};
 
