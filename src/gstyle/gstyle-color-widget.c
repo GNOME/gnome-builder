@@ -243,9 +243,7 @@ gstyle_color_widget_on_drag_leave (GtkWidget      *widget,
                                    GdkDragContext *context,
                                    guint           time)
 {
-  GstyleColorWidget *self = (GstyleColorWidget *)widget;
-
-  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+  g_assert (GSTYLE_IS_COLOR_WIDGET (widget));
   g_assert (GDK_IS_DRAG_CONTEXT (context));
 
   gtk_drag_unhighlight (widget);
@@ -586,9 +584,7 @@ gstyle_color_widget_on_drag_failed (GtkWidget      *widget,
                                     GdkDragContext *context,
                                     GtkDragResult   result)
 {
-  GstyleColorWidget *self = (GstyleColorWidget *)widget;
-
-  g_assert (GSTYLE_IS_COLOR_WIDGET (self));
+  g_assert (GSTYLE_IS_COLOR_WIDGET (widget));
   g_assert (GDK_IS_DRAG_CONTEXT (context));
 
   return FALSE;

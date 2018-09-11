@@ -669,11 +669,9 @@ static GtkWidget *
 create_palette_list_item (gpointer item,
                           gpointer user_data)
 {
-  GstylePaletteWidget *self = (GstylePaletteWidget *)user_data;
   GstyleColor *color = (GstyleColor *)item;
   GtkWidget *row;
 
-  g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
   g_assert (GSTYLE_IS_COLOR (color));
 
   row = g_object_new (GSTYLE_TYPE_COLOR_WIDGET,
@@ -689,14 +687,12 @@ static GtkWidget *
 create_palette_flow_item (gpointer item,
                           gpointer user_data)
 {
-  GstylePaletteWidget *self = (GstylePaletteWidget *)user_data;
   GstyleColor *color = (GstyleColor *)item;
   g_autofree gchar *color_string = NULL;
   g_autofree gchar *tooltip = NULL;
   const gchar *name;
   GtkWidget *swatch;
 
-  g_assert (GSTYLE_IS_PALETTE_WIDGET (self));
   g_assert (GSTYLE_IS_COLOR (color));
 
   name = gstyle_color_get_name (color);
