@@ -1,6 +1,7 @@
 buildui_private_sources = [
   'ide-build-configuration-row.c',
   'ide-build-configuration-view.c',
+  'ide-build-config-view-addin.c',
   'ide-build-log-panel.c',
   'ide-build-panel.c',
   'ide-build-perspective.c',

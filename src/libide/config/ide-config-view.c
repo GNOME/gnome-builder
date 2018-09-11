@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include "application/ide-application.h"
 #include "config/ide-config-view.h"
 #include "config/ide-config-view-addin.h"
 #include "util/ide-gtk.h"
@@ -73,6 +74,7 @@ ide_config_view_destroy (GtkWidget *widget)
 {
   IdeConfigView *self = (IdeConfigView *)widget;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONFIG_VIEW (self));
 
   if (self->config)
@@ -86,6 +88,7 @@ ide_config_view_finalize (GObject *object)
 {
   IdeConfigView *self = (IdeConfigView *)object;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (self->addins == NULL);
   g_assert (self->config == NULL);
   g_assert (self->cancellable == NULL);
@@ -100,6 +103,8 @@ ide_config_view_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   IdeConfigView *self = IDE_CONFIG_VIEW (object);
+
+  g_assert (IDE_IS_MAIN_THREAD ());
 
   switch (prop_id)
     {
@@ -119,6 +124,8 @@ ide_config_view_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   IdeConfigView *self = IDE_CONFIG_VIEW (object);
+
+  g_assert (IDE_IS_MAIN_THREAD ());
 
   switch (prop_id)
     {
@@ -168,6 +175,7 @@ ide_config_view_load_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeContext *context;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONFIG_VIEW_ADDIN (addin));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_CONFIG_VIEW (self));
@@ -187,6 +195,7 @@ ide_config_view_addin_added_cb (PeasExtensionSet *set,
   IdeConfigViewAddin *addin = (IdeConfigViewAddin *)exten;
   IdeConfigView *self = user_data;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_CONFIG_VIEW_ADDIN (addin));
@@ -210,6 +219,7 @@ ide_config_view_addin_removed_cb (PeasExtensionSet *set,
   IdeConfigViewAddin *addin = (IdeConfigViewAddin *)exten;
   IdeConfigView *self = user_data;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_CONFIG_VIEW_ADDIN (addin));
@@ -222,6 +232,7 @@ ide_config_view_addin_removed_cb (PeasExtensionSet *set,
 static void
 ide_config_view_disconnect (IdeConfigView *self)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONFIG_VIEW (self));
   g_assert (IDE_IS_CONFIGURATION (self->config));
 
@@ -240,6 +251,7 @@ ide_config_view_connect (IdeConfigView    *self,
 {
   IdeContext *context;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONFIG_VIEW (self));
   g_assert (IDE_IS_CONFIGURATION (config));
   g_assert (self->cancellable == NULL);
@@ -288,6 +300,7 @@ ide_config_view_connect (IdeConfigView    *self,
 IdeConfiguration *
 ide_config_view_get_config (IdeConfigView *self)
 {
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CONFIG_VIEW (self), NULL);
 
   return self->config;
@@ -297,6 +310,7 @@ void
 ide_config_view_set_config (IdeConfigView    *self,
                             IdeConfiguration *config)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONFIG_VIEW (self));
   g_return_if_fail (!config || IDE_IS_CONFIGURATION (config));
 
