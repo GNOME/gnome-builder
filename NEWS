@@ -1,4 +1,17 @@
 ==============
+Version 3.31.1
+==============
+
+Changes since last release:
+
+ • Add setting to disable clearing build caches at startup.
+ • Build system improvements for release/nodebug builds.
+
+Updated Translations:
+
+  French, Brazilian Portuguese, Swedish
+
+==============
 Version 3.30.0
 ==============
 
