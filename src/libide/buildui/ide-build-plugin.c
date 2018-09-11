@@ -23,6 +23,8 @@
 #include "object-modules.h"
 
 #include "buildui/ide-build-workbench-addin.h"
+#include "buildui/ide-build-config-view-addin.h"
+#include "config/ide-config-view-addin.h"
 #include "workbench/ide-workbench-addin.h"
 
 void
@@ -31,4 +33,7 @@ ide_build_tool_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               IDE_TYPE_BUILD_WORKBENCH_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_CONFIG_VIEW_ADDIN,
+                                              IDE_TYPE_BUILD_CONFIG_VIEW_ADDIN);
 }

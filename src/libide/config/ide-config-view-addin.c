@@ -112,7 +112,7 @@ ide_config_view_addin_load_finish (IdeConfigViewAddin  *self,
                                    GError             **error)
 {
   g_return_val_if_fail (IDE_IS_CONFIG_VIEW_ADDIN (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   return IDE_CONFIG_VIEW_ADDIN_GET_IFACE (self)->load_finish (self, result, error);
 }
