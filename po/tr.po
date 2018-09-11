@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-08-31 13:56+0300\n"
+"POT-Creation-Date: 2018-09-10 19:00+0000\n"
+"PO-Revision-Date: 2018-09-11 17:28+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -37,7 +37,7 @@ msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
 msgstr ""
-"İnşa ederken kullanılacak işçi sayısı. makul öntanımlı için -1. CPU sayısı "
+"İnşa ederken kullanılacak işçi sayısı. Makul öntanımlı için -1. CPU sayısı "
 "için 0."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
@@ -50,7 +50,7 @@ msgid ""
 "dependencies when connection is metered."
 msgstr ""
 "Bağlantı kotalıyken inşa için SDK indirmeleri ve bağımlılıklar gibi kendi "
-"kendine gerçekleşen aktarımlara izin ver"
+"kendine gerçekleşen aktarımlara izin ver."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
@@ -233,7 +233,7 @@ msgstr "Kendiliğinden Kaydetme Sıklığı"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:113
 msgid "The number of seconds after modification before auto saving."
-msgstr "Kendiliğinden kaydetme için değiştirmeden sonra saniye sayısı"
+msgstr "Kendiliğinden kaydetme için değiştirmeden sonra saniye sayısı."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "Completion Row Count"
@@ -245,14 +245,10 @@ msgstr "Kullanıcıya gösterilecek tamamlama satırlarının sayısı."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/preferences/ide-preferences-builtin.c:211
-#| msgid "Suggest Snippet Completion"
 msgid "Interactive Completion"
 msgstr "Etkileşimli Tamamlama"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
-#| msgid ""
-#| "If enabled, Builder will automatically wrap text so all of the line text "
-#| "is visible."
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -274,7 +270,7 @@ msgstr "Etkin"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
 msgid "If the type within the extension is enabled."
-msgstr "Eklenti içerisinde türün etkin olup olmadığı"
+msgstr "Eklenti içerisinde türün etkin olup olmadığı."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
@@ -324,7 +320,7 @@ msgid "\"Projects\""
 msgstr "\"Projeler\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:423
 msgid "Projects directory"
 msgstr "Projeler dizini"
 
@@ -347,6 +343,15 @@ msgstr "Açık Dosyaları Göster"
 #: data/gsettings/org.gnome.builder.gschema.xml:44
 msgid "Display the open files list in the project sidebar."
 msgstr "Proje kenar çubuğunda açık dosya listesini göster."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:48
+msgid "Clear build caches at startup"
+msgstr "Başlangıçta inşa önbelleklerini temizle"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:49
+msgid "If enabled, Builder will clear build caches upon startup."
+msgstr ""
+"Eğer etkinleştirilirse, Builder başlangıçta inşa önbelleklerini temizleyecek."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -407,7 +412,7 @@ msgstr "Sol Paneli Göster"
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
 msgid "If enabled, the left panel will be displayed."
-msgstr "Eğer etkinleştirilirse, sol panel gösterilecek"
+msgstr "Eğer etkinleştirilirse, sol panel gösterilecek."
 
 #: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
 msgid "Left Panel Position"
@@ -784,7 +789,7 @@ msgid "Funded By"
 msgstr "Maddi Destekçiler"
 
 #: src/libide/application/ide-application.c:1001
-#: src/libide/preferences/ide-preferences-builtin.c:418
+#: src/libide/preferences/ide-preferences-builtin.c:420
 msgid "Projects"
 msgstr "Projeler"
 
@@ -944,7 +949,7 @@ msgid "Failed to save draft: %s"
 msgstr "Taslak kaydetme başarısız oldu: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:642
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:643
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Kopya)"
@@ -2184,7 +2189,7 @@ msgstr "Panodaki metni yapıştır"
 #: src/libide/keybindings/ide-shortcuts-window.ui:225
 msgctxt "shortcut window"
 msgid "Duplicate current line or selection"
-msgstr "Geçerli satırı veya seçimi ikile."
+msgstr "Geçerli satırı veya seçimi ikile"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:233
 msgctxt "shortcut window"
@@ -2436,7 +2441,7 @@ msgstr "Tüh, bir şeyler yanlış gitti"
 
 #: src/libide/layout/ide-layout-stack.ui:125
 msgid "There was a failure while trying to perform the operation."
-msgstr "İşlemi gerçekleştirmeye çalışırken hata oluştu"
+msgstr "İşlemi gerçekleştirmeye çalışırken hata oluştu."
 
 #. translators: %s is replaced with the host name
 #: src/libide/local/ide-local-device.c:137
@@ -2736,7 +2741,7 @@ msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
-"Kaynak dosyada keşfedilen ek bilgiyi vurgulamak için kod sezgisini kullan "
+"Kaynak dosyada keşfedilen ek bilgiyi vurgulamak için kod sezgisini kullan"
 
 #: src/libide/preferences/ide-preferences-builtin.c:207
 msgid "Completion"
@@ -2773,7 +2778,7 @@ msgstr "Satır sonundaki boşlukları kırp"
 #: src/libide/preferences/ide-preferences-builtin.c:331
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
-"Kaydetme üzerine, değiştirilen satırların sonundaki boşluklar silinecek"
+"Kaydetme üzerine, değiştirilen satırların sonundaki boşluklar silinecek."
 
 #: src/libide/preferences/ide-preferences-builtin.c:332
 msgid "Overwrite Braces"
@@ -2894,14 +2899,22 @@ msgid "Number of parallel build workers"
 msgstr "Aynı anda çalışacak inşa işçileri"
 
 #: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Clear build cache at startup"
+msgstr "Başlangıçta inşa önbelleğini temizle"
+
+#: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Expired caches will be purged when Builder is started"
+msgstr "Builder başladığında süresi geçmiş önbellekler temizlenecek"
+
+#: src/libide/preferences/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Ağ"
 
-#: src/libide/preferences/ide-preferences-builtin.c:412
+#: src/libide/preferences/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Kotalı bağlantılarda indirmelere izin ver"
 
-#: src/libide/preferences/ide-preferences-builtin.c:412
+#: src/libide/preferences/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2909,29 +2922,29 @@ msgstr ""
 "Bağımlılıklar kendiliğinden indirilirken kotalı ağ bağlantılarının "
 "kullanımına izin ver"
 
-#: src/libide/preferences/ide-preferences-builtin.c:420
+#: src/libide/preferences/ide-preferences-builtin.c:422
 msgid "Workspace"
 msgstr "Çalışma Alanı"
 
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:423
 msgid "A place for all your projects"
 msgstr "Tüm projeleriniz için bir yer"
 
-#: src/libide/preferences/ide-preferences-builtin.c:422
+#: src/libide/preferences/ide-preferences-builtin.c:424
 msgid "Restore previously opened files"
 msgstr "Önceden açılan dosyaları geri yükle"
 
-#: src/libide/preferences/ide-preferences-builtin.c:422
+#: src/libide/preferences/ide-preferences-builtin.c:424
 msgid "Open previously opened files when loading a project"
 msgstr "Projeyi yüklerken daha önce açılmış dosyaları aç"
 
-#: src/libide/preferences/ide-preferences-builtin.c:543
+#: src/libide/preferences/ide-preferences-builtin.c:545
 #: src/plugins/create-project/gbp-create-project-widget.ui:180
 msgid "Version Control"
 msgstr "Sürüm Denetimi"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/preferences/ide-preferences-builtin.c:555
+#: src/libide/preferences/ide-preferences-builtin.c:557
 msgid "SDKs"
 msgstr "Yazılım Geliştirme Kitleri"
 
@@ -3191,7 +3204,7 @@ msgstr "Tezgâh menüsünü aç"
 
 #: src/libide/workbench/ide-workbench-header-bar.ui:96
 msgid "Press Ctrl+. to search"
-msgstr "Aramak için Ctrl+. tuşlarına basın "
+msgstr "Aramak için Ctrl+. tuşlarına basın"
 
 #: src/libide/workbench/ide-workbench-shortcuts.c:35
 msgctxt "shortcut window"
@@ -3631,7 +3644,7 @@ msgstr "RGB birimi"
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
 msgid "The unit used by RGB component and strings."
-msgstr "RGB bileşenleri ve dizgeleri tarafından kullanılan birim"
+msgstr "RGB bileşenleri ve dizgeleri tarafından kullanılan birim."
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
 msgid "Selected palette ID"
@@ -3639,7 +3652,7 @@ msgstr "Seçili palet kimliği"
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
 msgid "The selected palette ID among the loaded ones."
-msgstr "Yüklü olanlar arasından seçili palet kimliği"
+msgstr "Yüklü olanlar arasından seçili palet kimliği."
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
 msgid "Color strings visibility"
@@ -3647,7 +3660,7 @@ msgstr "Renk dizgeleri görünürlüğü"
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
 msgid "The visible color strings."
-msgstr "Görünür renk dizgeleri"
+msgstr "Görünür renk dizgeleri."
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
 msgid "Color filter"
@@ -3655,7 +3668,7 @@ msgstr "Renk süzgeci"
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
 msgid "The filter used on the color scales and color plane."
-msgstr "Renk ölçeklerinde ve renk düzleminde kullanılan süzgeç"
+msgstr "Renk ölçeklerinde ve renk düzleminde kullanılan süzgeç."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
 msgid "Color components"
@@ -4298,7 +4311,7 @@ msgstr "kullanıcı@makineadi:depo.git"
 
 #: src/plugins/git/ide-git-clone-widget.ui:67
 msgid "Enter the URL of your project’s source code repository"
-msgstr "Projenizin kaynak kod deposunun URL’sini (adresini) girin."
+msgstr "Projenizin kaynak kod deposunun URL’sini (adresini) girin"
 
 #: src/plugins/git/ide-git-clone-widget.ui:70
 msgid "Change default branch"
@@ -4626,7 +4639,7 @@ msgstr "npm bağımlılıkları indiriliyor"
 
 #: src/plugins/phpize/phpize_plugin.py:210
 msgid "Bootstrapping project"
-msgstr "Proje özyükleniyor…"
+msgstr "Proje özyükleniyor"
 
 #: src/plugins/project-tree/gb-new-file-popover.c:123
 #: src/plugins/project-tree/gb-rename-file-popover.c:139
@@ -4817,7 +4830,7 @@ msgstr "Rustup güncelleniyor"
 
 #: src/plugins/rustup/rustup_plugin.py:283
 msgid "Installing rust "
-msgstr "Rust kuruluyor"
+msgstr "Rust kuruluyor "
 
 #: src/plugins/rustup/rustup_plugin.py:285
 msgid "Checking system"
@@ -4833,11 +4846,11 @@ msgstr "Kanal güncellemeleri eşzamanlanıyor"
 
 #: src/plugins/rustup/rustup_plugin.py:361
 msgid "Downloading "
-msgstr "İndiriliyor"
+msgstr "İndiriliyor "
 
 #: src/plugins/rustup/rustup_plugin.py:368
 msgid "Installing "
-msgstr "Kuruluyor"
+msgstr "Kuruluyor "
 
 #: src/plugins/rustup/rustup_plugin.py:374
 msgid "Checking for rustup updates"
@@ -4849,7 +4862,7 @@ msgstr "Rustup güncellemesi indiriliyor"
 
 #: src/plugins/rustup/rustup_plugin.py:416
 msgid "Error installing "
-msgstr "Kurulum sırasında hata"
+msgstr "Kurulum sırasında hata "
 
 #: src/plugins/rustup/rustup_plugin.py:418
 msgid "Error"
