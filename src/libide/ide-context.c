@@ -2134,12 +2134,11 @@ ide_context_unload_cb (GObject      *object,
                        GAsyncResult *result,
                        gpointer      user_data)
 {
-  IdeContext *self = (IdeContext *)object;
   IdeTask *unload_task = (IdeTask *)result;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (IDE_IS_CONTEXT (object));
   g_assert (IDE_IS_TASK (unload_task));
   g_assert (IDE_IS_TASK (task));
 
