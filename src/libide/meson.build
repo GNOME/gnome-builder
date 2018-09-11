@@ -234,7 +234,7 @@ libide_args += hidden_visibility_args
 libide = shared_library('ide-' + libide_api_version,
   libide_resources + libide_icons_resources + libide_sources,
   dependencies: libide_deps,
-        c_args: libide_args,
+        c_args: libide_args + release_args,
        install: true,
    install_dir: pkglibdir_abs,
  install_rpath: pkglibdir_abs,

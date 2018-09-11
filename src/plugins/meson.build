@@ -81,7 +81,7 @@ gnome_builder_plugins = shared_library(
 
    dependencies: gnome_builder_plugins_deps,
    link_depends: 'plugins.map',
-         c_args: gnome_builder_plugins_args,
+         c_args: gnome_builder_plugins_args + release_args,
       link_args: gnome_builder_plugins_link_args,
       link_with: gnome_builder_plugins_link_with,
         install: true,
