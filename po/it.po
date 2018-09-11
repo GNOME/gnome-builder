@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-09-03 10:02+0200\n"
+"POT-Creation-Date: 2018-09-10 19:00+0000\n"
+"PO-Revision-Date: 2018-09-11 11:17+0200\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -312,7 +312,7 @@ msgid "\"Projects\""
 msgstr "\"Progetti\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:423
 msgid "Projects directory"
 msgstr "Directory progetti"
 
@@ -337,6 +337,15 @@ msgstr "Mostra file aperti"
 msgid "Display the open files list in the project sidebar."
 msgstr ""
 "Visualizza l'elenco dei file aperti nel riquadro laterale del progetto."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:48
+msgid "Clear build caches at startup"
+msgstr "Svuota cache di compilazione all'avvio"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:49
+msgid "If enabled, Builder will clear build caches upon startup."
+msgstr ""
+"Se abilitato, il programma svuoterà le cache di compilazione all'avvio."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -777,7 +786,7 @@ msgid "Funded By"
 msgstr "Reso possibile da"
 
 #: src/libide/application/ide-application.c:1001
-#: src/libide/preferences/ide-preferences-builtin.c:418
+#: src/libide/preferences/ide-preferences-builtin.c:420
 msgid "Projects"
 msgstr "Progetti"
 
@@ -937,7 +946,7 @@ msgid "Failed to save draft: %s"
 msgstr "Salvataggio della bozza riuscito: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:642
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:643
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (copia)"
@@ -2901,14 +2910,22 @@ msgid "Number of parallel build workers"
 msgstr "Numero di esecutori di compilazione paralleli"
 
 #: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Clear build cache at startup"
+msgstr "Svuotare cache compilazione all'avvio"
+
+#: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Expired caches will be purged when Builder is started"
+msgstr "Le cache scadute vengono pulite all'avvio"
+
+#: src/libide/preferences/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Rete"
 
-#: src/libide/preferences/ide-preferences-builtin.c:412
+#: src/libide/preferences/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Consentire scaricamenti con connessioni a consumo"
 
-#: src/libide/preferences/ide-preferences-builtin.c:412
+#: src/libide/preferences/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2916,29 +2933,29 @@ msgstr ""
 "Consente l'uso delle connessioni a consumo per scaricare automaticamente le "
 "dipendenze"
 
-#: src/libide/preferences/ide-preferences-builtin.c:420
+#: src/libide/preferences/ide-preferences-builtin.c:422
 msgid "Workspace"
 msgstr "Spazio di lavoro"
 
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:423
 msgid "A place for all your projects"
 msgstr "Un luogo per tutti i propri progetti"
 
-#: src/libide/preferences/ide-preferences-builtin.c:422
+#: src/libide/preferences/ide-preferences-builtin.c:424
 msgid "Restore previously opened files"
 msgstr "Ripristina i file che erano aperti"
 
-#: src/libide/preferences/ide-preferences-builtin.c:422
+#: src/libide/preferences/ide-preferences-builtin.c:424
 msgid "Open previously opened files when loading a project"
 msgstr "Apre i file che erano aperti quando carica un progetto"
 
-#: src/libide/preferences/ide-preferences-builtin.c:543
+#: src/libide/preferences/ide-preferences-builtin.c:545
 #: src/plugins/create-project/gbp-create-project-widget.ui:180
 msgid "Version Control"
 msgstr "Controllo della versione"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/preferences/ide-preferences-builtin.c:555
+#: src/libide/preferences/ide-preferences-builtin.c:557
 msgid "SDKs"
 msgstr "SDK"
 
@@ -4442,7 +4459,6 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain.c:66
 #, c-format
-#| msgid "Meson"
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
@@ -4539,7 +4555,6 @@ msgid "Fortran"
 msgstr "Fortran"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
-#| msgid "ID"
 msgid "D"
 msgstr "D"
 
