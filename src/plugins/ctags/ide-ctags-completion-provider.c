@@ -325,7 +325,6 @@ ide_ctags_completion_provider_activate_proposal (IdeCompletionProvider *provider
                                                  IdeCompletionProposal *proposal,
                                                  const GdkEventKey     *key)
 {
-  IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
   IdeCtagsCompletionItem *item = (IdeCtagsCompletionItem *)proposal;
   g_autofree gchar *slice = NULL;
   g_autoptr(IdeSnippet) snippet = NULL;
@@ -336,7 +335,7 @@ ide_ctags_completion_provider_activate_proposal (IdeCompletionProvider *provider
   GtkTextIter end;
   IdeFile *file;
 
-  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_CTAGS_COMPLETION_ITEM (item));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
 

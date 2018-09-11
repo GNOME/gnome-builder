@@ -124,7 +124,6 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
                                                  IdeCompletionProposal *proposal,
                                                  const GdkEventKey     *key)
 {
-  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
   g_autofree gchar *word = NULL;
   g_autoptr(IdeSnippet) snippet = NULL;
@@ -133,7 +132,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
   IdeFile *file;
   GtkTextIter begin, end;
 
-  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
 

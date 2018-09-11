@@ -184,11 +184,11 @@ static gboolean
 gbp_sysroot_runtime_supports_toolchain (IdeRuntime   *runtime,
                                         IdeToolchain *toolchain)
 {
-  GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
   g_autoptr(IdeTriplet) host_triplet = NULL;
   g_autofree gchar *runtime_arch = NULL;
 
-  g_assert (GBP_IS_SYSROOT_RUNTIME (self));
+  g_assert (GBP_IS_SYSROOT_RUNTIME (runtime));
+  g_assert (IDE_IS_TOOLCHAIN (toolchain));
 
   runtime_arch = ide_runtime_get_arch (runtime);
   host_triplet = ide_toolchain_get_host_triplet (toolchain);
