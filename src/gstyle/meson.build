@@ -83,6 +83,7 @@ endif
 libgstyle = shared_library('gstyle-private', libgstyle_sources,
   dependencies: libgstyle_deps,
      link_args: libgstyle_link_args,
+        c_args: release_args,
   link_depends: 'gstyle.map',
        version: '0.0.0',
        install: true,
