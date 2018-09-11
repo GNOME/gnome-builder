@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-08-31 15:10+0200\n"
+"POT-Creation-Date: 2018-09-10 19:00+0000\n"
+"PO-Revision-Date: 2018-09-11 09:01+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -330,7 +330,7 @@ msgid "\"Projects\""
 msgstr "\"Projekte\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:423
 msgid "Projects directory"
 msgstr "Projekteordner"
 
@@ -353,6 +353,16 @@ msgstr "Offene Dateien anzeigen"
 #: data/gsettings/org.gnome.builder.gschema.xml:44
 msgid "Display the open files list in the project sidebar."
 msgstr "Die geöffneten Dateien in der Projekt-Seitenleiste anzeigen."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:48
+msgid "Clear build caches at startup"
+msgstr "Erstellungs-Zwischenspeicher beim Start löschen"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:49
+msgid "If enabled, Builder will clear build caches upon startup."
+msgstr ""
+"Legt fest, ob abgelaufene Zwischenspeicher beim Start von Builder geleert "
+"werden sollen."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -802,7 +812,7 @@ msgid "Funded By"
 msgstr "Gefördert von"
 
 #: src/libide/application/ide-application.c:1001
-#: src/libide/preferences/ide-preferences-builtin.c:418
+#: src/libide/preferences/ide-preferences-builtin.c:420
 msgid "Projects"
 msgstr "Projekte"
 
@@ -964,7 +974,7 @@ msgid "Failed to save draft: %s"
 msgstr "Entwurf konnte nicht gespeichert werden: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:642
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:643
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Kopie)"
@@ -2942,14 +2952,22 @@ msgid "Number of parallel build workers"
 msgstr "Anzahl der parallel laufenden Erstellungs-Worker"
 
 #: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Clear build cache at startup"
+msgstr "Erstellungs-Zwischenspeicher beim Start löschen"
+
+#: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Expired caches will be purged when Builder is started"
+msgstr "Abgelaufene Zwischenspeicher werden beim Start von Builder geleert"
+
+#: src/libide/preferences/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Netzwerk"
 
-#: src/libide/preferences/ide-preferences-builtin.c:412
+#: src/libide/preferences/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Downloads über getaktete Verbindungen zulassen"
 
-#: src/libide/preferences/ide-preferences-builtin.c:412
+#: src/libide/preferences/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2957,29 +2975,29 @@ msgstr ""
 "Die Nutzung getakteter Verbindungen zulassen, wenn Abhängigkeiten "
 "automatisch heruntergeladen werden"
 
-#: src/libide/preferences/ide-preferences-builtin.c:420
+#: src/libide/preferences/ide-preferences-builtin.c:422
 msgid "Workspace"
 msgstr "Arbeitsfläche"
 
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:423
 msgid "A place for all your projects"
 msgstr "Ein Platz für alle Ihre Projekte"
 
-#: src/libide/preferences/ide-preferences-builtin.c:422
+#: src/libide/preferences/ide-preferences-builtin.c:424
 msgid "Restore previously opened files"
 msgstr "Zuvor geöffnete Dateien öffnen"
 
-#: src/libide/preferences/ide-preferences-builtin.c:422
+#: src/libide/preferences/ide-preferences-builtin.c:424
 msgid "Open previously opened files when loading a project"
 msgstr "Zuvor geöffnete Dateien beim Laden eines Projekts öffnen"
 
-#: src/libide/preferences/ide-preferences-builtin.c:543
+#: src/libide/preferences/ide-preferences-builtin.c:545
 #: src/plugins/create-project/gbp-create-project-widget.ui:180
 msgid "Version Control"
 msgstr "Versionskontrolle"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/preferences/ide-preferences-builtin.c:555
+#: src/libide/preferences/ide-preferences-builtin.c:557
 msgid "SDKs"
 msgstr "SDKs"
 
