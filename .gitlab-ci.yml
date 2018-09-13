@@ -21,8 +21,6 @@ flatpak:
         MESON_ARGS: "--buildtype=debugoptimized -Dctags_path=/app/bin/ctags -Dfusermount_wrapper=true -Dwith_tcmalloc=true -Denable_tracing=true -Dwith_help=true -Dwith_channel=flatpak-nightly -Dwith_deviced=true"
         DBUS_ID: "org.gnome.Builder"
 
-    before_script:
-        - tar -xzf cache.tar.gz .flatpak-builder/cache/ || true
     script:
         - flatpak-builder --stop-at=${FLATPAK_MODULE} app ${MANIFEST_PATH}
         # Make sure to keep this in sync with the Flatpak manifest, all arguments
@@ -35,8 +33,6 @@ flatpak:
         # - xvfb-run -a -s "-screen 0 1024x768x24" flatpak build app ninja -C _build test
         # Generate a Flatpak bundle
         - flatpak build-bundle repo ${BUNDLE} --runtime-repo=${RUNTIME_REPO} ${DBUS_ID}
-    after_script:
-        - tar -czf cache.tar.gz .flatpak-builder/cache/
 
     artifacts:
         paths:
@@ -44,9 +40,11 @@ flatpak:
             - _build/meson-logs/meson-log.txt
             - _build/meson-logs/testlog.txt
         expire_in: 30 days
+        
     cache:
         paths:
-             - cache.tar.gz
+            - .flatpak-builder/downloads/
+            - .flatpak-builder/git/
 
 review:
     stage: review
