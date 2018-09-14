@@ -337,7 +337,7 @@ class EmptyProjectTemplate(MesonTemplate):
             _('Empty Project'),
             'pattern-cli',
             _('Create a new empty project'),
-            ['C', 'C++', 'JavaScript', 'Python', 'Vala'],
+            ['C', 'C++', 'C♯', 'JavaScript', 'Python', 'Vala'],
             200
          )
 
