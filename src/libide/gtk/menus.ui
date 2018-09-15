@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <menu id="app-menu">
-    <section id="app-menu-project-section">
+  <menu id="gear-menu">
+    <section id="gear-menu-project-section">
       <item>
         <attribute name="label" translatable="yes">_New Project</attribute>
         <attribute name="action">app.new-project</attribute>
@@ -16,15 +16,33 @@
         <attribute name="action">app.clone</attribute>
       </item>
     </section>
-    <section id="app-menu-placeholder-1"/>
-    <section id="app-menu-preferences-section">
+    <section id="gear-menu-save-section">
+      <item>
+        <attribute name="label" translatable="yes">Save _All</attribute>
+        <attribute name="action">win.save-all</attribute>
+        <attribute name="accel">&lt;primary&gt;&lt;alt&gt;s</attribute>
+      </item>
+    </section>
+    <section id="gear-menu-close-section">
+      <item>
+        <attribute name="label" translatable="yes">Close _All</attribute>
+        <attribute name="action">editor.close-all</attribute>
+        <attribute name="accel">&lt;primary&gt;&lt;shift&gt;w</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Close Project</attribute>
+        <attribute name="action">win.close-project</attribute>
+      </item>
+    </section>
+    <section id="gear-menu-placeholder-1"/>
+    <section id="gear-menu-preferences-section">
       <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
       </item>
     </section>
-    <section id="app-menu-placeholder-2"/>
-    <section id="app-menu-help-section">
+    <section id="gear-menu-placeholder-2"/>
+    <section id="gear-menu-help-section">
       <attribute name="id">help-section</attribute>
       <item>
         <attribute name="label" translatable="yes">Keyboard _Shortcuts</attribute>
@@ -38,6 +56,8 @@
         <attribute name="label" translatable="yes">_About</attribute>
         <attribute name="action">app.about</attribute>
       </item>
+    </section>
+    <section id="gear-menu-quit-section">
       <item>
         <attribute name="label" translatable="yes">_Quit</attribute>
         <attribute name="action">app.quit</attribute>
@@ -66,24 +86,6 @@
         <attribute name="verb-icon-name">preferences-other-symbolic</attribute>
       </item>
     </section>
-  </menu>
-  <menu id="pages-menu">
-    <section id="pages-menu-save-section">
-      <item>
-        <attribute name="label" translatable="yes">Save _All</attribute>
-        <attribute name="action">win.save-all</attribute>
-        <attribute name="accel">&lt;primary&gt;&lt;alt&gt;s</attribute>
-      </item>
-    </section>
-    <section id="pages-menu-close-section">
-      <item>
-        <attribute name="label" translatable="yes">Close _All</attribute>
-        <attribute name="action">editor.close-all</attribute>
-        <attribute name="accel">&lt;primary&gt;&lt;shift&gt;w</attribute>
-      </item>
-    </section>
-  </menu>
-  <menu id="gear-menu">
   </menu>
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-jump-section">

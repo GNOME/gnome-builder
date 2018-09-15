@@ -243,7 +243,7 @@
         </child>
       </object>
       <packing>
-        <property name="position">1</property>
+        <property name="position">2</property>
         <property name="pack-type">end</property>
       </packing>
     </child>
@@ -257,7 +257,7 @@
         </style>
       </object>
       <packing>
-        <property name="position">0</property>
+        <property name="position">1</property>
         <property name="pack-type">end</property>
       </packing>
     </child>
@@ -270,8 +270,22 @@
         </style>
       </object>
       <packing>
-        <property name="position">0</property>
+        <property name="position">1</property>
         <property name="pack-type">end</property>
+      </packing>
+    </child>
+    <child>
+      <object class="DzlMenuButton" id="gear_button">
+        <property name="icon-name">open-menu-symbolic</property>
+        <property name="visible">true</property>
+        <property name="menu-id">gear-menu</property>
+        <style>
+          <class name="image-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+        <property name="position">0</property>
       </packing>
     </child>
   </object>
