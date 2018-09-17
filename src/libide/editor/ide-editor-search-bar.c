@@ -289,6 +289,7 @@ static gboolean
 update_match_positions (gpointer user_data)
 {
   IdeEditorSearchBar *self = user_data;
+  GtkStyleContext *style;
   g_autofree gchar *str = NULL;
   guint count;
   guint pos;
@@ -322,6 +323,13 @@ update_match_positions (gpointer user_data)
 
       ide_tagged_entry_tag_set_label (self->search_entry_tag, str);
     }
+
+  style = gtk_widget_get_style_context (GTK_WIDGET(self->search_entry));
+
+  if (count == 0 && gtk_entry_get_text_length (GTK_ENTRY (self->search_entry)) > 0)
+    gtk_style_context_add_class (style, GTK_STYLE_CLASS_ERROR);
+  else
+    gtk_style_context_remove_class(style, GTK_STYLE_CLASS_ERROR);
 
   return G_SOURCE_REMOVE;
 }
