@@ -161,7 +161,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 
   if (ret != NULL)
     {
-      g_autofree gchar *project_name = NULL;
       g_autofree gchar *project_path = NULL;
       g_autofree gchar *build_path = NULL;
       g_autofree gchar *ccache_dir = NULL;
@@ -172,6 +171,7 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       IdeContext *context;
       IdeConfigurationManager *config_manager;
       IdeConfiguration *configuration;
+      IdeVcs *vcs;
 
       context = ide_object_get_context (IDE_OBJECT (self));
       config_manager = ide_context_get_configuration_manager (context);
@@ -181,24 +181,30 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       builddir = get_builddir (self);
 
       /* Find the project directory path */
-      project_file = ide_context_get_project_file (context);
-      if (project_file != NULL)
+      if ((vcs = ide_context_get_vcs (context)))
         {
-          g_autofree gchar *project_file_path = NULL;
-
-          project_file_path = g_file_get_path (project_file);
-          if (g_file_test (project_file_path, G_FILE_TEST_IS_DIR))
+          GFile *vcs_workdir = ide_vcs_get_working_directory (vcs);
+          project_path = g_file_get_path (vcs_workdir);
+        }
+      else
+        {
+          project_file = ide_context_get_project_file (context);
+          if (project_file != NULL)
             {
-              project_path = g_file_get_path (project_file);
-              project_name = g_file_get_basename (project_file);
-            }
-          else
-            {
-              g_autoptr(GFile) project_dir = NULL;
+              g_autofree gchar *project_file_path = NULL;
 
-              project_dir = g_file_get_parent (project_file);
-              project_path = g_file_get_path (project_dir);
-              project_name = g_file_get_basename (project_dir);
+              project_file_path = g_file_get_path (project_file);
+              if (g_file_test (project_file_path, G_FILE_TEST_IS_DIR))
+                {
+                  project_path = g_file_get_path (project_file);
+                }
+              else
+                {
+                  g_autoptr(GFile) project_dir = NULL;
+
+                  project_dir = g_file_get_parent (project_file);
+                  project_path = g_file_get_path (project_dir);
+                }
             }
         }
 

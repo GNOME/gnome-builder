@@ -77,6 +77,9 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_autofree gchar *prefix_option = NULL;
   g_autofree gchar *build_ninja = NULL;
   g_autofree gchar *crossbuild_file = NULL;
+  GFile *project_file;
+  g_autofree gchar *project_file_name = NULL;
+  g_autofree gchar *srcdir = NULL;
   IdeBuildSystem *build_system;
   IdeConfiguration *configuration;
   IdeContext *context;
@@ -85,7 +88,6 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   const gchar *ninja = NULL;
   const gchar *config_opts;
   const gchar *prefix;
-  const gchar *srcdir;
   const gchar *cmake;
   guint id;
   gint parallelism;
@@ -101,10 +103,17 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (!GBP_IS_CMAKE_BUILD_SYSTEM (build_system))
     IDE_GOTO (failure);
 
+  project_file = ide_context_get_project_file (context);
+  project_file_name = g_file_get_basename (project_file);
+
   configuration = ide_build_pipeline_get_configuration (pipeline);
   runtime = ide_build_pipeline_get_runtime (pipeline);
   toolchain = ide_build_pipeline_get_toolchain (pipeline);
-  srcdir = ide_build_pipeline_get_srcdir (pipeline);
+
+  if (g_strcmp0 (project_file_name, "CMakeLists.txt") == 0)
+    srcdir = g_dirname (g_file_peek_path (project_file));
+  else
+    srcdir = g_strdup (ide_build_pipeline_get_srcdir (pipeline));
 
   g_assert (IDE_IS_CONFIGURATION (configuration));
   g_assert (IDE_IS_RUNTIME (runtime));
