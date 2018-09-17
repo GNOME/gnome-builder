@@ -186,7 +186,8 @@ gbp_history_editor_view_addin_insert_text (GbpHistoryEditorViewAddin *self,
   g_assert (location != NULL);
   g_assert (text != NULL);
 
-  gbp_history_editor_view_addin_queue (self, gtk_text_iter_get_line (location));
+  if (!ide_buffer_get_loading (buffer))
+    gbp_history_editor_view_addin_queue (self, gtk_text_iter_get_line (location));
 }
 
 static void
@@ -200,7 +201,8 @@ gbp_history_editor_view_addin_delete_range (GbpHistoryEditorViewAddin *self,
   g_assert (end != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  gbp_history_editor_view_addin_queue (self, gtk_text_iter_get_line (begin));
+  if (!ide_buffer_get_loading (buffer))
+    gbp_history_editor_view_addin_queue (self, gtk_text_iter_get_line (begin));
 }
 
 static void
