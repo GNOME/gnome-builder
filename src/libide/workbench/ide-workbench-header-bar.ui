@@ -84,7 +84,6 @@
                 </child>
               </object>
               <packing>
-                <property name="priority">-100001</property>
                 <property name="pack-type">end</property>
               </packing>
             </child>
