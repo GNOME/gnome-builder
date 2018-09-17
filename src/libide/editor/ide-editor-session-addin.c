@@ -274,6 +274,12 @@ ide_editor_session_addin_load_file_cb (GObject      *object,
 
           file = g_file_new_for_uri (item->uri);
 
+          if(!g_file_query_exists (file, NULL))
+            {
+              g_warning ("File %s doesn't exist. Ignoring.", g_file_get_uri (file));
+              continue;
+            }
+
           if (!(buffer = ide_buffer_manager_find_buffer (bufmgr, file)))
             {
               g_warning ("Failed to restore %s", item->uri);
