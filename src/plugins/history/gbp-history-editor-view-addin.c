@@ -206,6 +206,32 @@ gbp_history_editor_view_addin_delete_range (GbpHistoryEditorViewAddin *self,
 }
 
 static void
+gbp_history_editor_view_addin_buffer_loaded (GbpHistoryEditorViewAddin *self,
+                                             IdeBuffer                 *buffer)
+{
+  IdeSourceView *source_view;
+
+  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_VIEW (self->editor));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  /*
+   * The cursor should have settled here, push it's location onto the
+   * history stack so that ctrl+i works after jumping backwards.
+   */
+
+  source_view = ide_editor_view_get_view (self->editor);
+
+  if (gtk_widget_has_focus (GTK_WIDGET (source_view)))
+    {
+      GtkTextIter iter;
+
+      ide_buffer_get_selection_bounds (buffer, &iter, NULL);
+      gbp_history_editor_view_addin_queue (self, gtk_text_iter_get_line (&iter));
+    }
+}
+
+static void
 gbp_history_editor_view_addin_load (IdeEditorViewAddin *addin,
                                     IdeEditorView      *view)
 {
@@ -237,6 +263,11 @@ gbp_history_editor_view_addin_load (IdeEditorViewAddin *addin,
                             "delete-range",
                             G_CALLBACK (gbp_history_editor_view_addin_delete_range),
                             self);
+
+  g_signal_connect_swapped (buffer,
+                            "loaded",
+                            G_CALLBACK (gbp_history_editor_view_addin_buffer_loaded),
+                            self);
 }
 
 static void
@@ -265,6 +296,10 @@ gbp_history_editor_view_addin_unload (IdeEditorViewAddin *addin,
 
   g_signal_handlers_disconnect_by_func (buffer,
                                         G_CALLBACK (gbp_history_editor_view_addin_delete_range),
+                                        self);
+
+  g_signal_handlers_disconnect_by_func (buffer,
+                                        G_CALLBACK (gbp_history_editor_view_addin_buffer_loaded),
                                         self);
 
   g_clear_weak_pointer (&self->stack_addin);
