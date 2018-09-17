@@ -161,17 +161,16 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
 
   if (ret != NULL)
     {
-      g_autofree gchar *project_name = NULL;
-      g_autofree gchar *project_path = NULL;
       g_autofree gchar *build_path = NULL;
       g_autofree gchar *ccache_dir = NULL;
       g_auto(GStrv) new_environ = NULL;
       const gchar *builddir = NULL;
+      const gchar *project_path = NULL;
       const gchar * const *build_args = NULL;
-      GFile *project_file;
       IdeContext *context;
       IdeConfigurationManager *config_manager;
       IdeConfiguration *configuration;
+      IdeVcs *vcs;
 
       context = ide_object_get_context (IDE_OBJECT (self));
       config_manager = ide_context_get_configuration_manager (context);
@@ -181,26 +180,8 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
       builddir = get_builddir (self);
 
       /* Find the project directory path */
-      project_file = ide_context_get_project_file (context);
-      if (project_file != NULL)
-        {
-          g_autofree gchar *project_file_path = NULL;
-
-          project_file_path = g_file_get_path (project_file);
-          if (g_file_test (project_file_path, G_FILE_TEST_IS_DIR))
-            {
-              project_path = g_file_get_path (project_file);
-              project_name = g_file_get_basename (project_file);
-            }
-          else
-            {
-              g_autoptr(GFile) project_dir = NULL;
-
-              project_dir = g_file_get_parent (project_file);
-              project_path = g_file_get_path (project_dir);
-              project_name = g_file_get_basename (project_dir);
-            }
-        }
+      vcs = ide_context_get_vcs (context);
+      project_path = g_file_peek_path (ide_vcs_get_working_directory (vcs));
 
       /* Add 'flatpak build' and the specified arguments to the launcher */
       ide_subprocess_launcher_push_argv (ret, "flatpak");
