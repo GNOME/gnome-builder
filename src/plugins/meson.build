@@ -11,7 +11,6 @@ gnome_builder_plugins_link_args = [
 ]
 
 subdir('autotools')
-subdir('autotools-templates')
 subdir('beautifier')
 subdir('c-pack')
 subdir('cargo')
@@ -158,7 +157,6 @@ status += [
 
   'Templates:',
   '',
-  'Autotools ............. : @0@'.format(get_option('with_autotools_templates')),
   'Meson ................. : @0@'.format(get_option('with_meson_templates')),
   '', ''
 ]

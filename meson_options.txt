@@ -24,7 +24,6 @@ option('python_libprefix', type: 'string')
 # Ideally we want many of these to be defined in the plugin dir:
 #   https://github.com/mesonbuild/meson/issues/707
 option('with_autotools', type: 'boolean')
-option('with_autotools_templates', type: 'boolean', value: false)
 option('with_beautifier', type: 'boolean')
 option('with_c_pack', type: 'boolean')
 option('with_cargo', type: 'boolean')
