@@ -72,23 +72,6 @@ apply_quirks (IdeWorkbenchHeaderBar *self)
 }
 
 static void
-ide_workbench_header_bar_menu_items_changed (IdeWorkbenchHeaderBar *self,
-                                             guint                  position,
-                                             guint                  removed,
-                                             guint                  added,
-                                             GMenu                 *menu)
-{
-  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
-  gboolean visible;
-
-  g_assert (IDE_IS_WORKBENCH_HEADER_BAR (self));
-  g_assert (G_IS_MENU (menu));
-
-  visible = g_menu_model_get_n_items (G_MENU_MODEL (menu)) > 0;
-  gtk_widget_set_visible (GTK_WIDGET (priv->menu_button), visible);
-}
-
-static void
 search_popover_position_func (DzlSuggestionEntry *entry,
                               GdkRectangle       *area,
                               gboolean           *is_absolute,
@@ -140,31 +123,11 @@ static void
 ide_workbench_header_bar_init (IdeWorkbenchHeaderBar *self)
 {
   IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
-  GtkWidget *popover;
-  GMenu *model;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  model = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gear-menu");
-  popover = gtk_popover_new_from_model (NULL, G_MENU_MODEL (model));
-  gtk_widget_set_size_request (popover, 225, -1);
-  gtk_menu_button_set_popover (priv->menu_button, popover);
-  gtk_container_set_border_width (GTK_CONTAINER (popover), 10);
-
   dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (priv->search_entry),
                                           search_popover_position_func, NULL, NULL);
-
-  /*
-   * We want to track whether or not there are any menu items
-   * in the workbench menu. If there are no items, then we will
-   * hide the menu.
-   */
-  g_signal_connect_object (model,
-                           "items-changed",
-                           G_CALLBACK (ide_workbench_header_bar_menu_items_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
-  ide_workbench_header_bar_menu_items_changed (self, 0, 0, 0, model);
 
   apply_quirks (self);
 }

@@ -69,19 +69,17 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuButton" id="menu_button">
-                <property name="tooltip-text" translatable="yes">Show workbench menu</property>
+              <object class="DzlMenuButton" id="menu_button">
                 <property name="focus-on-click">false</property>
+                <property name="icon-name">open-menu-symbolic</property>
+		<property name="menu-id">gear-menu</property>
+                <property name="show-accels">true</property>
+                <property name="show-icons">true</property>
+                <property name="tooltip-text" translatable="yes">Show workbench menu</property>
                 <property name="visible">true</property>
                 <style>
                   <class name="image-button"/>
                 </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">open-menu-symbolic</property>
-                    <property name="visible">true</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="pack-type">end</property>

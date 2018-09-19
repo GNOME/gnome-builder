@@ -276,9 +276,11 @@
     </child>
     <child>
       <object class="DzlMenuButton" id="gear_button">
+	<property name="show-accels">true</property>
+	<property name="show-icons">true</property>
         <property name="icon-name">open-menu-symbolic</property>
-        <property name="visible">true</property>
         <property name="menu-id">gear-menu</property>
+        <property name="visible">true</property>
         <style>
           <class name="image-button"/>
         </style>
