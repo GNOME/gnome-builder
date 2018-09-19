@@ -35,7 +35,7 @@
  * #IdeTask is meant to be an improved form of #GTask. There are a few
  * deficiencies in #GTask that have made it unsuitable for certain use cases.
  *
- * #GTask does not provide a way to guarnatee that the source object,
+ * #GTask does not provide a way to guarantee that the source object,
  * task data, and unused results are freed with in a given #GMainContext.
  * #IdeTask addresses this by having a more flexible result and object
  * ownership control.
