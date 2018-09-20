@@ -46,7 +46,7 @@ class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # When the pipeline changes, we need to check to see if we can find
         # valgrind inside the runtime environment.
         pipeline = build_manager.get_pipeline()
-        if pipeline:
+        if pipeline is not None:
             runtime = pipeline.get_configuration().get_runtime()
             if runtime and runtime.contains_program_in_path('valgrind'):
                 if not self.has_handler:
