@@ -17,6 +17,7 @@
     <file compressed="true">resources/src/gi_composites.py</file>
     <file compressed="true">resources/src/main.js.tmpl</file>
     <file compressed="true">resources/src/main.c</file>
+    <file compressed="true">resources/src/main-cli.c</file>
     <file compressed="true">resources/src/main.cpp</file>
     <file compressed="true">resources/src/hello.src.gresource.xml</file>
     <file compressed="true">resources/src/window.c</file>
@@ -25,6 +26,7 @@
     <file compressed="true">resources/src/window.py</file>
     <file compressed="true">resources/src/window.vala</file>
     <file compressed="true">resources/src/main.vala</file>
+    <file compressed="true">resources/src/main-cli.vala</file>
     <file compressed="true">resources/src/hello.py.in</file>
     <file compressed="true">resources/src/main.py</file>
     <file compressed="true">resources/src/application.in</file>
@@ -32,6 +34,7 @@
     <file compressed="true">resources/src/meson-cs.build</file>
     <file compressed="true">resources/build-aux/meson/postinstall.py</file>
     <file compressed="true">resources/meson.build</file>
+    <file compressed="true">resources/src/meson-cli.build</file>
     <file compressed="true">resources/flatpak.json</file>
     <file compressed="true">resources/flatpak-gtksharp.json.tmpl</file>
     <file compressed="true">resources/data/meson.build</file>
