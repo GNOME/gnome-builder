@@ -38,6 +38,7 @@ class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
     def do_get_project_templates(self):
         return [GnomeProjectTemplate(),
                 LibraryProjectTemplate(),
+                CLIProjectTemplate(),
                 EmptyProjectTemplate()]
 
 
@@ -344,3 +345,22 @@ class EmptyProjectTemplate(MesonTemplate):
     def prepare_files(self, files):
         files['resources/src/meson-empty.build'] = 'src/meson.build'
 
+
+class CLIProjectTemplate(MesonTemplate):
+    def __init__(self):
+        super().__init__(
+            'cli',
+            _('Command Line Tool'),
+            'pattern-cli',
+            _('Create a new command line project'),
+            ['C', 'Vala'],
+            200
+         )
+
+    def prepare_files(self, files):
+        files['resources/src/meson-cli.build'] = 'src/meson.build'
+
+        if self.language == 'c':
+            files['resources/src/main-cli.c'] = 'src/main.c'
+        elif self.language == 'vala':
+            files['resources/src/main-cli.vala'] = 'src/main.vala'

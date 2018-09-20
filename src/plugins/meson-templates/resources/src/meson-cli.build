@@ -1,0 +1,20 @@
+{{name_}}_sources = [
+{{if language == "c"}}
+  'main.c',
+{{else if language == "vala"}}
+  'main.vala',
+{{end}}
+]
+
+{{name_}}_deps = [
+  dependency('glib-2.0'),
+{{if language == "vala"}}
+  dependency('gobject-2.0'),
+{{end}}
+]
+
+executable('{{name}}', {{name_}}_sources,
+{{if language == "vala"}}  vala_args: '--target-glib=2.58',{{end}}
+  dependencies: {{name_}}_deps,
+  install: true,
+)
