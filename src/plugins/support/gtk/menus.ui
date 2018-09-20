@@ -2,7 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <menu id="gear-menu">
-    <section id="gear-menu-placeholder-2">
+    <section id="gear-menu-placeholder-1">
       <item>
         <attribute name="label" translatable="yes">Generate Support Log</attribute>
         <attribute name="action">app.generate-support</attribute>
