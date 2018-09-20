@@ -9,6 +9,7 @@ i18n = import('i18n')
 
 {{if language == "c"}}
 config_h = configuration_data()
+config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
 {{if enable_i18n}}
 config_h.set_quoted('GETTEXT_PACKAGE', '{{name}}')
 config_h.set_quoted('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
