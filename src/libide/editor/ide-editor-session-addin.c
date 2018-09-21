@@ -296,6 +296,44 @@ ide_editor_session_addin_load_file_cb (GObject      *object,
 }
 
 static void
+restore_file (GObject      *source,
+              GAsyncResult *result,
+              gpointer      user_data)
+{
+  IdeFile *file = (IdeFile*)source;
+  LoadState *load_state = NULL;
+  GError *error = NULL;
+  IdeTask *task = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_FILE (file));
+  g_assert (IDE_IS_TASK (task));
+
+  load_state = ide_task_get_task_data (task);
+
+  g_assert (load_state != NULL);
+
+  if (ide_file_exists_finish (file, result, &error))
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (file));
+      IdeBufferManager *bufmgr = ide_context_get_buffer_manager (context);
+
+      ide_buffer_manager_load_file_async (bufmgr,
+                                          file,
+                                          FALSE,
+                                          IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW,
+                                          NULL,
+                                          ide_task_get_cancellable (task),
+                                          ide_editor_session_addin_load_file_cb,
+                                          g_object_ref (task));
+    }
+  else
+    load_state->active--;
+
+}
+
+static void
 ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
                                         GVariant            *state,
                                         GCancellable        *cancellable,
@@ -306,7 +344,6 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GHashTable) uris = NULL;
   g_autoptr(GSettings) settings = NULL;
-  IdeBufferManager *bufmgr;
   const gchar *uri;
   LoadState *load_state;
   IdeContext *context;
@@ -328,7 +365,6 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  bufmgr = ide_context_get_buffer_manager (context);
   uris = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   load_state = g_slice_new0 (LoadState);
@@ -363,15 +399,11 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
       file = ide_file_new (context, gfile);
 
       load_state->active++;
-
-      ide_buffer_manager_load_file_async (bufmgr,
-                                          file,
-                                          FALSE,
-                                          IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW,
-                                          NULL,
-                                          cancellable,
-                                          ide_editor_session_addin_load_file_cb,
-                                          g_object_ref (task));
+      ide_file_exists_async (file,
+                             G_PRIORITY_LOW,
+                             cancellable,
+                             restore_file,
+                             g_object_ref(task));
     }
 
   load_state->active--;
