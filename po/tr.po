@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-08-31 13:56+0300\n"
+"POT-Creation-Date: 2018-09-21 07:13+0000\n"
+"PO-Revision-Date: 2018-09-21 16:03+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -245,14 +245,10 @@ msgstr "Kullanıcıya gösterilecek tamamlama satırlarının sayısı."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/preferences/ide-preferences-builtin.c:211
-#| msgid "Suggest Snippet Completion"
 msgid "Interactive Completion"
 msgstr "Etkileşimli Tamamlama"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
-#| msgid ""
-#| "If enabled, Builder will automatically wrap text so all of the line text "
-#| "is visible."
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -944,7 +940,7 @@ msgid "Failed to save draft: %s"
 msgstr "Taslak kaydetme başarısız oldu: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:642
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:643
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Kopya)"
@@ -1664,7 +1660,7 @@ msgstr "Dil Söz Dizimi"
 msgid "Search languages…"
 msgstr "Dilleri ara…"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
@@ -2008,15 +2004,15 @@ msgstr "Bağlantı Adresini _Kopyala"
 msgid "You must call %s() before using libide."
 msgstr "libide kullanmadan önce %s()’i çağırmalısınız."
 
-#: src/libide/ide-context.c:2212
+#: src/libide/ide-context.c:2211
 msgid "An unload request is already pending"
 msgstr "Yüklemeyi kaldırma isteği zaten beklemede"
 
-#: src/libide/ide-context.c:2294
+#: src/libide/ide-context.c:2293
 msgid "Context already unloading, cannot restore."
 msgstr "Bağlam zaten boşaltıldı, geri alınamaz."
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
 msgstr "Bağlam zaten düzeltildi."
 
@@ -3242,7 +3238,7 @@ msgstr "Proje yapılandırılıyor"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3517,11 +3513,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Projeyi yapılandır"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -4176,12 +4172,12 @@ msgstr[0] "%u çalışma zamanı daha göster"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Çalışma Zamanları"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4534,29 +4530,39 @@ msgstr "Araç Setini Sil"
 msgid "Delete Tool"
 msgstr "Aracı Sil"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "GNOME Uygulaması"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Yeni GNOME uygulaması oluştur"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Paylaşılan Kütüphane"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Paylaşılan kütüphaneyle yeni proje oluştur"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Boş Proje"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Yeni boş proje oluştur"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+#| msgid "Command failed: %s"
+msgid "Command Line Tool"
+msgstr "Komut Satırı Aracı"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+#| msgid "Create a new project"
+msgid "Create a new command line project"
+msgstr "Yeni bir komut satırı projesi oluştur"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
@@ -5477,9 +5483,6 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 
 #~ msgid "Other Projects"
 #~ msgstr "Diğer Projeler"
-
-#~ msgid "Create a new project"
-#~ msgstr "Yeni bir proje oluştur"
 
 #~ msgid "Project Discovery"
 #~ msgstr "Proje Keşfi"
