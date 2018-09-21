@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-09-10 19:00+0000\n"
-"PO-Revision-Date: 2018-09-11 09:01+0200\n"
+"POT-Creation-Date: 2018-09-20 23:08+0000\n"
+"PO-Revision-Date: 2018-09-21 08:52+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -679,7 +679,7 @@ msgstr "Erzeugt"
 msgid "Unable to save %s\n"
 msgstr "%s kann nicht gespeichert werden\n"
 
-#: src/gstyle/gstyle-palette-widget.c:983
+#: src/gstyle/gstyle-palette-widget.c:979
 #, c-format
 msgid "Unsaved palette %u"
 msgstr "Ungesicherte Palette %u"
@@ -1206,7 +1206,7 @@ msgstr "Erstellungsdetails"
 msgid "Build pipeline is empty"
 msgstr "Erstellungskette ist leer"
 
-#: src/libide/buildui/ide-build-perspective.c:454 src/libide/gtk/menus.ui:55
+#: src/libide/buildui/ide-build-perspective.c:454 src/libide/gtk/menus.ui:74
 msgid "Build Preferences"
 msgstr "Einstellungen zur Erstellung"
 
@@ -1442,22 +1442,22 @@ msgstr "Suche _umbrechen"
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
-#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:112
-#: src/libide/gtk/menus.ui:241
+#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:113
+#: src/libide/gtk/menus.ui:242
 msgid "_Copy"
 msgstr "_Kopieren"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:116
-#: src/libide/gtk/menus.ui:245
+#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:117
+#: src/libide/gtk/menus.ui:246
 msgid "_Paste"
 msgstr "_Einfügen"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:120
+#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:121
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:135
-#: src/libide/gtk/menus.ui:253
+#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:136
+#: src/libide/gtk/menus.ui:254
 msgid "Select _All"
 msgstr "_Alle auswählen"
 
@@ -1704,7 +1704,7 @@ msgstr "Sprachsyntax"
 msgid "Search languages…"
 msgstr "Sprachen suchen …"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u von %u"
@@ -1925,123 +1925,127 @@ msgstr "Projekt ö_ffnen"
 msgid "_Clone Repository"
 msgstr "Softwarebestand _klonen"
 
-#: src/libide/gtk/menus.ui:22
+#: src/libide/gtk/menus.ui:21
+msgid "Save _All"
+msgstr "A_lle speichern"
+
+#: src/libide/gtk/menus.ui:28
+msgid "Close _All"
+msgstr "A_lles schließen"
+
+#: src/libide/gtk/menus.ui:33
+msgid "Close Project"
+msgstr "Projekt schließen"
+
+#: src/libide/gtk/menus.ui:41
 msgid "_Preferences"
 msgstr "_Einstellungen"
 
-#: src/libide/gtk/menus.ui:30
+#: src/libide/gtk/menus.ui:46
 msgid "Keyboard _Shortcuts"
 msgstr "Tasten_kombinationen"
 
-#: src/libide/gtk/menus.ui:34
+#: src/libide/gtk/menus.ui:50
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: src/libide/gtk/menus.ui:38
-msgid "_About"
-msgstr "_Info"
+#: src/libide/gtk/menus.ui:55
+msgid "_About Builder"
+msgstr "_Info zu Builder"
 
-#: src/libide/gtk/menus.ui:42
+#: src/libide/gtk/menus.ui:61
 msgid "_Quit"
 msgstr "_Beenden"
 
-#: src/libide/gtk/menus.ui:64
+#: src/libide/gtk/menus.ui:83
 #: src/libide/preferences/ide-preferences-perspective.c:139
 #: src/libide/preferences/ide-preferences-window.ui:9
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: src/libide/gtk/menus.ui:73
-msgid "Save _All"
-msgstr "A_lle speichern"
-
-#: src/libide/gtk/menus.ui:80
-msgid "Close _All"
-msgstr "A_lles schließen"
-
-#: src/libide/gtk/menus.ui:91
+#: src/libide/gtk/menus.ui:92
 msgid "_Go to Definition"
 msgstr "Zur Definition _springen"
 
-#: src/libide/gtk/menus.ui:97
+#: src/libide/gtk/menus.ui:98
 msgid "_Undo"
 msgstr "_Rückgängig"
 
-#: src/libide/gtk/menus.ui:101
+#: src/libide/gtk/menus.ui:102
 msgid "_Redo"
 msgstr "_Wiederholen"
 
-#: src/libide/gtk/menus.ui:107
+#: src/libide/gtk/menus.ui:108
 msgid "C_ut"
 msgstr "_Ausschneiden"
 
-#: src/libide/gtk/menus.ui:128
+#: src/libide/gtk/menus.ui:129
 #: src/libide/preferences/ide-preferences-builtin.c:198
 #: src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Hervorhebung"
 
-#: src/libide/gtk/menus.ui:133 src/libide/gtk/menus.ui:251
+#: src/libide/gtk/menus.ui:134 src/libide/gtk/menus.ui:252
 msgid "Selection"
 msgstr "Auswahl"
 
-#: src/libide/gtk/menus.ui:140 src/libide/gtk/menus.ui:258
+#: src/libide/gtk/menus.ui:141 src/libide/gtk/menus.ui:259
 msgid "Select _None"
 msgstr "_Nichts auswählen"
 
-#: src/libide/gtk/menus.ui:146
+#: src/libide/gtk/menus.ui:147
 msgid "All _Upper Case"
 msgstr "Alles _groß schreiben"
 
-#: src/libide/gtk/menus.ui:151
+#: src/libide/gtk/menus.ui:152
 msgid "All _Lower Case"
 msgstr "Alles _klein schreiben"
 
-#: src/libide/gtk/menus.ui:156
+#: src/libide/gtk/menus.ui:157
 msgid "_Invert Case"
 msgstr "Groß-/Kleinschreibung _umkehren"
 
-#: src/libide/gtk/menus.ui:161
+#: src/libide/gtk/menus.ui:162
 msgid "_Title Case"
 msgstr "Überschrif_t-Großschreibung"
 
-#: src/libide/gtk/menus.ui:168
+#: src/libide/gtk/menus.ui:169
 msgid "Join Lines"
 msgstr "Zeilen zusammenfügen"
 
-#: src/libide/gtk/menus.ui:172
+#: src/libide/gtk/menus.ui:173
 msgid "Sort Lines"
 msgstr "Zeilen sortieren"
 
-#: src/libide/gtk/menus.ui:181
+#: src/libide/gtk/menus.ui:182
 msgid "Zoom"
 msgstr "Größe"
 
-#: src/libide/gtk/menus.ui:183
+#: src/libide/gtk/menus.ui:184
 msgid "Zoom _In"
 msgstr "Ver_größern"
 
-#: src/libide/gtk/menus.ui:188
+#: src/libide/gtk/menus.ui:189
 msgid "Zoom _Out"
 msgstr "Ver_kleinern"
 
-#: src/libide/gtk/menus.ui:194 src/plugins/terminal/gtk/menus.ui:13
+#: src/libide/gtk/menus.ui:195 src/plugins/terminal/gtk/menus.ui:13
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: src/libide/gtk/menus.ui:208 src/libide/layout/ide-layout-stack.ui:105
+#: src/libide/gtk/menus.ui:209 src/libide/layout/ide-layout-stack.ui:105
 msgid "Open File…"
 msgstr "Datei öffnen …"
 
-#: src/libide/gtk/menus.ui:219 src/libide/runner/ide-run-manager.c:1118
+#: src/libide/gtk/menus.ui:220 src/libide/runner/ide-run-manager.c:1118
 msgid "Run"
 msgstr "Ausführen"
 
-#: src/libide/gtk/menus.ui:228
+#: src/libide/gtk/menus.ui:229
 msgid "_Open Link"
 msgstr "Verweis ö_ffnen"
 
-#: src/libide/gtk/menus.ui:233
+#: src/libide/gtk/menus.ui:234
 msgid "_Copy Link Address"
 msgstr "Verweisadresse _kopieren"
 
@@ -2050,16 +2054,16 @@ msgstr "Verweisadresse _kopieren"
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: src/libide/ide-context.c:2212
+#: src/libide/ide-context.c:2211
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: src/libide/ide-context.c:2294
+#: src/libide/ide-context.c:2293
 msgid "Context already unloading, cannot restore."
 msgstr ""
 "Der Kontext wird bereits entfernt und kann nicht wiederhergestellt werden."
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
@@ -3259,11 +3263,11 @@ msgid "Transfers"
 msgstr "Übertragungen"
 
 # CHECK
-#: src/libide/workbench/ide-workbench-header-bar.ui:57
+#: src/libide/workbench/ide-workbench-header-bar.ui:78
 msgid "Show workbench menu"
 msgstr "Werkbank-Menü anzeigen"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:96
+#: src/libide/workbench/ide-workbench-header-bar.ui:97
 msgid "Press Ctrl+. to search"
 msgstr "Zum Suchen Strg+. drücken"
 
@@ -3316,7 +3320,7 @@ msgstr "Projekt wird konfiguriert"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3327,32 +3331,6 @@ msgstr "Projekt wird erstellt"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:371
 msgid "Caching build commands"
 msgstr "Erstellungsbefehle werden zwischengespeichert"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:265
-msgid "Shared Library (Autotools)"
-msgstr "Gemeinsam verwendete Bibliothek (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:267
-msgid "Create a new autotools project with a shared library"
-msgstr ""
-"Ein neues Autotools-Projekt mit einer gemeinsam verwendeten Bibliothek "
-"erstellen"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:291
-msgid "Empty Project (Autotools)"
-msgstr "Leeres Projekt (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:294
-msgid "Create a new empty autotools project"
-msgstr "Ein neues, leeres Autotools-Projekt anlegen"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:308
-msgid "GNOME Application (Autotools)"
-msgstr "GNOME-Anwendung (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:310
-msgid "Create a new flatpak-ready GNOME application"
-msgstr "Eine neue GNOME-Anwendung für Flatpak erstellen"
 
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:155
@@ -3596,11 +3574,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Projekt konfigurieren"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -4276,12 +4254,12 @@ msgstr[1] "%u weitere Laufzeiten zeigen"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak-Laufzeitumgebungen"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4643,29 +4621,37 @@ msgstr "Werkzeugkette löschen"
 msgid "Delete Tool"
 msgstr "Werkzeug löschen"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "GNOME-Anwendung"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Eine neue GNOME-Anwendung erstellen"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Gemeinsam verwendete Bibliothek"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Ein neues Projekt mit einer gemeinsam verwendeten Bibliothek erstellen"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Leeres Projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Ein neues, leeres Projekt anlegen"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+msgid "Command Line Tool"
+msgstr "Befehlszeilenwerkzeug"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+msgid "Create a new command line project"
+msgstr "Ein neues Befehlszeilenprojekt anlegen"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
