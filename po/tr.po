@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-09-10 19:00+0000\n"
-"PO-Revision-Date: 2018-09-11 17:28+0300\n"
+"POT-Creation-Date: 2018-09-21 06:53+0000\n"
+"PO-Revision-Date: 2018-09-21 16:05+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -659,7 +659,7 @@ msgstr "Üretilen"
 msgid "Unable to save %s\n"
 msgstr "%s kaydedilemedi\n"
 
-#: src/gstyle/gstyle-palette-widget.c:983
+#: src/gstyle/gstyle-palette-widget.c:979
 #, c-format
 msgid "Unsaved palette %u"
 msgstr "Kaydedilmemiş palet %u"
@@ -1178,7 +1178,7 @@ msgstr "İnşa Ayrıntıları"
 msgid "Build pipeline is empty"
 msgstr "İnşa boru hattı boş"
 
-#: src/libide/buildui/ide-build-perspective.c:454 src/libide/gtk/menus.ui:55
+#: src/libide/buildui/ide-build-perspective.c:454 src/libide/gtk/menus.ui:74
 msgid "Build Preferences"
 msgstr "İnşa Tercihleri"
 
@@ -1408,22 +1408,22 @@ msgstr "_Çevrele"
 msgid "Cu_t"
 msgstr "_Kes"
 
-#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:112
-#: src/libide/gtk/menus.ui:241
+#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:113
+#: src/libide/gtk/menus.ui:242
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:116
-#: src/libide/gtk/menus.ui:245
+#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:117
+#: src/libide/gtk/menus.ui:246
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:120
+#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:121
 msgid "_Delete"
 msgstr "_Sil"
 
-#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:135
-#: src/libide/gtk/menus.ui:253
+#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:136
+#: src/libide/gtk/menus.ui:254
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
@@ -1669,7 +1669,7 @@ msgstr "Dil Söz Dizimi"
 msgid "Search languages…"
 msgstr "Dilleri ara…"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
@@ -1888,123 +1888,129 @@ msgstr "Pr_oje Aç"
 msgid "_Clone Repository"
 msgstr "Depoyu _Klonla"
 
-#: src/libide/gtk/menus.ui:22
+#: src/libide/gtk/menus.ui:21
+msgid "Save _All"
+msgstr "_Tümünü Kaydet"
+
+#: src/libide/gtk/menus.ui:28
+msgid "Close _All"
+msgstr "_Tümünü Kapat"
+
+#: src/libide/gtk/menus.ui:33
+#| msgid "Clone Project"
+msgid "Close Project"
+msgstr "Projeyi Kapat"
+
+#: src/libide/gtk/menus.ui:41
 msgid "_Preferences"
 msgstr "_Tercihler"
 
-#: src/libide/gtk/menus.ui:30
+#: src/libide/gtk/menus.ui:46
 msgid "Keyboard _Shortcuts"
 msgstr "Klavye _Kısayolları"
 
-#: src/libide/gtk/menus.ui:34
+#: src/libide/gtk/menus.ui:50
 msgid "_Help"
 msgstr "_Yardım"
 
-#: src/libide/gtk/menus.ui:38
-msgid "_About"
-msgstr "_Hakkında"
+#: src/libide/gtk/menus.ui:55
+#| msgid "Builder"
+msgid "_About Builder"
+msgstr "Builder _Hakkında"
 
-#: src/libide/gtk/menus.ui:42
+#: src/libide/gtk/menus.ui:61
 msgid "_Quit"
 msgstr "_Çıkış"
 
-#: src/libide/gtk/menus.ui:64
+#: src/libide/gtk/menus.ui:83
 #: src/libide/preferences/ide-preferences-perspective.c:139
 #: src/libide/preferences/ide-preferences-window.ui:9
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: src/libide/gtk/menus.ui:73
-msgid "Save _All"
-msgstr "_Tümünü Kaydet"
-
-#: src/libide/gtk/menus.ui:80
-msgid "Close _All"
-msgstr "_Tümünü Kapat"
-
-#: src/libide/gtk/menus.ui:91
+#: src/libide/gtk/menus.ui:92
 msgid "_Go to Definition"
 msgstr "Tanıma _Git"
 
-#: src/libide/gtk/menus.ui:97
+#: src/libide/gtk/menus.ui:98
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: src/libide/gtk/menus.ui:101
+#: src/libide/gtk/menus.ui:102
 msgid "_Redo"
 msgstr "_Yinele"
 
-#: src/libide/gtk/menus.ui:107
+#: src/libide/gtk/menus.ui:108
 msgid "C_ut"
 msgstr "K_es"
 
-#: src/libide/gtk/menus.ui:128
+#: src/libide/gtk/menus.ui:129
 #: src/libide/preferences/ide-preferences-builtin.c:198
 #: src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Vurgulama"
 
-#: src/libide/gtk/menus.ui:133 src/libide/gtk/menus.ui:251
+#: src/libide/gtk/menus.ui:134 src/libide/gtk/menus.ui:252
 msgid "Selection"
 msgstr "Seçim"
 
-#: src/libide/gtk/menus.ui:140 src/libide/gtk/menus.ui:258
+#: src/libide/gtk/menus.ui:141 src/libide/gtk/menus.ui:259
 msgid "Select _None"
 msgstr "_Hiçbirini Seçme"
 
-#: src/libide/gtk/menus.ui:146
+#: src/libide/gtk/menus.ui:147
 msgid "All _Upper Case"
 msgstr "Tümü _Büyük Harf"
 
-#: src/libide/gtk/menus.ui:151
+#: src/libide/gtk/menus.ui:152
 msgid "All _Lower Case"
 msgstr "Tümü _Küçük Harf"
 
-#: src/libide/gtk/menus.ui:156
+#: src/libide/gtk/menus.ui:157
 msgid "_Invert Case"
 msgstr "Büyük/Küçük Harf Değ_iştir"
 
-#: src/libide/gtk/menus.ui:161
+#: src/libide/gtk/menus.ui:162
 msgid "_Title Case"
 msgstr "Başlık _Durumu"
 
-#: src/libide/gtk/menus.ui:168
+#: src/libide/gtk/menus.ui:169
 msgid "Join Lines"
 msgstr "Satırları Birleştir"
 
-#: src/libide/gtk/menus.ui:172
+#: src/libide/gtk/menus.ui:173
 msgid "Sort Lines"
 msgstr "Satırları Sırala"
 
-#: src/libide/gtk/menus.ui:181
+#: src/libide/gtk/menus.ui:182
 msgid "Zoom"
 msgstr "Yakınlaştırma"
 
-#: src/libide/gtk/menus.ui:183
+#: src/libide/gtk/menus.ui:184
 msgid "Zoom _In"
 msgstr "_Yakınlaştır"
 
-#: src/libide/gtk/menus.ui:188
+#: src/libide/gtk/menus.ui:189
 msgid "Zoom _Out"
 msgstr "Uzakla_ştır"
 
-#: src/libide/gtk/menus.ui:194 src/plugins/terminal/gtk/menus.ui:13
+#: src/libide/gtk/menus.ui:195 src/plugins/terminal/gtk/menus.ui:13
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: src/libide/gtk/menus.ui:208 src/libide/layout/ide-layout-stack.ui:105
+#: src/libide/gtk/menus.ui:209 src/libide/layout/ide-layout-stack.ui:105
 msgid "Open File…"
 msgstr "Dosya Aç…"
 
-#: src/libide/gtk/menus.ui:219 src/libide/runner/ide-run-manager.c:1118
+#: src/libide/gtk/menus.ui:220 src/libide/runner/ide-run-manager.c:1118
 msgid "Run"
 msgstr "Çalıştır"
 
-#: src/libide/gtk/menus.ui:228
+#: src/libide/gtk/menus.ui:229
 msgid "_Open Link"
 msgstr "Bağlantıyı _Aç"
 
-#: src/libide/gtk/menus.ui:233
+#: src/libide/gtk/menus.ui:234
 msgid "_Copy Link Address"
 msgstr "Bağlantı Adresini _Kopyala"
 
@@ -2013,15 +2019,15 @@ msgstr "Bağlantı Adresini _Kopyala"
 msgid "You must call %s() before using libide."
 msgstr "libide kullanmadan önce %s()’i çağırmalısınız."
 
-#: src/libide/ide-context.c:2212
+#: src/libide/ide-context.c:2211
 msgid "An unload request is already pending"
 msgstr "Yüklemeyi kaldırma isteği zaten beklemede"
 
-#: src/libide/ide-context.c:2294
+#: src/libide/ide-context.c:2293
 msgid "Context already unloading, cannot restore."
 msgstr "Bağlam zaten boşaltıldı, geri alınamaz."
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
 msgstr "Bağlam zaten düzeltildi."
 
@@ -3198,11 +3204,11 @@ msgstr "%s — Builder"
 msgid "Transfers"
 msgstr "Aktarımlar"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:57
+#: src/libide/workbench/ide-workbench-header-bar.ui:78
 msgid "Show workbench menu"
 msgstr "Tezgâh menüsünü aç"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:96
+#: src/libide/workbench/ide-workbench-header-bar.ui:97
 msgid "Press Ctrl+. to search"
 msgstr "Aramak için Ctrl+. tuşlarına basın"
 
@@ -3255,7 +3261,7 @@ msgstr "Proje yapılandırılıyor"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3266,30 +3272,6 @@ msgstr "Proje inşa ediliyor"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:371
 msgid "Caching build commands"
 msgstr "İnşa komutları önbellekleniyor"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:265
-msgid "Shared Library (Autotools)"
-msgstr "Paylaşılan Kütüphane (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:267
-msgid "Create a new autotools project with a shared library"
-msgstr "Paylaşılan kütüphaneyle yeni autotools projesi yarat"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:291
-msgid "Empty Project (Autotools)"
-msgstr "Boş Proje (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:294
-msgid "Create a new empty autotools project"
-msgstr "Yeni boş autotools projesi oluştur"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:308
-msgid "GNOME Application (Autotools)"
-msgstr "GNOME Uygulaması (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:310
-msgid "Create a new flatpak-ready GNOME application"
-msgstr "Flatpak’e hazır yeni GNOME uygulaması oluştur"
 
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:155
@@ -3530,11 +3512,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Projeyi yapılandır"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -4189,12 +4171,12 @@ msgstr[0] "%u çalışma zamanı daha göster"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak Çalışma Zamanları"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4547,29 +4529,39 @@ msgstr "Araç Setini Sil"
 msgid "Delete Tool"
 msgstr "Aracı Sil"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "GNOME Uygulaması"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Yeni GNOME uygulaması oluştur"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Paylaşılan Kütüphane"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Paylaşılan kütüphaneyle yeni proje oluştur"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Boş Proje"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Yeni boş proje oluştur"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+#| msgid "Command failed: %s"
+msgid "Command Line Tool"
+msgstr "Komut Satırı Aracı"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+#| msgid "Create a new project"
+msgid "Create a new command line project"
+msgstr "Yeni bir komut satırı projesi oluştur"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
@@ -5272,6 +5264,27 @@ msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 
+#~ msgid "_About"
+#~ msgstr "_Hakkında"
+
+#~ msgid "Shared Library (Autotools)"
+#~ msgstr "Paylaşılan Kütüphane (Autotools)"
+
+#~ msgid "Create a new autotools project with a shared library"
+#~ msgstr "Paylaşılan kütüphaneyle yeni autotools projesi yarat"
+
+#~ msgid "Empty Project (Autotools)"
+#~ msgstr "Boş Proje (Autotools)"
+
+#~ msgid "Create a new empty autotools project"
+#~ msgstr "Yeni boş autotools projesi oluştur"
+
+#~ msgid "GNOME Application (Autotools)"
+#~ msgstr "GNOME Uygulaması (Autotools)"
+
+#~ msgid "Create a new flatpak-ready GNOME application"
+#~ msgstr "Flatpak’e hazır yeni GNOME uygulaması oluştur"
+
 #~ msgid "Allow snippets to be inserted into the document."
 #~ msgstr "Kod parçalarının belgeye eklenmesine izin ver."
 
@@ -5490,9 +5503,6 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 
 #~ msgid "Other Projects"
 #~ msgstr "Diğer Projeler"
-
-#~ msgid "Create a new project"
-#~ msgstr "Yeni bir proje oluştur"
 
 #~ msgid "Project Discovery"
 #~ msgstr "Proje Keşfi"
