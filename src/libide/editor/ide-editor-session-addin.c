@@ -303,7 +303,7 @@ restore_file (GObject      *source,
   IdeFile *file = (IdeFile*)source;
   LoadState *load_state = NULL;
   GError *error = NULL;
-  IdeTask *task = user_data;
+  g_autoptr(IdeTask) task = user_data;
 
   IDE_ENTRY;
 
