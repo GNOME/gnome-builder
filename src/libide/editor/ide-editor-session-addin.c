@@ -225,6 +225,56 @@ ide_editor_session_addin_save_finish (IdeSessionAddin  *self,
 }
 
 static void
+load_state_finish (IdeEditorSessionAddin *self,
+                   LoadState             *state)
+{
+  IdeBufferManager *bufmgr;
+  IdePerspective *editor;
+  IdeLayoutGrid *grid;
+  IdeContext *context;
+  GtkWidget *workbench;
+
+  g_assert (IDE_IS_EDITOR_SESSION_ADDIN (self));
+  g_assert (state != NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  bufmgr = ide_context_get_buffer_manager (context);
+  workbench = ide_context_get_workbench (context);
+  editor = ide_workbench_get_perspective_by_name (IDE_WORKBENCH (workbench), "editor");
+  grid = ide_editor_perspective_get_grid (IDE_EDITOR_PERSPECTIVE (editor));
+
+  /* Now restore views in the proper place */
+
+  for (guint i = 0; i < state->items->len; i++)
+    {
+      const Item *item = &g_array_index (state->items, Item, i);
+      g_autoptr(GFile) file = NULL;
+      IdeLayoutGridColumn *column;
+      IdeLayoutStack *stack;
+      IdeEditorView *view;
+      IdeBuffer *buffer;
+
+      file = g_file_new_for_uri (item->uri);
+
+      if (!(buffer = ide_buffer_manager_find_buffer (bufmgr, file)))
+        {
+          g_warning ("Failed to restore %s", item->uri);
+          continue;
+        }
+
+      column = ide_layout_grid_get_nth_column (grid, item->column);
+      stack = _ide_layout_grid_get_nth_stack_for_column (grid, column, item->row);
+
+      view = g_object_new (IDE_TYPE_EDITOR_VIEW,
+                           "buffer", buffer,
+                           "visible", TRUE,
+                           NULL);
+
+      gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
+    }
+}
+
+static void
 ide_editor_session_addin_load_file_cb (GObject      *object,
                                        GAsyncResult *result,
                                        gpointer      user_data)
@@ -233,6 +283,7 @@ ide_editor_session_addin_load_file_cb (GObject      *object,
   g_autoptr(IdeBuffer) loaded = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeEditorSessionAddin *self;
   LoadState *state;
 
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
@@ -243,55 +294,70 @@ ide_editor_session_addin_load_file_cb (GObject      *object,
     g_warning ("Failed to load buffer: %s", error->message);
 
   state = ide_task_get_task_data (task);
+  self = ide_task_get_source_object (task);
+
   g_assert (state != NULL);
   g_assert (state->items != NULL);
   g_assert (state->active > 0);
+  g_assert (IDE_IS_EDITOR_SESSION_ADDIN (self));
 
   state->active--;
 
   if (state->active == 0)
     {
-      IdeContext *context;
-      GtkWidget *workbench;
-      IdePerspective *editor;
-      IdeLayoutGrid *grid;
-
-      context = ide_object_get_context (IDE_OBJECT (bufmgr));
-      workbench = ide_context_get_workbench (context);
-      editor = ide_workbench_get_perspective_by_name (IDE_WORKBENCH (workbench), "editor");
-      grid = ide_editor_perspective_get_grid (IDE_EDITOR_PERSPECTIVE (editor));
-
-      /* Now restore views in the proper place */
-
-      for (guint i = 0; i < state->items->len; i++)
-        {
-          const Item *item = &g_array_index (state->items, Item, i);
-          g_autoptr(GFile) file = NULL;
-          IdeLayoutGridColumn *column;
-          IdeLayoutStack *stack;
-          IdeEditorView *view;
-          IdeBuffer *buffer;
-
-          file = g_file_new_for_uri (item->uri);
-
-          if (!(buffer = ide_buffer_manager_find_buffer (bufmgr, file)))
-            {
-              g_warning ("Failed to restore %s", item->uri);
-              continue;
-            }
-
-          column = ide_layout_grid_get_nth_column (grid, item->column);
-          stack = _ide_layout_grid_get_nth_stack_for_column (grid, column, item->row);
-
-          view = g_object_new (IDE_TYPE_EDITOR_VIEW,
-                               "buffer", buffer,
-                               "visible", TRUE,
-                               NULL);
-
-          gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
-        }
-
+      load_state_finish (self, state);
       ide_task_return_boolean (task, TRUE);
+    }
+}
+
+static void
+restore_file (GObject      *source,
+              GAsyncResult *result,
+              gpointer      user_data)
+{
+  GFile *file = (GFile *)source;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFileInfo) info = NULL;
+  IdeEditorSessionAddin *self;
+  LoadState *load_state;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  load_state = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_EDITOR_SESSION_ADDIN (self));
+  g_assert (load_state != NULL);
+
+  if ((info = g_file_query_info_finish (file, result, &error)))
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeBufferManager *bufmgr = ide_context_get_buffer_manager (context);
+      g_autoptr(IdeFile) ifile = ide_file_new (context, file);
+
+      ide_buffer_manager_load_file_async (bufmgr,
+                                          ifile,
+                                          FALSE,
+                                          IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW,
+                                          NULL,
+                                          ide_task_get_cancellable (task),
+                                          ide_editor_session_addin_load_file_cb,
+                                          g_object_ref (task));
+    }
+  else
+    {
+      load_state->active--;
+
+      if (load_state->active == 0)
+        {
+          load_state_finish (self, load_state);
+          ide_task_return_boolean (task, TRUE);
+        }
     }
 }
 
@@ -302,18 +368,15 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
                                         GAsyncReadyCallback  callback,
                                         gpointer             user_data)
 {
-  IdeEditorSessionAddin *self = (IdeEditorSessionAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GHashTable) uris = NULL;
   g_autoptr(GSettings) settings = NULL;
-  IdeBufferManager *bufmgr;
   const gchar *uri;
   LoadState *load_state;
-  IdeContext *context;
   GVariantIter iter;
   gint column, row, depth;
 
-  g_assert (IDE_IS_SESSION_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_SESSION_ADDIN (addin));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (addin, cancellable, callback, user_data);
@@ -327,8 +390,6 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
       return;
     }
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  bufmgr = ide_context_get_buffer_manager (context);
   uris = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   load_state = g_slice_new0 (LoadState);
@@ -342,7 +403,6 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
 
   while (g_variant_iter_next (&iter, "(&siii)", &uri, &column, &row, &depth))
     {
-      g_autoptr(IdeFile) file = NULL;
       g_autoptr(GFile) gfile = NULL;
       Item item;
 
@@ -360,18 +420,16 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
 
       g_hash_table_add (uris, g_strdup (uri));
       gfile = g_file_new_for_uri (uri);
-      file = ide_file_new (context, gfile);
 
       load_state->active++;
 
-      ide_buffer_manager_load_file_async (bufmgr,
-                                          file,
-                                          FALSE,
-                                          IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW,
-                                          NULL,
-                                          cancellable,
-                                          ide_editor_session_addin_load_file_cb,
-                                          g_object_ref (task));
+      g_file_query_info_async (gfile,
+                               G_FILE_ATTRIBUTE_STANDARD_NAME,
+                               G_FILE_QUERY_INFO_NONE,
+                               G_PRIORITY_LOW,
+                               cancellable,
+                               restore_file,
+                               g_object_ref (task));
     }
 
   load_state->active--;
