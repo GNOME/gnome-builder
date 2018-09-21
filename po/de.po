@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-08-31 15:10+0200\n"
+"POT-Creation-Date: 2018-09-20 22:42+0000\n"
+"PO-Revision-Date: 2018-09-21 08:49+0200\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -964,7 +964,7 @@ msgid "Failed to save draft: %s"
 msgstr "Entwurf konnte nicht gespeichert werden: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:642
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:643
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Kopie)"
@@ -1694,7 +1694,7 @@ msgstr "Sprachsyntax"
 msgid "Search languages…"
 msgstr "Sprachen suchen …"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u von %u"
@@ -2040,16 +2040,16 @@ msgstr "Verweisadresse _kopieren"
 msgid "You must call %s() before using libide."
 msgstr "Sie müssen %s() aufrufen, bevor libide genutzt werden kann."
 
-#: src/libide/ide-context.c:2212
+#: src/libide/ide-context.c:2211
 msgid "An unload request is already pending"
 msgstr "Es steht bereits eine ungeladene Anfrage aus"
 
-#: src/libide/ide-context.c:2294
+#: src/libide/ide-context.c:2293
 msgid "Context already unloading, cannot restore."
 msgstr ""
 "Der Kontext wird bereits entfernt und kann nicht wiederhergestellt werden."
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
 msgstr "Der Kontext wurde bereits wiederhergestellt."
 
@@ -3298,7 +3298,7 @@ msgstr "Projekt wird konfiguriert"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3578,11 +3578,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Projekt konfigurieren"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -4258,12 +4258,12 @@ msgstr[1] "%u weitere Laufzeiten zeigen"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak-Laufzeitumgebungen"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4625,29 +4625,37 @@ msgstr "Werkzeugkette löschen"
 msgid "Delete Tool"
 msgstr "Werkzeug löschen"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "GNOME-Anwendung"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Eine neue GNOME-Anwendung erstellen"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Gemeinsam verwendete Bibliothek"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Ein neues Projekt mit einer gemeinsam verwendeten Bibliothek erstellen"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Leeres Projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Ein neues, leeres Projekt anlegen"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+msgid "Command Line Tool"
+msgstr "Befehlszeilenwerkzeug"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+msgid "Create a new command line project"
+msgstr "Ein neues Befehlszeilenprojekt anlegen"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
