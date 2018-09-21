@@ -84,5 +84,16 @@ void               _ide_file_set_content_type    (IdeFile              *self,
                                                   const gchar          *content_type) G_GNUC_INTERNAL;
 GtkSourceFile     *_ide_file_get_source_file     (IdeFile              *self) G_GNUC_INTERNAL;
 
+IDE_AVAILABLE_IN_3_30
+void               ide_file_exists_async         (IdeFile              *self,
+                                                  gint                  io_priority,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+
+IDE_AVAILABLE_IN_3_30
+gboolean           ide_file_exists_finish        (IdeFile              *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
 
 G_END_DECLS

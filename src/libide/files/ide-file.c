@@ -659,6 +659,77 @@ ide_file_find_other_worker (IdeTask      *task,
                              "Failed to locate other file.");
 }
 
+static void
+file_exists_cb (GObject      *source,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GFileInfo) info = NULL;
+
+  GError *error = NULL;
+  GFile *file = (GFile*)source;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (IDE_IS_TASK (task));
+
+  info = g_file_query_info_finish (file, result, &error);
+
+  ide_task_return_boolean (task, info != NULL);
+}
+
+/**
+ * ide_file_exists_async:
+ * @self: an #IdeFile
+ * @cancellable: (nullable): a #GCancellable
+ * @callback: a #GAsyncReadyCallback to execute upon completion
+ * @user_data: closure data for @callback
+ *
+ */
+void
+ide_file_exists_async (IdeFile             *self,
+                       gint                 io_priority,
+                       GCancellable        *cancellable,
+                       GAsyncReadyCallback  callback,
+                       gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  g_return_if_fail (IDE_IS_FILE (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_file_exists_async);
+  ide_task_set_priority (task, io_priority);
+
+  g_file_query_info_async (self->file,
+                           G_FILE_ATTRIBUTE_STANDARD_NAME,
+                           G_FILE_QUERY_INFO_NONE,
+                           ide_task_get_priority (task),
+                           cancellable,
+                           file_exists_cb,
+                           g_steal_pointer(&task));
+}
+
+/**
+ * ide_file_exists_finish:
+ * @self: an #IdeFile
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
+ *
+ * Returns:
+ */
+gboolean
+ide_file_exists_finish (IdeFile       *self,
+                        GAsyncResult  *result,
+                        GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_FILE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  return ide_task_propagate_boolean (IDE_TASK(result), error);
+}
+
 void
 ide_file_find_other_async (IdeFile             *self,
                            GCancellable        *cancellable,
