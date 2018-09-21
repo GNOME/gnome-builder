@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-09-03 10:02+0200\n"
+"POT-Creation-Date: 2018-09-21 06:51+0000\n"
+"PO-Revision-Date: 2018-09-21 09:13+0200\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -937,7 +937,7 @@ msgid "Failed to save draft: %s"
 msgstr "Salvataggio della bozza riuscito: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:642
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:643
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (copia)"
@@ -1662,7 +1662,7 @@ msgstr "Sintassi linguaggio"
 msgid "Search languages…"
 msgstr "Cerca linguaggi…"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u di %u"
@@ -2005,15 +2005,15 @@ msgstr "_Copia indirizzo collegamento"
 msgid "You must call %s() before using libide."
 msgstr "È necessario chiamare %s() prima di utilizzare libide."
 
-#: src/libide/ide-context.c:2212
+#: src/libide/ide-context.c:2211
 msgid "An unload request is already pending"
 msgstr "Una richiesta di unload è già in corso"
 
-#: src/libide/ide-context.c:2294
+#: src/libide/ide-context.c:2293
 msgid "Context already unloading, cannot restore."
 msgstr "Contesto già scaricato, impossibile ripristinare."
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
 msgstr "Il contesto è già stato ripristinato."
 
@@ -3256,7 +3256,7 @@ msgstr "Configurazione progetto"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3532,11 +3532,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Configura progetto"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -4198,12 +4198,12 @@ msgstr[1] "Mostra %u runtime addizionali"
 msgid "Flatpak Runtimes"
 msgstr "Runtime Flatpack"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4442,7 +4442,6 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain.c:66
 #, c-format
-#| msgid "Meson"
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
@@ -4539,7 +4538,6 @@ msgid "Fortran"
 msgstr "Fortran"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
-#| msgid "ID"
 msgid "D"
 msgstr "D"
 
@@ -4560,29 +4558,37 @@ msgstr "Elimina toolchain"
 msgid "Delete Tool"
 msgstr "Elimina strumento"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "Applicazione GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Crea una nuova applicazione GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Libreria condivisa"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Crea un nuovo progetto con una libreria condivisa"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Progetto vuoto"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Crea un nuovo progetto vuoto"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+msgid "Command Line Tool"
+msgstr "Strumento a riga di comando"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+msgid "Create a new command line project"
+msgstr "Crea un nuovo progetto per la riga di comando"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
@@ -5509,9 +5515,6 @@ msgstr "Buffer caricato, ma non nel gestore del buffer."
 
 #~ msgid "Other Projects"
 #~ msgstr "Altri progetti"
-
-#~ msgid "Create a new project"
-#~ msgstr "Crea un nuovo progetto"
 
 #~ msgid "Project Discovery"
 #~ msgstr "Scoperta progetto"
