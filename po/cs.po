@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-09-04 10:21+0200\n"
+"POT-Creation-Date: 2018-09-20 22:39+0000\n"
+"PO-Revision-Date: 2018-09-21 20:28+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -318,7 +318,7 @@ msgid "\"Projects\""
 msgstr "\"Projekty\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:33
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:423
 msgid "Projects directory"
 msgstr "Složka s projekty"
 
@@ -341,6 +341,15 @@ msgstr "Zobrazovat otevřené soubory"
 #: data/gsettings/org.gnome.builder.gschema.xml:44
 msgid "Display the open files list in the project sidebar."
 msgstr "Zobrazovat seznam otevřených souborů v postranním panelu projektu."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:48
+msgid "Clear build caches at startup"
+msgstr "Při spuštění vyčistit mezipaměti sestavení"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:49
+msgid "If enabled, Builder will clear build caches upon startup."
+msgstr ""
+"Když je zapnuto, vymaže Builder při každém spuštění mezipaměti sestavení."
 
 #: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
 msgid "Plugin enabled"
@@ -651,7 +660,7 @@ msgstr "Vygenerovaná"
 msgid "Unable to save %s\n"
 msgstr "Nelze uložit %s\n"
 
-#: src/gstyle/gstyle-palette-widget.c:983
+#: src/gstyle/gstyle-palette-widget.c:979
 #, c-format
 msgid "Unsaved palette %u"
 msgstr "Neuložená paleta %u"
@@ -779,7 +788,7 @@ msgid "Funded By"
 msgstr "Financovali"
 
 #: src/libide/application/ide-application.c:1001
-#: src/libide/preferences/ide-preferences-builtin.c:418
+#: src/libide/preferences/ide-preferences-builtin.c:420
 msgid "Projects"
 msgstr "Projekty"
 
@@ -939,7 +948,7 @@ msgid "Failed to save draft: %s"
 msgstr "Selhalo uložení konceptu: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:642
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:643
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (kopie)"
@@ -1168,7 +1177,7 @@ msgstr "Podrobnosti o sestavení"
 msgid "Build pipeline is empty"
 msgstr "Sestavovací roura je prázdná"
 
-#: src/libide/buildui/ide-build-perspective.c:454 src/libide/gtk/menus.ui:55
+#: src/libide/buildui/ide-build-perspective.c:454 src/libide/gtk/menus.ui:74
 msgid "Build Preferences"
 msgstr "Předvolby sestavení"
 
@@ -1399,22 +1408,22 @@ msgstr "_Cyklicky přecházet přes okraj"
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:112
-#: src/libide/gtk/menus.ui:241
+#: src/libide/editor/gtk/menus.ui:41 src/libide/gtk/menus.ui:113
+#: src/libide/gtk/menus.ui:242
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:116
-#: src/libide/gtk/menus.ui:245
+#: src/libide/editor/gtk/menus.ui:45 src/libide/gtk/menus.ui:117
+#: src/libide/gtk/menus.ui:246
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:120
+#: src/libide/editor/gtk/menus.ui:49 src/libide/gtk/menus.ui:121
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:135
-#: src/libide/gtk/menus.ui:253
+#: src/libide/editor/gtk/menus.ui:55 src/libide/gtk/menus.ui:136
+#: src/libide/gtk/menus.ui:254
 msgid "Select _All"
 msgstr "Vybrat vš_e"
 
@@ -1659,7 +1668,7 @@ msgstr "Syntax jazyka"
 msgid "Search languages…"
 msgstr "Vyhledat jazyky…"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u z %u"
@@ -1877,123 +1886,127 @@ msgstr "_Otevřít projekt"
 msgid "_Clone Repository"
 msgstr "_Klonovat repozitář"
 
-#: src/libide/gtk/menus.ui:22
+#: src/libide/gtk/menus.ui:21
+msgid "Save _All"
+msgstr "Uložit _vše"
+
+#: src/libide/gtk/menus.ui:28
+msgid "Close _All"
+msgstr "Z_avřít vše"
+
+#: src/libide/gtk/menus.ui:33
+msgid "Close Project"
+msgstr "Klonovat projekt"
+
+#: src/libide/gtk/menus.ui:41
 msgid "_Preferences"
 msgstr "_Předvolby"
 
-#: src/libide/gtk/menus.ui:30
+#: src/libide/gtk/menus.ui:46
 msgid "Keyboard _Shortcuts"
 msgstr "Kláve_sové zkratky"
 
-#: src/libide/gtk/menus.ui:34
+#: src/libide/gtk/menus.ui:50
 msgid "_Help"
 msgstr "Nápo_věda"
 
-#: src/libide/gtk/menus.ui:38
-msgid "_About"
-msgstr "O _aplikaci"
+#: src/libide/gtk/menus.ui:55
+msgid "_About Builder"
+msgstr "O _aplikaci Builder"
 
-#: src/libide/gtk/menus.ui:42
+#: src/libide/gtk/menus.ui:61
 msgid "_Quit"
 msgstr "U_končit"
 
-#: src/libide/gtk/menus.ui:64
+#: src/libide/gtk/menus.ui:83
 #: src/libide/preferences/ide-preferences-perspective.c:139
 #: src/libide/preferences/ide-preferences-window.ui:9
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: src/libide/gtk/menus.ui:73
-msgid "Save _All"
-msgstr "Uložit _vše"
-
-#: src/libide/gtk/menus.ui:80
-msgid "Close _All"
-msgstr "Z_avřít vše"
-
-#: src/libide/gtk/menus.ui:91
+#: src/libide/gtk/menus.ui:92
 msgid "_Go to Definition"
 msgstr "Pře_jít na definici"
 
-#: src/libide/gtk/menus.ui:97
+#: src/libide/gtk/menus.ui:98
 msgid "_Undo"
 msgstr "_Zpět"
 
-#: src/libide/gtk/menus.ui:101
+#: src/libide/gtk/menus.ui:102
 msgid "_Redo"
 msgstr "Z_novu"
 
-#: src/libide/gtk/menus.ui:107
+#: src/libide/gtk/menus.ui:108
 msgid "C_ut"
 msgstr "_Vyjmout"
 
-#: src/libide/gtk/menus.ui:128
+#: src/libide/gtk/menus.ui:129
 #: src/libide/preferences/ide-preferences-builtin.c:198
 #: src/plugins/spellcheck/gtk/menus.ui:12
 msgid "Highlighting"
 msgstr "Zvýrazňování"
 
-#: src/libide/gtk/menus.ui:133 src/libide/gtk/menus.ui:251
+#: src/libide/gtk/menus.ui:134 src/libide/gtk/menus.ui:252
 msgid "Selection"
 msgstr "Výběr"
 
-#: src/libide/gtk/menus.ui:140 src/libide/gtk/menus.ui:258
+#: src/libide/gtk/menus.ui:141 src/libide/gtk/menus.ui:259
 msgid "Select _None"
 msgstr "Z_rušit výběr"
 
-#: src/libide/gtk/menus.ui:146
+#: src/libide/gtk/menus.ui:147
 msgid "All _Upper Case"
 msgstr "Vše vel_kými písmeny"
 
-#: src/libide/gtk/menus.ui:151
+#: src/libide/gtk/menus.ui:152
 msgid "All _Lower Case"
 msgstr "Vše _malými písmeny"
 
-#: src/libide/gtk/menus.ui:156
+#: src/libide/gtk/menus.ui:157
 msgid "_Invert Case"
 msgstr "Obrát_it velikost písmen"
 
-#: src/libide/gtk/menus.ui:161
+#: src/libide/gtk/menus.ui:162
 msgid "_Title Case"
 msgstr "_První písmena velká"
 
-#: src/libide/gtk/menus.ui:168
+#: src/libide/gtk/menus.ui:169
 msgid "Join Lines"
 msgstr "Spojit řádky"
 
-#: src/libide/gtk/menus.ui:172
+#: src/libide/gtk/menus.ui:173
 msgid "Sort Lines"
 msgstr "Seřadit řádky"
 
-#: src/libide/gtk/menus.ui:181
+#: src/libide/gtk/menus.ui:182
 msgid "Zoom"
 msgstr "Přiblížení"
 
-#: src/libide/gtk/menus.ui:183
+#: src/libide/gtk/menus.ui:184
 msgid "Zoom _In"
 msgstr "Přiblíž_it"
 
-#: src/libide/gtk/menus.ui:188
+#: src/libide/gtk/menus.ui:189
 msgid "Zoom _Out"
 msgstr "_Oddálit"
 
-#: src/libide/gtk/menus.ui:194 src/plugins/terminal/gtk/menus.ui:13
+#: src/libide/gtk/menus.ui:195 src/plugins/terminal/gtk/menus.ui:13
 msgid "Reset"
 msgstr "Výchozí"
 
-#: src/libide/gtk/menus.ui:208 src/libide/layout/ide-layout-stack.ui:105
+#: src/libide/gtk/menus.ui:209 src/libide/layout/ide-layout-stack.ui:105
 msgid "Open File…"
 msgstr "Otevřít soubor…"
 
-#: src/libide/gtk/menus.ui:219 src/libide/runner/ide-run-manager.c:1118
+#: src/libide/gtk/menus.ui:220 src/libide/runner/ide-run-manager.c:1118
 msgid "Run"
 msgstr "Spustit"
 
-#: src/libide/gtk/menus.ui:228
+#: src/libide/gtk/menus.ui:229
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
-#: src/libide/gtk/menus.ui:233
+#: src/libide/gtk/menus.ui:234
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
@@ -2002,15 +2015,15 @@ msgstr "_Kopírovat adresu odkazu"
 msgid "You must call %s() before using libide."
 msgstr "Před použitím libide musíte zavolat %s()."
 
-#: src/libide/ide-context.c:2212
+#: src/libide/ide-context.c:2211
 msgid "An unload request is already pending"
 msgstr "Nějaký požadavek na odstranění z paměti již probíhá"
 
-#: src/libide/ide-context.c:2294
+#: src/libide/ide-context.c:2293
 msgid "Context already unloading, cannot restore."
 msgstr "Kontext byl již odstraněn z paměti, nelze jej obnovit."
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
 msgstr "Kontext již byl obnoven."
 
@@ -2891,14 +2904,23 @@ msgid "Number of parallel build workers"
 msgstr "Počet souběžných sestavovacích procesů"
 
 #: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Clear build cache at startup"
+msgstr "Vyčistit při spuštění mezipaměť sestavení"
+
+#: src/libide/preferences/ide-preferences-builtin.c:411
+msgid "Expired caches will be purged when Builder is started"
+msgstr ""
+"Mezipaměti s prošlou platností budou při spuštění aplikace Builder promazány"
+
+#: src/libide/preferences/ide-preferences-builtin.c:413
 msgid "Network"
 msgstr "Síť"
 
-#: src/libide/preferences/ide-preferences-builtin.c:412
+#: src/libide/preferences/ide-preferences-builtin.c:414
 msgid "Allow downloads over metered connections"
 msgstr "Povolit stahování přes měřená připojení"
 
-#: src/libide/preferences/ide-preferences-builtin.c:412
+#: src/libide/preferences/ide-preferences-builtin.c:414
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2906,29 +2928,29 @@ msgstr ""
 "Povolit použití měřených síťových připojení, když se automaticky stahují "
 "závislosti"
 
-#: src/libide/preferences/ide-preferences-builtin.c:420
+#: src/libide/preferences/ide-preferences-builtin.c:422
 msgid "Workspace"
 msgstr "Pracovní plocha"
 
-#: src/libide/preferences/ide-preferences-builtin.c:421
+#: src/libide/preferences/ide-preferences-builtin.c:423
 msgid "A place for all your projects"
 msgstr "Místo pro všechny vaše projekty"
 
-#: src/libide/preferences/ide-preferences-builtin.c:422
+#: src/libide/preferences/ide-preferences-builtin.c:424
 msgid "Restore previously opened files"
 msgstr "Obnovovat naposledy otevřené soubory"
 
-#: src/libide/preferences/ide-preferences-builtin.c:422
+#: src/libide/preferences/ide-preferences-builtin.c:424
 msgid "Open previously opened files when loading a project"
 msgstr "Po načtení projektu otevřít naposledy otevřené soubory"
 
-#: src/libide/preferences/ide-preferences-builtin.c:543
+#: src/libide/preferences/ide-preferences-builtin.c:545
 #: src/plugins/create-project/gbp-create-project-widget.ui:180
 msgid "Version Control"
 msgstr "Systém správy verzí"
 
 #. only the page goes here, plugins will fill in the details
-#: src/libide/preferences/ide-preferences-builtin.c:555
+#: src/libide/preferences/ide-preferences-builtin.c:557
 msgid "SDKs"
 msgstr "SDK"
 
@@ -3188,11 +3210,11 @@ msgstr "%s – Builder"
 msgid "Transfers"
 msgstr "Přenosy"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:57
+#: src/libide/workbench/ide-workbench-header-bar.ui:78
 msgid "Show workbench menu"
 msgstr "Zobrazovat nabídku pracovních nástrojů"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:96
+#: src/libide/workbench/ide-workbench-header-bar.ui:97
 msgid "Press Ctrl+. to search"
 msgstr "Zmáčknutím Ctrl+. můžete hledat"
 
@@ -3245,7 +3267,7 @@ msgstr "Konfiguruje se projekt"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3256,30 +3278,6 @@ msgstr "Sestavuje se projekt"
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:371
 msgid "Caching build commands"
 msgstr "Ukládají se sestavovací příkazy do mezipaměti"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:265
-msgid "Shared Library (Autotools)"
-msgstr "Sdílená knihovna (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:267
-msgid "Create a new autotools project with a shared library"
-msgstr "Vytvořit nový projekt se sdílenou knihovnou a používající autotools"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:291
-msgid "Empty Project (Autotools)"
-msgstr "Prázdný projekt (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:294
-msgid "Create a new empty autotools project"
-msgstr "Vytvořit nový prázdný projekt s autotools"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:308
-msgid "GNOME Application (Autotools)"
-msgstr "Aplikace GNOME (Autotools)"
-
-#: src/plugins/autotools-templates/autotools_templates/__init__.py:310
-msgid "Create a new flatpak-ready GNOME application"
-msgstr "Vytvořit novou aplikaci GNOME připravenou pro flatpak"
 
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:155
@@ -3527,11 +3525,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Konfiguruje se projekt"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -4188,12 +4186,12 @@ msgstr[2] "Zobrazit %u dalších běhových prostředí"
 msgid "Flatpak Runtimes"
 msgstr "Běhová prostředí flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4544,29 +4542,37 @@ msgstr "Odebrat sadu nástrojů"
 msgid "Delete Tool"
 msgstr "Odebrat nástroj"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "Aplikace GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Vytvořit novou aplikaci GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Sdílená knihovna"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Vytvořit nový projekt se sdílenou knihovnou"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Prázdný projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Vytvořit nový prázdný projekt"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+msgid "Command Line Tool"
+msgstr "Nástroj příkazové řádky"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+msgid "Create a new command line project"
+msgstr "Vytvořit nový projekt pro příkazovou řádku"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
