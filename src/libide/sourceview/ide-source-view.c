@@ -24,6 +24,7 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "ide-context.h"
 #include "ide-debug.h"
@@ -231,6 +232,7 @@ enum {
   CLEAR_SEARCH,
   CLEAR_SELECTION,
   CLEAR_SNIPPETS,
+  COPY_CLIPBOARD_EXTENDED,
   CYCLE_COMPLETION,
   DECREASE_FONT_SIZE,
   DELETE_SELECTION,
@@ -3020,6 +3022,36 @@ ide_source_view_real_join_lines (IdeSourceView *self)
 }
 
 static void
+ide_source_view_real_copy_clipboard_extended (IdeSourceView *self)
+
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkClipboard *clipboard;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin, end;
+  g_autofree gchar *text = NULL;
+  g_autofree gchar *new_text = NULL;
+  gsize len;
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD);
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  if  (gtk_text_iter_is_end (&end))
+    {
+      text = gtk_text_buffer_get_text (buffer, &begin, &end, FALSE);
+      len = strlen (text);
+      new_text = g_malloc (len + 1);
+      memcpy (new_text, text, len);
+      new_text[len] = '\n';
+
+      gtk_clipboard_set_text (clipboard, new_text, len + 1);
+    }
+  else
+    gtk_text_buffer_copy_clipboard (buffer, clipboard);
+}
+
+static void
 ide_source_view_real_paste_clipboard_extended (IdeSourceView *self,
                                                gboolean       smart_lines,
                                                gboolean       after_cursor,
@@ -5622,6 +5654,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   klass->clear_modifier = ide_source_view_real_clear_modifier;
   klass->clear_selection = ide_source_view_real_clear_selection;
   klass->clear_snippets = ide_source_view_clear_snippets;
+  klass->copy_clipboard_extended = ide_source_view_real_copy_clipboard_extended;
   klass->cycle_completion = ide_source_view_real_cycle_completion;
   klass->decrease_font_size = ide_source_view_real_decrease_font_size;
   klass->delete_selection = ide_source_view_real_delete_selection;
@@ -5942,6 +5975,15 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeSourceViewClass, clear_snippets),
+                  NULL, NULL, NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  signals [COPY_CLIPBOARD_EXTENDED] =
+    g_signal_new ("copy-clipboard-extended",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (IdeSourceViewClass, copy_clipboard_extended),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);

@@ -334,6 +334,7 @@ struct _IdeSourceViewClass
   void (*add_cursor)                  (IdeSourceView           *self,
                                        guint                    type);
   void (*remove_cursors)              (IdeSourceView           *self);
+  void (*copy_clipboard_extended)     (IdeSourceView           *self);
 
   /*< private >*/
   gpointer _reserved1;
@@ -359,7 +360,6 @@ struct _IdeSourceViewClass
   gpointer _reserved21;
   gpointer _reserved22;
   gpointer _reserved23;
-  gpointer _reserved24;
 };
 
 IDE_AVAILABLE_IN_3_30

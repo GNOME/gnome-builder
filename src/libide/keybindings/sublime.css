@@ -224,13 +224,13 @@
   bind "<ctrl>c" { "save-insert-mark" ()
                    "movement" (first-char, 0, 0, 0)
                    "movement" (line-end, 1, 0, 0)
-                   "copy-clipboard" ()
+                   "copy-clipboard-extended" ()
                    "clear-selection" ()
                    "restore-insert-mark" () };
   /* Ditto Ctrl+X for cut */
   bind "<ctrl>x" { "movement" (first-char, 0, 0, 0)
                    "movement" (line-end, 1, 0, 0)
-                   "copy-clipboard" ()
+                   "copy-clipboard-extended" ()
                    "delete-selection" () };
   /* Expand selection to word - is Quick Add Next when there's a selection */
   bind "<ctrl>d" { "movement" (previous-word-end, 0, 1, 1)
