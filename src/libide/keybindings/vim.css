@@ -49,7 +49,7 @@
  *   bind "<ctrl><alt>delete" { "movement" (first-line, 0, 0, 0)
  *                              "movement" (last-line, 1, 0, 0)
  *                              "movement" (last-char, 1, 0, 0)
- *                              "copy-clipboard" ()
+ *                              "copy-clipboard-extended" ()
  *                              "delete-selection" () };
  *
  * The "movement" action takes three parameters.
@@ -251,7 +251,7 @@
   bind "s" { "begin-macro" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-char, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" () };
 
   /* overwrite the current character with a modifier */
@@ -477,7 +477,7 @@
   /* delete to end of line */
   bind "<shift>d" { "begin-macro" ()
                     "movement" (last-char, 1, 0, 0)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "clear-count" ()
                     "end-macro" () };
@@ -485,7 +485,7 @@
  /* delete to end of line and go to insert */
   bind "<shift>c" { "begin-macro" ()
                     "movement" (last-char, 1, 0, 0)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "clear-count" ()
                     "set-mode" ("vim-insert", permanent) };
@@ -493,7 +493,7 @@
   /* delete current char */
   bind "x" { "begin-macro" ()
              "movement" (next-char, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "clear-count" ()
              "end-macro" () };
@@ -501,7 +501,7 @@
   /* delete previous char */
   bind "<shift>x" { "begin-macro" ()
                     "movement" (previous-char, 1, 1, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "clear-count" ()
                     "end-macro" () };
@@ -547,7 +547,7 @@
   bind "<shift>y" { "save-insert-mark" ()
                     "movement" (first-char, 0, 0, 0)
                     "movement" (next-line, 1, 1, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (expand)
                     "clear-count" ()
                     "clear-selection" ()
@@ -635,73 +635,73 @@
   bind "e" { "begin-macro" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-word-end, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" () };
   bind "w" { "begin-macro" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-word-end, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" () };
 
   bind "l" { "begin-macro" ()
              "movement" (next-char, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
   bind "h" { "begin-macro" ()
              "movement" (previous-char, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
   bind "k" { "begin-macro" ()
              "movement" (last-char, 0, 0, 0)
              "movement" (previous-line, 1, 0, 1)
              "movement" (first-char, 1, 1, 0)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
   bind "j" { "begin-macro" ()
              "movement" (first-char, 0, 1, 0)
              "movement" (next-line, 1, 0, 1)
              "movement" (last-char, 1, 0, 0)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
   bind "Right" { "begin-macro" ()
                  "movement" (next-char, 1, 1, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "set-mode" ("vim-insert", permanent) };
   bind "Left" { "begin-macro" ()
                 "movement" (previous-char, 1, 1, 1)
-                "copy-clipboard" ()
+                "copy-clipboard-extended" ()
                 "delete-selection" ()
                 "set-mode" ("vim-insert", permanent) };
   bind "Up" { "begin-macro" ()
               "movement" (last-char, 0, 0, 0)
               "movement" (previous-line, 1, 0, 1)
               "movement" (first-char, 1, 1, 0)
-              "copy-clipboard" ()
+              "copy-clipboard-extended" ()
               "delete-selection" ()
               "set-mode" ("vim-insert", permanent) };
   bind "Down" { "begin-macro" ()
                 "movement" (first-char, 0, 1, 0)
                 "movement" (next-line, 1, 0, 1)
                 "movement" (last-char, 1, 0, 0)
-                "copy-clipboard" ()
+                "copy-clipboard-extended" ()
                 "delete-selection" ()
                 "set-mode" ("vim-insert", permanent) };
 
   bind "0" { "begin-macro" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (first-char, 1, 0, 0)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
   bind "KP_0" { "begin-macro" ()
                 "set-mode" ("vim-insert", permanent)
                 "movement" (first-char, 1, 0, 0)
-                "copy-clipboard" ()
+                "copy-clipboard-extended" ()
                 "delete-selection" ()
                 "end-macro" () };
 
@@ -709,7 +709,7 @@
                 "movement" (first-char, 0, 1, 0)
                 "movement" (next-line, 1, 0, 1)
                 "movement" (last-char, 1, 0, 0)
-                "copy-clipboard" ()
+                "copy-clipboard-extended" ()
                 "delete-selection" ()
                 "reindent" ()
                 "clear-count" ()
@@ -718,7 +718,7 @@
                     "movement" (first-char, 0, 1, 0)
                     "movement" (next-line, 1, 0, 1)
                     "movement" (last-char, 1, 0, 0)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "reindent" ()
                     "clear-count" ()
@@ -727,7 +727,7 @@
                            "movement" (first-char, 0, 1, 0)
                            "movement" (next-line, 1, 0, 1)
                            "movement" (last-char, 1, 0, 0)
-                           "copy-clipboard" ()
+                           "copy-clipboard-extended" ()
                            "delete-selection" ()
                            "reindent" ()
                            "clear-count" ()
@@ -736,7 +736,7 @@
                   "movement" (first-char, 0, 1, 0)
                   "movement" (next-line, 1, 0, 1)
                   "movement" (last-char, 1, 0, 0)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "delete-selection" ()
                   "reindent" ()
                   "clear-count" ()
@@ -745,7 +745,7 @@
                          "movement" (first-char, 0, 1, 0)
                          "movement" (next-line, 1, 0, 1)
                          "movement" (last-char, 1, 0, 0)
-                         "copy-clipboard" ()
+                         "copy-clipboard-extended" ()
                          "delete-selection" ()
                          "reindent" ()
                          "clear-count" ()
@@ -754,7 +754,7 @@
   bind "<shift>asciicircum" { "begin-macro" ()
                               "set-mode" ("vim-insert", permanent)
                               "movement" (first-nonspace-char, 1, 1, 1)
-                              "copy-clipboard" ()
+                              "copy-clipboard-extended" ()
                               "delete-selection" ()
                               "end-macro" () };
 
@@ -763,7 +763,7 @@
                       "movement" (first-char, 0, 1, 0)
                       "movement" (next-line, 1, 0, 1)
                       "movement" (last-char, 1, 0, 0)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "delete-selection" ()
                       "reindent" ()
                       "clear-count" ()
@@ -772,7 +772,7 @@
   bind "dollar" { "begin-macro" ()
                   "set-mode" ("vim-insert", permanent)
                   "movement" (line-end, 1, 1, 0)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "delete-selection" ()
                   "end-macro" () };
 
@@ -783,7 +783,7 @@
              "save-search-char" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-match-modifier, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
              "clear-modifier" () };
@@ -794,7 +794,7 @@
              "save-search-char" ()
              "set-mode" ("vim-insert", permanent)
              "movement" (next-match-modifier, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
              "clear-modifier" () };
@@ -802,7 +802,7 @@
   bind "c" { "begin-macro" ()
              "movement" (first-char, 0, 1, 0)
              "movement" (last-char, 1, 0, 0)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "reindent" ()
              "set-mode" ("vim-insert", permanent) };
@@ -813,7 +813,7 @@
                     "save-search-char" ()
                     "set-mode" ("vim-insert", permanent)
                     "movement" (previous-match-modifier, 1, 1, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" ()
                     "clear-modifier" () };
@@ -824,7 +824,7 @@
                     "save-search-char" ()
                     "set-mode" ("vim-insert", permanent)
                     "movement" (previous-match-modifier, 1, 0, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" ()
                     "clear-modifier" () };
@@ -832,14 +832,14 @@
   bind "comma" { "begin-macro" ()
                  "movement" (previous-match-search-char, 1, 0, 1)
                  "set-mode" ("vim-insert", permanent)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "selection-theatric" (shrink)
                  "delete-selection" () };
 
   bind "semicolon" { "begin-macro" ()
                      "movement" (next-match-search-char, 1, 0, 1)
                      "set-mode" ("vim-insert", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 }
@@ -860,7 +860,7 @@
              "movement" (paragraph-start, 1, 1, 1)
              "swap-selection-bounds" ()
              "movement" (paragraph-end, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" () };
 
@@ -870,7 +870,7 @@
              "movement" (sentence-start, 1, 1, 1)
              "swap-selection-bounds" ()
              "movement" (sentence-end, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" () };
 
@@ -880,7 +880,7 @@
              "movement" (previous-word-end, 0, 1, 1)
              "movement" (next-word-start, 0, 1, 0)
              "movement" (next-word-end, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" () };
 
@@ -890,7 +890,7 @@
                     "movement" (previous-full-word-end, 0, 1, 1)
                     "movement" (next-full-word-start, 0, 1, 0)
                     "movement" (next-full-word-end, 1, 0, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" () };
 
@@ -898,21 +898,21 @@
   bind "parenleft" { "begin-macro" ()
                      "select-inner" ("(", ")", 1, 0)
                      "set-mode" ("vim-insert", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "parenright" { "begin-macro" ()
                       "select-inner" ("(", ")", 1, 0)
                       "set-mode" ("vim-insert", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "b" { "begin-macro" ()
              "select-inner" ("(", ")", 1, 0)
              "set-mode" ("vim-insert", permanent)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" () };
 
@@ -920,14 +920,14 @@
   bind "bracketleft" { "begin-macro" ()
                        "select-inner" ("[", "]", 1, 0)
                        "set-mode" ("vim-insert", permanent)
-                       "copy-clipboard" ()
+                       "copy-clipboard-extended" ()
                        "selection-theatric" (shrink)
                        "delete-selection" () };
 
   bind "bracketright" { "begin-macro" ()
                         "select-inner" ("[", "]", 1, 0)
                         "set-mode" ("vim-insert", permanent)
-                        "copy-clipboard" ()
+                        "copy-clipboard-extended" ()
                         "selection-theatric" (shrink)
                         "delete-selection" () };
 
@@ -935,21 +935,21 @@
   bind "braceleft" { "begin-macro" ()
                      "select-inner" ("{", "}", 1, 0)
                      "set-mode" ("vim-insert", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "braceright" { "begin-macro" ()
                       "select-inner" ("{", "}", 1, 0)
                       "set-mode" ("vim-insert", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "<shift>b" { "begin-macro" ()
                     "select-inner" ("{", "}", 1, 0)
                     "set-mode" ("vim-insert", permanent)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" () };
 
@@ -957,14 +957,14 @@
     bind "less" { "begin-macro" ()
                   "select-inner" ("<", ">", 1, 0)
                   "set-mode" ("vim-insert", permanent)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "selection-theatric" (shrink)
                   "delete-selection" () };
 
     bind "greater" { "begin-macro" ()
                      "select-inner" ("<", ">", 1, 0)
                      "set-mode" ("vim-insert", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
@@ -972,21 +972,21 @@
     bind "quotedbl" { "begin-macro" ()
                       "select-inner" ("\"", "\"", 1, 1)
                       "set-mode" ("vim-insert", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
     bind "apostrophe" { "begin-macro" ()
                         "select-inner" ("'", "'", 1, 1)
                         "set-mode" ("vim-insert", permanent)
-                        "copy-clipboard" ()
+                        "copy-clipboard-extended" ()
                         "selection-theatric" (shrink)
                         "delete-selection" () };
 
     bind "grave" { "begin-macro" ()
                    "select-inner" ("`", "`", 1, 1)
                    "set-mode" ("vim-insert", permanent)
-                   "copy-clipboard" ()
+                   "copy-clipboard-extended" ()
                    "selection-theatric" (shrink)
                    "delete-selection" () };
 
@@ -994,7 +994,7 @@
     bind "t" { "begin-macro" ()
                "select-tag" (1)
                "set-mode" ("vim-insert", permanent)
-               "copy-clipboard" ()
+               "copy-clipboard-extended" ()
                "selection-theatric" (shrink)
                "delete-selection" () };
 }
@@ -1005,21 +1005,21 @@
   bind "parenleft" { "begin-macro" ()
                      "select-inner" ("(", ")", 0, 0)
                      "set-mode" ("vim-insert", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "parenright" { "begin-macro" ()
                       "select-inner" ("(", ")", 0, 0)
                       "set-mode" ("vim-insert", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "b" { "begin-macro" ()
              "select-inner" ("(", ")", 0, 0)
              "set-mode" ("vim-insert", permanent)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" () };
 
@@ -1027,14 +1027,14 @@
   bind "bracketleft" { "begin-macro" ()
                        "select-inner" ("[", "]", 0, 0)
                        "set-mode" ("vim-insert", permanent)
-                       "copy-clipboard" ()
+                       "copy-clipboard-extended" ()
                        "selection-theatric" (shrink)
                        "delete-selection" () };
 
   bind "bracketright" { "begin-macro" ()
                         "select-inner" ("[", "]", 0, 0)
                         "set-mode" ("vim-insert", permanent)
-                        "copy-clipboard" ()
+                        "copy-clipboard-extended" ()
                         "selection-theatric" (shrink)
                         "delete-selection" () };
 
@@ -1042,21 +1042,21 @@
   bind "braceleft" { "begin-macro" ()
                      "select-inner" ("{", "}", 0, 0)
                      "set-mode" ("vim-insert", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "braceright" { "begin-macro" ()
                       "select-inner" ("{", "}", 0, 0)
                       "set-mode" ("vim-insert", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "<shift>b" { "begin-macro" ()
                     "select-inner" ("{", "}", 0, 0)
                     "set-mode" ("vim-insert", permanent)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" () };
 
@@ -1064,14 +1064,14 @@
     bind "less" { "begin-macro" ()
                   "select-inner" ("<", ">", 0, 0)
                   "set-mode" ("vim-insert", permanent)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "selection-theatric" (shrink)
                   "delete-selection" () };
 
     bind "greater" { "begin-macro" ()
                      "select-inner" ("<", ">", 0, 0)
                      "set-mode" ("vim-insert", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
@@ -1079,21 +1079,21 @@
     bind "quotedbl" { "begin-macro" ()
                       "select-inner" ("\"", "\"", 0, 1)
                       "set-mode" ("vim-insert", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
     bind "apostrophe" { "begin-macro" ()
                         "select-inner" ("'", "'", 0, 1)
                         "set-mode" ("vim-insert", permanent)
-                        "copy-clipboard" ()
+                        "copy-clipboard-extended" ()
                         "selection-theatric" (shrink)
                         "delete-selection" () };
 
     bind "grave" { "begin-macro" ()
                    "select-inner" ("`", "`", 0, 1)
                    "set-mode" ("vim-insert", permanent)
-                   "copy-clipboard" ()
+                   "copy-clipboard-extended" ()
                    "selection-theatric" (shrink)
                    "delete-selection" () };
 
@@ -1101,7 +1101,7 @@
     bind "t" { "begin-macro" ()
                "select-tag" (0)
                "set-mode" ("vim-insert", permanent)
-               "copy-clipboard" ()
+               "copy-clipboard-extended" ()
                "selection-theatric" (shrink)
                "delete-selection" () };
 }
@@ -1110,35 +1110,35 @@
 {
   bind "Left"  { "begin-macro" ()
                  "movement" (previous-char, 1, 1, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "end-macro" () };
   bind "h"     { "begin-macro" ()
                  "movement" (previous-char, 1, 1, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "end-macro" () };
 
   bind "braceleft"  { "begin-macro" ()
                       "movement" (paragraph-start, 1, 0, 1)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "delete-selection" ()
                       "end-macro" () };
 
   bind "braceright" { "begin-macro" ()
                       "movement" (paragraph-end, 1, 0, 1)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "delete-selection" ()
                       "end-macro" () };
 
   bind "Right" { "begin-macro" ()
                  "movement" (next-char, 1, 1, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "end-macro" () };
   bind "l"     { "begin-macro" ()
                  "movement" (next-char, 1, 1, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "end-macro" () };
 
@@ -1146,7 +1146,7 @@
                  "movement" (line-end, 0, 0, 0)
                  "movement" (previous-line, 1, 0, 0)
                  "movement" (previous-line, 1, 0, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
@@ -1154,7 +1154,7 @@
                  "movement" (line-end, 0, 0, 0)
                  "movement" (previous-line, 1, 0, 0)
                  "movement" (previous-line, 1, 0, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
@@ -1163,7 +1163,7 @@
                  "movement" (first-char, 0, 1, 0)
                  "movement" (next-line, 1, 0, 0)
                  "movement" (next-line, 1, 0, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
@@ -1171,7 +1171,7 @@
                  "movement" (first-char, 0, 1, 0)
                  "movement" (next-line, 1, 0, 0)
                  "movement" (next-line, 1, 0, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "delete-selection" ()
                  "movement" (first-nonspace-char, 0, 1, 0)
                  "end-macro" () };
@@ -1179,7 +1179,7 @@
                   "movement" (first-char, 0, 1, 0)
                   "movement" (next-line, 1, 0, 0)
                   "movement" (next-line, 1, 0, 1)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "delete-selection" ()
                   "movement" (first-nonspace-char, 0, 1, 0)
                   "end-macro" () };
@@ -1187,7 +1187,7 @@
   bind "<shift>g" { "begin-macro" ()
                     "movement" (nth-line, 1, 0, 1)
                     "movement" (last-char, 1, 0, 0)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "movement" (last-char, 0, 0, 0)
                     "end-macro" () };
@@ -1201,7 +1201,7 @@
              "capture-modifier" ()
              "save-search-char" ()
              "movement" (next-match-modifier, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
              "clear-modifier" ()
@@ -1211,7 +1211,7 @@
              "capture-modifier" ()
              "save-search-char" ()
              "movement" (next-match-modifier, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
              "clear-modifier" ()
@@ -1222,7 +1222,7 @@
                     "capture-modifier" ()
                     "save-search-char" ()
                     "movement" (previous-match-modifier, 1, 1, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" ()
                     "clear-modifier" ()
@@ -1232,14 +1232,14 @@
                     "capture-modifier" ()
                     "save-search-char" ()
                     "movement" (previous-match-modifier, 1, 0, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" ()
                     "clear-modifier" ()
                     "end-macro" () };
   bind "comma" { "begin-macro" ()
                  "movement" (previous-match-search-char, 1, 1, 1)
-                 "copy-clipboard" ()
+                 "copy-clipboard-extended" ()
                  "selection-theatric" (shrink)
                  "delete-selection" ()
                  "clear-count" ()
@@ -1247,7 +1247,7 @@
 
   bind "semicolon" { "begin-macro" ()
                      "movement" (next-match-search-char, 1, 0, 1)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" ()
                      "clear-count" ()
@@ -1256,7 +1256,7 @@
   bind "d" { "begin-macro" ()
              "movement" (first-char, 0, 1, 0)
              "movement" (next-line, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "movement" (first-nonspace-char, 0, 1, 0)
              "end-macro" () };
@@ -1265,7 +1265,7 @@
                 "movement" (first-char, 0, 1, 0)
                 "movement" (next-line, 1, 0, 0)
                 "movement" (next-line, 1, 0, 1)
-                "copy-clipboard" ()
+                "copy-clipboard-extended" ()
                 "delete-selection" ()
                 "movement" (first-nonspace-char, 0, 1, 0)
                 "clear-count" () };
@@ -1273,7 +1273,7 @@
                     "movement" (first-char, 0, 1, 0)
                     "movement" (next-line, 1, 0, 0)
                     "movement" (next-line, 1, 0, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "movement" (first-nonspace-char, 0, 1, 0)
                     "clear-count" () };
@@ -1281,7 +1281,7 @@
                            "movement" (first-char, 0, 1, 0)
                            "movement" (next-line, 1, 0, 0)
                            "movement" (next-line, 1, 0, 1)
-                           "copy-clipboard" ()
+                           "copy-clipboard-extended" ()
                            "delete-selection" ()
                            "movement" (first-nonspace-char, 0, 1, 0)
                            "clear-count" () };
@@ -1289,7 +1289,7 @@
                   "movement" (first-char, 0, 1, 0)
                   "movement" (next-line, 1, 0, 0)
                   "movement" (next-line, 1, 0, 1)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "delete-selection" ()
                   "movement" (first-nonspace-char, 0, 1, 0)
                   "clear-count" () };
@@ -1297,7 +1297,7 @@
                          "movement" (first-char, 0, 1, 0)
                          "movement" (next-line, 1, 0, 0)
                          "movement" (next-line, 1, 0, 1)
-                         "copy-clipboard" ()
+                         "copy-clipboard-extended" ()
                          "delete-selection" ()
                          "movement" (first-nonspace-char, 0, 1, 0)
                          "clear-count" () };
@@ -1307,61 +1307,61 @@
                       "movement" (first-char, 0, 1, 0)
                       "movement" (next-line, 1, 0, 0)
                       "movement" (next-line, 1, 0, 1)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "delete-selection" ()
                       "movement" (first-nonspace-char, 0, 1, 0)
                       "clear-count" () };
 
   bind "b" { "begin-macro" ()
              "movement" (previous-word-start-newline-stop, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
 
   bind "<shift>b" { "begin-macro" ()
                     "movement" (previous-full-word-start-newline-stop, 1, 1, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "end-macro" () };
 
   bind "e" { "begin-macro" ()
              "movement" (next-word-end-newline-stop, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
   bind "<shift>e" { "begin-macro" ()
                     "movement" (next-full-word-end-newline-stop, 1, 0, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "end-macro" () };
   bind "w" { "begin-macro" ()
              "movement" (next-word-start-newline-stop, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
   bind "<shift>w" { "begin-macro" ()
                     "movement" (next-full-word-start-newline-stop, 1, 1, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "end-macro" () };
   bind "0" { "begin-macro" ()
              "movement" (first-char, 1, 0, 0)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
   bind "KP_0" { "begin-macro" ()
                 "movement" (first-char, 1, 0, 0)
-                "copy-clipboard" ()
+                "copy-clipboard-extended" ()
                 "delete-selection" ()
                 "end-macro" () };
   bind "<shift>asciicircum" { "begin-macro" ()
                               "movement" (first-nonspace-char, 1, 1, 1)
-                              "copy-clipboard" ()
+                              "copy-clipboard-extended" ()
                               "delete-selection" ()
                               "end-macro" () };
   bind "dollar" { "begin-macro" ()
                   "movement" (line-end, 1, 1, 0)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "delete-selection" ()
                   "end-macro" () };
 }
@@ -1483,7 +1483,7 @@
   bind "y" { "save-insert-mark" ()
              "movement" (first-char, 0, 1, 0)
              "movement" (next-line, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (expand)
              "clear-selection" ()
              "restore-insert-mark" () };
@@ -1493,7 +1493,7 @@
              "movement" (first-char, 0, 1, 0)
              "movement" (next-line, 1, 0, 0)
              "movement" (next-line, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (expand)
              "clear-selection" ()
              "restore-insert-mark" () };
@@ -1501,21 +1501,21 @@
   bind "k" { "movement" (line-end, 0, 0, 0)
              "movement" (previous-line, 1, 0, 0)
              "movement" (previous-line, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (expand)
              "clear-selection" ()
              "movement" (first-nonspace-char, 0, 1, 0) };
 
   bind "w" { "save-insert-mark" ()
              "movement" (next-word-start, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (expand)
              "restore-insert-mark" ()
              "clear-count" () };
 
   bind "<shift>w" { "save-insert-mark" ()
                     "movement" (next-full-word-start, 1, 1, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (expand)
                     "restore-insert-mark" ()
                     "clear-count" () };
@@ -1526,7 +1526,7 @@
              "capture-modifier" ()
              "save-search-char" ()
              "movement" (next-match-modifier, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (expand)
              "clear-modifier" ()
              "restore-insert-mark" ()
@@ -1539,7 +1539,7 @@
              "capture-modifier" ()
              "save-search-char" ()
              "movement" (next-match-modifier, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (expand)
              "clear-modifier" ()
              "restore-insert-mark" ()
@@ -1549,7 +1549,7 @@
   bind "dollar" { "begin-macro" ()
                   "save-insert-mark" ()
                   "movement" (line-end, 1, 1, 1)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "selection-theatric" (expand)
                   "restore-insert-mark" ()
                   "clear-count" ()
@@ -1604,34 +1604,34 @@
 {
   bind "e" { "begin-macro" ()
              "movement" (previous-word-end, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
   bind "<shift>e" { "begin-macro" ()
                     "movement" (previous-full-word-end, 1, 1, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "end-macro" () };
   bind "g" { "begin-macro" ()
              "movement" (first-line, 1, 1, 0)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
   bind "k" { "begin-macro" ()
              "movement" (next-char, 1, 1, 0)
              "movement" (previous-line, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
   bind "j" { "begin-macro" ()
              "movement" (next-char, 1, 1, 0)
              "movement" (next-line, 1, 1, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
   bind "m" { "begin-macro" ()
              "movement" (middle-char, 1, 1, 0)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" () };
 }
@@ -1644,7 +1644,7 @@
              "swap-selection-bounds" ()
              "movement" (paragraph-end, 1, 1, 1)
              "movement" (last-char, 1, 1, 0)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
              "end-macro" () };
@@ -1655,7 +1655,7 @@
              "movement" (previous-word-end, 0, 1, 1)
              "movement" (next-word-start, 0, 1, 0)
              "movement" (next-word-end, 1, 0, 1)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" () };
 
@@ -1665,7 +1665,7 @@
                     "movement" (previous-full-word-end, 0, 1, 1)
                     "movement" (next-full-word-start, 0, 1, 0)
                     "movement" (next-full-word-end, 1, 0, 1)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" () };
 
@@ -1673,21 +1673,21 @@
   bind "parenleft" { "begin-macro" ()
                      "select-inner" ("(", ")", 1, 0)
                      "set-mode" ("vim-normal", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "parenright" { "begin-macro" ()
                       "select-inner" ("(", ")", 1, 0)
                       "set-mode" ("vim-normal", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "b" { "begin-macro" ()
              "select-inner" ("(", ")", 1, 0)
              "set-mode" ("vim-normal", permanent)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" () };
 
@@ -1695,14 +1695,14 @@
   bind "bracketleft" { "begin-macro" ()
                        "select-inner" ("[", "]", 1, 0)
                        "set-mode" ("vim-normal", permanent)
-                       "copy-clipboard" ()
+                       "copy-clipboard-extended" ()
                        "selection-theatric" (shrink)
                        "delete-selection" () };
 
   bind "bracketright" { "begin-macro" ()
                         "select-inner" ("[", "]", 1, 0)
                         "set-mode" ("vim-normal", permanent)
-                        "copy-clipboard" ()
+                        "copy-clipboard-extended" ()
                         "selection-theatric" (shrink)
                         "delete-selection" () };
 
@@ -1710,21 +1710,21 @@
   bind "braceleft" { "begin-macro" ()
                      "select-inner" ("{", "}", 1, 0)
                      "set-mode" ("vim-normal", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "braceright" { "begin-macro" ()
                       "select-inner" ("{", "}", 1, 0)
                       "set-mode" ("vim-normal", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "<shift>b" { "begin-macro" ()
                     "select-inner" ("{", "}", 1, 0)
                     "set-mode" ("vim-normal", permanent)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" () };
 
@@ -1732,14 +1732,14 @@
     bind "less" { "begin-macro" ()
                   "select-inner" ("<", ">", 1, 0)
                   "set-mode" ("vim-normal", permanent)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "selection-theatric" (shrink)
                   "delete-selection" () };
 
     bind "greater" { "begin-macro" ()
                      "select-inner" ("<", ">", 1, 0)
                      "set-mode" ("vim-normal", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
@@ -1747,21 +1747,21 @@
     bind "quotedbl" { "begin-macro" ()
                       "select-inner" ("\"", "\"", 1, 1)
                       "set-mode" ("vim-normal", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
     bind "apostrophe" { "begin-macro" ()
                         "select-inner" ("'", "'", 1, 1)
                         "set-mode" ("vim-normal", permanent)
-                        "copy-clipboard" ()
+                        "copy-clipboard-extended" ()
                         "selection-theatric" (shrink)
                         "delete-selection" () };
 
     bind "grave" { "begin-macro" ()
                    "select-inner" ("`", "`", 1, 1)
                    "set-mode" ("vim-normal", permanent)
-                   "copy-clipboard" ()
+                   "copy-clipboard-extended" ()
                    "selection-theatric" (shrink)
                    "delete-selection" () };
 
@@ -1769,7 +1769,7 @@
     bind "t" { "begin-macro" ()
                "select-tag" (1)
                "set-mode" ("vim-normal", permanent)
-               "copy-clipboard" ()
+               "copy-clipboard-extended" ()
                "selection-theatric" (shrink)
                "delete-selection" () };
 }
@@ -1780,21 +1780,21 @@
   bind "parenleft" { "begin-macro" ()
                      "select-inner" ("(", ")", 0, 0)
                      "set-mode" ("vim-normal", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "parenright" { "begin-macro" ()
                       "select-inner" ("(", ")", 0, 0)
                       "set-mode" ("vim-normal", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "b" { "begin-macro" ()
              "select-inner" ("(", ")", 0, 0)
              "set-mode" ("vim-normal", permanent)
-             "copy-clipboard" ()
+             "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" () };
 
@@ -1802,14 +1802,14 @@
   bind "bracketleft" { "begin-macro" ()
                        "select-inner" ("[", "]", 0, 0)
                        "set-mode" ("vim-normal", permanent)
-                       "copy-clipboard" ()
+                       "copy-clipboard-extended" ()
                        "selection-theatric" (shrink)
                        "delete-selection" () };
 
   bind "bracketright" { "begin-macro" ()
                         "select-inner" ("[", "]", 0, 0)
                         "set-mode" ("vim-normal", permanent)
-                        "copy-clipboard" ()
+                        "copy-clipboard-extended" ()
                         "selection-theatric" (shrink)
                         "delete-selection" () };
 
@@ -1817,21 +1817,21 @@
   bind "braceleft" { "begin-macro" ()
                      "select-inner" ("{", "}", 0, 0)
                      "set-mode" ("vim-normal", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
   bind "braceright" { "begin-macro" ()
                       "select-inner" ("{", "}", 0, 0)
                       "set-mode" ("vim-normal", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
   bind "<shift>b" { "begin-macro" ()
                     "select-inner" ("{", "}", 0, 0)
                     "set-mode" ("vim-normal", permanent)
-                    "copy-clipboard" ()
+                    "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" () };
 
@@ -1839,14 +1839,14 @@
     bind "less" { "begin-macro" ()
                   "select-inner" ("<", ">", 0, 0)
                   "set-mode" ("vim-normal", permanent)
-                  "copy-clipboard" ()
+                  "copy-clipboard-extended" ()
                   "selection-theatric" (shrink)
                   "delete-selection" () };
 
     bind "greater" { "begin-macro" ()
                      "select-inner" ("<", ">", 0, 0)
                      "set-mode" ("vim-normal", permanent)
-                     "copy-clipboard" ()
+                     "copy-clipboard-extended" ()
                      "selection-theatric" (shrink)
                      "delete-selection" () };
 
@@ -1854,21 +1854,21 @@
     bind "quotedbl" { "begin-macro" ()
                       "select-inner" ("\"", "\"", 0, 1)
                       "set-mode" ("vim-normal", permanent)
-                      "copy-clipboard" ()
+                      "copy-clipboard-extended" ()
                       "selection-theatric" (shrink)
                       "delete-selection" () };
 
     bind "apostrophe" { "begin-macro" ()
                         "select-inner" ("'", "'", 0, 1)
                         "set-mode" ("vim-normal", permanent)
-                        "copy-clipboard" ()
+                        "copy-clipboard-extended" ()
                         "selection-theatric" (shrink)
                         "delete-selection" () };
 
     bind "grave" { "begin-macro" ()
                    "select-inner" ("`", "`", 0, 1)
                    "set-mode" ("vim-normal", permanent)
-                   "copy-clipboard" ()
+                   "copy-clipboard-extended" ()
                    "selection-theatric" (shrink)
                    "delete-selection" () };
 
@@ -1876,7 +1876,7 @@
     bind "t" { "begin-macro" ()
                "select-tag" (0)
                "set-mode" ("vim-normal", permanent)
-               "copy-clipboard" ()
+               "copy-clipboard-extended" ()
                "selection-theatric" (shrink)
                "delete-selection" () };
 }
@@ -2033,22 +2033,22 @@
   bind "9" { "append-to-count" (9)
              "set-mode" ("vim-visual-with-count", transient) };
 
-  bind "x" { "copy-clipboard" ()
+  bind "x" { "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" ()
              "set-mode" ("vim-normal", permanent) };
 
-  bind "c" { "copy-clipboard" ()
+  bind "c" { "copy-clipboard-extended" ()
              "selection-theatric" (shrink)
              "delete-selection" ()
              "set-mode" ("vim-insert", permanent) };
 
-  bind "d" { "copy-clipboard" ()
+  bind "d" { "copy-clipboard-extended" ()
              "delete-selection" ()
              "end-macro" ()
              "set-mode" ("vim-normal", permanent) };
 
-  bind "<shift>x" { "copy-clipboard" ()
+  bind "<shift>x" { "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
@@ -2072,7 +2072,7 @@
                  "set-mode" ("vim-normal", permanent) };
 
   /* TODO: we really want to rollback the macro here */
-  bind "y" { "copy-clipboard" ()
+  bind "y" { "copy-clipboard-extended" ()
              "selection-theatric" (expand)
              "clear-selection" ()
              "end-macro" ()
@@ -2420,17 +2420,17 @@ bind "KP_Multiply" { "save-insert-mark" ()
   bind "<shift>g" { "movement" (nth-line, 1, 0, 1)
                     "movement" (last-char, 1, 0, 0) };
 
-  bind "x"        { "copy-clipboard" ()
+  bind "x"        { "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
-  bind "d"        { "copy-clipboard" ()
+  bind "d"        { "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
-  bind "c"        { "copy-clipboard" ()
+  bind "c"        { "copy-clipboard-extended" ()
                     "selection-theatric" (shrink)
                     "delete-selection" ()
                     "set-mode" ("vim-insert", permanent)
@@ -2438,21 +2438,21 @@ bind "KP_Multiply" { "save-insert-mark" ()
                     "move-cursor" (display-lines, -1, 0)
                     "reindent" () };
 
-  bind "<shift>x" { "copy-clipboard" ()
+  bind "<shift>x" { "copy-clipboard-extended" ()
                     "delete-selection" ()
                     "delete-from-cursor" (chars, 1)
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
   /* TODO: this should actually cancel the macro */
-  bind "y"        { "copy-clipboard" ()
+  bind "y"        { "copy-clipboard-extended" ()
                     "selection-theatric" (expand)
                     "clear-selection" ()
                     "end-macro" ()
                     "set-mode" ("vim-normal", permanent) };
 
   /* TODO: this should actually cancel the macro */
-  bind "<shift>y" { "copy-clipboard" ()
+  bind "<shift>y" { "copy-clipboard-extended" ()
                     "selection-theatric" (expand)
                     "clear-selection" ()
                     "set-mode" ("vim-normal", permanent) };
