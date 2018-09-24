@@ -166,7 +166,6 @@ G_BEGIN_DECLS
 #include "snippets/ide-snippet-storage.h"
 #include "sourceview/ide-indenter.h"
 #include "sourceview/ide-language.h"
-#include "sourceview/ide-source-map.h"
 #include "sourceview/ide-source-style-scheme.h"
 #include "sourceview/ide-source-view.h"
 #include "storage/ide-persistent-map.h"
