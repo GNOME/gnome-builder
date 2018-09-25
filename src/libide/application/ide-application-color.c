@@ -23,6 +23,27 @@
 #include "application/ide-application.h"
 #include "application/ide-application-private.h"
 
+void
+_ide_application_update_color (IdeApplication *self)
+{
+  g_assert (IDE_IS_APPLICATION (self));
+
+  if (self->color_proxy == NULL || self->settings == NULL)
+    return;
+
+  if (g_settings_get_boolean (self->settings, "follow-night-light"))
+    {
+      g_autoptr(GVariant) activev = NULL;
+      gboolean active;
+
+      activev = g_dbus_proxy_get_cached_property (self->color_proxy, "NightLightActive");
+      active = g_variant_get_boolean (activev);
+
+      if (active != g_settings_get_boolean (self->settings, "night-mode"))
+        g_settings_set_boolean (self->settings, "night-mode", active);
+    }
+}
+
 static void
 ide_application_color_properties_changed (IdeApplication      *self,
                                           GVariant            *properties,
@@ -32,17 +53,7 @@ ide_application_color_properties_changed (IdeApplication      *self,
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (G_IS_DBUS_PROXY (proxy));
 
-  if (g_settings_get_boolean (self->settings, "follow-night-light"))
-    {
-      g_autoptr(GVariant) activev = NULL;
-      gboolean active;
-
-      activev = g_dbus_proxy_get_cached_property (proxy, "NightLightActive");
-      active = g_variant_get_boolean (activev);
-
-      if (active != g_settings_get_boolean (self->settings, "night-mode"))
-        g_settings_set_boolean (self->settings, "night-mode", active);
-    }
+  _ide_application_update_color (self);
 }
 
 void
