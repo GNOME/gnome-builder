@@ -441,7 +441,7 @@ on_night_mode_changed (IdeApplication *self,
   IDE_ENTRY;
 
   g_assert (IDE_IS_APPLICATION (self));
-  g_assert (key != NULL);
+  g_assert (dzl_str_equal0 (key, "night-mode"));
   g_assert (G_IS_SETTINGS (settings));
 
   gtk_settings = gtk_settings_get_default ();
@@ -488,6 +488,12 @@ ide_application_register_settings (IdeApplication *self)
                                G_CALLBACK (on_night_mode_changed),
                                self,
                                G_CONNECT_SWAPPED);
+      g_signal_connect_object (self->settings,
+                               "changed::follow-night-light",
+                               G_CALLBACK (_ide_application_update_color),
+                               self,
+                               G_CONNECT_SWAPPED);
+      on_night_mode_changed (self, "night-mode", self->settings);
     }
 
   IDE_EXIT;

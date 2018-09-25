@@ -93,6 +93,7 @@ gboolean ide_application_open_finish                (IdeApplication        *self
                                                      GAsyncResult          *reuslt,
                                                      GError               **error);
 void     _ide_application_init_color                (IdeApplication        *self);
+void     _ide_application_update_color              (IdeApplication        *self);
 void     _ide_application_init_shortcuts            (IdeApplication        *self);
 void     _ide_application_set_mode                  (IdeApplication        *self,
                                                      IdeApplicationMode     mode);
