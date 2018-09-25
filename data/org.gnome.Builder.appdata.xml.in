@@ -82,6 +82,24 @@
 
   <releases>
 
+    <release version="3.30.1" date="2018-09-24">
+      <description>
+        <p>
+          Builder 3.30.1 is a bug-fix release.
+        </p>
+        <ul>
+          <li>Fixes to history tracking while loading a buffer.</li>
+          <li>Night-mode will now update the style-scheme when appropriate.</li>
+          <li>Vim improvements.</li>
+          <li>Editor search improvements.</li>
+          <li>Editor session tracking is more robust in discovering missing files.</li>
+          <li>New C#, C, and Vala project templates.</li>
+          <li>CMake build system improvements.</li>
+          <li></li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.30.0" date="2018-09-04">
       <description>
         <p>

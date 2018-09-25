@@ -1,4 +1,26 @@
 ==============
+Version 3.30.1
+==============
+
+Changes since last release:
+
+ • Build fixes for distributions using --buildtype=release.
+ • Fixes to history tracking while loading a buffer.
+ • Include PACKAGE_VERSION in meson project templates.
+ • Fix Night-mode tracking to update style-scheme when appropriate.
+ • Editor session tracking will now skip missing files during restoration.
+ • The editor search bar now includes error state visibility similar to gedit.
+ • Documentation improvements.
+ • CMake improvements when used from sub-directories.
+ • Empty C# and C/Vala CLI project templates were added.
+ • Fixes for `yyp` in Vim-mode at the end of a document.
+
+Updated Translations:
+
+  Swedish, Danish, Turkish, French, Indonesian, Czech, German, Italian,
+  Polish, Brazilian Portuguese, Latvian.
+
+==============
 Version 3.30.0
 ==============
 
