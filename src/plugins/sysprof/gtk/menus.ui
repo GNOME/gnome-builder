@@ -5,7 +5,7 @@
       <item>
         <attribute name="id">open-sysprof-capture</attribute>
         <attribute name="after">open-file</attribute>
-        <attribute name="label" translatable="yes">Open Sysprof Capture…</attribute>
+        <attribute name="label" translatable="yes" context="menu label">Open Sysprof Capture…</attribute>
         <attribute name="action">profiler.open-profile</attribute>
       </item>
     </section>
