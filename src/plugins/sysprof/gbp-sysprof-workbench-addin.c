@@ -353,7 +353,7 @@ open_profile_action (GSimpleAction *action,
   vcs = ide_context_get_vcs (context);
   workdir = ide_vcs_get_working_directory (vcs);
 
-  native = gtk_file_chooser_native_new (_("Open Profile…"),
+  native = gtk_file_chooser_native_new (_("Open Sysprof Capture…"),
                                         GTK_WINDOW (self->workbench),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         _("Open"),
