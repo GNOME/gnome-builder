@@ -99,8 +99,6 @@ add_lang_executable (const gchar *lang,
     _gbp_cmake_file_set_quoted (content, "VALA_EXECUTABLE", path);
   else if (g_strcmp0 (lang, IDE_TOOLCHAIN_LANGUAGE_FORTRAN) == 0)
     _gbp_cmake_file_set_quoted (content, "CMAKE_Fortran_COMPILER", path);
-  else if (g_strcmp0 (lang, IDE_TOOLCHAIN_LANGUAGE_FORTRAN) == 0)
-    _gbp_cmake_file_set_quoted (content, "CMAKE_Fortran_COMPILER", path);
   else if (g_strcmp0 (lang, IDE_TOOLCHAIN_LANGUAGE_D) == 0)
     _gbp_cmake_file_set_quoted (content, "CMAKE_D_COMPILER", path);
 }
