@@ -691,6 +691,10 @@ ide_workbench_set_context (IdeWorkbench *self,
 
   _ide_context_set_workbench (context, GTK_WIDGET (self));
 
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "win", "close-project",
+                             "enabled", TRUE,
+                             NULL);
+
   project = ide_context_get_project (context);
   g_object_bind_property_full (project, "name",
                                self, "title",

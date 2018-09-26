@@ -333,6 +333,10 @@ ide_workbench_actions_init (IdeWorkbench *self)
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
 
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "win", "close-project",
+                             "enabled", FALSE,
+                             NULL);
+
   action = g_property_action_new ("perspective", self, "visible-perspective-name");
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (action));
   g_object_unref (action);
