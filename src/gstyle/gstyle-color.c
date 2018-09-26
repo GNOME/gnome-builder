@@ -156,9 +156,9 @@ gstyle_color_to_string (GstyleColor     *self,
   gdouble hue = 0.0;
   gdouble saturation = 0.0;
   gdouble lightness = 0.0;
-  guint red = 0.0;
-  guint green = 0.0;
-  guint blue = 0.0;
+  guint red = 0;
+  guint green = 0;
+  guint blue = 0;
 
   g_return_val_if_fail (GSTYLE_IS_COLOR (self), NULL);
 
