@@ -92,6 +92,7 @@
       <item>
         <attribute name="label" translatable="yes">Print…</attribute>
         <attribute name="action">editor-view.print</attribute>
+        <attribute name="accel">&lt;primary&gt;p</attribute>
       </item>
     </section>
     <section id="editor-document-preferences-section">
@@ -106,10 +107,12 @@
       <item>
         <attribute name="action">editor-view.save</attribute>
         <attribute name="label" translatable="yes">_Save</attribute>
+        <attribute name="accel">&lt;primary&gt;s</attribute>
       </item>
       <item>
         <attribute name="action">editor-view.save-as</attribute>
         <attribute name="label" translatable="yes">Save _As</attribute>
+        <attribute name="accel">&lt;primary&gt;&lt;shift&gt;s</attribute>
       </item>
     </section>
     <section id="editor-document-close-section">

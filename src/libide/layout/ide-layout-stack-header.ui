@@ -170,6 +170,7 @@
       <object class="DzlMenuButton" id="document_button">
         <property name="focus-on-click">false</property>
         <property name="icon-name">pan-down-symbolic</property>
+        <property name="show-accels">true</property>
         <property name="show-arrow">false</property>
         <property name="show-icons">true</property>
         <property name="visible">true</property>
