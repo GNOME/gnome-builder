@@ -16,7 +16,8 @@ gstyle_color = executable('test-gstyle-color',
   dependencies: libgstyle_dep,
 )
 test('test-gstyle-color', gstyle_color,
-  env: gstyle_test_env
+  env: gstyle_test_env,
+  timeout: 120
 )
 
 
