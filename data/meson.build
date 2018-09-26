@@ -27,10 +27,11 @@ appdata_file = i18n.merge_file(
 
 appstream_util = find_program('appstream-util', required: false)
 if appstream_util.found()
-  test('Validate appstream file', appstream_util,
-    # FIXME: Screenshots are wrong size for 'validate'
-    args: ['validate-relax', appdata_file]
-  )
+  validate_args = ['validate-relax', appdata_file]
+if not get_option('network_tests')
+  validate_args += '--nonet'
+endif
+  test('Validate appstream file', appstream_util, args: validate_args)
 endif
 
 # D-Bus service file.

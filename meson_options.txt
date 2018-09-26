@@ -16,6 +16,8 @@ option('with_vapi', type: 'boolean')
 option('with_help', type: 'boolean', value: false)
 option('with_docs', type: 'boolean', value: false)
 
+option('network_tests', type: 'boolean', value: true, description: 'Allow networking in unit-tests')
+
 option('ctags_path', type: 'string', value: '')
 
 option('python_libprefix', type: 'string')
