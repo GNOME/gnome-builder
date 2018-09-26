@@ -49,6 +49,12 @@ meson_toolchain_edition_preferences_add_new (GbpMesonToolchainEditionPreferences
   g_assert (DZL_IS_PREFERENCES_BIN (emitter));
 
   user_folder_path = g_build_filename (g_get_user_data_dir (), "meson", "cross", NULL);
+  if (g_mkdir_with_parents (user_folder_path, 0700) != 0)
+    {
+      g_critical ("Can't create %s", user_folder_path);
+      return;
+    }
+
   for (uint i = 0; i < UINT_MAX; i++)
     {
       g_autofree gchar *possible_target = g_strdup_printf ("new_file%u", i);
