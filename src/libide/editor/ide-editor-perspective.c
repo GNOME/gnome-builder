@@ -535,6 +535,8 @@ ide_editor_perspective_focus_location_full (IdeEditorPerspective *self,
    */
   if (line || line_offset)
     ide_editor_view_scroll_to_line_offset (lookup.view, line, line_offset);
+  else
+    gtk_widget_grab_focus (GTK_WIDGET (lookup.view));
 
   IDE_EXIT;
 }
