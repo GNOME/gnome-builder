@@ -278,10 +278,16 @@ ide_git_vcs_load (IdeGitVcs  *self,
 
               if (g_str_has_prefix (line, "gitdir: "))
                 {
+                  g_autoptr(GFile) location_parent = g_file_get_parent (location);
+                  const gchar *path = line + strlen ("gitdir: ");
                   const gchar *branch;
 
                   g_clear_object (&location);
-                  location = g_file_new_for_path (line + strlen ("gitdir: "));
+
+                  if (g_path_is_absolute (path))
+                    location = g_file_new_for_path (path);
+                  else
+                    location = g_file_resolve_relative_path (location_parent, path);
 
                   /*
                    * Worktrees only have a single branch, and it is the name
