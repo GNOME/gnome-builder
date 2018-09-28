@@ -2428,7 +2428,7 @@ gbp_gdb_debugger_prepare (IdeDebugger *debugger,
     self->mapped_fd = ide_runner_take_fd (runner, tty_fd, -1);
 
   /* We need access to stdin/stdout for communicating with gdb */
-  ide_runner_set_flags (runner, G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  ide_runner_set_flags (runner, G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
 
   IDE_EXIT;
 }
