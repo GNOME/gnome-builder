@@ -188,38 +188,7 @@ struct _IdeDebuggerClass
                                           GError                        **error);
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
-  gpointer _reserved9;
-  gpointer _reserved10;
-  gpointer _reserved11;
-  gpointer _reserved12;
-  gpointer _reserved13;
-  gpointer _reserved14;
-  gpointer _reserved15;
-  gpointer _reserved16;
-  gpointer _reserved17;
-  gpointer _reserved18;
-  gpointer _reserved19;
-  gpointer _reserved20;
-  gpointer _reserved21;
-  gpointer _reserved22;
-  gpointer _reserved23;
-  gpointer _reserved24;
-  gpointer _reserved25;
-  gpointer _reserved26;
-  gpointer _reserved27;
-  gpointer _reserved28;
-  gpointer _reserved29;
-  gpointer _reserved30;
-  gpointer _reserved31;
-  gpointer _reserved32;
+  gpointer _reserved[32];
 };
 
 IDE_AVAILABLE_IN_ALL

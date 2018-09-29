@@ -142,7 +142,8 @@ _ide_debugger_real_modify_breakpoint_finish (IdeDebugger   *self,
 
 void
 _ide_debugger_real_list_locals_async (IdeDebugger         *self,
-                                      IdeDebuggerThread   *thread, IdeDebuggerFrame    *frame,
+                                      IdeDebuggerThread   *thread,
+                                      IdeDebuggerFrame    *frame,
                                       GCancellable        *cancellable,
                                       GAsyncReadyCallback  callback,
                                       gpointer             user_data)
