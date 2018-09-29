@@ -35,8 +35,6 @@ DZL_DEFINE_COUNTER (instances, "IdeHighlightIndex", "Instances", "Number of inde
 
 struct _IdeHighlightIndex
 {
-  volatile gint  ref_count;
-
   /* For debugging info */
   guint          count;
   gsize          chunk_size;
@@ -51,8 +49,7 @@ ide_highlight_index_new (void)
 {
   IdeHighlightIndex *ret;
 
-  ret = g_slice_new0 (IdeHighlightIndex);
-  ret->ref_count = 1;
+  ret = g_atomic_rc_box_new0 (IdeHighlightIndex);
   ret->strings = g_string_chunk_new (ide_get_system_page_size ());
   ret->index = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -163,11 +160,8 @@ IdeHighlightIndex *
 ide_highlight_index_ref (IdeHighlightIndex *self)
 {
   g_assert (self);
-  g_assert (self->ref_count > 0);
 
-  g_atomic_int_inc (&self->ref_count);
-
-  return self;
+  return g_atomic_rc_box_acquire (self);
 }
 
 static void
@@ -177,7 +171,6 @@ ide_highlight_index_finalize (IdeHighlightIndex *self)
 
   g_clear_pointer (&self->strings, g_string_chunk_free);
   g_clear_pointer (&self->index, g_hash_table_unref);
-  g_slice_free (IdeHighlightIndex, self);
 
   DZL_COUNTER_DEC (instances);
 
@@ -188,10 +181,8 @@ void
 ide_highlight_index_unref (IdeHighlightIndex *self)
 {
   g_assert (self);
-  g_assert (self->ref_count > 0);
 
-  if (g_atomic_int_dec_and_test (&self->ref_count))
-    ide_highlight_index_finalize (self);
+  g_atomic_rc_box_release_full (self, (GDestroyNotify)ide_highlight_index_finalize);
 }
 
 void
