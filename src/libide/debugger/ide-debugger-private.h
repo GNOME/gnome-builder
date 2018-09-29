@@ -44,6 +44,14 @@ void                    _ide_debugger_real_list_frames_async        (IdeDebugger
 GPtrArray              *_ide_debugger_real_list_frames_finish       (IdeDebugger                    *self,
                                                                      GAsyncResult                   *result,
                                                                      GError                        **error);
+void                    _ide_debugger_real_interpret_async          (IdeDebugger                    *self,
+                                                                     const gchar                    *command,
+                                                                     GCancellable                   *cancellable,
+                                                                     GAsyncReadyCallback             callback,
+                                                                     gpointer                        user_data);
+gboolean                _ide_debugger_real_interpret_finish         (IdeDebugger                    *self,
+                                                                     GAsyncResult                   *result,
+                                                                     GError                        **error);
 void                    _ide_debugger_real_interrupt_async          (IdeDebugger                    *self,
                                                                      IdeDebuggerThreadGroup         *thread_group,
                                                                      GCancellable                   *cancellable,

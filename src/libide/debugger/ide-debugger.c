@@ -488,6 +488,8 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
   klass->thread_group_removed = ide_debugger_real_thread_group_removed;
   klass->thread_removed = ide_debugger_real_thread_removed;
   klass->thread_selected = ide_debugger_real_thread_selected;
+  klass->interpret_async = _ide_debugger_real_interpret_async;
+  klass->interpret_finish = _ide_debugger_real_interpret_finish;
 
   /**
    * IdeDebugger:display-name:
@@ -1997,4 +1999,63 @@ ide_debugger_prepare (IdeDebugger *self,
 
   if (IDE_DEBUGGER_GET_CLASS (self)->prepare)
     IDE_DEBUGGER_GET_CLASS (self)->prepare (self, runner);
+}
+
+/**
+ * ide_debugger_interpret_async:
+ * @self: an #IdeDebugger
+ * @command: a command to execute
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: a callback to execute, or %NULL
+ * @user_data: user data for @callback
+ *
+ * Asynchronously requests that the debugger interpret the command.
+ *
+ * This is used by the interactive-console to submit commands to the debugger
+ * that are in the native syntax of that debugger.
+ *
+ * The debugger is expected to return any textual output via the
+ * IdeDebugger::log signal.
+ *
+ * Call ide_debugger_interpret_finish() from @callback to determine if the
+ * command was interpreted.
+ *
+ * Since: 3.32
+ */
+void
+ide_debugger_interpret_async (IdeDebugger         *self,
+                              const gchar         *command,
+                              GCancellable        *cancellable,
+                              GAsyncReadyCallback  callback,
+                              gpointer             user_data)
+{
+  g_return_if_fail (IDE_IS_DEBUGGER (self));
+  g_return_if_fail (command != NULL);
+
+  return IDE_DEBUGGER_GET_CLASS (self)->interpret_async (self, command, cancellable, callback, user_data);
+}
+
+/**
+ * ide_debugger_interpret_finish:
+ * @self: an #IdeDebugger
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
+ *
+ * Retrieves the result of the asynchronous operation to interpret a debugger
+ * command.
+ *
+ * Returns: %TRUE if the command was interpreted, otherwise %FALSE and
+ *    @error is set.
+ *
+ * Since: 3.32
+ */
+gboolean
+ide_debugger_interpret_finish (IdeDebugger   *self,
+                               GAsyncResult  *result,
+                               GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_DEBUGGER (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return IDE_DEBUGGER_GET_CLASS (self)->interpret_finish (self, result, error);
 }

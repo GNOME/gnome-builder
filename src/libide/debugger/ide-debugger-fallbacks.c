@@ -257,3 +257,32 @@ _ide_debugger_real_disassemble_finish (IdeDebugger   *self,
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
+
+void
+_ide_debugger_real_interpret_async (IdeDebugger         *self,
+                                    const gchar         *command,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  g_assert (IDE_IS_DEBUGGER (self));
+  g_assert (command != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  g_task_report_new_error (self, callback, user_data,
+                           _ide_debugger_real_interpret_async,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           "Interpret command is not supported");
+}
+
+gboolean
+_ide_debugger_real_interpret_finish (IdeDebugger   *self,
+                                     GAsyncResult  *result,
+                                     GError       **error)
+{
+  g_assert (IDE_IS_DEBUGGER (self));
+  g_assert (G_IS_TASK (result));
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}

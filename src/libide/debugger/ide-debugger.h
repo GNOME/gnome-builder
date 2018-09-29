@@ -186,6 +186,14 @@ struct _IdeDebuggerClass
   GPtrArray *(*disassemble_finish)       (IdeDebugger                    *self,
                                           GAsyncResult                   *result,
                                           GError                        **error);
+  void       (*interpret_async)          (IdeDebugger                    *self,
+                                          const gchar                    *command,
+                                          GCancellable                   *cancellable,
+                                          GAsyncReadyCallback             callback,
+                                          gpointer                        user_data);
+  gboolean   (*interpret_finish)         (IdeDebugger                    *self,
+                                          GAsyncResult                   *result,
+                                          GError                        **error);
 
   /*< private >*/
   gpointer _reserved[32];
@@ -386,5 +394,15 @@ void               ide_debugger_emit_library_loaded       (IdeDebugger          
 IDE_AVAILABLE_IN_ALL
 void               ide_debugger_emit_library_unloaded     (IdeDebugger                    *self,
                                                            IdeDebuggerLibrary             *library);
+IDE_AVAILABLE_IN_3_32
+void               ide_debugger_interpret_async           (IdeDebugger                    *self,
+                                                           const gchar                    *command,
+                                                           GCancellable                   *cancellable,
+                                                           GAsyncReadyCallback             callback,
+                                                           gpointer                        user_data);
+IDE_AVAILABLE_IN_3_32
+gboolean           ide_debugger_interpret_finish          (IdeDebugger                    *self,
+                                                           GAsyncResult                   *result,
+                                                           GError                        **error);
 
 G_END_DECLS
