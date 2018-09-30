@@ -46,7 +46,7 @@ You can also use the command line to install Builder:
 
 .. code-block:: sh
 
-   $ flatpak install --user --from https://git.gnome.org/browse/gnome-apps-nightly/plain/gnome-builder.flatpakref
+   $ flatpak install --user --from https://gitlab.gnome.org/GNOME/gnome-apps-nightly/raw/master/gnome-builder.flatpakref
    $ flatpak run org.gnome.Builder
 
 .. note:: Nightly builds are built with tracing enabled. The tracing is fairly lightweight, but it includes a great deal of more debugging information.
@@ -65,7 +65,7 @@ Now, in Builder's source directory, use ``flatpak-builder`` to build a Builder f
 
 .. code-block:: sh
 
-   $ git clone https://git.gnome.org/browse/gnome-builder/
+   $ git clone https://gitlab.gnome.org/GNOME/gnome-builder.git
    $ cd gnome-builder
    $ mkdir app
    $ flatpak-builder --ccache --repo=$HOME/my-flatpak-builds app org.gnome.Builder.json
@@ -101,7 +101,7 @@ Command Line
 
 .. code-block:: sh
 
-   $ git clone git://git.gnome.org/jhbuild.git
+   $ git clone https://gitlab.gnome.org/GNOME/jhbuild.git
    $ cd jhbuild
    $ ./autogen.sh --simple-install
    $ make
