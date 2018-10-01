@@ -89,7 +89,7 @@ gbp_devhelp_menu_button_pixbuf_data_func (GtkCellLayout   *cell_layout,
 
         case DH_LINK_TYPE_BOOK:
         case DH_LINK_TYPE_PAGE:
-          icon_name = "devhelp-symbolic";
+          icon_name = "org.gnome.Devhelp-symbolic";
           break;
 
         case DH_LINK_TYPE_KEYWORD:

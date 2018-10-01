@@ -205,7 +205,7 @@ gbp_devhelp_view_init (GbpDevhelpView *self)
 
   ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), _("Documentation"));
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), TRUE);
-  ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "devhelp-symbolic");
+  ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "org.gnome.Devhelp-symbolic");
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "devhelp-view-document-menu");
 
   self->search = g_object_new (GBP_TYPE_DEVHELP_SEARCH, NULL);
