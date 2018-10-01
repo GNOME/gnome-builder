@@ -440,8 +440,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak/releases/download/0.99.3/flatpak-0.99.3.tar.xz",
-                    "sha256" : "d3ab44c8174f9c2b69b09ac630d5d1987bfe529226d7eca6ac1c7d8f438fa671"
+                    "url" : "https://github.com/flatpak/flatpak/releases/download/1.0.2/flatpak-1.0.2.tar.xz",
+                    "sha256" : "f685625aa6c597ff7f7f241ca6e489aeb1d3c971e602490493765cb2aab71634"
                 }
             ]
         },
@@ -450,8 +450,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/0.99.3/flatpak-builder-0.99.3.tar.xz",
-                    "sha256" : "93de343e09cc1e929234623e1b241e3a4330e76e7c18cccd3543f13d3ccb036b"
+                    "url" : "https://github.com/flatpak/flatpak-builder/releases/download/1.0.0/flatpak-builder-1.0.0.tar.xz",
+                    "sha256" : "858a5b2204f569e47fb6cb57f28f7a0dab9d6f7a5a73a7c2688e23c61bf8567b"
                 }
             ]
         },
