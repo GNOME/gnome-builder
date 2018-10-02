@@ -6,6 +6,7 @@
   <project_license>GPL-3.0+ and GPL-2.0+ and LGPL-3.0+ and LGPL-2.0+ and MIT</project_license>
   <name>Builder</name>
   <summary>An IDE for GNOME</summary>
+  <developer_name>Christian Hergert, et al.</developer_name>
 
   <description>
     <p>
