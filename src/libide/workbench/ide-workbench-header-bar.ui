@@ -109,4 +109,8 @@
       </packing>
     </child>
   </template>
+  <object class="DzlShortcutTooltip" id="fullscreen_tooltip">
+    <property name="command-id">org.gnome.builder.workbench.fullscreen</property>
+    <property name="widget">fullscreen_button</property>
+  </object>
 </interface>

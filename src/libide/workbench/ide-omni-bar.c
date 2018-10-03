@@ -134,7 +134,7 @@ struct _IdeOmniBar
   GtkImage             *build_result_diagnostics_image;
   GtkLabel             *build_result_mode_label;
   GtkButton            *build_button;
-  GtkShortcutsShortcut *build_button_shortcut;
+  DzlShortcutTooltip   *build_button_tooltip;
   GtkLabel             *build_tooltip_message;
   GtkButton            *cancel_button;
   GtkLabel             *config_name_label;
@@ -623,12 +623,13 @@ ide_omni_bar__build_button__query_tooltip (IdeOmniBar *self,
                                NULL,
                                NULL);
 
-  if (enabled)
-    gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->build_button_shortcut));
-  else
-    gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->build_tooltip_message));
+  if (!enabled)
+    {
+      gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->build_tooltip_message));
+      return TRUE;
+    }
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
@@ -666,7 +667,7 @@ ide_omni_bar_class_init (IdeOmniBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, branch_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, branch_label);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button_shortcut);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_button_tooltip);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_tooltip_message);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_diagnostics_image);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, build_result_mode_label);

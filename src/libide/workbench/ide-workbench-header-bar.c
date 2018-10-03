@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <glib/gi18n.h>
 
 #include "application/ide-application.h"
 #include "runner/ide-run-button.h"
@@ -35,6 +36,7 @@ typedef struct
 {
   GtkToggleButton *fullscreen_button;
   GtkImage        *fullscreen_image;
+  DzlShortcutTooltip *fullscreen_tooltip;
   GtkMenuButton   *menu_button;
   DzlPriorityBox  *right_box;
   DzlPriorityBox  *left_box;
@@ -100,6 +102,34 @@ search_popover_position_func (DzlSuggestionEntry *entry,
 #undef RIGHT_MARGIN
 }
 
+static gboolean
+query_fullscreen_tooltip_cb (IdeWorkbenchHeaderBar *self,
+                             gint                   x,
+			     gint                   y,
+			     gboolean               keyboard_mode,
+			     GtkTooltip            *tooltip,
+			     GtkWidget             *widget)
+{
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
+  g_autoptr(GVariant) state = NULL;
+  GtkWidget *window;
+
+  g_assert (IDE_IS_WORKBENCH_HEADER_BAR (self));
+  g_assert (GTK_IS_TOOLTIP (tooltip));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  window = gtk_widget_get_toplevel (widget);
+
+  state = g_action_group_get_action_state (G_ACTION_GROUP (window), "fullscreen");
+
+  if (!g_variant_get_boolean (state))
+    dzl_shortcut_tooltip_set_title (priv->fullscreen_tooltip, _("Display the window in full screen"));
+  else
+    dzl_shortcut_tooltip_set_title (priv->fullscreen_tooltip, _("Exit full screen"));
+
+  return FALSE;
+}
+
 static void
 ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
 {
@@ -108,6 +138,7 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-workbench-header-bar.ui");
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, fullscreen_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, fullscreen_image);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, fullscreen_tooltip);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
@@ -128,6 +159,12 @@ ide_workbench_header_bar_init (IdeWorkbenchHeaderBar *self)
 
   dzl_suggestion_entry_set_position_func (DZL_SUGGESTION_ENTRY (priv->search_entry),
                                           search_popover_position_func, NULL, NULL);
+
+  g_signal_connect_object (priv->fullscreen_button,
+                           "query-tooltip",
+                           G_CALLBACK (query_fullscreen_tooltip_cb),
+                           self,
+			   G_CONNECT_SWAPPED);
 
   apply_quirks (self);
 }

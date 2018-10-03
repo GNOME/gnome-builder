@@ -606,4 +606,8 @@
       <widget name="warning_title"/>
     </widgets>
   </object>
+  <object class="DzlShortcutTooltip" id="build_button_tooltip">
+    <property name="command-id">org.gnome.builder.workbench.build</property>
+    <property name="widget">build_button</property>
+  </object>
 </interface>
