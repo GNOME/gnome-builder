@@ -61,4 +61,7 @@
       </object>
     </child>
   </template>
+  <object class="DzlShortcutTooltip" id="tooltip">
+    <property name="widget">button</property>
+  </object>
 </interface>

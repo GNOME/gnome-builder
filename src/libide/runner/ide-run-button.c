@@ -41,6 +41,7 @@ struct _IdeRunButton
   GtkButton            *stop_button;
   GtkShortcutsShortcut *run_shortcut;
   GtkLabel             *run_tooltip_message;
+  DzlShortcutTooltip   *tooltip;
 };
 
 G_DEFINE_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_BOX)
@@ -154,21 +155,15 @@ ide_run_button_query_tooltip (IdeRunButton *self,
                                        NULL,
                                        NULL);
 
-          if (enabled)
-            {
-              g_object_set (self->run_shortcut,
-                            "accelerator", info->accel,
-                            "title", info->title,
-                            "visible", TRUE,
-                            NULL);
-              gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_shortcut));
-            }
-          else
+          if (!enabled)
             {
               gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_tooltip_message));
+              return TRUE;
             }
 
-          return TRUE;
+          /* The shortcut tooltip will set this up after us */
+          dzl_shortcut_tooltip_set_accel (self->tooltip, info->accel);
+          dzl_shortcut_tooltip_set_title (self->tooltip, info->title);
         }
     }
 
@@ -187,6 +182,7 @@ ide_run_button_class_init (IdeRunButtonClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_shortcut);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, stop_button);
   gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_tooltip_message);
+  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, tooltip);
 }
 
 static void
