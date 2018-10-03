@@ -71,6 +71,7 @@ src/libide/editor/ide-editor-layout-stack-controls.ui
 src/libide/editor/ide-editor-perspective-actions.c
 src/libide/editor/ide-editor-perspective.c
 src/libide/editor/ide-editor-perspective-shortcuts.c
+src/libide/editor/ide-editor-perspective.ui
 src/libide/editor/ide-editor-properties.ui
 src/libide/editor/ide-editor-search-bar.c
 src/libide/editor/ide-editor-search-bar.ui
