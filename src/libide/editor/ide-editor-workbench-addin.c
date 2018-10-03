@@ -45,6 +45,8 @@ struct _IdeEditorWorkbenchAddin
   /* Owned references */
   DzlSignalGroup       *buffer_manager_signals;
   DzlDockManager       *manager;
+  DzlShortcutTooltip   *tooltip1;
+  DzlShortcutTooltip   *tooltip2;
 
   /* Borrowed references */
   IdeWorkbench         *workbench;
@@ -127,6 +129,8 @@ ide_editor_workbench_addin_finalize (GObject *object)
   IdeEditorWorkbenchAddin *self = (IdeEditorWorkbenchAddin *)object;
 
   g_clear_object (&self->buffer_manager_signals);
+  g_clear_object (&self->tooltip1);
+  g_clear_object (&self->tooltip2);
 
   G_OBJECT_CLASS (ide_editor_workbench_addin_parent_class)->finalize (object);
 }
@@ -177,7 +181,6 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
   button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
                          "action-name", "dockbin.left-visible",
                          "focus-on-click", FALSE,
-                         "tooltip-text", _("Toggle navigation panel"),
                          "child", g_object_new (GTK_TYPE_IMAGE,
                                                 "icon-name", "builder-view-left-pane-symbolic",
                                                 "margin-start", 12,
@@ -186,12 +189,15 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
                                                 NULL),
                          "visible", TRUE,
                          NULL);
+  self->tooltip1 = g_object_new (DZL_TYPE_SHORTCUT_TOOLTIP,
+                                 "command-id", "org.gnome.builder.editor.navigation-panel",
+                                 "widget", button,
+			         NULL);
   gtk_container_add (GTK_CONTAINER (self->panels_box), button);
 
   button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
                          "action-name", "dockbin.bottom-visible",
                          "focus-on-click", FALSE,
-                         "tooltip-text", _("Toggle utilities panel"),
                          "child", g_object_new (GTK_TYPE_IMAGE,
                                                 "icon-name", "builder-view-bottom-pane-symbolic",
                                                 "margin-start", 12,
@@ -200,6 +206,10 @@ ide_editor_workbench_addin_add_buttons (IdeEditorWorkbenchAddin *self,
                                                 NULL),
                          "visible", TRUE,
                          NULL);
+  self->tooltip2 = g_object_new (DZL_TYPE_SHORTCUT_TOOLTIP,
+                                 "command-id", "org.gnome.builder.editor.utilities-panel",
+                                 "widget", button,
+			         NULL);
   gtk_container_add (GTK_CONTAINER (self->panels_box), button);
 
   self->new_button = g_object_new (DZL_TYPE_MENU_BUTTON,
