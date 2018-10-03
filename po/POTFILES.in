@@ -116,6 +116,7 @@ src/libide/workbench/ide-omni-bar.c
 src/libide/workbench/ide-omni-bar.ui
 src/libide/workbench/ide-workbench-actions.c
 src/libide/workbench/ide-workbench.c
+src/libide/workbench/ide-workbench-header-bar.c
 src/libide/workbench/ide-workbench-header-bar.ui
 src/libide/workbench/ide-workbench-shortcuts.c
 src/main.c
