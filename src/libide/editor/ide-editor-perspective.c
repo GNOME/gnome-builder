@@ -360,6 +360,9 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
   _ide_editor_perspective_init_actions (self);
   _ide_editor_perspective_init_shortcuts (self);
 
+  /* ensure we default to the grid visible */
+  _ide_editor_perspective_set_loading (self, FALSE);
+
   g_signal_connect_swapped (self->grid,
                             "notify::current-view",
                             G_CALLBACK (ide_editor_perspective_notify_current_view),

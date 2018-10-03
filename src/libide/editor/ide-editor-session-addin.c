@@ -273,8 +273,6 @@ load_state_finish (IdeEditorSessionAddin *self,
 
       gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
     }
-
-  _ide_editor_perspective_set_loading (IDE_EDITOR_PERSPECTIVE (editor), FALSE);
 }
 
 static void
@@ -365,6 +363,18 @@ restore_file (GObject      *source,
 }
 
 static void
+load_task_completed_cb (IdeTask              *task,
+                        GParamSpec           *pspec,
+                        IdeEditorPerspective *perspective)
+{
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
+
+  /* Always show the grid after the task completes */
+  _ide_editor_perspective_set_loading (perspective, FALSE);
+}
+
+static void
 ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
                                         GVariant            *state,
                                         GCancellable        *cancellable,
@@ -385,8 +395,17 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
   g_assert (IDE_IS_EDITOR_SESSION_ADDIN (addin));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  context = ide_object_get_context (IDE_OBJECT (addin));
+  workbench = IDE_WORKBENCH (ide_context_get_workbench (context));
+  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+
   task = ide_task_new (addin, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_editor_session_addin_restore_async);
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (load_task_completed_cb),
+                           editor,
+                           0);
 
   settings = g_settings_new ("org.gnome.builder");
 
@@ -395,13 +414,6 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
       ide_task_return_boolean (task, TRUE);
       return;
     }
-
-  context = ide_object_get_context (IDE_OBJECT (addin));
-  workbench = IDE_WORKBENCH (ide_context_get_workbench (context));
-  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
-
-  /* Hide the grid until we've loaded */
-  _ide_editor_perspective_set_loading (IDE_EDITOR_PERSPECTIVE (editor), TRUE);
 
   uris = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -449,9 +461,12 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
 
   if (load_state->active == 0)
     {
-      _ide_editor_perspective_set_loading (IDE_EDITOR_PERSPECTIVE (editor), FALSE);
       ide_task_return_boolean (task, TRUE);
+      return;
     }
+
+  /* Hide the grid until we've loaded */
+  _ide_editor_perspective_set_loading (IDE_EDITOR_PERSPECTIVE (editor), TRUE);
 }
 
 static gboolean
