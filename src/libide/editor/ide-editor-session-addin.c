@@ -29,6 +29,7 @@
 #include "buffers/ide-buffer-manager.h"
 #include "editor/ide-editor-session-addin.h"
 #include "editor/ide-editor-perspective.h"
+#include "editor/ide-editor-private.h"
 #include "editor/ide-editor-view.h"
 #include "files/ide-file.h"
 #include "layout/ide-layout-grid.h"
@@ -272,6 +273,8 @@ load_state_finish (IdeEditorSessionAddin *self,
 
       gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (view));
     }
+
+  _ide_editor_perspective_set_loading (IDE_EDITOR_PERSPECTIVE (editor), FALSE);
 }
 
 static void
@@ -373,6 +376,9 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
   g_autoptr(GSettings) settings = NULL;
   const gchar *uri;
   LoadState *load_state;
+  IdeContext *context;
+  IdeWorkbench *workbench;
+  IdePerspective *editor;
   GVariantIter iter;
   gint column, row, depth;
 
@@ -389,6 +395,13 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
       ide_task_return_boolean (task, TRUE);
       return;
     }
+
+  context = ide_object_get_context (IDE_OBJECT (addin));
+  workbench = IDE_WORKBENCH (ide_context_get_workbench (context));
+  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+
+  /* Hide the grid until we've loaded */
+  _ide_editor_perspective_set_loading (IDE_EDITOR_PERSPECTIVE (editor), TRUE);
 
   uris = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -435,7 +448,10 @@ ide_editor_session_addin_restore_async (IdeSessionAddin     *addin,
   load_state->active--;
 
   if (load_state->active == 0)
-    ide_task_return_boolean (task, TRUE);
+    {
+      _ide_editor_perspective_set_loading (IDE_EDITOR_PERSPECTIVE (editor), FALSE);
+      ide_task_return_boolean (task, TRUE);
+    }
 }
 
 static gboolean

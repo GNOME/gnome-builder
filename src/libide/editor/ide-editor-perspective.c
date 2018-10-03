@@ -343,6 +343,7 @@ ide_editor_perspective_class_init (IdeEditorPerspectiveClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, grid);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, properties);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPerspective, loading_stack);
 
   g_type_ensure (IDE_TYPE_EDITOR_PROPERTIES);
   g_type_ensure (IDE_TYPE_EDITOR_SIDEBAR);
@@ -943,4 +944,15 @@ ide_editor_perspective_get_overlay (IdeEditorPerspective *self)
   g_return_val_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self), NULL);
 
   return GTK_WIDGET (self->overlay);
+}
+
+void
+_ide_editor_perspective_set_loading (IdeEditorPerspective *self,
+                                     gboolean              loading)
+{
+  g_return_if_fail (IDE_IS_EDITOR_PERSPECTIVE (self));
+
+  gtk_widget_set_visible (GTK_WIDGET (self->grid), !loading);
+  gtk_stack_set_visible_child_name (self->loading_stack,
+                                    loading ? "empty_state" : "grid");
 }
