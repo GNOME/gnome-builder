@@ -65,7 +65,7 @@ gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
   if (!ide_application_has_network (IDE_APPLICATION_DEFAULT))
     {
       ide_build_stage_log (stage,
-                           IDE_BUILD_LOG_STDOUT,
+                           IDE_BUILD_LOG_STDERR,
                            _("Network is not available, skipping downloads"),
                            -1);
       ide_build_stage_set_completed (stage, TRUE);

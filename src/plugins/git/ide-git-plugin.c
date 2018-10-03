@@ -20,6 +20,7 @@
 #include <ide.h>
 
 #include "ide-git-genesis-addin.h"
+#include "ide-git-pipeline-addin.h"
 #include "ide-git-remote-callbacks.h"
 #include "ide-git-vcs.h"
 #include "ide-git-vcs-config.h"
@@ -72,6 +73,9 @@ ide_git_register_types (PeasObjectModule *module)
       peas_object_module_register_extension_type (module,
                                                   IDE_TYPE_GENESIS_ADDIN,
                                                   IDE_TYPE_GIT_GENESIS_ADDIN);
+      peas_object_module_register_extension_type (module,
+                                                  IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                                  IDE_TYPE_GIT_PIPELINE_ADDIN);
 
       ide_vcs_register_ignored (".git");
     }

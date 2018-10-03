@@ -178,6 +178,7 @@ src/plugins/git/ide-git-buffer-change-monitor.c
 src/plugins/git/ide-git-clone-widget.c
 src/plugins/git/ide-git-clone-widget.ui
 src/plugins/git/ide-git-genesis-addin.c
+src/plugins/git/ide-git-pipeline-addin.c
 src/plugins/git/ide-git-remote-callbacks.c
 src/plugins/git/ide-git-vcs.c
 src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c

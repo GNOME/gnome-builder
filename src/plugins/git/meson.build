@@ -13,6 +13,8 @@ git_sources = [
   'ide-git-clone-widget.h',
   'ide-git-genesis-addin.c',
   'ide-git-genesis-addin.h',
+  'ide-git-pipeline-addin.c',
+  'ide-git-pipeline-addin.h',
   'ide-git-plugin.c',
   'ide-git-remote-callbacks.c',
   'ide-git-remote-callbacks.h',
