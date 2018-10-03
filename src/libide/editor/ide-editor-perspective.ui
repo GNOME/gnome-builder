@@ -15,9 +15,29 @@
       <object class="GtkOverlay" id="overlay">
         <property name="visible">true</property>
         <child>
-          <object class="IdeLayoutGrid" id="grid">
-            <property name="orientation">horizontal</property>
+          <object class="GtkStack" id="loading_stack">
             <property name="visible">true</property>
+            <property name="transition-type">crossfade</property>
+            <child>
+              <object class="DzlEmptyState" id="empty_state">
+                <property name="icon-name">document-open-recent-symbolic</property>
+                <property name="title" translatable="yes">Restoring previous session</property>
+                <property name="subtitle" translatable="yes">Your previous session will be ready momentarily.</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">empty_state</property>
+              </packing>
+            </child>
+            <child>
+              <object class="IdeLayoutGrid" id="grid">
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="name">grid</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>

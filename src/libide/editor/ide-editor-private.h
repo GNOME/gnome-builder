@@ -44,6 +44,7 @@ struct _IdeEditorPerspective
   IdeLayoutGrid       *grid;
   GtkOverlay          *overlay;
   IdeEditorProperties *properties;
+  GtkStack            *loading_stack;
 
   /* State before entering focus mode */
   guint                prefocus_had_left : 1;
@@ -97,6 +98,8 @@ void _ide_editor_sidebar_set_open_pages      (IdeEditorSidebar     *self,
                                               GListModel           *open_pages);
 void _ide_editor_perspective_show_properties (IdeEditorPerspective *self,
                                               IdeEditorView        *view);
+void _ide_editor_perspective_set_loading     (IdeEditorPerspective *self,
+                                              gboolean              loading);
 void _ide_editor_perspective_init_actions    (IdeEditorPerspective *self);
 void _ide_editor_perspective_init_shortcuts  (IdeEditorPerspective *self);
 
