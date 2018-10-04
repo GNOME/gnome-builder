@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-09-21 07:13+0000\n"
-"PO-Revision-Date: 2018-09-21 07:16-0200\n"
+"POT-Creation-Date: 2018-10-04 12:39+0000\n"
+"PO-Revision-Date: 2018-10-04 19:53-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -449,7 +449,7 @@ msgstr "A altura em unidades de pixel do painel inferior."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:605
+#: src/libide/application/ide-application.c:585
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:665
@@ -758,7 +758,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Carregar ou gerar uma paleta usando as preferências"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4970
+#: src/libide/sourceview/ide-source-view.c:5001
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renomear"
@@ -794,7 +794,7 @@ msgstr "Aprenda mais sobre o GNOME Builder"
 msgid "Funded By"
 msgstr "Financiado por"
 
-#: src/libide/application/ide-application.c:1001
+#: src/libide/application/ide-application.c:981
 #: src/libide/preferences/ide-preferences-builtin.c:418
 msgid "Projects"
 msgstr "Projetos"
@@ -1106,7 +1106,7 @@ msgid "Runtime"
 msgstr "Runtime"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:198
 msgid "Toolchain"
 msgstr "Cadeia de ferramentas"
 
@@ -1393,7 +1393,7 @@ msgid "No file was provided."
 msgstr "Nenhum arquivo foi fornecido."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:841
+#: src/libide/editor/ide-editor-perspective.c:847
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:155
 msgid "Editor"
@@ -1450,7 +1450,7 @@ msgstr "Mover para esquerda"
 msgid "Move Right"
 msgstr "Mover para direita"
 
-#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:119
+#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:121
 #: src/plugins/devhelp/gtk/menus.ui:11 src/plugins/terminal/gtk/menus.ui:25
 msgid "Close"
 msgstr "Fechar"
@@ -1475,11 +1475,11 @@ msgstr "Imprimir…"
 msgid "Document Preferences"
 msgstr "Preferências do documento"
 
-#: src/libide/editor/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:113
 msgid "Save _As"
 msgstr "Salvar _como"
 
-#: src/libide/editor/gtk/menus.ui:127
+#: src/libide/editor/gtk/menus.ui:129
 msgid "New File"
 msgstr "Novo arquivo"
 
@@ -1609,6 +1609,15 @@ msgstr "Ativa o painel de utilitários"
 msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Fecha todos os arquivos"
+
+#: src/libide/editor/ide-editor-perspective.ui:24
+#| msgid "Restore Previous Files"
+msgid "Restoring previous session"
+msgstr "Restaurando a sessão anterior"
+
+#: src/libide/editor/ide-editor-perspective.ui:25
+msgid "Your previous session will be ready momentarily."
+msgstr "Sua sessão anterior estará pronta momentaneamente."
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -3001,31 +3010,31 @@ msgstr "O processo saiu inesperadamente"
 msgid "Host operating system"
 msgstr "Sistema operacional hospedeiro"
 
-#: src/libide/sourceview/ide-source-view.c:4425
+#: src/libide/sourceview/ide-source-view.c:4456
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insira “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4427
+#: src/libide/sourceview/ide-source-view.c:4458
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Substitua “%s” com “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4541
+#: src/libide/sourceview/ide-source-view.c:4572
 msgid "Apply Fix-It"
 msgstr "Aplicar correção"
 
-#: src/libide/sourceview/ide-source-view.c:4969
+#: src/libide/sourceview/ide-source-view.c:5000
 msgid "Rename symbol"
 msgstr "Renomear símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5205
+#: src/libide/sourceview/ide-source-view.c:5236
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Linha %u, Coluna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5231
+#: src/libide/sourceview/ide-source-view.c:5262
 msgid "No references were found"
 msgstr "Nenhuma referência foi localizada"
 
@@ -4365,7 +4374,7 @@ msgstr ""
 "O Builder falhou em fornecer credenciais apropriadas ao clonar o repositório."
 
 #. translators: %s is replaced with the error message
-#: src/plugins/git/ide-git-vcs.c:406
+#: src/plugins/git/ide-git-vcs.c:412
 #, c-format
 msgid "Failed to establish git file monitor: %s"
 msgstr "Falha ao estabelecer o monitorador de arquivo git: %s"
@@ -4460,11 +4469,11 @@ msgstr ""
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:101
 msgid "Add toolchain"
 msgstr "Adicionar cadeia de ferramentas"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:108
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr "Define uma nova cadeia de ferramentas para uma plataforma específica"
 
@@ -4597,12 +4606,10 @@ msgid "Create a new empty project"
 msgstr "Criar um novo projeto vazio"
 
 #: src/plugins/meson-templates/meson_templates.py:353
-#| msgid "Command failed: %s"
 msgid "Command Line Tool"
 msgstr "Ferramenta de linha de comando"
 
 #: src/plugins/meson-templates/meson_templates.py:355
-#| msgid "Create a new project"
 msgid "Create a new command line project"
 msgstr "Criar um novo projeto de linha de comando"
 
