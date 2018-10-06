@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-08-30 20:49+0000\n"
-"PO-Revision-Date: 2018-09-02 19:44+0100\n"
-"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
+"POT-Creation-Date: 2018-10-01 20:23+0000\n"
+"PO-Revision-Date: 2018-10-02 17:27+0200\n"
+"Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -244,20 +244,16 @@ msgstr "A felhasználó számára megjelenített kiegészítés sorainak száma.
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/preferences/ide-preferences-builtin.c:211
-#| msgid "Suggest Snippet Completion"
 msgid "Interactive Completion"
 msgstr "Interaktív kiegészítés"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
-#| msgid ""
-#| "If enabled, Builder will automatically wrap text so all of the line text "
-#| "is visible."
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
-"Ha be van kapcsolva, akkor az Építő automatikusan megjeleníti a kiegészítési"
-" javaslatokat gépelés közben."
+"Ha be van kapcsolva, akkor az Építő automatikusan megjeleníti a kiegészítési "
+"javaslatokat gépelés közben."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -454,7 +450,7 @@ msgstr "Az alsó panel magassága képpontokban megadva."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:605
+#: src/libide/application/ide-application.c:585
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:665
@@ -757,7 +753,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Paletta betöltése vagy előállítása a beállítások alapján"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4970
+#: src/libide/sourceview/ide-source-view.c:5001
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Átnevezés"
@@ -791,7 +787,7 @@ msgstr "Tudjon meg többet a GNOME Építőről"
 msgid "Funded By"
 msgstr "Támogatta"
 
-#: src/libide/application/ide-application.c:1001
+#: src/libide/application/ide-application.c:981
 #: src/libide/preferences/ide-preferences-builtin.c:418
 msgid "Projects"
 msgstr "Projektek"
@@ -952,7 +948,7 @@ msgid "Failed to save draft: %s"
 msgstr "Nem sikerült a piszkozatot menteni: %s"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:642
+#: src/libide/buildconfig/ide-buildconfig-configuration-provider.c:643
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (másolat)"
@@ -1099,7 +1095,7 @@ msgid "Runtime"
 msgstr "Futtatókörnyezet"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:198
 msgid "Toolchain"
 msgstr "Eszközlánc"
 
@@ -1385,7 +1381,7 @@ msgid "No file was provided."
 msgstr "Nincs fájl megadva."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:841
+#: src/libide/editor/ide-editor-perspective.c:843
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:155
 msgid "Editor"
@@ -1677,7 +1673,7 @@ msgstr "Nyelvi szintaxis"
 msgid "Search languages…"
 msgstr "Nyelvek keresése…"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u / %u"
@@ -2023,15 +2019,15 @@ msgstr "Hivatkozás _címének másolása"
 msgid "You must call %s() before using libide."
 msgstr "A libide használata előtt meg kell hívni a(z) %s() függvényt."
 
-#: src/libide/ide-context.c:2212
+#: src/libide/ide-context.c:2211
 msgid "An unload request is already pending"
 msgstr "Egy lecsatolási kérés már várakozik"
 
-#: src/libide/ide-context.c:2294
+#: src/libide/ide-context.c:2293
 msgid "Context already unloading, cannot restore."
 msgstr "A környezet már lecsatolódik, nem állítható vissza."
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
 msgstr "A környezet már vissza lett állítva."
 
@@ -2989,31 +2985,31 @@ msgstr "A folyamat váratlanul kilépett"
 msgid "Host operating system"
 msgstr "Gazda operációs rendszer"
 
-#: src/libide/sourceview/ide-source-view.c:4425
+#: src/libide/sourceview/ide-source-view.c:4456
 #, c-format
 msgid "Insert “%s”"
 msgstr "„%s” beszúrása"
 
-#: src/libide/sourceview/ide-source-view.c:4427
+#: src/libide/sourceview/ide-source-view.c:4458
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "A(z) „%s” cseréje ezzel: „%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4541
+#: src/libide/sourceview/ide-source-view.c:4572
 msgid "Apply Fix-It"
 msgstr "Javítás érvényesítése"
 
-#: src/libide/sourceview/ide-source-view.c:4969
+#: src/libide/sourceview/ide-source-view.c:5000
 msgid "Rename symbol"
 msgstr "Szimbólum átnevezése"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5205
+#: src/libide/sourceview/ide-source-view.c:5236
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>%u. sor, %u. oszlop</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5231
+#: src/libide/sourceview/ide-source-view.c:5262
 msgid "No references were found"
 msgstr "Nem találhatók hivatkozások"
 
@@ -3263,7 +3259,7 @@ msgstr "Projekt beállítása"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3538,11 +3534,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Projekt beállítása"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -4205,12 +4201,12 @@ msgstr[1] "Még %u futtatókörnyezet megjelenítése"
 msgid "Flatpak Runtimes"
 msgstr "Flatpak futtatókörnyezetek"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4355,7 +4351,7 @@ msgstr ""
 "Az Építő nem adott meg megfelelő hitelesítési adatokat a tároló klónozásakor."
 
 #. translators: %s is replaced with the error message
-#: src/plugins/git/ide-git-vcs.c:406
+#: src/plugins/git/ide-git-vcs.c:412
 #, c-format
 msgid "Failed to establish git file monitor: %s"
 msgstr "A git fájlfigyelő létrehozása meghiúsult: %s"
@@ -4447,11 +4443,11 @@ msgstr "A Meson-alapú projekt betöltésre került, de a meson nem található.
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:101
 msgid "Add toolchain"
 msgstr "Eszközlánc hozzáadása"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:108
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr "Adjon meg új egyéni eszközláncot, mely egy konkrét platformot céloz"
 
@@ -4559,29 +4555,37 @@ msgstr "Eszközlánc törlése"
 msgid "Delete Tool"
 msgstr "Eszköz törlése"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "GNOME alkalmazás"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Új GNOME alkalmazás létrehozása"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Megosztott programkönyvtár"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Új projekt létrehozása egy megosztott programkönyvtárral"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Üres projekt"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Új üres projekt létrehozása"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+msgid "Command Line Tool"
+msgstr "Parancssoros eszköz"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+msgid "Create a new command line project"
+msgstr "Új parancssoros projekt létrehozása"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
