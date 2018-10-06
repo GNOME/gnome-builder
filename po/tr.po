@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-09-21 06:53+0000\n"
-"PO-Revision-Date: 2018-09-21 16:05+0300\n"
+"POT-Creation-Date: 2018-10-05 06:46+0000\n"
+"PO-Revision-Date: 2018-10-06 12:07+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -457,7 +457,7 @@ msgstr "Dip panelin piksel cinsinden yüksekliği."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:605
+#: src/libide/application/ide-application.c:585
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:665
@@ -469,7 +469,11 @@ msgstr "Builder"
 msgid "An IDE for GNOME"
 msgstr "GNOME için IDE"
 
-#: data/org.gnome.Builder.appdata.xml.in:11
+#: data/org.gnome.Builder.appdata.xml.in:9
+msgid "Christian Hergert, et al."
+msgstr "Christian Hergert ve arkadaşları."
+
+#: data/org.gnome.Builder.appdata.xml.in:12
 msgid ""
 "Builder is an actively developed Integrated Development Environment for "
 "GNOME. It combines integrated support for essential GNOME technologies such "
@@ -481,7 +485,7 @@ msgstr ""
 "destek ile sözdizimi vurgulama ve kod parçaları gibi her geliştiricinin "
 "işine yarayacak özellikleri birleştirir."
 
-#: data/org.gnome.Builder.appdata.xml.in:17
+#: data/org.gnome.Builder.appdata.xml.in:18
 msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
@@ -489,83 +493,83 @@ msgstr ""
 "Her altı ayda bir GNOME’un yeni sürümüyle birlikte Builder’ın da yeni bir "
 "sürümü çıkacağından emin olabilirsiniz."
 
-#: data/org.gnome.Builder.appdata.xml.in:21
+#: data/org.gnome.Builder.appdata.xml.in:22
 msgid "Features:"
 msgstr "Özellikler:"
 
-#: data/org.gnome.Builder.appdata.xml.in:23
+#: data/org.gnome.Builder.appdata.xml.in:24
 msgid "Built in syntax highlighting for many languages"
 msgstr "Birçok dil için tümleşik sözdizimi vurgulama"
 
-#: data/org.gnome.Builder.appdata.xml.in:24
+#: data/org.gnome.Builder.appdata.xml.in:25
 msgid "Side-by-side code editors"
 msgstr "Yan yana kod düzenleyiciler"
 
-#: data/org.gnome.Builder.appdata.xml.in:25
+#: data/org.gnome.Builder.appdata.xml.in:26
 msgid "Integration with Git"
 msgstr "Git tümleştirmesi"
 
-#: data/org.gnome.Builder.appdata.xml.in:26
+#: data/org.gnome.Builder.appdata.xml.in:27
 msgid "Integration with Autotools, Cargo, CMake, Meson, Make, and PHPize"
 msgstr "Autotools, Cargo, CMake, Meson, Make ve PHPize ile entegrasyon"
 
-#: data/org.gnome.Builder.appdata.xml.in:27
+#: data/org.gnome.Builder.appdata.xml.in:28
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Clang temelli kendiliğinden tamamlama, anlamsal vurgulama ve tanılama"
 
-#: data/org.gnome.Builder.appdata.xml.in:28
+#: data/org.gnome.Builder.appdata.xml.in:29
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr "Python temelli kendiliğinden tamamlama, anlamsal vurgulama ve tanılama"
 
-#: data/org.gnome.Builder.appdata.xml.in:29
+#: data/org.gnome.Builder.appdata.xml.in:30
 msgid "Vala based auto-completion and diagnostics"
 msgstr "Vala temelli kendiliğinden tamamlama ve tanılama"
 
-#: data/org.gnome.Builder.appdata.xml.in:30
+#: data/org.gnome.Builder.appdata.xml.in:31
 msgid "Auto indentation support for C, Python, Vala, and XML"
 msgstr "C, Python, Vala ve XML için kendiliğinden girintileme desteği"
 
-#: data/org.gnome.Builder.appdata.xml.in:31
+#: data/org.gnome.Builder.appdata.xml.in:32
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
 msgstr "HTML, Markdown, ve reStructuredTest, ve Sphinx canlı ön izleme"
 
-#: data/org.gnome.Builder.appdata.xml.in:32
+#: data/org.gnome.Builder.appdata.xml.in:33
 msgid "Optional Vim-style editing"
 msgstr "İsteğe bağlı Vim-tarzı düzenleme"
 
-#: data/org.gnome.Builder.appdata.xml.in:33
+#: data/org.gnome.Builder.appdata.xml.in:34
 msgid "An integrated software profiler for native applications"
 msgstr "Yerli uygulamalar için tümleşik yazılım profilleyici"
 
-#: data/org.gnome.Builder.appdata.xml.in:34
+#: data/org.gnome.Builder.appdata.xml.in:35
 msgid "An integrated debugger for native applications"
 msgstr "Yerli uygulamalar için tümleşik hata ayıklayıcısı"
 
-#: data/org.gnome.Builder.appdata.xml.in:35
+#: data/org.gnome.Builder.appdata.xml.in:36
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr "Flatpak çalışma zamanları ve jhbuild ile inşa desteği"
 
-#: data/org.gnome.Builder.appdata.xml.in:41
+#: data/org.gnome.Builder.appdata.xml.in:42
 msgid "Quickly access your projects"
 msgstr "Projelerinize hızlıca erişin"
 
-#: data/org.gnome.Builder.appdata.xml.in:45
+#: data/org.gnome.Builder.appdata.xml.in:46
 msgid "Create new projects from a variety of templates"
 msgstr "Çeşitli şablonlardan yeni projeler oluşturun"
 
-#: data/org.gnome.Builder.appdata.xml.in:49
+#: data/org.gnome.Builder.appdata.xml.in:50
 msgid "Integration with Git to clone your projects"
 msgstr "Projelerinizi klonlamak için Git tümleşmesi"
 
-#: data/org.gnome.Builder.appdata.xml.in:53
+#: data/org.gnome.Builder.appdata.xml.in:54
 msgid "The source code editor"
 msgstr "Kaynak kod düzenleyici"
 
-#: data/org.gnome.Builder.appdata.xml.in:57
+#: data/org.gnome.Builder.appdata.xml.in:58
 msgid "Fast global fuzzy search"
 msgstr "Hızlı genel bulanık arama"
 
-#: data/org.gnome.Builder.appdata.xml.in:61
+#: data/org.gnome.Builder.appdata.xml.in:62
 msgid "Debug with the GNU debugger"
 msgstr "GNU hata ayıklayıcıyla hata ayıklayın"
 
@@ -754,7 +758,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Tercihleri kullanarak palet yükle veya üret"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4970
+#: src/libide/sourceview/ide-source-view.c:5001
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Yeniden Adlandır"
@@ -788,7 +792,7 @@ msgstr "GNOME Builder hakkında daha çoğunu öğrenin"
 msgid "Funded By"
 msgstr "Maddi Destekçiler"
 
-#: src/libide/application/ide-application.c:1001
+#: src/libide/application/ide-application.c:981
 #: src/libide/preferences/ide-preferences-builtin.c:420
 msgid "Projects"
 msgstr "Projeler"
@@ -1094,7 +1098,7 @@ msgid "Runtime"
 msgstr "Çalışma Zamanı"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:198
 msgid "Toolchain"
 msgstr "Araç Seti"
 
@@ -1108,7 +1112,7 @@ msgid "Save File"
 msgstr "Dosyayı Kaydet"
 
 #: src/libide/buildui/ide-build-log-panel.c:275
-#: src/libide/editor/gtk/menus.ui:108
+#: src/libide/editor/gtk/menus.ui:109
 msgid "_Save"
 msgstr "_Kaydet"
 
@@ -1378,7 +1382,7 @@ msgid "No file was provided."
 msgstr "Hiçbir dosya sağlanmadı."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:841
+#: src/libide/editor/ide-editor-perspective.c:847
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:155
 msgid "Editor"
@@ -1435,7 +1439,7 @@ msgstr "Sola Taşı"
 msgid "Move Right"
 msgstr "Sağa Taşı"
 
-#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:119
+#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:122
 #: src/plugins/devhelp/gtk/menus.ui:11 src/plugins/terminal/gtk/menus.ui:25
 msgid "Close"
 msgstr "Kapat"
@@ -1456,15 +1460,15 @@ msgstr "Ayır"
 msgid "Print…"
 msgstr "Yazdır…"
 
-#: src/libide/editor/gtk/menus.ui:100
+#: src/libide/editor/gtk/menus.ui:101
 msgid "Document Preferences"
 msgstr "Belge Tercihleri"
 
-#: src/libide/editor/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:114
 msgid "Save _As"
 msgstr "_Farklı Kaydet"
 
-#: src/libide/editor/gtk/menus.ui:127
+#: src/libide/editor/gtk/menus.ui:130
 msgid "New File"
 msgstr "Yeni Dosya"
 
@@ -1594,6 +1598,15 @@ msgstr "Araçlar panelini aç/kapat"
 msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Tüm dosyaları kapat"
+
+#: src/libide/editor/ide-editor-perspective.ui:24
+#| msgid "Restore Previous Files"
+msgid "Restoring previous session"
+msgstr "Önceki oturum geri yükleniyor"
+
+#: src/libide/editor/ide-editor-perspective.ui:25
+msgid "Your previous session will be ready momentarily."
+msgstr "Önceki oturumunuz kısa sürede hazır olacak."
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -1788,14 +1801,6 @@ msgstr ""
 "Builder, bu dosyanın başka program tarafından değiştirildiğini saptadı. "
 "Dosyayı yeniden yüklemek ister misiniz?"
 
-#: src/libide/editor/ide-editor-workbench-addin.c:180
-msgid "Toggle navigation panel"
-msgstr "Gezinim panelini aç/kapat"
-
-#: src/libide/editor/ide-editor-workbench-addin.c:194
-msgid "Toggle utilities panel"
-msgstr "Araçlar panelini aç/kapat"
-
 #: src/libide/greeter/ide-greeter-perspective.c:215
 msgid "Failed to load the project"
 msgstr "Proje yükleme başarısız oldu"
@@ -1897,7 +1902,6 @@ msgid "Close _All"
 msgstr "_Tümünü Kapat"
 
 #: src/libide/gtk/menus.ui:33
-#| msgid "Clone Project"
 msgid "Close Project"
 msgstr "Projeyi Kapat"
 
@@ -1914,7 +1918,6 @@ msgid "_Help"
 msgstr "_Yardım"
 
 #: src/libide/gtk/menus.ui:55
-#| msgid "Builder"
 msgid "_About Builder"
 msgstr "Builder _Hakkında"
 
@@ -2990,31 +2993,31 @@ msgstr "Süreç beklenmeyen biçimde kapandı"
 msgid "Host operating system"
 msgstr "Ev sahibi işletim sistemi"
 
-#: src/libide/sourceview/ide-source-view.c:4425
+#: src/libide/sourceview/ide-source-view.c:4456
 #, c-format
 msgid "Insert “%s”"
 msgstr "“%s” Ekle"
 
-#: src/libide/sourceview/ide-source-view.c:4427
+#: src/libide/sourceview/ide-source-view.c:4458
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "“%s” yerine “%s” Koy"
 
-#: src/libide/sourceview/ide-source-view.c:4541
+#: src/libide/sourceview/ide-source-view.c:4572
 msgid "Apply Fix-It"
 msgstr "Düzeltme Uygula"
 
-#: src/libide/sourceview/ide-source-view.c:4969
+#: src/libide/sourceview/ide-source-view.c:5000
 msgid "Rename symbol"
 msgstr "Simgeyi yeniden adlandır"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5205
+#: src/libide/sourceview/ide-source-view.c:5236
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Satır %u, Sütun %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5231
+#: src/libide/sourceview/ide-source-view.c:5262
 msgid "No references were found"
 msgstr "Referans bulunamadı"
 
@@ -3199,6 +3202,17 @@ msgstr "Builder İstatistikleri"
 #, c-format
 msgid "%s — Builder"
 msgstr "%s — Builder"
+
+#: src/libide/workbench/ide-workbench-header-bar.c:126
+#| msgctxt "shortcut window"
+#| msgid "Toggle window to fullscreen"
+msgid "Display the window in full screen"
+msgstr "Pencereyi tam ekranda göster"
+
+#: src/libide/workbench/ide-workbench-header-bar.c:128
+#| msgid "_Fullscreen"
+msgid "Exit full screen"
+msgstr "Tam ekrandan çık"
 
 #: src/libide/workbench/ide-workbench-header-bar.ui:51
 msgid "Transfers"
@@ -4323,8 +4337,17 @@ msgstr ""
 "Builder, depoyu klonlarken uygun kimlik bilgilerini sağlamakta başarısız "
 "oldu."
 
+#: src/plugins/git/ide-git-submodule-stage.c:137
+#| msgid "Network is not available, skipping downloads"
+msgid "Network is not available, skipping submodule update"
+msgstr "Ağ kullanılabilir değil, altmodül güncelleme atlanıyor"
+
+#: src/plugins/git/ide-git-submodule-stage.c:210
+msgid "Initialize git submodules"
+msgstr "Git altmodüllerini başlat"
+
 #. translators: %s is replaced with the error message
-#: src/plugins/git/ide-git-vcs.c:406
+#: src/plugins/git/ide-git-vcs.c:412
 #, c-format
 msgid "Failed to establish git file monitor: %s"
 msgstr "Git dosya izleyicisi saptanamadı: %s"
@@ -4417,11 +4440,11 @@ msgstr "Meson temelli proje yüklendi fakat meson bulunamadı."
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:101
 msgid "Add toolchain"
 msgstr "Araç seti ekle"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:108
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr "Belirli platformu hedef alan yeni bir özel araç seti tanımla"
 
@@ -4554,12 +4577,10 @@ msgid "Create a new empty project"
 msgstr "Yeni boş proje oluştur"
 
 #: src/plugins/meson-templates/meson_templates.py:353
-#| msgid "Command failed: %s"
 msgid "Command Line Tool"
 msgstr "Komut Satırı Aracı"
 
 #: src/plugins/meson-templates/meson_templates.py:355
-#| msgid "Create a new project"
 msgid "Create a new command line project"
 msgstr "Yeni bir komut satırı projesi oluştur"
 
@@ -5117,8 +5138,8 @@ msgstr ""
 "handler::profiler\">Profilleyici ile çalıştır</a>ı seçin"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:356
-msgid "Open Profile"
-msgstr "Profil Aç"
+msgid "Open Sysprof Capture…"
+msgstr "Sysprof Yakalama Aç…"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:365
 msgid "Sysprof Capture (*.syscap)"
@@ -5134,8 +5155,10 @@ msgid "Run with Profiler"
 msgstr "Profilleyici ile çalıştır"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
+#| msgid "Open Sysprof Capture…"
+msgctxt "menu label"
 msgid "Open Sysprof Capture…"
-msgstr "Sysprof Yakalama Aç…"
+msgstr "Sysprof Yakalayıcıyı Aç…"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:80
 msgid "Add sysroot"
@@ -5263,6 +5286,15 @@ msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
 #: src/plugins/xml-pack/ide-xml-service.c:337
 msgid "Buffer loaded but not in the buffer manager."
 msgstr "Tampon yüklü ama tampon yöneticisinde değil."
+
+#~ msgid "Toggle navigation panel"
+#~ msgstr "Gezinim panelini aç/kapat"
+
+#~ msgid "Toggle utilities panel"
+#~ msgstr "Araçlar panelini aç/kapat"
+
+#~ msgid "Open Profile"
+#~ msgstr "Profil Aç"
 
 #~ msgid "_About"
 #~ msgstr "_Hakkında"
@@ -5497,9 +5529,6 @@ msgstr "Tampon yüklü ama tampon yöneticisinde değil."
 
 #~ msgid "Search directories for projects."
 #~ msgstr "Projeler için dizinleri ara."
-
-#~ msgid "_Fullscreen"
-#~ msgstr "_Tam Ekran"
 
 #~ msgid "Other Projects"
 #~ msgstr "Diğer Projeler"
