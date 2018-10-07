@@ -29,7 +29,6 @@ G_DEFINE_BOXED_TYPE (IdeFixit, ide_fixit, ide_fixit_ref, ide_fixit_unref)
 
 struct _IdeFixit
 {
-  volatile gint   ref_count;
   IdeSourceRange *range;
   gchar          *text;
 };
@@ -45,8 +44,7 @@ ide_fixit_new (IdeSourceRange *source_range,
   g_return_val_if_fail (source_range, NULL);
   g_return_val_if_fail (replacement_text, NULL);
 
-  self = g_slice_new0 (IdeFixit);
-  self->ref_count = 1;
+  self = g_atomic_rc_box_new0 (IdeFixit);
   self->range = ide_source_range_ref (source_range);
   self->text = g_strdup (replacement_text);
 
@@ -60,7 +58,6 @@ ide_fixit_destroy (IdeFixit *self)
 {
   g_clear_pointer (&self->range, ide_source_range_unref);
   g_clear_pointer (&self->text, g_free);
-  g_slice_free (IdeFixit, self);
 
   DZL_COUNTER_DEC (instances);
 }
@@ -69,21 +66,16 @@ IdeFixit *
 ide_fixit_ref (IdeFixit *self)
 {
   g_return_val_if_fail (self, NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
-  g_atomic_int_inc (&self->ref_count);
-
-  return self;
+  return g_atomic_rc_box_acquire (self);
 }
 
 void
 ide_fixit_unref (IdeFixit *self)
 {
   g_return_if_fail (self);
-  g_return_if_fail (self->ref_count > 0);
 
-  if (g_atomic_int_dec_and_test (&self->ref_count))
-    ide_fixit_destroy (self);
+  g_atomic_rc_box_release_full (self, (GDestroyNotify)ide_fixit_destroy);
 }
 
 void
