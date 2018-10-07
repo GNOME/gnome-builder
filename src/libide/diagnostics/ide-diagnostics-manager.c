@@ -41,14 +41,6 @@
 typedef struct
 {
   /*
-   * Our reference count on the group, which is not atomic because we
-   * require access to this structure to be accessed from the main thread
-   * only. This is used so that providers can have access to the group even
-   * after the group has been removed from the IdeDiagnosticsManager.
-   */
-  volatile gint ref_count;
-
-  /*
    * Used to give ourself a modicum of assurance our structure hasn't
    * been miss-used.
    */
@@ -181,13 +173,10 @@ free_diagnostics (gpointer data)
 }
 
 static void
-ide_diagnostics_group_free (gpointer data)
+ide_diagnostics_group_free (IdeDiagnosticsGroup *group)
 {
-  IdeDiagnosticsGroup *group = data;
-
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (group != NULL);
-  g_assert (group->ref_count == 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   group->magic = 0;
@@ -196,7 +185,6 @@ ide_diagnostics_group_free (gpointer data)
   g_weak_ref_clear (&group->buffer_wr);
   g_clear_object (&group->adapter);
   g_clear_object (&group->file);
-  g_slice_free (IdeDiagnosticsGroup, group);
 }
 
 static IdeDiagnosticsGroup *
@@ -207,8 +195,7 @@ ide_diagnostics_group_new (GFile *file)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_FILE (file));
 
-  group = g_slice_new0 (IdeDiagnosticsGroup);
-  group->ref_count = 1;
+  group = g_rc_box_new0 (IdeDiagnosticsGroup);
   group->magic = DIAG_GROUP_MAGIC;
   group->file = g_object_ref (file);
 
@@ -222,12 +209,9 @@ ide_diagnostics_group_ref (IdeDiagnosticsGroup *group)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
-  group->ref_count++;
-
-  return group;
+  return g_rc_box_acquire (group);
 }
 
 static void
@@ -235,13 +219,9 @@ ide_diagnostics_group_unref (IdeDiagnosticsGroup *group)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
-  group->ref_count--;
-
-  if (group->ref_count == 0)
-    ide_diagnostics_group_free (group);
+  g_rc_box_release_full (group, (GDestroyNotify)ide_diagnostics_group_free);
 }
 
 static guint
@@ -249,7 +229,6 @@ ide_diagnostics_group_has_diagnostics (IdeDiagnosticsGroup *group)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   if (group->diagnostics_by_provider != NULL)
@@ -278,7 +257,6 @@ ide_diagnostics_group_can_dispose (IdeDiagnosticsGroup *group)
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   /*
@@ -303,7 +281,6 @@ ide_diagnostics_group_add (IdeDiagnosticsGroup   *group,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
   g_assert (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
   g_assert (diagnostic != NULL);
@@ -370,7 +347,6 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   /*
@@ -470,7 +446,6 @@ ide_diagnostics_group_diagnose_foreach (IdeExtensionSetAdapter *adapter,
   group = g_object_get_data (G_OBJECT (provider), "IDE_DIAGNOSTICS_GROUP");
 
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   group->in_diagnose++;
@@ -549,7 +524,6 @@ ide_diagnostics_manager_begin_diagnose (gpointer data)
       IdeDiagnosticsGroup *group = value;
 
       g_assert (group != NULL);
-      g_assert (group->ref_count > 0);
       g_assert (IS_DIAGNOSTICS_GROUP (group));
 
       if (group->needs_diagnose && group->adapter != NULL && group->in_diagnose == 0)
@@ -564,7 +538,6 @@ ide_diagnostics_group_queue_diagnose (IdeDiagnosticsGroup   *group,
                                       IdeDiagnosticsManager *self)
 {
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
   g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self));
 
@@ -685,7 +658,6 @@ ide_diagnostics_manager_add_diagnostic (IdeDiagnosticsManager *self,
     }
 
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   ide_diagnostics_group_add (group, provider, diagnostic);
@@ -714,7 +686,6 @@ ide_diagnostics_manager_find_group_from_buffer (IdeDiagnosticsManager *self,
     }
 
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   return group;
@@ -738,7 +709,6 @@ ide_diagnostics_manager_find_group_from_adapter (IdeDiagnosticsManager  *self,
       IdeDiagnosticsGroup *group = value;
 
       g_assert (group != NULL);
-      g_assert (group->ref_count > 0);
       g_assert (IS_DIAGNOSTICS_GROUP (group));
 
       if (group->adapter == adapter)
@@ -840,7 +810,6 @@ ide_diagnostics_manager_clear_by_provider (IdeDiagnosticsManager *self,
       IdeDiagnosticsGroup *group = value;
 
       g_assert (group != NULL);
-      g_assert (group->ref_count > 0);
       g_assert (IS_DIAGNOSTICS_GROUP (group));
 
       if (group->diagnostics_by_provider != NULL)
@@ -917,7 +886,6 @@ ide_diagnostics_manager_buffer_changed (IdeDiagnosticsManager *self,
   group = ide_diagnostics_manager_find_group_from_buffer (self, buffer);
 
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   ide_diagnostics_group_queue_diagnose (group, self);
@@ -951,7 +919,6 @@ ide_diagnostics_manager_buffer_notify_language (IdeDiagnosticsManager *self,
   group = ide_diagnostics_manager_find_group_from_buffer (self, buffer);
 
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   if (group->adapter != NULL)
@@ -989,7 +956,6 @@ ide_diagnostics_manager_update_group_by_file (IdeDiagnosticsManager *self,
       g_autoptr(IdeBuffer) group_buffer = g_weak_ref_get (&group->buffer_wr);
 
       g_assert (group != NULL);
-      g_assert (group->ref_count > 0);
       g_assert (IS_DIAGNOSTICS_GROUP (group));
       g_assert (G_IS_FILE (group->file));
 
@@ -1092,7 +1058,6 @@ ide_diagnostics_manager_buffer_loaded (IdeDiagnosticsManager *self,
     }
 
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   g_weak_ref_set (&group->buffer_wr, buffer);
@@ -1162,7 +1127,6 @@ ide_diagnostics_manager_buffer_unloaded (IdeDiagnosticsManager *self,
   group = ide_diagnostics_manager_find_group_from_buffer (self, buffer);
 
   g_assert (group != NULL);
-  g_assert (group->ref_count > 0);
   g_assert (IS_DIAGNOSTICS_GROUP (group));
 
   /*
@@ -1289,7 +1253,6 @@ ide_diagnostics_manager_get_busy (IdeDiagnosticsManager *self)
       IdeDiagnosticsGroup *group = value;
 
       g_assert (group != NULL);
-      g_assert (group->ref_count > 0);
       g_assert (IS_DIAGNOSTICS_GROUP (group));
 
       if (group->in_diagnose > 0)
@@ -1371,7 +1334,6 @@ ide_diagnostics_manager_get_sequence_for_file (IdeDiagnosticsManager *self,
 
   if (group != NULL)
     {
-      g_assert (group->ref_count > 0);
       g_assert (IS_DIAGNOSTICS_GROUP (group));
       g_assert (G_IS_FILE (group->file));
       g_assert (g_file_equal (group->file, file));
