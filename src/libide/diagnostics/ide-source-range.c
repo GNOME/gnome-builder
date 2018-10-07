@@ -32,7 +32,6 @@ DZL_DEFINE_COUNTER (instances, "IdeSourceRange", "Instances", "Number of IdeSour
 
 struct _IdeSourceRange
 {
-  volatile gint      ref_count;
   IdeSourceLocation *begin;
   IdeSourceLocation *end;
 };
@@ -49,8 +48,7 @@ ide_source_range_new (IdeSourceLocation *begin,
                                         ide_source_location_get_file (end)),
                         NULL);
 
-  ret = g_slice_new0 (IdeSourceRange);
-  ret->ref_count = 1;
+  ret = g_atomic_rc_box_new0 (IdeSourceRange);
   ret->begin = ide_source_location_ref (begin);
   ret->end = ide_source_location_ref (end);
 
@@ -102,11 +100,17 @@ IdeSourceRange *
 ide_source_range_ref (IdeSourceRange *self)
 {
   g_return_val_if_fail (self, NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
-  g_atomic_int_inc (&self->ref_count);
+  return g_atomic_rc_box_acquire (self);
+}
 
-  return self;
+static void
+ide_source_range_finalize (IdeSourceRange *self)
+{
+  ide_source_location_unref (self->begin);
+  ide_source_location_unref (self->end);
+
+  DZL_COUNTER_DEC (instances);
 }
 
 /**
@@ -119,16 +123,8 @@ void
 ide_source_range_unref (IdeSourceRange *self)
 {
   g_return_if_fail (self);
-  g_return_if_fail (self->ref_count > 0);
 
-  if (g_atomic_int_dec_and_test (&self->ref_count))
-    {
-      ide_source_location_unref (self->begin);
-      ide_source_location_unref (self->end);
-      g_slice_free (IdeSourceRange, self);
-
-      DZL_COUNTER_DEC (instances);
-    }
+  g_atomic_rc_box_release_full (self, (GDestroyNotify)ide_source_range_finalize);
 }
 
 /**
