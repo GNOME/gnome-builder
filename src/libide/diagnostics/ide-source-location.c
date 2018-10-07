@@ -32,7 +32,6 @@ G_DEFINE_BOXED_TYPE (IdeSourceLocation, ide_source_location,
 
 struct _IdeSourceLocation
 {
-  volatile gint  ref_count;
   guint          line;
   guint          line_offset;
   guint          offset;
@@ -51,11 +50,17 @@ DZL_DEFINE_COUNTER (instances, "IdeSourceLocation", "Instances", "Number of IdeS
 IdeSourceLocation *
 ide_source_location_ref (IdeSourceLocation *self)
 {
-  g_return_val_if_fail (self->ref_count > 0, NULL);
+  g_return_val_if_fail (self, NULL);
 
-  g_atomic_int_inc (&self->ref_count);
+  return g_atomic_rc_box_acquire (self);
+}
 
-  return self;
+static void
+ide_source_location_finalize (IdeSourceLocation *self)
+{
+  g_clear_object (&self->file);
+
+  DZL_COUNTER_DEC (instances);
 }
 
 /**
@@ -67,14 +72,9 @@ ide_source_location_ref (IdeSourceLocation *self)
 void
 ide_source_location_unref (IdeSourceLocation *self)
 {
-  g_return_if_fail (self->ref_count > 0);
+  g_return_if_fail (self);
 
-  if (g_atomic_int_dec_and_test (&self->ref_count))
-    {
-      g_clear_object (&self->file);
-      g_slice_free (IdeSourceLocation, self);
-      DZL_COUNTER_DEC (instances);
-    }
+  g_atomic_rc_box_release_full (self, (GDestroyNotify)ide_source_location_finalize);
 }
 
 /**
@@ -159,8 +159,7 @@ ide_source_location_new (IdeFile *file,
 
   g_return_val_if_fail (IDE_IS_FILE (file), NULL);
 
-  ret = g_slice_new0 (IdeSourceLocation);
-  ret->ref_count = 1;
+  ret = g_atomic_rc_box_new0 (IdeSourceLocation);
   ret->file = g_object_ref (file);
   ret->line = MIN (G_MAXINT, line);
   ret->line_offset = MIN (G_MAXINT, line_offset);
