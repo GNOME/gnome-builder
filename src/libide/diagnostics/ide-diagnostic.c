@@ -37,7 +37,6 @@ DZL_DEFINE_COUNTER (instances, "IdeDiagnostic", "Instances", "Number of IdeDiagn
 
 struct _IdeDiagnostic
 {
-  volatile gint          ref_count;
   IdeDiagnosticSeverity  severity;
   guint                  hash;
   guint                  magic;
@@ -73,11 +72,21 @@ ide_diagnostic_ref (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, NULL);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
-  g_atomic_int_inc (&self->ref_count);
+  return g_atomic_rc_box_acquire (self);
+}
 
-  return self;
+static void
+ide_diagnostic_finalize (IdeDiagnostic *self)
+{
+  self->magic = 0xAAAAAAAA;
+
+  g_clear_pointer (&self->location, ide_source_location_unref);
+  g_clear_pointer (&self->text, g_free);
+  g_clear_pointer (&self->ranges, g_ptr_array_unref);
+  g_clear_pointer (&self->fixits, g_ptr_array_unref);
+
+  DZL_COUNTER_DEC (instances);
 }
 
 void
@@ -85,20 +94,8 @@ ide_diagnostic_unref (IdeDiagnostic *self)
 {
   g_return_if_fail (self);
   g_return_if_fail (IS_DIAGNOSTIC (self));
-  g_return_if_fail (self->ref_count > 0);
 
-  if (g_atomic_int_dec_and_test (&self->ref_count))
-    {
-      self->magic = 0xAAAAAAAA;
-
-      g_clear_pointer (&self->location, ide_source_location_unref);
-      g_clear_pointer (&self->text, g_free);
-      g_clear_pointer (&self->ranges, g_ptr_array_unref);
-      g_clear_pointer (&self->fixits, g_ptr_array_unref);
-      g_slice_free (IdeDiagnostic, self);
-
-      DZL_COUNTER_DEC (instances);
-    }
+  g_atomic_rc_box_release_full (self, (GDestroyNotify)ide_diagnostic_finalize);
 }
 
 IdeDiagnosticSeverity
@@ -115,7 +112,6 @@ ide_diagnostic_get_text (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, NULL);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   return self->text;
 }
@@ -142,7 +138,6 @@ ide_diagnostic_get_text_for_display (IdeDiagnostic *self)
 
   g_return_val_if_fail (self, NULL);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   severity = ide_diagnostic_severity_to_string (self->severity);
   location = ide_diagnostic_get_location (self);
@@ -161,7 +156,6 @@ ide_diagnostic_get_num_ranges (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, 0);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), 0);
-  g_return_val_if_fail (self->ref_count > 0, 0);
 
   return self->ranges ? self->ranges->len : 0;
 }
@@ -180,7 +174,6 @@ ide_diagnostic_get_range (IdeDiagnostic *self,
 {
   g_return_val_if_fail (self, NULL);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   if (self->ranges)
     {
@@ -204,7 +197,6 @@ ide_diagnostic_get_location (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, NULL);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   if (self->location)
     return self->location;
@@ -240,8 +232,7 @@ ide_diagnostic_new (IdeDiagnosticSeverity  severity,
 {
   IdeDiagnostic *ret;
 
-  ret = g_slice_new0 (IdeDiagnostic);
-  ret->ref_count = 1;
+  ret = g_atomic_rc_box_new0 (IdeDiagnostic);
   ret->magic = DIAGNOSTIC_MAGIC;
   ret->severity = severity;
   ret->text = g_strdup (text);
@@ -266,7 +257,6 @@ ide_diagnostic_take_fixit (IdeDiagnostic *self,
 {
   g_return_if_fail (self);
   g_return_if_fail (IS_DIAGNOSTIC (self));
-  g_return_if_fail (self->ref_count > 0);
   g_return_if_fail (fixit);
 
   if (self->fixits == NULL)
@@ -291,7 +281,6 @@ ide_diagnostic_take_range (IdeDiagnostic  *self,
 {
   g_return_if_fail (self);
   g_return_if_fail (IS_DIAGNOSTIC (self));
-  g_return_if_fail (self->ref_count > 0);
   g_return_if_fail (range);
 
   if (self->ranges == NULL)
@@ -317,7 +306,6 @@ ide_diagnostic_add_range (IdeDiagnostic  *self,
 {
   g_return_if_fail (self);
   g_return_if_fail (IS_DIAGNOSTIC (self));
-  g_return_if_fail (self->ref_count > 0);
   g_return_if_fail (range);
 
   ide_diagnostic_take_range (self, ide_source_range_ref (range));
@@ -356,7 +344,6 @@ ide_diagnostic_get_num_fixits (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self, 0);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), 0);
-  g_return_val_if_fail (self->ref_count > 0, 0);
 
   return (self->fixits != NULL) ? self->fixits->len : 0;
 }
@@ -377,7 +364,6 @@ ide_diagnostic_get_fixit (IdeDiagnostic *self,
 {
   g_return_val_if_fail (self, NULL);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
   g_return_val_if_fail (self->fixits, NULL);
   g_return_val_if_fail (index < self->fixits->len, NULL);
 
@@ -422,7 +408,6 @@ ide_diagnostic_get_file (IdeDiagnostic *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   if (self->location != NULL)
     {
@@ -455,7 +440,6 @@ ide_diagnostic_to_variant (const IdeDiagnostic *self)
 
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (IS_DIAGNOSTIC (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
   g_variant_dict_init (&dict, NULL);
 
