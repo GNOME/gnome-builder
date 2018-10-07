@@ -35,7 +35,6 @@ DZL_DEFINE_COUNTER (instances, "IdeDiagnostics", "Instances", "Number of IdeDiag
 
 struct _IdeDiagnostics
 {
-  volatile gint  ref_count;
   guint          magic;
   GPtrArray     *diagnostics;
 };
@@ -59,8 +58,7 @@ ide_diagnostics_new (GPtrArray *ar)
 
   IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_diagnostic_unref);
 
-  ret = g_slice_new0 (IdeDiagnostics);
-  ret->ref_count = 1;
+  ret = g_atomic_rc_box_new0 (IdeDiagnostics);
   ret->magic = DIAGNOSTICS_MAGIC;
   ret->diagnostics = ar;
 
@@ -74,11 +72,16 @@ ide_diagnostics_ref (IdeDiagnostics *self)
 {
   g_return_val_if_fail (self, NULL);
   g_return_val_if_fail (IS_DIAGNOSTICS (self), NULL);
-  g_return_val_if_fail (self->ref_count > 0, NULL);
 
-  g_atomic_int_inc (&self->ref_count);
+  return g_atomic_rc_box_acquire (self);
+}
 
-  return self;
+static void
+ide_diagnostics_finalize (IdeDiagnostics *self)
+{
+  g_clear_pointer (&self->diagnostics, g_ptr_array_unref);
+
+  DZL_COUNTER_DEC (instances);
 }
 
 void
@@ -86,15 +89,8 @@ ide_diagnostics_unref (IdeDiagnostics *self)
 {
   g_return_if_fail (self);
   g_return_if_fail (IS_DIAGNOSTICS (self));
-  g_return_if_fail (self->ref_count > 0);
 
-  if (g_atomic_int_dec_and_test (&self->ref_count))
-    {
-      g_clear_pointer (&self->diagnostics, g_ptr_array_unref);
-      g_slice_free (IdeDiagnostics, self);
-
-      DZL_COUNTER_DEC (instances);
-    }
+  g_atomic_rc_box_release_full (self, (GDestroyNotify)ide_diagnostics_finalize);
 }
 
 /**
