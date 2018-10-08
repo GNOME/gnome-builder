@@ -893,10 +893,8 @@ ide_langserv_client_initialize_cb (GObject      *object,
 
   if (!jsonrpc_client_call_finish (rpc_client, result, &reply, &error))
     {
-      ide_object_warning (self,
-                          /* translators: %s is replaced with the error message */
-                          _("Failed to initialize language server: %s"),
-                          error->message);
+      /* translators: %s is replaced with the error message */
+      g_debug (_("Failed to initialize language server: %s"), error->message);
       ide_langserv_client_stop (self);
       IDE_EXIT;
     }
@@ -1026,7 +1024,7 @@ ide_langserv_client_shutdown_cb (GObject      *object,
   g_assert (IDE_IS_LANGSERV_CLIENT (self));
 
   if (!jsonrpc_client_call_finish (client, result, NULL, &error))
-    g_warning ("%s", error->message);
+    g_debug ("%s", error->message);
   else
     jsonrpc_client_close_async (client,
                                 NULL,
