@@ -1166,6 +1166,24 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
       IDE_EXIT;
     }
 
+  /*
+   * In-case the directory for the file does not exist yet, or has been moved
+   * since we saved things locally, create the directory chain.
+   */
+  {
+    GFile *gfile = ide_file_get_file (file);
+    g_autoptr(GFile) parent = g_file_get_parent (gfile);
+    g_autoptr(GError) error = NULL;
+
+    /* It would be nice to do this async in the future... */
+    if (!g_file_make_directory_with_parents (parent, cancellable, &error) &&
+        !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
+      {
+        ide_task_return_error (task, g_steal_pointer (&error));
+        IDE_EXIT;
+      }
+  }
+
   context = ide_object_get_context (IDE_OBJECT (self));
   ide_context_hold_for_object (context, task);
 
