@@ -24,6 +24,18 @@
 
 #include "util/ide-backoff.h"
 
+/**
+ * ide_backoff_init:
+ * @self: (out): an #IdeBackoff
+ * @min_delay: minimum delay to apply for exponential backoff
+ * @max_delay: maximum delay to apply for exponential backoff
+ *
+ * Initializes an @IdeBackoff struct.
+ *
+ * This is useful for implementing exponential backoff.
+ *
+ * Since: 3.32
+ */
 void
 ide_backoff_init (IdeBackoff *self,
                   guint       min_delay,
@@ -44,6 +56,17 @@ ide_backoff_init (IdeBackoff *self,
   g_return_if_fail (self->max_delay >= self->min_delay);
 }
 
+/**
+ * ide_backoff_failed:
+ * @self: an #IdeBackoff
+ * @next_delay: (optional) (out): location for the next delay
+ *
+ * Marks the backoff as failed, so that the next delay timeout will be used.
+ * You can access the value using @next_delay to determine how long to sleep
+ * before retrying the operation.
+ *
+ * Since: 3.32
+ */
 void
 ide_backoff_failed (IdeBackoff *self,
                     guint      *next_delay)
@@ -84,6 +107,14 @@ ide_backoff_failed (IdeBackoff *self,
     }
 }
 
+/**
+ * ide_backoff_succeeded:
+ * @self: an #IdeBackoff
+ *
+ * Mark the backoff as succeeded and reset the counters.
+ *
+ * Since: 3.32
+ */
 void
 ide_backoff_succeeded (IdeBackoff *self)
 {
