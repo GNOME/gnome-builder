@@ -2668,6 +2668,20 @@ ide_buffer__check_for_volume_cb (GObject      *object,
             _ide_buffer_set_changed_on_volume (self, TRUE);
         }
     }
+  else
+    {
+      GtkTextIter iter;
+
+      /* If we get here, the file likely does not exist on disk. We might have
+       * a situation where the file was moved out from under the user. If so,
+       * then we should mark the buffer as modified so that the user can save
+       * it going forward.
+       */
+
+      gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (self), &iter);
+      if (gtk_text_iter_get_offset (&iter) != 0)
+        gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (self), TRUE);
+    }
 }
 
 /**
