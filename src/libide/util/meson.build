@@ -1,4 +1,5 @@
 util_headers = [
+  'ide-backoff.h',
   'ide-cell-renderer-fancy.h',
   'ide-fancy-tree-view.h',
   'ide-flatpak.h',
@@ -17,6 +18,7 @@ util_headers = [
 ]
 
 util_sources = [
+  'ide-backoff.c',
   'ide-cell-renderer-fancy.c',
   'ide-fancy-tree-view.c',
   'ide-flatpak.c',

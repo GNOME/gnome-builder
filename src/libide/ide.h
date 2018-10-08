@@ -196,6 +196,7 @@ G_BEGIN_DECLS
 #include "transfers/ide-transfer.h"
 #include "transfers/ide-transfer-button.h"
 #include "transfers/ide-transfer-manager.h"
+#include "util/ide-backoff.h"
 #include "util/ide-cell-renderer-fancy.h"
 #include "util/ide-fancy-tree-view.h"
 #include "util/ide-flatpak.h"
