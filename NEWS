@@ -4,12 +4,23 @@ Version 3.31.1
 
 Changes since last release:
 
+ • Updated translations.
  • Add setting to disable clearing build caches at startup.
  • Build system improvements for release/nodebug builds.
-
-Updated Translations:
-
-  French, Brazilian Portuguese, Swedish
+ • Swith to using window menus instead of app-menu for 3.32.
+ • Ignore history jumps while buffer is loading.
+ • Build fixes for unit tests when building without installing.
+ • Gdb plugin fixes when communicating with flatpak-based apps.
+ • Add X-Flatpak-RenamedFrom to desktop file.
+ • Install legacy gtksourceview-3.0 files.
+ • New shortcuts for headerbar buttons.
+ • Improved session saving to track previous searches.
+ • Add support for updating git submodules along with dependencies.
+ • SSL/PKI fixes when running under flatpak.
+ • Port various structs to GArcBox.
+ • Gstyle compilation fixes and improvements.
+ • Vim improvements.
+ • New meson project templates.
 
 ==============
 Version 3.30.0
