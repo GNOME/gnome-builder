@@ -10,15 +10,10 @@
   </menu>
   <menu id="gb-project-tree-popup-menu">
     <section id="gb-project-tree-new-section">
-      <submenu id="gb-project-tree-new-section-submenu">
-        <attribute name="label" translatable="yes">_New</attribute>
-        <section id="gb-project-tree-new-empty-file-section">
-          <item>
-            <attribute name="label" translatable="yes">_Empty File</attribute>
-            <attribute name="action">project-tree.new-file</attribute>
-          </item>
-        </section>
-      </submenu>
+      <item>
+        <attribute name="label" translatable="yes">New _File</attribute>
+        <attribute name="action">project-tree.new-file</attribute>
+      </item>
       <item>
         <attribute name="label" translatable="yes">_New Folder</attribute>
         <attribute name="action">project-tree.new-directory</attribute>
