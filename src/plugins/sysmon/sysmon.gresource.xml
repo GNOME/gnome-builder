@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<gresources>
-  <gresource prefix="/org/gnome/builder/plugins">
-    <file>sysmon.plugin</file>
-  </gresource>
-  <gresource prefix="/org/gnome/builder/plugins/sysmon">
-    <file>gb-sysmon-panel.ui</file>
-  </gresource>
-</gresources>

@@ -64,7 +64,6 @@ subdir('spellcheck')
 subdir('snippets')
 subdir('support')
 subdir('symbol-tree')
-subdir('sysmon')
 subdir('sysprof')
 subdir('sysroot')
 subdir('terminal')
@@ -145,7 +144,6 @@ status += [
   'Spellchecking ......... : @0@'.format(get_option('with_spellcheck')),
   'Support Tool .......... : @0@'.format(get_option('with_support')),
   'Symbol Tree ........... : @0@'.format(get_option('with_symbol_tree')),
-  'System Monitor ........ : @0@'.format(get_option('with_sysmon')),
   'Sysprof Profiler ...... : @0@'.format(get_option('with_sysprof')),
   'Sysroot ......          : @0@'.format(get_option('with_sysroot')),
   'Todo .................. : @0@'.format(get_option('with_todo')),

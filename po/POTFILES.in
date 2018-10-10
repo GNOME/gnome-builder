@@ -235,7 +235,6 @@ src/plugins/symbol-tree/gbp-symbol-hover-provider.c
 src/plugins/symbol-tree/gbp-symbol-layout-stack-addin.c
 src/plugins/symbol-tree/gbp-symbol-menu-button.c
 src/plugins/symbol-tree/gbp-symbol-menu-button.ui
-src/plugins/sysmon/gb-sysmon-panel.ui
 src/plugins/sysprof/gbp-sysprof-perspective.c
 src/plugins/sysprof/gbp-sysprof-perspective.ui
 src/plugins/sysprof/gbp-sysprof-workbench-addin.c

@@ -1,9 +1,0 @@
-[Plugin]
-Module=sysmon
-Name=System Monitor
-Description=Basic system information
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
-Depends=editor
-Builtin=true
-Embedded=gb_sysmon_register_types
