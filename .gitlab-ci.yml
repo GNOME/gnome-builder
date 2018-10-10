@@ -16,10 +16,18 @@ flatpak:
         RUNTIME_REPO: "https://sdk.gnome.org/gnome-nightly.flatpakrepo"
         # Replace with your application name, as written in the manifest
         FLATPAK_MODULE: "gnome-builder"
+        DBUS_ID: "org.gnome.Builder"
         # Make sure to keep this in sync with the Flatpak manifest, all arguments
         # are passed except the config-args because we build it ourselves
-        MESON_ARGS: "--buildtype=debugoptimized -Dctags_path=/app/bin/ctags -Dfusermount_wrapper=true -Dwith_tcmalloc=true -Denable_tracing=true -Dwith_help=true -Dwith_channel=flatpak-nightly -Dwith_deviced=true"
-        DBUS_ID: "org.gnome.Builder"
+        MESON_ARGS: |
+          --buildtype=debugoptimized
+          -Dctags_path=/app/bin/ctags
+          -Dfusermount_wrapper=true
+          -Dwith_tcmalloc=true
+          -Denable_tracing=true
+          -Dwith_help=true
+          -Dwith_channel=flatpak-nightly
+          -Dwith_deviced=true
 
     script:
         - flatpak-builder --stop-at=${FLATPAK_MODULE} app ${MANIFEST_PATH}
