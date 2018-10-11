@@ -34,15 +34,15 @@
 
 typedef struct
 {
-  GtkToggleButton *fullscreen_button;
-  GtkImage        *fullscreen_image;
+  GtkToggleButton    *fullscreen_button;
+  GtkImage           *fullscreen_image;
   DzlShortcutTooltip *fullscreen_tooltip;
-  GtkMenuButton   *menu_button;
-  DzlPriorityBox  *right_box;
-  DzlPriorityBox  *left_box;
-  IdeOmniBar      *omni_bar;
-  IdeSearchEntry  *search_entry;
-  GtkBox          *primary;
+  GtkMenuButton      *menu_button;
+  DzlPriorityBox     *right_box;
+  DzlPriorityBox     *left_box;
+  IdeOmniBar         *omni_bar;
+  IdeSearchEntry     *search_entry;
+  GtkBox             *primary;
 } IdeWorkbenchHeaderBarPrivate;
 
 static void buildable_iface_init (GtkBuildableIface *iface);
