@@ -315,6 +315,19 @@ ide_workbench_actions_close_project (GSimpleAction *action,
   gtk_window_close (GTK_WINDOW (self));
 }
 
+static void
+ide_workbench_actions_menu (GSimpleAction *action,
+                            GVariant      *variant,
+                            gpointer       user_data)
+{
+  IdeWorkbench *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  ide_workbench_header_bar_show_menu (self->header_bar);
+}
+
 void
 ide_workbench_actions_init (IdeWorkbench *self)
 {
@@ -329,6 +342,7 @@ ide_workbench_actions_init (IdeWorkbench *self)
     { "inspector", ide_workbench_actions_inspector },
     { "update-dependencies", ide_workbench_actions_update_dependencies },
     { "close-project", ide_workbench_actions_close_project },
+    { "menu", ide_workbench_actions_menu },
   };
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);

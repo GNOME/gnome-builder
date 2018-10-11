@@ -52,6 +52,8 @@ IDE_AVAILABLE_IN_ALL
 IdeOmniBar *ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self);
+IDE_AVAILABLE_IN_3_32
+void        ide_workbench_header_bar_show_menu    (IdeWorkbenchHeaderBar *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_workbench_header_bar_add_primary  (IdeWorkbenchHeaderBar *self,
                                                    GtkWidget             *widget);

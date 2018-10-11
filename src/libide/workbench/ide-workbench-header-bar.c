@@ -319,3 +319,13 @@ _ide_workbench_header_bar_set_fullscreen (IdeWorkbenchHeaderBar *self,
                 NULL);
   gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (self), fullscreen == FALSE);
 }
+
+void
+ide_workbench_header_bar_show_menu (IdeWorkbenchHeaderBar *self)
+{
+  IdeWorkbenchHeaderBarPrivate *priv = ide_workbench_header_bar_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKBENCH_HEADER_BAR (self));
+
+  gtk_widget_activate (GTK_WIDGET (priv->menu_button));
+}

@@ -28,6 +28,12 @@
 #define I_(s) (g_intern_static_string(s))
 
 static DzlShortcutEntry workbench_shortcuts[] = {
+  { "org.gnome.builder.workbench.menu",
+    0, NULL,
+    NC_("shortcut window", "Workbench shortcuts"),
+    NC_("shortcut window", "General"),
+    NC_("shortcut window", "Show workbench menu") },
+
   { "org.gnome.builder.workbench.fullscreen",
     0, NULL,
     NC_("shortcut window", "Workbench shortcuts"),
@@ -101,6 +107,12 @@ _ide_workbench_init_shortcuts (IdeWorkbench *self)
   DzlShortcutController *controller;
 
   controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.workbench.menu"),
+                                              "F10",
+                                              DZL_SHORTCUT_PHASE_BUBBLE | DZL_SHORTCUT_PHASE_GLOBAL,
+                                              I_("win.menu"));
 
   dzl_shortcut_controller_add_command_action (controller,
                                               I_("org.gnome.builder.workbench.fullscreen"),
