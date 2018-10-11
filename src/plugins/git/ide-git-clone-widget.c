@@ -183,6 +183,18 @@ ide_git_clone_widget_uri_changed (IdeGitCloneWidget *self,
 }
 
 static void
+ide_git_clone_widget_location_changed (IdeGitCloneWidget   *self,
+                                       GParamSpec          *pspec,
+                                       DzlFileChooserEntry *chooser)
+{
+  g_assert (IDE_IS_GIT_CLONE_WIDGET (self));
+  g_assert (pspec != NULL);
+  g_assert (DZL_IS_FILE_CHOOSER_ENTRY (chooser));
+
+  ide_git_clone_widget_uri_changed (self, self->clone_uri_entry);
+}
+
+static void
 branch_popover_activate_cb (IdeGitCloneWidget *self,
                             const gchar       *text,
                             DzlSimplePopover  *popover)
@@ -304,6 +316,12 @@ ide_git_clone_widget_init (IdeGitCloneWidget *self)
   g_assert (G_IS_FILE (projects_dir));
 
   dzl_file_chooser_entry_set_file (self->clone_location_entry, projects_dir);
+
+  g_signal_connect_object (self->clone_location_entry,
+                           "notify::file",
+                           G_CALLBACK (ide_git_clone_widget_location_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->clone_uri_entry,
                            "changed",
