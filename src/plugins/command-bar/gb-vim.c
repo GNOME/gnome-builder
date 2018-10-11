@@ -1510,7 +1510,8 @@ gb_vim_complete_edit_files (GtkWidget *active_widget,
         }
 
       fe = g_file_enumerate_children (parent,
-                                      G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                                      G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
+                                      G_FILE_ATTRIBUTE_STANDARD_TYPE,
                                       G_FILE_QUERY_INFO_NONE,
                                       NULL, NULL);
 
@@ -1520,7 +1521,10 @@ gb_vim_complete_edit_files (GtkWidget *active_widget,
       while ((descendent = g_file_enumerator_next_file (fe, NULL, NULL)))
         {
           const gchar *name;
+          GFileType file_type;
+
           name = g_file_info_get_display_name (descendent);
+          file_type = g_file_info_get_file_type (descendent);
 
           IDE_TRACE_MSG ("name=%s prefix=%s", name, prefix);
 
@@ -1536,11 +1540,14 @@ gb_vim_complete_edit_files (GtkWidget *active_widget,
               full_path = g_build_filename (parent_path, descendent_name, NULL);
 
               if (prefix[0] == G_DIR_SEPARATOR)
-                completed_command = g_strdup_printf ("%s %s", command, full_path);
+                completed_command = g_strdup_printf ("%s %s%s", command, full_path,
+                                                     file_type == G_FILE_TYPE_DIRECTORY ? G_DIR_SEPARATOR_S : "");
               else if (strchr (prefix, G_DIR_SEPARATOR) == NULL)
-                completed_command = g_strdup_printf ("%s %s", command, descendent_name);
+                completed_command = g_strdup_printf ("%s %s%s", command, descendent_name,
+                                                     file_type == G_FILE_TYPE_DIRECTORY ? G_DIR_SEPARATOR_S : "");
               else
-                completed_command = g_strdup_printf ("%s %s%s", command, prefix_dir, descendent_name);
+                completed_command = g_strdup_printf ("%s %s%s%s", command, prefix_dir, descendent_name,
+                                                     file_type == G_FILE_TYPE_DIRECTORY ? G_DIR_SEPARATOR_S : "");
 
               IDE_TRACE_MSG ("edit completion: %s", completed_command);
 
