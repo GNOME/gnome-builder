@@ -366,7 +366,7 @@
       </state>
       <state name="genesis">
         <object id="titlebar">
-          <property name="show-close-button">false</property>
+          <property name="show-close-button">true</property>
         </object>
         <object id="action_bar">
           <property name="visible">false</property>
