@@ -38,6 +38,7 @@ typedef struct
   GtkImage           *fullscreen_image;
   DzlShortcutTooltip *fullscreen_tooltip;
   GtkMenuButton      *menu_button;
+  DzlShortcutTooltip *menu_tooltip;
   DzlPriorityBox     *right_box;
   DzlPriorityBox     *left_box;
   IdeOmniBar         *omni_bar;
@@ -141,6 +142,7 @@ ide_workbench_header_bar_class_init (IdeWorkbenchHeaderBarClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, fullscreen_tooltip);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, left_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_button);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, menu_tooltip);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, omni_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, primary);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWorkbenchHeaderBar, right_box);

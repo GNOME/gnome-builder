@@ -75,7 +75,6 @@
 		<property name="menu-id">gear-menu</property>
                 <property name="show-accels">true</property>
                 <property name="show-icons">true</property>
-                <property name="tooltip-text" translatable="yes">Show workbench menu</property>
                 <property name="visible">true</property>
                 <style>
                   <class name="image-button"/>
@@ -112,5 +111,9 @@
   <object class="DzlShortcutTooltip" id="fullscreen_tooltip">
     <property name="command-id">org.gnome.builder.workbench.fullscreen</property>
     <property name="widget">fullscreen_button</property>
+  </object>
+  <object class="DzlShortcutTooltip" id="menu_tooltip">
+    <property name="command-id">org.gnome.builder.workbench.menu</property>
+    <property name="widget">menu_button</property>
   </object>
 </interface>
