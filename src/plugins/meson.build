@@ -40,6 +40,7 @@ subdir('go-langserv')
 subdir('history')
 subdir('html-completion')
 subdir('html-preview')
+subdir('java-langserv')
 subdir('jedi')
 subdir('jhbuild')
 subdir('make')
@@ -125,6 +126,7 @@ status += [
   'History ............... : @0@'.format(get_option('with_history')),
   'HTML Completion ....... : @0@'.format(get_option('with_html_completion')),
   'HTML Preview .......... : @0@'.format(get_option('with_html_preview')),
+  'Java Language Server... : @0@'.format(get_option('with_html_preview')),
   'Python Jedi ........... : @0@'.format(get_option('with_jedi')),
   'JHBuild ............... : @0@'.format(get_option('with_jhbuild')),
   'Make .................. : @0@'.format(get_option('with_make')),
