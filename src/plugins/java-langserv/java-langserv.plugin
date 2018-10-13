@@ -1,0 +1,15 @@
+[Plugin]
+Module=java_langserv_plugin
+Loader=python3
+Name=Java Language Server Integration
+Description=Provides auto-completion, diagnostics, and other IDE features
+Authors=Daniel Buch Hansen <boogiewasthere@gmail.com>
+Copyright=Copyright © 2018 Daniel Buch Hansen
+Builtin=true
+X-Completion-Provider-Languages=java
+X-Diagnostic-Provider-Languages=java
+X-Formatter-Languages=java
+X-Highlighter-Languages=java
+X-Hover-Provider-Languages=java
+X-Rename-Provider-Languages=java
+X-Symbol-Resolver-Languages=java
