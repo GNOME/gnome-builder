@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-09-11 15:40+0000\n"
-"PO-Revision-Date: 2018-09-16 12:41+0200\n"
+"POT-Creation-Date: 2018-10-03 19:42+0000\n"
+"PO-Revision-Date: 2018-10-14 19:53+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -226,31 +226,25 @@ msgid "The number of seconds after modification before auto saving."
 msgstr "Sekunžu skaits pēc izmaiņu veikšanas, pēc kurām automātiski jāsaglabā."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:118
-#| msgid "Completion"
 msgid "Completion Row Count"
 msgstr "Pabeigšanas rindu skaits"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:119
-#| msgid "The number of lines to scroll beyond the end of the buffer."
 msgid "The number of completion rows to display to the user."
 msgstr "Pabeigšanas rindu skaits, ko rādīt lietotājam."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/preferences/ide-preferences-builtin.c:211
-#| msgid "Suggest Snippet Completion"
 msgid "Interactive Completion"
 msgstr "Interaktīva pabeigšana"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
-#| msgid ""
-#| "If enabled, Builder will automatically wrap text so all of the line text "
-#| "is visible."
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
-"Ja ieslēgts, Būvētājs automātiski attēlos pabeigšanas priekšlikumus, kamēr"
-" jūs rakstāt."
+"Ja ieslēgts, Būvētājs automātiski attēlos pabeigšanas priekšlikumus, kamēr "
+"jūs rakstāt."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -441,7 +435,7 @@ msgstr "Apakšējās rūts augstums pikseļos."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:605
+#: src/libide/application/ide-application.c:585
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:665
@@ -571,7 +565,6 @@ msgid "Build;Develop;"
 msgstr "Būvēt;Izstrādāt;"
 
 #: data/style-schemes/builder-dark.style-scheme.xml:25
-#| msgid "Builder"
 msgid "Builder Dark"
 msgstr "Būvētāja tumšais"
 
@@ -742,7 +735,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Ielādēt vai izveidot paleti, izmantojot iestatījumus"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4970
+#: src/libide/sourceview/ide-source-view.c:5001
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Pārdēvēt"
@@ -774,7 +767,7 @@ msgstr "Uzziniet vairāk par GNOME būvētāju"
 msgid "Funded By"
 msgstr "Finansēja"
 
-#: src/libide/application/ide-application.c:1001
+#: src/libide/application/ide-application.c:981
 #: src/libide/preferences/ide-preferences-builtin.c:418
 msgid "Projects"
 msgstr "Projekti"
@@ -904,7 +897,6 @@ msgstr "Pašreizējai valodai trūkst simbolu atrisinātāju."
 
 #: src/libide/buffers/ide-buffer.c:3379
 #, c-format
-#| msgid "Print failed: %s"
 msgid "Buffer failed: %s"
 msgstr "Buferis cieta neveiksmi — %s"
 
@@ -1082,8 +1074,7 @@ msgid "Runtime"
 msgstr "Izpildlaiks"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
-#| msgid "Rustup Toolchains"
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:198
 msgid "Toolchain"
 msgstr "Rīku ķēde"
 
@@ -1277,7 +1268,6 @@ msgid "No break"
 msgstr "Bez pārtraukuma"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:22
-#| msgid "Breakpoints"
 msgid "Breakpoint"
 msgstr "Pārtraukuma punkts"
 
@@ -1368,7 +1358,7 @@ msgid "No file was provided."
 msgstr "Netika norādīta datne."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:841
+#: src/libide/editor/ide-editor-perspective.c:847
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:155
 msgid "Editor"
@@ -1425,7 +1415,7 @@ msgstr "Pārvietot pa kreisi"
 msgid "Move Right"
 msgstr "Pārvietot pa labi"
 
-#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:119
+#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:121
 #: src/plugins/devhelp/gtk/menus.ui:11 src/plugins/terminal/gtk/menus.ui:25
 msgid "Close"
 msgstr "Aizvērt"
@@ -1450,11 +1440,11 @@ msgstr "Drukāt…"
 msgid "Document Preferences"
 msgstr "Dokumenta iestatījumi"
 
-#: src/libide/editor/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:113
 msgid "Save _As"
 msgstr "S_aglabāt kā"
 
-#: src/libide/editor/gtk/menus.ui:127
+#: src/libide/editor/gtk/menus.ui:129
 msgid "New File"
 msgstr "Jauna datne"
 
@@ -1581,11 +1571,18 @@ msgid "Toggle utilities panel"
 msgstr "Pārslēgt utilītu paneli"
 
 #: src/libide/editor/ide-editor-perspective-shortcuts.c:59
-#| msgctxt "shortcut window"
-#| msgid "Save all files"
 msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Aizvērt visas datnes"
+
+#: src/libide/editor/ide-editor-perspective.ui:24
+#| msgid "Restore Previous Files"
+msgid "Restoring previous session"
+msgstr "Atjaunot iepriekšējo sesiju"
+
+#: src/libide/editor/ide-editor-perspective.ui:25
+msgid "Your previous session will be ready momentarily."
+msgstr "Iepriekšējā sesija pēc brīža būs gatava."
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -1661,7 +1658,7 @@ msgstr "Valodas sintakse"
 msgid "Search languages…"
 msgstr "Meklēt valodas…"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u no %u"
@@ -1908,7 +1905,6 @@ msgid "Save _All"
 msgstr "S_aglabāt visu"
 
 #: src/libide/gtk/menus.ui:80
-#| msgid "_Close All"
 msgid "Close _All"
 msgstr "_Aizvērt visus"
 
@@ -2008,7 +2004,6 @@ msgid "An unload request is already pending"
 msgstr "Atielādēšanas pieprasījums jau ir gaida"
 
 #: src/libide/ide-context.c:2293
-#| msgid "Context has already been restored."
 msgid "Context already unloading, cannot restore."
 msgstr "Konteksts jau atielādējas, nevar atjaunot."
 
@@ -2105,8 +2100,6 @@ msgid "Create new document"
 msgstr "Izveidot jaunu dokumentu"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:115
-#| msgctxt "shortcut window"
-#| msgid "Save the document"
 msgctxt "shortcut window"
 msgid "Save all documents"
 msgstr "Saglabāt visus dokumentus"
@@ -2118,8 +2111,6 @@ msgid "Close the document"
 msgstr "Aizvērt dokumentu"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:129
-#| msgctxt "shortcut window"
-#| msgid "Close the document"
 msgctxt "shortcut window"
 msgid "Close all documents"
 msgstr "Aizvērt visus dokumentus"
@@ -2518,8 +2509,6 @@ msgid "terminal font monospace"
 msgstr "termināļa fonts vienplatuma"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
-#| msgctxt "shortcut window"
-#| msgid "Find text within terminal"
 msgid "Bold text in terminals"
 msgstr "Trekns teksts terminālī"
 
@@ -2569,7 +2558,6 @@ msgid "Sublime Text"
 msgstr "Sublime teksts"
 
 #: src/libide/preferences/ide-preferences-builtin.c:145
-#| msgid "Emulates the Vim text editor"
 msgid "Emulates the Sublime Text editor"
 msgstr "Emulē Sublime teksta redaktoru"
 
@@ -2761,7 +2749,6 @@ msgid "Display code suggestions interactively as you type"
 msgstr "Rakstīšanas laika interaktīvi attēlot koda ieteikumus"
 
 #: src/libide/preferences/ide-preferences-builtin.c:213
-#| msgid "Completion"
 msgid "Completion Providers"
 msgstr "Pabeigšanas nodrošinātāji"
 
@@ -2977,31 +2964,31 @@ msgstr "Process negaidīti aizvērās"
 msgid "Host operating system"
 msgstr "Resursdatora operētājsistēma"
 
-#: src/libide/sourceview/ide-source-view.c:4425
+#: src/libide/sourceview/ide-source-view.c:4456
 #, c-format
 msgid "Insert “%s”"
 msgstr "Ievietot “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4427
+#: src/libide/sourceview/ide-source-view.c:4458
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Aizstāt “%s” ar “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4541
+#: src/libide/sourceview/ide-source-view.c:4572
 msgid "Apply Fix-It"
 msgstr "Pielietot Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:4969
+#: src/libide/sourceview/ide-source-view.c:5000
 msgid "Rename symbol"
 msgstr "Pārdēvēt simbolu"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5205
+#: src/libide/sourceview/ide-source-view.c:5236
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>rinda %u, kolonna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5231
+#: src/libide/sourceview/ide-source-view.c:5262
 msgid "No references were found"
 msgstr "Nav atrastu norāžu"
 
@@ -3038,7 +3025,6 @@ msgid "Tests will be loaded after building."
 msgstr "Testi tiks ielādēti pēc būvēšanas."
 
 #: src/libide/toolchain/ide-toolchain-manager.c:340
-#| msgid "Host operating system"
 msgid "Default (Host operating system)"
 msgstr "Noklusējuma (resursdatora operētājsistēma)"
 
@@ -3251,7 +3237,7 @@ msgstr "Konfigurē projektu"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3470,7 +3456,6 @@ msgid "clang diagnostics warnings errors"
 msgstr "clang diagnostikas brīdinājumi, kļūdas"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:78
-#| msgid "Suggest completions using Ctags"
 msgid "Suggest completions using Clang"
 msgstr "Iesaka pabeigšanu, izmantojot Clang"
 
@@ -3479,7 +3464,6 @@ msgid "Use Clang to suggest completions for C and C++ languages"
 msgstr "Izmanto Clang, lai ieteiktu pabeigšanu C un C++ valodām"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:83
-#| msgid "Configure Options"
 msgid "Clang Options"
 msgstr "Clang opcijas"
 
@@ -3492,7 +3476,6 @@ msgid "Include parenthesis when completing clang proposals"
 msgstr "Iekļaut iekavas, kad pabeidz clang priekšlikumus"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:104
-#| msgid "Parameters"
 msgid "Complete Parameters"
 msgstr "Pabeigt parametrus"
 
@@ -3513,7 +3496,6 @@ msgid "If parentheses should be included when completing."
 msgstr "Vai pabeidzot vajadzētu iekļaut iekavas."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
-#| msgid "Parameters"
 msgid "Complete parameters"
 msgstr "Pabeigt parametrus"
 
@@ -3528,11 +3510,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Konfigurēt projektu"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -3541,7 +3523,6 @@ msgstr "Instalē projektu"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:215
 #, c-format
-#| msgid "CMake"
 msgid "%s (CMake)"
 msgstr "%s (CMake)"
 
@@ -4061,7 +4042,6 @@ msgid "Suggest completions using Ctags"
 msgstr "Iesaka pabeigšanu, izmantojot Ctags"
 
 #: src/plugins/ctags/ide-ctags-preferences-addin.c:52
-#| msgid "Use Clang to suggest completions for C and C++ languages"
 msgid "Use Ctags to suggest completions for a variety of languages"
 msgstr "Izmanto Ctags, lai ieteiktu pabeigšanu dažādām valodām"
 
@@ -4192,12 +4172,12 @@ msgstr[2] "parādīt vēl %u izpildlaikus"
 msgid "Flatpak Runtimes"
 msgstr "Flatpck izpildlaiki"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4262,7 +4242,6 @@ msgstr "Nevar parādīt starpību, nav dota aizmugures datne."
 #. translators: %s is replaced with the error string from git
 #: src/plugins/git/ide-git-buffer-change-monitor.c:281
 #, c-format
-#| msgid "There was a failure while trying to perform the operation."
 msgid ""
 "There was a failure while calculating line changes from git. The exact error "
 "was: %s"
@@ -4317,7 +4296,6 @@ msgid "Enter the URL of your project’s source code repository"
 msgstr "Ievadiet sava projekta pirmkoda repozitorija URL"
 
 #: src/plugins/git/ide-git-clone-widget.ui:70
-#| msgid "Make default"
 msgid "Change default branch"
 msgstr "Mainīt noklusējuma zaru"
 
@@ -4346,7 +4324,7 @@ msgstr ""
 "repozitoriju."
 
 #. translators: %s is replaced with the error message
-#: src/plugins/git/ide-git-vcs.c:406
+#: src/plugins/git/ide-git-vcs.c:412
 #, c-format
 msgid "Failed to establish git file monitor: %s"
 msgstr "Neizdevās izveidot git datņu pārraugu — %s"
@@ -4401,7 +4379,6 @@ msgid "(Preview)"
 msgstr "(Priekšskatījums)"
 
 #: src/plugins/jedi/jedi_plugin.py:662
-#| msgid "Suggest completions using Ctags"
 msgid "Suggest completions from Python"
 msgstr "Iesaka pabeigšanu no Python"
 
@@ -4426,27 +4403,23 @@ msgid "Meson"
 msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:108
-#| msgid "A suitable debugger could not be found."
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr "Ir ielādēt uz Meson balstīts projekts, bet nevar atrast Ninja."
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:128
-#| msgid "A suitable debugger could not be found."
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr "Ir ielādēt uz Meson balstīts projekts, bet nevar atrast meson."
 
 #: src/plugins/meson/gbp-meson-toolchain.c:66
 #, c-format
-#| msgid "Meson"
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
-#| msgid "to add a new toolchain!"
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:101
 msgid "Add toolchain"
 msgstr "Pievienot rīku ķēdi"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:108
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr "Definēt jaunu pielāgotu rīku ķēdi, kas mērķē uz noteiktu platformu"
 
@@ -4475,7 +4448,6 @@ msgstr "Pievienot rīku:"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
 #: src/plugins/meson/gbp-meson-utils.c:96
-#| msgid "Completion"
 msgid "Compiler"
 msgstr "Kompilators"
 
@@ -4510,7 +4482,6 @@ msgid "Package Config"
 msgstr "Pakotnes konfigurācija"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
-#| msgid "Language"
 msgid "Any language"
 msgstr "Jebkura valoda"
 
@@ -4536,56 +4507,59 @@ msgid "Fortran"
 msgstr "Fortran"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:195
-#| msgid "ID"
 msgid "D"
 msgstr "D"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:227
-#| msgid "Add Word"
 msgid "Add Tool"
 msgstr "Pievienot rīku"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:242
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
-#| msgid "_Delete"
 msgid "Delete"
 msgstr "Dzēst"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:248
-#| msgctxt "shortcut window"
-#| msgid "Delete line"
 msgid "Delete Toolchain"
 msgstr "Dzēst rīku ķēdi"
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
-#| msgctxt "shortcut window"
-#| msgid "Delete line"
 msgid "Delete Tool"
 msgstr "Dzēst rīku"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "GNOME lietotne"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Izveidot jaunu GNOME lietotni"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Koplietota bibliotēka"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Izveidot jaunu projektu ar koplietotu bibliotēku"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Tukšs projekts"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Izveidot jaunu tukšu projektu"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+#| msgid "Command failed: %s"
+msgid "Command Line Tool"
+msgstr "Komandas rīks"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+#| msgid "Create a new project"
+msgid "Create a new command line project"
+msgstr "Izveidot jaunu komandrindas projektu"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
@@ -4956,12 +4930,10 @@ msgstr ", lai pievienotu jaunu rīku ķēdi!"
 
 #: src/plugins/snippets/ide-snippet-completion-item.c:112
 #, c-format
-#| msgid "Failed to parse integer from “%s”"
 msgid "Failed to parse snippet “%s”"
 msgstr "Neizdevās parsēt fragmentu “%s”"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:51
-#| msgid "Suggest completions using Ctags"
 msgid "Suggest Completions from Snippets"
 msgstr "Iesaka pabeigšanu, izmantojot Fragmentus"
 
@@ -5083,7 +5055,6 @@ msgstr ""
 "pielikumu jūsu kļūdu ziņojumā vai atbalsta pieprasījumā."
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:82
-#| msgid "_Go to Definition"
 msgid "Definition"
 msgstr "Definīcija"
 
@@ -5092,13 +5063,10 @@ msgid "Canonical"
 msgstr "Kanoniskais"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
-#| msgid "Rename symbol"
 msgid "Unnamed Symbol"
 msgstr "Nenosaukts simbols"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:162
-#| msgctxt "shortcut window"
-#| msgid "Symbols"
 msgid "Symbol"
 msgstr "Simbols"
 
@@ -5213,7 +5181,6 @@ msgstr "Lietotnes izvade"
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:238
 #, c-format
-#| msgid "Application exited\r\n"
 msgid "Application started at %s\r\n"
 msgstr "Lietotne palaista %s\r\n"
 
@@ -5222,8 +5189,6 @@ msgid "Application exited\r\n"
 msgstr "Lietotne izgāja\r\n"
 
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:278
-#| msgctxt "shortcut window"
-#| msgid "Terminal in Build Runtime"
 msgctxt "shortcut window"
 msgid "Terminal in Runtime"
 msgstr "Terminālis izpildlaikā"
@@ -5241,7 +5206,6 @@ msgid "New _Build Terminal"
 msgstr "Jauns _būvēšanas terminālis"
 
 #: src/plugins/terminal/gtk/menus.ui:50
-#| msgid "_New Runtime Terminal"
 msgid "New _Runtime Terminal"
 msgstr "Jauns izpildlaika te_rminālis"
 
@@ -5250,12 +5214,10 @@ msgid "New terminal in directory"
 msgstr "Jauns terminālis direktorijā"
 
 #: src/plugins/todo/gbp-todo-panel.c:299
-#| msgid "Downloading…"
 msgid "Loading TODOs…"
 msgstr "Ielādē TODO…"
 
 #: src/plugins/todo/gbp-todo-panel.c:300
-#| msgid "Integration with Git to clone your projects"
 msgid "Please wait while we scan your project"
 msgstr "Lūdzu, uzgaidiet, kamēr skenējam jūsu projektu"
 
@@ -5914,9 +5876,6 @@ msgstr "Buferis ir ielādēts, bet nav buferu pārvaldniekā."
 
 #~ msgid "Co_ntinue"
 #~ msgstr "_Turpināt"
-
-#~ msgid "Create a new project"
-#~ msgstr "Izveidot jaunu projektu"
 
 #~ msgid "Add a new empty file to your project"
 #~ msgstr "Pievienot jaunu tukšu datni jūsu projektam"
