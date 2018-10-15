@@ -195,6 +195,19 @@ ide_application_register_search_paths (IdeApplication *self)
     }
 }
 
+#ifdef DEVELOPMENT_BUILD
+
+static void
+setup_development_build (GtkWindow *window)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (window));
+  gtk_style_context_add_class (context, "development-version");
+}
+
+#endif
+
 static void
 ide_application_activate_primary (IdeApplication *self)
 {
@@ -220,6 +233,11 @@ ide_application_activate_primary (IdeApplication *self)
                          "application", self,
                          NULL);
   gtk_window_present (window);
+
+  /* Set development styles */
+  #ifdef DEVELOPMENT_BUILD
+    setup_development_build(window);
+  #endif
 }
 
 static void
