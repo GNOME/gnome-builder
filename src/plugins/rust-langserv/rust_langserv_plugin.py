@@ -92,7 +92,11 @@ class RustService(Ide.Object, Ide.Service):
             # to save the user having to update PATH.
             path_to_rls = os.path.expanduser("~/.cargo/bin/rls")
             if os.path.exists(path_to_rls):
-                launcher.setenv('PATH', os.path.expanduser("~/.cargo/bin"), True)
+                old_path = os.getenv('PATH')
+                new_path = os.path.expanduser('~/.cargo/bin')
+                if old_path is not None:
+                    new_path += os.path.pathsep + old_path
+                launcher.setenv('PATH', new_path, True)
             else:
                 path_to_rls = "rls"
 
