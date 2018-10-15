@@ -219,6 +219,12 @@ ide_application_activate_primary (IdeApplication *self)
   window = g_object_new (IDE_TYPE_WORKBENCH,
                          "application", self,
                          NULL);
+
+#ifdef DEVELOPMENT_BUILD
+  /* Set development styles */
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (window), "development-version");
+#endif
+
   gtk_window_present (window);
 }
 

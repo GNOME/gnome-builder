@@ -93,6 +93,9 @@ config_h.set('LOCALEDIR', 'PACKAGE_LOCALE_DIR')
 
 config_h.set10('ENABLE_NLS', true) # Always enabled
 
+# Development build setup
+config_h.set('DEVELOPMENT_BUILD', version_split[1].to_int().is_odd())
+
 # We should probably avoid using these
 config_h.set_quoted('SRCDIR', meson.source_root())
 config_h.set_quoted('BUILDDIR', meson.build_root())
