@@ -281,7 +281,9 @@ setup_view_cb (GtkWidget               *widget,
   GAction *action;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+
+  if (!IDE_IS_EDITOR_VIEW (view))
+    return;
 
   actions = gtk_widget_get_action_group (GTK_WIDGET (view), "view");
   g_action_map_add_action_entries (G_ACTION_MAP (actions),
