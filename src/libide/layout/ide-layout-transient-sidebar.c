@@ -28,6 +28,7 @@ typedef struct
 {
   DzlSignalGroup *toplevel_signals;
   GWeakRef        view_ref;
+  gint            hold_count;
 } IdeLayoutTransientSidebarPrivate;
 
 static void ide_layout_transient_sidebar_view_destroyed (IdeLayoutTransientSidebar *self,
@@ -104,6 +105,10 @@ ide_layout_transient_sidebar_after_set_focus (IdeLayoutTransientSidebar *self,
 
   g_assert (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
   g_assert (!toplevel || GTK_IS_WINDOW (toplevel));
+  g_assert (priv->hold_count >= 0);
+
+  if (priv->hold_count > 0)
+    return;
 
   /*
    * If we are currently visible, then check to see if the focus has gone
@@ -271,4 +276,35 @@ ide_layout_transient_sidebar_set_panel (IdeLayoutTransientSidebar *self,
     gtk_stack_set_visible_child (GTK_STACK (stack), panel);
   else
     g_warning ("Failed to locate stack containing panel");
+}
+
+void
+ide_layout_transient_sidebar_lock (IdeLayoutTransientSidebar *self)
+{
+  IdeLayoutTransientSidebarPrivate *priv = ide_layout_transient_sidebar_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
+  g_return_if_fail (priv->hold_count >= 0);
+
+  priv->hold_count++;
+
+  if (!dzl_dock_revealer_get_reveal_child (DZL_DOCK_REVEALER (self)))
+    dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (self), TRUE);
+}
+
+void
+ide_layout_transient_sidebar_unlock (IdeLayoutTransientSidebar *self)
+{
+  IdeLayoutTransientSidebarPrivate *priv = ide_layout_transient_sidebar_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
+  g_return_if_fail (priv->hold_count > 0);
+
+  priv->hold_count--;
+
+  if (priv->hold_count == 0)
+    {
+      if (dzl_dock_revealer_get_reveal_child (DZL_DOCK_REVEALER (self)))
+        dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (self), FALSE);
+    }
 }
