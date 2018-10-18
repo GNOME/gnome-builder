@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="gbp-glade-view-document-menu">
+    <section id="glade-document-section">
+      <attribute name="label" translatable="yes">Glade</attribute>
+      <item>
+        <attribute name="action">glade-view.save</attribute>
+        <attribute name="label" translatable="yes">_Save</attribute>
+        <attribute name="accel">&lt;primary&gt;s</attribute>
+      </item>
+    </section>
+    <section id="glade-preview-section">
+      <item>
+        <attribute name="action">glade-view.preview</attribute>
+        <attribute name="label" translatable="yes">Open _Preview</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
+
