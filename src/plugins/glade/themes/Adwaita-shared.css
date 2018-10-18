@@ -1,0 +1,37 @@
+@import url("resource:///org/gnome/builder/plugins/glade-plugin/themes/shared.css");
+
+gbpgladeproperties {
+  font-size: 0.83333em;
+}
+
+gbpgladeproperties entry,
+gbpgladeproperties spinbutton {
+  min-height: 24px;
+}
+
+gbpgladeproperties checkbutton check {
+  min-width: 10px;
+  min-height: 10px;
+}
+
+gbpgladeproperties spinbutton button {
+  min-height: 0px;
+  min-width: 0px;
+  padding: 0 4px;
+}
+
+gbpgladeproperties spinbutton entry {
+  min-height: 0px;
+  min-width: 0px;
+  padding: 0 4px;
+}
+
+gbpgladeproperties switch slider {
+  min-height: 18px;
+  min-width: 32px;
+}
+
+gbpgladeproperties button.combo {
+  min-height: 18px;
+  padding: 2px;
+}
