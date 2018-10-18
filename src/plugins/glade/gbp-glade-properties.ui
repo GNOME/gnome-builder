@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpGladeProperties" parent="DzlDockWidget">
+    <child>
+      <object class="GladeEditor" id="editor">
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </template>
+</interface>

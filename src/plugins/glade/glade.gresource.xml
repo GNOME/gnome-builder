@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>glade.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/glade-plugin">
+    <file>gtk/menus.ui</file>
+    <file>themes/shared.css</file>
+    <file>themes/Adwaita.css</file>
+    <file>themes/Adwaita-dark.css</file>
+    <file>gbp-glade-properties.ui</file>
+  </gresource>
+</gresources>
