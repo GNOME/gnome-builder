@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="gbp-glade-view-document-menu">
+    <section id="glade-document-section">
+      <attribute name="label" translatable="yes">Glade</attribute>
+      <item>
+        <attribute name="action">glade-view.save</attribute>
+        <attribute name="label" translatable="yes">_Save</attribute>
+        <attribute name="accel">&lt;primary&gt;s</attribute>
+      </item>
+    </section>
+    <section id="glade-preview-section">
+      <item>
+        <attribute name="action">glade-view.preview</attribute>
+        <attribute name="label" translatable="yes">Open _Preview</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;alt&gt;p</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="gb-project-tree-popup-menu">
+    <section id="gb-project-tree-open-section">
+      <submenu id="gb-project-tree-open-with-submenu">
+        <section id="gb-project-tree-open-with-internal-section">
+          <item>
+            <attribute name="id">gb-project-tree-open-with-glade</attribute>
+            <attribute name="after">gb-project-tree-open-with-editor</attribute>
+            <attribute name="label" translatable="yes">UI Designer</attribute>
+            <attribute name="action">project-tree.open-with-hint</attribute>
+            <attribute name="target" type="s">"glade"</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+</interface>
+
