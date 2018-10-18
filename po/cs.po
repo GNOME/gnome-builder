@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-10-03 22:05+0000\n"
-"PO-Revision-Date: 2018-10-04 14:37+0200\n"
+"POT-Creation-Date: 2018-10-15 20:25+0000\n"
+"PO-Revision-Date: 2018-10-10 12:19+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -371,7 +371,7 @@ msgstr ""
 "Konfigurace, která byla vybrána a bude obnovena při příštím načtení projektu."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-#: src/plugins/project-tree/gtk/menus.ui:84
+#: src/plugins/project-tree/gtk/menus.ui:79
 msgid "Show Icons"
 msgstr "Zobrazovat ikony"
 
@@ -381,7 +381,7 @@ msgstr ""
 "Když je zapnuto, bude projektový strom vedle každé položky zobrazovat ikonu."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/gtk/menus.ui:88
+#: src/plugins/project-tree/gtk/menus.ui:83
 msgid "Show Ignored Files"
 msgstr "Zobrazovat ignorované soubory"
 
@@ -393,7 +393,7 @@ msgstr ""
 "ignorovány systémem pro správu verzí."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/gtk/menus.ui:92
+#: src/plugins/project-tree/gtk/menus.ui:87
 msgid "Sort Directories First"
 msgstr "Složky zobrazovat na začátku"
 
@@ -771,7 +771,7 @@ msgstr "Odstranit"
 
 #: src/gstyle/ui/gstyle-rename-popover.ui:35
 #: src/plugins/project-tree/gb-rename-file-popover.ui:35
-#: src/plugins/project-tree/gtk/menus.ui:57
+#: src/plugins/project-tree/gtk/menus.ui:52
 msgid "_Rename"
 msgstr "_Přejmenovat"
 
@@ -872,7 +872,8 @@ msgstr "Takový sestavovací proces neexistuje"
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
 #: src/libide/workbench/ide-workbench-shortcuts.c:45
 #: src/libide/workbench/ide-workbench-shortcuts.c:51
-#: src/libide/workbench/ide-workbench-shortcuts.c:78
+#: src/libide/workbench/ide-workbench-shortcuts.c:57
+#: src/libide/workbench/ide-workbench-shortcuts.c:84
 #: src/plugins/command-bar/gb-command-bar.c:694
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:264
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:270
@@ -915,11 +916,11 @@ msgstr "Zobrazit okno s klávesovými zkratkami"
 msgid "Failed to establish a monitor for background changes: %s"
 msgstr "Selhalo ustanovení sledování změn na pozadí: %s"
 
-#: src/libide/buffers/ide-buffer.c:2908
+#: src/libide/buffers/ide-buffer.c:2922
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
-#: src/libide/buffers/ide-buffer.c:3379
+#: src/libide/buffers/ide-buffer.c:3393
 #, c-format
 msgid "Buffer failed: %s"
 msgstr "Selhala vyrovnávací paměť: %s"
@@ -928,7 +929,7 @@ msgstr "Selhala vyrovnávací paměť: %s"
 msgid "File too large to be opened."
 msgstr "Soubor je příliš velký pro otevření."
 
-#: src/libide/buffers/ide-buffer-manager.c:1825
+#: src/libide/buffers/ide-buffer-manager.c:1843
 #, c-format
 msgid "unsaved document %u"
 msgstr "neuložený dokument %u"
@@ -937,8 +938,8 @@ msgstr "neuložený dokument %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:1864
-#: src/libide/buffers/ide-buffer-manager.c:1927
+#: src/libide/buffers/ide-buffer-manager.c:1882
+#: src/libide/buffers/ide-buffer-manager.c:1945
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -2057,7 +2058,8 @@ msgstr "Klávesové zkratky editoru"
 #: src/libide/keybindings/ide-shortcuts-window.ui:14
 #: src/libide/keybindings/ide-shortcuts-window.ui:466
 #: src/libide/workbench/ide-workbench-shortcuts.c:34
-#: src/libide/workbench/ide-workbench-shortcuts.c:52
+#: src/libide/workbench/ide-workbench-shortcuts.c:40
+#: src/libide/workbench/ide-workbench-shortcuts.c:58
 #: src/plugins/command-bar/gb-command-bar.c:695
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:265
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:271
@@ -2338,7 +2340,7 @@ msgstr "Zrušit všechen výběr"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:412
 #: src/libide/runner/ide-run-manager.c:781
-#: src/libide/workbench/ide-workbench-shortcuts.c:46
+#: src/libide/workbench/ide-workbench-shortcuts.c:52
 msgctxt "shortcut window"
 msgid "Build and Run"
 msgstr "Sestavit a spustit"
@@ -2369,7 +2371,7 @@ msgid "Terminal Shortcuts"
 msgstr "Klávesové zkratky terminálu"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:534
-#: src/libide/workbench/ide-workbench-shortcuts.c:40
+#: src/libide/workbench/ide-workbench-shortcuts.c:46
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Hledání"
@@ -2380,7 +2382,7 @@ msgid "Find text within terminal"
 msgstr "Hledat text v terminálu"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:898
+#: src/libide/langserv/ide-langserv-client.c:897
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Selhala inicializace serveru pro daný jazyk: %s"
@@ -3210,11 +3212,11 @@ msgstr "Statistiky aplikace Builder"
 msgid "%s — Builder"
 msgstr "%s – Builder"
 
-#: src/libide/workbench/ide-workbench-header-bar.c:126
+#: src/libide/workbench/ide-workbench-header-bar.c:127
 msgid "Display the window in full screen"
 msgstr "Zobrazit okno přes celou obrazovku"
 
-#: src/libide/workbench/ide-workbench-header-bar.c:128
+#: src/libide/workbench/ide-workbench-header-bar.c:129
 msgid "Exit full screen"
 msgstr "Opustit celou obrazovku"
 
@@ -3222,40 +3224,41 @@ msgstr "Opustit celou obrazovku"
 msgid "Transfers"
 msgstr "Přenosy"
 
-#: src/libide/workbench/ide-workbench-header-bar.ui:78
-msgid "Show workbench menu"
-msgstr "Zobrazovat nabídku pracovních nástrojů"
-
-#: src/libide/workbench/ide-workbench-header-bar.ui:97
+#: src/libide/workbench/ide-workbench-header-bar.ui:96
 msgid "Press Ctrl+. to search"
 msgstr "Zmáčknutím Ctrl+. můžete hledat"
 
 #: src/libide/workbench/ide-workbench-shortcuts.c:35
 msgctxt "shortcut window"
+msgid "Show workbench menu"
+msgstr "Zobrazovat nabídku pracovních nástrojů"
+
+#: src/libide/workbench/ide-workbench-shortcuts.c:41
+msgctxt "shortcut window"
 msgid "Toggle window to fullscreen"
 msgstr "Přepnout okno na celou obrazovku"
 
-#: src/libide/workbench/ide-workbench-shortcuts.c:41
+#: src/libide/workbench/ide-workbench-shortcuts.c:47
 msgctxt "shortcut window"
 msgid "Focus to the global search entry"
 msgstr "Zaměřit vstupní pole pro globální vyhledávání"
 
-#: src/libide/workbench/ide-workbench-shortcuts.c:47
+#: src/libide/workbench/ide-workbench-shortcuts.c:53
 msgctxt "shortcut window"
 msgid "Trigger a build"
 msgstr "Spustit sestavení"
 
-#: src/libide/workbench/ide-workbench-shortcuts.c:53
+#: src/libide/workbench/ide-workbench-shortcuts.c:59
 msgctxt "shortcut window"
 msgid "Save all files"
 msgstr "Uložit všechny soubory"
 
-#: src/libide/workbench/ide-workbench-shortcuts.c:79
+#: src/libide/workbench/ide-workbench-shortcuts.c:85
 msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Pohledy"
 
-#: src/main.c:120
+#: src/main.c:86
 msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
@@ -4291,7 +4294,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "Požadovaný soubor neexistuje v indexu git."
 
 #: src/plugins/git/ide-git-clone-widget.c:159
-#: src/plugins/git/ide-git-clone-widget.c:500
+#: src/plugins/git/ide-git-clone-widget.c:518
 msgid "A valid Git URL is required"
 msgstr "Je vyžadována platná adresa URL pro Git"
 
@@ -4301,11 +4304,11 @@ msgstr "Je vyžadována platná adresa URL pro Git"
 msgid "Your project will be created at %s"
 msgstr "Váš projekt bude vytvořen ve složce %s"
 
-#: src/plugins/git/ide-git-clone-widget.c:216
+#: src/plugins/git/ide-git-clone-widget.c:228
 msgid "Apply"
 msgstr "Použít"
 
-#: src/plugins/git/ide-git-clone-widget.c:218
+#: src/plugins/git/ide-git-clone-widget.c:230
 msgid "Remote Branch to Clone"
 msgstr "Vzdálená větev, která se má naklonovat"
 
@@ -4341,19 +4344,19 @@ msgstr "Klonování projektu"
 msgid "Clone…"
 msgstr "Klonovat…"
 
-#: src/plugins/git/ide-git-pipeline-addin.c:113
-msgid "Network is not available, skipping submodule update"
-msgstr "Síť není dostupná, přeskakuje se aktualizace submodulu"
-
-#: src/plugins/git/ide-git-pipeline-addin.c:196
-msgid "Initialize git submodules"
-msgstr "Inicializuje se „git submodules“"
-
 #: src/plugins/git/ide-git-remote-callbacks.c:193
 #, c-format
 msgid ""
 "Builder failed to provide appropriate credentials when cloning repository."
 msgstr "Builder nebyl schopen předat pověření během klonování repozitáře."
+
+#: src/plugins/git/ide-git-submodule-stage.c:137
+msgid "Network is not available, skipping submodule update"
+msgstr "Síť není dostupná, přeskakuje se aktualizace submodulu"
+
+#: src/plugins/git/ide-git-submodule-stage.c:210
+msgid "Initialize git submodules"
+msgstr "Inicializuje se „git submodules“"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/git/ide-git-vcs.c:412
@@ -4744,58 +4747,54 @@ msgid "Re_veal in Project Tree"
 msgstr "Ukázat v projekto_vém stromu"
 
 #: src/plugins/project-tree/gtk/menus.ui:14
-msgid "_New"
-msgstr "_Nový"
+msgid "New _File"
+msgstr "Nový _soubor"
 
-#: src/plugins/project-tree/gtk/menus.ui:17
-msgid "_Empty File"
-msgstr "_Prázdný soubor"
-
-#: src/plugins/project-tree/gtk/menus.ui:23
+#: src/plugins/project-tree/gtk/menus.ui:18
 msgid "_New Folder"
 msgstr "_Nová složka"
 
-#: src/plugins/project-tree/gtk/menus.ui:29
+#: src/plugins/project-tree/gtk/menus.ui:24
 msgid "_Open"
 msgstr "_Otevřít"
 
-#: src/plugins/project-tree/gtk/menus.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:29
 msgid "Open _With"
 msgstr "Otevřít po_mocí"
 
-#: src/plugins/project-tree/gtk/menus.ui:37
+#: src/plugins/project-tree/gtk/menus.ui:32
 msgid "Source Code Editor"
 msgstr "Editor zdrojového kódu"
 
-#: src/plugins/project-tree/gtk/menus.ui:47
+#: src/plugins/project-tree/gtk/menus.ui:42
 msgid "_Open Containing Folder"
 msgstr "_Otevřít rodičovskou složku"
 
-#: src/plugins/project-tree/gtk/menus.ui:51
+#: src/plugins/project-tree/gtk/menus.ui:46
 msgid "_Open in Terminal"
 msgstr "_Otevřít v terminálu"
 
-#: src/plugins/project-tree/gtk/menus.ui:64
+#: src/plugins/project-tree/gtk/menus.ui:59
 msgid "Mo_ve to Trash"
 msgstr "Př_esunout do koše"
 
-#: src/plugins/project-tree/gtk/menus.ui:71
+#: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Build"
 msgstr "_Sestavit"
 
-#: src/plugins/project-tree/gtk/menus.ui:75
+#: src/plugins/project-tree/gtk/menus.ui:70
 msgid "_Rebuild"
 msgstr "_Znovu sestavit"
 
-#: src/plugins/project-tree/gtk/menus.ui:81
+#: src/plugins/project-tree/gtk/menus.ui:76
 msgid "Display Options"
 msgstr "Zobrazovat volby"
 
-#: src/plugins/project-tree/gtk/menus.ui:98
+#: src/plugins/project-tree/gtk/menus.ui:93
 msgid "_Collapse All Nodes"
 msgstr "S_balit všechny uzly"
 
-#: src/plugins/project-tree/gtk/menus.ui:102
+#: src/plugins/project-tree/gtk/menus.ui:97
 msgid "_Refresh"
 msgstr "_Aktualizovat"
 
@@ -5125,10 +5124,6 @@ msgstr "Vybrat symbol…"
 #: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:77
 msgid "Document Outline"
 msgstr "Obsah dokumentace"
-
-#: src/plugins/sysmon/gb-sysmon-panel.ui:5
-msgid "System Monitor"
-msgstr "Sledování systému"
 
 #: src/plugins/sysprof/gbp-sysprof-perspective.c:135
 #: src/plugins/sysprof/gtk/menus.ui:20
