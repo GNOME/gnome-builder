@@ -1,0 +1,23 @@
+gbpgladeproperties {
+  font-size: 0.83333em;
+}
+
+popover.glade-stack-header {
+  padding: 12px;
+}
+
+popover.glade-stack-header treeview {
+  background: transparent;
+  margin: 12px;
+  color: @theme_fg_color;
+}
+
+popover.glade-stack-header scrolledwindow {
+  border: none;
+}
+
+popover.glade-stack-header entry {
+  margin-bottom: 12px;
+}
+
+

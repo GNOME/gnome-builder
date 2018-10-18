@@ -323,6 +323,15 @@
             ]
         },
         {
+            "name" : "glade",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/glade.git"
+                }
+            ]
+        },
+        {
             "name" : "sysprof",
             "config-opts" : [
                 "--libdir=/app/lib",
