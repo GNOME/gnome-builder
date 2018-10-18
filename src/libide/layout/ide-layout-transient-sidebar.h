@@ -51,5 +51,9 @@ void ide_layout_transient_sidebar_set_panel (IdeLayoutTransientSidebar *self,
 IDE_AVAILABLE_IN_ALL
 void ide_layout_transient_sidebar_set_view  (IdeLayoutTransientSidebar *self,
                                              IdeLayoutView             *view);
+IDE_AVAILABLE_IN_3_32
+void ide_layout_transient_sidebar_lock      (IdeLayoutTransientSidebar *self);
+IDE_AVAILABLE_IN_3_32
+void ide_layout_transient_sidebar_unlock    (IdeLayoutTransientSidebar *self);
 
 G_END_DECLS
