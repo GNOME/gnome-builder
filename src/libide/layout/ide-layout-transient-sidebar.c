@@ -97,6 +97,51 @@ has_view_related_focus (IdeLayoutTransientSidebar *self)
 }
 
 static void
+set_visible (IdeLayoutTransientSidebar *self,
+             gboolean                   visible)
+{
+  const gchar *prop_name;
+  GtkPositionType pos;
+  GtkWidget *bin;
+
+  g_assert (IDE_IS_LAYOUT_TRANSIENT_SIDEBAR (self));
+
+  if (!(bin = gtk_widget_get_ancestor (GTK_WIDGET (self), DZL_TYPE_DOCK_BIN)))
+    {
+      g_warning ("Failed to locate DzlDockBin for transition");
+      return;
+    }
+
+  gtk_container_child_get (GTK_CONTAINER (bin), GTK_WIDGET (self),
+                           "position", &pos,
+                           NULL);
+
+  switch (pos)
+    {
+    case GTK_POS_TOP:
+      prop_name = "top-visible";
+      break;
+
+    case GTK_POS_BOTTOM:
+      prop_name = "bottom-visible";
+      break;
+
+    case GTK_POS_LEFT:
+      prop_name = "left-visible";
+      break;
+
+    case GTK_POS_RIGHT:
+      prop_name = "right-visible";
+      break;
+
+    default:
+      g_return_if_reached ();
+    }
+
+  g_object_set (bin, prop_name, visible, NULL);
+}
+
+static void
 ide_layout_transient_sidebar_after_set_focus (IdeLayoutTransientSidebar *self,
                                               GtkWidget                 *focus,
                                               GtkWindow                 *toplevel)
@@ -129,7 +174,7 @@ ide_layout_transient_sidebar_after_set_focus (IdeLayoutTransientSidebar *self,
                                                   G_CALLBACK (ide_layout_transient_sidebar_view_destroyed),
                                                   self);
 
-          dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (self), FALSE);
+          set_visible (self, FALSE);
           g_weak_ref_set (&priv->view_ref, NULL);
         }
     }
@@ -289,7 +334,7 @@ ide_layout_transient_sidebar_lock (IdeLayoutTransientSidebar *self)
   priv->hold_count++;
 
   if (!dzl_dock_revealer_get_reveal_child (DZL_DOCK_REVEALER (self)))
-    dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (self), TRUE);
+    set_visible (self, TRUE);
 }
 
 void
@@ -305,6 +350,6 @@ ide_layout_transient_sidebar_unlock (IdeLayoutTransientSidebar *self)
   if (priv->hold_count == 0)
     {
       if (dzl_dock_revealer_get_reveal_child (DZL_DOCK_REVEALER (self)))
-        dzl_dock_revealer_set_reveal_child (DZL_DOCK_REVEALER (self), FALSE);
+        set_visible (self, FALSE);
     }
 }
