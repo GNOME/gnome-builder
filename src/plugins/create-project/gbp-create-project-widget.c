@@ -204,6 +204,18 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
 }
 
 static void
+gbp_create_project_widget_location_changed (GbpCreateProjectWidget *self,
+                                            GParamSpec             *pspec,
+                                            DzlFileChooserEntry    *chooser)
+{
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (DZL_IS_FILE_CHOOSER_ENTRY (chooser));
+
+  /* Piggyback on the name changed signal to update things */
+  gbp_create_project_widget_name_changed (self, self->project_name_entry);
+}
+
+static void
 update_language_sensitivity (GtkWidget *widget,
                              gpointer   data)
 {
@@ -486,6 +498,12 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
   g_signal_connect_object (self->project_name_entry,
                            "changed",
                            G_CALLBACK (gbp_create_project_widget_name_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->project_location_entry,
+                           "notify::file",
+                           G_CALLBACK (gbp_create_project_widget_location_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
