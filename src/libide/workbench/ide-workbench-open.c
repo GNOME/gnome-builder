@@ -114,13 +114,13 @@ ide_workbench_loader_compare (gconstpointer a,
       gchar *name;
 
       name = ide_workbench_addin_get_id (loadera->addin);
-      match = g_strcmp0 (hint, name);
+      match = g_strcmp0 (hint, name) == 0;
       g_free (name);
       if (match)
         return -1;
 
       name = ide_workbench_addin_get_id (loaderb->addin);
-      match = g_strcmp0 (hint, name);
+      match = g_strcmp0 (hint, name) == 0;
       g_free (name);
       if (match)
         return 1;
