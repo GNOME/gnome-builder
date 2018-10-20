@@ -186,8 +186,10 @@ src/plugins/glade/gbp-glade-editor-addin.c
 src/plugins/glade/gbp-glade-layout-stack-addin.c
 src/plugins/glade/gbp-glade-properties.c
 src/plugins/glade/gbp-glade-properties.ui
-src/plugins/glade/gbp-glade-view.c
 src/plugins/glade/gbp-glade-view-actions.c
+src/plugins/glade/gbp-glade-view.c
+src/plugins/glade/gbp-glade-view-shortcuts.c
+src/plugins/glade/gtk/menus.ui
 src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c
 src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 src/plugins/gnome-code-assistance/ide-gca-service.c
