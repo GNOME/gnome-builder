@@ -35,3 +35,13 @@ gbpgladeproperties button.combo {
   min-height: 18px;
   padding: 2px;
 }
+
+.glade-chooser button {
+  min-height: 12px;
+  min-width: 12px;
+}
+
+.glade-chooser {
+  font-size: 0.8333em;
+  padding: 6px;
+}

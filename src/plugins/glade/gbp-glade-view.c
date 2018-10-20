@@ -66,19 +66,35 @@ gbp_glade_view_class_init (GbpGladeViewClass *klass)
 static void
 gbp_glade_view_init (GbpGladeView *self)
 {
+  GtkBox *box;
+
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "gbp-glade-view-menu");
   ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), _("Unnamed Glade project"));
   ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "glade-symbolic");
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "gbp-glade-view-document-menu");
 
   self->project = glade_project_new ();
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_VERTICAL,
+                      "visible", TRUE,
+                      NULL);
+  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (box));
+
+  self->chooser = g_object_new (GLADE_TYPE_ADAPTOR_CHOOSER,
+                                "project", self->project,
+                                "visible", TRUE,
+                                NULL);
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->chooser), "glade-chooser");
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->chooser));
+
   self->designer = g_object_new (GLADE_TYPE_DESIGN_VIEW,
                                  "project", self->project,
                                  "vexpand", TRUE,
                                  "visible", TRUE,
                                  NULL);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->designer), "glade-designer");
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->designer));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->designer));
 
   glade_app_add_project (self->project);
 

@@ -22,6 +22,7 @@
 
 #include <ide.h>
 #include <gladeui/glade.h>
+#include <gladeui/glade-adaptor-chooser.h>
 
 #include "gbp-glade-view.h"
 
@@ -29,10 +30,11 @@ G_BEGIN_DECLS
 
 struct _GbpGladeView
 {
-  IdeLayoutView    parent_instance;
-  GFile           *file;
-  GladeProject    *project;
-  GladeDesignView *designer;
+  IdeLayoutView        parent_instance;
+  GFile               *file;
+  GladeProject        *project;
+  GladeDesignView     *designer;
+  GladeAdaptorChooser *chooser;
 };
 
 void _gbp_glade_view_init_actions   (GbpGladeView *self);
