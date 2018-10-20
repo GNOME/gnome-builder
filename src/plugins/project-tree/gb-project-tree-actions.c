@@ -199,18 +199,22 @@ gb_project_tree_actions_open_with (GSimpleAction *action,
 }
 
 static void
-gb_project_tree_actions_open_with_editor (GSimpleAction *action,
-                                          GVariant      *variant,
-                                          gpointer       user_data)
+gb_project_tree_actions_open_with_hint (GSimpleAction *action,
+                                        GVariant      *variant,
+                                        gpointer       user_data)
 {
   IdeWorkbench *workbench;
   GbProjectTree *self = user_data;
-  GFileInfo *file_info;
-  GFile *file;
   DzlTreeNode *selected;
+  GFileInfo *file_info;
   GObject *item;
+  GFile *file;
+  const gchar *hint;
 
+  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (variant != NULL);
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
   if (!(selected = dzl_tree_get_selected (DZL_TREE (self))) ||
       !(item = dzl_tree_node_get_item (selected)) ||
@@ -221,7 +225,17 @@ gb_project_tree_actions_open_with_editor (GSimpleAction *action,
       !(workbench = ide_widget_get_workbench (GTK_WIDGET (self))))
     return;
 
-  ide_workbench_open_files_async (workbench, &file, 1, "editor", IDE_WORKBENCH_OPEN_FLAGS_NONE, NULL, NULL, NULL);
+  hint = g_variant_get_string (variant, NULL);
+  ide_workbench_open_files_async (workbench, &file, 1, hint, IDE_WORKBENCH_OPEN_FLAGS_NONE, NULL, NULL, NULL);
+}
+
+static void
+gb_project_tree_actions_open_with_editor (GSimpleAction *action,
+                                          GVariant      *variant,
+                                          gpointer       user_data)
+{
+  g_autoptr(GVariant) param = g_variant_take_ref (g_variant_new_string ("editor"));
+  gb_project_tree_actions_open_with_hint (action, param, user_data);
 }
 
 static void
@@ -831,6 +845,7 @@ static GActionEntry GbProjectTreeActions[] = {
   { "open-in-terminal",       gb_project_tree_actions_open_in_terminal },
   { "open-with",              gb_project_tree_actions_open_with, "s" },
   { "open-with-editor",       gb_project_tree_actions_open_with_editor },
+  { "open-with-hint",         gb_project_tree_actions_open_with_hint, "s" },
   { "refresh",                gb_project_tree_actions_refresh },
   { "rename-file",            gb_project_tree_actions_rename_file },
 };
@@ -905,6 +920,10 @@ gb_project_tree_actions_update (GbProjectTree *self)
               "enabled", (GB_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
               NULL);
   action_set (group, "open-with-editor",
+              "enabled", (GB_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
+              NULL);
+  /* TODO: use the hint to determine visibility */
+  action_set (group, "open-with-hint",
               "enabled", (GB_IS_PROJECT_FILE (item) && !project_file_is_directory (item)),
               NULL);
   action_set (group, "open-containing-folder",
