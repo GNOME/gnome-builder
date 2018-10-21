@@ -31,6 +31,12 @@ struct _GbpGladeWorkbenchAddin
   IdeWorkbench *workbench;
 };
 
+typedef struct
+{
+  GFile        *file;
+  GbpGladeView *view;
+} LocateView;
+
 static gchar *
 gbp_glade_workbench_addin_get_id (IdeWorkbenchAddin *addin)
 {
@@ -90,6 +96,27 @@ gbp_glade_workbench_addin_open_cb (GObject      *object,
 }
 
 static void
+locate_view (GtkWidget *view,
+             gpointer   user_data)
+{
+  LocateView *locate = user_data;
+  GFile *file;
+
+  g_assert (IDE_IS_LAYOUT_VIEW (view));
+  g_assert (locate != NULL);
+
+  if (locate->view != NULL)
+    return;
+
+  if (!GBP_IS_GLADE_VIEW (view))
+    return;
+
+  file = gbp_glade_view_get_file (GBP_GLADE_VIEW (view));
+  if (g_file_equal (file, locate->file))
+    locate->view = GBP_GLADE_VIEW (view);
+}
+
+static void
 gbp_glade_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
                                       IdeUri                *uri,
                                       const gchar           *content_type,
@@ -103,6 +130,7 @@ gbp_glade_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
   g_autoptr(GFile) file = NULL;
   IdePerspective *editor;
   GbpGladeView *view;
+  LocateView locate = { 0 };
 
   g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (self->workbench));
@@ -114,6 +142,16 @@ gbp_glade_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
 
   editor = ide_workbench_get_perspective_by_name (self->workbench, "editor");
   file = ide_uri_to_file (uri);
+
+  /* First try to find an existing view for the file */
+  locate.file = file;
+  ide_workbench_views_foreach (self->workbench, locate_view, &locate);
+  if (locate.view != NULL)
+    {
+      ide_workbench_focus (self->workbench, GTK_WIDGET (locate.view));
+      ide_task_return_boolean (task, TRUE);
+      return;
+    }
 
   view = gbp_glade_view_new ();
   gtk_container_add (GTK_CONTAINER (editor), GTK_WIDGET (view));
