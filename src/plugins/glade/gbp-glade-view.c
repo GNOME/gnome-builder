@@ -204,3 +204,16 @@ gbp_glade_view_load_file_finish (GbpGladeView  *self,
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
+
+/**
+ * gbp_glade_view_get_file:
+ *
+ * Returns: (nullable) (transfer none): a #GFile or %NULL
+ */
+GFile *
+gbp_glade_view_get_file (GbpGladeView *self)
+{
+  g_return_val_if_fail (GBP_IS_GLADE_VIEW (self), NULL);
+
+  return self->file;
+}

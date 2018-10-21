@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpGladeView, gbp_glade_view, GBP, GLADE_VIEW, IdeLayoutView)
 
 GbpGladeView *gbp_glade_view_new              (void);
+GFile        *gbp_glade_view_get_file         (GbpGladeView         *self);
 void          gbp_glade_view_load_file_async  (GbpGladeView         *self,
                                                GFile                *file,
                                                GCancellable         *cancellable,
