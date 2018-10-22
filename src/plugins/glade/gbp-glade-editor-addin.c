@@ -167,14 +167,14 @@ gbp_glade_editor_addin_view_set (IdeEditorAddin *addin,
       self->has_hold = TRUE;
       dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->properties),
                                         GTK_WIDGET (view),
-					"GBP_GLADE_VIEW");
+                                        "GBP_GLADE_VIEW");
     }
   else
     {
       gtk_widget_hide (GTK_WIDGET (self->signals_dock));
       dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->properties),
                                         NULL,
-					"GBP_GLADE_VIEW");
+                                        "GBP_GLADE_VIEW");
     }
 
   gbp_glade_editor_addin_set_project (self, project);
