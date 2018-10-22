@@ -42,6 +42,28 @@ gbp_glade_view_new (void)
   return g_object_new (GBP_TYPE_GLADE_VIEW, NULL);
 }
 
+gboolean
+_gbp_glade_view_save (GbpGladeView  *self,
+                      GError       **error)
+{
+  const gchar *path;
+
+  g_return_val_if_fail (GBP_IS_GLADE_VIEW (self), FALSE);
+  g_return_val_if_fail (GLADE_IS_PROJECT (self->project), FALSE);
+
+  if (self->file == NULL || !(path = g_file_peek_path (self->file)))
+    {
+      /* Implausible path */
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_NOT_FOUND,
+                   "No file has been set for the view");
+      return FALSE;
+    }
+
+  return glade_project_save (self->project, path, error);
+}
+
 static void
 viewport_style_changed_cb (GbpGladeView    *self,
                            GtkStyleContext *style_context)

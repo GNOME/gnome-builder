@@ -33,18 +33,11 @@ gbp_glade_view_action_save (GSimpleAction *action,
 {
   GbpGladeView *self = user_data;
   g_autoptr(GError) error = NULL;
-  const gchar *path;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_GLADE_VIEW (self));
 
-  if (self->file == NULL || !(path = g_file_peek_path (self->file)))
-    {
-      g_warning ("GbpGladeView is missing a file");
-      return;
-    }
-
-  if (!glade_project_save (self->project, path, &error))
+  if (!_gbp_glade_view_save (self, &error))
     /* translators: %s is replaced with the specific error message */
     ide_widget_warning (self, _("Failed to save glade document: %s"), error->message);
 }
