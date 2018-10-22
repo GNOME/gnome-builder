@@ -87,6 +87,16 @@ gbp_glade_view_init (GbpGladeView *self)
   GtkBox *box;
   GtkViewport *viewport;
   GtkStyleContext *style_context;
+  static const struct {
+    const gchar *action_target;
+    const gchar *icon_name;
+    const gchar *tooltip;
+  } pointers[] = {
+    { "select", "glade-selector", N_("Switch to selection mode") },
+    { "drag-resize", "glade-drag-resize", N_("Switch to drag-resize mode") },
+    { "margin-edit", "glade-margin-edit", N_("Switch to margin editor") },
+    { "align-edit", "glade-align-edit", N_("Switch to alignment editor") },
+  };
 
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "gbp-glade-view-menu");
   ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), _("Unnamed Glade project"));
@@ -130,9 +140,47 @@ gbp_glade_view_init (GbpGladeView *self)
                            G_CONNECT_SWAPPED);
   viewport_style_changed_cb (self, style_context);
 
+  /* Setup pointer-mode controls */
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "visible", TRUE,
+                      NULL);
+  dzl_gtk_widget_add_style_class (GTK_WIDGET (box), "linked");
+  gtk_container_add (GTK_CONTAINER (self->chooser), GTK_WIDGET (box));
+
+  for (guint i = 0; i < G_N_ELEMENTS (pointers); i++)
+    {
+      g_autoptr(GVariant) param = NULL;
+      GtkButton *button;
+      GtkImage *image;
+
+      param = g_variant_take_ref (g_variant_new_string (pointers[i].action_target));
+
+      image = g_object_new (GTK_TYPE_IMAGE,
+                            "icon-name", pointers[i].icon_name,
+                            "visible", TRUE,
+                            NULL);
+      button = g_object_new (GTK_TYPE_BUTTON,
+                             "action-name", "glade-view.pointer-mode",
+                             "action-target", param,
+                             "child", image,
+                             "has-tooltip", TRUE,
+                             "tooltip-text", pointers[i].tooltip,
+                             "visible", TRUE,
+                             NULL);
+      dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "image-button");
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
+    }
+
+  /* Setup project and bindings. */
+
   glade_app_add_project (self->project);
 
-  g_object_bind_property (G_OBJECT (self->project), "modified", self, "modified", G_BINDING_DEFAULT);
+  g_object_bind_property (G_OBJECT (self->project), "modified",
+                          self, "modified",
+                          G_BINDING_DEFAULT);
+
+  /* Setup action state and shortcuts */
 
   _gbp_glade_view_init_actions (self);
   _gbp_glade_view_init_shortcuts (GTK_WIDGET (self));

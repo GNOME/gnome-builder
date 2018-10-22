@@ -80,9 +80,39 @@ gbp_glade_view_action_preview (GSimpleAction *action,
     }
 }
 
+static void
+gbp_glade_view_action_pointer_mode (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  GbpGladeView *self = user_data;
+  g_autoptr(GEnumClass) klass = NULL;
+  GladeProject *project;
+  const gchar *nick;
+  GEnumValue *value;
+  GType type;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+  g_assert (GBP_IS_GLADE_VIEW (self));
+
+  project = gbp_glade_view_get_project (self);
+  nick = g_variant_get_string (param, NULL);
+
+  /* No GType to lookup from public API yet */
+  type = g_type_from_name ("GladePointerMode");
+  klass = g_type_class_ref (type);
+  value = g_enum_get_value_by_nick (klass, nick);
+
+  if (value != NULL)
+    glade_project_set_pointer_mode (project, value->value);
+}
+
 static GActionEntry actions[] = {
   { "save", gbp_glade_view_action_save },
   { "preview", gbp_glade_view_action_preview },
+  { "pointer-mode", gbp_glade_view_action_pointer_mode, "s" },
 };
 
 void
