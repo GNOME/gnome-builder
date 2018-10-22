@@ -158,10 +158,10 @@ gbp_glade_view_init (GbpGladeView *self)
     const gchar *icon_name;
     const gchar *tooltip;
   } pointers[] = {
-    { "select", "glade-selector", N_("Switch to selection mode") },
-    { "drag-resize", "glade-drag-resize", N_("Switch to drag-resize mode") },
-    { "margin-edit", "glade-margin-edit", N_("Switch to margin editor") },
-    { "align-edit", "glade-align-edit", N_("Switch to alignment editor") },
+    { "select", "pointer-mode-select-symbolic", N_("Switch to selection mode") },
+    { "drag-resize", "pointer-mode-drag-symbolic", N_("Switch to drag-resize mode") },
+    { "margin-edit", "pointer-mode-resize-symbolic", N_("Switch to margin editor") },
+    { "align-edit", "pointer-mode-pin-symbolic", N_("Switch to alignment editor") },
   };
 
   ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), FALSE);
