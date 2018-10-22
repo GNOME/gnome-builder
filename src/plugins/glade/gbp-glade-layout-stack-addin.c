@@ -128,6 +128,18 @@ gbp_glade_layout_stack_addin_init (GbpGladeLayoutStackAddin *self)
 }
 
 static void
+on_popover_show_cb (GtkPopover *popover,
+                    gpointer    user_data)
+{
+  GtkTreeView *tree;
+
+  g_assert (GTK_IS_POPOVER (popover));
+
+  tree = dzl_gtk_widget_find_child_typed (GTK_WIDGET (popover), GTK_TYPE_TREE_VIEW);
+  gtk_tree_view_expand_all (tree);
+}
+
+static void
 gbp_glade_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                                    IdeLayoutStack      *stack)
 {
@@ -146,6 +158,10 @@ gbp_glade_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                           "height-request", 400,
                           "position", GTK_POS_BOTTOM,
                           NULL);
+  g_signal_connect (popover,
+                    "show",
+                    G_CALLBACK (on_popover_show_cb),
+                    NULL);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (popover), "glade-stack-header");
 
   self->button = g_object_new (GTK_TYPE_MENU_BUTTON,
