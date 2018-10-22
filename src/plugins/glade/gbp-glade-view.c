@@ -43,6 +43,24 @@ gbp_glade_view_new (void)
 }
 
 static void
+viewport_style_changed_cb (GbpGladeView    *self,
+                           GtkStyleContext *style_context)
+{
+  GdkRGBA bg, fg;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GTK_IS_STYLE_CONTEXT (style_context));
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gtk_style_context_get_color (style_context, GTK_STATE_FLAG_NORMAL, &fg);
+  gtk_style_context_get_background_color (style_context, GTK_STATE_FLAG_NORMAL, &bg);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  ide_layout_view_set_primary_color_bg (IDE_LAYOUT_VIEW (self), &bg);
+  ide_layout_view_set_primary_color_fg (IDE_LAYOUT_VIEW (self), &fg);
+}
+
+static void
 gbp_glade_view_dispose (GObject *object)
 {
   GbpGladeView *self = (GbpGladeView *)object;
@@ -67,6 +85,8 @@ static void
 gbp_glade_view_init (GbpGladeView *self)
 {
   GtkBox *box;
+  GtkViewport *viewport;
+  GtkStyleContext *style_context;
 
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "gbp-glade-view-menu");
   ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), _("Unnamed Glade project"));
@@ -95,6 +115,18 @@ gbp_glade_view_init (GbpGladeView *self)
                                  NULL);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->designer), "glade-designer");
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->designer));
+
+  /* Discover viewport so that we can track the background color changes
+   * from CSS. That is used to set our primary color.
+   */
+  viewport = dzl_gtk_widget_find_child_typed (GTK_WIDGET (self->designer), GTK_TYPE_VIEWPORT);
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (viewport));
+  g_signal_connect_object (style_context,
+                           "changed",
+                           G_CALLBACK (viewport_style_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  viewport_style_changed_cb (self, style_context);
 
   glade_app_add_project (self->project);
 
