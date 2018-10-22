@@ -34,8 +34,10 @@ struct _GbpGladeLayoutStackAddin
   GtkMenuButton  *button;
   GtkLabel       *label;
   GtkImage       *image;
+  GtkButton      *toggle_source;
   GladeInspector *inspector;
   DzlSignalGroup *project_signals;
+  IdeLayoutView  *view;
 };
 
 static void layout_stack_addin_iface_init (IdeLayoutStackAddinInterface *iface);
@@ -140,6 +142,112 @@ on_popover_show_cb (GtkPopover *popover,
 }
 
 static void
+find_view_cb (GtkWidget *widget,
+              gpointer   user_data)
+{
+  struct {
+    GFile         *file;
+    GType          type;
+    IdeLayoutView *view;
+  } *lookup = user_data;
+  GFile *file;
+
+  if (lookup->view != NULL)
+    return;
+
+  if (g_type_is_a (G_OBJECT_TYPE (widget), lookup->type))
+    {
+      if (IDE_IS_EDITOR_VIEW (widget))
+        {
+          IdeBuffer *buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (widget));
+          file = ide_file_get_file (ide_buffer_get_file (buffer));
+        }
+      else if (GBP_IS_GLADE_VIEW (widget))
+        {
+          file = gbp_glade_view_get_file (GBP_GLADE_VIEW (widget));
+        }
+      else
+        {
+          g_return_if_reached ();
+        }
+
+      if (g_file_equal (lookup->file, file))
+        lookup->view = IDE_LAYOUT_VIEW (widget);
+    }
+}
+
+static IdeLayoutView *
+find_view_by_file_and_type (IdeWorkbench *workbench,
+                            GFile        *file,
+                            GType         type)
+{
+  struct {
+    GFile         *file;
+    GType          type;
+    IdeLayoutView *view;
+  } lookup = { file, type, NULL };
+
+  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (G_IS_FILE (file));
+  g_assert (type == IDE_TYPE_EDITOR_VIEW || type == GBP_TYPE_GLADE_VIEW);
+
+  ide_workbench_views_foreach (workbench, find_view_cb, &lookup);
+
+  return lookup.view;
+}
+
+static void
+on_toggle_source_clicked_cb (GbpGladeLayoutStackAddin *self,
+                             GtkButton                *toggle_source)
+{
+  IdeWorkbench *workbench;
+  IdeLayoutView *other;
+  const gchar *hint;
+  GFile *gfile;
+  GType type;
+
+  g_assert (GBP_IS_GLADE_LAYOUT_STACK_ADDIN (self));
+  g_assert (GTK_IS_BUTTON (toggle_source));
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (toggle_source));
+
+  if (IDE_IS_EDITOR_VIEW (self->view))
+    {
+      IdeBuffer *buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (self->view));
+      IdeFile *file = ide_buffer_get_file (buffer);
+
+      gfile = ide_file_get_file (file);
+      type = GBP_TYPE_GLADE_VIEW;
+      hint = "glade";
+    }
+  else if (GBP_IS_GLADE_VIEW (self->view))
+    {
+      gfile = gbp_glade_view_get_file (GBP_GLADE_VIEW (self->view));
+      type = IDE_TYPE_EDITOR_VIEW;
+      hint = "editor";
+    }
+  else
+    {
+      g_return_if_reached ();
+    }
+
+  if (!(other = find_view_by_file_and_type (workbench, gfile, type)))
+    {
+      g_autoptr(IdeUri) uri = ide_uri_new_from_file (gfile);
+
+      ide_workbench_open_uri_async (workbench,
+                                    uri,
+                                    hint,
+                                    IDE_WORKBENCH_OPEN_FLAGS_NONE,
+                                    NULL, NULL, NULL);
+    }
+  else
+    {
+      ide_workbench_focus (workbench, GTK_WIDGET (other));
+    }
+}
+
+static void
 gbp_glade_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                                    IdeLayoutStack      *stack)
 {
@@ -199,6 +307,30 @@ gbp_glade_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                                   "visible", TRUE,
                                   NULL);
   gtk_container_add (GTK_CONTAINER (popover), GTK_WIDGET (self->inspector));
+
+  /*
+   * This button allows for toggling between the designer and the
+   * source document. It makes it look like we're switching between
+   * documents in the same frame, but its really two separate views.
+   */
+  self->toggle_source = g_object_new (GTK_TYPE_BUTTON,
+                                      "has-tooltip", TRUE,
+                                      "hexpand", FALSE,
+                                      "visible", FALSE,
+                                      NULL);
+  g_signal_connect (self->toggle_source,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->toggle_source);
+  g_signal_connect_object (self->toggle_source,
+                           "clicked",
+                           G_CALLBACK (on_toggle_source_clicked_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_container_add_with_properties (GTK_CONTAINER (header), GTK_WIDGET (self->toggle_source),
+                                     "pack-type", GTK_PACK_END,
+                                     "priority", 200,
+                                     NULL);
 }
 
 static void
@@ -210,8 +342,13 @@ gbp_glade_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
   g_assert (GBP_IS_GLADE_LAYOUT_STACK_ADDIN (self));
   g_assert (IDE_IS_LAYOUT_STACK (stack));
 
+  self->view = NULL;
+
   if (self->button != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->button));
+
+  if (self->toggle_source != NULL)
+    gtk_widget_destroy (GTK_WIDGET (self->toggle_source));
 }
 
 static void
@@ -224,6 +361,12 @@ gbp_glade_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
   g_assert (GBP_IS_GLADE_LAYOUT_STACK_ADDIN (self));
   g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
 
+  self->view = view;
+
+  /*
+   * Update related widgetry from view change.
+   */
+
   if (GBP_IS_GLADE_VIEW (view))
     project = gbp_glade_view_get_project (GBP_GLADE_VIEW (view));
 
@@ -232,6 +375,36 @@ gbp_glade_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
 
   dzl_signal_group_set_target (self->project_signals, project);
   gbp_glade_layout_stack_addin_selection_changed_cb (self, project);
+
+  /*
+   * If this is an editor view and a UI file, we can allow the user
+   * to change to the designer.
+   */
+
+  gtk_widget_hide (GTK_WIDGET (self->toggle_source));
+
+  if (IDE_IS_EDITOR_VIEW (view))
+    {
+      IdeBuffer *buffer = ide_editor_view_get_buffer (IDE_EDITOR_VIEW (view));
+      IdeFile *file = ide_buffer_get_file (buffer);
+      GFile *gfile = ide_file_get_file (file);
+      g_autofree gchar *name = g_file_get_basename (gfile);
+
+      if (g_str_has_suffix (name, ".ui"))
+        {
+          gtk_button_set_label (self->toggle_source, _("View Design"));
+          gtk_widget_set_tooltip_text (GTK_WIDGET (self->toggle_source),
+                                       _("Switch to UI designer"));
+          gtk_widget_show (GTK_WIDGET (self->toggle_source));
+        }
+    }
+  else if (GBP_IS_GLADE_VIEW (view))
+    {
+      gtk_button_set_label (self->toggle_source, _("View Source"));
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self->toggle_source),
+                                   _("Switch to source code editor"));
+      gtk_widget_show (GTK_WIDGET (self->toggle_source));
+    }
 }
 
 static void
