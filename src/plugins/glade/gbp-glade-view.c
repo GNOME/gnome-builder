@@ -87,6 +87,7 @@ gbp_glade_view_dispose (GObject *object)
 {
   GbpGladeView *self = (GbpGladeView *)object;
 
+  g_clear_object (&self->file);
   g_clear_object (&self->project);
 
   G_OBJECT_CLASS (gbp_glade_view_parent_class)->dispose (object);
