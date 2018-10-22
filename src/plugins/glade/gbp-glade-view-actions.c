@@ -149,21 +149,17 @@ static GActionEntry actions[] = {
   { "pointer-mode", gbp_glade_view_action_pointer_mode, "s" },
 };
 
-static void
-gbp_glade_view_update_actions_cb (GbpGladeView *self,
-                                  GladeCommand *command,
-                                  gboolean      execute,
-                                  GladeProject *project)
+void
+_gbp_glade_view_update_actions (GbpGladeView *self)
 {
   GladeCommand *redo;
   GladeCommand *undo;
 
   g_assert (GBP_IS_GLADE_VIEW (self));
-  g_assert (!command || GLADE_IS_COMMAND (command));
-  g_assert (GLADE_IS_PROJECT (project));
+  g_assert (GLADE_IS_PROJECT (self->project));
 
-  redo = glade_project_next_redo_item (project);
-  undo = glade_project_next_undo_item (project);
+  redo = glade_project_next_redo_item (self->project);
+  undo = glade_project_next_undo_item (self->project);
 
   dzl_gtk_widget_action_set (GTK_WIDGET (self), "glade-view", "undo",
                              "enabled", undo != NULL,
@@ -189,10 +185,5 @@ _gbp_glade_view_init_actions (GbpGladeView *self)
                                   "glade-view",
                                   G_ACTION_GROUP (group));
 
-  g_signal_connect_object (self->project,
-                           "changed",
-                           G_CALLBACK (gbp_glade_view_update_actions_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  gbp_glade_view_update_actions_cb (self, NULL, FALSE, self->project);
+  _gbp_glade_view_update_actions (self);
 }

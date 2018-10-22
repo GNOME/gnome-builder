@@ -42,6 +42,22 @@ gbp_glade_view_new (void)
   return g_object_new (GBP_TYPE_GLADE_VIEW, NULL);
 }
 
+static void
+gbp_glade_view_changed_cb (GbpGladeView *self,
+                           GladeCommand *command,
+                           gboolean      execute,
+                           GladeProject *project)
+{
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (!command || GLADE_IS_COMMAND (command));
+  g_assert (GLADE_IS_PROJECT (project));
+
+  if (project != self->project)
+    return;
+
+  _gbp_glade_view_update_actions (self);
+}
+
 gboolean
 _gbp_glade_view_save (GbpGladeView  *self,
                       GError       **error)
@@ -171,6 +187,11 @@ gbp_glade_view_init (GbpGladeView *self)
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "gbp-glade-view-document-menu");
 
   self->project = glade_project_new ();
+  g_signal_connect_object (self->project,
+                           "changed",
+                           G_CALLBACK (gbp_glade_view_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_VERTICAL,

@@ -39,6 +39,7 @@ struct _GbpGladeView
 
 void     _gbp_glade_view_init_actions   (GbpGladeView  *self);
 void     _gbp_glade_view_init_shortcuts (GtkWidget     *widget);
+void     _gbp_glade_view_update_actions (GbpGladeView  *self);
 gboolean _gbp_glade_view_save           (GbpGladeView  *self,
                                          GError       **error);
 
