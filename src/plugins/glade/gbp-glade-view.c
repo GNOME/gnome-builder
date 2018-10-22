@@ -65,6 +65,45 @@ _gbp_glade_view_save (GbpGladeView  *self,
 }
 
 static void
+gbp_glade_view_agree_to_close_async (IdeLayoutView       *view,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  GbpGladeView *self = (GbpGladeView *)view;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_glade_view_agree_to_close_async);
+
+  if (ide_layout_view_get_modified (view))
+    {
+      if (!_gbp_glade_view_save (self, &error))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+
+  ide_task_return_boolean (task, TRUE);
+}
+
+static gboolean
+gbp_glade_view_agree_to_close_finish (IdeLayoutView  *view,
+                                      GAsyncResult   *result,
+                                      GError        **error)
+{
+  g_assert (GBP_IS_GLADE_VIEW (view));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static void
 viewport_style_changed_cb (GbpGladeView    *self,
                            GtkStyleContext *style_context)
 {
@@ -98,8 +137,12 @@ gbp_glade_view_class_init (GbpGladeViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  IdeLayoutViewClass *view_class = IDE_LAYOUT_VIEW_CLASS (klass);
 
   object_class->dispose = gbp_glade_view_dispose;
+
+  view_class->agree_to_close_async = gbp_glade_view_agree_to_close_async;
+  view_class->agree_to_close_finish = gbp_glade_view_agree_to_close_finish;
 
   gtk_widget_class_set_css_name (widget_class, "gbpgladeview");
 }
