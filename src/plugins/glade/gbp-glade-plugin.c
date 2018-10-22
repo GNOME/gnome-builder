@@ -18,6 +18,7 @@
 
 #define G_LOG_DOMAIN "gbp-glade-plugin"
 
+#include <gladeui/glade.h>
 #include <ide.h>
 #include <libpeas/peas.h>
 
@@ -28,6 +29,8 @@
 void
 gbp_glade_register_types (PeasObjectModule *module)
 {
+  glade_init ();
+
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,
                                               GBP_TYPE_GLADE_EDITOR_ADDIN);
