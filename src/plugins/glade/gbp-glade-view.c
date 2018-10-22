@@ -29,6 +29,14 @@
 
 G_DEFINE_TYPE (GbpGladeView, gbp_glade_view, IDE_TYPE_LAYOUT_VIEW)
 
+enum {
+  PROP_0,
+  PROP_PROJECT,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+
 /**
  * gbp_glade_view_new:
  *
@@ -56,6 +64,101 @@ gbp_glade_view_changed_cb (GbpGladeView *self,
     return;
 
   _gbp_glade_view_update_actions (self);
+}
+
+static void
+gbp_glade_view_set_project (GbpGladeView *self,
+                            GladeProject *project)
+{
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GLADE_IS_PROJECT (project));
+
+  if (project == self->project)
+    return;
+
+  if (gtk_widget_in_destruction (GTK_WIDGET (self)))
+    return;
+
+  if (self->project != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->project,
+                                            G_CALLBACK (gbp_glade_view_changed_cb),
+                                            self);
+      g_clear_object (&self->project);
+    }
+
+  if (project != NULL)
+    {
+      self->project = g_object_ref (project);
+      g_signal_connect_object (self->project,
+                               "changed",
+                               G_CALLBACK (gbp_glade_view_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
+
+  if (self->designer != NULL)
+    {
+      gtk_widget_destroy (GTK_WIDGET (self->designer));
+      g_assert (self->designer == NULL);
+
+      if (self->project != NULL)
+        {
+          self->designer = g_object_new (GLADE_TYPE_DESIGN_VIEW,
+                                         "project", self->project,
+                                         "vexpand", TRUE,
+                                         "visible", TRUE,
+                                         NULL);
+          g_signal_connect (self->designer,
+                            "destroy",
+                            G_CALLBACK (gtk_widget_destroyed),
+                            &self->designer);
+          dzl_gtk_widget_add_style_class (GTK_WIDGET (self->designer), "glade-designer");
+          gtk_container_add_with_properties (GTK_CONTAINER (self->main_box), GTK_WIDGET (self->designer),
+                                             "pack-type", GTK_PACK_START,
+                                             "position", 0,
+                                             NULL);
+        }
+    }
+
+  if (self->chooser != NULL)
+    glade_adaptor_chooser_set_project (self->chooser, self->project);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT]);
+}
+
+gboolean
+_gbp_glade_view_reload (GbpGladeView *self)
+{
+  GladeProject *project;
+  gboolean ret;
+
+  g_return_val_if_fail (GBP_IS_GLADE_VIEW (self), FALSE);
+  g_return_val_if_fail (GLADE_IS_PROJECT (self->project), FALSE);
+
+  /*
+   * Switch to a new GladeProject object, which is rather tricky
+   * because we need to update everything that connected to it.
+   * Sadly we can't reuse existing GladeProject objects.
+   */
+  project = glade_project_new ();
+  gbp_glade_view_set_project (self, project);
+  gbp_glade_view_load_file_async (self, self->file, NULL, NULL, NULL);
+  g_clear_object (&project);
+
+  /*
+   * This is sort of a hack, buf if we want everything to adapt to our
+   * new project, we need to signal that the view changed so that it
+   * grabs the new version of our GladeProject.
+   */
+  if (gtk_widget_get_visible (GTK_WIDGET (self)) &&
+      gtk_widget_get_child_visible (GTK_WIDGET (self)))
+    {
+      gtk_widget_hide (GTK_WIDGET (self));
+      gtk_widget_show (GTK_WIDGET (self));
+    }
+
+  return ret;
 }
 
 gboolean
@@ -149,6 +252,25 @@ gbp_glade_view_dispose (GObject *object)
 }
 
 static void
+gbp_glade_view_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GbpGladeView *self = GBP_GLADE_VIEW (object);
+
+  switch (prop_id)
+    {
+    case PROP_PROJECT:
+      g_value_set_object (value, gbp_glade_view_get_project (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_glade_view_class_init (GbpGladeViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -156,9 +278,19 @@ gbp_glade_view_class_init (GbpGladeViewClass *klass)
   IdeLayoutViewClass *view_class = IDE_LAYOUT_VIEW_CLASS (klass);
 
   object_class->dispose = gbp_glade_view_dispose;
+  object_class->get_property = gbp_glade_view_get_property;
 
   view_class->agree_to_close_async = gbp_glade_view_agree_to_close_async;
   view_class->agree_to_close_finish = gbp_glade_view_agree_to_close_finish;
+
+  properties [PROP_PROJECT] =
+    g_param_spec_object ("project",
+                         "Project",
+                         "The project for the view",
+                         GLADE_TYPE_PROJECT,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "gbpgladeview");
 }
@@ -193,18 +325,22 @@ gbp_glade_view_init (GbpGladeView *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  box = g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_VERTICAL,
-                      "visible", TRUE,
-                      NULL);
-  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (box));
+  self->main_box = g_object_new (GTK_TYPE_BOX,
+                                 "orientation", GTK_ORIENTATION_VERTICAL,
+                                 "visible", TRUE,
+                                 NULL);
+  gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->main_box));
 
   self->chooser = g_object_new (GLADE_TYPE_ADAPTOR_CHOOSER,
                                 "project", self->project,
                                 "visible", TRUE,
                                 NULL);
+  g_signal_connect (self->chooser,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->chooser);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->chooser), "glade-chooser");
-  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (self->chooser),
+  gtk_container_add_with_properties (GTK_CONTAINER (self->main_box), GTK_WIDGET (self->chooser),
                                      "pack-type", GTK_PACK_END,
                                      NULL);
 
@@ -213,8 +349,12 @@ gbp_glade_view_init (GbpGladeView *self)
                                  "vexpand", TRUE,
                                  "visible", TRUE,
                                  NULL);
+  g_signal_connect (self->designer,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->designer);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->designer), "glade-designer");
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->designer));
+  gtk_container_add (GTK_CONTAINER (self->main_box), GTK_WIDGET (self->designer));
 
   /* Discover viewport so that we can track the background color changes
    * from CSS. That is used to set our primary color.

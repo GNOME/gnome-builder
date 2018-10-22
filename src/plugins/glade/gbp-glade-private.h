@@ -35,11 +35,13 @@ struct _GbpGladeView
   GladeProject        *project;
   GladeDesignView     *designer;
   GladeAdaptorChooser *chooser;
+  GtkBox              *main_box;
 };
 
 void     _gbp_glade_view_init_actions   (GbpGladeView  *self);
 void     _gbp_glade_view_init_shortcuts (GtkWidget     *widget);
 void     _gbp_glade_view_update_actions (GbpGladeView  *self);
+gboolean _gbp_glade_view_reload         (GbpGladeView  *self);
 gboolean _gbp_glade_view_save           (GbpGladeView  *self,
                                          GError       **error);
 
