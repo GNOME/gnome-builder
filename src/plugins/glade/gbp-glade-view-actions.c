@@ -109,11 +109,63 @@ gbp_glade_view_action_pointer_mode (GSimpleAction *action,
     glade_project_set_pointer_mode (project, value->value);
 }
 
+static void
+gbp_glade_view_action_undo (GSimpleAction *action,
+                            GVariant      *param,
+                            gpointer       user_data)
+{
+  GbpGladeView *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_GLADE_VIEW (self));
+
+  glade_project_undo (self->project);
+}
+
+static void
+gbp_glade_view_action_redo (GSimpleAction *action,
+                            GVariant      *param,
+                            gpointer       user_data)
+{
+  GbpGladeView *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_GLADE_VIEW (self));
+
+  glade_project_redo (self->project);
+}
+
 static GActionEntry actions[] = {
+  { "redo", gbp_glade_view_action_redo },
+  { "undo", gbp_glade_view_action_undo },
   { "save", gbp_glade_view_action_save },
   { "preview", gbp_glade_view_action_preview },
   { "pointer-mode", gbp_glade_view_action_pointer_mode, "s" },
 };
+
+static void
+gbp_glade_view_update_actions_cb (GbpGladeView *self,
+                                  GladeCommand *command,
+                                  gboolean      execute,
+                                  GladeProject *project)
+{
+  GladeCommand *redo;
+  GladeCommand *undo;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (!command || GLADE_IS_COMMAND (command));
+  g_assert (GLADE_IS_PROJECT (project));
+
+  redo = glade_project_next_redo_item (project);
+  undo = glade_project_next_undo_item (project);
+
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "glade-view", "undo",
+                             "enabled", undo != NULL,
+                             NULL);
+  dzl_gtk_widget_action_set (GTK_WIDGET (self), "glade-view", "redo",
+                             "enabled", redo != NULL,
+                             NULL);
+}
 
 void
 _gbp_glade_view_init_actions (GbpGladeView *self)
@@ -130,4 +182,11 @@ _gbp_glade_view_init_actions (GbpGladeView *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "glade-view",
                                   G_ACTION_GROUP (group));
+
+  g_signal_connect_object (self->project,
+                           "changed",
+                           G_CALLBACK (gbp_glade_view_update_actions_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gbp_glade_view_update_actions_cb (self, NULL, FALSE, self->project);
 }

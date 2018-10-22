@@ -42,6 +42,18 @@ static DzlShortcutEntry glade_view_shortcuts[] = {
     NC_("shortcut window", "Glade shortcuts"),
     NC_("shortcut window", "Designer"),
     NC_("shortcut window", "Preview the interface design") },
+
+  { "org.gnome.builder.glade-view.undo",
+    0, NULL,
+    NC_("shortcut window", "Glade shortcuts"),
+    NC_("shortcut window", "Designer"),
+    NC_("shortcut window", "Undo the last command") },
+
+  { "org.gnome.builder.glade-view.redo",
+    0, NULL,
+    NC_("shortcut window", "Glade shortcuts"),
+    NC_("shortcut window", "Designer"),
+    NC_("shortcut window", "Redo the next command") },
 };
 
 void
@@ -64,6 +76,18 @@ _gbp_glade_view_init_shortcuts (GtkWidget *widget)
                                               "<Control><Alt>p",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("glade-view.preview"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.glade-view.undo"),
+                                              "<Control>z",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("glade-view.undo"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.glade-view.redo"),
+                                              "<Control><Shift>z",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("glade-view.redo"));
 
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              glade_view_shortcuts,
