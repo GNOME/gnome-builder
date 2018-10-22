@@ -33,8 +33,8 @@
                   </object>
                   <packing>
                     <property name="name">general</property>
-                    <property name="title" translatable="yes">General</property>
-                    <property name="icon-name">system-run-symbolic</property>
+                    <property name="title" translatable="yes">Widget specific properties</property>
+                    <property name="icon-name">widget-properties-symbolic</property>
                   </packing>
                 </child>
                 <child>
@@ -43,8 +43,8 @@
                   </object>
                   <packing>
                     <property name="name">packing</property>
-                    <property name="title" translatable="yes">Packing</property>
-                    <property name="icon-name">system-run-symbolic</property>
+                    <property name="title" translatable="yes">Container child properties</property>
+                    <property name="icon-name">widget-packing-symbolic</property>
                   </packing>
                 </child>
                 <child>
@@ -53,8 +53,8 @@
                   </object>
                   <packing>
                     <property name="name">common</property>
-                    <property name="title" translatable="yes">Common</property>
-                    <property name="icon-name">system-run-symbolic</property>
+                    <property name="title" translatable="yes">Styling, alignment, and other common properties</property>
+                    <property name="icon-name">widget-layout-symbolic</property>
                   </packing>
                 </child>
                 <child>
@@ -63,7 +63,7 @@
                   </object>
                   <packing>
                     <property name="name">a11y</property>
-                    <property name="title" translatable="yes">Accessibility</property>
+                    <property name="title" translatable="yes">Accessibility properties</property>
                     <property name="icon-name">preferences-desktop-accessibility-symbolic</property>
                   </packing>
                 </child>
