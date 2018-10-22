@@ -158,6 +158,7 @@ gbp_glade_view_init (GbpGladeView *self)
 
       image = g_object_new (GTK_TYPE_IMAGE,
                             "icon-name", pointers[i].icon_name,
+                            "pixel-size", 16,
                             "visible", TRUE,
                             NULL);
       button = g_object_new (GTK_TYPE_BUTTON,
