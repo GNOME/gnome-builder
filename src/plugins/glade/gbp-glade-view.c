@@ -121,6 +121,7 @@ gbp_glade_view_init (GbpGladeView *self)
     { "align-edit", "glade-align-edit", N_("Switch to alignment editor") },
   };
 
+  ide_layout_view_set_can_split (IDE_LAYOUT_VIEW (self), FALSE);
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "gbp-glade-view-menu");
   ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), _("Unnamed Glade project"));
   ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "glade-symbolic");
