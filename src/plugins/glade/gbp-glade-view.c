@@ -106,7 +106,9 @@ gbp_glade_view_init (GbpGladeView *self)
                                 "visible", TRUE,
                                 NULL);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->chooser), "glade-chooser");
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->chooser));
+  gtk_container_add_with_properties (GTK_CONTAINER (box), GTK_WIDGET (self->chooser),
+                                     "pack-type", GTK_PACK_END,
+                                     NULL);
 
   self->designer = g_object_new (GLADE_TYPE_DESIGN_VIEW,
                                  "project", self->project,
