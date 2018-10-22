@@ -2,8 +2,11 @@
 
 /* Draw our grid over the glade background pattern */
 gbpgladeview viewport {
-  background-color: #232729;
+  background-color: #1c1f20;
   background-size: 8px 8px;
-  background-image: repeating-linear-gradient(0deg, #2e2e2e, #2e2e2e 1px, transparent 1px, transparent 8px),
-                    repeating-linear-gradient(-90deg, #2e2e2e, #2e2e2e 1px, transparent 1px, transparent 8px);
+  background-image: repeating-linear-gradient(0deg, #212527, #212527 1px, transparent 1px, transparent 8px),
+                    repeating-linear-gradient(-90deg, #212527, #212527 1px, transparent 1px, transparent 8px);
+}
+.glade-chooser {
+  background-color: #1c1f20;
 }
