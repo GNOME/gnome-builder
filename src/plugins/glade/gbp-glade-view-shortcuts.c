@@ -89,6 +89,30 @@ _gbp_glade_view_init_shortcuts (GtkWidget *widget)
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               I_("glade-view.redo"));
 
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.glade-view.copy"),
+                                              "<Primary>c",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("glade-view.copy"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.glade-view.cut"),
+                                              "<Primary>x",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("glade-view.cut"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.glade-view.paste"),
+                                              "<Primary>v",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("glade-view.paste"));
+
+  dzl_shortcut_controller_add_command_action (controller,
+                                              I_("org.gnome.builder.glade-view.delete"),
+                                              "Delete",
+                                              DZL_SHORTCUT_PHASE_BUBBLE,
+                                              I_("glade-view.delete"));
+
   dzl_shortcut_manager_add_shortcut_entries (NULL,
                                              glade_view_shortcuts,
                                              G_N_ELEMENTS (glade_view_shortcuts),

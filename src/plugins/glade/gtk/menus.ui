@@ -16,6 +16,28 @@
         <attribute name="accel">&lt;control&gt;&lt;alt&gt;p</attribute>
       </item>
     </section>
+    <section id="glade-clipboard-section">
+      <item>
+        <attribute name="action">glade-view.cut</attribute>
+        <attribute name="label" translatable="yes">Cut</attribute>
+        <attribute name="accel">&lt;primary&gt;x</attribute>
+      </item>
+      <item>
+        <attribute name="action">glade-view.copy</attribute>
+        <attribute name="label" translatable="yes">Copy</attribute>
+        <attribute name="accel">&lt;primary&gt;c</attribute>
+      </item>
+      <item>
+        <attribute name="action">glade-view.paste</attribute>
+        <attribute name="label" translatable="yes">Paste</attribute>
+        <attribute name="accel">&lt;primary&gt;v</attribute>
+      </item>
+      <item>
+        <attribute name="action">glade-view.delete</attribute>
+        <attribute name="label" translatable="yes">Delete</attribute>
+        <attribute name="accel">Delete</attribute>
+      </item>
+    </section>
     <section id="glade-undo-section">
       <item>
         <attribute name="action">glade-view.undo</attribute>

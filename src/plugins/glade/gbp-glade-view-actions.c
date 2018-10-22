@@ -110,32 +110,45 @@ gbp_glade_view_action_pointer_mode (GSimpleAction *action,
 }
 
 static void
-gbp_glade_view_action_undo (GSimpleAction *action,
-                            GVariant      *param,
-                            gpointer       user_data)
+gbp_glade_view_action_paste (GSimpleAction *action,
+                             GVariant      *param,
+                             gpointer       user_data)
 {
   GbpGladeView *self = user_data;
+  GtkWidget *placeholder;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_GLADE_VIEW (self));
 
-  glade_project_undo (self->project);
+  placeholder = glade_util_get_placeholder_from_pointer (GTK_CONTAINER (self));
+  glade_project_command_paste (self->project, placeholder ? GLADE_PLACEHOLDER (placeholder) : NULL);
 }
 
-static void
-gbp_glade_view_action_redo (GSimpleAction *action,
-                            GVariant      *param,
-                            gpointer       user_data)
-{
-  GbpGladeView *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_GLADE_VIEW (self));
-
-  glade_project_redo (self->project);
+#define WRAP_PROJECT_ACTION(name, func)                 \
+static void                                             \
+gbp_glade_view_action_##name (GSimpleAction *action,    \
+                              GVariant      *param,     \
+                              gpointer       user_data) \
+{                                                       \
+  GbpGladeView *self = user_data;                       \
+                                                        \
+  g_assert (G_IS_SIMPLE_ACTION (action));               \
+  g_assert (GBP_IS_GLADE_VIEW (self));                  \
+                                                        \
+  glade_project_##func (self->project);                 \
 }
+
+WRAP_PROJECT_ACTION (cut, command_cut)
+WRAP_PROJECT_ACTION (copy, copy_selection)
+WRAP_PROJECT_ACTION (delete, command_delete)
+WRAP_PROJECT_ACTION (redo, redo)
+WRAP_PROJECT_ACTION (undo, undo)
 
 static GActionEntry actions[] = {
+  { "cut", gbp_glade_view_action_cut },
+  { "copy", gbp_glade_view_action_copy },
+  { "paste", gbp_glade_view_action_paste },
+  { "delete", gbp_glade_view_action_delete },
   { "redo", gbp_glade_view_action_redo },
   { "undo", gbp_glade_view_action_undo },
   { "save", gbp_glade_view_action_save },
