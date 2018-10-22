@@ -241,6 +241,50 @@ viewport_style_changed_cb (GbpGladeView    *self,
 }
 
 static void
+gbp_glade_view_buffer_saved_cb (GbpGladeView     *self,
+                                IdeBuffer        *buffer,
+                                IdeBufferManager *bufmgr)
+{
+  IdeFile *file;
+  GFile *gfile;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+
+  if (self->file == NULL)
+    return;
+
+  file = ide_buffer_get_file (buffer);
+  gfile = ide_file_get_file (file);
+
+  if (g_file_equal (gfile, self->file))
+    _gbp_glade_view_reload (self);
+}
+
+static void
+gbp_glade_view_context_set (GtkWidget  *widget,
+                            IdeContext *context)
+{
+  GbpGladeView *self = (GbpGladeView *)widget;
+  IdeBufferManager *bufmgr;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  if (context == NULL)
+    return;
+
+  /* Track when buffers are saved so that we can reload the view */
+  bufmgr = ide_context_get_buffer_manager (context);
+  g_signal_connect_object (bufmgr,
+                           "buffer-saved",
+                           G_CALLBACK (gbp_glade_view_buffer_saved_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+}
+
+static void
 gbp_glade_view_dispose (GObject *object)
 {
   GbpGladeView *self = (GbpGladeView *)object;
@@ -317,6 +361,8 @@ gbp_glade_view_init (GbpGladeView *self)
   ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), _("Unnamed Glade project"));
   ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "glade-symbolic");
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "gbp-glade-view-document-menu");
+
+  ide_widget_set_context_handler (self, gbp_glade_view_context_set);
 
   self->project = glade_project_new ();
   g_signal_connect_object (self->project,
