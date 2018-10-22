@@ -51,6 +51,18 @@ gbp_glade_view_new (void)
 }
 
 static void
+gbp_glade_view_notify_modified_cb (GbpGladeView *self,
+                                   GParamSpec   *pspec,
+                                   GladeProject *project)
+{
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GLADE_IS_PROJECT (project));
+
+  ide_layout_view_set_modified (IDE_LAYOUT_VIEW (self),
+                                glade_project_get_modified (project));
+}
+
+static void
 gbp_glade_view_changed_cb (GbpGladeView *self,
                            GladeCommand *command,
                            gboolean      execute,
@@ -70,6 +82,8 @@ static void
 gbp_glade_view_set_project (GbpGladeView *self,
                             GladeProject *project)
 {
+  GladeProject *old_project = NULL;
+
   g_assert (GBP_IS_GLADE_VIEW (self));
   g_assert (GLADE_IS_PROJECT (project));
 
@@ -81,18 +95,29 @@ gbp_glade_view_set_project (GbpGladeView *self,
 
   if (self->project != NULL)
     {
+      old_project = g_object_ref (self->project);
       g_signal_handlers_disconnect_by_func (self->project,
                                             G_CALLBACK (gbp_glade_view_changed_cb),
                                             self);
+      g_signal_handlers_disconnect_by_func (self->project,
+                                            G_CALLBACK (gbp_glade_view_notify_modified_cb),
+                                            self);
+      glade_app_remove_project (self->project);
       g_clear_object (&self->project);
     }
 
   if (project != NULL)
     {
       self->project = g_object_ref (project);
+      glade_app_add_project (self->project);
       g_signal_connect_object (self->project,
                                "changed",
                                G_CALLBACK (gbp_glade_view_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      g_signal_connect_object (self->project,
+                               "notify::modified",
+                               G_CALLBACK (gbp_glade_view_notify_modified_cb),
                                self,
                                G_CONNECT_SWAPPED);
     }
@@ -123,6 +148,11 @@ gbp_glade_view_set_project (GbpGladeView *self,
 
   if (self->chooser != NULL)
     glade_adaptor_chooser_set_project (self->chooser, self->project);
+
+  ide_layout_view_set_modified (IDE_LAYOUT_VIEW (self),
+                                self->project != NULL && glade_project_get_modified (self->project));
+
+  g_clear_object (&old_project);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT]);
 }
@@ -180,7 +210,32 @@ _gbp_glade_view_save (GbpGladeView  *self,
       return FALSE;
     }
 
-  return glade_project_save (self->project, path, error);
+  if (glade_project_save (self->project, path, error))
+    {
+      IdeBufferManager *bufmgr;
+      IdeContext *context;
+      IdeBuffer *buffer;
+
+      context = ide_widget_get_context (GTK_WIDGET (self));
+      bufmgr = ide_context_get_buffer_manager (context);
+
+      /* We successfully wrote the file, so trigger a full reload of the
+       * IdeBuffer if there is one already currently open.
+       */
+
+      if ((buffer = ide_buffer_manager_find_buffer (bufmgr, self->file)))
+        {
+          ide_buffer_manager_load_file_async (bufmgr,
+                                              ide_buffer_get_file (buffer),
+                                              TRUE,
+                                              IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW,
+                                              NULL, NULL, NULL, NULL);
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -345,6 +400,7 @@ gbp_glade_view_init (GbpGladeView *self)
   GtkBox *box;
   GtkViewport *viewport;
   GtkStyleContext *style_context;
+  GladeProject *project = NULL;
   static const struct {
     const gchar *action_target;
     const gchar *icon_name;
@@ -364,12 +420,9 @@ gbp_glade_view_init (GbpGladeView *self)
 
   ide_widget_set_context_handler (self, gbp_glade_view_context_set);
 
-  self->project = glade_project_new ();
-  g_signal_connect_object (self->project,
-                           "changed",
-                           G_CALLBACK (gbp_glade_view_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  project = glade_project_new ();
+  gbp_glade_view_set_project (self, project);
+  g_clear_object (&project);
 
   self->main_box = g_object_new (GTK_TYPE_BOX,
                                  "orientation", GTK_ORIENTATION_VERTICAL,
@@ -446,14 +499,6 @@ gbp_glade_view_init (GbpGladeView *self)
       dzl_gtk_widget_add_style_class (GTK_WIDGET (button), "image-button");
       gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
     }
-
-  /* Setup project and bindings. */
-
-  glade_app_add_project (self->project);
-
-  g_object_bind_property (G_OBJECT (self->project), "modified",
-                          self, "modified",
-                          G_BINDING_DEFAULT);
 
   /* Setup action state and shortcuts */
 
