@@ -96,13 +96,8 @@ gbp_glade_view_set_project (GbpGladeView *self,
   if (self->project != NULL)
     {
       old_project = g_object_ref (self->project);
-      g_signal_handlers_disconnect_by_func (self->project,
-                                            G_CALLBACK (gbp_glade_view_changed_cb),
-                                            self);
-      g_signal_handlers_disconnect_by_func (self->project,
-                                            G_CALLBACK (gbp_glade_view_notify_modified_cb),
-                                            self);
       glade_app_remove_project (self->project);
+      dzl_signal_group_set_target (self->project_signals, NULL);
       g_clear_object (&self->project);
     }
 
@@ -110,16 +105,7 @@ gbp_glade_view_set_project (GbpGladeView *self,
     {
       self->project = g_object_ref (project);
       glade_app_add_project (self->project);
-      g_signal_connect_object (self->project,
-                               "changed",
-                               G_CALLBACK (gbp_glade_view_changed_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-      g_signal_connect_object (self->project,
-                               "notify::modified",
-                               G_CALLBACK (gbp_glade_view_notify_modified_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
+      dzl_signal_group_set_target (self->project_signals, project);
     }
 
   if (self->designer != NULL)
@@ -347,6 +333,12 @@ gbp_glade_view_dispose (GObject *object)
   g_clear_object (&self->file);
   g_clear_object (&self->project);
 
+  if (self->project_signals != NULL)
+    {
+      dzl_signal_group_set_target (self->project_signals, NULL);
+      g_clear_object (&self->project_signals);
+    }
+
   G_OBJECT_CLASS (gbp_glade_view_parent_class)->dispose (object);
 }
 
@@ -417,6 +409,20 @@ gbp_glade_view_init (GbpGladeView *self)
   ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), _("Unnamed Glade project"));
   ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "glade-symbolic");
   ide_layout_view_set_menu_id (IDE_LAYOUT_VIEW (self), "gbp-glade-view-document-menu");
+
+  self->project_signals = dzl_signal_group_new (GLADE_TYPE_PROJECT);
+
+  dzl_signal_group_connect_object (self->project_signals,
+                                   "notify::modified",
+                                   G_CALLBACK (gbp_glade_view_notify_modified_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  dzl_signal_group_connect_object (self->project_signals,
+                                   "changed",
+                                   G_CALLBACK (gbp_glade_view_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
   ide_widget_set_context_handler (self, gbp_glade_view_context_set);
 

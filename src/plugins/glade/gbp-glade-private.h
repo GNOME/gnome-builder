@@ -31,8 +31,11 @@ G_BEGIN_DECLS
 struct _GbpGladeView
 {
   IdeLayoutView        parent_instance;
+
   GFile               *file;
   GladeProject        *project;
+  DzlSignalGroup      *project_signals;
+
   GladeDesignView     *designer;
   GladeAdaptorChooser *chooser;
   GtkBox              *main_box;
