@@ -628,6 +628,22 @@ gbp_glade_view_get_project (GbpGladeView *self)
   return self->project;
 }
 
+static gboolean
+file_missing_or_empty (GFile *file)
+{
+  g_autoptr(GFileInfo) info = NULL;
+
+  g_assert (G_IS_FILE (file));
+
+  info = g_file_query_info (file,
+                            G_FILE_ATTRIBUTE_STANDARD_SIZE,
+                            G_FILE_QUERY_INFO_NONE,
+                            NULL,
+                            NULL);
+
+  return info == NULL || g_file_info_get_size (info) == 0;
+}
+
 static void
 gbp_glade_view_load_file_map_cb (GladeDesignView *designer,
                                  IdeTask         *task)
@@ -654,6 +670,18 @@ gbp_glade_view_load_file_map_cb (GladeDesignView *designer,
                                  G_IO_ERROR,
                                  G_IO_ERROR_INVALID_FILENAME,
                                  "File must be a local file");
+      return;
+    }
+
+  /*
+   * If the file is empty, nothing to load for now. Just go
+   * ahead and wait until we save to overwrite it.
+   */
+  if (file_missing_or_empty (file))
+    {
+      name = g_file_get_basename (file);
+      ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), name);
+      ide_task_return_boolean (task, TRUE);
       return;
     }
 
