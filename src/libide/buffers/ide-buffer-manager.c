@@ -456,9 +456,11 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autofree gchar *guess_contents = NULL;
   g_autofree gchar *content_type = NULL;
+  g_autofree gchar *truncated = NULL;
   GtkSourceFileLoader *loader = (GtkSourceFileLoader *)object;
   IdeBufferManager *self;
   const gchar *path;
+  const gchar *dot;
   IdeContext *context;
   LoadState *state;
   GtkTextIter iter;
@@ -540,8 +542,15 @@ ide_buffer_manager_load_file__load_cb (GObject      *object,
   gtk_text_iter_forward_chars (&end, 1024);
   guess_contents = gtk_text_iter_get_slice (&iter, &end);
   path = ide_file_get_path (state->file);
-  content_type = g_content_type_guess (path, (const guchar *)guess_contents,
-                                       strlen (guess_contents), &uncertain);
+
+  /* Remove the ".in" suffix for files that are expanded at build time. */
+  if ((dot = strrchr (path, '.')))
+    path = truncated = g_strndup (path, dot - path);
+
+  content_type = g_content_type_guess (path,
+                                       (const guchar *)guess_contents,
+                                       strlen (guess_contents),
+                                       &uncertain);
   if (content_type && !uncertain)
     _ide_file_set_content_type (state->file, content_type);
 
