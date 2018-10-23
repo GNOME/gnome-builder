@@ -29,6 +29,7 @@ struct _GbpGladeWorkbenchAddin
 {
   GObject parent_instance;
   IdeWorkbench *workbench;
+  GHashTable *catalog_paths;
 };
 
 typedef struct
@@ -183,15 +184,111 @@ gbp_glade_workbench_addin_open_finish (IdeWorkbenchAddin  *addin,
 }
 
 static void
+on_build_pipeline_changed_cb (GbpGladeWorkbenchAddin *self,
+                              GParamSpec             *pspec,
+                              IdeBuildManager        *build_manager)
+{
+  IdeBuildPipeline *pipeline;
+  GHashTableIter iter;
+  const gchar *key;
+
+  g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  g_hash_table_iter_init (&iter, self->catalog_paths);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, NULL))
+    {
+      g_debug ("Removing catalogs from: %s", key);
+      glade_catalog_remove_path (key);
+      g_hash_table_iter_remove (&iter);
+    }
+
+  /* Get path from the installation prefix in the build runtime. */
+
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  if (pipeline != NULL)
+    {
+      IdeConfiguration *config = ide_build_pipeline_get_configuration (pipeline);
+      IdeRuntime *runtime = ide_build_pipeline_get_runtime (pipeline);
+      g_autoptr(GFile) translated = NULL;
+      g_autoptr(GFile) catalog_file = NULL;
+
+      if (config != NULL)
+        {
+          const gchar *prefix = ide_configuration_get_prefix (config);
+          g_autofree gchar *path = g_build_filename (prefix, "share/glade/catalogs", NULL);
+
+          if (!g_hash_table_contains (self->catalog_paths, path))
+            {
+              g_debug ("Adding catalogs from installation prefix: %s", path);
+              glade_catalog_add_path (path);
+              g_hash_table_insert (self->catalog_paths, g_steal_pointer (&path), NULL);
+            }
+        }
+
+      /*
+       * Get the path to the default installation path
+       * (/usr/share/glade/catalogs) for catalogs in the runtime. We just
+       * assume the natural /usr here since we deal with alternate installation
+       * paths above.
+       */
+
+      if (runtime != NULL)
+        {
+          const gchar *path;
+
+          catalog_file = g_file_new_for_path ("/usr/share/glade/catalogs");
+          translated = ide_runtime_translate_file (runtime, catalog_file);
+          path = g_file_peek_path (translated);
+
+          if (!g_hash_table_contains (self->catalog_paths, path))
+            {
+              g_debug ("Adding catalogs from runtime: %s", path);
+              glade_catalog_add_path (path);
+              g_hash_table_insert (self->catalog_paths, g_strdup (path), NULL);
+            }
+        }
+    }
+}
+
+static void
 gbp_glade_workbench_addin_load (IdeWorkbenchAddin *addin,
                                 IdeWorkbench      *workbench)
 {
   GbpGladeWorkbenchAddin *self = (GbpGladeWorkbenchAddin *)addin;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
 
   g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   self->workbench = workbench;
+  self->catalog_paths = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  /*
+   * We want to watch the build pipeline for changes to the current
+   * runtime, so that we can update the glade catalog paths based
+   * on the installation prefix.
+   *
+   * For example, if we get "/opt/gnome" as a prefix, we want to get
+   * the catalog path from "/opt/gnome/share/glade/catalogs/". Or if we
+   * get "/app" we want "/app/share/glade/catalogs/". We also need to
+   * translate the path to something we can locate on the host, in case
+   * the runtime is a foreign mount.
+   */
+
+  context = ide_workbench_get_context (workbench);
+  build_manager = ide_context_get_build_manager (context);
+
+  g_signal_connect_object (build_manager,
+                           "notify::pipeline",
+                           G_CALLBACK (on_build_pipeline_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Update catalogs */
+  on_build_pipeline_changed_cb (self, NULL, build_manager);
 }
 
 static void
@@ -199,9 +296,30 @@ gbp_glade_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
 {
   GbpGladeWorkbenchAddin *self = (GbpGladeWorkbenchAddin *)addin;
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+  const gchar *path;
+  GHashTableIter iter;
 
   g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
+
+  context = ide_workbench_get_context (workbench);
+  build_manager = ide_context_get_build_manager (context);
+
+  g_signal_handlers_disconnect_by_func (build_manager,
+                                        G_CALLBACK (on_build_pipeline_changed_cb),
+                                        self);
+
+  g_hash_table_iter_init (&iter, self->catalog_paths);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&path, NULL))
+    {
+      g_debug ("Removing catalogs from: %s", path);
+      glade_catalog_remove_path (path);
+      g_hash_table_iter_remove (&iter);
+    }
+
+  g_clear_pointer (&self->catalog_paths, g_hash_table_unref);
 
   self->workbench = NULL;
 }
