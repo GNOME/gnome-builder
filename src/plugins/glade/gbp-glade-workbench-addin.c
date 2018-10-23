@@ -49,11 +49,16 @@ gbp_glade_workbench_addin_can_open (IdeWorkbenchAddin *addin,
                                     const gchar       *content_type,
                                     gint              *priority)
 {
+  const gchar *path;
+
   g_assert (GBP_IS_GLADE_WORKBENCH_ADDIN (addin));
   g_assert (priority != NULL);
 
+  path = ide_uri_get_path (uri);
+
   if (g_strcmp0 (content_type, "application/x-gtk-builder") == 0 ||
-      g_strcmp0 (content_type, "application/x-designer") == 0)
+      g_strcmp0 (content_type, "application/x-designer") == 0 ||
+      (path && g_str_has_suffix (path, ".ui")))
     {
       *priority = -100;
       return TRUE;
