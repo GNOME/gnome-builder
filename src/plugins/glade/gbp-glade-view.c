@@ -326,6 +326,85 @@ gbp_glade_view_context_set (GtkWidget  *widget,
 }
 
 static void
+gbp_glade_view_add_signal_handler_cb (GbpGladeView      *self,
+                                      GladeWidget       *widget,
+                                      const GladeSignal *gsignal,
+                                      GladeProject      *project)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GLADE_IS_WIDGET (widget));
+  g_assert (GLADE_IS_SIGNAL (gsignal));
+  g_assert (GLADE_IS_PROJECT (project));
+
+  g_print ("add signal handler: %s\n",
+           glade_signal_get_handler (gsignal));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_glade_view_remove_signal_handler_cb (GbpGladeView      *self,
+                                         GladeWidget       *widget,
+                                         const GladeSignal *gsignal,
+                                         GladeProject      *project)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GLADE_IS_WIDGET (widget));
+  g_assert (GLADE_IS_SIGNAL (gsignal));
+  g_assert (GLADE_IS_PROJECT (project));
+
+  g_print ("remove signal handler: %s\n",
+           glade_signal_get_handler (gsignal));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_glade_view_change_signal_handler_cb (GbpGladeView      *self,
+                                         GladeWidget       *widget,
+                                         const GladeSignal *old_gsignal,
+                                         const GladeSignal *new_gsignal,
+                                         GladeProject      *project)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GLADE_IS_WIDGET (widget));
+  g_assert (GLADE_IS_SIGNAL (old_gsignal));
+  g_assert (GLADE_IS_SIGNAL (new_gsignal));
+  g_assert (GLADE_IS_PROJECT (project));
+
+  g_print ("change signal handler: %s => %s\n",
+           glade_signal_get_handler (old_gsignal),
+           glade_signal_get_handler (new_gsignal));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_glade_view_activate_signal_handler_cb (GbpGladeView      *self,
+                                           GladeWidget       *widget,
+                                           const GladeSignal *gsignal,
+                                           GladeProject      *project)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GLADE_VIEW (self));
+  g_assert (GLADE_IS_WIDGET (widget));
+  g_assert (GLADE_IS_SIGNAL (gsignal));
+  g_assert (GLADE_IS_PROJECT (project));
+
+  g_print ("activate signal handler: %s\n",
+           glade_signal_get_handler (gsignal));
+
+  IDE_EXIT;
+}
+
+static void
 gbp_glade_view_dispose (GObject *object)
 {
   GbpGladeView *self = (GbpGladeView *)object;
@@ -421,6 +500,30 @@ gbp_glade_view_init (GbpGladeView *self)
   dzl_signal_group_connect_object (self->project_signals,
                                    "changed",
                                    G_CALLBACK (gbp_glade_view_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  dzl_signal_group_connect_object (self->project_signals,
+                                   "add-signal-handler",
+                                   G_CALLBACK (gbp_glade_view_add_signal_handler_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  dzl_signal_group_connect_object (self->project_signals,
+                                   "remove-signal-handler",
+                                   G_CALLBACK (gbp_glade_view_remove_signal_handler_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  dzl_signal_group_connect_object (self->project_signals,
+                                   "change-signal-handler",
+                                   G_CALLBACK (gbp_glade_view_change_signal_handler_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
+  dzl_signal_group_connect_object (self->project_signals,
+                                   "activate-signal-handler",
+                                   G_CALLBACK (gbp_glade_view_activate_signal_handler_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
 
