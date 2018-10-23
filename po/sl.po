@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2018-08-29 08:30+0000\n"
-"PO-Revision-Date: 2018-10-19 20:59+0200\n"
+"PO-Revision-Date: 2018-10-23 16:08+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -2419,11 +2419,8 @@ msgid "Automatically enable dark mode at night"
 msgstr "Samodejno omogoči temno temo v času noči"
 
 #: src/libide/preferences/ide-preferences-builtin.c:100
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Clear highlight"
 msgid "follow night light"
-msgstr "Upoštevaj sistemsko nočno osvetlitev"
+msgstr "upoštevaj nočno osvetlitev"
 
 #: src/libide/preferences/ide-preferences-builtin.c:101
 msgid "Grid Pattern"
@@ -2749,9 +2746,8 @@ msgid "Insert Trailing Newline"
 msgstr "Vstavi končno novo vrstico"
 
 #: src/libide/preferences/ide-preferences-builtin.c:325
-#, fuzzy
 msgid "Ensure files end with a newline"
-msgstr "Zagotovi končno novo vrstico"
+msgstr "Zagotovi končni prelom v novo vrstico"
 
 #: src/libide/preferences/ide-preferences-builtin.c:327
 msgid "Margins"
@@ -3203,10 +3199,8 @@ msgid "Building cache…"
 msgstr "Poteka izgradnja predpomnilnika ..."
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
-#, fuzzy
-#| msgid "Host operating system"
 msgid "Bootstrapping build system"
-msgstr "Sistem izgradnje"
+msgstr "Sistem izgradnje začetnega nalagalnika"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:223
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:145
@@ -4048,10 +4042,9 @@ msgid "Downloading application sources…"
 msgstr "Poteka prejemanje virov programa ..."
 
 #: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:665
-#, fuzzy, c-format
-#| msgid "Failed to create translation unit: %s"
+#, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr "Odstranitev vnosa je spodletela: %s"
+msgstr "Odstranitev vnosa flatpak je spodletela: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
@@ -4087,9 +4080,8 @@ msgid "Finalizing flatpak build"
 msgstr "Zaključevanje izgradnje flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:558
-#, fuzzy
 msgid "Exporting staging directory"
-msgstr "Poteka izvažanje ..."
+msgstr "Poteka izvažanje mape s spremembami ..."
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:645
 msgid "Creating flatpak bundle"
