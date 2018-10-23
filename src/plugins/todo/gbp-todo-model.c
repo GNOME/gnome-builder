@@ -90,10 +90,10 @@ static const gchar *exclude_files[] = {
 };
 
 static const gchar *keywords[] = {
-  "FIXME",
-  "XXX",
-  "TODO",
-  "HACK",
+  "FIXME:",
+  "XXX:",
+  "TODO:",
+  "HACK:",
 };
 
 static void
