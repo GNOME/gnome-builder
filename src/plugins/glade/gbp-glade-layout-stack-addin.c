@@ -78,7 +78,7 @@ gbp_glade_layout_stack_addin_selection_changed_cb (GbpGladeLayoutStackAddin *sel
           display_name[0] != '(' &&
           name != NULL &&
           !g_str_equal (display_name, name))
-        name = format = g_strdup_printf ("%s ­— %s", display_name, name);
+        name = format = g_strdup_printf ("%s — %s", display_name, name);
 
       gtk_label_set_label (GTK_LABEL (self->label), name);
       g_object_set (self->image,
