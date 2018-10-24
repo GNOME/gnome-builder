@@ -1,0 +1,9 @@
+[Plugin]
+Module=grep
+Name=Find in Files
+Description=Search across project files
+Authors=Christian Hergert <christian@hergert.me>
+Copyright=Copyright © 2018 Christian Hergert
+Builtin=true
+Depends=editor
+Embedded=gbp_grep_register_types
