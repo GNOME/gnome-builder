@@ -49,6 +49,7 @@
         <attribute name="action">project-tree.open-in-terminal</attribute>
       </item>
     </section>
+    <section id="gb-project-tree-find-section"/>
     <section id="gb-project-tree-rename-section">
       <item>
         <attribute name="label" translatable="yes">_Rename</attribute>

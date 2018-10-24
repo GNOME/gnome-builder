@@ -195,6 +195,9 @@ src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c
 src/plugins/gnome-code-assistance/ide-gca-service.c
 src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml
 src/plugins/gradle/gradle_plugin.py
+src/plugins/grep/gbp-grep-panel.c
+src/plugins/grep/gbp-grep-popover.ui
+src/plugins/grep/gtk/menus.ui
 src/plugins/html-preview/gtk/menus.ui
 src/plugins/html-preview/html_preview.py
 src/plugins/jedi/jedi_plugin.py
