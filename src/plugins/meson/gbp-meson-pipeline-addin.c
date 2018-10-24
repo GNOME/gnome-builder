@@ -103,6 +103,9 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
     }
 
   if (ninja == NULL)
+    ninja = ide_configuration_getenv (config, "NINJA");
+
+  if (ninja == NULL)
     {
       ide_context_warning (context,
                            _("A Meson-based project is loaded but Ninja could not be found."));
