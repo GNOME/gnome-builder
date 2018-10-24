@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpGrepPanel" parent="DzlDockWidget">
+    <property name="icon-name">edit-find-symbolic</property>
+    <property name="title" translatable="yes">Find in Files</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="vexpand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeView" id="tree_view">
+                <property name="activate-on-single-click">true</property>
+                <property name="headers-visible">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-top">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="orientation">horizontal</property>
+            <property name="visible">true</property>
+            <child type="center">
+              <object class="GtkBox">
+                <property name="spacing">12</property>
+                <property name="hexpand">false</property>
+                <property name="orientation">horizontal</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Replace With</property>
+                    <property name="xalign">1.0</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child type="center">
+                  <object class="GtkEntry">
+                    <property name="visible">true</property>
+                    <property name="width-chars">30</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="replace_button">
+                    <property name="label" translatable="yes">Replace</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="destructive-action"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="close_button">
+                    <property name="label" translatable="yes">Close</property>
+                    <property name="visible">true</property>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="close_button"/>
+      <widget name="replace_button"/>
+    </widgets>
+  </object>
+</interface>
