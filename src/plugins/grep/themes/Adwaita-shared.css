@@ -1,0 +1,9 @@
+gbpgreppanel {
+  background-color: @theme_bg_color;
+}
+gbpgreppanel button {
+  min-height: 0px;
+}
+gbpgreppanel {
+  border-left: 1px solid alpha(@borders,.1);
+}
