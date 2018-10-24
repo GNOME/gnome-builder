@@ -37,6 +37,7 @@ subdir('gjs-symbols')
 subdir('glade')
 subdir('gnome-code-assistance')
 subdir('go-langserv')
+subdir('grep')
 subdir('history')
 subdir('html-completion')
 subdir('html-preview')
@@ -122,6 +123,7 @@ status += [
   'Glade ................. : @0@'.format(get_option('with_glade')),
   'GNOME Code Assistance . : @0@'.format(get_option('with_gnome_code_assistance')),
   'Go Language Server .... : @0@'.format(get_option('with_go_langserv')),
+  'Grep .................. : @0@'.format(get_option('with_grep')),
   'History ............... : @0@'.format(get_option('with_history')),
   'HTML Completion ....... : @0@'.format(get_option('with_html_completion')),
   'HTML Preview .......... : @0@'.format(get_option('with_html_preview')),

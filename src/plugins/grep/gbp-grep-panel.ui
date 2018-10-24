@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpGrepPanel" parent="DzlDockWidget">
+    <property name="icon-name">edit-find-symbolic</property>
+    <property name="title" translatable="yes">Find in Files</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="vexpand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkTreeView" id="tree_view">
+                <property name="activate-on-single-click">true</property>
+                <property name="headers-visible">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
