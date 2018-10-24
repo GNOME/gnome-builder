@@ -70,8 +70,6 @@ gbp_glade_layout_stack_addin_selection_changed_cb (GbpGladeLayoutStackAddin *sel
       const gchar *name;
       const gchar *icon_name;
 
-      g_assert (GTK_IS_WIDGET (widget));
-
       name = glade_widget_get_name (glade);
       display_name = glade_widget_get_display_name (glade);
       icon_name = glade_widget_adaptor_get_icon_name (adapter);
