@@ -39,6 +39,7 @@ class RustService(Ide.Object, Ide.Service):
     _client = None
     _has_started = False
     _supervisor = None
+    _monitor = None
 
     @GObject.Property(type=Ide.LangservClient)
     def client(self):
@@ -49,12 +50,45 @@ class RustService(Ide.Object, Ide.Service):
         self._client = value
         self.notify('client')
 
+    def do_context_loaded(self):
+        """
+        After the context has been loaded, we want to watch the project
+        Cargo.toml for changes if we find one. That will allow us to
+        restart the process as necessary to pick up changes.
+        """
+        context = self.get_context()
+        project_file = context.get_project_file()
+        if project_file is not None:
+            if project_file.get_basename() == 'Cargo.toml':
+                try:
+                    self._monitor = project_file.monitor(0, None)
+                    self._monitor.set_rate_limit(5 * 1000) # 5 Seconds
+                    self._monitor.connect('changed', self._monitor_changed_cb)
+                except Exception as ex:
+                    Ide.debug('Failed to monitor Cargo.toml for changes:', repr(ex))
+
+    def _monitor_changed_cb(self, monitor, file, other_file, event_type):
+        """
+        This method is called when Cargo.toml has changed. We need to
+        cancel any supervised process and force the language server to
+        restart. Otherwise, we risk it not picking up necessary changes.
+        """
+        if self._supervisor is not None:
+            subprocess = self._supervisor.get_subprocess()
+            if subprocess is not None:
+                subprocess.force_exit()
+
     def do_stop(self):
         """
         Stops the Rust Language Server upon request to shutdown the
         RustService.
         """
-        if self._supervisor:
+        if self._monitor is not None:
+            monitor, self._monitor = self._monitor, None
+            if monitor is not None:
+                monitor.cancel()
+
+        if self._supervisor is not None:
             supervisor, self._supervisor = self._supervisor, None
             supervisor.stop()
 
