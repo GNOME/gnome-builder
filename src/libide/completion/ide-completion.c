@@ -1664,7 +1664,10 @@ ide_completion_fuzzy_match (const gchar *haystack,
   for (; *casefold_needle; casefold_needle = g_utf8_next_char (casefold_needle))
     {
       gunichar ch = g_utf8_get_char (casefold_needle);
+      gunichar chup = g_unichar_toupper (ch);
       const gchar *tmp;
+      const gchar *downtmp;
+      const gchar *uptmp;
 
       /*
        * Note that the following code is not really correct. We want
@@ -1675,14 +1678,17 @@ ide_completion_fuzzy_match (const gchar *haystack,
        * for function names and symbols.
        */
 
-      tmp = strchr (haystack, ch);
+      downtmp = strchr (haystack, ch);
+      uptmp = strchr (haystack, chup);
 
-      if (tmp == NULL)
-        {
-          tmp = strchr (haystack, g_unichar_toupper (ch));
-          if (tmp == NULL)
-            return FALSE;
-        }
+      if (downtmp && uptmp)
+        tmp = MIN (downtmp, uptmp);
+      else if (downtmp)
+        tmp = downtmp;
+      else if (uptmp)
+        tmp = uptmp;
+      else
+        return FALSE;
 
       /*
        * Here we calculate the cost of this character into the score.
