@@ -1702,6 +1702,10 @@ ide_completion_fuzzy_match (const gchar *haystack,
        */
       real_score += (tmp - haystack) * 2;
 
+      /* Add extra cost if we matched by using toupper */
+      if (*haystack == chup)
+        real_score += 1;
+
       /*
        * Now move past our matching character so we cannot match
        * it a second time.
