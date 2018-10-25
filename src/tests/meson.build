@@ -204,3 +204,9 @@ test_hdr_format = executable('test-hdr-format', [
         c_args: ide_test_cflags,
   dependencies: [ ide_test_deps ],
 )
+
+test_completion_fuzzy = executable('test-completion-fuzzy', 'test-completion-fuzzy.c',
+        c_args: ide_test_cflags,
+  dependencies: [ ide_test_deps ],
+)
+test('test-completion-fuzzy', test_completion_fuzzy, env: ide_test_env)
