@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-09-20 22:42+0000\n"
-"PO-Revision-Date: 2018-09-21 08:49+0200\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"POT-Creation-Date: 2018-10-23 20:16+0000\n"
+"PO-Revision-Date: 2018-10-24 18:52+0200\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -457,7 +457,7 @@ msgstr "Die Höhe der unteren Leiste in Pixeleinheiten."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:605
+#: src/libide/application/ide-application.c:585
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:665
@@ -764,7 +764,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Eine Palette anhand der Einstellungen laden oder erzeugen"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4970
+#: src/libide/sourceview/ide-source-view.c:5001
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Umbenennen"
@@ -801,7 +801,7 @@ msgstr "Erfahren Sie mehr über GNOME Builder"
 msgid "Funded By"
 msgstr "Gefördert von"
 
-#: src/libide/application/ide-application.c:1001
+#: src/libide/application/ide-application.c:981
 #: src/libide/preferences/ide-preferences-builtin.c:418
 msgid "Projects"
 msgstr "Projekte"
@@ -927,20 +927,20 @@ msgstr ""
 "Eine Überwachung für Änderungen im Hintergrund konnte nicht eingerichtet "
 "werden: %s"
 
-#: src/libide/buffers/ide-buffer.c:2908
+#: src/libide/buffers/ide-buffer.c:2922
 msgid "The current language lacks a symbol resolver."
 msgstr "Die aktuelle Sprache benötigt einen Symbolauflöser."
 
-#: src/libide/buffers/ide-buffer.c:3379
+#: src/libide/buffers/ide-buffer.c:3393
 #, c-format
 msgid "Buffer failed: %s"
 msgstr "Puffer fehlgeschlagen: %s"
 
-#: src/libide/buffers/ide-buffer-manager.c:610
+#: src/libide/buffers/ide-buffer-manager.c:619
 msgid "File too large to be opened."
 msgstr "Datei ist zu groß zum Öffnen."
 
-#: src/libide/buffers/ide-buffer-manager.c:1825
+#: src/libide/buffers/ide-buffer-manager.c:1852
 #, c-format
 msgid "unsaved document %u"
 msgstr "Ungesichertes Dokument %u"
@@ -949,8 +949,8 @@ msgstr "Ungesichertes Dokument %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:1864
-#: src/libide/buffers/ide-buffer-manager.c:1927
+#: src/libide/buffers/ide-buffer-manager.c:1891
+#: src/libide/buffers/ide-buffer-manager.c:1954
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -1112,7 +1112,7 @@ msgid "Runtime"
 msgstr "Laufzeit"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:198
 msgid "Toolchain"
 msgstr "Werkzeugkette"
 
@@ -1401,7 +1401,7 @@ msgid "No file was provided."
 msgstr "Es wurde keine Datei geliefert."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:841
+#: src/libide/editor/ide-editor-perspective.c:847
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:155
 msgid "Editor"
@@ -1459,7 +1459,7 @@ msgstr "Nach links verschieben"
 msgid "Move Right"
 msgstr "Nach rechts verschieben"
 
-#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:119
+#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:121
 #: src/plugins/devhelp/gtk/menus.ui:11 src/plugins/terminal/gtk/menus.ui:25
 msgid "Close"
 msgstr "Schließen"
@@ -1484,11 +1484,11 @@ msgstr "Drucken …"
 msgid "Document Preferences"
 msgstr "Dokumenteinstellungen"
 
-#: src/libide/editor/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:113
 msgid "Save _As"
 msgstr "Speichern _unter"
 
-#: src/libide/editor/gtk/menus.ui:127
+#: src/libide/editor/gtk/menus.ui:129
 msgid "New File"
 msgstr "Neue Datei"
 
@@ -1618,6 +1618,14 @@ msgstr "Linke Leiste anzeigen/verbergen"
 msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Alle Dateien schließen"
+
+#: src/libide/editor/ide-editor-perspective.ui:24
+msgid "Restoring previous session"
+msgstr "Die vorherige Sitzung wiederherstellen"
+
+#: src/libide/editor/ide-editor-perspective.ui:25
+msgid "Your previous session will be ready momentarily."
+msgstr "Ihre vorherige Sitzung wird in Kürze bereit stehen."
 
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
@@ -2402,7 +2410,7 @@ msgid "Find text within terminal"
 msgstr "Text im Terminal suchen"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:898
+#: src/libide/langserv/ide-langserv-client.c:897
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Sprachserver konnte nicht initialisiert werden: %s"
@@ -3022,31 +3030,31 @@ msgstr "Prozess wurde unerwartet beendet"
 msgid "Host operating system"
 msgstr "Wirtsbetriebssystem"
 
-#: src/libide/sourceview/ide-source-view.c:4425
+#: src/libide/sourceview/ide-source-view.c:4456
 #, c-format
 msgid "Insert “%s”"
 msgstr "»%s« einfügen"
 
-#: src/libide/sourceview/ide-source-view.c:4427
+#: src/libide/sourceview/ide-source-view.c:4458
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "»%s« durch »%s« ersetzen"
 
-#: src/libide/sourceview/ide-source-view.c:4541
+#: src/libide/sourceview/ide-source-view.c:4572
 msgid "Apply Fix-It"
 msgstr "Fix-It anwenden"
 
-#: src/libide/sourceview/ide-source-view.c:4969
+#: src/libide/sourceview/ide-source-view.c:5000
 msgid "Rename symbol"
 msgstr "Symbol umbenennen"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5205
+#: src/libide/sourceview/ide-source-view.c:5236
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Zeile %u, Spalte %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5231
+#: src/libide/sourceview/ide-source-view.c:5262
 msgid "No references were found"
 msgstr "Keine Referenzen gefunden"
 
@@ -3274,7 +3282,7 @@ msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Perspektiven"
 
-#: src/main.c:120
+#: src/main.c:86
 msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
@@ -4047,7 +4055,7 @@ msgstr "Ordner mit diesem Namen existiert bereits"
 msgid "Your project will be created within %s."
 msgstr "Ihr Projekt wird innerhalb von %s erstellt."
 
-#: src/plugins/create-project/gbp-create-project-widget.c:612
+#: src/plugins/create-project/gbp-create-project-widget.c:630
 msgid "A failure occurred while initializing version control"
 msgstr "Beim Initialisieren der Versionskontrolle ist ein Fehler aufgetreten"
 
@@ -4352,7 +4360,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "Die angeforderte Datei existiert nicht im git-Index."
 
 #: src/plugins/git/ide-git-clone-widget.c:159
-#: src/plugins/git/ide-git-clone-widget.c:500
+#: src/plugins/git/ide-git-clone-widget.c:518
 msgid "A valid Git URL is required"
 msgstr "Eine gültige git-Adresse wird benötigt"
 
@@ -4362,11 +4370,11 @@ msgstr "Eine gültige git-Adresse wird benötigt"
 msgid "Your project will be created at %s"
 msgstr "Ihr Projekt wird auf %s erstellt"
 
-#: src/plugins/git/ide-git-clone-widget.c:216
+#: src/plugins/git/ide-git-clone-widget.c:228
 msgid "Apply"
 msgstr "Anwenden"
 
-#: src/plugins/git/ide-git-clone-widget.c:218
+#: src/plugins/git/ide-git-clone-widget.c:230
 msgid "Remote Branch to Clone"
 msgstr "Zu klonender entfernter Zweig"
 
@@ -4413,7 +4421,7 @@ msgstr ""
 "Softwarebestands liefern."
 
 #. translators: %s is replaced with the error message
-#: src/plugins/git/ide-git-vcs.c:406
+#: src/plugins/git/ide-git-vcs.c:412
 #, c-format
 msgid "Failed to establish git file monitor: %s"
 msgstr "Git-Dateiüberwachung konnte nicht eingerichtet werden: %s"
@@ -4509,11 +4517,11 @@ msgstr ""
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:101
 msgid "Add toolchain"
 msgstr "Eine Werkzeugkette hinzuzufügen"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:108
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr ""
 "Eine neue, angepasste Werkzeugkette für eine spezifische Plattform definieren"
