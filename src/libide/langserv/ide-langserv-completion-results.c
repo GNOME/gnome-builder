@@ -80,7 +80,9 @@ ide_langserv_completion_results_new (GVariant *results)
   self = g_object_new (IDE_TYPE_LANGSERV_COMPLETION_RESULTS, NULL);
   self->results = g_variant_ref_sink (results);
 
-  if ((items = g_variant_lookup_value (results, "items", NULL)))
+  /* Possibly unwrap the {items: []} style result. */
+  if (g_variant_is_of_type (results, G_VARIANT_TYPE_VARDICT) &&
+      (items = g_variant_lookup_value (results, "items", NULL)))
     {
       g_clear_pointer (&self->results, g_variant_unref);
 
