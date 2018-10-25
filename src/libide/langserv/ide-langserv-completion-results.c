@@ -178,7 +178,7 @@ ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
       return;
     }
 
-  query = g_utf8_strdown (typed_text, -1);
+  query = g_utf8_casefold (typed_text, -1);
 
   g_variant_iter_init (&iter, self->results);
 
