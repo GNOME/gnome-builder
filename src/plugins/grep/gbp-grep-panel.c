@@ -28,8 +28,12 @@
 
 struct _GbpGrepPanel
 {
-  DzlDockWidget  parent_instance;
-  GtkTreeView   *tree_view;
+  DzlDockWidget      parent_instance;
+
+  /* Unowned references */
+  GtkTreeView       *tree_view;
+  GtkTreeViewColumn *toggle_column;
+  GtkCheckButton    *check;
 };
 
 enum {
@@ -210,6 +214,10 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
   g_assert (GTK_IS_TREE_VIEW_COLUMN (column));
   g_assert (GTK_IS_TREE_VIEW (tree_view));
 
+  /* Ignore if this is the toggle checkbox column */
+  if (column == self->toggle_column)
+    return;
+
   if ((model = gtk_tree_view_get_model (tree_view)) &&
       gtk_tree_model_get_iter (model, &iter, path))
     {
@@ -237,6 +245,49 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
 
       ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
     }
+}
+
+static void
+gbp_grep_panel_row_toggled_cb (GbpGrepPanel          *self,
+                               const gchar           *pathstr,
+                               GtkCellRendererToggle *toggle)
+{
+  GtkTreeModel *model;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  g_assert (GBP_IS_GREP_PANEL (self));
+  g_assert (pathstr != NULL);
+  g_assert (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
+
+  path = gtk_tree_path_new_from_string (pathstr);
+  model = gtk_tree_view_get_model (self->tree_view);
+
+  if (gtk_tree_model_get_iter (model, &iter, path))
+    {
+      gbp_grep_model_toggle_row (GBP_GREP_MODEL (model), &iter);
+      gtk_widget_queue_resize (GTK_WIDGET (self->tree_view));
+    }
+
+  g_clear_pointer (&path, gtk_tree_path_free);
+}
+
+static void
+gbp_grep_panel_toggle_all_cb (GbpGrepPanel      *self,
+                              GtkTreeViewColumn *column)
+{
+  GtkToggleButton *toggle;
+  GtkTreeModel *model;
+
+  g_assert (GBP_IS_GREP_PANEL (self));
+  g_assert (GTK_IS_TREE_VIEW_COLUMN (column));
+
+  toggle = GTK_TOGGLE_BUTTON (self->check);
+  gtk_toggle_button_set_active (toggle, !gtk_toggle_button_get_active (toggle));
+
+  model = gtk_tree_view_get_model (self->tree_view);
+  gbp_grep_model_toggle_mode (GBP_GREP_MODEL (model));
+  gtk_widget_queue_resize (GTK_WIDGET (self->tree_view));
 }
 
 static void
@@ -312,12 +363,36 @@ gbp_grep_panel_init (GbpGrepPanel *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  column = gtk_tree_view_column_new ();
-  cell = gtk_cell_renderer_toggle_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (column), cell, "active", 1);
-  gtk_tree_view_column_set_expand (column, FALSE);
-  gtk_tree_view_append_column (self->tree_view, column);
+  self->check = g_object_new (GTK_TYPE_CHECK_BUTTON,
+                              "margin-bottom", 3,
+                              "margin-end", 6,
+                              "margin-start", 6,
+                              "margin-top", 3,
+                              "visible", TRUE,
+                              "active", TRUE,
+                              NULL);
+  self->toggle_column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
+                                      "visible", TRUE,
+                                      "clickable", TRUE,
+                                      "widget", self->check,
+                                      NULL);
+  g_signal_connect_object (self->toggle_column,
+                           "clicked",
+                           G_CALLBACK (gbp_grep_panel_toggle_all_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  cell = g_object_new (GTK_TYPE_CELL_RENDERER_TOGGLE,
+                       "activatable", TRUE,
+                       NULL);
+  g_signal_connect_object (cell,
+                           "toggled",
+                           G_CALLBACK (gbp_grep_panel_row_toggled_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self->toggle_column), cell, TRUE);
+  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (self->toggle_column), cell, "active", 1);
+  gtk_tree_view_column_set_expand (self->toggle_column, FALSE);
+  gtk_tree_view_append_column (self->tree_view, self->toggle_column);
 
   column = gtk_tree_view_column_new ();
   cell = gtk_cell_renderer_text_new ();
