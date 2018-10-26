@@ -37,6 +37,9 @@ struct _GbpGrepModel
   GFile *directory;
   gchar *query;
   Index *index;
+  GHashTable *toggled;
+
+  guint mode;
 
   guint has_scanned : 1;
   guint use_regex : 1;
@@ -59,6 +62,11 @@ enum {
   PROP_USE_REGEX,
   PROP_QUERY,
   N_PROPS
+};
+
+enum {
+  MODE_NONE,
+  MODE_ALL,
 };
 
 static GParamSpec *properties [N_PROPS];
@@ -91,6 +99,7 @@ gbp_grep_model_finalize (GObject *object)
   g_clear_object (&self->directory);
   g_clear_pointer (&self->index, index_free);
   g_clear_pointer (&self->query, g_free);
+  g_clear_pointer (&self->toggled, g_hash_table_unref);
 
   G_OBJECT_CLASS (gbp_grep_model_parent_class)->finalize (object);
 }
@@ -217,6 +226,8 @@ gbp_grep_model_class_init (GbpGrepModelClass *klass)
 static void
 gbp_grep_model_init (GbpGrepModel *self)
 {
+  self->mode = MODE_ALL;
+  self->toggled = g_hash_table_new (NULL, NULL);
 }
 
 const gchar *
@@ -616,6 +627,48 @@ gbp_grep_model_scan_finish (GbpGrepModel  *self,
   return self->index != NULL;
 }
 
+void
+gbp_grep_model_select_all (GbpGrepModel *self)
+{
+  g_return_if_fail (GBP_IS_GREP_MODEL (self));
+
+  self->mode = MODE_ALL;
+  g_hash_table_remove_all (self->toggled);
+}
+
+void
+gbp_grep_model_select_none (GbpGrepModel *self)
+{
+  g_return_if_fail (GBP_IS_GREP_MODEL (self));
+
+  self->mode = MODE_NONE;
+  g_hash_table_remove_all (self->toggled);
+}
+
+void
+gbp_grep_model_toggle_row (GbpGrepModel *self,
+                           GtkTreeIter  *iter)
+{
+  g_return_if_fail (GBP_IS_GREP_MODEL (self));
+  g_return_if_fail (iter != NULL);
+
+  if (g_hash_table_contains (self->toggled, iter->user_data))
+    g_hash_table_remove (self->toggled, iter->user_data);
+  else
+    g_hash_table_add (self->toggled, iter->user_data);
+}
+
+void
+gbp_grep_model_toggle_mode (GbpGrepModel *self)
+{
+  g_return_if_fail (GBP_IS_GREP_MODEL (self));
+
+  if (self->mode == MODE_ALL)
+    gbp_grep_model_select_none (self);
+  else
+    gbp_grep_model_select_all (self);
+}
+
 static GtkTreeModelFlags
 gbp_grep_model_get_flags (GtkTreeModel *tree_model)
 {
@@ -706,9 +759,11 @@ gbp_grep_model_get_value (GtkTreeModel *tree_model,
     }
   else if (column == 1)
     {
+      gboolean b = self->mode;
+      if (g_hash_table_contains (self->toggled, iter->user_data))
+        b = !b;
       g_value_init (value, G_TYPE_BOOLEAN);
-      /* TODO: Make this toggle'able */
-      g_value_set_boolean (value, TRUE);
+      g_value_set_boolean (value, b);
     }
 }
 
