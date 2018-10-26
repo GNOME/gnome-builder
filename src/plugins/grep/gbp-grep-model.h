@@ -47,6 +47,11 @@ void          gbp_grep_model_set_at_word_boundaries (GbpGrepModel         *self,
 const gchar  *gbp_grep_model_get_query              (GbpGrepModel         *self);
 void          gbp_grep_model_set_query              (GbpGrepModel         *self,
                                                      const gchar          *query);
+void          gbp_grep_model_select_all             (GbpGrepModel         *self);
+void          gbp_grep_model_select_none            (GbpGrepModel         *self);
+void          gbp_grep_model_toggle_mode            (GbpGrepModel         *self);
+void          gbp_grep_model_toggle_row             (GbpGrepModel         *self,
+                                                     GtkTreeIter          *iter);
 void          gbp_grep_model_scan_async             (GbpGrepModel         *self,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
