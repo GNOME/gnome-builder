@@ -35,6 +35,7 @@ struct _GbpGrepPanel
   GtkTreeViewColumn *toggle_column;
   GtkCheckButton    *check;
   GtkButton         *close_button;
+  GtkButton         *replace_button;
 };
 
 enum {
@@ -294,6 +295,16 @@ gbp_grep_panel_toggle_all_cb (GbpGrepPanel      *self,
 }
 
 static void
+gbp_grep_panel_replace_cb (GbpGrepPanel *self,
+                           GtkButton    *button)
+{
+  g_assert (GBP_IS_GREP_PANEL (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  gbp_grep_model_create_edits (GBP_GREP_MODEL (gtk_tree_view_get_model (self->tree_view)));
+}
+
+static void
 gbp_grep_panel_get_property (GObject    *object,
                              guint       prop_id,
                              GValue     *value,
@@ -350,6 +361,7 @@ gbp_grep_panel_class_init (GbpGrepPanelClass *klass)
   gtk_widget_class_set_css_name (widget_class, "gbpgreppanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/grep/gbp-grep-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, close_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, tree_view);
 }
 
@@ -364,6 +376,12 @@ gbp_grep_panel_init (GbpGrepPanel *self)
   g_signal_connect_object (self->close_button,
                            "clicked",
                            G_CALLBACK (gtk_widget_destroy),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->replace_button,
+                           "clicked",
+                           G_CALLBACK (gbp_grep_panel_replace_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
