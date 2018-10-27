@@ -110,6 +110,8 @@ match_data_func (GtkCellLayout   *layout,
                * the lifetime of the GValue here. Let's us avoid
                * an unnecessary copy.
                */
+              while (*tmp && g_unichar_isspace (g_utf8_get_char (tmp)))
+                tmp = g_utf8_next_char (tmp);
               g_value_set_static_string (&dst, tmp);
               break;
             }
