@@ -34,6 +34,7 @@ struct _GbpGrepPanel
   GtkTreeView       *tree_view;
   GtkTreeViewColumn *toggle_column;
   GtkCheckButton    *check;
+  GtkButton         *close_button;
 };
 
 enum {
@@ -346,6 +347,7 @@ gbp_grep_panel_class_init (GbpGrepPanelClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, "gbpgreppanel");
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/grep/gbp-grep-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, close_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, tree_view);
 }
 
@@ -356,6 +358,12 @@ gbp_grep_panel_init (GbpGrepPanel *self)
   GtkCellRenderer *cell;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_signal_connect_object (self->close_button,
+                           "clicked",
+                           G_CALLBACK (gtk_widget_destroy),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->tree_view,
                            "row-activated",
