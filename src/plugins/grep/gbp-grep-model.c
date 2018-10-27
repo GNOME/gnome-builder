@@ -882,3 +882,70 @@ tree_model_iface_init (GtkTreeModelIface *iface)
   iface->iter_nth_child = gbp_grep_model_iter_nth_child;
   iface->iter_parent = gbp_grep_model_iter_parent;
 }
+
+static void
+gbp_grep_model_foreach_selected (GbpGrepModel *self,
+                                 void        (*callback) (GbpGrepModel *self, guint index_, gpointer user_data),
+                                 gpointer      user_data)
+{
+  g_assert (GBP_IS_GREP_MODEL (self));
+  g_assert (callback != NULL);
+
+  if (self->index == NULL)
+    return;
+
+  if (self->mode == MODE_NONE)
+    {
+      GHashTableIter iter;
+      gpointer key;
+
+      g_hash_table_iter_init (&iter, self->toggled);
+      while (g_hash_table_iter_next (&iter, &key, NULL))
+        callback (self, GPOINTER_TO_UINT (key), user_data);
+    }
+  else if (self->mode == MODE_ALL)
+    {
+      for (guint i = 0; i < self->index->rows->len; i++)
+        {
+          if (!g_hash_table_contains (self->toggled, GINT_TO_POINTER (i)))
+            callback (self, i, user_data);
+        }
+    }
+  else
+    g_assert_not_reached ();
+}
+
+static void
+create_edits_cb (GbpGrepModel *self,
+                 guint         index_,
+                 gpointer      user_data)
+{
+  GPtrArray *edits = user_data;
+  const gchar *row;
+
+  g_assert (GBP_IS_GREP_MODEL (self));
+  g_assert (edits != NULL);
+
+  row = g_ptr_array_index (self->index->rows, index_);
+
+  //g_print ("ROW: %s\n", row);
+}
+
+/**
+ * gbp_grep_model_create_edits:
+ * @self: a #GbpGrepModel
+ *
+ * Returns: (transfer container): a #GPtrArray of IdeProjectEdit
+ */
+GPtrArray *
+gbp_grep_model_create_edits (GbpGrepModel *self)
+{
+  g_autoptr(GPtrArray) edits = NULL;
+
+  g_return_val_if_fail (GBP_IS_GREP_MODEL (self), NULL);
+
+  edits = g_ptr_array_new_with_free_func (g_object_unref);
+  gbp_grep_model_foreach_selected (self, create_edits_cb, edits);
+
+  return g_steal_pointer (&edits);
+}
