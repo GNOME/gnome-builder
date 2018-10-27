@@ -542,7 +542,7 @@ msgstr "Un debugger integrato per applicazioni native"
 
 #: data/org.gnome.Builder.appdata.xml.in:35
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr "Supporto per la compilazione con jhbuild e flatpack"
+msgstr "Supporto per la compilazione con jhbuild e flatpak"
 
 #: data/org.gnome.Builder.appdata.xml.in:41
 msgid "Quickly access your projects"
@@ -3307,7 +3307,7 @@ msgstr "Applicazione GNOME (autotools)"
 
 #: src/plugins/autotools-templates/autotools_templates/__init__.py:310
 msgid "Create a new flatpak-ready GNOME application"
-msgstr "Crea una nuova applicazione GNOME funzionante con Flatpack"
+msgstr "Crea una nuova applicazione GNOME funzionante con Flatpak"
 
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:155
@@ -4138,7 +4138,7 @@ msgstr "Scaricamento sorgenti applicazione…"
 #: src/plugins/flatpak/gbp-flatpak-configuration-provider.c:664
 #, c-format
 msgid "Failed to remove flatpak manifest: %s"
-msgstr "Rinomina del manifest flatpack non riuscita: %s"
+msgstr "Rinomina del manifest flatpak non riuscita: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-download-stage.c:69
 msgid "Network is not available, skipping downloads"
@@ -4155,7 +4155,7 @@ msgstr "Clona"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:150
 msgid "Creating flatpak workspace"
-msgstr "Creazione spazio di lavoro flatpack"
+msgstr "Creazione spazio di lavoro flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:329
 msgid "Preparing build directory"
@@ -4171,7 +4171,7 @@ msgstr "Compilazione dipendenze"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
 msgid "Finalizing flatpak build"
-msgstr "Completamento compilazione flatpack"
+msgstr "Completamento compilazione flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:558
 msgid "Exporting staging directory"
@@ -4179,7 +4179,7 @@ msgstr "Esportazione directory temporanea"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:644
 msgid "Creating flatpak bundle"
-msgstr "Creazione bundle flatpack"
+msgstr "Creazione bundle flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:91
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:84
@@ -4213,7 +4213,7 @@ msgstr[1] "Mostra %u runtime addizionali"
 
 #: src/plugins/flatpak/gbp-flatpak-preferences-addin.c:393
 msgid "Flatpak Runtimes"
-msgstr "Runtime Flatpack"
+msgstr "Runtime Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime.c:834
 #, c-format
@@ -4263,14 +4263,14 @@ msgstr "Il runtime è stato installato"
 
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:79
 msgid "Your computer is missing flatpak-builder"
-msgstr "«flatpack-builder» non disponibile"
+msgstr "«flatpak-builder» non disponibile"
 
 #: src/plugins/flatpak/gbp-flatpak-workbench-addin.c:80
 msgid ""
 "This program is necessary for building Flatpak applications. Would you like "
 "to install it?"
 msgstr ""
-"Questo programma è necessario per compilare applicazioni Flatpack. "
+"Questo programma è necessario per compilare applicazioni Flatpak. "
 "Installarlo?"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:87
