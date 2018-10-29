@@ -2,7 +2,7 @@
 
 # java_langserv_plugin.py
 #
-# Copyright 2016 Christian Hergert <chergert@redhat.com>
+# Copyright 2018 Daniel Buch Hansen <boogiewasthere@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
