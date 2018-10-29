@@ -164,20 +164,24 @@ gbp_grep_model_line_parse (GbpGrepModelLine *cl,
 
           msg_len = line_len - msg_begin;
 
-          while (g_regex_match_full (message_regex, cl->start_of_message, msg_len, 0, 0, &msg_match, NULL))
+          if (g_regex_match_full (message_regex, cl->start_of_message, msg_len, 0, 0, &msg_match, NULL))
             {
-              gint match_begin = -1;
-              gint match_end = -1;
-
-              if (g_match_info_fetch_pos (msg_match, 0, &match_begin, &match_end))
+              do
                 {
-                  GbpGrepModelMatch cm;
+                  gint match_begin = -1;
+                  gint match_end = -1;
 
-                  cm.match_begin = match_begin;
-                  cm.match_end = match_end;
+                  if (g_match_info_fetch_pos (msg_match, 0, &match_begin, &match_end))
+                    {
+                      GbpGrepModelMatch cm;
 
-                  g_array_append_val (cl->matches, cm);
+                      cm.match_begin = match_begin;
+                      cm.match_end = match_end;
+
+                      g_array_append_val (cl->matches, cm);
+                    }
                 }
+              while (g_match_info_next (msg_match, NULL));
 
               g_clear_pointer (&msg_match, g_match_info_free);
             }
@@ -369,7 +373,7 @@ gbp_grep_model_rebuild_regex (GbpGrepModel *self)
   else
     query = escaped = g_regex_escape_string (self->query, -1);
 
-  if (self->case_sensitive)
+  if (!self->case_sensitive)
     compile_flags |= G_REGEX_CASELESS;
 
   if (!(regex = g_regex_new (query, compile_flags, 0, &error)))
