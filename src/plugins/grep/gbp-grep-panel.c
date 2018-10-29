@@ -48,36 +48,6 @@ G_DEFINE_TYPE (GbpGrepPanel, gbp_grep_panel, DZL_TYPE_DOCK_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 
-static gchar *
-get_path_and_line (const gchar *str,
-                   guint       *line)
-{
-  static GRegex *regex;
-  g_autoptr(GMatchInfo) match = NULL;
-
-  if (regex == NULL)
-    {
-      g_autoptr(GError) error = NULL;
-
-      regex = g_regex_new ("([a-zA-Z0-9\\+\\-\\.\\/_]+):(\\d+):(.*)", 0, 0, &error);
-      g_assert_no_error (error);
-    }
-
-  if (g_regex_match_full (regex, str, strlen (str), 0, 0, &match, NULL))
-    {
-      gchar *pathstr = g_match_info_fetch (match, 1);
-      g_autofree gchar *linestr = g_match_info_fetch (match, 2);
-
-      *line = g_ascii_strtoll (linestr, NULL, 10);
-
-      return g_steal_pointer (&pathstr);
-    }
-
-  *line = 0;
-
-  return NULL;
-}
-
 static void
 match_data_func (GtkCellLayout   *layout,
                  GtkCellRenderer *cell,
@@ -85,42 +55,73 @@ match_data_func (GtkCellLayout   *layout,
                  GtkTreeIter     *iter,
                  gpointer         user_data)
 {
-  g_auto(GValue) src = G_VALUE_INIT;
-  g_auto(GValue) dst = G_VALUE_INIT;
-  const gchar *str;
-  const gchar *tmp;
-  guint count = 0;
+  const GbpGrepModelLine *line = NULL;
+  PangoAttrList *attrs = NULL;
+  const gchar *begin = NULL;
 
   g_assert (GTK_IS_CELL_LAYOUT (layout));
   g_assert (GTK_IS_CELL_RENDERER_TEXT (cell));
   g_assert (GTK_IS_TREE_MODEL (model));
   g_assert (iter != NULL);
 
-  gtk_tree_model_get_value (model, iter, 0, &src);
-  str = g_value_get_string (&src);
-  g_value_init (&dst, G_TYPE_STRING);
+  gbp_grep_model_get_line (GBP_GREP_MODEL (model), iter, &line);
 
-  for (tmp = str; *tmp; tmp = g_utf8_next_char (tmp))
+  if G_LIKELY (line != NULL)
     {
-      if (*tmp == ':')
+      goffset adjust;
+
+      /* Skip to the beginning of the text */
+      begin = line->start_of_message;
+      while (*begin && g_unichar_isspace (g_utf8_get_char (begin)))
+        begin = g_utf8_next_char (begin);
+
+      /*
+       * If any of our matches are for space, we can't skip past the starting
+       * space or we will fail to highlight properly.
+       */
+      adjust = begin - line->start_of_message;
+      for (guint i = 0; i < line->matches->len; i++)
         {
-          if (count == 1)
+          const GbpGrepModelMatch *match = &g_array_index (line->matches, GbpGrepModelMatch, i);
+
+          if (match->match_begin < adjust)
             {
-              tmp++;
-              /* We can use static string because we control
-               * the lifetime of the GValue here. Let's us avoid
-               * an unnecessary copy.
-               */
-              while (*tmp && g_unichar_isspace (g_utf8_get_char (tmp)))
-                tmp = g_utf8_next_char (tmp);
-              g_value_set_static_string (&dst, tmp);
+              begin = line->start_of_message;
+              adjust = 0;
               break;
             }
-          count++;
+        }
+
+      /* Now create pango attributes to draw around the matched text so that
+       * the user knows exactly where the match is. We need to adjust for what
+       * we chomped off the beginning of the visible message.
+       */
+      attrs = pango_attr_list_new ();
+      for (guint i = 0; i < line->matches->len; i++)
+        {
+          const GbpGrepModelMatch *match = &g_array_index (line->matches, GbpGrepModelMatch, i);
+          PangoAttribute *bg_attr = pango_attr_background_new (64764, 59881, 20303);
+          PangoAttribute *alpha_attr = pango_attr_background_alpha_new (32767);
+          gint start_index = match->match_begin - adjust;
+          gint end_index = match->match_end - adjust;
+
+          bg_attr->start_index = start_index;
+          bg_attr->end_index = end_index;
+
+          alpha_attr->start_index = start_index;
+          alpha_attr->end_index = end_index;
+
+          pango_attr_list_insert (attrs, g_steal_pointer (&bg_attr));
+          pango_attr_list_insert (attrs, g_steal_pointer (&alpha_attr));
         }
     }
 
-  g_object_set_property (G_OBJECT (cell), "text", &dst);
+  g_object_set (cell,
+                "attributes", attrs,
+                "text", begin,
+                NULL);
+
+  g_clear_pointer (&attrs, pango_attr_list_unref);
 }
 
 static void
@@ -130,35 +131,28 @@ path_data_func (GtkCellLayout   *layout,
                 GtkTreeIter     *iter,
                 gpointer         user_data)
 {
-  g_auto(GValue) src = G_VALUE_INIT;
-  g_auto(GValue) dst = G_VALUE_INIT;
-  const gchar *str;
-  const gchar *tmp;
-  guint count = 0;
+  const GbpGrepModelLine *line = NULL;
 
   g_assert (GTK_IS_CELL_LAYOUT (layout));
   g_assert (GTK_IS_CELL_RENDERER_TEXT (cell));
   g_assert (GTK_IS_TREE_MODEL (model));
   g_assert (iter != NULL);
 
-  gtk_tree_model_get_value (model, iter, 0, &src);
-  str = g_value_get_string (&src);
-  g_value_init (&dst, G_TYPE_STRING);
+  gbp_grep_model_get_line (GBP_GREP_MODEL (model), iter, &line);
 
-  for (tmp = str; *tmp; tmp = g_utf8_next_char (tmp))
+  if G_LIKELY (line != NULL)
     {
-      if (*tmp == ':')
+      const gchar *slash = strrchr (line->path, G_DIR_SEPARATOR);
+
+      if (slash != NULL)
         {
-          if (count == 1)
-            {
-              g_value_take_string (&dst, g_strndup (str, tmp - str));
-              break;
-            }
-          count++;
+          g_autofree gchar *path = g_strndup (line->path, slash - line->path);
+          g_object_set (cell, "text", path, NULL);
+          return;
         }
     }
 
-  g_object_set_property (G_OBJECT (cell), "text", &dst);
+  g_object_set (cell, "text", ".", NULL);
 }
 
 static void
@@ -168,40 +162,28 @@ filename_data_func (GtkCellLayout   *layout,
                     GtkTreeIter     *iter,
                     gpointer         user_data)
 {
-  g_auto(GValue) src = G_VALUE_INIT;
-  g_auto(GValue) dst = G_VALUE_INIT;
-  const gchar *str;
-  const gchar *tmp;
-  const gchar *slash;
-  guint count = 0;
+  const GbpGrepModelLine *line = NULL;
 
   g_assert (GTK_IS_CELL_LAYOUT (layout));
   g_assert (GTK_IS_CELL_RENDERER_TEXT (cell));
   g_assert (GTK_IS_TREE_MODEL (model));
   g_assert (iter != NULL);
 
-  gtk_tree_model_get_value (model, iter, 0, &src);
-  slash = str = g_value_get_string (&src);
-  g_value_init (&dst, G_TYPE_STRING);
+  gbp_grep_model_get_line (GBP_GREP_MODEL (model), iter, &line);
 
-  for (tmp = str; *tmp; tmp = g_utf8_next_char (tmp))
+  if G_LIKELY (line != NULL)
     {
-      if (*tmp == ':')
-        {
-          if (count == 1)
-            {
-              g_value_take_string (&dst, g_strndup (slash, tmp - slash));
-              break;
-            }
-          count++;
-        }
-      else if (*tmp == G_DIR_SEPARATOR)
-        {
-          slash = tmp + 1;
-        }
+      const gchar *slash = strrchr (line->path, G_DIR_SEPARATOR);
+
+      if (slash != NULL)
+        g_object_set (cell, "text", slash + 1, NULL);
+      else
+        g_object_set (cell, "text", line->path, NULL);
+
+      return;
     }
 
-  g_object_set_property (G_OBJECT (cell), "text", &dst);
+  g_object_set (cell, "text", NULL, NULL);
 }
 
 static void
@@ -225,29 +207,29 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
   if ((model = gtk_tree_view_get_model (tree_view)) &&
       gtk_tree_model_get_iter (model, &iter, path))
     {
-      g_autofree gchar *str = NULL;
-      g_autofree gchar *filename = NULL;
-      g_autoptr(IdeSourceLocation) location = NULL;
-      IdePerspective *editor;
-      IdeWorkbench *workbench;
-      IdeContext *context;
-      guint line = 0;
+      const GbpGrepModelLine *line = NULL;
 
-      gtk_tree_model_get (model, &iter,
-                          0, &str,
-                          -1);
+      gbp_grep_model_get_line (GBP_GREP_MODEL (model), &iter, &line);
 
-      filename = get_path_and_line (str, &line);
-      workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-      context = ide_workbench_get_context (workbench);
-      editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+      if G_LIKELY (line != NULL)
+        {
+          g_autoptr(IdeSourceLocation) location = NULL;
+          IdePerspective *editor;
+          IdeWorkbench *workbench;
+          IdeContext *context;
+          guint lineno = line->line;
 
-      if (line > 0)
-        line--;
+          workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+          context = ide_workbench_get_context (workbench);
+          editor = ide_workbench_get_perspective_by_name (workbench, "editor");
 
-      location = ide_source_location_new_for_path (context, filename, line, 0);
+          if (lineno > 0)
+            lineno--;
 
-      ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
+          location = ide_source_location_new_for_path (context, line->path, lineno, 0);
+
+          ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
+        }
     }
 }
 
