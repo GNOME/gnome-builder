@@ -2,7 +2,7 @@
 # Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 #
-# Alexandre Franke <alexandre.franke@gmail.com>, 2015-2016.
+# Alexandre Franke <alexandre.franke@gmail.com>, 2015-2018.
 # Yannick Inizan <inizan.yannick@gmail.com>, 2015.
 # Laurent de Burlet <thevedeburlet@gmail.com>, 2016.
 # Guillaume Bernard <associations@guillaume-bernard.fr>, 2017-2018
@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-09-05 05:32+0000\n"
-"PO-Revision-Date: 2018-09-05 20:37+0200\n"
-"Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
+"POT-Creation-Date: 2018-10-03 19:42+0000\n"
+"PO-Revision-Date: 2018-10-05 08:09+0200\n"
+"Last-Translator: Alexandre Franke <alexandre.franke@gmail.com>\n"
 "Language-Team: French <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -461,7 +461,7 @@ msgstr "La hauteur en pixels du panneau du bas."
 #: data/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: data/style-schemes/builder.style-scheme.xml:22
-#: src/libide/application/ide-application.c:605
+#: src/libide/application/ide-application.c:585
 #: src/libide/greeter/ide-greeter-perspective.ui:195
 #: src/libide/preferences/ide-preferences-builtin.c:142
 #: src/libide/workbench/ide-workbench.c:665
@@ -763,7 +763,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Charger ou générer une palette selon les préférences"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:4970
+#: src/libide/sourceview/ide-source-view.c:5001
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renommer"
@@ -801,7 +801,7 @@ msgstr "En apprendre plus sur GNOME Builder"
 msgid "Funded By"
 msgstr "Financé par"
 
-#: src/libide/application/ide-application.c:1001
+#: src/libide/application/ide-application.c:981
 #: src/libide/preferences/ide-preferences-builtin.c:418
 msgid "Projects"
 msgstr "Projets"
@@ -1111,7 +1111,7 @@ msgid "Runtime"
 msgstr "Environnement d’exécution"
 
 #: src/libide/buildui/ide-build-configuration-view.ui:217
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:192
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:198
 msgid "Toolchain"
 msgstr "Chaîne de compilation"
 
@@ -1397,7 +1397,7 @@ msgid "No file was provided."
 msgstr "Aucun fichier n’a été fourni."
 
 #: src/libide/editor/gtk/menus.ui:9
-#: src/libide/editor/ide-editor-perspective.c:841
+#: src/libide/editor/ide-editor-perspective.c:847
 #: src/libide/preferences/ide-preferences-builtin.c:106
 #: src/libide/preferences/ide-preferences-builtin.c:155
 msgid "Editor"
@@ -1454,7 +1454,7 @@ msgstr "Déplacer à gauche"
 msgid "Move Right"
 msgstr "Déplacer à droite"
 
-#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:119
+#: src/libide/editor/gtk/menus.ui:73 src/libide/editor/gtk/menus.ui:121
 #: src/plugins/devhelp/gtk/menus.ui:11 src/plugins/terminal/gtk/menus.ui:25
 msgid "Close"
 msgstr "Fermer"
@@ -1479,11 +1479,11 @@ msgstr "Imprimer…"
 msgid "Document Preferences"
 msgstr "Préférences du document"
 
-#: src/libide/editor/gtk/menus.ui:112
+#: src/libide/editor/gtk/menus.ui:113
 msgid "Save _As"
 msgstr "Enregistrer _sous"
 
-#: src/libide/editor/gtk/menus.ui:127
+#: src/libide/editor/gtk/menus.ui:129
 msgid "New File"
 msgstr "Nouveau fichier"
 
@@ -1614,6 +1614,14 @@ msgctxt "shortcut window"
 msgid "Close all files"
 msgstr "Fermer tous les fichiers"
 
+#: src/libide/editor/ide-editor-perspective.ui:24
+msgid "Restoring previous session"
+msgstr "Restauration de la session précédente"
+
+#: src/libide/editor/ide-editor-perspective.ui:25
+msgid "Your previous session will be ready momentarily."
+msgstr "Votre session précédente sera prête dans un instant."
+
 #: src/libide/editor/ide-editor-properties.ui:4
 msgid "Properties"
 msgstr "Propriétés"
@@ -1689,7 +1697,7 @@ msgstr "Syntaxe du langage"
 msgid "Search languages…"
 msgstr "Rechercher parmi les langages…"
 
-#: src/libide/editor/ide-editor-search-bar.c:304
+#: src/libide/editor/ide-editor-search-bar.c:305
 #, c-format
 msgid "%u of %u"
 msgstr "%u de %u"
@@ -2035,15 +2043,15 @@ msgstr "Copier l’_adresse du lien"
 msgid "You must call %s() before using libide."
 msgstr "Vous devez appeler %s() avant d’utiliser libide."
 
-#: src/libide/ide-context.c:2212
+#: src/libide/ide-context.c:2211
 msgid "An unload request is already pending"
 msgstr "Une requête de déchargement est déjà en attente"
 
-#: src/libide/ide-context.c:2294
+#: src/libide/ide-context.c:2293
 msgid "Context already unloading, cannot restore."
 msgstr "Le contexte est déjà en déchargement, impossible de restaurer."
 
-#: src/libide/ide-context.c:2303
+#: src/libide/ide-context.c:2302
 msgid "Context has already been restored."
 msgstr "Le contexte a déjà été restauré."
 
@@ -3017,31 +3025,31 @@ msgstr "Le processus a quitté de manière inattendue"
 msgid "Host operating system"
 msgstr "Système d’exploitation hôte"
 
-#: src/libide/sourceview/ide-source-view.c:4425
+#: src/libide/sourceview/ide-source-view.c:4456
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insérer « %s »"
 
-#: src/libide/sourceview/ide-source-view.c:4427
+#: src/libide/sourceview/ide-source-view.c:4458
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Remplacer « %s » par « %s »"
 
-#: src/libide/sourceview/ide-source-view.c:4541
+#: src/libide/sourceview/ide-source-view.c:4572
 msgid "Apply Fix-It"
 msgstr "Appliquer la correction automatique"
 
-#: src/libide/sourceview/ide-source-view.c:4969
+#: src/libide/sourceview/ide-source-view.c:5000
 msgid "Rename symbol"
 msgstr "Renommer le symbole"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5205
+#: src/libide/sourceview/ide-source-view.c:5236
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Ligne %u, colonne %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5231
+#: src/libide/sourceview/ide-source-view.c:5262
 msgid "No references were found"
 msgstr "Aucune référence trouvée"
 
@@ -3294,7 +3302,7 @@ msgstr "Configuration du projet"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:344
 #: src/plugins/cargo/cargo_plugin.py:166
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:210
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:197
@@ -3572,11 +3580,11 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:185
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:194
 msgid "Configure project"
 msgstr "Configurer le projet"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:229
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:207
 #: src/plugins/phpize/phpize_plugin.py:248
@@ -4245,12 +4253,12 @@ msgstr[1] "Afficher les %u environnements d’exécution suivants"
 msgid "Flatpak Runtimes"
 msgstr "Environnements d’exécution Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:834
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:815
 #, c-format
 msgid "%s <b>%s</b>"
 msgstr "%s <b>%s</b>"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:836
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:817
 #, c-format
 msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
@@ -4398,7 +4406,7 @@ msgstr ""
 "dépôt."
 
 #. translators: %s is replaced with the error message
-#: src/plugins/git/ide-git-vcs.c:406
+#: src/plugins/git/ide-git-vcs.c:412
 #, c-format
 msgid "Failed to establish git file monitor: %s"
 msgstr "Impossible de déterminer le moniteur de fichiers de git : %s"
@@ -4492,11 +4500,11 @@ msgstr "Un projet basé sur Meson est chargé mais meson n’a pas été trouvé
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:95
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:101
 msgid "Add toolchain"
 msgstr "Ajouter une chaîne de compilation"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:102
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:108
 msgid "Define a new custom toolchain targeting a specific platform"
 msgstr ""
 "Définir une nouvelle chaîne de compilation personnalisée ciblant une plate-"
@@ -4606,29 +4614,37 @@ msgstr "Supprimer la chaîne de compilation"
 msgid "Delete Tool"
 msgstr "Supprimer l’outil"
 
-#: src/plugins/meson-templates/meson_templates.py:250
+#: src/plugins/meson-templates/meson_templates.py:251
 msgid "GNOME Application"
 msgstr "Application GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:252
+#: src/plugins/meson-templates/meson_templates.py:253
 msgid "Create a new GNOME application"
 msgstr "Créer une nouvelle application GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:319
+#: src/plugins/meson-templates/meson_templates.py:320
 msgid "Shared Library"
 msgstr "Bibliothèque partagée"
 
-#: src/plugins/meson-templates/meson_templates.py:321
+#: src/plugins/meson-templates/meson_templates.py:322
 msgid "Create a new project with a shared library"
 msgstr "Créer un nouveau projet avec une bibliothèque partagée"
 
-#: src/plugins/meson-templates/meson_templates.py:337
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Empty Project"
 msgstr "Projet vide"
 
-#: src/plugins/meson-templates/meson_templates.py:339
+#: src/plugins/meson-templates/meson_templates.py:340
 msgid "Create a new empty project"
 msgstr "Créer un nouveau projet vide"
+
+#: src/plugins/meson-templates/meson_templates.py:353
+msgid "Command Line Tool"
+msgstr "Outil en ligne de commande"
+
+#: src/plugins/meson-templates/meson_templates.py:355
+msgid "Create a new command line project"
+msgstr "Créer un nouveau projet en ligne de commande"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
