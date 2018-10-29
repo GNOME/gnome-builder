@@ -34,10 +34,36 @@ struct _GbpGrepModel
 {
   IdeObject parent_instance;
 
+  /* The root directory to start searching from. */
   GFile *directory;
+
+  /* The query text, which we use to send to grep as well as use with
+   * GRegex to extract the match positions from a specific line.
+   */
   gchar *query;
+
+  /* We need to do client-side processing to extract the exact message
+   * locations after grep gives us the matching lines. This allows us to
+   * create IdeProjectEdit source ranges later as well as creating the
+   * match positions for highlighting in the treeview cell renderers.
+   */
+  GRegex *message_regex;
+
+  /* Our index of matches, which can be compiled off the main thread
+   * and then assigned to the model after it has completed building.
+   */
   Index *index;
+
+  /* We store the index of the toggled items here, and use that to
+   * reverse their selection from a base "all" or "nothing" mode.
+   */
   GHashTable *toggled;
+
+  /* We cache the last line we parsed, because the view will parse
+   * the same line repeatedly as it builds the cells for display.
+   * This saves us a bunch of repeated work.
+   */
+  GbpGrepModelLine prev_line;
 
   guint mode;
 
@@ -70,6 +96,7 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+static GRegex     *line_regex;
 
 static void
 index_free (gpointer data)
@@ -79,6 +106,87 @@ index_free (gpointer data)
   g_clear_pointer (&idx->rows, g_ptr_array_unref);
   g_clear_pointer (&idx->bytes, g_bytes_unref);
   g_slice_free (Index, idx);
+}
+
+static void
+clear_line (GbpGrepModelLine *cl)
+{
+  cl->start_of_line = NULL;
+  cl->line = 0;
+  g_clear_pointer (&cl->path, g_free);
+  g_clear_pointer (&cl->matches, g_array_unref);
+}
+
+static gboolean
+gbp_grep_model_line_parse (GbpGrepModelLine *cl,
+                           const gchar      *line,
+                           GRegex           *message_regex)
+{
+  g_autoptr(GMatchInfo) match = NULL;
+  gsize line_len;
+
+  g_assert (cl != NULL);
+  g_assert (line != NULL);
+  g_assert (line_regex != NULL);
+  g_assert (message_regex != NULL);
+
+  line_len = strlen (line);
+
+  if (g_regex_match_full (line_regex, line, line_len, 0, 0, &match, NULL))
+    {
+      g_autofree gchar *pathstr = NULL;
+      g_autofree gchar *linestr = NULL;
+      gint msg_begin = -1;
+      gint msg_end = -1;
+
+      pathstr = g_match_info_fetch (match, 1);
+      linestr = g_match_info_fetch (match, 2);
+
+      if (g_match_info_fetch_pos (match, 3, &msg_begin, &msg_end))
+        {
+          g_autoptr(GMatchInfo) msg_match = NULL;
+          gsize msg_len;
+
+          /* Make sure we parsed the message offset */
+          if (msg_begin < 0)
+            return FALSE;
+
+          cl->start_of_line = line;
+          cl->start_of_message = line + msg_begin;
+          cl->path = g_steal_pointer (&pathstr);
+          cl->line = g_ascii_strtoll (linestr, NULL, 10);
+          cl->matches = g_array_new (FALSE, FALSE, sizeof (GbpGrepModelMatch));
+
+          /* Now parse the matches for the line so that we can highlight
+           * them in the treeview and also determine the IdeProjectEdit
+           * source range when editing files.
+           */
+
+          msg_len = line_len - msg_begin;
+
+          while (g_regex_match_full (message_regex, cl->start_of_message, msg_len, 0, 0, &msg_match, NULL))
+            {
+              gint match_begin = -1;
+              gint match_end = -1;
+
+              if (g_match_info_fetch_pos (msg_match, 0, &match_begin, &match_end))
+                {
+                  GbpGrepModelMatch cm;
+
+                  cm.match_begin = match_begin;
+                  cm.match_end = match_end;
+
+                  g_array_append_val (cl->matches, cm);
+                }
+
+              g_clear_pointer (&msg_match, g_match_info_free);
+            }
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 GbpGrepModel *
@@ -96,10 +204,13 @@ gbp_grep_model_finalize (GObject *object)
 {
   GbpGrepModel *self = (GbpGrepModel *)object;
 
+  clear_line (&self->prev_line);
+
   g_clear_object (&self->directory);
   g_clear_pointer (&self->index, index_free);
   g_clear_pointer (&self->query, g_free);
   g_clear_pointer (&self->toggled, g_hash_table_unref);
+  g_clear_pointer (&self->message_regex, g_regex_unref);
 
   G_OBJECT_CLASS (gbp_grep_model_parent_class)->finalize (object);
 }
@@ -221,6 +332,9 @@ gbp_grep_model_class_init (GbpGrepModelClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  line_regex = g_regex_new ("([a-zA-Z0-9\\+\\-\\.\\/_]+):(\\d+):(.*)", 0, 0, NULL);
+  g_assert (line_regex != NULL);
 }
 
 static void
@@ -228,6 +342,45 @@ gbp_grep_model_init (GbpGrepModel *self)
 {
   self->mode = MODE_ALL;
   self->toggled = g_hash_table_new (NULL, NULL);
+}
+
+static void
+gbp_grep_model_clear_regex (GbpGrepModel *self)
+{
+  g_assert (GBP_IS_GREP_MODEL (self));
+
+  g_clear_pointer (&self->message_regex, g_regex_unref);
+}
+
+static gboolean
+gbp_grep_model_rebuild_regex (GbpGrepModel *self)
+{
+  GRegexCompileFlags compile_flags = G_REGEX_OPTIMIZE;
+  g_autoptr(GRegex) regex = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *escaped = NULL;
+  const gchar *query;
+
+  g_assert (GBP_IS_GREP_MODEL (self));
+  g_assert (self->message_regex == NULL);
+
+  if (self->use_regex)
+    query = self->query;
+  else
+    query = escaped = g_regex_escape_string (self->query, -1);
+
+  if (self->case_sensitive)
+    compile_flags |= G_REGEX_CASELESS;
+
+  if (!(regex = g_regex_new (query, compile_flags, 0, &error)))
+    {
+      g_warning ("Failed to compile regex for match: %s", error->message);
+      return FALSE;
+    }
+
+  self->message_regex = g_steal_pointer (&regex);
+
+  return TRUE;
 }
 
 const gchar *
@@ -248,6 +401,7 @@ gbp_grep_model_set_query (GbpGrepModel *self,
     {
       g_free (self->query);
       self->query = g_strdup (query);
+      gbp_grep_model_clear_regex (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_QUERY]);
     }
 }
@@ -298,6 +452,7 @@ gbp_grep_model_set_use_regex (GbpGrepModel *self,
   if (use_regex != self->use_regex)
     {
       self->use_regex = use_regex;
+      gbp_grep_model_clear_regex (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_REGEX]);
     }
 }
@@ -346,6 +501,7 @@ gbp_grep_model_set_case_sensitive (GbpGrepModel *self,
   if (case_sensitive != self->case_sensitive)
     {
       self->case_sensitive = case_sensitive;
+      gbp_grep_model_clear_regex (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CASE_SENSITIVE]);
     }
 }
@@ -370,6 +526,7 @@ gbp_grep_model_set_at_word_boundaries (GbpGrepModel *self,
   if (at_word_boundaries != self->at_word_boundaries)
     {
       self->at_word_boundaries = at_word_boundaries;
+      gbp_grep_model_clear_regex (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_AT_WORD_BOUNDARIES]);
     }
 }
@@ -948,4 +1105,49 @@ gbp_grep_model_create_edits (GbpGrepModel *self)
   gbp_grep_model_foreach_selected (self, create_edits_cb, edits);
 
   return g_steal_pointer (&edits);
+}
+
+/**
+ * gbp_grep_model_get_line:
+ * @self: a #GbpGrepModel
+ * @iter: a #GtkTextIter
+ * @line: (out): a location for the line info
+ *
+ * Gets information about the line that @iter points at.
+ */
+void
+gbp_grep_model_get_line (GbpGrepModel            *self,
+                         GtkTreeIter             *iter,
+                         const GbpGrepModelLine **line)
+{
+  const gchar *str;
+  guint index_;
+
+  g_return_if_fail (GBP_IS_GREP_MODEL (self));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (line != NULL);
+  g_return_if_fail (self->index != NULL);
+  g_return_if_fail (self->index->rows != NULL);
+
+  *line = NULL;
+
+  index_ = GPOINTER_TO_UINT (iter->user_data);
+  g_return_if_fail (index_ < self->index->rows->len);
+
+  str = g_ptr_array_index (self->index->rows, index_);
+
+  if (str != self->prev_line.start_of_line)
+    {
+      clear_line (&self->prev_line);
+
+      if (self->message_regex == NULL)
+        {
+          if (!gbp_grep_model_rebuild_regex (self))
+            return;
+        }
+
+      gbp_grep_model_line_parse (&self->prev_line, str, self->message_regex);
+    }
+
+  *line = &self->prev_line;
 }
