@@ -1082,14 +1082,47 @@ create_edits_cb (GbpGrepModel *self,
                  gpointer      user_data)
 {
   GPtrArray *edits = user_data;
+  GbpGrepModelLine line = {0};
   const gchar *row;
 
   g_assert (GBP_IS_GREP_MODEL (self));
+  g_assert (self->message_regex != NULL);
   g_assert (edits != NULL);
 
   row = g_ptr_array_index (self->index->rows, index_);
 
-  //g_print ("ROW: %s\n", row);
+  if (gbp_grep_model_line_parse (&line, row, self->message_regex))
+    {
+      g_autoptr(IdeFile) file = NULL;
+      IdeContext *context;
+
+      context = ide_object_get_context (IDE_OBJECT (self));
+      g_assert (IDE_IS_CONTEXT (context));
+
+      file = ide_file_new_for_path (context, line.path);
+      g_assert (IDE_IS_FILE (file));
+
+      for (guint i = 0; i < line.matches->len; i++)
+        {
+          const GbpGrepModelMatch *match = &g_array_index (line.matches, GbpGrepModelMatch, i);
+          g_autoptr(IdeProjectEdit) edit = NULL;
+          g_autoptr(IdeSourceRange) range = NULL;
+          g_autoptr(IdeSourceLocation) begin = NULL;
+          g_autoptr(IdeSourceLocation) end = NULL;
+
+          begin = ide_source_location_new (file, line.line, match->match_begin, 0);
+          end = ide_source_location_new (file, line.line, match->match_end, 0);
+          range = ide_source_range_new (begin, end);
+
+          edit = g_object_new (IDE_TYPE_PROJECT_EDIT,
+                               "range", range,
+                               NULL);
+
+          g_ptr_array_add (edits, g_steal_pointer (&edit));
+        }
+    }
+
+  clear_line (&line);
 }
 
 /**
@@ -1104,6 +1137,12 @@ gbp_grep_model_create_edits (GbpGrepModel *self)
   g_autoptr(GPtrArray) edits = NULL;
 
   g_return_val_if_fail (GBP_IS_GREP_MODEL (self), NULL);
+
+  if (self->message_regex == NULL)
+    {
+      if (!gbp_grep_model_rebuild_regex (self))
+        return NULL;
+    }
 
   edits = g_ptr_array_new_with_free_func (g_object_unref);
   gbp_grep_model_foreach_selected (self, create_edits_cb, edits);
