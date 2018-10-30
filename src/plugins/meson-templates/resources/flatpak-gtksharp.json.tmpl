@@ -34,9 +34,25 @@
             }
         },
         {
+            "name" : "meson",
+            "buildsystem" : "simple",
+            "build-commands": ["pip3 install -I --prefix=/app ."],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/mesonbuild/meson.git",
+                    "branch" : "0.48.1"
+                }
+            ]
+        },
+        {
             "name": "gtk-sharp3",
             "buildsystem": "meson",
             "builddir": true,
+            "config-opts" : [
+                "--libdir=lib",
+                "-Dinstall=true"
+            ],
             "sources": [
                 {
                     "type": "git",
