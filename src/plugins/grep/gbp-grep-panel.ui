@@ -65,6 +65,7 @@
                 <child>
                   <object class="GtkButton" id="replace_button">
                     <property name="label" translatable="yes">Replace</property>
+                    <property name="sensitive">false</property>
                     <property name="visible">true</property>
                     <style>
                       <class name="destructive-action"/>

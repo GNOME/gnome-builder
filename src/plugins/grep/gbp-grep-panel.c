@@ -511,6 +511,17 @@ gbp_grep_panel_set_model (GbpGrepPanel *self,
   g_return_if_fail (GBP_IS_GREP_PANEL (self));
   g_return_if_fail (!model || GBP_IS_GREP_MODEL (model));
 
+  if (model != NULL)
+    {
+      /* Disable replace button if we have nothing to replace. We only
+       * support setting the model after it has scanned, so this is fine.
+       */
+      if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (model), NULL) == 0)
+        gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
+      else
+        gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), TRUE);
+    }
+
   gtk_tree_view_set_model (self->tree_view, GTK_TREE_MODEL (model));
 }
 
