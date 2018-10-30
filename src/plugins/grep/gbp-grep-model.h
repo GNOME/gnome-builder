@@ -30,6 +30,8 @@ typedef struct
 {
   gint match_begin;
   gint match_end;
+  gint match_begin_bytes;
+  gint match_end_bytes;
 } GbpGrepModelMatch;
 
 typedef struct

@@ -103,8 +103,8 @@ match_data_func (GtkCellLayout   *layout,
           const GbpGrepModelMatch *match = &g_array_index (line->matches, GbpGrepModelMatch, i);
           PangoAttribute *bg_attr = pango_attr_background_new (64764, 59881, 20303);
           PangoAttribute *alpha_attr = pango_attr_background_alpha_new (32767);
-          gint start_index = match->match_begin - adjust;
-          gint end_index = match->match_end - adjust;
+          gint start_index = match->match_begin_bytes - adjust;
+          gint end_index = match->match_end_bytes - adjust;
 
           bg_attr->start_index = start_index;
           bg_attr->end_index = end_index;
