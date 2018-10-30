@@ -69,6 +69,10 @@ window.development-version  headerbar:last-child {
   color: alpha(@theme_fg_color, 0.2);
 }
 
-window.development-version headerbar label {
+window.development-version headerbar label:not(:disabled) {
   color: @theme_fg_color;
+}
+
+window.development-version headerbar .suggested-action label {
+  color: @theme_selected_fg_color;
 }
