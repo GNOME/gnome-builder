@@ -39,6 +39,7 @@ struct _GbpGrepPopover
   GtkCheckButton *regex_button;
   GtkCheckButton *whole_button;
   GtkCheckButton *case_button;
+  GtkCheckButton *recursive_button;
 };
 
 enum {
@@ -85,6 +86,7 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   gboolean use_regex;
   gboolean at_word_boundaries;
   gboolean case_sensitive;
+  gboolean recursive;
 
   g_assert (GBP_IS_GREP_POPOVER (self));
   g_assert (GTK_IS_BUTTON (button));
@@ -97,6 +99,7 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   use_regex = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->regex_button));
   at_word_boundaries = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->whole_button));
   case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->case_button));
+  recursive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->recursive_button));
 
   model = gbp_grep_model_new (context);
   gbp_grep_model_set_directory (model, self->file);
@@ -104,9 +107,7 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   gbp_grep_model_set_at_word_boundaries (model, at_word_boundaries);
   gbp_grep_model_set_case_sensitive (model, case_sensitive);
   gbp_grep_model_set_query (model, gtk_entry_get_text (self->entry));
-
-  /* TODO: Add recursive toggle */
-  gbp_grep_model_set_recursive (model, TRUE);
+  gbp_grep_model_set_recursive (model, recursive);
 
   panel = gbp_grep_panel_new ();
   gtk_container_add (GTK_CONTAINER (utils), panel);
@@ -201,6 +202,7 @@ gbp_grep_popover_class_init (GbpGrepPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, regex_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, whole_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, case_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, recursive_button);
 }
 
 static void
