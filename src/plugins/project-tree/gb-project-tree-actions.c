@@ -835,7 +835,63 @@ is_files_node (DzlTreeNode *node)
   return FALSE;
 }
 
+static void
+gb_project_tree_actions_action_with_path (GSimpleAction *action,
+                                          GVariant      *variant,
+                                          gpointer       user_data)
+{
+  GbProjectTree *self = user_data;
+  DzlTreeNode *selected;
+  g_autofree gchar *action_name = NULL;
+  g_autoptr(GVariant) target_value = NULL;
+  const gchar *detailed_action_name;
+  GFileInfo *file_info;
+  GObject *item;
+  GFile *file;
+  gchar *dot;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GB_IS_PROJECT_TREE (self));
+  g_assert (variant != NULL);
+  g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
+
+  if (!(selected = dzl_tree_get_selected (DZL_TREE (self))) ||
+      !(item = dzl_tree_node_get_item (selected)))
+    return;
+
+  if (!GB_IS_PROJECT_FILE (item) ||
+      !(file_info = gb_project_file_get_file_info (GB_PROJECT_FILE (item))) ||
+      !(file = gb_project_file_get_file (GB_PROJECT_FILE (item))))
+    {
+      IdeContext *context = ide_widget_get_context (GTK_WIDGET (self));
+      IdeVcs *vcs = ide_context_get_vcs (context);
+      file = ide_vcs_get_working_directory (vcs);
+    }
+
+  detailed_action_name = g_variant_get_string (variant, NULL);
+
+  if (!g_action_parse_detailed_name (detailed_action_name, &action_name, &target_value, NULL))
+    {
+      g_warning ("Failed to parse action \"%s\"", detailed_action_name);
+      return;
+    }
+
+  g_clear_pointer (&target_value, g_variant_unref);
+  target_value = g_variant_take_ref (g_variant_new_string (g_file_peek_path (file)));
+
+  if ((dot = strchr (action_name, '.')))
+    {
+      *dot = '\0';
+      dzl_gtk_widget_action (GTK_WIDGET (self), action_name, dot + 1, target_value);
+    }
+  else
+    {
+      dzl_gtk_widget_action (GTK_WIDGET (self), NULL, action_name, target_value);
+    }
+}
+
 static GActionEntry GbProjectTreeActions[] = {
+  { "action-with-path",       gb_project_tree_actions_action_with_path, "s" },
   { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
   { "move-to-trash",          gb_project_tree_actions_move_to_trash },
   { "new-directory",          gb_project_tree_actions_new_directory },
@@ -937,6 +993,9 @@ gb_project_tree_actions_update (GbProjectTree *self)
               NULL);
   action_set (group, "move-to-trash",
               "enabled", (GB_IS_PROJECT_FILE (item) && !is_files_node (selection)),
+              NULL);
+  action_set (group, "action-with-path",
+              "enabled", GB_IS_PROJECT_FILE (item),
               NULL);
 
   IDE_EXIT;
