@@ -72,6 +72,7 @@ struct _GbpGrepModel
   guint recursive : 1;
   guint case_sensitive : 1;
   guint at_word_boundaries : 1;
+  guint was_directory : 1;
 };
 
 static void tree_model_iface_init (GtkTreeModelIface *iface);
@@ -569,7 +570,6 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
     path = g_file_peek_path (workdir);
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
-  ide_subprocess_launcher_set_cwd (launcher, path);
 
   /*
    * Soft runtime check for Git support, so that we can use "git grep"
@@ -641,6 +641,22 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
       ide_subprocess_launcher_push_argv (launcher, "--and");
       ide_subprocess_launcher_push_argv (launcher, "-e");
       ide_subprocess_launcher_push_argv (launcher, "^.{0,256}$");
+    }
+
+  if (g_file_test (path, G_FILE_TEST_IS_DIR))
+    {
+      ide_subprocess_launcher_set_cwd (launcher, path);
+      self->was_directory = TRUE;
+    }
+  else
+    {
+      g_autofree gchar *parent = g_path_get_dirname (path);
+      g_autofree gchar *name = g_path_get_basename (path);
+
+      self->was_directory = FALSE;
+
+      ide_subprocess_launcher_set_cwd (launcher, parent);
+      ide_subprocess_launcher_push_argv (launcher, name);
     }
 
   return g_steal_pointer (&launcher);
@@ -1109,7 +1125,7 @@ create_edits_cb (GbpGrepModel *self,
       context = ide_object_get_context (IDE_OBJECT (self));
       g_assert (IDE_IS_CONTEXT (context));
 
-      gfile = g_file_get_child (self->directory, line.path);
+      gfile = gbp_grep_model_get_file (self, line.path);
       g_assert (G_IS_FILE (gfile));
 
       file = ide_file_new (context, gfile);
@@ -1208,4 +1224,24 @@ gbp_grep_model_get_line (GbpGrepModel            *self,
     }
 
   *line = &self->prev_line;
+}
+
+/**
+ * gbp_grep_model_get_file:
+ *
+ * Returns: (transfer full): a #GFile
+ */
+GFile *
+gbp_grep_model_get_file (GbpGrepModel *self,
+                         const gchar  *path)
+{
+  g_return_val_if_fail (GBP_IS_GREP_MODEL (self), NULL);
+
+  if (!path || !*path || g_strcmp0 (path, ".") == 0)
+    return g_file_dup (self->directory);
+
+  if (self->was_directory)
+    return g_file_get_child (self->directory, path);
+  else
+    return g_file_dup (self->directory);
 }

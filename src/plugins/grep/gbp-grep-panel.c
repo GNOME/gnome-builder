@@ -210,9 +210,6 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
       gtk_tree_model_get_iter (model, &iter, path))
     {
       const GbpGrepModelLine *line = NULL;
-      GFile *directory;
-
-      directory = gbp_grep_model_get_directory (GBP_GREP_MODEL (model));
 
       gbp_grep_model_get_line (GBP_GREP_MODEL (model), &iter, &line);
 
@@ -233,7 +230,7 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
           if (lineno > 0)
             lineno--;
 
-          child = g_file_get_child (directory, line->path);
+          child = gbp_grep_model_get_file (GBP_GREP_MODEL (model), line->path);
           ichild = ide_file_new (context, child);
           location = ide_source_location_new (ichild, lineno, 0, 0);
 

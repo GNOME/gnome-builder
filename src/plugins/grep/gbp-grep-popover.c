@@ -45,6 +45,7 @@ struct _GbpGrepPopover
 enum {
   PROP_0,
   PROP_FILE,
+  PROP_IS_DIRECTORY,
   N_PROPS
 };
 
@@ -107,7 +108,11 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   gbp_grep_model_set_at_word_boundaries (model, at_word_boundaries);
   gbp_grep_model_set_case_sensitive (model, case_sensitive);
   gbp_grep_model_set_query (model, gtk_entry_get_text (self->entry));
-  gbp_grep_model_set_recursive (model, recursive);
+
+  if (gtk_widget_get_visible (GTK_WIDGET (self->recursive_button)))
+    gbp_grep_model_set_recursive (model, recursive);
+  else
+    gbp_grep_model_set_recursive (model, FALSE);
 
   panel = gbp_grep_panel_new ();
   gtk_container_add (GTK_CONTAINER (utils), panel);
@@ -155,6 +160,10 @@ gbp_grep_popover_get_property (GObject    *object,
       g_value_set_object (value, self->file);
       break;
 
+    case PROP_IS_DIRECTORY:
+      g_value_set_boolean (value, gtk_widget_get_visible (GTK_WIDGET (self->recursive_button)));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -172,6 +181,10 @@ gbp_grep_popover_set_property (GObject      *object,
     {
     case PROP_FILE:
       g_set_object (&self->file, g_value_get_object (value));
+      break;
+
+    case PROP_IS_DIRECTORY:
+      gtk_widget_set_visible (GTK_WIDGET (self->recursive_button), g_value_get_boolean (value));
       break;
 
     default:
@@ -192,6 +205,10 @@ gbp_grep_popover_class_init (GbpGrepPopoverClass *klass)
   properties [PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,
                          G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_IS_DIRECTORY] =
+    g_param_spec_boolean ("is-directory", NULL, NULL, FALSE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);

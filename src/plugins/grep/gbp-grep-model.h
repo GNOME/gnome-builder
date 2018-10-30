@@ -73,6 +73,8 @@ void          gbp_grep_model_toggle_row             (GbpGrepModel            *se
 void          gbp_grep_model_get_line               (GbpGrepModel            *self,
                                                      GtkTreeIter             *iter,
                                                      const GbpGrepModelLine **line);
+GFile        *gbp_grep_model_get_file               (GbpGrepModel            *self,
+                                                     const gchar             *path);
 void          gbp_grep_model_scan_async             (GbpGrepModel            *self,
                                                      GCancellable            *cancellable,
                                                      GAsyncReadyCallback      callback,

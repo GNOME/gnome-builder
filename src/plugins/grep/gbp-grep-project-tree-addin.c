@@ -39,11 +39,15 @@ struct _GbpGrepProjectTreeAddin
 };
 
 static GFile *
-get_file_for_node (DzlTreeNode *node)
+get_file_for_node (DzlTreeNode *node,
+                   gboolean    *is_dir)
 {
   GObject *item;
 
   g_return_val_if_fail (!node || DZL_IS_TREE_NODE (node), NULL);
+
+  if (is_dir)
+    *is_dir = FALSE;
 
   if (node == NULL)
     return NULL;
@@ -52,7 +56,11 @@ get_file_for_node (DzlTreeNode *node)
     return NULL;
 
   if (GB_IS_PROJECT_FILE (item))
-    return gb_project_file_get_file (GB_PROJECT_FILE (item));
+    {
+      if (is_dir)
+        *is_dir = gb_project_file_get_is_directory (GB_PROJECT_FILE (item));
+      return gb_project_file_get_file (GB_PROJECT_FILE (item));
+    }
 
   return NULL;
 }
@@ -83,17 +91,19 @@ find_in_files_action (GSimpleAction *action,
   GbpGrepProjectTreeAddin *self = user_data;
   DzlTreeNode *node;
   GFile *file;
+  gboolean is_dir = FALSE;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_GREP_PROJECT_TREE_ADDIN (self));
 
   if ((node = dzl_tree_get_selected (self->tree)) &&
-      (file = get_file_for_node (node)))
+      (file = get_file_for_node (node, &is_dir)))
     {
       GtkPopover *popover;
 
       popover = g_object_new (GBP_TYPE_GREP_POPOVER,
                               "file", file,
+                              "is-directory", is_dir,
                               "position", GTK_POS_RIGHT,
                               NULL);
       g_signal_connect_after (popover,
@@ -110,12 +120,13 @@ on_node_selected_cb (GbpGrepProjectTreeAddin *self,
                      DzlTreeBuilder          *builder)
 {
   GFile *file;
+  gboolean is_dir = FALSE;
 
   g_assert (GBP_IS_GREP_PROJECT_TREE_ADDIN (self));
   g_assert (!node || DZL_IS_TREE_NODE (node));
   g_assert (DZL_IS_TREE_BUILDER (builder));
 
-  file = get_file_for_node (node);
+  file = get_file_for_node (node, &is_dir);
 
   dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "grep", "find-in-files",
                              "enabled", (file != NULL),
