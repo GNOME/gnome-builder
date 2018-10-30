@@ -75,7 +75,8 @@ gbp_grep_editor_addin_find_in_files (GSimpleAction *action,
 
   /* TODO: Show a popover, etc ... */
   gbp_grep_model_set_recursive (model, TRUE);
-  gbp_grep_model_set_query (model, "tunes");
+  gbp_grep_model_set_query (model, "tunes_sidebar_node");
+  gbp_grep_model_set_case_sensitive (model, TRUE);
 
   panel = gbp_grep_panel_new ();
   utils = ide_editor_perspective_get_utilities (self->editor);

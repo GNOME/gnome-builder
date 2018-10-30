@@ -154,8 +154,8 @@ gbp_grep_model_line_parse (GbpGrepModelLine *cl,
           cl->start_of_line = line;
           cl->start_of_message = line + msg_begin;
           cl->path = g_steal_pointer (&pathstr);
-          cl->line = g_ascii_strtoll (linestr, NULL, 10);
           cl->matches = g_array_new (FALSE, FALSE, sizeof (GbpGrepModelMatch));
+          cl->line = g_ascii_strtoll (linestr, NULL, 10);
 
           /* Now parse the matches for the line so that we can highlight
            * them in the treeview and also determine the IdeProjectEdit
@@ -183,6 +183,8 @@ gbp_grep_model_line_parse (GbpGrepModelLine *cl,
                        */
                       cm.match_begin = g_utf8_strlen (cl->start_of_message, match_begin);
                       cm.match_end = g_utf8_strlen (cl->start_of_message, match_end);
+                      cm.match_begin_bytes = match_begin;
+                      cm.match_end_bytes = match_end;
 
                       g_array_append_val (cl->matches, cm);
                     }
@@ -1101,12 +1103,15 @@ create_edits_cb (GbpGrepModel *self,
     {
       g_autoptr(IdeFile) file = NULL;
       IdeContext *context;
+      guint lineno;
 
       context = ide_object_get_context (IDE_OBJECT (self));
       g_assert (IDE_IS_CONTEXT (context));
 
       file = ide_file_new_for_path (context, line.path);
       g_assert (IDE_IS_FILE (file));
+
+      lineno = line.line ? line.line - 1 : 0;
 
       for (guint i = 0; i < line.matches->len; i++)
         {
@@ -1116,8 +1121,8 @@ create_edits_cb (GbpGrepModel *self,
           g_autoptr(IdeSourceLocation) begin = NULL;
           g_autoptr(IdeSourceLocation) end = NULL;
 
-          begin = ide_source_location_new (file, line.line, match->match_begin, 0);
-          end = ide_source_location_new (file, line.line, match->match_end, 0);
+          begin = ide_source_location_new (file, lineno, match->match_begin, 0);
+          end = ide_source_location_new (file, lineno, match->match_end, 0);
           range = ide_source_range_new (begin, end);
 
           edit = g_object_new (IDE_TYPE_PROJECT_EDIT,
