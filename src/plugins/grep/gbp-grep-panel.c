@@ -37,6 +37,7 @@ struct _GbpGrepPanel
   GtkButton         *close_button;
   GtkButton         *replace_button;
   GtkEntry          *replace_entry;
+  GtkSpinner        *spinner;
 };
 
 enum {
@@ -300,6 +301,8 @@ gbp_grep_panel_replace_edited_cb (GObject      *object,
    * to jump to the positions that were edited.
    */
   gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), TRUE);
+  gtk_spinner_stop (self->spinner);
+  gtk_widget_hide (GTK_WIDGET (self->spinner));
 }
 
 static void
@@ -331,6 +334,8 @@ gbp_grep_panel_replace_clicked_cb (GbpGrepPanel *self,
   gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), FALSE);
+  gtk_widget_show (GTK_WIDGET (self->spinner));
+  gtk_spinner_start (self->spinner);
 
   context = ide_widget_get_context (GTK_WIDGET (self));
   bufmgr = ide_context_get_buffer_manager (context);
@@ -401,6 +406,7 @@ gbp_grep_panel_class_init (GbpGrepPanelClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, close_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, spinner);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, tree_view);
 }
 

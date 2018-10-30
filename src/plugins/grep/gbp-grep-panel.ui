@@ -29,6 +29,17 @@
             <property name="margin-bottom">6</property>
             <property name="orientation">horizontal</property>
             <property name="visible">true</property>
+            <child>
+              <object class="GtkSpinner" id="spinner">
+                <property name="halign">end</property>
+              </object>
+              <packing>
+                <property name="expand">true</property>
+                <property name="fill">true</property>
+                <property name="pack-type">start</property>
+                <property name="padding">12</property>
+              </packing>
+            </child>
             <child type="center">
               <object class="GtkBox">
                 <property name="spacing">12</property>
