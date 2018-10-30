@@ -1,6 +1,6 @@
-/* gbp-grep-dialog.c
+/* gbp-grep-popover.h
  *
- * Copyright © 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,31 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
+#pragma once
 
-#define G_LOG_DOMAIN "gbp-grep-dialog"
+#include <gtk/gtk.h>
 
-#include <ide.h>
+G_BEGIN_DECLS
 
-#include "gbp-grep-dialog.h"
+#define GBP_TYPE_GREP_POPOVER (gbp_grep_popover_get_type())
 
-struct _GbpGrepDialog
-{
-  GtkDialog parent_instance;
-};
+G_DECLARE_FINAL_TYPE (GbpGrepPopover, gbp_grep_popover, GBP, GREP_POPOVER, GtkPopover)
 
-G_DEFINE_TYPE (GbpGrepDialog, gbp_grep_dialog, GTK_TYPE_DIALOG)
-
-static void
-gbp_grep_dialog_class_init (GbpGrepDialogClass *klass)
-{
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/grep/gbp-grep-dialog.ui");
-}
-
-static void
-gbp_grep_dialog_init (GbpGrepDialog *self)
-{
-  gtk_widget_init_template (GTK_WIDGET (self));
-}
+G_END_DECLS

@@ -210,12 +210,17 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
       gtk_tree_model_get_iter (model, &iter, path))
     {
       const GbpGrepModelLine *line = NULL;
+      GFile *directory;
+
+      directory = gbp_grep_model_get_directory (GBP_GREP_MODEL (model));
 
       gbp_grep_model_get_line (GBP_GREP_MODEL (model), &iter, &line);
 
       if G_LIKELY (line != NULL)
         {
           g_autoptr(IdeSourceLocation) location = NULL;
+          g_autoptr(GFile) child = NULL;
+          g_autoptr(IdeFile) ichild = NULL;
           IdePerspective *editor;
           IdeWorkbench *workbench;
           IdeContext *context;
@@ -228,7 +233,9 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
           if (lineno > 0)
             lineno--;
 
-          location = ide_source_location_new_for_path (context, line->path, lineno, 0);
+          child = g_file_get_child (directory, line->path);
+          ichild = ide_file_new (context, child);
+          location = ide_source_location_new (ichild, lineno, 0, 0);
 
           ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
         }

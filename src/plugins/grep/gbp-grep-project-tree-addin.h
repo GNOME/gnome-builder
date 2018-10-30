@@ -1,6 +1,6 @@
-/* gbp-grep-dialog.h
+/* gbp-grep-project-tree-addin.h
  *
- * Copyright © 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GREP_DIALOG (gbp_grep_dialog_get_type())
+#define GBP_TYPE_GREP_PROJECT_TREE_ADDIN (gbp_grep_project_tree_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGrepDialog, gbp_grep_dialog, GBP, GREP_DIALOG, GtkDialog)
+G_DECLARE_FINAL_TYPE (GbpGrepProjectTreeAddin, gbp_grep_project_tree_addin, GBP, GREP_PROJECT_TREE_ADDIN, GObject)
 
 G_END_DECLS

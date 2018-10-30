@@ -22,7 +22,6 @@
 
 #define G_LOG_DOMAIN "gbp-grep-editor-addin"
 
-#include "gbp-grep-dialog.h"
 #include "gbp-grep-editor-addin.h"
 #include "gbp-grep-model.h"
 #include "gbp-grep-panel.h"

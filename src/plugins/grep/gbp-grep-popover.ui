@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpGrepPopover" parent="GtkPopover">
+    <property name="border-width">12</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Find in Files</property>
+            <property name="visible">true</property>
+            <property name="xalign">0.0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkEntry" id="entry">
+                <property name="placeholder-text" translatable="yes">Search for…</property>
+                <property name="width-chars">24</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button">
+                <property name="hexpand">false</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Find</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-top">6</property>
+            <property name="orientation">vertical</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkCheckButton" id="case_button">
+                <property name="label" translatable="yes">Match _case when searching</property>
+                <property name="active">true</property>
+                <property name="use-underline">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="whole_button">
+                <property name="label" translatable="yes">Match _whole words</property>
+                <property name="use-underline">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="regex_button">
+                <property name="label" translatable="yes">Allow _regular expressions</property>
+                <property name="use-underline">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

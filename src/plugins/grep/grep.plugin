@@ -5,5 +5,5 @@ Description=Search across project files
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2018 Christian Hergert
 Builtin=true
-Depends=editor
+Depends=editor;project-tree-plugin
 Embedded=gbp_grep_register_types

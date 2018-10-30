@@ -1102,13 +1102,17 @@ create_edits_cb (GbpGrepModel *self,
   if (gbp_grep_model_line_parse (&line, row, self->message_regex))
     {
       g_autoptr(IdeFile) file = NULL;
+      g_autoptr(GFile) gfile = NULL;
       IdeContext *context;
       guint lineno;
 
       context = ide_object_get_context (IDE_OBJECT (self));
       g_assert (IDE_IS_CONTEXT (context));
 
-      file = ide_file_new_for_path (context, line.path);
+      gfile = g_file_get_child (self->directory, line.path);
+      g_assert (G_IS_FILE (gfile));
+
+      file = ide_file_new (context, gfile);
       g_assert (IDE_IS_FILE (file));
 
       lineno = line.line ? line.line - 1 : 0;

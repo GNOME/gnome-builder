@@ -22,6 +22,7 @@
 #include <libpeas/peas.h>
 
 #include "gbp-grep-editor-addin.h"
+#include "gbp-grep-project-tree-addin.h"
 
 void
 gbp_grep_register_types (PeasObjectModule *module)
@@ -29,4 +30,7 @@ gbp_grep_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,
                                               GBP_TYPE_GREP_EDITOR_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PROJECT_TREE_ADDIN,
+                                              GBP_TYPE_GREP_PROJECT_TREE_ADDIN);
 }

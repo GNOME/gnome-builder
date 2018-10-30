@@ -7,11 +7,12 @@ grep_resources = gnome.compile_resources(
 )
 
 grep_sources = [
-  'gbp-grep-dialog.c',
   'gbp-grep-editor-addin.c',
   'gbp-grep-model.c',
   'gbp-grep-panel.c',
   'gbp-grep-plugin.c',
+  'gbp-grep-popover.c',
+  'gbp-grep-project-tree-addin.c',
 ]
 
 gnome_builder_plugins_sources += files(grep_sources)
