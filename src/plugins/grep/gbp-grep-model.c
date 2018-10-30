@@ -175,8 +175,14 @@ gbp_grep_model_line_parse (GbpGrepModelLine *cl,
                     {
                       GbpGrepModelMatch cm;
 
-                      cm.match_begin = match_begin;
-                      cm.match_end = match_end;
+                      /*
+                       * We need to convert match offsets from bytes into the
+                       * number of UTF-8 (unichar) characters) so that we get
+                       * proper columns into the target file. Otherwise we risk
+                       * corrupting non-ASCII files.
+                       */
+                      cm.match_begin = g_utf8_strlen (cl->start_of_message, match_begin);
+                      cm.match_end = g_utf8_strlen (cl->start_of_message, match_end);
 
                       g_array_append_val (cl->matches, cm);
                     }
