@@ -147,7 +147,6 @@ gboolean
 _gbp_glade_view_reload (GbpGladeView *self)
 {
   GladeProject *project;
-  gboolean ret;
 
   g_return_val_if_fail (GBP_IS_GLADE_VIEW (self), FALSE);
   g_return_val_if_fail (GLADE_IS_PROJECT (self->project), FALSE);
@@ -172,9 +171,11 @@ _gbp_glade_view_reload (GbpGladeView *self)
     {
       gtk_widget_hide (GTK_WIDGET (self));
       gtk_widget_show (GTK_WIDGET (self));
+
+      return TRUE;
     }
 
-  return ret;
+  return FALSE;
 }
 
 gboolean
