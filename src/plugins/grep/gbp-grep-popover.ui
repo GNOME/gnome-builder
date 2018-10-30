@@ -19,6 +19,7 @@
         </child>
         <child>
           <object class="GtkBox">
+            <property name="margin-top">6</property>
             <property name="orientation">horizontal</property>
             <property name="spacing">6</property>
             <property name="visible">true</property>
