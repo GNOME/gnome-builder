@@ -89,6 +89,7 @@ typedef struct
 {
   GPtrArray  *edits;
   GHashTable *buffers;
+  GHashTable *to_close;
   guint       count;
   guint       failed : 1;
 } EditState;
@@ -139,6 +140,7 @@ edit_state_free (gpointer data)
     {
       g_clear_pointer (&state->edits, g_ptr_array_unref);
       g_clear_pointer (&state->buffers, g_hash_table_unref);
+      g_clear_pointer (&state->to_close, g_hash_table_unref);
       g_slice_free (EditState, state);
     }
 }
@@ -2162,6 +2164,7 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
   /* Save the buffer for future use when applying edits */
   file = ide_buffer_get_file (buffer);
   g_hash_table_insert (state->buffers, g_object_ref (file), g_object_ref (buffer));
+  g_hash_table_insert (state->to_close, g_object_ref (file), g_object_ref (buffer));
 
   /* If this is the last buffer to load, then we can go apply the edits. */
   if (state->count == 0)
@@ -2174,6 +2177,38 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
                                          cancellable,
                                          ide_buffer_manager_apply_edits_save_cb,
                                          g_steal_pointer (&task));
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_buffer_manager_apply_edits_completed_cb (IdeBufferManager *self,
+                                             GParamSpec       *pspec,
+                                             IdeTask          *task)
+{
+  EditState *state;
+  IdeBuffer *buffer;
+  GHashTableIter iter;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (self));
+  g_assert (pspec != NULL);
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+  g_assert (state != NULL);
+  g_assert (state->to_close != NULL);
+  g_assert (state->buffers != NULL);
+
+  g_hash_table_iter_init (&iter, state->to_close);
+
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&buffer))
+    {
+      g_assert (IDE_IS_BUFFER (buffer));
+
+      _ide_buffer_manager_reclaim (self, buffer);
     }
 
   IDE_EXIT;
@@ -2218,10 +2253,20 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
                                           (GEqualFunc)ide_file_equal,
                                           g_object_unref,
                                           unref_if_non_null);
+  state->to_close = g_hash_table_new_full ((GHashFunc)ide_file_hash,
+                                           (GEqualFunc)ide_file_equal,
+                                           g_object_unref,
+                                           unref_if_non_null);
   state->edits = g_steal_pointer (&edits);
   state->count = 1;
 
   ide_task_set_task_data (task, state, edit_state_free);
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_buffer_manager_apply_edits_completed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   for (guint i = 0; i < state->edits->len; i++)
     {
@@ -2251,10 +2296,13 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
 
       state->count++;
 
+      /* Load buffers, but don't create views for them since we don't want to
+       * create lots of views if there are lots of files to edit.
+       */
       ide_buffer_manager_load_file_async (self,
                                           file,
                                           FALSE,
-                                          IDE_WORKBENCH_OPEN_FLAGS_BACKGROUND,
+                                          IDE_WORKBENCH_OPEN_FLAGS_NO_VIEW,
                                           NULL,
                                           cancellable,
                                           ide_buffer_manager_apply_edits_buffer_loaded,
