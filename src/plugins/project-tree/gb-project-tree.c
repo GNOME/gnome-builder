@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <ide.h>
+#include <libpeas/peas.h>
 
 #include "gb-project-file.h"
 #include "gb-project-tree.h"
@@ -213,7 +214,6 @@ gb_project_tree_set_context (GbProjectTree *self,
     }
 }
 
-
 static void
 gb_project_tree_notify_selection (GbProjectTree *self)
 {
@@ -223,13 +223,77 @@ gb_project_tree_notify_selection (GbProjectTree *self)
 }
 
 static void
-gb_project_tree_finalize (GObject *object)
+gb_project_tree_extension_added_cb (PeasExtensionSet *set,
+                                    PeasPluginInfo   *plugin_info,
+                                    PeasExtension    *exten,
+                                    gpointer          user_data)
+{
+  IdeProjectTreeAddin *addin = (IdeProjectTreeAddin *)exten;
+  GbProjectTree *self = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_PROJECT_TREE_ADDIN (exten));
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  g_debug ("Loading project tree addin %s", G_OBJECT_TYPE_NAME (addin));
+
+  ide_project_tree_addin_load (addin, DZL_TREE (self));
+}
+
+static void
+gb_project_tree_extension_removed_cb (PeasExtensionSet *set,
+                                      PeasPluginInfo   *plugin_info,
+                                      PeasExtension    *exten,
+                                      gpointer          user_data)
+{
+  IdeProjectTreeAddin *addin = (IdeProjectTreeAddin *)exten;
+  GbProjectTree *self = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_PROJECT_TREE_ADDIN (exten));
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  g_debug ("Unloading project tree addin %s", G_OBJECT_TYPE_NAME (addin));
+
+  ide_project_tree_addin_unload (addin, DZL_TREE (self));
+}
+
+static void
+gb_project_tree_constructed (GObject *object)
 {
   GbProjectTree *self = (GbProjectTree *)object;
 
-  g_clear_object (&self->settings);
+  g_assert (GB_IS_PROJECT_TREE (self));
 
-  G_OBJECT_CLASS (gb_project_tree_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gb_project_tree_parent_class)->constructed (object);
+
+  self->addins = peas_extension_set_new (NULL, IDE_TYPE_PROJECT_TREE_ADDIN, NULL);
+  g_signal_connect (self->addins,
+                    "extension-added",
+                    G_CALLBACK (gb_project_tree_extension_added_cb),
+                    self);
+  g_signal_connect (self->addins,
+                    "extension-removed",
+                    G_CALLBACK (gb_project_tree_extension_removed_cb),
+                    self);
+  peas_extension_set_foreach (self->addins,
+                              gb_project_tree_extension_added_cb,
+                              self);
+}
+
+static void
+gb_project_tree_destroy (GtkWidget *widget)
+{
+  GbProjectTree *self = (GbProjectTree *)widget;
+
+  g_assert (GB_IS_PROJECT_TREE (self));
+
+  g_clear_object (&self->settings);
+  g_clear_object (&self->addins);
+
+  GTK_WIDGET_CLASS (gb_project_tree_parent_class)->destroy (widget);
 }
 
 static void
@@ -274,10 +338,13 @@ static void
 gb_project_tree_class_init (GbProjectTreeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = gb_project_tree_finalize;
+  object_class->constructed = gb_project_tree_constructed;
   object_class->get_property = gb_project_tree_get_property;
   object_class->set_property = gb_project_tree_set_property;
+
+  widget_class->destroy = gb_project_tree_destroy;
 
   properties [PROP_SHOW_IGNORED_FILES] =
     g_param_spec_boolean ("show-ignored-files",

@@ -3,6 +3,7 @@ projects_headers = [
   'ide-project-info.h',
   'ide-project-item.h',
   'ide-project.h',
+  'ide-project-tree-addin.h',
   'ide-recent-projects.h',
 ]
 
@@ -11,6 +12,7 @@ projects_sources = [
   'ide-project-info.c',
   'ide-project-item.c',
   'ide-project.c',
+  'ide-project-tree-addin.c',
   'ide-recent-projects.c',
 ]
 

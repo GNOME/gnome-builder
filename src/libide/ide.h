@@ -143,6 +143,7 @@ G_BEGIN_DECLS
 #include "projects/ide-project-info.h"
 #include "projects/ide-project-item.h"
 #include "projects/ide-project.h"
+#include "projects/ide-project-tree-addin.h"
 #include "projects/ide-recent-projects.h"
 #include "rename/ide-rename-provider.h"
 #include "runner/ide-run-manager.h"

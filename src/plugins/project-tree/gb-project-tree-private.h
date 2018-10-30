@@ -24,12 +24,13 @@ G_BEGIN_DECLS
 
 struct _GbProjectTree
 {
-  DzlTree     parent_instance;
+  DzlTree           parent_instance;
 
-  GSettings *settings;
+  GSettings        *settings;
+  PeasExtensionSet *addins;
 
-  guint      expanded_in_new : 1;
-  guint      show_ignored_files : 1;
+  guint             expanded_in_new : 1;
+  guint             show_ignored_files : 1;
 };
 
 void      _gb_project_tree_init_shortcuts       (GbProjectTree *self);
