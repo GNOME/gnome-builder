@@ -36,6 +36,7 @@ struct _GbpGrepPanel
   GtkCheckButton    *check;
   GtkButton         *close_button;
   GtkButton         *replace_button;
+  GtkEntry          *replace_entry;
 };
 
 enum {
@@ -277,13 +278,68 @@ gbp_grep_panel_toggle_all_cb (GbpGrepPanel      *self,
 }
 
 static void
-gbp_grep_panel_replace_cb (GbpGrepPanel *self,
-                           GtkButton    *button)
+gbp_grep_panel_replace_edited_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
 {
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(GbpGrepPanel) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_GREP_PANEL (self));
+
+  if (!ide_buffer_manager_apply_edits_finish (bufmgr, result, &error))
+    {
+      ide_object_warning (IDE_OBJECT (bufmgr), "Failed to apply edits: %s", error->message);
+      return;
+    }
+
+  /* Make the treeview visible, but show the old content. Allows the user
+   * to jump to the positions that were edited.
+   */
+  gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), TRUE);
+}
+
+static void
+gbp_grep_panel_replace_clicked_cb (GbpGrepPanel *self,
+                                   GtkButton    *button)
+{
+  g_autoptr(GPtrArray) edits = NULL;
+  IdeBufferManager *bufmgr;
+  const gchar *text;
+  IdeContext *context;
+
   g_assert (GBP_IS_GREP_PANEL (self));
   g_assert (GTK_IS_BUTTON (button));
 
-  gbp_grep_model_create_edits (GBP_GREP_MODEL (gtk_tree_view_get_model (self->tree_view)));
+  edits = gbp_grep_model_create_edits (GBP_GREP_MODEL (gtk_tree_view_get_model (self->tree_view)));
+  if (edits == NULL || edits->len == 0)
+    return;
+
+  text = gtk_entry_get_text (self->replace_entry);
+
+  for (guint i = 0; i < edits->len; i++)
+    {
+      IdeProjectEdit *edit = g_ptr_array_index (edits, i);
+      ide_project_edit_set_replacement (edit, text);
+    }
+
+  g_debug ("Replacing %u edit points with %s", edits->len, text);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), FALSE);
+
+  context = ide_widget_get_context (GTK_WIDGET (self));
+  bufmgr = ide_context_get_buffer_manager (context);
+
+  ide_buffer_manager_apply_edits_async (bufmgr,
+                                        IDE_PTR_ARRAY_STEAL_FULL (&edits),
+                                        NULL,
+                                        gbp_grep_panel_replace_edited_cb,
+                                        g_object_ref (self));
 }
 
 static void
@@ -344,6 +400,7 @@ gbp_grep_panel_class_init (GbpGrepPanelClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/grep/gbp-grep-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, close_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, tree_view);
 }
 
@@ -363,7 +420,7 @@ gbp_grep_panel_init (GbpGrepPanel *self)
 
   g_signal_connect_object (self->replace_button,
                            "clicked",
-                           G_CALLBACK (gbp_grep_panel_replace_cb),
+                           G_CALLBACK (gbp_grep_panel_replace_clicked_cb),
                            self,
                            G_CONNECT_SWAPPED);
 

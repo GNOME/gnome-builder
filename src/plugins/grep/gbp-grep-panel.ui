@@ -46,7 +46,7 @@
                   </object>
                 </child>
                 <child type="center">
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="replace_entry">
                     <property name="visible">true</property>
                     <property name="width-chars">30</property>
                   </object>
