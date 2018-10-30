@@ -2131,6 +2131,7 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
   g_autoptr(GError) error = NULL;
   g_autoptr(IdeBuffer) buffer = NULL;
   EditState *state;
+  IdeFile *file;
 
   IDE_ENTRY;
 
@@ -2157,6 +2158,10 @@ ide_buffer_manager_apply_edits_buffer_loaded (GObject      *object,
   /* Nothing to do if we already failed */
   if (state->failed)
     IDE_EXIT;
+
+  /* Save the buffer for future use when applying edits */
+  file = ide_buffer_get_file (buffer);
+  g_hash_table_insert (state->buffers, g_object_ref (file), g_object_ref (buffer));
 
   /* If this is the last buffer to load, then we can go apply the edits. */
   if (state->count == 0)
