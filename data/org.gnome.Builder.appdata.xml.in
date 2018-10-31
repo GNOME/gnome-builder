@@ -82,6 +82,37 @@
 
   <releases>
 
+    <release version="3.30.2" date="2018-10-30">
+      <description>
+        <p>
+          Builder 3.30.2 is a bug-fix release.
+        </p>
+        <ul>
+          <li>Fixes for tracking GNOME's Night Light setting</li>
+          <li>Fix running of Builder's unit tests without installing</li>
+          <li>Fix relative paths from .git gitdir</li>
+          <li>Fix gdb communication over chatty intermediate PTY</li>
+          <li>Allow gtksourceview-3.0 applications to use Builder style-schemes</li>
+          <li>Icon fixes and improvements</li>
+          <li>More UI components display keyboard shortcuts</li>
+          <li>Saving files will now create the necessary directory structure</li>
+          <li>Buffers will mark themselves as "modified on disk" when the backing file is deleted</li>
+          <li>Drop SSL/PKI overrides for Flatpak</li>
+          <li>Git plugin now updates status when the checkout directory changes</li>
+          <li>Vim command-bar has improved results when listing files/directories</li>
+          <li>Project creation and cloning wizards now update paths in response to changes</li>
+          <li>".in" filename suffix will be ignored when guessing syntax language</li>
+          <li>You can specify what Ninja path to use using $NINJA in build preferences</li>
+          <li>RLS is now restarted when Cargo.toml changes</li>
+          <li>Fuzzy matching completion results has been improved for some corner-cases</li>
+          <li>Gtk-sharp3 template now builds correctly</li>
+          <li>Editor is properly focused when re-selecting open buffer from global search</li>
+          <li>Various bug fixes to gstyle</li>
+          <li>Meson toolchain editing improvements</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="3.30.1" date="2018-09-24">
       <description>
         <p>
@@ -95,7 +126,6 @@
           <li>Editor session tracking is more robust in discovering missing files.</li>
           <li>New C#, C, and Vala project templates.</li>
           <li>CMake build system improvements.</li>
-          <li></li>
         </ul>
       </description>
     </release>

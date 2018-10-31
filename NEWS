@@ -1,4 +1,39 @@
 ==============
+Version 3.30.2
+==============
+
+Changes since last release:
+
+ • Fixes for tracking GNOME's Night Light setting
+ • Fix running of Builder's unit tests without installing
+ • Fix relative paths from .git gitdir
+ • Fix gdb communication over chatty intermediate PTY
+ • Allow gtksourceview-3.0 applications to use Builder style-schemes
+ • Icon fixes and improvements
+ • More UI components display keyboard shortcuts
+ • Saving files will now create the necessary directory structure
+ • Buffers will mark themselves as "modified on disk" when the backing file
+   is deleted
+ • Drop SSL/PKI overrides for Flatpak
+ • Git plugin now updates status when the checkout directory changes
+ • Vim command-bar has improved results when listing files/directories
+ • Project creation and cloning wizards now update paths in response to changes
+ • ".in" filename suffix will be ignored when guessing syntax language
+ • You can specify what Ninja path to use using $NINJA in build preferences
+ • RLS is now restarted when Cargo.toml changes
+ • Fuzzy matching completion results has been improved for some corner-cases
+ • Gtk-sharp3 template now builds correctly
+ • Editor is properly focused when re-selecting open buffer from global search
+ • Various bug fixes to gstyle
+ • Meson toolchain editing improvements
+
+Updated Translations:
+
+  Serbian, Latvian, Brazilian Portuguese, Polish, Italian, Slovenian, Czech,
+  Indonesian, Turkish, Romanian, German, Hungarian, Lithuanian, Swedish,
+  French
+
+==============
 Version 3.30.1
 ==============
 
