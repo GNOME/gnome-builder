@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpLsView" parent="IdeLayoutView">
+    <child>
+      <object class="GtkScrolledWindow" id="scroller">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkTreeView" id="tree_view">
+            <property name="headers-visible">true</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder/plugins">
+    <file>ls.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/plugins/ls">
+    <file preprocess="xml-stripblanks">gbp-ls-view.ui</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+  </gresource>
+</gresources>
