@@ -125,6 +125,11 @@ struct _IdeOmniBar
   guint did_build : 1;
 
   /*
+   * In case we want to supress the style-class changes.
+   */
+  guint supress : 1;
+
+  /*
    * The following are template children from the GtkBuilder template.
    */
   GtkLabel             *branch_label;
@@ -502,6 +507,7 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
   GtkStyleContext *style_context;
   const gchar *display_name;
   IdeRuntime *runtime;
+  IdeBuildPhase phase;
 
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
@@ -533,7 +539,13 @@ ide_omni_bar__build_manager__build_started (IdeOmniBar       *self,
   dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
   dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
 
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "building");
+  phase = ide_build_pipeline_get_requested_phase (build_pipeline);
+  g_assert ((phase & IDE_BUILD_PHASE_MASK) == phase);
+
+  self->supress = phase < IDE_BUILD_PHASE_BUILD;
+
+  if (!self->supress)
+    dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "building");
 }
 
 static void
@@ -558,7 +570,9 @@ ide_omni_bar__build_manager__build_failed (IdeOmniBar       *self,
   dzl_clear_signal_handler (build_pipeline, &self->message_handler);
 
   gtk_label_set_label (self->popover_build_result_label, _("Failed"));
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
+
+  if (!self->supress)
+    dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
 
   dzl_gtk_widget_remove_style_class (GTK_WIDGET (self), "building");
 }
@@ -585,7 +599,9 @@ ide_omni_bar__build_manager__build_finished (IdeOmniBar       *self,
   dzl_clear_signal_handler (build_pipeline, &self->message_handler);
 
   gtk_label_set_label (self->popover_build_result_label, _("Success"));
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
+
+  if (!self->supress)
+    dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "success");
 
   dzl_gtk_widget_remove_style_class (GTK_WIDGET (self), "building");
 }
