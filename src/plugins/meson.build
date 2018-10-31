@@ -43,6 +43,7 @@ subdir('html-completion')
 subdir('html-preview')
 subdir('jedi')
 subdir('jhbuild')
+subdir('ls')
 subdir('make')
 subdir('maven')
 subdir('meson')
@@ -129,6 +130,7 @@ status += [
   'HTML Preview .......... : @0@'.format(get_option('with_html_preview')),
   'Python Jedi ........... : @0@'.format(get_option('with_jedi')),
   'JHBuild ............... : @0@'.format(get_option('with_jhbuild')),
+  'Directory View ........ : @0@'.format(get_option('with_ls')),
   'Make .................. : @0@'.format(get_option('with_make')),
   'Maven.................. : @0@'.format(get_option('with_maven')),
   'Meson ................. : @0@'.format(get_option('with_meson')),

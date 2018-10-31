@@ -202,6 +202,8 @@ src/plugins/grep/gtk/menus.ui
 src/plugins/html-preview/gtk/menus.ui
 src/plugins/html-preview/html_preview.py
 src/plugins/jedi/jedi_plugin.py
+src/plugins/ls/gbp-ls-view.c
+src/plugins/ls/gbp-ls-view.ui
 src/plugins/make/make_plugin.py
 src/plugins/maven/maven_plugin.py
 src/plugins/meson/gbp-meson-build-system.c
