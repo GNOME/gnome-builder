@@ -175,12 +175,17 @@ filename_data_func (GtkCellLayout   *layout,
 
   if G_LIKELY (line != NULL)
     {
+      g_autofree gchar *formatted = NULL;
       const gchar *slash = strrchr (line->path, G_DIR_SEPARATOR);
+      const gchar *shortpath;
 
       if (slash != NULL)
-        g_object_set (cell, "text", slash + 1, NULL);
+        shortpath = slash + 1;
       else
-        g_object_set (cell, "text", line->path, NULL);
+        shortpath = line->path;
+
+      formatted = g_strdup_printf ("%s:%u", shortpath, line->line);
+      g_object_set (cell, "text", formatted, NULL);
 
       return;
     }
@@ -475,7 +480,7 @@ gbp_grep_panel_init (GbpGrepPanel *self)
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, filename_data_func, NULL, NULL);
-  gtk_tree_view_column_set_title (column, _("Filename"));
+  gtk_tree_view_column_set_title (column, _("Location"));
   gtk_tree_view_column_set_expand (column, FALSE);
   gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_append_column (self->tree_view, column);
