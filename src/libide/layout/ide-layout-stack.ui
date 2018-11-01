@@ -127,7 +127,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkStack" id="stack">
+              <object class="IdeLayoutStackWrapper" id="stack">
                 <property name="expand">true</property>
                 <property name="homogeneous">false</property>
                 <property name="interpolate-size">false</property>

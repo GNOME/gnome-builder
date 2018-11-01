@@ -28,6 +28,8 @@ layout_private_sources = [
   'ide-layout-private.h',
   'ide-layout-stack-actions.c',
   'ide-layout-stack-shortcuts.c',
+  'ide-layout-stack-wrapper.c',
+  'ide-layout-stack-wrapper.h',
   'ide-shortcut-label.c',
   'ide-shortcut-label.h',
 ]

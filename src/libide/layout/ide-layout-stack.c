@@ -29,6 +29,7 @@
 #include "layout/ide-layout-stack.h"
 #include "layout/ide-layout-stack-addin.h"
 #include "layout/ide-layout-stack-header.h"
+#include "layout/ide-layout-stack-wrapper.h"
 #include "layout/ide-layout-private.h"
 #include "layout/ide-shortcut-label.h"
 #include "threading/ide-task.h"
@@ -874,6 +875,7 @@ ide_layout_stack_class_init (IdeLayoutStackClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeLayoutStack, event_box);
 
   g_type_ensure (IDE_TYPE_LAYOUT_STACK_HEADER);
+  g_type_ensure (IDE_TYPE_LAYOUT_STACK_WRAPPER);
   g_type_ensure (IDE_TYPE_SHORTCUT_LABEL);
 }
 
