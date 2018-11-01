@@ -74,7 +74,7 @@ static GParamSpec *properties [N_PROPS];
 static IdeMarkedContent *
 parse_marked_string (GVariant *v)
 {
-  g_autoptr(GString) str = g_string_new (NULL);
+  g_autoptr(GString) gstr = g_string_new (NULL);
   g_autoptr(GVariant) child = NULL;
   GVariant *item;
   GVariantIter iter;
@@ -86,6 +86,18 @@ parse_marked_string (GVariant *v)
    *
    * MarkedString is (string | { language: string, value: string })
    */
+
+  if (g_variant_is_of_type (v, G_VARIANT_TYPE_STRING))
+    {
+      gsize len = 0;
+      const gchar *str = "";
+
+      str = g_variant_get_string (v, &len);
+      if (str && *str == '\0')
+        return NULL;
+
+      return ide_marked_content_new_from_data (str, len, IDE_MARKED_KIND_PLAINTEXT);
+    }
 
   if (g_variant_is_of_type (v, G_VARIANT_TYPE_VARIANT))
     v = child = g_variant_get_variant (v);
@@ -101,7 +113,7 @@ parse_marked_string (GVariant *v)
         asv = child2 = g_variant_get_variant (item);
 
       if (g_variant_is_of_type (asv, G_VARIANT_TYPE_STRING))
-        g_string_append (str, g_variant_get_string (asv, NULL));
+        g_string_append (gstr, g_variant_get_string (asv, NULL));
       else if (g_variant_is_of_type (asv, G_VARIANT_TYPE_VARDICT))
         {
           const gchar *lang = "";
@@ -117,15 +129,15 @@ parse_marked_string (GVariant *v)
             g_string_append (str, value);
 #else
           if (!dzl_str_empty0 (value))
-            g_string_append_printf (str, "```\n%s\n```", value);
+            g_string_append_printf (gstr, "```\n%s\n```", value);
 #endif
         }
 
       g_variant_unref (item);
     }
 
-  if (str->len)
-    return ide_marked_content_new_from_data (str->str, str->len, IDE_MARKED_KIND_MARKDOWN);
+  if (gstr->len)
+    return ide_marked_content_new_from_data (gstr->str, gstr->len, IDE_MARKED_KIND_MARKDOWN);
 
   return NULL;
 }
