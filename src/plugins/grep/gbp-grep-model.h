@@ -64,6 +64,12 @@ void          gbp_grep_model_set_at_word_boundaries (GbpGrepModel            *se
 const gchar  *gbp_grep_model_get_query              (GbpGrepModel            *self);
 void          gbp_grep_model_set_query              (GbpGrepModel            *self,
                                                      const gchar             *query);
+const gchar  *gbp_grep_model_get_file_filter        (GbpGrepModel            *self);
+void          gbp_grep_model_set_file_filter        (GbpGrepModel            *self,
+                                                     const gchar             *file_filter);
+const gchar  *gbp_grep_model_get_ignore_filter      (GbpGrepModel            *self);
+void          gbp_grep_model_set_ignore_filter      (GbpGrepModel            *self,
+                                                     const gchar             *ignore_filter);
 GPtrArray    *gbp_grep_model_create_edits           (GbpGrepModel            *self);
 void          gbp_grep_model_select_all             (GbpGrepModel            *self);
 void          gbp_grep_model_select_none            (GbpGrepModel            *self);
