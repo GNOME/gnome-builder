@@ -611,6 +611,9 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
     {
       if (!self->recursive)
         ide_subprocess_launcher_push_argv (launcher, "--max-depth=0");
+
+      /* Allow files that are untracked, but not ignored */
+      ide_subprocess_launcher_push_argv (launcher, "--untracked");
     }
 
   ide_subprocess_launcher_push_argv (launcher, "-E");
