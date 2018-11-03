@@ -37,6 +37,10 @@ struct _GbpGrepPopover
   GFile          *file;
 
   GtkEntry       *entry;
+  GtkEntry       *file_filter;
+  GtkEntry       *ignore_filter;
+  char          **file_filters;
+  char          **ignore_filters;
   GtkButton      *button;
   GtkCheckButton *regex_button;
   GtkCheckButton *whole_button;
@@ -90,6 +94,10 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   gboolean at_word_boundaries;
   gboolean case_sensitive;
   gboolean recursive;
+  gchar *file_filter;
+  gchar **file_filters;
+  gchar *ignore_filter;
+  gchar **ignore_filters;
 
   g_assert (GBP_IS_GREP_POPOVER (self));
   g_assert (GTK_IS_BUTTON (button));
@@ -110,6 +118,34 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   gbp_grep_model_set_at_word_boundaries (model, at_word_boundaries);
   gbp_grep_model_set_case_sensitive (model, case_sensitive);
   gbp_grep_model_set_query (model, gtk_entry_get_text (self->entry));
+
+  file_filter = gtk_entry_get_text (self->file_filter);
+  if (file_filter != NULL)
+    {
+      file_filter = g_strdup (file_filter);
+      if (g_strcmp0 (g_strstrip (file_filter), "") != 0)
+        {
+          file_filters = g_strsplit (g_strstrip (file_filter), ",", 0);
+          for (int i = 0; file_filters[i]; i++) {
+            file_filters[i] = g_strstrip (file_filters[i]);
+          }
+          gbp_grep_model_set_file_filter (model, (const gchar * const *)file_filters);
+        }
+    }
+
+  ignore_filter = gtk_entry_get_text (self->ignore_filter);
+  if (ignore_filter != NULL)
+    {
+      ignore_filter = g_strdup (ignore_filter);
+      if (g_strcmp0 (g_strstrip (ignore_filter), "") != 0)
+        {
+          ignore_filters = g_strsplit (g_strstrip (ignore_filter), ",", 0);
+          for (int i = 0; ignore_filters[i]; i++) {
+            ignore_filters[i] = g_strstrip (ignore_filters[i]);
+          }
+          gbp_grep_model_set_ignore_filter (model, (const gchar * const *)ignore_filters);
+        }
+    }
 
   if (gtk_widget_get_visible (GTK_WIDGET (self->recursive_button)))
     gbp_grep_model_set_recursive (model, recursive);
@@ -218,6 +254,8 @@ gbp_grep_popover_class_init (GbpGrepPopoverClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/grep/gbp-grep-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, file_filter);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, ignore_filter);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, regex_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, whole_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, case_button);
