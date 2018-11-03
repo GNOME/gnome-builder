@@ -42,6 +42,14 @@ struct _GbpGrepModel
    */
   gchar *query;
 
+  /* The filter text, which we use to select filenames in result.
+   */
+  gchar *file_filter;
+
+  /* The filter text, which we use to ignore dirs in result.
+   */
+  gchar *ignore_filter;
+
   /* We need to do client-side processing to extract the exact message
    * locations after grep gives us the matching lines. This allows us to
    * create IdeProjectEdit source ranges later as well as creating the
@@ -88,6 +96,8 @@ enum {
   PROP_RECURSIVE,
   PROP_USE_REGEX,
   PROP_QUERY,
+  PROP_FILE_FILTER,
+  PROP_IGNORE_FILTER,
   N_PROPS
 };
 
@@ -262,6 +272,14 @@ gbp_grep_model_get_property (GObject    *object,
       g_value_set_string (value, gbp_grep_model_get_query (self));
       break;
 
+    case PROP_FILE_FILTER:
+      g_value_set_string (value, gbp_grep_model_get_file_filter (self));
+      break;
+
+    case PROP_IGNORE_FILTER:
+      g_value_set_string (value, gbp_grep_model_get_ignore_filter (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -299,6 +317,14 @@ gbp_grep_model_set_property (GObject      *object,
 
     case PROP_QUERY:
       gbp_grep_model_set_query (self, g_value_get_string (value));
+      break;
+
+    case PROP_FILE_FILTER:
+      gbp_grep_model_set_file_filter (self, g_value_get_string (value));
+      break;
+
+    case PROP_IGNORE_FILTER:
+      gbp_grep_model_set_ignore_filter (self, g_value_get_string (value));
       break;
 
     default:
@@ -342,6 +368,14 @@ gbp_grep_model_class_init (GbpGrepModelClass *klass)
 
   properties [PROP_QUERY] =
     g_param_spec_string ("query", NULL, NULL, NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_FILE_FILTER] =
+    g_param_spec_string ("file-filter", NULL, NULL, NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_IGNORE_FILTER] =
+    g_param_spec_string ("ignore-filter", NULL, NULL, NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -404,6 +438,22 @@ gbp_grep_model_get_query (GbpGrepModel *self)
   return self->query;
 }
 
+const gchar *
+gbp_grep_model_get_file_filter (GbpGrepModel *self)
+{
+  g_return_val_if_fail (GBP_IS_GREP_MODEL (self), NULL);
+
+  return self->file_filter;
+}
+
+const gchar *
+gbp_grep_model_get_ignore_filter (GbpGrepModel *self)
+{
+  g_return_val_if_fail (GBP_IS_GREP_MODEL (self), NULL);
+
+  return self->ignore_filter;
+}
+
 void
 gbp_grep_model_set_query (GbpGrepModel *self,
                           const gchar  *query)
@@ -416,6 +466,36 @@ gbp_grep_model_set_query (GbpGrepModel *self,
       self->query = g_strdup (query);
       gbp_grep_model_clear_regex (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_QUERY]);
+    }
+}
+
+void
+gbp_grep_model_set_ignore_filter (GbpGrepModel *self,
+                                  const gchar  *ignore_filter)
+{
+  g_return_if_fail (GBP_IS_GREP_MODEL (self));
+
+  if (g_strcmp0 (ignore_filter, self->ignore_filter) != 0)
+    {
+      g_free (self->ignore_filter);
+      self->ignore_filter = g_strdup (ignore_filter);
+      gbp_grep_model_clear_regex (self);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IGNORE_FILTER]);
+    }
+}
+
+void
+gbp_grep_model_set_file_filter (GbpGrepModel *self,
+                                const gchar  *file_filter)
+{
+  g_return_if_fail (GBP_IS_GREP_MODEL (self));
+
+  if (g_strcmp0 (file_filter, self->file_filter) != 0)
+    {
+      g_free (self->file_filter);
+      self->file_filter = g_strdup (file_filter);
+      gbp_grep_model_clear_regex (self);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FILE_FILTER]);
     }
 }
 
@@ -554,6 +634,9 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
   GFile *workdir;
   GType git_vcs;
   gboolean use_git_grep = FALSE;
+  gchar **file_filters;
+  gchar **ignore_filters;
+  gsize i;
 
   g_assert (GBP_IS_GREP_MODEL (self));
   g_assert (self->query != NULL);
@@ -641,6 +724,64 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
       ide_subprocess_launcher_push_argv (launcher, "--and");
       ide_subprocess_launcher_push_argv (launcher, "-e");
       ide_subprocess_launcher_push_argv (launcher, "^.{0,256}$");
+    }
+
+  if (self->file_filter != NULL)
+    {
+      if (use_git_grep)
+        {
+          ide_subprocess_launcher_push_argv (launcher, "--");
+        }
+
+      file_filters = g_strsplit (self->file_filter, ",", 0);
+
+      for (i = 0; file_filters [i]; i++)
+        {
+          gchar *file_filter = file_filters [i];
+          gchar *chomp_file_filter = g_strchomp(file_filter);
+
+          g_autofree gchar *file_filter_pattern;
+          if (use_git_grep)
+            {
+              file_filter_pattern = g_strconcat ("*/", chomp_file_filter, NULL);
+              ide_subprocess_launcher_push_argv (launcher, file_filter_pattern);
+            }
+          else
+            {
+              file_filter_pattern = g_strconcat ("*/", chomp_file_filter, NULL);
+              ide_subprocess_launcher_push_argv (launcher, "--include");
+              ide_subprocess_launcher_push_argv (launcher, file_filter_pattern);
+            }
+        }
+    }
+
+  if (self->ignore_filter != NULL)
+    {
+      if (use_git_grep && self->file_filter == NULL)
+        {
+          ide_subprocess_launcher_push_argv (launcher, "--");
+        }
+
+      ignore_filters = g_strsplit (self->ignore_filter, ",", 0);
+
+      for (i = 0; ignore_filters [i]; i++)
+        {
+          gchar *ignore_filter = ignore_filters [i];
+          gchar *chomp_ignore_filter = g_strchomp(ignore_filter);
+
+          g_autofree gchar *ignore_filter_pattern;
+          if (use_git_grep)
+            {
+              ignore_filter_pattern = g_strconcat (":(exclude)", chomp_ignore_filter, "/", NULL);
+              ide_subprocess_launcher_push_argv (launcher, ignore_filter_pattern);
+            }
+          else
+            {
+              ignore_filter_pattern = g_strconcat ("*/", chomp_ignore_filter, NULL);
+              ide_subprocess_launcher_push_argv (launcher, "--exclude-dir");
+              ide_subprocess_launcher_push_argv (launcher, ignore_filter_pattern);
+            }
+        }
     }
 
   if (g_file_test (path, G_FILE_TEST_IS_DIR))
