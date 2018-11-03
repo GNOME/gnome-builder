@@ -19,10 +19,9 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="margin-top">6</property>
-            <property name="orientation">horizontal</property>
-            <property name="spacing">6</property>
-            <property name="visible">true</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkEntry" id="entry">
                 <property name="placeholder-text" translatable="yes">Search for…</property>
@@ -31,14 +30,34 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="button">
+              <object class="GtkEntry" id="file_filter">
+                <property name="placeholder-text" translatable="yes">File filter…</property>
+                <property name="width-chars">24</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkEntry" id="ignore_filter">
+                <property name="placeholder-text" translatable="yes">Dirs to ignore…</property>
+                <property name="width-chars">24</property>
+                <property name="visible">true</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button">
                 <property name="hexpand">false</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Find</property>
+                    <property name="label" translatable="yes">Find</property>
                 <property name="visible">true</property>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
