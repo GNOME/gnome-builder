@@ -37,6 +37,8 @@ struct _GbpGrepPopover
   GFile          *file;
 
   GtkEntry       *entry;
+  GtkEntry       *file_filter;
+  GtkEntry       *ignore_filter;
   GtkButton      *button;
   GtkCheckButton *regex_button;
   GtkCheckButton *whole_button;
@@ -110,6 +112,8 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   gbp_grep_model_set_at_word_boundaries (model, at_word_boundaries);
   gbp_grep_model_set_case_sensitive (model, case_sensitive);
   gbp_grep_model_set_query (model, gtk_entry_get_text (self->entry));
+  gbp_grep_model_set_file_filter (model, gtk_entry_get_text (self->file_filter));
+  gbp_grep_model_set_ignore_filter (model, gtk_entry_get_text (self->ignore_filter));
 
   if (gtk_widget_get_visible (GTK_WIDGET (self->recursive_button)))
     gbp_grep_model_set_recursive (model, recursive);
@@ -218,6 +222,8 @@ gbp_grep_popover_class_init (GbpGrepPopoverClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/grep/gbp-grep-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, file_filter);
+  gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, ignore_filter);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, regex_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, whole_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, case_button);
