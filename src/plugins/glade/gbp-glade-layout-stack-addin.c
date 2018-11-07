@@ -46,8 +46,6 @@ G_DEFINE_TYPE_WITH_CODE (GbpGladeLayoutStackAddin, gbp_glade_layout_stack_addin,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_LAYOUT_STACK_ADDIN,
                                                 layout_stack_addin_iface_init))
 
-
-
 static void
 gbp_glade_layout_stack_addin_selection_changed_cb (GbpGladeLayoutStackAddin *self,
                                                    GladeProject             *project)

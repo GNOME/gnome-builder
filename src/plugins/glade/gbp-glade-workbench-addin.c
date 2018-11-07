@@ -27,9 +27,9 @@
 
 struct _GbpGladeWorkbenchAddin
 {
-  GObject parent_instance;
+  GObject       parent_instance;
   IdeWorkbench *workbench;
-  GHashTable *catalog_paths;
+  GHashTable   *catalog_paths;
 };
 
 typedef struct
