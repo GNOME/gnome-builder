@@ -39,7 +39,7 @@ sysroot_preferences_add_new (GbpSysrootPreferencesAddin *self,
 {
   GtkWidget *pref_row = NULL;
   guint id = 0;
-  g_autofree gchar *new_target;
+  g_autofree gchar *new_target = NULL;
   GbpSysrootManager *sysroot_manager = NULL;
 
   g_assert (GBP_IS_SYSROOT_PREFERENCES_ADDIN (self));
