@@ -199,12 +199,26 @@ delta_rgb (void)
 
   printf ("time micro sec: %f (per sample:%f) sec: %f\n\n", time, time / RGB_SAMPLES, time / 1.0e6);
 
-  printf ("max red src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n",
-          gdk_rgba_to_string (&max_src_r_rgba), gdk_rgba_to_string (&max_dst_r_rgba), max_r_xyz.x, max_r_xyz.y, max_r_xyz.z);
-  printf ("max green src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n",
-          gdk_rgba_to_string (&max_src_g_rgba), gdk_rgba_to_string (&max_dst_r_rgba), max_g_xyz.x, max_g_xyz.y, max_g_xyz.z);
-  printf ("max blue src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n",
-          gdk_rgba_to_string (&max_src_b_rgba), gdk_rgba_to_string (&max_dst_r_rgba), max_b_xyz.x, max_b_xyz.y, max_b_xyz.z);
+  {
+    g_autofree gchar *src_str = gdk_rgba_to_string (&max_src_r_rgba);
+    g_autofree gchar *dst_str = gdk_rgba_to_string (&max_dst_r_rgba);
+
+    printf ("max red src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_r_xyz.x, max_r_xyz.y, max_r_xyz.z);
+  }
+
+  {
+    g_autofree gchar *src_str = gdk_rgba_to_string (&max_src_g_rgba);
+    g_autofree gchar *dst_str = gdk_rgba_to_string (&max_dst_g_rgba);
+
+    printf ("max green src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_g_xyz.x, max_g_xyz.y, max_g_xyz.z);
+  }
+
+  {
+    g_autofree gchar *src_str = gdk_rgba_to_string (&max_src_b_rgba);
+    g_autofree gchar *dst_str = gdk_rgba_to_string (&max_dst_b_rgba);
+
+    printf ("max blue src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_b_xyz.x, max_b_xyz.y, max_b_xyz.z);
+  }
 }
 
 static void
