@@ -63,7 +63,7 @@ test_deltae (void)
   GstyleCielab lab1, lab2;
   gdouble calc_delta_e, delta_e;
 
-  printf ("\n");
+  g_print ("\n");
 
   for (gint n = 0; n < G_N_ELEMENTS (lab_table); ++n)
     {
@@ -77,7 +77,7 @@ test_deltae (void)
       delta_e = item->delta_e;
 
       calc_delta_e = gstyle_color_delta_e (&lab1, &lab2);
-      printf ("lab(%f, %f, %f) vs lab(%f, %f, %f) deltaE (%f): %f\n",
+      g_print ("lab(%f, %f, %f) vs lab(%f, %f, %f) deltaE (%f): %f\n",
               lab1.l, lab1.a, lab1.b,
               lab2.l, lab2.a, lab2.b,
               delta_e, calc_delta_e);
@@ -189,35 +189,35 @@ delta_rgb (void)
   dg_moy /= 255.0 * 255.0 * 255.0;
   db_moy /= 255.0 * 255.0 * 255.0;
 
-  printf ("\nRGB -> XYZ -> RGB:\n");
-  printf ("red:\n\tΔmax: %f%% (normalized/255: %f)\n\tΔmin: %f%% (normalized/255: %f)\n\tΔmoy: %f%%(normalized/255: %f)\n\n",
+  g_print ("\nRGB -> XYZ -> RGB:\n");
+  g_print ("red:\n\tΔmax: %f%% (normalized/255: %f)\n\tΔmin: %f%% (normalized/255: %f)\n\tΔmoy: %f%%(normalized/255: %f)\n\n",
           dr_max, dr_max * 255.0, dr_min, dr_min * 255.0, dr_moy, dr_moy * 255.0);
-  printf ("green:\n\tΔmax: %f%% (normalized/255: %f)\n\tΔmin: %f%% (normalized/255: %f)\n\tΔmoy: %f%%(normalized/255: %f)\n\n",
+  g_print ("green:\n\tΔmax: %f%% (normalized/255: %f)\n\tΔmin: %f%% (normalized/255: %f)\n\tΔmoy: %f%%(normalized/255: %f)\n\n",
           dg_max, dg_max * 255.0, dg_min, dg_min * 255.0, dg_moy, dg_moy * 255.0);
-  printf ("blue:\n\tΔmax: %f%% (normalized/255: %f)\n\tΔmin: %f%% (normalized/255: %f)\n\tΔmoy: %f%%(normalized/255: %f)\n\n",
+  g_print ("blue:\n\tΔmax: %f%% (normalized/255: %f)\n\tΔmin: %f%% (normalized/255: %f)\n\tΔmoy: %f%%(normalized/255: %f)\n\n",
           db_max, db_max * 255.0, db_min, db_min * 255.0, db_moy, db_moy * 255.0);
 
-  printf ("time micro sec: %f (per sample:%f) sec: %f\n\n", time, time / RGB_SAMPLES, time / 1.0e6);
+  g_print ("time micro sec: %f (per sample:%f) sec: %f\n\n", time, time / RGB_SAMPLES, time / 1.0e6);
 
   {
     g_autofree gchar *src_str = gdk_rgba_to_string (&max_src_r_rgba);
     g_autofree gchar *dst_str = gdk_rgba_to_string (&max_dst_r_rgba);
 
-    printf ("max red src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_r_xyz.x, max_r_xyz.y, max_r_xyz.z);
+    g_print ("max red src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_r_xyz.x, max_r_xyz.y, max_r_xyz.z);
   }
 
   {
     g_autofree gchar *src_str = gdk_rgba_to_string (&max_src_g_rgba);
     g_autofree gchar *dst_str = gdk_rgba_to_string (&max_dst_g_rgba);
 
-    printf ("max green src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_g_xyz.x, max_g_xyz.y, max_g_xyz.z);
+    g_print ("max green src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_g_xyz.x, max_g_xyz.y, max_g_xyz.z);
   }
 
   {
     g_autofree gchar *src_str = gdk_rgba_to_string (&max_src_b_rgba);
     g_autofree gchar *dst_str = gdk_rgba_to_string (&max_dst_b_rgba);
 
-    printf ("max blue src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_b_xyz.x, max_b_xyz.y, max_b_xyz.z);
+    g_print ("max blue src rgba:%s dst rgba:%s xyz:(%f, %f, %f)\n", src_str, dst_str, max_b_xyz.x, max_b_xyz.y, max_b_xyz.z);
   }
 }
 
@@ -312,17 +312,17 @@ delta_hsv (void)
   ds_moy /= 255.0 * 100.0 * 100.0;
   dv_moy /= 255.0 * 100.0 * 100.0;
 
-  printf ("\nHSV -> XYZ -> HSV:\n");
-  printf ("hue:\n\tΔmax: %f%% (norm/360:%f)\n\tΔmin:%f%% (norm/360:%f)\n\tΔmoy:%f%% (norm/360:%f)\n\n",
+  g_print ("\nHSV -> XYZ -> HSV:\n");
+  g_print ("hue:\n\tΔmax: %f%% (norm/360:%f)\n\tΔmin:%f%% (norm/360:%f)\n\tΔmoy:%f%% (norm/360:%f)\n\n",
           dh_max, dh_max * 360.0, dh_min, dh_min * 360.0, dh_moy, dh_moy * 360.0);
-  printf ("saturation:\n\tΔmax:%f%% (norm/100:%f)\n\tΔmin:%f%% (norm/100:%f)\n\tΔmoy:%f%% (norm/100:%f)\n\n",
+  g_print ("saturation:\n\tΔmax:%f%% (norm/100:%f)\n\tΔmin:%f%% (norm/100:%f)\n\tΔmoy:%f%% (norm/100:%f)\n\n",
           ds_max, ds_max * 100.0, ds_min, ds_min * 100.0, ds_moy, ds_moy * 100.0);
-  printf ("value:\n\tΔmax:%f%% (norm/100:%f)\n\tΔmin:%f%% (norm/100:%f)\n\tΔmoy:%f%% (norm/100:%f)\n\n",
+  g_print ("value:\n\tΔmax:%f%% (norm/100:%f)\n\tΔmin:%f%% (norm/100:%f)\n\tΔmoy:%f%% (norm/100:%f)\n\n",
           dv_max, dv_min * 100.0, dv_min, dv_min * 100.0, dv_moy, dv_moy * 100.0);
 
-  printf ("time micro sec: %f (per sample:%f) sec: %f\n\n", time, time / HSV_SAMPLES, time / 1.0e6);
+  g_print ("time micro sec: %f (per sample:%f) sec: %f\n\n", time, time / HSV_SAMPLES, time / 1.0e6);
 
-  printf ("max hue src hsv(%f,%f,%f) dst hsv(%f,%f,%f)\n",
+  g_print ("max hue src hsv(%f,%f,%f) dst hsv(%f,%f,%f)\n",
           max_src_hsv_h, max_src_hsv_s, max_src_hsv_v,
           max_dst_hsv_h, max_dst_hsv_s, max_dst_hsv_v);
 }
@@ -383,15 +383,15 @@ delta_lab (void)
   da_moy /= 100.0 * 256.0 * 256.0;
   db_moy /= 100.0 * 256.0 * 256.0;
 
-  printf ("\nLAB -> XYZ -> LAB:\n");
-  printf ("L* in [0, 100]:\n\tΔl max: %f%%\n\tΔl min:%f%%\n\tΔl moy:%f%%\n\n",
+  g_print ("\nLAB -> XYZ -> LAB:\n");
+  g_print ("L* in [0, 100]:\n\tΔl max: %f%%\n\tΔl min:%f%%\n\tΔl moy:%f%%\n\n",
           dl_max, dl_min, dl_moy);
-  printf ("a* in [-128, +128]:\n\tΔa max: %f%%\n\tΔa min:%f\n\tΔa moy:%f%%\n\n",
+  g_print ("a* in [-128, +128]:\n\tΔa max: %f%%\n\tΔa min:%f\n\tΔa moy:%f%%\n\n",
           da_max, da_min, da_moy);
-  printf ("b* in [-128, +128]:\n\tΔb max: %f%%\n\tΔb min:%f%%\n\tΔb moy:%f%%\n\n",
+  g_print ("b* in [-128, +128]:\n\tΔb max: %f%%\n\tΔb min:%f%%\n\tΔb moy:%f%%\n\n",
           db_max, db_min, db_moy);
 
-  printf ("time micro sec: %f (per sample:%f) sec: %f\n\n", time, time / LAB_SAMPLES, time / 1.0e6);
+  g_print ("time micro sec: %f (per sample:%f) sec: %f\n\n", time, time / LAB_SAMPLES, time / 1.0e6);
 }
 
 static void
