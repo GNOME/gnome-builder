@@ -30,14 +30,13 @@
 void
 _ide_application_init_shortcuts (IdeApplication *self)
 {
-  static const gchar *shortcuts_fallback[] = { "<Primary>F1", NULL };
   DzlShortcutManager *manager;
   DzlShortcutTheme *theme;
 
   g_assert (IDE_IS_APPLICATION (self));
 
   manager = dzl_application_get_shortcut_manager (DZL_APPLICATION (self));
-  theme = g_object_ref (dzl_shortcut_manager_get_theme (manager));
+  theme = dzl_shortcut_manager_get_theme_by_name (manager, "internal");
 
   dzl_shortcut_manager_add_action (manager,
                                    I_("app.help"),
@@ -69,9 +68,6 @@ _ide_application_init_shortcuts (IdeApplication *self)
                                    NULL);
   dzl_shortcut_theme_set_accel_for_action (theme,
                                            "app.shortcuts",
-                                           "<Primary><Shift>question",
+                                           "<Primary>question",
                                            DZL_SHORTCUT_PHASE_GLOBAL);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (self),
-                                         "app.shortcuts",
-                                         shortcuts_fallback);
 }
