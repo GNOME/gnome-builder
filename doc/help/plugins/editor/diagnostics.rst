@@ -43,7 +43,7 @@ You also need to register the plugin as a diagnostic provider in the ``.plugin``
 
 For example, a C diagnostic plugin will have a plugin file that look similar to this:
 
-.. code-block::
+.. code-block:: none
 
     # my_plugin.plugin
     
