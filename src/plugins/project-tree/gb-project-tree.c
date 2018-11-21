@@ -29,6 +29,7 @@
 #include "gb-project-tree-private.h"
 #include "gb-vcs-tree-builder.h"
 
+
 G_DEFINE_TYPE (GbProjectTree, gb_project_tree, DZL_TYPE_TREE)
 
 enum {
@@ -292,6 +293,8 @@ gb_project_tree_destroy (GtkWidget *widget)
 
   g_clear_object (&self->settings);
   g_clear_object (&self->addins);
+  g_clear_pointer (&self->action_build_enable_checks, g_array_unref);
+  g_clear_pointer (&self->action_rebuild_enable_checks, g_array_unref);
 
   GTK_WIDGET_CLASS (gb_project_tree_parent_class)->destroy (widget);
 }
@@ -386,6 +389,10 @@ gb_project_tree_init (GbProjectTree *self)
                     "notify::selection",
                     G_CALLBACK (gb_project_tree_notify_selection),
                     NULL);
+
+  // This must be inited before tree actions
+  self->action_build_enable_checks = g_array_new (FALSE, TRUE, sizeof (gb_project_tree_action_enable_cb));
+  self->action_rebuild_enable_checks = g_array_new (FALSE, TRUE, sizeof (gb_project_tree_action_enable_cb));
 
   gb_project_tree_actions_init (self);
   _gb_project_tree_init_shortcuts (self);

@@ -1,6 +1,6 @@
-/* gb-project-tree-private.h
+/* ide-golang-application-addin.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2018 Loïc BLOT <loic.blot@unix-experience.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,24 +18,15 @@
 
 #pragma once
 
-#include <ide.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-struct _GbProjectTree
-{
-  DzlTree           parent_instance;
+#define IDE_TYPE_GOLANG_APPLICATION_ADDIN (ide_golang_application_addin_get_type())
 
-  GSettings        *settings;
-  PeasExtensionSet *addins;
-
-  GArray           *action_build_enable_checks;
-  GArray           *action_rebuild_enable_checks;
-
-  guint             expanded_in_new : 1;
-  guint             show_ignored_files : 1;
-};
-
-void      _gb_project_tree_init_shortcuts       (GbProjectTree *self);
+G_DECLARE_FINAL_TYPE (IdeGolangApplicationAddin, ide_golang_application_addin, IDE, GOLANG_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS
+
+const gchar *golang_get_go_version (void);
+

@@ -67,11 +67,11 @@
     <section id="gb-project-tree-build-section">
       <item>
         <attribute name="label" translatable="yes">_Build</attribute>
-        <attribute name="action">workbench.build</attribute>
+        <attribute name="action">project-tree.build</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Rebuild</attribute>
-        <attribute name="action">workbench.rebuild</attribute>
+        <attribute name="action">project-tree.rebuild</attribute>
       </item>
     </section>
     <section id="gb-project-tree-display-options-section">
@@ -105,3 +105,4 @@
     </section>
   </menu>
 </interface>
+

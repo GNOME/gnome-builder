@@ -25,4 +25,9 @@ G_BEGIN_DECLS
 void gb_project_tree_actions_init   (GbProjectTree *self);
 void gb_project_tree_actions_update (GbProjectTree *self);
 
+typedef gboolean (*gb_project_tree_action_enable_cb) (gboolean);
+
+void register_tree_action_build_check(gb_project_tree_action_enable_cb cb);
+void register_tree_action_rebuild_check(gb_project_tree_action_enable_cb cb);
+
 G_END_DECLS

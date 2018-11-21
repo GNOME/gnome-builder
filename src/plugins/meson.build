@@ -36,6 +36,7 @@ subdir('git')
 subdir('gjs-symbols')
 subdir('glade')
 subdir('gnome-code-assistance')
+subdir('golang')
 subdir('go-langserv')
 subdir('grep')
 subdir('history')
@@ -123,6 +124,7 @@ status += [
   'GJS Symbol Resolver ... : @0@'.format(get_option('with_gjs_symbols')),
   'Glade ................. : @0@'.format(get_option('with_glade')),
   'GNOME Code Assistance . : @0@'.format(get_option('with_gnome_code_assistance')),
+  'Go .................... : @0@'.format(get_option('with_golang')),
   'Go Language Server .... : @0@'.format(get_option('with_go_langserv')),
   'Grep .................. : @0@'.format(get_option('with_grep')),
   'History ............... : @0@'.format(get_option('with_history')),

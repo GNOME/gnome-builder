@@ -108,6 +108,23 @@ gb_project_tree_actions_refresh (GSimpleAction *action,
 }
 
 static void
+gb_project_tree_actions_action_build (GSimpleAction *action,
+                                            GVariant      *variant,
+                                            gpointer       user_data)
+{
+  // TODO
+}
+
+static void
+gb_project_tree_actions_action_rebuild (GSimpleAction *action,
+                                            GVariant      *variant,
+                                            gpointer       user_data)
+{
+
+  // TODO
+}
+
+static void
 gb_project_tree_actions_collapse_all_nodes (GSimpleAction *action,
                                             GVariant      *variant,
                                             gpointer       user_data)
@@ -892,6 +909,8 @@ gb_project_tree_actions_action_with_path (GSimpleAction *action,
 
 static GActionEntry GbProjectTreeActions[] = {
   { "action-with-path",       gb_project_tree_actions_action_with_path, "s" },
+  { "build",                  gb_project_tree_actions_action_build },
+  { "rebuild",                gb_project_tree_actions_action_rebuild },
   { "collapse-all-nodes",     gb_project_tree_actions_collapse_all_nodes },
   { "move-to-trash",          gb_project_tree_actions_move_to_trash },
   { "new-directory",          gb_project_tree_actions_new_directory },
@@ -906,12 +925,17 @@ static GActionEntry GbProjectTreeActions[] = {
   { "rename-file",            gb_project_tree_actions_rename_file },
 };
 
+GbProjectTree *gb_project_tree = NULL;
+
 void
 gb_project_tree_actions_init (GbProjectTree *self)
 {
   g_autoptr(GSettings) tree_settings = NULL;
   g_autoptr(GSimpleActionGroup) actions = NULL;
   GAction *action;
+
+  // Register it globally for other plugins registration
+  gb_project_tree = self;
 
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions),
@@ -948,6 +972,7 @@ gb_project_tree_actions_update (GbProjectTree *self)
   DzlTreeNode *parent;
   GObject *item = NULL;
   GObject *parent_item = NULL;
+  gboolean action_enable = FALSE;
 
   IDE_ENTRY;
 
@@ -998,5 +1023,49 @@ gb_project_tree_actions_update (GbProjectTree *self)
               "enabled", GB_IS_PROJECT_FILE (item),
               NULL);
 
+  // Run callbacks to verify if we can enable build function
+  for (guint i = 0; i < self->action_build_enable_checks->len; i++)
+    {
+      gb_project_tree_action_enable_cb cb = g_array_index (self->action_build_enable_checks, gb_project_tree_action_enable_cb, i);
+      if (cb(project_file_is_directory (item)) == TRUE)
+        {
+          action_enable = TRUE;
+          break;
+        }
+
+    }
+
+  // TODO permit to overwrite the text, or append something
+  // example: Build module github.com/a/b/cmd for golang
+  action_set(group, "build",
+             "enabled", GB_IS_PROJECT_FILE (item) && action_enable,
+             NULL);
+
+  // Run callbacks to verify if we can enable rebuild function
+  for (guint i = 0; i < self->action_rebuild_enable_checks->len; i++)
+    {
+      gb_project_tree_action_enable_cb cb = g_array_index (self->action_rebuild_enable_checks, gb_project_tree_action_enable_cb, i);
+      if (cb(project_file_is_directory (item)) == TRUE)
+        {
+          action_enable = TRUE;
+          break;
+        }
+
+    }
+
+  // TODO permit to overwrite the text, or append something
+  action_set(group, "rebuild",
+             "enabled", GB_IS_PROJECT_FILE (item) && action_enable,
+             NULL);
   IDE_EXIT;
+}
+
+void register_tree_action_build_check(gb_project_tree_action_enable_cb cb)
+{
+  g_array_append_val (gb_project_tree->action_build_enable_checks, cb);
+}
+
+void register_tree_action_rebuild_check(gb_project_tree_action_enable_cb cb)
+{
+  g_array_append_val (gb_project_tree->action_rebuild_enable_checks, cb);
 }

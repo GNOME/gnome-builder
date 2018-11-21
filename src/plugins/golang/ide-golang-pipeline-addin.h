@@ -1,6 +1,6 @@
-/* gb-project-tree-private.h
+/* ide-golang-pipeline-addin.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2018 Loïc BLOT <loic.blot@unix-experience.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,20 +22,8 @@
 
 G_BEGIN_DECLS
 
-struct _GbProjectTree
-{
-  DzlTree           parent_instance;
+#define IDE_TYPE_GOLANG_PIPELINE_ADDIN (ide_golang_pipeline_addin_get_type())
 
-  GSettings        *settings;
-  PeasExtensionSet *addins;
-
-  GArray           *action_build_enable_checks;
-  GArray           *action_rebuild_enable_checks;
-
-  guint             expanded_in_new : 1;
-  guint             show_ignored_files : 1;
-};
-
-void      _gb_project_tree_init_shortcuts       (GbProjectTree *self);
+G_DECLARE_FINAL_TYPE (IdeGolangPipelineAddin, ide_golang_pipeline_addin, IDE, GOLANG_PIPELINE_ADDIN, IdeObject)
 
 G_END_DECLS

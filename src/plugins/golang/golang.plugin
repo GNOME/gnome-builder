@@ -1,0 +1,11 @@
+[Plugin]
+Module=golang-plugin
+Name=Golang-C
+Description=Provides integration with the Golang toolchain
+Authors=Loïc BLOT <loic.blot@unix-experience.fr>
+Copyright=Copyright © 2018 Loïc BLOT
+Builtin=true
+Depends=project-tree-plugin
+Embedded=ide_golang_register_types
+X-Project-File-Filter-Pattern=*.go
+X-Project-File-Filter-Name=Golang files (*.go)
