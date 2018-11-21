@@ -1,0 +1,10 @@
+<schemalist>
+  <schema id="org.gnome.builder.plugins.golang" path="/org/gnome/builder/plugins/golang/" gettext-domain="gnome-builder">
+    <key name="goroot-path" type="s">
+      <default>'file:///'</default>
+      <summary>GOROOT path</summary>
+      <description>Go library ROOT to use within Go projects.</description>
+    </key>
+  </schema>
+</schemalist>
+
