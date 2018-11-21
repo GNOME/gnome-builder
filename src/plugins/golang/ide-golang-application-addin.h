@@ -1,6 +1,6 @@
-/* ide-doc-seq-private.h
+/* ide-golang-application-addin.h
  *
- * Copyright 2014-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018 Loïc BLOT <loic.blot@unix-experience.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-guint ide_doc_seq_acquire (void);
-void  ide_doc_seq_release (guint seq_id);
+#define IDE_TYPE_GOLANG_APPLICATION_ADDIN (ide_golang_application_addin_get_type())
 
-typedef gboolean (*gb_project_tree_action_enable_cb) (gboolean);
-
-void register_tree_action_build_check(gb_project_tree_action_enable_cb cb);
-void register_tree_action_rebuild_check(gb_project_tree_action_enable_cb cb);
+G_DECLARE_FINAL_TYPE (IdeGolangApplicationAddin, ide_golang_application_addin, IDE, GOLANG_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS
+
+const gchar *golang_get_go_version (void);
+

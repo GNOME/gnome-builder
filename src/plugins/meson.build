@@ -69,6 +69,7 @@ subdir('gettext')
 subdir('git')
 subdir('glade')
 subdir('gnome-code-assistance')
+subdir('golang')
 subdir('go-langserv')
 subdir('gjs-symbols')
 subdir('gradle')
@@ -150,6 +151,7 @@ status += [
   'GJS Symbols ........... : @0@'.format(get_option('plugin_gjs_symbols')),
   'Glade ................. : @0@'.format(get_option('plugin_glade')),
   'GNOME Code Assistance . : @0@'.format(get_option('plugin_gnome_code_assistance')),
+  'Go .................... : @0@'.format(get_option('plugin_golang')),
   'Go Language Server .... : @0@'.format(get_option('plugin_go_langserv')),
   'Gradle ................ : @0@'.format(get_option('plugin_gradle')),
   'Grep .................. : @0@'.format(get_option('plugin_grep')),
