@@ -682,6 +682,14 @@ ide_editor_view_set_search_text (IdeEditorView *self,
   g_assert (search_text != NULL || from_selection);
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
+  /* Use interactive mode if we're copying from the clipboard, because that
+   * is usually going to be followed by focusing the search box and we want
+   * to make sure the occurrance count is updated.
+   */
+
+  if (from_selection)
+    ide_editor_search_begin_interactive (self->search);
+
   if (from_selection)
     {
       if (gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (self->buffer), &begin, &end))
@@ -690,6 +698,9 @@ ide_editor_view_set_search_text (IdeEditorView *self,
 
   ide_editor_search_set_search_text (self->search, search_text);
   ide_editor_search_set_regex_enabled (self->search, FALSE);
+
+  if (from_selection)
+    ide_editor_search_end_interactive (self->search);
 }
 
 static void
