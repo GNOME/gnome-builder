@@ -1408,7 +1408,7 @@ ide_editor_search_backward_cb (GObject      *object,
   g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (context));
   g_assert (IDE_IS_EDITOR_SEARCH (self));
 
-  if (gtk_source_search_context_forward_finish (context, result, &begin, &end, NULL, NULL))
+  if (gtk_source_search_context_backward_finish (context, result, &begin, &end, NULL, NULL))
     {
       if (self->view != NULL)
         {
