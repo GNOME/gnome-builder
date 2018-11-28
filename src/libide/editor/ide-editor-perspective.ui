@@ -22,7 +22,7 @@
               <object class="DzlEmptyState" id="empty_state">
                 <property name="icon-name">document-open-recent-symbolic</property>
                 <property name="title" translatable="yes">Restoring previous session</property>
-                <property name="subtitle" translatable="yes">Your previous session will be ready momentarily.</property>
+                <property name="subtitle" translatable="yes">Your previous session will be ready in a moment.</property>
                 <property name="visible">true</property>
               </object>
               <packing>
@@ -44,3 +44,4 @@
     </child>
   </template>
 </interface>
+
