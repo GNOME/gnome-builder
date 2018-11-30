@@ -655,7 +655,8 @@ ide_g_host_file_get_contents (const gchar  *path,
     g_autoptr(IdeSubprocess) subprocess = NULL;
     g_autoptr(GBytes) stdout_buf = NULL;
 
-    launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+    launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                            G_SUBPROCESS_FLAGS_STDERR_SILENCE);
     ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
     ide_subprocess_launcher_push_argv (launcher, "cat");
     ide_subprocess_launcher_push_argv (launcher, path);
