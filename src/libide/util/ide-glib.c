@@ -626,7 +626,7 @@ ide_g_file_find_finish (GFile         *file,
  * @len: (out): a location for the size, not including trailing \0
  * @error: location for a #GError, or %NULL
  *
- * This is similar to g_get_file_contents() but ensures that we get
+ * This is similar to g_file_get_contents() but ensures that we get
  * the file from the host, rather than our mount namespace.
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
