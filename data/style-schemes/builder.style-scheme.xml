@@ -24,8 +24,8 @@
   <description>The default color scheme for Builder</description>
 
   <!-- Tango Palette -->
-  <color name="bg1"                         value="#f6f7f8"/>
-  <color name="bg2"                         value="#f0f1f2"/>
+  <color name="bg1"                         value="#edebe9"/>
+  <color name="bg2"                         value="#dbd7d3"/>
   <color name="og1"                         value="#d75d1b"/>
   <color name="gr1"                         value="#709831"/>
   <color name="brown1"                      value="#a67f59"/>
