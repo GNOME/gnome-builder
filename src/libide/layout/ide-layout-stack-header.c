@@ -303,8 +303,11 @@ ide_layout_stack_header_view_row_activated (GtkListBox           *list_box,
   view = g_object_get_data (G_OBJECT (row), "IDE_LAYOUT_VIEW");
 
   if (stack != NULL && view != NULL)
-    ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack),
-                                        IDE_LAYOUT_VIEW (view));
+    {
+      ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack),
+                                          IDE_LAYOUT_VIEW (view));
+      gtk_widget_grab_focus (view);
+    }
 
   _ide_layout_stack_header_popdown (self);
 }
