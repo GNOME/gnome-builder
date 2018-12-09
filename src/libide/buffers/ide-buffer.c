@@ -205,6 +205,9 @@ ide_buffer_queue_auto_save (IdeBuffer *self)
 
   dzl_clear_source (&priv->auto_save_handler);
 
+  if (!priv->auto_save)
+    return;
+
   if (gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (self)))
     priv->auto_save_handler =
       gdk_threads_add_timeout_seconds_full (G_PRIORITY_DEFAULT,
