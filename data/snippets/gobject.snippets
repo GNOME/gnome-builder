@@ -282,7 +282,7 @@ snippet gobject_boxed_ref
 	 *
 	 * Increments the reference count of @self by one.
 	 *
-	 * Returns: (transfer none): @self
+	 * Returns: (transfer full): @self
 	 */
 	$2 *
 	$3_ref ($2 *self)
@@ -297,7 +297,7 @@ snippet gobject_boxed_ref
 
 	/**
 	 * $3_unref:
-	 * @self: (transfer none): A #$2
+	 * @self: A #$2
 	 *
 	 * Decrements the reference count of @self by one, freeing the structure when
 	 * the reference count reaches zero.
