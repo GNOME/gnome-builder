@@ -437,6 +437,7 @@ ide_layout_stack_addin_removed (PeasExtensionSet *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_LAYOUT_STACK_ADDIN (addin));
 
+  ide_layout_stack_addin_set_view (addin, NULL);
   ide_layout_stack_addin_unload (addin, self);
 }
 
