@@ -74,6 +74,8 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
   IdeHoverContext *context;
   const gchar *name;
   GtkWidget *box;
+  IdeSymbolKind kind;
+  gboolean suggest_web_search = FALSE;
   struct {
     const gchar       *kind;
     IdeSourceLocation *loc;
@@ -104,7 +106,12 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
   loc[1].loc = ide_symbol_get_definition_location (symbol);
   loc[2].loc = ide_symbol_get_canonical_location (symbol);
 
-  if (!loc[0].loc && !loc[1].loc && !loc[2].loc)
+  kind = ide_symbol_get_kind (symbol);
+  if ((kind == IDE_SYMBOL_FUNCTION || kind == IDE_SYMBOL_MACRO) &&
+      dzl_str_equal0 (ide_buffer_get_language_id (buffer), "c"))
+    suggest_web_search = TRUE;
+
+  if (!loc[0].loc && !loc[1].loc && !loc[2].loc && !suggest_web_search)
     {
       ide_task_return_boolean (task, TRUE);
       return;
@@ -157,6 +164,36 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
                                    G_CONNECT_SWAPPED);
           gtk_container_add (GTK_CONTAINER (box), label);
         }
+    }
+
+  if (suggest_web_search)
+    {
+      GtkWidget *label;
+      g_autofree gchar *url = NULL;
+      g_autofree gchar *escaped = NULL;
+      g_autofree gchar *markup = NULL;
+      g_autofree gchar *sym = NULL;
+      const gchar *txt_search = _("Look up source definition");
+      const gchar *txt_at = _("at codesearch.debian.net");
+      char *p = strchr (name, '(');
+      size_t sym_len = p ? p - name : strlen (name);
+      sym = g_strndup (name, sym_len);
+      /* Regex is (?mi:^(?:#define\s+)?text)\s*\((?m:([^;]+)$)
+       * It matches both function and macro definitions */
+      url = g_strconcat ("https://codesearch.debian.net/search?q=%28%3Fmi%3A%5E%28%3F%3A%23define%5Cs%2B%29%3F",
+                         sym, "%29%5Cs*%5C%28%28%3Fm%3A%28%5B%5E%3B%5D%2B%29%24%29", NULL);
+
+      escaped = g_markup_escape_text (url, -1);
+      markup = g_strdup_printf ("<a href='%s'>%s</a> <span size='smaller'>%s</span>",
+                                escaped, txt_search, txt_at);
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "visible", TRUE,
+                            "xalign", 0.0f,
+                            "margin-top", 10,
+                            "use-markup", TRUE,
+                            "label", markup,
+                            NULL);
+      gtk_container_add (GTK_CONTAINER (box), label);
     }
 
   ide_hover_context_add_widget (context, SYMBOL_TREE_HOVER_PRIORITY, _("Symbol"), box);
