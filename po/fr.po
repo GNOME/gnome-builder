@@ -8,21 +8,22 @@
 # Guillaume Bernard <associations@guillaume-bernard.fr>, 2017-2018
 # Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2017.
 # Claude Paroz <claude@2xlibre.net>, 2018
+# Charles Monzat <charles.monzat@numericable.fr>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-10-03 19:42+0000\n"
-"PO-Revision-Date: 2018-10-05 08:09+0200\n"
-"Last-Translator: Alexandre Franke <alexandre.franke@gmail.com>\n"
-"Language-Team: French <gnomefr@traduc.org>\n"
+"POT-Creation-Date: 2018-11-08 17:17+0000\n"
+"PO-Revision-Date: 2018-11-17 21:44+0100\n"
+"Last-Translator: Charles Monzat <charles.monzat@numericable.fr>\n"
+"Language-Team: français <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Gtranslator 3.30.0\n"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -215,7 +216,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 msgid "Wrap Text"
-msgstr "Scission du text"
+msgstr "Scission du texte"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid ""
@@ -927,20 +928,20 @@ msgstr ""
 "Impossible de mettre en place un moniteur pour les modifications en arrière-"
 "plan : %s"
 
-#: src/libide/buffers/ide-buffer.c:2908
+#: src/libide/buffers/ide-buffer.c:2922
 msgid "The current language lacks a symbol resolver."
 msgstr "Le langage actuel ne possède pas de résolveur de symboles."
 
-#: src/libide/buffers/ide-buffer.c:3379
+#: src/libide/buffers/ide-buffer.c:3393
 #, c-format
 msgid "Buffer failed: %s"
 msgstr "Échec du tampon : %s"
 
-#: src/libide/buffers/ide-buffer-manager.c:610
+#: src/libide/buffers/ide-buffer-manager.c:619
 msgid "File too large to be opened."
 msgstr "Fichier trop grand pour être ouvert."
 
-#: src/libide/buffers/ide-buffer-manager.c:1825
+#: src/libide/buffers/ide-buffer-manager.c:1852
 #, c-format
 msgid "unsaved document %u"
 msgstr "document non enregistré %u"
@@ -949,8 +950,8 @@ msgstr "document non enregistré %u"
 #. translators: %s is replaced with error message
 #. translators: %s is the error message
 #. translators: %s is the underlying error message
-#: src/libide/buffers/ide-buffer-manager.c:1864
-#: src/libide/buffers/ide-buffer-manager.c:1927
+#: src/libide/buffers/ide-buffer-manager.c:1891
+#: src/libide/buffers/ide-buffer-manager.c:1954
 #: src/libide/editor/ide-editor-view-actions.c:191
 #: src/libide/editor/ide-editor-view-actions.c:312
 #, c-format
@@ -1210,7 +1211,7 @@ msgstr "Supprimer la variable d’environnement"
 #: src/libide/debugger/gtk/menus.ui:10
 #: src/libide/debugger/ide-debugger-editor-addin.c:433
 msgid "Run with Debugger"
-msgstr "Lancer avec le debogueur"
+msgstr "Lancer avec le débogueur"
 
 #: src/libide/debugger/ide-debugger-breakpoints-view.ui:22
 #: src/libide/debugger/ide-debugger-registers-view.ui:13
@@ -1788,7 +1789,7 @@ msgstr "Rechercher"
 #: src/libide/editor/ide-editor-view-shortcuts.c:57
 msgctxt "shortcut window"
 msgid "Move to the next match"
-msgstr "Rechercher la prochaine occurence"
+msgstr "Rechercher la prochaine occurrence"
 
 #: src/libide/editor/ide-editor-view-shortcuts.c:63
 msgctxt "shortcut window"
@@ -1891,7 +1892,7 @@ msgstr "Retourner à la sélection de projet"
 #: src/libide/gsettings/ide-language-defaults.c:217
 #, c-format
 msgid "%s contained invalid ASCII"
-msgstr "%s contient des caractères ASCII invalides"
+msgstr "%s contient des caractères ASCII non valides"
 
 #: src/libide/gsettings/ide-language-defaults.c:232
 #, c-format
@@ -1928,7 +1929,7 @@ msgstr "_Raccourcis clavier"
 
 #: src/libide/gtk/menus.ui:34
 msgid "_Help"
-msgstr "_Aide"
+msgstr "Aid_e"
 
 #: src/libide/gtk/menus.ui:38
 msgid "_About"
@@ -1946,11 +1947,11 @@ msgstr "Préférences"
 
 #: src/libide/gtk/menus.ui:73
 msgid "Save _All"
-msgstr "Enregistrer _tout"
+msgstr "_Tout enregistrer"
 
 #: src/libide/gtk/menus.ui:80
 msgid "Close _All"
-msgstr "Fermer _tout"
+msgstr "_Tout fermer"
 
 #: src/libide/gtk/menus.ui:91
 msgid "_Go to Definition"
@@ -1980,7 +1981,7 @@ msgstr "Sélection"
 
 #: src/libide/gtk/menus.ui:140 src/libide/gtk/menus.ui:258
 msgid "Select _None"
-msgstr "Tout _déselectionner"
+msgstr "Tout _désélectionner"
 
 #: src/libide/gtk/menus.ui:146
 msgid "All _Upper Case"
@@ -2181,7 +2182,7 @@ msgstr "Afficher la liste des documents ouverts"
 #: src/libide/keybindings/ide-shortcuts-window.ui:177
 msgctxt "shortcut window"
 msgid "Find the next match"
-msgstr "Rechercher la prochaine occurence"
+msgstr "Rechercher la prochaine occurrence"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:184
 msgctxt "shortcut window"
@@ -2203,18 +2204,18 @@ msgstr "Copier et coller"
 #: src/libide/keybindings/ide-shortcuts-window.ui:519
 msgctxt "shortcut window"
 msgid "Copy selected text to clipboard"
-msgstr "Copier le texte sélectionné vers le presse-papier"
+msgstr "Copier le texte sélectionné vers le presse-papiers"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:211
 msgctxt "shortcut window"
 msgid "Cut selected text to clipboard"
-msgstr "Couper le texte sélectionné vers le presse-papier"
+msgstr "Couper le texte sélectionné vers le presse-papiers"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:218
 #: src/libide/keybindings/ide-shortcuts-window.ui:526
 msgctxt "shortcut window"
 msgid "Paste text from clipboard"
-msgstr "Coller le texte contenu dans le presse-papier"
+msgstr "Coller le texte contenu dans le presse-papiers"
 
 #: src/libide/keybindings/ide-shortcuts-window.ui:225
 msgctxt "shortcut window"
@@ -2404,7 +2405,7 @@ msgid "Find text within terminal"
 msgstr "Rechercher du texte dans le terminal"
 
 #. translators: %s is replaced with the error message
-#: src/libide/langserv/ide-langserv-client.c:898
+#: src/libide/langserv/ide-langserv-client.c:897
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Échec à l’initialisation du serveur de langage : %s"
@@ -2557,7 +2558,7 @@ msgstr "Texte en gras dans les terminaux"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
 msgid "If terminals are allowed to display bold text"
-msgstr "Indique si les terminaux ont le droit d'afficher du texte en gras"
+msgstr "Indique si les terminaux ont le droit d’afficher du texte en gras"
 
 #: src/libide/preferences/ide-preferences-builtin.c:109
 msgctxt "Keywords"
@@ -2611,7 +2612,7 @@ msgstr "Mouvement"
 #: src/libide/preferences/ide-preferences-builtin.c:148
 msgid "Home moves to first non-whitespace character"
 msgstr ""
-"La touche Origine déplace le curseur au premier caractère qui n’est pas un "
+"La touche Origine déplace le curseur au premier caractère qui n’est pas une "
 "espace"
 
 #: src/libide/preferences/ide-preferences-builtin.c:149
@@ -2911,15 +2912,15 @@ msgstr "Espace avant un chevron ouvrant"
 
 #: src/libide/preferences/ide-preferences-builtin.c:350
 msgid "Prefer a space before colons"
-msgstr "Préférer un espace avant un deux-points"
+msgstr "Préférer une espace avant un deux-points"
 
 #: src/libide/preferences/ide-preferences-builtin.c:351
 msgid "Prefer a space before commas"
-msgstr "Préférer un espace avant une virgule"
+msgstr "Préférer une espace avant une virgule"
 
 #: src/libide/preferences/ide-preferences-builtin.c:352
 msgid "Prefer a space before semicolons"
-msgstr "Préférer un espace avant un point-virgule"
+msgstr "Préférer une espace avant un point-virgule"
 
 #: src/libide/preferences/ide-preferences-builtin.c:362
 #: src/libide/preferences/ide-preferences-builtin.c:380
@@ -3112,18 +3113,18 @@ msgstr "Caractères non UTF-8 dans l’URI"
 #: src/libide/util/ide-uri.c:368 src/libide/util/ide-uri.c:379
 #, c-format
 msgid "Invalid IP literal “%s” in URI"
-msgstr "Le format de l’IP « %s » est invalide dans l’URI"
+msgstr "Le format de l’IP « %s » est non valide dans l’URI"
 
 #: src/libide/util/ide-uri.c:413
 #, c-format
 msgid "Invalid encoded IP literal “%s” in URI"
-msgstr "Le format d’encodage de l’IP « %s » est invalide dans l’URI"
+msgstr "Le format d’encodage de l’IP « %s » est non valide dans l’URI"
 
 #: src/libide/util/ide-uri.c:422
 #, c-format
 msgid "Invalid non-ASCII hostname “%s” in URI"
 msgstr ""
-"Le nom d’hôte « %s » contient des caractères non-ASCII invalides dans l’URI"
+"Le nom d’hôte « %s » contient des caractères non-ASCII non valides dans l’URI"
 
 #: src/libide/util/ide-uri.c:436
 #, c-format
@@ -3144,16 +3145,16 @@ msgstr "Le port « %s » dans l’URI est en dehors de la plage"
 
 #: src/libide/util/ide-uri.c:592
 msgid "Base URI is not absolute"
-msgstr "L’URI de base n’est pas absolue"
+msgstr "L’URI de base n’est pas absolu"
 
 #: src/libide/util/ide-uri.c:617
 msgid "URI is not absolute, and no base URI was provided"
-msgstr "L’URI n’est pas absolue, et aucune URI de base n’a été fournie"
+msgstr "L’URI n’est pas absolu, et aucun URI de base n’a été fourni"
 
 #: src/libide/util/ide-uri.c:662
 #, c-format
 msgid "Could not parse “%s” as absolute URI"
-msgstr "Impossible d’analyser « %s » comme URI absolue"
+msgstr "Impossible d’analyser « %s » comme URI absolu"
 
 #: src/libide/util/ide-uri.c:1205
 #, c-format
@@ -3278,7 +3279,7 @@ msgctxt "shortcut window"
 msgid "Perspectives"
 msgstr "Perspectives"
 
-#: src/main.c:120
+#: src/main.c:86
 msgid ""
 "GNOME Builder requires a desktop session with D-Bus. Please set "
 "DBUS_SESSION_BUS_ADDRESS."
@@ -3295,7 +3296,7 @@ msgid "Bootstrapping build system"
 msgstr "Amorçage du système de construction"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:291
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:168
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:171
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "Configuration du projet"
@@ -3305,7 +3306,7 @@ msgstr "Configuration du projet"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:197
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:200
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Construction du projet"
@@ -3404,9 +3405,8 @@ msgid ""
 "Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
 "entry “%s” disabled"
 msgstr ""
-"Greffon enjoliveur : @c@ dans la clef du modèle de commande « %s » mais "
-"aucun fichier de configuration n’est défini : désactivation de l’entrée "
-"« %s »"
+"Greffon enjoliveur : @c@ dans la clé du modèle de commande « %s » mais aucun "
+"fichier de configuration n’est défini : désactivation de l’entrée « %s »"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:363
@@ -3586,7 +3586,7 @@ msgstr "Configurer le projet"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:207
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:210
 #: src/plugins/phpize/phpize_plugin.py:248
 msgid "Installing project"
 msgstr "Installation du projet"
@@ -3658,7 +3658,7 @@ msgstr "Palette GNOME Builder"
 
 #: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:178
 msgid "Palette name"
-msgstr "Nome de la palette"
+msgstr "Nom de la palette"
 
 #: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
 msgid "Enter a new name for the palette"
@@ -3857,7 +3857,7 @@ msgstr "Depuis le document en cours"
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
 msgid "Select the palette you want to see in the panel or close one."
 msgstr ""
-"Sélectionnez la palette que vous souhaitez dans le panneau ou fermez en une."
+"Sélectionnez la palette que vous souhaitez dans le panneau ou fermez-en une."
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
 msgid "No loaded palettes"
@@ -4039,7 +4039,7 @@ msgstr "Un répertoire avec ce nom existe déjà"
 msgid "Your project will be created within %s."
 msgstr "Votre projet sera créé dans %s."
 
-#: src/plugins/create-project/gbp-create-project-widget.c:612
+#: src/plugins/create-project/gbp-create-project-widget.c:630
 msgid "A failure occurred while initializing version control"
 msgstr ""
 "Une erreur s’est produite lors de l’initialisation du gestionnaire de "
@@ -4346,7 +4346,7 @@ msgid "The requested file does not exist within the git index."
 msgstr "Le fichier demandé n’existe pas dans l’index de git."
 
 #: src/plugins/git/ide-git-clone-widget.c:159
-#: src/plugins/git/ide-git-clone-widget.c:500
+#: src/plugins/git/ide-git-clone-widget.c:518
 msgid "A valid Git URL is required"
 msgstr "Un URL valide de dépôt Git est nécessaire"
 
@@ -4356,11 +4356,11 @@ msgstr "Un URL valide de dépôt Git est nécessaire"
 msgid "Your project will be created at %s"
 msgstr "Votre projet sera créé dans %s"
 
-#: src/plugins/git/ide-git-clone-widget.c:216
+#: src/plugins/git/ide-git-clone-widget.c:228
 msgid "Apply"
 msgstr "Appliquer"
 
-#: src/plugins/git/ide-git-clone-widget.c:218
+#: src/plugins/git/ide-git-clone-widget.c:230
 msgid "Remote Branch to Clone"
 msgstr "Branche distante à cloner"
 
@@ -4487,11 +4487,11 @@ msgstr "Créer un nouveau projet vide utilisant simplement un Makefile"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:108
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:111
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr "Un projet basé sur Meson est chargé mais Ninja n’a pas été trouvé."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:128
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:131
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr "Un projet basé sur Meson est chargé mais meson n’a pas été trouvé."
 
