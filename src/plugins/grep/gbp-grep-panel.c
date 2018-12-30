@@ -491,6 +491,7 @@ gbp_grep_panel_init (GbpGrepPanel *self)
                        NULL);
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, match_data_func, NULL, NULL);
+  /* translators: the column header for the matches in the 'find in files' results */
   gtk_tree_view_column_set_title (column, _("Match"));
   gtk_tree_view_column_set_expand (column, TRUE);
   gtk_tree_view_column_set_resizable (column, TRUE);
