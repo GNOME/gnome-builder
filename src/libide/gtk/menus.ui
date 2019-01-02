@@ -56,12 +56,6 @@
         <attribute name="action">app.about</attribute>
       </item>
     </section>
-    <section id="gear-menu-quit-section">
-      <item>
-        <attribute name="label" translatable="yes">_Quit</attribute>
-        <attribute name="action">app.quit</attribute>
-      </item>
-    </section>
   </menu>
   <menu id="perspectives-menu">
     <section id="perspectives-menu-section">
@@ -264,3 +258,4 @@
     </section>
   </menu>
 </interface>
+
