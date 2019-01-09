@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-html-proposals"
+
+#include "config.h"
 
 #include "ide-html-proposal.h"
 #include "ide-html-proposals.h"

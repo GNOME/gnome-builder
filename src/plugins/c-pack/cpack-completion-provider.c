@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "cpack-completion-provider"
+
+#include "config.h"
 
 #include "cpack-completion-item.h"
 #include "cpack-completion-provider.h"

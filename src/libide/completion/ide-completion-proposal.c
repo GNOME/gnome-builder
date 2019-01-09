@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-completion-proposal"
+
+#include "config.h"
 
 #include "ide-completion-proposal.h"
 

@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-marked-content"
+
+#include "config.h"
 
 #include "util/ide-marked-content.h"
 

@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "gbp-glade-view-shortcuts"
+
+#include "config.h"
 
 #include <dazzle.h>
 #include <glib/gi18n.h>

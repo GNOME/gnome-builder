@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-langserv-hover-provider"
+
+#include "config.h"
 
 #include <jsonrpc-glib.h>
 

@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-editor-session-addin"
+
+#include "config.h"
 
 #include <gtk/gtk.h>
 

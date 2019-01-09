@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "gbp-word-proposals"
+
+#include "config.h"
 
 #include "sourceview/ide-source-search-context.h"
 

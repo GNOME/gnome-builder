@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-git-dependency-updater"
+
+#include "config.h"
 
 #include "ide-git-dependency-updater.h"
 #include "ide-git-submodule-stage.h"

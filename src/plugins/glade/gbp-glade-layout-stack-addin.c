@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "gbp-glade-layout-stack-addin"
+
+#include "config.h"
 
 #include <glib/gi18n.h>
 #include <gladeui/glade.h>

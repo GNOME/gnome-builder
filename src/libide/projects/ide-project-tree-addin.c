@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-project-tree-addin"
+
+#include "config.h"
 
 #include "projects/ide-project-tree-addin.h"
 

@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-clang-rename-provider"
+
+#include "config.h"
 
 #include "ide-clang-rename-provider.h"
 

@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-marked-view"
+
+#include "config.h"
 
 #if ENABLE_WEBKIT
 # include <webkit2/webkit2.h>

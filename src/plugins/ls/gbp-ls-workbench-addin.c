@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "gbp-ls-workbench-addin"
+
+#include "config.h"
 
 #include "gbp-ls-workbench-addin.h"
 #include "gbp-ls-view.h"

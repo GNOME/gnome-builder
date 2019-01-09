@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-hover-context"
+
+#include "config.h"
 
 #include "hover/ide-hover-context.h"
 #include "hover/ide-hover-context-private.h"

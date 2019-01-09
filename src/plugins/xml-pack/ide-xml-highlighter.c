@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-xml-highlighter"
+
+#include "config.h"
 
 #include <dazzle.h>
 #include <glib/gi18n.h>

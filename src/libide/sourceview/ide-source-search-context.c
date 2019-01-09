@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-source-search-context"
+
+#include "config.h"
 
 #include "sourceview/ide-source-search-context.h"
 #include "threading/ide-task.h"

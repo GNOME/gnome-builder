@@ -18,9 +18,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "gbp-grep-project-tree-addin"
+
+#include "config.h"
 
 #include "gbp-grep-popover.h"
 #include "gbp-grep-project-tree-addin.h"
