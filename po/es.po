@@ -3,14 +3,14 @@
 # Copyright (C) 2015 THE GNOME Builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the GNOME Builder package.
 # Ian Hernandez <ihernandezs@openmailbox.org>, 2015.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016, 2017, 2018.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016, 2017, 2018, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2018-10-23 20:16+0000\n"
-"PO-Revision-Date: 2018-10-31 13:05+0100\n"
+"POT-Creation-Date: 2019-01-07 21:23+0000\n"
+"PO-Revision-Date: 2019-01-09 09:10+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -236,10 +236,9 @@ msgstr ""
 "de una modificación."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:118
-#, fuzzy
 #| msgid "Completion"
 msgid "Completion Row Count"
-msgstr "Completado"
+msgstr "Conteo de filas de completado"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:119
 msgid "The number of completion rows to display to the user."
@@ -247,14 +246,10 @@ msgstr "El número de filas de completado que mostrar al usuario."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/preferences/ide-preferences-builtin.c:211
-#| msgid "Suggest Snippet Completion"
 msgid "Interactive Completion"
 msgstr "Completado interactivo"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
-#| msgid ""
-#| "If enabled, Builder will automatically wrap text so all of the line text "
-#| "is visible."
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -865,9 +860,9 @@ msgstr "Proporcione una dirección de D-Bus"
 msgid "No such worker"
 msgstr "No existe el trabajador"
 
-#: src/libide/application/ide-application-shortcuts.c:44
-#: src/libide/application/ide-application-shortcuts.c:55
-#: src/libide/application/ide-application-shortcuts.c:66
+#: src/libide/application/ide-application-shortcuts.c:43
+#: src/libide/application/ide-application-shortcuts.c:54
+#: src/libide/application/ide-application-shortcuts.c:65
 #: src/libide/runner/ide-run-manager.c:780
 #: src/libide/workbench/ide-workbench-shortcuts.c:33
 #: src/libide/workbench/ide-workbench-shortcuts.c:39
@@ -882,30 +877,30 @@ msgctxt "shortcut window"
 msgid "Workbench shortcuts"
 msgstr "Atajos del banco de trabajo"
 
-#: src/libide/application/ide-application-shortcuts.c:45
-#: src/libide/application/ide-application-shortcuts.c:67
+#: src/libide/application/ide-application-shortcuts.c:44
+#: src/libide/application/ide-application-shortcuts.c:66
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Ayuda"
 
-#: src/libide/application/ide-application-shortcuts.c:46
+#: src/libide/application/ide-application-shortcuts.c:45
 msgctxt "shortcut window"
 msgid "Show the help window"
 msgstr "Mostrar la ventana de ayuda"
 
-#: src/libide/application/ide-application-shortcuts.c:56
+#: src/libide/application/ide-application-shortcuts.c:55
 #: src/libide/keybindings/ide-shortcuts-window.ui:25
 #: src/libide/keybindings/ide-shortcuts-window.ui:477
 msgctxt "shortcut window"
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/libide/application/ide-application-shortcuts.c:57
+#: src/libide/application/ide-application-shortcuts.c:56
 msgctxt "shortcut window"
 msgid "Show the preferences window"
 msgstr "Mostrar la ventana de preferencias"
 
-#: src/libide/application/ide-application-shortcuts.c:68
+#: src/libide/application/ide-application-shortcuts.c:67
 msgctxt "shortcut window"
 msgid "Show the shortcuts window"
 msgstr "Mostrar la ventana de atajos"
@@ -1291,14 +1286,13 @@ msgstr "Falló al inicializar el depurador."
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:16
 msgid "No break"
-msgstr ""
+msgstr "Sin parada"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:22
 msgid "Breakpoint"
 msgstr "Puntos de interrupción"
 
 #: src/libide/debugger/ide-debugger-hover-controls.ui:28
-#| msgid "Count"
 msgid "Countpoint"
 msgstr "Punto de conteo"
 
@@ -1605,7 +1599,6 @@ msgid "Close all files"
 msgstr "Cerrar todos los archivos"
 
 #: src/libide/editor/ide-editor-perspective.ui:24
-#| msgid "Restore Previous Files"
 msgid "Restoring previous session"
 msgstr "Restaurar sesión anterior"
 
@@ -2039,7 +2032,6 @@ msgid "An unload request is already pending"
 msgstr "Ya hay una solicitud de descarga pendiente"
 
 #: src/libide/ide-context.c:2293
-#| msgid "Context has already been restored."
 msgid "Context already unloading, cannot restore."
 msgstr "Ya se está descargando el contexto, no se puede restaurar."
 
@@ -2589,16 +2581,14 @@ msgid "Emulates the Vim text editor"
 msgstr "Emula el editor de texto Vim"
 
 #: src/libide/preferences/ide-preferences-builtin.c:145
-#, fuzzy
 #| msgid "Plain Text"
 msgid "Sublime Text"
-msgstr "Texto plano"
+msgstr "Texto Sublime"
 
 #: src/libide/preferences/ide-preferences-builtin.c:145
-#, fuzzy
 #| msgid "Emulates the Vim text editor"
 msgid "Emulates the Sublime Text editor"
-msgstr "Emula el editor de texto Vim"
+msgstr "Emula el editor de texto Sublime"
 
 #: src/libide/preferences/ide-preferences-builtin.c:147
 msgid "Movement"
@@ -2788,7 +2778,7 @@ msgstr "Completado"
 
 #: src/libide/preferences/ide-preferences-builtin.c:210
 msgid "Completions Display Size"
-msgstr ""
+msgstr "Tamaño de muestra de completado"
 
 #: src/libide/preferences/ide-preferences-builtin.c:210
 msgid "Number of completions to display"
@@ -2796,7 +2786,7 @@ msgstr "Número de completados que se mostrarán"
 
 #: src/libide/preferences/ide-preferences-builtin.c:211
 msgid "Display code suggestions interactively as you type"
-msgstr ""
+msgstr "Mostrar sugerencias de código interactivamente mientras escribe"
 
 #: src/libide/preferences/ide-preferences-builtin.c:213
 msgid "Completion Providers"
@@ -2991,6 +2981,8 @@ msgstr "El archivo debe estar en el árbol del proyecto."
 #: src/libide/runner/ide-run-button.ui:6
 msgid "The project cannot be run while the build pipeline is being set up"
 msgstr ""
+"No se puede ejecutar el proyecto mientras se configura la tubería de "
+"construcción"
 
 #: src/libide/runner/ide-run-button.ui:35
 msgid "Stop running"
@@ -3217,6 +3209,8 @@ msgstr "Construir proyecto"
 #: src/libide/workbench/ide-omni-bar.ui:596
 msgid "The project cannot be built while the build pipeline is being set up"
 msgstr ""
+"No se puede construir el proyecto mientras se configura la tubería de "
+"construcción"
 
 #: src/libide/workbench/ide-workbench-actions.c:220
 msgid "Builder Statistics"
@@ -3281,7 +3275,7 @@ msgid "Bootstrapping build system"
 msgstr "Inicializando sistema de construcción"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:291
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:168
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:171
 #: src/plugins/phpize/phpize_plugin.py:226
 msgid "Configuring project"
 msgstr "Configurando proyecto"
@@ -3291,7 +3285,7 @@ msgstr "Configurando proyecto"
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:219
 #: src/plugins/gradle/gradle_plugin.py:116
 #: src/plugins/maven/maven_plugin.py:109
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:197
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:200
 #: src/plugins/phpize/phpize_plugin.py:238
 msgid "Building project"
 msgstr "Construyendo proyecto"
@@ -3536,7 +3530,7 @@ msgstr "Completado de  parámetros"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:105
 msgid "Include parameters and types when completing clang proposals"
-msgstr ""
+msgstr "Incluir parámetros y tipos al completar las propuestas de Clang"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:56
 msgid "anonymous"
@@ -3572,7 +3566,7 @@ msgstr "Configurar proyecto"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:238
 #: src/plugins/maven/maven_plugin.py:120
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:207
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:210
 #: src/plugins/phpize/phpize_plugin.py:248
 msgid "Installing project"
 msgstr "Instalando proyecto"
@@ -4300,7 +4294,6 @@ msgstr ""
 #. translators: %s is replaced with the error string from git
 #: src/plugins/git/ide-git-buffer-change-monitor.c:281
 #, c-format
-#| msgid "There was a failure while trying to perform the operation."
 msgid ""
 "There was a failure while calculating line changes from git. The exact error "
 "was: %s"
@@ -4438,7 +4431,6 @@ msgid "(Preview)"
 msgstr "(Vista previa)"
 
 #: src/plugins/jedi/jedi_plugin.py:662
-#| msgid "Suggest completions using Ctags"
 msgid "Suggest completions from Python"
 msgstr "Sugerir completado usando Python"
 
@@ -4462,13 +4454,13 @@ msgstr "Crear un nuevo proyecto vacío usando un Makefile sencillo"
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:108
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:111
 msgid "A Meson-based project is loaded but Ninja could not be found."
 msgstr ""
 "Se ha cargado un proyecto basado en Meson pero no se ha podido encontrar "
 "Ninja."
 
-#: src/plugins/meson/gbp-meson-pipeline-addin.c:128
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:131
 msgid "A Meson-based project is loaded but meson could not be found."
 msgstr ""
 "Se ha cargado un proyecto basado en Meson pero no se ha podido encontrar "
@@ -4485,11 +4477,11 @@ msgstr "Añadir «toolchain»"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:108
 msgid "Define a new custom toolchain targeting a specific platform"
-msgstr ""
+msgstr "Definir una «toolchain» nueva que apunte a una plataforma específica"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:406
 msgid "No Provided Tool"
-msgstr ""
+msgstr "No se ha proporcionado una herramienta"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
@@ -4538,7 +4530,7 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:176
 #: src/plugins/meson/gbp-meson-utils.c:106
 msgid "Executable wrapper"
-msgstr ""
+msgstr "Envoltorio ejecutable"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:177
 #: src/plugins/meson/gbp-meson-utils.c:108
@@ -4616,12 +4608,10 @@ msgid "Create a new empty project"
 msgstr "Crear un nuevo proyecto vacío"
 
 #: src/plugins/meson-templates/meson_templates.py:353
-#| msgid "Command failed: %s"
 msgid "Command Line Tool"
 msgstr "Herramienta de línea de comandos"
 
 #: src/plugins/meson-templates/meson_templates.py:355
-#| msgid "Create a new project"
 msgid "Create a new command line project"
 msgstr "Crear un proyecto de línea de comandos nuevo"
 
@@ -4999,12 +4989,10 @@ msgstr "para añadir una «toolchain» nueva."
 
 #: src/plugins/snippets/ide-snippet-completion-item.c:112
 #, c-format
-#| msgid "Failed to parse integer from “%s”"
 msgid "Failed to parse snippet “%s”"
 msgstr "Falló al analizar el fragmento «%s»"
 
 #: src/plugins/snippets/ide-snippet-preferences-addin.c:51
-#| msgid "Suggest Completions using Jedi"
 msgid "Suggest Completions from Snippets"
 msgstr "Sugerir completado usando Snippets"
 
@@ -5130,7 +5118,7 @@ msgstr "Definición"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:83
 msgid "Canonical"
-msgstr ""
+msgstr "Canónico"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:120
 msgid "Unnamed Symbol"
@@ -5252,7 +5240,6 @@ msgstr "Salida de la aplicación"
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gb-terminal-workbench-addin.c:238
 #, c-format
-#| msgid "Application exited\r\n"
 msgid "Application started at %s\r\n"
 msgstr "Aplicación iniciada a las %s\n"
 
@@ -5286,7 +5273,6 @@ msgid "New terminal in directory"
 msgstr "Nueva terminal en una carpeta"
 
 #: src/plugins/todo/gbp-todo-panel.c:299
-#| msgid "Downloading…"
 msgid "Loading TODOs…"
 msgstr "Cargando POR HACER…"
 
@@ -5300,7 +5286,7 @@ msgstr "POR HACER/CORREGIR"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:151
 msgid "Abstract"
-msgstr ""
+msgstr "Resumen"
 
 #: src/plugins/vala-pack/ide-vala-completion-item.vala:153
 msgid "Compact"
