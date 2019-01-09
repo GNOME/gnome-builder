@@ -1,5 +1,5 @@
-option('enable_tracing', type: 'boolean', value: false, description: 'Enable tracing of internals for troubleshooting Builder')
-option('enable_profiling', type: 'boolean', value: false, description: 'Enable profiling of the Builder codebase')
+option('tracing', type: 'boolean', value: false, description: 'Enable tracing of internals for troubleshooting Builder')
+option('profiling', type: 'boolean', value: false, description: 'Enable profiling of the Builder codebase')
 option('fusermount_wrapper', type: 'boolean', value: false, description: 'Install fusermount-wrapper when distributing with flatpak')
 option('tcmalloc', type: 'boolean', value: false, description: 'Use tcmalloc for dynamic allocations')
 

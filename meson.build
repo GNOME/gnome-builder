@@ -66,8 +66,8 @@ status += [
   'Libdir ................ : @0@'.format(join_paths(get_option('prefix'), get_option('libdir'))),
   'Safe PATH ............. : @0@'.format(safe_path),
   '',
-  'Tracing ............... : @0@'.format(get_option('enable_tracing')),
-  'Profiling ............. : @0@'.format(get_option('enable_profiling')),
+  'Tracing ............... : @0@'.format(get_option('tracing')),
+  'Profiling ............. : @0@'.format(get_option('profiling')),
   'fusermount ............ : @0@'.format(get_option('fusermount_wrapper')),
   'tcmalloc_minimal ...... : @0@'.format(get_option('tcmalloc')),
   '',
@@ -170,7 +170,7 @@ test_c_args = [
 if get_option('buildtype') != 'plain'
   test_c_args += '-fstack-protector-strong'
 endif
-if get_option('enable_profiling')
+if get_option('profiling')
   test_c_args += '-pg'
 endif
 
