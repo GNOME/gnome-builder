@@ -69,7 +69,7 @@ status += [
   'Tracing ............... : @0@'.format(get_option('enable_tracing')),
   'Profiling ............. : @0@'.format(get_option('enable_profiling')),
   'fusermount ............ : @0@'.format(get_option('fusermount_wrapper')),
-  'tcmalloc_minimal ...... : @0@'.format(get_option('with_tcmalloc')),
+  'tcmalloc_minimal ...... : @0@'.format(get_option('tcmalloc')),
   '',
   'Help Docs ............. : @0@'.format(get_option('with_help')),
   'API Docs .............. : @0@'.format(get_option('with_docs')),
@@ -230,7 +230,7 @@ foreach link_arg: test_link_args
 endforeach
 add_project_link_arguments(global_link_args, language: 'c')
 
-if get_option('with_tcmalloc')
+if get_option('tcmalloc')
   tcmalloc_ldflags = [
     '-fno-builtin-malloc',
     '-fno-builtin-calloc',
