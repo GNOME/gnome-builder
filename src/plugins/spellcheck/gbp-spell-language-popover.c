@@ -17,6 +17,8 @@
  *
  * Adaptation of GspellLanguageChooserButton to show a popover
  * https://wiki.gnome.org/Projects/gspell
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include "gbp-spell-language-popover.h"

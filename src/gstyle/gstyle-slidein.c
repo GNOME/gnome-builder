@@ -17,6 +17,8 @@
  *
  * Initial ideas based on Gnome Builder Pnl dock system :
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gstyle-slidein"

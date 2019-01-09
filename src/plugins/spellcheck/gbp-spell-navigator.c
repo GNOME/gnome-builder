@@ -17,6 +17,8 @@
 
  * This code is a modification of:
  * https://git.gnome.org/browse/gspell/tree/gspell/gspell-navigator-text-view.c
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <glib/gi18n.h>

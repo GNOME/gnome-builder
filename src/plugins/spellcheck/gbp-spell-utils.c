@@ -18,6 +18,8 @@
  * This code is mostly from:
  * https://git.gnome.org/browse/gspell/tree/gspell/gspell-utils.c
  * https://git.gnome.org/browse/gspell/tree/gspell/gspell-text-iter.c
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-spell-utils"
