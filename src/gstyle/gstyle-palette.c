@@ -1,6 +1,6 @@
 /* gstyle-palette.c
  *
- * Copyright © 2016 sebastien lafargue <slafargue@gnome.org>
+ * Copyright 2016 sebastien lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -871,7 +871,7 @@ gstyle_palette_save_to_xml (GstylePalette  *self,
   gint succes;
 
   const gchar *header =
-                  "Copyright © 2016 GNOME Builder Team at irc.gimp.net/#gnome-builder\n"   \
+                  "Copyright 2016 GNOME Builder Team at irc.gimp.net/#gnome-builder\n"   \
                   "This program is free software: you can redistribute it and/or modify\n" \
                   "it under the terms of the GNU General Public License as published by\n" \
                   "the Free Software Foundation, either version 3 of the License, or\n"    \

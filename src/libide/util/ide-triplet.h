@@ -1,7 +1,7 @@
 /* ide-triplet.c
  *
- * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
- * Copyright (C) 2018 Collabora Ltd.
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
