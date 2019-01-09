@@ -1,0 +1,32 @@
+.greeter flowboxchild {
+  border-radius: 11px;
+  outline-offset: -3px;
+  -gtk-outline-radius: 9px;
+  min-width: 164px;
+  min-height: 164px;
+}
+
+.greeter flowboxchild:selected label {
+  color: @theme_selected_fg_color;
+}
+
+.greeter flowboxchild dzlpillbox {
+ background: alpha(shade(@theme_bg_color, 0.9), 0.8);
+}
+
+/*
+ * Greeter tweaks
+ *
+ * The following tweaks the greeter surface by adding
+ * separator lines to the list box.
+ */
+.greeter list row {
+  border-bottom: 1px solid alpha(@borders, 0.2);
+}
+.greeter list row:last-child {
+  border-bottom: none;
+}
+.greeter frame border {
+  border-color: alpha(@borders, 0.6);
+}
+

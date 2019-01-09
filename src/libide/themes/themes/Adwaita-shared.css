@@ -1,14 +1,6 @@
 @import url("resource:///org/gnome/builder/themes/shared.css");
 
-/* soften the headerbar a bit which looks too chunky give the widget density
- * near the bottom border.
- */
-window.workbench headerbar {
-  border-bottom: 1px solid @borders;
-  background-image: none;
-}
-
-idelayoutstackheader > button:last-child {
+ideframeheader > button:last-child {
   margin-right: 3px;
 }
 
@@ -48,16 +40,42 @@ ideeditorproperties entry:last-child {
   border-left: none;
 }
 
-
-popover.messagepopover {
+/* Omnibar */
+popover.omnibar {
   padding: 0;
 }
-popover.messagepopover list {
+popover.omnibar list {
   border-top: 1px solid @borders;
   border-radius: 0 0 5px 5px;
 }
-popover.messagepopover list row:not(:last-child) {
+popover.omnibar list row:not(:last-child) {
   border-bottom: 1px solid alpha(@borders, 0.3);
+}
+popover.omnibar row.notification .title {
+  font-weight: bold;
+}
+popover.omnibar row.notification .body {
+  opacity: 0.8;
+  font-size: 0.95em;
+}
+
+/* Notifications button (transfers, etc) */
+popover.notificationsbutton {
+  padding: 0;
+}
+popover.notificationsbutton list {
+  background: transparent;
+  border-radius: 5px;
+}
+popover.notificationsbutton list row:not(:last-child) {
+  border-bottom: 1px solid alpha(@borders, 0.3);
+}
+popover.notificationsbutton row.notification .title {
+  font-weight: bold;
+}
+popover.notificationsbutton row.notification .body {
+  opacity: 0.8;
+  font-size: 0.95em;
 }
 
 /* development styles */

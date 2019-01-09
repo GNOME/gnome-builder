@@ -19,44 +19,32 @@ filechooser actionbar button.combo {
     color: @warning_color;
 }
 
+/* headerbar shadow in fullscreen, for depth above children */
+window.fullscreen headerbar {
+  margin-bottom: 5px;
+  box-shadow: 0 0 3px 3px alpha(@wm_shadow,.3);
+}
 
-/*
- * Styling in the genesis (create project) perspective.
- */
-genesisperspective stack > box:first-child list row {
+
+/* Styling in the create-project surface. */
+createprojectsurface stack > box:first-child list row {
   padding: 10px;
   border-bottom: 1px solid alpha(@borders, 0.2);
 }
-genesisperspective stack > box:first-child list row:last-child {
+createprojectsurface stack > box:first-child list row:last-child {
   border-bottom: none;
-}
-
-/*
- * Greeter tweaks
- *
- * The following tweaks the greeter perspective by adding
- * separator lines to the list box.
- */
-greeter list row {
-  border-bottom: 1px solid alpha(@borders, 0.2);
-}
-greeter list row:last-child {
-  border-bottom: none;
-}
-greeter frame border {
-  border-color: alpha(@borders, 0.6);
 }
 
 /*
  * Perspectives switcher
  *
  * The following tweaks the left-most sidebar containing
- * the list of perspectives.
+ * the list of surfaces.
  */
-perspectiveswitcher {
+surfaceswitcher {
   border-right: 1px solid alpha(@borders, 0.5);
 }
-perspectiveswitcher button {
+surfaceswitcher button {
   background: transparent;
   border-radius: 0;
   border: none;
@@ -80,18 +68,18 @@ button.run-arrow-button {
 }
 
 
-buildperspective list.sidebar row:selected button:hover {
+buildsurface list.sidebar row:selected button:hover {
   border-color: transparent;
   box-shadow: none;
   background: transparent;
   color: @theme_selected_fg_color;
   opacity: 1;
 }
-buildperspective list.sidebar row:selected button,
-buildperspective list.sidebar row:selected button:active {
+buildsurface list.sidebar row:selected button,
+buildsurface list.sidebar row:selected button:active {
   opacity: 0.8;
 }
-buildperspective list.sidebar {
+buildsurface list.sidebar {
   border-right: 1px solid alpha(@borders, 0.55);
 }
 
@@ -143,4 +131,14 @@ popover.transfers list row > box {
 
 button.run-arrow-button {
   padding: 0px;
+}
+
+
+/* Stack list history tweaks */
+dzlstacklist row {
+  padding: 0;
+  margin: 0;
+}
+dzlstacklist .stack-header {
+  opacity: 0.55;
 }

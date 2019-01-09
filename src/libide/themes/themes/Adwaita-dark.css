@@ -1,17 +1,17 @@
 @import url("resource:///org/gnome/builder/themes/Adwaita-shared.css");
 
 
-perspectiveswitcher {
+surfaceswitcher {
   background-color: #272c2e;
 }
-perspectiveswitcher button {
+surfaceswitcher button {
   color: #696c6b;
 }
-perspectiveswitcher button:checked,
-perspectiveswitcher button:checked:hover {
+surfaceswitcher button:checked,
+surfaceswitcher button:checked:hover {
   color: #eeeeec;
 }
-perspectiveswitcher button:hover {
+surfaceswitcher button:hover {
   color: #b2b4b2;
 }
 

@@ -8,13 +8,13 @@
 @define-color theme_button_hover_bg_color #454C5C;
 @define-color theme_button_hover_border_color #262932;
 
-perspectiveswitcher {
+surfaceswitcher {
   background-color: @theme_accent_bg_color;
   border-top: 1px solid @borders;
   border-right: 1px solid @borders;
 }
 
-perspectiveswitcher button {
+surfaceswitcher button {
   color: @theme_accent_color;
   background-color: @theme_accent_bg_color;
   border-radius: 3px;
@@ -23,55 +23,55 @@ perspectiveswitcher button {
   margin: 1px;
 }
 
-perspectiveswitcher button:hover {
+surfaceswitcher button:hover {
   border-color: @theme_button_hover_border_color;
   background-color: @theme_button_hover_bg_color;
 }
 
-perspectiveswitcher button:checked {
+surfaceswitcher button:checked {
   color: white;
   background-color: @wm_button_active_bg;
 }
 
-perspectiveswitcher button:checked:backdrop {
+surfaceswitcher button:checked:backdrop {
   color: #c2c4c7;
 }
 
 
-layoutpane stackswitcher button {
+panel stackswitcher button {
   color: @theme_fg_color;
   background-color: transparent;
   border: none;
 }
-layoutpane stackswitcher button:checked {
+panel stackswitcher button:checked {
   color: @theme_selected_bg_color;
 }
 /* All boxes */
-layoutpane > box > box.horizontal > stackswitcher > button:hover {
+panel > box > box.horizontal > stackswitcher > button:hover {
   border: 1px solid @borders;
 }
 /* Box above file switcher */
-layoutpane > box.vertical:first-child > box.horizontal {
+panel > box.vertical:first-child > box.horizontal {
   border: 1px solid @borders;
 }
 
 
 /* Builder pane */
-window.workbench buildperspective list {
+window.workspace buildsurface list {
   border-right: 1px solid @borders;
   background-color: @theme_base_color;
 }
-window.workbench buildperspective list row {
+window.workspace buildsurface list row {
   padding: 10px;
   border-bottom: 1px solid alpha(@borders, 0.50);
 }
-window.workbench buildperspective list row:last-child {
+window.workspace buildsurface list row:last-child {
   border-bottom: none;
 }
 
 
 /* omnibar popover, remove popover padding */
-popover.messagepopover > * > * {
+popover.omnibar > * > * {
   margin: 0;
   padding: 0;
 }
