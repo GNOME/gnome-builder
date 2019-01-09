@@ -27,6 +27,8 @@
  * Returns: (transfer full): a string array which will hold the uris or
  *   %NULL if there were no valid uris. g_strfreev should be used when
  *   the string array is no longer used
+ *
+ * Since: 3.32
  */
 gchar **
 ide_dnd_get_uri_list (GtkSelectionData *selection_data)

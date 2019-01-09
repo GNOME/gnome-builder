@@ -38,7 +38,7 @@
  * It can also track the primary color of the content and update it's
  * styling to match.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 
 struct _IdeLayoutStackHeader
@@ -598,7 +598,7 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
    *
    * Set to %NULL to unset the primary-color.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   properties [PROP_BACKGROUND_RGBA] =
     g_param_spec_boxed ("background-rgba",
@@ -613,7 +613,7 @@ ide_layout_stack_header_class_init (IdeLayoutStackHeaderClass *klass)
    * Sets the foreground color to use when
    * #IdeLayoutStackHeader:background-rgba is used for the background.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   properties [PROP_FOREGROUND_RGBA] =
     g_param_spec_boxed ("foreground-rgba",
@@ -727,6 +727,8 @@ ide_layout_stack_header_new (void)
  * same size. So if you don't need that, you should just use the normal
  * gtk_container_add_with_properties() API to specify your widget with
  * a given priority.
+ *
+ * Since: 3.32
  */
 void
 ide_layout_stack_header_add_custom_title (IdeLayoutStackHeader *self,

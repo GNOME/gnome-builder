@@ -35,7 +35,7 @@
  * an edit point (also called a tab stop) have the
  * #IdeSnippetChunk:tab-stop property set.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 
 struct _IdeSnippetChunk
@@ -76,6 +76,8 @@ ide_snippet_chunk_new (void)
  * Copies the source snippet.
  *
  * Returns: (transfer full): An #IdeSnippetChunk.
+ *
+ * Since: 3.32
  */
 IdeSnippetChunk *
 ide_snippet_chunk_copy (IdeSnippetChunk *chunk)
@@ -115,6 +117,8 @@ on_context_changed (IdeSnippetContext *context,
  * Gets the context for the snippet insertion.
  *
  * Returns: (transfer none): An #IdeSnippetContext.
+ *
+ * Since: 3.32
  */
 IdeSnippetContext *
 ide_snippet_chunk_get_context (IdeSnippetChunk *chunk)

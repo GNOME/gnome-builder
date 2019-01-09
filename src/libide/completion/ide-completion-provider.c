@@ -42,6 +42,8 @@ ide_completion_provider_default_init (IdeCompletionProviderInterface *iface)
  * completion provider.
  *
  * Returns: (transfer full) (nullable): a #GIcon or %NULL.
+ *
+ * Since: 3.32
  */
 GIcon *
 ide_completion_provider_get_icon (IdeCompletionProvider *self)
@@ -69,7 +71,7 @@ ide_completion_provider_get_icon (IdeCompletionProvider *self)
  *
  * Returns: an integer specific to the provider
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gint
 ide_completion_provider_get_priority (IdeCompletionProvider *self,
@@ -92,6 +94,8 @@ ide_completion_provider_get_priority (IdeCompletionProvider *self,
  * the user context about the type of results that are displayed.
  *
  * Returns: (transfer full) (nullable): a string or %NULL
+ *
+ * Since: 3.32
  */
 gchar *
 ide_completion_provider_get_title (IdeCompletionProvider *self)
@@ -119,7 +123,7 @@ ide_completion_provider_get_title (IdeCompletionProvider *self)
  * use ide_completion_context_set_proposals_for_provider() to notify of results
  * while the async operation is in progress.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_completion_provider_populate_async (IdeCompletionProvider  *self,
@@ -142,6 +146,8 @@ ide_completion_provider_populate_async (IdeCompletionProvider  *self,
  * @error: a location for a GError, or %NULL
  *
  * Returns: (transfer full): a #GListModel of #IdeCompletionProposal
+ *
+ * Since: 3.32
  */
 GListModel *
 ide_completion_provider_populate_finish (IdeCompletionProvider  *self,
@@ -186,7 +192,7 @@ ide_completion_provider_activate_poposal (IdeCompletionProvider *self,
  *
  * Returns: %TRUE if refiltered; otherwise %FALSE
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_completion_provider_refilter (IdeCompletionProvider *self,
@@ -219,7 +225,7 @@ ide_completion_provider_refilter (IdeCompletionProvider *self,
  *
  * Returns: %TRUE to request that the completion window is displayed.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_provider_is_trigger (IdeCompletionProvider *self,
@@ -250,7 +256,7 @@ ide_completion_provider_is_trigger (IdeCompletionProvider *self,
  *
  * Returns: %TRUE if the proposal should be activated.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_provider_key_activates (IdeCompletionProvider *self,
@@ -293,7 +299,7 @@ _ide_completion_provider_load (IdeCompletionProvider *self,
  * interface) is that it allows for some optimizations and code simplification
  * on behalf of completion providers.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_provider_display_proposal (IdeCompletionProvider   *self,
@@ -326,7 +332,7 @@ ide_completion_provider_display_proposal (IdeCompletionProvider   *self,
  *
  * Returns: (transfer full) (nullable): A new string or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gchar *
 ide_completion_provider_get_comment (IdeCompletionProvider *self,

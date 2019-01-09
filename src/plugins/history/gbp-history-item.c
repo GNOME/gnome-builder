@@ -163,6 +163,8 @@ gbp_history_item_get_label (GbpHistoryItem *self)
  * Gets an #IdeSourceLocation represented by this item.
  *
  * Returns: (transfer full): A new #IdeSourceLocation
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 gbp_history_item_get_location (GbpHistoryItem *self)
@@ -194,6 +196,8 @@ gbp_history_item_get_location (GbpHistoryItem *self)
  * gbp_history_item_get_file:
  *
  * Returns: (transfer none): a #GFile.
+ *
+ * Since: 3.32
  */
 GFile *
 gbp_history_item_get_file (GbpHistoryItem *self)
@@ -210,6 +214,8 @@ gbp_history_item_get_file (GbpHistoryItem *self)
  *
  * If the text mark is still valid, it will be used to locate the
  * mark which may have moved.
+ *
+ * Since: 3.32
  */
 guint
 gbp_history_item_get_line (GbpHistoryItem *self)

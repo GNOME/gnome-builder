@@ -136,6 +136,8 @@ ide_transfer_row_class_init (IdeTransferRowClass *klass)
    * IdeTransferRow::cancelled:
    *
    * This signal is emitted when the cancel button is clicked.
+   *
+   * Since: 3.32
    */
   signals [CANCELLED] =
     g_signal_new ("cancelled",
@@ -194,6 +196,8 @@ ide_transfer_row_init (IdeTransferRow *self)
  * ide_transfer_row_get_transfer:
  *
  * Returns: (nullable) (transfer none): An #IdeTransfer or %NULL.
+ *
+ * Since: 3.32
  */
 IdeTransfer *
 ide_transfer_row_get_transfer (IdeTransferRow *self)

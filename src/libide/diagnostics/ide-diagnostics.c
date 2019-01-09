@@ -47,6 +47,8 @@ struct _IdeDiagnostics
  * Ownership of @ar is transfered to the resulting structure.
  *
  * Returns: (transfer full): A newly allocated #IdeDiagnostics.
+ *
+ * Since: 3.32
  */
 IdeDiagnostics *
 ide_diagnostics_new (GPtrArray *ar)
@@ -100,6 +102,8 @@ ide_diagnostics_unref (IdeDiagnostics *self)
  *
  * This is performed by taking a reference to the immutable #IdeDiagnostic
  * instances.
+ *
+ * Since: 3.32
  */
 void
 ide_diagnostics_merge (IdeDiagnostics *self,
@@ -135,6 +139,8 @@ ide_diagnostics_merge (IdeDiagnostics *self,
  * ide_diagnostics_index().
  *
  * Returns: The number of diagnostics in @self.
+ *
+ * Since: 3.32
  */
 gsize
 ide_diagnostics_get_size (IdeDiagnostics *self)
@@ -151,6 +157,8 @@ ide_diagnostics_get_size (IdeDiagnostics *self)
  * Retrieves the diagnostic at @index.
  *
  * Returns: (transfer none): An #IdeDiagnostic.
+ *
+ * Since: 3.32
  */
 IdeDiagnostic *
 ide_diagnostics_index (IdeDiagnostics *self,
@@ -182,7 +190,7 @@ ide_diagnostics_add (IdeDiagnostics *self,
  *
  * Like ide_diagnostics_add() but steals the reference to @diagnostic.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_diagnostics_take (IdeDiagnostics *self,

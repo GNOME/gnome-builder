@@ -105,6 +105,8 @@ task_state_attach (TaskState *state)
  * This is just like g_task_return_boolean() except that it enforces
  * that the current stack return to the main context before dispatching
  * the callback.
+ *
+ * Since: 3.32
  */
 void
 ide_g_task_return_boolean_from_main (GTask    *task,
@@ -163,6 +165,8 @@ ide_g_task_return_pointer_from_main (GTask          *task,
  *
  * Like g_task_return_error() but ensures we return to the main loop before
  * dispatching the result.
+ *
+ * Since: 3.32
  */
 void
 ide_g_task_return_error_from_main (GTask  *task,
@@ -205,7 +209,7 @@ ide_gettext (const gchar *message)
  * Returns: (nullable): A relative path, or %NULL if no common ancestor was
  *   found for the relative path.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gchar *
 ide_g_file_get_uncanonical_relative_path (GFile *file,
@@ -354,7 +358,7 @@ get_children_free (gpointer data)
  * This can be convenient when you know you need all of the #GFileInfo
  * accessable at once, or the size will be small.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_g_file_get_children_async (GFile               *file,
@@ -394,7 +398,7 @@ ide_g_file_get_children_async (GFile               *file,
  * Returns: (transfer full) (element-type Gio.FileInfo): A #GPtrArray
  *   of #GFileInfo if successful, otherwise %NULL.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GPtrArray *
 ide_g_file_get_children_finish (GFile         *file,
@@ -528,7 +532,7 @@ ide_g_file_find_worker (IdeTask      *task,
  *
  * You may only match on the filename, not the directory.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_g_file_find_with_depth_async (GFile               *file,
@@ -582,7 +586,7 @@ ide_g_file_find_with_depth_async (GFile               *file,
  *
  * You may only match on the filename, not the directory.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_g_file_find_async (GFile               *file,
@@ -603,6 +607,8 @@ ide_g_file_find_async (GFile               *file,
  * Gets the files that were found which matched the pattern.
  *
  * Returns: (transfer full) (element-type Gio.File): A #GPtrArray of #GFile
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_g_file_find_finish (GFile         *file,
@@ -631,7 +637,7 @@ ide_g_file_find_finish (GFile         *file,
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_g_host_file_get_contents (const gchar  *path,
@@ -724,6 +730,8 @@ ide_environ_parse (const gchar  *pair,
  * Adwaita.
  *
  * Returns: (transfer full) (nullable): A #GIcon or %NULL
+ *
+ * Since: 3.32
  */
 GIcon *
 ide_g_content_type_get_symbolic_icon (const gchar *content_type)

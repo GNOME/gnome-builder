@@ -92,7 +92,7 @@ ide_debugger_address_map_entry_free (gpointer data)
  *
  * Returns: (transfer full): A new #IdeDebuggerAddressMap
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeDebuggerAddressMap *
 ide_debugger_address_map_new (void)
@@ -112,7 +112,7 @@ ide_debugger_address_map_new (void)
  *
  * Frees all memory associated with @self.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_address_map_free (IdeDebuggerAddressMap *self)
@@ -137,7 +137,7 @@ ide_debugger_address_map_free (IdeDebuggerAddressMap *self)
  *
  * See also: ide_debugger_address_map_remove()
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_address_map_insert (IdeDebuggerAddressMap            *self,
@@ -170,7 +170,7 @@ ide_debugger_address_map_insert (IdeDebuggerAddressMap            *self,
  *
  * Returns: (nullable): An #IdeDebuggerAddressMapEntry or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const IdeDebuggerAddressMapEntry *
 ide_debugger_address_map_lookup (const IdeDebuggerAddressMap *self,
@@ -199,7 +199,7 @@ ide_debugger_address_map_lookup (const IdeDebuggerAddressMap *self,
  *
  * Removes the entry found containing @address.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 gboolean
 ide_debugger_address_map_remove (IdeDebuggerAddressMap *self,

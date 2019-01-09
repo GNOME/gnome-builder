@@ -482,7 +482,7 @@ find_files_node (DzlTree     *tree,
  *
  * Returns: (transfer full) (nullable): A #DzlTreeNode or %NULL.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 DzlTreeNode *
 gb_project_tree_find_file_node (GbProjectTree *self,
@@ -557,6 +557,8 @@ gb_project_tree_find_file_node (GbProjectTree *self,
  *
  * Expand the tree so the node for the specified file is visible and selected.
  * In the case that the file has been deleted, expand the tree as far as possible.
+ *
+ * Since: 3.32
  */
 void
 gb_project_tree_reveal (GbProjectTree *self,

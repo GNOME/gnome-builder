@@ -50,7 +50,7 @@
  * #IdeContext cannot be unloaded until it has finished, use ide_object_hold()
  * to ensure this property. Call ide_object_release() when no longer necessary.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 
 typedef struct
@@ -138,7 +138,7 @@ ide_object_real_get_context (IdeObject *self)
  *
  * Returns: (transfer none): An #IdeContext.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 IdeContext *
 ide_object_get_context (IdeObject *self)
@@ -155,7 +155,7 @@ ide_object_get_context (IdeObject *self)
  *
  * Sets the #IdeContext for the object.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 void
 ide_object_set_context (IdeObject  *self,
@@ -532,7 +532,7 @@ ide_object_new_for_extension_async_try_next (IdeTask *task)
  * Use @sort_priority_func to alter the priority of the extensions before
  * attempting to initialize them.
  *
- * Since: 3.22
+ * Since: 3.32
  */
 void
 ide_object_new_for_extension_async (GType                 interface_gtype,
@@ -604,7 +604,7 @@ ide_object_new_for_extension_async (GType                 interface_gtype,
  * The result can be fetched by calling ide_object_new_finish() from
  * the provided @callback.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 void
 ide_object_new_async (const gchar          *extension_point,
@@ -686,7 +686,7 @@ ide_object_new_async (const gchar          *extension_point,
  * Returns: (transfer full): An #IdeObject subclass, or %NULL
  *   and @error is set.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 IdeObject *
 ide_object_new_finish  (GAsyncResult  *result,
@@ -714,7 +714,7 @@ ide_object_new_finish  (GAsyncResult  *result,
  *
  * Returns: %TRUE if a hold was successfully created.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 gboolean
 ide_object_hold (IdeObject *self)
@@ -739,7 +739,7 @@ ide_object_hold (IdeObject *self)
  * Releases a successful hold on the context previously created with
  * ide_object_hold().
  *
- * Since: 3.18
+ * Since: 3.32
  */
 void
 ide_object_release (IdeObject *self)
@@ -792,7 +792,7 @@ ide_object_notify_in_main_cb (gpointer data)
  * This will *always* return to the default main context, and never
  * emit ::notify immediately.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 void
 ide_object_notify_in_main (gpointer    instance,

@@ -121,7 +121,7 @@ ide_simple_toolchain_get_tool_for_language (IdeToolchain  *toolchain,
  *
  * Gets the path of the compiler executable
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_simple_toolchain_set_tool_for_language  (IdeSimpleToolchain  *self,

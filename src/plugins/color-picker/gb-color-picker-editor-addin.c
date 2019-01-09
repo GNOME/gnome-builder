@@ -391,7 +391,7 @@ gb_color_picker_editor_addin_init (GbColorPickerEditorAddin *self)
  *
  * Returns: (transfer full): a #GstylePalette or %NULL.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GstylePalette *
 gb_color_picker_editor_addin_create_palette (GbColorPickerEditorAddin *self)

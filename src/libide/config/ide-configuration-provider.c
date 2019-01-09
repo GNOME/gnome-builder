@@ -133,7 +133,7 @@ ide_configuration_provider_default_init (IdeConfigurationProviderInterface *ifac
    * The "added" signal is emitted when a configuration
    * has been added to a configuration provider.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   signals [ADDED] =
     g_signal_new ("added",
@@ -155,7 +155,7 @@ ide_configuration_provider_default_init (IdeConfigurationProviderInterface *ifac
    * The "removed" signal is emitted when a configuration
    * has been removed from a configuration provider.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   signals [REMOVED] =
     g_signal_new ("removed",
@@ -185,7 +185,7 @@ ide_configuration_provider_default_init (IdeConfigurationProviderInterface *ifac
  * asynchronous function so that the configuration manager may be made
  * aware of the configurations.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_configuration_provider_load_async (IdeConfigurationProvider *self,
@@ -209,6 +209,8 @@ ide_configuration_provider_load_async (IdeConfigurationProvider *self,
  * Completes an asynchronous request to ide_configuration_provider_load_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_configuration_provider_load_finish (IdeConfigurationProvider  *self,
@@ -232,6 +234,8 @@ ide_configuration_provider_load_finish (IdeConfigurationProvider  *self,
  * Implementations of #IdeConfigurationProvider should emit removed
  * for every configuration they have registered so that the
  * #IdeConfigurationManager has correct information.
+ *
+ * Since: 3.32
  */
 void
 ide_configuration_provider_unload (IdeConfigurationProvider *self)
@@ -254,6 +258,8 @@ ide_configuration_provider_unload (IdeConfigurationProvider *self)
  *
  * This function will be called before unloading the configuration provider
  * so that it has a chance to persist any outstanding changes.
+ *
+ * Since: 3.32
  */
 void
 ide_configuration_provider_save_async (IdeConfigurationProvider *self,
@@ -277,6 +283,8 @@ ide_configuration_provider_save_async (IdeConfigurationProvider *self,
  * Completes an asynchronous request to ide_configuration_provider_save_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_configuration_provider_save_finish (IdeConfigurationProvider  *self,
@@ -298,7 +306,7 @@ ide_configuration_provider_save_finish (IdeConfigurationProvider  *self,
  * #IdeConfigurationProvider implementations should call this function with
  * a @config when it has discovered a new configuration.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_configuration_provider_emit_added (IdeConfigurationProvider *self,
@@ -318,7 +326,7 @@ ide_configuration_provider_emit_added (IdeConfigurationProvider *self,
  * #IdeConfigurationProvider implementations should call this function with
  * a @config when it has discovered it was removed.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_configuration_provider_emit_removed (IdeConfigurationProvider *self,
@@ -340,7 +348,7 @@ ide_configuration_provider_emit_removed (IdeConfigurationProvider *self,
  * ide_configuration_provider_save_async() will be called by the
  * #IdeConfigurationManager after calling this function.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_configuration_provider_delete (IdeConfigurationProvider *self,
@@ -374,7 +382,7 @@ ide_configuration_provider_delete (IdeConfigurationProvider *self,
  * It is expected that the #IdeConfigurationProvider will emit
  * #IdeConfigurationProvider::added with the new configuration.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_configuration_provider_duplicate (IdeConfigurationProvider *self,

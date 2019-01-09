@@ -60,6 +60,8 @@ ide_project_template_get_description (IdeProjectTemplate *self)
  * Get's the configuration widget for the template if there is one.
  *
  * Returns: (transfer none): a #GtkWidget.
+ *
+ * Since: 3.32
  */
 GtkWidget *
 ide_project_template_get_widget (IdeProjectTemplate *self)
@@ -78,6 +80,8 @@ ide_project_template_get_widget (IdeProjectTemplate *self)
  *
  * Returns: (transfer full): A newly allocated, NULL terminated list of
  *   supported languages.
+ *
+ * Since: 3.32
  */
 gchar **
 ide_project_template_get_languages (IdeProjectTemplate *self)
@@ -109,6 +113,8 @@ ide_project_template_get_icon_name (IdeProjectTemplate *self)
  * expanding files based on the contents of @params.
  *
  * It is expected that this method is only called once on an #IdeProjectTemplate.
+ *
+ * Since: 3.32
  */
 void
 ide_project_template_expand_async (IdeProjectTemplate  *self,
@@ -145,7 +151,7 @@ ide_project_template_expand_finish (IdeProjectTemplate  *self,
  *
  * Returns: the priority of the template
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gint
 ide_project_template_get_priority (IdeProjectTemplate *self)

@@ -670,6 +670,8 @@ gbp_flatpak_manifest_new (IdeContext  *context,
  * Gets the #GFile for the manifest.
  *
  * Returns: (transfer none): a #GFile
+ *
+ * Since: 3.32
  */
 GFile *
 gbp_flatpak_manifest_get_file (GbpFlatpakManifest *self)
@@ -684,6 +686,8 @@ gbp_flatpak_manifest_get_file (GbpFlatpakManifest *self)
  *
  * Gets the name of the primary module, which is usually the last
  * module of manifest.
+ *
+ * Since: 3.32
  */
 const gchar *
 gbp_flatpak_manifest_get_primary_module (GbpFlatpakManifest *self)
@@ -697,6 +701,8 @@ gbp_flatpak_manifest_get_primary_module (GbpFlatpakManifest *self)
  * gbp_flatpak_manifest_get_command:
  *
  * Gets the "command" specified in the manifest.
+ *
+ * Since: 3.32
  */
 const gchar *
 gbp_flatpak_manifest_get_command (GbpFlatpakManifest *self)
@@ -710,6 +716,8 @@ gbp_flatpak_manifest_get_command (GbpFlatpakManifest *self)
  * gbp_flatpak_manifest_get_build_args:
  *
  * Gets the "build-args" from the manifest as a string array.
+ *
+ * Since: 3.32
  */
 const gchar * const *
 gbp_flatpak_manifest_get_build_args (GbpFlatpakManifest *self)
@@ -723,6 +731,8 @@ gbp_flatpak_manifest_get_build_args (GbpFlatpakManifest *self)
  * gbp_flatpak_manifest_get_finish_args:
  *
  * Gets the "finish-args" from the manifest as a string array.
+ *
+ * Since: 3.32
  */
 const gchar * const *
 gbp_flatpak_manifest_get_finish_args (GbpFlatpakManifest *self)
@@ -736,6 +746,8 @@ gbp_flatpak_manifest_get_finish_args (GbpFlatpakManifest *self)
  * gbp_flatpak_manifest_get_sdk_extensions:
  *
  * Gets the "sdk-extensions" from the manifest as a string array.
+ *
+ * Since: 3.32
  */
 const gchar * const *
 gbp_flatpak_manifest_get_sdk_extensions (GbpFlatpakManifest *self)
@@ -750,6 +762,8 @@ gbp_flatpak_manifest_get_sdk_extensions (GbpFlatpakManifest *self)
  *
  * Gets the path for the manifest. This is equivalent to calling
  * g_file_get_path() with the result of gbp_flatpak_manifest_get_file().
+ *
+ * Since: 3.32
  */
 gchar *
 gbp_flatpak_manifest_get_path (GbpFlatpakManifest *self)

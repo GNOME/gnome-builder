@@ -43,7 +43,7 @@
  * that support hover requests. This can display markup in the interactive
  * tooltip that is displayed in the editor.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 
 typedef struct
@@ -229,7 +229,7 @@ ide_langserv_hover_provider_class_init (IdeLangservHoverProviderClass *klass)
    * The "client" property is the #IdeLangservClient that should be used to
    * communicate with the Language Server peer process.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
@@ -244,7 +244,7 @@ ide_langserv_hover_provider_class_init (IdeLangservHoverProviderClass *klass)
    * The "category" property is the category name to use when displaying
    * the hover contents.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_CATEGORY] =
     g_param_spec_string ("category",
@@ -449,7 +449,7 @@ hover_provider_iface_init (IdeHoverProviderInterface *iface)
  *
  * Returns: (transfer none) (nullable): an #IdeLangservClient or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeLangservClient *
 ide_langserv_hover_provider_get_client (IdeLangservHoverProvider *self)
@@ -468,7 +468,7 @@ ide_langserv_hover_provider_get_client (IdeLangservHoverProvider *self)
  *
  * Sets the client to be used to query for hover information.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_langserv_hover_provider_set_client (IdeLangservHoverProvider *self,

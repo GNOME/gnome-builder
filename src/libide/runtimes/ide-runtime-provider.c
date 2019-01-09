@@ -248,7 +248,7 @@ ide_runtime_provider_install_finish (IdeRuntimeProvider  *self,
  *
  * This function should be used instead of ide_runtime_provider_install_async().
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_runtime_provider_bootstrap_async (IdeRuntimeProvider  *self,
@@ -278,7 +278,7 @@ ide_runtime_provider_bootstrap_async (IdeRuntimeProvider  *self,
  * Returns: (transfer full): an #IdeRuntime if successful; otherwise %NULL
  *   and @error is set.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeRuntime *
 ide_runtime_provider_bootstrap_finish (IdeRuntimeProvider  *self,

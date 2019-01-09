@@ -700,6 +700,8 @@ ide_unsaved_files_update (IdeUnsavedFiles *self,
  *
  * Returns: (transfer full) (element-type Ide.UnsavedFile): a #GPtrArray
  *   containing #IdeUnsavedFile elements.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_unsaved_files_to_array (IdeUnsavedFiles *self)
@@ -768,6 +770,8 @@ ide_unsaved_files_contains (IdeUnsavedFiles *self,
  *
  * Thread safety: you may call this from any thread, as long as you
  *   hold a reference to @self.
+ *
+ * Since: 3.32
  */
 IdeUnsavedFile *
 ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles *self,

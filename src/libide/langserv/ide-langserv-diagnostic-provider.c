@@ -225,6 +225,8 @@ ide_langserv_diagnostic_provider_init (IdeLangservDiagnosticProvider *self)
  * Gets the client used by diagnostic provider.
  *
  * Returns: (nullable) (transfer none): An #IdeLangservClient or %NULL.
+ *
+ * Since: 3.32
  */
 IdeLangservClient *
 ide_langserv_diagnostic_provider_get_client (IdeLangservDiagnosticProvider *self)

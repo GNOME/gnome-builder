@@ -86,6 +86,8 @@ ide_thread_pool_get_pool (IdeThreadPoolKind kind)
  *
  * This pushes a task to be executed on a worker thread based on the task kind as denoted by
  * @kind. Some tasks will be placed on special work queues or throttled based on priority.
+ *
+ * Since: 3.32
  */
 void
 ide_thread_pool_push_task (IdeThreadPoolKind  kind,
@@ -134,6 +136,8 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
  * @func_data: user data for @func.
  *
  * Runs the callback on the thread pool thread.
+ *
+ * Since: 3.32
  */
 void
 ide_thread_pool_push (IdeThreadPoolKind kind,
@@ -151,6 +155,8 @@ ide_thread_pool_push (IdeThreadPoolKind kind,
  * @func_data: user data for @func.
  *
  * Runs the callback on the thread pool thread.
+ *
+ * Since: 3.32
  */
 void
 ide_thread_pool_push_with_priority (IdeThreadPoolKind kind,

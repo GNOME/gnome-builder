@@ -131,6 +131,8 @@ ide_xml_valid_warning (ValidState  *state,
  * @diagnostics: (out) (nullable): a location to store a #IdeDiagnostics object
  *
  * Returns: %TRUE if the validation succeeded, %FALSE otherwise
+ *
+ * Since: 3.32
  */
 gboolean
 ide_xml_validator_validate (IdeXmlValidator   *self,

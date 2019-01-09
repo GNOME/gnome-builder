@@ -57,6 +57,8 @@ ide_vte_pty_create_slave (VtePty *pty)
  * sensible fallback.
  *
  * Returns: (not nullable): a shell such as "/bin/sh"
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_get_user_shell (void)

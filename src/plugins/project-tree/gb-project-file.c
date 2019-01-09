@@ -269,6 +269,8 @@ gb_project_file_get_icon_name (GbProjectFile *self)
  * Gets the gicon for the node, which may be a themed icon.
  *
  * Returns: (transfer full): the #GIcon for the node
+ *
+ * Since: 3.32
  */
 GIcon *
 gb_project_file_get_icon (GbProjectFile *self)

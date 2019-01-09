@@ -657,7 +657,7 @@ ide_code_index_service_get_index (IdeCodeIndexService *self)
  *
  * Returns: (transfer none) (nullable): an #IdeCodeIndexer or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeCodeIndexer *
 ide_code_index_service_get_code_indexer (IdeCodeIndexService *self,

@@ -127,6 +127,8 @@ ide_diagnostic_get_text (IdeDiagnostic *self)
  * in a tooltip.
  *
  * Returns: (transfer full): string containing the text formatted for display.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_diagnostic_get_text_for_display (IdeDiagnostic *self)
@@ -167,6 +169,8 @@ ide_diagnostic_get_num_ranges (IdeDiagnostic *self)
  * function with a value greater or equal to ide_diagnostic_get_num_ranges().
  *
  * Returns: (transfer none) (nullable): An #IdeSourceRange
+ *
+ * Since: 3.32
  */
 IdeSourceRange *
 ide_diagnostic_get_range (IdeDiagnostic *self,
@@ -191,6 +195,8 @@ ide_diagnostic_get_range (IdeDiagnostic *self,
  * Gets the location of a diagnostic.
  *
  * Returns: (transfer none): Gets the location of a diagnostic.
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_diagnostic_get_location (IdeDiagnostic *self)
@@ -224,6 +230,8 @@ ide_diagnostic_get_location (IdeDiagnostic *self)
  * ide_diagnostic_add_range() or ide_diagnostic_take_range().
  *
  * Returns: (transfer full): An #IdeDiagnostic.
+ *
+ * Since: 3.32
  */
 IdeDiagnostic *
 ide_diagnostic_new (IdeDiagnosticSeverity  severity,
@@ -250,6 +258,8 @@ ide_diagnostic_new (IdeDiagnosticSeverity  severity,
  *
  * Adds the suggested fixit to the diagnostic while transfering ownership
  * of @fixit to @self.
+ *
+ * Since: 3.32
  */
 void
 ide_diagnostic_take_fixit (IdeDiagnostic *self,
@@ -274,6 +284,8 @@ ide_diagnostic_take_fixit (IdeDiagnostic *self,
  *
  * This saves multiple atomic references of @range which could be expensive
  * if you are doing lots of diagnostics.
+ *
+ * Since: 3.32
  */
 void
 ide_diagnostic_take_range (IdeDiagnostic  *self,
@@ -299,6 +311,8 @@ ide_diagnostic_take_range (IdeDiagnostic  *self,
  *
  * Adds the range to the diagnostic. This allows diagnostic tools to highlight
  * the errored text appropriately.
+ *
+ * Since: 3.32
  */
 void
 ide_diagnostic_add_range (IdeDiagnostic  *self,
@@ -357,6 +371,8 @@ ide_diagnostic_get_num_fixits (IdeDiagnostic *self)
  * returned from ide_diagnostic_get_num_fixits().
  *
  * Returns: (transfer none): An #IdeFixit.
+ *
+ * Since: 3.32
  */
 IdeFixit *
 ide_diagnostic_get_fixit (IdeDiagnostic *self,
@@ -402,6 +418,8 @@ ide_diagnostic_compare (const IdeDiagnostic *a,
  * location and looking at the file.
  *
  * Returns: (nullable) (transfer none): a #GFile or %NULL.
+ *
+ * Since: 3.32
  */
 GFile *
 ide_diagnostic_get_file (IdeDiagnostic *self)
@@ -431,7 +449,7 @@ ide_diagnostic_get_file (IdeDiagnostic *self)
  *
  * Returns: (transfer full): a #GVariant
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GVariant *
 ide_diagnostic_to_variant (const IdeDiagnostic *self)
@@ -501,7 +519,7 @@ ide_diagnostic_to_variant (const IdeDiagnostic *self)
  *
  * Returns: (nullable) (transfer full): a #GVariant or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeDiagnostic *
 ide_diagnostic_new_from_variant (GVariant *variant)

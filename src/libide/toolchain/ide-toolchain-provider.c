@@ -103,7 +103,7 @@ ide_toolchain_provider_default_init (IdeToolchainProviderInterface *iface)
    * The "added" signal is emitted when a toolchain
    * has been added to a toolchain provider.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [ADDED] =
     g_signal_new ("added",
@@ -125,7 +125,7 @@ ide_toolchain_provider_default_init (IdeToolchainProviderInterface *iface)
    * The "removed" signal is emitted when a toolchain
    * has been removed from a toolchain provider.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [REMOVED] =
     g_signal_new ("removed",
@@ -154,7 +154,7 @@ ide_toolchain_provider_default_init (IdeToolchainProviderInterface *iface)
  * before completing the asynchronous function so that the toolchain
  * manager may be made aware of the toolchains.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_toolchain_provider_load_async (IdeToolchainProvider *self,
@@ -177,7 +177,7 @@ ide_toolchain_provider_load_async (IdeToolchainProvider *self,
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_toolchain_provider_load_finish (IdeToolchainProvider  *self,
@@ -199,7 +199,7 @@ ide_toolchain_provider_load_finish (IdeToolchainProvider  *self,
  * #IdeToolchainProvider implementations should call this function with
  * a @toolchain when it has discovered a new toolchain.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_toolchain_provider_emit_added (IdeToolchainProvider *self,
@@ -219,7 +219,7 @@ ide_toolchain_provider_emit_added (IdeToolchainProvider *self,
  * #IdeToolchainProvider implementations should call this function with
  * a @toolchain when the toolchain was removed.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_toolchain_provider_emit_removed (IdeToolchainProvider *self,

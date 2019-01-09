@@ -163,6 +163,8 @@ ide_progress_flatpak_progress_callback (const char *status,
  *
  * Remember to make sure to unref the #IdeProgress instance with
  * g_object_unref() during the #GDestroyNotify.
+ *
+ * Since: 3.32
  */
 void
 ide_progress_file_progress_callback (goffset  current_num_bytes,

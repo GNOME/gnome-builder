@@ -226,7 +226,7 @@ gbp_spell_editor_view_addin_init (GbpSpellEditorViewAddin *self)
  * The caller should call gbp_spell_editor_view_addin_end_checking() when they
  * have completed the spellchecking process.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 gbp_spell_editor_view_addin_begin_checking (GbpSpellEditorViewAddin *self)
@@ -289,7 +289,7 @@ gbp_spell_editor_view_addin_begin_checking (GbpSpellEditorViewAddin *self)
  * Completes a spellcheck operation and potentially restores the buffer to
  * the visual state before spellchecking started.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 gbp_spell_editor_view_addin_end_checking (GbpSpellEditorViewAddin *self)
@@ -344,7 +344,7 @@ gbp_spell_editor_view_addin_end_checking (GbpSpellEditorViewAddin *self)
  *
  * Returns: (nullable) (transfer none): a #GspellChecker or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GspellChecker *
 gbp_spell_editor_view_addin_get_checker (GbpSpellEditorViewAddin *self)
@@ -369,7 +369,7 @@ gbp_spell_editor_view_addin_get_checker (GbpSpellEditorViewAddin *self)
  *
  * Returns: (nullable) (transfer none): a #GspellNavigator or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GspellNavigator *
 gbp_spell_editor_view_addin_get_navigator (GbpSpellEditorViewAddin *self)

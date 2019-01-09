@@ -283,6 +283,8 @@ ide_recent_projects_init (IdeRecentProjects *self)
  * @project_infos: (transfer none) (element-type Ide.ProjectInfo): a #GList of #IdeProjectInfo.
  *
  * Removes the provided projects from the recent projects file.
+ *
+ * Since: 3.32
  */
 void
 ide_recent_projects_remove (IdeRecentProjects *self,

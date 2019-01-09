@@ -147,6 +147,8 @@ ide_device_info_new (void)
  * Get the #IdeDeviceKind of the device describing the type of device @self refers to
  *
  * Returns: An #IdeDeviceKind.
+ *
+ * Since: 3.32
  */
 IdeDeviceKind
 ide_device_info_get_kind (IdeDeviceInfo *self)
@@ -163,6 +165,8 @@ ide_device_info_get_kind (IdeDeviceInfo *self)
  * @kind: An #IdeDeviceKind
  *
  * Set the #IdeDeviceKind of the device describing the type of device @self refers to
+ *
+ * Since: 3.32
  */
 void
 ide_device_info_set_kind (IdeDeviceInfo *self,
@@ -186,7 +190,7 @@ ide_device_info_set_kind (IdeDeviceInfo *self,
  *
  * Returns: (transfer none) (nullable): An #IdeTriplet.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeTriplet *
 ide_device_info_get_host_triplet (IdeDeviceInfo *self)
@@ -202,7 +206,7 @@ ide_device_info_get_host_triplet (IdeDeviceInfo *self)
  *
  * Set the #IdeTriplet object describing the configuration name
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_device_info_set_host_triplet (IdeDeviceInfo *self,

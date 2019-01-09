@@ -610,6 +610,8 @@ ide_diagnostics_manager_class_init (IdeDiagnosticsManagerClass *klass)
    *
    * This signal is emitted when the diagnostics have changed for any
    * file managed by the IdeDiagnosticsManager.
+   *
+   * Since: 3.32
    */
   signals [CHANGED] =
     g_signal_new ("changed",
@@ -1236,6 +1238,8 @@ initable_iface_init (GInitableIface *iface)
  * Gets if the diagnostics manager is currently executing a diagnosis.
  *
  * Returns: %TRUE if the #IdeDiagnosticsManager is busy diagnosing.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_diagnostics_manager_get_busy (IdeDiagnosticsManager *self)
@@ -1275,6 +1279,8 @@ ide_diagnostics_manager_get_busy (IdeDiagnosticsManager *self)
  * a %NULL value.
  *
  * Returns: (transfer full): A new #IdeDiagnostics.
+ *
+ * Since: 3.32
  */
 IdeDiagnostics *
 ide_diagnostics_manager_get_diagnostics_for_file (IdeDiagnosticsManager *self,
@@ -1357,7 +1363,7 @@ ide_diagnostics_manager_get_sequence_for_file (IdeDiagnosticsManager *self,
  * Internally, this is the same as @buffer emitting the #IdeBuffer::changed
  * signal.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_diagnostics_manager_rediagnose (IdeDiagnosticsManager *self,

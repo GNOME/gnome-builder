@@ -121,6 +121,8 @@ ide_indenter_mimic_source_view (GtkTextView *text_view,
  *
  * Returns: (nullable) (transfer full): A string containing the replacement
  *   text, or %NULL.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_indenter_format (IdeIndenter *self,
@@ -155,6 +157,8 @@ ide_indenter_format (IdeIndenter *self,
  * the default indentation style of #GtkSourceView.
  *
  * Returns: %TRUE if @event should trigger an indentation request.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_indenter_is_trigger (IdeIndenter *self,

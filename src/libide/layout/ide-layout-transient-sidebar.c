@@ -278,7 +278,7 @@ ide_layout_transient_sidebar_init (IdeLayoutTransientSidebar *self)
  * Sets the view for which the panel is transient for. When focus leaves the
  * sidebar or the view, the panel will be dismissed.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_layout_transient_sidebar_set_view (IdeLayoutTransientSidebar *self,

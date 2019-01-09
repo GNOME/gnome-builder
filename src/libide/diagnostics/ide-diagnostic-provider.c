@@ -45,6 +45,8 @@ ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
    *
    * This signal should be emitted by diagnostic providers when they know their
    * diagnostics have been invalidated out-of-band.
+   *
+   * Since: 3.32
    */
   signals [INVALIDATED] =
     g_signal_new ("invalidated",
@@ -86,6 +88,8 @@ ide_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *self,
  * Completes an asynchronous call to ide_diagnostic_provider_diagnose_async().
  *
  * Returns: (transfer full) (nullable): #IdeDiagnostics or %NULL and @error is set.
+ *
+ * Since: 3.32
  */
 IdeDiagnostics *
 ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,

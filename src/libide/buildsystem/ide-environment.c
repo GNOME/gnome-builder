@@ -212,6 +212,8 @@ ide_environment_getenv (IdeEnvironment *self,
  * in various GLib process functions.
  *
  * Returns: (transfer full): A newly allocated string array.
+ *
+ * Since: 3.32
  */
 gchar **
 ide_environment_get_environ (IdeEnvironment *self)
@@ -296,6 +298,8 @@ ide_environment_append (IdeEnvironment         *self,
  * Copies the contents of #IdeEnvironment into a newly allocated #IdeEnvironment.
  *
  * Returns: (transfer full): An #IdeEnvironment.
+ *
+ * Since: 3.32
  */
 IdeEnvironment *
 ide_environment_copy (IdeEnvironment *self)

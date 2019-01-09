@@ -290,7 +290,7 @@ _ide_completion_window_new (GtkWidget *view)
  *
  * Returns: (transfer none) (nullable): an #IdeCompletionContext or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletionContext *
 ide_completion_window_get_context (IdeCompletionWindow *self)
@@ -306,7 +306,7 @@ ide_completion_window_get_context (IdeCompletionWindow *self)
  *
  * Sets the context to be displayed in the window.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_window_set_context (IdeCompletionWindow  *self,

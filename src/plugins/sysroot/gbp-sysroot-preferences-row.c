@@ -212,6 +212,8 @@ gbp_sysroot_preferences_row_finalize (GObject *object)
  * @self: a #GbpSysrootPreferencesRow
  *
  * Requests the configuration popover the be shown over the widget.
+ *
+ * Since: 3.32
  */
 void
 gbp_sysroot_preferences_row_show_popup (GbpSysrootPreferencesRow *self)

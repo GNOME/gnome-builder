@@ -159,6 +159,8 @@ ide_omni_pausable_row_new (IdePausable *pausable)
  * @self: a #IdeOmniPausableRow
  *
  * Returns: (transfer none): An #IdePausable or %NULL
+ *
+ * Since: 3.32
  */
 IdePausable *
 ide_omni_pausable_row_get_pausable (IdeOmniPausableRow *self)

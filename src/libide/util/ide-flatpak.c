@@ -26,6 +26,8 @@
  * This function checks to see if the application is running within
  * a flatpak. This might be useful for cases where you need to perform
  * a different command when you are in the bundled flatpak version.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_is_flatpak (void)

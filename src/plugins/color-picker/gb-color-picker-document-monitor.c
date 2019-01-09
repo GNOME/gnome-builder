@@ -674,7 +674,7 @@ gb_color_picker_document_monitor_queue_oper_cb (gpointer data)
  * to the main loop. This can be useful for situations where you do not
  * know if you are in a path that must retain a valid GtkTextIter.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 static void
 gb_color_picker_document_monitor_queue_oper (GbColorPickerDocumentMonitor *self,
@@ -722,7 +722,7 @@ gb_color_picker_document_monitor_queue_oper (GbColorPickerDocumentMonitor *self,
  * to the main loop. This can be useful for situations where you do not
  * know if you are in a path that must retain a valid GtkTextIter.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 gb_color_picker_document_monitor_queue_colorize (GbColorPickerDocumentMonitor *self,
@@ -740,7 +740,7 @@ gb_color_picker_document_monitor_queue_colorize (GbColorPickerDocumentMonitor *s
  * to the main loop. This can be useful for situations where you do not
  * know if you are in a path that must retain a valid GtkTextIter.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 gb_color_picker_document_monitor_queue_uncolorize (GbColorPickerDocumentMonitor *self,

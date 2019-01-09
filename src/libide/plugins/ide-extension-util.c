@@ -224,6 +224,8 @@ collect_parameters (GType        type,
  * but looking at base-classes in addition to interface properties.
  *
  * Returns: (transfer full): a #PeasExtensionSet.
+ *
+ * Since: 3.32
  */
 PeasExtensionSet *
 ide_extension_set_new (PeasEngine     *engine,

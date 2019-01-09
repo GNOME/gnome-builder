@@ -90,6 +90,8 @@ ide_fixit_apply (IdeFixit *self)
  * Gets the text to replace the source range with.
  *
  * Returns: A string with the replacement text.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_fixit_get_text (IdeFixit *self)
@@ -107,6 +109,8 @@ ide_fixit_get_text (IdeFixit *self)
  * end location. [a,b)
  *
  * Returns: (transfer none): An #IdeSourceRange.
+ *
+ * Since: 3.32
  */
 IdeSourceRange *
 ide_fixit_get_range (IdeFixit *self)
@@ -125,6 +129,8 @@ ide_fixit_get_range (IdeFixit *self)
  * This function will never return a floating variant.
  *
  * Returns: (transfer full): a #GVariant
+ *
+ * Since: 3.32
  */
 GVariant *
 ide_fixit_to_variant (const IdeFixit *self)
@@ -154,7 +160,7 @@ ide_fixit_to_variant (const IdeFixit *self)
  *
  * Returns: (transfer full) (nullable): an #IdeFixit or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeFixit *
 ide_fixit_new_from_variant (GVariant *variant)

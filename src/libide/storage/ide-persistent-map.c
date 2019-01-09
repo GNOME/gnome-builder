@@ -226,6 +226,8 @@ ide_persistent_map_load_file_async (IdePersistentMap    *self,
  * @error: a location for a #GError, or %NULL
  *
  * Returns: Whether file is loaded or not.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_persistent_map_load_file_finish (IdePersistentMap  *self,
@@ -244,6 +246,8 @@ ide_persistent_map_load_file_finish (IdePersistentMap  *self,
  * @key: key to lookup value
  *
  * Returns: (transfer full) : value associalted with @key.
+ *
+ * Since: 3.32
  */
 GVariant *
 ide_persistent_map_lookup_value (IdePersistentMap *self,

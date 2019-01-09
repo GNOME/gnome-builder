@@ -299,7 +299,7 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
    * This can be used by the layout stack to alter the color of the
    * header to match that of the content.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   properties [PROP_PRIMARY_COLOR_BG] =
     g_param_spec_boxed ("primary-color-bg",
@@ -317,7 +317,7 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
    * This can be used by the layout stack to alter the color of the
    * foreground to match that of the content.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   properties [PROP_PRIMARY_COLOR_FG] =
     g_param_spec_boxed ("primary-color-fg",
@@ -346,6 +346,8 @@ ide_layout_view_class_init (IdeLayoutViewClass *klass)
    * set to %TRUE. The default is %FALSE.
    *
    * Returns: (transfer full): A newly created #IdeLayoutView
+   *
+   * Since: 3.32
    */
   signals [CREATE_SPLIT_VIEW] =
     g_signal_new (g_intern_static_string ("create-split-view"),
@@ -516,7 +518,7 @@ ide_layout_view_set_modified (IdeLayoutView *self,
  *
  * Returns: (transfer none) (nullable): A #GIcon or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GIcon *
 ide_layout_view_get_icon (IdeLayoutView *self)
@@ -612,7 +614,7 @@ ide_layout_view_set_can_split (IdeLayoutView *self,
  *
  * Returns: (nullable) (transfer full): A newly created #IdeLayoutView or %NULL.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeLayoutView *
 ide_layout_view_create_split_view (IdeLayoutView *self)
@@ -642,7 +644,7 @@ ide_layout_view_create_split_view (IdeLayoutView *self)
  *
  * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const GdkRGBA *
 ide_layout_view_get_primary_color_bg (IdeLayoutView *self)
@@ -662,7 +664,7 @@ ide_layout_view_get_primary_color_bg (IdeLayoutView *self)
  * Sets the #IdeLayoutView:primary-color-bg property.
  * If @primary_color_bg is %NULL, the property is unset.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_layout_view_set_primary_color_bg (IdeLayoutView *self,
@@ -704,7 +706,7 @@ ide_layout_view_set_primary_color_bg (IdeLayoutView *self,
  *
  * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const GdkRGBA *
 ide_layout_view_get_primary_color_fg (IdeLayoutView *self)
@@ -724,7 +726,7 @@ ide_layout_view_get_primary_color_fg (IdeLayoutView *self)
  * Sets the #IdeLayoutView:primary-color-fg property.
  * If @primary_color_fg is %NULL, the property is unset.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_layout_view_set_primary_color_fg (IdeLayoutView *self,
@@ -765,7 +767,7 @@ ide_layout_view_set_primary_color_fg (IdeLayoutView *self,
  * @format should be a printf-style format string followed by the
  * arguments for the format.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_layout_view_report_error (IdeLayoutView *self,

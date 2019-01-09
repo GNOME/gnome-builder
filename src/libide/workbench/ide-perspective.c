@@ -96,6 +96,8 @@ ide_perspective_default_init (IdePerspectiveInterface *iface)
  * perspective and return %FALSE.
  *
  * Returns: %TRUE to allow the workbench to continue shutting down.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_perspective_agree_to_shutdown (IdePerspective *self)
@@ -116,6 +118,8 @@ ide_perspective_agree_to_shutdown (IdePerspective *self)
  *
  * Returns: (nullable): A newly allcoated string that contains the icon-name
  *   to use for the perspective.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_perspective_get_icon_name (IdePerspective *self)
@@ -138,6 +142,8 @@ ide_perspective_get_icon_name (IdePerspective *self)
  * This value should be unique per workspace.
  *
  * Returns: (nullable): A string identifier for the perspective.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_perspective_get_id (IdePerspective *self)
@@ -165,6 +171,8 @@ ide_perspective_get_id (IdePerspective *self)
  * of its variants), the notifcation visual will be rendered with your icon.
  *
  * Returns: %TRUE if the perspective needs attention.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_perspective_get_needs_attention (IdePerspective *self)
@@ -182,6 +190,8 @@ ide_perspective_get_needs_attention (IdePerspective *self)
  * in the perspective selector and potentially other UI components.
  *
  * Returns: A string which will not be modified or freed.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_perspective_get_title (IdePerspective *self)
@@ -203,6 +213,8 @@ ide_perspective_get_title (IdePerspective *self)
  * creating a titlebar similar to other perspectives in Builder.
  *
  * Returns: (transfer none) (nullable): a #GtkWidget or %NULL.
+ *
+ * Since: 3.32
  */
 GtkWidget *
 ide_perspective_get_titlebar (IdePerspective *self)
@@ -219,6 +231,8 @@ ide_perspective_get_titlebar (IdePerspective *self)
  *
  * This interface method is used to notify the perspective that it is going into
  * fullscreen mode. The #IdeWorkbench will notify the perspective before it is displayed.
+ *
+ * Since: 3.32
  */
 void
 ide_perspective_set_fullscreen (IdePerspective *self,
@@ -236,6 +250,8 @@ ide_perspective_set_fullscreen (IdePerspective *self,
  * @user_data: user data for @callback.
  *
  * This interface method is used to iterate all #IdeLayoutView's that are descendents of @self.
+ *
+ * Since: 3.32
  */
 void
 ide_perspective_views_foreach (IdePerspective *self,
@@ -252,6 +268,8 @@ ide_perspective_views_foreach (IdePerspective *self,
  * ide_perspective_is_early:
  *
  * If %TRUE, the perspective can be used before loading a project.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_perspective_is_early (IdePerspective *self)
@@ -270,6 +288,8 @@ ide_perspective_is_early (IdePerspective *self)
  * register this accelerator on behalf of the perspective.
  *
  * Returns: (nullable) (transfer full): A newly allocated string or %NULL.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_perspective_get_accelerator (IdePerspective *self)

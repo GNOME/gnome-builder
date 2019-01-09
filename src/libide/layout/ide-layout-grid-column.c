@@ -347,6 +347,8 @@ _ide_layout_grid_column_is_empty (IdeLayoutGridColumn *self)
  * %NULL is returned.
  *
  * Returns: (transfer none) (nullable): an #IdeLayoutStack or %NULL.
+ *
+ * Since: 3.32
  */
 IdeLayoutStack *
 ide_layout_grid_column_get_current_stack (IdeLayoutGridColumn *self)

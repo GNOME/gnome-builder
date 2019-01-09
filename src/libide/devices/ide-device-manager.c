@@ -529,7 +529,7 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
    * user. This is the device we will try to deploy to when running, and
    * execute the application on.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_DEVICE] =
     g_param_spec_object ("device",
@@ -544,7 +544,7 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
    * The "progress" property is updated with a value between 0.0 and 1.0 while
    * the deployment is in progress.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_PROGRESS] =
     g_param_spec_double ("progress",
@@ -594,6 +594,8 @@ ide_device_manager_init (IdeDeviceManager *self)
  * Fetches the first device that matches the device identifier @device_id.
  *
  * Returns: (transfer none): An #IdeDevice or %NULL.
+ *
+ * Since: 3.32
  */
 IdeDevice *
 ide_device_manager_get_device_by_id (IdeDeviceManager *self,
@@ -625,7 +627,7 @@ ide_device_manager_get_device_by_id (IdeDeviceManager *self,
  *
  * Returns: (transfer none) (not nullable): an #IdeDevice
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeDevice *
 ide_device_manager_get_device (IdeDeviceManager *self)
@@ -660,7 +662,7 @@ ide_device_manager_get_device (IdeDeviceManager *self)
  *
  * If @device is %NULL, the local device will be used.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_device_manager_set_device (IdeDeviceManager *self,
@@ -904,7 +906,7 @@ ide_device_manager_deploy_completed (IdeDeviceManager *self,
  * be done before running the application so that the device has the most
  * up to date build.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_device_manager_deploy_async (IdeDeviceManager    *self,
@@ -981,7 +983,7 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_device_manager_deploy_finish (IdeDeviceManager  *self,

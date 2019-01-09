@@ -325,7 +325,7 @@ ide_test_provider_set_loading (IdeTestProvider *self,
  *
  * Requests the test provider reloads the tests.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_test_provider_reload (IdeTestProvider *self)

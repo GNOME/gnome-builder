@@ -119,7 +119,7 @@ ide_deploy_strategy_init (IdeDeployStrategy *self)
  * in build systems, how to determine that is an implementation detail of
  * the specific #IdeDeployStrategy.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_deploy_strategy_load_async (IdeDeployStrategy   *self,
@@ -150,7 +150,7 @@ ide_deploy_strategy_load_async (IdeDeployStrategy   *self,
  * Returns: %TRUE if successful and the pipeline was supported; otherwise
  *   %FALSE and @error is set.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
@@ -187,7 +187,7 @@ ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
  * If supported, the strategy will call @progress with periodic updates as
  * the application is deployed.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_deploy_strategy_deploy_async (IdeDeployStrategy     *self,
@@ -228,7 +228,7 @@ ide_deploy_strategy_deploy_async (IdeDeployStrategy     *self,
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_deploy_strategy_deploy_finish (IdeDeployStrategy  *self,

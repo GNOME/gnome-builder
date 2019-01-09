@@ -411,6 +411,8 @@ ide_xml_service_get_root_node_cb (GObject      *object,
  *
  * The xml service is meant to be used with buffers, that is,
  * by extension, loaded views.
+ *
+ * Since: 3.32
  */
 void
 ide_xml_service_get_root_node_async (IdeXmlService       *self,
@@ -472,6 +474,8 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
  * See ide_xml_service_get_root_node_async() for more information.
  *
  * Returns: (transfer full): An #IdeXmlSymbolNode or %NULL up on failure.
+ *
+ * Since: 3.32
  */
 IdeXmlSymbolNode *
 ide_xml_service_get_root_node_finish (IdeXmlService  *self,
@@ -525,6 +529,8 @@ ide_xml_service_get_diagnostics_cb (GObject      *object,
  *
  * The xml service is meant to be used with buffers, that is,
  * by extension, loaded views.
+ *
+ * Since: 3.32
  */
 void
 ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
@@ -589,6 +595,8 @@ ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
  * See ide_xml_service_get_diagnostics_async() for more information.
  *
  * Returns: (transfer full): An #IdeDiagnostics or %NULL on failure.
+ *
+ * Since: 3.32
  */
 IdeDiagnostics *
 ide_xml_service_get_diagnostics_finish (IdeXmlService  *self,
@@ -1141,6 +1149,8 @@ ide_xml_service_init (IdeXmlService *self)
  * Gets the #IdeXmlSymbolNode root node for the corresponding file.
  *
  * Returns: (transfer NULL): A xml symbol node.
+ *
+ * Since: 3.32
  */
 IdeXmlSymbolNode *
 ide_xml_service_get_cached_root_node (IdeXmlService *self,
@@ -1165,6 +1175,8 @@ ide_xml_service_get_cached_root_node (IdeXmlService *self,
  * Gets the #IdeDiagnostics for the corresponding file.
  *
  * Returns: (transfer NULL): an #IdeDiagnostics.
+ *
+ * Since: 3.32
  */
 IdeDiagnostics *
 ide_xml_service_get_cached_diagnostics (IdeXmlService *self,
@@ -1189,6 +1201,8 @@ ide_xml_service_get_cached_diagnostics (IdeXmlService *self,
  * Gets the #DzlTaskCache for the xml schemas.
  *
  * Returns: (transfer NULL): a #DzlTaskCache.
+ *
+ * Since: 3.32
  */
 DzlTaskCache *
 ide_xml_service_get_schemas_cache (IdeXmlService *self)

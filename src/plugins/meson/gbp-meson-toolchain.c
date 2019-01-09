@@ -125,7 +125,7 @@ gbp_meson_toolchain_load (GbpMesonToolchain  *self,
  *
  * Returns: (transfer none): the path to the Meson cross-file.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 const gchar *
 gbp_meson_toolchain_get_file_path (GbpMesonToolchain  *self)

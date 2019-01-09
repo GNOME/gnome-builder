@@ -39,6 +39,8 @@
  * @include: glib.h
  *
  * FIXME
+ *
+ * Since: 3.32
  */
 
 /**
@@ -93,6 +95,8 @@
  * in the corresponding #IdeUri fields, even if the #IdeUriParseFlags
  * would otherwise call for decoding it. You can use the flag
  * %IDE_URI_PARSE_UTF8_ONLY to cause this case to be an error instead.
+ *
+ * Since: 3.32
  */
 
 /**
@@ -118,6 +122,8 @@
  *     encountered in the URI.
  *
  * Flags that control how a URI string is parsed (or re-parsed).
+ *
+ * Since: 3.32
  */
 
 struct _IdeUri
@@ -554,6 +560,8 @@ parse_userinfo (const gchar       *raw_userinfo,
  * valid absolute URI, it will be discarded, and an error returned.
  *
  * Return value: a new #IdeUri.
+ *
+ * Since: 3.32
  */
 IdeUri *
 ide_uri_new (const gchar       *uri_string,
@@ -575,6 +583,8 @@ ide_uri_new (const gchar       *uri_string,
  * absolute URI, it will be discarded, and an error returned.
  *
  * Return value: a new #IdeUri.
+ *
+ * Since: 3.32
  */
 IdeUri *
 ide_uri_new_relative (IdeUri            *base_uri,
@@ -742,6 +752,8 @@ ide_uri_new_relative (IdeUri            *base_uri,
  * Returns a string representing @uri.
  *
  * Return value: a string representing @uri, which the caller must free.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_uri_to_string (IdeUri              *uri,
@@ -818,6 +830,8 @@ ide_uri_to_string (IdeUri              *uri,
  * Copies @uri
  *
  * Return value: a copy of @uri
+ *
+ * Since: 3.32
  */
 IdeUri *
 ide_uri_copy (IdeUri *uri)
@@ -848,6 +862,8 @@ ide_uri_copy (IdeUri *uri)
  * Increments the reference count of @uri by one.
  *
  * Returns: (transfer full): uri
+ *
+ * Since: 3.32
  */
 IdeUri *
 ide_uri_ref (IdeUri *uri)
@@ -866,6 +882,8 @@ ide_uri_ref (IdeUri *uri)
  *
  * Decrements the reference count of @uri by 1. If the reference count
  * reaches zero, the structure will be freed.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_unref (IdeUri *uri)
@@ -909,6 +927,8 @@ ide_uri_unref (IdeUri *uri)
  * delimiters as appropriate), and returns the pieces. Components that
  * are not present in @uri_string will be set to %NULL (but note that
  * the path is always present, though it may be an empty string).
+ *
+ * Since: 3.32
  */
 void
 ide_uri_split (const gchar  *uri_string,
@@ -1103,6 +1123,8 @@ str_ascii_case_equal (gconstpointer v1,
  * of attribute/value pairs. Both names and values will be fully-decoded. If
  * @params cannot be parsed (eg, it contains two @separator characters in a
  * row), then %NULL is returned.
+ *
+ * Since: 3.32
  */
 GHashTable *
 ide_uri_parse_params (const gchar *params,
@@ -1185,6 +1207,8 @@ ide_uri_parse_params (const gchar *params,
  * are mandatory.
  *
  * Return value: %TRUE on success, %FALSE on failure.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_uri_parse_host (const gchar       *uri_string,
@@ -1237,6 +1261,8 @@ ide_uri_parse_host (const gchar       *uri_string,
  * Gets @uri's scheme.
  *
  * Return value: @uri's scheme.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_uri_get_scheme (IdeUri *uri)
@@ -1250,6 +1276,8 @@ ide_uri_get_scheme (IdeUri *uri)
  * @scheme: the URI scheme
  *
  * Sets @uri's scheme to @scheme.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_scheme (IdeUri      *uri,
@@ -1269,6 +1297,8 @@ ide_uri_set_scheme (IdeUri      *uri,
  * userinfo is considered the user.
  *
  * Return value: @uri's user.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_uri_get_user (IdeUri *uri)
@@ -1283,6 +1313,8 @@ ide_uri_get_user (IdeUri *uri)
  *
  * Sets @uri's user to @user. See ide_uri_get_user() for a description
  * of how this interacts with various parsing flags.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_user (IdeUri      *uri,
@@ -1300,6 +1332,8 @@ ide_uri_set_user (IdeUri      *uri,
  * %IDE_URI_PARSE_PASSWORD, this will always be %NULL.
  *
  * Return value: @uri's password.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_uri_get_password (IdeUri *uri)
@@ -1313,6 +1347,8 @@ ide_uri_get_password (IdeUri *uri)
  * @password: the password, or %NULL
  *
  * Sets @uri's password to @password.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_password (IdeUri      *uri,
@@ -1331,6 +1367,8 @@ ide_uri_set_password (IdeUri      *uri,
  * information.
  *
  * Return value: @uri's authentication parameters.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_uri_get_auth_params (IdeUri *uri)
@@ -1344,6 +1382,8 @@ ide_uri_get_auth_params (IdeUri *uri)
  * @auth_params: the authentication parameters, or %NULL
  *
  * Sets @uri's authentication parameters to @auth_params.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_auth_params (IdeUri      *uri,
@@ -1362,6 +1402,8 @@ ide_uri_set_auth_params (IdeUri      *uri,
  * syntax.
  *
  * Return value: @uri's host.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_uri_get_host (IdeUri *uri)
@@ -1379,6 +1421,8 @@ ide_uri_get_host (IdeUri *uri)
  * If @host is an IPv6 IP address, it should not include the brackets
  * required by the URI syntax; they will be added automatically when
  * converting @uri to a string.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_host (IdeUri      *uri,
@@ -1395,6 +1439,8 @@ ide_uri_set_host (IdeUri      *uri,
  * Gets @uri's port.
  *
  * Return value: @uri's port, or %0 if it was unset
+ *
+ * Since: 3.32
  */
 gushort
 ide_uri_get_port (IdeUri *uri)
@@ -1409,6 +1455,8 @@ ide_uri_get_port (IdeUri *uri)
  *
  * Sets @uri's port to @port. If @port is 0, it will not be output
  * when calling ide_uri_to_string().
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_port (IdeUri  *uri,
@@ -1425,6 +1473,8 @@ ide_uri_set_port (IdeUri  *uri,
  * on the flags with which @uri was parsed.
  *
  * Return value: @uri's path.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_uri_get_path (IdeUri *uri)
@@ -1444,6 +1494,8 @@ ide_uri_get_path (IdeUri *uri)
  * unencoded '?' or '#' character, it will get encoded, since
  * otherwise converting @uri to a string and then back to a #IdeUri
  * again would give a different result.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_path (IdeUri      *uri,
@@ -1464,6 +1516,8 @@ ide_uri_set_path (IdeUri      *uri,
  * ide_uri_parse_params() may be useful.
  *
  * Return value: @uri's query.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_uri_get_query (IdeUri *uri)
@@ -1479,6 +1533,8 @@ ide_uri_get_query (IdeUri *uri)
  * Sets @uri's query to @query, which is assumed to have been
  * %<!-- -->-encoded by the caller. See ide_uri_set_path() for more
  * details.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_query (IdeUri      *uri,
@@ -1496,6 +1552,8 @@ ide_uri_set_query (IdeUri      *uri,
  * depending on the flags with which @uri was parsed.
  *
  * Return value: @uri's fragment.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_uri_get_fragment (IdeUri *uri)
@@ -1511,6 +1569,8 @@ ide_uri_get_fragment (IdeUri *uri)
  * Sets @uri's fragment to @fragment, which is assumed to have been
  * %<!-- -->-encoded by the caller. See ide_uri_set_path() for more
  * details.
+ *
+ * Since: 3.32
  */
 void
 ide_uri_set_fragment (IdeUri      *uri,
@@ -1533,6 +1593,8 @@ ide_uri_error_quark (void)
  * Creates a new #IdeUri from the uri provided by @file.
  *
  * Returns: (transfer full): A newly allcoated #IdeUri.
+ *
+ * Since: 3.32
  */
 IdeUri *
 ide_uri_new_from_file (GFile *file)
@@ -1581,6 +1643,8 @@ ide_uri_is_file (IdeUri *uri,
  * Creates a #GFile that represents the resource @uri.
  *
  * Returns: (transfer full) (nullable): a #GFile or %NULL upon failure.
+ *
+ * Since: 3.32
  */
 GFile *
 ide_uri_to_file (IdeUri *uri)

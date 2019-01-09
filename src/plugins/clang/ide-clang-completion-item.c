@@ -434,6 +434,8 @@ ide_clang_completion_item_init (IdeClangCompletionItem *self)
  * Gets the #IdeSnippet to be inserted when expanding this completion item.
  *
  * Returns: (transfer full): An #IdeSnippet.
+ *
+ * Since: 3.32
  */
 IdeSnippet *
 ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
@@ -454,6 +456,8 @@ ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
  * The @keyword parameter is not copied, it is expected to be valid
  * string found within @variant (and therefore associated with its
  * life-cycle).
+ *
+ * Since: 3.32
  */
 IdeClangCompletionItem *
 ide_clang_completion_item_new (GVariant    *variant,

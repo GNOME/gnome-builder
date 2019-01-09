@@ -499,6 +499,8 @@ ide_extension_set_adapter_init (IdeExtensionSetAdapter *self)
  * Gets the #IdeExtensionSetAdapter:engine property.
  *
  * Returns: (transfer none): a #PeasEngine.
+ *
+ * Since: 3.32
  */
 PeasEngine *
 ide_extension_set_adapter_get_engine (IdeExtensionSetAdapter *self)
@@ -576,6 +578,8 @@ ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
  * @user_data: user data for @foreach_func
  *
  * Calls @foreach_func for every extension loaded by the extension set.
+ *
+ * Since: 3.32
  */
 void
 ide_extension_set_adapter_foreach (IdeExtensionSetAdapter            *self,
@@ -627,6 +631,8 @@ sort_by_priority (gconstpointer a,
  * @user_data: user data for @foreach_func
  *
  * Calls @foreach_func for every extension loaded by the extension set.
+ *
+ * Since: 3.32
  */
 void
 ide_extension_set_adapter_foreach_by_priority (IdeExtensionSetAdapter            *self,
@@ -710,6 +716,8 @@ ide_extension_set_adapter_new (IdeContext  *context,
  * Locates the extension owned by @plugin_info if such extension exists.
  *
  * Returns: (transfer none) (nullable): a #PeasExtension or %NULL
+ *
+ * Since: 3.32
  */
 PeasExtension *
 ide_extension_set_adapter_get_extension (IdeExtensionSetAdapter *self,

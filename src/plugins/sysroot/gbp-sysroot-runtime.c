@@ -62,6 +62,8 @@ gbp_sysroot_runtime_new (IdeContext  *context,
  * Gets the associated unique identifier of the sysroot target.
  *
  * Returns: (transfer none): the unique identifier of the sysroot target.
+ *
+ * Since: 3.32
  */
 const gchar *
 gbp_sysroot_runtime_get_sysroot_id (GbpSysrootRuntime *self)

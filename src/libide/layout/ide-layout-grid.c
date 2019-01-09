@@ -46,7 +46,7 @@
  * to see all possible views in the stack, use the
  * ide_layout_grid_foreach_view() API.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 
 typedef struct
@@ -860,6 +860,8 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
    * Creates a new stack to be added to the grid.
    *
    * Returns: (transfer full): A newly created #IdeLayoutStack
+   *
+   * Since: 3.32
    */
   signals [CREATE_STACK] =
     g_signal_new (g_intern_static_string ("create-stack"),
@@ -878,7 +880,7 @@ ide_layout_grid_class_init (IdeLayoutGridClass *klass)
    *
    * Returns: (transfer full): A newly created #IdeLayoutView
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   signals [CREATE_VIEW] =
     g_signal_new (g_intern_static_string ("create-view"),
@@ -925,7 +927,7 @@ ide_layout_grid_init (IdeLayoutGrid *self)
  *
  * Returns: (transfer full): A newly created #IdeLayoutGrid
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GtkWidget *
 ide_layout_grid_new (void)
@@ -942,7 +944,7 @@ ide_layout_grid_new (void)
  *
  * Returns: (transfer none) (nullable): an #IdeLayoutStack or %NULL.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeLayoutStack *
 ide_layout_grid_get_current_stack (IdeLayoutGrid *self)
@@ -972,6 +974,8 @@ ide_layout_grid_get_current_stack (IdeLayoutGrid *self)
  * column at the end of the grid is created.
  *
  * Returns: (transfer none): An #IdeLayoutGridColumn.
+ *
+ * Since: 3.32
  */
 IdeLayoutGridColumn *
 ide_layout_grid_get_nth_column (IdeLayoutGrid *self,
@@ -1048,6 +1052,8 @@ _ide_layout_grid_get_nth_stack (IdeLayoutGrid *self,
  * will be created at the bottom.
  *
  * Returns: (not nullable) (transfer none): An #IdeLayoutStack.
+ *
+ * Since: 3.32
  */
 IdeLayoutStack *
 _ide_layout_grid_get_nth_stack_for_column (IdeLayoutGrid       *self,
@@ -1089,6 +1095,8 @@ _ide_layout_grid_get_nth_stack_for_column (IdeLayoutGrid       *self,
  * Gets the most recently focused column of the grid.
  *
  * Returns: (transfer none) (not nullable): An #IdeLayoutGridColumn
+ *
+ * Since: 3.32
  */
 IdeLayoutGridColumn *
 ide_layout_grid_get_current_column (IdeLayoutGrid *self)
@@ -1123,6 +1131,8 @@ ide_layout_grid_get_current_column (IdeLayoutGrid *self)
  * updated for you when the focus changes within the workbench.
  *
  * @column can be %NULL out of convenience.
+ *
+ * Since: 3.32
  */
 void
 ide_layout_grid_set_current_column (IdeLayoutGrid       *self,
@@ -1165,7 +1175,7 @@ ide_layout_grid_set_current_column (IdeLayoutGrid       *self,
  *
  * Returns: (transfer none): An #IdeLayoutView or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeLayoutView *
 ide_layout_grid_get_current_view (IdeLayoutGrid *self)
@@ -1198,7 +1208,7 @@ collect_views (GtkWidget *widget,
  *
  * This function will call @callback for every view found in @self.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_layout_grid_foreach_view (IdeLayoutGrid *self,
@@ -1423,6 +1433,8 @@ ide_layout_grid_count_views (IdeLayoutGrid *self)
  * If an #IdeLayoutView was focused, it will be returned to the caller.
  *
  * Returns: (transfer none) (nullable): An #IdeLayoutView or %NULL
+ *
+ * Since: 3.32
  */
 IdeLayoutView *
 ide_layout_grid_focus_neighbor (IdeLayoutGrid    *self,

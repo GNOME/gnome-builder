@@ -38,6 +38,8 @@
  * various sections that have been added to the sidebar.
  *
  * Use ide_editor_sidebar_add_section() to add a section to the sidebar.
+ *
+ * Since: 3.32
  */
 
 struct _IdeEditorSidebar
@@ -234,7 +236,7 @@ ide_editor_sidebar_init (IdeEditorSidebar *self)
  *
  * Returns: (transfer full): A new #IdeEditorSidebar
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GtkWidget *
 ide_editor_sidebar_new (void)
@@ -300,7 +302,7 @@ find_position (IdeEditorSidebar *self,
  *
  * To remove your section, call gtk_widget_destroy() on @section.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_sidebar_add_section (IdeEditorSidebar *self,
@@ -362,7 +364,7 @@ ide_editor_sidebar_add_section (IdeEditorSidebar *self,
  *
  * Returns: (nullable): The id of the current section if it registered one.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const gchar *
 ide_editor_sidebar_get_section_id (IdeEditorSidebar *self)
@@ -379,7 +381,7 @@ ide_editor_sidebar_get_section_id (IdeEditorSidebar *self)
  *
  * Changes the current section to @section_id.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_sidebar_set_section_id (IdeEditorSidebar *self,
@@ -478,6 +480,8 @@ create_open_page_row (gpointer item,
  * This private function is used to set the GListModel to use for the list
  * of open pages in the sidebar. It should contain a list of IdeLayoutView
  * which we will use to keep the rows up to date.
+ *
+ * Since: 3.32
  */
 void
 _ide_editor_sidebar_set_open_pages (IdeEditorSidebar *self,

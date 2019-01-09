@@ -115,7 +115,7 @@ ide_project_writer_unlock (IdeProject *self)
  *
  * Returns: (transfer full): a new string
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gchar *
 ide_project_create_id (const gchar *name)
@@ -171,6 +171,8 @@ _ide_project_set_name (IdeProject  *self,
  * ide_project_writer_unlock() when you are no longer modifiying the tree.
  *
  * Returns: (transfer none): An #IdeProjectItem.
+ *
+ * Since: 3.32
  */
 IdeProjectItem *
 ide_project_get_root (IdeProject *self)

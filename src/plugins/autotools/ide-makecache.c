@@ -143,6 +143,8 @@ is_target_interesting (const gchar *target)
  * ide_makecache_get_file_targets_searched:
  *
  * Returns: (transfer container): a #GPtrArray of #IdeMakecacheTarget.
+ *
+ * Since: 3.32
  */
 static GPtrArray *
 ide_makecache_get_file_targets_searched (GMappedFile *mapped,
@@ -1243,6 +1245,8 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
  * Completes an asynchronous request to ide_makecache_get_file_flags_async().
  *
  * Returns: (transfer container) (element-type Ide.MakecacheTarget): An array of targets.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_makecache_get_file_targets_finish (IdeMakecache  *self,

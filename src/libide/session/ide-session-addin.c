@@ -90,7 +90,7 @@ ide_session_addin_default_init (IdeSessionAddinInterface *iface)
  * The resulting state will be provided when restoring the addin
  * at a future time.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_session_addin_save_async (IdeSessionAddin     *self,
@@ -114,7 +114,7 @@ ide_session_addin_save_async (IdeSessionAddin     *self,
  *
  * Returns: (transfer full) (nullable): a #GVariant or %NULL.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GVariant *
 ide_session_addin_save_finish (IdeSessionAddin  *self,
@@ -137,7 +137,7 @@ ide_session_addin_save_finish (IdeSessionAddin  *self,
  *
  * Asynchronous request to restore session state by the addin.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_session_addin_restore_async (IdeSessionAddin     *self,

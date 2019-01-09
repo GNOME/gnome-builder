@@ -65,7 +65,7 @@ ide_hover_provider_default_init (IdeHoverProviderInterface *iface)
  * This method is used to load an #IdeHoverProvider.
  * Providers should perform any startup work from here.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_hover_provider_load (IdeHoverProvider *self,
@@ -86,7 +86,7 @@ ide_hover_provider_load (IdeHoverProvider *self,
  * This method is used to unload an #IdeHoverProvider.
  * Providers should cleanup any state they've allocated.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_hover_provider_unload (IdeHoverProvider *self,
@@ -108,7 +108,7 @@ ide_hover_provider_unload (IdeHoverProvider *self,
  * @user_data: closure data for @callback
  *
  * 
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_hover_provider_hover_async (IdeHoverProvider    *self,
@@ -134,7 +134,7 @@ ide_hover_provider_hover_async (IdeHoverProvider    *self,
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_hover_provider_hover_finish (IdeHoverProvider  *self,

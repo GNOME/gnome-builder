@@ -168,6 +168,8 @@ ide_langserv_symbol_tree_build (IdeLangservSymbolTree *self)
  * Creates a new #IdeLangservSymbolTree but takes ownership of @ar.
  *
  * Returns: (transfer full): A newly allocated #IdeLangservSymbolTree.
+ *
+ * Since: 3.32
  */
 IdeLangservSymbolTree *
 ide_langserv_symbol_tree_new (GPtrArray *symbols)

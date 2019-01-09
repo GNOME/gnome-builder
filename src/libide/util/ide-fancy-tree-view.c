@@ -38,7 +38,7 @@
  * It only has a single column, and comes setup with a single
  * cell (an #IdeCellRendererFancy) to render the conten.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 
 typedef struct
@@ -175,7 +175,7 @@ ide_fancy_tree_view_new (void)
  * Sets the data func to use to update the text for the
  * #IdeCellRendererFancy cell renderer.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_fancy_tree_view_set_data_func (IdeFancyTreeView      *self,

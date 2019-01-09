@@ -469,6 +469,8 @@ ide_build_stage_launcher_init (IdeBuildStageLauncher *self)
  * ide_build_stage_launcher_get_launcher:
  *
  * Returns: (transfer none): An #IdeSubprocessLauncher
+ *
+ * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_build_stage_launcher_get_launcher (IdeBuildStageLauncher *self)
@@ -502,6 +504,8 @@ ide_build_stage_launcher_set_launcher (IdeBuildStageLauncher *self,
  * #IdeBuildPipeline.
  *
  * Returns: (transfer full): An #IdeBuildStageLauncher
+ *
+ * Since: 3.32
  */
 IdeBuildStage *
 ide_build_stage_launcher_new (IdeContext            *context,
@@ -520,6 +524,8 @@ ide_build_stage_launcher_new (IdeContext            *context,
  *
  * If set to %TRUE, a non-zero exit status from the subprocess will not cause
  * the build stage to fail.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_build_stage_launcher_get_ignore_exit_status (IdeBuildStageLauncher *self)
@@ -538,6 +544,8 @@ ide_build_stage_launcher_get_ignore_exit_status (IdeBuildStageLauncher *self)
  *
  * If set to %TRUE, a non-zero exit status from the subprocess will not cause
  * the build stage to fail.
+ *
+ * Since: 3.32
  */
 void
 ide_build_stage_launcher_set_ignore_exit_status (IdeBuildStageLauncher *self,
@@ -578,6 +586,8 @@ ide_build_stage_launcher_set_clean_launcher (IdeBuildStageLauncher *self,
  * ide_build_stage_launcher_get_clean_launcher:
  *
  * Returns: (nullable) (transfer none): An #IdeSubprocessLauncher or %NULL.
+ *
+ * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_build_stage_launcher_get_clean_launcher (IdeBuildStageLauncher *self)
@@ -606,7 +616,7 @@ ide_build_stage_launcher_get_use_pty (IdeBuildStageLauncher *self)
  *
  * If @use_pty is set to %TRUE, a Pty will be attached to the process.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_build_stage_launcher_set_use_pty (IdeBuildStageLauncher *self,

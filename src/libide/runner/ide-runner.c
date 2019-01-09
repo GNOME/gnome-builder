@@ -657,6 +657,8 @@ ide_runner_class_init (IdeRunnerClass *klass)
    * that the runner cannot be executed due to an external issue. One such
    * example might be a debugger plugin that cannot locate a suitable debugger
    * to run the program.
+   *
+   * Since: 3.32
    */
   properties [PROP_FAILED] =
     g_param_spec_boolean ("failed",
@@ -670,6 +672,8 @@ ide_runner_class_init (IdeRunnerClass *klass)
    *
    * The "run-on-host" property indicates the program should be run on the
    * host machine rather than inside the application sandbox.
+   *
+   * Since: 3.32
    */
   properties [PROP_RUN_ON_HOST] =
     g_param_spec_boolean ("run-on-host",
@@ -688,7 +692,7 @@ ide_runner_class_init (IdeRunnerClass *klass)
    * or whether it's a graphical application, a command line tool or a test
    * program.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_BUILD_TARGET] =
     g_param_spec_object ("build-target",
@@ -736,6 +740,8 @@ ide_runner_init (IdeRunner *self)
  * ide_runner_get_stdin:
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
+ *
+ * Since: 3.32
  */
 GOutputStream *
 ide_runner_get_stdin (IdeRunner *self)
@@ -749,6 +755,8 @@ ide_runner_get_stdin (IdeRunner *self)
  * ide_runner_get_stdout:
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
+ *
+ * Since: 3.32
  */
 GInputStream *
 ide_runner_get_stdout (IdeRunner *self)
@@ -762,6 +770,8 @@ ide_runner_get_stdout (IdeRunner *self)
  * ide_runner_get_stderr:
  *
  * Returns: (nullable) (transfer full): An #GOutputStream or %NULL.
+ *
+ * Since: 3.32
  */
 GInputStream *
 ide_runner_get_stderr (IdeRunner *self)
@@ -809,6 +819,8 @@ ide_runner_set_argv (IdeRunner           *self,
  * ide_runner_get_environment:
  *
  * Returns: (transfer none): The #IdeEnvironment the process launched uses.
+ *
+ * Since: 3.32
  */
 IdeEnvironment *
 ide_runner_get_environment (IdeRunner *self)
@@ -827,6 +839,8 @@ ide_runner_get_environment (IdeRunner *self)
  *
  * Returns: (transfer full): A newly allocated string array that should
  *   be freed with g_strfreev().
+ *
+ * Since: 3.32
  */
 gchar **
 ide_runner_get_argv (IdeRunner *self)
@@ -1214,6 +1228,8 @@ sort_fd_mapping (gconstpointer a,
  * within the destination process.
  *
  * Returns: @dest_fd or the FD or the next available dest_fd.
+ *
+ * Since: 3.32
  */
 gint
 ide_runner_take_fd (IdeRunner *self,
@@ -1266,6 +1282,8 @@ ide_runner_take_fd (IdeRunner *self,
  * program is available (such as gdb, perf, strace, etc).
  *
  * Returns: (nullable) (transfer full): An #IdeRuntime or %NULL.
+ *
+ * Since: 3.32
  */
 IdeRuntime *
 ide_runner_get_runtime (IdeRunner *self)
@@ -1325,7 +1343,7 @@ ide_runner_set_failed (IdeRunner *self,
  *
  * Returns: (nullable): The current working directory, or %NULL.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 const gchar *
 ide_runner_get_cwd (IdeRunner *self)
@@ -1344,7 +1362,7 @@ ide_runner_get_cwd (IdeRunner *self)
  *
  * Sets the directory to use when spawning the runner.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_runner_set_cwd (IdeRunner   *self,
@@ -1370,7 +1388,7 @@ ide_runner_set_cwd (IdeRunner   *self,
  * Helper to call ide_runner_append_argv() for every argument
  * contained in @args.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_runner_push_args (IdeRunner           *self,
@@ -1392,7 +1410,7 @@ ide_runner_push_args (IdeRunner           *self,
  * Returns: (nullable) (transfer none): The %IdeBuildTarget associated with this %IdeRunner, or %NULL.
  *   See #IdeRunner:build-target for details.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeBuildTarget *
 ide_runner_get_build_target (IdeRunner *self)
@@ -1411,7 +1429,7 @@ ide_runner_get_build_target (IdeRunner *self)
  *
  * Sets the build target associated with this runner.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_runner_set_build_target (IdeRunner      *self,

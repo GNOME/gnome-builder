@@ -44,7 +44,7 @@
  * In doing so, we can use #GStringChunk for the meta-data, and then only
  * create all the small strings when we inflate the snippet and its chunks.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 
 struct _IdeSnippetStorage
@@ -258,7 +258,7 @@ ide_snippet_storage_add (IdeSnippetStorage *self,
  *
  * This will call @foreach for every item that has been loaded.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_snippet_storage_foreach (IdeSnippetStorage        *self,
@@ -305,7 +305,7 @@ query_compare (gconstpointer a,
  * This will call @foreach for every info that matches the query. This is
  * useful when building autocompletion lists based on word prefixes.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_snippet_storage_query (IdeSnippetStorage        *self,

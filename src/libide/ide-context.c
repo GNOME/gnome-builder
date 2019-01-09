@@ -98,7 +98,7 @@
  * ide_context_hold() and ide_context_release() functions to prevent
  * pre-mature unloading.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 
 #define RESTORE_FILES_MAX_FILES 20
@@ -229,6 +229,8 @@ ide_context_log_observer (IdeBuildLogStream  log_stream,
  * that should be used for the workbench.
  *
  * Returns: (transfer none): a #GtkRecentManager.
+ *
+ * Since: 3.32
  */
 GtkRecentManager *
 ide_context_get_recent_manager (IdeContext *self)
@@ -246,6 +248,8 @@ ide_context_get_recent_manager (IdeContext *self)
  * to hook into the load and save process.
  *
  * Returns: (transfer none): An #IdeBufferManager.
+ *
+ * Since: 3.32
  */
 IdeBufferManager *
 ide_context_get_buffer_manager (IdeContext *self)
@@ -259,6 +263,8 @@ ide_context_get_buffer_manager (IdeContext *self)
  * ide_context_get_build_manager:
  *
  * Returns: (transfer none): An #IdeBuildManager.
+ *
+ * Since: 3.32
  */
 IdeBuildManager *
 ide_context_get_build_manager (IdeContext *self)
@@ -274,6 +280,8 @@ ide_context_get_build_manager (IdeContext *self)
  * Fetches the "build-system" property of @context.
  *
  * Returns: (transfer none): An #IdeBuildSystem.
+ *
+ * Since: 3.32
  */
 IdeBuildSystem *
 ide_context_get_build_system (IdeContext *self)
@@ -291,6 +299,8 @@ ide_context_get_build_system (IdeContext *self)
  * LibIDE.
  *
  * Returns: (transfer none): An #IdeDeviceManager.
+ *
+ * Since: 3.32
  */
 IdeDeviceManager *
 ide_context_get_device_manager (IdeContext *self)
@@ -307,7 +317,7 @@ ide_context_get_device_manager (IdeContext *self)
  *
  * Returns: (transfer none): An #IdeSnippetStorage.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeSnippetStorage *
 ide_context_get_snippets (IdeContext *self)
@@ -324,6 +334,8 @@ ide_context_get_snippets (IdeContext *self)
  * open buffers in the IDE.
  *
  * Returns: (transfer none): An #IdeUnsavedFiles.
+ *
+ * Since: 3.32
  */
 IdeUnsavedFiles *
 ide_context_get_unsaved_files (IdeContext *self)
@@ -340,6 +352,8 @@ ide_context_get_unsaved_files (IdeContext *self)
  * could be found, this will return an #IdeDirectoryVcs.
  *
  * Returns: (transfer none): An #IdeVcs.
+ *
+ * Since: 3.32
  */
 IdeVcs *
 ide_context_get_vcs (IdeContext *self)
@@ -403,6 +417,8 @@ ide_context_new_async (GFile               *project_file,
  *
  * Returns: (transfer full): An #IdeContext or %NULL upon failure and
  *   @error is set.
+ *
+ * Since: 3.32
  */
 IdeContext *
 ide_context_new_finish (GAsyncResult  *result,
@@ -426,6 +442,8 @@ ide_context_new_finish (GAsyncResult  *result,
  * Retrieves the #IdeProject for the context.
  *
  * Returns: (transfer none): An #IdeContext.
+ *
+ * Since: 3.32
  */
 IdeProject *
 ide_context_get_project (IdeContext *self)
@@ -442,6 +460,8 @@ ide_context_get_project (IdeContext *self)
  * the context.
  *
  * Returns: (transfer none): a #GFile.
+ *
+ * Since: 3.32
  */
 GFile *
 ide_context_get_project_file (IdeContext *self)
@@ -467,6 +487,8 @@ ide_context_set_project_file (IdeContext *self,
  * Retrieves the search engine for the context.
  *
  * Returns: (transfer none): An #IdeSearchEngine.
+ *
+ * Since: 3.32
  */
 IdeSearchEngine *
 ide_context_get_search_engine (IdeContext *self)
@@ -486,6 +508,8 @@ ide_context_get_search_engine (IdeContext *self)
  * created, started, and returned.
  *
  * Returns: (type Ide.Service) (transfer none) (nullable): An #IdeService or %NULL.
+ *
+ * Since: 3.32
  */
 gpointer
 ide_context_get_service_typed (IdeContext *self,
@@ -826,6 +850,8 @@ ide_context_class_init (IdeContextClass *klass)
    * Plugins and services might want to get notified of this to perform
    * work that requires subsystems that may not be loaded during context
    * startup.
+   *
+   * Since: 3.32
    */
   signals [LOADED] =
     g_signal_new_class_handler ("loaded",
@@ -844,7 +870,7 @@ ide_context_class_init (IdeContextClass *klass)
    * The "log" signal is emitted when ide_context_warning()
    * or other log messages are sent.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   signals [LOG] =
     g_signal_new_class_handler ("log",
@@ -2182,6 +2208,8 @@ ide_context_do_unload_locked (IdeContext *self)
  * If there is a hold on the #IdeContext, created by ide_context_hold(), then
  * the unload request will be delayed until the appropriate number of calls to
  * ide_context_release() have been called.
+ *
+ * Since: 3.32
  */
 void
 ide_context_unload_async (IdeContext          *self,
@@ -2347,6 +2375,8 @@ _ide_context_is_restoring (IdeContext *self)
  * Project settings will be applied to first, followed by global settings.
  *
  * Returns: (transfer full): An #IdeSettings.
+ *
+ * Since: 3.32
  */
 IdeSettings *
 ide_context_get_settings (IdeContext  *self,
@@ -2369,6 +2399,8 @@ ide_context_get_settings (IdeContext  *self,
  * If ide_context_unload_async() is called while a hold is in progress, the
  * unload will be delayed until ide_context_release() has been called the
  * same number of times as ide_context_hold().
+ *
+ * Since: 3.32
  */
 void
 ide_context_hold (IdeContext *self)
@@ -2389,6 +2421,8 @@ ide_context_hold (IdeContext *self)
  * @instance: (type GObject.Object): a #GObject instance
  *
  * Adds a hold on @self for the lifetime of @instance.
+ *
+ * Since: 3.32
  */
 void
 ide_context_hold_for_object (IdeContext *self,
@@ -2409,6 +2443,8 @@ ide_context_hold_for_object (IdeContext *self,
  *
  * If a pending unload of the context has been requested, it will be dispatched
  * once the hold count reaches zero.
+ *
+ * Since: 3.32
  */
 void
 ide_context_release (IdeContext *self)
@@ -2435,6 +2471,8 @@ ide_context_release (IdeContext *self)
  * in various runtimes such as xdg-app.
  *
  * Returns: (transfer none): An #IdeRuntimeManager.
+ *
+ * Since: 3.32
  */
 IdeRuntimeManager *
 ide_context_get_runtime_manager (IdeContext *self)
@@ -2455,6 +2493,8 @@ ide_context_get_runtime_manager (IdeContext *self)
  * using different specified toolchains.
  *
  * Returns: (transfer none): An #IdeToolchainManager.
+ *
+ * Since: 3.32
  */
 IdeToolchainManager *
 ide_context_get_toolchain_manager (IdeContext *self)
@@ -2476,6 +2516,8 @@ ide_context_get_toolchain_manager (IdeContext *self)
  * #IdeDevice, the #IdeRuntime to use, and various other build options.
  *
  * Returns: (transfer none): An #IdeConfigurationManager.
+ *
+ * Since: 3.32
  */
 IdeConfigurationManager *
 ide_context_get_configuration_manager (IdeContext *self)
@@ -2498,6 +2540,8 @@ ide_context_get_configuration_manager (IdeContext *self)
  *
  * Thread-safety: you may call this from any thread that holds a reference to
  *   the #IdeContext object.
+ *
+ * Since: 3.32
  */
 void
 ide_context_emit_log (IdeContext     *self,
@@ -2532,7 +2576,7 @@ ide_context_emit_log (IdeContext     *self,
  * Thread-safety: you may call this from any thread, so long as the thread
  *   owns a reference to the context.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_context_message (IdeContext  *self,
@@ -2571,6 +2615,8 @@ ide_context_message (IdeContext  *self,
  *
  * Thread-safety: you may call this from any thread, so long as the thread
  *   owns a reference to the context.
+ *
+ * Since: 3.32
  */
 void
 ide_context_warning (IdeContext  *self,
@@ -2607,6 +2653,8 @@ ide_context_warning (IdeContext  *self,
  * what the UI will expect.
  *
  * Returns: (transfer none): An #IdeRunManager.
+ *
+ * Since: 3.32
  */
 IdeRunManager *
 ide_context_get_run_manager (IdeContext *self)
@@ -2622,6 +2670,8 @@ ide_context_get_run_manager (IdeContext *self)
  * Gets the #IdeDiagnosticsManager for the context.
  *
  * Returns: (transfer none): An #IdeDiagnosticsManager.
+ *
+ * Since: 3.32
  */
 IdeDiagnosticsManager *
 ide_context_get_diagnostics_manager (IdeContext *self)
@@ -2638,6 +2688,8 @@ ide_context_get_diagnostics_manager (IdeContext *self)
  * Gets the debug manager for the context.
  *
  * Returns: (transfer none): An #IdeDebugManager
+ *
+ * Since: 3.32
  */
 IdeDebugManager *
 ide_context_get_debug_manager (IdeContext *self)
@@ -2655,7 +2707,7 @@ ide_context_get_debug_manager (IdeContext *self)
  *
  * Returns: (transfer none): An #IdeTestManager
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeTestManager *
 ide_context_get_test_manager (IdeContext *self)
@@ -2674,7 +2726,7 @@ ide_context_get_test_manager (IdeContext *self)
  * context. Various UI in Builder may use this to present pausable actions to
  * the user.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_context_add_pausable (IdeContext  *self,
@@ -2693,7 +2745,7 @@ ide_context_add_pausable (IdeContext  *self,
  *
  * Remove a previously registered #IdePausable.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_context_remove_pausable (IdeContext  *self,
@@ -2737,7 +2789,7 @@ _ide_context_get_pausables (IdeContext *self)
  *
  * Returns: (transfer full): a #GFile for the cache file
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GFile *
 ide_context_cache_file (IdeContext  *self,
@@ -2794,7 +2846,7 @@ ide_context_cache_file (IdeContext  *self,
  *
  * Returns: (transfer full): A new string containing the cache filename
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gchar *
 ide_context_cache_filename (IdeContext  *self,
@@ -2843,7 +2895,7 @@ ide_context_cache_filename (IdeContext  *self,
  *
  * Returns: (transfer none): a #IdeVcsMonitor to monitor the project tree.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeVcsMonitor *
 ide_context_get_monitor (IdeContext *self)
@@ -2882,7 +2934,7 @@ ide_context_get_monitor (IdeContext *self)
  *
  * Returns: (transfer full): a string containing the new path
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gchar *
 ide_context_build_filename (IdeContext  *self,
@@ -2927,6 +2979,8 @@ ide_context_build_filename (IdeContext  *self,
  * This creates a new #GSettings instance for the project.
  *
  * Returns: (transfer full): a #GSettings
+ *
+ * Since: 3.32
  */
 GSettings *
 ide_context_get_project_settings (IdeContext *self)
@@ -2955,7 +3009,7 @@ ide_context_get_project_settings (IdeContext *self)
  *
  * Returns: %TRUE if ide_context_unload_async() has been called.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_context_is_unloading (IdeContext *self)
@@ -2974,7 +3028,7 @@ ide_context_is_unloading (IdeContext *self)
  *
  * Returns: (transfer none) (nullable): an #IdeWorkbench, or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GtkWidget *
 ide_context_get_workbench (IdeContext *self)

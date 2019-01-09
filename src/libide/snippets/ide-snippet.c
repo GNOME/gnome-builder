@@ -38,6 +38,8 @@
  *
  * The #IdeSnippet represents a single snippet that may be inserted
  * into the #IdeSourceView.
+ *
+ * Since: 3.32
  */
 
 #define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
@@ -89,6 +91,8 @@ static GParamSpec * properties[LAST_PROP];
  * Creates a new #IdeSnippet
  *
  * Returns: (transfer full): A new #IdeSnippet
+ *
+ * Since: 3.32
  */
 IdeSnippet *
 ide_snippet_new (const gchar *trigger,
@@ -107,6 +111,8 @@ ide_snippet_new (const gchar *trigger,
  * Does a deep copy of the snippet.
  *
  * Returns: (transfer full): An #IdeSnippet.
+ *
+ * Since: 3.32
  */
 IdeSnippet *
 ide_snippet_copy (IdeSnippet *self)
@@ -141,6 +147,8 @@ ide_snippet_copy (IdeSnippet *self)
  * as the user Tab's through the edit points.
  *
  * Returns: The tab stop, or -1 if unset.
+ *
+ * Since: 3.32
  */
 gint
 ide_snippet_get_tab_stop (IdeSnippet *self)
@@ -158,6 +166,8 @@ ide_snippet_get_tab_stop (IdeSnippet *self)
  * are editable.
  *
  * Returns: The number of chunks.
+ *
+ * Since: 3.32
  */
 guint
 ide_snippet_get_n_chunks (IdeSnippet *self)
@@ -175,6 +185,8 @@ ide_snippet_get_n_chunks (IdeSnippet *self)
  * Gets the chunk at @n.
  *
  * Returns: (transfer none): an #IdeSnippetChunk
+ *
+ * Since: 3.32
  */
 IdeSnippetChunk *
 ide_snippet_get_nth_chunk (IdeSnippet *self,
@@ -195,6 +207,8 @@ ide_snippet_get_nth_chunk (IdeSnippet *self,
  * Gets the trigger for the source snippet
  *
  * Returns: (nullable): A trigger if specified
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_snippet_get_trigger (IdeSnippet *self)
@@ -210,6 +224,8 @@ ide_snippet_get_trigger (IdeSnippet *self)
  * @trigger: the trigger word
  *
  * Sets the trigger for the snippet.
+ *
+ * Since: 3.32
  */
 void
 ide_snippet_set_trigger (IdeSnippet  *self,
@@ -234,6 +250,8 @@ ide_snippet_set_trigger (IdeSnippet  *self,
  * property.
  *
  * Returns: the language identifier
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_snippet_get_language (IdeSnippet *self)
@@ -250,6 +268,8 @@ ide_snippet_get_language (IdeSnippet *self)
  * Sets the language identifier for the snippet.
  *
  * This should match the #GtkSourceLanguage:id identifier.
+ *
+ * Since: 3.32
  */
 void
 ide_snippet_set_language (IdeSnippet  *self,
@@ -271,6 +291,8 @@ ide_snippet_set_language (IdeSnippet  *self,
  * @self: a #IdeSnippet
  *
  * Gets the description for the snippet.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_snippet_get_description (IdeSnippet *self)
@@ -286,6 +308,8 @@ ide_snippet_get_description (IdeSnippet *self)
  * @description: the snippet description
  *
  * Sets the description for the snippet.
+ *
+ * Since: 3.32
  */
 void
 ide_snippet_set_description (IdeSnippet  *self,
@@ -1034,6 +1058,8 @@ ide_snippet_after_delete_range (IdeSnippet    *self,
  * actively being edited.
  *
  * Returns: (transfer none) (nullable): a #GtkTextMark or %NULL
+ *
+ * Since: 3.32
  */
 GtkTextMark *
 ide_snippet_get_mark_begin (IdeSnippet *self)
@@ -1051,6 +1077,8 @@ ide_snippet_get_mark_begin (IdeSnippet *self)
  * actively being edited.
  *
  * Returns: (transfer none) (nullable): a #GtkTextMark or %NULL
+ *
+ * Since: 3.32
  */
 GtkTextMark *
 ide_snippet_get_mark_end (IdeSnippet *self)
@@ -1067,6 +1095,8 @@ ide_snippet_get_mark_end (IdeSnippet *self)
  * Get's the context used for expanding the snippet.
  *
  * Returns: (nullable) (transfer none): an #IdeSnippetContext
+ *
+ * Since: 3.32
  */
 IdeSnippetContext *
 ide_snippet_get_context (IdeSnippet *self)
@@ -1284,6 +1314,8 @@ ide_snippet_init (IdeSnippet *self)
  *
  * This is a debugging function to print information about a chunk to stderr.
  * Plugin developers might use this to track down issues when using a snippet.
+ *
+ * Since: 3.32
  */
 void
 ide_snippet_dump (IdeSnippet *self)

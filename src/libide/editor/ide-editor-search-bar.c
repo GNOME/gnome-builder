@@ -565,6 +565,8 @@ ide_editor_search_bar_set_show_options (IdeEditorSearchBar *self,
  * Gets the #IdeEditorSearch used by the search bar.
  *
  * Returns: (transfer none) (nullable): An #IdeEditorSearch or %NULL.
+ *
+ * Since: 3.32
  */
 IdeEditorSearch *
 ide_editor_search_bar_get_search (IdeEditorSearchBar *self)

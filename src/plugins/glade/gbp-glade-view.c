@@ -43,6 +43,8 @@ static GParamSpec *properties [N_PROPS];
  * Create a new #GbpGladeView.
  *
  * Returns: (transfer full): a newly created #GbpGladeView
+ *
+ * Since: 3.32
  */
 GbpGladeView *
 gbp_glade_view_new (void)
@@ -620,6 +622,8 @@ gbp_glade_view_init (GbpGladeView *self)
  * gbp_glade_view_get_project:
  *
  * Returns: (transfer none): A #GladeProject or %NULL
+ *
+ * Since: 3.32
  */
 GladeProject *
 gbp_glade_view_get_project (GbpGladeView *self)
@@ -749,6 +753,8 @@ gbp_glade_view_load_file_finish (GbpGladeView  *self,
  * gbp_glade_view_get_file:
  *
  * Returns: (nullable) (transfer none): a #GFile or %NULL
+ *
+ * Since: 3.32
  */
 GFile *
 gbp_glade_view_get_file (GbpGladeView *self)

@@ -305,6 +305,8 @@ ide_environment_editor_set_environment (IdeEnvironmentEditor *self,
  * ide_environment_editor_get_environment:
  *
  * Returns: (nullable) (transfer none): An #IdeEnvironment or %NULL.
+ *
+ * Since: 3.32
  */
 IdeEnvironment *
 ide_environment_editor_get_environment (IdeEnvironmentEditor *self)

@@ -93,7 +93,7 @@ ide_code_index_entries_default_init (IdeCodeIndexEntriesInterface *iface)
  *
  * Returns: (nullable) (transfer full): An #IdeCodeIndexEntry.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeCodeIndexEntry *
 ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self)
@@ -111,6 +111,8 @@ ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self)
  * The file that was indexed.
  *
  * Returns: (transfer full): a #GFile
+ *
+ * Since: 3.32
  */
 GFile *
 ide_code_index_entries_get_file (IdeCodeIndexEntries *self)
@@ -132,7 +134,7 @@ ide_code_index_entries_get_file (IdeCodeIndexEntries *self)
  * This allows implementations to possibly process data off the main thread
  * without blocking the main loop.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_code_index_entries_next_entries_async (IdeCodeIndexEntries *self,
@@ -158,7 +160,7 @@ ide_code_index_entries_next_entries_async (IdeCodeIndexEntries *self,
  * Returns: (transfer full) (element-type Ide.CodeIndexEntry): a #GPtrArray
  *   of #IdeCodeIndexEntry.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GPtrArray *
 ide_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *self,

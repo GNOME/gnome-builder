@@ -53,7 +53,7 @@
  *
  * Additionally, we can render faster because we can coalesce work.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 
 #define ARROW_WIDTH      5

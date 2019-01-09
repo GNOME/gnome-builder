@@ -108,6 +108,8 @@ ide_get_system_page_size (void)
  *
  * Returns: (transfer full): A newly allocated string containing the
  *   expansion. A copy of the input string upon failure to expand.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_path_expand (const gchar *path)
@@ -144,6 +146,8 @@ ide_path_expand (const gchar *path)
  * simply return a copy of @path.
  *
  * Returns: (transfer full): A new path, possibly collapsed.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_path_collapse (const gchar *path)

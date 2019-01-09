@@ -159,6 +159,8 @@ _g_value_equal (const GValue *a, const GValue *b)
  * @short_description: Generated C code for the org.gnome.CodeAssist.v1.Diagnostics D-Bus interface
  *
  * This section contains code for working with the <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Diagnostics.top_of_page">org.gnome.CodeAssist.v1.Diagnostics</link> D-Bus interface in C.
+ *
+ * Since: 3.32
  */
 
 /* ---- Introspection data for org.gnome.CodeAssist.v1.Diagnostics ---- */
@@ -219,6 +221,8 @@ static const _ExtendedGDBusInterfaceInfo _gca_diagnostics_interface_info =
  * Gets a machine-readable description of the <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Diagnostics.top_of_page">org.gnome.CodeAssist.v1.Diagnostics</link> D-Bus interface.
  *
  * Returns: (transfer none): a #GDBusInterfaceInfo. Do not free.
+ *
+ * Since: 3.32
  */
 GDBusInterfaceInfo *
 gca_diagnostics_interface_info (void)
@@ -235,6 +239,8 @@ gca_diagnostics_interface_info (void)
  * The properties are overridden in the order they are defined.
  *
  * Returns: The last property id.
+ *
+ * Since: 3.32
  */
 guint
 gca_diagnostics_override_properties (GObjectClass *klass, guint property_id_begin)
@@ -248,6 +254,8 @@ gca_diagnostics_override_properties (GObjectClass *klass, guint property_id_begi
  * GcaDiagnostics:
  *
  * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Diagnostics.top_of_page">org.gnome.CodeAssist.v1.Diagnostics</link>.
+ *
+ * Since: 3.32
  */
 
 /**
@@ -256,6 +264,8 @@ gca_diagnostics_override_properties (GObjectClass *klass, guint property_id_begi
  * @handle_diagnostics: Handler for the #GcaDiagnostics::handle-diagnostics signal.
  *
  * Virtual table for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Diagnostics.top_of_page">org.gnome.CodeAssist.v1.Diagnostics</link>.
+ *
+ * Since: 3.32
  */
 
 typedef GcaDiagnosticsIface GcaDiagnosticsInterface;
@@ -275,6 +285,8 @@ gca_diagnostics_default_init (GcaDiagnosticsIface *iface)
    * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gca_diagnostics_complete_diagnostics() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
    *
    * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+   *
+   * Since: 3.32
    */
   g_signal_new ("handle-diagnostics",
     G_TYPE_FROM_INTERFACE (iface),
@@ -301,6 +313,8 @@ gca_diagnostics_default_init (GcaDiagnosticsIface *iface)
  * You can then call gca_diagnostics_call_diagnostics_finish() to get the result of the operation.
  *
  * See gca_diagnostics_call_diagnostics_sync() for the synchronous, blocking version of this method.
+ *
+ * Since: 3.32
  */
 void
 gca_diagnostics_call_diagnostics (
@@ -329,6 +343,8 @@ gca_diagnostics_call_diagnostics (
  * Finishes an operation started with gca_diagnostics_call_diagnostics().
  *
  * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 gca_diagnostics_call_diagnostics_finish (
@@ -361,6 +377,8 @@ _out:
  * See gca_diagnostics_call_diagnostics() for the asynchronous version of this method.
  *
  * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 gca_diagnostics_call_diagnostics_sync (
@@ -396,6 +414,8 @@ _out:
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Diagnostics.Diagnostics">Diagnostics()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
  *
  * This method will free @invocation, you cannot use it afterwards.
+ *
+ * Since: 3.32
  */
 void
 gca_diagnostics_complete_diagnostics (
@@ -414,6 +434,8 @@ gca_diagnostics_complete_diagnostics (
  * GcaDiagnosticsProxy:
  *
  * The #GcaDiagnosticsProxy structure contains only private data and should only be accessed using the provided API.
+ *
+ * Since: 3.32
  */
 
 /**
@@ -421,6 +443,8 @@ gca_diagnostics_complete_diagnostics (
  * @parent_class: The parent class.
  *
  * Class structure for #GcaDiagnosticsProxy.
+ *
+ * Since: 3.32
  */
 
 struct _GcaDiagnosticsProxyPrivate
@@ -587,6 +611,8 @@ gca_diagnostics_proxy_iface_init (GcaDiagnosticsIface *iface)
  * You can then call gca_diagnostics_proxy_new_finish() to get the result of the operation.
  *
  * See gca_diagnostics_proxy_new_sync() for the synchronous, blocking version of this constructor.
+ *
+ * Since: 3.32
  */
 void
 gca_diagnostics_proxy_new (
@@ -609,6 +635,8 @@ gca_diagnostics_proxy_new (
  * Finishes an operation started with gca_diagnostics_proxy_new().
  *
  * Returns: (transfer full) (type GcaDiagnosticsProxy): The constructed proxy object or %NULL if @error is set.
+ *
+ * Since: 3.32
  */
 GcaDiagnostics *
 gca_diagnostics_proxy_new_finish (
@@ -642,6 +670,8 @@ gca_diagnostics_proxy_new_finish (
  * See gca_diagnostics_proxy_new() for the asynchronous version of this constructor.
  *
  * Returns: (transfer full) (type GcaDiagnosticsProxy): The constructed proxy object or %NULL if @error is set.
+ *
+ * Since: 3.32
  */
 GcaDiagnostics *
 gca_diagnostics_proxy_new_sync (
@@ -677,6 +707,8 @@ gca_diagnostics_proxy_new_sync (
  * You can then call gca_diagnostics_proxy_new_for_bus_finish() to get the result of the operation.
  *
  * See gca_diagnostics_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
+ *
+ * Since: 3.32
  */
 void
 gca_diagnostics_proxy_new_for_bus (
@@ -699,6 +731,8 @@ gca_diagnostics_proxy_new_for_bus (
  * Finishes an operation started with gca_diagnostics_proxy_new_for_bus().
  *
  * Returns: (transfer full) (type GcaDiagnosticsProxy): The constructed proxy object or %NULL if @error is set.
+ *
+ * Since: 3.32
  */
 GcaDiagnostics *
 gca_diagnostics_proxy_new_for_bus_finish (
@@ -732,6 +766,8 @@ gca_diagnostics_proxy_new_for_bus_finish (
  * See gca_diagnostics_proxy_new_for_bus() for the asynchronous version of this constructor.
  *
  * Returns: (transfer full) (type GcaDiagnosticsProxy): The constructed proxy object or %NULL if @error is set.
+ *
+ * Since: 3.32
  */
 GcaDiagnostics *
 gca_diagnostics_proxy_new_for_bus_sync (
@@ -757,6 +793,8 @@ gca_diagnostics_proxy_new_for_bus_sync (
  * GcaDiagnosticsSkeleton:
  *
  * The #GcaDiagnosticsSkeleton structure contains only private data and should only be accessed using the provided API.
+ *
+ * Since: 3.32
  */
 
 /**
@@ -764,6 +802,8 @@ gca_diagnostics_proxy_new_for_bus_sync (
  * @parent_class: The parent class.
  *
  * Class structure for #GcaDiagnosticsSkeleton.
+ *
+ * Since: 3.32
  */
 
 struct _GcaDiagnosticsSkeletonPrivate
@@ -1030,6 +1070,8 @@ gca_diagnostics_skeleton_iface_init (GcaDiagnosticsIface *iface)
  * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Diagnostics.top_of_page">org.gnome.CodeAssist.v1.Diagnostics</link>.
  *
  * Returns: (transfer full) (type GcaDiagnosticsSkeleton): The skeleton object.
+ *
+ * Since: 3.32
  */
 GcaDiagnostics *
 gca_diagnostics_skeleton_new (void)

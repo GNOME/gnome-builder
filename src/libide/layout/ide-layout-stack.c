@@ -51,6 +51,8 @@
  *
  * To simplify integration with other systems, #IdeLayoutStack implements
  * the #GListModel interface for each of the #IdeLayoutView.
+ *
+ * Since: 3.32
  */
 
 typedef struct
@@ -958,7 +960,7 @@ ide_layout_stack_new (void)
  *
  * Sets the current view for the stack.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_layout_stack_set_visible_child (IdeLayoutStack *self,
@@ -981,7 +983,7 @@ ide_layout_stack_set_visible_child (IdeLayoutStack *self,
  *
  * Returns: (nullable) (transfer none): An #IdeLayoutView or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeLayoutView *
 ide_layout_stack_get_visible_child (IdeLayoutStack *self)
@@ -1001,7 +1003,7 @@ ide_layout_stack_get_visible_child (IdeLayoutStack *self)
  *
  * Returns: (transfer none) (type Ide.LayoutStackHeader): The layout stack header.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GtkWidget *
 ide_layout_stack_get_titlebar (IdeLayoutStack *self)
@@ -1024,7 +1026,7 @@ ide_layout_stack_get_titlebar (IdeLayoutStack *self)
  *
  * Returns: %TRUE if the stack has a view
  *
- * Since: 3.26
+ * Since: 3.32
  */
 gboolean
 ide_layout_stack_get_has_view (IdeLayoutStack *self)
@@ -1339,7 +1341,7 @@ _ide_layout_stack_transfer (IdeLayoutStack *self,
  *
  * This function will call @callback for every view found in @self.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_layout_stack_foreach_view (IdeLayoutStack *self,
@@ -1368,7 +1370,7 @@ ide_layout_stack_foreach_view (IdeLayoutStack *self,
  *
  * Returns: (transfer none) (nullable): An #IdeLayoutStackAddin or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeLayoutStackAddin *
 ide_layout_stack_addin_find_by_module_name (IdeLayoutStack *stack,

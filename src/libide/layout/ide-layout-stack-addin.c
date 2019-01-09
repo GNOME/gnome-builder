@@ -70,6 +70,8 @@ ide_layout_stack_addin_default_init (IdeLayoutStackAddinInterface *iface)
  * This virtual method is called when the plugin should load itself.
  * A new instance of the plugin is created for every #IdeLayoutStack
  * that is created in Builder.
+ *
+ * Since: 3.32
  */
 void
 ide_layout_stack_addin_load (IdeLayoutStackAddin *self,
@@ -91,6 +93,8 @@ ide_layout_stack_addin_load (IdeLayoutStackAddin *self,
  *
  * This virtual method is called when the plugin should unload itself.
  * It should revert anything performed via ide_layout_stack_addin_load().
+ *
+ * Since: 3.32
  */
 void
 ide_layout_stack_addin_unload (IdeLayoutStackAddin *self,
@@ -110,6 +114,8 @@ ide_layout_stack_addin_unload (IdeLayoutStackAddin *self,
  * This virtual method is called whenever the active view changes
  * in the #IdeLayoutView. Plugins may want to alter what controls
  * are displayed on the stack based on the current view.
+ *
+ * Since: 3.32
  */
 void
 ide_layout_stack_addin_set_view (IdeLayoutStackAddin *self,

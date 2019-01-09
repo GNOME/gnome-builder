@@ -103,6 +103,8 @@ ide_vcs_default_init (IdeVcsInterface *iface)
    * The "changed" signal should be emitted when the VCS has detected a change
    * to the underlying VCS storage. This can be used by consumers to reload
    * their respective data structures.
+   *
+   * Since: 3.32
    */
   signals [CHANGED] =
     g_signal_new ("changed",
@@ -145,7 +147,7 @@ ide_vcs_default_init (IdeVcsInterface *iface)
  *   #IdeVcs implementations are required to ensure this function
  *   is thread-safe.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 gboolean
 ide_vcs_is_ignored (IdeVcs  *self,
@@ -224,7 +226,7 @@ ide_vcs_is_ignored (IdeVcs  *self,
  *   #IdeVcs implementations are required to ensure this function
  *   is thread-safe.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_vcs_path_is_ignored (IdeVcs       *self,
@@ -313,7 +315,7 @@ ide_vcs_get_priority (IdeVcs *self)
  *
  * Returns: (transfer none): a #GFile.
  *
- * Since: 3.18
+ * Since: 3.32
  *
  * Thread safety: this function is safe to call from threads. The working
  *   directory should only be set at creating and therefore safe to call
@@ -338,6 +340,8 @@ ide_vcs_get_working_directory (IdeVcs *self)
  * support change monitoring, or cannot for the current file, then %NULL is returned.
  *
  * Returns: (transfer full) (nullable): An #IdeBufferChangeMonitor or %NULL.
+ *
+ * Since: 3.32
  */
 IdeBufferChangeMonitor *
 ide_vcs_get_buffer_change_monitor (IdeVcs    *self,
@@ -391,6 +395,8 @@ ide_vcs_new_async (IdeContext           *context,
  * Completes a call to ide_vcs_new_async().
  *
  * Returns: (transfer full): An #IdeVcs.
+ *
+ * Since: 3.32
  */
 IdeVcs *
 ide_vcs_new_finish (GAsyncResult  *result,
@@ -420,6 +426,8 @@ ide_vcs_emit_changed (IdeVcs *self)
  * support access to configuration, then %NULL is returned.
  *
  * Returns: (transfer full) (nullable): An #IdeVcsConfig or %NULL.
+ *
+ * Since: 3.32
  */
 IdeVcsConfig *
 ide_vcs_get_config (IdeVcs *self)
@@ -442,6 +450,8 @@ ide_vcs_get_config (IdeVcs *self)
  * Retrieves the name of the branch in the current working directory.
  *
  * Returns: (transfer full): A string containing the branch name.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_vcs_get_branch_name (IdeVcs *self)
@@ -474,7 +484,7 @@ ide_vcs_get_branch_name (IdeVcs *self)
  * The function specified by @callback should call ide_vcs_list_status_finish()
  * to retrieve the result of this asynchronous operation.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_vcs_list_status_async (IdeVcs              *self,
@@ -516,7 +526,7 @@ ide_vcs_list_status_async (IdeVcs              *self,
  *   A #GListModel containing an #IdeVcsFileInfo for each of the files scanned
  *   by the #IdeVcs. Upon failure, %NULL is returned and @error is set.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GListModel *
 ide_vcs_list_status_finish (IdeVcs        *self,

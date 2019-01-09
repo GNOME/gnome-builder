@@ -45,7 +45,7 @@ G_DEFINE_INTERFACE (IdeApplicationTool, ide_application_tool, G_TYPE_OBJECT)
  * also provide "X-Tool-Description=description" to notify the user of what
  * the tool does.
  *
- * Since: 3.22
+ * Since: 3.32
  */
 
 static void
@@ -64,7 +64,7 @@ ide_application_tool_default_init (IdeApplicationToolInterface *iface)
  * Asynchronously runs an application tool. This is typically done on the
  * command line using the `ide` command.
  *
- * Since: 3.22
+ * Since: 3.32
  */
 void
 ide_application_tool_run_async (IdeApplicationTool  *self,
@@ -94,7 +94,7 @@ ide_application_tool_run_async (IdeApplicationTool  *self,
  *
  * Returns: A shell exit code, 0 for success, otherwise @error is set.
  *
- * Since: 3.22
+ * Since: 3.32
  */
 gint
 ide_application_tool_run_finish (IdeApplicationTool  *self,

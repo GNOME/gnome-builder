@@ -260,7 +260,7 @@ ide_session_restore_load_cb (GObject      *object,
  * the point it was last saved (typically upon shutdown). This includes
  * open documents and editor splits to the degree possible.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_session_restore_async (IdeSession          *self,
@@ -429,7 +429,7 @@ ide_session_save_addin_save_cb (GObject      *object,
  * so that the project may be restored to the current layout when the project
  * is re-opened at a later time.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_session_save_async (IdeSession          *self,

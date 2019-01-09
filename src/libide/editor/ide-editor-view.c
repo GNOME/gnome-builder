@@ -1048,7 +1048,7 @@ ide_editor_view_init (IdeEditorView *self)
  *
  * Returns: (transfer none): An #IdeBuffer
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeBuffer *
 ide_editor_view_get_buffer (IdeEditorView *self)
@@ -1066,7 +1066,7 @@ ide_editor_view_get_buffer (IdeEditorView *self)
  *
  * Returns: (transfer none): An #IdeSourceView
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeSourceView *
 ide_editor_view_get_view (IdeEditorView *self)
@@ -1084,7 +1084,7 @@ ide_editor_view_get_view (IdeEditorView *self)
  *
  * Returns: (nullable): the language-id as a string, or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const gchar *
 ide_editor_view_get_language_id (IdeEditorView *self)
@@ -1117,6 +1117,8 @@ ide_editor_view_get_language_id (IdeEditorView *self)
  * This will move the insert cursor.
  *
  * Lines start from 0.
+ *
+ * Since: 3.32
  */
 void
 ide_editor_view_scroll_to_line (IdeEditorView *self,
@@ -1140,6 +1142,8 @@ ide_editor_view_scroll_to_line (IdeEditorView *self,
  *
  * If @line_offset is zero, the first non-space character of @line will be
  * used instead.
+ *
+ * Since: 3.32
  */
 void
 ide_editor_view_scroll_to_line_offset (IdeEditorView *self,
@@ -1260,7 +1264,7 @@ ide_editor_view_set_show_map (IdeEditorView *self,
  * This is a convenience function to set the language on the underlying
  * #IdeBuffer text buffer.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_view_set_language (IdeEditorView     *self,
@@ -1280,7 +1284,7 @@ ide_editor_view_set_language (IdeEditorView     *self,
  *
  * Returns: (transfer none) (nullable): a #GtkSourceLanguage or %NULL.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GtkSourceLanguage *
 ide_editor_view_get_language (IdeEditorView *self)
@@ -1298,7 +1302,7 @@ ide_editor_view_get_language (IdeEditorView *self)
  *
  * If there is no error, the insertion cursor is not moved.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_view_move_next_error (IdeEditorView *self)
@@ -1316,7 +1320,7 @@ ide_editor_view_move_next_error (IdeEditorView *self)
  *
  * If there is no error, the insertion cursor is not moved.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_view_move_previous_error (IdeEditorView *self)
@@ -1334,7 +1338,7 @@ ide_editor_view_move_previous_error (IdeEditorView *self)
  *
  * If there is no search result, the insertion cursor is not moved.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_view_move_next_search_result (IdeEditorView *self)
@@ -1354,7 +1358,7 @@ ide_editor_view_move_next_search_result (IdeEditorView *self)
  *
  * If there is no search result, the insertion cursor is not moved.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_view_move_previous_search_result (IdeEditorView *self)
@@ -1373,6 +1377,8 @@ ide_editor_view_move_previous_search_result (IdeEditorView *self)
  * Gets the #IdeEditorSearch used to search within the document.
  *
  * Returns: (transfer none): An #IdeEditorSearch
+ *
+ * Since: 3.32
  */
 IdeEditorSearch *
 ide_editor_view_get_search (IdeEditorView *self)

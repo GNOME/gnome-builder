@@ -5802,6 +5802,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * This also requires that IdeBuffer:highlight-diagnostics is set to %TRUE
    * to generate diagnostics.
+   *
+   * Since: 3.32
    */
   properties [PROP_SHOW_LINE_DIAGNOSTICS] =
     g_param_spec_boolean ("show-line-diagnostics",
@@ -5855,6 +5857,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * to replay the sequence starting from the correct state.
    *
    * Pair this with an emission of #IdeSourceView::end-macro to complete the sequence.
+   *
+   * Since: 3.32
    */
   signals [BEGIN_MACRO] =
     g_signal_new ("begin-macro",
@@ -5872,6 +5876,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * operation using the #IdeRenameProvider from the underlying buffer. The
    * cursor position will be used as the location when sending the request to
    * the provider.
+   *
+   * Since: 3.32
    */
   signals [BEGIN_RENAME] =
     g_signal_new ("begin-rename",
@@ -5919,6 +5925,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Pressing Escape or unfocusing the widget will break from this loop.
    *
    * Use of this signal is not recommended except in very specific cases.
+   *
+   * Since: 3.32
    */
   signals [CAPTURE_MODIFIER] =
     g_signal_new ("capture-modifier",
@@ -6037,6 +6045,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Complete a macro recording sequence. This may be called more times than is necessary,
    * since #IdeSourceView will only keep the most recent macro recording. This can be
    * helpful when implementing recording sequences such as in Vim.
+   *
+   * Since: 3.32
    */
   signals [END_MACRO] =
     g_signal_new ("end-macro",
@@ -6125,6 +6135,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Inserts the current modifier character at the insert mark in the buffer.
    * If @use_count is %TRUE, then the character will be inserted
    * #IdeSourceView:count times.
+   *
+   * Since: 3.32
    */
   signals [INSERT_MODIFIER] =
     g_signal_new ("insert-modifier",
@@ -6170,6 +6182,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * @dir: The direction to move.
    *
    * Moves to the next search result either forwards or backwards.
+   *
+   * Since: 3.32
    */
   signals [MOVE_ERROR] =
     g_signal_new ("move-error",
@@ -6213,6 +6227,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Reselects a previousl selected range of text that was saved using
    * IdeSourceView::push-selection.
+   *
+   * Since: 3.32
    */
   signals [POP_SELECTION] =
     g_signal_new ("pop-selection",
@@ -6229,6 +6245,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * @snippet: An #IdeSnippet.
    *
    * Pops the current snippet from the sourceview if there is one.
+   *
+   * Since: 3.32
    */
   signals [POP_SNIPPET] =
     g_signal_new_class_handler ("pop-snippet",
@@ -6245,6 +6263,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Saves the current selection away to be restored by a call to
    * IdeSourceView::pop-selection. You must pop the selection to keep
    * the selection stack in consistent order.
+   *
+   * Since: 3.32
    */
   signals [PUSH_SELECTION] =
     g_signal_new ("push-selection",
@@ -6263,6 +6283,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Pushes @snippet onto the snippet stack at either @iter or the insertion
    * mark if @iter is not provided.
+   *
+   * Since: 3.32
    */
   signals [PUSH_SNIPPET] =
     g_signal_new_class_handler ("push-snippet",
@@ -6308,6 +6330,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Replays the last series of captured events that were captured between calls
    * to #IdeSourceView::begin-macro and #IdeSourceView::end-macro.
+   *
+   * Since: 3.32
    */
   signals [REPLAY_MACRO] =
     g_signal_new ("replay-macro",
@@ -6335,7 +6359,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * and various stateful settings of the sourceview. This is a good
    * signal to map to the "Escape" key.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [RESET] =
     g_signal_new_class_handler ("reset",
@@ -6448,6 +6472,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * This signal is meant to be activated from keybindings to sort the currently selected lines.
    * The lines are sorted using qsort() and either strcmp() or strcasecmp().
+   *
+   * Since: 3.32
    */
   signals [SORT] =
     g_signal_new ("sort",
@@ -6676,6 +6702,8 @@ ide_source_view_get_font_desc (IdeSourceView *self)
  * account. You must free the result with pango_font_description_free().
  *
  * Returns: (transfer full): a #PangoFontDescription
+ *
+ * Since: 3.32
  */
 PangoFontDescription *
 ide_source_view_get_scaled_font_desc (IdeSourceView *self)
@@ -6959,6 +6987,8 @@ ide_source_view_clear_snippets (IdeSourceView *self)
  * @location: (allow-none): A location for the snippet or %NULL.
  *
  * Pushes a new snippet onto the source view.
+ *
+ * Since: 3.32
  */
 void
 ide_source_view_push_snippet (IdeSourceView     *self,
@@ -7094,6 +7124,8 @@ ide_source_view_jump (IdeSourceView     *self,
  * Gets the #IdeSourceView:scroll-offset property. This property contains the number of lines
  * that should be kept above or below the line containing the insertion cursor relative to the
  * top and bottom of the visible text window.
+ *
+ * Since: 3.32
  */
 guint
 ide_source_view_get_scroll_offset (IdeSourceView *self)
@@ -7110,6 +7142,8 @@ ide_source_view_get_scroll_offset (IdeSourceView *self)
  *
  * Sets the #IdeSourceView:scroll-offset property. See ide_source_view_get_scroll_offset() for
  * more information. Set to 0 to unset this property.
+ *
+ * Since: 3.32
  */
 void
 ide_source_view_set_scroll_offset (IdeSourceView *self,
@@ -7135,6 +7169,8 @@ ide_source_view_set_scroll_offset (IdeSourceView *self,
  * is similar to gtk_text_view_get_visible_area() except that it takes into account the
  * #IdeSourceView:scroll-offset property to ensure there is space above and below the
  * visible_rect.
+ *
+ * Since: 3.32
  */
 void
 ide_source_view_get_visible_rect (IdeSourceView *self,
@@ -7596,6 +7632,8 @@ ide_source_view_place_cursor_onscreen (IdeSourceView *self)
  * such as spaces vs tabs.
  *
  * Returns: (transfer none) (nullable): An #IdeFileSettings or %NULL.
+ *
+ * Since: 3.32
  */
 IdeFileSettings *
 ide_source_view_get_file_settings (IdeSourceView *self)
@@ -7727,6 +7765,8 @@ _ide_source_view_get_scroll_mark (IdeSourceView *self)
  * Gets the current snippet if there is one, otherwise %NULL.
  *
  * Returns: (transfer none) (nullable): An #IdeSnippet or %NULL.
+ *
+ * Since: 3.32
  */
 IdeSnippet *
 ide_source_view_get_current_snippet (IdeSourceView *self)
@@ -7778,7 +7818,7 @@ ide_source_view_is_processing_key (IdeSourceView *self)
  *
  * Returns: (transfer none): an #IdeCompletion
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletion *
 ide_source_view_get_completion (IdeSourceView *self)
@@ -7798,7 +7838,7 @@ ide_source_view_get_completion (IdeSourceView *self)
  *
  * Returns: %TRUE if there is an active snippet.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_source_view_has_snippet (IdeSourceView *self)

@@ -272,6 +272,8 @@ sort_priority (gconstpointer a,
  *
  * If no build system could be found, then ide_build_system_new_finish() will
  * return %NULL.
+ *
+ * Since: 3.32
  */
 void
 ide_build_system_new_async (IdeContext          *context,
@@ -305,6 +307,8 @@ ide_build_system_new_async (IdeContext          *context,
  *
  * Returns: (transfer full): An #IdeBuildSystem if successful; otherwise
  *   %NULL and @error is set.
+ *
+ * Since: 3.32
  */
 IdeBuildSystem *
 ide_build_system_new_finish (GAsyncResult  *result,
@@ -441,6 +445,8 @@ ide_build_system_get_build_flags_async (IdeBuildSystem      *self,
  * ide_build_system_get_build_flags_finish:
  *
  * Returns: (transfer full):
+ *
+ * Since: 3.32
  */
 gchar **
 ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
@@ -471,6 +477,8 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
  *
  * This function will get build flags for all files and returns
  * map of file and its build flags as #GHashTable.
+ *
+ * Since: 3.32
  */
 void
 ide_build_system_get_build_flags_for_files_async (IdeBuildSystem       *self,
@@ -499,7 +507,7 @@ ide_build_system_get_build_flags_for_files_async (IdeBuildSystem       *self,
  *
  * Returns: (element-type Ide.File GStrv) (transfer full): a #GHashTable or #IdeFile to #GStrv
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GHashTable *
 ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
@@ -711,6 +719,8 @@ ide_build_system_get_build_flags_for_dir_async (IdeBuildSystem      *self,
  * @error: a location for a #GError or %NULL
  *
  * Returns: (element-type Ide.File GStrv) (transfer full): a #GHashTable of #IdeFile to #GStrv
+ *
+ * Since: 3.32
  */
 GHashTable *
 ide_build_system_get_build_flags_for_dir_finish (IdeBuildSystem  *self,
@@ -731,6 +741,8 @@ ide_build_system_get_build_flags_for_dir_finish (IdeBuildSystem  *self,
  * Checks whether the build system supports the given toolchain.
  *
  * Returns: %TRUE if the toolchain is supported by the build system, %FALSE otherwise
+ *
+ * Since: 3.32
  */
 gboolean
 ide_build_system_supports_toolchain (IdeBuildSystem *self,

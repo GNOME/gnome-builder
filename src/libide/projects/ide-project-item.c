@@ -45,6 +45,8 @@ static GParamSpec *properties [LAST_PROP];
  * @parent: (nullable): an #IdeProjectItem
  *
  * Returns: (transfer full): an #IdeProjectItem
+ *
+ * Since: 3.32
  */
 IdeProjectItem *
 ide_project_item_new (IdeProjectItem *parent)
@@ -104,6 +106,8 @@ ide_project_item_remove (IdeProjectItem *item,
  * A scalable list containing the children of the item.
  *
  * Returns: (transfer none): a #GSequence.
+ *
+ * Since: 3.32
  */
 GSequence *
 ide_project_item_get_children (IdeProjectItem *item)
@@ -123,6 +127,8 @@ ide_project_item_get_children (IdeProjectItem *item)
  *
  * Returns: (transfer none) (nullable): An #IdeProjectItem or %NULL if the item
  *   is the root of the tree.
+ *
+ * Since: 3.32
  */
 IdeProjectItem *
 ide_project_item_get_parent (IdeProjectItem *item)

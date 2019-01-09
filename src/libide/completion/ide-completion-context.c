@@ -254,7 +254,7 @@ ide_completion_context_class_init (IdeCompletionContextClass *klass)
    * The "busy" property is %TRUE while the completion context is
    * populating completion proposals.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
@@ -271,7 +271,7 @@ ide_completion_context_class_init (IdeCompletionContextClass *klass)
    * It will be notified when the first result is added or the last
    * result is removed.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_EMPTY] =
     g_param_spec_boolean ("empty",
@@ -285,7 +285,7 @@ ide_completion_context_class_init (IdeCompletionContextClass *klass)
    *
    * The "completion" is the #IdeCompletion that was used to create the context.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_COMPLETION] =
     g_param_spec_object ("completion",
@@ -396,7 +396,7 @@ ide_completion_context_items_changed_cb (IdeCompletionContext  *self,
  * additional asynchronous work. Doing so will allow the completions to
  * update while the operation is in progress.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_context_set_proposals_for_provider (IdeCompletionContext  *self,
@@ -514,7 +514,7 @@ ide_completion_context_notify_complete_cb (IdeCompletionContext *self,
  * Asynchronously requests that the completion context load proposals
  * from the registered providers.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 _ide_completion_context_complete_async (IdeCompletionContext    *self,
@@ -598,7 +598,7 @@ _ide_completion_context_complete_async (IdeCompletionContext    *self,
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 _ide_completion_context_complete_finish (IdeCompletionContext  *self,
@@ -620,7 +620,7 @@ _ide_completion_context_complete_finish (IdeCompletionContext  *self,
  *
  * Returns: %TRUE if the context is busy
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_context_get_busy (IdeCompletionContext *self)
@@ -738,7 +738,7 @@ list_model_iface_init (GListModelInterface *iface)
  *
  * Returns: %TRUE if the marks are still valid and @begin or @end was set.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_context_get_bounds (IdeCompletionContext *self,
@@ -789,7 +789,7 @@ ide_completion_context_get_bounds (IdeCompletionContext *self,
  *
  * Returns: (transfer none) (nullable): an #IdeCompletion or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletion *
 ide_completion_context_get_completion (IdeCompletionContext *self)
@@ -819,7 +819,7 @@ _ide_completion_context_new (IdeCompletion *completion)
  *
  * Returns: %TRUE if there are no proposals in the context
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_context_is_empty (IdeCompletionContext *self)
@@ -837,6 +837,8 @@ ide_completion_context_is_empty (IdeCompletionContext *self)
  * Gets the iter for the start of the completion.
  *
  * Returns:
+ *
+ * Since: 3.32
  */
 gboolean
 ide_completion_context_get_start_iter (IdeCompletionContext *self,
@@ -863,6 +865,8 @@ ide_completion_context_get_start_iter (IdeCompletionContext *self,
  * Gets the word that is being completed up to the position of the insert mark.
  *
  * Returns: (transfer full): a string containing the current word
+ *
+ * Since: 3.32
  */
 gchar *
 ide_completion_context_get_word (IdeCompletionContext *self)
@@ -924,7 +928,7 @@ _ide_completion_context_can_refilter (IdeCompletionContext *self,
  *
  * Returns: (transfer none) (nullable): a #GtkTextBuffer or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GtkTextBuffer *
 ide_completion_context_get_buffer (IdeCompletionContext *self)
@@ -944,6 +948,8 @@ ide_completion_context_get_buffer (IdeCompletionContext *self)
  * Gets the text view for the context.
  *
  * Returns: (nullable) (transfer none): a #GtkTextView or %NULL
+ *
+ * Since: 3.32
  */
 GtkTextView *
 ide_completion_context_get_view (IdeCompletionContext *self)
@@ -1006,7 +1012,7 @@ _ide_completion_context_iter_invalidates (IdeCompletionContext *self,
  *
  * Returns: a newly allocated string
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gchar *
 ide_completion_context_get_line_text (IdeCompletionContext *self)
@@ -1029,7 +1035,7 @@ ide_completion_context_get_line_text (IdeCompletionContext *self)
  *
  * Returns: (nullable): a language identifier or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 const gchar *
 ide_completion_context_get_language (IdeCompletionContext *self)
@@ -1056,7 +1062,7 @@ ide_completion_context_get_language (IdeCompletionContext *self)
  *
  * Returns: %TRUE if @language matches; otherwise %FALSE.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_context_is_language (IdeCompletionContext *self,
@@ -1073,7 +1079,7 @@ ide_completion_context_is_language (IdeCompletionContext *self,
  *
  * Gets the mode for which the context was activated.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletionActivation
 ide_completion_context_get_activation (IdeCompletionContext *self)

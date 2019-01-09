@@ -1096,7 +1096,7 @@ gbp_spell_widget_init (GbpSpellWidget *self)
  *
  * Returns: (nullable) (transfer none): An #IdeEditorView or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeEditorView *
 gbp_spell_widget_get_editor (GbpSpellWidget *self)

@@ -133,7 +133,7 @@ ide_langserv_completion_item_get_detail (IdeLangservCompletionItem *self)
  *
  * Returns: (transfer full): an #IdeSnippet
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeSnippet *
 ide_langserv_completion_item_get_snippet (IdeLangservCompletionItem *self)

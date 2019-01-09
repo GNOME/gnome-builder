@@ -249,7 +249,7 @@ gbp_spell_buffer_addin_init (GbpSpellBufferAddin *self)
  *
  * Returns: (transfer none): a #GspellChecker
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GspellChecker *
 gbp_spell_buffer_addin_get_checker (GbpSpellBufferAddin *self)
@@ -271,7 +271,7 @@ gbp_spell_buffer_addin_get_checker (GbpSpellBufferAddin *self)
  * to complete the process. If no more views are active, spellchecking
  * may be disabled on the buffer.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 gbp_spell_buffer_addin_begin_checking (GbpSpellBufferAddin *self)
@@ -299,6 +299,8 @@ gbp_spell_buffer_addin_begin_checking (GbpSpellBufferAddin *self)
  *
  * Completes a spellcheck operation. The buffer will return to it's original
  * state. Thay may mean inline checking is disabled.
+ *
+ * Since: 3.32
  */
 void
 gbp_spell_buffer_addin_end_checking (GbpSpellBufferAddin *self)
@@ -327,6 +329,8 @@ gbp_spell_buffer_addin_end_checking (GbpSpellBufferAddin *self)
  * Gets the tag to use for the current misspelled word.
  *
  * Returns: (nullable) (transfer none): a #GtkTextTag or %NULL.
+ *
+ * Since: 3.32
  */
 GtkTextTag *
 gbp_spell_buffer_addin_get_misspelled_tag (GbpSpellBufferAddin *self)

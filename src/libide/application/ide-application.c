@@ -63,7 +63,7 @@
  * to the lifetime of the process (rather than the lifetime of the project),
  * then #IdeApplicationAddin provides the extension point you need.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 
 G_DEFINE_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
@@ -598,7 +598,7 @@ ide_application_init (IdeApplication *self)
  * Creates a new #IdeApplication. This should only be used by the application
  * entry point.
  *
- * Since: 3.22
+ * Since: 3.32
  */
 IdeApplication *
 ide_application_new (IdeApplicationMode mode)
@@ -623,7 +623,7 @@ ide_application_new (IdeApplicationMode mode)
  *
  * Returns: the #IdeApplicationMode
  *
- * Since: 3.20
+ * Since: 3.32
  */
 IdeApplicationMode
 ide_application_get_mode (IdeApplication *self)
@@ -670,6 +670,8 @@ ide_application_get_worker_cb (GObject      *object,
  *
  * @callback should call ide_application_get_worker_finish() with the result
  * provided to retrieve the result.
+ *
+ * Since: 3.32
  */
 void
 ide_application_get_worker_async (IdeApplication      *self,
@@ -708,6 +710,8 @@ ide_application_get_worker_async (IdeApplication      *self,
  * Completes an asynchronous request to get a proxy to a worker process.
  *
  * Returns: (transfer full): a #GDBusProxy or %NULL.
+ *
+ * Since: 3.32
  */
 GDBusProxy *
 ide_application_get_worker_finish (IdeApplication  *self,
@@ -731,6 +735,8 @@ ide_application_get_worker_finish (IdeApplication  *self,
  * represents recent and discover projects on the system.
  *
  * Returns: (transfer none): An #IdeRecentProjects.
+ *
+ * Since: 3.32
  */
 IdeRecentProjects *
 ide_application_get_recent_projects (IdeApplication *self)
@@ -801,6 +807,8 @@ ide_application_get_keybindings_mode (IdeApplication *self)
  * Gets the startup time of the application.
  *
  * Returns: (transfer none): a #GDateTime.
+ *
+ * Since: 3.32
  */
 GDateTime *
 ide_application_get_started_at (IdeApplication *self)
@@ -817,7 +825,7 @@ ide_application_get_started_at (IdeApplication *self)
  *
  * Returns: %TRUE if the project is already open, otherwise %FALSE.
  *
- * Since: 3.22
+ * Since: 3.32
  */
 gboolean
 ide_application_open_project (IdeApplication *self,
@@ -883,6 +891,8 @@ ide_application_open_project (IdeApplication *self,
  * This is used by IDE_IS_MAIN_THREAD for assertion checks.
  *
  * Returns: (transfer none): a #GThread
+ *
+ * Since: 3.32
  */
 GThread *
 ide_application_get_main_thread (void)
@@ -898,7 +908,7 @@ ide_application_get_main_thread (void)
  * Adds a directory reaper which will be executed as part of the cleanup
  * process when exiting Builder.
  *
- * Since: 3.24
+ * Since: 3.32
  */
 void
 ide_application_add_reaper (IdeApplication     *self,
@@ -918,7 +928,7 @@ ide_application_add_reaper (IdeApplication     *self,
  *
  * Returns: (transfer none): An #IdeTransferManager
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeTransferManager *
 ide_application_get_transfer_manager (IdeApplication *self)
@@ -947,7 +957,7 @@ ide_application_get_transfer_manager (IdeApplication *self)
  *
  * Returns: (not nullable) (transfer full): a #GFile
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GFile *
 ide_application_get_projects_directory (IdeApplication *self)
@@ -1017,7 +1027,7 @@ ide_application_network_changed_cb (IdeApplication  *self,
  *
  * Returns: %TRUE if we think there is network access.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_application_has_network (IdeApplication *self)

@@ -61,6 +61,8 @@ sysroot_manager_get_path (void)
  * Returns a colon-separated list of additional pkgconfig paths
  *
  * Returns: (transfer full) (nullable): additional guessed paths
+ *
+ * Since: 3.32
  */
 static gchar *
 sysroot_manager_find_additional_pkgconfig_paths (GbpSysrootManager *self,
@@ -114,6 +116,8 @@ sysroot_manager_save (GbpSysrootManager *self)
  * Returns the default #GbpSysrootManager instance.
  *
  * Returns: (transfer none): the common sysroot manager
+ *
+ * Since: 3.32
  */
 GbpSysrootManager *
 gbp_sysroot_manager_get_default (void)
@@ -140,6 +144,8 @@ gbp_sysroot_manager_get_default (void)
  * This creates a new target and initializes its fields to the default parameters.
  *
  * Returns: (transfer full): the unique identifier of the new target
+ *
+ * Since: 3.32
  */
 gchar *
 gbp_sysroot_manager_create_target (GbpSysrootManager *self)
@@ -191,6 +197,8 @@ gbp_sysroot_manager_remove_target (GbpSysrootManager *self,
  * @name: the displayable name of the target
  *
  * Sets the displayable name of the target.
+ *
+ * Since: 3.32
  */
 void
 gbp_sysroot_manager_set_target_name (GbpSysrootManager *self,
@@ -215,6 +223,8 @@ gbp_sysroot_manager_set_target_name (GbpSysrootManager *self,
  * Gets the displayable name of the target.
  *
  * Returns: (transfer full): the name of the target to display.
+ *
+ * Since: 3.32
  */
 gchar *
 gbp_sysroot_manager_get_target_name (GbpSysrootManager *self,
@@ -234,6 +244,8 @@ gbp_sysroot_manager_get_target_name (GbpSysrootManager *self,
  * @name: the architecture of the target
  *
  * Sets the architecture of the target.
+ *
+ * Since: 3.32
  */
 void
 gbp_sysroot_manager_set_target_arch (GbpSysrootManager *self,
@@ -258,6 +270,8 @@ gbp_sysroot_manager_set_target_arch (GbpSysrootManager *self,
  * Gets the architecture of the target.
  *
  * Returns: (transfer full): the architecture of the target.
+ *
+ * Since: 3.32
  */
 gchar *
 gbp_sysroot_manager_get_target_arch (GbpSysrootManager *self,
@@ -277,6 +291,8 @@ gbp_sysroot_manager_get_target_arch (GbpSysrootManager *self,
  * @path: the sysroot path of the target
  *
  * Sets the sysroot path of the target.
+ *
+ * Since: 3.32
  */
 void
 gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
@@ -350,6 +366,8 @@ gbp_sysroot_manager_set_target_path (GbpSysrootManager *self,
  * Gets the sysroot path of the target.
  *
  * Returns: (transfer full): the sysroot path of the target.
+ *
+ * Since: 3.32
  */
 gchar *
 gbp_sysroot_manager_get_target_path (GbpSysrootManager *self,
@@ -371,6 +389,8 @@ gbp_sysroot_manager_get_target_path (GbpSysrootManager *self,
  *
  * Sets the additional Pkg-Config paths of the target.
  * It is possible to use several paths by separating them with a colon character.
+ *
+ * Since: 3.32
  */
 void
 gbp_sysroot_manager_set_target_pkg_config_path (GbpSysrootManager *self,
@@ -396,6 +416,8 @@ gbp_sysroot_manager_set_target_pkg_config_path (GbpSysrootManager *self,
  * This is often used when the target has its libraries in an architecture-specific folder.
  *
  * Returns: (transfer full) (nullable): the additional paths to pkg-config, using a colon separator.
+ *
+ * Since: 3.32
  */
 gchar *
 gbp_sysroot_manager_get_target_pkg_config_path (GbpSysrootManager *self,
@@ -416,6 +438,8 @@ gbp_sysroot_manager_get_target_pkg_config_path (GbpSysrootManager *self,
  *
  * Returns: (transfer full) (nullable): the %NULL-terminated list of all the available sysroot
  * unique identifiers.
+ *
+ * Since: 3.32
  */
 gchar **
 gbp_sysroot_manager_list (GbpSysrootManager *self)

@@ -238,6 +238,8 @@ ide_search_result_set_priority (IdeSearchResult *self,
  * be used in lieu of handling the activate signal.
  *
  * Returns: (transfer full) (nullable): An #IdeUri
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_search_result_get_source_location (IdeSearchResult *self)

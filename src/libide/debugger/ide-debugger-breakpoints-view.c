@@ -569,7 +569,7 @@ ide_debugger_breakpoints_view_new (void)
  *
  * Returns: (nullable) (transfer none): An #IdeDebugger or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeDebugger *
 ide_debugger_breakpoints_view_get_debugger (IdeDebuggerBreakpointsView *self)
@@ -589,7 +589,7 @@ ide_debugger_breakpoints_view_get_debugger (IdeDebuggerBreakpointsView *self)
  *
  * Sets the debugger that is being viewed.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_breakpoints_view_set_debugger (IdeDebuggerBreakpointsView *self,

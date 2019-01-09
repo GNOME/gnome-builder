@@ -138,6 +138,8 @@ ide_langserv_completion_provider_init (IdeLangservCompletionProvider *self)
  * Gets the client for the completion provider.
  *
  * Returns: (transfer none) (nullable): An #IdeLangservClient or %NULL
+ *
+ * Since: 3.32
  */
 IdeLangservClient *
 ide_langserv_completion_provider_get_client (IdeLangservCompletionProvider *self)

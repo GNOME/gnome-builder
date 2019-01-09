@@ -207,7 +207,7 @@ ide_workbench_header_bar_insert_left (IdeWorkbenchHeaderBar *self,
  * to the perspective selector. This is a special location in that the spacing
  * is treated differently than other locations on the header bar.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_workbench_header_bar_add_primary (IdeWorkbenchHeaderBar *self,
@@ -293,6 +293,8 @@ buildable_iface_init (GtkBuildableIface *iface)
  * ide_workbench_header_bar_get_omni_bar:
  *
  * Returns: (transfer none): An #IdeOmniBar.
+ *
+ * Since: 3.32
  */
 IdeOmniBar *
 ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self)

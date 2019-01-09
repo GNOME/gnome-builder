@@ -387,6 +387,8 @@ ide_workbench_open_files_cb (GObject      *object,
  *
  * Starts the process of loading the buffers for the given @files, possibly
  * creating an #IdeEditorView for each depending on @flags.
+ *
+ * Since: 3.32
  */
 void
 ide_workbench_open_files_async (IdeWorkbench         *self,

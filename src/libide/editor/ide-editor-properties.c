@@ -34,7 +34,7 @@
  * It should be used in a transient panel when the user needs to tweak the
  * settings of a view.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 
 struct _IdeEditorProperties
@@ -401,7 +401,7 @@ ide_editor_properties_init (IdeEditorProperties *self)
  *
  * Returns: (transfer full): an #IdeEditorProperties
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GtkWidget *
 ide_editor_properties_new (void)
@@ -416,7 +416,7 @@ ide_editor_properties_new (void)
  *
  * Sets the view to be edited by the property editor.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_properties_set_view (IdeEditorProperties *self,

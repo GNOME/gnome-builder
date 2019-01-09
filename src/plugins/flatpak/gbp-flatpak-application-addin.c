@@ -449,6 +449,8 @@ gbp_flatpak_application_addin_unload (IdeApplicationAddin *addin,
  * Gets an array of runtimes available on the system.
  *
  * Returns: (transfer container) (element-type Flatpak.InstalledRef): Array of runtimes.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 gbp_flatpak_application_addin_get_runtimes (GbpFlatpakApplicationAddin *self)
@@ -491,6 +493,8 @@ gbp_flatpak_application_addin_get_runtimes (GbpFlatpakApplicationAddin *self)
  * Gets an array of flatpak installations on the system.
  *
  * Returns: (transfer container) (element-type Flatpak.Installation): Array of installations
+ *
+ * Since: 3.32
  */
 GPtrArray *
 gbp_flatpak_application_addin_get_installations (GbpFlatpakApplicationAddin *self)
@@ -891,6 +895,8 @@ gbp_flatpak_application_addin_class_init (GbpFlatpakApplicationAddinClass *klass
    * This signal is emitted when a new runtime is discovered. No deduplication
    * is dealt with here, so consumers will need to ensure they have not seen
    * the runtime before by deduplicating with id/arch/branch.
+   *
+   * Since: 3.32
    */
   signals [RUNTIME_ADDED] = g_signal_new ("runtime-added",
                                           G_TYPE_FROM_CLASS (klass),
@@ -906,6 +912,8 @@ gbp_flatpak_application_addin_class_init (GbpFlatpakApplicationAddinClass *klass
    * This signal is emitted when the addin reloads, which is generally
    * triggered by one of the flatpak installations changing, so other
    * components can indirectly monitor that.
+   *
+   * Since: 3.32
    */
   signals [RELOAD] = g_signal_new ("reload",
                                    G_TYPE_FROM_CLASS (klass),

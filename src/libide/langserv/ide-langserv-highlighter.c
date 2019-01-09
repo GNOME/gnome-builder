@@ -363,6 +363,8 @@ ide_langserv_highlighter_init (IdeLangservHighlighter *self)
  * ide_langserv_highlighter_get_client:
  *
  * Returns: (transfer none) (nullable): An #IdeLangservHighlighter or %NULL.
+ *
+ * Since: 3.32
  */
 IdeLangservClient *
 ide_langserv_highlighter_get_client (IdeLangservHighlighter *self)

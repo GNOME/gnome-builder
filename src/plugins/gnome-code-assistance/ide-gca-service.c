@@ -216,6 +216,8 @@ ide_gca_service_get_proxy_async (IdeGcaService       *self,
  * Completes an asynchronous request to load a Gca proxy.
  *
  * Returns: (transfer full): a #GcaService or %NULL upon failure.
+ *
+ * Since: 3.32
  */
 GcaService *
 ide_gca_service_get_proxy_finish (IdeGcaService  *self,

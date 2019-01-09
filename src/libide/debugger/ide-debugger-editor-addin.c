@@ -52,7 +52,7 @@
  * various panels to the editor perpective and ensure they are only visible
  * when the process is being debugged.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 
 struct _IdeDebuggerEditorAddin

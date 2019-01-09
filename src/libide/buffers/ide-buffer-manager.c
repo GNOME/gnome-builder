@@ -191,6 +191,8 @@ unref_if_non_null (gpointer data)
  * Gets the value of the #IdeBufferManager:auto-save-timeout property.
  *
  * Returns: The timeout in seconds if enabled, otherwise 0.
+ *
+ * Since: 3.32
  */
 guint
 ide_buffer_manager_get_auto_save_timeout (IdeBufferManager *self)
@@ -214,6 +216,8 @@ ide_buffer_manager_get_auto_save_timeout (IdeBufferManager *self)
  *
  * This is the number of seconds to wait after a buffer has been changed before
  * automatically saving the buffer.
+ *
+ * Since: 3.32
  */
 void
 ide_buffer_manager_set_auto_save_timeout (IdeBufferManager *self,
@@ -249,6 +253,8 @@ ide_buffer_manager_set_auto_save_timeout (IdeBufferManager *self,
  * change.
  *
  * Returns: %TRUE if auto save is enabled. otherwise %FALSE.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_buffer_manager_get_auto_save (IdeBufferManager *self)
@@ -267,6 +273,8 @@ ide_buffer_manager_get_auto_save (IdeBufferManager *self)
  * Sets the #IdeBufferManager:auto-save property. If this is %TRUE, then a
  * buffer will automatically be saved after #IdeBufferManager:auto-save-timeout
  * seconds have elapsed since the buffer's last modification.
+ *
+ * Since: 3.32
  */
 void
 ide_buffer_manager_set_auto_save (IdeBufferManager *self,
@@ -299,6 +307,8 @@ ide_buffer_manager_set_auto_save (IdeBufferManager *self,
  * the current selected view.
  *
  * Returns: (transfer none): An #IdeBuffer or %NULL.
+ *
+ * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_manager_get_focus_buffer (IdeBufferManager *self)
@@ -756,6 +766,8 @@ ide_buffer_manager_load_task_completed (IdeBufferManager *self,
  * that will be loaded with the #IdeBufferManager:max-file-size property.
  *
  * See ide_buffer_manager_load_file_finish() for how to complete this asynchronous request.
+ *
+ * Since: 3.32
  */
 void
 ide_buffer_manager_load_file_async (IdeBufferManager       *self,
@@ -885,6 +897,8 @@ ide_buffer_manager_load_file_async (IdeBufferManager       *self,
  * with its reference count incremented by one.
  *
  * Returns: (transfer full): An #IdeBuffer if successful; otherwise %NULL and @error is set.
+ *
+ * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_manager_load_file_finish (IdeBufferManager  *self,
@@ -1134,6 +1148,8 @@ ide_buffer_manager_save_file__load_settings_cb (GObject      *object,
  *
  * Call ide_buffer_manager_save_file_finish() to complete this asynchronous
  * request.
+ *
+ * Since: 3.32
  */
 void
 ide_buffer_manager_save_file_async (IdeBufferManager     *self,
@@ -1230,6 +1246,8 @@ ide_buffer_manager_save_file_async (IdeBufferManager     *self,
  * ide_buffer_manager_save_file_async(). Upon failure, %FALSE is returned and @error is set.
  *
  * Returns: %TRUE if successful %FALSE upon failure and @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_buffer_manager_save_file_finish (IdeBufferManager  *self,
@@ -1524,6 +1542,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * #IdeBuffer or %NULL, for which one will be created.
    *
    * Returns: (transfer full) (nullable): An #IdeBuffer or %NULL.
+   *
+   * Since: 3.32
    */
   signals [CREATE_BUFFER] = g_signal_new_class_handler ("create-buffer",
                                                         G_TYPE_FROM_CLASS (klass),
@@ -1543,6 +1563,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when a request has been made to save a buffer. Connect to this signal
    * if you'd like to perform mutation of the buffer before it is persisted to storage.
    * Till the "buffer-saved" signal is emmited, the buffer:file property point to the current file.
+   *
+   * Since: 3.32
    */
   signals [SAVE_BUFFER] = g_signal_new ("save-buffer",
                                          G_TYPE_FROM_CLASS (klass),
@@ -1562,6 +1584,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * this signal if you want to know when the modifications have successfully been written to
    * storage.
    * The buffer:file property point to the saved file.
+   *
+   * Since: 3.32
    */
   signals [BUFFER_SAVED] = g_signal_new ("buffer-saved",
                                           G_TYPE_FROM_CLASS (klass),
@@ -1583,6 +1607,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * If @create_new_view is %FALSE, then the buffer is probably being force-reloaded due to
    * changes from the host file-system.
+   *
+   * Since: 3.32
    */
   signals [LOAD_BUFFER] = g_signal_new ("load-buffer",
                                         G_TYPE_FROM_CLASS (klass),
@@ -1601,6 +1627,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * This signal is emitted when a buffer has been successfully loaded. You might connect to this
    * signal to be notified when a buffer has completed loading.
+   *
+   * Since: 3.32
    */
   signals [BUFFER_LOADED] =
     g_signal_new_class_handler ("buffer-loaded",
@@ -1619,6 +1647,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * This signal is emitted when a view for @buffer has received focus. You might connect to this
    * signal when you want to perform an operation while a buffer is in focus.
+   *
+   * Since: 3.32
    */
   signals [BUFFER_FOCUS_ENTER] = g_signal_new ("buffer-focus-enter",
                                                 G_TYPE_FROM_CLASS (klass),
@@ -1636,6 +1666,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * This signal is emitted when the focus has left the view containing @buffer. You might connect
    * to this signal to stop any work you were performing while the buffer was focused.
+   *
+   * Since: 3.32
    */
   signals [BUFFER_FOCUS_LEAVE] = g_signal_new ("buffer-focus-leave",
                                                 G_TYPE_FROM_CLASS (klass),
@@ -1654,6 +1686,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * This signal is emitted when the buffer is unloaded. This allows consumers to access the
    * buffer before the items-changed signal is emitted; at which point it will be too late to
    * get a pointer to the buffer.
+   *
+   * Since: 3.32
    */
   signals [BUFFER_UNLOADED] =
     g_signal_new_class_handler ("buffer-unloaded",
@@ -1694,6 +1728,8 @@ ide_buffer_manager_init (IdeBufferManager *self)
  * Buffers are generally not added to the buffer list until they have been loaded.
  *
  * Returns: (transfer full) (element-type Ide.Buffer): a #GPtrArray of buffers.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_buffer_manager_get_buffers (IdeBufferManager *self)
@@ -1725,6 +1761,8 @@ ide_buffer_manager_get_buffers (IdeBufferManager *self)
  * returned.
  *
  * Returns: (transfer none) (nullable): An #IdeBuffer or %NULL.
+ *
+ * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_manager_find_buffer (IdeBufferManager *self,
@@ -1771,6 +1809,8 @@ ide_buffer_manager_find_buffer (IdeBufferManager *self,
  * Checks to see if the buffer manager has the file loaded.
  *
  * Returns: %TRUE if @file is loaded.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_buffer_manager_has_file (IdeBufferManager *self,
@@ -1793,6 +1833,8 @@ ide_buffer_manager_has_file (IdeBufferManager *self,
  * If zero, no size limits will be enforced.
  *
  * Returns: a #gsize in bytes or zero.
+ *
+ * Since: 3.32
  */
 gsize
 ide_buffer_manager_get_max_file_size (IdeBufferManager *self)
@@ -1809,6 +1851,8 @@ ide_buffer_manager_get_max_file_size (IdeBufferManager *self)
  * @max_file_size: The maximum file size in bytes, or zero for no limit.
  *
  * Sets the maximum file size in bytes, that will be loaded by the #IdeBufferManager.
+ *
+ * Since: 3.32
  */
 void
 ide_buffer_manager_set_max_file_size (IdeBufferManager *self,
@@ -1830,6 +1874,8 @@ ide_buffer_manager_set_max_file_size (IdeBufferManager *self,
  * ide_file_get_file() will return %NULL to denote this type of buffer.
  *
  * Returns: (transfer full): A newly created #IdeBuffer
+ *
+ * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_manager_create_temporary_buffer (IdeBufferManager *self)
@@ -2225,6 +2271,8 @@ ide_buffer_manager_apply_edits_completed_cb (IdeBufferManager *self,
  * Asynchronously requests that all of @edits are applied to the buffers
  * in the project. If the buffer has not been loaded for a particular edit,
  * it will be loaded.
+ *
+ * Since: 3.32
  */
 void
 ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,

@@ -103,6 +103,8 @@ ide_widget_hierarchy_changed (GtkWidget *widget,
  * @handler: (scope async): A callback to handle the context
  *
  * Calls @handler when the #IdeContext has been set for @widget.
+ *
+ * Since: 3.32
  */
 void
 ide_widget_set_context_handler (gpointer                widget,
@@ -139,6 +141,8 @@ ide_widget_set_context_handler (gpointer                widget,
  * If no workbench is associated, NULL is returned.
  *
  * Returns: (transfer none) (nullable): An #IdeWorkbench
+ *
+ * Since: 3.32
  */
 IdeWorkbench *
 ide_widget_get_workbench (GtkWidget *widget)
@@ -165,6 +169,8 @@ ide_widget_get_workbench (GtkWidget *widget)
  * ide_widget_get_context: (skip)
  *
  * Returns: (nullable) (transfer none): An #IdeContext or %NULL.
+ *
+ * Since: 3.32
  */
 IdeContext *
 ide_widget_get_context (GtkWidget *widget)

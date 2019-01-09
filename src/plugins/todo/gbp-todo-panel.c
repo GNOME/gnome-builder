@@ -345,6 +345,8 @@ gbp_todo_panel_init (GbpTodoPanel *self)
  * Gets the model being displayed by the treeview.
  *
  * Returns: (transfer none) (nullable): a #GbpTodoModel.
+ *
+ * Since: 3.32
  */
 GbpTodoModel *
 gbp_todo_panel_get_model (GbpTodoPanel *self)

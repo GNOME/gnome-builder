@@ -63,6 +63,8 @@ ide_source_range_new (IdeSourceLocation *begin,
  * Gets the beginning of the source range.
  *
  * Returns: (transfer none): An #IdeSourceLocation.
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_source_range_get_begin (IdeSourceRange *self)
@@ -78,6 +80,8 @@ ide_source_range_get_begin (IdeSourceRange *self)
  * Gets the end of the source range.
  *
  * Returns: (transfer none): An #IdeSourceLocation.
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_source_range_get_end (IdeSourceRange *self)
@@ -95,6 +99,8 @@ ide_source_range_get_end (IdeSourceRange *self)
  * @self, release it by calling ide_source_range_unref().
  *
  * Returns: (transfer full): @self
+ *
+ * Since: 3.32
  */
 IdeSourceRange *
 ide_source_range_ref (IdeSourceRange *self)
@@ -118,6 +124,8 @@ ide_source_range_finalize (IdeSourceRange *self)
  * @self: (transfer full): An #IdeSourceRange
  *
  * Decrements the reference count of @self by one.
+ *
+ * Since: 3.32
  */
 void
 ide_source_range_unref (IdeSourceRange *self)
@@ -137,7 +145,7 @@ ide_source_range_unref (IdeSourceRange *self)
  *
  * Returns: (transfer full): a #GVariant
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GVariant *
 ide_source_range_to_variant (const IdeSourceRange *self)

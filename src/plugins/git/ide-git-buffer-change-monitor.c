@@ -44,6 +44,8 @@
  * state updated for use by line change renderer in the source view.
  *
  * TODO: Move the thread work into ide_thread_pool?
+ *
+ * Since: 3.32
  */
 
 struct _IdeGitBufferChangeMonitor

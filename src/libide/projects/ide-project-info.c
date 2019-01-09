@@ -37,6 +37,8 @@
  *
  * This class contains information about a project that can be loaded.
  * This information should be used to display a list of available projects.
+ *
+ * Since: 3.32
  */
 
 struct _IdeProjectInfo
@@ -83,6 +85,8 @@ static GParamSpec *properties [LAST_PROP];
  *
  *
  * Returns: (nullable) (transfer none): An #IdeDoap or %NULL.
+ *
+ * Since: 3.32
  */
 IdeDoap *
 ide_project_info_get_doap (IdeProjectInfo *self)
@@ -107,6 +111,8 @@ ide_project_info_set_doap (IdeProjectInfo *self,
  * ide_project_info_get_languages:
  *
  * Returns: (transfer none): An array of language names.
+ *
+ * Since: 3.32
  */
 const gchar * const *
 ide_project_info_get_languages (IdeProjectInfo *self)
@@ -156,6 +162,8 @@ ide_project_info_set_priority (IdeProjectInfo *self,
  * This is the directory containing the project (if known).
  *
  * Returns: (nullable) (transfer none): a #GFile.
+ *
+ * Since: 3.32
  */
 GFile *
 ide_project_info_get_directory (IdeProjectInfo *self)
@@ -173,6 +181,8 @@ ide_project_info_get_directory (IdeProjectInfo *self)
  * This is the project file (such as configure.ac) of the project.
  *
  * Returns: (nullable) (transfer none): a #GFile.
+ *
+ * Since: 3.32
  */
 GFile *
 ide_project_info_get_file (IdeProjectInfo *self)
@@ -187,6 +197,8 @@ ide_project_info_get_file (IdeProjectInfo *self)
  *
  *
  * Returns: (transfer none) (nullable): a #GDateTime or %NULL.
+ *
+ * Since: 3.32
  */
 GDateTime *
 ide_project_info_get_last_modified_at (IdeProjectInfo *self)
@@ -601,7 +613,7 @@ ide_project_info_compare (IdeProjectInfo *info1,
  *
  * Returns: (transfer none) (nullable): a #IdeVcsUri or %NULL
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeVcsUri *
 ide_project_info_get_vcs_uri (IdeProjectInfo *self)

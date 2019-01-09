@@ -184,6 +184,8 @@ ide_build_stage_row_new (IdeBuildStage *stage)
  * Gets the stage for the row.
  *
  * Returns: (transfer none): an #IdeBuildStage
+ *
+ * Since: 3.32
  */
 IdeBuildStage *
 ide_build_stage_row_get_stage (IdeBuildStageRow *self)

@@ -1057,7 +1057,7 @@ ide_completion_class_init (IdeCompletionClass *klass)
    * The #GtkTextBuffer for the #IdeCompletion:view.
    * This is a convenience property for providers.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_BUFFER] =
     g_param_spec_object ("buffer",
@@ -1071,7 +1071,7 @@ ide_completion_class_init (IdeCompletionClass *klass)
    *
    * The number of rows to display to the user.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_N_ROWS] =
     g_param_spec_uint ("n-rows",
@@ -1086,7 +1086,7 @@ ide_completion_class_init (IdeCompletionClass *klass)
    * The "view" property is the #GtkTextView for which this #IdeCompletion
    * is providing completion features.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_VIEW] =
     g_param_spec_object ("view",
@@ -1105,7 +1105,7 @@ ide_completion_class_init (IdeCompletionClass *klass)
    * The "provided-added" signal is emitted when a new provider is
    * added to the completion.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [PROVIDER_ADDED] =
     g_signal_new ("provider-added",
@@ -1126,7 +1126,7 @@ ide_completion_class_init (IdeCompletionClass *klass)
    * The "provided-removed" signal is emitted when a provider has
    * been removed from the completion.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [PROVIDER_REMOVED] =
     g_signal_new ("provider-removed",
@@ -1146,7 +1146,7 @@ ide_completion_class_init (IdeCompletionClass *klass)
    * The "hide" signal is emitted when the completion window should
    * be hidden.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [HIDE] =
     g_signal_new_class_handler ("hide",
@@ -1167,7 +1167,7 @@ ide_completion_class_init (IdeCompletionClass *klass)
    * The "show" signal is emitted when the completion window should
    * be shown.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [SHOW] =
     g_signal_new_class_handler ("show",
@@ -1283,6 +1283,8 @@ ide_completion_init (IdeCompletion *self)
  * @self: a #IdeCompletion
  *
  * Returns: (transfer none): an #GtkSourceView
+ *
+ * Since: 3.32
  */
 GtkSourceView *
 ide_completion_get_view (IdeCompletion *self)
@@ -1297,6 +1299,8 @@ ide_completion_get_view (IdeCompletion *self)
  * @self: a #IdeCompletion
  *
  * Returns: (transfer none): a #GtkTextBuffer
+ *
+ * Since: 3.32
  */
 GtkTextBuffer *
 ide_completion_get_buffer (IdeCompletion *self)
@@ -1324,7 +1328,7 @@ _ide_completion_new (GtkSourceView *view)
  * Adds an #IdeCompletionProvider to the list of providers to be queried
  * for completion results.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_add_provider (IdeCompletion         *self,
@@ -1349,7 +1353,7 @@ ide_completion_add_provider (IdeCompletion         *self,
  * Removes an #IdeCompletionProvider previously added with
  * ide_completion_add_provider().
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_remove_provider (IdeCompletion         *self,
@@ -1379,7 +1383,7 @@ ide_completion_remove_provider (IdeCompletion         *self,
  * When the "show" signal is emitted, the completion window will be
  * displayed if there are any results available.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_show (IdeCompletion *self)
@@ -1408,7 +1412,7 @@ ide_completion_show (IdeCompletion *self)
  * When the "hide" signal is emitted, the completion window will be
  * dismissed.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_hide (IdeCompletion *self)
@@ -1545,7 +1549,7 @@ _ide_completion_set_language_id (IdeCompletion *self,
  *
  * Returns: %TRUE if the display is visible
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_is_visible (IdeCompletion *self)
@@ -1566,7 +1570,7 @@ ide_completion_is_visible (IdeCompletion *self)
  *
  * Returns: (transfer none): an #IdeCompletionDisplay
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletionDisplay *
 ide_completion_get_display (IdeCompletion *self)
@@ -1649,7 +1653,7 @@ _ide_completion_set_font_description (IdeCompletion              *self,
  *
  * Returns: %TRUE if @haystack matched @casefold_needle, otherwise %FALSE.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_fuzzy_match (const gchar *haystack,
@@ -1729,7 +1733,7 @@ ide_completion_fuzzy_match (const gchar *haystack,
  *
  * Returns: a newly allocated string
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gchar *
 ide_completion_fuzzy_highlight (const gchar *haystack,

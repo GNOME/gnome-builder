@@ -46,7 +46,7 @@
  * You can access the test manager using ide_context_get_text_manager()
  * using the #IdeContext for the loaded project.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 
 struct _IdeTestManager
@@ -154,7 +154,7 @@ ide_test_manager_class_init (IdeTestManagerClass *klass)
    * The "loading" property denotes if a test provider is busy loading
    * tests in the background.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_LOADING] =
     g_param_spec_boolean ("loading",
@@ -561,7 +561,7 @@ ide_test_manager_run_all_cb (GObject      *object,
  * Note that the individual test result information will be attached
  * to the specific #IdeTest instances.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_test_manager_run_all_async (IdeTestManager      *self,
@@ -635,7 +635,7 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_test_manager_run_all_finish (IdeTestManager  *self,
@@ -690,7 +690,7 @@ ide_test_manager_run_cb (GObject      *object,
  * The caller can access the result of the operation from @callback
  * by calling ide_test_manager_run_finish() with the provided result.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_test_manager_run_async (IdeTestManager      *self,
@@ -755,7 +755,7 @@ ide_test_manager_run_async (IdeTestManager      *self,
  * Returns: %TRUE if the test was executed; otherwise %FALSE
  *   and @error is set.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_test_manager_run_finish (IdeTestManager  *self,

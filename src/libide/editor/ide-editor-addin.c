@@ -36,6 +36,8 @@
  * to the editor perspective directly. This can be convenient if all you
  * need to do is add panels or perform view tracking of the current
  * focus view.
+ *
+ * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeEditorAddin, ide_editor_addin, G_TYPE_OBJECT)
@@ -54,7 +56,7 @@ ide_editor_addin_default_init (IdeEditorAddinInterface *iface)
  *
  * The addin should add any necessary UI components.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_addin_load (IdeEditorAddin       *self,
@@ -77,7 +79,7 @@ ide_editor_addin_load (IdeEditorAddin       *self,
  * The addin is responsible for undoing anything it setup in load
  * and cancel any in-flight or pending tasks immediately.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_addin_unload (IdeEditorAddin       *self,
@@ -106,7 +108,7 @@ ide_editor_addin_unload (IdeEditorAddin       *self,
  * When the last view is removed, @view will be %NULL to indicate to the
  * addin that there is no active view.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_addin_view_set (IdeEditorAddin *self,
@@ -129,6 +131,8 @@ ide_editor_addin_view_set (IdeEditorAddin *self,
  * should match the value specified in the ".plugin" module definition.
  *
  * Returns: (transfer none) (nullable): An #IdeEditorAddin or %NULL
+ *
+ * Since: 3.32
  */
 IdeEditorAddin *
 ide_editor_addin_find_by_module_name (IdeEditorPerspective *editor,

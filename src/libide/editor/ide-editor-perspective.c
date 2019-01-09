@@ -386,7 +386,7 @@ ide_editor_perspective_init (IdeEditorPerspective *self)
  *
  * Returns: (transfer none): An #IdeLayoutGrid.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeLayoutGrid *
 ide_editor_perspective_get_grid (IdeEditorPerspective *self)
@@ -665,7 +665,7 @@ ide_editor_perspective_focus_buffer_in_current_stack (IdeEditorPerspective *self
  *
  * Returns: (nullable) (transfer none): An #IdeLayoutView or %NULL.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeLayoutView *
 ide_editor_perspective_get_active_view (IdeEditorPerspective *self)
@@ -687,7 +687,7 @@ ide_editor_perspective_get_active_view (IdeEditorPerspective *self)
  *
  * Returns: (transfer none): an #IdeEditorSidebar
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeEditorSidebar *
 ide_editor_perspective_get_sidebar (IdeEditorPerspective *self)
@@ -709,7 +709,7 @@ ide_editor_perspective_get_sidebar (IdeEditorPerspective *self)
  *
  * Returns: (transfer none): An #IdeLayoutTransientSidebar
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeLayoutTransientSidebar *
 ide_editor_perspective_get_transient_sidebar (IdeEditorPerspective *self)
@@ -723,6 +723,8 @@ ide_editor_perspective_get_transient_sidebar (IdeEditorPerspective *self)
  * ide_editor_perspective_get_utilities:
  *
  * Returns: (transfer none): An #IdeEditorUtilities
+ *
+ * Since: 3.32
  */
 GtkWidget *
 ide_editor_perspective_get_utilities (IdeEditorPerspective *self)
@@ -940,6 +942,8 @@ _ide_editor_perspective_show_properties (IdeEditorPerspective *self,
  * items in the layout grid.
  *
  * Returns: (transfer none) (type Gtk.Overlay): a #GtkWidget
+ *
+ * Since: 3.32
  */
 GtkWidget *
 ide_editor_perspective_get_overlay (IdeEditorPerspective *self)

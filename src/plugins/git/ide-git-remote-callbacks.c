@@ -60,6 +60,8 @@ ide_git_remote_callbacks_new (void)
  * Gets the #IdeProgress for the operation.
  *
  * Returns: (transfer none): An #IdeProgress.
+ *
+ * Since: 3.32
  */
 IdeProgress *
 ide_git_remote_callbacks_get_progress (IdeGitRemoteCallbacks *self)
@@ -76,6 +78,8 @@ ide_git_remote_callbacks_get_progress (IdeGitRemoteCallbacks *self)
  * g_object_bind_property() to GtkProgressBar:fraction or similar progress widget.
  *
  * Returns: The operation completion percentage, as a fraction between 0 and 1.
+ *
+ * Since: 3.32
  */
 gdouble
 ide_git_remote_callbacks_get_fraction (IdeGitRemoteCallbacks *self)
@@ -270,6 +274,8 @@ ide_git_remote_callbacks_init (IdeGitRemoteCallbacks *self)
  *
  * This function should be called when a clone was canceled so that we can
  * avoid dispatching more events.
+ *
+ * Since: 3.32
  */
 void
 ide_git_remote_callbacks_cancel (IdeGitRemoteCallbacks *self)

@@ -536,6 +536,8 @@ gbp_grep_panel_set_model (GbpGrepPanel *self,
  * @self: a #GbpGrepPanel
  *
  * Returns: (transfer none) (nullable): a #GbpGrepModel
+ *
+ * Since: 3.32
  */
 GbpGrepModel *
 gbp_grep_panel_get_model (GbpGrepPanel *self)

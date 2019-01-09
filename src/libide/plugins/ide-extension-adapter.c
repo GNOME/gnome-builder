@@ -539,6 +539,8 @@ ide_extension_adapter_get_interface_type (IdeExtensionAdapter *self)
  * Gets the #IdeExtensionAdapter:engine property.
  *
  * Returns: (transfer none): a #PeasEngine.
+ *
+ * Since: 3.32
  */
 PeasEngine *
 ide_extension_adapter_get_engine (IdeExtensionAdapter *self)
@@ -555,6 +557,8 @@ ide_extension_adapter_get_engine (IdeExtensionAdapter *self)
  * Gets the extension object managed by the adapter.
  *
  * Returns: (transfer none) (type GObject.Object): a #GObject or %NULL.
+ *
+ * Since: 3.32
  */
 gpointer
 ide_extension_adapter_get_extension (IdeExtensionAdapter *self)
@@ -587,6 +591,8 @@ ide_extension_adapter_get_extension (IdeExtensionAdapter *self)
  * ignored and the secondary plugin will be used.
  *
  * Returns: (transfer full): A newly created #IdeExtensionAdapter.
+ *
+ * Since: 3.32
  */
 IdeExtensionAdapter *
 ide_extension_adapter_new (IdeContext  *context,

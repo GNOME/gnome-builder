@@ -34,7 +34,7 @@
  *
  * You can get this widget via ide_editor_perspective_get_utilities().
  *
- * Since: 3.26
+ * Since: 3.32
  */
 
 struct _IdeEditorUtilities

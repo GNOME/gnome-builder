@@ -46,6 +46,8 @@ DZL_DEFINE_COUNTER (instances, "IdeSourceLocation", "Instances", "Number of IdeS
  * Increments the reference count of @self by one.
  *
  * Returns: (transfer full): self
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_source_location_ref (IdeSourceLocation *self)
@@ -68,6 +70,8 @@ ide_source_location_finalize (IdeSourceLocation *self)
  *
  * Decrements the reference count of @self by one. If the reference count
  * reaches zero, then the structure is freed.
+ *
+ * Since: 3.32
  */
 void
 ide_source_location_unref (IdeSourceLocation *self)
@@ -83,6 +87,8 @@ ide_source_location_unref (IdeSourceLocation *self)
  * Retrieves the character offset within the file.
  *
  * Returns: a #guint containing the character offset within the file.
+ *
+ * Since: 3.32
  */
 guint
 ide_source_location_get_offset (IdeSourceLocation *self)
@@ -98,6 +104,8 @@ ide_source_location_get_offset (IdeSourceLocation *self)
  * Retrieves the target line number starting from 0.
  *
  * Returns: a #guint containing the target line.
+ *
+ * Since: 3.32
  */
 guint
 ide_source_location_get_line (IdeSourceLocation *self)
@@ -113,6 +121,8 @@ ide_source_location_get_line (IdeSourceLocation *self)
  * Retrieves the character offset within the line.
  *
  * Returns: a #guint containing the offset within the line.
+ *
+ * Since: 3.32
  */
 guint
 ide_source_location_get_line_offset (IdeSourceLocation *self)
@@ -128,6 +138,8 @@ ide_source_location_get_line_offset (IdeSourceLocation *self)
  * The file represented by this source location.
  *
  * Returns: (transfer none): An #IdeFile.
+ *
+ * Since: 3.32
  */
 IdeFile *
 ide_source_location_get_file (IdeSourceLocation *self)
@@ -148,6 +160,8 @@ ide_source_location_get_file (IdeSourceLocation *self)
  * offset provided.
  *
  * Returns: (transfer full): A newly allocated #IdeSourceLocation.
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_source_location_new (IdeFile *file,
@@ -184,7 +198,7 @@ ide_source_location_new (IdeFile *file,
  * Returns: (transfer full) (nullable): a #GVariant if succesful;
  *   otherwise %NULL.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_source_location_new_from_variant (GVariant *variant)
@@ -235,6 +249,8 @@ failure:
  * @self: (in): an #IdeSourceLocation.
  *
  * Returns: (transfer full): A newly allocated #IdeUri.
+ *
+ * Since: 3.32
  */
 IdeUri *
 ide_source_location_get_uri (IdeSourceLocation *self)
@@ -310,6 +326,8 @@ ide_source_location_new_for_path (IdeContext  *context,
  * This function will never return a variant with a floating reference.
  *
  * Returns: (transfer full): a #GVariant
+ *
+ * Since: 3.32
  */
 GVariant *
 ide_source_location_to_variant (const IdeSourceLocation *self)
@@ -344,6 +362,8 @@ ide_source_location_to_variant (const IdeSourceLocation *self)
  * Will return %NULL if the path is not native.
  *
  * Returns: (nullable): a path or %NULL if not local
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_source_location_get_path (IdeSourceLocation *self)

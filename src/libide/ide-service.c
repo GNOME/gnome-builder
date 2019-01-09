@@ -39,7 +39,7 @@ G_DEFINE_INTERFACE (IdeService, ide_service, IDE_TYPE_OBJECT)
  * When the project is created, the service will be started. When the project
  * is closed, the service will be stopped and discarded.
  *
- * Since: 3.16
+ * Since: 3.32
  */
 
 enum {
@@ -58,7 +58,7 @@ static guint signals [N_SIGNALS];
  *
  * Returns: (not nullable): A name for the service.
  *
- * Since: 3.16
+ * Since: 3.32
  */
 const gchar *
 ide_service_get_name (IdeService *self)
@@ -78,7 +78,7 @@ ide_service_get_name (IdeService *self)
  * This function is called by the owning #IdeContext and should not be needed
  * by plugins or other internal API in Builder.
  *
- * Since: 3.16
+ * Since: 3.32
  */
 void
 ide_service_start (IdeService *self)
@@ -99,7 +99,7 @@ ide_service_start (IdeService *self)
  * This function is called by the owning #IdeContext and should not be needed
  * by plugins or other internal API in Builder.
  *
- * Since: 3.16
+ * Since: 3.32
  */
 void
 ide_service_stop (IdeService *self)
@@ -137,7 +137,7 @@ ide_service_default_init (IdeServiceInterface *iface)
    * has completed loading the project. This may be useful if you want to
    * defer startup procedures until the context is fully loaded.
    *
-   * Since: 3.20
+   * Since: 3.32
    */
   signals [CONTEXT_LOADED] =
     g_signal_new ("context-loaded",

@@ -109,7 +109,7 @@ ide_completion_list_box_row_class_init (IdeCompletionListBoxRowClass *klass)
    *
    * The proposal to display in the list box row.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   properties [PROP_PROPOSAL] =
     g_param_spec_object ("proposal",
@@ -148,7 +148,7 @@ ide_completion_list_box_row_new (void)
  *
  * Returns: (transfer none) (nullable): an #IdeCompletionProposal or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletionProposal *
 ide_completion_list_box_row_get_proposal (IdeCompletionListBoxRow *self)
@@ -165,7 +165,7 @@ ide_completion_list_box_row_get_proposal (IdeCompletionListBoxRow *self)
  *
  * Sets the proposal to display in the row.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_list_box_row_set_proposal (IdeCompletionListBoxRow *self,
@@ -192,6 +192,8 @@ ide_completion_list_box_row_set_proposal (IdeCompletionListBoxRow *self,
  * @self: a #IdeCompletionListBoxRow
  * @left: (nullable): text for the left column
  *
+ *
+ * Since: 3.32
  */
 void
 ide_completion_list_box_row_set_left (IdeCompletionListBoxRow *self,
@@ -207,6 +209,8 @@ ide_completion_list_box_row_set_left (IdeCompletionListBoxRow *self,
  * @self: a #IdeCompletionListBoxRow
  * @left_markup: (nullable): markup for the left column
  *
+ *
+ * Since: 3.32
  */
 void
 ide_completion_list_box_row_set_left_markup (IdeCompletionListBoxRow *self,
@@ -233,6 +237,8 @@ ide_completion_list_box_row_set_left_markup (IdeCompletionListBoxRow *self,
  * @self: a #IdeCompletionListBoxRow
  * @center: (nullable): text for the center column
  *
+ *
+ * Since: 3.32
  */
 void
 ide_completion_list_box_row_set_center (IdeCompletionListBoxRow *self,
@@ -249,6 +255,8 @@ ide_completion_list_box_row_set_center (IdeCompletionListBoxRow *self,
  * @self: a #IdeCompletionListBoxRow
  * @center_markup: (nullable): markup for the center column
  *
+ *
+ * Since: 3.32
  */
 void
 ide_completion_list_box_row_set_center_markup (IdeCompletionListBoxRow *self,
@@ -275,6 +283,8 @@ ide_completion_list_box_row_set_center_markup (IdeCompletionListBoxRow *self,
  * @self: a #IdeCompletionListBoxRow
  * @right: (nullable): text for the right column
  *
+ *
+ * Since: 3.32
  */
 void
 ide_completion_list_box_row_set_right (IdeCompletionListBoxRow *self,
@@ -290,6 +300,8 @@ ide_completion_list_box_row_set_right (IdeCompletionListBoxRow *self,
  * @self: a #IdeCompletionListBoxRow
  * @icon_name: (nullable): an icon-name or %NULL
  *
+ *
+ * Since: 3.32
  */
 void
 ide_completion_list_box_row_set_icon_name (IdeCompletionListBoxRow *self,

@@ -216,6 +216,8 @@ ide_configuration_manager_save_finish (IdeConfigurationManager  *self,
  *
  * Returns: (transfer none) (nullable): An #IdeConfiguration or %NULL if
  *   the configuration could not be found.
+ *
+ * Since: 3.32
  */
 IdeConfiguration *
 ide_configuration_manager_get_configuration (IdeConfigurationManager *self,
@@ -388,6 +390,8 @@ ide_configuration_manager_class_init (IdeConfigurationManagerClass *klass)
    *
    * This signal is emitted any time a new configuration is selected or the
    * currently selected configurations state changes.
+   *
+   * Since: 3.32
    */
   signals [INVALIDATE] =
     g_signal_new ("invalidate",
@@ -903,6 +907,8 @@ ide_configuration_manager_set_current (IdeConfigurationManager *self,
  * settings.
  *
  * Returns: (transfer none): An #IdeConfiguration
+ *
+ * Since: 3.32
  */
 IdeConfiguration *
 ide_configuration_manager_get_current (IdeConfigurationManager *self)
@@ -998,7 +1004,7 @@ ide_configuration_manager_delete (IdeConfigurationManager *self,
  * Returns: %TRUE if the current configuration is ready for usage;
  *   otherwise %FALSE.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_configuration_manager_get_ready (IdeConfigurationManager *self)

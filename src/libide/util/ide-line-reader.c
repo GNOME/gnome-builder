@@ -59,6 +59,8 @@ ide_line_reader_init (IdeLineReader *reader,
  * you must provide @length to determine the length of the line.
  *
  * Returns: (transfer none): The beginning of the line within the buffer.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_line_reader_next (IdeLineReader *reader,

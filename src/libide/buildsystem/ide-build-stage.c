@@ -366,7 +366,7 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
    * This property is set to %TRUE when the build stage is actively
    * running or cleaning.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_ACTIVE] =
     g_param_spec_boolean ("active",
@@ -384,6 +384,8 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
    * that Builder will extract errors from stdout.
    *
    * One such example is Ninja.
+   *
+   * Since: 3.32
    */
   properties [PROP_CHECK_STDOUT] =
     g_param_spec_boolean ("check-stdout",
@@ -398,6 +400,8 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
    * The "completed" property is set to %TRUE after the pipeline has
    * completed processing the stage. When the pipeline invalidates
    * phases, completed may be reset to %FALSE.
+   *
+   * Since: 3.32
    */
   properties [PROP_COMPLETED] =
     g_param_spec_boolean ("completed",
@@ -416,6 +420,8 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
    *
    * If the stage is both transient and disabled, it will not be removed during
    * the transient cleanup phase.
+   *
+   * Since: 3.32
    */
   properties [PROP_DISABLED] =
     g_param_spec_boolean ("disabled",
@@ -429,6 +435,8 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
    *
    * The name of the build stage. This is only used by UI to view
    * the build pipeline.
+   *
+   * Since: 3.32
    */
   properties [PROP_NAME] =
     g_param_spec_string ("name",
@@ -447,6 +455,8 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
    * For safety reasons, the contents are first redirected to a temporary
    * file and will be redirected to the stdout-path location after the
    * build stage has completed executing.
+   *
+   * Since: 3.32
    */
   properties [PROP_STDOUT_PATH] =
     g_param_spec_string ("stdout-path",
@@ -464,6 +474,8 @@ ide_build_stage_class_init (IdeBuildStageClass *klass)
    * ide_build_pipeline_execute_async(). This can be a convenient
    * way to add a temporary item to a build pipeline that should
    * be immediately discarded.
+   *
+   * Since: 3.32
    */
   properties [PROP_TRANSIENT] =
     g_param_spec_boolean ("transient",
@@ -588,6 +600,8 @@ ide_build_stage_execute_finish (IdeBuildStage  *self,
  * Plugins that need to handle logging from a build stage should set
  * an observer on the pipeline so that log distribution may be fanned
  * out to all observers.
+ *
+ * Since: 3.32
  */
 void
 ide_build_stage_set_log_observer (IdeBuildStage       *self,
@@ -790,6 +804,8 @@ ide_build_stage_observe_stream (IdeBuildStage     *self,
  * stdout and stderr streams of the subprocess. You must have created
  * the subprocess with %G_SUBPROCESS_FLAGS_STDERR_PIPE and
  * %G_SUBPROCESS_FLAGS_STDOUT_PIPE so that the streams may be read.
+ *
+ * Since: 3.32
  */
 void
 ide_build_stage_log_subprocess (IdeBuildStage *self,
@@ -882,6 +898,8 @@ ide_build_stage_unpause (IdeBuildStage *self)
  * query signal. If the stage is paused after the query, execute will
  * be delayed until the correct number of ide_build_stage_unpause() calls
  * have occurred.
+ *
+ * Since: 3.32
  */
 void
 _ide_build_stage_execute_with_query_async (IdeBuildStage       *self,
@@ -1094,7 +1112,7 @@ ide_build_stage_set_check_stdout (IdeBuildStage *self,
  *
  * Returns: %TRUE if the stage is actively executing or cleaning.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_build_stage_get_active (IdeBuildStage *self)

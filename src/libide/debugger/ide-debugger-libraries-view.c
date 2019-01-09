@@ -342,6 +342,8 @@ ide_debugger_libraries_view_new (void)
  * Gets the debugger property.
  *
  * Returns: (transfer none): An #IdeDebugger or %NULL.
+ *
+ * Since: 3.32
  */
 IdeDebugger *
 ide_debugger_libraries_view_get_debugger (IdeDebuggerLibrariesView *self)

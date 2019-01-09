@@ -819,6 +819,8 @@ get_changes_finish (IdeCodeIndexBuilder  *self,
  * @fuzzy_builder: the fuzzy index builder to append
  *
  * This will incrementally add entries to the builder.
+ *
+ * Since: 3.32
  */
 static void
 add_entries_to_index (GPtrArray               *entries,

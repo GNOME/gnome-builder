@@ -78,6 +78,8 @@ ide_workbench_addin_default_init (IdeWorkbenchAddinInterface *iface)
  * required UI or actions to @workbench here. You should remove anything you've added
  * in ide_workbench_addin_unload(), as that will be called when your plugin is deactivated
  * or the workbench is in the destruction process.
+ *
+ * Since: 3.32
  */
 void
 ide_workbench_addin_load (IdeWorkbenchAddin *self,
@@ -99,6 +101,8 @@ ide_workbench_addin_load (IdeWorkbenchAddin *self,
  *
  * This might be called when a plugin is deactivated, or the workbench is in the
  * destruction process.
+ *
+ * Since: 3.32
  */
 void
 ide_workbench_addin_unload (IdeWorkbenchAddin *self,
@@ -125,6 +129,8 @@ ide_workbench_addin_unload (IdeWorkbenchAddin *self,
  * returned %TRUE from this method will be consulted.
  *
  * Returns: %TRUE if @self and open @uri.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_workbench_addin_can_open (IdeWorkbenchAddin *self,
@@ -191,6 +197,8 @@ ide_workbench_addin_open_finish (IdeWorkbenchAddin  *self,
  * to prefer a given loader.
  *
  * Returns: (transfer full): a newly allocated string.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_workbench_addin_get_id (IdeWorkbenchAddin *self)
@@ -209,6 +217,8 @@ ide_workbench_addin_get_id (IdeWorkbenchAddin *self)
  *
  * Addins that wish to add buttons to the header bar may want to show or
  * hide the widgets in this vfunc.
+ *
+ * Since: 3.32
  */
 void
 ide_workbench_addin_perspective_set (IdeWorkbenchAddin *self,
@@ -230,7 +240,7 @@ ide_workbench_addin_perspective_set (IdeWorkbenchAddin *self,
  *
  * Returns: (transfer none) (nullable): An #IdeWorkbenchAddin or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeWorkbenchAddin *
 ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,

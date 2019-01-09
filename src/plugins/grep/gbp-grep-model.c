@@ -424,6 +424,8 @@ gbp_grep_model_set_query (GbpGrepModel *self,
  * @self: a #GbpGrepModel
  *
  * Returns: (transfer none) (nullable): A #GFile or %NULL
+ *
+ * Since: 3.32
  */
 GFile *
 gbp_grep_model_get_directory (GbpGrepModel *self)
@@ -1164,6 +1166,8 @@ create_edits_cb (GbpGrepModel *self,
  * @self: a #GbpGrepModel
  *
  * Returns: (transfer container): a #GPtrArray of IdeProjectEdit
+ *
+ * Since: 3.32
  */
 GPtrArray *
 gbp_grep_model_create_edits (GbpGrepModel *self)
@@ -1191,6 +1195,8 @@ gbp_grep_model_create_edits (GbpGrepModel *self)
  * @line: (out): a location for the line info
  *
  * Gets information about the line that @iter points at.
+ *
+ * Since: 3.32
  */
 void
 gbp_grep_model_get_line (GbpGrepModel            *self,
@@ -1233,6 +1239,8 @@ gbp_grep_model_get_line (GbpGrepModel            *self,
  * gbp_grep_model_get_file:
  *
  * Returns: (transfer full): a #GFile
+ *
+ * Since: 3.32
  */
 GFile *
 gbp_grep_model_get_file (GbpGrepModel *self,

@@ -52,6 +52,8 @@ DZL_DEFINE_COUNTER (instances, "IdeSymbol", "Instances", "Number of symbol insta
  * @canonical_location: (allow-none): the canonical location
  *
  * Returns: (transfer full): a new #IdeSymbol.
+ *
+ * Since: 3.32
  */
 IdeSymbol *
 ide_symbol_new (const gchar       *name,
@@ -100,6 +102,8 @@ ide_symbol_get_name (IdeSymbol *self)
  * If the symbol provider did not register this information, %NULL will be returned.
  *
  * Returns: (transfer none) (nullable): An #IdeSourceLocation or %NULL.
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_symbol_get_declaration_location (IdeSymbol *self)
@@ -116,6 +120,8 @@ ide_symbol_get_declaration_location (IdeSymbol *self)
  * the definition).
  *
  * Returns: (transfer none) (nullable): An #IdeSourceLocation or %NULL.
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_symbol_get_definition_location (IdeSymbol *self)
@@ -132,6 +138,8 @@ ide_symbol_get_definition_location (IdeSymbol *self)
  * declarations by only a single implementation.
  *
  * Returns: (transfer none) (nullable): An #IdeSourceLocation or %NULL.
+ *
+ * Since: 3.32
  */
 IdeSourceLocation *
 ide_symbol_get_canonical_location (IdeSymbol *self)
@@ -354,6 +362,8 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
  * This function will never return a floating reference.
  *
  * Returns: (transfer full): a #GVariant
+ *
+ * Since: 3.32
  */
 GVariant *
 ide_symbol_to_variant (const IdeSymbol *self)

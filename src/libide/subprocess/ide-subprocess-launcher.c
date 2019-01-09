@@ -634,6 +634,8 @@ ide_subprocess_launcher_get_environ (IdeSubprocessLauncher *self)
  * of environment variables to set
  *
  * Replace the environment variables by a new list of variables.
+ *
+ * Since: 3.32
  */
 void
 ide_subprocess_launcher_set_environ (IdeSubprocessLauncher *self,
@@ -698,6 +700,8 @@ ide_subprocess_launcher_push_argv (IdeSubprocessLauncher *self,
  * Synchronously spawn a process using the internal state.
  *
  * Returns: (transfer full): an #IdeSubprocess or %NULL upon error.
+ *
+ * Since: 3.32
  */
 IdeSubprocess *
 ide_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
@@ -775,6 +779,8 @@ ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
  * for each element of @args.
  *
  * If @args is %NULL, this function does nothing.
+ *
+ * Since: 3.32
  */
 void
 ide_subprocess_launcher_push_args (IdeSubprocessLauncher *self,
@@ -820,6 +826,8 @@ ide_subprocess_launcher_pop_argv (IdeSubprocessLauncher *self)
  * zone and requires the application was built with --allow=devel.
  *
  * Returns: %TRUE if the process should be executed outside the containment zone.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_subprocess_launcher_get_run_on_host (IdeSubprocessLauncher *self)
@@ -836,6 +844,8 @@ ide_subprocess_launcher_get_run_on_host (IdeSubprocessLauncher *self)
  *
  * Sets the #IdeSubprocessLauncher:run-on-host property. See
  * ide_subprocess_launcher_get_run_on_host() for more information.
+ *
+ * Since: 3.32
  */
 void
 ide_subprocess_launcher_set_run_on_host (IdeSubprocessLauncher *self,

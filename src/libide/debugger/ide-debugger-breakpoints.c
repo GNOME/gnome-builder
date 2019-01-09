@@ -44,6 +44,8 @@
  * breakpoints as necessary by the current debugger. If no debugger is
  * active, the breakpoints are queued until the debugger has started, and
  * then synchronized to the debugger process.
+ *
+ * Since: 3.32
  */
 
 typedef struct
@@ -197,7 +199,7 @@ ide_debugger_breakpoints_init (IdeDebuggerBreakpoints *self)
  *
  * Returns: (nullable) (transfer none): An #IdeDebuggerBreakpoint or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeDebuggerBreakpoint *
 ide_debugger_breakpoints_get_line (IdeDebuggerBreakpoints *self,
@@ -368,6 +370,8 @@ _ide_debugger_breakpoints_remove (IdeDebuggerBreakpoints *self,
  * this container belong to.
  *
  * Returns: (transfer none): a #GFile
+ *
+ * Since: 3.32
  */
 GFile *
 ide_debugger_breakpoints_get_file (IdeDebuggerBreakpoints *self)
@@ -385,7 +389,7 @@ ide_debugger_breakpoints_get_file (IdeDebuggerBreakpoints *self)
  *
  * Call @func for every #IdeDebuggerBreakpoint in @self.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_breakpoints_foreach (IdeDebuggerBreakpoints *self,

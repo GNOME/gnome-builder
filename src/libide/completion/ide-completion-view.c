@@ -213,7 +213,7 @@ ide_completion_view_class_init (IdeCompletionViewClass *klass)
    *
    * Make @direction positive to move forward, negative to move backwards
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [MOVE_CURSOR] =
     g_signal_new_class_handler ("move-cursor",
@@ -229,7 +229,7 @@ ide_completion_view_class_init (IdeCompletionViewClass *klass)
    *
    * Activates the selected item in the completion window.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [ACTIVATE] =
     g_signal_new_class_handler ("activate",
@@ -249,7 +249,7 @@ ide_completion_view_class_init (IdeCompletionViewClass *klass)
    * Signal used to request the the container reposition itself due
    * to changes in the underlying list.
    *
-   * Since: 3.30
+   * Since: 3.32
    */
   signals [REPOSITION] =
     g_signal_new_class_handler ("reposition",
@@ -329,7 +329,7 @@ ide_completion_view_init (IdeCompletionView *self)
  *
  * Returns: (transfer none) (nullable): an #IdeCompletionContext or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletionContext *
 ide_completion_view_get_context (IdeCompletionView *self)
@@ -345,7 +345,7 @@ ide_completion_view_get_context (IdeCompletionView *self)
  *
  * Sets the #IdeCompletionContext to be visualized.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_view_set_context (IdeCompletionView    *self,

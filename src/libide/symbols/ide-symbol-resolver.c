@@ -147,6 +147,8 @@ ide_symbol_resolver_default_init (IdeSymbolResolverInterface *iface)
  * Asynchronously requests that @self determine the symbol existing at the source location
  * denoted by @self. @callback should call ide_symbol_resolver_lookup_symbol_finish() to
  * retrieve the result.
+ *
+ * Since: 3.32
  */
 void
 ide_symbol_resolver_lookup_symbol_async  (IdeSymbolResolver   *self,
@@ -172,6 +174,8 @@ ide_symbol_resolver_lookup_symbol_async  (IdeSymbolResolver   *self,
  * ide_symbol_resolver_lookup_symbol_async().
  *
  * Returns: (transfer full) (nullable): An #IdeSymbol if successful; otherwise %NULL.
+ *
+ * Since: 3.32
  */
 IdeSymbol *
 ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
@@ -194,6 +198,8 @@ ide_symbol_resolver_lookup_symbol_finish (IdeSymbolResolver  *self,
  * @user_data: user data for @callback
  *
  * Asynchronously fetch an up to date symbol tree for @file.
+ *
+ * Since: 3.32
  */
 void
 ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
@@ -215,6 +221,8 @@ ide_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *self,
  * Completes an asynchronous request to get the symbol tree for the requested file.
  *
  * Returns: (nullable) (transfer full): An #IdeSymbolTree; otherwise %NULL and @error is set.
+ *
+ * Since: 3.32
  */
 IdeSymbolTree *
 ide_symbol_resolver_get_symbol_tree_finish (IdeSymbolResolver  *self,
@@ -269,6 +277,8 @@ ide_symbol_resolver_find_references_async (IdeSymbolResolver   *self,
  *
  * Returns: (transfer full) (element-type Ide.SourceRange): a #GPtrArray
  *   of #IdeSourceRange if successful; otherwise %NULL and @error is set.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
@@ -295,7 +305,7 @@ ide_symbol_resolver_find_references_finish (IdeSymbolResolver  *self,
  * See ide_symbol_resolver_find_nearest_scope_finish() for how to
  * complete the operation.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver    *self,
@@ -324,7 +334,7 @@ ide_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver    *self,
  *
  * Returns: (transfer full) (nullable): An #IdeSymbol or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeSymbol *
 ide_symbol_resolver_find_nearest_scope_finish (IdeSymbolResolver  *self,

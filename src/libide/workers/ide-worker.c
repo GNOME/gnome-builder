@@ -49,6 +49,8 @@ ide_worker_register_service (IdeWorker       *self,
  * end of @connection.
  *
  * Returns: (transfer full): a #GDBusProxy or %NULL.
+ *
+ * Since: 3.32
  */
 GDBusProxy *
 ide_worker_create_proxy (IdeWorker        *self,

@@ -145,6 +145,8 @@ ide_project_edit_new (void)
  * Returns the range for the edit.
  *
  * Returns: (nullable) (transfer none): An #IdeSourceRange
+ *
+ * Since: 3.32
  */
 IdeSourceRange *
 ide_project_edit_get_range (IdeProjectEdit *self)

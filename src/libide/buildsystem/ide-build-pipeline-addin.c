@@ -82,6 +82,8 @@ ide_build_pipeline_addin_unload (IdeBuildPipelineAddin *self,
  *
  * You should not mix this function with manual pipeline disconnections.
  * While it should work, that is not yet guaranteed.
+ *
+ * Since: 3.32
  */
 void
 ide_build_pipeline_addin_track (IdeBuildPipelineAddin *self,

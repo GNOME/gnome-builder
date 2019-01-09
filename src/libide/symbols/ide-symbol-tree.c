@@ -38,6 +38,8 @@ ide_symbol_tree_default_init (IdeSymbolTreeInterface *iface)
  * is assumed.
  *
  * Returns: An unsigned integer containing the number of children.
+ *
+ * Since: 3.32
  */
 guint
 ide_symbol_tree_get_n_children (IdeSymbolTree *self,
@@ -58,6 +60,8 @@ ide_symbol_tree_get_n_children (IdeSymbolTree *self,
  * Gets the @nth child node of @node.
  *
  * Returns: (transfer full) (nullable): an #IdeSymbolNode or %NULL.
+ *
+ * Since: 3.32
  */
 IdeSymbolNode *
 ide_symbol_tree_get_nth_child (IdeSymbolTree *self,

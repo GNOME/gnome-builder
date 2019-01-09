@@ -54,6 +54,8 @@ ide_preferences_addin_default_init (IdePreferencesAddinInterface *iface)
  *
  * Such implementations might include a preferences dialog window, or a preferences
  * widget which could be rendered as a perspective.
+ *
+ * Since: 3.32
  */
 void
 ide_preferences_addin_load (IdePreferencesAddin *self,
@@ -73,6 +75,8 @@ ide_preferences_addin_load (IdePreferencesAddin *self,
  * This interface method is called when the preferences addin should remove all controls
  * added to @preferences. This could happen during desctruction of @preferences, or when
  * the plugin is unloaded.
+ *
+ * Since: 3.32
  */
 void
 ide_preferences_addin_unload (IdePreferencesAddin *self,

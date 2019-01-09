@@ -388,6 +388,8 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
    *
    * The creation of #IdeWorkbenchAddin addins are deferred until this property
    * has been set.
+   *
+   * Since: 3.32
    */
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -402,6 +404,8 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
    * This property contains the #IdePerspective that is currently selected.
    * Connect to the "notify::visible-perspective" signal to be notified when
    * the perspective has been changed.
+   *
+   * Since: 3.32
    */
   properties [PROP_VISIBLE_PERSPECTIVE] =
     g_param_spec_object ("visible-perspective",
@@ -418,6 +422,8 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
    * project.
    *
    * This should not be used by application plugins.
+   *
+   * Since: 3.32
    */
   properties [PROP_DISABLE_GREETER] =
     g_param_spec_boolean ("disable-greeter",
@@ -431,6 +437,8 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
    *
    * This property is just like #IdeWorkbench:visible-perspective except that
    * it contains the name of the perspective as a string.
+   *
+   * Since: 3.32
    */
   properties [PROP_VISIBLE_PERSPECTIVE_NAME] =
     g_param_spec_string ("visible-perspective-name",
@@ -459,6 +467,8 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
    * @name: the name of the perspective
    *
    * This signal is meant for keybindings to change the current perspective.
+   *
+   * Since: 3.32
    */
   signals [SET_PERSPECTIVE] =
     g_signal_new_class_handler ("set-perspective",
@@ -529,6 +539,8 @@ ide_workbench_views_foreach_cb (GtkWidget *widget,
  * @user_data: user data for @callback.
  *
  * Executes @callback for every #IdeLayoutView across all perspectives.
+ *
+ * Since: 3.32
  */
 void
 ide_workbench_views_foreach (IdeWorkbench *self,
@@ -595,6 +607,8 @@ ide_workbench_addin_removed (PeasExtensionSet *set,
  * Gets the context associated with the workbench, or %NULL.
  *
  * Returns: (transfer none) (nullable): An #IdeContext or %NULL.
+ *
+ * Since: 3.32
  */
 IdeContext *
 ide_workbench_get_context (IdeWorkbench *self)
@@ -811,6 +825,8 @@ ide_workbench_remove_perspective (IdeWorkbench   *self,
  * ide_perspective_get_id().
  *
  * Returns: (nullable) (transfer none): An #IdePerspective or %NULL.
+ *
+ * Since: 3.32
  */
 IdePerspective *
 ide_workbench_get_perspective_by_name (IdeWorkbench *self,
@@ -833,6 +849,8 @@ ide_workbench_get_perspective_by_name (IdeWorkbench *self,
  * Gets the current perspective.
  *
  * Returns: (transfer none): An #IdePerspective.
+ *
+ * Since: 3.32
  */
 IdePerspective *
 ide_workbench_get_visible_perspective (IdeWorkbench *self)
@@ -1038,6 +1056,8 @@ ide_workbench_focus (IdeWorkbench *self,
  * to an #IdeWorkbenchHeaderBar. This is convenience for plugins.
  *
  * Returns: (transfer none): An #IdeWorkbenchHeaderBar.
+ *
+ * Since: 3.32
  */
 IdeWorkbenchHeaderBar *
 ide_workbench_get_headerbar (IdeWorkbench *self)

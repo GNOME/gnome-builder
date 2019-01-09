@@ -146,6 +146,8 @@ ide_file_create_language (IdeFile *self)
  * Retrieves the #GtkSourceLanguage that was discovered for the file.
  *
  * Returns: (nullable) (transfer none): a #GtkSourceLanguage or %NULL.
+ *
+ * Since: 3.32
  */
 GtkSourceLanguage *
 ide_file_get_language (IdeFile *self)
@@ -169,6 +171,8 @@ ide_file_get_language (IdeFile *self)
  * Retrieves the underlying #GFile represented by @self.
  *
  * Returns: (transfer none): a #GFile.
+ *
+ * Since: 3.32
  */
 GFile *
 ide_file_get_file (IdeFile *self)
@@ -199,6 +203,8 @@ ide_file_set_file (IdeFile *self,
  * Gets the GtkSourceFile for the #IdeFile.
  *
  * Returns: (transfer full): a #GtkSourceFile.
+ *
+ * Since: 3.32
  */
 GtkSourceFile *
 _ide_file_get_source_file (IdeFile *self)
@@ -339,6 +345,8 @@ ide_file_load_settings_async (IdeFile              *self,
  *
  * Returns: (transfer full): An #IdeFileSettings or %NULL upon failure and
  *   @error is set.
+ *
+ * Since: 3.32
  */
 IdeFileSettings *
 ide_file_load_settings_finish (IdeFile              *self,
@@ -364,7 +372,7 @@ ide_file_load_settings_finish (IdeFile              *self,
  *
  * Returns: (nullable) (transfer none): an #IdeFileSettings or %NULL
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeFileSettings *
 ide_file_peek_settings (IdeFile *self)
@@ -387,6 +395,8 @@ ide_file_peek_settings (IdeFile *self)
  * Files that are not temporary, will return zero.
  *
  * Returns: A positive integer greater than zero if the file is a temporary file.
+ *
+ * Since: 3.32
  */
 guint
 ide_file_get_temporary_id (IdeFile *self)
@@ -685,6 +695,8 @@ ide_file_find_other_async (IdeFile             *self,
  * Returns an #IdeFile if successful, otherwise %NULL and @error is set.
  *
  * Returns: (transfer full) (nullable): An #IdeFIle or %NULL.
+ *
+ * Since: 3.32
  */
 IdeFile *
 ide_file_find_other_finish (IdeFile       *self,
@@ -722,6 +734,8 @@ lookup_by_gfile_locked (GFile *file)
  * Creates a new file.
  *
  * Returns: (transfer full): An #IdeFile.
+ *
+ * Since: 3.32
  */
 IdeFile *
 ide_file_new (IdeContext *context,

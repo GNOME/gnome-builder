@@ -60,6 +60,8 @@ static GParamSpec *properties [N_PROPS];
  * Gets the client to use for the formatter.
  *
  * Returns: (transfer none): An #IdeLangservClient or %NULL.
+ *
+ * Since: 3.32
  */
 IdeLangservClient *
 ide_langserv_formatter_get_client (IdeLangservFormatter *self)

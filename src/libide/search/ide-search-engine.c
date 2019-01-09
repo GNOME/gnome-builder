@@ -163,6 +163,8 @@ ide_search_engine_new (void)
  * Checks if the #IdeSearchEngine is currently executing a query.
  *
  * Returns: %TRUE if queries are being processed.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_search_engine_get_busy (IdeSearchEngine *self)
@@ -302,6 +304,8 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
  * The result is a #GListModel of #IdeSearchResult when successful.
  *
  * Returns: (transfer full): a #GListModel of #IdeSearchResult items.
+ *
+ * Since: 3.32
  */
 GListModel *
 ide_search_engine_search_finish (IdeSearchEngine  *self,

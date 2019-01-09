@@ -56,7 +56,7 @@ static GParamSpec *properties [N_PROPS];
  *
  * Returns: (transfer none): the unique identifier.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 const gchar *
 ide_toolchain_get_id (IdeToolchain  *self)
@@ -76,7 +76,7 @@ ide_toolchain_get_id (IdeToolchain  *self)
  *
  * Sets the internal identifier of the toolchain
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_toolchain_set_id (IdeToolchain  *self,
@@ -129,7 +129,7 @@ ide_toolchain_set_display_name (IdeToolchain  *self,
  *
  * Sets the host system of the toolchain
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_toolchain_set_host_triplet (IdeToolchain *self,
@@ -159,7 +159,7 @@ ide_toolchain_set_host_triplet (IdeToolchain *self,
  *
  * Returns: (transfer full): The host system.type of the toolchain
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeTriplet *
 ide_toolchain_get_host_triplet (IdeToolchain *self)
@@ -207,7 +207,7 @@ ide_toolchain_real_get_tools_for_id (IdeToolchain  *self,
  * Returns: (transfer none): A string containing the path of the tool for the given language, or
  * %NULL is no tool has been found.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 const gchar *
 ide_toolchain_get_tool_for_language (IdeToolchain *self,
@@ -234,7 +234,7 @@ ide_toolchain_get_tool_for_language (IdeToolchain *self,
  *
  * Returns: (transfer full) (element-type utf8 utf8): A table of language names and paths.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GHashTable *
 ide_toolchain_get_tools_for_id (IdeToolchain  *self,

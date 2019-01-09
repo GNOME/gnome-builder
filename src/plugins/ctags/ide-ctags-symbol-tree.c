@@ -78,6 +78,8 @@ G_DEFINE_TYPE_EXTENDED (IdeCtagsSymbolTree, ide_ctags_symbol_tree, G_TYPE_OBJECT
  *
  * This function takes ownership of @ar.
  *
+ *
+ * Since: 3.32
  */
 IdeCtagsSymbolTree *
 ide_ctags_symbol_tree_new (GPtrArray *ar)

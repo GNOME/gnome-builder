@@ -654,6 +654,8 @@ ide_configuration_init (IdeConfiguration *self)
  * Gets the application ID for the configuration.
  *
  * Returns: (transfer none) (nullable): A string.
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_configuration_get_app_id (IdeConfiguration *self)
@@ -737,7 +739,7 @@ ide_configuration_set_runtime_id (IdeConfiguration *self,
  *
  * Returns: (transfer none) (nullable): The id of an #IdeToolchain or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 const gchar *
 ide_configuration_get_toolchain_id (IdeConfiguration *self)
@@ -756,7 +758,7 @@ ide_configuration_get_toolchain_id (IdeConfiguration *self)
  *
  * Sets the toolchain id for the configuration.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_configuration_set_toolchain_id (IdeConfiguration *self,
@@ -789,6 +791,8 @@ ide_configuration_set_toolchain_id (IdeConfiguration *self,
  * Gets the runtime for the configuration.
  *
  * Returns: (transfer none) (nullable): An #IdeRuntime
+ *
+ * Since: 3.32
  */
 IdeRuntime *
 ide_configuration_get_runtime (IdeConfiguration *self)
@@ -816,7 +820,7 @@ ide_configuration_set_runtime (IdeConfiguration *self,
  *
  * Returns: (transfer full) (nullable): An #IdeToolchain
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeToolchain *
 ide_configuration_get_toolchain (IdeConfiguration *self)
@@ -845,7 +849,7 @@ ide_configuration_get_toolchain (IdeConfiguration *self)
  *
  * Sets the toolchain for the configuration.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_configuration_set_toolchain (IdeConfiguration *self,
@@ -869,6 +873,8 @@ ide_configuration_set_toolchain (IdeConfiguration *self,
  * Gets the environment to use when spawning processes.
  *
  * Returns: (transfer full): An array of key=value environment variables.
+ *
+ * Since: 3.32
  */
 gchar **
 ide_configuration_get_environ (IdeConfiguration *self)
@@ -1080,6 +1086,8 @@ ide_configuration_set_dirty (IdeConfiguration *self,
  * ide_configuration_get_environment:
  *
  * Returns: (transfer none): An #IdeEnvironment.
+ *
+ * Since: 3.32
  */
 IdeEnvironment *
 ide_configuration_get_environment (IdeConfiguration *self)
@@ -1216,6 +1224,8 @@ ide_configuration_set_post_install_commands (IdeConfiguration    *self,
  * mean time.
  *
  * Returns: A monotonic sequence number.
+ *
+ * Since: 3.32
  */
 guint
 ide_configuration_get_sequence (IdeConfiguration *self)
@@ -1423,6 +1433,8 @@ ide_configuration_set_internal_int64 (IdeConfiguration *self,
  * Gets the value associated with @key if it is a #GObject.
  *
  * Returns: (nullable) (transfer none) (type GObject.Object): a #GObject or %NULL.
+ *
+ * Since: 3.32
  */
 gpointer
 ide_configuration_get_internal_object (IdeConfiguration *self,
@@ -1449,6 +1461,8 @@ ide_configuration_get_internal_object (IdeConfiguration *self,
  * @instance: (type GObject.Object) (nullable): a #GObject or %NULL
  *
  * Sets the value for @key to @instance.
+ *
+ * Since: 3.32
  */
 void
 ide_configuration_set_internal_object (IdeConfiguration *self,
@@ -1477,6 +1491,8 @@ ide_configuration_set_internal_object (IdeConfiguration *self,
  * Determines if the configuration is ready for use.
  *
  * Returns: %TRUE if the configuration is ready for use.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_configuration_get_ready (IdeConfiguration *self)
@@ -1516,7 +1532,7 @@ ide_configuration_supports_runtime (IdeConfiguration *self,
  * Returns: (transfer none) (nullable): A string containing the run options
  *   or %NULL if none have been set.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const gchar *
 ide_configuration_get_run_opts (IdeConfiguration *self)
@@ -1536,7 +1552,7 @@ ide_configuration_get_run_opts (IdeConfiguration *self)
  * Sets the run options to use when running the target application.
  * See ide_configuration_get_run_opts() for more information.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_configuration_set_run_opts (IdeConfiguration *self,
@@ -1625,6 +1641,8 @@ ide_configuration_set_locality (IdeConfiguration *self,
  * @self: a #IdeConfiguration
  *
  * Returns: (transfer none) (nullable): a #GFile or %NULL
+ *
+ * Since: 3.32
  */
 GFile *
 ide_configuration_get_build_commands_dir (IdeConfiguration *self)

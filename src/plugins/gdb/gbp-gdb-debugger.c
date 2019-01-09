@@ -2765,7 +2765,7 @@ gbp_gdb_debugger_write_cb (GObject      *object,
  * from the debugger with the result, or the connection has closed. Whichever
  * is first.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
@@ -2877,6 +2877,8 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
  *
  * Returns: a gdbwire_mi_output which should be freed with
  *   gdbwire_mi_output_free() when no longer in use.
+ *
+ * Since: 3.32
  */
 struct gdbwire_mi_output *
 gbp_gdb_debugger_exec_finish (GbpGdbDebugger  *self,

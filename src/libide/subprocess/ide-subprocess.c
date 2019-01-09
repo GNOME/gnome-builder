@@ -50,6 +50,8 @@ ide_subprocess_get_identifier (IdeSubprocess *self)
  * ide_subprocess_get_stdout_pipe:
  *
  * Returns: (transfer none): a #GInputStream or %NULL.
+ *
+ * Since: 3.32
  */
 GInputStream *
 ide_subprocess_get_stdout_pipe (IdeSubprocess *self)
@@ -63,6 +65,8 @@ ide_subprocess_get_stdout_pipe (IdeSubprocess *self)
  * ide_subprocess_get_stderr_pipe:
  *
  * Returns: (transfer none): a #GInputStream or %NULL.
+ *
+ * Since: 3.32
  */
 GInputStream *
 ide_subprocess_get_stderr_pipe (IdeSubprocess *self)
@@ -76,6 +80,8 @@ ide_subprocess_get_stderr_pipe (IdeSubprocess *self)
  * ide_subprocess_get_stdin_pipe:
  *
  * Returns: (transfer none): a #GOutputStream or %NULL.
+ *
+ * Since: 3.32
  */
 GOutputStream *
 ide_subprocess_get_stdin_pipe (IdeSubprocess *self)
@@ -299,6 +305,8 @@ ide_subprocess_communicate (IdeSubprocess  *self,
  * This process acts identical to g_subprocess_communicate_utf8().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_subprocess_communicate_utf8 (IdeSubprocess  *self,
@@ -330,6 +338,8 @@ ide_subprocess_communicate_utf8 (IdeSubprocess  *self,
  *
  * Ensure you've set the proper flags to ensure that you can write to stdin
  * or read from stderr/stdout as necessary.
+ *
+ * Since: 3.32
  */
 void
 ide_subprocess_communicate_async (IdeSubprocess       *self,
@@ -355,6 +365,8 @@ ide_subprocess_communicate_async (IdeSubprocess       *self,
  * Finishes a request to ide_subprocess_communicate_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_subprocess_communicate_finish (IdeSubprocess  *self,
@@ -373,6 +385,8 @@ ide_subprocess_communicate_finish (IdeSubprocess  *self,
  * ide_subprocess_communicate_utf8_async:
  * @stdin_buf: (nullable): The data to send to stdin or %NULL
  *
+ *
+ * Since: 3.32
  */
 void
 ide_subprocess_communicate_utf8_async (IdeSubprocess       *self,
@@ -396,6 +410,8 @@ ide_subprocess_communicate_utf8_async (IdeSubprocess       *self,
  * @error: A location for a #GError, or %NULL
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_subprocess_communicate_utf8_finish (IdeSubprocess  *self,

@@ -89,6 +89,8 @@ _pty_intercept_set_raw (pty_fd_t fd)
  *
  * Returns: a FD for the slave PTY that should be closed with close().
  *   Upon error, %PTY_FD_INVALID (-1) is returned.
+ *
+ * Since: 3.32
  */
 pty_fd_t
 pty_intercept_create_slave (pty_fd_t master_fd,
@@ -164,6 +166,8 @@ pty_intercept_create_slave (pty_fd_t master_fd,
  *
  * Returns: a FD that should be closed with close() if successful.
  *   Upon error, %PTY_FD_INVALID (-1) is returned.
+ *
+ * Since: 3.32
  */
 pty_fd_t
 pty_intercept_create_master (void)
@@ -413,6 +417,8 @@ close_and_cleanup:
  * Since we can't track SIGWINCH cleanly in here, we rely on the
  * external consuming program to notify us of SIGWINCH so that we
  * can copy the new size across.
+ *
+ * Since: 3.32
  */
 gboolean
 pty_intercept_set_size (pty_intercept_t *self,
@@ -450,6 +456,8 @@ pty_intercept_set_size (pty_intercept_t *self,
  * extracting any necessary information.
  *
  * Returns: %TRUE if successful; otherwise %FALSE
+ *
+ * Since: 3.32
  */
 gboolean
 pty_intercept_init (pty_intercept_t *self,
@@ -533,6 +541,8 @@ pty_intercept_init (pty_intercept_t *self,
  * releases any allocated memory.
  *
  * It is invalid to use @self after calling this function.
+ *
+ * Since: 3.32
  */
 void
 pty_intercept_clear (pty_intercept_t *self)
@@ -560,6 +570,8 @@ pty_intercept_clear (pty_intercept_t *self)
  * to use to create a slave fd which can be passed to a child process.
  *
  * Returns: A FD of a PTY master if successful, otherwise -1.
+ *
+ * Since: 3.32
  */
 pty_fd_t
 pty_intercept_get_fd (pty_intercept_t *self)
@@ -581,6 +593,8 @@ pty_intercept_get_fd (pty_intercept_t *self)
  * from a particular side of the intercept.
  *
  * You may only set one per side.
+ *
+ * Since: 3.32
  */
 void
 pty_intercept_set_callback (pty_intercept_t          *self,

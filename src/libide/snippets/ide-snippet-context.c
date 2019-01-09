@@ -39,7 +39,7 @@
  * The #IdeSnippet will build the context and then expand each of the
  * chunks during the insertion/edit phase.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 
 struct _IdeSnippetContext

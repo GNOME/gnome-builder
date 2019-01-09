@@ -49,7 +49,7 @@ static GParamSpec *properties [N_PROPS];
  *
  * Returns: (transfer none): a #GFile
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GFile *
 ide_vcs_file_info_get_file (IdeVcsFileInfo *self)

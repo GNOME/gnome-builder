@@ -225,7 +225,7 @@ _ide_hover_context_query_async (IdeHoverContext     *self,
  *
  * Returns: %TRUE if successful, otherwise %FALSE and @error.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 _ide_hover_context_query_finish (IdeHoverContext  *self,

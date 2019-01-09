@@ -868,6 +868,8 @@ ide_git_vcs_class_init (IdeGitVcsClass *klass)
    * The @repository instance is to aide consumers in locating the repository and should not
    * be used directly except in very specific situations. The gutter change renderer uses this
    * instance in a threaded manner.
+   *
+   * Since: 3.32
    */
   signals [RELOADED] =
     g_signal_new_class_handler ("reloaded",

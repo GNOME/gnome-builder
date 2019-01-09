@@ -47,6 +47,8 @@ G_DEFINE_BOXED_TYPE (IdeMarkedContent,
  * Creates a new #IdeMarkedContent using the bytes provided.
  *
  * Returns: (transfer full): an #IdeMarkedContent
+ *
+ * Since: 3.32
  */
 IdeMarkedContent *
 ide_marked_content_new (GBytes        *content,
@@ -74,7 +76,7 @@ ide_marked_content_new (GBytes        *content,
  *
  * Returns: (transfer full): an #IdeMarkedContent
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeMarkedContent *
 ide_marked_content_new_plaintext (const gchar *plaintext)
@@ -95,7 +97,7 @@ ide_marked_content_new_plaintext (const gchar *plaintext)
  *
  * Returns: (transfer full): an #IdeMarkedContent
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeMarkedContent *
 ide_marked_content_new_from_data (const gchar   *data,
@@ -123,7 +125,7 @@ ide_marked_content_new_from_data (const gchar   *data,
  *
  * Returns: (transfer full): @self with the reference count incremented
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeMarkedContent *
 ide_marked_content_ref (IdeMarkedContent *self)
@@ -145,7 +147,7 @@ ide_marked_content_ref (IdeMarkedContent *self)
  *
  * When the reference count of @self reaches zero, it will be freed.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_marked_content_unref (IdeMarkedContent *self)
@@ -172,6 +174,8 @@ ide_marked_content_unref (IdeMarkedContent *self)
  * This is used to display the content appropriately.
  *
  * Returns:
+ *
+ * Since: 3.32
  */
 IdeMarkedKind
 ide_marked_content_get_kind (IdeMarkedContent *self)
@@ -189,6 +193,8 @@ ide_marked_content_get_kind (IdeMarkedContent *self)
  * Gets the bytes for the marked content.
  *
  * Returns: (transfer none): a #GBytes
+ *
+ * Since: 3.32
  */
 GBytes *
 ide_marked_content_get_bytes (IdeMarkedContent *self)
@@ -208,7 +214,7 @@ ide_marked_content_get_bytes (IdeMarkedContent *self)
  *
  * Returns: (nullable): a newly allocated string or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gchar *
 ide_marked_content_as_string (IdeMarkedContent *self)

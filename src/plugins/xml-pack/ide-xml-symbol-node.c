@@ -450,6 +450,8 @@ ide_xml_symbol_node_set_location (IdeXmlSymbolNode *self,
  * Gets the location of an xml node.
  *
  * Returns: (transfer none): Gets the location of an xml node.
+ *
+ * Since: 3.32
  */
 GFile *
 ide_xml_symbol_node_get_location (IdeXmlSymbolNode *self,

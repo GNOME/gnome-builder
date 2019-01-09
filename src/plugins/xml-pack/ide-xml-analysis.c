@@ -33,6 +33,8 @@ ide_xml_analysis_get_sequence (IdeXmlAnalysis *self)
  *
  * Returns: (nullable) (transfer none): The #IdeDiagnostics contained by the analysis.
  *
+ *
+ * Since: 3.32
  */
 IdeDiagnostics *
 ide_xml_analysis_get_diagnostics (IdeXmlAnalysis *self)
@@ -48,6 +50,8 @@ ide_xml_analysis_get_diagnostics (IdeXmlAnalysis *self)
  *
  * Returns: (nullable) (transfer none): The #IdeXmlSymbolNode root node contained by the analysis.
  *
+ *
+ * Since: 3.32
  */
 IdeXmlSymbolNode *
 ide_xml_analysis_get_root_node (IdeXmlAnalysis *self)
@@ -63,6 +67,8 @@ ide_xml_analysis_get_root_node (IdeXmlAnalysis *self)
  *
  * Returns: (nullable) (transfer none): The schemas entries #GPtrArray contained by the analysis.
  *
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_xml_analysis_get_schemas (IdeXmlAnalysis *self)

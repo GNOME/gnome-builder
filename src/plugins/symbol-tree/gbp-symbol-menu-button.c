@@ -250,7 +250,7 @@ gbp_symbol_menu_button_init (GbpSymbolMenuButton *self)
  *
  * Returns: (transfer none) (nullable): An #IdeSymbolTree or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeSymbolTree *
 gbp_symbol_menu_button_get_symbol_tree (GbpSymbolMenuButton *self)
@@ -266,7 +266,7 @@ gbp_symbol_menu_button_get_symbol_tree (GbpSymbolMenuButton *self)
  *
  * Sets the symbol tree to be displayed by the popover.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 gbp_symbol_menu_button_set_symbol_tree (GbpSymbolMenuButton *self,

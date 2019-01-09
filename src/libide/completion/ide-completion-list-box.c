@@ -665,7 +665,7 @@ ide_completion_list_box_set_n_rows (IdeCompletionListBox *self,
  *
  * Returns: (nullable) (transfer full): a #IdeCompletionProposal or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletionProposal *
 ide_completion_list_box_get_proposal (IdeCompletionListBox *self)
@@ -696,7 +696,7 @@ ide_completion_list_box_get_proposal (IdeCompletionListBox *self)
  *
  * Returns: %TRUE if there is a selection
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_completion_list_box_get_selected (IdeCompletionListBox   *self,
@@ -727,6 +727,8 @@ ide_completion_list_box_get_selected (IdeCompletionListBox   *self,
  * Gets the context that is being displayed in the list box.
  *
  * Returns: (transfer none) (nullable): an #IdeCompletionContext or %NULL
+ *
+ * Since: 3.32
  */
 IdeCompletionContext *
 ide_completion_list_box_get_context (IdeCompletionListBox *self)
@@ -764,7 +766,7 @@ ide_completion_list_box_items_changed_cb (IdeCompletionListBox *self,
  *
  * Sets the context to be displayed.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_completion_list_box_set_context (IdeCompletionListBox *self,

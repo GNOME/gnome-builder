@@ -167,6 +167,8 @@ find_alternate_focus (GtkWidget *focus)
  * @bar: a #GbCommandBar
  *
  * Hides the command bar in an animated fashion.
+ *
+ * Since: 3.32
  */
 void
 gb_command_bar_hide (GbCommandBar *self)
@@ -206,6 +208,8 @@ gb_command_bar_set_last_focus (GbCommandBar *self,
  * @bar: a #GbCommandBar
  *
  * Shows the command bar in an animated fashion.
+ *
+ * Since: 3.32
  */
 void
 gb_command_bar_show (GbCommandBar *self)
@@ -653,6 +657,8 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
   /**
    * GbCommandBar::complete:
    * @bar: the object which received the signal.
+   *
+   * Since: 3.32
    */
   signals [COMPLETE] =
     g_signal_new_class_handler ("complete",
@@ -667,6 +673,8 @@ gb_command_bar_class_init (GbCommandBarClass *klass)
    * GbCommandBar::move-history:
    * @bar: the object which received the signal.
    * @direction: direction to move
+   *
+   * Since: 3.32
    */
   signals [MOVE_HISTORY] =
     g_signal_new_class_handler ("move-history",

@@ -73,7 +73,7 @@ gbp_todo_item_init (GbpTodoItem *self)
  *
  * Returns: (transfer full): A newly allocated #GbpTodoItem
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GbpTodoItem *
 gbp_todo_item_new (GBytes *bytes)

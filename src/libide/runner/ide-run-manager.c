@@ -318,6 +318,8 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
    * to be nofied after the run handler has executed. It's unwise to change
    * things that the run handler might expect. Generally if you want to
    * change settings, do that before the run handler has exected.
+   *
+   * Since: 3.32
    */
   signals [RUN] =
     g_signal_new_class_handler ("run",
@@ -336,6 +338,8 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
    *
    * This signal is emitted when the run manager has stopped the currently
    * executing inferior.
+   *
+   * Since: 3.32
    */
   signals [STOPPED] =
     g_signal_new ("stopped",
@@ -824,6 +828,8 @@ ide_run_manager_remove_handler (IdeRunManager *self,
  *
  * Returns: (transfer none): An #IdeBuildTarget or %NULL if no build target
  *   has been set.
+ *
+ * Since: 3.32
  */
 IdeBuildTarget *
 ide_run_manager_get_build_target (IdeRunManager *self)
@@ -991,6 +997,8 @@ ide_run_manager_discover_default_target_async (IdeRunManager       *self,
  *
  * Returns: (transfer full): An #IdeBuildTarget if successful; otherwise %NULL
  *   and @error is set.
+ *
+ * Since: 3.32
  */
 IdeBuildTarget *
 ide_run_manager_discover_default_target_finish (IdeRunManager  *self,

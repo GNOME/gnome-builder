@@ -233,6 +233,8 @@ ide_environment_editor_row_init (IdeEnvironmentEditorRow *self)
  * ide_environment_editor_row_get_variable:
  *
  * Returns: (transfer none) (nullable): An #IdeEnvironmentVariable.
+ *
+ * Since: 3.32
  */
 IdeEnvironmentVariable *
 ide_environment_editor_row_get_variable (IdeEnvironmentEditorRow *self)

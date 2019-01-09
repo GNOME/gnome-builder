@@ -172,6 +172,8 @@ directory_index_new (GFile         *directory,
  *
  * Thread safety: you may call this function from a thread so long as the
  *   thread has a reference to @self.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_code_index_index_load (IdeCodeIndexIndex   *self,

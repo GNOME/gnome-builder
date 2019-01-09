@@ -542,6 +542,8 @@ gbp_spell_dict_class_init (GbpSpellDictClass *klass)
    *
    * This signal is emitted when the dictionary is fully initialised.
    * (for now, personal dictionary loaded)
+   *
+   * Since: 3.32
    */
   signals [LOADED] =
     g_signal_new_class_handler ("loaded",

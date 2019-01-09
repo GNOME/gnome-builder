@@ -37,7 +37,7 @@
  * For example, when the inferior creates a new thread, the debugger
  * implementation should call ide_debugger_emit_thread_added().
  *
- * Since: 3.26
+ * Since: 3.32
  */
 
 typedef struct
@@ -496,7 +496,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * to display the name of the debugger. You might set this to "GNU Debugger"
    * or "Python Debugger", etc.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   properties [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
@@ -510,7 +510,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * The currently selected thread.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   properties [PROP_SELECTED_THREAD] =
     g_param_spec_object ("selected-thread",
@@ -530,7 +530,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * The "log" signal is emitted when there is new content to be
    * appended to one of the streams.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [LOG] =
     g_signal_new ("log",
@@ -550,7 +550,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * This signal is emitted when a thread-group has been added.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [THREAD_GROUP_ADDED] =
     g_signal_new ("thread-group-added",
@@ -569,7 +569,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * This signal is emitted when a thread-group has been removed.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [THREAD_GROUP_REMOVED] =
     g_signal_new ("thread-group-removed",
@@ -588,7 +588,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * This signal is emitted when a thread-group has been started.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [THREAD_GROUP_STARTED] =
     g_signal_new ("thread-group-started",
@@ -607,7 +607,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * This signal is emitted when a thread-group has exited.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [THREAD_GROUP_EXITED] =
     g_signal_new ("thread-group-exited",
@@ -624,7 +624,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * The signal is emitted when a thread is added to the inferior.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [THREAD_ADDED] =
     g_signal_new ("thread-added",
@@ -641,7 +641,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * The signal is emitted when a thread is removed from the inferior.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [THREAD_REMOVED] =
     g_signal_new ("thread-removed",
@@ -658,7 +658,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * The signal is emitted when a thread is selected in the debugger.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [THREAD_SELECTED] =
     g_signal_new ("thread-selected",
@@ -676,7 +676,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * The "breakpoint-added" signal is emitted when a breakpoint has been
    * added to the debugger.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [BREAKPOINT_ADDED] =
     g_signal_new ("breakpoint-added",
@@ -694,7 +694,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * The "breakpoint-removed" signal is emitted when a breakpoint has been
    * removed from the debugger.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [BREAKPOINT_REMOVED] =
     g_signal_new ("breakpoint-removed",
@@ -712,7 +712,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * The "breakpoint-modified" signal is emitted when a breakpoint has been
    * modified by the debugger.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [BREAKPOINT_MODIFIED] =
     g_signal_new ("breakpoint-modified",
@@ -729,7 +729,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * This signal is emitted when the debugger starts or resumes executing
    * the inferior.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [RUNNING] =
     g_signal_new ("running",
@@ -752,7 +752,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * representable by source in the project (such as memory address based
    * breakpoints).
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [STOPPED] =
     g_signal_new ("stopped",
@@ -772,7 +772,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    *
    * This signal is emitted when a library has been loaded by the debugger.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [LIBRARY_LOADED] =
     g_signal_new ("library-loaded",
@@ -791,7 +791,7 @@ ide_debugger_class_init (IdeDebuggerClass *klass)
    * Generally, this means that the library was a module and loaded in such a
    * way that allowed unloading.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [LIBRARY_UNLOADED] =
     g_signal_new ("library-unloaded",
@@ -822,7 +822,7 @@ ide_debugger_init (IdeDebugger *self)
  *
  * Returns: The display name for the debugger
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const gchar *
 ide_debugger_get_display_name (IdeDebugger *self)
@@ -839,6 +839,8 @@ ide_debugger_get_display_name (IdeDebugger *self)
  * @self: a #IdeDebugger
  *
  * Sets the #IdeDebugger:display-name property.
+ *
+ * Since: 3.32
  */
 void
 ide_debugger_set_display_name (IdeDebugger *self,
@@ -865,7 +867,7 @@ ide_debugger_set_display_name (IdeDebugger *self,
  *
  * Returns: %TRUE if @movement can be performed.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 gboolean
 ide_debugger_get_can_move (IdeDebugger         *self,
@@ -891,7 +893,7 @@ ide_debugger_get_can_move (IdeDebugger         *self,
  * Advances the debugger to the next breakpoint or until the debugger stops.
  * @movement should describe the type of movement to perform.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_move_async (IdeDebugger         *self,
@@ -920,7 +922,7 @@ ide_debugger_move_async (IdeDebugger         *self,
  *
  * Returns: %TRUE if successful, otherwise %FALSE
  *
- * Since: 3.26
+ * Since: 3.32
  */
 gboolean
 ide_debugger_move_finish (IdeDebugger   *self,
@@ -944,7 +946,7 @@ ide_debugger_move_finish (IdeDebugger   *self,
  *
  * Use the #IdeDebuggerStream to denote the particular stream.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_log (IdeDebugger       *self,
@@ -966,7 +968,7 @@ ide_debugger_emit_log (IdeDebugger       *self,
  * Debugger implementations should call this to notify that a thread group has
  * been added to the inferior.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_thread_group_added (IdeDebugger            *self,
@@ -986,7 +988,7 @@ ide_debugger_emit_thread_group_added (IdeDebugger            *self,
  * Debugger implementations should call this to notify that a thread group has
  * been removed from the inferior.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_thread_group_removed (IdeDebugger            *self,
@@ -1006,7 +1008,7 @@ ide_debugger_emit_thread_group_removed (IdeDebugger            *self,
  * Debugger implementations should call this to notify that a thread group has
  * started executing.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_thread_group_started (IdeDebugger            *self,
@@ -1026,7 +1028,7 @@ ide_debugger_emit_thread_group_started (IdeDebugger            *self,
  * Debugger implementations should call this to notify that a thread group has
  * exited.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_thread_group_exited (IdeDebugger            *self,
@@ -1046,7 +1048,7 @@ ide_debugger_emit_thread_group_exited (IdeDebugger            *self,
  * Emits the #IdeDebugger::thread-added signal notifying that a new thread
  * has been added to the inferior.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_thread_added (IdeDebugger       *self,
@@ -1066,7 +1068,7 @@ ide_debugger_emit_thread_added (IdeDebugger       *self,
  * Emits the #IdeDebugger::thread-removed signal notifying that a thread has
  * been removed to the inferior.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_thread_removed (IdeDebugger       *self,
@@ -1086,7 +1088,7 @@ ide_debugger_emit_thread_removed (IdeDebugger       *self,
  * Emits the #IdeDebugger::thread-selected signal notifying that a thread
  * has been set as the current debugging thread.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_thread_selected (IdeDebugger       *self,
@@ -1111,7 +1113,7 @@ ide_debugger_emit_thread_selected (IdeDebugger       *self,
  * If a breakpoint has changed, you should use
  * ide_debugger_emit_breakpoint_modified() to notify of the modification.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_breakpoint_added (IdeDebugger           *self,
@@ -1136,7 +1138,7 @@ ide_debugger_emit_breakpoint_added (IdeDebugger           *self,
  * If a breakpoint has changed, you should use
  * ide_debugger_emit_breakpoint_modified() to notify of the modification.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_breakpoint_removed (IdeDebugger           *self,
@@ -1158,7 +1160,7 @@ ide_debugger_emit_breakpoint_removed (IdeDebugger           *self,
  * Debugger implementations should call this when a breakpoint has changed
  * in the underlying debugger.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_breakpoint_modified (IdeDebugger           *self,
@@ -1179,7 +1181,7 @@ ide_debugger_emit_breakpoint_modified (IdeDebugger           *self,
  * Debugger implementations should call this when the debugger has started
  * or restarted executing the inferior.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_running (IdeDebugger *self)
@@ -1200,7 +1202,7 @@ ide_debugger_emit_running (IdeDebugger *self)
  * Debugger implementations should call this when the debugger has stopped
  * and include the reason and location of the stop.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_stopped (IdeDebugger           *self,
@@ -1224,7 +1226,7 @@ ide_debugger_emit_stopped (IdeDebugger           *self,
  * Debugger implementations should call this when the debugger has loaded
  * a new library.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_library_loaded (IdeDebugger        *self,
@@ -1246,7 +1248,7 @@ ide_debugger_emit_library_loaded (IdeDebugger        *self,
  * Debugger implementations should call this when the debugger has unloaded a
  * library.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_emit_library_unloaded (IdeDebugger        *self,
@@ -1270,7 +1272,7 @@ ide_debugger_emit_library_unloaded (IdeDebugger        *self,
  * #IdeDebugger implementations must implement the virtual function
  * for this method.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_list_breakpoints_async (IdeDebugger         *self,
@@ -1295,7 +1297,7 @@ ide_debugger_list_breakpoints_async (IdeDebugger         *self,
  * Returns: (transfer full) (element-type Ide.DebuggerBreakpoint): a #GPtrArray
  *   of breakpoints that are registered with the debugger.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GPtrArray *
 ide_debugger_list_breakpoints_finish (IdeDebugger   *self,
@@ -1322,7 +1324,7 @@ ide_debugger_list_breakpoints_finish (IdeDebugger   *self,
  * registered in the debugger. Debugger implementations will emit
  * #IdeDebugger::breakpoint-added when a breakpoint has been registered.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_insert_breakpoint_async (IdeDebugger             *self,
@@ -1355,7 +1357,7 @@ ide_debugger_insert_breakpoint_async (IdeDebugger             *self,
  * Returns: %TRUE if the command was submitted successfully; otherwise %FALSE
  *   and @error is set.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 gboolean
 ide_debugger_insert_breakpoint_finish (IdeDebugger   *self,
@@ -1382,7 +1384,7 @@ ide_debugger_insert_breakpoint_finish (IdeDebugger   *self,
  * removed by the debugger. Debugger implementations will emit
  * #IdeDebugger::breakpoint-removed when a breakpoint has been removed.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_remove_breakpoint_async (IdeDebugger             *self,
@@ -1414,7 +1416,7 @@ ide_debugger_remove_breakpoint_async (IdeDebugger             *self,
  *
  * Returns: %TRUE if the command was submitted successfully; otherwise %FALSE and @error is set.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 gboolean
 ide_debugger_remove_breakpoint_finish (IdeDebugger   *self,
@@ -1444,7 +1446,7 @@ ide_debugger_remove_breakpoint_finish (IdeDebugger   *self,
  * modified by the debugger. Debugger implementations will emit
  * #IdeDebugger::breakpoint-modified when a breakpoint has been removed.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_modify_breakpoint_async (IdeDebugger                 *self,
@@ -1481,7 +1483,7 @@ ide_debugger_modify_breakpoint_async (IdeDebugger                 *self,
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 gboolean
 ide_debugger_modify_breakpoint_finish (IdeDebugger   *self,
@@ -1509,6 +1511,8 @@ ide_debugger_modify_breakpoint_finish (IdeDebugger   *self,
  * display information on breakpoints.
  *
  * Returns: (transfer none) (not nullable): a #GListModel of #IdeDebuggerBreakpoint
+ *
+ * Since: 3.32
  */
 GListModel *
 ide_debugger_get_breakpoints (IdeDebugger *self)
@@ -1530,6 +1534,8 @@ ide_debugger_get_breakpoints (IdeDebugger *self)
  * implementation emitting varous thread-group modification signals correctly.
  *
  * Returns: (transfer none) (not nullable): a #GListModel of #IdeDebuggerThreadGroup
+ *
+ * Since: 3.32
  */
 GListModel *
 ide_debugger_get_thread_groups (IdeDebugger *self)
@@ -1551,6 +1557,8 @@ ide_debugger_get_thread_groups (IdeDebugger *self)
  * implementation emitting varous thread modification signals correctly.
  *
  * Returns: (transfer none) (not nullable): a #GListModel of #IdeDebuggerThread
+ *
+ * Since: 3.32
  */
 GListModel *
 ide_debugger_get_threads (IdeDebugger *self)
@@ -1583,6 +1591,8 @@ ide_debugger_list_frames_async (IdeDebugger         *self,
  *
  * Returns: (transfer full) (element-type Ide.DebuggerFrame) (nullable): An
  *   array of debugger frames or %NULL and @error is set.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_debugger_list_frames_finish (IdeDebugger   *self,
@@ -1603,7 +1613,7 @@ ide_debugger_list_frames_finish (IdeDebugger   *self,
  *
  * Returns: (transfer none) (nullable): An #IdeDebuggerThread or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeDebuggerThread *
 ide_debugger_get_selected_thread (IdeDebugger *self)
@@ -1628,7 +1638,7 @@ ide_debugger_get_selected_thread (IdeDebugger *self)
  * stopped together and on gdb on Linux, this is the default for all threads in
  * the process.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_interrupt_async (IdeDebugger            *self,
@@ -1716,7 +1726,7 @@ ide_debugger_send_signal_finish (IdeDebugger   *self,
  *
  * Returns: the filename of the binary or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const gchar *
 ide_debugger_locate_binary_at_address (IdeDebugger        *self,
@@ -1747,7 +1757,7 @@ ide_debugger_locate_binary_at_address (IdeDebugger        *self,
  * Requests the debugger backend to list the locals that are available to the
  * given @frame of @thread.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_list_locals_async (IdeDebugger         *self,
@@ -1781,7 +1791,7 @@ ide_debugger_list_locals_async (IdeDebugger         *self,
  * Returns: (transfer full) (element-type Ide.DebuggerVariable): a #GPtrArray of
  *   #IdeDebuggerVariable if successful; otherwise %NULL and error is set.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GPtrArray *
 ide_debugger_list_locals_finish (IdeDebugger   *self,
@@ -1806,7 +1816,7 @@ ide_debugger_list_locals_finish (IdeDebugger   *self,
  * Requests the debugger backend to list the parameters to the given stack
  * frame.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_list_params_async (IdeDebugger         *self,
@@ -1840,7 +1850,7 @@ ide_debugger_list_params_async (IdeDebugger         *self,
  * Returns: (transfer full) (element-type Ide.DebuggerVariable): a #GPtrArray of
  *   #IdeDebuggerVariable if successful; otherwise %NULL and error is set.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GPtrArray *
 ide_debugger_list_params_finish (IdeDebugger   *self,
@@ -1862,7 +1872,7 @@ ide_debugger_list_params_finish (IdeDebugger   *self,
  *
  * Requests the list of registers and their values.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_list_registers_async (IdeDebugger         *self,
@@ -1887,7 +1897,7 @@ ide_debugger_list_registers_async (IdeDebugger         *self,
  * Returns: (transfer full) (element-type Ide.DebuggerRegister): a #GPtrArray of
  *   #IdeDebuggerRegister if successful; otherwise %NULL and error is set.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GPtrArray *
 ide_debugger_list_registers_finish (IdeDebugger   *self,
@@ -1910,7 +1920,7 @@ ide_debugger_list_registers_finish (IdeDebugger   *self,
  *
  * Disassembles the address range requested.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_disassemble_async (IdeDebugger                   *self,
@@ -1937,7 +1947,7 @@ ide_debugger_disassemble_async (IdeDebugger                   *self,
  * Returns: (transfer full) (element-type Ide.DebuggerInstruction): a #GPtrArray
  *   of #IdeDebuggerInstruction if successful; otherwise %NULL and error is set.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GPtrArray *
 ide_debugger_disassemble_finish (IdeDebugger   *self,
@@ -1960,6 +1970,8 @@ ide_debugger_disassemble_finish (IdeDebugger   *self,
  * to check if the binary type matches it's expectation.
  *
  * Returns: %TRUE if the #IdeDebugger supports the runner.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_debugger_supports_runner (IdeDebugger *self,
@@ -1986,7 +1998,7 @@ ide_debugger_supports_runner (IdeDebugger *self,
  *
  * Prepares the runner to launch a debugger and target process.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_prepare (IdeDebugger *self,

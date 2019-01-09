@@ -1098,7 +1098,7 @@ ide_langserv_client_call_cb (GObject      *object,
  *
  * If @params is floating, it's floating reference is consumed.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_langserv_client_call_async (IdeLangservClient   *self,
@@ -1198,7 +1198,7 @@ ide_langserv_client_send_notification_cb (GObject      *object,
  *
  * If @params is floating, it's reference is consumed.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_langserv_client_send_notification_async (IdeLangservClient   *self,
@@ -1297,6 +1297,8 @@ ide_langserv_client_get_diagnostics_async (IdeLangservClient   *self,
  *
  * Returns: %TRUE if successful and @diagnostics is set, otherwise %FALSE
  *   and @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_langserv_client_get_diagnostics_finish (IdeLangservClient  *self,

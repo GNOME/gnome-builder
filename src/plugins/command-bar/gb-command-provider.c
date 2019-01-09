@@ -61,6 +61,8 @@ gb_command_provider_new (IdeWorkbench *workbench)
  * was focused in the workbench.
  *
  * Returns: (transfer none): an #IdeLayoutView or %NULL.
+ *
+ * Since: 3.32
  */
 IdeLayoutView *
 gb_command_provider_get_active_view (GbCommandProvider *provider)
@@ -220,6 +222,8 @@ gb_command_provider_set_priority (GbCommandProvider *provider,
  *
  *
  * Returns: (transfer full): a #GbCommand if successful; otherwise %NULL.
+ *
+ * Since: 3.32
  */
 GbCommand *
 gb_command_provider_lookup (GbCommandProvider *provider,
@@ -241,6 +245,8 @@ gb_command_provider_lookup (GbCommandProvider *provider,
  * @completions: (in): a #GPtrArray where completed strings can be added
  * @command_text: (in): Initial command text to be completed
  *
+ *
+ * Since: 3.32
  */
 void
 gb_command_provider_complete (GbCommandProvider *provider,
@@ -330,6 +336,8 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    * Lower priorities will be queried first.
    *
    * A negative priority is allowed;
+   *
+   * Since: 3.32
    */
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",
@@ -346,6 +354,8 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    * The "workbench" property is the top-level window containing our project
    * and the workbench to work on it. It keeps track of the last focused tab
    * for convenience by action providers.
+   *
+   * Since: 3.32
    */
   properties [PROP_WORKBENCH] =
     g_param_spec_object ("workbench",
@@ -369,6 +379,8 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    *
    * If successful, the callee can set @parameter, to specify the
    * parameters that should be passed to the resulting action.
+   *
+   * Since: 3.32
    */
   signals [LOOKUP] =
     g_signal_new ("lookup",
@@ -390,6 +402,8 @@ gb_command_provider_class_init (GbCommandProviderClass *klass)
    * This signal is emitted when a request to complete a command text is
    * received. All providers should all all possible completions, matching
    * the initial test.
+   *
+   * Since: 3.32
    */
   signals [COMPLETE] =
     g_signal_new ("complete",

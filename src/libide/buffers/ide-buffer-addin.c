@@ -39,6 +39,8 @@
  * may be used by views to show the misspelled words. This is preferrable
  * to adding a spellchecker in each view because it allows for multiple
  * views to share one spellcheker on the underlying buffer.
+ *
+ * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeBufferAddin, ide_buffer_addin, G_TYPE_OBJECT)
@@ -56,7 +58,7 @@ ide_buffer_addin_default_init (IdeBufferAddinInterface *iface)
  * This calls the load virtual function of #IdeBufferAddin to request
  * that the addin load itself.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_buffer_addin_load (IdeBufferAddin *self,
@@ -81,7 +83,7 @@ ide_buffer_addin_load (IdeBufferAddin *self,
  * The addin should cancel any in-flight operations and attempt to drop
  * references to the buffer or any other machinery as soon as possible.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_buffer_addin_unload (IdeBufferAddin *self,
@@ -105,7 +107,7 @@ ide_buffer_addin_unload (IdeBufferAddin *self,
  *
  * Returns: (transfer none) (nullable): An #IdeBufferAddin or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeBufferAddin *
 ide_buffer_addin_find_by_module_name (IdeBuffer   *buffer,

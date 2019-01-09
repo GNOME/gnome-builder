@@ -190,7 +190,7 @@ gbp_flatpak_download_stage_class_init (GbpFlatpakDownloadStageClass *klass)
    * The "state-dir" is the flatpak-builder state directory, to be used
    * as a parameter to "flatpak-builder --state-dir".
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_STATE_DIR] =
     g_param_spec_string ("state-dir",

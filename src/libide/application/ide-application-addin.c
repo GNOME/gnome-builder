@@ -37,7 +37,7 @@
  * Use this interface when you can share code between multiple projects that
  * are open at the same time.
  *
- * Since: 3.24
+ * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeApplicationAddin, ide_application_addin, G_TYPE_OBJECT)
@@ -72,7 +72,7 @@ ide_application_addin_default_init (IdeApplicationAddinInterface *iface)
  * Use this to setup code in your plugin that needs to be loaded once per
  * application process.
  *
- * Since: 3.24
+ * Since: 3.32
  */
 void
 ide_application_addin_load (IdeApplicationAddin *self,
@@ -95,7 +95,7 @@ ide_application_addin_load (IdeApplicationAddin *self,
  * Use this function to cleanup after anything setup in
  * ide_application_addin_load().
  *
- * Since: 3.24
+ * Since: 3.32
  */
 void
 ide_application_addin_unload (IdeApplicationAddin *self,

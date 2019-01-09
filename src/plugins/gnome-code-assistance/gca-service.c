@@ -159,6 +159,8 @@ _g_value_equal (const GValue *a, const GValue *b)
  * @short_description: Generated C code for the org.gnome.CodeAssist.v1.Service D-Bus interface
  *
  * This section contains code for working with the <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Service.top_of_page">org.gnome.CodeAssist.v1.Service</link> D-Bus interface in C.
+ *
+ * Since: 3.32
  */
 
 /* ---- Introspection data for org.gnome.CodeAssist.v1.Service ---- */
@@ -303,6 +305,8 @@ static const _ExtendedGDBusInterfaceInfo _gca_service_interface_info =
  * Gets a machine-readable description of the <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Service.top_of_page">org.gnome.CodeAssist.v1.Service</link> D-Bus interface.
  *
  * Returns: (transfer none): a #GDBusInterfaceInfo. Do not free.
+ *
+ * Since: 3.32
  */
 GDBusInterfaceInfo *
 gca_service_interface_info (void)
@@ -319,6 +323,8 @@ gca_service_interface_info (void)
  * The properties are overridden in the order they are defined.
  *
  * Returns: The last property id.
+ *
+ * Since: 3.32
  */
 guint
 gca_service_override_properties (GObjectClass *klass, guint property_id_begin)
@@ -332,6 +338,8 @@ gca_service_override_properties (GObjectClass *klass, guint property_id_begin)
  * GcaService:
  *
  * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Service.top_of_page">org.gnome.CodeAssist.v1.Service</link>.
+ *
+ * Since: 3.32
  */
 
 /**
@@ -341,6 +349,8 @@ gca_service_override_properties (GObjectClass *klass, guint property_id_begin)
  * @handle_parse: Handler for the #GcaService::handle-parse signal.
  *
  * Virtual table for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Service.top_of_page">org.gnome.CodeAssist.v1.Service</link>.
+ *
+ * Since: 3.32
  */
 
 typedef GcaServiceIface GcaServiceInterface;
@@ -361,6 +371,8 @@ gca_service_default_init (GcaServiceIface *iface)
    * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gca_service_complete_dispose() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
    *
    * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+   *
+   * Since: 3.32
    */
   g_signal_new ("handle-dispose",
     G_TYPE_FROM_INTERFACE (iface),
@@ -387,6 +399,8 @@ gca_service_default_init (GcaServiceIface *iface)
    * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gca_service_complete_parse() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
    *
    * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+   *
+   * Since: 3.32
    */
   g_signal_new ("handle-parse",
     G_TYPE_FROM_INTERFACE (iface),
@@ -414,6 +428,8 @@ gca_service_default_init (GcaServiceIface *iface)
  * You can then call gca_service_call_dispose_finish() to get the result of the operation.
  *
  * See gca_service_call_dispose_sync() for the synchronous, blocking version of this method.
+ *
+ * Since: 3.32
  */
 void
 gca_service_call_dispose (
@@ -443,6 +459,8 @@ gca_service_call_dispose (
  * Finishes an operation started with gca_service_call_dispose().
  *
  * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 gca_service_call_dispose_finish (
@@ -473,6 +491,8 @@ _out:
  * See gca_service_call_dispose() for the asynchronous version of this method.
  *
  * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 gca_service_call_dispose_sync (
@@ -515,6 +535,8 @@ _out:
  * You can then call gca_service_call_parse_finish() to get the result of the operation.
  *
  * See gca_service_call_parse_sync() for the synchronous, blocking version of this method.
+ *
+ * Since: 3.32
  */
 void
 gca_service_call_parse (
@@ -551,6 +573,8 @@ gca_service_call_parse (
  * Finishes an operation started with gca_service_call_parse().
  *
  * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 gca_service_call_parse_finish (
@@ -587,6 +611,8 @@ _out:
  * See gca_service_call_parse() for the asynchronous version of this method.
  *
  * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 gca_service_call_parse_sync (
@@ -629,6 +655,8 @@ _out:
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Dispose">Dispose()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
  *
  * This method will free @invocation, you cannot use it afterwards.
+ *
+ * Since: 3.32
  */
 void
 gca_service_complete_dispose (
@@ -648,6 +676,8 @@ gca_service_complete_dispose (
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-gnome-CodeAssist-v1-Service.Parse">Parse()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
  *
  * This method will free @invocation, you cannot use it afterwards.
+ *
+ * Since: 3.32
  */
 void
 gca_service_complete_parse (
@@ -666,6 +696,8 @@ gca_service_complete_parse (
  * GcaServiceProxy:
  *
  * The #GcaServiceProxy structure contains only private data and should only be accessed using the provided API.
+ *
+ * Since: 3.32
  */
 
 /**
@@ -673,6 +705,8 @@ gca_service_complete_parse (
  * @parent_class: The parent class.
  *
  * Class structure for #GcaServiceProxy.
+ *
+ * Since: 3.32
  */
 
 struct _GcaServiceProxyPrivate
@@ -839,6 +873,8 @@ gca_service_proxy_iface_init (GcaServiceIface *iface)
  * You can then call gca_service_proxy_new_finish() to get the result of the operation.
  *
  * See gca_service_proxy_new_sync() for the synchronous, blocking version of this constructor.
+ *
+ * Since: 3.32
  */
 void
 gca_service_proxy_new (
@@ -861,6 +897,8 @@ gca_service_proxy_new (
  * Finishes an operation started with gca_service_proxy_new().
  *
  * Returns: (transfer full) (type GcaServiceProxy): The constructed proxy object or %NULL if @error is set.
+ *
+ * Since: 3.32
  */
 GcaService *
 gca_service_proxy_new_finish (
@@ -894,6 +932,8 @@ gca_service_proxy_new_finish (
  * See gca_service_proxy_new() for the asynchronous version of this constructor.
  *
  * Returns: (transfer full) (type GcaServiceProxy): The constructed proxy object or %NULL if @error is set.
+ *
+ * Since: 3.32
  */
 GcaService *
 gca_service_proxy_new_sync (
@@ -929,6 +969,8 @@ gca_service_proxy_new_sync (
  * You can then call gca_service_proxy_new_for_bus_finish() to get the result of the operation.
  *
  * See gca_service_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
+ *
+ * Since: 3.32
  */
 void
 gca_service_proxy_new_for_bus (
@@ -951,6 +993,8 @@ gca_service_proxy_new_for_bus (
  * Finishes an operation started with gca_service_proxy_new_for_bus().
  *
  * Returns: (transfer full) (type GcaServiceProxy): The constructed proxy object or %NULL if @error is set.
+ *
+ * Since: 3.32
  */
 GcaService *
 gca_service_proxy_new_for_bus_finish (
@@ -984,6 +1028,8 @@ gca_service_proxy_new_for_bus_finish (
  * See gca_service_proxy_new_for_bus() for the asynchronous version of this constructor.
  *
  * Returns: (transfer full) (type GcaServiceProxy): The constructed proxy object or %NULL if @error is set.
+ *
+ * Since: 3.32
  */
 GcaService *
 gca_service_proxy_new_for_bus_sync (
@@ -1009,6 +1055,8 @@ gca_service_proxy_new_for_bus_sync (
  * GcaServiceSkeleton:
  *
  * The #GcaServiceSkeleton structure contains only private data and should only be accessed using the provided API.
+ *
+ * Since: 3.32
  */
 
 /**
@@ -1016,6 +1064,8 @@ gca_service_proxy_new_for_bus_sync (
  * @parent_class: The parent class.
  *
  * Class structure for #GcaServiceSkeleton.
+ *
+ * Since: 3.32
  */
 
 struct _GcaServiceSkeletonPrivate
@@ -1282,6 +1332,8 @@ gca_service_skeleton_iface_init (GcaServiceIface *iface)
  * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-org-gnome-CodeAssist-v1-Service.top_of_page">org.gnome.CodeAssist.v1.Service</link>.
  *
  * Returns: (transfer full) (type GcaServiceSkeleton): The skeleton object.
+ *
+ * Since: 3.32
  */
 GcaService *
 gca_service_skeleton_new (void)

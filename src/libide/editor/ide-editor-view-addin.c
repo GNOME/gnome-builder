@@ -87,7 +87,7 @@ ide_editor_view_addin_stack_set (IdeEditorViewAddin *self,
  *
  * Returns: (transfer none) (nullable): An #IdeEditorViewAddin or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeEditorViewAddin *
 ide_editor_view_addin_find_by_module_name (IdeEditorView *view,

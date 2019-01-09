@@ -133,6 +133,8 @@ ide_langserv_symbol_resolver_init (IdeLangservSymbolResolver *self)
  * Gets the client used by the symbol resolver.
  *
  * Returns: (transfer none) (nullable): An #IdeLangservClient or %NULL.
+ *
+ * Since: 3.32
  */
 IdeLangservClient *
 ide_langserv_symbol_resolver_get_client (IdeLangservSymbolResolver *self)

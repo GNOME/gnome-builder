@@ -414,7 +414,7 @@ ide_vcs_monitor_init (IdeVcsMonitor *self)
  * 
  * Returns: (transfer full) (nullable): an #IdeVcsFileInfo or %NULL
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeVcsFileInfo *
 ide_vcs_monitor_get_info (IdeVcsMonitor *self,

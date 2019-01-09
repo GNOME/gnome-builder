@@ -58,6 +58,8 @@ search_data_free (SearchData *sd)
  * and we can remove this.
  *
  * https://gitlab.gnome.org/GNOME/gtksourceview/issues/8
+ *
+ * Since: 3.32
  */
 void
 ide_source_search_context_backward_async (GtkSourceSearchContext *search,
@@ -111,7 +113,7 @@ ide_source_search_context_backward_async (GtkSourceSearchContext *search,
  * @has_wrapped_around: (out): a location to a boolean
  * @error: a location for a #GError
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_source_search_context_backward_finish2 (GtkSourceSearchContext  *search,

@@ -142,6 +142,8 @@ void ide_file_settings_set_##name##_set (IdeFileSettings *self, \
  * implementation might look for ".editorconfig" files.
  *
  * Returns: (transfer none): An #IdeFile.
+ *
+ * Since: 3.32
  */
 IdeFile *
 ide_file_settings_get_file (IdeFileSettings *self)
@@ -184,6 +186,8 @@ ide_file_settings_set_file (IdeFileSettings *self,
  * settled.
  *
  * Returns: %TRUE if all the settings have loaded.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_file_settings_get_settled (IdeFileSettings *self)

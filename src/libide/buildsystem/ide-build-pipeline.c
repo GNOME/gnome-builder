@@ -98,6 +98,8 @@ DZL_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline in
  * ide_build_stage_set_transient(). This may be useful to perform operations
  * such as an "export tarball" stage which should only run once as determined
  * by the user requesting a "make dist" style operation.
+ *
+ * Since: 3.32
  */
 
 typedef struct
@@ -795,6 +797,8 @@ ide_build_pipeline_check_ready (IdeBuildPipeline *self,
  *
  * Gets the current phase that is executing. This is only useful during
  * execution of the pipeline.
+ *
+ * Since: 3.32
  */
 IdeBuildPhase
 ide_build_pipeline_get_phase (IdeBuildPipeline *self)
@@ -817,6 +821,8 @@ ide_build_pipeline_get_phase (IdeBuildPipeline *self)
  * Gets the #IdeConfiguration to use for the pipeline.
  *
  * Returns: (transfer none): An #IdeConfiguration
+ *
+ * Since: 3.32
  */
 IdeConfiguration *
 ide_build_pipeline_get_configuration (IdeBuildPipeline *self)
@@ -1128,6 +1134,8 @@ ide_build_pipeline_load_cb (IdleLoadState *state)
  * enable/disable the pipeline as the IdeConfiguration:ready property changes.
  * This could happen when the device or runtime is added/removed while the
  * application is running.
+ *
+ * Since: 3.32
  */
 static void
 ide_build_pipeline_load (IdeBuildPipeline *self)
@@ -1246,6 +1254,8 @@ ide_build_pipeline_begin_load (IdeBuildPipeline *self)
  * This function is safe to run even if load has not been called. We will not
  * clean things up if the pipeline is currently executing (we can wait until
  * its finished or dispose/finalize to cleanup up further.
+ *
+ * Since: 3.32
  */
 static void
 ide_build_pipeline_unload (IdeBuildPipeline *self)
@@ -1517,6 +1527,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    * IdeBuildPipeline:busy:
    *
    * Gets the "busy" property. If %TRUE, the pipeline is busy executing.
+   *
+   * Since: 3.32
    */
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
@@ -1529,6 +1541,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    * IdeBuildPipeline:configuration:
    *
    * The configuration to use for the build pipeline.
+   *
+   * Since: 3.32
    */
   properties [PROP_CONFIGURATION] =
     g_param_spec_object ("configuration",
@@ -1542,7 +1556,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    *
    * The "device" property is the device we are compiling for.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_DEVICE] =
     g_param_spec_object ("device",
@@ -1557,7 +1571,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    * The "message" property is descriptive text about what the the
    * pipeline is doing or it's readiness status.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_MESSAGE] =
     g_param_spec_string ("message",
@@ -1570,6 +1584,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    * IdeBuildPipeline:phase:
    *
    * The current build phase during execution of the pipeline.
+   *
+   * Since: 3.32
    */
   properties [PROP_PHASE] =
     g_param_spec_flags ("phase",
@@ -1585,7 +1601,7 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    * The "pty" property is the #VtePty that is used by build stages that
    * execute subprocesses with a pseudo terminal.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_PTY] =
     g_param_spec_object ("pty",
@@ -1603,6 +1619,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    *
    * This signal is emitted when a plugin has detected a diagnostic while
    * building the pipeline.
+   *
+   * Since: 3.32
    */
   signals [DIAGNOSTIC] =
     g_signal_new_class_handler ("diagnostic",
@@ -1618,6 +1636,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    *
    * This signal is emitted when the pipeline has started executing in
    * response to ide_build_pipeline_execute_async() being called.
+   *
+   * Since: 3.32
    */
   signals [STARTED] =
     g_signal_new_class_handler ("started",
@@ -1635,6 +1655,8 @@ ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)
    * This signal is emitted when the build process has finished executing.
    * If the build failed to complete all requested stages, then @failed will
    * be set to %TRUE, otherwise %FALSE.
+   *
+   * Since: 3.32
    */
   signals [FINISHED] =
     g_signal_new_class_handler ("finished",
@@ -1949,7 +1971,7 @@ ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,
  * ide_build_pipeline_execute_finish() to get the status of the
  * operation.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_build_pipeline_build_async (IdeBuildPipeline    *self,
@@ -2030,7 +2052,7 @@ short_circuit:
  *   up to the requested build phase provided to
  *   ide_build_pipeline_build_async().
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_build_pipeline_build_finish (IdeBuildPipeline  *self,
@@ -2065,7 +2087,7 @@ ide_build_pipeline_build_finish (IdeBuildPipeline  *self,
  * ide_build_pipeline_execute_finish() to get the status of the
  * operation.
  *
- * Since: 3.24
+ * Since: 3.32
  */
 void
 ide_build_pipeline_execute_async (IdeBuildPipeline    *self,
@@ -2269,6 +2291,8 @@ ide_build_pipeline_queue_flush (IdeBuildPipeline *self)
  * ide_build_pipeline_execute_finish:
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_build_pipeline_execute_finish (IdeBuildPipeline  *self,
@@ -2300,6 +2324,8 @@ ide_build_pipeline_execute_finish (IdeBuildPipeline  *self,
  * stages that are part of the same phase.
  *
  * Returns: A stage_id that may be passed to ide_build_pipeline_disconnect().
+ *
+ * Since: 3.32
  */
 guint
 ide_build_pipeline_connect (IdeBuildPipeline *self,
@@ -2394,6 +2420,8 @@ cleanup:
  * function.
  *
  * Returns: A stage_id that may be passed to ide_build_pipeline_remove().
+ *
+ * Since: 3.32
  */
 guint
 ide_build_pipeline_connect_launcher (IdeBuildPipeline      *self,
@@ -2425,6 +2453,8 @@ ide_build_pipeline_connect_launcher (IdeBuildPipeline      *self,
  * including all stages that were previously invalidated.
  *
  * Returns: %TRUE if a stage is known to require execution.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_build_pipeline_request_phase (IdeBuildPipeline *self,
@@ -2504,6 +2534,8 @@ cleanup:
  * the location that build systems will use for out-of-tree builds.
  *
  * Returns: the path of the build directory
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_build_pipeline_get_builddir (IdeBuildPipeline *self)
@@ -2521,6 +2553,8 @@ ide_build_pipeline_get_builddir (IdeBuildPipeline *self)
  * IdeVcs:working-directory property as a string.
  *
  * Returns: the path of the source directory
+ *
+ * Since: 3.32
  */
 const gchar *
 ide_build_pipeline_get_srcdir (IdeBuildPipeline *self)
@@ -2560,6 +2594,8 @@ ide_build_pipeline_build_path_va_list (const gchar *prefix,
  * working directory of the source tree.
  *
  * Returns: (transfer full): A newly allocated string.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_build_pipeline_build_srcdir_path (IdeBuildPipeline *self,
@@ -2590,6 +2626,8 @@ ide_build_pipeline_build_srcdir_path (IdeBuildPipeline *self,
  * result of ide_build_pipeline_get_builddir() as the first parameter.
  *
  * Returns: (transfer full): A newly allocated string.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_build_pipeline_build_builddir_path (IdeBuildPipeline *self,
@@ -2621,6 +2659,8 @@ ide_build_pipeline_build_builddir_path (IdeBuildPipeline *self,
  *
  * Plugins should use this function to remove their stages when the plugin
  * is unloading.
+ *
+ * Since: 3.32
  */
 void
 ide_build_pipeline_disconnect (IdeBuildPipeline *self,
@@ -2657,6 +2697,8 @@ ide_build_pipeline_disconnect (IdeBuildPipeline *self,
  * upon discovering its state is no longer valid. Such an example might be
  * invalidating the %IDE_BUILD_PHASE_AUTOGEN phase when the an autotools
  * projects autogen.sh file has been changed.
+ *
+ * Since: 3.32
  */
 void
 ide_build_pipeline_invalidate_phase (IdeBuildPipeline *self,
@@ -2683,6 +2725,8 @@ ide_build_pipeline_invalidate_phase (IdeBuildPipeline *self,
  *
  * Returns: (transfer none) (nullable): An #IdeBuildStage or %NULL if the
  *   stage could not be found.
+ *
+ * Since: 3.32
  */
 IdeBuildStage *
 ide_build_pipeline_get_stage_by_id (IdeBuildPipeline *self,
@@ -2709,7 +2753,7 @@ ide_build_pipeline_get_stage_by_id (IdeBuildPipeline *self,
  *
  * Returns: (transfer none) (nullable): An #IdeRuntime or %NULL
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeRuntime *
 ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
@@ -2727,7 +2771,7 @@ ide_build_pipeline_get_runtime (IdeBuildPipeline *self)
  *
  * Returns: (transfer none): An #IdeToolchain
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeToolchain *
 ide_build_pipeline_get_toolchain (IdeBuildPipeline *self)
@@ -2745,6 +2789,8 @@ ide_build_pipeline_get_toolchain (IdeBuildPipeline *self)
  * using the configuration and runtime associated with the pipeline.
  *
  * Returns: (transfer full): An #IdeSubprocessLauncher.
+ *
+ * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
@@ -2796,7 +2842,7 @@ ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,
  * This is useful if the application can take advantage of a PTY for
  * features like colors and other escape sequences.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
@@ -2846,7 +2892,7 @@ ide_build_pipeline_attach_pty (IdeBuildPipeline      *self,
  *
  * Returns: (transfer none) (nullable): a #VtePty or %NULL
  *
- * Since: 3.28
+ * Since: 3.32
  */
 VtePty *
 ide_build_pipeline_get_pty (IdeBuildPipeline *self)
@@ -2926,6 +2972,8 @@ ide_build_pipeline_emit_diagnostic (IdeBuildPipeline *self,
  *
  * Returns: an error format id that may be passed to
  *   ide_build_pipeline_remove_error_format().
+ *
+ * Since: 3.32
  */
 guint
 ide_build_pipeline_add_error_format (IdeBuildPipeline   *self,
@@ -2961,6 +3009,8 @@ ide_build_pipeline_add_error_format (IdeBuildPipeline   *self,
  * ide_build_pipeline_add_error_format().
  *
  * Returns: %TRUE if the error format was removed.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_build_pipeline_remove_error_format (IdeBuildPipeline *self,
@@ -3001,6 +3051,8 @@ ide_build_pipeline_get_busy (IdeBuildPipeline *self)
  *
  * Returns: (nullable) (transfer full): A string representing the
  *   current stage of the build, or %NULL.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_build_pipeline_get_message (IdeBuildPipeline *self)
@@ -3104,6 +3156,8 @@ ide_build_pipeline_get_message (IdeBuildPipeline *self)
  *
  * This function will call @stage_callback for every #IdeBuildStage registered
  * in the pipeline.
+ *
+ * Since: 3.32
  */
 void
 ide_build_pipeline_foreach_stage (IdeBuildPipeline *self,
@@ -3537,6 +3591,8 @@ ide_build_pipeline_rebuild_finish (IdeBuildPipeline  *self,
  * sensitivity of a button.
  *
  * Returns: %TRUE if there are export pipeline stages.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_build_pipeline_get_can_export (IdeBuildPipeline *self)
@@ -3606,7 +3662,7 @@ _ide_build_pipeline_cancel (IdeBuildPipeline *self)
  *
  * Returns: %TRUE if %IDE_BUILD_PHASE_CONFIGURE has been reached.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_build_pipeline_has_configured (IdeBuildPipeline *self)
@@ -3725,7 +3781,7 @@ list_model_iface_init (GListModelInterface *iface)
  *
  * Returns: an #IdeBuildPhase
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeBuildPhase
 ide_build_pipeline_get_requested_phase (IdeBuildPipeline *self)
@@ -3838,7 +3894,7 @@ _ide_build_pipeline_check_toolchain (IdeBuildPipeline *self,
  *
  * Returns: (transfer none): an #IdeDevice.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeDevice *
 ide_build_pipeline_get_device (IdeBuildPipeline *self)
@@ -3857,7 +3913,7 @@ ide_build_pipeline_get_device (IdeBuildPipeline *self)
  *
  * Returns: %TRUE if the pipeline has loaded, otherwise %FALSE
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_build_pipeline_is_ready (IdeBuildPipeline *self)
@@ -3878,7 +3934,7 @@ ide_build_pipeline_is_ready (IdeBuildPipeline *self)
  *
  * Returns: (transfer none): an #IdeTriplet
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeTriplet *
 ide_build_pipeline_get_host_triplet (IdeBuildPipeline *self)
@@ -3898,7 +3954,7 @@ ide_build_pipeline_get_host_triplet (IdeBuildPipeline *self)
  *
  * Returns: %FALSE if we're possibly cross-compiling, otherwise %TRUE
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_build_pipeline_is_native (IdeBuildPipeline *self)

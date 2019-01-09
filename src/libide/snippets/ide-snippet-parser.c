@@ -39,7 +39,7 @@
  * text files. This is generally only used internally by Builder, but can
  * be used by plugins under certain situations.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 
 struct _IdeSnippetParser
@@ -644,6 +644,8 @@ ide_snippet_parser_load_from_data (IdeSnippetParser  *parser,
  * Get the list of all the snippets loaded.
  *
  * Returns: (transfer none) (element-type Ide.Snippet): a #GList of #IdeSnippets items.
+ *
+ * Since: 3.32
  */
 GList *
 ide_snippet_parser_get_snippets (IdeSnippetParser *parser)

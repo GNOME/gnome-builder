@@ -55,6 +55,8 @@ ide_genesis_addin_get_icon_name (IdeGenesisAddin *self)
  * ide_genesis_addin_get_widget:
  *
  * Returns: (transfer none): a #GtkWidget.
+ *
+ * Since: 3.32
  */
 GtkWidget *
 ide_genesis_addin_get_widget (IdeGenesisAddin *self)
@@ -129,6 +131,8 @@ ide_genesis_addin_get_next_label (IdeGenesisAddin *self)
  * will be called afterwards to begin a clone.
  *
  * Returns: %TRUE if @uri was handled; otherwise %FALSE.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_genesis_addin_apply_uri (IdeGenesisAddin *self,
