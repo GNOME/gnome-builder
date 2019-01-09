@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2015-2018 Christian Hergert
+Depends=editor;project-tree;
+Description=Provides user interface components to display the build settings.
+Embedded=_gbp_buildui_register_types
+Hidden=true
+Module=buildui
+Name=Build user interface components
+X-Workspace-Kind=primary;

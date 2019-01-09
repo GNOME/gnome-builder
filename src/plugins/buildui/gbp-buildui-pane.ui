@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpBuilduiPane" parent="IdePane">
+    <child>
+      <object class="DzlMultiPaned">
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkGrid">
+            <property name="margin">6</property>
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">6</property>
+            <property name="expand">false</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Build status:</property>
+                <property name="visible">true</property>
+                <property name="xalign">1.0</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="scale" value="0.8333"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="top-attach">0</property>
+                <property name="left-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Time completed:</property>
+                <property name="visible">true</property>
+                <property name="xalign">1.0</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="scale" value="0.8333"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="top-attach">1</property>
+                <property name="left-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="build_status_label">
+                <property name="label" translatable="yes">—</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+                <property name="xalign">0.0</property>
+                <attributes>
+                  <attribute name="scale" value="0.8333"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="top-attach">0</property>
+                <property name="left-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="time_completed_label">
+                <property name="label" translatable="yes">—</property>
+                <property name="hexpand">true</property>
+                <property name="visible">true</property>
+                <property name="xalign">0.0</property>
+                <attributes>
+                  <attribute name="scale" value="0.8333"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="top-attach">1</property>
+                <property name="left-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkExpander">
+                <property name="visible">true</property>
+                <property name="label" translatable="yes">Build Details</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="propagate-natural-height">true</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkListBox" id="stages_list_box">
+                        <property name="selection-mode">none</property>
+                        <property name="visible">true</property>
+                        <child type="placeholder">
+                          <object class="GtkLabel">
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                            <property name="label" translatable="yes">Build pipeline is empty</property>
+                            <property name="xalign">0.5</property>
+                            <property name="ypad">12</property>
+                            <property name="visible">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="top-attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkNotebook" id="notebook">
+            <property name="show-border">false</property>
+            <property name="vexpand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkScrolledWindow" id="warnings_page">
+                <property name="visible">true</property>
+                <child>
+                  <object class="IdeFancyTreeView" id="warnings_tree_view">
+                    <property name="has-tooltip">true</property>
+                    <property name="visible">true</property>
+                    <style>
+                      <class name="i-wanna-be-listbox"/>
+                    </style>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection">
+                        <property name="mode">none</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="tab-label" translatable="yes">Warnings</property>
+                <property name="tab-expand">true</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="errors_page">
+                <property name="visible">true</property>
+                <child>
+                  <object class="IdeFancyTreeView" id="errors_tree_view">
+                    <property name="has-tooltip">true</property>
+                    <property name="visible">true</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection">
+                        <property name="mode">none</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab-label" translatable="yes">Errors</property>
+                <property name="tab-expand">true</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkListStore" id="diagnostics_store">
+    <columns>
+      <column type="IdeDiagnostic"/>
+    </columns>
+  </object>
+</interface>
