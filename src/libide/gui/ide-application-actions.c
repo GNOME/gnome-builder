@@ -1,6 +1,6 @@
 /* ide-application-actions.c
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,29 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-application-actions"
+#define G_LOG_DOMAIN "ide-application-addins"
 #define DOCS_URI "https://builder.readthedocs.io"
 
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libide-projects.h>
 
-#include "ide-build-ident.h"
-#include "ide-debug.h"
-#include "ide-version.h"
-
-#include "application/ide-application.h"
-#include "application/ide-application-actions.h"
-#include "application/ide-application-credits.h"
-#include "application/ide-application-private.h"
-#include "greeter/ide-greeter-perspective.h"
-#include "keybindings/ide-shortcuts-window.h"
-#include "preferences/ide-preferences-window.h"
-#include "subprocess/ide-subprocess.h"
-#include "subprocess/ide-subprocess-launcher.h"
-#include "workbench/ide-workbench.h"
-#include "util/ide-flatpak.h"
-#include "util/ide-gtk.h"
+#include "ide-application.h"
+#include "ide-application-credits.h"
+#include "ide-application-private.h"
+#include "ide-gui-global.h"
+#include "ide-preferences-window.h"
+#include "ide-shortcuts-window-private.h"
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -101,6 +92,8 @@ ide_application_actions_quit (GSimpleAction *action,
   IDE_ENTRY;
 
   g_assert (IDE_IS_APPLICATION (self));
+
+  /* TODO: Ask all workbenches to cleanup */
 
   g_application_quit (G_APPLICATION (self));
 
@@ -207,7 +200,7 @@ ide_application_actions_help_cb (GObject      *object,
       g_autoptr(GError) error = NULL;
 
       if (ide_is_flatpak ())
-        file_base = ide_flatpak_get_app_path ("/share/doc/gnome-builder");
+        file_base = ide_get_relocatable_path ("/share/doc/gnome-builder");
       else
         file_base = g_strdup (PACKAGE_DOCDIR);
 
@@ -253,86 +246,6 @@ ide_application_actions_help (GSimpleAction *action,
                                      g_object_ref (self));
 
   IDE_EXIT;
-}
-
-static void
-ide_application_actions_open_project (GSimpleAction *action,
-                                      GVariant      *variant,
-                                      gpointer       user_data)
-{
-  IdeApplication *self = user_data;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  ide_application_show_projects_window (self);
-}
-
-
-static void
-ide_application_actions_load_workbench_view (IdeApplication *self,
-                                             const char     *genesis_view,
-                                             const char     *manifest)
-{
-  IdeWorkbench *workbench = NULL;
-  IdePerspective *greeter;
-  const GList *list;
-
-  list = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  for (; list != NULL; list = list->next)
-    {
-      GtkWindow *window = list->data;
-
-      if (IDE_IS_WORKBENCH (window))
-        {
-          if (ide_workbench_get_context (IDE_WORKBENCH (window)) == NULL)
-            {
-              workbench = IDE_WORKBENCH (window);
-              break;
-            }
-        }
-    }
-
-  if (workbench == NULL)
-    {
-      workbench = g_object_new (IDE_TYPE_WORKBENCH,
-                                "application", self,
-                                NULL);
-    }
-
-  greeter = ide_workbench_get_perspective_by_name (workbench, "greeter");
-
-  if (greeter)
-    {
-      ide_greeter_perspective_show_genesis_view (IDE_GREETER_PERSPECTIVE (greeter),
-                                                 genesis_view, manifest);
-    }
-
-  gtk_window_present (GTK_WINDOW (workbench));
-}
-
-static void
-ide_application_actions_clone (GSimpleAction *action,
-                               GVariant      *variant,
-                               gpointer       user_data)
-{
-  IdeApplication *self = user_data;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  ide_application_actions_load_workbench_view (self, "IdeGitGenesisAddin", NULL);
-}
-
-static void
-ide_application_actions_new_project (GSimpleAction *action,
-                                     GVariant      *variant,
-                                     gpointer       user_data)
-{
-  IdeApplication *self = user_data;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  ide_application_actions_load_workbench_view (self, "GbpCreateProjectGenesisAddin", NULL);
 }
 
 static void
@@ -411,32 +324,27 @@ ide_application_actions_load_project (GSimpleAction *action,
                                       gpointer       user_data)
 {
   IdeApplication *self = user_data;
+  g_autoptr(IdeProjectInfo) project_info = NULL;
   g_autofree gchar *filename = NULL;
   g_autoptr(GFile) file = NULL;
+  g_autofree gchar *scheme = NULL;
 
   g_assert (IDE_IS_APPLICATION (self));
 
   g_variant_get (args, "s", &filename);
-  file = g_file_new_for_path (filename);
 
-  if (!ide_application_open_project (self, file))
-    {
-      g_message ("unable to open project specified by path - %s", filename);
-    }
-}
+  if ((scheme = g_uri_parse_scheme (filename)))
+    file = g_file_new_for_uri (filename);
+  else
+    file = g_file_new_for_path (filename);
 
-static void
-ide_application_actions_load_flatpak (GSimpleAction *action,
-                                      GVariant      *args,
-                                      gpointer       user_data)
-{
-  IdeApplication *self = user_data;
-  const gchar *manifest = NULL;
+  project_info = ide_project_info_new ();
+  ide_project_info_set_file (project_info, file);
 
-  g_assert (IDE_IS_APPLICATION (self));
-
-  manifest = g_variant_get_string (args, NULL);
-  ide_application_actions_load_workbench_view (self, "GbpFlatpakGenesisAddin", manifest);
+  ide_application_open_project_async (self,
+                                      project_info,
+                                      G_TYPE_INVALID,
+                                      NULL, NULL, NULL);
 }
 
 static gint
@@ -456,9 +364,31 @@ ide_application_actions_stats (GSimpleAction *action,
 {
   guint n_types = 0;
   g_autofree GType *types = g_type_children (G_TYPE_OBJECT, &n_types);
+  GtkScrolledWindow *scroller;
+  GtkTextBuffer *buffer;
+  GtkTextView *text_view;
+  GtkWindow *window;
   gboolean found = FALSE;
 
-  g_printerr ("Type Counts\n");
+  window = g_object_new (GTK_TYPE_WINDOW,
+                         "default-width", 1000,
+                         "default-height", 600,
+                         "title", "about:types",
+                         NULL);
+  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                           "visible", TRUE,
+                           NULL);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (scroller));
+  text_view = g_object_new (GTK_TYPE_TEXT_VIEW,
+                            "editable", FALSE,
+                            "monospace", TRUE,
+                            "visible", TRUE,
+                            NULL);
+  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (text_view));
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_buffer_insert_at_cursor (buffer, "Count | Type\n", -1);
+  gtk_text_buffer_insert_at_cursor (buffer, "======+======\n", -1);
 
   qsort (types, n_types, sizeof (GType), type_compare);
 
@@ -468,25 +398,30 @@ ide_application_actions_stats (GSimpleAction *action,
 
       if (count)
         {
+          gchar str[12];
+
           found = TRUE;
-          g_printerr ("  %60s : %d\n", g_type_name (types[i]), g_type_get_instance_count (types[i]));
+
+          g_snprintf (str, sizeof str, "%6d", count);
+          gtk_text_buffer_insert_at_cursor (buffer, str, -1);
+          gtk_text_buffer_insert_at_cursor (buffer, " ", -1);
+          gtk_text_buffer_insert_at_cursor (buffer, g_type_name (types[i]), -1);
+          gtk_text_buffer_insert_at_cursor (buffer, "\n", -1);
         }
     }
 
   if (!found)
-    g_printerr ("No stats were found, was GOBJECT_DEBUG=instance-count set?\n");
+    gtk_text_buffer_insert_at_cursor (buffer, "No stats were found, was GOBJECT_DEBUG=instance-count set?", -1);
+
+  gtk_window_present (window);
 }
 
 static const GActionEntry IdeApplicationActions[] = {
   { "about:types",  ide_application_actions_stats },
   { "about",        ide_application_actions_about },
-  { "clone",        ide_application_actions_clone },
   { "dayhack",      ide_application_actions_dayhack },
   { "nighthack",    ide_application_actions_nighthack },
-  { "open-project", ide_application_actions_open_project },
-  { "new-project",  ide_application_actions_new_project },
   { "load-project", ide_application_actions_load_project, "s"},
-  { "load-flatpak", ide_application_actions_load_flatpak, "s"},
   { "preferences",  ide_application_actions_preferences },
   { "quit",         ide_application_actions_quit },
   { "shortcuts",    ide_application_actions_shortcuts },
@@ -494,18 +429,13 @@ static const GActionEntry IdeApplicationActions[] = {
 };
 
 void
-ide_application_actions_init (IdeApplication *self)
+_ide_application_init_actions (IdeApplication *self)
 {
-  g_action_map_add_action_entries (G_ACTION_MAP (self), IdeApplicationActions,
-                                   G_N_ELEMENTS (IdeApplicationActions), self);
-
-  ide_application_actions_update (self);
-}
-
-void
-ide_application_actions_update (IdeApplication *self)
-{
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
-  /* Nothing to do currently */
+  g_action_map_add_action_entries (G_ACTION_MAP (self),
+                                   IdeApplicationActions,
+                                   G_N_ELEMENTS (IdeApplicationActions),
+                                   self);
 }

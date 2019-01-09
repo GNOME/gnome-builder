@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "application/ide-application-addin.h"
+#include "ide-application-addin.h"
 
 /**
  * SECTION:ide-application-addin
@@ -107,4 +107,83 @@ ide_application_addin_unload (IdeApplicationAddin *self,
   g_return_if_fail (IDE_IS_APPLICATION (application));
 
   IDE_APPLICATION_ADDIN_GET_IFACE (self)->unload (self, application);
+}
+
+/**
+ * ide_application_addin_add_option_entries:
+ * @self: a #IdeApplicationAddin
+ * @application: an #IdeApplication
+ *
+ * This function is called to allow the application a chance to add various
+ * command-line options to the #GOptionContext. See
+ * g_application_add_main_option_entries() for more information on how to
+ * add arguments.
+ *
+ * See ide_application_addin_handle_command_line() for how to handle arguments
+ * once command line argument processing begins.
+ *
+ * Make sure you set `X-At-Startup=true` in your `.plugin` file so that the
+ * plugin is loaded early during startup or this virtual function will not
+ * be called.
+ *
+ * Since: 3.32
+ */
+void
+ide_application_addin_add_option_entries (IdeApplicationAddin *self,
+                                          IdeApplication      *application)
+{
+  g_return_if_fail (IDE_IS_APPLICATION_ADDIN (self));
+  g_return_if_fail (IDE_IS_APPLICATION (application));
+
+  if (IDE_APPLICATION_ADDIN_GET_IFACE (self)->add_option_entries)
+    IDE_APPLICATION_ADDIN_GET_IFACE (self)->add_option_entries (self, application);
+}
+
+/**
+ * ide_application_addin_handle_command_line:
+ * @self: a #IdeApplicationAddin
+ * @application: an #IdeApplication
+ * @cmdline: a #GApplicationCommandLine
+ *
+ * This function is called to allow the addin to procses command line arguments
+ * that were parsed based on options added in
+ * ide_application_addin_add_option_entries().
+ *
+ * See g_application_command_line_get_option_dict() for more information.
+ *
+ * Since: 3.32
+ */
+void
+ide_application_addin_handle_command_line (IdeApplicationAddin     *self,
+                                           IdeApplication          *application,
+                                           GApplicationCommandLine *cmdline)
+{
+  g_return_if_fail (IDE_IS_APPLICATION_ADDIN (self));
+  g_return_if_fail (IDE_IS_APPLICATION (application));
+  g_return_if_fail (G_IS_APPLICATION_COMMAND_LINE (cmdline));
+
+  if (IDE_APPLICATION_ADDIN_GET_IFACE (self)->handle_command_line)
+    IDE_APPLICATION_ADDIN_GET_IFACE (self)->handle_command_line (self, application, cmdline);
+}
+
+void
+ide_application_addin_workbench_added (IdeApplicationAddin *self,
+                                       IdeWorkbench        *workbench)
+{
+  g_return_if_fail (IDE_IS_APPLICATION_ADDIN (self));
+  g_return_if_fail (IDE_IS_WORKBENCH (workbench));
+
+  if (IDE_APPLICATION_ADDIN_GET_IFACE (self)->workbench_added)
+    IDE_APPLICATION_ADDIN_GET_IFACE (self)->workbench_added (self, workbench);
+}
+
+void
+ide_application_addin_workbench_removed (IdeApplicationAddin *self,
+                                         IdeWorkbench        *workbench)
+{
+  g_return_if_fail (IDE_IS_APPLICATION_ADDIN (self));
+  g_return_if_fail (IDE_IS_WORKBENCH (workbench));
+
+  if (IDE_APPLICATION_ADDIN_GET_IFACE (self)->workbench_removed)
+    IDE_APPLICATION_ADDIN_GET_IFACE (self)->workbench_removed (self, workbench);
 }

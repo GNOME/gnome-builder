@@ -24,8 +24,8 @@
 
 #include <gtksourceview/gtksource.h>
 
-#include "application/ide-application.h"
-#include "application/ide-application-private.h"
+#include "ide-application.h"
+#include "ide-application-private.h"
 
 static void
 add_style_name (GPtrArray   *ar,
@@ -88,7 +88,7 @@ find_similar_style_scheme (const gchar *name,
   return NULL;
 }
 
-void
+static void
 _ide_application_update_color (IdeApplication *self)
 {
   static gboolean ignore_reentrant = FALSE;
