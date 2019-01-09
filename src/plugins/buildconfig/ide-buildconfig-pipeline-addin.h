@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "buildsystem/ide-build-pipeline-addin.h"
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 

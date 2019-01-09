@@ -1,4 +1,4 @@
-/* ide-buildsystem-plugin.c
+/* buildconfig-plugin.c
  *
  * Copyright 2016 Matthew Leeds <mleeds@redhat.com>
  *
@@ -18,19 +18,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-buildsystem-plugin"
+#define G_LOG_DOMAIN "buildconfig-plugin"
 
 #include "config.h"
 
-#include "object-modules.h"
+#include <libpeas/peas.h>
+#include <libide-foundry.h>
 
-#include "buildconfig/ide-buildconfig-configuration-provider.h"
-#include "buildconfig/ide-buildconfig-pipeline-addin.h"
-#include "buildsystem/ide-build-pipeline-addin.h"
-#include "config/ide-configuration-provider.h"
+#include "ide-buildconfig-configuration-provider.h"
+#include "ide-buildconfig-pipeline-addin.h"
 
-void
-ide_buildconfig_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_buildconfig_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIGURATION_PROVIDER,

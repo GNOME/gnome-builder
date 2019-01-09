@@ -22,11 +22,11 @@
 
 #include "config.h"
 
-#include "ide-debug.h"
+#include <libide-foundry.h>
+#include <libide-threading.h>
 
-#include "buildconfig/ide-buildconfig-configuration.h"
-#include "buildconfig/ide-buildconfig-pipeline-addin.h"
-#include "subprocess/ide-subprocess-launcher.h"
+#include "ide-buildconfig-configuration.h"
+#include "ide-buildconfig-pipeline-addin.h"
 
 static void
 add_command (IdeBuildPipelineAddin  *addin,
@@ -61,7 +61,7 @@ add_command (IdeBuildPipelineAddin  *addin,
 
   ide_subprocess_launcher_set_environ (launcher, (const gchar * const *)env);
 
-  stage_id = ide_build_pipeline_connect_launcher (pipeline, phase, priority, launcher);
+  stage_id = ide_build_pipeline_attach_launcher (pipeline, phase, priority, launcher);
   ide_build_pipeline_addin_track (addin, stage_id);
 }
 

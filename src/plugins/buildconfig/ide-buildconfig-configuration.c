@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "buildconfig/ide-buildconfig-configuration.h"
+#include "ide-buildconfig-configuration.h"
 
 struct _IdeBuildconfigConfiguration
 {

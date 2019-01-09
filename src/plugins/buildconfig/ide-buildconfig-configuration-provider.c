@@ -27,17 +27,14 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include <libide-foundry.h>
+#include <libide-threading.h>
+
 #include "ide-context.h"
 #include "ide-debug.h"
 
-#include "buildconfig/ide-buildconfig-configuration.h"
-#include "buildconfig/ide-buildconfig-configuration-provider.h"
-#include "config/ide-configuration-manager.h"
-#include "config/ide-configuration-provider.h"
-#include "config/ide-configuration.h"
-#include "buildsystem/ide-environment.h"
-#include "vcs/ide-vcs.h"
-#include "threading/ide-task.h"
+#include "ide-buildconfig-configuration.h"
+#include "ide-buildconfig-configuration-provider.h"
 
 #define DOT_BUILDCONFIG ".buildconfig"
 
@@ -193,17 +190,14 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
 {
   g_autoptr(IdeConfiguration) config = NULL;
   g_autofree gchar *env_group = NULL;
-  IdeContext *context;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
   g_assert (self->key_file != NULL);
   g_assert (config_id != NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-
   config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
-                         "context", context,
                          "id", config_id,
+                         "parent", self,
                          NULL);
 
   load_string (config, self->key_file, config_id, "config-opts", "config-opts");
@@ -294,9 +288,9 @@ ide_buildconfig_configuration_provider_load_async (IdeConfigurationProvider *pro
 add_default:
   /* "Default" is not translated because .buildconfig can be checked in */
   fallback = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
-                           "context", context,
                            "display-name", "Default",
                            "id", "default",
+                           "parent", self,
                            "runtime-id", "host",
                            "toolchain-id", "default",
                            NULL);
@@ -382,7 +376,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  manager = ide_context_get_configuration_manager (context);
+  manager = ide_configuration_manager_from_context (context);
   path = ide_context_build_filename (context, DOT_BUILDCONFIG, NULL);
   file = g_file_new_for_path (path);
 
@@ -409,7 +403,6 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigurationProvider *pro
 
       config_id = ide_configuration_get_id (config);
       env_group = g_strdup_printf ("%s.environment", config_id);
-      env = ide_configuration_get_environment (config);
 
       /*
        * Track our known group names, so we can remove missing names after
@@ -586,13 +579,12 @@ ide_buildconfig_configuration_provider_delete (IdeConfigurationProvider *provide
   if (self->configs->len == 0)
     {
       g_autoptr(IdeConfiguration) new_config = NULL;
-      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
 
       /* "Default" is not translated because .buildconfig can be checked in */
       new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
-                                 "context", context,
                                  "display-name", "Default",
                                  "id", "default",
+                                 "parent", self,
                                  "runtime-id", "host",
                                  "toolchain-id", "default",
                                  NULL);
@@ -631,7 +623,7 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *prov
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  manager = ide_context_get_configuration_manager (context);
+  manager = ide_configuration_manager_from_context (context);
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
 
   config_id = ide_configuration_get_id (config);
@@ -648,8 +640,8 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *prov
 
   new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
                              "id", new_config_id,
-                             "context", context,
                              "display-name", new_name,
+                             "parent", self,
                              NULL);
 
   ide_environment_copy_into (env, ide_configuration_get_environment (new_config), TRUE);
@@ -660,8 +652,7 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigurationProvider *prov
     {
       GParamSpec *pspec = pspecs[i];
 
-      if (g_str_equal (pspec->name, "context") ||
-          g_str_equal (pspec->name, "id") ||
+      if (g_str_equal (pspec->name, "id") ||
           g_str_equal (pspec->name, "display-name") ||
           g_type_is_a (pspec->value_type, G_TYPE_BOXED) ||
           g_type_is_a (pspec->value_type, G_TYPE_OBJECT))
@@ -727,6 +718,8 @@ ide_buildconfig_configuration_provider_removed (IdeConfigurationProvider *provid
 
   /* It's possible we already removed it by now */
   g_ptr_array_remove (self->configs, config);
+
+  ide_object_destroy (IDE_OBJECT (config));
 }
 
 static void
