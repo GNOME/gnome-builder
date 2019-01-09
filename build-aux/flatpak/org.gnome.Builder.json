@@ -521,7 +521,7 @@
                 "-Dwith_tcmalloc=true",
                 "-Dpython_libprefix=python3.7",
                 "-Denable_tracing=true",
-                "-Dwith_help=true",
+                "-Dhelp=true",
                 "-Dwith_channel=flatpak-nightly",
                 "-Dwith_deviced=true"
             ],
