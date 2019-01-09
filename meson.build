@@ -203,6 +203,8 @@ if get_option('default_library') != 'static'
   endif
 endif
 
+libide_args += hidden_visibility_args
+
 add_project_arguments(global_c_args, language: 'c')
 
 release_args = []
