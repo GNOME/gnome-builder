@@ -1,3 +1,5 @@
+if get_option('docs')
+
 subdir('xml')
 
 private_headers = ['config.h']
@@ -53,3 +55,5 @@ gnome.gtkdoc('libide',
        ],
             install: true)
 
+
+endif

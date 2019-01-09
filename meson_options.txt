@@ -11,10 +11,7 @@ option('with_channel',
 )
 
 option('help', type: 'boolean', value: false)
-option('with_editorconfig', type: 'boolean')
-option('with_webkit', type: 'boolean')
-option('with_vapi', type: 'boolean')
-option('with_docs', type: 'boolean', value: false)
+option('docs', type: 'boolean', value: false)
 
 option('network_tests', type: 'boolean', value: true, description: 'Allow networking in unit-tests')
 
