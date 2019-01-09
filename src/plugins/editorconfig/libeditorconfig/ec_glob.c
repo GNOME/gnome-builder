@@ -1,5 +1,5 @@
 /*
- * Copyright © 2014 Hong Xu <hong AT topbug DOT net>
+ * Copyright 2014 Hong Xu <hong AT topbug DOT net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

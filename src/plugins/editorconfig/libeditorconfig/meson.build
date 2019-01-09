@@ -1,5 +1,3 @@
-if get_option('with_editorconfig')
-
 libeditorconfig_sources = [
   'ec_glob.c',
   'ec_glob.h',
@@ -45,5 +43,3 @@ libeditorconfig_dep = declare_dependency(
             link_with: libeditorconfig,
   include_directories: include_directories('.'),
 )
-
-endif
