@@ -1,12 +1,6 @@
-if get_option('with_clang')
+if get_option('plugin_clang')
 
-clang_resources = gnome.compile_resources(    
-  'ide-clang-resources',                      
-  'clang.gresource.xml',                      
-  c_name: 'ide_clang',                        
-)                                           
-
-clang_sources = [
+plugins_sources += files([
   'clang-plugin.c',
   'ide-clang-client.c',
   'ide-clang-client.h',
@@ -34,12 +28,20 @@ clang_sources = [
   'ide-clang-symbol-resolver.h',
   'ide-clang-symbol-tree.c',
   'ide-clang-symbol-tree.h',
-]
+])
 
 gnome_builder_clang_sources = [
   'gnome-builder-clang.c',
   'ide-clang.c',
 ]
+
+plugin_clang_resources = gnome.compile_resources(
+  'clang-resources',
+  'clang.gresource.xml',
+  c_name: 'gbp_clang',
+)
+
+plugins_sources += plugin_clang_resources[0]
 
 add_languages('cpp') # Needed for llvm dep
 llvm_dep = dependency('llvm', version: '>= 3.5')
@@ -59,11 +61,14 @@ clang_includes_dep = declare_dependency(
   include_directories: include_directories(clang_include),
 )
 
-gnome_builder_plugins_deps += [clang_includes_dep]
-gnome_builder_plugins_sources += files(clang_sources)
-gnome_builder_plugins_sources += clang_resources[0]
+plugins_deps += [clang_includes_dep]
 
-gnome_builder_clang_deps = [ clang_dep, libide_deps, libide_dep ]
+gnome_builder_clang_deps = [
+  clang_dep,
+  libjsonrpc_glib_dep,
+
+  libide_code_dep,
+]
 
 executable('gnome-builder-clang', gnome_builder_clang_sources,
       dependencies: gnome_builder_clang_deps,

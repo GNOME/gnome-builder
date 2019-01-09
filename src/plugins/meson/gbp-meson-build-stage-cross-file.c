@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Authors: Corentin Noël <corentin.noel@collabora.com>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-meson-build-stage-cross-file"
@@ -47,6 +49,7 @@ add_lang_executable (const gchar *lang,
 static void
 gbp_meson_build_stage_cross_file_query (IdeBuildStage    *stage,
                                         IdeBuildPipeline *pipeline,
+                                        GPtrArray        *targets,
                                         GCancellable     *cancellable)
 {
   GbpMesonBuildStageCrossFile *self = (GbpMesonBuildStageCrossFile *)stage;
@@ -176,7 +179,6 @@ gbp_meson_build_stage_cross_file_class_init (GbpMesonBuildStageCrossFileClass *k
 static void
 gbp_meson_build_stage_cross_file_init (GbpMesonBuildStageCrossFile *self)
 {
-  
 }
 
 GbpMesonBuildStageCrossFile *

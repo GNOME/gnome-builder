@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include "gbp-create-project-template-icon.h"
@@ -81,7 +83,7 @@ gbp_create_project_template_icon_set_property (GObject      *object,
                     "icon-name", icon_name,
                     NULL);
       gtk_label_set_text (self->template_name, name);
-      if (!dzl_str_empty0 (description))
+      if (!ide_str_empty0 (description))
         gtk_widget_set_tooltip_text (GTK_WIDGET (self), description);
       break;
 
@@ -121,7 +123,7 @@ gbp_create_project_template_icon_class_init (GbpCreateProjectTemplateIconClass *
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/create-project-plugin/gbp-create-project-template-icon.ui");
+                                               "/plugins/create-project/gbp-create-project-template-icon.ui");
   gtk_widget_class_set_css_name (widget_class, "createprojecttemplateicon");
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectTemplateIcon, template_icon);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectTemplateIcon, template_name);
@@ -140,6 +142,8 @@ gbp_create_project_template_icon_init (GbpCreateProjectTemplateIcon *self)
  * Gets the template for the item.
  *
  * Returns: (transfer none): an #IdeProjectTemplate
+ *
+ * Since: 3.32
  */
 IdeProjectTemplate *
 gbp_create_project_template_icon_get_template (GbpCreateProjectTemplateIcon *self)

@@ -1,0 +1,7 @@
+@import url("resource:///org/gnome/builder/themes/Arc-shared.css");
+
+/* Darker border */
+surfaceswitcher {
+  border-top: 1px solid #2b2e39;
+  border-right: 1px solid #2b2e39;
+}

@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Philip Chimento <philip@endlessm.com>
+Builtin=true
+Copyright=Copyright © 2018 Philip Chimento
+Description=Emulation of various Sublime Text features
+Embedded=_gbp_sublime_register_types
+Hidden=true
+Module=sublime
+Name=Sublime Text Emulation

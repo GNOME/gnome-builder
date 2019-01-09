@@ -1,6 +1,6 @@
 /* recent-plugin.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,17 +14,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "recent-plugin"
+
+#include "config.h"
+
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-greeter.h>
+#include <libide-gui.h>
 
 #include "gbp-recent-section.h"
+#include "gbp-recent-workbench-addin.h"
 
-void
-gbp_recent_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_recent_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_GREETER_SECTION,
                                               GBP_TYPE_RECENT_SECTION);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_RECENT_WORKBENCH_ADDIN);
 }

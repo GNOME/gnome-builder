@@ -1,18 +1,16 @@
-if get_option('with_python_pack')
+if get_option('plugin_python_pack')
 
-python_pack_resources = gnome.compile_resources(
-  'python-pack-resources',
+plugins_sources += files([
+  'ide-python-indenter.c',
+  'python-pack-plugin.c',
+])
+
+plugin_python_pack_resources = gnome.compile_resources(
+  'gbp-python-pack-resources',
   'python-pack.gresource.xml',
-  c_name: 'ide_python_pack',
+  c_name: 'gbp_python_pack',
 )
 
-python_pack_sources = [
-  'ide-python-indenter.c',
-  'ide-python-indenter.h',
-  'python-pack-plugin.c',
-]
-
-gnome_builder_plugins_sources += files(python_pack_sources)
-gnome_builder_plugins_sources += python_pack_resources[0]
+plugins_sources += plugin_python_pack_resources[0]
 
 endif

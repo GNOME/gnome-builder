@@ -1,0 +1,13 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2014-2018 Christian Hergert
+Description=Builder's greeter window
+Embedded=_gbp_greeter_register_types
+Hidden=true
+Module=greeter
+Name=Greeter
+X-At-Startup=true
+X-Project-File-Filter-Content-Type=inode/directory
+X-Project-File-Filter-Name=Directory
+X-Project-File-Filter-Priority=-100

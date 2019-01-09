@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins">
+  <gresource prefix="/plugins/spellcheck">
     <file>spellcheck.plugin</file>
-  </gresource>
-  <gresource prefix="/org/gnome/builder/plugins/spellcheck-plugin">
-    <file compressed="true" preprocess="xml-stripblanks">gtk/menus.ui</file>
-    <file compressed="true" preprocess="xml-stripblanks">gbp-spell-widget.ui</file>
-    <file compressed="true">themes/shared.css</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">gbp-spell-widget.ui</file>
+    <file>themes/shared.css</file>
   </gresource>
 </gresources>

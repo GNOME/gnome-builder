@@ -1,6 +1,6 @@
 /* gbp-qemu-device-provider.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,13 +79,16 @@ gbp_qemu_device_provider_load_worker (IdeTask      *task,
   g_autofree gchar *status = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) devices = NULL;
-  IdeContext *context;
+  GbpQemuDeviceProvider *self;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_TASK (task));
   g_assert (GBP_IS_QEMU_DEVICE_PROVIDER (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  self = ide_task_get_source_object (task);
+  g_assert (GBP_IS_QEMU_DEVICE_PROVIDER (self));
 
   devices = g_ptr_array_new_with_free_func (g_object_unref);
 
@@ -125,8 +128,6 @@ gbp_qemu_device_provider_load_worker (IdeTask      *task,
       IDE_EXIT;
     }
 
-  context = ide_object_get_context (source_object);
-
   /* Now locate which of the machines are registered. Qemu has a huge
    * list of these, so we only check for ones we think are likely to
    * be used. If you want support for more, let us know.
@@ -162,9 +163,9 @@ gbp_qemu_device_provider_load_worker (IdeTask      *task,
           device = g_object_new (IDE_TYPE_LOCAL_DEVICE,
                                  "id", machines[i].filename,
                                  "triplet", triplet,
-                                 "context", context,
                                  "display-name", display_name,
                                  NULL);
+          ide_object_append (IDE_OBJECT (self), IDE_OBJECT (device));
           g_ptr_array_add (devices, g_steal_pointer (&device));
         }
     }

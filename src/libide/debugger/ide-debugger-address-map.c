@@ -1,6 +1,6 @@
 /* ide-debugger-address-map.c
  *
- * Copyright 2016-2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-debugger-address-map"
 
 #include "config.h"
 
-#include "debugger/ide-debugger-address-map.h"
+#include "ide-debugger-address-map-private.h"
 
 struct _IdeDebuggerAddressMap
 {
@@ -92,7 +94,7 @@ ide_debugger_address_map_entry_free (gpointer data)
  *
  * Returns: (transfer full): A new #IdeDebuggerAddressMap
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeDebuggerAddressMap *
 ide_debugger_address_map_new (void)
@@ -112,7 +114,7 @@ ide_debugger_address_map_new (void)
  *
  * Frees all memory associated with @self.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_address_map_free (IdeDebuggerAddressMap *self)
@@ -137,7 +139,7 @@ ide_debugger_address_map_free (IdeDebuggerAddressMap *self)
  *
  * See also: ide_debugger_address_map_remove()
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_address_map_insert (IdeDebuggerAddressMap            *self,
@@ -170,7 +172,7 @@ ide_debugger_address_map_insert (IdeDebuggerAddressMap            *self,
  *
  * Returns: (nullable): An #IdeDebuggerAddressMapEntry or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const IdeDebuggerAddressMapEntry *
 ide_debugger_address_map_lookup (const IdeDebuggerAddressMap *self,
@@ -199,7 +201,7 @@ ide_debugger_address_map_lookup (const IdeDebuggerAddressMap *self,
  *
  * Removes the entry found containing @address.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 gboolean
 ide_debugger_address_map_remove (IdeDebuggerAddressMap *self,

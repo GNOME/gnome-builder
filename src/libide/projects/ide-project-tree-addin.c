@@ -1,6 +1,6 @@
 /* ide-project-tree-addin.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-project-tree-addin"
 
-#include "projects/ide-project-tree-addin.h"
+#include "config.h"
+
+#include "ide-project-tree-addin.h"
 
 /**
  * SECTION:ide-project-tree-addin

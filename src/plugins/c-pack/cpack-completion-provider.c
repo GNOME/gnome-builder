@@ -1,6 +1,6 @@
 /* cpack-completion-provider.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
+#define G_LOG_DOMAIN "cpack-completion-provider"
 
 #include "config.h"
 
-#define G_LOG_DOMAIN "cpack-completion-provider"
+#include <libide-sourceview.h>
 
 #include "cpack-completion-item.h"
 #include "cpack-completion-provider.h"
@@ -44,6 +48,7 @@ cpack_completion_provider_init (CpackCompletionProvider *self)
 {
 }
 
+#if 0
 static void
 cpack_completion_provider_populate_cb (GObject      *object,
                                        GAsyncResult *result,
@@ -101,6 +106,7 @@ cpack_completion_provider_get_build_flags_cb (GObject      *object,
                                            cpack_completion_provider_populate_cb,
                                            g_object_ref (task));
 }
+#endif
 
 static void
 cpack_completion_provider_populate_async (IdeCompletionProvider *provider,
@@ -155,6 +161,12 @@ query_filesystem:
 
   g_assert (IDE_IS_BUFFER (buffer));
 
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "TODO need access to build flags");
+
+#if 0
   /*
    * First step is to get our list of include paths from the CFLAGS for the
    * file. After that, we can start looking for matches on the file-system
@@ -165,6 +177,7 @@ query_filesystem:
                                     cancellable,
                                     cpack_completion_provider_get_build_flags_cb,
                                     g_steal_pointer (&task));
+#endif
 }
 
 static GListModel *

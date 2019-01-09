@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins">
+  <gresource prefix="/plugins/xml-pack">
     <file>xml-pack.plugin</file>
-  </gresource>
-  <gresource prefix="/org/gnome/builder/plugins/xml-pack-plugin">
     <file>schemas/gtkbuilder.rng</file>
   </gresource>
 </gresources>

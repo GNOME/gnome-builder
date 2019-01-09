@@ -1,6 +1,6 @@
 /* ide-editor-search.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-editor-search"
@@ -21,10 +23,10 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-sourceview.h>
 #include <string.h>
 
-#include "editor/ide-editor-search.h"
-#include "sourceview/ide-source-view.h"
+#include "ide-editor-search.h"
 
 /**
  * SECTION:ide-editor-search
@@ -42,7 +44,7 @@
  * Additionally, it provides an addin layer to highlight similar words
  * when then buffer selection changes.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 
 struct _IdeEditorSearch
@@ -94,20 +96,23 @@ enum {
   N_PROPS
 };
 
-static void ide_editor_search_actions_move_next     (IdeEditorSearch *self,
-                                                     GVariant        *param);
-static void ide_editor_search_actions_move_previous (IdeEditorSearch *self,
-                                                     GVariant        *param);
-static void ide_editor_search_actions_replace       (IdeEditorSearch *self,
-                                                     GVariant        *param);
-static void ide_editor_search_actions_replace_all   (IdeEditorSearch *self,
-                                                     GVariant        *param);
+static void ide_editor_search_actions_move_next        (IdeEditorSearch *self,
+                                                        GVariant        *param);
+static void ide_editor_search_actions_move_previous    (IdeEditorSearch *self,
+                                                        GVariant        *param);
+static void ide_editor_search_actions_replace          (IdeEditorSearch *self,
+                                                        GVariant        *param);
+static void ide_editor_search_actions_replace_all      (IdeEditorSearch *self,
+                                                        GVariant        *param);
+static void ide_editor_search_actions_at_word_boundary (IdeEditorSearch *self,
+                                                        GVariant        *param);
 
 DZL_DEFINE_ACTION_GROUP (IdeEditorSearch, ide_editor_search, {
   { "move-next", ide_editor_search_actions_move_next },
   { "move-previous", ide_editor_search_actions_move_previous },
   { "replace", ide_editor_search_actions_replace },
   { "replace-all", ide_editor_search_actions_replace_all },
+  { "at-word-boundaries", ide_editor_search_actions_at_word_boundary, "b" },
 })
 
 G_DEFINE_TYPE_WITH_CODE (IdeEditorSearch, ide_editor_search, G_TYPE_OBJECT,
@@ -536,7 +541,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * The "active" property is %TRUE when their is an active search
    * in progress.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_ACTIVE] =
     g_param_spec_boolean ("active", NULL, NULL,
@@ -550,7 +555,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * is being searched. This must be set when creating the
    * #IdeEditorSearch and may not be changed after construction.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_VIEW] =
     g_param_spec_object ("view", NULL,  NULL,
@@ -563,7 +568,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * The "at-word-boundaries" property specifies if the search-text must
    * only be matched starting from the beginning of a word.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_AT_WORD_BOUNDARIES] =
     g_param_spec_boolean ("at-word-boundaries", NULL, NULL,
@@ -576,7 +581,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * The "case-sensitive" property specifies if the search text should
    * be case sensitive.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_CASE_SENSITIVE] =
     g_param_spec_boolean ("case-sensitive", NULL, NULL,
@@ -590,7 +595,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * the editor should be extended as the user navigates between search
    * results.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_EXTEND_SELECTION] =
     g_param_spec_enum ("extend-selection",
@@ -611,7 +616,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * ide_editor_search_begin_interactive() and before calling
    * ide_editor_search_end_interactive().
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_MATCH_COUNT] =
     g_param_spec_uint ("match-count", NULL, NULL,
@@ -627,7 +632,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * This value starts from 1, and 0 indicates that the insertion cursor
    * is not placed within the a search result.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_MATCH_POSITION] =
     g_param_spec_uint ("match-position", NULL, NULL,
@@ -643,7 +648,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    *
    * This property will be cleared after an attempt to move.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_REPEAT] =
     g_param_spec_uint ("repeat", NULL, NULL,
@@ -658,7 +663,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * user to search using common regex values such as "foo.*bar". It
    * also allows for capture groups to be used in replacement text.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_REGEX_ENABLED] =
     g_param_spec_boolean ("regex-enabled", NULL, NULL,
@@ -675,7 +680,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * If #IdeEditorSearch:regex-enabled is %TRUE, then the user may use
    * references to capture groups specified in #IdeEditorSearch:search-text.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_REPLACEMENT_TEXT] =
     g_param_spec_string ("replacement-text", NULL, NULL, NULL,
@@ -687,7 +692,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * The "reverse" property determines if relative directions should be
    * switched, so next is backward, and previous is forward.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_REVERSE] =
     g_param_spec_boolean ("reverse", NULL, NULL, FALSE,
@@ -703,7 +708,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * buffer. They may also specify capture groups to use in search and
    * replace.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_SEARCH_TEXT] =
     g_param_spec_string ("search-text", NULL, NULL, NULL,
@@ -720,7 +725,7 @@ ide_editor_search_class_init (IdeEditorSearchClass *klass)
    * However, some cases, such as Vim search movements, may want to show
    * the search highlights, but are not within an interactive search.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   properties [PROP_VISIBLE] =
     g_param_spec_string ("visible", NULL, NULL, FALSE,
@@ -776,7 +781,7 @@ ide_editor_search_init (IdeEditorSearch *self)
  *
  * Returns: (transfer full): A new #IdeEditorSearch instance
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeEditorSearch *
 ide_editor_search_new (GtkSourceView *view)
@@ -887,7 +892,7 @@ ide_editor_search_release_context (IdeEditorSearch *self)
  * @case_sensitive: %TRUE if the search should be case-sensitive
  *
  * See also: #GtkSourceSearchSettings:case-sensitive
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_set_case_sensitive (IdeEditorSearch *self,
@@ -907,7 +912,7 @@ ide_editor_search_set_case_sensitive (IdeEditorSearch *self,
  * Returns: %TRUE if the search is case-sensitive.
  *
  * See also: #GtkSourceSearchSettings:case-sensitive
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_editor_search_get_case_sensitive (IdeEditorSearch *self)
@@ -961,7 +966,7 @@ ide_editor_search_scan_forward_cb (GObject      *object,
  *
  * See also: #GtkSourceSearchSettings:search-text
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_set_search_text (IdeEditorSearch *self,
@@ -1017,7 +1022,7 @@ ide_editor_search_set_search_text (IdeEditorSearch *self,
  *
  * Returns: (nullable): The search text or %NULL
  *
- * Since: 3.28
+ * Since: 3.32
  */
 const gchar *
 ide_editor_search_get_search_text (IdeEditorSearch *self)
@@ -1039,7 +1044,7 @@ ide_editor_search_get_search_text (IdeEditorSearch *self)
  * Returns: %TRUE if the search text contains invalid content. If %TRUE,
  *   then @invalid_begin and @invalid_end is set.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_editor_search_get_search_text_invalid (IdeEditorSearch  *self,
@@ -1120,7 +1125,7 @@ ide_editor_search_get_search_text_invalid (IdeEditorSearch  *self,
  * This will allow the user to still make search movements based on the
  * previous search request, and re-enable visibility upon doing so.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_set_visible (IdeEditorSearch *self,
@@ -1148,7 +1153,7 @@ ide_editor_search_set_visible (IdeEditorSearch *self,
  *
  * Returns: %TRUE if the current search should be highlighted.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_editor_search_get_visible (IdeEditorSearch *self)
@@ -1165,7 +1170,7 @@ ide_editor_search_get_visible (IdeEditorSearch *self)
  *
  * See also: #GtkSourceSearchSettings:regex-enabled
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_set_regex_enabled (IdeEditorSearch *self,
@@ -1188,7 +1193,7 @@ ide_editor_search_set_regex_enabled (IdeEditorSearch *self,
  *
  * Returns: %TRUE if search text can use regex
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_editor_search_get_regex_enabled (IdeEditorSearch *self)
@@ -1210,7 +1215,7 @@ ide_editor_search_get_regex_enabled (IdeEditorSearch *self)
  * If #IdeEditorSearch:regex-enabled is set, then you may reference
  * regex groups from the regex in #IdeEditorSearch:search-text.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_set_replacement_text (IdeEditorSearch *self,
@@ -1236,7 +1241,7 @@ ide_editor_search_set_replacement_text (IdeEditorSearch *self,
  *
  * Returns: (nullable): the replacement text, or %NULL
  *
- * Since: 3.28
+ * Since: 3.32
  */
 const gchar *
 ide_editor_search_get_replacement_text (IdeEditorSearch *self)
@@ -1253,7 +1258,7 @@ ide_editor_search_get_replacement_text (IdeEditorSearch *self)
  *
  * See also: gtk_source_search_settings_set_word_boundaries()
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_set_at_word_boundaries (IdeEditorSearch *self,
@@ -1275,7 +1280,7 @@ ide_editor_search_set_at_word_boundaries (IdeEditorSearch *self,
  * Returns: %TRUE if the search should only match word boundaries.
  *
  * See also: #GtkSourceSearchSettings:at-word-boundaries
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_editor_search_get_at_word_boundaries (IdeEditorSearch *self)
@@ -1292,7 +1297,7 @@ ide_editor_search_get_at_word_boundaries (IdeEditorSearch *self)
  * Gets the number of matches currently found in the editor. This
  * will update as new matches are found while scanning the buffer.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 guint
 ide_editor_search_get_match_count (IdeEditorSearch *self)
@@ -1310,7 +1315,7 @@ ide_editor_search_get_match_count (IdeEditorSearch *self)
  * cursor is within a match, this will be a 1-based index
  * will update as new matches are found while scanning the buffer.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 guint
 ide_editor_search_get_match_position (IdeEditorSearch *self)
@@ -1408,7 +1413,7 @@ ide_editor_search_backward_cb (GObject      *object,
   g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (context));
   g_assert (IDE_IS_EDITOR_SEARCH (self));
 
-  if (gtk_source_search_context_backward_finish (context, result, &begin, &end, NULL, NULL))
+  if (gtk_source_search_context_forward_finish (context, result, &begin, &end, NULL, NULL))
     {
       if (self->view != NULL)
         {
@@ -1521,7 +1526,7 @@ maybe_flip_selection_bounds (IdeEditorSearch *self,
  * automatically wrap around to the end of the buffer once the beginning
  * of the buffer has been reached.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_move (IdeEditorSearch          *self,
@@ -1614,7 +1619,7 @@ ide_editor_search_move (IdeEditorSearch          *self,
  * Replaces the next occurrance of a search result with the
  * value of #IdeEditorSearch:replacement-text.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_replace (IdeEditorSearch *self)
@@ -1653,7 +1658,7 @@ ide_editor_search_replace (IdeEditorSearch *self)
  * Replaces all the occurrances of #IdeEditorSearch:search-text with the
  * value of #IdeEditorSearch:replacement-text.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_replace_all (IdeEditorSearch *self)
@@ -1684,7 +1689,7 @@ ide_editor_search_replace_all (IdeEditorSearch *self)
  * result automatically, and then snap back to the previous location if
  * the search is aborted.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_begin_interactive (IdeEditorSearch *self)
@@ -1721,7 +1726,7 @@ ide_editor_search_begin_interactive (IdeEditorSearch *self)
  * as it might allow the editor to restore positioning back to the
  * previous editor location from before the interactive search began.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_end_interactive (IdeEditorSearch *self)
@@ -1752,7 +1757,7 @@ ide_editor_search_end_interactive (IdeEditorSearch *self)
  *
  * Returns: %TRUE if relative movements are reversed directions.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_editor_search_get_reverse (IdeEditorSearch *self)
@@ -1774,7 +1779,7 @@ ide_editor_search_get_reverse (IdeEditorSearch *self)
  * directions so that %IDE_EDITOR_SEARCH_PREVIOUS will search forwards
  * in the buffer and %IDE_EDITOR_SEARCH_NEXT wills earch backwards.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_set_reverse (IdeEditorSearch *self,
@@ -1802,7 +1807,7 @@ ide_editor_search_set_reverse (IdeEditorSearch *self,
  *
  * Returns: An %IdeEditorSearchSelect
  *
- * Since: 3.28
+ * Since: 3.32
  */
 IdeEditorSearchSelect
 ide_editor_search_get_extend_selection (IdeEditorSearch *self)
@@ -1838,6 +1843,8 @@ ide_editor_search_set_extend_selection (IdeEditorSearch       *self,
  * will be performed.
  *
  * Returns: A number containing the number of moves.
+ *
+ * Since: 3.32
  */
 guint
 ide_editor_search_get_repeat (IdeEditorSearch *self)
@@ -1857,7 +1864,7 @@ ide_editor_search_get_repeat (IdeEditorSearch *self)
  *
  * See also: ide_editor_search_get_repeat()
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_editor_search_set_repeat (IdeEditorSearch *self,
@@ -1882,6 +1889,8 @@ ide_editor_search_set_repeat (IdeEditorSearch *self,
  * context loaded and the search text is not empty.
  *
  * Returns: %TRUE if a search is active
+ *
+ * Since: 3.32
  */
 gboolean
 ide_editor_search_get_active (IdeEditorSearch *self)
@@ -1906,6 +1915,13 @@ ide_editor_search_actions_move_previous (IdeEditorSearch *self,
                                          GVariant        *param)
 {
   ide_editor_search_move (self, IDE_EDITOR_SEARCH_PREVIOUS);
+}
+
+static void
+ide_editor_search_actions_at_word_boundary (IdeEditorSearch *self,
+                                            GVariant        *param)
+{
+  ide_editor_search_set_at_word_boundaries (self, g_variant_get_boolean (param));
 }
 
 static void

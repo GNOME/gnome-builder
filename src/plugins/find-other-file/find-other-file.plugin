@@ -1,9 +1,12 @@
 [Plugin]
-Module=find_other_file
-Loader=python3
-Name=Find other files
-Description=Allows the user to rotate through other files similarly named to the open document.
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2017 Christian Hergert
 Builtin=true
-Depends=editor
+Copyright=Copyright © 2017 Christian Hergert
+Depends=editor;
+Description=Allows the user to rotate through other files similarly named to the open document.
+Hidden=true
+Loader=python3
+Module=find_other_file
+Name=Find other files
+X-Builder-ABI=@PACKAGE_ABI@
+X-Workspace-Kind=primary;editor;

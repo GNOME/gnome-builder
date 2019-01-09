@@ -10,7 +10,7 @@ typelib_dirs = [
   join_paths(gsv_libdir, 'girepository-1.0'),
 ]
 
-ide_test_env = [
+test_env = [
   'GI_TYPELIB_PATH="@0@:$(GI_TYPELIB_PATH)"'.format(':'.join(typelib_dirs)),
   'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
   'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
@@ -19,194 +19,86 @@ ide_test_env = [
   'GSETTINGS_SCHEMA_DIR=@0@/data/gsettings'.format(meson.build_root()),
   'PYTHONDONTWRITEBYTECODE=yes',
   'MALLOC_CHECK_=2',
-#  'MALLOC_PERTURB_=$((${RANDOM:-256} % 256))',
 ]
-ide_test_cflags = [
+
+test_cflags = [
   '-DTEST_DATA_DIR="@0@/data/"'.format(meson.current_source_dir()),
   '-I' + join_paths(meson.source_root(), 'src'),
 ]
 
-ide_test_deps = [
-  libide_dep,
-  libpeas_dep,
-  gnome_builder_plugins_dep,
-]
 
-
-ide_compile_commands = executable('test-ide-compile-commands', 'test-ide-compile-commands.c',
-        c_args: ide_test_cflags,
-  dependencies: [ ide_test_deps ],
+test_libide_core = executable('test-libide-core', 'test-libide-core.c',
+        c_args: test_cflags,
+  dependencies: [ libide_core_dep ],
 )
-test('test-ide-compile-commands', ide_compile_commands, env: ide_test_env)
+test('test-libide-core', test_libide_core, env: test_env)
 
 
-ide_context = executable('test-ide-context', 'test-ide-context.c',
-        c_args: ide_test_cflags,
-  dependencies: [ide_test_deps]
+test_snippet_parser = executable('test-snippet-parser', 'test-snippet-parser.c',
+        c_args: test_cflags,
+  dependencies: [ libide_sourceview_dep ],
 )
-test('test-ide-context', ide_context, env: ide_test_env)
-
-
-ide_runtime = executable('test-ide-runtime', 'test-ide-runtime.c',
-        c_args: ide_test_cflags,
-  dependencies: [ide_test_deps]
-)
-test('test-ide-runtime', ide_runtime, env: ide_test_env)
-
-
-ide_buffer_manager = executable('test-ide-buffer-manager',
-  'test-ide-buffer-manager.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-test('test-ide-buffer-manager', ide_buffer_manager,
-  env: ide_test_env,
-)
-
-
-ide_buffer = executable('test-ide-buffer',
-  'test-ide-buffer.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-test('test-ide-buffer', ide_buffer,
-  env: ide_test_env,
-)
-
-
-ide_doap = executable('test-ide-doap',
-  'test-ide-doap.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-test('test-ide-doap', ide_doap,
-  env: ide_test_env,
-)
-
-
-ide_file_settings = executable('test-ide-file-settings',
-  'test-ide-file-settings.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-test('test-ide-file-settings', ide_file_settings,
-  env: ide_test_env,
-)
-
-
-ide_indenter = executable('test-ide-indenter',
-  'test-ide-indenter.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-#test('test-ide-indenter', ide_indenter,
-  #env: ide_test_env,
-#)
-
-
-ide_vcs_uri = executable('test-ide-vcs-uri',
-  'test-ide-vcs-uri.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-test('test-ide-vcs-uri', ide_vcs_uri,
-  env: ide_test_env,
-)
-
-
-ide_uri = executable('test-ide-uri',
-  'test-ide-uri.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-test('test-ide-uri', ide_uri,
-  env: ide_test_env,
-)
-
-
-test_vim = executable('test-vim',
-  'test-vim.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-#test('test-vim', test_vim,
-#  env: ide_test_env,
-#)
-
-
-test_snippet_parser = executable('test-snippet-parser',
-  'test-snippet-parser.c',
-  c_args: ide_test_cflags,
-  dependencies: [
-    ide_test_deps,
-  ],
-)
-#test('test-snippet-parser', test_snippet_parser,
-#  env: ide_test_env,
-#)
-
-
-test_ide_glib = executable('test-ide-glib', 'test-ide-glib.c',
-  c_args: ide_test_cflags,
-  dependencies: [ ide_test_deps ],
-)
-test('test-ide-glib', test_ide_glib, env: ide_test_env)
+test('test-snippet-parser', test_snippet_parser, env: test_env)
 
 
 test_line_reader = executable('test-line-reader', 'test-line-reader.c',
-  c_args: ide_test_cflags,
-  dependencies: [ ide_test_deps ],
+        c_args: test_cflags,
+  dependencies: [ libide_io_dep ],
 )
-test('test-line-reader', test_line_reader, env: ide_test_env)
+test('test-line-reader', test_line_reader, env: test_env)
 
 
-test_ide_task = executable('test-ide-task', 'test-ide-task.c',
-  c_args: ide_test_cflags,
-  dependencies: [ ide_test_deps ],
+test_text_iter = executable('test-text-iter', 'test-text-iter.c',
+        c_args: test_cflags,
+  dependencies: [ libide_sourceview_dep ],
 )
-test('test-ide-task', test_ide_task, env: ide_test_env)
+test('test-text-iter', test_text_iter, env: test_env)
 
 
-test_iter = executable('test-iter', 'test-iter.c',
-  c_args: ide_test_cflags,
-  dependencies: [ ide_test_deps ],
+test_vcs_uri = executable('test-vcs-uri', 'test-vcs-uri.c',
+        c_args: test_cflags,
+  dependencies: [ libide_vcs_dep ],
 )
-test('test-iter', test_iter, env: ide_test_env)
+test('test-vcs-uri', test_vcs_uri, env: test_env)
 
 
-test_backoff = executable('test-backoff', 'test-backoff.c',
-  c_args: ide_test_cflags,
-  dependencies: [ ide_test_deps ],
+test_task = executable('test-task', 'test-task.c',
+        c_args: test_cflags,
+  dependencies: [ libide_threading_dep ],
 )
-test('test-backoff', test_backoff, env: ide_test_env)
+test('test-task', test_task, env: test_env)
 
 
-test_hdr_format = executable('test-hdr-format', [
-  'test-hdr-format.c',
-  '../plugins/c-pack/c-parse-helper.c',
-],
-        c_args: ide_test_cflags,
-  dependencies: [ ide_test_deps ],
+test_subprocess_launcher = executable('test-subprocess-launcher', 'test-subprocess-launcher.c',
+        c_args: test_cflags,
+  dependencies: [ libide_threading_dep ],
 )
+test('test-subprocess-launcher', test_subprocess_launcher, env: test_env)
+
+
+test_gfile = executable('test-gfile', 'test-gfile.c',
+        c_args: test_cflags,
+  dependencies: [ libide_io_dep ],
+)
+test('test-gfile', test_gfile, env: test_env)
+
+
+test_doap = executable('test-doap', 'test-doap.c',
+        c_args: test_cflags,
+  dependencies: [ libide_projects_dep ],
+)
+test('test-doap', test_doap, env: test_env)
+
+
+test_compile_commands = executable('test-compile-commands', 'test-compile-commands.c',
+        c_args: test_cflags,
+  dependencies: [ libide_foundry_dep ],
+)
+test('test-compile-commands', test_compile_commands, env: test_env)
+
 
 test_completion_fuzzy = executable('test-completion-fuzzy', 'test-completion-fuzzy.c',
-        c_args: ide_test_cflags,
-  dependencies: [ ide_test_deps ],
+        c_args: test_cflags,
+  dependencies: [ libide_sourceview_dep ],
 )
-test('test-completion-fuzzy', test_completion_fuzzy, env: ide_test_env)
+test('test-completion-fuzzy', test_completion_fuzzy, env: test_env)

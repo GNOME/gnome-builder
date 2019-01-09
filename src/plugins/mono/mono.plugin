@@ -1,9 +1,10 @@
 [Plugin]
-Module=mono_plugin
-Loader=python3
-Name=Mono
-Description=Provides integration with Mono
 Authors=Christian Hergert <chergert@redhat.com>
-Copyright=Copyright © 2017 Christian Hergert
 Builtin=true
-Hidden=false
+Copyright=Copyright © 2017-2018 Christian Hergert
+Description=Provides integration with Mono
+Hidden=true
+Loader=python3
+Module=mono_plugin
+Name=Mono
+X-Builder-ABI=@PACKAGE_ABI@

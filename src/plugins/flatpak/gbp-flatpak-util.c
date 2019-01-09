@@ -1,6 +1,6 @@
 /* gbp-flatpak-util.c
  *
- * Copyright 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-util"
 
 #include <flatpak.h>
 #include <string.h>
+#include <libide-foundry.h>
+#include <libide-vcs.h>
 
 #include "gbp-flatpak-util.h"
 
@@ -35,16 +39,16 @@ gbp_flatpak_get_staging_dir (IdeBuildPipeline *pipeline)
   g_autofree gchar *branch = NULL;
   g_autofree gchar *name = NULL;
   g_autoptr (IdeTriplet) triplet = NULL;
-  IdeContext *context;
-  IdeVcs *vcs;
-  IdeToolchain *toolchain;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(IdeVcs) vcs = NULL;
+  g_autoptr(IdeToolchain) toolchain = NULL;
 
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  context = ide_object_get_context (IDE_OBJECT (pipeline));
-  vcs = ide_context_get_vcs (context);
+  context = ide_object_ref_context (IDE_OBJECT (pipeline));
+  vcs = ide_vcs_ref_from_context (context);
   branch = ide_vcs_get_branch_name (vcs);
-  toolchain = ide_build_pipeline_get_toolchain (pipeline);
+  toolchain = ide_build_pipeline_ref_toolchain (pipeline);
   triplet = ide_toolchain_get_host_triplet (toolchain);
   name = g_strdup_printf ("%s-%s", ide_triplet_get_arch (triplet), branch);
 

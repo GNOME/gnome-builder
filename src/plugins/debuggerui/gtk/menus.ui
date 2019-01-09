@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="run-menu">
+    <section id="run-menu-section">
+      <item>
+        <attribute name="id">debugger-run-handler</attribute>
+        <attribute name="after">default-run-handler</attribute>
+        <attribute name="action">run-manager.run-with-handler</attribute>
+        <attribute name="target">debugger</attribute>
+        <attribute name="label" translatable="yes">Run with Debugger</attribute>
+        <attribute name="verb-icon-name">builder-debugger-symbolic</attribute>
+        <attribute name="accel">F5</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="project-tree-run-with-submenu">
+    <section id="project-tree-menu-run-with-section">
+      <item>
+        <attribute name="id">project-tree-menu-debug</attribute>
+        <attribute name="label" translatable="yes">Run with Debugger</attribute>
+        <attribute name="action">buildui.run-with-handler</attribute>
+        <attribute name="target" type="s">'debugger'</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

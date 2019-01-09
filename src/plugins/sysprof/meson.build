@@ -1,25 +1,24 @@
-if get_option('with_sysprof')
+if get_option('plugin_sysprof')
 
-sysprof_resources = gnome.compile_resources(
-  'gbp-sysprof-resources',
-  'sysprof.gresource.xml',
-  c_name: 'gbp_sysprof',
-)
-
-sysprof_sources = [
-  'gbp-sysprof-plugin.c',
-  'gbp-sysprof-perspective.c',
-  'gbp-sysprof-perspective.h',
-  'gbp-sysprof-workbench-addin.c',
-  'gbp-sysprof-workbench-addin.h',
-]
-
-gnome_builder_plugins_deps += [
+plugins_deps += [
   dependency('sysprof-2', version: '>= 3.31.1'),
   dependency('sysprof-ui-2', version: '>= 3.31.1'),
 ]
 
-gnome_builder_plugins_sources += files(sysprof_sources)
-gnome_builder_plugins_sources += sysprof_resources[0]
+plugins_sources += files([
+  'sysprof-plugin.c',
+  'gbp-sysprof-surface.c',
+  'gbp-sysprof-surface.h',
+  'gbp-sysprof-workspace-addin.c',
+  'gbp-sysprof-workspace-addin.h',
+])
+
+plugin_sysprof_resources = gnome.compile_resources(
+  'sysprof-resources',
+  'sysprof.gresource.xml',
+  c_name: 'gbp_sysprof',
+)
+
+plugins_sources += plugin_sysprof_resources[0]
 
 endif

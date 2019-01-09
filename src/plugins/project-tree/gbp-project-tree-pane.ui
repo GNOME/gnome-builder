@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpProjectTreePane" parent="IdePane">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <child>
+          <object class="GbpProjectTree" id="tree">
+            <property name="level-indentation">16</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="i-wanna-be-list-box"/>
+              <class name="project-tree"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

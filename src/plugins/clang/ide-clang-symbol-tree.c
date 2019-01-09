@@ -1,6 +1,6 @@
 /* ide-clang-symbol-tree.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-clang-symbol-tree"
@@ -33,7 +35,7 @@ struct _IdeClangSymbolTree
 
 static void symbol_tree_iface_init (IdeSymbolTreeInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeClangSymbolTree, ide_clang_symbol_tree, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (IdeClangSymbolTree, ide_clang_symbol_tree, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
 
 enum {
@@ -51,6 +53,8 @@ static GParamSpec *properties [N_PROPS];
  * Gets the #IdeClangSymbolTree:file property.
  *
  * Returns: (transfer none): a #GFile.
+ *
+ * Since: 3.32
  */
 GFile *
 ide_clang_symbol_tree_get_file (IdeClangSymbolTree *self)
@@ -83,7 +87,6 @@ ide_clang_symbol_tree_get_nth_child (IdeSymbolTree *symbol_tree,
   IdeClangSymbolTree *self = (IdeClangSymbolTree *)symbol_tree;
   g_autoptr(GVariant) node = NULL;
   IdeSymbolNode *ret;
-  IdeContext *context;
 
   g_assert (IDE_IS_CLANG_SYMBOL_TREE (self));
   g_assert (!parent || IDE_IS_CLANG_SYMBOL_NODE (parent));
@@ -97,9 +100,8 @@ ide_clang_symbol_tree_get_nth_child (IdeSymbolTree *symbol_tree,
   if (nth >= g_variant_n_children (self->tree))
     g_return_val_if_reached (NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   node = g_variant_get_child_value (self->tree, nth);
-  ret = ide_clang_symbol_node_new (context, node);
+  ret = ide_clang_symbol_node_new (node);
 
   g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (ret), NULL);
 
@@ -180,8 +182,7 @@ ide_clang_symbol_tree_init (IdeClangSymbolTree *self)
 }
 
 IdeClangSymbolTree *
-ide_clang_symbol_tree_new (IdeContext *context,
-                           GFile      *file,
+ide_clang_symbol_tree_new (GFile      *file,
                            GVariant   *tree)
 {
   IdeClangSymbolTree *self;
@@ -193,7 +194,6 @@ ide_clang_symbol_tree_new (IdeContext *context,
                         NULL);
 
   self = g_object_new (IDE_TYPE_CLANG_SYMBOL_TREE,
-                       "context", context,
                        "file", file,
                        NULL);
 

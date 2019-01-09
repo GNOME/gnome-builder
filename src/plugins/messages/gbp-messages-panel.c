@@ -1,6 +1,6 @@
 /* gbp-messages-panel.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-messages-panel"
 
-#include <ide.h>
+#include <libide-editor.h>
+#include <libide-terminal.h>
 
 #include "gbp-messages-panel.h"
 
@@ -37,6 +40,7 @@ G_DEFINE_TYPE (GbpMessagesPanel, gbp_messages_panel, DZL_TYPE_DOCK_WIDGET)
 static void
 gbp_messages_panel_log_cb (GbpMessagesPanel *self,
                            GLogLevelFlags    log_level,
+                           const gchar      *domain,
                            const gchar      *message,
                            IdeContext       *context)
 {
@@ -92,8 +96,7 @@ gbp_messages_panel_class_init (GbpMessagesPanelClass *klass)
 
   widget_class->destroy = gbp_messages_panel_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/messages-plugin/gbp-messages-panel.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/messages/gbp-messages-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpMessagesPanel, scrollbar);
   gtk_widget_class_bind_template_child (widget_class, GbpMessagesPanel, terminal);
 }

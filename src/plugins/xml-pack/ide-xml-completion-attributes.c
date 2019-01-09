@@ -14,10 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "ide-xml-completion-attributes.h"
+#include <dazzle.h>
 
+#include "ide-xml-completion-attributes.h"
 #include "ide-xml-position.h"
 
 typedef struct _MatchingState

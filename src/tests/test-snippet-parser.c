@@ -1,7 +1,5 @@
-#include <ide.h>
+#include <libide-sourceview.h>
 #include <stdlib.h>
-
-#include "snippets/ide-snippet-parser.h"
 
 gint
 main (gint   argc,

@@ -1,11 +1,10 @@
 [Plugin]
-Module=comment-code-plugin
-Name=Comment Code
-Description=Comment code lines with Builder editor.
 Authors=Sebastien Lafargue <slafargue@gnome.org>
-Copyright=Copyright © 2016 Sebastien Lafargue
 Builtin=true
-Depends=editor
-Embedded=gbp_comment_code_register_types
-X-Tool-Name=comment-code
-X-Tool-Description=Comment code lines
+Copyright=Copyright © 2016 Sebastien Lafargue
+Depends=editor;
+Description=Comment code lines with Builder editor.
+Embedded=_gbp_comment_code_register_types
+Hidden=true
+Module=comment-code
+Name=Comment Code

@@ -2,9 +2,9 @@
  *
  * based on : gtk-color-plane
  *   GTK - The GIMP Toolkit
- *   Copyright © 2012 Red Hat, Inc.
+ *   Copyright 2012 Red Hat, Inc.
  *
- * Copyright © 2016 sebastien lafargue <slafargue@gnome.org>
+ * Copyright 2016 sebastien lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once

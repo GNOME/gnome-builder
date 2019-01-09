@@ -1,9 +1,9 @@
 [Plugin]
-Module=beautifier_plugin
-Name=Code Beautifier
-Description=Beautify code according to profiles
 Authors=Sébastien Lafargue <slafargue@gnome.org>
-Copyright=Copyright © 2016 Sébastien Lafargue
-Depends=editor
 Builtin=true
-Embedded=gb_beautifier_register_types
+Copyright=Copyright © 2016 Sébastien Lafargue
+Depends=editor;
+Description=Beautify code according to profiles
+Embedded=_gb_beautifier_register_types
+Module=beautifier
+Name=Code Beautifier

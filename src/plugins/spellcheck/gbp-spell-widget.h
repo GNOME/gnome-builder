@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-editor.h>
 
 G_BEGIN_DECLS
 
@@ -26,9 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSpellWidget, gbp_spell_widget, GBP, SPELL_WIDGET, GtkBin)
 
-GtkWidget     *gbp_spell_widget_new        (IdeEditorView  *editor);
-IdeEditorView *gbp_spell_widget_get_editor (GbpSpellWidget *self);
+GtkWidget     *gbp_spell_widget_new        (IdeEditorPage  *editor);
+IdeEditorPage *gbp_spell_widget_get_editor (GbpSpellWidget *self);
 void           gbp_spell_widget_set_editor (GbpSpellWidget *self,
-                                            IdeEditorView  *editor);
+                                            IdeEditorPage  *editor);
 
 G_END_DECLS

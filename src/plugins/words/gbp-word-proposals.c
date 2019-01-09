@@ -1,7 +1,7 @@
 /* gbp-word-proposals.c
  *
  * Copyright 2017 Umang Jain <mailumangjain@gmail.com>
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,13 +15,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
-#include "config.h"
 
 #define G_LOG_DOMAIN "gbp-word-proposals"
 
-#include "sourceview/ide-source-search-context.h"
+#include "config.h"
+
+#include <libide-sourceview.h>
 
 #include "gbp-word-proposal.h"
 #include "gbp-word-proposals.h"
@@ -325,7 +327,7 @@ gbp_word_proposals_populate_finish (GbpWordProposals  *self,
 
   if (old_len || self->items->len)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->items->len);
-  
+
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 

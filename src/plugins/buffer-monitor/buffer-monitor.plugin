@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;
+Description=Watches buffers for changes on disk
+Embedded=_gbp_buffer_monitor_register_types
+Hidden=true
+Module=buffer-monitor
+Name=Buffer Monitor

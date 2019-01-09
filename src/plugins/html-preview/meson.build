@@ -1,4 +1,4 @@
-if get_option('with_html_preview')
+if get_option('plugin_html_preview')
 
 html_preview_resources = gnome.compile_resources(
   'html_preview',
@@ -13,7 +13,7 @@ install_data('html_preview.py', install_dir: plugindir)
 configure_file(
           input: 'html-preview.plugin',
          output: 'html-preview.plugin',
-           copy: true,
+  configuration: config_h,
         install: true,
     install_dir: plugindir,
 )

@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2014-2018 Christian Hergert
+Depends=editor;buildui;
+Description=Builder's visual debugger
+Embedded=_gbp_debuggerui_register_types
+Hidden=true
+Module=debuggerui
+Name=Debugger
+X-Workspace-Kind=primary;

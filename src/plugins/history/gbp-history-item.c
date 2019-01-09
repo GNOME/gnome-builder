@@ -1,6 +1,6 @@
 /* gbp-history-item.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-history-item"
@@ -72,11 +74,11 @@ gbp_history_item_init (GbpHistoryItem *self)
 GbpHistoryItem *
 gbp_history_item_new (GtkTextMark *mark)
 {
-  GtkTextIter iter;
+  g_autoptr(IdeContext) context = NULL;
   GbpHistoryItem *item;
   GtkTextBuffer *buffer;
-  IdeContext *context;
-  IdeFile *file;
+  GtkTextIter iter;
+  GFile *file;
 
   g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), NULL);
 
@@ -86,16 +88,16 @@ gbp_history_item_new (GtkTextMark *mark)
   item = g_object_new (GBP_TYPE_HISTORY_ITEM, NULL);
   item->mark = g_object_ref (mark);
 
-  context = ide_buffer_get_context (IDE_BUFFER (buffer));
+  context = ide_buffer_ref_context (IDE_BUFFER (buffer));
   g_set_weak_pointer (&item->context, context);
 
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
   item->line = gtk_text_iter_get_line (&iter);
 
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
-  item->file = g_object_ref (ide_file_get_file (file));
+  item->file = g_object_ref (file);
 
-  return item;
+  return g_steal_pointer (&item);
 }
 
 gboolean
@@ -136,8 +138,8 @@ gbp_history_item_chain (GbpHistoryItem *self,
 gchar *
 gbp_history_item_get_label (GbpHistoryItem *self)
 {
+  g_autofree gchar *title = NULL;
   GtkTextBuffer *buffer;
-  const gchar *title;
   GtkTextIter iter;
   guint line;
 
@@ -151,7 +153,7 @@ gbp_history_item_get_label (GbpHistoryItem *self)
 
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, self->mark);
   line = gtk_text_iter_get_line (&iter) + 1;
-  title = ide_buffer_get_title (IDE_BUFFER (buffer));
+  title = ide_buffer_dup_title (IDE_BUFFER (buffer));
 
   return g_strdup_printf ("%s <span fgcolor='32767'>%u</span>", title, line);
 }
@@ -160,11 +162,13 @@ gbp_history_item_get_label (GbpHistoryItem *self)
  * gbp_history_item_get_location:
  * @self: a #GbpHistoryItem
  *
- * Gets an #IdeSourceLocation represented by this item.
+ * Gets an #IdeLocation represented by this item.
  *
- * Returns: (transfer full): A new #IdeSourceLocation
+ * Returns: (transfer full): A new #IdeLocation
+ *
+ * Since: 3.32
  */
-IdeSourceLocation *
+IdeLocation *
 gbp_history_item_get_location (GbpHistoryItem *self)
 {
   GtkTextBuffer *buffer;
@@ -176,13 +180,8 @@ gbp_history_item_get_location (GbpHistoryItem *self)
   if (self->context == NULL)
     return NULL;
 
-  buffer = gtk_text_mark_get_buffer (self->mark);
-
-  if (buffer == NULL)
-    {
-      g_autoptr(IdeFile) file = ide_file_new (self->context, self->file);
-      return ide_source_location_new (file, self->line, 0, 0);
-    }
+  if (!(buffer = gtk_text_mark_get_buffer (self->mark)))
+    return ide_location_new (self->file, self->line, 0);
 
   g_return_val_if_fail (IDE_IS_BUFFER (buffer), NULL);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, self->mark);
@@ -194,6 +193,8 @@ gbp_history_item_get_location (GbpHistoryItem *self)
  * gbp_history_item_get_file:
  *
  * Returns: (transfer none): a #GFile.
+ *
+ * Since: 3.32
  */
 GFile *
 gbp_history_item_get_file (GbpHistoryItem *self)
@@ -210,6 +211,8 @@ gbp_history_item_get_file (GbpHistoryItem *self)
  *
  * If the text mark is still valid, it will be used to locate the
  * mark which may have moved.
+ *
+ * Since: 3.32
  */
 guint
 gbp_history_item_get_line (GbpHistoryItem *self)

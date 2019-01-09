@@ -1,23 +1,35 @@
-if get_option('with_c_pack')
+if get_option('plugin_c_pack')
 
-c_pack_resources = gnome.compile_resources(
+plugins_sources += files([
+  'c-pack-plugin.c',
+  'c-parse-helper.c',
+  'cpack-completion-item.c',
+  'cpack-completion-provider.c',
+  'cpack-completion-results.c',
+  'cpack-editor-page-addin.c',
+  'hdr-format.c',
+  'ide-c-indenter.c',
+])
+
+plugin_c_pack_resources = gnome.compile_resources(
   'c-pack-resources',
   'c-pack.gresource.xml',
   c_name: 'ide_c',
 )
 
-c_pack_sources = [
-  'c-pack-plugin.c',
-  'c-parse-helper.c',
-  'hdr-format.c',
-  'ide-c-indenter.c',
-  'cpack-completion-item.c',
-  'cpack-completion-provider.c',
-  'cpack-completion-results.c',
-  'cpack-editor-view-addin.c',
-]
+plugins_sources += plugin_c_pack_resources[0]
 
-gnome_builder_plugins_sources += files(c_pack_sources)
-gnome_builder_plugins_sources += c_pack_resources[0]
+test_cpack = executable('test-cpack',
+  'test-cpack.c', 'c-parse-helper.c',
+        c_args: test_cflags,
+  dependencies: [ libide_projects_dep ],
+)
+test('test-cpack', test_cpack, env: test_env)
+
+test_hdr_format = executable('test-hdr-format',
+  'test-hdr-format.c', 'c-parse-helper.c',
+        c_args: test_cflags,
+  dependencies: [ libide_sourceview_dep ],
+)
 
 endif

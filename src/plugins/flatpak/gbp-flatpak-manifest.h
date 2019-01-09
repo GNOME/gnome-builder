@@ -1,7 +1,7 @@
 /* gbp-flatpak-manifest.h
  *
  * Copyright 2016 Matthew Leeds <mleeds@redhat.com>
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +15,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
@@ -27,8 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakManifest, gbp_flatpak_manifest, GBP, FLATPAK_MANIFEST, IdeConfiguration)
 
-GbpFlatpakManifest  *gbp_flatpak_manifest_new                (IdeContext           *context,
-                                                              GFile                *file,
+GbpFlatpakManifest  *gbp_flatpak_manifest_new                (GFile                *file,
                                                               const gchar          *id);
 GFile               *gbp_flatpak_manifest_get_file           (GbpFlatpakManifest   *self);
 const gchar         *gbp_flatpak_manifest_get_primary_module (GbpFlatpakManifest   *self);

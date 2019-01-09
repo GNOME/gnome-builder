@@ -1,9 +1,10 @@
 [Plugin]
-Module=spellcheck-plugin
-Name=Spellcheck
-Description=Provides spellchecking for documents
 Authors=Sébastien Lafargue <slafargue@gnome.org>
-Copyright=Copyright © 2016 Sébastien Lafargue
-Depends=editor
 Builtin=true
-Embedded=gbp_spellcheck_register_types
+Copyright=Copyright © 2016 Sébastien Lafargue
+Depends=editor;
+Description=Provides spellchecking for documents
+Embedded=_gbp_spellcheck_register_types
+Hidden=true
+Module=spellcheck
+Name=Spellcheck

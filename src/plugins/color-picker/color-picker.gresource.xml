@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/color-picker">
+    <file>color-picker.plugin</file>
+
+    <file>themes/Adwaita.css</file>
+    <file>themes/Adwaita-dark.css</file>
+    <file>themes/shared.css</file>
+
+    <file preprocess="xml-stripblanks">gtk/color-picker.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker-prefs.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker-preview.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker-palette-row.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker-palette-menu.ui</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+
+    <file preprocess="xml-stripblanks">data/basic.gstyle.xml</file>
+    <file>data/svg.gpl</file>
+
+    <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-load-palette.svg">icons/palette/load-palette.svg</file>
+    <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-save-palette.svg">icons/palette/save-palette.svg</file>
+    <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-palette-from-document.svg">icons/palette/palette-from-document.svg</file>
+    <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-viewmode-list.svg">icons/viewmode/viewmode-list.svg</file>
+    <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-viewmode-swatchs.svg">icons/viewmode/viewmode-swatchs.svg</file>
+  </gresource>
+</gresources>

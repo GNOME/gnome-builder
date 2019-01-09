@@ -1,0 +1,83 @@
+ideframeheader {
+  min-height: 26px;
+}
+ideframeheader button {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+ideframeheader button:disabled {
+  color: alpha(currentColor, 0.25);
+}
+ideframeheader button:not(:disabled) image {
+  opacity: 0.55;
+}
+ideframeheader button:checked image,
+ideframeheader button:not(:disabled):hover image {
+  opacity: 1;
+}
+ideframeheader button:checked,
+ideframeheader button:hover {
+  background: shade(@theme_bg_color, 0.9);
+}
+ideframeheader button:active {
+  background: shade(@theme_bg_color, 0.85);
+}
+ideframeheader > button {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+ideframeheader * button:first-child > image,
+ideframeheader * button:last-child:dir(rtl) > image {
+  padding-left: 12px;
+  padding-right: 10px;
+}
+ideframeheader * button:first-child:dir(rtl) > image,
+ideframeheader * button:last-child > image {
+  padding-right: 12px;
+  padding-left: 9px;
+}
+idegridcolumn.handle,
+idegrid.handle {
+  border: 1px solid @borders;
+}
+popover.title-popover list row {
+  padding: 1px 0;
+}
+popover.title-popover scrolledwindow {
+  min-width: 300px;
+}
+popover.title-popover list {
+  background: transparent;
+}
+popover.title-popover list row box > image:first-child {
+  opacity: 0.55;
+}
+popover.title-popover list row box > image:first-child {
+  margin: 6px 8px;
+  min-height: 16px;
+  min-width: 16px;
+}
+popover.title-popover list row button:last-child {
+  background: none;
+  box-shadow: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0 6px;
+  color: @theme_fg_color;
+  opacity: 0.55;
+}
+popover.title-popover list row button:last-child:hover {
+  opacity: 1;
+}
+popover.title-popover list row button image {
+  min-height: 16px;
+  min-width: 16px;
+}
+popover.title-popover list row button image {
+  color: @theme_unfocused_fg_color;
+}

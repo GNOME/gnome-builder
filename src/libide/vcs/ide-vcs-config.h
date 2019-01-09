@@ -14,19 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <glib-object.h>
+#if !defined (IDE_VCS_INSIDE) && !defined (IDE_VCS_COMPILATION)
+# error "Only <libide-vcs.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_CONFIG (ide_vcs_config_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeVcsConfig, ide_vcs_config, IDE, VCS_CONFIG, GObject)
 
 typedef enum
@@ -47,11 +51,11 @@ struct _IdeVcsConfigInterface
                       const GValue    *value);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_vcs_config_get_config (IdeVcsConfig     *self,
                                 IdeVcsConfigType  type,
                                 GValue           *value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_vcs_config_set_config (IdeVcsConfig     *self,
                                 IdeVcsConfigType  type,
                                 const GValue     *value);

@@ -1,11 +1,12 @@
 [Plugin]
-Module=phpize_plugin
-Loader=python3
-Name=PHPize
-Description=Provides integration with phpize-based PHP extensions
 Authors=Christian Hergert <chergert@redhat.com>
-Copyright=Copyright © 2017 Christian Hergert
 Builtin=true
-Hidden=false
-X-Project-File-Filter-Pattern=config.m4
+Copyright=Copyright © 2017 Christian Hergert
+Description=Provides integration with phpize-based PHP extensions
+Hidden=true
+Loader=python3
+Module=phpize_plugin
+Name=PHPize
 X-Project-File-Filter-Name=PHPize Project (config.m4)
+X-Project-File-Filter-Pattern=config.m4
+X-Builder-ABI=@PACKAGE_ABI@

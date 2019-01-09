@@ -29,7 +29,7 @@ namespace Ide
 
 		public void load (Ide.Context context)
 		{
-			this.service = context.get_service_typed (typeof (Ide.ValaService)) as Ide.ValaService;
+			this.service = Ide.ValaService.from_context (context);
 		}
 
 		public bool is_trigger (Gtk.TextIter iter, unichar ch)
@@ -61,11 +61,12 @@ namespace Ide
 			var file = buffer.get_file ();
 			Gtk.TextIter iter, begin;
 
-			if (file.is_temporary) {
+			if (buffer.is_temporary) {
 				throw new GLib.IOError.NOT_SUPPORTED ("Cannot complete on temporary files");
 			}
 
-			buffer.sync_to_unsaved_files ();
+			/* force buffer sync */
+			buffer.dup_content ();
 
 			context.get_bounds (out iter, null);
 
@@ -77,7 +78,7 @@ namespace Ide
 			var line_offset = iter.get_line_offset ();
 
 			var index = this.service.index;
-			var unsaved_files = this.get_context ().get_unsaved_files ();
+			var unsaved_files = Ide.UnsavedFiles.from_context (this.get_context ());
 
 			/* make a copy for threaded access */
 			var unsaved_files_copy = unsaved_files.to_array ();
@@ -85,7 +86,7 @@ namespace Ide
 			Ide.ThreadPool.push (Ide.ThreadPoolKind.COMPILER, () => {
 				int res_line = -1;
 				int res_column = -1;
-				results = index.code_complete (file.file,
+				results = index.code_complete (file,
 				                               line + 1,
 				                               line_offset + 1,
 				                               line_text,

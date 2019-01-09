@@ -1,10 +1,11 @@
 [Plugin]
-Module=meson-plugin
-Name=Meson
-Description=Provides integration with the Meson build system
 Authors=Patrick Griffis <tingping@tingping.se>
-Copyright=Copyright © 2016 Patrick Griffis
 Builtin=true
-X-Project-File-Filter-Pattern=meson.build
+Copyright=Copyright © 2016 Patrick Griffis
+Description=Provides integration with the Meson build system
+Embedded=_gbp_meson_register_types
+Hidden=true
+Module=meson
+Name=Meson
 X-Project-File-Filter-Name=Meson Project (meson.build)
-Embedded=gbp_meson_register_types
+X-Project-File-Filter-Pattern=meson.build

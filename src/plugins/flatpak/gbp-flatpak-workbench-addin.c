@@ -1,6 +1,6 @@
 /* gbp-flatpak-workbench-addin.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-workbench-addin"
 
 #include <glib/gi18n.h>
+#include <libide-io.h>
 
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-download-stage.h"
@@ -30,7 +33,7 @@ struct _GbpFlatpakWorkbenchAddin
 
   GSimpleActionGroup  *actions;
   IdeWorkbench        *workbench;
-  IdeWorkbenchMessage *message;
+  IdeNotification     *message;
 };
 
 static void
@@ -39,13 +42,13 @@ check_sysdeps_cb (GObject      *object,
                   gpointer      user_data)
 {
   GbpFlatpakApplicationAddin *app_addin = (GbpFlatpakApplicationAddin *)object;
-  g_autoptr(IdeWorkbenchMessage) message = user_data;
+  g_autoptr(GbpFlatpakWorkbenchAddin) self = user_data;
   g_autoptr(GError) error = NULL;
   gboolean has_sysdeps;
 
   g_assert (GBP_IS_FLATPAK_APPLICATION_ADDIN (app_addin));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_WORKBENCH_MESSAGE (message));
+  g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
 
   has_sysdeps = gbp_flatpak_application_addin_check_sysdeps_finish (app_addin, result, &error);
 
@@ -54,7 +57,71 @@ check_sysdeps_cb (GObject      *object,
     IDE_TRACE_MSG ("which flatpak-builder resulted in %s", error->message);
 #endif
 
-  gtk_widget_set_visible (GTK_WIDGET (message), has_sysdeps == FALSE);
+  if (!has_sysdeps)
+    {
+      IdeContext *context;
+
+      context = ide_workbench_get_context (self->workbench);
+      ide_notification_attach (self->message, IDE_OBJECT (context));
+    }
+}
+
+static void
+gbp_flatpak_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
+                                             IdeWorkspace      *workspace)
+{
+  GbpFlatpakWorkbenchAddin *self = (GbpFlatpakWorkbenchAddin *)addin;
+  GbpFlatpakApplicationAddin *app_addin;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  if (!IDE_IS_PRIMARY_WORKSPACE (workspace))
+    return;
+
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "flatpak",
+                                  G_ACTION_GROUP (self->actions));
+
+  self->message = g_object_new (IDE_TYPE_NOTIFICATION,
+                                "title", _("Missing system dependencies"),
+                                "body", _("The “flatpak-builder” program is necessary for building Flatpak-based applications. Builder can install it for you."),
+                                "icon-name", "dialog-warning-symbolic",
+                                "urgent", TRUE,
+                                NULL);
+  ide_notification_add_button (self->message,
+                               _("Install"),
+                               NULL,
+                               "flatpak.install-flatpak-builder");
+
+  app_addin = gbp_flatpak_application_addin_get_default ();
+  gbp_flatpak_application_addin_check_sysdeps_async (app_addin,
+                                                     NULL,
+                                                     check_sysdeps_cb,
+                                                     g_object_ref (self));
+
+}
+
+static void
+gbp_flatpak_workbench_addin_workspace_removed (IdeWorkbenchAddin *addin,
+                                               IdeWorkspace      *workspace)
+{
+  GbpFlatpakWorkbenchAddin *self = (GbpFlatpakWorkbenchAddin *)addin;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  if (!IDE_IS_PRIMARY_WORKSPACE (workspace))
+    return;
+
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "flatpak", NULL);
+
+  if (self->message != NULL)
+    {
+      ide_notification_withdraw (self->message);
+      g_clear_object (&self->message);
+    }
 }
 
 static void
@@ -62,33 +129,12 @@ gbp_flatpak_workbench_addin_load (IdeWorkbenchAddin *addin,
                                   IdeWorkbench      *workbench)
 {
   GbpFlatpakWorkbenchAddin *self = (GbpFlatpakWorkbenchAddin *)addin;
-  GbpFlatpakApplicationAddin *app_addin;
-  IdeContext *context;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   self->workbench = workbench;
-
-  context = ide_workbench_get_context (workbench);
-  if (context != NULL)
-    gtk_widget_insert_action_group (GTK_WIDGET (workbench), "flatpak", G_ACTION_GROUP (self->actions));
-
-  self->message = g_object_new (IDE_TYPE_WORKBENCH_MESSAGE,
-                                "id", "org.gnome.builder.flatpak.install",
-                                "title", _("Your computer is missing flatpak-builder"),
-                                "subtitle", _("This program is necessary for building Flatpak applications. Would you like to install it?"),
-                                "show-close-button", TRUE,
-                                "visible", FALSE,
-                                NULL);
-  ide_workbench_message_add_action (self->message, _("Install"), "flatpak.install-flatpak-builder");
-  ide_workbench_push_message (workbench, self->message);
-
-  app_addin = gbp_flatpak_application_addin_get_default ();
-  gbp_flatpak_application_addin_check_sysdeps_async (app_addin,
-                                                     NULL,
-                                                     check_sysdeps_cb,
-                                                     g_object_ref (self->message));
 }
 
 static void
@@ -100,11 +146,6 @@ gbp_flatpak_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "flatpak", NULL);
-
-  gtk_widget_destroy (GTK_WIDGET (self->message));
-
-  self->message = NULL;
   self->workbench = NULL;
 }
 
@@ -113,6 +154,8 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_flatpak_workbench_addin_load;
   iface->unload = gbp_flatpak_workbench_addin_unload;
+  iface->workspace_added = gbp_flatpak_workbench_addin_workspace_added;
+  iface->workspace_removed = gbp_flatpak_workbench_addin_workspace_removed;
 }
 
 static void
@@ -146,7 +189,7 @@ gbp_flatpak_workbench_addin_install_cb (GObject      *object,
   else
     {
       IdeContext *context = ide_workbench_get_context (self->workbench);
-      IdeConfigurationManager *config_manager = ide_context_get_configuration_manager (context);
+      IdeConfigurationManager *config_manager = ide_configuration_manager_from_context (context);
 
       /* TODO: It would be nice to have a cleaner way to re-setup the pipeline
        *       because we know it is invalidated.
@@ -178,7 +221,7 @@ gbp_flatpak_workbench_addin_install_flatpak_builder (GSimpleAction *action,
   g_assert (GBP_IS_FLATPAK_WORKBENCH_ADDIN (self));
 
   transfer = ide_pkcon_transfer_new (packages);
-  manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
+  manager = ide_transfer_manager_get_default ();
 
   g_simple_action_set_enabled (action, FALSE);
 

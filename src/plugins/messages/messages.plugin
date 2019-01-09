@@ -1,10 +1,10 @@
 [Plugin]
-Module=messages-plugin
-Name=Internal Logging
-Description=Show internal warning logs
 Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
 Copyright=Copyright © 2018 Christian Hergert
 Depends=editor;
+Description=Show internal warning logs
+Embedded=_gbp_messages_register_types
 Hidden=true
-Builtin=true
-Embedded=gbp_messages_register_types
+Module=messages
+Name=Internal Logging

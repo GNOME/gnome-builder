@@ -1,6 +1,6 @@
 /* ide-thread-pool.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_THREADING_INSIDE) && !defined (IDE_THREADING_COMPILATION)
+# error "Only <libide-threading.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <gio/gio.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -39,19 +44,21 @@ typedef enum
  * IdeThreadFunc:
  * @user_data: (closure) (transfer full): The closure for the callback.
  *
+ *
+ * Since: 3.32
  */
 typedef void (*IdeThreadFunc) (gpointer user_data);
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_thread_pool_push               (IdeThreadPoolKind  kind,
                                              IdeThreadFunc      func,
                                              gpointer           func_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void     ide_thread_pool_push_with_priority (IdeThreadPoolKind  kind,
                                              gint               priority,
                                              IdeThreadFunc      func,
                                              gpointer           func_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_thread_pool_push_task          (IdeThreadPoolKind  kind,
                                              GTask             *task,
                                              GTaskThreadFunc    func);

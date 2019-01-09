@@ -1,8 +1,10 @@
 [Plugin]
+Authors=Christian Hergert <christian@hergert.me>, Georg Vienna <georg.vienna@himbarsoft.com>
+Builtin=true
+Copyright=Copyright © 2017 Christian Hergert, Georg Vienna <georg.vienna@himbarsoft.com>
+Description=Helps keep your rust installation up to date!
+Loader=python3
 Module=rustup_plugin
 Name=RustUp
-Loader=python3
-Description=Helps keep your rust installation up to date!
-Authors=Christian Hergert <christian@hergert.me>, Georg Vienna <georg.vienna@himbarsoft.com>
-Copyright=Copyright © 2017 Christian Hergert, Georg Vienna <georg.vienna@himbarsoft.com>
-Builtin=true
+X-Builder-ABI=@PACKAGE_ABI@
+X-Has-Resources=true

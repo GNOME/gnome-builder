@@ -1,6 +1,6 @@
 /* ide-search-reducer.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_SEARCH_INSIDE) && !defined (IDE_SEARCH_COMPILATION)
+# error "Only <libide-search.h> can be included directly."
+#endif
 
-#include "ide-types.h"
+#include <libide-core.h>
+
+#include "ide-search-result.h"
 
 G_BEGIN_DECLS
 
@@ -31,21 +37,21 @@ typedef struct
   gsize      count;
 } IdeSearchReducer;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_reducer_init    (IdeSearchReducer  *reducer,
                                        gsize              max_results);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean   ide_search_reducer_accepts (IdeSearchReducer  *reducer,
                                        gfloat             score);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_reducer_take    (IdeSearchReducer  *reducer,
                                        IdeSearchResult   *result);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_reducer_push    (IdeSearchReducer  *reducer,
                                        IdeSearchResult   *result);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_reducer_destroy (IdeSearchReducer  *reducer);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GPtrArray *ide_search_reducer_free    (IdeSearchReducer  *reducer,
                                        gboolean           free_results);
 

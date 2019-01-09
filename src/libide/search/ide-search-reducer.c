@@ -1,6 +1,6 @@
 /* ide-search-reducer.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,14 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-search-reducer"
 
 #include "config.h"
 
-#include "search/ide-search-reducer.h"
-#include "search/ide-search-result.h"
+#include "ide-search-reducer.h"
+#include "ide-search-result.h"
 
 /**
  * SECTION:ide-search-reducer
@@ -30,6 +32,8 @@
  *
  * This is a helper structure for search engines to reduce the number
  * of items they inflate when performing a search.
+ *
+ * Since: 3.32
  */
 
 #define DEFAULT_MAX_ITEMS 1000
@@ -42,6 +46,8 @@
  * Initializes a new #IdeSearchReducer to be used to reduce the number of
  * search results that are created. This is generally just used to help
  * keep search performance good.
+ *
+ * Since: 3.32
  */
 void
 ide_search_reducer_init (IdeSearchReducer  *reducer,
@@ -59,6 +65,8 @@ ide_search_reducer_init (IdeSearchReducer  *reducer,
  * @reducer: a #IdeSearchReducer
  *
  * Frees the results.
+ *
+ * Since: 3.32
  */
 void
 ide_search_reducer_destroy (IdeSearchReducer *reducer)
@@ -77,9 +85,11 @@ ide_search_reducer_destroy (IdeSearchReducer *reducer)
  * Frees all items associated with the result set, unless @free_results is
  * %FALSE and then the results are returned as an array.
  *
- * Returns: (nullable) (transfer container) (element-type Ide.SearchResult):
+ * Returns: (nullable) (transfer container) (element-type IdeSearchResult):
  *   An array of #IdeSearchResult unless @free_results is %TRUE, then
  *   %NULL is returned.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_search_reducer_free (IdeSearchReducer *reducer,
@@ -125,6 +135,8 @@ ide_search_reducer_free (IdeSearchReducer *reducer,
  *
  * Like ide_search_reducer_push() but takes ownership of @result by
  * stealing the reference.
+ *
+ * Since: 3.32
  */
 void
 ide_search_reducer_take (IdeSearchReducer *reducer,
@@ -151,6 +163,8 @@ ide_search_reducer_take (IdeSearchReducer *reducer,
  * @result: an #IdeSearchResult
  *
  * Adds result to the set unless it scores too low.
+ *
+ * Since: 3.32
  */
 void
 ide_search_reducer_push (IdeSearchReducer *reducer,
@@ -172,6 +186,8 @@ ide_search_reducer_push (IdeSearchReducer *reducer,
  * where you want to avoid inflating an #IdeSearchResult unless necessary.
  *
  * Returns: %TRUE if there is space for a result with a score of @score.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_search_reducer_accepts (IdeSearchReducer *reducer,

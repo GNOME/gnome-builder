@@ -1,6 +1,6 @@
 /* ide-c-indenter.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "cindent"
 
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
+#include <libide-sourceview.h>
 
 #include "c-parse-helper.h"
 #include "ide-c-indenter.h"
@@ -1356,7 +1359,7 @@ ide_c_indenter_format (IdeIndenter    *indenter,
     ret = c_indenter_indent (c, view, buffer, begin);
     *begin = begin_copy;
 
-    if (!dzl_str_empty0 (ret))
+    if (!ide_str_empty0 (ret))
       {
         /*
          * If we have additional space after where our new indentation

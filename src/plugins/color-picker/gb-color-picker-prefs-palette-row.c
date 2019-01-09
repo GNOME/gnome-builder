@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <gdk/gdk.h>
 #include "glib/gi18n.h"
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gstyle-rename-popover.h"
 
@@ -504,7 +506,7 @@ gb_color_picker_prefs_palette_row_class_init (GbColorPickerPrefsPaletteRowClass 
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/color-picker-plugin/gtk/color-picker-palette-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/color-picker/gtk/color-picker-palette-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, image);
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, event_box);
   gtk_widget_class_bind_template_child (widget_class, GbColorPickerPrefsPaletteRow, palette_name);
@@ -526,7 +528,7 @@ gb_color_picker_prefs_palette_row_init (GbColorPickerPrefsPaletteRow *self)
                             G_CALLBACK (event_box_button_pressed_cb),
                             self);
 
-  builder = gtk_builder_new_from_resource ("/org/gnome/builder/plugins/color-picker-plugin/gtk/color-picker-palette-menu.ui");
+  builder = gtk_builder_new_from_resource ("/plugins/color-picker/gtk/color-picker-palette-menu.ui");
   self->popover_menu = GTK_WIDGET (g_object_ref_sink (gtk_builder_get_object (builder, "popover")));
   button_rename = GTK_WIDGET (gtk_builder_get_object (builder, "button_rename"));
   g_signal_connect_object (button_rename, "button-release-event",

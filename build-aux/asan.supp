@@ -1,8 +1,0 @@
-leak:g_get_charset
-leak:g_get_filename_charsets
-leak:g_get_language_names
-leak:g_intern_static_string
-leak:pygi_constructor_cache_new
-leak:pygi_function_cache_new
-leak:pygi_method_cache_new
-leak:pygi_vfunc_cache_new

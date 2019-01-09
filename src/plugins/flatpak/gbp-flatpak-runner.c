@@ -1,6 +1,6 @@
 /* gbp-flatpak-runner.c
  *
- * Copyright 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-runner"
@@ -66,7 +68,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_context_get_configuration_manager (context);
+  config_manager = ide_configuration_manager_from_context (context);
   config = ide_configuration_manager_get_current (config_manager);
   app_id = ide_configuration_get_app_id (config);
 
@@ -150,9 +152,7 @@ gbp_flatpak_runner_new (IdeContext  *context,
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  self = g_object_new (GBP_TYPE_FLATPAK_RUNNER,
-                       "context", context,
-                       NULL);
+  self = g_object_new (GBP_TYPE_FLATPAK_RUNNER, NULL);
 
   if (binary_path != NULL)
     ide_runner_append_argv (IDE_RUNNER (self), binary_path);

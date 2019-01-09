@@ -1,6 +1,6 @@
 /* ide-clang-highlighter.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,9 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "ide-clang-highlighter"
+
+#include "config.h"
+
 #include <glib/gi18n.h>
+#include <libide-foundry.h>
 
 #include "ide-clang-client.h"
 #include "ide-clang-highlighter.h"
@@ -111,12 +118,12 @@ get_index_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeClangClient) client = NULL;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) flags = NULL;
-  IdeClangClient *client;
   GCancellable *cancellable;
   IdeContext *context;
-  IdeFile *file;
+  GFile *file;
 
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -124,12 +131,12 @@ get_index_flags_cb (GObject      *object,
 
   flags = ide_build_system_get_build_flags_finish (build_system, result, &error);
   context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   file = ide_task_get_task_data (task);
   cancellable = ide_task_get_cancellable (task);
 
   ide_clang_client_get_highlight_index_async (client,
-                                              ide_file_get_file (file),
+                                              file,
                                               (const gchar * const *)flags,
                                               cancellable,
                                               get_highlight_index_cb,
@@ -307,11 +314,11 @@ static gboolean
 ide_clang_highlighter_do_update (IdeClangHighlighter *self)
 {
   g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeClangClient) client = NULL;
   IdeBuildSystem *build_system;
-  IdeClangClient *client;
   IdeContext *context;
   IdeBuffer *buffer;
-  IdeFile *file;
+  GFile *file;
 
   g_assert (IDE_IS_CLANG_HIGHLIGHTER (self));
 
@@ -321,14 +328,14 @@ ide_clang_highlighter_do_update (IdeClangHighlighter *self)
       !(buffer = ide_highlight_engine_get_buffer (self->engine)) ||
       !(file = ide_buffer_get_file (buffer)) ||
       !(context = ide_object_get_context (IDE_OBJECT (self))) ||
-      !(client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT)))
+      !(client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT)))
     return G_SOURCE_REMOVE;
 
   task = ide_task_new (self, NULL, NULL, NULL);
   ide_task_set_source_tag (task, ide_clang_highlighter_get_index);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
 
   ide_build_system_get_build_flags_async (build_system,
                                           file,

@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <string.h>
 
 #include <libpeas/peas.h>
 #include "gb-color-picker-private.h"
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gb-color-picker-helper.h"
 

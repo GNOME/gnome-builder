@@ -1,6 +1,6 @@
 /* ide-source-search-context.h
  *
- * Copyright © 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
+#if !defined (IDE_SOURCEVIEW_INSIDE) && !defined (IDE_SOURCEVIEW_COMPILATION)
+# error "Only <libide-sourceview.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <gtksourceview/gtksource.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -31,13 +36,13 @@ G_BEGIN_DECLS
  * https://gitlab.gnome.org/GNOME/gtksourceview/issues/8
  */
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void     ide_source_search_context_backward_async   (GtkSourceSearchContext  *search,
                                                      const GtkTextIter       *iter,
                                                      GCancellable            *cancellable,
                                                      GAsyncReadyCallback      callback,
                                                      gpointer                 user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean ide_source_search_context_backward_finish2 (GtkSourceSearchContext  *search,
                                                      GAsyncResult            *result,
                                                      GtkTextIter             *match_begin,

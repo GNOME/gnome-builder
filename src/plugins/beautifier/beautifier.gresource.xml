@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/beautifier">
+    <file>beautifier.plugin</file>
+
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+
+    <file>config/global.ini</file>
+    <file>config/automake/config.ini</file>
+    <file>config/c/config.ini</file>
+    <file>config/c/gnu-indent.cfg</file>
+    <file>config/c/kr.cfg</file>
+    <file>config/c/linux-kernel.cfg</file>
+    <file>config/c-sharp/config.ini</file>
+    <file>config/c-sharp/mono.cfg</file>
+    <file>config/d/config.ini</file>
+    <file>config/d/d.cfg</file>
+    <file>config/html/config.ini</file>
+    <file>config/html/tidy-autoindent.cfg</file>
+    <file>config/html/tidy-indent.cfg</file>
+    <file>config/objc/config.ini</file>
+    <file>config/objc/objc.cfg</file>
+    <file>config/python/config.ini</file>
+    <file>config/xml/config.ini</file>
+
+    <file>self/global.ini</file>
+    <file>self/c/config.ini</file>
+    <file>self/c/gb-clang-format.cfg</file>
+    <file>self/c/gb-uncrustify.cfg</file>
+
+    <file>internal/align_makefile.py</file>
+  </gresource>
+</gresources>

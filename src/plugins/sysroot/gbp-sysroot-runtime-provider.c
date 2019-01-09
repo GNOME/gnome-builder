@@ -1,7 +1,7 @@
 /* gbp-sysroot-runtime-provider.c
  *
- * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
- * Copyright (C) 2018 Collabora Ltd.
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-sysroot-runtime-provider"
@@ -67,10 +69,13 @@ sysroot_runtime_provider_add_target (GbpSysrootRuntimeProvider *self,
                                      const gchar               *target)
 {
   g_autoptr(GbpSysrootRuntime) runtime = NULL;
-  IdeContext *context = NULL;
 
-  context = ide_object_get_context (IDE_OBJECT (self->runtime_manager));
-  runtime = gbp_sysroot_runtime_new (context, target);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSROOT_RUNTIME_PROVIDER (self));
+  g_assert (target != NULL);
+
+  runtime = gbp_sysroot_runtime_new (target);
+  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runtime));
 
   ide_runtime_manager_add (self->runtime_manager, IDE_RUNTIME (runtime));
   g_ptr_array_add (self->runtimes, g_steal_pointer (&runtime));
@@ -93,13 +98,11 @@ sysroot_runtime_provider_target_changed (GbpSysrootRuntimeProvider              
 static void
 gbp_sysroot_runtime_provider_class_init (GbpSysrootRuntimeProviderClass *klass)
 {
-  
 }
 
 static void
 gbp_sysroot_runtime_provider_init (GbpSysrootRuntimeProvider *self)
 {
-  
 }
 
 static void

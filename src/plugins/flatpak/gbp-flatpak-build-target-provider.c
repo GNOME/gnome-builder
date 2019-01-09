@@ -1,6 +1,6 @@
 /* gbp-flatpak-build-target-provider.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-build-target-provider"
@@ -48,7 +50,7 @@ gbp_flatpak_build_target_provider_get_targets_async (IdeBuildTargetProvider *pro
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_context_get_configuration_manager (context);
+  config_manager = ide_configuration_manager_from_context (context);
   config = ide_configuration_manager_get_current (config_manager);
 
   targets = g_ptr_array_new_with_free_func (g_object_unref);
@@ -61,7 +63,6 @@ gbp_flatpak_build_target_provider_get_targets_async (IdeBuildTargetProvider *pro
       command = gbp_flatpak_manifest_get_command (GBP_FLATPAK_MANIFEST (config));
 
       target = g_object_new (GBP_TYPE_FLATPAK_BUILD_TARGET,
-                             "context", context,
                              "command", command,
                              NULL);
 

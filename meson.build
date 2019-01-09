@@ -1,7 +1,7 @@
 project('gnome-builder', 'c',
           license: 'GPL3+',
           version: '3.31.1',
-    meson_version: '>= 0.47.2',
+    meson_version: '>= 0.48.0',
   default_options: [ 'c_std=gnu11',
                      'cpp_std=c++11',
                      'warning_level=2',
@@ -14,7 +14,7 @@ MAJOR_VERSION = version_split[0]
 MINOR_VERSION = version_split[1]
 MICRO_VERSION = version_split[2]
 
-libide_api_version = '1.0'
+libide_api_version = '@0@.@1@'.format(MAJOR_VERSION, MINOR_VERSION)
 
 pkgdocdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'gnome-builder')
 pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
@@ -66,18 +66,20 @@ status += [
   'Libdir ................ : @0@'.format(join_paths(get_option('prefix'), get_option('libdir'))),
   'Safe PATH ............. : @0@'.format(safe_path),
   '',
-  'Tracing ............... : @0@'.format(get_option('enable_tracing')),
-  'Profiling ............. : @0@'.format(get_option('enable_profiling')),
+  'Tracing ............... : @0@'.format(get_option('tracing')),
+  'Profiling ............. : @0@'.format(get_option('profiling')),
   'fusermount ............ : @0@'.format(get_option('fusermount_wrapper')),
-  'tcmalloc_minimal ...... : @0@'.format(get_option('with_tcmalloc')),
+  'tcmalloc_minimal ...... : @0@'.format(get_option('tcmalloc')),
   '',
-  'Help Docs ............. : @0@'.format(get_option('with_help')),
-  'API Docs .............. : @0@'.format(get_option('with_docs')),
+  'Help Docs ............. : @0@'.format(get_option('help')),
+  'API Docs .............. : @0@'.format(get_option('docs')),
   '', ''
 ]
 
 config_h = configuration_data()
 config_h.set_quoted('PACKAGE_NAME', 'gnome-builder')
+config_h.set_quoted('PACKAGE_ABI_S', libide_api_version)
+config_h.set('PACKAGE_ABI', libide_api_version)
 config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
 config_h.set_quoted('PACKAGE_STRING', 'gnome-builder-' + meson.project_version())
 config_h.set_quoted('PACKAGE_DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
@@ -99,8 +101,6 @@ config_h.set('DEVELOPMENT_BUILD', version_split[1].to_int().is_odd())
 # We should probably avoid using these
 config_h.set_quoted('SRCDIR', meson.source_root())
 config_h.set_quoted('BUILDDIR', meson.build_root())
-
-config_h.set10('ENABLE_WEBKIT', get_option('with_webkit'))
 
 add_global_arguments([
   '-DHAVE_CONFIG_H',
@@ -170,7 +170,7 @@ test_c_args = [
 if get_option('buildtype') != 'plain'
   test_c_args += '-fstack-protector-strong'
 endif
-if get_option('enable_profiling')
+if get_option('profiling')
   test_c_args += '-pg'
 endif
 
@@ -201,6 +201,8 @@ if get_option('default_library') != 'static'
   endif
 endif
 
+libide_args += hidden_visibility_args
+
 add_project_arguments(global_c_args, language: 'c')
 
 release_args = []
@@ -230,7 +232,7 @@ foreach link_arg: test_link_args
 endforeach
 add_project_link_arguments(global_link_args, language: 'c')
 
-if get_option('with_tcmalloc')
+if get_option('tcmalloc')
   tcmalloc_ldflags = [
     '-fno-builtin-malloc',
     '-fno-builtin-calloc',
@@ -262,40 +264,39 @@ libpangoft2_dep = dependency('pangoft2', version: '>= 1.38.0')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
 libvte_dep = dependency('vte-2.91', version: '>= 0.40.2')
+libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.22')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
+libgit_dep = dependency('libgit2-glib-1.0', version: '>= 0.25.0')
 
-if get_option('with_flatpak') or get_option('with_git')
-  libgit_dep = dependency('libgit2-glib-1.0', version: '>= 0.25.0')
+# Make sure libgit2/libgit2-glib were compiled with proper flags
+libgit_thread_safe_check = '''
+#include <libgit2-glib/ggit.h>
+int main(int argc, const char *argv[])
+{
+ggit_init ();
+return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
+}
+'''
+res = cc.run(libgit_thread_safe_check,
+dependencies: libgit_dep,
+)
+if res.returncode() != 0
+error('libgit2 was not compiled with -DTHREADSAFE:BOOL=ON')
+endif
 
-  libgit_thread_safe_check = '''
-    #include <libgit2-glib/ggit.h>
-    int main(int argc, const char *argv[])
-    {
-      ggit_init ();
-      return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
-    }
-  '''
-  res = cc.run(libgit_thread_safe_check,
-    dependencies: libgit_dep,
-  )
-  if res.returncode() != 0
-    error('libgit2 was not compiled with -DTHREADSAFE:BOOL=ON')
-  endif
-
-  libgit_ssh_check = '''
-    #include <libgit2-glib/ggit.h>
-    int main(int argc, const char *argv[])
-    {
-      ggit_init ();
-      return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
-    }
-  '''
-  res = cc.run(libgit_ssh_check,
-    dependencies: libgit_dep,
-  )
-  if res.returncode() != 0
-    error('libgit2 was not compiled with SSH support')
-  endif
+libgit_ssh_check = '''
+#include <libgit2-glib/ggit.h>
+int main(int argc, const char *argv[])
+{
+ggit_init ();
+return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
+}
+'''
+res = cc.run(libgit_ssh_check,
+dependencies: libgit_dep,
+)
+if res.returncode() != 0
+error('libgit2 was not compiled with SSH support')
 endif
 
 check_functions = [
@@ -314,6 +315,7 @@ configure_file(output: 'config.h', configuration: config_h)
 
 gnome = import('gnome')
 i18n = import('i18n')
+pkgconfig = import('pkgconfig')
 
 subdir('data')
 subdir('src')

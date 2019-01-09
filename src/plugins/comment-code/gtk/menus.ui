@@ -7,12 +7,12 @@
           <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
           <item>
             <attribute name="label" translatable="yes">Comment code</attribute>
-            <attribute name="action">view.comment-code</attribute>
+            <attribute name="action">comment-code.comment-code</attribute>
             <attribute name="target" type="s">'0'</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Uncomment code</attribute>
-            <attribute name="action">view.comment-code</attribute>
+            <attribute name="action">comment-code.comment-code</attribute>
             <attribute name="target" type="s">'1'</attribute>
           </item>
         </section>

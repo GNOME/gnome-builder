@@ -1,6 +1,6 @@
 /* gbp-flatpak-transfer.h
  *
- * Copyright 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -26,9 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakTransfer, gbp_flatpak_transfer, GBP, FLATPAK_TRANSFER, IdeTransfer)
 
-GbpFlatpakTransfer *gbp_flatpak_transfer_new (const gchar        *id,
-                                              const gchar        *arch,
-                                              const gchar        *branch,
-                                              gboolean            force_update);
+GbpFlatpakTransfer *gbp_flatpak_transfer_new (const gchar *id,
+                                              const gchar *arch,
+                                              const gchar *branch,
+                                              gboolean     force_update);
 
 G_END_DECLS

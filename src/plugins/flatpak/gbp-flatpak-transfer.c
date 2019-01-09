@@ -1,6 +1,6 @@
 /* gbp-flatpak-transfer.c
  *
- * Copyright 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-transfer"
@@ -123,20 +125,20 @@ task_completed (GbpFlatpakTransfer *self,
 static void
 proxy_notify (GbpFlatpakTransfer *self,
               GParamSpec         *pspec,
-              IdeProgress        *progress)
+              IdeNotification    *progress)
 {
   g_assert (GBP_IS_FLATPAK_TRANSFER (self));
   g_assert (pspec != NULL);
-  g_assert (IDE_IS_PROGRESS (progress));
+  g_assert (IDE_IS_NOTIFICATION (progress));
 
-  if (g_strcmp0 (pspec->name, "message") == 0)
+  if (g_strcmp0 (pspec->name, "body") == 0)
     {
-      g_autofree gchar *message = ide_progress_get_message (progress);
+      g_autofree gchar *message = ide_notification_dup_body (progress);
       ide_transfer_set_status (IDE_TRANSFER (self), message);
     }
 
-  if (g_strcmp0 (pspec->name, "fraction") == 0)
-    ide_transfer_set_progress (IDE_TRANSFER (self), ide_progress_get_fraction (progress));
+  if (g_strcmp0 (pspec->name, "progress") == 0)
+    ide_transfer_set_progress (IDE_TRANSFER (self), ide_notification_get_progress (progress));
 }
 
 static void
@@ -170,7 +172,7 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
   GbpFlatpakTransfer *self = (GbpFlatpakTransfer *)transfer;
   GbpFlatpakApplicationAddin *addin;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(IdeProgress) progress = NULL;
+  g_autoptr(IdeNotification) progress = NULL;
 
   IDE_ENTRY;
 
@@ -218,13 +220,13 @@ gbp_flatpak_transfer_execute_async (IdeTransfer         *transfer,
                                                        g_steal_pointer (&task));
 
   g_signal_connect_object (progress,
-                           "notify::fraction",
+                           "notify::progress",
                            G_CALLBACK (proxy_notify),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (progress,
-                           "notify::message",
+                           "notify::body",
                            G_CALLBACK (proxy_notify),
                            self,
                            G_CONNECT_SWAPPED);

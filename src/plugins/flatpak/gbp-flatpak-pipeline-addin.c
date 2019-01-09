@@ -1,6 +1,6 @@
 /* gbp-flatpak-pipeline-addin.c
  *
- * Copyright 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-pipeline-addin"
@@ -110,10 +112,15 @@ sniff_flatpak_builder_version (GbpFlatpakPipelineAddin *self)
 
 static void
 always_run_query_handler (IdeBuildStage    *stage,
-                          IdeBuildPipeline *pipeline)
+                          GPtrArray        *targets,
+                          IdeBuildPipeline *pipeline,
+                          GCancellable     *cancellable,
+                          gpointer          user_data)
 {
-  g_return_if_fail (IDE_IS_BUILD_STAGE (stage));
-  g_return_if_fail (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   ide_build_stage_set_completed (stage, FALSE);
 }
@@ -155,7 +162,7 @@ register_mkdirs_stage (GbpFlatpakPipelineAddin  *self,
   ide_build_stage_mkdirs_add_path (IDE_BUILD_STAGE_MKDIRS (mkdirs), repo_dir, TRUE, 0750, FALSE);
   ide_build_stage_mkdirs_add_path (IDE_BUILD_STAGE_MKDIRS (mkdirs), staging_dir, TRUE, 0750, TRUE);
 
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_PREPARE, PREPARE_MKDIRS, mkdirs);
+  stage_id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_PREPARE, PREPARE_MKDIRS, mkdirs);
 
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
@@ -190,6 +197,7 @@ reap_staging_dir_cb (GObject      *object,
 static void
 check_for_build_init_files (IdeBuildStage    *stage,
                             IdeBuildPipeline *pipeline,
+                            GPtrArray        *targets,
                             GCancellable     *cancellable,
                             const gchar      *staging_dir)
 {
@@ -199,6 +207,7 @@ check_for_build_init_files (IdeBuildStage    *stage,
   gboolean completed = FALSE;
   gboolean parent_exists;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_BUILD_STAGE (stage));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (staging_dir != NULL);
@@ -327,7 +336,6 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                         "name", _("Preparing build directory"),
-                        "context", context,
                         "launcher", launcher,
                         NULL);
 
@@ -354,7 +362,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
                          (GClosureNotify)g_free,
                          0);
 
-  stage_id = ide_build_pipeline_connect (pipeline,
+  stage_id = ide_build_pipeline_attach (pipeline,
                                          IDE_BUILD_PHASE_PREPARE,
                                          PREPARE_BUILD_INIT,
                                          stage);
@@ -378,10 +386,9 @@ register_downloads_stage (GbpFlatpakPipelineAddin  *self,
 
   stage = g_object_new (GBP_TYPE_FLATPAK_DOWNLOAD_STAGE,
                         "name", _("Downloading dependencies"),
-                        "context", context,
                         "state-dir", self->state_dir,
                         NULL);
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_DOWNLOADS, 0, stage);
+  stage_id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_DOWNLOADS, 0, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -458,11 +465,10 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                         "name", _("Building dependencies"),
-                        "context", context,
                         "launcher", launcher,
                         NULL);
 
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_DEPENDENCIES, 0, stage);
+  stage_id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_DEPENDENCIES, 0, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -510,11 +516,10 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                         "name", _("Finalizing flatpak build"),
-                        "context", context,
                         "launcher", launcher,
                         NULL);
 
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_FINISH, stage);
+  stage_id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_FINISH, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -556,7 +561,6 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                         "name", _("Exporting staging directory"),
-                        "context", context,
                         "launcher", launcher,
                         NULL);
 
@@ -565,7 +569,7 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
                     G_CALLBACK (always_run_query_handler),
                     NULL);
 
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_EXPORT, stage);
+  stage_id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_COMMIT, COMMIT_BUILD_EXPORT, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -642,7 +646,6 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
 
   stage = g_object_new (IDE_TYPE_BUILD_STAGE_LAUNCHER,
                         "name", _("Creating flatpak bundle"),
-                        "context", context,
                         "launcher", launcher,
                         NULL);
 
@@ -658,7 +661,7 @@ register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
                          (GClosureNotify)g_free,
                          0);
 
-  stage_id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_BUNDLE, stage);
+  stage_id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_EXPORT, EXPORT_BUILD_BUNDLE, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;

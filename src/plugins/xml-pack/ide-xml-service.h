@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
@@ -22,7 +24,7 @@
 #include <gtksourceview/gtksource.h>
 #include "ide-xml-position.h"
 #include "ide-xml-symbol-node.h"
-#include <ide.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
@@ -30,6 +32,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlService, ide_xml_service, IDE, XML_SERVICE, IdeObject)
 
+IdeXmlService      *ide_xml_service_from_context                       (IdeContext           *context);
 IdeDiagnostics     *ide_xml_service_get_cached_diagnostics             (IdeXmlService        *self,
                                                                         GFile                *gfile);
 IdeXmlSymbolNode   *ide_xml_service_get_cached_root_node               (IdeXmlService        *self,
@@ -38,13 +41,14 @@ IdeDiagnostics     *ide_xml_service_get_diagnostics_finish             (IdeXmlSe
                                                                         GAsyncResult         *result,
                                                                         GError              **error);
 void                ide_xml_service_get_diagnostics_async              (IdeXmlService        *self,
-                                                                        IdeFile              *ifile,
-                                                                        IdeBuffer            *buffer,
+                                                                        GFile                *file,
+                                                                        GBytes               *contents,
+                                                                        const gchar          *lang_id,
                                                                         GCancellable         *cancellable,
                                                                         GAsyncReadyCallback   callback,
                                                                         gpointer              user_data);
 void                ide_xml_service_get_position_from_cursor_async     (IdeXmlService        *self,
-                                                                        IdeFile              *ifile,
+                                                                        GFile                *file,
                                                                         IdeBuffer            *buffer,
                                                                         gint                  line,
                                                                         gint                  line_offset,
@@ -55,8 +59,8 @@ IdeXmlPosition     *ide_xml_service_get_position_from_cursor_finish    (IdeXmlSe
                                                                         GAsyncResult         *result,
                                                                         GError              **error);
 void                ide_xml_service_get_root_node_async                (IdeXmlService        *self,
-                                                                        IdeFile              *ifile,
-                                                                        IdeBuffer            *buffer,
+                                                                        GFile                *file,
+                                                                        GBytes               *contents,
                                                                         GCancellable         *cancellable,
                                                                         GAsyncReadyCallback   callback,
                                                                         gpointer              user_data);

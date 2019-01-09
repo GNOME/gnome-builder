@@ -1,0 +1,60 @@
+@import url("resource:///org/gnome/builder/keybindings/shared.css");
+
+@binding-set default-ide-source-view
+{
+  bind "Escape" { "clear-search" ()
+                  "clear-modifier" ()
+                  "clear-selection" ()
+                  "clear-count" ()
+                  "clear-snippets" ()
+                  "hide-completion" ()
+                  "remove-cursors" () };
+  bind "<ctrl><shift>e" { "add-cursor" (column) };
+  bind "<ctrl><shift>d" { "add-cursor" (match) };
+  bind "<alt>period" { "goto-definition" () };
+  bind "<ctrl>k" { "action" ("frame", "show-list", "") };
+  bind "<ctrl>d" { "delete-from-cursor" (paragraphs, 1) };
+  bind "<ctrl>j" { "join-lines" () };
+  bind "<ctrl>u" { "change-case" (upper) };
+  bind "<ctrl>l" { "change-case" (lower) };
+  bind "<ctrl>i" { "action" ("editor-page", "goto-line", "") };
+  bind "<ctrl>asciitilde" { "change-case" (toggle) };
+  bind "<ctrl><alt>d" { "duplicate-entire-line" ()};
+  bind "<ctrl><shift>z" { "clear-count" ()
+                          "clear-selection" ()
+                          "remove-cursors" ()
+                          "redo" () };
+  bind "<ctrl>z" { "clear-count" ()
+                   "clear-selection" ()
+                   "remove-cursors" ()
+                   "undo" () };
+
+  bind "<ctrl>minus" { "decrease-font-size" () };
+  bind "<ctrl>plus" { "increase-font-size" () };
+  bind "<ctrl>equal" { "increase-font-size" () };
+  bind "<ctrl>0" { "reset-font-size" () };
+
+  /* cycle "tabs" */
+  bind "<ctrl><alt>Page_Up" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl><alt>KP_Page_Up" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl><alt>Page_Down" { "action" ("frame", "next-page", "") };
+  bind "<ctrl><alt>KP_Page_Down" { "action" ("frame", "next-page", "") };
+
+  bind "F2" { "clear-selection" ()
+              "movement" (previous-word-end, 0, 1, 1)
+              "movement" (next-word-start, 0, 1, 0)
+              "movement" (next-word-end, 1, 0, 1)
+              "request-documentation" ()
+              "clear-count" ()
+              "clear-selection" () };
+  bind "F4" { "action" ("win", "find-other-file", "") };
+
+  bind "<ctrl><alt>i" { "reindent" () };
+
+  /* Add back emoji */
+  bind "<ctrl>semicolon" { "insert-emoji" () };
+}
+
+idesourceviewmode.default {
+  -gtk-key-bindings: default-ide-source-view;
+}

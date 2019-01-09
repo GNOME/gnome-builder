@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Authors: Corentin Noël <corentin.noel@collabora.com>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-meson-toolchain"
@@ -44,16 +46,9 @@ static GParamSpec *properties [N_PROPS];
 GbpMesonToolchain *
 gbp_meson_toolchain_new (IdeContext *context)
 {
-  g_autoptr(GbpMesonToolchain) toolchain = NULL;
-
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  toolchain = g_object_new (GBP_TYPE_MESON_TOOLCHAIN,
-                            "context", context,
-                            NULL);
-
-
-  return g_steal_pointer (&toolchain);
+  return g_object_new (GBP_TYPE_MESON_TOOLCHAIN, NULL);
 }
 
 gboolean
@@ -125,7 +120,7 @@ gbp_meson_toolchain_load (GbpMesonToolchain  *self,
  *
  * Returns: (transfer none): the path to the Meson cross-file.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 const gchar *
 gbp_meson_toolchain_get_file_path (GbpMesonToolchain  *self)
@@ -184,5 +179,4 @@ gbp_meson_toolchain_class_init (GbpMesonToolchainClass *klass)
 static void
 gbp_meson_toolchain_init (GbpMesonToolchain *self)
 {
-  
 }

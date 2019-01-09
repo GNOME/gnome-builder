@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/builder">
+    <file compressed="true">themes/Adwaita.css</file>
+    <file compressed="true">themes/Adwaita-dark.css</file>
+    <file compressed="true">themes/Adwaita-shared.css</file>
+
+    <file compressed="true" alias="themes/Arc.css">themes/Arc.css</file>
+    <file compressed="true" alias="themes/Arc-Dark.css">themes/Arc-Dark.css</file>
+    <file compressed="true" alias="themes/Arc-Darker.css">themes/Arc-Darker.css</file>
+    <file compressed="true" alias="themes/Arc-dark.css">themes/Arc-Dark.css</file>
+    <file compressed="true" alias="themes/Arc-Dark-dark.css">themes/Arc-Dark.css</file>
+    <file compressed="true" alias="themes/Arc-Darker-dark.css">themes/Arc-Dark.css</file>
+    <file compressed="true" alias="themes/Arc-shared.css">themes/Arc-shared.css</file>
+
+    <file compressed="true">themes/elementary.css</file>
+
+    <file compressed="true">themes/shared.css</file>
+    <file compressed="true">themes/shared/shared-buildui.css</file>
+    <file compressed="true">themes/shared/shared-completion.css</file>
+    <file compressed="true">themes/shared/shared-debugger.css</file>
+    <file compressed="true">themes/shared/shared-editor.css</file>
+    <file compressed="true">themes/shared/shared-greeter.css</file>
+    <file compressed="true">themes/shared/shared-hoverer.css</file>
+    <file compressed="true">themes/shared/shared-layout.css</file>
+    <file compressed="true">themes/shared/shared-omnibar.css</file>
+    <file compressed="true">themes/shared/shared-search.css</file>
+    <file compressed="true">themes/shared/shared-treeview.css</file>
+  </gresource>
+</gresources>

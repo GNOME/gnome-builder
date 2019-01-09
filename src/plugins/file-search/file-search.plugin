@@ -1,8 +1,8 @@
 [Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2015-2018 Christian Hergert
+Description=Search for files in the global search bar
+Embedded=_gbp_file_search_register_types
 Module=file-search
 Name=File Search
-Description=Search for files in the global search bar
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015-2017 Christian Hergert
-Builtin=true
-Embedded=gb_file_search_register_types

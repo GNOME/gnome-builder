@@ -1,6 +1,6 @@
 /* gstyle-color-panel.c
  *
- * Copyright © 2016 sebastien lafargue <slafargue@gnome.org>
+ * Copyright 2016 sebastien lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gstyle-color-panel"
 
 #include <glib/gi18n.h>
+
+#include "gstyle-resources.h"
 
 #include "gstyle-color-panel-private.h"
 #include "gstyle-color-panel-actions.h"
@@ -1375,6 +1379,8 @@ gstyle_color_panel_class_init (GstyleColorPanelClass *klass)
   object_class->dispose = gstyle_color_panel_dispose;
   object_class->get_property = gstyle_color_panel_get_property;
   object_class->set_property = gstyle_color_panel_set_property;
+
+  g_resources_register (gstyle_get_resource ());
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/libgstyle/ui/gstyle-color-panel.ui");

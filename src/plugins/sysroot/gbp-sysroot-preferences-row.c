@@ -1,7 +1,7 @@
 /* gbp-sysroot-preferences-row.c
  *
- * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
- * Copyright (C) 2018 Collabora Ltd.
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-sysroot-preferences-row"
@@ -303,7 +305,7 @@ gbp_sysroot_preferences_row_class_init (GbpSysrootPreferencesRowClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysroot-plugin/gbp-sysroot-preferences-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/sysroot/gbp-sysroot-preferences-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, display_name);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, name_entry);

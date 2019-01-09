@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="ide-greeter-workspace-menu">
+    <section id="ide-greeter-workspace-menu-projects">
+      <item>
+        <attribute name="id">ide-greeter-workspace-menu-new</attribute>
+        <attribute name="label" translatable="yes">_New Project</attribute>
+        <attribute name="action">win.surface</attribute>
+        <attribute name="target" type="s">'create-project'</attribute>
+        <attribute name="before">ide-greeter-workspace-menu-open</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-projects-section">
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-new</attribute>
+        <attribute name="label" translatable="yes">_New Project</attribute>
+        <attribute name="action">app.present-greeter-with-surface</attribute>
+        <attribute name="target" type="s">'create-project'</attribute>
+        <attribute name="before">ide-primary-workspace-menu-open</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-editor-workspace-menu">
+    <section id="ide-editor-workspace-menu-projects-section">
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-new</attribute>
+        <attribute name="label" translatable="yes">_New Project</attribute>
+        <attribute name="action">app.present-greeter-with-surface</attribute>
+        <attribute name="target" type="s">'create-project'</attribute>
+        <attribute name="before">ide-editor-workspace-menu-open</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

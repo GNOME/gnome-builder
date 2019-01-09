@@ -1,11 +1,12 @@
 [Plugin]
-Module=ctags-plugin
-Name=Ctags Auto-Completion
-Description=Provides integration with Ctags for auto-completion and symbol resolving
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Embedded=ide_ctags_register_types
+Copyright=Copyright © 2015-2018 Christian Hergert
+Depends=editor;
+Description=Provides integration with Ctags for auto-completion and symbol resolving
+Embedded=_ide_ctags_register_types
+Module=ctags
+Name=Ctags Auto-Completion
 X-Completion-Provider-Languages=c,cpp,chdr,cpphdr,python,python3,js,ruby
-X-Highlighter-Languages=c,cpp,chdr,python,python3,js,ruby
-X-Symbol-Resolver-Languages=c,cpp,chdr,python,python3,js,css,html,ruby
+X-Highlighter-Languages=c,cpp,chdr,cpphdr,python,python3,js,ruby
+X-Symbol-Resolver-Languages=c,cpp,chdr,cpphdr,python,python3,js,css,html,ruby

@@ -1,6 +1,6 @@
 /* ide-editor-sidebar.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-editor-sidebar"
@@ -21,12 +23,12 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-gui.h>
 
-#include "editor/ide-editor-private.h"
-#include "editor/ide-editor-sidebar.h"
-#include "layout/ide-layout-private.h"
-#include "layout/ide-layout-stack.h"
-#include "layout/ide-layout-view.h"
+#include "ide-gui-private.h"
+
+#include "ide-editor-private.h"
+#include "ide-editor-sidebar.h"
 
 /**
  * SECTION:ide-editor-sidebar
@@ -34,15 +36,17 @@
  * @short_description: The left sidebar for the editor
  *
  * The #IdeEditorSidebar is the widget displayed on the left of the
- * #IdeEditorPerspective.  It contains an open document list, and then the
+ * #IdeEditorSurface.  It contains an open document list, and then the
  * various sections that have been added to the sidebar.
  *
  * Use ide_editor_sidebar_add_section() to add a section to the sidebar.
+ *
+ * Since: 3.32
  */
 
 struct _IdeEditorSidebar
 {
-  IdeLayoutPane      parent_instance;
+  IdePanel           parent_instance;
 
   GSettings         *settings;
   GListModel        *open_pages;
@@ -57,7 +61,7 @@ struct _IdeEditorSidebar
   GtkStack          *stack;
 };
 
-G_DEFINE_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE_TYPE_LAYOUT_PANE)
+G_DEFINE_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE_TYPE_PANEL)
 
 static void
 ide_editor_sidebar_update_title (IdeEditorSidebar *self)
@@ -114,20 +118,20 @@ ide_editor_sidebar_open_pages_row_activated (IdeEditorSidebar *self,
                                              GtkListBoxRow    *row,
                                              GtkListBox       *list_box)
 {
-  IdeLayoutView *view;
+  IdePage *view;
   GtkWidget *stack;
 
   g_assert (IDE_IS_EDITOR_SIDEBAR (self));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
-  view = g_object_get_data (G_OBJECT (row), "IDE_LAYOUT_VIEW");
-  g_assert (IDE_IS_LAYOUT_VIEW (view));
+  view = g_object_get_data (G_OBJECT (row), "IDE_PAGE");
+  g_assert (IDE_IS_PAGE (view));
 
-  stack = gtk_widget_get_ancestor (GTK_WIDGET (view), IDE_TYPE_LAYOUT_STACK);
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  stack = gtk_widget_get_ancestor (GTK_WIDGET (view), IDE_TYPE_FRAME);
+  g_assert (IDE_IS_FRAME (stack));
 
-  ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack), view);
+  ide_frame_set_visible_child (IDE_FRAME (stack), view);
 
   gtk_widget_grab_focus (GTK_WIDGET (view));
 }
@@ -190,7 +194,7 @@ ide_editor_sidebar_class_init (IdeEditorSidebarClass *klass)
 
   widget_class->destroy = ide_editor_sidebar_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-sidebar.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ui/ide-editor-sidebar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, open_pages_list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSidebar, open_pages_section);
@@ -234,7 +238,7 @@ ide_editor_sidebar_init (IdeEditorSidebar *self)
  *
  * Returns: (transfer full): A new #IdeEditorSidebar
  *
- * Since: 3.26
+ * Since: 3.32
  */
 GtkWidget *
 ide_editor_sidebar_new (void)
@@ -300,7 +304,7 @@ find_position (IdeEditorSidebar *self,
  *
  * To remove your section, call gtk_widget_destroy() on @section.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_sidebar_add_section (IdeEditorSidebar *self,
@@ -362,7 +366,7 @@ ide_editor_sidebar_add_section (IdeEditorSidebar *self,
  *
  * Returns: (nullable): The id of the current section if it registered one.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 const gchar *
 ide_editor_sidebar_get_section_id (IdeEditorSidebar *self)
@@ -379,7 +383,7 @@ ide_editor_sidebar_get_section_id (IdeEditorSidebar *self)
  *
  * Changes the current section to @section_id.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_editor_sidebar_set_section_id (IdeEditorSidebar *self,
@@ -393,37 +397,37 @@ ide_editor_sidebar_set_section_id (IdeEditorSidebar *self,
 
 static void
 ide_editor_sidebar_close_view (GtkButton     *button,
-                               IdeLayoutView *view)
+                               IdePage *view)
 {
   GtkWidget *stack;
 
   g_assert (GTK_IS_BUTTON (button));
-  g_assert (IDE_IS_LAYOUT_VIEW (view));
+  g_assert (IDE_IS_PAGE (view));
 
-  stack = gtk_widget_get_ancestor (GTK_WIDGET (view), IDE_TYPE_LAYOUT_STACK);
+  stack = gtk_widget_get_ancestor (GTK_WIDGET (view), IDE_TYPE_FRAME);
 
   if (stack != NULL)
-    _ide_layout_stack_request_close (IDE_LAYOUT_STACK (stack), view);
+    _ide_frame_request_close (IDE_FRAME (stack), view);
 }
 
 static GtkWidget *
 create_open_page_row (gpointer item,
                       gpointer user_data)
 {
-  IdeLayoutView *view = item;
+  IdePage *view = item;
   GtkListBoxRow *row;
   GtkButton *button;
   GtkImage *image;
   GtkLabel *label;
   GtkBox *box;
 
-  g_assert (IDE_IS_LAYOUT_VIEW (view));
+  g_assert (IDE_IS_PAGE (view));
   g_assert (IDE_IS_EDITOR_SIDEBAR (user_data));
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW,
                       "visible", TRUE,
                       NULL);
-  g_object_set_data (G_OBJECT (row), "IDE_LAYOUT_VIEW", view);
+  g_object_set_data (G_OBJECT (row), "IDE_PAGE", view);
 
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -476,8 +480,10 @@ create_open_page_row (gpointer item,
  * @open_pages: a #GListModel describing the open pages
  *
  * This private function is used to set the GListModel to use for the list
- * of open pages in the sidebar. It should contain a list of IdeLayoutView
+ * of open pages in the sidebar. It should contain a list of IdePage
  * which we will use to keep the rows up to date.
+ *
+ * Since: 3.32
  */
 void
 _ide_editor_sidebar_set_open_pages (IdeEditorSidebar *self,
@@ -486,7 +492,7 @@ _ide_editor_sidebar_set_open_pages (IdeEditorSidebar *self,
   g_return_if_fail (IDE_IS_EDITOR_SIDEBAR (self));
   g_return_if_fail (!open_pages || G_IS_LIST_MODEL (open_pages));
   g_return_if_fail (!open_pages ||
-                    g_list_model_get_item_type (open_pages) == IDE_TYPE_LAYOUT_VIEW);
+                    g_list_model_get_item_type (open_pages) == IDE_TYPE_PAGE);
 
   g_set_object (&self->open_pages, open_pages);
 

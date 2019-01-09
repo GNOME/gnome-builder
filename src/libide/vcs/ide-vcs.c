@@ -1,6 +1,6 @@
 /* ide-vcs.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-vcs"
 
 #include "config.h"
 
+#include <libide-io.h>
 #include <string.h>
 
-#include "ide-context.h"
-
-#include "buffers/ide-buffer.h"
-#include "buffers/ide-buffer-change-monitor.h"
-#include "vcs/ide-vcs.h"
+#include "ide-directory-vcs.h"
+#include "ide-vcs.h"
+#include "ide-vcs-enums.h"
 
 G_DEFINE_INTERFACE (IdeVcs, ide_vcs, IDE_TYPE_OBJECT)
 
@@ -36,19 +37,6 @@ enum {
 };
 
 static guint signals [N_SIGNALS];
-static GPtrArray *ignored;
-
-G_LOCK_DEFINE_STATIC (ignored);
-
-void
-ide_vcs_register_ignored (const gchar *pattern)
-{
-  G_LOCK (ignored);
-  if (ignored == NULL)
-    ignored = g_ptr_array_new ();
-  g_ptr_array_add (ignored, g_pattern_spec_new (pattern));
-  G_UNLOCK (ignored);
-}
 
 static void
 ide_vcs_real_list_status_async (IdeVcs              *self,
@@ -91,7 +79,7 @@ ide_vcs_default_init (IdeVcsInterface *iface)
                                                             (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
 
   g_object_interface_install_property (iface,
-                                       g_param_spec_object ("working-directory",
+                                       g_param_spec_object ("workdir",
                                                             "Working Directory",
                                                             "The working directory for the VCS",
                                                             G_TYPE_FILE,
@@ -103,6 +91,8 @@ ide_vcs_default_init (IdeVcsInterface *iface)
    * The "changed" signal should be emitted when the VCS has detected a change
    * to the underlying VCS storage. This can be used by consumers to reload
    * their respective data structures.
+   *
+   * Since: 3.32
    */
   signals [CHANGED] =
     g_signal_new ("changed",
@@ -115,14 +105,6 @@ ide_vcs_default_init (IdeVcsInterface *iface)
   g_signal_set_va_marshaller (signals [CHANGED],
                               G_TYPE_FROM_INTERFACE (iface),
                               g_cclosure_marshal_VOID__VOIDv);
-
-
-  /* Ignore Gio temporary files */
-  ide_vcs_register_ignored (".goutputstream-*");
-
-  /* Ignore minified JS */
-  ide_vcs_register_ignored ("*.min.js");
-  ide_vcs_register_ignored ("*.min.js.*");
 }
 
 /**
@@ -145,61 +127,29 @@ ide_vcs_default_init (IdeVcsInterface *iface)
  *   #IdeVcs implementations are required to ensure this function
  *   is thread-safe.
  *
- * Since: 3.18
+ * Since: 3.32
  */
 gboolean
 ide_vcs_is_ignored (IdeVcs  *self,
                     GFile   *file,
                     GError **error)
 {
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *reversed = NULL;
-  gboolean ret = FALSE;
-  gsize len;
-
   g_return_val_if_fail (!self || IDE_IS_VCS (self), FALSE);
   g_return_val_if_fail (!file || G_IS_FILE (file), FALSE);
 
   if (file == NULL)
     return TRUE;
 
-  name = g_file_get_basename (file);
-  if (name == NULL || *name == 0)
+  if (ide_g_file_is_ignored (file))
     return TRUE;
-
-  len = strlen (name);
-
-  /* Ignore builtin backup files by GIO */
-  if (name[len - 1] == '~')
-    return TRUE;
-
-  reversed = g_utf8_strreverse (name, len);
-
-  G_LOCK (ignored);
-
-  if G_LIKELY (ignored != NULL)
-    {
-      for (guint i = 0; i < ignored->len; i++)
-        {
-          GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
-
-          if (g_pattern_match (pattern_spec, len, name, reversed))
-            {
-              ret = TRUE;
-              break;
-            }
-        }
-    }
-
-  G_UNLOCK (ignored);
 
   if (self != NULL)
     {
-      if (!ret && IDE_VCS_GET_IFACE (self)->is_ignored)
-        ret = IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
+      if (IDE_VCS_GET_IFACE (self)->is_ignored)
+        return IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
     }
 
-  return ret;
+  return FALSE;
 }
 
 /**
@@ -224,16 +174,13 @@ ide_vcs_is_ignored (IdeVcs  *self,
  *   #IdeVcs implementations are required to ensure this function
  *   is thread-safe.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_vcs_path_is_ignored (IdeVcs       *self,
                          const gchar  *path,
                          GError      **error)
 {
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *reversed = NULL;
-  gsize len;
   gboolean ret = FALSE;
 
   g_return_val_if_fail (!self || IDE_IS_VCS (self), FALSE);
@@ -241,35 +188,8 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
   if (path == NULL)
     return TRUE;
 
-  name = g_path_get_basename (path);
-  if (name == NULL || *name == 0)
+  if (ide_path_is_ignored (path))
     return TRUE;
-
-  len = strlen (name);
-
-  /* Ignore builtin backup files by GIO */
-  if (name[len - 1] == '~')
-    return TRUE;
-
-  reversed = g_utf8_strreverse (name, len);
-
-  G_LOCK (ignored);
-
-  if G_LIKELY (ignored != NULL)
-    {
-      for (guint i = 0; i < ignored->len; i++)
-        {
-          GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
-
-          if (g_pattern_match (pattern_spec, len, name, reversed))
-            {
-              ret = TRUE;
-              break;
-            }
-        }
-    }
-
-  G_UNLOCK (ignored);
 
   if (self != NULL)
     {
@@ -280,7 +200,7 @@ ide_vcs_path_is_ignored (IdeVcs       *self,
           if (g_path_is_absolute (path))
             file = g_file_new_for_path (path);
           else
-            file = g_file_get_child (ide_vcs_get_working_directory (self), path);
+            file = g_file_get_child (ide_vcs_get_workdir (self), path);
 
           ret = IDE_VCS_GET_IFACE (self)->is_ignored (self, file, error);
         }
@@ -303,7 +223,7 @@ ide_vcs_get_priority (IdeVcs *self)
 }
 
 /**
- * ide_vcs_get_working_directory:
+ * ide_vcs_get_workdir:
  * @self: An #IdeVcs.
  *
  * Retrieves the working directory for the context. This is the root of where
@@ -313,7 +233,7 @@ ide_vcs_get_priority (IdeVcs *self)
  *
  * Returns: (transfer none): a #GFile.
  *
- * Since: 3.18
+ * Since: 3.32
  *
  * Thread safety: this function is safe to call from threads. The working
  *   directory should only be set at creating and therefore safe to call
@@ -321,88 +241,14 @@ ide_vcs_get_priority (IdeVcs *self)
  *   implementing #IdeVcs are required to ensure this invariant holds true.
  */
 GFile *
-ide_vcs_get_working_directory (IdeVcs *self)
+ide_vcs_get_workdir (IdeVcs *self)
 {
   g_return_val_if_fail (IDE_IS_VCS (self), NULL);
 
-  if (IDE_VCS_GET_IFACE (self)->get_working_directory)
-    return IDE_VCS_GET_IFACE (self)->get_working_directory (self);
+  if (IDE_VCS_GET_IFACE (self)->get_workdir)
+    return IDE_VCS_GET_IFACE (self)->get_workdir (self);
 
   return NULL;
-}
-
-/**
- * ide_vcs_get_buffer_change_monitor:
- *
- * Gets an #IdeBufferChangeMonitor for the buffer provided. If the #IdeVcs implementation does not
- * support change monitoring, or cannot for the current file, then %NULL is returned.
- *
- * Returns: (transfer full) (nullable): An #IdeBufferChangeMonitor or %NULL.
- */
-IdeBufferChangeMonitor *
-ide_vcs_get_buffer_change_monitor (IdeVcs    *self,
-                                   IdeBuffer *buffer)
-{
-  IdeBufferChangeMonitor *ret = NULL;
-
-  g_return_val_if_fail (IDE_IS_VCS (self), NULL);
-  g_return_val_if_fail (IDE_IS_BUFFER (buffer), NULL);
-
-  if (IDE_VCS_GET_IFACE (self)->get_buffer_change_monitor)
-    ret = IDE_VCS_GET_IFACE (self)->get_buffer_change_monitor (self, buffer);
-
-  g_return_val_if_fail (!ret || IDE_IS_BUFFER_CHANGE_MONITOR (ret), NULL);
-
-  return ret;
-}
-
-static gint
-sort_by_priority (gconstpointer a,
-                  gconstpointer b,
-                  gpointer      user_data)
-{
-  IdeVcs *vcs_a = *(IdeVcs **)a;
-  IdeVcs *vcs_b = *(IdeVcs **)b;
-
-  return ide_vcs_get_priority (vcs_a) - ide_vcs_get_priority (vcs_b);
-}
-
-void
-ide_vcs_new_async (IdeContext           *context,
-                   int                   io_priority,
-                   GCancellable         *cancellable,
-                   GAsyncReadyCallback   callback,
-                   gpointer              user_data)
-{
-  ide_object_new_for_extension_async (IDE_TYPE_VCS,
-                                      sort_by_priority,
-                                      NULL,
-                                      io_priority,
-                                      cancellable,
-                                      callback,
-                                      user_data,
-                                      "context", context,
-                                      NULL);
-}
-
-/**
- * ide_vcs_new_finish:
- *
- * Completes a call to ide_vcs_new_async().
- *
- * Returns: (transfer full): An #IdeVcs.
- */
-IdeVcs *
-ide_vcs_new_finish (GAsyncResult  *result,
-                    GError       **error)
-{
-  IdeObject *ret;
-
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-
-  ret = ide_object_new_finish (result, error);
-
-  return IDE_VCS (ret);
 }
 
 void
@@ -420,6 +266,8 @@ ide_vcs_emit_changed (IdeVcs *self)
  * support access to configuration, then %NULL is returned.
  *
  * Returns: (transfer full) (nullable): An #IdeVcsConfig or %NULL.
+ *
+ * Since: 3.32
  */
 IdeVcsConfig *
 ide_vcs_get_config (IdeVcs *self)
@@ -442,16 +290,25 @@ ide_vcs_get_config (IdeVcs *self)
  * Retrieves the name of the branch in the current working directory.
  *
  * Returns: (transfer full): A string containing the branch name.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_vcs_get_branch_name (IdeVcs *self)
 {
+  gchar *ret = NULL;
+
   g_return_val_if_fail (IDE_IS_VCS (self), NULL);
 
+  ide_object_lock (IDE_OBJECT (self));
   if (IDE_VCS_GET_IFACE (self)->get_branch_name)
-    return IDE_VCS_GET_IFACE (self)->get_branch_name (self);
+    ret = IDE_VCS_GET_IFACE (self)->get_branch_name (self);
+  ide_object_unlock (IDE_OBJECT (self));
 
-  return g_strdup ("primary");
+  if (ret == NULL)
+    ret = g_strdup ("primary");
+
+  return ret;
 }
 
 /**
@@ -474,7 +331,7 @@ ide_vcs_get_branch_name (IdeVcs *self)
  * The function specified by @callback should call ide_vcs_list_status_finish()
  * to retrieve the result of this asynchronous operation.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_vcs_list_status_async (IdeVcs              *self,
@@ -490,7 +347,7 @@ ide_vcs_list_status_async (IdeVcs              *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (directory_or_file == NULL)
-    directory_or_file = ide_vcs_get_working_directory (self);
+    directory_or_file = ide_vcs_get_workdir (self);
 
   IDE_VCS_GET_IFACE (self)->list_status_async (self,
                                                directory_or_file,
@@ -516,7 +373,7 @@ ide_vcs_list_status_async (IdeVcs              *self,
  *   A #GListModel containing an #IdeVcsFileInfo for each of the files scanned
  *   by the #IdeVcs. Upon failure, %NULL is returned and @error is set.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GListModel *
 ide_vcs_list_status_finish (IdeVcs        *self,
@@ -527,4 +384,59 @@ ide_vcs_list_status_finish (IdeVcs        *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
   return IDE_VCS_GET_IFACE (self)->list_status_finish (self, result, error);
+}
+
+/**
+ * ide_vcs_from_context:
+ * @context: an #IdeContext
+ *
+ * Gets the #IdeVcs for the context.
+ *
+ * Returns: (transfer none): an #IdeVcs
+ *
+ * Since: 3.32
+ */
+IdeVcs *
+ide_vcs_from_context (IdeContext *context)
+{
+  IdeVcs *ret;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  /* Release full reference, into borrowed ref */
+  ret = ide_vcs_ref_from_context (context);
+  g_object_unref (ret);
+
+  return ret;
+}
+
+/**
+ * ide_vcs_ref_from_context:
+ * @context: an #IdeContext
+ *
+ * A thread-safe version of ide_vcs_from_context().
+ *
+ * Returns: (transfer full): an #IdeVcs
+ *
+ * Since: 3.32
+ */
+IdeVcs *
+ide_vcs_ref_from_context (IdeContext *context)
+{
+  IdeVcs *ret;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  ide_object_lock (IDE_OBJECT (context));
+  ret = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_VCS);
+  if (ret == NULL)
+    {
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
+      ret = (IdeVcs *)ide_directory_vcs_new (workdir);
+      ide_object_prepend (IDE_OBJECT (context), IDE_OBJECT (ret));
+    }
+  ide_object_unlock (IDE_OBJECT (context));
+
+  return g_steal_pointer (&ret);
 }

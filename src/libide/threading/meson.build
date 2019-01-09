@@ -1,20 +1,78 @@
-threading_headers = [
-  'ide-thread-pool.h',
+libide_threading_header_subdir = join_paths(libide_header_subdir, 'threading')
+libide_include_directories += include_directories('.')
+
+#
+# Public API Headers
+#
+
+libide_threading_public_headers = [
+  'ide-environment.h',
+  'ide-environment-variable.h',
+  'ide-subprocess.h',
+  'ide-subprocess-launcher.h',
+  'ide-subprocess-supervisor.h',
   'ide-task.h',
+  'ide-thread-pool.h',
+  'libide-threading.h',
 ]
 
-threading_sources = [
-  'ide-thread-pool.c',
+install_headers(libide_threading_public_headers, subdir: libide_threading_header_subdir)
+
+#
+# Sources
+#
+
+libide_threading_private_headers = [
+  'ide-thread-private.h',
+  'ide-flatpak-subprocess-private.h',
+  'ide-gtask-private.h',
+  'ide-simple-subprocess-private.h',
+]
+
+libide_threading_private_sources = [
+  'ide-flatpak-subprocess.c',
+  'ide-simple-subprocess.c',
+]
+
+libide_threading_public_sources = [
+  'ide-environment-variable.c',
+  'ide-environment.c',
+  'ide-gtask.c',
+  'ide-subprocess-launcher.c',
+  'ide-subprocess-supervisor.c',
+  'ide-subprocess.c',
   'ide-task.c',
+  'ide-thread-pool.c',
 ]
 
-threading_enums = [
-  'ide-thread-pool.h',
-  'ide-task.h',
+libide_threading_sources = libide_threading_public_sources + libide_threading_private_sources
+
+#
+# Library Definitions
+#
+
+libide_threading_deps = [
+  libgio_dep,
+  libgiounix_dep,
+
+  libide_core_dep,
 ]
 
-libide_public_headers += files(threading_headers)
-libide_public_sources += files(threading_sources)
-libide_enum_headers += files(threading_enums)
+libide_threading = static_library('ide-threading-' + libide_api_version, libide_threading_sources,
+   dependencies: libide_threading_deps,
+         c_args: libide_args + release_args + ['-DIDE_THREADING_COMPILATION'],
+)
 
-install_headers(threading_headers, subdir: join_paths(libide_header_subdir, 'threading'))
+libide_threading_dep = declare_dependency(
+              sources: libide_threading_private_headers,
+         dependencies: libide_threading_deps,
+           link_whole: libide_threading,
+  include_directories: include_directories('.'),
+)
+
+gnome_builder_public_sources += files(libide_threading_public_sources)
+gnome_builder_public_headers += files(libide_threading_public_headers)
+gnome_builder_private_sources += files(libide_threading_private_sources)
+gnome_builder_private_headers += files(libide_threading_private_headers)
+gnome_builder_include_subdirs += libide_threading_header_subdir
+gnome_builder_gir_extra_args += ['--c-include=libide-threading.h', '-DIDE_THREADING_COMPILATION']

@@ -1,6 +1,6 @@
 /* gbp-flatpak-dependency-updater.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-dependency-updater"
@@ -81,7 +83,7 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  manager = ide_context_get_build_manager (context);
+  manager = ide_build_manager_from_context (context);
   g_assert (IDE_IS_BUILD_MANAGER (manager));
 
   pipeline = ide_build_manager_get_pipeline (manager);
@@ -116,6 +118,7 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
    */
   ide_build_manager_rebuild_async (manager,
                                    IDE_BUILD_PHASE_CONFIGURE,
+                                   NULL,
                                    NULL,
                                    gbp_flatpak_dependency_updater_update_cb,
                                    g_steal_pointer (&task));

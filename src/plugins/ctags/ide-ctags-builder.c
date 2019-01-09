@@ -1,6 +1,6 @@
 /* ide-ctags-builder.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,9 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-ctags-builder"
+
+#include <libide-vcs.h>
 
 #include "ide-ctags-builder.h"
 
@@ -77,13 +81,9 @@ ide_ctags_builder_init (IdeCtagsBuilder *self)
 }
 
 IdeTagsBuilder *
-ide_ctags_builder_new (IdeContext *context)
+ide_ctags_builder_new (void)
 {
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  return g_object_new (IDE_TYPE_CTAGS_BUILDER,
-                       "context", context,
-                       NULL);
+  return g_object_new (IDE_TYPE_CTAGS_BUILDER, NULL);
 }
 
 static gboolean
@@ -106,9 +106,9 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
   g_autofree gchar *options_path = NULL;
   g_autofree gchar *tags_path = NULL;
   g_autoptr(GString) filenames = NULL;
+  g_autoptr(IdeVcs) vcs = NULL;
   GOutputStream *stdin_stream;
   IdeContext *context;
-  IdeVcs *vcs;
   gpointer infoptr;
 
   g_assert (IDE_IS_CTAGS_BUILDER (self));
@@ -116,7 +116,7 @@ ide_ctags_builder_build (IdeCtagsBuilder *self,
   g_assert (G_IS_FILE (destination));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
+  vcs = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_VCS);
 
   dest_dir = g_file_get_path (destination);
   if (0 != g_mkdir_with_parents (dest_dir, 0750))
@@ -303,14 +303,27 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
   g_autoptr(GSettings) settings = NULL;
   g_autofree gchar *destination_path = NULL;
   g_autofree gchar *relative_path = NULL;
+  g_autoptr(GFile) workdir = NULL;
   BuildTaskData *task_data;
   IdeContext *context;
-  GFile *workdir;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_CTAGS_BUILDER (self));
   g_assert (G_IS_FILE (directory_or_file));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_ctags_builder_build_async);
+  ide_task_set_priority (task, G_PRIORITY_LOW + 200);
+
+  if (ide_object_in_destruction (IDE_OBJECT (self)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_CANCELLED,
+                                 "The operation was cancelled");
+      IDE_EXIT;
+    }
 
   settings = g_settings_new ("org.gnome.builder.code-insight");
 
@@ -327,14 +340,11 @@ ide_ctags_builder_build_async (IdeTagsBuilder      *builder,
    * putting things in the source tree.
    */
   context = ide_object_get_context (IDE_OBJECT (self));
-  workdir = ide_vcs_get_working_directory (ide_context_get_vcs (context));
+  workdir = ide_context_ref_workdir (context);
   relative_path = g_file_get_relative_path (workdir, directory_or_file);
   destination_path = ide_context_cache_filename (context, "ctags", relative_path, NULL);
   task_data->destination = g_file_new_for_path (destination_path);
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_ctags_builder_build_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW + 200);
   ide_task_set_task_data (task, task_data, build_task_data_free);
   ide_task_set_kind (task, IDE_TASK_KIND_INDEXER);
   ide_task_run_in_thread (task, ide_ctags_builder_build_worker);

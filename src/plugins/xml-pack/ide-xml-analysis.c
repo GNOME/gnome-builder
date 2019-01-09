@@ -14,7 +14,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 #include "ide-xml-analysis.h"
 
 G_DEFINE_BOXED_TYPE (IdeXmlAnalysis, ide_xml_analysis, ide_xml_analysis_ref, ide_xml_analysis_unref)
@@ -79,11 +82,7 @@ ide_xml_analysis_set_diagnostics (IdeXmlAnalysis *self,
   g_return_if_fail (self != NULL);
   g_return_if_fail (diagnostics != NULL);
 
-  if (diagnostics != self->diagnostics)
-    {
-      g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
-      self->diagnostics = ide_diagnostics_ref (diagnostics);
-    }
+  g_set_object (&self->diagnostics, diagnostics);
 }
 
 void
@@ -138,8 +137,7 @@ ide_xml_analysis_free (IdeXmlAnalysis *self)
   g_assert_cmpint (self->ref_count, ==, 0);
 
   g_clear_object (&self->root_node);
-  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
-
+  g_clear_object (&self->diagnostics);
   g_slice_free (IdeXmlAnalysis, self);
 }
 

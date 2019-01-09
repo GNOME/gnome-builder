@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeWorkspace" parent="DzlApplicationWindow">
+    <child>
+      <object class="GtkEventBox" id="event_box">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkOverlay" id="overlay">
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkStack" id="surfaces">
+                <property name="homogeneous">false</property>
+                <property name="expand">true</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
+

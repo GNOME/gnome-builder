@@ -1,6 +1,6 @@
 /* ide-extension-util.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,16 +14,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-extension-util"
 
 #include "config.h"
 
+#include <libide-core.h>
 #include <gobject/gvaluecollector.h>
 #include <stdlib.h>
 
-#include "plugins/ide-extension-util.h"
+#include "ide-extension-util-private.h"
 
 gboolean
 ide_extension_util_can_use_plugin (PeasEngine     *engine,
@@ -37,7 +40,8 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
   g_autoptr(GSettings) settings = NULL;
 
   g_return_val_if_fail (plugin_info != NULL, FALSE);
-  g_return_val_if_fail (g_type_is_a (interface_type, G_TYPE_INTERFACE), FALSE);
+  g_return_val_if_fail (g_type_is_a (interface_type, G_TYPE_INTERFACE) ||
+                        g_type_is_a (interface_type, G_TYPE_OBJECT), FALSE);
   g_return_val_if_fail (priority != NULL, FALSE);
 
   *priority = 0;
@@ -47,7 +51,18 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
    * information to do so.
    */
   if ((key != NULL) && (value == NULL))
-    return FALSE;
+    {
+      const gchar *found;
+
+      /* If the plugin has the key and its empty, or doesn't have the key,
+       * then we can assume it wants the equivalent of "*".
+       */
+      found = peas_plugin_info_get_external_data (plugin_info, key);
+      if (ide_str_empty0 (found))
+        return TRUE;
+
+      return FALSE;
+    }
 
   /*
    * If the plugin isn't loaded, then we shouldn't use it.
@@ -68,12 +83,15 @@ ide_extension_util_can_use_plugin (PeasEngine     *engine,
   if (key != NULL)
     {
       g_autofree gchar *priority_name = NULL;
+      g_autofree gchar *delimit = NULL;
       g_auto(GStrv) values_array = NULL;
       const gchar *values;
       const gchar *priority_value;
 
       values = peas_plugin_info_get_external_data (plugin_info, key);
-      values_array = g_strsplit (values ? values : "", ",", 0);
+      /* Canonicalize input (for both , and ;) */
+      delimit = g_strdelimit (g_strdup (values ? values : ""), ";,", ';');
+      values_array = g_strsplit (delimit, ";", 0);
 
       /* An empty value implies "*" to match anything */
       if (!values || g_strv_contains ((const gchar * const *)values_array, "*"))
@@ -224,6 +242,8 @@ collect_parameters (GType        type,
  * but looking at base-classes in addition to interface properties.
  *
  * Returns: (transfer full): a #PeasExtensionSet.
+ *
+ * Since: 3.32
  */
 PeasExtensionSet *
 ide_extension_set_new (PeasEngine     *engine,
@@ -252,7 +272,7 @@ ide_extension_new (PeasEngine     *engine,
   va_list args;
 
   g_return_val_if_fail (!engine || PEAS_IS_ENGINE (engine), NULL);
-  g_return_val_if_fail (G_TYPE_IS_INTERFACE (type), NULL);
+  g_return_val_if_fail (G_TYPE_IS_INTERFACE (type) || G_TYPE_IS_OBJECT (type), NULL);
 
   if (engine == NULL)
     engine = peas_engine_get_default ();

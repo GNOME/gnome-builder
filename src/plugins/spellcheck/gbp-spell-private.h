@@ -1,7 +1,7 @@
 /* gbp-spell-widget-private.h
  *
  * Copyright 2016 Sebastien Lafargue <slafargue@gnome.org>
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,17 +15,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
 #include <gspell/gspell.h>
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gbp-spell-dict.h"
 #include "gbp-spell-widget.h"
 #include "gbp-spell-editor-addin.h"
-#include "gbp-spell-editor-view-addin.h"
+#include "gbp-spell-editor-page-addin.h"
 
 G_BEGIN_DECLS
 
@@ -41,9 +43,9 @@ struct _GbpSpellWidget
   GtkBin                   parent_instance;
 
   /* Owned references */
-  IdeEditorView           *editor;
-  GbpSpellEditorViewAddin *editor_view_addin;
-  DzlSignalGroup          *editor_view_addin_signals;
+  IdeEditorPage           *editor;
+  GbpSpellEditorPageAddin *editor_page_addin;
+  DzlSignalGroup          *editor_page_addin_signals;
   GPtrArray               *words_array;
   GbpSpellDict            *dict;
 
@@ -91,8 +93,8 @@ void       _gbp_spell_widget_change         (GbpSpellWidget *self,
                                              gboolean        change_all);
 
 void       _gbp_spell_editor_addin_begin    (GbpSpellEditorAddin *self,
-                                             IdeEditorView       *view);
+                                             IdeEditorPage       *view);
 void       _gbp_spell_editor_addin_cancel   (GbpSpellEditorAddin *self,
-                                             IdeEditorView       *view);
+                                             IdeEditorPage       *view);
 
 G_END_DECLS

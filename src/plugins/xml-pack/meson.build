@@ -1,12 +1,6 @@
-if get_option('with_xml_pack')
+if get_option('plugin_xml_pack')
 
-xml_pack_resources = gnome.compile_resources(
-  'xml-pack-resources',
-  'xml-pack.gresource.xml',
-  c_name: 'ide_xml'
-)
-
-xml_pack_sources = [
+plugins_sources += files([
   'ide-xml-analysis.c',
   'ide-xml-completion-attributes.c',
   'ide-xml-completion-values.c',
@@ -38,9 +32,14 @@ xml_pack_sources = [
   'ide-xml-validator.c',
   'ide-xml.c',
   'xml-pack-plugin.c',
-]
+])
 
-gnome_builder_plugins_sources += files(xml_pack_sources)
-gnome_builder_plugins_sources += xml_pack_resources[0]
+plugin_xml_pack_resources = gnome.compile_resources(
+  'gbp-xml-pack-resources',
+  'xml-pack.gresource.xml',
+  c_name: 'gbp_xml_pack',
+)
+
+plugins_sources += plugin_xml_pack_resources[0]
 
 endif

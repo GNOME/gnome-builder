@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-cursor"
@@ -22,9 +24,9 @@
 
 #include <dazzle.h>
 
-#include "sourceview/ide-source-view.h"
-#include "sourceview/ide-cursor.h"
-#include "sourceview/ide-text-util.h"
+#include "ide-source-view.h"
+#include "ide-cursor.h"
+#include "ide-text-util.h"
 
 struct _IdeCursor
 {

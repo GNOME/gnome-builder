@@ -1,6 +1,6 @@
 /* ide-ctags-index.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-ctags-index"
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
-#include <ide.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -293,7 +294,7 @@ ide_ctags_index_set_path_root (IdeCtagsIndex *self,
 {
   g_return_if_fail (IDE_IS_CTAGS_INDEX (self));
 
-  if (!dzl_str_equal0 (self->path_root, path_root))
+  if (!ide_str_equal0 (self->path_root, path_root))
     {
       g_free (self->path_root);
       self->path_root = g_strdup (path_root);
@@ -644,6 +645,8 @@ ide_ctags_index_get_mtime (IdeCtagsIndex *self)
  *
  * Returns: (transfer container) (element-type Ide.CtagsIndexEntry): An array
  *   of items matching the relative path.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_ctags_index_find_with_path (IdeCtagsIndex *self,

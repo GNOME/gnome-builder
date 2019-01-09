@@ -1,6 +1,6 @@
 /* ide-recent-projects.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include "ide-version-macros.h"
-
-#include "projects/ide-project-info.h"
+#include <libide-core.h>
+#include <libide-projects.h>
 
 G_BEGIN_DECLS
 
@@ -29,17 +30,20 @@ G_BEGIN_DECLS
 #define IDE_RECENT_PROJECTS_GROUP                     "X-GNOME-Builder-Project"
 #define IDE_RECENT_PROJECTS_LANGUAGE_GROUP_PREFIX     "X-GNOME-Builder-Language:"
 #define IDE_RECENT_PROJECTS_BUILD_SYSTEM_GROUP_PREFIX "X-GNOME-Builder-Build-System:"
+#define IDE_RECENT_PROJECTS_DIRECTORY                 "X-GNOME-Builder-Directory:"
 #define IDE_RECENT_PROJECTS_BOOKMARK_FILENAME         "recent-projects.xbel"
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeRecentProjects, ide_recent_projects, IDE, RECENT_PROJECTS, GObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
+IdeRecentProjects *ide_recent_projects_get_default       (void);
+IDE_AVAILABLE_IN_3_32
 IdeRecentProjects *ide_recent_projects_new               (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_recent_projects_remove            (IdeRecentProjects *self,
                                                           GList             *project_infos);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gchar             *ide_recent_projects_find_by_directory (IdeRecentProjects *self,
                                                           const gchar       *directory);
 

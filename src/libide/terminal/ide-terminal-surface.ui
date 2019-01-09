@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTerminalSurface" parent="IdeSurface">
+    <child>
+      <object class="IdeGrid" id="grid">
+        <property name="visible">true</property>
+      </object>
+    </child>
+  </template>
+</interface>

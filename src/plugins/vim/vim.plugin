@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2015-2018 Christian Hergert
+Description=Emulation of various VIM features
+Embedded=_gbp_vim_register_types
+Hidden=true
+Module=vim
+Name=VIM Emulation

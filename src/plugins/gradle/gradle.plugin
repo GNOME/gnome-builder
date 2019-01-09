@@ -1,10 +1,12 @@
 [Plugin]
+Authors=Alberto Fanjul Alonso <albfan@gnome.org>
+Builtin=true
+Copyright=Copyright © 2018 Alberto Fanjul Alonso
+Description=Provides integration with the Gradle build tool
+Hidden=true
+Loader=python3
 Module=gradle_plugin
 Name=Gradle
-Loader=python3
-Description=Provides integration with the Gradle build tool
-Authors=Alberto Fanjul Alonso <albfan@gnome.org>
-Copyright=Copyright © 2018 Alberto Fanjul Alonso
-Builtin=true
-X-Project-File-Filter-Pattern=build.gradle
 X-Project-File-Filter-Name=Gradle (build.gradle)
+X-Project-File-Filter-Pattern=build.gradle
+X-Builder-ABI=@PACKAGE_ABI@

@@ -142,15 +142,14 @@ namespace Ide
 				this.kind = Ide.SymbolKind.FIELD;
 		}
 
-		public override async Ide.SourceLocation? get_location_async (GLib.Cancellable? cancellable)
+		public override async Ide.Location? get_location_async (GLib.Cancellable? cancellable)
 		{
 			var source_reference = this.node.source_reference;
 			var file = (source_reference.file as Ide.ValaSourceFile).file;
 
-			return new Ide.SourceLocation (file,
-			                               source_reference.begin.line - 1,
-			                               source_reference.begin.column - 1,
-			                               0);
+			return new Ide.Location (file,
+			                         source_reference.begin.line - 1,
+			                         source_reference.begin.column - 1);
 		}
 	}
 }

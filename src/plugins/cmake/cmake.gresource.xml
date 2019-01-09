@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins">
+  <gresource prefix="/plugins/cmake">
     <file>cmake.plugin</file>
-  </gresource>
-  <gresource prefix="/org/gnome/builder/plugins/cmake">
     <file>CMakeLists.txt</file>
     <file>toolchain-info.ini.cmake</file>
   </gresource>

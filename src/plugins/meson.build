@@ -1,42 +1,78 @@
 plugindir = join_paths(get_option('libdir'), 'gnome-builder/plugins')
 plugindatadir = join_paths(get_option('datadir'), 'gnome-builder/plugins')
 
-gnome_builder_plugins_sources = ['gnome-builder-plugins.c']
-gnome_builder_plugins_args = []
-gnome_builder_plugins_deps = [libpeas_dep, libide_plugin_dep, libide_dep]
-gnome_builder_plugins_link_with = []
-gnome_builder_plugins_link_deps = join_paths(meson.current_source_dir(), 'plugins.map')
-gnome_builder_plugins_link_args = [
-  '-Wl,--version-script,' + gnome_builder_plugins_link_deps,
+plugins_sources = []
+plugins_include_directories = []
+plugins_generated_sources = []
+plugins_link_with = []
+
+plugins_deps = [
+  libdazzle_dep,
+  libgtk_dep,
+  libgtksource_dep,
+  libgit_dep,
+  libjsonrpc_glib_dep,
+
+  libide_code_dep,
+  libide_core_dep,
+  libide_debugger_dep,
+  libide_editor_dep,
+  libide_foundry_dep,
+  libide_greeter_dep,
+  libide_gui_dep,
+  libide_io_dep,
+  libide_plugins_dep,
+  libide_projects_dep,
+  libide_search_dep,
+  libide_sourceview_dep,
+  libide_terminal_dep,
+  libide_themes_dep,
+  libide_threading_dep,
+  libide_tree_dep,
+  libide_vcs_dep,
+  libide_webkit_dep,
 ]
 
+subdir('auto-save')
 subdir('autotools')
 subdir('beautifier')
-subdir('c-pack')
+subdir('buildconfig')
+subdir('buildsystem')
+subdir('buildui')
+subdir('buffer-monitor')
 subdir('cargo')
 subdir('clang')
 subdir('cmake')
 subdir('code-index')
+subdir('codeui')
 subdir('color-picker')
 subdir('command-bar')
 subdir('comment-code')
+subdir('c-pack')
 subdir('create-project')
 subdir('ctags')
+subdir('debuggerui')
 subdir('devhelp')
+subdir('deviceui')
 subdir('deviced')
+subdir('doap')
+subdir('editor')
+subdir('editorconfig')
+subdir('emacs')
 subdir('eslint')
+subdir('flatpak')
 subdir('file-search')
 subdir('find-other-file')
-subdir('flatpak')
-subdir('gradle')
 subdir('gcc')
 subdir('gdb')
 subdir('gettext')
 subdir('git')
-subdir('gjs-symbols')
 subdir('glade')
 subdir('gnome-code-assistance')
 subdir('go-langserv')
+subdir('gjs-symbols')
+subdir('gradle')
+subdir('greeter')
 subdir('grep')
 subdir('history')
 subdir('html-completion')
@@ -49,10 +85,12 @@ subdir('maven')
 subdir('meson')
 subdir('meson-templates')
 subdir('messages')
+subdir('modelines')
 subdir('mono')
 subdir('newcomers')
 subdir('notification')
 subdir('npm')
+subdir('omni-gutter')
 subdir('phpize')
 subdir('project-tree')
 subdir('python-gi-imports-completion')
@@ -60,107 +98,87 @@ subdir('python-pack')
 subdir('qemu')
 subdir('quick-highlight')
 subdir('recent')
+subdir('restore-cursor')
 subdir('retab')
-subdir('rust-langserv')
+subdir('rls')
 subdir('rustup')
-subdir('spellcheck')
 subdir('snippets')
+subdir('spellcheck')
+subdir('sublime')
 subdir('support')
 subdir('symbol-tree')
 subdir('sysprof')
 subdir('sysroot')
 subdir('terminal')
+subdir('testui')
 subdir('todo')
-subdir('vala-pack')
+subdir('trim-spaces')
 subdir('valgrind')
+subdir('vcsui')
+subdir('vim')
 subdir('words')
 subdir('xml-pack')
 
-gnome_builder_plugins = shared_library(
-  'gnome-builder-plugins',
-  gnome_builder_plugins_sources,
-
-   dependencies: gnome_builder_plugins_deps,
-   link_depends: 'plugins.map',
-         c_args: gnome_builder_plugins_args + release_args,
-      link_args: gnome_builder_plugins_link_args,
-      link_with: gnome_builder_plugins_link_with,
-        install: true,
-    install_dir: pkglibdir,
-  install_rpath: pkglibdir_abs,
-)
-
-gnome_builder_plugins_dep = declare_dependency(
-   dependencies: libide_deps,
-      link_with: gnome_builder_plugins_link_with + [gnome_builder_plugins],
+plugins = static_library('plugins', plugins_sources,
+         dependencies: plugins_deps,
+               c_args: release_args,
+  include_directories: plugins_include_directories,
+            link_with: plugins_link_with,
 )
 
 status += [
   'Plugins:',
   '',
-  'Autotools ............. : @0@'.format(get_option('with_autotools')),
-  'Beautifier ............ : @0@'.format(get_option('with_beautifier')),
-  'C Language Pack ....... : @0@'.format(get_option('with_c_pack')),
-  'Cargo ................. : @0@'.format(get_option('with_cargo')),
-  'Clang ................. : @0@'.format(get_option('with_clang')),
-  'CMake ................. : @0@'.format(get_option('with_cmake')),
-  'Color Picker .......... : @0@'.format(get_option('with_color_picker')),
-  'Command Bar ........... : @0@'.format(get_option('with_command_bar')),
-  'Comment Code .......... : @0@'.format(get_option('with_comment_code')),
-  'Project Wizard ........ : @0@'.format(get_option('with_create_project')),
-  'CTags ................. : @0@'.format(get_option('with_ctags')),
-  'Devhelp ............... : @0@'.format(get_option('with_devhelp')),
-  'Deviced ............... : @0@'.format(get_option('with_deviced')),
-  'ESLint ................ : @0@'.format(get_option('with_eslint')),
-  'File Search ........... : @0@'.format(get_option('with_file_search')),
-  'Find other file ....... : @0@'.format(get_option('with_find_other_file')),
-  'Flatpak ............... : @0@'.format(get_option('with_flatpak')),
-  'Gradle ................ : @0@'.format(get_option('with_gradle')),
-  'GCC ................... : @0@'.format(get_option('with_gcc')),
-  'GDB ................... : @0@'.format(get_option('with_gdb')),
-  'Gettext ............... : @0@'.format(get_option('with_gettext')),
-  'Git ................... : @0@'.format(get_option('with_git')),
-  'GJS Symbol Resolver ... : @0@'.format(get_option('with_gjs_symbols')),
-  'Glade ................. : @0@'.format(get_option('with_glade')),
-  'GNOME Code Assistance . : @0@'.format(get_option('with_gnome_code_assistance')),
-  'Go Language Server .... : @0@'.format(get_option('with_go_langserv')),
-  'Grep .................. : @0@'.format(get_option('with_grep')),
-  'History ............... : @0@'.format(get_option('with_history')),
-  'HTML Completion ....... : @0@'.format(get_option('with_html_completion')),
-  'HTML Preview .......... : @0@'.format(get_option('with_html_preview')),
-  'Python Jedi ........... : @0@'.format(get_option('with_jedi')),
-  'JHBuild ............... : @0@'.format(get_option('with_jhbuild')),
-  'Directory View ........ : @0@'.format(get_option('with_ls')),
-  'Make .................. : @0@'.format(get_option('with_make')),
-  'Maven.................. : @0@'.format(get_option('with_maven')),
-  'Meson ................. : @0@'.format(get_option('with_meson')),
-  'Mono .................. : @0@'.format(get_option('with_mono')),
-  'Notifications ......... : @0@'.format(get_option('with_notification')),
-  'Node Package Manager .. : @0@'.format(get_option('with_npm')),
-  'PHPize ................ : @0@'.format(get_option('with_phpize')),
-  'Project Tree .......... : @0@'.format(get_option('with_project_tree')),
-  'Python GI Completion .. : @0@'.format(get_option('with_python_gi_imports_completion')),
-  'Python Language Pack .. : @0@'.format(get_option('with_python_pack')),
-  'Qemu .................. : @0@'.format(get_option('with_qemu')),
-  'Quick Highlight ....... : @0@'.format(get_option('with_quick_highlight')),
-  'Retab ................. : @0@'.format(get_option('with_retab')),
-  'Rust Language Server .. : @0@'.format(get_option('with_rust_langserv')),
-  'RustUp ................ : @0@'.format(get_option('with_rustup')),
-  'Snippets .............. : @0@'.format(get_option('with_snippets')),
-  'Spellchecking ......... : @0@'.format(get_option('with_spellcheck')),
-  'Support Tool .......... : @0@'.format(get_option('with_support')),
-  'Symbol Tree ........... : @0@'.format(get_option('with_symbol_tree')),
-  'Sysprof Profiler ...... : @0@'.format(get_option('with_sysprof')),
-  'Sysroot ......          : @0@'.format(get_option('with_sysroot')),
-  'Todo .................. : @0@'.format(get_option('with_todo')),
-  'Vala Language Pack .... : @0@'.format(get_option('with_vala_pack')),
-  'Valgrind .............. : @0@'.format(get_option('with_valgrind')),
-  'Word Completion ....... : @0@'.format(get_option('with_words')),
-  'XML Language Pack ..... : @0@'.format(get_option('with_xml_pack')),
-  '', '',
-
-  'Templates:',
+  'Autotools ............. : @0@'.format(get_option('plugin_autotools')),
+  'Beautifier ............ : @0@'.format(get_option('plugin_beautifier')),
+  'C Pack ................ : @0@'.format(get_option('plugin_c_pack')),
+  'Cargo ................. : @0@'.format(get_option('plugin_cargo')),
+  'Clang ................. : @0@'.format(get_option('plugin_clang')),
+  'CMake ................. : @0@'.format(get_option('plugin_cmake')),
+  'Code Index ............ : @0@'.format(get_option('plugin_code_index')),
+  'Color Pickr ........... : @0@'.format(get_option('plugin_color_picker')),
+  'CTags ................. : @0@'.format(get_option('plugin_ctags')),
+  'Devhelp ............... : @0@'.format(get_option('plugin_devhelp')),
+  'Deviced ............... : @0@'.format(get_option('plugin_deviced')),
+  'Editorconfig .......... : @0@'.format(get_option('plugin_editorconfig')),
+  'ESLint ................ : @0@'.format(get_option('plugin_eslint')),
+  'File Search ........... : @0@'.format(get_option('plugin_file_search')),
+  'Flatpak ............... : @0@'.format(get_option('plugin_flatpak')),
+  'GDB ................... : @0@'.format(get_option('plugin_gdb')),
+  'Gettext ............... : @0@'.format(get_option('plugin_gettext')),
+  'Git ................... : @0@'.format(get_option('plugin_git')),
+  'GJS Symbols ........... : @0@'.format(get_option('plugin_gjs_symbols')),
+  'Glade ................. : @0@'.format(get_option('plugin_glade')),
+  'GNOME Code Assistance . : @0@'.format(get_option('plugin_gnome_code_assistance')),
+  'Go Language Server .... : @0@'.format(get_option('plugin_go_langserv')),
+  'Gradle ................ : @0@'.format(get_option('plugin_gradle')),
+  'Grep .................. : @0@'.format(get_option('plugin_grep')),
+  'HTML Completion ....... : @0@'.format(get_option('plugin_html_completion')),
+  'HTML Preview .......... : @0@'.format(get_option('plugin_html_preview')),
+  'Jedi .................. : @0@'.format(get_option('plugin_jedi')),
+  'JHBuild ............... : @0@'.format(get_option('plugin_jhbuild')),
+  'Make .................. : @0@'.format(get_option('plugin_make')),
+  'Maven ................. : @0@'.format(get_option('plugin_maven')),
+  'Meson ................. : @0@'.format(get_option('plugin_meson')),
+  'Modelines ............. : @0@'.format(get_option('plugin_modelines')),
+  'Mono .................. : @0@'.format(get_option('plugin_mono')),
+  'Newcomers ............. : @0@'.format(get_option('plugin_newcomers')),
+  'Notifications ......... : @0@'.format(get_option('plugin_notification')),
+  'Npm ................... : @0@'.format(get_option('plugin_npm')),
+  'PHPize ................ : @0@'.format(get_option('plugin_phpize')),
+  'Python Pack ........... : @0@'.format(get_option('plugin_python_pack')),
+  'Qemu .................. : @0@'.format(get_option('plugin_qemu')),
+  'Quick Highlight ....... : @0@'.format(get_option('plugin_quick_highlight')),
+  'Retab ................. : @0@'.format(get_option('plugin_retab')),
+  'RLS ................... : @0@'.format(get_option('plugin_rls')),
+  'Rustup ................ : @0@'.format(get_option('plugin_rustup')),
+  'Spellcheck ............ : @0@'.format(get_option('plugin_spellcheck')),
+  'Sysprof ............... : @0@'.format(get_option('plugin_sysprof')),
+  'Sysroot ............... : @0@'.format(get_option('plugin_sysroot')),
+  'Todo .................. : @0@'.format(get_option('plugin_todo')),
+  'Vala Pack ............. : @0@'.format(get_option('plugin_vala')),
+  'Valgrind .............. : @0@'.format(get_option('plugin_valgrind')),
+  'Word Completion ....... : @0@'.format(get_option('plugin_words')),
+  'XML Pack .............. : @0@'.format(get_option('plugin_xml_pack')),
   '',
-  'Meson ................. : @0@'.format(get_option('with_meson_templates')),
-  '', ''
 ]

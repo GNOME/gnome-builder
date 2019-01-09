@@ -1,0 +1,28 @@
+G_DEFINE_CONSTRUCTOR	gconstructor.h	25;"	d
+G_DEFINE_CONSTRUCTOR	gconstructor.h	33;"	d
+G_DEFINE_CONSTRUCTOR	gconstructor.h	55;"	d
+G_DEFINE_CONSTRUCTOR	gconstructor.h	80;"	d
+G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA	gconstructor.h	50;"	d
+G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA	gconstructor.h	75;"	d
+G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS	gconstructor.h	53;"	d
+G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS	gconstructor.h	78;"	d
+G_DEFINE_DESTRUCTOR	gconstructor.h	26;"	d
+G_DEFINE_DESTRUCTOR	gconstructor.h	39;"	d
+G_DEFINE_DESTRUCTOR	gconstructor.h	62;"	d
+G_DEFINE_DESTRUCTOR	gconstructor.h	85;"	d
+G_DEFINE_DESTRUCTOR_NEEDS_PRAGMA	gconstructor.h	51;"	d
+G_DEFINE_DESTRUCTOR_NEEDS_PRAGMA	gconstructor.h	76;"	d
+G_DEFINE_DESTRUCTOR_PRAGMA_ARGS	gconstructor.h	60;"	d
+G_DEFINE_DESTRUCTOR_PRAGMA_ARGS	gconstructor.h	83;"	d
+G_HAS_CONSTRUCTORS	gconstructor.h	23;"	d
+G_HAS_CONSTRUCTORS	gconstructor.h	31;"	d
+G_HAS_CONSTRUCTORS	gconstructor.h	47;"	d
+G_HAS_CONSTRUCTORS	gconstructor.h	73;"	d
+G_LOG_DOMAIN	main.c	21;"	d	file:
+bug_buddy_init	bug-buddy.c	/^bug_buddy_init (void)$/;"	f
+bug_buddy_init	bug-buddy.h	/^void bug_buddy_init (void);$/;"	p
+bug_buddy_sigsegv_handler	bug-buddy.c	/^bug_buddy_sigsegv_handler (int signum)$/;"	f	file:
+early_params_check	main.c	/^early_params_check (gint       *argc,$/;"	f	file:
+gdb_argv	bug-buddy.c	/^static gchar **gdb_argv = NULL;$/;"	v	file:
+main	main.c	/^main (gint   argc,$/;"	f
+verbose_cb	main.c	/^verbose_cb (const gchar  *option_name,$/;"	f	file:

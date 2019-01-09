@@ -14,11 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-search.h>
 
 G_BEGIN_DECLS
 
@@ -26,10 +29,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexSearchResult, ide_code_index_search_result, IDE, CODE_INDEX_SEARCH_RESULT, IdeSearchResult)
 
-IdeCodeIndexSearchResult *ide_code_index_search_result_new (const gchar       *title,
-                                                            const gchar       *subtitle,
-                                                            const gchar       *icon_name,
-                                                            IdeSourceLocation *location,
-                                                            gfloat             score);
+IdeCodeIndexSearchResult *ide_code_index_search_result_new (const gchar *title,
+                                                            const gchar *subtitle,
+                                                            const gchar *icon_name,
+                                                            IdeLocation *location,
+                                                            gfloat       score);
 
 G_END_DECLS

@@ -1,6 +1,6 @@
 /* ide-extension-set-adapter.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-extension-set-adapter"
@@ -24,12 +26,8 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
-#include "ide-context.h"
-#include "ide-debug.h"
-
-#include "application/ide-application.h"
-#include "plugins/ide-extension-set-adapter.h"
-#include "plugins/ide-extension-util.h"
+#include "ide-extension-set-adapter.h"
+#include "ide-extension-util-private.h"
 
 struct _IdeExtensionSetAdapter
 {
@@ -69,6 +67,20 @@ static guint signals [LAST_SIGNAL];
 
 static void ide_extension_set_adapter_queue_reload (IdeExtensionSetAdapter *);
 
+static gchar *
+ide_extension_set_adapter_repr (IdeObject *object)
+{
+  IdeExtensionSetAdapter *self = (IdeExtensionSetAdapter *)object;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+
+  return g_strdup_printf ("%s interface=\"%s\" key=\"%s\" value=\"%s\"",
+                          G_OBJECT_TYPE_NAME (self),
+                          g_type_name (self->interface_type),
+                          self->key ?: "",
+                          self->value ?: "");
+}
+
 static void
 add_extension (IdeExtensionSetAdapter *self,
                PeasPluginInfo         *plugin_info,
@@ -81,6 +93,19 @@ add_extension (IdeExtensionSetAdapter *self,
   g_assert (g_type_is_a (G_OBJECT_TYPE (exten), self->interface_type));
 
   g_hash_table_insert (self->extensions, plugin_info, exten);
+
+  /* Ensure that we take the reference in case it's a floating ref */
+  if (G_IS_INITIALLY_UNOWNED (exten) && g_object_is_floating (exten))
+    g_object_ref_sink (exten);
+
+  /*
+   * If the plugin object turned out to have IdeObject as a
+   * base, make it a child of ourselves, because we're an
+   * IdeObject too and that gives it access to the context.
+   */
+  if (IDE_IS_OBJECT (exten))
+    ide_object_append (IDE_OBJECT (self), IDE_OBJECT (exten));
+
   g_signal_emit (self, signals [EXTENSION_ADDED], 0, plugin_info, exten);
 }
 
@@ -102,6 +127,9 @@ remove_extension (IdeExtensionSetAdapter *self,
 
   g_hash_table_remove (self->extensions, plugin_info);
   g_signal_emit (self, signals [EXTENSION_REMOVED], 0, plugin_info, hold);
+
+  if (IDE_IS_OBJECT (hold))
+    ide_object_destroy (IDE_OBJECT (hold));
 }
 
 static void
@@ -128,7 +156,7 @@ watch_extension (IdeExtensionSetAdapter *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_assert (plugin_info != NULL);
-  g_assert (G_TYPE_IS_INTERFACE (interface_type));
+  g_assert (G_TYPE_IS_INTERFACE (interface_type) || G_TYPE_IS_OBJECT (interface_type));
 
   path = g_strdup_printf ("/org/gnome/builder/extension-types/%s/%s/",
                           peas_plugin_info_get_module_name (plugin_info),
@@ -150,7 +178,6 @@ watch_extension (IdeExtensionSetAdapter *self,
 static void
 ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
 {
-  IdeContext *context;
   const GList *plugins;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -168,10 +195,7 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
       g_ptr_array_remove_index (self->settings, self->settings->len - 1);
     }
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   plugins = peas_engine_get_plugin_list (self->engine);
-
-  g_assert (IDE_IS_CONTEXT (context));
 
   for (; plugins; plugins = plugins->next)
     {
@@ -181,8 +205,10 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
       if (!peas_plugin_info_is_loaded (plugin_info))
         continue;
 
-      if (peas_engine_provides_extension (self->engine, plugin_info, self->interface_type))
-        watch_extension (self, plugin_info, self->interface_type);
+      if (!peas_engine_provides_extension (self->engine, plugin_info, self->interface_type))
+        continue;
+
+      watch_extension (self, plugin_info, self->interface_type);
 
       if (ide_extension_util_can_use_plugin (self->engine,
                                              plugin_info,
@@ -195,26 +221,10 @@ ide_extension_set_adapter_reload (IdeExtensionSetAdapter *self)
             {
               PeasExtension *exten;
 
-              if (g_type_is_a (self->interface_type, IDE_TYPE_OBJECT))
-                exten = ide_extension_new (self->engine,
-                                           plugin_info,
-                                           self->interface_type,
-                                           "context", context,
-                                           NULL);
-              else
-                {
-                  exten = ide_extension_new (self->engine,
-                                             plugin_info,
-                                             self->interface_type,
-                                             NULL);
-                  /*
-                   * If the plugin object turned out to have IdeObject
-                   * as a base, try to set it now (even though we couldn't
-                   * do it at construction time).
-                   */
-                  if (IDE_IS_OBJECT (exten))
-                    ide_object_set_context (IDE_OBJECT (exten), context);
-                }
+              exten = ide_extension_new (self->engine,
+                                         plugin_info,
+                                         self->interface_type,
+                                         NULL);
 
               add_extension (self, plugin_info, exten);
             }
@@ -253,7 +263,7 @@ ide_extension_set_adapter_queue_reload (IdeExtensionSetAdapter *self)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
-  dzl_clear_source (&self->reload_handler);
+  g_clear_handle_id (&self->reload_handler, g_source_remove);
 
   self->reload_handler = g_idle_add_full (G_PRIORITY_HIGH,
                                           ide_extension_set_adapter_do_reload,
@@ -262,15 +272,56 @@ ide_extension_set_adapter_queue_reload (IdeExtensionSetAdapter *self)
 }
 
 static void
+ide_extension_set_adapter_load_plugin (IdeExtensionSetAdapter *self,
+                                       PeasPluginInfo         *plugin_info,
+                                       PeasEngine             *engine)
+{
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  ide_extension_set_adapter_queue_reload (self);
+}
+
+static void
+ide_extension_set_adapter_unload_plugin (IdeExtensionSetAdapter *self,
+                                         PeasPluginInfo         *plugin_info,
+                                         PeasEngine             *engine)
+{
+  PeasExtension *exten;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  if ((exten = g_hash_table_lookup (self->extensions, plugin_info)))
+    {
+      remove_extension (self, plugin_info, exten);
+      g_hash_table_remove (self->extensions, plugin_info);
+    }
+}
+
+static void
 ide_extension_set_adapter_set_engine (IdeExtensionSetAdapter *self,
                                       PeasEngine             *engine)
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
-  g_assert (PEAS_IS_ENGINE (engine));
+  g_assert (!engine || PEAS_IS_ENGINE (engine));
+
+  if (engine == NULL)
+    engine = peas_engine_get_default ();
 
   if (g_set_object (&self->engine, engine))
     {
+      g_signal_connect_object (self->engine, "load-plugin",
+                               G_CALLBACK (ide_extension_set_adapter_load_plugin),
+                               self,
+                               G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+      g_signal_connect_object (self->engine, "unload-plugin",
+                               G_CALLBACK (ide_extension_set_adapter_unload_plugin),
+                               self,
+                               G_CONNECT_SWAPPED);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENGINE]);
       ide_extension_set_adapter_queue_reload (self);
     }
@@ -282,7 +333,7 @@ ide_extension_set_adapter_set_interface_type (IdeExtensionSetAdapter *self,
 {
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
-  g_assert (G_TYPE_IS_INTERFACE (interface_type));
+  g_assert (G_TYPE_IS_INTERFACE (interface_type) || G_TYPE_IS_OBJECT (interface_type));
 
   if (interface_type != self->interface_type)
     {
@@ -293,7 +344,7 @@ ide_extension_set_adapter_set_interface_type (IdeExtensionSetAdapter *self,
 }
 
 static void
-ide_extension_set_adapter_dispose (GObject *object)
+ide_extension_set_adapter_destroy (IdeObject *object)
 {
   IdeExtensionSetAdapter *self = (IdeExtensionSetAdapter *)object;
   g_autoptr(GHashTable) extensions = NULL;
@@ -305,7 +356,7 @@ ide_extension_set_adapter_dispose (GObject *object)
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
   self->interface_type = G_TYPE_INVALID;
-  dzl_clear_source (&self->reload_handler);
+  g_clear_handle_id (&self->reload_handler, g_source_remove);
 
   /*
    * Steal the extensions so we can be re-entrant safe and not break
@@ -325,7 +376,7 @@ ide_extension_set_adapter_dispose (GObject *object)
       g_hash_table_iter_remove (&iter);
     }
 
-  G_OBJECT_CLASS (ide_extension_set_adapter_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_extension_set_adapter_parent_class)->destroy (object);
 }
 
 static void
@@ -419,11 +470,14 @@ static void
 ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->dispose = ide_extension_set_adapter_dispose;
   object_class->finalize = ide_extension_set_adapter_finalize;
   object_class->get_property = ide_extension_set_adapter_get_property;
   object_class->set_property = ide_extension_set_adapter_set_property;
+
+  i_object_class->destroy = ide_extension_set_adapter_destroy;
+  i_object_class->repr = ide_extension_set_adapter_repr;
 
   properties [PROP_ENGINE] =
     g_param_spec_object ("engine",
@@ -436,7 +490,7 @@ ide_extension_set_adapter_class_init (IdeExtensionSetAdapterClass *klass)
     g_param_spec_gtype ("interface-type",
                         "Interface Type",
                         "Interface Type",
-                        G_TYPE_INTERFACE,
+                        G_TYPE_OBJECT,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_KEY] =
@@ -499,6 +553,8 @@ ide_extension_set_adapter_init (IdeExtensionSetAdapter *self)
  * Gets the #IdeExtensionSetAdapter:engine property.
  *
  * Returns: (transfer none): a #PeasEngine.
+ *
+ * Since: 3.32
  */
 PeasEngine *
 ide_extension_set_adapter_get_engine (IdeExtensionSetAdapter *self)
@@ -531,7 +587,7 @@ ide_extension_set_adapter_set_key (IdeExtensionSetAdapter *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
 
-  if (!dzl_str_equal0 (self->key, key))
+  if (!ide_str_equal0 (self->key, key))
     {
       g_free (self->key);
       self->key = g_strdup (key);
@@ -560,7 +616,7 @@ ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
                  g_type_name (self->interface_type),
                  value ?: "");
 
-  if (!dzl_str_equal0 (self->value, value))
+  if (!ide_str_equal0 (self->value, value))
     {
       g_free (self->value);
       self->value = g_strdup (value);
@@ -576,28 +632,33 @@ ide_extension_set_adapter_set_value (IdeExtensionSetAdapter *self,
  * @user_data: user data for @foreach_func
  *
  * Calls @foreach_func for every extension loaded by the extension set.
+ *
+ * Since: 3.32
  */
 void
 ide_extension_set_adapter_foreach (IdeExtensionSetAdapter            *self,
                                    IdeExtensionSetAdapterForeachFunc  foreach_func,
                                    gpointer                           user_data)
 {
-  GHashTableIter iter;
-  gpointer key;
-  gpointer value;
+  const GList *list;
 
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_return_if_fail (foreach_func != NULL);
 
-  g_hash_table_iter_init (&iter, self->extensions);
+  /*
+   * Use the ordered list of plugins as it is sorted including any
+   * dependencies of plugins.
+   */
 
-  while (g_hash_table_iter_next (&iter, &key, &value))
+  list = peas_engine_get_plugin_list (self->engine);
+
+  for (const GList *iter = list; iter; iter = iter->next)
     {
-      PeasPluginInfo *plugin_info = key;
-      PeasExtension *exten = value;
+      PeasPluginInfo *plugin_info = iter->data;
+      PeasExtension *exten = g_hash_table_lookup (self->extensions, plugin_info);
 
-      foreach_func (self, plugin_info, exten, user_data);
+      if (exten != NULL)
+        foreach_func (self, plugin_info, exten, user_data);
     }
 }
 
@@ -627,6 +688,8 @@ sort_by_priority (gconstpointer a,
  * @user_data: user data for @foreach_func
  *
  * Calls @foreach_func for every extension loaded by the extension set.
+ *
+ * Since: 3.32
  */
 void
 ide_extension_set_adapter_foreach_by_priority (IdeExtensionSetAdapter            *self,
@@ -642,6 +705,12 @@ ide_extension_set_adapter_foreach_by_priority (IdeExtensionSetAdapter           
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_SET_ADAPTER (self));
   g_return_if_fail (foreach_func != NULL);
+
+  if (self->key == NULL)
+    {
+      ide_extension_set_adapter_foreach (self, foreach_func, user_data);
+      return;
+    }
 
   prio_key = g_strdup_printf ("%s-Priority", self->key);
   sorted = g_array_new (FALSE, FALSE, sizeof (SortedInfo));
@@ -681,25 +750,40 @@ ide_extension_set_adapter_get_n_extensions (IdeExtensionSetAdapter *self)
 }
 
 IdeExtensionSetAdapter *
-ide_extension_set_adapter_new (IdeContext  *context,
+ide_extension_set_adapter_new (IdeObject   *parent,
                                PeasEngine  *engine,
                                GType        interface_type,
                                const gchar *key,
                                const gchar *value)
 {
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-  g_return_val_if_fail (!engine || PEAS_IS_ENGINE (engine), NULL);
-  g_return_val_if_fail (G_TYPE_IS_INTERFACE (interface_type), NULL);
-  g_return_val_if_fail (key != NULL, NULL);
+  IdeExtensionSetAdapter *ret;
 
-  return g_object_new (IDE_TYPE_EXTENSION_SET_ADAPTER,
-                       "context", context,
-                       "engine", engine,
-                       "interface-type", interface_type,
-                       "key", key,
-                       "value", value,
-                       NULL);
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (!parent || IDE_IS_OBJECT (parent), NULL);
+  g_return_val_if_fail (!engine || PEAS_IS_ENGINE (engine), NULL);
+  g_return_val_if_fail (G_TYPE_IS_INTERFACE (interface_type) ||
+                        G_TYPE_IS_OBJECT (interface_type), NULL);
+
+  ret = g_object_new (IDE_TYPE_EXTENSION_SET_ADAPTER,
+                      "engine", engine,
+                      "interface-type", interface_type,
+                      "key", key,
+                      "value", value,
+                      NULL);
+
+  if (parent != NULL)
+    ide_object_append (parent, IDE_OBJECT (ret));
+
+  /* If we have a reload queued, just process it immediately so that
+   * there is some determinism in plugin loading.
+   */
+  if (ret->reload_handler != 0)
+    {
+      g_clear_handle_id (&ret->reload_handler, g_source_remove);
+      ide_extension_set_adapter_do_reload (ret);
+    }
+
+  return ret;
 }
 
 /**
@@ -710,6 +794,8 @@ ide_extension_set_adapter_new (IdeContext  *context,
  * Locates the extension owned by @plugin_info if such extension exists.
  *
  * Returns: (transfer none) (nullable): a #PeasExtension or %NULL
+ *
+ * Since: 3.32
  */
 PeasExtension *
 ide_extension_set_adapter_get_extension (IdeExtensionSetAdapter *self,

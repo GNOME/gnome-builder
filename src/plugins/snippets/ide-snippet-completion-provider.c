@@ -1,6 +1,6 @@
 /* ide-snippet-completion-provider.c
  *
- * Copyright © 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
 #define G_LOG_DOMAIN "ide-snippet-completion-provider.h"
+
+#include "config.h"
 
 #include "ide-snippet-completion-provider.h"
 #include "ide-snippet-completion-item.h"
@@ -70,7 +72,7 @@ ide_snippet_completion_provider_load (IdeCompletionProvider *provider,
   g_assert (IDE_IS_SNIPPET_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  storage = ide_context_get_snippets (context);
+  storage = ide_snippet_storage_from_context (context);
   self->model = ide_snippet_model_new (storage);
 }
 

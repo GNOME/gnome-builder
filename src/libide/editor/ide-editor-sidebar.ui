@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeEditorSidebar" parent="IdeLayoutPane">
+  <template class="IdeEditorSidebar" parent="IdePanel">
     <child>
       <object class="GtkBox" id="box">
         <property name="vexpand">true</property>

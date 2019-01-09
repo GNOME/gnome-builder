@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/libide-editor/ui/">
+    <file preprocess="xml-stripblanks">ide-editor-page.ui</file>
+    <file preprocess="xml-stripblanks">ide-editor-search-bar.ui</file>
+    <file preprocess="xml-stripblanks">ide-editor-settings-dialog.ui</file>
+    <file preprocess="xml-stripblanks">ide-editor-sidebar.ui</file>
+    <file preprocess="xml-stripblanks">ide-editor-surface.ui</file>
+    <file preprocess="xml-stripblanks">ide-editor-workspace.ui</file>
+  </gresource>
+</gresources>

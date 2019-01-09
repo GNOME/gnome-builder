@@ -1,6 +1,6 @@
 /* gbp-devhelp-hover-provider.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,16 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
-#include "config.h"
 
 #define G_LOG_DOMAIN "gbp-devhelp-hover-provider"
 
+#include "config.h"
+
 #include <devhelp/devhelp.h>
+#include <libide-sourceview.h>
 #include <glib/gi18n.h>
 
-#include "sourceview/ide-text-iter.h"
 #include "gbp-devhelp-hover-provider.h"
 
 #define DEVHELP_HOVER_PROVIDER_PRIORITY 200
@@ -45,7 +47,7 @@ hover_free (Hover *h)
 {
   g_clear_object (&h->context);
   g_clear_pointer (&h->word, g_free);
-  g_clear_pointer (&h->symbol, ide_symbol_unref);
+  g_clear_object (&h->symbol);
   g_slice_free (Hover, h);
 }
 
@@ -192,7 +194,7 @@ gbp_devhelp_hover_provider_hover_async (IdeHoverProvider    *provider,
 
   h = g_slice_new0 (Hover);
   h->context = g_object_ref (context);
-  h->word = _ide_text_iter_current_symbol (iter, NULL);
+  h->word = ide_text_iter_current_symbol (iter, NULL);
   ide_task_set_task_data (task, h, hover_free);
 
   buffer = IDE_BUFFER (gtk_text_iter_get_buffer (iter));

@@ -1,8 +1,4 @@
-if get_option('with_vala_pack')
-
-if not get_option('with_vapi')
-#  error('You must enable VAPI generation to build the Vala pack')
-endif
+if get_option('plugin_vala')
 
 add_languages('vala')
 
@@ -10,7 +6,7 @@ valac = meson.get_compiler('vala')
 libvala_version = run_command(valac.cmd_array()[0], '--api-version').stdout().strip()
 libvala = dependency('libvala-@0@'.format(libvala_version))
 
-vala_pack_sources = [
+vala_sources = [
   'config.vapi',
   'ide-vala-service.vala',
   'ide-vala-code-indexer.vala',
@@ -30,41 +26,45 @@ vala_pack_sources = [
   'vala-pack-plugin.vala',
 ]
 
-vala_pack_deps = [
+vala_deps = [
   libvala,
-  libide_vapi,
   libpeas_dep,
-  libide_plugin_dep,
+  libide_vapi,
+  libgtksource_dep,
+  libvte_dep,
+  libdazzle_dep,
+  libtemplate_glib_dep,
 ]
 
-shared_module('vala-pack-plugin', vala_pack_sources,
-     link_args: gnome_builder_plugins_link_args,
-  link_depends: gnome_builder_plugins_link_deps,
-  dependencies: vala_pack_deps,
-       install: true,
-   install_dir: plugindir,
- install_rpath: pkglibdir_abs,
+shared_module('plugin-vala-pack', vala_sources,
+         dependencies: vala_deps,
+              install: true,
+          install_dir: plugindir,
+        install_rpath: pkglibdir_abs,
+  include_directories: [include_directories('.')] + libide_include_directories,
 
-     vala_args: [ '--target-glib=2.52',
-                  '--pkg=posix',
-                  '--pkg=libpeas-1.0',
-                  '--pkg=gtksourceview-4',
-                  '--pkg=gio-2.0',
-                  '--pkg=libvala-' + libvala_version,
-                  '--pkg=libdazzle-1.0',
-                ],
-        c_args: [ '-DVALA_VERSION="@0@"'.format(libvala_version),
-                  '-DLOG_DOMAIN="vala-pack-plugin"',
-                  '-DGETTEXT_PACKAGE="gnome-builder"',
-                  '-DPACKAGE_DATADIR="@0@"'.format(join_paths(get_option('prefix'), get_option('datadir'), 'gnome-builder')),
-		  '-Wno-incompatible-pointer-types',
-                ],
+            vala_args: [ '--target-glib=2.52',
+                         '--pkg=posix',
+                         '--pkg=libpeas-1.0',
+                         '--pkg=gtksourceview-4',
+                         '--pkg=gio-2.0',
+                         '--pkg=libvala-' + libvala_version,
+                         '--pkg=libdazzle-1.0',
+                         '--pkg=template-glib-1.0',
+                         '--pkg=vte-2.91',
+                       ],
+               c_args: [ '-DVALA_VERSION="@0@"'.format(libvala_version),
+                         '-DLOG_DOMAIN="vala-pack"',
+                         '-DGETTEXT_PACKAGE="gnome-builder"',
+                         '-DPACKAGE_DATADIR="@0@"'.format(join_paths(get_option('prefix'), get_option('datadir'), 'gnome-builder')),
+		         '-Wno-incompatible-pointer-types',
+                       ],
 )
 
 configure_file(
           input: 'vala-pack.plugin',
          output: 'vala-pack.plugin',
-           copy: true,
+  configuration: config_h,
         install: true,
     install_dir: plugindir,
 )

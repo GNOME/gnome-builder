@@ -1,16 +1,17 @@
-if get_option('with_gdb')
+if get_option('plugin_gdb')
 
-gdb_resources = gnome.compile_resources(
+plugins_sources += files([
+  'gbp-gdb-debugger.c',
+  'gdb-plugin.c',
+])
+
+plugin_gdb_resources = gnome.compile_resources(
   'gdb-resources',
   'gdb.gresource.xml',
   c_name: 'gbp_gdb',
 )
 
-gdb_sources = [
-  'gbp-gdb-debugger.c',
-  'gbp-gdb-debugger.h',
-  'gbp-gdb-plugin.c',
-]
+plugins_sources += plugin_gdb_resources[0]
 
 gdbwire = static_library('gdbwire', ['gdbwire.c'],
   c_args: [ '-Wno-redundant-decls',
@@ -20,8 +21,6 @@ gdbwire = static_library('gdbwire', ['gdbwire.c'],
             '-Wno-declaration-after-statement' ],
 )
 
-gnome_builder_plugins_sources += files(gdb_sources)
-gnome_builder_plugins_sources += gdb_resources[0]
-gnome_builder_plugins_link_with += gdbwire
+plugins_link_with += gdbwire
 
 endif

@@ -1,6 +1,6 @@
 /* ide-greeter-section.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-greeter-section"
 
 #include "config.h"
 
-#include "greeter/ide-greeter-section.h"
+#include "ide-greeter-section.h"
 
 G_DEFINE_INTERFACE (IdeGreeterSection, ide_greeter_section, GTK_TYPE_WIDGET)
 
@@ -52,7 +54,7 @@ ide_greeter_section_default_init (IdeGreeterSectionInterface *iface)
    * Use ide_greeter_section_emit_project_activated() to activate
    * this signal.
    *
-   * Since: 3.28
+   * Since: 3.32
    */
   signals [PROJECT_ACTIVATED] =
     g_signal_new ("project-activated",
@@ -72,7 +74,7 @@ ide_greeter_section_default_init (IdeGreeterSectionInterface *iface)
  *
  * Returns: the priority for the section
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gint
 ide_greeter_section_get_priority (IdeGreeterSection *self)
@@ -94,7 +96,7 @@ ide_greeter_section_get_priority (IdeGreeterSection *self)
  *
  * Returns: %TRUE if at least one element matched.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_greeter_section_filter (IdeGreeterSection *self,
@@ -132,7 +134,7 @@ ide_greeter_section_emit_project_activated (IdeGreeterSection *self,
  *
  * Returns: %TRUE if an item was activated
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_greeter_section_activate_first (IdeGreeterSection *self)

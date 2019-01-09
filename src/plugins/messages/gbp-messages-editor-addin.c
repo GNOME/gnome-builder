@@ -1,6 +1,6 @@
 /* gbp-messages-editor-addin.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-messages-editor-addin"
 
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gbp-messages-editor-addin.h"
 #include "gbp-messages-panel.h"
@@ -30,16 +32,16 @@ struct _GbpMessagesEditorAddin
 };
 
 static void
-gbp_messages_editor_addin_load (IdeEditorAddin       *addin,
-                                IdeEditorPerspective *editor)
+gbp_messages_editor_addin_load (IdeEditorAddin   *addin,
+                                IdeEditorSurface *editor)
 {
   GbpMessagesEditorAddin *self = (GbpMessagesEditorAddin *)addin;
   GtkWidget *utilities;
 
   g_assert (GBP_IS_MESSAGES_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
-  utilities = ide_editor_perspective_get_utilities (editor);
+  utilities = ide_editor_surface_get_utilities (editor);
 
   /* hidden by default */
   self->panel = g_object_new (GBP_TYPE_MESSAGES_PANEL, NULL);
@@ -52,12 +54,12 @@ gbp_messages_editor_addin_load (IdeEditorAddin       *addin,
 
 static void
 gbp_messages_editor_addin_unload (IdeEditorAddin       *addin,
-                                  IdeEditorPerspective *editor)
+                                  IdeEditorSurface *editor)
 {
   GbpMessagesEditorAddin *self = (GbpMessagesEditorAddin *)addin;
 
   g_assert (GBP_IS_MESSAGES_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
   if (self->panel != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->panel));

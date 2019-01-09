@@ -17,10 +17,12 @@
 
  * This code is a modification of:
  * https://git.gnome.org/browse/gspell/tree/gspell/gspell-navigator-text-view.c
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gbp-spell-buffer-addin.h"
 #include "gbp-spell-navigator.h"
@@ -84,7 +86,7 @@ get_misspelled_tag (GbpSpellNavigator *self)
   g_assert (self->buffer != NULL);
   g_assert (IDE_IS_BUFFER (self->buffer));
 
-  buffer_addin = ide_buffer_addin_find_by_module_name (IDE_BUFFER (self->buffer), "spellcheck-plugin");
+  buffer_addin = ide_buffer_addin_find_by_module_name (IDE_BUFFER (self->buffer), "spellcheck");
   if (buffer_addin != NULL)
     return gbp_spell_buffer_addin_get_misspelled_tag (GBP_SPELL_BUFFER_ADDIN (buffer_addin));
 

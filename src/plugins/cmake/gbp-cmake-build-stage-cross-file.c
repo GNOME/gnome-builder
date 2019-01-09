@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Authors: Corentin Noël <corentin.noel@collabora.com>
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-cmake-build-stage-cross-file"
@@ -63,6 +65,7 @@ _gbp_cmake_file_set_quoted (gchar       **content,
 static void
 gbp_cmake_build_stage_cross_file_query (IdeBuildStage    *stage,
                                         IdeBuildPipeline *pipeline,
+                                        GPtrArray        *targets,
                                         GCancellable     *cancellable)
 {
   GbpCMakeBuildStageCrossFile *self = (GbpCMakeBuildStageCrossFile *)stage;
@@ -192,7 +195,6 @@ gbp_cmake_build_stage_cross_file_class_init (GbpCMakeBuildStageCrossFileClass *k
 static void
 gbp_cmake_build_stage_cross_file_init (GbpCMakeBuildStageCrossFile *self)
 {
-  
 }
 
 GbpCMakeBuildStageCrossFile *

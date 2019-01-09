@@ -1,10 +1,12 @@
 [Plugin]
-Module=project-tree-plugin
-Name=Project Tree
-Description=Provides a project tree
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
-Depends=editor
 Builtin=true
+Copyright=Copyright © 2014-2018 Christian Hergert
+Depends=editor;
+Description=Builder's project creation wizard
+Embedded=_gbp_project_tree_register_types
 Hidden=true
-Embedded=gb_project_tree_register_types
+Module=project-tree
+Name=Project Tree
+X-Workspace-Kind=primary;
+X-Tree-Kind=project-tree;

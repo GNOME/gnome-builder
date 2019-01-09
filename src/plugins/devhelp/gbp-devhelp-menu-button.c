@@ -1,6 +1,6 @@
 /* gbp-devhelp-menu-button.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-devhelp-menu-button"
 
 #include <devhelp/devhelp.h>
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gbp-devhelp-menu-button.h"
 
@@ -99,6 +101,8 @@ gbp_devhelp_menu_button_pixbuf_data_func (GtkCellLayout   *cell_layout,
     }
 
   g_object_set (cell, "icon-name", icon_name, NULL);
+
+  g_clear_pointer (&link, dh_link_unref);
 }
 
 static void
@@ -165,7 +169,7 @@ monkey_patch_devhelp (GbpDevhelpMenuButton *self)
   model = gtk_tree_view_get_model (tree_view);
   column_type = gtk_tree_model_get_column_type (model, DH_KEYWORD_MODEL_COL_LINK);
 
-  if (column_type != G_TYPE_POINTER)
+  if (column_type != DH_TYPE_LINK)
     {
       g_warning ("Link type %s does not match expectation",
                  g_type_name (column_type));
@@ -227,7 +231,7 @@ gbp_devhelp_menu_button_class_init (GbpDevhelpMenuButtonClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/devhelp-plugin/gbp-devhelp-menu-button.ui");
+                                               "/plugins/devhelp/gbp-devhelp-menu-button.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpMenuButton, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpMenuButton, sidebar);
 

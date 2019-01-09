@@ -1,12 +1,13 @@
 [Plugin]
-Module=python-pack-plugin
-Name=Python Auto-Indenter
-Description=Provides auto-indentation for the Python programming language
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Embedded=ide_python_pack_register_types
-X-Indenter-Languages=python,python3
-X-Indenter-Languages-Priority=0
-X-Completion-Provider-Languages=python,python3
+Copyright=Copyright © 2015 Christian Hergert
+Depends=editor;
+Description=Provides auto-indentation for the Python programming language
+Embedded=_ide_python_pack_register_types
+Module=python-pack
+Name=Python Auto-Indenter
 X-Completion-Provider-Languages-Priority=0
+X-Completion-Provider-Languages=python,python3
+X-Indenter-Languages-Priority=0
+X-Indenter-Languages=python,python3

@@ -1,6 +1,6 @@
 /* ide-source-view.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
+#if !defined (IDE_SOURCEVIEW_INSIDE) && !defined (IDE_SOURCEVIEW_COMPILATION)
+# error "Only <libide-sourceview.h> can be included directly."
+#endif
+
 #include <gtksourceview/gtksource.h>
+#include <libide-code.h>
 
-#include "ide-types.h"
-#include "ide-version-macros.h"
-
-#include "completion/ide-completion-types.h"
+#include "ide-completion-types.h"
+#include "ide-gutter.h"
+#include "ide-snippet-types.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SOURCE_VIEW  (ide_source_view_get_type())
+#define IDE_TYPE_SOURCE_VIEW (ide_source_view_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeSourceView, ide_source_view, IDE, SOURCE_VIEW, GtkSourceView)
 
 typedef enum
@@ -46,6 +52,8 @@ typedef enum
  * @IDE_SOURCE_VIEW_MODE_MODAL: Modal
  *
  * The type of keyboard mode.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -60,6 +68,8 @@ typedef enum
  * @IDE_SOURCE_VIEW_THEATRIC_SHRINK: shrink from selection location.
  *
  * The style of theatric.
+ *
+ * Since: 3.32
  */
 
 typedef enum
@@ -145,6 +155,8 @@ typedef enum
  *
  * Some of these movements may be modified by using the modify-repeat action.
  * First adjust the repeat and then perform the "movement" action.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -266,7 +278,7 @@ struct _IdeSourceViewClass
   void (*delete_selection)            (IdeSourceView           *self);
   void (*end_macro)                   (IdeSourceView           *self);
   void (*focus_location)              (IdeSourceView           *self,
-                                       IdeSourceLocation       *location);
+                                       IdeLocation       *location);
   void (*goto_definition)             (IdeSourceView           *self);
   void (*hide_completion)             (IdeSourceView           *self);
   void (*indent_selection)            (IdeSourceView           *self,
@@ -337,157 +349,135 @@ struct _IdeSourceViewClass
   void (*copy_clipboard_extended)     (IdeSourceView           *self);
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
-  gpointer _reserved9;
-  gpointer _reserved10;
-  gpointer _reserved11;
-  gpointer _reserved12;
-  gpointer _reserved13;
-  gpointer _reserved14;
-  gpointer _reserved15;
-  gpointer _reserved16;
-  gpointer _reserved17;
-  gpointer _reserved18;
-  gpointer _reserved19;
-  gpointer _reserved20;
-  gpointer _reserved21;
-  gpointer _reserved22;
-  gpointer _reserved23;
+  gpointer _reserved[32];
 };
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_has_snippet               (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_clear_snippets            (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSnippet                 *ide_source_view_get_current_snippet       (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint                       ide_source_view_get_visual_column         (IdeSourceView              *self,
                                                                        const GtkTextIter          *location);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_get_visual_position       (IdeSourceView              *self,
                                                                        guint                      *line,
                                                                        guint                      *line_column);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint                        ide_source_view_get_count                 (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFileSettings            *ide_source_view_get_file_settings         (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const PangoFontDescription *ide_source_view_get_font_desc             (IdeSourceView              *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 PangoFontDescription       *ide_source_view_get_scaled_font_desc      (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_highlight_current_line(IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_insert_matching_brace (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_get_iter_at_visual_column (IdeSourceView              *self,
                                                                        guint                      column,
                                                                        GtkTextIter                *location);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar                *ide_source_view_get_mode_display_name     (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar                *ide_source_view_get_mode_name             (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_overwrite_braces      (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_overwrite             (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint                       ide_source_view_get_scroll_offset         (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_show_grid_lines       (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_show_line_changes     (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_show_line_diagnostics (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_show_line_numbers     (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_snippet_completion    (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_get_spell_checking        (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_get_visible_rect          (IdeSourceView              *self,
                                                                        GdkRectangle               *visible_rect);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_jump                      (IdeSourceView              *self,
                                                                        const GtkTextIter          *from,
                                                                        const GtkTextIter          *to);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_pop_snippet               (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_push_snippet              (IdeSourceView              *self,
                                                                        IdeSnippet                 *snippet,
                                                                        const GtkTextIter          *location);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_rollback_search           (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_save_search               (IdeSourceView              *self,
                                                                        const gchar                *search_text);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_count                 (IdeSourceView              *self,
                                                                        gint                        count);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_font_desc             (IdeSourceView              *self,
                                                                        const PangoFontDescription *font_desc);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_font_name             (IdeSourceView              *self,
                                                                        const gchar                *font_name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_highlight_current_line(IdeSourceView              *self,
                                                                        gboolean                    highlight_current_line);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_insert_matching_brace (IdeSourceView              *self,
                                                                        gboolean                    insert_matching_brace);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_misspelled_word       (IdeSourceView              *self,
                                                                        GtkTextIter                *start,
                                                                        GtkTextIter                *end);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_overwrite_braces      (IdeSourceView              *self,
                                                                        gboolean                    overwrite_braces);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_scroll_offset         (IdeSourceView              *self,
                                                                        guint                       scroll_offset);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_show_grid_lines       (IdeSourceView              *self,
                                                                        gboolean                    show_grid_lines);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_show_line_changes     (IdeSourceView              *self,
                                                                        gboolean                    show_line_changes);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_show_line_diagnostics (IdeSourceView              *self,
                                                                        gboolean                    show_line_diagnostics);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_show_line_numbers     (IdeSourceView              *self,
                                                                        gboolean                    show_line_numbers);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_snippet_completion    (IdeSourceView              *self,
                                                                        gboolean                    snippet_completion);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_set_spell_checking        (IdeSourceView              *self,
                                                                        gboolean                    enable);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_move_mark_onscreen        (IdeSourceView              *self,
                                                                        GtkTextMark                *mark);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_place_cursor_onscreen     (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_clear_search              (IdeSourceView              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_scroll_mark_onscreen      (IdeSourceView              *self,
                                                                        GtkTextMark                *mark,
                                                                        IdeSourceScrollAlign        use_align,
                                                                        gdouble                     alignx,
                                                                        gdouble                     aligny);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_scroll_to_mark            (IdeSourceView              *self,
                                                                        GtkTextMark                *mark,
                                                                        gdouble                     within_margin,
@@ -495,7 +485,7 @@ void                        ide_source_view_scroll_to_mark            (IdeSource
                                                                        gdouble                     xalign,
                                                                        gdouble                     yalign,
                                                                        gboolean                    animate_scroll);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_scroll_to_iter            (IdeSourceView              *self,
                                                                        const GtkTextIter          *iter,
                                                                        gdouble                     within_margin,
@@ -503,18 +493,14 @@ void                        ide_source_view_scroll_to_iter            (IdeSource
                                                                        gdouble                     xalign,
                                                                        gdouble                     yalign,
                                                                        gboolean                    animate_scroll);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                        ide_source_view_scroll_to_insert          (IdeSourceView              *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeCompletion              *ide_source_view_get_completion            (IdeSourceView              *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean                    ide_source_view_is_processing_key         (IdeSourceView              *self);
-
-const gchar                *_ide_source_view_get_mode_name            (IdeSourceView              *self) G_GNUC_INTERNAL;
-void                        _ide_source_view_set_count                (IdeSourceView              *self,
-                                                                       gint                        count) G_GNUC_INTERNAL;
-void                        _ide_source_view_set_modifier             (IdeSourceView              *self,
-                                                                       gunichar                    modifier) G_GNUC_INTERNAL;
-GtkTextMark                *_ide_source_view_get_scroll_mark          (IdeSourceView              *self) G_GNUC_INTERNAL;
+IDE_AVAILABLE_IN_3_32
+void                        ide_source_view_set_gutter                (IdeSourceView              *self,
+                                                                       IdeGutter                  *gutter);
 
 G_END_DECLS
