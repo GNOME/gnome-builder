@@ -14,7 +14,7 @@ MAJOR_VERSION = version_split[0]
 MINOR_VERSION = version_split[1]
 MICRO_VERSION = version_split[2]
 
-libide_api_version = '1.0'
+libide_api_version = '@0@.@1@'.format(MAJOR_VERSION, MINOR_VERSION)
 
 pkgdocdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'gnome-builder')
 pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
@@ -78,6 +78,8 @@ status += [
 
 config_h = configuration_data()
 config_h.set_quoted('PACKAGE_NAME', 'gnome-builder')
+config_h.set_quoted('PACKAGE_ABI_S', libide_api_version)
+config_h.set('PACKAGE_ABI', libide_api_version)
 config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
 config_h.set_quoted('PACKAGE_STRING', 'gnome-builder-' + meson.project_version())
 config_h.set_quoted('PACKAGE_DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
