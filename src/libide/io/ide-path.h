@@ -1,6 +1,6 @@
-/* ide-line-reader.h
+/* ide-path.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,17 @@
 
 #pragma once
 
-#include <glib.h>
+#if !defined (IDE_IO_INSIDE) && !defined (IDE_IO_COMPILATION)
+# error "Only <libide-io.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-typedef struct
-{
-  gchar  *contents;
-  gsize   length;
-  gssize  pos;
-} IdeLineReader;
-
 IDE_AVAILABLE_IN_3_32
-void   ide_line_reader_init (IdeLineReader *reader,
-                             gchar         *contents,
-                             gssize         length);
+gchar *ide_path_collapse (const gchar *path);
 IDE_AVAILABLE_IN_3_32
-gchar *ide_line_reader_next (IdeLineReader *reader,
-                             gsize         *length);
+gchar *ide_path_expand   (const gchar *path);
 
 G_END_DECLS

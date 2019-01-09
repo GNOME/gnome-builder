@@ -23,10 +23,10 @@
 
 #include "config.h"
 
+#include <libide-threading.h>
 #include <string.h>
 
-#include "storage/ide-persistent-map-builder.h"
-#include "threading/ide-task.h"
+#include "ide-persistent-map-builder.h"
 
 typedef struct
 {

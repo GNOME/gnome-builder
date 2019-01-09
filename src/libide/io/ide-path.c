@@ -1,6 +1,6 @@
-/* ide-posix.c
+/* ide-path.c
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,83 +23,10 @@
 #include "config.h"
 
 #include <string.h>
-#include <sys/types.h>
-#include <sys/user.h>
-#include <sys/utsname.h>
 #include <unistd.h>
 #include <wordexp.h>
 
-#include "util/ide-posix.h"
-
-gchar *
-ide_create_host_triplet (const gchar *arch,
-                         const gchar *kernel,
-                         const gchar *system)
-{
-  if (arch == NULL || kernel == NULL)
-    return g_strdup (ide_get_system_type ());
-  else if (system == NULL)
-    return g_strdup_printf ("%s-%s", arch, kernel);
-  else
-    return g_strdup_printf ("%s-%s-%s", arch, kernel, system);
-}
-
-const gchar *
-ide_get_system_type (void)
-{
-  static gchar *system_type;
-  g_autofree gchar *os_lower = NULL;
-  const gchar *machine = NULL;
-  struct utsname u;
-
-  if (system_type != NULL)
-    return system_type;
-
-  if (uname (&u) < 0)
-    return g_strdup ("unknown");
-
-  os_lower = g_utf8_strdown (u.sysname, -1);
-
-  /* config.sub doesn't accept amd64-OS */
-  machine = strcmp (u.machine, "amd64") ? u.machine : "x86_64";
-
-  /*
-   * TODO: Clearly we want to discover "gnu", but that should be just fine
-   *       for a default until we try to actually run on something non-gnu.
-   *       Which seems unlikely at the moment. If you run FreeBSD, you can
-   *       probably fix this for me :-) And while you're at it, make the
-   *       uname() call more portable.
-   */
-
-#ifdef __GLIBC__
-  system_type = g_strdup_printf ("%s-%s-%s", machine, os_lower, "gnu");
-#else
-  system_type = g_strdup_printf ("%s-%s", machine, os_lower);
-#endif
-
-  return system_type;
-}
-
-gchar *
-ide_get_system_arch (void)
-{
-  struct utsname u;
-  const char *machine;
-
-  if (uname (&u) < 0)
-    return g_strdup ("unknown");
-
-  /* config.sub doesn't accept amd64-OS */
-  machine = strcmp (u.machine, "amd64") ? u.machine : "x86_64";
-
-  return g_strdup (machine);
-}
-
-gsize
-ide_get_system_page_size (void)
-{
-  return sysconf (_SC_PAGE_SIZE);
-}
+#include "ide-path.h"
 
 /**
  * ide_path_expand:

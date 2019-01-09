@@ -23,8 +23,9 @@
 
 #include "config.h"
 
-#include "storage/ide-persistent-map.h"
-#include "threading/ide-task.h"
+#include <libide-threading.h>
+
+#include "ide-persistent-map.h"
 
 typedef struct
 {

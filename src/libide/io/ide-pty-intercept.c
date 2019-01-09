@@ -1,6 +1,6 @@
-/* ptyintercept.c
+/* ide-pty-intercept.c
  *
- * Copyright 2018 Christian Hergert
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-#include "ptyintercept.h"
+#include "ide-pty-intercept.h"
 
 /*
  * We really don't need all that much. A PTY on Linux has a some amount of
@@ -49,18 +49,17 @@
 #define MASTER_READ_PRIORITY  G_PRIORITY_DEFAULT_IDLE
 #define MASTER_WRITE_PRIORITY G_PRIORITY_HIGH
 
-
-static void     _pty_intercept_side_close (pty_intercept_side_t *side);
-static gboolean _pty_intercept_in_cb      (GIOChannel           *channel,
-                                           GIOCondition          condition,
-                                           gpointer              user_data);
-static gboolean _pty_intercept_out_cb     (GIOChannel           *channel,
-                                           GIOCondition          condition,
-                                           gpointer              user_data);
-static void     clear_source              (guint                *source_id);
+static void     _ide_pty_intercept_side_close (IdePtyInterceptSide *side);
+static gboolean _ide_pty_intercept_in_cb      (GIOChannel          *channel,
+                                               GIOCondition         condition,
+                                               gpointer             user_data);
+static gboolean _ide_pty_intercept_out_cb     (GIOChannel          *channel,
+                                               GIOCondition         condition,
+                                               gpointer             user_data);
+static void     clear_source                  (guint               *source_id);
 
 static gboolean
-_pty_intercept_set_raw (pty_fd_t fd)
+_ide_pty_intercept_set_raw (IdePtyFd fd)
 {
   struct termios t;
 
@@ -80,7 +79,7 @@ _pty_intercept_set_raw (pty_fd_t fd)
 }
 
 /**
- * pty_intercept_create_slave:
+ * ide_pty_intercept_create_slave:
  * @master_fd: a pty master
  * @blocking: use %FALSE to set O_NONBLOCK
  *
@@ -90,15 +89,15 @@ _pty_intercept_set_raw (pty_fd_t fd)
  * PTY slave.
  *
  * Returns: a FD for the slave PTY that should be closed with close().
- *   Upon error, %PTY_FD_INVALID (-1) is returned.
+ *   Upon error, %IDE_PTY_FD_INVALID (-1) is returned.
  *
  * Since: 3.32
  */
-pty_fd_t
-pty_intercept_create_slave (pty_fd_t master_fd,
-                            gboolean blocking)
+IdePtyFd
+ide_pty_intercept_create_slave (IdePtyFd master_fd,
+                                gboolean blocking)
 {
-  g_auto(pty_fd_t) ret = PTY_FD_INVALID;
+  g_auto(IdePtyFd) ret = IDE_PTY_FD_INVALID;
   gint extra = blocking ? 0 : O_NONBLOCK;
 #if defined(HAVE_PTSNAME_R) || defined(__FreeBSD__)
   char name[256];
@@ -109,50 +108,50 @@ pty_intercept_create_slave (pty_fd_t master_fd,
   g_assert (master_fd != -1);
 
   if (grantpt (master_fd) != 0)
-    return PTY_FD_INVALID;
+    return IDE_PTY_FD_INVALID;
 
   if (unlockpt (master_fd) != 0)
-    return PTY_FD_INVALID;
+    return IDE_PTY_FD_INVALID;
 
 #ifdef HAVE_PTSNAME_R
   if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
-    return PTY_FD_INVALID;
+    return IDE_PTY_FD_INVALID;
   name[sizeof name - 1] = '\0';
 #elif defined(__FreeBSD__)
   if (fdevname_r (master_fd, name + 5, sizeof name - 6) == NULL)
-    return PTY_FD_INVALID;
+    return IDE_PTY_FD_INVALID;
   memcpy (name, "/dev/", 5);
   name[sizeof name - 1] = '\0';
 #else
   if (NULL == (name = ptsname (master_fd)))
-    return PTY_FD_INVALID;
+    return IDE_PTY_FD_INVALID;
 #endif
 
   ret = open (name, O_RDWR | O_CLOEXEC | extra);
 
-  if (ret == PTY_FD_INVALID && errno == EINVAL)
+  if (ret == IDE_PTY_FD_INVALID && errno == EINVAL)
     {
       gint flags;
 
       ret = open (name, O_RDWR | O_CLOEXEC);
-      if (ret == PTY_FD_INVALID && errno == EINVAL)
+      if (ret == IDE_PTY_FD_INVALID && errno == EINVAL)
         ret = open (name, O_RDWR);
 
-      if (ret == PTY_FD_INVALID)
-        return PTY_FD_INVALID;
+      if (ret == IDE_PTY_FD_INVALID)
+        return IDE_PTY_FD_INVALID;
 
       /* Add FD_CLOEXEC if O_CLOEXEC failed */
       flags = fcntl (ret, F_GETFD, 0);
       if ((flags & FD_CLOEXEC) == 0)
         {
           if (fcntl (ret, F_SETFD, flags | FD_CLOEXEC) < 0)
-            return PTY_FD_INVALID;
+            return IDE_PTY_FD_INVALID;
         }
 
       if (!blocking)
         {
           if (!g_unix_set_fd_nonblocking (ret, TRUE, NULL))
-            return PTY_FD_INVALID;
+            return IDE_PTY_FD_INVALID;
         }
     }
 
@@ -160,21 +159,21 @@ pty_intercept_create_slave (pty_fd_t master_fd,
 }
 
 /**
- * pty_intercept_create_master:
+ * ide_pty_intercept_create_master:
  *
  * Creates a new PTY master using posix_openpt(). Some fallbacks are
  * provided for non-Linux systems where O_CLOEXEC and O_NONBLOCK may
  * not be supported.
  *
  * Returns: a FD that should be closed with close() if successful.
- *   Upon error, %PTY_FD_INVALID (-1) is returned.
+ *   Upon error, %IDE_PTY_FD_INVALID (-1) is returned.
  *
  * Since: 3.32
  */
-pty_fd_t
-pty_intercept_create_master (void)
+IdePtyFd
+ide_pty_intercept_create_master (void)
 {
-  g_auto(pty_fd_t) master_fd = PTY_FD_INVALID;
+  g_auto(IdePtyFd) master_fd = IDE_PTY_FD_INVALID;
 
   master_fd = posix_openpt (O_RDWR | O_NOCTTY | O_NONBLOCK | O_CLOEXEC);
 
@@ -182,28 +181,28 @@ pty_intercept_create_master (void)
   /* Fallback for operating systems that don't support
    * O_NONBLOCK and O_CLOEXEC when opening.
    */
-  if (master_fd == PTY_FD_INVALID && errno == EINVAL)
+  if (master_fd == IDE_PTY_FD_INVALID && errno == EINVAL)
     {
       master_fd = posix_openpt (O_RDWR | O_NOCTTY | O_CLOEXEC);
 
-      if (master_fd == PTY_FD_INVALID && errno == EINVAL)
+      if (master_fd == IDE_PTY_FD_INVALID && errno == EINVAL)
         {
           gint flags;
 
           master_fd = posix_openpt (O_RDWR | O_NOCTTY);
           if (master_fd == -1)
-            return PTY_FD_INVALID;
+            return IDE_PTY_FD_INVALID;
 
           flags = fcntl (master_fd, F_GETFD, 0);
           if (flags < 0)
-            return PTY_FD_INVALID;
+            return IDE_PTY_FD_INVALID;
 
           if (fcntl (master_fd, F_SETFD, flags | FD_CLOEXEC) < 0)
-            return PTY_FD_INVALID;
+            return IDE_PTY_FD_INVALID;
         }
 
       if (!g_unix_set_fd_nonblocking (master_fd, TRUE, NULL))
-        return PTY_FD_INVALID;
+        return IDE_PTY_FD_INVALID;
     }
 #endif
 
@@ -220,7 +219,7 @@ clear_source (guint *source_id)
 }
 
 static void
-_pty_intercept_side_close (pty_intercept_side_t *side)
+_ide_pty_intercept_side_close (IdePtyInterceptSide *side)
 {
   g_assert (side != NULL);
 
@@ -231,12 +230,12 @@ _pty_intercept_side_close (pty_intercept_side_t *side)
 }
 
 static gboolean
-_pty_intercept_out_cb (GIOChannel   *channel,
-                       GIOCondition  condition,
-                       gpointer      user_data)
+_ide_pty_intercept_out_cb (GIOChannel   *channel,
+                           GIOCondition  condition,
+                           gpointer      user_data)
 {
-  pty_intercept_t *self = user_data;
-  pty_intercept_side_t *us, *them;
+  IdePtyIntercept *self = user_data;
+  IdePtyInterceptSide *us, *them;
   GIOStatus status;
   const gchar *wrbuf;
   gsize n_written = 0;
@@ -292,21 +291,21 @@ _pty_intercept_out_cb (GIOChannel   *channel,
     g_io_add_watch_full (them->channel,
                          them->read_prio,
                          G_IO_IN | G_IO_ERR | G_IO_HUP,
-                         _pty_intercept_in_cb,
+                         _ide_pty_intercept_in_cb,
                          self, NULL);
 
   return G_SOURCE_REMOVE;
 
 close_and_cleanup:
 
-  _pty_intercept_side_close (us);
-  _pty_intercept_side_close (them);
+  _ide_pty_intercept_side_close (us);
+  _ide_pty_intercept_side_close (them);
 
   return G_SOURCE_REMOVE;
 }
 
 /*
- * _pty_intercept_in_cb:
+ * _ide_pty_intercept_in_cb:
  *
  * This function is called when we have received a condition that specifies
  * the channel has data to read. We read that data and then setup a watch
@@ -318,12 +317,12 @@ close_and_cleanup:
  * The in watch is disabled until we have completed the write.
  */
 static gboolean
-_pty_intercept_in_cb (GIOChannel   *channel,
-                      GIOCondition  condition,
-                      gpointer      user_data)
+_ide_pty_intercept_in_cb (GIOChannel   *channel,
+                          GIOCondition  condition,
+                          gpointer      user_data)
 {
-  pty_intercept_t *self = user_data;
-  pty_intercept_side_t *us, *them;
+  IdePtyIntercept *self = user_data;
+  IdePtyInterceptSide *us, *them;
   GIOStatus status = G_IO_STATUS_AGAIN;
   gchar buf[4096];
   gchar *wrbuf = buf;
@@ -331,7 +330,7 @@ _pty_intercept_in_cb (GIOChannel   *channel,
 
   g_assert (channel != NULL);
   g_assert (condition & (G_IO_ERR | G_IO_HUP | G_IO_IN));
-  g_assert (PTY_IS_INTERCEPT (self));
+  g_assert (IDE_IS_PTY_INTERCEPT (self));
 
   if (channel == self->master.channel)
     {
@@ -386,7 +385,7 @@ _pty_intercept_in_cb (GIOChannel   *channel,
           them->out_watch = g_io_add_watch_full (them->channel,
                                                  them->write_prio,
                                                  G_IO_OUT | G_IO_ERR | G_IO_HUP,
-                                                 _pty_intercept_out_cb,
+                                                 _ide_pty_intercept_out_cb,
                                                  self, NULL);
           us->in_watch = 0;
 
@@ -403,14 +402,14 @@ _pty_intercept_in_cb (GIOChannel   *channel,
 
 close_and_cleanup:
 
-  _pty_intercept_side_close (us);
-  _pty_intercept_side_close (them);
+  _ide_pty_intercept_side_close (us);
+  _ide_pty_intercept_side_close (them);
 
   return G_SOURCE_REMOVE;
 }
 
 /**
- * pty_intercept_set_size:
+ * ide_pty_intercept_set_size:
  *
  * Proxies a winsize across to the inferior. If the PTY is the
  * controlling PTY for the process, then SIGWINCH will be signaled
@@ -423,16 +422,16 @@ close_and_cleanup:
  * Since: 3.32
  */
 gboolean
-pty_intercept_set_size (pty_intercept_t *self,
-                        guint            rows,
-                        guint            columns)
+ide_pty_intercept_set_size (IdePtyIntercept *self,
+                            guint            rows,
+                            guint            columns)
 {
 
-  g_return_val_if_fail (PTY_IS_INTERCEPT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_PTY_INTERCEPT (self), FALSE);
 
   if (self->master.channel != NULL)
     {
-      pty_fd_t fd = g_io_channel_unix_get_fd (self->master.channel);
+      IdePtyFd fd = g_io_channel_unix_get_fd (self->master.channel);
       struct winsize ws = {0};
 
       ws.ws_col = columns;
@@ -444,13 +443,39 @@ pty_intercept_set_size (pty_intercept_t *self,
   return FALSE;
 }
 
+static guint
+_g_io_add_watch_full_with_context (GMainContext   *main_context,
+                                   GIOChannel     *channel,
+                                   gint            priority,
+                                   GIOCondition    condition,
+                                   GIOFunc         func,
+                                   gpointer        user_data,
+                                   GDestroyNotify  notify)
+{
+  GSource *source;
+  guint id;
+
+  g_return_val_if_fail (channel != NULL, 0);
+
+  source = g_io_create_watch (channel, condition);
+
+  if (priority != G_PRIORITY_DEFAULT)
+    g_source_set_priority (source, priority);
+  g_source_set_callback (source, (GSourceFunc)func, user_data, notify);
+
+  id = g_source_attach (source, main_context);
+  g_source_unref (source);
+
+  return id;
+}
+
 /**
- * pty_intercept_init:
- * @self: a location of memory to store a #pty_intercept_t
+ * ide_pty_intercept_init:
+ * @self: a location of memory to store a #IdePtyIntercept
  * @fd: the PTY master fd, possibly from a #VtePty
  * @main_context: (nullable): a #GMainContext or %NULL for thread-default
  *
- * Creates a enw #pty_intercept_t using the PTY master fd @fd.
+ * Creates a enw #IdePtyIntercept using the PTY master fd @fd.
  *
  * A new PTY slave is created that will communicate with @fd.
  * Additionally, a new PTY master is created that can communicate
@@ -462,33 +487,33 @@ pty_intercept_set_size (pty_intercept_t *self,
  * Since: 3.32
  */
 gboolean
-pty_intercept_init (pty_intercept_t *self,
-                    int              fd,
-                    GMainContext    *main_context)
+ide_pty_intercept_init (IdePtyIntercept *self,
+                        int              fd,
+                        GMainContext    *main_context)
 {
-  g_auto(pty_fd_t) slave_fd = PTY_FD_INVALID;
-  g_auto(pty_fd_t) master_fd = PTY_FD_INVALID;
+  g_auto(IdePtyFd) slave_fd = IDE_PTY_FD_INVALID;
+  g_auto(IdePtyFd) master_fd = IDE_PTY_FD_INVALID;
   struct winsize ws;
 
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (fd != -1, FALSE);
 
   memset (self, 0, sizeof *self);
-  self->magic = PTY_INTERCEPT_MAGIC;
+  self->magic = IDE_PTY_INTERCEPT_MAGIC;
 
-  slave_fd = pty_intercept_create_slave (fd, FALSE);
-  if (slave_fd == PTY_FD_INVALID)
+  slave_fd = ide_pty_intercept_create_slave (fd, FALSE);
+  if (slave_fd == IDE_PTY_FD_INVALID)
     return FALSE;
 
   /* Do not perform additional processing on the slave_fd created
    * from the master we were provided. Otherwise, it will be happening
    * twice instead of just once.
    */
-  if (!_pty_intercept_set_raw (slave_fd))
+  if (!_ide_pty_intercept_set_raw (slave_fd))
     return FALSE;
 
-  master_fd = pty_intercept_create_master ();
-  if (master_fd == PTY_FD_INVALID)
+  master_fd = ide_pty_intercept_create_master ();
+  if (master_fd == IDE_PTY_FD_INVALID)
     return FALSE;
 
   /* Copy the win size across */
@@ -516,28 +541,30 @@ pty_intercept_init (pty_intercept_t *self,
   g_io_channel_set_buffer_size (self->slave.channel, CHANNEL_BUFFER_SIZE);
 
   self->master.in_watch =
-    g_io_add_watch_full (self->master.channel,
-                         self->master.read_prio,
-                         G_IO_IN | G_IO_ERR | G_IO_HUP,
-                         _pty_intercept_in_cb,
-                         self, NULL);
+    _g_io_add_watch_full_with_context (main_context,
+                                       self->master.channel,
+                                       self->master.read_prio,
+                                       G_IO_IN | G_IO_ERR | G_IO_HUP,
+                                       _ide_pty_intercept_in_cb,
+                                       self, NULL);
 
   self->slave.in_watch =
-    g_io_add_watch_full (self->slave.channel,
-                         self->slave.read_prio,
-                         G_IO_IN | G_IO_ERR | G_IO_HUP,
-                         _pty_intercept_in_cb,
-                         self, NULL);
+    _g_io_add_watch_full_with_context (main_context,
+                                       self->slave.channel,
+                                       self->slave.read_prio,
+                                       G_IO_IN | G_IO_ERR | G_IO_HUP,
+                                       _ide_pty_intercept_in_cb,
+                                       self, NULL);
 
   return TRUE;
 }
 
 /**
- * pty_intercept_clear:
- * @self: a #pty_intercept_t
+ * ide_pty_intercept_clear:
+ * @self: a #IdePtyIntercept
  *
- * Cleans up a #pty_intercept_t previously initialized with
- * pty_intercept_init().
+ * Cleans up a #IdePtyIntercept previously initialized with
+ * ide_pty_intercept_init().
  *
  * This diconnects any #GIOChannel that have been attached and
  * releases any allocated memory.
@@ -547,9 +574,9 @@ pty_intercept_init (pty_intercept_t *self,
  * Since: 3.32
  */
 void
-pty_intercept_clear (pty_intercept_t *self)
+ide_pty_intercept_clear (IdePtyIntercept *self)
 {
-  g_return_if_fail (PTY_IS_INTERCEPT (self));
+  g_return_if_fail (IDE_IS_PTY_INTERCEPT (self));
 
   clear_source (&self->slave.in_watch);
   clear_source (&self->slave.out_watch);
@@ -565,30 +592,30 @@ pty_intercept_clear (pty_intercept_t *self)
 }
 
 /**
- * pty_intercept_get_fd:
- * @self: a #pty_intercept_t
+ * ide_pty_intercept_get_fd:
+ * @self: a #IdePtyIntercept
  *
- * Gets a master PTY fd created by the #pty_intercept_t. This is suitable
+ * Gets a master PTY fd created by the #IdePtyIntercept. This is suitable
  * to use to create a slave fd which can be passed to a child process.
  *
  * Returns: A FD of a PTY master if successful, otherwise -1.
  *
  * Since: 3.32
  */
-pty_fd_t
-pty_intercept_get_fd (pty_intercept_t *self)
+IdePtyFd
+ide_pty_intercept_get_fd (IdePtyIntercept *self)
 {
-  g_return_val_if_fail (PTY_IS_INTERCEPT (self), PTY_FD_INVALID);
-  g_return_val_if_fail (self->master.channel != NULL, PTY_FD_INVALID);
+  g_return_val_if_fail (IDE_IS_PTY_INTERCEPT (self), IDE_PTY_FD_INVALID);
+  g_return_val_if_fail (self->master.channel != NULL, IDE_PTY_FD_INVALID);
 
   return g_io_channel_unix_get_fd (self->master.channel);
 }
 
 /**
- * pty_intercept_set_callback:
- * @self: a pty_intercept_t
+ * ide_pty_intercept_set_callback:
+ * @self: a IdePtyIntercept
  * @side: the side containing the data to watch
- * @callback: the callback to execute when data is received
+ * @callback: (scope notified): the callback to execute when data is received
  * @user_data: closure data for @callback
  *
  * This sets the callback to execute every time data is received
@@ -599,12 +626,12 @@ pty_intercept_get_fd (pty_intercept_t *self)
  * Since: 3.32
  */
 void
-pty_intercept_set_callback (pty_intercept_t          *self,
-                            pty_intercept_side_t     *side,
-                            pty_intercept_callback_t  callback,
-                            gpointer                  callback_data)
+ide_pty_intercept_set_callback (IdePtyIntercept         *self,
+                                IdePtyInterceptSide     *side,
+                                IdePtyInterceptCallback  callback,
+                                gpointer                 callback_data)
 {
-  g_return_if_fail (PTY_IS_INTERCEPT (self));
+  g_return_if_fail (IDE_IS_PTY_INTERCEPT (self));
   g_return_if_fail (side == &self->master || side == &self->slave);
 
   side->callback = callback;

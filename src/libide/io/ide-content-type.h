@@ -1,6 +1,6 @@
-/* ide-posix.h
+/* ide-content-type.h
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,12 @@
 
 #pragma once
 
-#include <glib.h>
-
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_3_32
-gchar       *ide_get_system_arch      (void);
-IDE_AVAILABLE_IN_3_32
-const gchar *ide_get_system_type      (void);
-IDE_AVAILABLE_IN_3_32
-gchar       *ide_create_host_triplet  (const gchar *arch,
-                                       const gchar *kernel,
-                                       const gchar *system);
-IDE_AVAILABLE_IN_3_32
-gsize        ide_get_system_page_size (void) G_GNUC_CONST;
-IDE_AVAILABLE_IN_3_32
-gchar       *ide_path_collapse        (const gchar *path);
-IDE_AVAILABLE_IN_3_32
-gchar       *ide_path_expand          (const gchar *path);
+GIcon *ide_g_content_type_get_symbolic_icon (const gchar *content_type);
 
 G_END_DECLS
+

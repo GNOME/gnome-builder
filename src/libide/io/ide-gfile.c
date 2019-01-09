@@ -1,4 +1,4 @@
-/* ide-glib.c
+/* ide-gfile.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,180 +18,159 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-glib"
-
-#include <string.h>
+#define G_LOG_DOMAIN "ide-gfile"
 
 #include "config.h"
 
-#include "util/ide-flatpak.h"
-#include "util/ide-glib.h"
-#include "subprocess/ide-subprocess.h"
-#include "subprocess/ide-subprocess-launcher.h"
-#include "threading/ide-task.h"
-#include "vcs/ide-vcs.h"
+#include <libide-threading.h>
 
-typedef struct
+#include "ide-gfile.h"
+
+static GPtrArray *g_ignored;
+G_LOCK_DEFINE_STATIC (ignored);
+
+static GPtrArray *
+get_ignored_locked (void)
 {
-  GType type;
-  GTask *task;
-  union {
-    gboolean v_bool;
-    gint v_int;
-    GError *v_error;
-    struct {
-      gpointer pointer;
-      GDestroyNotify destroy;
-    } v_ptr;
-  } u;
-} TaskState;
+  static const gchar *ignored_patterns[] = {
+    /* Ignore Gio temporary files */
+    ".goutputstream-*",
+    /* Ignore minified JS */
+    "*.min.js",
+    "*.min.js.*",
+  };
 
-static gboolean
-do_return (gpointer user_data)
-{
-  TaskState *state = user_data;
-
-  switch (state->type)
+  if (g_ignored == NULL)
     {
-    case G_TYPE_INT:
-      g_task_return_int (state->task, state->u.v_int);
-      break;
-
-    case G_TYPE_BOOLEAN:
-      g_task_return_boolean (state->task, state->u.v_bool);
-      break;
-
-    case G_TYPE_POINTER:
-      g_task_return_pointer (state->task, state->u.v_ptr.pointer, state->u.v_ptr.destroy);
-      state->u.v_ptr.pointer = NULL;
-      state->u.v_ptr.destroy = NULL;
-      break;
-
-    default:
-      if (state->type == G_TYPE_ERROR)
-        {
-          g_task_return_error (state->task, g_steal_pointer (&state->u.v_error));
-          break;
-        }
-
-      g_assert_not_reached ();
+      g_ignored = g_ptr_array_new ();
+      for (guint i = 0; i < G_N_ELEMENTS (ignored_patterns); i++)
+        g_ptr_array_add (g_ignored, g_pattern_spec_new (ignored_patterns[i]));
     }
 
-  g_clear_object (&state->task);
-  g_slice_free (TaskState, state);
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-task_state_attach (TaskState *state)
-{
-  GMainContext *main_context;
-  GSource *source;
-
-  g_assert (state != NULL);
-  g_assert (G_IS_TASK (state->task));
-
-  main_context = g_task_get_context (state->task);
-
-  source = g_timeout_source_new (0);
-  g_source_set_callback (source, do_return, state, NULL);
-  g_source_set_name (source, "[ide] ide_g_task_return_from_main");
-  g_source_attach (source, main_context);
-  g_source_unref (source);
+  return g_ignored;
 }
 
 /**
- * ide_g_task_return_boolean_from_main:
+ * ide_g_file_add_ignored_pattern:
+ * @pattern: a #GPatternSpec style glob pattern
  *
- * This is just like g_task_return_boolean() except that it enforces
- * that the current stack return to the main context before dispatching
- * the callback.
+ * Adds a pattern that can be used to match ingored files. These are global
+ * to the application, so they should only include well-known ignored files
+ * such as those internal to a build system, or version control system, and
+ * similar.
  *
  * Since: 3.32
  */
 void
-ide_g_task_return_boolean_from_main (GTask    *task,
-                                     gboolean  value)
+ide_g_file_add_ignored_pattern (const gchar *pattern)
 {
-  TaskState *state;
-
-  g_return_if_fail (G_IS_TASK (task));
-
-  state = g_slice_new0 (TaskState);
-  state->type = G_TYPE_BOOLEAN;
-  state->task = g_object_ref (task);
-  state->u.v_bool = !!value;
-
-  task_state_attach (state);
-}
-
-void
-ide_g_task_return_int_from_main (GTask *task,
-                                 gint   value)
-{
-  TaskState *state;
-
-  g_return_if_fail (G_IS_TASK (task));
-
-  state = g_slice_new0 (TaskState);
-  state->type = G_TYPE_INT;
-  state->task = g_object_ref (task);
-  state->u.v_int = value;
-
-  task_state_attach (state);
-}
-
-void
-ide_g_task_return_pointer_from_main (GTask          *task,
-                                     gpointer        value,
-                                     GDestroyNotify  notify)
-{
-  TaskState *state;
-
-  g_return_if_fail (G_IS_TASK (task));
-
-  state = g_slice_new0 (TaskState);
-  state->type = G_TYPE_POINTER;
-  state->task = g_object_ref (task);
-  state->u.v_ptr.pointer = value;
-  state->u.v_ptr.destroy = notify;
-
-  task_state_attach (state);
+  G_LOCK (ignored);
+  g_ptr_array_add (get_ignored_locked (), g_pattern_spec_new (pattern));
+  G_UNLOCK (ignored);
 }
 
 /**
- * ide_g_task_return_error_from_main:
- * @task: a #GTask
- * @error: (transfer full): a #GError.
+ * ide_path_is_ignored:
+ * @path: the path to the file
  *
- * Like g_task_return_error() but ensures we return to the main loop before
- * dispatching the result.
+ * Checks if @path should be ignored using the global file
+ * ignores registered with Builder.
+ *
+ * Returns: %TRUE if @path should be ignored, otherwise %FALSE
  *
  * Since: 3.32
  */
-void
-ide_g_task_return_error_from_main (GTask  *task,
-                                   GError *error)
+gboolean
+ide_path_is_ignored (const gchar *path)
 {
-  TaskState *state;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *reversed = NULL;
+  GPtrArray *ignored;
+  gsize len;
+  gboolean ret = FALSE;
 
-  g_return_if_fail (G_IS_TASK (task));
+  name = g_path_get_basename (path);
+  len = strlen (name);
+  reversed = g_utf8_strreverse (name, len);
 
-  state = g_slice_new0 (TaskState);
-  state->type = G_TYPE_ERROR;
-  state->task = g_object_ref (task);
-  state->u.v_error = error;
+  /* Ignore empty files for whatever reason */
+  if (ide_str_empty0 (name))
+    return TRUE;
 
-  task_state_attach (state);
+  /* Ignore builtin backup files by GIO */
+  if (name[len - 1] == '~')
+    return TRUE;
+
+  G_LOCK (ignored);
+
+  ignored = get_ignored_locked ();
+
+  for (guint i = 0; i < ignored->len; i++)
+    {
+      GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
+
+      if (g_pattern_match (pattern_spec, len, name, reversed))
+        {
+          ret = TRUE;
+          break;
+        }
+    }
+
+  G_UNLOCK (ignored);
+
+  return ret;
 }
 
-const gchar *
-ide_gettext (const gchar *message)
+/**
+ * ide_g_file_is_ignored:
+ * @file: a #GFile
+ *
+ * Checks if @file should be ignored using the internal ignore rules.  If you
+ * care about the version control system, see #IdeVcs and ide_vcs_is_ignored().
+ *
+ * Returns: %TRUE if @file should be ignored; otherwise %FALSE.
+ *
+ * Since: 3.32
+ */
+gboolean
+ide_g_file_is_ignored (GFile *file)
 {
-  if (message != NULL)
-    return g_dgettext (GETTEXT_PACKAGE, message);
-  return NULL;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *reversed = NULL;
+  GPtrArray *ignored;
+  gsize len;
+  gboolean ret = FALSE;
+
+  name = g_file_get_basename (file);
+  len = strlen (name);
+  reversed = g_utf8_strreverse (name, len);
+
+  /* Ignore empty files for whatever reason */
+  if (ide_str_empty0 (name))
+    return TRUE;
+
+  /* Ignore builtin backup files by GIO */
+  if (name[len - 1] == '~')
+    return TRUE;
+
+  G_LOCK (ignored);
+
+  ignored = get_ignored_locked ();
+
+  for (guint i = 0; i < ignored->len; i++)
+    {
+      GPatternSpec *pattern_spec = g_ptr_array_index (ignored, i);
+
+      if (g_pattern_match (pattern_spec, len, name, reversed))
+        {
+          ret = TRUE;
+          break;
+        }
+    }
+
+  G_UNLOCK (ignored);
+
+  return ret;
 }
 
 /**
@@ -386,6 +365,23 @@ ide_g_file_get_children_async (GFile               *file,
   ide_task_set_source_tag (task, ide_g_file_get_children_async);
   ide_task_set_priority (task, io_priority);
   ide_task_set_task_data (task, gc, get_children_free);
+
+#ifdef DEVELOPMENT_BUILD
+  /* Useful for testing slow interactions on project-tree and such */
+  if (g_getenv ("IDE_G_FILE_DELAY"))
+    {
+      gboolean
+      delayed_run (gpointer data)
+      {
+        g_autoptr(IdeTask) subtask = data;
+        ide_task_run_in_thread (subtask, ide_g_file_get_children_worker);
+        return G_SOURCE_REMOVE;
+      }
+      g_timeout_add_seconds (1, delayed_run, g_object_ref (task));
+      return;
+    }
+#endif
+
   ide_task_run_in_thread (task, ide_g_file_get_children_worker);
 }
 
@@ -491,7 +487,7 @@ populate_descendants_matching (GFile        *file,
           GFile *child = g_ptr_array_index (children, i);
 
           /* Don't recurse into known bad directories */
-          if (!ide_vcs_is_ignored (NULL, child, NULL))
+          if (!ide_g_file_is_ignored (child))
             populate_descendants_matching (child, cancellable, results, spec, depth - 1);
         }
     }
@@ -692,125 +688,4 @@ ide_g_host_file_get_contents (const gchar  *path,
   }
 
   return TRUE;
-}
-
-gboolean
-ide_environ_parse (const gchar  *pair,
-                   gchar       **key,
-                   gchar       **value)
-{
-  const gchar *eq;
-
-  g_return_val_if_fail (pair != NULL, FALSE);
-
-  if (key != NULL)
-    *key = NULL;
-
-  if (value != NULL)
-    *value = NULL;
-
-  if ((eq = strchr (pair, '=')))
-    {
-      if (key != NULL)
-        *key = g_strndup (pair, eq - pair);
-
-      if (value != NULL)
-        *value = g_strdup (eq + 1);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
- * ide_g_content_type_get_symbolic_icon:
- *
- * This function is simmilar to g_content_type_get_symbolic_icon() except that
- * it takes our bundled icons into account to ensure that they are taken at a
- * higher priority than the fallbacks from the current icon theme such as
- * Adwaita.
- *
- * Returns: (transfer full) (nullable): A #GIcon or %NULL
- *
- * Since: 3.32
- */
-GIcon *
-ide_g_content_type_get_symbolic_icon (const gchar *content_type)
-{
-  static GHashTable *bundled;
-  g_autoptr(GIcon) icon = NULL;
-
-  g_return_val_if_fail (content_type != NULL, NULL);
-
-  if (g_once_init_enter (&bundled))
-    {
-      GHashTable *table = g_hash_table_new (g_str_hash, g_str_equal);
-
-      /*
-       * This needs to be updated when we add icons for specific mime-types
-       * because of how icon theme loading works (and it wanting to use
-       * Adwaita generic icons before our hicolor specific icons.
-       */
-
-#define ADD_ICON(t, n, v) g_hash_table_insert (t, (gpointer)n, v ? (gpointer)v : (gpointer)n)
-      ADD_ICON (table, "application-x-php-symbolic", NULL);
-      ADD_ICON (table, "text-css-symbolic", NULL);
-      ADD_ICON (table, "text-html-symbolic", NULL);
-      ADD_ICON (table, "text-markdown-symbolic", NULL);
-      ADD_ICON (table, "text-rust-symbolic", NULL);
-      ADD_ICON (table, "text-sql-symbolic", NULL);
-      ADD_ICON (table, "text-x-authors-symbolic", NULL);
-      ADD_ICON (table, "text-x-changelog-symbolic", NULL);
-      ADD_ICON (table, "text-x-chdr-symbolic", NULL);
-      ADD_ICON (table, "text-x-copying-symbolic", NULL);
-      ADD_ICON (table, "text-x-cpp-symbolic", NULL);
-      ADD_ICON (table, "text-x-csrc-symbolic", NULL);
-      ADD_ICON (table, "text-x-javascript-symbolic", NULL);
-      ADD_ICON (table, "text-x-python-symbolic", NULL);
-      ADD_ICON (table, "text-x-python3-symbolic", "text-x-python-symbolic");
-      ADD_ICON (table, "text-x-readme-symbolic", NULL);
-      ADD_ICON (table, "text-x-ruby-symbolic", NULL);
-      ADD_ICON (table, "text-x-script-symbolic", NULL);
-      ADD_ICON (table, "text-x-vala-symbolic", NULL);
-      ADD_ICON (table, "text-xml-symbolic", NULL);
-#undef ADD_ICON
-
-      g_once_init_leave (&bundled, table);
-    }
-
-  /*
-   * Basically just steal the name if we get something that is not generic,
-   * because that is the only way we can somewhat ensure that we don't use
-   * the Adwaita fallback for generic when what we want is the *exact* match
-   * from our hicolor/ bundle.
-   */
-
-  icon = g_content_type_get_symbolic_icon (content_type);
-
-  if (G_IS_THEMED_ICON (icon))
-    {
-      const gchar * const *names = g_themed_icon_get_names (G_THEMED_ICON (icon));
-
-      if (names != NULL)
-        {
-          gboolean fallback = FALSE;
-
-          for (guint i = 0; names[i] != NULL; i++)
-            {
-              const gchar *replace = g_hash_table_lookup (bundled, names[i]);
-
-              if (replace != NULL)
-                return g_icon_new_for_string (replace, NULL);
-
-              fallback |= (g_str_equal (names[i], "text-plain") ||
-                           g_str_equal (names[i], "application-octet-stream"));
-            }
-
-          if (fallback)
-            return g_icon_new_for_string ("text-x-generic-symbolic", NULL);
-        }
-    }
-
-  return g_steal_pointer (&icon);
 }
