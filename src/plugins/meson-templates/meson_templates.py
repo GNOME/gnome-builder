@@ -20,9 +20,6 @@ import gi
 import os
 from os import path
 
-gi.require_version('Ide', '1.0')
-gi.require_version('Template', '1.0')
-
 from gi.repository import (
     Ide,
     Gio,
@@ -40,7 +37,6 @@ class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
                 LibraryProjectTemplate(),
                 CLIProjectTemplate(),
                 EmptyProjectTemplate()]
-
 
 class MesonTemplateLocator(Template.TemplateLocator):
     license = None
@@ -129,8 +125,10 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
         scope.get('name_').assign_string(name_)
         scope.get('NAME').assign_string(name.upper().replace('-','_'))
 
-        # TODO: Support setting app id
-        appid = 'org.gnome.' + name.title()
+        if 'app-id' in params:
+            appid = params['app-id'].get_string()
+        else:
+            appid = 'org.example.App'
         appid_path = '/' + appid.replace('.', '/')
         scope.get('appid').assign_string(appid)
         scope.get('appid_path').assign_string(appid_path)
@@ -225,7 +223,7 @@ class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
             if src.startswith('resource://'):
                 self.add_resource(src[11:], destination, scope, modes.get(src, 0))
             else:
-                path = os.path.join('/org/gnome/builder/plugins/meson_templates', src)
+                path = os.path.join('/plugins/meson_templates', src)
                 self.add_resource(path, destination, scope, modes.get(src, 0))
 
         self.expand_all_async(cancellable, self.expand_all_cb, task)

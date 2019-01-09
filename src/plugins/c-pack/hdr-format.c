@@ -1,6 +1,6 @@
 /* hdr-format.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "hdr-format"
 
-#include <glib.h>
-#include <ide.h>
+#include <gtksourceview/gtksource.h>
 #include <string.h>
 
 #include "c-parse-helper.h"
@@ -209,7 +210,7 @@ push_chunk (GArray      *ar,
   str = pos;
 
   chunk.return_type = g_strstrip (g_steal_pointer (&return_type));
-  
+
   if (!(ident = getword (str, &pos)))
     goto failure;
   if (*ident != '_' && !g_ascii_isalpha (*ident))
@@ -405,6 +406,12 @@ hdr_format_string (const gchar *data,
             {
               g_string_append (out, "...");
               break;
+            }
+
+          if (p->type == NULL)
+            {
+              g_warning ("Unexpected NULL value for type");
+              continue;
             }
 
           g_string_append (out, p->type);

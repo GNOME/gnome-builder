@@ -1,10 +1,11 @@
 [Plugin]
-Module=autotools-plugin
-Name=Autotools
-Description=Provides integration with the Autotools build system
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Embedded=ide_autotools_register_types
-X-Project-File-Filter-Pattern=configure.ac,configure.in
+Copyright=Copyright © 2015-2018 Christian Hergert
+Description=Provides integration with the Autotools build system
+Embedded=_ide_autotools_register_types
+Hidden=true
+Module=autotools
+Name=Autotools
 X-Project-File-Filter-Name=Autotools Project (configure.ac)
+X-Project-File-Filter-Pattern=configure.ac,configure.in

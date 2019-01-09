@@ -14,13 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-vcs-config"
 
 #include "config.h"
 
-#include "vcs/ide-vcs-config.h"
+#include "ide-vcs-config.h"
+#include "ide-vcs-enums.h"
 
 G_DEFINE_INTERFACE (IdeVcsConfig, ide_vcs_config, G_TYPE_OBJECT)
 

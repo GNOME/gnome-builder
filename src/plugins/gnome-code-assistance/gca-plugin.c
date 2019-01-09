@@ -1,6 +1,6 @@
 /* gca-plugin.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-gui.h>
 
 #include "ide-gca-diagnostic-provider.h"
 #include "ide-gca-preferences-addin.h"
-#include "ide-gca-service.h"
 
-void
-ide_gca_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_gca_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_SERVICE,
-                                              IDE_TYPE_GCA_SERVICE);
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               IDE_TYPE_GCA_DIAGNOSTIC_PROVIDER);
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               IDE_TYPE_GCA_PREFERENCES_ADDIN);

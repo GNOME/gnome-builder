@@ -1,9 +1,9 @@
 [Plugin]
-Module=color-picker-plugin
-Name=Color Picker
-Description=Show a color picker to inspect or change text color codes
 Authors=Sébastien Lafargue <slafargue@gnome.org>
+Builtin=true
 Copyright=Copyright © 2016 Sébastien Lafargue
 Depends=editor
-Builtin=true
-Embedded=gb_color_picker_register_types
+Description=Show a color picker to inspect or change text color codes
+Embedded=_gb_color_picker_register_types
+Module=color-picker
+Name=Color Picker

@@ -1,7 +1,7 @@
 /* ide-gettext-diagnostic-provider.c
  *
  * Copyright 2016 Daiki Ueno <dueno@src.gnome.org>
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-gettext-diagnostic-provider"
@@ -78,7 +80,7 @@ ide_gettext_diagnostic_provider_communicate_cb (GObject      *object,
   g_autofree gchar *stderr_buf = NULL;
   g_autofree gchar *stdout_buf = NULL;
   IdeLineReader reader;
-  IdeFile *file;
+  GFile *file;
   gchar *line;
   gsize len;
 
@@ -94,16 +96,16 @@ ide_gettext_diagnostic_provider_communicate_cb (GObject      *object,
 
   file = ide_task_get_task_data (task);
   g_assert (file != NULL);
-  g_assert (IDE_IS_FILE (file));
+  g_assert (G_IS_FILE (file));
 
-  ret = ide_diagnostics_new (NULL);
+  ret = ide_diagnostics_new ();
 
   ide_line_reader_init (&reader, stderr_buf, -1);
 
   while (NULL != (line = ide_line_reader_next (&reader, &len)))
     {
       g_autoptr(IdeDiagnostic) diag = NULL;
-      g_autoptr(IdeSourceLocation) loc = NULL;
+      g_autoptr(IdeLocation) loc = NULL;
       guint64 lineno;
 
       line[len] = '\0';
@@ -130,20 +132,21 @@ ide_gettext_diagnostic_provider_communicate_cb (GObject      *object,
 
       line += strlen (": ");
 
-      loc = ide_source_location_new (file, lineno, 0, 0);
+      loc = ide_location_new (file, lineno, -1);
       diag = ide_diagnostic_new (IDE_DIAGNOSTIC_WARNING, line, loc);
       ide_diagnostics_add (ret, diag);
     }
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&ret),
-                           (GDestroyNotify)ide_diagnostics_unref);
+                           g_object_unref);
 }
 
 static void
 ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
-                                                IdeFile               *file,
-                                                IdeBuffer             *buffer,
+                                                GFile                 *file,
+                                                GBytes                *contents,
+                                                const gchar           *lang_id,
                                                 GCancellable          *cancellable,
                                                 GAsyncReadyCallback    callback,
                                                 gpointer               user_data)
@@ -151,16 +154,13 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   IdeGettextDiagnosticProvider *self = (IdeGettextDiagnosticProvider *)provider;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GBytes) contents = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
-  GtkSourceLanguage *language;
-  const gchar *lang_id = NULL;
   const gchar *xgettext_id;
 
   g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
-  g_assert (IDE_IS_FILE (file));
-  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_FILE (file));
+  g_assert (contents != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -169,9 +169,7 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   /* Figure out what language xgettext should use */
-  if (!(language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))) ||
-      !(lang_id = gtk_source_language_get_id (language)) ||
-      !(xgettext_id = id_to_xgettext_language (lang_id)))
+  if (!(xgettext_id = id_to_xgettext_language (lang_id)))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -182,11 +180,11 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
     }
 
   /* Return an empty set if we failed to locate any buffer contents */
-  if (!(contents = ide_buffer_get_content (buffer)) || g_bytes_get_size (contents) == 0)
+  if (g_bytes_get_size (contents) == 0)
     {
       ide_task_return_pointer (task,
-                               ide_diagnostics_new (NULL),
-                               (GDestroyNotify)ide_diagnostics_unref);
+                               ide_diagnostics_new (),
+                               g_object_unref);
       return;
     }
 

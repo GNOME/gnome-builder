@@ -1,6 +1,6 @@
 /* ide-search-provider.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,14 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-search-provider"
 
 #include "config.h"
 
-#include "search/ide-search-provider.h"
-#include "threading/ide-task.h"
+#include <libide-threading.h>
+
+#include "ide-search-provider.h"
 
 G_DEFINE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE_TYPE_OBJECT)
 
@@ -86,8 +89,10 @@ ide_search_provider_search_async (IdeSearchProvider   *self,
  *
  * Completes a request to a search provider.
  *
- * Returns: (transfer full) (element-type Ide.SearchResult): a #GPtrArray
+ * Returns: (transfer full) (element-type IdeSearchResult): a #GPtrArray
  *    of #IdeSearchResult elements.
+ *
+ * Since: 3.32
  */
 GPtrArray *
 ide_search_provider_search_finish (IdeSearchProvider  *self,

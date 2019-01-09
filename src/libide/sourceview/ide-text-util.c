@@ -18,9 +18,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "sourceview/ide-text-util.h"
+#include "ide-text-util.h"
 
 void
 ide_text_util_delete_line (GtkTextView *text_view,

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="GbpNewFilePopover" parent="GtkPopover">
+    <child>
+      <object class="GtkBox">
+        <property name="border-width">12</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkLabel" id="title">
+            <property name="label" translatable="yes">File Name</property>
+            <property name="xalign">0.0</property>
+            <property name="visible">true</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">9</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkEntry" id="entry">
+                <property name="width-chars">20</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button">
+                <property name="sensitive">false</property>
+                <property name="label" translatable="yes">_Create</property>
+                <property name="use-underline">true</property>
+                <property name="visible">true</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="message">
+            <property name="xalign">0.0</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

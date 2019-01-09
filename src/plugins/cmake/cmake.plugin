@@ -1,10 +1,11 @@
 [Plugin]
-Module=cmake-plugin
-Name=CMake
-Description=Provides integration with the CMake build system
 Authors=Martin Blanchard <tchaik@gmx.com>
-Copyright=Copyright © 2017 Martin Blanchard
 Builtin=true
-X-Project-File-Filter-Pattern=CMakeLists.txt
+Copyright=Copyright © 2017 Martin Blanchard
+Description=Provides integration with the CMake build system
+Embedded=_gbp_cmake_register_types
+Hidden=true
+Module=cmake
+Name=CMake
 X-Project-File-Filter-Name=CMake Project (CMakeLists.txt)
-Embedded=gbp_cmake_register_types
+X-Project-File-Filter-Pattern=CMakeLists.txt

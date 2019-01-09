@@ -1,6 +1,6 @@
 /* ide-extension-adapter.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-extension-adapter"
@@ -23,11 +25,8 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 
-#include "ide-debug.h"
-
-#include "application/ide-application.h"
-#include "plugins/ide-extension-adapter.h"
-#include "plugins/ide-extension-util.h"
+#include "ide-extension-adapter.h"
+#include "ide-extension-util-private.h"
 
 struct _IdeExtensionAdapter
 {
@@ -59,6 +58,20 @@ enum {
 };
 
 static GParamSpec *properties [LAST_PROP];
+
+static gchar *
+ide_extension_adapter_repr (IdeObject *object)
+{
+  IdeExtensionAdapter *self = (IdeExtensionAdapter *)object;
+
+  g_assert (IDE_IS_EXTENSION_ADAPTER (self));
+
+  return g_strdup_printf ("%s interface=“%s” key=“%s” value=“%s”",
+                          G_OBJECT_TYPE_NAME (self),
+                          g_type_name (self->interface_type),
+                          self->key ?: "",
+                          self->value ?: "");
+}
 
 static GSettings *
 ide_extension_adapter_get_settings (IdeExtensionAdapter *self,
@@ -105,9 +118,18 @@ ide_extension_adapter_set_extension (IdeExtensionAdapter *self,
 
   self->plugin_info = plugin_info;
 
-  if (g_set_object (&self->extension, extension))
+  if (extension != self->extension)
     {
+      if (IDE_IS_OBJECT (self->extension))
+        ide_object_destroy (IDE_OBJECT (self->extension));
+
+      g_set_object (&self->extension, extension);
+
+      if (IDE_IS_OBJECT (extension))
+        ide_object_append (IDE_OBJECT (self), IDE_OBJECT (extension));
+
       ide_extension_adapter_monitor (self, plugin_info);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXTENSION]);
     }
 }
@@ -166,30 +188,10 @@ ide_extension_adapter_reload (IdeExtensionAdapter *self)
     return;
 
   if (best_match != NULL)
-    {
-      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-
-      if (g_type_is_a (self->interface_type, IDE_TYPE_OBJECT))
-        extension = ide_extension_new (self->engine,
-                                       best_match,
-                                       self->interface_type,
-                                       "context", context,
-                                       NULL);
-      else
-        {
-          extension = ide_extension_new (self->engine,
-                                         best_match,
-                                         self->interface_type,
-                                         NULL);
-          /*
-           * If the plugin object turned out to have IdeObject
-           * as a base, try to set it now (even though we couldn't
-           * do it at construction time).
-           */
-          if (IDE_IS_OBJECT (extension))
-            ide_object_set_context (IDE_OBJECT (extension), context);
-        }
-    }
+    extension = ide_extension_new (self->engine,
+                                   best_match,
+                                   self->interface_type,
+                                   NULL);
 
   ide_extension_adapter_set_extension (self, best_match, extension);
 
@@ -218,7 +220,7 @@ ide_extension_adapter_queue_reload (IdeExtensionAdapter *self)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_EXTENSION_ADAPTER (self));
 
-  dzl_clear_source (&self->queue_handler);
+  g_clear_handle_id (&self->queue_handler, g_source_remove);
   self->queue_handler = g_timeout_add (0, ide_extension_adapter_do_reload, self);
 }
 
@@ -309,7 +311,7 @@ ide_extension_adapter__changed_disabled (IdeExtensionAdapter *self,
   g_assert (IDE_IS_EXTENSION_ADAPTER (self));
   g_assert (G_IS_SETTINGS (settings));
 
-  if (dzl_str_equal0 (changed_key, "disabled"))
+  if (ide_str_equal0 (changed_key, "disabled"))
     ide_extension_adapter_queue_reload (self);
 }
 
@@ -320,7 +322,7 @@ ide_extension_adapter_dispose (GObject *object)
 
   self->interface_type = G_TYPE_INVALID;
 
-  dzl_clear_source (&self->queue_handler);
+  g_clear_handle_id (&self->queue_handler, g_source_remove);
 
   ide_extension_adapter_monitor (self, NULL);
 
@@ -416,11 +418,14 @@ static void
 ide_extension_adapter_class_init (IdeExtensionAdapterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_extension_adapter_dispose;
   object_class->finalize = ide_extension_adapter_finalize;
   object_class->get_property = ide_extension_adapter_get_property;
   object_class->set_property = ide_extension_adapter_set_property;
+
+  i_object_class->repr = ide_extension_adapter_repr;
 
   properties [PROP_ENGINE] =
     g_param_spec_object ("engine",
@@ -489,7 +494,7 @@ ide_extension_adapter_set_key (IdeExtensionAdapter *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_ADAPTER (self));
 
-  if (!dzl_str_equal0 (self->key, key))
+  if (!ide_str_equal0 (self->key, key))
     {
       g_free (self->key);
       self->key = g_strdup (key);
@@ -514,7 +519,7 @@ ide_extension_adapter_set_value (IdeExtensionAdapter *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_EXTENSION_ADAPTER (self));
 
-  if (!dzl_str_equal0 (self->value, value))
+  if (!ide_str_equal0 (self->value, value))
     {
       g_free (self->value);
       self->value = g_strdup (value);
@@ -539,6 +544,8 @@ ide_extension_adapter_get_interface_type (IdeExtensionAdapter *self)
  * Gets the #IdeExtensionAdapter:engine property.
  *
  * Returns: (transfer none): a #PeasEngine.
+ *
+ * Since: 3.32
  */
 PeasEngine *
 ide_extension_adapter_get_engine (IdeExtensionAdapter *self)
@@ -555,6 +562,8 @@ ide_extension_adapter_get_engine (IdeExtensionAdapter *self)
  * Gets the extension object managed by the adapter.
  *
  * Returns: (transfer none) (type GObject.Object): a #GObject or %NULL.
+ *
+ * Since: 3.32
  */
 gpointer
 ide_extension_adapter_get_extension (IdeExtensionAdapter *self)
@@ -567,44 +576,54 @@ ide_extension_adapter_get_extension (IdeExtensionAdapter *self)
 
 /**
  * ide_extension_adapter_new:
- * @context: An #IdeContext.
- * @engine: (allow-none): a #PeasEngine or %NULL.
+ * @parent: (nullable): An #IdeObject or %NULL
+ * @engine: (allow-none): a #PeasEngine or %NULL
  * @interface_type: The #GType of the interface to be implemented.
  * @key: The key for matching extensions from plugin info external data.
  * @value: (allow-none): The value to use when matching keys.
  *
  * Creates a new #IdeExtensionAdapter.
  *
- * The #IdeExtensionAdapter object can be used to wrap an extension that might need to change
- * at runtime based on various changing parameters. For example, it can watch the loading and
- * unloading of plugins and reload the #IdeExtensionAdapter:extension property.
+ * The #IdeExtensionAdapter object can be used to wrap an extension that might
+ * need to change at runtime based on various changing parameters. For example,
+ * it can watch the loading and unloading of plugins and reload the
+ * #IdeExtensionAdapter:extension property.
  *
  * Additionally, it can match a specific plugin based on the @value provided.
  *
- * This uses #IdeExtensionPoint to create the extension implementation, which means that
- * extension points that are disabled (such as from the plugins GSettings) will be ignored.
- * As such, if one plugin that is higher priority than another, but is disabled, will be
- * ignored and the secondary plugin will be used.
+ * This uses #IdeExtensionPoint to create the extension implementation, which
+ * means that extension points that are disabled (such as from the plugins
+ * GSettings) will be ignored.  As such, if one plugin that is higher priority
+ * than another, but is disabled, will be ignored and the secondary plugin will
+ * be used.
  *
  * Returns: (transfer full): A newly created #IdeExtensionAdapter.
+ *
+ * Since: 3.32
  */
 IdeExtensionAdapter *
-ide_extension_adapter_new (IdeContext  *context,
+ide_extension_adapter_new (IdeObject   *parent,
                            PeasEngine  *engine,
                            GType        interface_type,
                            const gchar *key,
                            const gchar *value)
 {
+  IdeExtensionAdapter *self;
+
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (!engine || PEAS_IS_ENGINE (engine), NULL);
   g_return_val_if_fail (G_TYPE_IS_INTERFACE (interface_type), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return g_object_new (IDE_TYPE_EXTENSION_ADAPTER,
-                       "context", context,
+  self = g_object_new (IDE_TYPE_EXTENSION_ADAPTER,
                        "engine", engine,
                        "interface-type", interface_type,
                        "key", key,
                        "value", value,
                        NULL);
+
+  if (parent != NULL)
+    ide_object_append (parent, IDE_OBJECT (self));
+
+  return g_steal_pointer (&self);
 }

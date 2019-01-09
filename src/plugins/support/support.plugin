@@ -1,9 +1,9 @@
 [Plugin]
-Module=support-plugin
+Module=support
 Name=Support
 Description=Generate support logs for assistance
 Authors=Christian Hergert <christian@hergert.me>
 Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
 Hidden=true
-Embedded=ide_support_register_types
+Embedded=_ide_support_register_types

@@ -1,6 +1,6 @@
 /* ide-editor-search-bar.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-editor-search-bar"
@@ -23,10 +25,9 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 
-#include "editor/ide-editor-private.h"
-#include "editor/ide-editor-search.h"
-#include "editor/ide-editor-search-bar.h"
-#include "search/ide-tagged-entry.h"
+#include "ide-editor-private.h"
+#include "ide-editor-search.h"
+#include "ide-editor-search-bar.h"
 
 struct _IdeEditorSearchBar
 {
@@ -445,7 +446,7 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
                                 g_cclosure_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-search-bar.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ui/ide-editor-search-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, case_sensitive);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_all_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_button);
@@ -565,6 +566,8 @@ ide_editor_search_bar_set_show_options (IdeEditorSearchBar *self,
  * Gets the #IdeEditorSearch used by the search bar.
  *
  * Returns: (transfer none) (nullable): An #IdeEditorSearch or %NULL.
+ *
+ * Since: 3.32
  */
 IdeEditorSearch *
 ide_editor_search_bar_get_search (IdeEditorSearchBar *self)

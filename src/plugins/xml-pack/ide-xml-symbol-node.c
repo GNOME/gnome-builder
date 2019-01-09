@@ -14,10 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 
 #define G_LOG_DOMAIN "ide-xml-symbol-node"
+
+#include <dazzle.h>
 
 #include "ide-xml-symbol-node.h"
 
@@ -79,9 +83,7 @@ ide_xml_symbol_node_get_location_async (IdeSymbolNode       *node,
 {
   IdeXmlSymbolNode *self = (IdeXmlSymbolNode *)node;
   g_autoptr(IdeTask) task = NULL;
-  IdeContext *context;
-  g_autoptr(IdeFile) ifile = NULL;
-  IdeSourceLocation *ret;
+  IdeLocation *ret;
 
   g_return_if_fail (IDE_IS_XML_SYMBOL_NODE (self));
   g_return_if_fail (G_IS_FILE (self->file));
@@ -90,18 +92,14 @@ ide_xml_symbol_node_get_location_async (IdeSymbolNode       *node,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_xml_symbol_node_get_location_async);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  ifile = ide_file_new (context, self->file);
+  ret = ide_location_new (self->file,
+                          self->start_tag.start_line - 1,
+                          self->start_tag.start_line_offset - 1);
 
-  ret = ide_source_location_new (ifile,
-                                 self->start_tag.start_line - 1,
-                                 self->start_tag.start_line_offset - 1,
-                                 0);
-
-  ide_task_return_pointer (task, ret, (GDestroyNotify)ide_source_location_unref);
+  ide_task_return_pointer (task, ret, g_object_unref);
 }
 
-static IdeSourceLocation *
+static IdeLocation *
 ide_xml_symbol_node_get_location_finish (IdeSymbolNode  *node,
                                          GAsyncResult   *result,
                                          GError        **error)

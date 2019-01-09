@@ -1,22 +1,61 @@
-search_headers = [
+libide_search_header_subdir = join_paths(libide_header_subdir, 'search')
+libide_include_directories += include_directories('.')
+
+#
+# Public API Headers
+#
+
+libide_search_public_headers = [
   'ide-search-engine.h',
-  'ide-search-entry.h',
   'ide-search-provider.h',
-  'ide-search-result.h',
   'ide-search-reducer.h',
-  'ide-tagged-entry.h',
+  'ide-search-result.h',
+  'libide-search.h',
 ]
 
-search_sources = [
+install_headers(libide_search_public_headers, subdir: libide_search_header_subdir)
+
+#
+# Sources
+#
+
+libide_search_public_sources = [
   'ide-search-engine.c',
-  'ide-search-entry.c',
   'ide-search-provider.c',
-  'ide-search-result.c',
   'ide-search-reducer.c',
-  'ide-tagged-entry.c',
+  'ide-search-result.c',
 ]
 
-libide_public_headers += files(search_headers)
-libide_public_sources += files(search_sources)
+libide_search_sources = libide_search_public_sources
 
-install_headers(search_headers, subdir: join_paths(libide_header_subdir, 'search'))
+#
+# Dependencies
+#
+
+libide_search_deps = [
+  libgio_dep,
+  libdazzle_dep,
+  libpeas_dep,
+  libide_core_dep,
+  libide_threading_dep,
+]
+
+#
+# Library Definitions
+#
+
+libide_search = static_library('ide-search-' + libide_api_version, libide_search_sources,
+   dependencies: libide_search_deps,
+         c_args: libide_args + release_args + ['-DIDE_SEARCH_COMPILATION'],
+)
+
+libide_search_dep = declare_dependency(
+         dependencies: libide_search_deps,
+           link_whole: libide_search,
+  include_directories: include_directories('.'),
+)
+
+gnome_builder_public_sources += files(libide_search_public_sources)
+gnome_builder_public_headers += files(libide_search_public_headers)
+gnome_builder_include_subdirs += libide_search_header_subdir
+gnome_builder_gir_extra_args += ['--c-include=libide-search.h', '-DIDE_SEARCH_COMPILATION']

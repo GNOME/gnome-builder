@@ -14,12 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-notification-addin"
 
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+#include <libide-foundry.h>
 
 #include "ide-notification-addin.h"
 
@@ -27,10 +30,12 @@
 
 struct _IdeNotificationAddin
 {
-  IdeObject  parent_instance;
-  gchar     *last_msg_body;
-  gint64     last_time;
-  guint      supress : 1;
+  IdeObject        parent_instance;
+  IdeNotification *notif;
+  gchar           *last_msg_body;
+  IdeBuildPhase    requested_phase;
+  gint64           last_time;
+  guint            supress : 1;
 };
 
 static void addin_iface_init (IdeBuildPipelineAddinInterface *iface);
@@ -65,14 +70,13 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
                                gboolean              success)
 {
   g_autofree gchar *msg_body = NULL;
+  g_autofree gchar *project_name = NULL;
   g_autoptr(GNotification) notification = NULL;
   g_autoptr(GIcon) icon = NULL;
   GtkApplication *app;
-  const gchar *project_name;
   const gchar *msg_title;
   const gchar *id;
   IdeContext *context;
-  IdeProject *project;
   GtkWindow *window;
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
@@ -89,9 +93,8 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
     return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  project = ide_context_get_project (context);
-  project_name = ide_project_get_name (project);
-  id = ide_project_get_id (project);
+  project_name = ide_context_dup_title (context);
+  id = ide_context_dup_project_id (context);
 
   if (success)
     {
@@ -117,24 +120,38 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
 
 static void
 ide_notification_addin_build_started (IdeNotificationAddin *self,
-                                      IdeBuildPipeline     *build_pipeline,
+                                      IdeBuildPipeline     *pipeline,
                                       IdeBuildManager      *build_manager)
 {
   IdeBuildPhase phase;
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  if (self->notif != NULL)
+    {
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
+    }
 
   /* We don't care about any build that is advancing to a phase
    * before the BUILD phase. We advanced to CONFIGURE a lot when
    * extracting build flags.
    */
 
-  phase = ide_build_pipeline_get_requested_phase (build_pipeline);
+  phase = ide_build_pipeline_get_requested_phase (pipeline);
   g_assert ((phase & IDE_BUILD_PHASE_MASK) == phase);
 
+  self->requested_phase = phase;
   self->supress = phase < IDE_BUILD_PHASE_BUILD;
+
+  if (self->requested_phase)
+    {
+      self->notif = ide_notification_new ();
+      g_object_bind_property (pipeline, "message", self->notif, "title", G_BINDING_SYNC_CREATE);
+      ide_notification_attach (self->notif, IDE_OBJECT (self));
+    }
 }
 
 static void
@@ -146,17 +163,34 @@ ide_notification_addin_build_failed (IdeNotificationAddin *self,
   g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
+  if (self->notif)
+    ide_notification_set_title (self->notif, _("Build failed"));
+
   ide_notification_addin_notify (self, FALSE);
 }
 
 static void
 ide_notification_addin_build_finished (IdeNotificationAddin *self,
-                                       IdeBuildPipeline     *build_pipeline,
+                                       IdeBuildPipeline     *pipeline,
                                        IdeBuildManager      *build_manager)
 {
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
-  g_assert (IDE_IS_BUILD_PIPELINE (build_pipeline));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+
+  if (self->notif)
+    {
+      g_autoptr(GIcon) icon = g_themed_icon_new ("emblem-ok-symbolic");
+
+      if (self->requested_phase & IDE_BUILD_PHASE_BUILD)
+        ide_notification_set_title (self->notif, _("Build succeeded"));
+      else if (self->requested_phase & IDE_BUILD_PHASE_CONFIGURE)
+        ide_notification_set_title (self->notif, _("Build configured"));
+      else if (self->requested_phase & IDE_BUILD_PHASE_AUTOGEN)
+        ide_notification_set_title (self->notif, _("Build bootstrapped"));
+
+      ide_notification_set_icon (self->notif, icon);
+    }
 
   ide_notification_addin_notify (self, TRUE);
 }
@@ -175,7 +209,7 @@ ide_notification_addin_load (IdeBuildPipelineAddin *addin,
   context = ide_object_get_context (IDE_OBJECT (addin));
   g_assert (IDE_IS_CONTEXT (context));
 
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   g_signal_connect_object (build_manager,
@@ -205,6 +239,12 @@ ide_notification_addin_unload (IdeBuildPipelineAddin *addin,
 
   g_assert (IDE_IS_NOTIFICATION_ADDIN (self));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+
+  if (self->notif != NULL)
+    {
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
+    }
 
   g_clear_pointer (&self->last_msg_body, g_free);
 }

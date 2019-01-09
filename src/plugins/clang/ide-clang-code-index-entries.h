@@ -1,7 +1,7 @@
 /* ide-clang-code-index-entries.h
  *
  * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +15,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 

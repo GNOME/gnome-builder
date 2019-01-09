@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "xml-diagnostic-provider"
@@ -53,15 +55,16 @@ ide_xml_diagnostic_provider_diagnose_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&ret),
-                             (GDestroyNotify)ide_diagnostics_unref);
+                             g_object_unref);
 
   IDE_EXIT;
 }
 
 static void
 ide_xml_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
-                                            IdeFile               *file,
-                                            IdeBuffer             *buffer,
+                                            GFile                 *file,
+                                            GBytes                *contents,
+                                            const gchar           *lang_id,
                                             GCancellable          *cancellable,
                                             GAsyncReadyCallback    callback,
                                             gpointer               user_data)
@@ -74,19 +77,19 @@ ide_xml_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_XML_DIAGNOSTIC_PROVIDER (self));
-  g_return_if_fail (IDE_IS_FILE (file));
-  g_return_if_fail (IDE_IS_BUFFER (buffer));
+  g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_xml_diagnostic_provider_diagnose_async);
 
   context = ide_object_get_context (IDE_OBJECT (provider));
-  service = ide_context_get_service_typed (context, IDE_TYPE_XML_SERVICE);
+  service = ide_xml_service_from_context (context);
 
   ide_xml_service_get_diagnostics_async (service,
                                          file,
-                                         buffer,
+                                         contents,
+                                         lang_id,
                                          cancellable,
                                          ide_xml_diagnostic_provider_diagnose_cb,
                                          g_steal_pointer (&task));

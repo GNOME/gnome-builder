@@ -1,9 +1,0 @@
-[Plugin]
-Module=editor
-Name=Editor
-Description=Builder's source code editor
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2014-2015 Christian Hergert
-Builtin=true
-Hidden=true
-Embedded=ide_editor_register_types

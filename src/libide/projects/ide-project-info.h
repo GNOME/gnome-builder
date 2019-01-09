@@ -1,6 +1,6 @@
 /* ide-project-info.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,82 +14,96 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
+#if !defined (IDE_PROJECTS_INSIDE) && !defined (IDE_PROJECTS_COMPILATION)
+# error "Only <libide-projects.h> can be included directly."
+#endif
+
 #include <gio/gio.h>
+#include <libide-core.h>
 
-#include "ide-version-macros.h"
-
-#include "doap/ide-doap.h"
-#include "vcs/ide-vcs-uri.h"
+#include "ide-doap.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_INFO (ide_project_info_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeProjectInfo, ide_project_info, IDE, PROJECT_INFO, GObject)
 
-IDE_AVAILABLE_IN_ALL
-gint         ide_project_info_compare                (IdeProjectInfo  *info1,
-                                                      IdeProjectInfo  *info2);
-IDE_AVAILABLE_IN_ALL
-GFile        *ide_project_info_get_file              (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-IdeDoap      *ide_project_info_get_doap              (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_doap              (IdeProjectInfo  *self,
-                                                      IdeDoap         *doap);
-IDE_AVAILABLE_IN_ALL
-const gchar  *ide_project_info_get_build_system_name (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-const gchar  *ide_project_info_get_description       (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-GFile        *ide_project_info_get_directory         (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-gboolean      ide_project_info_get_is_recent         (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-gint          ide_project_info_get_priority          (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-GDateTime    *ide_project_info_get_last_modified_at  (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_last_modified_at  (IdeProjectInfo  *self,
-                                                      GDateTime       *modified_at);
-IDE_AVAILABLE_IN_ALL
-const gchar * const *
-              ide_project_info_get_languages         (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-const gchar  *ide_project_info_get_name              (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_3_28
-IdeVcsUri    *ide_project_info_get_vcs_uri           (IdeProjectInfo  *self);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_file              (IdeProjectInfo  *self,
-                                                      GFile           *file);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_build_system_name (IdeProjectInfo  *self,
-                                                      const gchar     *build_system_name);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_description       (IdeProjectInfo  *self,
-                                                      const gchar     *description);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_directory         (IdeProjectInfo  *self,
-                                                      GFile           *directory);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_is_recent         (IdeProjectInfo  *self,
-                                                      gboolean         is_recent);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_languages         (IdeProjectInfo  *self,
-                                                      gchar          **languages);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_name              (IdeProjectInfo  *self,
-                                                      const gchar     *name);
-IDE_AVAILABLE_IN_ALL
-void          ide_project_info_set_priority          (IdeProjectInfo  *self,
-                                                      gint             priority);
-IDE_AVAILABLE_IN_3_28
-void          ide_project_info_set_vcs_uri           (IdeProjectInfo  *self,
-                                                      IdeVcsUri       *uri);
+IDE_AVAILABLE_IN_3_32
+IdeProjectInfo      *ide_project_info_new                   (void);
+IDE_AVAILABLE_IN_3_32
+const gchar         *ide_project_info_get_id                (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_id                (IdeProjectInfo  *self,
+                                                             const gchar     *id);
+IDE_AVAILABLE_IN_3_32
+gint                 ide_project_info_compare               (IdeProjectInfo  *info1,
+                                                             IdeProjectInfo  *info2);
+IDE_AVAILABLE_IN_3_32
+gboolean             ide_project_info_equal                 (IdeProjectInfo  *self,
+                                                             IdeProjectInfo  *other);
+IDE_AVAILABLE_IN_3_32
+GFile               *ide_project_info_get_file              (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+IdeDoap             *ide_project_info_get_doap              (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_doap              (IdeProjectInfo  *self,
+                                                             IdeDoap         *doap);
+IDE_AVAILABLE_IN_3_32
+const gchar         *ide_project_info_get_build_system_name (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+const gchar         *ide_project_info_get_description       (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+GFile               *ide_project_info_get_directory         (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+gboolean             ide_project_info_get_is_recent         (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+gint                 ide_project_info_get_priority          (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+GDateTime           *ide_project_info_get_last_modified_at  (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_last_modified_at  (IdeProjectInfo  *self,
+                                                             GDateTime       *modified_at);
+IDE_AVAILABLE_IN_3_32
+const gchar * const *ide_project_info_get_languages         (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+const gchar         *ide_project_info_get_name              (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+const gchar         *ide_project_info_get_vcs_uri           (IdeProjectInfo  *self);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_file              (IdeProjectInfo  *self,
+                                                             GFile           *file);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_build_system_name (IdeProjectInfo  *self,
+                                                             const gchar     *build_system_name);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_description       (IdeProjectInfo  *self,
+                                                             const gchar     *description);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_directory         (IdeProjectInfo  *self,
+                                                             GFile           *directory);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_is_recent         (IdeProjectInfo  *self,
+                                                             gboolean         is_recent);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_languages         (IdeProjectInfo  *self,
+                                                             gchar          **languages);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_name              (IdeProjectInfo  *self,
+                                                             const gchar     *name);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_priority          (IdeProjectInfo  *self,
+                                                             gint             priority);
+IDE_AVAILABLE_IN_3_32
+void                 ide_project_info_set_vcs_uri           (IdeProjectInfo  *self,
+                                                             const gchar     *vcs_uri);
+
 
 G_END_DECLS

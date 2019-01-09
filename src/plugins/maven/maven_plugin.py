@@ -19,11 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gi
 import threading
 import os
-
-gi.require_version('Ide', '1.0')
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -38,7 +35,14 @@ _ATTRIBUTES = ",".join([
     Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON,
 ])
 
-class MavenBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
+class MavenBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.props.glob = 'pom.xml'
+        self.props.hint = 'maven_plugin'
+        self.props.priority = 2000
+
+class MavenBuildSystem(Ide.Object, Ide.BuildSystem):
     project_file = GObject.Property(type=Gio.File)
 
     def do_get_id(self):
@@ -47,32 +51,8 @@ class MavenBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_display_name(self):
         return 'Maven'
 
-    def do_init_async(self, io_priority, cancellable, callback, data):
-        task = Ide.Task.new(self, cancellable, callback)
-
-        try:
-            # Maybe this is a pom.xml
-            if self.props.project_file.get_basename() in ('pom.xml',):
-                task.return_boolean(True)
-                return
-
-            # Maybe this is a directory with a pom.xml
-            if self.props.project_file.query_file_type(0) == Gio.FileType.DIRECTORY:
-                child = self.props.project_file.get_child('pom.xml')
-                if child.query_exists(None):
-                    self.props.project_file = child
-                    task.return_boolean(True)
-                    return
-        except Exception as ex:
-            task.return_error(ex)
-
-        task.return_error(Ide.NotSupportedError())
-
-    def do_init_finish(self, task):
-        return task.propagate_boolean()
-
     def do_get_priority(self):
-        return 400
+        return 2000
 
 class MavenPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
@@ -82,7 +62,7 @@ class MavenPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
     def do_load(self, pipeline):
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != MavenBuildSystem:
             return
@@ -156,7 +136,7 @@ class MavenBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
         task.set_priority(GLib.PRIORITY_LOW)
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != MavenBuildSystem:
             task.return_error(GLib.Error('Not maven build system',
@@ -178,7 +158,7 @@ class MavenIdeTestProvider(Ide.TestProvider):
         task.set_priority(GLib.PRIORITY_LOW)
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != MavenBuildSystem:
             task.return_error(GLib.Error('Not maven build system',
@@ -226,14 +206,14 @@ class MavenIdeTestProvider(Ide.TestProvider):
     def do_reload(self):
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != MavenBuildSystem:
             return
 
         # find all files in test directory
         # http://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html
-        build_manager = context.get_build_manager()
+        build_manager = Ide.BuildManager.from_context(context)
         pipeline = build_manager.get_pipeline()
         srcdir = pipeline.get_srcdir()
         test_suite = Gio.File.new_for_path(os.path.join(srcdir, 'src/test/java'))
@@ -260,8 +240,9 @@ class MavenIdeTestProvider(Ide.TestProvider):
                                                     self.on_enumerator_loaded,
                                                     None)
                 else:
-                    #TODO Ask java through introspection for classes with TestCase and its public void methods 
-                    # or Annotation @Test methods
+                    # TODO: Ask java through introspection for classes with
+                    # TestCase and its public void methods or Annotation @Test
+                    # methods
                     result, contents, etag = gfile.load_contents()
                     tests = [x for x in str(contents).split('\\n') if 'public void' in x]
                     tests = [v.replace("()", "").replace("public void","").strip() for v in tests]

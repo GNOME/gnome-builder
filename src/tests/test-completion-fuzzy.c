@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include <libide-sourceview.h>
 
 static void
 test_fuzzy_match (void)

@@ -1,6 +1,6 @@
 /* ide-vcs-file-info.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,15 +14,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-vcs-file-info"
 
 #include "config.h"
 
-#include "ide-enums.h"
-
-#include "vcs/ide-vcs-file-info.h"
+#include "ide-vcs-enums.h"
+#include "ide-vcs-file-info.h"
 
 typedef struct
 {
@@ -49,7 +50,7 @@ static GParamSpec *properties [N_PROPS];
  *
  * Returns: (transfer none): a #GFile
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GFile *
 ide_vcs_file_info_get_file (IdeVcsFileInfo *self)
@@ -178,7 +179,7 @@ ide_vcs_file_info_class_init (IdeVcsFileInfoClass *klass)
                        IDE_TYPE_VCS_FILE_STATUS,
                        IDE_VCS_FILE_STATUS_UNCHANGED,
                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 

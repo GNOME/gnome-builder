@@ -1,6 +1,6 @@
 /* gbp-meson-build-target-provider.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-meson-build-target-provider"
@@ -39,7 +41,7 @@ create_launcher (IdeContext  *context,
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (error == NULL || *error == NULL);
 
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
   if (pipeline == NULL)
@@ -128,7 +130,12 @@ gbp_meson_build_target_provider_communicate_cb2 (GObject      *object,
 
           /* We only need one result */
           ret = g_ptr_array_new_with_free_func (g_object_unref);
-          g_ptr_array_add (ret, gbp_meson_build_target_new (context, gdir, name));
+          g_ptr_array_add (ret,
+                           gbp_meson_build_target_new (context,
+                                                       gdir,
+                                                       name,
+                                                       NULL,
+                                                       IDE_ARTIFACT_KIND_EXECUTABLE));
           ide_task_return_pointer (task, g_steal_pointer (&ret), (GDestroyNotify)g_ptr_array_unref);
 
           return;
@@ -208,6 +215,7 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
     {
       JsonNode *element = json_array_get_element (array, i);
       const gchar *name;
+      const gchar *install_filename;
       const gchar *filename;
       const gchar *type;
       JsonObject *obj;
@@ -220,6 +228,9 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
           JSON_NODE_HOLDS_VALUE (member) &&
           NULL != (name = json_node_get_string (member)) &&
           NULL != (member = json_object_get_member (obj, "install_filename")) &&
+          JSON_NODE_HOLDS_VALUE (member) &&
+          NULL != (install_filename = json_node_get_string (member)) &&
+          NULL != (member = json_object_get_member (obj, "filename")) &&
           JSON_NODE_HOLDS_VALUE (member) &&
           NULL != (filename = json_node_get_string (member)) &&
           NULL != (member = json_object_get_member (obj, "type")) &&
@@ -234,24 +245,32 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
           g_autofree gchar *base = NULL;
           g_autofree gchar *name_of_dir = NULL;
           g_autoptr(GFile) dir = NULL;
+          IdeArtifactKind kind = 0;
 
-          install_dir = g_path_get_dirname (filename);
+          install_dir = g_path_get_dirname (install_filename);
           name_of_dir = g_path_get_basename (install_dir);
 
           g_debug ("Found target %s", name);
 
-          base = g_path_get_basename (filename);
+          base = g_path_get_basename (install_filename);
           dir = g_file_new_for_path (install_dir);
 
-          target = gbp_meson_build_target_new (context, dir, base);
+          if (ide_str_equal0 (type, "executable"))
+            kind = IDE_ARTIFACT_KIND_EXECUTABLE;
+          else if (ide_str_equal0 (type, "static library"))
+            kind = IDE_ARTIFACT_KIND_STATIC_LIBRARY;
+          else if (ide_str_equal0 (type, "shared library"))
+            kind = IDE_ARTIFACT_KIND_SHARED_LIBRARY;
 
-          found_bindir |= dzl_str_equal0 (name_of_dir, "bin");
+          target = gbp_meson_build_target_new (context, dir, base, filename, kind);
+
+          found_bindir |= ide_str_equal0 (name_of_dir, "bin");
 
           /*
            * Until Builder supports selecting a target to run, we need to prefer
            * bindir targets over other targets.
            */
-          if (dzl_str_equal0 (name_of_dir, "bin") && dzl_str_equal0 (type, "executable"))
+          if (ide_str_equal0 (name_of_dir, "bin") && kind == IDE_ARTIFACT_KIND_EXECUTABLE)
             g_ptr_array_insert (ret, 0, g_steal_pointer (&target));
           else
             g_ptr_array_add (ret, g_steal_pointer (&target));
@@ -278,7 +297,7 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
   cancellable = ide_task_get_cancellable (task);
 
@@ -328,7 +347,7 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
 
   if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
     {
@@ -339,7 +358,7 @@ gbp_meson_build_target_provider_get_targets_async (IdeBuildTargetProvider *provi
       IDE_EXIT;
     }
 
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
   if (pipeline == NULL)

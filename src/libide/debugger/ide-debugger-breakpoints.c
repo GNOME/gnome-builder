@@ -1,6 +1,6 @@
 /* ide-debugger-breakpoints.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-debugger-breakpoints"
@@ -24,8 +26,8 @@
 
 #include "ide-debug.h"
 
-#include "debugger/ide-debugger-breakpoints.h"
-#include "debugger/ide-debugger-private.h"
+#include "ide-debugger-breakpoints.h"
+#include "ide-debugger-private.h"
 
 /**
  * SECTION:ide-debugger-breakpoints
@@ -44,6 +46,8 @@
  * breakpoints as necessary by the current debugger. If no debugger is
  * active, the breakpoints are queued until the debugger has started, and
  * then synchronized to the debugger process.
+ *
+ * Since: 3.32
  */
 
 typedef struct
@@ -197,7 +201,7 @@ ide_debugger_breakpoints_init (IdeDebuggerBreakpoints *self)
  *
  * Returns: (nullable) (transfer none): An #IdeDebuggerBreakpoint or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeDebuggerBreakpoint *
 ide_debugger_breakpoints_get_line (IdeDebuggerBreakpoints *self,
@@ -368,6 +372,8 @@ _ide_debugger_breakpoints_remove (IdeDebuggerBreakpoints *self,
  * this container belong to.
  *
  * Returns: (transfer none): a #GFile
+ *
+ * Since: 3.32
  */
 GFile *
 ide_debugger_breakpoints_get_file (IdeDebuggerBreakpoints *self)
@@ -385,7 +391,7 @@ ide_debugger_breakpoints_get_file (IdeDebuggerBreakpoints *self)
  *
  * Call @func for every #IdeDebuggerBreakpoint in @self.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 ide_debugger_breakpoints_foreach (IdeDebuggerBreakpoints *self,

@@ -1,7 +1,7 @@
 /* gbp-meson-toolchain-edition-preferences-row.c
  *
- * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
- * Copyright (C) 2018 Collabora Ltd.
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-meson-toolchain-edition-preferences-row"
@@ -365,6 +367,8 @@ gbp_meson_toolchain_edition_preferences_row_finalize (GObject *object)
  * @self: a #GbpMesonToolchainEditionPreferencesRow
  *
  * Requests the configuration popover the be shown over the widget.
+ *
+ * Since: 3.32
  */
 void
 gbp_meson_toolchain_edition_preferences_row_show_popup (GbpMesonToolchainEditionPreferencesRow *self)
@@ -435,7 +439,7 @@ gbp_meson_toolchain_edition_preferences_row_class_init (GbpMesonToolchainEdition
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/meson-plugin/gbp-meson-toolchain-edition-preferences-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolchainEditionPreferencesRow, display_name);
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolchainEditionPreferencesRow, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolchainEditionPreferencesRow, name_entry);

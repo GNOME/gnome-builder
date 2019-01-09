@@ -1,6 +1,6 @@
 /* gbp-deviced-device-provider.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,6 @@ gbp_deviced_device_provider_device_added_cb (GbpDevicedDeviceProvider *self,
                                              DevdBrowser              *browser)
 {
   GbpDevicedDevice *wrapped;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -53,9 +52,9 @@ gbp_deviced_device_provider_device_added_cb (GbpDevicedDeviceProvider *self,
   g_assert (DEVD_IS_DEVICE (device));
   g_assert (DEVD_IS_BROWSER (browser));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  wrapped = gbp_deviced_device_new (context, device);
+  wrapped = gbp_deviced_device_new (device);
   g_object_set_data (G_OBJECT (device), "GBP_DEVICED_DEVICE", wrapped);
+  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (wrapped));
 
   ide_device_provider_emit_device_added (IDE_DEVICE_PROVIDER (self), IDE_DEVICE (wrapped));
 

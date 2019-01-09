@@ -1,6 +1,6 @@
 /* ide-editor-sidebar.h
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,29 +14,34 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_EDITOR_INSIDE) && !defined (IDE_EDITOR_COMPILATION)
+# error "Only <libide-editor.h> can be included directly."
+#endif
 
-#include "layout/ide-layout-pane.h"
+#include <libide-core.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_SIDEBAR (ide_editor_sidebar_get_type())
 
-IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE, EDITOR_SIDEBAR, IdeLayoutPane)
+IDE_AVAILABLE_IN_3_32
+G_DECLARE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE, EDITOR_SIDEBAR, IdePanel)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget   *ide_editor_sidebar_new            (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_editor_sidebar_get_section_id (IdeEditorSidebar *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_editor_sidebar_set_section_id (IdeEditorSidebar *self,
                                                 const gchar      *section_id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_editor_sidebar_add_section    (IdeEditorSidebar *self,
                                                 const gchar      *id,
                                                 const gchar      *title,

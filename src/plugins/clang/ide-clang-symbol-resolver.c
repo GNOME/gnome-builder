@@ -1,6 +1,6 @@
 /* ide-clang-symbol-resolver.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,9 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "clang-symbol-resolver"
+
+#include "config.h"
+
+#include <libide-foundry.h>
 
 #include "ide-clang-client.h"
 #include "ide-clang-symbol-resolver.h"
@@ -52,7 +58,7 @@ ide_clang_symbol_resolver_lookup_symbol_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&symbol),
-                             (GDestroyNotify) ide_symbol_unref);
+                             g_object_unref);
 
   IDE_EXIT;
 }
@@ -64,13 +70,12 @@ lookup_symbol_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeClangClient) client = NULL;
   g_auto(GStrv) flags = NULL;
-  IdeSourceLocation *location;
-  IdeClangClient *client;
+  IdeLocation *location;
   GCancellable *cancellable;
   IdeContext *context;
-  IdeFile *file;
-  GFile *gfile;
+  GFile *file;
   guint line;
   guint column;
 
@@ -82,16 +87,15 @@ lookup_symbol_flags_cb (GObject      *object,
 
   flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
   context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   cancellable = ide_task_get_cancellable (task);
   location = ide_task_get_task_data (task);
-  file = ide_source_location_get_file (location);
-  gfile = ide_file_get_file (file);
-  line = ide_source_location_get_line (location);
-  column = ide_source_location_get_line_offset (location);
+  file = ide_location_get_file (location);
+  line = ide_location_get_line (location);
+  column = ide_location_get_line_offset (location);
 
   ide_clang_client_locate_symbol_async (client,
-                                        gfile,
+                                        file,
                                         (const gchar * const *)flags,
                                         line + 1,
                                         column + 1,
@@ -104,7 +108,7 @@ lookup_symbol_flags_cb (GObject      *object,
 
 static void
 ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
-                                               IdeSourceLocation   *location,
+                                               IdeLocation   *location,
                                                GCancellable        *cancellable,
                                                GAsyncReadyCallback  callback,
                                                gpointer             user_data)
@@ -113,7 +117,7 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   g_autoptr(IdeTask) task = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
-  IdeFile *file;
+  GFile *file;
 
   IDE_ENTRY;
 
@@ -125,12 +129,12 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, ide_clang_symbol_resolver_lookup_symbol_async);
   ide_task_set_task_data (task,
-                          ide_source_location_ref (location),
-                          ide_source_location_unref);
+                          g_object_ref (location),
+                          g_object_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
-  file = ide_source_location_get_file (location);
+  build_system = ide_build_system_from_context (context);
+  file = ide_location_get_file (location);
 
   ide_build_system_get_build_flags_async (build_system,
                                           file,
@@ -189,8 +193,8 @@ get_symbol_tree_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeClangClient) client = NULL;
   g_auto(GStrv) flags = NULL;
-  IdeClangClient *client;
   GCancellable *cancellable;
   IdeContext *context;
   GFile *file;
@@ -201,7 +205,7 @@ get_symbol_tree_flags_cb (GObject      *object,
 
   flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
   context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   cancellable = ide_task_get_cancellable (task);
   file = ide_task_get_task_data (task);
 
@@ -216,14 +220,13 @@ get_symbol_tree_flags_cb (GObject      *object,
 static void
 ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                  GFile               *file,
-                                                 IdeBuffer           *buffer,
+                                                 GBytes              *content,
                                                  GCancellable        *cancellable,
                                                  GAsyncReadyCallback  callback,
                                                  gpointer             user_data)
 {
   IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)resolver;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
 
@@ -231,7 +234,6 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
 
   g_return_if_fail (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
   g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (IDE_IS_BUFFER (buffer));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -240,11 +242,10 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
-  ifile = ide_file_new (context, file);
+  build_system = ide_build_system_from_context (context);
 
   ide_build_system_get_build_flags_async (build_system,
-                                          ifile,
+                                          file,
                                           cancellable,
                                           get_symbol_tree_flags_cb,
                                           g_steal_pointer (&task));
@@ -288,7 +289,7 @@ ide_clang_symbol_resolver_find_scope_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&symbol),
-                             (GDestroyNotify)ide_symbol_unref);
+                             g_object_unref);
 }
 
 static void
@@ -298,13 +299,12 @@ find_nearest_scope_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeClangClient) client = NULL;
   g_auto(GStrv) flags = NULL;
-  IdeSourceLocation *location;
-  IdeClangClient *client;
+  IdeLocation *location;
   GCancellable *cancellable;
   IdeContext *context;
-  IdeFile *file;
-  GFile *gfile;
+  GFile *file;
   guint line;
   guint column;
 
@@ -314,16 +314,15 @@ find_nearest_scope_flags_cb (GObject      *object,
 
   flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
   context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   cancellable = ide_task_get_cancellable (task);
   location = ide_task_get_task_data (task);
-  file = ide_source_location_get_file (location);
-  gfile = ide_file_get_file (file);
-  line = ide_source_location_get_line (location);
-  column = ide_source_location_get_line_offset (location);
+  file = ide_location_get_file (location);
+  line = ide_location_get_line (location);
+  column = ide_location_get_line_offset (location);
 
   ide_clang_client_find_nearest_scope_async (client,
-                                             gfile,
+                                             file,
                                              (const gchar * const *)flags,
                                              line + 1,
                                              column + 1,
@@ -334,7 +333,7 @@ find_nearest_scope_flags_cb (GObject      *object,
 
 static void
 ide_clang_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver   *symbol_resolver,
-                                                    IdeSourceLocation   *location,
+                                                    IdeLocation   *location,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             user_data)
@@ -343,7 +342,7 @@ ide_clang_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver   *symbol_
   g_autoptr(IdeTask) task = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
-  IdeFile *file;
+  GFile *file;
 
   IDE_ENTRY;
 
@@ -354,12 +353,12 @@ ide_clang_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver   *symbol_
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, ide_clang_symbol_resolver_find_nearest_scope_async);
   ide_task_set_task_data (task,
-                          ide_source_location_ref (location),
-                          ide_source_location_unref);
+                          g_object_ref (location),
+                          g_object_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
-  file = ide_source_location_get_file (location);
+  build_system = ide_build_system_from_context (context);
+  file = ide_location_get_file (location);
 
   ide_build_system_get_build_flags_async (build_system,
                                           file,

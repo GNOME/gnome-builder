@@ -1,8 +1,8 @@
 [Plugin]
-Module=git-plugin
-Name=Git
-Description=Provides support for the Git version control system
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
-Embedded=ide_git_register_types
+Copyright=Copyright © 2015-2018 Christian Hergert
+Description=Support for the Git version control system
+Embedded=_gbp_git_register_types
+Module=git
+Name=Git

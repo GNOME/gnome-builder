@@ -1,6 +1,6 @@
 /* ide-ctags-index.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <gio/gio.h>
-#include <ide.h>
+#include <libide-core.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
@@ -99,37 +101,37 @@ ide_ctags_index_entry_kind_to_symbol_kind (IdeCtagsIndexEntryKind kind)
     case IDE_CTAGS_INDEX_ENTRY_PROTOTYPE:
       /* bit of an impedenece mismatch */
     case IDE_CTAGS_INDEX_ENTRY_CLASS_NAME:
-      return IDE_SYMBOL_CLASS;
+      return IDE_SYMBOL_KIND_CLASS;
 
     case IDE_CTAGS_INDEX_ENTRY_ENUMERATOR:
-      return IDE_SYMBOL_ENUM;
+      return IDE_SYMBOL_KIND_ENUM;
 
     case IDE_CTAGS_INDEX_ENTRY_ENUMERATION_NAME:
-      return IDE_SYMBOL_ENUM_VALUE;
+      return IDE_SYMBOL_KIND_ENUM_VALUE;
 
     case IDE_CTAGS_INDEX_ENTRY_FUNCTION:
-      return IDE_SYMBOL_FUNCTION;
+      return IDE_SYMBOL_KIND_FUNCTION;
 
     case IDE_CTAGS_INDEX_ENTRY_MEMBER:
-      return IDE_SYMBOL_FIELD;
+      return IDE_SYMBOL_KIND_FIELD;
 
     case IDE_CTAGS_INDEX_ENTRY_STRUCTURE:
-      return IDE_SYMBOL_STRUCT;
+      return IDE_SYMBOL_KIND_STRUCT;
 
     case IDE_CTAGS_INDEX_ENTRY_UNION:
-      return IDE_SYMBOL_UNION;
+      return IDE_SYMBOL_KIND_UNION;
 
     case IDE_CTAGS_INDEX_ENTRY_VARIABLE:
-      return IDE_SYMBOL_VARIABLE;
+      return IDE_SYMBOL_KIND_VARIABLE;
 
     case IDE_CTAGS_INDEX_ENTRY_IMPORT:
-      return IDE_SYMBOL_PACKAGE;
+      return IDE_SYMBOL_KIND_PACKAGE;
 
     case IDE_CTAGS_INDEX_ENTRY_ANCHOR:
     case IDE_CTAGS_INDEX_ENTRY_DEFINE:
     case IDE_CTAGS_INDEX_ENTRY_FILE_NAME:
     default:
-      return IDE_SYMBOL_NONE;
+      return IDE_SYMBOL_KIND_NONE;
     }
 }
 

@@ -1,6 +1,6 @@
 /* ide-source-view-shortcuts.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-source-view-shortcuts"
@@ -22,12 +24,8 @@
 
 #include <dazzle.h>
 
-#include "sourceview/ide-source-view.h"
-#include "sourceview/ide-source-view-private.h"
-
-/* static const DzlShortcutEntry source_view_shortcuts[] = { */
-/*   { NULL } */
-/* }; */
+#include "ide-source-view.h"
+#include "ide-source-view-private.h"
 
 void
 _ide_source_view_init_shortcuts (IdeSourceView *self)
@@ -43,9 +41,4 @@ _ide_source_view_init_shortcuts (IdeSourceView *self)
                                               "Escape",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               "reset", 0);
-
-  /* dzl_shortcut_manager_add_shortcut_entries (NULL, */
-  /*                                            source_view_shortcuts, */
-  /*                                            G_N_ELEMENTS (source_view_shortcuts), */
-  /*                                            GETTEXT_PACKAGE); */
 }

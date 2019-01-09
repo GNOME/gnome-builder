@@ -25,19 +25,19 @@ namespace Ide
 	public class ValaSymbolResolver: Ide.Object, Ide.SymbolResolver
 	{
 		public async Ide.SymbolTree? get_symbol_tree_async (GLib.File file,
-		                                                    Ide.Buffer buffer,
+		                                                    GLib.Bytes? contents,
 		                                                    GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
 			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
+			var service = Ide.ValaService.from_context (context);
 			var index = service.index;
 			var symbol_tree = yield index.get_symbol_tree (file, cancellable);
 
 			return symbol_tree;
 		}
 
-		Ide.Symbol? create_symbol (Ide.File file, Vala.Symbol symbol)
+		Ide.Symbol? create_symbol (GLib.File file, Vala.Symbol symbol)
 		{
 			var kind = Ide.SymbolKind.NONE;
 			if (symbol is Vala.Class)
@@ -69,28 +69,27 @@ namespace Ide
 			var source_reference = symbol.source_reference;
 
 			if (source_reference != null) {
-				var loc = new Ide.SourceLocation (file,
-												  source_reference.begin.line - 1,
-												  source_reference.begin.column - 1,
-												  0);
-				return new Ide.Symbol (symbol.name, kind, flags, loc, loc, loc);
+				var loc = new Ide.Location (file,
+				                            source_reference.begin.line - 1,
+				                            source_reference.begin.column - 1);
+				return new Ide.Symbol (symbol.name, kind, flags, loc, loc);
 			}
 
 			return null;
 		}
 
-		public async Ide.Symbol? lookup_symbol_async (Ide.SourceLocation location,
+		public async Ide.Symbol? lookup_symbol_async (Ide.Location location,
 		                                              GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
 			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
+			var service = Ide.ValaService.from_context (context);
 			var index = service.index;
 			var file = location.get_file ();
 			var line = (int)location.get_line () + 1;
 			var column = (int)location.get_line_offset () + 1;
 
-			Vala.Symbol? symbol = yield index.find_symbol_at (file.get_file (), line, column);
+			Vala.Symbol? symbol = yield index.find_symbol_at (file, line, column);
 
 			if (symbol != null)
 				return create_symbol (file, symbol);
@@ -117,25 +116,26 @@ namespace Ide
 		public void load () {}
 		public void unload () {}
 
-		public async GLib.GenericArray<Ide.SourceRange> find_references_async (Ide.SourceLocation location,
-		                                                                       GLib.Cancellable? cancellable)
+		public async GLib.GenericArray<Ide.Range> find_references_async (Ide.Location location,
+		                                                                 string? language_id,
+		                                                                 GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			return new GLib.GenericArray<Ide.SourceRange> ();
+			return new GLib.GenericArray<Ide.Range> ();
 		}
 
-		public async Ide.Symbol? find_nearest_scope_async (Ide.SourceLocation location,
+		public async Ide.Symbol? find_nearest_scope_async (Ide.Location location,
 		                                                   GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
 			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
+			var service = Ide.ValaService.from_context (context);
 			var index = service.index;
 			var file = location.get_file ();
 			var line = (int)location.get_line () + 1;
 			var column = (int)location.get_line_offset () + 1;
 
-			var symbol = yield index.find_symbol_at (file.get_file (), line, column);
+			var symbol = yield index.find_symbol_at (file, line, column);
 
 			while (symbol != null) {
 				if (symbol is Vala.Class ||

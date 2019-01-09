@@ -24,17 +24,20 @@ namespace Ide
 {
 	public class ValaDiagnosticProvider: Ide.Object, Ide.DiagnosticProvider
 	{
-		public async Ide.Diagnostics? diagnose_async (Ide.File file,
-		                                              Ide.Buffer buffer,
-		                                              GLib.Cancellable? cancellable)
+		public async Ide.Diagnostics diagnose_async (GLib.File file,
+		                                             GLib.Bytes? contents,
+		                                             string? language_id,
+		                                             GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
-			var service = (Ide.ValaService)get_context ().get_service_typed (typeof (Ide.ValaService));
-			yield service.index.parse_file (file.file, get_context ().unsaved_files, cancellable);
-			var results = yield service.index.get_diagnostics (file.file, cancellable);
+			var service = Ide.ValaService.from_context (this.get_context ());
+			var unsaved_files = Ide.UnsavedFiles.from_context (this.get_context ());
+			yield service.index.parse_file (file, unsaved_files, cancellable);
+			var results = yield service.index.get_diagnostics (file, cancellable);
 			return results;
 		}
 
 		public void load () {}
+		public void unload () {}
 	}
 }

@@ -1,7 +1,7 @@
 /* gbp-meson-toolchain-edition-preferences.c
  *
- * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
- * Copyright (C) 2018 Collabora Ltd.
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +15,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-meson-toolchain-edition-preferences-addin"
 
 #include <glib/gi18n.h>
+#include <libide-gui.h>
 
 #include "gbp-meson-toolchain-edition-preferences-addin.h"
 #include "gbp-meson-toolchain-edition-preferences-row.h"
@@ -71,7 +74,9 @@ meson_toolchain_edition_preferences_add_new (GbpMesonToolchainEditionPreferences
                            NULL);
 
   file = g_file_new_for_path (new_target);
-  output_stream = g_file_create (file, G_FILE_CREATE_NONE, NULL, &error);
+
+  if ((output_stream = g_file_create (file, G_FILE_CREATE_NONE, NULL, &error)))
+    g_output_stream_close (G_OUTPUT_STREAM (output_stream), NULL, NULL);
 
   id = dzl_preferences_add_custom (self->preferences, "sdk", "toolchain", GTK_WIDGET (pref_row), "", 1);
   g_array_append_val (self->ids, id);
@@ -173,7 +178,7 @@ gbp_meson_toolchain_edition_preferences_addin_load_finish (GObject      *object,
       id = dzl_preferences_add_custom (self->preferences, "sdk", "toolchain", GTK_WIDGET (pref_row), NULL, i);
       g_array_append_val (self->ids, id);
     }
-  
+
 }
 
 static void

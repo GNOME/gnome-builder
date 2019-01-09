@@ -1,6 +1,6 @@
 /* fusermount-wrapper.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,9 @@
 #include "config.h"
 
 #include <errno.h>
-#include <ide.h>
+#include <libide-threading.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-#include "threading/ide-thread-pool.h"
 
 static gint exit_code;
 

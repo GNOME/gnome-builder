@@ -20,7 +20,6 @@
 #
 
 import os
-import gi
 
 from gi.repository import Ide
 from gi.repository import GLib
@@ -48,7 +47,7 @@ def get_file_type(path):
         return _TYPE_CPLUSPLUS
     return _TYPE_NONE
 
-class PHPizeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
+class PHPizeBuildSystem(Ide.Object, Ide.BuildSystem):
     """
     This is the the basis of the build system. It provides access to
     some information about the project (like CFLAGS/CXXFLAGS, build targets,
@@ -63,29 +62,12 @@ class PHPizeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         return 'PHPize'
 
     def do_get_priority(self):
-        return 500
+        return 3000
 
-    def do_init_async(self, priority, cancel, callback, data=None):
-        task = Gio.Task.new(self, cancel, callback)
-        task.set_priority(priority)
-
-        project_file = self.get_context().get_project_file()
-        if project_file.get_basename() == 'config.m4':
-            task.return_boolean(True)
-        else:
-            child = project_file.get_child('config.m4')
-            exists = child.query_exists(cancel)
-            if exists:
-                self.props.project_file = child
-            task.return_boolean(exists)
-
-    def do_init_finish(self, result):
-        return result.propagate_boolean()
-
-    def do_get_build_flags_async(self, ifile, cancellable, callback, data=None):
+    def do_get_build_flags_async(self, file, cancellable, callback, data=None):
         task = Gio.Task.new(self, cancellable, callback)
         task.build_flags = []
-        task.type = get_file_type(ifile.get_path())
+        task.type = get_file_type(file.get_path())
 
         if not task.type:
             task.return_boolean(True)
@@ -94,12 +76,11 @@ class PHPizeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
         # To get the build flags, we run make with some custom code to
         # print variables, and then extract the values based on the file type.
         # But before, we must advance the pipeline through CONFIGURE.
-        build_manager = self.get_context().get_build_manager()
+        build_manager = Ide.BuildManager.from_context(context)
         build_manager.execute_async(Ide.BuildPhase.CONFIGURE, None, self._get_build_flags_build_cb, task)
 
     def do_get_build_flags_finish(self, result):
-        if result.propagate_boolean():
-            return result.build_flags
+        return result.build_flags
 
     def _get_build_flags_build_cb(self, build_manager, result, task):
         """
@@ -191,7 +172,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
     def do_load(self, pipeline):
         context = pipeline.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != PHPizeBuildSystem:
             return
@@ -209,7 +190,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         bootstrap_stage = Ide.BuildStageLauncher.new(context, bootstrap_launcher)
         bootstrap_stage.set_name(_("Bootstrapping project"))
         bootstrap_stage.set_completed(os.path.exists(os.path.join(srcdir, 'configure')))
-        self.track(pipeline.connect(Ide.BuildPhase.AUTOGEN, 0, bootstrap_stage))
+        self.track(pipeline.attach(Ide.BuildPhase.AUTOGEN, 0, bootstrap_stage))
 
         # Configure the project using autoconf. We run from builddir.
         config_launcher = pipeline.create_launcher()
@@ -224,7 +205,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
             config_launcher.push_args(config_opts)
         config_stage = Ide.BuildStageLauncher.new(context, config_launcher)
         config_stage.set_name(_("Configuring project"))
-        self.track(pipeline.connect(Ide.BuildPhase.CONFIGURE, 0, config_stage))
+        self.track(pipeline.attach(Ide.BuildPhase.CONFIGURE, 0, config_stage))
 
         # Build the project using make.
         build_launcher = pipeline.create_launcher()
@@ -238,7 +219,7 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
+        self.track(pipeline.attach(Ide.BuildPhase.BUILD, 0, build_stage))
 
         # Use "make install" to install the project.
         install_launcher = pipeline.create_launcher()
@@ -246,8 +227,8 @@ class PHPizeBuildPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         install_launcher.push_argv('install')
         install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
         install_stage.set_name(_("Installing project"))
-        self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
+        self.track(pipeline.attach(Ide.BuildPhase.INSTALL, 0, install_stage))
 
-    def _query(self, stage, pipeline, cancellable):
+    def _query(self, stage, pipeline, targets, cancellable):
         # Always defer to make for completion status
         stage.set_completed(False)

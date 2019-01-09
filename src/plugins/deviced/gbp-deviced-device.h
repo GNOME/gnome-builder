@@ -1,6 +1,6 @@
 /* gbp-deviced-device.h
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 #include <libdeviced.h>
 
 G_BEGIN_DECLS
@@ -27,8 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpDevicedDevice, gbp_deviced_device, GBP, DEVICED_DEVICE, IdeDevice)
 
-GbpDevicedDevice *gbp_deviced_device_new                   (IdeContext             *context,
-                                                            DevdDevice             *device);
+GbpDevicedDevice *gbp_deviced_device_new                   (DevdDevice             *device);
 void              gbp_deviced_device_get_commit_async      (GbpDevicedDevice       *self,
                                                             const gchar            *commit_id,
                                                             GCancellable           *cancellable,

@@ -24,10 +24,6 @@ import gi
 import json
 import threading
 
-gi.require_versions({
-    'Ide': '1.0',
-})
-
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gio
@@ -37,7 +33,7 @@ SYMBOL_PARAM_FLAGS=flags = GObject.ParamFlags.CONSTRUCT_ONLY | GObject.ParamFlag
 
 
 class JsSymbolNode(Ide.SymbolNode):
-    file = GObject.Property(type=Ide.File, flags=SYMBOL_PARAM_FLAGS)
+    file = GObject.Property(type=Gio.File, flags=SYMBOL_PARAM_FLAGS)
     line = GObject.Property(type=int, flags=SYMBOL_PARAM_FLAGS)
     col = GObject.Property(type=int, flags=SYMBOL_PARAM_FLAGS)
 
@@ -52,7 +48,7 @@ class JsSymbolNode(Ide.SymbolNode):
 
     def do_get_location_finish(self, result):
         if result.propagate_boolean():
-            return Ide.SourceLocation.new(self.file, self.line, self.col, 0)
+            return Ide.Location.new(self.file, self.line, self.col)
 
     def __len__(self):
         return len(self.children)
@@ -264,16 +260,22 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
     def _get_launcher(context, file_):
         file_path = file_.get_path()
         script = JS_SCRIPT % file_path
-        unsaved_file = context.get_unsaved_files().get_unsaved_file(file_)
+        unsaved_file = Ide.UnsavedFiles.from_context(context).get_unsaved_file(file_)
 
-        runtime = context.get_configuration_manager().get_current().get_runtime()
-        launcher = runtime.create_launcher()
+        if context.has_project():
+            runtime = Ide.ConfigurationManager.from_context(context).get_current().get_runtime()
+            launcher = runtime.create_launcher()
+        else:
+            launcher = Ide.SubprocessLauncher.new(0)
+
         launcher.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
         launcher.push_args(('gjs', '-c', script))
+
         if unsaved_file is not None:
             launcher.push_argv(unsaved_file.get_content().get_data().decode('utf-8'))
         else:
             launcher.push_args(('--file', file_path))
+
         return launcher
 
     def do_lookup_symbol_async(self, location, cancellable, callback, user_data=None):
@@ -300,8 +302,7 @@ class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
                 task.return_error(GLib.Error('Failed to run gjs'))
                 return
 
-            ide_file = Ide.File(file=file_, context=self.get_context())
-            task.symbol_tree = JsSymbolTree(json.loads(stdout), ide_file)
+            task.symbol_tree = JsSymbolTree(json.loads(stdout), file_)
         except GLib.Error as err:
             task.return_error(err)
         except (json.JSONDecodeError, UnicodeDecodeError) as e:
@@ -382,9 +383,8 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
         try:
             _, stdout, stderr = subprocess.communicate_utf8_finish(result)
 
-            ide_file = Ide.File(file=task.file, context=self.get_context())
             try:
-                root_node = JsSymbolTree._node_from_dict(json.loads(stdout), ide_file)
+                root_node = JsSymbolTree._node_from_dict(json.loads(stdout), task.file)
             except (json.JSONDecodeError, UnicodeDecodeError) as e:
                 raise GLib.Error('Failed to decode gjs json: {}'.format(e))
             except (IndexError, KeyError) as e:

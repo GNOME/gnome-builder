@@ -1,6 +1,6 @@
 /* gbp-meson-pipeline-addin.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-meson-pipeline-addin"
@@ -23,6 +25,7 @@
 #include "gbp-meson-toolchain.h"
 #include "gbp-meson-build-stage-cross-file.h"
 #include "gbp-meson-build-system.h"
+#include "gbp-meson-build-target.h"
 #include "gbp-meson-pipeline-addin.h"
 
 struct _GbpMesonPipelineAddin
@@ -33,9 +36,60 @@ struct _GbpMesonPipelineAddin
 static const gchar *ninja_names[] = { "ninja", "ninja-build" };
 
 static void
-on_stage_query (IdeBuildStage    *stage,
-                IdeBuildPipeline *pipeline,
-                GCancellable     *cancellable)
+on_build_stage_query (IdeBuildStage    *stage,
+                      IdeBuildPipeline *pipeline,
+                      GPtrArray        *targets,
+                      GCancellable     *cancellable)
+{
+  IdeSubprocessLauncher *launcher;
+  g_autoptr(GPtrArray) replace = NULL;
+  const gchar * const *argv;
+
+  g_assert (IDE_IS_BUILD_STAGE (stage));
+  g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* Defer to ninja to determine completed status */
+  ide_build_stage_set_completed (stage, FALSE);
+
+  /* Clear any previous argv items from a possible previous build */
+  launcher = ide_build_stage_launcher_get_launcher (IDE_BUILD_STAGE_LAUNCHER (stage));
+  argv = ide_subprocess_launcher_get_argv (launcher);
+  replace = g_ptr_array_new_with_free_func (g_free);
+  for (guint i = 0; argv[i]; i++)
+    {
+      g_ptr_array_add (replace, g_strdup (argv[i]));
+      if (g_strv_contains (ninja_names, argv[i]))
+        break;
+    }
+  g_ptr_array_add (replace, NULL);
+  ide_subprocess_launcher_set_argv (launcher, (const gchar * const *)replace->pdata);
+
+  /* If we have targets to build, specify them */
+  if (targets != NULL)
+    {
+      for (guint i = 0; i < targets->len; i++)
+        {
+          IdeBuildTarget *target = g_ptr_array_index (targets, i);
+
+          if (GBP_IS_MESON_BUILD_TARGET (target))
+            {
+              const gchar *filename;
+
+              filename = gbp_meson_build_target_get_filename (GBP_MESON_BUILD_TARGET (target));
+
+              if (filename != NULL)
+                ide_subprocess_launcher_push_argv (launcher, filename);
+            }
+        }
+    }
+}
+
+static void
+on_install_stage_query (IdeBuildStage    *stage,
+                        IdeBuildPipeline *pipeline,
+                        GPtrArray        *targets,
+                        GCancellable     *cancellable)
 {
   g_assert (IDE_IS_BUILD_STAGE (stage));
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
@@ -80,7 +134,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
   if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
     IDE_GOTO (failure);
 
@@ -139,7 +193,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       cross_file_stage = gbp_meson_build_stage_cross_file_new (context, toolchain);
       crossbuild_file = gbp_meson_build_stage_cross_file_get_path (cross_file_stage, pipeline);
 
-      id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_PREPARE, 0, IDE_BUILD_STAGE (cross_file_stage));
+      id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_PREPARE, 0, IDE_BUILD_STAGE (cross_file_stage));
       ide_build_pipeline_addin_track (addin, id);
     }
 
@@ -156,7 +210,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       ide_subprocess_launcher_push_argv (config_launcher, crossbuild_file);
     }
 
-  if (!dzl_str_empty0 (config_opts))
+  if (!ide_str_empty0 (config_opts))
     {
       g_auto(GStrv) argv = NULL;
       gint argc;
@@ -173,7 +227,7 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (g_file_test (build_ninja, G_FILE_TEST_IS_REGULAR))
     ide_build_stage_set_completed (config_stage, TRUE);
 
-  id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_CONFIGURE, 0, config_stage);
+  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_CONFIGURE, 0, config_stage);
   ide_build_pipeline_addin_track (addin, id);
 
   /*
@@ -198,9 +252,9 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_build_stage_launcher_set_clean_launcher (IDE_BUILD_STAGE_LAUNCHER (build_stage), clean_launcher);
   ide_build_stage_set_check_stdout (build_stage, TRUE);
   ide_build_stage_set_name (build_stage, _("Building project"));
-  g_signal_connect (build_stage, "query", G_CALLBACK (on_stage_query), NULL);
+  g_signal_connect (build_stage, "query", G_CALLBACK (on_build_stage_query), NULL);
 
-  id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_BUILD, 0, build_stage);
+  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_BUILD, 0, build_stage);
   ide_build_pipeline_addin_track (addin, id);
 
   /* Setup our install stage */
@@ -208,8 +262,8 @@ gbp_meson_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   ide_subprocess_launcher_push_argv (install_launcher, "install");
   install_stage = ide_build_stage_launcher_new (context, install_launcher);
   ide_build_stage_set_name (install_stage, _("Installing project"));
-  g_signal_connect (install_stage, "query", G_CALLBACK (on_stage_query), NULL);
-  id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_INSTALL, 0, install_stage);
+  g_signal_connect (install_stage, "query", G_CALLBACK (on_install_stage_query), NULL);
+  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_INSTALL, 0, install_stage);
   ide_build_pipeline_addin_track (addin, id);
 
   IDE_EXIT;

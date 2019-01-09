@@ -1,6 +1,6 @@
 /* gbp-deviced-device.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-deviced-device"
@@ -314,14 +316,13 @@ gbp_deviced_device_init (GbpDevicedDevice *self)
 }
 
 GbpDevicedDevice *
-gbp_deviced_device_new (IdeContext *context,
-                        DevdDevice *device)
+gbp_deviced_device_new (DevdDevice *device)
 {
   g_autofree gchar *id = NULL;
   const gchar *name;
   const gchar *icon_name;
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (DEVD_IS_DEVICE (device), NULL);
 
   id = g_strdup_printf ("deviced:%s", devd_device_get_id (device));
@@ -330,7 +331,6 @@ gbp_deviced_device_new (IdeContext *context,
 
   return g_object_new (GBP_TYPE_DEVICED_DEVICE,
                        "id", id,
-                       "context", context,
                        "device", device,
                        "display-name", name,
                        "icon-name", icon_name,

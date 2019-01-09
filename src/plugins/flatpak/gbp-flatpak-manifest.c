@@ -1,7 +1,7 @@
 /* gbp-flatpak-manifest.c
  *
  * Copyright 2016 Matthew Leeds <mleeds@redhat.com>
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-flatpak-manifest"
@@ -341,12 +343,11 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   g_auto(GStrv) build_commands = NULL;
   g_auto(GStrv) post_install = NULL;
   const gchar *app_id_field = "app-id";
-  IdeContext *context;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GFile) workdir = NULL;
   JsonObject *root_obj;
   JsonObject *primary;
   JsonNode *root;
-  IdeVcs *vcs;
-  GFile *workdir;
   gsize len = 0;
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (self));
@@ -375,9 +376,8 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   display_name = g_file_get_basename (self->file);
   ide_configuration_set_display_name (IDE_CONFIGURATION (self), display_name);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  workdir = ide_context_ref_workdir (context);
   dir_name = g_file_get_basename (workdir);
   root_obj = json_node_get_object (root);
 
@@ -653,12 +653,13 @@ gbp_flatpak_manifest_init (GbpFlatpakManifest *self)
 }
 
 GbpFlatpakManifest *
-gbp_flatpak_manifest_new (IdeContext  *context,
-                          GFile       *file,
+gbp_flatpak_manifest_new (GFile       *file,
                           const gchar *id)
 {
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (id != NULL, NULL);
+
   return g_object_new (GBP_TYPE_FLATPAK_MANIFEST,
-                       "context", context,
                        "id", id,
                        "file", file,
                        NULL);

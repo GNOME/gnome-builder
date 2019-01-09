@@ -19,7 +19,7 @@
         <attribute name="id">new-documentation-page</attribute>
         <attribute name="after">new-file</attribute>
         <attribute name="label" translatable="yes">New Documentation Page</attribute>
-        <attribute name="action">win.new-devhelp-view</attribute>
+        <attribute name="action">win.new-devhelp-page</attribute>
       </item>
     </section>
   </menu>

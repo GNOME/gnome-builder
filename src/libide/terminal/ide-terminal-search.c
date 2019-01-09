@@ -1,6 +1,6 @@
 /* ide-terminal-search.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-terminal-search"
@@ -23,14 +25,13 @@
 
 #include <fcntl.h>
 #include <glib/gi18n.h>
-#include <ide.h>
 #include <pcre2.h>
 #include <stdlib.h>
 #include <vte/vte.h>
 #include <unistd.h>
 
-#include "terminal/ide-terminal-search.h"
-#include "terminal/ide-terminal-search-private.h"
+#include "ide-terminal-search.h"
+#include "ide-terminal-search-private.h"
 
 G_DEFINE_TYPE (IdeTerminalSearch, ide_terminal_search, GTK_TYPE_BIN)
 
@@ -298,7 +299,7 @@ ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
 
   object_class->get_property = ide_terminal_search_get_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-terminal-search.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-search.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_prev_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_next_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, close_button);
@@ -360,7 +361,7 @@ ide_terminal_search_init (IdeTerminalSearch *self)
  * ide_terminal_search_set_terminal:
  * @self: a #IdeTerminalSearch
  *
- * Since: 3.28
+ * Since: 3.32
  */
 void
 ide_terminal_search_set_terminal (IdeTerminalSearch *self,
@@ -378,7 +379,7 @@ ide_terminal_search_set_terminal (IdeTerminalSearch *self,
  *
  * Returns: (transfer none) (nullable): a #VteRegex or %NULL.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 VteRegex *
 ide_terminal_search_get_regex (IdeTerminalSearch *self)
@@ -393,7 +394,7 @@ ide_terminal_search_get_regex (IdeTerminalSearch *self)
  * @self: a #IdeTerminalSearch
  *
  *
- * Since: 3.28
+ * Since: 3.32
  */
 gboolean
 ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
@@ -411,7 +412,7 @@ ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
  *
  * Returns: (transfer none): a #GtkRevealer
  *
- * Since: 3.28
+ * Since: 3.32
  */
 GtkRevealer *
 ide_terminal_search_get_revealer (IdeTerminalSearch *self)

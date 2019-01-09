@@ -1,6 +1,6 @@
 /* gbp-recent-project-row.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-recent-project-row"
@@ -334,8 +336,7 @@ gbp_recent_project_row_class_init (GbpRecentProjectRowClass *klass)
   object_class->get_property = gbp_recent_project_row_get_property;
   object_class->set_property = gbp_recent_project_row_set_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/recent-plugin/gbp-recent-project-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/recent/gbp-recent-project-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpRecentProjectRow, checkbox);
   gtk_widget_class_bind_template_child (widget_class, GbpRecentProjectRow, date_label);
   gtk_widget_class_bind_template_child (widget_class, GbpRecentProjectRow, description_label);

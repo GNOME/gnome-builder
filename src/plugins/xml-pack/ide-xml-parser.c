@@ -14,8 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <glib-object.h>
 
@@ -111,11 +114,9 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
                                   IdeDiagnosticSeverity   severity)
 {
   IdeXmlParser *self = (IdeXmlParser *)state->self;
-  IdeContext *context;
+  g_autoptr(IdeLocation) start_loc = NULL;
+  g_autoptr(IdeLocation) end_loc = NULL;
   IdeDiagnostic *diagnostic;
-  g_autoptr(IdeSourceLocation) start_loc = NULL;
-  g_autoptr(IdeSourceLocation) end_loc = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
   gint start_line;
   gint start_line_offset;
   gint end_line;
@@ -124,29 +125,25 @@ ide_xml_parser_create_diagnostic (ParserState            *state,
 
   g_assert (IDE_IS_XML_PARSER (self));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   ide_xml_sax_get_location (state->sax_parser,
                             &start_line, &start_line_offset,
                             &end_line, &end_line_offset,
                             NULL,
                             &size);
 
-  ifile = ide_file_new (context, state->file);
-  start_loc = ide_source_location_new (ifile,
-                                       start_line - 1,
-                                       start_line_offset - 1,
-                                       0);
+  start_loc = ide_location_new (state->file,
+                                start_line - 1,
+                                start_line_offset - 1);
 
   if (size > 0)
     {
-      IdeSourceRange *range;
+      IdeRange *range;
 
-      end_loc = ide_source_location_new (ifile,
-                                         end_line - 1,
-                                         end_line_offset - 1,
-                                         0);
+      end_loc = ide_location_new (state->file,
+                                  end_line - 1,
+                                  end_line_offset - 1);
 
-      range = ide_source_range_new (start_loc, end_loc);
+      range = ide_range_new (start_loc, end_loc);
       diagnostic = ide_diagnostic_new (severity, msg, NULL);
       ide_diagnostic_take_range (diagnostic, range);
     }
@@ -210,7 +207,7 @@ ide_xml_parser_state_processing (IdeXmlParser          *self,
     {
       if (callback_type == IDE_XML_SAX_CALLBACK_TYPE_START_ELEMENT)
         {
-          node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_XML_ELEMENT);
+          node = ide_xml_symbol_node_new ("internal", NULL, element_name, IDE_SYMBOL_KIND_XML_ELEMENT);
           ide_xml_symbol_node_set_location (node, g_object_ref (state->file),
                                             start_line, start_line_offset,
                                             end_line, end_line_offset,
@@ -383,7 +380,7 @@ ide_xml_parser_error_sax_cb (ParserState    *state,
           if (prev >= base && *prev == '<')
             {
               /* '<' only case, no name tag, node not created, we need to do it ourself */
-              node = ide_xml_symbol_node_new ("internal", NULL, NULL, IDE_SYMBOL_XML_ELEMENT);
+              node = ide_xml_symbol_node_new ("internal", NULL, NULL, IDE_SYMBOL_KIND_XML_ELEMENT);
               ide_xml_symbol_node_set_state (node, IDE_XML_SYMBOL_NODE_STATE_NOT_CLOSED);
               ide_xml_symbol_node_take_internal_child (state->parent_node, node);
 
@@ -588,14 +585,19 @@ ide_xml_parser_get_analysis_worker (IdeTask      *task,
       return;
     }
 
-  diagnostics = ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&state->diagnostics_array));
+  diagnostics = ide_diagnostics_new ();
+  if (state->diagnostics_array)
+    {
+      for (guint i = 0; i < state->diagnostics_array->len; i++)
+        ide_diagnostics_add (diagnostics, g_ptr_array_index (state->diagnostics_array, i));
+    }
   ide_xml_analysis_set_diagnostics (analysis, diagnostics);
 
   if (state->file_is_ui)
     {
       entry = ide_xml_schema_cache_entry_new ();
       entry->kind = SCHEMA_KIND_RNG;
-      entry->file = g_file_new_for_uri ("resource:///org/gnome/builder/plugins/xml-pack-plugin/schemas/gtkbuilder.rng");
+      entry->file = g_file_new_for_uri ("resource:///plugins/xml-pack/schemas/gtkbuilder.rng");
       g_object_set_data (G_OBJECT (entry->file), "kind", GUINT_TO_POINTER (entry->kind));
       g_ptr_array_add (state->schemas, entry);
     }
@@ -631,7 +633,7 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->file = g_object_ref (file);
   state->content = g_bytes_ref (content);
   state->sequence = sequence;
-  state->diagnostics_array = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+  state->diagnostics_array = g_ptr_array_new_with_free_func (g_object_unref);
   state->schemas = g_ptr_array_new_with_free_func (g_object_unref);
   state->sax_parser = ide_xml_sax_new ();
   state->stack = ide_xml_stack_new ();
@@ -639,7 +641,7 @@ ide_xml_parser_get_analysis_async (IdeXmlParser        *self,
   state->build_state = BUILD_STATE_NORMAL;
 
   state->analysis = ide_xml_analysis_new (-1);
-  state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_NONE);
+  state->root_node = ide_xml_symbol_node_new ("root", NULL, "root", IDE_SYMBOL_KIND_NONE);
   ide_xml_analysis_set_root_node (state->analysis, state->root_node);
 
   state->parent_node = state->root_node;

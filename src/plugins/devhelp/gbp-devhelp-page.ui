@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.18 -->
+  <template class="GbpDevhelpPage" parent="IdePage">
+    <child>
+      <object class="GtkPaned" id="paned">
+        <property name="expand">true</property>
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkOverlay" id="devhelp_overlay">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="WebKitWebView" id="web_view1">
+                <property name="visible">true</property>
+                <property name="expand">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

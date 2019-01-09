@@ -1,6 +1,6 @@
 /* ide-clang.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 /* Prologue {{{1 */
 
 #define G_LOG_DOMAIN "ide-clang"
 
-#include <ide.h>
+#include <libide-code.h>
 
 #include "ide-clang.h"
 #include "ide-clang-util.h"
@@ -288,54 +290,54 @@ ide_clang_get_symbol_kind (CXCursor        cursor,
   switch ((int)cxkind)
     {
     case CXCursor_StructDecl:
-      kind = IDE_SYMBOL_STRUCT;
+      kind = IDE_SYMBOL_KIND_STRUCT;
       break;
 
     case CXCursor_UnionDecl:
-      kind = IDE_SYMBOL_UNION;
+      kind = IDE_SYMBOL_KIND_UNION;
       break;
 
     case CXCursor_ClassDecl:
-      kind = IDE_SYMBOL_CLASS;
+      kind = IDE_SYMBOL_KIND_CLASS;
       break;
 
     case CXCursor_FunctionDecl:
-      kind = IDE_SYMBOL_FUNCTION;
+      kind = IDE_SYMBOL_KIND_FUNCTION;
       break;
 
     case CXCursor_EnumDecl:
-      kind = IDE_SYMBOL_ENUM;
+      kind = IDE_SYMBOL_KIND_ENUM;
       break;
 
     case CXCursor_EnumConstantDecl:
-      kind = IDE_SYMBOL_ENUM_VALUE;
+      kind = IDE_SYMBOL_KIND_ENUM_VALUE;
       break;
 
     case CXCursor_FieldDecl:
-      kind = IDE_SYMBOL_FIELD;
+      kind = IDE_SYMBOL_KIND_FIELD;
       break;
 
     case CXCursor_InclusionDirective:
-      kind = IDE_SYMBOL_HEADER;
+      kind = IDE_SYMBOL_KIND_HEADER;
       break;
 
     case CXCursor_VarDecl:
-      kind = IDE_SYMBOL_VARIABLE;
+      kind = IDE_SYMBOL_KIND_VARIABLE;
       break;
 
     case CXCursor_NamespaceAlias:
-      kind = IDE_SYMBOL_NAMESPACE;
+      kind = IDE_SYMBOL_KIND_NAMESPACE;
       break;
 
     case CXCursor_CXXMethod:
     case CXCursor_Destructor:
     case CXCursor_Constructor:
-      kind = IDE_SYMBOL_METHOD;
+      kind = IDE_SYMBOL_KIND_METHOD;
       break;
 
     case CXCursor_MacroDefinition:
     case CXCursor_MacroExpansion:
-      kind = IDE_SYMBOL_MACRO;
+      kind = IDE_SYMBOL_KIND_MACRO;
       break;
 
     default:
@@ -354,8 +356,7 @@ create_symbol (const gchar  *path,
 {
   g_auto(CXString) cxname = {0};
   g_autoptr(GFile) gfile = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
-  g_autoptr(IdeSourceLocation) srcloc = NULL;
+  g_autoptr(IdeLocation) srcloc = NULL;
   IdeSymbolKind symkind;
   IdeSymbolFlags symflags = 0;
   CXSourceLocation loc;
@@ -374,21 +375,15 @@ create_symbol (const gchar  *path,
   loc = clang_getCursorLocation (cursor);
   clang_getExpansionLocation (loc, NULL, &line, &column, NULL);
   gfile = g_file_new_for_path (path);
-  ifile = ide_file_new (NULL, gfile);
 
   if (line) line--;
   if (column) column--;
 
-  srcloc = ide_source_location_new (ifile, line, column, 0);
+  srcloc = ide_location_new (gfile, line, column);
   cxname = clang_getCursorSpelling (cursor);
   symkind = ide_clang_get_symbol_kind (cursor, &symflags);
 
-  return ide_symbol_new (clang_getCString (cxname),
-                         symkind,
-                         symflags,
-                         NULL,
-                         NULL,
-                         srcloc);
+  return ide_symbol_new (clang_getCString (cxname), symkind, symflags, srcloc, srcloc);
 }
 
 static void
@@ -470,28 +465,28 @@ ide_clang_index_symbol_prefix (IdeSymbolKind kind)
 {
   switch ((int)kind)
     {
-    case IDE_SYMBOL_FUNCTION:
+    case IDE_SYMBOL_KIND_FUNCTION:
       return "f\x1F";
 
-    case IDE_SYMBOL_STRUCT:
+    case IDE_SYMBOL_KIND_STRUCT:
       return "s\x1F";
 
-    case IDE_SYMBOL_VARIABLE:
+    case IDE_SYMBOL_KIND_VARIABLE:
       return "v\x1F";
 
-    case IDE_SYMBOL_UNION:
+    case IDE_SYMBOL_KIND_UNION:
       return "u\x1F";
 
-    case IDE_SYMBOL_ENUM:
+    case IDE_SYMBOL_KIND_ENUM:
       return "e\x1F";
 
-    case IDE_SYMBOL_CLASS:
+    case IDE_SYMBOL_KIND_CLASS:
       return "c\x1F";
 
-    case IDE_SYMBOL_ENUM_VALUE:
+    case IDE_SYMBOL_KIND_ENUM_VALUE:
       return "a\x1F";
 
-    case IDE_SYMBOL_MACRO:
+    case IDE_SYMBOL_KIND_MACRO:
       return "m\x1F";
 
     default:
@@ -527,7 +522,7 @@ ide_clang_index_file_visitor (CXCursor     cursor,
   cxpath = clang_getFileName (file);
   path = clang_getCString (cxpath);
 
-  if (dzl_str_equal0 (path, state->path))
+  if (ide_str_equal0 (path, state->path))
     {
       enum CXCursorKind cursor_kind = clang_getCursorKind (cursor);
 
@@ -552,6 +547,8 @@ ide_clang_index_file_visitor (CXCursor     cursor,
  * from queue, else this will do Breadth first traversal on AST till it finds a
  * declaration.  On next request when decl_cursors is empty it will continue
  * traversal from where it has stopped in previously.
+ *
+ * Since: 3.32
  */
 static IdeCodeIndexEntry *
 ide_clang_index_file_next_entry (IndexFile                *state,
@@ -564,7 +561,7 @@ ide_clang_index_file_next_entry (IndexFile                *state,
   g_auto(CXString) usr = {0};
   CXSourceLocation location;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
-  IdeSymbolKind kind = IDE_SYMBOL_NONE;
+  IdeSymbolKind kind = IDE_SYMBOL_KIND_NONE;
   enum CXLinkageKind linkage;
   enum CXCursorKind cursor_kind;
   const gchar *cname = NULL;
@@ -611,7 +608,7 @@ ide_clang_index_file_next_entry (IndexFile                *state,
    */
   cxname = clang_getCursorSpelling (*cursor);
   cname = clang_getCString (cxname);
-  if (dzl_str_empty0 (cname))
+  if (ide_str_empty0 (cname))
     return NULL;
 
   /*
@@ -732,7 +729,7 @@ ide_clang_index_file_worker (IdeTask      *task,
 
       break;
     }
-  
+
   ide_task_return_pointer (task,
                            g_steal_pointer (&state->entries),
                            (GDestroyNotify)g_ptr_array_unref);
@@ -751,7 +748,7 @@ ide_clang_index_file_worker (IdeTask      *task,
  * found at @path. The results (an array of #IdeCodeIndexEntry) can be accessed
  * via ide_clang_index_file_finish() using the result provided to @callback
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_clang_index_file_async (IdeClang            *self,
@@ -798,7 +795,7 @@ ide_clang_index_file_async (IdeClang            *self,
  *
  * Returns: (transfer full): a #GPtrArray of #IdeCodeIndexEntry
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GPtrArray *
 ide_clang_index_file_finish (IdeClang      *self,
@@ -881,14 +878,13 @@ get_path (GFile       *workdir,
   return path_or_uri (child);
 }
 
-static IdeSourceLocation *
+static IdeLocation *
 create_location (GFile             *workdir,
                  CXSourceLocation   cxloc,
-                 IdeSourceLocation *alternate)
+                 IdeLocation *alternate)
 {
   g_autofree gchar *path = NULL;
-  g_autoptr(IdeFile) file = NULL;
-  g_autoptr(GFile) gfile = NULL;
+  g_autoptr(GFile) file = NULL;
   g_auto(CXString) str = {0};
   CXFile cxfile = NULL;
   unsigned line;
@@ -902,7 +898,7 @@ create_location (GFile             *workdir,
   str = clang_getFileName (cxfile);
 
   if (line == 0 || clang_getCString (str) == NULL)
-    return alternate ? ide_source_location_ref (alternate) : NULL;
+    return alternate ? g_object_ref (alternate) : NULL;
 
   if (line > 0)
     line--;
@@ -910,24 +906,21 @@ create_location (GFile             *workdir,
   if (column > 0)
     column--;
 
-  /* TODO: Remove IdeFile from IdeSourceLocation */
-
   path = get_path (workdir, clang_getCString (str));
-  gfile = g_file_new_for_path (path);
-  file = ide_file_new (NULL, gfile);
+  file = g_file_new_for_path (path);
 
-  return ide_source_location_new (file, line, column, offset);
+  return ide_location_new (file, line, column);
 }
 
-static IdeSourceRange *
+static IdeRange *
 create_range (GFile         *workdir,
               CXSourceRange  cxrange)
 {
-  IdeSourceRange *range = NULL;
+  IdeRange *range = NULL;
   CXSourceLocation cxbegin;
   CXSourceLocation cxend;
-  g_autoptr(IdeSourceLocation) begin = NULL;
-  g_autoptr(IdeSourceLocation) end = NULL;
+  g_autoptr(IdeLocation) begin = NULL;
+  g_autoptr(IdeLocation) end = NULL;
 
   g_assert (G_IS_FILE (workdir));
 
@@ -935,13 +928,13 @@ create_range (GFile         *workdir,
   cxend = clang_getRangeEnd (cxrange);
 
   /* Sometimes the end location does not have a file associated with it,
-   * so we force it to have the IdeFile of the first location.
+   * so we force it to have the GFile of the first location.
    */
   begin = create_location (workdir, cxbegin, NULL);
   end = create_location (workdir, cxend, begin);
 
   if ((begin != NULL) && (end != NULL))
-    range = ide_source_range_new (begin, end);
+    range = ide_range_new (begin, end);
 
   return range;
 }
@@ -951,7 +944,7 @@ create_diagnostic (GFile        *workdir,
                    GFile        *target,
                    CXDiagnostic *cxdiag)
 {
-  g_autoptr(IdeSourceLocation) loc = NULL;
+  g_autoptr(IdeLocation) loc = NULL;
   enum CXDiagnosticSeverity cxseverity;
   IdeDiagnosticSeverity severity;
   IdeDiagnostic *diag;
@@ -996,7 +989,7 @@ create_diagnostic (GFile        *workdir,
   for (guint i = 0; i < num_ranges; i++)
     {
       CXSourceRange cxrange;
-      IdeSourceRange *range;
+      IdeRange *range;
 
       cxrange = clang_getDiagnosticRange (cxdiag, i);
       range = create_range (workdir, cxrange);
@@ -1085,7 +1078,7 @@ ide_clang_diagnose_worker (IdeTask      *task,
  *
  * This generates diagnostics related to the file after parsing it.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_clang_diagnose_async (IdeClang            *self,
@@ -1118,7 +1111,7 @@ ide_clang_diagnose_async (IdeClang            *self,
   else
     state->workdir = g_file_new_for_path ((parent = g_path_get_dirname (path)));
 
-  IDE_PTR_ARRAY_SET_FREE_FUNC (state->diagnostics, ide_diagnostic_unref);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (state->diagnostics, ide_object_unref_and_destroy);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_clang_diagnose_async);
@@ -1136,7 +1129,7 @@ ide_clang_diagnose_async (IdeClang            *self,
  * Returns: (transfer full) (element-type Ide.Diagnostic):
  *   a #GPtrArray of #IdeDiagnostic
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GPtrArray *
 ide_clang_diagnose_finish (IdeClang      *self,
@@ -1150,9 +1143,7 @@ ide_clang_diagnose_finish (IdeClang      *self,
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
-  IDE_PTR_ARRAY_CLEAR_FREE_FUNC (ret);
-
-  return ret;
+  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
 }
 
 /* Completion {{{1 */
@@ -1453,7 +1444,7 @@ ide_clang_find_nearest_scope_worker (IdeTask      *task,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&ret),
-                             (GDestroyNotify)ide_symbol_unref);
+                             g_object_unref);
 }
 
 void
@@ -1536,9 +1527,8 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
                                 GCancellable *cancellable)
 {
   LocateSymbol *state = task_data;
-  g_autoptr(IdeSourceLocation) declaration = NULL;
-  g_autoptr(IdeSourceLocation) definition = NULL;
-  g_autoptr(IdeSourceLocation) canonical = NULL;
+  g_autoptr(IdeLocation) declaration = NULL;
+  g_autoptr(IdeLocation) definition = NULL;
   g_autoptr(IdeSymbol) ret = NULL;
   g_auto(CXTranslationUnit) unit = NULL;
   g_auto(CXString) cxstr = {0};
@@ -1615,7 +1605,7 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
 
   symkind = ide_clang_get_symbol_kind (cursor, &symflags);
 
-  if (symkind == IDE_SYMBOL_HEADER)
+  if (symkind == IDE_SYMBOL_KIND_HEADER)
     {
       g_auto(CXString) included_file_name = {0};
       CXFile included_file;
@@ -1627,24 +1617,19 @@ ide_clang_locate_symbol_worker (IdeTask      *task,
 
       if (path != NULL)
         {
-          g_autoptr(IdeFile) file = NULL;
-          g_autoptr(GFile) gfile = NULL;
+          g_autoptr(GFile) file = g_file_new_for_path (path);
 
-          gfile = g_file_new_for_path (path);
-          file = ide_file_new (NULL, gfile);
-
-          g_clear_pointer (&definition, ide_source_location_unref);
-          declaration = ide_source_location_new (file, 0, 0, 0);
+          g_clear_object (&definition);
+          declaration = ide_location_new (file, -1, -1);
         }
     }
 
   cxstr = clang_getCursorDisplayName (cursor);
-  ret = ide_symbol_new (clang_getCString (cxstr), symkind, symflags,
-                        declaration, definition, canonical);
+  ret = ide_symbol_new (clang_getCString (cxstr), symkind, symflags, declaration, definition);
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&ret),
-                           (GDestroyNotify)ide_symbol_unref);
+                           g_object_unref);
 }
 
 void
@@ -1758,7 +1743,7 @@ cursor_is_recognized (GetSymbolTree *state,
         cxloc = clang_getCursorLocation (cursor);
         clang_getFileLocation (cxloc, &file, NULL, NULL, NULL);
         filename = clang_getFileName (file);
-        ret = dzl_str_equal0 (clang_getCString (filename), state->path);
+        ret = ide_str_equal0 (clang_getCString (filename), state->path);
       }
       break;
 
@@ -2220,6 +2205,8 @@ ide_clang_get_index_key_async (IdeClang            *self,
  * at a given source location.
  *
  * Returns: (transfer full): the key, or %NULL and @error is set
+ *
+ * Since: 3.32
  */
 gchar *
 ide_clang_get_index_key_finish (IdeClang      *self,

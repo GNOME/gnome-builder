@@ -1,6 +1,6 @@
 /* ide-indenter.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,16 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-indenter"
 
 #include "config.h"
 
-#include "ide-context.h"
-#include "ide-debug.h"
+#include <libide-code.h>
 
-#include "sourceview/ide-indenter.h"
+#include "ide-indenter.h"
 
 G_DEFINE_INTERFACE (IdeIndenter, ide_indenter, IDE_TYPE_OBJECT)
 
@@ -121,6 +122,8 @@ ide_indenter_mimic_source_view (GtkTextView *text_view,
  *
  * Returns: (nullable) (transfer full): A string containing the replacement
  *   text, or %NULL.
+ *
+ * Since: 3.32
  */
 gchar *
 ide_indenter_format (IdeIndenter *self,
@@ -155,6 +158,8 @@ ide_indenter_format (IdeIndenter *self,
  * the default indentation style of #GtkSourceView.
  *
  * Returns: %TRUE if @event should trigger an indentation request.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_indenter_is_trigger (IdeIndenter *self,

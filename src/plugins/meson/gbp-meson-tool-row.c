@@ -1,7 +1,7 @@
 /* gbp-meson-tool-row.c
  *
- * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
- * Copyright (C) 2018 Collabora Ltd.
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-meson-tool-row"
@@ -215,7 +217,7 @@ gbp_meson_tool_row_class_init (GbpMesonToolRowClass *klass)
                                 G_TYPE_NONE,
                                 0);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/meson-plugin/gbp-meson-tool-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/meson/gbp-meson-tool-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolRow, name_label);
   gtk_widget_class_bind_template_child (widget_class, GbpMesonToolRow, delete_button);
 }

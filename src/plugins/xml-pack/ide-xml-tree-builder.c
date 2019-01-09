@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 
@@ -83,17 +85,12 @@ create_diagnostic (IdeContext            *context,
                    gint                   col,
                    IdeDiagnosticSeverity  severity)
 {
-  g_autoptr(IdeSourceLocation) loc = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
+  g_autoptr(IdeLocation) loc = NULL;
 
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (G_IS_FILE (file));
 
-  ifile = ide_file_new (context, file);
-  loc = ide_source_location_new (ifile,
-                                 line - 1,
-                                 col - 1,
-                                 0);
+  loc = ide_location_new (file, line - 1, col - 1);
 
   return ide_diagnostic_new (severity, msg, loc);
 }
@@ -113,12 +110,12 @@ ide_xml_tree_builder_get_file_content (IdeXmlTreeBuilder *self,
   g_assert (G_IS_FILE (file));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  manager = ide_context_get_buffer_manager (context);
+  manager = ide_buffer_manager_from_context (context);
   buffer = ide_buffer_manager_find_buffer (manager, file);
 
   if (buffer != NULL)
     {
-      content = ide_buffer_get_content (buffer);
+      content = ide_buffer_dup_content (buffer);
       sequence_tmp = ide_buffer_get_change_count (buffer);
     }
 
@@ -231,7 +228,7 @@ fetch_schemas_async (IdeXmlTreeBuilder   *self,
   schemas_copy = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_xml_schema_cache_entry_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_XML_SERVICE);
+  service = ide_xml_service_from_context (context);
   schemas_cache = ide_xml_service_get_schemas_cache (service);
 
   for (guint i = 0; i < schemas->len; i++)
@@ -554,40 +551,47 @@ ide_xml_tree_builder_build_tree_finish (IdeXmlTreeBuilder  *self,
 }
 
 static void
-ide_xml_tree_builder_finalize (GObject *object)
+ide_xml_tree_builder_destroy (IdeObject *object)
 {
   IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)object;
 
-  g_clear_object (&self->parser);
-  g_clear_object (&self->validator);
+  ide_clear_and_destroy_object (&self->parser);
+  ide_clear_and_destroy_object (&self->validator);
 
-  G_OBJECT_CLASS (ide_xml_tree_builder_parent_class)->finalize (object);
+  IDE_OBJECT_CLASS (ide_xml_tree_builder_parent_class)->destroy (object);
 }
 
 static void
-ide_xml_tree_builder_constructed (GObject *object)
+ide_xml_tree_builder_parent_set (IdeObject *object,
+                                 IdeObject *parent)
 {
   IdeXmlTreeBuilder *self = (IdeXmlTreeBuilder *)object;
   IdeContext *context;
 
-  G_OBJECT_CLASS (ide_xml_tree_builder_parent_class)->constructed (object);
+  g_assert (IDE_IS_XML_TREE_BUILDER (self));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (parent == NULL)
+    return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
   self->parser = g_object_new (IDE_TYPE_XML_PARSER,
-                               "context", context,
+                               "parent", self,
                                NULL);
-  self->validator = ide_xml_validator_new (context);
+  self->validator = g_object_new (IDE_TYPE_XML_VALIDATOR,
+                                  "parent", self,
+                                  NULL);
 }
 
 static void
 ide_xml_tree_builder_class_init (IdeXmlTreeBuilderClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_xml_tree_builder_constructed;
-  object_class->finalize = ide_xml_tree_builder_finalize;
+  i_object_class->parent_set = ide_xml_tree_builder_parent_set;
+  i_object_class->destroy = ide_xml_tree_builder_destroy;
 }
 
 static void

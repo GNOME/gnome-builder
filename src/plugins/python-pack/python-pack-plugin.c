@@ -1,6 +1,6 @@
 /* python-pack-plugin.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,14 +14,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
+#include <libide-sourceview.h>
 
 #include "ide-python-indenter.h"
 
-void
-ide_python_pack_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_python_pack_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_PYTHON_INDENTER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_INDENTER,
+                                              IDE_TYPE_PYTHON_INDENTER);
 }

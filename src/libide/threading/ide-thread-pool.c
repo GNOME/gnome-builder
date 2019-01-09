@@ -1,6 +1,6 @@
 /* ide-thread-pool.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,18 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-thread-pool"
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libide-core.h>
 
-#include "ide-debug.h"
-
-#include "threading/ide-thread-pool.h"
-#include "threading/ide-thread-private.h"
+#include "ide-thread-pool.h"
+#include "ide-thread-private.h"
 
 typedef struct
 {
@@ -51,9 +51,6 @@ struct _IdeThreadPool
   guint              worker_max_threads;
   gboolean           exclusive;
 };
-
-DZL_DEFINE_COUNTER (TotalTasks, "ThreadPool", "Total Tasks", "Total number of tasks processed.")
-DZL_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number of pending tasks.")
 
 static IdeThreadPool thread_pools[] = {
   { NULL, IDE_THREAD_POOL_DEFAULT, 10, 1, FALSE },
@@ -86,6 +83,8 @@ ide_thread_pool_get_pool (IdeThreadPoolKind kind)
  *
  * This pushes a task to be executed on a worker thread based on the task kind as denoted by
  * @kind. Some tasks will be placed on special work queues or throttled based on priority.
+ *
+ * Since: 3.32
  */
 void
 ide_thread_pool_push_task (IdeThreadPoolKind  kind,
@@ -101,8 +100,6 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
   g_return_if_fail (G_IS_TASK (task));
   g_return_if_fail (func != NULL);
 
-  DZL_COUNTER_INC (TotalTasks);
-
   pool = ide_thread_pool_get_pool (kind);
 
   if (pool != NULL)
@@ -114,8 +111,6 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
       work_item->priority = g_task_get_priority (task);
       work_item->task.task = g_object_ref (task);
       work_item->task.func = func;
-
-      DZL_COUNTER_INC (QueuedTasks);
 
       g_thread_pool_push (pool, work_item, NULL);
     }
@@ -134,6 +129,8 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
  * @func_data: user data for @func.
  *
  * Runs the callback on the thread pool thread.
+ *
+ * Since: 3.32
  */
 void
 ide_thread_pool_push (IdeThreadPoolKind kind,
@@ -151,6 +148,8 @@ ide_thread_pool_push (IdeThreadPoolKind kind,
  * @func_data: user data for @func.
  *
  * Runs the callback on the thread pool thread.
+ *
+ * Since: 3.32
  */
 void
 ide_thread_pool_push_with_priority (IdeThreadPoolKind kind,
@@ -166,8 +165,6 @@ ide_thread_pool_push_with_priority (IdeThreadPoolKind kind,
   g_return_if_fail (kind < IDE_THREAD_POOL_LAST);
   g_return_if_fail (func != NULL);
 
-  DZL_COUNTER_INC (TotalTasks);
-
   pool = ide_thread_pool_get_pool (kind);
 
   if (pool != NULL)
@@ -179,8 +176,6 @@ ide_thread_pool_push_with_priority (IdeThreadPoolKind kind,
       work_item->priority = priority;
       work_item->func.callback = func;
       work_item->func.data = func_data;
-
-      DZL_COUNTER_INC (QueuedTasks);
 
       g_thread_pool_push (pool, work_item, NULL);
     }
@@ -199,8 +194,6 @@ ide_thread_pool_worker (gpointer data,
   WorkItem *work_item = data;
 
   g_assert (work_item != NULL);
-
-  DZL_COUNTER_DEC (QueuedTasks);
 
   if (work_item->type == TYPE_TASK)
     {

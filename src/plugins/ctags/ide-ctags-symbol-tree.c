@@ -1,6 +1,6 @@
 /* ide-ctags-symbol-tree.c
  *
- * Copyright 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-ctags-symbol-tree"
@@ -69,8 +71,8 @@ symbol_tree_iface_init (IdeSymbolTreeInterface *iface)
   iface->get_nth_child = ide_ctags_symbol_tree_get_nth_child;
 }
 
-G_DEFINE_TYPE_EXTENDED (IdeCtagsSymbolTree, ide_ctags_symbol_tree, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
+G_DEFINE_TYPE_WITH_CODE (IdeCtagsSymbolTree, ide_ctags_symbol_tree, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_TREE, symbol_tree_iface_init))
 
 /**
  * ide_ctags_symbol_tree_new:
@@ -78,6 +80,8 @@ G_DEFINE_TYPE_EXTENDED (IdeCtagsSymbolTree, ide_ctags_symbol_tree, G_TYPE_OBJECT
  *
  * This function takes ownership of @ar.
  *
+ *
+ * Since: 3.32
  */
 IdeCtagsSymbolTree *
 ide_ctags_symbol_tree_new (GPtrArray *ar)

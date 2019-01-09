@@ -1,6 +1,6 @@
 /* ide-source-view.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-source-view"
@@ -23,51 +25,30 @@
 #include <cairo-gobject.h>
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libide-code.h>
+#include <libide-plugins.h>
+#include <libide-threading.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-enums.h"
+#include "ide-buffer-private.h"
 
-#include "application/ide-application.h"
-#include "buffers/ide-buffer-manager.h"
-#include "buffers/ide-buffer.h"
-#include "buffers/ide-buffer-private.h"
-#include "completion/ide-completion.h"
-#include "completion/ide-completion-private.h"
-#include "diagnostics/ide-diagnostic.h"
-#include "diagnostics/ide-fixit.h"
-#include "diagnostics/ide-source-location.h"
-#include "diagnostics/ide-source-range.h"
-#include "files/ide-file-settings.h"
-#include "files/ide-file.h"
-#include "hover/ide-hover-private.h"
-#include "plugins/ide-extension-adapter.h"
-#include "plugins/ide-extension-set-adapter.h"
-#include "rename/ide-rename-provider.h"
-#include "snippets/ide-snippet-chunk.h"
-#include "snippets/ide-snippet-context.h"
-#include "snippets/ide-snippet-private.h"
-#include "snippets/ide-snippet.h"
-#include "sourceview/ide-cursor.h"
-#include "sourceview/ide-indenter.h"
-#include "sourceview/ide-omni-gutter-renderer.h"
-#include "sourceview/ide-omni-gutter-renderer-private.h"
-#include "sourceview/ide-source-iter.h"
-#include "sourceview/ide-source-view-capture.h"
-#include "sourceview/ide-source-view-mode.h"
-#include "sourceview/ide-source-view-movements.h"
-#include "sourceview/ide-source-view-private.h"
-#include "sourceview/ide-source-view.h"
-#include "sourceview/ide-text-util.h"
-#include "symbols/ide-symbol.h"
-#include "symbols/ide-symbol-resolver.h"
-#include "util/ide-gtk.h"
-#include "vcs/ide-vcs.h"
-#include "workbench/ide-workbench-private.h"
-#include "threading/ide-task.h"
-#include "util/ide-glib.h"
+#include "ide-completion-private.h"
+#include "ide-completion.h"
+#include "ide-cursor.h"
+#include "ide-hover-private.h"
+#include "ide-indenter.h"
+#include "ide-snippet-chunk.h"
+#include "ide-snippet-context.h"
+#include "ide-snippet-private.h"
+#include "ide-snippet.h"
+#include "ide-source-view-capture.h"
+#include "ide-source-view-mode.h"
+#include "ide-source-view-movements.h"
+#include "ide-source-view-private.h"
+#include "ide-source-view.h"
+#include "ide-source-view-enums.h"
+#include "ide-text-util.h"
 
 #define INCLUDE_STATEMENTS "^#include[\\s]+[\\\"\\<][^\\s\\\"\\\'\\<\\>[:cntrl:]]+[\\\"\\>]"
 
@@ -112,7 +93,7 @@ typedef struct
   GQueue                      *snippets;
   DzlAnimation                *hadj_animation;
   DzlAnimation                *vadj_animation;
-  IdeOmniGutterRenderer       *omni_renderer;
+  IdeGutter                   *gutter;
 
   IdeCompletion               *completion;
   IdeHover                    *hover;
@@ -149,7 +130,7 @@ typedef struct
   guint                        delay_size_allocate_chainup;
   GtkAllocation                delay_size_allocation;
 
-  IdeSourceLocation           *definition_src_location;
+  IdeLocation                 *definition_src_location;
   GtkTextMark                 *definition_highlight_start_mark;
   GtkTextMark                 *definition_highlight_end_mark;
 
@@ -173,6 +154,9 @@ typedef struct
   guint                        snippet_completion : 1;
   guint                        waiting_for_capture : 1;
   guint                        waiting_for_symbol : 1;
+  guint                        show_line_changes : 1;
+  guint                        show_line_diagnostics : 1;
+  guint                        show_line_numbers : 1;
 } IdeSourceViewPrivate;
 
 typedef struct
@@ -185,7 +169,7 @@ typedef struct
 typedef struct
 {
   GPtrArray         *resolvers;
-  IdeSourceLocation *location;
+  IdeLocation *location;
 } FindReferencesTaskData;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
@@ -300,22 +284,38 @@ static gdouble     fontScale [LAST_FONT_SCALE] = {
   1.2, 1.44, 1.728, 2.48832,
 };
 
-static void ide_source_view_real_save_insert_mark    (IdeSourceView         *self);
-static void ide_source_view_real_restore_insert_mark (IdeSourceView         *self);
-static void ide_source_view_real_set_mode            (IdeSourceView         *self,
-                                                      const gchar           *name,
-                                                      IdeSourceViewModeType  type);
-static void ide_source_view_save_column              (IdeSourceView         *self);
-static void ide_source_view_maybe_overwrite          (IdeSourceView         *self,
-                                                      GtkTextIter           *iter,
-                                                      const gchar           *text,
-                                                      gint                   len);
+static gboolean ide_source_view_do_size_allocate_hack_cb (gpointer               data);
+static void     ide_source_view_real_save_insert_mark    (IdeSourceView         *self);
+static void     ide_source_view_real_restore_insert_mark (IdeSourceView         *self);
+static void     ide_source_view_real_set_mode            (IdeSourceView         *self,
+                                                          const gchar           *name,
+                                                          IdeSourceViewModeType  type);
+static void     ide_source_view_save_column              (IdeSourceView         *self);
+static void     ide_source_view_maybe_overwrite          (IdeSourceView         *self,
+                                                          GtkTextIter           *iter,
+                                                          const gchar           *text,
+                                                          gint                   len);
+
+static gpointer
+get_selection_owner (IdeSourceView *self)
+{
+  return g_object_get_data (G_OBJECT (gtk_widget_get_toplevel (GTK_WIDGET (self))),
+                            "IDE_SOURCE_VIEW_SELECTION_OWNER");
+}
+
+static void
+set_selection_owner (IdeSourceView *self,
+                     gpointer       tag)
+{
+  g_object_set_data (G_OBJECT (gtk_widget_get_toplevel (GTK_WIDGET (self))),
+                     "IDE_SOURCE_VIEW_SELECTION_OWNER", tag);
+}
 
 static void
 find_references_task_data_free (FindReferencesTaskData *data)
 {
   g_clear_pointer (&data->resolvers, g_ptr_array_unref);
-  g_clear_pointer (&data->location, ide_source_location_unref);
+  g_clear_object (&data->location);
   g_slice_free (FindReferencesTaskData, data);
 }
 
@@ -360,21 +360,6 @@ ide_source_view_set_interactive_completion (IdeSourceView *self,
       else
         block_interactive (self);
     }
-}
-
-static void
-find_references_task_get_extension (IdeExtensionSetAdapter *set,
-                                    PeasPluginInfo         *plugin_info,
-                                    PeasExtension          *extension,
-                                    gpointer                user_data)
-{
-  FindReferencesTaskData *data = user_data;
-  IdeSymbolResolver *resolver = (IdeSymbolResolver *)extension;
-
-  g_assert (data != NULL);
-  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
-
-  g_ptr_array_add (data->resolvers, g_object_ref (resolver));
 }
 
 static void
@@ -779,7 +764,7 @@ ide_source_view_set_file_settings (IdeSourceView   *self,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (IDE_IS_FILE_SETTINGS (file_settings));
+  g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
 
   if (file_settings != ide_source_view_get_file_settings (self))
     {
@@ -789,80 +774,14 @@ ide_source_view_set_file_settings (IdeSourceView   *self,
 }
 
 static void
-ide_source_view__file_load_settings_cb (GObject      *object,
-                                        GAsyncResult *result,
-                                        gpointer      user_data)
-{
-  g_autoptr(IdeSourceView) self = user_data;
-  g_autoptr(IdeFileSettings) file_settings = NULL;
-  g_autoptr(GError) error = NULL;
-  IdeFile *file = (IdeFile *)object;
-
-  g_assert (IDE_IS_FILE (file));
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  file_settings = ide_file_load_settings_finish (file, result, &error);
-
-  if (!file_settings)
-    {
-      g_message ("%s", error->message);
-      return;
-    }
-
-  ide_source_view_set_file_settings (self, file_settings);
-}
-
-static void
-ide_source_view_reload_file_settings (IdeSourceView *self)
-{
-  IdeBuffer *buffer;
-  IdeFile *file;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-  g_assert (IDE_IS_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self))));
-
-  buffer = IDE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self)));
-  file = ide_buffer_get_file (buffer);
-
-  ide_file_load_settings_async (file,
-                                NULL,
-                                ide_source_view__file_load_settings_cb,
-                                g_object_ref (self));
-}
-
-static void
-ide_source_view_reload_language (IdeSourceView *self)
-{
-  GtkSourceLanguage *language;
-  GtkTextBuffer *buffer;
-  IdeFile *file = NULL;
-
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  /*
-   * Update source language, etc.
-   */
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  file = ide_buffer_get_file (IDE_BUFFER (buffer));
-  language = ide_file_get_language (file);
-
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (IDE_IS_FILE (file));
-  g_assert (!language || GTK_SOURCE_IS_LANGUAGE (language));
-
-  gtk_source_buffer_set_language (GTK_SOURCE_BUFFER (buffer), language);
-}
-
-static void
-ide_source_view__buffer_notify_file_cb (IdeSourceView *self,
-                                        GParamSpec    *pspec,
-                                        IdeBuffer     *buffer)
+ide_source_view__buffer_notify_file_settings_cb (IdeSourceView *self,
+                                                 GParamSpec    *pspec,
+                                                 IdeBuffer     *buffer)
 {
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  ide_source_view_reload_language (self);
-  ide_source_view_reload_file_settings (self);
+  ide_source_view_set_file_settings (self, ide_buffer_get_file_settings (buffer));
 }
 
 static void
@@ -961,8 +880,8 @@ ide_source_view_rebuild_css (IdeSourceView *self)
       css = g_strdup_printf ("textview { %s }", str ?: "");
       gtk_css_provider_load_from_data (priv->css_provider, css, -1, NULL);
 
-      if (priv->omni_renderer != NULL)
-        _ide_omni_gutter_renderer_reset_font (priv->omni_renderer);
+      if (priv->gutter != NULL)
+        ide_gutter_style_changed (priv->gutter);
 
       if (priv->completion != NULL)
         _ide_completion_set_font_description (priv->completion, font_desc);
@@ -1188,31 +1107,29 @@ ide_source_view__buffer_notify_has_selection_cb (IdeSourceView *self,
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   gboolean has_selection;
-  IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
 
   has_selection = gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (buffer));
   ide_source_view_mode_set_has_selection (priv->mode, has_selection);
 
-  if (workbench == NULL)
-    return;
-
   if (has_selection)
-    ide_workbench_set_selection_owner (workbench, G_OBJECT (self));
-  else if (ide_workbench_get_selection_owner (workbench) == G_OBJECT (self))
-    ide_workbench_set_selection_owner (workbench, NULL);
+    set_selection_owner (self, G_OBJECT (self));
+  else if (get_selection_owner (self) == G_OBJECT (self))
+    set_selection_owner (self, NULL);
 }
 
 static void
 ide_source_view__buffer_line_flags_changed_cb (IdeSourceView *self,
                                                IdeBuffer     *buffer)
 {
+  GtkSourceGutter *gutter;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  gtk_source_gutter_queue_draw (gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self),
-                                                            GTK_TEXT_WINDOW_LEFT));
+  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
+  gtk_source_gutter_queue_draw (gutter);
 
   IDE_EXIT;
 }
@@ -1278,7 +1195,7 @@ ide_source_view_reset_definition_highlight (IdeSourceView *self)
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
   if (priv->definition_src_location)
-    g_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
+    g_clear_object (&priv->definition_src_location);
 
   if (priv->buffer != NULL)
     {
@@ -1336,12 +1253,14 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
                              DzlSignalGroup *group)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  g_autoptr(IdeContext) context = NULL;
   GtkTextMark *insert;
+  IdeObjectBox *box;
   GtkTextIter iter;
-  IdeContext *context;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (DZL_IS_SIGNAL_GROUP (group));
@@ -1358,11 +1277,13 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
       priv->completion_blocked = TRUE;
     }
 
-  context = ide_buffer_get_context (buffer);
+  context = ide_buffer_ref_context (buffer);
 
   _ide_hover_set_context (priv->hover, context);
 
-  priv->indenter_adapter = ide_extension_adapter_new (context,
+  box = ide_object_box_from_object (G_OBJECT (buffer));
+
+  priv->indenter_adapter = ide_extension_adapter_new (IDE_OBJECT (box),
                                                       peas_engine_get_default (),
                                                       IDE_TYPE_INDENTER,
                                                       "Indenter-Languages",
@@ -1386,7 +1307,7 @@ ide_source_view_bind_buffer (IdeSourceView  *self,
   g_object_ref (priv->definition_highlight_end_mark);
 
   ide_source_view__buffer_notify_language_cb (self, NULL, buffer);
-  ide_source_view__buffer_notify_file_cb (self, NULL, buffer);
+  ide_source_view__buffer_notify_file_settings_cb (self, NULL, buffer);
   ide_source_view__buffer_notify_style_scheme_cb (self, NULL, buffer);
   ide_source_view__buffer__notify_can_redo (self, NULL, buffer);
   ide_source_view__buffer__notify_can_undo (self, NULL, buffer);
@@ -1426,7 +1347,7 @@ ide_source_view_unbind_buffer (IdeSourceView  *self,
       g_clear_object (&priv->cursor);
     }
 
-  g_clear_object (&priv->indenter_adapter);
+  ide_clear_and_destroy_object (&priv->indenter_adapter);
   g_clear_object (&priv->definition_highlight_start_mark);
   g_clear_object (&priv->definition_highlight_end_mark);
 
@@ -2297,9 +2218,9 @@ ide_source_view_process_press_on_definition (IdeSourceView  *self,
 
       if (gtk_text_iter_in_range (&iter, &definition_highlight_start, &definition_highlight_end))
         {
-          g_autoptr(IdeSourceLocation) src_location = NULL;
+          g_autoptr(IdeLocation) src_location = NULL;
 
-          src_location = ide_source_location_ref (priv->definition_src_location);
+          src_location = g_object_ref (priv->definition_src_location);
           ide_source_view_reset_definition_highlight (self);
           g_signal_emit (self, signals [FOCUS_LOCATION], 0, src_location);
         }
@@ -2445,7 +2366,7 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
   IdeBuffer *buffer = (IdeBuffer *)object;
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
-  IdeSourceLocation *srcloc;
+  IdeLocation *srcloc;
   IdeSymbolKind kind;
 
   IDE_ENTRY;
@@ -2473,10 +2394,10 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
 
   kind = ide_symbol_get_kind (symbol);
 
-  srcloc = ide_symbol_get_definition_location (symbol);
+  srcloc = ide_symbol_get_location (symbol);
 
   if (srcloc == NULL)
-    srcloc = ide_symbol_get_declaration_location (symbol);
+    srcloc = ide_symbol_get_header_location (symbol);
 
   if (srcloc != NULL)
     {
@@ -2484,17 +2405,17 @@ ide_source_view_get_definition_on_mouse_over_cb (GObject      *object,
       GtkTextIter word_end;
 
       if (priv->definition_src_location != NULL && priv->definition_src_location != srcloc)
-        g_clear_pointer (&priv->definition_src_location, ide_source_location_unref);
+        g_clear_object (&priv->definition_src_location);
 
       if (priv->definition_src_location == NULL)
-        priv->definition_src_location = ide_source_location_ref (srcloc);
+        priv->definition_src_location = g_object_ref (srcloc);
 
       gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
                                         &word_start, data->word_start_mark);
       gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
                                         &word_end, data->word_end_mark);
 
-      if (kind == IDE_SYMBOL_HEADER)
+      if (kind == IDE_SYMBOL_KIND_HEADER)
         {
           GtkTextIter line_start = word_start;
           GtkTextIter line_end = word_end;
@@ -3385,8 +3306,10 @@ ide_source_view_real_move_error (IdeSourceView    *self,
                                  GtkDirectionType  dir)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  IdeDiagnostics *diagnostics;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
+  GFile *file;
   GtkTextIter iter;
   gboolean wrap_around = TRUE;
   gboolean (*movement) (GtkTextIter *) = NULL;
@@ -3395,6 +3318,11 @@ ide_source_view_real_move_error (IdeSourceView    *self,
 
   if (!priv->buffer)
     return;
+
+  if (!(diagnostics = ide_buffer_get_diagnostics (priv->buffer)))
+    return;
+
+  file = ide_buffer_get_file (priv->buffer);
 
   if (dir == GTK_DIR_RIGHT)
     dir = GTK_DIR_DOWN;
@@ -3422,12 +3350,11 @@ wrapped:
   while (movement (&iter))
     {
       IdeDiagnostic *diag;
+      guint line = gtk_text_iter_get_line (&iter);
 
-      diag = ide_buffer_get_diagnostic_at_iter (priv->buffer, &iter);
-
-      if (diag)
+      if ((diag = ide_diagnostics_get_diagnostic_at_line (diagnostics, file, line)))
         {
-          IdeSourceLocation *location;
+          IdeLocation *location;
 
           location = ide_diagnostic_get_location (diag);
 
@@ -3435,7 +3362,7 @@ wrapped:
             {
               guint line_offset;
 
-              line_offset = ide_source_location_get_line_offset (location);
+              line_offset = ide_location_get_line_offset (location);
               gtk_text_iter_set_line_offset (&iter, 0);
               for (; line_offset; line_offset--)
                 if (gtk_text_iter_ends_line (&iter) || !gtk_text_iter_forward_char (&iter))
@@ -3696,17 +3623,15 @@ ide_source_view_real_push_selection (IdeSourceView *self)
 }
 
 static void
-ide_source_view_real_push_snippet (IdeSourceView           *self,
+ide_source_view_real_push_snippet (IdeSourceView     *self,
                                    IdeSnippet        *snippet,
-                                   const GtkTextIter       *location)
+                                   const GtkTextIter *location)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  IdeContext *ide_context;
-  IdeSnippetContext *context;
-  IdeFile *file;
-  GFile *gfile = NULL;
   g_autoptr(GFile) gparentfile = NULL;
-
+  g_autoptr(IdeContext) ide_context = NULL;
+  IdeSnippetContext *context;
+  GFile *file = NULL;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_SNIPPET (snippet));
@@ -3716,34 +3641,30 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
 
   if (priv->buffer != NULL)
     {
-      if ((file = ide_buffer_get_file (priv->buffer)) &&
-          (gfile = ide_file_get_file (file)))
+      if ((file = ide_buffer_get_file (priv->buffer)))
         {
           g_autofree gchar *name = NULL;
           g_autofree gchar *path = NULL;
           g_autofree gchar *dirname = NULL;
 
-          name = g_file_get_basename (gfile);
-          gparentfile = g_file_get_parent(gfile);
+          name = g_file_get_basename (file);
+          gparentfile = g_file_get_parent (file);
           dirname = g_file_get_path (gparentfile);
-          path = g_file_get_path (gfile);
+          path = g_file_get_path (file);
           ide_snippet_context_add_variable (context, "filename", name);
           ide_snippet_context_add_variable (context, "dirname", dirname);
           ide_snippet_context_add_variable (context, "path", path);
         }
 
-      if ((ide_context = ide_buffer_get_context (priv->buffer)))
+      if ((ide_context = ide_buffer_ref_context (priv->buffer)))
         {
-          IdeVcs *vcs;
-          IdeVcsConfig *vcs_config;
-          GFile *workdir;
+          g_autoptr(GFile) workdir = NULL;
 
-          vcs = ide_context_get_vcs (ide_context);
-          workdir = ide_vcs_get_working_directory (vcs);
-          if (workdir && gfile)
+          workdir = ide_context_ref_workdir (ide_context);
+          if (workdir && file)
             {
               g_autofree gchar *relative_path = NULL;
-              relative_path = g_file_get_relative_path (workdir, gfile);
+              relative_path = g_file_get_relative_path (workdir, file);
               ide_snippet_context_add_variable (context, "relative_path", relative_path);
             }
           if (workdir && gparentfile)
@@ -3751,32 +3672,6 @@ ide_source_view_real_push_snippet (IdeSourceView           *self,
               g_autofree gchar *relative_dirname = NULL;
               relative_dirname = g_file_get_relative_path (workdir, gparentfile);
               ide_snippet_context_add_variable (context, "relative_dirname", relative_dirname);
-            }
-
-          if ((vcs_config = ide_vcs_get_config (vcs)))
-            {
-              GValue value = G_VALUE_INIT;
-
-              g_value_init (&value, G_TYPE_STRING);
-
-              ide_vcs_config_get_config (vcs_config, IDE_VCS_CONFIG_FULL_NAME, &value);
-
-              if (!dzl_str_empty0 (g_value_get_string (&value)))
-                {
-                  ide_snippet_context_add_shared_variable (context, "author", g_value_get_string (&value));
-                  ide_snippet_context_add_shared_variable (context, "fullname", g_value_get_string (&value));
-                  ide_snippet_context_add_shared_variable (context, "username", g_value_get_string (&value));
-                }
-
-              g_value_reset (&value);
-
-              ide_vcs_config_get_config (vcs_config, IDE_VCS_CONFIG_EMAIL, &value);
-
-              if (!dzl_str_empty0 (g_value_get_string (&value)))
-                ide_snippet_context_add_shared_variable (context, "email", g_value_get_string (&value));
-
-              g_value_unset (&value);
-              g_object_unref (vcs_config);
             }
         }
     }
@@ -3909,7 +3804,6 @@ ide_source_view_constructed (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  GtkSourceGutter *gutter;
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->constructed (object);
 
@@ -3919,13 +3813,6 @@ ide_source_view_constructed (GObject *object)
 
   priv->definition_src_location = NULL;
   ide_source_view_reset_definition_highlight (self);
-
-  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self), GTK_TEXT_WINDOW_LEFT);
-  priv->omni_renderer = g_object_new (IDE_TYPE_OMNI_GUTTER_RENDERER,
-                                      "visible", TRUE,
-                                      NULL);
-  g_object_ref_sink (priv->omni_renderer);
-  gtk_source_gutter_insert (gutter, GTK_SOURCE_GUTTER_RENDERER (priv->omni_renderer), 0);
 
   priv->completion = _ide_completion_new (GTK_SOURCE_VIEW (self));
 
@@ -4096,7 +3983,6 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
 {
   IdeSourceView *self = (IdeSourceView *)widget;
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  IdeWorkbench *workbench;
   gboolean ret;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
@@ -4104,13 +3990,19 @@ ide_source_view_focus_in_event (GtkWidget     *widget,
   /* Restore the completion window now that we have regained focus. */
   unblock_interactive (self);
 
+  /* Force size allocation immediately if we have something queued. */
+  if (priv->delay_size_allocate_chainup)
+    {
+      g_source_remove (priv->delay_size_allocate_chainup);
+      ide_source_view_do_size_allocate_hack_cb (self);
+    }
+
   /*
    * Restore the insert mark, but ignore selections (since we cant ensure they
    * will stay looking selected, as the other frame could be a view into our
    * own buffer).
    */
-  workbench = ide_widget_get_workbench (GTK_WIDGET (widget));
-  if (!workbench || ide_workbench_get_selection_owner (workbench) != G_OBJECT (self))
+  if (get_selection_owner (self) != self)
     {
       priv->saved_selection_line = priv->saved_line;
       priv->saved_selection_line_column = priv->saved_line_column;
@@ -4219,7 +4111,7 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
   g_autoptr(IdeSymbol) symbol = NULL;
   IdeBuffer *buffer = (IdeBuffer *)object;
   g_autoptr(GError) error = NULL;
-  IdeSourceLocation *srcloc;
+  IdeLocation *srcloc;
 
   IDE_ENTRY;
 
@@ -4234,20 +4126,20 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  srcloc = ide_symbol_get_definition_location (symbol);
+  srcloc = ide_symbol_get_location (symbol);
 
   if (srcloc == NULL)
-    srcloc = ide_symbol_get_declaration_location (symbol);
+    srcloc = ide_symbol_get_header_location (symbol);
 
   if (srcloc != NULL)
     {
-      guint line = ide_source_location_get_line (srcloc);
-      guint line_offset = ide_source_location_get_line_offset (srcloc);
-      IdeFile *file = ide_source_location_get_file (srcloc);
-      IdeFile *our_file = ide_buffer_get_file (buffer);
+      guint line = ide_location_get_line (srcloc);
+      guint line_offset = ide_location_get_line_offset (srcloc);
+      GFile *file = ide_location_get_file (srcloc);
+      GFile *our_file = ide_buffer_get_file (buffer);
 
 #ifdef IDE_ENABLE_TRACE
-      const gchar *filename = ide_file_get_path (file);
+      const gchar *filename = g_file_peek_path (file);
 
       IDE_TRACE_MSG ("%s => %s +%u:%u",
                      ide_symbol_get_name (symbol),
@@ -4261,7 +4153,7 @@ ide_source_view_goto_definition_symbol_cb (GObject      *object,
        * If we are navigating within this file, just stay captive instead of
        * potentially allowing jumping to the file in another editor.
        */
-      if (ide_file_equal (file, our_file))
+      if (g_file_equal (file, our_file))
         {
           GtkTextIter iter;
 
@@ -4394,11 +4286,11 @@ ide_source_view_get_overwrite (IdeSourceView *self)
 
 static gchar *
 ide_source_view_get_fixit_label (IdeSourceView *self,
-                                 IdeFixit      *fixit)
+                                 IdeTextEdit      *fixit)
 {
-  IdeSourceLocation *begin_loc;
-  IdeSourceLocation *end_loc;
-  IdeSourceRange *range;
+  IdeLocation *begin_loc;
+  IdeLocation *end_loc;
+  IdeRange *range;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
@@ -4410,11 +4302,11 @@ ide_source_view_get_fixit_label (IdeSourceView *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (fixit != NULL);
 
-  range = ide_fixit_get_range (fixit);
+  range = ide_text_edit_get_range (fixit);
   if (range == NULL)
     goto cleanup;
 
-  new_text = g_strdup (ide_fixit_get_text (fixit));
+  new_text = g_strdup (ide_text_edit_get_text (fixit));
   if (new_text == NULL)
     goto cleanup;
 
@@ -4422,11 +4314,11 @@ ide_source_view_get_fixit_label (IdeSourceView *self,
   if (!IDE_IS_BUFFER (buffer))
     goto cleanup;
 
-  begin_loc = ide_source_range_get_begin (range);
-  end_loc = ide_source_range_get_end (range);
+  begin_loc = ide_range_get_begin (range);
+  end_loc = ide_range_get_end (range);
 
-  ide_buffer_get_iter_at_source_location (IDE_BUFFER (buffer), &begin, begin_loc);
-  ide_buffer_get_iter_at_source_location (IDE_BUFFER (buffer), &end, end_loc);
+  ide_buffer_get_iter_at_location (IDE_BUFFER (buffer), &begin, begin_loc);
+  ide_buffer_get_iter_at_location (IDE_BUFFER (buffer), &end, end_loc);
 
   old_text = gtk_text_iter_get_slice (&begin, &end);
 
@@ -4468,7 +4360,7 @@ static void
 ide_source_view__fixit_activate (IdeSourceView *self,
                                  GtkMenuItem   *menu_item)
 {
-  IdeFixit *fixit;
+  IdeTextEdit *fixit;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_MENU_ITEM (menu_item));
@@ -4477,8 +4369,8 @@ ide_source_view__fixit_activate (IdeSourceView *self,
 
   if (fixit != NULL)
     {
-      IdeSourceLocation *srcloc;
-      IdeSourceRange *range;
+      IdeLocation *srcloc;
+      IdeRange *range;
       GtkTextBuffer *buffer;
       const gchar *text;
       GtkTextIter begin;
@@ -4488,14 +4380,14 @@ ide_source_view__fixit_activate (IdeSourceView *self,
       if (!IDE_IS_BUFFER (buffer))
         return;
 
-      text = ide_fixit_get_text (fixit);
-      range = ide_fixit_get_range (fixit);
+      text = ide_text_edit_get_text (fixit);
+      range = ide_text_edit_get_range (fixit);
 
-      srcloc = ide_source_range_get_begin (range);
-      ide_buffer_get_iter_at_source_location (IDE_BUFFER (buffer), &begin, srcloc);
+      srcloc = ide_range_get_begin (range);
+      ide_buffer_get_iter_at_location (IDE_BUFFER (buffer), &begin, srcloc);
 
-      srcloc = ide_source_range_get_end (range);
-      ide_buffer_get_iter_at_source_location (IDE_BUFFER (buffer), &end, srcloc);
+      srcloc = ide_range_get_end (range);
+      ide_buffer_get_iter_at_location (IDE_BUFFER (buffer), &end, srcloc);
 
       gtk_text_buffer_begin_user_action (buffer);
       gtk_text_buffer_delete (buffer, &begin, &end);
@@ -4510,13 +4402,14 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
 {
   IdeSourceView *self = (IdeSourceView *)text_view;
   GtkSeparatorMenuItem *sep;
+  IdeDiagnostics *diagnostics;
+  IdeDiagnostic *diagnostic = NULL;
   GtkTextBuffer *buffer;
   GtkMenuItem *menu_item;
   GtkTextMark *insert;
   GtkTextIter iter;
   GtkTextIter begin;
   GtkTextIter end;
-  IdeDiagnostic *diagnostic;
   GMenu *model;
 
   g_assert (GTK_IS_TEXT_VIEW (text_view));
@@ -4545,15 +4438,18 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
 
   /*
    * Check if we have a diagnostic at this position and if there are fixits associated with it.
-   * If so, display the "Apply Fixit" menu item with available fixits.
+   * If so, display the "Apply TextEdit" menu item with available fixits.
    */
-  diagnostic = ide_buffer_get_diagnostic_at_iter (IDE_BUFFER (buffer), &iter);
+  if ((diagnostics = ide_buffer_get_diagnostics (IDE_BUFFER (buffer))))
+    diagnostic = ide_diagnostics_get_diagnostic_at_line (diagnostics,
+                                                         ide_buffer_get_file (IDE_BUFFER (buffer)),
+                                                         gtk_text_iter_get_line (&iter));
 
   if (diagnostic != NULL)
     {
       guint num_fixits;
 
-      num_fixits = ide_diagnostic_get_num_fixits (diagnostic);
+      num_fixits = ide_diagnostic_get_n_fixits (diagnostic);
 
       if (num_fixits > 0)
         {
@@ -4577,7 +4473,7 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
 
           for (i = 0; i < num_fixits; i++)
             {
-              IdeFixit *fixit;
+              IdeTextEdit *fixit;
               gchar *label;
 
               fixit = ide_diagnostic_get_fixit (diagnostic, i);
@@ -4591,8 +4487,8 @@ ide_source_view_real_populate_popup (GtkTextView *text_view,
 
               g_object_set_data_full (G_OBJECT (menu_item),
                                       "IDE_FIXIT",
-                                      ide_fixit_ref (fixit),
-                                      (GDestroyNotify)ide_fixit_unref);
+                                      g_object_ref (fixit),
+                                      (GDestroyNotify)g_object_unref);
 
               g_signal_connect_object (menu_item,
                                        "activate",
@@ -4887,8 +4783,8 @@ ide_source_view_rename_edits_cb (GObject      *object,
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   g_autoptr(GPtrArray) edits = NULL;
   g_autoptr(GError) error = NULL;
+  g_autoptr(IdeContext) context = NULL;
   IdeBufferManager *buffer_manager;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -4907,8 +4803,8 @@ ide_source_view_rename_edits_cb (GObject      *object,
 
   IDE_PTR_ARRAY_SET_FREE_FUNC (edits, g_object_unref);
 
-  context = ide_buffer_get_context (priv->buffer);
-  buffer_manager = ide_context_get_buffer_manager (context);
+  context = ide_buffer_ref_context (priv->buffer);
+  buffer_manager = ide_buffer_manager_from_context (context);
 
   ide_buffer_manager_apply_edits_async (buffer_manager,
                                         IDE_PTR_ARRAY_STEAL_FULL (&edits),
@@ -4925,7 +4821,7 @@ ide_source_view_rename_activate (IdeSourceView    *self,
                                  DzlSimplePopover *popover)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
-  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(IdeLocation) location = NULL;
   IdeRenameProvider *provider;
 
   IDE_ENTRY;
@@ -4961,7 +4857,7 @@ ide_source_view_real_begin_rename (IdeSourceView *self)
 {
   IdeRenameProvider *provider;
   DzlSimplePopover *popover;
-  g_autofree gchar *uri = NULL;
+  g_autofree gchar *title = NULL;
   GtkTextBuffer *buffer;
   GtkTextMark *insert;
   GtkTextIter iter;
@@ -4981,14 +4877,14 @@ ide_source_view_real_begin_rename (IdeSourceView *self)
     }
 
   insert = gtk_text_buffer_get_insert (buffer);
-  uri = ide_buffer_get_uri (IDE_BUFFER (buffer));
+  title = ide_buffer_dup_title (IDE_BUFFER (buffer));
 
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
 
-  IDE_TRACE_MSG ("Renaming symbol found at %s: %d:%d",
-                 uri,
-                 gtk_text_iter_get_line (&iter) + 1,
-                 gtk_text_iter_get_line_offset (&iter) + 1);
+  g_debug ("Renaming symbol from %s +%d:%d",
+           title,
+           gtk_text_iter_get_line (&iter) + 1,
+           gtk_text_iter_get_line_offset (&iter) + 1);
 
   gtk_text_buffer_select_range (buffer, &iter, &iter);
   gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &iter, &loc);
@@ -5076,7 +4972,7 @@ ide_source_view_real_find_references_jump (IdeSourceView *self,
                                            GtkListBoxRow *row,
                                            GtkListBox    *list_box)
 {
-  IdeSourceLocation *location;
+  IdeLocation *location;
 
   IDE_ENTRY;
 
@@ -5084,7 +4980,7 @@ ide_source_view_real_find_references_jump (IdeSourceView *self,
   g_assert (GTK_IS_LIST_BOX_ROW (row));
   g_assert (GTK_IS_LIST_BOX (list_box));
 
-  location = g_object_get_data (G_OBJECT (row), "IDE_SOURCE_LOCATION");
+  location = g_object_get_data (G_OBJECT (row), "IDE_LOCATION");
 
   if (location != NULL)
     g_signal_emit (self, signals [FOCUS_LOCATION], 0, location);
@@ -5094,11 +4990,11 @@ ide_source_view_real_find_references_jump (IdeSourceView *self,
 
 static gboolean
 insert_mark_within_range (IdeBuffer      *buffer,
-                          IdeSourceRange *range)
+                          IdeRange *range)
 {
   GtkTextMark *insert = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
-  IdeSourceLocation *begin = ide_source_range_get_begin (range);
-  IdeSourceLocation *end = ide_source_range_get_end (range);
+  IdeLocation *begin = ide_range_get_begin (range);
+  IdeLocation *end = ide_range_get_end (range);
   GtkTextIter iter;
   GtkTextIter begin_iter;
   GtkTextIter end_iter;
@@ -5107,8 +5003,8 @@ insert_mark_within_range (IdeBuffer      *buffer,
     return FALSE;
 
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, insert);
-  ide_buffer_get_iter_at_source_location (buffer, &begin_iter, begin);
-  ide_buffer_get_iter_at_source_location (buffer, &end_iter, end);
+  ide_buffer_get_iter_at_location (buffer, &begin_iter, begin);
+  ide_buffer_get_iter_at_location (buffer, &end_iter, end);
 
   return gtk_text_iter_compare (&begin_iter, &iter) <= 0 &&
          gtk_text_iter_compare (&end_iter, &iter) >= 0;
@@ -5142,7 +5038,7 @@ ide_source_view_find_references_cb (GObject      *object,
 
   references = ide_symbol_resolver_find_references_finish (symbol_resolver, result, &error);
 
-  IDE_PTR_ARRAY_SET_FREE_FUNC (references, ide_source_range_unref);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (references, g_object_unref);
 
   self = ide_task_get_source_object (task);
   priv = ide_source_view_get_instance_private (self);
@@ -5166,6 +5062,7 @@ ide_source_view_find_references_cb (GObject      *object,
 
       ide_symbol_resolver_find_references_async (resolver,
                                                  data->location,
+                                                 ide_buffer_get_language_id (priv->buffer),
                                                  cancellable,
                                                  ide_source_view_find_references_cb,
                                                  g_steal_pointer (&task));
@@ -5208,29 +5105,27 @@ ide_source_view_find_references_cb (GObject      *object,
 
   if (references != NULL && references->len > 0)
     {
-      IdeContext *context = ide_buffer_get_context (priv->buffer);
-      IdeVcs *vcs = ide_context_get_vcs (context);
-      GFile *workdir = ide_vcs_get_working_directory (vcs);
+      g_autoptr(IdeContext) context = ide_buffer_ref_context (priv->buffer);
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
 
       for (guint i = 0; i < references->len; i++)
         {
-          IdeSourceRange *range = g_ptr_array_index (references, i);
-          IdeSourceLocation *begin = ide_source_range_get_begin (range);
-          IdeFile *file = ide_source_location_get_file (begin);
-          GFile *gfile = ide_file_get_file (file);
-          guint line = ide_source_location_get_line (begin);
-          guint line_offset = ide_source_location_get_line_offset (begin);
+          IdeRange *range = g_ptr_array_index (references, i);
+          IdeLocation *begin = ide_range_get_begin (range);
+          GFile *file = ide_location_get_file (begin);
+          guint line = ide_location_get_line (begin);
+          guint line_offset = ide_location_get_line_offset (begin);
           g_autofree gchar *name = NULL;
           g_autofree gchar *text = NULL;
           GtkListBoxRow *row;
           GtkLabel *label;
 
-          if (g_file_has_prefix (gfile, workdir))
-            name = g_file_get_relative_path (workdir, gfile);
-          else if (g_file_is_native (gfile))
-            name = g_file_get_path (gfile);
+          if (g_file_has_prefix (file, workdir))
+            name = g_file_get_relative_path (workdir, file);
+          else if (g_file_is_native (file))
+            name = g_file_get_path (file);
           else
-            name = g_file_get_uri (gfile);
+            name = g_file_get_uri (file);
 
           /* translators: %s is the filename, then line number, column number. <> are pango markup */
           text = g_strdup_printf (_("<b>%s</b> — <small>Line %u, Column %u</small>"),
@@ -5247,9 +5142,9 @@ ide_source_view_find_references_cb (GObject      *object,
                               "visible", TRUE,
                               NULL);
           g_object_set_data_full (G_OBJECT (row),
-                                  "IDE_SOURCE_LOCATION",
-                                  ide_source_location_ref (begin),
-                                  (GDestroyNotify)ide_source_location_unref);
+                                  "IDE_LOCATION",
+                                  g_object_ref (begin),
+                                  g_object_unref);
           gtk_container_add (GTK_CONTAINER (list_box), GTK_WIDGET (row));
 
           if (insert_mark_within_range (priv->buffer, range))
@@ -5285,9 +5180,8 @@ ide_source_view_real_find_references (IdeSourceView *self)
 {
   IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
   g_autoptr(IdeTask) task = NULL;
-  IdeExtensionSetAdapter *adapter;
+  g_autoptr(GPtrArray) resolvers = NULL;
   FindReferencesTaskData *data;
-  guint n_extensions;
   IdeSymbolResolver *resolver;
 
   IDE_ENTRY;
@@ -5297,29 +5191,26 @@ ide_source_view_real_find_references (IdeSourceView *self)
   task = ide_task_new (self, NULL, NULL, NULL);
   ide_task_set_source_tag (task, ide_source_view_real_find_references);
 
-  adapter = ide_buffer_get_symbol_resolvers (priv->buffer);
-  n_extensions = ide_extension_set_adapter_get_n_extensions (adapter);
+  resolvers = ide_buffer_get_symbol_resolvers (priv->buffer);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (resolvers, g_object_unref);
 
-  if (!n_extensions)
+  if (resolvers->len == 0)
     {
       g_debug ("No symbol resolver is available");
-
       IDE_EXIT;
     }
 
   data = g_slice_new0 (FindReferencesTaskData);
-  data->resolvers = g_ptr_array_new_with_free_func (g_object_unref);
+  data->resolvers = g_steal_pointer (&resolvers);
   data->location = ide_buffer_get_insert_location (priv->buffer);
   ide_task_set_task_data (task, data, find_references_task_data_free);
-
-  ide_extension_set_adapter_foreach_by_priority (adapter, find_references_task_get_extension, data);
-  g_assert (data->resolvers->len > 0);
 
   resolver = g_ptr_array_index (data->resolvers, data->resolvers->len - 1);
 
   /* Try each symbol resolver one by one to find references. */
   ide_symbol_resolver_find_references_async (resolver,
                                              data->location,
+                                             ide_buffer_get_language_id (priv->buffer),
                                              NULL,
                                              ide_source_view_find_references_cb,
                                              g_steal_pointer (&task));
@@ -5376,6 +5267,21 @@ ide_source_view_real_reset (IdeSourceView *self)
 }
 
 static void
+ide_source_view_destroy (GtkWidget *widget)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  /* Ensure we release the buffer immediately */
+  if (priv->buffer_signals != NULL)
+    dzl_signal_group_set_target (priv->buffer_signals, NULL);
+
+  GTK_WIDGET_CLASS (ide_source_view_parent_class)->destroy (widget);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -5404,12 +5310,12 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&priv->hover);
   g_clear_object (&priv->completion);
   g_clear_object (&priv->capture);
-  g_clear_object (&priv->indenter_adapter);
+  ide_clear_and_destroy_object (&priv->indenter_adapter);
   g_clear_object (&priv->css_provider);
   g_clear_object (&priv->mode);
   g_clear_object (&priv->buffer_signals);
   g_clear_object (&priv->file_setting_bindings);
-  g_clear_object (&priv->omni_renderer);
+  g_clear_object (&priv->gutter);
 
   if (priv->command_str != NULL)
     {
@@ -5635,6 +5541,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   widget_class->scroll_event = ide_source_view_scroll_event;
   widget_class->size_allocate = ide_source_view_size_allocate;
   widget_class->style_updated = ide_source_view_real_style_updated;
+  widget_class->destroy = ide_source_view_destroy;
 
   text_view_class->delete_from_cursor = ide_source_view_real_delete_from_cursor;
   text_view_class->draw_layer = ide_source_view_real_draw_layer;
@@ -5802,6 +5709,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * This also requires that IdeBuffer:highlight-diagnostics is set to %TRUE
    * to generate diagnostics.
+   *
+   * Since: 3.32
    */
   properties [PROP_SHOW_LINE_DIAGNOSTICS] =
     g_param_spec_boolean ("show-line-diagnostics",
@@ -5855,6 +5764,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * to replay the sequence starting from the correct state.
    *
    * Pair this with an emission of #IdeSourceView::end-macro to complete the sequence.
+   *
+   * Since: 3.32
    */
   signals [BEGIN_MACRO] =
     g_signal_new ("begin-macro",
@@ -5872,6 +5783,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * operation using the #IdeRenameProvider from the underlying buffer. The
    * cursor position will be used as the location when sending the request to
    * the provider.
+   *
+   * Since: 3.32
    */
   signals [BEGIN_RENAME] =
     g_signal_new ("begin-rename",
@@ -5919,6 +5832,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Pressing Escape or unfocusing the widget will break from this loop.
    *
    * Use of this signal is not recommended except in very specific cases.
+   *
+   * Since: 3.32
    */
   signals [CAPTURE_MODIFIER] =
     g_signal_new ("capture-modifier",
@@ -6037,6 +5952,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Complete a macro recording sequence. This may be called more times than is necessary,
    * since #IdeSourceView will only keep the most recent macro recording. This can be
    * helpful when implementing recording sequences such as in Vim.
+   *
+   * Since: 3.32
    */
   signals [END_MACRO] =
     g_signal_new ("end-macro",
@@ -6071,7 +5988,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   1,
-                  IDE_TYPE_SOURCE_LOCATION);
+                  IDE_TYPE_LOCATION);
 
   signals [FORMAT_SELECTION] =
     g_signal_new_class_handler ("format-selection",
@@ -6125,6 +6042,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Inserts the current modifier character at the insert mark in the buffer.
    * If @use_count is %TRUE, then the character will be inserted
    * #IdeSourceView:count times.
+   *
+   * Since: 3.32
    */
   signals [INSERT_MODIFIER] =
     g_signal_new ("insert-modifier",
@@ -6170,6 +6089,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * @dir: The direction to move.
    *
    * Moves to the next search result either forwards or backwards.
+   *
+   * Since: 3.32
    */
   signals [MOVE_ERROR] =
     g_signal_new ("move-error",
@@ -6213,6 +6134,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Reselects a previousl selected range of text that was saved using
    * IdeSourceView::push-selection.
+   *
+   * Since: 3.32
    */
   signals [POP_SELECTION] =
     g_signal_new ("pop-selection",
@@ -6229,6 +6152,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * @snippet: An #IdeSnippet.
    *
    * Pops the current snippet from the sourceview if there is one.
+   *
+   * Since: 3.32
    */
   signals [POP_SNIPPET] =
     g_signal_new_class_handler ("pop-snippet",
@@ -6245,6 +6170,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * Saves the current selection away to be restored by a call to
    * IdeSourceView::pop-selection. You must pop the selection to keep
    * the selection stack in consistent order.
+   *
+   * Since: 3.32
    */
   signals [PUSH_SELECTION] =
     g_signal_new ("push-selection",
@@ -6263,6 +6190,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Pushes @snippet onto the snippet stack at either @iter or the insertion
    * mark if @iter is not provided.
+   *
+   * Since: 3.32
    */
   signals [PUSH_SNIPPET] =
     g_signal_new_class_handler ("push-snippet",
@@ -6308,6 +6237,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * Replays the last series of captured events that were captured between calls
    * to #IdeSourceView::begin-macro and #IdeSourceView::end-macro.
+   *
+   * Since: 3.32
    */
   signals [REPLAY_MACRO] =
     g_signal_new ("replay-macro",
@@ -6335,7 +6266,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    * and various stateful settings of the sourceview. This is a good
    * signal to map to the "Escape" key.
    *
-   * Since: 3.26
+   * Since: 3.32
    */
   signals [RESET] =
     g_signal_new_class_handler ("reset",
@@ -6448,6 +6379,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
    *
    * This signal is meant to be activated from keybindings to sort the currently selected lines.
    * The lines are sorted using qsort() and either strcmp() or strcasecmp().
+   *
+   * Since: 3.32
    */
   signals [SORT] =
     g_signal_new ("sort",
@@ -6541,6 +6474,9 @@ ide_source_view_init (IdeSourceView *self)
                                      0,
                                      NULL);
 
+  priv->show_line_numbers = TRUE;
+  priv->show_line_changes = TRUE;
+  priv->show_line_diagnostics = TRUE;
   priv->interactive_completion = TRUE;
   priv->target_line_column = 0;
   priv->snippets = g_queue_new ();
@@ -6592,8 +6528,8 @@ ide_source_view_init (IdeSourceView *self)
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (priv->buffer_signals,
-                                   "notify::file",
-                                   G_CALLBACK (ide_source_view__buffer_notify_file_cb),
+                                   "notify::file-settings",
+                                   G_CALLBACK (ide_source_view__buffer_notify_file_settings_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
   dzl_signal_group_connect_object (priv->buffer_signals,
@@ -6676,6 +6612,8 @@ ide_source_view_get_font_desc (IdeSourceView *self)
  * account. You must free the result with pango_font_description_free().
  *
  * Returns: (transfer full): a #PangoFontDescription
+ *
+ * Since: 3.32
  */
 PangoFontDescription *
 ide_source_view_get_scaled_font_desc (IdeSourceView *self)
@@ -6740,7 +6678,7 @@ ide_source_view_get_show_line_changes (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
-  return ide_omni_gutter_renderer_get_show_line_changes (priv->omni_renderer);
+  return priv->show_line_changes;
 }
 
 void
@@ -6751,8 +6689,13 @@ ide_source_view_set_show_line_changes (IdeSourceView *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  ide_omni_gutter_renderer_set_show_line_changes (priv->omni_renderer, show_line_changes);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_CHANGES]);
+  priv->show_line_changes = !!show_line_changes;
+
+  if (priv->gutter)
+    {
+      ide_gutter_set_show_line_changes (priv->gutter, show_line_changes);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_CHANGES]);
+    }
 }
 
 gboolean
@@ -6762,7 +6705,7 @@ ide_source_view_get_show_line_diagnostics (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
-  return ide_omni_gutter_renderer_get_show_line_diagnostics (priv->omni_renderer);
+  return priv->show_line_diagnostics;
 }
 
 void
@@ -6773,8 +6716,13 @@ ide_source_view_set_show_line_diagnostics (IdeSourceView *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  ide_omni_gutter_renderer_set_show_line_diagnostics (priv->omni_renderer, show_line_diagnostics);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_DIAGNOSTICS]);
+  priv->show_line_diagnostics = !!show_line_diagnostics;
+
+  if (priv->gutter)
+    {
+      ide_gutter_set_show_line_diagnostics (priv->gutter, show_line_diagnostics);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_DIAGNOSTICS]);
+    }
 }
 
 gboolean
@@ -6959,6 +6907,8 @@ ide_source_view_clear_snippets (IdeSourceView *self)
  * @location: (allow-none): A location for the snippet or %NULL.
  *
  * Pushes a new snippet onto the source view.
+ *
+ * Since: 3.32
  */
 void
 ide_source_view_push_snippet (IdeSourceView     *self,
@@ -7094,6 +7044,8 @@ ide_source_view_jump (IdeSourceView     *self,
  * Gets the #IdeSourceView:scroll-offset property. This property contains the number of lines
  * that should be kept above or below the line containing the insertion cursor relative to the
  * top and bottom of the visible text window.
+ *
+ * Since: 3.32
  */
 guint
 ide_source_view_get_scroll_offset (IdeSourceView *self)
@@ -7110,6 +7062,8 @@ ide_source_view_get_scroll_offset (IdeSourceView *self)
  *
  * Sets the #IdeSourceView:scroll-offset property. See ide_source_view_get_scroll_offset() for
  * more information. Set to 0 to unset this property.
+ *
+ * Since: 3.32
  */
 void
 ide_source_view_set_scroll_offset (IdeSourceView *self,
@@ -7135,6 +7089,8 @@ ide_source_view_set_scroll_offset (IdeSourceView *self,
  * is similar to gtk_text_view_get_visible_area() except that it takes into account the
  * #IdeSourceView:scroll-offset property to ensure there is space above and below the
  * visible_rect.
+ *
+ * Since: 3.32
  */
 void
 ide_source_view_get_visible_rect (IdeSourceView *self,
@@ -7596,6 +7552,8 @@ ide_source_view_place_cursor_onscreen (IdeSourceView *self)
  * such as spaces vs tabs.
  *
  * Returns: (transfer none) (nullable): An #IdeFileSettings or %NULL.
+ *
+ * Since: 3.32
  */
 IdeFileSettings *
 ide_source_view_get_file_settings (IdeSourceView *self)
@@ -7727,6 +7685,8 @@ _ide_source_view_get_scroll_mark (IdeSourceView *self)
  * Gets the current snippet if there is one, otherwise %NULL.
  *
  * Returns: (transfer none) (nullable): An #IdeSnippet or %NULL.
+ *
+ * Since: 3.32
  */
 IdeSnippet *
 ide_source_view_get_current_snippet (IdeSourceView *self)
@@ -7745,7 +7705,7 @@ ide_source_view_get_show_line_numbers (IdeSourceView *self)
 
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
-  return ide_omni_gutter_renderer_get_show_line_numbers (priv->omni_renderer);
+  return priv->show_line_numbers;
 }
 
 void
@@ -7756,8 +7716,13 @@ ide_source_view_set_show_line_numbers (IdeSourceView *self,
 
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
-  ide_omni_gutter_renderer_set_show_line_numbers (priv->omni_renderer, show_line_numbers);
-  g_object_notify (G_OBJECT (self), "show-line-numbers");
+  priv->show_line_numbers = !!show_line_numbers;
+
+  if (priv->gutter)
+    {
+      ide_gutter_set_show_line_numbers (priv->gutter, show_line_numbers);
+      g_object_notify (G_OBJECT (self), "show-line-numbers");
+    }
 }
 
 gboolean
@@ -7778,7 +7743,7 @@ ide_source_view_is_processing_key (IdeSourceView *self)
  *
  * Returns: (transfer none): an #IdeCompletion
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeCompletion *
 ide_source_view_get_completion (IdeSourceView *self)
@@ -7798,7 +7763,7 @@ ide_source_view_get_completion (IdeSourceView *self)
  *
  * Returns: %TRUE if there is an active snippet.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_source_view_has_snippet (IdeSourceView *self)
@@ -7808,4 +7773,57 @@ ide_source_view_has_snippet (IdeSourceView *self)
   g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
 
   return priv->snippets->length > 0;
+}
+
+/**
+ * ide_source_view_set_gutter:
+ * @self: a #IdeSourceView
+ * @gutter: an #IdeGutter
+ *
+ * Allows setting the gutter for the sourceview.
+ *
+ * Generally, this will always be #IdeOmniGutterRenderer. However, to avoid
+ * circular dependencies, an interface is used to allow plugins to set
+ * this object.
+ *
+ * Since: 3.32
+ */
+void
+ide_source_view_set_gutter (IdeSourceView *self,
+                            IdeGutter     *gutter)
+{
+  IdeSourceViewPrivate *priv = ide_source_view_get_instance_private (self);
+  GtkSourceGutter *left_gutter;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (!gutter || IDE_IS_GUTTER (gutter));
+  g_return_if_fail (!gutter || GTK_SOURCE_IS_GUTTER_RENDERER (gutter));
+
+  if (gutter == priv->gutter)
+    return;
+
+  left_gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self),
+                                            GTK_TEXT_WINDOW_LEFT);
+
+  if (priv->gutter)
+    {
+      gtk_source_gutter_remove (left_gutter, GTK_SOURCE_GUTTER_RENDERER (priv->gutter));
+      g_clear_object (&priv->gutter);
+    }
+
+  if (gutter)
+    {
+      priv->gutter = g_object_ref_sink (gutter);
+      gtk_source_gutter_insert (left_gutter,
+                                GTK_SOURCE_GUTTER_RENDERER (gutter),
+                                0);
+      ide_gutter_set_show_line_numbers (priv->gutter, priv->show_line_numbers);
+      ide_gutter_set_show_line_changes (priv->gutter, priv->show_line_changes);
+      ide_gutter_set_show_line_diagnostics (priv->gutter, priv->show_line_diagnostics);
+      ide_gutter_style_changed (gutter);
+    }
+
+  g_object_notify (G_OBJECT (self), "show-line-changes");
+  g_object_notify (G_OBJECT (self), "show-line-diagnostics");
+  g_object_notify (G_OBJECT (self), "show-line-numbers");
 }

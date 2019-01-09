@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2015-2018 Christian Hergert
+Depends=editor;project-tree;
+Description=Provides user interface components to display VCS
+Embedded=_gbp_vcsui_register_types
+Hidden=true
+Module=vcsui
+Name=VCS interface extensions
+X-Workspace-Kind=primary;

@@ -1,7 +1,7 @@
 /* gbp-spell-widget-actions.c
  *
  * Copyright 2016 Sebastien Lafargue <slafargue@gnome.org>
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-spell-widget-actions"
@@ -72,12 +74,12 @@ gbp_spell_widget_actions_ignore_all (GSimpleAction *action,
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_SPELL_WIDGET (self));
 
-  if (self->editor_view_addin != NULL)
+  if (self->editor_page_addin != NULL)
     {
       GspellChecker *checker;
       const gchar *word;
 
-      checker = gbp_spell_editor_view_addin_get_checker (self->editor_view_addin);
+      checker = gbp_spell_editor_page_addin_get_checker (self->editor_page_addin);
       word = gtk_label_get_text (self->word_label);
 
       if (!dzl_str_empty0 (word))
@@ -134,19 +136,19 @@ _gbp_spell_widget_update_actions (GbpSpellWidget *self)
 
   g_return_if_fail (GBP_IS_SPELL_WIDGET (self));
 
-  if (IDE_IS_EDITOR_VIEW (self->editor) &&
-      GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self->editor_view_addin) &&
+  if (IDE_IS_EDITOR_PAGE (self->editor) &&
+      GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self->editor_page_addin) &&
       self->spellchecking_status == TRUE)
     {
-      g_assert (IDE_IS_EDITOR_VIEW_ADDIN (self->editor_view_addin));
+      g_assert (IDE_IS_EDITOR_PAGE_ADDIN (self->editor_page_addin));
 
       can_change = TRUE;
       can_change_all = TRUE;
       can_move_next_word = TRUE;
 
-      if (self->editor_view_addin != NULL)
+      if (self->editor_page_addin != NULL)
         {
-          if (NULL != (navigator = gbp_spell_editor_view_addin_get_navigator (self->editor_view_addin)))
+          if (NULL != (navigator = gbp_spell_editor_page_addin_get_navigator (self->editor_page_addin)))
             word_counted = gbp_spell_navigator_get_is_words_counted (GBP_SPELL_NAVIGATOR (navigator));
         }
 

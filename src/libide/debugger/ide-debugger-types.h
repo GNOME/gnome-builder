@@ -1,6 +1,6 @@
 /* ide-debugger-types.h
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <gio/gio.h>
-
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -33,7 +33,7 @@ G_BEGIN_DECLS
  *
  * The type of stream for the log message.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 typedef enum
 {
@@ -57,7 +57,7 @@ typedef enum
  *
  * Describes the style of movement that should be performed by the debugger.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 typedef enum
 {
@@ -80,6 +80,8 @@ typedef enum
  *    received a death signal.
  *
  * Represents the reason a process has stopped executing in the debugger.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -117,6 +119,8 @@ typedef enum
  *   specification matching.
  *
  * The type of breakpoint.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -135,6 +139,8 @@ typedef enum
  * @IDE_DEBUGGER_BREAKPOINT_CHANGE_ENABLED: change the enabled state
  *
  * Describes the type of modification to perform on a breakpoint.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -158,6 +164,8 @@ typedef enum
  *
  * The disposition determines what should happen to the breakpoint at the next
  * stop of the debugger.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -175,7 +183,7 @@ typedef guint64 IdeDebuggerAddress;
 
 #define IDE_DEBUGGER_ADDRESS_INVALID (0)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerAddress ide_debugger_address_parse (const gchar *string);
 
 typedef struct
@@ -187,25 +195,25 @@ typedef struct
 #define IDE_TYPE_DEBUGGER_ADDRESS_RANGE (ide_debugger_address_range_get_type())
 
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType ide_debugger_stream_get_type            (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType ide_debugger_movement_get_type          (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType ide_debugger_stop_reason_get_type       (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType ide_debugger_break_mode_get_type        (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType ide_debugger_disposition_get_type       (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType ide_debugger_address_range_get_type     (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType ide_debugger_breakpoint_change_get_type (void);
 
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerAddressRange *ide_debugger_address_range_copy (const IdeDebuggerAddressRange *range);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                     ide_debugger_address_range_free (IdeDebuggerAddressRange       *range);
 
 

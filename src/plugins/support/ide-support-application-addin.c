@@ -1,6 +1,6 @@
 /* ide-support-application-addin.c
  *
- * Copyright 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-gui.h>
 
-#include "ide-support-application-addin.h"
 #include "ide-support.h"
+#include "ide-support-application-addin.h"
 
 struct _IdeSupportApplicationAddin
 {
@@ -51,6 +53,7 @@ generate_support_activate (GSimpleAction              *action,
                            GVariant                   *variant,
                            IdeSupportApplicationAddin *self)
 {
+  g_autoptr(GFile) file = NULL;
   GtkWidget *dialog;
   gchar *text = NULL;
   GList *windows;
@@ -65,6 +68,8 @@ generate_support_activate (GSimpleAction              *action,
   name = g_strdup_printf ("gnome-builder-%u.log", (int)getpid ());
   log_path = g_build_filename (g_get_home_dir (), name, NULL);
   g_free (name);
+
+  file = g_file_new_for_path (log_path);
 
   windows = gtk_application_get_windows (GTK_APPLICATION (IDE_APPLICATION_DEFAULT));
 
@@ -91,6 +96,8 @@ generate_support_activate (GSimpleAction              *action,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
   gtk_window_present (GTK_WINDOW (dialog));
+
+  dzl_file_manager_show (file, NULL);
 
 cleanup:
   g_free (text);

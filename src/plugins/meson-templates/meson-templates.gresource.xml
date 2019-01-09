@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins/meson_templates">
+  <gresource prefix="/plugins/meson_templates">
     <file compressed="true">resources/src/window.ui</file>
     <file compressed="true">resources/src/window.js.tmpl</file>
     <file compressed="true">resources/src/meson-py.build</file>
@@ -44,5 +44,13 @@
     <file compressed="true">resources/po/meson.build</file>
     <file compressed="true">resources/po/POTFILES</file>
     <file compressed="true">resources/po/LINGUAS</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder">
+    <file compressed="true">icons/scalable/actions/pattern-legacy.svg</file>
+    <file compressed="true">icons/scalable/actions/pattern-library.svg</file>
+    <file compressed="true">icons/scalable/actions/pattern-grid.svg</file>
+    <file compressed="true">icons/scalable/actions/pattern-browse.svg</file>
+    <file compressed="true">icons/scalable/actions/pattern-cli.svg</file>
+    <file compressed="true">icons/scalable/actions/pattern-gnome.svg</file>
   </gresource>
 </gresources>

@@ -1,6 +1,6 @@
 /* ide-terminal.c
  *
- * Copyright 2016-2017 Christian Hergert <christian@hergert.me>
+ * Copyright 2016-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-terminal"
@@ -22,9 +24,9 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-gui.h>
 
-#include "terminal/ide-terminal.h"
+#include "ide-terminal.h"
 
 #define BUILDER_PCRE2_MULTILINE 0x00000400u
 
@@ -272,7 +274,7 @@ ide_terminal_copy_link_address (IdeTerminal *self)
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (priv->url != NULL);
 
-  if (dzl_str_empty0 (priv->url))
+  if (ide_str_empty0 (priv->url))
     return FALSE;
 
   gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD),
@@ -291,7 +293,7 @@ ide_terminal_open_link (IdeTerminal *self)
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (priv->url != NULL);
 
-  if (dzl_str_empty0 (priv->url))
+  if (ide_str_empty0 (priv->url))
     return FALSE;
 
   if (NULL != (app = GTK_APPLICATION (g_application_get_default ())) &&

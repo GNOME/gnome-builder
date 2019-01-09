@@ -1,6 +1,6 @@
 /* project-tree-plugin.c
  *
- * Copyright 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,21 +14,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <libpeas/peas.h>
-#include <ide.h>
+#define G_LOG_DOMAIN "project-tree-plugin"
 
-#include "gb-project-tree-addin.h"
-#include "gb-project-tree-editor-addin.h"
+#include "config.h"
+
+#include <libide-gui.h>
+#include <libide-tree.h>
+#include <libpeas/peas.h>
+
+#include "gbp-project-tree-addin.h"
+#include "gbp-project-tree-workspace-addin.h"
 
 void
-gb_project_tree_register_types (PeasObjectModule *module)
+_gbp_project_tree_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GB_TYPE_PROJECT_TREE_ADDIN);
+                                              IDE_TYPE_TREE_ADDIN,
+                                              GBP_TYPE_PROJECT_TREE_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                              GB_TYPE_PROJECT_TREE_EDITOR_ADDIN);
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_PROJECT_TREE_WORKSPACE_ADDIN);
 }

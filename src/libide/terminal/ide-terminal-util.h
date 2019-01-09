@@ -1,6 +1,6 @@
 /* gb-terminal-util.h
  *
- * Copyright 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <vte/vte.h>
+#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
+# error "Only <libide-terminal.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <vte/vte.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 int          ide_vte_pty_create_slave (VtePty *pty);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_get_user_shell       (void);
 
 G_END_DECLS

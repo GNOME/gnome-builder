@@ -1,6 +1,6 @@
 /* ide-search-result.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-search-result"
 
 #include "config.h"
 
-#include "search/ide-search-result.h"
+#include "ide-search-result.h"
 
 typedef struct
 {
@@ -229,25 +231,24 @@ ide_search_result_set_priority (IdeSearchResult *self,
 }
 
 /**
- * ide_search_result_get_source_location:
+ * ide_search_result_activate:
  * @self: a #IdeSearchResult
+ * @last_focus: a #GtkWidget of the last focus
  *
- * Gets the file associated with the search result if any.
+ * Requests that @self activate. @last_focus is provided so that the search
+ * result may activate #GAction or other context-specific actions.
  *
- * Many search providers ultimately just open a file, so this may
- * be used in lieu of handling the activate signal.
- *
- * Returns: (transfer full) (nullable): An #IdeUri
+ * Since: 3.32
  */
-IdeSourceLocation *
-ide_search_result_get_source_location (IdeSearchResult *self)
+void
+ide_search_result_activate (IdeSearchResult *self,
+                            GtkWidget       *last_focus)
 {
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+  g_return_if_fail (GTK_IS_WIDGET (last_focus));
 
-  if (IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location != NULL)
-    return IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location (self);
-
-  return NULL;
+  if (IDE_SEARCH_RESULT_GET_CLASS (self)->activate)
+    IDE_SEARCH_RESULT_GET_CLASS (self)->activate (self, last_focus);
 }
 
 void

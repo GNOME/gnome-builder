@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins/make_plugin">
+  <gresource prefix="/plugins/make_plugin">
     <file compressed="true">resources/Makefile</file>
     <file compressed="true">resources/main.c</file>
     <file compressed="true">resources/.gitignore</file>

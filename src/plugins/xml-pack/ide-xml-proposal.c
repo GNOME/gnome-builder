@@ -1,6 +1,6 @@
 /* ide-xml-proposal.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
+#define G_LOG_DOMAIN "ide-xml-proposal"
 
 #include "config.h"
 
-#define G_LOG_DOMAIN "ide-xml-proposal"
+#include <libide-sourceview.h>
 
 #include "ide-xml-proposal.h"
 
@@ -61,7 +65,7 @@ ide_xml_proposal_new (const gchar *text,
                       const gchar *label)
 {
   IdeXmlProposal *self;
-  
+
   self = g_object_new (IDE_TYPE_XML_PROPOSAL, NULL);
   self->text = g_strdup (text);
   self->label = g_strdup (label);

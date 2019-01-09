@@ -1,7 +1,7 @@
 /* gbp-sysroot-runtime.h
  *
- * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
- * Copyright (C) 2018 Collabora Ltd.
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +15,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
@@ -27,8 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSysrootRuntime, gbp_sysroot_runtime, GBP, SYSROOT_RUNTIME, IdeRuntime)
 
-GbpSysrootRuntime  *gbp_sysroot_runtime_new            (IdeContext        *context,
-                                                        const gchar       *sysroot_id);
+GbpSysrootRuntime  *gbp_sysroot_runtime_new            (const gchar       *sysroot_id);
 const gchar        *gbp_sysroot_runtime_get_sysroot_id (GbpSysrootRuntime *self);
 
 G_END_DECLS

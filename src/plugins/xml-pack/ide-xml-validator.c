@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <glib.h>
@@ -64,24 +66,17 @@ create_diagnostic (IdeXmlValidator        *self,
                    xmlError               *error,
                    IdeDiagnosticSeverity   severity)
 {
-  IdeContext *context;
-  IdeDiagnostic *diagnostic;
-  g_autoptr(IdeSourceLocation) loc = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
+  g_autoptr(IdeLocation) loc = NULL;
   gint line;
 
   g_assert (IDE_IS_XML_VALIDATOR (self));
   g_assert (G_IS_FILE (file));
   g_assert (error != NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  ifile = ide_file_new (context, file);
-  line = (error->line > 0) ? error->line - 1 : 0;
-  loc = ide_source_location_new (ifile, line, 0, 0);
+  line = error->line - 1;
+  loc = ide_location_new (file, line, -1);
 
-  diagnostic = ide_diagnostic_new (severity, error->message, loc);
-
-  return diagnostic;
+  return ide_diagnostic_new (severity, error->message, loc);
 }
 
 static void
@@ -201,11 +196,10 @@ ide_xml_validator_validate (IdeXmlValidator   *self,
 
 end:
   if (diagnostics != NULL)
-    *diagnostics = ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&self->diagnostics_array));
-  else
-    g_clear_pointer (&self->diagnostics_array, g_ptr_array_unref);
+    *diagnostics = ide_diagnostics_new_from_array (self->diagnostics_array);
 
-  self->diagnostics_array = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+  g_clear_pointer (&self->diagnostics_array, g_ptr_array_unref);
+  self->diagnostics_array = g_ptr_array_new_with_free_func (g_object_unref);
 
   return ret;
 }
@@ -262,14 +256,6 @@ ide_xml_validator_set_schema (IdeXmlValidator  *self,
   return ret;
 }
 
-IdeXmlValidator *
-ide_xml_validator_new (IdeContext *context)
-{
-  return g_object_new (IDE_TYPE_XML_VALIDATOR,
-                       "context", context,
-                       NULL);
-}
-
 static void
 ide_xml_validator_finalize (GObject *object)
 {
@@ -294,5 +280,5 @@ ide_xml_validator_class_init (IdeXmlValidatorClass *klass)
 static void
 ide_xml_validator_init (IdeXmlValidator *self)
 {
-  self->diagnostics_array = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+  self->diagnostics_array = g_ptr_array_new_with_free_func (g_object_unref);
 }

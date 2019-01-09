@@ -1,6 +1,6 @@
 /* meson-plugin.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,25 +14,44 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-foundry.h>
+#include <libide-gui.h>
 
 #include "gbp-meson-build-system.h"
+#include "gbp-meson-build-system-discovery.h"
 #include "gbp-meson-build-target-provider.h"
 #include "gbp-meson-pipeline-addin.h"
 #include "gbp-meson-test-provider.h"
 #include "gbp-meson-toolchain-provider.h"
 #include "gbp-meson-toolchain-edition-preferences-addin.h"
 
-void
-gbp_meson_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_meson_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, GBP_TYPE_MESON_PIPELINE_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_SYSTEM, GBP_TYPE_MESON_BUILD_SYSTEM);
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_TARGET_PROVIDER, GBP_TYPE_MESON_BUILD_TARGET_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TEST_PROVIDER, GBP_TYPE_MESON_TEST_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TOOLCHAIN_PROVIDER, GBP_TYPE_MESON_TOOLCHAIN_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_PREFERENCES_ADDIN, GBP_TYPE_MESON_TOOLCHAIN_EDITION_PREFERENCES_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                              GBP_TYPE_MESON_PIPELINE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_SYSTEM,
+                                              GBP_TYPE_MESON_BUILD_SYSTEM);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
+                                              GBP_TYPE_MESON_BUILD_SYSTEM_DISCOVERY);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_TARGET_PROVIDER,
+                                              GBP_TYPE_MESON_BUILD_TARGET_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TEST_PROVIDER,
+                                              GBP_TYPE_MESON_TEST_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TOOLCHAIN_PROVIDER,
+                                              GBP_TYPE_MESON_TOOLCHAIN_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PREFERENCES_ADDIN,
+                                              GBP_TYPE_MESON_TOOLCHAIN_EDITION_PREFERENCES_ADDIN);
 }

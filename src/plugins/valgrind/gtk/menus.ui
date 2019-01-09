@@ -13,4 +13,14 @@
       </item>
     </section>
   </menu>
+  <menu id="project-tree-run-with-submenu">
+    <section id="project-tree-menu-run-with-section">
+      <item>
+        <attribute name="id">project-tree-menu-valgrind</attribute>
+        <attribute name="label" translatable="yes">Run with Valgrind</attribute>
+        <attribute name="action">buildui.run-with-handler</attribute>
+        <attribute name="target" type="s">'valgrind'</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

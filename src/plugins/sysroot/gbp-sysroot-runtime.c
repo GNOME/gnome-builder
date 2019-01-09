@@ -1,7 +1,7 @@
 /* gbp-sysroot-runtime.c
  *
- * Copyright (C) 2018 Corentin Noël <corentin.noel@collabora.com>
- * Copyright (C) 2018 Collabora Ltd.
+ * Copyright 2018 Corentin Noël <corentin.noel@collabora.com>
+ * Copyright 2018 Collabora Ltd.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-sysroot-runtime"
@@ -36,19 +38,16 @@ struct _GbpSysrootRuntime
 G_DEFINE_TYPE (GbpSysrootRuntime, gbp_sysroot_runtime, IDE_TYPE_RUNTIME)
 
 GbpSysrootRuntime *
-gbp_sysroot_runtime_new (IdeContext  *context,
-                         const gchar *sysroot_id)
+gbp_sysroot_runtime_new (const gchar *sysroot_id)
 {
   g_autoptr(GbpSysrootRuntime) runtime = NULL;
   g_autofree gchar *built_id = NULL;
 
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (sysroot_id != NULL, NULL);
 
   built_id = g_strconcat (RUNTIME_PREFIX, sysroot_id, NULL);
   runtime = g_object_new (GBP_TYPE_SYSROOT_RUNTIME,
                           "id", built_id,
-                          "context", context,
                           "display-name", "",
                           NULL);
 
@@ -71,7 +70,7 @@ gbp_sysroot_runtime_get_sysroot_id (GbpSysrootRuntime *self)
   if (!g_str_has_prefix (runtime_id, RUNTIME_PREFIX))
     return runtime_id;
 
-  return runtime_id + strlen(RUNTIME_PREFIX);
+  return runtime_id + strlen (RUNTIME_PREFIX);
 }
 
 static IdeSubprocessLauncher *
@@ -227,10 +226,10 @@ gbp_sysroot_runtime_constructed (GObject *object)
   ide_runtime_set_display_name (IDE_RUNTIME (object), display_name);
 
   g_signal_connect_object (sysroot_manager,
-                            "target-name-changed",
-                            G_CALLBACK (sysroot_runtime_target_name_changed),
-                            object,
-                            G_CONNECT_SWAPPED);
+                           "target-name-changed",
+                           G_CALLBACK (sysroot_runtime_target_name_changed),
+                           object,
+                           G_CONNECT_SWAPPED);
 
   G_OBJECT_CLASS (gbp_sysroot_runtime_parent_class)->constructed (object);
 }

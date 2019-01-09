@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;
+Description=Integrated gutter for the source code editor
+Embedded=_gbp_omni_gutter_register_types
+Hidden=true
+Module=omni-gutter
+Name=OmniGutter

@@ -1,20 +1,13 @@
-if get_option('with_support')
+plugins_sources += files([
+  'ide-support-application-addin.c',
+  'ide-support.c',
+  'support-plugin.c',
+])
 
-support_resources = gnome.compile_resources(
+plugin_support_resources = gnome.compile_resources(
   'support-resources',
   'support.gresource.xml',
-  c_name: 'ide_support',
+  c_name: 'gbp_support',
 )
 
-support_sources = [
-  'ide-support-application-addin.c',
-  'ide-support-application-addin.h',
-  'ide-support.c',
-  'ide-support.h',
-  'ide-support-plugin.c',
-]
-
-gnome_builder_plugins_sources += files(support_sources)
-gnome_builder_plugins_sources += support_resources[0]
-
-endif
+plugins_sources += plugin_support_resources[0]

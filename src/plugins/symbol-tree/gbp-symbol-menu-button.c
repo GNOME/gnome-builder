@@ -1,6 +1,6 @@
 /* gbp-symbol-menu-button.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,10 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-symbol-menu-button"
 
+#include <libide-sourceview.h>
 #include <glib/gi18n.h>
 
 #include "gbp-symbol-menu-button.h"
@@ -205,7 +208,7 @@ gbp_symbol_menu_button_class_init (GbpSymbolMenuButtonClass *klass)
 
   widget_class->destroy = gbp_symbol_menu_button_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/symbol-tree-plugin/gbp-symbol-menu-button.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/symbol-tree/gbp-symbol-menu-button.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, symbol_icon);
@@ -250,7 +253,7 @@ gbp_symbol_menu_button_init (GbpSymbolMenuButton *self)
  *
  * Returns: (transfer none) (nullable): An #IdeSymbolTree or %NULL
  *
- * Since: 3.26
+ * Since: 3.32
  */
 IdeSymbolTree *
 gbp_symbol_menu_button_get_symbol_tree (GbpSymbolMenuButton *self)
@@ -266,7 +269,7 @@ gbp_symbol_menu_button_get_symbol_tree (GbpSymbolMenuButton *self)
  *
  * Sets the symbol tree to be displayed by the popover.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 void
 gbp_symbol_menu_button_set_symbol_tree (GbpSymbolMenuButton *self,

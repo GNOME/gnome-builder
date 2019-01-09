@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/command-bar">
+    <file>command-bar.plugin</file>
+    <file>themes/shared.css</file>
+    <file preprocess="xml-stripblanks">gbp-command-bar.ui</file>
+  </gresource>
+</gresources>

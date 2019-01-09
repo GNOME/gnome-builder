@@ -1,7 +1,7 @@
 #
-# __init__.py
+# valgrind_plugin.py
 #
-# Copyright 2017 Christian Hergert <chergert@redhat.com>
+# Copyright 2017-2018 Christian Hergert <chergert@redhat.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,8 +20,6 @@
 import gi
 import os
 
-gi.require_version('Ide', '1.0')
-
 from gi.repository import Ide
 from gi.repository import GLib
 from gi.repository import GObject
@@ -29,6 +27,7 @@ from gi.repository import GObject
 _ = Ide.gettext
 
 class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
+    build_manager = None
     workbench = None
     has_handler = False
     notify_handler = None
@@ -36,12 +35,13 @@ class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
     def do_load(self, workbench):
         self.workbench = workbench
 
-        build_manager = workbench.get_context().get_build_manager()
-        self.notify_handler = build_manager.connect('notify::pipeline', self.notify_pipeline)
-        self.notify_pipeline(build_manager, None)
+    def do_project_loaded(self, project_info):
+        self.build_manager = Ide.BuildManager.from_context(self.workbench.get_context())
+        self.notify_handler = self.build_manager.connect('notify::pipeline', self.notify_pipeline)
+        self.notify_pipeline(self.build_manager, None)
 
     def notify_pipeline(self, build_manager, pspec):
-        run_manager = self.workbench.get_context().get_run_manager()
+        run_manager = Ide.RunManager.from_context(self.workbench.get_context())
 
         # When the pipeline changes, we need to check to see if we can find
         # valgrind inside the runtime environment.
@@ -58,12 +58,13 @@ class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
             run_manager.remove_handler('valgrind')
 
     def do_unload(self, workbench):
-        build_manager = workbench.get_context().get_build_manager()
-        build_manager.disconnect(self.notify_handler)
-        self.notify_handler = None
+        if self.build_manager is not None:
+            if self.notify_handler is not None:
+                self.build_manager.disconnect(self.notify_handler)
+                self.notify_handler = None
 
         if self.has_handler:
-            run_manager = workbench.get_context().get_run_manager()
+            run_manager = Ide.RunManager.from_context(workbench.get_context())
             run_manager.remove_handler('valgrind')
 
         self.workbench = None
@@ -83,5 +84,5 @@ class ValgrindWorkbenchAddin(GObject.Object, Ide.WorkbenchAddin):
         # If we weren't unloaded in the meantime, we can open the file using
         # the "editor" hint to ensure the editor opens the file.
         if self.workbench:
-            uri = Ide.Uri.new('file://'+name, 0)
-            self.workbench.open_uri_async(uri, 'editor', 0, None, None, None)
+            gfile = Gio.File.new_for_path(name)
+            self.workbench.open_async(gfile, 'editor', 0, None, None, None)

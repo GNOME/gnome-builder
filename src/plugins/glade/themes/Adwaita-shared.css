@@ -1,4 +1,4 @@
-@import url("resource:///org/gnome/builder/plugins/glade-plugin/themes/shared.css");
+@import url("resource:///plugins/glade/themes/shared.css");
 
 gbpgladeproperties {
   font-size: 0.83333em;
@@ -27,8 +27,8 @@ gbpgladeproperties spinbutton entry {
 }
 
 gbpgladeproperties switch slider {
-  min-height: 18px;
-  min-width: 32px;
+  min-height: 16px;
+  min-width: 18px;
 }
 
 gbpgladeproperties button.combo {

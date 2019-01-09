@@ -1,9 +1,10 @@
 [Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;project-tree;
+Description=Search across project files
+Embedded=_gbp_grep_register_types
 Module=grep
 Name=Find in Files
-Description=Search across project files
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2018 Christian Hergert
-Builtin=true
-Depends=editor;project-tree-plugin
-Embedded=gbp_grep_register_types
+X-Tree-Kind=project-tree;

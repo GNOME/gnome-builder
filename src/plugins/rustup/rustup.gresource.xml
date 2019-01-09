@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins/rustup_plugin">
+  <gresource prefix="/plugins/rustup_plugin">
     <file>rustup.sh</file>
   </gresource>
 </gresources>

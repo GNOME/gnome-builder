@@ -1,6 +1,6 @@
 /* gbp-cmake-pipeline-addin.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  * Copyright 2017 Martin Blanchard <tchaik@gmx.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-cmake-pipeline-addin"
@@ -51,6 +53,7 @@ gbp_cmake_pipeline_addin_init (GbpCMakePipelineAddin *self)
 static void
 gbp_cmake_pipeline_addin_stage_query_cb (IdeBuildStage    *stage,
                                          IdeBuildPipeline *pipeline,
+                                         GPtrArray        *targets,
                                          GCancellable     *cancellable)
 {
   g_assert (IDE_IS_BUILD_STAGE (stage));
@@ -77,7 +80,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_autofree gchar *prefix_option = NULL;
   g_autofree gchar *build_ninja = NULL;
   g_autofree gchar *crossbuild_file = NULL;
-  GFile *project_file;
+  g_autoptr(GFile) project_file = NULL;
   g_autofree gchar *project_file_name = NULL;
   g_autofree gchar *srcdir = NULL;
   IdeBuildSystem *build_system;
@@ -99,11 +102,11 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   context = ide_object_get_context (IDE_OBJECT (self));
 
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
   if (!GBP_IS_CMAKE_BUILD_SYSTEM (build_system))
     IDE_GOTO (failure);
 
-  project_file = ide_context_get_project_file (context);
+  g_object_get (build_system, "project-file", &project_file, NULL);
   project_file_name = g_file_get_basename (project_file);
 
   configuration = ide_build_pipeline_get_configuration (pipeline);
@@ -156,7 +159,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       cross_file_stage = gbp_cmake_build_stage_cross_file_new (context, toolchain);
       crossbuild_file = gbp_cmake_build_stage_cross_file_get_path (cross_file_stage, pipeline);
 
-      id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_PREPARE, 0, IDE_BUILD_STAGE (cross_file_stage));
+      id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_PREPARE, 0, IDE_BUILD_STAGE (cross_file_stage));
       ide_build_pipeline_addin_track (addin, id);
     }
 
@@ -197,7 +200,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   if (g_file_test (build_ninja, G_FILE_TEST_IS_REGULAR))
     ide_build_stage_set_completed (configure_stage, TRUE);
 
-  id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_CONFIGURE, 0, configure_stage);
+  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_CONFIGURE, 0, configure_stage);
   ide_build_pipeline_addin_track (addin, id);
 
   /* Setup our build stage */
@@ -226,7 +229,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
                     G_CALLBACK (gbp_cmake_pipeline_addin_stage_query_cb),
                     NULL);
 
-  id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_BUILD, 0, build_stage);
+  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_BUILD, 0, build_stage);
   ide_build_pipeline_addin_track (addin, id);
 
   /* Setup our install stage */
@@ -242,7 +245,7 @@ gbp_cmake_pipeline_addin_load (IdeBuildPipelineAddin *addin,
                     G_CALLBACK (gbp_cmake_pipeline_addin_stage_query_cb),
                     NULL);
 
-  id = ide_build_pipeline_connect (pipeline, IDE_BUILD_PHASE_INSTALL, 0, install_stage);
+  id = ide_build_pipeline_attach (pipeline, IDE_BUILD_PHASE_INSTALL, 0, install_stage);
   ide_build_pipeline_addin_track (addin, id);
 
   IDE_EXIT;

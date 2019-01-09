@@ -1,107 +1,85 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="ide-source-view-popup-menu">
-    <section id="ide-source-view-popup-menu-reveal-section">
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-placeholder0"/>
+    <section id="project-tree-menu-new-section">
       <item>
-        <attribute name="label" translatable="yes">Re_veal in Project Tree</attribute>
-        <attribute name="action">project-tree.reveal</attribute>
-      </item>
-    </section>
-  </menu>
-  <menu id="gb-project-tree-popup-menu">
-    <section id="gb-project-tree-new-section">
-      <item>
-        <attribute name="label" translatable="yes">New _File</attribute>
+        <attribute name="id">project-tree-menu-new-file</attribute>
+        <attribute name="label" translatable="yes">New File…</attribute>
         <attribute name="action">project-tree.new-file</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_New Folder</attribute>
-        <attribute name="action">project-tree.new-directory</attribute>
+        <attribute name="id">project-tree-menu-new-folder</attribute>
+        <attribute name="label" translatable="yes">New Folder…</attribute>
+        <attribute name="action">project-tree.new-folder</attribute>
       </item>
     </section>
-    <section id="gb-project-tree-open-section">
+    <section id="project-tree-menu-placeholder1"/>
+    <section id="project-tree-menu-open-section">
       <item>
-        <attribute name="label" translatable="yes">_Open</attribute>
+        <attribute name="id">project-tree-menu-open</attribute>
+        <attribute name="label" translatable="yes">Open</attribute>
         <attribute name="action">project-tree.open</attribute>
-        <attribute name="accel">Return</attribute>
       </item>
-      <submenu id="gb-project-tree-open-with-submenu">
-        <attribute name="label" translatable="yes">Open _With</attribute>
-        <section id="gb-project-tree-open-with-internal-section">
+      <submenu id="project-tree-menu-open-with-menu">
+        <attribute name="label" translatable="yes">Open With…</attribute>
+        <section id="project-tree-menu-open-with-section">
           <item>
-            <attribute name="id">gb-project-tree-open-with-editor</attribute>
+            <attribute name="id">project-tree-menu-open-editor</attribute>
             <attribute name="label" translatable="yes">Source Code Editor</attribute>
             <attribute name="action">project-tree.open-with-hint</attribute>
-            <attribute name="target" type="s">"editor"</attribute>
+            <attribute name="target" type="s">'editor'</attribute>
+          </item>
+          <item>
+            <attribute name="id">project-tree-menu-open-editor</attribute>
+            <attribute name="label" translatable="yes">UI Designer</attribute>
+            <attribute name="action">project-tree.open-with-hint</attribute>
+            <attribute name="target" type="s">'glade'</attribute>
           </item>
         </section>
-        <section id="gb-project-tree-open-by-mime-section">
-        </section>
       </submenu>
-    </section>
-    <section id="gb-project-tree-open-containing-section">
       <item>
-        <attribute name="label" translatable="yes">_Open Containing Folder</attribute>
+        <attribute name="id">project-tree-menu-open-folder</attribute>
+        <attribute name="label" translatable="yes">Open Containing Folder</attribute>
         <attribute name="action">project-tree.open-containing-folder</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_Open in Terminal</attribute>
+        <attribute name="id">project-tree-menu-open-terminal</attribute>
+        <attribute name="label" translatable="yes">Open in Terminal</attribute>
         <attribute name="action">project-tree.open-in-terminal</attribute>
       </item>
     </section>
-    <section id="gb-project-tree-find-section"/>
-    <section id="gb-project-tree-rename-section">
+    <section id="project-tree-menu-placeholder2"/>
+    <section id="project-tree-menu-destructive-section">
       <item>
-        <attribute name="label" translatable="yes">_Rename</attribute>
-        <attribute name="action">project-tree.rename-file</attribute>
-        <attribute name="accel">F2</attribute>
+        <attribute name="id">project-tree-menu-rename</attribute>
+        <attribute name="label" translatable="yes">Rename</attribute>
+        <attribute name="action">project-tree.rename</attribute>
+      </item>
+      <item>
+        <attribute name="id">project-tree-menu-trash</attribute>
+        <attribute name="label" translatable="yes">Move to Trash</attribute>
+        <attribute name="action">project-tree.trash</attribute>
       </item>
     </section>
-    <section id="gb-project-tree-move-to-trash-section">
-      <item>
-        <attribute name="label" translatable="yes">Mo_ve to Trash</attribute>
-        <attribute name="action">project-tree.move-to-trash</attribute>
-        <attribute name="accel">Delete</attribute>
-      </item>
-    </section>
-    <section id="gb-project-tree-build-section">
-      <item>
-        <attribute name="label" translatable="yes">_Build</attribute>
-        <attribute name="action">workbench.build</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Rebuild</attribute>
-        <attribute name="action">workbench.rebuild</attribute>
-      </item>
-    </section>
-    <section id="gb-project-tree-display-options-section">
-      <submenu id="gb-project-tree-display-options-submenu">
+    <section id="project-tree-menu-placeholder3"/>
+    <section id="project-tree-menu-display-options-parent-section">
+      <submenu id="project-tree-menu-display-options">
         <attribute name="label" translatable="yes">Display Options</attribute>
-        <section id="gb-project-tree-display-options-show-section">
+        <section id="project-tree-menu-display-options-section">
           <item>
-            <attribute name="label" translatable="yes">Show Icons</attribute>
-            <attribute name="action">project-tree.show-icons</attribute>
-          </item>
-          <item>
+            <attribute name="id">project-tree-menu-show-ignored</attribute>
             <attribute name="label" translatable="yes">Show Ignored Files</attribute>
             <attribute name="action">project-tree.show-ignored-files</attribute>
           </item>
           <item>
+            <attribute name="id">project-tree-menu-sort-directories-first</attribute>
             <attribute name="label" translatable="yes">Sort Directories First</attribute>
             <attribute name="action">project-tree.sort-directories-first</attribute>
           </item>
         </section>
-        <section id="gb-project-tree-display-options-nodes-section">
-          <item>
-            <attribute name="label" translatable="yes">_Collapse All Nodes</attribute>
-            <attribute name="action">project-tree.collapse-all-nodes</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">_Refresh</attribute>
-            <attribute name="action">project-tree.refresh</attribute>
-          </item>
-        </section>
       </submenu>
     </section>
+    <section id="project-tree-menu-placeholder4"/>
   </menu>
 </interface>

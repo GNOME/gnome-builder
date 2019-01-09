@@ -1,6 +1,6 @@
 /* ide-search-provider.h
  *
- * Copyright 2015-2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_SEARCH_INSIDE) && !defined (IDE_SEARCH_COMPILATION)
+# error "Only <libide-search.h> can be included directly."
+#endif
 
-#include "ide-object.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_PROVIDER (ide_search_provider_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE, SEARCH_PROVIDER, IdeObject)
 
 struct _IdeSearchProviderInterface
@@ -44,14 +48,14 @@ struct _IdeSearchProviderInterface
                                GError              **error);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_provider_search_async  (IdeSearchProvider    *self,
                                               const gchar          *query,
                                               guint                 max_results,
                                               GCancellable         *cancellable,
                                               GAsyncReadyCallback   callback,
                                               gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GPtrArray *ide_search_provider_search_finish (IdeSearchProvider    *self,
                                               GAsyncResult         *result,
                                               GError              **error);

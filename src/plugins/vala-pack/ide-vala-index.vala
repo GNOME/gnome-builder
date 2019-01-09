@@ -41,8 +41,7 @@ namespace Ide
 
 		public ValaIndex (Ide.Context context)
 		{
-			var vcs = context.get_vcs();
-			var workdir = vcs.get_working_directory();
+			var workdir = context.ref_workdir ();
 
 			this.source_files = new HashMap<GLib.File,Ide.ValaSourceFile> (GLib.File.hash, (GLib.EqualFunc)GLib.File.equal);
 
@@ -82,20 +81,6 @@ namespace Ide
 			this.code_context.entry_point_name = null;
 
 			this.code_context.run_output = false;
-
-			int minor = 36;
-			var tokens = Config.VALA_VERSION.split(".", 2);
-			if (tokens[1] != null) {
-				minor = int.parse(tokens[1]);
-			}
-
-			for (var i = 2; i <= minor; i += 2) {
-				this.code_context.add_define ("VALA_0_%d".printf (i));
-			}
-
-			for (var i = 16; i < GLib.Version.minor; i+= 2) {
-				this.code_context.add_define ("GLIB_2_%d".printf (i));
-			}
 
 			this.code_context.vapi_directories = {};
 
@@ -246,8 +231,7 @@ namespace Ide
 					}
 					else if (param.has_suffix (".vapi")) {
 						if (!GLib.Path.is_absolute (param)) {
-							var vcs = this.context.get_vcs ();
-							var workdir = vcs.get_working_directory ();
+							var workdir = context.ref_workdir ();
 							var child = workdir.get_child (param);
 							this.add_file (child);
 						} else {
@@ -268,11 +252,10 @@ namespace Ide
 		async void update_build_flags (GLib.File file,
 		                               GLib.Cancellable? cancellable)
 		{
-			var ifile = new Ide.File (this.context, file);
-			var build_system = this.context.get_build_system ();
+			var build_system = Ide.BuildSystem.from_context (this.context);
 
 			try {
-				var flags = yield build_system.get_build_flags_async (ifile, cancellable);
+				var flags = yield build_system.get_build_flags_async (file, cancellable);
 				load_build_flags (flags);
 			} catch (GLib.Error err) {
 				warning ("%s", err.message);

@@ -1,6 +1,6 @@
 /* ide-clang-symbol-node.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
@@ -26,8 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClangSymbolNode, ide_clang_symbol_node, IDE, CLANG_SYMBOL_NODE, IdeSymbolNode)
 
-IdeSymbolNode *ide_clang_symbol_node_new            (IdeContext         *context,
-                                                     GVariant           *variant);
+IdeSymbolNode *ide_clang_symbol_node_new            (GVariant           *variant);
 guint          ide_clang_symbol_node_get_n_children (IdeClangSymbolNode *self);
 IdeSymbolNode *ide_clang_symbol_node_get_nth_child  (IdeClangSymbolNode *self,
                                                      guint               nth);

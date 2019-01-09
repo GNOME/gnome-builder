@@ -14,15 +14,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-code.h>
 
 #include "ide-gettext-diagnostic-provider.h"
 
-void
-ide_gettext_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_gettext_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,

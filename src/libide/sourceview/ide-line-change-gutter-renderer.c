@@ -1,6 +1,6 @@
 /* ide-line-change-gutter-renderer.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,25 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-line-change-gutter-renderer"
 
 #include "config.h"
 
-#include "ide-context.h"
+#include <libide-code.h>
 
-#include "buffers/ide-buffer.h"
-#include "files/ide-file.h"
-#include "sourceview/ide-line-change-gutter-renderer.h"
-#include "vcs/ide-vcs.h"
+#include "ide-line-change-gutter-renderer.h"
 
 #define DELETE_WIDTH  5.0
 #define DELETE_HEIGHT 8.0
 
-#if 0
-# define ARROW_TOWARDS_GUTTER
-#endif
+#define IS_LINE_CHANGE(i) ((i)->is_add || (i)->is_change || \
+                           (i)->is_delete || (i)->is_next_delete || (i)->is_prev_delete)
 
 struct _IdeLineChangeGutterRenderer
 {
@@ -44,33 +42,81 @@ struct _IdeLineChangeGutterRenderer
   GtkTextBuffer          *buffer;
   gulong                  buffer_notify_style_scheme;
 
-  GdkRGBA                 rgba_added;
-  GdkRGBA                 rgba_changed;
-  GdkRGBA                 rgba_removed;
+  GArray                 *lines;
+  guint                   begin_line;
 
-  guint                   show_line_deletions : 1;
+  struct {
+    GdkRGBA add;
+    GdkRGBA remove;
+    GdkRGBA change;
+  } changes;
 
   guint                   rgba_added_set : 1;
   guint                   rgba_changed_set : 1;
   guint                   rgba_removed_set : 1;
 };
 
+typedef struct
+{
+  /* The line is an addition to the buffer */
+  guint is_add : 1;
 
-G_DEFINE_TYPE (IdeLineChangeGutterRenderer,
-               ide_line_change_gutter_renderer,
-               GTK_SOURCE_TYPE_GUTTER_RENDERER)
+  /* The line has changed in the buffer */
+  guint is_change : 1;
 
-static GdkRGBA rgbaAdded;
-static GdkRGBA rgbaChanged;
-static GdkRGBA rgbaRemoved;
+  /* The line is part of a deleted range in the buffer */
+  guint is_delete : 1;
+
+  /* The previous line was a delete */
+  guint is_prev_delete : 1;
+
+  /* The next line is a delete */
+  guint is_next_delete : 1;
+} LineInfo;
 
 enum {
-  PROP_0,
-  PROP_SHOW_LINE_DELETIONS,
-  LAST_PROP
+  FOREGROUND,
+  BACKGROUND,
 };
 
-static GParamSpec *properties [LAST_PROP];
+G_DEFINE_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer, GTK_SOURCE_TYPE_GUTTER_RENDERER)
+
+static gboolean
+get_style_rgba (GtkSourceStyleScheme *scheme,
+                const gchar          *style_name,
+                int                   type,
+                GdkRGBA              *rgba)
+{
+  GtkSourceStyle *style;
+
+  g_assert (!scheme || GTK_SOURCE_IS_STYLE_SCHEME (scheme));
+  g_assert (style_name != NULL);
+  g_assert (type == FOREGROUND || type == BACKGROUND);
+  g_assert (rgba != NULL);
+
+  memset (rgba, 0, sizeof *rgba);
+
+  if (scheme == NULL)
+    return FALSE;
+
+  if (NULL != (style = gtk_source_style_scheme_get_style (scheme, style_name)))
+    {
+      g_autofree gchar *str = NULL;
+      gboolean set = FALSE;
+
+      g_object_get (style,
+                    type ? "background" : "foreground", &str,
+                    type ? "background-set" : "foreground-set", &set,
+                    NULL);
+
+      if (str != NULL)
+        gdk_rgba_parse (rgba, str);
+
+      return set;
+    }
+
+  return FALSE;
+}
 
 static void
 disconnect_style_scheme (IdeLineChangeGutterRenderer *self)
@@ -109,70 +155,25 @@ disconnect_view (IdeLineChangeGutterRenderer *self)
 static void
 connect_style_scheme (IdeLineChangeGutterRenderer *self)
 {
-  GtkTextView *text_view;
+  GtkSourceStyleScheme *scheme;
   GtkTextBuffer *buffer;
-  GtkSourceStyleScheme *style_scheme;
+  GtkTextView *view;
 
-  text_view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  buffer = gtk_text_view_get_buffer (text_view);
-
-  if (!GTK_SOURCE_IS_BUFFER (buffer))
+  if (!(view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self))) ||
+      !(buffer = gtk_text_view_get_buffer (view)) ||
+      !GTK_SOURCE_IS_BUFFER (buffer))
     return;
 
-  style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
+  scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
 
-  if (style_scheme)
-    {
-      GtkSourceStyle *style;
+  if (!get_style_rgba (scheme, "gutter::added-line", FOREGROUND, &self->changes.add))
+    gdk_rgba_parse (&self->changes.add, "#8ae234");
 
-      style = gtk_source_style_scheme_get_style (style_scheme, "gutter:added-line");
+  if (!get_style_rgba (scheme, "gutter::changed-line", FOREGROUND, &self->changes.change))
+    gdk_rgba_parse (&self->changes.change, "#fcaf3e");
 
-      if (style)
-        {
-          g_autofree gchar *foreground = NULL;
-          gboolean foreground_set = 0;
-
-          g_object_get (style,
-                        "foreground-set", &foreground_set,
-                        "foreground", &foreground,
-                        NULL);
-
-          if (foreground_set)
-            self->rgba_added_set = gdk_rgba_parse (&self->rgba_added, foreground);
-        }
-
-      style = gtk_source_style_scheme_get_style (style_scheme, "gutter:changed-line");
-
-      if (style)
-        {
-          g_autofree gchar *foreground = NULL;
-          gboolean foreground_set = 0;
-
-          g_object_get (style,
-                        "foreground-set", &foreground_set,
-                        "foreground", &foreground,
-                        NULL);
-
-          if (foreground_set)
-            self->rgba_changed_set = gdk_rgba_parse (&self->rgba_changed, foreground);
-        }
-
-      style = gtk_source_style_scheme_get_style (style_scheme, "gutter:removed-line");
-
-      if (style)
-        {
-          g_autofree gchar *foreground = NULL;
-          gboolean foreground_set = 0;
-
-          g_object_get (style,
-                        "foreground-set", &foreground_set,
-                        "foreground", &foreground,
-                        NULL);
-
-          if (foreground_set)
-            self->rgba_removed_set = gdk_rgba_parse (&self->rgba_removed, foreground);
-        }
-    }
+  if (!get_style_rgba (scheme, "gutter::removed-line", FOREGROUND, &self->changes.remove))
+    gdk_rgba_parse (&self->changes.remove, "#ef2929");
 }
 
 static void
@@ -237,6 +238,145 @@ ide_line_change_gutter_renderer_notify_view (IdeLineChangeGutterRenderer *self)
 }
 
 static void
+populate_changes_cb (guint               line,
+                     IdeBufferLineChange change,
+                     gpointer            user_data)
+{
+  LineInfo *info;
+  struct {
+    GArray *lines;
+    guint   begin_line;
+    guint   end_line;
+  } *state = user_data;
+  guint pos;
+
+  g_assert (line >= state->begin_line);
+  g_assert (line <= state->end_line);
+
+  pos = line - state->begin_line;
+
+  info = &g_array_index (state->lines, LineInfo, pos);
+  info->is_add = !!(change & IDE_BUFFER_LINE_CHANGE_ADDED);
+  info->is_change = !!(change & IDE_BUFFER_LINE_CHANGE_CHANGED);
+  info->is_delete = !!(change & IDE_BUFFER_LINE_CHANGE_DELETED);
+
+  if (pos > 0)
+    {
+      LineInfo *last = &g_array_index (state->lines, LineInfo, pos - 1);
+
+      info->is_prev_delete = last->is_delete;
+      last->is_next_delete = info->is_delete;
+    }
+}
+
+static void
+ide_line_change_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
+                                       cairo_t                 *cr,
+                                       GdkRectangle            *bg_area,
+                                       GdkRectangle            *cell_area,
+                                       GtkTextIter             *begin,
+                                       GtkTextIter             *end)
+{
+  IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
+  IdeBufferChangeMonitor *monitor;
+  GtkTextBuffer *buffer;
+  GtkTextView *view;
+  struct {
+    GArray *lines;
+    guint   begin_line;
+    guint   end_line;
+  } state;
+
+  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
+  g_assert (cr != NULL);
+  g_assert (bg_area != NULL);
+  g_assert (cell_area != NULL);
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+
+  if (!(view = gtk_source_gutter_renderer_get_view (renderer)) ||
+      !(buffer = gtk_text_view_get_buffer (view)) ||
+      !IDE_IS_BUFFER (buffer) ||
+      !(monitor = ide_buffer_get_change_monitor (IDE_BUFFER (buffer))))
+    return;
+
+  self->begin_line = state.begin_line = gtk_text_iter_get_line (begin);
+  state.end_line = gtk_text_iter_get_line (end);
+  state.lines = g_array_new (FALSE, TRUE, sizeof (LineInfo));
+  g_array_set_size (state.lines, state.end_line - state.begin_line + 1);
+
+  ide_buffer_change_monitor_foreach_change (monitor,
+                                            state.begin_line,
+                                            state.end_line,
+                                            populate_changes_cb,
+                                            &state);
+
+  g_clear_pointer (&self->lines, g_array_unref);
+  self->lines = g_steal_pointer (&state.lines);
+}
+
+static void
+ide_line_change_gutter_renderer_end (GtkSourceGutterRenderer *renderer)
+{
+  IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
+
+  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
+
+  //g_clear_pointer (&self->lines, g_array_unref);
+}
+
+static void
+draw_line_change (IdeLineChangeGutterRenderer  *self,
+                  cairo_t                      *cr,
+                  GdkRectangle                 *area,
+                  LineInfo                     *info,
+                  GtkSourceGutterRendererState  state)
+{
+  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
+  g_assert (cr != NULL);
+  g_assert (area != NULL);
+
+  /*
+   * Draw a simple line with the appropriate color from the style scheme
+   * based on the type of change we have.
+   */
+
+  if (info->is_add || info->is_change)
+    {
+      gdk_cairo_rectangle (cr, area);
+
+      if (info->is_add)
+        gdk_cairo_set_source_rgba (cr, &self->changes.add);
+      else
+        gdk_cairo_set_source_rgba (cr, &self->changes.change);
+
+      cairo_fill (cr);
+    }
+
+  if (info->is_next_delete && !info->is_delete)
+    {
+      cairo_rectangle (cr,
+                       area->x,
+                       area->y + area->width / 2.0,
+                       area->width,
+                       area->height / 2.0);
+      gdk_cairo_set_source_rgba (cr, &self->changes.remove);
+      cairo_fill (cr);
+    }
+
+  if (info->is_delete && !info->is_prev_delete)
+    {
+      cairo_rectangle (cr,
+                       area->x,
+                       area->y,
+                       area->width,
+                       area->height / 2.0);
+      gdk_cairo_set_source_rgba (cr, &self->changes.remove);
+      cairo_fill (cr);
+    }
+}
+
+static void
 ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
                                       cairo_t                      *cr,
                                       GdkRectangle                 *bg_area,
@@ -246,190 +386,39 @@ ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
                                       GtkSourceGutterRendererState  state)
 {
   IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
-  GdkRectangle cell_area_copy;
-  GtkTextBuffer *buffer;
-  GdkRGBA *rgba = NULL;
-  IdeBufferLineFlags flags;
-  IdeBufferLineFlags prev_flags = 0;
-  IdeBufferLineFlags next_flags;
-  guint lineno;
-  gint xpad;
+  guint line;
 
-  g_return_if_fail (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
-  g_return_if_fail (cr);
-  g_return_if_fail (bg_area);
-  g_return_if_fail (cell_area);
-  g_return_if_fail (begin);
-  g_return_if_fail (end);
+  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
+  g_assert (cr != NULL);
+  g_assert (bg_area != NULL);
+  g_assert (cell_area != NULL);
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
 
-  GTK_SOURCE_GUTTER_RENDERER_CLASS (ide_line_change_gutter_renderer_parent_class)->draw (renderer, cr, bg_area, cell_area, begin, end, state);
-
-  buffer = gtk_text_iter_get_buffer (begin);
-
-  if (!IDE_IS_BUFFER (buffer))
+  if (self->lines == NULL)
     return;
 
-  lineno = gtk_text_iter_get_line (begin);
+  line = gtk_text_iter_get_line (begin);
 
-  flags = ide_buffer_get_line_flags (IDE_BUFFER (buffer), lineno);
-  next_flags = ide_buffer_get_line_flags (IDE_BUFFER (buffer), lineno + 1);
-  if (lineno > 0)
-    prev_flags = ide_buffer_get_line_flags (IDE_BUFFER (buffer), lineno - 1);
-
-  if ((flags & IDE_BUFFER_LINE_FLAGS_ADDED) != 0)
-    rgba = self->rgba_added_set ? &self->rgba_added : &rgbaAdded;
-
-  if ((flags & IDE_BUFFER_LINE_FLAGS_CHANGED) != 0)
-    rgba = self->rgba_changed_set ? &self->rgba_changed : &rgbaChanged;
-
-  if (rgba)
+  if ((line - self->begin_line) < self->lines->len)
     {
-      gdk_cairo_rectangle (cr, cell_area);
-      gdk_cairo_set_source_rgba (cr, rgba);
-      cairo_fill (cr);
+      LineInfo *info = &g_array_index (self->lines, LineInfo, line - self->begin_line);
+
+      if (IS_LINE_CHANGE (info))
+        draw_line_change (self, cr, cell_area, info, state);
     }
-
-  if (!self->show_line_deletions)
-    return;
-
-  /*
-   * If we have xpad, we want to draw over it. So we'll just mutate
-   * the cell_area here.
-   */
-  g_object_get (self, "xpad", &xpad, NULL);
-  cell_area_copy = *cell_area;
-  cell_area->x += xpad;
-
-  /*
-   * If the next line is a deletion, but we were not a deletion, then
-   * draw our half the deletion mark.
-   */
-  if (((next_flags & IDE_BUFFER_LINE_FLAGS_DELETED) != 0) &&
-      ((flags & IDE_BUFFER_LINE_FLAGS_DELETED) == 0))
-    {
-      rgba = self->rgba_removed_set ? &self->rgba_removed : &rgbaRemoved;
-      gdk_cairo_set_source_rgba (cr, rgba);
-
-#ifdef ARROW_TOWARDS_GUTTER
-      cairo_move_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y + cell_area->height);
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width - DELETE_WIDTH,
-                     cell_area->y + cell_area->height);
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y + cell_area->height - (DELETE_HEIGHT / 2));
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y + cell_area->height);
-#else
-      cairo_move_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y + cell_area->height);
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width - DELETE_WIDTH,
-                     cell_area->y + cell_area->height);
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width - DELETE_WIDTH,
-                     cell_area->y + cell_area->height - (DELETE_HEIGHT / 2));
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y + cell_area->height);
-#endif
-
-      cairo_fill (cr);
-    }
-
-  /*
-   * If the previous line was not a deletion, and we have a deletion, then
-   * draw our half the deletion mark.
-   */
-  if (((prev_flags & IDE_BUFFER_LINE_FLAGS_DELETED) == 0) &&
-      ((flags & IDE_BUFFER_LINE_FLAGS_DELETED) != 0))
-    {
-      rgba = self->rgba_removed_set ? &self->rgba_removed : &rgbaRemoved;
-      gdk_cairo_set_source_rgba (cr, rgba);
-
-#ifdef ARROW_TOWARDS_GUTTER
-      cairo_move_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y);
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y + (DELETE_HEIGHT / 2));
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width - DELETE_WIDTH,
-                     cell_area->y);
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y);
-#else
-      cairo_move_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y);
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width - DELETE_WIDTH,
-                     cell_area->y);
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width - DELETE_WIDTH,
-                     cell_area->y + (DELETE_HEIGHT / 2));
-      cairo_line_to (cr,
-                     cell_area->x + cell_area->width,
-                     cell_area->y);
-#endif
-
-      cairo_fill (cr);
-    }
-
-  *cell_area = cell_area_copy;
 }
 
 static void
 ide_line_change_gutter_renderer_dispose (GObject *object)
 {
+  IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)object;
+
   disconnect_view (IDE_LINE_CHANGE_GUTTER_RENDERER (object));
 
+  g_clear_pointer (&self->lines, g_array_unref);
+
   G_OBJECT_CLASS (ide_line_change_gutter_renderer_parent_class)->dispose (object);
-}
-
-static void
-ide_line_change_gutter_renderer_get_property (GObject    *object,
-                                              guint       prop_id,
-                                              GValue     *value,
-                                              GParamSpec *pspec)
-{
-  IdeLineChangeGutterRenderer *self = IDE_LINE_CHANGE_GUTTER_RENDERER(object);
-
-  switch (prop_id)
-    {
-    case PROP_SHOW_LINE_DELETIONS:
-      g_value_set_boolean (value, self->show_line_deletions);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-    }
-}
-
-static void
-ide_line_change_gutter_renderer_set_property (GObject      *object,
-                                              guint         prop_id,
-                                              const GValue *value,
-                                              GParamSpec   *pspec)
-{
-  IdeLineChangeGutterRenderer *self = IDE_LINE_CHANGE_GUTTER_RENDERER(object);
-
-  switch (prop_id)
-    {
-    case PROP_SHOW_LINE_DELETIONS:
-      self->show_line_deletions = g_value_get_boolean (value);
-      gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-    }
 }
 
 static void
@@ -439,23 +428,10 @@ ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *kl
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_line_change_gutter_renderer_dispose;
-  object_class->get_property = ide_line_change_gutter_renderer_get_property;
-  object_class->set_property = ide_line_change_gutter_renderer_set_property;
 
+  renderer_class->end = ide_line_change_gutter_renderer_end;
+  renderer_class->begin = ide_line_change_gutter_renderer_begin;
   renderer_class->draw = ide_line_change_gutter_renderer_draw;
-
-  properties [PROP_SHOW_LINE_DELETIONS] =
-    g_param_spec_boolean ("show-line-deletions",
-                          "Show Line Deletions",
-                          "If the deletion mark should be shown for deleted lines",
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
-
-  gdk_rgba_parse (&rgbaAdded, "#8ae234");
-  gdk_rgba_parse (&rgbaChanged, "#fcaf3e");
-  gdk_rgba_parse (&rgbaRemoved, "#ff0000");
 }
 
 static void

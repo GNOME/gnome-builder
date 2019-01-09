@@ -1,10 +1,13 @@
 [Plugin]
+Authors=Alberto Fanjul Alonso <albfan@gnome.org>
+Builtin=true
+Copyright=Copyright © 2018 Alberto Fanjul Alonso
+Description=Provides integration with the Maven build tool
+Depends=editor;buildui;
+Hidden=true
+Loader=python3
 Module=maven_plugin
 Name=Maven
-Loader=python3
-Description=Provides integration with the Maven build tool
-Authors=Alberto Fanjul Alonso <albfan@gnome.org>
-Copyright=Copyright © 2018 Alberto Fanjul Alonso
-Builtin=true
-X-Project-File-Filter-Pattern=pom.xml
+X-Builder-ABI=@PACKAGE_ABI@
 X-Project-File-Filter-Name=Maven (pom.xml)
+X-Project-File-Filter-Pattern=pom.xml

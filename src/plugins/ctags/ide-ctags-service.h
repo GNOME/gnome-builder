@@ -1,6 +1,6 @@
 /* ide-ctags-service.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
-#include <ide.h>
+#include <libide-sourceview.h>
 
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-highlighter.h"
@@ -30,15 +31,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsService, ide_ctags_service, IDE, CTAGS_SERVICE, IdeObject)
 
-void ide_ctags_service_register_highlighter   (IdeCtagsService            *self,
-                                               IdeCtagsHighlighter        *highlighter);
-void ide_ctags_service_unregister_highlighter (IdeCtagsService            *self,
-                                               IdeCtagsHighlighter        *highlighter);
-void ide_ctags_service_register_completion    (IdeCtagsService            *self,
-                                               IdeCtagsCompletionProvider *completion);
-void ide_ctags_service_unregister_completion  (IdeCtagsService            *self,
-                                               IdeCtagsCompletionProvider *completion);
-
-GPtrArray *ide_ctags_service_get_indexes (IdeCtagsService *self);
+void       ide_ctags_service_register_highlighter   (IdeCtagsService            *self,
+                                                     IdeCtagsHighlighter        *highlighter);
+void       ide_ctags_service_unregister_highlighter (IdeCtagsService            *self,
+                                                     IdeCtagsHighlighter        *highlighter);
+void       ide_ctags_service_register_completion    (IdeCtagsService            *self,
+                                                     IdeCtagsCompletionProvider *completion);
+void       ide_ctags_service_unregister_completion  (IdeCtagsService            *self,
+                                                     IdeCtagsCompletionProvider *completion);
+void       ide_ctags_service_pause                  (IdeCtagsService            *self);
+void       ide_ctags_service_unpause                (IdeCtagsService            *self);
+GPtrArray *ide_ctags_service_get_indexes            (IdeCtagsService            *self);
 
 G_END_DECLS

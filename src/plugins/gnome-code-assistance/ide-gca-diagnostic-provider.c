@@ -1,6 +1,6 @@
 /* ide-gca-diagnostic-provider.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-gca-diagnostic-provider"
@@ -36,7 +38,7 @@ typedef struct
 {
   IdeTask        *task; /* Integrity check backpointer */
   IdeUnsavedFile *unsaved_file;
-  IdeFile        *file;
+  GFile          *file;
   gchar          *language_id;
 } DiagnoseState;
 
@@ -105,7 +107,7 @@ variant_to_diagnostics (DiagnoseState *state,
 
   g_assert (variant);
 
-  ar = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_diagnostic_unref);
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
 
   g_variant_iter_init (&iter, variant);
 
@@ -143,10 +145,9 @@ variant_to_diagnostics (DiagnoseState *state,
 
       while (g_variant_iter_next (c, "(x(xx)(xx))", &x1, &x2, &x3, &x4, &x5))
         {
-          IdeSourceRange *range;
-          IdeSourceLocation *begin;
-          IdeSourceLocation *end;
-          IdeFile *file = NULL;
+          g_autoptr(IdeRange) range = NULL;
+          g_autoptr(IdeLocation) begin = NULL;
+          g_autoptr(IdeLocation) end = NULL;
 
           /*
            * FIXME:
@@ -154,22 +155,18 @@ variant_to_diagnostics (DiagnoseState *state,
            * Not always true, but we can cheat for now and claim it is within
            * the file we just parsed.
            */
-          file = state->file;
 
-          begin = ide_source_location_new (file, x2 - 1, x3 - 1, 0);
-          end = ide_source_location_new (file, x4 - 1, x5 - 1, 0);
+          begin = ide_location_new (state->file, x2 - 1, x3 - 1);
+          end = ide_location_new (state->file, x4 - 1, x5 - 1);
 
-          range = ide_source_range_new (begin, end);
-          ide_diagnostic_take_range (diag, range);
-
-          ide_source_location_unref (begin);
-          ide_source_location_unref (end);
+          range = ide_range_new (begin, end);
+          ide_diagnostic_take_range (diag, g_steal_pointer (&range));
         }
 
       g_ptr_array_add (ar, g_steal_pointer (&diag));
     }
 
-  return ide_diagnostics_new (IDE_PTR_ARRAY_STEAL_FULL (&ar));
+  return ide_diagnostics_new_from_array (ar);
 }
 
 static void
@@ -201,8 +198,7 @@ diagnostics_cb (GObject      *object,
 
   diagnostics = variant_to_diagnostics (state, var);
 
-  ide_task_return_pointer (task, diagnostics,
-                           (GDestroyNotify)ide_diagnostics_unref);
+  ide_task_return_pointer (task, diagnostics, g_object_unref);
 
   IDE_EXIT;
 }
@@ -272,8 +268,9 @@ parse_cb (GObject      *object,
     {
       if (g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SERVICE_UNKNOWN))
         {
-          ide_task_return_pointer (task, ide_diagnostics_new (NULL),
-                                   (GDestroyNotify)ide_diagnostics_unref);
+          ide_task_return_pointer (task,
+                                   ide_diagnostics_new (),
+                                   g_object_unref);
         }
       else
         {
@@ -345,7 +342,6 @@ get_proxy_cb (GObject      *object,
   const gchar *temp_path;
   GcaService *proxy;
   GVariant *cursor = NULL;
-  GFile *gfile;
 
   IDE_ENTRY;
 
@@ -363,8 +359,7 @@ get_proxy_cb (GObject      *object,
       IDE_GOTO (cleanup);
     }
 
-  gfile = ide_file_get_file (state->file);
-  temp_path = path = g_file_get_path (gfile);
+  temp_path = path = g_file_get_path (state->file);
 
   if (!path)
     {
@@ -409,8 +404,9 @@ cleanup:
 
 static void
 ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
-                                            IdeFile               *file,
-                                            IdeBuffer             *buffer,
+                                            GFile                 *file,
+                                            GBytes                *contents,
+                                            const gchar           *language_id,
                                             GCancellable          *cancellable,
                                             GAsyncReadyCallback    callback,
                                             gpointer               user_data)
@@ -419,22 +415,15 @@ ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   g_autoptr(IdeTask) task = NULL;
   IdeGcaService *service;
   DiagnoseState *state;
-  GtkSourceLanguage *language;
-  IdeContext *context;
   IdeUnsavedFiles *files;
-  const gchar *language_id = NULL;
-  GFile *gfile;
+  IdeContext *context;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_GCA_DIAGNOSTIC_PROVIDER (self));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-
-  language = ide_file_get_language (file);
-
-  if (language != NULL)
-    language_id = gtk_source_language_get_id (language);
+  ide_task_set_source_tag (task, ide_gca_diagnostic_provider_diagnose_async);
 
   if (language_id == NULL)
     {
@@ -446,20 +435,22 @@ ide_gca_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
     }
 
   context = ide_object_get_context (IDE_OBJECT (provider));
-  service = ide_context_get_service_typed (context, IDE_TYPE_GCA_SERVICE);
-  files = ide_context_get_unsaved_files (context);
-  gfile = ide_file_get_file (file);
+  service = ide_gca_service_from_context (context);
+  files = ide_unsaved_files_from_context (context);
 
   state = g_slice_new0 (DiagnoseState);
   state->task = task;
   state->language_id = g_strdup (language_id);
   state->file = g_object_ref (file);
-  state->unsaved_file = ide_unsaved_files_get_unsaved_file (files, gfile);
+  state->unsaved_file = ide_unsaved_files_get_unsaved_file (files, file);
 
   ide_task_set_task_data (task, state, diagnose_state_free);
 
-  ide_gca_service_get_proxy_async (service, language_id, cancellable,
-                                   get_proxy_cb, g_object_ref (task));
+  ide_gca_service_get_proxy_async (service,
+                                   language_id,
+                                   cancellable,
+                                   get_proxy_cb,
+                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }

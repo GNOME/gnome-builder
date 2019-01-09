@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
@@ -24,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_CLONE_WIDGET (gbp_flatpak_clone_widget_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakCloneWidget, gbp_flatpak_clone_widget, GBP, FLATPAK_CLONE_WIDGET, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpFlatpakCloneWidget, gbp_flatpak_clone_widget, GBP, FLATPAK_CLONE_WIDGET, IdeSurface)
 
 void     gbp_flatpak_clone_widget_clone_async  (GbpFlatpakCloneWidget *self,
                                                 GCancellable          *cancellable,

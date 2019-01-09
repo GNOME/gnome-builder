@@ -1,6 +1,6 @@
 /* gbp-symbol-tree-builder.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-symbol-tree-builder"
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-editor.h>
+#include <libide-gui.h>
 
 #include "gbp-symbol-tree-builder.h"
 
@@ -93,10 +96,10 @@ gbp_symbol_tree_builder_get_location_cb (GObject      *object,
 {
   IdeSymbolNode *node = (IdeSymbolNode *)object;
   g_autoptr(GbpSymbolTreeBuilder) self = user_data;
-  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(IdeLocation) location = NULL;
   g_autoptr(GError) error = NULL;
-  IdePerspective *editor;
-  IdeWorkbench *workbench;
+  IdeSurface *editor;
+  IdeWorkspace *workspace;
   DzlTree *tree;
 
   IDE_ENTRY;
@@ -115,10 +118,10 @@ gbp_symbol_tree_builder_get_location_cb (GObject      *object,
     }
 
   tree = dzl_tree_builder_get_tree (DZL_TREE_BUILDER (self));
-  workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
-  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+  workspace = ide_widget_get_workspace (GTK_WIDGET (tree));
+  editor = ide_workspace_get_surface_by_name (workspace, "editor");
 
-  ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
+  ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (editor), location);
 
   IDE_EXIT;
 }

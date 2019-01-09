@@ -4,7 +4,7 @@
 # jedi_plugin.py
 #
 # Copyright 2015 Elad Alfassa <elad@fedoraproject.org>
-# Copyright 2015 Christian Hergert <chris@dronelabs.com>
+# Copyright 2015-2019 Christian Hergert <chris@dronelabs.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,11 +34,6 @@ import os
 import os.path
 import sqlite3
 import threading
-
-gi.require_version('GIRepository', '2.0')
-gi.require_version('Gtk', '3.0')
-gi.require_version('GtkSource', '4')
-gi.require_version('Ide', '1.0')
 
 from collections import OrderedDict
 
@@ -484,7 +479,7 @@ class JediCompletionProvider(Ide.Object, Ide.CompletionProvider):
 
         begin, end = buffer.get_bounds()
 
-        task.filename = buffer.get_file().get_file().get_path()
+        task.filename = buffer.get_file().get_path()
         task.line = iter.get_line()
         task.line_offset = iter.get_line_offset()
         #if task.line_offset > 0:

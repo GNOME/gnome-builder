@@ -1,6 +1,6 @@
 /* ide-ctags-symbol-resolver.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-ctags-symbol-resolver"
 
 #include <errno.h>
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-code.h>
 
 #include "ide-ctags-service.h"
 #include "ide-ctags-symbol-node.h"
@@ -72,18 +74,15 @@ create_symbol (IdeCtagsSymbolResolver   *self,
                gint                      line_offset,
                gint                      offset)
 {
-  g_autoptr(IdeSourceLocation) loc = NULL;
+  g_autoptr(IdeLocation) loc = NULL;
   g_autoptr(GFile) gfile = NULL;
-  g_autoptr(IdeFile) file = NULL;
-  IdeContext *context;
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   gfile = g_file_new_for_path (entry->path);
-  file = ide_file_new (context, gfile);
-  loc = ide_source_location_new (file, line, line_offset, offset);
+  loc = ide_location_new (gfile, line, line_offset);
 
-  return ide_symbol_new (entry->name, ide_ctags_index_entry_kind_to_symbol_kind (entry->kind), 0, loc, loc, loc);
-
+  return ide_symbol_new (entry->name,
+                         ide_ctags_index_entry_kind_to_symbol_kind (entry->kind),
+                         0, loc, loc);
 }
 
 static gboolean
@@ -243,7 +242,7 @@ regex_worker (IdeTask      *task,
           symbol = create_symbol (self, lookup->entry, line, line_offset, begin);
           ide_task_return_pointer (task,
                                    g_steal_pointer (&symbol),
-                                   (GDestroyNotify)ide_symbol_unref);
+                                   (GDestroyNotify)g_object_unref);
 
           return;
         }
@@ -270,19 +269,18 @@ is_linenum (const gchar *pattern)
 
 static void
 ide_ctags_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
-                                               IdeSourceLocation   *location,
+                                               IdeLocation   *location,
                                                GCancellable        *cancellable,
                                                GAsyncReadyCallback  callback,
                                                gpointer             user_data)
 {
   IdeCtagsSymbolResolver *self = (IdeCtagsSymbolResolver *)resolver;
+  g_autoptr(IdeCtagsService) service = NULL;
   IdeContext *context;
   IdeBufferManager *bufmgr;
-  IdeCtagsService *service;
   g_autofree gchar *keyword = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) indexes = NULL;
-  IdeFile *ifile;
   const gchar * const *allowed;
   const gchar *lang_id = NULL;
   GtkSourceLanguage *language;
@@ -299,16 +297,23 @@ ide_ctags_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
 
   task = ide_task_new (self, cancellable, callback, user_data);
 
-  ifile = ide_source_location_get_file (location);
-  file = ide_file_get_file (ifile);
-  line = ide_source_location_get_line (location);
-  line_offset = ide_source_location_get_line_offset (location);
+  file = ide_location_get_file (location);
+  line = ide_location_get_line (location);
+  line_offset = ide_location_get_line_offset (location);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
+  if (!(context = ide_object_get_context (IDE_OBJECT (self))) ||
+      !(service = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_CTAGS_SERVICE)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Service is not loaded. Likely no project was loaded");
+      return;
+    }
+
   indexes = ide_ctags_service_get_indexes (service);
 
-  bufmgr = ide_context_get_buffer_manager (context);
+  bufmgr = ide_buffer_manager_from_context (context);
   buffer = ide_buffer_manager_find_buffer (bufmgr, file);
 
   if (!buffer)
@@ -397,7 +402,7 @@ ide_ctags_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
               symbol = create_symbol (self, entry, parsed, 0, 0);
               ide_task_return_pointer (task,
                                        g_steal_pointer (&symbol),
-                                       (GDestroyNotify)ide_symbol_unref);
+                                       (GDestroyNotify)g_object_unref);
               return;
             }
         }
@@ -639,7 +644,7 @@ ide_ctags_symbol_resolver_get_symbol_tree_worker (IdeTask      *task,
 static void
 ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                  GFile               *file,
-                                                 IdeBuffer           *buffer,
+                                                 GBytes              *contents,
                                                  GCancellable        *cancellable,
                                                  GAsyncReadyCallback  callback,
                                                  gpointer             user_data)
@@ -648,7 +653,7 @@ ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   TreeResolverState *state;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) indexes = NULL;
-  IdeCtagsService *service;
+  g_autoptr(IdeCtagsService) service = NULL;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -660,8 +665,16 @@ ide_ctags_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_ctags_symbol_resolver_get_symbol_tree_async);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
+  if (!(context = ide_object_get_context (IDE_OBJECT (self))) ||
+      !(service = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_CTAGS_SERVICE)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "No ctags service is loaded, likely no project was loaded");
+      return;
+    }
+
   indexes = ide_ctags_service_get_indexes (service);
 
   if (indexes == NULL || indexes->len == 0)
@@ -754,7 +767,7 @@ ide_ctags_symbol_resolver_get_location_async (IdeCtagsSymbolResolver   *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  bufmgr = ide_context_get_buffer_manager (context);
+  bufmgr = ide_buffer_manager_from_context (context);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_ctags_symbol_resolver_get_location_async);
@@ -772,7 +785,7 @@ ide_ctags_symbol_resolver_get_location_async (IdeCtagsSymbolResolver   *self,
       symbol = create_symbol (self, entry, parsed, 0, 0);
       ide_task_return_pointer (task,
                                g_steal_pointer (&symbol),
-                               (GDestroyNotify)ide_symbol_unref);
+                               (GDestroyNotify)g_object_unref);
 
       IDE_EXIT;
     }
@@ -816,13 +829,13 @@ not_a_number:
   IDE_EXIT;
 }
 
-IdeSourceLocation *
+IdeLocation *
 ide_ctags_symbol_resolver_get_location_finish (IdeCtagsSymbolResolver  *self,
                                                GAsyncResult            *result,
                                                GError                 **error)
 {
   g_autoptr(IdeSymbol) symbol = NULL;
-  IdeSourceLocation *ret = NULL;
+  IdeLocation *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_CTAGS_SYMBOL_RESOLVER (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
@@ -831,8 +844,8 @@ ide_ctags_symbol_resolver_get_location_finish (IdeCtagsSymbolResolver  *self,
 
   if (symbol != NULL)
     {
-      if ((ret = ide_symbol_get_declaration_location (symbol)))
-        ide_source_location_ref (ret);
+      if ((ret = ide_symbol_get_location (symbol)))
+        g_object_ref (ret);
       else
         g_set_error (error,
                      G_IO_ERROR,

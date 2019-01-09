@@ -1,6 +1,6 @@
 /* gbp-flatpak-application-addin.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
 #include <flatpak.h>
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
@@ -46,7 +48,7 @@ void                        gbp_flatpak_application_addin_install_runtime_async 
                                                                                   const gchar                 *arch,
                                                                                   const gchar                 *branch,
                                                                                   GCancellable                *cancellable,
-                                                                                  IdeProgress                **progress,
+                                                                                  IdeNotification            **progress,
                                                                                   GAsyncReadyCallback          callback,
                                                                                   gpointer                     user_data);
 gboolean                    gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin  *self,

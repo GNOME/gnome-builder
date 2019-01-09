@@ -1,11 +1,11 @@
-if get_option('with_go_langserv')
+if get_option('plugin_go_langserv')
 
 install_data('go_langserver_plugin.py', install_dir: plugindir)
 
 configure_file(
           input: 'go-langserv.plugin',
          output: 'go-langserv.plugin',
-           copy: true,
+  configuration: config_h,
         install: true,
     install_dir: plugindir,
 )

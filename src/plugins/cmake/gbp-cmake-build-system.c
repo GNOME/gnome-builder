@@ -1,6 +1,6 @@
 /* gbp-cmake-build-system.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  * Copyright 2017 Martin Blanchard <tchaik@gmx.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "gbp-cmake-build-system"
@@ -130,10 +132,11 @@ gbp_cmake_build_system_ensure_config_async (GbpCMakeBuildSystem *self,
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
 
   ide_build_manager_execute_async (build_manager,
                                    IDE_BUILD_PHASE_CONFIGURE,
+                                   NULL,
                                    cancellable,
                                    gbp_cmake_build_system_ensure_config_cb,
                                    g_steal_pointer (&task));
@@ -205,7 +208,7 @@ gbp_cmake_build_system_load_commands_config_cb (GObject      *object,
     }
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
   if (pipeline == NULL)
@@ -282,7 +285,7 @@ gbp_cmake_build_system_load_commands_async (GbpCMakeBuildSystem *self,
    */
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
   if (pipeline != NULL)
@@ -461,9 +464,9 @@ gbp_cmake_build_system_get_build_flags_cb (GObject      *object,
 
   /* Get non-standard system includes */
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_context_get_configuration_manager (context);
+  config_manager = ide_configuration_manager_from_context (context);
   config = ide_configuration_manager_get_current (config_manager);
-  if (NULL != (runtime = ide_configuration_get_runtime (config)))
+  if ((runtime = ide_configuration_get_runtime (config)))
     system_includes = ide_runtime_get_system_include_dirs (runtime);
 
   build_flags = ide_compile_commands_lookup (compile_commands,
@@ -480,27 +483,24 @@ gbp_cmake_build_system_get_build_flags_cb (GObject      *object,
 
 static void
 gbp_cmake_build_system_get_build_flags_async (IdeBuildSystem      *build_system,
-                                              IdeFile             *file,
+                                              GFile               *file,
                                               GCancellable        *cancellable,
                                               GAsyncReadyCallback  callback,
                                               gpointer             user_data)
 {
   GbpCMakeBuildSystem *self = (GbpCMakeBuildSystem *)build_system;
   g_autoptr(IdeTask) task = NULL;
-  GFile *gfile;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_CMAKE_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_FILE (file));
+  g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  gfile = ide_file_get_file (file);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, gbp_cmake_build_system_get_build_flags_async);
-  ide_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   gbp_cmake_build_system_load_commands_async (self,
                                               cancellable,
@@ -574,7 +574,7 @@ gbp_cmake_build_system_init_worker (IdeTask      *task,
 
   name = g_file_get_basename (project_file);
 
-  if (dzl_str_equal0 (name, "CMakeLists.txt"))
+  if (ide_str_equal0 (name, "CMakeLists.txt"))
     {
       ide_task_return_pointer (task, g_object_ref (project_file), g_object_unref);
       IDE_EXIT;
@@ -621,7 +621,7 @@ gbp_cmake_build_system_init_async (GAsyncInitable      *initable,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   task = ide_task_new (self, cancellable, callback, user_data);

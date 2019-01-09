@@ -16,11 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef G_DISABLE_ASSERT
-# undef G_DISABLE_ASSERT
-#endif
-
-#include <ide.h>
+#include <libide-io.h>
 #include <string.h>
 
 static void

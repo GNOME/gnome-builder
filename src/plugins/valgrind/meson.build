@@ -1,20 +1,19 @@
-if get_option('with_valgrind')
-
-install_data('valgrind_plugin.py', install_dir: plugindir)
+if get_option('plugin_valgrind')
 
 valgrind_resources = gnome.compile_resources(
   'valgrind_plugin',
-  'valgrind-plugin.gresource.xml',
-
+  'valgrind.gresource.xml',
   gresource_bundle: true,
            install: true,
        install_dir: plugindir,
 )
 
+install_data('valgrind_plugin.py', install_dir: plugindir)
+
 configure_file(
           input: 'valgrind.plugin',
          output: 'valgrind.plugin',
-           copy: true,
+  configuration: config_h,
         install: true,
     install_dir: plugindir,
 )

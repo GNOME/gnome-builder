@@ -1,6 +1,6 @@
 /* ide-autotools-makecache-stage.c
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-autotools-makecache-stage"
@@ -59,7 +61,9 @@ ide_autotools_makecache_stage_makecache_cb (GObject      *object,
   self = ide_task_get_source_object (task);
   g_assert (IDE_IS_AUTOTOOLS_MAKECACHE_STAGE (self));
 
-  g_clear_object (&self->makecache);
+  ide_clear_and_destroy_object (&self->makecache);
+  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (makecache));
+
   self->makecache = g_steal_pointer (&makecache);
 
   ide_task_return_boolean (task, TRUE);
@@ -205,13 +209,11 @@ ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline  *pipeline,
   const gchar *make = "make";
   IdeConfiguration *config;
   IdeRuntime *runtime;
-  IdeContext *context;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_BUILD_PIPELINE (pipeline), NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (pipeline));
   config = ide_build_pipeline_get_configuration (pipeline);
   runtime = ide_configuration_get_runtime (config);
 
@@ -229,7 +231,6 @@ ide_autotools_makecache_stage_new_for_pipeline (IdeBuildPipeline  *pipeline,
   ide_subprocess_launcher_push_argv (launcher, "-s");
 
   stage = g_object_new (IDE_TYPE_AUTOTOOLS_MAKECACHE_STAGE,
-                        "context", context,
                         "launcher", launcher,
                         "ignore-exit-status", TRUE,
                         NULL);

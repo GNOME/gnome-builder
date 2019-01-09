@@ -1,6 +1,6 @@
 /* ide-clang-util.h
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-code.h>
 
 #include "ide-clang-autocleanups.h"
 
@@ -30,50 +32,50 @@ ide_clang_translate_kind (enum CXCursorKind cursor_kind)
   switch ((int)cursor_kind)
     {
     case CXCursor_StructDecl:
-      return IDE_SYMBOL_STRUCT;
+      return IDE_SYMBOL_KIND_STRUCT;
 
     case CXCursor_UnionDecl:
-      return IDE_SYMBOL_UNION;
+      return IDE_SYMBOL_KIND_UNION;
 
     case CXCursor_ClassDecl:
-      return IDE_SYMBOL_CLASS;
+      return IDE_SYMBOL_KIND_CLASS;
 
     case CXCursor_EnumDecl:
-      return IDE_SYMBOL_ENUM;
+      return IDE_SYMBOL_KIND_ENUM;
 
     case CXCursor_FieldDecl:
-      return IDE_SYMBOL_FIELD;
+      return IDE_SYMBOL_KIND_FIELD;
 
     case CXCursor_EnumConstantDecl:
-      return IDE_SYMBOL_ENUM_VALUE;
+      return IDE_SYMBOL_KIND_ENUM_VALUE;
 
     case CXCursor_FunctionDecl:
-      return IDE_SYMBOL_FUNCTION;
+      return IDE_SYMBOL_KIND_FUNCTION;
 
     case CXCursor_CXXMethod:
-      return IDE_SYMBOL_METHOD;
+      return IDE_SYMBOL_KIND_METHOD;
 
     case CXCursor_VarDecl:
     case CXCursor_ParmDecl:
-      return IDE_SYMBOL_VARIABLE;
+      return IDE_SYMBOL_KIND_VARIABLE;
 
     case CXCursor_TypedefDecl:
     case CXCursor_NamespaceAlias:
     case CXCursor_TypeAliasDecl:
-      return IDE_SYMBOL_ALIAS;
+      return IDE_SYMBOL_KIND_ALIAS;
 
     case CXCursor_Namespace:
-      return IDE_SYMBOL_NAMESPACE;
+      return IDE_SYMBOL_KIND_NAMESPACE;
 
     case CXCursor_FunctionTemplate:
     case CXCursor_ClassTemplate:
-      return IDE_SYMBOL_TEMPLATE;
+      return IDE_SYMBOL_KIND_TEMPLATE;
 
     case CXCursor_MacroDefinition:
-      return IDE_SYMBOL_MACRO;
+      return IDE_SYMBOL_KIND_MACRO;
 
     default:
-      return IDE_SYMBOL_NONE;
+      return IDE_SYMBOL_KIND_NONE;
     }
 }
 

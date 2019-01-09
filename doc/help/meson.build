@@ -1,4 +1,4 @@
-if get_option('with_help')
+if get_option('help')
 
 sphinx = find_program(['sphinx-build-3', 'sphinx-build'], required: true)
 

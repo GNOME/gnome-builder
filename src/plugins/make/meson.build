@@ -1,4 +1,4 @@
-if get_option('with_make')
+if get_option('plugin_make')
 
 make_resources = gnome.compile_resources(
   'make_plugin',
@@ -13,7 +13,7 @@ install_data('make_plugin.py', install_dir: plugindir)
 configure_file(
           input: 'make.plugin',
          output: 'make.plugin',
-           copy: true,
+  configuration: config_h,
         install: true,
     install_dir: plugindir,
 )

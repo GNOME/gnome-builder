@@ -1,6 +1,6 @@
 /* ide-vcs-uri.c
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,17 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-vcs-uri"
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "vcs/ide-vcs-uri.h"
+#include "ide-vcs-uri.h"
 
 G_DEFINE_BOXED_TYPE (IdeVcsUri, ide_vcs_uri, ide_vcs_uri_ref, ide_vcs_uri_unref)
 
@@ -154,7 +155,7 @@ ide_vcs_uri_parse (IdeVcsUri   *self,
           g_free (tmp);
         }
 
-      if (!dzl_str_empty0 (portstr) && g_ascii_isdigit (portstr [1]))
+      if (!ide_str_empty0 (portstr) && g_ascii_isdigit (portstr [1]))
         port = CLAMP (atoi (&portstr [1]), 1, G_MAXINT16);
 
       ide_vcs_uri_set_scheme (self, scheme);
@@ -218,7 +219,7 @@ ide_vcs_uri_new (const gchar *uri)
 {
   IdeVcsUri *self;
 
-  self = g_new0 (IdeVcsUri, 1);
+  self = g_slice_new0 (IdeVcsUri);
   self->ref_count = 1;
 
   if (ide_vcs_uri_parse (self, uri) && ide_vcs_uri_validate (self))
@@ -227,7 +228,7 @@ ide_vcs_uri_new (const gchar *uri)
       return self;
     }
 
-  g_free (self);
+  ide_vcs_uri_unref (self);
 
   return NULL;
 }
@@ -240,7 +241,7 @@ ide_vcs_uri_finalize (IdeVcsUri *self)
   g_free (self->user);
   g_free (self->host);
   g_free (self->path);
-  g_free (self);
+  g_slice_free (IdeVcsUri, self);
 }
 
 IdeVcsUri *
@@ -310,7 +311,7 @@ ide_vcs_uri_set_scheme (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
-  if (dzl_str_empty0 (scheme))
+  if (ide_str_empty0 (scheme))
     scheme = NULL;
 
   if (scheme != self->scheme)
@@ -334,7 +335,7 @@ ide_vcs_uri_set_user (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
-  if (dzl_str_empty0 (user))
+  if (ide_str_empty0 (user))
     user = NULL;
 
   if (user != self->user)
@@ -358,7 +359,7 @@ ide_vcs_uri_set_host (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
-  if (dzl_str_empty0 (host))
+  if (ide_str_empty0 (host))
     host = NULL;
 
   if (host != self->host)
@@ -388,7 +389,7 @@ ide_vcs_uri_set_path (IdeVcsUri   *self,
 {
   g_return_if_fail (self);
 
-  if (dzl_str_empty0 (path))
+  if (ide_str_empty0 (path))
     path = NULL;
 
   if (path != self->path)
@@ -457,4 +458,44 @@ ide_vcs_uri_is_valid (const gchar *uri_string)
     }
 
   return ret;
+}
+
+/**
+ * ide_vcs_uri_get_clone_name:
+ * @self: an #ideVcsUri
+ *
+ * Determines a suggested name for the checkout directory. Some special
+ * handling of suffixes such as ".git" are performed to improve the the
+ * quality of results.
+ *
+ * Returns: (transfer full) (nullable): a string containing the suggested
+ *   clone directory name, or %NULL.
+ *
+ * Since: 3.32
+ */
+gchar *
+ide_vcs_uri_get_clone_name (const IdeVcsUri *self)
+{
+  g_autofree gchar *name = NULL;
+  const gchar *path;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  if (!(path = ide_vcs_uri_get_path (self)))
+    return NULL;
+
+  if (ide_str_empty0 (path))
+    return NULL;
+
+  if (!(name = g_path_get_basename (path)))
+    return NULL;
+
+  /* Trim trailing ".git" */
+  if (g_str_has_suffix (name, ".git"))
+    *(strrchr (name, '.')) = '\0';
+
+  if (!g_str_equal (name, "/") && !g_str_equal (name, "~"))
+    return g_steal_pointer (&name);
+
+  return NULL;
 }

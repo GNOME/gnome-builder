@@ -1,7 +1,7 @@
 /* ide-clang-code-index-entries.c
  *
  * Copyright 2017 Anoop Chandu <anoopchandu96@gmail.com>
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-clang-code-index-entries"
@@ -105,7 +107,7 @@ ide_clang_code_index_entries_worker (IdeTask      *task,
                                  &begin.line, &begin.column,
                                  &end.line, &end.column);
 
-          if (dzl_str_empty0 (key))
+          if (ide_str_empty0 (key))
             key = NULL;
 
           ide_code_index_entry_builder_set_name (builder, name);

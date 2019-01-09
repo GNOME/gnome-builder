@@ -33,30 +33,33 @@ _ATTRIBUTES = ",".join([
     Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON,
 ])
 
-class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
+class FindOtherFile(GObject.Object, Ide.WorkspaceAddin):
     context = None
+    workspace = None
     workbench = None
 
-    def do_load(self, workbench):
-        self.workbench = workbench
-        self.context = workbench.get_context()
+    def do_load(self, workspace):
+        self.workspace = workspace
+        self.workbench = Ide.widget_get_workbench(workspace)
+        self.context = self.workbench.get_context()
 
         action = Gio.SimpleAction.new('find-other-file', None)
         action.connect('activate', self.on_activate)
-        self.workbench.add_action(action)
+        self.workspace.add_action(action)
 
-    def do_unload(self, workbench):
+    def do_unload(self, workspace):
         self.workbench = None
+        self.workspace = None
         self.context = None
 
     def on_activate(self, *args):
-        editor = self.workbench.get_perspective_by_name('editor')
-        view = editor.get_active_view()
-        if type(view) is not Ide.EditorView:
+        editor = self.workspace.get_surface_by_name('editor')
+        page = editor.get_active_page()
+        if type(page) is not Ide.EditorPage:
             return
 
-        buffer = view.get_buffer()
-        file = buffer.get_file().get_file()
+        buffer = page.get_buffer()
+        file = buffer.get_file()
         parent = file.get_parent()
 
         basename = file.get_basename()
@@ -85,9 +88,8 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
                     display_name = info.get_attribute_string(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
                     icon = info.get_attribute_object(Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON)
                     icon_name = icon.to_string() if icon else None
-                    gfile = parent.get_child(name)
-                    ifile = Ide.File.new(self.context, gfile)
-                    result = OtherFileSearchResult(file=ifile, icon_name=icon_name, title=display_name)
+                    file = parent.get_child(name)
+                    result = OtherFileSearchResult(file=file, icon_name=icon_name, title=display_name)
                     files.append(result)
 
                 info = enumerator.next_file(None)
@@ -97,8 +99,8 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
             count = files.get_n_items()
 
             if count == 1:
-                file = files.get_item(0).file.get_file()
-                self.workbench.open_files_async([file], 'editor', 0, None, None)
+                file = files.get_item(0).file
+                self.workbench.open_async(file, 'editor', 0, None, None)
             elif count:
                 self.present_results(files, basename)
 
@@ -107,7 +109,7 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
             return
 
     def present_results(self, results, name):
-        headerbar = self.workbench.get_headerbar()
+        headerbar = self.workspace.get_header_bar()
         search = Dazzle.gtk_widget_find_child_typed(headerbar, Ide.SearchEntry)
         search.set_text('')
         search.set_model(results)
@@ -116,7 +118,10 @@ class FindOtherFile(GObject.Object, Ide.WorkbenchAddin):
 
 
 class OtherFileSearchResult(Ide.SearchResult):
-    file = GObject.Property(type=Ide.File)
+    file = GObject.Property(type=Gio.File)
 
-    def do_get_source_location(self):
-        return Ide.SourceLocation.new(self.file, 0, 0, 0)
+    def do_activate(self, last_focus):
+        workspace = Ide.widget_get_workspace(last_focus)
+        editor = workspace.get_surface_by_name('editor')
+        loc = Ide.Location.new(self.file, -1, -1)
+        editor.focus_location(loc)

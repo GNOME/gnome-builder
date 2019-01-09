@@ -1,6 +1,6 @@
 /* ide-search-engine.c
  *
- * Copyright 2015-2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-search-engine"
@@ -21,12 +23,12 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+#include <libide-core.h>
+#include <libide-threading.h>
 
-#include "search/ide-search-engine.h"
-#include "search/ide-search-provider.h"
-#include "search/ide-search-result.h"
-#include "threading/ide-task.h"
-#include "util/ide-glib.h"
+#include "ide-search-engine.h"
+#include "ide-search-provider.h"
+#include "ide-search-result.h"
 
 #define DEFAULT_MAX_RESULTS 50
 
@@ -80,31 +82,65 @@ request_destroy (Request *r)
 }
 
 static void
-ide_search_engine_constructed (GObject *object)
+on_extension_added_cb (PeasExtensionSet *set,
+                       PeasPluginInfo   *plugin_info,
+                       PeasExtension    *exten,
+                       gpointer          user_data)
 {
-  IdeSearchEngine *self = (IdeSearchEngine *)object;
-  IdeContext *context;
-
-  g_assert (IDE_IS_SEARCH_ENGINE (self));
-
-  G_OBJECT_CLASS (ide_search_engine_parent_class)->constructed (object);
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  self->extensions = peas_extension_set_new (peas_engine_get_default (),
-                                             IDE_TYPE_SEARCH_PROVIDER,
-                                             "context", context,
-                                             NULL);
+  ide_object_append (IDE_OBJECT (user_data), IDE_OBJECT (exten));
 }
 
 static void
-ide_search_engine_dispose (GObject *object)
+on_extension_removed_cb (PeasExtensionSet *set,
+                         PeasPluginInfo   *plugin_info,
+                         PeasExtension    *exten,
+                         gpointer          user_data)
+{
+  ide_object_remove (IDE_OBJECT (user_data), IDE_OBJECT (exten));
+}
+
+static void
+ide_search_engine_parent_set (IdeObject *object,
+                              IdeObject *parent)
+{
+  IdeSearchEngine *self = (IdeSearchEngine *)object;
+
+  g_assert (IDE_IS_SEARCH_ENGINE (self));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (parent == NULL)
+    {
+      g_clear_object (&self->extensions);
+      return;
+    }
+
+  self->extensions = peas_extension_set_new (peas_engine_get_default (),
+                                             IDE_TYPE_SEARCH_PROVIDER,
+                                             NULL);
+
+  g_signal_connect (self->extensions,
+                    "extension-added",
+                    G_CALLBACK (on_extension_added_cb),
+                    self);
+
+  g_signal_connect (self->extensions,
+                    "extension-removed",
+                    G_CALLBACK (on_extension_removed_cb),
+                    self);
+
+  peas_extension_set_foreach (self->extensions,
+                              on_extension_added_cb,
+                              self);
+}
+
+static void
+ide_search_engine_destroy (IdeObject *object)
 {
   IdeSearchEngine *self = (IdeSearchEngine *)object;
 
   g_clear_object (&self->extensions);
 
-  G_OBJECT_CLASS (ide_search_engine_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_search_engine_parent_class)->destroy (object);
 }
 
 static void
@@ -129,11 +165,13 @@ ide_search_engine_get_property (GObject    *object,
 static void
 ide_search_engine_class_init (IdeSearchEngineClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *g_object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_search_engine_constructed;
-  object_class->dispose = ide_search_engine_dispose;
-  object_class->get_property = ide_search_engine_get_property;
+  g_object_class->get_property = ide_search_engine_get_property;
+
+  object_class->destroy = ide_search_engine_destroy;
+  object_class->parent_set = ide_search_engine_parent_set;
 
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
@@ -142,7 +180,7 @@ ide_search_engine_class_init (IdeSearchEngineClass *klass)
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  g_object_class_install_properties (g_object_class, N_PROPS, properties);
 }
 
 static void
@@ -163,6 +201,8 @@ ide_search_engine_new (void)
  * Checks if the #IdeSearchEngine is currently executing a query.
  *
  * Returns: %TRUE if queries are being processed.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_search_engine_get_busy (IdeSearchEngine *self)
@@ -302,6 +342,8 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
  * The result is a #GListModel of #IdeSearchResult when successful.
  *
  * Returns: (transfer full): a #GListModel of #IdeSearchResult items.
+ *
+ * Since: 3.32
  */
 GListModel *
 ide_search_engine_search_finish (IdeSearchEngine  *self,

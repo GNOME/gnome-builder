@@ -1,6 +1,6 @@
 /* ide-terminal.h
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <vte/vte.h>
+#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
+# error "Only <libide-terminal.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <vte/vte.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL (ide_terminal_get_type())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeTerminal, ide_terminal, IDE, TERMINAL, VteTerminal)
 
 struct _IdeTerminalClass
@@ -41,10 +46,11 @@ struct _IdeTerminalClass
   gboolean (*open_link)           (IdeTerminal *self);
   gboolean (*copy_link_address)   (IdeTerminal *self);
 
+  /*< private >*/
   gpointer padding[16];
 };
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 GtkWidget *ide_terminal_new (void);
 
 G_END_DECLS

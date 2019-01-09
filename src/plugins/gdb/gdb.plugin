@@ -1,10 +1,11 @@
 [Plugin]
-Module=gdb-plugin
-Name=Gdb
-Description=Provides integration with the GNU Debugger
 Authors=Christian Hergert <chergert@redhat.com>
-Copyright=Copyright © 2017 Christian Hergert
-Depends=debugger;editor;terminal;
 Builtin=true
-Embedded=gbp_gdb_register_types
+Copyright=Copyright © 2017-2018 Christian Hergert
+Depends=editor;terminal;buildui;debuggerui;
+Description=Provides integration with the GNU Debugger
+Embedded=_gbp_gdb_register_types
+Hidden=true
+Module=gdb
+Name=Gdb
 X-Debugger-Languages=c,chdr,cpp,cpphdr,fortran,rust,vala,asm

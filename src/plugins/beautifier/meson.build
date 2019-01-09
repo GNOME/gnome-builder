@@ -1,25 +1,19 @@
-if get_option('with_beautifier')
+if get_option('plugin_beautifier')
 
-beautifier_resources = gnome.compile_resources(
-  'gb-beautifier-resources',
-  'gb-beautifier.gresource.xml',
-  c_name: 'gb_beautifier'
+plugins_sources += files([
+  'beautifier-plugin.c',
+  'gb-beautifier-config.c',
+  'gb-beautifier-helper.c',
+  'gb-beautifier-process.c',
+  'gb-beautifier-editor-addin.c',
+])
+
+plugin_beautifier_resources = gnome.compile_resources(
+  'beautifier-resources',
+  'beautifier.gresource.xml',
+  c_name: 'gbp_beautifier',
 )
 
-beautifier_sources = [
-  'gb-beautifier-config.c',
-  'gb-beautifier-config.h',
-  'gb-beautifier-helper.c',
-  'gb-beautifier-helper.h',
-  'gb-beautifier-plugin.c',
-  'gb-beautifier-private.h',
-  'gb-beautifier-process.c',
-  'gb-beautifier-process.h',
-  'gb-beautifier-editor-addin.c',
-  'gb-beautifier-editor-addin.h',
-]
-
-gnome_builder_plugins_sources += files(beautifier_sources)
-gnome_builder_plugins_sources += beautifier_resources[0]
+plugins_sources += plugin_beautifier_resources[0]
 
 endif

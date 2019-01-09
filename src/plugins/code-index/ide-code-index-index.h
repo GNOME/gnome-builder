@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
@@ -26,7 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexIndex, ide_code_index_index, IDE, CODE_INDEX_INDEX, IdeObject)
 
-IdeCodeIndexIndex *ide_code_index_index_new             (IdeContext           *context);
+IdeCodeIndexIndex *ide_code_index_index_new             (IdeObject            *parent);
 gboolean           ide_code_index_index_load            (IdeCodeIndexIndex    *self,
                                                          GFile                *directory,
                                                          GFile                *source_directory,

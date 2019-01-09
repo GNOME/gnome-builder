@@ -1,6 +1,6 @@
 /* ide-source-view-movements.h
  *
- * Copyright 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,11 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include "sourceview/ide-source-view.h"
+#include "ide-source-view.h"
 
 G_BEGIN_DECLS
 
@@ -32,14 +34,12 @@ void _ide_source_view_apply_movement (IdeSourceView         *source_view,
                                       gunichar               modifier,
                                       gunichar               search_char,
                                       guint                 *target_column);
-
 void _ide_source_view_select_inner   (IdeSourceView *self,
                                       gunichar       inner_left,
                                       gunichar       inner_right,
                                       gint           count,
                                       gboolean       exclusive,
                                       gboolean       string_mode);
-
 void _ide_source_view_select_tag     (IdeSourceView *self,
                                       gint           count,
                                       gboolean       exclusive);

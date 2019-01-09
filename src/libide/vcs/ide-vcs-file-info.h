@@ -1,6 +1,6 @@
 /* ide-vcs-file-info.h
  *
- * Copyright 2017 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_VCS_INSIDE) && !defined (IDE_VCS_COMPILATION)
+# error "Only <libide-vcs.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_FILE_INFO (ide_vcs_file_info_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeVcsFileInfo, ide_vcs_file_info, IDE, VCS_FILE_INFO, GObject)
 
 typedef enum
@@ -48,13 +52,13 @@ struct _IdeVcsFileInfoClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeVcsFileInfo   *ide_vcs_file_info_new        (GFile            *file);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile            *ide_vcs_file_info_get_file   (IdeVcsFileInfo   *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeVcsFileStatus  ide_vcs_file_info_get_status (IdeVcsFileInfo   *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void              ide_vcs_file_info_set_status (IdeVcsFileInfo   *self,
                                                 IdeVcsFileStatus  status);
 

@@ -1,6 +1,6 @@
 /* gstyle-color-convert.c
  *
- * Copyright © 2016 sebastien lafargue <slafargue@gnome.org>
+ * Copyright 2016 sebastien lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #include <stdio.h>
@@ -45,7 +47,7 @@
 
 /* pow_1_24 and pow_24 are adapted version from babl, published under LGPL */
 /* babl - dynamically extendable universal pixel conversion library.
- * Copyright © 2012, Red Hat, Inc.
+ * Copyright 2012, Red Hat, Inc.
  */
 
 /* Chebychev polynomial terms for x^(5/12) expanded around x=1.5

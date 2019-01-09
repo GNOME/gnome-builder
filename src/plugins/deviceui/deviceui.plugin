@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;
+Description=Provides user interface components to display devices
+Embedded=_gbp_deviceui_register_types
+Hidden=true
+Module=deviceui
+Name=Device UI
+X-Workspace-Kind=primary;

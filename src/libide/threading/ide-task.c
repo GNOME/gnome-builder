@@ -15,17 +15,26 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 #define G_LOG_DOMAIN "ide-task"
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libide-core.h>
 
-#include "threading/ide-task.h"
-#include "threading/ide-thread-pool.h"
-#include "threading/ide-thread-private.h"
+#include "ide-task.h"
+#include "ide-thread-pool.h"
+#include "ide-thread-private.h"
+
+/* From GDK_PRIORITY_REDRAW */
+#define PRIORITY_REDRAW (G_PRIORITY_HIGH_IDLE + 20)
+
+#if 0
+# define ENABLE_TIME_CHART
+#endif
 
 /**
  * SECTION:ide-task
@@ -59,7 +68,7 @@
  * provides a simplified API over ide_task_return_pointer() which also allows
  * copying the result to chained tasks.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 
 typedef struct
@@ -237,6 +246,11 @@ typedef struct
    */
   gpointer source_tag;
 
+#ifdef ENABLE_TIME_CHART
+  /* The time the task was created */
+  gint64 begin_time;
+#endif
+
   /*
    * Our priority for scheduling tasks in the particular workqueue.
    */
@@ -319,8 +333,6 @@ static void     ide_task_release        (IdeTask           *self,
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeTaskData, ide_task_data_free);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeTaskResult, ide_task_result_free);
-
-DZL_DEFINE_COUNTER (instances, "Tasks", "Instances", "Number of active tasks")
 
 G_DEFINE_TYPE_WITH_CODE (IdeTask, ide_task, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (IdeTask)
@@ -623,8 +635,6 @@ ide_task_finalize (GObject *object)
   g_mutex_clear (&priv->mutex);
 
   G_OBJECT_CLASS (ide_task_parent_class)->finalize (object);
-
-  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -676,14 +686,12 @@ ide_task_init (IdeTask *self)
 {
   IdeTaskPrivate *priv = ide_task_get_instance_private (self);
 
-  DZL_COUNTER_INC (instances);
-
   g_mutex_init (&priv->mutex);
 
   priv->check_cancellable = TRUE;
   priv->release_on_propagate = TRUE;
   priv->priority = G_PRIORITY_DEFAULT;
-  priv->complete_priority = GDK_PRIORITY_REDRAW + 1;
+  priv->complete_priority = PRIORITY_REDRAW + 1;
   priv->main_context = g_main_context_ref_thread_default ();
   priv->global_link.data = self;
 
@@ -710,7 +718,7 @@ ide_task_init (IdeTask *self)
  *
  * Returns: (transfer none) (nullable) (type GObject.Object): a #GObject or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gpointer
 ide_task_get_source_object (IdeTask *self)
@@ -743,7 +751,7 @@ ide_task_get_source_object (IdeTask *self)
  *
  * Returns: (transfer full): an #IdeTask
  *
- * Since: 3.30
+ * Since: 3.32
  */
 IdeTask *
 (ide_task_new) (gpointer             source_object,
@@ -764,20 +772,23 @@ IdeTask *
   priv->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
   priv->callback = callback;
   priv->user_data = user_data;
+#ifdef ENABLE_TIME_CHART
+  priv->begin_time = g_get_monotonic_time ();
+#endif
 
   return g_steal_pointer (&self);
 }
 
 /**
  * ide_task_is_valid:
- * @self: (nullable) (type Ide.Task): a #IdeTask
+ * @self: (nullable) (type IdeTask): a #IdeTask
  * @source_object: (nullable): a #GObject or %NULL
  *
  * Checks if @source_object matches the object the task was created with.
  *
  * Returns: %TRUE is source_object matches
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_task_is_valid (gpointer self,
@@ -800,7 +811,7 @@ ide_task_is_valid (gpointer self,
  *
  * Returns: %TRUE if the task has completed
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_task_get_completed (IdeTask *self)
@@ -881,7 +892,7 @@ ide_task_set_complete_priority (IdeTask *self,
  *
  * Returns: (transfer none) (nullable): a #GCancellable or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 GCancellable *
 ide_task_get_cancellable (IdeTask *self)
@@ -978,6 +989,12 @@ ide_task_return_cb (gpointer user_data)
    */
   self = g_steal_pointer (&result->task);
   priv = ide_task_get_instance_private (self);
+
+#ifdef ENABLE_TIME_CHART
+  g_message ("TASK-END: %s: duration=%lf",
+             priv->name,
+             (g_get_monotonic_time () - priv->begin_time) / (gdouble)G_USEC_PER_SEC);
+#endif
 
   g_mutex_lock (&priv->mutex);
 
@@ -1140,7 +1157,7 @@ ide_task_return (IdeTask       *self,
  * Other tasks depending on the result will be notified after returning
  * to the #GMainContext of the task.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_return_int (IdeTask *self,
@@ -1167,7 +1184,7 @@ ide_task_return_int (IdeTask *self,
  * Other tasks depending on the result will be notified after returning
  * to the #GMainContext of the task.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_return_boolean (IdeTask  *self,
@@ -1194,7 +1211,7 @@ ide_task_return_boolean (IdeTask  *self,
  * know the boxed #GType so that the result may be propagated to chained
  * tasks.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_return_boxed (IdeTask  *self,
@@ -1225,7 +1242,7 @@ ide_task_return_boxed (IdeTask  *self,
  * Takes ownership of @instance to allow saving a reference increment and
  * decrement by the caller.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_return_object (IdeTask  *self,
@@ -1259,7 +1276,7 @@ ide_task_return_object (IdeTask  *self,
  * If you need task chaining with pointers, see ide_task_return_boxed()
  * or ide_task_return_object().
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_return_pointer (IdeTask        *self,
@@ -1285,7 +1302,7 @@ ide_task_return_pointer (IdeTask        *self,
  *
  * Sets @error as the result of the #IdeTask
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_return_error (IdeTask *self,
@@ -1311,7 +1328,7 @@ ide_task_return_error (IdeTask *self,
  *
  * Creates a new #GError and sets it as the result for the task.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_return_new_error (IdeTask     *self,
@@ -1341,7 +1358,7 @@ ide_task_return_new_error (IdeTask     *self,
  *
  * Returns: %TRUE if the task was cancelled and error returned.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_task_return_error_if_cancelled (IdeTask *self)
@@ -1377,7 +1394,7 @@ ide_task_return_error_if_cancelled (IdeTask *self)
  * Generally, you want to leave this as %TRUE to ensure thread-safety on the
  * dependent objects and task data.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_set_release_on_propagate (IdeTask  *self,
@@ -1402,7 +1419,7 @@ ide_task_set_release_on_propagate (IdeTask  *self,
  * Sets the source tag for the task. Generally this is a function pointer
  * of the function that created the task.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_set_source_tag (IdeTask  *self,
@@ -1427,7 +1444,7 @@ ide_task_set_source_tag (IdeTask  *self,
  * before propagating a result. If cancelled, an error will be returned
  * instead of the result.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_set_check_cancellable (IdeTask  *self,
@@ -1455,7 +1472,7 @@ ide_task_set_check_cancellable (IdeTask  *self,
  * ide_task_return_boolean(), ide_task_return_int(), or
  * ide_task_return_pointer().
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_run_in_thread (IdeTask           *self,
@@ -1633,7 +1650,7 @@ ide_task_propagate_int (IdeTask  *self,
  * Returns: (transfer full) (type GObject.Object): a #GObject or %NULL
  *   and @error may be set.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gpointer
 ide_task_propagate_object (IdeTask  *self,
@@ -1690,7 +1707,7 @@ ide_task_propagate_pointer (IdeTask  *self,
  * have called ide_task_set_release_on_propagate() with @self and set
  * release_on_propagate to %FALSE, or @self has not yet completed.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_chain (IdeTask *self,
@@ -1779,7 +1796,7 @@ ide_task_set_kind (IdeTask     *self,
  *
  * Returns: (transfer none): previously registered task data or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gpointer
 ide_task_get_task_data (IdeTask *self)
@@ -1898,6 +1915,8 @@ ide_task_cancellable_cancelled_cb (GCancellable  *cancellable,
  *
  * Gets the return_on_cancel value, which means the task will return
  * immediately when the #GCancellable is cancelled.
+ *
+ * Since: 3.32
  */
 gboolean
 ide_task_get_return_on_cancel (IdeTask *self)
@@ -1928,7 +1947,7 @@ ide_task_get_return_on_cancel (IdeTask *self)
  * will outlive the threaded worker so that task state can be freed in a delayed
  * fashion.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_set_return_on_cancel (IdeTask  *self,
@@ -2011,7 +2030,7 @@ ide_task_report_new_error (gpointer              source_object,
  *
  * Returns: (nullable): a string or %NULL
  *
- * Since: 3.30
+ * Since: 3.32
  */
 const gchar *
 ide_task_get_name (IdeTask *self)
@@ -2044,7 +2063,7 @@ ide_task_get_name (IdeTask *self)
  * If using #IdeTask from C, a default name is set using the source
  * file name and line number.
  *
- * Since: 3.30
+ * Since: 3.32
  */
 void
 ide_task_set_name (IdeTask *self,
@@ -2059,6 +2078,10 @@ ide_task_set_name (IdeTask *self,
   g_mutex_lock (&priv->mutex);
   priv->name = name;
   g_mutex_unlock (&priv->mutex);
+
+#ifdef ENABLE_TIME_CHART
+  g_message ("TASK-BEGIN: %s", name);
+#endif
 }
 
 /**
@@ -2069,7 +2092,7 @@ ide_task_set_name (IdeTask *self,
  *
  * Returns: %TRUE if an error has occurred
  *
- * Since: 3.30
+ * Since: 3.32
  */
 gboolean
 ide_task_had_error (IdeTask *self)
@@ -2130,7 +2153,7 @@ async_result_init_iface (GAsyncResultIface *iface)
 }
 
 void
-ide_dump_tasks (void)
+_ide_dump_tasks (void)
 {
   guint i = 0;
 

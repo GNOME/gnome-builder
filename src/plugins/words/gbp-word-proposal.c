@@ -1,6 +1,6 @@
 /* gbp-word-proposal.c
  *
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
-
-#include "config.h"
 
 #define G_LOG_DOMAIN "gbp-word-proposal"
 
-#include <ide.h>
+#include "config.h"
+
+#include <libide-sourceview.h>
 
 #include "gbp-word-proposal.h"
 
