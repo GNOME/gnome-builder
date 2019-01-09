@@ -9,7 +9,7 @@
     ],
     "desktop-file-name-prefix" : "(Nightly) ",
     "finish-args" : [
-        "--require-version=0.10.0",
+        "--require-version=1.0.0",
         "--allow=devel",
         "--talk-name=org.freedesktop.Flatpak",
         "--share=ipc",
