@@ -20,11 +20,13 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_CODE_INSIDE) && !defined (IDE_CODE_COMPILATION)
+# error "Only <libide-code.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
-#include "ide-types.h"
+#include "ide-code-types.h"
 
 G_BEGIN_DECLS
 

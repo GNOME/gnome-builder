@@ -29,18 +29,12 @@
 #include <glib/gstdio.h>
 #include <string.h>
 
-#include "ide-context.h"
-#include "ide-debug.h"
-#include "ide-global.h"
+#include <libide-io.h>
+#include <libide-threading.h>
 
-#include "application/ide-application.h"
-#include "buffers/ide-buffer-private.h"
-#include "buffers/ide-unsaved-file.h"
-#include "buffers/ide-unsaved-files.h"
-#include "projects/ide-project.h"
-#include "threading/ide-task.h"
-#include "util/ide-glib.h"
-#include "util/ide-line-reader.h"
+#include "ide-unsaved-file.h"
+#include "ide-unsaved-file-private.h"
+#include "ide-unsaved-files.h"
 
 typedef struct
 {
@@ -58,6 +52,7 @@ struct _IdeUnsavedFiles
   GMutex     mutex;
   GPtrArray *unsaved_files;
   gint64     sequence;
+  gchar     *project_id;
 };
 
 typedef struct
@@ -68,26 +63,28 @@ typedef struct
 
 G_DEFINE_TYPE (IdeUnsavedFiles, ide_unsaved_files, IDE_TYPE_OBJECT)
 
+enum {
+  PROP_0,
+  PROP_PROJECT_ID,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+
 static void ide_unsaved_files_update_locked (IdeUnsavedFiles *self,
                                              GFile           *file,
                                              GBytes          *content);
 
 static gchar *
-get_drafts_directory (IdeContext *context)
+get_drafts_directory (IdeUnsavedFiles *self)
 {
-  IdeProject *project;
-  const gchar *project_name;
-
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_CONTEXT (context));
-
-  project = ide_context_get_project (context);
-  project_name = ide_project_get_id (project);
+  g_assert (IDE_IS_UNSAVED_FILES (self));
 
   return g_build_filename (g_get_user_data_dir (),
                            ide_get_program_name (),
                            "drafts",
-                           project_name,
+                           self->project_id,
                            NULL);
 }
 
@@ -269,17 +266,14 @@ ide_unsaved_files_save_worker (IdeTask      *task,
 static AsyncState *
 async_state_new (IdeUnsavedFiles *files)
 {
-  IdeContext *context;
   AsyncState *state;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_UNSAVED_FILES (files));
 
-  context = ide_object_get_context (IDE_OBJECT (files));
-
   state = g_slice_new0 (AsyncState);
   state->unsaved_files = g_ptr_array_new_with_free_func (unsaved_file_free);
-  state->drafts_directory = get_drafts_directory (context);
+  state->drafts_directory = get_drafts_directory (files);
 
   return state;
 }
@@ -404,7 +398,7 @@ ide_unsaved_files_restore_worker (IdeTask      *task,
 
       line[line_len] = '\0';
 
-      if (dzl_str_empty0 (line))
+      if (ide_str_empty0 (line))
         continue;
 
       file = g_file_new_for_uri (line);
@@ -514,7 +508,6 @@ static void
 ide_unsaved_files_remove_draft_locked (IdeUnsavedFiles *self,
                                        GFile           *file)
 {
-  IdeContext *context;
   g_autofree gchar *drafts_directory = NULL;
   g_autofree gchar *uri = NULL;
   g_autofree gchar *hash = NULL;
@@ -526,8 +519,7 @@ ide_unsaved_files_remove_draft_locked (IdeUnsavedFiles *self,
   g_assert (IDE_IS_UNSAVED_FILES (self));
   g_assert (G_IS_FILE (file));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  drafts_directory = get_drafts_directory (context);
+  drafts_directory = get_drafts_directory (self);
   uri = g_file_get_uri (file);
   hash = hash_uri (uri);
   path = g_build_filename (drafts_directory, hash, NULL);
@@ -825,14 +817,54 @@ ide_unsaved_files_get_sequence (IdeUnsavedFiles *self)
 }
 
 static void
+ide_unsaved_files_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  IdeUnsavedFiles *self = IDE_UNSAVED_FILES (object);
+
+  switch (prop_id)
+    {
+    case PROP_PROJECT_ID:
+      g_value_set_string (value, self->project_id);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_unsaved_files_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  IdeUnsavedFiles *self = IDE_UNSAVED_FILES (object);
+
+  switch (prop_id)
+    {
+    case PROP_PROJECT_ID:
+      self->project_id = g_value_dup_string (value);
+      g_assert (self->project_id != NULL);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_unsaved_files_finalize (GObject *object)
 {
   IdeUnsavedFiles *self = (IdeUnsavedFiles *)object;
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
-  g_mutex_clear (&self->mutex);
   g_clear_pointer (&self->unsaved_files, g_ptr_array_unref);
+  g_clear_pointer (&self->project_id, g_free);
+  g_mutex_clear (&self->mutex);
 
   G_OBJECT_CLASS (ide_unsaved_files_parent_class)->finalize (object);
 }
@@ -843,6 +875,17 @@ ide_unsaved_files_class_init (IdeUnsavedFilesClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = ide_unsaved_files_finalize;
+  object_class->get_property = ide_unsaved_files_get_property;
+  object_class->set_property = ide_unsaved_files_set_property;
+
+  properties [PROP_PROJECT_ID] =
+    g_param_spec_string ("project-id",
+                         "Project Id",
+                         "The identifier for the project",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -940,4 +983,40 @@ ide_unsaved_files_reap_finish (IdeUnsavedFiles  *self,
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+/**
+ * ide_unsaved_files_from_context:
+ * @context: an #IdeContext
+ *
+ * Gets the unsaved files object for @context.
+ *
+ * Returns: (transfer none): an #IdeContext
+ *
+ * Since: 3.32
+ */
+IdeUnsavedFiles *
+ide_unsaved_files_from_context (IdeContext *context)
+{
+  IdeUnsavedFiles *self;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  ide_object_lock (IDE_OBJECT (context));
+  self = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_UNSAVED_FILES);
+  if (self == NULL)
+    {
+      g_autofree gchar *project_id = ide_context_dup_project_id (context);
+      self = g_object_new (IDE_TYPE_UNSAVED_FILES,
+                           "project-id", project_id,
+                           NULL);
+      ide_object_append (IDE_OBJECT (context), IDE_OBJECT (self));
+    }
+  ide_object_unlock (IDE_OBJECT (context));
+
+  /* Looks unsafe because we get a full ref back */
+  g_object_unref (self);
+
+  return self;
 }

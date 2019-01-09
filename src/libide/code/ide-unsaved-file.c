@@ -22,11 +22,10 @@
 
 #include "config.h"
 
-#include "ide-debug.h"
-
-#include "application/ide-application.h"
-#include "buffers/ide-unsaved-file.h"
-#include "buffers/ide-buffer-private.h"
+#include "ide-buffer.h"
+#include "ide-buffer-private.h"
+#include "ide-unsaved-file.h"
+#include "ide-unsaved-file-private.h"
 
 /*
  * This type is meant to be created and then immutable after that.
@@ -34,8 +33,7 @@
  * any other thread to do the work.
  */
 
-G_DEFINE_BOXED_TYPE (IdeUnsavedFile, ide_unsaved_file,
-                     ide_unsaved_file_ref, ide_unsaved_file_unref)
+G_DEFINE_BOXED_TYPE (IdeUnsavedFile, ide_unsaved_file, ide_unsaved_file_ref, ide_unsaved_file_unref)
 
 struct _IdeUnsavedFile
 {
