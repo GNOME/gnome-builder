@@ -1,4 +1,8 @@
 subdir('appdata')
+subdir('fonts')
+subdir('gsettings')
+subdir('icons')
+subdir('style-schemes')
 
 # Desktop launcher and description file.
 desktop_file = i18n.merge_file(
@@ -27,8 +31,3 @@ configure_file(
 	install: true,
 	install_dir: join_paths(get_option('datadir'), 'dbus-1', 'services'),
 )
-
-subdir('fonts')
-subdir('gsettings')
-subdir('icons')
-subdir('style-schemes')
