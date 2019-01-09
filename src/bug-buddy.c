@@ -37,7 +37,7 @@
 
 static gchar **gdb_argv = NULL;
 
-static void
+G_GNUC_NORETURN static void
 bug_buddy_sigsegv_handler (int signum)
 {
   int pid;
