@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_PIPELINE_ADDIN (ide_build_pipeline_addin_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeBuildPipelineAddin, ide_build_pipeline_addin, IDE, BUILD_PIPELINE_ADDIN, IdeObject)
 
 struct _IdeBuildPipelineAddinInterface
@@ -41,13 +41,13 @@ struct _IdeBuildPipelineAddinInterface
                   IdeBuildPipeline      *pipeline);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_build_pipeline_addin_load   (IdeBuildPipelineAddin *self,
                                       IdeBuildPipeline      *pipeline);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_build_pipeline_addin_unload (IdeBuildPipelineAddin *self,
                                       IdeBuildPipeline      *pipeline);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_build_pipeline_addin_track  (IdeBuildPipelineAddin *self,
                                       guint                  stage_id);
 

@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKBENCH_HEADER_BAR (ide_workbench_header_bar_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeWorkbenchHeaderBar, ide_workbench_header_bar, IDE, WORKBENCH_HEADER_BAR, GtkHeaderBar)
 
 struct _IdeWorkbenchHeaderBarClass
@@ -46,23 +46,23 @@ struct _IdeWorkbenchHeaderBarClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget  *ide_workbench_header_bar_new          (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeOmniBar *ide_workbench_header_bar_get_omni_bar (IdeWorkbenchHeaderBar *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_workbench_header_bar_focus_search (IdeWorkbenchHeaderBar *self);
 IDE_AVAILABLE_IN_3_32
 void        ide_workbench_header_bar_show_menu    (IdeWorkbenchHeaderBar *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_workbench_header_bar_add_primary  (IdeWorkbenchHeaderBar *self,
                                                    GtkWidget             *widget);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_workbench_header_bar_insert_left  (IdeWorkbenchHeaderBar *self,
                                                    GtkWidget             *widget,
                                                    GtkPackType            pack_type,
                                                    gint                   priority);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_workbench_header_bar_insert_right (IdeWorkbenchHeaderBar *self,
                                                    GtkWidget             *widget,
                                                    GtkPackType            pack_type,

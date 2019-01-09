@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_FORMATTER (ide_langserv_formatter_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeLangservFormatter, ide_langserv_formatter, IDE, LANGSERV_FORMATTER, IdeObject)
 
 struct _IdeLangservFormatter
@@ -39,10 +39,10 @@ struct _IdeLangservFormatter
   gpointer _reserved[4];
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                  ide_langserv_formatter_set_client (IdeLangservFormatter *self,
                                                          IdeLangservClient    *client);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLangservClient    *ide_langserv_formatter_get_client (IdeLangservFormatter *self);
 
 G_END_DECLS

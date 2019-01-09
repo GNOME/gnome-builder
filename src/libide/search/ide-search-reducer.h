@@ -31,21 +31,21 @@ typedef struct
   gsize      count;
 } IdeSearchReducer;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_reducer_init    (IdeSearchReducer  *reducer,
                                        gsize              max_results);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean   ide_search_reducer_accepts (IdeSearchReducer  *reducer,
                                        gfloat             score);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_reducer_take    (IdeSearchReducer  *reducer,
                                        IdeSearchResult   *result);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_reducer_push    (IdeSearchReducer  *reducer,
                                        IdeSearchResult   *result);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_search_reducer_destroy (IdeSearchReducer  *reducer);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GPtrArray *ide_search_reducer_free    (IdeSearchReducer  *reducer,
                                        gboolean           free_results);
 

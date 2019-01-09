@@ -28,26 +28,26 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUG_MANAGER (ide_debug_manager_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDebugManager, ide_debug_manager, IDE, DEBUG_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebugger            *ide_debug_manager_get_debugger             (IdeDebugManager        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                ide_debug_manager_get_active               (IdeDebugManager        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                ide_debug_manager_start                    (IdeDebugManager        *self,
                                                                     IdeRunner              *runner,
                                                                     GError                **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                    ide_debug_manager_stop                     (IdeDebugManager        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerBreakpoints *ide_debug_manager_get_breakpoints_for_file (IdeDebugManager        *self,
                                                                     GFile                  *file);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean                ide_debug_manager_supports_language        (IdeDebugManager        *self,
                                                                     const gchar            *language_id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebugger            *ide_debug_manager_find_debugger            (IdeDebugManager        *self,
                                                                     IdeRunner              *runner);
 

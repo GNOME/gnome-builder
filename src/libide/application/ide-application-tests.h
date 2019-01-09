@@ -30,7 +30,7 @@ typedef void     (*IdeApplicationTest)           (GCancellable         *cancella
 typedef gboolean (*IdeApplicationTestCompletion) (GAsyncResult         *result,
                                                   GError              **error);
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_application_add_test (IdeApplication               *self,
                                const gchar                  *test_name,
                                IdeApplicationTest            test_func,

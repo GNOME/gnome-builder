@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_APPLICATION_TOOL (ide_application_tool_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeApplicationTool, ide_application_tool, IDE, APPLICATION_TOOL, GObject)
 
 /**
@@ -56,13 +56,13 @@ struct _IdeApplicationToolInterface
                       GError              **error);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_application_tool_run_async  (IdeApplicationTool   *self,
                                       const gchar * const  *arguments,
                                       GCancellable         *cancellable,
                                       GAsyncReadyCallback   callback,
                                       gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint ide_application_tool_run_finish (IdeApplicationTool   *self,
                                       GAsyncResult         *result,
                                       GError              **error);

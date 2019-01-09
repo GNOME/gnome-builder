@@ -28,14 +28,14 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_GRID_COLUMN (ide_layout_grid_column_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeLayoutGridColumn, ide_layout_grid_column, IDE, LAYOUT_GRID_COLUMN, DzlMultiPaned)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget      *ide_layout_grid_column_new               (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLayoutStack *ide_layout_grid_column_get_current_stack (IdeLayoutGridColumn *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_layout_grid_column_set_current_stack (IdeLayoutGridColumn *self,
                                                           IdeLayoutStack      *stack);
 

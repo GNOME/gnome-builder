@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT (ide_layout_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLayout, ide_layout, IDE, LAYOUT, DzlDockBin)
 
 struct _IdeLayoutClass

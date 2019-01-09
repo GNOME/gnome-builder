@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_HOVER_PROVIDER (ide_langserv_hover_provider_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLangservHoverProvider, ide_langserv_hover_provider, IDE, LANGSERV_HOVER_PROVIDER, IdeObject)
 
 struct _IdeLangservHoverProviderClass
@@ -41,9 +41,9 @@ struct _IdeLangservHoverProviderClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeLangservClient *ide_langserv_hover_provider_get_client (IdeLangservHoverProvider *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_hover_provider_set_client (IdeLangservHoverProvider *self,
                                                            IdeLangservClient        *client);
 

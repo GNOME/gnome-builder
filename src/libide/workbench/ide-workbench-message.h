@@ -26,27 +26,27 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKBENCH_MESSAGE (ide_workbench_message_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeWorkbenchMessage, ide_workbench_message, IDE, WORKBENCH_MESSAGE, GtkInfoBar)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget   *ide_workbench_message_new          (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_workbench_message_get_id       (IdeWorkbenchMessage *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_workbench_message_set_id       (IdeWorkbenchMessage *self,
                                                  const gchar         *id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_workbench_message_get_title    (IdeWorkbenchMessage *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_workbench_message_set_title    (IdeWorkbenchMessage *self,
                                                  const gchar         *title);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_workbench_message_get_subtitle (IdeWorkbenchMessage *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_workbench_message_set_subtitle (IdeWorkbenchMessage *self,
                                                  const gchar         *subtitle);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_workbench_message_add_action   (IdeWorkbenchMessage *self,
                                                  const gchar         *label,
                                                  const gchar         *action_name);

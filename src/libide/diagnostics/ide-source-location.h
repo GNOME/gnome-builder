@@ -28,42 +28,42 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_LOCATION (ide_source_location_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType              ide_source_location_get_type         (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_source_location_ref              (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_source_location_unref            (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_source_location_new              (IdeFile                 *file,
                                                          guint                    line,
                                                          guint                    line_offset,
                                                          guint                    offset);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_source_location_new_from_variant (GVariant                *variant);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_source_location_new_for_path     (IdeContext              *context,
                                                          const gchar             *path,
                                                          guint                    line,
                                                          guint                    line_offset);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint              ide_source_location_get_line         (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint              ide_source_location_get_line_offset  (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint              ide_source_location_get_offset       (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFile           *ide_source_location_get_file         (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeUri            *ide_source_location_get_uri          (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 const gchar       *ide_source_location_get_path         (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint               ide_source_location_compare          (const IdeSourceLocation *a,
                                                          const IdeSourceLocation *b);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint              ide_source_location_hash             (IdeSourceLocation       *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GVariant          *ide_source_location_to_variant       (const IdeSourceLocation *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceLocation, ide_source_location_unref)

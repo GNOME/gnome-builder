@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TAGS_BUILDER (ide_tags_builder_get_type ())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeTagsBuilder, ide_tags_builder, IDE, TAGS_BUILDER, GObject)
 
 struct _IdeTagsBuilderInterface
@@ -44,14 +44,14 @@ struct _IdeTagsBuilderInterface
                             GError              **error);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void      ide_tags_builder_build_async  (IdeTagsBuilder       *self,
                                          GFile                *directory_or_file,
                                          gboolean              recursive,
                                          GCancellable         *cancellable,
                                          GAsyncReadyCallback   callback,
                                          gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean  ide_tags_builder_build_finish (IdeTagsBuilder       *self,
                                          GAsyncResult         *result,
                                          GError              **error);

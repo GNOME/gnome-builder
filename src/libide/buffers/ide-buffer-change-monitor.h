@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUFFER_CHANGE_MONITOR (ide_buffer_change_monitor_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeBufferChangeMonitor, ide_buffer_change_monitor, IDE, BUFFER_CHANGE_MONITOR, IdeObject)
 
 typedef enum
@@ -53,12 +53,12 @@ struct _IdeBufferChangeMonitorClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeBufferLineChange ide_buffer_change_monitor_get_change   (IdeBufferChangeMonitor *self,
                                                             guint                   line);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_buffer_change_monitor_emit_changed (IdeBufferChangeMonitor *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_buffer_change_monitor_reload       (IdeBufferChangeMonitor *self);
 
 G_END_DECLS

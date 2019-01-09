@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_VARIABLE (ide_debugger_variable_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerVariable, ide_debugger_variable, IDE, DEBUGGER_VARIABLE, GObject)
 
 struct _IdeDebuggerVariableClass
@@ -44,23 +44,23 @@ struct _IdeDebuggerVariableClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerVariable *ide_debugger_variable_new              (const gchar         *name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar         *ide_debugger_variable_get_name         (IdeDebuggerVariable *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar         *ide_debugger_variable_get_type_name    (IdeDebuggerVariable *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_debugger_variable_set_type_name    (IdeDebuggerVariable *self,
                                                              const gchar         *type_name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar         *ide_debugger_variable_get_value        (IdeDebuggerVariable *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_debugger_variable_set_value        (IdeDebuggerVariable *self,
                                                              const gchar         *value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean             ide_debugger_variable_get_has_children (IdeDebuggerVariable *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_debugger_variable_set_has_children (IdeDebuggerVariable *self,
                                                              gboolean             has_children);
 

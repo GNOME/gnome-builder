@@ -24,19 +24,19 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar       *ide_get_system_arch      (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_get_system_type      (void);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gchar       *ide_create_host_triplet  (const gchar *arch,
                                        const gchar *kernel,
                                        const gchar *system);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gsize        ide_get_system_page_size (void) G_GNUC_CONST;
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar       *ide_path_collapse        (const gchar *path);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar       *ide_path_expand          (const gchar *path);
 
 G_END_DECLS

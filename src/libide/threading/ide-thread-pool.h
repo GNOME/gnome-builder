@@ -42,16 +42,16 @@ typedef enum
  */
 typedef void (*IdeThreadFunc) (gpointer user_data);
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_thread_pool_push               (IdeThreadPoolKind  kind,
                                              IdeThreadFunc      func,
                                              gpointer           func_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void     ide_thread_pool_push_with_priority (IdeThreadPoolKind  kind,
                                              gint               priority,
                                              IdeThreadFunc      func,
                                              gpointer           func_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_thread_pool_push_task          (IdeThreadPoolKind  kind,
                                              GTask             *task,
                                              GTaskThreadFunc    func);

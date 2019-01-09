@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FORMATTER (ide_formatter_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeFormatter, ide_formatter, IDE, FORMATTER, IdeObject)
 
 struct _IdeFormatterInterface
@@ -59,20 +59,20 @@ struct _IdeFormatterInterface
                                    GError              **error);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_formatter_load                (IdeFormatter         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_formatter_format_async        (IdeFormatter         *self,
                                             IdeBuffer            *buffer,
                                             IdeFormatterOptions  *options,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,
                                             gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean ide_formatter_format_finish       (IdeFormatter         *self,
                                             GAsyncResult         *result,
                                             GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_formatter_format_range_async  (IdeFormatter         *self,
                                             IdeBuffer            *buffer,
                                             IdeFormatterOptions  *options,
@@ -81,7 +81,7 @@ void     ide_formatter_format_range_async  (IdeFormatter         *self,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,
                                             gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean ide_formatter_format_range_finish (IdeFormatter         *self,
                                             GAsyncResult         *result,
                                             GError              **error);

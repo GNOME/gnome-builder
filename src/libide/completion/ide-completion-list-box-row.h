@@ -27,32 +27,32 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_LIST_BOX_ROW (ide_completion_list_box_row_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompletionListBoxRow, ide_completion_list_box_row, IDE, COMPLETION_LIST_BOX_ROW, GtkListBoxRow)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GtkWidget             *ide_completion_list_box_row_new               (void);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeCompletionProposal *ide_completion_list_box_row_get_proposal      (IdeCompletionListBoxRow *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_row_set_proposal      (IdeCompletionListBoxRow *self,
                                                                       IdeCompletionProposal   *proposal);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_row_set_icon_name     (IdeCompletionListBoxRow *self,
                                                                       const gchar             *icon_name);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_row_set_left          (IdeCompletionListBoxRow *self,
                                                                       const gchar             *left);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_row_set_left_markup   (IdeCompletionListBoxRow *self,
                                                                       const gchar             *left_markup);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_row_set_right         (IdeCompletionListBoxRow *self,
                                                                       const gchar             *right);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_row_set_center        (IdeCompletionListBoxRow *self,
                                                                       const gchar             *center);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_row_set_center_markup (IdeCompletionListBoxRow *self,
                                                                       const gchar             *center_markup);
 

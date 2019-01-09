@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_RESULT (ide_search_result_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeSearchResult, ide_search_result, IDE, SEARCH_RESULT, DzlSuggestion)
 
 struct _IdeSearchResultClass
@@ -49,24 +49,24 @@ struct _IdeSearchResultClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSearchResult   *ide_search_result_new                 (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_search_result_get_source_location (IdeSearchResult       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint               ide_search_result_compare             (gconstpointer          a,
                                                           gconstpointer          b);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint               ide_search_result_get_priority        (IdeSearchResult       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_search_result_set_priority        (IdeSearchResult       *self,
                                                           gint                   priority);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gfloat             ide_search_result_get_score           (IdeSearchResult       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_search_result_set_score           (IdeSearchResult       *self,
                                                           gfloat                 score);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_search_result_set_icon            (IdeSearchResult       *self,
                                                           GIcon                 *icon);
 

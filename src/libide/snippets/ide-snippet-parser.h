@@ -26,22 +26,22 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SNIPPET_PARSER (ide_snippet_parser_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSnippetParser, ide_snippet_parser, IDE, SNIPPET_PARSER, GObject)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSnippetParser *ide_snippet_parser_new            (void);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean          ide_snippet_parser_load_from_data (IdeSnippetParser  *parser,
                                                      const gchar       *defalut_language,
                                                      const gchar       *data,
                                                      gssize             data_len,
                                                      GError           **error);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean          ide_snippet_parser_load_from_file (IdeSnippetParser  *parser,
                                                      GFile             *file,
                                                      GError           **error);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GList            *ide_snippet_parser_get_snippets   (IdeSnippetParser  *parser);
 
 G_END_DECLS

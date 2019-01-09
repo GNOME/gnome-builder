@@ -28,24 +28,24 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SESSION (ide_session_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSession, ide_session, IDE, SESSION, IdeObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_session_restore_async  (IdeSession           *self,
                                      GCancellable         *cancellable,
                                      GAsyncReadyCallback   callback,
                                      gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean ide_session_restore_finish (IdeSession           *self,
                                      GAsyncResult         *result,
                                      GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_session_save_async     (IdeSession           *self,
                                      GCancellable         *cancellable,
                                      GAsyncReadyCallback   callback,
                                      gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean ide_session_save_finish    (IdeSession           *self,
                                      GAsyncResult         *result,
                                      GError              **error);

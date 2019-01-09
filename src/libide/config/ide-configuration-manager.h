@@ -29,33 +29,33 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIGURATION_MANAGER (ide_configuration_manager_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeConfigurationManager, ide_configuration_manager, IDE, CONFIGURATION_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeConfiguration *ide_configuration_manager_get_current       (IdeConfigurationManager  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void              ide_configuration_manager_set_current       (IdeConfigurationManager  *self,
                                                                IdeConfiguration         *configuration);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeConfiguration *ide_configuration_manager_get_configuration (IdeConfigurationManager  *self,
                                                                const gchar              *id);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void              ide_configuration_manager_duplicate         (IdeConfigurationManager  *self,
                                                                IdeConfiguration         *config);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void              ide_configuration_manager_delete            (IdeConfigurationManager  *self,
                                                                IdeConfiguration         *config);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void              ide_configuration_manager_save_async        (IdeConfigurationManager  *self,
                                                                GCancellable             *cancellable,
                                                                GAsyncReadyCallback       callback,
                                                                gpointer                  user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean          ide_configuration_manager_save_finish       (IdeConfigurationManager  *self,
                                                                GAsyncResult             *result,
                                                                GError                  **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean          ide_configuration_manager_get_ready         (IdeConfigurationManager  *self);
 
 G_END_DECLS

@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_GREETER_SECTION (ide_greeter_section_get_type ())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeGreeterSection, ide_greeter_section, IDE, GREETER_SECTION, GtkWidget)
 
 struct _IdeGreeterSectionInterface
@@ -47,22 +47,22 @@ struct _IdeGreeterSectionInterface
   void     (*purge_selected)     (IdeGreeterSection *self);
 };
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gint     ide_greeter_section_get_priority           (IdeGreeterSection *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean ide_greeter_section_filter                 (IdeGreeterSection *self,
                                                      DzlPatternSpec    *spec);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_greeter_section_emit_project_activated (IdeGreeterSection *self,
                                                      IdeProjectInfo    *project_info);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean ide_greeter_section_activate_first         (IdeGreeterSection *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_greeter_section_set_selection_mode     (IdeGreeterSection *self,
                                                      gboolean           selection_mode);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_greeter_section_delete_selected        (IdeGreeterSection *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_greeter_section_purge_selected         (IdeGreeterSection *self);
 
 G_END_DECLS

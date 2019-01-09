@@ -28,12 +28,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_VIEW (ide_completion_view_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompletionView, ide_completion_view, IDE, COMPLETION_VIEW, DzlBin)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeCompletionContext *ide_completion_view_get_context (IdeCompletionView    *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                  ide_completion_view_set_context (IdeCompletionView    *self,
                                                        IdeCompletionContext *context);
 

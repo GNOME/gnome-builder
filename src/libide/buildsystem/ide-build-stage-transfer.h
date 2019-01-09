@@ -26,10 +26,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_STAGE_TRANSFER (ide_build_stage_transfer_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeBuildStageTransfer, ide_build_stage_transfer, IDE, BUILD_STAGE_TRANSFER, IdeBuildStage)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeBuildStageTransfer *ide_build_stage_transfer_new (IdeContext  *context,
                                                      IdeTransfer *transfer);
 

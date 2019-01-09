@@ -24,12 +24,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_COMPLETION_RESULTS (ide_langserv_completion_results_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeLangservCompletionResults, ide_langserv_completion_results, IDE, LANGSERV_COMPLETION_RESULTS, GObject)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeLangservCompletionResults *ide_langserv_completion_results_new      (GVariant                     *results);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                          ide_langserv_completion_results_refilter (IdeLangservCompletionResults *self,
                                                                         const gchar                  *typed_text);
 

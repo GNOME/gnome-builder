@@ -38,26 +38,26 @@ typedef enum
   IDE_MARKED_KIND_PANGO     = 3,
 } IdeMarkedKind;
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GType             ide_marked_content_get_type      (void);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeMarkedContent *ide_marked_content_new           (GBytes           *content,
                                                     IdeMarkedKind     kind);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeMarkedContent *ide_marked_content_new_plaintext (const gchar      *plaintext);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeMarkedContent *ide_marked_content_new_from_data (const gchar      *data,
                                                     gssize            len,
                                                     IdeMarkedKind     kind);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GBytes           *ide_marked_content_get_bytes     (IdeMarkedContent *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeMarkedKind     ide_marked_content_get_kind      (IdeMarkedContent *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gchar            *ide_marked_content_as_string     (IdeMarkedContent *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeMarkedContent *ide_marked_content_ref           (IdeMarkedContent *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void              ide_marked_content_unref         (IdeMarkedContent *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeMarkedContent, ide_marked_content_unref)

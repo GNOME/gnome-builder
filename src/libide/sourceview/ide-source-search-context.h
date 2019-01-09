@@ -31,13 +31,13 @@ G_BEGIN_DECLS
  * https://gitlab.gnome.org/GNOME/gtksourceview/issues/8
  */
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void     ide_source_search_context_backward_async   (GtkSourceSearchContext  *search,
                                                      const GtkTextIter       *iter,
                                                      GCancellable            *cancellable,
                                                      GAsyncReadyCallback      callback,
                                                      gpointer                 user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean ide_source_search_context_backward_finish2 (GtkSourceSearchContext  *search,
                                                      GAsyncResult            *result,
                                                      GtkTextIter             *match_begin,

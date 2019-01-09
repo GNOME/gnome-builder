@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_FILE_INFO (ide_vcs_file_info_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeVcsFileInfo, ide_vcs_file_info, IDE, VCS_FILE_INFO, GObject)
 
 typedef enum
@@ -48,13 +48,13 @@ struct _IdeVcsFileInfoClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeVcsFileInfo   *ide_vcs_file_info_new        (GFile            *file);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile            *ide_vcs_file_info_get_file   (IdeVcsFileInfo   *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeVcsFileStatus  ide_vcs_file_info_get_status (IdeVcsFileInfo   *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void              ide_vcs_file_info_set_status (IdeVcsFileInfo   *self,
                                                 IdeVcsFileStatus  status);
 

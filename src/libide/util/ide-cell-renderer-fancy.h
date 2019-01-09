@@ -26,22 +26,22 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CELL_RENDERER_FANCY (ide_cell_renderer_fancy_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCellRendererFancy, ide_cell_renderer_fancy, IDE, CELL_RENDERER_FANCY, GtkCellRenderer)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkCellRenderer *ide_cell_renderer_fancy_new        (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar     *ide_cell_renderer_fancy_get_body   (IdeCellRendererFancy *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar     *ide_cell_renderer_fancy_get_title  (IdeCellRendererFancy *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void             ide_cell_renderer_fancy_take_title (IdeCellRendererFancy *self,
                                                      gchar                *title);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void             ide_cell_renderer_fancy_set_title  (IdeCellRendererFancy *self,
                                                      const gchar          *title);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void             ide_cell_renderer_fancy_set_body   (IdeCellRendererFancy *self,
                                                      const gchar          *body);
 

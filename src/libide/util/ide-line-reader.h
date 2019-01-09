@@ -31,11 +31,11 @@ typedef struct
   gssize  pos;
 } IdeLineReader;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void   ide_line_reader_init (IdeLineReader *reader,
                              gchar         *contents,
                              gssize         length);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar *ide_line_reader_next (IdeLineReader *reader,
                              gsize         *length);
 

@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SERVICE (ide_service_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeService, ide_service, IDE, SERVICE, IdeObject)
 
 /**
@@ -54,11 +54,11 @@ struct _IdeServiceInterface
   void         (*stop)           (IdeService *self);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_service_get_name             (IdeService *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_service_start                (IdeService *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_service_stop                 (IdeService *self);
 void         _ide_service_emit_context_loaded (IdeService *self) G_GNUC_INTERNAL;
 

@@ -26,29 +26,29 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROGRESS (ide_progress_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeProgress, ide_progress, IDE, PROGRESS, GObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeProgress *ide_progress_new                       (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_progress_get_completed             (IdeProgress *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gdouble      ide_progress_get_fraction              (IdeProgress *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar       *ide_progress_get_message               (IdeProgress *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_progress_set_fraction              (IdeProgress *self,
                                                      gdouble      fraction);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_progress_set_message               (IdeProgress *self,
                                                      const gchar *message);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_progress_flatpak_progress_callback (const char  *status,
                                                      guint        progress,
                                                      gboolean     estimating,
                                                      gpointer     user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_progress_file_progress_callback    (goffset      current_num_bytes,
                                                      goffset      total_num_bytes,
                                                      gpointer     user_data);

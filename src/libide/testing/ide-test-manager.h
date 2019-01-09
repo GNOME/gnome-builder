@@ -25,27 +25,27 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TEST_MANAGER (ide_test_manager_get_type())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeTestManager, ide_test_manager, IDE, TEST_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean ide_test_manager_get_loading    (IdeTestManager       *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_test_manager_run_async      (IdeTestManager       *self,
                                           IdeTest              *test,
                                           GCancellable         *cancellable,
                                           GAsyncReadyCallback   callback,
                                           gpointer              user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean ide_test_manager_run_finish     (IdeTestManager       *self,
                                           GAsyncResult         *result,
                                           GError              **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_test_manager_run_all_async  (IdeTestManager       *self,
                                           GCancellable         *cancellable,
                                           GAsyncReadyCallback   callback,
                                           gpointer              user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean ide_test_manager_run_all_finish (IdeTestManager       *self,
                                           GAsyncResult         *result,
                                           GError              **error);

@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_ADDIN (ide_editor_addin_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeEditorAddin, ide_editor_addin, IDE, EDITOR_ADDIN, GObject)
 
 struct _IdeEditorAddinInterface
@@ -42,17 +42,17 @@ struct _IdeEditorAddinInterface
                     IdeLayoutView        *view);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_editor_addin_load     (IdeEditorAddin       *self,
                                 IdeEditorPerspective *perspective);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_editor_addin_unload   (IdeEditorAddin       *self,
                                 IdeEditorPerspective *perspective);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_editor_addin_view_set (IdeEditorAddin       *self,
                                 IdeLayoutView        *view);
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeEditorAddin *ide_editor_addin_find_by_module_name (IdeEditorPerspective *editor,
                                                       const gchar          *module_name);
 

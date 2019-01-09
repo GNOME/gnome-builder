@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_CLIENT (ide_langserv_client_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLangservClient, ide_langserv_client, IDE, LANGSERV_CLIENT, IdeObject)
 
 struct _IdeLangservClientClass
@@ -53,46 +53,46 @@ struct _IdeLangservClientClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLangservClient *ide_langserv_client_new                      (IdeContext           *context,
                                                                  GIOStream            *io_stream);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_client_add_language             (IdeLangservClient    *self,
                                                                  const gchar          *language_id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_client_start                    (IdeLangservClient    *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_client_stop                     (IdeLangservClient    *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_client_call_async               (IdeLangservClient    *self,
                                                                  const gchar          *method,
                                                                  GVariant             *params,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_langserv_client_call_finish              (IdeLangservClient    *self,
                                                                  GAsyncResult         *result,
                                                                  GVariant            **return_value,
                                                                  GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_client_send_notification_async  (IdeLangservClient    *self,
                                                                  const gchar          *method,
                                                                  GVariant             *params,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   notificationback,
                                                                  gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_langserv_client_send_notification_finish (IdeLangservClient    *self,
                                                                  GAsyncResult         *result,
                                                                  GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_client_get_diagnostics_async    (IdeLangservClient    *self,
                                                                  GFile                *file,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_langserv_client_get_diagnostics_finish   (IdeLangservClient    *self,
                                                                  GAsyncResult         *result,
                                                                  IdeDiagnostics      **diagnostics,

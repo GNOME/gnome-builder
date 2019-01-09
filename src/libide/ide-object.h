@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeObject, ide_object, IDE, OBJECT, GObject)
 
 #define IDE_TYPE_OBJECT (ide_object_get_type())
@@ -41,12 +41,12 @@ struct _IdeObjectClass
                               IdeContext *context);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeContext *ide_object_get_context             (IdeObject            *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_object_set_context             (IdeObject            *self,
                                                 IdeContext           *context);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_object_new_for_extension_async (GType                 interface_gtype,
                                                 GCompareDataFunc      sort_priority_func,
                                                 gpointer              sort_priority_data,
@@ -56,7 +56,7 @@ void        ide_object_new_for_extension_async (GType                 interface_
                                                 gpointer              user_data,
                                                 const gchar          *first_property,
                                                 ...);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_object_new_async               (const gchar          *extension_point,
                                                 int                   io_priority,
                                                 GCancellable         *cancellable,
@@ -64,25 +64,25 @@ void        ide_object_new_async               (const gchar          *extension_
                                                 gpointer              user_data,
                                                 const gchar          *first_property,
                                                 ...);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeObject  *ide_object_new_finish              (GAsyncResult         *result,
                                                 GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_object_hold                    (IdeObject            *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_object_release                 (IdeObject            *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_object_notify_in_main          (gpointer              instance,
                                                 GParamSpec           *pspec);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void        ide_object_message                 (gpointer              instance,
                                                 const gchar          *format,
                                                 ...) G_GNUC_PRINTF (2, 3);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void        ide_object_warning                 (gpointer              instance,
                                                 const gchar          *format,
                                                 ...) G_GNUC_PRINTF (2, 3);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_object_is_unloading            (IdeObject            *self);
 
 G_END_DECLS

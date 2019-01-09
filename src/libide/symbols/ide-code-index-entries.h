@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_INDEX_ENTRIES (ide_code_index_entries_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeCodeIndexEntries, ide_code_index_entries, IDE, CODE_INDEX_ENTRIES, GObject)
 
 struct _IdeCodeIndexEntriesInterface
@@ -46,16 +46,16 @@ struct _IdeCodeIndexEntriesInterface
                                              GError              **error);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeCodeIndexEntry *ide_code_index_entries_get_next_entry      (IdeCodeIndexEntries  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile             *ide_code_index_entries_get_file            (IdeCodeIndexEntries  *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_code_index_entries_next_entries_async  (IdeCodeIndexEntries  *self,
                                                                GCancellable         *cancellable,
                                                                GAsyncReadyCallback   callback,
                                                                gpointer              user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GPtrArray         *ide_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *self,
                                                                GAsyncResult         *result,
                                                                GError              **error);

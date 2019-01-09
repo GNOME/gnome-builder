@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_STACK_ADDIN (ide_layout_stack_addin_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeLayoutStackAddin, ide_layout_stack_addin, IDE, LAYOUT_STACK_ADDIN, GObject)
 
 struct _IdeLayoutStackAddinInterface
@@ -44,16 +44,16 @@ struct _IdeLayoutStackAddinInterface
                     IdeLayoutView       *view);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_layout_stack_addin_load                (IdeLayoutStackAddin *self,
                                                                  IdeLayoutStack      *stack);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_layout_stack_addin_unload              (IdeLayoutStackAddin *self,
                                                                  IdeLayoutStack      *stack);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_layout_stack_addin_set_view            (IdeLayoutStackAddin *self,
                                                                  IdeLayoutView       *view);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLayoutStackAddin *ide_layout_stack_addin_find_by_module_name (IdeLayoutStack      *stack,
                                                                  const gchar         *module_name);
 

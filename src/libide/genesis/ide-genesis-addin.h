@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_GENESIS_ADDIN (ide_genesis_addin_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeGenesisAddin, ide_genesis_addin, IDE, GENESIS_ADDIN, GObject)
 
 struct _IdeGenesisAddinInterface
@@ -52,27 +52,27 @@ struct _IdeGenesisAddinInterface
                                 IdeVcsUri            *uri);
 };
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean   ide_genesis_addin_apply_uri      (IdeGenesisAddin      *self,
                                              IdeVcsUri            *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar     *ide_genesis_addin_get_label      (IdeGenesisAddin      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar     *ide_genesis_addin_get_next_label (IdeGenesisAddin      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint       ide_genesis_addin_get_priority   (IdeGenesisAddin      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar     *ide_genesis_addin_get_title      (IdeGenesisAddin      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar     *ide_genesis_addin_get_icon_name  (IdeGenesisAddin      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget *ide_genesis_addin_get_widget     (IdeGenesisAddin      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_genesis_addin_run_async      (IdeGenesisAddin      *self,
                                              GCancellable         *cancellable,
                                              GAsyncReadyCallback   callback,
                                              gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean   ide_genesis_addin_run_finish     (IdeGenesisAddin      *self,
                                              GAsyncResult         *result,
                                              GError              **error);

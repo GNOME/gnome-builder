@@ -25,26 +25,26 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEVICE_MANAGER (ide_device_manager_get_type())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDeviceManager, ide_device_manager, IDE, DEVICE_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gdouble    ide_device_manager_get_progress     (IdeDeviceManager     *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 IdeDevice *ide_device_manager_get_device       (IdeDeviceManager     *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void       ide_device_manager_set_device       (IdeDeviceManager     *self,
                                                 IdeDevice            *device);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 IdeDevice *ide_device_manager_get_device_by_id (IdeDeviceManager     *self,
                                                 const gchar          *device_id);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void       ide_device_manager_deploy_async     (IdeDeviceManager     *self,
                                                 IdeBuildPipeline     *pipeline,
                                                 GCancellable         *cancellable,
                                                 GAsyncReadyCallback   callback,
                                                 gpointer              user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean   ide_device_manager_deploy_finish    (IdeDeviceManager     *self,
                                                 GAsyncResult         *result,
                                                 GError              **error);

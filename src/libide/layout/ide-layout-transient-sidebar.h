@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_TRANSIENT_SIDEBAR (ide_layout_transient_sidebar_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutTransientSidebar, ide_layout_transient_sidebar, IDE, LAYOUT_TRANSIENT_SIDEBAR, IdeLayoutPane)
 
 struct _IdeLayoutTransientSidebarClass
@@ -45,10 +45,10 @@ struct _IdeLayoutTransientSidebarClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_layout_transient_sidebar_set_panel (IdeLayoutTransientSidebar *self,
                                              GtkWidget                 *panel);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_layout_transient_sidebar_set_view  (IdeLayoutTransientSidebar *self,
                                              IdeLayoutView             *view);
 IDE_AVAILABLE_IN_3_32

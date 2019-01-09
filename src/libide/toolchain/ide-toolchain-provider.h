@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TOOLCHAIN_PROVIDER (ide_toolchain_provider_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeToolchainProvider, ide_toolchain_provider, IDE, TOOLCHAIN_PROVIDER, IdeObject)
 
 struct _IdeToolchainProviderInterface
@@ -51,22 +51,22 @@ struct _IdeToolchainProviderInterface
                                    IdeToolchain          *toolchain);
 };
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void        ide_toolchain_provider_load_async   (IdeToolchainProvider  *self,
                                                  GCancellable          *cancellable,
                                                  GAsyncReadyCallback    callback,
                                                  gpointer               user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_toolchain_provider_load_finish  (IdeToolchainProvider  *self,
                                                  GAsyncResult          *result,
                                                  GError               **error);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void        ide_toolchain_provider_unload       (IdeToolchainProvider  *self,
                                                  IdeToolchainManager   *manager);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void        ide_toolchain_provider_emit_added   (IdeToolchainProvider  *self,
                                                  IdeToolchain          *toolchain);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void        ide_toolchain_provider_emit_removed (IdeToolchainProvider  *self,
                                                  IdeToolchain          *toolchain);
 

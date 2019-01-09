@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_STAGE_MKDIRS (ide_build_stage_mkdirs_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeBuildStageMkdirs, ide_build_stage_mkdirs, IDE, BUILD_STAGE_MKDIRS, IdeBuildStage)
 
 struct _IdeBuildStageMkdirsClass
@@ -40,9 +40,9 @@ struct _IdeBuildStageMkdirsClass
   gpointer _reserved4;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeBuildStage *ide_build_stage_mkdirs_new      (IdeContext          *context);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,
                                                 const gchar         *path,
                                                 gboolean             with_parents,

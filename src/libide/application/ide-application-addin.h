@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_APPLICATION_ADDIN (ide_application_addin_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeApplicationAddin, ide_application_addin, IDE, APPLICATION_ADDIN, GObject)
 
 /**
@@ -46,10 +46,10 @@ struct _IdeApplicationAddinInterface
                   IdeApplication      *application);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_application_addin_load   (IdeApplicationAddin *self,
                                    IdeApplication      *application);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_application_addin_unload (IdeApplicationAddin *self,
                                    IdeApplication      *application);
 

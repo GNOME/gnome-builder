@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_PANE (ide_layout_pane_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutPane, ide_layout_pane, IDE, LAYOUT_PANE, DzlDockBinEdge)
 
 struct _IdeLayoutPaneClass

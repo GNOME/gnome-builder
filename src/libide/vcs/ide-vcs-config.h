@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_CONFIG (ide_vcs_config_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeVcsConfig, ide_vcs_config, IDE, VCS_CONFIG, GObject)
 
 typedef enum
@@ -47,11 +47,11 @@ struct _IdeVcsConfigInterface
                       const GValue    *value);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_vcs_config_get_config (IdeVcsConfig     *self,
                                 IdeVcsConfigType  type,
                                 GValue           *value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void ide_vcs_config_set_config (IdeVcsConfig     *self,
                                 IdeVcsConfigType  type,
                                 const GValue     *value);

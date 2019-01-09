@@ -28,31 +28,31 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_HIGHLIGHT_ENGINE (ide_highlight_engine_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeHighlightEngine, ide_highlight_engine, IDE, HIGHLIGHT_ENGINE, IdeObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeHighlightEngine *ide_highlight_engine_new             (IdeBuffer          *buffer);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeBuffer          *ide_highlight_engine_get_buffer      (IdeHighlightEngine *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeHighlighter     *ide_highlight_engine_get_highlighter (IdeHighlightEngine *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_highlight_engine_rebuild         (IdeHighlightEngine *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_highlight_engine_clear           (IdeHighlightEngine *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_highlight_engine_invalidate      (IdeHighlightEngine *self,
                                                           const GtkTextIter  *begin,
                                                           const GtkTextIter  *end);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkTextTag         *ide_highlight_engine_get_style       (IdeHighlightEngine *self,
                                                           const gchar        *style_name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_highlight_engine_pause           (IdeHighlightEngine *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_highlight_engine_unpause         (IdeHighlightEngine *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                ide_highlight_engine_advance         (IdeHighlightEngine *self);
 
 G_END_DECLS

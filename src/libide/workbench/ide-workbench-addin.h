@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKBENCH_ADDIN (ide_workbench_addin_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeWorkbenchAddin, ide_workbench_addin, IDE, WORKBENCH_ADDIN, GObject)
 
 struct _IdeWorkbenchAddinInterface
@@ -58,24 +58,24 @@ struct _IdeWorkbenchAddinInterface
                                 IdePerspective         *perspective);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeWorkbenchAddin *ide_workbench_addin_find_by_module_name (IdeWorkbench *workbench,
                                                             const gchar  *addin_name);
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar    *ide_workbench_addin_get_id          (IdeWorkbenchAddin      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void      ide_workbench_addin_load            (IdeWorkbenchAddin      *self,
                                                IdeWorkbench           *workbench);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void      ide_workbench_addin_unload          (IdeWorkbenchAddin      *self,
                                                IdeWorkbench           *workbench);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean  ide_workbench_addin_can_open        (IdeWorkbenchAddin      *self,
                                                IdeUri                 *uri,
                                                const gchar            *content_type,
                                                gint                   *priority);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void      ide_workbench_addin_open_async      (IdeWorkbenchAddin      *self,
                                                IdeUri                 *uri,
                                                const gchar            *content_type,
@@ -83,11 +83,11 @@ void      ide_workbench_addin_open_async      (IdeWorkbenchAddin      *self,
                                                GCancellable           *cancellable,
                                                GAsyncReadyCallback     callback,
                                                gpointer                user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean  ide_workbench_addin_open_finish     (IdeWorkbenchAddin      *self,
                                                GAsyncResult           *result,
                                                GError                **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void      ide_workbench_addin_perspective_set (IdeWorkbenchAddin      *self,
                                                IdePerspective         *perspective);
 

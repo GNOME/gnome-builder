@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SUBPROCESS_SUPERVISOR (ide_subprocess_supervisor_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeSubprocessSupervisor, ide_subprocess_supervisor, IDE, SUBPROCESS_SUPERVISOR, GObject)
 
 struct _IdeSubprocessSupervisorClass
@@ -48,20 +48,20 @@ struct _IdeSubprocessSupervisorClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSubprocessSupervisor *ide_subprocess_supervisor_new            (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSubprocessLauncher   *ide_subprocess_supervisor_get_launcher   (IdeSubprocessSupervisor *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                     ide_subprocess_supervisor_set_launcher   (IdeSubprocessSupervisor *self,
                                                                    IdeSubprocessLauncher   *launcher);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                     ide_subprocess_supervisor_start          (IdeSubprocessSupervisor *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                     ide_subprocess_supervisor_stop           (IdeSubprocessSupervisor *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSubprocess           *ide_subprocess_supervisor_get_subprocess (IdeSubprocessSupervisor *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                     ide_subprocess_supervisor_set_subprocess (IdeSubprocessSupervisor *self,
                                                                    IdeSubprocess           *subprocess);
 

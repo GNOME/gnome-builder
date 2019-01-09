@@ -29,18 +29,18 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_BREAKPOINTS (ide_debugger_breakpoints_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDebuggerBreakpoints, ide_debugger_breakpoints, IDE, DEBUGGER_BREAKPOINTS, GObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile                 *ide_debugger_breakpoints_get_file      (IdeDebuggerBreakpoints *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerBreakMode   ide_debugger_breakpoints_get_line_mode (IdeDebuggerBreakpoints *self,
                                                                guint                   line);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerBreakpoint *ide_debugger_breakpoints_get_line      (IdeDebuggerBreakpoints *self,
                                                                guint                   line);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_debugger_breakpoints_foreach       (IdeDebuggerBreakpoints *self,
                                                                GFunc                   func,
                                                                gpointer                user_data);

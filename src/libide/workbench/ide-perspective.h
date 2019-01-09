@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PERSPECTIVE (ide_perspective_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdePerspective, ide_perspective, IDE, PERSPECTIVE, GtkWidget)
 
 struct _IdePerspectiveInterface
@@ -49,30 +49,30 @@ struct _IdePerspectiveInterface
   void          (*restore_state)       (IdePerspective *self);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean      ide_perspective_agree_to_shutdown   (IdePerspective *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar        *ide_perspective_get_icon_name       (IdePerspective *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar        *ide_perspective_get_id              (IdePerspective *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean      ide_perspective_get_needs_attention (IdePerspective *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar        *ide_perspective_get_title           (IdePerspective *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget    *ide_perspective_get_titlebar        (IdePerspective *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean      ide_perspective_is_early            (IdePerspective *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void          ide_perspective_set_fullscreen      (IdePerspective *self,
                                                    gboolean        fullscreen);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void          ide_perspective_views_foreach       (IdePerspective *self,
                                                    GtkCallback     callback,
                                                    gpointer        user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar        *ide_perspective_get_accelerator     (IdePerspective *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void          ide_perspective_restore_state       (IdePerspective *self);
 
 G_END_DECLS

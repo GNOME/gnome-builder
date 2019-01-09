@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER_BUTTON (ide_transfer_button_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeTransferButton, ide_transfer_button, IDE, TRANSFER_BUTTON, DzlProgressButton)
 
 struct _IdeTransferButtonClass
@@ -42,7 +42,7 @@ struct _IdeTransferButtonClass
   gpointer _reserved4;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget *ide_transfer_button_new (IdeTransfer *transfer);
 
 G_END_DECLS

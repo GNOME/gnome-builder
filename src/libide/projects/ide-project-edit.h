@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_EDIT (ide_project_edit_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeProjectEdit, ide_project_edit, IDE, PROJECT_EDIT, GObject)
 
 struct _IdeProjectEditClass
@@ -42,16 +42,16 @@ struct _IdeProjectEditClass
   gpointer _reserved4;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeProjectEdit *ide_project_edit_new             (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceRange *ide_project_edit_get_range       (IdeProjectEdit *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_project_edit_set_range       (IdeProjectEdit *self,
                                                   IdeSourceRange *range);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar    *ide_project_edit_get_replacement (IdeProjectEdit *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_project_edit_set_replacement (IdeProjectEdit *self,
                                                   const gchar    *replacement);
 

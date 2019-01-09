@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_TRANSFER  (ide_transfer_get_type())
 #define IDE_TRANSFER_ERROR (ide_transfer_error_quark())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeTransfer, ide_transfer, IDE, TRANSFER, GObject)
 
 struct _IdeTransferClass
@@ -59,40 +59,40 @@ typedef enum
   IDE_TRANSFER_ERROR_CONNECTION_IS_METERED = 1,
 } IdeTransferError;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GQuark       ide_transfer_error_quark    (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_transfer_cancel         (IdeTransfer          *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_transfer_get_completed  (IdeTransfer          *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_transfer_get_active     (IdeTransfer          *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_transfer_get_icon_name  (IdeTransfer          *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_transfer_set_icon_name  (IdeTransfer          *self,
                                           const gchar          *icon_name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gdouble      ide_transfer_get_progress   (IdeTransfer          *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_transfer_set_progress   (IdeTransfer          *self,
                                           gdouble               progress);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_transfer_get_status     (IdeTransfer          *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_transfer_set_status     (IdeTransfer          *self,
                                           const gchar          *status);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_transfer_get_title      (IdeTransfer          *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_transfer_set_title      (IdeTransfer          *self,
                                           const gchar          *title);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_transfer_execute_async  (IdeTransfer          *self,
                                           GCancellable         *cancellable,
                                           GAsyncReadyCallback   callback,
                                           gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_transfer_execute_finish (IdeTransfer          *self,
                                           GAsyncResult         *result,
                                           GError              **error);

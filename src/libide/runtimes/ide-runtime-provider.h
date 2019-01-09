@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RUNTIME_PROVIDER (ide_runtime_provider_get_type ())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeRuntimeProvider, ide_runtime_provider, IDE, RUNTIME_PROVIDER, GObject)
 
 struct _IdeRuntimeProviderInterface
@@ -59,32 +59,32 @@ struct _IdeRuntimeProviderInterface
                                    GError              **error);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_runtime_provider_load             (IdeRuntimeProvider   *self,
                                                    IdeRuntimeManager    *manager);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_runtime_provider_unload           (IdeRuntimeProvider   *self,
                                                    IdeRuntimeManager    *manager);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_runtime_provider_can_install      (IdeRuntimeProvider   *self,
                                                    const gchar          *runtime_id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_runtime_provider_install_async    (IdeRuntimeProvider   *self,
                                                    const gchar          *runtime_id,
                                                    GCancellable         *cancellable,
                                                    GAsyncReadyCallback   callback,
                                                    gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_runtime_provider_install_finish   (IdeRuntimeProvider   *self,
                                                    GAsyncResult         *result,
                                                    GError              **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void        ide_runtime_provider_bootstrap_async  (IdeRuntimeProvider   *self,
                                                    IdeBuildPipeline     *pipeline,
                                                    GCancellable         *cancellable,
                                                    GAsyncReadyCallback   callback,
                                                    gpointer              user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 IdeRuntime *ide_runtime_provider_bootstrap_finish (IdeRuntimeProvider   *self,
                                                    GAsyncResult         *result,
                                                    GError              **error);

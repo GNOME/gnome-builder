@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_PROVIDER (ide_completion_provider_get_type ())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeCompletionProvider, ide_completion_provider, IDE, COMPLETION_PROVIDER, GObject)
 
 struct _IdeCompletionProviderInterface
@@ -72,47 +72,47 @@ struct _IdeCompletionProviderInterface
                                     IdeCompletionProposal    *proposal);
 };
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GIcon      *ide_completion_provider_get_icon         (IdeCompletionProvider    *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gint        ide_completion_provider_get_priority     (IdeCompletionProvider    *self,
                                                       IdeCompletionContext     *context);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gchar      *ide_completion_provider_get_title        (IdeCompletionProvider    *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void        ide_completion_provider_populate_async   (IdeCompletionProvider    *self,
                                                       IdeCompletionContext     *context,
                                                       GCancellable             *cancellable,
                                                       GAsyncReadyCallback       callback,
                                                       gpointer                  user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GListModel *ide_completion_provider_populate_finish  (IdeCompletionProvider    *self,
                                                       GAsyncResult             *result,
                                                       GError                  **error);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void        ide_completion_provider_display_proposal (IdeCompletionProvider    *self,
                                                       IdeCompletionListBoxRow  *row,
                                                       IdeCompletionContext     *context,
                                                       const gchar              *typed_text,
                                                       IdeCompletionProposal    *proposal);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void        ide_completion_provider_activate_poposal (IdeCompletionProvider    *self,
                                                       IdeCompletionContext     *context,
                                                       IdeCompletionProposal    *proposal,
                                                       const GdkEventKey        *key);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_completion_provider_refilter         (IdeCompletionProvider    *self,
                                                       IdeCompletionContext     *context,
                                                       GListModel               *proposals);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_completion_provider_is_trigger       (IdeCompletionProvider    *self,
                                                       const GtkTextIter        *iter,
                                                       gunichar                  ch);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_completion_provider_key_activates    (IdeCompletionProvider    *self,
                                                       IdeCompletionProposal    *proposal,
                                                       const GdkEventKey        *key);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gchar      *ide_completion_provider_get_comment      (IdeCompletionProvider    *self,
                                                       IdeCompletionProposal    *proposal);
 

@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FANCY_TREE_VIEW (ide_fancy_tree_view_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeFancyTreeView, ide_fancy_tree_view, IDE, FANCY_TREE_VIEW, GtkTreeView)
 
 struct _IdeFancyTreeViewClass
@@ -40,9 +40,9 @@ struct _IdeFancyTreeViewClass
   gpointer _reserved4;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget *ide_fancy_tree_view_new           (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_fancy_tree_view_set_data_func (IdeFancyTreeView      *self,
                                               GtkCellLayoutDataFunc  func,
                                               gpointer               func_data,

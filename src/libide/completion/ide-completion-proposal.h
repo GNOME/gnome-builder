@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_PROPOSAL (ide_completion_proposal_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeCompletionProposal, ide_completion_proposal, IDE, COMPLETION_PROPOSAL, GObject)
 
 struct _IdeCompletionProposalInterface

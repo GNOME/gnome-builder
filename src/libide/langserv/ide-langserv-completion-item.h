@@ -27,21 +27,21 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_COMPLETION_ITEM (ide_langserv_completion_item_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeLangservCompletionItem, ide_langserv_completion_item, IDE, LANGSERV_COMPLETION_ITEM, GObject)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeLangservCompletionItem *ide_langserv_completion_item_new             (GVariant *variant);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 const gchar               *ide_langserv_completion_item_get_icon_name   (IdeLangservCompletionItem *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 const gchar               *ide_langserv_completion_item_get_return_type (IdeLangservCompletionItem *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 const gchar               *ide_langserv_completion_item_get_detail      (IdeLangservCompletionItem *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gchar                     *ide_langserv_completion_item_get_markup      (IdeLangservCompletionItem *self,
                                                                          const gchar               *typed_text);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSnippet                *ide_langserv_completion_item_get_snippet     (IdeLangservCompletionItem *self);
 
 G_END_DECLS

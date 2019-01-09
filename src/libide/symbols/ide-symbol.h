@@ -86,36 +86,36 @@ typedef enum
   IDE_SYMBOL_FLAGS_IS_DEFINITION = 1 << 3
 } IdeSymbolFlags;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType              ide_symbol_get_type                 (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSymbol         *ide_symbol_ref                      (IdeSymbol *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_symbol_unref                    (IdeSymbol *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSymbolKind      ide_symbol_get_kind                 (IdeSymbol *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSymbolFlags     ide_symbol_get_flags                (IdeSymbol *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar       *ide_symbol_get_name                 (IdeSymbol *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_symbol_get_canonical_location   (IdeSymbol *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_symbol_get_declaration_location (IdeSymbol *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_symbol_get_definition_location  (IdeSymbol *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSymbol         *ide_symbol_new                      (const gchar           *name,
                                                         IdeSymbolKind          kind,
                                                         IdeSymbolFlags         flags,
                                                         IdeSourceLocation     *declaration_location,
                                                         IdeSourceLocation     *definition_location,
                                                         IdeSourceLocation     *canonical_location);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSymbol         *ide_symbol_new_from_variant         (GVariant              *variant);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GVariant          *ide_symbol_to_variant               (const IdeSymbol       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar       *ide_symbol_kind_get_icon_name       (IdeSymbolKind          kind);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSymbol, ide_symbol_unref)

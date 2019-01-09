@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_OVERLAY (ide_completion_overlay_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompletionOverlay, ide_completion_overlay, IDE, COMPLETION_OVERLAY, DzlBin)
 
 G_END_DECLS

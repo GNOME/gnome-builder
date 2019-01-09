@@ -30,53 +30,53 @@ G_BEGIN_DECLS
 
 #define IDE_FILE_ATTRIBUTE_POSITION "metadata::libide-position"
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeFile, ide_file, IDE, FILE, IdeObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFile           *ide_file_new                  (IdeContext           *context,
                                                   GFile                *file);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFile           *ide_file_new_for_path         (IdeContext           *context,
                                                   const gchar          *path);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_file_get_is_temporary     (IdeFile              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint              ide_file_get_temporary_id     (IdeFile              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkSourceLanguage *ide_file_get_language         (IdeFile              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar       *ide_file_get_language_id      (IdeFile              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile             *ide_file_get_file             (IdeFile              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint              ide_file_hash                 (IdeFile              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_file_equal                (IdeFile              *self,
                                                   IdeFile              *other);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar       *ide_file_get_path             (IdeFile              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_file_load_settings_async  (IdeFile              *self,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFileSettings   *ide_file_load_settings_finish (IdeFile              *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 IdeFileSettings   *ide_file_peek_settings        (IdeFile              *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_file_find_other_async     (IdeFile              *self,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFile           *ide_file_find_other_finish    (IdeFile              *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint               ide_file_compare              (const IdeFile        *a,
                                                   const IdeFile        *b);
 const gchar       *_ide_file_get_content_type    (IdeFile              *self) G_GNUC_INTERNAL;

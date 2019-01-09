@@ -28,29 +28,29 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_ENVIRONMENT (ide_environment_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeEnvironment, ide_environment, IDE, ENVIRONMENT, GObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeEnvironment *ide_environment_new         (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_environment_setenv      (IdeEnvironment         *self,
                                              const gchar            *key,
                                              const gchar            *value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar    *ide_environment_getenv      (IdeEnvironment         *self,
                                              const gchar            *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar         **ide_environment_get_environ (IdeEnvironment         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_environment_append      (IdeEnvironment         *self,
                                              IdeEnvironmentVariable *variable);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_environment_remove      (IdeEnvironment         *self,
                                              IdeEnvironmentVariable *variable);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeEnvironment *ide_environment_copy        (IdeEnvironment         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_environment_copy_into   (IdeEnvironment         *self,
                                              IdeEnvironment         *dest,
                                              gboolean                replace);

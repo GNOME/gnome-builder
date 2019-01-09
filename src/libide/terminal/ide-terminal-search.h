@@ -26,17 +26,17 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL_SEARCH (ide_terminal_search_get_type())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, IDE, TERMINAL_SEARCH, GtkBin)
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 VteRegex    *ide_terminal_search_get_regex       (IdeTerminalSearch *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_terminal_search_get_wrap_around (IdeTerminalSearch *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void         ide_terminal_search_set_terminal    (IdeTerminalSearch *self,
                                                   VteTerminal       *terminal);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 GtkRevealer *ide_terminal_search_get_revealer    (IdeTerminalSearch *self);
 
 G_END_DECLS

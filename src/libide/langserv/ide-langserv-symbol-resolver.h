@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_SYMBOL_RESOLVER (ide_langserv_symbol_resolver_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLangservSymbolResolver, ide_langserv_symbol_resolver, IDE, LANGSERV_SYMBOL_RESOLVER, IdeObject)
 
 struct _IdeLangservSymbolResolverClass
@@ -47,9 +47,9 @@ struct _IdeLangservSymbolResolverClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLangservClient *ide_langserv_symbol_resolver_get_client (IdeLangservSymbolResolver *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_symbol_resolver_set_client (IdeLangservSymbolResolver *self,
                                                             IdeLangservClient         *client);
 

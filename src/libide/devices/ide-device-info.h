@@ -39,19 +39,19 @@ typedef enum
 
 #define IDE_TYPE_DEVICE_INFO (ide_device_info_get_type())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDeviceInfo, ide_device_info, IDE, DEVICE_INFO, GObject)
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 IdeDeviceInfo *ide_device_info_new              (void);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 IdeDeviceKind  ide_device_info_get_kind         (IdeDeviceInfo *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void           ide_device_info_set_kind         (IdeDeviceInfo *self,
                                                  IdeDeviceKind  kind);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeTriplet    *ide_device_info_get_host_triplet (IdeDeviceInfo *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void           ide_device_info_set_host_triplet (IdeDeviceInfo *self,
                                                  IdeTriplet    *host_triplet);
 

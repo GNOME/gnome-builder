@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_DISPLAY (ide_completion_display_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeCompletionDisplay, ide_completion_display, IDE, COMPLETION_DISPLAY, GtkWidget)
 
 struct _IdeCompletionDisplayInterface
@@ -50,19 +50,19 @@ struct _IdeCompletionDisplayInterface
                                gint                        count);
 };
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void     ide_completion_display_attach          (IdeCompletionDisplay *self,
                                                  GtkSourceView        *view);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void     ide_completion_display_set_context     (IdeCompletionDisplay *self,
                                                  IdeCompletionContext *context);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean ide_completion_display_key_press_event (IdeCompletionDisplay *self,
                                                  const GdkEventKey    *key);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void     ide_completion_display_set_n_rows      (IdeCompletionDisplay *self,
                                                  guint                 n_rows);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void     ide_completion_display_move_cursor     (IdeCompletionDisplay *self,
                                                  GtkMovementStep       step,
                                                  gint                  count);

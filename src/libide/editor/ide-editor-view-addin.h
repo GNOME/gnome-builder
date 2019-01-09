@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_VIEW_ADDIN (ide_editor_view_addin_get_type ())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeEditorViewAddin, ide_editor_view_addin, IDE, EDITOR_VIEW_ADDIN, GObject)
 
 struct _IdeEditorViewAddinInterface
@@ -44,19 +44,19 @@ struct _IdeEditorViewAddinInterface
                               IdeLayoutStack     *stack);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_editor_view_addin_load                (IdeEditorViewAddin *self,
                                                                IdeEditorView      *view);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_editor_view_addin_unload              (IdeEditorViewAddin *self,
                                                                IdeEditorView      *view);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_editor_view_addin_stack_set           (IdeEditorViewAddin *self,
                                                                IdeLayoutStack     *stack);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_editor_view_addin_language_changed    (IdeEditorViewAddin *self,
                                                                const gchar        *language_id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeEditorViewAddin *ide_editor_view_addin_find_by_module_name (IdeEditorView      *view,
                                                                const gchar        *module_name);
 

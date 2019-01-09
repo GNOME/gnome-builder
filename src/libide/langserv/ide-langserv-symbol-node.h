@@ -26,12 +26,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_SYMBOL_NODE (ide_langserv_symbol_node_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeLangservSymbolNode, ide_langserv_symbol_node, IDE, LANGSERV_SYMBOL_NODE, IdeSymbolNode)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_langserv_symbol_node_get_parent_name (IdeLangservSymbolNode *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_langserv_symbol_node_is_parent_of    (IdeLangservSymbolNode *self,
                                                        IdeLangservSymbolNode *other);
 

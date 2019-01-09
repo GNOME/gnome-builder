@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SESSION_ADDIN (ide_session_addin_get_type ())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeSessionAddin, ide_session_addin, IDE, SESSION_ADDIN, IdeObject)
 
 struct _IdeSessionAddinInterface
@@ -51,22 +51,22 @@ struct _IdeSessionAddinInterface
                                GError              **error);
 };
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void      ide_session_addin_save_async     (IdeSessionAddin      *self,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,
                                             gpointer              user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GVariant *ide_session_addin_save_finish    (IdeSessionAddin      *self,
                                             GAsyncResult         *result,
                                             GError              **error);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void      ide_session_addin_restore_async  (IdeSessionAddin      *self,
                                             GVariant             *state,
                                             GCancellable         *cancellable,
                                             GAsyncReadyCallback   callback,
                                             gpointer              user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean  ide_session_addin_restore_finish (IdeSessionAddin      *self,
                                             GAsyncResult         *result,
                                             GError              **error);

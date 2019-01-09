@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEPENDENCY_UPDATER (ide_dependency_updater_get_type ())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeDependencyUpdater, ide_dependency_updater, IDE, DEPENDENCY_UPDATER, IdeObject)
 
 struct _IdeDependencyUpdaterInterface
@@ -41,12 +41,12 @@ struct _IdeDependencyUpdaterInterface
                              GError               **error);
 };
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_dependency_updater_update_async  (IdeDependencyUpdater  *self,
                                                GCancellable          *cancellable,
                                                GAsyncReadyCallback    callback,
                                                gpointer               user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean ide_dependency_updater_update_finish (IdeDependencyUpdater  *self,
                                                GAsyncResult          *result,
                                                GError               **error);

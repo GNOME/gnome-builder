@@ -26,10 +26,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFERS_BUTTON (ide_transfers_button_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeTransfersButton, ide_transfers_button, IDE, TRANSFERS_BUTTON, DzlProgressMenuButton)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget *ide_transfers_button_new (void);
 
 G_END_DECLS

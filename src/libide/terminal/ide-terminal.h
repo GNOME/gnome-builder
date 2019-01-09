@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL (ide_terminal_get_type())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeTerminal, ide_terminal, IDE, TERMINAL, VteTerminal)
 
 struct _IdeTerminalClass
@@ -44,7 +44,7 @@ struct _IdeTerminalClass
   gpointer padding[16];
 };
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 GtkWidget *ide_terminal_new (void);
 
 G_END_DECLS

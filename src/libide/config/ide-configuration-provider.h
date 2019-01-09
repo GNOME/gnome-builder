@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIGURATION_PROVIDER (ide_configuration_provider_get_type ())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, IDE, CONFIGURATION_PROVIDER, IdeObject)
 
 struct _IdeConfigurationProviderInterface
@@ -60,36 +60,36 @@ struct _IdeConfigurationProviderInterface
   void     (*unload)         (IdeConfigurationProvider  *self);
 };
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_configuration_provider_emit_added    (IdeConfigurationProvider  *self,
                                                    IdeConfiguration          *config);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_configuration_provider_emit_removed  (IdeConfigurationProvider  *self,
                                                    IdeConfiguration          *config);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_configuration_provider_load_async    (IdeConfigurationProvider  *self,
                                                    GCancellable              *cancellable,
                                                    GAsyncReadyCallback        callback,
                                                    gpointer                   user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean ide_configuration_provider_load_finish   (IdeConfigurationProvider  *self,
                                                    GAsyncResult              *result,
                                                    GError                   **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_configuration_provider_save_async    (IdeConfigurationProvider  *self,
                                                    GCancellable              *cancellable,
                                                    GAsyncReadyCallback        callback,
                                                    gpointer                   user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean ide_configuration_provider_save_finish   (IdeConfigurationProvider  *self,
                                                    GAsyncResult              *result,
                                                    GError                   **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_configuration_provider_delete        (IdeConfigurationProvider  *self,
                                                    IdeConfiguration          *config);
 void     ide_configuration_provider_duplicate     (IdeConfigurationProvider  *self,
                                                    IdeConfiguration          *config);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void     ide_configuration_provider_unload        (IdeConfigurationProvider  *self);
 
 G_END_DECLS

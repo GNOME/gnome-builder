@@ -26,19 +26,19 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FORMATTER_OPTIONS (ide_formatter_options_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeFormatterOptions, ide_formatter_options, IDE, FORMATTER_OPTIONS, GObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFormatterOptions *ide_formatter_options_new               (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint                ide_formatter_options_get_tab_width     (IdeFormatterOptions *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_formatter_options_set_tab_width     (IdeFormatterOptions *self,
                                                               guint                tab_width);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean             ide_formatter_options_get_insert_spaces (IdeFormatterOptions *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_formatter_options_set_insert_spaces (IdeFormatterOptions *self,
                                                               gboolean             insert_spaces);
 

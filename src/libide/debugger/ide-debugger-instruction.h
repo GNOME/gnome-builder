@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_INSTRUCTION (ide_debugger_instruction_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerInstruction, ide_debugger_instruction, IDE, DEBUGGER_INSTRUCTION, GObject)
 
 struct _IdeDebuggerInstructionClass
@@ -40,18 +40,18 @@ struct _IdeDebuggerInstructionClass
   gpointer _reserved4;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerInstruction *ide_debugger_instruction_new          (IdeDebuggerAddress      address);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerAddress      ide_debugger_instruction_get_address  (IdeDebuggerInstruction *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar            *ide_debugger_instruction_get_function (IdeDebuggerInstruction *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                    ide_debugger_instruction_set_function (IdeDebuggerInstruction *self,
                                                                const gchar            *function);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar            *ide_debugger_instruction_get_display  (IdeDebuggerInstruction *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                    ide_debugger_instruction_set_display  (IdeDebuggerInstruction *self,
                                                                const gchar            *display);
 

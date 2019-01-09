@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RENAME_PROVIDER (ide_rename_provider_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeRenameProvider, ide_rename_provider, IDE, RENAME_PROVIDER, IdeObject)
 
 struct _IdeRenameProviderInterface
@@ -48,16 +48,16 @@ struct _IdeRenameProviderInterface
   void     (*load)          (IdeRenameProvider    *self);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void      ide_rename_provider_load          (IdeRenameProvider     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void      ide_rename_provider_rename_async  (IdeRenameProvider     *self,
                                              IdeSourceLocation     *location,
                                              const gchar           *new_name,
                                              GCancellable          *cancellable,
                                              GAsyncReadyCallback    callback,
                                              gpointer               user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean  ide_rename_provider_rename_finish (IdeRenameProvider     *self,
                                              GAsyncResult          *result,
                                              GPtrArray            **edits,

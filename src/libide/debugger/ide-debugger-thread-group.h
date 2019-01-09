@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_THREAD_GROUP (ide_debugger_thread_group_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerThreadGroup, ide_debugger_thread_group, IDE, DEBUGGER_THREAD_GROUP, GObject)
 
 struct _IdeDebuggerThreadGroupClass
@@ -40,21 +40,21 @@ struct _IdeDebuggerThreadGroupClass
   gpointer _reserved4;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint                    ide_debugger_thread_group_compare       (IdeDebuggerThreadGroup *a,
                                                                  IdeDebuggerThreadGroup *b);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDebuggerThreadGroup *ide_debugger_thread_group_new           (const gchar *id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar            *ide_debugger_thread_group_get_id        (IdeDebuggerThreadGroup *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar            *ide_debugger_thread_group_get_pid       (IdeDebuggerThreadGroup *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                    ide_debugger_thread_group_set_pid       (IdeDebuggerThreadGroup *self,
                                                                  const gchar            *pid);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar            *ide_debugger_thread_group_get_exit_code (IdeDebuggerThreadGroup *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                    ide_debugger_thread_group_set_exit_code (IdeDebuggerThreadGroup *self,
                                                                  const gchar            *exit_code);
 

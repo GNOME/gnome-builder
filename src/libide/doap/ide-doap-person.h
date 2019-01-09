@@ -26,19 +26,19 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DOAP_PERSON (ide_doap_person_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDoapPerson, ide_doap_person, IDE, DOAP_PERSON, GObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDoapPerson *ide_doap_person_new       (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_person_get_name  (IdeDoapPerson *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_doap_person_set_name  (IdeDoapPerson *self,
                                           const gchar   *name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_person_get_email (IdeDoapPerson *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_doap_person_set_email (IdeDoapPerson *self,
                                           const gchar   *email);
 

@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_TARGET (ide_build_target_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeBuildTarget, ide_build_target, IDE, BUILD_TARGET, IdeObject)
 
 struct _IdeBuildTargetInterface
@@ -43,19 +43,19 @@ struct _IdeBuildTargetInterface
   gchar  *(*get_language)          (IdeBuildTarget *self);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile     *ide_build_target_get_install_directory (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar     *ide_build_target_get_name              (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gint       ide_build_target_get_priority          (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gchar    **ide_build_target_get_argv              (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gchar     *ide_build_target_get_cwd               (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gchar     *ide_build_target_get_language          (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean   ide_build_target_compare               (const IdeBuildTarget *left,
                                                    const IdeBuildTarget *right);
 

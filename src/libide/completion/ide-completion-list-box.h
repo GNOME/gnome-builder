@@ -29,28 +29,28 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_LIST_BOX (ide_completion_list_box_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompletionListBox, ide_completion_list_box, IDE, COMPLETION_LIST_BOX, DzlBin)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GtkWidget             *ide_completion_list_box_new          (void);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeCompletionContext  *ide_completion_list_box_get_context  (IdeCompletionListBox   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_set_context  (IdeCompletionListBox   *self,
                                                              IdeCompletionContext   *context);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 guint                  ide_completion_list_box_get_n_rows   (IdeCompletionListBox   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_set_n_rows   (IdeCompletionListBox   *self,
                                                              guint                   n_rows);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeCompletionProposal *ide_completion_list_box_get_proposal (IdeCompletionListBox   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean               ide_completion_list_box_get_selected (IdeCompletionListBox   *self,
                                                              IdeCompletionProvider **provider,
                                                              IdeCompletionProposal **proposal);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                   ide_completion_list_box_move_cursor  (IdeCompletionListBox   *self,
                                                              GtkMovementStep         step,
                                                              gint                    direction);

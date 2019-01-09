@@ -26,21 +26,21 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType           ide_unsaved_file_get_type      (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeUnsavedFile *ide_unsaved_file_ref           (IdeUnsavedFile  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_unsaved_file_unref         (IdeUnsavedFile  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GBytes         *ide_unsaved_file_get_content   (IdeUnsavedFile  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile          *ide_unsaved_file_get_file      (IdeUnsavedFile  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint64          ide_unsaved_file_get_sequence  (IdeUnsavedFile  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar    *ide_unsaved_file_get_temp_path (IdeUnsavedFile  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean        ide_unsaved_file_persist       (IdeUnsavedFile  *self,
                                                 GCancellable    *cancellable,
                                                 GError         **error);

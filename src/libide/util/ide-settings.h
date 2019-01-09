@@ -25,74 +25,74 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SETTINGS (ide_settings_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSettings, ide_settings, IDE, SETTINGS, IdeObject)
 
 IdeSettings *_ide_settings_new                        (IdeContext              *context,
                                                        const gchar             *schema_id,
                                                        const gchar             *relative_path,
                                                        gboolean                 ignore_project_settings) G_GNUC_INTERNAL;
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_settings_get_relative_path           (IdeSettings             *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_settings_get_schema_id               (IdeSettings             *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_settings_get_ignore_project_settings (IdeSettings             *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GVariant    *ide_settings_get_default_value           (IdeSettings             *self,
                                                        const gchar             *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GVariant    *ide_settings_get_user_value              (IdeSettings             *self,
                                                        const gchar             *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GVariant    *ide_settings_get_value                   (IdeSettings             *self,
                                                        const gchar             *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_set_value                   (IdeSettings             *self,
                                                        const gchar             *key,
                                                        GVariant                *value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_settings_get_boolean                 (IdeSettings             *self,
                                                        const gchar             *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gdouble      ide_settings_get_double                  (IdeSettings             *self,
                                                        const gchar             *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint         ide_settings_get_int                     (IdeSettings             *self,
                                                        const gchar             *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar       *ide_settings_get_string                  (IdeSettings             *self,
                                                        const gchar             *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint        ide_settings_get_uint                    (IdeSettings             *self,
                                                        const gchar             *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_set_boolean                 (IdeSettings             *self,
                                                        const gchar             *key,
                                                        gboolean                 val);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_set_double                  (IdeSettings             *self,
                                                        const gchar             *key,
                                                        gdouble                  val);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_set_int                     (IdeSettings             *self,
                                                        const gchar             *key,
                                                        gint                     val);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_set_string                  (IdeSettings             *self,
                                                        const gchar             *key,
                                                        const gchar             *val);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_set_uint                    (IdeSettings             *self,
                                                        const gchar             *key,
                                                        guint                    val);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_bind                        (IdeSettings             *self,
                                                        const gchar             *key,
                                                        gpointer                 object,
                                                        const gchar             *property,
                                                        GSettingsBindFlags       flags);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_bind_with_mapping           (IdeSettings             *self,
                                                        const gchar             *key,
                                                        gpointer                 object,
@@ -102,7 +102,7 @@ void         ide_settings_bind_with_mapping           (IdeSettings             *
                                                        GSettingsBindSetMapping  set_mapping,
                                                        gpointer                 user_data,
                                                        GDestroyNotify           destroy);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_settings_unbind                      (IdeSettings             *self,
                                                        const gchar             *property);
 

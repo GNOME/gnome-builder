@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUFFER_ADDIN (ide_buffer_addin_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeBufferAddin, ide_buffer_addin, IDE, BUFFER_ADDIN, GObject)
 
 struct _IdeBufferAddinInterface
@@ -39,13 +39,13 @@ struct _IdeBufferAddinInterface
                   IdeBuffer         *buffer);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_buffer_addin_load                (IdeBufferAddin *self,
                                                       IdeBuffer      *buffer);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_buffer_addin_unload              (IdeBufferAddin *self,
                                                       IdeBuffer      *buffer);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeBufferAddin *ide_buffer_addin_find_by_module_name (IdeBuffer      *buffer,
                                                       const gchar    *module_name);
 

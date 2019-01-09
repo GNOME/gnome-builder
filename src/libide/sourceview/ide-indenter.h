@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_INDENTER (ide_indenter_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeIndenter, ide_indenter, IDE, INDENTER, IdeObject)
 
 struct _IdeIndenterInterface
@@ -45,10 +45,10 @@ struct _IdeIndenterInterface
                             GdkEventKey   *event);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean  ide_indenter_is_trigger (IdeIndenter *self,
                                    GdkEventKey *event);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar    *ide_indenter_format     (IdeIndenter *self,
                                    GtkTextView *text_view,
                                    GtkTextIter *begin,

@@ -60,46 +60,46 @@ ide_clear_string (gchar **ptr)
   *ptr = NULL;
 }
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_environ_parse                        (const gchar          *pair,
                                                        gchar               **key,
                                                        gchar               **value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_gettext                              (const gchar          *message);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_g_task_return_boolean_from_main      (GTask                *task,
                                                        gboolean              value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_g_task_return_int_from_main          (GTask                *task,
                                                        gint                  value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_g_task_return_pointer_from_main      (GTask                *task,
                                                        gpointer              value,
                                                        GDestroyNotify        notify);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_g_task_return_error_from_main        (GTask                *task,
                                                        GError               *error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gchar       *ide_g_file_get_uncanonical_relative_path (GFile                *file,
                                                        GFile                *other);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void         ide_g_file_find_with_depth_async         (GFile                *file,
                                                        const gchar          *pattern,
                                                        guint                 max_depth,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void         ide_g_file_find_async                    (GFile                *file,
                                                        const gchar          *pattern,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 GPtrArray   *ide_g_file_find_finish                   (GFile                *file,
                                                        GAsyncResult         *result,
                                                        GError              **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void         ide_g_file_get_children_async            (GFile                *file,
                                                        const gchar          *attributes,
                                                        GFileQueryInfoFlags   flags,
@@ -107,16 +107,16 @@ void         ide_g_file_get_children_async            (GFile                *fil
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 GPtrArray   *ide_g_file_get_children_finish           (GFile                *file,
                                                        GAsyncResult         *result,
                                                        GError              **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_g_host_file_get_contents             (const gchar          *path,
                                                        gchar               **contents,
                                                        gsize                *len,
                                                        GError              **error);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GIcon       *ide_g_content_type_get_symbolic_icon     (const gchar          *content_type);
 
 G_END_DECLS

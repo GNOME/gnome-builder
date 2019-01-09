@@ -26,12 +26,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_WINDOW (ide_completion_window_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompletionWindow, ide_completion_window, IDE, COMPLETION_WINDOW, GtkWindow)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeCompletionContext *ide_completion_window_get_context (IdeCompletionWindow  *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                  ide_completion_window_set_context (IdeCompletionWindow  *self,
                                                          IdeCompletionContext *context);
 

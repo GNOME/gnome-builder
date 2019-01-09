@@ -27,10 +27,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_MONITOR (ide_vcs_monitor_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeVcsMonitor, ide_vcs_monitor, IDE, VCS_MONITOR, IdeObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeVcsFileInfo *ide_vcs_monitor_get_info (IdeVcsMonitor *self,
                                           GFile         *file);
 

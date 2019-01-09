@@ -31,46 +31,46 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_VIEW (ide_editor_view_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeEditorView, ide_editor_view, IDE, EDITOR_VIEW, IdeLayoutView)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeBuffer         *ide_editor_view_get_buffer                  (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceView     *ide_editor_view_get_view                    (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeEditorSearch   *ide_editor_view_get_search                  (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar       *ide_editor_view_get_language_id             (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_scroll_to_line              (IdeEditorView     *self,
                                                                 guint              line);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_scroll_to_line_offset       (IdeEditorView     *self,
                                                                 guint              line,
                                                                 guint              line_offset);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_editor_view_get_auto_hide_map           (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_set_auto_hide_map           (IdeEditorView     *self,
                                                                 gboolean           auto_hide_map);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_editor_view_get_show_map                (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_set_show_map                (IdeEditorView     *self,
                                                                 gboolean           show_map);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkSourceLanguage *ide_editor_view_get_language                (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_set_language                (IdeEditorView     *self,
                                                                 GtkSourceLanguage *language);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_move_next_error             (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_move_previous_error         (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_move_next_search_result     (IdeEditorView     *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_editor_view_move_previous_search_result (IdeEditorView     *self);
 
 G_END_DECLS

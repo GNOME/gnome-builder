@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_TEMPLATE (ide_project_template_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeProjectTemplate, ide_project_template, IDE, PROJECT_TEMPLATE, GObject)
 
 struct _IdeProjectTemplateInterface
@@ -50,31 +50,31 @@ struct _IdeProjectTemplateInterface
   gint        (*get_priority)    (IdeProjectTemplate   *self);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar      *ide_project_template_get_id          (IdeProjectTemplate  *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gint        ide_project_template_get_priority    (IdeProjectTemplate  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar      *ide_project_template_get_name        (IdeProjectTemplate  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar      *ide_project_template_get_description (IdeProjectTemplate  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget  *ide_project_template_get_widget      (IdeProjectTemplate  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar     **ide_project_template_get_languages   (IdeProjectTemplate  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar      *ide_project_template_get_icon_name   (IdeProjectTemplate  *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void        ide_project_template_expand_async    (IdeProjectTemplate   *self,
                                                   GHashTable           *params,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean    ide_project_template_expand_finish   (IdeProjectTemplate   *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gint        ide_project_template_compare         (IdeProjectTemplate   *a,
                                                   IdeProjectTemplate   *b);
 

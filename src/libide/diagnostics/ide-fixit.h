@@ -25,24 +25,24 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FIXIT (ide_fixit_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFixit       *ide_fixit_new              (IdeSourceRange *source_range,
                                             const gchar    *replacement_text);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeFixit       *ide_fixit_new_from_variant (GVariant       *variant);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType           ide_fixit_get_type         (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFixit       *ide_fixit_ref              (IdeFixit       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_fixit_unref            (IdeFixit       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_fixit_apply            (IdeFixit       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar    *ide_fixit_get_text         (IdeFixit       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceRange *ide_fixit_get_range        (IdeFixit       *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GVariant       *ide_fixit_to_variant       (const IdeFixit *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeFixit, ide_fixit_unref)

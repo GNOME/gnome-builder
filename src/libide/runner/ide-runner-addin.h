@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RUNNER_ADDIN (ide_runner_addin_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeRunnerAddin, ide_runner_addin, IDE, RUNNER_ADDIN, GObject)
 
 struct _IdeRunnerAddinInterface
@@ -56,27 +56,27 @@ struct _IdeRunnerAddinInterface
                                GError              **error);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_runner_addin_load            (IdeRunnerAddin       *self,
                                            IdeRunner            *runner);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_runner_addin_unload          (IdeRunnerAddin       *self,
                                            IdeRunner            *runner);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_runner_addin_prehook_async   (IdeRunnerAddin       *self,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
                                            gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean ide_runner_addin_prehook_finish  (IdeRunnerAddin       *self,
                                            GAsyncResult         *result,
                                            GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void     ide_runner_addin_posthook_async  (IdeRunnerAddin       *self,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
                                            gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean ide_runner_addin_posthook_finish (IdeRunnerAddin       *self,
                                            GAsyncResult         *result,
                                            GError              **error);

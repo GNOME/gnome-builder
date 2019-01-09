@@ -26,27 +26,27 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPILE_COMMANDS (ide_compile_commands_get_type())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompileCommands, ide_compile_commands, IDE, COMPILE_COMMANDS, GObject)
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 IdeCompileCommands  *ide_compile_commands_new         (void);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean             ide_compile_commands_load        (IdeCompileCommands   *self,
                                                        GFile                *file,
                                                        GCancellable         *cancellable,
                                                        GError              **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void                 ide_compile_commands_load_async  (IdeCompileCommands   *self,
                                                        GFile                *file,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean             ide_compile_commands_load_finish (IdeCompileCommands   *self,
                                                        GAsyncResult         *result,
                                                        GError              **error);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gchar              **ide_compile_commands_lookup      (IdeCompileCommands   *self,
                                                        GFile                *file,
                                                        const gchar * const  *system_includes,

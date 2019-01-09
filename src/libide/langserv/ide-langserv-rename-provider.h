@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_RENAME_PROVIDER (ide_langserv_rename_provider_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLangservRenameProvider, ide_langserv_rename_provider, IDE, LANGSERV_RENAME_PROVIDER, IdeObject)
 
 struct _IdeLangservRenameProviderClass
@@ -45,9 +45,9 @@ struct _IdeLangservRenameProviderClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLangservClient *ide_langserv_rename_provider_get_client (IdeLangservRenameProvider *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_rename_provider_set_client (IdeLangservRenameProvider *self,
                                                             IdeLangservClient         *client);
 

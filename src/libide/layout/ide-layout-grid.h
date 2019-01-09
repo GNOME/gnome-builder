@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_GRID (ide_layout_grid_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutGrid, ide_layout_grid, IDE, LAYOUT_GRID, DzlMultiPaned)
 
 struct _IdeLayoutGridClass
@@ -51,26 +51,26 @@ struct _IdeLayoutGridClass
   gpointer _reserved8;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget           *ide_layout_grid_new                (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLayoutGridColumn *ide_layout_grid_get_nth_column     (IdeLayoutGrid       *self,
                                                          gint                 nth);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLayoutView       *ide_layout_grid_focus_neighbor     (IdeLayoutGrid       *self,
                                                          GtkDirectionType     dir);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLayoutGridColumn *ide_layout_grid_get_current_column (IdeLayoutGrid       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_layout_grid_set_current_column (IdeLayoutGrid       *self,
                                                          IdeLayoutGridColumn *column);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLayoutStack      *ide_layout_grid_get_current_stack  (IdeLayoutGrid       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLayoutView       *ide_layout_grid_get_current_view   (IdeLayoutGrid       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint                ide_layout_grid_count_views        (IdeLayoutGrid       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_layout_grid_foreach_view       (IdeLayoutGrid       *self,
                                                          GtkCallback          callback,
                                                          gpointer             user_data);

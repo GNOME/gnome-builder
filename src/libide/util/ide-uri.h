@@ -41,16 +41,16 @@ typedef enum
   IDE_URI_PARSE_UTF8_ONLY   = 1 << 7
 } IdeUriParseFlags;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeUri *       ide_uri_new           (const gchar        *uri_string,
                                       IdeUriParseFlags    flags,
                                       GError            **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeUri *       ide_uri_new_relative  (IdeUri             *base_uri,
                                       const gchar        *uri_string,
                                       IdeUriParseFlags    flags,
                                       GError            **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeUri *       ide_uri_new_from_file (GFile              *file);
 
 typedef enum
@@ -61,63 +61,63 @@ typedef enum
 
 #define IDE_TYPE_URI (ide_uri_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType        ide_uri_get_type        (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 char        *ide_uri_to_string       (IdeUri               *uri,
                                       IdeUriToStringFlags   flags);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeUri      *ide_uri_copy            (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeUri      *ide_uri_ref             (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_unref           (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_uri_get_scheme      (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_scheme      (IdeUri               *uri,
                                       const gchar          *scheme);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_uri_get_user        (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_user        (IdeUri               *uri,
                                       const gchar          *user);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_uri_get_password    (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_password    (IdeUri               *uri,
                                       const gchar          *password);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_uri_get_auth_params (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_auth_params (IdeUri               *uri,
                                       const gchar          *auth_params);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_uri_get_host        (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_host        (IdeUri               *uri,
                                       const gchar          *host);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gushort      ide_uri_get_port        (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_port        (IdeUri               *uri,
                                       gushort               port);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_uri_get_path        (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_path        (IdeUri               *uri,
                                       const gchar          *path);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_uri_get_query       (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_query       (IdeUri               *uri,
                                       const gchar          *query);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar *ide_uri_get_fragment    (IdeUri               *uri);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_set_fragment    (IdeUri               *uri,
                                       const gchar          *fragment);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_uri_split           (const gchar          *uri_string,
                                       gboolean              strict,
                                       gchar               **scheme,
@@ -127,19 +127,19 @@ void         ide_uri_split           (const gchar          *uri_string,
                                       gchar               **path,
                                       gchar               **query,
                                       gchar               **fragment);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GHashTable  *ide_uri_parse_params    (const gchar          *params,
                                       gssize                length,
                                       gchar                 separator,
                                       gboolean              case_insensitive);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_uri_parse_host      (const gchar          *uri_string,
                                       IdeUriParseFlags      flags,
                                       gchar               **scheme,
                                       gchar               **host,
                                       gushort              *port,
                                       GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar       *ide_uri_build           (const gchar          *scheme,
                                       const gchar          *userinfo,
                                       const gchar          *host,
@@ -147,10 +147,10 @@ gchar       *ide_uri_build           (const gchar          *scheme,
                                       const gchar          *path,
                                       const gchar          *query,
                                       const gchar          *fragment);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean     ide_uri_is_file         (IdeUri               *uri,
                                       GFile                *file);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile       *ide_uri_to_file         (IdeUri               *uri);
 
 
@@ -183,7 +183,7 @@ typedef enum
   IDE_URI_ERROR_BAD_FRAGMENT
 } IdeUriError;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GQuark ide_uri_error_quark (void);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeUri, ide_uri_unref)

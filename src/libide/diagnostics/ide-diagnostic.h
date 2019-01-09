@@ -39,56 +39,56 @@ typedef enum
   IDE_DIAGNOSTIC_FATAL      = 5,
 } IdeDiagnosticSeverity;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation     *ide_diagnostic_get_location         (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GFile                 *ide_diagnostic_get_file             (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint                  ide_diagnostic_get_num_fixits       (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFixit              *ide_diagnostic_get_fixit            (IdeDiagnostic         *self,
                                                             guint                  index);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint                  ide_diagnostic_get_num_ranges       (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceRange        *ide_diagnostic_get_range            (IdeDiagnostic         *self,
                                                             guint                  index);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDiagnosticSeverity  ide_diagnostic_get_severity         (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar           *ide_diagnostic_get_text             (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar                 *ide_diagnostic_get_text_for_display (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType                  ide_diagnostic_get_type             (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDiagnostic         *ide_diagnostic_ref                  (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_diagnostic_unref                (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDiagnostic         *ide_diagnostic_new                  (IdeDiagnosticSeverity  severity,
                                                             const gchar           *text,
                                                             IdeSourceLocation     *location);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeDiagnostic         *ide_diagnostic_new_from_variant     (GVariant              *variant);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_diagnostic_add_range            (IdeDiagnostic         *self,
                                                             IdeSourceRange        *range);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_diagnostic_take_fixit           (IdeDiagnostic         *self,
                                                             IdeFixit              *fixit);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_diagnostic_take_range           (IdeDiagnostic         *self,
                                                             IdeSourceRange        *range);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gint                   ide_diagnostic_compare              (const IdeDiagnostic   *a,
                                                             const IdeDiagnostic   *b);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 guint                  ide_diagnostic_hash                 (IdeDiagnostic         *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GVariant              *ide_diagnostic_to_variant           (const IdeDiagnostic   *self);
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar           *ide_diagnostic_severity_to_string   (IdeDiagnosticSeverity severity);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeDiagnostic, ide_diagnostic_unref)

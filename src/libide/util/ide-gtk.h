@@ -31,22 +31,22 @@ G_BEGIN_DECLS
 typedef void (*IdeWidgetContextHandler) (GtkWidget  *widget,
                                          IdeContext *context);
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void          ide_widget_set_context_handler (gpointer                 widget,
                                               IdeWidgetContextHandler  handler);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeContext   *ide_widget_get_context         (GtkWidget               *widget);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeWorkbench *ide_widget_get_workbench       (GtkWidget               *widget);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void          ide_widget_message             (gpointer                 instance,
                                               const gchar             *format,
                                               ...) G_GNUC_PRINTF (2, 3);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void          ide_widget_warning             (gpointer                 instance,
                                               const gchar             *format,
                                               ...) G_GNUC_PRINTF (2, 3);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean      ide_gtk_show_uri_on_window     (GtkWindow               *window,
                                               const gchar             *uri,
                                               guint32                  timestamp,

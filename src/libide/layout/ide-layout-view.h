@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LAYOUT_VIEW (ide_layout_view_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLayoutView, ide_layout_view, IDE, LAYOUT_VIEW, GtkBox)
 
 struct _IdeLayoutViewClass
@@ -57,65 +57,65 @@ struct _IdeLayoutViewClass
   gpointer _reserved12;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget     *ide_layout_view_new                   (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_layout_view_get_can_split         (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_can_split         (IdeLayoutView        *self,
                                                       gboolean              can_split);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLayoutView *ide_layout_view_create_split_view     (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_layout_view_get_icon_name         (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_icon_name         (IdeLayoutView        *self,
                                                       const gchar          *icon_name);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GIcon         *ide_layout_view_get_icon              (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_icon              (IdeLayoutView        *self,
                                                       GIcon                *icon);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_layout_view_get_failed            (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_failed            (IdeLayoutView        *self,
                                                       gboolean              failed);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_layout_view_get_menu_id           (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_menu_id           (IdeLayoutView        *self,
                                                       const gchar          *menu_id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_layout_view_get_modified          (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_modified          (IdeLayoutView        *self,
                                                       gboolean              modified);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_layout_view_get_title             (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_title             (IdeLayoutView        *self,
                                                       const gchar          *title);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const GdkRGBA *ide_layout_view_get_primary_color_bg  (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_primary_color_bg  (IdeLayoutView        *self,
                                                       const GdkRGBA        *primary_color_bg);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const GdkRGBA *ide_layout_view_get_primary_color_fg  (IdeLayoutView        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_set_primary_color_fg  (IdeLayoutView        *self,
                                                       const GdkRGBA        *primary_color_fg);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_agree_to_close_async  (IdeLayoutView        *self,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_layout_view_agree_to_close_finish (IdeLayoutView        *self,
                                                       GAsyncResult         *result,
                                                       GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_layout_view_report_error          (IdeLayoutView        *self,
                                                       const gchar          *format,
                                                       ...) G_GNUC_PRINTF (2, 3);

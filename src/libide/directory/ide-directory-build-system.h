@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIRECTORY_BUILD_SYSTEM (ide_directory_build_system_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDirectoryBuildSystem, ide_directory_build_system, IDE, DIRECTORY_BUILD_SYSTEM, IdeObject)
 
 G_END_DECLS

@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TEMPLATE_PROVIDER (ide_template_provider_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeTemplateProvider, ide_template_provider, IDE, TEMPLATE_PROVIDER, GObject)
 
 struct _IdeTemplateProviderInterface
@@ -36,7 +36,7 @@ struct _IdeTemplateProviderInterface
   GList *(*get_project_templates) (IdeTemplateProvider *self);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GList *ide_template_provider_get_project_templates (IdeTemplateProvider *self);
 
 G_END_DECLS

@@ -28,12 +28,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER_ROW (ide_transfer_row_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeTransferRow, ide_transfer_row, IDE, TRANSFER_ROW, GtkListBoxRow)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeTransfer *ide_transfer_row_get_transfer (IdeTransferRow *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void         ide_transfer_row_set_transfer (IdeTransferRow *self,
                                             IdeTransfer    *transfer);
 

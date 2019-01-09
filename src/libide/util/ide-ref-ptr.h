@@ -28,16 +28,16 @@ G_BEGIN_DECLS
 
 typedef struct _IdeRefPtr IdeRefPtr;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType      ide_ref_ptr_get_type (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeRefPtr *ide_ref_ptr_new      (gpointer        data,
                                  GDestroyNotify  free_func);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeRefPtr *ide_ref_ptr_ref      (IdeRefPtr      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_ref_ptr_unref    (IdeRefPtr      *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gpointer   ide_ref_ptr_get      (IdeRefPtr      *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeRefPtr, ide_ref_ptr_unref)

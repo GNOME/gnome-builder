@@ -26,26 +26,26 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTICS (ide_diagnostics_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType           ide_diagnostics_get_type (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDiagnostics *ide_diagnostics_ref      (IdeDiagnostics *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_diagnostics_unref    (IdeDiagnostics *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gsize           ide_diagnostics_get_size (IdeDiagnostics *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDiagnostic  *ide_diagnostics_index    (IdeDiagnostics *self,
                                           gsize           index);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_diagnostics_merge    (IdeDiagnostics *self,
                                           IdeDiagnostics *other);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDiagnostics *ide_diagnostics_new      (GPtrArray      *ar);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_diagnostics_add      (IdeDiagnostics *self,
                                           IdeDiagnostic  *diagnostic);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void            ide_diagnostics_take     (IdeDiagnostics *self,
                                           IdeDiagnostic  *diagnostic);
 

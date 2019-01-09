@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_TARGET_PROVIDER (ide_build_target_provider_get_type())
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_INTERFACE (IdeBuildTargetProvider, ide_build_target_provider, IDE, BUILD_TARGET_PROVIDER, IdeObject)
 
 struct _IdeBuildTargetProviderInterface
@@ -41,12 +41,12 @@ struct _IdeBuildTargetProviderInterface
                                     GError                 **error);
 };
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void       ide_build_target_provider_get_targets_async  (IdeBuildTargetProvider  *self,
                                                          GCancellable            *cancellable,
                                                          GAsyncReadyCallback      callback,
                                                          gpointer                 user_data);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 GPtrArray *ide_build_target_provider_get_targets_finish (IdeBuildTargetProvider  *self,
                                                          GAsyncResult            *result,
                                                          GError                 **error);

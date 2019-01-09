@@ -26,22 +26,22 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_RANGE (ide_source_range_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType              ide_source_range_get_type        (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceRange    *ide_source_range_ref              (IdeSourceRange       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_source_range_unref            (IdeSourceRange       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_source_range_get_begin        (IdeSourceRange       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceLocation *ide_source_range_get_end          (IdeSourceRange       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeSourceRange    *ide_source_range_new              (IdeSourceLocation    *begin,
                                                       IdeSourceLocation    *end);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSourceRange    *ide_source_range_new_from_variant (GVariant             *variant);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GVariant          *ide_source_range_to_variant       (const IdeSourceRange *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeSourceRange, ide_source_range_unref)

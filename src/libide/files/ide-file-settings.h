@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define IDE_TYPE_FILE_SETTINGS            (ide_file_settings_get_type())
 #define IDE_FILE_SETTINGS_EXTENSION_POINT "org.gnome.libide.extensions.file-settings"
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeFileSettings, ide_file_settings, IDE, FILE_SETTINGS, IdeObject)
 
 struct _IdeFileSettingsClass
@@ -40,11 +40,11 @@ struct _IdeFileSettingsClass
   IdeObjectClass parent;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFileSettings *ide_file_settings_new         (IdeFile         *file);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeFile         *ide_file_settings_get_file    (IdeFileSettings *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean         ide_file_settings_get_settled (IdeFileSettings *self);
 
 #define IDE_FILE_SETTINGS_PROPERTY(_1, name, _2, ret_type, _3, _4, _5, _6) \

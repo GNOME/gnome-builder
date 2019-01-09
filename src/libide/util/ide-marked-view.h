@@ -28,10 +28,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_MARKED_VIEW (ide_marked_view_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeMarkedView, ide_marked_view, IDE, MARKED_VIEW, GtkBin)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GtkWidget *ide_marked_view_new (IdeMarkedContent *content);
 
 G_END_DECLS

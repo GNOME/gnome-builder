@@ -28,36 +28,36 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SNIPPET_CHUNK (ide_snippet_chunk_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSnippetChunk, ide_snippet_chunk, IDE, SNIPPET_CHUNK, GObject)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSnippetChunk   *ide_snippet_chunk_new          (void);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSnippetChunk   *ide_snippet_chunk_copy         (IdeSnippetChunk   *chunk);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSnippetContext *ide_snippet_chunk_get_context  (IdeSnippetChunk   *chunk);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_chunk_set_context  (IdeSnippetChunk   *chunk,
                                                    IdeSnippetContext *context);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 const gchar       *ide_snippet_chunk_get_spec     (IdeSnippetChunk   *chunk);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_chunk_set_spec     (IdeSnippetChunk   *chunk,
                                                    const gchar       *spec);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gint               ide_snippet_chunk_get_tab_stop (IdeSnippetChunk   *chunk);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_chunk_set_tab_stop (IdeSnippetChunk   *chunk,
                                                    gint              tab_stop);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 const gchar       *ide_snippet_chunk_get_text     (IdeSnippetChunk   *chunk);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_chunk_set_text     (IdeSnippetChunk   *chunk,
                                                    const gchar       *text);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_snippet_chunk_get_text_set (IdeSnippetChunk   *chunk);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_chunk_set_text_set (IdeSnippetChunk   *chunk,
                                                    gboolean          text_set);
 

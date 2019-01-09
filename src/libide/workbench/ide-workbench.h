@@ -55,20 +55,20 @@ typedef enum
 
 #define IDE_TYPE_WORKBENCH (ide_workbench_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeWorkbench, ide_workbench, IDE, WORKBENCH, DzlApplicationWindow)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_open_project_async           (IdeWorkbench           *self,
                                                                    GFile                  *file_or_directory,
                                                                    GCancellable           *cancellable,
                                                                    GAsyncReadyCallback     callback,
                                                                    gpointer                user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean               ide_workbench_open_project_finish          (IdeWorkbench           *self,
                                                                    GAsyncResult           *result,
                                                                    GError                **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_open_uri_async               (IdeWorkbench           *self,
                                                                    IdeUri                 *uri,
                                                                    const gchar            *hint,
@@ -76,11 +76,11 @@ void                   ide_workbench_open_uri_async               (IdeWorkbench 
                                                                    GCancellable           *cancellable,
                                                                    GAsyncReadyCallback     callback,
                                                                    gpointer                user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean               ide_workbench_open_uri_finish              (IdeWorkbench           *self,
                                                                    GAsyncResult           *result,
                                                                    GError                **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_open_files_async             (IdeWorkbench           *self,
                                                                    GFile                 **files,
                                                                    guint                   n_files,
@@ -89,60 +89,60 @@ void                   ide_workbench_open_files_async             (IdeWorkbench 
                                                                    GCancellable           *cancellable,
                                                                    GAsyncReadyCallback     callback,
                                                                    gpointer                user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean               ide_workbench_open_files_finish            (IdeWorkbench           *self,
                                                                    GAsyncResult           *result,
                                                                    GError                **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_save_all_async               (IdeWorkbench           *self,
                                                                    GCancellable           *cancellable,
                                                                    GAsyncReadyCallback     callback,
                                                                    gpointer                user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean               ide_workbench_save_all_finish              (IdeWorkbench           *self,
                                                                    GAsyncResult           *result,
                                                                    GError                **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_focus                        (IdeWorkbench           *self,
                                                                    GtkWidget              *widget);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_close                        (IdeWorkbench           *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeContext            *ide_workbench_get_context                  (IdeWorkbench           *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_add_perspective              (IdeWorkbench           *self,
                                                                    IdePerspective         *perspective);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_remove_perspective           (IdeWorkbench           *self,
                                                                    IdePerspective         *perspective);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdePerspective        *ide_workbench_get_perspective_by_name      (IdeWorkbench           *self,
                                                                    const gchar            *name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdePerspective        *ide_workbench_get_visible_perspective      (IdeWorkbench           *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_set_visible_perspective      (IdeWorkbench           *self,
                                                                    IdePerspective         *perspective);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar           *ide_workbench_get_visible_perspective_name (IdeWorkbench           *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_set_visible_perspective_name (IdeWorkbench           *self,
                                                                    const gchar            *name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_views_foreach                (IdeWorkbench           *self,
                                                                    GtkCallback             callback,
                                                                    gpointer                user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeWorkbenchHeaderBar *ide_workbench_get_headerbar                (IdeWorkbench           *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_push_message                 (IdeWorkbench           *self,
                                                                    IdeWorkbenchMessage    *message);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean               ide_workbench_pop_message                  (IdeWorkbench           *self,
                                                                    const gchar            *message_id);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean               ide_workbench_get_focus_mode               (IdeWorkbench           *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                   ide_workbench_set_focus_mode               (IdeWorkbench           *self,
                                                                    gboolean                focus_mode);
 

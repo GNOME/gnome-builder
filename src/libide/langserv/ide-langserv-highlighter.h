@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LANGSERV_HIGHLIGHTER (ide_langserv_highlighter_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeLangservHighlighter, ide_langserv_highlighter, IDE, LANGSERV_HIGHLIGHTER, IdeObject)
 
 struct _IdeLangservHighlighterClass
@@ -42,9 +42,9 @@ struct _IdeLangservHighlighterClass
   gpointer _reserved4;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeLangservClient *ide_langserv_highlighter_get_client (IdeLangservHighlighter *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void               ide_langserv_highlighter_set_client (IdeLangservHighlighter *self,
                                                         IdeLangservClient      *client);
 

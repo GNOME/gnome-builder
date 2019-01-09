@@ -43,31 +43,31 @@ typedef void (*IdeSnippetStorageForeach) (IdeSnippetStorage    *self,
                                           const IdeSnippetInfo *info,
                                           gpointer              user_data);
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSnippetStorage, ide_snippet_storage, IDE, SNIPPET_STORAGE, GObject)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeSnippetStorage *ide_snippet_storage_new         (void);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_storage_add         (IdeSnippetStorage         *self,
                                                     const gchar               *default_scope,
                                                     GBytes                    *bytes);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_storage_foreach     (IdeSnippetStorage         *self,
                                                     IdeSnippetStorageForeach   foreach,
                                                     gpointer                   user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_storage_query       (IdeSnippetStorage         *self,
                                                     const gchar               *lang,
                                                     const gchar               *prefix,
                                                     IdeSnippetStorageForeach   foreach,
                                                     gpointer                   user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void               ide_snippet_storage_load_async  (IdeSnippetStorage         *self,
                                                     GCancellable              *cancellable,
                                                     GAsyncReadyCallback        callback,
                                                     gpointer                   user_data);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean           ide_snippet_storage_load_finish (IdeSnippetStorage         *self,
                                                     GAsyncResult              *result,
                                                     GError                   **error);

@@ -24,9 +24,9 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean  ide_is_flatpak           (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar    *ide_flatpak_get_app_path (const gchar *path);
 
 G_END_DECLS

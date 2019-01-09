@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 #define IDE_APPLICATION_DEFAULT (IDE_APPLICATION (g_application_get_default()))
 #define IDE_IS_MAIN_THREAD()    (g_thread_self() == ide_application_get_main_thread())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeApplication, ide_application, IDE, APPLICATION, DzlApplication)
 
 typedef enum
@@ -43,41 +43,41 @@ typedef enum
   IDE_APPLICATION_MODE_TESTS,
 } IdeApplicationMode;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GThread            *ide_application_get_main_thread        (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeApplicationMode  ide_application_get_mode               (IdeApplication       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeApplication     *ide_application_new                    (IdeApplicationMode    mode);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GDateTime          *ide_application_get_started_at         (IdeApplication       *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 IdeTransferManager *ide_application_get_transfer_manager   (IdeApplication       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeRecentProjects  *ide_application_get_recent_projects    (IdeApplication       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_application_show_projects_window   (IdeApplication       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar        *ide_application_get_keybindings_mode   (IdeApplication       *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_application_get_worker_async       (IdeApplication       *self,
                                                             const gchar          *plugin_name,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GDBusProxy         *ide_application_get_worker_finish      (IdeApplication       *self,
                                                             GAsyncResult         *result,
                                                             GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean            ide_application_open_project           (IdeApplication       *self,
                                                             GFile                *file);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                ide_application_add_reaper             (IdeApplication       *self,
                                                             DzlDirectoryReaper   *reaper);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 GFile              *ide_application_get_projects_directory (IdeApplication       *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean            ide_application_has_network            (IdeApplication       *self);
 
 G_END_DECLS

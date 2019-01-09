@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 #define IDE_DOAP_ERROR (ide_doap_error_quark())
 #define IDE_TYPE_DOAP  (ide_doap_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDoap, ide_doap, IDE, DOAP, GObject)
 
 typedef enum
@@ -37,37 +37,37 @@ typedef enum
   IDE_DOAP_ERROR_INVALID_FORMAT = 1,
 } IdeDoapError;
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeDoap       *ide_doap_new               (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GQuark         ide_doap_error_quark       (void);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_doap_load_from_file    (IdeDoap        *self,
                                            GFile          *file,
                                            GCancellable   *cancellable,
                                            GError        **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_doap_load_from_data    (IdeDoap        *self,
                                            const gchar    *data,
                                            gsize           length,
                                            GError        **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_get_name          (IdeDoap        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_get_shortdesc     (IdeDoap        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_get_description   (IdeDoap        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_get_bug_database  (IdeDoap        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_get_download_page (IdeDoap        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_get_homepage      (IdeDoap        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_doap_get_category      (IdeDoap        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gchar        **ide_doap_get_languages     (IdeDoap        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GList         *ide_doap_get_maintainers   (IdeDoap        *self);
 
 G_END_DECLS

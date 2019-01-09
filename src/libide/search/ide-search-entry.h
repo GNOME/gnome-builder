@@ -26,10 +26,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_ENTRY (ide_search_entry_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeSearchEntry, ide_search_entry, IDE, SEARCH_ENTRY, DzlSuggestionEntry)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GtkWidget *ide_search_entry_new (void);
 
 G_END_DECLS

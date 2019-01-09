@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_ITEM (ide_project_item_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeProjectItem, ide_project_item, IDE, PROJECT_ITEM, IdeObject)
 
 struct _IdeProjectItemClass
@@ -34,17 +34,17 @@ struct _IdeProjectItemClass
   IdeObjectClass parent_class;
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeProjectItem *ide_project_item_new          (IdeProjectItem *parent);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeProjectItem *ide_project_item_get_parent   (IdeProjectItem *item);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_project_item_append       (IdeProjectItem *item,
                                                IdeProjectItem *child);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void            ide_project_item_remove       (IdeProjectItem *item,
                                                IdeProjectItem *child);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GSequence      *ide_project_item_get_children (IdeProjectItem *item);
 
 G_END_DECLS

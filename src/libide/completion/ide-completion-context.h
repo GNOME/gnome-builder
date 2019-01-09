@@ -28,42 +28,42 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_COMPLETION_CONTEXT (ide_completion_context_get_type())
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeCompletionContext, ide_completion_context, IDE, COMPLETION_CONTEXT, GObject)
 
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeCompletionActivation  ide_completion_context_get_activation             (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 const gchar             *ide_completion_context_get_language               (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean                 ide_completion_context_is_language                (IdeCompletionContext   *self,
                                                                             const gchar            *language);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GtkTextBuffer           *ide_completion_context_get_buffer                 (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 GtkTextView             *ide_completion_context_get_view                   (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean                 ide_completion_context_get_busy                   (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean                 ide_completion_context_is_empty                   (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 void                     ide_completion_context_set_proposals_for_provider (IdeCompletionContext   *self,
                                                                             IdeCompletionProvider  *provider,
                                                                             GListModel             *results);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 IdeCompletion           *ide_completion_context_get_completion             (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean                 ide_completion_context_get_bounds                 (IdeCompletionContext   *self,
                                                                             GtkTextIter            *begin,
                                                                             GtkTextIter            *end);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean                 ide_completion_context_get_start_iter             (IdeCompletionContext   *self,
                                                                             GtkTextIter            *iter);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gchar                   *ide_completion_context_get_word                   (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gchar                   *ide_completion_context_get_line_text              (IdeCompletionContext   *self);
-IDE_AVAILABLE_IN_3_30
+IDE_AVAILABLE_IN_3_32
 gboolean                 ide_completion_context_get_item_full              (IdeCompletionContext   *self,
                                                                             guint                   position,
                                                                             IdeCompletionProvider **provider,

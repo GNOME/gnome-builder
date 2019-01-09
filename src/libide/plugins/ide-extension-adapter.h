@@ -27,29 +27,29 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EXTENSION_ADAPTER (ide_extension_adapter_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeExtensionAdapter, ide_extension_adapter, IDE, EXTENSION_ADAPTER, IdeObject)
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 IdeExtensionAdapter *ide_extension_adapter_new                (IdeContext          *context,
                                                                PeasEngine          *engine,
                                                                GType                interface_type,
                                                                const gchar         *key,
                                                                const gchar         *value);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 PeasEngine          *ide_extension_adapter_get_engine         (IdeExtensionAdapter *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gpointer             ide_extension_adapter_get_extension      (IdeExtensionAdapter *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GType                ide_extension_adapter_get_interface_type (IdeExtensionAdapter *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar         *ide_extension_adapter_get_key            (IdeExtensionAdapter *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_extension_adapter_set_key            (IdeExtensionAdapter *self,
                                                                const gchar         *key);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar         *ide_extension_adapter_get_value          (IdeExtensionAdapter *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void                 ide_extension_adapter_set_value          (IdeExtensionAdapter *self,
                                                                const gchar         *value);
 

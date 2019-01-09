@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEVICE_PROVIDER (ide_device_provider_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeDeviceProvider, ide_device_provider, IDE, DEVICE_PROVIDER, IdeObject)
 
 struct _IdeDeviceProviderClass
@@ -47,22 +47,22 @@ struct _IdeDeviceProviderClass
                               GError              **error);
 };
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_device_provider_emit_device_added   (IdeDeviceProvider    *self,
                                                     IdeDevice            *device);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_device_provider_emit_device_removed (IdeDeviceProvider    *self,
                                                     IdeDevice            *device);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void       ide_device_provider_load_async          (IdeDeviceProvider    *self,
                                                     GCancellable         *cancellable,
                                                     GAsyncReadyCallback   callback,
                                                     gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean   ide_device_provider_load_finish         (IdeDeviceProvider    *self,
                                                     GAsyncResult         *result,
                                                     GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 GPtrArray *ide_device_provider_get_devices         (IdeDeviceProvider    *self);
 
 G_END_DECLS

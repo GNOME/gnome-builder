@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_STAGE (ide_build_stage_get_type())
 
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 G_DECLARE_DERIVABLE_TYPE (IdeBuildStage, ide_build_stage, IDE, BUILD_STAGE, IdeObject)
 
 struct _IdeBuildStageClass
@@ -173,82 +173,82 @@ struct _IdeBuildStageClass
   gpointer _reserved12;
 };
 
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_build_stage_get_active       (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_3_28
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_set_active       (IdeBuildStage        *self,
                                                  gboolean              active);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_build_stage_get_name         (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_set_name         (IdeBuildStage        *self,
                                                  const gchar          *name);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_log              (IdeBuildStage        *self,
                                                  IdeBuildLogStream     stream,
                                                  const gchar          *message,
                                                  gssize                message_len);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_log_subprocess   (IdeBuildStage        *self,
                                                  IdeSubprocess        *subprocess);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_set_log_observer (IdeBuildStage        *self,
                                                  IdeBuildLogObserver   observer,
                                                  gpointer              observer_data,
                                                  GDestroyNotify        observer_data_destroy);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_set_stdout_path  (IdeBuildStage        *self,
                                                  const gchar          *path);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 const gchar   *ide_build_stage_get_stdout_path  (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_build_stage_get_completed    (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_set_completed    (IdeBuildStage        *self,
                                                  gboolean              completed);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_build_stage_get_disabled     (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_set_disabled     (IdeBuildStage        *self,
                                                  gboolean              disabled);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_build_stage_get_check_stdout (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_set_check_stdout (IdeBuildStage        *self,
                                                  gboolean              check_stdout);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_build_stage_get_transient    (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_set_transient    (IdeBuildStage        *self,
                                                  gboolean              transient);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_execute_async    (IdeBuildStage        *self,
                                                  IdeBuildPipeline     *pipeline,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_build_stage_execute_finish   (IdeBuildStage        *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_clean_async      (IdeBuildStage        *self,
                                                  IdeBuildPipeline     *pipeline,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_build_stage_clean_finish     (IdeBuildStage        *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 gboolean       ide_build_stage_chain            (IdeBuildStage        *self,
                                                  IdeBuildStage        *next);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_pause            (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_unpause          (IdeBuildStage        *self);
-IDE_AVAILABLE_IN_ALL
+IDE_AVAILABLE_IN_3_32
 void           ide_build_stage_emit_reap        (IdeBuildStage        *self,
                                                  DzlDirectoryReaper   *reaper);
 
