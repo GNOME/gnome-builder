@@ -1,7 +1,7 @@
 /* gbp-word-proposals.c
  *
  * Copyright 2017 Umang Jain <mailumangjain@gmail.com>
- * Copyright 2018 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

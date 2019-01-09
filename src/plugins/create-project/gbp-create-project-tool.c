@@ -1,6 +1,6 @@
 /* gbp-create-project-tool.c
  *
- * Copyright 2015 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

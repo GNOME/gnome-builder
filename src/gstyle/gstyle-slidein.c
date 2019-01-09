@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Initial ideas based on Gnome Builder Pnl dock system :
- * Copyright © 2016 Christian Hergert <chergert@redhat.com>
+ * Copyright © 2016-2019 Christian Hergert <chergert@redhat.com>
  */
 
 #define G_LOG_DOMAIN "gstyle-slidein"
