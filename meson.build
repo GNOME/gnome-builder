@@ -71,8 +71,8 @@ status += [
   'fusermount ............ : @0@'.format(get_option('fusermount_wrapper')),
   'tcmalloc_minimal ...... : @0@'.format(get_option('tcmalloc')),
   '',
-  'Help Docs ............. : @0@'.format(get_option('with_help')),
-  'API Docs .............. : @0@'.format(get_option('with_docs')),
+  'Help Docs ............. : @0@'.format(get_option('help')),
+  'API Docs .............. : @0@'.format(get_option('docs')),
   '', ''
 ]
 
