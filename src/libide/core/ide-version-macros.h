@@ -1,6 +1,6 @@
 /* ide-version-macros.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef IDE_VERSION_MACROS_H
-#define IDE_VERSION_MACROS_H
+#pragma once
 
-#if !defined(IDE_INSIDE) && !defined(IDE_COMPILATION)
-# error "Only <ide.h> can be included directly."
+#if !defined (IDE_CORE_INSIDE) && !defined (IDE_CORE_COMPILATION)
+# error "Only <libide-core.h> can be included directly."
 #endif
 
 #include <glib.h>
@@ -78,7 +77,7 @@
  * it is possible to use this symbol to avoid the compiler warnings
  * without disabling warning for every deprecated function.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 #ifndef IDE_VERSION_MIN_REQUIRED
 # define IDE_VERSION_MIN_REQUIRED (IDE_VERSION_CUR_STABLE)
@@ -99,7 +98,7 @@
  * it is possible to use this symbol to get compiler warnings when
  * trying to use that function.
  *
- * Since: 3.28
+ * Since: 3.32
  */
 #ifndef IDE_VERSION_MAX_ALLOWED
 # if IDE_VERSION_MIN_REQUIRED > IDE_VERSION_PREV_STABLE
@@ -159,5 +158,3 @@
 #else
 # define IDE_AVAILABLE_IN_3_32                 _IDE_EXTERN
 #endif
-
-#endif /* IDE_VERSION_MACROS_H */

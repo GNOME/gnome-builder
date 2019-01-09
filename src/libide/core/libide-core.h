@@ -1,6 +1,6 @@
-/* ide-global.h
+/* ide-core.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,24 @@
 
 #pragma once
 
+#include <gio/gio.h>
+
+#define IDE_CORE_INSIDE
+
+#include "ide-build-ident.h"
+#include "ide-context.h"
+#include "ide-debug.h"
+#include "ide-global.h"
+#include "ide-log.h"
+#include "ide-macros.h"
+#include "ide-notification.h"
+#include "ide-notifications.h"
+#include "ide-object.h"
+#include "ide-object-box.h"
+#include "ide-settings.h"
+#include "ide-transfer.h"
+#include "ide-transfer-manager.h"
+#include "ide-version.h"
 #include "ide-version-macros.h"
 
-G_BEGIN_DECLS
-
-IDE_AVAILABLE_IN_3_32
-const gchar *ide_get_program_name (void);
-IDE_AVAILABLE_IN_3_32
-void         ide_set_program_name (const gchar *program_name);
-
-G_END_DECLS
+#undef IDE_CORE_INSIDE
