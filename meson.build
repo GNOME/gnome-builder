@@ -102,8 +102,6 @@ config_h.set('DEVELOPMENT_BUILD', version_split[1].to_int().is_odd())
 config_h.set_quoted('SRCDIR', meson.source_root())
 config_h.set_quoted('BUILDDIR', meson.build_root())
 
-config_h.set10('ENABLE_WEBKIT', get_option('with_webkit'))
-
 add_global_arguments([
   '-DHAVE_CONFIG_H',
   '-I' + meson.build_root(), # config.h
@@ -266,40 +264,39 @@ libpangoft2_dep = dependency('pangoft2', version: '>= 1.38.0')
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
 libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
 libvte_dep = dependency('vte-2.91', version: '>= 0.40.2')
+libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.22')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
+libgit_dep = dependency('libgit2-glib-1.0', version: '>= 0.25.0')
 
-if get_option('with_flatpak') or get_option('with_git')
-  libgit_dep = dependency('libgit2-glib-1.0', version: '>= 0.25.0')
+# Make sure libgit2/libgit2-glib were compiled with proper flags
+libgit_thread_safe_check = '''
+#include <libgit2-glib/ggit.h>
+int main(int argc, const char *argv[])
+{
+ggit_init ();
+return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
+}
+'''
+res = cc.run(libgit_thread_safe_check,
+dependencies: libgit_dep,
+)
+if res.returncode() != 0
+error('libgit2 was not compiled with -DTHREADSAFE:BOOL=ON')
+endif
 
-  libgit_thread_safe_check = '''
-    #include <libgit2-glib/ggit.h>
-    int main(int argc, const char *argv[])
-    {
-      ggit_init ();
-      return ((ggit_get_features() & GGIT_FEATURE_THREADS) != 0) ? 0 : 1;
-    }
-  '''
-  res = cc.run(libgit_thread_safe_check,
-    dependencies: libgit_dep,
-  )
-  if res.returncode() != 0
-    error('libgit2 was not compiled with -DTHREADSAFE:BOOL=ON')
-  endif
-
-  libgit_ssh_check = '''
-    #include <libgit2-glib/ggit.h>
-    int main(int argc, const char *argv[])
-    {
-      ggit_init ();
-      return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
-    }
-  '''
-  res = cc.run(libgit_ssh_check,
-    dependencies: libgit_dep,
-  )
-  if res.returncode() != 0
-    error('libgit2 was not compiled with SSH support')
-  endif
+libgit_ssh_check = '''
+#include <libgit2-glib/ggit.h>
+int main(int argc, const char *argv[])
+{
+ggit_init ();
+return ((ggit_get_features() & GGIT_FEATURE_SSH) != 0) ? 0 : 1;
+}
+'''
+res = cc.run(libgit_ssh_check,
+dependencies: libgit_dep,
+)
+if res.returncode() != 0
+error('libgit2 was not compiled with SSH support')
 endif
 
 check_functions = [
@@ -318,6 +315,7 @@ configure_file(output: 'config.h', configuration: config_h)
 
 gnome = import('gnome')
 i18n = import('i18n')
+pkgconfig = import('pkgconfig')
 
 subdir('data')
 subdir('src')
