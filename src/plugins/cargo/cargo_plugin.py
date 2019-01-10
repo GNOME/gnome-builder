@@ -166,7 +166,7 @@ class CargoBuildTarget(Ide.Object, Ide.BuildTarget):
 
     def do_get_argv(self):
         context = self.get_context()
-        config_manager = context.get_configuration_manager()
+        config_manager = Ide.ConfigManager.from_context(context)
         config = config_manager.get_current()
         cargo = locate_cargo_from_config(config)
 
@@ -227,7 +227,7 @@ class CargoDependencyUpdater(Ide.Object, Ide.DependencyUpdater):
                                          code=Gio.IOErrorEnum.FAILED))
             return
 
-        config_manager = context.get_configuration_manager()
+        config_manager = Ide.ConfigManager.from_context(context)
         config = config_manager.get_current()
         cargo = locate_cargo_from_config(config)
 
