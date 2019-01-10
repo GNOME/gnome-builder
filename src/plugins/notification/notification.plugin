@@ -1,8 +1,9 @@
 [Plugin]
-Module=notification-plugin
-Name=Notification of progress
-Description=Notification of progress when Builder application is not on foreground
 Authors=Lucie Charvat <luci.charvat@gmail.com>
-Copyright=Copyright © 2017 Lucie Charvat
 Builtin=true
-Embedded=ide_notification_register_types
+Copyright=Copyright © 2017 Lucie Charvat
+Description=Notification of progress when Builder application is not on foreground
+Embedded=_ide_notification_register_types
+Hidden=true
+Module=notification
+Name=Notification of progress

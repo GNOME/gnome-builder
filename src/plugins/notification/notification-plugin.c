@@ -18,13 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-foundry.h>
 
 #include "ide-notification-addin.h"
 
-void
-ide_notification_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_notification_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, IDE_TYPE_NOTIFICATION_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                              IDE_TYPE_NOTIFICATION_ADDIN);
 }
