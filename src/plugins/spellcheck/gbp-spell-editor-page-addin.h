@@ -1,4 +1,4 @@
-/* gbp-spell-editor-view-addin.h
+/* gbp-spell-editor-page-addin.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -21,20 +21,20 @@
 #pragma once
 
 #include <gspell/gspell.h>
-#include <ide.h>
+#include <libide-editor.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SPELL_EDITOR_VIEW_ADDIN (gbp_spell_editor_view_addin_get_type())
+#define GBP_TYPE_SPELL_EDITOR_PAGE_ADDIN (gbp_spell_editor_page_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSpellEditorViewAddin, gbp_spell_editor_view_addin, GBP, SPELL_EDITOR_VIEW_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpSpellEditorPageAddin, gbp_spell_editor_page_addin, GBP, SPELL_EDITOR_PAGE_ADDIN, GObject)
 
-void             gbp_spell_editor_view_addin_begin_checking     (GbpSpellEditorViewAddin *self);
-void             gbp_spell_editor_view_addin_end_checking       (GbpSpellEditorViewAddin *self);
-GspellChecker   *gbp_spell_editor_view_addin_get_checker        (GbpSpellEditorViewAddin *self);
-GspellNavigator *gbp_spell_editor_view_addin_get_navigator      (GbpSpellEditorViewAddin *self);
-guint            gbp_spell_editor_view_addin_get_count          (GbpSpellEditorViewAddin *self,
+void             gbp_spell_editor_page_addin_begin_checking     (GbpSpellEditorPageAddin *self);
+void             gbp_spell_editor_page_addin_end_checking       (GbpSpellEditorPageAddin *self);
+GspellChecker   *gbp_spell_editor_page_addin_get_checker        (GbpSpellEditorPageAddin *self);
+GspellNavigator *gbp_spell_editor_page_addin_get_navigator      (GbpSpellEditorPageAddin *self);
+guint            gbp_spell_editor_page_addin_get_count          (GbpSpellEditorPageAddin *self,
                                                                  const gchar             *word);
-gboolean         gbp_spell_editor_view_addin_move_to_word_start (GbpSpellEditorViewAddin *self);
+gboolean         gbp_spell_editor_page_addin_move_to_word_start (GbpSpellEditorPageAddin *self);
 
 G_END_DECLS

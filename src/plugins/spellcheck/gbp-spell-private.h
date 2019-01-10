@@ -22,12 +22,12 @@
 #pragma once
 
 #include <gspell/gspell.h>
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gbp-spell-dict.h"
 #include "gbp-spell-widget.h"
 #include "gbp-spell-editor-addin.h"
-#include "gbp-spell-editor-view-addin.h"
+#include "gbp-spell-editor-page-addin.h"
 
 G_BEGIN_DECLS
 
@@ -43,9 +43,9 @@ struct _GbpSpellWidget
   GtkBin                   parent_instance;
 
   /* Owned references */
-  IdeEditorView           *editor;
-  GbpSpellEditorViewAddin *editor_view_addin;
-  DzlSignalGroup          *editor_view_addin_signals;
+  IdeEditorPage           *editor;
+  GbpSpellEditorPageAddin *editor_page_addin;
+  DzlSignalGroup          *editor_page_addin_signals;
   GPtrArray               *words_array;
   GbpSpellDict            *dict;
 
@@ -93,8 +93,8 @@ void       _gbp_spell_widget_change         (GbpSpellWidget *self,
                                              gboolean        change_all);
 
 void       _gbp_spell_editor_addin_begin    (GbpSpellEditorAddin *self,
-                                             IdeEditorView       *view);
+                                             IdeEditorPage       *view);
 void       _gbp_spell_editor_addin_cancel   (GbpSpellEditorAddin *self,
-                                             IdeEditorView       *view);
+                                             IdeEditorPage       *view);
 
 G_END_DECLS

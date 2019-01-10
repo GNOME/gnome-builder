@@ -29,7 +29,7 @@ struct _GbpSpellEditorAddin
 {
   GObject               parent_instance;
 
-  IdeEditorPerspective *editor;
+  IdeEditorSurface *editor;
 
   DzlDockWidget        *dock;
   GbpSpellWidget       *widget;
@@ -37,17 +37,17 @@ struct _GbpSpellEditorAddin
 
 static void
 gbp_spell_editor_addin_load (IdeEditorAddin       *addin,
-                             IdeEditorPerspective *editor)
+                             IdeEditorSurface *editor)
 {
   GbpSpellEditorAddin *self = (GbpSpellEditorAddin *)addin;
-  IdeLayoutTransientSidebar *sidebar;
+  IdeTransientSidebar *sidebar;
 
   g_assert (GBP_IS_SPELL_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
   self->editor = editor;
 
-  sidebar = ide_editor_perspective_get_transient_sidebar (editor);
+  sidebar = ide_editor_surface_get_transient_sidebar (editor);
 
   self->dock = g_object_new (DZL_TYPE_DOCK_WIDGET,
                              "title", _("Spelling"),
@@ -72,12 +72,12 @@ gbp_spell_editor_addin_load (IdeEditorAddin       *addin,
 
 static void
 gbp_spell_editor_addin_unload (IdeEditorAddin       *addin,
-                               IdeEditorPerspective *editor)
+                               IdeEditorSurface *editor)
 {
   GbpSpellEditorAddin *self = (GbpSpellEditorAddin *)addin;
 
   g_assert (GBP_IS_SPELL_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
   if (self->dock != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->dock));
@@ -89,14 +89,14 @@ gbp_spell_editor_addin_unload (IdeEditorAddin       *addin,
 }
 
 static void
-gbp_spell_editor_addin_view_set (IdeEditorAddin *addin,
-                                 IdeLayoutView  *view)
+gbp_spell_editor_addin_page_set (IdeEditorAddin *addin,
+                                 IdePage  *view)
 {
   GbpSpellEditorAddin *self = (GbpSpellEditorAddin *)addin;
-  IdeEditorView *current;
+  IdeEditorPage *current;
 
   g_assert (GBP_IS_SPELL_EDITOR_ADDIN (self));
-  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+  g_assert (!view || IDE_IS_PAGE (view));
 
   /* If there is currently a view attached, and this is
    * a new view, then we want to unset it so that the
@@ -107,7 +107,7 @@ gbp_spell_editor_addin_view_set (IdeEditorAddin *addin,
 
   if (current != NULL)
     {
-      if (view == IDE_LAYOUT_VIEW (current))
+      if (view == IDE_PAGE (current))
         return;
 
       gbp_spell_widget_set_editor (self->widget, NULL);
@@ -125,7 +125,7 @@ editor_addin_iface_init (IdeEditorAddinInterface *iface)
 {
   iface->load = gbp_spell_editor_addin_load;
   iface->unload = gbp_spell_editor_addin_unload;
-  iface->view_set = gbp_spell_editor_addin_view_set;
+  iface->page_set = gbp_spell_editor_addin_page_set;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpSpellEditorAddin, gbp_spell_editor_addin, G_TYPE_OBJECT,
@@ -143,18 +143,18 @@ gbp_spell_editor_addin_init (GbpSpellEditorAddin *self)
 
 void
 _gbp_spell_editor_addin_begin (GbpSpellEditorAddin *self,
-                               IdeEditorView       *view)
+                               IdeEditorPage       *view)
 {
-  IdeLayoutTransientSidebar *sidebar;
+  IdeTransientSidebar *sidebar;
 
   g_return_if_fail (GBP_IS_SPELL_EDITOR_ADDIN (self));
-  g_return_if_fail (IDE_IS_EDITOR_VIEW (view));
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (view));
 
   gbp_spell_widget_set_editor (self->widget, view);
 
-  sidebar = ide_editor_perspective_get_transient_sidebar (self->editor);
-  ide_layout_transient_sidebar_set_view (sidebar, IDE_LAYOUT_VIEW (view));
-  ide_layout_transient_sidebar_set_panel (sidebar, GTK_WIDGET (self->dock));
+  sidebar = ide_editor_surface_get_transient_sidebar (self->editor);
+  ide_transient_sidebar_set_page (sidebar, IDE_PAGE (view));
+  ide_transient_sidebar_set_panel (sidebar, GTK_WIDGET (self->dock));
 
   /* TODO: This needs API via transient sidebar panel */
   g_object_set (self->editor, "right-visible", TRUE, NULL);
@@ -162,10 +162,10 @@ _gbp_spell_editor_addin_begin (GbpSpellEditorAddin *self,
 
 void
 _gbp_spell_editor_addin_cancel (GbpSpellEditorAddin *self,
-                                IdeEditorView       *view)
+                                IdeEditorPage       *view)
 {
   g_return_if_fail (GBP_IS_SPELL_EDITOR_ADDIN (self));
-  g_return_if_fail (IDE_IS_EDITOR_VIEW (view));
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (view));
 
   gbp_spell_widget_set_editor (self->widget, NULL);
 

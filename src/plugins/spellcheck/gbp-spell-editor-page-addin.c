@@ -1,4 +1,4 @@
-/* gbp-spell-editor-view-addin.c
+/* gbp-spell-editor-page-addin.c
  *
  * Copyright 2016 Sebastien Lafargue <slafargue@gnome.org>
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-spell-editor-view-addin"
+#define G_LOG_DOMAIN "gbp-spell-editor-page-addin"
 
 #include "config.h"
 
@@ -30,7 +30,7 @@
 
 #include "gbp-spell-buffer-addin.h"
 #include "gbp-spell-editor-addin.h"
-#include "gbp-spell-editor-view-addin.h"
+#include "gbp-spell-editor-page-addin.h"
 #include "gbp-spell-navigator.h"
 #include "gbp-spell-private.h"
 #include "gbp-spell-utils.h"
@@ -39,12 +39,12 @@
 
 #define I_(s) g_intern_static_string(s)
 
-struct _GbpSpellEditorViewAddin
+struct _GbpSpellEditorPageAddin
 {
   GObject          parent_instance;
 
   /* Borrowed references */
-  IdeEditorView   *view;
+  IdeEditorPage   *view;
   GtkTextMark     *word_begin;
   GtkTextMark     *word_end;
   GtkTextMark     *start_boundary;
@@ -58,46 +58,46 @@ struct _GbpSpellEditorViewAddin
 };
 
 static void
-gbp_spell_editor_view_addin_begin (GSimpleAction *action,
+gbp_spell_editor_page_addin_begin (GSimpleAction *action,
                                    GVariant      *variant,
                                    gpointer       user_data)
 {
-  GbpSpellEditorViewAddin *self = user_data;
+  GbpSpellEditorPageAddin *self = user_data;
   IdeEditorAddin *addin;
   GtkWidget *editor;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self));
+  g_assert (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
 
-  editor = gtk_widget_get_ancestor (GTK_WIDGET (self->view), IDE_TYPE_EDITOR_PERSPECTIVE);
-  addin = ide_editor_addin_find_by_module_name (IDE_EDITOR_PERSPECTIVE (editor), "spellcheck-plugin");
+  editor = gtk_widget_get_ancestor (GTK_WIDGET (self->view), IDE_TYPE_EDITOR_SURFACE);
+  addin = ide_editor_addin_find_by_module_name (IDE_EDITOR_SURFACE (editor), "spellcheck");
   _gbp_spell_editor_addin_begin (GBP_SPELL_EDITOR_ADDIN (addin), self->view);
 }
 
 static void
-gbp_spell_editor_view_addin_cancel (GSimpleAction *action,
+gbp_spell_editor_page_addin_cancel (GSimpleAction *action,
                                     GVariant      *variant,
                                     gpointer       user_data)
 {
-  GbpSpellEditorViewAddin *self = user_data;
+  GbpSpellEditorPageAddin *self = user_data;
   IdeEditorAddin *addin;
   GtkWidget *editor;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self));
+  g_assert (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
 
-  editor = gtk_widget_get_ancestor (GTK_WIDGET (self->view), IDE_TYPE_EDITOR_PERSPECTIVE);
-  addin = ide_editor_addin_find_by_module_name (IDE_EDITOR_PERSPECTIVE (editor), "spellcheck-plugin");
+  editor = gtk_widget_get_ancestor (GTK_WIDGET (self->view), IDE_TYPE_EDITOR_SURFACE);
+  addin = ide_editor_addin_find_by_module_name (IDE_EDITOR_SURFACE (editor), "spellcheck");
   _gbp_spell_editor_addin_cancel (GBP_SPELL_EDITOR_ADDIN (addin), self->view);
 }
 
 static const GActionEntry actions[] = {
-  { "spellcheck", gbp_spell_editor_view_addin_begin },
-  { "cancel-spellcheck", gbp_spell_editor_view_addin_cancel },
+  { "spellcheck", gbp_spell_editor_page_addin_begin },
+  { "cancel-spellcheck", gbp_spell_editor_page_addin_cancel },
 };
 
   static const DzlShortcutEntry spellchecker_shortcut_entry[] = {
-    { "org.gnome.builder.editor-view.spellchecker",
+    { "org.gnome.builder.editor-page.spellchecker",
       0, NULL,
       NC_("shortcut window", "Editor shortcuts"),
       NC_("shortcut window", "Editing"),
@@ -105,10 +105,10 @@ static const GActionEntry actions[] = {
   };
 
 static void
-gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
-                                  IdeEditorView      *view)
+gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
+                                  IdeEditorPage      *view)
 {
-  GbpSpellEditorViewAddin *self = (GbpSpellEditorViewAddin *)addin;
+  GbpSpellEditorPageAddin *self = (GbpSpellEditorPageAddin *)addin;
   g_autoptr(GSimpleActionGroup) group = NULL;
   g_autoptr(GPropertyAction) enabled_action = NULL;
   DzlShortcutController *controller;
@@ -117,20 +117,20 @@ gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
   IdeSourceView *source_view;
   IdeBuffer *buffer;
 
-  g_assert (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
   self->view = view;
 
-  source_view = ide_editor_view_get_view (view);
+  source_view = ide_editor_page_get_view (view);
   g_assert (source_view != NULL);
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
-  buffer = ide_editor_view_get_buffer (view);
+  buffer = ide_editor_page_get_buffer (view);
   g_assert (buffer != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  buffer_addin = ide_buffer_addin_find_by_module_name (buffer, "spellcheck-plugin");
+  buffer_addin = ide_buffer_addin_find_by_module_name (buffer, "spellcheck");
 
   if (!GBP_IS_SPELL_BUFFER_ADDIN (buffer_addin))
     {
@@ -163,7 +163,7 @@ gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
 
   controller = dzl_shortcut_controller_find (GTK_WIDGET (view));
   dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.editor-view.spellchecker",
+                                              "org.gnome.builder.editor-page.spellchecker",
                                               I_("<shift>F7"),
                                               DZL_SHORTCUT_PHASE_CAPTURE,
                                               "spellcheck.spellcheck");
@@ -175,13 +175,13 @@ gbp_spell_editor_view_addin_load (IdeEditorViewAddin *addin,
 }
 
 static void
-gbp_spell_editor_view_addin_unload (IdeEditorViewAddin *addin,
-                                    IdeEditorView      *view)
+gbp_spell_editor_page_addin_unload (IdeEditorPageAddin *addin,
+                                    IdeEditorPage      *view)
 {
-  GbpSpellEditorViewAddin *self = (GbpSpellEditorViewAddin *)addin;
+  GbpSpellEditorPageAddin *self = (GbpSpellEditorPageAddin *)addin;
 
-  g_assert (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
   gtk_widget_insert_action_group (GTK_WIDGET (view), "spellcheck", NULL);
 
@@ -197,45 +197,45 @@ gbp_spell_editor_view_addin_unload (IdeEditorViewAddin *addin,
 }
 
 static void
-editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface)
+editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
 {
-  iface->load = gbp_spell_editor_view_addin_load;
-  iface->unload = gbp_spell_editor_view_addin_unload;
+  iface->load = gbp_spell_editor_page_addin_load;
+  iface->unload = gbp_spell_editor_page_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpSpellEditorViewAddin, gbp_spell_editor_view_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, editor_view_addin_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbpSpellEditorPageAddin, gbp_spell_editor_page_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
 
 static void
-gbp_spell_editor_view_addin_class_init (GbpSpellEditorViewAddinClass *klass)
+gbp_spell_editor_page_addin_class_init (GbpSpellEditorPageAddinClass *klass)
 {
 }
 
 static void
-gbp_spell_editor_view_addin_init (GbpSpellEditorViewAddin *self)
+gbp_spell_editor_page_addin_init (GbpSpellEditorPageAddin *self)
 {
 }
 
 /**
- * gbp_spell_editor_view_addin_begin_checking:
- * @self: a #GbpSpellEditorViewAddin
+ * gbp_spell_editor_page_addin_begin_checking:
+ * @self: a #GbpSpellEditorPageAddin
  *
  * This function should be called by the #GbpSpellWidget to enable
  * spellchecking on the textview and underlying buffer. Doing so allows the
  * inline-spellchecking and language-menu to be dynamically enabled even if
  * spellchecking is typically disabled in the buffer.
  *
- * The caller should call gbp_spell_editor_view_addin_end_checking() when they
+ * The caller should call gbp_spell_editor_page_addin_end_checking() when they
  * have completed the spellchecking process.
  *
- * Since: 3.32
+ * Since: 3.26
  */
 void
-gbp_spell_editor_view_addin_begin_checking (GbpSpellEditorViewAddin *self)
+gbp_spell_editor_page_addin_begin_checking (GbpSpellEditorPageAddin *self)
 {
   GObject *buffer_addin;
 
-  g_return_if_fail (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self));
+  g_return_if_fail (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
   g_return_if_fail (self->view != NULL);
   g_return_if_fail (self->checking_count >= 0);
 
@@ -258,7 +258,7 @@ gbp_spell_editor_view_addin_begin_checking (GbpSpellEditorViewAddin *self)
 
       gbp_spell_buffer_addin_begin_checking (GBP_SPELL_BUFFER_ADDIN (buffer_addin));
 
-      view = ide_editor_view_get_view (self->view);
+      view = ide_editor_page_get_view (self->view);
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
       /* Use the selected range, otherwise whole buffer */
@@ -285,18 +285,18 @@ gbp_spell_editor_view_addin_begin_checking (GbpSpellEditorViewAddin *self)
 }
 
 /**
- * gbp_spell_editor_view_addin_end_checking:
- * @self: a #GbpSpellEditorViewAddin
+ * gbp_spell_editor_page_addin_end_checking:
+ * @self: a #GbpSpellEditorPageAddin
  *
  * Completes a spellcheck operation and potentially restores the buffer to
  * the visual state before spellchecking started.
  *
- * Since: 3.32
+ * Since: 3.26
  */
 void
-gbp_spell_editor_view_addin_end_checking (GbpSpellEditorViewAddin *self)
+gbp_spell_editor_page_addin_end_checking (GbpSpellEditorPageAddin *self)
 {
-  g_return_if_fail (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self));
+  g_return_if_fail (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
   g_return_if_fail (self->checking_count >= 0);
 
   self->checking_count--;
@@ -312,7 +312,7 @@ gbp_spell_editor_view_addin_end_checking (GbpSpellEditorViewAddin *self)
 
       if (self->view != NULL)
         {
-          IdeBuffer *buffer = ide_editor_view_get_buffer (self->view);
+          IdeBuffer *buffer = ide_editor_page_get_buffer (self->view);
 
           /*
            * We could be in disposal here, so its possible the buffer has
@@ -338,22 +338,22 @@ gbp_spell_editor_view_addin_end_checking (GbpSpellEditorViewAddin *self)
 }
 
 /**
- * gbp_spell_editor_view_addin_get_checker:
- * @self: a #GbpSpellEditorViewAddin
+ * gbp_spell_editor_page_addin_get_checker:
+ * @self: a #GbpSpellEditorPageAddin
  *
  * This function may return %NULL before
- * gbp_spell_editor_view_addin_begin_checking() has been called.
+ * gbp_spell_editor_page_addin_begin_checking() has been called.
  *
  * Returns: (nullable) (transfer none): a #GspellChecker or %NULL
  *
- * Since: 3.32
+ * Since: 3.26
  */
 GspellChecker *
-gbp_spell_editor_view_addin_get_checker (GbpSpellEditorViewAddin *self)
+gbp_spell_editor_page_addin_get_checker (GbpSpellEditorPageAddin *self)
 {
   GObject *buffer_addin;
 
-  g_return_val_if_fail (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self), NULL);
+  g_return_val_if_fail (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self), NULL);
 
   buffer_addin = dzl_binding_group_get_source (self->buffer_addin_bindings);
   if (GBP_IS_SPELL_BUFFER_ADDIN (buffer_addin))
@@ -363,26 +363,26 @@ gbp_spell_editor_view_addin_get_checker (GbpSpellEditorViewAddin *self)
 }
 
 /**
- * gbp_spell_editor_view_addin_get_navigator:
- * @self: a #GbpSpellEditorViewAddin
+ * gbp_spell_editor_page_addin_get_navigator:
+ * @self: a #GbpSpellEditorPageAddin
  *
  * This function may return %NULL before
- * gbp_spell_editor_view_addin_begin_checking() has been called.
+ * gbp_spell_editor_page_addin_begin_checking() has been called.
  *
  * Returns: (nullable) (transfer none): a #GspellNavigator or %NULL
  *
- * Since: 3.32
+ * Since: 3.26
  */
 GspellNavigator *
-gbp_spell_editor_view_addin_get_navigator (GbpSpellEditorViewAddin *self)
+gbp_spell_editor_page_addin_get_navigator (GbpSpellEditorPageAddin *self)
 {
-  g_return_val_if_fail (GBP_IS_SPELL_EDITOR_VIEW_ADDIN (self), NULL);
+  g_return_val_if_fail (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self), NULL);
 
   if (self->navigator == NULL)
     {
       if (self->view != NULL)
         {
-          IdeSourceView *view = ide_editor_view_get_view (self->view);
+          IdeSourceView *view = ide_editor_page_get_view (self->view);
 
           self->navigator = gbp_spell_navigator_new (GTK_TEXT_VIEW (view));
           if (self->navigator)
