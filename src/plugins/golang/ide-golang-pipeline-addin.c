@@ -23,7 +23,6 @@
 #include "ide-golang-pipeline-addin.h"
 #include "ide-golang-build-system.h"
 #include "ide-golang-go-stage.h"
-#include "project-tree/gb-project-tree-actions.h"
 
 static gboolean
 register_go_stage (IdeGolangPipelineAddin  *self,
@@ -50,7 +49,7 @@ register_go_stage (IdeGolangPipelineAddin  *self,
                         "target", target,
                         NULL);
 
-  stage_id = ide_build_pipeline_connect (pipeline, phase, 0, stage);
+  stage_id = ide_build_pipeline_attach (pipeline, phase, 0, stage);
   ide_build_pipeline_addin_track (IDE_BUILD_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -74,7 +73,7 @@ ide_golang_pipeline_addin_load (IdeBuildPipelineAddin *addin,
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (addin));
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
 
   if (!IDE_IS_GOLANG_BUILD_SYSTEM (build_system))
     return;
@@ -86,12 +85,6 @@ ide_golang_pipeline_addin_load (IdeBuildPipelineAddin *addin,
       g_warning ("Failed to create golang launcher: %s", error->message);
       return;
     }
-
-  // Register project-tree handlers to enable build & rebuild actions
-  register_tree_action_build_check(&golang_tree_action_enable_build);
-  register_tree_action_rebuild_check(&golang_tree_action_enable_build);
-
-  // @TODO
 }
 
 static void
