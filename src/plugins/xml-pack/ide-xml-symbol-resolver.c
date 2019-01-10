@@ -37,7 +37,7 @@ G_DEFINE_TYPE_WITH_CODE (IdeXmlSymbolResolver, ide_xml_symbol_resolver, IDE_TYPE
 
 static void
 ide_xml_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
-                                             IdeSourceLocation   *location,
+                                             IdeLocation   *location,
                                              GCancellable        *cancellable,
                                              GAsyncReadyCallback  callback,
                                              gpointer             user_data)
@@ -105,7 +105,7 @@ ide_xml_symbol_resolver_get_symbol_tree_cb (GObject      *object,
 static void
 ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
                                                GFile               *file,
-                                               IdeBuffer           *buffer,
+                                               GBytes              *contents,
                                                GCancellable        *cancellable,
                                                GAsyncReadyCallback  callback,
                                                gpointer             user_data)
@@ -114,7 +114,6 @@ ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   g_autoptr(IdeTask) task = NULL;
   IdeContext *context;
   IdeXmlService *service;
-  g_autoptr(IdeFile) ifile = NULL;
 
   IDE_ENTRY;
 
@@ -123,17 +122,15 @@ ide_xml_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_XML_SERVICE);
+  service = ide_xml_service_from_context (context);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
   ide_task_set_source_tag (task, ide_xml_symbol_resolver_get_symbol_tree_async);
 
-  ifile = ide_file_new (context, file);
-
   ide_xml_service_get_root_node_async (service,
-                                       ifile,
-                                       buffer,
+                                       file,
+                                       contents,
                                        cancellable,
                                        ide_xml_symbol_resolver_get_symbol_tree_cb,
                                        g_object_ref (task));

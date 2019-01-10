@@ -86,8 +86,6 @@ symbol_tree_iface_init (IdeSymbolTreeInterface *iface)
  * Create a new #IdeXmlSymbolTree
  *
  * Returns: (transfer full): A newly allocated #IdeXmlSymbolTree.
- *
- * Since: 3.32
  */
 IdeXmlSymbolTree *
 ide_xml_symbol_tree_new (IdeXmlSymbolNode *root_node)

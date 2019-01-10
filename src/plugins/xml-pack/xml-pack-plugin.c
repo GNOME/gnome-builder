@@ -18,22 +18,34 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
+#include <libide-code.h>
+#include <libide-sourceview.h>
 
 #include "ide-xml-completion-provider.h"
 #include "ide-xml-diagnostic-provider.h"
 #include "ide-xml-highlighter.h"
 #include "ide-xml-indenter.h"
-#include "ide-xml-service.h"
 #include "ide-xml-symbol-resolver.h"
 
-void
-ide_xml_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_xml_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_COMPLETION_PROVIDER, IDE_TYPE_XML_COMPLETION_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_DIAGNOSTIC_PROVIDER, IDE_TYPE_XML_DIAGNOSTIC_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_HIGHLIGHTER, IDE_TYPE_XML_HIGHLIGHTER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_INDENTER, IDE_TYPE_XML_INDENTER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_SYMBOL_RESOLVER, IDE_TYPE_XML_SYMBOL_RESOLVER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_SERVICE, IDE_TYPE_XML_SERVICE);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              IDE_TYPE_XML_COMPLETION_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_DIAGNOSTIC_PROVIDER,
+                                              IDE_TYPE_XML_DIAGNOSTIC_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_HIGHLIGHTER,
+                                              IDE_TYPE_XML_HIGHLIGHTER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_INDENTER,
+                                              IDE_TYPE_XML_INDENTER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_SYMBOL_RESOLVER,
+                                              IDE_TYPE_XML_SYMBOL_RESOLVER);
 }

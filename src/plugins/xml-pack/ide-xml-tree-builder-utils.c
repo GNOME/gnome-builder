@@ -18,6 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include <dazzle.h>
 #include <string.h>
 
 #include "ide-xml-tree-builder-utils-private.h"

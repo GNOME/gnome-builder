@@ -20,7 +20,7 @@
 #pragma once
 
 #include <glib.h>
-#include <ide.h>
+#include <libide-code.h>
 
 #include "ide-xml-schema-cache-entry.h"
 #include "ide-xml-symbol-node.h"

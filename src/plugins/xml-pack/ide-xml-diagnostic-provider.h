@@ -21,7 +21,7 @@
 #pragma once
 
 #include <glib-object.h>
-#include <ide.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 

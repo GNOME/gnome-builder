@@ -18,8 +18,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include <dazzle.h>
+#include <libide-code.h>
+
 #include "ide-xml-stack.h"
-#include <ide.h>
 
 typedef struct _StackItem
 {

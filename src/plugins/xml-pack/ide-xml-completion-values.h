@@ -22,7 +22,7 @@
 
 #include <glib.h>
 
-#include <ide.h>
+#include <libide-code.h>
 
 #include "ide-xml-rng-define.h"
 #include "ide-xml-symbol-node.h"

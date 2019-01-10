@@ -23,6 +23,7 @@
 #include <dazzle.h>
 #include <gtksourceview/gtksource.h>
 #include <libpeas/peas.h>
+#include <libide-sourceview.h>
 
 #include "ide-xml-completion-attributes.h"
 #include "ide-xml-completion-provider.h"
@@ -66,9 +67,9 @@ typedef struct _StateStackItem
 
 typedef struct
 {
-  IdeFile *ifile;
-  gint     line;
-  gint     line_offset;
+  GFile *file;
+  gint   line;
+  gint   line_offset;
 } PopulateState;
 
 typedef struct
@@ -91,7 +92,7 @@ populate_state_free (PopulateState *state)
 {
   g_assert (state != NULL);
 
-  g_clear_object (&state->ifile);
+  g_clear_object (&state->file);
   g_slice_free (PopulateState, state);
 }
 
@@ -997,7 +998,7 @@ populate_cb (GObject      *object,
           items = g_ptr_array_new_with_free_func ((GDestroyNotify)completion_item_free);
           if (child_pos != -1)
             {
-              candidate_node = ide_xml_symbol_node_new ("internal", NULL, "", IDE_SYMBOL_XML_ELEMENT);
+              candidate_node = ide_xml_symbol_node_new ("internal", NULL, "", IDE_SYMBOL_KIND_XML_ELEMENT);
               ide_xml_position_set_child_node (position, candidate_node);
             }
 
@@ -1043,20 +1044,20 @@ ide_xml_completion_provider_populate_async (IdeCompletionProvider *provider,
   ide_task_set_source_tag (task, ide_xml_completion_provider_populate_async);
 
   ide_context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (ide_context, IDE_TYPE_XML_SERVICE);
+  service = ide_xml_service_from_context (ide_context);
 
   buffer = ide_completion_context_get_buffer (context);
   ide_completion_context_get_bounds (context, &iter, NULL);
 
   state = g_slice_new0 (PopulateState);
-  state->ifile = g_object_ref (ide_buffer_get_file (IDE_BUFFER (buffer)));
+  state->file = g_object_ref (ide_buffer_get_file (IDE_BUFFER (buffer)));
   state->line = gtk_text_iter_get_line (&iter) + 1;
   state->line_offset = gtk_text_iter_get_line_offset (&iter) + 1;
 
   ide_task_set_task_data (task, state, populate_state_free);
 
   ide_xml_service_get_position_from_cursor_async (service,
-                                                  state->ifile,
+                                                  state->file,
                                                   IDE_BUFFER (buffer),
                                                   state->line,
                                                   state->line_offset,

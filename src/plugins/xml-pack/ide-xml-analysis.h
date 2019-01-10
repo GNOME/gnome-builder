@@ -20,10 +20,9 @@
 
 #pragma once
 
-#include "diagnostics/ide-diagnostics.h"
-#include "ide-xml-symbol-node.h"
+#include <libide-code.h>
 
-#include <glib-object.h>
+#include "ide-xml-symbol-node.h"
 
 G_BEGIN_DECLS
 

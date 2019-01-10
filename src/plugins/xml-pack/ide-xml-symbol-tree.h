@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-code.h>
 #include "ide-xml-symbol-node.h"
 
 G_BEGIN_DECLS

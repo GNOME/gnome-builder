@@ -17,6 +17,7 @@
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+
 #include "ide-xml-analysis.h"
 
 G_DEFINE_BOXED_TYPE (IdeXmlAnalysis, ide_xml_analysis, ide_xml_analysis_ref, ide_xml_analysis_unref)
@@ -35,8 +36,6 @@ ide_xml_analysis_get_sequence (IdeXmlAnalysis *self)
  *
  * Returns: (nullable) (transfer none): The #IdeDiagnostics contained by the analysis.
  *
- *
- * Since: 3.32
  */
 IdeDiagnostics *
 ide_xml_analysis_get_diagnostics (IdeXmlAnalysis *self)
@@ -52,8 +51,6 @@ ide_xml_analysis_get_diagnostics (IdeXmlAnalysis *self)
  *
  * Returns: (nullable) (transfer none): The #IdeXmlSymbolNode root node contained by the analysis.
  *
- *
- * Since: 3.32
  */
 IdeXmlSymbolNode *
 ide_xml_analysis_get_root_node (IdeXmlAnalysis *self)
@@ -69,8 +66,6 @@ ide_xml_analysis_get_root_node (IdeXmlAnalysis *self)
  *
  * Returns: (nullable) (transfer none): The schemas entries #GPtrArray contained by the analysis.
  *
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_xml_analysis_get_schemas (IdeXmlAnalysis *self)
@@ -87,11 +82,7 @@ ide_xml_analysis_set_diagnostics (IdeXmlAnalysis *self,
   g_return_if_fail (self != NULL);
   g_return_if_fail (diagnostics != NULL);
 
-  if (diagnostics != self->diagnostics)
-    {
-      g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
-      self->diagnostics = ide_diagnostics_ref (diagnostics);
-    }
+  g_set_object (&self->diagnostics, diagnostics);
 }
 
 void
@@ -146,8 +137,7 @@ ide_xml_analysis_free (IdeXmlAnalysis *self)
   g_assert_cmpint (self->ref_count, ==, 0);
 
   g_clear_object (&self->root_node);
-  g_clear_pointer (&self->diagnostics, ide_diagnostics_unref);
-
+  g_clear_object (&self->diagnostics);
   g_slice_free (IdeXmlAnalysis, self);
 }
 

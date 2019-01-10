@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "ide-xml-parser-ui"
 
 #include <dazzle.h>
+#include <libide-code.h>
 
 #include "ide-xml-parser-ui.h"
 #include "ide-xml-parser.h"
@@ -69,7 +70,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           dzl_str_equal0 (parent_name, "template"))
         {
           value = get_attribute (attributes, "name", NULL);
-          node = ide_xml_symbol_node_new (value, NULL, "property", IDE_SYMBOL_UI_PROPERTY);
+          node = ide_xml_symbol_node_new (value, NULL, "property", IDE_SYMBOL_KIND_UI_PROPERTY);
           is_internal = TRUE;
           state->build_state = BUILD_STATE_GET_CONTENT;
         }
@@ -81,7 +82,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           dzl_str_equal0 (parent_name, "item"))
         {
           value = get_attribute (attributes, "name", NULL);
-          node = ide_xml_symbol_node_new (value, NULL, "attribute", IDE_SYMBOL_UI_MENU_ATTRIBUTE);
+          node = ide_xml_symbol_node_new (value, NULL, "attribute", IDE_SYMBOL_KIND_UI_MENU_ATTRIBUTE);
           is_internal = TRUE;
           state->build_state = BUILD_STATE_GET_CONTENT;
         }
@@ -89,7 +90,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
   else if (dzl_str_equal0 (name, "class") && dzl_str_equal0 (parent_name, "style"))
     {
       value = get_attribute (attributes, "name", NULL);
-      node = ide_xml_symbol_node_new (value, NULL, "class", IDE_SYMBOL_UI_STYLE_CLASS);
+      node = ide_xml_symbol_node_new (value, NULL, "class", IDE_SYMBOL_KIND_UI_STYLE_CLASS);
       is_internal = TRUE;
     }
   else if (dzl_str_equal0 (name, "child"))
@@ -110,7 +111,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           g_string_append (string, value);
         }
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "child", IDE_SYMBOL_UI_CHILD);
+      node = ide_xml_symbol_node_new (string->str, NULL, "child", IDE_SYMBOL_KIND_UI_CHILD);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (dzl_str_equal0 (name, "object"))
@@ -128,7 +129,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
           g_string_append (string, value);
         }
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "object", IDE_SYMBOL_UI_OBJECT);
+      node = ide_xml_symbol_node_new (string->str, NULL, "object", IDE_SYMBOL_KIND_UI_OBJECT);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (dzl_str_equal0 (name, "template"))
@@ -144,16 +145,16 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       g_string_append (string, label);
       g_string_append (string, value);
 
-      node = ide_xml_symbol_node_new (string->str, NULL, (const gchar *)name, IDE_SYMBOL_UI_TEMPLATE);
+      node = ide_xml_symbol_node_new (string->str, NULL, (const gchar *)name, IDE_SYMBOL_KIND_UI_TEMPLATE);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (dzl_str_equal0 (name, "packing"))
     {
-      node = ide_xml_symbol_node_new ("packing", NULL, "packing", IDE_SYMBOL_UI_PACKING);
+      node = ide_xml_symbol_node_new ("packing", NULL, "packing", IDE_SYMBOL_KIND_UI_PACKING);
     }
   else if (dzl_str_equal0 (name, "style"))
     {
-      node = ide_xml_symbol_node_new ("style", NULL, "style", IDE_SYMBOL_UI_STYLE);
+      node = ide_xml_symbol_node_new ("style", NULL, "style", IDE_SYMBOL_KIND_UI_STYLE);
     }
   else if (dzl_str_equal0 (name, "menu"))
     {
@@ -162,7 +163,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       g_string_append (string, label);
       g_string_append (string, value);
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "menu", IDE_SYMBOL_UI_MENU);
+      node = ide_xml_symbol_node_new (string->str, NULL, "menu", IDE_SYMBOL_KIND_UI_MENU);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (dzl_str_equal0 (name, "submenu"))
@@ -172,7 +173,7 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       g_string_append (string, label);
       g_string_append (string, value);
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "submenu", IDE_SYMBOL_UI_SUBMENU);
+      node = ide_xml_symbol_node_new (string->str, NULL, "submenu", IDE_SYMBOL_KIND_UI_SUBMENU);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (dzl_str_equal0 (name, "section"))
@@ -182,12 +183,12 @@ ide_xml_parser_ui_start_element_sax_cb (ParserState    *state,
       g_string_append (string, label);
       g_string_append (string, value);
 
-      node = ide_xml_symbol_node_new (string->str, NULL, "section", IDE_SYMBOL_UI_SECTION);
+      node = ide_xml_symbol_node_new (string->str, NULL, "section", IDE_SYMBOL_KIND_UI_SECTION);
       g_object_set (node, "use-markup", TRUE, NULL);
     }
   else if (dzl_str_equal0 (name, "item"))
     {
-      node = ide_xml_symbol_node_new ("item", NULL, "item", IDE_SYMBOL_UI_ITEM);
+      node = ide_xml_symbol_node_new ("item", NULL, "item", IDE_SYMBOL_KIND_UI_ITEM);
     }
 
   state->attributes = (const gchar **)attributes;
@@ -207,7 +208,7 @@ get_menu_attribute_value (IdeXmlSymbolNode *node,
   for (gint i = 0; i < n_children; ++i)
     {
       child = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_internal_child (node, i));
-      if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_UI_MENU_ATTRIBUTE &&
+      if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_KIND_UI_MENU_ATTRIBUTE &&
           dzl_str_equal0 (ide_symbol_node_get_name (IDE_SYMBOL_NODE (child)), name))
         {
           return ide_xml_symbol_node_get_value (child);
@@ -236,7 +237,7 @@ node_post_processing_collect_style_classes (IdeXmlParser      *self,
       const gchar *name;
 
       child = IDE_XML_SYMBOL_NODE (ide_xml_symbol_node_get_nth_internal_child (node, i));
-      if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_UI_STYLE_CLASS)
+      if (ide_symbol_node_get_kind (IDE_SYMBOL_NODE (child)) == IDE_SYMBOL_KIND_UI_STYLE_CLASS)
         {
           name = ide_symbol_node_get_name (IDE_SYMBOL_NODE (child));
           if (dzl_str_empty0 (name))
