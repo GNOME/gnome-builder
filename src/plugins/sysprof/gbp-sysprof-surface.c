@@ -1,4 +1,4 @@
-/* gbp-sysprof-perspective.c
+/* gbp-sysprof-surface.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,17 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-sysprof-perspective"
+#define G_LOG_DOMAIN "gbp-sysprof-surface"
 
 #include <glib/gi18n.h>
 #include <sysprof.h>
 #include <sysprof-ui.h>
 
-#include "gbp-sysprof-perspective.h"
+#include "gbp-sysprof-surface.h"
 
-struct _GbpSysprofPerspective
+struct _GbpSysprofSurface
 {
-  GtkBin                parent_instance;
+  IdeSurface            parent_instance;
 
   SpCaptureReader      *reader;
 
@@ -42,58 +42,56 @@ struct _GbpSysprofPerspective
   SpZoomManager        *zoom_manager;
 };
 
-static void perspective_iface_init         (IdePerspectiveInterface *iface);
-static void gbp_sysprof_perspective_reload (GbpSysprofPerspective   *self);
+static void gbp_sysprof_surface_reload (GbpSysprofSurface *self);
 
-G_DEFINE_TYPE_EXTENDED (GbpSysprofPerspective, gbp_sysprof_perspective, GTK_TYPE_BIN, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_PERSPECTIVE, perspective_iface_init))
+G_DEFINE_TYPE (GbpSysprofSurface, gbp_sysprof_surface, IDE_TYPE_SURFACE)
 
 static void
-hide_info_bar (GbpSysprofPerspective *self,
+hide_info_bar (GbpSysprofSurface *self,
                GtkButton             *button)
 {
-  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_assert (GBP_IS_SYSPROF_SURFACE (self));
 
   gtk_revealer_set_reveal_child (self->info_bar_revealer, FALSE);
 }
 
 static void
-gbp_sysprof_perspective_selection_changed (GbpSysprofPerspective *self,
+gbp_sysprof_surface_selection_changed (GbpSysprofSurface *self,
                                            SpSelection           *selection)
 {
-  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_assert (GBP_IS_SYSPROF_SURFACE (self));
   g_assert (SP_IS_SELECTION (selection));
 
-  gbp_sysprof_perspective_reload (self);
+  gbp_sysprof_surface_reload (self);
 }
 
 static void
-gbp_sysprof_perspective_finalize (GObject *object)
+gbp_sysprof_surface_finalize (GObject *object)
 {
-  GbpSysprofPerspective *self = (GbpSysprofPerspective *)object;
+  GbpSysprofSurface *self = (GbpSysprofSurface *)object;
 
   g_clear_pointer (&self->reader, sp_capture_reader_unref);
 
-  G_OBJECT_CLASS (gbp_sysprof_perspective_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_sysprof_surface_parent_class)->finalize (object);
 }
 
 static void
-gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
+gbp_sysprof_surface_class_init (GbpSysprofSurfaceClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gbp_sysprof_perspective_finalize;
+  object_class->finalize = gbp_sysprof_surface_finalize;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysprof-plugin/gbp-sysprof-perspective.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, callgraph_view);
-  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, info_bar_label);
-  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, info_bar_close);
-  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, info_bar_revealer);
-  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, stack);
-  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, recording_view);
-  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, visualizers);
-  gtk_widget_class_bind_template_child (widget_class, GbpSysprofPerspective, zoom_manager);
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/sysprof/gbp-sysprof-surface.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofSurface, callgraph_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofSurface, info_bar_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofSurface, info_bar_close);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofSurface, info_bar_revealer);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofSurface, stack);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofSurface, recording_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofSurface, visualizers);
+  gtk_widget_class_bind_template_child (widget_class, GbpSysprofSurface, zoom_manager);
 
   g_type_ensure (SP_TYPE_CALLGRAPH_VIEW);
   g_type_ensure (SP_TYPE_CPU_VISUALIZER_ROW);
@@ -104,11 +102,15 @@ gbp_sysprof_perspective_class_init (GbpSysprofPerspectiveClass *klass)
 }
 
 static void
-gbp_sysprof_perspective_init (GbpSysprofPerspective *self)
+gbp_sysprof_surface_init (GbpSysprofSurface *self)
 {
   SpSelection *selection;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_widget_set_name (GTK_WIDGET (self), "profiler");
+  ide_surface_set_icon_name (IDE_SURFACE (self), "utilities-system-monitor-symbolic");
+  ide_surface_set_title (IDE_SURFACE (self), _("Profiler"));
 
   g_signal_connect_object (self->info_bar_close,
                            "clicked",
@@ -120,42 +122,9 @@ gbp_sysprof_perspective_init (GbpSysprofPerspective *self)
 
   g_signal_connect_object (selection,
                            "changed",
-                           G_CALLBACK (gbp_sysprof_perspective_selection_changed),
+                           G_CALLBACK (gbp_sysprof_surface_selection_changed),
                            self,
                            G_CONNECT_SWAPPED);
-}
-
-static gchar *
-gbp_sysprof_perspective_get_icon_name (IdePerspective *perspective)
-{
-  return g_strdup ("utilities-system-monitor-symbolic");
-}
-
-static gchar *
-gbp_sysprof_perspective_get_title (IdePerspective *perspective)
-{
-  return g_strdup (_("Profiler"));
-}
-
-static gchar *
-gbp_sysprof_perspective_get_id (IdePerspective *perspective)
-{
-  return g_strdup ("profiler");
-}
-
-static gchar *
-gbp_sysprof_perspective_get_accelerator (IdePerspective *perspective)
-{
-  return g_strdup ("<Alt>3");
-}
-
-static void
-perspective_iface_init (IdePerspectiveInterface *iface)
-{
-  iface->get_icon_name = gbp_sysprof_perspective_get_icon_name;
-  iface->get_title = gbp_sysprof_perspective_get_title;
-  iface->get_id = gbp_sysprof_perspective_get_id;
-  iface->get_accelerator = gbp_sysprof_perspective_get_accelerator;
 }
 
 static void
@@ -164,11 +133,11 @@ generate_cb (GObject      *object,
              gpointer      user_data)
 {
   SpCallgraphProfile *profile = (SpCallgraphProfile *)object;
-  g_autoptr(GbpSysprofPerspective) self = user_data;
+  g_autoptr(GbpSysprofSurface) self = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (SP_IS_CALLGRAPH_PROFILE (profile));
-  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_assert (GBP_IS_SYSPROF_SURFACE (self));
 
   if (!sp_profile_generate_finish (SP_PROFILE (profile), result, &error))
     {
@@ -180,12 +149,12 @@ generate_cb (GObject      *object,
 }
 
 static void
-gbp_sysprof_perspective_reload (GbpSysprofPerspective *self)
+gbp_sysprof_surface_reload (GbpSysprofSurface *self)
 {
   SpSelection *selection;
   g_autoptr(SpProfile) profile = NULL;
 
-  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_assert (GBP_IS_SYSPROF_SURFACE (self));
 
   if (self->reader == NULL)
     return;
@@ -206,18 +175,18 @@ gbp_sysprof_perspective_reload (GbpSysprofPerspective *self)
 }
 
 SpCaptureReader *
-gbp_sysprof_perspective_get_reader (GbpSysprofPerspective *self)
+gbp_sysprof_surface_get_reader (GbpSysprofSurface *self)
 {
-  g_return_val_if_fail (GBP_IS_SYSPROF_PERSPECTIVE (self), NULL);
+  g_return_val_if_fail (GBP_IS_SYSPROF_SURFACE (self), NULL);
 
   return sp_visualizer_view_get_reader (self->visualizers);
 }
 
 void
-gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
+gbp_sysprof_surface_set_reader (GbpSysprofSurface *self,
                                     SpCaptureReader       *reader)
 {
-  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_assert (GBP_IS_SYSPROF_SURFACE (self));
 
   if (reader != self->reader)
     {
@@ -237,19 +206,19 @@ gbp_sysprof_perspective_set_reader (GbpSysprofPerspective *self,
       if (reader != NULL)
         {
           self->reader = sp_capture_reader_ref (reader);
-          gbp_sysprof_perspective_reload (self);
+          gbp_sysprof_surface_reload (self);
         }
     }
 }
 
 static void
-gbp_sysprof_perspective_profiler_failed (GbpSysprofPerspective *self,
+gbp_sysprof_surface_profiler_failed (GbpSysprofSurface *self,
                                          const GError          *error,
                                          SpProfiler            *profiler)
 {
   IDE_ENTRY;
 
-  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_assert (GBP_IS_SYSPROF_SURFACE (self));
   g_assert (error != NULL);
   g_assert (SP_IS_PROFILER (profiler));
 
@@ -262,10 +231,10 @@ gbp_sysprof_perspective_profiler_failed (GbpSysprofPerspective *self,
 }
 
 void
-gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
+gbp_sysprof_surface_set_profiler (GbpSysprofSurface *self,
                                       SpProfiler            *profiler)
 {
-  g_return_if_fail (GBP_IS_SYSPROF_PERSPECTIVE (self));
+  g_return_if_fail (GBP_IS_SYSPROF_SURFACE (self));
   g_return_if_fail (!profiler || SP_IS_PROFILER (profiler));
 
   sp_recording_state_view_set_profiler (self->recording_view, profiler);
@@ -276,7 +245,7 @@ gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
 
       g_signal_connect_object (profiler,
                                "failed",
-                               G_CALLBACK (gbp_sysprof_perspective_profiler_failed),
+                               G_CALLBACK (gbp_sysprof_surface_profiler_failed),
                                self,
                                G_CONNECT_SWAPPED);
     }
@@ -287,9 +256,9 @@ gbp_sysprof_perspective_set_profiler (GbpSysprofPerspective *self,
 }
 
 SpZoomManager *
-gbp_sysprof_perspective_get_zoom_manager (GbpSysprofPerspective *self)
+gbp_sysprof_surface_get_zoom_manager (GbpSysprofSurface *self)
 {
-  g_return_val_if_fail (GBP_IS_SYSPROF_PERSPECTIVE (self), NULL);
+  g_return_val_if_fail (GBP_IS_SYSPROF_SURFACE (self), NULL);
 
   return self->zoom_manager;
 }

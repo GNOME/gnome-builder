@@ -1,4 +1,4 @@
-/* gbp-sysprof-plugin.c
+/* gbp-sysprof-workspace-addin.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,18 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <libpeas/peas.h>
-#include <ide.h>
-#include <sysprof.h>
+#pragma once
 
-#include "gbp-sysprof-workbench-addin.h"
+#include <libide-gui.h>
 
-void
-gbp_sysprof_register_types (PeasObjectModule *module)
-{
-  sp_clock_init ();
+G_BEGIN_DECLS
 
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_SYSPROF_WORKBENCH_ADDIN);
-}
+#define GBP_TYPE_SYSPROF_WORKSPACE_ADDIN (gbp_sysprof_workspace_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpSysprofWorkspaceAddin, gbp_sysprof_workspace_addin, GBP, SYSPROF_WORKSPACE_ADDIN, GObject)
+
+G_END_DECLS

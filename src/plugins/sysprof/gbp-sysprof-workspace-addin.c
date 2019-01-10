@@ -1,4 +1,4 @@
-/* gbp-sysprof-workbench-addin.c
+/* gbp-sysprof-workspace-addin.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -21,44 +21,49 @@
 #include <glib/gi18n.h>
 #include <sysprof.h>
 
-#include "gbp-sysprof-perspective.h"
-#include "gbp-sysprof-workbench-addin.h"
+#include "gbp-sysprof-surface.h"
+#include "gbp-sysprof-workspace-addin.h"
 
-struct _GbpSysprofWorkbenchAddin
+struct _GbpSysprofWorkspaceAddin
 {
   GObject                parent_instance;
 
   GSimpleActionGroup    *actions;
   SpProfiler            *profiler;
 
-  GbpSysprofPerspective *perspective;
-  IdeWorkbench          *workbench;
+  GbpSysprofSurface     *surface;
+  IdeWorkspace          *workspace;
 
   GtkBox                *zoom_controls;
 };
 
-static void workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface);
+static void workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbpSysprofWorkspaceAddin, gbp_sysprof_workspace_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
-gbp_sysprof_workbench_addin_update_controls (GbpSysprofWorkbenchAddin *self)
+gbp_sysprof_workspace_addin_update_controls (GbpSysprofWorkspaceAddin *self)
 {
-  IdePerspective *perspective;
+  IdeSurface *surface;
   gboolean visible;
 
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
 
-  perspective = ide_workbench_get_visible_perspective (self->workbench);
-  visible = GBP_IS_SYSPROF_PERSPECTIVE (perspective) &&
-            !!gbp_sysprof_perspective_get_reader (GBP_SYSPROF_PERSPECTIVE (perspective));
+  if (self->workspace == NULL)
+    return;
 
-  gtk_widget_set_visible (GTK_WIDGET (self->zoom_controls), visible);
+  surface = ide_workspace_get_visible_surface (self->workspace);
+  visible = GBP_IS_SYSPROF_SURFACE (surface) &&
+            !!gbp_sysprof_surface_get_reader (GBP_SYSPROF_SURFACE (surface));
+
+  if (self->zoom_controls)
+    gtk_widget_set_visible (GTK_WIDGET (self->zoom_controls), visible);
 }
 
 static void
-profiler_stopped (GbpSysprofWorkbenchAddin *self,
+profiler_stopped (GbpSysprofWorkspaceAddin *self,
                   SpProfiler               *profiler)
 {
   g_autoptr(SpCaptureReader) reader = NULL;
@@ -67,13 +72,14 @@ profiler_stopped (GbpSysprofWorkbenchAddin *self,
 
   IDE_ENTRY;
 
-  g_return_if_fail (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
-  g_return_if_fail (SP_IS_PROFILER (profiler));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  g_assert (SP_IS_PROFILER (profiler));
 
   if (self->profiler != profiler)
     IDE_EXIT;
 
-  if (self->workbench == NULL)
+  if (self->workspace == NULL)
     IDE_EXIT;
 
   writer = sp_profiler_get_writer (profiler);
@@ -86,23 +92,24 @@ profiler_stopped (GbpSysprofWorkbenchAddin *self,
       IDE_EXIT;
     }
 
-  gbp_sysprof_perspective_set_reader (self->perspective, reader);
+  gbp_sysprof_surface_set_reader (self->surface, reader);
 
-  ide_workbench_set_visible_perspective_name (self->workbench, "profiler");
+  ide_workspace_set_visible_surface_name (self->workspace, "profiler");
 
-  gbp_sysprof_workbench_addin_update_controls (self);
+  gbp_sysprof_workspace_addin_update_controls (self);
 
   IDE_EXIT;
 }
 
 static void
-profiler_child_spawned (GbpSysprofWorkbenchAddin *self,
+profiler_child_spawned (GbpSysprofWorkspaceAddin *self,
                         const gchar              *identifier,
                         IdeRunner                *runner)
 {
   GPid pid = 0;
 
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (identifier != NULL);
   g_assert (IDE_IS_RUNNER (runner));
 
@@ -133,9 +140,10 @@ get_runtime_sysroot (IdeContext  *context,
   IdeConfiguration *config;
   IdeRuntime *runtime;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CONTEXT (context));
 
-  config_manager = ide_context_get_configuration_manager (context);
+  config_manager = ide_configuration_manager_from_context (context);
   config = ide_configuration_manager_get_current (config_manager);
   runtime = ide_configuration_get_runtime (config);
 
@@ -156,14 +164,15 @@ profiler_run_handler (IdeRunManager *run_manager,
                       IdeRunner     *runner,
                       gpointer       user_data)
 {
-  GbpSysprofWorkbenchAddin *self = user_data;
+  GbpSysprofWorkspaceAddin *self = user_data;
   g_autoptr(SpSource) proc_source = NULL;
   g_autoptr(SpSource) perf_source = NULL;
   g_autoptr(SpSource) hostinfo_source = NULL;
   g_autoptr(SpSource) memory_source = NULL;
   IdeContext *context;
 
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUNNER (runner));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
@@ -210,7 +219,7 @@ profiler_run_handler (IdeRunManager *run_manager,
 
   g_signal_connect_object (self->profiler,
                            "stopped",
-                           G_CALLBACK (gbp_sysprof_workbench_addin_update_controls),
+                           G_CALLBACK (gbp_sysprof_workspace_addin_update_controls),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -259,21 +268,21 @@ profiler_run_handler (IdeRunManager *run_manager,
                            self,
                            G_CONNECT_SWAPPED);
 
-  gbp_sysprof_perspective_set_profiler (self->perspective, self->profiler);
+  gbp_sysprof_surface_set_profiler (self->surface, self->profiler);
 
-  ide_workbench_set_visible_perspective (self->workbench, IDE_PERSPECTIVE (self->perspective));
+  ide_workspace_set_visible_surface (self->workspace, IDE_SURFACE (self->surface));
 }
 
 static void
-gbp_sysprof_workbench_addin_open_cb (GObject      *object,
+gbp_sysprof_workspace_addin_open_cb (GObject      *object,
                                      GAsyncResult *result,
                                      gpointer      user_data)
 {
-  GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)object;
+  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)object;
   g_autoptr(SpCaptureReader) reader = NULL;
   g_autoptr(GError) error = NULL;
 
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_TASK (result));
 
   reader = ide_task_propagate_pointer (IDE_TASK (result), &error);
@@ -286,14 +295,14 @@ gbp_sysprof_workbench_addin_open_cb (GObject      *object,
       return;
     }
 
-  gbp_sysprof_perspective_set_profiler (self->perspective, NULL);
-  gbp_sysprof_perspective_set_reader (self->perspective, reader);
+  gbp_sysprof_surface_set_profiler (self->surface, NULL);
+  gbp_sysprof_surface_set_reader (self->surface, reader);
 
-  gbp_sysprof_workbench_addin_update_controls (self);
+  gbp_sysprof_workspace_addin_update_controls (self);
 }
 
 static void
-gbp_sysprof_workbench_addin_open_worker (IdeTask      *task,
+gbp_sysprof_workspace_addin_open_worker (IdeTask      *task,
                                          gpointer      source_object,
                                          gpointer      task_data,
                                          GCancellable *cancellable)
@@ -304,7 +313,7 @@ gbp_sysprof_workbench_addin_open_worker (IdeTask      *task,
   GFile *file = task_data;
 
   g_assert (IDE_IS_TASK (task));
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (source_object));
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (source_object));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -317,12 +326,12 @@ gbp_sysprof_workbench_addin_open_worker (IdeTask      *task,
 }
 
 static void
-gbp_sysprof_workbench_addin_open (GbpSysprofWorkbenchAddin *self,
+gbp_sysprof_workspace_addin_open (GbpSysprofWorkspaceAddin *self,
                                   GFile                    *file)
 {
   g_autoptr(IdeTask) task = NULL;
 
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (G_IS_FILE (file));
 
   if (!g_file_is_native (file))
@@ -331,9 +340,9 @@ gbp_sysprof_workbench_addin_open (GbpSysprofWorkbenchAddin *self,
       return;
     }
 
-  task = ide_task_new (self, NULL, gbp_sysprof_workbench_addin_open_cb, NULL);
+  task = ide_task_new (self, NULL, gbp_sysprof_workspace_addin_open_cb, NULL);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
-  ide_task_run_in_thread (task, gbp_sysprof_workbench_addin_open_worker);
+  ide_task_run_in_thread (task, gbp_sysprof_workspace_addin_open_worker);
 }
 
 static void
@@ -341,26 +350,25 @@ open_profile_action (GSimpleAction *action,
                      GVariant      *variant,
                      gpointer       user_data)
 {
-  GbpSysprofWorkbenchAddin *self = user_data;
+  GbpSysprofWorkspaceAddin *self = user_data;
+  g_autoptr(GFile) workdir = NULL;
   GtkFileChooserNative *native;
   GtkFileFilter *filter;
   IdeContext *context;
-  IdeVcs *vcs;
-  GFile *workdir;
   gint ret;
 
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKBENCH (self->workbench));
-  g_assert (GBP_IS_SYSPROF_PERSPECTIVE (self->perspective));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+  g_assert (GBP_IS_SYSPROF_SURFACE (self->surface));
 
-  ide_workbench_set_visible_perspective (self->workbench, IDE_PERSPECTIVE (self->perspective));
+  ide_workspace_set_visible_surface (self->workspace, IDE_SURFACE (self->surface));
 
-  context = ide_workbench_get_context (self->workbench);
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  context = ide_workspace_get_context (self->workspace);
+  workdir = ide_context_ref_workdir (context);
 
   native = gtk_file_chooser_native_new (_("Open Sysprof Capture…"),
-                                        GTK_WINDOW (self->workbench),
+                                        GTK_WINDOW (self->workspace),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         _("Open"),
                                         _("Cancel"));
@@ -389,7 +397,7 @@ open_profile_action (GSimpleAction *action,
 
       file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
       if (G_IS_FILE (file))
-        gbp_sysprof_workbench_addin_open (self, file);
+        gbp_sysprof_workspace_addin_open (self, file);
     }
 
   gtk_native_dialog_hide (GTK_NATIVE_DIALOG (native));
@@ -397,29 +405,33 @@ open_profile_action (GSimpleAction *action,
 }
 
 static void
-gbp_sysprof_workbench_addin_finalize (GObject *object)
+gbp_sysprof_workspace_addin_finalize (GObject *object)
 {
-  GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)object;
+  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)object;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
 
   g_clear_object (&self->actions);
 
-  G_OBJECT_CLASS (gbp_sysprof_workbench_addin_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_sysprof_workspace_addin_parent_class)->finalize (object);
 }
 
 static void
-gbp_sysprof_workbench_addin_class_init (GbpSysprofWorkbenchAddinClass *klass)
+gbp_sysprof_workspace_addin_class_init (GbpSysprofWorkspaceAddinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gbp_sysprof_workbench_addin_finalize;
+  object_class->finalize = gbp_sysprof_workspace_addin_finalize;
 }
 
 static void
-gbp_sysprof_workbench_addin_init (GbpSysprofWorkbenchAddin *self)
+gbp_sysprof_workspace_addin_init (GbpSysprofWorkspaceAddin *self)
 {
   static const GActionEntry entries[] = {
     { "open-profile", open_profile_action },
   };
+
+  g_assert (IDE_IS_MAIN_THREAD ());
 
   self->actions = g_simple_action_group_new ();
 
@@ -430,10 +442,11 @@ gbp_sysprof_workbench_addin_init (GbpSysprofWorkbenchAddin *self)
 }
 
 static void
-run_manager_stopped (GbpSysprofWorkbenchAddin *self,
+run_manager_stopped (GbpSysprofWorkspaceAddin *self,
                      IdeRunManager            *run_manager)
 {
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
   if (self->profiler != NULL && sp_profiler_get_is_running (self->profiler))
@@ -452,27 +465,28 @@ zoom_level_to_string (GBinding     *binding,
 }
 
 static void
-gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
-                                  IdeWorkbench      *workbench)
+gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
+                                  IdeWorkspace      *workspace)
 {
-  GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)addin;
-  IdeWorkbenchHeaderBar *header;
+  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
   SpZoomManager *zoom_manager;
   IdeRunManager *run_manager;
+  IdeHeaderBar *header;
   IdeContext *context;
   GtkLabel *label;
 
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace));
 
-  self->workbench = workbench;
+  self->workspace = workspace;
 
-  context = ide_workbench_get_context (workbench);
+  context = ide_workspace_get_context (workspace);
 
   /*
    * Register our custom run handler to activate the profiler.
    */
-  run_manager = ide_context_get_run_manager (context);
+  run_manager = ide_run_manager_from_context (context);
   ide_run_manager_add_handler (run_manager,
                                "profiler",
                                _("Run with Profiler"),
@@ -487,30 +501,34 @@ gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
 
-  /*
-   * Add the perspcetive to the workbench.
-   */
-  self->perspective = g_object_new (GBP_TYPE_SYSPROF_PERSPECTIVE,
-                                    "visible", TRUE,
-                                    NULL);
-  ide_workbench_add_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
+  /* Add the surface to the workspace. */
+  self->surface = g_object_new (GBP_TYPE_SYSPROF_SURFACE,
+                                "visible", TRUE,
+                                NULL);
+  g_signal_connect (self->surface,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->surface);
+  ide_workspace_add_surface (workspace, IDE_SURFACE (self->surface));
 
-  zoom_manager = gbp_sysprof_perspective_get_zoom_manager (self->perspective);
-
-  /*
-   * Add our actions to the workbench so they can be activated via the
-   * headerbar or the perspective.
-   */
-  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "profiler", G_ACTION_GROUP (self->actions));
-  gtk_widget_insert_action_group (GTK_WIDGET (workbench), "profiler-zoom", G_ACTION_GROUP (zoom_manager));
+  zoom_manager = gbp_sysprof_surface_get_zoom_manager (self->surface);
 
   /*
-   * Add our buttons to the header.
+   * Add our actions to the workspace so they can be activated via the
+   * headerbar or the surface.
    */
-  header = ide_workbench_get_headerbar (workbench);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler", G_ACTION_GROUP (self->actions));
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler-zoom", G_ACTION_GROUP (zoom_manager));
+
+  /* Add our buttons to the header. */
+  header = ide_workspace_get_header_bar (workspace);
   self->zoom_controls = g_object_new (GTK_TYPE_BOX,
                                       "orientation", GTK_ORIENTATION_HORIZONTAL,
                                       NULL);
+  g_signal_connect (self->zoom_controls,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->zoom_controls);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->zoom_controls), "linked");
   gtk_container_add (GTK_CONTAINER (self->zoom_controls),
                      g_object_new (GTK_TYPE_BUTTON,
@@ -545,50 +563,55 @@ gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
                                                           NULL),
                                    "visible", TRUE,
                                    NULL));
-  ide_workbench_header_bar_insert_left (header, GTK_WIDGET (self->zoom_controls), GTK_PACK_START, 100);
+  ide_header_bar_add_primary (header, GTK_WIDGET (self->zoom_controls));
 }
 
 static void
-gbp_sysprof_workbench_addin_unload (IdeWorkbenchAddin *addin,
-                                    IdeWorkbench      *workbench)
+gbp_sysprof_workspace_addin_unload (IdeWorkspaceAddin *addin,
+                                    IdeWorkspace      *workspace)
 {
-  GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)addin;
+  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
   IdeRunManager *run_manager;
   IdeContext *context;
 
-  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKBENCH (workbench));
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
-  context = ide_workbench_get_context (workbench);
+  context = ide_workspace_get_context (workspace);
 
-  run_manager = ide_context_get_run_manager (context);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler", NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler-zoom", NULL);
+
+  run_manager = ide_run_manager_from_context (context);
   ide_run_manager_remove_handler (run_manager, "profiler");
 
-  ide_workbench_remove_perspective (workbench, IDE_PERSPECTIVE (self->perspective));
+  if (self->surface)
+    gtk_widget_destroy (GTK_WIDGET (self->surface));
 
-  gtk_widget_destroy (GTK_WIDGET (self->zoom_controls));
+  if (self->zoom_controls)
+    gtk_widget_destroy (GTK_WIDGET (self->zoom_controls));
 
   self->zoom_controls = NULL;
-  self->perspective = NULL;
-  self->workbench = NULL;
+  self->surface = NULL;
+  self->workspace = NULL;
 }
 
 static void
-gbp_sysprof_workbench_addin_perspective_set (IdeWorkbenchAddin *addin,
-                                             IdePerspective    *perspective)
+gbp_sysprof_workspace_addin_surface_set (IdeWorkspaceAddin *addin,
+                                         IdeSurface        *surface)
 {
-  GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)addin;
+  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
 
-  g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
-  g_assert (IDE_IS_PERSPECTIVE (perspective));
+  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
+  g_assert (!surface || IDE_IS_SURFACE (surface));
 
-  gbp_sysprof_workbench_addin_update_controls (self);
+  gbp_sysprof_workspace_addin_update_controls (self);
 }
 
 static void
-workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
+workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
-  iface->load = gbp_sysprof_workbench_addin_load;
-  iface->unload = gbp_sysprof_workbench_addin_unload;
-  iface->perspective_set = gbp_sysprof_workbench_addin_perspective_set;
+  iface->load = gbp_sysprof_workspace_addin_load;
+  iface->unload = gbp_sysprof_workspace_addin_unload;
+  iface->surface_set = gbp_sysprof_workspace_addin_surface_set;
 }

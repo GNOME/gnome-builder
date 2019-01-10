@@ -1,4 +1,4 @@
-/* gbp-sysprof-perspective.h
+/* gbp-sysprof-surface.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,20 +20,20 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-gui.h>
 #include <sysprof-ui.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SYSPROF_PERSPECTIVE (gbp_sysprof_perspective_get_type())
+#define GBP_TYPE_SYSPROF_SURFACE (gbp_sysprof_surface_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSysprofPerspective, gbp_sysprof_perspective, GBP, SYSPROF_PERSPECTIVE, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpSysprofSurface, gbp_sysprof_surface, GBP, SYSPROF_SURFACE, IdeSurface)
 
-SpZoomManager   *gbp_sysprof_perspective_get_zoom_manager (GbpSysprofPerspective *self);
-void             gbp_sysprof_perspective_set_profiler     (GbpSysprofPerspective *self,
-                                                           SpProfiler            *profiler);
-SpCaptureReader *gbp_sysprof_perspective_get_reader       (GbpSysprofPerspective *self);
-void             gbp_sysprof_perspective_set_reader       (GbpSysprofPerspective *self,
-                                                           SpCaptureReader       *reader);
+SpZoomManager   *gbp_sysprof_surface_get_zoom_manager (GbpSysprofSurface *self);
+void             gbp_sysprof_surface_set_profiler     (GbpSysprofSurface *self,
+                                                       SpProfiler        *profiler);
+SpCaptureReader *gbp_sysprof_surface_get_reader       (GbpSysprofSurface *self);
+void             gbp_sysprof_surface_set_reader       (GbpSysprofSurface *self,
+                                                       SpCaptureReader   *reader);
 
 G_END_DECLS
