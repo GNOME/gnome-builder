@@ -25,7 +25,7 @@
 #include <libide-foundry.h>
 #include <libide-threading.h>
 
-#include "ide-buildconfig-configuration.h"
+#include "ide-buildconfig-config.h"
 #include "ide-buildconfig-pipeline-addin.h"
 
 static void
@@ -81,13 +81,13 @@ ide_buildconfig_pipeline_addin_load (IdeBuildPipelineAddin *addin,
 
   config = ide_build_pipeline_get_configuration (pipeline);
 
-  if (!IDE_IS_BUILDCONFIG_CONFIGURATION (config))
+  if (!IDE_IS_BUILDCONFIG_CONFIG (config))
     return;
 
   env = ide_config_get_environ (config);
 
-  prebuild = ide_buildconfig_configuration_get_prebuild (IDE_BUILDCONFIG_CONFIGURATION (config));
-  postbuild = ide_buildconfig_configuration_get_postbuild (IDE_BUILDCONFIG_CONFIGURATION (config));
+  prebuild = ide_buildconfig_config_get_prebuild (IDE_BUILDCONFIG_CONFIG (config));
+  postbuild = ide_buildconfig_config_get_postbuild (IDE_BUILDCONFIG_CONFIG (config));
 
   if (prebuild != NULL)
     {

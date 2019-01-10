@@ -1,4 +1,4 @@
-/* ide-buildconfig-configuration-provider.c
+/* ide-buildconfig-config-provider.c
  *
  * Copyright 2016 Matthew Leeds <mleeds@redhat.com>
  *
@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-buildconfig-configuration-provider"
+#define G_LOG_DOMAIN "ide-buildconfig-config-provider"
 
 #include "config.h"
 
@@ -33,12 +33,12 @@
 #include "ide-context.h"
 #include "ide-debug.h"
 
-#include "ide-buildconfig-configuration.h"
-#include "ide-buildconfig-configuration-provider.h"
+#include "ide-buildconfig-config.h"
+#include "ide-buildconfig-config-provider.h"
 
 #define DOT_BUILDCONFIG ".buildconfig"
 
-struct _IdeBuildconfigConfigurationProvider
+struct _IdeBuildconfigConfigProvider
 {
   IdeObject  parent_instance;
 
@@ -185,17 +185,17 @@ load_environ (IdeConfig *config,
 }
 
 static IdeConfig *
-ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvider *self,
+ide_buildconfig_config_provider_create (IdeBuildconfigConfigProvider *self,
                                                const gchar                         *config_id)
 {
   g_autoptr(IdeConfig) config = NULL;
   g_autofree gchar *env_group = NULL;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (self->key_file != NULL);
   g_assert (config_id != NULL);
 
-  config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
+  config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIG,
                          "id", config_id,
                          "parent", self,
                          NULL);
@@ -226,12 +226,12 @@ ide_buildconfig_configuration_provider_create (IdeBuildconfigConfigurationProvid
 }
 
 static void
-ide_buildconfig_configuration_provider_load_async (IdeConfigProvider *provider,
+ide_buildconfig_config_provider_load_async (IdeConfigProvider *provider,
                                                    GCancellable             *cancellable,
                                                    GAsyncReadyCallback       callback,
                                                    gpointer                  user_data)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(IdeConfig) fallback = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
@@ -240,12 +240,12 @@ ide_buildconfig_configuration_provider_load_async (IdeConfigProvider *provider,
   IdeContext *context;
   gsize len;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (self->key_file == NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_buildconfig_configuration_provider_load_async);
+  ide_task_set_source_tag (task, ide_buildconfig_config_provider_load_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   self->key_file = g_key_file_new ();
@@ -277,7 +277,7 @@ ide_buildconfig_configuration_provider_load_async (IdeConfigProvider *provider,
       if (strchr (group, '.') != NULL)
         continue;
 
-      config = ide_buildconfig_configuration_provider_create (self, group);
+      config = ide_buildconfig_config_provider_create (self, group);
       ide_config_set_dirty (config, FALSE);
       ide_config_provider_emit_added (provider, config);
     }
@@ -287,7 +287,7 @@ ide_buildconfig_configuration_provider_load_async (IdeConfigProvider *provider,
 
 add_default:
   /* "Default" is not translated because .buildconfig can be checked in */
-  fallback = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
+  fallback = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIG,
                            "display-name", "Default",
                            "id", "default",
                            "parent", self,
@@ -302,11 +302,11 @@ complete:
 }
 
 static gboolean
-ide_buildconfig_configuration_provider_load_finish (IdeConfigProvider  *provider,
+ide_buildconfig_config_provider_load_finish (IdeConfigProvider  *provider,
                                                     GAsyncResult              *result,
                                                     GError                   **error)
 {
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (provider));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
   g_assert (ide_task_is_valid (IDE_TASK (result), provider));
 
@@ -314,7 +314,7 @@ ide_buildconfig_configuration_provider_load_finish (IdeConfigProvider  *provider
 }
 
 static void
-ide_buildconfig_configuration_provider_save_cb (GObject      *object,
+ide_buildconfig_config_provider_save_cb (GObject      *object,
                                                 GAsyncResult *result,
                                                 gpointer      user_data)
 {
@@ -333,12 +333,12 @@ ide_buildconfig_configuration_provider_save_cb (GObject      *object,
 }
 
 static void
-ide_buildconfig_configuration_provider_save_async (IdeConfigProvider *provider,
+ide_buildconfig_config_provider_save_async (IdeConfigProvider *provider,
                                                    GCancellable             *cancellable,
                                                    GAsyncReadyCallback       callback,
                                                    gpointer                  user_data)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(GHashTable) group_names = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) file = NULL;
@@ -352,12 +352,12 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigProvider *provider,
   gboolean dirty = FALSE;
   gsize length = 0;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (self->key_file != NULL);
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_buildconfig_configuration_provider_save_async);
+  ide_task_set_source_tag (task, ide_buildconfig_config_provider_save_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   dirty = self->key_file_dirty;
@@ -415,7 +415,7 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigProvider *provider,
       g_key_file_set_string (self->key_file, config_id, key, \
                              ide_config_##getter (config) ?: "")
 #define PERSIST_STRV_KEY(key, getter) G_STMT_START { \
-      const gchar * const *val = ide_buildconfig_configuration_##getter (IDE_BUILDCONFIG_CONFIGURATION (config)); \
+      const gchar * const *val = ide_buildconfig_config_##getter (IDE_BUILDCONFIG_CONFIG (config)); \
       gsize vlen = val ? g_strv_length ((gchar **)val) : 0; \
       g_key_file_set_string_list (self->key_file, config_id, key, val, vlen); \
 } G_STMT_END
@@ -519,16 +519,16 @@ ide_buildconfig_configuration_provider_save_async (IdeConfigProvider *provider,
                                        FALSE,
                                        G_FILE_CREATE_NONE,
                                        cancellable,
-                                       ide_buildconfig_configuration_provider_save_cb,
+                                       ide_buildconfig_config_provider_save_cb,
                                        g_steal_pointer (&task));
 }
 
 static gboolean
-ide_buildconfig_configuration_provider_save_finish (IdeConfigProvider  *provider,
+ide_buildconfig_config_provider_save_finish (IdeConfigProvider  *provider,
                                                     GAsyncResult              *result,
                                                     GError                   **error)
 {
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (provider));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
   g_assert (ide_task_is_valid (IDE_TASK (result), provider));
 
@@ -536,17 +536,17 @@ ide_buildconfig_configuration_provider_save_finish (IdeConfigProvider  *provider
 }
 
 static void
-ide_buildconfig_configuration_provider_delete (IdeConfigProvider *provider,
+ide_buildconfig_config_provider_delete (IdeConfigProvider *provider,
                                                IdeConfig         *config)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(IdeConfig) hold = NULL;
   g_autofree gchar *env = NULL;
   const gchar *config_id;
   gboolean had_group;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION (config));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG (config));
   g_assert (self->key_file != NULL);
   g_assert (self->configs->len > 0);
 
@@ -581,7 +581,7 @@ ide_buildconfig_configuration_provider_delete (IdeConfigProvider *provider,
       g_autoptr(IdeConfig) new_config = NULL;
 
       /* "Default" is not translated because .buildconfig can be checked in */
-      new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
+      new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIG,
                                  "display-name", "Default",
                                  "id", "default",
                                  "parent", self,
@@ -601,10 +601,10 @@ ide_buildconfig_configuration_provider_delete (IdeConfigProvider *provider,
 }
 
 static void
-ide_buildconfig_configuration_provider_duplicate (IdeConfigProvider *provider,
+ide_buildconfig_config_provider_duplicate (IdeConfigProvider *provider,
                                                   IdeConfig         *config)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(IdeConfig) new_config = NULL;
   g_autofree GParamSpec **pspecs = NULL;
   g_autofree gchar *new_config_id = NULL;
@@ -616,9 +616,9 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigProvider *provider,
   IdeContext *context;
   guint n_pspecs = 0;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (IDE_IS_CONFIG (config));
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION (config));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG (config));
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -638,7 +638,7 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigProvider *provider,
 
   env = ide_config_get_environment (config);
 
-  new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIGURATION,
+  new_config = g_object_new (IDE_TYPE_BUILDCONFIG_CONFIG,
                              "id", new_config_id,
                              "display-name", new_name,
                              "parent", self,
@@ -675,12 +675,12 @@ ide_buildconfig_configuration_provider_duplicate (IdeConfigProvider *provider,
 }
 
 static void
-ide_buildconfig_configuration_provider_unload (IdeConfigProvider *provider)
+ide_buildconfig_config_provider_unload (IdeConfigProvider *provider)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
   g_autoptr(GPtrArray) configs = NULL;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (self->configs != NULL);
 
   configs = g_steal_pointer (&self->configs);
@@ -694,12 +694,12 @@ ide_buildconfig_configuration_provider_unload (IdeConfigProvider *provider)
 }
 
 static void
-ide_buildconfig_configuration_provider_added (IdeConfigProvider *provider,
+ide_buildconfig_config_provider_added (IdeConfigProvider *provider,
                                               IdeConfig         *config)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (IDE_IS_CONFIG (config));
   g_assert (self->configs != NULL);
 
@@ -707,12 +707,12 @@ ide_buildconfig_configuration_provider_added (IdeConfigProvider *provider,
 }
 
 static void
-ide_buildconfig_configuration_provider_removed (IdeConfigProvider *provider,
+ide_buildconfig_config_provider_removed (IdeConfigProvider *provider,
                                                 IdeConfig         *config)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)provider;
 
-  g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (IDE_IS_BUILDCONFIG_CONFIG_PROVIDER (self));
   g_assert (IDE_IS_CONFIG (config));
   g_assert (self->configs != NULL);
 
@@ -725,44 +725,44 @@ ide_buildconfig_configuration_provider_removed (IdeConfigProvider *provider,
 static void
 configuration_provider_iface_init (IdeConfigProviderInterface *iface)
 {
-  iface->added = ide_buildconfig_configuration_provider_added;
-  iface->removed = ide_buildconfig_configuration_provider_removed;
-  iface->load_async = ide_buildconfig_configuration_provider_load_async;
-  iface->load_finish = ide_buildconfig_configuration_provider_load_finish;
-  iface->save_async = ide_buildconfig_configuration_provider_save_async;
-  iface->save_finish = ide_buildconfig_configuration_provider_save_finish;
-  iface->delete = ide_buildconfig_configuration_provider_delete;
-  iface->duplicate = ide_buildconfig_configuration_provider_duplicate;
-  iface->unload = ide_buildconfig_configuration_provider_unload;
+  iface->added = ide_buildconfig_config_provider_added;
+  iface->removed = ide_buildconfig_config_provider_removed;
+  iface->load_async = ide_buildconfig_config_provider_load_async;
+  iface->load_finish = ide_buildconfig_config_provider_load_finish;
+  iface->save_async = ide_buildconfig_config_provider_save_async;
+  iface->save_finish = ide_buildconfig_config_provider_save_finish;
+  iface->delete = ide_buildconfig_config_provider_delete;
+  iface->duplicate = ide_buildconfig_config_provider_duplicate;
+  iface->unload = ide_buildconfig_config_provider_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (IdeBuildconfigConfigurationProvider,
-                         ide_buildconfig_configuration_provider,
+G_DEFINE_TYPE_WITH_CODE (IdeBuildconfigConfigProvider,
+                         ide_buildconfig_config_provider,
                          IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_CONFIG_PROVIDER,
                                                 configuration_provider_iface_init))
 
 static void
-ide_buildconfig_configuration_provider_finalize (GObject *object)
+ide_buildconfig_config_provider_finalize (GObject *object)
 {
-  IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)object;
+  IdeBuildconfigConfigProvider *self = (IdeBuildconfigConfigProvider *)object;
 
   g_clear_pointer (&self->configs, g_ptr_array_unref);
   g_clear_pointer (&self->key_file, g_key_file_free);
 
-  G_OBJECT_CLASS (ide_buildconfig_configuration_provider_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_buildconfig_config_provider_parent_class)->finalize (object);
 }
 
 static void
-ide_buildconfig_configuration_provider_class_init (IdeBuildconfigConfigurationProviderClass *klass)
+ide_buildconfig_config_provider_class_init (IdeBuildconfigConfigProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_buildconfig_configuration_provider_finalize;
+  object_class->finalize = ide_buildconfig_config_provider_finalize;
 }
 
 static void
-ide_buildconfig_configuration_provider_init (IdeBuildconfigConfigurationProvider *self)
+ide_buildconfig_config_provider_init (IdeBuildconfigConfigProvider *self)
 {
   self->configs = g_ptr_array_new_with_free_func (g_object_unref);
 }

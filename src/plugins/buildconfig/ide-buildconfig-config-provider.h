@@ -1,4 +1,4 @@
-/* ide-buildconfig-configuration-provider.h
+/* ide-buildconfig-config-provider.h
  *
  * Copyright 2016 Matthew Leeds <mleeds@redhat.com>
  *
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BUILDCONFIG_CONFIGURATION_PROVIDER (ide_buildconfig_configuration_provider_get_type())
+#define IDE_TYPE_BUILDCONFIG_CONFIG_PROVIDER (ide_buildconfig_config_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeBuildconfigConfigurationProvider, ide_buildconfig_configuration_provider, IDE, BUILDCONFIG_CONFIGURATION_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeBuildconfigConfigProvider, ide_buildconfig_config_provider, IDE, BUILDCONFIG_CONFIG_PROVIDER, IdeObject)
 
 G_END_DECLS

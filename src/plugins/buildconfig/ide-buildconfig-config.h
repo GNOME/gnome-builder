@@ -1,4 +1,4 @@
-/* ide-buildconfig-configuration.h
+/* ide-buildconfig-config.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -24,15 +24,15 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_BUILDCONFIG_CONFIGURATION (ide_buildconfig_configuration_get_type())
+#define IDE_TYPE_BUILDCONFIG_CONFIG (ide_buildconfig_config_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeBuildconfigConfiguration, ide_buildconfig_configuration, IDE, BUILDCONFIG_CONFIGURATION, IdeConfig)
+G_DECLARE_FINAL_TYPE (IdeBuildconfigConfig, ide_buildconfig_config, IDE, BUILDCONFIG_CONFIG, IdeConfig)
 
-const gchar * const *ide_buildconfig_configuration_get_prebuild  (IdeBuildconfigConfiguration *self);
-void                 ide_buildconfig_configuration_set_prebuild  (IdeBuildconfigConfiguration *self,
+const gchar * const *ide_buildconfig_config_get_prebuild  (IdeBuildconfigConfig *self);
+void                 ide_buildconfig_config_set_prebuild  (IdeBuildconfigConfig *self,
                                                                   const gchar * const         *prebuild);
-const gchar * const *ide_buildconfig_configuration_get_postbuild (IdeBuildconfigConfiguration *self);
-void                 ide_buildconfig_configuration_set_postbuild (IdeBuildconfigConfiguration *self,
+const gchar * const *ide_buildconfig_config_get_postbuild (IdeBuildconfigConfig *self);
+void                 ide_buildconfig_config_set_postbuild (IdeBuildconfigConfig *self,
                                                                   const gchar * const         *postbuild);
 
 G_END_DECLS

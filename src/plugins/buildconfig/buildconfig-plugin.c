@@ -25,7 +25,7 @@
 #include <libpeas/peas.h>
 #include <libide-foundry.h>
 
-#include "ide-buildconfig-configuration-provider.h"
+#include "ide-buildconfig-config-provider.h"
 #include "ide-buildconfig-pipeline-addin.h"
 
 _IDE_EXTERN void
@@ -33,7 +33,7 @@ _gbp_buildconfig_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIG_PROVIDER,
-                                              IDE_TYPE_BUILDCONFIG_CONFIGURATION_PROVIDER);
+                                              IDE_TYPE_BUILDCONFIG_CONFIG_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_PIPELINE_ADDIN,
                                               IDE_TYPE_BUILDCONFIG_PIPELINE_ADDIN);
