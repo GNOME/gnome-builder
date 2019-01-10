@@ -24,7 +24,7 @@
 #include <gstyle-color-panel.h>
 
 #include "gb-color-picker-editor-addin.h"
-#include "gb-color-picker-editor-view-addin.h"
+#include "gb-color-picker-editor-page-addin.h"
 #include "gb-color-picker-prefs.h"
 
 struct _GbColorPickerEditorAddin
@@ -35,7 +35,7 @@ struct _GbColorPickerEditorAddin
    * An unowned reference to the editor. This is set/unset when
    * load/unload vfuncs are called.
    */
-  IdeEditorPerspective *editor;
+  IdeEditorSurface *editor;
 
   /*
    * Out preferences to use in conjunction with the pane. This needs
@@ -46,7 +46,7 @@ struct _GbColorPickerEditorAddin
 
   /*
    * Our transient panel which we will slide into visibility when
-   * the current view is an IdeEditorView with the color-picker
+   * the current view is an IdeEditorPage with the color-picker
    * enabled.
    */
   GstyleColorPanel *panel;
@@ -58,10 +58,10 @@ struct _GbColorPickerEditorAddin
   DzlDockWidget *dock;
 
   /*
-   * If the current view in the perspective is an editor view, then
+   * If the current view in the surface is an editor view, then
    * this unowned reference will point to that view.
    */
-  IdeEditorView *view;
+  IdeEditorPage *view;
 
   /*
    * This signal group manages correctly binding/unbinding signals from
@@ -112,8 +112,8 @@ gb_color_picker_editor_addin_add_palette (GbColorPickerEditorAddin *self,
 }
 
 static const gchar * internal_palettes[] = {
-  "resource:///org/gnome/builder/plugins/color-picker-plugin/data/basic.gstyle.xml",
-  "resource:///org/gnome/builder/plugins/color-picker-plugin/data/svg.gpl",
+  "resource:///plugins/color-picker/data/basic.gstyle.xml",
+  "resource:///plugins/color-picker/data/svg.gpl",
 };
 
 static void
@@ -155,12 +155,12 @@ gb_color_picker_editor_addin_notify_rgba (GbColorPickerEditorAddin *self,
 
   if (self->view_addin_signals != NULL)
     {
-      GbColorPickerEditorViewAddin *view_addin;
+      GbColorPickerEditorPageAddin *view_addin;
 
       view_addin = dzl_signal_group_get_target (self->view_addin_signals);
 
-      if (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (view_addin))
-        gb_color_picker_editor_view_addin_set_color (view_addin, color);
+      if (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (view_addin))
+        gb_color_picker_editor_page_addin_set_color (view_addin, color);
     }
 }
 
@@ -197,16 +197,16 @@ gb_color_picker_editor_addin_show_panel (GbColorPickerEditorAddin *self)
 
   if (self->view != NULL)
     {
-      IdeLayoutTransientSidebar *sidebar;
-      IdeLayoutView *view = IDE_LAYOUT_VIEW (self->view);
+      IdeTransientSidebar *sidebar;
+      IdePage *view = IDE_PAGE (self->view);
 
       if (self->panel == NULL)
         gb_color_picker_editor_addin_set_panel (self);
 
-      sidebar = ide_editor_perspective_get_transient_sidebar (self->editor);
+      sidebar = ide_editor_surface_get_transient_sidebar (self->editor);
 
-      ide_layout_transient_sidebar_set_view (sidebar, view);
-      ide_layout_transient_sidebar_set_panel (sidebar, GTK_WIDGET (self->dock));
+      ide_transient_sidebar_set_page (sidebar, view);
+      ide_transient_sidebar_set_panel (sidebar, GTK_WIDGET (self->dock));
 
       g_object_set (self->editor, "right-visible", TRUE, NULL);
     }
@@ -227,17 +227,17 @@ gb_color_picker_editor_addin_hide_panel (GbColorPickerEditorAddin *self)
 static void
 gb_color_picker_editor_addin_notify_enabled (GbColorPickerEditorAddin     *self,
                                              GParamSpec                   *pspec,
-                                             GbColorPickerEditorViewAddin *view_addin)
+                                             GbColorPickerEditorPageAddin *view_addin)
 {
   g_assert (GB_IS_COLOR_PICKER_EDITOR_ADDIN (self));
-  g_assert (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (view_addin));
+  g_assert (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (view_addin));
 
   /* This function is called when the enabled state is toggled
    * for the specific view in question. We hide the panel if it
    * is current visible, otherwise we show it.
    */
 
-  if (gb_color_picker_editor_view_addin_get_enabled (view_addin))
+  if (gb_color_picker_editor_page_addin_get_enabled (view_addin))
     gb_color_picker_editor_addin_show_panel (self);
   else
     gb_color_picker_editor_addin_hide_panel (self);
@@ -246,13 +246,13 @@ gb_color_picker_editor_addin_notify_enabled (GbColorPickerEditorAddin     *self,
 static void
 gb_color_picker_editor_addin_color_found (GbColorPickerEditorAddin     *self,
                                           GstyleColor                  *color,
-                                          GbColorPickerEditorViewAddin *view_addin)
+                                          GbColorPickerEditorPageAddin *view_addin)
 {
   GdkRGBA rgba;
 
   g_assert (GB_IS_COLOR_PICKER_EDITOR_ADDIN (self));
   g_assert (GSTYLE_IS_COLOR (color));
-  g_assert (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (view_addin));
+  g_assert (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (view_addin));
 
   dzl_signal_group_block (self->view_addin_signals);
   gstyle_color_fill_rgba (color, &rgba);
@@ -266,16 +266,16 @@ gb_color_picker_editor_addin_color_found (GbColorPickerEditorAddin     *self,
 
 static void
 gb_color_picker_editor_addin_load (IdeEditorAddin       *addin,
-                                   IdeEditorPerspective *perspective)
+                                   IdeEditorSurface *surface)
 {
   GbColorPickerEditorAddin *self = (GbColorPickerEditorAddin *)addin;
-  IdeLayoutTransientSidebar *sidebar;
+  IdeTransientSidebar *sidebar;
 
   g_assert (GB_IS_COLOR_PICKER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
+  g_assert (IDE_IS_EDITOR_SURFACE (surface));
 
-  self->editor = perspective;
-  self->view_addin_signals = dzl_signal_group_new (GB_TYPE_COLOR_PICKER_EDITOR_VIEW_ADDIN);
+  self->editor = surface;
+  self->view_addin_signals = dzl_signal_group_new (GB_TYPE_COLOR_PICKER_EDITOR_PAGE_ADDIN);
   dzl_signal_group_connect_swapped (self->view_addin_signals,
                                     "color-found",
                                     G_CALLBACK (gb_color_picker_editor_addin_color_found),
@@ -297,19 +297,19 @@ gb_color_picker_editor_addin_load (IdeEditorAddin       *addin,
                     G_CALLBACK (gtk_widget_destroyed),
                     &self->dock);
 
-  sidebar = ide_editor_perspective_get_transient_sidebar (self->editor);
+  sidebar = ide_editor_surface_get_transient_sidebar (self->editor);
   gtk_container_add (GTK_CONTAINER (sidebar), GTK_WIDGET (self->dock));
 }
 
 
 static void
 gb_color_picker_editor_addin_unload (IdeEditorAddin       *addin,
-                                     IdeEditorPerspective *perspective)
+                                     IdeEditorSurface *surface)
 {
   GbColorPickerEditorAddin *self = (GbColorPickerEditorAddin *)addin;
 
   g_assert (GB_IS_COLOR_PICKER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (perspective));
+  g_assert (IDE_IS_EDITOR_SURFACE (surface));
 
   g_clear_object (&self->view_addin_signals);
 
@@ -325,30 +325,30 @@ gb_color_picker_editor_addin_unload (IdeEditorAddin       *addin,
 }
 
 static void
-gb_color_picker_editor_addin_view_set (IdeEditorAddin *addin,
-                                       IdeLayoutView  *view)
+gb_color_picker_editor_addin_page_set (IdeEditorAddin *addin,
+                                       IdePage  *view)
 {
   GbColorPickerEditorAddin *self = (GbColorPickerEditorAddin *)addin;
 
   g_assert (GB_IS_COLOR_PICKER_EDITOR_ADDIN (self));
-  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+  g_assert (!view || IDE_IS_PAGE (view));
 
-  if (IDE_IS_EDITOR_VIEW (view))
+  if (IDE_IS_EDITOR_PAGE (view))
     {
-      IdeEditorViewAddin *view_addin;
+      IdeEditorPageAddin *view_addin;
 
-      self->view = IDE_EDITOR_VIEW (view);
+      self->view = IDE_EDITOR_PAGE (view);
 
       /* The addin may not be available yet if things are just initializing.
        * We'll have to wait for a follow up view-set to make progress.
        */
-      view_addin = ide_editor_view_addin_find_by_module_name (self->view, "color-picker-plugin");
-      g_assert (!view_addin || GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (view_addin));
+      view_addin = ide_editor_page_addin_find_by_module_name (self->view, "color-picker");
+      g_assert (!view_addin || GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (view_addin));
 
       dzl_signal_group_set_target (self->view_addin_signals, view_addin);
 
       if (view_addin != NULL &&
-          gb_color_picker_editor_view_addin_get_enabled (GB_COLOR_PICKER_EDITOR_VIEW_ADDIN (view_addin)))
+          gb_color_picker_editor_page_addin_get_enabled (GB_COLOR_PICKER_EDITOR_PAGE_ADDIN (view_addin)))
         gb_color_picker_editor_addin_show_panel (self);
     }
   else
@@ -364,7 +364,7 @@ editor_addin_iface_init (IdeEditorAddinInterface *iface)
 {
   iface->load = gb_color_picker_editor_addin_load;
   iface->unload = gb_color_picker_editor_addin_unload;
-  iface->view_set = gb_color_picker_editor_addin_view_set;
+  iface->page_set = gb_color_picker_editor_addin_page_set;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbColorPickerEditorAddin,
@@ -393,7 +393,7 @@ gb_color_picker_editor_addin_init (GbColorPickerEditorAddin *self)
  *
  * Returns: (transfer full): a #GstylePalette or %NULL.
  *
- * Since: 3.32
+ * Since: 3.26
  */
 GstylePalette *
 gb_color_picker_editor_addin_create_palette (GbColorPickerEditorAddin *self)
@@ -402,7 +402,7 @@ gb_color_picker_editor_addin_create_palette (GbColorPickerEditorAddin *self)
 
   if (self->view != NULL)
     {
-      IdeBuffer *buffer = ide_editor_view_get_buffer (self->view);
+      IdeBuffer *buffer = ide_editor_page_get_buffer (self->view);
 
       return gstyle_palette_new_from_buffer (GTK_TEXT_BUFFER (buffer),
                                              NULL, NULL, NULL, NULL);

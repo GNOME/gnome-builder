@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins">
+  <gresource prefix="/plugins/color-picker">
     <file>color-picker.plugin</file>
-  </gresource>
 
-  <gresource prefix="/org/gnome/builder/plugins/color-picker-plugin">
     <file>themes/Adwaita.css</file>
     <file>themes/Adwaita-dark.css</file>
     <file>themes/shared.css</file>
 
-    <file>gtk/color-picker.ui</file>
-    <file>gtk/color-picker-prefs.ui</file>
-    <file>gtk/color-picker-preview.ui</file>
-    <file>gtk/color-picker-palette-row.ui</file>
-    <file>gtk/color-picker-palette-menu.ui</file>
-    <file>gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker-prefs.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker-preview.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker-palette-row.ui</file>
+    <file preprocess="xml-stripblanks">gtk/color-picker-palette-menu.ui</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
 
-    <file>data/basic.gstyle.xml</file>
+    <file preprocess="xml-stripblanks">data/basic.gstyle.xml</file>
     <file>data/svg.gpl</file>
 
     <file compressed="true" alias="icons/scalable/actions/builder-colorpicker-load-palette.svg">icons/palette/load-palette.svg</file>

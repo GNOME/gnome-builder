@@ -1,4 +1,4 @@
-/* gb-color-picker-editor-view-addin.c
+/* gb-color-picker-editor-page-addin.c
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,17 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gb-color-picker-editor-view-addin"
+#define G_LOG_DOMAIN "gb-color-picker-editor-page-addin"
 
 #include "gb-color-picker-document-monitor.h"
-#include "gb-color-picker-editor-view-addin.h"
+#include "gb-color-picker-editor-page-addin.h"
 
-struct _GbColorPickerEditorViewAddin
+struct _GbColorPickerEditorPageAddin
 {
   GObject parent_instance;
 
   /* Unowned reference to the view */
-  IdeEditorView *view;
+  IdeEditorPage *view;
 
   /* Our document monitor, or NULL */
   GbColorPickerDocumentMonitor *monitor;
@@ -55,11 +55,11 @@ static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
 static void
-monitor_color_found (GbColorPickerEditorViewAddin *self,
+monitor_color_found (GbColorPickerEditorPageAddin *self,
                      GstyleColor                  *color,
                      GbColorPickerDocumentMonitor *monitor)
 {
-  g_assert (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (self));
+  g_assert (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (self));
   g_assert (GSTYLE_IS_COLOR (color));
   g_assert (GB_IS_COLOR_PICKER_DOCUMENT_MONITOR (monitor));
 
@@ -69,10 +69,10 @@ monitor_color_found (GbColorPickerEditorViewAddin *self,
 }
 
 void
-gb_color_picker_editor_view_addin_set_enabled (GbColorPickerEditorViewAddin *self,
+gb_color_picker_editor_page_addin_set_enabled (GbColorPickerEditorPageAddin *self,
                                                gboolean                      enabled)
 {
-  g_return_if_fail (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (self));
+  g_return_if_fail (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (self));
 
   enabled = !!enabled;
 
@@ -88,7 +88,7 @@ gb_color_picker_editor_view_addin_set_enabled (GbColorPickerEditorViewAddin *sel
 
       if (enabled)
         {
-          IdeBuffer *buffer = ide_editor_view_get_buffer (self->view);
+          IdeBuffer *buffer = ide_editor_page_get_buffer (self->view);
 
           self->enabled = TRUE;
           self->monitor = gb_color_picker_document_monitor_new (buffer);
@@ -105,22 +105,22 @@ gb_color_picker_editor_view_addin_set_enabled (GbColorPickerEditorViewAddin *sel
 }
 
 gboolean
-gb_color_picker_editor_view_addin_get_enabled (GbColorPickerEditorViewAddin *self)
+gb_color_picker_editor_page_addin_get_enabled (GbColorPickerEditorPageAddin *self)
 {
-  g_return_val_if_fail (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (self), FALSE);
+  g_return_val_if_fail (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (self), FALSE);
 
   return self->enabled;
 }
 
 static void
-gb_color_picker_editor_view_addin_load (IdeEditorViewAddin *addin,
-                                        IdeEditorView      *view)
+gb_color_picker_editor_page_addin_load (IdeEditorPageAddin *addin,
+                                        IdeEditorPage      *view)
 {
-  GbColorPickerEditorViewAddin *self = (GbColorPickerEditorViewAddin *)addin;
+  GbColorPickerEditorPageAddin *self = (GbColorPickerEditorPageAddin *)addin;
   g_autoptr(DzlPropertiesGroup) group = NULL;
 
-  g_assert (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
   self->view = view;
 
@@ -130,13 +130,13 @@ gb_color_picker_editor_view_addin_load (IdeEditorViewAddin *addin,
 }
 
 static void
-gb_color_picker_editor_view_addin_unload (IdeEditorViewAddin *addin,
-                                          IdeEditorView      *view)
+gb_color_picker_editor_page_addin_unload (IdeEditorPageAddin *addin,
+                                          IdeEditorPage      *view)
 {
-  GbColorPickerEditorViewAddin *self = (GbColorPickerEditorViewAddin *)addin;
+  GbColorPickerEditorPageAddin *self = (GbColorPickerEditorPageAddin *)addin;
 
-  g_assert (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
   if (self->monitor != NULL)
     {
@@ -150,27 +150,27 @@ gb_color_picker_editor_view_addin_unload (IdeEditorViewAddin *addin,
 }
 
 static void
-editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface)
+editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
 {
-  iface->load = gb_color_picker_editor_view_addin_load;
-  iface->unload = gb_color_picker_editor_view_addin_unload;
+  iface->load = gb_color_picker_editor_page_addin_load;
+  iface->unload = gb_color_picker_editor_page_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbColorPickerEditorViewAddin, gb_color_picker_editor_view_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, editor_view_addin_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbColorPickerEditorPageAddin, gb_color_picker_editor_page_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
 
 static void
-gb_color_picker_editor_view_addin_get_property (GObject    *object,
+gb_color_picker_editor_page_addin_get_property (GObject    *object,
                                                 guint       prop_id,
                                                 GValue     *value,
                                                 GParamSpec *pspec)
 {
-  GbColorPickerEditorViewAddin *self = GB_COLOR_PICKER_EDITOR_VIEW_ADDIN (object);
+  GbColorPickerEditorPageAddin *self = GB_COLOR_PICKER_EDITOR_PAGE_ADDIN (object);
 
   switch (prop_id)
     {
     case PROP_ENABLED:
-      g_value_set_boolean (value, gb_color_picker_editor_view_addin_get_enabled (self));
+      g_value_set_boolean (value, gb_color_picker_editor_page_addin_get_enabled (self));
       break;
 
     default:
@@ -179,17 +179,17 @@ gb_color_picker_editor_view_addin_get_property (GObject    *object,
 }
 
 static void
-gb_color_picker_editor_view_addin_set_property (GObject      *object,
+gb_color_picker_editor_page_addin_set_property (GObject      *object,
                                                 guint         prop_id,
                                                 const GValue *value,
                                                 GParamSpec   *pspec)
 {
-  GbColorPickerEditorViewAddin *self = GB_COLOR_PICKER_EDITOR_VIEW_ADDIN (object);
+  GbColorPickerEditorPageAddin *self = GB_COLOR_PICKER_EDITOR_PAGE_ADDIN (object);
 
   switch (prop_id)
     {
     case PROP_ENABLED:
-      gb_color_picker_editor_view_addin_set_enabled (self, g_value_get_boolean (value));
+      gb_color_picker_editor_page_addin_set_enabled (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -198,12 +198,12 @@ gb_color_picker_editor_view_addin_set_property (GObject      *object,
 }
 
 static void
-gb_color_picker_editor_view_addin_class_init (GbColorPickerEditorViewAddinClass *klass)
+gb_color_picker_editor_page_addin_class_init (GbColorPickerEditorPageAddinClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->get_property = gb_color_picker_editor_view_addin_get_property;
-  object_class->set_property = gb_color_picker_editor_view_addin_set_property;
+  object_class->get_property = gb_color_picker_editor_page_addin_get_property;
+  object_class->set_property = gb_color_picker_editor_page_addin_set_property;
 
   properties [PROP_ENABLED] =
     g_param_spec_boolean ("enabled", NULL, NULL,
@@ -221,15 +221,15 @@ gb_color_picker_editor_view_addin_class_init (GbColorPickerEditorViewAddinClass 
 }
 
 static void
-gb_color_picker_editor_view_addin_init (GbColorPickerEditorViewAddin *self)
+gb_color_picker_editor_page_addin_init (GbColorPickerEditorPageAddin *self)
 {
 }
 
 void
-gb_color_picker_editor_view_addin_set_color (GbColorPickerEditorViewAddin *self,
+gb_color_picker_editor_page_addin_set_color (GbColorPickerEditorPageAddin *self,
                                              GstyleColor                  *color)
 {
-  g_return_if_fail (GB_IS_COLOR_PICKER_EDITOR_VIEW_ADDIN (self));
+  g_return_if_fail (GB_IS_COLOR_PICKER_EDITOR_PAGE_ADDIN (self));
   g_return_if_fail (GSTYLE_IS_COLOR (color));
 
   if (self->monitor != NULL && !self->in_color_found)

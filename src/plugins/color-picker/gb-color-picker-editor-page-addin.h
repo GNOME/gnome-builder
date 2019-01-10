@@ -1,4 +1,4 @@
-/* gb-color-picker-editor-view-addin.h
+/* gb-color-picker-editor-page-addin.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,18 +20,18 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-editor.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COLOR_PICKER_EDITOR_VIEW_ADDIN (gb_color_picker_editor_view_addin_get_type())
+#define GB_TYPE_COLOR_PICKER_EDITOR_PAGE_ADDIN (gb_color_picker_editor_page_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbColorPickerEditorViewAddin, gb_color_picker_editor_view_addin, GB, COLOR_PICKER_EDITOR_VIEW_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbColorPickerEditorPageAddin, gb_color_picker_editor_page_addin, GB, COLOR_PICKER_EDITOR_PAGE_ADDIN, GObject)
 
-gboolean gb_color_picker_editor_view_addin_get_enabled (GbColorPickerEditorViewAddin *self);
-void     gb_color_picker_editor_view_addin_set_enabled (GbColorPickerEditorViewAddin *self,
+gboolean gb_color_picker_editor_page_addin_get_enabled (GbColorPickerEditorPageAddin *self);
+void     gb_color_picker_editor_page_addin_set_enabled (GbColorPickerEditorPageAddin *self,
                                                         gboolean                      enabled);
-void     gb_color_picker_editor_view_addin_set_color   (GbColorPickerEditorViewAddin *self,
+void     gb_color_picker_editor_page_addin_set_color   (GbColorPickerEditorPageAddin *self,
                                                         GstyleColor                  *color);
 
 G_END_DECLS
