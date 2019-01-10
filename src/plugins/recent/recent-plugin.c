@@ -18,15 +18,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "recent-plugin"
+
+#include "config.h"
+
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-greeter.h>
+#include <libide-gui.h>
 
 #include "gbp-recent-section.h"
+#include "gbp-recent-workbench-addin.h"
 
-void
-gbp_recent_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_recent_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_GREETER_SECTION,
                                               GBP_TYPE_RECENT_SECTION);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_RECENT_WORKBENCH_ADDIN);
 }

@@ -1,6 +1,6 @@
-/* ide-greeter-project-row.h
+/* gbp-recent-workbench-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,12 @@
 
 #pragma once
 
-#include <libide-projects.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_RECENT_PROJECT_ROW (gbp_recent_project_row_get_type())
+#define GBP_TYPE_RECENT_WORKBENCH_ADDIN (gbp_recent_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpRecentProjectRow, gbp_recent_project_row, GBP, RECENT_PROJECT_ROW, GtkListBoxRow)
-
-IdeProjectInfo *gbp_recent_project_row_get_project_info   (GbpRecentProjectRow *self);
-const gchar    *gbp_recent_project_row_get_search_text    (GbpRecentProjectRow *self);
-void            gbp_recent_project_row_set_selection_mode (GbpRecentProjectRow *self,
-                                                           gboolean             selection_mode);
+G_DECLARE_FINAL_TYPE (GbpRecentWorkbenchAddin, gbp_recent_workbench_addin, GBP, RECENT_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS

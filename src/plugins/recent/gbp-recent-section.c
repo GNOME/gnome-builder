@@ -20,7 +20,8 @@
 
 #define G_LOG_DOMAIN "gbp-recent-section"
 
-#include <ide.h>
+#include <glib/gi18n.h>
+#include <libide-greeter.h>
 
 #include "gbp-recent-project-row.h"
 #include "gbp-recent-section.h"
@@ -243,6 +244,8 @@ static gboolean
 can_purge_project_directory (GFile *directory)
 {
   g_autoptr(GFile) projects_dir = NULL;
+  g_autoptr(GFile) home_dir = NULL;
+  g_autoptr(GFile) downloads_dir = NULL;
   g_autofree gchar *uri = NULL;
   GFileType file_type;
 
@@ -257,8 +260,9 @@ can_purge_project_directory (GFile *directory)
       return FALSE;
     }
 
-  projects_dir = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
-  g_assert (G_IS_FILE (projects_dir));
+  projects_dir = g_file_new_for_path (ide_get_projects_dir ());
+  home_dir = g_file_new_for_path (g_get_home_dir ());
+  downloads_dir = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD));
 
   /* Refuse to delete anything outside of projects dir to be paranoid */
   if (!g_file_has_prefix (directory, projects_dir))
@@ -267,9 +271,11 @@ can_purge_project_directory (GFile *directory)
       return FALSE;
     }
 
-  if (g_file_equal (directory, projects_dir))
+  if (g_file_equal (directory, projects_dir) ||
+      g_file_equal (directory, home_dir) ||
+      g_file_equal (directory, downloads_dir))
     {
-      g_critical ("Refusing to purge the projects directory");
+      g_critical ("Refusing to purge the project's directory");
       return FALSE;
     }
 
@@ -308,6 +314,35 @@ gbp_recent_section_reap_cb (GObject      *object,
 }
 
 static void
+gbp_recent_section_remove_file (DzlDirectoryReaper *reaper,
+                                GFile              *file,
+                                GtkTextBuffer      *buffer)
+{
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (G_IS_FILE (file));
+  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+
+  if (g_file_is_native (file))
+    {
+      /* translators: %s is replaced with the path of the file to be deleted and \n for a new line */
+      g_autofree gchar *formatted = g_strdup_printf (_("Removing %s\n"), g_file_peek_path (file));
+      gtk_text_buffer_insert (buffer, &iter, formatted, -1);
+    }
+  else
+    {
+      /* translators: %s is replaced with the path of the file to be deleted and \n for a new line */
+      g_autofree gchar *uri = g_file_get_uri (file);
+      g_autofree gchar *formatted = g_strdup_printf (_("Removing %s\n"), uri);
+      gtk_text_buffer_insert (buffer, &iter, formatted, -1);
+    }
+}
+
+static void
 gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
                                         gboolean           purge_sources)
 {
@@ -315,16 +350,19 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
   g_autoptr(DzlDirectoryReaper) reaper = NULL;
   g_autoptr(GPtrArray) directories = NULL;
   IdeRecentProjects *projects;
+  GtkWidget *workspace;
   GList *infos = NULL;
 
   g_assert (GBP_IS_RECENT_SECTION (self));
+
+  workspace = gtk_widget_get_toplevel (GTK_WIDGET (section));
 
   gtk_container_foreach (GTK_CONTAINER (self->listbox),
                          gbp_recent_section_collect_selected_cb,
                          &infos);
 
   /* Remove the projects from the list of recent projects */
-  projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
+  projects = ide_recent_projects_get_default ();
   ide_recent_projects_remove (projects, infos);
 
   /* Now asynchronously remove all the project files */
@@ -342,6 +380,18 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
       g_autofree gchar *path = NULL;
 
       g_assert (G_IS_FILE (directory) || G_IS_FILE (file));
+
+      /* If the IdeProjectInfo:file is a directory, refuse to delete the
+       * pre-stated directory as it might be a parent which is really Home, or
+       * something like that. This just helps ensure we're a bit safer when
+       * dealing with user data.
+       */
+      if (file != NULL &&
+          g_file_query_file_type (file, 0, NULL) == G_FILE_TYPE_DIRECTORY)
+        {
+          if (directory == NULL || g_file_has_prefix (file, directory))
+            directory = file;
+        }
 
       if (directory == NULL)
         {
@@ -368,7 +418,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
        * might expect to be reomved.
        */
 
-      id = ide_project_create_id (name);
+      id = ide_create_project_id (name);
 
       if (name != NULL)
         {
@@ -389,6 +439,48 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
        */
       path = g_strdup_printf ("/org/gnome/builder/projects/%s/", id);
       clear_settings_with_path ("org.gnome.builder.project", path);
+    }
+
+  if (purge_sources)
+    {
+      GtkDialog *dialog;
+      GtkWidget *scroller;
+      GtkWidget *view;
+      GtkWidget *content_area;
+      GtkTextBuffer *buffer;
+
+      dialog = GTK_DIALOG (gtk_dialog_new ());
+      gtk_window_set_title (GTK_WINDOW (dialog), _("Removing Files…"));
+      gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (workspace));
+      gtk_dialog_add_button (dialog, _("Close"), GTK_RESPONSE_CLOSE);
+      gtk_window_set_default_size (GTK_WINDOW (dialog), 700, 500);
+      content_area = gtk_dialog_get_content_area (dialog);
+      gtk_container_set_border_width (GTK_CONTAINER (content_area), 12);
+      gtk_box_set_spacing (GTK_BOX (content_area), 12);
+
+      scroller = gtk_scrolled_window_new (NULL, NULL);
+      gtk_widget_set_vexpand (scroller, TRUE);
+      gtk_container_add (GTK_CONTAINER (content_area), scroller);
+      gtk_widget_show (scroller);
+
+      view = gtk_text_view_new ();
+      gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+      gtk_container_add (GTK_CONTAINER (scroller), view);
+      gtk_widget_show (view);
+
+      g_signal_connect_object (reaper,
+                               "remove-file",
+                               G_CALLBACK (gbp_recent_section_remove_file),
+                               buffer,
+                               0);
+
+      g_signal_connect (dialog,
+                        "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
+
+      gtk_window_present (GTK_WINDOW (dialog));
     }
 
   dzl_directory_reaper_execute_async (reaper,
@@ -495,7 +587,7 @@ gbp_recent_section_constructed (GObject *object)
 
   G_OBJECT_CLASS (gbp_recent_section_parent_class)->constructed (object);
 
-  projects = ide_application_get_recent_projects (IDE_APPLICATION_DEFAULT);
+  projects = ide_recent_projects_get_default ();
 
   gtk_list_box_bind_model (self->listbox,
                            G_LIST_MODEL (projects),
@@ -538,8 +630,7 @@ gbp_recent_section_class_init (GbpRecentSectionClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "recent");
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/recent-plugin/gbp-recent-section.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/recent/gbp-recent-section.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpRecentSection, listbox);
   gtk_widget_class_bind_template_callback (widget_class, gbp_recent_section_row_activated);
 
@@ -558,10 +649,10 @@ on_button_press_event_cb (GtkListBox       *listbox,
 
   if (ev->button == GDK_BUTTON_SECONDARY)
     {
-      dzl_gtk_widget_action (GTK_WIDGET (self),
-                             "greeter",
-                             "state",
-                             g_variant_new_string ("selection"));
+      GtkWidget *workspace;
+
+      workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_GREETER_WORKSPACE);
+      ide_greeter_workspace_set_selection_mode (IDE_GREETER_WORKSPACE (workspace), TRUE);
 
       if ((row = gtk_list_box_get_row_at_y (listbox, ev->y)))
         {

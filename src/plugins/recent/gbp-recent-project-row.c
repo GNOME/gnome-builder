@@ -336,8 +336,7 @@ gbp_recent_project_row_class_init (GbpRecentProjectRowClass *klass)
   object_class->get_property = gbp_recent_project_row_get_property;
   object_class->set_property = gbp_recent_project_row_set_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/recent-plugin/gbp-recent-project-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/recent/gbp-recent-project-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpRecentProjectRow, checkbox);
   gtk_widget_class_bind_template_child (widget_class, GbpRecentProjectRow, date_label);
   gtk_widget_class_bind_template_child (widget_class, GbpRecentProjectRow, description_label);
