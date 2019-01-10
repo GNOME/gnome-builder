@@ -1,4 +1,4 @@
-/* gbp-ls-view.h
+/* ls-plugin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,19 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#include "config.h"
 
-#include <ide.h>
+#include <libpeas/peas.h>
+#include <libide-gui.h>
 
-G_BEGIN_DECLS
+#include "gbp-ls-workbench-addin.h"
 
-#define GBP_TYPE_LS_VIEW (gbp_ls_view_get_type())
-
-G_DECLARE_FINAL_TYPE (GbpLsView, gbp_ls_view, GBP, LS_VIEW, IdeLayoutView)
-
-GtkWidget *gbp_ls_view_new           (void);
-GFile     *gbp_ls_view_get_directory (GbpLsView *self);
-void       gbp_ls_view_set_directory (GbpLsView *self,
-                                      GFile     *directory);
-
-G_END_DECLS
+_IDE_EXTERN void
+_gbp_ls_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_LS_WORKBENCH_ADDIN);
+}

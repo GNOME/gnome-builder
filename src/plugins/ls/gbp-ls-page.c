@@ -1,4 +1,4 @@
-/* gbp-ls-view.c
+/* gbp-ls-page.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,18 +18,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-ls-view"
+#define G_LOG_DOMAIN "gbp-ls-page"
 
 #include "config.h"
 
 #include <glib/gi18n.h>
 
 #include "gbp-ls-model.h"
-#include "gbp-ls-view.h"
+#include "gbp-ls-page.h"
 
-struct _GbpLsView
+struct _GbpLsPage
 {
-  IdeLayoutView      parent_instance;
+  IdePage            parent_instance;
 
   GCancellable      *model_cancellable;
   GbpLsModel        *model;
@@ -51,12 +51,12 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (GbpLsView, gbp_ls_view, IDE_TYPE_LAYOUT_VIEW)
+G_DEFINE_TYPE (GbpLsPage, gbp_ls_page, IDE_TYPE_PAGE)
 
 static GParamSpec *properties [N_PROPS];
 
 static void
-gbp_ls_view_row_activated_cb (GbpLsView         *self,
+gbp_ls_page_row_activated_cb (GbpLsPage         *self,
                               GtkTreePath       *path,
                               GtkTreeViewColumn *column,
                               GtkTreeView       *tree_view)
@@ -64,7 +64,7 @@ gbp_ls_view_row_activated_cb (GbpLsView         *self,
   GtkTreeModel *model;
   GtkTreeIter iter;
 
-  g_assert (GBP_IS_LS_VIEW (self));
+  g_assert (GBP_IS_LS_PAGE (self));
   g_assert (path != NULL);
 
   if ((model = gtk_tree_view_get_model (tree_view)) &&
@@ -79,22 +79,19 @@ gbp_ls_view_row_activated_cb (GbpLsView         *self,
                           -1);
 
       if (file_type == G_FILE_TYPE_DIRECTORY)
-        gbp_ls_view_set_directory (self, file);
+        gbp_ls_page_set_directory (self, file);
       else
         {
-          g_autoptr(IdeUri) uri = ide_uri_new_from_file (file);
           IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
 
-          ide_workbench_open_uri_async (workbench,
-                                        uri,
-                                        NULL,
-                                        IDE_WORKBENCH_OPEN_FLAGS_NONE,
-                                        NULL,
-                                        NULL,
-                                        NULL);
+          ide_workbench_open_async (workbench,
+                                    file,
+                                    NULL,
+                                    IDE_BUFFER_OPEN_FLAGS_NONE,
+                                    NULL, NULL, NULL);
 
           if (self->close_on_activate)
-            dzl_gtk_widget_action (GTK_WIDGET (self), "layoutstack", "close-view", NULL);
+            dzl_gtk_widget_action (GTK_WIDGET (self), "frame", "close-page", NULL);
         }
     }
 }
@@ -134,28 +131,28 @@ size_cell_data_func (GtkCellLayout   *cell_layout,
 }
 
 static void
-gbp_ls_view_finalize (GObject *object)
+gbp_ls_page_finalize (GObject *object)
 {
-  GbpLsView *self = (GbpLsView *)object;
+  GbpLsPage *self = (GbpLsPage *)object;
 
   g_clear_object (&self->model_cancellable);
   g_clear_object (&self->model);
 
-  G_OBJECT_CLASS (gbp_ls_view_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_ls_page_parent_class)->finalize (object);
 }
 
 static void
-gbp_ls_view_get_property (GObject    *object,
+gbp_ls_page_get_property (GObject    *object,
                           guint       prop_id,
                           GValue     *value,
                           GParamSpec *pspec)
 {
-  GbpLsView *self = GBP_LS_VIEW (object);
+  GbpLsPage *self = GBP_LS_PAGE (object);
 
   switch (prop_id)
     {
     case PROP_DIRECTORY:
-      g_value_set_object (value, gbp_ls_view_get_directory (self));
+      g_value_set_object (value, gbp_ls_page_get_directory (self));
       break;
 
     case PROP_CLOSE_ON_ACTIVATE:
@@ -168,17 +165,17 @@ gbp_ls_view_get_property (GObject    *object,
 }
 
 static void
-gbp_ls_view_set_property (GObject      *object,
+gbp_ls_page_set_property (GObject      *object,
                           guint         prop_id,
                           const GValue *value,
                           GParamSpec   *pspec)
 {
-  GbpLsView *self = GBP_LS_VIEW (object);
+  GbpLsPage *self = GBP_LS_PAGE (object);
 
   switch (prop_id)
     {
     case PROP_DIRECTORY:
-      gbp_ls_view_set_directory (self, g_value_get_object (value));
+      gbp_ls_page_set_directory (self, g_value_get_object (value));
       break;
 
     case PROP_CLOSE_ON_ACTIVATE:
@@ -191,14 +188,14 @@ gbp_ls_view_set_property (GObject      *object,
 }
 
 static void
-gbp_ls_view_class_init (GbpLsViewClass *klass)
+gbp_ls_page_class_init (GbpLsPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = gbp_ls_view_finalize;
-  object_class->get_property = gbp_ls_view_get_property;
-  object_class->set_property = gbp_ls_view_set_property;
+  object_class->finalize = gbp_ls_page_finalize;
+  object_class->get_property = gbp_ls_page_get_property;
+  object_class->set_property = gbp_ls_page_set_property;
 
   properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
@@ -214,25 +211,25 @@ gbp_ls_view_class_init (GbpLsViewClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/ls/gbp-ls-view.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpLsView, modified_cell);
-  gtk_widget_class_bind_template_child (widget_class, GbpLsView, modified_column);
-  gtk_widget_class_bind_template_child (widget_class, GbpLsView, size_cell);
-  gtk_widget_class_bind_template_child (widget_class, GbpLsView, size_column);
-  gtk_widget_class_bind_template_child (widget_class, GbpLsView, scroller);
-  gtk_widget_class_bind_template_child (widget_class, GbpLsView, tree_view);
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/ls/gbp-ls-page.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpLsPage, modified_cell);
+  gtk_widget_class_bind_template_child (widget_class, GbpLsPage, modified_column);
+  gtk_widget_class_bind_template_child (widget_class, GbpLsPage, size_cell);
+  gtk_widget_class_bind_template_child (widget_class, GbpLsPage, size_column);
+  gtk_widget_class_bind_template_child (widget_class, GbpLsPage, scroller);
+  gtk_widget_class_bind_template_child (widget_class, GbpLsPage, tree_view);
 }
 
 static void
-gbp_ls_view_init (GbpLsView *self)
+gbp_ls_page_init (GbpLsPage *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  ide_layout_view_set_icon_name (IDE_LAYOUT_VIEW (self), "folder-symbolic");
+  ide_page_set_icon_name (IDE_PAGE (self), "folder-symbolic");
 
   g_signal_connect_object (self->tree_view,
                            "row-activated",
-                           G_CALLBACK (gbp_ls_view_row_activated_cb),
+                           G_CALLBACK (gbp_ls_page_row_activated_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -248,15 +245,15 @@ gbp_ls_view_init (GbpLsView *self)
 }
 
 GtkWidget *
-gbp_ls_view_new (void)
+gbp_ls_page_new (void)
 {
-  return g_object_new (GBP_TYPE_LS_VIEW, NULL);
+  return g_object_new (GBP_TYPE_LS_PAGE, NULL);
 }
 
 GFile *
-gbp_ls_view_get_directory (GbpLsView *self)
+gbp_ls_page_get_directory (GbpLsPage *self)
 {
-  g_return_val_if_fail (GBP_IS_LS_VIEW (self), NULL);
+  g_return_val_if_fail (GBP_IS_LS_PAGE (self), NULL);
 
   if (self->model != NULL)
     return gbp_ls_model_get_directory (GBP_LS_MODEL (self->model));
@@ -265,18 +262,18 @@ gbp_ls_view_get_directory (GbpLsView *self)
 }
 
 static void
-gbp_ls_view_init_model_cb (GObject      *object,
+gbp_ls_page_init_model_cb (GObject      *object,
                            GAsyncResult *result,
                            gpointer      user_data)
 {
   GbpLsModel *model = (GbpLsModel *)object;
-  g_autoptr(GbpLsView) self = user_data;
+  g_autoptr(GbpLsPage) self = user_data;
   g_autoptr(GError) error = NULL;
   GtkTreeIter iter;
 
   g_assert (GBP_IS_LS_MODEL (model));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (GBP_IS_LS_VIEW (self));
+  g_assert (GBP_IS_LS_PAGE (self));
 
   if (model != self->model)
     return;
@@ -284,7 +281,7 @@ gbp_ls_view_init_model_cb (GObject      *object,
   if (!g_async_initable_init_finish (G_ASYNC_INITABLE (model), result, &error))
     {
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        ide_layout_view_report_error (IDE_LAYOUT_VIEW (self),
+        ide_page_report_error (IDE_PAGE (self),
                                       _("Failed to load directory: %s"),
                                       error->message);
       return;
@@ -304,27 +301,26 @@ gbp_ls_view_init_model_cb (GObject      *object,
 }
 
 void
-gbp_ls_view_set_directory (GbpLsView *self,
+gbp_ls_page_set_directory (GbpLsPage *self,
                            GFile     *directory)
 {
   g_autofree gchar *title = NULL;
   g_autofree gchar *name = NULL;
+  g_autoptr(GFile) local_directory = NULL;
   GFile *old_directory;
 
-  g_return_if_fail (GBP_IS_LS_VIEW (self));
+  g_return_if_fail (GBP_IS_LS_PAGE (self));
   g_return_if_fail (!directory || G_IS_FILE (directory));
 
   if (directory == NULL)
     {
       IdeContext *context = ide_widget_get_context (GTK_WIDGET (self));
-      IdeVcs *vcs = ide_context_get_vcs (context);
-
-      directory = ide_vcs_get_working_directory (vcs);
+      directory = local_directory = ide_context_ref_workdir (context);
     }
 
-  g_assert (directory != NULL);
+  g_assert (G_IS_FILE (directory));
 
-  old_directory = gbp_ls_view_get_directory (self);
+  old_directory = gbp_ls_page_get_directory (self);
 
   if (directory != NULL &&
       old_directory != NULL &&
@@ -342,12 +338,12 @@ gbp_ls_view_set_directory (GbpLsView *self,
   g_async_initable_init_async (G_ASYNC_INITABLE (self->model),
                                G_PRIORITY_DEFAULT,
                                self->model_cancellable,
-                               gbp_ls_view_init_model_cb,
+                               gbp_ls_page_init_model_cb,
                                g_object_ref (self));
 
   name = g_file_get_basename (directory);
   title = g_strdup_printf (_("%s — Directory"), name);
-  ide_layout_view_set_title (IDE_LAYOUT_VIEW (self), title);
+  ide_page_set_title (IDE_PAGE (self), title);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
 }

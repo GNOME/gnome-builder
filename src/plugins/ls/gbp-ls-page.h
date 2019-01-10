@@ -1,4 +1,4 @@
-/* gbp-ls-plugin.c
+/* gbp-ls-page.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,17 +18,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
+#pragma once
 
-#include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-gui.h>
 
-#include "gbp-ls-workbench-addin.h"
+G_BEGIN_DECLS
 
-void
-gbp_ls_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_LS_WORKBENCH_ADDIN);
-}
+#define GBP_TYPE_LS_PAGE (gbp_ls_page_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpLsPage, gbp_ls_page, GBP, LS_PAGE, IdePage)
+
+GtkWidget *gbp_ls_page_new           (void);
+GFile     *gbp_ls_page_get_directory (GbpLsPage *self);
+void       gbp_ls_page_set_directory (GbpLsPage *self,
+                                      GFile     *directory);
+
+G_END_DECLS

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpLsView" parent="IdeLayoutView">
+  <template class="GbpLsPage" parent="IdePage">
     <child>
       <object class="GtkScrolledWindow" id="scroller">
         <property name="vexpand">true</property>

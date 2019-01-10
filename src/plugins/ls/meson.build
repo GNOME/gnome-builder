@@ -1,19 +1,14 @@
-if get_option('with_ls')
+plugins_sources += files([
+  'gbp-ls-model.c',
+  'gbp-ls-page.c',
+  'gbp-ls-workbench-addin.c',
+  'ls-plugin.c',
+])
 
-grep_resources = gnome.compile_resources(
+plugin_ls_resources = gnome.compile_resources(
   'ls-resources',
   'ls.gresource.xml',
   c_name: 'gbp_ls',
 )
 
-grep_sources = [
-  'gbp-ls-model.c',
-  'gbp-ls-plugin.c',
-  'gbp-ls-view.c',
-  'gbp-ls-workbench-addin.c',
-]
-
-gnome_builder_plugins_sources += files(grep_sources)
-gnome_builder_plugins_sources += grep_resources[0]
-
-endif
+plugins_sources += plugin_ls_resources[0]

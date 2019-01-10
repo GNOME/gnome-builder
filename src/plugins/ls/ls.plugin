@@ -1,9 +1,10 @@
 [Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;
+Description=List files in a directory as a view
+Embedded=_gbp_ls_register_types
+Hidden=true
 Module=ls
 Name=View Directory Listings
-Description=List files in a directory as a view
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2018 Christian Hergert
-Builtin=true
-Depends=editor;
-Embedded=gbp_ls_register_types
