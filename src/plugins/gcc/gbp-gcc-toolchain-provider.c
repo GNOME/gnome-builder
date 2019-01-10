@@ -23,6 +23,7 @@
 #define G_LOG_DOMAIN "gbp-gcc-toolchain-provider"
 
 #include <glib/gi18n.h>
+#include <libide-foundry.h>
 
 #include "gbp-gcc-toolchain-provider.h"
 
@@ -82,13 +83,11 @@ gbp_gcc_toolchain_provider_get_toolchain_from_file (GbpGccToolchainProvider *sel
   g_autofree gchar *sdk_ld_path = NULL;
   g_autofree gchar *sdk_strip_path = NULL;
   g_autofree gchar *sdk_pkg_config_path = NULL;
-  IdeContext *context;
 
   gcc_path = g_file_get_path (file);
   toolchain_id = g_strdup_printf ("gcc:%s", gcc_path);
   display_name = g_strdup_printf (_("GCC %s Cross-Compiler (System)"), arch);
-  context = ide_object_get_context (IDE_OBJECT (self));
-  toolchain = ide_simple_toolchain_new (context, toolchain_id, display_name);
+  toolchain = ide_simple_toolchain_new (toolchain_id, display_name);
   ide_toolchain_set_host_triplet (IDE_TOOLCHAIN (toolchain), triplet);
   ide_simple_toolchain_set_tool_for_language (toolchain, IDE_TOOLCHAIN_LANGUAGE_C, IDE_TOOLCHAIN_TOOL_CC, gcc_path);
 

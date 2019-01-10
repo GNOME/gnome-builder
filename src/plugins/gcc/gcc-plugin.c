@@ -18,15 +18,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include "config.h"
+
+#include <libide-foundry.h>
 #include <libpeas/peas.h>
 
 #include "gbp-gcc-pipeline-addin.h"
 #include "gbp-gcc-toolchain-provider.h"
 
-void
-gbp_gcc_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_gcc_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_BUILD_PIPELINE_ADDIN, GBP_TYPE_GCC_PIPELINE_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TOOLCHAIN_PROVIDER, GBP_TYPE_GCC_TOOLCHAIN_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUILD_PIPELINE_ADDIN,
+                                              GBP_TYPE_GCC_PIPELINE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TOOLCHAIN_PROVIDER,
+                                              GBP_TYPE_GCC_TOOLCHAIN_PROVIDER);
 }
