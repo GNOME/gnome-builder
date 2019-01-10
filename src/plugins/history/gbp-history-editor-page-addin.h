@@ -1,4 +1,4 @@
-/* gbp-history-editor-view-addin.h
+/* gbp-history-editor-page-addin.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-editor.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_HISTORY_EDITOR_VIEW_ADDIN (gbp_history_editor_view_addin_get_type())
+#define GBP_TYPE_HISTORY_EDITOR_PAGE_ADDIN (gbp_history_editor_page_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpHistoryEditorViewAddin, gbp_history_editor_view_addin, GBP, HISTORY_EDITOR_VIEW_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpHistoryEditorPageAddin, gbp_history_editor_page_addin, GBP, HISTORY_EDITOR_PAGE_ADDIN, GObject)
 
 G_END_DECLS

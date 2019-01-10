@@ -1,4 +1,4 @@
-/* gbp-history-editor-view-addin.c
+/* gbp-history-editor-page-addin.c
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,52 +18,52 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-history-editor-view-addin"
+#define G_LOG_DOMAIN "gbp-history-editor-page-addin"
 
-#include "gbp-history-editor-view-addin.h"
+#include "gbp-history-editor-page-addin.h"
 #include "gbp-history-item.h"
-#include "gbp-history-layout-stack-addin.h"
+#include "gbp-history-frame-addin.h"
 
-struct _GbpHistoryEditorViewAddin
+struct _GbpHistoryEditorPageAddin
 {
-  GObject                     parent_instance;
+  GObject               parent_instance;
 
   /* Unowned pointer */
-  IdeEditorView              *editor;
+  IdeEditorPage        *editor;
 
   /* Weak pointer */
-  GbpHistoryLayoutStackAddin *stack_addin;
+  GbpHistoryFrameAddin *frame_addin;
 
-  gsize                       last_change_count;
+  gsize                 last_change_count;
 
-  guint                       queued_edit_line;
-  guint                       queued_edit_source;
+  guint                 queued_edit_line;
+  guint                 queued_edit_source;
 };
 
 static void
-gbp_history_editor_view_addin_stack_set (IdeEditorViewAddin *addin,
-                                         IdeLayoutStack     *stack)
+gbp_history_editor_page_addin_frame_set (IdeEditorPageAddin *addin,
+                                         IdeFrame           *stack)
 {
-  GbpHistoryEditorViewAddin *self = (GbpHistoryEditorViewAddin *)addin;
-  IdeLayoutStackAddin *stack_addin;
+  GbpHistoryEditorPageAddin *self = (GbpHistoryEditorPageAddin *)addin;
+  IdeFrameAddin *frame_addin;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_EDITOR_VIEW_ADDIN (self));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_assert (IDE_IS_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_FRAME (stack));
 
-  stack_addin = ide_layout_stack_addin_find_by_module_name (stack, "history-plugin");
+  frame_addin = ide_frame_addin_find_by_module_name (stack, "history");
 
-  g_assert (stack_addin != NULL);
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (stack_addin));
+  g_assert (frame_addin != NULL);
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (frame_addin));
 
-  g_set_weak_pointer (&self->stack_addin, GBP_HISTORY_LAYOUT_STACK_ADDIN (stack_addin));
+  g_set_weak_pointer (&self->frame_addin, GBP_HISTORY_FRAME_ADDIN (frame_addin));
 
   IDE_EXIT;
 }
 
 static void
-gbp_history_editor_view_addin_push (GbpHistoryEditorViewAddin *self,
+gbp_history_editor_page_addin_push (GbpHistoryEditorPageAddin *self,
                                     const GtkTextIter         *iter)
 {
   g_autoptr(GbpHistoryItem) item = NULL;
@@ -72,11 +72,11 @@ gbp_history_editor_view_addin_push (GbpHistoryEditorViewAddin *self,
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
   g_assert (iter != NULL);
   g_assert (self->editor != NULL);
 
-  if (self->stack_addin == NULL)
+  if (self->frame_addin == NULL)
     IDE_GOTO (no_stack_loaded);
 
   /*
@@ -87,14 +87,14 @@ gbp_history_editor_view_addin_push (GbpHistoryEditorViewAddin *self,
   mark = gtk_text_buffer_create_mark (buffer, NULL, iter, TRUE);
   item = gbp_history_item_new (mark);
 
-  gbp_history_layout_stack_addin_push (self->stack_addin, item);
+  gbp_history_frame_addin_push (self->frame_addin, item);
 
 no_stack_loaded:
   IDE_EXIT;
 }
 
 static void
-gbp_history_editor_view_addin_jump (GbpHistoryEditorViewAddin *self,
+gbp_history_editor_page_addin_jump (GbpHistoryEditorPageAddin *self,
                                     const GtkTextIter         *from,
                                     const GtkTextIter         *to,
                                     IdeSourceView             *source_view)
@@ -102,7 +102,7 @@ gbp_history_editor_view_addin_jump (GbpHistoryEditorViewAddin *self,
   IdeBuffer *buffer;
   gsize change_count;
 
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
   g_assert (from != NULL);
   g_assert (to != NULL);
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
@@ -126,35 +126,35 @@ gbp_history_editor_view_addin_jump (GbpHistoryEditorViewAddin *self,
   //if (change_count != self->last_change_count)
     {
       self->last_change_count = change_count;
-      gbp_history_editor_view_addin_push (self, from);
-      gbp_history_editor_view_addin_push (self, to);
+      gbp_history_editor_page_addin_push (self, from);
+      gbp_history_editor_page_addin_push (self, to);
     }
 }
 
 static gboolean
-gbp_history_editor_view_addin_flush_edit (gpointer user_data)
+gbp_history_editor_page_addin_flush_edit (gpointer user_data)
 {
-  GbpHistoryEditorViewAddin *self = user_data;
+  GbpHistoryEditorPageAddin *self = user_data;
   IdeBuffer *buffer;
   GtkTextIter iter;
 
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
   g_assert (self->editor != NULL);
 
   self->queued_edit_source = 0;
 
-  buffer = ide_editor_view_get_buffer (self->editor);
+  buffer = ide_editor_page_get_buffer (self->editor);
   gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (buffer), &iter, self->queued_edit_line);
-  gbp_history_editor_view_addin_push (self, &iter);
+  gbp_history_editor_page_addin_push (self, &iter);
 
   return G_SOURCE_REMOVE;
 }
 
 static void
-gbp_history_editor_view_addin_queue (GbpHistoryEditorViewAddin *self,
+gbp_history_editor_page_addin_queue (GbpHistoryEditorPageAddin *self,
                                      guint                      line)
 {
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
 
   /*
    * If the buffer is modified, we want to keep track of this position in the
@@ -170,51 +170,51 @@ gbp_history_editor_view_addin_queue (GbpHistoryEditorViewAddin *self,
     {
       self->queued_edit_line = line;
       self->queued_edit_source = gdk_threads_add_idle_full (G_PRIORITY_LOW,
-                                                            gbp_history_editor_view_addin_flush_edit,
+                                                            gbp_history_editor_page_addin_flush_edit,
                                                             g_object_ref (self),
                                                             g_object_unref);
     }
 }
 
 static void
-gbp_history_editor_view_addin_insert_text (GbpHistoryEditorViewAddin *self,
+gbp_history_editor_page_addin_insert_text (GbpHistoryEditorPageAddin *self,
                                            const GtkTextIter         *location,
                                            const gchar               *text,
                                            gint                       length,
                                            IdeBuffer                 *buffer)
 {
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (location != NULL);
   g_assert (text != NULL);
 
   if (!ide_buffer_get_loading (buffer))
-    gbp_history_editor_view_addin_queue (self, gtk_text_iter_get_line (location));
+    gbp_history_editor_page_addin_queue (self, gtk_text_iter_get_line (location));
 }
 
 static void
-gbp_history_editor_view_addin_delete_range (GbpHistoryEditorViewAddin *self,
+gbp_history_editor_page_addin_delete_range (GbpHistoryEditorPageAddin *self,
                                             const GtkTextIter         *begin,
                                             const GtkTextIter         *end,
                                             IdeBuffer                 *buffer)
 {
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
   g_assert (begin != NULL);
   g_assert (end != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
   if (!ide_buffer_get_loading (buffer))
-    gbp_history_editor_view_addin_queue (self, gtk_text_iter_get_line (begin));
+    gbp_history_editor_page_addin_queue (self, gtk_text_iter_get_line (begin));
 }
 
 static void
-gbp_history_editor_view_addin_buffer_loaded (GbpHistoryEditorViewAddin *self,
+gbp_history_editor_page_addin_buffer_loaded (GbpHistoryEditorPageAddin *self,
                                              IdeBuffer                 *buffer)
 {
   IdeSourceView *source_view;
 
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (self->editor));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (self->editor));
   g_assert (IDE_IS_BUFFER (buffer));
 
   /*
@@ -222,111 +222,111 @@ gbp_history_editor_view_addin_buffer_loaded (GbpHistoryEditorViewAddin *self,
    * history stack so that ctrl+i works after jumping backwards.
    */
 
-  source_view = ide_editor_view_get_view (self->editor);
+  source_view = ide_editor_page_get_view (self->editor);
 
   if (gtk_widget_has_focus (GTK_WIDGET (source_view)))
     {
       GtkTextIter iter;
 
       ide_buffer_get_selection_bounds (buffer, &iter, NULL);
-      gbp_history_editor_view_addin_queue (self, gtk_text_iter_get_line (&iter));
+      gbp_history_editor_page_addin_queue (self, gtk_text_iter_get_line (&iter));
     }
 }
 
 static void
-gbp_history_editor_view_addin_load (IdeEditorViewAddin *addin,
-                                    IdeEditorView      *view)
+gbp_history_editor_page_addin_load (IdeEditorPageAddin *addin,
+                                    IdeEditorPage      *view)
 {
-  GbpHistoryEditorViewAddin *self = (GbpHistoryEditorViewAddin *)addin;
+  GbpHistoryEditorPageAddin *self = (GbpHistoryEditorPageAddin *)addin;
   IdeSourceView *source_view;
   IdeBuffer *buffer;
 
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
   self->editor = view;
 
-  buffer = ide_editor_view_get_buffer (view);
-  source_view = ide_editor_view_get_view (view);
+  buffer = ide_editor_page_get_buffer (view);
+  source_view = ide_editor_page_get_view (view);
 
   self->last_change_count = ide_buffer_get_change_count (buffer);
 
   g_signal_connect_swapped (source_view,
                             "jump",
-                            G_CALLBACK (gbp_history_editor_view_addin_jump),
+                            G_CALLBACK (gbp_history_editor_page_addin_jump),
                             addin);
 
   g_signal_connect_swapped (buffer,
                             "insert-text",
-                            G_CALLBACK (gbp_history_editor_view_addin_insert_text),
+                            G_CALLBACK (gbp_history_editor_page_addin_insert_text),
                             self);
 
   g_signal_connect_swapped (buffer,
                             "delete-range",
-                            G_CALLBACK (gbp_history_editor_view_addin_delete_range),
+                            G_CALLBACK (gbp_history_editor_page_addin_delete_range),
                             self);
 
   g_signal_connect_swapped (buffer,
                             "loaded",
-                            G_CALLBACK (gbp_history_editor_view_addin_buffer_loaded),
+                            G_CALLBACK (gbp_history_editor_page_addin_buffer_loaded),
                             self);
 }
 
 static void
-gbp_history_editor_view_addin_unload (IdeEditorViewAddin *addin,
-                                      IdeEditorView      *view)
+gbp_history_editor_page_addin_unload (IdeEditorPageAddin *addin,
+                                      IdeEditorPage      *view)
 {
-  GbpHistoryEditorViewAddin *self = (GbpHistoryEditorViewAddin *)addin;
+  GbpHistoryEditorPageAddin *self = (GbpHistoryEditorPageAddin *)addin;
   IdeSourceView *source_view;
   IdeBuffer *buffer;
 
-  g_assert (GBP_IS_HISTORY_EDITOR_VIEW_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (GBP_IS_HISTORY_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
-  dzl_clear_source (&self->queued_edit_source);
+  g_clear_handle_id (&self->queued_edit_source, g_source_remove);
 
-  source_view = ide_editor_view_get_view (view);
-  buffer = ide_editor_view_get_buffer (view);
+  source_view = ide_editor_page_get_view (view);
+  buffer = ide_editor_page_get_buffer (view);
 
   g_signal_handlers_disconnect_by_func (source_view,
-                                        G_CALLBACK (gbp_history_editor_view_addin_jump),
+                                        G_CALLBACK (gbp_history_editor_page_addin_jump),
                                         self);
 
   g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (gbp_history_editor_view_addin_insert_text),
+                                        G_CALLBACK (gbp_history_editor_page_addin_insert_text),
                                         self);
 
   g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (gbp_history_editor_view_addin_delete_range),
+                                        G_CALLBACK (gbp_history_editor_page_addin_delete_range),
                                         self);
 
   g_signal_handlers_disconnect_by_func (buffer,
-                                        G_CALLBACK (gbp_history_editor_view_addin_buffer_loaded),
+                                        G_CALLBACK (gbp_history_editor_page_addin_buffer_loaded),
                                         self);
 
-  g_clear_weak_pointer (&self->stack_addin);
+  g_clear_weak_pointer (&self->frame_addin);
 
   self->editor = NULL;
 }
 
 static void
-editor_view_addin_iface_init (IdeEditorViewAddinInterface *iface)
+editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface)
 {
-  iface->load = gbp_history_editor_view_addin_load;
-  iface->unload = gbp_history_editor_view_addin_unload;
-  iface->stack_set = gbp_history_editor_view_addin_stack_set;
+  iface->load = gbp_history_editor_page_addin_load;
+  iface->unload = gbp_history_editor_page_addin_unload;
+  iface->frame_set = gbp_history_editor_page_addin_frame_set;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpHistoryEditorViewAddin, gbp_history_editor_view_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN,
+G_DEFINE_TYPE_WITH_CODE (GbpHistoryEditorPageAddin, gbp_history_editor_page_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN,
                                                 editor_view_addin_iface_init))
 
 static void
-gbp_history_editor_view_addin_class_init (GbpHistoryEditorViewAddinClass *klass)
+gbp_history_editor_page_addin_class_init (GbpHistoryEditorPageAddinClass *klass)
 {
 }
 
 static void
-gbp_history_editor_view_addin_init (GbpHistoryEditorViewAddin *self)
+gbp_history_editor_page_addin_init (GbpHistoryEditorPageAddin *self)
 {
 }

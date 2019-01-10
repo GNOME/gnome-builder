@@ -1,4 +1,4 @@
-/* gbp-history-layout-stack-addin.h
+/* history-plugin.c
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,19 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#include <libide-gui.h>
+#include <libide-editor.h>
+#include <libpeas/peas.h>
 
-#include <ide.h>
+#include "gbp-history-editor-page-addin.h"
+#include "gbp-history-frame-addin.h"
 
-#include "gbp-history-item.h"
-
-G_BEGIN_DECLS
-
-#define GBP_TYPE_HISTORY_LAYOUT_STACK_ADDIN (gbp_history_layout_stack_addin_get_type())
-
-G_DECLARE_FINAL_TYPE (GbpHistoryLayoutStackAddin, gbp_history_layout_stack_addin, GBP, HISTORY_LAYOUT_STACK_ADDIN, GObject)
-
-void gbp_history_layout_stack_addin_push (GbpHistoryLayoutStackAddin *self,
-                                          GbpHistoryItem             *item);
-
-G_END_DECLS
+_IDE_EXTERN void
+_gbp_history_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_EDITOR_PAGE_ADDIN,
+                                              GBP_TYPE_HISTORY_EDITOR_PAGE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_FRAME_ADDIN,
+                                              GBP_TYPE_HISTORY_FRAME_ADDIN);
+}

@@ -1,4 +1,4 @@
-/* gbp-history-plugin.c
+/* gbp-history-frame-addin.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,19 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
-#include <libpeas/peas.h>
+#pragma once
 
-#include "gbp-history-editor-view-addin.h"
-#include "gbp-history-layout-stack-addin.h"
+#include "gbp-history-item.h"
 
-void
-gbp_history_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                              GBP_TYPE_HISTORY_EDITOR_VIEW_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_LAYOUT_STACK_ADDIN,
-                                              GBP_TYPE_HISTORY_LAYOUT_STACK_ADDIN);
-}
+G_BEGIN_DECLS
+
+#define GBP_TYPE_HISTORY_FRAME_ADDIN (gbp_history_frame_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpHistoryFrameAddin, gbp_history_frame_addin, GBP, HISTORY_FRAME_ADDIN, GObject)
+
+void gbp_history_frame_addin_push (GbpHistoryFrameAddin *self,
+                                   GbpHistoryItem       *item);
+
+G_END_DECLS

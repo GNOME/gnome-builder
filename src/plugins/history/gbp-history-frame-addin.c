@@ -1,4 +1,4 @@
-/* gbp-history-layout-stack-addin.c
+/* gbp-history-frame-addin.c
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,14 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-history-layout-stack-addin"
+#define G_LOG_DOMAIN "gbp-history-frame-addin"
 
-#include "gbp-history-layout-stack-addin.h"
+#include "gbp-history-frame-addin.h"
 
 #define MAX_HISTORY_ITEMS   20
 #define NEARBY_LINES_THRESH 10
 
-struct _GbpHistoryLayoutStackAddin
+struct _GbpHistoryFrameAddin
 {
   GObject         parent_instance;
 
@@ -36,17 +36,17 @@ struct _GbpHistoryLayoutStackAddin
   GtkButton      *previous_button;
   GtkButton      *next_button;
 
-  IdeLayoutStack *stack;
+  IdeFrame *stack;
 
   guint           navigating;
 };
 
 static void
-gbp_history_layout_stack_addin_update (GbpHistoryLayoutStackAddin *self)
+gbp_history_frame_addin_update (GbpHistoryFrameAddin *self)
 {
   gboolean has_items;
 
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (self));
 
   has_items = g_list_model_get_n_items (G_LIST_MODEL (self->back_store)) > 0;
   dzl_gtk_widget_action_set (GTK_WIDGET (self->controls),
@@ -82,24 +82,24 @@ gbp_history_layout_stack_addin_update (GbpHistoryLayoutStackAddin *self)
 }
 
 static void
-gbp_history_layout_stack_addin_navigate (GbpHistoryLayoutStackAddin *self,
+gbp_history_frame_addin_navigate (GbpHistoryFrameAddin *self,
                                          GbpHistoryItem             *item)
 {
-  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(IdeLocation) location = NULL;
   GtkWidget *editor;
 
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (self));
   g_assert (GBP_IS_HISTORY_ITEM (item));
 
   location = gbp_history_item_get_location (item);
-  editor = gtk_widget_get_ancestor (GTK_WIDGET (self->controls), IDE_TYPE_EDITOR_PERSPECTIVE);
-  ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
+  editor = gtk_widget_get_ancestor (GTK_WIDGET (self->controls), IDE_TYPE_EDITOR_SURFACE);
+  ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (editor), location);
 
-  gbp_history_layout_stack_addin_update (self);
+  gbp_history_frame_addin_update (self);
 }
 
 static gboolean
-item_is_nearby (IdeEditorView  *editor,
+item_is_nearby (IdeEditorPage  *editor,
                 GbpHistoryItem *item)
 {
   GtkTextIter insert;
@@ -109,13 +109,13 @@ item_is_nearby (IdeEditorView  *editor,
   gint buffer_line;
   gint item_line;
 
-  g_assert (IDE_IS_EDITOR_VIEW (editor));
+  g_assert (IDE_IS_EDITOR_PAGE (editor));
   g_assert (GBP_IS_HISTORY_ITEM (item));
 
-  buffer = ide_editor_view_get_buffer (editor);
+  buffer = ide_editor_page_get_buffer (editor);
 
   /* Make sure this is the same file */
-  buffer_file = ide_file_get_file (ide_buffer_get_file (buffer));
+  buffer_file = ide_buffer_get_file (buffer);
   item_file = gbp_history_item_get_file (item);
   if (!g_file_equal (buffer_file, item_file))
     return FALSE;
@@ -133,18 +133,18 @@ move_previous_edit_action (GSimpleAction *action,
                            GVariant      *param,
                            gpointer       user_data)
 {
-  GbpHistoryLayoutStackAddin *self = user_data;
-  IdeLayoutView *current;
+  GbpHistoryFrameAddin *self = user_data;
+  IdePage *current;
   GListModel *model;
   guint n_items;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (self));
   g_assert (self->stack != NULL);
 
   model = G_LIST_MODEL (self->back_store);
   n_items = g_list_model_get_n_items (model);
-  current = ide_layout_stack_get_visible_child (self->stack);
+  current = ide_frame_get_visible_child (self->stack);
 
   /*
    * The tip of the backward jumplist could be very close to
@@ -161,10 +161,10 @@ move_previous_edit_action (GSimpleAction *action,
       g_list_store_remove (self->back_store, i - 1);
       g_list_store_insert (self->forward_store, 0, item);
 
-      if (!IDE_IS_EDITOR_VIEW (current) ||
-          !item_is_nearby (IDE_EDITOR_VIEW (current), item))
+      if (!IDE_IS_EDITOR_PAGE (current) ||
+          !item_is_nearby (IDE_EDITOR_PAGE (current), item))
         {
-          gbp_history_layout_stack_addin_navigate (self, item);
+          gbp_history_frame_addin_navigate (self, item);
           break;
         }
     }
@@ -177,15 +177,15 @@ move_next_edit_action (GSimpleAction *action,
                        GVariant      *param,
                        gpointer       user_data)
 {
-  GbpHistoryLayoutStackAddin *self = user_data;
-  IdeLayoutView *current;
+  GbpHistoryFrameAddin *self = user_data;
+  IdePage *current;
   GListModel *model;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (self));
 
   model = G_LIST_MODEL (self->forward_store);
-  current = ide_layout_stack_get_visible_child (self->stack);
+  current = ide_frame_get_visible_child (self->stack);
 
   self->navigating++;
 
@@ -196,10 +196,10 @@ move_next_edit_action (GSimpleAction *action,
       g_list_store_remove (self->forward_store, 0);
       g_list_store_append (self->back_store, item);
 
-      if (!IDE_IS_EDITOR_VIEW (current) ||
-          !item_is_nearby (IDE_EDITOR_VIEW (current), item))
+      if (!IDE_IS_EDITOR_PAGE (current) ||
+          !item_is_nearby (IDE_EDITOR_PAGE (current), item))
         {
-          gbp_history_layout_stack_addin_navigate (self, item);
+          gbp_history_frame_addin_navigate (self, item);
           break;
         }
     }
@@ -213,15 +213,15 @@ static const GActionEntry entries[] = {
 };
 
 static void
-gbp_history_layout_stack_addin_load (IdeLayoutStackAddin *addin,
-                                     IdeLayoutStack      *stack)
+gbp_history_frame_addin_load (IdeFrameAddin *addin,
+                                     IdeFrame      *stack)
 {
-  GbpHistoryLayoutStackAddin *self = (GbpHistoryLayoutStackAddin *)addin;
+  GbpHistoryFrameAddin *self = (GbpHistoryFrameAddin *)addin;
   g_autoptr(GSimpleActionGroup) actions = NULL;
   GtkWidget *header;
 
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (addin));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (addin));
+  g_assert (IDE_IS_FRAME (stack));
 
   self->stack = stack;
 
@@ -234,7 +234,7 @@ gbp_history_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                                   "history",
                                   G_ACTION_GROUP (actions));
 
-  header = ide_layout_stack_get_titlebar (stack);
+  header = ide_frame_get_titlebar (stack);
 
   self->controls = g_object_new (GTK_TYPE_BOX,
                                  "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -278,17 +278,17 @@ gbp_history_layout_stack_addin_load (IdeLayoutStackAddin *addin,
                     &self->next_button);
   gtk_container_add (GTK_CONTAINER (self->controls), GTK_WIDGET (self->next_button));
 
-  gbp_history_layout_stack_addin_update (self);
+  gbp_history_frame_addin_update (self);
 }
 
 static void
-gbp_history_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
-                                       IdeLayoutStack      *stack)
+gbp_history_frame_addin_unload (IdeFrameAddin *addin,
+                                       IdeFrame      *stack)
 {
-  GbpHistoryLayoutStackAddin *self = (GbpHistoryLayoutStackAddin *)addin;
+  GbpHistoryFrameAddin *self = (GbpHistoryFrameAddin *)addin;
 
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (addin));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (addin));
+  g_assert (IDE_IS_FRAME (stack));
 
   gtk_widget_insert_action_group (GTK_WIDGET (stack), "history", NULL);
 
@@ -306,47 +306,47 @@ gbp_history_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
 }
 
 static void
-gbp_history_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
-                                         IdeLayoutView       *view)
+gbp_history_frame_addin_set_view (IdeFrameAddin *addin,
+                                         IdePage       *view)
 {
-  GbpHistoryLayoutStackAddin *self = (GbpHistoryLayoutStackAddin *)addin;
+  GbpHistoryFrameAddin *self = (GbpHistoryFrameAddin *)addin;
 
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
-  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (self));
+  g_assert (!view || IDE_IS_PAGE (view));
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->controls), IDE_IS_EDITOR_VIEW (view));
+  gtk_widget_set_sensitive (GTK_WIDGET (self->controls), IDE_IS_EDITOR_PAGE (view));
 }
 
 static void
-layout_stack_addin_iface_init (IdeLayoutStackAddinInterface *iface)
+frame_addin_iface_init (IdeFrameAddinInterface *iface)
 {
-  iface->load = gbp_history_layout_stack_addin_load;
-  iface->unload = gbp_history_layout_stack_addin_unload;
-  iface->set_view = gbp_history_layout_stack_addin_set_view;
+  iface->load = gbp_history_frame_addin_load;
+  iface->unload = gbp_history_frame_addin_unload;
+  iface->set_page = gbp_history_frame_addin_set_view;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpHistoryLayoutStackAddin, gbp_history_layout_stack_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_LAYOUT_STACK_ADDIN,
-                                                layout_stack_addin_iface_init))
+G_DEFINE_TYPE_WITH_CODE (GbpHistoryFrameAddin, gbp_history_frame_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_FRAME_ADDIN,
+                                                frame_addin_iface_init))
 
 static void
-gbp_history_layout_stack_addin_class_init (GbpHistoryLayoutStackAddinClass *klass)
+gbp_history_frame_addin_class_init (GbpHistoryFrameAddinClass *klass)
 {
 }
 
 static void
-gbp_history_layout_stack_addin_init (GbpHistoryLayoutStackAddin *self)
+gbp_history_frame_addin_init (GbpHistoryFrameAddin *self)
 {
   self->back_store = g_list_store_new (GBP_TYPE_HISTORY_ITEM);
   self->forward_store = g_list_store_new (GBP_TYPE_HISTORY_ITEM);
 }
 
 static void
-move_forward_to_back_store (GbpHistoryLayoutStackAddin *self)
+move_forward_to_back_store (GbpHistoryFrameAddin *self)
 {
   IDE_ENTRY;
 
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (self));
 
   /* Be certain we're not disposed */
   if (self->forward_store == NULL || self->back_store == NULL)
@@ -365,11 +365,11 @@ move_forward_to_back_store (GbpHistoryLayoutStackAddin *self)
 }
 
 static void
-gbp_history_layout_stack_addin_remove_dups (GbpHistoryLayoutStackAddin *self)
+gbp_history_frame_addin_remove_dups (GbpHistoryFrameAddin *self)
 {
   guint n_items;
 
-  g_assert (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_HISTORY_FRAME_ADDIN (self));
   g_assert (self->forward_store != NULL);
   g_assert (g_list_model_get_n_items (G_LIST_MODEL (self->forward_store)) == 0);
 
@@ -410,14 +410,14 @@ gbp_history_layout_stack_addin_remove_dups (GbpHistoryLayoutStackAddin *self)
 }
 
 void
-gbp_history_layout_stack_addin_push (GbpHistoryLayoutStackAddin *self,
+gbp_history_frame_addin_push (GbpHistoryFrameAddin *self,
                                      GbpHistoryItem             *item)
 {
   guint n_items;
 
   IDE_ENTRY;
 
-  g_return_if_fail (GBP_IS_HISTORY_LAYOUT_STACK_ADDIN (self));
+  g_return_if_fail (GBP_IS_HISTORY_FRAME_ADDIN (self));
   g_return_if_fail (GBP_IS_HISTORY_ITEM (item));
   g_return_if_fail (self->back_store != NULL);
   g_return_if_fail (self->forward_store != NULL);
@@ -434,14 +434,14 @@ gbp_history_layout_stack_addin_push (GbpHistoryLayoutStackAddin *self,
   g_list_store_append (self->back_store, item);
 
   /* Now remove dups in the list */
-  gbp_history_layout_stack_addin_remove_dups (self);
+  gbp_history_frame_addin_remove_dups (self);
 
   /* Truncate from head if necessary */
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self->back_store));
   if (n_items >= MAX_HISTORY_ITEMS)
     g_list_store_remove (self->back_store, 0);
 
-  gbp_history_layout_stack_addin_update (self);
+  gbp_history_frame_addin_update (self);
 
   IDE_EXIT;
 }
