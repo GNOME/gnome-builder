@@ -523,7 +523,7 @@
                 "-Dtracing=true",
                 "-Dhelp=true",
                 "-Dwith_channel=flatpak-nightly",
-                "-Dwith_deviced=true"
+                "-Dplugin_deviced=true"
             ],
             "sources" : [
                 {
