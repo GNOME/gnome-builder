@@ -53,6 +53,8 @@ struct _IdeApplicationAddinInterface
                                IdeApplication          *application);
   void (*unload)              (IdeApplicationAddin     *self,
                                IdeApplication          *application);
+  void (*activate)            (IdeApplicationAddin     *self,
+                               IdeApplication          *application);
   void (*add_option_entries)  (IdeApplicationAddin     *self,
                                IdeApplication          *application);
   void (*handle_command_line) (IdeApplicationAddin     *self,
@@ -64,6 +66,9 @@ struct _IdeApplicationAddinInterface
                                IdeWorkbench            *workbench);
 };
 
+IDE_AVAILABLE_IN_3_32
+void ide_application_addin_activate            (IdeApplicationAddin     *self,
+                                                IdeApplication          *application);
 IDE_AVAILABLE_IN_3_32
 void ide_application_addin_load                (IdeApplicationAddin     *self,
                                                 IdeApplication          *application);

@@ -229,6 +229,20 @@ ide_application_activate_worker (IdeApplication *self)
 }
 
 static void
+ide_application_activate_cb (PeasExtensionSet *set,
+                             PeasPluginInfo   *plugin_info,
+                             PeasExtension    *exten,
+                             gpointer          user_data)
+{
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_APPLICATION_ADDIN (exten));
+  g_assert (IDE_IS_APPLICATION (user_data));
+
+  ide_application_addin_activate (IDE_APPLICATION_ADDIN (exten), user_data);
+}
+
+static void
 ide_application_activate (GApplication *app)
 {
   IdeApplication *self = (IdeApplication *)app;
@@ -242,11 +256,16 @@ ide_application_activate (GApplication *app)
   if (ide_str_equal0 (self->type, "worker"))
     {
       ide_application_activate_worker (self);
-      return;
+      IDE_EXIT;
     }
 
   if ((window = gtk_application_get_active_window (GTK_APPLICATION (self))))
     ide_gtk_window_present (window);
+
+  if (self->addins != NULL)
+    peas_extension_set_foreach (self->addins,
+                                ide_application_activate_cb,
+                                self);
 
   IDE_EXIT;
 }

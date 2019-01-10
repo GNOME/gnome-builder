@@ -64,6 +64,27 @@ ide_application_addin_default_init (IdeApplicationAddinInterface *iface)
 }
 
 /**
+ * ide_application_addin_activate:
+ * @self: a #IdeApplicationAddin
+ * @application: an #ideApplication
+ *
+ * This function is activated when the GApplication::activate signal is
+ * emitted.
+ *
+ * Since: 3.32
+ */
+void
+ide_application_addin_activate (IdeApplicationAddin *self,
+                                IdeApplication      *application)
+{
+  g_return_if_fail (IDE_IS_APPLICATION_ADDIN (self));
+  g_return_if_fail (IDE_IS_APPLICATION (application));
+
+  if (IDE_APPLICATION_ADDIN_GET_IFACE (self)->activate)
+    IDE_APPLICATION_ADDIN_GET_IFACE (self)->activate (self, application);
+}
+
+/**
  * ide_application_addin_load:
  * @self: An #IdeApplicationAddin.
  * @application: An #IdeApplication.
