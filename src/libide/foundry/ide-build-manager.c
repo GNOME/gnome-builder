@@ -486,11 +486,18 @@ ide_build_manager_device_get_info_cb (GObject      *object,
   pipeline = ide_task_get_task_data (task);
   g_assert (IDE_IS_BUILD_PIPELINE (pipeline));
 
-  context = ide_object_get_context (IDE_OBJECT (pipeline));
-  g_assert (IDE_IS_CONTEXT (context));
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
 
-  runtime_manager = ide_runtime_manager_from_context (context);
-  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
+  if (!(context = ide_object_get_context (IDE_OBJECT (pipeline))) ||
+      !(runtime_manager = ide_runtime_manager_from_context (context)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_CANCELLED,
+                                 "Device was destroyed");
+      IDE_EXIT;
+    }
 
   if (!(info = ide_device_get_info_finish (device, result, &error)))
     {
