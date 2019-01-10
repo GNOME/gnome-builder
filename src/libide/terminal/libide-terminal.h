@@ -1,6 +1,6 @@
-/* gb-terminal-util.h
+/* libide-terminal.h
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,19 @@
 
 #pragma once
 
-#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
-# error "Only <libide-terminal.h> can be included directly."
-#endif
-
-#include <vte/vte.h>
 #include <libide-core.h>
+#include <libide-io.h>
+#include <libide-gui.h>
+#include <libide-threading.h>
+#include <vte/vte.h>
 
-G_BEGIN_DECLS
+#define IDE_TERMINAL_INSIDE
 
-IDE_AVAILABLE_IN_3_32
-int          ide_vte_pty_create_slave (VtePty *pty);
-IDE_AVAILABLE_IN_3_32
-const gchar *ide_get_user_shell       (void);
+#include "ide-terminal.h"
+#include "ide-terminal-page.h"
+#include "ide-terminal-search.h"
+#include "ide-terminal-surface.h"
+#include "ide-terminal-util.h"
+#include "ide-terminal-workspace.h"
 
-G_END_DECLS
+#undef IDE_TERMINAL_INSIDE

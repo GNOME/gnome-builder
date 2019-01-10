@@ -1,4 +1,4 @@
-/* gb-terminal-view-private.h
+/* ide-terminal-page-private.h
  *
  * Copyright 2015 Sebastien Lafargue <slafargue@gnome.org>
  *
@@ -20,41 +20,47 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <libide-foundry.h>
 #include <libide-gui.h>
+#include <libide-terminal.h>
 
 G_BEGIN_DECLS
 
-struct _IdeTerminalSearch
+struct _IdeTerminalPage
 {
-  GtkBin               parent_instance;
+  IdePage              parent_instance;
 
-  VteTerminal         *terminal;
+  /*
+   * If we are spawning a process in a runtime instead of the
+   * host, then we will have a runtime pointer here.
+   */
+  IdeRuntime          *runtime;
 
-  GtkRevealer         *search_revealer;
+  GtkOverlay          *terminal_overlay_top;
 
-  IdeTaggedEntry      *search_entry;
+  GtkRevealer         *search_revealer_top;
 
-  GtkButton           *search_prev_button;
-  GtkButton           *search_next_button;
-  GtkButton           *close_button;
+  IdeTerminal         *terminal_top;
 
-  GtkGrid             *search_options;
+  GtkScrollbar        *top_scrollbar;
 
-  GtkToggleButton     *reveal_button;
-  GtkToggleButton     *match_case_checkbutton;
-  GtkToggleButton     *entire_word_checkbutton;
-  GtkToggleButton     *regex_checkbutton;
-  GtkToggleButton     *wrap_around_checkbutton;
+  IdeTerminalSearch   *tsearch;
 
-  /* Cached regex */
-  gboolean             regex_caseless;
-  gchar               *regex_pattern;
-  VteRegex            *regex;
+  GFile               *save_as_file_top;
 
-  GtkClipboard        *clipboard;
-  gchar               *selected_text;
   gchar               *selection_buffer;
+
+  gchar               *cwd;
+
+  VtePty              *pty;
+
+  gint64               last_respawn;
+
+  guint                manage_spawn : 1;
+  guint                top_has_spawned : 1;
+  guint                top_has_needs_attention : 1;
+  guint                run_on_host : 1;
+  guint                use_runner : 1;
 };
 
 G_END_DECLS

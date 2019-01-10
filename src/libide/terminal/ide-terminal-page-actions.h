@@ -1,6 +1,6 @@
-/* gb-terminal-util.h
+/* ide-terminal-page-actions.h
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * opyright (C) 2015 Sebastien Lafargue <slafargue@gnome.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,10 @@
 
 #pragma once
 
-#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
-# error "Only <libide-terminal.h> can be included directly."
-#endif
-
-#include <vte/vte.h>
-#include <libide-core.h>
+#include "ide-terminal-page.h"
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
-int          ide_vte_pty_create_slave (VtePty *pty);
-IDE_AVAILABLE_IN_3_32
-const gchar *ide_get_user_shell       (void);
+void ide_terminal_page_actions_init (IdeTerminalPage *self);
 
 G_END_DECLS

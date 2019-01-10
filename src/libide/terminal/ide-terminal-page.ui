@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.16 -->
+  <template class="IdeTerminalPage" parent="IdePage">
+    <property name="visible">true</property>
+    <child>
+      <object class="GtkPaned" id="paned">
+        <property name="expand">true</property>
+        <property name="orientation">vertical</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkOverlay" id="terminal_overlay_top">
+            <property name="expand">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkBox" id="top_container">
+                <property name="orientation">horizontal</property>
+                <property name="expand">true</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="IdeTerminal" id="terminal_top">
+                    <property name="audible-bell">false</property>
+                    <property name="expand">true</property>
+                    <property name="visible">true</property>
+                    <property name="scrollback-lines">0xffffffff</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrollbar" id="top_scrollbar">
+                    <property name="orientation">vertical</property>
+                    <property name="visible">true</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

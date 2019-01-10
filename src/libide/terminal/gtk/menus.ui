@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="ide-terminal-workspace-menu">
+    <section id="ide-terminal-workspace-menu-close">
+      <item>
+        <attribute name="id">ide-terminal-workspace-menu-close</attribute>
+        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="action">win.close</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

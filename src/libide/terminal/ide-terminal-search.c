@@ -25,14 +25,13 @@
 
 #include <fcntl.h>
 #include <glib/gi18n.h>
-#include <ide.h>
 #include <pcre2.h>
 #include <stdlib.h>
 #include <vte/vte.h>
 #include <unistd.h>
 
-#include "terminal/ide-terminal-search.h"
-#include "terminal/ide-terminal-search-private.h"
+#include "ide-terminal-search.h"
+#include "ide-terminal-search-private.h"
 
 G_DEFINE_TYPE (IdeTerminalSearch, ide_terminal_search, GTK_TYPE_BIN)
 
@@ -300,7 +299,7 @@ ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
 
   object_class->get_property = ide_terminal_search_get_property;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-terminal-search.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-terminal/ui/ide-terminal-search.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_prev_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_next_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, close_button);

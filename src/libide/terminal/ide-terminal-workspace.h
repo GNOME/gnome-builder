@@ -1,6 +1,6 @@
-/* gb-terminal-view.h
+/* ide-terminal-workspace.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,24 +24,14 @@
 # error "Only <libide-terminal.h> can be included directly."
 #endif
 
-#include <vte/vte.h>
 #include <libide-core.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_TERMINAL_SEARCH (ide_terminal_search_get_type())
+#define IDE_TYPE_TERMINAL_WORKSPACE (ide_terminal_workspace_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, IDE, TERMINAL_SEARCH, GtkBin)
-
-IDE_AVAILABLE_IN_3_32
-VteRegex    *ide_terminal_search_get_regex       (IdeTerminalSearch *self);
-IDE_AVAILABLE_IN_3_32
-gboolean     ide_terminal_search_get_wrap_around (IdeTerminalSearch *self);
-IDE_AVAILABLE_IN_3_32
-void         ide_terminal_search_set_terminal    (IdeTerminalSearch *self,
-                                                  VteTerminal       *terminal);
-IDE_AVAILABLE_IN_3_32
-GtkRevealer *ide_terminal_search_get_revealer    (IdeTerminalSearch *self);
+G_DECLARE_FINAL_TYPE (IdeTerminalWorkspace, ide_terminal_workspace, IDE, TERMINAL_WORKSPACE, IdeWorkspace)
 
 G_END_DECLS
