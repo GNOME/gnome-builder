@@ -68,7 +68,7 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_context_get_configuration_manager (context);
+  config_manager = ide_configuration_manager_from_context (context);
   config = ide_configuration_manager_get_current (config_manager);
   app_id = ide_configuration_get_app_id (config);
 
@@ -152,9 +152,7 @@ gbp_flatpak_runner_new (IdeContext  *context,
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  self = g_object_new (GBP_TYPE_FLATPAK_RUNNER,
-                       "context", context,
-                       NULL);
+  self = g_object_new (GBP_TYPE_FLATPAK_RUNNER, NULL);
 
   if (binary_path != NULL)
     ide_runner_append_argv (IDE_RUNNER (self), binary_path);

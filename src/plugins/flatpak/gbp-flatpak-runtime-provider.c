@@ -24,8 +24,6 @@
 #include <ostree.h>
 #include <string.h>
 
-#include "util/ide-posix.h"
-
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
@@ -57,7 +55,7 @@ typedef struct
 
 struct _GbpFlatpakRuntimeProvider
 {
-  GObject            parent_instance;
+  IdeObject          parent_instance;
   IdeRuntimeManager *manager;
   GPtrArray         *runtimes;
 };
@@ -68,7 +66,7 @@ static void gbp_flatpak_runtime_provider_load   (IdeRuntimeProvider          *pr
 static void gbp_flatpak_runtime_provider_unload (IdeRuntimeProvider          *provider,
                                                  IdeRuntimeManager           *manager);
 
-G_DEFINE_TYPE_WITH_CODE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
 
 static void
@@ -116,6 +114,20 @@ is_same_runtime (GbpFlatpakRuntime   *runtime,
 }
 
 static void
+monitor_transfer (GbpFlatpakRuntimeProvider *self,
+                  GbpFlatpakTransfer        *transfer)
+{
+  g_autoptr(IdeNotification) notif = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (GBP_IS_FLATPAK_TRANSFER (transfer));
+
+  notif = ide_transfer_create_notification (IDE_TRANSFER (transfer));
+  ide_notification_attach (notif, IDE_OBJECT (self));
+}
+
+static void
 runtime_added_cb (GbpFlatpakRuntimeProvider  *self,
                   FlatpakInstalledRef        *ref,
                   GbpFlatpakApplicationAddin *app_addin)
@@ -123,7 +135,6 @@ runtime_added_cb (GbpFlatpakRuntimeProvider  *self,
   g_autoptr(GbpFlatpakRuntime) new_runtime = NULL;
   g_autoptr(GError) error = NULL;
   const gchar *name;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -153,13 +164,16 @@ runtime_added_cb (GbpFlatpakRuntimeProvider  *self,
    * We didn't already have this runtime, so go ahead and just
    * add it now (and keep a copy so we can find it later).
    */
-  context = ide_object_get_context (IDE_OBJECT (self->manager));
-  new_runtime = gbp_flatpak_runtime_new (context, ref, NULL, &error);
+  new_runtime = gbp_flatpak_runtime_new (ref, NULL, &error);
 
   if (new_runtime == NULL)
-    g_warning ("Failed to create GbpFlatpakRuntime: %s", error->message);
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        g_warning ("Failed to create GbpFlatpakRuntime: %s", error->message);
+    }
   else
     {
+      ide_object_append (IDE_OBJECT (self), IDE_OBJECT (new_runtime));
       ide_runtime_manager_add (self->manager, IDE_RUNTIME (new_runtime));
       g_ptr_array_add (self->runtimes, g_steal_pointer (&new_runtime));
     }
@@ -327,6 +341,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *docs_id = NULL;
+  GbpFlatpakRuntimeProvider *self;
   IdeTransferManager *transfer_manager;
   InstallRuntime *install;
   GCancellable *cancellable;
@@ -339,13 +354,15 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
   g_assert (!ide_task_get_completed (task));
 
+  self = ide_task_get_source_object (task);
   install = ide_task_get_task_data (task);
   cancellable = ide_task_get_cancellable (task);
 
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
   g_assert (install != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
+  transfer_manager = ide_transfer_manager_get_default ();
 
   if (!gbp_flatpak_application_addin_locate_sdk_finish (app_addin,
                                                         result,
@@ -377,6 +394,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
                                            install->arch,
                                            install->branch,
                                            FALSE);
+      monitor_transfer (self, transfer);
       ide_transfer_manager_execute_async (transfer_manager,
                                           IDE_TRANSFER (transfer),
                                           cancellable,
@@ -402,6 +420,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
                                            install->sdk_arch,
                                            install->sdk_branch,
                                            FALSE);
+      monitor_transfer (self, transfer);
       ide_transfer_manager_execute_async (transfer_manager,
                                           IDE_TRANSFER (transfer),
                                           cancellable,
@@ -425,6 +444,7 @@ gbp_flatpak_runtime_provider_locate_sdk_cb (GObject      *object,
                                            install->arch,
                                            install->branch,
                                            FALSE);
+      monitor_transfer (self, transfer);
       ide_transfer_manager_execute_async (transfer_manager,
                                           IDE_TRANSFER (transfer),
                                           cancellable,
@@ -583,7 +603,7 @@ gbp_flatpak_runtime_provider_bootstrap_cb (GObject      *object,
                                     state->branch);
 
       context = ide_object_get_context (IDE_OBJECT (self->manager));
-      runtime_manager = ide_context_get_runtime_manager (context);
+      runtime_manager = ide_runtime_manager_from_context (context);
       runtime = ide_runtime_manager_get_runtime (runtime_manager, runtime_id);
 
       if (runtime == NULL)
@@ -656,7 +676,7 @@ gbp_flatpak_runtime_provider_bootstrap_async (IdeRuntimeProvider  *provider,
       GbpFlatpakApplicationAddin *addin;
       const gchar * const *sdk_exts;
 
-      transfer_manager = ide_application_get_transfer_manager (IDE_APPLICATION_DEFAULT);
+      transfer_manager = ide_transfer_manager_get_default ();
       addin = gbp_flatpak_application_addin_get_default ();
       sdk_exts = gbp_flatpak_manifest_get_sdk_extensions (GBP_FLATPAK_MANIFEST (state->config));
 

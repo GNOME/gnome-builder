@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_RUNTIME_PROVIDER (gbp_flatpak_runtime_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, GBP, FLATPAK_RUNTIME_PROVIDER, GObject)
+G_DECLARE_FINAL_TYPE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, GBP, FLATPAK_RUNTIME_PROVIDER, IdeObject)
 
 G_END_DECLS

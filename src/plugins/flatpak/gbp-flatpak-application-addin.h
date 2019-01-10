@@ -21,7 +21,7 @@
 #pragma once
 
 #include <flatpak.h>
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
@@ -48,7 +48,7 @@ void                        gbp_flatpak_application_addin_install_runtime_async 
                                                                                   const gchar                 *arch,
                                                                                   const gchar                 *branch,
                                                                                   GCancellable                *cancellable,
-                                                                                  IdeProgress                **progress,
+                                                                                  IdeNotification            **progress,
                                                                                   GAsyncReadyCallback          callback,
                                                                                   gpointer                     user_data);
 gboolean                    gbp_flatpak_application_addin_install_runtime_finish (GbpFlatpakApplicationAddin  *self,

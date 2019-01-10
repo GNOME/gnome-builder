@@ -23,6 +23,7 @@
 #include <flatpak.h>
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
+#include <libide-vcs.h>
 #include <string.h>
 
 #include "gbp-flatpak-configuration-provider.h"
@@ -152,7 +153,6 @@ load_manifest_worker (IdeTask      *task,
   g_autoptr(GbpFlatpakManifest) manifest = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *name = NULL;
-  IdeContext *context;
   GFile *file = task_data;
 
   g_assert (IDE_IS_TASK (task));
@@ -160,12 +160,13 @@ load_manifest_worker (IdeTask      *task,
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   name = g_file_get_basename (file);
-  manifest = gbp_flatpak_manifest_new (context, file, name);
+  manifest = gbp_flatpak_manifest_new (file, name);
+  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (manifest));
 
   if (!g_initable_init (G_INITABLE (manifest), cancellable, &error))
     {
+      ide_clear_and_destroy_object (&manifest);
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
     }
@@ -248,7 +249,7 @@ reload_manifest_cb (GObject      *object,
   g_ptr_array_add (self->configs, g_object_ref (new_manifest));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  manager = ide_context_get_configuration_manager (context);
+  manager = ide_configuration_manager_from_context (context);
   current = ide_configuration_manager_get_current (manager);
 
   is_active = current == IDE_CONFIGURATION (old_manifest);
@@ -298,7 +299,6 @@ gbp_flatpak_configuration_provider_load_worker (IdeTask      *task,
 {
   GbpFlatpakConfigurationProvider *self = source_object;
   g_autoptr(GPtrArray) manifests = NULL;
-  IdeContext *context;
   GPtrArray *files = task_data;
 
   g_assert (IDE_IS_TASK (task));
@@ -306,7 +306,6 @@ gbp_flatpak_configuration_provider_load_worker (IdeTask      *task,
   g_assert (files != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   manifests = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (guint i = 0; i < files->len; i++)
@@ -319,10 +318,12 @@ gbp_flatpak_configuration_provider_load_worker (IdeTask      *task,
       g_assert (G_IS_FILE (file));
 
       name = g_file_get_basename (file);
-      manifest = gbp_flatpak_manifest_new (context, file, name);
+      manifest = gbp_flatpak_manifest_new (file, name);
+      ide_object_append (IDE_OBJECT (self), IDE_OBJECT (manifest));
 
       if (!g_initable_init (G_INITABLE (manifest), cancellable, &error))
         {
+          ide_clear_and_destroy_object (&manifest);
           g_message ("%s is not a flatpak manifest, skipping: %s",
                      name, error->message);
           continue;
@@ -425,13 +426,13 @@ gbp_flatpak_configuration_provider_monitor_changed (GbpFlatpakConfigurationProvi
         {
           g_autoptr(GbpFlatpakManifest) manifest = NULL;
           g_autoptr(GError) error = NULL;
-          IdeContext *context;
 
-          context = ide_object_get_context (IDE_OBJECT (self));
-          manifest = gbp_flatpak_manifest_new (context, file, name);
+          manifest = gbp_flatpak_manifest_new (file, name);
+          ide_object_append (IDE_OBJECT (self), IDE_OBJECT (manifest));
 
           if (!g_initable_init (G_INITABLE (manifest), NULL, &error))
             {
+              ide_clear_and_destroy_object (&manifest);
               g_message ("%s is not a flatpak manifest, skipping: %s",
                          name, error->message);
               return;
@@ -471,9 +472,9 @@ gbp_flatpak_configuration_provider_load_async (IdeConfigurationProvider *provide
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
-  monitor = ide_context_get_monitor (context);
+  vcs = ide_vcs_from_context (context);
+  workdir = ide_vcs_get_workdir (vcs);
+  monitor = ide_context_peek_child_typed (context, IDE_TYPE_VCS_MONITOR);
 
   task = ide_task_new (provider, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_flatpak_configuration_provider_load_async);
@@ -563,7 +564,7 @@ gbp_flatpak_configuration_provider_load_finish (IdeConfigurationProvider  *provi
     {
       IdeConfiguration *config = guess_best_config (configs);
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-      IdeConfigurationManager *manager = ide_context_get_configuration_manager (context);
+      IdeConfigurationManager *manager = ide_configuration_manager_from_context (context);
 
       g_assert (IDE_IS_CONFIGURATION (config));
 

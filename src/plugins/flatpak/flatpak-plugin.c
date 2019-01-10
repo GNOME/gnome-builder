@@ -1,4 +1,4 @@
-/* gbp-flatpak-plugin.c
+/* flatpak-plugin.c
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,24 +18,29 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "flatpak-plugin"
+
+#include "config.h"
+
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-foundry.h>
+#include <libide-gui.h>
 
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-build-system-discovery.h"
 #include "gbp-flatpak-build-target-provider.h"
 #include "gbp-flatpak-configuration-provider.h"
 #include "gbp-flatpak-dependency-updater.h"
-#include "gbp-flatpak-genesis-addin.h"
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-preferences-addin.h"
 #include "gbp-flatpak-runtime-provider.h"
 #include "gbp-flatpak-workbench-addin.h"
 
-void
-gbp_flatpak_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_flatpak_register_types (PeasObjectModule *module)
 {
-  ide_vcs_register_ignored (".flatpak-builder");
+  ide_g_file_add_ignored_pattern (".flatpak-builder");
 
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
@@ -55,9 +60,6 @@ gbp_flatpak_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
                                               GBP_TYPE_FLATPAK_APPLICATION_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_GENESIS_ADDIN,
-                                              GBP_TYPE_FLATPAK_GENESIS_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_PIPELINE_ADDIN,
                                               GBP_TYPE_FLATPAK_PIPELINE_ADDIN);

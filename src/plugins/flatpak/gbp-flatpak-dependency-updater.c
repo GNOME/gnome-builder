@@ -83,7 +83,7 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  manager = ide_context_get_build_manager (context);
+  manager = ide_build_manager_from_context (context);
   g_assert (IDE_IS_BUILD_MANAGER (manager));
 
   pipeline = ide_build_manager_get_pipeline (manager);
@@ -118,6 +118,7 @@ gbp_flatpak_dependency_updater_update_async (IdeDependencyUpdater *updater,
    */
   ide_build_manager_rebuild_async (manager,
                                    IDE_BUILD_PHASE_CONFIGURE,
+                                   NULL,
                                    NULL,
                                    gbp_flatpak_dependency_updater_update_cb,
                                    g_steal_pointer (&task));

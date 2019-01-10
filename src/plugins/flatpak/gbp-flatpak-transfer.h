@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -28,9 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakTransfer, gbp_flatpak_transfer, GBP, FLATPAK_TRANSFER, IdeTransfer)
 
-GbpFlatpakTransfer *gbp_flatpak_transfer_new (const gchar        *id,
-                                              const gchar        *arch,
-                                              const gchar        *branch,
-                                              gboolean            force_update);
+GbpFlatpakTransfer *gbp_flatpak_transfer_new (const gchar *id,
+                                              const gchar *arch,
+                                              const gchar *branch,
+                                              gboolean     force_update);
 
 G_END_DECLS

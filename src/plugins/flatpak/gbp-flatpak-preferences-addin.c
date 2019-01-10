@@ -23,6 +23,7 @@
 
 #include <flatpak.h>
 #include <glib/gi18n.h>
+#include <libide-gui.h>
 
 #include "gbp-flatpak-application-addin.h"
 #include "gbp-flatpak-preferences-addin.h"

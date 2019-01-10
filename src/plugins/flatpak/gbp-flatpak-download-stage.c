@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "gbp-flatpak-download-stage"
 
 #include <glib/gi18n.h>
+#include <libide-gui.h>
 
 #include "gbp-flatpak-download-stage.h"
 #include "gbp-flatpak-manifest.h"
@@ -49,6 +50,7 @@ static GParamSpec *properties [N_PROPS];
 static void
 gbp_flatpak_download_stage_query (IdeBuildStage    *stage,
                                   IdeBuildPipeline *pipeline,
+                                  GPtrArray        *targets,
                                   GCancellable     *cancellable)
 {
   GbpFlatpakDownloadStage *self = (GbpFlatpakDownloadStage *)stage;
@@ -192,7 +194,7 @@ gbp_flatpak_download_stage_class_init (GbpFlatpakDownloadStageClass *klass)
    * The "state-dir" is the flatpak-builder state directory, to be used
    * as a parameter to "flatpak-builder --state-dir".
    *
-   * Since: 3.32
+   * Since: 3.28
    */
   properties [PROP_STATE_DIR] =
     g_param_spec_string ("state-dir",

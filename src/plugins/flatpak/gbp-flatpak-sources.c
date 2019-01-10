@@ -28,7 +28,7 @@
 
 /* This file includes modified code from
  * flatpak/builder/builder-source-archive.c
- * Written by Alexander Larsson, originally licensed under GPL 2.1.
+ * Written by Alexander Larsson, originally licensed under GPL 2.1+.
  * Copyright Red Hat, Inc. 2015
  */
 
