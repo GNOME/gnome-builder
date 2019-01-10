@@ -1,4 +1,4 @@
-/* gbp-create-project-widget.c
+/* gbp-create-project-surface.c
  *
  * Copyright 2016-2019 Christian Hergert <christian@hergert.me>
  *
@@ -18,22 +18,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-create-project-widget"
+#define G_LOG_DOMAIN "gbp-create-project-surface"
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-greeter.h>
+#include <libide-projects.h>
+#include <libide-vcs.h>
 #include <libpeas/peas.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "ide-greeter-private.h"
+
 #include "gbp-create-project-template-icon.h"
-#include "gbp-create-project-widget.h"
+#include "gbp-create-project-surface.h"
 
-struct _GbpCreateProjectWidget
+struct _GbpCreateProjectSurface
 {
-  GtkBin                parent;
+  IdeSurface            parent;
 
+  GtkEntry             *app_id_entry;
   GtkEntry             *project_name_entry;
   DzlFileChooserEntry  *project_location_entry;
   DzlRadioBox          *project_language_chooser;
@@ -41,6 +46,7 @@ struct _GbpCreateProjectWidget
   GtkSwitch            *versioning_switch;
   DzlRadioBox          *license_chooser;
   GtkLabel             *destination_label;
+  GtkButton            *create_button;
 
   guint                 invalid_directory : 1;
 };
@@ -53,7 +59,7 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-G_DEFINE_TYPE (GbpCreateProjectWidget, gbp_create_project_widget, GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbpCreateProjectSurface, gbp_create_project_surface, IDE_TYPE_SURFACE)
 
 static gboolean
 is_preferred (const gchar *name)
@@ -82,7 +88,7 @@ sort_by_name (gconstpointer a,
 }
 
 static void
-gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
+gbp_create_project_surface_add_languages (GbpCreateProjectSurface *self,
                                          const GList            *templates)
 {
   g_autoptr(GHashTable) languages = NULL;
@@ -90,7 +96,7 @@ gbp_create_project_widget_add_languages (GbpCreateProjectWidget *self,
   const GList *iter;
   guint len;
 
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
   languages = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -137,13 +143,13 @@ validate_name (const gchar *name)
 }
 
 static gboolean
-directory_exists (GbpCreateProjectWidget *self,
+directory_exists (GbpCreateProjectSurface *self,
                   const gchar            *name)
 {
   g_autoptr(GFile) directory = NULL;
   g_autoptr(GFile) child = NULL;
 
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
   g_assert (name != NULL);
 
   directory = dzl_file_chooser_entry_get_file (self->project_location_entry);
@@ -155,19 +161,56 @@ directory_exists (GbpCreateProjectWidget *self,
 }
 
 static void
-gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
+gbp_create_project_surface_create_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  GbpCreateProjectSurface *self = (GbpCreateProjectSurface *)object;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (user_data == NULL);
+
+  if (!gbp_create_project_surface_create_finish (self, result, &error))
+    {
+      g_warning ("Failed to create project: %s", error->message);
+    }
+}
+
+static void
+gbp_create_project_surface_create_clicked (GbpCreateProjectSurface *self,
+                                           GtkButton               *button)
+{
+  GCancellable *cancellable;
+  GtkWidget *workspace;
+
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_WORKSPACE);
+  cancellable = ide_workspace_get_cancellable (IDE_WORKSPACE (workspace));
+
+  gbp_create_project_surface_create_async (self,
+                                           cancellable,
+                                           gbp_create_project_surface_create_cb,
+                                           NULL);
+}
+
+static void
+gbp_create_project_surface_name_changed (GbpCreateProjectSurface *self,
                                         GtkEntry               *entry)
 {
   g_autofree gchar *project_name = NULL;
   const gchar *text;
 
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
   g_assert (GTK_IS_ENTRY (entry));
 
   text = gtk_entry_get_text (entry);
   project_name = g_strstrip (g_strdup (text));
 
-  if (dzl_str_empty0 (project_name) || !validate_name (project_name))
+  if (ide_str_empty0 (project_name) || !validate_name (project_name))
     {
       g_object_set (self->project_name_entry,
                     "secondary-icon-name", "dialog-warning-symbolic",
@@ -206,22 +249,22 @@ gbp_create_project_widget_name_changed (GbpCreateProjectWidget *self,
 }
 
 static void
-gbp_create_project_widget_location_changed (GbpCreateProjectWidget *self,
+gbp_create_project_surface_location_changed (GbpCreateProjectSurface *self,
                                             GParamSpec             *pspec,
                                             DzlFileChooserEntry    *chooser)
 {
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
   g_assert (DZL_IS_FILE_CHOOSER_ENTRY (chooser));
 
   /* Piggyback on the name changed signal to update things */
-  gbp_create_project_widget_name_changed (self, self->project_name_entry);
+  gbp_create_project_surface_name_changed (self, self->project_name_entry);
 }
 
 static void
 update_language_sensitivity (GtkWidget *widget,
                              gpointer   data)
 {
-  GbpCreateProjectWidget *self = data;
+  GbpCreateProjectSurface *self = data;
   GbpCreateProjectTemplateIcon *template_icon;
   IdeProjectTemplate *template;
   g_auto(GStrv) template_languages = NULL;
@@ -229,12 +272,12 @@ update_language_sensitivity (GtkWidget *widget,
   gboolean sensitive = FALSE;
   gint i;
 
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
   g_assert (GTK_IS_FLOW_BOX_CHILD (widget));
 
   language = dzl_radio_box_get_active_id (self->project_language_chooser);
 
-  if (dzl_str_empty0 (language))
+  if (ide_str_empty0 (language))
     goto apply;
 
   template_icon = GBP_CREATE_PROJECT_TEMPLATE_ICON (gtk_bin_get_child (GTK_BIN (widget)));
@@ -257,7 +300,7 @@ apply:
 }
 
 static void
-gbp_create_project_widget_refilter (GbpCreateProjectWidget *self)
+gbp_create_project_surface_refilter (GbpCreateProjectSurface *self)
 {
   gtk_container_foreach (GTK_CONTAINER (self->project_template_chooser),
                          update_language_sensitivity,
@@ -265,23 +308,23 @@ gbp_create_project_widget_refilter (GbpCreateProjectWidget *self)
 }
 
 static void
-gbp_create_project_widget_language_changed (GbpCreateProjectWidget *self,
+gbp_create_project_surface_language_changed (GbpCreateProjectSurface *self,
                                             DzlRadioBox            *language_chooser)
 {
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
   g_assert (DZL_IS_RADIO_BOX (language_chooser));
 
-  gbp_create_project_widget_refilter (self);
+  gbp_create_project_surface_refilter (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
 
 static void
-gbp_create_project_widget_template_selected (GbpCreateProjectWidget *self,
+gbp_create_project_surface_template_selected (GbpCreateProjectSurface *self,
                                              GtkFlowBox             *box,
                                              GtkFlowBoxChild        *child)
 {
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_READY]);
 }
@@ -306,10 +349,10 @@ project_template_sort_func (GtkFlowBoxChild *child1,
 }
 
 static void
-gbp_create_project_widget_add_template_buttons (GbpCreateProjectWidget *self,
+gbp_create_project_surface_add_template_buttons (GbpCreateProjectSurface *self,
                                                 GList                  *templates)
 {
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
   for (const GList *iter = templates; iter; iter = iter->next)
     {
@@ -338,49 +381,52 @@ template_providers_foreach_cb (PeasExtensionSet *set,
                                PeasExtension    *exten,
                                gpointer          user_data)
 {
-  GbpCreateProjectWidget *self = user_data;
+  GbpCreateProjectSurface *self = user_data;
   IdeTemplateProvider *provider = (IdeTemplateProvider *)exten;
   GList *templates;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
   g_assert (IDE_IS_TEMPLATE_PROVIDER (provider));
 
   templates = ide_template_provider_get_project_templates (provider);
 
-  gbp_create_project_widget_add_template_buttons (self, templates);
-  gbp_create_project_widget_add_languages (self, templates);
+  gbp_create_project_surface_add_template_buttons (self, templates);
+  gbp_create_project_surface_add_languages (self, templates);
 
   gtk_flow_box_invalidate_sort (self->project_template_chooser);
-  gbp_create_project_widget_refilter (self);
+  gbp_create_project_surface_refilter (self);
 
   g_list_free_full (templates, g_object_unref);
 }
 
 static GFile *
-gbp_create_project_widget_get_directory (GbpCreateProjectWidget *self)
+gbp_create_project_surface_get_directory (GbpCreateProjectSurface *self)
 {
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
   return dzl_file_chooser_entry_get_file (self->project_location_entry);
 }
 
 static void
-gbp_create_project_widget_set_directory (GbpCreateProjectWidget *self,
+gbp_create_project_surface_set_directory (GbpCreateProjectSurface *self,
                                          GFile                  *directory)
 {
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
   g_assert (G_IS_FILE (directory));
 
   dzl_file_chooser_entry_set_file (self->project_location_entry, directory);
 }
 
 static void
-gbp_create_project_widget_constructed (GObject *object)
+gbp_create_project_surface_constructed (GObject *object)
 {
-  GbpCreateProjectWidget *self = GBP_CREATE_PROJECT_WIDGET (object);
-  PeasEngine *engine;
+  GbpCreateProjectSurface *self = GBP_CREATE_PROJECT_SURFACE (object);
   PeasExtensionSet *extensions;
+  GtkFlowBoxChild *child;
+  PeasEngine *engine;
+
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
   engine = peas_engine_get_default ();
 
@@ -389,19 +435,29 @@ gbp_create_project_widget_constructed (GObject *object)
   peas_extension_set_foreach (extensions, template_providers_foreach_cb, self);
   g_clear_object (&extensions);
 
-  G_OBJECT_CLASS (gbp_create_project_widget_parent_class)->constructed (object);
+  G_OBJECT_CLASS (gbp_create_project_surface_parent_class)->constructed (object);
 
+  /* Default to C, always. We might investigate setting this to the
+   * previously selected item in the future.
+   */
   dzl_radio_box_set_active_id (self->project_language_chooser, "C");
+
+  /* Select the first template that is visible so we have a selection
+   * initially without the user having to select. We might also try to
+   * re-select a previous item in the future.
+   */
+  if ((child = gtk_flow_box_get_child_at_index (self->project_template_chooser, 0)))
+    gtk_flow_box_select_child (self->project_template_chooser, child);
 }
 
 static void
-gbp_create_project_widget_finalize (GObject *object)
+gbp_create_project_surface_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (gbp_create_project_widget_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_create_project_surface_parent_class)->finalize (object);
 }
 
 static gboolean
-gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
+gbp_create_project_surface_is_ready (GbpCreateProjectSurface *self)
 {
   const gchar *text;
   g_autofree gchar *project_name = NULL;
@@ -409,7 +465,7 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   GList *selected_template = NULL;
   gboolean ret = FALSE;
 
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
   if (self->invalid_directory)
     return FALSE;
@@ -417,12 +473,12 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
   text = gtk_entry_get_text (self->project_name_entry);
   project_name = g_strstrip (g_strdup (text));
 
-  if (dzl_str_empty0 (project_name) || !validate_name (project_name))
+  if (ide_str_empty0 (project_name) || !validate_name (project_name))
     return FALSE;
 
   language = dzl_radio_box_get_active_id (self->project_language_chooser);
 
-  if (dzl_str_empty0 (language))
+  if (ide_str_empty0 (language))
     return FALSE;
 
   selected_template = gtk_flow_box_get_selected_children (self->project_template_chooser);
@@ -438,17 +494,23 @@ gbp_create_project_widget_is_ready (GbpCreateProjectWidget *self)
 }
 
 static void
-gbp_create_project_widget_get_property (GObject    *object,
+gbp_create_project_surface_grab_focus (GtkWidget *widget)
+{
+  gtk_widget_grab_focus (GTK_WIDGET (GBP_CREATE_PROJECT_SURFACE (widget)->project_name_entry));
+}
+
+static void
+gbp_create_project_surface_get_property (GObject    *object,
                                         guint       prop_id,
                                         GValue     *value,
                                         GParamSpec *pspec)
 {
-  GbpCreateProjectWidget *self = GBP_CREATE_PROJECT_WIDGET(object);
+  GbpCreateProjectSurface *self = GBP_CREATE_PROJECT_SURFACE(object);
 
   switch (prop_id)
     {
     case PROP_IS_READY:
-      g_value_set_boolean (value, gbp_create_project_widget_is_ready (self));
+      g_value_set_boolean (value, gbp_create_project_surface_is_ready (self));
       break;
 
     default:
@@ -457,14 +519,16 @@ gbp_create_project_widget_get_property (GObject    *object,
 }
 
 static void
-gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
+gbp_create_project_surface_class_init (GbpCreateProjectSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->constructed = gbp_create_project_widget_constructed;
-  object_class->finalize = gbp_create_project_widget_finalize;
-  object_class->get_property = gbp_create_project_widget_get_property;
+  object_class->constructed = gbp_create_project_surface_constructed;
+  object_class->finalize = gbp_create_project_surface_finalize;
+  object_class->get_property = gbp_create_project_surface_get_property;
+
+  widget_class->grab_focus = gbp_create_project_surface_grab_focus;
 
   properties [PROP_IS_READY] =
     g_param_spec_boolean ("is-ready",
@@ -475,55 +539,68 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_css_name (widget_class, "createprojectwidget");
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/create-project-plugin/gbp-create-project-widget.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_name_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_location_entry);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_language_chooser);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, project_template_chooser);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, versioning_switch);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, license_chooser);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, destination_label);
+  gtk_widget_class_set_css_name (widget_class, "createprojectsurface");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/create-project/gbp-create-project-surface.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, app_id_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, create_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, destination_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, license_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, project_language_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, project_location_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, project_name_entry);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, project_template_chooser);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectSurface, versioning_switch);
 }
 
 static void
-gbp_create_project_widget_init (GbpCreateProjectWidget *self)
+gbp_create_project_surface_init (GbpCreateProjectSurface *self)
 {
   g_autoptr(GFile) projects_dir = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  projects_dir = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
-  gbp_create_project_widget_set_directory (self, projects_dir);
+  gtk_widget_set_name (GTK_WIDGET (self), "create-project");
+  ide_surface_set_title (IDE_SURFACE (self), _("New Project"));
+
+  projects_dir = g_file_new_for_path (ide_get_projects_dir ());
+  gbp_create_project_surface_set_directory (self, projects_dir);
 
   g_signal_connect_object (self->project_name_entry,
                            "changed",
-                           G_CALLBACK (gbp_create_project_widget_name_changed),
+                           G_CALLBACK (gbp_create_project_surface_name_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->project_location_entry,
                            "notify::file",
-                           G_CALLBACK (gbp_create_project_widget_location_changed),
+                           G_CALLBACK (gbp_create_project_surface_location_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->project_language_chooser,
                            "changed",
-                           G_CALLBACK (gbp_create_project_widget_language_changed),
+                           G_CALLBACK (gbp_create_project_surface_language_changed),
                            self,
                            G_CONNECT_SWAPPED);
 
   g_signal_connect_object (self->project_template_chooser,
                            "child-activated",
-                           G_CALLBACK (gbp_create_project_widget_template_selected),
+                           G_CALLBACK (gbp_create_project_surface_template_selected),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (self->create_button,
+                           "clicked",
+                           G_CALLBACK (gbp_create_project_surface_create_clicked),
                            self,
                            G_CONNECT_SWAPPED);
 
   gtk_flow_box_set_sort_func (self->project_template_chooser,
                               project_template_sort_func,
                               NULL, NULL);
+
+  g_object_bind_property (self, "is-ready", self->create_button, "sensitive",
+                          G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -531,12 +608,13 @@ init_vcs_cb (GObject      *object,
              GAsyncResult *result,
              gpointer      user_data)
 {
-  g_autoptr(IdeTask) task = user_data;
   IdeVcsInitializer *vcs = (IdeVcsInitializer *)object;
-  GbpCreateProjectWidget *self;
-  IdeWorkbench *workbench;
-  GFile *project_file;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeProjectInfo) project_info = NULL;
   g_autoptr(GError) error = NULL;
+  GbpCreateProjectSurface *self;
+  GtkWidget *workspace;
+  GFile *project_file;
 
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
@@ -548,13 +626,15 @@ init_vcs_cb (GObject      *object,
     }
 
   self = ide_task_get_source_object (task);
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
   project_file = ide_task_get_task_data (task);
-  g_assert (G_IS_FILE (project_file));
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
+  project_info = ide_project_info_new ();
+  ide_project_info_set_file (project_info, project_file);
+
+  workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_GREETER_WORKSPACE);
+  ide_greeter_workspace_open_project (IDE_GREETER_WORKSPACE (workspace), project_info);
 
   ide_task_return_boolean (task, TRUE);
 }
@@ -567,12 +647,11 @@ extract_cb (GObject      *object,
   IdeProjectTemplate *template = (IdeProjectTemplate *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeVcsInitializer) vcs = NULL;
-  GbpCreateProjectWidget *self;
-  IdeWorkbench *workbench;
-  PeasEngine *engine;
-  PeasPluginInfo *plugin_info;
-  GFile *project_file;
   g_autoptr(GError) error = NULL;
+  GbpCreateProjectSurface *self;
+  PeasPluginInfo *plugin_info;
+  PeasEngine *engine;
+  GFile *project_file;
 
   /* To keep the UI simple, we only support git from
    * the creation today. However, at the time of writing
@@ -580,7 +659,7 @@ extract_cb (GObject      *object,
    * add support for an additional VCS, we need to redesign
    * this part of the UI.
    */
-  const gchar *vcs_id = "git-plugin";
+  const gchar *vcs_id = "git";
 
   g_assert (IDE_IS_PROJECT_TEMPLATE (template));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -593,15 +672,22 @@ extract_cb (GObject      *object,
     }
 
   self = ide_task_get_source_object (task);
-  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GBP_IS_CREATE_PROJECT_SURFACE (self));
 
   project_file = ide_task_get_task_data (task);
   g_assert (G_IS_FILE (project_file));
 
   if (!gtk_switch_get_active (self->versioning_switch))
     {
-      workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-      ide_workbench_open_project_async (workbench, project_file, NULL, NULL, NULL);
+      g_autoptr(IdeProjectInfo) project_info = NULL;
+      GtkWidget *workspace;
+
+      project_info = ide_project_info_new ();
+      ide_project_info_set_file (project_info, project_file);
+
+      workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_GREETER_WORKSPACE);
+      ide_greeter_workspace_open_project (IDE_GREETER_WORKSPACE (workspace), project_info);
+
       ide_task_return_boolean (task, TRUE);
       return;
     }
@@ -609,13 +695,13 @@ extract_cb (GObject      *object,
   engine = peas_engine_get_default ();
   plugin_info = peas_engine_get_plugin_info (engine, vcs_id);
   if (plugin_info == NULL)
-    goto failure;
+    IDE_GOTO (failure);
 
   vcs = (IdeVcsInitializer *)peas_engine_create_extension (engine, plugin_info,
                                                            IDE_TYPE_VCS_INITIALIZER,
                                                            NULL);
   if (vcs == NULL)
-    goto failure;
+    IDE_GOTO (failure);
 
   ide_vcs_initializer_initialize_async (vcs,
                                         project_file,
@@ -633,10 +719,10 @@ failure:
 }
 
 void
-gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
-                                        GCancellable           *cancellable,
-                                        GAsyncReadyCallback     callback,
-                                        gpointer                user_data)
+gbp_create_project_surface_create_async (GbpCreateProjectSurface *self,
+                                         GCancellable            *cancellable,
+                                         GAsyncReadyCallback      callback,
+                                         gpointer                 user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GHashTable) params = NULL;
@@ -654,12 +740,21 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
   PeasEngine *engine;
   PeasPluginInfo *plugin_info;
   const gchar *text;
-  const gchar *vcs_id = "git-plugin";
+  const gchar *app_id;
+  const gchar *vcs_id = "git";
   const gchar *author_name;
   GList *selected_box_child;
 
-  g_return_if_fail (GBP_CREATE_PROJECT_WIDGET (self));
+  g_return_if_fail (GBP_CREATE_PROJECT_SURFACE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->create_button), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->license_chooser), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->project_language_chooser), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->project_location_entry), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->project_name_entry), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->project_template_chooser), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->versioning_switch), FALSE);
 
   selected_box_child = gtk_flow_box_get_selected_children (self->project_template_chooser);
   template_container = selected_box_child->data;
@@ -680,7 +775,7 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
                        g_strdup ("name"),
                        g_variant_ref_sink (g_variant_new_string (g_strdelimit (name, " ", '-'))));
 
-  location = gbp_create_project_widget_get_directory (self);
+  location = gbp_create_project_surface_get_directory (self);
   child = g_file_get_child (location, name);
   path = g_file_get_path (child);
 
@@ -700,8 +795,8 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
       g_autofree gchar *license_full_path = NULL;
       g_autofree gchar *license_short_path = NULL;
 
-      license_full_path = g_strjoin (NULL, "resource://", "/org/gnome/builder/plugins/create-project-plugin/license/full/", license_id, NULL);
-      license_short_path = g_strjoin (NULL, "resource://", "/org/gnome/builder/plugins/create-project-plugin/license/short/", license_id, NULL);
+      license_full_path = g_strjoin (NULL, "resource://", "/plugins/create-project/license/full/", license_id, NULL);
+      license_short_path = g_strjoin (NULL, "resource://", "/plugins/create-project/license/short/", license_id, NULL);
 
       g_hash_table_insert (params,
                            g_strdup ("license_full"),
@@ -735,14 +830,23 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
         }
     }
 
-  if (G_VALUE_HOLDS_STRING (&str) && !dzl_str_empty0 (g_value_get_string (&str)))
+  if (G_VALUE_HOLDS_STRING (&str) && !ide_str_empty0 (g_value_get_string (&str)))
     author_name = g_value_get_string (&str);
   else
     author_name = g_get_real_name ();
 
+  app_id = gtk_entry_get_text (self->app_id_entry);
+
+  if (ide_str_empty0 (app_id))
+    app_id = "org.example.App";
+
   g_hash_table_insert (params,
                        g_strdup ("author"),
-                       g_variant_ref_sink (g_variant_new_string (author_name)));
+                       g_variant_take_ref (g_variant_new_string (author_name)));
+
+  g_hash_table_insert (params,
+                       g_strdup ("app-id"),
+                       g_variant_take_ref (g_variant_new_string (app_id)));
 
   g_value_unset (&str);
 
@@ -757,12 +861,20 @@ gbp_create_project_widget_create_async (GbpCreateProjectWidget *self,
 }
 
 gboolean
-gbp_create_project_widget_create_finish (GbpCreateProjectWidget *self,
-                                         GAsyncResult           *result,
-                                         GError                **error)
+gbp_create_project_surface_create_finish (GbpCreateProjectSurface  *self,
+                                          GAsyncResult             *result,
+                                          GError                  **error)
 {
-  g_return_val_if_fail (GBP_IS_CREATE_PROJECT_WIDGET (self), FALSE);
+  g_return_val_if_fail (GBP_IS_CREATE_PROJECT_SURFACE (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (self->create_button), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->license_chooser), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->project_language_chooser), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->project_location_entry), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->project_name_entry), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->project_template_chooser), TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (self->versioning_switch), TRUE);
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

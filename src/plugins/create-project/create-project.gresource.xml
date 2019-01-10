@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins/create-project-plugin">
+  <gresource prefix="/plugins/create-project">
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">gbp-create-project-surface.ui</file>
+    <file preprocess="xml-stripblanks">gbp-create-project-template-icon.ui</file>
     <file>create-project.plugin</file>
   </gresource>
 
-  <gresource prefix="/org/gnome/builder/plugins/create-project-plugin">
-    <file>gbp-create-project-widget.ui</file>
-    <file>gbp-create-project-template-icon.ui</file>
-  </gresource>
-
-  <gresource prefix="/org/gnome/builder/plugins/create-project-plugin/license/full">
+  <gresource prefix="/plugins/create-project/license/full">
     <file compressed="true" alias="agpl_3">resources/agpl_3_full</file>
     <file compressed="true" alias="apache_2">resources/apache_2_full</file>
     <file compressed="true" alias="gpl_2">resources/gpl_2_full</file>
@@ -19,7 +17,7 @@
     <file compressed="true" alias="mit_x11">resources/mit_x11_full</file>
   </gresource>
 
-  <gresource prefix="/org/gnome/builder/plugins/create-project-plugin/license/short">
+  <gresource prefix="/plugins/create-project/license/short">
     <file compressed="true" alias="agpl_3">resources/agpl_3_short</file>
     <file compressed="true" alias="apache_2">resources/apache_2_short</file>
     <file compressed="true" alias="gpl_2">resources/gpl_2_short</file>

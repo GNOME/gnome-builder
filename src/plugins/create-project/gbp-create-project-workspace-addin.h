@@ -1,6 +1,6 @@
-/* gbp-create-project-tool.h
+/* gbp-create-project-workspace-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_CREATE_PROJECT_TOOL (gbp_create_project_tool_get_type())
+#define GBP_TYPE_CREATE_PROJECT_WORKSPACE_ADDIN (gbp_create_project_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCreateProjectTool, gbp_create_project_tool, GBP, CREATE_PROJECT_TOOL, GObject)
+G_DECLARE_FINAL_TYPE (GbpCreateProjectWorkspaceAddin, gbp_create_project_workspace_addin, GBP, CREATE_PROJECT_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

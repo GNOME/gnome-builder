@@ -1,6 +1,6 @@
-/* gbp-create-project-genesis-addin.h
+/* gbp-create-project-application-addin.h
  *
- * Copyright 2016-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_CREATE_PROJECT_GENESIS_ADDIN (gbp_create_project_genesis_addin_get_type())
+#define GBP_TYPE_CREATE_PROJECT_APPLICATION_ADDIN (gbp_create_project_application_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCreateProjectGenesisAddin, gbp_create_project_genesis_addin, GBP, CREATE_PROJECT_GENESIS_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpCreateProjectApplicationAddin, gbp_create_project_application_addin, GBP, CREATE_PROJECT_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS

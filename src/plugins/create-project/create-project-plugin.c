@@ -1,4 +1,4 @@
-/* gbp-create-project-plugin.c
+/* create-project-plugin.c
  *
  * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,19 +18,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#define G_LOG_DOMAIN "create-project-plugin"
+
+#include "config.h"
+
+#include <libide-greeter.h>
 #include <libpeas/peas.h>
 
-#include "gbp-create-project-genesis-addin.h"
-#include "gbp-create-project-tool.h"
+#include "gbp-create-project-application-addin.h"
+#include "gbp-create-project-workspace-addin.h"
 
 void
-gbp_create_project_register_types (PeasObjectModule *module)
+_gbp_create_project_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_APPLICATION_TOOL,
-                                              GBP_TYPE_CREATE_PROJECT_TOOL);
+                                              IDE_TYPE_APPLICATION_ADDIN,
+                                              GBP_TYPE_CREATE_PROJECT_APPLICATION_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_GENESIS_ADDIN,
-                                              GBP_TYPE_CREATE_PROJECT_GENESIS_ADDIN);
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_CREATE_PROJECT_WORKSPACE_ADDIN);
 }

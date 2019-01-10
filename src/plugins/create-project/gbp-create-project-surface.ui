@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpCreateProjectWidget" parent="GtkBin">
+  <template class="GbpCreateProjectSurface" parent="IdeSurface">
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">true</property>
@@ -22,7 +22,6 @@
                 <property name="column-spacing">12</property>
                 <property name="row-spacing">24</property>
                 <property name="visible">true</property>
-
                 <child>
                   <object class="GtkLabel" id="project_name_label">
                     <property name="halign">end</property>
@@ -42,7 +41,6 @@
                     <property name="visible">true</property>
                     <child>
                       <object class="GtkEntry" id="project_name_entry">
-                        <property name="activates-default">true</property>
                         <property name="width-chars">50</property>
                         <property name="expand">true</property>
                         <property name="visible">true</property>
@@ -69,7 +67,51 @@
                     <property name="row">0</property>
                   </packing>
                 </child>
-
+                <child>
+                  <object class="GtkLabel" id="app_id_label">
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Application ID</property>
+                    <property name="valign">start</property>
+                    <property name="visible">true</property>
+                  </object>
+                  <packing>
+                    <property name="column">left</property>
+                    <property name="row">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">6</property>
+                    <property name="orientation">vertical</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkEntry" id="app_id_entry">
+                        <property name="width-chars">50</property>
+                        <property name="expand">true</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="xalign">0.0</property>
+                        <property name="wrap">true</property>
+                        <property name="visible">true</property>
+                        <property name="max-width-chars">60</property>
+                        <property name="label" translatable="yes">The Application ID is a reverse domain-name identifier used to uniquely identify your application such as “org.gnome.Builder”.</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                        <attributes>
+                          <attribute name="scale" value="0.833333"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="column">center</property>
+                    <property name="row">1</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkLabel" id="project_location_label">
                     <property name="halign">end</property>
@@ -79,7 +121,7 @@
                   </object>
                   <packing>
                     <property name="column">left</property>
-                    <property name="row">1</property>
+                    <property name="row">2</property>
                   </packing>
                 </child>
                 <child>
@@ -113,7 +155,7 @@
                   </object>
                   <packing>
                     <property name="column">center</property>
-                    <property name="row">1</property>
+                    <property name="row">2</property>
                   </packing>
                 </child>
 
@@ -126,7 +168,7 @@
                   </object>
                   <packing>
                     <property name="column">left</property>
-                    <property name="row">2</property>
+                    <property name="row">3</property>
                   </packing>
                 </child>
                 <child>
@@ -136,7 +178,7 @@
                   </object>
                   <packing>
                     <property name="column">center</property>
-                    <property name="row">2</property>
+                    <property name="row">3</property>
                   </packing>
                 </child>
 
@@ -149,7 +191,7 @@
                   </object>
                   <packing>
                     <property name="column">left</property>
-                    <property name="row">3</property>
+                    <property name="row">4</property>
                   </packing>
                 </child>
                 <child>
@@ -170,7 +212,7 @@
                   </object>
                   <packing>
                     <property name="column">center</property>
-                    <property name="row">3</property>
+                    <property name="row">4</property>
                   </packing>
                 </child>
 
@@ -182,7 +224,7 @@
                   </object>
                   <packing>
                     <property name="column">left</property>
-                    <property name="row">4</property>
+                    <property name="row">5</property>
                   </packing>
                 </child>
                 <child>
@@ -214,7 +256,7 @@
                   </object>
                   <packing>
                     <property name="column">center</property>
-                    <property name="row">4</property>
+                    <property name="row">5</property>
                   </packing>
                 </child>
                 <child>
@@ -243,7 +285,7 @@
                   </object>
                   <packing>
                     <property name="column">right</property>
-                    <property name="row">3</property>
+                    <property name="row">4</property>
                   </packing>
                 </child>
                 <child>
@@ -272,7 +314,32 @@
                   </object>
                   <packing>
                     <property name="column">right</property>
-                    <property name="row">2</property>
+                    <property name="row">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="margin-top">12</property>
+                    <property name="hexpand">true</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkButton" id="create_button">
+                        <property name="label" translatable="yes">Create Project</property>
+                        <property name="halign">end</property>
+                        <property name="visible">true</property>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="pack-type">end</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="column">1</property>
+                    <property name="row">6</property>
                   </packing>
                 </child>
               </object>
@@ -283,7 +350,7 @@
                 <property name="expand">true</property>
                 <property name="valign">start</property>
                 <property name="spacing">12</property>
-                <property name="border-width">32</property>
+                <property name="margin-top">24</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkLabel">
@@ -319,6 +386,7 @@
     <property name="mode">vertical</property>
     <widgets>
       <widget name="project_name_label"/>
+      <widget name="app_id_label"/>
       <widget name="project_name_entry"/>
       <widget name="project_location_label"/>
       <widget name="license_label"/>
