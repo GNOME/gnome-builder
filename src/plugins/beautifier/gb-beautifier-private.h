@@ -20,27 +20,26 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <libide-editor.h>
 
-#include "ide.h"
 #include "gb-beautifier-editor-addin.h"
 
 G_BEGIN_DECLS
 
 struct _GbBeautifierEditorAddin
 {
-  GObject                parent_instance;
+  GObject            parent_instance;
 
-  IdeContext            *context;
-  IdeEditorPerspective  *editor;
-  IdeLayoutView         *current_view;
-  GArray                *entries;
+  IdeContext        *context;
+  IdeEditorSurface  *editor;
+  IdePage           *current_view;
+  GArray            *entries;
 
-  gchar                 *tmp_dir;
+  gchar             *tmp_dir;
 
-  gboolean               has_default;
+  gboolean           has_default;
 };
 
-GbBeautifierEditorAddin    *gb_beautifier_editor_addin_get_editor_perspective    (GbBeautifierEditorAddin *self);
+GbBeautifierEditorAddin *gb_beautifier_editor_addin_get_editor_surface (GbBeautifierEditorAddin *self);
 
 G_END_DECLS

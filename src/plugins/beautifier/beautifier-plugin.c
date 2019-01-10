@@ -1,4 +1,4 @@
-/* gb-beautifier-plugin.c
+/* beautifier-plugin.c
  *
  * Copyright 2016 sebastien lafargue <slafargue@gnome.org>
  *
@@ -18,13 +18,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include "config.h"
+
+#include <libide-editor.h>
 #include <libpeas/peas.h>
 
 #include "gb-beautifier-editor-addin.h"
 
-void
-gb_beautifier_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gb_beautifier_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,

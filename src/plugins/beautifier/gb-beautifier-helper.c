@@ -24,7 +24,7 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtksourceview/gtksource.h>
-#include <ide.h>
+#include <libide-editor.h>
 #include <string.h>
 
 #include "gb-beautifier-helper.h"

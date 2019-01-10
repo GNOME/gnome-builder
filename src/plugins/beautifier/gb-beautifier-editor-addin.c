@@ -26,7 +26,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gb-beautifier-editor-addin.h"
 #include "gb-beautifier-helper.h"
@@ -64,7 +64,7 @@ view_activate_beautify_action_cb (GSimpleAction *action,
                                   gpointer       user_data)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)user_data;
-  IdeEditorView *view;
+  IdeEditorPage *view;
   IdeSourceView *source_view;
   GtkTextBuffer *buffer;
   GCancellable *cancellable;
@@ -79,10 +79,10 @@ view_activate_beautify_action_cb (GSimpleAction *action,
   g_assert (G_IS_SIMPLE_ACTION (action));
 
   view = g_object_get_data (G_OBJECT (action), "gb-beautifier-editor-addin");
-  if (view == NULL || !IDE_IS_EDITOR_VIEW (view))
+  if (view == NULL || !IDE_IS_EDITOR_PAGE (view))
     return;
 
-  source_view = ide_editor_view_get_view (view);
+  source_view = ide_editor_page_get_view (view);
   if (!GTK_SOURCE_IS_VIEW (source_view))
     {
       ide_object_warning (self, _("Beautifier Plugin: the view is not a GtkSourceView"));
@@ -277,14 +277,14 @@ static void
 setup_view_cb (GtkWidget               *widget,
                GbBeautifierEditorAddin *self)
 {
-  IdeEditorView *view = (IdeEditorView *)widget;
+  IdeEditorPage *view = (IdeEditorPage *)widget;
   IdeSourceView *source_view;
   GActionGroup *actions;
   GAction *action;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
 
-  if (!IDE_IS_EDITOR_VIEW (view))
+  if (!IDE_IS_EDITOR_PAGE (view))
     return;
 
   actions = gtk_widget_get_action_group (GTK_WIDGET (view), "view");
@@ -300,7 +300,7 @@ setup_view_cb (GtkWidget               *widget,
 
   g_object_set_data (G_OBJECT (view), "gb-beautifier-editor-addin", self);
 
-  source_view = ide_editor_view_get_view (view);
+  source_view = ide_editor_page_get_view (view);
   g_signal_connect_object (source_view,
                            "populate-popup",
                            G_CALLBACK (view_populate_popup),
@@ -317,12 +317,12 @@ static void
 cleanup_view_cb (GtkWidget               *widget,
                  GbBeautifierEditorAddin *self)
 {
-  IdeEditorView *view = (IdeEditorView *)widget;
+  IdeEditorPage *view = (IdeEditorPage *)widget;
   GActionGroup *actions;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
 
-  if (!IDE_IS_EDITOR_VIEW (view))
+  if (!IDE_IS_EDITOR_PAGE (view))
     return;
 
   if (NULL != (actions = gtk_widget_get_action_group (GTK_WIDGET (view), "view")))
@@ -385,7 +385,7 @@ gb_beautifier_editor_addin_async_cb (GObject      *object,
   if (!self->has_default)
     set_default_keybinding (self, "view.beautify-default::none");
 
-  ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)setup_view_cb, self);
+  ide_surface_foreach_page (IDE_SURFACE (self->editor), (GtkCallback)setup_view_cb, self);
 
   add_shortcut_window_entry (self);
 }
@@ -421,7 +421,7 @@ gb_beautifier_editor_addin_reap_cb (GObject      *object,
 
 static void
 gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
-                                 IdeEditorPerspective *editor)
+                                 IdeEditorSurface *editor)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)addin;
   IdeWorkbench *workbench;
@@ -429,7 +429,7 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
   g_autoptr (GFile) tmp_file = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
   g_set_weak_pointer (&self->editor, editor);
   workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
@@ -451,17 +451,17 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
 }
 
 static void
-gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
-                                   IdeEditorPerspective *editor)
+gb_beautifier_editor_addin_unload (IdeEditorAddin   *addin,
+                                   IdeEditorSurface *editor)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)addin;
   GbBeautifierConfigEntry *entry;
   g_autoptr (GFile) tmp_file = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
-  ide_perspective_views_foreach (IDE_PERSPECTIVE (self->editor), (GtkCallback)cleanup_view_cb, self);
+  ide_surface_foreach_page (IDE_SURFACE (self->editor), (GtkCallback)cleanup_view_cb, self);
   if (self->entries != NULL)
     {
       for (guint i = 0; i < self->entries->len; i++)
@@ -485,19 +485,19 @@ gb_beautifier_editor_addin_unload (IdeEditorAddin       *addin,
 }
 
 static void
-gb_beautifier_editor_addin_view_set (IdeEditorAddin *addin,
-                                     IdeLayoutView  *view)
+gb_beautifier_editor_addin_page_set (IdeEditorAddin *addin,
+                                     IdePage  *view)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)addin;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+  g_assert (!view || IDE_IS_PAGE (view));
 
   /* If there is currently a view set, and this is
    * a new view, then we want to clean it up.
    */
 
-  if (!IDE_IS_EDITOR_VIEW (view))
+  if (!IDE_IS_EDITOR_PAGE (view))
     return;
 
   if (self->current_view != NULL)
@@ -532,5 +532,5 @@ editor_addin_iface_init (IdeEditorAddinInterface *iface)
 {
   iface->load = gb_beautifier_editor_addin_load;
   iface->unload = gb_beautifier_editor_addin_unload;
-  iface->view_set = gb_beautifier_editor_addin_view_set;
+  iface->page_set = gb_beautifier_editor_addin_page_set;
 }
