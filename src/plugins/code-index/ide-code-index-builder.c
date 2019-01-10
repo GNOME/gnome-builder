@@ -22,14 +22,16 @@
 #define G_LOG_DOMAIN "ide-code-index-builder"
 
 #include <dazzle.h>
+#include <libpeas/peas.h>
+#include <libide-vcs.h>
 #include <string.h>
 
 #include "ide-code-index-builder.h"
+#include "gbp-code-index-workbench-addin.h"
 
 struct _IdeCodeIndexBuilder
 {
   IdeObject            parent;
-  IdeCodeIndexService *service;
   IdeCodeIndexIndex   *index;
 };
 
@@ -103,7 +105,6 @@ typedef struct
 enum {
   PROP_0,
   PROP_INDEX,
-  PROP_SERVICE,
   N_PROPS
 };
 
@@ -301,7 +302,6 @@ ide_code_index_builder_dispose (GObject *object)
   IdeCodeIndexBuilder *self = (IdeCodeIndexBuilder *)object;
 
   g_clear_object (&self->index);
-  g_clear_object (&self->service);
 
   G_OBJECT_CLASS (ide_code_index_builder_parent_class)->dispose (object);
 }
@@ -318,10 +318,6 @@ ide_code_index_builder_get_property (GObject    *object,
     {
     case PROP_INDEX:
       g_value_set_object (value, self->index);
-      break;
-
-    case PROP_SERVICE:
-      g_value_set_object (value, self->service);
       break;
 
     default:
@@ -341,10 +337,6 @@ ide_code_index_builder_set_property (GObject      *object,
     {
     case PROP_INDEX:
       self->index = g_value_dup_object (value);
-      break;
-
-    case PROP_SERVICE:
-      self->service = g_value_dup_object (value);
       break;
 
     default:
@@ -368,13 +360,6 @@ ide_code_index_builder_class_init (IdeCodeIndexBuilderClass *klass)
                          IDE_TYPE_CODE_INDEX_INDEX,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  properties [PROP_SERVICE] =
-    g_param_spec_object ("service",
-                         "Service",
-                         "The service to query for various build information",
-                         IDE_TYPE_CODE_INDEX_SERVICE,
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -384,18 +369,15 @@ ide_code_index_builder_init (IdeCodeIndexBuilder *self)
 }
 
 IdeCodeIndexBuilder *
-ide_code_index_builder_new (IdeContext          *context,
-                            IdeCodeIndexService *service,
-                            IdeCodeIndexIndex   *index)
+ide_code_index_builder_new (IdeObject         *parent,
+                            IdeCodeIndexIndex *index)
 {
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-  g_return_val_if_fail (IDE_IS_CODE_INDEX_SERVICE (service), NULL);
+  g_return_val_if_fail (IDE_IS_OBJECT (parent), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_INDEX (index), NULL);
 
   return g_object_new (IDE_TYPE_CODE_INDEX_BUILDER,
-                       "context", context,
-                       "service", service,
                        "index", index,
+                       "parent", parent,
                        NULL);
 }
 
@@ -780,7 +762,7 @@ get_changes_async (IdeCodeIndexBuilder *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
+  vcs = ide_vcs_from_context (context);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, get_changes_async);
@@ -821,8 +803,6 @@ get_changes_finish (IdeCodeIndexBuilder  *self,
  * @fuzzy_builder: the fuzzy index builder to append
  *
  * This will incrementally add entries to the builder.
- *
- * Since: 3.32
  */
 static void
 add_entries_to_index (GPtrArray               *entries,
@@ -1155,6 +1135,7 @@ index_directory_async (IdeCodeIndexBuilder *self,
                        GAsyncReadyCallback  callback,
                        gpointer             user_data)
 {
+  g_autoptr(GbpCodeIndexWorkbenchAddin) addin = NULL;
   g_autoptr(IdeTask) task = NULL;
   IndexDirectoryData *idd;
   GHashTableIter iter;
@@ -1186,24 +1167,24 @@ index_directory_async (IdeCodeIndexBuilder *self,
 
   idd->n_active++;
 
+  addin = GBP_CODE_INDEX_WORKBENCH_ADDIN (ide_object_ref_parent (IDE_OBJECT (self)));
+
   while (g_hash_table_iter_next (&iter, &k, &v))
     {
-      IdeFile *file = k;
+      GFile *file = k;
       const gchar * const *file_flags = v;
-      const gchar *path = ide_file_get_path (file);
-      GFile *gfile = ide_file_get_file (file);
+      const gchar *path = g_file_peek_path (file);
       IdeCodeIndexer *indexer;
 
-      g_assert (IDE_IS_FILE (file));
-      g_assert (G_IS_FILE (gfile));
+      g_assert (G_IS_FILE (file));
       g_assert (path != NULL);
-      g_assert (IDE_IS_CODE_INDEX_SERVICE (self->service));
+      g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (addin));
 
-      if ((indexer = ide_code_index_service_get_code_indexer (self->service, path)))
+      if ((indexer = gbp_code_index_workbench_addin_get_code_indexer (addin, path)))
         {
           idd->n_active++;
           ide_code_indexer_index_file_async (indexer,
-                                             gfile,
+                                             file,
                                              file_flags,
                                              cancellable,
                                              index_directory_index_file_cb,
@@ -1427,9 +1408,9 @@ ide_code_index_builder_build_async (IdeCodeIndexBuilder *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  build_system = ide_build_system_from_context (context);
+  vcs = ide_vcs_from_context (context);
+  workdir = ide_vcs_get_workdir (vcs);
   relative = g_file_get_relative_path (workdir, directory);
   index_dir = ide_context_cache_file (context, "code-index", relative, NULL);
 

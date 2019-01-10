@@ -24,7 +24,10 @@
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 #include <libgit2-glib/ggit.h>
-#include <ide.h>
+#include <libide-greeter.h>
+#include <libide-gui.h>
+#include <libide-threading.h>
+#include <libide-vcs.h>
 
 #include "gbp-flatpak-clone-widget.h"
 #include "gbp-flatpak-sources.h"
@@ -33,7 +36,7 @@
 
 struct _GbpFlatpakCloneWidget
 {
-  GtkBin          parent_instance;
+  IdeSurface      parent_instance;
 
   GtkProgressBar *clone_progress;
 
@@ -54,12 +57,12 @@ typedef enum {
 
 typedef struct
 {
-  SourceType type;
-  IdeVcsUri  *uri;
-  gchar      *branch;
-  gchar      *sha;
-  gchar      *name;
-  gchar     **patches;
+  SourceType   type;
+  IdeVcsUri   *uri;
+  gchar       *branch;
+  gchar       *sha;
+  gchar       *name;
+  gchar      **patches;
 } ModuleSource;
 
 typedef struct
@@ -76,7 +79,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (GbpFlatpakCloneWidget, gbp_flatpak_clone_widget, GTK_TYPE_BIN)
+G_DEFINE_TYPE (GbpFlatpakCloneWidget, gbp_flatpak_clone_widget, IDE_TYPE_SURFACE)
 
 static void
 module_source_free (void *data)
@@ -122,24 +125,33 @@ static void
 gbp_flatpak_clone_widget_set_manifest (GbpFlatpakCloneWidget *self,
                                        const gchar           *manifest)
 {
-  gchar *ptr;
+  g_autofree gchar *name = NULL;
+  g_autofree gchar *title = NULL;
+  const gchar *ptr;
 
-  g_free (self->manifest);
-  g_free (self->app_id_override);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (self));
+  g_assert (manifest != NULL);
+
+  g_clear_pointer (&self->manifest, g_free);
+  g_clear_pointer (&self->app_id_override, g_free);
+
+  name = g_path_get_basename (manifest);
+  /* translators: %s is replaced with the name of the flatpak manifest */
+  title = g_strdup_printf (_("Cloning project %s"), name);
+  ide_surface_set_title (IDE_SURFACE (self), title);
 
   /* if the filename does not end with .json, just set it right away,
    * even if it may fail later.
    */
-  ptr = g_strrstr (manifest, ".json");
-  if (!ptr)
+  if (!(ptr = g_strrstr (manifest, ".json")))
     {
       self->manifest = g_strdup (manifest);
       return;
     }
 
   /* search for the first '+' after the .json extension */
-  ptr = strchr (ptr, '+');
-  if (!ptr)
+  if (!(ptr = strchr (ptr, '+')))
     {
       self->manifest = g_strdup (manifest);
       return;
@@ -230,7 +242,7 @@ gbp_flatpak_clone_widget_class_init (GbpFlatpakCloneWidgetClass *klass)
                                                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
 
   gtk_widget_class_set_css_name (widget_class, "flatpakclonewidget");
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/flatpak-plugin/gbp-flatpak-clone-widget.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/flatpak/gbp-flatpak-clone-widget.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpFlatpakCloneWidget, clone_progress);
 }
 
@@ -244,21 +256,30 @@ gbp_flatpak_clone_widget_init (GbpFlatpakCloneWidget *self)
 static gboolean
 open_after_timeout (gpointer user_data)
 {
+  g_autoptr(IdeProjectInfo) project_info = NULL;
   g_autoptr(IdeTask) task = user_data;
-  DownloadRequest *req;
   GbpFlatpakCloneWidget *self;
-  IdeWorkbench *workbench;
+  DownloadRequest *req;
+  GtkWidget *workspace;
 
   IDE_ENTRY;
 
   req = ide_task_get_task_data (task);
   self = ide_task_get_source_object (task);
+
   g_assert (GBP_IS_FLATPAK_CLONE_WIDGET (self));
+  g_assert (req != NULL);
+  g_assert (G_IS_FILE (req->project_file));
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  g_assert (IDE_IS_WORKBENCH (workbench));
+  /* Maybe we were shut mid-operation? */
+  if (!(workspace = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_GREETER_WORKSPACE)))
+    IDE_RETURN (G_SOURCE_REMOVE);
 
-  ide_workbench_open_project_async (workbench, req->project_file, NULL, NULL, NULL);
+  project_info = ide_project_info_new ();
+  ide_project_info_set_file (project_info, req->project_file);
+  ide_project_info_set_directory (project_info, req->project_file);
+
+  ide_greeter_workspace_open_project (IDE_GREETER_WORKSPACE (workspace), project_info);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -370,7 +391,6 @@ download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
       g_autoptr(GgitObject) parsed_rev = NULL;
       g_autoptr(GgitRemoteCallbacks) callbacks = NULL;
       g_autoptr(GgitRepository) repository = NULL;
-      g_autoptr(IdeProgress) progress = NULL;
       GType git_callbacks_type;
 
       /* First, try to open an existing repository at this path */
@@ -387,16 +407,19 @@ download_flatpak_sources_if_required (GbpFlatpakCloneWidget  *self,
 
       if (repository == NULL)
         {
+          g_autoptr(IdeNotification) progress = ide_notification_new ();
+
           /* HACK: we don't want libide to depend on libgit2 just yet, so for
            * now, we just lookup the GType of the object we need from the git
            * plugin by name.
            */
-          git_callbacks_type = g_type_from_name ("IdeGitRemoteCallbacks");
+          git_callbacks_type = g_type_from_name ("GbpGitRemoteCallbacks");
           g_assert (git_callbacks_type != 0);
 
-          callbacks = g_object_new (git_callbacks_type, NULL);
-          g_object_get (callbacks, "progress", &progress, NULL);
-          g_object_bind_property (progress, "fraction", self->clone_progress, "fraction", 0);
+          callbacks = g_object_new (git_callbacks_type,
+                                    "progress", progress,
+                                    NULL);
+          g_object_bind_property (progress, "progress", self->clone_progress, "fraction", 0);
 
           fetch_options = ggit_fetch_options_new ();
           ggit_fetch_options_set_remote_callbacks (fetch_options, callbacks);
@@ -745,8 +768,7 @@ gbp_flatpak_clone_widget_clone_async (GbpFlatpakCloneWidget   *self,
         }
     }
 
-  destination = ide_application_get_projects_directory (IDE_APPLICATION_DEFAULT);
-  g_assert (G_IS_FILE (destination));
+  destination = g_file_new_for_path (ide_get_projects_dir ());
 
   if (self->child_name)
     {

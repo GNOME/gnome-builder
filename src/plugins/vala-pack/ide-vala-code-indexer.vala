@@ -34,7 +34,7 @@ namespace Ide
 			throws GLib.Error
 		{
 			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
+			var service = Ide.ValaService.from_context (context);
 			var index = service.index;
 			var tree = index.get_symbol_tree_sync (file, cancellable);
 
@@ -55,18 +55,18 @@ namespace Ide
 			return ret;
 		}
 
-		public async string generate_key_async (Ide.SourceLocation location,
+		public async string generate_key_async (Ide.Location location,
 		                                        string[]? build_flags,
 		                                        GLib.Cancellable? cancellable)
 			throws GLib.Error
 		{
 			var context = this.get_context ();
-			var service = (Ide.ValaService)context.get_service_typed (typeof (Ide.ValaService));
+			var service = Ide.ValaService.from_context (context);
 			var index = service.index;
 			var file = location.get_file ();
 			var line = location.get_line () + 1;
 			var column = location.get_line_offset () + 1;
-			Vala.Symbol? symbol = yield index.find_symbol_at (file.get_file (), (int)line, (int)column);
+			Vala.Symbol? symbol = yield index.find_symbol_at (file, (int)line, (int)column);
 
 			if (symbol == null)
 				throw new GLib.IOError.FAILED ("failed to locate symbol");

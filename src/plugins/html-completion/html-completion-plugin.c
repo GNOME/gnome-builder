@@ -18,13 +18,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include "config.h"
+
+#include <libide-sourceview.h>
 #include <libpeas/peas.h>
 
 #include "ide-html-completion-provider.h"
 
-void
-ide_html_completion_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_ide_html_completion_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_COMPLETION_PROVIDER,

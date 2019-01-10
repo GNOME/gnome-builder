@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "vcs/ide-vcs-initializer.h"
+#include "ide-vcs-initializer.h"
 
 G_DEFINE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, G_TYPE_OBJECT)
 

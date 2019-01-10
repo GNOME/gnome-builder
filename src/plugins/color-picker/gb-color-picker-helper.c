@@ -22,7 +22,7 @@
 
 #include <libpeas/peas.h>
 #include "gb-color-picker-private.h"
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gb-color-picker-helper.h"
 

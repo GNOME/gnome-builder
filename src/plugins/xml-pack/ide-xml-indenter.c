@@ -20,8 +20,10 @@
 
 #define G_LOG_DOMAIN "ide-xml-indenter"
 
-#include <libpeas/peas.h>
 #include <gtksourceview/gtksource.h>
+#include <libpeas/peas.h>
+#include <libide-code.h>
+#include <libide-sourceview.h>
 #include <string.h>
 
 #include "ide-xml-indenter.h"

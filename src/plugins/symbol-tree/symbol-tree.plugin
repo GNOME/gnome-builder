@@ -1,9 +1,10 @@
 [Plugin]
-Module=symbol-tree-plugin
-Name=Symbol Tree
-Description=Provides a Symbol Tree for the currently focused document
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
-Depends=editor
 Builtin=true
-Embedded=gbp_symbol_tree_register_types
+Copyright=Copyright © 2015-2018 Christian Hergert
+Depends=editor;
+Description=Provides a Symbol Tree for the currently focused document
+Embedded=_gbp_symbol_tree_register_types
+Hidden=true
+Module=symbol-tree
+Name=Symbol Tree

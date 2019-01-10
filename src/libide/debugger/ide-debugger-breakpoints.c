@@ -26,8 +26,8 @@
 
 #include "ide-debug.h"
 
-#include "debugger/ide-debugger-breakpoints.h"
-#include "debugger/ide-debugger-private.h"
+#include "ide-debugger-breakpoints.h"
+#include "ide-debugger-private.h"
 
 /**
  * SECTION:ide-debugger-breakpoints

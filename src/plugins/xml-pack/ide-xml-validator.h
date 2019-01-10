@@ -23,7 +23,7 @@
 #include <glib-object.h>
 #include <libxml/parser.h>
 
-#include <ide.h>
+#include <libide-code.h>
 #include "ide-xml-schema-cache-entry.h"
 
 G_BEGIN_DECLS
@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeXmlValidator, ide_xml_validator, IDE, XML_VALIDATOR, IdeObject)
 
-IdeXmlValidator       *ide_xml_validator_new        (IdeContext       *context);
 IdeXmlSchemaKind       ide_xml_validator_get_kind   (IdeXmlValidator  *self);
 gboolean               ide_xml_validator_set_schema (IdeXmlValidator  *self,
                                                      IdeXmlSchemaKind  kind,

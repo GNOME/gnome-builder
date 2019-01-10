@@ -141,14 +141,12 @@ gbp_sysroot_toolchain_provider_try_poky (GbpSysrootToolchainProvider *self,
       g_autofree gchar *sdk_pkg_config_path = NULL;
       g_autofree gchar *qemu_static_name = NULL;
       g_autofree gchar *qemu_static_path = NULL;
-      IdeContext *context;
 
       sdk_file = g_file_new_for_path (sdk_path);
       sdk_canonical_path = g_file_get_path (sdk_file);
       toolchain_id = g_strdup_printf ("sysroot:%s", sdk_canonical_path);
       display_name = g_strdup_printf (_("%s (Sysroot SDK)"), sdk_canonical_path);
-      context = ide_object_get_context (IDE_OBJECT (self));
-      toolchain = ide_simple_toolchain_new (context, toolchain_id, display_name);
+      toolchain = ide_simple_toolchain_new (toolchain_id, display_name);
       ide_toolchain_set_host_triplet (IDE_TOOLCHAIN (toolchain), sysroot_triplet);
 
       sdk_tools_path = g_build_filename (sdk_canonical_path, "usr", "bin", sysroot_basename, NULL);
@@ -316,5 +314,5 @@ gbp_sysroot_toolchain_provider_class_init (GbpSysrootToolchainProviderClass *kla
 static void
 gbp_sysroot_toolchain_provider_init (GbpSysrootToolchainProvider *self)
 {
-  
+
 }

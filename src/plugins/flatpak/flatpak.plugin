@@ -1,9 +1,11 @@
 [Plugin]
-Module=flatpak-plugin
-Name=Flatpak
-Description=Provides support for building with Flatpak
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2016 Christian Hergert
 Builtin=true
-Depends=git-plugin;
-Embedded=gbp_flatpak_register_types
+Copyright=Copyright © 2016-2018 Christian Hergert
+Depends=buildui;editor;git;
+Description=Provides support for building with Flatpak
+Embedded=_gbp_flatpak_register_types
+Hidden=true
+Module=flatpak
+Name=Flatpak
+X-At-Startup=true

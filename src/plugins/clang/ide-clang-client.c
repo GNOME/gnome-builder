@@ -25,6 +25,9 @@
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 #include <glib-unix.h>
+#include <libide-code.h>
+#include <libide-foundry.h>
+#include <libide-vcs.h>
 #include <jsonrpc-glib.h>
 
 #include "ide-clang-client.h"
@@ -58,10 +61,7 @@ typedef struct
   gulong          cancel_id;
 } Call;
 
-static void service_iface_init (IdeServiceInterface *iface);
-
-G_DEFINE_TYPE_EXTENDED (IdeClangClient, ide_clang_client, IDE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SERVICE, service_iface_init))
+G_DEFINE_TYPE (IdeClangClient, ide_clang_client, IDE_TYPE_OBJECT)
 
 static void
 call_free (gpointer data)
@@ -104,7 +104,7 @@ ide_clang_client_sync_buffers (IdeClangClient *self)
    */
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  ufs = ide_context_get_unsaved_files (context);
+  ufs = ide_unsaved_files_from_context (context);
   ar = ide_unsaved_files_to_array (ufs);
   IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_unsaved_file_unref);
 
@@ -297,8 +297,7 @@ ide_clang_client_buffer_saved (IdeClangClient   *self,
                                IdeBuffer        *buffer,
                                IdeBufferManager *bufmgr)
 {
-  IdeFile *file;
-  GFile *gfile;
+  GFile *file;
 
   g_assert (IDE_IS_CLANG_CLIENT (self));
   g_assert (IDE_BUFFER (buffer));
@@ -311,20 +310,20 @@ ide_clang_client_buffer_saved (IdeClangClient   *self,
    */
 
   file = ide_buffer_get_file (buffer);
-  gfile = ide_file_get_file (file);
   if (self->seq_by_file != NULL)
-    g_hash_table_remove (self->seq_by_file, gfile);
+    g_hash_table_remove (self->seq_by_file, file);
 
   /* skip if thereis no peer */
   if (self->rpc_client == NULL)
     return;
 
-  if (gfile != NULL)
-    ide_clang_client_set_buffer_async (self, gfile, NULL, NULL, NULL, NULL);
+  if (file != NULL)
+    ide_clang_client_set_buffer_async (self, file, NULL, NULL, NULL, NULL);
 }
 
 static void
-ide_clang_client_constructed (GObject *object)
+ide_clang_client_parent_set (IdeObject *object,
+                             IdeObject *parent)
 {
   IdeClangClient *self = (IdeClangClient *)object;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
@@ -334,10 +333,16 @@ ide_clang_client_constructed (GObject *object)
   IdeVcs *vcs;
   GFile *workdir;
 
+  g_assert (IDE_IS_CLANG_CLIENT (self));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (parent == NULL)
+    return;
+
   context = ide_object_get_context (IDE_OBJECT (self));
-  bufmgr = ide_context_get_buffer_manager (context);
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  bufmgr = ide_buffer_manager_from_context (context);
+  vcs = ide_vcs_from_context (context);
+  workdir = ide_vcs_get_workdir (vcs);
 
   self->root_uri = g_object_ref (workdir);
 
@@ -376,12 +381,10 @@ ide_clang_client_constructed (GObject *object)
                            G_CALLBACK (ide_clang_client_buffer_saved),
                            self,
                            G_CONNECT_SWAPPED);
-
-  G_OBJECT_CLASS (ide_clang_client_parent_class)->constructed (object);
 }
 
 static void
-ide_clang_client_dispose (GObject *object)
+ide_clang_client_destroy (IdeObject *object)
 {
   IdeClangClient *self = (IdeClangClient *)object;
   GList *queued;
@@ -418,7 +421,7 @@ ide_clang_client_dispose (GObject *object)
 
   g_list_free_full (queued, g_object_unref);
 
-  G_OBJECT_CLASS (ide_clang_client_parent_class)->dispose (object);
+  IDE_OBJECT_CLASS (ide_clang_client_parent_class)->destroy (object);
 }
 
 static void
@@ -442,10 +445,12 @@ static void
 ide_clang_client_class_init (IdeClangClientClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_clang_client_constructed;
-  object_class->dispose = ide_clang_client_dispose;
   object_class->finalize = ide_clang_client_finalize;
+
+  i_object_class->parent_set = ide_clang_client_parent_set;
+  i_object_class->destroy = ide_clang_client_destroy;;
 }
 
 static void
@@ -817,7 +822,7 @@ ide_clang_client_find_nearest_scope_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&ret),
-                             (GDestroyNotify)ide_symbol_unref);
+                             g_object_unref);
 }
 
 void
@@ -912,7 +917,7 @@ ide_clang_client_locate_symbol_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&ret),
-                             (GDestroyNotify)ide_symbol_unref);
+                             g_object_unref);
 }
 
 void
@@ -985,20 +990,18 @@ ide_clang_client_get_symbol_tree_cb (GObject      *object,
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeContext *context;
   GFile *file;
 
   g_assert (IDE_IS_CLANG_CLIENT (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   file = ide_task_get_task_data (task);
 
   if (!ide_clang_client_call_finish (self, result, &reply, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
-    ide_task_return_object (task, ide_clang_symbol_tree_new (context, file, reply));
+    ide_task_return_object (task, ide_clang_symbol_tree_new (file, reply));
 }
 
 void
@@ -1082,7 +1085,7 @@ ide_clang_client_diagnose_cb (GObject      *object,
       return;
     }
 
-  ret = ide_diagnostics_new (NULL);
+  ret = ide_diagnostics_new ();
 
   g_variant_iter_init (&iter, reply);
 
@@ -1098,7 +1101,7 @@ ide_clang_client_diagnose_cb (GObject      *object,
 
   ide_task_return_pointer (task,
                            g_steal_pointer (&ret),
-                           (GDestroyNotify) ide_diagnostics_unref);
+                           g_object_unref);
 }
 
 void
@@ -1399,18 +1402,4 @@ ide_clang_client_set_buffer_finish (IdeClangClient  *self,
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
-}
-
-static void
-ide_clang_client_stop (IdeService *service)
-{
-  g_assert (IDE_IS_CLANG_CLIENT (service));
-
-  g_object_run_dispose (G_OBJECT (service));
-}
-
-static void
-service_iface_init (IdeServiceInterface *iface)
-{
-  iface->stop = ide_clang_client_stop;
 }

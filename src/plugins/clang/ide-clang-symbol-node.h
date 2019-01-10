@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
@@ -28,8 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeClangSymbolNode, ide_clang_symbol_node, IDE, CLANG_SYMBOL_NODE, IdeSymbolNode)
 
-IdeSymbolNode *ide_clang_symbol_node_new            (IdeContext         *context,
-                                                     GVariant           *variant);
+IdeSymbolNode *ide_clang_symbol_node_new            (GVariant           *variant);
 guint          ide_clang_symbol_node_get_n_children (IdeClangSymbolNode *self);
 IdeSymbolNode *ide_clang_symbol_node_get_nth_child  (IdeClangSymbolNode *self,
                                                      guint               nth);

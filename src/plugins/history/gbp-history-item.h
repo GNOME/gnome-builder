@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-editor.h>
 
 G_BEGIN_DECLS
 
@@ -28,12 +28,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpHistoryItem, gbp_history_item, GBP, HISTORY_ITEM, GObject)
 
-GbpHistoryItem    *gbp_history_item_new          (GtkTextMark    *mark);
-gchar             *gbp_history_item_get_label    (GbpHistoryItem *self);
-IdeSourceLocation *gbp_history_item_get_location (GbpHistoryItem *self);
-GFile             *gbp_history_item_get_file     (GbpHistoryItem *self);
-guint              gbp_history_item_get_line     (GbpHistoryItem *self);
-gboolean           gbp_history_item_chain        (GbpHistoryItem *self,
-                                                  GbpHistoryItem *other);
+GbpHistoryItem *gbp_history_item_new          (GtkTextMark    *mark);
+gchar          *gbp_history_item_get_label    (GbpHistoryItem *self);
+IdeLocation    *gbp_history_item_get_location (GbpHistoryItem *self);
+GFile          *gbp_history_item_get_file     (GbpHistoryItem *self);
+guint           gbp_history_item_get_line     (GbpHistoryItem *self);
+gboolean        gbp_history_item_chain        (GbpHistoryItem *self,
+                                               GbpHistoryItem *other);
 
 G_END_DECLS

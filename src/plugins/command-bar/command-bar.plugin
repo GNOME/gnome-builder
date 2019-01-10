@@ -1,9 +1,11 @@
 [Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2014-2018 Christian Hergert
+Depends=editor;terminal;
+Description=Builder's workspace command-bar
+Embedded=_gbp_command_bar_register_types
+Hidden=true
 Module=command-bar
 Name=Command Bar
-Description=Provides a command bar at the bottom of the workbench window.
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
-Builtin=true
-Hidden=true
-Embedded=gb_command_bar_register_types
+X-Workspace-Kind=primary;editor;terminal;

@@ -20,9 +20,13 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_SEARCH_INSIDE) && !defined (IDE_SEARCH_COMPILATION)
+# error "Only <libide-search.h> can be included directly."
+#endif
 
-#include "ide-types.h"
+#include <libide-core.h>
+
+#include "ide-search-result.h"
 
 G_BEGIN_DECLS
 

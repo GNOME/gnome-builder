@@ -24,7 +24,8 @@
 
 #include <gio/gio.h>
 #include <gtksourceview/gtksource.h>
-#include <ide.h>
+#include <libide-foundry.h>
+#include <libide-vcs.h>
 #include <string.h>
 
 #include "ide-autotools-build-system.h"
@@ -204,7 +205,7 @@ invalidate_makecache_stage (gpointer data,
 static void
 evict_makecache (IdeContext *context)
 {
-  IdeBuildManager *build_manager = ide_context_get_build_manager (context);
+  IdeBuildManager *build_manager = ide_build_manager_from_context (context);
   IdeBuildPipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
 
   ide_build_pipeline_foreach_stage (pipeline, invalidate_makecache_stage, NULL);
@@ -215,12 +216,12 @@ looks_like_makefile (IdeBuffer *buffer)
 {
   GtkSourceLanguage *language;
   const gchar *path;
-  IdeFile *file;
+  GFile *file;
 
   g_assert (IDE_IS_BUFFER (buffer));
 
   file = ide_buffer_get_file (buffer);
-  path = ide_file_get_path (file);
+  path = g_file_peek_path (file);
 
   if (path != NULL)
     {
@@ -273,45 +274,32 @@ ide_autotools_build_system__vcs_changed_cb (IdeAutotoolsBuildSystem *self,
 }
 
 static void
-ide_autotools_build_system__context_loaded_cb (IdeAutotoolsBuildSystem *self,
-                                               IdeContext              *context)
-{
-  IdeVcs *vcs;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  vcs = ide_context_get_vcs (context);
-
-  g_signal_connect_object (vcs,
-                           "changed",
-                           G_CALLBACK (ide_autotools_build_system__vcs_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  IDE_EXIT;
-}
-
-static void
-ide_autotools_build_system_constructed (GObject *object)
+ide_autotools_build_system_parent_set (IdeObject *object,
+                                       IdeObject *parent)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
   IdeBufferManager *buffer_manager;
   IdeContext *context;
+  IdeVcs *vcs;
 
-  G_OBJECT_CLASS (ide_autotools_build_system_parent_class)->constructed (object);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (parent == NULL)
+    return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  buffer_manager = ide_context_get_buffer_manager (context);
+  buffer_manager = ide_buffer_manager_from_context (context);
   g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
 
-  g_signal_connect_object (context,
-                           "loaded",
-                           G_CALLBACK (ide_autotools_build_system__context_loaded_cb),
+  vcs = ide_vcs_from_context (context);
+
+  g_signal_connect_object (vcs,
+                           "changed",
+                           G_CALLBACK (ide_autotools_build_system__vcs_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -336,7 +324,7 @@ ide_autotools_build_system_constructed (GObject *object)
 static gint
 ide_autotools_build_system_get_priority (IdeBuildSystem *system)
 {
-  return -500;
+  return 0;
 }
 
 static void
@@ -443,7 +431,7 @@ ide_autotools_build_system_get_build_flags_execute_cb (GObject      *object,
 
 static void
 ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_system,
-                                                  IdeFile             *file,
+                                                  GFile               *file,
                                                   GCancellable        *cancellable,
                                                   GAsyncReadyCallback  callback,
                                                   gpointer             user_data)
@@ -456,12 +444,12 @@ ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_sys
   IDE_ENTRY;
 
   g_assert (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
-  g_assert (IDE_IS_FILE (file));
+  g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_autotools_build_system_get_build_flags_async);
-  ide_task_set_task_data (task, g_object_ref (ide_file_get_file (file)), g_object_unref);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   /*
    * To get the build flags for the file, we first need to get the makecache
@@ -472,10 +460,11 @@ ide_autotools_build_system_get_build_flags_async (IdeBuildSystem      *build_sys
    */
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
 
   ide_build_manager_execute_async (build_manager,
                                    IDE_BUILD_PHASE_CONFIGURE,
+                                   NULL,
                                    cancellable,
                                    ide_autotools_build_system_get_build_flags_execute_cb,
                                    g_steal_pointer (&task));
@@ -514,8 +503,8 @@ ide_autotools_build_system_get_builddir (IdeBuildSystem   *build_system,
    */
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  vcs = ide_vcs_from_context (context);
+  workdir = ide_vcs_get_workdir (vcs);
 
   if (!g_file_is_native (workdir))
     return NULL;
@@ -541,14 +530,14 @@ ide_autotools_build_system_get_display_name (IdeBuildSystem *build_system)
 }
 
 static void
-ide_autotools_build_system_finalize (GObject *object)
+ide_autotools_build_system_destroy (IdeObject *object)
 {
   IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)object;
 
   g_clear_pointer (&self->tarball_name, g_free);
   g_clear_object (&self->project_file);
 
-  G_OBJECT_CLASS (ide_autotools_build_system_parent_class)->finalize (object);
+  IDE_OBJECT_CLASS (ide_autotools_build_system_parent_class)->destroy (object);
 }
 
 static void
@@ -610,11 +599,13 @@ static void
 ide_autotools_build_system_class_init (IdeAutotoolsBuildSystemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_autotools_build_system_constructed;
-  object_class->finalize = ide_autotools_build_system_finalize;
   object_class->get_property = ide_autotools_build_system_get_property;
   object_class->set_property = ide_autotools_build_system_set_property;
+
+  i_object_class->parent_set = ide_autotools_build_system_parent_set;
+  i_object_class->destroy = ide_autotools_build_system_destroy;
 
   properties [PROP_TARBALL_NAME] =
     g_param_spec_string ("tarball-name",
@@ -728,28 +719,23 @@ ide_autotools_build_system_init_async (GAsyncInitable      *initable,
                                        GAsyncReadyCallback  callback,
                                        gpointer             user_data)
 {
-  IdeAutotoolsBuildSystem *system = (IdeAutotoolsBuildSystem *)initable;
+  IdeAutotoolsBuildSystem *self = (IdeAutotoolsBuildSystem *)initable;
   g_autoptr(IdeTask) task = NULL;
-  IdeContext *context;
-  GFile *project_file;
 
   IDE_ENTRY;
 
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (system));
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_SYSTEM (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = ide_task_new (initable, cancellable, callback, user_data);
+  task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_autotools_build_system_init_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  context = ide_object_get_context (IDE_OBJECT (system));
-  project_file = ide_context_get_project_file (context);
-
-  ide_autotools_build_system_discover_file_async (system,
-                                                  project_file,
+  ide_autotools_build_system_discover_file_async (self,
+                                                  self->project_file,
                                                   cancellable,
                                                   discover_file_cb,
-                                                  g_object_ref (task));
+                                                  g_steal_pointer (&task));
 
   IDE_EXIT;
 }

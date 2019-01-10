@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeNotificationsButton" parent="DzlProgressMenuButton">
+    <property name="show-progress">false</property>
+    <property name="popover">popover</property>
+  </template>
+  <object class="GtkPopover" id="popover">
+    <style>
+      <class name="notificationsbutton"/>
+    </style>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <property name="max-content-width">400</property>
+        <property name="min-content-width">400</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="propagate-natural-width">false</property>
+        <property name="propagate-natural-height">true</property>
+        <child>
+          <object class="GtkListBox" id="list_box">
+            <signal name="row-activated" handler="ide_notifications_button_row_activated" swapped="true" object="IdeNotificationsButton"/>
+            <property name="selection-mode">none</property>
+            <property name="visible">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
+
+
+

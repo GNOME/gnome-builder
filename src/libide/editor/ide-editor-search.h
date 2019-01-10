@@ -20,9 +20,12 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
+#if !defined (IDE_EDITOR_INSIDE) && !defined (IDE_EDITOR_COMPILATION)
+# error "Only <libide-editor.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <gtksourceview/gtksource.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -44,6 +47,8 @@ typedef enum
  *
  * This enum can be used to determine how the selection should be extending
  * when moving between the search results.
+ *
+ * Since: 3.32
  */
 typedef enum
 {

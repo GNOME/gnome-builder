@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <libide-core.h>
+
 #include "ide-ctags-completion-provider.h"
 
 G_BEGIN_DECLS

@@ -20,10 +20,12 @@
 
 #pragma once
 
-#include <libpeas/peas.h>
+#if !defined (IDE_PLUGINS_INSIDE) && !defined (IDE_PLUGINS_COMPILATION)
+# error "Only <libide-plugins.h> can be included directly."
+#endif
 
-#include "ide-object.h"
-#include "ide-version-macros.h"
+#include <libpeas/peas.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -38,7 +40,7 @@ typedef void (*IdeExtensionSetAdapterForeachFunc) (IdeExtensionSetAdapter *set,
                                                    gpointer                user_data);
 
 IDE_AVAILABLE_IN_3_32
-IdeExtensionSetAdapter *ide_extension_set_adapter_new                (IdeContext                        *context,
+IdeExtensionSetAdapter *ide_extension_set_adapter_new                (IdeObject                         *parent,
                                                                       PeasEngine                        *engine,
                                                                       GType                              interface_type,
                                                                       const gchar                       *key,

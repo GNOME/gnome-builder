@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeSearchEntry" parent="DzlSuggestionEntry">
+    <child internal-child="popover">
+      <object class="DzlSuggestionPopover">
+        <property name="title-ellipsize">middle</property>
+        <property name="subtitle-ellipsize">end</property>
+      </object>
+    </child>
+  </template>
+</interface>

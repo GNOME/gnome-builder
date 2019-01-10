@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "debugger/ide-debugger-library.h"
+#include "ide-debugger-library.h"
 
 typedef struct
 {

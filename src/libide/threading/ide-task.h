@@ -19,9 +19,11 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_THREADING_INSIDE) && !defined (IDE_THREADING_COMPILATION)
+# error "Only <libide-threading.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -167,8 +169,6 @@ void          ide_task_report_new_error          (gpointer              source_o
                                                   gint                  code,
                                                   const gchar          *format,
                                                   ...) G_GNUC_PRINTF (7, 8);
-IDE_AVAILABLE_IN_3_32
-void          ide_dump_tasks                     (void);
 
 #ifdef __GNUC__
 # define ide_task_new(self, cancellable, callback, user_data)                      \

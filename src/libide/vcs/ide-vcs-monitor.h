@@ -20,10 +20,14 @@
 
 #pragma once
 
-#include "ide-object.h"
-#include "ide-version-macros.h"
+#if !defined (IDE_VCS_INSIDE) && !defined (IDE_VCS_COMPILATION)
+# error "Only <libide-vcs.h> can be included directly."
+#endif
 
-#include "vcs/ide-vcs-file-info.h"
+#include <libide-core.h>
+
+#include "ide-vcs.h"
+#include "ide-vcs-file-info.h"
 
 G_BEGIN_DECLS
 
@@ -33,7 +37,17 @@ IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeVcsMonitor, ide_vcs_monitor, IDE, VCS_MONITOR, IdeObject)
 
 IDE_AVAILABLE_IN_3_32
-IdeVcsFileInfo *ide_vcs_monitor_get_info (IdeVcsMonitor *self,
+IdeVcsFileInfo *ide_vcs_monitor_ref_info (IdeVcsMonitor *self,
                                           GFile         *file);
+IDE_AVAILABLE_IN_3_32
+GFile          *ide_vcs_monitor_ref_root (IdeVcsMonitor *self);
+IDE_AVAILABLE_IN_3_32
+void            ide_vcs_monitor_set_root (IdeVcsMonitor *self,
+                                          GFile         *file);
+IDE_AVAILABLE_IN_3_32
+IdeVcs         *ide_vcs_monitor_ref_vcs  (IdeVcsMonitor *self);
+IDE_AVAILABLE_IN_3_32
+void            ide_vcs_monitor_set_vcs  (IdeVcsMonitor *self,
+                                          IdeVcs        *vcs);
 
 G_END_DECLS

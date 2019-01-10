@@ -20,11 +20,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gi
 import threading
 import os
-
-gi.require_version('Ide', '1.0')
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -39,6 +36,13 @@ _ATTRIBUTES = ",".join([
     Gio.FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON,
 ])
 
+class GradleBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.props.glob = 'build.gradle'
+        self.props.hint = 'gradle_plugin'
+        self.props.priority = 2000
+
 class GradleBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     project_file = GObject.Property(type=Gio.File)
 
@@ -48,32 +52,8 @@ class GradleBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_display_name(self):
         return 'Gradle'
 
-    def do_init_async(self, io_priority, cancellable, callback, data):
-        task = Gio.Task.new(self, cancellable, callback)
-
-        try:
-            # Maybe this is a gradlew
-            if self.props.project_file.get_basename() in ('build.gradle',):
-                task.return_boolean(True)
-                return
-
-            # Maybe this is a directory with a gradlew
-            if self.props.project_file.query_file_type(0) == Gio.FileType.DIRECTORY:
-                child = self.props.project_file.get_child('build.gradle')
-                if child.query_exists(None):
-                    self.props.project_file = child
-                    task.return_boolean(True)
-                    return
-        except Exception as ex:
-            task.return_error(ex)
-
-        task.return_error(Ide.NotSupportedError())
-
-    def do_init_finish(self, task):
-        return task.propagate_boolean()
-
     def do_get_priority(self):
-        return 500
+        return 2000
 
 class GradlePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
@@ -83,7 +63,7 @@ class GradlePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
     def do_load(self, pipeline):
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != GradleBuildSystem:
             return
@@ -153,7 +133,7 @@ class GradleBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
         task.set_priority(GLib.PRIORITY_LOW)
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != GradleBuildSystem:
             task.return_error(GLib.Error('Not gradle build system',
@@ -175,7 +155,7 @@ class GradleIdeTestProvider(Ide.TestProvider):
         task.set_priority(GLib.PRIORITY_LOW)
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != GradleBuildSystem:
             task.return_error(GLib.Error('Not gradle build system',
@@ -223,13 +203,13 @@ class GradleIdeTestProvider(Ide.TestProvider):
     def do_reload(self):
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != GradleBuildSystem:
             return
 
         # find all files in test directory
-        build_manager = context.get_build_manager()
+        build_manager = Ide.BuildManager.from_context(context)
         pipeline = build_manager.get_pipeline()
         srcdir = pipeline.get_srcdir()
         test_suite = Gio.File.new_for_path(os.path.join(srcdir, 'src/test/java'))
@@ -256,8 +236,9 @@ class GradleIdeTestProvider(Ide.TestProvider):
                                                     self.on_enumerator_loaded,
                                                     None)
                 else:
-                    #TODO Ask java through introspection for classes with TestCase and its public void methods 
-                    # or Annotation @Test methods
+                    # TODO: Ask java through introspection for classes with
+                    # TestCase and its public void methods or Annotation @Test
+                    # methods
                     result, contents, etag = gfile.load_contents()
                     tests = [x for x in str(contents).split('\\n') if 'public void' in x]
                     tests = [v.replace("()", "").replace("public void","").strip() for v in tests]

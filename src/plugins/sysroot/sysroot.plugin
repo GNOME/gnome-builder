@@ -1,8 +1,10 @@
 [Plugin]
-Module=sysroot-plugin
-Name=Sysroot Support
-Description=Provides sysroot support
 Authors=Corentin Noël <corentin.noel@collabora.com>
-Copyright=Copyright © 2018 Collabora Ltd.
 Builtin=true
-Embedded=gbp_sysroot_register_types
+Copyright=Copyright © 2018 Collabora Ltd.
+Depends=buildui;
+Description=Provides sysroot support
+Embedded=_gbp_sysroot_register_types
+Hidden=true
+Module=sysroot
+Name=Sysroot Support

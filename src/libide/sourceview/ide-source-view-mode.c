@@ -24,12 +24,11 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libide-core.h>
 #include <string.h>
 
-#include "ide-debug.h"
-
-#include "sourceview/ide-source-view.h"
-#include "sourceview/ide-source-view-mode.h"
+#include "ide-source-view.h"
+#include "ide-source-view-mode.h"
 
 struct _IdeSourceViewMode
 {

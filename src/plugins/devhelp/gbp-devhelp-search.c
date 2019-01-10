@@ -23,7 +23,7 @@
 
 #include <fcntl.h>
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-editor.h>
 #include <webkit2/webkit2.h>
 
 #include "gbp-devhelp-search.h"
@@ -95,7 +95,7 @@ gbp_devhelp_search_class_init (GbpDevhelpSearchClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/devhelp-plugin/gbp-devhelp-search.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/devhelp/gbp-devhelp-search.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpSearch, search_prev_button);
   gtk_widget_class_bind_template_child (widget_class, GbpDevhelpSearch, search_next_button);

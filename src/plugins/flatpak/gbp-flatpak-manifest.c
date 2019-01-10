@@ -343,12 +343,11 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   g_auto(GStrv) build_commands = NULL;
   g_auto(GStrv) post_install = NULL;
   const gchar *app_id_field = "app-id";
-  IdeContext *context;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GFile) workdir = NULL;
   JsonObject *root_obj;
   JsonObject *primary;
   JsonNode *root;
-  IdeVcs *vcs;
-  GFile *workdir;
   gsize len = 0;
 
   g_assert (GBP_IS_FLATPAK_MANIFEST (self));
@@ -377,9 +376,8 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   display_name = g_file_get_basename (self->file);
   ide_configuration_set_display_name (IDE_CONFIGURATION (self), display_name);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  workdir = ide_context_ref_workdir (context);
   dir_name = g_file_get_basename (workdir);
   root_obj = json_node_get_object (root);
 
@@ -655,12 +653,13 @@ gbp_flatpak_manifest_init (GbpFlatpakManifest *self)
 }
 
 GbpFlatpakManifest *
-gbp_flatpak_manifest_new (IdeContext  *context,
-                          GFile       *file,
+gbp_flatpak_manifest_new (GFile       *file,
                           const gchar *id)
 {
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (id != NULL, NULL);
+
   return g_object_new (GBP_TYPE_FLATPAK_MANIFEST,
-                       "context", context,
                        "id", id,
                        "file", file,
                        NULL);
@@ -672,8 +671,6 @@ gbp_flatpak_manifest_new (IdeContext  *context,
  * Gets the #GFile for the manifest.
  *
  * Returns: (transfer none): a #GFile
- *
- * Since: 3.32
  */
 GFile *
 gbp_flatpak_manifest_get_file (GbpFlatpakManifest *self)
@@ -688,8 +685,6 @@ gbp_flatpak_manifest_get_file (GbpFlatpakManifest *self)
  *
  * Gets the name of the primary module, which is usually the last
  * module of manifest.
- *
- * Since: 3.32
  */
 const gchar *
 gbp_flatpak_manifest_get_primary_module (GbpFlatpakManifest *self)
@@ -703,8 +698,6 @@ gbp_flatpak_manifest_get_primary_module (GbpFlatpakManifest *self)
  * gbp_flatpak_manifest_get_command:
  *
  * Gets the "command" specified in the manifest.
- *
- * Since: 3.32
  */
 const gchar *
 gbp_flatpak_manifest_get_command (GbpFlatpakManifest *self)
@@ -718,8 +711,6 @@ gbp_flatpak_manifest_get_command (GbpFlatpakManifest *self)
  * gbp_flatpak_manifest_get_build_args:
  *
  * Gets the "build-args" from the manifest as a string array.
- *
- * Since: 3.32
  */
 const gchar * const *
 gbp_flatpak_manifest_get_build_args (GbpFlatpakManifest *self)
@@ -733,8 +724,6 @@ gbp_flatpak_manifest_get_build_args (GbpFlatpakManifest *self)
  * gbp_flatpak_manifest_get_finish_args:
  *
  * Gets the "finish-args" from the manifest as a string array.
- *
- * Since: 3.32
  */
 const gchar * const *
 gbp_flatpak_manifest_get_finish_args (GbpFlatpakManifest *self)
@@ -748,8 +737,6 @@ gbp_flatpak_manifest_get_finish_args (GbpFlatpakManifest *self)
  * gbp_flatpak_manifest_get_sdk_extensions:
  *
  * Gets the "sdk-extensions" from the manifest as a string array.
- *
- * Since: 3.32
  */
 const gchar * const *
 gbp_flatpak_manifest_get_sdk_extensions (GbpFlatpakManifest *self)
@@ -764,8 +751,6 @@ gbp_flatpak_manifest_get_sdk_extensions (GbpFlatpakManifest *self)
  *
  * Gets the path for the manifest. This is equivalent to calling
  * g_file_get_path() with the result of gbp_flatpak_manifest_get_file().
- *
- * Since: 3.32
  */
 gchar *
 gbp_flatpak_manifest_get_path (GbpFlatpakManifest *self)

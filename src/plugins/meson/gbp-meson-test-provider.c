@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "gbp-meson-test-provider"
 
 #include <json-glib/json-glib.h>
+#include <libide-threading.h>
 
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-test.h"
@@ -287,7 +288,7 @@ gbp_meson_test_provider_reload (gpointer user_data)
    * Check that we're working with a meson build system.
    */
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
   if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
     IDE_RETURN (G_SOURCE_REMOVE);
 
@@ -295,7 +296,7 @@ gbp_meson_test_provider_reload (gpointer user_data)
    * Get access to the pipeline so we can create a launcher to
    * introspect meson from within the build environment.
    */
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
   if (pipeline == NULL)
     IDE_RETURN (G_SOURCE_REMOVE);
@@ -376,6 +377,7 @@ gbp_meson_test_provider_run_cb (GObject      *object,
     }
 
   ide_test_set_status (test, IDE_TEST_STATUS_SUCCESS);
+  ide_object_destroy (IDE_OBJECT (runner));
 
   ide_task_return_boolean (task, TRUE);
 }
@@ -522,18 +524,21 @@ gbp_meson_test_provider_run_finish (IdeTestProvider  *provider,
 }
 
 static void
-gbp_meson_test_provider_constructed (GObject *object)
+gbp_meson_test_provider_parent_set (IdeObject *object,
+                                    IdeObject *parent)
 {
   GbpMesonTestProvider *self = (GbpMesonTestProvider *)object;
   IdeBuildManager *build_manager;
   IdeContext *context;
 
   g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
 
-  G_OBJECT_CLASS (gbp_meson_test_provider_parent_class)->constructed (object);
+  if (parent == NULL)
+    return;
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
 
   g_signal_connect_object (build_manager,
                            "notify::pipeline",
@@ -560,10 +565,12 @@ static void
 gbp_meson_test_provider_class_init (GbpMesonTestProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
   IdeTestProviderClass *provider_class = IDE_TEST_PROVIDER_CLASS (klass);
 
-  object_class->constructed = gbp_meson_test_provider_constructed;
   object_class->dispose = gbp_meson_test_provider_dispose;
+
+  i_object_class->parent_set = gbp_meson_test_provider_parent_set;
 
   provider_class->run_async = gbp_meson_test_provider_run_async;
   provider_class->run_finish = gbp_meson_test_provider_run_finish;

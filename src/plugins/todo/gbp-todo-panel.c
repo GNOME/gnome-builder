@@ -21,7 +21,8 @@
 #define G_LOG_DOMAIN "gbp-todo-panel"
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-gui.h>
 
 #include "gbp-todo-item.h"
 #include "gbp-todo-panel.h"
@@ -96,7 +97,6 @@ gbp_todo_panel_row_activated (GbpTodoPanel      *self,
 {
   g_autoptr(GbpTodoItem) item = NULL;
   g_autoptr(GFile) file = NULL;
-  g_autoptr(IdeUri) uri = NULL;
   g_autofree gchar *fragment = NULL;
   IdeWorkbench *workbench;
   GtkTreeModel *model;
@@ -130,26 +130,26 @@ gbp_todo_panel_row_activated (GbpTodoPanel      *self,
       GFile *workdir;
 
       context = ide_workbench_get_context (workbench);
-      vcs = ide_context_get_vcs (context);
-      workdir = ide_vcs_get_working_directory (vcs);
+      vcs = ide_vcs_from_context (context);
+      workdir = ide_vcs_get_workdir (vcs);
       file = g_file_get_child (workdir, path);
     }
 
-  uri = ide_uri_new_from_file (file);
-
-  /* Set lineno info so that the editor can jump
-   * to the location of the TODO item. Our line number
-   * from the model is 1-based, and we need 0-based for
+  /* Set lineno info so that the editor can jump to the location of the TODO
+   * item. Our line number from the model is 1-based, and we need 0-based for
    * our API to open files.
    */
   lineno = gbp_todo_item_get_lineno (item);
   if (lineno > 0)
     lineno--;
 
-  fragment = g_strdup_printf ("L%u", lineno);
-  ide_uri_set_fragment (uri, fragment);
-
-  ide_workbench_open_uri_async (workbench, uri, "editor", 0, NULL, NULL, NULL);
+  ide_workbench_open_at_async (workbench,
+                               file,
+                               "editor",
+                               lineno,
+                               -1,
+                               IDE_BUFFER_OPEN_FLAGS_NONE,
+                               NULL, NULL, NULL);
 }
 
 static gboolean

@@ -25,12 +25,11 @@
 #include <dazzle.h>
 #include <string.h>
 
-#include "ide-enums.h"
-#include "ide-debug.h"
+#include <libide-code.h>
 
-#include "sourceview/ide-source-iter.h"
-#include "sourceview/ide-source-view-movements.h"
-#include "sourceview/ide-text-iter.h"
+#include "ide-source-view-enums.h"
+#include "ide-source-view-movements.h"
+#include "ide-source-view-private.h"
 
 #define ANCHOR_BEGIN   "SELECTION_ANCHOR_BEGIN"
 #define ANCHOR_END     "SELECTION_ANCHOR_END"
@@ -1001,20 +1000,20 @@ match_char_with_depth (GtkTextIter      *iter,
       if (string_mode)
         {
           gtk_text_iter_set_line_offset (&limit, 0);
-          ret = _ide_text_iter_backward_find_char (iter, bracket_predicate, &state, &limit);
+          ret = ide_text_iter_backward_find_char (iter, bracket_predicate, &state, &limit);
         }
       else
-        ret = _ide_text_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
+        ret = ide_text_iter_backward_find_char (iter, bracket_predicate, &state, NULL);
     }
   else
     {
       if (string_mode)
         {
           gtk_text_iter_forward_to_line_end (&limit);
-          ret = _ide_text_iter_forward_find_char (iter, bracket_predicate, &state, &limit);
+          ret = ide_text_iter_forward_find_char (iter, bracket_predicate, &state, &limit);
         }
       else
-        ret = _ide_text_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
+        ret = ide_text_iter_forward_find_char (iter, bracket_predicate, &state, NULL);
     }
 
   if (ret && !is_exclusive)
@@ -1064,17 +1063,17 @@ macro_conditionals_qualify_iter (GtkTextIter *insert,
                                  GtkTextIter *cond_end,
                                  gboolean     include_str_bounds)
 {
-  if (_ide_text_iter_in_string (insert, "#ifdef", cond_start, cond_end, include_str_bounds))
+  if (ide_text_iter_in_string (insert, "#ifdef", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IFDEF;
-  else if (_ide_text_iter_in_string (insert, "#ifndef", cond_start, cond_end, include_str_bounds))
+  else if (ide_text_iter_in_string (insert, "#ifndef", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IFNDEF;
-  else if (_ide_text_iter_in_string (insert, "#if", cond_start, cond_end, include_str_bounds))
+  else if (ide_text_iter_in_string (insert, "#if", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_IF;
-  else if (_ide_text_iter_in_string (insert, "#elif", cond_start, cond_end, include_str_bounds))
+  else if (ide_text_iter_in_string (insert, "#elif", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ELIF;
-  else if (_ide_text_iter_in_string (insert, "#else", cond_start, cond_end, include_str_bounds))
+  else if (ide_text_iter_in_string (insert, "#else", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ELSE;
-  else if (_ide_text_iter_in_string (insert, "#endif", cond_start, cond_end, include_str_bounds))
+  else if (ide_text_iter_in_string (insert, "#endif", cond_start, cond_end, include_str_bounds))
     return MACRO_COND_ENDIF;
   else
     return MACRO_COND_NONE;
@@ -1290,7 +1289,7 @@ match_comments (GtkTextIter *insert,
 
   if (comment_start && !gtk_text_iter_is_end (&cursor))
     {
-      if (_ide_text_iter_find_chars_forward (&cursor, NULL, NULL, "*/", FALSE))
+      if (ide_text_iter_find_chars_forward (&cursor, NULL, NULL, "*/", FALSE))
         {
           gtk_text_iter_forward_char (&cursor);
           *insert = cursor;
@@ -1300,7 +1299,7 @@ match_comments (GtkTextIter *insert,
     }
   else if (!comment_start && !gtk_text_iter_is_start (&cursor))
     {
-      if (_ide_text_iter_find_chars_backward (&cursor, NULL, NULL, "/*", FALSE))
+      if (ide_text_iter_find_chars_backward (&cursor, NULL, NULL, "/*", FALSE))
         {
           *insert = cursor;
 
@@ -1347,7 +1346,7 @@ ide_source_view_movements_match_special (Movement *mv)
   if (!vim_percent_predicate (&mv->insert, start_char, NULL))
     {
 loop:
-      if (_ide_text_iter_forward_find_char (&mv->insert, vim_percent_predicate, NULL, &limit))
+      if (ide_text_iter_forward_find_char (&mv->insert, vim_percent_predicate, NULL, &limit))
         start_char = gtk_text_iter_get_char (&mv->insert);
       else
         {
@@ -1502,7 +1501,7 @@ ide_source_view_movements_next_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_forward_word_end (&mv->insert, mv->newline_stop);
+  ide_text_iter_forward_word_end (&mv->insert, mv->newline_stop);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1520,7 +1519,7 @@ ide_source_view_movements_next_full_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_forward_WORD_end (&mv->insert, mv->newline_stop);
+  ide_text_iter_forward_WORD_end (&mv->insert, mv->newline_stop);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1538,7 +1537,7 @@ ide_source_view_movements_next_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_forward_word_start (&mv->insert, mv->newline_stop);
+  ide_text_iter_forward_word_start (&mv->insert, mv->newline_stop);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1556,7 +1555,7 @@ ide_source_view_movements_next_full_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_forward_WORD_start (&mv->insert, mv->newline_stop);
+  ide_text_iter_forward_WORD_start (&mv->insert, mv->newline_stop);
 
   /* prefer an empty line before word */
   text_iter_forward_to_empty_line (&copy, &mv->insert);
@@ -1574,7 +1573,7 @@ ide_source_view_movements_previous_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_backward_word_start (&mv->insert, mv->newline_stop);
+  ide_text_iter_backward_word_start (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -1594,7 +1593,7 @@ ide_source_view_movements_previous_full_word_start (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_backward_WORD_start (&mv->insert, mv->newline_stop);
+  ide_text_iter_backward_WORD_start (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -1614,7 +1613,7 @@ ide_source_view_movements_previous_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_backward_word_end (&mv->insert, mv->newline_stop);
+  ide_text_iter_backward_word_end (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -1638,7 +1637,7 @@ ide_source_view_movements_previous_full_word_end (Movement *mv)
 
   copy = mv->insert;
 
-  _ide_text_iter_backward_WORD_end (&mv->insert, mv->newline_stop);
+  ide_text_iter_backward_WORD_end (&mv->insert, mv->newline_stop);
 
   /*
    * Vim treats an empty line as a word.
@@ -1658,7 +1657,7 @@ ide_source_view_movements_previous_full_word_end (Movement *mv)
 static void
 ide_source_view_movements_paragraph_start (Movement *mv)
 {
-  _ide_text_iter_backward_paragraph_start (&mv->insert);
+  ide_text_iter_backward_paragraph_start (&mv->insert);
 
   if (mv->exclusive)
     {
@@ -1673,7 +1672,7 @@ ide_source_view_movements_paragraph_start (Movement *mv)
 static void
 ide_source_view_movements_paragraph_end (Movement *mv)
 {
-  _ide_text_iter_forward_paragraph_end (&mv->insert);
+  ide_text_iter_forward_paragraph_end (&mv->insert);
 
   if (mv->exclusive)
     {
@@ -1694,13 +1693,13 @@ ide_source_view_movements_paragraph_end (Movement *mv)
 static void
 ide_source_view_movements_sentence_start (Movement *mv)
 {
-  _ide_text_iter_backward_sentence_start (&mv->insert);
+  ide_text_iter_backward_sentence_start (&mv->insert);
 }
 
 static void
 ide_source_view_movements_sentence_end (Movement *mv)
 {
-  _ide_text_iter_forward_sentence_end (&mv->insert);
+  ide_text_iter_forward_sentence_end (&mv->insert);
 }
 
 static void
@@ -2554,10 +2553,10 @@ find_html_tag (GtkTextIter      *iter,
   g_return_val_if_fail (direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT, NULL);
 
   if (direction == GTK_DIR_LEFT)
-    ret = _ide_text_iter_backward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
+    ret = ide_text_iter_backward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
   else
     ret = (gtk_text_iter_get_char (iter) == '<') ||
-          _ide_text_iter_forward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
+          ide_text_iter_forward_find_char (iter, html_tag_predicate, GUINT_TO_POINTER ('<'), NULL);
 
   if (!ret)
     return NULL;
@@ -2592,11 +2591,11 @@ find_html_tag (GtkTextIter      *iter,
 
       return tag;
     }
-  else if (_ide_text_iter_find_chars_forward (&cursor, NULL, &end, "!--", TRUE))
+  else if (ide_text_iter_find_chars_forward (&cursor, NULL, &end, "!--", TRUE))
     {
       tag->kind = HTML_TAG_KIND_COMMENT;
       cursor = end;
-      if (_ide_text_iter_find_chars_forward (&cursor, NULL, &end, "-->", FALSE))
+      if (ide_text_iter_find_chars_forward (&cursor, NULL, &end, "-->", FALSE))
         {
           tag->end = end;
           if (direction == GTK_DIR_RIGHT)
@@ -2664,10 +2663,10 @@ static HtmlTag *
 find_non_matching_html_tag_at_left (GtkTextIter *cursor,
                                     gboolean     block_cursor)
 {
-  GQueue *stack;
-  HtmlTag *tag;
-  HtmlTag *last_closing_tag;
   GtkTextIter cursor_right;
+  HtmlTag *last_closing_tag = NULL;
+  HtmlTag *tag = NULL;
+  GQueue *stack = NULL;
 
   stack = g_queue_new ();
 
@@ -2766,10 +2765,11 @@ find_non_matching_html_tag_at_right (GtkTextIter *cursor,
       else if (tag->kind == HTML_TAG_KIND_ERROR)
         gtk_text_iter_forward_char (&cursor_left);
 
-      free_html_tag (tag);
+      g_clear_pointer (&tag, free_html_tag);
     }
 
   g_queue_free_full (stack, free_html_tag);
+  g_clear_pointer (&tag, free_html_tag);
 
   return tag;
 }

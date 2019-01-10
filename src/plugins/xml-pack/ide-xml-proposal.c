@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-sourceview.h>
+
 #include "ide-xml-proposal.h"
 
 struct _IdeXmlProposal
@@ -63,7 +65,7 @@ ide_xml_proposal_new (const gchar *text,
                       const gchar *label)
 {
   IdeXmlProposal *self;
-  
+
   self = g_object_new (IDE_TYPE_XML_PROPOSAL, NULL);
   self->text = g_strdup (text);
   self->label = g_strdup (label);

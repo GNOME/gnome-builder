@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpBuilduiConfigSurface" parent="IdeSurface">
+    <style>
+      <class name="buildui"/>
+    </style>
+    <child>
+      <object class="GtkPaned" id="paned">
+        <property name="position">275</property>
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-width">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkListBox" id="config_list_box">
+                <property name="visible">true</property>
+                <style>
+                  <class name="sidebar"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

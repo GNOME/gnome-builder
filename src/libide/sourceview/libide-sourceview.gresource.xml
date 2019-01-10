@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/libide-sourceview">
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+  </gresource>
+  <gresource prefix="/org/gnome/libide-sourceview/ui">
+    <file preprocess="xml-stripblanks">ide-completion-list-box-row.ui</file>
+    <file preprocess="xml-stripblanks">ide-completion-overlay.ui</file>
+    <file preprocess="xml-stripblanks">ide-completion-view.ui</file>
+    <file preprocess="xml-stripblanks">ide-completion-window.ui</file>
+  </gresource>
+</gresources>

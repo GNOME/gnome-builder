@@ -174,8 +174,6 @@ directory_index_new (GFile         *directory,
  *
  * Thread safety: you may call this function from a thread so long as the
  *   thread has a reference to @self.
- *
- * Since: 3.32
  */
 gboolean
 ide_code_index_index_load (IdeCodeIndexIndex   *self,
@@ -229,8 +227,8 @@ static IdeCodeIndexSearchResult *
 ide_code_index_index_create_search_result (IdeContext       *context,
                                            const FuzzyMatch *fuzzy_match)
 {
-  g_autoptr(IdeFile) file = NULL;
-  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(GFile) file = NULL;
+  g_autoptr(IdeLocation) location = NULL;
   g_autoptr(GString) subtitle = NULL;
   const gchar *key;
   const gchar *icon_name;
@@ -253,7 +251,7 @@ ide_code_index_index_create_search_result (IdeContext       *context,
   g_variant_get (value, "(uuuuu)", &file_id, &line, &line_offset, &flags, &kind);
 
   /* Ignore variables in global search */
-  if (kind == IDE_SYMBOL_VARIABLE)
+  if (kind == IDE_SYMBOL_KIND_VARIABLE)
     return NULL;
 
   key = dzl_fuzzy_index_match_get_key (fuzzy_match->match);
@@ -262,8 +260,8 @@ ide_code_index_index_create_search_result (IdeContext       *context,
 
   path = dzl_fuzzy_index_get_metadata_string (fuzzy_match->index, num);
 
-  file = ide_file_new_for_path (context, path);
-  location = ide_source_location_new (file, line - 1, line_offset - 1, 0);
+  file = g_file_new_for_path (path);
+  location = ide_location_new (file, line - 1, line_offset - 1);
 
   icon_name = ide_symbol_kind_get_icon_name (kind);
   score = dzl_fuzzy_index_match_get_score (fuzzy_match->match);
@@ -273,7 +271,7 @@ ide_code_index_index_create_search_result (IdeContext       *context,
   if (NULL != (shortname = strrchr (path, G_DIR_SEPARATOR)))
     g_string_append (subtitle, shortname + 1);
 
-  if ((kind == IDE_SYMBOL_FUNCTION) && !(flags & IDE_SYMBOL_FLAGS_IS_DEFINITION))
+  if ((kind == IDE_SYMBOL_KIND_FUNCTION) && !(flags & IDE_SYMBOL_FLAGS_IS_DEFINITION))
     {
       /* translators: "Declaration" is describing a function that is defined in a header
        *              file (.h) rather than a source file (.c).
@@ -491,16 +489,15 @@ IdeSymbol *
 ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
                                     const gchar       *key)
 {
-  g_autoptr(IdeSourceLocation) declaration = NULL;
-  g_autoptr(IdeSourceLocation) definition = NULL;
-  g_autoptr(IdeFile) file = NULL;
+  g_autoptr(IdeLocation) declaration = NULL;
+  g_autoptr(IdeLocation) definition = NULL;
+  g_autoptr(GFile) file = NULL;
   g_autoptr(GMutexLocker) locker = NULL;
   g_autofree gchar *name = NULL;
-  IdeSymbolKind kind = IDE_SYMBOL_NONE;
+  IdeSymbolKind kind = IDE_SYMBOL_KIND_NONE;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
   DzlFuzzyIndex *symbol_names = NULL;
   const DirectoryIndex *dir_index = NULL;
-  IdeContext *context;
   const gchar *filename;
   guint32 file_id = 0;
   guint32 line = 0;
@@ -541,15 +538,14 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
   g_snprintf (num, sizeof(num), "%u", file_id);
 
   filename = dzl_fuzzy_index_get_metadata_string (symbol_names, num);
-  context = ide_object_get_context (IDE_OBJECT (self));
-  file = ide_file_new_for_path (context, filename);
+  file = g_file_new_for_path (filename);
 
   if (flags & IDE_SYMBOL_FLAGS_IS_DEFINITION)
-    definition = ide_source_location_new (file, line - 1, line_offset - 1, 0);
+    definition = ide_location_new (file, line - 1, line_offset - 1);
   else
-    declaration = ide_source_location_new (file, line - 1, line_offset - 1, 0);
+    declaration = ide_location_new (file, line - 1, line_offset - 1);
 
-  return ide_symbol_new (name, kind, flags, declaration, definition, NULL);
+  return ide_symbol_new (name, kind, flags, definition, declaration);
 }
 
 static void
@@ -583,9 +579,11 @@ ide_code_index_index_class_init (IdeCodeIndexIndexClass *klass)
 }
 
 IdeCodeIndexIndex *
-ide_code_index_index_new (IdeContext *context)
+ide_code_index_index_new (IdeObject *parent)
 {
+  g_return_val_if_fail (IDE_IS_OBJECT (parent), NULL);
+
   return g_object_new (IDE_TYPE_CODE_INDEX_INDEX,
-                       "context", context,
+                       "parent", parent,
                        NULL);
 }

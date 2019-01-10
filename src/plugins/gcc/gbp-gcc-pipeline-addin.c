@@ -20,6 +20,10 @@
 
 #define G_LOG_DOMAIN "gbp-gcc-pipeline-addin"
 
+#include "config.h"
+
+#include "libide-foundry.h"
+
 #include "gbp-gcc-pipeline-addin.h"
 
 #define ERROR_FORMAT_REGEX                  \

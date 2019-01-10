@@ -20,12 +20,10 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <libide-core.h>
 
-#include "ide-version-macros.h"
-
-#include "debugger/ide-debugger-breakpoint.h"
-#include "debugger/ide-debugger-types.h"
+#include "ide-debugger-breakpoint.h"
+#include "ide-debugger-types.h"
 
 G_BEGIN_DECLS
 

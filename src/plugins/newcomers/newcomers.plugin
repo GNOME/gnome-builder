@@ -1,8 +1,9 @@
 [Plugin]
-Module=newcomers-plugin
-Name=GNOME Newcomers
-Description=Integration with GNOME newcomers initiative
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2017 Christian Hergert
 Builtin=true
-Embedded=gbp_newcomers_register_types
+Copyright=Copyright © 2017-2018 Christian Hergert
+Description=Integration with GNOME newcomers initiative
+Embedded=_gbp_newcomers_register_types
+Module=newcomers
+Depends=greeter;
+Name=GNOME Newcomers

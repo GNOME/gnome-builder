@@ -1,32 +1,5 @@
-commandbar > box.vertical > box.horizontal {
-  border: none;
-  box-shadow: 0px 10px 5px -10px shade(@theme_selected_bg_color, 0.3) inset;
-  color: @theme_selected_fg_color;
-  background-color: @theme_selected_bg_color;
-  background-size: 8px 8px;
-  background-image: repeating-linear-gradient(0deg, alpha(@theme_selected_fg_color,0.05), alpha(@theme_selected_fg_color,0.05) 1px, transparent 1px, transparent 8px),
-                    repeating-linear-gradient(-90deg, alpha(@theme_selected_fg_color,0.05), alpha(@theme_selected_fg_color,0.05) 1px, transparent 1px, transparent 8px);
-}
 commandbar entry {
-  font-family: Monospace;
-  background-image: none;
-  background-color: transparent;
-  min-height: 0px;
-  color: @theme_selected_fg_color;
-  border: none;
-  padding: 6px;
-  caret-color: @theme_selected_fg_color;
-  box-shadow: none;
-}
-commandbar flowbox {
-  opacity: 0.9;
-  padding: 12px;
-  color: @theme_selected_fg_color;
-  background: transparent;
-}
-commandbar viewport {
-  background-color: @theme_selected_bg_color;
-  background-size: 8px 8px;
-  background-image: repeating-linear-gradient(0deg, alpha(@theme_selected_fg_color,0.05), alpha(@theme_selected_fg_color,0.05) 1px, transparent 1px, transparent 8px),
-                    repeating-linear-gradient(-90deg, alpha(@theme_selected_fg_color,0.05), alpha(@theme_selected_fg_color,0.05) 1px, transparent 1px, transparent 8px);
+  margin: 10px;
+  border-width: 3px;
+  box-shadow: 0 0 5px @wm_shadow;
 }

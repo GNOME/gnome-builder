@@ -24,7 +24,7 @@
 
 #include <dazzle.h>
 #include <gtk/gtk.h>
-#include <ide.h>
+#include <libide-gui.h>
 #include <ide-build-ident.h>
 #include <libpeas/peas.h>
 #include <string.h>

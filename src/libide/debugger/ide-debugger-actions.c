@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "debugger/ide-debugger-private.h"
+#include "ide-debugger-private.h"
 
 typedef struct _IdeDebuggerActionEntry IdeDebuggerActionEntry;
 

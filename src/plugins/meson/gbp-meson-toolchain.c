@@ -46,16 +46,9 @@ static GParamSpec *properties [N_PROPS];
 GbpMesonToolchain *
 gbp_meson_toolchain_new (IdeContext *context)
 {
-  g_autoptr(GbpMesonToolchain) toolchain = NULL;
-
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  toolchain = g_object_new (GBP_TYPE_MESON_TOOLCHAIN,
-                            "context", context,
-                            NULL);
-
-
-  return g_steal_pointer (&toolchain);
+  return g_object_new (GBP_TYPE_MESON_TOOLCHAIN, NULL);
 }
 
 gboolean
@@ -186,5 +179,4 @@ gbp_meson_toolchain_class_init (GbpMesonToolchainClass *klass)
 static void
 gbp_meson_toolchain_init (GbpMesonToolchain *self)
 {
-  
 }

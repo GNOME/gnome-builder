@@ -214,8 +214,6 @@ gbp_sysroot_preferences_row_finalize (GObject *object)
  * @self: a #GbpSysrootPreferencesRow
  *
  * Requests the configuration popover the be shown over the widget.
- *
- * Since: 3.32
  */
 void
 gbp_sysroot_preferences_row_show_popup (GbpSysrootPreferencesRow *self)
@@ -307,7 +305,7 @@ gbp_sysroot_preferences_row_class_init (GbpSysrootPreferencesRowClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/sysroot-plugin/gbp-sysroot-preferences-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/sysroot/gbp-sysroot-preferences-row.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, display_name);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpSysrootPreferencesRow, name_entry);

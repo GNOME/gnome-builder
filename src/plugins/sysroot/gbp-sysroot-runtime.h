@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
@@ -29,8 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSysrootRuntime, gbp_sysroot_runtime, GBP, SYSROOT_RUNTIME, IdeRuntime)
 
-GbpSysrootRuntime  *gbp_sysroot_runtime_new            (IdeContext        *context,
-                                                        const gchar       *sysroot_id);
+GbpSysrootRuntime  *gbp_sysroot_runtime_new            (const gchar       *sysroot_id);
 const gchar        *gbp_sysroot_runtime_get_sysroot_id (GbpSysrootRuntime *self);
 
 G_END_DECLS

@@ -20,7 +20,8 @@
 
 #define G_LOG_DOMAIN "gbp-todo-model"
 
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-gui.h>
 #include <string.h>
 
 #include "gbp-todo-model.h"
@@ -668,7 +669,7 @@ gbp_todo_model_mine_async (GbpTodoModel        *self,
       return;
     }
 
-  workdir = ide_vcs_get_working_directory (self->vcs);
+  workdir = ide_vcs_get_workdir (self->vcs);
 
   m = g_slice_new0 (Mine);
   m->file = g_object_ref (file);

@@ -20,9 +20,7 @@
 
 #pragma once
 
-#include <gio/gio.h>
-
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -35,7 +33,7 @@ G_BEGIN_DECLS
  *
  * The type of stream for the log message.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 typedef enum
 {
@@ -59,7 +57,7 @@ typedef enum
  *
  * Describes the style of movement that should be performed by the debugger.
  *
- * Since: 3.26
+ * Since: 3.32
  */
 typedef enum
 {
@@ -82,6 +80,8 @@ typedef enum
  *    received a death signal.
  *
  * Represents the reason a process has stopped executing in the debugger.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -119,6 +119,8 @@ typedef enum
  *   specification matching.
  *
  * The type of breakpoint.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -137,6 +139,8 @@ typedef enum
  * @IDE_DEBUGGER_BREAKPOINT_CHANGE_ENABLED: change the enabled state
  *
  * Describes the type of modification to perform on a breakpoint.
+ *
+ * Since: 3.32
  */
 typedef enum
 {
@@ -160,6 +164,8 @@ typedef enum
  *
  * The disposition determines what should happen to the breakpoint at the next
  * stop of the debugger.
+ *
+ * Since: 3.32
  */
 typedef enum
 {

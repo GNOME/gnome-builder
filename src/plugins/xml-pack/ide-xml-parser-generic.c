@@ -69,7 +69,7 @@ ide_xml_parser_generic_start_element_sax_cb (ParserState    *state,
   attr = collect_attributes (self, (const gchar **)attributes);
   label = g_strconcat ((const gchar *)name, attr, NULL);
 
-  node = ide_xml_symbol_node_new (label, NULL, (gchar *)name, IDE_SYMBOL_XML_ELEMENT);
+  node = ide_xml_symbol_node_new (label, NULL, (gchar *)name, IDE_SYMBOL_KIND_XML_ELEMENT);
   g_object_set (node, "use-markup", TRUE, NULL);
 
   state->attributes = (const gchar **)attributes;
@@ -87,7 +87,7 @@ ide_xml_parser_generic_comment_sax_cb (ParserState   *state,
   g_assert (IDE_IS_XML_PARSER (self));
 
   strip_name = g_strstrip (g_strdup ((const gchar *)name));
-  node = ide_xml_symbol_node_new (strip_name, NULL, NULL, IDE_SYMBOL_XML_COMMENT);
+  node = ide_xml_symbol_node_new (strip_name, NULL, NULL, IDE_SYMBOL_KIND_XML_COMMENT);
   ide_xml_parser_state_processing (self, state, "comment", node, IDE_XML_SAX_CALLBACK_TYPE_COMMENT, FALSE);
 }
 
@@ -101,7 +101,7 @@ ide_xml_parser_generic_cdata_sax_cb (ParserState   *state,
 
   g_assert (IDE_IS_XML_PARSER (self));
 
-  node = ide_xml_symbol_node_new ("cdata", NULL, NULL, IDE_SYMBOL_XML_CDATA);
+  node = ide_xml_symbol_node_new ("cdata", NULL, NULL, IDE_SYMBOL_KIND_XML_CDATA);
   ide_xml_parser_state_processing (self, state, "cdata", node, IDE_XML_SAX_CALLBACK_TYPE_CDATA, FALSE);
 }
 

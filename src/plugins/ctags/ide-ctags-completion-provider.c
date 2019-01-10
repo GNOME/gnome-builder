@@ -21,8 +21,7 @@
 #define G_LOG_DOMAIN "ide-ctags-completion-provider"
 
 #include <glib/gi18n.h>
-
-#include "sourceview/ide-source-iter.h"
+#include <libide-code.h>
 
 #include "ide-ctags-completion-item.h"
 #include "ide-ctags-completion-provider.h"
@@ -141,24 +140,24 @@ ide_ctags_completion_provider_load (IdeCompletionProvider *provider,
                                     IdeContext            *context)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)provider;
-  IdeCtagsService *service;
+  g_autoptr(IdeCtagsService) service = NULL;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
-  ide_ctags_service_register_completion (service, self);
+  if ((service = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_CTAGS_SERVICE)))
+    ide_ctags_service_register_completion (service, self);
 }
 
 static void
 ide_ctags_completion_provider_dispose (GObject *object)
 {
   IdeCtagsCompletionProvider *self = (IdeCtagsCompletionProvider *)object;
+  g_autoptr(IdeCtagsService) service = NULL;
   IdeContext *context;
-  IdeCtagsService *service;
 
   if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
-      (service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE)))
+      (service = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_CTAGS_SERVICE)))
     ide_ctags_service_unregister_completion (service, self);
 
   G_OBJECT_CLASS (ide_ctags_completion_provider_parent_class)->dispose (object);
@@ -330,12 +329,11 @@ ide_ctags_completion_provider_activate_proposal (IdeCompletionProvider *provider
   IdeCtagsCompletionItem *item = (IdeCtagsCompletionItem *)proposal;
   g_autofree gchar *slice = NULL;
   g_autoptr(IdeSnippet) snippet = NULL;
-  IdeFileSettings *file_settings = NULL;
+  IdeFileSettings *file_settings;
   GtkTextBuffer *buffer;
   GtkTextView *view;
   GtkTextIter begin;
   GtkTextIter end;
-  IdeFile *file;
 
   g_assert (IDE_IS_CTAGS_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_CTAGS_COMPLETION_ITEM (item));
@@ -349,10 +347,7 @@ ide_ctags_completion_provider_activate_proposal (IdeCompletionProvider *provider
   buffer = ide_completion_context_get_buffer (context);
   g_assert (IDE_IS_BUFFER (buffer));
 
-  file = ide_buffer_get_file (IDE_BUFFER (buffer));
-  g_assert (IDE_IS_FILE (file));
-
-  file_settings = ide_file_peek_settings (file);
+  file_settings = ide_buffer_get_file_settings (IDE_BUFFER (buffer));
   g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
 
   slice = gtk_text_iter_get_slice (&begin, &end);

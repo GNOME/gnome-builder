@@ -25,10 +25,9 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 
-#include "editor/ide-editor-private.h"
-#include "editor/ide-editor-search.h"
-#include "editor/ide-editor-search-bar.h"
-#include "search/ide-tagged-entry.h"
+#include "ide-editor-private.h"
+#include "ide-editor-search.h"
+#include "ide-editor-search-bar.h"
 
 struct _IdeEditorSearchBar
 {
@@ -447,7 +446,7 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
                                 g_cclosure_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-editor-search-bar.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ui/ide-editor-search-bar.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, case_sensitive);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_all_button);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorSearchBar, replace_button);

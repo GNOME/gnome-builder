@@ -23,10 +23,10 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-sourceview.h>
 #include <string.h>
 
-#include "editor/ide-editor-search.h"
-#include "sourceview/ide-source-view.h"
+#include "ide-editor-search.h"
 
 /**
  * SECTION:ide-editor-search
@@ -96,20 +96,23 @@ enum {
   N_PROPS
 };
 
-static void ide_editor_search_actions_move_next     (IdeEditorSearch *self,
-                                                     GVariant        *param);
-static void ide_editor_search_actions_move_previous (IdeEditorSearch *self,
-                                                     GVariant        *param);
-static void ide_editor_search_actions_replace       (IdeEditorSearch *self,
-                                                     GVariant        *param);
-static void ide_editor_search_actions_replace_all   (IdeEditorSearch *self,
-                                                     GVariant        *param);
+static void ide_editor_search_actions_move_next        (IdeEditorSearch *self,
+                                                        GVariant        *param);
+static void ide_editor_search_actions_move_previous    (IdeEditorSearch *self,
+                                                        GVariant        *param);
+static void ide_editor_search_actions_replace          (IdeEditorSearch *self,
+                                                        GVariant        *param);
+static void ide_editor_search_actions_replace_all      (IdeEditorSearch *self,
+                                                        GVariant        *param);
+static void ide_editor_search_actions_at_word_boundary (IdeEditorSearch *self,
+                                                        GVariant        *param);
 
 DZL_DEFINE_ACTION_GROUP (IdeEditorSearch, ide_editor_search, {
   { "move-next", ide_editor_search_actions_move_next },
   { "move-previous", ide_editor_search_actions_move_previous },
   { "replace", ide_editor_search_actions_replace },
   { "replace-all", ide_editor_search_actions_replace_all },
+  { "at-word-boundaries", ide_editor_search_actions_at_word_boundary, "b" },
 })
 
 G_DEFINE_TYPE_WITH_CODE (IdeEditorSearch, ide_editor_search, G_TYPE_OBJECT,
@@ -1410,7 +1413,7 @@ ide_editor_search_backward_cb (GObject      *object,
   g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (context));
   g_assert (IDE_IS_EDITOR_SEARCH (self));
 
-  if (gtk_source_search_context_backward_finish (context, result, &begin, &end, NULL, NULL))
+  if (gtk_source_search_context_forward_finish (context, result, &begin, &end, NULL, NULL))
     {
       if (self->view != NULL)
         {
@@ -1912,6 +1915,13 @@ ide_editor_search_actions_move_previous (IdeEditorSearch *self,
                                          GVariant        *param)
 {
   ide_editor_search_move (self, IDE_EDITOR_SEARCH_PREVIOUS);
+}
+
+static void
+ide_editor_search_actions_at_word_boundary (IdeEditorSearch *self,
+                                            GVariant        *param)
+{
+  ide_editor_search_set_at_word_boundaries (self, g_variant_get_boolean (param));
 }
 
 static void

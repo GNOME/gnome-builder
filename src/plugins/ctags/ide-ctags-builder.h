@@ -20,7 +20,9 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-code.h>
+
+#include "ide-tags-builder.h"
 
 G_BEGIN_DECLS
 
@@ -28,6 +30,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsBuilder, ide_ctags_builder, IDE, CTAGS_BUILDER, IdeObject)
 
-IdeTagsBuilder *ide_ctags_builder_new (IdeContext *context);
+IdeTagsBuilder *ide_ctags_builder_new (void);
 
 G_END_DECLS

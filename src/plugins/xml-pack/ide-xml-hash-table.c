@@ -18,7 +18,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include <dazzle.h>
+#include <libide-code.h>
 
 #include "ide-xml-hash-table.h"
 

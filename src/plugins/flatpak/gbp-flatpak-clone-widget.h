@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_FLATPAK_CLONE_WIDGET (gbp_flatpak_clone_widget_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakCloneWidget, gbp_flatpak_clone_widget, GBP, FLATPAK_CLONE_WIDGET, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpFlatpakCloneWidget, gbp_flatpak_clone_widget, GBP, FLATPAK_CLONE_WIDGET, IdeSurface)
 
 void     gbp_flatpak_clone_widget_clone_async  (GbpFlatpakCloneWidget *self,
                                                 GCancellable          *cancellable,

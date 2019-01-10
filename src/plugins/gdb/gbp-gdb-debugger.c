@@ -21,10 +21,10 @@
 #define G_LOG_DOMAIN "gbp-gdb-debugger"
 
 #include <dazzle.h>
+#include <libide-io.h>
 #include <string.h>
 
 #include "gbp-gdb-debugger.h"
-#include "util/ide-glib.h"
 
 #define READ_BUFFER_LEN 4096
 
@@ -79,35 +79,35 @@ G_DEFINE_TYPE (GbpGdbDebugger, gbp_gdb_debugger, IDE_TYPE_DEBUGGER)
   } G_STMT_END
 
 static void
-gbp_gdb_debugger_set_context (IdeObject  *object,
-                              IdeContext *context)
+gbp_gdb_debugger_parent_set (IdeObject *object,
+                             IdeObject *parent)
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)object;
+  IdeBuildManager *build_manager;
+  IdeBuildPipeline *pipeline;
+  const gchar *builddir;
+  IdeContext *context;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
-  g_assert (!context || IDE_IS_CONTEXT (context));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
 
-  IDE_OBJECT_CLASS (gbp_gdb_debugger_parent_class)->set_context (object, context);
+  if (parent == NULL)
+    return;
 
-  if (context != NULL)
-    {
-      IdeBuildManager *build_manager;
-      IdeBuildPipeline *pipeline;
-      const gchar *builddir;
+  context = ide_object_get_context (parent);
 
-      /*
-       * We need to save the build directory so that we can translate
-       * relative paths coming from gdb into the path within the project
-       * source tree.
-       */
+  /*
+   * We need to save the build directory so that we can translate
+   * relative paths coming from gdb into the path within the project
+   * source tree.
+   */
 
-      build_manager = ide_context_get_build_manager (context);
-      pipeline = ide_build_manager_get_pipeline (build_manager);
-      builddir = ide_build_pipeline_get_builddir (pipeline);
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+  builddir = ide_build_pipeline_get_builddir (pipeline);
 
-      g_clear_object (&self->builddir);
-      self->builddir = g_file_new_for_path (builddir);
-    }
+  g_clear_object (&self->builddir);
+  self->builddir = g_file_new_for_path (builddir);
 }
 
 static gchar *
@@ -2534,7 +2534,7 @@ gbp_gdb_debugger_class_init (GbpGdbDebuggerClass *klass)
   object_class->dispose = gbp_gdb_debugger_dispose;
   object_class->finalize = gbp_gdb_debugger_finalize;
 
-  ide_object_class->set_context = gbp_gdb_debugger_set_context;
+  ide_object_class->parent_set = gbp_gdb_debugger_parent_set;
 
   debugger_class->supports_runner = gbp_gdb_debugger_supports_runner;
   debugger_class->prepare = gbp_gdb_debugger_prepare;

@@ -24,12 +24,8 @@
 
 #include <dazzle.h>
 
-#include "sourceview/ide-source-view.h"
-#include "sourceview/ide-source-view-private.h"
-
-/* static const DzlShortcutEntry source_view_shortcuts[] = { */
-/*   { NULL } */
-/* }; */
+#include "ide-source-view.h"
+#include "ide-source-view-private.h"
 
 void
 _ide_source_view_init_shortcuts (IdeSourceView *self)
@@ -45,9 +41,4 @@ _ide_source_view_init_shortcuts (IdeSourceView *self)
                                               "Escape",
                                               DZL_SHORTCUT_PHASE_BUBBLE,
                                               "reset", 0);
-
-  /* dzl_shortcut_manager_add_shortcut_entries (NULL, */
-  /*                                            source_view_shortcuts, */
-  /*                                            G_N_ELEMENTS (source_view_shortcuts), */
-  /*                                            GETTEXT_PACKAGE); */
 }

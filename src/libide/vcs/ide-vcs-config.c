@@ -22,7 +22,8 @@
 
 #include "config.h"
 
-#include "vcs/ide-vcs-config.h"
+#include "ide-vcs-config.h"
+#include "ide-vcs-enums.h"
 
 G_DEFINE_INTERFACE (IdeVcsConfig, ide_vcs_config, G_TYPE_OBJECT)
 

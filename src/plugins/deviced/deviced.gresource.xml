@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins">
+  <gresource prefix="/plugins/deviced">
     <file>deviced.plugin</file>
-  </gresource>
-  <gresource prefix="/org/gnome/builder/plugins/deviced-plugin">
   </gresource>
 </gresources>

@@ -103,7 +103,7 @@ ide_clang_completion_provider_key_activates (IdeCompletionProvider *provider,
   IdeClangCompletionItem *item = IDE_CLANG_COMPLETION_ITEM (proposal);
 
   /* Try to dereference field/variable */
-  if (item->kind == IDE_SYMBOL_FIELD || item->kind == IDE_SYMBOL_VARIABLE)
+  if (item->kind == IDE_SYMBOL_KIND_FIELD || item->kind == IDE_SYMBOL_KIND_VARIABLE)
     return key->keyval == GDK_KEY_period;
 
 #if 0
@@ -129,9 +129,9 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
   IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
   g_autofree gchar *word = NULL;
   g_autoptr(IdeSnippet) snippet = NULL;
+  IdeFileSettings *file_settings;
   GtkTextBuffer *buffer;
   GtkTextView *view;
-  IdeFile *file;
   GtkTextIter begin, end;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (provider));
@@ -144,8 +144,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
-  file = ide_buffer_get_file (IDE_BUFFER (buffer));
-  g_assert (IDE_IS_FILE (file));
+  file_settings = ide_buffer_get_file_settings (IDE_BUFFER (buffer));
 
   /*
    * If the typed text matches the typed text of the item, and the user
@@ -155,7 +154,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
     {
       if ((word = ide_completion_context_get_word (context)))
         {
-          if (dzl_str_equal0 (word, item->typed_text))
+          if (ide_str_equal0 (word, item->typed_text))
             {
               ide_completion_context_get_bounds (context, &begin, &end);
               gtk_text_buffer_insert (buffer, &end, "\n", -1);
@@ -170,13 +169,13 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
   if (ide_completion_context_get_bounds (context, &begin, &end))
     gtk_text_buffer_delete (buffer, &begin, &end);
 
-  snippet = ide_clang_completion_item_get_snippet (item, ide_file_peek_settings (file));
+  snippet = ide_clang_completion_item_get_snippet (item, file_settings);
 
   /*
    * If we are completing field or variable types, we might want to add
    * a . or -> to the snippet based on the input character.
    */
-  if (item->kind == IDE_SYMBOL_FIELD || item->kind == IDE_SYMBOL_VARIABLE)
+  if (item->kind == IDE_SYMBOL_KIND_FIELD || item->kind == IDE_SYMBOL_KIND_VARIABLE)
     {
       if (key->keyval == GDK_KEY_period || key->keyval == GDK_KEY_minus)
         {
@@ -238,12 +237,12 @@ ide_clang_completion_provider_load (IdeCompletionProvider *provider,
                                     IdeContext            *context)
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
-  IdeClangClient *client;
+  g_autoptr(IdeClangClient) client = NULL;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   g_set_object (&self->client, client);
 }
 

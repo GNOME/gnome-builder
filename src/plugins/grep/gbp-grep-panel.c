@@ -23,6 +23,9 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libide-code.h>
+#include <libide-editor.h>
+#include <libide-gui.h>
 
 #include "gbp-grep-panel.h"
 
@@ -220,26 +223,22 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
 
       if G_LIKELY (line != NULL)
         {
-          g_autoptr(IdeSourceLocation) location = NULL;
+          g_autoptr(IdeLocation) location = NULL;
           g_autoptr(GFile) child = NULL;
-          g_autoptr(IdeFile) ichild = NULL;
-          IdePerspective *editor;
-          IdeWorkbench *workbench;
-          IdeContext *context;
+          IdeWorkspace *workspace;
+          IdeSurface *editor;
           guint lineno = line->line;
 
-          workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-          context = ide_workbench_get_context (workbench);
-          editor = ide_workbench_get_perspective_by_name (workbench, "editor");
+          workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+          editor = ide_workspace_get_surface_by_name (workspace, "editor");
 
           if (lineno > 0)
             lineno--;
 
           child = gbp_grep_model_get_file (GBP_GREP_MODEL (model), line->path);
-          ichild = ide_file_new (context, child);
-          location = ide_source_location_new (ichild, lineno, 0, 0);
+          location = ide_location_new (child, lineno, -1);
 
-          ide_editor_perspective_focus_location (IDE_EDITOR_PERSPECTIVE (editor), location);
+          ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (editor), location);
         }
     }
 }
@@ -334,8 +333,8 @@ gbp_grep_panel_replace_clicked_cb (GbpGrepPanel *self,
 
   for (guint i = 0; i < edits->len; i++)
     {
-      IdeProjectEdit *edit = g_ptr_array_index (edits, i);
-      ide_project_edit_set_replacement (edit, text);
+      IdeTextEdit *edit = g_ptr_array_index (edits, i);
+      ide_text_edit_set_text (edit, text);
     }
 
   g_debug ("Replacing %u edit points with %s", edits->len, text);
@@ -347,7 +346,7 @@ gbp_grep_panel_replace_clicked_cb (GbpGrepPanel *self,
   gtk_spinner_start (self->spinner);
 
   context = ide_widget_get_context (GTK_WIDGET (self));
-  bufmgr = ide_context_get_buffer_manager (context);
+  bufmgr = ide_buffer_manager_from_context (context);
 
   ide_buffer_manager_apply_edits_async (bufmgr,
                                         IDE_PTR_ARRAY_STEAL_FULL (&edits),
@@ -411,7 +410,7 @@ gbp_grep_panel_class_init (GbpGrepPanelClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_css_name (widget_class, "gbpgreppanel");
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/grep/gbp-grep-panel.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/grep/gbp-grep-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, close_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPanel, replace_entry);
@@ -490,8 +489,8 @@ gbp_grep_panel_init (GbpGrepPanel *self)
                        "ellipsize", PANGO_ELLIPSIZE_END,
                        NULL);
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, match_data_func, NULL, NULL);
   /* translators: the column header for the matches in the 'find in files' results */
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, match_data_func, NULL, NULL);
   gtk_tree_view_column_set_title (column, _("Match"));
   gtk_tree_view_column_set_expand (column, TRUE);
   gtk_tree_view_column_set_resizable (column, TRUE);
@@ -536,8 +535,6 @@ gbp_grep_panel_set_model (GbpGrepPanel *self,
  * @self: a #GbpGrepPanel
  *
  * Returns: (transfer none) (nullable): a #GbpGrepModel
- *
- * Since: 3.32
  */
 GbpGrepModel *
 gbp_grep_panel_get_model (GbpGrepPanel *self)

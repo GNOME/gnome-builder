@@ -21,7 +21,7 @@
 #pragma once
 
 #include <glib-object.h>
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gstyle-color.h"
 

@@ -22,7 +22,9 @@
 
 #include "config.h"
 
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-gui.h>
+#include <libide-editor.h>
 
 #include "gbp-grep-model.h"
 #include "gbp-grep-panel.h"
@@ -30,9 +32,9 @@
 
 struct _GbpGrepPopover
 {
-  GtkPopover parent_instance;
+  GtkPopover      parent_instance;
 
-  GFile *file;
+  GFile          *file;
 
   GtkEntry       *entry;
   GtkButton      *button;
@@ -67,7 +69,7 @@ gbp_grep_popover_scan_cb (GObject      *object,
   g_assert (GBP_IS_GREP_PANEL (panel));
 
   if (!gbp_grep_model_scan_finish (model, result, &error))
-    ide_widget_warning (GTK_WIDGET (panel), "Failed to find files: %s", error->message);
+    g_warning ("Failed to find files: %s", error->message);
   else
     gbp_grep_panel_set_model (panel, model);
 
@@ -79,8 +81,8 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
                                     GtkButton      *button)
 {
   g_autoptr(GbpGrepModel) model = NULL;
-  IdePerspective *editor;
-  IdeWorkbench *workbench;
+  IdeSurface *editor;
+  IdeWorkspace *workspace;
   IdeContext *context;
   GtkWidget *panel;
   GtkWidget *utils;
@@ -92,10 +94,10 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   g_assert (GBP_IS_GREP_POPOVER (self));
   g_assert (GTK_IS_BUTTON (button));
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
-  editor = ide_workbench_get_perspective_by_name (workbench, "editor");
-  utils = ide_editor_perspective_get_utilities (IDE_EDITOR_PERSPECTIVE (editor));
-  context = ide_workbench_get_context (workbench);
+  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+  editor = ide_workspace_get_surface_by_name (workspace, "editor");
+  utils = ide_editor_surface_get_utilities (IDE_EDITOR_SURFACE (editor));
+  context = ide_widget_get_context (GTK_WIDGET (workspace));
 
   use_regex = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->regex_button));
   at_word_boundaries = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->whole_button));
@@ -213,7 +215,7 @@ gbp_grep_popover_class_init (GbpGrepPopoverClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/grep/gbp-grep-popover.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/grep/gbp-grep-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, button);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, entry);
   gtk_widget_class_bind_template_child (widget_class, GbpGrepPopover, regex_button);

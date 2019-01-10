@@ -1,10 +1,9 @@
 [Plugin]
-Module=deviced-plugin
-Name=Deviced
-Description=Integration with deviced devices
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2017 Christian Hergert
-Depends=editor;debugger;terminal;
-Hidden=true
 Builtin=true
-Embedded=gbp_deviced_register_types
+Copyright=Copyright © 2017 Christian Hergert
+Depends=editor;debuggerui;terminal;deviceui;flatpak;
+Description=Integration with deviced devices
+Embedded=_gbp_deviced_register_types
+Module=deviced
+Name=Deviced

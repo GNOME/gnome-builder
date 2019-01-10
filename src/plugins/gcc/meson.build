@@ -1,20 +1,15 @@
-if get_option('with_gcc')
+plugins_sources += files([
+  'gbp-gcc-pipeline-addin.c',
+  'gbp-gcc-pipeline-addin.h',
+  'gbp-gcc-toolchain-provider.c',
+  'gbp-gcc-toolchain-provider.h',
+  'gcc-plugin.c',
+])
 
-gcc_resources = gnome.compile_resources(
+plugin_gcc_resources = gnome.compile_resources(
   'gcc-resources',
   'gcc.gresource.xml',
   c_name: 'gbp_gcc',
 )
 
-gcc_sources = [
-  'gbp-gcc-pipeline-addin.c',
-  'gbp-gcc-pipeline-addin.h',
-  'gbp-gcc-plugin.c',
-  'gbp-gcc-toolchain-provider.c',
-  'gbp-gcc-toolchain-provider.h',
-]
-
-gnome_builder_plugins_sources += files(gcc_sources)
-gnome_builder_plugins_sources += gcc_resources[0]
-
-endif
+plugins_sources += plugin_gcc_resources[0]

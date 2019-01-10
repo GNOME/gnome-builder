@@ -20,17 +20,17 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-gui.h>
 #include <gladeui/glade.h>
 #include <gladeui/glade-adaptor-chooser.h>
 
-#include "gbp-glade-view.h"
+#include "gbp-glade-page.h"
 
 G_BEGIN_DECLS
 
-struct _GbpGladeView
+struct _GbpGladePage
 {
-  IdeLayoutView        parent_instance;
+  IdePage              parent_instance;
 
   GFile               *file;
   GladeProject        *project;
@@ -41,11 +41,11 @@ struct _GbpGladeView
   GtkBox              *main_box;
 };
 
-void     _gbp_glade_view_init_actions   (GbpGladeView  *self);
-void     _gbp_glade_view_init_shortcuts (GtkWidget     *widget);
-void     _gbp_glade_view_update_actions (GbpGladeView  *self);
-gboolean _gbp_glade_view_reload         (GbpGladeView  *self);
-gboolean _gbp_glade_view_save           (GbpGladeView  *self,
+void     _gbp_glade_page_init_actions   (GbpGladePage  *self);
+void     _gbp_glade_page_init_shortcuts (GtkWidget     *widget);
+void     _gbp_glade_page_update_actions (GbpGladePage  *self);
+gboolean _gbp_glade_page_reload         (GbpGladePage  *self);
+gboolean _gbp_glade_page_save           (GbpGladePage  *self,
                                          GError       **error);
 
 G_END_DECLS

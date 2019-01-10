@@ -35,15 +35,13 @@ struct _IdeClangSymbolNode
 G_DEFINE_TYPE (IdeClangSymbolNode, ide_clang_symbol_node, IDE_TYPE_SYMBOL_NODE)
 
 IdeSymbolNode *
-ide_clang_symbol_node_new (IdeContext *context,
-                           GVariant   *node)
+ide_clang_symbol_node_new (GVariant *node)
 {
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GVariant) children = NULL;
   IdeClangSymbolNode *self;
   const gchar *name;
 
-  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
   g_return_val_if_fail (node != NULL, NULL);
 
   if (!(symbol = ide_symbol_new_from_variant (node)))
@@ -52,10 +50,9 @@ ide_clang_symbol_node_new (IdeContext *context,
   name = ide_symbol_get_name (symbol);
 
   self = g_object_new (IDE_TYPE_CLANG_SYMBOL_NODE,
-                       "context", context,
                        "kind", ide_symbol_get_kind (symbol),
                        "flags", ide_symbol_get_flags (symbol),
-                       "name", dzl_str_empty0 (name) ? _("anonymous") : name,
+                       "name", ide_str_empty0 (name) ? _("anonymous") : name,
                        NULL);
 
   self->symbol = g_steal_pointer (&symbol);
@@ -80,7 +77,7 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
 {
   IdeClangSymbolNode *self = (IdeClangSymbolNode *)symbol_node;
   g_autoptr(IdeTask) task = NULL;
-  IdeSourceLocation *location;
+  IdeLocation *location;
 
   g_return_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -90,20 +87,19 @@ ide_clang_symbol_node_get_location_async (IdeSymbolNode       *symbol_node,
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (self->symbol == NULL ||
-      (!(location = ide_symbol_get_definition_location (self->symbol)) &&
-       !(location = ide_symbol_get_declaration_location (self->symbol)) &&
-       !(location = ide_symbol_get_canonical_location (self->symbol))))
+      (!(location = ide_symbol_get_location (self->symbol)) &&
+       !(location = ide_symbol_get_header_location (self->symbol))))
     ide_task_return_new_error (task,
                                G_IO_ERROR,
                                G_IO_ERROR_NOT_FOUND,
                                "Failed to locate location for symbol");
   else
     ide_task_return_pointer (task,
-                             ide_source_location_ref (location),
-                             (GDestroyNotify) ide_source_location_unref);
+                             g_object_ref (location),
+                             g_object_unref);
 }
 
-static IdeSourceLocation *
+static IdeLocation *
 ide_clang_symbol_node_get_location_finish (IdeSymbolNode  *symbol_node,
                                            GAsyncResult   *result,
                                            GError        **error)
@@ -119,7 +115,7 @@ ide_clang_symbol_node_finalize (GObject *object)
 {
   IdeClangSymbolNode *self = (IdeClangSymbolNode *)object;
 
-  g_clear_pointer (&self->symbol, ide_symbol_unref);
+  g_clear_object (&self->symbol);
   g_clear_pointer (&self->children, g_variant_unref);
 
   G_OBJECT_CLASS (ide_clang_symbol_node_parent_class)->finalize (object);
@@ -155,15 +151,13 @@ ide_clang_symbol_node_get_nth_child (IdeClangSymbolNode *self,
                                      guint               nth)
 {
   g_autoptr(GVariant) child = NULL;
-  IdeContext *context;
 
   g_return_val_if_fail (IDE_IS_CLANG_SYMBOL_NODE (self), NULL);
 
   if (self->children == NULL || g_variant_n_children (self->children) <= nth)
     return NULL;
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   child = g_variant_get_child_value (self->children, nth);
 
-  return ide_clang_symbol_node_new (context, child);
+  return ide_clang_symbol_node_new (child);
 }

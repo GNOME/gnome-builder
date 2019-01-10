@@ -32,7 +32,9 @@
 #include <glib/gstdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <ide.h>
+
+#include <libide-foundry.h>
+#include <libide-vcs.h>
 
 #include "ide-autotools-build-target.h"
 #include "ide-makecache.h"
@@ -125,8 +127,8 @@ ide_makecache_get_relative_path (IdeMakecache *self,
   g_assert (G_IS_FILE (file));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  vcs = ide_vcs_from_context (context);
+  workdir = ide_vcs_get_workdir (vcs);
 
   return g_file_get_relative_path (workdir, file);
 }
@@ -145,8 +147,6 @@ is_target_interesting (const gchar *target)
  * ide_makecache_get_file_targets_searched:
  *
  * Returns: (transfer container): a #GPtrArray of #IdeMakecacheTarget.
- *
- * Since: 3.32
  */
 static GPtrArray *
 ide_makecache_get_file_targets_searched (GMappedFile *mapped,
@@ -1110,7 +1110,6 @@ ide_makecache_new_for_cache_file_async (IdeRuntime          *runtime,
   g_autoptr(GMappedFile) mapped = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *cache_path = NULL;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -1152,11 +1151,7 @@ ide_makecache_new_for_cache_file_async (IdeRuntime          *runtime,
       IDE_EXIT;
     }
 
-  context = ide_object_get_context (IDE_OBJECT (runtime));
-
-  self = g_object_new (IDE_TYPE_MAKECACHE,
-                       "context", context,
-                       NULL);
+  self = g_object_new (IDE_TYPE_MAKECACHE, NULL);
 
   mapped = g_mapped_file_new (cache_path, FALSE, &error);
 
@@ -1247,8 +1242,6 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
  * Completes an asynchronous request to ide_makecache_get_file_flags_async().
  *
  * Returns: (transfer container) (element-type Ide.MakecacheTarget): An array of targets.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_makecache_get_file_targets_finish (IdeMakecache  *self,
@@ -1488,7 +1481,7 @@ ide_makecache_get_build_targets_worker (GTask        *task,
    */
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  configmgr = ide_context_get_configuration_manager (context);
+  configmgr = ide_configuration_manager_from_context (context);
   config = ide_configuration_manager_get_current (configmgr);
   runtime = ide_configuration_get_runtime (config);
 
@@ -1681,7 +1674,6 @@ ide_makecache_get_build_targets_worker (GTask        *task,
 
               target = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TARGET,
                                      "build-directory", makedir,
-                                     "context", context,
                                      "install-directory", installdir,
                                      "name", name,
                                      NULL);

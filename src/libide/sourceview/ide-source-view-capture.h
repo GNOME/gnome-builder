@@ -20,16 +20,13 @@
 
 #pragma once
 
-#include "sourceview/ide-source-view.h"
+#include "ide-source-view.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SOURCE_VIEW_CAPTURE (ide_source_view_capture_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSourceViewCapture,
-                      ide_source_view_capture,
-                      IDE, SOURCE_VIEW_CAPTURE,
-                      GObject)
+G_DECLARE_FINAL_TYPE (IdeSourceViewCapture, ide_source_view_capture, IDE, SOURCE_VIEW_CAPTURE, GObject)
 
 IdeSourceViewCapture *ide_source_view_capture_new             (IdeSourceView         *view,
                                                                const gchar           *mode_name,

@@ -22,7 +22,7 @@
 #pragma once
 
 #include <gladeui/glade.h>
-#include <ide.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 

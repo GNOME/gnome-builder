@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "editor/ide-editor-view.h"
+#include "ide-editor-page.h"
 
 G_BEGIN_DECLS
 
@@ -28,6 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, IDE, EDITOR_PRINT_OPERATION, GtkPrintOperation)
 
-IdeEditorPrintOperation  *ide_editor_print_operation_new    (IdeSourceView *view);
+IdeEditorPrintOperation *ide_editor_print_operation_new (IdeSourceView *view);
 
 G_END_DECLS

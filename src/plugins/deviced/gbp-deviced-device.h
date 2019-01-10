@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 #include <libdeviced.h>
 
 G_BEGIN_DECLS
@@ -29,8 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpDevicedDevice, gbp_deviced_device, GBP, DEVICED_DEVICE, IdeDevice)
 
-GbpDevicedDevice *gbp_deviced_device_new                   (IdeContext             *context,
-                                                            DevdDevice             *device);
+GbpDevicedDevice *gbp_deviced_device_new                   (DevdDevice             *device);
 void              gbp_deviced_device_get_commit_async      (GbpDevicedDevice       *self,
                                                             const gchar            *commit_id,
                                                             GCancellable           *cancellable,

@@ -20,9 +20,12 @@
 
 #pragma once
 
-#include <vte/vte.h>
+#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
+# error "Only <libide-terminal.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <vte/vte.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 

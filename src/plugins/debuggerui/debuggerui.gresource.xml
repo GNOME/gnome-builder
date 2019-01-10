@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/debuggerui">
+    <file>debuggerui.plugin</file>
+    <file>gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">ide-debugger-breakpoints-view.ui</file>
+    <file preprocess="xml-stripblanks">ide-debugger-controls.ui</file>
+    <file preprocess="xml-stripblanks">ide-debugger-disassembly-view.ui</file>
+    <file preprocess="xml-stripblanks">ide-debugger-hover-controls.ui</file>
+    <file preprocess="xml-stripblanks">ide-debugger-libraries-view.ui</file>
+    <file preprocess="xml-stripblanks">ide-debugger-locals-view.ui</file>
+    <file preprocess="xml-stripblanks">ide-debugger-registers-view.ui</file>
+    <file preprocess="xml-stripblanks">ide-debugger-threads-view.ui</file>
+  </gresource>
+</gresources>

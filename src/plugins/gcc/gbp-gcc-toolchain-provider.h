@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 

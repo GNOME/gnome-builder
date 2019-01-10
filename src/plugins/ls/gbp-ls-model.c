@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <ide.h>
+#include <libide-gui.h>
 
 #include "gbp-ls-model.h"
 

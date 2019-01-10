@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-editor.h>
 #include <gspell/gspell.h>
 
 G_BEGIN_DECLS

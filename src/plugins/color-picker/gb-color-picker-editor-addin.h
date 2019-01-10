@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-editor.h>
 
 #include <gstyle-palette.h>
 

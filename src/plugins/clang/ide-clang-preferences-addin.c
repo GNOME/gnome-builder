@@ -19,7 +19,8 @@
  */
 
 #include <glib/gi18n.h>
-#include <ide.h>
+#include <libide-code.h>
+#include <libide-gui.h>
 
 #include "ide-clang-preferences-addin.h"
 

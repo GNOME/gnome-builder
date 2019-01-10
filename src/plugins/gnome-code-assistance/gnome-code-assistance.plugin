@@ -1,9 +1,9 @@
 [Plugin]
-Module=gnome-code-assistance-plugin
-Name=GNOME Code Assistance
-Description=Provides integration with gnome-code-assistance
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
 Builtin=true
+Copyright=Copyright © 2015 Christian Hergert
+Description=Provides integration with gnome-code-assistance
+Embedded=_ide_gca_register_types
+Module=gnome-code-assistance
+Name=GNOME Code Assistance
 X-Diagnostic-Provider-Languages=css,html,js,json,python,python3,ruby,scss,sh,xml,yaml
-Embedded=ide_gca_register_types

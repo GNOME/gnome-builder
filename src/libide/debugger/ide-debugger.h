@@ -20,22 +20,19 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#include <libide-core.h>
+#include <libide-code.h>
+#include <libide-foundry.h>
 
-#include "ide-version-macros.h"
-
-#include "ide-object.h"
-
-#include "debugger/ide-debugger-breakpoint.h"
-#include "debugger/ide-debugger-frame.h"
-#include "debugger/ide-debugger-instruction.h"
-#include "debugger/ide-debugger-library.h"
-#include "debugger/ide-debugger-register.h"
-#include "debugger/ide-debugger-thread-group.h"
-#include "debugger/ide-debugger-thread.h"
-#include "debugger/ide-debugger-types.h"
-#include "debugger/ide-debugger-variable.h"
-#include "runner/ide-runner.h"
+#include "ide-debugger-breakpoint.h"
+#include "ide-debugger-frame.h"
+#include "ide-debugger-instruction.h"
+#include "ide-debugger-library.h"
+#include "ide-debugger-register.h"
+#include "ide-debugger-thread-group.h"
+#include "ide-debugger-thread.h"
+#include "ide-debugger-types.h"
+#include "ide-debugger-variable.h"
 
 G_BEGIN_DECLS
 

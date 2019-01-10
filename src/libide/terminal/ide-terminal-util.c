@@ -23,15 +23,14 @@
 #include "config.h"
 
 #include <fcntl.h>
+#include <libide-io.h>
+#include <libide-threading.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <vte/vte.h>
 
-#include "subprocess/ide-subprocess.h"
-#include "subprocess/ide-subprocess-launcher.h"
-#include "terminal/ide-terminal-private.h"
-#include "terminal/ide-terminal-util.h"
-#include "util/ptyintercept.h"
+#include "ide-terminal-private.h"
+#include "ide-terminal-util.h"
 
 static const gchar *user_shell = "/bin/sh";
 
@@ -40,13 +39,13 @@ ide_vte_pty_create_slave (VtePty *pty)
 {
   gint master_fd;
 
-  g_return_val_if_fail (VTE_IS_PTY (pty), PTY_FD_INVALID);
+  g_return_val_if_fail (VTE_IS_PTY (pty), IDE_PTY_FD_INVALID);
 
   master_fd = vte_pty_get_fd (pty);
-  if (master_fd == PTY_FD_INVALID)
-    return PTY_FD_INVALID;
+  if (master_fd == IDE_PTY_FD_INVALID)
+    return IDE_PTY_FD_INVALID;
 
-  return pty_intercept_create_slave (master_fd, TRUE);
+  return ide_pty_intercept_create_slave (master_fd, TRUE);
 }
 
 /**
@@ -118,7 +117,8 @@ _ide_guess_shell (void)
 
   if (!g_shell_parse_argv (command, NULL, &argv, &error))
     {
-      g_warning ("Failed to parse command into argv: %s", error->message);
+      g_warning ("Failed to parse command into argv: %s",
+                 error ? error->message : "unknown error");
       return;
     }
 

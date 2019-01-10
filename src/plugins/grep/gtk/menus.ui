@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="gb-project-tree-popup-menu">
-    <section id="gb-project-tree-find-section">
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-placeholder2">
       <item>
         <attribute name="label" translatable="yes">Find in Files</attribute>
         <attribute name="action">grep.find-in-files</attribute>

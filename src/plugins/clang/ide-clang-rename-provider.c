@@ -22,6 +22,10 @@
 
 #include "config.h"
 
+#include <libide-code.h>
+#include <libide-foundry.h>
+#include <libide-vcs.h>
+
 #include "ide-clang-rename-provider.h"
 
 struct _IdeClangRenameProvider
@@ -45,10 +49,10 @@ ide_clang_rename_provider_communicate_cb (GObject      *object,
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(IdeProjectEdit) edit = NULL;
-  g_autoptr(IdeSourceLocation) begin = NULL;
-  g_autoptr(IdeSourceLocation) end = NULL;
-  g_autoptr(IdeSourceRange) range = NULL;
+  g_autoptr(IdeTextEdit) edit = NULL;
+  g_autoptr(IdeLocation) begin = NULL;
+  g_autoptr(IdeLocation) end = NULL;
+  g_autoptr(IdeRange) range = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) edits = NULL;
   g_autofree gchar *stdout_buf = NULL;
@@ -70,7 +74,7 @@ ide_clang_rename_provider_communicate_cb (GObject      *object,
   if (ide_task_return_error_if_cancelled (task))
     IDE_EXIT;
 
-  if (dzl_str_empty0 (stdout_buf) || (stdout_buf[0] == '\n' && stdout_buf[1] == 0))
+  if (ide_str_empty0 (stdout_buf) || (stdout_buf[0] == '\n' && stdout_buf[1] == 0))
     {
       /* Don't allow deleting the buffer contents */
       ide_task_return_new_error (task,
@@ -100,17 +104,14 @@ ide_clang_rename_provider_communicate_cb (GObject      *object,
   gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (buffer), &begin_iter, &end_iter);
   begin = ide_buffer_get_iter_location (buffer, &begin_iter);
   end = ide_buffer_get_iter_location (buffer, &end_iter);
-  range = ide_source_range_new (begin, end);
+  range = ide_range_new (begin, end);
 
   /*
    * We just get the single replacement buffer from clang-rename instead
-   * of individual file-edits, so create IdeProjectEdit to reflect that.
+   * of individual file-edits, so create IdeTextEdit to reflect that.
    */
 
-  edit = ide_project_edit_new ();
-  ide_project_edit_set_range (edit, range);
-  ide_project_edit_set_replacement (edit, stdout_buf);
-
+  edit = ide_text_edit_new (range, stdout_buf);
   edits = g_ptr_array_new_full (1, g_object_unref);
   g_ptr_array_add (edits, g_steal_pointer (&edit));
 
@@ -121,7 +122,7 @@ ide_clang_rename_provider_communicate_cb (GObject      *object,
 
 static void
 ide_clang_rename_provider_rename_async (IdeRenameProvider   *provider,
-                                        IdeSourceLocation   *location,
+                                        IdeLocation         *location,
                                         const gchar         *new_name,
                                         GCancellable        *cancellable,
                                         GAsyncReadyCallback  callback,
@@ -139,8 +140,7 @@ ide_clang_rename_provider_rename_async (IdeRenameProvider   *provider,
   IdeBuildManager *build_manager;
   const gchar *builddir = NULL;
   IdeContext *context;
-  IdeFile *file;
-  GFile *gfile;
+  GFile *file;
   guint offset;
 
   IDE_ENTRY;
@@ -148,7 +148,7 @@ ide_clang_rename_provider_rename_async (IdeRenameProvider   *provider,
   g_assert (IDE_IS_CLANG_RENAME_PROVIDER (self));
   g_assert (IDE_IS_BUFFER (self->buffer));
   g_assert (location != NULL);
-  g_assert (!dzl_str_empty0 (new_name));
+  g_assert (!ide_str_empty0 (new_name));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* TODO: For build systems that don't support compile_commands.json,
@@ -161,13 +161,12 @@ ide_clang_rename_provider_rename_async (IdeRenameProvider   *provider,
   ide_task_set_task_data (task, g_object_ref (self->buffer), g_object_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
     builddir = ide_build_pipeline_get_builddir (pipeline);
 
-  file = ide_source_location_get_file (location);
-  gfile = ide_file_get_file (file);
-  path = g_file_get_path (gfile);
+  file = ide_location_get_file (location);
+  path = g_file_get_path (file);
 
   if (path == NULL)
     {
@@ -178,7 +177,7 @@ ide_clang_rename_provider_rename_async (IdeRenameProvider   *provider,
       IDE_EXIT;
     }
 
-  offset = ide_source_location_get_offset (location);
+  offset = ide_location_get_offset (location);
 
   position_arg = g_strdup_printf ("-offset=%u", offset);
   new_name_arg = g_strdup_printf ("-new-name=%s", new_name);
@@ -189,8 +188,8 @@ ide_clang_rename_provider_rename_async (IdeRenameProvider   *provider,
     ide_subprocess_launcher_set_cwd (launcher, builddir);
   else
     {
-      IdeVcs *vcs = ide_context_get_vcs (context);
-      GFile *workdir = ide_vcs_get_working_directory (vcs);
+      IdeVcs *vcs = ide_vcs_from_context (context);
+      GFile *workdir = ide_vcs_get_workdir (vcs);
       g_autofree gchar *srcdir = g_file_get_path (workdir);
 
       /* fallback to srcdir */

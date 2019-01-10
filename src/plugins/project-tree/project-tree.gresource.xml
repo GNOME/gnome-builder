@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gnome/builder/plugins">
+  <gresource prefix="/plugins/project-tree">
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">gbp-project-tree-pane.ui</file>
+    <file preprocess="xml-stripblanks">gbp-new-file-popover.ui</file>
+    <file preprocess="xml-stripblanks">gbp-rename-file-popover.ui</file>
     <file>project-tree.plugin</file>
-  </gresource>
-  <gresource prefix="/org/gnome/builder/plugins/project-tree-plugin">
-    <file>gb-new-file-popover.ui</file>
-    <file>gb-rename-file-popover.ui</file>
-    <file>gtk/menus.ui</file>
     <file>themes/shared.css</file>
   </gresource>
 </gresources>

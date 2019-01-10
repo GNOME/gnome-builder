@@ -1,8 +1,10 @@
 [Plugin]
-Module=sysprof-plugin
-Name=Sysprof
-Description=Integration with the Sysprof system profiler
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2016 Christian Hergert
 Builtin=true
-Embedded=gbp_sysprof_register_types
+Copyright=Copyright © 2016-2018 Christian Hergert
+Description=Integration with the Sysprof system profiler
+Embedded=_gbp_sysprof_register_types
+Hidden=true
+Module=sysprof
+Name=Sysprof
+X-Workspace-Kind=primary;

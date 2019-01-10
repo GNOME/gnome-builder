@@ -20,16 +20,19 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#if !defined (IDE_EDITOR_INSIDE) && !defined (IDE_EDITOR_COMPILATION)
+# error "Only <libide-editor.h> can be included directly."
+#endif
 
-#include "layout/ide-layout-pane.h"
+#include <libide-core.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_SIDEBAR (ide_editor_sidebar_get_type())
 
 IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE, EDITOR_SIDEBAR, IdeLayoutPane)
+G_DECLARE_FINAL_TYPE (IdeEditorSidebar, ide_editor_sidebar, IDE, EDITOR_SIDEBAR, IdePanel)
 
 IDE_AVAILABLE_IN_3_32
 GtkWidget   *ide_editor_sidebar_new            (void);

@@ -25,5 +25,6 @@
 G_BEGIN_DECLS
 
 void _ide_thread_pool_init (gboolean is_worker);
+void _ide_dump_tasks       (void);
 
 G_END_DECLS

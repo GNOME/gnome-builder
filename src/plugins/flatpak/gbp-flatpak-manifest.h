@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
@@ -29,8 +29,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakManifest, gbp_flatpak_manifest, GBP, FLATPAK_MANIFEST, IdeConfiguration)
 
-GbpFlatpakManifest  *gbp_flatpak_manifest_new                (IdeContext           *context,
-                                                              GFile                *file,
+GbpFlatpakManifest  *gbp_flatpak_manifest_new                (GFile                *file,
                                                               const gchar          *id);
 GFile               *gbp_flatpak_manifest_get_file           (GbpFlatpakManifest   *self);
 const gchar         *gbp_flatpak_manifest_get_primary_module (GbpFlatpakManifest   *self);

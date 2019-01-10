@@ -45,7 +45,7 @@ namespace Ide
 	public class ValaSourceFile: Vala.SourceFile
 	{
 		ArrayList<Ide.Diagnostic> diagnostics;
-		internal Ide.File file;
+		internal GLib.File file;
 
 		public ValaSourceFile (Vala.CodeContext context,
 		                       Vala.SourceFileType type,
@@ -55,7 +55,7 @@ namespace Ide
 		{
 			base (context, type, filename, content, cmdline);
 
-			this.file = new Ide.File (null, GLib.File.new_for_path (filename));
+			this.file = GLib.File.new_for_path (filename);
 			this.diagnostics = new ArrayList<Ide.Diagnostic> ();
 
 			this.add_default_namespace ();
@@ -66,12 +66,18 @@ namespace Ide
 
 		public GLib.File get_file ()
 		{
-			return this.file.file;
+			return this.file;
 		}
 
 		public void reset ()
 		{
-			this.diagnostics.clear ();
+			/* clear diagnostics on main thread */
+			var old_diags = this.diagnostics;
+			this.diagnostics = new ArrayList<Ide.Diagnostic> ();
+			GLib.Idle.add(() => {
+				old_diags.clear ();
+				return false;
+			});
 
 			/* Copy the node list since we will be mutating while iterating */
 			var copy = new ArrayList<Vala.CodeNode> ();
@@ -101,9 +107,8 @@ namespace Ide
 
 		public void sync (GenericArray<Ide.UnsavedFile> unsaved_files)
 		{
-			var gfile = this.file.file;
 			unsaved_files.foreach((unsaved_file) => {
-				if (unsaved_file.get_file ().equal (gfile)) {
+				if (unsaved_file.get_file ().equal (this.file)) {
 					var bytes = unsaved_file.get_content ();
 
 					if (bytes.get_data () != (uint8[]) this.content) {
@@ -119,27 +124,25 @@ namespace Ide
 		                    string message,
 		                    Ide.DiagnosticSeverity severity)
 		{
-			var begin = new Ide.SourceLocation (this.file,
-			                                    source_reference.begin.line - 1,
-			                                    source_reference.begin.column - 1,
-			                                    0);
-			var end = new Ide.SourceLocation (this.file,
-			                                  source_reference.end.line - 1,
-			                                  source_reference.end.column - 1,
-			                                  0);
+			var begin = new Ide.Location (this.file,
+			                              source_reference.begin.line - 1,
+			                              source_reference.begin.column - 1);
+			var end = new Ide.Location (this.file,
+			                            source_reference.end.line - 1,
+			                            source_reference.end.column - 1);
 
 			var diag = new Ide.Diagnostic (severity, message, begin);
-			diag.take_range (new Ide.SourceRange (begin, end));
+			diag.take_range (new Ide.Range (begin, end));
 			this.diagnostics.add (diag);
 		}
 
 		public Ide.Diagnostics? diagnose ()
 		{
-			var ar = new GLib.GenericArray<Ide.Diagnostic> ();
+			var ret = new Ide.Diagnostics ();
 			foreach (var diag in this.diagnostics) {
-				ar.add (diag);
+				ret.add (diag);
 			}
-			return new Ide.Diagnostics (ar);
+			return ret;
 		}
 
 		void add_default_namespace ()

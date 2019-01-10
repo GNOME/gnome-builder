@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
-#include "debugger/ide-debugger-types.h"
+#include "ide-debugger-types.h"
 
 G_BEGIN_DECLS
 

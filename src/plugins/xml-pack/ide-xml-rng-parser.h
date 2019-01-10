@@ -21,7 +21,7 @@
 #pragma once
 
 #include <glib.h>
-#include <ide.h>
+#include <libide-code.h>
 
 #include "ide-xml-schema.h"
 

@@ -22,6 +22,9 @@
 
 #include "config.h"
 
+#include <libide-code.h>
+#include <libide-vcs.h>
+
 #include "gbp-grep-model.h"
 
 typedef struct
@@ -32,7 +35,9 @@ typedef struct
 
 struct _GbpGrepModel
 {
-  IdeObject parent_instance;
+  GObject parent_instance;
+
+  IdeContext *context;
 
   /* The root directory to start searching from. */
   GFile *directory;
@@ -44,7 +49,7 @@ struct _GbpGrepModel
 
   /* We need to do client-side processing to extract the exact message
    * locations after grep gives us the matching lines. This allows us to
-   * create IdeProjectEdit source ranges later as well as creating the
+   * create IdeTextEdit source ranges later as well as creating the
    * match positions for highlighting in the treeview cell renderers.
    */
   GRegex *message_regex;
@@ -77,7 +82,7 @@ struct _GbpGrepModel
 
 static void tree_model_iface_init (GtkTreeModelIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GbpGrepModel, gbp_grep_model, IDE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GbpGrepModel, gbp_grep_model, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, tree_model_iface_init))
 
 enum {
@@ -159,7 +164,7 @@ gbp_grep_model_line_parse (GbpGrepModelLine *cl,
           cl->line = g_ascii_strtoll (linestr, NULL, 10);
 
           /* Now parse the matches for the line so that we can highlight
-           * them in the treeview and also determine the IdeProjectEdit
+           * them in the treeview and also determine the IdeTextEdit
            * source range when editing files.
            */
 
@@ -205,11 +210,24 @@ gbp_grep_model_line_parse (GbpGrepModelLine *cl,
 GbpGrepModel *
 gbp_grep_model_new (IdeContext *context)
 {
+  GbpGrepModel *self;
+
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  return g_object_new (GBP_TYPE_GREP_MODEL,
-                       "context", context,
-                       NULL);
+  self = g_object_new (GBP_TYPE_GREP_MODEL, NULL);
+  self->context = g_object_ref (context);
+
+  return g_steal_pointer (&self);
+}
+
+static void
+gbp_grep_model_dispose (GObject *object)
+{
+  GbpGrepModel *self = (GbpGrepModel *)object;
+
+  g_clear_object (&self->context);
+
+  G_OBJECT_CLASS (gbp_grep_model_parent_class)->dispose (object);
 }
 
 static void
@@ -219,6 +237,7 @@ gbp_grep_model_finalize (GObject *object)
 
   clear_line (&self->prev_line);
 
+  g_clear_object (&self->context);
   g_clear_object (&self->directory);
   g_clear_pointer (&self->index, index_free);
   g_clear_pointer (&self->query, g_free);
@@ -311,6 +330,7 @@ gbp_grep_model_class_init (GbpGrepModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = gbp_grep_model_dispose;
   object_class->finalize = gbp_grep_model_finalize;
   object_class->get_property = gbp_grep_model_get_property;
   object_class->set_property = gbp_grep_model_set_property;
@@ -424,8 +444,6 @@ gbp_grep_model_set_query (GbpGrepModel *self,
  * @self: a #GbpGrepModel
  *
  * Returns: (transfer none) (nullable): A #GFile or %NULL
- *
- * Since: 3.32
  */
 GFile *
 gbp_grep_model_get_directory (GbpGrepModel *self)
@@ -551,7 +569,6 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   const gchar *path;
-  IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
   GType git_vcs;
@@ -561,10 +578,9 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
   g_assert (self->query != NULL);
   g_assert (self->query[0] != '\0');
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
-  git_vcs = g_type_from_name ("IdeGitVcs");
+  vcs = ide_vcs_from_context (self->context);
+  workdir = ide_vcs_get_workdir (vcs);
+  git_vcs = g_type_from_name ("GbpGitVcs");
 
   if (self->directory != NULL)
     path = g_file_peek_path (self->directory);
@@ -577,7 +593,7 @@ gbp_grep_model_create_launcher (GbpGrepModel *self)
    * Soft runtime check for Git support, so that we can use "git grep"
    * instead of the system "grep".
    */
-  if (git_vcs != G_TYPE_INVALID && g_type_is_a (G_OBJECT_TYPE (vcs), git_vcs))
+  if (git_vcs != G_TYPE_INVALID && G_TYPE_CHECK_INSTANCE_TYPE (vcs, git_vcs))
     use_git_grep = TRUE;
 
   if (use_git_grep)
@@ -768,7 +784,7 @@ gbp_grep_model_scan_async (GbpGrepModel        *self,
       IDE_EXIT;
     }
 
-  if (dzl_str_empty0 (self->query))
+  if (ide_str_empty0 (self->query))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -1122,37 +1138,27 @@ create_edits_cb (GbpGrepModel *self,
 
   if (gbp_grep_model_line_parse (&line, row, self->message_regex))
     {
-      g_autoptr(IdeFile) file = NULL;
-      g_autoptr(GFile) gfile = NULL;
-      IdeContext *context;
+      g_autoptr(GFile) file = NULL;
       guint lineno;
 
-      context = ide_object_get_context (IDE_OBJECT (self));
-      g_assert (IDE_IS_CONTEXT (context));
-
-      gfile = gbp_grep_model_get_file (self, line.path);
-      g_assert (G_IS_FILE (gfile));
-
-      file = ide_file_new (context, gfile);
-      g_assert (IDE_IS_FILE (file));
+      file = gbp_grep_model_get_file (self, line.path);
+      g_assert (G_IS_FILE (file));
 
       lineno = line.line ? line.line - 1 : 0;
 
       for (guint i = 0; i < line.matches->len; i++)
         {
           const GbpGrepModelMatch *match = &g_array_index (line.matches, GbpGrepModelMatch, i);
-          g_autoptr(IdeProjectEdit) edit = NULL;
-          g_autoptr(IdeSourceRange) range = NULL;
-          g_autoptr(IdeSourceLocation) begin = NULL;
-          g_autoptr(IdeSourceLocation) end = NULL;
+          g_autoptr(IdeTextEdit) edit = NULL;
+          g_autoptr(IdeRange) range = NULL;
+          g_autoptr(IdeLocation) begin = NULL;
+          g_autoptr(IdeLocation) end = NULL;
 
-          begin = ide_source_location_new (file, lineno, match->match_begin, 0);
-          end = ide_source_location_new (file, lineno, match->match_end, 0);
-          range = ide_source_range_new (begin, end);
+          begin = ide_location_new (file, lineno, match->match_begin);
+          end = ide_location_new (file, lineno, match->match_end);
+          range = ide_range_new (begin, end);
 
-          edit = g_object_new (IDE_TYPE_PROJECT_EDIT,
-                               "range", range,
-                               NULL);
+          edit = ide_text_edit_new (range, NULL);
 
           g_ptr_array_add (edits, g_steal_pointer (&edit));
         }
@@ -1165,9 +1171,7 @@ create_edits_cb (GbpGrepModel *self,
  * gbp_grep_model_create_edits:
  * @self: a #GbpGrepModel
  *
- * Returns: (transfer container): a #GPtrArray of IdeProjectEdit
- *
- * Since: 3.32
+ * Returns: (transfer container): a #GPtrArray of IdeTextEdit
  */
 GPtrArray *
 gbp_grep_model_create_edits (GbpGrepModel *self)
@@ -1195,8 +1199,6 @@ gbp_grep_model_create_edits (GbpGrepModel *self)
  * @line: (out): a location for the line info
  *
  * Gets information about the line that @iter points at.
- *
- * Since: 3.32
  */
 void
 gbp_grep_model_get_line (GbpGrepModel            *self,
@@ -1239,8 +1241,6 @@ gbp_grep_model_get_line (GbpGrepModel            *self,
  * gbp_grep_model_get_file:
  *
  * Returns: (transfer full): a #GFile
- *
- * Since: 3.32
  */
 GFile *
 gbp_grep_model_get_file (GbpGrepModel *self,

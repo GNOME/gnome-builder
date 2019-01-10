@@ -1,7 +1,0 @@
-{
-global:
-	gnome_builder_plugins_init;
-        *_register_types;
-local:
-        *;
-};

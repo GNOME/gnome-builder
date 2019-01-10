@@ -51,7 +51,7 @@ gbp_glade_properties_class_init (GbpGladePropertiesClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/glade-plugin/gbp-glade-properties.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/glade/gbp-glade-properties.ui");
   gtk_widget_class_set_css_name (widget_class, "gbpgladeproperties");
   gtk_widget_class_bind_template_child (widget_class, GbpGladeProperties, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpGladeProperties, stack_switcher);

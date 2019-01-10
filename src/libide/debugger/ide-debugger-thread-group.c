@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "debugger/ide-debugger-thread-group.h"
+#include "ide-debugger-thread-group.h"
 
 typedef struct
 {

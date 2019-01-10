@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include "gbp-ls-workbench-addin.h"
-#include "gbp-ls-view.h"
+#include "gbp-ls-page.h"
 
 struct _GbpLsWorkbenchAddin
 {
@@ -34,18 +34,12 @@ struct _GbpLsWorkbenchAddin
 typedef struct
 {
   GFile     *file;
-  GbpLsView *view;
+  GbpLsPage *view;
 } LocateView;
-
-static gchar *
-gbp_ls_workbench_addin_get_id (IdeWorkbenchAddin *addin)
-{
-  return g_strdup ("directory");
-}
 
 static gboolean
 gbp_ls_workbench_addin_can_open (IdeWorkbenchAddin *addin,
-                                 IdeUri            *uri,
+                                 GFile             *file,
                                  const gchar       *content_type,
                                  gint              *priority)
 {
@@ -68,63 +62,64 @@ locate_view (GtkWidget *view,
   LocateView *locate = user_data;
   GFile *file;
 
-  g_assert (IDE_IS_LAYOUT_VIEW (view));
+  g_assert (IDE_IS_PAGE (view));
   g_assert (locate != NULL);
 
   if (locate->view != NULL)
     return;
 
-  if (!GBP_IS_LS_VIEW (view))
+  if (!GBP_IS_LS_PAGE (view))
     return;
 
-  file = gbp_ls_view_get_directory (GBP_LS_VIEW (view));
+  file = gbp_ls_page_get_directory (GBP_LS_PAGE (view));
   if (g_file_equal (file, locate->file))
-    locate->view = GBP_LS_VIEW (view);
+    locate->view = GBP_LS_PAGE (view);
 }
 
 static void
 gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
-                                   IdeUri                *uri,
+                                   GFile                 *file,
                                    const gchar           *content_type,
-                                   IdeWorkbenchOpenFlags  flags,
+                                   IdeBufferOpenFlags     flags,
                                    GCancellable          *cancellable,
                                    GAsyncReadyCallback    callback,
                                    gpointer               user_data)
 {
   GbpLsWorkbenchAddin *self = (GbpLsWorkbenchAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GFile) file = NULL;
-  IdePerspective *editor;
-  GbpLsView *view;
+  IdeWorkspace *workspace;
+  IdeSurface *surface;
+  GbpLsPage *view;
   LocateView locate = { 0 };
 
   g_assert (GBP_IS_LS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (self->workbench));
-  g_assert (uri != NULL);
+  g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_ls_workbench_addin_open_async);
 
-  editor = ide_workbench_get_perspective_by_name (self->workbench, "editor");
-  file = ide_uri_to_file (uri);
+  workspace = ide_workbench_get_current_workspace (self->workbench);
+  if (!(surface = ide_workspace_get_surface_by_name (workspace, "editor")))
+    surface = ide_workspace_get_surface_by_name (workspace, "terminal");
 
   /* First try to find an existing view for the file */
   locate.file = file;
-  ide_workbench_views_foreach (self->workbench, locate_view, &locate);
+  ide_workbench_foreach_page (self->workbench, locate_view, &locate);
   if (locate.view != NULL)
     {
-      ide_workbench_focus (self->workbench, GTK_WIDGET (locate.view));
+      ide_widget_reveal_and_grab (GTK_WIDGET (locate.view));
       ide_task_return_boolean (task, TRUE);
       return;
     }
 
-  view = g_object_new (GBP_TYPE_LS_VIEW,
+  view = g_object_new (GBP_TYPE_LS_PAGE,
                        "close-on-activate", TRUE,
                        "directory", file,
                        "visible", TRUE,
                        NULL);
-  gtk_container_add (GTK_CONTAINER (editor), GTK_WIDGET (view));
+  gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (view));
 
   ide_task_return_boolean (task, TRUE);
 }
@@ -157,7 +152,6 @@ gbp_ls_workbench_addin_unload (IdeWorkbenchAddin *addin,
 static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
-  iface->get_id = gbp_ls_workbench_addin_get_id;
   iface->can_open = gbp_ls_workbench_addin_can_open;
   iface->open_async = gbp_ls_workbench_addin_open_async;
   iface->open_finish = gbp_ls_workbench_addin_open_finish;

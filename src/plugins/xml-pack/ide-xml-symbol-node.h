@@ -23,7 +23,7 @@
 #include "ide-xml-types.h"
 #include "ide-xml-symbol-resolver.h"
 
-#include <ide.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 

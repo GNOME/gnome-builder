@@ -18,6 +18,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include <dazzle.h>
+
 #include "ide-xml-rng-define.h"
 
 G_DEFINE_BOXED_TYPE (IdeXmlRngDefine, ide_xml_rng_define, ide_xml_rng_define_ref, ide_xml_rng_define_unref)

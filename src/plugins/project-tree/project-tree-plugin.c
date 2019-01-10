@@ -18,19 +18,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <libpeas/peas.h>
-#include <ide.h>
+#define G_LOG_DOMAIN "project-tree-plugin"
 
-#include "gb-project-tree-addin.h"
-#include "gb-project-tree-editor-addin.h"
+#include "config.h"
+
+#include <libide-gui.h>
+#include <libide-tree.h>
+#include <libpeas/peas.h>
+
+#include "gbp-project-tree-addin.h"
+#include "gbp-project-tree-workspace-addin.h"
 
 void
-gb_project_tree_register_types (PeasObjectModule *module)
+_gbp_project_tree_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GB_TYPE_PROJECT_TREE_ADDIN);
+                                              IDE_TYPE_TREE_ADDIN,
+                                              GBP_TYPE_PROJECT_TREE_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_VIEW_ADDIN,
-                                              GB_TYPE_PROJECT_TREE_EDITOR_ADDIN);
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_PROJECT_TREE_WORKSPACE_ADDIN);
 }

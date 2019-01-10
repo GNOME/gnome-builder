@@ -22,8 +22,9 @@
 
 #include "config.h"
 
-#include "search/ide-search-provider.h"
-#include "threading/ide-task.h"
+#include <libide-threading.h>
+
+#include "ide-search-provider.h"
 
 G_DEFINE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE_TYPE_OBJECT)
 
@@ -88,7 +89,7 @@ ide_search_provider_search_async (IdeSearchProvider   *self,
  *
  * Completes a request to a search provider.
  *
- * Returns: (transfer full) (element-type Ide.SearchResult): a #GPtrArray
+ * Returns: (transfer full) (element-type IdeSearchResult): a #GPtrArray
  *    of #IdeSearchResult elements.
  *
  * Since: 3.32

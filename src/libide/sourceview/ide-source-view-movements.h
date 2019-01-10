@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "sourceview/ide-source-view.h"
+#include "ide-source-view.h"
 
 G_BEGIN_DECLS
 
@@ -34,14 +34,12 @@ void _ide_source_view_apply_movement (IdeSourceView         *source_view,
                                       gunichar               modifier,
                                       gunichar               search_char,
                                       guint                 *target_column);
-
 void _ide_source_view_select_inner   (IdeSourceView *self,
                                       gunichar       inner_left,
                                       gunichar       inner_right,
                                       gint           count,
                                       gboolean       exclusive,
                                       gboolean       string_mode);
-
 void _ide_source_view_select_tag     (IdeSourceView *self,
                                       gint           count,
                                       gboolean       exclusive);

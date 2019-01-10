@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.24 -->
+  <template class="IdeGreeterWorkspace" parent="IdeWorkspace">
+    <child type="titlebar">
+      <object class="IdeHeaderBar" id="header_bar">
+        <property name="menu-id">ide-greeter-workspace-menu</property>
+        <property name="show-fullscreen-button">false</property>
+        <property name="show-close-button">true</property>
+        <property name="visible">true</property>
+        <child type="left">
+          <object class="GtkButton" id="back_button">
+            <property name="action-name">win.surface</property>
+            <property name="action-target">'sections'</property>
+            <property name="has-tooltip">true</property>
+            <property name="tooltip-text" translatable="yes">Go back</property>
+            <property name="margin-end">6</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">true</property>
+                <property name="icon-name">pan-start-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="left">
+          <object class="DzlPriorityBox" id="left_box">
+            <property name="spacing">10</property>
+            <property name="hexpand">false</property>
+            <property name="homogeneous">true</property>
+            <property name="visible">true</property>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">win.open</property>
+                <property name="label" translatable="yes">_Open…</property>
+                <property name="use-underline">true</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="priority">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">win.surface</property>
+                <property name="action-target">'clone'</property>
+                <property name="label" translatable="yes">_Clone…</property>
+                <property name="use-underline">true</property>
+                <property name="visible">true</property>
+              </object>
+              <packing>
+                <property name="priority">10</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child type="right">
+          <object class="GtkToggleButton" id="select_button">
+            <property name="action-name">win.selection-mode</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">object-select-symbolic</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child internal-child="surfaces">
+      <object class="GtkStack" id="surfaces">
+        <property name="transition-type">crossfade</property>
+        <signal name="notify::visible-child" handler="stack_notify_visible_child_cb" object="IdeGreeterWorkspace" swapped="true"/>
+        <child>
+          <object class="IdeSurface" id="sections_surface">
+            <property name="title" translatable="yes">Select a Project</property>
+            <property name="visible">true</property>
+            <style>
+              <class name="sectionssurface"/>
+            </style>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="expand">true</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="visible">true</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="expand">true</property>
+                        <property name="visible">true</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin">32</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">24</property>
+                            <property name="visible">true</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="search_entry">
+                                <property name="halign">center</property>
+                                <property name="visible">true</property>
+                                <property name="width-chars">45</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="DzlPriorityBox" id="sections">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">32</property>
+                                <property name="visible">true</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkActionBar" id="action_bar">
+                    <child>
+                      <object class="GtkButton" id="remove_button">
+                        <property name="action-name">win.delete-selected-rows</property>
+                        <property name="label" translatable="yes">_Remove Projects</property>
+                        <property name="use-underline">true</property>
+                        <property name="visible">true</property>
+                        <property name="sensitive">false</property>
+                        <style>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="purge_button">
+                        <property name="action-name">win.purge-selected-rows</property>
+                        <property name="label" translatable="yes">Remove Projects and Sources…</property>
+                        <property name="use-underline">true</property>
+                        <property name="visible">true</property>
+                        <property name="sensitive">false</property>
+                        <style>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">sections</property>
+          </packing>
+        </child>
+        <child>
+          <object class="IdeCloneSurface" id="clone_surface">
+            <property name="title" translatable="yes">Clone Project</property>
+            <property name="visible">true</property>
+          </object>
+          <packing>
+            <property name="name">clone</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

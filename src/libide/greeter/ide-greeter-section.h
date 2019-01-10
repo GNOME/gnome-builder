@@ -21,10 +21,8 @@
 #pragma once
 
 #include <dazzle.h>
-
-#include "ide-version-macros.h"
-
-#include "projects/ide-project-info.h"
+#include <libide-core.h>
+#include <libide-projects.h>
 
 G_BEGIN_DECLS
 

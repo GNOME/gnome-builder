@@ -1,9 +1,9 @@
 [Plugin]
-Module=history-plugin
-Name=Edit History
-Description=Tracks edits in buffer to provide navigation history
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2017 Christian Hergert
-Depends=editor
 Builtin=true
-Embedded=gbp_history_register_types
+Copyright=Copyright © 2017 Christian Hergert
+Depends=editor;
+Description=Tracks edits in buffer to provide navigation history
+Embedded=_gbp_history_register_types
+Module=history
+Name=Editor History

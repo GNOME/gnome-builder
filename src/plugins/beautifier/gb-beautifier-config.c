@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-#include <ide.h>
+#include <libide-editor.h>
 #include <libpeas/peas.h>
 
 #include "gb-beautifier-helper.h"
@@ -77,8 +77,8 @@ gb_beautifier_config_check_duplicates (GbBeautifierEditorAddin *self,
 {
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (entries != NULL);
-  g_assert (!dzl_str_empty0 (lang_id));
-  g_assert (!dzl_str_empty0 (display_name));
+  g_assert (!ide_str_empty0 (lang_id));
+  g_assert (!ide_str_empty0 (display_name));
 
   for (guint i = 0; i < entries->len; ++i)
     {
@@ -103,7 +103,7 @@ gb_beautifier_map_check_duplicates (GbBeautifierEditorAddin *self,
 {
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (map != NULL);
-  g_assert (!dzl_str_empty0 (lang_id));
+  g_assert (!ide_str_empty0 (lang_id));
 
   for (guint i = 0; i < map->len; ++i)
     {
@@ -132,8 +132,8 @@ copy_to_tmp_file (GbBeautifierEditorAddin *self,
   g_autofree gchar *tmp_path = NULL;
   gint fd;
 
-  g_assert (!dzl_str_empty0 (tmp_dir));
-  g_assert (!dzl_str_empty0 (source_path));
+  g_assert (!ide_str_empty0 (tmp_dir));
+  g_assert (!ide_str_empty0 (source_path));
 
   tmp_path = g_build_filename (tmp_dir, "XXXXXX.txt", NULL);
   if (-1 != (fd = g_mkstemp (tmp_path)))
@@ -190,9 +190,9 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
   gsize nb_profiles;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!dzl_str_empty0 (base_path));
-  g_assert (!dzl_str_empty0 (lang_id));
-  g_assert (!dzl_str_empty0 (real_lang_id));
+  g_assert (!ide_str_empty0 (base_path));
+  g_assert (!ide_str_empty0 (lang_id));
+  g_assert (!ide_str_empty0 (real_lang_id));
   g_assert (entries != NULL);
 
   *has_default = FALSE;
@@ -319,7 +319,7 @@ add_entries_from_config_ini_file (GbBeautifierEditorAddin *self,
               command = g_key_file_get_string (key_file, profile, "command-pattern", NULL);
               if (g_str_has_prefix (command, "[internal]"))
                 {
-                  command_pattern = g_build_filename ("resource:///org/gnome/builder/plugins/beautifier_plugin/internal/",
+                  command_pattern = g_build_filename ("resource:///plugins/beautifier/internal/",
                                                       command + 10,
                                                       NULL);
                 }
@@ -437,7 +437,7 @@ add_entries_from_base_path (GbBeautifierEditorAddin *self,
   gboolean ret_has_default = FALSE;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!dzl_str_empty0 (base_path));
+  g_assert (!ide_str_empty0 (base_path));
   g_assert (entries != NULL);
   g_assert (map != NULL);
 
@@ -526,7 +526,7 @@ gb_beautifier_config_get_map (GbBeautifierEditorAddin *self,
   gsize data_len;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!dzl_str_empty0 (path));
+  g_assert (!ide_str_empty0 (path));
 
   map = g_array_new (TRUE, TRUE, sizeof (GbBeautifierMapEntry));
   g_array_set_clear_func (map, map_entry_clear_func);
@@ -597,15 +597,14 @@ get_entries_worker (IdeTask      *task,
                     GCancellable *cancellable)
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)source_object;
-  IdeProject *project;
-  IdeVcs *vcs;
-  GArray *entries;
-  GArray *map = NULL;
-  const gchar *project_name;
+  GbBeautifierEntriesResult *result;
   g_autofree gchar *project_config_path = NULL;
   g_autofree gchar *user_config_path = NULL;
+  g_autofree gchar *project_id = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  GArray *entries;
+  GArray *map = NULL;
   gchar *configdir;
-  GbBeautifierEntriesResult *result;
   gboolean has_default = FALSE;
   gboolean ret_has_default = FALSE;
 
@@ -636,13 +635,14 @@ get_entries_worker (IdeTask      *task,
 
   g_clear_pointer (&map, g_array_unref);
 
+  project_id = ide_context_dup_project_id (self->context);
+
   /* Project wide config */
-  if (NULL != (project = ide_context_get_project (self->context)))
+  if (project_id != NULL)
     {
-      project_name = ide_project_get_name (project);
-      if (dzl_str_equal0 (project_name, "Builder"))
+      if (ide_str_equal0 (project_id, "Builder"))
         {
-          configdir = g_strdup ("resource:///org/gnome/builder/plugins/beautifier_plugin/self/");
+          configdir = g_strdup ("resource:///plugins/beautifier/self/");
           map = gb_beautifier_config_get_map (self, configdir);
           add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);
           has_default |= ret_has_default;
@@ -650,14 +650,9 @@ get_entries_worker (IdeTask      *task,
 
           g_clear_pointer (&map, g_array_unref);
         }
-      else if (NULL != (vcs = ide_context_get_vcs (self->context)))
+      else if ((workdir = ide_context_ref_workdir (self->context)))
         {
-          GFile *workdir;
-          g_autofree gchar *workdir_path = NULL;
-
-          workdir = ide_vcs_get_working_directory (vcs);
-          workdir_path = g_file_get_path (workdir);
-          project_config_path = g_build_filename (workdir_path,
+          project_config_path = g_build_filename (g_file_peek_path (workdir),
                                                   ".beautifier",
                                                   NULL);
           map = gb_beautifier_config_get_map (self, project_config_path);
@@ -669,7 +664,7 @@ get_entries_worker (IdeTask      *task,
     }
 
   /* System wide config */
-  configdir = g_strdup ("resource:///org/gnome/builder/plugins/beautifier_plugin/config/");
+  configdir = g_strdup ("resource:///plugins/beautifier/config/");
 
   map = gb_beautifier_config_get_map (self, configdir);
   add_entries_from_base_path (self, configdir, entries, map, &ret_has_default);

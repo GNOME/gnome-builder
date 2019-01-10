@@ -18,6 +18,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include <dazzle.h>
+
 #include "ide-xml-completion-values.h"
 #include "ide-xml-position.h"
 

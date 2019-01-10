@@ -22,6 +22,8 @@
 
 #include <glib/gi18n.h>
 
+#include "gstyle-resources.h"
+
 #include "gstyle-color-panel-private.h"
 #include "gstyle-color-panel-actions.h"
 #include "gstyle-revealer.h"
@@ -1377,6 +1379,8 @@ gstyle_color_panel_class_init (GstyleColorPanelClass *klass)
   object_class->dispose = gstyle_color_panel_dispose;
   object_class->get_property = gstyle_color_panel_get_property;
   object_class->set_property = gstyle_color_panel_set_property;
+
+  g_resources_register (gstyle_get_resource ());
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gnome/libgstyle/ui/gstyle-color-panel.ui");

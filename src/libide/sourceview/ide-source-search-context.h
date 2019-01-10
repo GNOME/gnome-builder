@@ -20,9 +20,12 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
+#if !defined (IDE_SOURCEVIEW_INSIDE) && !defined (IDE_SOURCEVIEW_COMPILATION)
+# error "Only <libide-sourceview.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <gtksourceview/gtksource.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 

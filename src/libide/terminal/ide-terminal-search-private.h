@@ -21,8 +21,7 @@
 #pragma once
 
 #include <gtk/gtk.h>
-
-#include "search/ide-tagged-entry.h"
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
@@ -33,7 +32,7 @@ struct _IdeTerminalSearch
   VteTerminal         *terminal;
 
   GtkRevealer         *search_revealer;
-  
+
   IdeTaggedEntry      *search_entry;
 
   GtkButton           *search_prev_button;

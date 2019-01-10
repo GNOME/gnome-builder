@@ -18,18 +18,21 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <libpeas/peas.h>
-#include <ide.h>
+#include "config.h"
 
-#include "gbp-symbol-layout-stack-addin.h"
+#include <libpeas/peas.h>
+#include <libide-sourceview.h>
+#include <libide-gui.h>
+
+#include "gbp-symbol-frame-addin.h"
 #include "gbp-symbol-hover-provider.h"
 
-void
-gbp_symbol_tree_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_symbol_tree_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_LAYOUT_STACK_ADDIN,
-                                              GBP_TYPE_SYMBOL_LAYOUT_STACK_ADDIN);
+                                              IDE_TYPE_FRAME_ADDIN,
+                                              GBP_TYPE_SYMBOL_FRAME_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_HOVER_PROVIDER,
                                               GBP_TYPE_SYMBOL_HOVER_PROVIDER);

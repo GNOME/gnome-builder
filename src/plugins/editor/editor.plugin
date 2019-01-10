@@ -1,0 +1,11 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2014-2018 Christian Hergert
+Description=Builder's greeter window
+Embedded=_gbp_editor_register_types
+Hidden=true
+Module=editor
+Name=Editor
+X-At-Startup=true
+X-Workspace-Kind=primary;editor;

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-core.h>
 
 #include "gca-service.h"
 
@@ -30,13 +30,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeGcaService, ide_gca_service, IDE, GCA_SERVICE, IdeObject)
 
-void        ide_gca_service_get_proxy_async  (IdeGcaService        *self,
-                                              const gchar          *language_id,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data);
-GcaService *ide_gca_service_get_proxy_finish (IdeGcaService        *self,
-                                              GAsyncResult         *result,
-                                              GError              **error);
+IdeGcaService *ide_gca_service_from_context     (IdeContext           *context);
+void           ide_gca_service_get_proxy_async  (IdeGcaService        *self,
+                                                 const gchar          *language_id,
+                                                 GCancellable         *cancellable,
+                                                 GAsyncReadyCallback   callback,
+                                                 gpointer              user_data);
+GcaService    *ide_gca_service_get_proxy_finish (IdeGcaService        *self,
+                                                 GAsyncResult         *result,
+                                                 GError              **error);
 
 G_END_DECLS

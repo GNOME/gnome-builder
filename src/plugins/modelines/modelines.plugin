@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2014-2018 Christian Hergert
+Depends=editor;
+Description=Support for modelines in source code files
+Embedded=_gbp_modelines_register_types
+Hidden=true
+Module=modelines
+Name=Modelines

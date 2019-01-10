@@ -15,12 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import gi
 import os
 from os import path
-
-gi.require_version('Ide', '1.0')
-gi.require_version('Template', '1.0')
 
 from gi.repository import GObject
 from gi.repository import Gio
@@ -31,10 +27,23 @@ from gi.repository import Template
 
 _ = Ide.gettext
 
-class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
+class MakeBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.props.glob = 'Makefile'
+        self.props.hint = 'make_plugin'
+        self.props.priority = 1000
+
+class MakeBuildSystem(Ide.Object, Ide.BuildSystem):
     project_file = GObject.Property(type=Gio.File)
     make_dir = GObject.Property(type=Gio.File)
     run_args = None
+
+    def do_parent_set(self, parent):
+        if self.project_file.get_basename() == 'Makefile':
+            self.make_dir = project_file.get_parent()
+        elif self.project_file.query_file_type(0, None) == Gio.FileType.DIRECTORY:
+            self.make_dir = self.project_file
 
     def do_get_id(self):
         return 'make'
@@ -42,45 +51,23 @@ class MakeBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
     def do_get_display_name(self):
         return 'Make'
 
-    def do_init_async(self, priority, cancel, callback, data=None):
-        task = Gio.Task.new(self, cancel, callback)
-        task.set_priority(priority)
-
-        # TODO: Be async here also
-        project_file = self.get_context().get_project_file()
-        if project_file.get_basename() == 'Makefile':
-            self.props.make_dir = project_file.get_parent()
-            task.return_boolean(True)
-        else:
-            child = project_file.get_child('Makefile')
-            exists = child.query_exists(cancel)
-            if exists:
-                self.props.make_dir = project_file
-                self.props.project_file = child
-            task.return_boolean(exists)
-
-    def do_init_finish(self, result):
-        return result.propagate_boolean()
-
     def do_get_priority(self):
         return 0
 
     def do_get_builddir(self, pipeline):
-        context = self.get_context()
-        return context.get_vcs().get_working_directory().get_path()
+        return self.get_context().ref_workdir().get_path()
 
-    def do_get_build_flags_async(self, ifile, cancellable, callback, data=None):
+    def do_get_build_flags_async(self, file, cancellable, callback, data=None):
         task = Gio.Task.new(self, cancellable, callback)
-        task.ifile = ifile
+        task.file = file
         task.build_flags = []
         task.return_boolean(True)
 
     def do_get_build_flags_finish(self, result):
-        if result.propagate_boolean():
-            return result.build_flags
+        return result.build_flags
 
     def get_make_dir(self):
-        return self.props.make_dir
+        return self.make_dir
 
 class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
     """
@@ -90,7 +77,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
     def do_load(self, pipeline):
         context = pipeline.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         # Only register stages if we are a makefile project
         if type(build_system) != MakeBuildSystem:
@@ -102,7 +89,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         # If the configuration has set $MAKE, then use it.
         make = config.getenv('MAKE') or "make"
 
-        srcdir = context.get_vcs().get_working_directory().get_path()
+        srcdir = context.ref_workdir().get_path()
         builddir = pipeline.get_builddir()
 
         # Register the build launcher which will perform the incremental
@@ -123,7 +110,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_stage.set_name(_("Build project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
+        self.track(pipeline.attach(Ide.BuildPhase.BUILD, 0, build_stage))
 
         # Register the install launcher which will perform our
         # "make install" when the Ide.BuildPhase.INSTALL phase
@@ -135,7 +122,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
         install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
         install_stage.set_name(_("Install project"))
-        self.track(pipeline.connect(Ide.BuildPhase.INSTALL, 0, install_stage))
+        self.track(pipeline.attach(Ide.BuildPhase.INSTALL, 0, install_stage))
 
         # Determine what it will take to "make run" for this pipeline
         # and stash it on the build_system for use by the build target.
@@ -143,7 +130,7 @@ class MakePipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         # has a "run" target.
         build_system.run_args = [make, '-C', build_system.get_make_dir().get_path(), 'run']
 
-    def _query(self, stage, pipeline, cancellable):
+    def _query(self, stage, pipeline, targets, cancellable):
         stage.set_completed(False)
 
 class MakeBuildTarget(Ide.Object, Ide.BuildTarget):
@@ -160,7 +147,7 @@ class MakeBuildTarget(Ide.Object, Ide.BuildTarget):
 
     def do_get_argv(self):
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
         assert type(build_system) == MakeBuildSystem
         return build_system.run_args
 
@@ -180,7 +167,7 @@ class MakeBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
         task.set_priority(GLib.PRIORITY_LOW)
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != MakeBuildSystem:
             task.return_error(GLib.Error('Not a make build system',
@@ -188,7 +175,7 @@ class MakeBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
                                          code=Gio.IOErrorEnum.NOT_SUPPORTED))
             return
 
-        task.targets = [MakeBuildTarget(context=self.get_context())]
+        task.targets = [MakeBuildTarget()]
         task.return_boolean(True)
 
     def do_get_targets_finish(self, result):
@@ -334,7 +321,7 @@ class MakeTemplateBase(Ide.TemplateBase, Ide.ProjectTemplate):
             if src.startswith('resource://'):
                 self.add_resource(src[11:], destination, scope, modes.get(src, 0))
             else:
-                path = os.path.join('/org/gnome/builder/plugins/make_plugin', src)
+                path = os.path.join('/plugins/make_plugin', src)
                 self.add_resource(path, destination, scope, modes.get(src, 0))
 
         self.expand_all_async(cancellable, self.expand_all_cb, task)

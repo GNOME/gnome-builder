@@ -22,6 +22,7 @@
 #define G_LOG_DOMAIN "gbp-sysroot-preferences-addin"
 
 #include <glib/gi18n.h>
+#include <libide-gui.h>
 
 #include "gbp-sysroot-preferences-addin.h"
 #include "gbp-sysroot-preferences-row.h"

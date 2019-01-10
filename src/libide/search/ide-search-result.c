@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "search/ide-search-result.h"
+#include "ide-search-result.h"
 
 typedef struct
 {
@@ -231,27 +231,24 @@ ide_search_result_set_priority (IdeSearchResult *self,
 }
 
 /**
- * ide_search_result_get_source_location:
+ * ide_search_result_activate:
  * @self: a #IdeSearchResult
+ * @last_focus: a #GtkWidget of the last focus
  *
- * Gets the file associated with the search result if any.
- *
- * Many search providers ultimately just open a file, so this may
- * be used in lieu of handling the activate signal.
- *
- * Returns: (transfer full) (nullable): An #IdeUri
+ * Requests that @self activate. @last_focus is provided so that the search
+ * result may activate #GAction or other context-specific actions.
  *
  * Since: 3.32
  */
-IdeSourceLocation *
-ide_search_result_get_source_location (IdeSearchResult *self)
+void
+ide_search_result_activate (IdeSearchResult *self,
+                            GtkWidget       *last_focus)
 {
-  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+  g_return_if_fail (GTK_IS_WIDGET (last_focus));
 
-  if (IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location != NULL)
-    return IDE_SEARCH_RESULT_GET_CLASS (self)->get_source_location (self);
-
-  return NULL;
+  if (IDE_SEARCH_RESULT_GET_CLASS (self)->activate)
+    IDE_SEARCH_RESULT_GET_CLASS (self)->activate (self, last_focus);
 }
 
 void

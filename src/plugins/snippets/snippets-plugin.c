@@ -18,14 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include "config.h"
+
+#include <libide-gui.h>
+#include <libide-sourceview.h>
 #include <libpeas/peas.h>
 
 #include "ide-snippet-completion-provider.h"
 #include "ide-snippet-preferences-addin.h"
 
-void
-gbp_snippets_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_snippets_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_COMPLETION_PROVIDER,

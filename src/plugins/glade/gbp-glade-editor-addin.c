@@ -23,18 +23,19 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libide-editor.h>
 
 #include "gbp-glade-editor-addin.h"
 #include "gbp-glade-private.h"
 #include "gbp-glade-properties.h"
-#include "gbp-glade-view.h"
+#include "gbp-glade-page.h"
 
 struct _GbpGladeEditorAddin
 {
   GObject               parent_instance;
 
   /* Widgets */
-  IdeEditorPerspective *editor;
+  IdeEditorSurface     *editor;
   GbpGladeProperties   *properties;
   GladeSignalEditor    *signals;
   DzlDockWidget        *signals_dock;
@@ -49,6 +50,46 @@ static void editor_addin_iface_init (IdeEditorAddinInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GbpGladeEditorAddin, gbp_glade_editor_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_ADDIN, editor_addin_iface_init))
+
+static void
+gbp_glade_editor_addin_ensure_properties (GbpGladeEditorAddin *self)
+{
+  IdeTransientSidebar *transient;
+  GtkWidget *utils;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_GLADE_EDITOR_ADDIN (self));
+
+  if (self->properties)
+    return;
+
+  transient = ide_editor_surface_get_transient_sidebar (self->editor);
+  utils = ide_editor_surface_get_utilities (self->editor);
+
+  self->properties = g_object_new (GBP_TYPE_GLADE_PROPERTIES,
+                                   "visible", TRUE,
+                                   NULL);
+  g_signal_connect (self->properties,
+                    "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &self->properties);
+  gtk_container_add (GTK_CONTAINER (transient), GTK_WIDGET (self->properties));
+
+  self->signals_dock = g_object_new (DZL_TYPE_DOCK_WIDGET,
+                                     "title", _("Signals"),
+                                     "icon-name", "glade-symbolic",
+                                     "visible", TRUE,
+                                     NULL);
+  gtk_container_add (GTK_CONTAINER (utils), GTK_WIDGET (self->signals_dock));
+
+  self->signals = g_object_new (GLADE_TYPE_SIGNAL_EDITOR,
+                                "visible", TRUE,
+                                NULL);
+  gtk_container_add (GTK_CONTAINER (self->signals_dock), GTK_WIDGET (self->signals));
+
+  /* Wire up the shortcuts to the panel too */
+  _gbp_glade_page_init_shortcuts (GTK_WIDGET (self->properties));
+}
 
 static void
 gbp_glade_editor_addin_dispose (GObject *object)
@@ -86,15 +127,21 @@ gbp_glade_editor_addin_selection_changed_cb (GbpGladeEditorAddin *self,
       GtkWidget *widget = selection->data;
       GladeWidget *glade = glade_widget_get_from_gobject (widget);
 
+      gbp_glade_editor_addin_ensure_properties (self);
+
       gbp_glade_properties_set_widget (self->properties, glade);
       glade_signal_editor_load_widget (self->signals, glade);
       gtk_widget_show (GTK_WIDGET (self->signals_dock));
     }
   else
     {
-      gbp_glade_properties_set_widget (self->properties, NULL);
+      if (self->properties)
+        gbp_glade_properties_set_widget (self->properties, NULL);
+
       glade_signal_editor_load_widget (self->signals, NULL);
-      gtk_widget_hide (GTK_WIDGET (self->signals_dock));
+
+      if (self->signals_dock)
+        gtk_widget_hide (GTK_WIDGET (self->signals_dock));
     }
 }
 
@@ -139,104 +186,87 @@ gbp_glade_editor_addin_set_project (GbpGladeEditorAddin *self,
 }
 
 static void
-gbp_glade_editor_addin_view_set (IdeEditorAddin *addin,
-                                 IdeLayoutView  *view)
+gbp_glade_editor_addin_page_set (IdeEditorAddin *addin,
+                                 IdePage        *view)
 {
   GbpGladeEditorAddin *self = (GbpGladeEditorAddin *)addin;
-  IdeLayoutTransientSidebar *transient;
+  IdeTransientSidebar *transient;
   GladeProject *project = NULL;
 
   g_assert (GBP_IS_GLADE_EDITOR_ADDIN (self));
-  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+  g_assert (!view || IDE_IS_PAGE (view));
 
-  transient = ide_editor_perspective_get_transient_sidebar (self->editor);
+  transient = ide_editor_surface_get_transient_sidebar (self->editor);
 
   if (self->has_hold)
     {
-      ide_layout_transient_sidebar_unlock (transient);
+      ide_transient_sidebar_unlock (transient);
       self->has_hold = FALSE;
     }
 
-  if (GBP_IS_GLADE_VIEW (view))
+  if (GBP_IS_GLADE_PAGE (view))
     {
-      project = gbp_glade_view_get_project (GBP_GLADE_VIEW (view));
-      ide_layout_transient_sidebar_set_view (transient, view);
-      ide_layout_transient_sidebar_lock (transient);
+      gbp_glade_editor_addin_ensure_properties (self);
+
+      project = gbp_glade_page_get_project (GBP_GLADE_PAGE (view));
+      ide_transient_sidebar_set_page (transient, view);
+      ide_transient_sidebar_lock (transient);
       gtk_widget_show (GTK_WIDGET (transient));
       dzl_dock_item_present (DZL_DOCK_ITEM (self->properties));
       self->has_hold = TRUE;
       dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->properties),
                                         GTK_WIDGET (view),
-                                        "GBP_GLADE_VIEW");
+                                        "GBP_GLADE_PAGE");
     }
   else
     {
-      gtk_widget_hide (GTK_WIDGET (self->signals_dock));
-      dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->properties),
-                                        NULL,
-                                        "GBP_GLADE_VIEW");
+      if (self->signals_dock)
+        gtk_widget_hide (GTK_WIDGET (self->signals_dock));
+
+      if (self->properties)
+        dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self->properties),
+                                          NULL,
+                                          "GBP_GLADE_PAGE");
     }
 
   gbp_glade_editor_addin_set_project (self, project);
 }
 
 static void
-gbp_glade_editor_addin_load (IdeEditorAddin       *addin,
-                             IdeEditorPerspective *editor)
+gbp_glade_editor_addin_load (IdeEditorAddin   *addin,
+                             IdeEditorSurface *editor)
 {
   GbpGladeEditorAddin *self = (GbpGladeEditorAddin *)addin;
-  IdeLayoutTransientSidebar *transient;
-  GtkWidget *utils;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GLADE_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
   self->editor = editor;
-
-  transient = ide_editor_perspective_get_transient_sidebar (self->editor);
-  utils = ide_editor_perspective_get_utilities (self->editor);
-
-  self->properties = g_object_new (GBP_TYPE_GLADE_PROPERTIES,
-                                   "visible", TRUE,
-                                   NULL);
-  gtk_container_add (GTK_CONTAINER (transient), GTK_WIDGET (self->properties));
-
-  self->signals_dock = g_object_new (DZL_TYPE_DOCK_WIDGET,
-                                     "title", _("Signals"),
-                                     "icon-name", "glade-symbolic",
-                                     "visible", TRUE,
-                                     NULL);
-  gtk_container_add (GTK_CONTAINER (utils), GTK_WIDGET (self->signals_dock));
-
-  self->signals = g_object_new (GLADE_TYPE_SIGNAL_EDITOR,
-                                "visible", TRUE,
-                                NULL);
-  gtk_container_add (GTK_CONTAINER (self->signals_dock), GTK_WIDGET (self->signals));
-
-  /* Wire up the shortcuts to the panel too */
-  _gbp_glade_view_init_shortcuts (GTK_WIDGET (self->properties));
 }
 
 static void
 gbp_glade_editor_addin_unload (IdeEditorAddin       *addin,
-                               IdeEditorPerspective *editor)
+                               IdeEditorSurface *editor)
 {
   GbpGladeEditorAddin *self = (GbpGladeEditorAddin *)addin;
-  IdeLayoutTransientSidebar *transient;
+  IdeTransientSidebar *transient;
 
   g_assert (GBP_IS_GLADE_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
-  transient = ide_editor_perspective_get_transient_sidebar (self->editor);
+  transient = ide_editor_surface_get_transient_sidebar (self->editor);
 
   if (self->has_hold)
     {
-      ide_layout_transient_sidebar_unlock (transient);
+      ide_transient_sidebar_unlock (transient);
       self->has_hold = FALSE;
     }
 
   gtk_widget_insert_action_group (GTK_WIDGET (editor), "glade", NULL);
-  gtk_widget_destroy (GTK_WIDGET (self->properties));
+
+  if (self->properties)
+    gtk_widget_destroy (GTK_WIDGET (self->properties));
 
   self->editor = NULL;
 }
@@ -246,5 +276,5 @@ editor_addin_iface_init (IdeEditorAddinInterface *iface)
 {
   iface->load = gbp_glade_editor_addin_load;
   iface->unload = gbp_glade_editor_addin_unload;
-  iface->view_set = gbp_glade_editor_addin_view_set;
+  iface->page_set = gbp_glade_editor_addin_page_set;
 }

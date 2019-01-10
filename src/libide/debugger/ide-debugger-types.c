@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "debugger/ide-debugger-types.h"
+#include "ide-debugger-types.h"
 
 GType
 ide_debugger_stream_get_type (void)

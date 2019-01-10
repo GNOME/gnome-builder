@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2015-2018 Christian Hergert
+Description=Initializes build system support
+Embedded=_gbp_buildsystem_register_types
+Hidden=true
+Module=buildsystem
+Name=Buildsystem Support

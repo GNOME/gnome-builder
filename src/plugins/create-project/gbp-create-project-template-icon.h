@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-#include <ide.h>
+#include <libide-projects.h>
 
 G_BEGIN_DECLS
 

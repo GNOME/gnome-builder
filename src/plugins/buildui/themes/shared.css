@@ -1,0 +1,9 @@
+.buildui .sidebar label.header {
+  padding: 8px;
+  border-bottom: 1px solid alpha(@borders, 0.5);
+}
+
+.omnibar label.error {
+  color: @error_color;
+  font-weight: bold;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="ide-primary-workspace-surfaces-menu">
+    <section id="ide-primary-workspace-surfaces-menu-section">
+      <item>
+        <attribute name="accel">&lt;alt&gt;2</attribute>
+        <attribute name="id">surface-menu-config</attribute>
+        <attribute name="label" translatable="yes">Build Preferences</attribute>
+        <attribute name="role">normal</attribute>
+        <attribute name="action">win.surface</attribute>
+        <attribute name="target">buildui</attribute>
+        <attribute name="verb-icon-name">builder-build-configure-symbolic</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-placeholder3">
+      <item>
+        <attribute name="id">project-tree-menu-build</attribute>
+        <attribute name="label" translatable="yes">Build</attribute>
+        <attribute name="action">buildui.build</attribute>
+      </item>
+      <item>
+        <attribute name="id">project-tree-menu-rebuild</attribute>
+        <attribute name="label" translatable="yes">Rebuild</attribute>
+        <attribute name="action">buildui.rebuild</attribute>
+      </item>
+      <item>
+        <attribute name="id">project-tree-menu-run</attribute>
+        <attribute name="label" translatable="yes">Run</attribute>
+        <attribute name="action">buildui.run-with-handler</attribute>
+        <attribute name="target" type="s">''</attribute>
+      </item>
+      <submenu id="project-tree-run-with-submenu">
+        <attribute name="label" translatable="yes">Run With…</attribute>
+        <section id="project-tree-menu-run-with-section">
+        </section>
+      </submenu>
+    </section>
+  </menu>
+</interface>

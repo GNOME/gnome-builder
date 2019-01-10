@@ -20,6 +20,7 @@
 
 #define G_LOG_DOMAIN "gbp-symbol-menu-button"
 
+#include <libide-sourceview.h>
 #include <glib/gi18n.h>
 
 #include "gbp-symbol-menu-button.h"
@@ -207,7 +208,7 @@ gbp_symbol_menu_button_class_init (GbpSymbolMenuButtonClass *klass)
 
   widget_class->destroy = gbp_symbol_menu_button_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/symbol-tree-plugin/gbp-symbol-menu-button.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/symbol-tree/gbp-symbol-menu-button.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, popover);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, search_entry);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolMenuButton, symbol_icon);

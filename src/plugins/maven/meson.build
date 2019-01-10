@@ -1,11 +1,11 @@
-if get_option('with_maven')
+if get_option('plugin_maven')
 
 install_data('maven_plugin.py', install_dir: plugindir)
 
 configure_file(
           input: 'maven.plugin',
          output: 'maven.plugin',
-           copy: true,
+  configuration: config_h,
         install: true,
     install_dir: plugindir,
 )

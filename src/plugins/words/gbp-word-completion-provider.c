@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <ide.h>
+#include <libide-sourceview.h>
 
 #include "gbp-word-completion-provider.h"
 #include "gbp-word-proposal.h"

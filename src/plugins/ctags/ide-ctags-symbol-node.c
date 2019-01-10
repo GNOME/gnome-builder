@@ -39,7 +39,7 @@ ide_ctags_symbol_node_get_location_cb (GObject      *object,
                                        gpointer      user_data)
 {
   IdeCtagsSymbolResolver *resolver = (IdeCtagsSymbolResolver *)object;
-  g_autoptr(IdeSourceLocation) location = NULL;
+  g_autoptr(IdeLocation) location = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
@@ -54,7 +54,7 @@ ide_ctags_symbol_node_get_location_cb (GObject      *object,
   else
     ide_task_return_pointer (task,
                              g_steal_pointer (&location),
-                             (GDestroyNotify)ide_source_location_unref);
+                             (GDestroyNotify)g_object_unref);
 }
 
 static void
@@ -80,7 +80,7 @@ ide_ctags_symbol_node_get_location_async (IdeSymbolNode       *node,
                                                 g_steal_pointer (&task));
 }
 
-static IdeSourceLocation *
+static IdeLocation *
 ide_ctags_symbol_node_get_location_finish (IdeSymbolNode  *node,
                                            GAsyncResult   *result,
                                            GError        **error)

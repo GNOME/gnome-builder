@@ -4,8 +4,6 @@ import os
 import json
 import gi
 
-gi.require_version('Ide', '1.0')
-
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import GObject
@@ -13,12 +11,16 @@ from gi.repository import Ide
 
 DEV_MODE = os.getenv('DEV_MODE') and True or False
 
-class GoService(Ide.Object, Ide.Service):
+class GoService(Ide.Object):
     _client = None
     _has_started = False
     _supervisor = None
 
-    @GObject.Property(type=Ide.LangservClient)
+    @classmethod
+    def from_context(klass, context):
+        return context.ensure_child_typed(GoService)
+
+    @GObject.Property(type=Ide.LspClient)
     def client(self):
         return self._client
 
@@ -49,7 +51,7 @@ class GoService(Ide.Object, Ide.Service):
             launcher.set_clear_env(False)
 
             # Locate the directory of the project and run go-langserver from there
-            workdir = self.get_context().get_vcs().get_working_directory()
+            workdir = self.get_context().ref_workdir()
             launcher.set_cwd(workdir.get_path())
 
             # Bash will load the host $PATH and $GOPATH (and optionally $GOROOT) for us.
@@ -78,8 +80,10 @@ class GoService(Ide.Object, Ide.Service):
 
         if self._client:
             self._client.stop()
+            self._client.destroy()
 
-        self._client = Ide.LangservClient.new(self.get_context(), io_stream)
+        self._client = Ide.LspClient.new(io_stream)
+        self.append(self._client)
         self._client.add_language('go')
         self._client.start()
         self.notify('client')
@@ -97,26 +101,26 @@ class GoService(Ide.Object, Ide.Service):
     @classmethod
     def bind_client(klass, provider):
         context = provider.get_context()
-        self = context.get_service_typed(GoService)
+        self = GoService.from_context(context)
         self._ensure_started()
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
 # This is the only up-to-date looking list of supported things lsp things:
 # https://github.com/sourcegraph/go-langserver/blob/master/langserver/handler.go#L226
 
-class GoSymbolResolver(Ide.LangservSymbolResolver, Ide.SymbolResolver):
+class GoSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
     def do_load(self):
         GoService.bind_client(self)
 
 ## This is supported as of a few weeks ago, but at least for me, it seems
 ## awfully crashy, so I'm going to leave it disabled by default so as to
 ## not give a bad impression
-#class GoCompletionProvider(Ide.LangservCompletionProvider, Ide.CompletionProvider):
+#class GoCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
 #    def do_load(self, context):
 #        GoService.bind_client(self)
 
 ## Could not validate that this works, though `go-langserver` says it does.
 ## Calling out to `gofmt` is probably the more canonical route
-#class GoFormatter(Ide.LangservFormatter, Ide.Formatter):
+#class GoFormatter(Ide.LspFormatter, Ide.Formatter):
 #    def do_load(self):
 #        GoService.bind_client(self)

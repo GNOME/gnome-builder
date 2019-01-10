@@ -22,12 +22,10 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libide-core.h>
 
-#include "ide-debug.h"
-
-#include "threading/ide-thread-pool.h"
-#include "threading/ide-thread-private.h"
+#include "ide-thread-pool.h"
+#include "ide-thread-private.h"
 
 typedef struct
 {
@@ -53,9 +51,6 @@ struct _IdeThreadPool
   guint              worker_max_threads;
   gboolean           exclusive;
 };
-
-DZL_DEFINE_COUNTER (TotalTasks, "ThreadPool", "Total Tasks", "Total number of tasks processed.")
-DZL_DEFINE_COUNTER (QueuedTasks, "ThreadPool", "Queued Tasks", "Current number of pending tasks.")
 
 static IdeThreadPool thread_pools[] = {
   { NULL, IDE_THREAD_POOL_DEFAULT, 10, 1, FALSE },
@@ -105,8 +100,6 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
   g_return_if_fail (G_IS_TASK (task));
   g_return_if_fail (func != NULL);
 
-  DZL_COUNTER_INC (TotalTasks);
-
   pool = ide_thread_pool_get_pool (kind);
 
   if (pool != NULL)
@@ -118,8 +111,6 @@ ide_thread_pool_push_task (IdeThreadPoolKind  kind,
       work_item->priority = g_task_get_priority (task);
       work_item->task.task = g_object_ref (task);
       work_item->task.func = func;
-
-      DZL_COUNTER_INC (QueuedTasks);
 
       g_thread_pool_push (pool, work_item, NULL);
     }
@@ -174,8 +165,6 @@ ide_thread_pool_push_with_priority (IdeThreadPoolKind kind,
   g_return_if_fail (kind < IDE_THREAD_POOL_LAST);
   g_return_if_fail (func != NULL);
 
-  DZL_COUNTER_INC (TotalTasks);
-
   pool = ide_thread_pool_get_pool (kind);
 
   if (pool != NULL)
@@ -187,8 +176,6 @@ ide_thread_pool_push_with_priority (IdeThreadPoolKind kind,
       work_item->priority = priority;
       work_item->func.callback = func;
       work_item->func.data = func_data;
-
-      DZL_COUNTER_INC (QueuedTasks);
 
       g_thread_pool_push (pool, work_item, NULL);
     }
@@ -207,8 +194,6 @@ ide_thread_pool_worker (gpointer data,
   WorkItem *work_item = data;
 
   g_assert (work_item != NULL);
-
-  DZL_COUNTER_DEC (QueuedTasks);
 
   if (work_item->type == TYPE_TASK)
     {

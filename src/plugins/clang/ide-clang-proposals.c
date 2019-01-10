@@ -22,12 +22,15 @@
 
 #include "config.h"
 
+#include <libide-code.h>
+#include <libide-foundry.h>
+#include <libide-sourceview.h>
 #include <clang-c/Index.h>
+
+#include "ide-buffer-private.h"
 
 #include "ide-clang-completion-item.h"
 #include "ide-clang-proposals.h"
-
-#include "sourceview/ide-text-iter.h"
 
 struct _IdeClangProposals
 {
@@ -216,7 +219,7 @@ ide_clang_proposals_class_init (IdeClangProposalsClass *klass)
                          "The client to the clang worker process",
                          IDE_TYPE_CLANG_CLIENT,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -514,7 +517,7 @@ ide_clang_proposals_query_build_flags_cb (GObject      *object,
 
 static void
 ide_clang_proposals_query_async (IdeClangProposals   *self,
-                                 IdeFile             *file,
+                                 GFile               *file,
                                  guint                line,
                                  guint                column,
                                  GCancellable        *cancellable,
@@ -527,15 +530,15 @@ ide_clang_proposals_query_async (IdeClangProposals   *self,
   Query *q;
 
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
-  g_assert (IDE_IS_FILE (file));
+  g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self->client));
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
 
   q = g_slice_new0 (Query);
   q->client = g_object_ref (self->client);
-  q->file = g_object_ref (ide_file_get_file (file));
+  q->file = g_object_ref (file);
   q->line = line;
   q->column = column;
   q->query_id = ++self->query_id;
@@ -613,7 +616,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter previous;
-  IdeFile *file;
+  GFile *file;
 
   IDE_ENTRY;
 
@@ -655,7 +658,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
     }
 
   /* Unlikely, but is this the exact same query as before? */
-  if (dzl_str_equal0 (self->filter, word))
+  if (ide_str_equal0 (self->filter, word))
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
@@ -687,7 +690,7 @@ ide_clang_proposals_populate_async (IdeClangProposals   *self,
 
 query_client:
 
-  ide_buffer_sync_to_unsaved_files (IDE_BUFFER (buffer));
+  _ide_buffer_sync_to_unsaved_files (IDE_BUFFER (buffer));
   file = ide_buffer_get_file (IDE_BUFFER (buffer));
 
   prev_cancellable = g_steal_pointer (&self->cancellable);

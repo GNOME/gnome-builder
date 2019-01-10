@@ -19,11 +19,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import gi
 import threading
 import os
-
-gi.require_version('Ide', '1.0')
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -39,7 +36,14 @@ _ERROR_FORMAT_REGEX = ("(?<filename>[a-zA-Z0-9\\+\\-\\.\\/_]+):"
                        "(?<level>[\\w\\[a-zA-Z0-9\\]\\s]+): "
                        "(?<message>.*)")
 
-class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
+class CargoBuildSystemDiscovery(Ide.SimpleBuildSystemDiscovery):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.props.glob = 'Cargo.toml'
+        self.props.hint = 'cargo_plugin'
+        self.props.priority = -200
+
+class CargoBuildSystem(Ide.Object, Ide.BuildSystem):
     project_file = GObject.Property(type=Gio.File)
 
     def do_get_id(self):
@@ -47,33 +51,6 @@ class CargoBuildSystem(Ide.Object, Ide.BuildSystem, Gio.AsyncInitable):
 
     def do_get_display_name(self):
         return 'Cargo'
-
-    def do_init_async(self, io_priority, cancellable, callback, data):
-        task = Gio.Task.new(self, cancellable, callback)
-
-        # This is all done synchronously, doing it in a thread would probably
-        # be somewhat ideal although unnecessary at this time.
-
-        try:
-            # Maybe this is a Cargo.toml
-            if self.props.project_file.get_basename() in ('Cargo.toml',):
-                task.return_boolean(True)
-                return
-
-            # Maybe this is a directory with a Cargo.toml
-            if self.props.project_file.query_file_type(0) == Gio.FileType.DIRECTORY:
-                child = self.props.project_file.get_child('Cargo.toml')
-                if child.query_exists(None):
-                    self.props.project_file = child
-                    task.return_boolean(True)
-                    return
-        except Exception as ex:
-            task.return_error(ex)
-
-        task.return_error(Ide.NotSupportedError())
-
-    def do_init_finish(self, task):
-        return task.propagate_boolean()
 
     def do_get_priority(self):
         return -200
@@ -100,7 +77,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
 
     def do_load(self, pipeline):
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         # Always register the error regex
         self.error_format_id = pipeline.add_error_format(_ERROR_FORMAT_REGEX,
@@ -127,7 +104,7 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         fetch_launcher.push_argv('fetch')
         fetch_launcher.push_argv('--manifest-path')
         fetch_launcher.push_argv(cargo_toml)
-        self.track(pipeline.connect_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
+        self.track(pipeline.attach_launcher(Ide.BuildPhase.DOWNLOADS, 0, fetch_launcher))
 
         # Now create our launcher to build the project
         build_launcher = pipeline.create_launcher()
@@ -166,13 +143,13 @@ class CargoPipelineAddin(Ide.Object, Ide.BuildPipelineAddin):
         build_stage.set_name(_("Building project"))
         build_stage.set_clean_launcher(clean_launcher)
         build_stage.connect('query', self._query)
-        self.track(pipeline.connect(Ide.BuildPhase.BUILD, 0, build_stage))
+        self.track(pipeline.attach(Ide.BuildPhase.BUILD, 0, build_stage))
 
     def do_unload(self, pipeline):
         if self.error_format_id:
             pipeline.remove_error_format(self.error_format_id)
 
-    def _query(self, stage, pipeline, cancellable):
+    def _query(self, stage, pipeline, targets, cancellable):
         # Always defer to cargo to check if build is needed
         stage.set_completed(False)
 
@@ -213,7 +190,7 @@ class CargoBuildTargetProvider(Ide.Object, Ide.BuildTargetProvider):
         task.set_priority(GLib.PRIORITY_LOW)
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         if type(build_system) != CargoBuildSystem:
             task.return_error(GLib.Error('Not cargo build system',
@@ -235,14 +212,14 @@ class CargoDependencyUpdater(Ide.Object, Ide.DependencyUpdater):
         task.set_priority(GLib.PRIORITY_LOW)
 
         context = self.get_context()
-        build_system = context.get_build_system()
+        build_system = Ide.BuildSystem.from_context(context)
 
         # Short circuit if not using cargo
         if type(build_system) != CargoBuildSystem:
             task.return_boolean(True)
             return
 
-        build_manager = context.get_build_manager()
+        build_manager = Ide.BuildManager.from_context(context)
         pipeline = build_manager.get_pipeline()
         if not pipeline:
             task.return_error(GLib.Error('Cannot update dependencies without build pipeline',

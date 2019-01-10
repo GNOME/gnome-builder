@@ -20,8 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-python-indenter"
 
-#include <libpeas/peas.h>
 #include <gtksourceview/gtksource.h>
+#include <libide-sourceview.h>
 #include <string.h>
 
 #include "ide-python-indenter.h"

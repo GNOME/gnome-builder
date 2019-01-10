@@ -22,7 +22,7 @@
 
 #include <glib-object.h>
 
-#include "ide.h"
+#include "libide-editor.h"
 
 #include "gb-beautifier-config.h"
 #include "gb-beautifier-editor-addin.h"

@@ -29,7 +29,7 @@
 #include <gio/gunixoutputstream.h>
 #include <glib-unix.h>
 #include <jsonrpc-glib.h>
-#include <ide.h>
+#include <libide-code.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -422,7 +422,7 @@ handle_diagnose_cb (IdeClang     *clang,
       return;
     }
 
-  IDE_PTR_ARRAY_SET_FREE_FUNC (diagnostics, ide_diagnostic_unref);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (diagnostics, ide_object_unref_and_destroy);
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
 

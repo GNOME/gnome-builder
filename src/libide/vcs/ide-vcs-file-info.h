@@ -20,9 +20,11 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_VCS_INSIDE) && !defined (IDE_VCS_COMPILATION)
+# error "Only <libide-vcs.h> can be included directly."
+#endif
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 

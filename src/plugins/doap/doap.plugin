@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2015-2018 Christian Hergert
+Description=Support for the Git version control system
+Embedded=_gbp_doap_register_types
+Hidden=true
+Module=doap
+Name=Description of a Project

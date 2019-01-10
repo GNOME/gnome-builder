@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GbpRecentSection" parent="GtkBin">
+    <property name="halign">center</property>
     <child>
       <object class="GtkBox">
+        <property name="hexpand">true</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <property name="visible">true</property>

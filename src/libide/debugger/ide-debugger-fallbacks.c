@@ -22,8 +22,8 @@
 
 #include "config.h"
 
-#include "debugger/ide-debugger.h"
-#include "debugger/ide-debugger-private.h"
+#include "ide-debugger.h"
+#include "ide-debugger-private.h"
 
 void
 _ide_debugger_real_list_frames_async (IdeDebugger         *self,

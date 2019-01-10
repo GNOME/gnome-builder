@@ -1,6 +1,6 @@
 /* ide-editor-private.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,32 +20,29 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include <libide-gui.h>
+#include <libide-plugins.h>
+#include <libide-sourceview.h>
 #include <libpeas/peas.h>
 
-#include "editor/ide-editor-perspective.h"
-#include "editor/ide-editor-properties.h"
-#include "editor/ide-editor-search.h"
-#include "editor/ide-editor-search-bar.h"
-#include "editor/ide-editor-sidebar.h"
-#include "editor/ide-editor-view-addin.h"
-#include "editor/ide-editor-view.h"
-#include "layout/ide-layout-grid.h"
-#include "layout/ide-layout-view.h"
-#include "plugins/ide-extension-set-adapter.h"
+#include "ide-editor-addin.h"
+#include "ide-editor-page.h"
+#include "ide-editor-search-bar.h"
+#include "ide-editor-search.h"
+#include "ide-editor-sidebar.h"
+#include "ide-editor-surface.h"
 
 G_BEGIN_DECLS
 
-struct _IdeEditorPerspective
+struct _IdeEditorSurface
 {
-  IdeLayout            parent_instance;
+  IdeSurface           parent_instance;
 
   PeasExtensionSet    *addins;
 
   /* Template widgets */
-  IdeLayoutGrid       *grid;
+  IdeGrid             *grid;
   GtkOverlay          *overlay;
-  IdeEditorProperties *properties;
   GtkStack            *loading_stack;
 
   /* State before entering focus mode */
@@ -53,9 +50,9 @@ struct _IdeEditorPerspective
   guint                prefocus_had_bottom : 1;
 };
 
-struct _IdeEditorView
+struct _IdeEditorPage
 {
-  IdeLayoutView            parent_instance;
+  IdePage                  parent_instance;
 
   IdeExtensionSetAdapter  *addins;
 
@@ -82,8 +79,8 @@ struct _IdeEditorView
   GtkRevealer             *modified_revealer;
   GtkButton               *modified_cancel_button;
 
-  /* Raw pointer used to determine when stack changes */
-  IdeLayoutStack          *last_stack_ptr;
+  /* Raw pointer used to determine when frame changes */
+  IdeFrame                *last_frame_ptr;
 
   guint                    toggle_map_source;
 
@@ -91,18 +88,16 @@ struct _IdeEditorView
   guint                    show_map : 1;
 };
 
-void _ide_editor_view_init_actions           (IdeEditorView        *self);
-void _ide_editor_view_init_settings          (IdeEditorView        *self);
-void _ide_editor_view_init_shortcuts         (IdeEditorView        *self);
-void _ide_editor_view_update_actions         (IdeEditorView        *self);
-void _ide_editor_search_bar_init_shortcuts   (IdeEditorSearchBar   *self);
-void _ide_editor_sidebar_set_open_pages      (IdeEditorSidebar     *self,
-                                              GListModel           *open_pages);
-void _ide_editor_perspective_show_properties (IdeEditorPerspective *self,
-                                              IdeEditorView        *view);
-void _ide_editor_perspective_set_loading     (IdeEditorPerspective *self,
-                                              gboolean              loading);
-void _ide_editor_perspective_init_actions    (IdeEditorPerspective *self);
-void _ide_editor_perspective_init_shortcuts  (IdeEditorPerspective *self);
+void _ide_editor_page_init_actions         (IdeEditorPage      *self);
+void _ide_editor_page_init_settings        (IdeEditorPage      *self);
+void _ide_editor_page_init_shortcuts       (IdeEditorPage      *self);
+void _ide_editor_page_update_actions       (IdeEditorPage      *self);
+void _ide_editor_search_bar_init_shortcuts (IdeEditorSearchBar *self);
+void _ide_editor_sidebar_set_open_pages    (IdeEditorSidebar   *self,
+                                            GListModel         *open_pages);
+void _ide_editor_surface_set_loading       (IdeEditorSurface   *self,
+                                            gboolean            loading);
+void _ide_editor_surface_init_actions      (IdeEditorSurface   *self);
+void _ide_editor_surface_init_shortcuts    (IdeEditorSurface   *self);
 
 G_END_DECLS

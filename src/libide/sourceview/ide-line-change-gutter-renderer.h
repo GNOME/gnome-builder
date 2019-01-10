@@ -21,12 +21,13 @@
 #pragma once
 
 #include <gtksourceview/gtksource.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER (ide_line_change_gutter_renderer_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer,
-                      IDE, LINE_CHANGE_GUTTER_RENDERER, GtkSourceGutterRenderer);
+IDE_AVAILABLE_IN_3_32
+G_DECLARE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer, IDE, LINE_CHANGE_GUTTER_RENDERER, GtkSourceGutterRenderer)
 
 G_END_DECLS

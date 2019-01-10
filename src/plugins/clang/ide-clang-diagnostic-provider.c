@@ -21,6 +21,7 @@
 #define G_LOG_DOMAIN "ide-clang-diagnostic-provider"
 
 #include <glib/gi18n.h>
+#include <libide-foundry.h>
 
 #include "ide-clang-client.h"
 #include "ide-clang-diagnostic-provider.h"
@@ -61,8 +62,8 @@ diagnose_get_build_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(IdeTask) task = user_data;
+  g_autoptr(IdeClangClient) client = NULL;
   g_auto(GStrv) flags = NULL;
-  IdeClangClient *client;
   GCancellable *cancellable;
   IdeContext *context;
   GFile *file;
@@ -73,7 +74,7 @@ diagnose_get_build_flags_cb (GObject      *object,
 
   flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
   context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_context_get_service_typed (context, IDE_TYPE_CLANG_CLIENT);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   file = ide_task_get_task_data (task);
   cancellable = ide_task_get_cancellable (task);
 
@@ -87,8 +88,9 @@ diagnose_get_build_flags_cb (GObject      *object,
 
 static void
 ide_clang_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
-                                              IdeFile               *file,
-                                              IdeBuffer             *buffer,
+                                              GFile                 *file,
+                                              GBytes                *contents,
+                                              const gchar           *lang_id,
                                               GCancellable          *cancellable,
                                               GAsyncReadyCallback    callback,
                                               gpointer               user_data)
@@ -97,18 +99,16 @@ ide_clang_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   g_autoptr(IdeTask) task = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
-  GFile *gfile;
 
-  g_return_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self));
-
-  gfile = ide_file_get_file (file);
+  g_assert (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self));
+  g_assert (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_task_data (task, g_object_ref (gfile), g_object_unref);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
   ide_task_set_kind (task, IDE_TASK_KIND_COMPILER);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
 
   ide_build_system_get_build_flags_async (build_system,
                                           file,

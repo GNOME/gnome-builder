@@ -69,10 +69,13 @@ sysroot_runtime_provider_add_target (GbpSysrootRuntimeProvider *self,
                                      const gchar               *target)
 {
   g_autoptr(GbpSysrootRuntime) runtime = NULL;
-  IdeContext *context = NULL;
 
-  context = ide_object_get_context (IDE_OBJECT (self->runtime_manager));
-  runtime = gbp_sysroot_runtime_new (context, target);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSROOT_RUNTIME_PROVIDER (self));
+  g_assert (target != NULL);
+
+  runtime = gbp_sysroot_runtime_new (target);
+  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runtime));
 
   ide_runtime_manager_add (self->runtime_manager, IDE_RUNTIME (runtime));
   g_ptr_array_add (self->runtimes, g_steal_pointer (&runtime));
@@ -95,13 +98,11 @@ sysroot_runtime_provider_target_changed (GbpSysrootRuntimeProvider              
 static void
 gbp_sysroot_runtime_provider_class_init (GbpSysrootRuntimeProviderClass *klass)
 {
-  
 }
 
 static void
 gbp_sysroot_runtime_provider_init (GbpSysrootRuntimeProvider *self)
 {
-  
 }
 
 static void

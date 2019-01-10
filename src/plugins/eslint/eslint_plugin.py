@@ -24,15 +24,11 @@ import gi
 import json
 import threading
 
-gi.require_version('Ide', '1.0')
-
-from gi.repository import (
-    GLib,
-    GObject,
-    Gio,
-    Gtk,
-    Ide,
-)
+from gi.repository import GLib
+from gi.repository import GObject
+from gi.repository import Gio
+from gi.repository import Gtk
+from gi.repository import Ide
 
 _ = Ide.gettext
 
@@ -52,24 +48,34 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
         else:
             return 'eslint'  # Just rely on PATH
 
-    def do_diagnose_async(self, file, buffer, cancellable, callback, user_data):
+    def create_launcher(self):
+        context = self.get_context()
+        srcdir = context.ref_workdir().get_path()
+        launcher = None
+
+        if context.has_project():
+            build_manager = Ide.BuildManager.from_context(context)
+            pipeline = build_manager.get_pipeline()
+            if pipeline is not None:
+                srcdir = pipeline.get_srcdir()
+            runtime = pipeline.get_configuration().get_runtime()
+            launcher = runtime.create_launcher()
+
+        if launcher is None:
+            launcher = Ide.SubprocessLauncher.new(0)
+
+        launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE)
+        launcher.set_cwd(srcdir)
+
+        return launcher
+
+    def do_diagnose_async(self, file, file_content, lang_id, cancellable, callback, user_data):
         self.diagnostics_list = []
         task = Gio.Task.new(self, cancellable, callback)
         task.diagnostics_list = []
 
-        context = self.get_context()
-        unsaved_file = context.get_unsaved_files().get_unsaved_file(file.get_file())
-        pipeline = self.get_context().get_build_manager().get_pipeline()
-        srcdir = pipeline.get_srcdir()
-        runtime = pipeline.get_configuration().get_runtime()
-        launcher = runtime.create_launcher()
-        launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE)
-        launcher.set_cwd(srcdir)
-
-        if unsaved_file:
-            file_content = unsaved_file.get_content().get_data().decode('utf-8')
-        else:
-            file_content = None
+        launcher = self.create_launcher()
+        srcdir = launcher.get_cwd()
 
         threading.Thread(target=self.execute, args=(task, launcher, srcdir, file, file_content),
                          name='eslint-thread').start()
@@ -87,7 +93,8 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
                 launcher.push_argv(file.get_path())
 
             sub_process = launcher.spawn()
-            success, stdout, stderr = sub_process.communicate_utf8(file_content, None)
+            stdin = file_content.get_data().decode('UTF-8')
+            success, stdout, stderr = sub_process.communicate_utf8(stdin, None)
 
             if not success:
                 task.return_boolean(False)
@@ -100,17 +107,17 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
                         continue
                     start_line = max(message['line'] - 1, 0)
                     start_col = max(message['column'] - 1, 0)
-                    start = Ide.SourceLocation.new(file, start_line, start_col, 0)
+                    start = Ide.Location.new(file, start_line, start_col)
                     end = None
                     if 'endLine' in message:
                         end_line = max(message['endLine'] - 1, 0)
                         end_col = max(message['endColumn'] - 1, 0)
-                        end = Ide.SourceLocation.new(file, end_line, end_col, 0)
+                        end = Ide.Location.new(file, end_line, end_col)
 
                     severity = SEVERITY_MAP[message['severity']]
                     diagnostic = Ide.Diagnostic.new(severity, message['message'], start)
                     if end is not None:
-                        range_ = Ide.SourceRange.new(start, end)
+                        range_ = Ide.Range.new(start, end)
                         diagnostic.add_range(range_)
                         # if 'fix' in message:
                         # Fixes often come without end* information so we
@@ -129,7 +136,10 @@ class ESLintDiagnosticProvider(Ide.Object, Ide.DiagnosticProvider):
 
     def do_diagnose_finish(self, result):
         if result.propagate_boolean():
-            return Ide.Diagnostics.new(result.diagnostics_list)
+            diagnostics = Ide.Diagnostics()
+            for diag in result.diagnostics_list:
+                diagnostics.add(diag)
+            return diagnostics
 
 
 class ESLintPreferencesAddin(GObject.Object, Ide.PreferencesAddin):

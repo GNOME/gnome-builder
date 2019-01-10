@@ -107,7 +107,7 @@ ide_clang_code_index_entries_worker (IdeTask      *task,
                                  &begin.line, &begin.column,
                                  &end.line, &end.column);
 
-          if (dzl_str_empty0 (key))
+          if (ide_str_empty0 (key))
             key = NULL;
 
           ide_code_index_entry_builder_set_name (builder, name);

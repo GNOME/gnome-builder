@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2015-2018 Christian Hergert
+Description=Support for .buildconfig files
+Embedded=_gbp_buildconfig_register_types
+Hidden=true
+Module=buildconfig
+Name=Buildconfig Support

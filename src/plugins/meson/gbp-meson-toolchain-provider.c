@@ -230,7 +230,7 @@ gbp_meson_toolchain_provider_load_async (IdeToolchainProvider     *provider,
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
 
   if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
     {
@@ -254,7 +254,7 @@ gbp_meson_toolchain_provider_load_async (IdeToolchainProvider     *provider,
   user_folder_path = g_build_filename (g_get_user_data_dir (), "meson", "cross", NULL);
   folders = g_list_append (folders, g_file_new_for_path (user_folder_path));
 
-  project_folder = g_file_get_parent (ide_context_get_project_file (context));
+  project_folder = ide_context_ref_workdir (context);
   folders = g_list_append (folders, g_steal_pointer (&project_folder));
 
   fs = file_searching_new ();
@@ -342,5 +342,4 @@ gbp_meson_toolchain_provider_class_init (GbpMesonToolchainProviderClass *klass)
 static void
 gbp_meson_toolchain_provider_init (GbpMesonToolchainProvider *self)
 {
-  
 }

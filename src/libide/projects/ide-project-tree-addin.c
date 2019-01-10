@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "projects/ide-project-tree-addin.h"
+#include "ide-project-tree-addin.h"
 
 /**
  * SECTION:ide-project-tree-addin
