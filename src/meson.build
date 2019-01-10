@@ -108,18 +108,27 @@ configure_file(
     install_dir: pkgvapidir,
 )
 
+configure_file(
+          input: 'Ide.metadata.in',
+         output: 'Ide-@0@.@1@.metadata'.format(MAJOR_VERSION, MINOR_VERSION),
+           copy: true,
+        install: true,
+    install_dir: plugindir,
+)
+
 libide_vapi = gnome.generate_vapi('libide-' + libide_api_version,
-      sources: libide_gir[0],
-      install: true,
-  install_dir: pkgvapidir,
-     packages: [ 'gio-2.0',
-                 'gtk+-3.0',
-                 'gtksourceview-4',
-                 'json-glib-1.0',
-                 'libdazzle-1.0',
-                 'libpeas-1.0',
-                 'template-glib-1.0',
-                 'vte-2.91' ],
+        sources: libide_gir[0],
+        install: true,
+    install_dir: pkgvapidir,
+  metadata_dirs: [meson.current_build_dir()],
+       packages: [ 'gio-2.0',
+                   'gtk+-3.0',
+                   'gtksourceview-4',
+                   'json-glib-1.0',
+                   'libdazzle-1.0',
+                   'libpeas-1.0',
+                   'template-glib-1.0',
+                   'vte-2.91' ],
 )
 
 # Must be after vapi generation
