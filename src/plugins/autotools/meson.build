@@ -1,34 +1,25 @@
-if get_option('with_autotools')
+if get_option('plugin_autotools')
 
-autotools_resources = gnome.compile_resources(    
-  'ide-autotools-resources',                      
-  'autotools.gresource.xml',                      
-  c_name: 'ide_autotools',                        
-)                                           
-
-autotools_sources = [
+plugins_sources += files([
   'autotools-plugin.c',
   'ide-autotools-autogen-stage.c',
-  'ide-autotools-autogen-stage.h',
   'ide-autotools-build-system.c',
-  'ide-autotools-build-system.h',
-  'ide-autotools-build-target.c',
-  'ide-autotools-build-target.h',
+  'gbp-autotools-build-system-discovery.c',
   'ide-autotools-build-target-provider.c',
-  'ide-autotools-build-target-provider.h',
+  'ide-autotools-build-target.c',
   'ide-autotools-make-stage.c',
-  'ide-autotools-make-stage.h',
   'ide-autotools-makecache-stage.c',
-  'ide-autotools-makecache-stage.h',
   'ide-autotools-pipeline-addin.c',
-  'ide-autotools-pipeline-addin.h',
-  'ide-makecache.c',
-  'ide-makecache.h',
   'ide-makecache-target.c',
-  'ide-makecache-target.h',
-]
+  'ide-makecache.c',
+])
 
-gnome_builder_plugins_sources += files(autotools_sources)       
-gnome_builder_plugins_sources += autotools_resources[0]         
+plugin_autotools_resources = gnome.compile_resources(
+  'gbp-autotools-resources',
+  'autotools.gresource.xml',
+  c_name: 'gbp_autotools',
+)
+
+plugins_sources += plugin_autotools_resources[0]
 
 endif

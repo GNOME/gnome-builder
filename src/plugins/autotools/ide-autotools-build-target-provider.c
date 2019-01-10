@@ -96,7 +96,7 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_context_get_build_system (context);
+  build_system = ide_build_system_from_context (context);
 
   if (!IDE_IS_AUTOTOOLS_BUILD_SYSTEM (build_system))
     {
@@ -107,7 +107,7 @@ ide_autotools_build_target_provider_get_targets_async (IdeBuildTargetProvider *p
       IDE_EXIT;
     }
 
-  build_manager = ide_context_get_build_manager (context);
+  build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
   builddir = ide_build_pipeline_get_builddir (pipeline);
   builddir_file = g_file_new_for_path (builddir);

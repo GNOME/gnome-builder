@@ -1,6 +1,6 @@
-/* ide-autotools-pipeline-addin.h
+/* gbp-autotools-build-system-discovery.h
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_AUTOTOOLS_PIPELINE_ADDIN (ide_autotools_pipeline_addin_get_type())
+#define GBP_TYPE_AUTOTOOLS_BUILD_SYSTEM_DISCOVERY (gbp_autotools_build_system_discovery_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeAutotoolsPipelineAddin, ide_autotools_pipeline_addin, IDE, AUTOTOOLS_PIPELINE_ADDIN, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpAutotoolsBuildSystemDiscovery, gbp_autotools_build_system_discovery, GBP, AUTOTOOLS_BUILD_SYSTEM_DISCOVERY, IdeSimpleBuildSystemDiscovery)
 
 G_END_DECLS

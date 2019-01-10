@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-foundry.h>
 
 #include "ide-makecache.h"
 

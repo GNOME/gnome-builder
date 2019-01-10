@@ -340,6 +340,7 @@ ide_autotools_make_stage_clean_finish (IdeBuildStage  *stage,
 static void
 ide_autotools_make_stage_query (IdeBuildStage    *stage,
                                 IdeBuildPipeline *pipeline,
+                                GPtrArray        *targets,
                                 GCancellable     *cancellable)
 {
   IDE_ENTRY;
