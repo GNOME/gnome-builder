@@ -1,8 +1,11 @@
 [Plugin]
-Module=valgrind_plugin
-Loader=python3
-Name=Valgrind
-Description=Provides integration with valgrind
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2017 Christian Hergert
 Builtin=true
+Copyright=Copyright © 2017-2018 Christian Hergert
+Depends=buildui;editor;
+Description=Provides integration with valgrind
+Loader=python3
+Module=valgrind_plugin
+Name=Valgrind
+X-Builder-ABI=@PACKAGE_ABI@
+X-Has-Resources=true
