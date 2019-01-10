@@ -1,4 +1,4 @@
-/* gbp-devhelp-layout-stack-addin.h
+/* gbp-devhelp-frame-addin.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-editor.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_DEVHELP_LAYOUT_STACK_ADDIN (gbp_devhelp_layout_stack_addin_get_type())
+#define GBP_TYPE_DEVHELP_FRAME_ADDIN (gbp_devhelp_frame_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpDevhelpLayoutStackAddin, gbp_devhelp_layout_stack_addin, GBP, DEVHELP_LAYOUT_STACK_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpDevhelpFrameAddin, gbp_devhelp_frame_addin, GBP, DEVHELP_FRAME_ADDIN, GObject)
 
 G_END_DECLS

@@ -1,4 +1,4 @@
-/* gbp-devhelp-plugin.c
+/* devhelp-plugin.c
  *
  * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,15 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <ide.h>
+#include "config.h"
+
+#include <libide-editor.h>
 #include <libpeas/peas.h>
 
 #include "gbp-devhelp-editor-addin.h"
 #include "gbp-devhelp-hover-provider.h"
-#include "gbp-devhelp-layout-stack-addin.h"
+#include "gbp-devhelp-frame-addin.h"
 
-void
-gbp_devhelp_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_devhelp_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,
@@ -35,6 +37,6 @@ gbp_devhelp_register_types (PeasObjectModule *module)
                                               IDE_TYPE_HOVER_PROVIDER,
                                               GBP_TYPE_DEVHELP_HOVER_PROVIDER);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_LAYOUT_STACK_ADDIN,
-                                              GBP_TYPE_DEVHELP_LAYOUT_STACK_ADDIN);
+                                              IDE_TYPE_FRAME_ADDIN,
+                                              GBP_TYPE_DEVHELP_FRAME_ADDIN);
 }

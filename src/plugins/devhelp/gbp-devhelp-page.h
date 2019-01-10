@@ -1,4 +1,4 @@
-/* gbp-devhelp-view.h
+/* gbp-devhelp-page.h
  *
  * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,15 +20,15 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-editor.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_DEVHELP_VIEW (gbp_devhelp_view_get_type())
+#define GBP_TYPE_DEVHELP_PAGE (gbp_devhelp_page_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpDevhelpView, gbp_devhelp_view, GBP, DEVHELP_VIEW, IdeLayoutView)
+G_DECLARE_FINAL_TYPE (GbpDevhelpPage, gbp_devhelp_page, GBP, DEVHELP_PAGE, IdePage)
 
-void gbp_devhelp_view_set_uri (GbpDevhelpView *self,
+void gbp_devhelp_page_set_uri (GbpDevhelpPage *self,
                                const gchar    *uri);
 
 G_END_DECLS

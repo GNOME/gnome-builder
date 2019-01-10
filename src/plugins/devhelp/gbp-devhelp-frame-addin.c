@@ -1,4 +1,4 @@
-/* gbp-devhelp-layout-stack-addin.c
+/* gbp-devhelp-frame-addin.c
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,31 +18,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-devhelp-layout-stack-addin"
+#define G_LOG_DOMAIN "gbp-devhelp-frame-addin"
 
-#include "gbp-devhelp-layout-stack-addin.h"
+#include "gbp-devhelp-frame-addin.h"
 #include "gbp-devhelp-menu-button.h"
-#include "gbp-devhelp-view.h"
+#include "gbp-devhelp-page.h"
 
-struct _GbpDevhelpLayoutStackAddin
+struct _GbpDevhelpFrameAddin
 {
   GObject               parent_instance;
-  IdeLayoutStack       *stack;
+  IdeFrame       *stack;
   GbpDevhelpMenuButton *button;
 };
 
 static void
-gbp_devhelp_layout_stack_addin_search (GSimpleAction *action,
+gbp_devhelp_frame_addin_search (GSimpleAction *action,
                                        GVariant      *variant,
                                        gpointer       user_data)
 {
-  GbpDevhelpLayoutStackAddin *self = user_data;
+  GbpDevhelpFrameAddin *self = user_data;
   const gchar *keyword;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_DEVHELP_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_DEVHELP_FRAME_ADDIN (self));
   g_assert (self->stack != NULL);
-  g_assert (IDE_IS_LAYOUT_STACK (self->stack));
+  g_assert (IDE_IS_FRAME (self->stack));
   g_assert (variant != NULL);
   g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
@@ -54,62 +54,62 @@ gbp_devhelp_layout_stack_addin_search (GSimpleAction *action,
 }
 
 static void
-gbp_devhelp_layout_stack_addin_new_view (GSimpleAction *action,
+gbp_devhelp_frame_addin_new_view (GSimpleAction *action,
                                          GVariant      *variant,
                                          gpointer       user_data)
 {
-  GbpDevhelpLayoutStackAddin *self = user_data;
-  GbpDevhelpView *view;
+  GbpDevhelpFrameAddin *self = user_data;
+  GbpDevhelpPage *view;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_DEVHELP_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_DEVHELP_FRAME_ADDIN (self));
   g_assert (self->stack != NULL);
-  g_assert (IDE_IS_LAYOUT_STACK (self->stack));
+  g_assert (IDE_IS_FRAME (self->stack));
 
-  view = g_object_new (GBP_TYPE_DEVHELP_VIEW,
+  view = g_object_new (GBP_TYPE_DEVHELP_PAGE,
                        "visible", TRUE,
                        NULL);
   gtk_container_add (GTK_CONTAINER (self->stack), GTK_WIDGET (view));
 }
 
 static void
-gbp_devhelp_layout_stack_addin_navigate_to (GSimpleAction *action,
+gbp_devhelp_frame_addin_navigate_to (GSimpleAction *action,
                                             GVariant      *variant,
                                             gpointer       user_data)
 {
-  GbpDevhelpLayoutStackAddin *self = user_data;
-  IdeLayoutView *view;
+  GbpDevhelpFrameAddin *self = user_data;
+  IdePage *view;
   const gchar *uri;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_DEVHELP_LAYOUT_STACK_ADDIN (self));
+  g_assert (GBP_IS_DEVHELP_FRAME_ADDIN (self));
   g_assert (self->stack != NULL);
-  g_assert (IDE_IS_LAYOUT_STACK (self->stack));
+  g_assert (IDE_IS_FRAME (self->stack));
   g_assert (variant != NULL);
   g_assert (g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING));
 
   uri = g_variant_get_string (variant, NULL);
-  view = ide_layout_stack_get_visible_child (self->stack);
+  view = ide_frame_get_visible_child (self->stack);
 
-  if (GBP_IS_DEVHELP_VIEW (view))
-    gbp_devhelp_view_set_uri (GBP_DEVHELP_VIEW (view), uri);
+  if (GBP_IS_DEVHELP_PAGE (view))
+    gbp_devhelp_page_set_uri (GBP_DEVHELP_PAGE (view), uri);
 }
 
 static GActionEntry actions[] = {
-  { "new-view", gbp_devhelp_layout_stack_addin_new_view },
-  { "search", gbp_devhelp_layout_stack_addin_search, "s" },
-  { "navigate-to", gbp_devhelp_layout_stack_addin_navigate_to, "s" },
+  { "new-view", gbp_devhelp_frame_addin_new_view },
+  { "search", gbp_devhelp_frame_addin_search, "s" },
+  { "navigate-to", gbp_devhelp_frame_addin_navigate_to, "s" },
 };
 
 static void
-gbp_devhelp_layout_stack_addin_load (IdeLayoutStackAddin *addin,
-                                     IdeLayoutStack      *stack)
+gbp_devhelp_frame_addin_load (IdeFrameAddin *addin,
+                                     IdeFrame      *stack)
 {
-  GbpDevhelpLayoutStackAddin *self = (GbpDevhelpLayoutStackAddin *)addin;
+  GbpDevhelpFrameAddin *self = (GbpDevhelpFrameAddin *)addin;
   g_autoptr(GSimpleActionGroup) group = NULL;
 
-  g_assert (GBP_IS_DEVHELP_LAYOUT_STACK_ADDIN (self));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_assert (GBP_IS_DEVHELP_FRAME_ADDIN (self));
+  g_assert (IDE_IS_FRAME (stack));
 
   self->stack = stack;
 
@@ -124,13 +124,13 @@ gbp_devhelp_layout_stack_addin_load (IdeLayoutStackAddin *addin,
 }
 
 static void
-gbp_devhelp_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
-                                       IdeLayoutStack      *stack)
+gbp_devhelp_frame_addin_unload (IdeFrameAddin *addin,
+                                       IdeFrame      *stack)
 {
-  GbpDevhelpLayoutStackAddin *self = (GbpDevhelpLayoutStackAddin *)addin;
+  GbpDevhelpFrameAddin *self = (GbpDevhelpFrameAddin *)addin;
 
-  g_assert (GBP_IS_DEVHELP_LAYOUT_STACK_ADDIN (self));
-  g_assert (IDE_IS_LAYOUT_STACK (stack));
+  g_assert (GBP_IS_DEVHELP_FRAME_ADDIN (self));
+  g_assert (IDE_IS_FRAME (stack));
 
   self->stack = NULL;
 
@@ -141,16 +141,16 @@ gbp_devhelp_layout_stack_addin_unload (IdeLayoutStackAddin *addin,
 }
 
 static void
-gbp_devhelp_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
-                                         IdeLayoutView       *view)
+gbp_devhelp_frame_addin_set_view (IdeFrameAddin *addin,
+                                         IdePage       *view)
 {
-  GbpDevhelpLayoutStackAddin *self = (GbpDevhelpLayoutStackAddin *)addin;
+  GbpDevhelpFrameAddin *self = (GbpDevhelpFrameAddin *)addin;
   gboolean visible = FALSE;
 
-  g_assert (GBP_IS_DEVHELP_LAYOUT_STACK_ADDIN (self));
-  g_assert (!view || IDE_IS_LAYOUT_VIEW (view));
+  g_assert (GBP_IS_DEVHELP_FRAME_ADDIN (self));
+  g_assert (!view || IDE_IS_PAGE (view));
   g_assert (self->stack != NULL);
-  g_assert (IDE_IS_LAYOUT_STACK (self->stack));
+  g_assert (IDE_IS_FRAME (self->stack));
 
   /*
    * We don't setup self->button until we get our first devhelp
@@ -158,13 +158,13 @@ gbp_devhelp_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
    * memory footprint until it is necessary.
    */
 
-  if (GBP_IS_DEVHELP_VIEW (view))
+  if (GBP_IS_DEVHELP_PAGE (view))
     {
       if (self->button == NULL)
         {
           GtkWidget *titlebar;
 
-          titlebar = ide_layout_stack_get_titlebar (self->stack);
+          titlebar = ide_frame_get_titlebar (self->stack);
 
           self->button = g_object_new (GBP_TYPE_DEVHELP_MENU_BUTTON,
                                        "hexpand", TRUE,
@@ -173,7 +173,7 @@ gbp_devhelp_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
                             "destroy",
                             G_CALLBACK (gtk_widget_destroyed),
                             &self->button);
-          ide_layout_stack_header_add_custom_title (IDE_LAYOUT_STACK_HEADER (titlebar),
+          ide_frame_header_add_custom_title (IDE_FRAME_HEADER (titlebar),
                                                     GTK_WIDGET (self->button),
                                                     100);
         }
@@ -186,25 +186,25 @@ gbp_devhelp_layout_stack_addin_set_view (IdeLayoutStackAddin *addin,
 }
 
 static void
-layout_stack_addin_iface_init (IdeLayoutStackAddinInterface *iface)
+frame_addin_iface_init (IdeFrameAddinInterface *iface)
 {
-  iface->load = gbp_devhelp_layout_stack_addin_load;
-  iface->unload = gbp_devhelp_layout_stack_addin_unload;
-  iface->set_view = gbp_devhelp_layout_stack_addin_set_view;
+  iface->load = gbp_devhelp_frame_addin_load;
+  iface->unload = gbp_devhelp_frame_addin_unload;
+  iface->set_page = gbp_devhelp_frame_addin_set_view;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GbpDevhelpLayoutStackAddin,
-                         gbp_devhelp_layout_stack_addin,
+G_DEFINE_TYPE_WITH_CODE (GbpDevhelpFrameAddin,
+                         gbp_devhelp_frame_addin,
                          G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_LAYOUT_STACK_ADDIN,
-                                                layout_stack_addin_iface_init))
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_FRAME_ADDIN,
+                                                frame_addin_iface_init))
 
 static void
-gbp_devhelp_layout_stack_addin_class_init (GbpDevhelpLayoutStackAddinClass *klass)
+gbp_devhelp_frame_addin_class_init (GbpDevhelpFrameAddinClass *klass)
 {
 }
 
 static void
-gbp_devhelp_layout_stack_addin_init (GbpDevhelpLayoutStackAddin *self)
+gbp_devhelp_frame_addin_init (GbpDevhelpFrameAddin *self)
 {
 }

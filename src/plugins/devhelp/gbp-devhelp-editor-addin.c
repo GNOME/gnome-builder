@@ -21,72 +21,75 @@
 #define G_LOG_DOMAIN "gbp-devhelp-editor-addin"
 
 #include "gbp-devhelp-editor-addin.h"
-#include "gbp-devhelp-view.h"
+#include "gbp-devhelp-page.h"
 
 struct _GbpDevhelpEditorAddin
 {
   GObject               parent_instance;
-  IdeEditorPerspective *editor;
+  IdeEditorSurface *editor;
 };
 
 static void
-gbp_devhelp_editor_addin_new_devhelp_view (GSimpleAction *action,
+gbp_devhelp_editor_addin_new_devhelp_page (GSimpleAction *action,
                                            GVariant      *variant,
                                            gpointer       user_data)
 {
   GbpDevhelpEditorAddin *self = user_data;
-  IdeLayoutGrid *grid;
+  IdeGrid *grid;
   GtkWidget *view;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_DEVHELP_EDITOR_ADDIN (self));
   g_assert (self->editor != NULL);
 
-  view = g_object_new (GBP_TYPE_DEVHELP_VIEW,
+  view = g_object_new (GBP_TYPE_DEVHELP_PAGE,
                        "visible", TRUE,
                        NULL);
-  grid = ide_editor_perspective_get_grid (self->editor);
+  grid = ide_editor_surface_get_grid (self->editor);
   gtk_container_add (GTK_CONTAINER (grid), view);
 }
 
 static GActionEntry actions[] = {
-  { "new-devhelp-view", gbp_devhelp_editor_addin_new_devhelp_view },
+  { "new-devhelp-page", gbp_devhelp_editor_addin_new_devhelp_page },
 };
 
 static void
-gbp_devhelp_editor_addin_load (IdeEditorAddin       *addin,
-                               IdeEditorPerspective *editor)
+gbp_devhelp_editor_addin_load (IdeEditorAddin   *addin,
+                               IdeEditorSurface *editor)
 {
   GbpDevhelpEditorAddin *self = (GbpDevhelpEditorAddin *)addin;
-  IdeWorkbench *workbench;
+  GtkWidget *workspace;
 
   g_assert (GBP_IS_DEVHELP_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
   self->editor = editor;
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
+  workspace = gtk_widget_get_ancestor (GTK_WIDGET (editor), IDE_TYPE_WORKSPACE);
 
-  if (workbench != NULL)
-    g_action_map_add_action_entries (G_ACTION_MAP (workbench), actions, G_N_ELEMENTS (actions), self);
+  if (workspace != NULL)
+    g_action_map_add_action_entries (G_ACTION_MAP (workspace),
+                                     actions,
+                                     G_N_ELEMENTS (actions),
+                                     self);
 }
 
 static void
 gbp_devhelp_editor_addin_unload (IdeEditorAddin       *addin,
-                                 IdeEditorPerspective *editor)
+                                 IdeEditorSurface *editor)
 {
   GbpDevhelpEditorAddin *self = (GbpDevhelpEditorAddin *)addin;
-  GtkWidget *win;
+  GtkWidget *workspace;
 
   g_assert (GBP_IS_DEVHELP_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
-  win = gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_WINDOW);
+  workspace = gtk_widget_get_ancestor (GTK_WIDGET (editor), IDE_TYPE_WORKSPACE);
 
-  if (G_IS_ACTION_MAP (win))
+  if (G_IS_ACTION_MAP (workspace))
     {
       for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
-        g_action_map_remove_action (G_ACTION_MAP (win), actions[i].name);
+        g_action_map_remove_action (G_ACTION_MAP (workspace), actions[i].name);
     }
 
   self->editor = NULL;

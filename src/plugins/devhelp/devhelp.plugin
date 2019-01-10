@@ -1,10 +1,11 @@
 [Plugin]
-Module=devhelp-plugin
-Name=Devhelp
-Description=Integration with devhelp documentation
 Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
-Depends=editor;webkit;
 Builtin=true
-Embedded=gbp_devhelp_register_types
+Copyright=Copyright © 2015-2018 Christian Hergert
+Depends=editor;webkit;
+Description=Integration with devhelp documentation
+Embedded=_gbp_devhelp_register_types
+Hidden=true
+Module=devhelp
+Name=Devhelp
 X-Hover-Provider-Languages=c,chdr,cpp,cpphdr
