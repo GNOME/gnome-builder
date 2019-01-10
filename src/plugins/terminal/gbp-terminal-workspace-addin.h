@@ -1,6 +1,6 @@
-/* gb-terminal-view.h
+/* gbp-terminal-workspace-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
-#include <vte/vte.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_TERMINAL_VIEW (gb_terminal_view_get_type())
+#define GBP_TYPE_TERMINAL_WORKSPACE_ADDIN (gbp_terminal_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbTerminalView, gb_terminal_view, GB, TERMINAL_VIEW, IdeLayoutView)
-
-void      gb_terminal_view_set_pty        (GbTerminalView *self,
-                                           VtePty         *pty);
-void      gb_terminal_view_feed           (GbTerminalView *self,
-                                           const gchar    *message);
+G_DECLARE_FINAL_TYPE (GbpTerminalWorkspaceAddin, gbp_terminal_workspace_addin, GBP, TERMINAL_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

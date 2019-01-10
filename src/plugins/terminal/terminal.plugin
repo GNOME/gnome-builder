@@ -1,9 +1,12 @@
 [Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2014-2018 Christian Hergert
+Depends=editor;
+Description=Builder's terminal support
+Embedded=_gbp_terminal_register_types
+Hidden=true
 Module=terminal
 Name=Terminal
-Description=A terminal for Builder
-Authors=Christian Hergert <christian@hergert.me>
-Copyright=Copyright © 2015 Christian Hergert
-Depends=editor
-Builtin=true
-Embedded=gb_terminal_register_types
+X-At-Startup=true
+X-Workspace-Kind=editor;primary;terminal;

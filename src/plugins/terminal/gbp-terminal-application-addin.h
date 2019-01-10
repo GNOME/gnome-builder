@@ -1,6 +1,6 @@
-/* gb-terminal-view-actions.h
+/* gbp-terminal-application-addin.h
  *
- * opyright (C) 2015 Sebastien Lafargue <slafargue@gnome.org>
+ * Copyright 2018 Christian Hergert <unknown@domain.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,12 @@
 
 #pragma once
 
-#include "gb-terminal-view.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-void gb_terminal_view_actions_init   (GbTerminalView *self);
+#define GBP_TYPE_TERMINAL_APPLICATION_ADDIN (gbp_terminal_application_addin_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpTerminalApplicationAddin, gbp_terminal_application_addin, GBP, TERMINAL_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS

@@ -1,6 +1,6 @@
-/* gb-terminal-plugin.c
+/* terminal-plugin.c
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,16 +18,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "terminal-plugin"
+
+#include "config.h"
+
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-gui.h>
+#include <libide-terminal.h>
 
-#include "gb-terminal-private.h"
-#include "gb-terminal-workbench-addin.h"
+#include "gbp-terminal-application-addin.h"
+#include "gbp-terminal-workspace-addin.h"
 
-void
-gb_terminal_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_terminal_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GB_TYPE_TERMINAL_WORKBENCH_ADDIN);
+                                              IDE_TYPE_APPLICATION_ADDIN,
+                                              GBP_TYPE_TERMINAL_APPLICATION_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_TERMINAL_WORKSPACE_ADDIN);
 }
