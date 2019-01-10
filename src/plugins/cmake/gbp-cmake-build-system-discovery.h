@@ -1,7 +1,6 @@
-/* gbp-cmake-pipeline-addin.h
+/* gbp-cmake-build-system-discovery.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
- * Copyright 2017 Martin Blanchard <tchaik@gmx.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_CMAKE_PIPELINE_ADDIN (gbp_cmake_pipeline_addin_get_type())
+#define GBP_TYPE_CMAKE_BUILD_SYSTEM_DISCOVERY (gbp_cmake_build_system_discovery_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCMakePipelineAddin, gbp_cmake_pipeline_addin, GBP, CMAKE_PIPELINE_ADDIN, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpCmakeBuildSystemDiscovery, gbp_cmake_build_system_discovery, GBP, CMAKE_BUILD_SYSTEM_DISCOVERY, IdeSimpleBuildSystemDiscovery)
 
 G_END_DECLS

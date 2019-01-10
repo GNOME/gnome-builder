@@ -140,9 +140,8 @@ gbp_cmake_toolchain_provider_load_async (IdeToolchainProvider     *provider,
 {
   GbpCMakeToolchainProvider *self = (GbpCMakeToolchainProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GFile) workdir = NULL;
   IdeContext *context;
-  IdeVcs *vcs;
-  GFile *workdir;
 
   IDE_ENTRY;
 
@@ -151,8 +150,7 @@ gbp_cmake_toolchain_provider_load_async (IdeToolchainProvider     *provider,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  vcs = ide_context_get_vcs (context);
-  workdir = ide_vcs_get_working_directory (vcs);
+  workdir = ide_context_ref_workdir (context);
 
   task = ide_task_new (provider, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_cmake_toolchain_provider_load_async);
@@ -235,5 +233,5 @@ gbp_cmake_toolchain_provider_class_init (GbpCMakeToolchainProviderClass *klass)
 static void
 gbp_cmake_toolchain_provider_init (GbpCMakeToolchainProvider *self)
 {
-  
+
 }
