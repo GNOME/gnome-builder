@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-core.h>
 
 #include "ide-ctags-index.h"
 

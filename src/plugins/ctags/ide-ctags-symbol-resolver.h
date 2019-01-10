@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-core.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
@@ -34,7 +35,7 @@ void               ide_ctags_symbol_resolver_get_location_async  (IdeCtagsSymbol
                                                                   GCancellable             *cancellable,
                                                                   GAsyncReadyCallback       callback,
                                                                   gpointer                  user_data);
-IdeSourceLocation *ide_ctags_symbol_resolver_get_location_finish (IdeCtagsSymbolResolver   *self,
+IdeLocation *ide_ctags_symbol_resolver_get_location_finish (IdeCtagsSymbolResolver   *self,
                                                                   GAsyncResult             *result,
                                                                   GError                  **error);
 

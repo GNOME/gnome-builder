@@ -1,6 +1,6 @@
-/* ide-ctags-builder.h
+/* gbp-ctags-workbench-addin.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,12 @@
 
 #pragma once
 
-#include <libide-code.h>
-
-#include "ide-tags-builder.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CTAGS_BUILDER (ide_ctags_builder_get_type())
+#define GBP_TYPE_CTAGS_WORKBENCH_ADDIN (gbp_ctags_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeCtagsBuilder, ide_ctags_builder, IDE, CTAGS_BUILDER, IdeObject)
-
-IdeTagsBuilder *ide_ctags_builder_new (void);
+G_DECLARE_FINAL_TYPE (GbpCtagsWorkbenchAddin, gbp_ctags_workbench_addin, GBP, CTAGS_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS

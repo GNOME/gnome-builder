@@ -107,25 +107,26 @@ get_tag_from_kind (IdeCtagsIndexEntryKind kind)
 
 static const gchar *
 get_tag (IdeCtagsHighlighter *self,
-         IdeFile             *file,
+         GFile               *file,
          const gchar         *word)
 {
-  const gchar *file_path = ide_file_get_path (file);
+  const gchar *file_path = g_file_peek_path (file);
   const IdeCtagsIndexEntry *entries;
   gsize n_entries;
-  gsize i;
-  gsize j;
 
-  for (i = 0; i < self->indexes->len; i++)
+  for (guint i = 0; i < self->indexes->len; i++)
     {
       IdeCtagsIndex *item = g_ptr_array_index (self->indexes, i);
+
       entries = ide_ctags_index_lookup_prefix (item, word, &n_entries);
       if ((entries == NULL) || (n_entries == 0))
         continue;
 
-      for (j = 0; j < n_entries; j++)
-        if (dzl_str_equal0 (entries[j].path, file_path))
-          return get_tag_from_kind (entries[j].kind);
+      for (guint j = 0; j < n_entries; j++)
+        {
+          if (ide_str_equal0 (entries[j].path, file_path))
+            return get_tag_from_kind (entries[j].kind);
+        }
 
       return get_tag_from_kind (entries[0].kind);
     }
@@ -143,7 +144,7 @@ ide_ctags_highlighter_real_update (IdeHighlighter       *highlighter,
   GtkTextBuffer *text_buffer;
   GtkSourceBuffer *source_buffer;
   IdeBuffer *buffer;
-  IdeFile *file;
+  GFile *file;
   GtkTextIter begin;
   GtkTextIter end;
 
@@ -243,20 +244,20 @@ ide_ctags_highlighter_real_set_engine (IdeHighlighter      *highlighter,
                                        IdeHighlightEngine  *engine)
 {
   IdeCtagsHighlighter *self = (IdeCtagsHighlighter *)highlighter;
+  g_autoptr(IdeCtagsService) service = NULL;
   IdeContext *context;
-  IdeCtagsService *service;
 
   g_return_if_fail (IDE_IS_CTAGS_HIGHLIGHTER (self));
   g_return_if_fail (IDE_IS_HIGHLIGHT_ENGINE (engine));
 
   self->engine = engine;
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  service = ide_context_get_service_typed (context, IDE_TYPE_CTAGS_SERVICE);
-
-  g_set_weak_pointer (&self->service, service);
-
-  ide_ctags_service_register_highlighter (service, self);
+  if ((context = ide_object_get_context (IDE_OBJECT (self))) &&
+      (service = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_CTAGS_SERVICE)))
+    {
+      g_set_weak_pointer (&self->service, service);
+      ide_ctags_service_register_highlighter (service, self);
+    }
 }
 
 static void

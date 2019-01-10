@@ -22,7 +22,6 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
-#include <ide.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -295,7 +294,7 @@ ide_ctags_index_set_path_root (IdeCtagsIndex *self,
 {
   g_return_if_fail (IDE_IS_CTAGS_INDEX (self));
 
-  if (!dzl_str_equal0 (self->path_root, path_root))
+  if (!ide_str_equal0 (self->path_root, path_root))
     {
       g_free (self->path_root);
       self->path_root = g_strdup (path_root);

@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include <gtksourceview/gtksource.h>
-#include <ide.h>
+#include <libide-sourceview.h>
 
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-highlighter.h"
@@ -32,15 +31,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCtagsService, ide_ctags_service, IDE, CTAGS_SERVICE, IdeObject)
 
-void ide_ctags_service_register_highlighter   (IdeCtagsService            *self,
-                                               IdeCtagsHighlighter        *highlighter);
-void ide_ctags_service_unregister_highlighter (IdeCtagsService            *self,
-                                               IdeCtagsHighlighter        *highlighter);
-void ide_ctags_service_register_completion    (IdeCtagsService            *self,
-                                               IdeCtagsCompletionProvider *completion);
-void ide_ctags_service_unregister_completion  (IdeCtagsService            *self,
-                                               IdeCtagsCompletionProvider *completion);
-
-GPtrArray *ide_ctags_service_get_indexes (IdeCtagsService *self);
+void       ide_ctags_service_register_highlighter   (IdeCtagsService            *self,
+                                                     IdeCtagsHighlighter        *highlighter);
+void       ide_ctags_service_unregister_highlighter (IdeCtagsService            *self,
+                                                     IdeCtagsHighlighter        *highlighter);
+void       ide_ctags_service_register_completion    (IdeCtagsService            *self,
+                                                     IdeCtagsCompletionProvider *completion);
+void       ide_ctags_service_unregister_completion  (IdeCtagsService            *self,
+                                                     IdeCtagsCompletionProvider *completion);
+void       ide_ctags_service_pause                  (IdeCtagsService            *self);
+void       ide_ctags_service_unpause                (IdeCtagsService            *self);
+GPtrArray *ide_ctags_service_get_indexes            (IdeCtagsService            *self);
 
 G_END_DECLS
