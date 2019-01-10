@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;
+Description=Auto-save support for source code files
+Embedded=_gbp_auto_save_register_types
+Hidden=true
+Module=auto-save
+Name=Auto-Save
