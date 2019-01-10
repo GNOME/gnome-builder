@@ -20,8 +20,7 @@
 
 #define G_LOG_DOMAIN "hdr-format"
 
-#include <glib.h>
-#include <ide.h>
+#include <gtksourceview/gtksource.h>
 #include <string.h>
 
 #include "c-parse-helper.h"
@@ -211,7 +210,7 @@ push_chunk (GArray      *ar,
   str = pos;
 
   chunk.return_type = g_strstrip (g_steal_pointer (&return_type));
-  
+
   if (!(ident = getword (str, &pos)))
     goto failure;
   if (*ident != '_' && !g_ascii_isalpha (*ident))
@@ -407,6 +406,12 @@ hdr_format_string (const gchar *data,
             {
               g_string_append (out, "...");
               break;
+            }
+
+          if (p->type == NULL)
+            {
+              g_warning ("Unexpected NULL value for type");
+              continue;
             }
 
           g_string_append (out, p->type);

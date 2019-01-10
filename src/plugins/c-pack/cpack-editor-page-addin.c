@@ -1,4 +1,4 @@
-/* cpack-editor-view-addin.c
+/* cpack-editor-page-addin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,12 +18,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "cpack-editor-view-addin"
+#define G_LOG_DOMAIN "cpack-editor-page-addin"
 
-#include "cpack-editor-view-addin.h"
+#include "config.h"
+
+#include <libide-editor.h>
+
+#include "cpack-editor-page-addin.h"
 #include "hdr-format.h"
 
-struct _CpackEditorViewAddin
+struct _CpackEditorPageAddin
 {
   GObject parent_instance;
 };
@@ -33,17 +37,17 @@ format_decls_cb (GSimpleAction *action,
                  GVariant      *param,
                  gpointer       user_data)
 {
-  IdeEditorView *view = user_data;
+  IdeEditorPage *view = user_data;
   g_autofree gchar *input = NULL;
   g_autofree gchar *output = NULL;
   IdeBuffer *buffer;
   IdeSourceView *sourceview;
   GtkTextIter begin, end;
 
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
-  buffer = ide_editor_view_get_buffer (view);
-  sourceview = ide_editor_view_get_view (view);
+  buffer = ide_editor_page_get_buffer (view);
+  sourceview = ide_editor_page_get_view (view);
 
   /* We require a selection */
   if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end))
@@ -67,13 +71,13 @@ static GActionEntry entries[] = {
 };
 
 static void
-cpack_editor_view_addin_load (IdeEditorViewAddin *addin,
-                              IdeEditorView      *view)
+cpack_editor_page_addin_load (IdeEditorPageAddin *addin,
+                              IdeEditorPage      *view)
 {
   g_autoptr(GActionMap) group = NULL;
 
-  g_assert (CPACK_IS_EDITOR_VIEW_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (CPACK_IS_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
   group = G_ACTION_MAP (g_simple_action_group_new ());
   g_action_map_add_action_entries (group, entries, G_N_ELEMENTS (entries), view);
@@ -81,31 +85,31 @@ cpack_editor_view_addin_load (IdeEditorViewAddin *addin,
 }
 
 static void
-cpack_editor_view_addin_unload (IdeEditorViewAddin *addin,
-                                IdeEditorView      *view)
+cpack_editor_page_addin_unload (IdeEditorPageAddin *addin,
+                                IdeEditorPage      *view)
 {
-  g_assert (CPACK_IS_EDITOR_VIEW_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_VIEW (view));
+  g_assert (CPACK_IS_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (view));
 
   gtk_widget_insert_action_group (GTK_WIDGET (view), "cpack", NULL);
 }
 
 static void
-iface_init (IdeEditorViewAddinInterface *iface)
+iface_init (IdeEditorPageAddinInterface *iface)
 {
-  iface->load = cpack_editor_view_addin_load;
-  iface->unload = cpack_editor_view_addin_unload;
+  iface->load = cpack_editor_page_addin_load;
+  iface->unload = cpack_editor_page_addin_unload;
 }
 
-G_DEFINE_TYPE_WITH_CODE (CpackEditorViewAddin, cpack_editor_view_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_VIEW_ADDIN, iface_init))
+G_DEFINE_TYPE_WITH_CODE (CpackEditorPageAddin, cpack_editor_page_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, iface_init))
 
 static void
-cpack_editor_view_addin_class_init (CpackEditorViewAddinClass *klass)
+cpack_editor_page_addin_class_init (CpackEditorPageAddinClass *klass)
 {
 }
 
 static void
-cpack_editor_view_addin_init (CpackEditorViewAddin *self)
+cpack_editor_page_addin_init (CpackEditorPageAddin *self)
 {
 }

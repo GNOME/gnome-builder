@@ -1,4 +1,4 @@
-/* cpack-editor-view-addin.h
+/* cpack-editor-page-addin.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <ide.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define CPACK_TYPE_EDITOR_VIEW_ADDIN (cpack_editor_view_addin_get_type())
+#define CPACK_TYPE_EDITOR_PAGE_ADDIN (cpack_editor_page_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (CpackEditorViewAddin, cpack_editor_view_addin, CPACK, EDITOR_VIEW_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (CpackEditorPageAddin, cpack_editor_page_addin, CPACK, EDITOR_PAGE_ADDIN, GObject)
 
 G_END_DECLS

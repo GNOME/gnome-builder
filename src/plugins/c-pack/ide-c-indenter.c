@@ -22,6 +22,7 @@
 
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
+#include <libide-sourceview.h>
 
 #include "c-parse-helper.h"
 #include "ide-c-indenter.h"
@@ -1358,7 +1359,7 @@ ide_c_indenter_format (IdeIndenter    *indenter,
     ret = c_indenter_indent (c, view, buffer, begin);
     *begin = begin_copy;
 
-    if (!dzl_str_empty0 (ret))
+    if (!ide_str_empty0 (ret))
       {
         /*
          * If we have additional space after where our new indentation

@@ -1,4 +1,4 @@
-/* cpack-completion-provider.h
+/* test-hdr-format.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -14,18 +14,34 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#include "hdr-format.c"
 
-#include <libide-core.h>
+gint
+main (gint argc,
+      gchar *argv[])
+{
+  g_autofree gchar *contents = NULL;
+  g_autofree gchar *ret = NULL;
+  g_autoptr(GError) error = NULL;
+  gsize len;
 
-G_BEGIN_DECLS
+  if (argc < 2)
+    {
+      g_printerr ("usage: %s FILENAME\n", argv[0]);
+      return 1;
+    }
 
-#define CPACK_TYPE_COMPLETION_PROVIDER (cpack_completion_provider_get_type())
+  if (!g_file_get_contents (argv[1], &contents, &len, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      return 1;
+    }
 
-G_DECLARE_FINAL_TYPE (CpackCompletionProvider, cpack_completion_provider, CPACK, COMPLETION_PROVIDER, IdeObject)
+  ret = hdr_format_string (contents, len);
 
-G_END_DECLS
+  g_print ("%s\n", ret);
+
+  return 0;
+}

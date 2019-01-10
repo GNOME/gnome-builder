@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <ide.h>
+#include <libide-sourceview.h>
 
 G_BEGIN_DECLS
 
