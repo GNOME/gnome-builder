@@ -24,7 +24,7 @@
 
 #include <dazzle.h>
 
-#include "debugger/ide-debugger-libraries-view.h"
+#include "ide-debugger-libraries-view.h"
 
 struct _IdeDebuggerLibrariesView
 {
@@ -274,7 +274,7 @@ ide_debugger_libraries_view_class_init (IdeDebuggerLibrariesViewClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-libraries-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-libraries-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLibrariesView, tree_view);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLibrariesView, list_store);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLibrariesView, target_cell);

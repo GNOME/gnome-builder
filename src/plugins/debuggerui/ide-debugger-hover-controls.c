@@ -23,12 +23,12 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-debugger.h>
+#include <libide-sourceview.h>
 
-#include "debugger/ide-debugger-hover-controls.h"
-#include "debugger/ide-debugger-breakpoints.h"
-#include "debugger/ide-debugger-private.h"
-#include "debugger/ide-debug-manager.h"
-#include "sourceview/ide-source-view.h"
+#include "ide-debugger-hover-controls.h"
+#include "ide-debugger-breakpoints.h"
+#include "ide-debugger-private.h"
 
 struct _IdeDebuggerHoverControls
 {
@@ -63,7 +63,7 @@ ide_debugger_hover_controls_class_init (IdeDebuggerHoverControlsClass *klass)
 
   widget_class->destroy = ide_debugger_hover_controls_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-hover-controls.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-hover-controls.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerHoverControls, nobreak);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerHoverControls, breakpoint);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerHoverControls, countpoint);

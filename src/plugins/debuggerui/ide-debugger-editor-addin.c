@@ -22,28 +22,24 @@
 
 #include "config.h"
 
+#include <libide-code.h>
+#include <libide-core.h>
+#include <libide-debugger.h>
+#include <libide-editor.h>
+#include <libide-foundry.h>
+#include <libide-gui.h>
+#include <libide-io.h>
+#include <libide-terminal.h>
 #include <glib/gi18n.h>
 
-#include "ide-context.h"
-#include "ide-debug.h"
-
-#include "debugger/ide-debug-manager.h"
-#include "debugger/ide-debugger-breakpoints-view.h"
-#include "debugger/ide-debugger-controls.h"
-#include "debugger/ide-debugger-disassembly-view.h"
-#include "debugger/ide-debugger-editor-addin.h"
-#include "debugger/ide-debugger-libraries-view.h"
-#include "debugger/ide-debugger-locals-view.h"
-#include "debugger/ide-debugger-registers-view.h"
-#include "debugger/ide-debugger-threads-view.h"
-#include "editor/ide-editor-addin.h"
-#include "files/ide-file.h"
-#include "runner/ide-run-manager.h"
-#include "terminal/ide-terminal.h"
-#include "workbench/ide-workbench.h"
-#include "workbench/ide-workbench-message.h"
-#include "util/ide-line-reader.h"
-#include "util/ide-gtk.h"
+#include "ide-debugger-breakpoints-view.h"
+#include "ide-debugger-controls.h"
+#include "ide-debugger-disassembly-view.h"
+#include "ide-debugger-editor-addin.h"
+#include "ide-debugger-libraries-view.h"
+#include "ide-debugger-locals-view.h"
+#include "ide-debugger-registers-view.h"
+#include "ide-debugger-threads-view.h"
 
 /**
  * SECTION:ide-debugger-editor-addin
@@ -64,7 +60,7 @@ struct _IdeDebuggerEditorAddin
   DzlSignalGroup             *debug_manager_signals;
   DzlSignalGroup             *debugger_signals;
 
-  IdeEditorPerspective       *editor;
+  IdeEditorSurface           *editor;
   IdeWorkbench               *workbench;
 
   IdeDebuggerDisassemblyView *disassembly_view;
@@ -72,7 +68,6 @@ struct _IdeDebuggerEditorAddin
   IdeDebuggerBreakpointsView *breakpoints_view;
   IdeDebuggerLibrariesView   *libraries_view;
   IdeDebuggerLocalsView      *locals_view;
-  IdeWorkbenchMessage        *message;
   DzlDockWidget              *panel;
   IdeDebuggerRegistersView   *registers_view;
   IdeDebuggerThreadsView     *threads_view;
@@ -139,6 +134,35 @@ debugger_stopped (IdeDebuggerEditorAddin *self,
 }
 
 static void
+send_notification (IdeDebuggerEditorAddin *self,
+                   const gchar            *title,
+                   const gchar            *body,
+                   const gchar            *icon_name,
+                   gboolean                urgent)
+{
+  g_autoptr(IdeNotification) notif = NULL;
+  g_autoptr(GIcon) icon = NULL;
+  IdeContext *context;
+
+  g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
+
+  context = ide_workbench_get_context (self->workbench);
+
+  if (icon_name)
+    icon = g_themed_icon_new (icon_name);
+
+  notif = g_object_new (IDE_TYPE_NOTIFICATION,
+                        "has-progress", FALSE,
+                        "icon", icon,
+                        "title", title,
+                        "body", body,
+                        "urgent", TRUE,
+                        NULL);
+  ide_notification_attach (notif, IDE_OBJECT (context));
+  ide_notification_withdraw_in_seconds (notif, 30);
+}
+
+static void
 debugger_run_handler (IdeRunManager *run_manager,
                       IdeRunner     *runner,
                       gpointer       user_data)
@@ -159,13 +183,14 @@ debugger_run_handler (IdeRunManager *run_manager,
    * It might need to prepend arguments like `gdb', `pdb', `mdb', etc.
    */
   context = ide_object_get_context (IDE_OBJECT (run_manager));
-  debug_manager = ide_context_get_debug_manager (context);
+  debug_manager = ide_debug_manager_from_context (context);
 
   if (!ide_debug_manager_start (debug_manager, runner, &error))
-    {
-      ide_workbench_message_set_subtitle (self->message, error->message);
-      gtk_widget_show (GTK_WIDGET (self->message));
-    }
+    send_notification (self,
+                       _("Failed to start the debugger"),
+                       error->message,
+                       "computer-fail-symbolic",
+                       TRUE);
 
   IDE_EXIT;
 }
@@ -176,6 +201,7 @@ debug_manager_notify_debugger (IdeDebuggerEditorAddin *self,
                                IdeDebugManager        *debug_manager)
 {
   IdeDebugger *debugger;
+  IdeWorkspace *workspace;
 
   g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
   g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
@@ -192,9 +218,10 @@ debug_manager_notify_debugger (IdeDebuggerEditorAddin *self,
 
   debugger = ide_debug_manager_get_debugger (debug_manager);
 
-  gtk_widget_insert_action_group (GTK_WIDGET (self->workbench),
-                                  "debugger",
-                                  G_ACTION_GROUP (debugger));
+  if ((workspace = ide_widget_get_workspace (GTK_WIDGET (self->editor))))
+    gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                    "debugger",
+                                    G_ACTION_GROUP (debugger));
 
   ide_debugger_breakpoints_view_set_debugger (self->breakpoints_view, debugger);
   ide_debugger_locals_view_set_debugger (self->locals_view, debugger);
@@ -257,11 +284,13 @@ on_frame_activated (IdeDebuggerEditorAddin *self,
 
   if (path != NULL)
     {
-      g_autoptr(IdeSourceLocation) location = NULL;
       IdeContext *context = ide_widget_get_context (GTK_WIDGET (threads_view));
+      g_autoptr(IdeLocation) location = NULL;
+      g_autofree gchar *project_path = ide_context_build_filename (context, path, NULL);
+      g_autoptr(GFile) file = g_file_new_for_path (project_path);
 
-      location = ide_source_location_new_for_path (context, path, line, 0);
-      ide_editor_perspective_focus_location (self->editor, location);
+      location = ide_location_new (file, line, -1);
+      ide_editor_surface_focus_location (self->editor, location);
 
       IDE_EXIT;
     }
@@ -282,7 +311,6 @@ on_frame_activated (IdeDebuggerEditorAddin *self,
 static void
 ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
 {
-  IdeWorkbench *workbench;
   GtkWidget *scroll_box;
   GtkWidget *box;
   GtkWidget *hpaned;
@@ -290,13 +318,12 @@ ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
   GtkWidget *overlay;
 
   g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (self->editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (self->editor));
 
 #define OBSERVE_DESTROY(ptr) \
   g_signal_connect ((ptr), "destroy", G_CALLBACK (gtk_widget_destroyed), &(ptr))
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self->editor));
-  overlay = ide_editor_perspective_get_overlay (self->editor);
+  overlay = ide_editor_surface_get_overlay (self->editor);
 
   self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
                                  "transition-duration", 500,
@@ -393,23 +420,15 @@ ide_debugger_editor_addin_add_ui (IdeDebuggerEditorAddin *self)
                                           NULL);
   gtk_container_add (GTK_CONTAINER (scroll_box), GTK_WIDGET (self->log_view_scroller));
 
-  utilities = ide_editor_perspective_get_utilities (self->editor);
+  utilities = ide_editor_surface_get_utilities (self->editor);
   gtk_container_add (GTK_CONTAINER (utilities), GTK_WIDGET (self->panel));
-
-  self->message = g_object_new (IDE_TYPE_WORKBENCH_MESSAGE,
-                                "id", "org.gnome.builder.debugger.failure",
-                                "show-close-button", TRUE,
-                                "title", _("Failed to initialize the debugger"),
-                                NULL);
-  OBSERVE_DESTROY (self->message);
-  ide_workbench_push_message (workbench, self->message);
 
 #undef OBSERVE_DESTROY
 }
 
 static void
-ide_debugger_editor_addin_load (IdeEditorAddin       *addin,
-                                IdeEditorPerspective *editor)
+ide_debugger_editor_addin_load (IdeEditorAddin   *addin,
+                                IdeEditorSurface *editor)
 {
   IdeDebuggerEditorAddin *self = (IdeDebuggerEditorAddin *)addin;
   IdeContext *context;
@@ -419,14 +438,17 @@ ide_debugger_editor_addin_load (IdeEditorAddin       *addin,
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
   self->editor = editor;
   self->workbench = ide_widget_get_workbench (GTK_WIDGET (editor));
 
+  if (!ide_workbench_has_project (self->workbench))
+    return;
+
   context = ide_widget_get_context (GTK_WIDGET (editor));
-  run_manager = ide_context_get_run_manager (context);
-  debug_manager = ide_context_get_debug_manager (context);
+  run_manager = ide_run_manager_from_context (context);
+  debug_manager = ide_debug_manager_from_context (context);
 
   ide_debugger_editor_addin_add_ui (self);
 
@@ -469,22 +491,27 @@ ide_debugger_editor_addin_load (IdeEditorAddin       *addin,
 }
 
 static void
-ide_debugger_editor_addin_unload (IdeEditorAddin       *addin,
-                                  IdeEditorPerspective *editor)
+ide_debugger_editor_addin_unload (IdeEditorAddin   *addin,
+                                  IdeEditorSurface *editor)
 {
   IdeDebuggerEditorAddin *self = (IdeDebuggerEditorAddin *)addin;
   IdeRunManager *run_manager;
+  IdeWorkspace *workspace;
   IdeContext *context;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
+
+  if (!ide_workbench_has_project (self->workbench))
+    return;
 
   context = ide_workbench_get_context (self->workbench);
-  run_manager = ide_context_get_run_manager (context);
+  run_manager = ide_run_manager_from_context (context);
 
-  gtk_widget_insert_action_group (GTK_WIDGET (self->workbench), "debugger", NULL);
+  if ((workspace = ide_widget_get_workspace (GTK_WIDGET (editor))))
+    gtk_widget_insert_action_group (GTK_WIDGET (workspace), "debugger", NULL);
 
   /* Remove the handler to initiate the debugger */
   ide_run_manager_remove_handler (run_manager, "debugger");
@@ -496,8 +523,6 @@ ide_debugger_editor_addin_unload (IdeEditorAddin       *addin,
     gtk_widget_destroy (GTK_WIDGET (self->panel));
   if (self->controls != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->controls));
-  if (self->message != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->message));
   if (self->disassembly_view != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->disassembly_view));
 
@@ -532,18 +557,14 @@ ide_debugger_editor_addin_navigate_to_file (IdeDebuggerEditorAddin *self,
                                             GFile                  *file,
                                             guint                   line)
 {
-  g_autoptr(IdeSourceLocation) location = NULL;
-  g_autoptr(IdeFile) ifile = NULL;
-  IdeContext *context;
+  g_autoptr(IdeLocation) location = NULL;
 
   g_return_if_fail (IDE_IS_DEBUGGER_EDITOR_ADDIN (self));
   g_return_if_fail (G_IS_FILE (file));
 
-  context = ide_widget_get_context (GTK_WIDGET (self->editor));
-  ifile = ide_file_new (context, file);
-  location = ide_source_location_new (ifile, line, 0, 0);
+  location = ide_location_new (file, line, -1);
 
-  ide_editor_perspective_focus_location (self->editor, location);
+  ide_editor_surface_focus_location (self->editor, location);
 }
 
 static void
@@ -576,7 +597,7 @@ ide_debugger_editor_addin_disassemble_cb (GObject      *object,
 
   if (self->disassembly_view == NULL)
     {
-      IdeLayoutGrid *grid = ide_editor_perspective_get_grid (self->editor);
+      IdeGrid *grid = ide_editor_surface_get_grid (self->editor);
 
       self->disassembly_view = g_object_new (IDE_TYPE_DEBUGGER_DISASSEMBLY_VIEW,
                                              "visible", TRUE,
@@ -593,10 +614,10 @@ ide_debugger_editor_addin_disassemble_cb (GObject      *object,
   /* TODO: Set current instruction */
 
   /* FIXME: It would be nice if we had a nicer API for this */
-  stack = gtk_widget_get_ancestor (GTK_WIDGET (self->disassembly_view), IDE_TYPE_LAYOUT_STACK);
+  stack = gtk_widget_get_ancestor (GTK_WIDGET (self->disassembly_view), IDE_TYPE_FRAME);
   if (stack != NULL)
-    ide_layout_stack_set_visible_child (IDE_LAYOUT_STACK (stack),
-                                        IDE_LAYOUT_VIEW (self->disassembly_view));
+    ide_frame_set_visible_child (IDE_FRAME (stack),
+                                        IDE_PAGE (self->disassembly_view));
 
   IDE_EXIT;
 }

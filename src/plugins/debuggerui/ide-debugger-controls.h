@@ -1,6 +1,6 @@
-/* ide-debugger-hover-controls.h
+/* ide-debugger-controls.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,16 +22,16 @@
 
 #include <gtk/gtk.h>
 
-#include "debugger/ide-debug-manager.h"
+#include "ide-debugger.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEBUGGER_HOVER_CONTROLS (ide_debugger_hover_controls_get_type())
+#define IDE_TYPE_DEBUGGER_CONTROLS (ide_debugger_controls_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerHoverControls, ide_debugger_hover_controls, IDE, DEBUGGER_HOVER_CONTROLS, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeDebuggerControls, ide_debugger_controls, IDE, DEBUGGER_CONTROLS, GtkRevealer)
 
-GtkWidget *ide_debugger_hover_controls_new (IdeDebugManager *debug_manager,
-                                            GFile           *file,
-                                            guint            line);
+IdeDebugger *ide_debugger_controls_get_debugger (IdeDebuggerControls *self);
+void         ide_debugger_controls_set_debugger (IdeDebuggerControls *self,
+                                                 IdeDebugger         *debugger);
 
 G_END_DECLS

@@ -20,9 +20,7 @@
 
 #pragma once
 
-#include <gio/gio.h>
-
-#include "ide-version-macros.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -36,10 +34,7 @@ struct _IdeDebuggerThreadGroupClass
   GObjectClass parent_class;
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
+  gpointer _reserved[4];
 };
 
 IDE_AVAILABLE_IN_3_32

@@ -1,6 +1,6 @@
-/* ide-debugger-breakpoints-view.h
+/* ide-debugger-hover-provider.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,12 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-
-#include "debugger/ide-debugger.h"
+#include <libide-sourceview.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEBUGGER_BREAKPOINTS_VIEW (ide_debugger_breakpoints_view_get_type())
+#define IDE_TYPE_DEBUGGER_HOVER_PROVIDER (ide_debugger_hover_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerBreakpointsView, ide_debugger_breakpoints_view, IDE, DEBUGGER_BREAKPOINTS_VIEW, GtkBin)
-
-GtkWidget   *ide_debugger_breakpoints_view_new          (void);
-IdeDebugger *ide_debugger_breakpoints_view_get_debugger (IdeDebuggerBreakpointsView *self);
-void         ide_debugger_breakpoints_view_set_debugger (IdeDebuggerBreakpointsView *self,
-                                                         IdeDebugger                *debugger);
+G_DECLARE_FINAL_TYPE (IdeDebuggerHoverProvider, ide_debugger_hover_provider, IDE, DEBUGGER_HOVER_PROVIDER, GObject)
 
 G_END_DECLS

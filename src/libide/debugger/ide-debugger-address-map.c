@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "debugger/ide-debugger-address-map.h"
+#include "ide-debugger-address-map-private.h"
 
 struct _IdeDebuggerAddressMap
 {

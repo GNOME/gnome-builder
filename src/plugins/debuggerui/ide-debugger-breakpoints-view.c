@@ -24,7 +24,7 @@
 
 #include <dazzle.h>
 
-#include "debugger/ide-debugger-breakpoints-view.h"
+#include "ide-debugger-breakpoints-view.h"
 
 struct _IdeDebuggerBreakpointsView
 {
@@ -440,7 +440,7 @@ ide_debugger_breakpoints_view_class_init (IdeDebuggerBreakpointsViewClass *klass
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-breakpoints-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-breakpoints-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerBreakpointsView, address_cell);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerBreakpointsView, address_column);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerBreakpointsView, hits_cell);

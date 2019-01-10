@@ -23,11 +23,11 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-core.h>
+#include <libide-threading.h>
 #include <glib/gi18n.h>
 
-#include "debugger/ide-debugger-locals-view.h"
-#include "util/ide-glib.h"
-#include "threading/ide-task.h"
+#include "ide-debugger-locals-view.h"
 
 struct _IdeDebuggerLocalsView
 {
@@ -206,7 +206,7 @@ ide_debugger_locals_view_class_init (IdeDebuggerLocalsViewClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-locals-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-locals-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLocalsView, tree_store);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLocalsView, tree_view);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerLocalsView, type_cell);

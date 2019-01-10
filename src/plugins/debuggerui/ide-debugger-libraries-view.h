@@ -1,4 +1,4 @@
-/* ide-debugger-registers-view.h
+/* ide-debugger-libraries-view.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -22,17 +22,17 @@
 
 #include <gtk/gtk.h>
 
-#include "debugger/ide-debugger.h"
+#include "ide-debugger.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEBUGGER_REGISTERS_VIEW (ide_debugger_registers_view_get_type())
+#define IDE_TYPE_DEBUGGER_LIBRARIES_VIEW (ide_debugger_libraries_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerRegistersView, ide_debugger_registers_view, IDE, DEBUGGER_REGISTERS_VIEW, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeDebuggerLibrariesView, ide_debugger_libraries_view, IDE, DEBUGGER_LIBRARIES_VIEW, GtkBin)
 
-GtkWidget   *ide_debugger_registers_view_new          (void);
-IdeDebugger *ide_debugger_registers_view_get_debugger (IdeDebuggerRegistersView *self);
-void         ide_debugger_registers_view_set_debugger (IdeDebuggerRegistersView *self,
+GtkWidget   *ide_debugger_libraries_view_new          (void);
+IdeDebugger *ide_debugger_libraries_view_get_debugger (IdeDebuggerLibrariesView *self);
+void         ide_debugger_libraries_view_set_debugger (IdeDebuggerLibrariesView *self,
                                                        IdeDebugger              *debugger);
 
 G_END_DECLS

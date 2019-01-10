@@ -23,16 +23,16 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-core.h>
 
-#include "debugger/ide-debugger-registers-view.h"
-#include "util/ide-glib.h"
+#include "ide-debugger-registers-view.h"
 
 struct _IdeDebuggerRegistersView
 {
   GtkBin          parent_instance;
 
   /* Owned references */
-  DzlSignalGroup *debugger_signals;
+  DzlSignalGroup      *debugger_signals;
 
   /* Template references */
   GtkTreeView         *tree_view;
@@ -239,7 +239,7 @@ ide_debugger_registers_view_class_init (IdeDebuggerRegistersViewClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-registers-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-registers-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerRegistersView, id_cell);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerRegistersView, id_column);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerRegistersView, list_store);

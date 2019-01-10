@@ -1,4 +1,4 @@
-/* ide-debugger-address-map.h
+/* ide-debugger-address-map-private.h
  *
  * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "debugger/ide-debugger-types.h"
+#include "ide-debugger-types.h"
 
 G_BEGIN_DECLS
 

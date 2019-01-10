@@ -20,11 +20,12 @@
 
 #pragma once
 
-#include "ide-version-macros.h"
+#include <libide-core.h>
+#include <libide-foundry.h>
 
-#include "ide-object.h"
-
-#include "debugger/ide-debugger-breakpoints.h"
+#include "ide-debugger.h"
+#include "ide-debugger-breakpoints.h"
+#include "ide-debugger-types.h"
 
 G_BEGIN_DECLS
 
@@ -33,6 +34,8 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeDebugManager, ide_debug_manager, IDE, DEBUG_MANAGER, IdeObject)
 
+IDE_AVAILABLE_IN_3_32
+IdeDebugManager        *ide_debug_manager_from_context             (IdeContext             *context);
 IDE_AVAILABLE_IN_3_32
 IdeDebugger            *ide_debug_manager_get_debugger             (IdeDebugManager        *self);
 IDE_AVAILABLE_IN_3_32

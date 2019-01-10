@@ -24,43 +24,40 @@
 
 #include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libide-code.h>
+#include <libide-plugins.h>
+#include <libide-threading.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "ide-debug.h"
+#include "ide-buffer-private.h"
 
-#include "buffers/ide-buffer.h"
-#include "buffers/ide-buffer-manager.h"
-#include "buildsystem/ide-build-target.h"
-#include "debugger/ide-debug-manager.h"
-#include "debugger/ide-debugger.h"
-#include "debugger/ide-debugger-private.h"
-#include "files/ide-file.h"
-#include "plugins/ide-extension-util.h"
-#include "runner/ide-runner.h"
-#include "threading/ide-task.h"
+#include "ide-debug-manager.h"
+#include "ide-debugger.h"
+#include "ide-debugger-private.h"
 
 #define TAG_CURRENT_BKPT "debugger::current-breakpoint"
 
 struct _IdeDebugManager
 {
-  IdeObject           parent_instance;
+  IdeObject       parent_instance;
 
-  GHashTable         *breakpoints;
-  IdeDebugger        *debugger;
-  DzlSignalGroup     *debugger_signals;
-  IdeRunner          *runner;
-  GQueue              pending_breakpoints;
-  GPtrArray          *supported_languages;
+  GHashTable     *breakpoints;
+  IdeDebugger    *debugger;
+  DzlSignalGroup *debugger_signals;
+  IdeRunner      *runner;
+  GQueue          pending_breakpoints;
+  GPtrArray      *supported_languages;
 
-  guint               active : 1;
+  guint           active : 1;
 };
 
 typedef struct
 {
-  IdeDebugger *debugger;
-  IdeRunner   *runner;
-  gint         priority;
+  IdeDebugManager *self;
+  IdeDebugger     *debugger;
+  IdeRunner       *runner;
+  gint             priority;
 } DebuggerLookup;
 
 enum {
@@ -90,6 +87,28 @@ compare_language_id (gconstpointer a,
   const gchar * const *bstr = b;
 
   return strcmp (*astr, *bstr);
+}
+
+static void
+ide_debug_manager_notify_buffer (IdeDebugManager        *self,
+                                 IdeDebuggerBreakpoints *breakpoints)
+{
+  g_autoptr(IdeContext) context = NULL;
+  IdeBufferManager *bufmgr;
+  IdeBuffer *buffer;
+  GFile *file;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (IDE_IS_DEBUGGER_BREAKPOINTS (breakpoints));
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  bufmgr = ide_buffer_manager_from_context (context);
+  file = ide_debugger_breakpoints_get_file (breakpoints);
+  buffer = ide_buffer_manager_find_buffer (bufmgr, file);
+
+  if (buffer != NULL)
+    _ide_buffer_line_flags_changed (buffer);
 }
 
 /**
@@ -294,7 +313,7 @@ ide_debug_manager_breakpoint_added (IdeDebugManager       *self,
                                     IdeDebuggerBreakpoint *breakpoint,
                                     IdeDebugger           *debugger)
 {
-  IdeDebuggerBreakpoints *breakpoints;
+  g_autoptr(IdeDebuggerBreakpoints) breakpoints = NULL;
   g_autoptr(GFile) file = NULL;
   const gchar *path;
 
@@ -303,21 +322,13 @@ ide_debug_manager_breakpoint_added (IdeDebugManager       *self,
   g_assert (IDE_IS_DEBUGGER (debugger));
 
   /* If there is no file, then there is nothing to cache */
-  path = ide_debugger_breakpoint_get_file (breakpoint);
-  if (path == NULL)
+  if (!(path = ide_debugger_breakpoint_get_file (breakpoint)))
     return;
 
   file = g_file_new_for_path (path);
-  breakpoints = g_hash_table_lookup (self->breakpoints, file);
-  if (breakpoints == NULL)
-    {
-      breakpoints = g_object_new (IDE_TYPE_DEBUGGER_BREAKPOINTS,
-                                  "file", file,
-                                  NULL);
-      g_hash_table_insert (self->breakpoints, g_steal_pointer (&file), breakpoints);
-    }
-
+  breakpoints = ide_debug_manager_get_breakpoints_for_file (self, file);
   _ide_debugger_breakpoints_add (breakpoints, breakpoint);
+  ide_debug_manager_notify_buffer (self, breakpoints);
 }
 
 static void
@@ -384,7 +395,7 @@ ide_debug_manager_clear_stopped (IdeDebugManager *self)
   g_assert (IDE_IS_DEBUG_MANAGER (self));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  bufmgr = ide_context_get_buffer_manager (context);
+  bufmgr = ide_buffer_manager_from_context (context);
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (bufmgr));
 
@@ -504,17 +515,17 @@ ide_debug_manager_real_breakpoint_reached (IdeDebugManager       *self,
   if (path != NULL)
     {
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-      IdeBufferManager *bufmgr = ide_context_get_buffer_manager (context);
-      g_autoptr(IdeFile) file = ide_file_new_for_path (context, path);
+      IdeBufferManager *bufmgr = ide_buffer_manager_from_context (context);
+      g_autoptr(GFile) file = ide_context_build_file (context, path);
       g_autoptr(IdeTask) task = NULL;
 
       task = ide_task_new (self, NULL, NULL, NULL);
+      ide_task_set_source_tag (task, ide_debug_manager_real_breakpoint_reached);
       ide_task_set_task_data (task, g_object_ref (breakpoint), g_object_unref);
 
       ide_buffer_manager_load_file_async (bufmgr,
                                           file,
-                                          FALSE,
-                                          IDE_WORKBENCH_OPEN_FLAGS_NONE,
+                                          IDE_BUFFER_OPEN_FLAGS_NONE,
                                           NULL,
                                           NULL,
                                           ide_debug_manager_load_file_cb,
@@ -532,8 +543,8 @@ ide_debug_manager_dispose (GObject *object)
 
   g_hash_table_remove_all (self->breakpoints);
   dzl_signal_group_set_target (self->debugger_signals, NULL);
-  g_clear_object (&self->debugger);
-  g_clear_object (&self->runner);
+  ide_clear_and_destroy_object (&self->debugger);
+  ide_clear_and_destroy_object (&self->runner);
 
   G_OBJECT_CLASS (ide_debug_manager_parent_class)->dispose (object);
 }
@@ -746,6 +757,8 @@ debugger_lookup (PeasExtensionSet *set,
   g_assert (IDE_IS_DEBUGGER (debugger));
   g_assert (lookup != NULL);
 
+  ide_object_append (IDE_OBJECT (lookup->self), IDE_OBJECT (debugger));
+
   if (ide_debugger_supports_runner (debugger, lookup->runner, &priority))
     {
       IdeBuildTarget *build_target = ide_runner_get_build_target (lookup->runner);
@@ -755,15 +768,20 @@ debugger_lookup (PeasExtensionSet *set,
           g_autofree gchar *language = ide_build_target_get_language (build_target);
 
           if (!debugger_supports_language (plugin_info, language))
-            return;
+            goto failure;
         }
 
       if (lookup->debugger == NULL || priority < lookup->priority)
         {
-          g_set_object (&lookup->debugger, debugger);
+          ide_clear_and_destroy_object (&lookup->debugger);
+          lookup->debugger = g_object_ref (debugger);
           lookup->priority = priority;
+          return;
         }
     }
+
+failure:
+  ide_object_destroy (IDE_OBJECT (debugger));
 }
 
 /**
@@ -783,22 +801,19 @@ ide_debug_manager_find_debugger (IdeDebugManager *self,
                                  IdeRunner       *runner)
 {
   g_autoptr(PeasExtensionSet) set = NULL;
-  IdeContext *context;
   DebuggerLookup lookup;
 
   g_return_val_if_fail (IDE_IS_DEBUG_MANAGER (self), NULL);
   g_return_val_if_fail (IDE_IS_RUNNER (runner), NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (runner));
-
+  lookup.self = self;
   lookup.debugger = NULL;
   lookup.runner = runner;
   lookup.priority = G_MAXINT;
 
-  set = ide_extension_set_new (peas_engine_get_default (),
-                               IDE_TYPE_DEBUGGER,
-                               "context", context,
-                               NULL);
+  set = peas_extension_set_new (peas_engine_get_default (),
+                                IDE_TYPE_DEBUGGER,
+                                NULL);
 
   peas_extension_set_foreach (set, debugger_lookup, &lookup);
 
@@ -943,6 +958,9 @@ ide_debug_manager_runner_exited (IdeDebugManager *self,
   ide_debug_manager_clear_stopped (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
+
+  ide_clear_and_destroy_object (&debugger);
+  ide_clear_and_destroy_object (&hold_runner);
 }
 
 /**
@@ -969,6 +987,7 @@ ide_debug_manager_start (IdeDebugManager  *self,
 
   g_return_val_if_fail (IDE_IS_DEBUG_MANAGER (self), FALSE);
   g_return_val_if_fail (IDE_IS_RUNNER (runner), FALSE);
+  g_return_val_if_fail (self->debugger == NULL, FALSE);
 
   debugger = ide_debug_manager_find_debugger (self, runner);
 
@@ -978,7 +997,7 @@ ide_debug_manager_start (IdeDebugManager  *self,
       g_set_error (error,
                    G_IO_ERROR,
                    G_IO_ERROR_NOT_SUPPORTED,
-                   _("A suitable debugger could not be found."));
+                   _("A suitable debugger was not found."));
       IDE_GOTO (failure);
     }
 
@@ -1021,10 +1040,10 @@ ide_debug_manager_stop (IdeDebugManager *self)
   if (self->runner != NULL)
     {
       ide_runner_force_quit (self->runner);
-      g_clear_object (&self->runner);
+      ide_clear_and_destroy_object (&self->runner);
     }
 
-  g_clear_object (&self->debugger);
+  ide_clear_and_destroy_object (&self->debugger);
   ide_debug_manager_reset_breakpoints (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
@@ -1126,9 +1145,7 @@ _ide_debug_manager_add_breakpoint (IdeDebugManager       *self,
       IDE_EXIT;
     }
 
-  path = ide_debugger_breakpoint_get_file (breakpoint);
-
-  if (path == NULL)
+  if (!(path = ide_debugger_breakpoint_get_file (breakpoint)))
     {
       /* We don't know where this breakpoint is because it's either an
        * address, function, expression, etc. So we just need to queue
@@ -1141,6 +1158,7 @@ _ide_debug_manager_add_breakpoint (IdeDebugManager       *self,
   file = g_file_new_for_path (path);
   breakpoints = ide_debug_manager_get_breakpoints_for_file (self, file);
   _ide_debugger_breakpoints_add (breakpoints, breakpoint);
+  ide_debug_manager_notify_buffer (self, breakpoints);
 
   IDE_EXIT;
 }
@@ -1188,4 +1206,28 @@ _ide_debug_manager_remove_breakpoint (IdeDebugManager       *self,
     _ide_debugger_breakpoints_remove (breakpoints, breakpoint);
 
   IDE_EXIT;
+}
+
+/**
+ * ide_debug_manager_from_context:
+ * @context: an #IdeContext
+ *
+ * Gets the #IdeDebugManager for a context.
+ *
+ * Returns: (transfer none): an #IdeDebugManager
+ *
+ * Since: 3.32
+ */
+IdeDebugManager *
+ide_debug_manager_from_context (IdeContext *context)
+{
+  IdeDebugManager *ret;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  /* Returns a borrowed reference, instead of full */
+  ret = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_DEBUG_MANAGER);
+  g_object_unref (ret);
+
+  return ret;
 }

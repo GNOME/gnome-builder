@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "debugger/ide-debug-manager.h"
-#include "debugger/ide-debugger.h"
-#include "debugger/ide-debugger-breakpoints.h"
+#include "ide-debug-manager.h"
+#include "ide-debugger.h"
+#include "ide-debugger-breakpoints.h"
 
 G_BEGIN_DECLS
 

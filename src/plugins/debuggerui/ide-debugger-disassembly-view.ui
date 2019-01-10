@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeDebuggerDisassemblyView" parent="IdeLayoutView">
+  <template class="IdeDebuggerDisassemblyView" parent="IdePage">
     <property name="icon-name">application-x-executable-symbolic</property>
     <property name="title" translatable="yes">Disassembly</property>
     <child>

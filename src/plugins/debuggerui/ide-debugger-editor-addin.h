@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include "debugger/ide-debugger-breakpoint.h"
-#include "editor/ide-editor-addin.h"
+#include <libide-debugger.h>
 
 G_BEGIN_DECLS
 

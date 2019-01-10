@@ -1,4 +1,4 @@
-/* ide-debugger-hover-provider.h
+/* ide-debugger-hover-controls.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,18 @@
 
 #pragma once
 
-#include "hover/ide-hover-provider.h"
+#include <gtk/gtk.h>
+
+#include "ide-debug-manager.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEBUGGER_HOVER_PROVIDER (ide_debugger_hover_provider_get_type())
+#define IDE_TYPE_DEBUGGER_HOVER_CONTROLS (ide_debugger_hover_controls_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerHoverProvider, ide_debugger_hover_provider, IDE, DEBUGGER_HOVER_PROVIDER, GObject)
+G_DECLARE_FINAL_TYPE (IdeDebuggerHoverControls, ide_debugger_hover_controls, IDE, DEBUGGER_HOVER_CONTROLS, GtkBin)
+
+GtkWidget *ide_debugger_hover_controls_new (IdeDebugManager *debug_manager,
+                                            GFile           *file,
+                                            guint            line);
 
 G_END_DECLS

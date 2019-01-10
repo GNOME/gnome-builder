@@ -1,6 +1,6 @@
-/* ide-debugger-plugin.c
+/* debuggerui-plugin.c
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,20 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-debugger-plugin"
+#define G_LOG_DOMAIN "debuggerui-plugin"
 
 #include "config.h"
 
-#include "object-modules.h"
+#include <libide-debugger.h>
+#include <libide-editor.h>
+#include <libide-gui.h>
+#include <libpeas/peas.h>
 
-#include "debugger/ide-debugger-editor-addin.h"
-#include "debugger/ide-debugger-hover-provider.h"
-#include "editor/ide-editor-addin.h"
-#include "editor/ide-editor-view-addin.h"
-#include "hover/ide-hover-provider.h"
+#include "ide-debugger-editor-addin.h"
+#include "ide-debugger-hover-provider.h"
 
 void
-ide_debugger_register_types (PeasObjectModule *module)
+_gbp_debuggerui_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,

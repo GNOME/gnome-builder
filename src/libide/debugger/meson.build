@@ -1,6 +1,14 @@
-debugger_headers = [
+libide_debugger_header_subdir = join_paths(libide_header_subdir, 'debugger')
+libide_include_directories += include_directories('.')
+
+libide_debugger_generated_headers = []
+
+#
+# Public API Headers
+#
+
+libide_debugger_public_headers = [
   'ide-debug-manager.h',
-  'ide-debugger.h',
   'ide-debugger-breakpoint.h',
   'ide-debugger-breakpoints.h',
   'ide-debugger-frame.h',
@@ -11,11 +19,24 @@ debugger_headers = [
   'ide-debugger-thread.h',
   'ide-debugger-types.h',
   'ide-debugger-variable.h',
+  'ide-debugger.h',
+  'libide-debugger.h',
 ]
 
-debugger_sources = [
+libide_debugger_private_headers = [
+  'ide-debugger-address-map-private.h',
+  'ide-debugger-private.h',
+]
+
+install_headers(libide_debugger_public_headers, subdir: libide_debugger_header_subdir)
+
+#
+# Sources
+#
+
+libide_debugger_public_sources = [
   'ide-debug-manager.c',
-  'ide-debugger.c',
+  'ide-debugger-address-map.c',
   'ide-debugger-breakpoint.c',
   'ide-debugger-breakpoints.c',
   'ide-debugger-frame.c',
@@ -26,39 +47,49 @@ debugger_sources = [
   'ide-debugger-thread.c',
   'ide-debugger-types.c',
   'ide-debugger-variable.c',
+  'ide-debugger.c',
 ]
 
-# .h files used for gtk-doc ignores
-debugger_private_sources = [
-  'ide-debugger-actions.c',
-  'ide-debugger-address-map.c',
-  'ide-debugger-address-map.h',
-  'ide-debugger-breakpoints-view.c',
-  'ide-debugger-breakpoints-view.h',
-  'ide-debugger-controls.c',
-  'ide-debugger-controls.h',
-  'ide-debugger-disassembly-view.c',
-  'ide-debugger-disassembly-view.h',
-  'ide-debugger-editor-addin.c',
-  'ide-debugger-editor-addin.h',
+libide_debugger_private_sources = [
   'ide-debugger-fallbacks.c',
-  'ide-debugger-hover-controls.c',
-  'ide-debugger-hover-controls.h',
-  'ide-debugger-hover-provider.c',
-  'ide-debugger-hover-provider.h',
-  'ide-debugger-libraries-view.c',
-  'ide-debugger-libraries-view.h',
-  'ide-debugger-locals-view.c',
-  'ide-debugger-locals-view.h',
-  'ide-debugger-plugin.c',
-  'ide-debugger-registers-view.c',
-  'ide-debugger-registers-view.h',
-  'ide-debugger-threads-view.c',
-  'ide-debugger-threads-view.h',
+  'ide-debugger-actions.c',
 ]
 
-libide_public_headers += files(debugger_headers)
-libide_public_sources += files(debugger_sources)
-libide_private_sources += files(debugger_private_sources)
+#
+# Dependencies
+#
 
-install_headers(debugger_headers, subdir: join_paths(libide_header_subdir, 'debugger'))
+libide_debugger_deps = [
+  libgio_dep,
+  libgtk_dep,
+  libdazzle_dep,
+
+  libide_core_dep,
+  libide_io_dep,
+  libide_threading_dep,
+  libide_code_dep,
+  libide_foundry_dep,
+]
+
+#
+# Library Definitions
+#
+
+libide_debugger = static_library('ide-debugger-' + libide_api_version,
+   libide_debugger_public_sources + libide_debugger_private_sources,
+   dependencies: libide_debugger_deps,
+         c_args: libide_args + release_args + ['-DIDE_DEBUGGER_COMPILATION'],
+)
+
+libide_debugger_dep = declare_dependency(
+              sources: libide_debugger_private_headers + libide_debugger_generated_headers,
+         dependencies: libide_debugger_deps,
+           link_whole: libide_debugger,
+  include_directories: include_directories('.'),
+)
+
+gnome_builder_public_sources += files(libide_debugger_public_sources)
+gnome_builder_public_headers += files(libide_debugger_public_headers)
+gnome_builder_generated_headers += libide_debugger_generated_headers
+gnome_builder_include_subdirs += libide_debugger_header_subdir
+gnome_builder_gir_extra_args += ['--c-include=libide-debugger.h', '-DIDE_DEBUGGER_COMPILATION']

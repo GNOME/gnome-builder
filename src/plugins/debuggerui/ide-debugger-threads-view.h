@@ -1,4 +1,4 @@
-/* ide-debugger-controls.c
+/* ide-debugger-threads-view.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,26 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "debugger/ide-debugger-controls.h"
+#pragma once
 
-struct _IdeDebuggerControls
-{
-  GtkBin parent_instance;
-};
+#include <gtk/gtk.h>
 
-G_DEFINE_TYPE (IdeDebuggerControls, ide_debugger_controls, GTK_TYPE_REVEALER)
+#include "ide-debugger.h"
 
-static void
-ide_debugger_controls_class_init (IdeDebuggerControlsClass *klass)
-{
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+G_BEGIN_DECLS
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-controls.ui");
-  gtk_widget_class_set_css_name (widget_class, "idedebuggercontrols");
-}
+#define IDE_TYPE_DEBUGGER_THREADS_VIEW (ide_debugger_threads_view_get_type())
 
-static void
-ide_debugger_controls_init (IdeDebuggerControls *self)
-{
-  gtk_widget_init_template (GTK_WIDGET (self));
-}
+G_DECLARE_FINAL_TYPE (IdeDebuggerThreadsView, ide_debugger_threads_view, IDE, DEBUGGER_THREADS_VIEW, GtkBin)
+
+IdeDebugger *ide_debugger_threads_view_get_debugger (IdeDebuggerThreadsView *self);
+void         ide_debugger_threads_view_set_debugger (IdeDebuggerThreadsView *self,
+                                                     IdeDebugger            *debugger);
+
+G_END_DECLS

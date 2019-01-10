@@ -22,7 +22,7 @@
 
 #include <gtk/gtk.h>
 
-#include "debugger/ide-debugger.h"
+#include "ide-debugger.h"
 
 G_BEGIN_DECLS
 

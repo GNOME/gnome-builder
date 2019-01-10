@@ -22,14 +22,14 @@
 
 #include "config.h"
 
-#include <gtksourceview/gtksource.h>
+#include <libide-sourceview.h>
 
-#include "debugger/ide-debugger-disassembly-view.h"
-#include "debugger/ide-debugger-instruction.h"
+#include "ide-debugger-disassembly-view.h"
+#include "ide-debugger-instruction.h"
 
 struct _IdeDebuggerDisassemblyView
 {
-  IdeLayoutView       parent_instance;
+  IdePage             parent_instance;
 
   /* Owned references */
   GPtrArray          *instructions;
@@ -41,7 +41,7 @@ struct _IdeDebuggerDisassemblyView
   IdeDebuggerAddress  current_address;
 };
 
-G_DEFINE_TYPE (IdeDebuggerDisassemblyView, ide_debugger_disassembly_view, IDE_TYPE_LAYOUT_VIEW)
+G_DEFINE_TYPE (IdeDebuggerDisassemblyView, ide_debugger_disassembly_view, IDE_TYPE_PAGE)
 
 static void
 ide_debugger_disassembly_view_destroy (GtkWidget *widget)
@@ -60,7 +60,7 @@ ide_debugger_disassembly_view_class_init (IdeDebuggerDisassemblyViewClass *klass
 
   widget_class->destroy = ide_debugger_disassembly_view_destroy;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-disassembly-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-disassembly-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerDisassemblyView, source_buffer);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerDisassemblyView, source_view);
 }

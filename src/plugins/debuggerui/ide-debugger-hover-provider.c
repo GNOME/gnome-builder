@@ -22,17 +22,15 @@
 
 #include "config.h"
 
+#include <libide-code.h>
+#include <libide-core.h>
+#include <libide-debugger.h>
+#include <libide-sourceview.h>
+#include <libide-threading.h>
 #include <glib/gi18n.h>
 
-#include "ide-context.h"
-
-#include "buffers/ide-buffer.h"
-#include "debugger/ide-debug-manager.h"
-#include "debugger/ide-debugger-hover-controls.h"
-#include "debugger/ide-debugger-hover-provider.h"
-#include "files/ide-file.h"
-#include "threading/ide-task.h"
-#include "util/ide-marked-content.h"
+#include "ide-debugger-hover-controls.h"
+#include "ide-debugger-hover-provider.h"
 
 #define DEBUGGER_HOVER_PRIORITY 1000
 
@@ -51,12 +49,11 @@ ide_debugger_hover_provider_hover_async (IdeHoverProvider    *provider,
 {
   IdeDebuggerHoverProvider *self = (IdeDebuggerHoverProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeContext) icontext = NULL;
   IdeDebugManager *dbgmgr;
   const gchar *lang_id;
-  IdeContext *icontext;
   IdeBuffer *buffer;
-  IdeFile *file;
-  GFile *gfile;
+  GFile *file;
   guint line;
 
   g_assert (IDE_IS_DEBUGGER_HOVER_PROVIDER (provider));
@@ -76,17 +73,16 @@ ide_debugger_hover_provider_hover_async (IdeHoverProvider    *provider,
     }
 
   lang_id = ide_buffer_get_language_id (buffer);
-  icontext = ide_buffer_get_context (buffer);
-  dbgmgr = ide_context_get_debug_manager (icontext);
+  icontext = ide_buffer_ref_context (buffer);
+  dbgmgr = ide_debug_manager_from_context (icontext);
   file = ide_buffer_get_file (buffer);
-  gfile = ide_file_get_file (file);
   line = gtk_text_iter_get_line (iter);
 
   if (ide_debug_manager_supports_language (dbgmgr, lang_id))
     {
       GtkWidget *controls;
 
-      controls = ide_debugger_hover_controls_new (dbgmgr, gfile, line + 1);
+      controls = ide_debugger_hover_controls_new (dbgmgr, file, line + 1);
       ide_hover_context_add_widget (context, DEBUGGER_HOVER_PRIORITY, _("Debugger"), controls);
     }
 

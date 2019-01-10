@@ -1,4 +1,4 @@
-/* ide-debugger-disassembly-view.h
+/* ide-debugger-breakpoints-view.h
  *
  * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -22,18 +22,17 @@
 
 #include <gtk/gtk.h>
 
-#include "debugger/ide-debugger-types.h"
-#include "layout/ide-layout-view.h"
+#include "ide-debugger.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEBUGGER_DISASSEMBLY_VIEW (ide_debugger_disassembly_view_get_type())
+#define IDE_TYPE_DEBUGGER_BREAKPOINTS_VIEW (ide_debugger_breakpoints_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerDisassemblyView, ide_debugger_disassembly_view, IDE, DEBUGGER_DISASSEMBLY_VIEW, IdeLayoutView)
+G_DECLARE_FINAL_TYPE (IdeDebuggerBreakpointsView, ide_debugger_breakpoints_view, IDE, DEBUGGER_BREAKPOINTS_VIEW, GtkBin)
 
-void ide_debugger_disassembly_view_set_current_address (IdeDebuggerDisassemblyView *self,
-                                                        IdeDebuggerAddress          address);
-void ide_debugger_disassembly_view_set_instructions    (IdeDebuggerDisassemblyView *self,
-                                                        GPtrArray                  *instructions);
+GtkWidget   *ide_debugger_breakpoints_view_new          (void);
+IdeDebugger *ide_debugger_breakpoints_view_get_debugger (IdeDebuggerBreakpointsView *self);
+void         ide_debugger_breakpoints_view_set_debugger (IdeDebuggerBreakpointsView *self,
+                                                         IdeDebugger                *debugger);
 
 G_END_DECLS

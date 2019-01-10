@@ -23,10 +23,11 @@
 #include "config.h"
 
 #include <dazzle.h>
+#include <libide-core.h>
+#include <libide-gui.h>
 #include <glib/gi18n.h>
 
-#include "debugger/ide-debugger-threads-view.h"
-#include "util/ide-glib.h"
+#include "ide-debugger-threads-view.h"
 
 struct _IdeDebuggerThreadsView
 {
@@ -688,7 +689,7 @@ ide_debugger_threads_view_class_init (IdeDebuggerThreadsViewClass *klass)
                   0, NULL, NULL, NULL,
                   G_TYPE_NONE, 2, IDE_TYPE_DEBUGGER_THREAD, IDE_TYPE_DEBUGGER_FRAME);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-debugger-threads-view.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-threads-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerThreadsView, args_cell);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerThreadsView, args_column);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerThreadsView, binary_cell);

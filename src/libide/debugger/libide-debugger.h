@@ -1,6 +1,6 @@
-/* ide-debugger-libraries-view.h
+/* libide-debugger.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,25 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-
-#include "debugger/ide-debugger.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEBUGGER_LIBRARIES_VIEW (ide_debugger_libraries_view_get_type())
+#define IDE_DEBUGGER_INSIDE
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerLibrariesView, ide_debugger_libraries_view, IDE, DEBUGGER_LIBRARIES_VIEW, GtkBin)
+#include "ide-debugger-breakpoint.h"
+#include "ide-debugger-breakpoints.h"
+#include "ide-debugger-frame.h"
+#include "ide-debugger-instruction.h"
+#include "ide-debugger-library.h"
+#include "ide-debugger-register.h"
+#include "ide-debugger-thread-group.h"
+#include "ide-debugger-thread.h"
+#include "ide-debugger-types.h"
+#include "ide-debugger-variable.h"
+#include "ide-debugger.h"
+#include "ide-debug-manager.h"
 
-GtkWidget   *ide_debugger_libraries_view_new          (void);
-IdeDebugger *ide_debugger_libraries_view_get_debugger (IdeDebuggerLibrariesView *self);
-void         ide_debugger_libraries_view_set_debugger (IdeDebuggerLibrariesView *self,
-                                                       IdeDebugger              *debugger);
+#undef IDE_DEBUGGER_INSIDE
 
 G_END_DECLS

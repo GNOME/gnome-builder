@@ -20,11 +20,9 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#include <libide-core.h>
 
-#include "ide-version-macros.h"
-
-#include "debugger/ide-debugger-types.h"
+#include "ide-debugger-types.h"
 
 G_BEGIN_DECLS
 
