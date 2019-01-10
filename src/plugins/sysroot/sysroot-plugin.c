@@ -19,16 +19,26 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
+#include <libide-foundry.h>
+#include <libide-gui.h>
 
 #include "gbp-sysroot-runtime-provider.h"
 #include "gbp-sysroot-preferences-addin.h"
 #include "gbp-sysroot-toolchain-provider.h"
 
-void
-gbp_sysroot_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_sysroot_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module, IDE_TYPE_RUNTIME_PROVIDER, GBP_TYPE_SYSROOT_RUNTIME_PROVIDER);
-  peas_object_module_register_extension_type (module, IDE_TYPE_PREFERENCES_ADDIN, GBP_TYPE_SYSROOT_PREFERENCES_ADDIN);
-  peas_object_module_register_extension_type (module, IDE_TYPE_TOOLCHAIN_PROVIDER, GBP_TYPE_SYSROOT_TOOLCHAIN_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUNTIME_PROVIDER,
+                                              GBP_TYPE_SYSROOT_RUNTIME_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PREFERENCES_ADDIN,
+                                              GBP_TYPE_SYSROOT_PREFERENCES_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TOOLCHAIN_PROVIDER,
+                                              GBP_TYPE_SYSROOT_TOOLCHAIN_PROVIDER);
 }
