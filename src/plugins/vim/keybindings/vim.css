@@ -101,7 +101,7 @@
                    "hide-completion" ()
                    "set-mode" ("vim-normal", permanent) };
 
-  bind "<ctrl>k" { "action" ("layoutstack", "show-list", "") };
+  bind "<ctrl>k" { "action" ("frame", "show-list", "") };
   bind "<ctrl>minus" { "decrease-font-size" () };
   bind "<ctrl>plus" { "increase-font-size" () };
   bind "<ctrl>equal" { "increase-font-size" () };
@@ -164,24 +164,25 @@
   bind "KP_9" { "append-to-count" (9)
                 "set-mode" ("vim-normal-with-count", transient) };
 
-  bind "colon" { "action" ("win", "show-command-bar", "") };
+  bind "colon" { "action" ("win", "reveal-command-bar", "") };
 
   /* cycle "tabs" */
-  bind "<ctrl><alt>Page_Up" { "action" ("layoutstack", "previous-view", "") };
-  bind "<ctrl><alt>KP_Page_Up" { "action" ("layoutstack", "previous-view", "") };
-  bind "<ctrl><alt>Page_Down" { "action" ("layoutstack", "next-view", "") };
-  bind "<ctrl><alt>KP_Page_Down" { "action" ("layoutstack", "next-view", "") };
+  bind "<ctrl><alt>Page_Up" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl><alt>KP_Page_Up" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl><alt>Page_Down" { "action" ("frame", "next-page", "") };
+  bind "<ctrl><alt>KP_Page_Down" { "action" ("frame", "next-page", "") };
 
   /* replay the last recording */
   bind "period" { "replay-macro" (1) };
 
   /* start search backward */
   /* TODO: use internal sourceview search */
-  bind "question" { "action" ("editor-view", "find", "") };
+  bind "question" { "action" ("editor-page", "find", "") };
 
   /* start search */
-  bind "slash" { "action" ("editor-view", "find", "") };
-  bind "KP_Divide" { "action" ("editor-view", "find", "") };
+  bind "slash" { "action" ("editor-search", "at-word-boundaries", "false")
+                 "action" ("editor-page", "find", "") };
+  bind "KP_Divide" { "action" ("editor-page", "find", "") };
 
   /* insert at cursor */
   bind "i" { "begin-macro" ()
@@ -1573,8 +1574,8 @@
   bind "<shift>u" { "set-mode" ("vim-normal-g-u", transient) };
 
   /* cycle "tabs" */
-  bind "<shift>t" { "action" ("layoutstack", "previous-view", "") };
-  bind "t" { "action" ("layoutstack", "next-view", "") };
+  bind "<shift>t" { "action" ("frame", "previous-page", "") };
+  bind "t" { "action" ("frame", "next-page", "") };
 }
 
 @binding-set builder-vim-source-view-normal-g-u
@@ -1905,27 +1906,27 @@
 
 @binding-set builder-vim-source-view-normal-ctrl-w
 {
-  bind "v" { "action" ("layoutstack", "open-in-new-frame", "''") "grab_focus" () };
-  bind "<ctrl>v" { "action" ("layoutstack", "open-in-new-frame", "''") "grab_focus" () };
+  bind "v" { "action" ("frame", "open-in-new-frame", "''") "grab_focus" () };
+  bind "<ctrl>v" { "action" ("frame", "open-in-new-frame", "''") "grab_focus" () };
 
-  bind "c" { "action" ("layoutstack", "close-view", "") };
+  bind "c" { "action" ("frame", "close-page", "") };
 
-  bind "s" { "action" ("layoutstack", "split-view", "''") };
+  bind "s" { "action" ("frame", "split-page", "''") };
 
-  bind "w" { "action" ("layoutgrid", "focus-neighbor", "0") };
-  bind "<ctrl>w" { "action" ("layoutgrid", "focus-neighbor", "0") };
+  bind "w" { "action" ("grid", "focus-neighbor", "0") };
+  bind "<ctrl>w" { "action" ("grid", "focus-neighbor", "0") };
 
-  bind "l" { "action" ("layoutgrid", "focus-neighbor", "5") };
-  bind "Right" { "action" ("layoutgrid", "focus-neighbor", "5") };
+  bind "l" { "action" ("grid", "focus-neighbor", "5") };
+  bind "Right" { "action" ("grid", "focus-neighbor", "5") };
 
-  bind "h" { "action" ("layoutgrid", "focus-neighbor", "4") };
-  bind "Left" { "action" ("layoutgrid", "focus-neighbor", "4") };
+  bind "h" { "action" ("grid", "focus-neighbor", "4") };
+  bind "Left" { "action" ("grid", "focus-neighbor", "4") };
 
-  bind "j" { "action" ("layoutgrid", "focus-neighbor", "3") };
-  bind "Down" { "action" ("layoutgrid", "focus-neighbor", "3") };
+  bind "j" { "action" ("grid", "focus-neighbor", "3") };
+  bind "Down" { "action" ("grid", "focus-neighbor", "3") };
 
-  bind "k" { "action" ("layoutgrid", "focus-neighbor", "2") };
-  bind "Up" { "action" ("layoutgrid", "focus-neighbor", "2") };
+  bind "k" { "action" ("grid", "focus-neighbor", "2") };
+  bind "Up" { "action" ("grid", "focus-neighbor", "2") };
 }
 
 @binding-set builder-vim-source-view-visual-line-g
@@ -2010,7 +2011,7 @@
   bind "i" { "set-mode" ("vim-visual-i", transient) };
   bind "a" { "set-mode" ("vim-visual-a", transient) };
 
-  bind "colon" { "action" ("win", "show-command-bar", "") };
+  bind "colon" { "action" ("win", "reveal-command-bar", "") };
 
   bind "percent" { "move-to-matching-bracket" (1) };
 
@@ -2079,7 +2080,7 @@
              "set-mode" ("vim-normal", permanent) };
 
   bind "slash" { "set-search-text" ("", 1)
-                 "action" ("editor-view", "find", "") };
+                 "action" ("editor-page", "find", "") };
 
   bind "e" { "movement" (next-word-end, 1, 0, 1) };
   bind "<shift>e" { "movement" (next-full-word-end, 1, 0, 1) };
@@ -2375,7 +2376,7 @@ bind "KP_Multiply" { "save-insert-mark" ()
 
 @binding-set builder-vim-source-view-visual-line
 {
-  bind "colon" { "action" ("win", "show-command-bar", "") };
+  bind "colon" { "action" ("win", "reveal-command-bar", "") };
 
   bind "1" { "append-to-count" (1)
              "set-mode" ("vim-visual-line-with-count", transient) };
@@ -2546,7 +2547,7 @@ bind "KP_Multiply" { "save-insert-mark" ()
 
 @binding-set builder-gb-project-tree-vim
 {
-  bind "colon" { "action" ("win", "show-command-bar", "") };
+  bind "colon" { "action" ("win", "reveal-command-bar", "") };
 }
 
 @binding-set builder-vim-workbench

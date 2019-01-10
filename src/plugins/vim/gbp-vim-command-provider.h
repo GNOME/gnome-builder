@@ -1,6 +1,6 @@
-/* ide-shortcuts-window.h
+/* gbp-vim-command-provider.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SHORTCUTS_WINDOW (ide_shortcuts_window_get_type())
+#define GBP_TYPE_VIM_COMMAND_PROVIDER (gbp_vim_command_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeShortcutsWindow, ide_shortcuts_window, IDE, SHORTCUTS_WINDOW, GtkShortcutsWindow)
+G_DECLARE_FINAL_TYPE (GbpVimCommandProvider, gbp_vim_command_provider, GBP, VIM_COMMAND_PROVIDER, GObject)
 
 G_END_DECLS

@@ -25,10 +25,9 @@
 #include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
+#include <libide-core.h>
 
-#include "ide-debug.h"
-
-#include "keybindings/ide-keybindings.h"
+#include "ide-keybindings.h"
 
 struct _IdeKeybindings
 {
@@ -78,8 +77,7 @@ ide_keybindings_load_plugin (IdeKeybindings *self,
     return;
 
   module_name = peas_plugin_info_get_module_name (plugin_info);
-  path = g_strdup_printf ("/org/gnome/builder/plugins/%s/keybindings/%s.css",
-                          module_name, self->mode);
+  path = g_strdup_printf ("/plugins/%s/keybindings/%s.css", module_name, self->mode);
   bytes = g_resources_lookup_data (path, 0, NULL);
   if (bytes == NULL)
     return;
@@ -142,6 +140,15 @@ ide_keybindings_reload (IdeKeybindings *self)
     IDE_TRACE_MSG ("Loading %s keybindings", self->mode);
     path = g_strdup_printf ("/org/gnome/builder/keybindings/%s.css", self->mode);
     bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, &error);
+
+    if (bytes == NULL)
+      {
+        g_clear_pointer (&path, g_free);
+        path = g_strdup_printf ("/plugins/%s/keybindings/%s.css", self->mode, self->mode);
+        bytes = g_resources_lookup_data (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+        if (bytes != NULL)
+          g_clear_error (&error);
+      }
 
     if (error == NULL)
       {

@@ -4,9 +4,9 @@
 {
   bind "<ctrl>n" { "action" ("editor", "new-file", "") };
   bind "<ctrl>o" { "action" ("win", "open-with-dialog", "") };
-  bind "<ctrl>s" { "action" ("editor-view", "save", "") };
-  bind "<ctrl><shift>s" { "action" ("editor-view", "save-as", "") };
-  bind "<ctrl>w" { "action" ("layoutstack", "close-view", "") };
+  bind "<ctrl>s" { "action" ("editor-page", "save", "") };
+  bind "<ctrl><shift>s" { "action" ("editor-page", "save-as", "") };
+  bind "<ctrl>w" { "action" ("frame", "close-page", "") };
   bind "<ctrl>q" { "action" ("app", "quit", "") };
 
   bind "<ctrl>z" { "clear-count" ()
@@ -77,26 +77,26 @@
   bind "<alt><shift>m" { "movement" (match-special, 1, 0, 0) };
   bind "<ctrl><shift>a" { "select-tag" (1) };
 
-  bind "<ctrl>f" { "action" ("editor-view", "find", "") };
+  bind "<ctrl>f" { "action" ("editor-page", "find", "") };
   /* Make "Incremental search" and "Use selection for search" do the same thing
    * as Ctrl+F, in Builder they are all the same anyway */
-  bind "<ctrl>i" { "action" ("editor-view", "find", "") };
-  bind "<ctrl>e" { "action" ("editor-view", "find", "") };
-  bind "F3" { "action" ("editor-view", "move-next-search-result", "") };
-  bind "<shift>F3" { "action" ("editor-view", "move-previous-search-result", "") };
-  bind "<ctrl>h" { "action" ("editor-view", "find-replace", "") };
-  bind "<ctrl><shift>e" { "action" ("editor-view", "find-replace", "") };
+  bind "<ctrl>i" { "action" ("editor-page", "find", "") };
+  bind "<ctrl>e" { "action" ("editor-page", "find", "") };
+  bind "F3" { "action" ("editor-page", "move-next-search-result", "") };
+  bind "<shift>F3" { "action" ("editor-page", "move-previous-search-result", "") };
+  bind "<ctrl>h" { "action" ("editor-page", "find-replace", "") };
+  bind "<ctrl><shift>e" { "action" ("editor-page", "find-replace", "") };
 
   bind "<ctrl>quoteleft" { "action" ("dockbin", "bottom-visible", "") };
   bind "<shift>F11" { "action" ("win", "fullscreen", "") };
   bind "F6" { "action" ("spellcheck", "spellcheck", "") };
 
-  bind "<alt>exclam" { "action" ("layoutstack", "split-view", "''") };
-  bind "<alt><shift>KP_1" { "action" ("layoutstack", "split-view", "''") };
+  bind "<alt>exclam" { "action" ("frame", "split-page", "''") };
+  bind "<alt><shift>KP_1" { "action" ("frame", "split-page", "''") };
 
   bind "<ctrl>r" { "action" ("symbol-tree", "search", "") };
   bind "F12" { "goto-definition" () };
-  bind "<ctrl>g" { "action" ("editor-view", "goto-line", "") };
+  bind "<ctrl>g" { "action" ("editor-page", "goto-line", "") };
   bind "<alt>minus" { "action" ("history", "move-previous-edit", "") };
   bind "<alt>underscore" { "action" ("history", "move-next-edit", "") };
   /* Goto matching bracket; should be Ctrl+M but that is hardcoded to comment
@@ -112,12 +112,12 @@
   bind "<ctrl><super>e" { "move-error" (down) };
   bind "<ctrl><super><shift>e" { "move-error" (up) };
 
-  bind "<ctrl>Page_Up" { "action" ("layoutstack", "previous-view", "") };
-  bind "<ctrl>KP_Page_Up" { "action" ("layoutstack", "previous-view", "") };
-  bind "<ctrl>Page_Down" { "action" ("layoutstack", "next-view", "") };
-  bind "<ctrl>KP_Page_Down" { "action" ("layoutstack", "next-view", "") };
-  bind "<ctrl>Tab" { "action" ("layoutstack", "next-view", "") };
-  bind "<ctrl><shift>Tab" { "action" ("layoutstack", "previous-view", "") };
+  bind "<ctrl>Page_Up" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl>KP_Page_Up" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl>Page_Down" { "action" ("frame", "next-page", "") };
+  bind "<ctrl>KP_Page_Down" { "action" ("frame", "next-page", "") };
+  bind "<ctrl>Tab" { "action" ("frame", "next-page", "") };
+  bind "<ctrl><shift>Tab" { "action" ("frame", "previous-page", "") };
   bind "<alt>o" { "action" ("win", "find-other-file", "") };
 
   bind "<ctrl>Up" { "movement" (screen-up, 0, 0, 0) };
@@ -145,7 +145,7 @@
   bind "<ctrl>KP_Add" { "increase-font-size" () };
 
   /* These don't originally have bindings in Sublime */
-  bind "<ctrl>k" { "action" ("layoutstack", "show-list", "") };
+  bind "<ctrl>k" { "action" ("frame", "show-list", "") };
   bind "<ctrl>0" { "reset-font-size" () };
   bind "<ctrl>KP_0" { "reset-font-size" () };
 
@@ -167,7 +167,7 @@
    *   Ctrl+Alt+Shift+P Show scope name; ditto
    *   F4, Shift+F4 Previous/next search result in results panel; Builder
    *     doesn't have a results panel
-   *   Ctrl+1, Ctrl+Shift+1, etc; Builder doesn't have multiple layout stacks
+   *   Ctrl+1, Ctrl+Shift+1, etc; Builder doesn't have multiple frames
    *   Alt+Shift+2, etc; Builder can open vertical splits and close them, which
    *     is already plenty of flexibility for splitting windows
    *
@@ -177,8 +177,8 @@
    *     paste-clipboard-extended, to select pasted text so we can reindent it
    *   Ctrl+Shift+J Expand selection to indentation; selects every contiguous
    *     line at the current indendation level or deeper. Needs movement type
-   *   Alt+1, Alt+2, etc. Go to position in stack; needs a goto-view action in
-   *     ide-layout-stack-actions.c
+   *   Alt+1, Alt+2, etc. Go to position in stack; needs a goto-page action in
+   *     ide-frame-actions.c
    *   Alt+. Close Tag; nice to have for editing HTML
    *   Alt+Shift+W Wrap Selection with Tag; inserts <p> and </p> around the
    *     selection, and selects both "p"'s
@@ -210,7 +210,7 @@
    *     apparently can't be overridden.
    *   Ctrl+Alt+Q doesn't toggle macro recording. Instead, use Ctrl+Super+Q to
    *     stop recording.
-   *   Ctrl+Alt+P, Switch Project, doesn't work when the editor view is focused.
+   *   Ctrl+Alt+P, Switch Project, doesn't work when the editor page is focused.
    *   Previous Error and Next Error were originally bound to Ctrl+K, P and
    *     Ctrl+K, N on SublimeLinter for Linux. We use the shortcuts from macOS
    *     in order to avoid a separate Ctrl+K state.

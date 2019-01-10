@@ -1,6 +1,6 @@
-/* ide-shortcuts-window.c
+/* gbp-emacs-preferences-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,27 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <glib/gi18n.h>
+#pragma once
 
-#include "keybindings/ide-shortcuts-window.h"
+#include <glib-object.h>
 
-struct _IdeShortcutsWindow
-{
-  GtkShortcutsWindow parent_instance;
-};
+G_BEGIN_DECLS
 
-G_DEFINE_TYPE (IdeShortcutsWindow, ide_shortcuts_window, GTK_TYPE_SHORTCUTS_WINDOW)
+#define GBP_TYPE_EMACS_PREFERENCES_ADDIN (gbp_emacs_preferences_addin_get_type())
 
-static void
-ide_shortcuts_window_class_init (IdeShortcutsWindowClass *klass)
-{
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+G_DECLARE_FINAL_TYPE (GbpEmacsPreferencesAddin, gbp_emacs_preferences_addin, GBP, EMACS_PREFERENCES_ADDIN, GObject)
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-shortcuts-window.ui");
-}
-
-static void
-ide_shortcuts_window_init (IdeShortcutsWindow *self)
-{
-  gtk_widget_init_template (GTK_WIDGET (self));
-}
+G_END_DECLS

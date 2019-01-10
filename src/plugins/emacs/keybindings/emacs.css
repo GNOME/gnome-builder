@@ -64,14 +64,14 @@
                             "remove-cursors" ()
                             "undo" () };
   bind "<alt>x" { "action" ("win", "show-command-bar", "") };
-  bind "<ctrl>r" { "action" ("editor-view", "find", "") };
-  bind "<ctrl>s" { "action" ("editor-view", "find", "") };
+  bind "<ctrl>r" { "action" ("editor-page", "find", "") };
+  bind "<ctrl>s" { "action" ("editor-page", "find", "") };
   bind "<alt>dollar" { "action" ("spellcheck", "spellcheck", "") };
   bind "<alt>period" { "goto-definition" () };
   bind "<alt>n" { "move-error" (down) };
   bind "<alt>p" { "move-error" (up) };
-  bind "<ctrl>j" { "action" ("layoutgrid", "focus-neighbor", "3") };
-  bind "<shift><ctrl>j" { "action" ("layoutstack", "split-view", "''") };
+  bind "<ctrl>j" { "action" ("grid", "focus-neighbor", "3") };
+  bind "<shift><ctrl>j" { "action" ("frame", "split-page", "''") };
   bind "F2" { "clear-selection" ()
               "movement" (previous-word-end, 0, 1, 1)
               "movement" (next-word-start, 0, 1, 0)
@@ -99,10 +99,10 @@
   bind "<alt>o" { "action" ("win", "find-other-file", "") };
 
   /* cycle "tabs" */
-  bind "<ctrl><alt>Page_Up" { "action" ("layoutstack", "previous-view", "") };
-  bind "<ctrl><alt>KP_Page_Up" { "action" ("layoutstack", "previous-view", "") };
-  bind "<ctrl><alt>Page_Down" { "action" ("layoutstack", "next-view", "") };
-  bind "<ctrl><alt>KP_Page_Down" { "action" ("layoutstack", "next-view", "") };
+  bind "<ctrl><alt>Page_Up" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl><alt>KP_Page_Up" { "action" ("frame", "previous-page", "") };
+  bind "<ctrl><alt>Page_Down" { "action" ("frame", "next-page", "") };
+  bind "<ctrl><alt>KP_Page_Down" { "action" ("frame", "next-page", "") };
 
   bind "<alt>0" { "append-to-count" (0) };
   bind "<alt>1" { "append-to-count" (1) };
@@ -129,20 +129,20 @@
 @binding-set builder-emacs-source-view-x
 {
   bind "<ctrl>c" { "action" ("app", "quit", "") };
-  bind "0" { "action" ("layoutstack", "close-view", "") };
-  bind "k" { "action" ("layoutstack", "close-view", "") };
+  bind "0" { "action" ("frame", "close-page", "") };
+  bind "k" { "action" ("frame", "close-page", "") };
   bind "<ctrl>f" { "action" ("win", "open-with-dialog", "") };
-  bind "<ctrl>s" { "action" ("editor-view", "save", "") };
+  bind "<ctrl>s" { "action" ("editor-page", "save", "") };
   bind "s" { "action" ("win", "save-all", "") };
-  bind "<ctrl>b" { "action" ("layoutstack", "show-list", "") };
-  bind "<ctrl>w" { "action" ("editor-view", "save-as", "") };
+  bind "<ctrl>b" { "action" ("frame", "show-list", "") };
+  bind "<ctrl>w" { "action" ("editor-page", "save-as", "") };
   bind "u" { "clear-count" ()
              "clear-selection" ()
              "remove-cursors" ()
              "redo" () };
-  bind "2" { "action" ("layoutstack", "split-view", "''") };
-  bind "3" { "action" ("layoutstack", "open-in-new-frame", "''") };
-  bind "o" { "action" ("layoutgrid", "focus-neighbor", "0") };
+  bind "2" { "action" ("frame", "split-page", "''") };
+  bind "3" { "action" ("frame", "open-in-new-frame", "''") };
+  bind "o" { "action" ("grid", "focus-neighbor", "0") };
   bind "grave" { "move-error" (down) };
   bind "h" { "select-all" (1) };
   bind "<ctrl>space" { "action" ("history", "move-previous-edit", "") };
