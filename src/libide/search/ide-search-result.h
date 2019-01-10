@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#if !defined (IDE_SEARCH_INSIDE) && !defined (IDE_SEARCH_COMPILATION)
+# error "Only <libide-search.h> can be included directly."
+#endif
+
+#include <libide-core.h>
 #include <dazzle.h>
-
-#include "ide-version-macros.h"
-
-#include "diagnostics/ide-source-location.h"
 
 G_BEGIN_DECLS
 
@@ -38,23 +38,18 @@ struct _IdeSearchResultClass
 {
   DzlSuggestionClass parent_class;
 
-  IdeSourceLocation *(*get_source_location) (IdeSearchResult *self);
+  void (*activate) (IdeSearchResult *self,
+                    GtkWidget       *last_focus);
 
   /*< private >*/
-  gpointer _reserved1;
-  gpointer _reserved2;
-  gpointer _reserved3;
-  gpointer _reserved4;
-  gpointer _reserved5;
-  gpointer _reserved6;
-  gpointer _reserved7;
-  gpointer _reserved8;
+  gpointer _reserved[8];
 };
 
 IDE_AVAILABLE_IN_3_32
 IdeSearchResult   *ide_search_result_new                 (void);
 IDE_AVAILABLE_IN_3_32
-IdeSourceLocation *ide_search_result_get_source_location (IdeSearchResult       *self);
+void               ide_search_result_activate            (IdeSearchResult       *self,
+                                                          GtkWidget             *last_focus);
 IDE_AVAILABLE_IN_3_32
 gint               ide_search_result_compare             (gconstpointer          a,
                                                           gconstpointer          b);

@@ -1,6 +1,6 @@
 /* ide-search-reducer.c
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 
 #include "config.h"
 
-#include "search/ide-search-reducer.h"
-#include "search/ide-search-result.h"
+#include "ide-search-reducer.h"
+#include "ide-search-result.h"
 
 /**
  * SECTION:ide-search-reducer
@@ -85,7 +85,7 @@ ide_search_reducer_destroy (IdeSearchReducer *reducer)
  * Frees all items associated with the result set, unless @free_results is
  * %FALSE and then the results are returned as an array.
  *
- * Returns: (nullable) (transfer container) (element-type Ide.SearchResult):
+ * Returns: (nullable) (transfer container) (element-type IdeSearchResult):
  *   An array of #IdeSearchResult unless @free_results is %TRUE, then
  *   %NULL is returned.
  *
