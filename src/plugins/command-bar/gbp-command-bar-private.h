@@ -1,6 +1,6 @@
-/* gb-command-bar.h
+/* gbp-command-bar-private.h
  *
- * Copyright 2014-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,10 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include "gbp-command-bar.h"
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_BAR (gb_command_bar_get_type())
-
-G_DECLARE_FINAL_TYPE (GbCommandBar, gb_command_bar, GB, COMMAND_BAR, GtkRevealer)
-
-GtkWidget *gb_command_bar_new  (void);
-void       gb_command_bar_show (GbCommandBar *bar);
-void       gb_command_bar_hide (GbCommandBar *bar);
+void _gbp_command_bar_init_shortcuts (GbpCommandBar *self);
 
 G_END_DECLS

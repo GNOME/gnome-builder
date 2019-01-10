@@ -1,6 +1,6 @@
-/* gb-vim.c
+/* gbp-command-bar-workspace-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,27 +20,12 @@
 
 #pragma once
 
+#include <glib-object.h>
+
 G_BEGIN_DECLS
 
-#define GB_VIM_ERROR (gb_vim_error_quark())
+#define GBP_TYPE_COMMAND_BAR_WORKSPACE_ADDIN (gbp_command_bar_workspace_addin_get_type())
 
-typedef enum
-{
-  GB_VIM_ERROR_NOT_IMPLEMENTED,
-  GB_VIM_ERROR_NOT_FOUND,
-  GB_VIM_ERROR_NOT_NUMBER,
-  GB_VIM_ERROR_NUMBER_OUT_OF_RANGE,
-  GB_VIM_ERROR_CANNOT_FIND_COLORSCHEME,
-  GB_VIM_ERROR_UNKNOWN_OPTION,
-  GB_VIM_ERROR_NOT_SOURCE_VIEW,
-  GB_VIM_ERROR_NO_VIEW
-} IdeVimError;
-
-GQuark     gb_vim_error_quark (void);
-gboolean   gb_vim_execute     (GtkWidget      *active_widget,
-                               const gchar    *line,
-                               GError        **error);
-gchar    **gb_vim_complete    (GtkWidget      *active_widget,
-                               const gchar    *line);
+G_DECLARE_FINAL_TYPE (GbpCommandBarWorkspaceAddin, gbp_command_bar_workspace_addin, GBP, COMMAND_BAR_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

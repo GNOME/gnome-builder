@@ -1,6 +1,6 @@
-/* gb-command-vim-provider.h
+/* gbp-command-bar-suggestion.h
  *
- * Copyright 2014-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,16 @@
 
 #pragma once
 
-#include "gb-command-provider.h"
+#include <dazzle.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_VIM_PROVIDER (gb_command_vim_provider_get_type())
+#define GBP_TYPE_COMMAND_BAR_SUGGESTION (gbp_command_bar_suggestion_get_type())
 
-G_DECLARE_FINAL_TYPE (GbCommandVimProvider, gb_command_vim_provider,
-                      GB, COMMAND_VIM_PROVIDER, GbCommandProvider)
+G_DECLARE_FINAL_TYPE (GbpCommandBarSuggestion, gbp_command_bar_suggestion, GBP, COMMAND_BAR_SUGGESTION, DzlSuggestion)
+
+GbpCommandBarSuggestion *gbp_command_bar_suggestion_new         (IdeCommand              *command);
+IdeCommand              *gbp_command_bar_suggestion_get_command (GbpCommandBarSuggestion *self);
 
 G_END_DECLS

@@ -1,6 +1,6 @@
-/* gb-command-vim.h
+/* gbp-command-bar-command-provider.h
  *
- * Copyright 2014-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include "gb-command.h"
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_VIM (gb_command_vim_get_type())
+#define GBP_TYPE_COMMAND_BAR_COMMAND_PROVIDER (gbp_command_bar_command_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbCommandVim, gb_command_vim, GB, COMMAND_VIM, GbCommand)
+G_DECLARE_FINAL_TYPE (GbpCommandBarCommandProvider, gbp_command_bar_command_provider, GBP, COMMAND_BAR_COMMAND_PROVIDER, GObject)
 
 G_END_DECLS

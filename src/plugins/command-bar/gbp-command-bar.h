@@ -1,6 +1,6 @@
-/* gb-command-gaction.h
+/* gbp-command-bar.h
  *
- * Copyright 2014-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,16 @@
 
 #pragma once
 
-#include "gb-command.h"
+#include <dazzle.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GB_TYPE_COMMAND_GACTION (gb_command_gaction_get_type())
+#define GBP_TYPE_COMMAND_BAR (gbp_command_bar_get_type())
 
-G_DECLARE_FINAL_TYPE (GbCommandGaction, gb_command_gaction, GB, COMMAND_GACTION, GbCommand)
+G_DECLARE_FINAL_TYPE (GbpCommandBar, gbp_command_bar, GBP, COMMAND_BAR, DzlBin)
+
+void gbp_command_bar_dismiss (GbpCommandBar *self);
+void gbp_command_bar_reveal  (GbpCommandBar *self);
 
 G_END_DECLS
