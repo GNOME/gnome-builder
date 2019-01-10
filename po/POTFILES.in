@@ -163,6 +163,7 @@ src/plugins/cmake/gbp-cmake-build-system.c
 src/plugins/cmake/gbp-cmake-pipeline-addin.c
 src/plugins/cmake/gbp-cmake-toolchain.c
 src/plugins/code-index/ide-code-index-index.c
+src/plugins/color-picker/data/basic.gstyle.xml
 src/plugins/color-picker/gb-color-picker-editor-addin.c
 src/plugins/color-picker/gb-color-picker-prefs-palette-row.c
 src/plugins/color-picker/gb-color-picker-prefs.c
