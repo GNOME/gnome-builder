@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2018 Christian Hergert
+Depends=editor;
+Description=Provides user interface components for code subsystem.
+Embedded=_gbp_codeui_register_types
+Hidden=true
+Module=codeui
+Name=Code UI integration plugin
