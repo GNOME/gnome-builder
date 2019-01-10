@@ -174,8 +174,7 @@ gbp_newcomers_project_class_init (GbpNewcomersProjectClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class,
-                                               "/org/gnome/builder/plugins/newcomers-plugin/gbp-newcomers-project.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/newcomers/gbp-newcomers-project.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, label);
   gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, icon);
   gtk_widget_class_bind_template_child (widget_class, GbpNewcomersProject, tags_box);
