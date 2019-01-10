@@ -1,4 +1,4 @@
-/* gbp-messages-plugin.c
+/* messages-plugin.c
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,13 +18,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <libpeas/peas.h>
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gbp-messages-editor-addin.h"
 
-void
-gbp_messages_register_types (PeasObjectModule *module)
+_IDE_EXTERN void
+_gbp_messages_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_ADDIN,

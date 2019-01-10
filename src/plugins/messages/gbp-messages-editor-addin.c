@@ -20,7 +20,7 @@
 
 #define G_LOG_DOMAIN "gbp-messages-editor-addin"
 
-#include <ide.h>
+#include <libide-editor.h>
 
 #include "gbp-messages-editor-addin.h"
 #include "gbp-messages-panel.h"
@@ -32,16 +32,16 @@ struct _GbpMessagesEditorAddin
 };
 
 static void
-gbp_messages_editor_addin_load (IdeEditorAddin       *addin,
-                                IdeEditorPerspective *editor)
+gbp_messages_editor_addin_load (IdeEditorAddin   *addin,
+                                IdeEditorSurface *editor)
 {
   GbpMessagesEditorAddin *self = (GbpMessagesEditorAddin *)addin;
   GtkWidget *utilities;
 
   g_assert (GBP_IS_MESSAGES_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
-  utilities = ide_editor_perspective_get_utilities (editor);
+  utilities = ide_editor_surface_get_utilities (editor);
 
   /* hidden by default */
   self->panel = g_object_new (GBP_TYPE_MESSAGES_PANEL, NULL);
@@ -54,12 +54,12 @@ gbp_messages_editor_addin_load (IdeEditorAddin       *addin,
 
 static void
 gbp_messages_editor_addin_unload (IdeEditorAddin       *addin,
-                                  IdeEditorPerspective *editor)
+                                  IdeEditorSurface *editor)
 {
   GbpMessagesEditorAddin *self = (GbpMessagesEditorAddin *)addin;
 
   g_assert (GBP_IS_MESSAGES_EDITOR_ADDIN (self));
-  g_assert (IDE_IS_EDITOR_PERSPECTIVE (editor));
+  g_assert (IDE_IS_EDITOR_SURFACE (editor));
 
   if (self->panel != NULL)
     gtk_widget_destroy (GTK_WIDGET (self->panel));
